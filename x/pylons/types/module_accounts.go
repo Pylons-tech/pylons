@@ -11,4 +11,6 @@ const (
 	ExecutionsLockerName = "pylons_executions_locker"
 	// CoinsIssuerName is the root name of the coins minter module account
 	CoinsIssuerName = "pylons_coins_issuer"
+	// PaymentsProcessorName is the root name of the payments' processor module account
+	PaymentsProcessorName = "pylons_payments_processor"
 )

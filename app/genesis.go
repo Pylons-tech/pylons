@@ -3,6 +3,9 @@ package app
 import (
 	"encoding/json"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 )
 
@@ -17,5 +20,17 @@ type GenesisState map[string]json.RawMessage
 
 // NewDefaultGenesisState generates the default state for the application.
 func NewDefaultGenesisState(cdc codec.JSONCodec) GenesisState {
-	return ModuleBasics.DefaultGenesis(cdc)
+	gs := ModuleBasics.DefaultGenesis(cdc)
+	// add default SendEnabled params for paymentProcessors tokens
+	bankModuleName := banktypes.ModuleName
+	bankModule, ok := gs[bankModuleName]
+	if ok {
+		var bankGenesisState banktypes.GenesisState
+		cdc.MustUnmarshalJSON(bankModule, &bankGenesisState)
+		for _, token := range types.DefaultPaymentProcessorsTokensBankParams {
+			bankGenesisState.Params.SetSendEnabledParam(token.Denom, token.Enabled)
+		}
+		gs[bankModuleName] = cdc.MustMarshalJSON(&bankGenesisState)
+	}
+	return gs
 }

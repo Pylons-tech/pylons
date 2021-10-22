@@ -7,13 +7,14 @@ import (
 
 var _ sdk.Msg = &MsgExecuteRecipe{}
 
-func NewMsgExecuteRecipe(creator string, cookbookID string, recipeID string, coinInputsIndex uint64, itemIDs []string) *MsgExecuteRecipe {
+func NewMsgExecuteRecipe(creator string, cookbookID string, recipeID string, coinInputsIndex uint64, itemIDs []string, paymentInfos []PaymentInfo) *MsgExecuteRecipe {
 	return &MsgExecuteRecipe{
 		Creator:         creator,
 		CookbookID:      cookbookID,
 		RecipeID:        recipeID,
 		CoinInputsIndex: coinInputsIndex,
 		ItemIDs:         itemIDs,
+		PaymentInfos:    paymentInfos,
 	}
 }
 
@@ -52,6 +53,12 @@ func (msg *MsgExecuteRecipe) ValidateBasic() error {
 
 	for _, id := range msg.ItemIDs {
 		if err = ValidateItemID(id); err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+	}
+
+	for _, pi := range msg.PaymentInfos {
+		if err = ValidatePaymentInfo(pi); err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}

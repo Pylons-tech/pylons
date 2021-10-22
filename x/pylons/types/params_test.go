@@ -1,7 +1,6 @@
 package types
 
 import (
-	"fmt"
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -34,6 +33,62 @@ func Test_validateUint(t *testing.T) {
 	}
 }
 
+func Test_validateInt(t *testing.T) {
+	type args struct {
+		i interface{}
+	}
+
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"invalid type sdk coins", args{sdk.NewCoin("fail", sdk.OneInt())}, true},
+		{"invalid type int64 -1", args{-1}, true},
+		{"invalid type int32 1", args{int32(1)}, true},
+		{"invalid type int64 1", args{int64(1)}, true},
+		{"invalid type uint32 1", args{uint32(1)}, true},
+
+		{"valid type Int 1", args{sdk.OneInt()}, false},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			require.Equal(t, tt.wantErr, validateInt(tt.args.i) != nil)
+		})
+	}
+}
+
+func Test_validateDecPercentage(t *testing.T) {
+	type args struct {
+		i interface{}
+	}
+
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"invalid type sdk coins", args{sdk.NewCoin("fail", sdk.OneInt())}, true},
+		{"invalid type int64 -1", args{-1}, true},
+		{"invalid type int32 1", args{int32(1)}, true},
+		{"invalid type int64 1", args{int64(1)}, true},
+		{"invalid type uint32 1", args{uint32(1)}, true},
+
+		{"invalid percentage 1", args{sdk.OneDec()}, true},
+		{"invalid negative percentage", args{sdk.NewDec(-1)}, true},
+		{"valid percentage", args{sdk.ZeroDec()}, false},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			require.Equal(t, tt.wantErr, validateDecPercentage(tt.args.i) != nil)
+		})
+	}
+}
+
 func Test_validateCoinFee(t *testing.T) {
 	type args struct {
 		i interface{}
@@ -52,7 +107,6 @@ func Test_validateCoinFee(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			fmt.Println(validateCoinFee(tt.args.i))
 			require.Equal(t, tt.wantErr, validateCoinFee(tt.args.i) != nil)
 		})
 	}
@@ -145,14 +199,101 @@ func Test_validateCoinIssuers(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			fmt.Println(validateCoinIssuers(tt.args.i))
 			require.Equal(t, tt.wantErr, validateCoinIssuers(tt.args.i) != nil)
 		})
 	}
 }
 
-// validateInt
-// validateDecPercentage
+func Test_validatePaymentProcessor(t *testing.T) {
+	type args struct {
+		i interface{}
+	}
+
+	invaliPaymentProcessorCoinDenom := make([]PaymentProcessor, 1)
+	invaliPaymentProcessorPubkey := make([]PaymentProcessor, 1)
+	invaliPaymentProcessorName := make([]PaymentProcessor, 1)
+	invaliPaymentProcessorPercentages := make([]PaymentProcessor, 1)
+	validPaymentProcessor := make([]PaymentProcessor, 1)
+
+	invaliPaymentProcessorCoinDenom[0] = PaymentProcessor{
+		CoinDenom:            "$",
+		PubKey:               DefaultPaymentProcessors[0].PubKey,
+		Name:                 "test",
+		ProcessorPercentage:  sdk.ZeroDec(),
+		ValidatorsPercentage: sdk.ZeroDec(),
+	}
+
+	invaliPaymentProcessorPubkey[0] = PaymentProcessor{
+		CoinDenom:            "test",
+		PubKey:               "",
+		Name:                 "test",
+		ProcessorPercentage:  sdk.ZeroDec(),
+		ValidatorsPercentage: sdk.ZeroDec(),
+	}
+
+	invaliPaymentProcessorPercentages[0] = PaymentProcessor{
+		CoinDenom:            "test",
+		PubKey:               DefaultPaymentProcessors[0].PubKey,
+		Name:                 "test",
+		ProcessorPercentage:  sdk.OneDec(),
+		ValidatorsPercentage: sdk.ZeroDec(),
+	}
+
+	invaliPaymentProcessorName[0] = PaymentProcessor{
+		CoinDenom:            "test",
+		PubKey:               DefaultPaymentProcessors[0].PubKey,
+		Name:                 "",
+		ProcessorPercentage:  sdk.ZeroDec(),
+		ValidatorsPercentage: sdk.ZeroDec(),
+	}
+
+	validPaymentProcessor[0] = PaymentProcessor{
+		CoinDenom:            "test",
+		PubKey:               DefaultPaymentProcessors[0].PubKey,
+		Name:                 "test",
+		ProcessorPercentage:  sdk.ZeroDec(),
+		ValidatorsPercentage: sdk.ZeroDec(),
+	}
+
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name:    "invalid CoinDenom",
+			args:    args{invaliPaymentProcessorCoinDenom},
+			wantErr: true,
+		},
+		{
+			name:    "invalid PubKey",
+			args:    args{invaliPaymentProcessorPubkey},
+			wantErr: true,
+		},
+		{
+			name:    "invalid percentages",
+			args:    args{invaliPaymentProcessorPercentages},
+			wantErr: true,
+		},
+		{
+			name:    "invalid name",
+			args:    args{invaliPaymentProcessorName},
+			wantErr: true,
+		},
+		{
+			name:    "valid",
+			args:    args{validPaymentProcessor},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			require.Equal(t, tt.wantErr, validatePaymentProcessor(tt.args.i) != nil)
+		})
+	}
+}
 
 func Test_validateParams(t *testing.T) {
 	params := DefaultParams()

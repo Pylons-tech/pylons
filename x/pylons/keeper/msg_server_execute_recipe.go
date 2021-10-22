@@ -94,6 +94,20 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	}
 
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
+
+	// check that coinInputs does not contain an unsendable paymentProcessor coin without a receipt
+	err = k.ValidatePaymentInfo(ctx, msg.PaymentInfos, coinInputs)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if len(msg.PaymentInfos) != 0 {
+		// client is providing payments receipts
+		err = k.ProcessPaymentInfos(ctx, msg.PaymentInfos, addr)
+		if err != nil {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+	}
 	err = k.LockCoinsForExecution(ctx, addr, coinInputs)
 	if err != nil {
 		return nil, err
@@ -129,8 +143,9 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	id := k.AppendPendingExecution(ctx, execution, recipe.BlockInterval)
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateExecution{
-		Creator: execution.Creator,
-		ID:      id,
+		Creator:      execution.Creator,
+		ID:           id,
+		PaymentInfos: msg.PaymentInfos,
 	})
 
 	return &types.MsgExecuteRecipeResponse{ID: id}, err

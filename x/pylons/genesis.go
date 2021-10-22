@@ -11,6 +11,16 @@ import (
 // state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// this line is used by starport scaffolding # genesis/module/init
+	// Set all the redeemInfo
+	for _, elem := range genState.RedeemInfoList {
+		k.SetRedeemInfo(ctx, elem)
+	}
+
+	// Set all the paymentInfo
+	for _, elem := range genState.PaymentInfoList {
+		k.SetPaymentInfo(ctx, elem)
+	}
+
 	// Set all the account mappings
 	for _, elem := range genState.AccountList {
 		username := types.Username{Value: elem.Username}
@@ -78,6 +88,20 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis.EntityCount = k.GetEntityCount(ctx)
 
 	// this line is used by starport scaffolding # genesis/module/export
+	// Get all redeemInfo
+	redeemInfoList := k.GetAllRedeemInfo(ctx)
+	for _, elem := range redeemInfoList {
+		elem := elem
+		genesis.RedeemInfoList = append(genesis.RedeemInfoList, elem)
+	}
+
+	// Get all paymentInfo
+	paymentInfoList := k.GetAllPaymentInfo(ctx)
+	for _, elem := range paymentInfoList {
+		elem := elem
+		genesis.PaymentInfoList = append(genesis.PaymentInfoList, elem)
+	}
+
 	// Get all username
 	usernameList := k.GetAllPylonsAccount(ctx)
 	genesis.AccountList = append(genesis.AccountList, usernameList...)

@@ -3,6 +3,8 @@ package types
 import (
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -101,6 +103,142 @@ func TestValidateUsername(t *testing.T) {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			err := ValidateUsername(tc.username)
+			if tc.err != nil {
+				require.ErrorIs(t, err, tc.err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestValidatePaymentInfo(t *testing.T) {
+	for _, tc := range []struct {
+		desc string
+		obj  PaymentInfo
+		err  error
+	}{
+		{desc: "Valid", obj: PaymentInfo{
+			PurchaseID:    "test",
+			ProcessorName: "test",
+			PayerAddr:     GenTestBech32FromString("test"),
+			Amount:        sdk.OneInt(),
+			ProductID:     "test",
+			Signature:     "test",
+		}},
+		{desc: "InvalidPurchaseID", obj: PaymentInfo{
+			PurchaseID:    "",
+			ProcessorName: "test",
+			PayerAddr:     GenTestBech32FromString("test"),
+			Amount:        sdk.OneInt(),
+			ProductID:     "test",
+			Signature:     "test",
+		}, err: ErrInvalidRequestField},
+		{desc: "InvalidProductID", obj: PaymentInfo{
+			PurchaseID:    "test",
+			ProcessorName: "test",
+			PayerAddr:     GenTestBech32FromString("test"),
+			Amount:        sdk.OneInt(),
+			ProductID:     "",
+			Signature:     "test",
+		}, err: ErrInvalidRequestField},
+		{desc: "InvalidSignature", obj: PaymentInfo{
+			PurchaseID:    "test",
+			ProcessorName: "test",
+			PayerAddr:     GenTestBech32FromString("test"),
+			Amount:        sdk.OneInt(),
+			ProductID:     "test",
+			Signature:     "",
+		}, err: ErrInvalidRequestField},
+		{desc: "InvalidAmount", obj: PaymentInfo{
+			PurchaseID:    "test",
+			ProcessorName: "test",
+			PayerAddr:     GenTestBech32FromString("test"),
+			Amount:        sdk.ZeroInt(),
+			ProductID:     "test",
+			Signature:     "test",
+		}, err: ErrInvalidRequestField},
+		{desc: "InvalidAddress", obj: PaymentInfo{
+			PurchaseID:    "test",
+			ProcessorName: "test",
+			PayerAddr:     "test",
+			Amount:        sdk.OneInt(),
+			ProductID:     "test",
+			Signature:     "test",
+		}, err: ErrInvalidRequestField},
+		{desc: "InvalidProcessorName", obj: PaymentInfo{
+			PurchaseID:    "test",
+			ProcessorName: "",
+			PayerAddr:     GenTestBech32FromString("test"),
+			Amount:        sdk.OneInt(),
+			ProductID:     "test",
+			Signature:     "test",
+		}, err: ErrInvalidRequestField},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			err := ValidatePaymentInfo(tc.obj)
+			if tc.err != nil {
+				require.ErrorIs(t, err, tc.err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestValidateRedeemInfo(t *testing.T) {
+	for _, tc := range []struct {
+		desc string
+		obj  RedeemInfo
+		err  error
+	}{
+		{desc: "Valid", obj: RedeemInfo{
+			ID:            "test",
+			ProcessorName: "test",
+			Address:       GenTestBech32FromString("test"),
+			Amount:        sdk.OneInt(),
+			Signature:     "test",
+		}},
+		{desc: "InvalidID", obj: RedeemInfo{
+			ID:            "",
+			ProcessorName: "test",
+			Address:       GenTestBech32FromString("test"),
+			Amount:        sdk.OneInt(),
+			Signature:     "test",
+		}, err: ErrInvalidRequestField},
+		{desc: "InvalidSignature", obj: RedeemInfo{
+			ID:            "test",
+			ProcessorName: "test",
+			Address:       GenTestBech32FromString("test"),
+			Amount:        sdk.OneInt(),
+			Signature:     "",
+		}, err: ErrInvalidRequestField},
+		{desc: "InvalidAmount", obj: RedeemInfo{
+			ID:            "test",
+			ProcessorName: "test",
+			Address:       GenTestBech32FromString("test"),
+			Amount:        sdk.ZeroInt(),
+			Signature:     "test",
+		}, err: ErrInvalidRequestField},
+		{desc: "InvalidAddress", obj: RedeemInfo{
+			ID:            "test",
+			ProcessorName: "test",
+			Address:       "test",
+			Amount:        sdk.OneInt(),
+			Signature:     "test",
+		}, err: ErrInvalidRequestField},
+		{desc: "InvalidProcessorName", obj: RedeemInfo{
+			ID:            "test",
+			ProcessorName: "",
+			Address:       GenTestBech32FromString("test"),
+			Amount:        sdk.OneInt(),
+			Signature:     "test",
+		}, err: ErrInvalidRequestField},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			err := ValidateRedeemInfo(tc.obj)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {

@@ -197,6 +197,30 @@ func createNGoogleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.Goog
 	return items
 }
 
+func createNPaymentInfo(k keeper.Keeper, ctx sdk.Context, n int) []types.PaymentInfo {
+	items := make([]types.PaymentInfo, n)
+	creators := types.GenTestBech32List(n)
+	for i := range items {
+		items[i].PayerAddr = creators[i]
+		items[i].PurchaseID = fmt.Sprintf("%d", i)
+		items[i].Amount = sdk.OneInt()
+		k.SetPaymentInfo(ctx, items[i])
+	}
+	return items
+}
+
+func createNRedeemInfo(k keeper.Keeper, ctx sdk.Context, n int) []types.RedeemInfo {
+	items := make([]types.RedeemInfo, n)
+	creators := types.GenTestBech32List(n)
+	for i := range items {
+		items[i].Address = creators[i]
+		items[i].ID = fmt.Sprintf("%d", i)
+		items[i].Amount = sdk.OneInt()
+		k.SetRedeemInfo(ctx, items[i])
+	}
+	return items
+}
+
 func createNItem(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []types.Item {
 	items := make([]types.Item, n)
 	owners := types.GenTestBech32List(n)

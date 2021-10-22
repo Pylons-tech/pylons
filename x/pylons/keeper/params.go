@@ -24,6 +24,12 @@ func (k Keeper) CoinIssuers(ctx sdk.Context) (res []types.CoinIssuer) {
 	return
 }
 
+// PaymentProcessors returns the CoinIssuers param
+func (k Keeper) PaymentProcessors(ctx sdk.Context) (res []types.PaymentProcessor) {
+	k.paramSpace.Get(ctx, types.ParamStoreKeyPaymentProcessors, &res)
+	return
+}
+
 // CoinIssuedDenomsList returns the CoinIssuedList param
 func (k Keeper) CoinIssuedDenomsList(ctx sdk.Context) (res []string) {
 	coinIssuers := k.CoinIssuers(ctx)

@@ -67,3 +67,11 @@ const (
 	// AccountKey is a string used as prefix to the KVStore
 	AccountKey = "PylonsAccount-value-"
 )
+
+const (
+	PaymentInfoKey = "PaymentInfo-value-"
+)
+
+const (
+	RedeemInfoKey = "RedeemInfo-value-"
+)

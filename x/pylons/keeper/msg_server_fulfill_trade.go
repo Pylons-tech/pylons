@@ -77,6 +77,28 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		coinInputs = trade.CoinInputs[coinInputsIndex].Coins
 	}
 
+	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
+
+	// check that coinInputs does not contain an unsendable paymentProcessor coin without a receipt
+	err := k.ValidatePaymentInfo(ctx, msg.PaymentInfos, coinInputs)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if len(msg.PaymentInfos) != 0 {
+		// client is providing payments receipts
+		err := k.ProcessPaymentInfos(ctx, msg.PaymentInfos, addr)
+		if err != nil {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+	}
+
+	// check that sender has enough balance to pay coinInputs
+	balance := k.bankKeeper.SpendableCoins(ctx, addr)
+	if !balance.IsAllGTE(coinInputs) {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "not enough balance to pay for trade coinInputs")
+	}
+
 	// match msg items to trade itemInputs
 	matchedInputItems, err := k.MatchItemInputsForTrade(ctx, msg.Creator, msg.Items, trade)
 	if err != nil {
@@ -99,13 +121,6 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		minItemInputsTransferFees = minItemInputsTransferFees.Add(matchedInputItems[i].TransferFee[itemInputsTransferFeePermutation[i]])
 	}
 
-	// check that sender has enough balance to pay coinInputs
-	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
-	balance := k.bankKeeper.SpendableCoins(ctx, addr)
-	if !balance.IsAllGTE(coinInputs) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "not enough balance to pay for trade coinInputs")
-	}
-
 	outputItems := make([]types.Item, len(trade.ItemOutputs))
 	for i, itemRef := range trade.ItemOutputs {
 		item, _ := k.GetItem(ctx, itemRef.CookbookID, itemRef.ItemID)
@@ -115,7 +130,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	minItemOutputsTransferFees := sdk.NewCoins()
 	itemOutputsTransferFeePermutation, err := types.FindValidPaymentsPermutation(outputItems, coinInputs)
 	if err != nil {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "balance not sufficient to pay coinInputs")
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "coinInputs not sufficient to pay transfer fees")
 	}
 	for i := range outputItems {
 		minItemOutputsTransferFees = minItemOutputsTransferFees.Add(outputItems[i].TransferFee[itemOutputsTransferFeePermutation[i]])
@@ -229,13 +244,14 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		itemInputsRefs[i] = types.ItemRef{CookbookID: item.CookbookID, ItemID: item.ID}
 	}
 	err = ctx.EventManager().EmitTypedEvent(&types.EventFulfillTrade{
-		ID:          trade.ID,
-		Creator:     trade.Creator,
-		Fulfiller:   msg.Creator,
-		ItemInputs:  itemInputsRefs,
-		CoinInputs:  coinInputs,
-		ItemOutputs: trade.ItemOutputs,
-		CoinOutputs: coinOutputs,
+		ID:           trade.ID,
+		Creator:      trade.Creator,
+		Fulfiller:    msg.Creator,
+		ItemInputs:   itemInputsRefs,
+		CoinInputs:   coinInputs,
+		ItemOutputs:  trade.ItemOutputs,
+		CoinOutputs:  coinOutputs,
+		PaymentInfos: msg.PaymentInfos,
 	})
 
 	return &types.MsgFulfillTradeResponse{}, err
