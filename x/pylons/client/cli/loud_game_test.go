@@ -630,6 +630,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 	_, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 
+	var character types.Item
 	// Farm this wolf fight
 	for i := 0; i < 30; i++ {
 		// get sword and character IDs
@@ -671,9 +672,10 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 		// if the character died or their sword was broken, get a new one!
 		var itemResp types.QueryGetItemResponse
 		args = []string{cookbookID, simInfo.characterID}
-		out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
+		charOut, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 		require.NoError(t, err)
-		require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+		require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(charOut.Bytes(), &itemResp))
+		character = itemResp.Item
 		if itemResp.Item.Owner != simInfo.net.Validators[0].Address.String() {
 			// PLAYER DIED
 			createCharacter(t, simInfo)
@@ -682,13 +684,15 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 		}
 
 		args = []string{cookbookID, simInfo.swordID}
-		out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
+		swordOut, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 		require.NoError(t, err)
-		require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+		require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(swordOut.Bytes(), &itemResp))
 		if itemResp.Item.Owner != simInfo.net.Validators[0].Address.String() {
 			// LOST SWORD
 			buyCopperSword(t, simInfo)
 			continue
 		}
 	}
+
+	fmt.Println(character)
 }
