@@ -27,8 +27,8 @@ func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.Paymen
 
 				amt := pi.Amount
 				// account for network fees
-				burnAmt := amt.ToDec().Mul(pp.ProcessingCut).RoundInt()
-				feesAmt := amt.ToDec().Mul(pp.ConsensusCut).RoundInt()
+				burnAmt := amt.ToDec().Mul(pp.ProcessorPercentage).RoundInt()
+				feesAmt := amt.ToDec().Mul(pp.ValidatorsPercentage).RoundInt()
 
 				mintCoins := sdk.NewCoins(sdk.NewCoin(pp.CoinDenom, pi.Amount))
 				burnCoins := sdk.NewCoins(sdk.NewCoin(pp.CoinDenom, burnAmt))
@@ -104,8 +104,8 @@ func (k Keeper) ValidatePaymentInfo(ctx sdk.Context, paymentInfos []types.Paymen
 				paymentProcessor := paymentInfoProcessorMap[paymentInfo.PurchaseID]
 				// account for network fees
 				amt := paymentInfo.Amount
-				burnAmt := amt.ToDec().Mul(paymentProcessor.ProcessingCut).RoundInt()
-				feesAmt := amt.ToDec().Mul(paymentProcessor.ConsensusCut).RoundInt()
+				burnAmt := amt.ToDec().Mul(paymentProcessor.ProcessorPercentage).RoundInt()
+				feesAmt := amt.ToDec().Mul(paymentProcessor.ValidatorsPercentage).RoundInt()
 				coin = coin.AddAmount(burnAmt).AddAmount(feesAmt)
 			}
 			if mintAmt.LT(coin.Amount) {

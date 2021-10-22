@@ -26,9 +26,9 @@ message PaymentProcessor {
   // pubKey is assumed to be ed25519
   string pubKey = 2 [(gogoproto.moretags) = "yaml:\"pub_key\""];
   // Represents the percentage retained by the payment processor when new coins are minted. In the range [0, 1), this amount is burned on-chain, actual fee is retained at the source.
-  string processingCut = 3 [(gogoproto.moretags) = "yaml:\"processing_cut\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string processorPercentage = 3 [(gogoproto.moretags) = "yaml:\"processor_percentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   // Represents the percentage distributed to stakers. In the range [0, 1). The sum with processingCut cannot exceed 1.
-  string consensusCut = 4 [(gogoproto.moretags) = "yaml:\"consensus_cut\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string validatorsPercentage = 4 [(gogoproto.moretags) = "yaml:\"validators_pecentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   string name = 5;
 }
 

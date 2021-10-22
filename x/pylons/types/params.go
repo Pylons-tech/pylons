@@ -4,6 +4,8 @@ import (
 	"encoding/base64"
 	"fmt"
 
+	"github.com/cosmos/cosmos-sdk/x/bank/types"
+
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 
 	"gopkg.in/yaml.v2"
@@ -31,27 +33,22 @@ var (
 			GoogleInAppPurchasePubKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwZsjhk6eN5Pve9pP3uqz2MwBFixvmCRtQJoDQLTEJo3zTd9VMZcXoerQX8cnDPclZWmMZWkO+BWcN1ikYdGHvU2gC7yBLi+TEkhsEkixMlbqOGRdmNptJJhqxuVmXK+drWTb6W0IgQ9g8CuCjZUiMTc0UjHb5mPOE/IhcuTZ0wCHdoqc5FS2spdQqrohvSEP7gR4ZgGzYNI1U+YZHskIEm2qC4ZtSaX9J/fDkAmmJFV2hzeDMcljCxY9+ZM1mdzIpZKwM7O6UdWRpwD1QJ7yXND8AQ9M46p16F0VQuZbbMKCs90NIcKkx6jDDGbVmJrFnUT1Oq1uYxNYtiZjTp+JowIDAQAB",
 			EntityName:                "Pylons_Inc",
 		},
-		{
-			CoinDenom:  CosmosCoinDenom,
-			EntityName: "Cosmos_Hub",
-		},
-		{
-			CoinDenom:  StakingCoinDenom,
-			EntityName: "Pylons_Chain",
-		},
 	}
 
-	DefaultConsensusCut, _   = sdk.NewDecFromStr("0.001")
-	DefaultProcessingCut     = sdk.ZeroDec()
-	DefaultPylonsIncPubKey   = "EVK1dqjD6K8hGylacMpWAa/ru/OnWUDtCZ+lPkv2TTA=" // this is a testing key, do not use in production!
-	DefaultPaymentProcessors = []PaymentProcessor{
+	DefaultProcessorPercentage  = sdk.MustNewDecFromStr("0.003")
+	DefaultValidatorsPercentage = sdk.ZeroDec()
+	DefaultPylonsIncPubKey      = "EVK1dqjD6K8hGylacMpWAa/ru/OnWUDtCZ+lPkv2TTA=" // this is a testing key, do not use in production!
+	DefaultPaymentProcessors    = []PaymentProcessor{
 		{
-			CoinDenom:     "ustripeusd",
-			PubKey:        DefaultPylonsIncPubKey,
-			ProcessingCut: DefaultProcessingCut,
-			ConsensusCut:  DefaultConsensusCut,
-			Name:          "Pylons_Inc",
+			CoinDenom:            StripeCoinDenom,
+			PubKey:               DefaultPylonsIncPubKey,
+			ProcessorPercentage:  DefaultProcessorPercentage,
+			ValidatorsPercentage: DefaultValidatorsPercentage,
+			Name:                 "Pylons_Inc",
 		},
+	}
+	DefaultPaymentProcessorsTokensBankParams = []types.SendEnabled{
+		{Denom: StripeCoinDenom, Enabled: false},
 	}
 
 	DefaultRecipeFeePercentage, _       = sdk.NewDecFromStr("0.10")
@@ -316,14 +313,14 @@ func validatePaymentProcessor(i interface{}) error {
 		if !coin.IsValid() {
 			return fmt.Errorf("invalid denom")
 		}
-		if err := validateDecPercentage(pp.ProcessingCut); err != nil {
-			return fmt.Errorf("processing cut must be in the range [0, 1), got %v", pp.ProcessingCut.String())
+		if err := validateDecPercentage(pp.ProcessorPercentage); err != nil {
+			return fmt.Errorf("payment processor percentage must be in the range [0, 1), got %v", pp.ProcessorPercentage.String())
 		}
-		if err := validateDecPercentage(pp.ConsensusCut); err != nil {
-			return fmt.Errorf("consensus cut must be in the range [0, 1), got %v", pp.ConsensusCut.String())
+		if err := validateDecPercentage(pp.ValidatorsPercentage); err != nil {
+			return fmt.Errorf("validators percentage must be in the range [0, 1), got %v", pp.ValidatorsPercentage.String())
 		}
-		if err := validateDecPercentage(pp.ProcessingCut.Add(pp.ConsensusCut)); err != nil {
-			return fmt.Errorf("processing cut and consensus together must be in the range [0, 1)")
+		if err := validateDecPercentage(pp.ProcessorPercentage.Add(pp.ValidatorsPercentage)); err != nil {
+			return fmt.Errorf("the sum of payment processor percentage and validators percentage must be in the range [0, 1)")
 		}
 		pubKeyBytes, err := base64.StdEncoding.DecodeString(pp.PubKey)
 		if err != nil {
