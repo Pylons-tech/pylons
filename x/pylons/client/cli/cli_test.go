@@ -28,6 +28,23 @@ func generateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 	return addrs
 }
 
+func networkWithRedeemInfoObjects(t *testing.T, n int) (*network.Network, []types.RedeemInfo) {
+	t.Helper()
+	cfg := network.DefaultConfig()
+	state := types.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+
+	addresses := types.GenTestBech32List(n)
+	for i := 0; i < n; i++ {
+		state.RedeemInfoList = append(state.RedeemInfoList, types.RedeemInfo{Address: addresses[i], ID: strconv.Itoa(i), Amount: sdk.OneInt()})
+	}
+
+	buf, err := cfg.Codec.MarshalJSON(&state)
+	require.NoError(t, err)
+	cfg.GenesisState[types.ModuleName] = buf
+	return network.New(t, cfg), state.RedeemInfoList
+}
+
 func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.UserMap) {
 	t.Helper()
 	cfg := network.DefaultConfig()
@@ -188,6 +205,22 @@ func networkWithGoogleIAPOrderObjects(t *testing.T, n int) (*network.Network, []
 	require.NoError(t, err)
 	cfg.GenesisState[types.ModuleName] = buf
 	return network.New(t, cfg), state.GoogleInAppPurchaseOrderList
+}
+
+func networkWithPaymentInfoObjects(t *testing.T, n int) (*network.Network, []types.PaymentInfo) {
+	t.Helper()
+	cfg := network.DefaultConfig()
+	state := types.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+
+	addresses := types.GenTestBech32List(n)
+	for i := 0; i < n; i++ {
+		state.PaymentInfoList = append(state.PaymentInfoList, types.PaymentInfo{PayerAddr: addresses[i], PurchaseID: strconv.Itoa(i), Amount: sdk.OneInt()})
+	}
+	buf, err := cfg.Codec.MarshalJSON(&state)
+	require.NoError(t, err)
+	cfg.GenesisState[types.ModuleName] = buf
+	return network.New(t, cfg), state.PaymentInfoList
 }
 
 func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item) {

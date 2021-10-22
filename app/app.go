@@ -157,15 +157,16 @@ var (
 	maccPerms = map[string][]string{
 		authtypes.FeeCollectorName: nil,
 		// distrtypes.ModuleName:                    nil,
-		minttypes.ModuleName:                   {authtypes.Minter},
-		stakingtypes.BondedPoolName:            {authtypes.Burner, authtypes.Staking},
-		stakingtypes.NotBondedPoolName:         {authtypes.Burner, authtypes.Staking},
-		govtypes.ModuleName:                    {authtypes.Burner},
-		ibctransfertypes.ModuleName:            {authtypes.Minter, authtypes.Burner},
-		pylonsmoduletypes.FeeCollectorName:     nil,
-		pylonsmoduletypes.TradesLockerName:     nil,
-		pylonsmoduletypes.ExecutionsLockerName: {authtypes.Burner, authtypes.Minter},
-		pylonsmoduletypes.CoinsIssuerName:      {authtypes.Minter},
+		minttypes.ModuleName:                    {authtypes.Minter},
+		stakingtypes.BondedPoolName:             {authtypes.Burner, authtypes.Staking},
+		stakingtypes.NotBondedPoolName:          {authtypes.Burner, authtypes.Staking},
+		govtypes.ModuleName:                     {authtypes.Burner},
+		ibctransfertypes.ModuleName:             {authtypes.Minter, authtypes.Burner},
+		pylonsmoduletypes.FeeCollectorName:      nil,
+		pylonsmoduletypes.TradesLockerName:      nil,
+		pylonsmoduletypes.ExecutionsLockerName:  {authtypes.Burner, authtypes.Minter},
+		pylonsmoduletypes.CoinsIssuerName:       {authtypes.Minter},
+		pylonsmoduletypes.PaymentsProcessorName: {authtypes.Burner, authtypes.Minter},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )

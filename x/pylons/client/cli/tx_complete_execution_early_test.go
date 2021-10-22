@@ -84,19 +84,19 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	args = []string{cookbookID, recipeID, "1", "[]"} // empty list for item-ids since there is no item input
+	args = []string{cookbookID, recipeID, "1", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err2 := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err2)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code, resp.RawLog)
 
 	var executionsResponse types.QueryListExecutionsByRecipeResponse
 	args = []string{cookbookID, recipeID, "--output=json"}
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdListExecutionsByRecipe(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &executionsResponse))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &executionsResponse))
 	require.NotEmpty(t, executionsResponse.PendingExecutions)
 
 	var testedExecution = executionsResponse.PendingExecutions[0]
@@ -129,7 +129,7 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 		out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
 
 		require.NoError(t, err)
-		require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &executionsResponse))
+		require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &executionsResponse))
 		require.True(t, executionsResponse.Completed)
 
 	})

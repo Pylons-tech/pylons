@@ -1,7 +1,12 @@
 package types
 
 import (
+	"encoding/base64"
 	"fmt"
+
+	"github.com/cosmos/cosmos-sdk/x/bank/types"
+
+	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 
 	"gopkg.in/yaml.v2"
 
@@ -28,14 +33,22 @@ var (
 			GoogleInAppPurchasePubKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwZsjhk6eN5Pve9pP3uqz2MwBFixvmCRtQJoDQLTEJo3zTd9VMZcXoerQX8cnDPclZWmMZWkO+BWcN1ikYdGHvU2gC7yBLi+TEkhsEkixMlbqOGRdmNptJJhqxuVmXK+drWTb6W0IgQ9g8CuCjZUiMTc0UjHb5mPOE/IhcuTZ0wCHdoqc5FS2spdQqrohvSEP7gR4ZgGzYNI1U+YZHskIEm2qC4ZtSaX9J/fDkAmmJFV2hzeDMcljCxY9+ZM1mdzIpZKwM7O6UdWRpwD1QJ7yXND8AQ9M46p16F0VQuZbbMKCs90NIcKkx6jDDGbVmJrFnUT1Oq1uYxNYtiZjTp+JowIDAQAB",
 			EntityName:                "Pylons_Inc",
 		},
+	}
+
+	DefaultProcessorPercentage  = sdk.MustNewDecFromStr("0.003")
+	DefaultValidatorsPercentage = sdk.ZeroDec()
+	DefaultPylonsIncPubKey      = "EVK1dqjD6K8hGylacMpWAa/ru/OnWUDtCZ+lPkv2TTA=" // this is a testing key, do not use in production!
+	DefaultPaymentProcessors    = []PaymentProcessor{
 		{
-			CoinDenom:  CosmosCoinDenom,
-			EntityName: "Cosmos_Hub",
+			CoinDenom:            StripeCoinDenom,
+			PubKey:               DefaultPylonsIncPubKey,
+			ProcessorPercentage:  DefaultProcessorPercentage,
+			ValidatorsPercentage: DefaultValidatorsPercentage,
+			Name:                 "Pylons_Inc",
 		},
-		{
-			CoinDenom:  StakingCoinDenom,
-			EntityName: "Pylons_Chain",
-		},
+	}
+	DefaultPaymentProcessorsTokensBankParams = []types.SendEnabled{
+		{Denom: StripeCoinDenom, Enabled: false},
 	}
 
 	DefaultRecipeFeePercentage, _       = sdk.NewDecFromStr("0.10")
@@ -51,6 +64,7 @@ var (
 	ParamStoreKeyMinNameFieldLength        = []byte("MinNameFieldLength")
 	ParamStoreKeyMinDescriptionFieldLength = []byte("MinDescriptionFieldLength")
 	ParamStoreKeyCoinIssuers               = []byte("CoinIssuers")
+	ParamStoreKeyPaymentProcessors         = []byte("PaymentProcessors")
 	ParamStoreKeyRecipeFeePercentage       = []byte("RecipeFeePercentage")
 	ParamStoreKeyItemTransferFeePercentage = []byte("ItemTransferFeePercentage")
 	ParamStoreKeyUpdateItemStringFee       = []byte("UpdateItemStringFee")
@@ -64,6 +78,7 @@ func NewParams(
 	minNameFieldLength uint64,
 	minDescriptionFieldLength uint64,
 	coinIssuers []CoinIssuer,
+	paymentProcessors []PaymentProcessor,
 	recipeFeePercentage sdk.Dec,
 	itemTransferFeePercentage sdk.Dec,
 	updateItemStringFee sdk.Coin,
@@ -75,6 +90,7 @@ func NewParams(
 		MinNameFieldLength:        minNameFieldLength,
 		MinDescriptionFieldLength: minDescriptionFieldLength,
 		CoinIssuers:               coinIssuers,
+		PaymentProcessors:         paymentProcessors,
 		RecipeFeePercentage:       recipeFeePercentage,
 		ItemTransferFeePercentage: itemTransferFeePercentage,
 		UpdateItemStringFee:       updateItemStringFee,
@@ -90,6 +106,7 @@ func DefaultParams() Params {
 		DefaultMinNameFieldLength,
 		DefaultMinDescriptionFieldLength,
 		DefaultCoinIssuers,
+		DefaultPaymentProcessors,
 		DefaultRecipeFeePercentage,
 		DefaultItemTransferFeePercentage,
 		DefaultUpdateItemStringFee,
@@ -105,6 +122,7 @@ func NetworkTestParams() Params {
 		DefaultMinNameFieldLength,
 		DefaultMinDescriptionFieldLength,
 		DefaultCoinIssuers,
+		DefaultPaymentProcessors,
 		DefaultRecipeFeePercentage,
 		DefaultItemTransferFeePercentage,
 		sdk.NewCoin("node0token", sdk.NewInt(10)),
@@ -133,6 +151,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(ParamStoreKeyItemTransferFeePercentage, &p.ItemTransferFeePercentage, validateDecPercentage),
 		paramtypes.NewParamSetPair(ParamStoreKeyUpdateItemStringFee, &p.UpdateItemStringFee, validateCoinFee),
 		paramtypes.NewParamSetPair(ParamStoreKeyCoinIssuers, &p.CoinIssuers, validateCoinIssuers),
+		paramtypes.NewParamSetPair(ParamStoreKeyPaymentProcessors, &p.PaymentProcessors, validatePaymentProcessor),
 		paramtypes.NewParamSetPair(ParamStoreKeyRecipeFeePercentage, &p.RecipeFeePercentage, validateDecPercentage),
 		paramtypes.NewParamSetPair(ParamStoreKeyMinTransferFee, &p.MinTransferFee, validateInt),
 		paramtypes.NewParamSetPair(ParamStoreKeyMaxTransferFee, &p.MaxTransferFee, validateInt),
@@ -278,6 +297,40 @@ func validateCoinIssuers(i interface{}) error {
 					return fmt.Errorf("invalid amount")
 				}
 			}
+		}
+	}
+	return nil
+}
+
+func validatePaymentProcessor(i interface{}) error {
+	v, ok := i.([]PaymentProcessor)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+
+	for _, pp := range v {
+		coin := sdk.Coin{Denom: pp.CoinDenom, Amount: sdk.OneInt()}
+		if !coin.IsValid() {
+			return fmt.Errorf("invalid denom")
+		}
+		if err := validateDecPercentage(pp.ProcessorPercentage); err != nil {
+			return fmt.Errorf("payment processor percentage must be in the range [0, 1), got %v", pp.ProcessorPercentage.String())
+		}
+		if err := validateDecPercentage(pp.ValidatorsPercentage); err != nil {
+			return fmt.Errorf("validators percentage must be in the range [0, 1), got %v", pp.ValidatorsPercentage.String())
+		}
+		if err := validateDecPercentage(pp.ProcessorPercentage.Add(pp.ValidatorsPercentage)); err != nil {
+			return fmt.Errorf("the sum of payment processor percentage and validators percentage must be in the range [0, 1)")
+		}
+		pubKeyBytes, err := base64.StdEncoding.DecodeString(pp.PubKey)
+		if err != nil {
+			return fmt.Errorf("pubKey decoding failure: %s", err.Error())
+		}
+		if len(pubKeyBytes) != ed25519.PubKeySize {
+			return fmt.Errorf("invalid pubKey size")
+		}
+		if pp.Name == "" {
+			return fmt.Errorf("empty string for name")
 		}
 	}
 	return nil

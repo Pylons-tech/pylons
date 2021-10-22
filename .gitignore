@@ -7,9 +7,11 @@
 .dir-locals.el
 .vscode
 
-vue/node_modules
-vue/dist
-release/
+# starport generated folders
+./vue/
+./flutter/
+
+*.out
 
 genesis/alpha
 genesis/beta

@@ -62,21 +62,67 @@ func ValidateUsername(s string) error {
 	return sdkerrors.Wrap(ErrInvalidRequestField, "invalid username")
 }
 
-// ValidateNumber validates numbers
-func ValidateNumber(s string) error {
-	regex := regexp.MustCompile(`^[0-9]+$`)
-	if regex.MatchString(s) {
-		return nil
-	}
-
-	return sdkerrors.Wrap(ErrInvalidRequestField, "invalid number")
-}
-
 // ValidateItemID validates an ItemID
 func ValidateItemID(s string) error {
 	decode := DecodeItemID(s)
 	if EncodeItemID(decode) != s {
 		return sdkerrors.Wrap(ErrInvalidRequestField, "invalid itemID")
+	}
+
+	return nil
+}
+
+// ValidatePaymentInfo validates a payment receipt
+func ValidatePaymentInfo(p PaymentInfo) error {
+	_, err := sdk.AccAddressFromBech32(p.PayerAddr)
+	if err != nil {
+		return sdkerrors.Wrap(ErrInvalidRequestField, "invalid address in payment info")
+	}
+
+	if !p.Amount.IsPositive() {
+		return sdkerrors.Wrap(ErrInvalidRequestField, "invalid amount in payment info")
+	}
+
+	if p.ProcessorName == "" {
+		return sdkerrors.Wrap(ErrInvalidRequestField, "empty payment processor name in payment info")
+	}
+
+	if p.PurchaseID == "" {
+		return sdkerrors.Wrap(ErrInvalidRequestField, "empty purchase ID in payment info")
+	}
+
+	if p.ProductID == "" {
+		return sdkerrors.Wrap(ErrInvalidRequestField, "empty product ID in payment info")
+	}
+
+	if p.Signature == "" {
+		return sdkerrors.Wrap(ErrInvalidRequestField, "empty signature in payment info")
+	}
+
+	return nil
+}
+
+// ValidateRedeemInfo validates a redeem receipt
+func ValidateRedeemInfo(r RedeemInfo) error {
+	_, err := sdk.AccAddressFromBech32(r.Address)
+	if err != nil {
+		return sdkerrors.Wrap(ErrInvalidRequestField, "invalid address in redeem info")
+	}
+
+	if !r.Amount.IsPositive() {
+		return sdkerrors.Wrap(ErrInvalidRequestField, "invalid amount in redeem info")
+	}
+
+	if r.ProcessorName == "" {
+		return sdkerrors.Wrap(ErrInvalidRequestField, "empty payment processor name in redeem info")
+	}
+
+	if r.ID == "" {
+		return sdkerrors.Wrap(ErrInvalidRequestField, "empty purchase ID in redeem info")
+	}
+
+	if r.Signature == "" {
+		return sdkerrors.Wrap(ErrInvalidRequestField, "empty signature in payment info")
 	}
 
 	return nil

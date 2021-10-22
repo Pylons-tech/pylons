@@ -15,6 +15,8 @@ const (
 	PylonsCoinDenom = "upylon"
 	// StakingCoinDenom is the staking denom string with the u prefix indicating "microbedrock"
 	StakingCoinDenom = "ubedrock"
+	// StripeCoinDenom is the denom string for Stripe-based USD
+	StripeCoinDenom = "ustripeusd"
 	// CosmosCoinDenom is the atom denom string with the u prefix indicating "uatom"
 	CosmosCoinDenom = "uatom"
 

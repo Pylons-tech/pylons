@@ -16,6 +16,28 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
 	items := make([]types.Item, 0)
 
+	// coins with send_enable to false cannot be added to CoinOutputs
+	err := k.bankKeeper.IsSendEnabledCoins(ctx, msg.CoinOutputs...)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+	// coins with sendEnable to false cannot be added to CoinInputs unless they can be issued by a payment processor
+	paymentProcessors := k.PaymentProcessors(ctx)
+	for _, coinInput := range msg.CoinInputs {
+		for _, coin := range coinInput.Coins {
+			checkSendEnable := true
+			for _, pp := range paymentProcessors {
+				if coin.Denom == pp.CoinDenom {
+					checkSendEnable = false
+					break
+				}
+			}
+			if checkSendEnable && !k.bankKeeper.IsSendEnabledCoin(ctx, coin) {
+				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "coin %s cannot be traded", coin.Denom)
+			}
+		}
+	}
+
 	// check that each item provided for trade is owned by sender, and lock it
 	for _, itemRef := range msg.ItemOutputs {
 		item, found := k.GetItem(ctx, itemRef.CookbookID, itemRef.ItemID)
@@ -40,7 +62,7 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		}
 	}
 	// lock coins for trade
-	err := k.LockCoinsForTrade(ctx, addr, msg.CoinOutputs)
+	err = k.LockCoinsForTrade(ctx, addr, msg.CoinOutputs)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}

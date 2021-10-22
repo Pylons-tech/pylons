@@ -19,9 +19,9 @@ var _ = strconv.Itoa(0)
 
 func CmdExecuteRecipe() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "execute-recipe [cookbook-id] [recipe-id] [coin-inputs-index] [item-ids]",
+		Use:   "execute-recipe [cookbook-id] [recipe-id] [coin-inputs-index] [item-ids] [payment-info]",
 		Short: "Execute a recipe",
-		Args:  cobra.ExactArgs(4),
+		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsCookbookID := args[0]
 			argsRecipeID := args[1]
@@ -35,13 +35,19 @@ func CmdExecuteRecipe() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			argsPaymentInfo := args[4]
+			jsonArgsPaymentInfo := make([]types.PaymentInfo, 0)
+			err = json.Unmarshal([]byte(argsPaymentInfo), &jsonArgsPaymentInfo)
+			if err != nil {
+				return err
+			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgExecuteRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, argsRecipeID, argsCoinInputsIndex, jsonArgsItemIDs)
+			msg := types.NewMsgExecuteRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, argsRecipeID, argsCoinInputsIndex, jsonArgsItemIDs, jsonArgsPaymentInfo)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

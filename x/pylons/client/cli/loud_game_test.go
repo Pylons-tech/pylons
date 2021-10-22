@@ -184,7 +184,7 @@ func createCharacterRecipe(t *testing.T, simInfo *loudBasicSim) {
 
 func createCharacter(t *testing.T, simInfo *loudBasicSim) {
 	// execute recipe for character
-	args := []string{cookbookID, simInfo.getCharacterRecipeID, "0", "[]"} // empty list for item-ids since there is no item input
+	args := []string{cookbookID, simInfo.getCharacterRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, simInfo.common...)
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
@@ -264,7 +264,7 @@ func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 	require.NoError(t, err)
 
 	// execute recipe for character
-	args = []string{cookbookID, getLoudCoinRecipeID, "0", "[]"} // empty list for item-ids since there is no item input
+	args = []string{cookbookID, getLoudCoinRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, simInfo.common...)
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
@@ -371,7 +371,7 @@ func createBuyCopperSwordRecipe(t *testing.T, simInfo *loudBasicSim) {
 
 func buyCopperSword(t *testing.T, simInfo *loudBasicSim) {
 	// execute recipe for character
-	args := []string{cookbookID, simInfo.buyCopperSwordRecipeID, "0", "[]"} // empty list for item-ids since there is no item input
+	args := []string{cookbookID, simInfo.buyCopperSwordRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, simInfo.common...)
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
@@ -638,7 +638,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 		require.NoError(t, err)
 
 		// execute recipe for character
-		args = []string{cookbookID, fightWolfWithSwordRecipeID, "0", string(itemInputIDs)} // empty list for item-ids since there is no item input
+		args = []string{cookbookID, fightWolfWithSwordRecipeID, "0", string(itemInputIDs), "[]"} // empty list for item-ids since there is no item input
 		args = append(args, simInfo.common...)
 		out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 		require.NoError(t, err)

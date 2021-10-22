@@ -6,6 +6,8 @@ import "cosmos/base/v1beta1/coin.proto";
 // this line is used by starport scaffolding # proto/tx/import
 import "pylons/trade.proto";
 import "pylons/google_iap_order.proto";
+import "pylons/payment_info.proto";
+import "pylons/redeem_info.proto";
 import "pylons/execution.proto";
 import "pylons/item.proto";
 import "pylons/recipe.proto";
@@ -16,6 +18,7 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 // Msg defines the Msg service.
 service Msg {
   // this line is used by starport scaffolding # proto/tx/rpc
+  rpc BurnDebtToken(MsgBurnDebtToken) returns (MsgBurnDebtTokenResponse);
   rpc UpdateAccount(MsgUpdateAccount) returns (MsgUpdateAccountResponse);
   rpc FulfillTrade(MsgFulfillTrade) returns (MsgFulfillTradeResponse);
   rpc CreateTrade(MsgCreateTrade) returns (MsgCreateTradeResponse);
@@ -34,6 +37,14 @@ service Msg {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
+message MsgBurnDebtToken {
+  string creator = 1;
+  RedeemInfo redeemInfo = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgBurnDebtTokenResponse {
+}
+
 message MsgUpdateAccount {
   string creator = 1;
   string username = 2;
@@ -55,6 +66,7 @@ message MsgFulfillTrade {
   uint64 ID = 2;
   uint64 coinInputsIndex = 3;
   repeated ItemRef items = 4 [(gogoproto.nullable) = false];
+  repeated PaymentInfo paymentInfos = 5 [(gogoproto.nullable) = false];
 }
 
 message MsgFulfillTradeResponse {
@@ -124,6 +136,7 @@ message MsgExecuteRecipe {
   string recipeID = 3;
   uint64 coinInputsIndex = 4;
   repeated string itemIDs = 5 [(gogoproto.nullable) = false];
+  repeated PaymentInfo paymentInfos = 6 [(gogoproto.nullable) = false];
 }
 
 message MsgExecuteRecipeResponse {
