@@ -52,7 +52,6 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 				Doubles: []types.DoubleParam{
 					{
 						Key:  "Mass",
-						Rate: sdk.OneDec(),
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -67,7 +66,6 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-						Rate:    sdk.OneDec(),
 						Value:   "testValue",
 						Program: "",
 					},
@@ -207,7 +205,6 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 				Doubles: []types.DoubleParam{
 					{
 						Key:  "Mass",
-						Rate: sdk.OneDec(),
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -222,7 +219,6 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-						Rate:    sdk.OneDec(),
 						Value:   "testValue",
 						Program: "",
 					},
@@ -399,7 +395,6 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 				Doubles: []types.DoubleParam{
 					{
 						Key:  "Mass",
-						Rate: sdk.OneDec(),
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -414,7 +409,6 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-						Rate:    sdk.OneDec(),
 						Value:   "testValue",
 						Program: "",
 					},
@@ -570,7 +564,6 @@ func TestExecuteDisableRecipe(t *testing.T) {
 				Doubles: []types.DoubleParam{
 					{
 						Key:  "Mass",
-						Rate: sdk.OneDec(),
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -585,7 +578,6 @@ func TestExecuteDisableRecipe(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-						Rate:    sdk.OneDec(),
 						Value:   "testValue",
 						Program: "",
 					},

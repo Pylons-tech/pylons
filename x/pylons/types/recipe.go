@@ -210,10 +210,6 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 						return false, nil
 					}
 
-					if !originalDouble.Rate.Equal(updatedDouble.Rate) {
-						return false, nil
-					}
-
 					if originalDouble.Program != updatedDouble.Program {
 						return false, nil
 					}
@@ -246,10 +242,6 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 					updatedLong := updatedItem.Longs[j]
 
 					if originalLong.Key != updatedLong.Key {
-						return false, nil
-					}
-
-					if !originalLong.Rate.Equal(updatedLong.Rate) {
 						return false, nil
 					}
 
@@ -302,10 +294,6 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 					updatedString := updatedItem.Strings[j]
 
 					if originalString.Key != updatedString.Key {
-						return false, nil
-					}
-
-					if !originalString.Rate.Equal(updatedString.Rate) {
 						return false, nil
 					}
 
@@ -370,10 +358,6 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 						return false, nil
 					}
 
-					if !originalDouble.Rate.Equal(updatedDouble.Rate) {
-						return false, nil
-					}
-
 					if originalDouble.Program != updatedDouble.Program {
 						return false, nil
 					}
@@ -409,10 +393,6 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 						return false, nil
 					}
 
-					if !originalLong.Rate.Equal(updatedLong.Rate) {
-						return false, nil
-					}
-
 					if originalLong.Program != updatedLong.Program {
 						return false, nil
 					}
@@ -445,10 +425,6 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 					updatedString := updatedItem.Strings[j]
 
 					if originalString.Key != updatedString.Key {
-						return false, nil
-					}
-
-					if !originalString.Rate.Equal(updatedString.Rate) {
 						return false, nil
 					}
 
@@ -642,11 +618,6 @@ func ValidateDoubles(dp []DoubleParam) error {
 		}
 		keyMap[param.Key] = true
 
-		// rate must be in (0, 1]
-		if param.Rate.LTE(sdk.ZeroDec()) || param.Rate.GT(sdk.OneDec()) {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid rate on double param %s", param.Key)
-		}
-
 		for _, item := range param.WeightRanges {
 			if item.Upper.LT(item.Lower) {
 				return sdkerrors.Wrapf(ErrInvalidRequestField, "upper value cannot be less than lower value for weigthRange of double param %s", param.Key)
@@ -674,11 +645,6 @@ func ValidateLongs(lp []LongParam) error {
 		}
 		keyMap[param.Key] = true
 
-		// rate must be in (0, 1]
-		if param.Rate.LTE(sdk.ZeroDec()) || param.Rate.GT(sdk.OneDec()) {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid rate on long param %s", param.Key)
-		}
-
 		for _, item := range param.WeightRanges {
 			if item.Upper < item.Lower {
 				return sdkerrors.Wrapf(ErrInvalidRequestField, "upper value cannot be less than lower value for weigthRange of long param %s", param.Key)
@@ -704,11 +670,6 @@ func ValidateStrings(sp []StringParam) error {
 			return sdkerrors.Wrapf(ErrInvalidRequestField, "key %s repeated in string param list", param.Key)
 		}
 		keyMap[param.Key] = true
-
-		// rate must be in (0, 1]
-		if param.Rate.LTE(sdk.ZeroDec()) || param.Rate.GT(sdk.OneDec()) {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid rate on string param %s", param.Key)
-		}
 	}
 
 	return nil
