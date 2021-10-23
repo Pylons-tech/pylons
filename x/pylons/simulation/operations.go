@@ -22,15 +22,15 @@ const (
 	OpWeightMsgCreatAcc       = "op_weight_msg_create_acc"
 	OpWeightMsgCreateCookbook = "op_weight_msg_create_cookbook"
 	OpWeightMsgCreateRecipe   = "op_weight_msg_create_recipe"
-	OpWeightMsgExecuteRecipe   = "op_weight_msg_execute_recipe"
+	OpWeightMsgExecuteRecipe  = "op_weight_msg_execute_recipe"
 	invalidField              = "invalid"
 )
 
 // TODO add a global (not per-account) store of cookbook/recipeIDs
 type recipeInfo struct {
-	Address string
+	Address    string
 	CookbookID string
-	ID string
+	ID         string
 }
 
 var recipeInfoList []recipeInfo
@@ -234,7 +234,7 @@ func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operati
 			stateMap[simAccount.Address.String()] = accState
 
 			info := recipeInfo{
-				Address:   simAccount.Address.String(),
+				Address:    simAccount.Address.String(),
 				CookbookID: accState.CookbookIDs[0],
 				ID:         id,
 			}
@@ -276,7 +276,6 @@ func SimulateExecuteRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 				types.ModuleName, msgType, "Account has no balance"), nil, nil
 		}
 
-
 		// add cookbook id to global stateMap store
 		cookbookID := ""
 		recipeID := ""
@@ -300,4 +299,3 @@ func SimulateExecuteRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
 	}
 }
-
