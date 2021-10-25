@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Features:
+- [#478](https://github.com/Pylons-tech/pylons/pull/478) Expand validation checks for CreateRecipe and UpdateRecipe messages.
 - [#473](https://github.com/Pylons-tech/pylons/pull/473) Add `paymentProcessors` support for `Trade`s and `Recipe`s.
 - [#448](https://github.com/Pylons-tech/pylons/pull/448) Add query `list-trades` for listing `Trade`s by creator address.
 - [#430](https://github.com/Pylons-tech/pylons/pull/430) Add `x/evidence` and `x/slashing` modules for IBC functionality.

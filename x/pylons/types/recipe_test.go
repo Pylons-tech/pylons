@@ -182,7 +182,7 @@ func TestValidateDoubles(t *testing.T) {
 		}},
 		{desc: "ValidMultiple", obj: []DoubleParam{
 			{Key: "test1", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
-			{Key: "test2",  WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
+			{Key: "test2", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
 		}},
 		{desc: "InvalidSingle1", obj: []DoubleParam{
 			{Key: "1test"},
@@ -194,7 +194,7 @@ func TestValidateDoubles(t *testing.T) {
 			{Key: "test", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valLTone}}},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidMultiple", obj: []DoubleParam{
-			{Key: "test",  WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
+			{Key: "test", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
 			{Key: "test", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
 		}, err: ErrInvalidRequestField},
 	} {
@@ -221,7 +221,7 @@ func TestValidateLongs(t *testing.T) {
 		}},
 		{desc: "ValidMultiple", obj: []LongParam{
 			{Key: "test1", WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
-			{Key: "test2",  WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
+			{Key: "test2", WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
 		}},
 		{desc: "InvalidSingle1", obj: []LongParam{
 			{Key: "1test"},

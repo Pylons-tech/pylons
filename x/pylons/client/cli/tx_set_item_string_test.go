@@ -48,7 +48,7 @@ func TestSetItemString(t *testing.T) {
 				ID: executedItemID,
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),

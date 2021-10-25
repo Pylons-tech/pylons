@@ -51,7 +51,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -204,7 +204,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -394,7 +394,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -563,7 +563,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),

@@ -3,17 +3,19 @@ package cli_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Pylons-tech/pylons/testutil/network"
-	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"strconv"
+	"testing"
+	"time"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
-	"strconv"
-	"testing"
-	"time"
+
+	"github.com/Pylons-tech/pylons/testutil/network"
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 const (
@@ -21,14 +23,14 @@ const (
 )
 
 type easelBasicSim struct {
-	net                    *network.Network
-	ctx                    client.Context
-	basicTradePercentage   sdk.Dec
-	err                    error
-	common                 []string
-	execCount              int
-	itemCount              int
-	mintRecipeID string
+	net                  *network.Network
+	ctx                  client.Context
+	basicTradePercentage sdk.Dec
+	err                  error
+	common               []string
+	execCount            int
+	itemCount            int
+	mintRecipeID         string
 }
 
 func TestEaselBasic(t *testing.T) {
@@ -108,7 +110,7 @@ func createMintRecipe(t *testing.T, simInfo *easelBasicSim) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-		 	EntryIDs: []string{"title_title"},
+			EntryIDs: []string{"title_title"},
 			Weight:   1,
 		},
 	})
@@ -136,7 +138,6 @@ func createMintRecipe(t *testing.T, simInfo *easelBasicSim) {
 	_, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 }
-
 
 func mintNFT(t *testing.T, simInfo *easelBasicSim) {
 	// execute recipe to mint

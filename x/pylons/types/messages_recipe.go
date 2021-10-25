@@ -118,7 +118,7 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 	}
 
 	totalEntries := len(msg.Entries.CoinOutputs) + len(msg.Entries.ItemOutputs) + len(msg.Entries.ItemModifyOutputs)
-	if sum <= 0 && totalEntries > 0{
+	if sum <= 0 && totalEntries > 0 {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "weights in weightedOutputs add up to %v, should be nonzero", sum)
 	}
 
@@ -234,10 +234,17 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
+	sum := uint64(0)
 	for _, o := range msg.Outputs {
 		if err = ValidateOutputs(o, idMap); err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
+		sum += o.Weight
+	}
+
+	totalEntries := len(msg.Entries.CoinOutputs) + len(msg.Entries.ItemOutputs) + len(msg.Entries.ItemModifyOutputs)
+	if sum <= 0 && totalEntries > 0 {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "weights in weightedOutputs add up to %v, should be nonzero", sum)
 	}
 
 	// check if denoms are valid in coinOutputs
