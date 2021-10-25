@@ -1,8 +1,9 @@
 package simulation
 
 import (
-	regen "github.com/zach-klippenstein/goregen"
 	"math/rand"
+
+	regen "github.com/zach-klippenstein/goregen"
 )
 
 func generateRandomUsername(r *rand.Rand) (ret string) {

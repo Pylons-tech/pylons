@@ -104,8 +104,6 @@ func WeightedOperations(
 	}
 }
 
-
-
 // SimulateCreateAccount generates a MsgCreateAccount with random values
 func SimulateCreateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
 	return func(
