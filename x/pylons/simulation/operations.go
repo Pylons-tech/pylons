@@ -3,8 +3,6 @@ package simulation
 import (
 	"math/rand"
 
-	regen "github.com/zach-klippenstein/goregen"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -26,7 +24,6 @@ const (
 	invalidField              = "invalid"
 )
 
-// TODO add a global (not per-account) store of cookbook/recipeIDs
 type recipeInfo struct {
 	Address    string
 	CookbookID string
@@ -107,32 +104,7 @@ func WeightedOperations(
 	}
 }
 
-func generateRandomUsername(r *rand.Rand) (ret string) {
-	if r.Int63n(100) > 9 {
-		ret, _ = regen.Generate("^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$")
-	} else {
-		ret = invalidField
-	}
-	return
-}
 
-func generateRandomStringID(r *rand.Rand) (ret string) {
-	if r.Int63n(100) > 9 {
-		ret, _ = regen.Generate("^[a-zA-Z_][a-zA-Z_0-9]*$")
-	} else {
-		ret = invalidField
-	}
-	return
-}
-
-func generateRandomEmail(r *rand.Rand) (ret string) {
-	if r.Int63n(100) > 9 {
-		ret, _ = regen.Generate("^([a-zA-Z0-9_\\-.]+)@([a-zA-Z0-9_\\-.]+)\\.([a-zA-Z0-9]{2,})$")
-	} else {
-		ret = invalidField
-	}
-	return
-}
 
 // SimulateCreateAccount generates a MsgCreateAccount with random values
 func SimulateCreateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
