@@ -69,7 +69,7 @@ func TestLOUDBasic(t *testing.T) {
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 	}
 
-	createCookbook(t, simInfo)
+	createLOUDCookbook(t, simInfo)
 	createCharacterRecipe(t, simInfo)
 	createCharacter(t, simInfo)
 	getLOUDCoin(t, simInfo)
@@ -78,7 +78,7 @@ func TestLOUDBasic(t *testing.T) {
 	fightWolfWithSword(t, simInfo)
 }
 
-func createCookbook(t *testing.T, simInfo *loudBasicSim) {
+func createLOUDCookbook(t *testing.T, simInfo *loudBasicSim) {
 
 	cbFields := []string{
 		"Legend of the Undead Dragon",

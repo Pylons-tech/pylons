@@ -14292,6 +14292,12 @@ paths:
                                 properties:
                                   key:
                                     type: string
+                                  rate:
+                                    type: string
+                                    description: >-
+                                      The likelihood that this parameter is
+                                      applied to the output item. Between 0.0
+                                      (exclusive) and 1.0 (inclusive).
                                   weightRanges:
                                     type: array
                                     items:
@@ -14322,6 +14328,12 @@ paths:
                                 properties:
                                   key:
                                     type: string
+                                  rate:
+                                    type: string
+                                    description: >-
+                                      The likelihood that this parameter is
+                                      applied to the output item. Between 0.0
+                                      (exclusive) and 1.0 (inclusive).
                                   weightRanges:
                                     type: array
                                     items:
@@ -14354,6 +14366,12 @@ paths:
                                 properties:
                                   key:
                                     type: string
+                                  rate:
+                                    type: string
+                                    description: >-
+                                      The likelihood that this parameter is
+                                      applied to the output item. Between 0.0
+                                      (exclusive) and 1.0 (inclusive).
                                   value:
                                     type: string
                                   program:
@@ -14431,6 +14449,12 @@ paths:
                                 properties:
                                   key:
                                     type: string
+                                  rate:
+                                    type: string
+                                    description: >-
+                                      The likelihood that this parameter is
+                                      applied to the output item. Between 0.0
+                                      (exclusive) and 1.0 (inclusive).
                                   weightRanges:
                                     type: array
                                     items:
@@ -14461,6 +14485,12 @@ paths:
                                 properties:
                                   key:
                                     type: string
+                                  rate:
+                                    type: string
+                                    description: >-
+                                      The likelihood that this parameter is
+                                      applied to the output item. Between 0.0
+                                      (exclusive) and 1.0 (inclusive).
                                   weightRanges:
                                     type: array
                                     items:
@@ -14493,6 +14523,12 @@ paths:
                                 properties:
                                   key:
                                     type: string
+                                  rate:
+                                    type: string
+                                    description: >-
+                                      The likelihood that this parameter is
+                                      applied to the output item. Between 0.0
+                                      (exclusive) and 1.0 (inclusive).
                                   value:
                                     type: string
                                   program:
@@ -14817,6 +14853,12 @@ paths:
                                   properties:
                                     key:
                                       type: string
+                                    rate:
+                                      type: string
+                                      description: >-
+                                        The likelihood that this parameter is
+                                        applied to the output item. Between 0.0
+                                        (exclusive) and 1.0 (inclusive).
                                     weightRanges:
                                       type: array
                                       items:
@@ -14847,6 +14889,12 @@ paths:
                                   properties:
                                     key:
                                       type: string
+                                    rate:
+                                      type: string
+                                      description: >-
+                                        The likelihood that this parameter is
+                                        applied to the output item. Between 0.0
+                                        (exclusive) and 1.0 (inclusive).
                                     weightRanges:
                                       type: array
                                       items:
@@ -14879,6 +14927,12 @@ paths:
                                   properties:
                                     key:
                                       type: string
+                                    rate:
+                                      type: string
+                                      description: >-
+                                        The likelihood that this parameter is
+                                        applied to the output item. Between 0.0
+                                        (exclusive) and 1.0 (inclusive).
                                     value:
                                       type: string
                                     program:
@@ -14958,6 +15012,12 @@ paths:
                                   properties:
                                     key:
                                       type: string
+                                    rate:
+                                      type: string
+                                      description: >-
+                                        The likelihood that this parameter is
+                                        applied to the output item. Between 0.0
+                                        (exclusive) and 1.0 (inclusive).
                                     weightRanges:
                                       type: array
                                       items:
@@ -14988,6 +15048,12 @@ paths:
                                   properties:
                                     key:
                                       type: string
+                                    rate:
+                                      type: string
+                                      description: >-
+                                        The likelihood that this parameter is
+                                        applied to the output item. Between 0.0
+                                        (exclusive) and 1.0 (inclusive).
                                     weightRanges:
                                       type: array
                                       items:
@@ -15020,6 +15086,12 @@ paths:
                                   properties:
                                     key:
                                       type: string
+                                    rate:
+                                      type: string
+                                      description: >-
+                                        The likelihood that this parameter is
+                                        applied to the output item. Between 0.0
+                                        (exclusive) and 1.0 (inclusive).
                                     value:
                                       type: string
                                     program:
@@ -23372,6 +23444,11 @@ definitions:
     properties:
       key:
         type: string
+      rate:
+        type: string
+        description: >-
+          The likelihood that this parameter is applied to the output item.
+          Between 0.0 (exclusive) and 1.0 (inclusive).
       weightRanges:
         type: array
         items:
@@ -23446,6 +23523,11 @@ definitions:
                 properties:
                   key:
                     type: string
+                  rate:
+                    type: string
+                    description: >-
+                      The likelihood that this parameter is applied to the
+                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
                   weightRanges:
                     type: array
                     items:
@@ -23474,6 +23556,11 @@ definitions:
                 properties:
                   key:
                     type: string
+                  rate:
+                    type: string
+                    description: >-
+                      The likelihood that this parameter is applied to the
+                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
                   weightRanges:
                     type: array
                     items:
@@ -23504,6 +23591,11 @@ definitions:
                 properties:
                   key:
                     type: string
+                  rate:
+                    type: string
+                    description: >-
+                      The likelihood that this parameter is applied to the
+                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
                   value:
                     type: string
                   program:
@@ -23577,6 +23669,11 @@ definitions:
                 properties:
                   key:
                     type: string
+                  rate:
+                    type: string
+                    description: >-
+                      The likelihood that this parameter is applied to the
+                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
                   weightRanges:
                     type: array
                     items:
@@ -23605,6 +23702,11 @@ definitions:
                 properties:
                   key:
                     type: string
+                  rate:
+                    type: string
+                    description: >-
+                      The likelihood that this parameter is applied to the
+                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
                   weightRanges:
                     type: array
                     items:
@@ -23635,6 +23737,11 @@ definitions:
                 properties:
                   key:
                     type: string
+                  rate:
+                    type: string
+                    description: >-
+                      The likelihood that this parameter is applied to the
+                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
                   value:
                     type: string
                   program:
@@ -24005,6 +24112,11 @@ definitions:
           properties:
             key:
               type: string
+            rate:
+              type: string
+              description: >-
+                The likelihood that this parameter is applied to the output
+                item. Between 0.0 (exclusive) and 1.0 (inclusive).
             weightRanges:
               type: array
               items:
@@ -24033,6 +24145,11 @@ definitions:
           properties:
             key:
               type: string
+            rate:
+              type: string
+              description: >-
+                The likelihood that this parameter is applied to the output
+                item. Between 0.0 (exclusive) and 1.0 (inclusive).
             weightRanges:
               type: array
               items:
@@ -24061,6 +24178,11 @@ definitions:
           properties:
             key:
               type: string
+            rate:
+              type: string
+              description: >-
+                The likelihood that this parameter is applied to the output
+                item. Between 0.0 (exclusive) and 1.0 (inclusive).
             value:
               type: string
             program:
@@ -24123,6 +24245,11 @@ definitions:
           properties:
             key:
               type: string
+            rate:
+              type: string
+              description: >-
+                The likelihood that this parameter is applied to the output
+                item. Between 0.0 (exclusive) and 1.0 (inclusive).
             weightRanges:
               type: array
               items:
@@ -24151,6 +24278,11 @@ definitions:
           properties:
             key:
               type: string
+            rate:
+              type: string
+              description: >-
+                The likelihood that this parameter is applied to the output
+                item. Between 0.0 (exclusive) and 1.0 (inclusive).
             weightRanges:
               type: array
               items:
@@ -24179,6 +24311,11 @@ definitions:
           properties:
             key:
               type: string
+            rate:
+              type: string
+              description: >-
+                The likelihood that this parameter is applied to the output
+                item. Between 0.0 (exclusive) and 1.0 (inclusive).
             value:
               type: string
             program:
@@ -24304,6 +24441,11 @@ definitions:
     properties:
       key:
         type: string
+      rate:
+        type: string
+        description: >-
+          The likelihood that this parameter is applied to the output item.
+          Between 0.0 (exclusive) and 1.0 (inclusive).
       weightRanges:
         type: array
         items:
@@ -24928,6 +25070,12 @@ definitions:
                         properties:
                           key:
                             type: string
+                          rate:
+                            type: string
+                            description: >-
+                              The likelihood that this parameter is applied to
+                              the output item. Between 0.0 (exclusive) and 1.0
+                              (inclusive).
                           weightRanges:
                             type: array
                             items:
@@ -24956,6 +25104,12 @@ definitions:
                         properties:
                           key:
                             type: string
+                          rate:
+                            type: string
+                            description: >-
+                              The likelihood that this parameter is applied to
+                              the output item. Between 0.0 (exclusive) and 1.0
+                              (inclusive).
                           weightRanges:
                             type: array
                             items:
@@ -24986,6 +25140,12 @@ definitions:
                         properties:
                           key:
                             type: string
+                          rate:
+                            type: string
+                            description: >-
+                              The likelihood that this parameter is applied to
+                              the output item. Between 0.0 (exclusive) and 1.0
+                              (inclusive).
                           value:
                             type: string
                           program:
@@ -25060,6 +25220,12 @@ definitions:
                         properties:
                           key:
                             type: string
+                          rate:
+                            type: string
+                            description: >-
+                              The likelihood that this parameter is applied to
+                              the output item. Between 0.0 (exclusive) and 1.0
+                              (inclusive).
                           weightRanges:
                             type: array
                             items:
@@ -25088,6 +25254,12 @@ definitions:
                         properties:
                           key:
                             type: string
+                          rate:
+                            type: string
+                            description: >-
+                              The likelihood that this parameter is applied to
+                              the output item. Between 0.0 (exclusive) and 1.0
+                              (inclusive).
                           weightRanges:
                             type: array
                             items:
@@ -25118,6 +25290,12 @@ definitions:
                         properties:
                           key:
                             type: string
+                          rate:
+                            type: string
+                            description: >-
+                              The likelihood that this parameter is applied to
+                              the output item. Between 0.0 (exclusive) and 1.0
+                              (inclusive).
                           value:
                             type: string
                           program:
@@ -26199,6 +26377,12 @@ definitions:
                           properties:
                             key:
                               type: string
+                            rate:
+                              type: string
+                              description: >-
+                                The likelihood that this parameter is applied to
+                                the output item. Between 0.0 (exclusive) and 1.0
+                                (inclusive).
                             weightRanges:
                               type: array
                               items:
@@ -26229,6 +26413,12 @@ definitions:
                           properties:
                             key:
                               type: string
+                            rate:
+                              type: string
+                              description: >-
+                                The likelihood that this parameter is applied to
+                                the output item. Between 0.0 (exclusive) and 1.0
+                                (inclusive).
                             weightRanges:
                               type: array
                               items:
@@ -26261,6 +26451,12 @@ definitions:
                           properties:
                             key:
                               type: string
+                            rate:
+                              type: string
+                              description: >-
+                                The likelihood that this parameter is applied to
+                                the output item. Between 0.0 (exclusive) and 1.0
+                                (inclusive).
                             value:
                               type: string
                             program:
@@ -26336,6 +26532,12 @@ definitions:
                           properties:
                             key:
                               type: string
+                            rate:
+                              type: string
+                              description: >-
+                                The likelihood that this parameter is applied to
+                                the output item. Between 0.0 (exclusive) and 1.0
+                                (inclusive).
                             weightRanges:
                               type: array
                               items:
@@ -26366,6 +26568,12 @@ definitions:
                           properties:
                             key:
                               type: string
+                            rate:
+                              type: string
+                              description: >-
+                                The likelihood that this parameter is applied to
+                                the output item. Between 0.0 (exclusive) and 1.0
+                                (inclusive).
                             weightRanges:
                               type: array
                               items:
@@ -26398,6 +26606,12 @@ definitions:
                           properties:
                             key:
                               type: string
+                            rate:
+                              type: string
+                              description: >-
+                                The likelihood that this parameter is applied to
+                                the output item. Between 0.0 (exclusive) and 1.0
+                                (inclusive).
                             value:
                               type: string
                             program:
@@ -26901,6 +27115,12 @@ definitions:
                     properties:
                       key:
                         type: string
+                      rate:
+                        type: string
+                        description: >-
+                          The likelihood that this parameter is applied to the
+                          output item. Between 0.0 (exclusive) and 1.0
+                          (inclusive).
                       weightRanges:
                         type: array
                         items:
@@ -26929,6 +27149,12 @@ definitions:
                     properties:
                       key:
                         type: string
+                      rate:
+                        type: string
+                        description: >-
+                          The likelihood that this parameter is applied to the
+                          output item. Between 0.0 (exclusive) and 1.0
+                          (inclusive).
                       weightRanges:
                         type: array
                         items:
@@ -26959,6 +27185,12 @@ definitions:
                     properties:
                       key:
                         type: string
+                      rate:
+                        type: string
+                        description: >-
+                          The likelihood that this parameter is applied to the
+                          output item. Between 0.0 (exclusive) and 1.0
+                          (inclusive).
                       value:
                         type: string
                       program:
@@ -27032,6 +27264,12 @@ definitions:
                     properties:
                       key:
                         type: string
+                      rate:
+                        type: string
+                        description: >-
+                          The likelihood that this parameter is applied to the
+                          output item. Between 0.0 (exclusive) and 1.0
+                          (inclusive).
                       weightRanges:
                         type: array
                         items:
@@ -27060,6 +27298,12 @@ definitions:
                     properties:
                       key:
                         type: string
+                      rate:
+                        type: string
+                        description: >-
+                          The likelihood that this parameter is applied to the
+                          output item. Between 0.0 (exclusive) and 1.0
+                          (inclusive).
                       weightRanges:
                         type: array
                         items:
@@ -27090,6 +27334,12 @@ definitions:
                     properties:
                       key:
                         type: string
+                      rate:
+                        type: string
+                        description: >-
+                          The likelihood that this parameter is applied to the
+                          output item. Between 0.0 (exclusive) and 1.0
+                          (inclusive).
                       value:
                         type: string
                       program:
@@ -27205,6 +27455,11 @@ definitions:
     properties:
       key:
         type: string
+      rate:
+        type: string
+        description: >-
+          The likelihood that this parameter is applied to the output item.
+          Between 0.0 (exclusive) and 1.0 (inclusive).
       value:
         type: string
       program:
