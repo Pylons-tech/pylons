@@ -18,6 +18,7 @@
 - [#421](https://github.com/Pylons-tech/pylons/pull/421) Recipe execution validation and item matching logic fixed.
 
 ### Changes:
+- [#473](https://github.com/Pylons-tech/pylons/pull/473) Update proto definition of `MsgExecuteRecipe` and `MsgFulfillTrade` to add the `PaymentInfos` field.
 - [#467](https://github.com/Pylons-tech/pylons/pull/467) Remove the `/flutter/` directory.  Code has been [moved](https://github.com/Pylons-tech/flutter_wallet).
 - [#465](https://github.com/Pylons-tech/pylons/pull/465) Remove the `/vue/` directory.  Code has been [moved](https://github.com/Pylons-tech/pylons-web).
 - [#463](https://github.com/Pylons-tech/pylons/pull/463) Bump SDK version to v0.44.2 and IBC-Go to v1.2.2.
