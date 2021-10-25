@@ -49,7 +49,6 @@ func TestSetItemString(t *testing.T) {
 				Doubles: []types.DoubleParam{
 					{
 						Key:  "Mass",
-						Rate: sdk.NewDec(1),
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -64,7 +63,6 @@ func TestSetItemString(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-						Rate:    sdk.NewDec(1),
 						Value:   "testValue",
 						Program: "",
 					},

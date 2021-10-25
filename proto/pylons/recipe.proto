@@ -58,11 +58,9 @@ message DoubleWeightRange {
 // DoubleParam describes the bounds on an item input/output parameter of type float64
 message DoubleParam  {
   string key = 1;
-  // The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-  string rate = 2 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
-  repeated DoubleWeightRange weightRanges = 3 [(gogoproto.nullable) = false];
+  repeated DoubleWeightRange weightRanges = 2 [(gogoproto.nullable) = false];
   // When program is not empty, weightRanges is ignored
-  string program = 4;
+  string program = 3;
 }
 
 // IntWeightRange describes weight range that produce int value
@@ -75,21 +73,17 @@ message IntWeightRange {
 // LongParam describes the bounds on an item input/output parameter of type int64
 message LongParam {
   string key = 1;
-  // The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-  string rate = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
-  repeated IntWeightRange weightRanges = 3 [(gogoproto.nullable) = false];
+  repeated IntWeightRange weightRanges = 2 [(gogoproto.nullable) = false];
   // When program is not empty, weightRanges is ignored
-  string program = 4;
+  string program = 3;
 }
 
 // StringParam describes an item input/output parameter of type string
 message StringParam {
   string key = 1;
-  // The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-  string rate = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
-  string value = 3;
+  string value = 2;
   // When program is not empty, value is ignored
-  string program = 4;
+  string program = 3;
 }
 
 // CoinOutput models the continuum of valid outcomes for coin generation in recipes

@@ -105,40 +105,33 @@ func createCharacterRecipe(t *testing.T, simInfo *loudBasicSim) {
 			ID: "basic_character_lv1",
 			Doubles: []types.DoubleParam{{
 				Key:          "XP",
-				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "1",
 			}},
 			Longs: []types.LongParam{{
 				Key:          "level",
-				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "1",
 			}, {
 				Key:          "giantKills",
-				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "0",
 			}, {
 				Key:          "special",
-				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "0",
 			}, {
 				Key:          "specialDragonKill",
-				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "0",
 			}, {
 				Key:          "undeadDragonKill",
-				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "0",
 			}},
 			Strings: []types.StringParam{
 				{
 					Key:     "entityType",
-					Rate:    sdk.OneDec(),
 					Value:   "character",
 					Program: "",
 				}},
@@ -309,24 +302,20 @@ func createBuyCopperSwordRecipe(t *testing.T, simInfo *loudBasicSim) {
 			ID: "copper_sword_lv1",
 			Doubles: []types.DoubleParam{{
 				Key:          "attack",
-				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "10.0",
 			}},
 			Longs: []types.LongParam{{
 				Key:          "level",
-				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "1",
 			}, {
 				Key:          "value",
-				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "250",
 			}},
 			Strings: []types.StringParam{{
 				Key:     "name",
-				Rate:    sdk.OneDec(),
 				Value:   "Copper Sword",
 				Program: "",
 			}},
@@ -470,7 +459,6 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 				Doubles: []types.DoubleParam{
 					{
 						Key:          "attack",
-						Rate:         sdk.NewDec(1),
 						WeightRanges: nil,
 						Program:      "0.0",
 					},
@@ -478,13 +466,11 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 				Longs: []types.LongParam{
 					{
 						Key:          "level",
-						Rate:         sdk.NewDec(1),
 						WeightRanges: nil,
 						Program:      "1",
 					},
 					{
 						Key:          "value",
-						Rate:         sdk.NewDec(1),
 						WeightRanges: nil,
 						Program:      "140",
 					},
@@ -492,7 +478,6 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 				Strings: []types.StringParam{
 					{
 						Key:     "name",
-						Rate:    sdk.NewDec(1),
 						Value:   "Wolf Tail",
 						Program: "",
 					},
@@ -509,7 +494,6 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 				Doubles: []types.DoubleParam{
 					{
 						Key:          "attack",
-						Rate:         sdk.NewDec(1),
 						WeightRanges: nil,
 						Program:      "0.0",
 					},
@@ -517,13 +501,11 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 				Longs: []types.LongParam{
 					{
 						Key:          "level",
-						Rate:         sdk.NewDec(1),
 						WeightRanges: nil,
 						Program:      "1",
 					},
 					{
 						Key:          "value",
-						Rate:         sdk.NewDec(1),
 						WeightRanges: nil,
 						Program:      "140",
 					},
@@ -531,7 +513,6 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 				Strings: []types.StringParam{
 					{
 						Key:     "Name",
-						Rate:    sdk.NewDec(1),
 						Value:   "Wolf Fur",
 						Program: "",
 					},
@@ -551,7 +532,6 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 				Doubles: []types.DoubleParam{
 					{
 						Key:          "XP",
-						Rate:         sdk.OneDec(),
 						WeightRanges: nil,
 						Program:      "XP + double(15 * 3)",
 					},
@@ -559,7 +539,6 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 				Longs: []types.LongParam{
 					{
 						Key:          "level",
-						Rate:         sdk.OneDec(),
 						WeightRanges: nil,
 						Program:      "level + int(XP / double(level * level * level + 5))",
 					},

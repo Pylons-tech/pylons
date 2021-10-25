@@ -13913,6 +13913,184 @@ paths:
           type: boolean
       tags:
         - Query
+  '/pylons/payment/{purchaseID}':
+    get:
+      summary: Queries a paymentInfo by index.
+      operationId: PylonstechPylonsPylonsPaymentInfo
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              PaymentInfo:
+                type: object
+                properties:
+                  purchaseID:
+                    type: string
+                  processorName:
+                    type: string
+                  payerAddr:
+                    type: string
+                  amount:
+                    type: string
+                  productID:
+                    type: string
+                  signature:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: purchaseID
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  /pylons/payments:
+    get:
+      summary: Queries a list of paymentInfo items.
+      operationId: PylonstechPylonsPylonsPaymentInfoAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              PaymentInfo:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    purchaseID:
+                      type: string
+                    processorName:
+                      type: string
+                    payerAddr:
+                      type: string
+                    amount:
+                      type: string
+                    productID:
+                      type: string
+                    signature:
+                      type: string
+              pagination:
+                type: object
+                properties:
+                  nextKey:
+                    type: string
+                    format: byte
+                    title: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.countTotal
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
   '/pylons/recipe/{CookbookID}/{ID}':
     get:
       summary: Retrieves a recipe by ID.
@@ -14114,12 +14292,6 @@ paths:
                                 properties:
                                   key:
                                     type: string
-                                  rate:
-                                    type: string
-                                    description: >-
-                                      The likelihood that this parameter is
-                                      applied to the output item. Between 0.0
-                                      (exclusive) and 1.0 (inclusive).
                                   weightRanges:
                                     type: array
                                     items:
@@ -14150,12 +14322,6 @@ paths:
                                 properties:
                                   key:
                                     type: string
-                                  rate:
-                                    type: string
-                                    description: >-
-                                      The likelihood that this parameter is
-                                      applied to the output item. Between 0.0
-                                      (exclusive) and 1.0 (inclusive).
                                   weightRanges:
                                     type: array
                                     items:
@@ -14188,12 +14354,6 @@ paths:
                                 properties:
                                   key:
                                     type: string
-                                  rate:
-                                    type: string
-                                    description: >-
-                                      The likelihood that this parameter is
-                                      applied to the output item. Between 0.0
-                                      (exclusive) and 1.0 (inclusive).
                                   value:
                                     type: string
                                   program:
@@ -14271,12 +14431,6 @@ paths:
                                 properties:
                                   key:
                                     type: string
-                                  rate:
-                                    type: string
-                                    description: >-
-                                      The likelihood that this parameter is
-                                      applied to the output item. Between 0.0
-                                      (exclusive) and 1.0 (inclusive).
                                   weightRanges:
                                     type: array
                                     items:
@@ -14307,12 +14461,6 @@ paths:
                                 properties:
                                   key:
                                     type: string
-                                  rate:
-                                    type: string
-                                    description: >-
-                                      The likelihood that this parameter is
-                                      applied to the output item. Between 0.0
-                                      (exclusive) and 1.0 (inclusive).
                                   weightRanges:
                                     type: array
                                     items:
@@ -14345,12 +14493,6 @@ paths:
                                 properties:
                                   key:
                                     type: string
-                                  rate:
-                                    type: string
-                                    description: >-
-                                      The likelihood that this parameter is
-                                      applied to the output item. Between 0.0
-                                      (exclusive) and 1.0 (inclusive).
                                   value:
                                     type: string
                                   program:
@@ -14675,12 +14817,6 @@ paths:
                                   properties:
                                     key:
                                       type: string
-                                    rate:
-                                      type: string
-                                      description: >-
-                                        The likelihood that this parameter is
-                                        applied to the output item. Between 0.0
-                                        (exclusive) and 1.0 (inclusive).
                                     weightRanges:
                                       type: array
                                       items:
@@ -14711,12 +14847,6 @@ paths:
                                   properties:
                                     key:
                                       type: string
-                                    rate:
-                                      type: string
-                                      description: >-
-                                        The likelihood that this parameter is
-                                        applied to the output item. Between 0.0
-                                        (exclusive) and 1.0 (inclusive).
                                     weightRanges:
                                       type: array
                                       items:
@@ -14749,12 +14879,6 @@ paths:
                                   properties:
                                     key:
                                       type: string
-                                    rate:
-                                      type: string
-                                      description: >-
-                                        The likelihood that this parameter is
-                                        applied to the output item. Between 0.0
-                                        (exclusive) and 1.0 (inclusive).
                                     value:
                                       type: string
                                     program:
@@ -14834,12 +14958,6 @@ paths:
                                   properties:
                                     key:
                                       type: string
-                                    rate:
-                                      type: string
-                                      description: >-
-                                        The likelihood that this parameter is
-                                        applied to the output item. Between 0.0
-                                        (exclusive) and 1.0 (inclusive).
                                     weightRanges:
                                       type: array
                                       items:
@@ -14870,12 +14988,6 @@ paths:
                                   properties:
                                     key:
                                       type: string
-                                    rate:
-                                      type: string
-                                      description: >-
-                                        The likelihood that this parameter is
-                                        applied to the output item. Between 0.0
-                                        (exclusive) and 1.0 (inclusive).
                                     weightRanges:
                                       type: array
                                       items:
@@ -14908,12 +15020,6 @@ paths:
                                   properties:
                                     key:
                                       type: string
-                                    rate:
-                                      type: string
-                                      description: >-
-                                        The likelihood that this parameter is
-                                        applied to the output item. Between 0.0
-                                        (exclusive) and 1.0 (inclusive).
                                     value:
                                       type: string
                                     program:
@@ -15001,7 +15107,6 @@ paths:
                     extraInfo:
                       type: string
               pagination:
-                description: pagination defines the pagination in the response.
                 type: object
                 properties:
                   nextKey:
@@ -15018,6 +15123,16 @@ paths:
                       PageRequest.count_total
 
                       was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
         default:
           description: An unexpected error response.
           schema:
@@ -15041,6 +15156,180 @@ paths:
           in: path
           required: true
           type: string
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.countTotal
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  '/pylons/redeem/{ID}':
+    get:
+      summary: Queries a redeemInfo by index.
+      operationId: PylonstechPylonsPylonsRedeemInfo
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              RedeemInfo:
+                type: object
+                properties:
+                  ID:
+                    type: string
+                  processorName:
+                    type: string
+                  address:
+                    type: string
+                  amount:
+                    type: string
+                  signature:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: ID
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  /pylons/redeems:
+    get:
+      summary: Queries a list of redeemInfo items.
+      operationId: PylonstechPylonsPylonsRedeemInfoAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              RedeemInfo:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    ID:
+                      type: string
+                    processorName:
+                      type: string
+                    address:
+                      type: string
+                    amount:
+                      type: string
+                    signature:
+                      type: string
+              pagination:
+                type: object
+                properties:
+                  nextKey:
+                    type: string
+                    format: byte
+                    title: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
         - name: pagination.key
           description: |-
             key is a value returned in PageResponse.next_key to begin
@@ -15510,7 +15799,6 @@ paths:
                           itemID:
                             type: string
               pagination:
-                description: pagination defines the pagination in the response.
                 type: object
                 properties:
                   nextKey:
@@ -15527,6 +15815,16 @@ paths:
                       PageRequest.count_total
 
                       was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
         default:
           description: An unexpected error response.
           schema:
@@ -23074,11 +23372,6 @@ definitions:
     properties:
       key:
         type: string
-      rate:
-        type: string
-        description: >-
-          The likelihood that this parameter is applied to the output item.
-          Between 0.0 (exclusive) and 1.0 (inclusive).
       weightRanges:
         type: array
         items:
@@ -23153,11 +23446,6 @@ definitions:
                 properties:
                   key:
                     type: string
-                  rate:
-                    type: string
-                    description: >-
-                      The likelihood that this parameter is applied to the
-                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
                   weightRanges:
                     type: array
                     items:
@@ -23186,11 +23474,6 @@ definitions:
                 properties:
                   key:
                     type: string
-                  rate:
-                    type: string
-                    description: >-
-                      The likelihood that this parameter is applied to the
-                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
                   weightRanges:
                     type: array
                     items:
@@ -23221,11 +23504,6 @@ definitions:
                 properties:
                   key:
                     type: string
-                  rate:
-                    type: string
-                    description: >-
-                      The likelihood that this parameter is applied to the
-                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
                   value:
                     type: string
                   program:
@@ -23299,11 +23577,6 @@ definitions:
                 properties:
                   key:
                     type: string
-                  rate:
-                    type: string
-                    description: >-
-                      The likelihood that this parameter is applied to the
-                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
                   weightRanges:
                     type: array
                     items:
@@ -23332,11 +23605,6 @@ definitions:
                 properties:
                   key:
                     type: string
-                  rate:
-                    type: string
-                    description: >-
-                      The likelihood that this parameter is applied to the
-                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
                   weightRanges:
                     type: array
                     items:
@@ -23367,11 +23635,6 @@ definitions:
                 properties:
                   key:
                     type: string
-                  rate:
-                    type: string
-                    description: >-
-                      The likelihood that this parameter is applied to the
-                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
                   value:
                     type: string
                   program:
@@ -23742,11 +24005,6 @@ definitions:
           properties:
             key:
               type: string
-            rate:
-              type: string
-              description: >-
-                The likelihood that this parameter is applied to the output
-                item. Between 0.0 (exclusive) and 1.0 (inclusive).
             weightRanges:
               type: array
               items:
@@ -23775,11 +24033,6 @@ definitions:
           properties:
             key:
               type: string
-            rate:
-              type: string
-              description: >-
-                The likelihood that this parameter is applied to the output
-                item. Between 0.0 (exclusive) and 1.0 (inclusive).
             weightRanges:
               type: array
               items:
@@ -23808,11 +24061,6 @@ definitions:
           properties:
             key:
               type: string
-            rate:
-              type: string
-              description: >-
-                The likelihood that this parameter is applied to the output
-                item. Between 0.0 (exclusive) and 1.0 (inclusive).
             value:
               type: string
             program:
@@ -23875,11 +24123,6 @@ definitions:
           properties:
             key:
               type: string
-            rate:
-              type: string
-              description: >-
-                The likelihood that this parameter is applied to the output
-                item. Between 0.0 (exclusive) and 1.0 (inclusive).
             weightRanges:
               type: array
               items:
@@ -23908,11 +24151,6 @@ definitions:
           properties:
             key:
               type: string
-            rate:
-              type: string
-              description: >-
-                The likelihood that this parameter is applied to the output
-                item. Between 0.0 (exclusive) and 1.0 (inclusive).
             weightRanges:
               type: array
               items:
@@ -23941,11 +24179,6 @@ definitions:
           properties:
             key:
               type: string
-            rate:
-              type: string
-              description: >-
-                The likelihood that this parameter is applied to the output
-                item. Between 0.0 (exclusive) and 1.0 (inclusive).
             value:
               type: string
             program:
@@ -24071,11 +24304,6 @@ definitions:
     properties:
       key:
         type: string
-      rate:
-        type: string
-        description: >-
-          The likelihood that this parameter is applied to the output item.
-          Between 0.0 (exclusive) and 1.0 (inclusive).
       weightRanges:
         type: array
         items:
@@ -24097,6 +24325,8 @@ definitions:
     title: >-
       LongParam describes the bounds on an item input/output parameter of type
       int64
+  Pylonstech.pylons.pylons.MsgBurnDebtTokenResponse:
+    type: object
   Pylonstech.pylons.pylons.MsgCancelTradeResponse:
     type: object
   Pylonstech.pylons.pylons.MsgCompleteExecutionEarlyResponse:
@@ -24137,6 +24367,109 @@ definitions:
     type: object
   Pylonstech.pylons.pylons.MsgUpdateRecipeResponse:
     type: object
+  Pylonstech.pylons.pylons.PaymentInfo:
+    type: object
+    properties:
+      purchaseID:
+        type: string
+      processorName:
+        type: string
+      payerAddr:
+        type: string
+      amount:
+        type: string
+      productID:
+        type: string
+      signature:
+        type: string
+  Pylonstech.pylons.pylons.QueryAllPaymentInfoResponse:
+    type: object
+    properties:
+      PaymentInfo:
+        type: array
+        items:
+          type: object
+          properties:
+            purchaseID:
+              type: string
+            processorName:
+              type: string
+            payerAddr:
+              type: string
+            amount:
+              type: string
+            productID:
+              type: string
+            signature:
+              type: string
+      pagination:
+        type: object
+        properties:
+          nextKey:
+            type: string
+            format: byte
+            title: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
+  Pylonstech.pylons.pylons.QueryAllRedeemInfoResponse:
+    type: object
+    properties:
+      RedeemInfo:
+        type: array
+        items:
+          type: object
+          properties:
+            ID:
+              type: string
+            processorName:
+              type: string
+            address:
+              type: string
+            amount:
+              type: string
+            signature:
+              type: string
+      pagination:
+        type: object
+        properties:
+          nextKey:
+            type: string
+            format: byte
+            title: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
   Pylonstech.pylons.pylons.QueryGetAddressByUsernameResponse:
     type: object
     properties:
@@ -24385,6 +24718,24 @@ definitions:
             description: >-
               The percentage of a trade sale retained by the cookbook owner. In
               the range (0.0, 1.0).
+  Pylonstech.pylons.pylons.QueryGetPaymentInfoResponse:
+    type: object
+    properties:
+      PaymentInfo:
+        type: object
+        properties:
+          purchaseID:
+            type: string
+          processorName:
+            type: string
+          payerAddr:
+            type: string
+          amount:
+            type: string
+          productID:
+            type: string
+          signature:
+            type: string
   Pylonstech.pylons.pylons.QueryGetRecipeResponse:
     type: object
     properties:
@@ -24577,12 +24928,6 @@ definitions:
                         properties:
                           key:
                             type: string
-                          rate:
-                            type: string
-                            description: >-
-                              The likelihood that this parameter is applied to
-                              the output item. Between 0.0 (exclusive) and 1.0
-                              (inclusive).
                           weightRanges:
                             type: array
                             items:
@@ -24611,12 +24956,6 @@ definitions:
                         properties:
                           key:
                             type: string
-                          rate:
-                            type: string
-                            description: >-
-                              The likelihood that this parameter is applied to
-                              the output item. Between 0.0 (exclusive) and 1.0
-                              (inclusive).
                           weightRanges:
                             type: array
                             items:
@@ -24647,12 +24986,6 @@ definitions:
                         properties:
                           key:
                             type: string
-                          rate:
-                            type: string
-                            description: >-
-                              The likelihood that this parameter is applied to
-                              the output item. Between 0.0 (exclusive) and 1.0
-                              (inclusive).
                           value:
                             type: string
                           program:
@@ -24727,12 +25060,6 @@ definitions:
                         properties:
                           key:
                             type: string
-                          rate:
-                            type: string
-                            description: >-
-                              The likelihood that this parameter is applied to
-                              the output item. Between 0.0 (exclusive) and 1.0
-                              (inclusive).
                           weightRanges:
                             type: array
                             items:
@@ -24761,12 +25088,6 @@ definitions:
                         properties:
                           key:
                             type: string
-                          rate:
-                            type: string
-                            description: >-
-                              The likelihood that this parameter is applied to
-                              the output item. Between 0.0 (exclusive) and 1.0
-                              (inclusive).
                           weightRanges:
                             type: array
                             items:
@@ -24797,12 +25118,6 @@ definitions:
                         properties:
                           key:
                             type: string
-                          rate:
-                            type: string
-                            description: >-
-                              The likelihood that this parameter is applied to
-                              the output item. Between 0.0 (exclusive) and 1.0
-                              (inclusive).
                           value:
                             type: string
                           program:
@@ -24881,6 +25196,22 @@ definitions:
           enabled:
             type: boolean
           extraInfo:
+            type: string
+  Pylonstech.pylons.pylons.QueryGetRedeemInfoResponse:
+    type: object
+    properties:
+      RedeemInfo:
+        type: object
+        properties:
+          ID:
+            type: string
+          processorName:
+            type: string
+          address:
+            type: string
+          amount:
+            type: string
+          signature:
             type: string
   Pylonstech.pylons.pylons.QueryGetTradeResponse:
     type: object
@@ -25868,12 +26199,6 @@ definitions:
                           properties:
                             key:
                               type: string
-                            rate:
-                              type: string
-                              description: >-
-                                The likelihood that this parameter is applied to
-                                the output item. Between 0.0 (exclusive) and 1.0
-                                (inclusive).
                             weightRanges:
                               type: array
                               items:
@@ -25904,12 +26229,6 @@ definitions:
                           properties:
                             key:
                               type: string
-                            rate:
-                              type: string
-                              description: >-
-                                The likelihood that this parameter is applied to
-                                the output item. Between 0.0 (exclusive) and 1.0
-                                (inclusive).
                             weightRanges:
                               type: array
                               items:
@@ -25942,12 +26261,6 @@ definitions:
                           properties:
                             key:
                               type: string
-                            rate:
-                              type: string
-                              description: >-
-                                The likelihood that this parameter is applied to
-                                the output item. Between 0.0 (exclusive) and 1.0
-                                (inclusive).
                             value:
                               type: string
                             program:
@@ -26023,12 +26336,6 @@ definitions:
                           properties:
                             key:
                               type: string
-                            rate:
-                              type: string
-                              description: >-
-                                The likelihood that this parameter is applied to
-                                the output item. Between 0.0 (exclusive) and 1.0
-                                (inclusive).
                             weightRanges:
                               type: array
                               items:
@@ -26059,12 +26366,6 @@ definitions:
                           properties:
                             key:
                               type: string
-                            rate:
-                              type: string
-                              description: >-
-                                The likelihood that this parameter is applied to
-                                the output item. Between 0.0 (exclusive) and 1.0
-                                (inclusive).
                             weightRanges:
                               type: array
                               items:
@@ -26097,12 +26398,6 @@ definitions:
                           properties:
                             key:
                               type: string
-                            rate:
-                              type: string
-                              description: >-
-                                The likelihood that this parameter is applied to
-                                the output item. Between 0.0 (exclusive) and 1.0
-                                (inclusive).
                             value:
                               type: string
                             program:
@@ -26186,7 +26481,6 @@ definitions:
             extraInfo:
               type: string
       pagination:
-        description: pagination defines the pagination in the response.
         type: object
         properties:
           nextKey:
@@ -26203,6 +26497,14 @@ definitions:
               PageRequest.count_total
 
               was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
   Pylonstech.pylons.pylons.QueryListTradesByCreatorResponse:
     type: object
     properties:
@@ -26386,7 +26688,6 @@ definitions:
                   itemID:
                     type: string
       pagination:
-        description: pagination defines the pagination in the response.
         type: object
         properties:
           nextKey:
@@ -26403,6 +26704,14 @@ definitions:
               PageRequest.count_total
 
               was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
   Pylonstech.pylons.pylons.Recipe:
     type: object
     properties:
@@ -26592,12 +26901,6 @@ definitions:
                     properties:
                       key:
                         type: string
-                      rate:
-                        type: string
-                        description: >-
-                          The likelihood that this parameter is applied to the
-                          output item. Between 0.0 (exclusive) and 1.0
-                          (inclusive).
                       weightRanges:
                         type: array
                         items:
@@ -26626,12 +26929,6 @@ definitions:
                     properties:
                       key:
                         type: string
-                      rate:
-                        type: string
-                        description: >-
-                          The likelihood that this parameter is applied to the
-                          output item. Between 0.0 (exclusive) and 1.0
-                          (inclusive).
                       weightRanges:
                         type: array
                         items:
@@ -26662,12 +26959,6 @@ definitions:
                     properties:
                       key:
                         type: string
-                      rate:
-                        type: string
-                        description: >-
-                          The likelihood that this parameter is applied to the
-                          output item. Between 0.0 (exclusive) and 1.0
-                          (inclusive).
                       value:
                         type: string
                       program:
@@ -26741,12 +27032,6 @@ definitions:
                     properties:
                       key:
                         type: string
-                      rate:
-                        type: string
-                        description: >-
-                          The likelihood that this parameter is applied to the
-                          output item. Between 0.0 (exclusive) and 1.0
-                          (inclusive).
                       weightRanges:
                         type: array
                         items:
@@ -26775,12 +27060,6 @@ definitions:
                     properties:
                       key:
                         type: string
-                      rate:
-                        type: string
-                        description: >-
-                          The likelihood that this parameter is applied to the
-                          output item. Between 0.0 (exclusive) and 1.0
-                          (inclusive).
                       weightRanges:
                         type: array
                         items:
@@ -26811,12 +27090,6 @@ definitions:
                     properties:
                       key:
                         type: string
-                      rate:
-                        type: string
-                        description: >-
-                          The likelihood that this parameter is applied to the
-                          output item. Between 0.0 (exclusive) and 1.0
-                          (inclusive).
                       value:
                         type: string
                       program:
@@ -26895,6 +27168,19 @@ definitions:
         type: boolean
       extraInfo:
         type: string
+  Pylonstech.pylons.pylons.RedeemInfo:
+    type: object
+    properties:
+      ID:
+        type: string
+      processorName:
+        type: string
+      address:
+        type: string
+      amount:
+        type: string
+      signature:
+        type: string
   Pylonstech.pylons.pylons.StringInputParam:
     type: object
     properties:
@@ -26919,11 +27205,6 @@ definitions:
     properties:
       key:
         type: string
-      rate:
-        type: string
-        description: >-
-          The likelihood that this parameter is applied to the output item.
-          Between 0.0 (exclusive) and 1.0 (inclusive).
       value:
         type: string
       program:
