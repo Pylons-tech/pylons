@@ -51,7 +51,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -204,7 +204,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -394,7 +394,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -563,7 +563,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -682,7 +682,7 @@ func TestExecuteRecipeNoInputOutputInvalidArgs(t *testing.T) {
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.True(t, strings.Contains(err.Error(), "unexpected end of JSON input"))
 
-	// invalid cookbookID
+	// invalid cookbookIDLOUD
 	args = []string{"1", recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)

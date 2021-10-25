@@ -21,7 +21,7 @@ import (
 )
 
 const (
-	cookbookID = "cookbookLOUD"
+	cookbookIDLOUD = "cookbookLOUD"
 )
 
 type loudBasicSim struct {
@@ -69,7 +69,7 @@ func TestLOUDBasic(t *testing.T) {
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 	}
 
-	createCookbook(t, simInfo)
+	createLOUDCookbook(t, simInfo)
 	createCharacterRecipe(t, simInfo)
 	createCharacter(t, simInfo)
 	getLOUDCoin(t, simInfo)
@@ -78,7 +78,7 @@ func TestLOUDBasic(t *testing.T) {
 	fightWolfWithSword(t, simInfo)
 }
 
-func createCookbook(t *testing.T, simInfo *loudBasicSim) {
+func createLOUDCookbook(t *testing.T, simInfo *loudBasicSim) {
 
 	cbFields := []string{
 		"Legend of the Undead Dragon",
@@ -91,7 +91,7 @@ func createCookbook(t *testing.T, simInfo *loudBasicSim) {
 	}
 
 	// create LOUD cookbook
-	args := []string{cookbookID}
+	args := []string{cookbookIDLOUD}
 	args = append(args, cbFields...)
 	args = append(args, simInfo.common...)
 	_, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateCookbook(), args)
@@ -167,7 +167,7 @@ func createCharacterRecipe(t *testing.T, simInfo *loudBasicSim) {
 	}
 
 	// create recipe
-	args := []string{cookbookID, simInfo.getCharacterRecipeID}
+	args := []string{cookbookIDLOUD, simInfo.getCharacterRecipeID}
 	args = append(args, getCharacterRecipe...)
 	fmt.Println(args)
 	args = append(args, simInfo.common...)
@@ -177,7 +177,7 @@ func createCharacterRecipe(t *testing.T, simInfo *loudBasicSim) {
 
 func createCharacter(t *testing.T, simInfo *loudBasicSim) {
 	// execute recipe for character
-	args := []string{cookbookID, simInfo.getCharacterRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
+	args := []string{cookbookIDLOUD, simInfo.getCharacterRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, simInfo.common...)
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
@@ -207,12 +207,12 @@ func createCharacter(t *testing.T, simInfo *loudBasicSim) {
 	// check the item, itemID is i
 	simInfo.characterID = types.EncodeItemID(uint64(simInfo.itemCount))
 	simInfo.itemCount++
-	args = []string{cookbookID, simInfo.characterID}
+	args = []string{cookbookIDLOUD, simInfo.characterID}
 	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookIDLOUD, itemResp.Item.CookbookID)
 }
 
 func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
@@ -250,14 +250,14 @@ func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 	}
 
 	// create recipe
-	args := []string{cookbookID, getLoudCoinRecipeID}
+	args := []string{cookbookIDLOUD, getLoudCoinRecipeID}
 	args = append(args, getLoudCoinRecipe...)
 	args = append(args, simInfo.common...)
 	_, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 
 	// execute recipe for character
-	args = []string{cookbookID, getLoudCoinRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
+	args = []string{cookbookIDLOUD, getLoudCoinRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, simInfo.common...)
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
@@ -288,7 +288,7 @@ func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 }
 
 func createBuyCopperSwordRecipe(t *testing.T, simInfo *loudBasicSim) {
-	denom, err := types.CookbookDenom(cookbookID, "loudCoin")
+	denom, err := types.CookbookDenom(cookbookIDLOUD, "loudCoin")
 	require.NoError(t, err)
 
 	coinInputs, err := json.Marshal([]types.CoinInput{
@@ -351,7 +351,7 @@ func createBuyCopperSwordRecipe(t *testing.T, simInfo *loudBasicSim) {
 	}
 
 	// create recipe
-	args := []string{cookbookID, simInfo.buyCopperSwordRecipeID}
+	args := []string{cookbookIDLOUD, simInfo.buyCopperSwordRecipeID}
 	args = append(args, buyCopperSwordRecipe...)
 	args = append(args, simInfo.common...)
 	_, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateRecipe(), args)
@@ -360,7 +360,7 @@ func createBuyCopperSwordRecipe(t *testing.T, simInfo *loudBasicSim) {
 
 func buyCopperSword(t *testing.T, simInfo *loudBasicSim) {
 	// execute recipe for character
-	args := []string{cookbookID, simInfo.buyCopperSwordRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
+	args := []string{cookbookIDLOUD, simInfo.buyCopperSwordRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, simInfo.common...)
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
@@ -390,12 +390,12 @@ func buyCopperSword(t *testing.T, simInfo *loudBasicSim) {
 	// check the item, itemID is i
 	simInfo.swordID = types.EncodeItemID(uint64(simInfo.itemCount))
 	simInfo.itemCount++
-	args = []string{cookbookID, simInfo.swordID}
+	args = []string{cookbookIDLOUD, simInfo.swordID}
 	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookIDLOUD, itemResp.Item.CookbookID)
 }
 
 func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
@@ -603,7 +603,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 	}
 
 	// create recipe
-	args := []string{cookbookID, fightWolfWithSwordRecipeID}
+	args := []string{cookbookIDLOUD, fightWolfWithSwordRecipeID}
 	args = append(args, fightWolfWithSwordRecipe...)
 	args = append(args, simInfo.common...)
 	_, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateRecipe(), args)
@@ -617,7 +617,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 		require.NoError(t, err)
 
 		// execute recipe for character
-		args = []string{cookbookID, fightWolfWithSwordRecipeID, "0", string(itemInputIDs), "[]"} // empty list for item-ids since there is no item input
+		args = []string{cookbookIDLOUD, fightWolfWithSwordRecipeID, "0", string(itemInputIDs), "[]"} // empty list for item-ids since there is no item input
 		args = append(args, simInfo.common...)
 		out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 		require.NoError(t, err)
@@ -650,7 +650,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 
 		// if the character died or their sword was broken, get a new one!
 		var itemResp types.QueryGetItemResponse
-		args = []string{cookbookID, simInfo.characterID}
+		args = []string{cookbookIDLOUD, simInfo.characterID}
 		charOut, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 		require.NoError(t, err)
 		require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(charOut.Bytes(), &itemResp))
@@ -662,7 +662,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 			continue
 		}
 
-		args = []string{cookbookID, simInfo.swordID}
+		args = []string{cookbookIDLOUD, simInfo.swordID}
 		swordOut, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 		require.NoError(t, err)
 		require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(swordOut.Bytes(), &itemResp))

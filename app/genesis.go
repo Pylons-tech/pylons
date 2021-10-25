@@ -3,8 +3,9 @@ package app
 import (
 	"encoding/json"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 )
