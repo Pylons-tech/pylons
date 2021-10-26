@@ -23,10 +23,10 @@ func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.Stak
 			valShares = validator.GetDelegatorShares()
 			validatorSharesMap[validatorAddr.String()] = valShares
 		}
-		// the shares of a delegaror represent the relative shares percentage of the total shares of the validator
+		// the shares of a delegator represent the relative shares percentage of the total shares of the validator
 		// calculate absolute percentage as totalValidatorShares / relativeDelegatorShares
 
-		delegatorAbsolutePercentage := valShares.Quo((delegation.GetShares()))
+		delegatorAbsolutePercentage := valShares.Quo(delegation.GetShares())
 		if _, ok := distrPercentages[delegatorAddr.String()]; !ok {
 			distrPercentages[delegatorAddr.String()] = sdk.ZeroDec()
 		}
