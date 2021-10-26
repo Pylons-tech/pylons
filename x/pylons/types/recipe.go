@@ -670,6 +670,7 @@ func ValidateStrings(sp []StringParam) error {
 			return sdkerrors.Wrapf(ErrInvalidRequestField, "key %s repeated in string param list", param.Key)
 		}
 		keyMap[param.Key] = true
+	}
 
 	return nil
 }
