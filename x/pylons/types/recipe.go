@@ -671,7 +671,6 @@ func ValidateStrings(sp []StringParam) error {
 		}
 		keyMap[param.Key] = true
 	}
-
 	return nil
 }
 
