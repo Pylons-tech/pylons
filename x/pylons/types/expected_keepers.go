@@ -35,7 +35,7 @@ type AccountKeeper interface {
 
 // StakingKeeper expected staking keeper (noalias)
 type StakingKeeper interface {
-	Validator(sdk.Context, sdk.ValAddress) stakingtypes.ValidatorI            // get a particular validator by operator address
+	Validator(sdk.Context, sdk.ValAddress) stakingtypes.ValidatorI // get a particular validator by operator address
 
 	// Delegation allows for getting a particular delegation for a given validator
 	// and delegator outside the scope of the staking module.
