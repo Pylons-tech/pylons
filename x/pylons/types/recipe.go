@@ -670,7 +670,6 @@ func ValidateStrings(sp []StringParam) error {
 			return sdkerrors.Wrapf(ErrInvalidRequestField, "key %s repeated in string param list", param.Key)
 		}
 		keyMap[param.Key] = true
-	}
 
 	return nil
 }
@@ -725,8 +724,10 @@ func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool) error {
 		}
 
 		// item.TradePercentage must be in (0, 1)
-		if item.TradePercentage.LTE(sdk.ZeroDec()) || item.TradePercentage.GTE(sdk.OneDec()) {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemOutput %s", item.ID)
+		if !item.TradePercentage.IsNil() {
+			if item.TradePercentage.LTE(sdk.ZeroDec()) || item.TradePercentage.GTE(sdk.OneDec()) {
+				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemOutput %s", item.ID)
+			}
 		}
 
 		for _, tf := range item.TransferFee {
