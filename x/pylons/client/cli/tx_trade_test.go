@@ -218,8 +218,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
-						Rate: sdk.OneDec(),
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -234,7 +233,6 @@ func TestCreateTradeItemOutput(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-						Rate:    sdk.OneDec(),
 						Value:   "testValue",
 						Program: "",
 					},
@@ -442,8 +440,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
-						Rate: sdk.OneDec(),
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -458,7 +455,6 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-						Rate:    sdk.OneDec(),
 						Value:   "testValue",
 						Program: "",
 					},
@@ -677,8 +673,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
-						Rate: sdk.OneDec(),
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -693,7 +688,6 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-						Rate:    sdk.OneDec(),
 						Value:   "testValue",
 						Program: "",
 					},
@@ -912,8 +906,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
-						Rate: sdk.OneDec(),
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -928,7 +921,6 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-						Rate:    sdk.OneDec(),
 						Value:   "testValue",
 						Program: "",
 					},
@@ -1147,8 +1139,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
-						Rate: sdk.OneDec(),
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -1163,7 +1154,6 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-						Rate:    sdk.OneDec(),
 						Value:   "testValue",
 						Program: "",
 					},

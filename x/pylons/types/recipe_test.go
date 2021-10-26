@@ -178,24 +178,24 @@ func TestValidateDoubles(t *testing.T) {
 		err  error
 	}{
 		{desc: "ValidSingle", obj: []DoubleParam{
-			{Key: "test", Rate: sdk.OneDec()},
+			{Key: "test"},
 		}},
 		{desc: "ValidMultiple", obj: []DoubleParam{
-			{Key: "test1", Rate: sdk.OneDec(), WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
-			{Key: "test2", Rate: sdk.OneDec(), WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
+			{Key: "test1", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
+			{Key: "test2", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
 		}},
 		{desc: "InvalidSingle1", obj: []DoubleParam{
-			{Key: "test", Rate: valGTone},
+			{Key: "1test"},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidSingle2", obj: []DoubleParam{
-			{Key: "test", Rate: sdk.ZeroDec()},
+			{Key: "2test"},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidSingle3", obj: []DoubleParam{
-			{Key: "test", Rate: sdk.OneDec(), WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valLTone}}},
+			{Key: "test", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valLTone}}},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidMultiple", obj: []DoubleParam{
-			{Key: "test", Rate: sdk.OneDec(), WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
-			{Key: "test", Rate: sdk.OneDec(), WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
+			{Key: "test", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
+			{Key: "test", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
 		}, err: ErrInvalidRequestField},
 	} {
 		tc := tc
@@ -217,24 +217,24 @@ func TestValidateLongs(t *testing.T) {
 		err  error
 	}{
 		{desc: "ValidSingle", obj: []LongParam{
-			{Key: "test", Rate: sdk.OneDec()},
+			{Key: "test"},
 		}},
 		{desc: "ValidMultiple", obj: []LongParam{
-			{Key: "test1", Rate: sdk.OneDec(), WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
-			{Key: "test2", Rate: sdk.OneDec(), WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
+			{Key: "test1", WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
+			{Key: "test2", WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
 		}},
 		{desc: "InvalidSingle1", obj: []LongParam{
-			{Key: "test", Rate: sdk.NewDec(2)},
+			{Key: "1test"},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidSingle2", obj: []LongParam{
-			{Key: "test", Rate: sdk.ZeroDec()},
+			{Key: "2test"},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidSingle3", obj: []LongParam{
-			{Key: "test", Rate: sdk.OneDec(), WeightRanges: []IntWeightRange{{Lower: 1, Upper: 0}}},
+			{Key: "test", WeightRanges: []IntWeightRange{{Lower: 1, Upper: 0}}},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidMultiple", obj: []LongParam{
-			{Key: "test", Rate: sdk.OneDec(), WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
-			{Key: "test", Rate: sdk.OneDec(), WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
+			{Key: "test", WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
+			{Key: "test", WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
 		}, err: ErrInvalidRequestField},
 	} {
 		tc := tc
@@ -256,21 +256,21 @@ func TestValidateStrings(t *testing.T) {
 		err  error
 	}{
 		{desc: "ValidSingle", obj: []StringParam{
-			{Key: "test", Rate: sdk.OneDec()},
+			{Key: "test"},
 		}},
 		{desc: "ValidMultiple", obj: []StringParam{
-			{Key: "test1", Rate: sdk.OneDec()},
-			{Key: "test2", Rate: sdk.OneDec()},
+			{Key: "test1"},
+			{Key: "test2"},
 		}},
 		{desc: "InvalidSingle1", obj: []StringParam{
-			{Key: "test", Rate: sdk.NewDec(2)},
+			{Key: "1test"},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidSingle2", obj: []StringParam{
-			{Key: "test", Rate: sdk.ZeroDec()},
+			{Key: "2test"},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidMultiple", obj: []StringParam{
-			{Key: "test", Rate: sdk.OneDec()},
-			{Key: "test", Rate: sdk.OneDec()},
+			{Key: "test"},
+			{Key: "test"},
 		}, err: ErrInvalidRequestField},
 	} {
 		tc := tc
@@ -292,10 +292,10 @@ func TestValidateItemOutputs(t *testing.T) {
 		err  error
 	}{
 		{desc: "ValidEmpty", obj: "[]"},
-		{desc: "ValidSingle", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\", \"rate\": \"0.1\"}], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
-		{desc: "ValidMultiple", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\", \"rate\": \"0.1\"}], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}, {\"ID\": \"test2\", \"doubles\": [], \"longs\": [{\"key\": \"test2\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
+		{desc: "ValidSingle", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\"}], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
+		{desc: "ValidMultiple", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\"}], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}, {\"ID\": \"test2\", \"doubles\": [], \"longs\": [{\"key\": \"test2\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
 		{desc: "InvalidSingle1", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": [{\"denom\": \"\", \"amount\": \"\"}]}]", err: ErrInvalidRequestField},
-		{desc: "InValidMultiple", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test\", \"rate\": \"0.1\"}], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": {\"denom\": \"\", \"amount\": \"\"}}, {\"ID\": \"test\", \"doubles\": [], \"longs\": [{\"key\": \"test\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
+		{desc: "InValidMultiple", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test\"}], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": {\"denom\": \"\", \"amount\": \"\"}}, {\"ID\": \"test\", \"doubles\": [], \"longs\": [{\"key\": \"test\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
@@ -320,9 +320,9 @@ func TestValidateItemModifyOutputs(t *testing.T) {
 	}{
 		{desc: "ValidEmpty", obj: "[]"},
 		{desc: "ValidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
-		{desc: "ValidMultiple", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\", \"rate\": \"0.1\"}],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}, {\"ID\": \"test2\", \"doubles\": [], \"longs\": [{\"key\": \"test2\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
+		{desc: "ValidMultiple", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\"}],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}, {\"ID\": \"test2\", \"doubles\": [], \"longs\": [{\"key\": \"test2\", \"lower\": 1, \"upper\": 2}], \"strings\": [],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
 		{desc: "InvalidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
-		{desc: "InValidMultiple", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test\", \"rate\": \"0.1\"}],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"\", \"amount\": \"0.01\"}]}, {\"ID\": \"test\", \"doubles\": [], \"longs\": [{\"key\": \"test\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
+		{desc: "InValidMultiple", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test\"}],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"\", \"amount\": \"0.01\"}]}, {\"ID\": \"test\", \"doubles\": [], \"longs\": [{\"key\": \"test\", \"lower\": 1, \"upper\": 2}], \"strings\": [],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {

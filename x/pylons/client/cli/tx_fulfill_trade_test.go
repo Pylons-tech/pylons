@@ -182,8 +182,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
-						Rate: sdk.OneDec(),
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -198,7 +197,6 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-						Rate:    sdk.OneDec(),
 						Value:   "testValue",
 						Program: "",
 					},
