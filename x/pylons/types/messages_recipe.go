@@ -117,8 +117,22 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 		sum += o.Weight
 	}
 
-	totalEntries := len(msg.Entries.CoinOutputs) + len(msg.Entries.ItemOutputs) + len(msg.Entries.ItemModifyOutputs)
-	if sum <= 0 && totalEntries > 0 {
+	entriesLen := 0
+	if msg.Entries.CoinOutputs != nil {
+		entriesLen += len(msg.Entries.CoinOutputs)
+	}
+
+	if msg.Entries.ItemOutputs != nil {
+		entriesLen += len(msg.Entries.ItemOutputs)
+
+	}
+
+	if msg.Entries.ItemModifyOutputs != nil {
+		entriesLen += len(msg.Entries.ItemModifyOutputs)
+
+	}
+
+	if sum <= 0 && entriesLen > 0 {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "weights in weightedOutputs add up to %v, should be nonzero", sum)
 	}
 
@@ -242,8 +256,22 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 		sum += o.Weight
 	}
 
-	totalEntries := len(msg.Entries.CoinOutputs) + len(msg.Entries.ItemOutputs) + len(msg.Entries.ItemModifyOutputs)
-	if sum <= 0 && totalEntries > 0 {
+	entriesLen := 0
+	if msg.Entries.CoinOutputs != nil {
+		entriesLen += len(msg.Entries.CoinOutputs)
+	}
+
+	if msg.Entries.ItemOutputs != nil {
+		entriesLen += len(msg.Entries.ItemOutputs)
+
+	}
+
+	if msg.Entries.ItemModifyOutputs != nil {
+		entriesLen += len(msg.Entries.ItemModifyOutputs)
+
+	}
+
+	if sum <= 0 && entriesLen > 0 {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "weights in weightedOutputs add up to %v, should be nonzero", sum)
 	}
 
