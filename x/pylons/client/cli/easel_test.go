@@ -31,7 +31,7 @@ type easelBasicSim struct {
 	execCount            int
 	itemCount            int
 	mintRecipeID         string
-	mintRecipeID2         string
+	mintRecipeID2        string
 }
 
 func TestEaselBasic(t *testing.T) {
@@ -182,7 +182,6 @@ func mintNFT1(t *testing.T, simInfo *easelBasicSim) {
 	require.Equal(t, cookbookIDEasel, itemResp.Item.CookbookID)
 }
 
-
 func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 	coinInputs, err := json.Marshal([]types.CoinInput{
 		{Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(450)))},
@@ -199,8 +198,8 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 					Key: "Residual",
 					WeightRanges: []types.DoubleWeightRange{
 						{
-							Lower: residual,
-							Upper: residual,
+							Lower:  residual,
+							Upper:  residual,
 							Weight: 1,
 						},
 					},
@@ -212,8 +211,8 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 					Key: "Quantity",
 					WeightRanges: []types.IntWeightRange{
 						{
-							Lower: 34,
-							Upper: 34,
+							Lower:  34,
+							Upper:  34,
 							Weight: 1,
 						},
 					},
@@ -223,8 +222,8 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 					Key: "Width",
 					WeightRanges: []types.IntWeightRange{
 						{
-							Lower: 960,
-							Upper: 960,
+							Lower:  960,
+							Upper:  960,
 							Weight: 1,
 						},
 					},
@@ -234,8 +233,8 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 					Key: "Height",
 					WeightRanges: []types.IntWeightRange{
 						{
-							Lower: 1280,
-							Upper: 1280,
+							Lower:  1280,
+							Upper:  1280,
 							Weight: 1,
 						},
 					},
@@ -255,10 +254,10 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 					Program: "",
 				},
 				{
-				Key:     "NFT_URL",
-				Value:   "https://i.imgur.com/dpNqwvl.jpg",
-				Program: "",
-			},
+					Key:     "NFT_URL",
+					Value:   "https://i.imgur.com/dpNqwvl.jpg",
+					Program: "",
+				},
 				{
 					Key:     "Currency",
 					Value:   "upylon",
@@ -348,7 +347,6 @@ func mintNFT2(t *testing.T, simInfo *easelBasicSim) {
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookIDEasel, itemResp.Item.CookbookID)
-
 
 	args = []string{cookbookIDEasel, simInfo.mintRecipeID2}
 	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowRecipe(), args)
