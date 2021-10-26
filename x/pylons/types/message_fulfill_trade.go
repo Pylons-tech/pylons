@@ -45,7 +45,7 @@ func (msg *MsgFulfillTrade) ValidateBasic() error {
 	}
 
 	for _, item := range msg.Items {
-		err = ValidateID(item.ItemID)
+		err = ValidateItemID(item.ItemID)
 		if err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
