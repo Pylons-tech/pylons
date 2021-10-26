@@ -526,6 +526,7 @@ func New(
 		epochsmodule.NewAppModule(appCodec, app.EpochsKeeper),
 
 		transferModule,
+		pylonsModule,
 	)
 
 	app.sm.RegisterStoreDecoders()
