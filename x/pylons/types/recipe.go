@@ -705,10 +705,13 @@ func ValidateStrings(sp []StringParam) error {
 		}
 		keyMap[param.Key] = true
 
-		// rate must be in (0, 1]
-		if param.Rate.LTE(sdk.ZeroDec()) || param.Rate.GT(sdk.OneDec()) {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid rate on string param %s", param.Key)
+		if !param.Rate.IsNil() {
+			// rate must be in (0, 1]
+			if param.Rate.LTE(sdk.ZeroDec()) || param.Rate.GT(sdk.OneDec()) {
+				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid rate on string param %s", param.Key)
+			}
 		}
+
 	}
 
 	return nil
@@ -764,8 +767,10 @@ func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool) error {
 		}
 
 		// item.TradePercentage must be in (0, 1)
-		if item.TradePercentage.LTE(sdk.ZeroDec()) || item.TradePercentage.GTE(sdk.OneDec()) {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemOutput %s", item.ID)
+		if !item.TradePercentage.IsNil() {
+			if item.TradePercentage.LTE(sdk.ZeroDec()) || item.TradePercentage.GTE(sdk.OneDec()) {
+				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemOutput %s", item.ID)
+			}
 		}
 
 		for _, tf := range item.TransferFee {
