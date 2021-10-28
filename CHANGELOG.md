@@ -24,6 +24,8 @@
 ### Client Breaking Changes
 - [#485](https://github.com/Pylons-tech/pylons/pull/485) Add fee distribution and the `x/epochs` module.
 - [#476](https://github.com/Pylons-tech/pylons/pull/476) Remove `rate` field from `*Param` proto messages.
+- [#473](https://github.com/Pylons-tech/pylons/pull/473) Update proto definition of `MsgExecuteRecipe` and `MsgFulfillTrade` to add the `PaymentInfos` field.
+
 
 ### Changes:
 - [#467](https://github.com/Pylons-tech/pylons/pull/467) Remove the `/flutter/` directory.  Code has been [moved](https://github.com/Pylons-tech/flutter_wallet).
@@ -33,5 +35,3 @@
 - [#428](https://github.com/Pylons-tech/pylons/pull/428) Follow migration [guide](https://github.com/tendermint/starport/blob/v0.18.0/docs/migration/index.md) for updating a starport-scaffolded chain to starport v0.18 compliance 
 - [#425](https://github.com/Pylons-tech/pylons/pull/425) Upgrade Tendermint Core to v0.34.13 (was v0.34.12).
 
-### Client Breaking Changes:
-- [#473](https://github.com/Pylons-tech/pylons/pull/473) Update proto definition of `MsgExecuteRecipe` and `MsgFulfillTrade` to add the `PaymentInfos` field.
