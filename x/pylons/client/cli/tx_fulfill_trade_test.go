@@ -112,7 +112,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	ctx := val.ClientCtx
 	var err error
 
-	accs := GenerateAddressesInKeyring(val.ClientCtx.Keyring, 1)
+	accs := generateAddressesInKeyring(val.ClientCtx.Keyring, 1)
 	trader := accs[0]
 	traderUsername := "trader"
 

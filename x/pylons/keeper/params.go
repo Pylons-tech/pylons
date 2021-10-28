@@ -75,12 +75,6 @@ func (k Keeper) MaxTransferFee(ctx sdk.Context) (res sdk.Int) {
 	return
 }
 
-// DistrEpochIdentifier returns the DistrEpochIdentifier param
-func (k Keeper) DistrEpochIdentifier(ctx sdk.Context) (res string) {
-	k.paramSpace.Get(ctx, types.ParamStoreKeyDistrEpochIdentifier, &res)
-	return
-}
-
 // GetParams returns the total set of pylons parameters.
 func (k Keeper) GetParams(ctx sdk.Context) (params types.Params) {
 	k.paramSpace.GetParamSet(ctx, &params)
