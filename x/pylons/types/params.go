@@ -57,6 +57,7 @@ var (
 	DefaultUpdateUsernameFee            = sdk.NewCoin(PylonsCoinDenom, sdk.NewInt(10))
 	DefaultMinTransferFee               = sdk.OneInt()
 	DefaultMaxTransferFee               = sdk.NewInt(10000)
+	DefaultDistrEpochIdentifier         = "day"
 )
 
 // Parameter Store Keys
@@ -71,6 +72,7 @@ var (
 	ParamStoreKeyMinTransferFee            = []byte("MinTransferFee")
 	ParamStoreKeyMaxTransferFee            = []byte("MaxTransferFee")
 	ParamStoreKeyUpdateUsernameFee         = []byte("UpdateUsernameFee")
+	ParamStoreKeyDistrEpochIdentifier      = []byte("DistrEpochIdentifier")
 )
 
 // NewParams creates a new Params object
@@ -85,6 +87,7 @@ func NewParams(
 	minTransferFee sdk.Int,
 	maxTransferFee sdk.Int,
 	updateUsernameFee sdk.Coin,
+	distrEpochIdentifier string,
 ) Params {
 	return Params{
 		MinNameFieldLength:        minNameFieldLength,
@@ -97,6 +100,7 @@ func NewParams(
 		MinTransferFee:            minTransferFee,
 		MaxTransferFee:            maxTransferFee,
 		UpdateUsernameFee:         updateUsernameFee,
+		DistrEpochIdentifier:      distrEpochIdentifier,
 	}
 }
 
@@ -113,6 +117,7 @@ func DefaultParams() Params {
 		DefaultMinTransferFee,
 		DefaultMaxTransferFee,
 		DefaultUpdateUsernameFee,
+		DefaultDistrEpochIdentifier,
 	)
 }
 
@@ -129,6 +134,7 @@ func NetworkTestParams() Params {
 		DefaultMinTransferFee,
 		DefaultMaxTransferFee,
 		sdk.NewCoin("node0token", sdk.NewInt(10)),
+		DefaultDistrEpochIdentifier,
 	)
 }
 
@@ -156,6 +162,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(ParamStoreKeyMinTransferFee, &p.MinTransferFee, validateInt),
 		paramtypes.NewParamSetPair(ParamStoreKeyMaxTransferFee, &p.MaxTransferFee, validateInt),
 		paramtypes.NewParamSetPair(ParamStoreKeyUpdateUsernameFee, &p.UpdateUsernameFee, validateCoinFee),
+		paramtypes.NewParamSetPair(ParamStoreKeyDistrEpochIdentifier, &p.DistrEpochIdentifier, validateString),
 	}
 }
 
@@ -216,6 +223,10 @@ func (p Params) ValidateBasic() error {
 		if err != nil {
 			return err
 		}
+	}
+
+	if p.DistrEpochIdentifier == "" {
+		return fmt.Errorf("invalid empty DistrEpochIdentifier")
 	}
 
 	return nil
@@ -332,6 +343,18 @@ func validatePaymentProcessor(i interface{}) error {
 		if pp.Name == "" {
 			return fmt.Errorf("empty string for name")
 		}
+	}
+	return nil
+}
+
+func validateString(i interface{}) error {
+	v, ok := i.(string)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+
+	if v == "" {
+		return fmt.Errorf("invalid empty string")
 	}
 	return nil
 }

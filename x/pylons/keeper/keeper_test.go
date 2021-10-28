@@ -315,6 +315,7 @@ type IntegrationTestSuite struct {
 	k             keeper.Keeper
 	bankKeeper    types.BankKeeper
 	accountKeeper types.AccountKeeper
+	stakingKeeper types.StakingKeeper
 }
 
 func (suite *IntegrationTestSuite) SetupTest() {
@@ -335,6 +336,7 @@ func (suite *IntegrationTestSuite) SetupTest() {
 	suite.k = a.PylonsKeeper
 	suite.bankKeeper = a.BankKeeper
 	suite.accountKeeper = a.AccountKeeper
+	suite.stakingKeeper = a.StakingKeeper
 }
 
 func TestKeeperTestSuite(t *testing.T) {

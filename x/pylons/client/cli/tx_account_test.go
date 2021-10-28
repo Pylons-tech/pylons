@@ -22,7 +22,7 @@ func TestCreateAccount(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
-	accs := generateAddressesInKeyring(val.ClientCtx.Keyring, 2)
+	accs := GenerateAddressesInKeyring(val.ClientCtx.Keyring, 2)
 
 	for _, tc := range []struct {
 		desc     string
@@ -133,7 +133,7 @@ func TestUpdateAccount(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
-	accs := generateAddressesInKeyring(val.ClientCtx.Keyring, 2)
+	accs := GenerateAddressesInKeyring(val.ClientCtx.Keyring, 2)
 	common := []string{
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
