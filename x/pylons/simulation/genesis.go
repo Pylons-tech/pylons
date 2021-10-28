@@ -20,24 +20,23 @@ func randomLengthField(r *rand.Rand) uint64 {
 }
 
 func randomPercentage(r *rand.Rand) sdk.Dec {
-	percent := r.Int63n(101) // range [1 - 100]
-	dec := sdk.NewDec(percent)
-	return dec.Quo(sdk.NewDec(100))
+	percent := r.Int63n(101) + 1 // range [1 - 100]
+	return sdk.NewDec(percent)
 }
 
 func randomCoinFee(r *rand.Rand) sdk.Coin {
 	return sdk.NewCoin("upylon", sdk.NewInt(r.Int63n(10)+1)) // [1, 100]
 }
 
-func randomTransferFeePair(r *rand.Rand) (sdk.Int, sdk.Int) {
-	min := sdk.NewInt(r.Int63n(11))              // [0, 10]
-	max := sdk.NewInt(r.Int63n(10) + 1).Add(min) // [min, min + 10]
+func randomTransferFeePair() (sdk.Int, sdk.Int) {
+	min := sdk.NewInt(rand.Int63n(11))              // [0, 10]
+	max := sdk.NewInt(rand.Int63n(10) + 1).Add(min) // [min, min + 10]
 	return min, max
 }
 
 // RandomizedGenState generates a random GenesisState for bank
 func RandomizedGenState(simState *module.SimulationState) {
-	// TODO add logic for randomizing stateMap
+	// TODO add logic for randomizing state
 	var minNameFieldLength uint64
 	simState.AppParams.GetOrGenerate(
 		simState.Cdc, string(types.ParamStoreKeyMinNameFieldLength),
@@ -74,7 +73,7 @@ func RandomizedGenState(simState *module.SimulationState) {
 		&updateUsernameFee, simState.Rand,
 		func(r *rand.Rand) { updateUsernameFee = randomCoinFee(r) })
 
-	minTransferFee, maxTransferFee := randomTransferFeePair(simState.Rand)
+	minTransferFee, maxTransferFee := randomTransferFeePair()
 
 	genesis := types.GenesisState{
 		Params: types.Params{
@@ -87,7 +86,6 @@ func RandomizedGenState(simState *module.SimulationState) {
 			UpdateUsernameFee:         updateUsernameFee,
 			MinTransferFee:            minTransferFee,
 			MaxTransferFee:            maxTransferFee,
-			DistrEpochIdentifier:      "hour",
 		},
 		EntityCount:                  0,
 		GoogleInAppPurchaseOrderList: nil,

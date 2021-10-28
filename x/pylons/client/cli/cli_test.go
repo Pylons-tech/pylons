@@ -19,7 +19,7 @@ const (
 	testIBCDenom = "ibc/529ba5e3e86ba7796d7caab4fc02728935fbc75c0f7b25a9e611c49dd7d68a35"
 )
 
-func GenerateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
+func generateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 	addrs := make([]sdk.AccAddress, n)
 	for i := 0; i < n; i++ {
 		info, _, _ := ring.NewMnemonic("NewUser"+strconv.Itoa(i), keyring.English, sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)

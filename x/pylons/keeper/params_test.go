@@ -70,7 +70,6 @@ func (suite *IntegrationTestSuite) TestSetParams() {
 		MinTransferFee:            sdk.NewInt(2),
 		MaxTransferFee:            sdk.NewInt(20000),
 		UpdateUsernameFee:         sdk.NewCoin(TestDenom, sdk.NewInt(20)),
-		DistrEpochIdentifier:      "day",
 	}
 
 	k.SetParams(ctx, newParams)
