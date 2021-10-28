@@ -21,7 +21,8 @@ type (
 		memKey        sdk.StoreKey
 		bankKeeper    types.BankKeeper
 		accountKeeper types.AccountKeeper
-		paramSpace    paramtypes.Subspace
+
+		paramSpace paramtypes.Subspace
 		// this line is used by starport scaffolding # ibc/keeper/attribute
 
 	}

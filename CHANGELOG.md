@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+
+## [v0.2.0](https://github.com/Pylons-tech/pylons/releases/tag/v0.2.0) - 2021-10-28
+
 ### Features:
 - [#478](https://github.com/Pylons-tech/pylons/pull/478) Expand validation checks for CreateRecipe and UpdateRecipe messages.
 - [#473](https://github.com/Pylons-tech/pylons/pull/473) Add `paymentProcessors` support for `Trade`s and `Recipe`s.
@@ -19,7 +22,10 @@
 - [#421](https://github.com/Pylons-tech/pylons/pull/421) Recipe execution validation and item matching logic fixed.
 
 ### Client Breaking Changes
-- [#476](https://github.com/Pylons-tech/pylons/pull/476) Removes `rate` field from `*Param` proto messages.
+- [#485](https://github.com/Pylons-tech/pylons/pull/485) Add fee distribution and the `x/epochs` module.
+- [#476](https://github.com/Pylons-tech/pylons/pull/476) Remove `rate` field from `*Param` proto messages.
+- [#473](https://github.com/Pylons-tech/pylons/pull/473) Update proto definition of `MsgExecuteRecipe` and `MsgFulfillTrade` to add the `PaymentInfos` field.
+
 
 ### Changes:
 - [#467](https://github.com/Pylons-tech/pylons/pull/467) Remove the `/flutter/` directory.  Code has been [moved](https://github.com/Pylons-tech/flutter_wallet).
@@ -29,5 +35,3 @@
 - [#428](https://github.com/Pylons-tech/pylons/pull/428) Follow migration [guide](https://github.com/tendermint/starport/blob/v0.18.0/docs/migration/index.md) for updating a starport-scaffolded chain to starport v0.18 compliance 
 - [#425](https://github.com/Pylons-tech/pylons/pull/425) Upgrade Tendermint Core to v0.34.13 (was v0.34.12).
 
-### Client Breaking Changes:
-- [#473](https://github.com/Pylons-tech/pylons/pull/473) Update proto definition of `MsgExecuteRecipe` and `MsgFulfillTrade` to add the `PaymentInfos` field.
