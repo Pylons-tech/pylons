@@ -19,7 +19,8 @@
 - [#421](https://github.com/Pylons-tech/pylons/pull/421) Recipe execution validation and item matching logic fixed.
 
 ### Client Breaking Changes
-- [#476](https://github.com/Pylons-tech/pylons/pull/476) Removes `rate` field from `*Param` proto messages.
+- [#485](https://github.com/Pylons-tech/pylons/pull/485) Add fee distribution and the `x/epochs` module.
+- [#476](https://github.com/Pylons-tech/pylons/pull/476) Remove `rate` field from `*Param` proto messages.
 
 ### Changes:
 - [#467](https://github.com/Pylons-tech/pylons/pull/467) Remove the `/flutter/` directory.  Code has been [moved](https://github.com/Pylons-tech/flutter_wallet).
