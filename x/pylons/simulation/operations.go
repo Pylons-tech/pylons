@@ -17,7 +17,8 @@ import (
 
 // Simulation operation weights constants
 const (
-	OpWeightMsgCreatAcc       = "op_weight_msg_create_acc"
+	OpWeightMsgCreateAcc      = "op_weight_msg_create_acc"
+	OpWeightMsgUpdateAcc      = "op_weight_msg_update_acc"
 	OpWeightMsgCreateCookbook = "op_weight_msg_create_cookbook"
 	OpWeightMsgCreateRecipe   = "op_weight_msg_create_recipe"
 	OpWeightMsgExecuteRecipe  = "op_weight_msg_execute_recipe"
@@ -56,13 +57,20 @@ func WeightedOperations(
 ) simulation.WeightedOperations {
 
 	var weightMsgCreateAcc int
+	var weightMsgUpdateAcc int
 	var weightMsgCreateCookbook int
 	var weightMsgCreateRecipe int
 	var weightMsgExecuteRecipe int
 
-	appParams.GetOrGenerate(cdc, OpWeightMsgCreatAcc, &weightMsgCreateAcc, nil,
+	appParams.GetOrGenerate(cdc, OpWeightMsgCreateAcc, &weightMsgCreateAcc, nil,
 		func(_ *rand.Rand) {
 			weightMsgCreateAcc = 100
+		},
+	)
+
+	appParams.GetOrGenerate(cdc, OpWeightMsgUpdateAcc, &weightMsgUpdateAcc, nil,
+		func(_ *rand.Rand) {
+			weightMsgUpdateAcc = 100
 		},
 	)
 
@@ -88,6 +96,10 @@ func WeightedOperations(
 		simulation.NewWeightedOperation(
 			weightMsgCreateAcc,
 			SimulateCreateAccount(bk, k),
+		),
+		simulation.NewWeightedOperation(
+			weightMsgUpdateAcc,
+			SimulateUpdateAccount(bk, k),
 		),
 		simulation.NewWeightedOperation(
 			weightMsgCreateCookbook,
@@ -126,6 +138,32 @@ func SimulateCreateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 			RecipeIDs:   make([]string, 0),
 			TradeIDs:    make([]string, 0),
 			ItemIDs:     make([]string, 0),
+		}
+
+		username := generateRandomUsername(r)
+
+		msg := types.NewMsgCreateAccount(
+			simAccount.Address.String(),
+			username)
+
+		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
+	}
+}
+
+// SimulateUpdateAccount generates a MsgUpdateAccount with random values
+func SimulateUpdateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+	return func(
+		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
+		accs []simtypes.Account, chainID string,
+	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+
+		simAccount, _ := simtypes.RandomAcc(r, accs)
+		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
+		msgType := (&types.MsgCreateAccount{}).Type()
+
+		if simCoins.Len() <= 0 {
+			return simtypes.NoOpMsg(
+				types.ModuleName, msgType, "Account has no balance"), nil, nil
 		}
 
 		username := generateRandomUsername(r)
