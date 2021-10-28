@@ -6,6 +6,15 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
+func (k Keeper) SendRewardsFromFeeCollector(ctx sdk.Context, addr sdk.AccAddress, amounts sdk.Coins) error {
+	feeCollector := types.FeeCollectorName
+
+	// send coins
+	err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, feeCollector, addr, amounts)
+
+	return err
+}
+
 func (k Keeper) MintCoinsToAddr(ctx sdk.Context, addr sdk.AccAddress, amounts sdk.Coins) error {
 	coinMint := types.CoinsIssuerName
 

@@ -45,4 +45,5 @@ message Params {
   string minTransferFee = 8 [(gogoproto.moretags) = "yaml:\"min_transfer_fee\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
   string maxTransferFee = 9 [(gogoproto.moretags) = "yaml:\"max_transfer_fee\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
   cosmos.base.v1beta1.Coin updateUsernameFee = 10 [(gogoproto.moretags) = "yaml:\"update_username_fee\"", (gogoproto.nullable) = false];
+  string distrEpochIdentifier = 11  [(gogoproto.moretags) = "yaml:\"distr_epoch_identifier\""];
 }
