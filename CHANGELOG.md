@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+
+## [v0.2.0](https://github.com/Pylons-tech/pylons/releases/tag/v0.2.0) - 2021-10-28
+
 ### Features:
 - [#478](https://github.com/Pylons-tech/pylons/pull/478) Expand validation checks for CreateRecipe and UpdateRecipe messages.
 - [#473](https://github.com/Pylons-tech/pylons/pull/473) Add `paymentProcessors` support for `Trade`s and `Recipe`s.
