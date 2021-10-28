@@ -17,8 +17,8 @@ import (
 
 // Simulation operation weights constants
 const (
-	OpWeightMsgCreateAcc       = "op_weight_msg_create_acc"
-	OpWeightMsgUpdateAcc       = "op_weight_msg_update_acc"
+	OpWeightMsgCreateAcc      = "op_weight_msg_create_acc"
+	OpWeightMsgUpdateAcc      = "op_weight_msg_update_acc"
 	OpWeightMsgCreateCookbook = "op_weight_msg_create_cookbook"
 	OpWeightMsgCreateRecipe   = "op_weight_msg_create_recipe"
 	OpWeightMsgExecuteRecipe  = "op_weight_msg_execute_recipe"
