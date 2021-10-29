@@ -14,6 +14,7 @@
 - [#421](https://github.com/Pylons-tech/pylons/pull/421) Add game simulation testing to cli test suite.  Tests cover CEL environment execution, item modification and cookbook coin generation. 
 
 ### Fixes:
+- [#489](https://github.com/Pylons-tech/pylons/pull/489) Fix potential consensus failure due to nodeVersion being pulled from binary
 - [#467](https://github.com/Pylons-tech/pylons/pull/467) Fix a bug where Item IDs were being validated incorrectly in `ValidateBasic()` calls.
 - [#346](https://github.com/Pylons-tech/pylons/pull/436) Fix a bug in `x/pylons/keeper/msg_server_fulfill_trade.go` where a transfer fees were being matched from itemInputs where they should have been from itemOutputs.
 - [#346](https://github.com/Pylons-tech/pylons/pull/436) Fix a bug in `x/pylons/keeper/msg_server_fulfill_trade.go` where a `MatchItemInputsForTrade()` would return an error incorrectly.
@@ -26,6 +27,8 @@
 - [#476](https://github.com/Pylons-tech/pylons/pull/476) Remove `rate` field from `*Param` proto messages.
 - [#473](https://github.com/Pylons-tech/pylons/pull/473) Update proto definition of `MsgExecuteRecipe` and `MsgFulfillTrade` to add the `PaymentInfos` field.
 
+## State Machine Breaking Changes
+- [#489](https://github.com/Pylons-tech/pylons/pull/489) Changed `nodeVersion` field in `Recipe`, `Cookbook`, `Item`, `Execution`, to be a `uint64` on-chain param instead of being pulled from the binary
 
 ### Changes:
 - [#467](https://github.com/Pylons-tech/pylons/pull/467) Remove the `/flutter/` directory.  Code has been [moved](https://github.com/Pylons-tech/flutter_wallet).
