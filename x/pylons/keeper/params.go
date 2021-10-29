@@ -81,6 +81,12 @@ func (k Keeper) DistrEpochIdentifier(ctx sdk.Context) (res string) {
 	return
 }
 
+// EngineVersion returns the EngineVersion param
+func (k Keeper) EngineVersion(ctx sdk.Context) (res uint64) {
+	k.paramSpace.Get(ctx, types.ParamStoreKeyEngineVersion, &res)
+	return
+}
+
 // GetParams returns the total set of pylons parameters.
 func (k Keeper) GetParams(ctx sdk.Context) (params types.Params) {
 	k.paramSpace.GetParamSet(ctx, &params)

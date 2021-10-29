@@ -148,7 +148,7 @@ message CoinInput{
 message Recipe {
   string cookbookID = 1;
   string ID = 2;
-  string nodeVersion = 3;
+  uint64 nodeVersion = 3;
   string name = 4;
   string description = 5;
   string version = 6;

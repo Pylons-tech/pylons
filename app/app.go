@@ -411,8 +411,6 @@ func New(
 
 	epochsModule := epochsmodule.NewAppModule(appCodec, app.EpochsKeeper)
 
-	// Set node version from build configuration
-	pylonsmoduletypes.SetNodeVersionString(version.Version)
 	pylonsModule := pylonsmodule.NewAppModule(appCodec, app.PylonsKeeper, app.BankKeeper)
 
 	/****  Module Options ****/

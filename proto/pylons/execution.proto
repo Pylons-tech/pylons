@@ -21,7 +21,7 @@ message Execution {
   string recipeID = 3;
   string cookbookID = 4;
   string recipeVersion = 5;
-  string nodeVersion = 6;
+  uint64 nodeVersion = 6;
   int64 blockHeight = 7;
   repeated ItemRecord itemInputs = 8 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin coinInputs = 9 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];

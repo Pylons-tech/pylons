@@ -77,7 +77,7 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 		if itemOutput.Quantity != 0 && itemOutput.Quantity <= recipe.Entries.ItemOutputs[idx].AmountMinted {
 			return nil, nil, nil, sdkerrors.Wrapf(types.ErrItemQuantityExceeded, "quantity: %d, already minted: %d", itemOutput.Quantity, itemOutput.AmountMinted)
 		}
-		item, err := itemOutput.Actualize(ctx, recipe.CookbookID, addr, ec)
+		item, err := itemOutput.Actualize(ctx, recipe.CookbookID, addr, ec, k.EngineVersion(ctx))
 		if err != nil {
 			return nil, nil, nil, err
 		}
