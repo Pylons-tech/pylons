@@ -87,6 +87,7 @@ func (k Keeper) EngineVersion(ctx sdk.Context) (res uint64) {
 	return
 }
 
+
 // GetParams returns the total set of pylons parameters.
 func (k Keeper) GetParams(ctx sdk.Context) (params types.Params) {
 	k.paramSpace.GetParamSet(ctx, &params)
