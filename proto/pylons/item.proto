@@ -29,7 +29,7 @@ message Item {
   string owner = 1;
   string cookbookID = 2;
   string ID = 3;
-  string nodeVersion = 4;
+  uint64 nodeVersion = 4;
   repeated DoubleKeyValue doubles = 5 [(gogoproto.nullable) = false];
   repeated LongKeyValue longs = 6 [(gogoproto.nullable) = false];
   repeated StringKeyValue strings = 7 [(gogoproto.nullable) = false];

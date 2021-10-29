@@ -29,7 +29,7 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 	var cookbook = types.Cookbook{
 		ID:           msg.ID,
 		Creator:      msg.Creator,
-		NodeVersion:  types.GetNodeVersionString(),
+		NodeVersion:  k.EngineVersion(ctx),
 		Name:         msg.Name,
 		Description:  msg.Description,
 		Developer:    msg.Developer,
@@ -77,7 +77,7 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 	var updatedCookbook = types.Cookbook{
 		ID:           msg.ID,
 		Creator:      msg.Creator,
-		NodeVersion:  types.GetNodeVersionString(),
+		NodeVersion:  k.EngineVersion(ctx),
 		Name:         msg.Name,
 		Description:  msg.Description,
 		Developer:    msg.Developer,
