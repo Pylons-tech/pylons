@@ -40,7 +40,7 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 
 	var recipe = types.Recipe{
 		ID:            msg.ID,
-		NodeVersion:   types.GetNodeVersionString(),
+		NodeVersion:   k.EngineVersion(ctx),
 		CookbookID:    msg.CookbookID,
 		Name:          msg.Name,
 		Version:       msg.Version,
@@ -100,7 +100,7 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 
 	var updatedRecipe = types.Recipe{
 		ID:            msg.ID,
-		NodeVersion:   types.GetNodeVersionString(),
+		NodeVersion:   k.EngineVersion(ctx),
 		CookbookID:    msg.CookbookID,
 		Name:          msg.Name,
 		Version:       msg.Version,

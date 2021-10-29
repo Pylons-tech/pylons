@@ -131,7 +131,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	// create PendingExecution passing the current blockHeight
 	execution := types.Execution{
 		Creator:       msg.Creator,
-		NodeVersion:   types.GetNodeVersionString(),
+		NodeVersion:   k.EngineVersion(ctx),
 		BlockHeight:   ctx.BlockHeight(),
 		ItemInputs:    itemRecords,
 		RecipeID:      recipe.ID,

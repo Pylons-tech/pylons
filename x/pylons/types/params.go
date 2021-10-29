@@ -58,6 +58,7 @@ var (
 	DefaultMinTransferFee               = sdk.OneInt()
 	DefaultMaxTransferFee               = sdk.NewInt(10000)
 	DefaultDistrEpochIdentifier         = "day"
+	DefaultEngineVersion                = uint64(0)
 )
 
 // Parameter Store Keys
@@ -73,6 +74,7 @@ var (
 	ParamStoreKeyMaxTransferFee            = []byte("MaxTransferFee")
 	ParamStoreKeyUpdateUsernameFee         = []byte("UpdateUsernameFee")
 	ParamStoreKeyDistrEpochIdentifier      = []byte("DistrEpochIdentifier")
+	ParamStoreKeyEngineVersion             = []byte("EngineVersion")
 )
 
 // NewParams creates a new Params object
@@ -88,6 +90,7 @@ func NewParams(
 	maxTransferFee sdk.Int,
 	updateUsernameFee sdk.Coin,
 	distrEpochIdentifier string,
+	engineVersion uint64,
 ) Params {
 	return Params{
 		MinNameFieldLength:        minNameFieldLength,
@@ -101,6 +104,7 @@ func NewParams(
 		MaxTransferFee:            maxTransferFee,
 		UpdateUsernameFee:         updateUsernameFee,
 		DistrEpochIdentifier:      distrEpochIdentifier,
+		EngineVersion:             engineVersion,
 	}
 }
 
@@ -118,6 +122,7 @@ func DefaultParams() Params {
 		DefaultMaxTransferFee,
 		DefaultUpdateUsernameFee,
 		DefaultDistrEpochIdentifier,
+		DefaultEngineVersion,
 	)
 }
 
@@ -135,6 +140,7 @@ func NetworkTestParams() Params {
 		DefaultMaxTransferFee,
 		sdk.NewCoin("node0token", sdk.NewInt(10)),
 		DefaultDistrEpochIdentifier,
+		DefaultEngineVersion,
 	)
 }
 
@@ -163,6 +169,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(ParamStoreKeyMaxTransferFee, &p.MaxTransferFee, validateInt),
 		paramtypes.NewParamSetPair(ParamStoreKeyUpdateUsernameFee, &p.UpdateUsernameFee, validateCoinFee),
 		paramtypes.NewParamSetPair(ParamStoreKeyDistrEpochIdentifier, &p.DistrEpochIdentifier, validateString),
+		paramtypes.NewParamSetPair(ParamStoreKeyEngineVersion, &p.EngineVersion, validateInt64),
 	}
 }
 
@@ -356,5 +363,14 @@ func validateString(i interface{}) error {
 	if v == "" {
 		return fmt.Errorf("invalid empty string")
 	}
+	return nil
+}
+
+func validateInt64(i interface{}) error {
+	_, ok := i.(uint64)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+
 	return nil
 }

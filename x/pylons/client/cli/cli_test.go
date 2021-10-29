@@ -137,7 +137,7 @@ func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 		state.CookbookList = append(state.CookbookList, types.Cookbook{
 			Creator:      addresses[i],
 			ID:           strconv.Itoa(i),
-			NodeVersion:  "v1.0.0",
+			NodeVersion:  0,
 			Name:         "testCookbookName" + strconv.Itoa(i),
 			Description:  "testCookbookDescription" + strconv.Itoa(i),
 			Developer:    "testDeveloper" + strconv.Itoa(i),
@@ -173,7 +173,7 @@ func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types
 			types.Execution{
 				Creator:     addresses[i],
 				ID:          strconv.Itoa(i),
-				NodeVersion: "v1.0.0",
+				NodeVersion: 0,
 				CoinOutputs: sdk.NewCoins(sdk.NewCoin(
 					"testDenom"+strconv.Itoa(i),
 					sdk.OneInt(),
@@ -237,7 +237,7 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item
 				Owner:           addresses[i],
 				ID:              strconv.Itoa(i),
 				CookbookID:      "testCookbookID",
-				NodeVersion:     "0.0.1",
+				NodeVersion:     0,
 				Doubles:         make([]types.DoubleKeyValue, 0),
 				Longs:           make([]types.LongKeyValue, 0),
 				Strings:         make([]types.StringKeyValue, 0),
@@ -268,7 +268,7 @@ func networkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, [
 				Owner:           addresses[0],
 				ID:              strconv.Itoa(i),
 				CookbookID:      "testCookbookID",
-				NodeVersion:     "0.0.1",
+				NodeVersion:     0,
 				Doubles:         make([]types.DoubleKeyValue, 0),
 				Longs:           make([]types.LongKeyValue, 0),
 				Strings:         make([]types.StringKeyValue, 0),
@@ -297,7 +297,7 @@ func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Re
 			types.Recipe{
 				CookbookID:    strconv.Itoa(i),
 				ID:            strconv.Itoa(i),
-				NodeVersion:   "",
+				NodeVersion:   0,
 				Name:          "",
 				Description:   "",
 				Version:       "",
