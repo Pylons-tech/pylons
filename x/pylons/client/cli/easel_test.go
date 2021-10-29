@@ -358,4 +358,3 @@ func mintNFT2(t *testing.T, simInfo *easelBasicSim) {
 	// b, _ := json.MarshalIndent(recResp.Recipe, " ", " ")
 	// fmt.Println(string(b))
 }
-

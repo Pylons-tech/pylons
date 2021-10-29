@@ -411,7 +411,6 @@ func New(
 
 	epochsModule := epochsmodule.NewAppModule(appCodec, app.EpochsKeeper)
 
-
 	pylonsModule := pylonsmodule.NewAppModule(appCodec, app.PylonsKeeper, app.BankKeeper)
 
 	/****  Module Options ****/
