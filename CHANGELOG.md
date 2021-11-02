@@ -1,7 +1,22 @@
 # Changelog
 
-## Unreleased
+## Unreleased 
 
+## Changes:
+- [#494](https://github.com/Pylons-tech/pylons/pull/494) Replace usages of deprecated `EmitEvent()` with `EmitTypedEvent()`.
+
+
+## [v0.3.1](https://github.com/Pylons-tech/pylons/releases/tag/v0.3.1) - 2021-10-01
+
+### Features:
+- [#487](https://github.com/Pylons-tech/pylons/pull/487) Add `x/epochs` module and custom fee distribution logic.
+- [#478](https://github.com/Pylons-tech/pylons/pull/478) Enhance validation checks for Recipe weights
+
+### Fixes:
+- [#492](https://github.com/Pylons-tech/pylons/pull/492) Update SDK version to v0.44.3 to fix security issues.
+- [#490](https://github.com/Pylons-tech/pylons/pull/490) Invert default parameters for paymentProcessor percentage.
+- [#482](https://github.com/Pylons-tech/pylons/pull/482) Prevent bug where nil pointers could cause panics in Recipe EntriesList fields.
+- [#479](https://github.com/Pylons-tech/pylons/pull/479) Fixes an issue in the `ValidateBasic()` function for `MsgFulfillTrade` where itemIDs were being validated incorrectly.
 
 ## [v0.2.0](https://github.com/Pylons-tech/pylons/releases/tag/v0.2.0) - 2021-10-28
 
