@@ -241,8 +241,13 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 					Program: "",
 				},
 			},
-			ID: "How_do_you_do_turn_this_on",
+			ID: "id1",
 			Strings: []types.StringParam{
+				{
+					Key:     "App_Type",
+					Value:   "Easel",
+					Program: "",
+				},
 				{
 					Key:     "Name",
 					Value:   "How do you do turn this on",
@@ -280,7 +285,7 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"How_do_you_do_turn_this_on"},
+			EntryIDs: []string{"id1"},
 			Weight:   1,
 		},
 	})
@@ -355,6 +360,6 @@ func mintNFT2(t *testing.T, simInfo *easelBasicSim) {
 	require.NoError(t, simInfo.net.Config.Codec.UnmarshalJSON(out.Bytes(), &recResp))
 	require.NotNil(t, recResp.Recipe)
 
-	// b, _ := json.MarshalIndent(recResp.Recipe, " ", " ")
-	// fmt.Println(string(b))
+	b, _ := json.MarshalIndent(recResp.Recipe, " ", " ")
+	fmt.Println(string(b))
 }

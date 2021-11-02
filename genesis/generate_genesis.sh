@@ -18,7 +18,7 @@ pylonsd init masternode --chain-id=pylonschain
 
 # Change the bond denom to the staking token (ubedrock)
 sed -i 's/stake/ubedrock/g' $HOME/.pylons/config/genesis.json
-#sed -i 's/"ed25519"/"secp256k1"/g' $HOME/.pylons/config/genesis.json
+#sed -i 's/"ed25519"/"secp256k1"/g' $HOME/.pylons/config/genesis-starport.json
 
 # Create all accounts
 pylonsd keys add pylonsinc --keyring-backend=test  --recover <<< "achieve patch rabbit delay you stairs flag nation lady outside answer property olive man dwarf used chapter sunset bundle sniff between since review logic"
