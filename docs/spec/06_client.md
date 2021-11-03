@@ -80,7 +80,7 @@ pylonsd query pylons get-cookbook [id] [flags]
 #### list-executions-by-recipe
 
 ```bash
-  pylonsd query pylons list-executions-by-item [cookbook-id] [id] [flags]
+  pylonsd query pylons list-executions-by-recipe [cookbook-id] [id] [flags]
 ```
 
 #### list-item-by-owner
