@@ -263,6 +263,7 @@ message MsgExecuteRecipe {
   string recipeID = 3;
   uint64 coinInputsIndex = 4;
   repeated string itemIDs = 5 [(gogoproto.nullable) = false];
+  repeated PaymentInfo paymentInfos = 6 [(gogoproto.nullable) = false];
 }
 ```
 
@@ -401,6 +402,7 @@ message MsgFulfillTrade {
   uint64 ID = 2;
   uint64 coinInputsIndex = 3;
   repeated ItemRef items = 4 [(gogoproto.nullable) = false];
+  repeated PaymentInfo paymentInfos = 5 [(gogoproto.nullable) = false];
 }
 ```
 
@@ -449,6 +451,14 @@ The message handling should fail if:
 - a Google IAP Order specified by the purchaseToken does not exist
 - the Google IAP signature is invalid
 
-<!--
-TODO add stripe
--->
+### `MsgBurnDebtToken`
+
+```protobuf
+message MsgBurnDebtToken {
+  string creator = 1;
+  RedeemInfo redeemInfo = 2 [(gogoproto.nullable) = false];
+}
+```
+
+The message handling should fail if:
+- The `RedeemInfo` signature is invalid

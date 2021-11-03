@@ -205,3 +205,12 @@ message EventStripePurchase {
   string ID = 2;
 }
 ```
+
+## EventBurnDebtToken
+
+Emitted when issued debt tokens are burned, fulling a payment processor purchase.
+```protobuf
+message EventBurnDebtToken {
+  RedeemInfo redeemInfo = 1 [(gogoproto.nullable) = false];
+}
+```

@@ -17,6 +17,10 @@ The pylons module contains the following parameters:
 | UpdateUsernameFee                   | sdk.Coin      | {"denom": "upylon", "amount", 10}                               |
 | MinTransferFee                        | sdk.Int       | 20                               |
 | MaxTransferFee                        | sdk.Int       | 20                               |
+| PaymentProcessors                     | []PaymentProcessor| (see below)                  |
+| DistrEpochIdentifier                  | string         | "day"                           |
+| EngineVersion                         | uint64         | 1                               |
+
 
 
 ## MinNameFieldLength
@@ -96,5 +100,39 @@ Minimum transfer fee for sending `Item`s.
 ## MaxTransferFee
 
 Minimum transfer fee for sending `Item`s.
+
+## PaymentProcessors
+
+Structure to represent a payment processor (such as Stripe) on-chain.  
+
+Example:
+
+```go
+	DefaultProcessorPercentage  = sdk.ZeroDec()
+    DefaultValidatorsPercentage = sdk.MustNewDecFromStr("0.003")
+    DefaultPylonsIncPubKey      = "EVK1dqjD6K8hGylacMpWAa/ru/OnWUDtCZ+lPkv2TTA=" // this is a testing key, do not use in production!
+    DefaultPaymentProcessors    = []PaymentProcessor{
+        {
+            CoinDenom:            StripeCoinDenom,
+            PubKey:               DefaultPylonsIncPubKey,
+            ProcessorPercentage:  DefaultProcessorPercentage,
+            ValidatorsPercentage: DefaultValidatorsPercentage,
+            Name:                 "Pylons_Inc",
+        },
+    }
+    DefaultPaymentProcessorsTokensBankParams = []types.SendEnabled{
+        {Denom: StripeCoinDenom, Enabled: false},
+    }
+```
+
+## DistrEpochIdentifier
+
+String identifier to choose an epoch length from the `x/epochs` module.
+
+## EngineVersion
+
+Application version.  Planned for use in the future to deprecate recipes.
+
+
 
 

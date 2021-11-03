@@ -17,20 +17,20 @@ The `pylons` module tracks the state of these primary objects:
 
 Cookbooks objects are containers for recipes.  A cookbook could be a collection of recipes that make up a game experience or be a portfolio of recipes an artist uses to mint their NFTs from.
 
-The definition of a cookbook can be found in [`cookbook.proto`](LINK).
+The definition of a cookbook can be found in [`cookbook.proto`](../../../proto/pylons/cookbook.proto).
 
-```go
-type Cookbook struct {
-	Creator      string     `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	ID           string     `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
-	NodeVersion  string     `protobuf:"bytes,3,opt,name=nodeVersion,proto3" json:"nodeVersion,omitempty"`
-	Name         string     `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Description  string     `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
-	Developer    string     `protobuf:"bytes,6,opt,name=developer,proto3" json:"developer,omitempty"`
-	Version      string     `protobuf:"bytes,7,opt,name=version,proto3" json:"version,omitempty"`
-	SupportEmail string     `protobuf:"bytes,8,opt,name=supportEmail,proto3" json:"supportEmail,omitempty"`
-	CostPerBlock types.Coin `protobuf:"bytes,9,opt,name=costPerBlock,proto3" json:"costPerBlock"`
-	Enabled      bool       `protobuf:"varint,10,opt,name=enabled,proto3" json:"enabled,omitempty"`
+```protobuf
+message Cookbook {
+  string creator = 1;
+  string ID = 2;
+  uint64 nodeVersion = 3;
+  string name = 4;
+  string description = 5;
+  string developer = 6;
+  string version = 7;
+  string supportEmail = 8;
+  cosmos.base.v1beta1.Coin costPerBlock = 9 [(gogoproto.nullable) = false];
+  bool enabled = 10;
 }
 ```
 
@@ -40,23 +40,23 @@ Recipe objects are blueprints for digital experiences involving coins and NFT it
 other blockchains experiences like Ethereum, or specify mini-programs to probabilistically result in a variety of outcomes.  The recipe structure contains
 fields specifying the rules and logic of a recipe.
 
-The definition of a recipe can be found in [`recipe.proto`](LINK).
+The definition of a recipe can be found in [`recipe.proto`](../../../proto/pylons/recipe.proto).
 
-```go
-type Recipe struct {
-	CookbookID    string            `protobuf:"bytes,1,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
-	ID            string            `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
-	NodeVersion   string            `protobuf:"bytes,3,opt,name=nodeVersion,proto3" json:"nodeVersion,omitempty"`
-	Name          string            `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string            `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
-	Version       string            `protobuf:"bytes,6,opt,name=version,proto3" json:"version,omitempty"`
-	CoinInputs    []CoinInput       `protobuf:"bytes,7,rep,name=coinInputs,proto3" json:"coinInputs"`
-	ItemInputs    []ItemInput       `protobuf:"bytes,8,rep,name=itemInputs,proto3" json:"itemInputs"`
-	Entries       EntriesList       `protobuf:"bytes,9,opt,name=entries,proto3" json:"entries"`
-	Outputs       []WeightedOutputs `protobuf:"bytes,10,rep,name=outputs,proto3" json:"outputs"`
-	BlockInterval int64             `protobuf:"varint,11,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
-	Enabled       bool              `protobuf:"varint,12,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	ExtraInfo     string            `protobuf:"bytes,13,opt,name=extraInfo,proto3" json:"extraInfo,omitempty"`
+```protobuf
+message Recipe {
+  string cookbookID = 1;
+  string ID = 2;
+  uint64 nodeVersion = 3;
+  string name = 4;
+  string description = 5;
+  string version = 6;
+  repeated CoinInput coinInputs = 7 [(gogoproto.nullable) = false];
+  repeated ItemInput itemInputs = 8 [(gogoproto.nullable) = false];
+  EntriesList entries = 9 [(gogoproto.nullable) = false];
+  repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
+  int64 blockInterval = 11;
+  bool enabled = 12;
+  string extraInfo = 13;
 }
 ```
 
@@ -65,68 +65,68 @@ type Recipe struct {
 Execution objects are instances created when a user actually runs a recipe.  The data structure contains information about the specific coins, items,
 recipe and outputs involved in the execution.
 
-The definition of a recipe can be found in [`execution.proto`](LINK).
+The definition of an execution can be found in [`execution.proto`](../../../proto/pylons/execution.proto).
 
-```go
-type Execution struct {
-	Creator             string                                   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	ID                  string                                   `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
-	RecipeID            string                                   `protobuf:"bytes,3,opt,name=recipeID,proto3" json:"recipeID,omitempty"`
-	CookbookID          string                                   `protobuf:"bytes,4,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
-	RecipeVersion       string                                   `protobuf:"bytes,5,opt,name=recipeVersion,proto3" json:"recipeVersion,omitempty"`
-	NodeVersion         string                                   `protobuf:"bytes,6,opt,name=nodeVersion,proto3" json:"nodeVersion,omitempty"`
-	BlockHeight         int64                                    `protobuf:"varint,7,opt,name=blockHeight,proto3" json:"blockHeight,omitempty"`
-	ItemInputs          []ItemRecord                             `protobuf:"bytes,8,rep,name=itemInputs,proto3" json:"itemInputs"`
-	CoinInputs          github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,9,rep,name=coinInputs,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"coinInputs"`
-	CoinOutputs         github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,10,rep,name=coinOutputs,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"coinOutputs"`
-	ItemOutputIDs       []string                                 `protobuf:"bytes,11,rep,name=itemOutputIDs,proto3" json:"itemOutputIDs,omitempty"`
-	ItemModifyOutputIDs []string                                 `protobuf:"bytes,12,rep,name=itemModifyOutputIDs,proto3" json:"itemModifyOutputIDs,omitempty"`
+```protobuf
+message Execution {
+  string creator = 1;
+  string ID = 2;
+  string recipeID = 3;
+  string cookbookID = 4;
+  string recipeVersion = 5;
+  uint64 nodeVersion = 6;
+  int64 blockHeight = 7;
+  repeated ItemRecord itemInputs = 8 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin coinInputs = 9 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin coinOutputs = 10 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated string itemOutputIDs = 11 [(gogoproto.nullable) = false];
+  repeated string itemModifyOutputIDs = 12 [(gogoproto.nullable) = false];
 }
 ```
 
 ## Items
 
-Item objects provide the core asset identity file for the `pylons` module. <!-- need general object description here, what is the file with this code? where does it live in the repo? -->.
+Item objects provide the core asset identity file for the `pylons` module.  Like ERC-721 NFTs, they contain a unique identifier.  They also contain on-chain data that is set by executing the recipe that mints or modifies the item.
 
-The definition of a recipe can be found in [`item.proto`](LINK).
+The definition of an item can be found in [`item.proto`](../../../proto/pylons/item.proto).
 
 
-````go
-type Item struct {
-	Owner          string           `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
-	CookbookID     string           `protobuf:"bytes,2,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
-	ID             string           `protobuf:"bytes,3,opt,name=ID,proto3" json:"ID,omitempty"`
-	NodeVersion    string           `protobuf:"bytes,4,opt,name=nodeVersion,proto3" json:"nodeVersion,omitempty"`
-	Doubles        []DoubleKeyValue `protobuf:"bytes,5,rep,name=doubles,proto3" json:"doubles"`
-	Longs          []LongKeyValue   `protobuf:"bytes,6,rep,name=longs,proto3" json:"longs"`
-	Strings        []StringKeyValue `protobuf:"bytes,7,rep,name=strings,proto3" json:"strings"`
-	MutableStrings []StringKeyValue `protobuf:"bytes,8,rep,name=mutableStrings,proto3" json:"mutableStrings"`
-	Tradeable      bool             `protobuf:"varint,9,opt,name=tradeable,proto3" json:"tradeable,omitempty"`
-	LastUpdate     int64            `protobuf:"varint,10,opt,name=lastUpdate,proto3" json:"lastUpdate,omitempty"`
-	TransferFee    []types.Coin     `protobuf:"bytes,11,rep,name=transferFee,proto3" json:"transferFee"`
-	// The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
-	TradePercentage github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,12,opt,name=tradePercentage,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"tradePercentage"`
+````protobuf
+message Item {
+  string owner = 1;
+  string cookbookID = 2;
+  string ID = 3;
+  uint64 nodeVersion = 4;
+  repeated DoubleKeyValue doubles = 5 [(gogoproto.nullable) = false];
+  repeated LongKeyValue longs = 6 [(gogoproto.nullable) = false];
+  repeated StringKeyValue strings = 7 [(gogoproto.nullable) = false];
+  repeated StringKeyValue mutableStrings = 8 [(gogoproto.nullable) = false];
+  bool tradeable = 9;
+  int64 lastUpdate = 10;
+  repeated cosmos.base.v1beta1.Coin transferFee = 11 [(gogoproto.nullable) = false];
+  // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
+  string tradePercentage = 12 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
 }
 ````
 
 ## Trades
 
-Trades objects are <!-- need general object description here, what is the file with this code? where does it live in the repo? -->.
+Trades objects are pushed to the blockchain to be publicly viewed by all users.  Users can then choose to "fulfill" then trade, completing it.
 
-The definition of a recipe can be found in [`trade.proto`](LINK).
+The definition of a trade can be found in [`trade.proto`](../../../proto/pylons/trade.proto).
 
 
-```go
-type Trade struct {
-	Creator          string                                   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	ID               uint64                                   `protobuf:"varint,2,opt,name=ID,proto3" json:"ID,omitempty"`
-	CoinInputs       []CoinInput                              `protobuf:"bytes,3,rep,name=coinInputs,proto3" json:"coinInputs"`
-	ItemInputs       []ItemInput                              `protobuf:"bytes,4,rep,name=itemInputs,proto3" json:"itemInputs"`
-	CoinOutputs      github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,5,rep,name=coinOutputs,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"coinOutputs"`
-	ItemOutputs      []ItemRef                                `protobuf:"bytes,6,rep,name=itemOutputs,proto3" json:"itemOutputs"`
-	ExtraInfo        string                                   `protobuf:"bytes,7,opt,name=extraInfo,proto3" json:"extraInfo,omitempty"`
-	Receiver         string                                   `protobuf:"bytes,8,opt,name=receiver,proto3" json:"receiver,omitempty"`
-	TradedItemInputs []ItemRef                                `protobuf:"bytes,9,rep,name=tradedItemInputs,proto3" json:"tradedItemInputs"`
+```protobuf
+message Trade {
+  string creator = 1;
+  uint64 ID = 2;
+  repeated CoinInput coinInputs = 3 [(gogoproto.nullable) = false];
+  repeated ItemInput itemInputs = 4 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin coinOutputs = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated ItemRef itemOutputs = 6 [(gogoproto.nullable) = false];
+  string extraInfo = 7;
+  string receiver = 8;
+  repeated ItemRef tradedItemInputs = 9 [(gogoproto.nullable) = false];
 }
 ```
 
@@ -134,13 +134,41 @@ type Trade struct {
 
 The PylonsAccounts objects define a two-way map between a Cosmos SDK address and a username.  
 
-  <!-- need general object description here, what is the file with this code? where does it live in the repo? -->.
-The definition of a recipe can be found in [`accounts.proto`](LINK).
+The definition of the account map can be found in [`accounts.proto`](../../../proto/pylons/accounts.proto).
 
 
-```go
-type UserMap struct {
-	AccountAddr string `protobuf:"bytes,1,opt,name=accountAddr,proto3" json:"accountAddr,omitempty"`
-	Username    string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+```protobuf
+message UserMap {
+  string accountAddr = 1;
+  string username = 2;
+}
+```
+
+## PaymentInfo
+
+The definition of payment info can be found in [`payment_info.proto`](../../../proto/pylons/payment_info.proto).
+
+```protobuf
+message PaymentInfo {
+  string purchaseID = 1;
+  string processorName = 2;
+  string payerAddr = 3;
+  string amount = 4 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
+  string productID = 5;
+  string signature = 6;
+}
+```
+
+## RedeemInfo
+
+The definition of a redeem info can be found in [`redeem_info.proto`](../../../proto/pylons/redeem_info.proto).
+
+```protobuf
+message RedeemInfo {
+  string ID = 1;
+  string processorName = 2;
+  string address = 3;
+  string amount = 4 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];;
+  string signature = 5;
 }
 ```
