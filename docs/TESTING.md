@@ -30,10 +30,15 @@ make test-cover
 
 ## Simulation Tests
 
-TODO
+To test using a simulation for non-determinism:
+
+```shell
+make test-sim-nondeterminism
+```
 
 ## Benchmarking
 
 ```shell
 make bench
 ```
+
