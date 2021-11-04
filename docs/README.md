@@ -8,6 +8,8 @@
 - **[Testing](./TESTING.md)**: Documentation for testing the code available in this repository.
 - **[Testnet](./TESTNET.md)**: Documentation on how to run a simple Testnet.
 
-## Spec
+## Specs
 
 For a more detailed look at the design of Pylons, please see the official [specification](./spec/README.md).
+- `x/pylons` [spec](../x/pylons/spec/README.md)
+- `x/epochs` [spec](../x/epochs/spec/README.md)

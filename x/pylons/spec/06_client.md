@@ -80,7 +80,7 @@ pylonsd query pylons get-cookbook [id] [flags]
 #### list-executions-by-recipe
 
 ```bash
-  pylonsd query pylons list-executions-by-recipe [cookbook-id] [recipe-id] [flags]
+  pylonsd query pylons list-executions-by-item [cookbook-id] [id] [flags]
 ```
 
 #### list-item-by-owner
@@ -101,6 +101,18 @@ pylonsd query pylons get-cookbook [id] [flags]
   pylonsd query pylons list-trades [creator] [flags]
 ```
 
+#### get-redeem-info
+
+```shell
+  pylonsd query pylons get-redeem-info [index] [flags]
+```
+
+#### list-redeem-info
+
+```shell
+  pylonsd q pylons list-redeem-info
+```
+
 ### Transactions
 
 The `tx` commands allow users to interact with the `pylons` module.
@@ -116,7 +128,6 @@ The `tx` commands allow users to interact with the `pylons` module.
 ```bash
   pylonsd tx pylons update-account [username] [flags]
 ```
-
 
 #### create-cookbook
 
@@ -188,6 +199,12 @@ The `tx` commands allow users to interact with the `pylons` module.
 
 ```bash
   pylonsd tx pylons google-iap-get-pylons [productID] [purchaseToken] [recieptDataBase64] [signature] [flags]
+```
+
+#### burn-debt-token
+
+```shell
+  pylonsd tx pylons burn-debt-token [redeemInfo] [flags]
 ```
 
 ## gRPC
@@ -490,7 +507,6 @@ Example response:
           "doubles": [
             {
               "key": "string",
-              "rate": "string",
               "weightRanges": [
                 {
                   "lower": "string",
@@ -504,7 +520,6 @@ Example response:
           "longs": [
             {
               "key": "string",
-              "rate": "string",
               "weightRanges": [
                 {
                   "lower": "string",
@@ -518,7 +533,6 @@ Example response:
           "strings": [
             {
               "key": "string",
-              "rate": "string",
               "value": "string",
               "program": "string"
             }
@@ -548,7 +562,6 @@ Example response:
           "doubles": [
             {
               "key": "string",
-              "rate": "string",
               "weightRanges": [
                 {
                   "lower": "string",
@@ -562,7 +575,6 @@ Example response:
           "longs": [
             {
               "key": "string",
-              "rate": "string",
               "weightRanges": [
                 {
                   "lower": "string",
@@ -576,7 +588,6 @@ Example response:
           "strings": [
             {
               "key": "string",
-              "rate": "string",
               "value": "string",
               "program": "string"
             }
@@ -711,7 +722,6 @@ Example response:
             "doubles": [
               {
                 "key": "string",
-                "rate": "string",
                 "weightRanges": [
                   {
                     "lower": "string",
@@ -725,7 +735,6 @@ Example response:
             "longs": [
               {
                 "key": "string",
-                "rate": "string",
                 "weightRanges": [
                   {
                     "lower": "string",
@@ -739,7 +748,6 @@ Example response:
             "strings": [
               {
                 "key": "string",
-                "rate": "string",
                 "value": "string",
                 "program": "string"
               }
@@ -769,7 +777,6 @@ Example response:
             "doubles": [
               {
                 "key": "string",
-                "rate": "string",
                 "weightRanges": [
                   {
                     "lower": "string",
@@ -783,7 +790,6 @@ Example response:
             "longs": [
               {
                 "key": "string",
-                "rate": "string",
                 "weightRanges": [
                   {
                     "lower": "string",
@@ -797,7 +803,6 @@ Example response:
             "strings": [
               {
                 "key": "string",
-                "rate": "string",
                 "value": "string",
                 "program": "string"
               }
