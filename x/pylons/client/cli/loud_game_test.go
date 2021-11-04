@@ -283,8 +283,6 @@ func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
-
-	// TODO check balance?
 }
 
 func createBuyCopperSwordRecipe(t *testing.T, simInfo *loudBasicSim) {

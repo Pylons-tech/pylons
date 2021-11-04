@@ -39,7 +39,6 @@ func DefaultGenesis() *GenesisState {
 // Validate performs basic genesis state validation returning an error upon any
 // failure.
 func (gs GenesisState) Validate() error {
-	// TODO: Epochs identifiers should be unique
 	epochIdentifiers := map[string]bool{}
 	for _, epoch := range gs.Epochs {
 		if epoch.Identifier == "" {

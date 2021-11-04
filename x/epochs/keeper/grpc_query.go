@@ -2,7 +2,8 @@ package keeper
 
 import (
 	"context"
-	"errors"
+
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -26,7 +27,7 @@ func (k Keeper) CurrentEpoch(c context.Context, req *types.QueryCurrentEpochRequ
 
 	info := k.GetEpochInfo(ctx, req.Identifier)
 	if info.Identifier != req.Identifier {
-		return nil, errors.New("not available identifier")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "not available identifier")
 	}
 
 	return &types.QueryCurrentEpochResponse{

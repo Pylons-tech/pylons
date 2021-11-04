@@ -4,6 +4,8 @@ import (
 	gocontext "context"
 	"time"
 
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
 	"github.com/Pylons-tech/pylons/x/epochs/types"
 )
 
@@ -31,4 +33,18 @@ func (suite *KeeperTestSuite) TestQueryEpochInfos() {
 	suite.Require().Equal(epochInfosResponse.Epochs[1].CurrentEpoch, int64(0))
 	suite.Require().Equal(epochInfosResponse.Epochs[1].CurrentEpochStartTime, chainStartTime)
 	suite.Require().Equal(epochInfosResponse.Epochs[1].EpochCountingStarted, false)
+}
+
+func (suite *KeeperTestSuite) TestCurrentEpoch() {
+	suite.SetupTest()
+	queryClient := suite.queryClient
+
+	// correct identifier
+	currentEpochResp, err := queryClient.CurrentEpoch(gocontext.Background(), &types.QueryCurrentEpochRequest{Identifier: "day"})
+	suite.Require().NoError(err)
+	suite.Require().Zero(currentEpochResp.CurrentEpoch)
+
+	// incorrect identifier
+	_, err = queryClient.CurrentEpoch(gocontext.Background(), &types.QueryCurrentEpochRequest{Identifier: "invalid"})
+	suite.Require().ErrorIs(err, sdkerrors.ErrInvalidRequest)
 }
