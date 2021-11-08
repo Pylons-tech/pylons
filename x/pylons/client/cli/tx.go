@@ -67,6 +67,8 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdCreateCookbook())
 	cmd.AddCommand(CmdUpdateCookbook())
 
+	cmd.AddCommand(CmdGenerateSignedAPIToken())
+
 	return cmd
 }
 

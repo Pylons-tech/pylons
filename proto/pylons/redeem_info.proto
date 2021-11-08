@@ -12,3 +12,10 @@ message RedeemInfo {
   string amount = 4 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];;
   string signature = 5;
 }
+
+message CreatePaymentAccount {
+  string address = 1;
+  string token = 2;
+  string signature = 3;
+}
+
