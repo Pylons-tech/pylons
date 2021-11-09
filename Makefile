@@ -6,6 +6,7 @@ VERSION := $(shell echo $(shell git describe --tags 2> /dev/null || echo "dev-$(
 COMMIT := $(shell git log -1 --format='%H')
 PROJECT_NAME = $(shell git remote get-url origin | xargs basename -s .git)
 ARTIFACT_DIR := ./artifacts
+LEDGER_ENABLED ?= true
 
 export GO111MODULE = on
 
