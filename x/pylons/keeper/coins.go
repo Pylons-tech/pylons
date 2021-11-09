@@ -58,7 +58,7 @@ func (k Keeper) MintCreditToAddr(ctx sdk.Context, addr sdk.AccAddress, amounts, 
 	}
 
 	// send fees to the fee collector
-	err = k.bankKeeper.SendCoinsFromModuleToModule(ctx, ppMacc, feesMacc, actualAmt)
+	err = k.bankKeeper.SendCoinsFromModuleToModule(ctx, ppMacc, feesMacc, fees)
 	if err != nil {
 		return err
 	}
