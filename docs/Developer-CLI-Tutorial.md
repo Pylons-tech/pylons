@@ -3,7 +3,7 @@
 Pylons SDK can be used for blockchain game developers to build their own games that run on blockchain involving game characters and items.
 
 This document is basic tutorial for beginners.
-There is more information on [Pylons Spec](https://github.com/Pylons-tech/pylons_sdk/blob/master/DEVELOPER_DOC.md).
+There is more information on [Pylons Spec](https://github.com/Pylons-tech/pylons/tree/main/docs/spec).
 
 Important points in pylons SDK are:
 
