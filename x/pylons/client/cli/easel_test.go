@@ -78,7 +78,7 @@ func createEaselCookbook(t *testing.T, simInfo *easelBasicSim) {
 		"true",
 	}
 
-	// create LOUD cookbook
+	// create Easel cookbook
 	args := []string{cookbookIDEasel}
 	args = append(args, cbFields...)
 	args = append(args, simInfo.common...)
