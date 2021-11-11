@@ -754,7 +754,7 @@ In this section we will attempt trading between accounts.
 Now you have successfully executed the recipe, trades and you probably understood pylons about 30%.
 And you are ready to go into the deep level of pylons ecosystem.
 
-  Transaction-wise these are the transactions in Pylons under tx pylons. There are several more commands and other transactions that can be run.
+There are several commands and various transactions that can be run in pylons under different command combinations. However, the below are the transactions in Pylons under `pylonsd tx pylons`.  
   
   ```
 Stargate Pylons App
