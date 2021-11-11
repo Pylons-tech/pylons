@@ -1,11 +1,12 @@
 # Introduction
 
-This document is basic tutorial for beginners.
+This document is basic developer CLI tutorial for beginners.
 
 There is more information on [Pylons Spec](https://github.com/Pylons-tech/pylons/tree/main/docs/spec).
 
 Important points in pylons are:
 
+-Cookbook: This is a principal concept in pylons. A cookbook is a game. And to build recipes and items, you need to have cookbooks.
 - item: Item is an important concept in Pylons. It can simply be considered as the items in original games. Items will have properties in the format of Double, String, Integer etc. Characters can be created as items either.
 - recipe: recipes will decide and generate everything like item generation and modification, combination of items. Recipes can be used to get result of some action between items and characters. Every action related to items are taken by recipes.
 - trade: this functionality enables accounts to trade their coins themselves. Trade includes items - items trading, coins - coins trading and mixed trading.
@@ -18,14 +19,14 @@ It's helpful if you know something about `cosmos-sdk` as Pylons is based on [cos
   
 Refer to the [technical setup page](../TECHNICAL-SETUP.md) for instructions.
 
-- Go version: Download and install Go
-- Pylonsd version: Download the latest version
+- Go version: Download and install the lastest Go verision (https://golang.org/doc/install)
+- Pylonsd version: Download the latest version/tagged release (https://github.com/Pylons-tech/pylons/releases)
 
          ensure GOPATH is set properly to point to the go directory of your Go installation: GOPATH = $HOME/go
          ensure PATH is set properly to point to the bin folder of your Go installation: PATH = $GOPATH/bin
          pylonsd binary(link above or from 'make install' on repo clone/source) should be put in Go's bin folder
 
-- Starport version: Download and install the latest version of starport
+- Starport version: Download and install the latest version of starport (https://docs.starport.network/guide/install.html)
 
 ## Start pylons 
 
@@ -78,7 +79,7 @@ If not running locally or if you wish to start the pylons daemon without starpor
    $ pylonsd collect gentx
    ```
 
-7. replace all occurrences of "stake" in the genesis file with "ubedrock" in the genesis in .pylons/config/genesis.json unless you are using a preconfigured genesis that has done this.
+7. replace all occurrences of "stake" in the genesis file with "ubedrock" in the genesis in .pylons/config/genesis.json unless you are using a pre-configured genesis/genesis from another source e.g a central genesis for a network, that has already done this.
 
 8. start pylons
    ```shell
@@ -137,7 +138,7 @@ Use "pylonsd [command] --help" for more information about a command.
 Now let's move forward with some important cli commands one by one.
 
 Some of the pylonsd cli commands require user password for keyring-backend. 
-If you set `--keyring-backend=test` flag, it uses testing keyring and which does not require password, on our tutorial, we will be using test keyring for most of the commands.
+If you set `--keyring-backend=test` flag, it uses testing keyring and which does not require password, on our tutorial, we will be using test keyring for most of the commands and you will see how to set it once and for all below.
 
 ### Local keys
 
