@@ -1,15 +1,14 @@
 # Introduction
 
-Pylons SDK can be used for blockchain game developers to build their own games that run on blockchain involving game characters and items.
-
 This document is basic tutorial for beginners.
+
 There is more information on [Pylons Spec](https://github.com/Pylons-tech/pylons/tree/main/docs/spec).
 
-Important points in pylons SDK are:
+Important points in pylons are:
 
-- item: Item is an important concept in Pylons sdk. It can simply be considered as the items in original games. Items will have properties in the format of Double, String, Integer etc. Characters can be created as items either.
-- recipe: in this sdk, recipes will decide and generate everything like item generation and modification, combination of items. Recipes can be used to get result of some action between items and characters. Every action related to items are taken by recipes.
-- trade: Pylons SDK enables accounts to trade their coins themselves. Trade includes items - items trading, coins - coins trading and mixed trading.
+- item: Item is an important concept in Pylons. It can simply be considered as the items in original games. Items will have properties in the format of Double, String, Integer etc. Characters can be created as items either.
+- recipe: recipes will decide and generate everything like item generation and modification, combination of items. Recipes can be used to get result of some action between items and characters. Every action related to items are taken by recipes.
+- trade: this functionality enables accounts to trade their coins themselves. Trade includes items - items trading, coins - coins trading and mixed trading.
 
 It's helpful if you know something about `cosmos-sdk` as Pylons is based on [cosmos-sdk](https://cosmos.network/sdk).
 
@@ -19,18 +18,29 @@ It's helpful if you know something about `cosmos-sdk` as Pylons is based on [cos
   
 Refer to the [technical setup page](../TECHNICAL-SETUP.md) for instructions.
 
-- Go version: [v1.17+](https://golang.org/dl/)
-- Pylonsd version: [v0.3.2](https://github.com/Pylons-tech/pylons/releases/tag/v0.3.2)
+- Go version: Download and install Go
+- Pylonsd version: Download the latest version
 
          ensure GOPATH is set properly to point to the go directory of your Go installation: GOPATH = $HOME/go
          ensure PATH is set properly to point to the bin folder of your Go installation: PATH = $GOPATH/bin
          pylonsd binary(link above or from 'make install' on repo clone/source) should be put in Go's bin folder
 
+- Starport version: Download and install the latest version of starport
+
 ## Start pylons daemon
 
 You need to start pylons daemon. Download binary files for `pylonsd` from link above and run ```make install``` on it which will install  the binary into GOPATH/bin.
 
-And run the following commands.
+If running locally,
+
+  1. Download the source from the latest pylons release
+  2. unzip and cd into pylons
+  3. Run starport chain serve
+ ```shell
+   $ starport chain serve
+   ```
+
+If not running locally, run the following commands.
 
 1. Initialize the pylons directories and create the local genesis file with the correct
    chain-id
@@ -38,43 +48,51 @@ And run the following commands.
    ```shell
    $ pylonsd init <moniker-name> --chain-id=pylons-testnet
    ```
+2. Set the keyring to test 
+  
+  ```shell
+   $ pylonsd config keyring-backend test
+   ```
 
-2. Create local key pairs in the Keybase with key name: `jack`. You can create more accounts for trading between accounts later.
+3. Create local key pairs in the Keybase with key name: `jack`. You can create more accounts for trading between accounts later.
 
    ```shell
-   $ pylonsd keys add <key-name> --keyring-backend=test
+   $ pylonsd keys add <key-name> 
 
    ```
    We recommend that you save the mnemonic generated to be able to recover your account in the future if it gets lost.  
 
-3. Add your account to your local genesis file with a given amount and the key you
+4. Add your account to your local genesis file with a given amount and the key you
    just created. 
 
    ```shell
-   $ pylonsd add-genesis-account $(pylonsd keys show <key-name> -a --keyring-backend=test) 1000000ubedrock
+   $ pylonsd add-genesis-account $(pylonsd keys show <key-name> -a) 1000000ubedrock
    ```
 
-4. Create the gentx ()
+5. Create the gentx ()
 
    ```shell
-   $ pylonsd gentx <key-name> 1000000ubedrock --moniker="<moniker-name>" --pubkey $(pylonsd tendermint show-validator) --keyring-backend=test --chain-id=pylons-testnet --output-document ./gentxs/<moniker-name>.json                    
+   $ pylonsd gentx <key-name> 1000000ubedrock --moniker="<moniker-name>" --pubkey $(pylonsd tendermint show-validator) --chain-id=pylons-testnet --output-document ./gentxs/<moniker-name>.json                    
    ```
 
-5. run collect Gentx
+6. run collect Gentx
    ```shell
    $ pylonsd collect gentx
    ```
 
-6. replace all occurrences of "stake" in the genesis file with "ubedrock" in the genesis in .pylons/config/genesis.json
+7. replace all occurrences of "stake" in the genesis file with "ubedrock" in the genesis in .pylons/config/genesis.json unless you are uaing a preconfigured genesis that has done this.
 
-7. start pylons
+8. start pylons
    ```shell
    pylonsd start
    ```
 
 # CLI commands
 
-Now you are ready to use cli commands. Open a new terminal window other than the pylons daemon terminal window. Try to run the pylonsd command.
+Now you are ready to use cli commands. Open a new terminal window other than the pylons daemon/chain terminal window. Try to run the pylonsd command.
+
+if you have problems running your daemon check the section above on GOPATH and PATH settings and ensure they are set properly.
+
 
 ```
 pylonsd
@@ -167,10 +185,14 @@ If you set `--keyring-backend=test` flag, it uses testing keyring and which does
   ```
   **Warning**  
   If you don't set keyring backend like `pylonsd keys show jack` it will default keyring as `os` and will require your computer password. But in the end, keys are not stored in os backend, it will not show you the same key that is created right now.
-
+  
+  To do this once, run
+  ```
+   pylonsd config keyring-backend test
+   ```
 - List all the keys available
   ```
-  pylonsd keys list --keyring-backend=test
+  pylonsd keys list 
   ```
   This command will list all the local keys that are available in the chain.
   The result will be like the following.
