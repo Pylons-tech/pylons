@@ -39,53 +39,6 @@ If running locally,
    $ starport chain serve
    ```
 
-If not running locally or if you wish to start the pylons daemon without starport, Download binary files for `pylonsd` from link above and run ```make install``` on it which will install the binary into GOPATH/bin. Alternatively you can clone the source, checkout the latest version and run ```make install```. After this, run the following commands.
-
-1. Initialize the pylons directories and create the local genesis file with the correct
-   chain-id
-
-   ```shell
-   $ pylonsd init <moniker-name> --chain-id=pylons-testnet
-   ```
-2. Set the keyring to test 
-  
-  ```shell
-   $ pylonsd config keyring-backend test
-   ```
-
-3. Create local key pairs in the Keybase with key name: `jack`. You can create more accounts for trading between accounts later.
-
-   ```shell
-   $ pylonsd keys add <key-name> 
-
-   ```
-   We recommend that you save the mnemonic generated to be able to recover your account in the future if it gets lost.  
-
-4. Add your account to your local genesis file with a given amount and the key you
-   just created. 
-
-   ```shell
-   $ pylonsd add-genesis-account $(pylonsd keys show <key-name> -a) 1000000ubedrock
-   ```
-
-5. Create the gentx ()
-
-   ```shell
-   $ pylonsd gentx <key-name> 1000000ubedrock --moniker="<moniker-name>" --pubkey $(pylonsd tendermint show-validator) --chain-id=pylons-testnet --output-document ./gentxs/<moniker-name>.json                    
-   ```
-
-6. run collect Gentx
-   ```shell
-   $ pylonsd collect gentx
-   ```
-
-7. replace all occurrences of "stake" in the genesis file with "ubedrock" in the genesis in .pylons/config/genesis.json unless you are using a pre-configured genesis/genesis from another source e.g a central genesis for a network, that has already done this.
-
-8. start pylons
-   ```shell
-   pylonsd start
-   ```
-
 # CLI commands
 
 Now you are ready to use cli commands. Open a new terminal window other than the pylons daemon/chain terminal window. Try to run the pylonsd command.
