@@ -27,9 +27,7 @@ Refer to the [technical setup page](../TECHNICAL-SETUP.md) for instructions.
 
 - Starport version: Download and install the latest version of starport
 
-## Start pylons daemon
-
-You need to start pylons daemon. Download binary files for `pylonsd` from link above and run ```make install``` on it which will install  the binary into GOPATH/bin.
+## Start pylons 
 
 If running locally,
 
@@ -40,7 +38,7 @@ If running locally,
    $ starport chain serve
    ```
 
-If not running locally, run the following commands.
+If not running locally or if you wish to start the pylons daemon without starport, Download binary files for `pylonsd` from link above and run ```make install``` on it which will install the binary into GOPATH/bin. After this, run the following commands.
 
 1. Initialize the pylons directories and create the local genesis file with the correct
    chain-id
@@ -80,7 +78,7 @@ If not running locally, run the following commands.
    $ pylonsd collect gentx
    ```
 
-7. replace all occurrences of "stake" in the genesis file with "ubedrock" in the genesis in .pylons/config/genesis.json unless you are uaing a preconfigured genesis that has done this.
+7. replace all occurrences of "stake" in the genesis file with "ubedrock" in the genesis in .pylons/config/genesis.json unless you are using a preconfigured genesis that has done this.
 
 8. start pylons
    ```shell
@@ -147,7 +145,7 @@ If you set `--keyring-backend=test` flag, it uses testing keyring and which does
 
 - Add your first local key
   ```
-  pylonsd keys add jack --keyring-backend=test
+  pylonsd keys add jack 
   ```
 
   You can replace the local key that is set `jack` in the example with any key you want.
@@ -172,7 +170,7 @@ If you set `--keyring-backend=test` flag, it uses testing keyring and which does
 
 - Show the local key
   ```
-  pylonsd keys show jack --keyring-backend=test
+  pylonsd keys show jack 
   ```
   This will show the info of the local key `jack` that is just added.
   The result will be like following.
@@ -183,7 +181,7 @@ If you set `--keyring-backend=test` flag, it uses testing keyring and which does
   pubkey: '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"A1iZOha1tMg7nhz+ZhXcc+3zzujqZcAyHEBKOoY2fqfr"}'
   mnemonic: ""
   ```
-  **Warning**  
+  
   If you don't set keyring backend like `pylonsd keys show jack` it will default keyring as `os` and will require your computer password. But in the end, keys are not stored in os backend, it will not show you the same key that is created right now.
   
   To do this once, run
@@ -220,10 +218,10 @@ If you set `--keyring-backend=test` flag, it uses testing keyring and which does
 
 We already added key on local. But this does not mean that this account is registerd on pylons chain. Now we can register an account with the key added.
 
-We can use `pylonsd tx pylons create-account` command for this.
+We can use `pylonsd tx pylons create-account` command for this. Run `pylonsd config keyring-backend test` first. Then run:
 
 ```
-pylonsd tx pylons create-account <account-name> --from pylo16v53vnxv2vlqkpmpe490dsz6prwrtwp40jgn8d --keyring-backend=test
+pylonsd tx pylons create-account <account-name> --from pylo16v53vnxv2vlqkpmpe490dsz6prwrtwp40jgn8d 
 ```
 
 For the `from` flag, you should give the address of the key genereated. We used the address of `jack` key. Note your chain has to be running while you create/add the keys and create the account
