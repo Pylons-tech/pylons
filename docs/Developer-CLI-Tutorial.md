@@ -19,14 +19,14 @@ It's helpful if you know something about `cosmos-sdk` as Pylons is based on [cos
   
 Refer to the [technical setup page](../TECHNICAL-SETUP.md) for instructions.
 
-- Go version: Download and install the lastest Go verision (https://golang.org/doc/install)
-- Pylonsd version: Download the latest version/tagged release (https://github.com/Pylons-tech/pylons/releases)
+- Go version: Download and [install](https://golang.org/doc/install) the lastest Go verision 
+- Pylonsd version: Download the latest version/[tagged release](https://github.com/Pylons-tech/pylons/releases)
 
          ensure GOPATH is set properly to point to the go directory of your Go installation: GOPATH = $HOME/go
          ensure PATH is set properly to point to the bin folder of your Go installation: PATH = $GOPATH/bin
          pylonsd binary(link above or from 'make install' on repo clone/source) should be put in Go's bin folder
 
-- Starport version: Download and install the latest version of starport (https://docs.starport.network/guide/install.html)
+- Starport version: Download and install the latest version of [starport](https://docs.starport.network/guide/install.html)
 
 ## Start pylons 
 
