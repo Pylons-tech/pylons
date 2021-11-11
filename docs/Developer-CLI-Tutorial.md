@@ -7,17 +7,15 @@ There is more information on [Pylons Spec](https://github.com/Pylons-tech/pylons
 Important points in pylons are:
 
 
-- Cookbook: This is a principal concept in pylons. It is the container for your application recipes. An example is a game. And to build recipes and items, you need to have cookbooks.
-- recipe: these execute commands to create, modify, and trade items on the blockchain. Can be created solely by devs or exposed to users for use. Recipes can be used to get result of some action between items and characters. Every action related to items are taken by recipes.
-- item: Items are NFTs. It can be items in original games. Items will have properties in the format of Double, String, Integer etc. Characters can be created as items either.
-- trade: this functionality enables accounts to trade their coins themselves. Trade includes items - items trading, coins - coins trading and mixed trading.
+- **Cookbook**: This is a principal concept in pylons. It is the container for your application recipes. An example is a game. And to build recipes and items, you need to have cookbooks.
+- **recipe**: these execute commands to create, modify, and trade items on the blockchain. Can be created solely by devs or exposed to users for use. Recipes can be used to get result of some action between items and characters. Every action related to items are taken by recipes.
+- **item**: Items are NFTs. It can be items in original games. Items will have properties in the format of Double, String, Integer etc. Characters can be created as items either.
+- **trade**: this functionality enables accounts to trade their coins themselves. Trade includes items - items trading, coins - coins trading and mixed trading.
 
 
 It's helpful if you know something about `cosmos-sdk` as Pylons is based on [cosmos-sdk](https://cosmos.network/sdk).
 
 # Setup Local Environment
-
-## Install Golang
   
 Refer to the [technical setup page](../TECHNICAL-SETUP.md) for instructions.
 
@@ -41,7 +39,7 @@ If running locally,
    $ starport chain serve
    ```
 
-If not running locally or if you wish to start the pylons daemon without starport, Download binary files for `pylonsd` from link above and run ```make install``` on it which will install the binary into GOPATH/bin. After this, run the following commands.
+If not running locally or if you wish to start the pylons daemon without starport, Download binary files for `pylonsd` from link above and run ```make install``` on it which will install the binary into GOPATH/bin. Alternatively you can clone the source, checkout the latest version and run ```make install```. After this, run the following commands.
 
 1. Initialize the pylons directories and create the local genesis file with the correct
    chain-id
@@ -139,8 +137,15 @@ Use "pylonsd [command] --help" for more information about a command.
 
 Now let's move forward with some important cli commands one by one.
 
-Some of the pylonsd cli commands require user password for keyring-backend. 
-If you set `--keyring-backend=test` flag, it uses testing keyring and which does not require password, on our tutorial, we will be using test keyring for most of the commands and you will see how to set it once and for all below.
+Some of the pylonsd cli commands require user password for keyring-backend. If you don't set keyring backend like `pylonsd keys show jack` it will default keyring as `os` and will require your computer password. But in the end, keys are not stored in os backend, hence, it will not show you the same key that is created right now.
+
+If you set `--keyring-backend=test` flag, it uses the test keyring which does not require password. On our tutorial, we will be using test keyring for most of the commands.  
+ 
+  
+  To set this keyring once, run
+  ```
+   pylonsd config keyring-backend test
+   ```
 
 ### Local keys
 
@@ -184,13 +189,7 @@ If you set `--keyring-backend=test` flag, it uses testing keyring and which does
   pubkey: '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"A1iZOha1tMg7nhz+ZhXcc+3zzujqZcAyHEBKOoY2fqfr"}'
   mnemonic: ""
   ```
-  
-  If you don't set keyring backend like `pylonsd keys show jack` it will default keyring as `os` and will require your computer password. But in the end, keys are not stored in os backend, it will not show you the same key that is created right now.
-  
-  To do this once, run
-  ```
-   pylonsd config keyring-backend test
-   ```
+
 - List all the keys available
   ```
   pylonsd keys list 
@@ -269,7 +268,7 @@ txhash: F8987EDFDFDE5921D45F5BC1987634CAD49666F436C12C58A11A197718F26894
 
 ### Create cookbook
 
-A cookbook is a game. And to build recipes and items, you need to have cookbooks.
+A cookbook ie an application container for recipes for example a game. And to build recipes and items, you need to have cookbooks.
 
 A Sample cookbook json is like the following.
 
