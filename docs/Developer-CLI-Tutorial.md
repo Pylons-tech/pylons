@@ -6,10 +6,12 @@ There is more information on [Pylons Spec](https://github.com/Pylons-tech/pylons
 
 Important points in pylons are:
 
--Cookbook: This is a principal concept in pylons. A cookbook is a game. And to build recipes and items, you need to have cookbooks.
-- item: Item is an important concept in Pylons. It can simply be considered as the items in original games. Items will have properties in the format of Double, String, Integer etc. Characters can be created as items either.
-- recipe: recipes will decide and generate everything like item generation and modification, combination of items. Recipes can be used to get result of some action between items and characters. Every action related to items are taken by recipes.
+-
+- Cookbook: This is a principal concept in pylons. It is the container for your application recipes. An example is a game. And to build recipes and items, you need to have cookbooks.
+- recipe: these execute commands to create, modify, and trade items on the blockchain. Can be created solely by devs or exposed to users for use. Recipes can be used to get result of some action between items and characters. Every action related to items are taken by recipes.
+- item: Items are NFTs. It can be items in original games. Items will have properties in the format of Double, String, Integer etc. Characters can be created as items either.
 - trade: this functionality enables accounts to trade their coins themselves. Trade includes items - items trading, coins - coins trading and mixed trading.
+
 
 It's helpful if you know something about `cosmos-sdk` as Pylons is based on [cosmos-sdk](https://cosmos.network/sdk).
 
