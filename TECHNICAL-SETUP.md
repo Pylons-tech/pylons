@@ -21,35 +21,33 @@ To install the latest version of the `starport` binary use the following command
 curl https://get.starport.network/starport! | bash
 ```
 
-## Install Dev Tools
+## Install Git pre-commit Hook
 
-### pre-commit
+Git `pre-commit` hooks run before any commit to the Git repository. These hooks verify that each commit passes basic formatting and linting checks.
 
-`pre-commit` runs hooks before any commit to the git repository.  These hooks verify that any commit passes basic formatting and linting checks.
+- Homebrew 
 
-#### Homebrew
+    ```shell
+    brew install pre-commit
+    ```
 
-```shell
-brew install pre-commit
-```
+- Ubuntu and Debian-based Linux Distributions
 
-#### Ubuntu / Debian based linux distributions
+    ```shell
+    sudo apt install pre-commit
+    ```
 
-```shell
-sudo apt install pre-commit
-```
+## Set Up pre-commit for Pylons
 
-#### Setting up precommit in the project
-
-After installing the binary, run the following command in the base directory of the `pylons` repository:
+After installing the `pre-commit` binary, run the following command in the base directory of the `pylons` repository:
 
 ```shell
 pre-commit install
 ```
 
-Now, any time `git commit *` is run, the `pre-commit` hooks  run before the commit can be finalized.
+Now, any time `git commit *` is run, the `pre-commit` hooks run before the commit can be finalized.
 
-### golangci-lint
+## Install Go Linters Aggregator
 
 The `golangci-lint` linter runner is used in the `make lint` command that is provided to developers.
 
