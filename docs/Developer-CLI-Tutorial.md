@@ -1,56 +1,77 @@
-# Introduction
+# CLI Tutorial
 
-This document is basic developer CLI tutorial for beginners.
+Welcome to the Pylons basic developer CLI tutorial for beginners. 
 
-There is more information on [Pylons Spec](https://github.com/Pylons-tech/pylons/tree/main/docs/spec).
+Built on the Cosmos SDK, Pylons is a fast and interoperable system for brands and creators to build engaging products with meaningful NFT experiences.
 
-Important points in pylons are:
+Pylons is the fastest, easiest way to launch a massive NFT product with minimal transaction fees. For details on the pylons module for the Pylons NFT blockchain, see the [Pylons spec](https://github.com/Pylons-tech/pylons/tree/main/docs/spec).
 
-
-- **Cookbook**: This is a principal concept in pylons. It is the container for your application recipes. An example is a game. And to build recipes and items, you need to have cookbooks.
-- **recipe**: these execute commands to create, modify, and trade items on the blockchain. Can be created solely by devs or exposed to users for use. Recipes can be used to get result of some action between items and characters. Every action related to items are taken by recipes.
-- **item**: Items are NFTs. It can be items in original games. Items will have properties in the format of Double, String, Integer etc. Characters can be created as items either.
-- **trade**: this functionality enables accounts to trade their coins themselves. Trade includes items - items trading, coins - coins trading and mixed trading.
+Before you get started with the CLI tutorial, review these important Pylons terms:
 
 
-It's helpful if you know something about `cosmos-sdk` as Pylons is based on [cosmos-sdk](https://cosmos.network/sdk).
+- **cookbook**: A principal concept in pylons, a cookbook is the container for your application recipes. For example, an application recipe for a game. Cookbooks are required to build recipes and items.
 
-# Setup Local Environment
+- **recipe**: Execute commands to create, modify, and trade items on the blockchain. Recipes are created for specific roles, they can be available only to developers or they can be exposed to users, or both. Use recipes to get the result of some action that occurs between items and characters. Every action that is related to items are taken by recipes.
   
-Refer to the [technical setup page](../TECHNICAL-SETUP.md) for instructions.
+- **item**: Items are NFTs. Items can be items in original games. Items have properties in the format of Double, String, Integer, and so on. Characters can be created as items.
 
-- Go version: Download and install the lastest [Go verision](https://golang.org/doc/install)
-- Pylonsd version: Download the latest [tagged release](https://github.com/Pylons-tech/pylons/releases)
+- **trade**: Functionality that enables accounts to trade their coins. Trade includes:
 
-         ensure GOPATH is set properly to point to the go directory of your Go installation: GOPATH = $HOME/go
-         ensure PATH is set properly to point to the bin folder of your Go installation: PATH = $GOPATH/bin
-         pylonsd binary(link above or from 'make install' on repo clone/source) should be put in Go's bin folder
-
-- Starport version: Download and install the latest version of [Starport](https://docs.starport.network/guide/install.html)
-
-## Start pylons 
-
-If running locally,
-
-  1. Download the source from the latest pylons release
-  2. unzip and cd into pylons
-  3. Run starport chain serve
- ```shell
-   $ starport chain serve
-   ```
-
-# CLI commands
-
-Now you are ready to use cli commands. Open a new terminal window other than the pylons daemon/chain terminal window. Try to run the pylonsd command.
-
-if you have problems running your daemon check the section above on GOPATH and PATH settings and ensure they are set properly.
+  - Items: items, coins
+  - Coins trading
+  - Mixed trading
 
 
-```
-pylonsd
-```
-This command will give you the overall help for all available commands in pylonsd.
-The result should be like the following.
+The Pylons module is based on the [Cosmos SDK](https://cosmos.network/sdk), the world’s most popular blockchain framework. Before you get started with Pylons, explore the Cosmos ecosystem. 
+
+## Set Up Your Local Environment
+  
+1. Follow the instructions in [Technical Setup](../TECHNICAL-SETUP.md) to set up your local environment, install Go, and install the Go linter aggregator.  
+
+2. Download the latest tagged release of the `pylonsd` binary from [https://github.com/Pylons-tech/pylons/tags](https://github.com/Pylons-tech/pylons/tags).
+
+3. Move the `pylonsd` binary to the the `bin` folder of your Go installation, or run `make install` on the local Pylons repo. 
+
+4. Ensure GOPATH is set properly to point to the `go` directory of your Go installation: 
+
+    `GOPATH = $HOME/go`
+
+5. Ensure PATH is set properly to point to the `bin` folder of your Go installation: 
+
+    `PATH = $GOPATH/bin`
+
+6. Download and install the latest version of [Starport](https://docs.starport.network/guide/install.html).
+
+## Start Pylons 
+
+To run Pylons locally:
+
+1. Extract the pylonsd binary that you downloaded.
+   
+2. Use `cd pylons` to change into the `pylons` directory.
+   
+3. To start the pylons chain on your development machine:
+
+    ```shell
+    starport chain serve
+    ```
+    
+    This command downloads dependencies and compiles the source code into a binary called `pylonsd`. Leave this terminal window open and use a different window for interacting with `pylonsd` at the command line.
+
+
+## CLI Commands
+
+Now, you are ready to use Pylons CLI commands in a new terminal window. 
+
+Start Pylons:
+
+    ```
+    pylonsd
+    ```
+
+If `pylonsd` does not run as expected, go back to the local setup instructions and verify your Go path and environment variables.
+
+The `pylons` command outputs a list of the available commands:
 
 ```
 Stargate Pylons App
@@ -88,102 +109,120 @@ Flags:
 Use "pylonsd [command] --help" for more information about a command.
 ```
 
-Now let's move forward with some important cli commands one by one.
+## Using Pylons CLI
 
-Some of the pylonsd cli commands require user password for keyring-backend. If you don't set keyring backend like `pylonsd keys show jack` it will default keyring as `os` and will require your computer password. But in the end, keys are not stored in os backend, hence, it will not show you the same key that is created right now.
+Now you are ready to interact with Pylons at the command line. 
 
-If you set `--keyring-backend=test` flag, it uses the test keyring which does not require password. On our tutorial, we will be using test keyring for most of the commands.  
- 
+
+### Authentication 
+
+Some of the `pylonsd` commands require a user password for keyring-backend. 
+
+This tutorial relies on `--keyring-backend=test` flag to use the test keyring that does not require a password. 
   
-  To set this keyring once, run
-  ```
-   pylonsd config keyring-backend test
-   ```
+To set the `test` keyring, run:
 
-### Local keys
+```
+pylonsd config keyring-backend test
+```
 
-`pylonsd keys` command will let you add or view local keys in the chain.
+**Important** Your chain must be running to add keys and create accounts.
 
-- Add your first local key
-  ```
-  pylonsd keys add jack 
-  ```
+### Local Keys
 
-  You can replace the local key that is set `jack` in the example with any key you want.
+Use the `pylonsd keys` command to add and view local keys in the chain.
 
-  This command will create a local key with the name given as the argument. The result will be like following.
+Create your first local key for your `pylonsd` application:
 
-  ```
-  name: jack
-  type: local
-  address: pylo1wp5p47qng6ua5tz03t5s6u2ej7hylrpva9q28r
-  pubkey: '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"A1iZOha1tMg7nhz+ZhXcc+3zzujqZcAyHEBKOoY2fqfr"}'
-  mnemonic: ""
+    ```
+    pylonsd keys add jack 
+    ```
+
+    You can replace `jack` with another account name. 
+
+A local key is created with the specified name:
+
+```
+name: jack
+type: local
+address: pylo1wp5p47qng6ua5tz03t5s6u2ej7hylrpva9q28r
+pubkey: '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"A1iZOha1tMg7nhz+ZhXcc+3zzujqZcAyHEBKOoY2fqfr"}'
+mnemonic: ""
 
 
-  Important: write this mnemonic phrase in a safe place.
-  It is the only way to recover your account if you ever forget your password.
+Important: write this mnemonic phrase in a safe place.
+It is the only way to recover your account if you ever forget your password.
 
-  oval doctor mosquito mad cash season life survey type grace apple measure glad dismiss huge citizen virtual lens survey smart vivid sssss ccccc vvvv
-  ```
+oval doctor mosquito mad cash season life survey type grace apple measure glad dismiss huge citizen virtual lens survey smart vivid sssss ccccc vvvv
+```
 
-  The `address` value `pylo1wp5p47qng6ua5tz03t5s6u2ej7hylrpva9q28r` will be used for the other cli commands.
+Your new key includes the `address` of `pylo1wp5p47qng6ua5tz03t5s6u2ej7hylrpva9q28r`. This address is used for the other CLI commands.
 
-- Show the local key
+At any time, you can view the local key:
+
   ```
   pylonsd keys show jack 
   ```
-  This will show the info of the local key `jack` that is just added.
-  The result will be like following.
-  ```
-  name: jack
-  type: local
-  address: pylo1wp5p47qng6ua5tz03t5s6u2ej7hylrpva9q28r
-  pubkey: '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"A1iZOha1tMg7nhz+ZhXcc+3zzujqZcAyHEBKOoY2fqfr"}'
-  mnemonic: ""
-  ```
 
-- List all the keys available
+The result:
+
+```
+name: jack
+type: local
+address: pylo1wp5p47qng6ua5tz03t5s6u2ej7hylrpva9q28r
+pubkey: '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"A1iZOha1tMg7nhz+ZhXcc+3zzujqZcAyHEBKOoY2fqfr"}'
+mnemonic: ""
+```
+
+List all the of the keys available on the chain: 
+
   ```
   pylonsd keys list 
   ```
-  This command will list all the local keys that are available in the chain.
-  The result will be like the following.
-  ```
-  [
-  name: alice
-  type: local
-  address: pylo1zhu40grs2wshfyytrd40y5y5ldpkar22tf2k29
-  pubkey: '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"Ape6Byykvfn16bo0tMV8bEdDv2udMnTN3QmVgqt4Sarj"}'
-  mnemonic: ""
-  name: bob
-  type: local
-  address: pylo1rl69433ge3gtj5c9h922j5mu6dms64nqyktscn
-  pubkey: '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"A8MqFprIKamNdMDJwUGPvpQRqYuhWJW4gng//mXlvQGD"}'
-  mnemonic: ""
-  name: jack
-  type: local
-  address: pylo1wp5p47qng6ua5tz03t5s6u2ej7hylrpva9q28r
-  pubkey: '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"A1iZOha1tMg7nhz+ZhXcc+3zzujqZcAyHEBKOoY2fqfr"}'
-  mnemonic: ""
-  ]
-  ```
 
-### Create an account on chain
-
-We already added key on local. But this does not mean that this account is registerd on pylons chain. Now we can register an account with the key added.
-
-We can use `pylonsd tx pylons create-account` command for this. Run `pylonsd config keyring-backend test` first. Then run:
+The output is like: 
 
 ```
-pylonsd tx pylons create-account <account-name> --from pylo16v53vnxv2vlqkpmpe490dsz6prwrtwp40jgn8d 
+[
+name: alice
+type: local
+address: pylo1zhu40grs2wshfyytrd40y5y5ldpkar22tf2k29
+pubkey: '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"Ape6Byykvfn16bo0tMV8bEdDv2udMnTN3QmVgqt4Sarj"}'
+mnemonic: ""
+name: bob
+type: local
+address: pylo1rl69433ge3gtj5c9h922j5mu6dms64nqyktscn
+pubkey: '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"A8MqFprIKamNdMDJwUGPvpQRqYuhWJW4gng//mXlvQGD"}'
+mnemonic: ""
+name: jack
+type: local
+address: pylo1wp5p47qng6ua5tz03t5s6u2ej7hylrpva9q28r
+pubkey: '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"A1iZOha1tMg7nhz+ZhXcc+3zzujqZcAyHEBKOoY2fqfr"}'
+mnemonic: ""
+]
 ```
 
-For the `from` flag, you should give the address of the key genereated. We used the address of `jack` key. Note your chain has to be running while you create/add the keys and create the account
+### Create an Account
 
-Press `y` for the confirm line.
+You already added an application key on your local machine. Now it's time to create an account to register that key on the Pylons chain. 
 
-The result should be like the following.
+To register an account with the key you added:
+
+1. First, run the `config` command<!-- describe why-->: 
+
+    ```bash
+    pylonsd config keyring-backend test
+    ```
+
+2. Now, use `pylonsd tx pylons create-account` command and specify the address from the key you generated earlier:
+
+    ```bash
+    pylonsd tx pylons create-account <account-name> --from pylo16v53vnxv2vlqkpmpe490dsz6prwrtwp40jgn8d 
+    ```
+
+    Press `y` for the confirm line.
+
+The result is like the following:
 
 ```
 {"body":{"messages":[{"@type":"/Pylonstech.pylons.pylons.MsgCreateAccount","creator":"pylo16v53vnxv2vlqkpmpe490dsz6prwrtwp40jgn8d","username":"theaccount"}],"memo":"","timeout_height":"0","extension_options":[],"non_critical_extension_options":[]},"auth_info":{"signer_infos":[],"fee":{"amount":[],"gas_limit":"200000","payer":"","granter":""}},"signatures":[]}
@@ -219,11 +258,9 @@ txhash: F8987EDFDFDE5921D45F5BC1987634CAD49666F436C12C58A11A197718F26894
 ```
 
 
-### Create cookbook
+### Create a Cookbook
 
-A cookbook ie an application container for recipes for example a game. And to build recipes and items, you need to have cookbooks.
-
-A Sample cookbook json is like the following.
+A Pylons cookbook is an application container for recipes. The JSON format of a Pylons cookbook is like the following:
 
 ```
 {
@@ -239,6 +276,7 @@ A Sample cookbook json is like the following.
   "enabled": true
 }
 ```
+
 To create a cookbook you run the following command:
 
  pylonsd tx pylons create-cookbook [id] [name] [description] [developer] [version] [support-email] [cost-per-block] [enabled] [flags]
