@@ -1,4 +1,6 @@
-# Requirements
+# Technical Setup 
+
+To ensure you have a successful experience working with Pylons, your local system must meet these technical requirements.
 
 ## Install Go
 
@@ -45,12 +47,13 @@ After installing the binary, run the following command in the base directory of 
 pre-commit install
 ```
 
-Now, any time `git commit *` is run, the `pre-commit` hooks will run before the commit can be finalized.
+Now, any time `git commit *` is run, the `pre-commit` hooks  run before the commit can be finalized.
 
 ### golangci-lint
 
-`golangci-lint` is a linter runner used in the `make lint` command provided to developers.
-To install it into `$GOPATH/bin` run:
+The `golangci-lint` linter runner is used in the `make lint` command that is provided to developers.
+
+To install `golangci-lint` into `$GOPATH/bin`, run:
 
 ```shell
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.41.1
