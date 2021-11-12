@@ -4,8 +4,7 @@ To ensure you have a successful experience working with Pylons, your local syste
 
 ## Install Go
 
-This installation method removes existing Go installations, installs Go in `/usr/local/go/bin/go`, and sets
-the environment variables.
+This installation method removes existing Go installations, installs Go in `/usr/local/go/bin/go`, and sets the environment variables.
 
 1. Go to <https://golang.org/dl>.
 1. Download the binary release that is suitable for your system.
@@ -37,7 +36,7 @@ Git `pre-commit` hooks run before any commit to the Git repository. These hooks 
     sudo apt install pre-commit
     ```
 
-## Set Up pre-commit for Pylons
+## Install pre-commit in Your Local Pylons Repo
 
 After installing the `pre-commit` binary, run the following command in the base directory of the `pylons` repository:
 
