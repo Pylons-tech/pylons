@@ -18,8 +18,8 @@ var _ = strconv.Itoa(0)
 
 func CmdListCookbooksByCreator() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "list-cookbooks [creator]",
-		Short: "list cookbooks by creator",
+		Use:   "list-cookbooks [address]",
+		Short: "list cookbooks by owner address",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			reqCreator := args[0]

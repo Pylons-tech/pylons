@@ -13,7 +13,7 @@ import (
 func CmdShowGoogleIAPOrder() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get-google-iap-order [purchase-token]",
-		Short: "gets a GoogleIAPOrder",
+		Short: "retrieve Google IAP order",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)

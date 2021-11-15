@@ -13,7 +13,7 @@ import (
 func CmdShowRecipe() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get-recipe [cookbook-id] [id]",
-		Short: "Retrieve a recipe",
+		Short: "retrieve recipe by ID",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)

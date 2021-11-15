@@ -16,7 +16,7 @@ var _ = strconv.Itoa(0)
 func CmdListExecutionsByItem() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list-executions-by-item [cookbook-id] [id]",
-		Short: "list all executions of where an item is an input or output",
+		Short: "list all executions where item is input and/or output",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			reqCookbookID := args[0]

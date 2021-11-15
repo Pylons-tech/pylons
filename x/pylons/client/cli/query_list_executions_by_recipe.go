@@ -16,7 +16,7 @@ var _ = strconv.Itoa(0)
 func CmdListExecutionsByRecipe() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list-executions-by-recipe [cookbook-id] [recipe-id]",
-		Short: "list all executions of a recipe",
+		Short: "list all executions of recipe by ID",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			reqCookbookID := args[0]
