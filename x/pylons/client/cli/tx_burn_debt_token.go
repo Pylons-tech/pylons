@@ -18,7 +18,7 @@ var _ = strconv.Itoa(0)
 func CmdBurnDebtToken() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "burn-debt-token [redeemInfo]",
-		Short: "burn debt token using a redeem confirmation receipt",
+		Short: "burn debt token using redeem confirmation receipt",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsRedeemInfo := args[0]

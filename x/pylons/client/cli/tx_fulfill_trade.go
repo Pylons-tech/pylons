@@ -20,7 +20,7 @@ var _ = strconv.Itoa(0)
 func CmdFulfillTrade() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "fulfill-trade [id] [coin-inputs-index] [items] [payment-info]",
-		Short: "fulfill an existing trade",
+		Short: "fulfill existing trade",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsID, err := cast.ToUint64E(args[0])

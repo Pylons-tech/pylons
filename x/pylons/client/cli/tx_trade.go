@@ -20,7 +20,7 @@ import (
 func CmdCreateTrade() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create-trade [coinInputs] [itemInputs] [coinOutputs] [itemOutputs] [extraInfo]",
-		Short: "Create a new Trade",
+		Short: "create new trade",
 		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsCoinInputs, err := cast.ToStringE(args[0])

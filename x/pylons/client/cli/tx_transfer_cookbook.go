@@ -17,7 +17,7 @@ var _ = strconv.Itoa(0)
 func CmdTransferCookbook() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "transfer-cookbook [cookbookIDLOUD] [recipient]",
-		Short: "transfer ownership of a Cookbook to Recipient",
+		Short: "transfer ownership of cookbook to recipient",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsCookbookID := args[0]

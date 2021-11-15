@@ -17,7 +17,7 @@ var _ = strconv.Itoa(0)
 func CmdCompleteExecutionEarly() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "complete-execution-early [id]",
-		Short: "pay to finalize a pending execution",
+		Short: "pay to finalize pending execution",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsID := args[0]

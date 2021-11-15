@@ -19,7 +19,7 @@ var _ = strconv.Itoa(0)
 func CmdCreateAccount() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create-account [username]",
-		Short: "initialize an account from an address",
+		Short: "initialize account from address",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			username := args[0]
@@ -47,7 +47,7 @@ func CmdCreateAccount() *cobra.Command {
 func CmdUpdateAccount() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update-account [username]",
-		Short: "Broadcast message update-account",
+		Short: "broadcast message update-account",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsUsername := args[0]
