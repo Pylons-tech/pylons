@@ -106,12 +106,11 @@ Flags:
 Use "pylonsd [command] --help" for more information about a command.
 ```
 
-## Using Pylons CLI
 
 Now you are ready to interact with Pylons at the command line. 
 
 
-### Authentication 
+## Authentication 
 
 Some of the `pylonsd` commands require a user password for keyring-backend. 
 
@@ -125,7 +124,7 @@ pylonsd config keyring-backend test
 
 **Important** Your chain must be running to add keys and create accounts.
 
-### Local keys
+## Local keys
 
 Use the `pylonsd keys` command to add and view local keys in the chain.
 
@@ -197,7 +196,7 @@ mnemonic: ""
 ]
 ```
 
-### Create an account
+## Create an account
 
 You already added an application key on your local machine. Now it's time to create an account to register that key on the Pylons chain. 
 
@@ -253,7 +252,7 @@ txhash: F8987EDFDFDE5921D45F5BC1987634CAD49666F436C12C58A11A197718F26894
 ```
 
 
-### Create a cookbook
+## Create a cookbook
 
 A Pylons cookbook is an application container for recipes. The JSON format of a Pylons cookbook is like the following:
 
@@ -371,7 +370,7 @@ tx:
 ```
 
 
-### Create recipe
+## Create recipe
 
 Recipe defines actions like generate items and modify items, generate coins etc.
 
@@ -660,7 +659,7 @@ txhash: E15F5387AD8AD1A97B57AA3AD957EE105E790A61340E1E00E5F608E7F56EF32F
 ```
 
 
-### Execute the recipe
+## Execute the recipe
 
 The recipe is created. You need to execute the created recipe.
 
@@ -757,7 +756,7 @@ txhash: EBC51E8343949E13AE2456B55771C3E9545C045F15E5686B963AF411F5B8EFE9
 ```
 
 
-### Create trade
+## Create trade
 
 In this section, you trade between accounts.  
 
@@ -773,7 +772,7 @@ In this section, you trade between accounts.
   "amountMinted": 1,"tradeable": true}],"itemModifyOutputs": []}' "" --from Jack
 ```
 
-### Fulfill trade  
+## Fulfill trade  
 
   Now you have successfully created the trade. It is time to fulfill this trade.
   ```
