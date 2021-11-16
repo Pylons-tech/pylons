@@ -4,12 +4,12 @@ Welcome to the Pylons basic developer CLI tutorial for beginners.
 
 Built on the Cosmos SDK, Pylons is a fast and interoperable system for brands and creators to build engaging products with meaningful NFT experiences.
 
-Pylons is the fastest, easiest way to launch a massive NFT product with minimal transaction fees. For details on the pylons module for the Pylons NFT blockchain, see the [Pylons spec](https://github.com/Pylons-tech/pylons/tree/main/docs/spec).
+Pylons is the fastest, easiest way to launch a massive NFT product with minimal transaction fees. For details on the Pylons module for the Pylons NFT blockchain, see the [Pylons spec](https://github.com/Pylons-tech/pylons/tree/main/docs/spec).
 
 Before you get started with the CLI tutorial, review these important Pylons terms:
 
 
-- **cookbook**: A principal concept in pylons, a cookbook is the container for your application recipes. For example, an application recipe for a game. Cookbooks are required to build recipes and items.
+- **cookbook**: A principal concept in Pylons, a cookbook is the container for your application recipes. For example, an application recipe for a game. Cookbooks are required to build recipes and items.
 
 - **recipe**: Execute commands to create, modify, and trade items on the blockchain. Recipes are created for specific roles, they can be available only to developers or they can be exposed to users, or both. Use recipes to get the result of some action that occurs between items and characters. Every action that is related to items are taken by recipes.
   
@@ -50,7 +50,7 @@ To run Pylons locally:
    
 2. Use `cd pylons` to change into the `pylons` directory.
    
-3. To start the pylons chain on your development machine:
+3. To start the Pylons chain on your development machine:
 
     ```shell
     starport chain serve
@@ -63,11 +63,8 @@ To run Pylons locally:
 
 Now, you are ready to use Pylons CLI commands in a new terminal window. 
 
-Start Pylons:
-
-    ```
-    pylonsd
-    ```
+Run:    
+    `pylonsd`
 
 If `pylonsd` does not run as expected, go back to the local setup instructions and verify your Go path and environment variables.
 
@@ -134,12 +131,10 @@ Use the `pylonsd keys` command to add and view local keys in the chain.
 
 Create your first local key for your `pylonsd` application:
 
-    ```
-    pylonsd keys add jack 
-    ```
+   
+    pylonsd keys add jack     
 
-    You can replace `jack` with another account name. 
-
+You can replace `jack` with another account name. 
 A local key is created with the specified name:
 
 ```
@@ -279,7 +274,7 @@ A Pylons cookbook is an application container for recipes. The JSON format of a 
 
 To create a cookbook you run the following command:
 
- pylonsd tx pylons create-cookbook [id] [name] [description] [developer] [version] [support-email] [cost-per-block] [enabled] [flags]
+ `pylonsd tx pylons create-cookbook [id] [name] [description] [developer] [version] [support-email] [cost-per-block] [enabled] [flags]`
 ```
  pylonsd tx pylons create-cookbook "loud123456" "Legend of the Undead Dragon" "Cookbook for running pylons recreation of LOUD" "Pylons Inc" v0.3.1 lyri@gmail.com "{\"denom\":  \"upylon\", \"amount\":  \"1000000\"}" true --from Jack
 ```
@@ -319,7 +314,7 @@ txhash: B95D125F4E4D8448C66E4D10966717584CF45D0814D894FA0F30055107D8769B
 
 
 ```
-Check the details of a transaction using pylonsd query tx <tx-hash>
+Check the details of a transaction using `pylonsd query tx <tx-hash>`
 
 ```
 pylonsd q tx B95D125F4E4D8448C66E4D10966717584CF45D0814D894FA0F30055107D8769B
@@ -385,7 +380,7 @@ To create a recipe you run the following command:
    pylonsd tx pylons create-recipe [cookbook-id] [id] [name] [description] [version] [coin-inputs] [item-inputs] [entries] [outputs] [block-interval] [enabled] [extra-info] [flags]
 ```
   
-An example of this run against the testnet is:
+An example of this, run against the testnet, is:
   ```
   pylonsd tx pylons create-recipe testCookbookStripe recipeNostripe1 testRecipe "this is a test recipe" v0.0.1 
   '[{"coins": [{"denom": "upylon", "amount": "100000000000"}]}]' '[]' '{"coinOutputs": [],"itemOutputs": [{"ID": "id1","doubles": 
@@ -397,7 +392,7 @@ An example of this run against the testnet is:
   "mutableStrings": [],"transferFee": [],"tradePercentage": "0.100000000000000000","amountMinted": 1,"tradeable": true}],"itemModifyOutputs": []}' 
   '[{"entryIDs": ["id1"],"weight": 1}]' 1 true "" --from giunat --node https://rpc.pylons.smartnodes.co:443 --chain-id pylons-testnet                                        
  ```
-  if you choose to run this locally using the Jack account we defined above:
+  if you choose to run this locally using the Jack account defined above:
   ```
   pylonsd tx pylons create-recipe testCookbookStripe recipeNostripe1 testRecipe "this is a test recipe" v0.0.1 
   '[{"coins": [{"denom": "upylon", "amount": "100000000000"}]}]' '[]' '{"coinOutputs": [],"itemOutputs": [{"ID": "id1","doubles": 
@@ -409,7 +404,7 @@ An example of this run against the testnet is:
   "mutableStrings": [],"transferFee": [],"tradePercentage": "0.100000000000000000","amountMinted": 1,"tradeable": true}],"itemModifyOutputs": []}'
   '[{"entryIDs": ["id1"],"weight": 1}]' 1 true "" --from Jack
   ```
-  On running this:
+  When you run this:
   
   ```
   {"body":{"messages":[{"@type":"/Pylonstech.pylons.pylons.MsgCreateRecipe","creator":"pylo16v53vnxv2vlqkpmpe490dsz6prwrtwp40jgn8d","cookbookID":"loud1234567","ID":"recipeNostripe1","name":"testRecipe","description":"this is a test recipe","version":"v0.0.1","coinInputs":[{"coins":[{"denom":"upylon","amount":"100000000000"}]}],"itemInputs":[],"entries":{"coinOutputs":[],"itemOutputs":[{"ID":"id1","doubles":[{"key":"Residual","weightRanges":[{"lower":"2.000000000000000000","upper":"2.000000000000000000","weight":"1"}],"program":""}],"longs":[{"key":"Quantity","weightRanges":[{"lower":"34","upper":"34","weight":"1"}],"program":""},{"key":"Width","weightRanges":[{"lower":"960","upper":"960","weight":"1"}],"program":""},{"key":"Height","weightRanges":[{"lower":"1280","upper":"1280","weight":"1"}],"program":""}],"strings":[{"key":"App_Type","value":"Easel","program":""},{"key":"Name","value":"How do you do turn this on","program":""},{"key":"Description","value":"I am the representation of a LOUD recipe ","program":""},{"key":"NFT_URL","value":"https://i.imgur.com/dpNqwvl.jpg","program":""},{"key":"Currency","value":"upylon","program":""},{"key":"Price","value":"450","program":""}],"mutableStrings":[],"transferFee":[],"tradePercentage":"0.100000000000000000","quantity":"0","amountMinted":"1","tradeable":true}],"itemModifyOutputs":[]},"outputs":[{"entryIDs":["id1"],"weight":"1"}],"blockInterval":"1","enabled":true,"extraInfo":""}],"memo":"","timeout_height":"0","extension_options":[],"non_critical_extension_options":[]},"auth_info":{"signer_infos":[],"fee":{"amount":[],"gas_limit":"200000","payer":"","granter":""}},"signatures":[]}
@@ -667,17 +662,17 @@ txhash: E15F5387AD8AD1A97B57AA3AD957EE105E790A61340E1E00E5F608E7F56EF32F
 
 ### Execute the recipe
 
-The recipe is created. We need to execute the created recipe now.
+The recipe is created. You need to execute the created recipe.
 
-We do this by: 
+You do this by: 
   
-  pylonsd tx pylons execute-recipe [cookbook-id] [recipe-id] [coin-inputs-index] [item-ids] [payment-info] [flags]
+  `pylonsd tx pylons execute-recipe [cookbook-id] [recipe-id] [coin-inputs-index] [item-ids] [payment-info] [flags]`
 
 ```
 pylonsd tx pylons execute-recipe loud1234567 recipeNostripe1 0 '[]' '[{"purchaseID": "pi_3Ju3j843klKuxW9f0JrajT3q","processorName":"Pylons_Inc", "payerAddr": "pylo16v53vnxv2vlqkpmpe490dsz6prwrtwp40jgn8d","amount": "1003009027","productID": "recipe/loud1234567/recipeNostripe1","signature": "AlFMPMg8rbOEmYGC0nYmfUJHIdoFWnUT0gs1A6k3qAri"}]' --from Jack
 ```
 
-On hitting enter, it gives
+When you run this command, it gives:
 
 ```
 {"body":{"messages":[{"@type":"/Pylonstech.pylons.pylons.MsgExecuteRecipe","creator":"pylo16v53vnxv2vlqkpmpe490dsz6prwrtwp40jgn8d","cookbookID":"loud1234567","recipeID":"recipeNostripe1","coinInputsIndex":"0","itemIDs":[],"paymentInfos":[{"purchaseID":"pi_3Ju3j843klKuxW9f0JrajT3q","processorName":"Pylons_Inc","payerAddr":"pylo16v53vnxv2vlqkpmpe490dsz6prwrtwp40jgn8d","amount":"1003009027","productID":"recipe/loud1234567/recipeNostripe1","signature":"AlFMPMg8rbOEmYGC0nYmfUJHIdoFWnUT0gs1A6k3qAri"}]}],"memo":"","timeout_height":"0","extension_options":[],"non_critical_extension_options":[]},"auth_info":{"signer_infos":[],"fee":{"amount":[],"gas_limit":"200000","payer":"","granter":""}},"signatures":[]}
@@ -764,9 +759,9 @@ txhash: EBC51E8343949E13AE2456B55771C3E9545C045F15E5686B963AF411F5B8EFE9
 
 ### Create Trade
 
-In this section we will attempt trading between accounts.  
+In this section you will attempt trading between accounts.  
 
-   pylonsd tx pylons create-trade [coinInputs] [itemInputs] [coinOutputs] [itemOutputs] [extraInfo] [flags] --from [account]
+   `pylonsd tx pylons create-trade [coinInputs] [itemInputs] [coinOutputs] [itemOutputs] [extraInfo] [flags] --from [account]`
 ```
  pylonsd tx pylons create-trade '[{"coins": [{"denom": "upylon", "amount": "100000000000"}]}]' '[]' '{"coinOutputs": []}' 
   '{"itemOutputs": [{"ID": "id1","doubles": [{"key": "Residual","weightRanges": [{"lower": "2.000000000000000000","upper": 
@@ -780,7 +775,7 @@ In this section we will attempt trading between accounts.
 
 ### Fulfill Trade  
 
-  Now we've successfully created the trade. It's time to fulfill this trade.
+  Now you have successfully created the trade. It is time to fulfill this trade.
   ```
   pylonsd tx pylons fulfill-trade [id] [coin-inputs-index] [items] [payment-info] [flags]
   ```
@@ -789,10 +784,10 @@ In this section we will attempt trading between accounts.
   ```
   pylonsd tx pylons fulfill-trade t1234567 0 '[]' '[{"purchaseID": "pi_3Ju3j843klKuxW9f0JrajT3q","processorName":"Pylons_Inc","payerAddr": "pylo16v53vnxv2vlqkpmpe490dsz6prwrtwp40jgn8d","amount": "1003009027","productID": "recipe/loud1234567/recipeNostripe1","signature": "AlFMPMg8rbOEmYGC0nYmfUJHIdoFWnUT0gs1A6k3qAri"}]' --from Jack
   ```
-Now you have successfully executed the recipe, trades and you probably understood pylons about 30%.
-And you are ready to go into the deep level of pylons ecosystem.
+Now you have successfully executed the recipe, trades and you probably understood Pylons about 30%.
+And you are ready to go into the deep level of Pylons ecosystem. See the [Pylons spec](https://github.com/Pylons-tech/pylons/tree/main/docs/spec) for more information.
 
-There are several commands and various transactions that can be run in pylons under different command combinations. However, the below are the transactions in Pylons under `pylonsd tx pylons`.  
+There are several commands and various transactions that can be run in Pylons under different command combinations. However, the below are the transactions in Pylons under `pylonsd tx pylons`.  
   
   ```
 Stargate Pylons App
