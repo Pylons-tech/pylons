@@ -14,7 +14,7 @@ import (
 func CmdShowTrade() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get-trade [id]",
-		Short: "gets a Trade",
+		Short: "retrieve trade by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)

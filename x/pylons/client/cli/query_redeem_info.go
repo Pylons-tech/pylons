@@ -45,8 +45,8 @@ func CmdListRedeemInfo() *cobra.Command {
 
 func CmdShowRedeemInfo() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "get-redeem-info [index]",
-		Short: "gets a RedeemInfo",
+		Use:   "get-redeem-info [id]",
+		Short: "retrieve RedeemInfo by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)

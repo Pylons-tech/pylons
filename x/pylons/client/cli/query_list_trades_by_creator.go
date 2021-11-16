@@ -18,8 +18,8 @@ var _ = strconv.Itoa(0)
 
 func CmdListTradesByCreator() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "list-trades [creator]",
-		Short: "List trades by creator",
+		Use:   "list-trades [address]",
+		Short: "list trades by creator address",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			reqAddress := args[0]

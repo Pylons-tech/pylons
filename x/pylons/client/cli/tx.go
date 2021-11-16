@@ -51,7 +51,7 @@ func GetTxCmd() *cobra.Command {
 
 	cmd.AddCommand(CmdTransferCookbook())
 
-	cmd.AddCommand(CmdGoogleInAppPurchaseGetPylons())
+	cmd.AddCommand(CmdGoogleInAppPurchaseGetCoins())
 
 	cmd.AddCommand(CmdCreateAccount())
 

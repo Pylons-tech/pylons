@@ -20,7 +20,7 @@ var _ = strconv.Itoa(0)
 func CmdExecuteRecipe() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "execute-recipe [cookbook-id] [recipe-id] [coin-inputs-index] [item-ids] [payment-info]",
-		Short: "Execute a recipe",
+		Short: "execute recipe",
 		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsCookbookID := args[0]

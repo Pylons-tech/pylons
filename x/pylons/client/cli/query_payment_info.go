@@ -46,7 +46,7 @@ func CmdListPaymentInfo() *cobra.Command {
 func CmdShowPaymentInfo() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get-payment-info [purchase-id]",
-		Short: "gets a PaymentInfo",
+		Short: "retrieve PaymentInfo by ID",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)

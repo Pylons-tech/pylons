@@ -20,7 +20,7 @@ import (
 func CmdCreateCookbook() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create-cookbook [id] [name] [description] [developer] [version] [support-email] [cost-per-block] [enabled]",
-		Short: "Create a new cookbook",
+		Short: "create new cookbook",
 		Args:  cobra.ExactArgs(8),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			id := args[0]
@@ -76,7 +76,7 @@ func CmdCreateCookbook() *cobra.Command {
 func CmdUpdateCookbook() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update-cookbook [id] [name] [description] [developer] [version] [support-email] [cost-per-block] [enabled]",
-		Short: "Update a cookbook",
+		Short: "update cookbook",
 		Args:  cobra.ExactArgs(8),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			id := args[0]

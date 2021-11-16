@@ -15,8 +15,8 @@ var _ = strconv.Itoa(0)
 
 func CmdListItemByOwner() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "list-item-by-owner [owner]",
-		Short: "List items by owner",
+		Use:   "list-item-by-owner [address]",
+		Short: "list items by owner address",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			reqOwner := args[0]

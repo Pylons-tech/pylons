@@ -14,10 +14,10 @@ import (
 
 var _ = strconv.Itoa(0)
 
-func CmdGoogleInAppPurchaseGetPylons() *cobra.Command {
+func CmdGoogleInAppPurchaseGetCoins() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "google-iap-get-pylons [productID] [purchaseToken] [recieptDataBase64] [signature]",
-		Short: "Get coins using Google IAP",
+		Use:   "google-iap-get-coins [productID] [purchaseToken] [recieptDataBase64] [signature]",
+		Short: "get coins using Google IAP",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsProductID := args[0]
