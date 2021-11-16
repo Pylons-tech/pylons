@@ -9,7 +9,7 @@ PROJECT_NAME = $(shell git remote get-url origin | xargs basename -s .git)
 ARTIFACT_DIR := ./artifacts
 LEDGER_ENABLED ?= true
 BINDIR ?= $(GOPATH)/bin
-SIMAPP = ./simapp
+SIMAPP = ./app
 
 export GO111MODULE = on
 
@@ -54,7 +54,9 @@ ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=pylons \
 	-X github.com/cosmos/cosmos-sdk/version.ServerName=pylonsd \
 	-X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
 	-X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT) \
-	-X "github.com/cosmos/cosmos-sdk/version.BuildTags=$(build_tags_comma_sep)"
+	-X "github.com/cosmos/cosmos-sdk/version.BuildTags=$(build_tags_comma_sep)" \
+				-X github.com/tendermint/tendermint/version.TMCoreSemVer=$(TMVERSION)
+
 
 ifeq (cleveldb,$(findstring cleveldb,$(PYLONS_BUILD_OPTIONS)))
   ldflags += -X github.com/cosmos/cosmos-sdk/types.DBBackend=cleveldb
