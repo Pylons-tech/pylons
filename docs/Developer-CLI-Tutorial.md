@@ -1,4 +1,4 @@
-# CLI Tutorial
+# CLI tutorial
 
 Welcome to the Pylons basic developer CLI tutorial for beginners. 
 
@@ -24,7 +24,7 @@ Before you get started with the CLI tutorial, review these important Pylons term
 
 The Pylons module is based on the [Cosmos SDK](https://cosmos.network/sdk), the world’s most popular blockchain framework. Before you get started with Pylons, explore the Cosmos ecosystem. 
 
-## Set Up Your Local Environment
+## Set up your local environment
   
 1. Follow the instructions in [Technical Setup](../TECHNICAL-SETUP.md) to set up your local environment, install Go, and install the Go linter aggregator.  
 
@@ -59,7 +59,7 @@ To run Pylons locally:
     This command downloads dependencies and compiles the source code into a binary called `pylonsd`. Leave this terminal window open and use a different window for interacting with `pylonsd` at the command line.
 
 
-## CLI Commands
+## CLI commands
 
 Now, you are ready to use Pylons CLI commands in a new terminal window. 
 
@@ -125,7 +125,7 @@ pylonsd config keyring-backend test
 
 **Important** Your chain must be running to add keys and create accounts.
 
-### Local Keys
+### Local keys
 
 Use the `pylonsd keys` command to add and view local keys in the chain.
 
@@ -197,7 +197,7 @@ mnemonic: ""
 ]
 ```
 
-### Create an Account
+### Create an account
 
 You already added an application key on your local machine. Now it's time to create an account to register that key on the Pylons chain. 
 
@@ -253,7 +253,7 @@ txhash: F8987EDFDFDE5921D45F5BC1987634CAD49666F436C12C58A11A197718F26894
 ```
 
 
-### Create a Cookbook
+### Create a cookbook
 
 A Pylons cookbook is an application container for recipes. The JSON format of a Pylons cookbook is like the following:
 
@@ -757,9 +757,9 @@ txhash: EBC51E8343949E13AE2456B55771C3E9545C045F15E5686B963AF411F5B8EFE9
 ```
 
 
-### Create Trade
+### Create trade
 
-In this section you will attempt trading between accounts.  
+In this section, you trade between accounts.  
 
    `pylonsd tx pylons create-trade [coinInputs] [itemInputs] [coinOutputs] [itemOutputs] [extraInfo] [flags] --from [account]`
 ```
@@ -773,7 +773,7 @@ In this section you will attempt trading between accounts.
   "amountMinted": 1,"tradeable": true}],"itemModifyOutputs": []}' "" --from Jack
 ```
 
-### Fulfill Trade  
+### Fulfill trade  
 
   Now you have successfully created the trade. It is time to fulfill this trade.
   ```
