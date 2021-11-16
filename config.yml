@@ -11,6 +11,19 @@ genesis:
       deposit_params:
         min_deposit:
           denom: ubedrock
+    mint:
+      minter:
+        inflation: "0"
+      params:
+        mint_denom: "disabled"
+        inflation_rate_change: "0"
+        inflation_max: "0"
+        inflation_min: "0"
+    bank:
+      params:
+        send_enabled:
+          - denom: "ustripeusd"
+            enabled: false
 accounts:
   - name: alice
     coins: ["20000000000upylon", "200000000ubedrock"]
@@ -20,8 +33,6 @@ validator:
   name: alice
   staked: "100000000ubedrock"
 client:
-  vuex:
-    path: "vue/src/store"
   openapi:
     path: "docs/static/openapi.yml"
 faucet:
