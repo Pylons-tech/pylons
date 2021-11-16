@@ -1,28 +1,31 @@
 # CLI Tutorial
 
-Welcome to the Pylons basic developer CLI tutorial for beginners. 
+Welcome to the Pylons basic developer CLI tutorial for beginners. This tutorial covers the basic CLI commands that you can run against the Pylons blockchain. It explains these commands and shows the user how to use them.
 
 Built on the Cosmos SDK, Pylons is a fast and interoperable system for brands and creators to build engaging products with meaningful NFT experiences.
 
-Pylons is the fastest, easiest way to launch a massive NFT product with minimal transaction fees. For details on the Pylons module for the Pylons NFT blockchain, see the [Pylons spec](https://github.com/Pylons-tech/pylons/tree/main/docs/spec).
+Pylons is the fastest, easiest way to launch a massive NFT product with minimal transaction fees. For details on the Pylons module for the Pylons NFT blockchain, see the [Pylons Spec](https://github.com/Pylons-tech/pylons/tree/main/docs/spec).
 
 Before you get started with the CLI tutorial, review these important Pylons terms:
 
 
-- **cookbook**: A principal concept in Pylons, a cookbook is the container for your application recipes. For example, an application recipe for a game. Cookbooks are required to build recipes and items.
+- **Cookbook**: A principal concept in Pylons, a cookbook is the container for your application recipes. For example, an application recipe for a game. Cookbooks are required to build recipes and items.
 
-- **recipe**: Execute commands to create, modify, and trade items on the blockchain. Recipes are created for specific roles, they can be available only to developers or they can be exposed to users, or both. Use recipes to get the result of some action that occurs between items and characters. Every action that is related to items are taken by recipes.
+- **Recipe**: Execute commands to create, modify, and trade items on the blockchain. Recipes are created for specific roles, they can be available only to developers or they can be exposed to users, or both. Use recipes to get the result of some action that occurs between items and characters. Every action that is related to items are taken by recipes.
   
-- **item**: Items are NFTs. Items can be items in original games. Items have properties in the format of Double, String, Integer, and so on. Characters can be created as items.
+- **Item**: Items are NFTs. Items can be items in original games. Items have properties in the format of Double, String, Integer, and so on. Characters can be created as items.
 
-- **trade**: Functionality that enables accounts to trade their coins. Trade includes:
+- **Trade**: Functionality that enables accounts to trade their coins. Trade includes:
 
-  - Items: items, coins
-  - Coins trading
-  - Mixed trading
+  - Items: Items, Coins
+  - Coins Trading
+  - Mixed Trading
 
 
 The Pylons module is based on the [Cosmos SDK](https://cosmos.network/sdk), the world’s most popular blockchain framework. Before you get started with Pylons, explore the Cosmos ecosystem. 
+
+**Note**: The code in this tutorial is written specifically for this learning experience and is intended only for educational purposes. This tutorial code is not intended to be used in production.
+
 
 ## Set Up Your Local Environment
   
@@ -64,7 +67,9 @@ To run Pylons locally:
 Now, you are ready to use Pylons CLI commands in a new terminal window. 
 
 Run:    
-    ```pylonsd```
+   
+      pylonsd
+    
 
 If `pylonsd` does not run as expected, go back to the local setup instructions and verify your Go path and environment variables.
 
@@ -168,13 +173,13 @@ pubkey: '{"@type":"/cosmos.crypto.secp256k1.PubKey","key":"A1iZOha1tMg7nhz+ZhXcc
 mnemonic: ""
 ```
 
-List all the of the keys available on the chain: 
+To list all the of the keys available on the chain: 
 
   ```
   pylonsd keys list 
   ```
 
-The output is like: 
+The output is: 
 
 ```
 [
@@ -202,11 +207,13 @@ You already added an application key on your local machine. Now it's time to cre
 
 To register an account with the key you added:
 
-1. First, run the `config` command<!-- describe why-->: 
+1. First, run the `config` command  to use the test keyring and hence not require a password. 
+  
+To set the `test` keyring: 
 
-    ```bash
-    pylonsd config keyring-backend test
-    ```
+    
+      pylonsd config keyring-backend test
+    
 
 2. Now, use `pylonsd tx pylons create-account` command and specify the address from the key you generated earlier:
 
@@ -274,6 +281,8 @@ A Pylons cookbook is an application container for recipes. The JSON format of a 
 To create a cookbook you run the following command:
 
  `pylonsd tx pylons create-cookbook [id] [name] [description] [developer] [version] [support-email] [cost-per-block] [enabled] [flags]`
+ 
+ This is shown below:
 ```
  pylonsd tx pylons create-cookbook "loud123456" "Legend of the Undead Dragon" "Cookbook for running pylons recreation of LOUD" "Pylons Inc" v0.3.1 lyri@gmail.com "{\"denom\":  \"upylon\", \"amount\":  \"1000000\"}" true --from Jack
 ```
@@ -391,7 +400,7 @@ An example of this, run against the testnet, is:
   "mutableStrings": [],"transferFee": [],"tradePercentage": "0.100000000000000000","amountMinted": 1,"tradeable": true}],"itemModifyOutputs": []}' 
   '[{"entryIDs": ["id1"],"weight": 1}]' 1 true "" --from giunat --node https://rpc.pylons.smartnodes.co:443 --chain-id pylons-testnet                                        
  ```
-  if you choose to run this locally using the Jack account defined above:
+  if you choose to run this locally, using the Jack account defined above:
   ```
   pylonsd tx pylons create-recipe testCookbookStripe recipeNostripe1 testRecipe "this is a test recipe" v0.0.1 
   '[{"coins": [{"denom": "upylon", "amount": "100000000000"}]}]' '[]' '{"coinOutputs": [],"itemOutputs": [{"ID": "id1","doubles": 
@@ -661,12 +670,13 @@ txhash: E15F5387AD8AD1A97B57AA3AD957EE105E790A61340E1E00E5F608E7F56EF32F
 
 ## Execute The Recipe
 
-The recipe is created. You need to execute the created recipe.
+After the recipe is created, you need to execute the created recipe.
 
 You do this by: 
   
   `pylonsd tx pylons execute-recipe [cookbook-id] [recipe-id] [coin-inputs-index] [item-ids] [payment-info] [flags]`
 
+An example of this is:
 ```
 pylonsd tx pylons execute-recipe loud1234567 recipeNostripe1 0 '[]' '[{"purchaseID": "pi_3Ju3j843klKuxW9f0JrajT3q","processorName":"Pylons_Inc", "payerAddr": "pylo16v53vnxv2vlqkpmpe490dsz6prwrtwp40jgn8d","amount": "1003009027","productID": "recipe/loud1234567/recipeNostripe1","signature": "AlFMPMg8rbOEmYGC0nYmfUJHIdoFWnUT0gs1A6k3qAri"}]' --from Jack
 ```
@@ -693,13 +703,12 @@ tx: null
 txhash: EBC51E8343949E13AE2456B55771C3E9545C045F15E5686B963AF411F5B8EFE9
 ```
 To get the result of executed transaction, you can use `pylonsd query tx <txHash>` command.
-Set the `txHash` arg as the txHash field you get from the broadcast command.
 
 ```
 pylonsd query tx EBC51E8343949E13AE2456B55771C3E9545C045F15E5686B963AF411F5B8EFE9
 ```
 
-An example of the log which shows the reason of a failed transaction is as belows:
+An example of the log from the above command, which shows the reason of a failed transaction is as belows:
 
 ```
 code: 18
@@ -784,7 +793,7 @@ In this section, you trade between accounts.
   pylonsd tx pylons fulfill-trade t1234567 0 '[]' '[{"purchaseID": "pi_3Ju3j843klKuxW9f0JrajT3q","processorName":"Pylons_Inc","payerAddr": "pylo16v53vnxv2vlqkpmpe490dsz6prwrtwp40jgn8d","amount": "1003009027","productID": "recipe/loud1234567/recipeNostripe1","signature": "AlFMPMg8rbOEmYGC0nYmfUJHIdoFWnUT0gs1A6k3qAri"}]' --from Jack
   ```
 Now you have successfully executed the recipe, trades and you probably understood Pylons about 30%.
-And you are ready to go into the deep level of Pylons ecosystem. See the [Pylons spec](https://github.com/Pylons-tech/pylons/tree/main/docs/spec) for more information.
+And you are ready to go into the deep level of Pylons ecosystem. Also, see the [Pylons Spec](https://github.com/Pylons-tech/pylons/tree/main/docs/spec) for more information.
 
 There are several commands and various transactions that can be run in Pylons under different command combinations. However, the below are the transactions in Pylons under `pylonsd tx pylons`.  
   
