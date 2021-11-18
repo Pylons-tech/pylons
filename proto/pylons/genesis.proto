@@ -1,0 +1,11 @@
+syntax = "proto3";
+package Pylonstech.pylons.pylons;
+
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
+
+// GenesisState defines the pylons module's genesis state.
+message GenesisState {
+    // this line is used by starport scaffolding # genesis/proto/state
+}
