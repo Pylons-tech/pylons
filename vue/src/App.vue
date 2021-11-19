@@ -38,7 +38,14 @@ export default {
     },
   },
   async created() {
-    await this.$store.dispatch('common/env/init')
+    await this.$store.dispatch('common/env/init', {
+      apiNode: 'http://localhost:1317',
+      rpcNode: 'http://localhost:26657',
+      wsNode: 'ws://localhost:26657/websocket',
+      chainId: 'pylons',
+      addrPrefix: 'pylo',
+      sdkVersion: 'Stargate',
+    })
     this.initialized = true
   },
   errorCaptured(err) {
