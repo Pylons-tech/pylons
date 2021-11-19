@@ -11,15 +11,6 @@ import (
 
 func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCookbook) (*types.MsgCreateCookbookResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if len(msg.Name) < int(k.MinNameFieldLength(ctx)) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cookbook name should have more than 8 characters")
-	}
-
-	if len(msg.Description) < int(k.MinDescriptionFieldLength(ctx)) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cookbook description should have more than 20 characters")
-	}
-
 	// Check if the value already exists
 	_, isFound := k.GetCookbook(ctx, msg.ID)
 	if isFound {
@@ -54,14 +45,6 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 
 func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCookbook) (*types.MsgUpdateCookbookResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if len(msg.Name) < int(k.MinNameFieldLength(ctx)) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cookbook name should have more than 8 characters")
-	}
-
-	if len(msg.Description) < int(k.MinDescriptionFieldLength(ctx)) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cookbook description should have more than 20 characters")
-	}
 
 	// Check if the value exists
 	origCookbook, isFound := k.GetCookbook(ctx, msg.ID)

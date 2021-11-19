@@ -42,26 +42,6 @@ func TestCreateCookbook(t *testing.T) {
 		"true",
 	}
 
-	invalidName := []string{
-		"",
-		"DescriptionDescriptionDescription",
-		"Developer",
-		"v0.0.3",
-		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
-		"true",
-	}
-
-	invalidDescription := []string{
-		"testCookbookName",
-		"",
-		"Developer",
-		"v0.0.4",
-		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
-		"true",
-	}
-
 	invalidVersion1 := []string{
 		"testCookbookName",
 		"DescriptionDescriptionDescription",
@@ -170,22 +150,6 @@ func TestCreateCookbook(t *testing.T) {
 			args:   common,
 			err:    nil,
 			code:   0,
-		},
-		{
-			id:     "InvalidName",
-			desc:   "InvalidName",
-			fields: invalidName,
-			args:   common,
-			err:    nil,
-			code:   sdkerrors.ErrInvalidRequest.ABCICode(),
-		},
-		{
-			id:     "InvalidDescription",
-			desc:   "InvalidDescription",
-			fields: invalidDescription,
-			args:   common,
-			err:    nil,
-			code:   sdkerrors.ErrInvalidRequest.ABCICode(),
 		},
 		{
 			id:     "InvalidVersion1",

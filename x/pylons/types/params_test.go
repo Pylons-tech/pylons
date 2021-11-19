@@ -7,32 +7,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_validateUint(t *testing.T) {
-	type args struct {
-		i interface{}
-	}
-
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		{"invalid type sdk coins", args{sdk.NewCoin("fail", sdk.OneInt())}, true},
-		{"invalid type int64 -1", args{-1}, true},
-		{"invalid type int32 1", args{int32(1)}, true},
-		{"invalid type int64 1", args{int64(1)}, true},
-		{"invalid type uint32 1", args{uint32(1)}, true},
-		{"valid type uint64 1", args{uint64(1)}, false},
-	}
-
-	for _, tt := range tests {
-		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
-			require.Equal(t, tt.wantErr, validateUint(tt.args.i) != nil)
-		})
-	}
-}
-
 func Test_validateInt(t *testing.T) {
 	type args struct {
 		i interface{}

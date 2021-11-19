@@ -16,10 +16,10 @@ import (
 
 // Default parameter namespace
 const (
-	// DefaultMinNameFieldLength is the default minimum character length of a request's name field
-	DefaultMinNameFieldLength uint64 = 8
-	// DefaultMinDescriptionFieldLength is the default minimum character length of a request's description field
-	DefaultMinDescriptionFieldLength uint64 = 20
+	// DefaultMinFieldLength is the default minimum character length of a request's field
+	DefaultMinFieldLength int = 3
+	// DefaultMaxFieldLength is the default maximum character length of a request's field
+	DefaultMaxFieldLength int = 65535
 )
 
 var (
@@ -63,8 +63,6 @@ var (
 
 // Parameter Store Keys
 var (
-	ParamStoreKeyMinNameFieldLength        = []byte("MinNameFieldLength")
-	ParamStoreKeyMinDescriptionFieldLength = []byte("MinDescriptionFieldLength")
 	ParamStoreKeyCoinIssuers               = []byte("CoinIssuers")
 	ParamStoreKeyPaymentProcessors         = []byte("PaymentProcessors")
 	ParamStoreKeyRecipeFeePercentage       = []byte("RecipeFeePercentage")
@@ -79,8 +77,6 @@ var (
 
 // NewParams creates a new Params object
 func NewParams(
-	minNameFieldLength uint64,
-	minDescriptionFieldLength uint64,
 	coinIssuers []CoinIssuer,
 	paymentProcessors []PaymentProcessor,
 	recipeFeePercentage sdk.Dec,
@@ -93,8 +89,6 @@ func NewParams(
 	engineVersion uint64,
 ) Params {
 	return Params{
-		MinNameFieldLength:        minNameFieldLength,
-		MinDescriptionFieldLength: minDescriptionFieldLength,
 		CoinIssuers:               coinIssuers,
 		PaymentProcessors:         paymentProcessors,
 		RecipeFeePercentage:       recipeFeePercentage,
@@ -111,8 +105,6 @@ func NewParams(
 // DefaultParams returns default pylons Params
 func DefaultParams() Params {
 	return NewParams(
-		DefaultMinNameFieldLength,
-		DefaultMinDescriptionFieldLength,
 		DefaultCoinIssuers,
 		DefaultPaymentProcessors,
 		DefaultRecipeFeePercentage,
@@ -129,8 +121,6 @@ func DefaultParams() Params {
 // NetworkTestParams returns default pylons Params
 func NetworkTestParams() Params {
 	return NewParams(
-		DefaultMinNameFieldLength,
-		DefaultMinDescriptionFieldLength,
 		DefaultCoinIssuers,
 		DefaultPaymentProcessors,
 		DefaultRecipeFeePercentage,
@@ -158,8 +148,6 @@ func ParamKeyTable() paramtypes.KeyTable {
 // ParamSetPairs returns the parameter set pairs.
 func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 	return paramtypes.ParamSetPairs{
-		paramtypes.NewParamSetPair(ParamStoreKeyMinNameFieldLength, &p.MinNameFieldLength, validateUint),
-		paramtypes.NewParamSetPair(ParamStoreKeyMinDescriptionFieldLength, &p.MinDescriptionFieldLength, validateUint),
 		paramtypes.NewParamSetPair(ParamStoreKeyItemTransferFeePercentage, &p.ItemTransferFeePercentage, validateDecPercentage),
 		paramtypes.NewParamSetPair(ParamStoreKeyUpdateItemStringFee, &p.UpdateItemStringFee, validateCoinFee),
 		paramtypes.NewParamSetPair(ParamStoreKeyCoinIssuers, &p.CoinIssuers, validateCoinIssuers),
@@ -175,14 +163,6 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 
 // ValidateBasic performs basic validation on distribution parameters.
 func (p Params) ValidateBasic() error {
-	if p.MinNameFieldLength == 0 {
-		return fmt.Errorf("MinNameFieldLength must at least be 1")
-	}
-
-	if p.MinDescriptionFieldLength == 0 {
-		return fmt.Errorf("MinDescriptionFieldLength must at least be 1")
-	}
-
 	if !(p.RecipeFeePercentage.GTE(sdk.ZeroDec()) && p.RecipeFeePercentage.LT(sdk.OneDec())) {
 		return fmt.Errorf("percentage parameter should be in the range [0,1)")
 	}
@@ -234,19 +214,6 @@ func (p Params) ValidateBasic() error {
 
 	if p.DistrEpochIdentifier == "" {
 		return fmt.Errorf("invalid empty DistrEpochIdentifier")
-	}
-
-	return nil
-}
-
-func validateUint(i interface{}) error {
-	v, ok := i.(uint64)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if v <= 0 {
-		return fmt.Errorf("min length parameter must be greater than 0")
 	}
 
 	return nil
