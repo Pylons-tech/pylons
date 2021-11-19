@@ -15,10 +15,6 @@ import (
 
 // cookbook -> recipe -> execution -> item
 
-func randomLengthField(r *rand.Rand) uint64 {
-	return uint64(r.Int63n(101) + 10) // range [10 - 110]
-}
-
 func randomPercentage(r *rand.Rand) sdk.Dec {
 	percent := r.Int63n(101) // range [1 - 100]
 	dec := sdk.NewDec(percent)
@@ -38,18 +34,6 @@ func randomTransferFeePair(r *rand.Rand) (sdk.Int, sdk.Int) {
 // RandomizedGenState generates a random GenesisState for bank
 func RandomizedGenState(simState *module.SimulationState) {
 	// TODO add logic for randomizing stateMap
-	var minNameFieldLength uint64
-	simState.AppParams.GetOrGenerate(
-		simState.Cdc, string(types.ParamStoreKeyMinNameFieldLength),
-		&minNameFieldLength, simState.Rand,
-		func(r *rand.Rand) { minNameFieldLength = randomLengthField(r) })
-
-	var minDescriptionFieldLength uint64
-	simState.AppParams.GetOrGenerate(
-		simState.Cdc, string(types.ParamStoreKeyMinDescriptionFieldLength),
-		&minDescriptionFieldLength, simState.Rand,
-		func(r *rand.Rand) { minDescriptionFieldLength = randomLengthField(r) })
-
 	var recipeFeePercentage sdk.Dec
 	simState.AppParams.GetOrGenerate(
 		simState.Cdc, string(types.ParamStoreKeyRecipeFeePercentage),
@@ -78,8 +62,6 @@ func RandomizedGenState(simState *module.SimulationState) {
 
 	genesis := types.GenesisState{
 		Params: types.Params{
-			MinNameFieldLength:        minNameFieldLength,
-			MinDescriptionFieldLength: minDescriptionFieldLength,
 			CoinIssuers:               types.DefaultCoinIssuers, // set as default for simplicity
 			RecipeFeePercentage:       recipeFeePercentage,
 			ItemTransferFeePercentage: itemTransferFeePercentage,

@@ -8,8 +8,6 @@ The pylons module contains the following parameters:
 
 | Key                                   | Type          | Example                          |
 | ------------------------------------- | ------------- | -------------------------------- |
-| MinNameFieldLength                    | uint64        | 8                                |
-| MinDescriptionFieldLength             | uint64        | 20                               |
 | CoinIssuers                           | []CoinIssuer  |(see below)                       | 
 | RecipeFeePercentage                    |sdk.Dec       | 10.0                             |
 | ItemTransferFeePercentage             | sdk.Dec       | 20.0                             |
@@ -20,16 +18,6 @@ The pylons module contains the following parameters:
 | PaymentProcessors                     | []PaymentProcessor| (see below)                  |
 | DistrEpochIdentifier                  | string         | "day"                           |
 | EngineVersion                         | uint64         | 1                               |
-
-
-
-## MinNameFieldLength
-
-Minimum string length for the "name" field in `Recipe` and `Cookbook` types on chain.
-
-## MinDescriptionFieldLength
-
-Minimum string length for the "description" field in `Recipe` and `Cookbook` types on chain.
 
 ## CoinIssuers
 

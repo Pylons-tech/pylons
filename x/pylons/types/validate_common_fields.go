@@ -10,6 +10,14 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
+// ValidateFieldLength checks if a string field is within minLength and maxLength
+func ValidateFieldLength(field string, minLength, maxLength int) error {
+	if len(field) < minLength || len(field) > maxLength {
+		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid field length for field %v.  Must be in range [%v, %v]", field, minLength, maxLength)
+	}
+	return nil
+}
+
 // ValidateEmail validates the email string provided
 func ValidateEmail(email string) error {
 	exp := regexp.MustCompile(`^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z0-9]{2,})$`)

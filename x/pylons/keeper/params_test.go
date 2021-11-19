@@ -16,8 +16,6 @@ func (suite *IntegrationTestSuite) TestDefaultParams() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	require.Equal(types.DefaultMinNameFieldLength, k.MinNameFieldLength(ctx))
-	require.Equal(types.DefaultMinDescriptionFieldLength, k.MinDescriptionFieldLength(ctx))
 	require.Equal(types.DefaultCoinIssuers, k.CoinIssuers(ctx))
 	require.Equal(types.DefaultPaymentProcessors, k.PaymentProcessors(ctx))
 	require.Equal(types.DefaultRecipeFeePercentage, k.RecipeFeePercentage(ctx))
@@ -47,8 +45,6 @@ func (suite *IntegrationTestSuite) TestSetParams() {
 	itemTransferFeePercentage, _ := sdk.NewDecFromStr("0.20")
 
 	newParams := types.Params{
-		MinNameFieldLength:        20,
-		MinDescriptionFieldLength: 25,
 		CoinIssuers: []types.CoinIssuer{
 			{
 				CoinDenom: types.PylonsCoinDenom,
