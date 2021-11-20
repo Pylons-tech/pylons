@@ -17,12 +17,22 @@ import (
 
 // Simulation operation weights constants
 const (
-	OpWeightMsgCreateAcc      = "op_weight_msg_create_acc"
-	OpWeightMsgUpdateAcc      = "op_weight_msg_update_acc"
-	OpWeightMsgCreateCookbook = "op_weight_msg_create_cookbook"
-	OpWeightMsgCreateRecipe   = "op_weight_msg_create_recipe"
-	OpWeightMsgExecuteRecipe  = "op_weight_msg_execute_recipe"
-	invalidField              = "invalid"
+	OpWeightMsgCreateAcc              = "op_weight_msg_create_acc"
+	OpWeightMsgUpdateAcc              = "op_weight_msg_update_acc"
+	OpWeightMsgCreateCookbook         = "op_weight_msg_create_cookbook"
+	OpWeightMsgCreateRecipe           = "op_weight_msg_create_recipe"
+	OpWeightMsgUpdateCookbook         = "op_weight_msg_update_cookbook"   // TODO
+	OpWeightMsgTransferCookbook       = "op_weight_msg_transfer_cookbook" // TODO
+	OpWeightMsgUpdateRecipe           = "op_weight_msg_update_recipe"     // TODO
+	OpWeightMsgExecuteRecipe          = "op_weight_msg_execute_recipe"
+	OpWeightMsgCompleteExecutionEarly = "op_weight_msg_complete_execution_early" // TODO
+	OpWeightMsgCreateTrade            = "op_weight_msg_create_trade"             // TODO
+	OpWeightMsgCancelTrade            = "op_weight_msg_cancel_trade"             // TODO
+	OpWeightMsgFulfillTrade           = "op_weight_msg_fulfill_trade"            // TODO
+	OpWeightMsgSendItems              = "op_weight_msg_send_items"               // TODO
+	OpWeightMsgSetItemString          = "op_weight_msg_set_item_string"          // TODO
+
+	invalidField = "invalid"
 )
 
 type recipeInfo struct {
@@ -61,6 +71,8 @@ func WeightedOperations(
 	var weightMsgCreateCookbook int
 	var weightMsgCreateRecipe int
 	var weightMsgExecuteRecipe int
+	var weightMsgCreateTrade int
+	var weightMsgCancelTrade int
 
 	appParams.GetOrGenerate(cdc, OpWeightMsgCreateAcc, &weightMsgCreateAcc, nil,
 		func(_ *rand.Rand) {
@@ -89,6 +101,18 @@ func WeightedOperations(
 	appParams.GetOrGenerate(cdc, OpWeightMsgExecuteRecipe, &weightMsgExecuteRecipe, nil,
 		func(_ *rand.Rand) {
 			weightMsgExecuteRecipe = 100
+		},
+	)
+
+	appParams.GetOrGenerate(cdc, OpWeightMsgCreateTrade, &weightMsgCreateTrade, nil,
+		func(_ *rand.Rand) {
+			weightMsgCreateTrade = 100
+		},
+	)
+
+	appParams.GetOrGenerate(cdc, OpWeightMsgCancelTrade, &weightMsgCancelTrade, nil,
+		func(_ *rand.Rand) {
+			weightMsgCancelTrade = 100
 		},
 	)
 
@@ -304,6 +328,78 @@ func SimulateExecuteRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 			ItemIDs:         nil,
 		}
 
+		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
+	}
+}
+
+
+// SimulateCreateTrade generates a MsgCreateTrade with random values
+func SimulateCreateTrade(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+	return func(
+		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
+		accs []simtypes.Account, chainID string,
+	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+
+		simAccount, _ := simtypes.RandomAcc(r, accs)
+		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
+		msgType := (&types.MsgCreateTrade{}).Type()
+
+		if simCoins.Len() <= 0 {
+			return simtypes.NoOpMsg(
+				types.ModuleName, msgType, "Account has no balance"), nil, nil
+		}
+
+		// add trade id to global stateMap store
+		// accState := stateMap[simAccount.Address.String()]
+		// accState.CookbookIDs = append(accState.TradeIDs, id)
+		// stateMap[simAccount.Address.String()] = accState
+
+		coinInputs := make([]types.CoinInput, 0)
+		itemInputs := make([]types.ItemInput, 0)
+		coinOutputs := sdk.Coins{}
+		itemOutputs := make([]types.ItemRef, 0)
+		extraInfo := "extraInfo"
+
+		msg := &types.MsgCreateTrade{
+			Creator:     simAccount.Address.String(),
+			CoinInputs:  coinInputs,
+			ItemInputs:  itemInputs,
+			CoinOutputs: coinOutputs,
+			ItemOutputs: itemOutputs,
+			ExtraInfo:   extraInfo,
+		}
+
+		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
+	}
+}
+
+// SimulateCancelTrade generates a MsgCancelTrade with random values
+func SimulateCancelTrade(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+	return func(
+		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
+		accs []simtypes.Account, chainID string,
+	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+
+		simAccount, _ := simtypes.RandomAcc(r, accs)
+		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
+		msgType := (&types.MsgCancelTrade{}).Type()
+
+		if simCoins.Len() <= 0 {
+			return simtypes.NoOpMsg(
+				types.ModuleName, msgType, "Account has no balance"), nil, nil
+		}
+
+		id := generateRandomUint64(r)
+
+		// remove trade id to global stateMap store
+		// accState := stateMap[simAccount.Address.String()]
+		// accState.CookbookIDs = append(accState.CookbookIDs, id)
+		// stateMap[simAccount.Address.String()] = accState
+
+		msg := &types.MsgCancelTrade{
+			ID:      id,
+			Creator: simAccount.Address.String(),
+		}
 		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
 	}
 }

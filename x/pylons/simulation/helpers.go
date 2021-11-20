@@ -15,6 +15,10 @@ func generateRandomUsername(r *rand.Rand) (ret string) {
 	return
 }
 
+func generateRandomUint64(r *rand.Rand) (ret uint64) {
+	return uint64(r.Int63n(10000))
+}
+
 func generateRandomStringID(r *rand.Rand) (ret string) {
 	if r.Int63n(100) > 9 {
 		ret, _ = regen.Generate("^[a-zA-Z_][a-zA-Z_0-9]*$")
