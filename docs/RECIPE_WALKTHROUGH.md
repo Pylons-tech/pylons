@@ -10,7 +10,7 @@ We will:
 
 1. Create a cookbook for the game
 2. Create a recipe to create a character
-3. Create a recipe to get cookbook tokens from a faucet 
+3. Create a recipe to get cookbook tokens from a "cookbook faucet" 
 4. Create a recipe to buy a sword item
 5. Create a recipe to fight an enemy
 6. Execute our recipes to play the game experience!
@@ -46,7 +46,7 @@ Let's start by creating the following cookbook:
 
 - The "version" is the string form of the cookbook's [semantic version](https://semver.org/).  If the cookbook is updated, this version string MUST also be increased.
 
-- The "costPerBlock" field is a Cosmos SDK coin that represents the cost IOJOIJOIJ
+- The "costPerBlock" field is a Cosmos SDK coin that is used to build the fee for paying to do the `execute-recipe` transaction before the recipe's `blockInterval` is met.
 
 - The "enabled" field is a boolean to enable or disable the cookbook's functionality.  If a cookbook is disabled, new recipes cannot be minted from it and existing recipes will no longer be able to be executed.
 
@@ -71,7 +71,7 @@ type Recipe struct {
 }
 ```
 
-To get a better look at the data structures that comprise a Recipe, check out our techncial [spec](https://github.com/Pylons-tech/pylons/x/pylons/spec/README.md).  For now, let's briefly detail each field.
+To get a better look at the data structures that comprise a Recipe, check out our technical [spec](https://github.com/Pylons-tech/pylons/x/pylons/spec/README.md).  For now, let's briefly detail each field.
 
 - The "CookbookID" field is the ID of the cookbook that *contains* this recipe
 - The "RecipeID" field is the unique identifier for this particular recipe
