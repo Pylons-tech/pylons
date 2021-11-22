@@ -38,4 +38,9 @@ client:
 faucet:
   name: bob
   coins: [ "10000upylon", "10000ubedrock" ]
-
+host:
+  rpc: "0.0.0.0:26659"
+  p2p: "0.0.0.0:26658"
+  prof: ":6061"
+  grpc: ":9092"
+  api: "0.0.0.0:1318"
