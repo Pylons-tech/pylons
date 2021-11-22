@@ -5,7 +5,7 @@
 - **[Technical Setup](../TECHNICAL-SETUP.md)**: Provides details on how to set up your environment to compile, run
   and test the Pylons code.
 - **[Quick Start](./QUICK_START.md)**: Instructions on how to quickly get up and running with Pylons.
-- **[Testing](./TESTING.md)**: Documentation for testing the code available in this repository.
+- **[Testing](./TESTING.md)**: Documentation for testing the code available in this reposito
 - **[Testnet](./TESTNET.md)**: Documentation on how to run a simple Testnet.
 
 ## Specs
