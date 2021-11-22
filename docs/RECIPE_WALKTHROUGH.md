@@ -1,0 +1,490 @@
+# Recipe Walkthrough
+
+### About this guide
+
+The core of developing experiences on Pylons is the recipe.  This guide provides an example game experience created with recipes on Pylons.  We'll look at each recipe in detail, explaining a bit about how they work.  This is only a small sample of the experiences one can create - we encourage developers to explore the system and try new things!
+
+### Summary
+
+We will:
+
+1. Create a cookbook for the game
+2. Create a recipe to create a character
+3. Create a recipe to get cookbook tokens from a faucet 
+4. Create a recipe to buy a sword item
+5. Create a recipe to fight an enemy
+6. Execute our recipes to play the game experience!
+
+### Creating the cookbook
+
+When you want to develop on Pylons, the first step is always to create a cookbook.  Cookbooks are the "containers" of a set of recipes, typically grouped together for a particular experience.  A visual NFT artist will be creating many recipes to mint new image NFTs or a game will contain many recipes that together build the full experience. In both of these cases, all of the recipes would be contained within a single cookbook.
+
+Let's start by creating the following cookbook:
+
+```json
+{
+  "creator": "pylo1vn4p3v0u7l3c6jqup5j8fmhxnfumzl2094gtrc",
+  "ID": "cookbookLOUD",
+  "name": "Legend of the Undead Dragon",
+  "description": "Cookbook for running pylons game experience LOUD",
+  "developer": "Pylons Inc",
+  "version": "v0.0.1",
+  "supportEmail": "test@email.xyz",
+  "costPerBlock": {
+   "denom": "upylon",
+   "amount": "1000000"
+  },
+  "enabled": true
+ }
+```
+
+- The "creator" is the string bech32 string of the Pylons address for the owner / creator of the cookbook.  Ownership of cookbooks can change via the `transfer-cookbook` transaction.
+
+- The "ID" is the unique identifier string of the cookbook.  This is currently chosen by the developer when creating the cookbook.
+
+- The "name", "description", "version" and "supportEmail" strings are additional metadata fields that the can provide users and apps with more details about the experience.
+
+- The "version" is the string form of the cookbook's [semantic version](https://semver.org/).  If the cookbook is updated, this version string MUST also be increased.
+
+- The "costPerBlock" field is a Cosmos SDK coin that represents the cost IOJOIJOIJ
+
+- The "enabled" field is a boolean to enable or disable the cookbook's functionality.  If a cookbook is disabled, new recipes cannot be minted from it and existing recipes will no longer be able to be executed.
+
+### A bit about recipes
+
+The recipe structure is as follows:
+```golang
+type Recipe struct {
+	CookbookID    string            `protobuf:"bytes,1,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
+	ID            string            `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
+	NodeVersion   uint64            `protobuf:"varint,3,opt,name=nodeVersion,proto3" json:"nodeVersion,omitempty"`
+	Name          string            `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Description   string            `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	Version       string            `protobuf:"bytes,6,opt,name=version,proto3" json:"version,omitempty"`
+	CoinInputs    []CoinInput       `protobuf:"bytes,7,rep,name=coinInputs,proto3" json:"coinInputs"`
+	ItemInputs    []ItemInput       `protobuf:"bytes,8,rep,name=itemInputs,proto3" json:"itemInputs"`
+	Entries       EntriesList       `protobuf:"bytes,9,opt,name=entries,proto3" json:"entries"`
+	Outputs       []WeightedOutputs `protobuf:"bytes,10,rep,name=outputs,proto3" json:"outputs"`
+	BlockInterval int64             `protobuf:"varint,11,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
+	Enabled       bool              `protobuf:"varint,12,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	ExtraInfo     string            `protobuf:"bytes,13,opt,name=extraInfo,proto3" json:"extraInfo,omitempty"`
+}
+```
+
+To get a better look at the data structures that comprise a Recipe, check out our techncial [spec](https://github.com/Pylons-tech/pylons/x/pylons/spec/README.md).  For now, let's briefly detail each field.
+
+- The "CookbookID" field is the ID of the cookbook that *contains* this recipe
+- The "RecipeID" field is the unique identifier for this particular recipe
+- The "Name" and "Description" fields LJAFOIJOIJ
+- The "CoinInputs" field
+- The "ItemInputs" field
+- The "Entries" field
+- The "Outputs" field
+- The "BlockInterval" field
+- The "Enabled" field
+
+### Character creation recipe
+
+```json
+{
+  "cookbookID": "cookbookLOUD",
+  "ID": "LOUDGetCharacter123125",
+  "name": "LOUD-Get-Character-Recipe",
+  "description": "Creates a basic character in LOUD",
+  "version": "v0.0.1",
+  "coinInputs": [],
+  "itemInputs": [],
+  "entries": {
+   "coinOutputs": [],
+   "itemOutputs": [
+    {
+     "ID": "basic_character_lv1",
+     "doubles": [
+      {
+       "key": "XP",
+       "weightRanges": [],
+       "program": "1"
+      }
+     ],
+     "longs": [
+      {
+       "key": "level",
+       "weightRanges": [],
+       "program": "1"
+      },
+      {
+       "key": "giantKills",
+       "weightRanges": [],
+       "program": "0"
+      },
+      {
+       "key": "special",
+       "weightRanges": [],
+       "program": "0"
+      },
+      {
+       "key": "specialDragonKill",
+       "weightRanges": [],
+       "program": "0"
+      },
+      {
+       "key": "undeadDragonKill",
+       "weightRanges": [],
+       "program": "0"
+      }
+     ],
+     "strings": [
+      {
+       "key": "entityType",
+       "value": "character"
+      }
+     ],
+     "mutableStrings": [],
+     "transferFee": [],
+     "tradePercentage": "0.100000000000000000",
+     "tradeable": true
+    }
+   ],
+   "itemModifyOutputs": []
+  },
+  "outputs": [
+   {
+    "entryIDs": [
+     "basic_character_lv1"
+    ],
+    "weight": 1
+   }
+  ],
+  "enabled": true,
+  "extraInfo": "extraInfo"
+ }
+```
+
+### Cookbook tokens facuet recipe
+
+```json
+{
+  "cookbookID": "cookbookLOUD",
+  "ID": "LOUD_Get_Coins103120312",
+  "name": "LOUD-get-coins",
+  "description": "Gives a player 10000 loudCoin",
+  "version": "v0.0.1",
+  "coinInputs": [],
+  "itemInputs": [],
+  "entries": {
+   "coinOutputs": [
+    {
+     "ID": "loudCoin",
+     "coin": {
+      "denom": "cookbookLOUD/loudCoin",
+      "amount": "10000"
+     }
+    }
+   ],
+   "itemOutputs": [],
+   "itemModifyOutputs": []
+  },
+  "outputs": [
+   {
+    "entryIDs": [
+     "loudCoin"
+    ],
+    "weight": 1
+   }
+  ],
+  "enabled": true,
+  "extraInfo": "extraInfo"
+ }
+```
+
+### Sword purchase recipe
+
+```json
+{
+  "cookbookID": "cookbookLOUD",
+  "ID": "LOUDbuyCopperSword123125",
+  "name": "LOUD-Buy-Copper-Sword",
+  "description": "Purchases a copper sword for loudCoin",
+  "version": "v0.0.1",
+  "coinInputs": [
+   {
+    "coins": [
+     {
+      "denom": "cookbookLOUD/loudCoin",
+      "amount": "10"
+     }
+    ]
+   }
+  ],
+  "itemInputs": [],
+  "entries": {
+   "coinOutputs": [],
+   "itemOutputs": [
+    {
+     "ID": "copper_sword_lv1",
+     "doubles": [
+      {
+       "key": "attack",
+       "weightRanges": [],
+       "program": "10.0"
+      }
+     ],
+     "longs": [
+      {
+       "key": "level",
+       "weightRanges": [],
+       "program": "1"
+      },
+      {
+       "key": "value",
+       "weightRanges": [],
+       "program": "250"
+      }
+     ],
+     "strings": [
+      {
+       "key": "name",
+       "value": "Copper Sword"
+      }
+     ],
+     "mutableStrings": [],
+     "transferFee": [],
+     "tradePercentage": "0.100000000000000000",
+     "tradeable": true
+    }
+   ],
+   "itemModifyOutputs": []
+  },
+  "outputs": [
+   {
+    "entryIDs": [
+     "copper_sword_lv1"
+    ],
+    "weight": 1
+   }
+  ],
+  "enabled": true,
+  "extraInfo": "extraInfo"
+ }
+```
+
+### Enemy encounter recipe
+
+```json
+{
+  "cookbookID": "cookbookLOUD",
+  "ID": "LOUDFightWolfWithSword123125",
+  "name": "LOUD-Fight-Wolf-With-Sword-Recipe",
+  "description": "creates a fight instance with a wolf requiring a character and a sword",
+  "version": "v0.0.1",
+  "coinInputs": [],
+  "itemInputs": [
+   {
+    "ID": "character",
+    "doubles": [
+     {
+      "key": "XP",
+      "minValue": "1.000000000000000000",
+      "maxValue": "10000000.000000000000000000"
+     }
+    ],
+    "longs": [
+     {
+      "key": "level",
+      "minValue": 1,
+      "maxValue": 10000000
+     }
+    ],
+    "strings": [
+     {
+      "key": "entityType",
+      "value": "character"
+     }
+    ],
+    "conditions": {
+     "doubles": [],
+     "longs": [],
+     "strings": []
+    }
+   },
+   {
+    "ID": "sword",
+    "doubles": [
+     {
+      "key": "attack",
+      "minValue": "1.000000000000000000",
+      "maxValue": "10000000.000000000000000000"
+     }
+    ],
+    "longs": [
+     {
+      "key": "level",
+      "minValue": 1,
+      "maxValue": 10000000
+     }
+    ],
+    "strings": [],
+    "conditions": {
+     "doubles": [],
+     "longs": [],
+     "strings": []
+    }
+   }
+  ],
+  "entries": {
+   "coinOutputs": [
+    {
+     "ID": "coin_reward",
+     "coin": {
+      "denom": "cookbookLOUD/loudCoin",
+      "amount": "10"
+     }
+    }
+   ],
+   "itemOutputs": [
+    {
+     "ID": "wolf_tail",
+     "doubles": [
+      {
+       "key": "attack",
+       "weightRanges": [],
+       "program": "0.0"
+      }
+     ],
+     "longs": [
+      {
+       "key": "level",
+       "weightRanges": [],
+       "program": "1"
+      },
+      {
+       "key": "value",
+       "weightRanges": [],
+       "program": "140"
+      }
+     ],
+     "strings": [
+      {
+       "key": "name",
+       "value": "Wolf Tail"
+      }
+     ],
+     "mutableStrings": [],
+     "transferFee": [],
+     "tradePercentage": "0.100000000000000000",
+     "tradeable": true
+    },
+    {
+     "ID": "wolf_fur",
+     "doubles": [
+      {
+       "key": "attack",
+       "weightRanges": [],
+       "program": "0.0"
+      }
+     ],
+     "longs": [
+      {
+       "key": "level",
+       "weightRanges": [],
+       "program": "1"
+      },
+      {
+       "key": "value",
+       "weightRanges": [],
+       "program": "140"
+      }
+     ],
+     "strings": [
+      {
+       "key": "Name",
+       "value": "Wolf Fur"
+      }
+     ],
+     "mutableStrings": [],
+     "transferFee": [],
+     "tradePercentage": "0.100000000000000000",
+     "tradeable": true
+    }
+   ],
+   "itemModifyOutputs": [
+    {
+     "ID": "modified_character",
+     "itemInputRef": "character",
+     "doubles": [
+      {
+       "key": "XP",
+       "weightRanges": [],
+       "program": "XP + double(15 * 3)"
+      }
+     ],
+     "longs": [
+      {
+       "key": "level",
+       "weightRanges": [],
+       "program": "level + int(XP / double(level * level * level + 5))"
+      }
+     ],
+     "strings": [],
+     "mutableStrings": [],
+     "transferFee": [],
+     "tradePercentage": "0.100000000000000000",
+     "tradeable": true
+    },
+    {
+     "ID": "sword",
+     "itemInputRef": "sword",
+     "doubles": [],
+     "longs": [],
+     "strings": [],
+     "mutableStrings": [],
+     "transferFee": [],
+     "tradePercentage": "0.100000000000000000",
+     "tradeable": true
+    }
+   ]
+  },
+  "outputs": [
+   {
+    "weight": 3
+   },
+   {
+    "entryIDs": [
+     "coin_reward",
+     "modified_character"
+    ],
+    "weight": 3
+   },
+   {
+    "entryIDs": [
+     "coin_reward",
+     "modified_character",
+     "sword"
+    ],
+    "weight": 24
+   },
+   {
+    "entryIDs": [
+     "coin_reward",
+     "modified_character",
+     "sword",
+     "wolf_tail"
+    ],
+    "weight": 40
+   },
+   {
+    "entryIDs": [
+     "coin_reward",
+     "modified_character",
+     "sword",
+     "wolf_fur"
+    ],
+    "weight": 30
+   }
+  ],
+  "enabled": true,
+  "extraInfo": "extraInfo"
+ }
+```
+
+### Putting it all together
