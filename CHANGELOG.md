@@ -4,6 +4,9 @@
 
 ### State Machine Breaking Changes:
 - [#508](https://github.com/Pylons-tech/pylons/pull/508) Remove the `MinNameFieldLength` and `MinDescriptionFieldLength` params from the chain.
+
+### Fixes: 
+- [#509](https://github.com/Pylons-tech/pylons/pull/509) Bump `github.com/opencontainers/image-spec` to v1.0.2 to avoid security issue.
  
 ### Changes:
 - [#494](https://github.com/Pylons-tech/pylons/pull/494) Replace usages of deprecated `EmitEvent()` with `EmitTypedEvent()`.
