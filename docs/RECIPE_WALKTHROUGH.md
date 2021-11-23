@@ -476,3 +476,5 @@ Ouputs is where it gets interesting. First we output coins: if you look you can 
 In our output field, we have five options for output. The output is determined by the weight: the higher the weight, the higher the chance of receiving that output. Within our entryIDs we reference which items we want to be outputted by calling the unique IDs.
 
 ### Putting it all together
+
+Now that we have created our cookbook and recipes, we need to actually execute them to "play" the game.  
