@@ -9,6 +9,7 @@
 - [#509](https://github.com/Pylons-tech/pylons/pull/509) Bump `github.com/opencontainers/image-spec` to v1.0.2 to avoid security issue.
  
 ### Changes:
+- [#515](https://github.com/Pylons-tech/pylons/pull/515) Remove the `ConditionList` proto message.
 - [#494](https://github.com/Pylons-tech/pylons/pull/494) Replace usages of deprecated `EmitEvent()` with `EmitTypedEvent()`.
 
 
