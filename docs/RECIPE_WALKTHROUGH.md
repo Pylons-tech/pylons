@@ -159,7 +159,11 @@ To get a better look at the data structures that comprise a Recipe, check out ou
 }
 ```
 
-Here we implement a basic recipe, one that builds a unique base character with a few features: level, XP, giant kills, etc. Anything you wish for a character to have in their game utilities or arsenal you place them within the 'item outputs' under their type of output (double, long, string). Note both coinInputs and itemInputs are empty, so this recipe doesn't require anything to execute. given that this is a basic character, mutableStrings, transferFee and itemModifyOutputs are empty. TradePercentage refers to [alex needed] and the boolean field tradable is true (item can be traded). In the outputs field we return the new character by calling the item output ID. Weight refers how often it will occur and since the character is are only output it'll always return a character.
+Here we implement a basic recipe, one that builds a unique base character with a few features: level, XP, giant kills, etc. Anything you wish for a character to have in their game utilities or arsenal you place them within the 'item outputs' under their type of output (double, long, string).
+
+Note both coinInputs and itemInputs are empty, so this recipe doesn't require anything to execute. given that this is a basic character, mutableStrings, transferFee and itemModifyOutputs are empty. TradePercentage refers to [alex needed] and the boolean field tradable is true (item can be traded).
+
+In the outputs field we return the new character by calling the item output ID. Weight refers how often it will occur and since the character is are only output it'll always return a character.
 
 ### Cookbook tokens facuet recipe
 
@@ -267,7 +271,11 @@ This recipe should be even simplier to understand after building a base characte
 }
 ```
 
-Let's see if you can follow along with this more complex recipe. We have all of our identifying information about the recipe in name, id, cookbook, etc. and we are trying to purchase a sword for our character. In coinInputs we can add the coin inout to indicate what kind of coin our user ould need to execute this type of recipe, which in this case is the unique LOUD coin from our game. We've also indicated that the user needs at least 10 LOUD coins to execute this recipe. We don't intake any items, just coins. As we move along to outputs, we can see we don't output any coins but we do have an item called 'copper_sword_lv1'. Let's look at our first output in doubles. We use 'key' to indicate the unique feature from the sword. Our first one is 'attack' which indicates an attack function. weightRanges is empty, but in future can be used to help randomize the attack/how intense it is. Our final field is 'program', which can run a program each time a 'attack' is called from the sword. For now we have '10.0' which means we'll be getting 10.0 point attack from the sword. In long and string output fields, we assign outputs/values to features of the sword, like 'level', 'value', and 'name'. Finally we have have our tradePercentage, tradeable, and outputs reflecting what we've used in previous recipes.
+Let's see if you can follow along with this more complex recipe. We have all of our identifying information about the recipe in name, id, cookbook, etc. and we are trying to purchase a sword for our character. In coinInputs we can add the coin input to indicate what kind of coin our user ould need to execute this type of recipe, which in this case is the unique LOUD coin from our game. We've also indicated that the user needs at least 10 LOUD coins to execute this recipe. We don't intake any items, just coins.
+
+As we move along to outputs, we can see we don't output any coins but we do have an item called 'copper_sword_lv1'. Let's look at our first output in doubles. We use 'key' to indicate the unique feature from the sword. Our first one is 'attack' which indicates an attack function. weightRanges is empty, but in future can be used to help randomize the attack/how intense it is. Our final field is 'program', which can run a program each time a 'attack' is called from the sword. For now we have '10.0' which means we'll be getting 10.0 point attack from the sword. In long and string output fields, we assign outputs/values to features of the sword, like 'level', 'value', and 'name'.
+
+Finally we have have our tradePercentage, tradeable, and outputs reflecting what we've used in previous recipes.
 
 ### Enemy encounter recipe
 
@@ -471,8 +479,10 @@ Let's see if you can follow along with this more complex recipe. We have all of 
 }
 ```
 
-This recipe is complex, but given what we know from before let's dissect it. We have our identifiying information for the recipe in cookbookID, Id, name, etc. In order for the recipe to execute, we require a 'character' that requires XP at a minimum amount of 1, a level status at least at level 1, and it needs to have the entitiyType of a 'character'. We also need the sword that we created in the recipe earlier on, with the specific features we reference in the double/long/string fields. [alex needed - conditions? havent used those before].  
-Ouputs is where it gets interesting. First we output coins: if you look you can see we're giving back ten LOUD coins. In addition we have some unique items which look similar to the recipes we've toyed with before. We have a wolf tail and wolf fur (both have attacks at 0, level at 1, and value at 140). In ItemModifyOutputs, we can modify one of our inputs. In this case we modify our 'character' which we indicate with 'itemInputRef'. The modification looks the exact same as the other recipes we've built but we can use the program field to actively change our stats on chain. Note that we reference some of the past keys like level and XP. The program takes our previous stats and upgrades them within our program field.  
+This recipe is complex, but given what we know from before let's dissect it. We have our identifiying information for the recipe in cookbookID, Id, name, etc. In order for the recipe to execute, we require a 'character' that requires XP at a minimum amount of 1, a level status at least at level 1, and it needs to have the entitiyType of a 'character'. We also need the sword that we created in the recipe earlier on, with the specific features we reference in the double/long/string fields. [alex needed - conditions? havent used those before].
+
+Ouputs is where it gets interesting. First we output coins: if you look you can see we're giving back ten LOUD coins. In addition we have some unique items which look similar to the recipes we've toyed with before. We have a wolf tail and wolf fur (both have attacks at 0, level at 1, and value at 140). In ItemModifyOutputs, we can modify one of our inputs. In this case we modify our 'character' which we indicate with 'itemInputRef'. The modification looks the exact same as the other recipes we've built but we can use the program field to actively change our stats on chain. Note that we reference some of the past keys like level and XP. The program takes our previous stats and upgrades them within our program field.
+
 In our output field, we have five options for output. The output is determined by the weight: the higher the weight, the higher the chance of receiving that output. Within our entryIDs we reference which items we want to be outputted by calling the unique IDs.
 
 ### Putting it all together
@@ -490,3 +500,5 @@ In our output field, we have five options for output. The output is determined b
 | outputs     | EntriesList | recipe's outputs after execution     |
 | enabled     | boolean     | enabled the recipe for execution     |
 | extraInfo   | string      | additional info                      |
+
+Now that we have created our cookbook and recipes, we need to actually execute them to "play" the game.

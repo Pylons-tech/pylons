@@ -2,7 +2,13 @@
 
 ## Unreleased 
 
-## Changes:
+### State Machine Breaking Changes:
+- [#508](https://github.com/Pylons-tech/pylons/pull/508) Remove the `MinNameFieldLength` and `MinDescriptionFieldLength` params from the chain.
+
+### Fixes: 
+- [#509](https://github.com/Pylons-tech/pylons/pull/509) Bump `github.com/opencontainers/image-spec` to v1.0.2 to avoid security issue.
+ 
+### Changes:
 - [#494](https://github.com/Pylons-tech/pylons/pull/494) Replace usages of deprecated `EmitEvent()` with `EmitTypedEvent()`.
 
 
@@ -42,7 +48,7 @@
 - [#476](https://github.com/Pylons-tech/pylons/pull/476) Remove `rate` field from `*Param` proto messages.
 - [#473](https://github.com/Pylons-tech/pylons/pull/473) Update proto definition of `MsgExecuteRecipe` and `MsgFulfillTrade` to add the `PaymentInfos` field.
 
-## State Machine Breaking Changes
+### State Machine Breaking Changes
 - [#489](https://github.com/Pylons-tech/pylons/pull/489) Changed `nodeVersion` field in `Recipe`, `Cookbook`, `Item`, `Execution`, to be a `uint64` on-chain param instead of being pulled from the binary
 
 ### Changes:

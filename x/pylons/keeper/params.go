@@ -6,18 +6,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-// MinNameFieldLength returns the MinNameFieldLength param
-func (k Keeper) MinNameFieldLength(ctx sdk.Context) (res uint64) {
-	k.paramSpace.Get(ctx, types.ParamStoreKeyMinNameFieldLength, &res)
-	return
-}
-
-// MinDescriptionFieldLength returns the MinDescriptionFieldLength param
-func (k Keeper) MinDescriptionFieldLength(ctx sdk.Context) (res uint64) {
-	k.paramSpace.Get(ctx, types.ParamStoreKeyMinDescriptionFieldLength, &res)
-	return
-}
-
 // CoinIssuers returns the CoinIssuers param
 func (k Keeper) CoinIssuers(ctx sdk.Context) (res []types.CoinIssuer) {
 	k.paramSpace.Get(ctx, types.ParamStoreKeyCoinIssuers, &res)
