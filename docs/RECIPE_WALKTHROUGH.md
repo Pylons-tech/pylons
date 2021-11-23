@@ -76,13 +76,13 @@ To get a better look at the data structures that comprise a Recipe, check out ou
 
 - The "CookbookID" field is the ID of the cookbook that _contains_ this recipe
 - The "RecipeID" field is the unique identifier for this particular recipe
-- The "Name" and "Description" fields LJAFOIJOIJ
-- The "CoinInputs" field
-- The "ItemInputs" field
-- The "Entries" field
-- The "Outputs" field
-- The "BlockInterval" field
-- The "Enabled" field
+- The "Name" and "Description" fields are the name and escription of the recipe
+- The "CoinInputs" are the fields that detail what coins are required to run the recipe
+- The "ItemInputs" is the field for items which are required to run the recipe
+- The "Entries" field holds a list of the various outputs one could get from the recipe. Items are established with an ID and a set of doubles, longs, and strings to flesh oout the outputs.
+- The "Outputs" field calls the unique IDs of the items in entries list and uses them as outputs after the execution of the recipe.
+- The "BlockInterval" field indicates what block the recipe will execute. For instance, if blockInterval is at 2, the recipe won't execute until the chain has executed 2 blocks.
+- The "Enabled" field is a boolean variable indicating if the recipe is enabled
 
 ### Character creation recipe
 
@@ -476,3 +476,17 @@ Ouputs is where it gets interesting. First we output coins: if you look you can 
 In our output field, we have five options for output. The output is determined by the weight: the higher the weight, the higher the chance of receiving that output. Within our entryIDs we reference which items we want to be outputted by calling the unique IDs.
 
 ### Putting it all together
+
+| Field       | Type        | Description                          |
+| ----------- | ----------- | ------------------------------------ |
+| cookbookID  | string      | the cookbook for your application    |
+| ID          | string      | the unique identifier for the recipe |
+| name        | string      | name of the recipe                   |
+| description | string      | description of the recipe            |
+| version     | string      | version of recipe                    |
+| coinInputs  | EntriesList | coins required to run the recipe     |
+| itemInputs  | EntriesList | items required to run the recipe     |
+| entries     | EntriesList | create the item                      |
+| outputs     | EntriesList | recipe's outputs after execution     |
+| enabled     | boolean     | enabled the recipe for execution     |
+| extraInfo   | string      | additional info                      |
