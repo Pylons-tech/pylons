@@ -1,11 +1,8 @@
 package cli
 
 import (
-	"encoding/json"
-
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
 
 	"github.com/spf13/cast"
@@ -19,9 +16,9 @@ import (
 
 func CmdCreateCookbook() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-cookbook [id] [name] [description] [developer] [version] [support-email] [cost-per-block] [enabled]",
+		Use:   "create-cookbook [id] [name] [description] [developer] [version] [support-email] [enabled]",
 		Short: "create new cookbook",
-		Args:  cobra.ExactArgs(8),
+		Args:  cobra.ExactArgs(7),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			id := args[0]
 			argsName, err := cast.ToStringE(args[1])
@@ -44,13 +41,7 @@ func CmdCreateCookbook() *cobra.Command {
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			argsCostPerBlock := args[6]
-			jsonArgsCostPerBlock := sdk.Coin{}
-			err = json.Unmarshal([]byte(argsCostPerBlock), &jsonArgsCostPerBlock)
-			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-			}
-			argsEnabled, err := cast.ToBoolE(args[7])
+			argsEnabled, err := cast.ToBoolE(args[6])
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
@@ -60,7 +51,7 @@ func CmdCreateCookbook() *cobra.Command {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			msg := types.NewMsgCreateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, jsonArgsCostPerBlock, argsEnabled)
+			msg := types.NewMsgCreateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, argsEnabled)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -77,7 +68,7 @@ func CmdUpdateCookbook() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update-cookbook [id] [name] [description] [developer] [version] [support-email] [cost-per-block] [enabled]",
 		Short: "update cookbook",
-		Args:  cobra.ExactArgs(8),
+		Args:  cobra.ExactArgs(7),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			id := args[0]
 			argsName, err := cast.ToStringE(args[1])
@@ -100,13 +91,7 @@ func CmdUpdateCookbook() *cobra.Command {
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			argsCostPerBlock := args[6]
-			jsonArgsCostPerBlock := sdk.Coin{}
-			err = json.Unmarshal([]byte(argsCostPerBlock), &jsonArgsCostPerBlock)
-			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-			}
-			argsEnabled, err := cast.ToBoolE(args[7])
+			argsEnabled, err := cast.ToBoolE(args[6])
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
@@ -116,7 +101,7 @@ func CmdUpdateCookbook() *cobra.Command {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			msg := types.NewMsgUpdateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, jsonArgsCostPerBlock, argsEnabled)
+			msg := types.NewMsgUpdateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, argsEnabled)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

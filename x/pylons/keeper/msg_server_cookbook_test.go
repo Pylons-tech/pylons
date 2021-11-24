@@ -30,7 +30,6 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerCreate() {
 			Developer:    desc,
 			Version:      "v0.0.1",
 			SupportEmail: "test@email.com",
-			CostPerBlock: sdk.Coin{},
 			Enabled:      false,
 		}
 		_, err := srv.CreateCookbook(wctx, expected)
@@ -69,7 +68,6 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 		Developer:    "",
 		Version:      "v0.0.1",
 		SupportEmail: "test@email.com",
-		CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
 		Enabled:      false,
 	}
 	_, err := srv.CreateCookbook(wctx, expected)
@@ -90,7 +88,6 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 				Developer:    "",
 				Version:      version,
 				SupportEmail: email,
-				CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
 				Enabled:      false,
 			},
 			err: nil,
@@ -105,7 +102,6 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 				Developer:    "",
 				Version:      version,
 				SupportEmail: email,
-				CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
 				Enabled:      false,
 			}, err: sdkerrors.ErrUnauthorized,
 		},
@@ -119,7 +115,6 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 				Developer:    "",
 				Version:      version,
 				SupportEmail: email,
-				CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
 				Enabled:      false,
 			}, err: sdkerrors.ErrKeyNotFound,
 		},

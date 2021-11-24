@@ -25,7 +25,6 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 		Description:  "descdescdescdescdescdesc",
 		Version:      "v0.0.1",
 		SupportEmail: "test@email.com",
-		CostPerBlock: sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.OneInt()},
 		Enabled:      true,
 	}
 	_, err := srv.CreateCookbook(wctx, cookbookMsg)
@@ -38,6 +37,7 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 		Description:   "descdescdescdescdescdesc",
 		Version:       "v0.0.1",
 		BlockInterval: amountToPay.AmountOf(types.PylonsCoinDenom).Int64(),
+		CostPerBlock:  sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.OneInt()},
 		Enabled:       true,
 	}
 	_, err = srv.CreateRecipe(wctx, recipeMsg)

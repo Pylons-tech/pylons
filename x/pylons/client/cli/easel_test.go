@@ -74,7 +74,6 @@ func createEaselCookbook(t *testing.T, simInfo *easelBasicSim) {
 		"Pylons Inc",
 		"v0.0.1",
 		"alex@shmeeload.xyz",
-		"{\"denom\": \"pylons\", \"amount\": \"12\"}",
 		"true",
 	}
 
@@ -129,6 +128,7 @@ func createMintRecipe1(t *testing.T, simInfo *easelBasicSim) {
 		string(entries),
 		string(itemOutputs),
 		"0",
+		"{\"denom\": \"pylons\", \"amount\": \"12\"}",
 		"true",
 		"extraInfo",
 	}
@@ -301,6 +301,7 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 		string(entries),
 		string(itemOutputs),
 		"1",
+		"{\"denom\": \"pylons\", \"amount\": \"12\"}",
 		"true",
 		"",
 	}

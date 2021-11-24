@@ -26,7 +26,6 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 		Developer:    msg.Developer,
 		Version:      msg.Version,
 		SupportEmail: msg.SupportEmail,
-		CostPerBlock: msg.CostPerBlock,
 		Enabled:      msg.Enabled,
 	}
 
@@ -66,7 +65,6 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 		Developer:    msg.Developer,
 		Version:      msg.Version,
 		SupportEmail: msg.SupportEmail,
-		CostPerBlock: msg.CostPerBlock,
 	}
 
 	modified, err := types.CookbookModified(origCookbook, updatedCookbook)

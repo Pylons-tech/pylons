@@ -1,8 +1,9 @@
 # Changelog
 
 ## Unreleased 
-
+ 
 ### State Machine Breaking Changes:
+- [#517](https://github.com/Pylons-tech/pylons/pull/517) Move the `CostPerBlock` field from Cookbook messages to Recipe messages.
 - [#508](https://github.com/Pylons-tech/pylons/pull/508) Remove the `MinNameFieldLength` and `MinDescriptionFieldLength` params from the chain.
 
 ### Fixes: 

@@ -29,7 +29,6 @@ func TestCreateRecipe(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 	fields := []string{
@@ -41,6 +40,7 @@ func TestCreateRecipe(t *testing.T) {
 		"{}",
 		"[]",
 		"1",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}
@@ -102,7 +102,6 @@ func TestUpdateRecipe(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 	fields := []string{
@@ -114,6 +113,7 @@ func TestUpdateRecipe(t *testing.T) {
 		"{}",
 		"[]",
 		"1",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}
@@ -148,6 +148,7 @@ func TestUpdateRecipe(t *testing.T) {
 		"{}",
 		"[]",
 		"1",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}
@@ -162,6 +163,7 @@ func TestUpdateRecipe(t *testing.T) {
 		"{}",
 		"[]",
 		"1",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"false",
 		"extraInfo",
 	}
@@ -176,6 +178,7 @@ func TestUpdateRecipe(t *testing.T) {
 		"{}",
 		"[]",
 		"1",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"false",
 		"extraInfo",
 	}

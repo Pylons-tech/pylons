@@ -143,11 +143,7 @@ func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 			Developer:    "testDeveloper" + strconv.Itoa(i),
 			Version:      "v0.0.1",
 			SupportEmail: "test@email.com",
-			CostPerBlock: sdk.Coin{
-				Denom:  "testDenom" + strconv.Itoa(i),
-				Amount: sdk.OneInt(),
-			},
-			Enabled: false,
+			Enabled:      false,
 		})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
@@ -306,6 +302,7 @@ func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Re
 				Entries:       types.EntriesList{CoinOutputs: []types.CoinOutput{}, ItemOutputs: []types.ItemOutput{}, ItemModifyOutputs: []types.ItemModifyOutput{}},
 				Outputs:       make([]types.WeightedOutputs, 0),
 				BlockInterval: 0x0,
+				CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.OneInt()},
 				Enabled:       false,
 				ExtraInfo:     "",
 			})
