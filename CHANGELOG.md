@@ -10,6 +10,7 @@
 
 ### Fixes:
 
+- [#519](https://github.com/Pylons-tech/pylons/pull/519) Remove potentially panic-ing array access in `x/pylons/keeper/complete_pending_execution.go`.
 - [#509](https://github.com/Pylons-tech/pylons/pull/509) Bump `github.com/opencontainers/image-spec` to v1.0.2 to avoid security issue.
 
 ### Changes:
