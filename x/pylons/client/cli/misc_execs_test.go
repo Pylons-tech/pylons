@@ -216,7 +216,6 @@ func TestSingleItemModifyOutput(t *testing.T) {
 					Value: "weapon",
 				},
 			},
-			Conditions: types.ConditionList{},
 		},
 	})
 	require.NoError(t, err)
