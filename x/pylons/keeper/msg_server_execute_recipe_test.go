@@ -44,7 +44,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe() {
 			Entries:       types.EntriesList{},
 			Outputs:       nil,
 			BlockInterval: 0,
-			CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
+			CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
 			Enabled:       true,
 			ExtraInfo:     "",
 		}

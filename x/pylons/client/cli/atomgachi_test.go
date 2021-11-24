@@ -69,7 +69,7 @@ func createAtomgachiCookbook(t *testing.T, simInfo *atomgachiBasicSim) {
 		"Cookbook for testing demo atomgachi transactions",
 		"Pylons Inc",
 		"v0.0.1",
-		"alex@test.xyz",
+		"alex@shmeeload.xyz",
 		"true",
 	}
 
