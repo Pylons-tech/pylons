@@ -313,15 +313,6 @@ func TestUpdateCookbook(t *testing.T) {
 		"true",
 	}
 
-	invalidCoinAmount := []string{
-		"ModifiedCookbooknameNewNew",
-		"DescriptionDescriptionDescription",
-		"Developer",
-		"v0.0.12",
-		"test@email.com",
-		"true",
-	}
-
 	invalidEnabledField := []string{
 		"ModifiedCookbooknameNewNew",
 		"DescriptionDescriptionDescription",
@@ -408,13 +399,6 @@ func TestUpdateCookbook(t *testing.T) {
 			id:   id,
 			args: append(invalidEmail, common...),
 			err:  sdkerrors.ErrInvalidRequest,
-			code: types.ErrInvalidRequestField.ABCICode(),
-		},
-		{
-			desc: "InvalidCoinAmount",
-			id:   id,
-			args: append(invalidCoinAmount, common...),
-			err:  sdkerrors.ErrInvalidCoins,
 			code: types.ErrInvalidRequestField.ABCICode(),
 		},
 		{
