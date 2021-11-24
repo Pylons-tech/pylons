@@ -28,7 +28,6 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe() {
 			Developer:    "",
 			Version:      "v0.0.1",
 			SupportEmail: "test@email.com",
-			CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
 			Enabled:      true,
 		}
 		_, err := srv.CreateCookbook(wctx, cookbook)

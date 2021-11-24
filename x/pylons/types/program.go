@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
-	"strconv"
 
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/common/types/ref"
@@ -90,55 +89,70 @@ func (ec *CelEnvCollection) EvalString(program string) (string, error) {
 	return fmt.Sprintf("%v", refVal.Value()), nil
 }
 
-// GetWeightInt calculate weight value using program
-func (ol WeightedOutputs) GetWeightInt(ec CelEnvCollection) (int, error) {
-	weightStr := strconv.FormatUint(ol.Weight, 10)
-	refVal, refErr := ec.Eval(weightStr)
-	if refErr != nil {
-		return 0, refErr
+func sample(r float64, cdf []float64) int {
+	bucket := 0
+	for r > cdf[bucket] {
+		bucket++
 	}
-
-	val64, ok := refVal.Value().(int64)
-	if !ok {
-		return 0, errors.New("error converting weight value to int64")
-	}
-	if val64 < 0 {
-		return 0, nil
-	}
-	return int(val64), nil
+	return bucket
 }
 
 // Actualize generate result entries from WeightedOutputsList
-func (wol WeightedOutputsList) Actualize(ec CelEnvCollection) ([]string, error) {
+func (wol WeightedOutputsList) Actualize() ([]string, error) {
 
 	if len(wol) == 0 {
 		return nil, nil
 	}
 
-	lastWeight := 0
-	weights := make([]int, 0, len(wol))
-	for _, wp := range wol {
-		w, err := wp.GetWeightInt(ec)
-		if err != nil {
-			return nil, err
-		}
-		lastWeight += w
-		weights = append(weights, lastWeight)
+	// calculate CDF
+	weightSum := uint64(0)
+	cdf := make([]uint64, len(wol))
+	for i, wp := range wol {
+		weightSum += wp.Weight
+		cdf[i] = weightSum
 	}
 
-	if lastWeight == 0 {
+	if weightSum == 0 {
 		return nil, errors.New("total weight of weighted param list shouldn't be zero")
 	}
-	randWeight := rand.Intn(lastWeight)
 
-	first := 0
-	chosenIndex := -1
-	for i, weight := range weights {
-		if randWeight >= first && randWeight <= weight {
-			chosenIndex = i
-			break
-		}
-		first = weight
+	// [1, 2, 3] / 3
+	normCDF := make([]float64, len(wol))
+	for i, p := range cdf {
+		normCDF[i] = float64(p) / float64(weightSum)
 	}
-	return wol[chosenIndex].EntryIDs, nil
+	// [.33, .66, .99]
+
+	randWeight := rand.Float64()
+	// norm
+
+	// weightSum == 3
+	// options are: 0, 1, 2 which is what we want
+
+	// 10 + 10 + 10 = 30
+	// therefore len(wol) == 3
+	// 30 / 3 = 10
+	// options are: [0, 29] which is fucked
+
+	// 5 + 5 + 20 = 30
+	// therefore len(wol) == 3
+	// 30 / 3 = 10
+
+	// [0, n)
+	// [0, 29] / 10 -> [0 -> 2]
+
+	// we need to translate a range of random numbers into a range of indices based on a probability bucket thingy
+
+	index := sample(randWeight, normCDF)
+
+	//first := 0
+	//chosenIndex := -1
+	//for i, weight := range cdf {
+	//	if randWeight >= first && randWeight < weight {
+	//		chosenIndex = i
+	//		break
+	//	}
+	//	first = weight
+	//}
+	return wol[index].EntryIDs, nil
 }
