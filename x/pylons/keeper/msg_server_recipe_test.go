@@ -46,7 +46,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreate() {
 			Entries:       types.EntriesList{},
 			Outputs:       nil,
 			BlockInterval: 0,
-			CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
+			CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
 			Enabled:       false,
 			ExtraInfo:     "",
 		}
@@ -93,7 +93,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidAlreadyExists
 			Entries:       types.EntriesList{},
 			Outputs:       nil,
 			BlockInterval: 0,
-			CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
+			CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
 			Enabled:       false,
 			ExtraInfo:     "",
 		}
@@ -140,7 +140,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidCookbookNotOw
 			Entries:       types.EntriesList{},
 			Outputs:       nil,
 			BlockInterval: 0,
-			CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
+			CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
 			Enabled:       false,
 			ExtraInfo:     "",
 		}
@@ -216,7 +216,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 		Entries:       types.EntriesList{},
 		Outputs:       nil,
 		BlockInterval: 0,
-		CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
+		CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
 		Enabled:       false,
 		ExtraInfo:     "",
 	}

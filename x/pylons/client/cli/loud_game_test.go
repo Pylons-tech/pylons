@@ -85,7 +85,7 @@ func createLOUDCookbook(t *testing.T, simInfo *loudBasicSim) {
 		"Cookbook for running pylons recreation of LOUD",
 		"Pylons Inc",
 		"v0.0.1",
-		"alex@shmeeload.xyz",
+		"alex@test.xyz",
 		"true",
 	}
 
@@ -444,6 +444,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 			Conditions: types.ConditionList{},
 		},
 	})
+	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: []types.CoinOutput{
