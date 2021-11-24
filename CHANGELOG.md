@@ -9,10 +9,12 @@
 
 ### Fixes:
 
+- [#519](https://github.com/Pylons-tech/pylons/pull/519) Remove potentially panic-ing array access in `x/pylons/keeper/complete_pending_execution.go`.
 - [#509](https://github.com/Pylons-tech/pylons/pull/509) Bump `github.com/opencontainers/image-spec` to v1.0.2 to avoid security issue.
 
 ### Changes:
 
+- [#515](https://github.com/Pylons-tech/pylons/pull/515) Remove the `ConditionList` proto message.
 - [#494](https://github.com/Pylons-tech/pylons/pull/494) Replace usages of deprecated `EmitEvent()` with `EmitTypedEvent()`.
 
 ## [v0.3.1](https://github.com/Pylons-tech/pylons/releases/tag/v0.3.1) - 2021-10-01
