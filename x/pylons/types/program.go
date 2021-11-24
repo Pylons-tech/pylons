@@ -116,43 +116,14 @@ func (wol WeightedOutputsList) Actualize() ([]string, error) {
 		return nil, errors.New("total weight of weighted param list shouldn't be zero")
 	}
 
-	// [1, 2, 3] / 3
+	// normalize CDF
 	normCDF := make([]float64, len(wol))
 	for i, p := range cdf {
 		normCDF[i] = float64(p) / float64(weightSum)
 	}
-	// [.33, .66, .99]
 
 	randWeight := rand.Float64()
-	// norm
-
-	// weightSum == 3
-	// options are: 0, 1, 2 which is what we want
-
-	// 10 + 10 + 10 = 30
-	// therefore len(wol) == 3
-	// 30 / 3 = 10
-	// options are: [0, 29] which is fucked
-
-	// 5 + 5 + 20 = 30
-	// therefore len(wol) == 3
-	// 30 / 3 = 10
-
-	// [0, n)
-	// [0, 29] / 10 -> [0 -> 2]
-
-	// we need to translate a range of random numbers into a range of indices based on a probability bucket thingy
-
 	index := sample(randWeight, normCDF)
 
-	//first := 0
-	//chosenIndex := -1
-	//for i, weight := range cdf {
-	//	if randWeight >= first && randWeight < weight {
-	//		chosenIndex = i
-	//		break
-	//	}
-	//	first = weight
-	//}
 	return wol[index].EntryIDs, nil
 }
