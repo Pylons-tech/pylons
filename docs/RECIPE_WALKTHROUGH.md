@@ -30,10 +30,6 @@ Let's start by creating the following cookbook:
   "developer": "Pylons Inc",
   "version": "v0.0.1",
   "supportEmail": "test@email.xyz",
-  "costPerBlock": {
-    "denom": "upylon",
-    "amount": "1000000"
-  },
   "enabled": true
 }
 ```
@@ -46,8 +42,6 @@ Let's start by creating the following cookbook:
 
 - The "version" is the string form of the cookbook's [semantic version](https://semver.org/). If the cookbook is updated, this version string MUST also be increased.
 
-- The "costPerBlock" field is a Cosmos SDK coin that is used to build the fee for paying to do the `execute-recipe` transaction before the recipe's `blockInterval` is met.
-
 - The "enabled" field is a boolean to enable or disable the cookbook's functionality. If a cookbook is disabled, new recipes cannot be minted from it and existing recipes will no longer be able to be executed.
 
 ### A bit about recipes
@@ -56,20 +50,22 @@ The recipe structure is as follows:
 
 ```golang
 type Recipe struct {
-	CookbookID    string            `protobuf:"bytes,1,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
-	ID            string            `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
-	NodeVersion   uint64            `protobuf:"varint,3,opt,name=nodeVersion,proto3" json:"nodeVersion,omitempty"`
-	Name          string            `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string            `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
-	Version       string            `protobuf:"bytes,6,opt,name=version,proto3" json:"version,omitempty"`
-	CoinInputs    []CoinInput       `protobuf:"bytes,7,rep,name=coinInputs,proto3" json:"coinInputs"`
-	ItemInputs    []ItemInput       `protobuf:"bytes,8,rep,name=itemInputs,proto3" json:"itemInputs"`
-	Entries       EntriesList       `protobuf:"bytes,9,opt,name=entries,proto3" json:"entries"`
-	Outputs       []WeightedOutputs `protobuf:"bytes,10,rep,name=outputs,proto3" json:"outputs"`
-	BlockInterval int64             `protobuf:"varint,11,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
-	Enabled       bool              `protobuf:"varint,12,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	ExtraInfo     string            `protobuf:"bytes,13,opt,name=extraInfo,proto3" json:"extraInfo,omitempty"`
+CookbookID    string            `protobuf:"bytes,1,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
+ID            string            `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
+NodeVersion   uint64            `protobuf:"varint,3,opt,name=nodeVersion,proto3" json:"nodeVersion,omitempty"`
+Name          string            `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+Description   string            `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+Version       string            `protobuf:"bytes,6,opt,name=version,proto3" json:"version,omitempty"`
+CoinInputs    []CoinInput       `protobuf:"bytes,7,rep,name=coinInputs,proto3" json:"coinInputs"`
+ItemInputs    []ItemInput       `protobuf:"bytes,8,rep,name=itemInputs,proto3" json:"itemInputs"`
+Entries       EntriesList       `protobuf:"bytes,9,opt,name=entries,proto3" json:"entries"`
+Outputs       []WeightedOutputs `protobuf:"bytes,10,rep,name=outputs,proto3" json:"outputs"`
+BlockInterval int64             `protobuf:"varint,11,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
+CostPerBlock  types.Coin        `protobuf:"bytes,12,opt,name=costPerBlock,proto3" json:"costPerBlock"`
+Enabled       bool              `protobuf:"varint,13,opt,name=enabled,proto3" json:"enabled,omitempty"`
+ExtraInfo     string            `protobuf:"bytes,14,opt,name=extraInfo,proto3" json:"extraInfo,omitempty"`
 }
+
 ```
 
 To get a better look at the data structures that comprise a Recipe, check out our technical [spec](https://github.com/Pylons-tech/pylons/x/pylons/spec/README.md). For now, let's briefly detail each field.
@@ -82,6 +78,7 @@ To get a better look at the data structures that comprise a Recipe, check out ou
 - The "Entries" field holds a list of the various outputs one could get from the recipe. Items are established with an ID and a set of doubles, longs, and strings to flesh oout the outputs.
 - The "Outputs" field calls the unique IDs of the items in entries list and uses them as outputs after the execution of the recipe.
 - The "BlockInterval" field indicates what block the recipe will execute. For instance, if blockInterval is at 2, the recipe won't execute until the chain has executed 2 blocks.
+- The "CostPerBlock" field is a Cosmos SDK coin that is used to build the fee for paying to do the `execute-recipe` transaction before the recipe's `blockInterval` is met.
 - The "Enabled" field is a boolean variable indicating if the recipe is enabled
 
 ### Character creation recipe
@@ -154,6 +151,11 @@ To get a better look at the data structures that comprise a Recipe, check out ou
       "weight": 1
     }
   ],
+  "blockInterval": 0,
+  "costPerBlock": {
+    "denom": "upylon",
+    "amount": "1000000"
+  },
   "enabled": true,
   "extraInfo": "extraInfo"
 }
@@ -195,6 +197,11 @@ In the outputs field we return the new character by calling the item output ID. 
       "weight": 1
     }
   ],
+  "blockInterval": 0,
+  "costPerBlock": {
+    "denom": "upylon",
+    "amount": "1000000"
+  },
   "enabled": true,
   "extraInfo": "extraInfo"
 }
@@ -266,6 +273,11 @@ This recipe should be even simplier to understand after building a base characte
       "weight": 1
     }
   ],
+  "blockInterval": 0,
+  "costPerBlock": {
+    "denom": "upylon",
+    "amount": "1000000"
+  },
   "enabled": true,
   "extraInfo": "extraInfo"
 }
@@ -474,6 +486,11 @@ Finally we have have our tradePercentage, tradeable, and outputs reflecting what
       "weight": 30
     }
   ],
+  "blockInterval": 0,
+  "costPerBlock": {
+    "denom": "upylon",
+    "amount": "1000000"
+  },
   "enabled": true,
   "extraInfo": "extraInfo"
 }
@@ -487,16 +504,18 @@ In our output field, we have five options for output. The output is determined b
 
 ### Recap
 
-| Field       | Type        | Description                          |
-| ----------- | ----------- | ------------------------------------ |
-| cookbookID  | string      | the cookbook for your application    |
-| ID          | string      | the unique identifier for the recipe |
-| name        | string      | name of the recipe                   |
-| description | string      | description of the recipe            |
-| version     | string      | version of recipe                    |
-| coinInputs  | EntriesList | coins required to run the recipe     |
-| itemInputs  | EntriesList | items required to run the recipe     |
-| entries     | EntriesList | create the item                      |
-| outputs     | EntriesList | recipe's outputs after execution     |
-| enabled     | boolean     | enabled the recipe for execution     |
-| extraInfo   | string      | additional info                      |
+| Field         | Type              | Description                                  |
+| --------------| ----------------- | -------------------------------------------- |
+| cookbookID    | string            | the cookbook for your application            |
+| ID            | string            | the unique identifier for the recipe         |
+| name          | string            | name of the recipe                           |
+| description   | string            | description of the recipe                    |
+| version       | string            | version of recipe                            |
+| coinInputs    | []CoinInput       | coins required to run the recipe             |
+| itemInputs    | []ItemInput       | items required to run the recipe             |
+| entries       | EntriesList       | create the item                              |
+| outputs       | []WeightedOutputs | recipe's outputs after execution             |
+| blockInterval | int64             | block delay until execution is finalized     |
+| costPerBlock  | sdk.Coin          | cost to complete execution early per block   |
+| enabled       | boolean           | enabled the recipe for execution             |
+| extraInfo     | string            | additional info                              |
