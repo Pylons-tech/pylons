@@ -420,7 +420,6 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 					Value: "character",
 				},
 			},
-			Conditions: types.ConditionList{},
 		},
 		{
 			ID: "sword",
@@ -439,7 +438,6 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 				},
 			},
 			Strings:    nil,
-			Conditions: types.ConditionList{},
 		},
 	})
 

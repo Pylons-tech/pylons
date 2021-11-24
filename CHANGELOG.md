@@ -12,6 +12,7 @@
 
 ### Changes:
 
+- [#515](https://github.com/Pylons-tech/pylons/pull/515) Remove the `ConditionList` proto message.
 - [#494](https://github.com/Pylons-tech/pylons/pull/494) Replace usages of deprecated `EmitEvent()` with `EmitTypedEvent()`.
 
 ## [v0.3.1](https://github.com/Pylons-tech/pylons/releases/tag/v0.3.1) - 2021-10-01
