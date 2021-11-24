@@ -44,11 +44,6 @@ func TestCreateTradeNoItemOutput1(t *testing.T) {
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
-			Conditions: types.ConditionList{
-				Doubles: nil,
-				Longs:   nil,
-				Strings: nil,
-			},
 		},
 	})
 	require.NoError(t, err)
@@ -127,11 +122,6 @@ func TestCreateTradeNoItemOutput2(t *testing.T) {
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
-			Conditions: types.ConditionList{
-				Doubles: nil,
-				Longs:   nil,
-				Strings: nil,
-			},
 		},
 	})
 	require.NoError(t, err)
@@ -344,11 +334,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
-			Conditions: types.ConditionList{
-				Doubles: nil,
-				Longs:   nil,
-				Strings: nil,
-			},
+
 		},
 	})
 	require.NoError(t, err)
@@ -578,11 +564,6 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
-			Conditions: types.ConditionList{
-				Doubles: nil,
-				Longs:   nil,
-				Strings: nil,
-			},
 		},
 	})
 	require.NoError(t, err)
@@ -811,11 +792,6 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
-			Conditions: types.ConditionList{
-				Doubles: nil,
-				Longs:   nil,
-				Strings: nil,
-			},
 		},
 	})
 	require.NoError(t, err)
@@ -1044,11 +1020,6 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
-			Conditions: types.ConditionList{
-				Doubles: nil,
-				Longs:   nil,
-				Strings: nil,
-			},
 		},
 	})
 	require.NoError(t, err)
@@ -1276,11 +1247,6 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
-			Conditions: types.ConditionList{
-				Doubles: nil,
-				Longs:   nil,
-				Strings: nil,
-			},
 		},
 	})
 	require.NoError(t, err)
@@ -1364,11 +1330,6 @@ func TestCreateTradeInvalidCoinOutput(t *testing.T) {
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
-			Conditions: types.ConditionList{
-				Doubles: nil,
-				Longs:   nil,
-				Strings: nil,
-			},
 		},
 	})
 	require.NoError(t, err)
@@ -1448,11 +1409,6 @@ func TestCreateTradeInvalidItemOutput(t *testing.T) {
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
-			Conditions: types.ConditionList{
-				Doubles: nil,
-				Longs:   nil,
-				Strings: nil,
-			},
 		},
 	})
 	require.NoError(t, err)
@@ -1532,11 +1488,6 @@ func TestCancelTrade(t *testing.T) {
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
-			Conditions: types.ConditionList{
-				Doubles: nil,
-				Longs:   nil,
-				Strings: nil,
-			},
 		},
 	})
 	require.NoError(t, err)
