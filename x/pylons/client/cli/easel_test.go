@@ -73,7 +73,8 @@ func createEaselCookbook(t *testing.T, simInfo *easelBasicSim) {
 		"Cookbook for testing demo easel transactions",
 		"Pylons Inc",
 		"v0.0.1",
-		"alex@test.xyz",
+		"alex@shmeeload.xyz",
+		"{\"denom\": \"pylons\", \"amount\": \"12\"}",
 		"true",
 	}
 
@@ -116,7 +117,6 @@ func createMintRecipe1(t *testing.T, simInfo *easelBasicSim) {
 			Weight:   1,
 		},
 	})
-	require.NoError(t, err)
 
 	// Get Character Recipe
 	simInfo.mintRecipeID = "EaselMintNFT23418234129"
@@ -129,7 +129,6 @@ func createMintRecipe1(t *testing.T, simInfo *easelBasicSim) {
 		string(entries),
 		string(itemOutputs),
 		"0",
-		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
 		"true",
 		"extraInfo",
 	}
@@ -137,6 +136,7 @@ func createMintRecipe1(t *testing.T, simInfo *easelBasicSim) {
 	// create recipe
 	args := []string{cookbookIDEasel, simInfo.mintRecipeID}
 	args = append(args, mintNFTRecipe...)
+	fmt.Println(args)
 	args = append(args, simInfo.common...)
 	_, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
@@ -301,7 +301,6 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 		string(entries),
 		string(itemOutputs),
 		"1",
-		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
 		"true",
 		"",
 	}
