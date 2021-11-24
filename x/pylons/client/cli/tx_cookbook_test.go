@@ -28,7 +28,6 @@ func TestCreateCookbook(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -38,7 +37,6 @@ func TestCreateCookbook(t *testing.T) {
 		"",
 		"v0.0.2",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -48,7 +46,6 @@ func TestCreateCookbook(t *testing.T) {
 		"Developer",
 		"0.0.1",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -58,7 +55,6 @@ func TestCreateCookbook(t *testing.T) {
 		"Developer",
 		"1",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -68,7 +64,6 @@ func TestCreateCookbook(t *testing.T) {
 		"Developer",
 		"version",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -78,27 +73,6 @@ func TestCreateCookbook(t *testing.T) {
 		"Developer",
 		"v0.0.5",
 		"incorrect email",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
-		"true",
-	}
-
-	emptyCoin := []string{
-		"testCookbookName",
-		"DescriptionDescriptionDescription",
-		"Developer",
-		"v0.0.6",
-		"test@email.com",
-		"{}",
-		"true",
-	}
-
-	invalidCoinAmount := []string{
-		"testCookbookName",
-		"DescriptionDescriptionDescription",
-		"Developer",
-		"v0.0.7",
-		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"-1\"}",
 		"true",
 	}
 
@@ -108,7 +82,6 @@ func TestCreateCookbook(t *testing.T) {
 		"Developer",
 		"v0.0.8",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"incorrect",
 	}
 
@@ -184,22 +157,6 @@ func TestCreateCookbook(t *testing.T) {
 			code:   types.ErrInvalidRequestField.ABCICode(),
 		},
 		{
-			id:     "EmptyCoin",
-			desc:   "EmptyCoin",
-			fields: emptyCoin,
-			args:   common,
-			err:    sdkerrors.ErrInvalidCoins,
-			code:   types.ErrInvalidRequestField.ABCICode(),
-		},
-		{
-			id:     "InvalidCoinAmount",
-			desc:   "InvalidCoinAmount",
-			fields: invalidCoinAmount,
-			args:   common,
-			err:    sdkerrors.ErrInvalidCoins,
-			code:   types.ErrInvalidRequestField.ABCICode(),
-		},
-		{
 			id:     "InvalidEnabledField",
 			desc:   "InvalidEnabledField",
 			fields: invalidEnabledField,
@@ -238,7 +195,6 @@ func TestUpdateCookbook(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 	common := []string{
@@ -264,7 +220,6 @@ func TestUpdateCookbook(t *testing.T) {
 		"Modified",
 		"v0.0.2",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -274,7 +229,6 @@ func TestUpdateCookbook(t *testing.T) {
 		"Developer",
 		"v0.0.3",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"false",
 	}
 
@@ -284,7 +238,6 @@ func TestUpdateCookbook(t *testing.T) {
 		"Developer",
 		"v0.0.4",
 		"newTest@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"false",
 	}
 
@@ -294,7 +247,6 @@ func TestUpdateCookbook(t *testing.T) {
 		"Developer",
 		"v0.0.5",
 		"test@email.com",
-		"{\"denom\": \"snolyp\", \"amount\": \"1\"}",
 		"false",
 	}
 
@@ -304,7 +256,6 @@ func TestUpdateCookbook(t *testing.T) {
 		"Developer",
 		"0.0.5",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"false",
 	}
 
@@ -314,7 +265,6 @@ func TestUpdateCookbook(t *testing.T) {
 		"Developer",
 		"0.0.5",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"false",
 	}
 
@@ -324,7 +274,6 @@ func TestUpdateCookbook(t *testing.T) {
 		"Developer",
 		"v0.0.5",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"false",
 	}
 
@@ -334,7 +283,6 @@ func TestUpdateCookbook(t *testing.T) {
 		"Developer",
 		"0.0.9",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -344,7 +292,6 @@ func TestUpdateCookbook(t *testing.T) {
 		"Developer",
 		"1",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -354,7 +301,6 @@ func TestUpdateCookbook(t *testing.T) {
 		"Developer",
 		"0.0.1",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -364,27 +310,6 @@ func TestUpdateCookbook(t *testing.T) {
 		"Developer",
 		"v0.0.10",
 		"incorrect email",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
-		"true",
-	}
-
-	emptyCoin := []string{
-		"ModifiedCookbooknameNewNew",
-		"DescriptionDescriptionDescription",
-		"Developer",
-		"v0.0.11",
-		"test@email.com",
-		"{}",
-		"true",
-	}
-
-	invalidCoinAmount := []string{
-		"ModifiedCookbooknameNewNew",
-		"DescriptionDescriptionDescription",
-		"Developer",
-		"v0.0.12",
-		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"-1\"}",
 		"true",
 	}
 
@@ -394,7 +319,6 @@ func TestUpdateCookbook(t *testing.T) {
 		"Developer",
 		"v0.0.13",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"incorrect",
 	}
 
@@ -475,20 +399,6 @@ func TestUpdateCookbook(t *testing.T) {
 			id:   id,
 			args: append(invalidEmail, common...),
 			err:  sdkerrors.ErrInvalidRequest,
-			code: types.ErrInvalidRequestField.ABCICode(),
-		},
-		{
-			desc: "EmptyCoin",
-			id:   id,
-			args: append(emptyCoin, common...),
-			err:  sdkerrors.ErrInvalidCoins,
-			code: types.ErrInvalidRequestField.ABCICode(),
-		},
-		{
-			desc: "InvalidCoinAmount",
-			id:   id,
-			args: append(invalidCoinAmount, common...),
-			err:  sdkerrors.ErrInvalidCoins,
 			code: types.ErrInvalidRequestField.ABCICode(),
 		},
 		{

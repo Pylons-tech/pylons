@@ -36,7 +36,6 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 		"testDeveloper",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"node0token\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -73,6 +72,7 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 		"{}",
 		"[]",
 		"100",
+		"{\"denom\": \"node0token\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}

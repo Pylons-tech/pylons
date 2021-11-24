@@ -10,7 +10,7 @@ import (
 var _ sdk.Msg = &MsgCreateRecipe{}
 var _ sdk.Msg = &MsgUpdateRecipe{}
 
-func NewMsgCreateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput []CoinInput, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, enabled bool, extraInfo string) *MsgCreateRecipe {
+func NewMsgCreateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput []CoinInput, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, costPerBlock sdk.Coin, enabled bool, extraInfo string) *MsgCreateRecipe {
 	return &MsgCreateRecipe{
 		Creator:       creator,
 		CookbookID:    cookbookID,
@@ -23,6 +23,7 @@ func NewMsgCreateRecipe(creator string, cookbookID string, id string, name strin
 		Entries:       entries,
 		Outputs:       weightedOutputs,
 		BlockInterval: blockInterval,
+		CostPerBlock:  costPerBlock,
 		Enabled:       enabled,
 		ExtraInfo:     extraInfo,
 	}
@@ -74,6 +75,10 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 
 	if err = ValidateVersion(msg.Version); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if !msg.CostPerBlock.IsValid() {
+		return sdkerrors.ErrInvalidCoins
 	}
 
 	if msg.BlockInterval < 0 {
@@ -158,7 +163,7 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 	return nil
 }
 
-func NewMsgUpdateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput []CoinInput, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, enabled bool, extraInfo string) *MsgUpdateRecipe {
+func NewMsgUpdateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput []CoinInput, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, costPerBlock sdk.Coin, enabled bool, extraInfo string) *MsgUpdateRecipe {
 	return &MsgUpdateRecipe{
 		Creator:       creator,
 		CookbookID:    cookbookID,
@@ -171,6 +176,7 @@ func NewMsgUpdateRecipe(creator string, cookbookID string, id string, name strin
 		Entries:       entries,
 		Outputs:       weightedOutputs,
 		BlockInterval: blockInterval,
+		CostPerBlock:  costPerBlock,
 		Enabled:       enabled,
 		ExtraInfo:     extraInfo,
 	}
@@ -222,6 +228,10 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 
 	if err = ValidateVersion(msg.Version); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if !msg.CostPerBlock.IsValid() {
+		return sdkerrors.ErrInvalidCoins
 	}
 
 	if msg.BlockInterval < 0 {

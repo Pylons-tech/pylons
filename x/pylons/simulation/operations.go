@@ -208,7 +208,6 @@ func SimulateCreateCookbook(bk types.BankKeeper, k keeper.Keeper) simtypes.Opera
 			Developer:    "developer",
 			Version:      "v0.0.1",
 			SupportEmail: email,
-			CostPerBlock: sdk.Coin{},
 			Enabled:      true,
 		}
 		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
@@ -261,6 +260,7 @@ func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operati
 			Entries:       types.EntriesList{},
 			Outputs:       nil,
 			BlockInterval: 0,
+			CostPerBlock:  sdk.Coin{},
 			Enabled:       true,
 			ExtraInfo:     "",
 		}

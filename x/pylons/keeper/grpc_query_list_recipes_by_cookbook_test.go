@@ -37,7 +37,7 @@ func (suite *IntegrationTestSuite) TestListRecipesByCookbook() {
 		err      error
 	}{
 		{
-			desc:     "ByOffset",
+			desc:     "ByLimit",
 			request:  requestFunc(nil, 0, 5, false, cookbooks[0].ID),
 			response: &types.QueryListRecipesByCookbookResponse{Recipes: msgs[:5]},
 		},

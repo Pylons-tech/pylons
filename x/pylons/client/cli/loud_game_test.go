@@ -85,8 +85,7 @@ func createLOUDCookbook(t *testing.T, simInfo *loudBasicSim) {
 		"Cookbook for running pylons recreation of LOUD",
 		"Pylons Inc",
 		"v0.0.1",
-		"alex@shmeeload.xyz",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"alex@test.xyz",
 		"true",
 	}
 
@@ -162,6 +161,7 @@ func createCharacterRecipe(t *testing.T, simInfo *loudBasicSim) {
 		string(entries),
 		string(itemOutputs),
 		"0",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}
@@ -245,6 +245,7 @@ func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 		string(entries),
 		string(outputs),
 		"0",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}
@@ -344,6 +345,7 @@ func createBuyCopperSwordRecipe(t *testing.T, simInfo *loudBasicSim) {
 		string(entries),
 		string(itemOutputs),
 		"0",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}
@@ -440,6 +442,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 			Strings:    nil,
 		},
 	})
+	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: []types.CoinOutput{
@@ -594,6 +597,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 		string(entries),
 		string(outputs),
 		"0",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}
@@ -605,7 +609,6 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 	_, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 
-	var character types.Item
 	// Farm this wolf fight
 	for i := 0; i < 30; i++ {
 		// get sword and character IDs
@@ -650,7 +653,6 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 		charOut, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 		require.NoError(t, err)
 		require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(charOut.Bytes(), &itemResp))
-		character = itemResp.Item
 		if itemResp.Item.Owner != simInfo.net.Validators[0].Address.String() {
 			// PLAYER DIED
 			createCharacter(t, simInfo)
@@ -668,6 +670,4 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 			continue
 		}
 	}
-
-	fmt.Println(character)
 }

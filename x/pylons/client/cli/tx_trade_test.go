@@ -194,7 +194,6 @@ func TestCreateTradeItemOutput(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"node0token\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -256,6 +255,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 		string(entries),
 		string(itemOutputs),
 		"0",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}
@@ -412,7 +412,6 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"node0token\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -486,6 +485,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 		string(entries),
 		string(itemOutputs),
 		"0",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}
@@ -640,7 +640,6 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"node0token\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -714,6 +713,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 		string(entries),
 		string(itemOutputs),
 		"0",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}
@@ -868,7 +868,6 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"node0token\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -942,6 +941,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 		string(entries),
 		string(itemOutputs),
 		"0",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}
@@ -1096,7 +1096,6 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"node0token\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -1169,6 +1168,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 		string(entries),
 		string(itemOutputs),
 		"0",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}

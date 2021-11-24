@@ -15,6 +15,5 @@ message Cookbook {
   string developer = 6; 
   string version = 7; 
   string supportEmail = 8;
-  cosmos.base.v1beta1.Coin costPerBlock = 9 [(gogoproto.nullable) = false];
-  bool enabled = 10;
+  bool enabled = 9;
 }

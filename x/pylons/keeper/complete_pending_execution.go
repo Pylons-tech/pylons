@@ -106,7 +106,6 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 			return nil, nil, nil, err
 		}
 		modifiedItems[idx] = item
-		recipe.Entries.ItemOutputs[idx].AmountMinted++
 	}
 
 	return coins, mintedItems, modifiedItems, nil

@@ -34,7 +34,6 @@ func TestSendItems(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -113,6 +112,7 @@ func TestSendItems(t *testing.T) {
 		string(entries),
 		string(itemOutputs),
 		"0",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}

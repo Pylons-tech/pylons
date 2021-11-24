@@ -44,7 +44,6 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 			Developer:    "",
 			Version:      "v0.0.1",
 			SupportEmail: "test@email.com",
-			CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
 			Enabled:      false,
 		}
 		// setting cookbook required to provide a valid "scope" for items

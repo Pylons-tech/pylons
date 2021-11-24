@@ -60,6 +60,12 @@ func RecipeModified(original, updated Recipe) (bool, error) {
 		modified = true
 	}
 
+	if original.CostPerBlock.Denom != updated.CostPerBlock.Denom {
+		modified = true
+	} else if original.CostPerBlock.IsEqual(updated.CostPerBlock) {
+		modified = true
+	}
+
 	if modified {
 		comp := semver.Compare(original.Version, updated.Version)
 		if comp != -1 {

@@ -12611,21 +12611,6 @@ paths:
                     type: string
                   supportEmail:
                     type: string
-                  costPerBlock:
-                    type: object
-                    properties:
-                      denom:
-                        type: string
-                      amount:
-                        type: string
-                    description: >-
-                      Coin defines a token with a denomination and an amount.
-
-
-                      NOTE: The amount field is an Int which implements the
-                      custom method
-
-                      signatures required by gogoproto.
                   enabled:
                     type: boolean
         default:
@@ -12685,21 +12670,6 @@ paths:
                       type: string
                     supportEmail:
                       type: string
-                    costPerBlock:
-                      type: object
-                      properties:
-                        denom:
-                          type: string
-                        amount:
-                          type: string
-                      description: >-
-                        Coin defines a token with a denomination and an amount.
-
-
-                        NOTE: The amount field is an Int which implements the
-                        custom method
-
-                        signatures required by gogoproto.
                     enabled:
                       type: boolean
               pagination:
@@ -14530,6 +14500,21 @@ paths:
                   blockInterval:
                     type: string
                     format: int64
+                  costPerBlock:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
+
+
+                      NOTE: The amount field is an Int which implements the
+                      custom method
+
+                      signatures required by gogoproto.
                   enabled:
                     type: boolean
                   extraInfo:
@@ -14999,6 +14984,21 @@ paths:
                     blockInterval:
                       type: string
                       format: int64
+                    costPerBlock:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
                     enabled:
                       type: boolean
                     extraInfo:
@@ -23064,18 +23064,6 @@ definitions:
         type: string
       supportEmail:
         type: string
-      costPerBlock:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
-
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
       enabled:
         type: boolean
   Pylonstech.pylons.pylons.DoubleInputParam:
@@ -24183,21 +24171,6 @@ definitions:
             type: string
           supportEmail:
             type: string
-          costPerBlock:
-            type: object
-            properties:
-              denom:
-                type: string
-              amount:
-                type: string
-            description: >-
-              Coin defines a token with a denomination and an amount.
-
-
-              NOTE: The amount field is an Int which implements the custom
-              method
-
-              signatures required by gogoproto.
           enabled:
             type: boolean
   Pylonstech.pylons.pylons.QueryGetExecutionResponse:
@@ -24826,6 +24799,21 @@ definitions:
           blockInterval:
             type: string
             format: int64
+          costPerBlock:
+            type: object
+            properties:
+              denom:
+                type: string
+              amount:
+                type: string
+            description: >-
+              Coin defines a token with a denomination and an amount.
+
+
+              NOTE: The amount field is an Int which implements the custom
+              method
+
+              signatures required by gogoproto.
           enabled:
             type: boolean
           extraInfo:
@@ -25006,21 +24994,6 @@ definitions:
               type: string
             supportEmail:
               type: string
-            costPerBlock:
-              type: object
-              properties:
-                denom:
-                  type: string
-                amount:
-                  type: string
-              description: >-
-                Coin defines a token with a denomination and an amount.
-
-
-                NOTE: The amount field is an Int which implements the custom
-                method
-
-                signatures required by gogoproto.
             enabled:
               type: boolean
       pagination:
@@ -26010,6 +25983,21 @@ definitions:
             blockInterval:
               type: string
               format: int64
+            costPerBlock:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
             enabled:
               type: boolean
             extraInfo:
@@ -26593,6 +26581,18 @@ definitions:
       blockInterval:
         type: string
         format: int64
+      costPerBlock:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
       enabled:
         type: boolean
       extraInfo:

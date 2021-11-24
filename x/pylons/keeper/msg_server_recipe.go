@@ -41,6 +41,7 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 		Outputs:       msg.Outputs,
 		Description:   msg.Description,
 		BlockInterval: msg.BlockInterval,
+		CostPerBlock:  msg.CostPerBlock,
 		Enabled:       msg.Enabled,
 		ExtraInfo:     msg.ExtraInfo,
 	}
@@ -93,6 +94,7 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 		Outputs:       msg.Outputs,
 		Description:   msg.Description,
 		BlockInterval: msg.BlockInterval,
+		CostPerBlock:  msg.CostPerBlock,
 		Enabled:       msg.Enabled,
 		ExtraInfo:     msg.ExtraInfo,
 	}

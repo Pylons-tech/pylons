@@ -37,7 +37,6 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -110,6 +109,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		string(entries),
 		string(itemOutputs),
 		"0",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}
@@ -190,7 +190,6 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -256,6 +255,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 		string(entries),
 		string(itemOutputs),
 		"0",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}
@@ -380,7 +380,6 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -446,6 +445,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 		string(entries),
 		string(itemOutputs),
 		"10", // blockInterval set for a delay so the recipe can be updated
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}
@@ -501,6 +501,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 		string(entries),
 		string(itemOutputs),
 		"10",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 		"new extra info",
 	}
@@ -549,7 +550,6 @@ func TestExecuteDisableRecipe(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -616,6 +616,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 		string(entries),
 		string(itemOutputs),
 		"0", // blockInterval set for a delay so the recipe can be updated
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"false",
 		"extraInfo",
 	}
