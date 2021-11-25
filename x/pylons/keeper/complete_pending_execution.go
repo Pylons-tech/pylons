@@ -126,7 +126,7 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}
 
-	outputs, err := types.WeightedOutputsList(recipe.Outputs).Actualize(celEnv)
+	outputs, err := types.WeightedOutputsList(recipe.Outputs).Actualize()
 	if err != nil {
 		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}

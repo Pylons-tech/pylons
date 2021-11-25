@@ -199,7 +199,6 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	fmt.Println(itemResp.Item)
 
-
 	// create recipe to modify the sword
 
 	coinInputs, err = json.Marshal([]types.CoinInput{

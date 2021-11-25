@@ -85,7 +85,7 @@ func createLOUDCookbook(t *testing.T, simInfo *loudBasicSim) {
 		"Cookbook for running pylons recreation of LOUD",
 		"Pylons Inc",
 		"v0.0.1",
-		"alex@test.xyz",
+		"alex@shmeeload.xyz",
 		"true",
 	}
 
@@ -161,7 +161,7 @@ func createCharacterRecipe(t *testing.T, simInfo *loudBasicSim) {
 		string(entries),
 		string(itemOutputs),
 		"0",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
 		"true",
 		"extraInfo",
 	}
@@ -245,7 +245,7 @@ func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 		string(entries),
 		string(outputs),
 		"0",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
 		"true",
 		"extraInfo",
 	}
@@ -345,7 +345,7 @@ func createBuyCopperSwordRecipe(t *testing.T, simInfo *loudBasicSim) {
 		string(entries),
 		string(itemOutputs),
 		"0",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
 		"true",
 		"extraInfo",
 	}
@@ -439,10 +439,9 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 					MaxValue: 10000000,
 				},
 			},
-			Strings:    nil,
+			Strings: nil,
 		},
 	})
-	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: []types.CoinOutput{
@@ -597,7 +596,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 		string(entries),
 		string(outputs),
 		"0",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
 		"true",
 		"extraInfo",
 	}

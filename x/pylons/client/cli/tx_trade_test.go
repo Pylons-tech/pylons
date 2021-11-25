@@ -334,7 +334,6 @@ func TestCreateTradeItemOutput(t *testing.T) {
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
-
 		},
 	})
 	require.NoError(t, err)
