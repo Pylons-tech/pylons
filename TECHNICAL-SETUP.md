@@ -55,3 +55,13 @@ To install `golangci-lint` into `$GOPATH/bin`, run:
 ```shell
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.41.1
 ```
+
+## Install goimports tool
+
+The `goimports` tool is used int the `make format` command taht is provided to developers.
+
+To install `goimports` using the `go get` command:
+
+```shell
+go get golang.org/x/tools/cmd/goimports
+```
