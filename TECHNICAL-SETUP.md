@@ -30,10 +30,10 @@ Git `pre-commit` hooks run before any commit to the Git repository. These hooks 
     brew install pre-commit
     ```
 
-- Ubuntu and Debian-based Linux Distributions
+- Pip package manager
 
     ```shell
-    sudo apt install pre-commit
+    pip install pre-commit
     ```
 
 ## Install pre-commit in Your Local Pylons Repo
