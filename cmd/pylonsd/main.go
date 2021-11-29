@@ -23,8 +23,8 @@ func main() {
 		// this line is used by starport scaffolding # root/arguments
 	)
 	rootCmd.Short = "Stargate Pylons App"
-	removeLineBreaksInCobraArgs(rootCmd)
 	rootCmd.AddCommand(Completion())
+	removeLineBreaksInCobraArgs(rootCmd)
 	if err := svrcmd.Execute(rootCmd, app.DefaultNodeHome); err != nil {
 		os.Exit(1)
 	}
