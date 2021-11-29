@@ -8,26 +8,26 @@ import (
 
 func Completion() *cobra.Command {
 
-	// completionCmd represents the completion command
+	// completionCmd outputs the completion script
 	c := &cobra.Command{
-		Use:   "completion",
-		Short: "Generate completion script",
-		Long: ` The completion command outputs a completion script you can use in your shell. The output script requires 
+		Use:   "completions",
+		Short: "Generate tab completion scripts",
+		Long: ` The completions command outputs completions scripts you can use in your shell. The output script requires 
 				that [bash-completion](https://github.com/scop/bash-completion)	is installed and enabled in your 
 				system. Since most Unix-like operating systems come with bash-completion by default, bash-completion 
 				is probably already installed and operational.
 
 Bash:
 
-  $ source <(pylons completions bash)
+  $ source <(pylonsd completions bash)
 
   To load completions for every new session, run:
 
   ** Linux **
-  $ pylons completions bash > /etc/bash_completion.d/pylons
+  $ pylonsd completions bash > /etc/bash_completion.d/pylonsd
 
   ** macOS **
-  $ pylons completions bash > /usr/local/etc/bash_completion.d/pylons
+  $ pylonsd completions bash > /usr/local/etc/bash_completion.d/pylonsd
 
 Zsh:
 
@@ -37,32 +37,32 @@ Zsh:
 
   To load completions for each session, execute once:
   
-  $ pylons completions zsh > "${fpath[1]}/_pylons"
+  $ pylonsd completions zsh > "${fpath[1]}/_pylonsd"
 
   You will need to start a new shell for this setup to take effect.
 
 fish:
 
-  $ pylons completions fish | source
+  $ pylonsd completions fish | source
 
   To load completions for each session, execute once:
   
-  $ pylons completions fish > ~/.config/fish/completionss/pylons.fish
+  $ pylonsd completions fish > ~/.config/fish/completionss/pylonsd.fish
 
 PowerShell:
 
-  PS> pylons completions powershell | Out-String | Invoke-Expression
+  PS> pylonsd completions powershell | Out-String | Invoke-Expression
 
   To load completions for every new session, run:
   
-  PS> pylons completions powershell > pylons.ps1
+  PS> pylonsd completions powershell > pylonsd.ps1
   
   and source this file from your PowerShell profile.
 `,
-		DisableFlagsInUseLine: false,
+		DisableFlagsInUseLine: true,
 		ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},
-		Args:                  cobra.ExactValidArgs(1),
-		Run: func(cmd *cobra.Command, args []string) {
+		Args:                  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
 			switch args[0] {
 			case "bash":
 				cmd.Root().GenBashCompletion(os.Stdout)
@@ -73,6 +73,7 @@ PowerShell:
 			case "powershell":
 				cmd.Root().GenPowerShellCompletionWithDesc(os.Stdout)
 			}
+			return nil
 		},
 	}
 	return c
