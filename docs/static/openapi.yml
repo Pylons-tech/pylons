@@ -24360,6 +24360,14 @@ definitions:
       ID:
         type: string
         format: uint64
+  Pylonstech.pylons.pylons.MsgEnlistForArenaResponse:
+    type: object
+    properties:
+      ID:
+        type: string
+        format: uint64
+      Info:
+        type: string
   Pylonstech.pylons.pylons.MsgExecuteRecipeResponse:
     type: object
     properties:

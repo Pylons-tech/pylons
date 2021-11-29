@@ -1,0 +1,16 @@
+syntax = "proto3";
+package Pylonstech.pylons.pylons;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
+
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+
+message Fighter {
+  string creator = 1;
+  uint64 ID = 2;
+  string cookbookID = 3;
+  string LHitem = 4;
+  string RHitem = 5;
+  string Armoritem = 6;
+}

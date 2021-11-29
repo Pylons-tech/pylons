@@ -62,6 +62,12 @@ const (
 	AddrTradeKey = "Address-trade-"
 	// TradeCountKey is a string used as prefix to the KVStore
 	TradeCountKey = "Trade-count-"
+	// FighterKey is a string used as prefix to the KVStore
+	FighterKey = "Fighter-value-"
+	// AddrFighterKey is a string key used as a prefix to the KVStore
+	AddrFighterKey = "Address-fighter-"
+	// FighterCountKey is a string used as prefix to the KVStore
+	FighterCountKey = "Fighter-count-"
 	// UsernameKey is a string used as prefix to the KVStore
 	UsernameKey = "Username-value-"
 	// AccountKey is a string used as prefix to the KVStore

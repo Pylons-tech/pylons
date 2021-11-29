@@ -36,6 +36,7 @@ func GetTxCmd() *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
+	cmd.AddCommand(CmdEnlistForArena())
 	// this line is used by starport scaffolding # 1
 	cmd.AddCommand(CmdBurnDebtToken())
 

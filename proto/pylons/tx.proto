@@ -17,7 +17,8 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 // Msg defines the Msg service.
 service Msg {
-  // this line is used by starport scaffolding # proto/tx/rpc
+    rpc EnlistForArena(MsgEnlistForArena) returns (MsgEnlistForArenaResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
   rpc BurnDebtToken(MsgBurnDebtToken) returns (MsgBurnDebtTokenResponse);
   rpc UpdateAccount(MsgUpdateAccount) returns (MsgUpdateAccountResponse);
   rpc FulfillTrade(MsgFulfillTrade) returns (MsgFulfillTradeResponse);
@@ -34,6 +35,20 @@ service Msg {
   rpc UpdateRecipe(MsgUpdateRecipe) returns (MsgUpdateRecipeResponse);
   rpc CreateCookbook(MsgCreateCookbook) returns (MsgCreateCookbookResponse);
   rpc UpdateCookbook(MsgUpdateCookbook) returns (MsgUpdateCookbookResponse);
+}
+
+message MsgEnlistForArena {
+  string creator = 1;
+  string opponent = 2;
+  string cookbookID = 3;
+  string lHitem = 4;
+  string rHitem = 5;
+  string armoritem = 6;
+}
+
+message MsgEnlistForArenaResponse {
+  uint64 ID = 1;
+  string Info = 2;
 }
 
 // this line is used by starport scaffolding # proto/tx/message
