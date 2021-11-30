@@ -9,6 +9,7 @@ import "pylons/redeem_info.proto";
 import "pylons/payment_info.proto";
 import "pylons/accounts.proto";
 import "pylons/trade.proto";
+import "pylons/fighter.proto";
 import "pylons/google_iap_order.proto";
 import "pylons/execution.proto";
 import "pylons/item.proto";
@@ -22,6 +23,11 @@ service Query {
 	// Queries a list of listTradesByCreator items.
 	rpc ListTradesByCreator(QueryListTradesByCreatorRequest) returns (QueryListTradesByCreatorResponse) {
 		option (google.api.http).get = "/pylons/trades/{creator}";
+	}
+
+// Queries a list of fight items.
+	rpc Fight(QueryFightRequest) returns (QueryFightResponse) {
+		option (google.api.http).get = "/Pylons-tech/pylons/pylons/fight";
 	}
 
 // this line is used by starport scaffolding # 2
@@ -126,6 +132,14 @@ message QueryListTradesByCreatorResponse {
 
 	// pagination defines the pagination in the response.
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryFightRequest {
+	uint64 ID = 1;
+}
+
+message QueryFightResponse {
+	Fighter Fighter = 1 [(gogoproto.nullable) = false];
 }
 
 // this line is used by starport scaffolding # 3
@@ -310,4 +324,3 @@ message QueryGetCookbookRequest {
 message QueryGetCookbookResponse {
 	Cookbook Cookbook = 1 [(gogoproto.nullable) = false];
 }
-

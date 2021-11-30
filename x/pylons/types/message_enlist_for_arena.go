@@ -46,20 +46,20 @@ func (msg *MsgEnlistForArena) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 	/*
-	items := []string{msg.LHitem, msg.RHitem, msg.Armoritem}
+		items := []string{msg.LHitem, msg.RHitem, msg.Armoritem}
 
 
-	for _, itemIDstring := range items {
-		fmt.Println(itemIDstring)
-		err := ValidateItemID(itemIDstring)
-		if err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		for _, itemIDstring := range items {
+			fmt.Println(itemIDstring)
+			err := ValidateItemID(itemIDstring)
+			if err != nil {
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			}
+			err = ValidateID(msg.CookbookID)
+			if err != nil {
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			}
 		}
-		err = ValidateID(msg.CookbookID)
-		if err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-		}
-	}
 	*/
 
 	return nil

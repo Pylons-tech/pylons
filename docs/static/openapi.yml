@@ -12501,6 +12501,62 @@ paths:
                         }
       tags:
         - Query
+  /Pylons-tech/pylons/pylons/fight:
+    get:
+      summary: Queries a list of fight items.
+      operationId: PylonstechPylonsPylonsFight
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Fighter:
+                type: object
+                properties:
+                  creator:
+                    type: string
+                  ID:
+                    type: string
+                    format: uint64
+                  cookbookID:
+                    type: string
+                  LHitem:
+                    type: string
+                  RHitem:
+                    type: string
+                  Armoritem:
+                    type: string
+                  Status:
+                    type: string
+                  Log:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: ID
+          in: query
+          required: false
+          type: string
+          format: uint64
+      tags:
+        - Query
   '/pylons/account/address/{address}':
     get:
       summary: Queries a list of getAccountByAddress items.
@@ -23796,6 +23852,26 @@ definitions:
         type: array
         items:
           type: string
+  Pylonstech.pylons.pylons.Fighter:
+    type: object
+    properties:
+      creator:
+        type: string
+      ID:
+        type: string
+        format: uint64
+      cookbookID:
+        type: string
+      LHitem:
+        type: string
+      RHitem:
+        type: string
+      Armoritem:
+        type: string
+      Status:
+        type: string
+      Log:
+        type: string
   Pylonstech.pylons.pylons.GoogleInAppPurchaseOrder:
     type: object
     properties:
@@ -24492,6 +24568,29 @@ definitions:
                    repeated Bar results = 1;
                    PageResponse page = 2;
            }
+  Pylonstech.pylons.pylons.QueryFightResponse:
+    type: object
+    properties:
+      Fighter:
+        type: object
+        properties:
+          creator:
+            type: string
+          ID:
+            type: string
+            format: uint64
+          cookbookID:
+            type: string
+          LHitem:
+            type: string
+          RHitem:
+            type: string
+          Armoritem:
+            type: string
+          Status:
+            type: string
+          Log:
+            type: string
   Pylonstech.pylons.pylons.QueryGetAddressByUsernameResponse:
     type: object
     properties:

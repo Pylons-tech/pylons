@@ -2,9 +2,9 @@ package keeper
 
 import (
 	"encoding/binary"
-	"strconv"
 	"fmt"
 	"math/rand"
+	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -91,14 +91,14 @@ func (k Keeper) GetFighterOwner(ctx sdk.Context, id uint64) string {
 	return k.GetFighter(ctx, id).Creator
 }
 
-// RemoveTrade removes a trade from the store
+// RemoveFighter removes a fighter from the store
 func (k Keeper) RemoveFighter(ctx sdk.Context, id uint64, creator sdk.AccAddress) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.FighterKey))
 	k.removeFighterFromAddress(ctx, getFighterIDBytes(id), creator)
 	store.Delete(getFighterIDBytes(id))
 }
 
-// GetAllTrade returns all trade
+// GetAllTrade returns all fighters
 func (k Keeper) GetAllFighters(ctx sdk.Context) (list []types.Fighter) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.FighterKey))
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})
@@ -152,35 +152,36 @@ func (k Keeper) GetFightersByCreatorPaginated(ctx sdk.Context, creator sdk.AccAd
 	return fighters, pageRes, nil
 }
 
-func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.Fighter) (result string, err error){
+func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.Fighter) (winner string, log string, err error) {
 
 	type attack struct {
-		damage float64
-		accuracy float64
+		damage     float64
+		accuracy   float64
 		damagetype string
+		weaponName string
 	}
 
 	type combattant struct {
-		attacks []attack
+		attacks    []attack
 		initiative float64
 		sliceArmor float64
 		bluntArmor float64
-		stabArmor float64
-		boltArmor float64
-		hp float64
+		stabArmor  float64
+		boltArmor  float64
+		hp         float64
 	}
 
-	calculateCombatSpecs := func (fighter types.Fighter) (readyFighter combattant, err error) {
+	calculateCombatSpecs := func(fighter types.Fighter) (readyFighter combattant, err error) {
 		items := []string{fighter.LHitem, fighter.RHitem, fighter.Armoritem}
 
 		readyFighter = combattant{
-			attacks: []attack{},
+			attacks:    []attack{},
 			initiative: 0.0,
 			sliceArmor: 0.0,
 			bluntArmor: 0.0,
-			stabArmor: 0.0,
-			boltArmor: 0.0,
-			hp: 20.0,
+			stabArmor:  0.0,
+			boltArmor:  0.0,
+			hp:         20.0,
 		}
 
 		for index, itemIDstring := range items {
@@ -188,73 +189,79 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 
 			// string properties of items are read and saved
 			for _, prop := range item.Strings {
-				if (prop.Key == "oneHanded") {
+				if prop.Key == "oneHanded" {
 					// if the first item is inspected, only add it if it's one handed,
 					// the second item is only added if there is none added yet or if it's one handed
-					if (index == 0 && prop.Value == "true") {
-						readyFighter.attacks = append(readyFighter.attacks, attack{0, 1.0, "undefined"})
-						fmt.Println("1st weapon added")
-					} else if (len(readyFighter.attacks) == 0 || prop.Value == "true" ){
-						readyFighter.attacks = append(readyFighter.attacks, attack{0, 1.0, "undefined"})
-						fmt.Println("2nd weapon added")
+					if index == 0 && prop.Value == "true" {
+						readyFighter.attacks = append(readyFighter.attacks, attack{0, 1.0, "undefined", "undefined"})
+					} else if len(readyFighter.attacks) == 0 || prop.Value == "true" {
+						readyFighter.attacks = append(readyFighter.attacks, attack{0, 1.0, "undefined", "undefined"})
 					}
-				}
-				if (prop.Key == "DamageType") {
-					readyFighter.attacks[index].damagetype = prop.Value
 				}
 
 				fmt.Println(prop.Key, prop.Value)
 			}
+			// second run necessary because attacks just exist now
+			for _, prop := range item.Strings {
+				if prop.Key == "DamageType" {
+					readyFighter.attacks[index].damagetype = prop.Value
+				}
+				// write down the weapon names
+				if prop.Key == "name" && index < 2 {
+					fmt.Println(prop.Key, prop.Value)
+					readyFighter.attacks[index].weaponName = prop.Value
+				}
+			}
 
 			// double properties of items are read and saved
 			for _, prop := range item.Doubles {
-				if (prop.Key == "initiative") {
+				if prop.Key == "initiative" {
 					val, err := prop.Value.Float64()
-					if (err != nil) {
+					if err != nil {
 						return readyFighter, err
 					}
 					readyFighter.initiative += val
-				} else if (prop.Key == "accuracyModifier") {
+				} else if prop.Key == "accuracyModifier" {
 					for i, _ := range readyFighter.attacks {
 						val, err := prop.Value.Float64()
-						if (err != nil) {
+						if err != nil {
 							return readyFighter, err
 						}
 						readyFighter.attacks[i].accuracy *= val
 					}
-				} else if (prop.Key == "sliceDef") {
+				} else if prop.Key == "sliceDef" {
 					val, err := prop.Value.Float64()
-					if (err != nil) {
+					if err != nil {
 						return readyFighter, err
 					}
 					readyFighter.sliceArmor += val
-				} else if (prop.Key == "bluntDef") {
+				} else if prop.Key == "bluntDef" {
 					val, err := prop.Value.Float64()
-					if (err != nil) {
+					if err != nil {
 						return readyFighter, err
 					}
 					readyFighter.bluntArmor += val
-				} else if (prop.Key == "stabDef") {
+				} else if prop.Key == "stabDef" {
 					val, err := prop.Value.Float64()
-					if (err != nil) {
+					if err != nil {
 						return readyFighter, err
 					}
 					readyFighter.stabArmor += val
-				} else if (prop.Key == "boltDef") {
+				} else if prop.Key == "boltDef" {
 					val, err := prop.Value.Float64()
-					if (err != nil) {
+					if err != nil {
 						return readyFighter, err
 					}
 					readyFighter.boltArmor += val
-				} else if (prop.Key == "damage") {
+				} else if prop.Key == "damage" {
 					val, err := prop.Value.Float64()
-					if (err != nil) {
+					if err != nil {
 						return readyFighter, err
 					}
 					readyFighter.attacks[index].damage += val
-				} else if (prop.Key == "accuracy") {
+				} else if prop.Key == "accuracy" {
 					val, err := prop.Value.Float64()
-					if (err != nil) {
+					if err != nil {
 						return readyFighter, err
 					}
 					readyFighter.attacks[index].accuracy *= val
@@ -273,9 +280,11 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 	fmt.Println(combattantA)
 	fmt.Println(combattantB)
 
-	combatRound := func (attacker *combattant, defender *combattant) {
+	combatLog := ""
+
+	combatRound := func(attacker *combattant, defender *combattant) {
 		for _, attack := range attacker.attacks {
-			if (rand.Float64() > attack.accuracy) {
+			if rand.Float64() > attack.accuracy {
 				damageReduction := 0.0
 				if attack.damagetype == "slice" {
 					damageReduction = defender.sliceArmor
@@ -288,9 +297,10 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 				}
 				damage := attack.damage - damageReduction
 				defender.hp -= damage
-				fmt.Println("Strike! remaining hp:", defender.hp)
+
+				combatLog = fmt.Sprintf("%sHits with %s! Opponent HP: %.0f\n", combatLog, attack.weaponName, defender.hp)
 			} else {
-				fmt.Println("FAIL")
+				combatLog = fmt.Sprintf("%sStrikes with %s, EPIC FAIL!\n", combatLog, attack.weaponName)
 			}
 		}
 	}
@@ -298,71 +308,67 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 	// here the actual fight happens
 	round := 0
 
-	if combattantA.attacks[0].damagetype == "slice" {
-		fmt.Println("A has a ranged weapon and shoots!")
+	if combattantA.attacks[0].damagetype == "bolt" {
+		combatLog = fmt.Sprintf("%sA has a ranged weapon and shoots!\n", combatLog)
 		combatRound(&combattantA, &combattantB)
 	}
-	if combattantB.attacks[0].damagetype == "slice" {
-		fmt.Println("B has a ranged weapon and shoots!")
+	if combattantB.attacks[0].damagetype == "bolt" {
+		combatLog = fmt.Sprintf("%sB has a ranged weapon and shoots!\n", combatLog)
 		combatRound(&combattantB, &combattantA)
 	}
 
 	Afirst := true
-	if (combattantA.initiative > combattantA.initiative) {
-		fmt.Println("A has a higher initiative and gets the first strike!")
+	if combattantA.initiative > combattantA.initiative {
+		combatLog = fmt.Sprintf("%sA has a higher initiative and gets the first strike!\n", combatLog)
 	} else if combattantA.initiative < combattantA.initiative {
-		fmt.Println("B has a higher initiative and gets the first strike!")
+		combatLog = fmt.Sprintf("%sB has a higher initiative and gets the first strike!\n", combatLog)
 		Afirst = false
 	} else {
-		if (rand.Int63n(2) == 0 ) {
-			fmt.Println("Both Fighters have the same Initiative, but the stars favor A.")
+		if rand.Int63n(2) == 0 {
+			combatLog = fmt.Sprintf("%sBoth Fighters have the same Initiative, but the stars favor A.\n", combatLog)
 		} else {
-			fmt.Println("Both Fighters have the same Initiative, but the stars favor B.")
+			combatLog = fmt.Sprintf("%sBoth Fighters have the same Initiative, but the stars favor B.\n", combatLog)
 			Afirst = false
 		}
 	}
 
-	checkEnd := func () bool {
+	checkEnd := func() (ended bool, winner string) {
 		if combattantA.hp <= 0 {
-			fmt.Println("B has defeated A and wins!")
-			return true
+			combatLog = fmt.Sprintf("%sB has defeated A and wins!\n", combatLog)
+			return true, "B"
 		} else if combattantB.hp <= 0 {
-			fmt.Println("B has defeated A and wins!")
-			return true
+			combatLog = fmt.Sprintf("%sA has defeated B and wins!\n", combatLog)
+			return true, "A"
 		}
-		return false
+		return false, "none"
 	}
 
 	for combattantA.hp > 0 && combattantB.hp > 0 {
 		round += 1
-		fmt.Println("Round", round, ":")
+		combatLog = fmt.Sprintf("%sRound %d:\n", combatLog, round)
 
 		if Afirst {
-			fmt.Println("A attacks B...")
+			combatLog = fmt.Sprintf("%sA attacks B...\n", combatLog)
 			combatRound(&combattantA, &combattantB)
-			if checkEnd() {
-				return "yes", nil
-			}
-			fmt.Println("B attacks A...")
-			combatRound(&combattantB, &combattantA)
-			if checkEnd() {
-				return "yes", nil
-			}
-		} else {
-			fmt.Println("B attacks A...")
-			combatRound(&combattantB, &combattantA)
-			if checkEnd() {
-				return "yes", nil
-			}
-			fmt.Println("A attacks B...")
-			combatRound(&combattantA, &combattantB)
-			if checkEnd() {
-				return "yes", nil
+			ended, winner := checkEnd()
+			if ended {
+				return winner, combatLog, nil
 			}
 		}
-
+		combatLog = fmt.Sprintf("%sB attacks A...\n", combatLog)
+		combatRound(&combattantB, &combattantA)
+		ended, winner := checkEnd()
+		if ended {
+			return winner, combatLog, nil
+		}
+		if !Afirst {
+			combatLog = fmt.Sprintf("%sA attacks B...\n", combatLog)
+			combatRound(&combattantA, &combattantB)
+			ended, winner := checkEnd()
+			if ended {
+				return winner, combatLog, nil
+			}
+		}
 	}
-
-
-	return "yes", nil
+	return "none", "unusual end of combat", nil
 }
