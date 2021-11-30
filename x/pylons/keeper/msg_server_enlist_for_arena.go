@@ -25,7 +25,7 @@ func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistFor
 	}
 
 	openFights := k.GetAllFighters(ctx)
-	fmt.Println("openFights:", openFights)
+
 
 	var fighter = types.Fighter{
 		Creator:    msg.Creator,
@@ -39,6 +39,7 @@ func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistFor
 
 	// go through all fights and see if there is a worthy opponent
 	for _, opponent := range openFights {
+		fmt.Println("opponent:", opponent)
 		if opponent.CookbookID == msg.CookbookID && opponent.Status == "waiting" /* && opponent.Creator != msg.Creator */ { // currently fighting against self is ok for testing
 			fmt.Println("Fighters matched!", opponent)
 
@@ -60,20 +61,17 @@ func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistFor
 				fighter.Log = battleLog
 			}
 
-
 			k.SetFighter(ctx, opponent)
 			k.SetFighter(ctx, fighter)
 
 			// now that we use the fighter for battle log, it should no longer get removed
 			//opponentAddr, _ := sdk.AccAddressFromBech32(opponent.Creator)
 			//k.RemoveFighter(ctx, uint64(id), opponentAddr)
+			break
 		}
 	}
 
 	id := k.AppendFighter(ctx, fighter)
 
-	return &types.MsgEnlistForArenaResponse{
-		ID:   id,
-		Info: "Bullshit",
-	}, nil
+	return &types.MsgEnlistForArenaResponse{ID: id}, nil
 }

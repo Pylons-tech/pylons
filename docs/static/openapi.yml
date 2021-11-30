@@ -24442,8 +24442,6 @@ definitions:
       ID:
         type: string
         format: uint64
-      Info:
-        type: string
   Pylonstech.pylons.pylons.MsgExecuteRecipeResponse:
     type: object
     properties:

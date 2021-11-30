@@ -48,7 +48,6 @@ message MsgEnlistForArena {
 
 message MsgEnlistForArenaResponse {
   uint64 ID = 1;
-  string Info = 2;
 }
 
 // this line is used by starport scaffolding # proto/tx/message
