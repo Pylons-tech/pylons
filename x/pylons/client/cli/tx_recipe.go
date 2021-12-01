@@ -43,11 +43,16 @@ func CmdCreateRecipe() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			jsonArgsCoinInputs := make([]types.CoinInput, 0)
-			err = json.Unmarshal([]byte(argsCoinInputs), &jsonArgsCoinInputs)
+			jsonArgsCoinInputs := make([]types.CoinInput, 1)
+			coins, err := ParseCoinArguments(argsCoinInputs)
 			if err != nil {
 				return err
 			}
+			jsonArgsCoinInputs[0].Coins = coins
+			if err != nil {
+				return err
+			}
+
 			argsItemInputs, err := cast.ToStringE(args[6])
 			if err != nil {
 				return err

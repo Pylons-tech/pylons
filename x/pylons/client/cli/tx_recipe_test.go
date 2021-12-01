@@ -1,6 +1,7 @@
 package cli_test
 
 import (
+	"errors"
 	"fmt"
 	"testing"
 
@@ -31,19 +32,6 @@ func TestCreateRecipe(t *testing.T) {
 		"test@email.com",
 		"true",
 	}
-	fields := []string{
-		"testRecipeName",
-		"DescriptionDescriptionDescriptionDescription",
-		"v0.0.1",
-		"[]",
-		"[]",
-		"{}",
-		"[]",
-		"1",
-		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
-		"true",
-		"extraInfo",
-	}
 	common := []string{
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
@@ -57,28 +45,62 @@ func TestCreateRecipe(t *testing.T) {
 	require.NoError(t, err)
 
 	for _, tc := range []struct {
-		desc string
-		id1  string
-		id2  string
-		args []string
-		err  error
-		code uint32
+		desc   string
+		id1    string
+		id2    string
+		fields []string
+		args   []string
+		err    error
+		code   uint32
 	}{
 		{
 			id1:  cookbookID,
 			id2:  recipeID,
 			desc: "valid",
+			fields: []string{
+				"testRecipeName",
+				"DescriptionDescriptionDescriptionDescription",
+				"v0.0.1",
+				"10000upylon,10000ustake",
+				"[]",
+				"{}",
+				"[]",
+				"1",
+				"{\"denom\": \"upylon\", \"amount\": \"1\"}",
+				"true",
+				"extraInfo",
+			},
 			args: common,
+		},
+		{
+			id1:  cookbookID,
+			id2:  recipeID,
+			desc: "invalid",
+			fields: []string{
+				"testRecipeNameInvalid",
+				"DescriptionDescriptionDescriptionDescriptionInvalid",
+				"v0.0.1",
+				"10000,10000",
+				"[]",
+				"{}",
+				"[]",
+				"1",
+				"{\"denom\": \"upylon\", \"amount\": \"1\"}",
+				"true",
+				"extraInfo",
+			},
+			args: common,
+			err: errors.New("coin is invalid"),
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			args := []string{cookbookID, recipeID}
-			args = append(args, fields...)
+			args = append(args, tc.fields...)
 			args = append(args, tc.args...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
 			if tc.err != nil {
-				require.ErrorIs(t, err, tc.err)
+				require.EqualError(t, err, "coin is invalid")
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse

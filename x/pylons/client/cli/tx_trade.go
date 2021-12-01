@@ -69,6 +69,7 @@ func CmdCreateTrade() *cobra.Command {
 				return err
 			}
 
+			// TODO ras -> use cosmoscoin
 			msg := types.NewMsgCreateTrade(clientCtx.GetFromAddress().String(), jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsCoinOutput, jsonArgsItemOutputs, argsExtraInfo)
 			if err := msg.ValidateBasic(); err != nil {
 				return err

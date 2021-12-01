@@ -49,6 +49,7 @@ func CmdFulfillTrade() *cobra.Command {
 				return err
 			}
 
+			// TODO ras -> use cosmoscoin
 			msg := types.NewMsgFulfillTrade(clientCtx.GetFromAddress().String(), argsID, argsCoinInputsIndex, jsonArgsItems, jsonArgsPaymentInfo)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
