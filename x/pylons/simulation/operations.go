@@ -29,7 +29,7 @@ const (
 	OpWeightMsgCreateTrade            = "op_weight_msg_create_trade"             // TODO
 	OpWeightMsgCancelTrade            = "op_weight_msg_cancel_trade"             // TODO
 	OpWeightMsgFulfillTrade           = "op_weight_msg_fulfill_trade"            // TODO
-	OpWeightMsgSendItems              = "op_weight_msg_send_items"               // TODO
+	OpWeightMsgSendItems              = "op_weight_msg_send_items"
 	OpWeightMsgSetItemString          = "op_weight_msg_set_item_string"          // TODO
 
 	invalidField = "invalid"
@@ -49,7 +49,7 @@ type pylonsSimState map[string]accountState
 type accountState struct {
 	CookbookIDs []string
 	RecipeIDs   []string
-	ItemIDs     []string
+	ItemRefs     []types.ItemRef
 	TradeIDs    []string
 }
 
@@ -73,6 +73,8 @@ func WeightedOperations(
 	var weightMsgExecuteRecipe int
 	var weightMsgCreateTrade int
 	var weightMsgCancelTrade int
+	var weightMsgSendItems int
+	var weightMsgSetItemString int
 
 	appParams.GetOrGenerate(cdc, OpWeightMsgCreateAcc, &weightMsgCreateAcc, nil,
 		func(_ *rand.Rand) {
@@ -116,6 +118,19 @@ func WeightedOperations(
 		},
 	)
 
+	appParams.GetOrGenerate(cdc, OpWeightMsgSendItems, &weightMsgSendItems, nil,
+		func(_ *rand.Rand) {
+			weightMsgSendItems = 100
+		},
+	)
+
+	appParams.GetOrGenerate(cdc, OpWeightMsgSetItemString, &weightMsgSetItemString, nil,
+		func(_ *rand.Rand) {
+			weightMsgSetItemString = 100
+		},
+	)
+
+
 	return simulation.WeightedOperations{
 		simulation.NewWeightedOperation(
 			weightMsgCreateAcc,
@@ -136,6 +151,22 @@ func WeightedOperations(
 		simulation.NewWeightedOperation(
 			weightMsgExecuteRecipe,
 			SimulateExecuteRecipe(bk, k),
+		),
+		simulation.NewWeightedOperation(
+			weightMsgCreateTrade,
+			SimulateCreateTrade(bk, k),
+		),
+		simulation.NewWeightedOperation(
+			weightMsgCancelTrade,
+			SimulateCancelTrade(bk, k),
+		),
+		simulation.NewWeightedOperation(
+			weightMsgSendItems,
+			SimulateSendItems(bk, k),
+		),
+		simulation.NewWeightedOperation(
+			weightMsgSetItemString,
+			SimulateSetItemString(bk, k),
 		),
 	}
 }
@@ -161,7 +192,7 @@ func SimulateCreateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 			CookbookIDs: make([]string, 0),
 			RecipeIDs:   make([]string, 0),
 			TradeIDs:    make([]string, 0),
-			ItemIDs:     make([]string, 0),
+			ItemRefs:    make([]types.ItemRef, 0),
 		}
 
 		username := generateRandomUsername(r)
@@ -192,7 +223,7 @@ func SimulateUpdateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 
 		username := generateRandomUsername(r)
 
-		msg := types.NewMsgCreateAccount(
+		msg := types.NewMsgUpdateAccount(
 			simAccount.Address.String(),
 			username)
 
@@ -399,6 +430,77 @@ func SimulateCancelTrade(bk types.BankKeeper, k keeper.Keeper) simtypes.Operatio
 		msg := &types.MsgCancelTrade{
 			ID:      id,
 			Creator: simAccount.Address.String(),
+		}
+		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
+	}
+}
+
+// SimulateSendItems generates a MsgSendItems with random values
+func SimulateSendItems(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+	return func(
+		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
+		accs []simtypes.Account, chainID string,
+	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+
+		simAccount, _ := simtypes.RandomAcc(r, accs)
+		toAccount, _ := simtypes.RandomAcc(r, accs)
+		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
+		msgType := (&types.MsgCancelTrade{}).Type()
+
+		if simCoins.Len() <= 0 {
+			return simtypes.NoOpMsg(
+				types.ModuleName, msgType, "Account has no balance"), nil, nil
+		}
+
+		// add cookbook id to global stateMap store
+		items := make([]types.ItemRef, 0)
+		accState := stateMap[simAccount.Address.String()]
+		if len(accState.ItemRefs) > 0 {
+			items = accState.ItemRefs
+		}
+
+		msg := &types.MsgSendItems{
+			Creator:  simAccount.Address.String(),
+			Receiver: toAccount.Address.String(),
+			Items:    items,
+		}
+		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
+	}
+}
+
+// SimulateSetItemString generates a MsgSetItemString with random values
+func SimulateSetItemString(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+	return func(
+		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
+		accs []simtypes.Account, chainID string,
+	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+
+		simAccount, _ := simtypes.RandomAcc(r, accs)
+		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
+		msgType := (&types.MsgCancelTrade{}).Type()
+
+		if simCoins.Len() <= 0 {
+			return simtypes.NoOpMsg(
+				types.ModuleName, msgType, "Account has no balance"), nil, nil
+		}
+
+		// add cookbook id to global stateMap store
+		item := types.ItemRef{
+			CookbookID: "",
+			ItemID: "",
+		}
+		accState := stateMap[simAccount.Address.String()]
+		if len(accState.ItemRefs) > 0 {
+			item = accState.ItemRefs[0]
+		}
+
+		// TODO
+		msg := &types.MsgSetItemString{
+			Creator:    simAccount.Address.String(),
+			CookbookID: item.CookbookID,
+			ID:         item.ItemID,
+			Field:      "test",
+			Value:      "test",
 		}
 		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
 	}
