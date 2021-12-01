@@ -47,7 +47,6 @@ func CmdExecuteRecipe() *cobra.Command {
 				return err
 			}
 
-			// TODO ras -> use cosmoscoin
 			msg := types.NewMsgExecuteRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, argsRecipeID, argsCoinInputsIndex, jsonArgsItemIDs, jsonArgsPaymentInfo)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
