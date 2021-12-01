@@ -40,6 +40,8 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 		Username: msg.Username,
 	})
 
+	telemetry.IncrCounter(1, "account", "create")
+
 	return &types.MsgCreateAccountResponse{}, err
 }
 
@@ -76,6 +78,8 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 		Address:  msg.Creator,
 		Username: msg.Username,
 	})
+
+	telemetry.IncrCounter(1, "account", "update")
 
 	return &types.MsgUpdateAccountResponse{}, err
 }

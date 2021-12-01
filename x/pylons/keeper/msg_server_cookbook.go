@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -38,6 +39,8 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 		Creator: cookbook.Creator,
 		ID:      cookbook.ID,
 	})
+
+	telemetry.IncrCounter(1, "cookbook", "create")
 
 	return &types.MsgCreateCookbookResponse{}, err
 }
@@ -79,6 +82,8 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 	err = ctx.EventManager().EmitTypedEvent(&types.EventUpdateCookbook{
 		OriginalCookbook: origCookbook,
 	})
+
+	telemetry.IncrCounter(1, "cookbook", "update")
 
 	return &types.MsgUpdateCookbookResponse{}, err
 }

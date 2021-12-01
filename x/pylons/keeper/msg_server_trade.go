@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -86,6 +87,8 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		ID:      id,
 	})
 
+	telemetry.IncrCounter(1, "trade", "create")
+
 	return &types.MsgCreateTradeResponse{
 		ID: id,
 	}, err
@@ -123,6 +126,8 @@ func (k msgServer) CancelTrade(goCtx context.Context, msg *types.MsgCancelTrade)
 		Creator: msg.Creator,
 		ID:      msg.ID,
 	})
+
+	telemetry.IncrCounter(1, "trade", "cancel")
 
 	return &types.MsgCancelTradeResponse{}, err
 }
