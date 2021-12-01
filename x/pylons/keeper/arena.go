@@ -186,9 +186,15 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 
 		for index, itemIDstring := range items {
 			item, _ := k.GetItem(ctx, fighter.CookbookID, itemIDstring)
+			shield := false
 
 			// string properties of items are read and saved
 			for _, prop := range item.Strings {
+				if prop.Key == "ItemType" {
+					if prop.Value == "shield" {
+						shield = true
+					}
+				}
 				if prop.Key == "oneHanded" {
 					// if the first item is inspected, only add it if it's one handed,
 					// the second item is only added if there is none added yet or if it's one handed
@@ -207,7 +213,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 					readyFighter.attacks[index].damagetype = prop.Value
 				}
 				// write down the weapon names
-				if prop.Key == "name" && index < 2 {
+				if prop.Key == "name" && index < 2 && !shield {
 					fmt.Println(prop.Key, prop.Value)
 					readyFighter.attacks[index].weaponName = prop.Value
 				}
