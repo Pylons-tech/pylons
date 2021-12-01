@@ -28,6 +28,17 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 	username := types.Username{Value: msg.Username}
 	accountAddr := types.AccountAddr{Value: msg.Creator}
 
+	b := k.cdc.MustMarshal(&username)
+	fee := types.CalculateTxSizeFee(b, types.DefaultSizeLimitBytes, types.DefaultFeePerBytes)
+	if fee > 0 {
+		// charge fee
+		coins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(fee))))
+		err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, addr, types.FeeCollectorName, coins)
+		if err != nil {
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInsufficientFunds, "unable to pay sizeOver fee of %d%s", fee, types.PylonsCoinDenom)
+		}
+	}
+
 	found := k.HasUsername(ctx, username) || k.HasAccountAddr(ctx, accountAddr)
 	if found {
 		return nil, types.ErrDuplicateUsername
@@ -59,6 +70,17 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 
 	username := types.Username{Value: msg.Username}
 	accountAddr := types.AccountAddr{Value: msg.Creator}
+
+	b := k.cdc.MustMarshal(&username)
+	fee := types.CalculateTxSizeFee(b, types.DefaultSizeLimitBytes, types.DefaultFeePerBytes)
+	if fee > 0 {
+		// charge fee
+		coins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(fee))))
+		err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, addr, types.FeeCollectorName, coins)
+		if err != nil {
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInsufficientFunds, "unable to pay sizeOver fee of %d%s", fee, types.PylonsCoinDenom)
+		}
+	}
 
 	found := k.HasUsername(ctx, username)
 	if found {

@@ -18,7 +18,7 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "ID %v already set", msg.ID)
 	}
 
-	var cookbook = types.Cookbook{
+	cookbook := types.Cookbook{
 		ID:           msg.ID,
 		Creator:      msg.Creator,
 		NodeVersion:  k.EngineVersion(ctx),
@@ -28,6 +28,18 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 		Version:      msg.Version,
 		SupportEmail: msg.SupportEmail,
 		Enabled:      msg.Enabled,
+	}
+
+	b := k.cdc.MustMarshal(&cookbook)
+	addr, _ := sdk.AccAddressFromBech32(cookbook.Creator)
+	fee := types.CalculateTxSizeFee(b, types.DefaultSizeLimitBytes, types.DefaultFeePerBytes)
+	if fee > 0 {
+		// charge fee
+		coins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(fee))))
+		err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, addr, types.FeeCollectorName, coins)
+		if err != nil {
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInsufficientFunds, "unable to pay sizeOver fee of %d%s", fee, types.PylonsCoinDenom)
+		}
 	}
 
 	k.SetCookbook(
@@ -59,7 +71,7 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
-	var updatedCookbook = types.Cookbook{
+	updatedCookbook := types.Cookbook{
 		ID:           msg.ID,
 		Creator:      msg.Creator,
 		NodeVersion:  k.EngineVersion(ctx),
@@ -68,6 +80,18 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 		Developer:    msg.Developer,
 		Version:      msg.Version,
 		SupportEmail: msg.SupportEmail,
+	}
+
+	b := k.cdc.MustMarshal(&updatedCookbook)
+	addr, _ := sdk.AccAddressFromBech32(updatedCookbook.Creator)
+	fee := types.CalculateTxSizeFee(b, types.DefaultSizeLimitBytes, types.DefaultFeePerBytes)
+	if fee > 0 {
+		// charge fee
+		coins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(fee))))
+		err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, addr, types.FeeCollectorName, coins)
+		if err != nil {
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInsufficientFunds, "unable to pay sizeOver fee of %d%s", fee, types.PylonsCoinDenom)
+		}
 	}
 
 	modified, err := types.CookbookModified(origCookbook, updatedCookbook)
