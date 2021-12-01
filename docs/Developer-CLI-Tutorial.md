@@ -272,19 +272,18 @@ A Pylons cookbook is an application container for recipes. The JSON format of a 
   "description": "Cookbook for running pylons recreation of LOUD",
   "developer": "Pylons Inc",
   "version": "v0.3.1",
-  "supportEmail": "lyric@gmail.com",
-  "costPerBlock": {"denom":  "upylon", "amount":  "1000000"},
+  "supportEmail": "lyric@gmail.com",  
   "enabled": true
 }
 ```
 
 To create a cookbook you run the following command:
 
- `pylonsd tx pylons create-cookbook [id] [name] [description] [developer] [version] [support-email] [cost-per-block] [enabled] [flags]`
+ `pylonsd tx pylons create-cookbook [id] [name] [description] [developer] [version] [support-email] [enabled] [flags]`
  
  This is shown below:
-```
- pylonsd tx pylons create-cookbook "loud123456" "Legend of the Undead Dragon" "Cookbook for running pylons recreation of LOUD" "Pylons Inc" v0.3.1 lyri@gmail.com "{\"denom\":  \"upylon\", \"amount\":  \"1000000\"}" true --from Jack
+``` 
+ pylonsd tx pylons create-cookbook "loud123456" "Legend of the Undead Dragon" "Cookbook for running pylons recreation of LOUD" "Pylons Inc" v0.3.1 lyri@gmail.com true --from Jack 
 ```
 On clicking enter you get the below and need to enter 'y' to confirm transaction before signing and broadcasting.
 ```
