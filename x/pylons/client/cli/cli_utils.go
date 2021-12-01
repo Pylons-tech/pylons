@@ -7,8 +7,8 @@ import (
 	"github.com/tendermint/starport/starport/pkg/cosmoscoin"
 )
 
-// ParseCoinArguments parses a cli argument of the format "10000000utoken,10000000ustake" and
-// returns a slice of type sdk.Coin
+// ParseCoinArguments parses a coin input argument of the format "10000000utoken,10000000ustake" (comma separated values)
+// and returns a slice of type sdk.Coin
 func ParseCoinArguments(args string) ([]sdk.Coin, error) {
 	coins := make([]sdk.Coin, 0)
 	for _, coin := range strings.Split(args, ",") {
