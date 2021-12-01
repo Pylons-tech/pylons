@@ -71,5 +71,10 @@ func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistFor
 
 	id := k.AppendFighter(ctx, fighter)
 
-	return &types.MsgEnlistForArenaResponse{ID: id}, nil
+	err := ctx.EventManager().EmitTypedEvent(&types.EventCreateFighter{
+		ID: id,
+		Creator: msg.Creator,
+	})
+
+	return &types.MsgEnlistForArenaResponse{ID: id}, err
 }
