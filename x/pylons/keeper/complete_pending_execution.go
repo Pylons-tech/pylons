@@ -5,9 +5,9 @@ import (
 
 	"github.com/rogpeppe/go-internal/semver"
 
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
+	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
@@ -220,6 +220,9 @@ coinLoop:
 		MintItems:     mintItems,
 		ModifyItems:   modifyItems,
 	}
+
+	telemetry.IncrCounter(1, "execution", "cookbookID", pendingExecution.CookbookID, "recipeID", pendingExecution.RecipeID)
+	telemetry.IncrCounter(1, "execution", "total")
 
 	return pendingExecution, event, true, nil
 }

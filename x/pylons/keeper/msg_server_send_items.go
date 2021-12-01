@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -98,6 +99,8 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 		Receiver: msg.Receiver,
 		Items:    msg.Items,
 	})
+
+	telemetry.IncrCounter(float32(len(msg.Items)), "send_items", "send")
 
 	return &types.MsgSendItemsResponse{}, err
 }
