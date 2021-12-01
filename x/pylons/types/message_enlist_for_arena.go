@@ -8,10 +8,10 @@ import (
 
 var _ sdk.Msg = &MsgEnlistForArena{}
 
-func NewMsgEnlistForArena(creator string, opponent string, cookbookID string, lHitem string, rHitem string, armoritem string) *MsgEnlistForArena {
+func NewMsgEnlistForArena(creator string, nft string, cookbookID string, lHitem string, rHitem string, armoritem string) *MsgEnlistForArena {
 	return &MsgEnlistForArena{
 		Creator:    creator,
-		Opponent:   opponent,
+		Nft:   			nft,
 		CookbookID: cookbookID,
 		LHitem:     lHitem,
 		RHitem:     rHitem,

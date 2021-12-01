@@ -12527,6 +12527,8 @@ paths:
                     type: string
                   Armoritem:
                     type: string
+                  NFT:
+                    type: string
                   Status:
                     type: string
                   Log:
@@ -23577,6 +23579,8 @@ definitions:
         type: string
       Armoritem:
         type: string
+      NFT:
+        type: string
       Status:
         type: string
       Log:
@@ -24240,6 +24244,8 @@ definitions:
           RHitem:
             type: string
           Armoritem:
+            type: string
+          NFT:
             type: string
           Status:
             type: string

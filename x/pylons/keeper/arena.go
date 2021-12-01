@@ -163,7 +163,10 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 
 	type combattant struct {
 		attacks    []attack
+		name			 string
 		initiative float64
+		armorName  string
+		shieldName string
 		sliceArmor float64
 		bluntArmor float64
 		stabArmor  float64
@@ -171,11 +174,14 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 		hp         float64
 	}
 
+	// first we go through all items and calculate all data that is necessary for a nice bout
 	calculateCombatSpecs := func(fighter types.Fighter) (readyFighter combattant, err error) {
-		items := []string{fighter.LHitem, fighter.RHitem, fighter.Armoritem}
+		items := []string{fighter.LHitem, fighter.RHitem, fighter.Armoritem, fighter.NFT}
 
 		readyFighter = combattant{
 			attacks:    []attack{},
+			name:				"no name yet",
+			shieldName: "",
 			initiative: 0.0,
 			sliceArmor: 0.0,
 			bluntArmor: 0.0,
@@ -184,15 +190,28 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 			hp:         20.0,
 		}
 
+		// go through all items that are relevant for combat
 		for index, itemIDstring := range items {
 			item, _ := k.GetItem(ctx, fighter.CookbookID, itemIDstring)
 			shield := false
+			nft := false
+			armor := false
 
 			// string properties of items are read and saved
 			for _, prop := range item.Strings {
 				if prop.Key == "ItemType" {
 					if prop.Value == "shield" {
 						shield = true
+					}
+				}
+				if prop.Key == "ItemType" {
+					if prop.Value == "nft" {
+						nft = true
+					}
+				}
+				if prop.Key == "ItemType" {
+					if prop.Value == "armor" {
+						armor = true
 					}
 				}
 				if prop.Key == "oneHanded" {
@@ -205,7 +224,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 					}
 				}
 
-				fmt.Println(prop.Key, prop.Value)
+				//fmt.Println(prop.Key, prop.Value)
 			}
 			// second run necessary because attacks just exist now
 			for _, prop := range item.Strings {
@@ -213,9 +232,14 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 					readyFighter.attacks[index].damagetype = prop.Value
 				}
 				// write down the weapon names
-				if prop.Key == "name" && index < 2 && !shield {
-					fmt.Println(prop.Key, prop.Value)
+				if prop.Key == "name" && index < 2 && !shield && !nft && !armor{
 					readyFighter.attacks[index].weaponName = prop.Value
+				} else if prop.Key == "name" && nft {
+					readyFighter.name = prop.Value
+				} else if prop.Key == "name" && armor {
+					readyFighter.armorName = prop.Value
+				} else if prop.Key == "name" && shield {
+					readyFighter.shieldName = prop.Value
 				}
 			}
 
@@ -273,9 +297,9 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 					readyFighter.attacks[index].accuracy *= val
 				}
 
-				fmt.Println(prop.Key, prop.Value)
+				//fmt.Println(prop.Key, prop.Value)
 			}
-			fmt.Println("--------")
+			//fmt.Println("--------")
 		}
 		return readyFighter, nil
 	}
@@ -283,11 +307,32 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 	combattantA, err := calculateCombatSpecs(FighterA)
 	combattantB, err := calculateCombatSpecs(FighterB)
 
-	fmt.Println(combattantA)
-	fmt.Println(combattantB)
+	// here this print should be removed it is for debugging
+	//fmt.Println("Fighter A:",combattantA)
+	//fmt.Println("Fighter B:",combattantB)
 
-	combatLog := ""
+	combatLog := "EPIC BATTLE BEGINS\n"
 
+	openerText := func (fighter combattant) string {
+		weaponsString := ""
+		shieldString := ""
+		if len(fighter.shieldName) > 0 {
+			shieldString = fmt.Sprintf("%swears a %s, ", weaponsString, fighter.shieldName)
+		}
+		for i, attack := range fighter.attacks {
+
+			if i > 0 {
+				weaponsString = fmt.Sprintf("%s and", weaponsString)
+			}
+			weaponsString = fmt.Sprintf("%s%s ", weaponsString, attack.weaponName)
+		}
+		return fmt.Sprintf("%s %spulls out %sand equips %s\n", fighter.name, shieldString, weaponsString, fighter.armorName)
+	}
+
+	combatLog = fmt.Sprintf("%s%s", combatLog, openerText(combattantA))
+	combatLog = fmt.Sprintf("%s%s", combatLog, openerText(combattantB))
+
+	// here is defined how one round in a combat from one attacker works (so a full round needs to run this 2 times)
 	combatRound := func(attacker *combattant, defender *combattant) {
 		for _, attack := range attacker.attacks {
 			if rand.Float64() > attack.accuracy {
@@ -304,71 +349,98 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 				damage := attack.damage - damageReduction
 				defender.hp -= damage
 
-				combatLog = fmt.Sprintf("%sHits with %s! Opponent HP: %.0f\n", combatLog, attack.weaponName, defender.hp)
+				combatLog = fmt.Sprintf("%sHits with %s! %s's HP: %.0f\n", combatLog, attack.weaponName, defender.name, defender.hp)
 			} else {
 				combatLog = fmt.Sprintf("%sStrikes with %s, EPIC FAIL!\n", combatLog, attack.weaponName)
 			}
 		}
 	}
 
-	// here the actual fight happens
-	round := 0
-
+	// first if there are ranged weapons these are fired first!
 	if combattantA.attacks[0].damagetype == "bolt" {
-		combatLog = fmt.Sprintf("%sA has a ranged weapon and shoots!\n", combatLog)
+		combatLog = fmt.Sprintf("%s%s has a ranged weapon and shoots!\n", combatLog, combattantA.name)
 		combatRound(&combattantA, &combattantB)
 	}
 	if combattantB.attacks[0].damagetype == "bolt" {
-		combatLog = fmt.Sprintf("%sB has a ranged weapon and shoots!\n", combatLog)
+		combatLog = fmt.Sprintf("%s%s has a ranged weapon and shoots!\n", combatLog, combattantB.name)
 		combatRound(&combattantB, &combattantA)
 	}
 
+	// from initiative we calculate how gets the first strike attempt each round
 	Afirst := true
 	if combattantA.initiative > combattantA.initiative {
-		combatLog = fmt.Sprintf("%sA has a higher initiative and gets the first strike!\n", combatLog)
+		combatLog = fmt.Sprintf("%s%s has a higher initiative and gets the first strike!\n", combatLog, combattantA.name)
 	} else if combattantA.initiative < combattantA.initiative {
-		combatLog = fmt.Sprintf("%sB has a higher initiative and gets the first strike!\n", combatLog)
+		combatLog = fmt.Sprintf("%s%s has a higher initiative and gets the first strike!\n", combatLog, combattantB.name)
 		Afirst = false
 	} else {
 		if rand.Int63n(2) == 0 {
-			combatLog = fmt.Sprintf("%sBoth Fighters have the same Initiative, but the stars favor A.\n", combatLog)
+			combatLog = fmt.Sprintf("%sBoth Fighters have the same Initiative, but the stars favor %s.\n", combatLog, combattantA.name)
 		} else {
-			combatLog = fmt.Sprintf("%sBoth Fighters have the same Initiative, but the stars favor B.\n", combatLog)
+			combatLog = fmt.Sprintf("%sBoth Fighters have the same Initiative, but the stars favor %s.\n", combatLog, combattantB.name)
 			Afirst = false
 		}
 	}
 
+	// this function checks if the combat has ended because someone died
 	checkEnd := func() (ended bool, winner string) {
+
+		// this increments wins and losses in the nfts according to outcome
+		updateNFT := func (NFT string, winner bool) {
+			keyString := ""
+			if winner {
+				keyString = "wins"
+			} else {
+				keyString = "losses"
+			}
+			updatedNFT, _ := k.GetItem(ctx, FighterA.CookbookID, NFT)
+			for i, prop := range updatedNFT.Doubles {
+				if prop.Key == keyString {
+					updatedNFT.Doubles[i].Value = prop.Value.Add(sdk.OneDec())
+				}
+			}
+			k.SetItem(ctx, updatedNFT)
+		}
+
 		if combattantA.hp <= 0 {
-			combatLog = fmt.Sprintf("%sB has defeated A and wins!\n", combatLog)
+			combatLog = fmt.Sprintf("%s%s has defeated %s and wins!\n", combatLog, combattantB.name, combattantA.name)
+
+			updateNFT(FighterA.NFT, false)
+			updateNFT(FighterB.NFT, true)
+
 			return true, "B"
 		} else if combattantB.hp <= 0 {
-			combatLog = fmt.Sprintf("%sA has defeated B and wins!\n", combatLog)
+			combatLog = fmt.Sprintf("%s%s has defeated %s and wins!\n", combatLog, combattantA.name, combattantB.name)
+
+			updateNFT(FighterA.NFT, true)
+			updateNFT(FighterB.NFT, false)
+
 			return true, "A"
 		}
 		return false, "none"
 	}
 
-	for combattantA.hp > 0 && combattantB.hp > 0 {
-		round += 1
+	// here the actual fight happens
+	// we limit the number of rounds to 1000 to prevent infinite loops, usually there should never be more than 30 rounds
+	for round := 1; round < 1000; round++ {
 		combatLog = fmt.Sprintf("%sRound %d:\n", combatLog, round)
 
 		if Afirst {
-			combatLog = fmt.Sprintf("%sA attacks B...\n", combatLog)
+			combatLog = fmt.Sprintf("%s%s attacks %s...\n", combatLog, combattantA.name, combattantB.name)
 			combatRound(&combattantA, &combattantB)
 			ended, winner := checkEnd()
 			if ended {
 				return winner, combatLog, nil
 			}
 		}
-		combatLog = fmt.Sprintf("%sB attacks A...\n", combatLog)
+		combatLog = fmt.Sprintf("%s%s attacks %s...\n", combatLog, combattantB.name, combattantA.name)
 		combatRound(&combattantB, &combattantA)
 		ended, winner := checkEnd()
 		if ended {
 			return winner, combatLog, nil
 		}
 		if !Afirst {
-			combatLog = fmt.Sprintf("%sA attacks B...\n", combatLog)
+			combatLog = fmt.Sprintf("%s%s attacks %s...\n", combatLog, combattantA.name, combattantB.name)
 			combatRound(&combattantA, &combattantB)
 			ended, winner := checkEnd()
 			if ended {

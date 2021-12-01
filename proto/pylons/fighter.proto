@@ -13,6 +13,7 @@ message Fighter {
   string LHitem = 4;
   string RHitem = 5;
   string Armoritem = 6;
-  string Status = 7;
-  string Log = 8;
+  string NFT = 7;
+  string Status = 8;
+  string Log = 9;
 }

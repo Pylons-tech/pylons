@@ -39,7 +39,7 @@ service Msg {
 
 message MsgEnlistForArena {
   string creator = 1;
-  string opponent = 2;
+  string nft = 2;
   string cookbookID = 3;
   string lHitem = 4;
   string rHitem = 5;

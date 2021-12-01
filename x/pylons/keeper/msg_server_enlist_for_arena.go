@@ -2,7 +2,7 @@ package keeper
 
 import (
 	"context"
-	"fmt"
+	//"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -12,7 +12,7 @@ import (
 func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistForArena) (*types.MsgEnlistForArenaResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	items := []string{msg.LHitem, msg.RHitem, msg.Armoritem}
+	items := []string{msg.LHitem, msg.RHitem, msg.Armoritem, msg.Nft}
 	// check that each item provided for battle is owned by the combattants
 	for _, itemIDstring := range items {
 		item, found := k.GetItem(ctx, msg.CookbookID, itemIDstring)
@@ -33,22 +33,20 @@ func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistFor
 		LHitem:     msg.LHitem,
 		RHitem:     msg.RHitem,
 		Armoritem:  msg.Armoritem,
+		NFT:				msg.Nft,
 		Status: 		"waiting",
 		Log:				"",
 	}
 
 	// go through all fights and see if there is a worthy opponent
 	for _, opponent := range openFights {
-		fmt.Println("opponent:", opponent)
-		if opponent.CookbookID == msg.CookbookID && opponent.Status == "waiting" /* && opponent.Creator != msg.Creator */ { // currently fighting against self is ok for testing
-			fmt.Println("Fighters matched!", opponent)
 
+		if opponent.CookbookID == msg.CookbookID && opponent.Status == "waiting" /* && opponent.Creator != msg.Creator */ { // currently fighting against self is ok for testing
 
 			battleWinner, battleLog, err := k.Battle(ctx, fighter, opponent)
 			if err != nil {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "battle ended with error %v", err.Error)
 			}
-			fmt.Println("winner", battleWinner)
 			if battleWinner == "A" {
 				opponent.Status = "loss"
 				opponent.Log = battleLog
