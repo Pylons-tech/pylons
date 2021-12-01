@@ -85,8 +85,11 @@ func CmdCreateRecipe() *cobra.Command {
 				return err
 			}
 			argsCostPerBlock := args[10]
-			jsonArgsCostPerBlock := sdk.Coin{}
-			err = json.Unmarshal([]byte(argsCostPerBlock), &jsonArgsCostPerBlock)
+			cArr, err := ParseCoinArguments(argsCostPerBlock)
+			if err != nil {
+				return err
+			}
+			jsonArgsCostPerBlock := cArr[0]
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
