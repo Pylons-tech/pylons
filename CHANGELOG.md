@@ -18,6 +18,7 @@
 - [#494](https://github.com/Pylons-tech/pylons/pull/494) Replace usages of deprecated `EmitEvent()` with `EmitTypedEvent()`.
 
 ### Features:
+- [#523](https://github.com/Pylons-tech/pylons/pull/523) Change the coin-inputs and cost per block arg format to support "1000000token" like coin inputs.  
 - [#521](https://github.com/Pylons-tech/pylons/pull/521) Added bash completion support
 
 ## [v0.3.1](https://github.com/Pylons-tech/pylons/releases/tag/v0.3.1) - 2021-10-01
