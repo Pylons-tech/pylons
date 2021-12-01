@@ -32,20 +32,12 @@ message StringInputParam {
   string value = 2;
 }
 
-// ConditionList is a struct for describing ItemInput expression conditions
-message ConditionList {
-  repeated DoubleInputParam doubles = 1[(gogoproto.nullable) = false];
-  repeated LongInputParam longs = 2[(gogoproto.nullable) = false];
-  repeated StringInputParam strings = 3[(gogoproto.nullable) = false];
-}
-
 // ItemInput is a struct for describing an input item
 message ItemInput  {
   string ID = 1;
   repeated DoubleInputParam doubles = 2 [(gogoproto.nullable) = false];
   repeated LongInputParam longs = 3 [(gogoproto.nullable) = false];
   repeated StringInputParam strings = 4[(gogoproto.nullable) = false];
-  ConditionList conditions = 5 [(gogoproto.nullable) = false];
 }
 
 // DoubleWeightRange describes weight range that produce double value
@@ -157,7 +149,8 @@ message Recipe {
   EntriesList entries = 9 [(gogoproto.nullable) = false];
   repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
   int64 blockInterval = 11;
-  bool enabled = 12;
-  string extraInfo = 13;
+  cosmos.base.v1beta1.Coin costPerBlock = 12 [(gogoproto.nullable) = false];
+  bool enabled = 13;
+  string extraInfo = 14;
 }
 

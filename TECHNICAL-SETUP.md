@@ -30,10 +30,10 @@ Git `pre-commit` hooks run before any commit to the Git repository. These hooks 
     brew install pre-commit
     ```
 
-- Ubuntu and Debian-based Linux Distributions
+- Pip package manager
 
     ```shell
-    sudo apt install pre-commit
+    pip install pre-commit
     ```
 
 ## Install pre-commit in Your Local Pylons Repo
@@ -54,4 +54,14 @@ To install `golangci-lint` into `$GOPATH/bin`, run:
 
 ```shell
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.41.1
+```
+
+## Install goimports tool
+
+The `goimports` tool is used int the `make format` command taht is provided to developers.
+
+To install `goimports` using the `go get` command:
+
+```shell
+go get golang.org/x/tools/cmd/goimports
 ```

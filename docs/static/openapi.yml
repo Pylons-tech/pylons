@@ -12667,21 +12667,6 @@ paths:
                     type: string
                   supportEmail:
                     type: string
-                  costPerBlock:
-                    type: object
-                    properties:
-                      denom:
-                        type: string
-                      amount:
-                        type: string
-                    description: >-
-                      Coin defines a token with a denomination and an amount.
-
-
-                      NOTE: The amount field is an Int which implements the
-                      custom method
-
-                      signatures required by gogoproto.
                   enabled:
                     type: boolean
         default:
@@ -12741,21 +12726,6 @@ paths:
                       type: string
                     supportEmail:
                       type: string
-                    costPerBlock:
-                      type: object
-                      properties:
-                        denom:
-                          type: string
-                        amount:
-                          type: string
-                      description: >-
-                        Coin defines a token with a denomination and an amount.
-
-
-                        NOTE: The amount field is an Int which implements the
-                        custom method
-
-                        signatures required by gogoproto.
                     enabled:
                       type: boolean
               pagination:
@@ -14259,59 +14229,6 @@ paths:
                             title: >-
                               StringInputParam describes the bounds on an item
                               input/output parameter of type string
-                        conditions:
-                          type: object
-                          properties:
-                            doubles:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  key:
-                                    type: string
-                                  minValue:
-                                    type: string
-                                    description: The minimum legal value of this parameter.
-                                  maxValue:
-                                    type: string
-                                    description: The maximum legal value of this parameter.
-                                title: >-
-                                  DoubleInputParam describes the bounds on an
-                                  item input/output parameter of type float64
-                            longs:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  key:
-                                    type: string
-                                  minValue:
-                                    type: string
-                                    format: int64
-                                    description: The minimum legal value of this parameter.
-                                  maxValue:
-                                    type: string
-                                    format: int64
-                                    description: The maximum legal value of this parameter.
-                                title: >-
-                                  LongInputParam describes the bounds on an item
-                                  input/output parameter of type int64
-                            strings:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  key:
-                                    type: string
-                                  value:
-                                    type: string
-                                    title: The value of the parameter
-                                title: >-
-                                  StringInputParam describes the bounds on an
-                                  item input/output parameter of type string
-                          title: >-
-                            ConditionList is a struct for describing ItemInput
-                            expression conditions
                       title: ItemInput is a struct for describing an input item
                   entries:
                     type: object
@@ -14639,6 +14556,21 @@ paths:
                   blockInterval:
                     type: string
                     format: int64
+                  costPerBlock:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
+
+
+                      NOTE: The amount field is an Int which implements the
+                      custom method
+
+                      signatures required by gogoproto.
                   enabled:
                     type: boolean
                   extraInfo:
@@ -14777,67 +14709,6 @@ paths:
                               title: >-
                                 StringInputParam describes the bounds on an item
                                 input/output parameter of type string
-                          conditions:
-                            type: object
-                            properties:
-                              doubles:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    key:
-                                      type: string
-                                    minValue:
-                                      type: string
-                                      description: >-
-                                        The minimum legal value of this
-                                        parameter.
-                                    maxValue:
-                                      type: string
-                                      description: >-
-                                        The maximum legal value of this
-                                        parameter.
-                                  title: >-
-                                    DoubleInputParam describes the bounds on an
-                                    item input/output parameter of type float64
-                              longs:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    key:
-                                      type: string
-                                    minValue:
-                                      type: string
-                                      format: int64
-                                      description: >-
-                                        The minimum legal value of this
-                                        parameter.
-                                    maxValue:
-                                      type: string
-                                      format: int64
-                                      description: >-
-                                        The maximum legal value of this
-                                        parameter.
-                                  title: >-
-                                    LongInputParam describes the bounds on an
-                                    item input/output parameter of type int64
-                              strings:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    key:
-                                      type: string
-                                    value:
-                                      type: string
-                                      title: The value of the parameter
-                                  title: >-
-                                    StringInputParam describes the bounds on an
-                                    item input/output parameter of type string
-                            title: >-
-                              ConditionList is a struct for describing ItemInput
-                              expression conditions
                         title: ItemInput is a struct for describing an input item
                     entries:
                       type: object
@@ -15169,6 +15040,21 @@ paths:
                     blockInterval:
                       type: string
                       format: int64
+                    costPerBlock:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
                     enabled:
                       type: boolean
                     extraInfo:
@@ -15547,59 +15433,6 @@ paths:
                             title: >-
                               StringInputParam describes the bounds on an item
                               input/output parameter of type string
-                        conditions:
-                          type: object
-                          properties:
-                            doubles:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  key:
-                                    type: string
-                                  minValue:
-                                    type: string
-                                    description: The minimum legal value of this parameter.
-                                  maxValue:
-                                    type: string
-                                    description: The maximum legal value of this parameter.
-                                title: >-
-                                  DoubleInputParam describes the bounds on an
-                                  item input/output parameter of type float64
-                            longs:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  key:
-                                    type: string
-                                  minValue:
-                                    type: string
-                                    format: int64
-                                    description: The minimum legal value of this parameter.
-                                  maxValue:
-                                    type: string
-                                    format: int64
-                                    description: The maximum legal value of this parameter.
-                                title: >-
-                                  LongInputParam describes the bounds on an item
-                                  input/output parameter of type int64
-                            strings:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  key:
-                                    type: string
-                                  value:
-                                    type: string
-                                    title: The value of the parameter
-                                title: >-
-                                  StringInputParam describes the bounds on an
-                                  item input/output parameter of type string
-                          title: >-
-                            ConditionList is a struct for describing ItemInput
-                            expression conditions
                       title: ItemInput is a struct for describing an input item
                   coinOutputs:
                     type: array
@@ -15763,67 +15596,6 @@ paths:
                               title: >-
                                 StringInputParam describes the bounds on an item
                                 input/output parameter of type string
-                          conditions:
-                            type: object
-                            properties:
-                              doubles:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    key:
-                                      type: string
-                                    minValue:
-                                      type: string
-                                      description: >-
-                                        The minimum legal value of this
-                                        parameter.
-                                    maxValue:
-                                      type: string
-                                      description: >-
-                                        The maximum legal value of this
-                                        parameter.
-                                  title: >-
-                                    DoubleInputParam describes the bounds on an
-                                    item input/output parameter of type float64
-                              longs:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    key:
-                                      type: string
-                                    minValue:
-                                      type: string
-                                      format: int64
-                                      description: >-
-                                        The minimum legal value of this
-                                        parameter.
-                                    maxValue:
-                                      type: string
-                                      format: int64
-                                      description: >-
-                                        The maximum legal value of this
-                                        parameter.
-                                  title: >-
-                                    LongInputParam describes the bounds on an
-                                    item input/output parameter of type int64
-                              strings:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    key:
-                                      type: string
-                                    value:
-                                      type: string
-                                      title: The value of the parameter
-                                  title: >-
-                                    StringInputParam describes the bounds on an
-                                    item input/output parameter of type string
-                            title: >-
-                              ConditionList is a struct for describing ItemInput
-                              expression conditions
                         title: ItemInput is a struct for describing an input item
                     coinOutputs:
                       type: array
@@ -23328,57 +23100,6 @@ definitions:
     title: >-
       CoinOutput models the continuum of valid outcomes for coin generation in
       recipes
-  Pylonstech.pylons.pylons.ConditionList:
-    type: object
-    properties:
-      doubles:
-        type: array
-        items:
-          type: object
-          properties:
-            key:
-              type: string
-            minValue:
-              type: string
-              description: The minimum legal value of this parameter.
-            maxValue:
-              type: string
-              description: The maximum legal value of this parameter.
-          title: >-
-            DoubleInputParam describes the bounds on an item input/output
-            parameter of type float64
-      longs:
-        type: array
-        items:
-          type: object
-          properties:
-            key:
-              type: string
-            minValue:
-              type: string
-              format: int64
-              description: The minimum legal value of this parameter.
-            maxValue:
-              type: string
-              format: int64
-              description: The maximum legal value of this parameter.
-          title: >-
-            LongInputParam describes the bounds on an item input/output
-            parameter of type int64
-      strings:
-        type: array
-        items:
-          type: object
-          properties:
-            key:
-              type: string
-            value:
-              type: string
-              title: The value of the parameter
-          title: >-
-            StringInputParam describes the bounds on an item input/output
-            parameter of type string
-    title: ConditionList is a struct for describing ItemInput expression conditions
   Pylonstech.pylons.pylons.Cookbook:
     type: object
     properties:
@@ -23399,18 +23120,6 @@ definitions:
         type: string
       supportEmail:
         type: string
-      costPerBlock:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
-
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
       enabled:
         type: boolean
   Pylonstech.pylons.pylons.DoubleInputParam:
@@ -24027,59 +23736,6 @@ definitions:
           title: >-
             StringInputParam describes the bounds on an item input/output
             parameter of type string
-      conditions:
-        type: object
-        properties:
-          doubles:
-            type: array
-            items:
-              type: object
-              properties:
-                key:
-                  type: string
-                minValue:
-                  type: string
-                  description: The minimum legal value of this parameter.
-                maxValue:
-                  type: string
-                  description: The maximum legal value of this parameter.
-              title: >-
-                DoubleInputParam describes the bounds on an item input/output
-                parameter of type float64
-          longs:
-            type: array
-            items:
-              type: object
-              properties:
-                key:
-                  type: string
-                minValue:
-                  type: string
-                  format: int64
-                  description: The minimum legal value of this parameter.
-                maxValue:
-                  type: string
-                  format: int64
-                  description: The maximum legal value of this parameter.
-              title: >-
-                LongInputParam describes the bounds on an item input/output
-                parameter of type int64
-          strings:
-            type: array
-            items:
-              type: object
-              properties:
-                key:
-                  type: string
-                value:
-                  type: string
-                  title: The value of the parameter
-              title: >-
-                StringInputParam describes the bounds on an item input/output
-                parameter of type string
-        title: >-
-          ConditionList is a struct for describing ItemInput expression
-          conditions
     title: ItemInput is a struct for describing an input item
   Pylonstech.pylons.pylons.ItemModifyOutput:
     type: object
@@ -24620,21 +24276,6 @@ definitions:
             type: string
           supportEmail:
             type: string
-          costPerBlock:
-            type: object
-            properties:
-              denom:
-                type: string
-              amount:
-                type: string
-            description: >-
-              Coin defines a token with a denomination and an amount.
-
-
-              NOTE: The amount field is an Int which implements the custom
-              method
-
-              signatures required by gogoproto.
           enabled:
             type: boolean
   Pylonstech.pylons.pylons.QueryGetExecutionResponse:
@@ -24953,59 +24594,6 @@ definitions:
                     title: >-
                       StringInputParam describes the bounds on an item
                       input/output parameter of type string
-                conditions:
-                  type: object
-                  properties:
-                    doubles:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          key:
-                            type: string
-                          minValue:
-                            type: string
-                            description: The minimum legal value of this parameter.
-                          maxValue:
-                            type: string
-                            description: The maximum legal value of this parameter.
-                        title: >-
-                          DoubleInputParam describes the bounds on an item
-                          input/output parameter of type float64
-                    longs:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          key:
-                            type: string
-                          minValue:
-                            type: string
-                            format: int64
-                            description: The minimum legal value of this parameter.
-                          maxValue:
-                            type: string
-                            format: int64
-                            description: The maximum legal value of this parameter.
-                        title: >-
-                          LongInputParam describes the bounds on an item
-                          input/output parameter of type int64
-                    strings:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          key:
-                            type: string
-                          value:
-                            type: string
-                            title: The value of the parameter
-                        title: >-
-                          StringInputParam describes the bounds on an item
-                          input/output parameter of type string
-                  title: >-
-                    ConditionList is a struct for describing ItemInput
-                    expression conditions
               title: ItemInput is a struct for describing an input item
           entries:
             type: object
@@ -25316,6 +24904,21 @@ definitions:
           blockInterval:
             type: string
             format: int64
+          costPerBlock:
+            type: object
+            properties:
+              denom:
+                type: string
+              amount:
+                type: string
+            description: >-
+              Coin defines a token with a denomination and an amount.
+
+
+              NOTE: The amount field is an Int which implements the custom
+              method
+
+              signatures required by gogoproto.
           enabled:
             type: boolean
           extraInfo:
@@ -25423,59 +25026,6 @@ definitions:
                     title: >-
                       StringInputParam describes the bounds on an item
                       input/output parameter of type string
-                conditions:
-                  type: object
-                  properties:
-                    doubles:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          key:
-                            type: string
-                          minValue:
-                            type: string
-                            description: The minimum legal value of this parameter.
-                          maxValue:
-                            type: string
-                            description: The maximum legal value of this parameter.
-                        title: >-
-                          DoubleInputParam describes the bounds on an item
-                          input/output parameter of type float64
-                    longs:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          key:
-                            type: string
-                          minValue:
-                            type: string
-                            format: int64
-                            description: The minimum legal value of this parameter.
-                          maxValue:
-                            type: string
-                            format: int64
-                            description: The maximum legal value of this parameter.
-                        title: >-
-                          LongInputParam describes the bounds on an item
-                          input/output parameter of type int64
-                    strings:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          key:
-                            type: string
-                          value:
-                            type: string
-                            title: The value of the parameter
-                        title: >-
-                          StringInputParam describes the bounds on an item
-                          input/output parameter of type string
-                  title: >-
-                    ConditionList is a struct for describing ItemInput
-                    expression conditions
               title: ItemInput is a struct for describing an input item
           coinOutputs:
             type: array
@@ -25549,21 +25099,6 @@ definitions:
               type: string
             supportEmail:
               type: string
-            costPerBlock:
-              type: object
-              properties:
-                denom:
-                  type: string
-                amount:
-                  type: string
-              description: >-
-                Coin defines a token with a denomination and an amount.
-
-
-                NOTE: The amount field is an Int which implements the custom
-                method
-
-                signatures required by gogoproto.
             enabled:
               type: boolean
       pagination:
@@ -26230,59 +25765,6 @@ definitions:
                       title: >-
                         StringInputParam describes the bounds on an item
                         input/output parameter of type string
-                  conditions:
-                    type: object
-                    properties:
-                      doubles:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            key:
-                              type: string
-                            minValue:
-                              type: string
-                              description: The minimum legal value of this parameter.
-                            maxValue:
-                              type: string
-                              description: The maximum legal value of this parameter.
-                          title: >-
-                            DoubleInputParam describes the bounds on an item
-                            input/output parameter of type float64
-                      longs:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            key:
-                              type: string
-                            minValue:
-                              type: string
-                              format: int64
-                              description: The minimum legal value of this parameter.
-                            maxValue:
-                              type: string
-                              format: int64
-                              description: The maximum legal value of this parameter.
-                          title: >-
-                            LongInputParam describes the bounds on an item
-                            input/output parameter of type int64
-                      strings:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            key:
-                              type: string
-                            value:
-                              type: string
-                              title: The value of the parameter
-                          title: >-
-                            StringInputParam describes the bounds on an item
-                            input/output parameter of type string
-                    title: >-
-                      ConditionList is a struct for describing ItemInput
-                      expression conditions
                 title: ItemInput is a struct for describing an input item
             entries:
               type: object
@@ -26606,6 +26088,21 @@ definitions:
             blockInterval:
               type: string
               format: int64
+            costPerBlock:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
             enabled:
               type: boolean
             extraInfo:
@@ -26724,59 +26221,6 @@ definitions:
                       title: >-
                         StringInputParam describes the bounds on an item
                         input/output parameter of type string
-                  conditions:
-                    type: object
-                    properties:
-                      doubles:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            key:
-                              type: string
-                            minValue:
-                              type: string
-                              description: The minimum legal value of this parameter.
-                            maxValue:
-                              type: string
-                              description: The maximum legal value of this parameter.
-                          title: >-
-                            DoubleInputParam describes the bounds on an item
-                            input/output parameter of type float64
-                      longs:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            key:
-                              type: string
-                            minValue:
-                              type: string
-                              format: int64
-                              description: The minimum legal value of this parameter.
-                            maxValue:
-                              type: string
-                              format: int64
-                              description: The maximum legal value of this parameter.
-                          title: >-
-                            LongInputParam describes the bounds on an item
-                            input/output parameter of type int64
-                      strings:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            key:
-                              type: string
-                            value:
-                              type: string
-                              title: The value of the parameter
-                          title: >-
-                            StringInputParam describes the bounds on an item
-                            input/output parameter of type string
-                    title: >-
-                      ConditionList is a struct for describing ItemInput
-                      expression conditions
                 title: ItemInput is a struct for describing an input item
             coinOutputs:
               type: array
@@ -26934,59 +26378,6 @@ definitions:
                 title: >-
                   StringInputParam describes the bounds on an item input/output
                   parameter of type string
-            conditions:
-              type: object
-              properties:
-                doubles:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      key:
-                        type: string
-                      minValue:
-                        type: string
-                        description: The minimum legal value of this parameter.
-                      maxValue:
-                        type: string
-                        description: The maximum legal value of this parameter.
-                    title: >-
-                      DoubleInputParam describes the bounds on an item
-                      input/output parameter of type float64
-                longs:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      key:
-                        type: string
-                      minValue:
-                        type: string
-                        format: int64
-                        description: The minimum legal value of this parameter.
-                      maxValue:
-                        type: string
-                        format: int64
-                        description: The maximum legal value of this parameter.
-                    title: >-
-                      LongInputParam describes the bounds on an item
-                      input/output parameter of type int64
-                strings:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      key:
-                        type: string
-                      value:
-                        type: string
-                        title: The value of the parameter
-                    title: >-
-                      StringInputParam describes the bounds on an item
-                      input/output parameter of type string
-              title: >-
-                ConditionList is a struct for describing ItemInput expression
-                conditions
           title: ItemInput is a struct for describing an input item
       entries:
         type: object
@@ -27295,6 +26686,18 @@ definitions:
       blockInterval:
         type: string
         format: int64
+      costPerBlock:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
+
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
       enabled:
         type: boolean
       extraInfo:
@@ -27426,59 +26829,6 @@ definitions:
                 title: >-
                   StringInputParam describes the bounds on an item input/output
                   parameter of type string
-            conditions:
-              type: object
-              properties:
-                doubles:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      key:
-                        type: string
-                      minValue:
-                        type: string
-                        description: The minimum legal value of this parameter.
-                      maxValue:
-                        type: string
-                        description: The maximum legal value of this parameter.
-                    title: >-
-                      DoubleInputParam describes the bounds on an item
-                      input/output parameter of type float64
-                longs:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      key:
-                        type: string
-                      minValue:
-                        type: string
-                        format: int64
-                        description: The minimum legal value of this parameter.
-                      maxValue:
-                        type: string
-                        format: int64
-                        description: The maximum legal value of this parameter.
-                    title: >-
-                      LongInputParam describes the bounds on an item
-                      input/output parameter of type int64
-                strings:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      key:
-                        type: string
-                      value:
-                        type: string
-                        title: The value of the parameter
-                    title: >-
-                      StringInputParam describes the bounds on an item
-                      input/output parameter of type string
-              title: >-
-                ConditionList is a struct for describing ItemInput expression
-                conditions
           title: ItemInput is a struct for describing an input item
       coinOutputs:
         type: array

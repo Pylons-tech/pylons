@@ -7,7 +7,7 @@ import (
 
 var _ sdk.Msg = &MsgCreateCookbook{}
 
-func NewMsgCreateCookbook(creator string, id string, name string, description string, developer string, version string, supportEmail string, costPerBlock sdk.Coin, enabled bool) *MsgCreateCookbook {
+func NewMsgCreateCookbook(creator string, id string, name string, description string, developer string, version string, supportEmail string, enabled bool) *MsgCreateCookbook {
 	return &MsgCreateCookbook{
 		Creator:      creator,
 		ID:           id,
@@ -16,7 +16,6 @@ func NewMsgCreateCookbook(creator string, id string, name string, description st
 		Developer:    developer,
 		Version:      version,
 		SupportEmail: supportEmail,
-		CostPerBlock: costPerBlock,
 		Enabled:      enabled,
 	}
 }
@@ -68,16 +67,12 @@ func (msg *MsgCreateCookbook) ValidateBasic() error {
 	if err = ValidateVersion(msg.Version); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
-
-	if !msg.CostPerBlock.IsValid() {
-		return sdkerrors.ErrInvalidCoins
-	}
 	return nil
 }
 
 var _ sdk.Msg = &MsgUpdateCookbook{}
 
-func NewMsgUpdateCookbook(creator string, id string, name string, description string, developer string, version string, supportEmail string, costPerBlock sdk.Coin, enabled bool) *MsgUpdateCookbook {
+func NewMsgUpdateCookbook(creator string, id string, name string, description string, developer string, version string, supportEmail string, enabled bool) *MsgUpdateCookbook {
 	return &MsgUpdateCookbook{
 		Creator:      creator,
 		ID:           id,
@@ -86,7 +81,6 @@ func NewMsgUpdateCookbook(creator string, id string, name string, description st
 		Developer:    developer,
 		Version:      version,
 		SupportEmail: supportEmail,
-		CostPerBlock: costPerBlock,
 		Enabled:      enabled,
 	}
 }
@@ -137,10 +131,6 @@ func (msg *MsgUpdateCookbook) ValidateBasic() error {
 
 	if err = ValidateVersion(msg.Version); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	if !msg.CostPerBlock.IsValid() {
-		return sdkerrors.ErrInvalidCoins
 	}
 
 	return nil

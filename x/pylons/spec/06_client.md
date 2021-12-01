@@ -132,7 +132,7 @@ The `tx` commands allow users to interact with the `pylons` module.
 #### create-cookbook
 
 ```bash
-  pylonsd tx pylons create-cookbook [id] [name] [description] [developer] [version] [support-email] [cost-per-block] [enabled] [flags]
+  pylonsd tx pylons create-cookbook [id] [name] [description] [developer] [version] [support-email] [enabled] [flags]
 ```
 
 #### transfer-cookbook
@@ -150,7 +150,7 @@ The `tx` commands allow users to interact with the `pylons` module.
 #### create-recipe
 
 ```bash
-  pylonsd tx pylons create-recipe [cookbook-id] [id] [name] [description] [version] [coin-inputs] [item-inputs] [entries] [outputs] [block-interval] [enabled] [extra-info] [flags]
+  pylonsd tx pylons update-recipe [cookbook-id] [id] [name] [description] [version] [coinInputs] [itemInputs] [entries] [outputs] [blockInterval] [cost-per-block] [enabled] [extraInfo] [flags]
 ```
 
 #### update-recipe

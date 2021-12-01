@@ -70,7 +70,6 @@ func createAtomgachiCookbook(t *testing.T, simInfo *atomgachiBasicSim) {
 		"Pylons Inc",
 		"v0.0.1",
 		"alex@shmeeload.xyz",
-		"{\"denom\": \"pylons\", \"amount\": \"12\"}",
 		"true",
 	}
 
@@ -123,6 +122,7 @@ func createMintRecipe(t *testing.T, simInfo *atomgachiBasicSim) {
 		string(entries),
 		string(itemOutputs),
 		"0",
+		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
 		"true",
 		"extraInfo",
 	}

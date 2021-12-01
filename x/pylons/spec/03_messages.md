@@ -80,8 +80,7 @@ message MsgCreateCookbook {
   string developer = 5;
   string version = 6;
   string supportEmail = 7;
-  cosmos.base.v1beta1.Coin costPerBlock = 8 [(gogoproto.nullable) = false];
-  bool enabled = 9;
+  bool enabled = 8;
 }
 ```
 
@@ -97,7 +96,6 @@ When updating a `Cookbook` the following fields may be modified:
 - `developer`
 - `version`
 - `supportEmail`
-- `costPerBlock`
 - `enabled`
 
 following the established regular expression rule restrictions.
@@ -113,8 +111,7 @@ message MsgUpdateCookbook {
   string developer = 5;
   string version = 6;
   string supportEmail = 7;
-  cosmos.base.v1beta1.Coin costPerBlock = 8 [(gogoproto.nullable) = false];
-  bool enabled = 9;
+  bool enabled = 8;
 }
 ```
 
@@ -182,8 +179,9 @@ message MsgCreateRecipe {
   EntriesList entries = 9 [(gogoproto.nullable) = false];
   repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
   int64 blockInterval = 11;
-  bool enabled = 12;
-  string extraInfo = 13;
+  cosmos.base.v1beta1.Coin costPerBlock = 12 [(gogoproto.nullable) = false];
+  bool enabled = 13;
+  string extraInfo = 14;
 }
 ```
 
@@ -223,8 +221,9 @@ message MsgUpdateRecipe {
   EntriesList entries = 9 [(gogoproto.nullable) = false];
   repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
   int64 blockInterval = 11;
-  bool enabled = 12;
-  string extraInfo = 13;
+  cosmos.base.v1beta1.Coin costPerBlock = 12 [(gogoproto.nullable) = false];
+  bool enabled = 13;
+  string extraInfo = 14;
 }
 ```
 

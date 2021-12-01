@@ -60,6 +60,12 @@ func RecipeModified(original, updated Recipe) (bool, error) {
 		modified = true
 	}
 
+	if original.CostPerBlock.Denom != updated.CostPerBlock.Denom {
+		modified = true
+	} else if original.CostPerBlock.IsEqual(updated.CostPerBlock) {
+		modified = true
+	}
+
 	if modified {
 		comp := semver.Compare(original.Version, updated.Version)
 		if comp != -1 {
@@ -99,36 +105,6 @@ func ItemInputsEqual(original, updated []ItemInput) bool {
 			if len(itemA.Doubles) == len(itemB.Doubles) {
 				for j := range itemA.Doubles {
 					if itemA.Doubles[j] != itemB.Doubles[j] {
-						return false
-					}
-				}
-			} else {
-				return false
-			}
-
-			if len(itemA.Conditions.Doubles) == len(itemB.Conditions.Doubles) {
-				for j := range itemA.Conditions.Doubles {
-					if itemA.Conditions.Doubles[j] != itemB.Conditions.Doubles[j] {
-						return false
-					}
-				}
-			} else {
-				return false
-			}
-
-			if len(itemA.Conditions.Longs) == len(itemB.Conditions.Longs) {
-				for j := range itemA.Conditions.Longs {
-					if itemA.Conditions.Longs[j] != itemB.Conditions.Longs[j] {
-						return false
-					}
-				}
-			} else {
-				return false
-			}
-
-			if len(itemA.Conditions.Strings) == len(itemB.Conditions.Strings) {
-				for j := range itemA.Conditions.Strings {
-					if itemA.Conditions.Strings[j] != itemB.Conditions.Strings[j] {
 						return false
 					}
 				}
@@ -558,21 +534,6 @@ func ValidateItemInput(i ItemInput) error {
 	}
 
 	err = ValidateInputStrings(i.Strings)
-	if err != nil {
-		return err
-	}
-
-	err = ValidateInputDoubles(i.Conditions.Doubles)
-	if err != nil {
-		return err
-	}
-
-	err = ValidateInputLongs(i.Conditions.Longs)
-	if err != nil {
-		return err
-	}
-
-	err = ValidateInputStrings(i.Conditions.Strings)
 	if err != nil {
 		return err
 	}

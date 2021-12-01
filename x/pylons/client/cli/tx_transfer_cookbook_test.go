@@ -27,7 +27,6 @@ func TestTransferCookbook(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 	common := []string{

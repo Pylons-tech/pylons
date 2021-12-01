@@ -24,7 +24,6 @@ func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	for i := range items {
 		items[i].Creator = creators[i]
 		items[i].ID = fmt.Sprintf("%d", i)
-		items[i].CostPerBlock = sdk.NewCoin(types.PylonsCoinDenom, sdk.OneInt())
 		k.SetCookbook(ctx, items[i])
 	}
 	return items
@@ -47,7 +46,6 @@ func createNCookbookForSingleOwner(k keeper.Keeper, ctx sdk.Context, n int) []ty
 	for i := range items {
 		items[i].Creator = creator
 		items[i].ID = fmt.Sprintf("%d", i)
-		items[i].CostPerBlock = sdk.NewCoin(types.PylonsCoinDenom, sdk.OneInt())
 		k.SetCookbook(ctx, items[i])
 	}
 	return items
@@ -270,6 +268,8 @@ func createNRecipe(k keeper.Keeper, ctx sdk.Context, cb types.Cookbook, n int) [
 	for i := range items {
 		items[i].CookbookID = cb.ID
 		items[i].ID = fmt.Sprintf("%d", i)
+		items[i].CostPerBlock = sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+
 		k.SetRecipe(ctx, items[i])
 	}
 	return items

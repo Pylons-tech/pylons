@@ -29,8 +29,7 @@ message Cookbook {
   string developer = 6;
   string version = 7;
   string supportEmail = 8;
-  cosmos.base.v1beta1.Coin costPerBlock = 9 [(gogoproto.nullable) = false];
-  bool enabled = 10;
+  bool enabled = 9;
 }
 ```
 
@@ -55,8 +54,9 @@ message Recipe {
   EntriesList entries = 9 [(gogoproto.nullable) = false];
   repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
   int64 blockInterval = 11;
-  bool enabled = 12;
-  string extraInfo = 13;
+  cosmos.base.v1beta1.Coin costPerBlock = 12 [(gogoproto.nullable) = false];
+  bool enabled = 13;
+  string extraInfo = 14;
 }
 ```
 

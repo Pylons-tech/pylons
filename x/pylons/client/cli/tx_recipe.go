@@ -10,15 +10,17 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func CmdCreateRecipe() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-recipe [cookbook-id] [id] [name] [description] [version] [coin-inputs] [item-inputs] [entries] [outputs] [block-interval] [enabled] [extra-info]",
+		Use:   "create-recipe [cookbook-id] [id] [name] [description] [version] [coin-inputs] [item-inputs] [entries] [outputs] [block-interval] [cost-per-block] [enabled] [extra-info]",
 		Short: "create new recipe",
-		Args:  cobra.ExactArgs(12),
+		Args:  cobra.ExactArgs(13),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsCookbookID, err := cast.ToStringE(args[0])
 			if err != nil {
@@ -77,11 +79,17 @@ func CmdCreateRecipe() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			argsEnabled, err := cast.ToBoolE(args[10])
+			argsCostPerBlock := args[10]
+			jsonArgsCostPerBlock := sdk.Coin{}
+			err = json.Unmarshal([]byte(argsCostPerBlock), &jsonArgsCostPerBlock)
+			if err != nil {
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			}
+			argsEnabled, err := cast.ToBoolE(args[11])
 			if err != nil {
 				return err
 			}
-			argsExtraInfo, err := cast.ToStringE(args[11])
+			argsExtraInfo, err := cast.ToStringE(args[12])
 			if err != nil {
 				return err
 			}
@@ -91,7 +99,7 @@ func CmdCreateRecipe() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgCreateRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, id, argsName, argsDescription, argsVersion, jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsEntries, jsonArgsOutputs, argsBlockInterval, argsEnabled, argsExtraInfo)
+			msg := types.NewMsgCreateRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, id, argsName, argsDescription, argsVersion, jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsEntries, jsonArgsOutputs, argsBlockInterval, jsonArgsCostPerBlock, argsEnabled, argsExtraInfo)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -106,9 +114,9 @@ func CmdCreateRecipe() *cobra.Command {
 
 func CmdUpdateRecipe() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-recipe [cookbook-id] [id] [name] [description] [version] [coinInputs] [itemInputs] [entries] [outputs] [blockInterval] [enabled] [extraInfo]",
+		Use:   "update-recipe [cookbook-id] [id] [name] [description] [version] [coinInputs] [itemInputs] [entries] [outputs] [blockInterval] [cost-per-block] [enabled] [extraInfo]",
 		Short: "update recipe",
-		Args:  cobra.ExactArgs(12),
+		Args:  cobra.ExactArgs(13),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsCookbookID, err := cast.ToStringE(args[0])
 			if err != nil {
@@ -167,11 +175,17 @@ func CmdUpdateRecipe() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			argsEnabled, err := cast.ToBoolE(args[10])
+			argsCostPerBlock := args[10]
+			jsonArgsCostPerBlock := sdk.Coin{}
+			err = json.Unmarshal([]byte(argsCostPerBlock), &jsonArgsCostPerBlock)
+			if err != nil {
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			}
+			argsEnabled, err := cast.ToBoolE(args[11])
 			if err != nil {
 				return err
 			}
-			argsExtraInfo, err := cast.ToStringE(args[11])
+			argsExtraInfo, err := cast.ToStringE(args[12])
 			if err != nil {
 				return err
 			}
@@ -181,7 +195,7 @@ func CmdUpdateRecipe() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgUpdateRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, id, argsName, argsDescription, argsVersion, jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsEntries, jsonArgsOutputs, argsBlockInterval, argsEnabled, argsExtraInfo)
+			msg := types.NewMsgUpdateRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, id, argsName, argsDescription, argsVersion, jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsEntries, jsonArgsOutputs, argsBlockInterval, jsonArgsCostPerBlock, argsEnabled, argsExtraInfo)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

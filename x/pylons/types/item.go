@@ -228,43 +228,6 @@ func (itemInput ItemInput) MatchItem(item Item, ec CelEnvCollection) error {
 			}
 		}
 	}
-
-	for _, param := range itemInput.Conditions.Doubles {
-		double, err := ec.EvalFloat64(param.Key)
-		if err != nil {
-			return sdkerrors.Wrapf(ErrItemMatch, "%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err.Error())
-		}
-
-		dec, err := sdk.NewDecFromStr(fmt.Sprintf("%v", double))
-		if err != nil {
-			return err
-		}
-
-		if !param.Has(dec) {
-			return sdkerrors.Wrapf(ErrItemMatch, "%s expression range does not match: item_id=%s", param.Key, item.ID)
-		}
-	}
-
-	for _, param := range itemInput.Conditions.Longs {
-		long, err := ec.EvalInt64(param.Key)
-		if err != nil {
-			return sdkerrors.Wrapf(ErrItemMatch, "%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err.Error())
-		}
-
-		if !param.Has(int(long)) {
-			return sdkerrors.Wrapf(ErrItemMatch, "%s expression range does not match: item_id=%s", param.Key, item.ID)
-		}
-	}
-
-	for _, param := range itemInput.Conditions.Strings {
-		str, err := ec.EvalString(param.Key)
-		if err != nil {
-			return sdkerrors.Wrapf(ErrItemMatch, "%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err.Error())
-		}
-		if str != param.Value {
-			return sdkerrors.Wrapf(ErrItemMatch, "%s expression value does not match: item_id=%s", param.Key, item.ID)
-		}
-	}
 	return nil
 }
 

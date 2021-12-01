@@ -21,10 +21,11 @@ func (k msgServer) CompleteExecutionEarly(goCtx context.Context, msg *types.MsgC
 
 	pendingExecution := k.GetPendingExecution(ctx, msg.ID)
 	cookbook, _ := k.GetCookbook(ctx, pendingExecution.CookbookID)
+	recipe, _ := k.GetRecipe(ctx, pendingExecution.CookbookID, pendingExecution.RecipeID)
 	executionIDSplit := strings.Split(pendingExecution.ID, "-")
 	targetBlockHeight, _ := strconv.ParseInt(executionIDSplit[0], 10, 64)
-	completeEarlyAmt := cookbook.CostPerBlock.Amount.Mul(sdk.NewInt(targetBlockHeight - ctx.BlockHeight()))
-	completeEarlyCoin := sdk.NewCoin(cookbook.CostPerBlock.Denom, completeEarlyAmt)
+	completeEarlyAmt := recipe.CostPerBlock.Amount.Mul(sdk.NewInt(targetBlockHeight - ctx.BlockHeight()))
+	completeEarlyCoin := sdk.NewCoin(recipe.CostPerBlock.Denom, completeEarlyAmt)
 
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
 	err := k.LockCoinsForExecution(ctx, addr, sdk.NewCoins(completeEarlyCoin))

@@ -62,6 +62,7 @@ func createGetTestCoinsRecipe(t *testing.T, simInfo *tradeSimInfo) {
 		string(entries),
 		string(outputs),
 		"0",
+		"{\"denom\": \"node0token\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}
@@ -163,7 +164,6 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"node0token\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -228,6 +228,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 		string(entries),
 		string(itemOutputs),
 		"0",
+		"{\"denom\": \"node0token\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}

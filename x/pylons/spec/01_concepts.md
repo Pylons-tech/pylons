@@ -38,7 +38,11 @@ A `json` example of an Item is shown below.  This item represents a character in
   ], 
   "mutableStrings": [], 
   "tradeable": true,
-  "lastUpdate": "81", 
+  "lastUpdate": "81",
+  "costPerBlock": {
+    "denom": "upylon",
+    "amount": "1000000"
+  },
   "transferFee": [], 
   "tradePercentage": "0.100000000000000000"
 }

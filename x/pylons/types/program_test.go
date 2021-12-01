@@ -223,3 +223,91 @@ func TestProgramWorkAsExpected(t *testing.T) {
 	_, err = ec.Eval(`level + attack`)
 	require.True(t, err != nil)
 }
+
+func TestWeightedOutputActualize(t *testing.T) {
+	numIters := 10000000
+
+	wol1 := WeightedOutputsList{
+		WeightedOutputs{EntryIDs: []string{"one"}, Weight: 1},
+		WeightedOutputs{EntryIDs: []string{"two"}, Weight: 1},
+		WeightedOutputs{EntryIDs: []string{"three"}, Weight: 1},
+	}
+
+	counts := []int{0, 0, 0}
+	desired1 := []int{33, 33, 33}
+
+	for i := 0; i < numIters; i++ {
+		entry, err := wol1.Actualize()
+		require.NoError(t, err)
+
+		switch entry[0] {
+		case "one":
+			counts[0] += 1
+		case "two":
+			counts[1] += 1
+		case "three":
+			counts[2] += 1
+		}
+	}
+
+	for i, c := range counts {
+		prob := int(float64(c) / float64(numIters/100))
+		require.Equal(t, prob, desired1[i])
+	}
+
+	wol2 := WeightedOutputsList{
+		WeightedOutputs{EntryIDs: []string{"one"}, Weight: 10},
+		WeightedOutputs{EntryIDs: []string{"two"}, Weight: 10},
+		WeightedOutputs{EntryIDs: []string{"three"}, Weight: 10},
+	}
+
+	counts = []int{0, 0, 0}
+	desired2 := []int{33, 33, 33}
+
+	for i := 0; i < numIters; i++ {
+		entry, err := wol2.Actualize()
+		require.NoError(t, err)
+
+		switch entry[0] {
+		case "one":
+			counts[0] += 1
+		case "two":
+			counts[1] += 1
+		case "three":
+			counts[2] += 1
+		}
+	}
+
+	for i, c := range counts {
+		prob := int(float64(c) / float64(numIters/100))
+		require.Equal(t, prob, desired2[i])
+	}
+
+	wol3 := WeightedOutputsList{
+		WeightedOutputs{EntryIDs: []string{"one"}, Weight: 5},
+		WeightedOutputs{EntryIDs: []string{"two"}, Weight: 5},
+		WeightedOutputs{EntryIDs: []string{"three"}, Weight: 20},
+	}
+
+	counts = []int{0, 0, 0}
+	desired3 := []int{16, 16, 66}
+
+	for i := 0; i < numIters; i++ {
+		entry, err := wol3.Actualize()
+		require.NoError(t, err)
+
+		switch entry[0] {
+		case "one":
+			counts[0] += 1
+		case "two":
+			counts[1] += 1
+		case "three":
+			counts[2] += 1
+		}
+	}
+
+	for i, c := range counts {
+		prob := int(float64(c) / float64(numIters/100))
+		require.Equal(t, prob, desired3[i])
+	}
+}

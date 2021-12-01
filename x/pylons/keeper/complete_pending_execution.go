@@ -106,7 +106,6 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 			return nil, nil, nil, err
 		}
 		modifiedItems[idx] = item
-		recipe.Entries.ItemOutputs[idx].AmountMinted++
 	}
 
 	return coins, mintedItems, modifiedItems, nil
@@ -127,7 +126,7 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}
 
-	outputs, err := types.WeightedOutputsList(recipe.Outputs).Actualize(celEnv)
+	outputs, err := types.WeightedOutputsList(recipe.Outputs).Actualize()
 	if err != nil {
 		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}
