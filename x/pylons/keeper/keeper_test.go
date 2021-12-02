@@ -12,6 +12,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
@@ -312,6 +313,7 @@ type IntegrationTestSuite struct {
 
 	app           *app.App
 	ctx           sdk.Context
+	cdc           codec.Codec
 	k             keeper.Keeper
 	bankKeeper    types.BankKeeper
 	accountKeeper types.AccountKeeper
@@ -333,6 +335,7 @@ func (suite *IntegrationTestSuite) SetupTest() {
 
 	suite.app = a
 	suite.ctx = ctx
+	suite.cdc = a.AppCodec()
 	suite.k = a.PylonsKeeper
 	suite.bankKeeper = a.BankKeeper
 	suite.accountKeeper = a.AccountKeeper
