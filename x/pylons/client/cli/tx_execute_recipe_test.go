@@ -669,7 +669,6 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		//"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -684,7 +683,6 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 				Doubles: []types.DoubleParam{
 					{
 						Key:  "Mass",
-						//Rate: sdk.OneDec(),
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -699,7 +697,6 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-				//		Rate:    sdk.OneDec(),
 						Value:   "testValue",
 						Program: "",
 					},
@@ -756,7 +753,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp)) //ctx.Codec.UnmarshalJSON(out.Bytes(), &executionsResponse)
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp)) 
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create recipe
