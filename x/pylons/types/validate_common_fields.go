@@ -4,10 +4,9 @@ import (
 	"regexp"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/rogpeppe/go-internal/semver"
-
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // ValidateFieldLength checks if a string field is within minLength and maxLength

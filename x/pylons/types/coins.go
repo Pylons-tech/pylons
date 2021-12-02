@@ -7,7 +7,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	ibctypes "github.com/cosmos/ibc-go/modules/apps/transfer/types"
+	ibctypes "github.com/cosmos/ibc-go/v2/modules/apps/transfer/types"
 )
 
 const (

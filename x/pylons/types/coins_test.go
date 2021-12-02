@@ -7,7 +7,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	ibctypes "github.com/cosmos/ibc-go/modules/apps/transfer/types"
+	ibctypes "github.com/cosmos/ibc-go/v2/modules/apps/transfer/types"
 
 	"github.com/stretchr/testify/require"
 )
