@@ -326,7 +326,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 			}
 			weaponsString = fmt.Sprintf("%s%s ", weaponsString, attack.weaponName)
 		}
-		return fmt.Sprintf("%s %spulls out %sand equips %s\n", fighter.name, shieldString, weaponsString, fighter.armorName)
+		return fmt.Sprintf("%s %spulls out %sand equips %s.\n", fighter.name, shieldString, weaponsString, fighter.armorName)
 	}
 
 	combatLog = fmt.Sprintf("%s%s", combatLog, openerText(combattantA))
@@ -335,7 +335,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 	// here is defined how one round in a combat from one attacker works (so a full round needs to run this 2 times)
 	combatRound := func(attacker *combattant, defender *combattant) {
 		for _, attack := range attacker.attacks {
-			if rand.Float64() > attack.accuracy {
+			if rand.Float64() < attack.accuracy {
 				damageReduction := 0.0
 				if attack.damagetype == "slice" {
 					damageReduction = defender.sliceArmor
@@ -349,7 +349,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 				damage := attack.damage - damageReduction
 				defender.hp -= damage
 
-				combatLog = fmt.Sprintf("%sHits with %s! %s's HP: %.0f\n", combatLog, attack.weaponName, defender.name, defender.hp)
+				combatLog = fmt.Sprintf("%sHits with %s dealing %.0f! \n%s's HP is now at: %.0f\n", combatLog, attack.weaponName, damage, defender.name, defender.hp)
 			} else {
 				combatLog = fmt.Sprintf("%sStrikes with %s, EPIC FAIL!\n", combatLog, attack.weaponName)
 			}
@@ -366,7 +366,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 		combatRound(&combattantB, &combattantA)
 	}
 
-	// from initiative we calculate how gets the first strike attempt each round
+	// from initiative we calculate who gets the first strike attempt each round
 	Afirst := true
 	if combattantA.initiative > combattantA.initiative {
 		combatLog = fmt.Sprintf("%s%s has a higher initiative and gets the first strike!\n", combatLog, combattantA.name)

@@ -2,7 +2,7 @@ package keeper
 
 import (
 	"context"
-	"fmt"
+	//"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
@@ -26,19 +26,6 @@ func (k Keeper) Fight(goCtx context.Context, req *types.QueryFightRequest) (*typ
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.FighterKey))
 	k.cdc.MustUnmarshal(store.Get(getTradeIDBytes(req.ID)), &fighter)
-
-
-	/*
-	id, err := strconv.ParseUint(req.Id, 10, 64)
-	if err != nil {
-		// Panic because the count should be always formattable to uint64
-		panic("cannot decode id")
-	}
-	fighter := k.GetFighter(ctx, id)
-	*/
-
-	fmt.Println("YEES")
-	fmt.Println(fighter)
 
 	return &types.QueryFightResponse{Fighter: fighter}, nil
 }
