@@ -55,9 +55,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	require.NoError(t, err)
 
 	// create recipe to mint initial sword item
-	coinInputs, err := json.Marshal([]types.CoinInput{
-		{Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(10)))},
-	})
+
 	require.NoError(t, err)
 
 	damageAmt, err := sdk.NewDecFromStr("8")
@@ -142,12 +140,12 @@ func TestSingleItemModifyOutput(t *testing.T) {
 		"Mint Sword Item Recipe",
 		"Mint Sword Item Recipe",
 		"v0.0.1",
-		string(coinInputs),
+		"10node0token",
 		"[]",
 		string(entries),
 		string(itemOutputs),
 		"0",
-		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
+		"12upylon",
 		"true",
 		"extraInfo",
 	}
@@ -201,9 +199,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 
 	// create recipe to modify the sword
 
-	coinInputs, err = json.Marshal([]types.CoinInput{
-		{Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(100)))},
-	})
+	coinInputs := "100node0token"
 	require.NoError(t, err)
 
 	itemInputs, err := json.Marshal([]types.ItemInput{
@@ -254,12 +250,12 @@ func TestSingleItemModifyOutput(t *testing.T) {
 		"Modify Sword Item Recipe",
 		"Modify Sword Item Recipe",
 		"v0.0.1",
-		string(coinInputs),
+		coinInputs,
 		string(itemInputs),
 		string(entries),
 		string(outputs),
 		"0",
-		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
+		"12upylon",
 		"true",
 		"extraInfo",
 	}

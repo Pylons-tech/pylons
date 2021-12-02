@@ -86,11 +86,6 @@ func createEaselCookbook(t *testing.T, simInfo *easelBasicSim) {
 }
 
 func createMintRecipe1(t *testing.T, simInfo *easelBasicSim) {
-	coinInputs, err := json.Marshal([]types.CoinInput{
-		{Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(10)))},
-	})
-	require.NoError(t, err)
-
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{{
@@ -123,12 +118,12 @@ func createMintRecipe1(t *testing.T, simInfo *easelBasicSim) {
 		"Easel-Mint-NFT-Recipe",
 		"A recipe with a URL for a minted image NFT",
 		"v0.0.1",
-		string(coinInputs),
+		"10node0token",
 		"[]",
 		string(entries),
 		string(itemOutputs),
 		"0",
-		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
+		"12upylon",
 		"true",
 		"extraInfo",
 	}
@@ -183,11 +178,6 @@ func mintNFT1(t *testing.T, simInfo *easelBasicSim) {
 }
 
 func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
-	coinInputs, err := json.Marshal([]types.CoinInput{
-		{Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(450)))},
-	})
-	require.NoError(t, err)
-
 	residual, _ := sdk.NewDecFromStr("2.000000000000000000")
 
 	entries, err := json.Marshal(types.EntriesList{
@@ -289,6 +279,7 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 			Weight:   1,
 		},
 	})
+	require.NoError(t, err)
 
 	// Get Character Recipe
 	simInfo.mintRecipeID2 = "cookbook_for_test_2021_10_22_09_13_587"
@@ -296,12 +287,12 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 		"A simple recipe test",
 		" A simple test recipe to be executed",
 		"v1.0.0",
-		string(coinInputs),
+		"10node0token",
 		"[]",
 		string(entries),
 		string(itemOutputs),
 		"1",
-		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
+		"12upylon",
 		"true",
 		"",
 	}

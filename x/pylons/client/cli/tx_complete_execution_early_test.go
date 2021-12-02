@@ -1,7 +1,6 @@
 package cli_test
 
 import (
-	"encoding/json"
 	"fmt"
 	"strconv"
 	"testing"
@@ -52,27 +51,17 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
 
-	coinInputsJson, _ := json.Marshal([]types.CoinInput{
-		{
-			Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
-		},
-		{
-			Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
-		},
-	},
-	)
-
 	// Create a recipe
 	recipeFields := []string{
 		"testRecipeName",
 		"DescriptionDescriptionDescriptionDescription",
 		"v0.0.1",
-		string(coinInputsJson),
+		"1node0token,1node0token",
 		"[]",
 		"{}",
 		"[]",
 		"100",
-		"{\"denom\": \"node0token\", \"amount\": \"1\"}",
+		"1node0token",
 		"true",
 		"extraInfo",
 	}

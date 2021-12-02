@@ -156,12 +156,12 @@ func createCharacterRecipe(t *testing.T, simInfo *loudBasicSim) {
 		"LOUD-Get-Character-Recipe",
 		"Creates a basic character in LOUD",
 		"v0.0.1",
-		"[]",
+		"",
 		"[]",
 		string(entries),
 		string(itemOutputs),
 		"0",
-		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
+		"12upylon",
 		"true",
 		"extraInfo",
 	}
@@ -240,12 +240,12 @@ func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 		"LOUD-get-coins",
 		"Gives a player 10000 loudCoin",
 		"v0.0.1",
-		"[]",
+		"",
 		"[]",
 		string(entries),
 		string(outputs),
 		"0",
-		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
+		"12upylon",
 		"true",
 		"extraInfo",
 	}
@@ -288,11 +288,6 @@ func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 
 func createBuyCopperSwordRecipe(t *testing.T, simInfo *loudBasicSim) {
 	denom, err := types.CookbookDenom(cookbookIDLOUD, "loudCoin")
-	require.NoError(t, err)
-
-	coinInputs, err := json.Marshal([]types.CoinInput{
-		{Coins: sdk.NewCoins(sdk.NewCoin(denom, sdk.NewInt(10)))},
-	})
 	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
@@ -340,12 +335,12 @@ func createBuyCopperSwordRecipe(t *testing.T, simInfo *loudBasicSim) {
 		"LOUD-Buy-Copper-Sword",
 		"Purchases a copper sword for loudCoin",
 		"v0.0.1",
-		string(coinInputs),
+		fmt.Sprintf("10%s",denom),
 		"[]",
 		string(entries),
 		string(itemOutputs),
 		"0",
-		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
+		"12upylon",
 		"true",
 		"extraInfo",
 	}
@@ -591,12 +586,12 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 		"LOUD-Fight-Wolf-With-Sword-Recipe",
 		"creates a fight instance with a wolf requiring a character and a sword",
 		"v0.0.1",
-		"[]",
+		"",
 		string(itemInputs),
 		string(entries),
 		string(outputs),
 		"0",
-		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
+		"12upylon",
 		"true",
 		"extraInfo",
 	}

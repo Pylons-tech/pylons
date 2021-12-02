@@ -82,8 +82,6 @@ func createAtomgachiCookbook(t *testing.T, simInfo *atomgachiBasicSim) {
 }
 
 func createMintRecipe(t *testing.T, simInfo *atomgachiBasicSim) {
-	coinInputs, err := json.Marshal([]types.CoinInput{})
-	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -117,12 +115,12 @@ func createMintRecipe(t *testing.T, simInfo *atomgachiBasicSim) {
 		"Atom with it's Number here",
 		"mijollae is testing the demo process",
 		"v0.0.1",
-		string(coinInputs),
+		"",
 		"[]",
 		string(entries),
 		string(itemOutputs),
 		"0",
-		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
+		"12upylon",
 		"true",
 		"extraInfo",
 	}
