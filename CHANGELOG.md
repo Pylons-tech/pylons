@@ -14,6 +14,7 @@
 
 ### Changes:
 
+- [#520](https://github.com/Pylons-tech/pylons/pull/520) Bump Cosmos SDK and IBC-Go to v0.44.4 and v2.0.0, respectively.
 - [#515](https://github.com/Pylons-tech/pylons/pull/515) Remove the `ConditionList` proto message.
 - [#494](https://github.com/Pylons-tech/pylons/pull/494) Replace usages of deprecated `EmitEvent()` with `EmitTypedEvent()`.
 

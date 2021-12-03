@@ -5,6 +5,7 @@ import (
 
 	"github.com/rogpeppe/go-internal/semver"
 
+	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -56,6 +57,8 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 		CookbookID: recipe.CookbookID,
 		ID:         recipe.ID,
 	})
+
+	telemetry.IncrCounter(1, "recipe", "create")
 
 	return &types.MsgCreateRecipeResponse{}, err
 }
@@ -111,6 +114,8 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 	err = ctx.EventManager().EmitTypedEvent(&types.EventUpdateRecipe{
 		OriginalRecipe: origRecipe,
 	})
+
+	telemetry.IncrCounter(1, "recipe", "update")
 
 	return &types.MsgUpdateRecipeResponse{}, err
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"strconv"
 
+	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -253,6 +254,8 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		CoinOutputs:  coinOutputs,
 		PaymentInfos: msg.PaymentInfos,
 	})
+
+	telemetry.IncrCounter(1, "trade", "fulfill")
 
 	return &types.MsgFulfillTradeResponse{}, err
 }
