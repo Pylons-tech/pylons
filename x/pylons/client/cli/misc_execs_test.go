@@ -140,12 +140,12 @@ func TestSingleItemModifyOutput(t *testing.T) {
 		"Mint Sword Item Recipe",
 		"Mint Sword Item Recipe",
 		"v0.0.1",
-		"10node0token",
+		"[[\"10node0token\"]]",
 		"[]",
 		string(entries),
 		string(itemOutputs),
 		"0",
-		"12upylon",
+		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
 		"true",
 		"extraInfo",
 	}
@@ -199,7 +199,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 
 	// create recipe to modify the sword
 
-	coinInputs := "100node0token"
+	coinInputs := "[[\"100node0token\"]]"
 	require.NoError(t, err)
 
 	itemInputs, err := json.Marshal([]types.ItemInput{
@@ -255,7 +255,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 		string(entries),
 		string(outputs),
 		"0",
-		"12upylon",
+		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
 		"true",
 		"extraInfo",
 	}

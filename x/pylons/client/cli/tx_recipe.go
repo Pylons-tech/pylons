@@ -43,19 +43,9 @@ func CmdCreateRecipe() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			var coins []sdk.Coin
-			jsonArgsCoinInputs := make([]types.CoinInput, 0)
-			if argsCoinInputs != "" {
-				coins, err = ParseCoinArguments(argsCoinInputs)
-				if err != nil {
-					return err
-				}
-				jsonArgsCoinInputs = make([]types.CoinInput, len(coins))
-				for i, ci := range coins {
-					jsonArgsCoinInputs[i] = types.CoinInput{
-						Coins: sdk.NewCoins(ci),
-					}
-				}
+			jsonArgsCoinInputs, err := ParseCoinArguments(argsCoinInputs)
+			if err != nil {
+				return err
 			}
 			argsItemInputs, err := cast.ToStringE(args[6])
 			if err != nil {
@@ -90,15 +80,7 @@ func CmdCreateRecipe() *cobra.Command {
 			}
 			argsCostPerBlock := args[10]
 			jsonArgsCostPerBlock := sdk.Coin{}
-			if argsCostPerBlock != "" {
-				cArr, err := ParseCoinArguments(argsCostPerBlock)
-				if err != nil {
-					return err
-				}
-				if cArr != nil {
-					jsonArgsCostPerBlock = cArr[0]
-				}
-			}
+			err = json.Unmarshal([]byte(argsCostPerBlock), &jsonArgsCostPerBlock)
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}

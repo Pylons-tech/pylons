@@ -61,12 +61,12 @@ func TestCreateRecipe(t *testing.T) {
 				"testRecipeName",
 				"DescriptionDescriptionDescriptionDescription",
 				"v0.0.1",
-				"10000upylon,10000ustake",
+				"[[\"10000upylon\",\"10000ustake\"]]",
 				"[]",
 				"{}",
 				"[]",
 				"1",
-				"1upylon",
+				"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 				"true",
 				"extraInfo",
 			},
@@ -90,7 +90,7 @@ func TestCreateRecipe(t *testing.T) {
 				"extraInfo",
 			},
 			args: common,
-			err: errors.New("coin is invalid"),
+			err: errors.New("Invalid Coin Input : 10000,10000: invalid character ',' after top-level value"),
 		},
 	} {
 		tc := tc
@@ -100,7 +100,7 @@ func TestCreateRecipe(t *testing.T) {
 			args = append(args, tc.args...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
 			if tc.err != nil {
-				require.EqualError(t, err, "coin is invalid")
+				require.Error(t, err)
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse
@@ -130,12 +130,12 @@ func TestUpdateRecipe(t *testing.T) {
 		"testRecipeName",
 		"DescriptionDescriptionDescriptionDescription",
 		"v0.0.1",
-		"",
+		"[]",
 		"[]",
 		"{}",
 		"[]",
 		"1",
-		"1upylon",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 		"extraInfo",
 	}

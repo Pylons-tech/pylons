@@ -27,12 +27,12 @@ func TestParseCoinArguments(t *testing.T){
 	}{
 		{
 			desc:     "Test_Valid_1",
-			input:	  "100000pylon",
+			input:	  "[[\"100000pylon\"]]",
 			converted: sdk.NewCoin("pylon",sdk.NewInt(100000)),
 		},
 		{
 			desc:     "Test_Valid_2",
-			input:	  "10000.00pylon",
+			input:	  "[[\"100000.00pylon\"]]",
 			err: errors.New("coin is invalid"),
 		},
 		{
@@ -62,7 +62,7 @@ func TestParseCoinArguments(t *testing.T){
 			val,err := cli.ParseCoinArguments(tc.input)
 			if tc.err==nil {
 				require.NoError(t, err)
-				equal := val[0].Amount.Equal(tc.converted.Amount) && val[0].Denom == tc.converted.Denom
+				equal := val[0].Coins[0].Amount.Equal(tc.converted.Amount) && val[0].Coins[0].Denom == tc.converted.Denom
 				require.True(t, equal)
 			}else{
 				require.EqualError(t, tc.err,"coin is invalid")
