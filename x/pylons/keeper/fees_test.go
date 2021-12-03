@@ -28,5 +28,6 @@ func (suite *IntegrationTestSuite) TestCalculateTxSizeFeeCookbook() {
 	require.Equal(0, fee)
 
 	fee = types.CalculateTxSizeFee(b, 10, types.DefaultFeePerBytes)
-	require.Equal(0, fee)
+	expectedFee := (len(b) - 10) * types.DefaultFeePerBytes
+	require.Equal(expectedFee, fee)
 }
