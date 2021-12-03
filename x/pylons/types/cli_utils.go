@@ -1,4 +1,4 @@
-package cli
+package types
 
 import (
 	"encoding/json"
@@ -6,19 +6,17 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/tendermint/starport/starport/pkg/cosmoscoin"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // ParseCoinArguments parses a coin input argument in the JSON array format
 // and returns a slice of types.CoinInput
-func ParseCoinArguments(args string) ([]types.CoinInput, error) {
+func ParseCoinArguments(args string) ([]CoinInput, error) {
 	var jsonArgs [][]string
 	err := json.Unmarshal([]byte(args), &jsonArgs)
 	if err != nil {
 		return nil, sdkerrors.Wrapf(err, "Invalid Coin Input : %s", args)
 	}
-	inputCoins := make([]types.CoinInput, 0)
+	inputCoins := make([]CoinInput, 0)
 	for i := range jsonArgs {
 		coins := make([]sdk.Coin, 0)
 		for j := range jsonArgs[i] {
@@ -28,7 +26,7 @@ func ParseCoinArguments(args string) ([]types.CoinInput, error) {
 			}
 			coins = append(coins, sdk.NewInt64Coin(coinDenom, int64(coinAmount)))
 		}
-		inputCoins = append(inputCoins, types.CoinInput{
+		inputCoins = append(inputCoins, CoinInput{
 			Coins: coins,
 		})
 
