@@ -78,14 +78,9 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 	}
 
 	b := k.cdc.MustMarshal(&trade)
-	fee := types.CalculateTxSizeFee(b, types.DefaultSizeLimitBytes, types.DefaultFeePerBytes)
-	if fee > 0 {
-		// charge fee
-		coins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(fee))))
-		err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, addr, types.FeeCollectorName, coins)
-		if err != nil {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInsufficientFunds, "unable to pay sizeOver fee of %d%s", fee, types.PylonsCoinDenom)
-		}
+	err = k.CalculateTxSizeFeeAndPay(ctx, b, addr)
+	if err != nil {
+		return nil, err
 	}
 
 	id := k.AppendTrade(

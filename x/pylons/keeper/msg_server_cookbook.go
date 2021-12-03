@@ -32,14 +32,9 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 
 	b := k.cdc.MustMarshal(&cookbook)
 	addr, _ := sdk.AccAddressFromBech32(cookbook.Creator)
-	fee := types.CalculateTxSizeFee(b, types.DefaultSizeLimitBytes, types.DefaultFeePerBytes)
-	if fee > 0 {
-		// charge fee
-		coins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(fee))))
-		err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, addr, types.FeeCollectorName, coins)
-		if err != nil {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInsufficientFunds, "unable to pay sizeOver fee of %d%s", fee, types.PylonsCoinDenom)
-		}
+	err := k.CalculateTxSizeFeeAndPay(ctx, b, addr)
+	if err != nil {
+		return nil, err
 	}
 
 	k.SetCookbook(
@@ -47,7 +42,7 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 		cookbook,
 	)
 
-	err := ctx.EventManager().EmitTypedEvent(&types.EventCreateCookbook{
+	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateCookbook{
 		Creator: cookbook.Creator,
 		ID:      cookbook.ID,
 	})
@@ -84,17 +79,13 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 
 	b := k.cdc.MustMarshal(&updatedCookbook)
 	addr, _ := sdk.AccAddressFromBech32(updatedCookbook.Creator)
-	fee := types.CalculateTxSizeFee(b, types.DefaultSizeLimitBytes, types.DefaultFeePerBytes)
-	if fee > 0 {
-		// charge fee
-		coins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(fee))))
-		err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, addr, types.FeeCollectorName, coins)
-		if err != nil {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInsufficientFunds, "unable to pay sizeOver fee of %d%s", fee, types.PylonsCoinDenom)
-		}
-	}
 
 	modified, err := types.CookbookModified(origCookbook, updatedCookbook)
+	if err != nil {
+		return nil, err
+	}
+
+	err = k.CalculateTxSizeFeeAndPay(ctx, b, addr)
 	if err != nil {
 		return nil, err
 	}
