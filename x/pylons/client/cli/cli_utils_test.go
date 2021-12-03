@@ -17,8 +17,6 @@ import (
 // ParseCoinArguments parses a cli argument of the format "10000000utoken,10000000ustake" and
 // returns a slice of type sdk.Coin
 func TestParseCoinArguments(t *testing.T){
-
-
 	for _, tc := range []struct {
 		desc    string
 		input 	string
