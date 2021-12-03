@@ -43,7 +43,7 @@ func CmdCreateRecipe() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			jsonArgsCoinInputs, err := ParseCoinArguments(argsCoinInputs)
+			jsonArgsCoinInputs, err := types.ParseCoinArguments(argsCoinInputs)
 			if err != nil {
 				return err
 			}
