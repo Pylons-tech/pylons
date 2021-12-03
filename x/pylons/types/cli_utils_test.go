@@ -7,8 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
-
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 
@@ -57,7 +56,7 @@ func TestParseCoinArguments(t *testing.T){
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			val,err := cli.ParseCoinArguments(tc.input)
+			val,err := types.ParseCoinArguments(tc.input)
 			if tc.err==nil {
 				require.NoError(t, err)
 				equal := val[0].Coins[0].Amount.Equal(tc.converted.Amount) && val[0].Coins[0].Denom == tc.converted.Denom
