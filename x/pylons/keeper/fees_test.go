@@ -1,6 +1,8 @@
 package keeper_test
 
 import (
+	"fmt"
+
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
@@ -30,4 +32,6 @@ func (suite *IntegrationTestSuite) TestCalculateTxSizeFeeCookbook() {
 	fee = types.CalculateTxSizeFee(b, 10, types.DefaultFeePerBytes)
 	expectedFee := (len(b) - 10) * types.DefaultFeePerBytes
 	require.Equal(expectedFee, fee)
+
+	fmt.Println("FEE: ", fee)
 }
