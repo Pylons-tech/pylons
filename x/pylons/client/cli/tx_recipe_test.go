@@ -22,8 +22,6 @@ func TestCreateRecipe(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
-	recipeID := "testRecipeID"
-
 	cbFields := []string{
 		"testCookbookName",
 		"DescriptionDescriptionDescription",
@@ -45,21 +43,21 @@ func TestCreateRecipe(t *testing.T) {
 	require.NoError(t, err)
 
 	for _, tc := range []struct {
-		desc   string
-		id1    string
-		id2    string
-		fields []string
-		args   []string
-		err    error
-		code   uint32
+		desc       string
+		cookbookId string
+		recipeId   string
+		fields     []string
+		args       []string
+		err        error
+		code       uint32
 	}{
 		{
-			id1:  cookbookID,
-			id2:  recipeID,
-			desc: "valid",
+			cookbookId: cookbookID,
+			recipeId:   "validRecipe1",
+			desc:       "valid1",
 			fields: []string{
 				"testRecipeName",
-				"DescriptionDescriptionDescriptionDescription",
+				"One coin input with two different coins",
 				"v0.0.1",
 				"[[\"10000upylon\",\"10000ustake\"]]",
 				"[]",
@@ -73,9 +71,46 @@ func TestCreateRecipe(t *testing.T) {
 			args: common,
 		},
 		{
-			id1:  cookbookID,
-			id2:  recipeID,
-			desc: "invalid",
+			cookbookId: cookbookID,
+			recipeId:   "validRecipe2",
+			desc:       "valid2",
+			fields: []string{
+				"SecondRecipeTest",
+				"Testing with no coin inputs in the message",
+				"v0.0.1",
+				"[]",
+				"[]",
+				"{}",
+				"[]",
+				"1",
+				"{\"denom\": \"upylon\", \"amount\": \"1\"}",
+				"true",
+				"extraInfo",
+			},
+			args: common,
+		}, {
+			cookbookId: cookbookID,
+			recipeId:   "validRecipe3",
+			desc:       "valid3",
+			fields: []string{
+				"ThirdRecipeTest",
+				"Two coin inputs and one IBC entry",
+				"v0.0.1",
+				"[[\"10000upylon\",\"10000ustake\"],[\"10000ibc/529ba5e3e86ba7796d7caab4fc02728935fbc75c0f7b25a9e611c49dd7d68a35\"]]",
+				"[]",
+				"{}",
+				"[]",
+				"1",
+				"{\"denom\": \"upylon\", \"amount\": \"1\"}",
+				"true",
+				"extraInfo",
+			},
+			args: common,
+		},
+		{
+			cookbookId: cookbookID,
+			recipeId:   "invalidRecipe1",
+			desc:       "invalid",
 			fields: []string{
 				"testRecipeNameInvalid",
 				"DescriptionDescriptionDescriptionDescriptionInvalid",
@@ -90,12 +125,12 @@ func TestCreateRecipe(t *testing.T) {
 				"extraInfo",
 			},
 			args: common,
-			err: errors.New("Invalid Coin Input : 10000,10000: invalid character ',' after top-level value"),
+			err:  errors.New("Invalid Coin Input : 10000,10000: invalid character ',' after top-level value"),
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			args := []string{cookbookID, recipeID}
+			args := []string{cookbookID, tc.recipeId}
 			args = append(args, tc.fields...)
 			args = append(args, tc.args...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
