@@ -45,6 +45,10 @@ func (wt DoubleWeightTable) Generate() (sdk.Dec, error) {
 
 	selectedWeightRange := wt[chosenIndex]
 
+	if selectedWeightRange.Upper.Equal(selectedWeightRange.Lower) {
+		return selectedWeightRange.Upper, nil
+	}
+
 	randDec, _ := sdk.NewDecFromStr(fmt.Sprintf("%v", rand.Float64()))
 	return randDec.Mul(selectedWeightRange.Upper.Sub(selectedWeightRange.Lower)).Add(selectedWeightRange.Lower), nil
 }
@@ -95,6 +99,10 @@ func (wt IntWeightTable) Generate() (int64, error) {
 	}
 
 	selectedWeightRange := wt[chosenIndex]
+
+	if selectedWeightRange.Upper == selectedWeightRange.Lower {
+		return selectedWeightRange.Upper, nil
+	}
 
 	if selectedWeightRange.Upper > selectedWeightRange.Lower {
 		return rand.Int63n(selectedWeightRange.Upper-selectedWeightRange.Lower) + selectedWeightRange.Lower, nil

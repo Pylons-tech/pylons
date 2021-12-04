@@ -682,7 +682,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -753,7 +753,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp)) 
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create recipe
@@ -802,7 +802,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	// check the recipe to see if the Mutable string is represented properly
-	expectedMutableString := []types.StringKeyValue{types.StringKeyValue{ Key: "testMutKey", Value: "testMutValue"}}
+	expectedMutableString := []types.StringKeyValue{{Key: "testMutKey", Value: "testMutValue"}}
 
 	args = []string{cookbookID, recipeID}
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowRecipe(), args)
@@ -811,9 +811,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &recipeResp))
 	require.Equal(t, expectedMutableString, recipeResp.Recipe.Entries.ItemOutputs[0].MutableStrings)
 
-
 }
-
 
 func TestExecuteRecipeNoInputOutputInvalidArgs(t *testing.T) {
 	net := network.New(t)
