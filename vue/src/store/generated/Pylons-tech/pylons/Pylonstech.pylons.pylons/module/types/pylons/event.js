@@ -1612,6 +1612,235 @@ export const EventFulfillTrade = {
         return message;
     },
 };
+const baseEventCreateFighter = { creator: "", ID: 0 };
+export const EventCreateFighter = {
+    encode(message, writer = Writer.create()) {
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.ID !== 0) {
+            writer.uint32(16).uint64(message.ID);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseEventCreateFighter };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.ID = longToNumber(reader.uint64());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseEventCreateFighter };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = Number(object.ID);
+        }
+        else {
+            message.ID = 0;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.ID !== undefined && (obj.ID = message.ID);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseEventCreateFighter };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = 0;
+        }
+        return message;
+    },
+};
+const baseEventCancelFighter = { creator: "", ID: 0 };
+export const EventCancelFighter = {
+    encode(message, writer = Writer.create()) {
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.ID !== 0) {
+            writer.uint32(16).uint64(message.ID);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseEventCancelFighter };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.ID = longToNumber(reader.uint64());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseEventCancelFighter };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = Number(object.ID);
+        }
+        else {
+            message.ID = 0;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.ID !== undefined && (obj.ID = message.ID);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseEventCancelFighter };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = 0;
+        }
+        return message;
+    },
+};
+const baseEventFulfillFight = { ID: 0, creator: "", fulfiller: "" };
+export const EventFulfillFight = {
+    encode(message, writer = Writer.create()) {
+        if (message.ID !== 0) {
+            writer.uint32(8).uint64(message.ID);
+        }
+        if (message.creator !== "") {
+            writer.uint32(18).string(message.creator);
+        }
+        if (message.fulfiller !== "") {
+            writer.uint32(26).string(message.fulfiller);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseEventFulfillFight };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.ID = longToNumber(reader.uint64());
+                    break;
+                case 2:
+                    message.creator = reader.string();
+                    break;
+                case 3:
+                    message.fulfiller = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseEventFulfillFight };
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = Number(object.ID);
+        }
+        else {
+            message.ID = 0;
+        }
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.fulfiller !== undefined && object.fulfiller !== null) {
+            message.fulfiller = String(object.fulfiller);
+        }
+        else {
+            message.fulfiller = "";
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.ID !== undefined && (obj.ID = message.ID);
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.fulfiller !== undefined && (obj.fulfiller = message.fulfiller);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseEventFulfillFight };
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = 0;
+        }
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = "";
+        }
+        if (object.fulfiller !== undefined && object.fulfiller !== null) {
+            message.fulfiller = object.fulfiller;
+        }
+        else {
+            message.fulfiller = "";
+        }
+        return message;
+    },
+};
 const baseEventGooglePurchase = {
     creator: "",
     productID: "",

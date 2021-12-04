@@ -24,19 +24,12 @@ export interface StringInputParam {
     /** The value of the parameter */
     value: string;
 }
-/** ConditionList is a struct for describing ItemInput expression conditions */
-export interface ConditionList {
-    doubles: DoubleInputParam[];
-    longs: LongInputParam[];
-    strings: StringInputParam[];
-}
 /** ItemInput is a struct for describing an input item */
 export interface ItemInput {
     ID: string;
     doubles: DoubleInputParam[];
     longs: LongInputParam[];
     strings: StringInputParam[];
-    conditions: ConditionList | undefined;
 }
 /** DoubleWeightRange describes weight range that produce double value */
 export interface DoubleWeightRange {
@@ -136,6 +129,7 @@ export interface Recipe {
     entries: EntriesList | undefined;
     outputs: WeightedOutputs[];
     blockInterval: number;
+    costPerBlock: Coin | undefined;
     enabled: boolean;
     extraInfo: string;
 }
@@ -159,13 +153,6 @@ export declare const StringInputParam: {
     fromJSON(object: any): StringInputParam;
     toJSON(message: StringInputParam): unknown;
     fromPartial(object: DeepPartial<StringInputParam>): StringInputParam;
-};
-export declare const ConditionList: {
-    encode(message: ConditionList, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): ConditionList;
-    fromJSON(object: any): ConditionList;
-    toJSON(message: ConditionList): unknown;
-    fromPartial(object: DeepPartial<ConditionList>): ConditionList;
 };
 export declare const ItemInput: {
     encode(message: ItemInput, writer?: Writer): Writer;

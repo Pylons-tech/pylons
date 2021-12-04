@@ -224,7 +224,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 					}
 				}
 
-				//fmt.Println(prop.Key, prop.Value)
+				fmt.Println(prop.Key, prop.Value)
 			}
 			// second run necessary because attacks just exist now
 			for _, prop := range item.Strings {
@@ -297,9 +297,9 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 					readyFighter.attacks[index].accuracy *= val
 				}
 
-				//fmt.Println(prop.Key, prop.Value)
+				fmt.Println(prop.Key, prop.Value)
 			}
-			//fmt.Println("--------")
+			fmt.Println("--------")
 		}
 		return readyFighter, nil
 	}
@@ -308,8 +308,8 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 	combattantB, err := calculateCombatSpecs(FighterB)
 
 	// here this print should be removed it is for debugging
-	//fmt.Println("Fighter A:",combattantA)
-	//fmt.Println("Fighter B:",combattantB)
+	fmt.Println("Fighter A:",combattantA)
+	fmt.Println("Fighter B:",combattantB)
 
 	combatLog := "EPIC BATTLE BEGINS\n"
 
@@ -419,6 +419,8 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 		}
 		return false, "none"
 	}
+
+	fmt.Println("fight starts")
 
 	// here the actual fight happens
 	// we limit the number of rounds to 1000 to prevent infinite loops, usually there should never be more than 30 rounds

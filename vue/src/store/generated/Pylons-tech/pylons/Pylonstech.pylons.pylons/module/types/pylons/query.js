@@ -3,6 +3,7 @@ import { Reader, util, configure, Writer } from "protobufjs/minimal";
 import * as Long from "long";
 import { PageRequest, PageResponse, } from "../cosmos/base/query/v1beta1/pagination";
 import { Trade } from "../pylons/trade";
+import { Fighter } from "../pylons/fighter";
 import { RedeemInfo } from "../pylons/redeem_info";
 import { PaymentInfo } from "../pylons/payment_info";
 import { Username, AccountAddr } from "../pylons/accounts";
@@ -172,6 +173,111 @@ export const QueryListTradesByCreatorResponse = {
         }
         else {
             message.pagination = undefined;
+        }
+        return message;
+    },
+};
+const baseQueryFightRequest = { ID: 0 };
+export const QueryFightRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.ID !== 0) {
+            writer.uint32(8).uint64(message.ID);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryFightRequest };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.ID = longToNumber(reader.uint64());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryFightRequest };
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = Number(object.ID);
+        }
+        else {
+            message.ID = 0;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.ID !== undefined && (obj.ID = message.ID);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryFightRequest };
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = 0;
+        }
+        return message;
+    },
+};
+const baseQueryFightResponse = {};
+export const QueryFightResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.Fighter !== undefined) {
+            Fighter.encode(message.Fighter, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryFightResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.Fighter = Fighter.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryFightResponse };
+        if (object.Fighter !== undefined && object.Fighter !== null) {
+            message.Fighter = Fighter.fromJSON(object.Fighter);
+        }
+        else {
+            message.Fighter = undefined;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.Fighter !== undefined &&
+            (obj.Fighter = message.Fighter
+                ? Fighter.toJSON(message.Fighter)
+                : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryFightResponse };
+        if (object.Fighter !== undefined && object.Fighter !== null) {
+            message.Fighter = Fighter.fromPartial(object.Fighter);
+        }
+        else {
+            message.Fighter = undefined;
         }
         return message;
     },
@@ -2584,6 +2690,11 @@ export class QueryClientImpl {
         const data = QueryListTradesByCreatorRequest.encode(request).finish();
         const promise = this.rpc.request("Pylonstech.pylons.pylons.Query", "ListTradesByCreator", data);
         return promise.then((data) => QueryListTradesByCreatorResponse.decode(new Reader(data)));
+    }
+    Fight(request) {
+        const data = QueryFightRequest.encode(request).finish();
+        const promise = this.rpc.request("Pylonstech.pylons.pylons.Query", "Fight", data);
+        return promise.then((data) => QueryFightResponse.decode(new Reader(data)));
     }
     RedeemInfo(request) {
         const data = QueryGetRedeemInfoRequest.encode(request).finish();

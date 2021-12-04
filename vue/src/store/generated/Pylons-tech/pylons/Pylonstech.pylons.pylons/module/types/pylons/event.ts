@@ -115,6 +115,22 @@ export interface EventFulfillTrade {
   paymentInfos: PaymentInfo[];
 }
 
+export interface EventCreateFighter {
+  creator: string;
+  ID: number;
+}
+
+export interface EventCancelFighter {
+  creator: string;
+  ID: number;
+}
+
+export interface EventFulfillFight {
+  ID: number;
+  creator: string;
+  fulfiller: string;
+}
+
 export interface EventGooglePurchase {
   creator: string;
   productID: string;
@@ -1830,6 +1846,245 @@ export const EventFulfillTrade = {
       for (const e of object.paymentInfos) {
         message.paymentInfos.push(PaymentInfo.fromPartial(e));
       }
+    }
+    return message;
+  },
+};
+
+const baseEventCreateFighter: object = { creator: "", ID: 0 };
+
+export const EventCreateFighter = {
+  encode(
+    message: EventCreateFighter,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.ID !== 0) {
+      writer.uint32(16).uint64(message.ID);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): EventCreateFighter {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseEventCreateFighter } as EventCreateFighter;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.ID = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EventCreateFighter {
+    const message = { ...baseEventCreateFighter } as EventCreateFighter;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = Number(object.ID);
+    } else {
+      message.ID = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: EventCreateFighter): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.ID !== undefined && (obj.ID = message.ID);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<EventCreateFighter>): EventCreateFighter {
+    const message = { ...baseEventCreateFighter } as EventCreateFighter;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = object.ID;
+    } else {
+      message.ID = 0;
+    }
+    return message;
+  },
+};
+
+const baseEventCancelFighter: object = { creator: "", ID: 0 };
+
+export const EventCancelFighter = {
+  encode(
+    message: EventCancelFighter,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.ID !== 0) {
+      writer.uint32(16).uint64(message.ID);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): EventCancelFighter {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseEventCancelFighter } as EventCancelFighter;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.ID = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EventCancelFighter {
+    const message = { ...baseEventCancelFighter } as EventCancelFighter;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = Number(object.ID);
+    } else {
+      message.ID = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: EventCancelFighter): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.ID !== undefined && (obj.ID = message.ID);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<EventCancelFighter>): EventCancelFighter {
+    const message = { ...baseEventCancelFighter } as EventCancelFighter;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = object.ID;
+    } else {
+      message.ID = 0;
+    }
+    return message;
+  },
+};
+
+const baseEventFulfillFight: object = { ID: 0, creator: "", fulfiller: "" };
+
+export const EventFulfillFight = {
+  encode(message: EventFulfillFight, writer: Writer = Writer.create()): Writer {
+    if (message.ID !== 0) {
+      writer.uint32(8).uint64(message.ID);
+    }
+    if (message.creator !== "") {
+      writer.uint32(18).string(message.creator);
+    }
+    if (message.fulfiller !== "") {
+      writer.uint32(26).string(message.fulfiller);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): EventFulfillFight {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseEventFulfillFight } as EventFulfillFight;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ID = longToNumber(reader.uint64() as Long);
+          break;
+        case 2:
+          message.creator = reader.string();
+          break;
+        case 3:
+          message.fulfiller = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EventFulfillFight {
+    const message = { ...baseEventFulfillFight } as EventFulfillFight;
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = Number(object.ID);
+    } else {
+      message.ID = 0;
+    }
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.fulfiller !== undefined && object.fulfiller !== null) {
+      message.fulfiller = String(object.fulfiller);
+    } else {
+      message.fulfiller = "";
+    }
+    return message;
+  },
+
+  toJSON(message: EventFulfillFight): unknown {
+    const obj: any = {};
+    message.ID !== undefined && (obj.ID = message.ID);
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.fulfiller !== undefined && (obj.fulfiller = message.fulfiller);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<EventFulfillFight>): EventFulfillFight {
+    const message = { ...baseEventFulfillFight } as EventFulfillFight;
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = object.ID;
+    } else {
+      message.ID = 0;
+    }
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.fulfiller !== undefined && object.fulfiller !== null) {
+      message.fulfiller = object.fulfiller;
+    } else {
+      message.fulfiller = "";
     }
     return message;
   },

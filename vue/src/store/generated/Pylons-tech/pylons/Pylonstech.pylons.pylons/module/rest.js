@@ -140,6 +140,21 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
+         * @name QueryFight
+         * @summary Queries a list of fight items.
+         * @request GET:/Pylons-tech/pylons/pylons/fight
+         */
+        this.queryFight = (query, params = {}) => this.request({
+            path: `/Pylons-tech/pylons/pylons/fight`,
+            method: "GET",
+            query: query,
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
          * @name QueryUsernameByAddress
          * @summary Queries a list of getAccountByAddress items.
          * @request GET:/pylons/account/address/{address}

@@ -94,6 +94,19 @@ export interface EventFulfillTrade {
     coinOutputs: Coin[];
     paymentInfos: PaymentInfo[];
 }
+export interface EventCreateFighter {
+    creator: string;
+    ID: number;
+}
+export interface EventCancelFighter {
+    creator: string;
+    ID: number;
+}
+export interface EventFulfillFight {
+    ID: number;
+    creator: string;
+    fulfiller: string;
+}
 export interface EventGooglePurchase {
     creator: string;
     productID: string;
@@ -223,6 +236,27 @@ export declare const EventFulfillTrade: {
     fromJSON(object: any): EventFulfillTrade;
     toJSON(message: EventFulfillTrade): unknown;
     fromPartial(object: DeepPartial<EventFulfillTrade>): EventFulfillTrade;
+};
+export declare const EventCreateFighter: {
+    encode(message: EventCreateFighter, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): EventCreateFighter;
+    fromJSON(object: any): EventCreateFighter;
+    toJSON(message: EventCreateFighter): unknown;
+    fromPartial(object: DeepPartial<EventCreateFighter>): EventCreateFighter;
+};
+export declare const EventCancelFighter: {
+    encode(message: EventCancelFighter, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): EventCancelFighter;
+    fromJSON(object: any): EventCancelFighter;
+    toJSON(message: EventCancelFighter): unknown;
+    fromPartial(object: DeepPartial<EventCancelFighter>): EventCancelFighter;
+};
+export declare const EventFulfillFight: {
+    encode(message: EventFulfillFight, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): EventFulfillFight;
+    fromJSON(object: any): EventFulfillFight;
+    toJSON(message: EventFulfillFight): unknown;
+    fromPartial(object: DeepPartial<EventFulfillFight>): EventFulfillFight;
 };
 export declare const EventGooglePurchase: {
     encode(message: EventGooglePurchase, writer?: Writer): Writer;

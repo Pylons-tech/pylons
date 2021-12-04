@@ -6,6 +6,7 @@ import {
   PageResponse,
 } from "../cosmos/base/query/v1beta1/pagination";
 import { Trade } from "../pylons/trade";
+import { Fighter } from "../pylons/fighter";
 import { RedeemInfo } from "../pylons/redeem_info";
 import { PaymentInfo } from "../pylons/payment_info";
 import { Username, AccountAddr } from "../pylons/accounts";
@@ -26,6 +27,14 @@ export interface QueryListTradesByCreatorResponse {
   Trades: Trade[];
   /** pagination defines the pagination in the response. */
   pagination: PageResponse | undefined;
+}
+
+export interface QueryFightRequest {
+  ID: number;
+}
+
+export interface QueryFightResponse {
+  Fighter: Fighter | undefined;
 }
 
 /** this line is used by starport scaffolding # 3 */
@@ -377,6 +386,122 @@ export const QueryListTradesByCreatorResponse = {
       message.pagination = PageResponse.fromPartial(object.pagination);
     } else {
       message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryFightRequest: object = { ID: 0 };
+
+export const QueryFightRequest = {
+  encode(message: QueryFightRequest, writer: Writer = Writer.create()): Writer {
+    if (message.ID !== 0) {
+      writer.uint32(8).uint64(message.ID);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryFightRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryFightRequest } as QueryFightRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ID = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryFightRequest {
+    const message = { ...baseQueryFightRequest } as QueryFightRequest;
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = Number(object.ID);
+    } else {
+      message.ID = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryFightRequest): unknown {
+    const obj: any = {};
+    message.ID !== undefined && (obj.ID = message.ID);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<QueryFightRequest>): QueryFightRequest {
+    const message = { ...baseQueryFightRequest } as QueryFightRequest;
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = object.ID;
+    } else {
+      message.ID = 0;
+    }
+    return message;
+  },
+};
+
+const baseQueryFightResponse: object = {};
+
+export const QueryFightResponse = {
+  encode(
+    message: QueryFightResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.Fighter !== undefined) {
+      Fighter.encode(message.Fighter, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryFightResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryFightResponse } as QueryFightResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.Fighter = Fighter.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryFightResponse {
+    const message = { ...baseQueryFightResponse } as QueryFightResponse;
+    if (object.Fighter !== undefined && object.Fighter !== null) {
+      message.Fighter = Fighter.fromJSON(object.Fighter);
+    } else {
+      message.Fighter = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryFightResponse): unknown {
+    const obj: any = {};
+    message.Fighter !== undefined &&
+      (obj.Fighter = message.Fighter
+        ? Fighter.toJSON(message.Fighter)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<QueryFightResponse>): QueryFightResponse {
+    const message = { ...baseQueryFightResponse } as QueryFightResponse;
+    if (object.Fighter !== undefined && object.Fighter !== null) {
+      message.Fighter = Fighter.fromPartial(object.Fighter);
+    } else {
+      message.Fighter = undefined;
     }
     return message;
   },
@@ -3210,6 +3335,8 @@ export interface Query {
   ListTradesByCreator(
     request: QueryListTradesByCreatorRequest
   ): Promise<QueryListTradesByCreatorResponse>;
+  /** Queries a list of fight items. */
+  Fight(request: QueryFightRequest): Promise<QueryFightResponse>;
   /** Queries a redeemInfo by index. */
   RedeemInfo(
     request: QueryGetRedeemInfoRequest
@@ -3289,6 +3416,16 @@ export class QueryClientImpl implements Query {
     return promise.then((data) =>
       QueryListTradesByCreatorResponse.decode(new Reader(data))
     );
+  }
+
+  Fight(request: QueryFightRequest): Promise<QueryFightResponse> {
+    const data = QueryFightRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "Pylonstech.pylons.pylons.Query",
+      "Fight",
+      data
+    );
+    return promise.then((data) => QueryFightResponse.decode(new Reader(data)));
   }
 
   RedeemInfo(

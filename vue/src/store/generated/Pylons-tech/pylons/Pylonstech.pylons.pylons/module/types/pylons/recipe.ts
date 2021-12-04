@@ -31,20 +31,12 @@ export interface StringInputParam {
   value: string;
 }
 
-/** ConditionList is a struct for describing ItemInput expression conditions */
-export interface ConditionList {
-  doubles: DoubleInputParam[];
-  longs: LongInputParam[];
-  strings: StringInputParam[];
-}
-
 /** ItemInput is a struct for describing an input item */
 export interface ItemInput {
   ID: string;
   doubles: DoubleInputParam[];
   longs: LongInputParam[];
   strings: StringInputParam[];
-  conditions: ConditionList | undefined;
 }
 
 /** DoubleWeightRange describes weight range that produce double value */
@@ -156,6 +148,7 @@ export interface Recipe {
   entries: EntriesList | undefined;
   outputs: WeightedOutputs[];
   blockInterval: number;
+  costPerBlock: Coin | undefined;
   enabled: boolean;
   extraInfo: string;
 }
@@ -410,126 +403,6 @@ export const StringInputParam = {
   },
 };
 
-const baseConditionList: object = {};
-
-export const ConditionList = {
-  encode(message: ConditionList, writer: Writer = Writer.create()): Writer {
-    for (const v of message.doubles) {
-      DoubleInputParam.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    for (const v of message.longs) {
-      LongInputParam.encode(v!, writer.uint32(18).fork()).ldelim();
-    }
-    for (const v of message.strings) {
-      StringInputParam.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): ConditionList {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseConditionList } as ConditionList;
-    message.doubles = [];
-    message.longs = [];
-    message.strings = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.doubles.push(
-            DoubleInputParam.decode(reader, reader.uint32())
-          );
-          break;
-        case 2:
-          message.longs.push(LongInputParam.decode(reader, reader.uint32()));
-          break;
-        case 3:
-          message.strings.push(
-            StringInputParam.decode(reader, reader.uint32())
-          );
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ConditionList {
-    const message = { ...baseConditionList } as ConditionList;
-    message.doubles = [];
-    message.longs = [];
-    message.strings = [];
-    if (object.doubles !== undefined && object.doubles !== null) {
-      for (const e of object.doubles) {
-        message.doubles.push(DoubleInputParam.fromJSON(e));
-      }
-    }
-    if (object.longs !== undefined && object.longs !== null) {
-      for (const e of object.longs) {
-        message.longs.push(LongInputParam.fromJSON(e));
-      }
-    }
-    if (object.strings !== undefined && object.strings !== null) {
-      for (const e of object.strings) {
-        message.strings.push(StringInputParam.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: ConditionList): unknown {
-    const obj: any = {};
-    if (message.doubles) {
-      obj.doubles = message.doubles.map((e) =>
-        e ? DoubleInputParam.toJSON(e) : undefined
-      );
-    } else {
-      obj.doubles = [];
-    }
-    if (message.longs) {
-      obj.longs = message.longs.map((e) =>
-        e ? LongInputParam.toJSON(e) : undefined
-      );
-    } else {
-      obj.longs = [];
-    }
-    if (message.strings) {
-      obj.strings = message.strings.map((e) =>
-        e ? StringInputParam.toJSON(e) : undefined
-      );
-    } else {
-      obj.strings = [];
-    }
-    return obj;
-  },
-
-  fromPartial(object: DeepPartial<ConditionList>): ConditionList {
-    const message = { ...baseConditionList } as ConditionList;
-    message.doubles = [];
-    message.longs = [];
-    message.strings = [];
-    if (object.doubles !== undefined && object.doubles !== null) {
-      for (const e of object.doubles) {
-        message.doubles.push(DoubleInputParam.fromPartial(e));
-      }
-    }
-    if (object.longs !== undefined && object.longs !== null) {
-      for (const e of object.longs) {
-        message.longs.push(LongInputParam.fromPartial(e));
-      }
-    }
-    if (object.strings !== undefined && object.strings !== null) {
-      for (const e of object.strings) {
-        message.strings.push(StringInputParam.fromPartial(e));
-      }
-    }
-    return message;
-  },
-};
-
 const baseItemInput: object = { ID: "" };
 
 export const ItemInput = {
@@ -545,12 +418,6 @@ export const ItemInput = {
     }
     for (const v of message.strings) {
       StringInputParam.encode(v!, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.conditions !== undefined) {
-      ConditionList.encode(
-        message.conditions,
-        writer.uint32(42).fork()
-      ).ldelim();
     }
     return writer;
   },
@@ -580,9 +447,6 @@ export const ItemInput = {
           message.strings.push(
             StringInputParam.decode(reader, reader.uint32())
           );
-          break;
-        case 5:
-          message.conditions = ConditionList.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -617,11 +481,6 @@ export const ItemInput = {
         message.strings.push(StringInputParam.fromJSON(e));
       }
     }
-    if (object.conditions !== undefined && object.conditions !== null) {
-      message.conditions = ConditionList.fromJSON(object.conditions);
-    } else {
-      message.conditions = undefined;
-    }
     return message;
   },
 
@@ -649,10 +508,6 @@ export const ItemInput = {
     } else {
       obj.strings = [];
     }
-    message.conditions !== undefined &&
-      (obj.conditions = message.conditions
-        ? ConditionList.toJSON(message.conditions)
-        : undefined);
     return obj;
   },
 
@@ -680,11 +535,6 @@ export const ItemInput = {
       for (const e of object.strings) {
         message.strings.push(StringInputParam.fromPartial(e));
       }
-    }
-    if (object.conditions !== undefined && object.conditions !== null) {
-      message.conditions = ConditionList.fromPartial(object.conditions);
-    } else {
-      message.conditions = undefined;
     }
     return message;
   },
@@ -2116,11 +1966,14 @@ export const Recipe = {
     if (message.blockInterval !== 0) {
       writer.uint32(88).int64(message.blockInterval);
     }
+    if (message.costPerBlock !== undefined) {
+      Coin.encode(message.costPerBlock, writer.uint32(98).fork()).ldelim();
+    }
     if (message.enabled === true) {
-      writer.uint32(96).bool(message.enabled);
+      writer.uint32(104).bool(message.enabled);
     }
     if (message.extraInfo !== "") {
-      writer.uint32(106).string(message.extraInfo);
+      writer.uint32(114).string(message.extraInfo);
     }
     return writer;
   },
@@ -2169,9 +2022,12 @@ export const Recipe = {
           message.blockInterval = longToNumber(reader.int64() as Long);
           break;
         case 12:
-          message.enabled = reader.bool();
+          message.costPerBlock = Coin.decode(reader, reader.uint32());
           break;
         case 13:
+          message.enabled = reader.bool();
+          break;
+        case 14:
           message.extraInfo = reader.string();
           break;
         default:
@@ -2242,6 +2098,11 @@ export const Recipe = {
     } else {
       message.blockInterval = 0;
     }
+    if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
+      message.costPerBlock = Coin.fromJSON(object.costPerBlock);
+    } else {
+      message.costPerBlock = undefined;
+    }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = Boolean(object.enabled);
     } else {
@@ -2292,6 +2153,10 @@ export const Recipe = {
     }
     message.blockInterval !== undefined &&
       (obj.blockInterval = message.blockInterval);
+    message.costPerBlock !== undefined &&
+      (obj.costPerBlock = message.costPerBlock
+        ? Coin.toJSON(message.costPerBlock)
+        : undefined);
     message.enabled !== undefined && (obj.enabled = message.enabled);
     message.extraInfo !== undefined && (obj.extraInfo = message.extraInfo);
     return obj;
@@ -2356,6 +2221,11 @@ export const Recipe = {
       message.blockInterval = object.blockInterval;
     } else {
       message.blockInterval = 0;
+    }
+    if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
+      message.costPerBlock = Coin.fromPartial(object.costPerBlock);
+    } else {
+      message.costPerBlock = undefined;
     }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = object.enabled;

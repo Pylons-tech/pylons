@@ -1,6 +1,7 @@
 import { Reader, Writer } from "protobufjs/minimal";
 import { PageRequest, PageResponse } from "../cosmos/base/query/v1beta1/pagination";
 import { Trade } from "../pylons/trade";
+import { Fighter } from "../pylons/fighter";
 import { RedeemInfo } from "../pylons/redeem_info";
 import { PaymentInfo } from "../pylons/payment_info";
 import { Username, AccountAddr } from "../pylons/accounts";
@@ -18,6 +19,12 @@ export interface QueryListTradesByCreatorResponse {
     Trades: Trade[];
     /** pagination defines the pagination in the response. */
     pagination: PageResponse | undefined;
+}
+export interface QueryFightRequest {
+    ID: number;
+}
+export interface QueryFightResponse {
+    Fighter: Fighter | undefined;
 }
 /** this line is used by starport scaffolding # 3 */
 export interface QueryGetRedeemInfoRequest {
@@ -164,6 +171,20 @@ export declare const QueryListTradesByCreatorResponse: {
     fromJSON(object: any): QueryListTradesByCreatorResponse;
     toJSON(message: QueryListTradesByCreatorResponse): unknown;
     fromPartial(object: DeepPartial<QueryListTradesByCreatorResponse>): QueryListTradesByCreatorResponse;
+};
+export declare const QueryFightRequest: {
+    encode(message: QueryFightRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryFightRequest;
+    fromJSON(object: any): QueryFightRequest;
+    toJSON(message: QueryFightRequest): unknown;
+    fromPartial(object: DeepPartial<QueryFightRequest>): QueryFightRequest;
+};
+export declare const QueryFightResponse: {
+    encode(message: QueryFightResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryFightResponse;
+    fromJSON(object: any): QueryFightResponse;
+    toJSON(message: QueryFightResponse): unknown;
+    fromPartial(object: DeepPartial<QueryFightResponse>): QueryFightResponse;
 };
 export declare const QueryGetRedeemInfoRequest: {
     encode(message: QueryGetRedeemInfoRequest, writer?: Writer): Writer;
@@ -407,6 +428,8 @@ export declare const QueryGetCookbookResponse: {
 export interface Query {
     /** Queries a list of listTradesByCreator items. */
     ListTradesByCreator(request: QueryListTradesByCreatorRequest): Promise<QueryListTradesByCreatorResponse>;
+    /** Queries a list of fight items. */
+    Fight(request: QueryFightRequest): Promise<QueryFightResponse>;
     /** Queries a redeemInfo by index. */
     RedeemInfo(request: QueryGetRedeemInfoRequest): Promise<QueryGetRedeemInfoResponse>;
     /** Queries a list of redeemInfo items. */
@@ -446,6 +469,7 @@ export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
     ListTradesByCreator(request: QueryListTradesByCreatorRequest): Promise<QueryListTradesByCreatorResponse>;
+    Fight(request: QueryFightRequest): Promise<QueryFightResponse>;
     RedeemInfo(request: QueryGetRedeemInfoRequest): Promise<QueryGetRedeemInfoResponse>;
     RedeemInfoAll(request: QueryAllRedeemInfoRequest): Promise<QueryAllRedeemInfoResponse>;
     PaymentInfo(request: QueryGetPaymentInfoRequest): Promise<QueryGetPaymentInfoResponse>;

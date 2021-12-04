@@ -14,6 +14,19 @@ import { Coin } from "../cosmos/base/v1beta1/coin";
 
 export const protobufPackage = "Pylonstech.pylons.pylons";
 
+export interface MsgEnlistForArena {
+  creator: string;
+  nft: string;
+  cookbookID: string;
+  lHitem: string;
+  rHitem: string;
+  armoritem: string;
+}
+
+export interface MsgEnlistForArenaResponse {
+  ID: number;
+}
+
 /** this line is used by starport scaffolding # proto/tx/message */
 export interface MsgBurnDebtToken {
   creator: string;
@@ -136,6 +149,7 @@ export interface MsgCreateRecipe {
   entries: EntriesList | undefined;
   outputs: WeightedOutputs[];
   blockInterval: number;
+  costPerBlock: Coin | undefined;
   enabled: boolean;
   extraInfo: string;
 }
@@ -154,6 +168,7 @@ export interface MsgUpdateRecipe {
   entries: EntriesList | undefined;
   outputs: WeightedOutputs[];
   blockInterval: number;
+  costPerBlock: Coin | undefined;
   enabled: boolean;
   extraInfo: string;
 }
@@ -168,7 +183,6 @@ export interface MsgCreateCookbook {
   developer: string;
   version: string;
   supportEmail: string;
-  costPerBlock: Coin | undefined;
   enabled: boolean;
 }
 
@@ -182,11 +196,226 @@ export interface MsgUpdateCookbook {
   developer: string;
   version: string;
   supportEmail: string;
-  costPerBlock: Coin | undefined;
   enabled: boolean;
 }
 
 export interface MsgUpdateCookbookResponse {}
+
+const baseMsgEnlistForArena: object = {
+  creator: "",
+  nft: "",
+  cookbookID: "",
+  lHitem: "",
+  rHitem: "",
+  armoritem: "",
+};
+
+export const MsgEnlistForArena = {
+  encode(message: MsgEnlistForArena, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.nft !== "") {
+      writer.uint32(18).string(message.nft);
+    }
+    if (message.cookbookID !== "") {
+      writer.uint32(26).string(message.cookbookID);
+    }
+    if (message.lHitem !== "") {
+      writer.uint32(34).string(message.lHitem);
+    }
+    if (message.rHitem !== "") {
+      writer.uint32(42).string(message.rHitem);
+    }
+    if (message.armoritem !== "") {
+      writer.uint32(50).string(message.armoritem);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgEnlistForArena {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgEnlistForArena } as MsgEnlistForArena;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.nft = reader.string();
+          break;
+        case 3:
+          message.cookbookID = reader.string();
+          break;
+        case 4:
+          message.lHitem = reader.string();
+          break;
+        case 5:
+          message.rHitem = reader.string();
+          break;
+        case 6:
+          message.armoritem = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgEnlistForArena {
+    const message = { ...baseMsgEnlistForArena } as MsgEnlistForArena;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.nft !== undefined && object.nft !== null) {
+      message.nft = String(object.nft);
+    } else {
+      message.nft = "";
+    }
+    if (object.cookbookID !== undefined && object.cookbookID !== null) {
+      message.cookbookID = String(object.cookbookID);
+    } else {
+      message.cookbookID = "";
+    }
+    if (object.lHitem !== undefined && object.lHitem !== null) {
+      message.lHitem = String(object.lHitem);
+    } else {
+      message.lHitem = "";
+    }
+    if (object.rHitem !== undefined && object.rHitem !== null) {
+      message.rHitem = String(object.rHitem);
+    } else {
+      message.rHitem = "";
+    }
+    if (object.armoritem !== undefined && object.armoritem !== null) {
+      message.armoritem = String(object.armoritem);
+    } else {
+      message.armoritem = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgEnlistForArena): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.nft !== undefined && (obj.nft = message.nft);
+    message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID);
+    message.lHitem !== undefined && (obj.lHitem = message.lHitem);
+    message.rHitem !== undefined && (obj.rHitem = message.rHitem);
+    message.armoritem !== undefined && (obj.armoritem = message.armoritem);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgEnlistForArena>): MsgEnlistForArena {
+    const message = { ...baseMsgEnlistForArena } as MsgEnlistForArena;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.nft !== undefined && object.nft !== null) {
+      message.nft = object.nft;
+    } else {
+      message.nft = "";
+    }
+    if (object.cookbookID !== undefined && object.cookbookID !== null) {
+      message.cookbookID = object.cookbookID;
+    } else {
+      message.cookbookID = "";
+    }
+    if (object.lHitem !== undefined && object.lHitem !== null) {
+      message.lHitem = object.lHitem;
+    } else {
+      message.lHitem = "";
+    }
+    if (object.rHitem !== undefined && object.rHitem !== null) {
+      message.rHitem = object.rHitem;
+    } else {
+      message.rHitem = "";
+    }
+    if (object.armoritem !== undefined && object.armoritem !== null) {
+      message.armoritem = object.armoritem;
+    } else {
+      message.armoritem = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgEnlistForArenaResponse: object = { ID: 0 };
+
+export const MsgEnlistForArenaResponse = {
+  encode(
+    message: MsgEnlistForArenaResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.ID !== 0) {
+      writer.uint32(8).uint64(message.ID);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgEnlistForArenaResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgEnlistForArenaResponse,
+    } as MsgEnlistForArenaResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ID = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgEnlistForArenaResponse {
+    const message = {
+      ...baseMsgEnlistForArenaResponse,
+    } as MsgEnlistForArenaResponse;
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = Number(object.ID);
+    } else {
+      message.ID = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: MsgEnlistForArenaResponse): unknown {
+    const obj: any = {};
+    message.ID !== undefined && (obj.ID = message.ID);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgEnlistForArenaResponse>
+  ): MsgEnlistForArenaResponse {
+    const message = {
+      ...baseMsgEnlistForArenaResponse,
+    } as MsgEnlistForArenaResponse;
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = object.ID;
+    } else {
+      message.ID = 0;
+    }
+    return message;
+  },
+};
 
 const baseMsgBurnDebtToken: object = { creator: "" };
 
@@ -2207,11 +2436,14 @@ export const MsgCreateRecipe = {
     if (message.blockInterval !== 0) {
       writer.uint32(88).int64(message.blockInterval);
     }
+    if (message.costPerBlock !== undefined) {
+      Coin.encode(message.costPerBlock, writer.uint32(98).fork()).ldelim();
+    }
     if (message.enabled === true) {
-      writer.uint32(96).bool(message.enabled);
+      writer.uint32(104).bool(message.enabled);
     }
     if (message.extraInfo !== "") {
-      writer.uint32(106).string(message.extraInfo);
+      writer.uint32(114).string(message.extraInfo);
     }
     return writer;
   },
@@ -2260,9 +2492,12 @@ export const MsgCreateRecipe = {
           message.blockInterval = longToNumber(reader.int64() as Long);
           break;
         case 12:
-          message.enabled = reader.bool();
+          message.costPerBlock = Coin.decode(reader, reader.uint32());
           break;
         case 13:
+          message.enabled = reader.bool();
+          break;
+        case 14:
           message.extraInfo = reader.string();
           break;
         default:
@@ -2333,6 +2568,11 @@ export const MsgCreateRecipe = {
     } else {
       message.blockInterval = 0;
     }
+    if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
+      message.costPerBlock = Coin.fromJSON(object.costPerBlock);
+    } else {
+      message.costPerBlock = undefined;
+    }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = Boolean(object.enabled);
     } else {
@@ -2382,6 +2622,10 @@ export const MsgCreateRecipe = {
     }
     message.blockInterval !== undefined &&
       (obj.blockInterval = message.blockInterval);
+    message.costPerBlock !== undefined &&
+      (obj.costPerBlock = message.costPerBlock
+        ? Coin.toJSON(message.costPerBlock)
+        : undefined);
     message.enabled !== undefined && (obj.enabled = message.enabled);
     message.extraInfo !== undefined && (obj.extraInfo = message.extraInfo);
     return obj;
@@ -2446,6 +2690,11 @@ export const MsgCreateRecipe = {
       message.blockInterval = object.blockInterval;
     } else {
       message.blockInterval = 0;
+    }
+    if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
+      message.costPerBlock = Coin.fromPartial(object.costPerBlock);
+    } else {
+      message.costPerBlock = undefined;
     }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = object.enabled;
@@ -2554,11 +2803,14 @@ export const MsgUpdateRecipe = {
     if (message.blockInterval !== 0) {
       writer.uint32(88).int64(message.blockInterval);
     }
+    if (message.costPerBlock !== undefined) {
+      Coin.encode(message.costPerBlock, writer.uint32(98).fork()).ldelim();
+    }
     if (message.enabled === true) {
-      writer.uint32(96).bool(message.enabled);
+      writer.uint32(104).bool(message.enabled);
     }
     if (message.extraInfo !== "") {
-      writer.uint32(106).string(message.extraInfo);
+      writer.uint32(114).string(message.extraInfo);
     }
     return writer;
   },
@@ -2607,9 +2859,12 @@ export const MsgUpdateRecipe = {
           message.blockInterval = longToNumber(reader.int64() as Long);
           break;
         case 12:
-          message.enabled = reader.bool();
+          message.costPerBlock = Coin.decode(reader, reader.uint32());
           break;
         case 13:
+          message.enabled = reader.bool();
+          break;
+        case 14:
           message.extraInfo = reader.string();
           break;
         default:
@@ -2680,6 +2935,11 @@ export const MsgUpdateRecipe = {
     } else {
       message.blockInterval = 0;
     }
+    if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
+      message.costPerBlock = Coin.fromJSON(object.costPerBlock);
+    } else {
+      message.costPerBlock = undefined;
+    }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = Boolean(object.enabled);
     } else {
@@ -2729,6 +2989,10 @@ export const MsgUpdateRecipe = {
     }
     message.blockInterval !== undefined &&
       (obj.blockInterval = message.blockInterval);
+    message.costPerBlock !== undefined &&
+      (obj.costPerBlock = message.costPerBlock
+        ? Coin.toJSON(message.costPerBlock)
+        : undefined);
     message.enabled !== undefined && (obj.enabled = message.enabled);
     message.extraInfo !== undefined && (obj.extraInfo = message.extraInfo);
     return obj;
@@ -2793,6 +3057,11 @@ export const MsgUpdateRecipe = {
       message.blockInterval = object.blockInterval;
     } else {
       message.blockInterval = 0;
+    }
+    if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
+      message.costPerBlock = Coin.fromPartial(object.costPerBlock);
+    } else {
+      message.costPerBlock = undefined;
     }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = object.enabled;
@@ -2888,11 +3157,8 @@ export const MsgCreateCookbook = {
     if (message.supportEmail !== "") {
       writer.uint32(58).string(message.supportEmail);
     }
-    if (message.costPerBlock !== undefined) {
-      Coin.encode(message.costPerBlock, writer.uint32(66).fork()).ldelim();
-    }
     if (message.enabled === true) {
-      writer.uint32(72).bool(message.enabled);
+      writer.uint32(64).bool(message.enabled);
     }
     return writer;
   },
@@ -2926,9 +3192,6 @@ export const MsgCreateCookbook = {
           message.supportEmail = reader.string();
           break;
         case 8:
-          message.costPerBlock = Coin.decode(reader, reader.uint32());
-          break;
-        case 9:
           message.enabled = reader.bool();
           break;
         default:
@@ -2976,11 +3239,6 @@ export const MsgCreateCookbook = {
     } else {
       message.supportEmail = "";
     }
-    if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
-      message.costPerBlock = Coin.fromJSON(object.costPerBlock);
-    } else {
-      message.costPerBlock = undefined;
-    }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = Boolean(object.enabled);
     } else {
@@ -3000,10 +3258,6 @@ export const MsgCreateCookbook = {
     message.version !== undefined && (obj.version = message.version);
     message.supportEmail !== undefined &&
       (obj.supportEmail = message.supportEmail);
-    message.costPerBlock !== undefined &&
-      (obj.costPerBlock = message.costPerBlock
-        ? Coin.toJSON(message.costPerBlock)
-        : undefined);
     message.enabled !== undefined && (obj.enabled = message.enabled);
     return obj;
   },
@@ -3044,11 +3298,6 @@ export const MsgCreateCookbook = {
       message.supportEmail = object.supportEmail;
     } else {
       message.supportEmail = "";
-    }
-    if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
-      message.costPerBlock = Coin.fromPartial(object.costPerBlock);
-    } else {
-      message.costPerBlock = undefined;
     }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = object.enabled;
@@ -3145,11 +3394,8 @@ export const MsgUpdateCookbook = {
     if (message.supportEmail !== "") {
       writer.uint32(58).string(message.supportEmail);
     }
-    if (message.costPerBlock !== undefined) {
-      Coin.encode(message.costPerBlock, writer.uint32(66).fork()).ldelim();
-    }
     if (message.enabled === true) {
-      writer.uint32(72).bool(message.enabled);
+      writer.uint32(64).bool(message.enabled);
     }
     return writer;
   },
@@ -3183,9 +3429,6 @@ export const MsgUpdateCookbook = {
           message.supportEmail = reader.string();
           break;
         case 8:
-          message.costPerBlock = Coin.decode(reader, reader.uint32());
-          break;
-        case 9:
           message.enabled = reader.bool();
           break;
         default:
@@ -3233,11 +3476,6 @@ export const MsgUpdateCookbook = {
     } else {
       message.supportEmail = "";
     }
-    if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
-      message.costPerBlock = Coin.fromJSON(object.costPerBlock);
-    } else {
-      message.costPerBlock = undefined;
-    }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = Boolean(object.enabled);
     } else {
@@ -3257,10 +3495,6 @@ export const MsgUpdateCookbook = {
     message.version !== undefined && (obj.version = message.version);
     message.supportEmail !== undefined &&
       (obj.supportEmail = message.supportEmail);
-    message.costPerBlock !== undefined &&
-      (obj.costPerBlock = message.costPerBlock
-        ? Coin.toJSON(message.costPerBlock)
-        : undefined);
     message.enabled !== undefined && (obj.enabled = message.enabled);
     return obj;
   },
@@ -3301,11 +3535,6 @@ export const MsgUpdateCookbook = {
       message.supportEmail = object.supportEmail;
     } else {
       message.supportEmail = "";
-    }
-    if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
-      message.costPerBlock = Coin.fromPartial(object.costPerBlock);
-    } else {
-      message.costPerBlock = undefined;
     }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = object.enabled;
@@ -3370,6 +3599,9 @@ export const MsgUpdateCookbookResponse = {
 
 /** Msg defines the Msg service. */
 export interface Msg {
+  EnlistForArena(
+    request: MsgEnlistForArena
+  ): Promise<MsgEnlistForArenaResponse>;
   /** this line is used by starport scaffolding # proto/tx/rpc */
   BurnDebtToken(request: MsgBurnDebtToken): Promise<MsgBurnDebtTokenResponse>;
   UpdateAccount(request: MsgUpdateAccount): Promise<MsgUpdateAccountResponse>;
@@ -3404,6 +3636,20 @@ export class MsgClientImpl implements Msg {
   constructor(rpc: Rpc) {
     this.rpc = rpc;
   }
+  EnlistForArena(
+    request: MsgEnlistForArena
+  ): Promise<MsgEnlistForArenaResponse> {
+    const data = MsgEnlistForArena.encode(request).finish();
+    const promise = this.rpc.request(
+      "Pylonstech.pylons.pylons.Msg",
+      "EnlistForArena",
+      data
+    );
+    return promise.then((data) =>
+      MsgEnlistForArenaResponse.decode(new Reader(data))
+    );
+  }
+
   BurnDebtToken(request: MsgBurnDebtToken): Promise<MsgBurnDebtTokenResponse> {
     const data = MsgBurnDebtToken.encode(request).finish();
     const promise = this.rpc.request(

@@ -1,5 +1,4 @@
 import { Writer, Reader } from "protobufjs/minimal";
-import { Coin } from "../cosmos/base/v1beta1/coin";
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 export interface Cookbook {
     creator: string;
@@ -10,7 +9,6 @@ export interface Cookbook {
     developer: string;
     version: string;
     supportEmail: string;
-    costPerBlock: Coin | undefined;
     enabled: boolean;
 }
 export declare const Cookbook: {

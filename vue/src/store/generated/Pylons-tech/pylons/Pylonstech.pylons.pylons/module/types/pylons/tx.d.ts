@@ -5,6 +5,17 @@ import { PaymentInfo } from "../pylons/payment_info";
 import { CoinInput, ItemInput, EntriesList, WeightedOutputs } from "../pylons/recipe";
 import { Coin } from "../cosmos/base/v1beta1/coin";
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
+export interface MsgEnlistForArena {
+    creator: string;
+    nft: string;
+    cookbookID: string;
+    lHitem: string;
+    rHitem: string;
+    armoritem: string;
+}
+export interface MsgEnlistForArenaResponse {
+    ID: number;
+}
 /** this line is used by starport scaffolding # proto/tx/message */
 export interface MsgBurnDebtToken {
     creator: string;
@@ -112,6 +123,7 @@ export interface MsgCreateRecipe {
     entries: EntriesList | undefined;
     outputs: WeightedOutputs[];
     blockInterval: number;
+    costPerBlock: Coin | undefined;
     enabled: boolean;
     extraInfo: string;
 }
@@ -129,6 +141,7 @@ export interface MsgUpdateRecipe {
     entries: EntriesList | undefined;
     outputs: WeightedOutputs[];
     blockInterval: number;
+    costPerBlock: Coin | undefined;
     enabled: boolean;
     extraInfo: string;
 }
@@ -142,7 +155,6 @@ export interface MsgCreateCookbook {
     developer: string;
     version: string;
     supportEmail: string;
-    costPerBlock: Coin | undefined;
     enabled: boolean;
 }
 export interface MsgCreateCookbookResponse {
@@ -155,11 +167,24 @@ export interface MsgUpdateCookbook {
     developer: string;
     version: string;
     supportEmail: string;
-    costPerBlock: Coin | undefined;
     enabled: boolean;
 }
 export interface MsgUpdateCookbookResponse {
 }
+export declare const MsgEnlistForArena: {
+    encode(message: MsgEnlistForArena, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgEnlistForArena;
+    fromJSON(object: any): MsgEnlistForArena;
+    toJSON(message: MsgEnlistForArena): unknown;
+    fromPartial(object: DeepPartial<MsgEnlistForArena>): MsgEnlistForArena;
+};
+export declare const MsgEnlistForArenaResponse: {
+    encode(message: MsgEnlistForArenaResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgEnlistForArenaResponse;
+    fromJSON(object: any): MsgEnlistForArenaResponse;
+    toJSON(message: MsgEnlistForArenaResponse): unknown;
+    fromPartial(object: DeepPartial<MsgEnlistForArenaResponse>): MsgEnlistForArenaResponse;
+};
 export declare const MsgBurnDebtToken: {
     encode(message: MsgBurnDebtToken, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgBurnDebtToken;
@@ -386,6 +411,7 @@ export declare const MsgUpdateCookbookResponse: {
 };
 /** Msg defines the Msg service. */
 export interface Msg {
+    EnlistForArena(request: MsgEnlistForArena): Promise<MsgEnlistForArenaResponse>;
     /** this line is used by starport scaffolding # proto/tx/rpc */
     BurnDebtToken(request: MsgBurnDebtToken): Promise<MsgBurnDebtTokenResponse>;
     UpdateAccount(request: MsgUpdateAccount): Promise<MsgUpdateAccountResponse>;
@@ -407,6 +433,7 @@ export interface Msg {
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
     constructor(rpc: Rpc);
+    EnlistForArena(request: MsgEnlistForArena): Promise<MsgEnlistForArenaResponse>;
     BurnDebtToken(request: MsgBurnDebtToken): Promise<MsgBurnDebtTokenResponse>;
     UpdateAccount(request: MsgUpdateAccount): Promise<MsgUpdateAccountResponse>;
     FulfillTrade(request: MsgFulfillTrade): Promise<MsgFulfillTradeResponse>;

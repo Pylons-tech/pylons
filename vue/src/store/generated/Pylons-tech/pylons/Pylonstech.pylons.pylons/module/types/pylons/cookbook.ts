@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as Long from "long";
 import { util, configure, Writer, Reader } from "protobufjs/minimal";
-import { Coin } from "../cosmos/base/v1beta1/coin";
 
 export const protobufPackage = "Pylonstech.pylons.pylons";
 
@@ -14,7 +13,6 @@ export interface Cookbook {
   developer: string;
   version: string;
   supportEmail: string;
-  costPerBlock: Coin | undefined;
   enabled: boolean;
 }
 
@@ -56,11 +54,8 @@ export const Cookbook = {
     if (message.supportEmail !== "") {
       writer.uint32(66).string(message.supportEmail);
     }
-    if (message.costPerBlock !== undefined) {
-      Coin.encode(message.costPerBlock, writer.uint32(74).fork()).ldelim();
-    }
     if (message.enabled === true) {
-      writer.uint32(80).bool(message.enabled);
+      writer.uint32(72).bool(message.enabled);
     }
     return writer;
   },
@@ -97,9 +92,6 @@ export const Cookbook = {
           message.supportEmail = reader.string();
           break;
         case 9:
-          message.costPerBlock = Coin.decode(reader, reader.uint32());
-          break;
-        case 10:
           message.enabled = reader.bool();
           break;
         default:
@@ -152,11 +144,6 @@ export const Cookbook = {
     } else {
       message.supportEmail = "";
     }
-    if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
-      message.costPerBlock = Coin.fromJSON(object.costPerBlock);
-    } else {
-      message.costPerBlock = undefined;
-    }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = Boolean(object.enabled);
     } else {
@@ -178,10 +165,6 @@ export const Cookbook = {
     message.version !== undefined && (obj.version = message.version);
     message.supportEmail !== undefined &&
       (obj.supportEmail = message.supportEmail);
-    message.costPerBlock !== undefined &&
-      (obj.costPerBlock = message.costPerBlock
-        ? Coin.toJSON(message.costPerBlock)
-        : undefined);
     message.enabled !== undefined && (obj.enabled = message.enabled);
     return obj;
   },
@@ -227,11 +210,6 @@ export const Cookbook = {
       message.supportEmail = object.supportEmail;
     } else {
       message.supportEmail = "";
-    }
-    if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
-      message.costPerBlock = Coin.fromPartial(object.costPerBlock);
-    } else {
-      message.costPerBlock = undefined;
     }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = object.enabled;

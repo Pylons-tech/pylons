@@ -34,12 +34,6 @@ export interface PylonsCoinOutput {
   program?: string;
 }
 
-export interface PylonsConditionList {
-  doubles?: PylonsDoubleInputParam[];
-  longs?: PylonsLongInputParam[];
-  strings?: PylonsStringInputParam[];
-}
-
 export interface PylonsCookbook {
   creator?: string;
   ID?: string;
@@ -51,14 +45,6 @@ export interface PylonsCookbook {
   developer?: string;
   version?: string;
   supportEmail?: string;
-
-  /**
-   * Coin defines a token with a denomination and an amount.
-   *
-   * NOTE: The amount field is an Int which implements the custom method
-   * signatures required by gogoproto.
-   */
-  costPerBlock?: V1Beta1Coin;
   enabled?: boolean;
 }
 
@@ -116,6 +102,20 @@ export interface PylonsExecution {
   itemModifyOutputIDs?: string[];
 }
 
+export interface PylonsFighter {
+  creator?: string;
+
+  /** @format uint64 */
+  ID?: string;
+  cookbookID?: string;
+  LHitem?: string;
+  RHitem?: string;
+  Armoritem?: string;
+  NFT?: string;
+  Status?: string;
+  Log?: string;
+}
+
 export interface PylonsGoogleInAppPurchaseOrder {
   creator?: string;
   productID?: string;
@@ -161,7 +161,6 @@ export interface PylonsItemInput {
   doubles?: PylonsDoubleInputParam[];
   longs?: PylonsLongInputParam[];
   strings?: PylonsStringInputParam[];
-  conditions?: PylonsConditionList;
 }
 
 export interface PylonsItemModifyOutput {
@@ -263,6 +262,11 @@ export interface PylonsMsgCreateTradeResponse {
   ID?: string;
 }
 
+export interface PylonsMsgEnlistForArenaResponse {
+  /** @format uint64 */
+  ID?: string;
+}
+
 export interface PylonsMsgExecuteRecipeResponse {
   ID?: string;
 }
@@ -320,6 +324,10 @@ export interface PylonsQueryAllRedeemInfoResponse {
    *  }
    */
   pagination?: V1Beta1PageResponse;
+}
+
+export interface PylonsQueryFightResponse {
+  Fighter?: PylonsFighter;
 }
 
 export interface PylonsQueryGetAddressByUsernameResponse {
@@ -423,6 +431,14 @@ export interface PylonsRecipe {
 
   /** @format int64 */
   blockInterval?: string;
+
+  /**
+   * Coin defines a token with a denomination and an amount.
+   *
+   * NOTE: The amount field is an Int which implements the custom method
+   * signatures required by gogoproto.
+   */
+  costPerBlock?: V1Beta1Coin;
   enabled?: boolean;
   extraInfo?: string;
 }
@@ -749,6 +765,23 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryFight
+   * @summary Queries a list of fight items.
+   * @request GET:/Pylons-tech/pylons/pylons/fight
+   */
+  queryFight = (query?: { ID?: string }, params: RequestParams = {}) =>
+    this.request<PylonsQueryFightResponse, RpcStatus>({
+      path: `/Pylons-tech/pylons/pylons/fight`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
   /**
    * No description
    *

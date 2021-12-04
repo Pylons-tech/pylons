@@ -2,9 +2,9 @@ import { StdFee } from "@cosmjs/launchpad";
 import { OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
 import { MsgSetWithdrawAddress } from "./types/cosmos/distribution/v1beta1/tx";
+import { MsgWithdrawDelegatorReward } from "./types/cosmos/distribution/v1beta1/tx";
 import { MsgWithdrawValidatorCommission } from "./types/cosmos/distribution/v1beta1/tx";
 import { MsgFundCommunityPool } from "./types/cosmos/distribution/v1beta1/tx";
-import { MsgWithdrawDelegatorReward } from "./types/cosmos/distribution/v1beta1/tx";
 export declare const MissingWalletError: Error;
 interface TxClientOptions {
     addr: string;
@@ -16,9 +16,9 @@ interface SignAndBroadcastOptions {
 declare const txClient: (wallet: OfflineSigner, { addr: addr }?: TxClientOptions) => Promise<{
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }?: SignAndBroadcastOptions) => Promise<import("@cosmjs/stargate").BroadcastTxResponse>;
     msgSetWithdrawAddress: (data: MsgSetWithdrawAddress) => EncodeObject;
+    msgWithdrawDelegatorReward: (data: MsgWithdrawDelegatorReward) => EncodeObject;
     msgWithdrawValidatorCommission: (data: MsgWithdrawValidatorCommission) => EncodeObject;
     msgFundCommunityPool: (data: MsgFundCommunityPool) => EncodeObject;
-    msgWithdrawDelegatorReward: (data: MsgWithdrawDelegatorReward) => EncodeObject;
 }>;
 interface QueryClientOptions {
     addr: string;
