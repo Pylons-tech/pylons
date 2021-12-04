@@ -8,6 +8,10 @@ const (
 func CalculateTxSizeFee(obj []byte, sizeLimitBytes, feePerByte int) int {
 	fee := 0
 
+	if sizeLimitBytes < 0 || feePerByte < 0 {
+		return fee
+	}
+
 	sizeOverBytes := len(obj) - sizeLimitBytes
 	if sizeOverBytes > 0 {
 		fee = sizeOverBytes * feePerByte
