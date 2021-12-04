@@ -1,2 +1,3 @@
 From  starport/cli
-ENTRYPOINT [ "starport", "chain", "serve" ]
+COPY . /app
+ENTRYPOINT [ "starport", "chain", "serve", "-p", "/app" ]
