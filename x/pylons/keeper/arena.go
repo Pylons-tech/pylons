@@ -229,11 +229,19 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 			// second run necessary because attacks just exist now
 			for _, prop := range item.Strings {
 				if prop.Key == "DamageType" {
-					readyFighter.attacks[index].damagetype = prop.Value
+					attackIndex := index
+					if attackIndex >= len(readyFighter.attacks) {
+						attackIndex = len(readyFighter.attacks) - 1
+					}
+					readyFighter.attacks[attackIndex].damagetype = prop.Value
 				}
 				// write down the weapon names
 				if prop.Key == "name" && index < 2 && !shield && !nft && !armor{
-					readyFighter.attacks[index].weaponName = prop.Value
+					attackIndex := index
+					if attackIndex >= len(readyFighter.attacks) {
+						attackIndex = len(readyFighter.attacks) - 1
+					}
+					readyFighter.attacks[attackIndex].weaponName = prop.Value
 				} else if prop.Key == "name" && nft {
 					readyFighter.name = prop.Value
 				} else if prop.Key == "name" && armor {
@@ -288,13 +296,21 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 					if err != nil {
 						return readyFighter, err
 					}
-					readyFighter.attacks[index].damage += val
+					attackIndex := index
+					if attackIndex >= len(readyFighter.attacks) {
+						attackIndex = len(readyFighter.attacks) - 1
+					}
+					readyFighter.attacks[attackIndex].damage += val
 				} else if prop.Key == "accuracy" {
 					val, err := prop.Value.Float64()
 					if err != nil {
 						return readyFighter, err
 					}
-					readyFighter.attacks[index].accuracy *= val
+					attackIndex := index
+					if attackIndex >= len(readyFighter.attacks) {
+						attackIndex = len(readyFighter.attacks) - 1
+					}
+					readyFighter.attacks[attackIndex].accuracy *= val
 				}
 
 				fmt.Println(prop.Key, prop.Value)
