@@ -15,11 +15,11 @@ var _ = strconv.Itoa(0)
 
 func CmdEnlistForArena() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "enlist-for-arena [opponent] [cookbook-id] [l-hitem] [r-hitem] [armoritem]",
+		Use:   "enlist-for-arena [nft] [cookbook-id] [l-hitem] [r-hitem] [armoritem]",
 		Short: "Broadcast message EnlistForArena",
 		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			argOpponent := args[0]
+			argNFT := args[0]
 			argCookbookID := args[1]
 			argLHitem := args[2]
 			argRHitem := args[3]
@@ -32,7 +32,7 @@ func CmdEnlistForArena() *cobra.Command {
 
 			msg := types.NewMsgEnlistForArena(
 				clientCtx.GetFromAddress().String(),
-				argOpponent,
+				argNFT,
 				argCookbookID,
 				argLHitem,
 				argRHitem,
