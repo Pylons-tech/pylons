@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/spf13/cast"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	ibctypes "github.com/cosmos/ibc-go/v2/modules/apps/transfer/types"
@@ -119,7 +118,8 @@ func ParseCoinInputsCLI(arg string) ([]CoinInput, error) {
 	err := json.Unmarshal([]byte(arg), &coinInputs)
 	if err != nil {
 		// try to marshal as []string
-		coinStrs, err := cast.ToStringSliceE(arg)
+		var coinStrs []string
+		err = json.Unmarshal([]byte(arg), &coinStrs)
 		if err != nil {
 			return nil, sdkerrors.Wrap(err, "cannot convert to []string or []CoinInput")
 		}

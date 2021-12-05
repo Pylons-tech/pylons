@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/json"
 	fmt "fmt"
 	"testing"
 
@@ -171,6 +172,123 @@ func TestParseCoinInputStringArray(t *testing.T) {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			parsed, err := ParseCoinInputStringArray(tc.coinsStr)
+			if err != nil {
+				require.Contains(t, err.Error(), tc.err.Error())
+			} else {
+				require.Equal(t, tc.coinInputs, parsed)
+			}
+		})
+	}
+}
+
+func TestParseCoinInputsCLI(t *testing.T) {
+	coinInputs1, err := json.Marshal([]CoinInput{
+		{Coins: sdk.NewCoins(
+			sdk.NewCoin("uatom", sdk.NewInt(10)),
+			sdk.NewCoin("upylon", sdk.NewInt(10)),
+		)},
+	})
+	require.NoError(t, err)
+
+	coinInputs2, err := json.Marshal([]CoinInput{{
+		Coins: sdk.NewCoins(
+			sdk.NewCoin("uatom", sdk.NewInt(10)),
+			sdk.NewCoin("upylon", sdk.NewInt(10)),
+		),
+	},
+		{
+			Coins: sdk.NewCoins(
+				sdk.NewCoin("uatom", sdk.NewInt(1000)),
+			),
+		},
+	})
+	require.NoError(t, err)
+
+	for _, tc := range []struct {
+		desc       string
+		arg        string
+		coinInputs []CoinInput
+		err        error
+	}{
+		{
+			desc: "valid1String",
+			arg:  "[\"10uatom,10upylon\"]",
+			coinInputs: []CoinInput{{
+				Coins: sdk.NewCoins(
+					sdk.NewCoin("uatom", sdk.NewInt(10)),
+					sdk.NewCoin("upylon", sdk.NewInt(10)),
+				),
+			}},
+			err: nil,
+		},
+		{
+			desc: "validString2",
+			arg:  "[\"10uatom,10upylon\",\"1000uatom\"]",
+			coinInputs: []CoinInput{{
+				Coins: sdk.NewCoins(
+					sdk.NewCoin("uatom", sdk.NewInt(10)),
+					sdk.NewCoin("upylon", sdk.NewInt(10)),
+				),
+			},
+				{
+					Coins: sdk.NewCoins(
+						sdk.NewCoin("uatom", sdk.NewInt(1000)),
+					),
+				},
+			},
+			err: nil,
+		},
+		{
+			desc: "validJSON1",
+			arg:  string(coinInputs1),
+			coinInputs: []CoinInput{{
+				Coins: sdk.NewCoins(
+					sdk.NewCoin("uatom", sdk.NewInt(10)),
+					sdk.NewCoin("upylon", sdk.NewInt(10)),
+				),
+			}},
+			err: nil,
+		},
+		{
+			desc: "validJSON2",
+			arg:  string(coinInputs2),
+			coinInputs: []CoinInput{{
+				Coins: sdk.NewCoins(
+					sdk.NewCoin("uatom", sdk.NewInt(10)),
+					sdk.NewCoin("upylon", sdk.NewInt(10)),
+				),
+			},
+				{
+					Coins: sdk.NewCoins(
+						sdk.NewCoin("uatom", sdk.NewInt(1000)),
+					),
+				},
+			},
+			err: nil,
+		},
+		{
+			desc:       "invalid1",
+			arg:        "[\"10uatom,joij\"]",
+			coinInputs: []CoinInput{},
+			err:        fmt.Errorf("invalid decimal coin expression: %s", "joij"),
+		},
+		{
+			desc:       "invalid2",
+			arg:        "[\"10uatom,10uatom\"]",
+			coinInputs: []CoinInput{},
+			err:        fmt.Errorf("duplicate denomination %s", "uatom"),
+		},
+		{
+			desc:       "invalid3",
+			arg:        "[\"10uatom,10upylon\",\"test\"]",
+			coinInputs: []CoinInput{},
+			err:        fmt.Errorf("invalid decimal coin expression: %s", "test"),
+		},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			parsed, err := ParseCoinInputsCLI(tc.arg)
+			fmt.Println(parsed)
 			if err != nil {
 				require.Contains(t, err.Error(), tc.err.Error())
 			} else {
