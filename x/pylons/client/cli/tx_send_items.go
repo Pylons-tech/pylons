@@ -38,7 +38,7 @@ func CmdSendItems() *cobra.Command {
 
 			msg := types.NewMsgSendItems(clientCtx.GetFromAddress().String(), argsReceiver, jsonArgsItems)
 			if err := msg.ValidateBasic(); err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return err
 			}
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},

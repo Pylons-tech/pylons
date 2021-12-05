@@ -84,7 +84,7 @@ func CmdCancelTrade() *cobra.Command {
 
 			msg := types.NewMsgCancelTrade(clientCtx.GetFromAddress().String(), id)
 			if err := msg.ValidateBasic(); err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return err
 			}
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},

@@ -4,7 +4,6 @@ import (
 	"strconv"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/spf13/cobra"
 
@@ -32,7 +31,7 @@ func CmdCreateAccount() *cobra.Command {
 
 			msg := types.NewMsgCreateAccount(clientCtx.GetFromAddress().String(), username)
 			if err := msg.ValidateBasic(); err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return err
 			}
 
 			txf := tx.NewFactoryCLI(clientCtx, cmd.Flags())
@@ -60,7 +59,7 @@ func CmdUpdateAccount() *cobra.Command {
 
 			msg := types.NewMsgUpdateAccount(clientCtx.GetFromAddress().String(), argsUsername)
 			if err := msg.ValidateBasic(); err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return err
 			}
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
