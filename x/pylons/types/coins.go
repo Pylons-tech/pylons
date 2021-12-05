@@ -97,3 +97,17 @@ func CreateValidCoinOutputsList(cookbookID string, coinOutputs []CoinOutput) ([]
 
 	return validCoinOutputs, nil
 }
+
+func ParseCoinInputStringArray(coinsStr []string) ([]CoinInput, error) {
+	coinInputs := make([]CoinInput, len(coinsStr))
+
+	for i, coinStr := range coinsStr {
+		coins, err := sdk.ParseCoinsNormalized(coinStr)
+		if err != nil {
+			return nil, err
+		}
+		coinInputs[i].Coins = coins
+	}
+
+	return coinInputs, nil
+}

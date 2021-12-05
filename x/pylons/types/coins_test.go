@@ -108,3 +108,45 @@ func TestCreateValidCoinOutputsList(t *testing.T) {
 		})
 	}
 }
+
+func TestParseCoinInputStringArray(t *testing.T) {
+	for _, tc := range []struct {
+		desc       string
+		coinsStr   []string
+		coinInputs []CoinInput
+	}{
+		{
+			desc:     "valid1",
+			coinsStr: []string{"10uatom,10upylon"},
+			coinInputs: []CoinInput{{
+				Coins: sdk.NewCoins(
+					sdk.NewCoin("uatom", sdk.NewInt(10)),
+					sdk.NewCoin("upylon", sdk.NewInt(10)),
+				),
+			}},
+		},
+		{
+			desc:     "valid2",
+			coinsStr: []string{"10uatom,10upylon", "1000upylon,10000000uatom"},
+			coinInputs: []CoinInput{{
+				Coins: sdk.NewCoins(
+					sdk.NewCoin("uatom", sdk.NewInt(10)),
+					sdk.NewCoin("upylon", sdk.NewInt(10)),
+				),
+			},
+				{
+					Coins: sdk.NewCoins(
+						sdk.NewCoin("upylon", sdk.NewInt(1000)),
+						sdk.NewCoin("uatom", sdk.NewInt(10000000)),
+					),
+				}},
+		},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			parsed, err := ParseCoinInputStringArray(tc.coinsStr)
+			require.NoError(t, err)
+			require.Equal(t, tc.coinInputs, parsed)
+		})
+	}
+}
