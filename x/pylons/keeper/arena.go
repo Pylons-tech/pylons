@@ -236,20 +236,27 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 					readyFighter.attacks[attackIndex].damagetype = prop.Value
 				}
 				// write down the weapon names
-				if prop.Key == "name" && index < 2 && !shield && !nft && !armor{
+				if prop.Key == "name" && index < 2 && !shield && !nft && !armor {
 					attackIndex := index
 					if attackIndex >= len(readyFighter.attacks) {
 						attackIndex = len(readyFighter.attacks) - 1
 					}
 					readyFighter.attacks[attackIndex].weaponName = prop.Value
-				} else if prop.Key == "name" && nft {
-					readyFighter.name = prop.Value
 				} else if prop.Key == "name" && armor {
 					readyFighter.armorName = prop.Value
 				} else if prop.Key == "name" && shield {
 					readyFighter.shieldName = prop.Value
 				}
 			}
+
+			if nft {
+				for _, prop := range item.MutableStrings {
+					if prop.Key == "name" {
+						readyFighter.name = prop.Value
+					}
+				}
+			}
+
 
 			// double properties of items are read and saved
 			for _, prop := range item.Doubles {
