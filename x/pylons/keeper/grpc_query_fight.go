@@ -2,7 +2,7 @@ package keeper
 
 import (
 	"context"
-	//"fmt"
+	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
@@ -17,6 +17,7 @@ func (k Keeper) Fight(goCtx context.Context, req *types.QueryFightRequest) (*typ
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
+	fmt.Println("ID:", req.ID)
 	var fighter types.Fighter
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -27,5 +28,6 @@ func (k Keeper) Fight(goCtx context.Context, req *types.QueryFightRequest) (*typ
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.FighterKey))
 	k.cdc.MustUnmarshal(store.Get(getFighterIDBytes(req.ID)), &fighter)
 
+	fmt.Println("FIGHTER", fighter)
 	return &types.QueryFightResponse{Fighter: fighter}, nil
 }
