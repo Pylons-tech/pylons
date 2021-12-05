@@ -390,3 +390,67 @@ func TestParseCoinOutputCLI(t *testing.T) {
 		})
 	}
 }
+
+func TestParseCoinCLI(t *testing.T) {
+	coin1, err := json.Marshal(
+		sdk.NewCoin("uatom", sdk.NewInt(10)),
+	)
+	require.NoError(t, err)
+
+	coin2, err := json.Marshal(
+		sdk.NewCoin("upylon", sdk.NewInt(10)),
+	)
+
+	require.NoError(t, err)
+
+	for _, tc := range []struct {
+		desc string
+		arg  string
+		coin sdk.Coin
+		err  error
+	}{
+		{
+			desc: "valid1String",
+			arg:  "10uatom",
+			coin: sdk.NewCoin("uatom", sdk.NewInt(10)),
+			err:  nil,
+		},
+		{
+			desc: "validString2",
+			arg:  "10upylon",
+			coin: sdk.NewCoin("upylon", sdk.NewInt(10)),
+
+			err: nil,
+		},
+		{
+			desc: "validJSON1",
+			arg:  string(coin1),
+			coin: sdk.NewCoin("uatom", sdk.NewInt(10)),
+			err:  nil,
+		},
+		{
+			desc: "validJSON2",
+			arg:  string(coin2),
+			coin: sdk.NewCoin("upylon", sdk.NewInt(10)),
+
+			err: nil,
+		},
+		{
+			desc: "invalid1",
+			arg:  "joij",
+			coin: sdk.Coin{},
+			err:  fmt.Errorf("invalid decimal coin expression: %s", "joij"),
+		},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			parsed, err := ParseCoinCLI(tc.arg)
+			fmt.Println(parsed)
+			if err != nil {
+				require.Contains(t, err.Error(), tc.err.Error())
+			} else {
+				require.Equal(t, tc.coin, parsed)
+			}
+		})
+	}
+}
