@@ -1,6 +1,7 @@
 package types
 
 import (
+	fmt "fmt"
 	"testing"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -114,6 +115,7 @@ func TestParseCoinInputStringArray(t *testing.T) {
 		desc       string
 		coinsStr   []string
 		coinInputs []CoinInput
+		err        error
 	}{
 		{
 			desc:     "valid1",
@@ -124,6 +126,7 @@ func TestParseCoinInputStringArray(t *testing.T) {
 					sdk.NewCoin("upylon", sdk.NewInt(10)),
 				),
 			}},
+			err: nil,
 		},
 		{
 			desc:     "valid2",
@@ -140,13 +143,39 @@ func TestParseCoinInputStringArray(t *testing.T) {
 						sdk.NewCoin("uatom", sdk.NewInt(10000000)),
 					),
 				}},
+			err: nil,
+		},
+		{
+			desc:     "invalidDuplicate1",
+			coinsStr: []string{"10uatom,10uatom"},
+			coinInputs: []CoinInput{{
+				Coins: sdk.NewCoins(
+					sdk.NewCoin("uatom", sdk.NewInt(20)),
+				),
+			}},
+			err: fmt.Errorf("duplicate denomination %s", "uatom"),
+		},
+		{
+			desc:       "invalidStr1",
+			coinsStr:   []string{"test", "1000upylon,10000000uatom"},
+			coinInputs: []CoinInput{{}},
+			err:        fmt.Errorf("invalid decimal coin expression: %s", "test"),
+		},
+		{
+			desc:       "invalidStr2",
+			coinsStr:   []string{"1000upylon,10000000uatom", "test"},
+			coinInputs: []CoinInput{{}},
+			err:        fmt.Errorf("invalid decimal coin expression: %s", "test"),
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			parsed, err := ParseCoinInputStringArray(tc.coinsStr)
-			require.NoError(t, err)
-			require.Equal(t, tc.coinInputs, parsed)
+			if err != nil {
+				require.Contains(t, err.Error(), tc.err.Error())
+			} else {
+				require.Equal(t, tc.coinInputs, parsed)
+			}
 		})
 	}
 }
