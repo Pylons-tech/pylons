@@ -104,7 +104,7 @@ func ParseCoinInputStringArray(coinsStr []string) ([]CoinInput, error) {
 	for i, coinStr := range coinsStr {
 		coins, err := sdk.ParseCoinsNormalized(coinStr)
 		if err != nil {
-			return nil, err
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, err.Error())
 		}
 		coinInputs[i].Coins = coins
 	}
