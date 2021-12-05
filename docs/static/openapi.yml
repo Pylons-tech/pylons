@@ -12533,6 +12533,9 @@ paths:
                     type: string
                   Log:
                     type: string
+                  opponentFighter:
+                    type: string
+                    format: uint64
         default:
           description: An unexpected error response.
           schema:
@@ -23585,6 +23588,9 @@ definitions:
         type: string
       Log:
         type: string
+      opponentFighter:
+        type: string
+        format: uint64
   Pylonstech.pylons.pylons.GoogleInAppPurchaseOrder:
     type: object
     properties:
@@ -24251,6 +24257,9 @@ definitions:
             type: string
           Log:
             type: string
+          opponentFighter:
+            type: string
+            format: uint64
   Pylonstech.pylons.pylons.QueryGetAddressByUsernameResponse:
     type: object
     properties:

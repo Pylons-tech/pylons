@@ -16,4 +16,5 @@ message Fighter {
   string NFT = 7;
   string Status = 8;
   string Log = 9;
+  uint64 opponentFighter = 10;
 }

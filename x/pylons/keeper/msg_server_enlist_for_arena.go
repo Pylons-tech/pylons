@@ -26,7 +26,6 @@ func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistFor
 
 	openFights := k.GetAllFighters(ctx)
 
-
 	var fighter = types.Fighter{
 		Creator:    msg.Creator,
 		CookbookID: msg.CookbookID,
@@ -36,12 +35,15 @@ func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistFor
 		NFT:				msg.Nft,
 		Status: 		"waiting",
 		Log:				"",
+		OpponentFighter: 0,
 	}
 
-	// go through all fights and see if there is a worthy opponent
-	for _, opponent := range openFights {
+	id := k.AppendFighter(ctx, fighter)
 
-		if opponent.CookbookID == msg.CookbookID && opponent.Status == "waiting" /* && opponent.Creator != msg.Creator */ { // currently fighting against self is ok for testing
+	// go through all fights and see if there is a worthy opponent
+	for oppoID, opponent := range openFights {
+
+		if (opponent.CookbookID == msg.CookbookID && opponent.Status == "waiting" && id != uint64(oppoID)	) /* && opponent.Creator != msg.Creator */  {
 
 			battleWinner, battleLog, err := k.Battle(ctx, fighter, opponent)
 			if err != nil {
@@ -50,13 +52,17 @@ func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistFor
 			if battleWinner == "A" {
 				opponent.Status = "loss"
 				opponent.Log = battleLog
+				opponent.OpponentFighter = id
 				fighter.Status = "win"
 				fighter.Log = battleLog
+				fighter.OpponentFighter = uint64(oppoID)
 			} else {
 				opponent.Status = "win"
 				opponent.Log = battleLog
+				opponent.OpponentFighter = id
 				fighter.Status = "loss"
 				fighter.Log = battleLog
+				fighter.OpponentFighter = uint64(oppoID)
 			}
 
 			k.SetFighter(ctx, opponent)
@@ -68,8 +74,6 @@ func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistFor
 			break
 		}
 	}
-
-	id := k.AppendFighter(ctx, fighter)
 
 	err := ctx.EventManager().EmitTypedEvent(&types.EventCreateFighter{
 		ID: id,
