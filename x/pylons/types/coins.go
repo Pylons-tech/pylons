@@ -1,10 +1,12 @@
 package types
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/spf13/cast"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	ibctypes "github.com/cosmos/ibc-go/v2/modules/apps/transfer/types"
@@ -110,4 +112,48 @@ func ParseCoinInputStringArray(coinsStr []string) ([]CoinInput, error) {
 	}
 
 	return coinInputs, nil
+}
+
+func ParseCoinInputsCLI(arg string) ([]CoinInput, error) {
+	coinInputs := make([]CoinInput, 0)
+	err := json.Unmarshal([]byte(arg), &coinInputs)
+	if err != nil {
+		// try to marshal as []string
+		coinStrs, err := cast.ToStringSliceE(arg)
+		if err != nil {
+			return nil, sdkerrors.Wrap(err, "cannot convert to []string or []CoinInput")
+		}
+		coinInputs, err = ParseCoinInputStringArray(coinStrs)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return coinInputs, nil
+}
+
+func ParseCoinOutputCLI(arg string) (sdk.Coins, error) {
+	coinOutputs := sdk.NewCoins()
+	err := json.Unmarshal([]byte(arg), &coinOutputs)
+	if err != nil {
+		// arg is in format "10uatom,100upylon"
+		coinOutputs, err = sdk.ParseCoinsNormalized(arg)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return coinOutputs, nil
+}
+
+func ParseCoinCLI(arg string) (sdk.Coin, error) {
+	coin := sdk.Coin{}
+	err := json.Unmarshal([]byte(arg), &coin)
+	if err != nil {
+		coin, err = sdk.ParseCoinNormalized(arg)
+		if err != nil {
+			return sdk.Coin{}, err
+		}
+	}
+	return coin, nil
 }

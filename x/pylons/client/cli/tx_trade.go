@@ -4,15 +4,12 @@ import (
 	"encoding/json"
 	"strconv"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	"github.com/spf13/cobra"
-
-	"github.com/spf13/cast"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
@@ -23,46 +20,33 @@ func CmdCreateTrade() *cobra.Command {
 		Short: "create new trade",
 		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			argsCoinInputs, err := cast.ToStringE(args[0])
+			argsCoinInputs := args[0]
+			jsonArgsCoinInputs, err := types.ParseCoinInputsCLI(argsCoinInputs)
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			jsonArgsCoinInputs := make([]types.CoinInput, 0)
-			err = json.Unmarshal([]byte(argsCoinInputs), &jsonArgsCoinInputs)
-			if err != nil {
-				return err
-			}
-			argsItemInputs, err := cast.ToStringE(args[1])
-			if err != nil {
-				return err
-			}
+
+			argsItemInputs := args[1]
 			jsonArgsItemInputs := make([]types.ItemInput, 0)
 			err = json.Unmarshal([]byte(argsItemInputs), &jsonArgsItemInputs)
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			argsCoinOutput, err := cast.ToStringE(args[2])
+
+			argsCoinOutput := args[2]
+			jsonArgsCoinOutput, err := types.ParseCoinOutputCLI(argsCoinOutput)
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			jsonArgsCoinOutput := sdk.Coins{}
-			err = json.Unmarshal([]byte(argsCoinOutput), &jsonArgsCoinOutput)
-			if err != nil {
-				return err
-			}
-			argsItemOutputs, err := cast.ToStringE(args[3])
-			if err != nil {
-				return err
-			}
+
+			argsItemOutputs := args[3]
 			jsonArgsItemOutputs := make([]types.ItemRef, 0)
 			err = json.Unmarshal([]byte(argsItemOutputs), &jsonArgsItemOutputs)
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			argsExtraInfo, err := cast.ToStringE(args[4])
-			if err != nil {
-				return err
-			}
+
+			argsExtraInfo := args[4]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -71,7 +55,7 @@ func CmdCreateTrade() *cobra.Command {
 
 			msg := types.NewMsgCreateTrade(clientCtx.GetFromAddress().String(), jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsCoinOutput, jsonArgsItemOutputs, argsExtraInfo)
 			if err := msg.ValidateBasic(); err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
@@ -90,7 +74,7 @@ func CmdCancelTrade() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			id, err := strconv.ParseUint(args[0], 10, 64)
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -100,7 +84,7 @@ func CmdCancelTrade() *cobra.Command {
 
 			msg := types.NewMsgCancelTrade(clientCtx.GetFromAddress().String(), id)
 			if err := msg.ValidateBasic(); err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},

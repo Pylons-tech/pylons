@@ -11,6 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
@@ -27,19 +28,20 @@ func CmdExecuteRecipe() *cobra.Command {
 			argsRecipeID := args[1]
 			argsCoinInputsIndex, err := cast.ToUint64E(args[2])
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsItemIDs := args[3]
 			jsonArgsItemIDs := make([]string, 0)
 			err = json.Unmarshal([]byte(argsItemIDs), &jsonArgsItemIDs)
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
+
 			argsPaymentInfo := args[4]
 			jsonArgsPaymentInfo := make([]types.PaymentInfo, 0)
 			err = json.Unmarshal([]byte(argsPaymentInfo), &jsonArgsPaymentInfo)
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -49,7 +51,7 @@ func CmdExecuteRecipe() *cobra.Command {
 
 			msg := types.NewMsgExecuteRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, argsRecipeID, argsCoinInputsIndex, jsonArgsItemIDs, jsonArgsPaymentInfo)
 			if err := msg.ValidateBasic(); err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},

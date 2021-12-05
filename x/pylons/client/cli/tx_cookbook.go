@@ -21,26 +21,12 @@ func CmdCreateCookbook() *cobra.Command {
 		Args:  cobra.ExactArgs(7),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			id := args[0]
-			argsName, err := cast.ToStringE(args[1])
-			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-			}
-			argsDescription, err := cast.ToStringE(args[2])
-			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-			}
-			argsDeveloper, err := cast.ToStringE(args[3])
-			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-			}
-			argsVersion, err := cast.ToStringE(args[4])
-			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-			}
-			argsSupportEmail, err := cast.ToStringE(args[5])
-			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-			}
+			argsName := args[1]
+			argsDescription := args[2]
+			argsDeveloper := args[3]
+			argsVersion := args[4]
+			argsSupportEmail := args[5]
+
 			argsEnabled, err := cast.ToBoolE(args[6])
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
@@ -48,12 +34,12 @@ func CmdCreateCookbook() *cobra.Command {
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return err
 			}
 
 			msg := types.NewMsgCreateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, argsEnabled)
 			if err := msg.ValidateBasic(); err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
@@ -71,26 +57,12 @@ func CmdUpdateCookbook() *cobra.Command {
 		Args:  cobra.ExactArgs(7),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			id := args[0]
-			argsName, err := cast.ToStringE(args[1])
-			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-			}
-			argsDescription, err := cast.ToStringE(args[2])
-			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-			}
-			argsDeveloper, err := cast.ToStringE(args[3])
-			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-			}
-			argsVersion, err := cast.ToStringE(args[4])
-			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-			}
-			argsSupportEmail, err := cast.ToStringE(args[5])
-			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-			}
+			argsName := args[1]
+			argsDescription := args[2]
+			argsDeveloper := args[3]
+			argsVersion := args[4]
+			argsSupportEmail := args[5]
+
 			argsEnabled, err := cast.ToBoolE(args[6])
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
@@ -98,12 +70,12 @@ func CmdUpdateCookbook() *cobra.Command {
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return err
 			}
 
 			msg := types.NewMsgUpdateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, argsEnabled)
 			if err := msg.ValidateBasic(); err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
