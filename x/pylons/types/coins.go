@@ -132,7 +132,7 @@ func ParseCoinInputsCLI(arg string) ([]CoinInput, error) {
 	return coinInputs, nil
 }
 
-func ParseCoinOutputCLI(arg string) (sdk.Coins, error) {
+func ParseCoinsCLI(arg string) (sdk.Coins, error) {
 	coinOutputs := sdk.NewCoins()
 	err := json.Unmarshal([]byte(arg), &coinOutputs)
 	if err != nil {

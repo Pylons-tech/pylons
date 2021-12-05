@@ -34,7 +34,7 @@ func CmdCreateTrade() *cobra.Command {
 			}
 
 			argsCoinOutput := args[2]
-			jsonArgsCoinOutput, err := types.ParseCoinOutputCLI(argsCoinOutput)
+			jsonArgsCoinOutput, err := types.ParseCoinsCLI(argsCoinOutput)
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}

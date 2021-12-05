@@ -29,11 +29,7 @@ func TestCreateTradeNoItemOutput1(t *testing.T) {
 	ctx := val.ClientCtx
 
 	coinInputs, err := json.Marshal(
-		[]types.CoinInput{
-			{
-				Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
-			},
-		},
+		[]string{"1node0token"},
 	)
 	require.NoError(t, err)
 
@@ -48,10 +44,7 @@ func TestCreateTradeNoItemOutput1(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	coinOutputs, err := json.Marshal(
-		sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(10))),
-	)
-	require.NoError(t, err)
+	coinOutputs := "10node0token"
 
 	// no  item outputs
 	itemOutputs, err := json.Marshal([]types.ItemRef{})
@@ -61,7 +54,7 @@ func TestCreateTradeNoItemOutput1(t *testing.T) {
 	fields := []string{
 		string(coinInputs),
 		string(itemInputs),
-		string(coinOutputs),
+		coinOutputs,
 		string(itemOutputs),
 		"extraInfo",
 	}

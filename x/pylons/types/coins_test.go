@@ -298,7 +298,7 @@ func TestParseCoinInputsCLI(t *testing.T) {
 	}
 }
 
-func TestParseCoinOutputCLI(t *testing.T) {
+func TestParseCoinsCLI(t *testing.T) {
 	coinOutput1, err := json.Marshal(sdk.NewCoins(
 		sdk.NewCoin("uatom", sdk.NewInt(10)),
 		sdk.NewCoin("upylon", sdk.NewInt(10)),
@@ -380,7 +380,7 @@ func TestParseCoinOutputCLI(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			parsed, err := ParseCoinOutputCLI(tc.arg)
+			parsed, err := ParseCoinsCLI(tc.arg)
 			fmt.Println(parsed)
 			if err != nil {
 				require.Contains(t, err.Error(), tc.err.Error())
