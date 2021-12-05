@@ -25,7 +25,6 @@ func CmdCreateRecipe() *cobra.Command {
 			id := args[1]
 			argsName := args[2]
 			argsDescription := args[3]
-			argsDescription, err := cast.ToStringE(args[3])
 			argsVersion := args[4]
 
 			argsCoinInputs := args[5]
