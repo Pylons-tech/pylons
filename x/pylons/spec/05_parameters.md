@@ -12,12 +12,15 @@ The pylons module contains the following parameters:
 | RecipeFeePercentage                    |sdk.Dec       | 10.0                             |
 | ItemTransferFeePercentage             | sdk.Dec       | 20.0                             |
 | UpdateItemStringFee                   | sdk.Coin      | {"denom": "upylon", "amount", 10}                               |
-| UpdateUsernameFee                   | sdk.Coin      | {"denom": "upylon", "amount", 10}                               |
+| UpdateUsernameFee                     | sdk.Coin      | {"denom": "upylon", "amount", 10}                               |
 | MinTransferFee                        | sdk.Int       | 20                               |
 | MaxTransferFee                        | sdk.Int       | 20                               |
 | PaymentProcessors                     | []PaymentProcessor| (see below)                  |
 | DistrEpochIdentifier                  | string         | "day"                           |
 | EngineVersion                         | uint64         | 1                               |
+| TxSizeLimitBytes                      | uint64         | 1024                               |
+| TxSizeFeePerByte                     | sdk.Coin        | {"denom": "upylon", "amount", 10}                               |
+
 
 ## CoinIssuers
 
@@ -121,6 +124,11 @@ String identifier to choose an epoch length from the `x/epochs` module.
 
 Application version.  Planned for use in the future to deprecate recipes.
 
+## TxSizeLimitBytes
 
+Number of bytes under which an object can be stored on-chain for free.  All objects larger than this limit cost a fee of
+`(size(obj) - TxSizeLimitBytes) * TxSizeFeePerByte`.
 
+## TxSizeFeePerByte
 
+Fee used to charge for object larger than `TxSizeLimitBytes`.
