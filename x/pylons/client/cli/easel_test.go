@@ -116,6 +116,7 @@ func createMintRecipe1(t *testing.T, simInfo *easelBasicSim) {
 			Weight:   1,
 		},
 	})
+	require.NoError(t, err)
 
 	// Get Character Recipe
 	simInfo.mintRecipeID = "EaselMintNFT23418234129"
@@ -149,7 +150,7 @@ func mintNFT1(t *testing.T, simInfo *easelBasicSim) {
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -167,7 +168,7 @@ func mintNFT1(t *testing.T, simInfo *easelBasicSim) {
 	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
@@ -178,7 +179,7 @@ func mintNFT1(t *testing.T, simInfo *easelBasicSim) {
 	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookIDEasel, itemResp.Item.CookbookID)
 }
 
@@ -289,6 +290,7 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 			Weight:   1,
 		},
 	})
+	require.NoError(t, err)
 
 	// Get Character Recipe
 	simInfo.mintRecipeID2 = "cookbook_for_test_2021_10_22_09_13_587"
@@ -301,7 +303,7 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 		string(entries),
 		string(itemOutputs),
 		"1",
-		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
+		"{\"denom\": \"node0token\", \"amount\": \"12\"}",
 		"true",
 		"",
 	}
@@ -311,8 +313,21 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 	args = append(args, mintNFTRecipe...)
 	fmt.Println(args)
 	args = append(args, simInfo.common...)
-	_, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateRecipe(), args)
+	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
+	var resp sdk.TxResponse
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
+	fmt.Println(resp.RawLog)
+	require.Equal(t, uint32(0), resp.Code)
+
+	// check the recipe
+	args = []string{cookbookIDEasel, simInfo.mintRecipeID2}
+	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowRecipe(), args)
+	require.NoError(t, err)
+	var recipeResp types.QueryGetRecipeResponse
+	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &recipeResp))
+	// verify completed
+	require.Equal(t, true, recipeResp.Recipe.Enabled)
 }
 
 func mintNFT2(t *testing.T, simInfo *easelBasicSim) {
@@ -322,7 +337,8 @@ func mintNFT2(t *testing.T, simInfo *easelBasicSim) {
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
+	fmt.Println(resp.RawLog)
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights

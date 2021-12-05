@@ -22,7 +22,7 @@ const (
 	DefaultMaxFieldLength int = 65535
 	// DefaultSizeLimitBytes is the size limit for objects stored on chain.  If an object is
 	// larger than this limit, a fee is charged for all bytes above this size.
-	DefaultSizeLimitBytes uint64 = 512
+	DefaultSizeLimitBytes uint64 = 1024
 	// DefaultFeePerBytesAmount is the fee per bytes charged for all bytes larger than SizePerBytes
 	DefaultFeePerBytesAmount int64 = 10
 )
