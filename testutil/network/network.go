@@ -114,6 +114,6 @@ func DefaultConfig() network.Config {
 }
 
 // CustomGenesisHelper returns the pylons module's custom genesis state.
-func CustomGenesisHelper(cdc codec.JSONCodec) json.RawMessage {
+func CustomGenesisHelper(cdc codec.Codec) json.RawMessage {
 	return cdc.MustMarshalJSON(types.NetworkTestGenesis())
 }

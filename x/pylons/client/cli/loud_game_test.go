@@ -182,7 +182,7 @@ func createCharacter(t *testing.T, simInfo *loudBasicSim) {
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -200,7 +200,7 @@ func createCharacter(t *testing.T, simInfo *loudBasicSim) {
 	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
@@ -211,7 +211,7 @@ func createCharacter(t *testing.T, simInfo *loudBasicSim) {
 	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookIDLOUD, itemResp.Item.CookbookID)
 }
 
@@ -263,7 +263,7 @@ func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -281,7 +281,7 @@ func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 }
@@ -365,7 +365,7 @@ func buyCopperSword(t *testing.T, simInfo *loudBasicSim) {
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -383,7 +383,7 @@ func buyCopperSword(t *testing.T, simInfo *loudBasicSim) {
 	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
@@ -394,7 +394,7 @@ func buyCopperSword(t *testing.T, simInfo *loudBasicSim) {
 	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookIDLOUD, itemResp.Item.CookbookID)
 }
 
@@ -620,7 +620,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 		out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 		require.NoError(t, err)
 		var resp sdk.TxResponse
-		require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+		require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 		require.Equal(t, uint32(0), resp.Code)
 
 		// simulate waiting for later block heights
@@ -638,7 +638,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 		out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowExecution(), args)
 		require.NoError(t, err)
 		var execResp types.QueryGetExecutionResponse
-		require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+		require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 		// verify completed
 		require.Equal(t, true, execResp.Completed)
 
@@ -651,7 +651,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 		args = []string{cookbookIDLOUD, simInfo.characterID}
 		charOut, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 		require.NoError(t, err)
-		require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(charOut.Bytes(), &itemResp))
+		require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(charOut.Bytes(), &itemResp))
 		if itemResp.Item.Owner != simInfo.net.Validators[0].Address.String() {
 			// PLAYER DIED
 			createCharacter(t, simInfo)
@@ -662,7 +662,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 		args = []string{cookbookIDLOUD, simInfo.swordID}
 		swordOut, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 		require.NoError(t, err)
-		require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(swordOut.Bytes(), &itemResp))
+		require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(swordOut.Bytes(), &itemResp))
 		if itemResp.Item.Owner != simInfo.net.Validators[0].Address.String() {
 			// LOST SWORD
 			buyCopperSword(t, simInfo)

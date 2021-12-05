@@ -82,7 +82,7 @@ func getTestCoins(t *testing.T, simInfo *tradeSimInfo, common []string) {
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -100,7 +100,7 @@ func getTestCoins(t *testing.T, simInfo *tradeSimInfo, common []string) {
 	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 }
@@ -153,7 +153,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate full execution of recipe to generate an item
@@ -254,7 +254,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	args = append(args, simInfo.traderCommon...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -272,7 +272,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
@@ -282,7 +282,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
@@ -334,7 +334,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	args = append(args, simInfo.traderCommon...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateTrade(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// fulfill trade from FULFILLER
@@ -356,7 +356,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	args = append(args, simInfo.fulfillerCommon...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdFulfillTrade(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// emsure that item is owned by FULFILLER
@@ -365,14 +365,14 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdListItemByOwner(), args)
 	var listItemResp types.QueryListItemByOwnerResponse
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &listItemResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &listItemResp))
 	require.Equal(t, 1, len(listItemResp.Items))
 
 	args = make([]string, 0)
 	args = append(args, trader.String())
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdListItemByOwner(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &listItemResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &listItemResp))
 	require.Equal(t, 0, len(listItemResp.Items))
 
 }
