@@ -126,7 +126,7 @@ func createMintRecipe1(t *testing.T, simInfo *easelBasicSim) {
 		string(entries),
 		string(itemOutputs),
 		"0",
-		"{\"denom\": \"upylon\", \"amount\": \"12\"}",
+		"12upylon",
 		"true",
 		"extraInfo",
 	}
