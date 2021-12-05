@@ -75,6 +75,18 @@ func (k Keeper) EngineVersion(ctx sdk.Context) (res uint64) {
 	return
 }
 
+// TxSizeLimitBytes returns the TxSizeLimitBytes param
+func (k Keeper) TxSizeLimitBytes(ctx sdk.Context) (res uint64) {
+	k.paramSpace.Get(ctx, types.ParamStoreKeyTxSizeLimitBytes, &res)
+	return
+}
+
+// TxSizeFeePerBytes returns the EngineVersion param
+func (k Keeper) TxSizeFeePerBytes(ctx sdk.Context) (res sdk.Coin) {
+	k.paramSpace.Get(ctx, types.ParamStoreKeyTxSizeFeePerByte, &res)
+	return
+}
+
 // GetParams returns the total set of pylons parameters.
 func (k Keeper) GetParams(ctx sdk.Context) (params types.Params) {
 	k.paramSpace.GetParamSet(ctx, &params)

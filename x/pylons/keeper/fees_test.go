@@ -1,8 +1,9 @@
 package keeper_test
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestCalculateTxSizeFeeCookbook() {
@@ -25,12 +26,14 @@ func (suite *IntegrationTestSuite) TestCalculateTxSizeFeeCookbook() {
 
 	b := cdc.MustMarshal(&cookbook)
 
-	fee := types.CalculateTxSizeFee(b, types.DefaultSizeLimitBytes, types.DefaultFeePerBytes)
-	require.Equal(0, fee)
+	fee := types.CalculateTxSizeFee(b, int(types.DefaultSizeLimitBytes), types.DefaultFeePerBytes)
+	expectedFee := sdk.NewCoin(types.DefaultFeePerBytes.Denom, sdk.NewInt(int64(0)))
+	require.Equal(expectedFee, fee)
 
 	fee = types.CalculateTxSizeFee(b, 10, types.DefaultFeePerBytes)
-	expectedFee := (len(b) - 10) * types.DefaultFeePerBytes
-	require.Equal(expectedFee, fee)
+	expectedFeeAmount := (len(b) - 10) * int(types.DefaultFeePerBytesAmount)
+	expectedFee = sdk.NewCoin(types.DefaultFeePerBytes.Denom, sdk.NewInt(int64(expectedFeeAmount)))
+	require.True(fee.Equal(expectedFee))
 }
 
 func (suite *IntegrationTestSuite) TestCalculateTxSizeFeeAndPayCookbook() {

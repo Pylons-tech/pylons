@@ -1,21 +1,18 @@
 package types
 
-const (
-	DefaultSizeLimitBytes = 1024
-	DefaultFeePerBytes    = 10
-)
+import sdk "github.com/cosmos/cosmos-sdk/types"
 
-func CalculateTxSizeFee(obj []byte, sizeLimitBytes, feePerByte int) int {
-	fee := 0
+func CalculateTxSizeFee(obj []byte, sizeLimitBytes int, feePerByte sdk.Coin) sdk.Coin {
+	fee := sdk.ZeroInt()
 
-	if sizeLimitBytes < 0 || feePerByte < 0 {
-		return fee
+	if sizeLimitBytes < 0 || feePerByte.Amount.IsNegative() {
+		return sdk.NewCoin(feePerByte.Denom, sdk.ZeroInt())
 	}
 
 	sizeOverBytes := len(obj) - sizeLimitBytes
 	if sizeOverBytes > 0 {
-		fee = sizeOverBytes * feePerByte
+		fee = feePerByte.Amount.Mul(sdk.NewIntFromUint64(uint64(sizeOverBytes)))
 	}
 
-	return fee
+	return sdk.NewCoin(feePerByte.Denom, fee)
 }

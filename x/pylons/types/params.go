@@ -20,6 +20,11 @@ const (
 	DefaultMinFieldLength int = 3
 	// DefaultMaxFieldLength is the default maximum character length of a request's field
 	DefaultMaxFieldLength int = 65535
+	// DefaultSizeLimitBytes is the size limit for objects stored on chain.  If an object is
+	// larger than this limit, a fee is charged for all bytes above this size.
+	DefaultSizeLimitBytes uint64 = 512
+	// DefaultFeePerBytesAmount is the fee per bytes charged for all bytes larger than SizePerBytes
+	DefaultFeePerBytesAmount int64 = 10
 )
 
 var (
@@ -59,6 +64,7 @@ var (
 	DefaultMaxTransferFee               = sdk.NewInt(10000)
 	DefaultDistrEpochIdentifier         = "day"
 	DefaultEngineVersion                = uint64(0)
+	DefaultFeePerBytes                  = sdk.NewCoin(PylonsCoinDenom, sdk.NewInt(DefaultFeePerBytesAmount))
 )
 
 // Parameter Store Keys
@@ -73,6 +79,8 @@ var (
 	ParamStoreKeyUpdateUsernameFee         = []byte("UpdateUsernameFee")
 	ParamStoreKeyDistrEpochIdentifier      = []byte("DistrEpochIdentifier")
 	ParamStoreKeyEngineVersion             = []byte("EngineVersion")
+	ParamStoreKeyTxSizeLimitBytes          = []byte("TxSizeLimitBytes")
+	ParamStoreKeyTxSizeFeePerByte          = []byte("TxSizeFeePerByte")
 )
 
 // NewParams creates a new Params object
@@ -87,6 +95,8 @@ func NewParams(
 	updateUsernameFee sdk.Coin,
 	distrEpochIdentifier string,
 	engineVersion uint64,
+	txSizeLimitBytes uint64,
+	txSizeFeePerByte sdk.Coin,
 ) Params {
 	return Params{
 		CoinIssuers:               coinIssuers,
@@ -99,6 +109,8 @@ func NewParams(
 		UpdateUsernameFee:         updateUsernameFee,
 		DistrEpochIdentifier:      distrEpochIdentifier,
 		EngineVersion:             engineVersion,
+		TxSizeLimitBytes:          txSizeLimitBytes,
+		TxSizeFeePerByte:          txSizeFeePerByte,
 	}
 }
 
@@ -115,6 +127,8 @@ func DefaultParams() Params {
 		DefaultUpdateUsernameFee,
 		DefaultDistrEpochIdentifier,
 		DefaultEngineVersion,
+		DefaultSizeLimitBytes,
+		DefaultFeePerBytes,
 	)
 }
 
@@ -131,6 +145,8 @@ func NetworkTestParams() Params {
 		sdk.NewCoin("node0token", sdk.NewInt(10)),
 		DefaultDistrEpochIdentifier,
 		DefaultEngineVersion,
+		DefaultSizeLimitBytes,
+		sdk.NewCoin("node0token", sdk.NewInt(DefaultFeePerBytesAmount)),
 	)
 }
 
@@ -157,7 +173,9 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(ParamStoreKeyMaxTransferFee, &p.MaxTransferFee, validateInt),
 		paramtypes.NewParamSetPair(ParamStoreKeyUpdateUsernameFee, &p.UpdateUsernameFee, validateCoinFee),
 		paramtypes.NewParamSetPair(ParamStoreKeyDistrEpochIdentifier, &p.DistrEpochIdentifier, validateString),
-		paramtypes.NewParamSetPair(ParamStoreKeyEngineVersion, &p.EngineVersion, validateInt64),
+		paramtypes.NewParamSetPair(ParamStoreKeyEngineVersion, &p.EngineVersion, validateUint64),
+		paramtypes.NewParamSetPair(ParamStoreKeyTxSizeLimitBytes, &p.TxSizeLimitBytes, validateUint64),
+		paramtypes.NewParamSetPair(ParamStoreKeyTxSizeFeePerByte, &p.TxSizeFeePerByte, validateCoinFee),
 	}
 }
 
@@ -250,7 +268,7 @@ func validateCoinFee(i interface{}) error {
 	}
 
 	if !v.IsValid() {
-		return fmt.Errorf("invalid coin")
+		return fmt.Errorf("invalid coin: %v%v", v.Amount, v.Denom)
 	}
 	return nil
 }
@@ -333,7 +351,7 @@ func validateString(i interface{}) error {
 	return nil
 }
 
-func validateInt64(i interface{}) error {
+func validateUint64(i interface{}) error {
 	_, ok := i.(uint64)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)

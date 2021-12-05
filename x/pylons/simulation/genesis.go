@@ -58,6 +58,12 @@ func RandomizedGenState(simState *module.SimulationState) {
 		&updateUsernameFee, simState.Rand,
 		func(r *rand.Rand) { updateUsernameFee = randomCoinFee(r) })
 
+	var txSizeFeePerByte sdk.Coin
+	simState.AppParams.GetOrGenerate(
+		simState.Cdc, string(types.ParamStoreKeyTxSizeFeePerByte),
+		&txSizeFeePerByte, simState.Rand,
+		func(r *rand.Rand) { txSizeFeePerByte = randomCoinFee(r) })
+
 	minTransferFee, maxTransferFee := randomTransferFeePair(simState.Rand)
 
 	genesis := types.GenesisState{
@@ -70,6 +76,8 @@ func RandomizedGenState(simState *module.SimulationState) {
 			MinTransferFee:            minTransferFee,
 			MaxTransferFee:            maxTransferFee,
 			DistrEpochIdentifier:      "hour",
+			TxSizeLimitBytes:          512,
+			TxSizeFeePerByte:          txSizeFeePerByte,
 		},
 		EntityCount:                  0,
 		GoogleInAppPurchaseOrderList: nil,

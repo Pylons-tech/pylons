@@ -24,6 +24,9 @@ func (suite *IntegrationTestSuite) TestDefaultParams() {
 	require.Equal(types.DefaultMinTransferFee, k.MinTransferFee(ctx))
 	require.Equal(types.DefaultMaxTransferFee, k.MaxTransferFee(ctx))
 	require.Equal(types.DefaultUpdateUsernameFee, k.UpdateUsernameFee(ctx))
+	require.Equal(types.DefaultEngineVersion, k.EngineVersion(ctx))
+	require.Equal(types.DefaultFeePerBytes, k.TxSizeFeePerBytes(ctx))
+	require.Equal(types.DefaultSizeLimitBytes, k.TxSizeLimitBytes(ctx))
 
 	coinIssuedDenomsList := k.CoinIssuedDenomsList(ctx)
 	require.Equal(len(coinIssuedDenomsList), len(types.DefaultCoinIssuers))
@@ -67,6 +70,9 @@ func (suite *IntegrationTestSuite) TestSetParams() {
 		MaxTransferFee:            sdk.NewInt(20000),
 		UpdateUsernameFee:         sdk.NewCoin(TestDenom, sdk.NewInt(20)),
 		DistrEpochIdentifier:      "day",
+		EngineVersion:             0,
+		TxSizeLimitBytes:          1024,
+		TxSizeFeePerByte:          sdk.NewCoin(TestDenom, sdk.NewInt(20)),
 	}
 
 	k.SetParams(ctx, newParams)

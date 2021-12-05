@@ -26,7 +26,7 @@ message GenesisState {
 		repeated Trade tradeList = 13 [(gogoproto.nullable) = false];  // this line is used by starport scaffolding # genesis/proto/stateField
 		uint64 tradeCount = 12; // this line is used by starport scaffolding # genesis/proto/stateField
 		uint64 entityCount = 11; // this line is used by starport scaffolding # genesis/proto/stateField
-	  Params params = 10 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
+	    Params params = 10 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
 		repeated GoogleInAppPurchaseOrder googleInAppPurchaseOrderList = 8 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
 		uint64 googleIAPOrderCount = 9; // this line is used by starport scaffolding # genesis/proto/stateField
 		repeated Execution executionList = 7 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField

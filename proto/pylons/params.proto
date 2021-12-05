@@ -45,4 +45,6 @@ message Params {
   cosmos.base.v1beta1.Coin updateUsernameFee = 8 [(gogoproto.moretags) = "yaml:\"update_username_fee\"", (gogoproto.nullable) = false];
   string distrEpochIdentifier = 9 [(gogoproto.moretags) = "yaml:\"distr_epoch_identifier\""];
   uint64 engineVersion = 10 [(gogoproto.moretags) = "yaml:\"engine_version\""];
+  uint64 txSizeLimitBytes = 11 [(gogoproto.moretags) = "yaml:\"tx_size_limit_byes\""];
+  cosmos.base.v1beta1.Coin txSizeFeePerByte = 12 [(gogoproto.moretags) = "yaml:\"tx_size_fee_per_byte\"", (gogoproto.nullable) = false];
 }
