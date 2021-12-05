@@ -297,3 +297,96 @@ func TestParseCoinInputsCLI(t *testing.T) {
 		})
 	}
 }
+
+func TestParseCoinOutputCLI(t *testing.T) {
+	coinOutput1, err := json.Marshal(sdk.NewCoins(
+		sdk.NewCoin("uatom", sdk.NewInt(10)),
+		sdk.NewCoin("upylon", sdk.NewInt(10)),
+	),
+	)
+	require.NoError(t, err)
+
+	coinOutput2, err := json.Marshal(sdk.NewCoins(
+		sdk.NewCoin("uatom", sdk.NewInt(10)),
+		sdk.NewCoin("upylon", sdk.NewInt(10)),
+		sdk.NewCoin("ustripeusd", sdk.NewInt(10)),
+	),
+	)
+	require.NoError(t, err)
+
+	for _, tc := range []struct {
+		desc       string
+		arg        string
+		coinOutput sdk.Coins
+		err        error
+	}{
+		{
+			desc: "valid1String",
+			arg:  "10uatom,10upylon",
+			coinOutput: sdk.NewCoins(
+				sdk.NewCoin("uatom", sdk.NewInt(10)),
+				sdk.NewCoin("upylon", sdk.NewInt(10)),
+			),
+			err: nil,
+		},
+		{
+			desc: "validString2",
+			arg:  "10uatom,10upylon,10ustripeusd",
+			coinOutput: sdk.NewCoins(
+				sdk.NewCoin("uatom", sdk.NewInt(10)),
+				sdk.NewCoin("upylon", sdk.NewInt(10)),
+				sdk.NewCoin("ustripeusd", sdk.NewInt(10)),
+			),
+
+			err: nil,
+		},
+		{
+			desc: "validJSON1",
+			arg:  string(coinOutput1),
+			coinOutput: sdk.NewCoins(
+				sdk.NewCoin("uatom", sdk.NewInt(10)),
+				sdk.NewCoin("upylon", sdk.NewInt(10)),
+			),
+			err: nil,
+		},
+		{
+			desc: "validJSON2",
+			arg:  string(coinOutput2),
+			coinOutput: sdk.NewCoins(
+				sdk.NewCoin("uatom", sdk.NewInt(10)),
+				sdk.NewCoin("upylon", sdk.NewInt(10)),
+				sdk.NewCoin("ustripeusd", sdk.NewInt(10)),
+			),
+			err: nil,
+		},
+		{
+			desc:       "invalid1",
+			arg:        "10uatom,joij",
+			coinOutput: sdk.Coins{},
+			err:        fmt.Errorf("invalid decimal coin expression: %s", "joij"),
+		},
+		{
+			desc:       "invalid2",
+			arg:        "10uatom,10uatom",
+			coinOutput: sdk.Coins{},
+			err:        fmt.Errorf("duplicate denomination %s", "uatom"),
+		},
+		{
+			desc:       "invalid3",
+			arg:        "10uatom,10upylon,stripeusd",
+			coinOutput: sdk.Coins{},
+			err:        fmt.Errorf("invalid decimal coin expression: %s", "stripeusd"),
+		},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			parsed, err := ParseCoinOutputCLI(tc.arg)
+			fmt.Println(parsed)
+			if err != nil {
+				require.Contains(t, err.Error(), tc.err.Error())
+			} else {
+				require.Equal(t, tc.coinOutput, parsed)
+			}
+		})
+	}
+}
