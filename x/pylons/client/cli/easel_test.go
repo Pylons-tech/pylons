@@ -86,9 +86,7 @@ func createEaselCookbook(t *testing.T, simInfo *easelBasicSim) {
 }
 
 func createMintRecipe1(t *testing.T, simInfo *easelBasicSim) {
-	coinInputs, err := json.Marshal([]types.CoinInput{
-		{Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(10)))},
-	})
+	coinInputs, err := json.Marshal([]string{"10node0token", "10uatom,10upylon"})
 	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
