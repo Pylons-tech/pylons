@@ -372,6 +372,8 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 		}
 	}
 
+	fmt.Println("ranged round!")
+
 	// first if there are ranged weapons these are fired first!
 	if combattantA.attacks[0].damagetype == "bolt" {
 		combatLog = fmt.Sprintf("%s%s has a ranged weapon and shoots!\n", combatLog, combattantA.name)
@@ -400,7 +402,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 
 	// this function checks if the combat has ended because someone died
 	checkEnd := func() (ended bool, winner string) {
-
+		fmt.Println("check end")
 		// this increments wins and losses in the nfts according to outcome
 		updateNFT := func (NFT string, winner bool) {
 			keyString := ""
@@ -436,7 +438,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 		return false, "none"
 	}
 
-	fmt.Println("fight starts")
+	fmt.Println("real rounds start")
 
 	// here the actual fight happens
 	// we limit the number of rounds to 1000 to prevent infinite loops, usually there should never be more than 30 rounds
