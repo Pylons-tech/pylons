@@ -25,7 +25,7 @@ func (k Keeper) Fight(goCtx context.Context, req *types.QueryFightRequest) (*typ
 	}
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.FighterKey))
-	k.cdc.MustUnmarshal(store.Get(getTradeIDBytes(req.ID)), &fighter)
+	k.cdc.MustUnmarshal(store.Get(getFighterIDBytes(req.ID)), &fighter)
 
 	return &types.QueryFightResponse{Fighter: fighter}, nil
 }
