@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-
 	"github.com/rogpeppe/go-internal/semver"
 
 	"github.com/cosmos/cosmos-sdk/telemetry"
@@ -12,44 +10,9 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-// EntryListsByIDs is a function to find an entry by ID
-func EntryListsByIDs(idList []string, recipe types.Recipe) ([]types.CoinOutput, map[int]types.ItemOutput, []types.ItemModifyOutput, error) {
-	coinOutputs := make([]types.CoinOutput, 0)
-	itemOutputs := make(map[int]types.ItemOutput)
-	itemModifyOutputs := make([]types.ItemModifyOutput, 0)
-
-Loop:
-	for _, id := range idList {
-		for _, coinOutput := range recipe.Entries.CoinOutputs {
-			if coinOutput.ID == id {
-				coinOutputs = append(coinOutputs, coinOutput)
-				continue Loop
-			}
-		}
-
-		for i, itemOutput := range recipe.Entries.ItemOutputs {
-			if itemOutput.ID == id {
-				itemOutputs[i] = itemOutput
-				continue Loop
-			}
-		}
-
-		for _, itemModifyOutput := range recipe.Entries.ItemModifyOutputs {
-			if itemModifyOutput.ID == id {
-				itemModifyOutputs = append(itemModifyOutputs, itemModifyOutput)
-				continue Loop
-			}
-		}
-
-		return nil, nil, nil, fmt.Errorf("no entry with the ID %s available", id)
-	}
-
-	return coinOutputs, itemOutputs, itemModifyOutputs, nil
-}
-
 // GenerateExecutionResult generates actual coins and items to be finalized in the store
 func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, entryIDs []string, recipe *types.Recipe, ec types.CelEnvCollection, matchedItems []types.ItemRecord) (sdk.Coins, []types.Item, []types.Item, error) {
-	coinOutputs, itemOutputs, itemModifyOutputs, err := EntryListsByIDs(entryIDs, *recipe)
+	coinOutputs, itemOutputs, itemModifyOutputs, err := types.EntryListsByIDs(entryIDs, *recipe)
 	if err != nil {
 		return nil, nil, nil, err
 	}
