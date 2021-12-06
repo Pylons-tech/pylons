@@ -307,7 +307,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 					if attackIndex >= len(readyFighter.attacks) {
 						attackIndex = len(readyFighter.attacks) - 1
 					}
-					readyFighter.attacks[attackIndex].damage += val
+					readyFighter.attacks[attackIndex].damage = val
 				} else if prop.Key == "accuracy" {
 					val, err := prop.Value.Float64()
 					if err != nil {
