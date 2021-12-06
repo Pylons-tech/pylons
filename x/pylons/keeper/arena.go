@@ -13,7 +13,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-// GetTradeCount get the total number of TypeName.LowerCamel
+// GetFighterCount get the total number of TypeName.LowerCamel
 func (k Keeper) GetFighterCount(ctx sdk.Context) uint64 {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.FighterCountKey))
 	byteKey := types.KeyPrefix(types.FighterCountKey)
@@ -34,7 +34,7 @@ func (k Keeper) GetFighterCount(ctx sdk.Context) uint64 {
 	return count
 }
 
-// SetFighterCount set the total number of trade
+// SetFighterCount set the total number of fight
 func (k Keeper) SetFighterCount(ctx sdk.Context, count uint64) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.FighterCountKey))
 	byteKey := types.KeyPrefix(types.FighterCountKey)
@@ -55,7 +55,7 @@ func (k Keeper) AppendFighter(
 
 	k.SetFighter(ctx, fighter)
 
-	// Update trade count
+	// Update fighter count
 	k.SetFighterCount(ctx, count+1)
 
 	return count
@@ -98,7 +98,7 @@ func (k Keeper) RemoveFighter(ctx sdk.Context, id uint64, creator sdk.AccAddress
 	store.Delete(getFighterIDBytes(id))
 }
 
-// GetAllTrade returns all fighters
+// GetAllFighters returns all fighters
 func (k Keeper) GetAllFighters(ctx sdk.Context) (list []types.Fighter) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.FighterKey))
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})

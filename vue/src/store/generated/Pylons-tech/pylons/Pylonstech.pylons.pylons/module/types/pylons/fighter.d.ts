@@ -10,6 +10,7 @@ export interface Fighter {
     NFT: string;
     Status: string;
     Log: string;
+    opponentFighter: number;
 }
 export declare const Fighter: {
     encode(message: Fighter, writer?: Writer): Writer;

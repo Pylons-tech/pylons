@@ -114,6 +114,9 @@ export interface PylonsFighter {
   NFT?: string;
   Status?: string;
   Log?: string;
+
+  /** @format uint64 */
+  opponentFighter?: string;
 }
 
 export interface PylonsGoogleInAppPurchaseOrder {

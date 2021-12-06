@@ -17,7 +17,7 @@ func (k Keeper) Fight(goCtx context.Context, req *types.QueryFightRequest) (*typ
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	fmt.Println("ID:", req.ID)
+	fmt.Println("req:", req)
 	var fighter types.Fighter
 	ctx := sdk.UnwrapSDKContext(goCtx)
 

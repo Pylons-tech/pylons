@@ -12,6 +12,7 @@ const baseFighter = {
     NFT: "",
     Status: "",
     Log: "",
+    opponentFighter: 0,
 };
 export const Fighter = {
     encode(message, writer = Writer.create()) {
@@ -41,6 +42,9 @@ export const Fighter = {
         }
         if (message.Log !== "") {
             writer.uint32(74).string(message.Log);
+        }
+        if (message.opponentFighter !== 0) {
+            writer.uint32(80).uint64(message.opponentFighter);
         }
         return writer;
     },
@@ -77,6 +81,9 @@ export const Fighter = {
                     break;
                 case 9:
                     message.Log = reader.string();
+                    break;
+                case 10:
+                    message.opponentFighter = longToNumber(reader.uint64());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -141,6 +148,13 @@ export const Fighter = {
         else {
             message.Log = "";
         }
+        if (object.opponentFighter !== undefined &&
+            object.opponentFighter !== null) {
+            message.opponentFighter = Number(object.opponentFighter);
+        }
+        else {
+            message.opponentFighter = 0;
+        }
         return message;
     },
     toJSON(message) {
@@ -154,6 +168,8 @@ export const Fighter = {
         message.NFT !== undefined && (obj.NFT = message.NFT);
         message.Status !== undefined && (obj.Status = message.Status);
         message.Log !== undefined && (obj.Log = message.Log);
+        message.opponentFighter !== undefined &&
+            (obj.opponentFighter = message.opponentFighter);
         return obj;
     },
     fromPartial(object) {
@@ -211,6 +227,13 @@ export const Fighter = {
         }
         else {
             message.Log = "";
+        }
+        if (object.opponentFighter !== undefined &&
+            object.opponentFighter !== null) {
+            message.opponentFighter = object.opponentFighter;
+        }
+        else {
+            message.opponentFighter = 0;
         }
         return message;
     },

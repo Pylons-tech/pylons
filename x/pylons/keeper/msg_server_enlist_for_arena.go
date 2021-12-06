@@ -2,7 +2,7 @@ package keeper
 
 import (
 	"context"
-	//"fmt"
+	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -39,11 +39,15 @@ func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistFor
 	}
 
 	id := k.AppendFighter(ctx, fighter)
+	fighter.ID = id
 
 	// go through all fights and see if there is a worthy opponent
 	for oppoID, opponent := range openFights {
 
 		if (opponent.CookbookID == msg.CookbookID && opponent.Status == "waiting" && id != uint64(oppoID)	) /* && opponent.Creator != msg.Creator */  {
+
+			fmt.Println("oppoid:", oppoID, "ownid:", id)
+			fmt.Println("fighter oppoid:", opponent.ID, "figther own id:", fighter.ID)
 
 			battleWinner, battleLog, err := k.Battle(ctx, fighter, opponent)
 			if err != nil {
