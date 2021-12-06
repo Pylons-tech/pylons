@@ -7,10 +7,7 @@ on:
   pull_request:
   push:
     branches:
-      - develop
-      - develop-no-stripe
-      - master
-      - starport
+      - main
 
 jobs:
   build:
