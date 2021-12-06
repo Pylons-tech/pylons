@@ -6,6 +6,7 @@ import (
 	"math/rand"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // Has check if an input is between double weight range
@@ -45,7 +46,16 @@ func (wt DoubleWeightTable) Generate() (sdk.Dec, error) {
 
 	selectedWeightRange := wt[chosenIndex]
 
-	randDec, _ := sdk.NewDecFromStr(fmt.Sprintf("%v", rand.Float64()))
+	if selectedWeightRange.Upper.Equal(selectedWeightRange.Lower) {
+		return selectedWeightRange.Upper, nil
+	}
+
+	randNum := rand.Float64()
+	randStr := fmt.Sprintf("%f", randNum)
+	randDec, err := sdk.NewDecFromStr(randStr)
+	if err != nil {
+		return selectedWeightRange.Lower, sdkerrors.Wrapf(err, "error creating random sdk.Dec : float: %f, string %s", randNum, randStr)
+	}
 	return randDec.Mul(selectedWeightRange.Upper.Sub(selectedWeightRange.Lower)).Add(selectedWeightRange.Lower), nil
 }
 
@@ -95,6 +105,10 @@ func (wt IntWeightTable) Generate() (int64, error) {
 	}
 
 	selectedWeightRange := wt[chosenIndex]
+
+	if selectedWeightRange.Upper == selectedWeightRange.Lower {
+		return selectedWeightRange.Upper, nil
+	}
 
 	if selectedWeightRange.Upper > selectedWeightRange.Lower {
 		return rand.Int63n(selectedWeightRange.Upper-selectedWeightRange.Lower) + selectedWeightRange.Lower, nil
