@@ -2,6 +2,8 @@
 
 ## Unreleased 
  
+## [v0.4.0](https://github.com/Pylons-tech/pylons/releases/tag/v0.4.0) - 2021-12-06
+
 ### State Machine Breaking Changes:
 
 - [#517](https://github.com/Pylons-tech/pylons/pull/517) Move the `CostPerBlock` field from Cookbook messages to Recipe messages.
