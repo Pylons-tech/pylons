@@ -307,6 +307,4 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
-
-	fmt.Println(itemResp.Item)
 }
