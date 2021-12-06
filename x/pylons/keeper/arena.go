@@ -370,6 +370,9 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 					damageReduction = defender.boltArmor
 				}
 				damage := attack.damage - damageReduction
+				if damage == 0 {
+					damage = 1
+				}
 				defender.hp -= damage
 
 				combatLog = fmt.Sprintf("%sHits with %s dealing %.0f! \n%s's HP is now at: %.0f\n", combatLog, attack.weaponName, damage, defender.name, defender.hp)
