@@ -4,13 +4,12 @@ import (
 	"encoding/json"
 	"strconv"
 
-	"github.com/spf13/cast"
-
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
@@ -25,14 +24,11 @@ func CmdSendItems() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsReceiver := args[0]
 
-			argsItems, err := cast.ToStringE(args[1])
-			if err != nil {
-				return err
-			}
+			argsItems := args[1]
 			jsonArgsItems := make([]types.ItemRef, 0)
-			err = json.Unmarshal([]byte(argsItems), &jsonArgsItems)
+			err := json.Unmarshal([]byte(argsItems), &jsonArgsItems)
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)

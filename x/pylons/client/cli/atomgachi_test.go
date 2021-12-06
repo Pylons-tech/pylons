@@ -143,7 +143,7 @@ func mint(t *testing.T, simInfo *atomgachiBasicSim) {
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -161,7 +161,7 @@ func mint(t *testing.T, simInfo *atomgachiBasicSim) {
 	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
@@ -172,6 +172,6 @@ func mint(t *testing.T, simInfo *atomgachiBasicSim) {
 	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
-	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookIDAtomgachi, itemResp.Item.CookbookID)
 }

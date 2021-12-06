@@ -166,7 +166,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -184,7 +184,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
@@ -195,7 +195,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	fmt.Println(itemResp.Item)
 
@@ -280,7 +280,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -297,7 +297,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	args = []string{execID}
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
@@ -305,7 +305,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	args = []string{cookbookID, swordID}
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 
 	fmt.Println(itemResp.Item)

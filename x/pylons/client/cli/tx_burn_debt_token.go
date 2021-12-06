@@ -9,6 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
@@ -25,7 +26,7 @@ func CmdBurnDebtToken() *cobra.Command {
 			var jsonArgsRedeemInfo types.RedeemInfo
 			err := json.Unmarshal([]byte(argsRedeemInfo), &jsonArgsRedeemInfo)
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)

@@ -14,12 +14,15 @@
 
 ### Changes:
 
+- [#528](https://github.com/Pylons-tech/pylons/pull/528) Bump Cosmos SDK and IBC-Go to v0.44.5.
 - [#520](https://github.com/Pylons-tech/pylons/pull/520) Bump Cosmos SDK and IBC-Go to v0.44.4 and v2.0.0, respectively.
 - [#515](https://github.com/Pylons-tech/pylons/pull/515) Remove the `ConditionList` proto message.
 - [#494](https://github.com/Pylons-tech/pylons/pull/494) Replace usages of deprecated `EmitEvent()` with `EmitTypedEvent()`.
 
 ### Features:
-- [#521](https://github.com/Pylons-tech/pylons/pull/521) Added bash completion support
+
+- [#530](https://github.com/Pylons-tech/pylons/pull/530) Improve CLI inputs for coins and simplify CLI parsing/error-handling.
+- [#521](https://github.com/Pylons-tech/pylons/pull/521) Added shell completion support.
 
 ## [v0.3.1](https://github.com/Pylons-tech/pylons/releases/tag/v0.3.1) - 2021-10-01
 

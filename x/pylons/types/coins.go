@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -24,6 +25,7 @@ const (
 	ibcPrefix    = "ibc"
 )
 
+// CookbookDenom converts a cookbookID, denom pair into a valid cookbookDenom string
 func CookbookDenom(cookbookID, denom string) (string, error) {
 	cookbookDenom := cookbookID + denomDivider + denom
 	if !IsCookbookDenom(cookbookDenom) {
@@ -32,6 +34,7 @@ func CookbookDenom(cookbookID, denom string) (string, error) {
 	return cookbookDenom, nil
 }
 
+// IsCookbookDenom checks if an inputted denom is a valid cookbookDenom
 func IsCookbookDenom(denom string) bool {
 	split := strings.Split(denom, denomDivider)
 	if len(split) != 2 {
@@ -50,6 +53,7 @@ func IsCookbookDenom(denom string) bool {
 	return err == nil
 }
 
+// IBCDenom converts a trace hash into a properly formatted IBCDenom string
 func IBCDenom(hash string) (string, error) {
 	ibcDenom := ibcPrefix + denomDivider + hash
 	if !IsIBCDenomRepresentation(ibcDenom) {
@@ -58,6 +62,7 @@ func IBCDenom(hash string) (string, error) {
 	return ibcDenom, nil
 }
 
+// IsIBCDenomRepresentation checks if an inputted denom is a valid IBCDenom
 func IsIBCDenomRepresentation(denom string) bool {
 	split := strings.Split(denom, denomDivider)
 	if len(split) != 2 {
@@ -68,6 +73,8 @@ func IsIBCDenomRepresentation(denom string) bool {
 	return err == nil
 }
 
+// CreateValidCoinOutputsList checks a list of coinOutputs to check if they are valid.  Valid coinOuputs
+// must have cookbookDenoms that are only from the proper cookbook and cannot mint payment tokens
 func CreateValidCoinOutputsList(cookbookID string, coinOutputs []CoinOutput) ([]CoinOutput, error) {
 	validCoinOutputs := make([]CoinOutput, len(coinOutputs))
 	for i, coinOutput := range coinOutputs {
@@ -96,4 +103,74 @@ func CreateValidCoinOutputsList(cookbookID string, coinOutputs []CoinOutput) ([]
 	}
 
 	return validCoinOutputs, nil
+}
+
+// ParseCoinInputStringArray converts a []string of form {"100tokenA,100tokenB","1000tokenC"}
+// and converts it to a []CoinInput
+func ParseCoinInputStringArray(coinsStr []string) ([]CoinInput, error) {
+	coinInputs := make([]CoinInput, len(coinsStr))
+
+	for i, coinStr := range coinsStr {
+		coins, err := sdk.ParseCoinsNormalized(coinStr)
+		if err != nil {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, err.Error())
+		}
+		coinInputs[i].Coins = coins
+	}
+
+	return coinInputs, nil
+}
+
+// ParseCoinInputsCLI parses a string and returns a []CoinInput.
+// The string can either be of the json form of a []CoinInput,
+// or be of form: {"100tokenA,100tokenB","1000tokenC"} as a string.
+func ParseCoinInputsCLI(arg string) ([]CoinInput, error) {
+	coinInputs := make([]CoinInput, 0)
+	err := json.Unmarshal([]byte(arg), &coinInputs)
+	if err != nil {
+		// try to marshal as []string
+		var coinStrs []string
+		err = json.Unmarshal([]byte(arg), &coinStrs)
+		if err != nil {
+			return nil, sdkerrors.Wrap(err, "cannot convert to []string or []CoinInput")
+		}
+		coinInputs, err = ParseCoinInputStringArray(coinStrs)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return coinInputs, nil
+}
+
+// ParseCoinsCLI parses a string and returns an sdk.Coins type.
+// The string can either be in the json form of the sdk.Coins type
+// or of form: "100tokenA,200tokenB,300tokenC"
+func ParseCoinsCLI(arg string) (sdk.Coins, error) {
+	coinOutputs := sdk.NewCoins()
+	err := json.Unmarshal([]byte(arg), &coinOutputs)
+	if err != nil {
+		// arg is in format "10uatom,100upylon"
+		coinOutputs, err = sdk.ParseCoinsNormalized(arg)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return coinOutputs, nil
+}
+
+// ParseCoinCLI parses a string and returns an sdk.Coin type.
+// The string can either be in the json form of the sdk.Coin type
+// or in the string form: "100tokenA"
+func ParseCoinCLI(arg string) (sdk.Coin, error) {
+	coin := sdk.Coin{}
+	err := json.Unmarshal([]byte(arg), &coin)
+	if err != nil {
+		coin, err = sdk.ParseCoinNormalized(arg)
+		if err != nil {
+			return sdk.Coin{}, err
+		}
+	}
+	return coin, nil
 }

@@ -29,11 +29,7 @@ func TestCreateTradeNoItemOutput1(t *testing.T) {
 	ctx := val.ClientCtx
 
 	coinInputs, err := json.Marshal(
-		[]types.CoinInput{
-			{
-				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
-			},
-		},
+		[]string{"1node0token"},
 	)
 	require.NoError(t, err)
 
@@ -48,10 +44,7 @@ func TestCreateTradeNoItemOutput1(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	coinOutputs, err := json.Marshal(
-		sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(10))),
-	)
-	require.NoError(t, err)
+	coinOutputs := "10node0token"
 
 	// no  item outputs
 	itemOutputs, err := json.Marshal([]types.ItemRef{})
@@ -61,7 +54,7 @@ func TestCreateTradeNoItemOutput1(t *testing.T) {
 	fields := []string{
 		string(coinInputs),
 		string(itemInputs),
-		string(coinOutputs),
+		coinOutputs,
 		string(itemOutputs),
 		"extraInfo",
 	}
@@ -94,7 +87,7 @@ func TestCreateTradeNoItemOutput1(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse
-				require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+				require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, tc.code, resp.Code)
 			}
 		})
@@ -172,7 +165,7 @@ func TestCreateTradeNoItemOutput2(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse
-				require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+				require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, tc.code, resp.Code)
 			}
 		})
@@ -287,7 +280,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -304,7 +297,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
@@ -314,14 +307,14 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
 			},
 		},
 	)
@@ -389,7 +382,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse
-				require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+				require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, tc.code, resp.Code)
 			}
 		})
@@ -516,7 +509,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -533,7 +526,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
@@ -543,14 +536,14 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
 			},
 		},
 	)
@@ -603,7 +596,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			},
-			err: sdkerrors.ErrInvalidCoins,
+			err: sdkerrors.ErrInvalidRequest,
 		},
 	} {
 		tc := tc
@@ -778,7 +771,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
 			},
 		},
 	)
@@ -831,7 +824,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			},
-			err: sdkerrors.ErrInvalidCoins,
+			err: sdkerrors.ErrInvalidRequest,
 		},
 	} {
 		tc := tc
@@ -1006,7 +999,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
 			},
 		},
 	)
@@ -1059,7 +1052,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			},
-			err: sdkerrors.ErrInvalidCoins,
+			err: sdkerrors.ErrInvalidRequest,
 		},
 	} {
 		tc := tc
