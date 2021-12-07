@@ -40,14 +40,14 @@ spec:
           - containerPort: {{ .Values.containerport4 }}
           - containerPort: {{ .Values.containerport5 }}
           - containerPort: {{ .Values.containerport6 }}
-          livenessProbe:
-            httpGet:
-              path: /status
-              port: 26657
-          readinessProbe:
-            httpGet:
-              path: /status
-              port: 26657
+          # livenessProbe:
+          #   httpGet:
+          #     path: /status
+          #     port: 26657
+          # readinessProbe:
+          #   httpGet:
+          #     path: /status
+          #     port: 26657
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
