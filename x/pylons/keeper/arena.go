@@ -396,9 +396,9 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 
 	// from initiative we calculate who gets the first strike attempt each round
 	Afirst := true
-	if combattantA.initiative > combattantA.initiative {
+	if combattantA.initiative > combattantB.initiative {
 		combatLog = fmt.Sprintf("%s%s has a higher initiative and gets the first strike!\n", combatLog, combattantA.name)
-	} else if combattantA.initiative < combattantA.initiative {
+	} else if combattantA.initiative < combattantB.initiative {
 		combatLog = fmt.Sprintf("%s%s has a higher initiative and gets the first strike!\n", combatLog, combattantB.name)
 		Afirst = false
 	} else {

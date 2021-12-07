@@ -44,6 +44,7 @@ func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistFor
 	// go through all fights and see if there is a worthy opponent
 	for oppoID, opponent := range openFights {
 
+		// this ensures that fighters are on the same cookbook and have not fought yet, only fighting against oneself is currently commented out
 		if (opponent.CookbookID == msg.CookbookID && opponent.Status == "waiting" && id != uint64(oppoID)	) /* && opponent.Creator != msg.Creator */  {
 
 			fmt.Println("oppoid:", oppoID, "ownid:", id)
@@ -72,9 +73,6 @@ func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistFor
 			k.SetFighter(ctx, opponent)
 			k.SetFighter(ctx, fighter)
 
-			// now that we use the fighter for battle log, it should no longer get removed
-			//opponentAddr, _ := sdk.AccAddressFromBech32(opponent.Creator)
-			//k.RemoveFighter(ctx, uint64(id), opponentAddr)
 			break
 		}
 	}
