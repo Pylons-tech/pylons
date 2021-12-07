@@ -59,8 +59,8 @@ jobs:
       run: |
         gcloud container clusters get-credentials $GKE_CLUSTER \
           --zone $GKE_ZONE \
-          --project $GKE_PROJECT
-        helm upgrade $GKE_PROJECT deploy/$DEPLOY_ENV \
+          --project $PROJECT_ID
+        helm upgrade $PROJECT_ID deploy/$DEPLOY_ENV \
           --set pylons.image.tag=$GITHUB_SHA \
           --set containerport1=26657 \
           --set containerport2=26656 \
