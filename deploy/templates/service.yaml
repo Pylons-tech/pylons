@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "pylons-node.fullname" . }}
+  labels:
+    {{- include "pylons-node.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - name: containerport1
+    protocol: TCP
+    port: {{ .Values.exposedport1 }}
+    targetPort: {{ .Values.containerport1 }}
+  - name: containerport2
+    protocol: TCP
+    port: {{ .Values.exposedport2 }}
+    targetPort: {{ .Values.containerport2 }}
+  - name: containerport3
+    protocol: TCP
+    port: {{ .Values.exposedport3 }}
+    targetPort: {{ .Values.containerport3 }}
+  - name: containerport4
+    protocol: TCP
+    port: {{ .Values.exposedport4 }}
+    targetPort: {{ .Values.containerport4 }}
+  - name: containerport5
+    protocol: TCP
+    port: {{ .Values.exposedport5 }}
+    targetPort: {{ .Values.containerport5 }}
+  - name: containerport6
+    protocol: TCP
+    port: {{ .Values.exposedport6 }}
+    targetPort: {{ .Values.containerport6 }}
+    
+  selector:
+    {{- include "pylons-node.selectorLabels" . | nindent 4 }}
