@@ -75,5 +75,5 @@ jobs:
           --set exposedport5=9090 \
           --set exposedport6=8080 \
           --wait
-        kubectl rollout status deployment/$DEPLOYMENT_NAME
+        kubectl rollout status deployment/$PROJECT_ID-pylons-node
         kubectl get services -o wide
