@@ -35,17 +35,11 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
           - containerPort: {{ .Values.containerport1 }}
-          #name: containerport1
           - containerPort: {{ .Values.containerport2 }}
-          #name: containerport2
           - containerPort: {{ .Values.containerport3 }}
-          #name: containerport3
           - containerPort: {{ .Values.containerport4 }}
-          #name: containerport4
           - containerPort: {{ .Values.containerport5 }}
-          #name: containerport5
           - containerPort: {{ .Values.containerport6 }}
-          #name: containerport6
           livenessProbe:
             httpGet:
               path: /
