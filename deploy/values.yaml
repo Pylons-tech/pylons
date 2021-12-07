@@ -3,6 +3,13 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
+containerport1: 26657
+containerport2: 26656
+containerport3: 6060
+containerport4: 1317
+
+containerport5: 9090
+containerport6: 8080
 
 image:
   repository: gcr.io/zinc-interface-241613/github.com/pylons-tech/pylons

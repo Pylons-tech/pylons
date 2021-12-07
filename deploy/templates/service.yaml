@@ -9,28 +9,27 @@ spec:
   ports:
   - name: containerport1
     protocol: TCP
-    port: {{ .Values.exposedport1 }}
+    port: {{ .Values.containerport1 }}
     targetPort: {{ .Values.containerport1 }}
   - name: containerport2
     protocol: TCP
-    port: {{ .Values.exposedport2 }}
+    port: {{ .Values.containerport2 }}
     targetPort: {{ .Values.containerport2 }}
   - name: containerport3
     protocol: TCP
-    port: {{ .Values.exposedport3 }}
+    port: {{ .Values.containerport3 }}
     targetPort: {{ .Values.containerport3 }}
   - name: containerport4
     protocol: TCP
-    port: {{ .Values.exposedport4 }}
+    port: {{ .Values.containerport4 }}
     targetPort: {{ .Values.containerport4 }}
   - name: containerport5
     protocol: TCP
-    port: {{ .Values.exposedport5 }}
+    port: {{ .Values.containerport5 }}
     targetPort: {{ .Values.containerport5 }}
   - name: containerport6
     protocol: TCP
-    port: {{ .Values.exposedport6 }}
-    targetPort: {{ .Values.containerport6 }}
-    
+    port: {{ .Values.containerport6 }}
+    targetPort: {{ .Values.containerport6}}
   selector:
     {{- include "pylons-node.selectorLabels" . | nindent 4 }}

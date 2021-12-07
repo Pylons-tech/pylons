@@ -46,7 +46,6 @@ spec:
           #name: containerport5
           - containerPort: {{ .Values.containerport6 }}
           #name: containerport6
-          
           livenessProbe:
             httpGet:
               path: /
