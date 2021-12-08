@@ -34,7 +34,7 @@ func (ec *CelEnvCollection) GetFuncs() cel.ProgramOption {
 }
 
 // Eval calculate a value
-func (ec *CelEnvCollection) Eval(program string) (ref.Val, error) {
+func (ec *CelEnvCollection) eval(program string) (ref.Val, error) {
 	parsed, issues := ec.env.Parse(program)
 	if issues != nil && issues.Err() != nil {
 		return nil, errors.New("parse error: " + issues.Err().Error())
@@ -54,7 +54,7 @@ func (ec *CelEnvCollection) Eval(program string) (ref.Val, error) {
 
 // EvalInt64 calculate a value and convert to int64
 func (ec *CelEnvCollection) EvalInt64(program string) (int64, error) {
-	refVal, refErr := ec.Eval(program)
+	refVal, refErr := ec.eval(program)
 	if refErr != nil {
 		return 0, refErr
 	}
@@ -73,7 +73,7 @@ func (ec *CelEnvCollection) EvalInt(program string) (int, error) {
 
 // EvalFloat64 calculate a value and convert to float64
 func (ec *CelEnvCollection) EvalFloat64(program string) (float64, error) {
-	refVal, refErr := ec.Eval(program)
+	refVal, refErr := ec.eval(program)
 	if refErr != nil {
 		return 0, refErr
 	}
@@ -82,7 +82,7 @@ func (ec *CelEnvCollection) EvalFloat64(program string) (float64, error) {
 
 // EvalString calculate a value and convert to string
 func (ec *CelEnvCollection) EvalString(program string) (string, error) {
-	refVal, refErr := ec.Eval(program)
+	refVal, refErr := ec.eval(program)
 	if refErr != nil {
 		return "", refErr
 	}
