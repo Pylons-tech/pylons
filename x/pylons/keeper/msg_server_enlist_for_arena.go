@@ -26,6 +26,18 @@ func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistFor
 
 	openFights := k.GetAllFighters(ctx)
 
+	// first check if the creator has already a fight enlisted, this helps to recover fight id if the frontend state was lost
+	for _, openFight := range openFights {
+		// if the creator has already enlisted don't search opponent, return fight id
+		if openFight.CookbookID == msg.CookbookID && openFight.Status == "waiting" && openFight.Creator == msg.Creator {
+			err := ctx.EventManager().EmitTypedEvent(&types.EventCreateFighter{
+				ID: openFight.ID,
+				Creator: msg.Creator,
+			})
+			return &types.MsgEnlistForArenaResponse{ID: openFight.ID}, err
+		}
+	}
+
 	var fighter = types.Fighter{
 		Creator:    msg.Creator,
 		CookbookID: msg.CookbookID,
@@ -45,7 +57,7 @@ func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistFor
 	for oppoID, opponent := range openFights {
 
 		// this ensures that fighters are on the same cookbook and have not fought yet, also you cannot fight against yourself
-		if (opponent.CookbookID == msg.CookbookID && opponent.Status == "waiting" && id != uint64(oppoID) && opponent.Creator != msg.Creator	)  {
+		if (opponent.CookbookID == msg.CookbookID && opponent.Status == "waiting" && id != uint64(oppoID))  {
 
 			//fmt.Println("oppoid:", oppoID, "ownid:", id)
 			//fmt.Println("fighter oppoid:", opponent.ID, "figther own id:", fighter.ID)
