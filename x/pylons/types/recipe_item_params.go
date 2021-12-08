@@ -78,7 +78,10 @@ func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, e
 		if len(param.Program) > 0 {
 			var val float64
 			val, err = ec.EvalFloat64(param.Program)
-			valDec, _ = sdk.NewDecFromStr(fmt.Sprintf("%v", val))
+			if err != nil {
+				return m, err
+			}
+			valDec, err = sdk.NewDecFromStr(fmt.Sprintf("%v", val))
 		} else {
 			valDec, err = DoubleWeightTable(param.WeightRanges).Generate()
 		}
