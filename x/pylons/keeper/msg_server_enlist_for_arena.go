@@ -2,7 +2,7 @@ package keeper
 
 import (
 	"context"
-	"fmt"
+	//"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -44,11 +44,11 @@ func (k msgServer) EnlistForArena(goCtx context.Context, msg *types.MsgEnlistFor
 	// go through all fights and see if there is a worthy opponent
 	for oppoID, opponent := range openFights {
 
-		// this ensures that fighters are on the same cookbook and have not fought yet, only fighting against oneself is currently commented out
-		if (opponent.CookbookID == msg.CookbookID && opponent.Status == "waiting" && id != uint64(oppoID)	) /* && opponent.Creator != msg.Creator */  {
+		// this ensures that fighters are on the same cookbook and have not fought yet, also you cannot fight against yourself
+		if (opponent.CookbookID == msg.CookbookID && opponent.Status == "waiting" && id != uint64(oppoID) && opponent.Creator != msg.Creator	)  {
 
-			fmt.Println("oppoid:", oppoID, "ownid:", id)
-			fmt.Println("fighter oppoid:", opponent.ID, "figther own id:", fighter.ID)
+			//fmt.Println("oppoid:", oppoID, "ownid:", id)
+			//fmt.Println("fighter oppoid:", opponent.ID, "figther own id:", fighter.ID)
 
 			battleWinner, battleLog, err := k.Battle(ctx, fighter, opponent)
 			if err != nil {

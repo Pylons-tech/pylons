@@ -224,7 +224,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 					}
 				}
 
-				fmt.Println(prop.Key, prop.Value)
+				//(prop.Key, prop.Value)
 			}
 			// second run necessary because attacks just exist now
 			for _, prop := range item.Strings {
@@ -320,9 +320,9 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 					readyFighter.attacks[attackIndex].accuracy *= val
 				}
 
-				fmt.Println(prop.Key, prop.Value)
+				//fmt.Println(prop.Key, prop.Value)
 			}
-			fmt.Println("--------")
+			//fmt.Println("--------")
 		}
 		return readyFighter, nil
 	}
@@ -331,8 +331,8 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 	combattantB, err := calculateCombatSpecs(FighterB)
 
 	// here this print should be removed it is for debugging
-	fmt.Println("Fighter A:",combattantA)
-	fmt.Println("Fighter B:",combattantB)
+	//fmt.Println("Fighter A:",combattantA)
+	//fmt.Println("Fighter B:",combattantB)
 
 	combatLog := "EPIC BATTLE BEGINS\n"
 
@@ -382,7 +382,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 		}
 	}
 
-	fmt.Println("ranged round!")
+	//fmt.Println("ranged round!")
 
 	// first if there are ranged weapons these are fired first!
 	if combattantA.attacks[0].damagetype == "bolt" {
@@ -412,7 +412,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 
 	// this function checks if the combat has ended because someone died
 	checkEnd := func() (ended bool, winner string) {
-		fmt.Println("check end")
+		//fmt.Println("check end")
 		// this increments wins and losses in the nfts according to outcome
 		updateNFT := func (NFT string, winner bool) {
 			keyString := ""
@@ -448,7 +448,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 		return false, "none"
 	}
 
-	fmt.Println("real rounds start")
+	//fmt.Println("real rounds start")
 
 	// here the actual fight happens
 	// we limit the number of rounds to 1000 to prevent infinite loops, usually there should never be more than 30 rounds
