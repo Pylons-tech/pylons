@@ -345,7 +345,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 		for i, attack := range fighter.attacks {
 
 			if i > 0 {
-				weaponsString = fmt.Sprintf("%s and", weaponsString)
+				weaponsString = fmt.Sprintf(" %s and", weaponsString)
 			}
 			weaponsString = fmt.Sprintf("%s%s ", weaponsString, attack.weaponName)
 		}
