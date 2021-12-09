@@ -436,6 +436,9 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 
 			updateNFT(FighterA.NFT, false)
 			updateNFT(FighterB.NFT, true)
+			winnermoney := sdk.NewCoins(sdk.NewCoin("nftarena/coin", sdk.NewInt(50)))
+			addr, _ := sdk.AccAddressFromBech32(FighterB.Creator)
+			k.MintCoinsToAddr(ctx, addr, winnermoney)
 
 			return true, "B"
 		} else if combattantB.hp <= 0 {
@@ -443,6 +446,9 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 
 			updateNFT(FighterA.NFT, true)
 			updateNFT(FighterB.NFT, false)
+			winnermoney := sdk.NewCoins(sdk.NewCoin("nftarena/coin", sdk.NewInt(50)))
+			addr, _ := sdk.AccAddressFromBech32(FighterA.Creator)
+			k.MintCoinsToAddr(ctx, addr, winnermoney)
 
 			return true, "A"
 		}
