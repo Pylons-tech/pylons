@@ -345,7 +345,7 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 		for i, attack := range fighter.attacks {
 
 			if i > 0 {
-				weaponsString = fmt.Sprintf(" %s and", weaponsString)
+				weaponsString = fmt.Sprintf(" %s and ", weaponsString)
 			}
 			weaponsString = fmt.Sprintf("%s%s ", weaponsString, attack.weaponName)
 		}
@@ -370,7 +370,8 @@ func (k Keeper) Battle(ctx sdk.Context, FighterA types.Fighter, FighterB types.F
 					damageReduction = defender.boltArmor
 				}
 				damage := attack.damage - damageReduction
-				if damage == 0 {
+				// at least 1 damage should be done
+				if damage <= 0 {
 					damage = 1
 				}
 				defender.hp -= damage
