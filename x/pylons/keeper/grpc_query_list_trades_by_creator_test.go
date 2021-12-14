@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -18,6 +19,20 @@ func (suite *IntegrationTestSuite) TestListTradesByCreator() {
 	addr1, err := sdk.AccAddressFromBech32(items[0].Creator)
 	addr2 := types.GenTestBech32FromString("dummyaddress")
 	require.NoError(err)
+
+	requestFunc := func(next []byte, offset, limit uint64, total bool, creator string) *types.QueryListTradesByCreatorRequest {
+		return &types.QueryListTradesByCreatorRequest{
+			Creator: addr1.String(),
+			Pagination: &query.PageRequest{
+				Key:        next,
+				Offset:     offset,
+				Limit:      limit,
+				CountTotal: total,
+			},
+		}
+	}
+
+
 	
 	for _, tc := range []struct {
 		desc     string
@@ -44,6 +59,20 @@ func (suite *IntegrationTestSuite) TestListTradesByCreator() {
 			},
 			response: &types.QueryListTradesByCreatorResponse{
 				Trades:     []types.Trade{},
+				Pagination: nil,
+			},
+		},{
+			desc:     "By Offset",
+			request:  requestFunc(nil, 0, 5, false, addr1.String()),
+			response: &types.QueryListTradesByCreatorResponse{
+				Trades:     items[:5],
+				Pagination: nil,
+			},
+		},{
+			desc:     "All",
+			request:  requestFunc(nil, 0, 0, true, addr1.String()),
+			response: &types.QueryListTradesByCreatorResponse{
+				Trades:     items,
 				Pagination: nil,
 			},
 		},
