@@ -20,7 +20,15 @@ func CmdCreateAccount() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create-account [username]",
 		Short: "initialize account from address",
-		Args:  cobra.ExactArgs(1),
+		Long:  "Create a new account using an existing key from the keyring.",
+		Example: `
+		pylonsd tx pylons create-account joe --from joe
+
+		or 
+
+		pylonsd tx pylons create-account joe --from pylo1tqqp6wmctv0ykatyaefsqy6stj92lnt800lkee 
+		`,
+		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			username := args[0]
 
