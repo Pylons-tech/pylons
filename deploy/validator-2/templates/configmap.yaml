@@ -1,0 +1,5 @@
+kind: ConfigMap
+# ...
+data:
+  config.json: |
+{{ .Values.applicationConfigJson | indent 4 }}
