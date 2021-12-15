@@ -14,7 +14,7 @@ require (
 	github.com/cosmos/ibc-go/v2 v2.0.0
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.5.2
-	github.com/google/cel-go v0.8.0
+	github.com/google/cel-go v0.9.0
 	github.com/gorilla/mux v1.8.0
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/rogpeppe/go-internal v1.6.2

@@ -149,23 +149,6 @@ func (k Keeper) getExecutionsByItemPaginated(ctx sdk.Context, cookbookID, itemID
 	return completedExecutions, pendingExecutions, pageRes, nil
 }
 
-func (k Keeper) getCompletedExecutionsByItem(ctx sdk.Context, cookbookID, itemID string) []types.Execution {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemExecutionKey))
-	store = prefix.NewStore(store, types.KeyPrefix(cookbookID))
-	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(itemID))
-
-	defer iterator.Close()
-
-	res := make([]types.Execution, 0)
-	for ; iterator.Valid(); iterator.Next() {
-		var val types.Execution
-		k.cdc.MustUnmarshal(iterator.Value(), &val)
-		res = append(res, val)
-	}
-
-	return res
-}
-
 // GetAllExecutionByItem returns completed and pending Executions of the specified itemID
 func (k Keeper) GetAllExecutionByItem(ctx sdk.Context, cookbookID, itemID string) ([]types.Execution, []types.Execution) {
 	completedExecutions := make([]types.Execution, 0)

@@ -5,50 +5,11 @@ import (
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/google/cel-go/cel"
-	celTypes "github.com/google/cel-go/common/types"
-	"github.com/google/cel-go/common/types/ref"
-	"github.com/google/cel-go/interpreter/functions"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
-
-// ExecutedByAddrCount is a function to get execution count for a given address
-func (k Keeper) ExecutedByAddrCount(ctx sdk.Context, args ...ref.Val) ref.Val {
-	// $addr, $cookbook_id, $recipe_id, $item_id
-	addr := args[0].Value().(string)
-	cookbookID := args[1].Value().(string)
-	itemID := args[2].Value().(string)
-	count := 0
-	executions := k.getCompletedExecutionsByItem(ctx, cookbookID, itemID)
-	for _, exec := range executions {
-		if exec.Creator == addr {
-			count++
-		}
-	}
-	return celTypes.Int(count)
-}
-
-// Overloads returns overloads
-func (k Keeper) Overloads(ctx sdk.Context) []*functions.Overload {
-	return append(types.BasicOverloads(),
-		&functions.Overload{
-			// operator for 1 param
-			Operator: "block_since",
-			Unary: func(arg ref.Val) ref.Val {
-				return celTypes.Int(ctx.BlockHeight() - arg.Value().(int64))
-			},
-		},
-		&functions.Overload{
-			// operator for 4 params
-			Operator: "executed_by_count",
-			Function: func(args ...ref.Val) ref.Val {
-				return k.ExecutedByAddrCount(ctx, args...)
-			},
-		},
-	)
-}
 
 // NewCelEnvCollectionFromItem generate cel env collection for an item
 func (k Keeper) NewCelEnvCollectionFromItem(ctx sdk.Context, recipeID, tradeID string, item types.Item) (types.CelEnvCollection, error) {
@@ -56,7 +17,7 @@ func (k Keeper) NewCelEnvCollectionFromItem(ctx sdk.Context, recipeID, tradeID s
 	variables := types.BasicVariables(ctx.BlockHeight(), recipeID, tradeID)
 	varDefs, variables = types.AddVariableFromItem(varDefs, variables, "", item) // HP, level, attack
 
-	funcs := cel.Functions(k.Overloads(ctx)...)
+	funcs := cel.Functions()
 
 	env, err := cel.NewEnv(
 		cel.Declarations(
@@ -98,7 +59,7 @@ func (k Keeper) NewCelEnvCollectionFromRecipe(ctx sdk.Context, pendingExecution 
 		}
 	}
 
-	funcs := cel.Functions(k.Overloads(ctx)...)
+	funcs := cel.Functions()
 
 	env, err := cel.NewEnv(
 		cel.Declarations(

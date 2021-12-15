@@ -1,6 +1,10 @@
 # Changelog
 
 ## Unreleased 
+
+### Changes:
+
+- [#537](https://github.com/Pylons-tech/pylons/pull/537) CEL execution environment cleanup.
  
 ## [v0.4.0](https://github.com/Pylons-tech/pylons/releases/tag/v0.4.0) - 2021-12-06
 
