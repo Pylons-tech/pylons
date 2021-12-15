@@ -18,7 +18,23 @@ func CmdCreateCookbook() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create-cookbook [id] [name] [description] [developer] [version] [support-email] [enabled]",
 		Short: "create new cookbook",
-		Args:  cobra.ExactArgs(7),
+		Long: `
+Create a new cookbook using the following arguments :
+
+* id : A unique identifier to your cookbook. Only letters, numbers and underscore (should not be the first character) allowed 
+* name: A human readable name for your cookbook, with a minimum of 8 characters size 
+* description : A more detailed description of your cookbook. Minimum 8 chars long
+* developer : Name of the developer
+* version : the version of the cookbook in semVer format, ex.: v0.0.0
+* enabled : whether or not the cookbook is enabled
+
+The --from flag is mandatory, as indicates the key to be used to sign the transaction. 
+
+		`,
+		Example: `
+pylonsd tx pylons create-cookbook "loud123456" "Legend of the Undead Dragon" "Cookbook for running pylons recreation of LOUD" "Pylons Inc" v0.3.1 test@pylons.com true --from joe
+			`,
+		Args: cobra.ExactArgs(7),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			id := args[0]
 			argsName := args[1]
