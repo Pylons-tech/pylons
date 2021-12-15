@@ -1,5 +1,9 @@
 kind: ConfigMap
 # ...
 data:
-  config.json: |
-{{ .Values.applicationConfigJson | indent 4 }}
+  config.toml: |
+{{ .Values.applicationConfigToml | indent 4 }}
+  client.toml: |
+{{ .Values.applicationClienToml | indent 4 }}
+  app.toml: |
+{{ .Values.applicationToml | indent 4 }}
