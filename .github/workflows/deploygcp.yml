@@ -61,6 +61,9 @@ jobs:
           --zone $GKE_ZONE \
           --project $PROJECT_ID
         helm upgrade $DEPLOYMENT_NAME deploy/$DEPLOY_ENV \
+        --set-file applicationConfigtoml="./deploy/$DEPLOYMENT_NAME/config.toml" \
+        --set-file applicationToml="./deploy/$DEPLOYMENT_NAME/app.toml" \
+        --set-file applicationClientToml="./deploy/$DEPLOYMENT_NAME/client.toml" \
           --set pylons.image.tag=$GITHUB_SHA \
           --set containerport1=26657 \
           --set containerport2=26656 \
