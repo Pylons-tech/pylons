@@ -30,7 +30,7 @@ spec:
       volumes:
         - name: "application-config"
           configMap:
-            name: "application-config"
+            name: "node-1-configmap"
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
