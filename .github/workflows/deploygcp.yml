@@ -60,10 +60,10 @@ jobs:
         gcloud container clusters get-credentials $GKE_CLUSTER \
           --zone $GKE_ZONE \
           --project $PROJECT_ID
-        helm upgrade $DEPLOYMENT_NAME deploy/$DEPLOY_ENV \
-        --set-file applicationConfigtoml="./deploy/$DEPLOYMENT_NAME/config.toml" \
-        --set-file applicationToml="./deploy/$DEPLOYMENT_NAME/app.toml" \
-        --set-file applicationClientToml="./deploy/$DEPLOYMENT_NAME/client.toml" \
+        helm upgrade node-1 deploy/node-1 \
+        --set-file applicationConfigtoml="./deploy/node-1/config/config.toml" \
+        --set-file applicationToml="./deploy/node-1/config/app.toml" \
+        --set-file applicationClientToml="./deploy/node-1/config/client.toml" \
           --set pylons.image.tag=$GITHUB_SHA \
           --set containerport1=26657 \
           --set containerport2=26656 \
@@ -78,5 +78,43 @@ jobs:
           --set exposedport5=9090 \
           --set exposedport6=8080 \
           --wait
-        kubectl rollout status deployment/$DEPLOYMENT_NAME
+        kubectl rollout status deployment/node-1
+        helm upgrade node-1 deploy/validator-1 \
+          --set-file applicationConfigtoml="./deploy/validator-1/config/config.toml" \
+          --set-file applicationToml="./deploy/validator-1/config/app.toml" \
+          --set-file applicationClientToml="./deploy/validator-1/config/client.toml" \
+            --set pylons.image.tag=$GITHUB_SHA \
+            --set containerport1=26657 \
+            --set containerport2=26656 \
+            --set containerport3=6060 \
+            --set containerport4=1317 \
+            --set containerport5=9090 \
+            --set containerport6=8080 \
+            --set exposedport1=26657 \
+            --set exposedport2=26656 \
+            --set exposedport3=6060 \
+            --set exposedport4=1317 \
+            --set exposedport5=9090 \
+            --set exposedport6=8080 \
+            --wait
+        kubectl rollout status deployment/validator-1
+        helm upgrade node-1 deploy/validator-1 \
+          --set-file applicationConfigtoml="./deploy/validator-2/config/config.toml" \
+          --set-file applicationToml="./deploy/validator-2/config/app.toml" \
+          --set-file applicationClientToml="./deploy/validator-2/config/client.toml" \
+            --set pylons.image.tag=$GITHUB_SHA \
+            --set containerport1=26657 \
+            --set containerport2=26656 \
+            --set containerport3=6060 \
+            --set containerport4=1317 \
+            --set containerport5=9090 \
+            --set containerport6=8080 \
+            --set exposedport1=26657 \
+            --set exposedport2=26656 \
+            --set exposedport3=6060 \
+            --set exposedport4=1317 \
+            --set exposedport5=9090 \
+            --set exposedport6=8080 \
+            --wait
+        kubectl rollout status deployment/validator-2
         kubectl get services -o wide
