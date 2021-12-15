@@ -20,7 +20,29 @@ func CmdCreateAccount() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create-account [username]",
 		Short: "initialize account from address",
-		Args:  cobra.ExactArgs(1),
+		Long: `
+Create a new account using an existing key from the keyring.
+
+A valid username should respect the following rules :
+
+	Usernames can consist of lowercase and capitals
+	Usernames can consist of alphanumeric characters
+	Usernames can consist of underscore and hyphens and spaces
+	Cannot be two underscores, two hypens or two spaces in a row
+	Cannot have a underscore, hypen or space at the start or end
+	Cannot be a valid cosmos SDK address
+
+Note that the username and the key name used to sign the transaction _are not the same_.   
+
+`,
+		Example: `
+pylonsd tx pylons create-account john --from joe
+
+or 
+
+pylonsd tx pylons create-account john --from pylo1tqqp6wmctv0ykatyaefsqy6stj92lnt800lkee 
+		`,
+		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			username := args[0]
 
