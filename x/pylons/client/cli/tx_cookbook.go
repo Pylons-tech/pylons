@@ -22,7 +22,7 @@ func CmdCreateCookbook() *cobra.Command {
 Create a new cookbook using the following arguments :
 
 * id : a unique identifier to your cookbook. Only letters, numbers and underscore (should not be the first character) allowed 
-* name: a human readable name for your cookbook, with a minimum of 8 characters size 
+* name: a human readable name for your cookbook, with a minimum of 3 characters size 
 * description : A more detailed description of your cookbook. Minimum 8 chars long
 * developer : name of the developer
 * version : the version of the cookbook in semVer format, ex.: v0.0.0
