@@ -44,9 +44,9 @@ All the fields are mandatory :
   "Cookbook for running pylons recreation of LOUD"                            \
   v0.3.1                                                                      \
   "[\"100000uatom\",\"10000000ubedrock\"]"                                    \
-  []                                                                          \
-  {}                                                                          \
-  []                                                                          \
+  "[]"                                                                        \
+  "{}"                                                                        \
+  "[]"                                                                        \
   1                                                                           \
   10000upylon                                                                 \
   true                                                                        \
