@@ -23,7 +23,7 @@ func CmdCreateAccount() *cobra.Command {
 		Long: `
 Create a new account using an existing key from the keyring.
 
-A valid username can be any combination of letters, numbers, and symbols. A valid username must respect the following rules:
+A valid username must respect the following rules:
 
 	- Contain alphanumeric characters (a-z, A-Z, 0-9)
 	- Contain non-repeating underscore (_), hyphen (-), and space characters
