@@ -23,7 +23,7 @@ func CmdCreateRecipe() *cobra.Command {
 The core of developing experiences on Pylons is the recipe. The structure of a recipe is complex and to have a more detailed
 info on how to create recipes and having complete examples, please see https://github.com/Pylons-tech/pylons/blob/main/docs/RECIPE_WALKTHROUGH.md.
 
-All the fields are mandatory :
+All the recipe fields are mandatory:
 
 * The "CookbookID" field is the ID of the cookbook that contains this recipe.
 * The "RecipeID" field is the unique identifier for this particular recipe.
