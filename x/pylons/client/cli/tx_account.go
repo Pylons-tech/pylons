@@ -23,16 +23,14 @@ func CmdCreateAccount() *cobra.Command {
 		Long: `
 Create a new account using an existing key from the keyring.
 
-A valid username should respect the following rules :
+A valid username can be any combination of letters, numbers, and symbols. A valid username must respect the following rules:
 
-	Usernames can consist of lowercase and capitals
-	Usernames can consist of alphanumeric characters
-	Usernames can consist of underscore and hyphens and spaces
-	Cannot be two underscores, two hypens or two spaces in a row
-	Cannot have a underscore, hypen or space at the start or end
-	Cannot be a valid cosmos SDK address
+	- Contain alphanumeric characters (a-z, A-Z, 0-9)
+	- Contain non-repeating underscore (_), hyphen (-), and space characters
+	- Cannot begin or end with (_), hyphen (-), or space
+	- Cannot be an existing valid Cosmos SDK address
 
-Note that the username and the key name used to sign the transaction _are not the same_.   
+Note that the username and the key name that are used to sign the transaction _are not the same_.   
 
 `,
 		Example: `
