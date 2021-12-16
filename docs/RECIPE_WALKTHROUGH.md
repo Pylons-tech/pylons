@@ -339,12 +339,7 @@ Finally we have have our tradePercentage, tradeable, and outputs reflecting what
           "maxValue": 10000000
         }
       ],
-      "strings": [],
-      "conditions": {
-        "doubles": [],
-        "longs": [],
-        "strings": []
-      }
+      "strings": []      
     }
   ],
   "entries": {
