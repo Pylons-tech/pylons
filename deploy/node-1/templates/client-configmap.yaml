@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-client-configmap
+data:
+  client.toml: |-
+{{ .Files.Get "config/client.toml" | indent 4}}
