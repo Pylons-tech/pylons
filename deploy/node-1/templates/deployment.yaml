@@ -28,9 +28,15 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
-        - name: "application-config"
+        - name: application-config
           configMap:
-            name: "node-1-configmap"
+            name: node-1-configmap
+        - name: application-toml
+          configMap:
+            name: node-1-configmap
+        - name: client-toml
+          configMap:
+            name: node-1-configmap
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -38,13 +44,13 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           volumeMounts:
             - name: application-config
-              mountPath: /app/config.toml
+              mountPath: /root/.pylons/config/config.toml
               subPath: config.toml
             - name: application-toml
-              mountPath: /app/app.toml
+              mountPath: /root/.pylons/config/app.toml
               subPath: app.toml
             - name: client-toml
-              mountPath: /app/client.toml
+              mountPath: /root/.pylons/config/client.toml
               subPath: client.toml
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
