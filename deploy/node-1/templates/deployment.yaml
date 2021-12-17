@@ -40,6 +40,12 @@ spec:
             - name: application-config
               mountPath: /app/config.toml
               subPath: config.toml
+            - name: application-toml
+              mountPath: /app/app.toml
+              subPath: app.toml
+            - name: client-toml
+              mountPath: /app/client.toml
+              subPath: client.toml
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
