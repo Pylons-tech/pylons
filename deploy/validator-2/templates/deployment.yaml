@@ -35,7 +35,22 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
+              protocol: TCP
+            - name: http2
+              containerPort: 9090
+              protocol: TCP
+            - name: http3
+              containerPort: 1317
+              protocol: TCP
+            - name: http4
+              containerPort: 6060
+              protocol: TCP
+            - name: http5
+              containerPort: 26656
+              protocol: TCP
+            - name: http6
+              containerPort: 26657
               protocol: TCP
           # livenessProbe:
           #   httpGet:
