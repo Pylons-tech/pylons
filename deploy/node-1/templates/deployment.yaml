@@ -44,17 +44,17 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           volumeMounts:
             - name: config-toml
-              mountPath: /root/.pylons/config/config.toml
+              mountPath: /config/config.toml
               subPath: config.toml
-              readOnly: true
+              readOnly: false
             - name: app-toml
-              mountPath: /root/.pylons/config/app.toml
+              mountPath: /config/app.toml
               subPath: app.toml
-              readOnly: true
+              readOnly: false
             - name: client-toml
-              mountPath: /root/.pylons/config/client.toml
+              mountPath: /config/client.toml
               subPath: client.toml
-              readOnly: true
+              readOnly: false
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
