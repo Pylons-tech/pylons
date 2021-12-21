@@ -23,18 +23,19 @@ func CmdCreateRecipe() *cobra.Command {
 The core of developing experiences on Pylons is the recipe. The structure of a recipe is complex and to have a more detailed
 info on how to create recipes and having complete examples, please see https://github.com/Pylons-tech/pylons/blob/main/docs/RECIPE_WALKTHROUGH.md.
 
-All the fields are mandatory :
+All the recipe fields are mandatory:
 
-* The "CookbookID" field is the ID of the cookbook that contains this recipe.
-* The "RecipeID" field is the unique identifier for this particular recipe.
-* The "Name" and "Description" fields are the name and description of the recipe.
-* The "CoinInputs" are the fields that detail what coins are required to run the recipe.
-* The "ItemInputs" is the field for items which are required to run the recipe.
-* The "Entries" field holds a list of the various outputs one could get from the recipe. Items are established with an ID and a set of doubles, longs, and strings to flesh oout the outputs.
-* The "Outputs" field calls the unique IDs of the items in entries list and uses them as outputs after the execution of the recipe.
-* The "BlockInterval" field indicates what block the recipe will execute. For instance, if blockInterval is at 2, the recipe won't execute until the chain has executed 2 blocks.
-* The "CostPerBlock" field is a Cosmos SDK coin that is used to build the fee for paying to do the execute-recipe transaction before the recipe's blockInterval is met.
-* The "Enabled" field is a boolean variable indicating if the recipe is enabled.
+* "CookbookID" is the ID of the cookbook that contains this recipe.
+* "RecipeID" is the unique identifier for this particular recipe.
+* "Name" is the name of the recipe.
+* "Description" is the plain text description of the recipe.
+* "CoinInputs" detail which coins are required to run the recipe.
+* "ItemInputs" detail which items are required to run the recipe.
+* "Entries" is a list of the various outputs from the recipe. Items are established with an ID and a set of doubles, longs, and strings to refine the outputs.
+* "Outputs" calls the unique IDs of the items in the entries list and uses the IDs as outputs after the execution of the recipe.
+* "BlockInterval" indicates what block the recipe executes. For example, if blockInterval is at 2, the recipe executes after the chain has executed 2 blocks.
+* "CostPerBlock" is a Cosmos SDK coin that is used to build the fee for paying for the execute-recipe transaction before the recipe blockInterval is met.
+* "Enabled" is a boolean variable to enable the recipe.
 `,
 		Example: `
   pylonsd tx pylons create-recipe                                             \
