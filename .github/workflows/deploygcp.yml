@@ -60,7 +60,7 @@ jobs:
         gcloud container clusters get-credentials $GKE_CLUSTER \
           --zone $GKE_ZONE \
           --project $PROJECT_ID
-        helm upgrade validator-1 ./deploy/validator-1 --namespace pylons  --debug \                                                        pylons/pylons (devnet ⚡) Justyns-MacBook-Air
+        helm upgrade validator-1 ./deploy/validator-1 --namespace default  --debug \                                                        pylons/pylons (devnet ⚡) Justyns-MacBook-Air
         --set-file applicationConfigtoml="./deploy/validator-1/config/config.toml" \
         --set-file applicationToml="./deploy/validator-1/config/app.toml" \
         --set-file applicationClientToml="./deploy/validator-1/config/client.toml" \
