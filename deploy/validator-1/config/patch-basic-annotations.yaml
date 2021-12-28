@@ -1,0 +1,7 @@
+spec:
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-secret: "secret/validator_1"
+        vault.hashicorp.com/role: "app"
