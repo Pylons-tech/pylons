@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "pylons-node.fullname" . }}
+  name: {{ include "{{ .Release.Name }}.fullname" . }}
   labels:
-    {{- include "pylons-node.labels" . | nindent 4 }}
+    {{- include "{{ .Release.Name }}.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "pylons-node.selectorLabels" . | nindent 6 }}
+      {{- include "{{ .Release.Name }}.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,36 +18,56 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "pylons-node.selectorLabels" . | nindent 8 }}
+        {{- include "{{ .Release.Name }}.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "pylons-node.serviceAccountName" . }}
+      serviceAccountName: {{ include "{{ .Release.Name }}.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: config-toml
+          configMap:
+            name: {{ .Release.Name }}-config-configmap
+        - name: app-toml
+          configMap:
+            name: {{ .Release.Name }}-app-configmap
+        - name: client-toml
+          configMap:
+            name: {{ .Release.Name }}-client-configmap
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          volumeMounts:
+            - name: config-toml
+              mountPath: /config/config.toml
+              subPath: config.toml
+              readOnly: false
+            - name: app-toml
+              mountPath: /config/app.toml
+              subPath: app.toml
+              readOnly: false
+            - name: client-toml
+              mountPath: /config/client.toml
+              subPath: client.toml
+              readOnly: false
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-          - containerPort: {{ .Values.containerport1 }}
-          - containerPort: {{ .Values.containerport2 }}
-          - containerPort: {{ .Values.containerport3 }}
-          - containerPort: {{ .Values.containerport4 }}
-          - containerPort: {{ .Values.containerport5 }}
-          - containerPort: {{ .Values.containerport6 }}
+            - name: http
+              containerPort: 80
+              protocol: TCP
           # livenessProbe:
           #   httpGet:
-          #     path: /status
-          #     port: 26657
+          #     path: /
+          #     port: http
           # readinessProbe:
           #   httpGet:
-          #     path: /status
-          #     port: 26657
+          #     path: /
+          #     port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

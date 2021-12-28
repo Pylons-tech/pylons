@@ -1,9 +1,0 @@
-kind: ConfigMap
-# ...
-data:
-  config.toml: |
-{{ .Values.applicationConfigToml | indent 4 }}
-  client.toml: |
-{{ .Values.applicationClienToml | indent 4 }}
-  app.toml: |
-{{ .Values.applicationToml | indent 4 }}
