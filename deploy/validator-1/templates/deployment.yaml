@@ -55,6 +55,10 @@ spec:
               mountPath: /config/client.toml
               subPath: client.toml
               readOnly: false
+            - name: genesis.json
+              mountPath: /home/vault/.pylons/config/genesis.json
+              subPath: genesis.json
+              readOnly: false
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
