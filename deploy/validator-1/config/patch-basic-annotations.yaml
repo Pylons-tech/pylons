@@ -4,4 +4,6 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-secret-validator-1-privkey: "secret/validator_1/privkey"
+        vault.hashicorp.com/agent-inject-template-validator-1-privkey: |
+          {{- with secret "secret/validator_1/privkey" -}}{{ .Data.data.key }}{{- end -}}
         vault.hashicorp.com/role: "validator-1"
