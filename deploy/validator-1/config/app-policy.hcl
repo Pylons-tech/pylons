@@ -1,4 +1,3 @@
-path "secret*" {
-    capabilities = [
-    read"]
+path "secret/validator_1/privkey/" {
+    capabilities = ["read"]
 }

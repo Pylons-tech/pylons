@@ -3,5 +3,5 @@ spec:
     metadata:
       annotations:
         vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/agent-inject-secret: "secret/validator_1"
-        vault.hashicorp.com/role: "app"
+        vault.hashicorp.com/agent-inject-secret-validator-1-privkey: "secret/validator_1/privkey"
+        vault.hashicorp.com/role: "validator-1"
