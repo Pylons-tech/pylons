@@ -37,6 +37,9 @@ spec:
         - name: client-toml
           configMap:
             name: {{ .Release.Name }}-client-configmap
+        - name: genesis-json
+          configMap:
+            name: {{ .Release.Name }}-genesis-json
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -55,7 +58,7 @@ spec:
               mountPath: /config/client.toml
               subPath: client.toml
               readOnly: false
-            - name: genesis.json
+            - name: genesis-json
               mountPath: /home/vault/.pylons/config/genesis.json
               subPath: genesis.json
               readOnly: false

@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-genesis-json
 data:
-  app.toml: |-
+  genesis.json: |-
 {{ .Files.Get "config/genesis.json" | indent 4}}
 
