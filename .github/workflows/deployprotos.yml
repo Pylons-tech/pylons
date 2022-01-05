@@ -18,7 +18,7 @@ jobs:
      - name: Push directory to another repository
        uses: cpina/github-action-push-to-another-repository@main
        env:
-        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        API_TOKEN_GITHUB: ${{ secrets.PYLONS_PROTO }}
        with:
         source-directory: 'proto'
         target-directory: 'proto'
