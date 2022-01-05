@@ -2,11 +2,10 @@ package keeper_test
 
 import (
 	"fmt"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func (suite *IntegrationTestSuite) TestExecuteRecipe() {
@@ -68,4 +67,125 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe() {
 		require.Equal(0, len(completed))
 		require.Equal(1, len(pending))
 	}
+}
+
+func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
+
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
+	items := make([]types.Item, 10)
+	owner := types.GenTestBech32FromString("testedCookbook")
+	coin := []sdk.Coin{sdk.NewCoin(types.PylonsCoinDenom, sdk.OneInt())}
+
+	cookbook := types.Cookbook{
+		Creator:     owner,
+		ID:          "0",
+		NodeVersion: 0,
+		Name:        "Testing cookbook",
+		Enabled:     false,
+	}
+	k.SetCookbook(ctx, cookbook)
+
+	for i := range items {
+		items[i].Owner = owner
+		items[i].CookbookID = cookbook.ID
+		items[i].TransferFee = coin
+		items[i].Tradeable = true
+		items[i].TradePercentage = sdk.ZeroDec()
+		items[i].ID = k.AppendItem(ctx, items[i])
+	}
+
+	itemStr := make([]string, len(items))
+
+	for i, it := range items {
+		itemStr[i] = it.ID
+	}
+
+	tests := []struct {
+		name          string
+		creator       string
+		testedMsg     types.MsgExecuteRecipe
+		inputItemsIDs []string
+		recipe        types.Recipe
+		expected      []types.Item
+		expectedError error
+	}{
+		{
+			name: "Size Mismatch Error Testing",
+			inputItemsIDs: []string{
+				"dummyInfo",
+			},
+			recipe: types.Recipe{
+				ItemInputs: []types.ItemInput{
+					{
+						ID: "dummyId1",
+					},
+					{
+						ID: "dummyId2",
+					},
+				},
+			},
+			creator:       types.GenTestBech32FromString("test1"),
+			expectedError: sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "size mismatch between provided input items and items required by recipe"),
+		}, {
+			name:    "Item not found",
+			creator: types.GenTestBech32FromString("test2"),
+			inputItemsIDs: []string{
+				"nonExistentId",
+			},
+			recipe: types.Recipe{
+				ItemInputs: []types.ItemInput{
+					{
+						ID: "existentId",
+					},
+				},
+			},
+			expectedError: sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v not found", "nonExistentId"),
+		}, {
+			name:          "Find matching",
+			creator:       owner,
+			inputItemsIDs: itemStr,
+			recipe: types.Recipe{
+				CookbookID: cookbook.ID,
+				ItemInputs: mapItems(itemStr),
+			},
+			expected:      nil,
+			expectedError: nil,
+		}, {
+			name:          "Different Owner",
+			creator:       types.GenTestBech32FromString("notyourkeysnotyouratoms"),
+			inputItemsIDs: itemStr,
+			recipe: types.Recipe{
+				CookbookID: cookbook.ID,
+				ItemInputs: mapItems(itemStr),
+			},
+			expected:      nil,
+			expectedError: sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %s not owned by sender", itemStr[0]),
+		},
+	}
+	for _, tc := range tests {
+		suite.Run(tc.name, func() {
+			response, err := k.MatchItemInputsForExecution(ctx, tc.creator, tc.inputItemsIDs, tc.recipe)
+			if err != nil {
+				require.Error(tc.expectedError)
+			} else {
+				for i, resp := range response {
+					require.Equal(resp.ID, tc.inputItemsIDs[i])
+				}
+			}
+		})
+	}
+}
+
+func mapItems(items []string) []types.ItemInput {
+	returnInput := []types.ItemInput{}
+	for _, it := range items {
+		input := types.ItemInput{
+			ID: it,
+		}
+		returnInput = append(returnInput, input)
+	}
+	return returnInput
 }
