@@ -144,15 +144,14 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 			},
 			expectedError: sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v not found", "nonExistentId"),
 		}, {
-			name:          "Find matching",
+			name:          "Find no matching",
 			creator:       owner,
 			inputItemsIDs: itemStr,
 			recipe: types.Recipe{
 				CookbookID: cookbook.ID,
 				ItemInputs: mapItems(itemStr),
 			},
-			expected:      nil,
-			expectedError: nil,
+			expectedError: sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cannot find match for recipe input item "),
 		}, {
 			name:          "Different Owner",
 			creator:       types.GenTestBech32FromString("notyourkeysnotyouratoms"),
@@ -171,8 +170,10 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 			if err != nil {
 				require.Error(tc.expectedError)
 			} else {
-				for i, resp := range listOfItems {
-					require.Equal(resp.ID, tc.inputItemsIDs[i])
+				for i, item := range listOfItems {
+					require.ElementsMatch(item.Doubles, tc.recipe.ItemInputs[i].Doubles)
+					require.ElementsMatch(item.Longs, tc.recipe.ItemInputs[i].Longs)
+					require.ElementsMatch(item.Strings, tc.recipe.ItemInputs[i].Strings)
 				}
 			}
 		})
@@ -181,9 +182,29 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 
 func mapItems(items []string) []types.ItemInput {
 	returnInput := []types.ItemInput{}
-	for _, it := range items {
+	for i, it := range items {
 		input := types.ItemInput{
 			ID: it,
+			Strings: []types.StringInputParam{
+				{
+					Key:   "strtest",
+					Value: fmt.Sprintf("%d", i),
+				},
+			},
+			Doubles: []types.DoubleInputParam{
+				{
+					Key:      "dbltest",
+					MinValue: sdk.NewDec(1),
+					MaxValue: sdk.NewDec(2),
+				},
+			},
+			Longs: []types.LongInputParam{
+				{
+					Key:      "lngtest",
+					MinValue: 1,
+					MaxValue: 2,
+				},
+			},
 		}
 		returnInput = append(returnInput, input)
 	}
