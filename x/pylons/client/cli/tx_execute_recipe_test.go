@@ -231,7 +231,6 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 				TransferFee:     []sdk.Coin{sdk.NewCoin("upylon", sdk.OneInt())},
 				Quantity:        1, // Set quantity so it can only be executed once
 				TradePercentage: tradePercentage,
-				AmountMinted:    0,
 			},
 		},
 		ItemModifyOutputs: nil,
@@ -364,7 +363,6 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	stat, ok := status.FromError(err)
 	require.True(t, ok)
 	require.Contains(t, stat.Err().Error(), status.Error(codes.InvalidArgument, "not found").Error())
-
 }
 
 func TestExecuteUpdatedRecipe(t *testing.T) {
