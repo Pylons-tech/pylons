@@ -167,11 +167,11 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 	}
 	for _, tc := range tests {
 		suite.Run(tc.name, func() {
-			response, err := k.MatchItemInputsForExecution(ctx, tc.creator, tc.inputItemsIDs, tc.recipe)
+			listOfItems, err := k.MatchItemInputsForExecution(ctx, tc.creator, tc.inputItemsIDs, tc.recipe)
 			if err != nil {
 				require.Error(tc.expectedError)
 			} else {
-				for i, resp := range response {
+				for i, resp := range listOfItems {
 					require.Equal(resp.ID, tc.inputItemsIDs[i])
 				}
 			}
