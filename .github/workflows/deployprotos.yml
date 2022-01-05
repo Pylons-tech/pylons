@@ -1,6 +1,9 @@
 name: Publish protos to pylons_protos repository
 
-on: workflow_dispatch # don't make this automatic til it makes sense
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   publish-protos:
@@ -9,14 +12,17 @@ jobs:
     environment: production
 
     steps:
+    
+     - uses: actions/checkout@v2
+      
      - name: Push directory to another repository
-       uses: cpina/github-action-push-to-another-repository@v1.3
+       uses: cpina/github-action-push-to-another-repository@main
        env:
         API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
        with:
-        source-directory: proto
-        target-directory: proto
-        destination-github-username: Pylons-tech
-        destination-repository-name: pylons_protos
+        source-directory: 'proto'
+        target-directory: 'proto'
+        destination-github-username: 'Pylons-tech'
+        destination-repository-name: 'pylons_protos'
         user-email: i@pylons.tech
-        target-branch: develop # shouldn't push to main til we're sure it's not spitting out garbage
+        target-branch: main
