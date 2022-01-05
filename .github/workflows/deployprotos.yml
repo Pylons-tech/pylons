@@ -1,3 +1,4 @@
+# Updates to this repository are populated downstream
 name: Publish protos to pylons_protos repository
 
 on:
