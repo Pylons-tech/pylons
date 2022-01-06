@@ -269,12 +269,7 @@ func createNRecipe(k keeper.Keeper, ctx sdk.Context, cb types.Cookbook, n int) [
 		items[i].CookbookID = cb.ID
 		items[i].ID = fmt.Sprintf("%d", i)
 		items[i].CostPerBlock = sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
-		for j := 0; j < n; j++ {
-			ip := types.ItemInput{
-				ID: fmt.Sprintf("%d", i),
-			}
-			items[i].ItemInputs = append(items[i].ItemInputs, ip)
-		}
+
 		k.SetRecipe(ctx, items[i])
 	}
 	return items
