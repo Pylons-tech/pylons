@@ -3,6 +3,7 @@ package types
 import (
 	"errors"
 	"fmt"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"math"
 	"testing"
 
@@ -117,6 +118,649 @@ func TestFindValidPaymentsPermutation(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				require.Equal(t, tc.res, res)
+			}
+		})
+	}
+}
+
+func TestFindDouble(t *testing.T) {
+	for _, tc := range []struct {
+		desc         string
+		testedItem   Item
+		testedValue  string
+		expectedDec  sdk.Dec
+		expectedBool bool
+	}{
+		{
+			desc: "Found",
+			testedItem: Item{
+				Doubles: []DoubleKeyValue{
+					{
+						Key:   "one",
+						Value: sdk.NewDec(1),
+					},
+					{
+						Key:   "two",
+						Value: sdk.NewDec(1),
+					},
+				},
+			},
+			testedValue:  "one",
+			expectedBool: true,
+			expectedDec:  sdk.NewDec(1),
+		},
+		{
+			desc: "Not Found",
+			testedItem: Item{
+				Doubles: []DoubleKeyValue{
+					{
+						Key:   "one",
+						Value: sdk.NewDec(1),
+					},
+					{
+						Key:   "two",
+						Value: sdk.NewDec(1),
+					},
+				},
+			},
+			testedValue:  "three",
+			expectedBool: false,
+			expectedDec:  sdk.ZeroDec(),
+		},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			returnedDec, returnedBool := tc.testedItem.FindDouble(tc.testedValue)
+			require.Equal(t, returnedDec, tc.expectedDec)
+			require.Equal(t, returnedBool, tc.expectedBool)
+		})
+	}
+}
+
+func TestFindDoubleKey(t *testing.T) {
+	for _, tc := range []struct {
+		desc         string
+		testedItem   Item
+		testedValue  string
+		expectedInt  int
+		expectedBool bool
+	}{
+		{
+			desc: "Found, position 0",
+			testedItem: Item{
+				Doubles: []DoubleKeyValue{
+					{
+						Key:   "one",
+						Value: sdk.NewDec(1),
+					},
+					{
+						Key:   "two",
+						Value: sdk.NewDec(1),
+					},
+				},
+			},
+			testedValue:  "one",
+			expectedBool: true,
+			expectedInt:  0,
+		}, {
+			desc: "Found, position non zero",
+			testedItem: Item{
+				Doubles: []DoubleKeyValue{
+					{
+						Key:   "one",
+						Value: sdk.NewDec(1),
+					},
+					{
+						Key:   "two",
+						Value: sdk.NewDec(1),
+					},
+				},
+			},
+			testedValue:  "two",
+			expectedBool: true,
+			expectedInt:  1,
+		},
+		{
+			desc: "Not Found",
+			testedItem: Item{
+				Doubles: []DoubleKeyValue{
+					{
+						Key:   "one",
+						Value: sdk.NewDec(1),
+					},
+					{
+						Key:   "two",
+						Value: sdk.NewDec(1),
+					},
+				},
+			},
+			testedValue:  "three",
+			expectedBool: false,
+			expectedInt:  0,
+		},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			returnedInt, returnedBool := tc.testedItem.FindDoubleKey(tc.testedValue)
+			require.Equal(t, returnedInt, tc.expectedInt)
+			require.Equal(t, returnedBool, tc.expectedBool)
+		})
+	}
+}
+func TestFindLong(t *testing.T) {
+	for _, tc := range []struct {
+		desc         string
+		testedItem   Item
+		testedValue  string
+		expectedInt  int
+		expectedBool bool
+	}{
+		{
+			desc: "Found",
+			testedItem: Item{
+				Longs: []LongKeyValue{
+					{
+						Key:   "one",
+						Value: 1,
+					},
+					{
+						Key:   "two",
+						Value: 2,
+					},
+				},
+			},
+			testedValue:  "two",
+			expectedBool: true,
+			expectedInt:  2,
+		},
+		{
+			desc: "Not Found",
+			testedItem: Item{
+				Longs: []LongKeyValue{
+					{
+						Key:   "one",
+						Value: 1,
+					},
+					{
+						Key:   "two",
+						Value: 2,
+					},
+				},
+			},
+			testedValue:  "three",
+			expectedBool: false,
+			expectedInt:  0,
+		},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			returnedInt, returnedBool := tc.testedItem.FindLong(tc.testedValue)
+			require.Equal(t, returnedInt, tc.expectedInt)
+			require.Equal(t, returnedBool, tc.expectedBool)
+		})
+	}
+}
+
+func TestFindLongKey(t *testing.T) {
+	for _, tc := range []struct {
+		desc         string
+		testedItem   Item
+		testedValue  string
+		expectedInt  int
+		expectedBool bool
+	}{
+		{
+			desc: "Found in position different from zero",
+			testedItem: Item{
+				Longs: []LongKeyValue{
+					{
+						Key:   "one",
+						Value: 1,
+					},
+					{
+						Key:   "zero",
+						Value: 0,
+					},
+				},
+			},
+			testedValue:  "zero",
+			expectedBool: true,
+			expectedInt:  1,
+		}, {
+			desc: "Found in position zero",
+			testedItem: Item{
+				Longs: []LongKeyValue{
+					{
+						Key:   "zero",
+						Value: 0,
+					},
+					{
+						Key:   "one",
+						Value: 1,
+					},
+				},
+			},
+			testedValue:  "zero",
+			expectedBool: true,
+			expectedInt:  0,
+		},
+		{
+			desc: "Not Found",
+			testedItem: Item{
+				Longs: []LongKeyValue{
+					{
+						Key:   "one",
+						Value: 1,
+					},
+					{
+						Key:   "two",
+						Value: 2,
+					},
+				},
+			},
+			testedValue:  "three",
+			expectedBool: false,
+			expectedInt:  0,
+		},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			returnedInt, returnedBool := tc.testedItem.FindLongKey(tc.testedValue)
+			require.Equal(t, returnedInt, tc.expectedInt)
+			require.Equal(t, returnedBool, tc.expectedBool)
+		})
+	}
+}
+
+func TestFindString(t *testing.T) {
+	for _, tc := range []struct {
+		desc           string
+		testedItem     Item
+		testedValue    string
+		expectedString string
+		expectedBool   bool
+	}{
+		{
+			desc: "Found",
+			testedItem: Item{
+				Strings: []StringKeyValue{
+					{
+						Key:   "firstOne",
+						Value: "lorem",
+					},
+					{
+						Key:   "secondOne",
+						Value: "ipsum",
+					},
+				},
+			},
+			testedValue:    "secondOne",
+			expectedBool:   true,
+			expectedString: "ipsum",
+		}, {
+			desc: "Empty string found",
+			testedItem: Item{
+				Strings: []StringKeyValue{
+					{
+						Key:   "firstOne",
+						Value: "lorem",
+					},
+					{
+						Key:   "secondOne",
+						Value: "",
+					},
+				},
+			},
+			testedValue:    "secondOne",
+			expectedBool:   true,
+			expectedString: "",
+		},
+		{
+			desc: "Not Found",
+			testedItem: Item{
+				Strings: []StringKeyValue{
+					{
+						Key:   "firstOne",
+						Value: "lorem",
+					},
+					{
+						Key:   "secondOne",
+						Value: "ipsum",
+					},
+				},
+			},
+			testedValue:    "thirdOne",
+			expectedBool:   false,
+			expectedString: "",
+		},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			returnedInt, returnedBool := tc.testedItem.FindString(tc.testedValue)
+			require.Equal(t, returnedInt, tc.expectedString)
+			require.Equal(t, returnedBool, tc.expectedBool)
+		})
+	}
+}
+
+func TestFindStringKey(t *testing.T) {
+	for _, tc := range []struct {
+		desc         string
+		testedItem   Item
+		testedValue  string
+		expectedInt  int
+		expectedBool bool
+	}{
+		{
+			desc: "Found",
+			testedItem: Item{
+				Strings: []StringKeyValue{
+					{
+						Key:   "firstOne",
+						Value: "lorem",
+					},
+					{
+						Key:   "secondOne",
+						Value: "ipsum",
+					},
+				},
+			},
+			testedValue:  "secondOne",
+			expectedBool: true,
+			expectedInt:  1,
+		},
+		{
+			desc: "Not Found",
+			testedItem: Item{
+				Strings: []StringKeyValue{
+					{
+						Key:   "firstOne",
+						Value: "lorem",
+					},
+					{
+						Key:   "secondOne",
+						Value: "ipsum",
+					},
+				},
+			},
+			testedValue:  "thirdOne",
+			expectedBool: false,
+			expectedInt:  0,
+		},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			returnedInt, returnedBool := tc.testedItem.FindStringKey(tc.testedValue)
+			require.Equal(t, returnedInt, tc.expectedInt)
+			require.Equal(t, returnedBool, tc.expectedBool)
+		})
+	}
+}
+func TestMatchItem(t *testing.T) {
+	for _, tc := range []struct {
+		desc             string
+		itemInputToMatch ItemInput
+		itemToMatch      Item
+		expectedError    error
+	}{
+		{
+			desc: "Match Successful",
+			itemInputToMatch: ItemInput{
+				ID: "test1",
+				Doubles: []DoubleInputParam{
+					{
+						Key:      "doubleone",
+						MinValue: sdk.OneDec(),
+						MaxValue: sdk.OneDec(),
+					},
+					{
+						Key:      "doubletwo",
+						MinValue: sdk.NewDec(2),
+						MaxValue: sdk.NewDec(2),
+					},
+				},
+				Longs: []LongInputParam{
+					{
+						Key:      "longone",
+						MinValue: 1,
+						MaxValue: 1,
+					},
+					{
+						Key:      "longtwo",
+						MinValue: 2,
+						MaxValue: 2,
+					},
+				},
+				Strings: []StringInputParam{
+					{
+						Key:   "stringone",
+						Value: "1",
+					},
+					{
+						Key:   "stringtwo",
+						Value: "2",
+					},
+				},
+			},
+			itemToMatch: Item{
+				Doubles: []DoubleKeyValue{
+					{
+						Key:   "doubleone",
+						Value: sdk.NewDec(1),
+					}, {
+						Key:   "doubletwo",
+						Value: sdk.NewDec(2),
+					},
+				},
+				Longs: []LongKeyValue{
+					{
+						Key:   "longone",
+						Value: 1,
+					},
+					{
+						Key:   "longtwo",
+						Value: 2,
+					},
+				},
+				Strings: []StringKeyValue{
+					{
+						Key:   "stringone",
+						Value: "1",
+					},
+					{
+						Key:   "stringtwo",
+						Value: "2",
+					},
+				},
+			},
+			expectedError: nil,
+		},
+		{
+			desc: "Double Key Not Available",
+			itemInputToMatch: ItemInput{
+				ID: "test1",
+				Doubles: []DoubleInputParam{
+					{
+						Key:      "doubleone",
+						MinValue: sdk.OneDec(),
+						MaxValue: sdk.OneDec(),
+					},
+					{
+						Key:      "doublethree",
+						MinValue: sdk.NewDec(3),
+						MaxValue: sdk.NewDec(3),
+					},
+				},
+			},
+			itemToMatch: Item{
+				ID: "test1",
+				Doubles: []DoubleKeyValue{
+					{
+						Key:   "doubleone",
+						Value: sdk.NewDec(1),
+					}, {
+						Key:   "doubletwo",
+						Value: sdk.NewDec(2),
+					},
+				},
+			},
+			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", "doublethree", "test1"),
+		}, {
+			desc: "Double key is available but range do not match",
+			itemInputToMatch: ItemInput{
+				ID: "test1",
+				Doubles: []DoubleInputParam{
+					{
+						Key:      "doubleone",
+						MinValue: sdk.OneDec(),
+						MaxValue: sdk.OneDec(),
+					},
+					{
+						Key:      "doubletwo",
+						MinValue: sdk.NewDec(3),
+						MaxValue: sdk.NewDec(4),
+					},
+				},
+			},
+			itemToMatch: Item{
+				ID: "test1",
+				Doubles: []DoubleKeyValue{
+					{
+						Key:   "doubleone",
+						Value: sdk.NewDec(1),
+					}, {
+						Key:   "doubletwo",
+						Value: sdk.NewDec(2),
+					},
+				},
+			},
+			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", "doubletwo", "test1"),
+		}, {
+			desc: "Long Key Not Available",
+			itemInputToMatch: ItemInput{
+				ID: "test1",
+				Longs: []LongInputParam{
+					{
+						Key:      "longone",
+						MinValue: 1,
+						MaxValue: 1,
+					},
+					{
+						Key:      "longthree",
+						MinValue: 3,
+						MaxValue: 3,
+					},
+				},
+			},
+			itemToMatch: Item{
+				ID: "test1",
+				Longs: []LongKeyValue{
+					{
+						Key:   "longone",
+						Value: 1,
+					}, {
+						Key:   "longtwo",
+						Value: 2,
+					},
+				},
+			},
+			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", "longthree", "test1"),
+		}, {
+			desc: "Long key is available but range do not match",
+			itemInputToMatch: ItemInput{
+				ID: "test1",
+				Longs: []LongInputParam{
+					{
+						Key:      "longone",
+						MinValue: 1,
+						MaxValue: 1,
+					},
+					{
+						Key:      "longtwo",
+						MinValue: 2,
+						MaxValue: 3,
+					},
+				},
+			},
+			itemToMatch: Item{
+				ID: "test1",
+				Longs: []LongKeyValue{
+					{
+						Key:   "longone",
+						Value: 1,
+					}, {
+						Key:   "longtwo",
+						Value: 4,
+					},
+				},
+			},
+			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", "longtwo", "test1"),
+		}, {
+			desc: "String Key Not Available",
+			itemInputToMatch: ItemInput{
+				ID: "test1",
+				Strings: []StringInputParam{
+					{
+						Key:   "stringone",
+						Value: "1",
+					},
+					{
+						Key:   "stringtwo",
+						Value: "1",
+					},
+				},
+			},
+			itemToMatch: Item{
+				ID: "test1",
+				Strings: []StringKeyValue{
+					{
+						Key:   "longone",
+						Value: "1",
+					}, {
+						Key:   "longtwo",
+						Value: "2",
+					},
+				},
+			},
+			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", "stringone", "test1"),
+		}, {
+			desc: "String key is available but values do not match",
+			itemInputToMatch: ItemInput{
+				ID: "test1",
+				Strings: []StringInputParam{
+					{
+						Key:   "stringone",
+						Value: "1",
+					},
+					{
+						Key:   "stringtwo",
+						Value: "2",
+					},
+				},
+			},
+			itemToMatch: Item{
+				ID: "test1",
+				Strings: []StringKeyValue{
+					{
+						Key:   "stringone",
+						Value: "1",
+					}, {
+						Key:   "stringtwo",
+						Value: "4",
+					},
+				},
+			},
+			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key value does not match: item_id=%s", "stringtwo", "test1"),
+		},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			ec := CelEnvCollection{}
+			err := tc.itemInputToMatch.MatchItem(tc.itemToMatch, ec)
+			if tc.expectedError != nil {
+				require.Equal(t, err.Error(), tc.expectedError.Error())
+			} else {
+				require.NoError(t, err)
 			}
 		})
 	}

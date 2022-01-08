@@ -9,7 +9,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k msgServer) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr string, inputItemsIDs []string, recipe types.Recipe) ([]types.Item, error) {
+func (k Keeper) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr string, inputItemsIDs []string, recipe types.Recipe) ([]types.Item, error) {
 	if len(inputItemsIDs) != len(recipe.ItemInputs) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "size mismatch between provided input items and items required by recipe")
 	}
