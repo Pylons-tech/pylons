@@ -684,9 +684,9 @@ func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool) error {
 			return err
 		}
 
-		// item.TradePercentage must be in (0, 1)
+		// item.TradePercentage must be in [0, 1]
 		if !item.TradePercentage.IsNil() {
-			if item.TradePercentage.LTE(sdk.ZeroDec()) || item.TradePercentage.GTE(sdk.OneDec()) {
+			if item.TradePercentage.LT(sdk.ZeroDec()) || item.TradePercentage.GT(sdk.OneDec()) {
 				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemOutput %s", item.ID)
 			}
 		}
@@ -732,8 +732,8 @@ func ValidateItemModifyOutputs(imo []ItemModifyOutput, idMap map[string]bool) er
 			return err
 		}
 
-		// item.TradePercentage must be in (0, 1)
-		if item.TradePercentage.LTE(sdk.ZeroDec()) || item.TradePercentage.GTE(sdk.OneDec()) {
+		// item.TradePercentage must be in [0, 1]
+		if item.TradePercentage.LT(sdk.ZeroDec()) || item.TradePercentage.GT(sdk.OneDec()) {
 			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemModifyOutput %s", item.ID)
 		}
 
