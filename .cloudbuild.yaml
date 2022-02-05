@@ -20,6 +20,15 @@ steps:
   args: ['cluster-info']
 
 
+# Workaround for stable url change
+- name: 'gcr.io/$PROJECT_ID/cloud-builders-helm'
+  args: ['repo', 'add', 'stable', 'https://charts.helm.sh/stable', '--force-update']
+  env:
+  - 'KUBECONFIG=/workspace/.kube/config'
+  - 'HELM_REPO_NAME=validator-1'
+  - 'HELM_REPO_URL=deploy/validator-1/'
+
+
 # run helm command to install/upgrade
 - name: 'gcr.io/$PROJECT_ID/cloud-builders-helm'
   args: ['upgrade', '--install', 'validator-1', '--namespace', 'default', 'deploy/validator-1/']
