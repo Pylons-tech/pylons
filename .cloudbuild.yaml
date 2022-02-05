@@ -1,3 +1,4 @@
+
 steps:
 # Docker Build
 - name: 'gcr.io/cloud-builders/docker'
@@ -27,5 +28,7 @@ steps:
   - 'HELM_REPO_NAME=validator-1'
   - 'HELM_REPO_URL=deploy/validator-1/'
 
+
 options:
   logging: CLOUD_LOGGING_ONLY
+
