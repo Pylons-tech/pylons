@@ -31,7 +31,7 @@ steps:
 
 # run helm command to install/upgrade
 - name: 'gcr.io/$PROJECT_ID/cloud-builders-community/helm'
-  args: ['upgrade', '--install', 'validator-1', '--namespace', 'default', 'deploy/validator-1/']
+  args: ['upgrade', '--install', 'validator-1', '--namespace', 'default', './deploy/validator-1/']
   env:
   - 'KUBECONFIG=/workspace/.kube/config'
   - 'HELM_REPO_NAME=validator-1'
