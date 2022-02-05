@@ -26,7 +26,7 @@ steps:
   env:
   - 'KUBECONFIG=/workspace/.kube/config'
   - 'HELM_REPO_NAME=validator-1'
-  - 'HELM_REPO_URL=deploy/validator-1'
+  - 'HELM_REPO_URL=github.com/pylons-tech/pylons/deploy/validator-1'
 
 
 # run helm command to install/upgrade
