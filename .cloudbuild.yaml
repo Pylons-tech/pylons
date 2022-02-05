@@ -21,7 +21,7 @@ steps:
 
 
 # run helm command to install/upgrade
-- name: 'gcr.io/rimusz-lab1/cloud-builders-helm'
+- name: 'gcr.io/$PROJECT_ID/cloud-builders-helm'
   args: ['upgrade', '--install', 'validator-1', '--namespace', 'default', 'deploy/validator-1/']
   env:
   - 'KUBECONFIG=/workspace/.kube/config'
