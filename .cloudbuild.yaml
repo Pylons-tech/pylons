@@ -1,5 +1,13 @@
 steps:
-
+# Docker Build
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 
+          'gcr.io/${PROJECT_ID}/github.com/pylons-tech/pylons', 
+          '.']
+# Docker Push
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 
+          'gcr.io/${PROJECT_ID}/github.com/pylons-tech/pylons']
 # fetch GKE cluster credentials to be used for helm step
 - name: 'gcr.io/cloud-builders/kubectl'
   env:
@@ -9,8 +17,7 @@ steps:
   args: ['cluster-info']
 
 # run helm command to install/upgrade
-
-- name: 'gcr.io/$PROJECT_ID/github.com/pylons-tech/pylons'
+- name: 'gcr.io/rimusz-lab1/cloud-builders-helm'
   args: ['upgrade', '--install', 'validator-1', '--namespace', 'default', 'deploy/validator-1/']
   env:
   - 'KUBECONFIG=/workspace/.kube/config'
