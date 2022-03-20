@@ -34,6 +34,9 @@ linters:
     - misspell
     # - wsl
     - nolintlint
+    - funlen
+    - godot
+    - goheader
 
 issues:
   exclude-rules:
@@ -67,3 +70,20 @@ linters-settings:
     checks: ["all", "-SA1019"]
   stylecheck:
     checks: ["all", "-ST1016", "ST1003"]
+  
+  # funclen check max lines and max statements in functions
+  funlen:
+    # Checks the max number lines per function
+    lines: 50
+    # Checks the max number statements per function
+    statements: 40
+
+  godot:
+    scope: all
+    # List of regexps for excluding particular comment lines from check.
+    exclude:
+      # Exclude todo and fixme comments.
+      - "^fixme:"
+      - "^todo:"
+    period: false
+    capital: true
