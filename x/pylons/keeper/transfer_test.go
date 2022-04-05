@@ -14,7 +14,7 @@ func (suite *IntegrationTestSuite) TestGetDenomTrace() {
 		Path:      "transfer/channel-0",
 	}
 
-	addr := generateRandomAddress()
+	addr := generateAddress()
 	k.SetDenomTrace(ctx, denomTrace)
 
 	coin := sdk.NewCoin("ibc/04F5F501207C3626A2C14BFEF654D51C2E0B8F7CA578AB8ED272A66FE4E48097", sdk.NewInt(100))

@@ -35,7 +35,7 @@ func (suite *IntegrationTestSuite) TestUpdateCoinsDenom() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	addr := generateRandomAddress()
+	addr := generateAddress()
 	coinInputs := sdk.Coins{sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(1)}}
 
 	updatedCoinsInput, err := k.UpdateCoinsDenom(ctx, addr, coinInputs)
@@ -49,7 +49,7 @@ func (suite *IntegrationTestSuite) TestUpdateCoinsIBCDenom() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	addr := generateRandomAddress()
+	addr := generateAddress()
 	coinInputs := sdk.Coins{sdk.Coin{Denom: "ujuno", Amount: sdk.NewInt(1)}}
 
 	denomTrace := transfertypes.DenomTrace{
