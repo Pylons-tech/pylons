@@ -16,13 +16,13 @@ import (
 
 type (
 	Keeper struct {
-		cdc           codec.Codec
-		storeKey      sdk.StoreKey
-		memKey        sdk.StoreKey
-		bankKeeper    types.BankKeeper
-		accountKeeper types.AccountKeeper
-
-		paramSpace paramtypes.Subspace
+		cdc            codec.Codec
+		storeKey       sdk.StoreKey
+		memKey         sdk.StoreKey
+		bankKeeper     types.BankKeeper
+		accountKeeper  types.AccountKeeper
+		transferKeeper types.TransferKeeper
+		paramSpace     paramtypes.Subspace
 		// this line is used by starport scaffolding # ibc/keeper/attribute
 
 	}
@@ -34,6 +34,7 @@ func NewKeeper(
 	memKey sdk.StoreKey,
 	bk types.BankKeeper,
 	ak types.AccountKeeper,
+	tk types.TransferKeeper,
 	paramSpace paramtypes.Subspace,
 	// this line is used by starport scaffolding # ibc/keeper/parameter
 
@@ -60,12 +61,13 @@ func NewKeeper(
 	}
 
 	return Keeper{
-		cdc:           cdc,
-		storeKey:      storeKey,
-		memKey:        memKey,
-		bankKeeper:    bk,
-		accountKeeper: ak,
-		paramSpace:    paramSpace,
+		cdc:            cdc,
+		storeKey:       storeKey,
+		memKey:         memKey,
+		bankKeeper:     bk,
+		accountKeeper:  ak,
+		transferKeeper: tk,
+		paramSpace:     paramSpace,
 		// this line is used by starport scaffolding # ibc/keeper/return
 
 	}

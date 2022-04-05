@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	"fmt"
+	"math/rand"
 	"strconv"
 	"testing"
 
@@ -17,6 +18,24 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
+
+var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+func randStringRunes(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	return string(b)
+}
+
+func generateRandomAddress() sdk.AccAddress {
+
+	name := randStringRunes(4)
+	addrString := types.GenTestBech32FromString(name)
+	addr, _ := sdk.AccAddressFromBech32(addrString)
+	return addr
+}
 
 func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	items := make([]types.Cookbook, n)
