@@ -9,7 +9,7 @@ on:
       - starport
       - develop-no-stripe
       - develop
-      - master
+      - main
 jobs:
 lint:
     # The type of runner that the job will run on
