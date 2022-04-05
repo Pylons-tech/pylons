@@ -4,6 +4,7 @@ name: Lint
 # The `golangci` will pass without running if no *.{go, mod, sum} files have been changed.
 on:
   pull_request:
+      - main
   push:
     branches:
       - starport
