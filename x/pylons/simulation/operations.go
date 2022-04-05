@@ -17,12 +17,17 @@ import (
 
 // Simulation operation weights constants
 const (
-	OpWeightMsgCreateAcc      = "op_weight_msg_create_acc"
-	OpWeightMsgUpdateAcc      = "op_weight_msg_update_acc"
+	/* #nosec */
+	OpWeightMsgCreateAcc = "op_weight_msg_create_acc"
+	/* #nosec */
+	OpWeightMsgUpdateAcc = "op_weight_msg_update_acc"
+	/* #nosec */
 	OpWeightMsgCreateCookbook = "op_weight_msg_create_cookbook"
-	OpWeightMsgCreateRecipe   = "op_weight_msg_create_recipe"
-	OpWeightMsgExecuteRecipe  = "op_weight_msg_execute_recipe"
-	invalidField              = "invalid"
+	/* #nosec */
+	OpWeightMsgCreateRecipe = "op_weight_msg_create_recipe"
+	/* #nosec */
+	OpWeightMsgExecuteRecipe = "op_weight_msg_execute_recipe"
+	invalidField             = "invalid"
 )
 
 type recipeInfo struct {
