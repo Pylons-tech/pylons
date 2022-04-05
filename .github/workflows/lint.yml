@@ -4,13 +4,9 @@ name: Lint
 # The `golangci` will pass without running if no *.{go, mod, sum} files have been changed.
 on:
   pull_request:
-      - main
+    branches: [ main ]
   push:
-    branches:
-      - starport
-      - develop-no-stripe
-      - develop
-      - main
+    branches: [ main ]
 jobs:
 lint:
     # The type of runner that the job will run on
