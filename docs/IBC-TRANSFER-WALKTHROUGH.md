@@ -1,5 +1,7 @@
 # IBC-transfer Walkthrough
+
 ## Summary
+
 We will:
 1. Add relayer account in config.yaml file
 2. Specify the ports in config.yaml file
@@ -12,16 +14,18 @@ We will:
 9. Make a Sample Transaction
 
 ## Add relayer account in config.yaml file
-You need to add the relayer account in config.yaml file in both chains.To add the account you simply need to add the following code.
+
+You need to add the relayer account in config.yaml file in both chains. To add relayer account, you can simply add the following lines in config.yaml.
 ```
 - name: relayer
   address : "<relayer_address>"
   coins: ["10000000000upylon", "100000000ubedrock"]
 ```
-The `address` field will be added later in the walkthrough guide.
+`address` is template at this time, we need will update it later in the  guide.
 
 ## Specify the ports in config.yaml file
-We will specify the ports in `config.yaml` file so that both chains donot use the same port and to avoid errors.
+
+You need to specify the ports in `config.yaml` file so that both chains don't use the same port and also to avoid errors.
 The sample ports for `pylons/config.yaml` 
   ```
 host:
@@ -47,26 +51,29 @@ host:
   dev-ui: ":13346"
   grpc-web: ":8093"
 ```
-You can have different port but the respective ports on both chain should not match.
+You can have different ports but the respective ports on both chain should not match.
 
 ## Installing the relayer
-We will be using the confio ts-relayer.
-Command to install the relayer is:
+
+We will be using the @confio/ts-relayer.
+The Command to install the relayer is:
 `sudo npm i -g @confio/relayer@main`
 
-It will allow you to use two commads `ibc-setup` & `ibc-relayer`.
+It will allows you to use following commands `ibc-setup` & `ibc-relayer`.
 
-Link to the relayer installation : https://github.com/confio/ts-relayer
+Here is the Link for relayer installation : https://github.com/confio/ts-relayer
 
 ## Setting-up the relayer
-Firstly, you want to create a registry file. Command to create registry file is
+
+First, you need to create a registry file. Command to create registry file is
 `ibc-setup init`
-This command will create a registery.yaml file.
+This command will create a registry.yaml file.
 
 #### Configure Registry.yaml
-Open the file in VS code  by this command.
+
+Open the file in VS code using the following command.
 `code ~/.ibc-setup/registry.yaml`
-Now, you to add the chain's object and you need to define the details of chains as follows.
+Now, you need to add the chain's object and details of chains as follows.
 ```
 chain:
 	juno:
@@ -85,13 +92,14 @@ chain:
 		rpc:
 		  - http://localhost:36659
 ```
- ics20_port: if default = ‘transfer’ else you can find the port-id in `x/type/keys.go`.
- rpc values can be find inside the `config.yaml` file in both chains.
+ ics20_port: if default = ‘transfer’ else you can found the port-id in `x/type/keys.go`.
+ rpc values can be found inside the `config.yaml` file in both chains.
  
  ### Configure app.yaml
- If app..yaml file is not generated along with the registry.yaml file. Write this command to generate app.yaml file.
+
+ If app.yaml file is not already generated along side with the registry.yaml file. Use the following command to generate app.yaml file.
  `ibc-setup init --src pylons --dest juno`
- Open the app.yaml file in the editor by this command.
+ Open the app.yaml file in the editor using the following command.
  `code ~/.ibc-setup/app.yaml`
  The file will look like this.
  ```
@@ -105,7 +113,8 @@ Add `srcConnection: connection-0` & `destConnection: connection-0`
 The `mnemonic` will be used to generate the address of the relayer for both chains.
 
 ### Get the relayer address for chain
-You need to open terminal inside the chain's directory and run the following commands.
+
+You will need to open terminal inside the chain's directory and run the following command.
 `<pylonsd> keys add relayer --recover --dry-run`
 Write the `mnemonic`  and press enter.
 The output will be like this.
@@ -122,8 +131,8 @@ stick deputy ankle near motion banana shift normal social hill between major
 
 
 ```
-Copy the address and write it in the `address` field in relayer account in the `<pylons>/config.yml`
-The code below for reference is from the `pylons/config.yaml`
+Copy the address and replace it in the `address` field in relayer account in the `<pylons>/config.yml`
+The lines below is for reference for updated `pylons/config.yaml`
 ```
 accounts:
   - name: alice
@@ -134,21 +143,24 @@ accounts:
     address : "pylo1qvcf7rug8k0uumxdvy0mrkyug75s9umdfa9px9"
     coins: ["10000000000upylon", "100000000ubedrock"]
 ```
- Repeat the same process for other chain .
+ Repeat the same process for juno chain .
  
  ## Start the chains
- Start both chain by opening the terminal in the chain's directory and running the following command.
+
+ Start both chains by opening the terminal in the chain's directory and running the following commands.
  ```
 starport chain init
- starport chain serve --force-reset
+starport chain serve --force-reset
+
 ```
 
 ## Create the connection.
-After serving both chains, you will need create a connection. This will take the details of the connection from the `registry.yaml` and `app.yaml` file.
-Command to create connection is:
+
+After serving both chains, you will need to create a connection. This will take the details of the connection from the `registry.yaml` and `app.yaml` file.
+Command to create a connection is:
 `starport tools ibc-setup connect -- -v`
 
-The terminal output will be similiar to this.
+The terminal output will be similar to this.
 ```
 hassan@hassan-rns:~/work/src/old ones/pylons$ starport tools ibc-setup connect -- -v
 verbose: Queried unbonding period {"seconds":1814400}
@@ -181,7 +193,8 @@ Created connections connection-0 (07-tendermint-0) <=> connection-0 (07-tendermi
 ```
 
 ## Create Channel
-To create the channel between the two chain, run this command
+
+To create the channel between the two chains, run the following command
 `starport tools ibc-setup channel -- --src-connection <connection-0> --dest-connection <connection-0> --src-port <transfer> --dest-port <transfer> --version ics20-1
 `
 
@@ -206,7 +219,8 @@ Created channel:
 ```
 
 ## Start the Relayer
-Command to start the relayer is:
+
+The Command to start the relayer is:
 `starport tools ibc-relayer start -- -v`
 
 ```
@@ -239,11 +253,11 @@ info: Sleeping 60 seconds...
 
 ```
 
-Relayer setup is completed.
+Relayer setup is completed now.
  
  ## Sample Transaction
  
- To do a transaction between the two chains, use this command:
+ To do a transaction between the two chains, use the following command:
  
  `<pylonsd> tx ibc-transfer transfer transfer channel-0 <reciever_address> 10000upylon --from <sender_address>`
  
