@@ -3,6 +3,7 @@ package keeper
 import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -83,4 +84,45 @@ func (k Keeper) getRecipesByCookbookPaginated(ctx sdk.Context, cookbookID string
 	}
 
 	return recipes, pageRes, nil
+}
+
+// GetCoinsInputsByIndex will return coins that are provided in recipe at index
+func (k Keeper) GetCoinsInputsByIndex(ctx sdk.Context, recipe types.Recipe, coinInputsIndex int) (sdk.Coins, error) {
+
+	var coinInputs sdk.Coins
+	switch {
+	case len(recipe.CoinInputs) == 0:
+		coinInputs = sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.ZeroInt()))
+	case coinInputsIndex >= len(recipe.CoinInputs) && len(recipe.CoinInputs) != 0:
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid coinInputs index")
+	default:
+		coinInputs = recipe.CoinInputs[coinInputsIndex].Coins
+	}
+
+	return coinInputs, nil
+}
+
+// UpdateCoinsDenom returns updated coins denom
+// We will not update Denom if user have enough coin
+// We will update Denom if user did not have enough coin but
+// User have enough IBC coin
+func (k Keeper) UpdateCoinsDenom(ctx sdk.Context, addr sdk.AccAddress, coinInputs sdk.Coins) (sdk.Coins, error) {
+
+	for i, coin := range coinInputs {
+
+		isEnough := k.HasEnoughBalance(ctx, addr, coin)
+		if !isEnough {
+
+			isIBCDenomEnough := k.HasEnoughIBCDenomBalance(ctx, addr, coin)
+
+			if isIBCDenomEnough {
+
+				denomTrace, _ := k.GetDenomTrace(ctx, coin)
+				coin.Denom = denomTrace.IBCDenom()
+				coinInputs[i] = coin
+			}
+		}
+	}
+
+	return coinInputs, nil
 }

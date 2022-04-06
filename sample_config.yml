@@ -29,12 +29,22 @@ accounts:
     coins: ["20000000000upylon", "200000000ubedrock"]
   - name: bob
     coins: ["10000000000upylon", "100000000ubedrock"]
+
+
 validator:
   name: alice
   staked: "100000000ubedrock"
-client:
-  openapi:
-    path: "docs/static/openapi.yml"
+
 faucet:
+  host: ":5500"
   name: bob
   coins: [ "10000upylon", "10000ubedrock" ]
+
+  
+host:
+  rpc: ":36657"
+  p2p: ":46658"
+  prof: ":7060"
+  grpc: ":36659"
+  grpc-web: ":9092"
+  api: ":2317"

@@ -4,29 +4,21 @@ name: Lint
 # The `golangci` will pass without running if no *.{go, mod, sum} files have been changed.
 on:
   pull_request:
+    branches: [ main ]
   push:
-    branches:
-      - starport
-      - develop-no-stripe
-      - develop
-      - master
+    branches: [ main ]
 jobs:
-  golangci:
-    name: golangci-lint
-    runs-on: ubuntu-latest
-    timeout-minutes: 6
-    steps:
-      - uses: actions/checkout@v2
-      - uses: technote-space/get-diff-action@v4
-        with:
-          PATTERNS: |
-            **/**.go
-            go.mod
-            go.sum
-      - uses: golangci/golangci-lint-action@v2
-        with:
-          # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
-          version: v1.41
-          args: --timeout 10m
-          github-token: ${{ secrets.github_token }}
-        if: env.GIT_DIFF
+  Lint:
+      # The type of runner that the job will run on
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - name: Set up Go
+          uses: actions/setup-go@v3
+          with:
+            go-version: 1.17
+        - name: Lint
+          uses: golangci/golangci-lint-action@v3
+          with:
+            # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
+            version: latest

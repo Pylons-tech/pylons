@@ -18,6 +18,13 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
+func generateAddress() sdk.AccAddress {
+
+	addrString := types.GenTestBech32FromString("test")
+	addr, _ := sdk.AccAddressFromBech32(addrString)
+	return addr
+}
+
 func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	items := make([]types.Cookbook, n)
 	creators := types.GenTestBech32List(n)

@@ -370,6 +370,7 @@ func New(
 		app.IBCKeeper.ChannelKeeper, &app.IBCKeeper.PortKeeper,
 		app.AccountKeeper, app.BankKeeper, scopedTransferKeeper,
 	)
+
 	transferModule := transfer.NewAppModule(app.TransferKeeper)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
@@ -393,6 +394,7 @@ func New(
 		keys[pylonsmoduletypes.MemStoreKey],
 		app.BankKeeper,
 		app.AccountKeeper,
+		app.TransferKeeper,
 		app.GetSubspace(pylonsmoduletypes.ModuleName),
 	)
 

@@ -60,6 +60,9 @@ func (k Keeper) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr string,
 	return matchedItems, nil
 }
 
+// ExecuteRecipe will excute the recipe provided in msg
+// We will update coins of during locking if user did not have enough normal coin
+// But user have enough IBC coins
 func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRecipe) (*types.MsgExecuteRecipeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -83,17 +86,17 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	}
 
 	coinInputsIndex := int(msg.CoinInputsIndex)
-	var coinInputs sdk.Coins
-	switch {
-	case len(recipe.CoinInputs) == 0:
-		coinInputs = sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.ZeroInt()))
-	case coinInputsIndex >= len(recipe.CoinInputs) && len(recipe.CoinInputs) != 0:
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid coinInputs index")
-	default:
-		coinInputs = recipe.CoinInputs[coinInputsIndex].Coins
+	coinInputs, err := k.GetCoinsInputsByIndex(ctx, recipe, coinInputsIndex)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
+
+	coinInputs, err = k.UpdateCoinsDenom(ctx, addr, coinInputs)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
 
 	// check that coinInputs does not contain an unsendable paymentProcessor coin without a receipt
 	err = k.ValidatePaymentInfo(ctx, msg.PaymentInfos, coinInputs)
@@ -108,6 +111,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}
+
 	err = k.LockCoinsForExecution(ctx, addr, coinInputs)
 	if err != nil {
 		return nil, err
