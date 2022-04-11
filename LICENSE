@@ -1,1 +1,172 @@
-Property of Pylons, Inc. All rights reserved. Use of this software is only authorized by written agreement with Pylons, Inc.
+PYLONS, INC.
+PUBLIC LICENSE AGREEMENT
+
+This Incentivized Testnet Public License Agreement (the Pylons Incentivized Testnet Public License, the Incentivized Testnet Public License, or the Public License) is entered into by and between Pylons, Inc., a Delaware corporation with its principal place of business located at 16192 Coastal Hwy, Lewes, DE 19958 and You.  By being granted and exercising the Licensed Rights, You accept and agree to be bound by the terms and conditions of this Incentivized Testnet Public License. 
+
+Definitions.  The capitalized terms of this Public License shall be defined as stated in this Section:
+
+“Adapted Material” shall mean material subject to Copyright and Similar Rights that is derived from or based upon the Licensed Material and in which the Licensed Material is translated, altered, arranged, transformed, or otherwise modified in a manner requiring permission under the Copyright and Similar Rights held by the Licensor.
+
+“Adapter’s License” shall mean the license You apply to Your Copyright and Similar Rights in Your contributions to Adapted Material in accordance with the terms and conditions of this Public License.
+
+“Competing” shall mean substantially-similar to or substitutable for any Pylons, Inc. (including all of its affiliates) product or service.
+
+“Competing Commercial” shall mean the subset of Competing activities that are intended for or substantially-affect commercial advantage or monetary gain.
+
+“Copyright and Similar Rights” shall mean copyright and/or similar rights closely related to copyright including, without limitation, performance, broadcast, sound recording, and Sui Generis Database Rights, without regard to how the rights are labeled or categorized.
+
+“Effective Technological Measures” shall mean those measures that, in the absence of proper authority, may not be circumvented under laws fulfilling obligations under Article 11 of the WIPO Copyright Treaty adopted on December 20, 1996, and/or similar international agreements.
+
+“Exceptions and Limitations” shall mean fair use, fair dealing, and/or any other exception or limitation to Copyright and Similar Rights that applies to Your use of the Licensed Material.
+
+“Licensed Material” shall mean the software, coding, database (including any blockchain databases), or other material to which the Licensor applied this Public License.
+
+“Licensed Rights” shall mean the rights granted to You subject to the terms and conditions of this Public License, which are limited to all Copyright and Similar Rights that apply to Your use of the Licensed Material and that the Licensor has authority to license.
+
+“Licensor” shall mean Pylons, Inc.
+
+“Prohibited Purposes” shall mean the use, or intended use of this License, in Licensor’s sole determination, to (i) advance hatred, intolerance, violence, cruelty, abuse, harassment, or any other conduct that could reasonably be found to constitute hate speech or otherwise infringe upon the rights of others; (ii) violate any law, statute, ordinance, regulation, or sanctions program of any jurisdiction, including, but not limited to the United States Department of Treasury’s Office of Foreign Assets Control (OFAC), and anti-money laundering rules administered by FinCEN; (iii) deploy or make use of proceeds of any unlawful activity; (iv) engage in fraud or fraudulent activities; (v) defame or disparage the Licensor (including the Licensed Material and the Licensor’s software and/or systems), or misrepresent or misappropriate any statement or action to Licensor in any way that would tend to reflect poorly on Licensor; (vi) “hack,” interfere with or disrupt Licensor’s or any third party’s technological system or the access of any user or third party to such technological system, or expropriate data from any such system; or (vii) allow any third party to access the Licensed Materials or any other technological system through or using Your identity, account, address, or other unique instance attributes in a manner that is expressly prohibited, is intended to circumvent the this Public License, or which would tend to conflate the third party’s identity or transactions with Yours.
+
+“Share” shall mean to provide material to the public by any means or process that requires permission under the Licensed Rights, such as reproduction, public display, public performance, distribution, dissemination, communication, or importation, and to make material available to the public including in ways that members of the public may access the material from a place and at a time individually chosen by them.
+
+“Sui Generis Database Rights” shall mean rights other than copyright resulting from Directive 96/9/EC of the European Parliament and of the Council of 11 March 1996 on the legal protection of databases, as amended and/or succeeded, as well as other essentially equivalent rights anywhere in the world. For the purposes of the interpretation of this term under this License, a “database” includes a blockchain, as well as discrete collections of information therein.
+
+“You” shall mean the individual or entity exercising the Licensed Rights under this Public License and subject to the provisions of this Public License.  “Your” shall have a corresponding meaning.
+
+Purpose.  The primary purpose of this Public License is the encouraging of further development and troubleshooting of the Licensed Material.  However, You may utilize any Adapted Material which may be separately released for other non-commercial purpose(s), so long as such purpose is a Non-Competing purpose (as defined herein).  This shall include the non-commercial use in any educational setting.
+
+License.
+
+License Grant.  Subject to the terms and conditions of this Public License, the Licensor hereby grants You a worldwide, non-sublicensable, non-exclusive, revocable license to exercise the Licensed Rights in the Licensed Material to:
+
+Reproduce and Share the Licensed Material, in whole or in part, for Non-competing purposes only; and
+
+Produce, reproduce, and Share Adapted Material for Non-competing purposes only.
+
+Any restrictions in this subsection and in this entire Public License made conditional upon Non-competing status apply whether the Licensed Material is used all or in part for a Competing work, and whether the Licensed Material represents all or part of the Competing work.
+
+Exceptions and Limitations.  For the avoidance of doubt, where Exceptions and Limitations apply to Your use, this Public License shall not apply.
+
+No Competing Purposes.  You may not Share the Licensed Material or any Adapted Material(s) for competing purposes.  Furthermore, You may not Share such material with any person who is not also subject to an agreement identical to or no more restrictive than this Public License.
+
+Media and Formats; Technical Modifications Allowed.  The Licensor authorizes You to exercise the Licensed Rights in all media and formats whether now known or hereafter created, and to make technical modifications necessary to do so.  The Licensor waives and/or agrees not to assert any right or authority to forbid You from making technical modifications necessary to exercise the Licensed Rights, including technical modifications necessary to circumvent Effective Technological Measures.
+
+Offer from the Licensor.  Every recipient of the Licensed Material automatically receives an offer from the Licensor to exercise the Licensed Rights under the terms and conditions of this Public License.
+
+No Downstream Restrictions.  You may not offer or impose any additional or different terms or conditions on, or apply any Effective Technological Measures to, the Licensed Material if doing so restricts exercise of the Licensed Rights by any recipient of the Licensed Material.
+
+No endorsement.  Nothing in this Public License constitutes or may be construed as permission to assert or imply that You are, or that Your use of the Licensed Material is, connected with, or sponsored, endorsed, or granted official status by, the Licensor or others designated to receive attribution.
+
+Prohibited Purposes.  This Public License may not be used for Prohibited Purposes, as defined in Section 1.
+
+Assistance.  By using this Public License, You agree to provide reasonable assistance to Licensor under the Digital Millennium Copyright Act of 1998 (whether 17 U.S.C. §512, or any other relevant section thereof) and under all anti-money laundering laws, regulations, or rules, including those administered by FinCEN, upon Licensor’s express written request wherever such request is related to Your use of this Public License, including, but not limited to, (i) Your use of the Licensed Material; (ii) Your interactions with the Licensor; or (iii) Your interactions with other users of the Licensed Material.
+
+Intellectual Property.
+
+Moral Rights.  Moral rights, such as the right of integrity, are not licensed under this Public License, nor are publicity, privacy, and/or other similar personality rights; however, to the extent possible, the Licensor waives and/or agrees not to assert any such rights held by the Licensor to the limited extent necessary to allow You to exercise the Licensed Rights, but not otherwise.
+
+Patent and Trademark.  Patent and trademark rights are not licensed under this Public License.
+
+Royalties.  To the extent possible, the Licensor waives any right to collect royalties from You for the exercise of the Licensed Rights, whether directly or through a collecting society under any voluntary or waivable statutory or compulsory licensing scheme.  In all other cases the Licensor expressly reserves any right to collect such royalties, including when the Licensed Material is used other than for Non-competing purposes.
+
+Sharing of Licensed Material.  Your exercise of the Licensed Rights is expressly made subject to the following conditions.
+
+Attribution.  If You Share the Licensed Material (including in modified form), You must retain the following if it is supplied by the Licensor:
+
+Identification of the creator(s) of the Licensed Material and any others designated to receive attribution, in any reasonable manner requested by the Licensor (including pseudonyms if designated);
+
+A copyright notice;
+
+A notice that refers to this Public License;
+
+A notice that refers to the disclaimer of warranties; and
+
+A URL or hyperlink to the Licensed Material to the extent reasonably practicable.
+
+Furthermore, You must indicate:
+
+If You modified the Licensed Material and retain an indication of any previous modifications; and
+
+The Licensed Material is licensed under this Public License, and include the text of, or the URL or hyperlink to, this Public License.
+
+Satisfaction.  You may satisfy the conditions in this section in any reasonable manner based on the medium, means, and context in which You Share the Licensed Material.  For example, it may be reasonable to satisfy the conditions by providing a URL or hyperlink to a resource that includes the required information.
+
+Removal of Information.  If requested by the Licensor, You must remove any of the information required by this section to the extent reasonably practicable.
+
+Compliance.  If You Share Adapted Material You produce, the Adapter’s License You apply must not prevent recipients of the Adapted Material from complying with this Public License.
+
+Sui Generis Database Rights.  Where the Licensed Rights include Sui Generis Database Rights that apply to Your use of the Licensed Material:
+
+For the avoidance of doubt, Section 3(a) grants You the right to extract, reuse, reproduce, and Share all or a substantial portion of the contents of the database for Non-competing purposes only;
+
+If You include all or a substantial portion of the database contents in a database in which You have Sui Generis Database Rights, then the database in which You have Sui Generis Database Rights (but not its individual contents) is Adapted Material; and
+
+You must comply with the conditions in Section 5(a) if You Share all or a substantial portion of the contents of the database.
+
+For the avoidance of doubt, this Section 6 supplements and does not replace Your obligations under this Public License where the Licensed Rights include other Copyright and Similar Rights.
+
+Confidentiality.  You acknowledge, understand, and agree that You may gain access to Confidential Information as it relates to the Licensor or the Licensed Material.  For purposes of this section, “Confidential Information” shall include coding, databases, and other digitally stored information provided by the Licensor for the purpose of carrying out the purposes of this Public License as stated in Section 2 (Confidential Information).  You shall not:
+
+Disclose any of such Confidential Information to any person or entity, except to Your representatives, advisors, or other agents who need to know the Confidential Information to assist You, or act on Your behalf, to exercise Your rights or perform Your obligations under this Public License, who shall be required to keep the Confidential Information under similar, but in any case, no less restrictive restrictions; or
+
+Use the Confidential Information, or permit it to be accessed or used, for any purpose other than to exercise Your rights or perform Your obligations under this Public License.
+
+ Disclaimer of Warranties and Limitation of Liability.
+
+Disclaimer of Warranties.  Unless otherwise separately undertaken by the Licensor, to the extent possible, the Licensor offers the Licensed Material as-is and as-available and makes no representations or warranties of any kind concerning the Licensed Material, whether express, implied, statutory, or other. This includes, without limitation, warranties of title, merchantability, fitness for a particular purpose, non-infringement, absence of latent or other defects, accuracy, or the presence or absence of errors, whether or not known or discoverable.
+
+Limitation of Liability.  To the extent possible, in no event will the Licensor be liable to You on any legal theory (including, without limitation, negligence) or otherwise for any direct, special, indirect, incidental, consequential, punitive, exemplary, or other losses, costs, expenses, or damages arising out of this Public License or use of the Licensed Material, even if the Licensor has been advised of the possibility of such losses, costs, expenses, or damages.
+
+Liquidated Damages.  Aside from any other remedies the Licensor may have at law or equity, in the event You breach the provisions of Section 3(a), you shall be liable to the Licensor for the amount You or Your agents or successors shall profit through the breach of such section, as well as any losses the Licensor may suffer as a result of such breach.  
+
+The provisions of this section shall be interpreted in a manner that, to the extent possible, most closely approximates an absolute disclaimer and waiver of all liability.
+
+Enforcement.  You recognize that the Licensor would be irreparably injured by the breach of any provision of Section 3, Section 4, Section 5, Section 6, Section 7, or Section 8, and that money damages alone may not be an appropriate measure of the harm to the Licensor from such continuing breach.  Therefore, equitable relief, including specific performance of these provisions by injunction, would be an appropriate remedy for the breach of these provisions, and the Licensor may enforce the provisions of this section by either suit for damages or injunction, or both, without the need to post bond.  These enforcement rights shall be cumulative with and not successive or exclusive of any other legal remedies which may be available to the Licensor.  In the event a tribunal of competent jurisdiction shall hold that the duration and/or scope (geographic or otherwise) of any covenant contained in any of the aforementioned sections is unreasonable, then, to the extent permitted by law, said tribunal may prescribe a duration and/or scope (geographic or otherwise) that is reasonable and judicially enforceable.  You and the Licensor agree to accept such determination, subject to Your/its rights of appeal, which You and the Licensor agree shall be substituted in place of any and every offensive part of this Public License, and as so modified, the Public License shall be as fully enforceable as if set forth herein by You and the Licensor in the modified form.  The provisions of this section shall expressly survive the termination or expiration of this Public License even if You have separate claims against the Licensor.
+
+Term and Termination.
+
+Term. This Public License shall take effect on the date You commence exercising any Licensed Rights and extend until the earlier of:
+
+December 31, 2022; or
+
+The conclusion of the Incentivized Testnet, which will be announced publicly by Pylons, Inc.; or
+
+The launch of the Pylons Mainnet, which will be announced publicly by Pylons, Inc.; or
+
+When the Licensor terminates this Public License and Your obligations in accordance hereof. 
+
+Nothing contained in this section shall be construed so as to mean the Licensor surrenders any intellectual property right in or to the Licensed Material.
+
+Termination.  This Public License may be terminated by either You or the Licensor with immediate effect upon:
+
+Written notice to the non-terminating party (which may take the form of email or interacting with the Licensor’s digital platform); or
+
+Your discontinuance of exercising the Licensed Rights for one (1) calendar week or longer.
+
+Obligations Upon Termination.  Upon termination of this Public License, You shall immediately cease exercising any Licensed Rights or making use of any Licensed Material for any purpose unless instructed otherwise by the Licensor.  If requested and applicable, You shall return any records of the Licensor to the Licensor and permanently delete all information and Adapted Material.
+
+Legal Compliance.  For the avoidance of doubt, this Public License does not, and shall not be interpreted to, reduce, limit, restrict, or impose conditions on any use of the Licensed Material that could lawfully be made without permission under this Public License.
+
+Entire Agreement.  This Public License constitutes the sole and entire agreement between You and the Licensor with respect to the subject matter contained herein, and supersedes all prior and contemporaneous understandings, agreements, representations, and warranties, both written and oral, with respect to such subject matter.
+
+Assignment.  You may not assign this Public License or any of the rights, interests, or obligations hereunder (whether by operation of law or otherwise) without the prior written consent of the Licensor.  The Licensor may assign the Public License to its affiliates, parent, subsidiaries, or successors-in-interest without Your consent or without notice to You. Subject to the foregoing, this Public License shall be binding upon and inure to the benefit of and be enforceable by You and the Licensor and Your/its respective successors and assigns.
+
+Amendment.  This Public License may only be amended, supplemented, superseded, or otherwise modified via written agreement executed by both You and the Licensor.
+
+Severability.  If any term or provision of this Public License is held invalid, illegal, or unenforceable in any jurisdiction, such invalidity, illegality, or unenforceability shall not affect any other term or provision of this Public License or invalidate or render unenforceable such term or provision in any other jurisdiction. In such an event, the Public License shall be automatically reformed to the minimum extent necessary to make it enforceable.  If the provision cannot be reformed, it shall be severed from the Public License without affecting the enforceability of the remaining terms and conditions.
+
+Waiver.  No failure by either You or the Licensor to insist upon the strict performance of any covenant, duty, agreement, or condition of this Public License or to exercise any right or remedy consequent upon a breach thereof shall constitute waiver of any such breach of any other covenant, duty, agreement, or condition.
+
+Governing Law.  This Public License, and all matters arising out of or relating to this Public License, whether sounding in contract, tort, statute, or otherwise, are governed by, and construed in accordance with the laws of the State of New York (including its statutes of limitations and  choice of law statutes), without giving effect to the conflict of laws provisions thereof to the extent such principles or rules would require or permit the application of the laws of any jurisdiction other than those of the State of New York.
+
+Arbitration.  Unless You and the Licensor agree otherwise in writing, in the event a dispute arises from, or related to, the terms or performance of this Public License, You and the Licensor shall proceed to binding arbitration before one (1) arbitrator of the American Arbitration Association (AAA).  In the event You and the Licensor fail to agree on the identity of the arbitrator, the arbitrator shall be assigned by the AAA.  Any arbitration shall be conducted in accordance with the AAA’s Commercial Arbitration Rules and Mediation Procedures.
+
+Unless You and the Licensor agree otherwise in writing, the seat of arbitration shall be New York, New York.
+
+You and the Licensor shall bear Your/its own dispute-related expenses, and attorneys’ fees may not be awarded by the arbitrator unless the arbitrator determines either party to have acted in bad faith by commencing such a dispute.
+
+Jury Trial Waiver.  To the full extent permitted by law, You and the Licensor hereby expressly waive any and all right to a trial by jury on the issue to enforce any term or condition of this Public License.
+
+Class Action Waiver.  Any proceedings to resolve or litigate any dispute arising from the provisions of this Public License will be conducted solely on an individual basis. Neither You nor the Licensor will seek to have any dispute heard as a class action, private attorney general action, or in any other proceeding in which You or the Licensor acts or proposes to act in a representative capacity.
+
+Effective Date: March 28, 2022
