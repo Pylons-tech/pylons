@@ -17,8 +17,10 @@ func (k Keeper) ListCoinIssuers(goCtx context.Context, req *types.QueryListCoinI
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	var CoinIssuersList []*types.CoinIssuer
+
 	for _, ci := range k.CoinIssuers(ctx) {
-		CoinIssuersList = append(CoinIssuersList, &ci)
+		temp := ci
+		CoinIssuersList = append(CoinIssuersList, &temp)
 	}
 
 	// TODO: Process the query
