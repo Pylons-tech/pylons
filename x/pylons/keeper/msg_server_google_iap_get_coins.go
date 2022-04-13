@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -22,7 +23,8 @@ func (k msgServer) GoogleInAppPurchaseGetCoins(goCtx context.Context, msg *types
 	var googleIapPackage types.GoogleInAppPurchasePackage
 CoinIssuersLoop:
 	for _, ci := range k.CoinIssuers(ctx) {
-		for _, p := range ci.Packages {
+		for index, p := range ci.Packages {
+			fmt.Println("Coin Issuer Package ", index, " - > ", p)
 			if p.ProductID == msg.ProductID {
 				coinIssuer = ci
 				googleIapPackage = p

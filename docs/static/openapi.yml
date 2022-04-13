@@ -12574,6 +12574,100 @@ paths:
                         }
       tags:
         - Query
+  /Pylons-tech/pylons/pylons/list_coin_issuers:
+    get:
+      summary: Queries a list of ListCoinIssuers items.
+      operationId: PylonstechPylonsPylonsListCoinIssuers
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              IssuersList:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    coinDenom:
+                      type: string
+                    packages:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          packageName:
+                            type: string
+                          productID:
+                            type: string
+                          amount:
+                            type: string
+                    googleInAppPurchasePubKey:
+                      type: string
+                    entityName:
+                      type: string
+                  title: CoinIssuer represents an entity or external blockchain
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
+  /Pylons-tech/pylons/pylons/list_packages:
+    get:
+      summary: Queries a list of ListPackages items.
+      operationId: PylonstechPylonsPylonsListPackages
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              packageList:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    packageName:
+                      type: string
+                    productID:
+                      type: string
+                    amount:
+                      type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
   '/pylons/account/address/{address}':
     get:
       summary: Queries a list of getAccountByAddress items.
@@ -23155,6 +23249,27 @@ definitions:
 
             NOTE: The amount field is an Int which implements the custom method
             signatures required by gogoproto.
+  Pylonstech.pylons.pylons.CoinIssuer:
+    type: object
+    properties:
+      coinDenom:
+        type: string
+      packages:
+        type: array
+        items:
+          type: object
+          properties:
+            packageName:
+              type: string
+            productID:
+              type: string
+            amount:
+              type: string
+      googleInAppPurchasePubKey:
+        type: string
+      entityName:
+        type: string
+    title: CoinIssuer represents an entity or external blockchain
   Pylonstech.pylons.pylons.CoinOutput:
     type: object
     properties:
@@ -23650,6 +23765,15 @@ definitions:
       receiptDataBase64:
         type: string
       signature:
+        type: string
+  Pylonstech.pylons.pylons.GoogleInAppPurchasePackage:
+    type: object
+    properties:
+      packageName:
+        type: string
+      productID:
+        type: string
+      amount:
         type: string
   Pylonstech.pylons.pylons.IntWeightRange:
     type: object
@@ -25102,6 +25226,32 @@ definitions:
         properties:
           value:
             type: string
+  Pylonstech.pylons.pylons.QueryListCoinIssuersResponse:
+    type: object
+    properties:
+      IssuersList:
+        type: array
+        items:
+          type: object
+          properties:
+            coinDenom:
+              type: string
+            packages:
+              type: array
+              items:
+                type: object
+                properties:
+                  packageName:
+                    type: string
+                  productID:
+                    type: string
+                  amount:
+                    type: string
+            googleInAppPurchasePubKey:
+              type: string
+            entityName:
+              type: string
+          title: CoinIssuer represents an entity or external blockchain
   Pylonstech.pylons.pylons.QueryListCookbooksByCreatorResponse:
     type: object
     properties:
@@ -25696,6 +25846,20 @@ definitions:
               PageRequest.count_total
 
               was set, its value is undefined otherwise
+  Pylonstech.pylons.pylons.QueryListPackagesResponse:
+    type: object
+    properties:
+      packageList:
+        type: array
+        items:
+          type: object
+          properties:
+            packageName:
+              type: string
+            productID:
+              type: string
+            amount:
+              type: string
   Pylonstech.pylons.pylons.QueryListRecipesByCookbookResponse:
     type: object
     properties:

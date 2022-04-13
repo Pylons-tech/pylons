@@ -31,6 +31,7 @@ func CmdGoogleInAppPurchaseGetCoins() *cobra.Command {
 			}
 
 			msg := types.NewMsgGoogleIAPGetCoins(clientCtx.GetFromAddress().String(), argsProductID, argsPurchaseToken, argsRecieptDataBase64, argsSignature)
+
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

@@ -14,6 +14,7 @@ import "pylons/execution.proto";
 import "pylons/item.proto";
 import "pylons/recipe.proto";
 import "pylons/cookbook.proto";
+import "pylons/params.proto";
 
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
@@ -22,6 +23,16 @@ service Query {
 	// Queries a list of listTradesByCreator items.
 	rpc ListTradesByCreator(QueryListTradesByCreatorRequest) returns (QueryListTradesByCreatorResponse) {
 		option (google.api.http).get = "/pylons/trades/{creator}";
+	}
+
+// Queries a list of ListPackages items.
+	rpc ListPackages(QueryListPackagesRequest) returns (QueryListPackagesResponse) {
+		option (google.api.http).get = "/Pylons-tech/pylons/pylons/list_packages";
+	}
+
+// Queries a list of ListCoinIssuers items.
+	rpc ListCoinIssuers(QueryListCoinIssuersRequest) returns (QueryListCoinIssuersResponse) {
+		option (google.api.http).get = "/Pylons-tech/pylons/pylons/list_coin_issuers";
 	}
 
 // this line is used by starport scaffolding # 2
@@ -126,6 +137,23 @@ message QueryListTradesByCreatorResponse {
 
 	// pagination defines the pagination in the response.
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryListPackagesRequest {
+}
+
+
+
+message QueryListPackagesResponse {
+  repeated GoogleInAppPurchasePackage packageList = 1;
+
+}
+
+message QueryListCoinIssuersRequest {
+}
+
+message QueryListCoinIssuersResponse {
+  repeated CoinIssuer IssuersList = 1;
 }
 
 // this line is used by starport scaffolding # 3

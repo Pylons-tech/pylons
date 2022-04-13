@@ -61,6 +61,7 @@ func (msg *MsgGoogleInAppPurchaseGetCoins) ValidateBasic() error {
 	if err != nil {
 		return err
 	}
+
 	if msg.PurchaseToken != jsonData["purchaseToken"] {
 		return fmt.Errorf("purchaseToken does not match with receipt data")
 	}
