@@ -28,7 +28,7 @@ const (
 	minCookBookDenomSplits = 2
 
 	// index for cook book id after splits
-	cookbookIdIndex = 0
+	cookbookIDIndex = 0
 )
 
 // CookbookDenom converts a cookbookID, denom pair into a valid cookbookDenom string
@@ -53,7 +53,7 @@ func IsCookbookDenom(denom string) bool {
 		return false
 	}
 	// validate cookbook ID
-	err := ValidateID(split[cookbookIdIndex])
+	err := ValidateID(split[cookbookIDIndex])
 	if err != nil {
 		return false
 	}
