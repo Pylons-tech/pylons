@@ -20,6 +20,9 @@ func TestCookbookDenom(t *testing.T) {
 	invalid1 := "1234/567"
 	invalid2 := "pylons"
 	invalid3, _ := CookbookDenom("12341234", "pylons")
+	invalid4 := "ibc/529ba5e3e86ba7796d7caab4fc02728935fbc75c0f7b25a9e611c49dd7d68a35"
+	invalid5, _ := CookbookDenom("a12341234", "ibc/529ba5e3e86ba7796d7caab4fc02728935fbc75c0f7b25a9e611c49dd7d68a35")
+	invalid6, _ := CookbookDenom("ibc", "529ba5e3e86ba7796d7caab4fc02728935fbc75c0f7b25a9e611c49dd7d68a35")
 
 	for _, tc := range []struct {
 		desc  string
@@ -31,6 +34,9 @@ func TestCookbookDenom(t *testing.T) {
 		{desc: "invalid1", denom: invalid1, is: false},
 		{desc: "invalid2", denom: invalid2, is: false},
 		{desc: "invalid3", denom: invalid3, is: false},
+		{desc: "invalid4", denom: invalid4, is: false},
+		{desc: "invalid5", denom: invalid5, is: false},
+		{desc: "invalid6", denom: invalid6, is: false},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {

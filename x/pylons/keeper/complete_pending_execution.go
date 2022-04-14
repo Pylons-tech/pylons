@@ -135,7 +135,12 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 	transferCoins := sdk.NewCoins()
 	feeCoins := sdk.NewCoins()
 
+coinLoop:
 	for _, coin := range pendingExecution.CoinInputs {
+		if types.IsCookbookDenom(coin.Denom) {
+			burnCoins = burnCoins.Add(coin)
+			continue coinLoop
+		}
 
 		payCoins = payCoins.Add(coin)
 		feeAmt := coin.Amount.ToDec().Mul(k.RecipeFeePercentage(ctx)).RoundInt()

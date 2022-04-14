@@ -35,12 +35,17 @@ func CookbookDenom(cookbookID, denom string) (string, error) {
 }
 
 // IsCookbookDenom checks if an inputted denom is a valid cookbookDenom
+// If denom is IBC denom we will not consider for CookBookDenom
 func IsCookbookDenom(denom string) bool {
 	split := strings.Split(denom, denomDivider)
 	if len(split) != 2 {
 		return false
 	}
 
+	// check if it is IBC denom
+	if IsIBCDenomRepresentation(denom) {
+		return false
+	}
 	// validate cookbook ID
 	err := ValidateID(split[0])
 	if err != nil {
