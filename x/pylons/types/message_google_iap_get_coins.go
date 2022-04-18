@@ -62,10 +62,10 @@ func (msg *MsgGoogleInAppPurchaseGetCoins) ValidateBasic() error {
 	}
 
 	if msg.PurchaseToken != jsonData["purchaseToken"] {
-		return sdkerrors.Wrapf(ErrPurchaseTokenMisMatch, "purchaseToken %s doesn't match with reciept data", msg.PurchaseToken)
+		return sdkerrors.Wrapf(ErrPurchaseTokenMisMatch, "purchaseToken %s doesn't match with receipt data", msg.PurchaseToken)
 	}
 	if msg.ProductID != jsonData["productId"] {
-		return sdkerrors.Wrapf(ErrProductIDMisMatch, "productId %s doesn't match with reciept data", msg.ProductID)
+		return sdkerrors.Wrapf(ErrProductIDMisMatch, "productId %s doesn't match with receipt data", msg.ProductID)
 	}
 	return nil
 }
