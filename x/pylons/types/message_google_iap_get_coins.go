@@ -5,7 +5,6 @@ import (
 	// Google forces us to use unsafe sha1 for IAP verification
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -63,10 +62,10 @@ func (msg *MsgGoogleInAppPurchaseGetCoins) ValidateBasic() error {
 	}
 
 	if msg.PurchaseToken != jsonData["purchaseToken"] {
-		return fmt.Errorf("purchaseToken does not match with receipt data")
+		return sdkerrors.Wrapf(ErrPurchaseTokenMisMatch, "purchaseToken %s doesn't match with reciept data", msg.PurchaseToken)
 	}
 	if msg.ProductID != jsonData["productId"] {
-		return fmt.Errorf("productId does not match with receipt data")
+		return sdkerrors.Wrapf(ErrProductIDMisMatch, "productId %s doesn't match with reciept data", msg.ProductID)
 	}
 	return nil
 }

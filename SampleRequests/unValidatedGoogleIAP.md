@@ -1,4 +1,5 @@
-# Disable Validations in `google-iap-get-coins`
+## Perform this after Disabling Validations in `google-iap-get-coins`
+
 
 pylonsd tx pylons google-iap-get-coins [productID] [purchaseToken] [recieptDataBase64] [signature] [flags]
 

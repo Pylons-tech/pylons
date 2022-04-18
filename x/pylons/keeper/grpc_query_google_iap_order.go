@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -22,7 +21,6 @@ func (k Keeper) GoogleInAppPurchaseOrder(c context.Context, req *types.QueryGetG
 	ctx := sdk.UnwrapSDKContext(c)
 
 	if !k.HasGoogleIAPOrder(ctx, req.PurchaseToken) {
-		fmt.Println("The Key was not found")
 		return nil, sdkerrors.ErrKeyNotFound
 	}
 
