@@ -52,7 +52,6 @@ func TestEaselBasic(t *testing.T) {
 	require.NoError(t, err)
 
 	simInfo.common = []string{
-
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
@@ -67,7 +66,6 @@ func TestEaselBasic(t *testing.T) {
 }
 
 func createEaselCookbook(t *testing.T, simInfo *easelBasicSim) {
-
 	cbFields := []string{
 		"Easel Test Cookbook",
 		"Cookbook for testing demo easel transactions",
@@ -98,7 +96,8 @@ func createMintRecipe1(t *testing.T, simInfo *easelBasicSim) {
 					Key:     "NFT_URL",
 					Value:   "https://www.imagesource.com/wp-content/uploads/2019/06/Rio.jpg",
 					Program: "",
-				}},
+				},
+			},
 			MutableStrings:  nil,
 			TransferFee:     nil,
 			TradePercentage: simInfo.basicTradePercentage,

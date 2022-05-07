@@ -24,7 +24,6 @@ func (k Keeper) NewCelEnvCollectionFromItem(ctx sdk.Context, recipeID, tradeID s
 			varDefs...,
 		),
 	)
-
 	if err != nil {
 		return types.CelEnvCollection{}, err
 	}

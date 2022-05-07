@@ -60,7 +60,6 @@ func init() {
 func WeightedOperations(
 	appParams simtypes.AppParams, cdc codec.JSONCodec, bk types.BankKeeper, k keeper.Keeper,
 ) simulation.WeightedOperations {
-
 	var weightMsgCreateAcc int
 	var weightMsgUpdateAcc int
 	var weightMsgCreateCookbook int
@@ -127,7 +126,6 @@ func SimulateCreateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
 		msgType := (&types.MsgCreateAccount{}).Type()
@@ -161,7 +159,6 @@ func SimulateUpdateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
 		msgType := (&types.MsgCreateAccount{}).Type()
@@ -187,7 +184,6 @@ func SimulateCreateCookbook(bk types.BankKeeper, k keeper.Keeper) simtypes.Opera
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
 		msgType := (&types.MsgCreateCookbook{}).Type()
@@ -225,7 +221,6 @@ func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operati
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
 		msgType := (&types.MsgCreateRecipe{}).Type()
@@ -279,7 +274,6 @@ func SimulateExecuteRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
 		msgType := (&types.MsgExecuteRecipe{}).Type()

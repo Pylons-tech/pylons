@@ -5,8 +5,10 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-var _ sdk.Msg = &MsgCreateAccount{}
-var _ sdk.Msg = &MsgUpdateAccount{}
+var (
+	_ sdk.Msg = &MsgCreateAccount{}
+	_ sdk.Msg = &MsgUpdateAccount{}
+)
 
 func NewMsgCreateAccount(creator string, username string) *MsgCreateAccount {
 	return &MsgCreateAccount{

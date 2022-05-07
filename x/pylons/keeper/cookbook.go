@@ -108,7 +108,6 @@ func (k Keeper) getCookbooksByCreatorPaginated(ctx sdk.Context, creator sdk.AccA
 		cookbooks = append(cookbooks, val)
 		return nil
 	})
-
 	if err != nil {
 		return nil, nil, err
 	}

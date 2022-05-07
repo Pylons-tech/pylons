@@ -62,7 +62,6 @@ func TestLOUDBasic(t *testing.T) {
 	require.NoError(t, err)
 
 	simInfo.common = []string{
-
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
@@ -79,7 +78,6 @@ func TestLOUDBasic(t *testing.T) {
 }
 
 func createLOUDCookbook(t *testing.T, simInfo *loudBasicSim) {
-
 	cbFields := []string{
 		"Legend of the Undead Dragon",
 		"Cookbook for running pylons recreation of LOUD",
@@ -133,7 +131,8 @@ func createCharacterRecipe(t *testing.T, simInfo *loudBasicSim) {
 					Key:     "entityType",
 					Value:   "character",
 					Program: "",
-				}},
+				},
+			},
 			MutableStrings:  nil,
 			TransferFee:     nil,
 			TradePercentage: simInfo.basicTradePercentage,

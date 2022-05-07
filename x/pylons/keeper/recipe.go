@@ -78,7 +78,6 @@ func (k Keeper) getRecipesByCookbookPaginated(ctx sdk.Context, cookbookID string
 		recipes = append(recipes, val)
 		return nil
 	})
-
 	if err != nil {
 		return nil, nil, err
 	}
@@ -88,7 +87,6 @@ func (k Keeper) getRecipesByCookbookPaginated(ctx sdk.Context, cookbookID string
 
 // GetCoinsInputsByIndex will return coins that are provided in recipe at index
 func (k Keeper) GetCoinsInputsByIndex(ctx sdk.Context, recipe types.Recipe, coinInputsIndex int) (sdk.Coins, error) {
-
 	var coinInputs sdk.Coins
 	switch {
 	case len(recipe.CoinInputs) == 0:
@@ -107,7 +105,6 @@ func (k Keeper) GetCoinsInputsByIndex(ctx sdk.Context, recipe types.Recipe, coin
 // We will update Denom if user did not have enough coin but
 // User have enough IBC coin
 func (k Keeper) UpdateCoinsDenom(ctx sdk.Context, addr sdk.AccAddress, coinInputs sdk.Coins) (sdk.Coins, error) {
-
 	for i, coin := range coinInputs {
 
 		isEnough := k.HasEnoughBalance(ctx, addr, coin)

@@ -120,6 +120,7 @@ func NewMsgCancelTrade(creator string, id uint64) *MsgCancelTrade {
 		Creator: creator,
 	}
 }
+
 func (msg *MsgCancelTrade) Route() string {
 	return RouterKey
 }

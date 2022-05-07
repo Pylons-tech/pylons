@@ -19,7 +19,6 @@ import (
 )
 
 func generateAddress() sdk.AccAddress {
-
 	addrString := types.GenTestBech32FromString("test")
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 	return addr

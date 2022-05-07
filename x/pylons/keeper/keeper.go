@@ -24,7 +24,6 @@ type (
 		transferKeeper types.TransferKeeper
 		paramSpace     paramtypes.Subspace
 		// this line is used by starport scaffolding # ibc/keeper/attribute
-
 	}
 )
 
@@ -37,9 +36,7 @@ func NewKeeper(
 	tk types.TransferKeeper,
 	paramSpace paramtypes.Subspace,
 	// this line is used by starport scaffolding # ibc/keeper/parameter
-
 ) Keeper {
-
 	// ensure pylons module accounts are set
 	if addr := ak.GetModuleAddress(types.FeeCollectorName); addr == nil {
 		panic(fmt.Sprintf("%s module account has not been set", types.FeeCollectorName))

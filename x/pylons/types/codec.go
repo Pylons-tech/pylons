@@ -35,7 +35,6 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 
 	cdc.RegisterConcrete(&MsgCreateCookbook{}, "pylons/CreateCookbook", nil)
 	cdc.RegisterConcrete(&MsgUpdateCookbook{}, "pylons/UpdateCookbook", nil)
-
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {

@@ -675,7 +675,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 			ID: "itemInputID",
 			Doubles: []types.DoubleInputParam{
 				{
-					Key:  "main",
+					Key:      "main",
 					MinValue: sdk.NewDec(50),
 					MaxValue: sdk.NewDec(100),
 				},
@@ -683,24 +683,24 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 			Longs: nil,
 			Strings: []types.StringInputParam{
 				{
-					Key:     "testInput",
-					Value:   "testVal",
+					Key:   "testInput",
+					Value: "testVal",
 				},
 			},
 		},
 	})
 	require.NoError(t, err)
 
-	//itemInputIDs, err := json.Marshal([]string{types.EncodeItemID(0)})
+	// itemInputIDs, err := json.Marshal([]string{types.EncodeItemID(0)})
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID" ,
+				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -719,11 +719,11 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 						Program: "",
 					},
 				},
-				MutableStrings: nil,
-				TransferFee:    []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
+				MutableStrings:  nil,
+				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
 				TradePercentage: sdk.SmallestDec(),
-				Quantity:       0,
-				AmountMinted:   0,
+				Quantity:        0,
+				AmountMinted:    0,
 			},
 		},
 		ItemModifyOutputs: nil,
@@ -763,7 +763,6 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 		"true",
 		"extraInfo",
 	}
-
 
 	recipeFields2 := []string{
 		"testRecipeName",
@@ -807,7 +806,6 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 
-
 	// create execution
 
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
@@ -845,8 +843,6 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
-
-
 }
 
 func TestExecuteRecipeMutableStringField(t *testing.T) {
@@ -1003,7 +999,6 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 	var recipeResp types.QueryGetRecipeResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &recipeResp))
 	require.Equal(t, expectedMutableString, recipeResp.Recipe.Entries.ItemOutputs[0].MutableStrings)
-
 }
 
 func TestExecuteRecipeNoInputOutputInvalidArgs(t *testing.T) {

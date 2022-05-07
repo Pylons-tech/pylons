@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	"fmt"
+
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -70,7 +71,6 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe() {
 }
 
 func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
-
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()

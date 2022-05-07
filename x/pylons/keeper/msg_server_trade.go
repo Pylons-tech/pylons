@@ -68,7 +68,7 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	var trade = types.Trade{
+	trade := types.Trade{
 		Creator:     msg.Creator,
 		CoinInputs:  msg.CoinInputs,
 		ItemInputs:  msg.ItemInputs,
