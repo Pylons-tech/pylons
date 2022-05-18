@@ -15,7 +15,7 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 	// this line is used by starport scaffolding # handler/msgServer
 
 	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
-		_ = ctx.WithEventManager(sdk.NewEventManager())
+		ctx = ctx.WithEventManager(sdk.NewEventManager())
 
 		// nolint: gocritic
 		switch msg := msg.(type) {
