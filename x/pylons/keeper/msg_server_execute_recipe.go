@@ -72,6 +72,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	}
 
 	cookbook, found := k.GetCookbook(ctx, msg.CookbookID)
+
 	if !found {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "main cookbook not found")
 	}
@@ -153,16 +154,17 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	})
 
 	//to do
-	// creater NAme
+	// creater Name
 	// recipient address
+
 	err = ctx.EventManager().EmitTypedEvent(&types.EventItemCreation{
 		ItemID:           id,
 		CookbookID:       recipe.CookbookID,
 		RecipeID:         recipe.ID,
 		PaymentInfos:     msg.PaymentInfos,
 		CreaterAddress:   msg.Creator,
-		CreaterName:      execution.Creator,
-		RecipientAddress: execution.Creator,
+		CreaterName:      "Temp-Creator-Name",
+		RecipientAddress: cookbook.Creator,
 	})
 
 	return &types.MsgExecuteRecipeResponse{ID: id}, err
