@@ -163,5 +163,18 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		PaymentInfos: msg.PaymentInfos,
 	})
 
+	//to do
+	// creater NAme
+	// recipient address
+	err = ctx.EventManager().EmitTypedEvent(&types.EventItemCreation{
+		ItemID:           id,
+		CookbookID:       recipe.CookbookID,
+		RecipeID:         recipe.ID,
+		PaymentInfos:     msg.PaymentInfos,
+		CreaterAddress:   msg.Creator,
+		CreaterName:      execution.Creator,
+		RecipientAddress: execution.Creator,
+	})
+
 	return &types.MsgExecuteRecipeResponse{ID: id}, err
 }
