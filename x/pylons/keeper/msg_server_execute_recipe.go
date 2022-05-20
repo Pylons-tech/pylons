@@ -76,6 +76,11 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "main cookbook not found")
 	}
 
+	// check if the recipe creator and the recipe executor are same
+	if msg.Creator == cookbook.Creator {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Recipe Executor Cannot Be Same As Creator")
+	}
+
 	if !recipe.Enabled || !cookbook.Enabled {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "this recipe or its parent cookbook are disabled")
 	}
