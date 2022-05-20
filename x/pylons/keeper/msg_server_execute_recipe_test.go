@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	"fmt"
+
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -17,6 +18,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe() {
 	wctx := sdk.WrapSDKContext(ctx)
 
 	creator := "A"
+	executor := "B"
 	for i := 0; i < 5; i++ {
 		idx := fmt.Sprintf("%d", i)
 		cookbook := &types.MsgCreateCookbook{
@@ -54,7 +56,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe() {
 		require.Equal(recipe.ID, rst.ID)
 
 		execution := &types.MsgExecuteRecipe{
-			Creator:         creator,
+			Creator:         executor,
 			CookbookID:      idx,
 			RecipeID:        idx,
 			CoinInputsIndex: 0,

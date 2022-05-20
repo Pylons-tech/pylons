@@ -50,16 +50,16 @@ It connects to the other nodes in the network to form a consensus, and responds 
 
 ## Documentation
 
-To learn how to use run a Pylons node, check out the [documentation pages](./docs/README.md). To learn more about developing NFTs on Pylons, see the [Pylons SDK](https://github.com/Pylons-tech/pylons_dart_sdk) project.
+To learn how to use run a Pylons node, check out the [documentation pages](./docs/README.md).  To learn more about developing NFTs on Pylons, see the [Pylons SDK](https://github.com/Pylons-tech/pylons_dart_sdk) project.
 
 ## Talk to us!
 
-Pylons is maintained by [Tendermint](https://tendermint.com/) and [Pylons LLC](https://pylons.tech). Follow us to see the latest updates or get involved.
+Pylons is maintained by [Tendermint](https://tendermint.com/) and [Pylons LLC](https://pylons.tech).  Follow us to see the latest updates or get involved.
 
-- [Discord](https://discord.gg/dZgUGy32j7)
-- [Twitter](https://twitter.com/pylonstech)
-- [Jobs](https://www.linkedin.com/company/pylons/jobs/)
+* [Discord](https://discord.gg/dZgUGy32j7)
+* [Twitter](https://twitter.com/pylonstech)
+* [Jobs](https://www.linkedin.com/company/pylons/jobs/)
 
 ## Contributing
 
-We welcome contributions from everyone. For more information about contributing, please review our [guidelines](CONTRIBUTING.md). Thank you to our Pylons contributors!
+We welcome contributions from everyone.  For more information about contributing, please review our [guidelines](CONTRIBUTING.md). Thank you to our Pylons contributors!
