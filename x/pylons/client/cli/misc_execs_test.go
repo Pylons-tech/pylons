@@ -9,7 +9,6 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
-	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -34,12 +33,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	basicTradePercentage, err := sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, address),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(address, net)
 
 	cookbookID := "COOKBOOK_ID"
 	cbFields := []string{
@@ -165,12 +159,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 
 	// Execute recipe and check item
 	// execute recipe to mint
-	commonExec := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	commonExec := CommonArgs(val.Address.String(), net)
 	args = []string{cookbookID, mintItemRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, commonExec...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)

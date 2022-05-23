@@ -2,7 +2,6 @@ package cli_test
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"testing"
 	"time"
@@ -11,7 +10,6 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
-	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -66,12 +64,7 @@ func TestCreateTradeNoItemOutput1(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-			},
+			args: CommonArgs(val.Address.String(), net),
 			err:  nil,
 			code: uint32(0),
 		},
@@ -144,12 +137,7 @@ func TestCreateTradeNoItemOutput2(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-			},
+			args: CommonArgs(val.Address.String(), net),
 			err:  nil,
 			code: sdkerrors.ErrInvalidRequest.ABCICode(), // we are able to validate the trade, but it is invalid at the keeper stage since the node does not own any ibc tokens
 		},
@@ -256,12 +244,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, address),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(string(address), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -278,12 +261,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common = CommonArgs(val.Address.String(), net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -369,12 +347,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-			},
+			args: CommonArgs(val.Address.String(), net),
 			err:  nil,
 			code: uint32(0),
 		},
@@ -493,12 +466,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, address),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(address, net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -515,12 +483,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common = CommonArgs(val.Address.String(), net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -606,13 +569,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-			},
-			err: sdkerrors.ErrInvalidRequest,
+			args: CommonArgs(val.Address.String(), net),
+			err:  sdkerrors.ErrInvalidRequest,
 		},
 	} {
 		tc := tc
@@ -729,12 +687,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, address),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(address, net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -751,12 +704,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common = CommonArgs(val.Address.String(), net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -842,13 +790,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-			},
-			err: sdkerrors.ErrInvalidRequest,
+			args: CommonArgs(val.Address.String(), net),
+			err:  sdkerrors.ErrInvalidRequest,
 		},
 	} {
 		tc := tc
@@ -965,12 +908,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, address),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(address, net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -987,12 +925,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common = CommonArgs(val.Address.String(), net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -1078,13 +1011,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-			},
-			err: sdkerrors.ErrInvalidRequest,
+			args: CommonArgs(val.Address.String(), net),
+			err:  sdkerrors.ErrInvalidRequest,
 		},
 	} {
 		tc := tc
@@ -1200,12 +1128,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, address),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(address, net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -1222,12 +1145,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common = CommonArgs(val.Address.String(), net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -1313,12 +1231,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-			},
+			args: CommonArgs(val.Address.String(), net),
 			err:  nil,
 			code: sdkerrors.ErrInvalidRequest.ABCICode(),
 		},
@@ -1392,12 +1305,7 @@ func TestCreateTradeInvalidCoinOutput(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-			},
+			args: CommonArgs(val.Address.String(), net),
 			err:  nil,
 			code: sdkerrors.ErrInvalidRequest.ABCICode(),
 		},
@@ -1476,12 +1384,7 @@ func TestCreateTradeInvalidItemOutput(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-			},
+			args: CommonArgs(val.Address.String(), net),
 			err:  nil,
 			code: sdkerrors.ErrInvalidRequest.ABCICode(),
 		},
@@ -1542,12 +1445,7 @@ func TestCancelTrade(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(val.Address.String(), net)
 	args := make([]string, 0)
 	args = append(args, fields...)
 	args = append(args, common...)

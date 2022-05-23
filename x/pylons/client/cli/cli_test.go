@@ -24,6 +24,19 @@ const (
 	testIBCDenom = "ibc/529ba5e3e86ba7796d7caab4fc02728935fbc75c0f7b25a9e611c49dd7d68a35"
 )
 
+var (
+	NEW_COIN = sdk.NewInt(10)
+)
+
+func CommonArgs(address string, net *network.Network) []string {
+	return []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, address),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, NEW_COIN)).String()),
+	}
+}
+
 func GenerateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 	addrs := make([]sdk.AccAddress, n)
 	for i := 0; i < n; i++ {
@@ -53,7 +66,7 @@ func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.N
 	}
 	var resp sdk.TxResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
-	if uint32(0) == resp.Code {
+	if uint32(0) != resp.Code {
 		return "", fmt.Errorf("Error Code Not Success")
 	}
 
