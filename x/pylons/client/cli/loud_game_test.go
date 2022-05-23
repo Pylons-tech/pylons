@@ -30,6 +30,7 @@ type loudBasicSim struct {
 	basicTradePercentage   sdk.Dec
 	err                    error
 	common                 []string
+	executorCommon         []string
 	execCount              int
 	itemCount              int
 	characterID            string
@@ -43,6 +44,25 @@ func TestLOUDBasic(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	var err error
+
+	accs := GenerateAddressesInKeyring(val.ClientCtx.Keyring, 2)
+	common := []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
+
+	username := "user"
+
+	// create account
+	args := []string{username}
+	args = append(args, common...)
+	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
+	require.NoError(t, err)
+	var resp sdk.TxResponse
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
+	require.Equal(t, uint32(0), resp.Code)
 
 	simInfo := &loudBasicSim{
 		net:                    net,
@@ -63,12 +83,18 @@ func TestLOUDBasic(t *testing.T) {
 
 	simInfo.common = []string{
 
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
+	simInfo.executorCommon = []string{
+
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 	}
-
 	createLOUDCookbook(t, simInfo)
 	createCharacterRecipe(t, simInfo)
 	createCharacter(t, simInfo)
@@ -178,7 +204,7 @@ func createCharacterRecipe(t *testing.T, simInfo *loudBasicSim) {
 func createCharacter(t *testing.T, simInfo *loudBasicSim) {
 	// execute recipe for character
 	args := []string{cookbookIDLOUD, simInfo.getCharacterRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, simInfo.common...)
+	args = append(args, simInfo.executorCommon...)
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
@@ -259,7 +285,7 @@ func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 
 	// execute recipe for character
 	args = []string{cookbookIDLOUD, getLoudCoinRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, simInfo.common...)
+	args = append(args, simInfo.executorCommon...)
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
@@ -361,7 +387,7 @@ func createBuyCopperSwordRecipe(t *testing.T, simInfo *loudBasicSim) {
 func buyCopperSword(t *testing.T, simInfo *loudBasicSim) {
 	// execute recipe for character
 	args := []string{cookbookIDLOUD, simInfo.buyCopperSwordRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, simInfo.common...)
+	args = append(args, simInfo.executorCommon...)
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
@@ -616,7 +642,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 
 		// execute recipe for character
 		args = []string{cookbookIDLOUD, fightWolfWithSwordRecipeID, "0", string(itemInputIDs), "[]"} // empty list for item-ids since there is no item input
-		args = append(args, simInfo.common...)
+		args = append(args, simInfo.executorCommon...)
 		out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 		require.NoError(t, err)
 		var resp sdk.TxResponse

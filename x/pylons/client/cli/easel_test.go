@@ -28,6 +28,7 @@ type easelBasicSim struct {
 	basicTradePercentage sdk.Dec
 	err                  error
 	common               []string
+	executorCommon       []string
 	execCount            int
 	itemCount            int
 	mintRecipeID         string
@@ -39,6 +40,25 @@ func TestEaselBasic(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	var err error
+
+	accs := GenerateAddressesInKeyring(val.ClientCtx.Keyring, 2)
+	common := []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
+
+	username := "user"
+
+	// create account
+	args := []string{username}
+	args = append(args, common...)
+	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
+	require.NoError(t, err)
+	var resp sdk.TxResponse
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
+	require.Equal(t, uint32(0), resp.Code)
 
 	simInfo := &easelBasicSim{
 		net:                  net,
@@ -53,12 +73,19 @@ func TestEaselBasic(t *testing.T) {
 
 	simInfo.common = []string{
 
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 	}
 
+	simInfo.executorCommon = []string{
+
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
 	createEaselCookbook(t, simInfo)
 	createMintRecipe1(t, simInfo)
 	mintNFT1(t, simInfo)
@@ -141,9 +168,10 @@ func createMintRecipe1(t *testing.T, simInfo *easelBasicSim) {
 }
 
 func mintNFT1(t *testing.T, simInfo *easelBasicSim) {
+
 	// execute recipe to mint
 	args := []string{cookbookIDEasel, simInfo.mintRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, simInfo.common...)
+	args = append(args, simInfo.executorCommon...)
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
@@ -316,7 +344,7 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 func mintNFT2(t *testing.T, simInfo *easelBasicSim) {
 	// execute recipe to mint
 	args := []string{cookbookIDEasel, simInfo.mintRecipeID2, "0", "[]", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, simInfo.common...)
+	args = append(args, simInfo.executorCommon...)
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse

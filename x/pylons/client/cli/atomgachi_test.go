@@ -28,6 +28,7 @@ type atomgachiBasicSim struct {
 	basicTradePercentage sdk.Dec
 	err                  error
 	common               []string
+	commonExec           []string
 	execCount            int
 	itemCount            int
 	mintRecipeID         string
@@ -39,6 +40,24 @@ func TestAtomgachiBasic(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	var err error
+	accs := GenerateAddressesInKeyring(val.ClientCtx.Keyring, 2)
+	common := []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
+
+	username := "user"
+
+	// create account
+	args := []string{username}
+	args = append(args, common...)
+	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
+	require.NoError(t, err)
+	var resp sdk.TxResponse
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
+	require.Equal(t, uint32(0), resp.Code)
 
 	simInfo := &atomgachiBasicSim{
 		net:                  net,
@@ -53,6 +72,12 @@ func TestAtomgachiBasic(t *testing.T) {
 
 	simInfo.common = []string{
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
+	simInfo.commonExec = []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
@@ -139,7 +164,7 @@ func createMintRecipe(t *testing.T, simInfo *atomgachiBasicSim) {
 func mint(t *testing.T, simInfo *atomgachiBasicSim) {
 	// execute recipe to mint
 	args := []string{cookbookIDAtomgachi, simInfo.mintRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, simInfo.common...)
+	args = append(args, simInfo.commonExec...)
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse

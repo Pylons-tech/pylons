@@ -27,11 +27,30 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	execCount := 0
 	itemCount := 0
 
+	accs := GenerateAddressesInKeyring(val.ClientCtx.Keyring, 2)
+	common := []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
+
+	username := "user"
+
+	// create account
+	args := []string{username}
+	args = append(args, common...)
+	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
+	require.NoError(t, err)
+	var resp sdk.TxResponse
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
+	require.Equal(t, uint32(0), resp.Code)
+
 	basicTradePercentage, err := sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+	common = []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
@@ -48,7 +67,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	}
 
 	// create cookbook
-	args := []string{cookbookID}
+	args = []string{cookbookID}
 	args = append(args, cbFields...)
 	args = append(args, common...)
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
@@ -161,11 +180,16 @@ func TestSingleItemModifyOutput(t *testing.T) {
 
 	// Execute recipe and check item
 	// execute recipe to mint
+	commonExec := []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
 	args = []string{cookbookID, mintItemRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, common...)
-	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
+	args = append(args, commonExec...)
+	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
-	var resp sdk.TxResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
@@ -277,7 +301,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	// Execute recipe and check item
 	// execute recipe to mint
 	args = []string{cookbookID, modifyItemRecipeID, "0", string(itemInputIDs), "[]"} // empty list for item-ids since there is no item input
-	args = append(args, common...)
+	args = append(args, commonExec...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))

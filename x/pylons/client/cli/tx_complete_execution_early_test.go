@@ -25,6 +25,26 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	net := network.New(t)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
+
+	accs := GenerateAddressesInKeyring(val.ClientCtx.Keyring, 2)
+	common := []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
+
+	username := "user"
+
+	// create account
+	args := []string{username}
+	args = append(args, common...)
+	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
+	require.NoError(t, err)
+	var resp sdk.TxResponse
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
+	require.Equal(t, uint32(0), resp.Code)
+
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
 
@@ -40,16 +60,16 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	}
 
 	//Common arguments
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+	common = []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 	}
-	args := []string{cookbookID}
+	args = []string{cookbookID}
 	args = append(args, cbFields...)
 	args = append(args, common...)
-	_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
+	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
 
 	coinInputsJson, _ := json.Marshal([]types.CoinInput{
@@ -84,11 +104,16 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
+	common = []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
 	args = []string{cookbookID, recipeID, "1", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err2 := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err2)
-	var resp sdk.TxResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code, resp.RawLog)
 
