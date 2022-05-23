@@ -27,24 +27,10 @@ func TestSetItemString(t *testing.T) {
 	executedItemID := "testItemID"
 	itemMutableStringField := "itemMutableStringField"
 	itemMutableStringValue := "itemMutableStringValue"
-	accs := GenerateAddressesInKeyring(val.ClientCtx.Keyring, 2)
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
 
-	username := "user"
-
-	// create account
-	args := []string{username}
-	args = append(args, common...)
-	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
+	address, err := GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
-	require.Equal(t, uint32(0), resp.Code)
 
 	cbFields := []string{
 		"testCookbookName",
@@ -133,15 +119,15 @@ func TestSetItemString(t *testing.T) {
 		"extraInfo",
 	}
 
-	common = []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
+	common := []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, address),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 	}
 
 	// create cookbook
-	args = []string{cookbookID}
+	args := []string{cookbookID}
 	args = append(args, cbFields...)
 	args = append(args, common...)
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
@@ -163,7 +149,7 @@ func TestSetItemString(t *testing.T) {
 	}
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
-	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
+	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)

@@ -1,15 +1,20 @@
 package cli_test
 
 import (
+	"fmt"
 	"strconv"
 	"testing"
 
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
+	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	"github.com/Pylons-tech/pylons/testutil/network"
@@ -26,6 +31,33 @@ func GenerateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 		addrs[i] = info.GetAddress()
 	}
 	return addrs
+}
+
+func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.Network) (string, error) {
+	accs := GenerateAddressesInKeyring(ctx.Keyring, 1)
+	common := []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
+
+	username := "user"
+
+	// create account
+	args := []string{username}
+	args = append(args, common...)
+	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
+	if err != nil {
+		return "", err
+	}
+	var resp sdk.TxResponse
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
+	if uint32(0) == resp.Code {
+		return "", fmt.Errorf("Error Code Not Success")
+	}
+
+	return accs[0].String(), nil
 }
 
 func networkWithRedeemInfoObjects(t *testing.T, n int) (*network.Network, []types.RedeemInfo) {

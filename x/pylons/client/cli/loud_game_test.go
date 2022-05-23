@@ -45,24 +45,8 @@ func TestLOUDBasic(t *testing.T) {
 	ctx := val.ClientCtx
 	var err error
 
-	accs := GenerateAddressesInKeyring(val.ClientCtx.Keyring, 2)
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
-
-	username := "user"
-
-	// create account
-	args := []string{username}
-	args = append(args, common...)
-	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
+	address, err := GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
-	var resp sdk.TxResponse
-	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
-	require.Equal(t, uint32(0), resp.Code)
 
 	simInfo := &loudBasicSim{
 		net:                    net,
@@ -83,7 +67,7 @@ func TestLOUDBasic(t *testing.T) {
 
 	simInfo.common = []string{
 
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, address),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
