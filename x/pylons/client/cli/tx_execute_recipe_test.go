@@ -24,10 +24,34 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
+func GenerateAddress() {
+
+}
 func TestExecuteRecipeNoInputOutput(t *testing.T) {
+
 	net := network.New(t)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
+
+	accs := GenerateAddressesInKeyring(val.ClientCtx.Keyring, 2)
+	common := []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
+
+	username := "user"
+
+	// create account
+	args := []string{username}
+	args = append(args, common...)
+	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
+	require.NoError(t, err)
+	var resp sdk.TxResponse
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
+	require.Equal(t, uint32(0), resp.Code)
+
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
 
@@ -114,7 +138,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := []string{
+	common = []string{
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
@@ -122,7 +146,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 	}
 
 	// create cookbook
-	args := []string{cookbookID}
+	args = []string{cookbookID}
 	args = append(args, cbFields...)
 	args = append(args, common...)
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
@@ -138,6 +162,13 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 	// this recipe can be run infinitely
 	// run it 5x in a loop
 	for i := 0; i < 5; i++ {
+
+		common = []string{
+			fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
+			fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+			fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+			fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+		}
 		// create execution
 		args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 		args = append(args, common...)
@@ -675,7 +706,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 			ID: "itemInputID",
 			Doubles: []types.DoubleInputParam{
 				{
-					Key:  "main",
+					Key:      "main",
 					MinValue: sdk.NewDec(50),
 					MaxValue: sdk.NewDec(100),
 				},
@@ -683,8 +714,8 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 			Longs: nil,
 			Strings: []types.StringInputParam{
 				{
-					Key:     "testInput",
-					Value:   "testVal",
+					Key:   "testInput",
+					Value: "testVal",
 				},
 			},
 		},
@@ -697,10 +728,10 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID" ,
+				ID: "testID",
 				Doubles: []types.DoubleParam{
 					{
-						Key:  "Mass",
+						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -719,11 +750,11 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 						Program: "",
 					},
 				},
-				MutableStrings: nil,
-				TransferFee:    []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
+				MutableStrings:  nil,
+				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
 				TradePercentage: sdk.SmallestDec(),
-				Quantity:       0,
-				AmountMinted:   0,
+				Quantity:        0,
+				AmountMinted:    0,
 			},
 		},
 		ItemModifyOutputs: nil,
@@ -763,7 +794,6 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 		"true",
 		"extraInfo",
 	}
-
 
 	recipeFields2 := []string{
 		"testRecipeName",
@@ -807,7 +837,6 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 
-
 	// create execution
 
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
@@ -845,7 +874,6 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
-
 
 }
 
