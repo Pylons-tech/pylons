@@ -122,6 +122,12 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		return nil, err
 	}
 
+	for _, item := range recipe.Entries.ItemOutputs {
+		if item.Quantity != 0 && item.Quantity <= item.AmountMinted {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Amount minted reached maximium limit")
+		}
+	}
+
 	// create ItemRecord list
 	itemRecords := make([]types.ItemRecord, len(matchedItems))
 	for i, item := range matchedItems {
