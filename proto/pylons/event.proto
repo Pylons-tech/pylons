@@ -22,10 +22,11 @@ message EventItemCreation {
   string itemID = 1;
   string cookbookID = 2;
   string recipeID = 3;
-  string createrName = 4;
-  string createrAddress = 5;
-  string recipientAddress = 6;
-  repeated PaymentInfo paymentInfos = 7 [ (gogoproto.nullable) = false ];
+  string senderName = 4;
+  string sender = 5;
+  string reciever = 6;
+  string amount = 7;
+  string time = 8;
 }
 
 message EventCreateAccount {

@@ -164,18 +164,22 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		PaymentInfos: msg.PaymentInfos,
 	})
 
-	//to do
-	// creater Name
-	// recipient address
+	//query sender name by address
+	//found is true if found
+	senderName, found := k.GetUsernameByAddress(ctx, msg.Creator)
+	if found != true {
+		return nil, err
+	}
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventItemCreation{
-		ItemID:           id,
-		CookbookID:       recipe.CookbookID,
-		RecipeID:         recipe.ID,
-		PaymentInfos:     msg.PaymentInfos,
-		CreaterAddress:   msg.Creator,
-		CreaterName:      "Temp-Creator-Name",
-		RecipientAddress: cookbook.Creator,
+		ItemID:     id,
+		CookbookID: recipe.CookbookID,
+		RecipeID:   recipe.ID,
+		Sender:     msg.Creator,
+		Reciever:   cookbook.Creator,
+		SenderName: senderName.GetValue(),
+		Amount:     coinInputs.String(),
+		Time:       ctx.BlockTime().String(),
 	})
 
 	return &types.MsgExecuteRecipeResponse{ID: id}, err
