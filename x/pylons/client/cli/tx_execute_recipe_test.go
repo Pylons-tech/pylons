@@ -2,7 +2,6 @@ package cli_test
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"strings"
 	"testing"
@@ -13,7 +12,6 @@ import (
 
 	"github.com/spf13/cast"
 
-	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -24,10 +22,18 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
+func GenerateAddress() {
+
+}
 func TestExecuteRecipeNoInputOutput(t *testing.T) {
+
 	net := network.New(t)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
+
+	address, err := GenerateAddressWithAccount(ctx, t, net)
+	require.NoError(t, err)
+
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
 
@@ -114,12 +120,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -137,6 +138,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 
 	// this recipe can be run infinitely
 	// run it 5x in a loop
+	common = CommonArgs(address, net)
 	for i := 0; i < 5; i++ {
 		// create execution
 		args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
@@ -183,6 +185,9 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
+
+	address, err := GenerateAddressWithAccount(ctx, t, net)
+	require.NoError(t, err)
 
 	cbFields := []string{
 		"testCookbookName",
@@ -259,20 +264,15 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
 	args = append(args, cbFields...)
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
-	require.NoError(t, err)
 	var resp sdk.TxResponse
+	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
@@ -286,8 +286,10 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create execution
+	commonExec := CommonArgs(address, net)
+
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, common...)
+	args = append(args, commonExec...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
@@ -333,7 +335,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	// try to execute again
 	// the response will be ok
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, common...)
+	args = append(args, commonExec...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
@@ -372,6 +374,9 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
+
+	address, err := GenerateAddressWithAccount(ctx, t, net)
+	require.NoError(t, err)
 
 	cbFields := []string{
 		"testCookbookName",
@@ -448,20 +453,15 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
 	args = append(args, cbFields...)
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
-	require.NoError(t, err)
 	var resp sdk.TxResponse
+	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
@@ -475,6 +475,7 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create execution
+	common = CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -506,12 +507,16 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 
 	require.Contains(t, stat.Err().Error(), status.Error(codes.InvalidArgument, "not found").Error())
 }
+
 func TestExecuteUpdatedRecipe(t *testing.T) {
 	net := network.New(t)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
+	address, err := GenerateAddressWithAccount(ctx, t, net)
+	require.NoError(t, err)
+	var resp sdk.TxResponse
 
 	cbFields := []string{
 		"testCookbookName",
@@ -589,12 +594,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -602,7 +602,6 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
-	var resp sdk.TxResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
@@ -616,8 +615,9 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create execution
+	commonExec := CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, common...)
+	args = append(args, commonExec...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
@@ -760,12 +760,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -802,6 +797,10 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
 	recipeID2 := "testRecipeID2"
+
+	address, err := GenerateAddressWithAccount(ctx, t, net)
+	require.NoError(t, err)
+	var resp sdk.TxResponse
 
 	cbFields := []string{
 		"testCookbookName",
@@ -919,12 +918,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -948,12 +942,11 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-
+	common = CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
-	var resp sdk.TxResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
@@ -993,6 +986,10 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
+
+	address, err := GenerateAddressWithAccount(ctx, t, net)
+	require.NoError(t, err)
+	var resp sdk.TxResponse
 
 	cbFields := []string{
 		"testCookbookName",
@@ -1070,12 +1067,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -1083,7 +1075,6 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
-	var resp sdk.TxResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
@@ -1097,6 +1088,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create execution
+	common = CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -1151,12 +1143,7 @@ func TestExecuteRecipeNoInputOutputInvalidArgs(t *testing.T) {
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(val.Address.String(), net)
 
 	// invalid coininputs index
 	args := []string{cookbookID, recipeID, "invalid", "[]", "[]"} // empty list for item-ids since there is no item input

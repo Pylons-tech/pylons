@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
@@ -28,6 +27,7 @@ type atomgachiBasicSim struct {
 	basicTradePercentage sdk.Dec
 	err                  error
 	common               []string
+	commonExec           []string
 	execCount            int
 	itemCount            int
 	mintRecipeID         string
@@ -39,6 +39,8 @@ func TestAtomgachiBasic(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	var err error
+	address, err := GenerateAddressWithAccount(ctx, t, net)
+	require.NoError(t, err)
 
 	simInfo := &atomgachiBasicSim{
 		net:                  net,
@@ -51,12 +53,8 @@ func TestAtomgachiBasic(t *testing.T) {
 	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 
-	simInfo.common = []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	simInfo.common = CommonArgs(val.Address.String(), net)
+	simInfo.commonExec = CommonArgs(address, net)
 
 	createAtomgachiCookbook(t, simInfo)
 	createMintRecipe(t, simInfo)
@@ -139,7 +137,7 @@ func createMintRecipe(t *testing.T, simInfo *atomgachiBasicSim) {
 func mint(t *testing.T, simInfo *atomgachiBasicSim) {
 	// execute recipe to mint
 	args := []string{cookbookIDAtomgachi, simInfo.mintRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, simInfo.common...)
+	args = append(args, simInfo.commonExec...)
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse

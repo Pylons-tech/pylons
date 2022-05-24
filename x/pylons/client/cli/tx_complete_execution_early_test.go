@@ -2,12 +2,10 @@ package cli_test
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"testing"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/client/flags"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/testutil/network"
@@ -25,6 +23,11 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	net := network.New(t)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
+
+	address, err := GenerateAddressWithAccount(ctx, t, net)
+	require.NoError(t, err)
+	var resp sdk.TxResponse
+
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
 
@@ -40,16 +43,11 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	}
 
 	//Common arguments
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(address, net)
 	args := []string{cookbookID}
 	args = append(args, cbFields...)
 	args = append(args, common...)
-	_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
+	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
 
 	coinInputsJson, _ := json.Marshal([]types.CoinInput{
@@ -84,11 +82,11 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
+	common = CommonArgs(val.Address.String(), net)
 	args = []string{cookbookID, recipeID, "1", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err2 := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err2)
-	var resp sdk.TxResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code, resp.RawLog)
 

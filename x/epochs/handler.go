@@ -15,7 +15,6 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 	// this line is used by starport scaffolding # handler/msgServer
 
 	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
-
 		// EventManager implements a simple wrapper around a slice of Event
 		_ = ctx.WithEventManager(sdk.NewEventManager())
 

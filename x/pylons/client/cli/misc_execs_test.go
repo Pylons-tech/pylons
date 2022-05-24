@@ -9,7 +9,6 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
-	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -27,15 +26,14 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	execCount := 0
 	itemCount := 0
 
+	address, err := GenerateAddressWithAccount(ctx, t, net)
+	require.NoError(t, err)
+	var resp sdk.TxResponse
+
 	basicTradePercentage, err := sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(address, net)
 
 	cookbookID := "COOKBOOK_ID"
 	cbFields := []string{
@@ -161,11 +159,11 @@ func TestSingleItemModifyOutput(t *testing.T) {
 
 	// Execute recipe and check item
 	// execute recipe to mint
+	commonExec := CommonArgs(val.Address.String(), net)
 	args = []string{cookbookID, mintItemRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, common...)
+	args = append(args, commonExec...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
-	var resp sdk.TxResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
@@ -277,7 +275,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	// Execute recipe and check item
 	// execute recipe to mint
 	args = []string{cookbookID, modifyItemRecipeID, "0", string(itemInputIDs), "[]"} // empty list for item-ids since there is no item input
-	args = append(args, common...)
+	args = append(args, commonExec...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))

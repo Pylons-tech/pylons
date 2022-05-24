@@ -2,12 +2,10 @@ package cli_test
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"testing"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cast"
@@ -27,6 +25,9 @@ func TestSendItems(t *testing.T) {
 	executedItemID := "testItemID"
 	itemMutableStringField := "itemMutableStringField"
 	itemMutableStringValue := "itemMutableStringValue"
+
+	address, err := GenerateAddressWithAccount(ctx, t, net)
+	require.NoError(t, err)
 
 	cbFields := []string{
 		"testCookbookName",
@@ -117,12 +118,7 @@ func TestSendItems(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(address, net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -141,10 +137,11 @@ func TestSendItems(t *testing.T) {
 	numTests := 1
 	executedItemRefs := make([]string, numTests)
 
+	commonExe := CommonArgs(val.Address.String(), net)
 	for i := 0; i < numTests; i++ {
 		// create execution
 		args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
-		args = append(args, common...)
+		args = append(args, commonExe...)
 		out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 		require.NoError(t, err)
 		var resp sdk.TxResponse
@@ -206,7 +203,7 @@ func TestSendItems(t *testing.T) {
 			cookbookID: cookbookID,
 			itemRefs:   executedItemRefs[0],
 			receiver:   addrs[0],
-			args:       common,
+			args:       commonExe,
 			err:        nil,
 			code:       0,
 		},

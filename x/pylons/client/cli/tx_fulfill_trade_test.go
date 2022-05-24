@@ -251,7 +251,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 
 	// create execution
 	args = []string{cookbookID, itemRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, simInfo.traderCommon...)
+	args = append(args, simInfo.fulfillerCommon...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
@@ -316,7 +316,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	require.NoError(t, err)
 
 	// get some coins for trader
-	getTestCoins(t, simInfo, simInfo.traderCommon)
+	getTestCoins(t, simInfo, simInfo.fulfillerCommon)
 	getTestCoins(t, simInfo, simInfo.fulfillerCommon)
 
 	// coinInputs, itemInputs, coinOutputs, itemOutputs, extraInfo, flags
@@ -331,7 +331,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	// create trade from trader
 	args = make([]string, 0)
 	args = append(args, tradeFields...)
-	args = append(args, simInfo.traderCommon...)
+	args = append(args, simInfo.fulfillerCommon...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateTrade(), args)
 	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
