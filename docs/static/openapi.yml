@@ -12574,6 +12574,67 @@ paths:
                         }
       tags:
         - Query
+  '/Pylons-tech/pylons/pylons/get_recipe_history/{cookbookID}/{recipeID}':
+    get:
+      summary: Queries a list of GetRecipeHistory items.
+      operationId: PylonstechPylonsPylonsGetRecipeHistory
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              History:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    ItemID:
+                      type: string
+                    CookbookID:
+                      type: string
+                    RecipeID:
+                      type: string
+                    Sender:
+                      type: string
+                    SenderName:
+                      type: string
+                    Reciever:
+                      type: string
+                    Amount:
+                      type: string
+                    Time:
+                      type: string
+                      format: int64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: cookbookID
+          in: path
+          required: true
+          type: string
+        - name: recipeID
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
   '/pylons/account/address/{address}':
     get:
       summary: Queries a list of getAccountByAddress items.
@@ -24527,6 +24588,31 @@ definitions:
             type: string
           signature:
             type: string
+  Pylonstech.pylons.pylons.QueryGetRecipeHistoryResponse:
+    type: object
+    properties:
+      History:
+        type: array
+        items:
+          type: object
+          properties:
+            ItemID:
+              type: string
+            CookbookID:
+              type: string
+            RecipeID:
+              type: string
+            Sender:
+              type: string
+            SenderName:
+              type: string
+            Reciever:
+              type: string
+            Amount:
+              type: string
+            Time:
+              type: string
+              format: int64
   Pylonstech.pylons.pylons.QueryGetRecipeResponse:
     type: object
     properties:
@@ -26730,6 +26816,26 @@ definitions:
         type: boolean
       extraInfo:
         type: string
+  Pylonstech.pylons.pylons.RecipeHistory:
+    type: object
+    properties:
+      ItemID:
+        type: string
+      CookbookID:
+        type: string
+      RecipeID:
+        type: string
+      Sender:
+        type: string
+      SenderName:
+        type: string
+      Reciever:
+        type: string
+      Amount:
+        type: string
+      Time:
+        type: string
+        format: int64
   Pylonstech.pylons.pylons.RedeemInfo:
     type: object
     properties:

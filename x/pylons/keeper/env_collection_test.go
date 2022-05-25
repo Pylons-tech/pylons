@@ -96,7 +96,7 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 		desc      string
 		execution types.Execution
 		recipe    types.Recipe
-		item	  types.Item
+		item      types.Item
 		expected  map[string]interface{}
 		err       error
 	}{
@@ -118,16 +118,16 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 			err: sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "itemRecord item not found in store"),
 		},
 		{
-			desc:      "Valid Test",
+			desc: "Valid Test",
 			execution: types.Execution{
-				Creator:             types.GenTestBech32FromString("test1"),
-				ID:                  "execution1",
-				RecipeID:            "recipe1",
-				CookbookID:          "cookbook1",
-				RecipeVersion:       "v1.1.1",
-				NodeVersion:         0,
-				BlockHeight:         0,
-				ItemInputs:          []types.ItemRecord{
+				Creator:       types.GenTestBech32FromString("test1"),
+				ID:            "execution1",
+				RecipeID:      "recipe1",
+				CookbookID:    "cookbook1",
+				RecipeVersion: "v1.1.1",
+				NodeVersion:   0,
+				BlockHeight:   0,
+				ItemInputs: []types.ItemRecord{
 					{
 						ID:      "item1",
 						Doubles: nil,
@@ -141,14 +141,14 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 				ItemModifyOutputIDs: nil,
 			},
 			recipe: types.Recipe{
-				CookbookID:    "cookbook1",
-				ID:            "recipe1",
-				NodeVersion:   0,
-				Name:          "Test Recipe",
-				Description:   "",
-				Version:       "v1.1.1",
-				CoinInputs:    nil,
-				ItemInputs:    []types.ItemInput{
+				CookbookID:  "cookbook1",
+				ID:          "recipe1",
+				NodeVersion: 0,
+				Name:        "Test Recipe",
+				Description: "",
+				Version:     "v1.1.1",
+				CoinInputs:  nil,
+				ItemInputs: []types.ItemInput{
 					{
 						ID:      "item1",
 						Doubles: nil,
@@ -159,31 +159,31 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 				Entries:       types.EntriesList{},
 				Outputs:       nil,
 				BlockInterval: 0,
-				CostPerBlock:  sdk.Coin{
+				CostPerBlock: sdk.Coin{
 					Denom:  "testCoin",
 					Amount: sdk.NewInt(1),
 				},
-				Enabled:       true,
-				ExtraInfo:     "",
+				Enabled:   true,
+				ExtraInfo: "",
 			},
 			item: types.Item{
-				Owner:           types.GenTestBech32FromString("test1"),
-				CookbookID:      "cookbook1",
-				ID:              "item1",
-				NodeVersion:     0,
-				Doubles:         []types.DoubleKeyValue{
+				Owner:       types.GenTestBech32FromString("test1"),
+				CookbookID:  "cookbook1",
+				ID:          "item1",
+				NodeVersion: 0,
+				Doubles: []types.DoubleKeyValue{
 					{
 						Key:   "doubleParam",
 						Value: sdk.NewDec(0),
 					},
 				},
-				Longs:           []types.LongKeyValue{
+				Longs: []types.LongKeyValue{
 					{
 						Key:   "longParam",
 						Value: 0,
 					},
 				},
-				Strings:         []types.StringKeyValue{
+				Strings: []types.StringKeyValue{
 					{
 						Key:   "entityType",
 						Value: "testItem",
@@ -196,27 +196,27 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 				TradePercentage: sdk.Dec{},
 			},
 			expected: map[string]interface{}{
-				"lastUpdate" : int64(0),
-				"doubleParam" : float64(0),
-				"input0.owner" : "pylo1w3jhxap395kj6tfd95kj6tfd95kj6tfd7up9d8",
-				"input0.itemID" : "item1",
-				"input0.lastUpdate" : int64(0),
-				"item1.owner" : "pylo1w3jhxap395kj6tfd95kj6tfd95kj6tfd7up9d8",
-				"lastBlockHeight" : int64(0),
-				"itemID" : "item1",
-				"input0.doubleParam" : float64(0),
-				"input0.longParam" : int64(0),
-				"input0.entityType" : "testItem",
-				"item1.itemID" : "item1",
-				"item1.lastUpdate" : int64(0),
-				"item1.longParam" : int64(0),
-				"recipeID" : "recipe1",
-				"entityType" : "testItem",
-				"item1.entityType" : "testItem",
-				"tradeID" : "",
-				"owner" : "pylo1w3jhxap395kj6tfd95kj6tfd95kj6tfd7up9d8",
-				"longParam" : int64(0),
-				"item1.doubleParam" : float64(0),
+				"lastUpdate":         int64(0),
+				"doubleParam":        float64(0),
+				"input0.owner":       "pylo1w3jhxap395kj6tfd95kj6tfd95kj6tfd7up9d8",
+				"input0.itemID":      "item1",
+				"input0.lastUpdate":  int64(0),
+				"item1.owner":        "pylo1w3jhxap395kj6tfd95kj6tfd95kj6tfd7up9d8",
+				"lastBlockHeight":    int64(0),
+				"itemID":             "item1",
+				"input0.doubleParam": float64(0),
+				"input0.longParam":   int64(0),
+				"input0.entityType":  "testItem",
+				"item1.itemID":       "item1",
+				"item1.lastUpdate":   int64(0),
+				"item1.longParam":    int64(0),
+				"recipeID":           "recipe1",
+				"entityType":         "testItem",
+				"item1.entityType":   "testItem",
+				"tradeID":            "",
+				"owner":              "pylo1w3jhxap395kj6tfd95kj6tfd95kj6tfd7up9d8",
+				"longParam":          int64(0),
+				"item1.doubleParam":  float64(0),
 			},
 		},
 	}
@@ -226,9 +226,9 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 				_, err := k.NewCelEnvCollectionFromRecipe(ctx, tc.execution, tc.recipe)
 				require.ErrorIs(tc.err, err)
 			} else {
-				k.SetRecipe(ctx,tc.recipe)
-				k.SetPendingExecution(ctx,tc.execution)
-				k.SetItem(ctx,tc.item)
+				k.SetRecipe(ctx, tc.recipe)
+				k.SetPendingExecution(ctx, tc.execution)
+				k.SetItem(ctx, tc.item)
 				resp, err := k.NewCelEnvCollectionFromRecipe(ctx, tc.execution, tc.recipe)
 				require.NoError(err)
 				variables := resp.GetVariables()

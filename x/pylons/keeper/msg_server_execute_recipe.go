@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -143,6 +144,13 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		k.LockItemForExecution(ctx, item)
 	}
 
+	//query sender name by address
+	//found is true if found
+	senderName, found := k.GetUsernameByAddress(ctx, msg.Creator)
+	if !found {
+		return nil, err
+	}
+
 	// create PendingExecution passing the current blockHeight
 	execution := types.Execution{
 		Creator:       msg.Creator,
@@ -162,6 +170,21 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		ID:           id,
 		PaymentInfos: msg.PaymentInfos,
 	})
+
+	executionTrack := types.RecipeHistory{
+		ItemID:     id,
+		CookbookID: recipe.CookbookID,
+		RecipeID:   recipe.ID,
+		Sender:     msg.Creator,
+		Reciever:   cookbook.Creator,
+		SenderName: senderName.GetValue(),
+		Amount:     coinInputs.String(),
+		Time:       ctx.BlockTime().Unix(),
+	}
+
+	k.SetExecuteRecipeHis(ctx, executionTrack)
+	info := k.GetAllExecuteRecipeHis(ctx, executionTrack.CookbookID, executionTrack.RecipeID)
+	fmt.Println(info)
 
 	return &types.MsgExecuteRecipeResponse{ID: id}, err
 }

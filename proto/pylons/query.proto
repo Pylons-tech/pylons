@@ -24,6 +24,11 @@ service Query {
 		option (google.api.http).get = "/pylons/trades/{creator}";
 	}
 
+// Queries a list of GetRecipeHistory items.
+	rpc GetRecipeHistory(QueryGetRecipeHistoryRequest) returns (QueryGetRecipeHistoryResponse) {
+		option (google.api.http).get = "/Pylons-tech/pylons/pylons/get_recipe_history/{cookbookID}/{recipeID}";
+	}
+
 // this line is used by starport scaffolding # 2
 
 	// Queries a redeemInfo by index.
@@ -128,6 +133,25 @@ message QueryListTradesByCreatorResponse {
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
+message QueryGetRecipeHistoryRequest {
+  string cookbookID = 1;
+  string recipeID = 2;
+}
+
+message QueryGetRecipeHistoryResponse {
+	repeated RecipeHistory History = 1;
+}
+
+message RecipeHistory {
+	string ItemID = 1;
+	string CookbookID = 2;
+	string RecipeID = 3;
+	string Sender = 4;
+	string SenderName = 5;
+	string Reciever = 6;
+	string Amount = 7;
+	int64 Time = 8;
+}
 // this line is used by starport scaffolding # 3
 message QueryGetRedeemInfoRequest {
 	string ID = 1;
