@@ -194,5 +194,18 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		),
 	)
 
+	executionTrack := types.RecipeHistory{
+		ItemID:     id,
+		CookbookID: recipe.CookbookID,
+		RecipeID:   recipe.ID,
+		Sender:     msg.Creator,
+		Receiver:   cookbook.Creator,
+		SenderName: senderName.GetValue(),
+		Amount:     coinInputs.String(),
+		Time:       ctx.BlockTime().Unix(),
+	}
+
+	k.SetExecuteRecipeHis(ctx, executionTrack)
+
 	return &types.MsgExecuteRecipeResponse{ID: id}, err
 }
