@@ -152,5 +152,7 @@ message Recipe {
   cosmos.base.v1beta1.Coin costPerBlock = 12 [(gogoproto.nullable) = false];
   bool enabled = 13;
   string extraInfo = 14;
+  string createdAt = 15;
+  string updatedAt = 16;
 }
 

@@ -45,6 +45,8 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 		CostPerBlock:  msg.CostPerBlock,
 		Enabled:       msg.Enabled,
 		ExtraInfo:     msg.ExtraInfo,
+		CreatedAt:     ctx.BlockTime().String(),
+		UpdatedAt:     ctx.BlockTime().String(),
 	}
 
 	k.SetRecipe(
@@ -100,6 +102,8 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 		CostPerBlock:  msg.CostPerBlock,
 		Enabled:       msg.Enabled,
 		ExtraInfo:     msg.ExtraInfo,
+		CreatedAt:     origRecipe.CreatedAt,
+		UpdatedAt:     ctx.BlockTime().String(),
 	}
 
 	modified, err := types.RecipeModified(origRecipe, updatedRecipe)
