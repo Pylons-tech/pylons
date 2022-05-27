@@ -72,6 +72,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	}
 
 	cookbook, found := k.GetCookbook(ctx, msg.CookbookID)
+
 	if !found {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "main cookbook not found")
 	}
@@ -157,11 +158,41 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 
 	id := k.AppendPendingExecution(ctx, execution, recipe.BlockInterval)
 
-	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateExecution{
-		Creator:      execution.Creator,
-		ID:           id,
-		PaymentInfos: msg.PaymentInfos,
-	})
+	// converted typed event to regular event for event management purpose
+	paymentInfo := ""
+	for _, i := range msg.PaymentInfos {
+		paymentInfo += i.String() + " "
+	}
+	// emit to register an execution event
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.CreateExecutionKey,
+			sdk.NewAttribute("creator", execution.Creator),
+			sdk.NewAttribute("ID", id),
+			sdk.NewAttribute("paymentInfos", paymentInfo),
+		),
+	)
+	// query sender name by address
+	// found is true if found
+	senderName, found := k.GetUsernameByAddress(ctx, msg.Creator)
+	if !found {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "user account username not found")
+	}
+
+	// event to register execution history details history of a recipe
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.CreateItemKey,
+			sdk.NewAttribute("itemID", id),
+			sdk.NewAttribute("cookbookID", recipe.CookbookID),
+			sdk.NewAttribute("recipeID", recipe.ID),
+			sdk.NewAttribute("sender", msg.Creator),
+			sdk.NewAttribute("receiver", cookbook.Creator),
+			sdk.NewAttribute("senderName", senderName.GetValue()),
+			sdk.NewAttribute("amount", coinInputs.String()),
+			sdk.NewAttribute("time", ctx.BlockTime().String()),
+		),
+	)
 
 	return &types.MsgExecuteRecipeResponse{ID: id}, err
 }

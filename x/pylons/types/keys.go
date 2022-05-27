@@ -66,6 +66,10 @@ const (
 	UsernameKey = "Username-value-"
 	// AccountKey is a string used as prefix to the KVStore
 	AccountKey = "PylonsAccount-value-"
+	// CreateItemKey is a string used as event name in msg execute recipe
+	CreateItemKey = "create_item"
+	// CreateExecutionKey is a string used as event name in msg execute recipe
+	CreateExecutionKey = "create_execution"
 )
 
 const (
@@ -74,4 +78,8 @@ const (
 
 const (
 	RedeemInfoKey = "RedeemInfo-value-"
+)
+
+const (
+	TestCreator = "pylo13qsmvq0eg7nu7dlt9mxqxn7ufjsqy8433akvy3"
 )

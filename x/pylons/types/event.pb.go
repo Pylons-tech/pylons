@@ -225,7 +225,8 @@ func (m *EventCreateCookbook) GetID() string {
 	return ""
 }
 
-// EventUpdateCookbook contains a record of the cookbook pre-update.  The updated fields can be found by the message emitted by MsgUpdateCookbook
+// EventUpdateCookbook contains a record of the cookbook pre-update.  The
+// updated fields can be found by the message emitted by MsgUpdateCookbook
 type EventUpdateCookbook struct {
 	OriginalCookbook Cookbook `protobuf:"bytes,1,opt,name=originalCookbook,proto3" json:"originalCookbook"`
 }
@@ -390,7 +391,8 @@ func (m *EventCreateRecipe) GetID() string {
 	return ""
 }
 
-// EventUpdateRecipe contains a record of the recipe pre-update.  The updated fields can be found by the message emitted by MsgUpdateRecipe
+// EventUpdateRecipe contains a record of the recipe pre-update.  The updated
+// fields can be found by the message emitted by MsgUpdateRecipe
 type EventUpdateRecipe struct {
 	OriginalRecipe Recipe `protobuf:"bytes,1,opt,name=originalRecipe,proto3" json:"originalRecipe"`
 }
@@ -435,7 +437,8 @@ func (m *EventUpdateRecipe) GetOriginalRecipe() Recipe {
 	return Recipe{}
 }
 
-// EventCreateExecution contains the creator and ID of a created execution. Execution IDs are of the form {count-targetBlockHeight}
+// EventCreateExecution contains the creator and ID of a created execution.
+// Execution IDs are of the form {count-targetBlockHeight}
 type EventCreateExecution struct {
 	Creator      string        `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
 	ID           string        `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`

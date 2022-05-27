@@ -33,7 +33,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	basicTradePercentage, err := sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 
-	common := CommonArgs(address, net)
+	common := CommonArgs(val.Address.String(), net)
 
 	cookbookID := "COOKBOOK_ID"
 	cbFields := []string{
@@ -159,7 +159,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 
 	// Execute recipe and check item
 	// execute recipe to mint
-	commonExec := CommonArgs(val.Address.String(), net)
+	commonExec := CommonArgs(address, net)
 	args = []string{cookbookID, mintItemRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, commonExec...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)

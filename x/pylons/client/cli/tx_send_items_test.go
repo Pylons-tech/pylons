@@ -118,7 +118,7 @@ func TestSendItems(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(address, net)
+	common := CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -137,7 +137,7 @@ func TestSendItems(t *testing.T) {
 	numTests := 1
 	executedItemRefs := make([]string, numTests)
 
-	commonExe := CommonArgs(val.Address.String(), net)
+	commonExe := CommonArgs(address, net)
 	for i := 0; i < numTests; i++ {
 		// create execution
 		args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input

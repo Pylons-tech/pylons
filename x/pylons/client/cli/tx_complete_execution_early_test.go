@@ -43,7 +43,7 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	}
 
 	//Common arguments
-	common := CommonArgs(address, net)
+	common := CommonArgs(val.Address.String(), net)
 	args := []string{cookbookID}
 	args = append(args, cbFields...)
 	args = append(args, common...)
@@ -82,7 +82,7 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = CommonArgs(val.Address.String(), net)
+	common = CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "1", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err2 := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)

@@ -54,9 +54,9 @@ func TestEaselBasic(t *testing.T) {
 	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 
-	simInfo.common = CommonArgs(address, net)
+	simInfo.executorCommon = CommonArgs(address, net)
 
-	simInfo.executorCommon = CommonArgs(val.Address.String(), net)
+	simInfo.common = CommonArgs(val.Address.String(), net)
 	createEaselCookbook(t, simInfo)
 	createMintRecipe1(t, simInfo)
 	mintNFT1(t, simInfo)

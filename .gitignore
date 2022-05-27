@@ -20,3 +20,4 @@ genesis/pylonsd
 
 artifacts
 
+cmd/pylonsd/__debug_bin

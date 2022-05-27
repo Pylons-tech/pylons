@@ -15,8 +15,9 @@ import "pylons/payment_info.proto";
 import "pylons/redeem_info.proto";
 
 message EventBurnDebtToken {
-  RedeemInfo redeemInfo = 1 [(gogoproto.nullable) = false];
+  RedeemInfo redeemInfo = 1 [ (gogoproto.nullable) = false ];
 }
+
 
 message EventCreateAccount {
   string address = 1;
@@ -33,9 +34,10 @@ message EventCreateCookbook {
   string ID = 2;
 }
 
-// EventUpdateCookbook contains a record of the cookbook pre-update.  The updated fields can be found by the message emitted by MsgUpdateCookbook
+// EventUpdateCookbook contains a record of the cookbook pre-update.  The
+// updated fields can be found by the message emitted by MsgUpdateCookbook
 message EventUpdateCookbook {
-  Cookbook originalCookbook = 1 [(gogoproto.nullable) = false];
+  Cookbook originalCookbook = 1 [ (gogoproto.nullable) = false ];
 }
 
 message EventTransferCookbook {
@@ -50,28 +52,45 @@ message EventCreateRecipe {
   string ID = 3;
 }
 
-// EventUpdateRecipe contains a record of the recipe pre-update.  The updated fields can be found by the message emitted by MsgUpdateRecipe
+// EventUpdateRecipe contains a record of the recipe pre-update.  The updated
+// fields can be found by the message emitted by MsgUpdateRecipe
 message EventUpdateRecipe {
-  Recipe originalRecipe = 1 [(gogoproto.nullable) = false];
+  Recipe originalRecipe = 1 [ (gogoproto.nullable) = false ];
 }
 
-// EventCreateExecution contains the creator and ID of a created execution. Execution IDs are of the form {count-targetBlockHeight}
+// EventCreateExecution contains the creator and ID of a created execution.
+// Execution IDs are of the form {count-targetBlockHeight}
 message EventCreateExecution {
   string creator = 1;
   string ID = 2;
-  repeated PaymentInfo paymentInfos = 3 [(gogoproto.nullable) = false];
+  repeated PaymentInfo paymentInfos = 3 [ (gogoproto.nullable) = false ];
 }
 
 message EventCompleteExecution {
   string creator = 1;
   string ID = 2;
-  repeated cosmos.base.v1beta1.Coin burnCoins = 3 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated cosmos.base.v1beta1.Coin payCoins = 4 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated cosmos.base.v1beta1.Coin transferCoins = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated cosmos.base.v1beta1.Coin feeCoins = 6 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated cosmos.base.v1beta1.Coin coinOutputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated Item mintItems = 8 [(gogoproto.nullable) = false];
-  repeated Item modifyItems = 9 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin burnCoins = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin payCoins = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin transferCoins = 5 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin feeCoins = 6 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin coinOutputs = 7 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated Item mintItems = 8 [ (gogoproto.nullable) = false ];
+  repeated Item modifyItems = 9 [ (gogoproto.nullable) = false ];
 }
 
 message EventDropExecution {
@@ -87,14 +106,15 @@ message EventCompleteExecutionEarly {
 message EventSendItems {
   string sender = 1;
   string receiver = 2;
-  repeated ItemRef items = 3 [(gogoproto.nullable) = false];
+  repeated ItemRef items = 3 [ (gogoproto.nullable) = false ];
 }
 
 message EventSetItemString {
   string creator = 1;
   string CookbookID = 2;
   string ID = 3;
-  repeated StringKeyValue originalMutableStrings = 4 [(gogoproto.nullable) = false];
+  repeated StringKeyValue originalMutableStrings = 4
+      [ (gogoproto.nullable) = false ];
 }
 
 message EventCreateTrade {
@@ -111,11 +131,17 @@ message EventFulfillTrade {
   uint64 ID = 1;
   string creator = 2;
   string fulfiller = 3;
-  repeated ItemRef itemInputs = 4 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin coinInputs = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated ItemRef itemOutputs = 6 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin coinOutputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated PaymentInfo paymentInfos = 8 [(gogoproto.nullable) = false];
+  repeated ItemRef itemInputs = 4 [ (gogoproto.nullable) = false ];
+  repeated cosmos.base.v1beta1.Coin coinInputs = 5 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated ItemRef itemOutputs = 6 [ (gogoproto.nullable) = false ];
+  repeated cosmos.base.v1beta1.Coin coinOutputs = 7 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated PaymentInfo paymentInfos = 8 [ (gogoproto.nullable) = false ];
 }
 
 message EventGooglePurchase {
@@ -130,4 +156,3 @@ message EventStripePurchase {
   string creator = 1;
   string ID = 2;
 }
-
