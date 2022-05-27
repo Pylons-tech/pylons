@@ -158,29 +158,41 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 
 	id := k.AppendPendingExecution(ctx, execution, recipe.BlockInterval)
 
-	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateExecution{
-		Creator:      execution.Creator,
-		ID:           id,
-		PaymentInfos: msg.PaymentInfos,
-	})
-
-	//query sender name by address
-	//found is true if found
+	// converted typed event to regular event for event management purpose
+	paymentInfo := ""
+	for _, i := range msg.PaymentInfos {
+		paymentInfo += i.String() + " "
+	}
+	// emit to register an execution event
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.CreateExecutionKey,
+			sdk.NewAttribute("creator", execution.Creator),
+			sdk.NewAttribute("ID", id),
+			sdk.NewAttribute("paymentInfos", paymentInfo),
+		),
+	)
+	// query sender name by address
+	// found is true if found
 	senderName, found := k.GetUsernameByAddress(ctx, msg.Creator)
-	if found != true {
+	if !found {
 		return nil, err
 	}
 
-	err = ctx.EventManager().EmitTypedEvent(&types.EventItemCreation{
-		ItemID:     id,
-		CookbookID: recipe.CookbookID,
-		RecipeID:   recipe.ID,
-		Sender:     msg.Creator,
-		Reciever:   cookbook.Creator,
-		SenderName: senderName.GetValue(),
-		Amount:     coinInputs.String(),
-		Time:       ctx.BlockTime().String(),
-	})
+	// event to register execution history details history of a recipe
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.CreateItemKey,
+			sdk.NewAttribute("itemID", id),
+			sdk.NewAttribute("cookbookID", recipe.CookbookID),
+			sdk.NewAttribute("recipeID", recipe.ID),
+			sdk.NewAttribute("sender", msg.Creator),
+			sdk.NewAttribute("receiver", cookbook.Creator),
+			sdk.NewAttribute("senderName", senderName.GetValue()),
+			sdk.NewAttribute("amount", coinInputs.String()),
+			sdk.NewAttribute("time", ctx.BlockTime().String()),
+		),
+	)
 
 	return &types.MsgExecuteRecipeResponse{ID: id}, err
 }
