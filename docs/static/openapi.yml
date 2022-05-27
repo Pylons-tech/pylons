@@ -12599,7 +12599,7 @@ paths:
                       type: string
                     SenderName:
                       type: string
-                    Reciever:
+                    Receiver:
                       type: string
                     Amount:
                       type: string
@@ -24606,7 +24606,7 @@ definitions:
               type: string
             SenderName:
               type: string
-            Reciever:
+            Receiver:
               type: string
             Amount:
               type: string
@@ -26829,7 +26829,7 @@ definitions:
         type: string
       SenderName:
         type: string
-      Reciever:
+      Receiver:
         type: string
       Amount:
         type: string
