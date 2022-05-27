@@ -79,3 +79,7 @@ const (
 const (
 	RedeemInfoKey = "RedeemInfo-value-"
 )
+
+const (
+	TestCreator = "pylo13qsmvq0eg7nu7dlt9mxqxn7ufjsqy8433akvy3"
+)

@@ -244,7 +244,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(string(address), net)
+	common := CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -261,7 +261,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = CommonArgs(val.Address.String(), net)
+	common = CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -347,7 +347,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: CommonArgs(val.Address.String(), net),
+			args: CommonArgs(address, net),
 			err:  nil,
 			code: uint32(0),
 		},
@@ -466,7 +466,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(address, net)
+	common := CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -483,7 +483,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = CommonArgs(val.Address.String(), net)
+	common = CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -569,7 +569,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: CommonArgs(val.Address.String(), net),
+			args: CommonArgs(address, net),
 			err:  sdkerrors.ErrInvalidRequest,
 		},
 	} {
@@ -687,7 +687,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(address, net)
+	common := CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -704,7 +704,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = CommonArgs(val.Address.String(), net)
+	common = CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -790,7 +790,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: CommonArgs(val.Address.String(), net),
+			args: CommonArgs(address, net),
 			err:  sdkerrors.ErrInvalidRequest,
 		},
 	} {
@@ -908,7 +908,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(address, net)
+	common := CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -925,7 +925,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = CommonArgs(val.Address.String(), net)
+	common = CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -1011,7 +1011,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: CommonArgs(val.Address.String(), net),
+			args: CommonArgs(address, net),
 			err:  sdkerrors.ErrInvalidRequest,
 		},
 	} {
@@ -1128,7 +1128,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(address, net)
+	common := CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -1145,7 +1145,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = CommonArgs(val.Address.String(), net)
+	common = CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -1231,7 +1231,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: CommonArgs(val.Address.String(), net),
+			args: CommonArgs(address, net),
 			err:  nil,
 			code: sdkerrors.ErrInvalidRequest.ABCICode(),
 		},

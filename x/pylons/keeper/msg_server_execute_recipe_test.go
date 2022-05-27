@@ -18,7 +18,11 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe() {
 	wctx := sdk.WrapSDKContext(ctx)
 
 	creator := "A"
-	executor := "B"
+	_, err := srv.CreateAccount(wctx, &types.MsgCreateAccount{
+		Creator:  types.TestCreator,
+		Username: "test",
+	})
+	require.NoError(err)
 	for i := 0; i < 5; i++ {
 		idx := fmt.Sprintf("%d", i)
 		cookbook := &types.MsgCreateCookbook{
@@ -56,7 +60,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe() {
 		require.Equal(recipe.ID, rst.ID)
 
 		execution := &types.MsgExecuteRecipe{
-			Creator:         executor,
+			Creator:         types.TestCreator,
 			CookbookID:      idx,
 			RecipeID:        idx,
 			CoinInputsIndex: 0,

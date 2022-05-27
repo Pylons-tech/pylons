@@ -9,7 +9,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 
-	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
@@ -111,23 +110,13 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	ctx := val.ClientCtx
 	var err error
 
-	accs := GenerateAddressesInKeyring(val.ClientCtx.Keyring, 1)
-	trader := accs[0]
-	traderUsername := "trader"
+	// getting address and creating account from the created helper function
+	address, err := GenerateAddressWithAccount(ctx, t, net)
+	require.NoError(t, err)
 
-	fulFillercommon := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	traderCommon := CommonArgs(val.Address.String(), net)
 
-	traderCommon := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, trader.String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	fulFillercommon := CommonArgs(address, net)
 
 	cookbookID := "testCookbookID"
 	itemRecipeID := "itemRecipeID"
@@ -146,15 +135,6 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 
 	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
-
-	// create account for trader
-	args := []string{traderUsername}
-	args = append(args, simInfo.traderCommon...)
-	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
-	require.NoError(t, err)
-	var resp sdk.TxResponse
-	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
-	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate full execution of recipe to generate an item
 
@@ -234,7 +214,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	}
 
 	// create cookbook
-	args = []string{cookbookID}
+	args := []string{cookbookID}
 	args = append(args, cbFields...)
 	args = append(args, simInfo.traderCommon...)
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
@@ -252,8 +232,9 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	// create execution
 	args = []string{cookbookID, itemRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, simInfo.fulfillerCommon...)
-	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
+	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
+	var resp sdk.TxResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
@@ -366,13 +347,13 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	var listItemResp types.QueryListItemByOwnerResponse
 	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &listItemResp))
-	require.Equal(t, 1, len(listItemResp.Items))
+	require.Equal(t, 0, len(listItemResp.Items))
 
 	args = make([]string, 0)
-	args = append(args, trader.String())
+	args = append(args, address)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdListItemByOwner(), args)
 	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &listItemResp))
-	require.Equal(t, 0, len(listItemResp.Items))
+	require.Equal(t, 1, len(listItemResp.Items))
 
 }

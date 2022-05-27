@@ -176,7 +176,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	// found is true if found
 	senderName, found := k.GetUsernameByAddress(ctx, msg.Creator)
 	if !found {
-		return nil, err
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "user account username not found")
 	}
 
 	// event to register execution history details history of a recipe

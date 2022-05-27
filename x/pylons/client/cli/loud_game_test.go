@@ -64,8 +64,8 @@ func TestLOUDBasic(t *testing.T) {
 	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 
-	simInfo.common = CommonArgs(address, net)
-	simInfo.executorCommon = CommonArgs(val.Address.String(), net)
+	simInfo.executorCommon = CommonArgs(address, net)
+	simInfo.common = CommonArgs(val.Address.String(), net)
 
 	createLOUDCookbook(t, simInfo)
 	createCharacterRecipe(t, simInfo)

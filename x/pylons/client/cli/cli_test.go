@@ -12,6 +12,7 @@ import (
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	bank "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	"github.com/stretchr/testify/require"
 
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
@@ -48,12 +49,7 @@ func GenerateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 
 func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.Network) (string, error) {
 	accs := GenerateAddressesInKeyring(ctx.Keyring, 1)
-	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-	}
+	common := CommonArgs(accs[0].String(), net)
 
 	username := "user"
 
@@ -65,6 +61,19 @@ func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.N
 		return "", err
 	}
 	var resp sdk.TxResponse
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
+	if uint32(0) != resp.Code {
+		return "", fmt.Errorf("Error Code Not Success")
+	}
+
+	common = CommonArgs(net.Validators[0].Address.String(), net)
+
+	args = []string{net.Validators[0].Address.String(), accs[0].String(), "1000node0token"}
+	args = append(args, common...)
+	out, err = clitestutil.ExecTestCLICmd(ctx, bank.NewSendTxCmd(), args)
+	if err != nil {
+		return "", err
+	}
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	if uint32(0) != resp.Code {
 		return "", fmt.Errorf("Error Code Not Success")
