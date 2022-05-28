@@ -366,3 +366,35 @@ func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Re
 	cfg.GenesisState[types.ModuleName] = buf
 	return network.New(t, cfg), state.RecipeList, nil
 }
+
+func networkWithRecipeObjectsHistory(t *testing.T, n int) (*network.Network, []types.Recipe, []types.Cookbook) {
+	t.Helper()
+	cfg := network.DefaultConfig()
+	state := types.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+
+	for i := 0; i < n; i++ {
+		state.RecipeList = append(
+			state.RecipeList,
+			types.Recipe{
+				CookbookID:    "testCookbook",
+				ID:            "testRecipe",
+				NodeVersion:   0,
+				Name:          "",
+				Description:   "",
+				Version:       "",
+				CoinInputs:    []types.CoinInput{{Coins: sdk.NewCoins()}},
+				ItemInputs:    make([]types.ItemInput, 0),
+				Entries:       types.EntriesList{CoinOutputs: []types.CoinOutput{}, ItemOutputs: []types.ItemOutput{}, ItemModifyOutputs: []types.ItemModifyOutput{}},
+				Outputs:       make([]types.WeightedOutputs, 0),
+				BlockInterval: 0x0,
+				CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.OneInt()},
+				Enabled:       true,
+				ExtraInfo:     "",
+			})
+	}
+	buf, err := cfg.Codec.MarshalJSON(&state)
+	require.NoError(t, err)
+	cfg.GenesisState[types.ModuleName] = buf
+	return network.New(t, cfg), state.RecipeList, nil
+}

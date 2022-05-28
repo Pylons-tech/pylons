@@ -32,8 +32,6 @@ func (suite *IntegrationTestSuite) TestListTradesByCreator() {
 		}
 	}
 
-
-	
 	for _, tc := range []struct {
 		desc     string
 		request  *types.QueryListTradesByCreatorRequest
@@ -41,8 +39,8 @@ func (suite *IntegrationTestSuite) TestListTradesByCreator() {
 		err      error
 	}{
 		{
-			desc:     "Account with trades",
-			request:  &types.QueryListTradesByCreatorRequest{
+			desc: "Account with trades",
+			request: &types.QueryListTradesByCreatorRequest{
 				Creator:    addr1.String(),
 				Pagination: nil,
 			},
@@ -52,8 +50,8 @@ func (suite *IntegrationTestSuite) TestListTradesByCreator() {
 			},
 		},
 		{
-			desc:     "Account without trades",
-			request:  &types.QueryListTradesByCreatorRequest{
+			desc: "Account without trades",
+			request: &types.QueryListTradesByCreatorRequest{
 				Creator:    addr2,
 				Pagination: nil,
 			},
@@ -61,40 +59,40 @@ func (suite *IntegrationTestSuite) TestListTradesByCreator() {
 				Trades:     []types.Trade{},
 				Pagination: nil,
 			},
-		},{
-			desc:     "By Offset",
-			request:  requestFunc(nil, 0, 5, false, addr1.String()),
+		}, {
+			desc:    "By Offset",
+			request: requestFunc(nil, 0, 5, false, addr1.String()),
 			response: &types.QueryListTradesByCreatorResponse{
 				Trades:     items[:5],
 				Pagination: nil,
 			},
-		},{
-			desc:     "All",
-			request:  requestFunc(nil, 0, 0, true, addr1.String()),
+		}, {
+			desc:    "All",
+			request: requestFunc(nil, 0, 0, true, addr1.String()),
 			response: &types.QueryListTradesByCreatorResponse{
 				Trades:     items,
 				Pagination: nil,
 			},
 		},
 		{
-			desc:    "InvalidAddress",
-			request:  &types.QueryListTradesByCreatorRequest{
+			desc: "InvalidAddress",
+			request: &types.QueryListTradesByCreatorRequest{
 				Creator:    "dummyaddress",
 				Pagination: nil,
 			},
-			err:     status.Error(codes.InvalidArgument, "invalid address"),
+			err: status.Error(codes.InvalidArgument, "invalid address"),
 		},
 	} {
 		tc := tc
 		suite.Run(tc.desc, func() {
-			response, err := k.ListTradesByCreator(wctx,tc.request)
+			response, err := k.ListTradesByCreator(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(err, tc.err)
 			} else {
 				nItems := len(response.Trades)
 				nItemsResponse := len(tc.response.Trades)
 				require.Equal(nItems, nItemsResponse)
-				require.ElementsMatch(tc.response.Trades,response.Trades)
+				require.ElementsMatch(tc.response.Trades, response.Trades)
 			}
 		})
 	}
