@@ -190,7 +190,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 			sdk.NewAttribute("receiver", cookbook.Creator),
 			sdk.NewAttribute("senderName", senderName.GetValue()),
 			sdk.NewAttribute("amount", coinInputs.String()),
-			sdk.NewAttribute("time", ctx.BlockTime().String()),
+			sdk.NewAttribute("createdAt", ctx.BlockTime().String()),
 		),
 	)
 
@@ -202,7 +202,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		Receiver:   cookbook.Creator,
 		SenderName: senderName.GetValue(),
 		Amount:     coinInputs.String(),
-		Time:       ctx.BlockTime().Unix(),
+		CreatedAt:  ctx.BlockTime().String(),
 	}
 
 	k.SetExecuteRecipeHis(ctx, executionTrack)

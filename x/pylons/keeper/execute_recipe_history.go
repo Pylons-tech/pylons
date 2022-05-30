@@ -28,7 +28,10 @@ func (k Keeper) GetAllExecuteRecipeHis(ctx sdk.Context, cookbookID string, id st
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.RecipeHistory
-		k.cdc.MustUnmarshal(iterator.Value(), &val)
+		err := k.cdc.Unmarshal(iterator.Value(), &val)
+		if err != nil {
+			continue
+		}
 		list = append(list, &val)
 	}
 

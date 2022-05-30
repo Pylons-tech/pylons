@@ -18,7 +18,7 @@ func (k Keeper) GetRecipeHistory(goCtx context.Context, req *types.QueryGetRecip
 
 	val := k.GetAllExecuteRecipeHis(ctx, req.GetCookbookID(), req.GetRecipeID())
 	if len(val) == 0 {
-		return nil, status.Error(codes.NotFound, "not found")
+		return &types.QueryGetRecipeHistoryResponse{History: []*types.RecipeHistory{}}, nil
 	}
 
 	return &types.QueryGetRecipeHistoryResponse{History: val}, nil
