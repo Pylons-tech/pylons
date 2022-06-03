@@ -13,6 +13,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/spf13/cast"
+	"github.com/tendermint/spm/cosmoscmd"
 	"github.com/tendermint/spm/openapiconsole"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
@@ -95,8 +96,6 @@ import (
 	pylonsmodule "github.com/Pylons-tech/pylons/x/pylons"
 	pylonsmodulekeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
 	pylonsmoduletypes "github.com/Pylons-tech/pylons/x/pylons/types"
-
-	"github.com/tendermint/spm/cosmoscmd"
 )
 
 const (
@@ -109,8 +108,6 @@ const (
 func init() {
 	appparams.SetupDenomsAndPrefixes()
 }
-
-// this line is used by starport scaffolding # stargate/wasm/app/enabledProposals
 
 func getGovProposalHandlers() []govclient.ProposalHandler {
 	var govProposalHandlers []govclient.ProposalHandler
