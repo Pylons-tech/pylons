@@ -11,7 +11,7 @@ replace (
 require (
 	github.com/btcsuite/btcutil v1.0.3-0.20201208143702-a53e38424cce
 	github.com/cosmos/cosmos-sdk v0.45.4
-	github.com/cosmos/ibc-go/v2 v2.0.3
+	github.com/cosmos/ibc-go/v3 v3.0.0
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.5.2
 	github.com/google/cel-go v0.9.0
@@ -23,10 +23,10 @@ require (
 	github.com/spf13/cobra v1.4.0
 	github.com/stretchr/testify v1.7.1
 	github.com/tendermint/tendermint v0.34.19
-	github.com/tendermint/tm-db v0.6.7
+	github.com/tendermint/tm-db v0.6.8-0.20220506192307-f628bb5dc95b
 	github.com/zach-klippenstein/goregen v0.0.0-20160303162051-795b5e3961ea
 	google.golang.org/genproto v0.0.0-20220317150908-0efb43f6373e
-	google.golang.org/grpc v1.45.0
+	google.golang.org/grpc v1.46.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/yaml.v2 v2.4.0
 )
@@ -35,7 +35,6 @@ require (
 	filippo.io/edwards25519 v1.0.0-beta.2 // indirect
 	github.com/99designs/keyring v1.1.6 // indirect
 	github.com/ChainSafe/go-schnorrkel v0.0.0-20200405005733-88cbf1b4c40d // indirect
-	github.com/DataDog/zstd v1.4.5 // indirect
 	github.com/Microsoft/go-winio v0.5.1 // indirect
 	github.com/Microsoft/hcsshim v0.9.2 // indirect
 	github.com/Workiva/go-datastructures v1.0.53 // indirect
@@ -58,14 +57,14 @@ require (
 	github.com/cosmos/go-bip39 v1.0.0 // indirect
 	github.com/cosmos/gorocksdb v1.2.0 // indirect
 	github.com/cosmos/iavl v0.17.3 // indirect
+	github.com/cosmos/ibc-go/v2 v2.0.3 // indirect
 	github.com/cosmos/ledger-cosmos-go v0.11.1 // indirect
 	github.com/cosmos/ledger-go v0.9.2 // indirect
 	github.com/danieljoos/wincred v1.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/desertbit/timer v0.0.0-20180107155436-c41aec40b27f // indirect
-	github.com/dgraph-io/badger/v2 v2.2007.2 // indirect
-	github.com/dgraph-io/ristretto v0.0.3 // indirect
-	github.com/dgryski/go-farm v0.0.0-20200201041132-a6ae2369ad13 // indirect
+	github.com/dgraph-io/badger/v3 v3.2103.2 // indirect
+	github.com/dgraph-io/ristretto v0.1.0 // indirect
 	github.com/docker/docker v20.10.7+incompatible // indirect
 	github.com/docker/go-units v0.4.0 // indirect
 	github.com/dustin/go-humanize v1.0.1-0.20200219035652-afde56e7acac // indirect
@@ -85,9 +84,11 @@ require (
 	github.com/goccy/go-yaml v1.9.4 // indirect
 	github.com/godbus/dbus v0.0.0-20190726142602-4481cbc300e2 // indirect
 	github.com/gogo/gateway v1.1.0 // indirect
+	github.com/golang/glog v1.0.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/snappy v0.0.3 // indirect
 	github.com/google/btree v1.0.0 // indirect
+	github.com/google/flatbuffers v1.12.1 // indirect
 	github.com/google/gxui v0.0.0-20151028112939-f85e0a97b3a4 // indirect
 	github.com/google/orderedcode v0.0.1 // indirect
 	github.com/gookit/color v1.5.0 // indirect
