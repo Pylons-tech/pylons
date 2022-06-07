@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
-	"github.com/tendermint/starport/starport/pkg/cosmoscmd"
+	"github.com/ignite-hq/cli/ignite/pkg/cosmoscmd"
 
 	"github.com/Pylons-tech/pylons/app"
 )
