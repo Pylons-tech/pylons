@@ -10,7 +10,6 @@ import (
 )
 
 func (suite *IntegrationTestSuite) TestListTradesByCreator() {
-
 	k := suite.k
 	ctx := suite.ctx
 	wctx := sdk.WrapSDKContext(ctx)
@@ -59,14 +58,16 @@ func (suite *IntegrationTestSuite) TestListTradesByCreator() {
 				Trades:     []types.Trade{},
 				Pagination: nil,
 			},
-		}, {
+		},
+		{
 			desc:    "By Offset",
 			request: requestFunc(nil, 0, 5, false, addr1.String()),
 			response: &types.QueryListTradesByCreatorResponse{
 				Trades:     items[:5],
 				Pagination: nil,
 			},
-		}, {
+		},
+		{
 			desc:    "All",
 			request: requestFunc(nil, 0, 0, true, addr1.String()),
 			response: &types.QueryListTradesByCreatorResponse{

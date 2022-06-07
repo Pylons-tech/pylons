@@ -2,7 +2,6 @@ package simapp
 
 import (
 	"encoding/json"
-
 	"time"
 
 	"github.com/cosmos/cosmos-sdk/simapp"

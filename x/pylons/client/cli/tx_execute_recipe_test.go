@@ -23,10 +23,9 @@ import (
 )
 
 func GenerateAddress() {
-
 }
-func TestExecuteRecipeNoInputOutput(t *testing.T) {
 
+func TestExecuteRecipeNoInputOutput(t *testing.T) {
 	net := network.New(t)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -831,7 +830,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	//itemInputIDs, err := json.Marshal([]string{types.EncodeItemID(0)})
+	// itemInputIDs, err := json.Marshal([]string{types.EncodeItemID(0)})
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -977,7 +976,6 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
-
 }
 
 func TestExecuteRecipeMutableStringField(t *testing.T) {
@@ -1133,7 +1131,6 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 	var recipeResp types.QueryGetRecipeResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &recipeResp))
 	require.Equal(t, expectedMutableString, recipeResp.Recipe.Entries.ItemOutputs[0].MutableStrings)
-
 }
 
 func TestExecuteRecipeNoInputOutputInvalidArgs(t *testing.T) {

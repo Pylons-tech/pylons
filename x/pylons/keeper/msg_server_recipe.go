@@ -30,7 +30,7 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
-	var recipe = types.Recipe{
+	recipe := types.Recipe{
 		ID:            msg.ID,
 		NodeVersion:   k.EngineVersion(ctx),
 		CookbookID:    msg.CookbookID,
@@ -87,7 +87,7 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "user does not own the cookbook")
 	}
 
-	var updatedRecipe = types.Recipe{
+	updatedRecipe := types.Recipe{
 		ID:            msg.ID,
 		NodeVersion:   k.EngineVersion(ctx),
 		CookbookID:    msg.CookbookID,

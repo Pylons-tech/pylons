@@ -9,27 +9,39 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-type StringKeyValueList []StringKeyValue
-type DoubleKeyValueList []DoubleKeyValue
-type LongKeyValueList []LongKeyValue
+type (
+	StringKeyValueList []StringKeyValue
+	DoubleKeyValueList []DoubleKeyValue
+	LongKeyValueList   []LongKeyValue
+)
 
-type LongParamList []LongParam
-type DoubleParamList []DoubleParam
-type StringParamList []StringParam
+type (
+	LongParamList   []LongParam
+	DoubleParamList []DoubleParam
+	StringParamList []StringParam
+)
 
-type DoubleInputParamList []DoubleInputParam
-type LongInputParamList []LongInputParam
-type StringInputParamList []StringInputParam
-type WeightedOutputsList []WeightedOutputs
+type (
+	DoubleInputParamList []DoubleInputParam
+	LongInputParamList   []LongInputParam
+	StringInputParamList []StringInputParam
+	WeightedOutputsList  []WeightedOutputs
+)
 
-type ItemList []Item
-type ItemInputList []ItemInput
+type (
+	ItemList      []Item
+	ItemInputList []ItemInput
+)
 
-type DoubleWeightTable []DoubleWeightRange
-type IntWeightTable []IntWeightRange
+type (
+	DoubleWeightTable []DoubleWeightRange
+	IntWeightTable    []IntWeightRange
+)
 
-var floatType = reflect.TypeOf(float64(0))
-var stringType = reflect.TypeOf("")
+var (
+	floatType  = reflect.TypeOf(float64(0))
+	stringType = reflect.TypeOf("")
+)
 
 func getFloat(unk interface{}) (float64, error) {
 	switch i := unk.(type) {

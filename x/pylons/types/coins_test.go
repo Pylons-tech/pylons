@@ -138,18 +138,20 @@ func TestParseCoinInputStringArray(t *testing.T) {
 		{
 			desc:     "valid2",
 			coinsStr: []string{"10uatom,10upylon", "1000upylon,10000000uatom"},
-			coinInputs: []CoinInput{{
-				Coins: sdk.NewCoins(
-					sdk.NewCoin("uatom", sdk.NewInt(10)),
-					sdk.NewCoin("upylon", sdk.NewInt(10)),
-				),
-			},
+			coinInputs: []CoinInput{
+				{
+					Coins: sdk.NewCoins(
+						sdk.NewCoin("uatom", sdk.NewInt(10)),
+						sdk.NewCoin("upylon", sdk.NewInt(10)),
+					),
+				},
 				{
 					Coins: sdk.NewCoins(
 						sdk.NewCoin("upylon", sdk.NewInt(1000)),
 						sdk.NewCoin("uatom", sdk.NewInt(10000000)),
 					),
-				}},
+				},
+			},
 			err: nil,
 		},
 		{
@@ -196,12 +198,13 @@ func TestParseCoinInputsCLI(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	coinInputs2, err := json.Marshal([]CoinInput{{
-		Coins: sdk.NewCoins(
-			sdk.NewCoin("uatom", sdk.NewInt(10)),
-			sdk.NewCoin("upylon", sdk.NewInt(10)),
-		),
-	},
+	coinInputs2, err := json.Marshal([]CoinInput{
+		{
+			Coins: sdk.NewCoins(
+				sdk.NewCoin("uatom", sdk.NewInt(10)),
+				sdk.NewCoin("upylon", sdk.NewInt(10)),
+			),
+		},
 		{
 			Coins: sdk.NewCoins(
 				sdk.NewCoin("uatom", sdk.NewInt(1000)),
@@ -230,12 +233,13 @@ func TestParseCoinInputsCLI(t *testing.T) {
 		{
 			desc: "validString2",
 			arg:  "[\"10uatom,10upylon\",\"1000uatom\"]",
-			coinInputs: []CoinInput{{
-				Coins: sdk.NewCoins(
-					sdk.NewCoin("uatom", sdk.NewInt(10)),
-					sdk.NewCoin("upylon", sdk.NewInt(10)),
-				),
-			},
+			coinInputs: []CoinInput{
+				{
+					Coins: sdk.NewCoins(
+						sdk.NewCoin("uatom", sdk.NewInt(10)),
+						sdk.NewCoin("upylon", sdk.NewInt(10)),
+					),
+				},
 				{
 					Coins: sdk.NewCoins(
 						sdk.NewCoin("uatom", sdk.NewInt(1000)),
@@ -258,12 +262,13 @@ func TestParseCoinInputsCLI(t *testing.T) {
 		{
 			desc: "validJSON2",
 			arg:  string(coinInputs2),
-			coinInputs: []CoinInput{{
-				Coins: sdk.NewCoins(
-					sdk.NewCoin("uatom", sdk.NewInt(10)),
-					sdk.NewCoin("upylon", sdk.NewInt(10)),
-				),
-			},
+			coinInputs: []CoinInput{
+				{
+					Coins: sdk.NewCoins(
+						sdk.NewCoin("uatom", sdk.NewInt(10)),
+						sdk.NewCoin("upylon", sdk.NewInt(10)),
+					),
+				},
 				{
 					Coins: sdk.NewCoins(
 						sdk.NewCoin("uatom", sdk.NewInt(1000)),
