@@ -10,7 +10,6 @@ import (
 )
 
 func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromItem() {
-
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -240,7 +239,6 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 					require.Equal(variables[fieldName], tc.expected[fieldName], "values of fields %s are not equal", fieldName)
 				}
 			}
-
 		})
 	}
 }

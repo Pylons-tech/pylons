@@ -7,7 +7,6 @@ import (
 )
 
 func Completion() *cobra.Command {
-
 	// completionCmd outputs the completion script
 	c := &cobra.Command{
 		Use:   "completions",

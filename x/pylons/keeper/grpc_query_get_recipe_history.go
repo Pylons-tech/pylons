@@ -22,5 +22,4 @@ func (k Keeper) GetRecipeHistory(goCtx context.Context, req *types.QueryGetRecip
 	}
 
 	return &types.QueryGetRecipeHistoryResponse{History: val}, nil
-
 }

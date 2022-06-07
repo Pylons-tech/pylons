@@ -12,6 +12,7 @@ linters:
     - dogsled
     # - errcheck
     - goconst
+    - gofumpt
     - gocritic
     - gofmt
     - goimports
@@ -32,7 +33,6 @@ linters:
     - unused
     - unparam
     - misspell
-    # - wsl
     - nolintlint
 
 issues:

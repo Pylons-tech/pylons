@@ -181,5 +181,4 @@ func TestGetRecipeHistory(t *testing.T) {
 		require.Equal(t, len(tc[0].obj), len(resp.History))
 		require.Equal(t, tc[1].obj[0].Sender, resp.History[0].Sender)
 	}
-
 }

@@ -142,7 +142,6 @@ func (k Keeper) GetTradesByCreatorPaginated(ctx sdk.Context, creator sdk.AccAddr
 		trades = append(trades, trade)
 		return nil
 	})
-
 	if err != nil {
 		return nil, nil, err
 	}

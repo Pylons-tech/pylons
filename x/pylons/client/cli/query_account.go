@@ -49,7 +49,6 @@ func CmdGetUsernameByAddress() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			params := &types.QueryGetUsernameByAddressRequest{
-
 				Address: args[0],
 			}
 

@@ -7,8 +7,10 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-var _ sdk.Msg = &MsgCreateRecipe{}
-var _ sdk.Msg = &MsgUpdateRecipe{}
+var (
+	_ sdk.Msg = &MsgCreateRecipe{}
+	_ sdk.Msg = &MsgUpdateRecipe{}
+)
 
 func NewMsgCreateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput []CoinInput, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, costPerBlock sdk.Coin, enabled bool, extraInfo string) *MsgCreateRecipe {
 	return &MsgCreateRecipe{
@@ -138,12 +140,10 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 
 	if msg.Entries.ItemOutputs != nil {
 		entriesLen += len(msg.Entries.ItemOutputs)
-
 	}
 
 	if msg.Entries.ItemModifyOutputs != nil {
 		entriesLen += len(msg.Entries.ItemModifyOutputs)
-
 	}
 
 	if sum <= 0 && entriesLen > 0 {
@@ -291,12 +291,10 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 
 	if msg.Entries.ItemOutputs != nil {
 		entriesLen += len(msg.Entries.ItemOutputs)
-
 	}
 
 	if msg.Entries.ItemModifyOutputs != nil {
 		entriesLen += len(msg.Entries.ItemModifyOutputs)
-
 	}
 
 	if sum <= 0 && entriesLen > 0 {
