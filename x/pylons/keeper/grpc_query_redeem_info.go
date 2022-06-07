@@ -32,7 +32,6 @@ func (k Keeper) RedeemInfoAll(c context.Context, req *types.QueryAllRedeemInfoRe
 		redeemInfos = append(redeemInfos, redeemInfo)
 		return nil
 	})
-
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

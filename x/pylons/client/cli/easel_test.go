@@ -65,7 +65,6 @@ func TestEaselBasic(t *testing.T) {
 }
 
 func createEaselCookbook(t *testing.T, simInfo *easelBasicSim) {
-
 	cbFields := []string{
 		"Easel Test Cookbook",
 		"Cookbook for testing demo easel transactions",
@@ -96,7 +95,8 @@ func createMintRecipe1(t *testing.T, simInfo *easelBasicSim) {
 					Key:     "NFT_URL",
 					Value:   "https://www.imagesource.com/wp-content/uploads/2019/06/Rio.jpg",
 					Program: "",
-				}},
+				},
+			},
 			MutableStrings:  nil,
 			TransferFee:     nil,
 			TradePercentage: simInfo.basicTradePercentage,
@@ -139,7 +139,6 @@ func createMintRecipe1(t *testing.T, simInfo *easelBasicSim) {
 }
 
 func mintNFT1(t *testing.T, simInfo *easelBasicSim) {
-
 	// execute recipe to mint
 	args := []string{cookbookIDEasel, simInfo.mintRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, simInfo.executorCommon...)

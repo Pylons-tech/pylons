@@ -7,7 +7,7 @@ import (
 )
 
 func (suite *IntegrationTestSuite) TestMintCoins() {
-	//k, ctx := setupKeeper(t)
+	// k, ctx := setupKeeper(t)
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
@@ -27,7 +27,7 @@ func (suite *IntegrationTestSuite) TestMintCoins() {
 }
 
 func (suite *IntegrationTestSuite) TestMintCoinsToAddr() {
-	//k, ctx := setupKeeper(t)
+	// k, ctx := setupKeeper(t)
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx

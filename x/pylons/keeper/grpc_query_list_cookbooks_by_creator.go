@@ -24,7 +24,6 @@ func (k Keeper) ListCookbooksByCreator(goCtx context.Context, req *types.QueryLi
 
 	// no errors, default case is an empty list meaning there is no cookbook owned by this address
 	cbs, pageRes, err := k.getCookbooksByCreatorPaginated(ctx, addr, req.Pagination)
-
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
 	}

@@ -3,7 +3,7 @@ package keeper_test
 import sdk "github.com/cosmos/cosmos-sdk/types"
 
 func (suite *IntegrationTestSuite) TestCookbookGet() {
-	//k, ctx := setupKeeper(t)
+	// k, ctx := setupKeeper(t)
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -18,7 +18,7 @@ func (suite *IntegrationTestSuite) TestCookbookGet() {
 }
 
 func (suite *IntegrationTestSuite) TestCookbookGetAll() {
-	//k, ctx := setupKeeper(t)
+	// k, ctx := setupKeeper(t)
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -28,7 +28,7 @@ func (suite *IntegrationTestSuite) TestCookbookGetAll() {
 }
 
 func (suite *IntegrationTestSuite) TestCookbookGetAllByCreator() {
-	//k, ctx := setupKeeper(t)
+	// k, ctx := setupKeeper(t)
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()

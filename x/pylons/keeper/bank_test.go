@@ -6,7 +6,6 @@ import (
 )
 
 func (suite *IntegrationTestSuite) TestHasEnoughBalance() {
-
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
@@ -33,7 +32,6 @@ func (suite *IntegrationTestSuite) TestHasEnoughBalance() {
 }
 
 func (suite *IntegrationTestSuite) TestHasEnoughIBCDenomBalance() {
-
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
