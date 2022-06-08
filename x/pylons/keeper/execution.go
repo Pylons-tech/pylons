@@ -70,7 +70,6 @@ func (k Keeper) getExecutionsByRecipePaginated(ctx sdk.Context, cookbookID, reci
 		}
 		return nil
 	})
-
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -141,7 +140,6 @@ func (k Keeper) getExecutionsByItemPaginated(ctx sdk.Context, cookbookID, itemID
 		}
 		return nil
 	})
-
 	if err != nil {
 		return nil, nil, nil, err
 	}

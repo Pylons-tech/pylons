@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
+	"os"
+	"testing"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -16,9 +18,6 @@ import (
 	dbm "github.com/tendermint/tm-db"
 
 	pylons "github.com/Pylons-tech/pylons/app"
-
-	"os"
-	"testing"
 )
 
 func init() {

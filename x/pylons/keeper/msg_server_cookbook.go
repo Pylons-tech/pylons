@@ -18,7 +18,7 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "ID %v already set", msg.ID)
 	}
 
-	var cookbook = types.Cookbook{
+	cookbook := types.Cookbook{
 		ID:           msg.ID,
 		Creator:      msg.Creator,
 		NodeVersion:  k.EngineVersion(ctx),
@@ -59,7 +59,7 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
-	var updatedCookbook = types.Cookbook{
+	updatedCookbook := types.Cookbook{
 		ID:           msg.ID,
 		Creator:      msg.Creator,
 		NodeVersion:  k.EngineVersion(ctx),

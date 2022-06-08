@@ -17,7 +17,6 @@ import (
 )
 
 func CmdCreateCookbook() *cobra.Command {
-
 	longText := fmt.Sprintf(`
 Create a new cookbook using the following arguments :
 

@@ -26,7 +26,6 @@ func CmdListRecipesByCookbook() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			params := &types.QueryListRecipesByCookbookRequest{
-
 				CookbookID: reqCookbookID,
 			}
 

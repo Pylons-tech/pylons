@@ -18,7 +18,6 @@ func (k Keeper) ListExecutionsByItem(goCtx context.Context, req *types.QueryList
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	completedExecs, pendingExecs, pageRes, err := k.getExecutionsByItemPaginated(ctx, req.CookbookID, req.ItemID, req.Pagination)
-
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
 	}

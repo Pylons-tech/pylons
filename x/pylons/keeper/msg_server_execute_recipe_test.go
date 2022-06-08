@@ -76,7 +76,6 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe() {
 }
 
 func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
-
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()

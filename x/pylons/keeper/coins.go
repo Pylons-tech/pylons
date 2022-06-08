@@ -85,7 +85,6 @@ func (k Keeper) BurnCreditFromAddr(ctx sdk.Context, addr sdk.AccAddress, amt sdk
 }
 
 func (k Keeper) MintCoins(ctx sdk.Context, minterName string, amounts sdk.Coins) error {
-
 	err := k.bankKeeper.MintCoins(ctx, minterName, amounts)
 	if err != nil {
 		return err
@@ -95,7 +94,6 @@ func (k Keeper) MintCoins(ctx sdk.Context, minterName string, amounts sdk.Coins)
 }
 
 func (k Keeper) BurnCoins(ctx sdk.Context, minterName string, amounts sdk.Coins) error {
-
 	err := k.bankKeeper.BurnCoins(ctx, minterName, amounts)
 	if err != nil {
 		return err

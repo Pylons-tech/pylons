@@ -154,7 +154,6 @@ func (k Keeper) GetItemsByOwnerPaginated(ctx sdk.Context, owner sdk.AccAddress, 
 		items = append(items, item)
 		return nil
 	})
-
 	if err != nil {
 		return nil, nil, err
 	}

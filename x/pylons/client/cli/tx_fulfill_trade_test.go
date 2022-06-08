@@ -283,7 +283,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 
 	// no coinOutputs
 	coinOutputs, err := json.Marshal(sdk.Coins{
-		//sdk.NewCoin(testDenom, sdk.NewInt(10)),
+		// sdk.NewCoin(testDenom, sdk.NewInt(10)),
 	})
 	require.NoError(t, err)
 
@@ -355,5 +355,4 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &listItemResp))
 	require.Equal(t, 1, len(listItemResp.Items))
-
 }

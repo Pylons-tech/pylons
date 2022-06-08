@@ -41,7 +41,6 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 	} {
 		tc := tc
 		suite.Run(tc.desc, func() {
-
 			_, err := srv.CreateAccount(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(err, tc.err)
@@ -97,7 +96,6 @@ func (suite *IntegrationTestSuite) TestUpdateAccount() {
 	} {
 		tc := tc
 		suite.Run(tc.desc, func() {
-
 			_, err := srv.UpdateAccount(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(err, tc.err)
