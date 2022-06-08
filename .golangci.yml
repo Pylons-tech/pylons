@@ -10,11 +10,12 @@ linters:
     - deadcode
     - depguard
     - dogsled
-    # - errcheck
+    - errcheck
     - goconst
     - gofumpt
     - gocritic
     - gofmt
+    - gofumpt
     - goimports
     - revive
     - gosec
