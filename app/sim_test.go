@@ -7,6 +7,7 @@ import (
 	"os"
 	"testing"
 
+	appparams "github.com/Pylons-tech/pylons/app/params"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/cosmos/cosmos-sdk/store"
@@ -67,7 +68,7 @@ func fullAppSimulation(tb testing.TB, is_testing bool) {
 		map[int64]bool{},
 		pylons.DefaultNodeHome,
 		simapp.FlagPeriodValue,
-		cosmoscmd.MakeEncodingConfig(pylons.ModuleBasics),
+		appparams.MakeEncodingConfig(pylons.ModuleBasics),
 		simapp.EmptyAppOptions{},
 		interBlockCacheOpt(),
 		fauxMerkleModeOpt)
