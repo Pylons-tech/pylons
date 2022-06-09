@@ -51,7 +51,7 @@ func fullAppSimulation(tb testing.TB, is_testing bool) {
 		}
 	}()
 
-	var pylonsApp *pylons.PylonApp = app.New(
+	var pylonsApp = app.New(
 		logger,
 		db,
 		nil,
