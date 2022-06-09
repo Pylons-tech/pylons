@@ -36,17 +36,6 @@ linters:
     - misspell
     - nolintlint
 
-issues:
-  exclude-rules:
-    - text: "comment on exported var"
-      linters:
-        - revive
-    - text: "don't use an underscore in package name"
-      linters:
-        - revive
-
-  max-issues-per-linter: 10000
-  max-same-issues: 10000
 
 linters-settings:
   dogsled:
