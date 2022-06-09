@@ -17,25 +17,17 @@ import (
 type KeeperTestSuite struct {
 	suite.Suite
 
-	app         *app.App
+	app         *app.PylonApp
 	ctx         sdk.Context
 	queryClient types.QueryClient
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
-	cmdApp := pylonsSimapp.New("./")
+	pylonsApp := pylonsSimapp.New("./")
 
-	var a *app.App
-	switch cmdApp.(type) {
-	case *app.App:
-		a = cmdApp.(*app.App)
-	default:
-		panic("imported simApp incorrectly")
-	}
+	ctx := pylonsApp.BaseApp.NewContext(false, tmproto.Header{})
 
-	ctx := a.BaseApp.NewContext(false, tmproto.Header{})
-
-	suite.app = a
+	suite.app = &pylonsApp
 	suite.ctx = ctx
 	// suite.k = a.PylonsKeeper
 	// suite.bankKeeper = a.BankKeeper

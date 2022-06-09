@@ -316,7 +316,7 @@ func createNTradeSameOwner(k keeper.Keeper, ctx sdk.Context, n int) []types.Trad
 type IntegrationTestSuite struct {
 	suite.Suite
 
-	app           *app.App
+	pylonsApp     *app.PylonApp
 	ctx           sdk.Context
 	k             keeper.Keeper
 	bankKeeper    types.BankKeeper
@@ -325,24 +325,16 @@ type IntegrationTestSuite struct {
 }
 
 func (suite *IntegrationTestSuite) SetupTest() {
-	cmdApp := pylonsSimapp.New("./")
+	pylonsApp := pylonsSimapp.New("./")
 
-	var a *app.App
-	switch cmdApp.(type) {
-	case *app.App:
-		a = cmdApp.(*app.App)
-	default:
-		panic("imported simApp incorrectly")
-	}
+	ctx := pylonsApp.BaseApp.NewContext(false, tmproto.Header{})
 
-	ctx := a.BaseApp.NewContext(false, tmproto.Header{})
-
-	suite.app = a
+	suite.pylonsApp = &pylonsApp
 	suite.ctx = ctx
-	suite.k = a.PylonsKeeper
-	suite.bankKeeper = a.BankKeeper
-	suite.accountKeeper = a.AccountKeeper
-	suite.stakingKeeper = a.StakingKeeper
+	suite.k = pylonsApp.PylonsKeeper
+	suite.bankKeeper = pylonsApp.BankKeeper
+	suite.accountKeeper = pylonsApp.AccountKeeper
+	suite.stakingKeeper = pylonsApp.StakingKeeper
 }
 
 func TestKeeperTestSuite(t *testing.T) {

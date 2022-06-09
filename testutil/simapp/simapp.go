@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/ignite-hq/cli/ignite/pkg/cosmoscmd"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
@@ -16,35 +15,27 @@ import (
 )
 
 // New creates application instance with in-memory database and disabled logging.
-func New(dir string) cosmoscmd.App {
+func New(dir string) app.PylonApp {
 	db := tmdb.NewMemDB()
 	logger := log.NewNopLogger()
 
-	encoding := cosmoscmd.MakeEncodingConfig(app.ModuleBasics)
+	encoding := app.MakeEncodingConfig()
 
-	cmdApp := app.New(logger, db, nil, true, map[int64]bool{}, dir, 0, encoding,
+	pylonsApp := app.New(logger, db, nil, true, map[int64]bool{}, dir, 0, encoding,
 		simapp.EmptyAppOptions{})
 
-	var a *app.App
-	switch cmdApp := cmdApp.(type) {
-	case *app.App:
-		a = cmdApp
-	default:
-		panic("imported simApp incorrectly")
-	}
-
-	genesisState := app.ModuleBasics.DefaultGenesis(encoding.Marshaler)
+	genesisState := app.ModuleBasics.DefaultGenesis(encoding.Codec)
 	stateBytes, err := json.MarshalIndent(genesisState, "", " ")
 	if err != nil {
 		panic(err)
 	}
 
 	// InitChain updates deliverState which is required when app.NewContext is called
-	a.InitChain(abci.RequestInitChain{
+	pylonsApp.InitChain(abci.RequestInitChain{
 		ConsensusParams: defaultConsensusParams,
 		AppStateBytes:   stateBytes,
 	})
-	return a
+	return *pylonsApp
 }
 
 var defaultConsensusParams = &abci.ConsensusParams{
