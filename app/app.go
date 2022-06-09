@@ -193,9 +193,7 @@ var (
 	}
 )
 
-var (
-	_ servertypes.Application = (*PylonApp)(nil)
-)
+var _ servertypes.Application = (*PylonApp)(nil)
 
 func init() {
 	userHomeDir, err := os.UserHomeDir()

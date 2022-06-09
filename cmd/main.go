@@ -28,7 +28,6 @@ func main() {
 			os.Exit(1)
 		}
 	}
-
 }
 
 // removeLineBreaksInCobraArgs recursively removes line breaks from a parent cobra command.
