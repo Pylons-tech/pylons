@@ -80,8 +80,32 @@ func IsIBCDenomRepresentation(denom string) bool {
 		return false
 	}
 
-	err := ibctypes.ValidateIBCDenom(denom)
+	err := ValidateIBCDenom(denom)
 	return err == nil
+}
+
+func ValidateIBCDenom(denom string) error {
+	if err := sdk.ValidateDenom(denom); err != nil {
+		return err
+	}
+
+	denomSplit := strings.SplitN(denom, "/", 2)
+
+	switch {
+	case strings.TrimSpace(denom) == "",
+		len(denomSplit) == 1 && denomSplit[0] == ibctypes.DenomPrefix,
+		len(denomSplit) == 2 && (denomSplit[0] != ibctypes.DenomPrefix || strings.TrimSpace(denomSplit[1]) == ""):
+		return sdkerrors.Wrapf(ibctypes.ErrInvalidDenomForTransfer, "denomination should be prefixed with the format 'ibc/{hash(trace + \"/\" + %s)}'", denom)
+
+	case denomSplit[0] == denom && strings.TrimSpace(denom) != "":
+		return nil
+	}
+
+	if _, err := ibctypes.ParseHexHash(denomSplit[1]); err != nil {
+		return sdkerrors.Wrapf(err, "invalid denom trace hash %s", denomSplit[1])
+	}
+
+	return nil
 }
 
 // CreateValidCoinOutputsList checks a list of coinOutputs to check if they are valid.  Valid coinOuputs
