@@ -97,7 +97,7 @@ func TestCreateTradeNoItemOutput2(t *testing.T) {
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin(testIBCDenom, sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin(testIBCDenom, sdk.NewInt(1))),
 			},
 		},
 	)
@@ -1191,7 +1191,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
 			},
 		},
 	)
@@ -1270,7 +1270,7 @@ func TestCreateTradeInvalidCoinOutput(t *testing.T) {
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
 			},
 		},
 	)
@@ -1345,7 +1345,7 @@ func TestCreateTradeInvalidItemOutput(t *testing.T) {
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
 			},
 		},
 	)

@@ -8,7 +8,6 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/Pylons-tech/pylons/app"
-	pylonsSimapp "github.com/Pylons-tech/pylons/testutil/simapp"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
@@ -324,8 +323,9 @@ type IntegrationTestSuite struct {
 	stakingKeeper types.StakingKeeper
 }
 
+// TODO: Fisal, Khanh, or Vuong, please fix this test.  Needs simapp.
 func (suite *IntegrationTestSuite) SetupTest() {
-	pylonsApp := pylonsSimapp.New("./")
+	pylonsApp := app.NewPylonsApp()
 
 	ctx := pylonsApp.BaseApp.NewContext(false, tmproto.Header{})
 
