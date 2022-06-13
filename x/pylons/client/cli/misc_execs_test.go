@@ -12,14 +12,15 @@ import (
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
+	"github.com/cosmos/cosmos-sdk/testutil/network"
 
 	"github.com/stretchr/testify/require"
 )
 
 func TestSingleItemModifyOutput(t *testing.T) {
-	net := network.New(t)
+	config := network.DefaultConfig()
+	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	var err error

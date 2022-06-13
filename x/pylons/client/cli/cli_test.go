@@ -18,7 +18,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
-	"github.com/Pylons-tech/pylons/testutil/network"
+	"github.com/cosmos/cosmos-sdk/testutil/network"
 )
 
 const (

@@ -12,9 +12,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/testutil/network"
 )
 
 const (
@@ -35,7 +35,8 @@ type atomgachiBasicSim struct {
 }
 
 func TestAtomgachiBasic(t *testing.T) {
-	net := network.New(t)
+	config := network.DefaultConfig()
+	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	var err error
