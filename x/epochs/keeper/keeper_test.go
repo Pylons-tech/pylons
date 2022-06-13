@@ -3,8 +3,6 @@ package keeper_test
 import (
 	"testing"
 
-	pylonsSimapp "github.com/Pylons-tech/pylons/testutil/simapp"
-
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
@@ -22,8 +20,9 @@ type KeeperTestSuite struct {
 	queryClient types.QueryClient
 }
 
+// TODO: this test needs fixing, too.
 func (suite *KeeperTestSuite) SetupTest() {
-	pylonsApp := pylonsSimapp.New("./")
+	pylonsApp := app.New
 
 	ctx := pylonsApp.BaseApp.NewContext(false, tmproto.Header{})
 
