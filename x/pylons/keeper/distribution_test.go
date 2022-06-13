@@ -17,9 +17,9 @@ import (
 	stakingcli "github.com/cosmos/cosmos-sdk/x/staking/client/cli"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/cosmos/cosmos-sdk/testutil/network"
 
 	epochtypes "github.com/Pylons-tech/pylons/x/epochs/types"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
