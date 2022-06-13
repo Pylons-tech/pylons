@@ -317,7 +317,6 @@ func (m *RecipeHistory) GetTime() int64 {
 	return 0
 }
 
-// this line is used by starport scaffolding # 3
 type QueryGetRedeemInfoRequest struct {
 	ID string `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
 }

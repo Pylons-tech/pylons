@@ -11,7 +11,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	// this line is used by starport scaffolding # ibc/keeper/import
 )
 
 type (
@@ -23,7 +22,6 @@ type (
 		accountKeeper  types.AccountKeeper
 		transferKeeper types.TransferKeeper
 		paramSpace     paramtypes.Subspace
-		// this line is used by starport scaffolding # ibc/keeper/attribute
 	}
 )
 
@@ -35,7 +33,6 @@ func NewKeeper(
 	ak types.AccountKeeper,
 	tk types.TransferKeeper,
 	paramSpace paramtypes.Subspace,
-	// this line is used by starport scaffolding # ibc/keeper/parameter
 ) Keeper {
 	// ensure pylons module accounts are set
 	if addr := ak.GetModuleAddress(types.FeeCollectorName); addr == nil {
@@ -65,8 +62,6 @@ func NewKeeper(
 		accountKeeper:  ak,
 		transferKeeper: tk,
 		paramSpace:     paramSpace,
-		// this line is used by starport scaffolding # ibc/keeper/return
-
 	}
 }
 

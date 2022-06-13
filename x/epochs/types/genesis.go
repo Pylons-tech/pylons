@@ -1,7 +1,6 @@
 package types
 
 import (
-	// this line is used by starport scaffolding # genesis/types/import
 	"errors"
 	"time"
 )

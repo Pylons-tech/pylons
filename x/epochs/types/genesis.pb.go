@@ -114,7 +114,6 @@ func (m *EpochInfo) GetEpochCountingStarted() bool {
 
 // GenesisState defines the epochs module's genesis state.
 type GenesisState struct {
-	// this line is used by starport scaffolding # genesis/proto/state
 	Epochs []EpochInfo `protobuf:"bytes,1,rep,name=epochs,proto3" json:"epochs"`
 }
 

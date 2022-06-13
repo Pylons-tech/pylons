@@ -3,7 +3,6 @@ package Pylonstech.pylons.pylons;
 
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
-// this line is used by starport scaffolding # proto/tx/import
 import "pylons/trade.proto";
 import "pylons/google_iap_order.proto";
 import "pylons/payment_info.proto";
@@ -17,7 +16,6 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 // Msg defines the Msg service.
 service Msg {
-  // this line is used by starport scaffolding # proto/tx/rpc
   rpc BurnDebtToken(MsgBurnDebtToken) returns (MsgBurnDebtTokenResponse);
   rpc UpdateAccount(MsgUpdateAccount) returns (MsgUpdateAccountResponse);
   rpc FulfillTrade(MsgFulfillTrade) returns (MsgFulfillTradeResponse);
@@ -36,7 +34,6 @@ service Msg {
   rpc UpdateCookbook(MsgUpdateCookbook) returns (MsgUpdateCookbookResponse);
 }
 
-// this line is used by starport scaffolding # proto/tx/message
 message MsgBurnDebtToken {
   string creator = 1;
   RedeemInfo redeemInfo = 2 [(gogoproto.nullable) = false];

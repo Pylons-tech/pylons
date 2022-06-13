@@ -1,7 +1,6 @@
 syntax = "proto3";
 package Pylonstech.pylons.pylons;
 
-// this line is used by starport scaffolding # genesis/proto/import
 import "pylons/redeem_info.proto";
 import "pylons/payment_info.proto";
 import "pylons/accounts.proto";
@@ -19,22 +18,20 @@ import "gogoproto/gogo.proto";
 
 // GenesisState defines the pylons module's genesis state.
 message GenesisState {
-    // this line is used by starport scaffolding # genesis/proto/state
-		repeated RedeemInfo redeemInfoList = 16 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
-		repeated PaymentInfo paymentInfoList = 15 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
-		repeated UserMap accountList = 14 [(gogoproto.nullable) = false];  // this line is used by starport scaffolding # genesis/proto/stateField
-		repeated Trade tradeList = 13 [(gogoproto.nullable) = false];  // this line is used by starport scaffolding # genesis/proto/stateField
-		uint64 tradeCount = 12; // this line is used by starport scaffolding # genesis/proto/stateField
-		uint64 entityCount = 11; // this line is used by starport scaffolding # genesis/proto/stateField
-	  Params params = 10 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
-		repeated GoogleInAppPurchaseOrder googleInAppPurchaseOrderList = 8 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
-		uint64 googleIAPOrderCount = 9; // this line is used by starport scaffolding # genesis/proto/stateField
-		repeated Execution executionList = 7 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
-		uint64 executionCount = 6; // this line is used by starport scaffolding # genesis/proto/stateField
-		repeated Execution pendingExecutionList = 5 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
-		uint64 pendingExecutionCount = 4; // this line is used by starport scaffolding # genesis/proto/stateField
-		repeated Item itemList = 3 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
-		repeated Recipe recipeList = 2 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
-		repeated Cookbook cookbookList = 1 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
-    // this line is used by starport scaffolding # ibc/genesis/proto
+		repeated RedeemInfo redeemInfoList = 16 [(gogoproto.nullable) = false]; 
+		repeated PaymentInfo paymentInfoList = 15 [(gogoproto.nullable) = false]; 
+		repeated UserMap accountList = 14 [(gogoproto.nullable) = false];  
+		repeated Trade tradeList = 13 [(gogoproto.nullable) = false];  
+		uint64 tradeCount = 12; 
+		uint64 entityCount = 11;
+	  Params params = 10 [(gogoproto.nullable) = false];
+		repeated GoogleInAppPurchaseOrder googleInAppPurchaseOrderList = 8 [(gogoproto.nullable) = false];
+		uint64 googleIAPOrderCount = 9;
+		repeated Execution executionList = 7 [(gogoproto.nullable) = false]; 
+		uint64 executionCount = 6;
+		repeated Execution pendingExecutionList = 5 [(gogoproto.nullable) = false];
+		uint64 pendingExecutionCount = 4; 
+		repeated Item itemList = 3 [(gogoproto.nullable) = false]; 
+		repeated Recipe recipeList = 2 [(gogoproto.nullable) = false]; 
+		repeated Cookbook cookbookList = 1 [(gogoproto.nullable) = false];
 }

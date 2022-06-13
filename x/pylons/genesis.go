@@ -10,7 +10,6 @@ import (
 // InitGenesis initializes the capability module's state from a provided genesis
 // state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
-	// this line is used by starport scaffolding # genesis/module/init
 	// Set all the redeemInfo
 	for _, elem := range genState.RedeemInfoList {
 		k.SetRedeemInfo(ctx, elem)
@@ -76,8 +75,6 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	}
 
 	k.SetParams(ctx, genState.Params)
-
-	// this line is used by starport scaffolding # ibc/genesis/init
 }
 
 // ExportGenesis returns the capability module's exported genesis.
@@ -87,7 +84,6 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	// Set the current count
 	genesis.EntityCount = k.GetEntityCount(ctx)
 
-	// this line is used by starport scaffolding # genesis/module/export
 	// Get all redeemInfo
 	redeemInfoList := k.GetAllRedeemInfo(ctx)
 	for _, elem := range redeemInfoList {
@@ -148,7 +144,6 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
 	params := k.GetParams(ctx)
 	genesis.Params = params
-	// this line is used by starport scaffolding # ibc/genesis/export
 
 	return genesis
 }

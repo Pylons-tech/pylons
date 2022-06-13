@@ -93,7 +93,6 @@ import (
 	epochsmodulekeeper "github.com/Pylons-tech/pylons/x/epochs/keeper"
 	epochsmoduletypes "github.com/Pylons-tech/pylons/x/epochs/types"
 
-	// this line is used by starport scaffolding # stargate/app/moduleImport
 	appparams "github.com/Pylons-tech/pylons/app/params"
 	pylonsmodule "github.com/Pylons-tech/pylons/x/pylons"
 	pylonsmodulekeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"

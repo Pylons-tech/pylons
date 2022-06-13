@@ -29,7 +29,6 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	// this line is used by starport scaffolding # 1
 	cmd.AddCommand(
 		GetCmdEpochsInfos(),
 		GetCmdCurrentEpoch(),
