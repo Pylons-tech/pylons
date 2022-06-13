@@ -17,7 +17,7 @@ import (
 type KeeperTestSuite struct {
 	suite.Suite
 
-	app         *app.PylonApp
+	app         *app.PylonsApp
 	ctx         sdk.Context
 	queryClient types.QueryClient
 }

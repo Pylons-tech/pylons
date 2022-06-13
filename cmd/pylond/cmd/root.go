@@ -232,7 +232,7 @@ func createCraftAppAndExport(
 ) (servertypes.ExportedApp, error) {
 	encCfg := app.MakeEncodingConfig() // Ideally, we would reuse the one created by NewRootCmd.
 	encCfg.Codec = codec.NewProtoCodec(encCfg.InterfaceRegistry)
-	var pylonsApp *app.PylonApp
+	var pylonsApp *app.PylonsApp
 
 	if height != -1 {
 		pylonsApp = app.New(logger, db, traceStore, false, map[int64]bool{}, "", uint(1), encCfg, appOpts)

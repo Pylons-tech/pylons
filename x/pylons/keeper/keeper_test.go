@@ -316,7 +316,7 @@ func createNTradeSameOwner(k keeper.Keeper, ctx sdk.Context, n int) []types.Trad
 type IntegrationTestSuite struct {
 	suite.Suite
 
-	pylonsApp     *app.PylonApp
+	pylonsApp     *app.PylonsApp
 	ctx           sdk.Context
 	k             keeper.Keeper
 	bankKeeper    types.BankKeeper
