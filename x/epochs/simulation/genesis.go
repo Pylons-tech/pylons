@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/osmosis-labs/osmosis/v9/x/epochs/types"
+	"github.com/Pylons-tech/pylons/x/epochs/types"
 
 	"github.com/cosmos/cosmos-sdk/types/module"
 )
