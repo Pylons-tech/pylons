@@ -1,0 +1,14 @@
+syntax = "proto3";
+package Pylonstech.pylons.gate;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "gate/param.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/Pylons-tech/pylons/x/gate/types";
+// GenesisState defines the exp module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+}

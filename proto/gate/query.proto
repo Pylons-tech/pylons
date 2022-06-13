@@ -1,0 +1,24 @@
+syntax = "proto3";
+package Pylonstech.pylons.gate;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+// this line is used by starport scaffolding # 1
+
+option go_package = "github.com/Pylons-tech/pylons/x/gate/types";
+
+// Query defines the gRPC querier service.
+service Query {
+    // this line is used by starport scaffolding # 2
+    // MaxTxsInBlock provide running maxtxs, maxtxs is max txs user can sent in one block .
+  rpc MaxTxsPerBlock(QueryMaxTxsPerBlockRequest) returns (QueryMaxTxsPerBlockResponse) {
+    option (google.api.http).get = "/pylons/gate/v1beta1/maxtxs";
+  }
+}
+
+// this line is used by starport scaffolding # 3
+message QueryMaxTxsPerBlockRequest {}
+message QueryMaxTxsPerBlockResponse {
+  int64 max_txs = 1 ;
+}

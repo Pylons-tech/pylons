@@ -1,0 +1,11 @@
+syntax = "proto3";
+package Pylonstech.pylons.gate;
+
+option go_package = "github.com/Pylons-tech/pylons/x/gate/types";
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+message Params {
+  int64 max_txs = 1 ;
+}
