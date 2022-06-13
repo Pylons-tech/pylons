@@ -1,0 +1,18 @@
+syntax = "proto3";
+package pylonstech.pylons.pylons;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
+
+message AppleInAppPurchaseOrder {
+  string quantity = 1; 
+  string productId = 2; 
+  string transactionId = 3; 
+  string originalTransactionId = 4; 
+  string purchaseDate = 5; 
+  string originalPurchaseDate = 6; 
+  string expiresDate = 7; 
+  string isInIntroOfferPeriod = 8; 
+  string cancellationDate = 9;
+  string webOrderLineItemId = 10;
+  string Creator = 11;
+}

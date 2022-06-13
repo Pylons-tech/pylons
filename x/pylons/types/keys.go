@@ -56,6 +56,10 @@ const (
 	GoogleInAppPurchaseOrderKey = "GoogleInAppPurchaseOrder-value-"
 	// GoogleInAppPurchaseOrderCountKey is a string key used as a prefix to the KVStore
 	GoogleInAppPurchaseOrderCountKey = "GoogleInAppPurchaseOrder-count-"
+	// GoogleInAppPurchaseOrderKey is a string key used as a prefix to the KVStore
+	AppleInAppPurchaseOrderKey = "AppleInAppPurchaseOrder-value-"
+	// GoogleInAppPurchaseOrderCountKey is a string key used as a prefix to the KVStore
+	AppleInAppPurchaseOrderCountKey = "AppleInAppPurchaseOrder-count-"
 	// GlobalEntityCountKey is a string used as prefix to the KVStore
 	GlobalEntityCountKey = "GlobalEntity-count-"
 	// TradeKey is a string used as prefix to the KVStore

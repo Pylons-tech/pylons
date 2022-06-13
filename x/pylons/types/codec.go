@@ -8,6 +8,8 @@ import (
 )
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
+	cdc.RegisterConcrete(&MsgAppleIap{}, "pylons/AppleIap", nil)
+	// this line is used by starport scaffolding # 2
 	cdc.RegisterConcrete(&MsgBurnDebtToken{}, "pylons/BurnDebtToken", nil)
 
 	cdc.RegisterConcrete(&MsgUpdateAccount{}, "pylons/UpdateAccount", nil)
@@ -37,6 +39,10 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgAppleIap{},
+	)
+	// this line is used by starport scaffolding # 3
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgBurnDebtToken{},
 	)
