@@ -7,29 +7,40 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/types/module"
+	"github.com/osmosis-labs/osmosis/v9/x/epochs/types"
 
-	"github.com/Pylons-tech/pylons/x/epochs/types"
+	"github.com/cosmos/cosmos-sdk/types/module"
 )
 
-// RandomizedGenState generates a random GenesisState for mint
+// RandomizedGenState generates a random GenesisState for mint.
 func RandomizedGenState(simState *module.SimulationState) {
 	epochs := []types.EpochInfo{
 		{
-			Identifier:            "day",
-			StartTime:             time.Time{},
-			Duration:              time.Hour * 24,
-			CurrentEpoch:          0,
-			CurrentEpochStartTime: time.Time{},
-			EpochCountingStarted:  false,
+			Identifier:              "day",
+			StartTime:               time.Time{},
+			Duration:                time.Hour * 24,
+			CurrentEpoch:            0,
+			CurrentEpochStartHeight: 0,
+			CurrentEpochStartTime:   time.Time{},
+			EpochCountingStarted:    false,
 		},
 		{
-			Identifier:            "hour",
-			StartTime:             time.Time{},
-			Duration:              time.Hour,
-			CurrentEpoch:          0,
-			CurrentEpochStartTime: time.Time{},
-			EpochCountingStarted:  false,
+			Identifier:              "hour",
+			StartTime:               time.Time{},
+			Duration:                time.Hour,
+			CurrentEpoch:            0,
+			CurrentEpochStartHeight: 0,
+			CurrentEpochStartTime:   time.Time{},
+			EpochCountingStarted:    false,
+		},
+		{
+			Identifier:              "second",
+			StartTime:               time.Time{},
+			Duration:                time.Second,
+			CurrentEpoch:            0,
+			CurrentEpochStartHeight: 0,
+			CurrentEpochStartTime:   time.Time{},
+			EpochCountingStarted:    false,
 		},
 	}
 	epochGenesis := types.NewGenesisState(epochs)

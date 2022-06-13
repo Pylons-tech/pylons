@@ -128,18 +128,14 @@ func init() {
 	appparams.SetupDenomsAndPrefixes()
 }
 
-// this line is used by starport scaffolding # stargate/wasm/app/enabledProposals
-
 func getGovProposalHandlers() []govclient.ProposalHandler {
 	var govProposalHandlers []govclient.ProposalHandler
-	// this line is used by starport scaffolding # stargate/app/govProposalHandlers
 
 	govProposalHandlers = append(govProposalHandlers,
 		paramsclient.ProposalHandler,
 		// distrclient.ProposalHandler,
 		upgradeclient.ProposalHandler,
 		upgradeclient.CancelProposalHandler,
-		// this line is used by starport scaffolding # stargate/app/govProposalHandler
 	)
 
 	return govProposalHandlers
@@ -170,7 +166,6 @@ var (
 		transfer.AppModuleBasic{},
 		vesting.AppModuleBasic{},
 		epochsmodule.AppModuleBasic{},
-		// this line is used by starport scaffolding # stargate/app/moduleBasic
 		pylonsmodule.AppModuleBasic{},
 	)
 
@@ -188,7 +183,6 @@ var (
 		pylonsmoduletypes.ExecutionsLockerName:  {authtypes.Burner, authtypes.Minter},
 		pylonsmoduletypes.CoinsIssuerName:       {authtypes.Minter},
 		pylonsmoduletypes.PaymentsProcessorName: {authtypes.Burner, authtypes.Minter},
-		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
 
@@ -241,7 +235,6 @@ type PylonsApp struct {
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
 
 	EpochsKeeper epochsmodulekeeper.Keeper
-	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	PylonsKeeper pylonsmodulekeeper.Keeper
 
@@ -287,7 +280,6 @@ func New(
 		ibctransfertypes.StoreKey,
 		capabilitytypes.StoreKey,
 		epochsmoduletypes.StoreKey,
-		// this line is used by starport scaffolding # stargate/app/storeKey
 		pylonsmoduletypes.StoreKey,
 	)
 
@@ -316,7 +308,6 @@ func New(
 	// grant capabilities for the ibc and ibc-transfer modules
 	scopedIBCKeeper := app.CapabilityKeeper.ScopeToModule(ibchost.ModuleName)
 	scopedTransferKeeper := app.CapabilityKeeper.ScopeToModule(ibctransfertypes.ModuleName)
-	// this line is used by starport scaffolding # stargate/app/scopedKeeper
 
 	// seal capability keeper after scoping modules
 	app.CapabilityKeeper.Seal()
@@ -391,8 +382,6 @@ func New(
 	transferModule := transfer.NewAppModule(app.TransferKeeper)
 	transferIBCModule := transfer.NewIBCModule(app.TransferKeeper)
 
-	// this line is used by starport scaffolding # stargate/app/keeperDefinition
-
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := ibcporttypes.NewRouter()
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferIBCModule)
@@ -419,7 +408,6 @@ func New(
 	epochsKeeper := epochsmodulekeeper.NewKeeper(
 		appCodec,
 		keys[epochsmoduletypes.StoreKey],
-		keys[epochsmoduletypes.MemStoreKey],
 	)
 
 	app.EpochsKeeper = *epochsKeeper.SetHooks(
@@ -463,7 +451,6 @@ func New(
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
 		epochsModule,
-		// this line is used by starport scaffolding # stargate/app/appModule
 		pylonsModule,
 	)
 
@@ -540,7 +527,6 @@ func New(
 		ibctransfertypes.ModuleName,
 		vestingtypes.ModuleName,
 
-		// this line is used by starport scaffolding # stargate/app/initGenesis
 		pylonsmoduletypes.ModuleName,
 		epochsmoduletypes.ModuleName,
 	)
@@ -598,7 +584,6 @@ func New(
 
 	app.ScopedIBCKeeper = scopedIBCKeeper
 	app.ScopedTransferKeeper = scopedTransferKeeper
-	// this line is used by starport scaffolding # stargate/app/beforeInitReturn
 
 	return app
 }
@@ -752,7 +737,6 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	paramsKeeper.Subspace(epochsmoduletypes.ModuleName)
-	// this line is used by starport scaffolding # stargate/app/paramSubspace
 	paramsKeeper.Subspace(pylonsmoduletypes.ModuleName)
 
 	return paramsKeeper
