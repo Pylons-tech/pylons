@@ -22,7 +22,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/epochs/keeper"
 	"github.com/Pylons-tech/pylons/x/epochs/simulation"
 	"github.com/Pylons-tech/pylons/x/epochs/types"
-	"github.com/Pylons-tech/pylons/x/mint/client/rest"
 )
 
 var (
@@ -69,7 +68,6 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncod
 
 // RegisterRESTRoutes registers the capability module's REST service handlers.
 func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
-	rest.RegisterRoutes(clientCtx, rtr)
 }
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the module.
