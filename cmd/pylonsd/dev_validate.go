@@ -1,4 +1,4 @@
-package cli
+package main
 
 import (
 	"fmt"
@@ -21,9 +21,9 @@ func CmdDevValidate() *cobra.Command {
 }
 
 func perCookbook(path string, _ types.Cookbook) {
-	fmt.Println(path, "is a valid cookbook")
+	fmt.Fprintln(Out, path, "is a valid cookbook")
 }
 
 func perRecipe(path string, _ types.Recipe) {
-	fmt.Println(path, "is a valid recipe")
+	fmt.Fprintln(Out, path, "is a valid recipe")
 }

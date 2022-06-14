@@ -5,28 +5,17 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"reflect"
 
-	"github.com/spf13/cobra"
 	"github.com/xeipuuv/gojsonschema"
-
-	"github.com/cosmos/cosmos-sdk/client"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func GetDevCmd(queryRoute string) *cobra.Command {
-	cmd := &cobra.Command{
-		Use:                        types.ModuleName,
-		Short:                      fmt.Sprintf("Application development commands for the %s module", types.ModuleName),
-		DisableFlagParsing:         true,
-		SuggestionsMinimumDistance: 2,
-		RunE:                       client.ValidateCmd,
-	}
-	return cmd
-}
+var Out io.Writer = os.Stdout // modified during testing
 
 const cookbookExtension = ".plc"
 const recipeExtension = ".plr"
@@ -39,11 +28,11 @@ func forFile(path string, perCookbook func(path string, cookbook types.Cookbook)
 	if filepath.Ext(path) == cookbookExtension {
 		cb, json, err := loadCookbookFromPath(path)
 		if err != nil {
-			fmt.Println("File ", path, " is not a cookbook - parsing error:\n", err)
+			fmt.Fprintln(Out, "File ", path, " is not a cookbook - parsing error:\n", err)
 		} else {
 			result, _ := validateJson(json, reflect.TypeOf(cb))
 			if !result.Valid() {
-				fmt.Println("File ", path, " is not a cookbook - parsing error:\n", result.Errors())
+				fmt.Fprintln(Out, "File ", path, " is not a cookbook - parsing error:\n", result.Errors())
 			} else {
 				perCookbook(path, cb)
 			}
@@ -51,11 +40,11 @@ func forFile(path string, perCookbook func(path string, cookbook types.Cookbook)
 	} else if filepath.Ext(path) == recipeExtension {
 		rcp, json, err := loadRecipeFromPath(path)
 		if err != nil {
-			fmt.Println("File ", path, " is not a recipe - parsing error:\n", err)
+			fmt.Fprintln(Out, "File ", path, " is not a recipe - parsing error:\n", err)
 		} else {
 			result, _ := validateJson(json, reflect.TypeOf(rcp))
 			if !result.Valid() {
-				fmt.Println("File ", path, " is not a recipe - parsing error:\n", result.Errors())
+				fmt.Fprintln(Out, "File ", path, " is not a recipe - parsing error:\n", result.Errors())
 			} else {
 				perRecipe(path, rcp)
 			}
@@ -70,7 +59,7 @@ func forFile(path string, perCookbook func(path string, cookbook types.Cookbook)
 func ForFiles(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.Recipe)) {
 	file, err := os.Stat(path)
 	if errors.Is(err, os.ErrNotExist) {
-		fmt.Println("Path ", path, " not found")
+		fmt.Fprintln(Out, "Path ", path, " not found")
 	} else {
 		if file.IsDir() {
 			filepath.Walk(path, func(p string, info os.FileInfo, e error) error {
