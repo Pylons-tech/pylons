@@ -11,7 +11,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
-	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	"github.com/cosmos/cosmos-sdk/x/staking/teststaking"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -34,7 +33,7 @@ type KeeperTestHelper struct {
 
 func (s *KeeperTestHelper) Setup() {
 	s.App = app.Setup(false)
-	s.Ctx = s.App.BaseApp.NewContext(false, tmproto.Header{Height: 1, ChainID: "osmosis-1", Time: time.Now().UTC()})
+	s.Ctx = s.App.BaseApp.NewContext(false, tmproto.Header{Height: 1, ChainID: "pylons-1", Time: time.Now().UTC()})
 	s.QueryHelper = &baseapp.QueryServiceTestHelper{
 		GRPCQueryRouter: s.App.GRPCQueryRouter(),
 		Ctx:             s.Ctx,
@@ -82,10 +81,6 @@ func (s *KeeperTestHelper) SetupValidator(bondStatus stakingtypes.BondStatus) sd
 	return valAddr
 }
 
-func (s *KeeperTestHelper) SetupTokenFactory() {
-	s.App.TokenFactoryKeeper.CreateModuleAccount(s.Ctx)
-}
-
 func (s *KeeperTestHelper) BeginNewBlock(executeNextEpoch bool) {
 	var valAddr []byte
 
@@ -113,7 +108,6 @@ func (s *KeeperTestHelper) BeginNewBlockWithProposer(executeNextEpoch bool, prop
 
 	valAddr := valConsAddr.Bytes()
 
-	epochIdentifier := s.App.SuperfluidKeeper.GetEpochIdentifier(s.Ctx)
 	epoch := s.App.EpochsKeeper.GetEpochInfo(s.Ctx, epochIdentifier)
 	newBlockTime := s.Ctx.BlockTime().Add(5 * time.Second)
 	if executeNextEpoch {
@@ -139,114 +133,6 @@ func (s *KeeperTestHelper) BeginNewBlockWithProposer(executeNextEpoch bool, prop
 func (s *KeeperTestHelper) EndBlock() {
 	reqEndBlock := abci.RequestEndBlock{Height: s.Ctx.BlockHeight()}
 	s.App.EndBlocker(s.Ctx, reqEndBlock)
-}
-
-func (s *KeeperTestHelper) AllocateRewardsToValidator(valAddr sdk.ValAddress, rewardAmt sdk.Int) {
-	validator, found := s.App.StakingKeeper.GetValidator(s.Ctx, valAddr)
-	s.Require().True(found)
-
-	// allocate reward tokens to distribution module
-	coins := sdk.Coins{sdk.NewCoin(sdk.DefaultBondDenom, rewardAmt)}
-	err := simapp.FundModuleAccount(s.App.BankKeeper, s.Ctx, distrtypes.ModuleName, coins)
-	s.Require().NoError(err)
-
-	// allocate rewards to validator
-	s.Ctx = s.Ctx.WithBlockHeight(s.Ctx.BlockHeight() + 1)
-	decTokens := sdk.DecCoins{{Denom: sdk.DefaultBondDenom, Amount: sdk.NewDec(20000)}}
-	s.App.DistrKeeper.AllocateTokensToValidator(s.Ctx, validator, decTokens)
-}
-
-// SetupGammPoolsWithBondDenomMultiplier uses given multipliers to set initial pool supply of bond denom.
-func (s *KeeperTestHelper) SetupGammPoolsWithBondDenomMultiplier(multipliers []sdk.Dec) []gammtypes.PoolI {
-	s.App.GAMMKeeper.SetParams(s.Ctx, gammtypes.Params{
-		PoolCreationFee: sdk.Coins{},
-	})
-
-	bondDenom := s.App.StakingKeeper.BondDenom(s.Ctx)
-	// TODO: use sdk crypto instead of tendermint to generate address
-	acc1 := sdk.AccAddress(ed25519.GenPrivKey().PubKey().Address().Bytes())
-
-	poolCreationFee := s.App.GAMMKeeper.GetParams(s.Ctx)
-	s.FundAcc(acc1, poolCreationFee.PoolCreationFee)
-
-	pools := []gammtypes.PoolI{}
-	for index, multiplier := range multipliers {
-		token := fmt.Sprintf("token%d", index)
-		uosmoAmount := gammtypes.InitPoolSharesSupply.ToDec().Mul(multiplier).RoundInt()
-
-		s.FundAcc(acc1, sdk.NewCoins(
-			sdk.NewCoin(bondDenom, uosmoAmount.Mul(sdk.NewInt(10))),
-			sdk.NewInt64Coin(token, 100000),
-		))
-
-		var (
-			defaultFutureGovernor = ""
-
-			// pool assets
-			defaultFooAsset balancer.PoolAsset = balancer.PoolAsset{
-				Weight: sdk.NewInt(100),
-				Token:  sdk.NewCoin(bondDenom, uosmoAmount),
-			}
-			defaultBarAsset balancer.PoolAsset = balancer.PoolAsset{
-				Weight: sdk.NewInt(100),
-				Token:  sdk.NewCoin(token, sdk.NewInt(10000)),
-			}
-
-			poolAssets []balancer.PoolAsset = []balancer.PoolAsset{defaultFooAsset, defaultBarAsset}
-		)
-
-		poolParams := balancer.PoolParams{
-			SwapFee: sdk.NewDecWithPrec(1, 2),
-			ExitFee: sdk.NewDecWithPrec(1, 2),
-		}
-		msg := balancer.NewMsgCreateBalancerPool(acc1, poolParams, poolAssets, defaultFutureGovernor)
-
-		poolId, err := s.App.GAMMKeeper.CreatePool(s.Ctx, msg)
-		s.Require().NoError(err)
-
-		pool, err := s.App.GAMMKeeper.GetPoolAndPoke(s.Ctx, poolId)
-		s.Require().NoError(err)
-
-		pools = append(pools, pool)
-	}
-
-	return pools
-}
-
-// SwapAndSetSpotPrice runs a swap to set Spot price of a pool using arbitrary values
-// returns spot price after the arbitrary swap.
-func (s *KeeperTestHelper) SwapAndSetSpotPrice(poolId uint64, fromAsset sdk.Coin, toAsset sdk.Coin) sdk.Dec {
-	// create a dummy account
-	acc1 := sdk.AccAddress(ed25519.GenPrivKey().PubKey().Address().Bytes())
-
-	// fund dummy account with tokens to swap
-	coins := sdk.Coins{sdk.NewInt64Coin(fromAsset.Denom, 100000000000000)}
-	s.FundAcc(acc1, coins)
-
-	_, err := s.App.GAMMKeeper.SwapExactAmountOut(
-		s.Ctx,
-		acc1,
-		poolId,
-		fromAsset.Denom,
-		fromAsset.Amount,
-		sdk.NewCoin(toAsset.Denom, toAsset.Amount.Quo(sdk.NewInt(4))),
-	)
-	s.Require().NoError(err)
-
-	spotPrice, err := s.App.GAMMKeeper.CalculateSpotPrice(s.Ctx, poolId, toAsset.Denom, fromAsset.Denom)
-	s.Require().NoError(err)
-
-	return spotPrice
-}
-
-func (s *KeeperTestHelper) LockTokens(addr sdk.AccAddress, coins sdk.Coins, duration time.Duration) (lockID uint64) {
-	msgServer := lockupkeeper.NewMsgServerImpl(s.App.LockupKeeper)
-	s.FundAcc(addr, coins)
-
-	msgResponse, err := msgServer.LockTokens(sdk.WrapSDKContext(s.Ctx), lockuptypes.NewMsgLockTokens(addr, duration, coins))
-	s.Require().NoError(err)
-
-	return msgResponse.ID
 }
 
 func (s *KeeperTestHelper) BuildTx(

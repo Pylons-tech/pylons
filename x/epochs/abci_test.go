@@ -15,7 +15,7 @@ import (
 )
 
 func TestEpochInfoChangesBeginBlockerAndInitGenesis(t *testing.T) {
-	var app *simapp.OsmosisApp
+	var app *simapp.PylonsApp
 	var ctx sdk.Context
 	var epochInfo types.EpochInfo
 
