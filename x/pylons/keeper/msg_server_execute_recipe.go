@@ -202,7 +202,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		Receiver:   cookbook.Creator,
 		SenderName: senderName.GetValue(),
 		Amount:     coinInputs.String(),
-		CreatedAt:  ctx.BlockTime().String(),
+		CreatedAt:  ctx.BlockTime().Unix(),
 	}
 
 	k.SetExecuteRecipeHis(ctx, executionTrack)

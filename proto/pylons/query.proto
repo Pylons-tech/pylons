@@ -150,7 +150,7 @@ message RecipeHistory {
 	string senderName = 5;
 	string receiver = 6;
 	string amount = 7;
-	string createdAt = 8;
+	int64 createdAt = 8;
 }
 // this line is used by starport scaffolding # 3
 message QueryGetRedeemInfoRequest {
