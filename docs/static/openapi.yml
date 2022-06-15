@@ -27203,23 +27203,22 @@ paths:
                 items:
                   type: object
                   properties:
-                    ItemID:
+                    itemID:
                       type: string
-                    CookbookID:
+                    cookbookID:
                       type: string
-                    RecipeID:
+                    recipeID:
                       type: string
-                    Sender:
+                    sender:
                       type: string
-                    SenderName:
+                    senderName:
                       type: string
-                    Receiver:
+                    receiver:
                       type: string
-                    Amount:
+                    amount:
                       type: string
-                    Time:
-                      type: string
-                      format: int64
+                    createdAt:
+                      type: int64
         default:
           description: An unexpected error response.
           schema:
@@ -29283,9 +29282,9 @@ paths:
                   extraInfo:
                     type: string
                   createdAt:
-                    type: string
+                    type: int64
                   updatedAt:
-                    type: string
+                    type: int64
         default:
           description: An unexpected error response.
           schema:
@@ -29771,9 +29770,9 @@ paths:
                     extraInfo:
                       type: string
                     createdAt:
-                      type: string
+                      type: int64
                     updatedAt:
-                      type: string
+                      type: int64
               pagination:
                 type: object
                 properties:
@@ -51407,23 +51406,22 @@ definitions:
         items:
           type: object
           properties:
-            ItemID:
+            itemID:
               type: string
-            CookbookID:
+            cookbookID:
               type: string
-            RecipeID:
+            recipeID:
               type: string
-            Sender:
+            sender:
               type: string
-            SenderName:
+            senderName:
               type: string
-            Receiver:
+            receiver:
               type: string
-            Amount:
+            amount:
               type: string
-            Time:
-              type: string
-              format: int64
+            createdAt:
+              type: int64
   Pylonstech.pylons.pylons.QueryGetRecipeResponse:
     type: object
     properties:
@@ -53037,9 +53035,9 @@ definitions:
             extraInfo:
               type: string
             createdAt:
-              type: string
+              type: int64
             updatedAt:
-              type: string
+              type: int64
       pagination:
         type: object
         properties:
@@ -53636,29 +53634,28 @@ definitions:
       extraInfo:
         type: string
       createdAt:
-        type: string
+        type: int64
       updatedAt:
-        type: string
+        type: int64
   Pylonstech.pylons.pylons.RecipeHistory:
     type: object
     properties:
-      ItemID:
+      itemID:
         type: string
-      CookbookID:
+      cookbookID:
         type: string
-      RecipeID:
+      recipeID:
         type: string
-      Sender:
+      sender:
         type: string
-      SenderName:
+      senderName:
         type: string
-      Receiver:
+      receiver:
         type: string
-      Amount:
+      amount:
         type: string
-      Time:
-        type: string
-        format: int64
+      createdAt:
+        type: int64
   Pylonstech.pylons.pylons.RedeemInfo:
     type: object
     properties:
