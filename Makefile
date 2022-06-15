@@ -110,7 +110,7 @@ clean:
 go.sum: go.mod
 	@echo "Ensure dependencies have not been modified ..."
 	@go mod verify
-	@go mod tidy -go=1.17
+	@go mod tidy -go=1.18
 
 .PHONY: install go.sum clean build build-linux build-reproducible
 

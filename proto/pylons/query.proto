@@ -143,14 +143,14 @@ message QueryGetRecipeHistoryResponse {
 }
 
 message RecipeHistory {
-	string ItemID = 1;
-	string CookbookID = 2;
-	string RecipeID = 3;
-	string Sender = 4;
-	string SenderName = 5;
-	string Receiver = 6;
-	string Amount = 7;
-	int64 Time = 8;
+	string itemID = 1;
+	string cookbookID = 2;
+	string recipeID = 3;
+	string sender = 4;
+	string senderName = 5;
+	string receiver = 6;
+	string amount = 7;
+	int64 createdAt = 8;
 }
 // this line is used by starport scaffolding # 3
 message QueryGetRedeemInfoRequest {

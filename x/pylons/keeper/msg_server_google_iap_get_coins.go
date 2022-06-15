@@ -21,7 +21,7 @@ func (k msgServer) GoogleInAppPurchaseGetCoins(goCtx context.Context, msg *types
 	var coinIssuer types.CoinIssuer
 	var googleIapPackage types.GoogleInAppPurchasePackage
 CoinIssuersLoop:
-	for _, ci := range k.CoinIssuers(ctx) {
+	for _, ci := range types.DefaultCoinIssuers {
 		for _, p := range ci.Packages {
 			if p.ProductID == msg.ProductID {
 				coinIssuer = ci
