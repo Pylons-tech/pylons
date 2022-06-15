@@ -12,7 +12,6 @@ linters:
     - dogsled
     - errcheck
     - goconst
-    - gofumpt
     - gocritic
     - gofmt
     - gofumpt
