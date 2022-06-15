@@ -7,11 +7,10 @@ import (
 	"os"
 	"testing"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/stretchr/testify/require"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
-
-	"github.com/osmosis-labs/osmosis/v9/app"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdkSimapp "github.com/cosmos/cosmos-sdk/simapp"
@@ -22,7 +21,7 @@ import (
 )
 
 // Profile with:
-// /usr/local/go/bin/go test -benchmem -run=^$ github.com/osmosis-labs/osmosis/simapp -bench ^BenchmarkFullAppSimulation$ -Commit=true -cpuprofile cpu.out
+// /usr/local/go/bin/go test -benchmem -run=^$ github.com/Pylons-tech/pylons/simapp -bench ^BenchmarkFullAppSimulation$ -Commit=true -cpuprofile cpu.out
 func BenchmarkFullAppSimulation(b *testing.B) {
 	// -Enabled=true -NumBlocks=1000 -BlockSize=200 \
 	// -Period=1 -Commit=true -Seed=57 -v -timeout 24h
@@ -73,7 +72,7 @@ func fullAppSimulation(tb testing.TB, is_testing bool) {
 		}
 	}
 
-	osmosis := app.NewOsmosisApp(
+	pylonsApp := app.New(
 		logger,
 		db,
 		nil,
@@ -83,8 +82,6 @@ func fullAppSimulation(tb testing.TB, is_testing bool) {
 		sdkSimapp.FlagPeriodValue,
 		app.MakeEncodingConfig(),
 		sdkSimapp.EmptyAppOptions{},
-		app.GetWasmEnabledProposals(),
-		app.EmptyWasmOpts,
 		interBlockCacheOpt(),
 		fauxMerkleModeOpt)
 
@@ -92,17 +89,17 @@ func fullAppSimulation(tb testing.TB, is_testing bool) {
 	_, simParams, simErr := simulation.SimulateFromSeed(
 		tb,
 		os.Stdout,
-		osmosis.BaseApp,
-		AppStateFn(osmosis.AppCodec(), osmosis.SimulationManager()),
-		simulation2.RandomAccounts,                                          // Replace with own random account function if using keys other than secp256k1
-		sdkSimapp.SimulationOperations(osmosis, osmosis.AppCodec(), config), // Run all registered operations
-		osmosis.ModuleAccountAddrs(),
+		pylonsApp.BaseApp,
+		AppStateFn(pylonsApp.AppCodec(), pylonsApp.SimulationManager()),
+		simulation2.RandomAccounts,                                              // Replace with own random account function if using keys other than secp256k1
+		sdkSimapp.SimulationOperations(pylonsApp, pylonsApp.AppCodec(), config), // Run all registered operations
+		pylonsApp.ModuleAccountAddrs(),
 		config,
-		osmosis.AppCodec(),
+		pylonsApp.AppCodec(),
 	)
 
 	// export state and simParams before the simulation error is checked
-	if err = sdkSimapp.CheckExportSimulation(osmosis, config, simParams); err != nil {
+	if err = sdkSimapp.CheckExportSimulation(pylonsApp, config, simParams); err != nil {
 		tb.Fatal(err)
 	}
 
@@ -155,7 +152,7 @@ func TestAppStateDeterminism(t *testing.T) {
 			}
 
 			db := dbm.NewMemDB()
-			app := app.NewOsmosisApp(
+			app := app.New(
 				logger,
 				db,
 				nil,
@@ -165,8 +162,6 @@ func TestAppStateDeterminism(t *testing.T) {
 				sdkSimapp.FlagPeriodValue,
 				app.MakeEncodingConfig(),
 				sdkSimapp.EmptyAppOptions{},
-				app.GetWasmEnabledProposals(),
-				app.EmptyWasmOpts,
 				interBlockCacheOpt())
 
 			fmt.Printf(

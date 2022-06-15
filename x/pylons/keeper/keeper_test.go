@@ -325,11 +325,11 @@ type IntegrationTestSuite struct {
 
 // TODO: Fisal, Khanh, or Vuong, please fix this test.  Needs simapp.
 func (suite *IntegrationTestSuite) SetupTest() {
-	pylonsApp := app.NewPylonsApp()
+	pylonsApp := app.Setup(false)
 
 	ctx := pylonsApp.BaseApp.NewContext(false, tmproto.Header{})
 
-	suite.pylonsApp = &pylonsApp
+	suite.pylonsApp = pylonsApp
 	suite.ctx = ctx
 	suite.k = pylonsApp.PylonsKeeper
 	suite.bankKeeper = pylonsApp.BankKeeper

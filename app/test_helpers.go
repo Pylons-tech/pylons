@@ -12,7 +12,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// Setup initializes a new OsmosisApp.
+// Setup initializes a new PylonsApp.
 func Setup(isCheckTx bool) *PylonsApp {
 	db := dbm.NewMemDB()
 	app := New(log.NewNopLogger(), db, nil, true, map[int64]bool{}, DefaultNodeHome, 5, MakeEncodingConfig(), simapp.EmptyAppOptions{})
@@ -37,12 +37,12 @@ func Setup(isCheckTx bool) *PylonsApp {
 	return app
 }
 
-// SetupTestingAppWithLevelDb initializes a new OsmosisApp intended for testing,
+// SetupTestingAppWithLevelDb initializes a new PylonssApp intended for testing,
 // with LevelDB as a db.
 func SetupTestingAppWithLevelDb(isCheckTx bool) (app *PylonsApp, cleanupFn func()) {
 	dir := "pylons_testing"
 	cdc := app.AppCodec()
-	db, err := sdk.NewLevelDB("osmosis_leveldb_testing", dir)
+	db, err := sdk.NewLevelDB("pylons_leveldb_testing", dir)
 	if err != nil {
 		panic(err)
 	}

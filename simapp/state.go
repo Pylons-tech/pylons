@@ -7,8 +7,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/osmosis-labs/osmosis/v9/app"
-
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdksimapp "github.com/cosmos/cosmos-sdk/simapp"
 	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
@@ -141,7 +140,7 @@ func AppStateRandomizedFn(
 	accs []simtypes.Account, genesisTimestamp time.Time, appParams simtypes.AppParams,
 ) (json.RawMessage, []simtypes.Account) {
 	numAccs := int64(len(accs))
-	genesisState := app.NewDefaultGenesisState()
+	genesisState := app.NewDefaultGenesisState(cdc)
 
 	// generate a random amount of initial stake coins and a random initial
 	// number of bonded accounts
