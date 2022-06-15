@@ -2,8 +2,6 @@ package types
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/osmoutils"
 )
 
 type EpochHooks interface {
@@ -42,11 +40,6 @@ func panicCatchingEpochHook(
 	epochIdentifier string,
 	epochNumber int64,
 ) {
-	defer func() {
-		if recovErr := recover(); recovErr != nil {
-			osmoutils.PrintPanicRecoveryError(ctx, recovErr)
-		}
-	}()
 	cacheCtx, write := ctx.CacheContext()
 	hookFn(cacheCtx, epochIdentifier, epochNumber)
 	write()
