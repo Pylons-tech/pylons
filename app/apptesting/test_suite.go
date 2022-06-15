@@ -1,7 +1,6 @@
 package apptesting
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -55,7 +54,7 @@ func (s *KeeperTestHelper) SetupValidator(bondStatus stakingtypes.BondStatus) sd
 
 	s.FundAcc(sdk.AccAddress(valAddr), selfBond)
 
-	sh := teststaking.NewHelper(s.Suite.T(), s.Ctx, *s.App.StakingKeeper)
+	sh := teststaking.NewHelper(s.Suite.T(), s.Ctx, *app.StakingKeeper)
 	msg := sh.CreateValidatorMsg(valAddr, valPub, selfBond[0].Amount)
 	sh.Handle(msg, true)
 
@@ -97,37 +96,6 @@ func (s *KeeperTestHelper) BeginNewBlock(executeNextEpoch bool) {
 	}
 
 	s.BeginNewBlockWithProposer(executeNextEpoch, valAddr)
-}
-
-func (s *KeeperTestHelper) BeginNewBlockWithProposer(executeNextEpoch bool, proposer sdk.ValAddress) {
-	validator, found := s.App.StakingKeeper.GetValidator(s.Ctx, proposer)
-	s.Assert().True(found)
-
-	valConsAddr, err := validator.GetConsAddr()
-	s.Require().NoError(err)
-
-	valAddr := valConsAddr.Bytes()
-
-	epoch := s.App.EpochsKeeper.GetEpochInfo(s.Ctx, epochIdentifier)
-	newBlockTime := s.Ctx.BlockTime().Add(5 * time.Second)
-	if executeNextEpoch {
-		endEpochTime := epoch.CurrentEpochStartTime.Add(epoch.Duration)
-		newBlockTime = endEpochTime.Add(time.Second)
-	}
-
-	header := tmproto.Header{Height: s.Ctx.BlockHeight() + 1, Time: newBlockTime}
-	newCtx := s.Ctx.WithBlockTime(newBlockTime).WithBlockHeight(s.Ctx.BlockHeight() + 1)
-	s.Ctx = newCtx
-	lastCommitInfo := abci.LastCommitInfo{
-		Votes: []abci.VoteInfo{{
-			Validator:       abci.Validator{Address: valAddr, Power: 1000},
-			SignedLastBlock: true,
-		}},
-	}
-	reqBeginBlock := abci.RequestBeginBlock{Header: header, LastCommitInfo: lastCommitInfo}
-
-	fmt.Println("beginning block ", s.Ctx.BlockHeight())
-	s.App.BeginBlocker(s.Ctx, reqBeginBlock)
 }
 
 func (s *KeeperTestHelper) EndBlock() {
