@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"sort"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -17,6 +18,7 @@ import (
 
 func TxHistoryRequestHandler(w http.ResponseWriter, r *http.Request, ctx client.Context) {
 	data := r.URL.Query()
+	denom := data.Get("denom")
 	address := data.Get("address")
 	if len(address) != 45 {
 		w.Header().Add(types.HTTPContentTypeKey, types.HTTPContentTypeVal)
@@ -54,7 +56,7 @@ func TxHistoryRequestHandler(w http.ResponseWriter, r *http.Request, ctx client.
 		limit = types.DefaultLimit
 	}
 
-	res, err := GetTxHistory(ctx, address, limit, offset)
+	res, err := GetTxHistory(ctx, address, denom, limit, offset)
 	if err != nil {
 		w.Header().Add(types.HTTPContentTypeKey, types.HTTPContentTypeVal)
 		info, _ := json.Marshal(types.StandardError{
@@ -69,7 +71,7 @@ func TxHistoryRequestHandler(w http.ResponseWriter, r *http.Request, ctx client.
 	_, _ = w.Write(info)
 }
 
-func GetTxHistory(ctx client.Context, address string, limit, offset int64) ([]*types.History, error) {
+func GetTxHistory(ctx client.Context, address, denom string, limit, offset int64) ([]*types.History, error) {
 	txService := authtx.NewTxServer(ctx, nil, nil)
 	history, err := txService.GetTxsEvent(context.Background(), &tx.GetTxsEventRequest{Events: []string{
 		types.TransferSenderEvent + address,
@@ -205,6 +207,16 @@ func GetTxHistory(ctx client.Context, address string, limit, offset int64) ([]*t
 	sort.Slice(userHistory, func(i, j int) bool {
 		return userHistory[i].CreatedAt >= userHistory[j].CreatedAt
 	})
+
+	if len(denom) > 0 {
+		his := []*types.History{}
+		for _, h := range userHistory {
+			if strings.Contains(h.Amount, denom) {
+				his = append(his, h)
+			}
+		}
+		userHistory = his
+	}
 
 	offset = limit * (offset - 1)
 	limit += offset
