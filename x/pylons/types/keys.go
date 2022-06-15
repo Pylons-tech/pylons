@@ -108,8 +108,17 @@ const (
 	KeyReceiver   = "receiver"
 	KeyRecipient  = "recipient"
 	KeySender     = "sender"
-	KeyCookbookId = "cookbookID"
-	KeyRecipeId   = "recipeID"
+	KeyCookbookID = "cookbookID"
+	KeyRecipeID   = "recipeID"
 
 	ValZero = "0"
+
+	AddressInvalid      = "invalid address"
+	OffsetInvalid       = "offset must greater than 0"
+	LimitInvalid        = "limit must greater than 0"
+	GetErrorHistoryMsg  = "unable to get transaction history"
+	GetErrorHistoryCode = "GetHistoryError"
+
+	HTTPContentTypeKey = "Content-Type"
+	HTTPContentTypeVal = "application/json"
 )

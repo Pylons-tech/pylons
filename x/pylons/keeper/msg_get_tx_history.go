@@ -13,42 +13,60 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/tx"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 func TxHistoryRequestHandler(w http.ResponseWriter, r *http.Request, ctx client.Context) {
 	data := r.URL.Query()
+	address := data.Get("address")
+	if len(address) != 45 {
+		w.Header().Add(types.HTTPContentTypeKey, types.HTTPContentTypeVal)
+		info, _ := json.Marshal(types.StandardError{
+			Code:    codes.InvalidArgument.String(),
+			Message: types.AddressInvalid,
+		})
+		_, _ = w.Write(info)
+		return
+	}
+
 	limit, _ := strconv.ParseInt(data.Get("limit"), 10, 64)
 	offset, _ := strconv.ParseInt(data.Get("offset"), 10, 64)
 	if offset < types.MinVal {
-		err := status.Error(codes.InvalidArgument, "offset must greater than 0")
-		w.Header().Add("content-type", "application/json")
-		info, _ := json.Marshal(err)
-		w.Write(info)
+		w.Header().Add(types.HTTPContentTypeKey, types.HTTPContentTypeVal)
+		info, _ := json.Marshal(types.StandardError{
+			Code:    codes.InvalidArgument.String(),
+			Message: types.OffsetInvalid,
+		})
+		_, _ = w.Write(info)
+		return
 	} else if offset == types.MinVal {
 		offset = types.DefaultOffset
 	}
 
 	if limit < 0 {
-		err := status.Error(codes.InvalidArgument, "limit must greater than 0")
-		w.Header().Add("content-type", "application/json")
-		info, _ := json.Marshal(err)
-		w.Write(info)
+		w.Header().Add(types.HTTPContentTypeKey, types.HTTPContentTypeVal)
+		info, _ := json.Marshal(types.StandardError{
+			Code:    codes.InvalidArgument.String(),
+			Message: types.LimitInvalid,
+		})
+		_, _ = w.Write(info)
+		return
 	} else if limit == types.MinVal {
 		limit = types.DefaultLimit
 	}
 
-	res, err := GetTxHistory(ctx, data.Get("address"), limit, offset)
+	res, err := GetTxHistory(ctx, address, limit, offset)
 	if err != nil {
-		w.Header().Add("content-type", "application/json")
-		info, _ := json.Marshal(err)
-		w.Write(info)
-
-	} else {
-		w.Header().Add("content-type", "application/json")
-		info, _ := json.Marshal(res)
-		w.Write(info)
+		w.Header().Add(types.HTTPContentTypeKey, types.HTTPContentTypeVal)
+		info, _ := json.Marshal(types.StandardError{
+			Code:    types.GetErrorHistoryCode,
+			Message: types.GetErrorHistoryMsg,
+		})
+		_, _ = w.Write(info)
+		return
 	}
+	w.Header().Add(types.HTTPContentTypeKey, types.HTTPContentTypeVal)
+	info, _ := json.Marshal(res)
+	_, _ = w.Write(info)
 }
 
 func GetTxHistory(ctx client.Context, address string, limit, offset int64) ([]*types.History, error) {
@@ -72,44 +90,49 @@ func GetTxHistory(ctx client.Context, address string, limit, offset int64) ([]*t
 			CreatedAt: date.Unix(),
 			Type:      types.TxTypeNFTBuy,
 		}
+	eventFound:
 		for _, e := range txRes.Logs[0].Events {
-			if e.Type == types.TransferEventKey {
+			switch e.Type {
+			case types.TransferEventKey:
 				for _, attr := range e.GetAttributes() {
-					if string(attr.Key) == types.KeyAmount {
-						if len(string(attr.Value)) == 0 {
+					switch attr.Key {
+					case types.KeyAmount:
+						if len(attr.Value) == 0 {
 							entry.Amount = types.ValZero
 						} else {
-							entry.Amount = string(attr.Value)
+							entry.Amount = attr.Value
 						}
-					} else if string(attr.Key) == types.KeyRecipient {
-						entry.Address = string(attr.Value)
+					case types.KeyRecipient:
+						entry.Address = attr.Value
 					}
 				}
-			} else if e.Type == types.CreateItemKey {
+			case types.CreateItemKey:
 				entry.Address = ""
 				for _, attr := range e.GetAttributes() {
-					if string(attr.Key) == types.KeyAmount {
-						if len(string(attr.Value)) == 0 {
+					switch attr.Key {
+					case types.KeyAmount:
+						if len(attr.Value) == 0 {
 							nft.Amount = types.ValZero
 						} else {
-							nft.Amount = string(attr.Value)
+							nft.Amount = attr.Value
 						}
-					} else if string(attr.Key) == types.KeyCookbookId {
-						nft.CookbookID = string(attr.Value)
-					} else if string(attr.Key) == types.KeyRecipeId {
-						nft.RecipeID = string(attr.Value)
-					} else if string(attr.Key) == types.KeyReceiver {
-						nft.Address = string(attr.Value)
+					case types.KeyCookbookID:
+						nft.CookbookID = attr.Value
+					case types.KeyRecipeID:
+						nft.RecipeID = attr.Value
+					case types.KeyReceiver:
+						nft.Address = attr.Value
 					}
 				}
 				userHistory = append(userHistory, nft)
-				break
+				break eventFound
 			}
 			if len(entry.Address) > 0 {
 				userHistory = append(userHistory, entry)
 			}
 		}
 	}
+
 	history, err = txService.GetTxsEvent(context.Background(), &tx.GetTxsEventRequest{Events: []string{
 		types.TransferRecipientEvent + address,
 	}})
@@ -127,14 +150,15 @@ func GetTxHistory(ctx client.Context, address string, limit, offset int64) ([]*t
 		for _, e := range txRes.Logs[0].Events {
 			if e.Type == types.TransferEventKey {
 				for _, attr := range e.GetAttributes() {
-					if string(attr.Key) == types.KeyAmount {
-						if len(string(attr.Value)) == 0 {
+					switch attr.Key {
+					case types.KeyAmount:
+						if len(attr.Value) == 0 {
 							entry.Amount = types.ValZero
 						} else {
-							entry.Amount = string(attr.Value)
+							entry.Amount = attr.Value
 						}
-					} else if string(attr.Key) == types.KeySender {
-						entry.Address = string(attr.Value)
+					case types.KeySender:
+						entry.Address = attr.Value
 					}
 				}
 				userHistory = append(userHistory, entry)
@@ -156,20 +180,21 @@ func GetTxHistory(ctx client.Context, address string, limit, offset int64) ([]*t
 			Type:      types.TxTypeNFTSell,
 		}
 		for _, e := range txRes.Logs[0].Events {
-			if e.Type == types.CreateItemKey {
+			if e.Type == types.TransferEventKey {
 				for _, attr := range e.GetAttributes() {
-					if string(attr.Key) == types.KeyAmount {
-						if len(string(attr.Value)) == 0 {
+					switch attr.Key {
+					case types.KeyAmount:
+						if len(attr.Value) == 0 {
 							nft.Amount = types.ValZero
 						} else {
-							nft.Amount = string(attr.Value)
+							nft.Amount = attr.Value
 						}
-					} else if string(attr.Key) == types.KeyCookbookId {
-						nft.CookbookID = string(attr.Value)
-					} else if string(attr.Key) == types.KeyRecipeId {
-						nft.RecipeID = string(attr.Value)
-					} else if string(attr.Key) == types.KeySender {
-						nft.Address = string(attr.Value)
+					case types.KeyCookbookID:
+						nft.CookbookID = attr.Value
+					case types.KeyRecipeID:
+						nft.RecipeID = attr.Value
+					case types.KeySender:
+						nft.Address = attr.Value
 					}
 				}
 				userHistory = append(userHistory, nft)
@@ -182,7 +207,7 @@ func GetTxHistory(ctx client.Context, address string, limit, offset int64) ([]*t
 	})
 
 	offset = limit * (offset - 1)
-	limit = limit + offset
+	limit += offset
 
 	if offset > int64(len(userHistory)) {
 		return []*types.History{}, nil
