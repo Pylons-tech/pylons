@@ -23,7 +23,7 @@ func TxHistoryRequestHandler(w http.ResponseWriter, r *http.Request, ctx client.
 	address := data.Get("address")
 
 	// format of address 'address' / %27address%27
-	if len(address) != types.MinVal {
+	if len(address) == types.MinVal {
 		// if address not found return error
 		w.Header().Add(types.HTTPContentTypeKey, types.HTTPContentTypeVal)
 		info, _ := json.Marshal(types.StandardError{
@@ -94,7 +94,7 @@ func GetTxHistory(ctx client.Context, address, denom string, limit, offset int64
 		return nil, err
 	}
 	// helper function to extract specific event information i.e. tranfer and create_item
-	userHistory := queryEventSender(history.TxResponses)
+	userHistory := QueryEventSender(history.TxResponses)
 
 	// 2. querying cosmos sdk service to get transfer.recipient event
 	// from this event we get 1 types of TxHistory i.e. RECEIVE
@@ -106,7 +106,7 @@ func GetTxHistory(ctx client.Context, address, denom string, limit, offset int64
 	}
 	// helper function to extract specific event information i.e. tranfer
 	// adding records to collection
-	userHistory = append(userHistory, queryEventRecipientBank(history.TxResponses)...)
+	userHistory = append(userHistory, QueryEventRecipientBank(history.TxResponses)...)
 
 	// 3. querying cosmos sdk service to get create_item.receiver event
 	// from this event we get 1 types of TxHistory i.e. NFTSELL
@@ -118,7 +118,7 @@ func GetTxHistory(ctx client.Context, address, denom string, limit, offset int64
 	}
 	// helper function to extract specific event information i.e. create_item
 	// adding records to collection
-	userHistory = append(userHistory, queryEventNFTSell(history.TxResponses)...)
+	userHistory = append(userHistory, QueryEventNFTSell(history.TxResponses)...)
 
 	sort.Slice(userHistory, func(i, j int) bool {
 		return userHistory[i].CreatedAt >= userHistory[j].CreatedAt
@@ -137,7 +137,7 @@ func GetTxHistory(ctx client.Context, address, denom string, limit, offset int64
 	}
 
 	// calculating limit and offset to retutrn paginated slice of complete tx history
-	offset = limit * (offset - 1)
+	offset = limit * (offset - 1) // subtracted 1 as indices start at 0, case offset is 1 i.e. first page, where first index is 0
 	limit += offset
 
 	// case: if offset if outof bound the return empty response
@@ -157,7 +157,7 @@ func GetTxHistory(ctx client.Context, address, denom string, limit, offset int64
 * Then find our desired event and store it
  */
 
-func queryEventSender(block []*sdkTypes.TxResponse) (userHistory []*types.History) {
+func QueryEventSender(block []*sdkTypes.TxResponse) (userHistory []*types.History) {
 	for _, txRes := range block {
 		// getting block time to note the time event occcured
 		// parsing date in string to date object
@@ -226,7 +226,7 @@ func queryEventSender(block []*sdkTypes.TxResponse) (userHistory []*types.Histor
 	return userHistory
 }
 
-func queryEventRecipientBank(block []*sdkTypes.TxResponse) (userHistory []*types.History) {
+func QueryEventRecipientBank(block []*sdkTypes.TxResponse) (userHistory []*types.History) {
 	for _, txRes := range block {
 		// getting block time to note the time event occcured
 		// parsing date in string to date object
@@ -263,7 +263,7 @@ func queryEventRecipientBank(block []*sdkTypes.TxResponse) (userHistory []*types
 	return userHistory
 }
 
-func queryEventNFTSell(block []*sdkTypes.TxResponse) (userHistory []*types.History) {
+func QueryEventNFTSell(block []*sdkTypes.TxResponse) (userHistory []*types.History) {
 	for _, txRes := range block {
 		// getting block time to note the time event occcured
 		// parsing date in string to date object
@@ -277,7 +277,7 @@ func queryEventNFTSell(block []*sdkTypes.TxResponse) (userHistory []*types.Histo
 		for _, log := range txRes.Logs {
 			for _, e := range log.Events {
 				// case create_item event is found
-				if e.Type == types.TransferEventKey {
+				if e.Type == types.CreateItemKey {
 					// extract amount at which NFT is sold,
 					// its identification id's and buyers address
 					for _, attr := range e.GetAttributes() {
