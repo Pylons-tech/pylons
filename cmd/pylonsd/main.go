@@ -10,7 +10,7 @@ import (
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 
 	"github.com/Pylons-tech/pylons/app"
-	pyloncmd "github.com/Pylons-tech/pylons/cmd/pylond/cmd"
+	pyloncmd "github.com/Pylons-tech/pylons/cmd/pylonsd/cmd"
 )
 
 func main() {
