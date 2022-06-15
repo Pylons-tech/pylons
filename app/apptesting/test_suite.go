@@ -11,7 +11,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
-	"github.com/cosmos/cosmos-sdk/x/staking/teststaking"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/stretchr/testify/suite"
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -54,10 +53,6 @@ func (s *KeeperTestHelper) SetupValidator(bondStatus stakingtypes.BondStatus) sd
 
 	s.FundAcc(sdk.AccAddress(valAddr), selfBond)
 
-	sh := teststaking.NewHelper(s.Suite.T(), s.Ctx, *app.StakingKeeper)
-	msg := sh.CreateValidatorMsg(valAddr, valPub, selfBond[0].Amount)
-	sh.Handle(msg, true)
-
 	val, found := s.App.StakingKeeper.GetValidator(s.Ctx, valAddr)
 	s.Require().True(found)
 
@@ -78,24 +73,6 @@ func (s *KeeperTestHelper) SetupValidator(bondStatus stakingtypes.BondStatus) sd
 	s.App.SlashingKeeper.SetValidatorSigningInfo(s.Ctx, consAddr, signingInfo)
 
 	return valAddr
-}
-
-func (s *KeeperTestHelper) BeginNewBlock(executeNextEpoch bool) {
-	var valAddr []byte
-
-	validators := s.App.StakingKeeper.GetAllValidators(s.Ctx)
-	if len(validators) >= 1 {
-		valAddrFancy, err := validators[0].GetConsAddr()
-		s.Require().NoError(err)
-		valAddr = valAddrFancy.Bytes()
-	} else {
-		valAddrFancy := s.SetupValidator(stakingtypes.Bonded)
-		validator, _ := s.App.StakingKeeper.GetValidator(s.Ctx, valAddrFancy)
-		valAddr2, _ := validator.GetConsAddr()
-		valAddr = valAddr2.Bytes()
-	}
-
-	s.BeginNewBlockWithProposer(executeNextEpoch, valAddr)
 }
 
 func (s *KeeperTestHelper) EndBlock() {
