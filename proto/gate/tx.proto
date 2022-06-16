@@ -1,0 +1,10 @@
+syntax = "proto3";
+package Pylonstech.pylons.gate;
+
+
+option go_package = "github.com/Pylons-tech/pylons/x/gate/types";
+
+// Msg defines the Msg service.
+service Msg {
+
+}

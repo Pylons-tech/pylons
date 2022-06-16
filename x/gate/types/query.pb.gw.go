@@ -145,7 +145,7 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_MaxTxsPerBlock_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"pylons", "gate", "v1beta1", "maxtxs"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_MaxTxsPerBlock_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"pylons", "gate", "v1beta1", "maxtxs"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (
