@@ -9,7 +9,7 @@ import "pylons/item.proto";
 import "pylons/recipe.proto";
 
 message ItemRecord {
-  string ID = 1;
+  string id = 1;
   repeated DoubleKeyValue doubles = 2 [(gogoproto.nullable) = false];
   repeated LongKeyValue longs = 3 [(gogoproto.nullable) = false];
   repeated StringKeyValue strings = 4 [(gogoproto.nullable) = false];
@@ -17,16 +17,16 @@ message ItemRecord {
 
 message Execution {
   string creator = 1;
-  string ID = 2;
-  string recipeID = 3;
-  string cookbookID = 4;
-  string recipeVersion = 5;
-  uint64 nodeVersion = 6;
-  int64 blockHeight = 7;
-  repeated ItemRecord itemInputs = 8 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin coinInputs = 9 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated cosmos.base.v1beta1.Coin coinOutputs = 10 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated string itemOutputIDs = 11 [(gogoproto.nullable) = false];
-  repeated string itemModifyOutputIDs = 12 [(gogoproto.nullable) = false];
+  string id = 2;
+  string recipe_id = 3;
+  string cookbook_id = 4;
+  string recipe_version = 5;
+  uint64 node_version = 6;
+  int64 block_height = 7;
+  repeated ItemRecord item_inputs = 8 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin coin_inputs = 9 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin coin_outputs = 10 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated string item_output_ids = 11 [(gogoproto.nullable) = false];
+  repeated string itemModify_output_ids = 12 [(gogoproto.nullable) = false];
   }
 
