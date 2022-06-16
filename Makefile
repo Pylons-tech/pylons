@@ -84,11 +84,11 @@ all: install lint test
 
 install: go.sum
 	@echo "--> Installing pylonsd"
-	@go install -mod=readonly $(BUILD_FLAGS) ./cmd
+	@go install -mod=readonly $(BUILD_FLAGS) ./cmd/pylonsd
 
 build: go.sum
 	@echo "--> Building pylonsd"
-	@go build -o $(ARTIFACT_DIR)/pylonsd -mod=readonly $(BUILD_FLAGS) ./cmd
+	@go build -o $(ARTIFACT_DIR)/pylonsd -mod=readonly $(BUILD_FLAGS) ./cmd/pylonsd
 
 build-linux: go.sum
 	LEDGER_ENABLED=false GOOS=linux GOARCH=amd64 $(MAKE) build
