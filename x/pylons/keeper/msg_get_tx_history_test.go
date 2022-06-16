@@ -6,7 +6,7 @@ import (
 	sdkTypes "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (suite *IntegrationTestSuite) TestGetTxHistory() {
+func (suite *IntegrationTestSuite) TestGetTxHistorySuccess() {
 	block := []*sdkTypes.TxResponse{
 		{
 			Logs: sdkTypes.ABCIMessageLogs{
@@ -67,7 +67,7 @@ func (suite *IntegrationTestSuite) TestGetTxHistory() {
 	suite.Require().Equal(1, len(userHistory))
 }
 
-func (suite *IntegrationTestSuite) TestGetTxHistoryNoHitoryNFT() {
+func (suite *IntegrationTestSuite) TestGetTxHistoryWithoutNFT() {
 	block := []*sdkTypes.TxResponse{
 		{
 			Logs: sdkTypes.ABCIMessageLogs{
@@ -103,7 +103,7 @@ func (suite *IntegrationTestSuite) TestGetTxHistoryNoHitoryNFT() {
 	suite.Require().Equal(0, len(userHistory))
 }
 
-func (suite *IntegrationTestSuite) TestGetTxHistoryNoHitory() {
+func (suite *IntegrationTestSuite) TestGetTxHistoryNoRecordFound() {
 	block := []*sdkTypes.TxResponse{
 		{
 			Logs: sdkTypes.ABCIMessageLogs{

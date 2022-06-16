@@ -12,56 +12,34 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	sdkTypes "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/tx"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
-	"google.golang.org/grpc/codes"
 )
 
 func TxHistoryRequestHandler(w http.ResponseWriter, r *http.Request, ctx client.Context) {
 	data := r.URL.Query()
 	denom := data.Get("denom")
-	address := data.Get("address")
-
 	// format of address 'address' / %27address%27
-	if len(address) == types.MinVal {
-		// if address not found return error
-		w.Header().Add(types.HTTPContentTypeKey, types.HTTPContentTypeVal)
-		info, _ := json.Marshal(types.StandardError{
-			Code:    codes.InvalidArgument.String(),
-			Message: types.AddressInvalid,
-		})
-		_, _ = w.Write(info)
-		return
-	}
-
+	address := data.Get("address")
 	limit, _ := strconv.ParseInt(data.Get("limit"), 10, 64)
 	offset, _ := strconv.ParseInt(data.Get("offset"), 10, 64)
-	// checking is offset is correct if exits
-	if offset < types.MinVal {
-		// if offset is negative return error
-		w.Header().Add(types.HTTPContentTypeKey, types.HTTPContentTypeVal)
-		info, _ := json.Marshal(types.StandardError{
-			Code:    codes.InvalidArgument.String(),
-			Message: types.OffsetInvalid,
-		})
-		_, _ = w.Write(info)
-		return
-	} else if offset == types.MinVal {
-		offset = types.DefaultOffset // min value of offset is 1
+
+	// setting with default values
+	if offset == types.MinVal {
+		offset = types.DefaultOffset
 	}
 
 	// checking if limit is correct
-	if limit < types.MinVal {
-		// if limit is negative return error
-		w.Header().Add(types.HTTPContentTypeKey, types.HTTPContentTypeVal)
-		info, _ := json.Marshal(types.StandardError{
-			Code:    codes.InvalidArgument.String(),
-			Message: types.LimitInvalid,
-		})
+	if limit == types.MinVal {
+		limit = types.DefaultLimit
+	}
+
+	validationErr := ValidateRequest(address, limit, offset)
+	if validationErr != nil {
+		info, _ := json.Marshal(validationErr)
 		_, _ = w.Write(info)
 		return
-	} else if limit == types.MinVal {
-		limit = types.DefaultLimit
 	}
 
 	// query for tx history of events on basis of address
@@ -69,10 +47,7 @@ func TxHistoryRequestHandler(w http.ResponseWriter, r *http.Request, ctx client.
 	if err != nil {
 		// incase of error return error
 		w.Header().Add(types.HTTPContentTypeKey, types.HTTPContentTypeVal)
-		info, _ := json.Marshal(types.StandardError{
-			Code:    types.GetErrorHistoryCode,
-			Message: types.GetErrorHistoryMsg,
-		})
+		info, _ := json.Marshal(sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, types.GetErrorHistoryMsg))
 		_, _ = w.Write(info)
 		return
 	}
@@ -82,37 +57,31 @@ func TxHistoryRequestHandler(w http.ResponseWriter, r *http.Request, ctx client.
 }
 
 func GetTxHistory(ctx client.Context, address, denom string, limit, offset int64) ([]*types.History, error) {
-	// initialiing cosmos sdk service to get query events
+	// initializing cosmos sdk service to get query events
 	txService := authtx.NewTxServer(ctx, nil, nil)
 
 	// 1. querying cosmos sdk service to get transfer.sender event
 	// from this event we get 2 types of TxHistory i.e. SEND and NFTBUY
-	history, err := txService.GetTxsEvent(context.Background(), &tx.GetTxsEventRequest{Events: []string{
-		types.TransferSenderEvent + address,
-	}})
+	history, err := QueryHistoryCosmos(txService, types.TransferSenderEvent+address)
 	if err != nil {
 		return nil, err
 	}
-	// helper function to extract specific event information i.e. tranfer and create_item
+	// helper function to extract specific event information i.e. transfer and create_item
 	userHistory := QueryEventSender(history.TxResponses)
 
 	// 2. querying cosmos sdk service to get transfer.recipient event
 	// from this event we get 1 types of TxHistory i.e. RECEIVE
-	history, err = txService.GetTxsEvent(context.Background(), &tx.GetTxsEventRequest{Events: []string{
-		types.TransferRecipientEvent + address,
-	}})
+	history, err = QueryHistoryCosmos(txService, types.TransferRecipientEvent+address)
 	if err != nil {
 		return nil, err
 	}
-	// helper function to extract specific event information i.e. tranfer
+	// helper function to extract specific event information i.e. transfer
 	// adding records to collection
 	userHistory = append(userHistory, QueryEventRecipientBank(history.TxResponses)...)
 
 	// 3. querying cosmos sdk service to get create_item.receiver event
 	// from this event we get 1 types of TxHistory i.e. NFTSELL
-	history, err = txService.GetTxsEvent(context.Background(), &tx.GetTxsEventRequest{Events: []string{
-		types.CreateItemReceiverEvent + address,
-	}})
+	history, err = QueryHistoryCosmos(txService, types.CreateItemReceiverEvent+address)
 	if err != nil {
 		return nil, err
 	}
@@ -120,34 +89,39 @@ func GetTxHistory(ctx client.Context, address, denom string, limit, offset int64
 	// adding records to collection
 	userHistory = append(userHistory, QueryEventNFTSell(history.TxResponses)...)
 
-	sort.Slice(userHistory, func(i, j int) bool {
-		return userHistory[i].CreatedAt >= userHistory[j].CreatedAt
-	})
+	// sorting final user history with chronological order
+	userHistory = Sort(userHistory)
 
 	// if incoming request is for a specific denomination
 	if len(denom) > types.MinVal {
-		his := []*types.History{}
-		// filter out the specific denomination from the tx history
-		for _, h := range userHistory {
-			if strings.Contains(h.Amount, denom) {
-				his = append(his, h)
-			}
-		}
-		userHistory = his
+		userHistory = FilterOnDenom(denom, userHistory)
 	}
 
-	// calculating limit and offset to retutrn paginated slice of complete tx history
+	// calculating limit and offset to return paginated slice of complete tx history
 	offset = limit * (offset - 1) // subtracted 1 as indices start at 0, case offset is 1 i.e. first page, where first index is 0
 	limit += offset
 
-	// case: if offset if outof bound the return empty response
+	// case: if offset if out of bound the return empty response
 	if offset > int64(len(userHistory)) {
 		return []*types.History{}, nil
-	} else if limit > int64(len(userHistory)) { // case if limit is outof bounds the return history from offset to end
+	} else if limit > int64(len(userHistory)) { // case if limit is out of bounds the return history from offset to end
 		return userHistory[offset:], nil
 	}
 	// normal case pagination lies between the slices
 	return userHistory[offset:limit], nil
+}
+
+/*
+* Common Function to query tx History from cosmos
+ */
+func QueryHistoryCosmos(txService tx.ServiceServer, query string) (history *tx.GetTxsEventResponse, err error) {
+	history, err = txService.GetTxsEvent(context.Background(), &tx.GetTxsEventRequest{Events: []string{
+		query,
+	}})
+	if err != nil {
+		return nil, err
+	}
+	return history, nil
 }
 
 /*
@@ -159,7 +133,7 @@ func GetTxHistory(ctx client.Context, address, denom string, limit, offset int64
 
 func QueryEventSender(block []*sdkTypes.TxResponse) (userHistory []*types.History) {
 	for _, txRes := range block {
-		// getting block time to note the time event occcured
+		// getting block time to note the time event occurred
 		// parsing date in string to date object
 		date, _ := time.Parse(time.RFC3339, txRes.Timestamp)
 		// using date to get unix timestamp of the block
@@ -173,52 +147,13 @@ func QueryEventSender(block []*sdkTypes.TxResponse) (userHistory []*types.Histor
 			Type:      types.TxTypeNFTBuy,
 		}
 		for _, log := range txRes.Logs {
-		eventFound:
-			for _, e := range log.Events {
-				switch e.Type {
-				// case transfer event found, i.e. user have sent amount user bank send
-				case types.TransferEventKey:
-					for _, attr := range e.GetAttributes() {
-						// extract amount of transfer and the recipient address
-						switch attr.Key {
-						case types.KeyAmount:
-							if len(attr.Value) == types.MinVal {
-								entry.Amount = types.ValZero
-							} else {
-								entry.Amount = attr.Value
-							}
-						case types.KeyRecipient:
-							entry.Address = attr.Value
-						}
-					}
-					// case create_item event found extracyt amount at which nft is bought
-					// its identification id's and owner address
-				case types.CreateItemKey:
-					entry.Address = ""
-					for _, attr := range e.GetAttributes() {
-						switch attr.Key {
-						case types.KeyAmount:
-							if len(attr.Value) == types.MinVal {
-								nft.Amount = types.ValZero
-							} else {
-								nft.Amount = attr.Value
-							}
-						case types.KeyCookbookID:
-							nft.CookbookID = attr.Value
-						case types.KeyRecipeID:
-							nft.RecipeID = attr.Value
-						case types.KeyReceiver:
-							nft.Address = attr.Value
-						}
-					}
-					userHistory = append(userHistory, nft)
-					// if creat_item event is found then skip any other event search, break loop
-					break eventFound
-				}
-				// if transfer as sender is found for a bank transfer add it to history
-				if len(entry.Address) > types.MinVal {
-					userHistory = append(userHistory, entry)
-				}
+			entry, nft = GetBankCreateItemEvent(log.Events, entry, nft)
+			// if transfer as sender is found for a bank transfer add it to history
+			if entry != nil {
+				userHistory = append(userHistory, entry)
+			}
+			if nft != nil {
+				userHistory = append(userHistory, nft)
 			}
 		}
 	}
@@ -226,9 +161,32 @@ func QueryEventSender(block []*sdkTypes.TxResponse) (userHistory []*types.Histor
 	return userHistory
 }
 
+func GetBankCreateItemEvent(events sdkTypes.StringEvents, entry *types.History, nft *types.History) (*types.History, *types.History) {
+	for _, e := range events {
+		switch e.Type {
+		// case transfer event found, i.e. user have sent amount user bank send
+		case types.TransferEventKey:
+			ExtractBankEvent(e, entry, false)
+			// case create_item event found extract amount at which nft is bought
+			// its identification id's and owner address
+		case types.CreateItemKey:
+			entry.Address = ""
+			// sending true to extract receiver
+			ExtractExecuteRecipeEvent(e, nft, false)
+			return nil, nft
+			// if creat_item event is found then skip any other event search, break loop
+		}
+	}
+	// if transfer as sender is found for a bank transfer add it to history
+	if len(entry.Address) > types.MinVal {
+		return entry, nil
+	}
+	return nil, nil
+}
+
 func QueryEventRecipientBank(block []*sdkTypes.TxResponse) (userHistory []*types.History) {
 	for _, txRes := range block {
-		// getting block time to note the time event occcured
+		// getting block time to note the time event occurred
 		// parsing date in string to date object
 		date, _ := time.Parse(time.RFC3339, txRes.Timestamp)
 		// using date to get unix timestamp of the block
@@ -238,34 +196,32 @@ func QueryEventRecipientBank(block []*sdkTypes.TxResponse) (userHistory []*types
 			Type:      types.TxTypeReceive,
 		}
 		for _, log := range txRes.Logs {
-			for _, e := range log.Events {
-				// case transfer event is found, i.e. user have received amount from bank send
-				// extract amount of transfer and sender address
-				if e.Type == types.TransferEventKey {
-					for _, attr := range e.GetAttributes() {
-						switch attr.Key {
-						case types.KeyAmount:
-							if len(attr.Value) == types.MinVal {
-								entry.Amount = types.ValZero
-							} else {
-								entry.Amount = attr.Value
-							}
-						case types.KeySender:
-							entry.Address = attr.Value
-						}
-					}
-					// add entry to userHistroy
-					userHistory = append(userHistory, entry)
-				}
+			entry = GetBankEvent(log.Events, entry)
+			if entry != nil {
+				userHistory = append(userHistory, entry)
 			}
 		}
 	}
 	return userHistory
 }
 
+func GetBankEvent(events sdkTypes.StringEvents, entry *types.History) *types.History {
+	for _, e := range events {
+		// case transfer event is found, i.e. user have received amount from bank send
+		// extract amount of transfer and sender address
+		if e.Type == types.TransferEventKey {
+			// passing true as we need to extract sender's info
+			ExtractBankEvent(e, entry, true)
+			// add entry to userHistory
+			return entry
+		}
+	}
+	return nil
+}
+
 func QueryEventNFTSell(block []*sdkTypes.TxResponse) (userHistory []*types.History) {
 	for _, txRes := range block {
-		// getting block time to note the time event occcured
+		// getting block time to note the time event occurred
 		// parsing date in string to date object
 		date, _ := time.Parse(time.RFC3339, txRes.Timestamp)
 		// using date to get unix timestamp of the block
@@ -275,32 +231,126 @@ func QueryEventNFTSell(block []*sdkTypes.TxResponse) (userHistory []*types.Histo
 			Type:      types.TxTypeNFTSell,
 		}
 		for _, log := range txRes.Logs {
-			for _, e := range log.Events {
-				// case create_item event is found
-				if e.Type == types.CreateItemKey {
-					// extract amount at which NFT is sold,
-					// its identification id's and buyers address
-					for _, attr := range e.GetAttributes() {
-						switch attr.Key {
-						case types.KeyAmount:
-							if len(attr.Value) == types.MinVal {
-								nft.Amount = types.ValZero
-							} else {
-								nft.Amount = attr.Value
-							}
-						case types.KeyCookbookID:
-							nft.CookbookID = attr.Value
-						case types.KeyRecipeID:
-							nft.RecipeID = attr.Value
-						case types.KeySender:
-							nft.Address = attr.Value
-						}
-					}
-					// add to history collection
-					userHistory = append(userHistory, nft)
-				}
+			nft = GetCreateItemEvent(log.Events, nft)
+			if nft != nil {
+				userHistory = append(userHistory, nft)
 			}
 		}
 	}
 	return userHistory
+}
+
+func GetCreateItemEvent(events sdkTypes.StringEvents, nft *types.History) *types.History {
+	for _, e := range events {
+		// case create_item event is found
+		if e.Type == types.CreateItemKey {
+			// extract amount at which NFT is sold,
+			// its identification id's and buyers address
+			// sending true to extract recipe executors's info
+			ExtractExecuteRecipeEvent(e, nft, true)
+			// add to history collection
+			return nft
+		}
+	}
+	return nil
+}
+
+/*
+* sender bool variable will be used to check which address we need to extract
+ */
+
+func ExtractBankEvent(e sdkTypes.StringEvent, entry *types.History, sender bool) {
+	for _, attr := range e.GetAttributes() {
+		switch attr.Key {
+		case types.KeyAmount:
+			if len(attr.Value) == types.MinVal {
+				entry.Amount = types.ValZero
+			} else {
+				entry.Amount = attr.Value
+			}
+		case types.KeySender:
+			if sender {
+				entry.Address = attr.Value
+			}
+		case types.KeyRecipient:
+			if !sender {
+				entry.Address = attr.Value
+			}
+		}
+	}
+}
+
+func ExtractExecuteRecipeEvent(e sdkTypes.StringEvent, nft *types.History, sender bool) {
+	for _, attr := range e.GetAttributes() {
+		switch attr.Key {
+		case types.KeyAmount:
+			if len(attr.Value) == types.MinVal {
+				nft.Amount = types.ValZero
+			} else {
+				nft.Amount = attr.Value
+			}
+		case types.KeyCookbookID:
+			nft.CookbookID = attr.Value
+		case types.KeyRecipeID:
+			nft.RecipeID = attr.Value
+		case types.KeySender:
+			if sender {
+				nft.Address = attr.Value
+			}
+		case types.KeyReceiver:
+			if !sender {
+				nft.Address = attr.Value
+			}
+		}
+	}
+}
+
+// helper func validate address
+func IsInvalidAddress(address string) bool {
+	return len(address) == types.MinVal
+}
+
+// helper func validate limit offset values
+func IsInvalidNum(val int64) bool {
+	return val < types.MinVal
+}
+
+// validate all common params i.e. address, limit and offset
+func ValidateRequest(address string, limit, offset int64) error {
+	if IsInvalidAddress(address) {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, types.AddressNotFound)
+	}
+	_, err := sdkTypes.AccAddressFromBech32(strings.Trim(address, "'"))
+	if err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, types.AddressInvalid)
+	}
+
+	if IsInvalidNum(offset) {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, types.OffsetInvalid)
+	}
+
+	if IsInvalidNum(limit) {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, types.LimitInvalid)
+	}
+	return nil
+}
+
+// sorts the userHistory array chronologically
+func Sort(userHistory []*types.History) []*types.History {
+	sort.Slice(userHistory, func(i, j int) bool {
+		return userHistory[i].CreatedAt >= userHistory[j].CreatedAt
+	})
+	return userHistory
+}
+
+// case denom is present it will filter transaction based on that denom
+func FilterOnDenom(denom string, userHistory []*types.History) []*types.History {
+	his := []*types.History{}
+	// filter out the specific denomination from the tx history
+	for _, h := range userHistory {
+		if strings.Contains(h.Amount, denom) {
+			his = append(his, h)
+		}
+	}
+	return his
 }

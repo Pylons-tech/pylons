@@ -114,6 +114,7 @@ const (
 	ValZero = "0"
 
 	AddressInvalid      = "invalid address"
+	AddressNotFound     = "address not found"
 	OffsetInvalid       = "offset must greater than 0"
 	LimitInvalid        = "limit must greater than 0"
 	GetErrorHistoryMsg  = "unable to get transaction history"
