@@ -96,7 +96,7 @@ func initAppConfig() (string, interface{}) {
 	srvCfg.API.Enable = true
 	srvCfg.StateSync.SnapshotInterval = 1500
 	srvCfg.StateSync.SnapshotKeepRecent = 2
-	srvCfg.MinGasPrices = "0ucraft"
+	srvCfg.MinGasPrices = "0stake"
 
 	CraftAppCfg := CustomAppConfig{Config: *srvCfg}
 

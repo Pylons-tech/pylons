@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/Pylons-tech/pylons/app/params"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	dbm "github.com/tendermint/tm-db"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -35,10 +36,10 @@ func DefaultConfig() network.Config {
 		ChainID:           "pylons-code-test",
 		NumValidators:     1,
 		BondDenom:         sdk.DefaultBondDenom,
-		MinGasPrices:      fmt.Sprintf("0.000006%s", sdk.DefaultBondDenom),
-		AccountTokens:     sdk.TokensFromConsensusPower(1000, sdk.DefaultPowerReduction),
-		StakingTokens:     sdk.TokensFromConsensusPower(500, sdk.DefaultPowerReduction),
-		BondedTokens:      sdk.TokensFromConsensusPower(100, sdk.DefaultPowerReduction),
+		MinGasPrices:      fmt.Sprintf("0%s", sdk.DefaultBondDenom),
+		AccountTokens:     sdk.TokensFromConsensusPower(1_000_000, sdk.DefaultPowerReduction),
+		StakingTokens:     sdk.TokensFromConsensusPower(1_000_000, sdk.DefaultPowerReduction),
+		BondedTokens:      sdk.TokensFromConsensusPower(30, sdk.DefaultPowerReduction),
 		CleanupDir:        true,
 		SigningAlgo:       string(hd.Secp256k1Type),
 		KeyringOptions:    []keyring.Option{},
@@ -51,6 +52,7 @@ func NewAppConstructor(encodingCfg params.EncodingConfig) network.AppConstructor
 			val.Ctx.Logger, dbm.NewMemDB(), nil, true, make(map[int64]bool), val.Ctx.Config.RootDir, 0,
 			encodingCfg,
 			simapp.EmptyAppOptions{},
+			baseapp.SetPruning(storetypes.NewPruningOptionsFromString(val.AppConfig.Pruning)),
 			baseapp.SetMinGasPrices(val.AppConfig.MinGasPrices),
 		)
 	}
