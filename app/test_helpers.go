@@ -39,7 +39,7 @@ func Setup(isCheckTx bool) *PylonsApp {
 
 // SetupTestingAppWithLevelDb initializes a new PylonssApp intended for testing,
 // with LevelDB as a db.
-func SetupTestingAppWithLevelDb(isCheckTx bool) (app *PylonsApp, cleanupFn func()) {
+func SetupTestingAppWithLevelDB(isCheckTx bool) (app *PylonsApp, cleanupFn func()) {
 	dir := "pylons_testing"
 	cdc := app.AppCodec()
 	db, err := sdk.NewLevelDB("pylons_leveldb_testing", dir)
