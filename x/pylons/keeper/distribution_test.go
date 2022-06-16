@@ -17,6 +17,7 @@ import (
 	stakingcli "github.com/cosmos/cosmos-sdk/x/staking/client/cli"
 	"github.com/stretchr/testify/require"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
@@ -66,7 +67,7 @@ func distributionPylonsGenesis(feesAmount sdk.Coin) *types.GenesisState {
 // DefaultConfig will initialize config for the network with custom application,
 // genesis and single validator. All other parameters are inherited from cosmos-sdk/testutil/network.DefaultConfig
 func distributionNetworkConfig(feesAmount sdk.Coin) network.Config {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	config.NumValidators = 1
 
 	cdc := config.Codec
@@ -92,7 +93,8 @@ func generateAccountsWithBalance(numAccounts int, validator *sdknetwork.Validato
 
 		args := []string{validator.Address.String(), addr, coin.String()}
 		args = append(args, flags...)
-		_, err := clitestutil.ExecTestCLICmd(clientCtx, bankcli.NewSendTxCmd(), args)
+		reqq, err := clitestutil.ExecTestCLICmd(clientCtx, bankcli.NewSendTxCmd(), args)
+		fmt.Println(reqq)
 		req.NoError(err)
 
 		accounts = append(accounts, addr)
