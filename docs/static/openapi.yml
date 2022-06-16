@@ -12574,7 +12574,7 @@ paths:
                         }
       tags:
         - Query
-  '/Pylons-tech/pylons/pylons/get_recipe_history/{cookbookID}/{recipeID}':
+  '/Pylons-tech/pylons/pylons/get_recipe_history/{cookbookId}/{recipeId}':
     get:
       summary: Queries a list of GetRecipeHistory items.
       operationId: PylonstechPylonsPylonsGetRecipeHistory
@@ -12589,11 +12589,11 @@ paths:
                 items:
                   type: object
                   properties:
-                    itemID:
+                    itemId:
                       type: string
-                    cookbookID:
+                    cookbookId:
                       type: string
-                    recipeID:
+                    recipeId:
                       type: string
                     sender:
                       type: string
@@ -12604,7 +12604,8 @@ paths:
                     amount:
                       type: string
                     createdAt:
-                      type: int64
+                      type: string
+                      format: int64
         default:
           description: An unexpected error response.
           schema:
@@ -12624,11 +12625,11 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: cookbookID
+        - name: cookbookId
           in: path
           required: true
           type: string
-        - name: recipeID
+        - name: recipeId
           in: path
           required: true
           type: string
@@ -12714,9 +12715,9 @@ paths:
           type: string
       tags:
         - Query
-  '/pylons/cookbook/{ID}':
+  '/pylons/cookbook/{id}':
     get:
-      summary: Retrieves a cookbook by ID.
+      summary: Retrieves a cookbook by id.
       operationId: PylonstechPylonsPylonsCookbook
       responses:
         '200':
@@ -12724,12 +12725,12 @@ paths:
           schema:
             type: object
             properties:
-              Cookbook:
+              cookbook:
                 type: object
                 properties:
                   creator:
                     type: string
-                  ID:
+                  id:
                     type: string
                   nodeVersion:
                     type: string
@@ -12765,7 +12766,7 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: ID
+        - name: id
           in: path
           required: true
           type: string
@@ -12781,14 +12782,14 @@ paths:
           schema:
             type: object
             properties:
-              Cookbooks:
+              cookbooks:
                 type: array
                 items:
                   type: object
                   properties:
                     creator:
                       type: string
-                    ID:
+                    id:
                       type: string
                     nodeVersion:
                       type: string
@@ -12904,7 +12905,7 @@ paths:
           type: boolean
       tags:
         - Query
-  '/pylons/execution/{ID}':
+  '/pylons/execution/{id}':
     get:
       summary: Queries a execution by id.
       operationId: PylonstechPylonsPylonsExecution
@@ -12914,16 +12915,16 @@ paths:
           schema:
             type: object
             properties:
-              Execution:
+              execution:
                 type: object
                 properties:
                   creator:
                     type: string
-                  ID:
+                  id:
                     type: string
-                  recipeID:
+                  recipeId:
                     type: string
-                  cookbookID:
+                  cookbookId:
                     type: string
                   recipeVersion:
                     type: string
@@ -12938,16 +12939,16 @@ paths:
                     items:
                       type: object
                       properties:
-                        ID:
+                        id:
                           type: string
                         doubles:
                           type: array
                           items:
                             type: object
                             properties:
-                              Key:
+                              key:
                                 type: string
-                              Value:
+                              value:
                                 type: string
                             title: DoubleKeyValue describes double key/value set
                         longs:
@@ -12955,9 +12956,9 @@ paths:
                           items:
                             type: object
                             properties:
-                              Key:
+                              key:
                                 type: string
-                              Value:
+                              value:
                                 type: string
                                 format: int64
                             title: LongKeyValue describes long key/value set
@@ -12966,9 +12967,9 @@ paths:
                           items:
                             type: object
                             properties:
-                              Key:
+                              key:
                                 type: string
-                              Value:
+                              value:
                                 type: string
                             title: StringKeyValue describes string key/value set
                   coinInputs:
@@ -13005,15 +13006,15 @@ paths:
                         custom method
 
                         signatures required by gogoproto.
-                  itemOutputIDs:
+                  itemOutputIds:
                     type: array
                     items:
                       type: string
-                  itemModifyOutputIDs:
+                  itemModifyOutputIds:
                     type: array
                     items:
                       type: string
-              Completed:
+              completed:
                 type: boolean
         default:
           description: An unexpected error response.
@@ -13034,13 +13035,13 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: ID
+        - name: id
           in: path
           required: true
           type: string
       tags:
         - Query
-  '/pylons/executions/item/{CookbookID}/{ItemID}':
+  '/pylons/executions/item/{cookbookId}/{itemId}':
     get:
       summary: Queries a list of listExecutionsByItem items.
       operationId: PylonstechPylonsPylonsListExecutionsByItem
@@ -13050,18 +13051,18 @@ paths:
           schema:
             type: object
             properties:
-              CompletedExecutions:
+              completedExecutions:
                 type: array
                 items:
                   type: object
                   properties:
                     creator:
                       type: string
-                    ID:
+                    id:
                       type: string
-                    recipeID:
+                    recipeId:
                       type: string
-                    cookbookID:
+                    cookbookId:
                       type: string
                     recipeVersion:
                       type: string
@@ -13076,16 +13077,16 @@ paths:
                       items:
                         type: object
                         properties:
-                          ID:
+                          id:
                             type: string
                           doubles:
                             type: array
                             items:
                               type: object
                               properties:
-                                Key:
+                                key:
                                   type: string
-                                Value:
+                                value:
                                   type: string
                               title: DoubleKeyValue describes double key/value set
                           longs:
@@ -13093,9 +13094,9 @@ paths:
                             items:
                               type: object
                               properties:
-                                Key:
+                                key:
                                   type: string
-                                Value:
+                                value:
                                   type: string
                                   format: int64
                               title: LongKeyValue describes long key/value set
@@ -13104,9 +13105,9 @@ paths:
                             items:
                               type: object
                               properties:
-                                Key:
+                                key:
                                   type: string
-                                Value:
+                                value:
                                   type: string
                               title: StringKeyValue describes string key/value set
                     coinInputs:
@@ -13145,26 +13146,26 @@ paths:
                           custom method
 
                           signatures required by gogoproto.
-                    itemOutputIDs:
+                    itemOutputIds:
                       type: array
                       items:
                         type: string
-                    itemModifyOutputIDs:
+                    itemModifyOutputIds:
                       type: array
                       items:
                         type: string
-              PendingExecutions:
+              pendingExecutions:
                 type: array
                 items:
                   type: object
                   properties:
                     creator:
                       type: string
-                    ID:
+                    id:
                       type: string
-                    recipeID:
+                    recipeId:
                       type: string
-                    cookbookID:
+                    cookbookId:
                       type: string
                     recipeVersion:
                       type: string
@@ -13179,16 +13180,16 @@ paths:
                       items:
                         type: object
                         properties:
-                          ID:
+                          id:
                             type: string
                           doubles:
                             type: array
                             items:
                               type: object
                               properties:
-                                Key:
+                                key:
                                   type: string
-                                Value:
+                                value:
                                   type: string
                               title: DoubleKeyValue describes double key/value set
                           longs:
@@ -13196,9 +13197,9 @@ paths:
                             items:
                               type: object
                               properties:
-                                Key:
+                                key:
                                   type: string
-                                Value:
+                                value:
                                   type: string
                                   format: int64
                               title: LongKeyValue describes long key/value set
@@ -13207,9 +13208,9 @@ paths:
                             items:
                               type: object
                               properties:
-                                Key:
+                                key:
                                   type: string
-                                Value:
+                                value:
                                   type: string
                               title: StringKeyValue describes string key/value set
                     coinInputs:
@@ -13248,11 +13249,11 @@ paths:
                           custom method
 
                           signatures required by gogoproto.
-                    itemOutputIDs:
+                    itemOutputIds:
                       type: array
                       items:
                         type: string
-                    itemModifyOutputIDs:
+                    itemModifyOutputIds:
                       type: array
                       items:
                         type: string
@@ -13293,11 +13294,11 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: CookbookID
+        - name: cookbookId
           in: path
           required: true
           type: string
-        - name: ItemID
+        - name: itemId
           in: path
           required: true
           type: string
@@ -13359,7 +13360,7 @@ paths:
           type: boolean
       tags:
         - Query
-  '/pylons/executions/recipe/{CookbookID}/{RecipeID}':
+  '/pylons/executions/recipe/{cookbookId}/{recipeId}':
     get:
       summary: Queries a list of listExecutionsByRecipe items.
       operationId: PylonstechPylonsPylonsListExecutionsByRecipe
@@ -13369,18 +13370,18 @@ paths:
           schema:
             type: object
             properties:
-              CompletedExecutions:
+              completedExecutions:
                 type: array
                 items:
                   type: object
                   properties:
                     creator:
                       type: string
-                    ID:
+                    id:
                       type: string
-                    recipeID:
+                    recipeId:
                       type: string
-                    cookbookID:
+                    cookbookId:
                       type: string
                     recipeVersion:
                       type: string
@@ -13395,16 +13396,16 @@ paths:
                       items:
                         type: object
                         properties:
-                          ID:
+                          id:
                             type: string
                           doubles:
                             type: array
                             items:
                               type: object
                               properties:
-                                Key:
+                                key:
                                   type: string
-                                Value:
+                                value:
                                   type: string
                               title: DoubleKeyValue describes double key/value set
                           longs:
@@ -13412,9 +13413,9 @@ paths:
                             items:
                               type: object
                               properties:
-                                Key:
+                                key:
                                   type: string
-                                Value:
+                                value:
                                   type: string
                                   format: int64
                               title: LongKeyValue describes long key/value set
@@ -13423,9 +13424,9 @@ paths:
                             items:
                               type: object
                               properties:
-                                Key:
+                                key:
                                   type: string
-                                Value:
+                                value:
                                   type: string
                               title: StringKeyValue describes string key/value set
                     coinInputs:
@@ -13464,26 +13465,26 @@ paths:
                           custom method
 
                           signatures required by gogoproto.
-                    itemOutputIDs:
+                    itemOutputIds:
                       type: array
                       items:
                         type: string
-                    itemModifyOutputIDs:
+                    itemModifyOutputIds:
                       type: array
                       items:
                         type: string
-              PendingExecutions:
+              pendingExecutions:
                 type: array
                 items:
                   type: object
                   properties:
                     creator:
                       type: string
-                    ID:
+                    id:
                       type: string
-                    recipeID:
+                    recipeId:
                       type: string
-                    cookbookID:
+                    cookbookId:
                       type: string
                     recipeVersion:
                       type: string
@@ -13498,16 +13499,16 @@ paths:
                       items:
                         type: object
                         properties:
-                          ID:
+                          id:
                             type: string
                           doubles:
                             type: array
                             items:
                               type: object
                               properties:
-                                Key:
+                                key:
                                   type: string
-                                Value:
+                                value:
                                   type: string
                               title: DoubleKeyValue describes double key/value set
                           longs:
@@ -13515,9 +13516,9 @@ paths:
                             items:
                               type: object
                               properties:
-                                Key:
+                                key:
                                   type: string
-                                Value:
+                                value:
                                   type: string
                                   format: int64
                               title: LongKeyValue describes long key/value set
@@ -13526,9 +13527,9 @@ paths:
                             items:
                               type: object
                               properties:
-                                Key:
+                                key:
                                   type: string
-                                Value:
+                                value:
                                   type: string
                               title: StringKeyValue describes string key/value set
                     coinInputs:
@@ -13567,11 +13568,11 @@ paths:
                           custom method
 
                           signatures required by gogoproto.
-                    itemOutputIDs:
+                    itemOutputIds:
                       type: array
                       items:
                         type: string
-                    itemModifyOutputIDs:
+                    itemModifyOutputIds:
                       type: array
                       items:
                         type: string
@@ -13612,11 +13613,11 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: CookbookID
+        - name: cookbookId
           in: path
           required: true
           type: string
-        - name: RecipeID
+        - name: recipeId
           in: path
           required: true
           type: string
@@ -13678,9 +13679,9 @@ paths:
           type: boolean
       tags:
         - Query
-  '/pylons/iap/{PurchaseToken}':
+  '/pylons/iap/{purchaseToken}':
     get:
-      summary: Queries a googleIAPOrder by PurchaseToken.
+      summary: Queries a googleIAPOrder by purchase_token.
       operationId: PylonstechPylonsPylonsGoogleInAppPurchaseOrder
       responses:
         '200':
@@ -13688,12 +13689,12 @@ paths:
           schema:
             type: object
             properties:
-              Order:
+              order:
                 type: object
                 properties:
                   creator:
                     type: string
-                  productID:
+                  productId:
                     type: string
                   purchaseToken:
                     type: string
@@ -13720,15 +13721,15 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: PurchaseToken
+        - name: purchaseToken
           in: path
           required: true
           type: string
       tags:
         - Query
-  '/pylons/item/{CookbookID}/{ID}':
+  '/pylons/item/{cookbookId}/{id}':
     get:
-      summary: Queries a item by ID.
+      summary: Queries a item by id.
       operationId: PylonstechPylonsPylonsItem
       responses:
         '200':
@@ -13736,14 +13737,14 @@ paths:
           schema:
             type: object
             properties:
-              Item:
+              item:
                 type: object
                 properties:
                   owner:
                     type: string
-                  cookbookID:
+                  cookbookId:
                     type: string
-                  ID:
+                  id:
                     type: string
                   nodeVersion:
                     type: string
@@ -13753,9 +13754,9 @@ paths:
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                       title: DoubleKeyValue describes double key/value set
                   longs:
@@ -13763,9 +13764,9 @@ paths:
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                           format: int64
                       title: LongKeyValue describes long key/value set
@@ -13774,9 +13775,9 @@ paths:
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                       title: StringKeyValue describes string key/value set
                   mutableStrings:
@@ -13784,9 +13785,9 @@ paths:
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                       title: StringKeyValue describes string key/value set
                   tradeable:
@@ -13835,11 +13836,11 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: CookbookID
+        - name: cookbookId
           in: path
           required: true
           type: string
-        - name: ID
+        - name: id
           in: path
           required: true
           type: string
@@ -13855,16 +13856,16 @@ paths:
           schema:
             type: object
             properties:
-              Items:
+              items:
                 type: array
                 items:
                   type: object
                   properties:
                     owner:
                       type: string
-                    cookbookID:
+                    cookbookId:
                       type: string
-                    ID:
+                    id:
                       type: string
                     nodeVersion:
                       type: string
@@ -13874,9 +13875,9 @@ paths:
                       items:
                         type: object
                         properties:
-                          Key:
+                          key:
                             type: string
-                          Value:
+                          value:
                             type: string
                         title: DoubleKeyValue describes double key/value set
                     longs:
@@ -13884,9 +13885,9 @@ paths:
                       items:
                         type: object
                         properties:
-                          Key:
+                          key:
                             type: string
-                          Value:
+                          value:
                             type: string
                             format: int64
                         title: LongKeyValue describes long key/value set
@@ -13895,9 +13896,9 @@ paths:
                       items:
                         type: object
                         properties:
-                          Key:
+                          key:
                             type: string
-                          Value:
+                          value:
                             type: string
                         title: StringKeyValue describes string key/value set
                     mutableStrings:
@@ -13905,9 +13906,9 @@ paths:
                       items:
                         type: object
                         properties:
-                          Key:
+                          key:
                             type: string
-                          Value:
+                          value:
                             type: string
                         title: StringKeyValue describes string key/value set
                     tradeable:
@@ -14037,7 +14038,7 @@ paths:
           type: boolean
       tags:
         - Query
-  '/pylons/payment/{purchaseID}':
+  '/pylons/payment/{purchaseId}':
     get:
       summary: Queries a paymentInfo by index.
       operationId: PylonstechPylonsPylonsPaymentInfo
@@ -14047,10 +14048,10 @@ paths:
           schema:
             type: object
             properties:
-              PaymentInfo:
+              paymentInfo:
                 type: object
                 properties:
-                  purchaseID:
+                  purchaseId:
                     type: string
                   processorName:
                     type: string
@@ -14058,7 +14059,7 @@ paths:
                     type: string
                   amount:
                     type: string
-                  productID:
+                  productId:
                     type: string
                   signature:
                     type: string
@@ -14081,7 +14082,7 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: purchaseID
+        - name: purchaseId
           in: path
           required: true
           type: string
@@ -14097,12 +14098,12 @@ paths:
           schema:
             type: object
             properties:
-              PaymentInfo:
+              paymentInfo:
                 type: array
                 items:
                   type: object
                   properties:
-                    purchaseID:
+                    purchaseId:
                       type: string
                     processorName:
                       type: string
@@ -14110,7 +14111,7 @@ paths:
                       type: string
                     amount:
                       type: string
-                    productID:
+                    productId:
                       type: string
                     signature:
                       type: string
@@ -14218,9 +14219,9 @@ paths:
           type: boolean
       tags:
         - Query
-  '/pylons/recipe/{CookbookID}/{ID}':
+  '/pylons/recipe/{cookbookId}/{id}':
     get:
-      summary: Retrieves a recipe by ID.
+      summary: Retrieves a recipe by id.
       operationId: PylonstechPylonsPylonsRecipe
       responses:
         '200':
@@ -14228,12 +14229,12 @@ paths:
           schema:
             type: object
             properties:
-              Recipe:
+              recipe:
                 type: object
                 properties:
-                  cookbookID:
+                  cookbookId:
                     type: string
-                  ID:
+                  id:
                     type: string
                   nodeVersion:
                     type: string
@@ -14272,7 +14273,7 @@ paths:
                     items:
                       type: object
                       properties:
-                        ID:
+                        id:
                           type: string
                         doubles:
                           type: array
@@ -14330,7 +14331,7 @@ paths:
                         items:
                           type: object
                           properties:
-                            ID:
+                            id:
                               type: string
                             coin:
                               type: object
@@ -14358,7 +14359,7 @@ paths:
                         items:
                           type: object
                           properties:
-                            ID:
+                            id:
                               type: string
                             doubles:
                               type: array
@@ -14444,9 +14445,9 @@ paths:
                               items:
                                 type: object
                                 properties:
-                                  Key:
+                                  key:
                                     type: string
-                                  Value:
+                                  value:
                                     type: string
                                 title: StringKeyValue describes string key/value set
                               title: >-
@@ -14495,7 +14496,7 @@ paths:
                         items:
                           type: object
                           properties:
-                            ID:
+                            id:
                               type: string
                             itemInputRef:
                               type: string
@@ -14583,9 +14584,9 @@ paths:
                               items:
                                 type: object
                                 properties:
-                                  Key:
+                                  key:
                                     type: string
-                                  Value:
+                                  value:
                                     type: string
                                 title: StringKeyValue describes string key/value set
                               title: >-
@@ -14635,7 +14636,7 @@ paths:
                     items:
                       type: object
                       properties:
-                        entryIDs:
+                        entryIds:
                           type: array
                           items:
                             type: string
@@ -14668,9 +14669,11 @@ paths:
                   extraInfo:
                     type: string
                   createdAt:
-                    type: int64
+                    type: string
+                    format: int64
                   updatedAt:
-                    type: int64
+                    type: string
+                    format: int64
         default:
           description: An unexpected error response.
           schema:
@@ -14690,17 +14693,17 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: CookbookID
+        - name: cookbookId
           in: path
           required: true
           type: string
-        - name: ID
+        - name: id
           in: path
           required: true
           type: string
       tags:
         - Query
-  '/pylons/recipes/{CookbookID}':
+  '/pylons/recipes/{cookbookId}':
     get:
       summary: Queries a list of listRecipesByCookbook items.
       operationId: PylonstechPylonsPylonsListRecipesByCookbook
@@ -14710,14 +14713,14 @@ paths:
           schema:
             type: object
             properties:
-              Recipes:
+              recipes:
                 type: array
                 items:
                   type: object
                   properties:
-                    cookbookID:
+                    cookbookId:
                       type: string
-                    ID:
+                    id:
                       type: string
                     nodeVersion:
                       type: string
@@ -14756,7 +14759,7 @@ paths:
                       items:
                         type: object
                         properties:
-                          ID:
+                          id:
                             type: string
                           doubles:
                             type: array
@@ -14814,7 +14817,7 @@ paths:
                           items:
                             type: object
                             properties:
-                              ID:
+                              id:
                                 type: string
                               coin:
                                 type: object
@@ -14842,7 +14845,7 @@ paths:
                           items:
                             type: object
                             properties:
-                              ID:
+                              id:
                                 type: string
                               doubles:
                                 type: array
@@ -14928,9 +14931,9 @@ paths:
                                 items:
                                   type: object
                                   properties:
-                                    Key:
+                                    key:
                                       type: string
-                                    Value:
+                                    value:
                                       type: string
                                   title: >-
                                     StringKeyValue describes string key/value
@@ -14981,7 +14984,7 @@ paths:
                           items:
                             type: object
                             properties:
-                              ID:
+                              id:
                                 type: string
                               itemInputRef:
                                 type: string
@@ -15069,9 +15072,9 @@ paths:
                                 items:
                                   type: object
                                   properties:
-                                    Key:
+                                    key:
                                       type: string
-                                    Value:
+                                    value:
                                       type: string
                                   title: >-
                                     StringKeyValue describes string key/value
@@ -15123,7 +15126,7 @@ paths:
                       items:
                         type: object
                         properties:
-                          entryIDs:
+                          entryIds:
                             type: array
                             items:
                               type: string
@@ -15156,9 +15159,11 @@ paths:
                     extraInfo:
                       type: string
                     createdAt:
-                      type: int64
+                      type: string
+                      format: int64
                     updatedAt:
-                      type: int64
+                      type: string
+                      format: int64
               pagination:
                 type: object
                 properties:
@@ -15205,7 +15210,7 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: CookbookID
+        - name: cookbookId
           in: path
           required: true
           type: string
@@ -15267,7 +15272,7 @@ paths:
           type: boolean
       tags:
         - Query
-  '/pylons/redeem/{ID}':
+  '/pylons/redeem/{id}':
     get:
       summary: Queries a redeemInfo by index.
       operationId: PylonstechPylonsPylonsRedeemInfo
@@ -15277,10 +15282,10 @@ paths:
           schema:
             type: object
             properties:
-              RedeemInfo:
+              redeemInfo:
                 type: object
                 properties:
-                  ID:
+                  id:
                     type: string
                   processorName:
                     type: string
@@ -15309,7 +15314,7 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: ID
+        - name: id
           in: path
           required: true
           type: string
@@ -15325,12 +15330,12 @@ paths:
           schema:
             type: object
             properties:
-              RedeemInfo:
+              redeemInfo:
                 type: array
                 items:
                   type: object
                   properties:
-                    ID:
+                    id:
                       type: string
                     processorName:
                       type: string
@@ -15444,7 +15449,7 @@ paths:
           type: boolean
       tags:
         - Query
-  '/pylons/trade/{ID}':
+  '/pylons/trade/{id}':
     get:
       summary: Queries a trade by id.
       operationId: PylonstechPylonsPylonsTrade
@@ -15454,12 +15459,12 @@ paths:
           schema:
             type: object
             properties:
-              Trade:
+              trade:
                 type: object
                 properties:
                   creator:
                     type: string
-                  ID:
+                  id:
                     type: string
                     format: uint64
                   coinInputs:
@@ -15490,7 +15495,7 @@ paths:
                     items:
                       type: object
                       properties:
-                        ID:
+                        id:
                           type: string
                         doubles:
                           type: array
@@ -15562,9 +15567,9 @@ paths:
                     items:
                       type: object
                       properties:
-                        cookbookID:
+                        cookbookId:
                           type: string
-                        itemID:
+                        itemId:
                           type: string
                   extraInfo:
                     type: string
@@ -15575,9 +15580,9 @@ paths:
                     items:
                       type: object
                       properties:
-                        cookbookID:
+                        cookbookId:
                           type: string
-                        itemID:
+                        itemId:
                           type: string
         default:
           description: An unexpected error response.
@@ -15598,7 +15603,7 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: ID
+        - name: id
           in: path
           required: true
           type: string
@@ -15615,14 +15620,14 @@ paths:
           schema:
             type: object
             properties:
-              Trades:
+              trades:
                 type: array
                 items:
                   type: object
                   properties:
                     creator:
                       type: string
-                    ID:
+                    id:
                       type: string
                       format: uint64
                     coinInputs:
@@ -15653,7 +15658,7 @@ paths:
                       items:
                         type: object
                         properties:
-                          ID:
+                          id:
                             type: string
                           doubles:
                             type: array
@@ -15726,9 +15731,9 @@ paths:
                       items:
                         type: object
                         properties:
-                          cookbookID:
+                          cookbookId:
                             type: string
-                          itemID:
+                          itemId:
                             type: string
                     extraInfo:
                       type: string
@@ -15739,9 +15744,9 @@ paths:
                       items:
                         type: object
                         properties:
-                          cookbookID:
+                          cookbookId:
                             type: string
-                          itemID:
+                          itemId:
                             type: string
               pagination:
                 type: object
@@ -23226,7 +23231,7 @@ definitions:
   Pylonstech.pylons.pylons.CoinOutput:
     type: object
     properties:
-      ID:
+      id:
         type: string
       coin:
         type: object
@@ -23250,7 +23255,7 @@ definitions:
     properties:
       creator:
         type: string
-      ID:
+      id:
         type: string
       nodeVersion:
         type: string
@@ -23284,9 +23289,9 @@ definitions:
   Pylonstech.pylons.pylons.DoubleKeyValue:
     type: object
     properties:
-      Key:
+      key:
         type: string
-      Value:
+      value:
         type: string
     title: DoubleKeyValue describes double key/value set
   Pylonstech.pylons.pylons.DoubleParam:
@@ -23332,7 +23337,7 @@ definitions:
         items:
           type: object
           properties:
-            ID:
+            id:
               type: string
             coin:
               type: object
@@ -23359,7 +23364,7 @@ definitions:
         items:
           type: object
           properties:
-            ID:
+            id:
               type: string
             doubles:
               type: array
@@ -23439,9 +23444,9 @@ definitions:
               items:
                 type: object
                 properties:
-                  Key:
+                  key:
                     type: string
-                  Value:
+                  value:
                     type: string
                 title: StringKeyValue describes string key/value set
               title: >-
@@ -23488,7 +23493,7 @@ definitions:
         items:
           type: object
           properties:
-            ID:
+            id:
               type: string
             itemInputRef:
               type: string
@@ -23570,9 +23575,9 @@ definitions:
               items:
                 type: object
                 properties:
-                  Key:
+                  key:
                     type: string
-                  Value:
+                  value:
                     type: string
                 title: StringKeyValue describes string key/value set
               title: >-
@@ -23618,11 +23623,11 @@ definitions:
     properties:
       creator:
         type: string
-      ID:
+      id:
         type: string
-      recipeID:
+      recipeId:
         type: string
-      cookbookID:
+      cookbookId:
         type: string
       recipeVersion:
         type: string
@@ -23637,16 +23642,16 @@ definitions:
         items:
           type: object
           properties:
-            ID:
+            id:
               type: string
             doubles:
               type: array
               items:
                 type: object
                 properties:
-                  Key:
+                  key:
                     type: string
-                  Value:
+                  value:
                     type: string
                 title: DoubleKeyValue describes double key/value set
             longs:
@@ -23654,9 +23659,9 @@ definitions:
               items:
                 type: object
                 properties:
-                  Key:
+                  key:
                     type: string
-                  Value:
+                  value:
                     type: string
                     format: int64
                 title: LongKeyValue describes long key/value set
@@ -23665,9 +23670,9 @@ definitions:
               items:
                 type: object
                 properties:
-                  Key:
+                  key:
                     type: string
-                  Value:
+                  value:
                     type: string
                 title: StringKeyValue describes string key/value set
       coinInputs:
@@ -23698,11 +23703,11 @@ definitions:
 
             NOTE: The amount field is an Int which implements the custom method
             signatures required by gogoproto.
-      itemOutputIDs:
+      itemOutputIds:
         type: array
         items:
           type: string
-      itemModifyOutputIDs:
+      itemModifyOutputIds:
         type: array
         items:
           type: string
@@ -23711,7 +23716,7 @@ definitions:
     properties:
       creator:
         type: string
-      productID:
+      productId:
         type: string
       purchaseToken:
         type: string
@@ -23737,9 +23742,9 @@ definitions:
     properties:
       owner:
         type: string
-      cookbookID:
+      cookbookId:
         type: string
-      ID:
+      id:
         type: string
       nodeVersion:
         type: string
@@ -23749,9 +23754,9 @@ definitions:
         items:
           type: object
           properties:
-            Key:
+            key:
               type: string
-            Value:
+            value:
               type: string
           title: DoubleKeyValue describes double key/value set
       longs:
@@ -23759,9 +23764,9 @@ definitions:
         items:
           type: object
           properties:
-            Key:
+            key:
               type: string
-            Value:
+            value:
               type: string
               format: int64
           title: LongKeyValue describes long key/value set
@@ -23770,9 +23775,9 @@ definitions:
         items:
           type: object
           properties:
-            Key:
+            key:
               type: string
-            Value:
+            value:
               type: string
           title: StringKeyValue describes string key/value set
       mutableStrings:
@@ -23780,9 +23785,9 @@ definitions:
         items:
           type: object
           properties:
-            Key:
+            key:
               type: string
-            Value:
+            value:
               type: string
           title: StringKeyValue describes string key/value set
       tradeable:
@@ -23812,7 +23817,7 @@ definitions:
   Pylonstech.pylons.pylons.ItemInput:
     type: object
     properties:
-      ID:
+      id:
         type: string
       doubles:
         type: array
@@ -23865,7 +23870,7 @@ definitions:
   Pylonstech.pylons.pylons.ItemModifyOutput:
     type: object
     properties:
-      ID:
+      id:
         type: string
       itemInputRef:
         type: string
@@ -23943,9 +23948,9 @@ definitions:
         items:
           type: object
           properties:
-            Key:
+            key:
               type: string
-            Value:
+            value:
               type: string
           title: StringKeyValue describes string key/value set
         title: >-
@@ -23985,7 +23990,7 @@ definitions:
   Pylonstech.pylons.pylons.ItemOutput:
     type: object
     properties:
-      ID:
+      id:
         type: string
       doubles:
         type: array
@@ -24061,9 +24066,9 @@ definitions:
         items:
           type: object
           properties:
-            Key:
+            key:
               type: string
-            Value:
+            value:
               type: string
           title: StringKeyValue describes string key/value set
         title: >-
@@ -24105,16 +24110,16 @@ definitions:
   Pylonstech.pylons.pylons.ItemRecord:
     type: object
     properties:
-      ID:
+      id:
         type: string
       doubles:
         type: array
         items:
           type: object
           properties:
-            Key:
+            key:
               type: string
-            Value:
+            value:
               type: string
           title: DoubleKeyValue describes double key/value set
       longs:
@@ -24122,9 +24127,9 @@ definitions:
         items:
           type: object
           properties:
-            Key:
+            key:
               type: string
-            Value:
+            value:
               type: string
               format: int64
           title: LongKeyValue describes long key/value set
@@ -24133,17 +24138,17 @@ definitions:
         items:
           type: object
           properties:
-            Key:
+            key:
               type: string
-            Value:
+            value:
               type: string
           title: StringKeyValue describes string key/value set
   Pylonstech.pylons.pylons.ItemRef:
     type: object
     properties:
-      cookbookID:
+      cookbookId:
         type: string
-      itemID:
+      itemId:
         type: string
   Pylonstech.pylons.pylons.LongInputParam:
     type: object
@@ -24164,9 +24169,9 @@ definitions:
   Pylonstech.pylons.pylons.LongKeyValue:
     type: object
     properties:
-      Key:
+      key:
         type: string
-      Value:
+      value:
         type: string
         format: int64
     title: LongKeyValue describes long key/value set
@@ -24203,7 +24208,7 @@ definitions:
   Pylonstech.pylons.pylons.MsgCompleteExecutionEarlyResponse:
     type: object
     properties:
-      ID:
+      id:
         type: string
   Pylonstech.pylons.pylons.MsgCreateAccountResponse:
     type: object
@@ -24214,13 +24219,13 @@ definitions:
   Pylonstech.pylons.pylons.MsgCreateTradeResponse:
     type: object
     properties:
-      ID:
+      id:
         type: string
         format: uint64
   Pylonstech.pylons.pylons.MsgExecuteRecipeResponse:
     type: object
     properties:
-      ID:
+      id:
         type: string
   Pylonstech.pylons.pylons.MsgFulfillTradeResponse:
     type: object
@@ -24241,7 +24246,7 @@ definitions:
   Pylonstech.pylons.pylons.PaymentInfo:
     type: object
     properties:
-      purchaseID:
+      purchaseId:
         type: string
       processorName:
         type: string
@@ -24249,19 +24254,19 @@ definitions:
         type: string
       amount:
         type: string
-      productID:
+      productId:
         type: string
       signature:
         type: string
   Pylonstech.pylons.pylons.QueryAllPaymentInfoResponse:
     type: object
     properties:
-      PaymentInfo:
+      paymentInfo:
         type: array
         items:
           type: object
           properties:
-            purchaseID:
+            purchaseId:
               type: string
             processorName:
               type: string
@@ -24269,7 +24274,7 @@ definitions:
               type: string
             amount:
               type: string
-            productID:
+            productId:
               type: string
             signature:
               type: string
@@ -24301,12 +24306,12 @@ definitions:
   Pylonstech.pylons.pylons.QueryAllRedeemInfoResponse:
     type: object
     properties:
-      RedeemInfo:
+      redeemInfo:
         type: array
         items:
           type: object
           properties:
-            ID:
+            id:
               type: string
             processorName:
               type: string
@@ -24352,12 +24357,12 @@ definitions:
   Pylonstech.pylons.pylons.QueryGetCookbookResponse:
     type: object
     properties:
-      Cookbook:
+      cookbook:
         type: object
         properties:
           creator:
             type: string
-          ID:
+          id:
             type: string
           nodeVersion:
             type: string
@@ -24377,16 +24382,16 @@ definitions:
   Pylonstech.pylons.pylons.QueryGetExecutionResponse:
     type: object
     properties:
-      Execution:
+      execution:
         type: object
         properties:
           creator:
             type: string
-          ID:
+          id:
             type: string
-          recipeID:
+          recipeId:
             type: string
-          cookbookID:
+          cookbookId:
             type: string
           recipeVersion:
             type: string
@@ -24401,16 +24406,16 @@ definitions:
             items:
               type: object
               properties:
-                ID:
+                id:
                   type: string
                 doubles:
                   type: array
                   items:
                     type: object
                     properties:
-                      Key:
+                      key:
                         type: string
-                      Value:
+                      value:
                         type: string
                     title: DoubleKeyValue describes double key/value set
                 longs:
@@ -24418,9 +24423,9 @@ definitions:
                   items:
                     type: object
                     properties:
-                      Key:
+                      key:
                         type: string
-                      Value:
+                      value:
                         type: string
                         format: int64
                     title: LongKeyValue describes long key/value set
@@ -24429,9 +24434,9 @@ definitions:
                   items:
                     type: object
                     properties:
-                      Key:
+                      key:
                         type: string
-                      Value:
+                      value:
                         type: string
                     title: StringKeyValue describes string key/value set
           coinInputs:
@@ -24468,25 +24473,25 @@ definitions:
                 method
 
                 signatures required by gogoproto.
-          itemOutputIDs:
+          itemOutputIds:
             type: array
             items:
               type: string
-          itemModifyOutputIDs:
+          itemModifyOutputIds:
             type: array
             items:
               type: string
-      Completed:
+      completed:
         type: boolean
   Pylonstech.pylons.pylons.QueryGetGoogleInAppPurchaseOrderResponse:
     type: object
     properties:
-      Order:
+      order:
         type: object
         properties:
           creator:
             type: string
-          productID:
+          productId:
             type: string
           purchaseToken:
             type: string
@@ -24497,14 +24502,14 @@ definitions:
   Pylonstech.pylons.pylons.QueryGetItemResponse:
     type: object
     properties:
-      Item:
+      item:
         type: object
         properties:
           owner:
             type: string
-          cookbookID:
+          cookbookId:
             type: string
-          ID:
+          id:
             type: string
           nodeVersion:
             type: string
@@ -24514,9 +24519,9 @@ definitions:
             items:
               type: object
               properties:
-                Key:
+                key:
                   type: string
-                Value:
+                value:
                   type: string
               title: DoubleKeyValue describes double key/value set
           longs:
@@ -24524,9 +24529,9 @@ definitions:
             items:
               type: object
               properties:
-                Key:
+                key:
                   type: string
-                Value:
+                value:
                   type: string
                   format: int64
               title: LongKeyValue describes long key/value set
@@ -24535,9 +24540,9 @@ definitions:
             items:
               type: object
               properties:
-                Key:
+                key:
                   type: string
-                Value:
+                value:
                   type: string
               title: StringKeyValue describes string key/value set
           mutableStrings:
@@ -24545,9 +24550,9 @@ definitions:
             items:
               type: object
               properties:
-                Key:
+                key:
                   type: string
-                Value:
+                value:
                   type: string
               title: StringKeyValue describes string key/value set
           tradeable:
@@ -24580,10 +24585,10 @@ definitions:
   Pylonstech.pylons.pylons.QueryGetPaymentInfoResponse:
     type: object
     properties:
-      PaymentInfo:
+      paymentInfo:
         type: object
         properties:
-          purchaseID:
+          purchaseId:
             type: string
           processorName:
             type: string
@@ -24591,7 +24596,7 @@ definitions:
             type: string
           amount:
             type: string
-          productID:
+          productId:
             type: string
           signature:
             type: string
@@ -24603,11 +24608,11 @@ definitions:
         items:
           type: object
           properties:
-            itemID:
+            itemId:
               type: string
-            cookbookID:
+            cookbookId:
               type: string
-            recipeID:
+            recipeId:
               type: string
             sender:
               type: string
@@ -24618,16 +24623,17 @@ definitions:
             amount:
               type: string
             createdAt:
-              type: int64
+              type: string
+              format: int64
   Pylonstech.pylons.pylons.QueryGetRecipeResponse:
     type: object
     properties:
-      Recipe:
+      recipe:
         type: object
         properties:
-          cookbookID:
+          cookbookId:
             type: string
-          ID:
+          id:
             type: string
           nodeVersion:
             type: string
@@ -24665,7 +24671,7 @@ definitions:
             items:
               type: object
               properties:
-                ID:
+                id:
                   type: string
                 doubles:
                   type: array
@@ -24723,7 +24729,7 @@ definitions:
                 items:
                   type: object
                   properties:
-                    ID:
+                    id:
                       type: string
                     coin:
                       type: object
@@ -24750,7 +24756,7 @@ definitions:
                 items:
                   type: object
                   properties:
-                    ID:
+                    id:
                       type: string
                     doubles:
                       type: array
@@ -24830,9 +24836,9 @@ definitions:
                       items:
                         type: object
                         properties:
-                          Key:
+                          key:
                             type: string
-                          Value:
+                          value:
                             type: string
                         title: StringKeyValue describes string key/value set
                       title: >-
@@ -24880,7 +24886,7 @@ definitions:
                 items:
                   type: object
                   properties:
-                    ID:
+                    id:
                       type: string
                     itemInputRef:
                       type: string
@@ -24962,9 +24968,9 @@ definitions:
                       items:
                         type: object
                         properties:
-                          Key:
+                          key:
                             type: string
-                          Value:
+                          value:
                             type: string
                         title: StringKeyValue describes string key/value set
                       title: >-
@@ -25011,7 +25017,7 @@ definitions:
             items:
               type: object
               properties:
-                entryIDs:
+                entryIds:
                   type: array
                   items:
                     type: string
@@ -25045,15 +25051,17 @@ definitions:
             type: string
           createdAt:
             type: string
+            format: int64
           updatedAt:
             type: string
+            format: int64
   Pylonstech.pylons.pylons.QueryGetRedeemInfoResponse:
     type: object
     properties:
-      RedeemInfo:
+      redeemInfo:
         type: object
         properties:
-          ID:
+          id:
             type: string
           processorName:
             type: string
@@ -25066,12 +25074,12 @@ definitions:
   Pylonstech.pylons.pylons.QueryGetTradeResponse:
     type: object
     properties:
-      Trade:
+      trade:
         type: object
         properties:
           creator:
             type: string
-          ID:
+          id:
             type: string
             format: uint64
           coinInputs:
@@ -25101,7 +25109,7 @@ definitions:
             items:
               type: object
               properties:
-                ID:
+                id:
                   type: string
                 doubles:
                   type: array
@@ -25173,9 +25181,9 @@ definitions:
             items:
               type: object
               properties:
-                cookbookID:
+                cookbookId:
                   type: string
-                itemID:
+                itemId:
                   type: string
           extraInfo:
             type: string
@@ -25186,9 +25194,9 @@ definitions:
             items:
               type: object
               properties:
-                cookbookID:
+                cookbookId:
                   type: string
-                itemID:
+                itemId:
                   type: string
   Pylonstech.pylons.pylons.QueryGetUsernameByAddressResponse:
     type: object
@@ -25201,14 +25209,14 @@ definitions:
   Pylonstech.pylons.pylons.QueryListCookbooksByCreatorResponse:
     type: object
     properties:
-      Cookbooks:
+      cookbooks:
         type: array
         items:
           type: object
           properties:
             creator:
               type: string
-            ID:
+            id:
               type: string
             nodeVersion:
               type: string
@@ -25246,18 +25254,18 @@ definitions:
   Pylonstech.pylons.pylons.QueryListExecutionsByItemResponse:
     type: object
     properties:
-      CompletedExecutions:
+      completedExecutions:
         type: array
         items:
           type: object
           properties:
             creator:
               type: string
-            ID:
+            id:
               type: string
-            recipeID:
+            recipeId:
               type: string
-            cookbookID:
+            cookbookId:
               type: string
             recipeVersion:
               type: string
@@ -25272,16 +25280,16 @@ definitions:
               items:
                 type: object
                 properties:
-                  ID:
+                  id:
                     type: string
                   doubles:
                     type: array
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                       title: DoubleKeyValue describes double key/value set
                   longs:
@@ -25289,9 +25297,9 @@ definitions:
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                           format: int64
                       title: LongKeyValue describes long key/value set
@@ -25300,9 +25308,9 @@ definitions:
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                       title: StringKeyValue describes string key/value set
             coinInputs:
@@ -25339,26 +25347,26 @@ definitions:
                   method
 
                   signatures required by gogoproto.
-            itemOutputIDs:
+            itemOutputIds:
               type: array
               items:
                 type: string
-            itemModifyOutputIDs:
+            itemModifyOutputIds:
               type: array
               items:
                 type: string
-      PendingExecutions:
+      pendingExecutions:
         type: array
         items:
           type: object
           properties:
             creator:
               type: string
-            ID:
+            id:
               type: string
-            recipeID:
+            recipeId:
               type: string
-            cookbookID:
+            cookbookId:
               type: string
             recipeVersion:
               type: string
@@ -25373,16 +25381,16 @@ definitions:
               items:
                 type: object
                 properties:
-                  ID:
+                  id:
                     type: string
                   doubles:
                     type: array
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                       title: DoubleKeyValue describes double key/value set
                   longs:
@@ -25390,9 +25398,9 @@ definitions:
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                           format: int64
                       title: LongKeyValue describes long key/value set
@@ -25401,9 +25409,9 @@ definitions:
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                       title: StringKeyValue describes string key/value set
             coinInputs:
@@ -25440,11 +25448,11 @@ definitions:
                   method
 
                   signatures required by gogoproto.
-            itemOutputIDs:
+            itemOutputIds:
               type: array
               items:
                 type: string
-            itemModifyOutputIDs:
+            itemModifyOutputIds:
               type: array
               items:
                 type: string
@@ -25469,18 +25477,18 @@ definitions:
   Pylonstech.pylons.pylons.QueryListExecutionsByRecipeResponse:
     type: object
     properties:
-      CompletedExecutions:
+      completedExecutions:
         type: array
         items:
           type: object
           properties:
             creator:
               type: string
-            ID:
+            id:
               type: string
-            recipeID:
+            recipeId:
               type: string
-            cookbookID:
+            cookbookId:
               type: string
             recipeVersion:
               type: string
@@ -25495,16 +25503,16 @@ definitions:
               items:
                 type: object
                 properties:
-                  ID:
+                  id:
                     type: string
                   doubles:
                     type: array
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                       title: DoubleKeyValue describes double key/value set
                   longs:
@@ -25512,9 +25520,9 @@ definitions:
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                           format: int64
                       title: LongKeyValue describes long key/value set
@@ -25523,9 +25531,9 @@ definitions:
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                       title: StringKeyValue describes string key/value set
             coinInputs:
@@ -25562,26 +25570,26 @@ definitions:
                   method
 
                   signatures required by gogoproto.
-            itemOutputIDs:
+            itemOutputIds:
               type: array
               items:
                 type: string
-            itemModifyOutputIDs:
+            itemModifyOutputIds:
               type: array
               items:
                 type: string
-      PendingExecutions:
+      pendingExecutions:
         type: array
         items:
           type: object
           properties:
             creator:
               type: string
-            ID:
+            id:
               type: string
-            recipeID:
+            recipeId:
               type: string
-            cookbookID:
+            cookbookId:
               type: string
             recipeVersion:
               type: string
@@ -25596,16 +25604,16 @@ definitions:
               items:
                 type: object
                 properties:
-                  ID:
+                  id:
                     type: string
                   doubles:
                     type: array
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                       title: DoubleKeyValue describes double key/value set
                   longs:
@@ -25613,9 +25621,9 @@ definitions:
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                           format: int64
                       title: LongKeyValue describes long key/value set
@@ -25624,9 +25632,9 @@ definitions:
                     items:
                       type: object
                       properties:
-                        Key:
+                        key:
                           type: string
-                        Value:
+                        value:
                           type: string
                       title: StringKeyValue describes string key/value set
             coinInputs:
@@ -25663,11 +25671,11 @@ definitions:
                   method
 
                   signatures required by gogoproto.
-            itemOutputIDs:
+            itemOutputIds:
               type: array
               items:
                 type: string
-            itemModifyOutputIDs:
+            itemModifyOutputIds:
               type: array
               items:
                 type: string
@@ -25692,16 +25700,16 @@ definitions:
   Pylonstech.pylons.pylons.QueryListItemByOwnerResponse:
     type: object
     properties:
-      Items:
+      items:
         type: array
         items:
           type: object
           properties:
             owner:
               type: string
-            cookbookID:
+            cookbookId:
               type: string
-            ID:
+            id:
               type: string
             nodeVersion:
               type: string
@@ -25711,9 +25719,9 @@ definitions:
               items:
                 type: object
                 properties:
-                  Key:
+                  key:
                     type: string
-                  Value:
+                  value:
                     type: string
                 title: DoubleKeyValue describes double key/value set
             longs:
@@ -25721,9 +25729,9 @@ definitions:
               items:
                 type: object
                 properties:
-                  Key:
+                  key:
                     type: string
-                  Value:
+                  value:
                     type: string
                     format: int64
                 title: LongKeyValue describes long key/value set
@@ -25732,9 +25740,9 @@ definitions:
               items:
                 type: object
                 properties:
-                  Key:
+                  key:
                     type: string
-                  Value:
+                  value:
                     type: string
                 title: StringKeyValue describes string key/value set
             mutableStrings:
@@ -25742,9 +25750,9 @@ definitions:
               items:
                 type: object
                 properties:
-                  Key:
+                  key:
                     type: string
-                  Value:
+                  value:
                     type: string
                 title: StringKeyValue describes string key/value set
             tradeable:
@@ -25795,14 +25803,14 @@ definitions:
   Pylonstech.pylons.pylons.QueryListRecipesByCookbookResponse:
     type: object
     properties:
-      Recipes:
+      recipes:
         type: array
         items:
           type: object
           properties:
-            cookbookID:
+            cookbookId:
               type: string
-            ID:
+            id:
               type: string
             nodeVersion:
               type: string
@@ -25840,7 +25848,7 @@ definitions:
               items:
                 type: object
                 properties:
-                  ID:
+                  id:
                     type: string
                   doubles:
                     type: array
@@ -25898,7 +25906,7 @@ definitions:
                   items:
                     type: object
                     properties:
-                      ID:
+                      id:
                         type: string
                       coin:
                         type: object
@@ -25926,7 +25934,7 @@ definitions:
                   items:
                     type: object
                     properties:
-                      ID:
+                      id:
                         type: string
                       doubles:
                         type: array
@@ -26010,9 +26018,9 @@ definitions:
                         items:
                           type: object
                           properties:
-                            Key:
+                            key:
                               type: string
-                            Value:
+                            value:
                               type: string
                           title: StringKeyValue describes string key/value set
                         title: >-
@@ -26061,7 +26069,7 @@ definitions:
                   items:
                     type: object
                     properties:
-                      ID:
+                      id:
                         type: string
                       itemInputRef:
                         type: string
@@ -26147,9 +26155,9 @@ definitions:
                         items:
                           type: object
                           properties:
-                            Key:
+                            key:
                               type: string
-                            Value:
+                            value:
                               type: string
                           title: StringKeyValue describes string key/value set
                         title: >-
@@ -26199,7 +26207,7 @@ definitions:
               items:
                 type: object
                 properties:
-                  entryIDs:
+                  entryIds:
                     type: array
                     items:
                       type: string
@@ -26232,9 +26240,11 @@ definitions:
             extraInfo:
               type: string
             createdAt:
-              type: int64
+              type: string
+              format: int64
             updatedAt:
-              type: int64
+              type: string
+              format: int64
       pagination:
         type: object
         properties:
@@ -26263,14 +26273,14 @@ definitions:
   Pylonstech.pylons.pylons.QueryListTradesByCreatorResponse:
     type: object
     properties:
-      Trades:
+      trades:
         type: array
         items:
           type: object
           properties:
             creator:
               type: string
-            ID:
+            id:
               type: string
               format: uint64
             coinInputs:
@@ -26300,7 +26310,7 @@ definitions:
               items:
                 type: object
                 properties:
-                  ID:
+                  id:
                     type: string
                   doubles:
                     type: array
@@ -26372,9 +26382,9 @@ definitions:
               items:
                 type: object
                 properties:
-                  cookbookID:
+                  cookbookId:
                     type: string
-                  itemID:
+                  itemId:
                     type: string
             extraInfo:
               type: string
@@ -26385,9 +26395,9 @@ definitions:
               items:
                 type: object
                 properties:
-                  cookbookID:
+                  cookbookId:
                     type: string
-                  itemID:
+                  itemId:
                     type: string
       pagination:
         type: object
@@ -26417,9 +26427,9 @@ definitions:
   Pylonstech.pylons.pylons.Recipe:
     type: object
     properties:
-      cookbookID:
+      cookbookId:
         type: string
-      ID:
+      id:
         type: string
       nodeVersion:
         type: string
@@ -26457,7 +26467,7 @@ definitions:
         items:
           type: object
           properties:
-            ID:
+            id:
               type: string
             doubles:
               type: array
@@ -26515,7 +26525,7 @@ definitions:
             items:
               type: object
               properties:
-                ID:
+                id:
                   type: string
                 coin:
                   type: object
@@ -26542,7 +26552,7 @@ definitions:
             items:
               type: object
               properties:
-                ID:
+                id:
                   type: string
                 doubles:
                   type: array
@@ -26622,9 +26632,9 @@ definitions:
                   items:
                     type: object
                     properties:
-                      Key:
+                      key:
                         type: string
-                      Value:
+                      value:
                         type: string
                     title: StringKeyValue describes string key/value set
                   title: >-
@@ -26671,7 +26681,7 @@ definitions:
             items:
               type: object
               properties:
-                ID:
+                id:
                   type: string
                 itemInputRef:
                   type: string
@@ -26753,9 +26763,9 @@ definitions:
                   items:
                     type: object
                     properties:
-                      Key:
+                      key:
                         type: string
-                      Value:
+                      value:
                         type: string
                     title: StringKeyValue describes string key/value set
                   title: >-
@@ -26801,7 +26811,7 @@ definitions:
         items:
           type: object
           properties:
-            entryIDs:
+            entryIds:
               type: array
               items:
                 type: string
@@ -26831,17 +26841,19 @@ definitions:
       extraInfo:
         type: string
       createdAt:
-        type: int64
+        type: string
+        format: int64
       updatedAt:
-        type: int64
+        type: string
+        format: int64
   Pylonstech.pylons.pylons.RecipeHistory:
     type: object
     properties:
-      itemID:
+      itemId:
         type: string
-      cookbookID:
+      cookbookId:
         type: string
-      recipeID:
+      recipeId:
         type: string
       sender:
         type: string
@@ -26852,11 +26864,12 @@ definitions:
       amount:
         type: string
       createdAt:
-        type: int64
+        type: string
+        format: int64
   Pylonstech.pylons.pylons.RedeemInfo:
     type: object
     properties:
-      ID:
+      id:
         type: string
       processorName:
         type: string
@@ -26880,9 +26893,9 @@ definitions:
   Pylonstech.pylons.pylons.StringKeyValue:
     type: object
     properties:
-      Key:
+      key:
         type: string
-      Value:
+      value:
         type: string
     title: StringKeyValue describes string key/value set
   Pylonstech.pylons.pylons.StringParam:
@@ -26901,7 +26914,7 @@ definitions:
     properties:
       creator:
         type: string
-      ID:
+      id:
         type: string
         format: uint64
       coinInputs:
@@ -26931,7 +26944,7 @@ definitions:
         items:
           type: object
           properties:
-            ID:
+            id:
               type: string
             doubles:
               type: array
@@ -27000,9 +27013,9 @@ definitions:
         items:
           type: object
           properties:
-            cookbookID:
+            cookbookId:
               type: string
-            itemID:
+            itemId:
               type: string
       extraInfo:
         type: string
@@ -27013,9 +27026,9 @@ definitions:
         items:
           type: object
           properties:
-            cookbookID:
+            cookbookId:
               type: string
-            itemID:
+            itemId:
               type: string
   Pylonstech.pylons.pylons.Username:
     type: object
@@ -27025,7 +27038,7 @@ definitions:
   Pylonstech.pylons.pylons.WeightedOutputs:
     type: object
     properties:
-      entryIDs:
+      entryIds:
         type: array
         items:
           type: string
