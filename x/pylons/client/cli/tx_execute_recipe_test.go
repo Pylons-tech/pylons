@@ -17,6 +17,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
@@ -26,7 +27,7 @@ func GenerateAddress() {
 }
 
 func TestExecuteRecipeNoInputOutput(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -180,7 +181,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 }
 
 func TestExecuteRecipeQuantityField(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -370,7 +371,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 }
 
 func TestLimitReachExecuteRecipe(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -511,7 +512,7 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 }
 
 func TestExecuteUpdatedRecipe(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -680,7 +681,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 }
 
 func TestExecuteDisableRecipe(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -795,7 +796,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 }
 
 func TestExecuteRecipeItemInputOutput(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -985,7 +986,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 }
 
 func TestExecuteRecipeMutableStringField(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -1141,7 +1142,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 }
 
 func TestExecuteRecipeNoInputOutputInvalidArgs(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx

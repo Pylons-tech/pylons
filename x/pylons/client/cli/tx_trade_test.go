@@ -8,6 +8,7 @@ import (
 
 	"github.com/spf13/cast"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
@@ -22,7 +23,7 @@ import (
 // TODO test for multiple paymentTokens
 
 func TestCreateTradeNoItemOutput1(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -89,7 +90,7 @@ func TestCreateTradeNoItemOutput1(t *testing.T) {
 }
 
 func TestCreateTradeNoItemOutput2(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -163,7 +164,7 @@ func TestCreateTradeNoItemOutput2(t *testing.T) {
 }
 
 func TestCreateTradeItemOutput(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -374,7 +375,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 }
 
 func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -596,7 +597,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 }
 
 func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -818,7 +819,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 }
 
 func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -1040,7 +1041,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 }
 
 func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -1262,7 +1263,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 }
 
 func TestCreateTradeInvalidCoinOutput(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -1337,7 +1338,7 @@ func TestCreateTradeInvalidCoinOutput(t *testing.T) {
 }
 
 func TestCreateTradeInvalidItemOutput(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -1417,7 +1418,7 @@ func TestCreateTradeInvalidItemOutput(t *testing.T) {
 }
 
 func TestCancelTrade(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx

@@ -10,6 +10,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
@@ -19,7 +20,7 @@ import (
 )
 
 func TestCmdCompleteExecutionEarly(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx

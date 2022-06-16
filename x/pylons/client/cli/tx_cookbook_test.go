@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -17,7 +18,7 @@ import (
 )
 
 func TestCreateCookbook(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -185,7 +186,7 @@ func TestCreateCookbook(t *testing.T) {
 }
 
 func TestUpdateCookbook(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx

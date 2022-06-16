@@ -6,6 +6,7 @@ import (
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -18,7 +19,7 @@ import (
 )
 
 func TestCreateAccount(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -130,7 +131,7 @@ func TestCreateAccount(t *testing.T) {
 }
 
 func TestUpdateAccount(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx

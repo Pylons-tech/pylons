@@ -10,6 +10,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 )
@@ -17,7 +18,7 @@ import (
 // TODO add tests for coinInput/coinOutput validation
 
 func TestCreateRecipe(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -91,7 +92,7 @@ func TestCreateRecipe(t *testing.T) {
 }
 
 func TestUpdateRecipe(t *testing.T) {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
