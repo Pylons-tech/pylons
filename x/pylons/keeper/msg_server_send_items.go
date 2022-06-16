@@ -19,21 +19,21 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 	items := make([]types.Item, 0)
 	for _, itemRef := range msg.Items {
 		// check it item exists and if it is owned by message creator
-		item, found := k.Keeper.GetItem(ctx, itemRef.CookbookID, itemRef.ItemID)
+		item, found := k.Keeper.GetItem(ctx, itemRef.CookbookId, itemRef.ItemId)
 		if !found {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item in cookbook %v with ID %v does not exist", itemRef.CookbookID, itemRef.ItemID)
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item in cookbook %v with ID %v does not exist", itemRef.CookbookId, itemRef.ItemId)
 		}
 
 		// check if item is owned by msg.Creator if not ERROR
 		if item.Owner != msg.Creator {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Item in cookbook %v with ID %v not owned by sender", item.CookbookID, item.ID)
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Item in cookbook %v with ID %v not owned by sender", item.CookbookId, item.Id)
 		}
 
 		if !item.Tradeable {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Item in cookbook %v with ID %v cannot be traded", item.CookbookID, item.ID)
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Item in cookbook %v with ID %v cannot be traded", item.CookbookId, item.Id)
 		}
 
-		itemsByCookbook[item.CookbookID] = append(itemsByCookbook[item.CookbookID], item)
+		itemsByCookbook[item.CookbookId] = append(itemsByCookbook[item.CookbookId], item)
 		items = append(items, item)
 	}
 
@@ -55,7 +55,7 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 		}
 		k.Keeper.UpdateItem(ctx, item, senderAddr)
 		transferFeeIdx := permutation[idx]
-		transferFees[item.CookbookID] = transferFees[item.CookbookID].Add(item.TransferFee[transferFeeIdx])
+		transferFees[item.CookbookId] = transferFees[item.CookbookId].Add(item.TransferFee[transferFeeIdx])
 	}
 
 	// Calculate fee and pay it to cookbook owners and module account

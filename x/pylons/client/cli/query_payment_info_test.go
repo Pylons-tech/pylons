@@ -32,7 +32,7 @@ func TestShowPaymentInfo(t *testing.T) {
 	}{
 		{
 			desc: "found",
-			id:   objs[0].PurchaseID,
+			id:   objs[0].PurchaseId,
 			args: common,
 			obj:  objs[0],
 		},

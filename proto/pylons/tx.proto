@@ -164,7 +164,7 @@ message MsgCreateRecipe {
   repeated CoinInput coin_inputs = 7 [(gogoproto.nullable) = false];
   repeated ItemInput item_inputs = 8 [(gogoproto.nullable) = false];
   EntriesList entries = 9 [(gogoproto.nullable) = false];
-  repeated Weighted_outputs outputs = 10 [(gogoproto.nullable) = false];
+  repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
   int64 block_interval = 11;
   cosmos.base.v1beta1.Coin cost_per_block = 12 [(gogoproto.nullable) = false];
   bool enabled = 13;
@@ -184,7 +184,7 @@ message MsgUpdateRecipe {
   repeated CoinInput coin_inputs = 7 [(gogoproto.nullable) = false];
   repeated ItemInput item_inputs = 8 [(gogoproto.nullable) = false];
   EntriesList entries = 9 [(gogoproto.nullable) = false];
-  repeated Weighted_outputs outputs = 10 [(gogoproto.nullable) = false];
+  repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
   int64 block_interval = 11;
   cosmos.base.v1beta1.Coin cost_per_block = 12 [(gogoproto.nullable) = false];
   bool enabled = 13;

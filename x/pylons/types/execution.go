@@ -13,21 +13,21 @@ func EntryListsByIDs(idList []string, recipe Recipe) ([]CoinOutput, map[int]Item
 Loop:
 	for _, id := range idList {
 		for _, coinOutput := range recipe.Entries.CoinOutputs {
-			if coinOutput.ID == id {
+			if coinOutput.Id == id {
 				coinOutputs = append(coinOutputs, coinOutput)
 				continue Loop
 			}
 		}
 
 		for i, itemOutput := range recipe.Entries.ItemOutputs {
-			if itemOutput.ID == id {
+			if itemOutput.Id == id {
 				itemOutputs[i] = itemOutput
 				continue Loop
 			}
 		}
 
 		for _, itemModifyOutput := range recipe.Entries.ItemModifyOutputs {
-			if itemModifyOutput.ID == id {
+			if itemModifyOutput.Id == id {
 				itemModifyOutputs = append(itemModifyOutputs, itemModifyOutput)
 				continue Loop
 			}

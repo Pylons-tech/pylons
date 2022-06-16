@@ -20,11 +20,11 @@ func (k Keeper) Execution(c context.Context, req *types.QueryGetExecutionRequest
 	completed := false
 	var execution types.Execution
 	switch {
-	case k.HasPendingExecution(ctx, req.ID):
-		execution = k.GetPendingExecution(ctx, req.ID)
-	case k.HasExecution(ctx, req.ID):
+	case k.HasPendingExecution(ctx, req.Id):
+		execution = k.GetPendingExecution(ctx, req.Id)
+	case k.HasExecution(ctx, req.Id):
 		completed = true
-		execution = k.GetExecution(ctx, req.ID)
+		execution = k.GetExecution(ctx, req.Id)
 	default:
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}

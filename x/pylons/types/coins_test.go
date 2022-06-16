@@ -74,12 +74,12 @@ func TestCreateValidCoinOutputsList(t *testing.T) {
 
 	valid := []CoinOutput{
 		{
-			ID:      "test1",
+			Id:      "test1",
 			Coin:    sdk.Coin{Denom: validCookbookID + denomDivider + "denom1", Amount: sdk.OneInt()},
 			Program: "",
 		},
 		{
-			ID:      "test1",
+			Id:      "test1",
 			Coin:    sdk.Coin{Denom: validCookbookID + denomDivider + "denom2", Amount: sdk.OneInt()},
 			Program: "",
 		},
@@ -87,12 +87,12 @@ func TestCreateValidCoinOutputsList(t *testing.T) {
 
 	invalid := []CoinOutput{
 		{
-			ID:      "test1",
+			Id:      "test1",
 			Coin:    sdk.Coin{Denom: validCookbookID + denomDivider + "denom1", Amount: sdk.OneInt()},
 			Program: "",
 		},
 		{
-			ID:      "test1",
+			Id:      "test1",
 			Coin:    sdk.Coin{Denom: invalidCookbookID + denomDivider + "denom2", Amount: sdk.OneInt()},
 			Program: "",
 		},

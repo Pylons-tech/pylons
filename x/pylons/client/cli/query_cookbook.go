@@ -21,7 +21,7 @@ func CmdShowCookbook() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			params := &types.QueryGetCookbookRequest{
-				ID: args[0],
+				Id: args[0],
 			}
 
 			res, err := queryClient.Cookbook(context.Background(), params)

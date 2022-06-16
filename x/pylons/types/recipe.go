@@ -125,7 +125,7 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 			coinA := original.CoinOutputs[i]
 			coinB := updated.CoinOutputs[i]
 
-			if coinA.ID != coinB.ID {
+			if coinA.Id != coinB.Id {
 				return false, nil
 			}
 
@@ -146,7 +146,7 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 			originalItem := original.ItemOutputs[i]
 			updatedItem := updated.ItemOutputs[i]
 
-			if originalItem.ID != updatedItem.ID {
+			if originalItem.Id != updatedItem.Id {
 				return false, nil
 			}
 
@@ -294,7 +294,7 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 			originalItem := original.ItemModifyOutputs[i]
 			updatedItem := updated.ItemModifyOutputs[i]
 
-			if originalItem.ID != updatedItem.ID {
+			if originalItem.Id != updatedItem.Id {
 				return false, nil
 			}
 
@@ -450,10 +450,10 @@ func OutputsEqual(original, updated []WeightedOutputs) bool {
 				return false
 			}
 
-			if len(originalOutput.EntryIDs) == len(updatedOutput.EntryIDs) {
-				for j := range originalOutput.EntryIDs {
-					originalID := originalOutput.EntryIDs[j]
-					updatedID := updatedOutput.EntryIDs[j]
+			if len(originalOutput.EntryIds) == len(updatedOutput.EntryIds) {
+				for j := range originalOutput.EntryIds {
+					originalID := originalOutput.EntryIds[j]
+					updatedID := updatedOutput.EntryIds[j]
 					if originalID != updatedID {
 						return false
 					}
@@ -518,8 +518,8 @@ func ValidateInputStrings(sip []StringInputParam) error {
 }
 
 func ValidateItemInput(i ItemInput) error {
-	err := ValidateID(i.ID)
-	if i.ID != "" && err != nil {
+	err := ValidateID(i.Id)
+	if i.Id != "" && err != nil {
 		return err
 	}
 
@@ -542,15 +542,15 @@ func ValidateItemInput(i ItemInput) error {
 }
 
 func ValidateCoinOutput(co CoinOutput, idMap map[string]bool) error {
-	err := ValidateID(co.ID)
+	err := ValidateID(co.Id)
 	if err != nil {
 		return err
 	}
 
-	if _, ok := idMap[co.ID]; ok {
-		return sdkerrors.Wrapf(ErrInvalidRequestField, "id %s repeated in coinOutput list", co.ID)
+	if _, ok := idMap[co.Id]; ok {
+		return sdkerrors.Wrapf(ErrInvalidRequestField, "id %s repeated in coinOutput list", co.Id)
 	}
-	idMap[co.ID] = true
+	idMap[co.Id] = true
 
 	// Validate sdk coins
 	if !co.Coin.IsValid() {
@@ -654,15 +654,15 @@ func ValidateMutableStrings(skv []StringKeyValue) error {
 
 func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool) error {
 	for _, item := range io {
-		err := ValidateID(item.ID)
+		err := ValidateID(item.Id)
 		if err != nil {
 			return err
 		}
 
-		if _, ok := idMap[item.ID]; ok {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "id %s repeated in itemOutput list", item.ID)
+		if _, ok := idMap[item.Id]; ok {
+			return sdkerrors.Wrapf(ErrInvalidRequestField, "id %s repeated in itemOutput list", item.Id)
 		}
-		idMap[item.ID] = true
+		idMap[item.Id] = true
 
 		err = ValidateDoubles(item.Doubles)
 		if err != nil {
@@ -687,13 +687,13 @@ func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool) error {
 		// item.TradePercentage must be in (0, 1)
 		if !item.TradePercentage.IsNil() {
 			if item.TradePercentage.LT(sdk.ZeroDec()) || item.TradePercentage.GTE(sdk.OneDec()) {
-				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemOutput %s", item.ID)
+				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemOutput %s", item.Id)
 			}
 		}
 
 		for _, tf := range item.TransferFee {
 			if !tf.IsValid() {
-				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid transferFee on ItemOutput %s", item.ID)
+				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid transferFee on ItemOutput %s", item.Id)
 			}
 		}
 	}
@@ -702,15 +702,15 @@ func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool) error {
 
 func ValidateItemModifyOutputs(imo []ItemModifyOutput, idMap map[string]bool) error {
 	for _, item := range imo {
-		err := ValidateID(item.ID)
+		err := ValidateID(item.Id)
 		if err != nil {
 			return err
 		}
 
-		if _, ok := idMap[item.ID]; ok {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "id %s repeated in itemModifyOutput list", item.ID)
+		if _, ok := idMap[item.Id]; ok {
+			return sdkerrors.Wrapf(ErrInvalidRequestField, "id %s repeated in itemModifyOutput list", item.Id)
 		}
-		idMap[item.ID] = true
+		idMap[item.Id] = true
 
 		err = ValidateDoubles(item.Doubles)
 		if err != nil {
@@ -734,12 +734,12 @@ func ValidateItemModifyOutputs(imo []ItemModifyOutput, idMap map[string]bool) er
 
 		// item.TradePercentage must be in (0, 1)
 		if item.TradePercentage.LTE(sdk.ZeroDec()) || item.TradePercentage.GTE(sdk.OneDec()) {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemModifyOutput %s", item.ID)
+			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemModifyOutput %s", item.Id)
 		}
 
 		for _, tf := range item.TransferFee {
 			if !tf.IsValid() {
-				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid transferFee on ItemOutput %s", item.ID)
+				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid transferFee on ItemOutput %s", item.Id)
 			}
 		}
 	}
@@ -769,7 +769,7 @@ func ValidateEntriesList(el EntriesList, idMap map[string]bool) error {
 }
 
 func ValidateOutputs(wo WeightedOutputs, idMap map[string]bool) error {
-	for _, id := range wo.EntryIDs {
+	for _, id := range wo.EntryIds {
 		if _, ok := idMap[id]; !ok {
 			return sdkerrors.Wrapf(ErrInvalidRequestField, "no valid entry found with ID %s", id)
 		}

@@ -9,7 +9,7 @@ func (suite *IntegrationTestSuite) TestItemGet() {
 
 	items := createNItem(k, ctx, 10, true)
 	for _, item := range items {
-		rst, found := k.GetItem(ctx, item.CookbookID, item.ID)
+		rst, found := k.GetItem(ctx, item.CookbookId, item.Id)
 		require.True(found)
 		require.Equal(item, rst)
 	}

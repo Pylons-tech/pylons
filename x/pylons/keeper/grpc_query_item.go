@@ -16,7 +16,7 @@ func (k Keeper) Item(c context.Context, req *types.QueryGetItemRequest) (*types.
 	}
 	ctx := sdk.UnwrapSDKContext(c)
 
-	val, found := k.GetItem(ctx, req.CookbookID, req.ID)
+	val, found := k.GetItem(ctx, req.CookbookId, req.Id)
 	if !found {
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}

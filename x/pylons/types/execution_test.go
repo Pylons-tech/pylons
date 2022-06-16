@@ -27,19 +27,19 @@ func TestEntryListsByIDsValid2(t *testing.T) {
 	entryList := EntriesList{
 		CoinOutputs: []CoinOutput{
 			{
-				ID:      "id1",
+				Id:      "id1",
 				Coin:    sdk.NewInt64Coin("coin", 10),
 				Program: "",
 			},
 		},
 		ItemOutputs: []ItemOutput{
 			{
-				ID: "id2",
+				Id: "id2",
 			},
 		},
 		ItemModifyOutputs: []ItemModifyOutput{
 			{
-				ID: "id3",
+				Id: "id3",
 			},
 		},
 	}
@@ -53,7 +53,7 @@ func TestEntryListsByIDsValid2(t *testing.T) {
 	coinOutputs, itemOutputs, itemModifyOutputs, err := EntryListsByIDs(idList, recipe)
 	require.NoError(t, err)
 	require.Equal(t, entryList.CoinOutputs, coinOutputs)
-	require.Equal(t, entryList.ItemOutputs[0].ID, itemOutputs[0].ID)
+	require.Equal(t, entryList.ItemOutputs[0].Id, itemOutputs[0].Id)
 	require.Equal(t, entryList.ItemModifyOutputs, itemModifyOutputs)
 }
 
@@ -61,19 +61,19 @@ func TestEntryListsByIDsValid3(t *testing.T) {
 	entryList := EntriesList{
 		CoinOutputs: []CoinOutput{
 			{
-				ID:      "id1",
+				Id:      "id1",
 				Coin:    sdk.NewInt64Coin("coin", 10),
 				Program: "",
 			},
 		},
 		ItemOutputs: []ItemOutput{
 			{
-				ID: "id2",
+				Id: "id2",
 			},
 		},
 		ItemModifyOutputs: []ItemModifyOutput{
 			{
-				ID: "id3",
+				Id: "id3",
 			},
 		},
 	}
@@ -100,7 +100,7 @@ func TestEntryListsByIDsInvalid1(t *testing.T) {
 	idList := []string{"id"}
 
 	_, _, _, err := EntryListsByIDs(idList, recipe)
-	expected := fmt.Errorf("no entry with the ID %s available", idList[0])
+	expected := fmt.Errorf("no entry with the Id %s available", idList[0])
 	require.Contains(t, err.Error(), expected.Error())
 }
 
@@ -108,19 +108,19 @@ func TestEntryListsByIDsInvalid2(t *testing.T) {
 	entryList := EntriesList{
 		CoinOutputs: []CoinOutput{
 			{
-				ID:      "id1",
+				Id:      "id1",
 				Coin:    sdk.NewInt64Coin("coin", 10),
 				Program: "",
 			},
 		},
 		ItemOutputs: []ItemOutput{
 			{
-				ID: "id4",
+				Id: "id4",
 			},
 		},
 		ItemModifyOutputs: []ItemModifyOutput{
 			{
-				ID: "id3",
+				Id: "id3",
 			},
 		},
 	}
@@ -132,6 +132,6 @@ func TestEntryListsByIDsInvalid2(t *testing.T) {
 	idList := []string{"id1", "id2", "id3"}
 
 	_, _, _, err := EntryListsByIDs(idList, recipe)
-	expected := fmt.Errorf("no entry with the ID %s available", idList[1])
+	expected := fmt.Errorf("no entry with the Id %s available", idList[1])
 	require.Contains(t, err.Error(), expected.Error())
 }

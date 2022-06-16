@@ -147,13 +147,13 @@ func TestValidateCoinOutput(t *testing.T) {
 		err  error
 	}{
 		{desc: "Valid", obj: CoinOutput{
-			ID: "test", Coin: sdk.Coin{Denom: "test", Amount: sdk.OneInt()},
+			Id: "test", Coin: sdk.Coin{Denom: "test", Amount: sdk.OneInt()},
 		}},
 		{desc: "Invalid1", obj: CoinOutput{
-			ID: "test", Coin: sdk.Coin{Denom: "test", Amount: sdk.NewInt(-1)},
+			Id: "test", Coin: sdk.Coin{Denom: "test", Amount: sdk.NewInt(-1)},
 		}, err: sdkerrors.ErrInvalidCoins},
 		{desc: "Invalid2", obj: CoinOutput{
-			ID: "test", Coin: sdk.Coin{},
+			Id: "test", Coin: sdk.Coin{},
 		}, err: sdkerrors.ErrInvalidCoins},
 	} {
 		tc := tc
@@ -349,8 +349,8 @@ func TestValidateOutputs(t *testing.T) {
 		obj  WeightedOutputs
 		err  error
 	}{
-		{desc: "Valid", obj: WeightedOutputs{EntryIDs: []string{"test1", "test2"}}},
-		{desc: "Invalid", obj: WeightedOutputs{EntryIDs: []string{"test", "test1"}}, err: ErrInvalidRequestField},
+		{desc: "Valid", obj: WeightedOutputs{EntryIds: []string{"test1", "test2"}}},
+		{desc: "Invalid", obj: WeightedOutputs{EntryIds: []string{"test", "test1"}}, err: ErrInvalidRequestField},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {

@@ -16,7 +16,7 @@ func (k Keeper) GetRecipeHistory(goCtx context.Context, req *types.QueryGetRecip
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	val := k.GetAllExecuteRecipeHis(ctx, req.GetCookbookID(), req.GetRecipeID())
+	val := k.GetAllExecuteRecipeHis(ctx, req.GetCookbookId(), req.GetRecipeId())
 	if len(val) == 0 {
 		return &types.QueryGetRecipeHistoryResponse{History: []*types.RecipeHistory{}}, nil
 	}

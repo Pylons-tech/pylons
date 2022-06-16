@@ -11,7 +11,7 @@ import (
 func (k Keeper) SetRedeemInfo(ctx sdk.Context, redeemInfo types.RedeemInfo) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RedeemInfoKey))
 	b := k.cdc.MustMarshal(&redeemInfo)
-	store.Set(types.KeyPrefix(redeemInfo.ID), b)
+	store.Set(types.KeyPrefix(redeemInfo.Id), b)
 }
 
 // GetRedeemInfo returns a redeemInfo from its index

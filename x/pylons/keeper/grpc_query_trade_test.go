@@ -24,17 +24,17 @@ func (suite *IntegrationTestSuite) TestTradeQuerySingle() {
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetTradeRequest{ID: msgs[0].ID},
+			request:  &types.QueryGetTradeRequest{Id: msgs[0].Id},
 			response: &types.QueryGetTradeResponse{Trade: msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetTradeRequest{ID: msgs[1].ID},
+			request:  &types.QueryGetTradeRequest{Id: msgs[1].Id},
 			response: &types.QueryGetTradeResponse{Trade: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetTradeRequest{ID: uint64(len(msgs))},
+			request: &types.QueryGetTradeRequest{Id: uint64(len(msgs))},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 		{
