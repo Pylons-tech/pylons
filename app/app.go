@@ -700,6 +700,9 @@ func (app *PylonsApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.API
 	// register app's OpenAPI routes.
 	apiSvr.Router.Handle("/static/openapi.yml", http.FileServer(http.FS(docs.Docs)))
 	apiSvr.Router.HandleFunc("/", openapiconsole.Handler(Name, "/static/openapi.yml"))
+	apiSvr.Router.HandleFunc("/pylons/tx", func(w http.ResponseWriter, r *http.Request) {
+		pylonsmodulekeeper.TxHistoryRequestHandler(w, r, clientCtx)
+	})
 }
 
 // RegisterTxService implements the Application.RegisterTxService method.
