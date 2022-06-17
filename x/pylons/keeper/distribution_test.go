@@ -93,8 +93,7 @@ func generateAccountsWithBalance(numAccounts int, validator *sdknetwork.Validato
 
 		args := []string{validator.Address.String(), addr, coin.String()}
 		args = append(args, flags...)
-		reqq, err := clitestutil.ExecTestCLICmd(clientCtx, bankcli.NewSendTxCmd(), args)
-		fmt.Println(reqq)
+		_, err := clitestutil.ExecTestCLICmd(clientCtx, bankcli.NewSendTxCmd(), args)
 		req.NoError(err)
 
 		accounts = append(accounts, addr)
