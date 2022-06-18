@@ -85,3 +85,41 @@ const (
 const (
 	TestCreator = "pylo13qsmvq0eg7nu7dlt9mxqxn7ufjsqy8433akvy3"
 )
+
+// Defining constants for GetTxHistory Endpoint
+const (
+	DefaultLimit  = 100
+	DefaultOffset = 1
+	MinVal        = 0
+
+	TransferSenderEvent     = "transfer.sender="
+	TransferRecipientEvent  = "transfer.recipient="
+	CreateItemReceiverEvent = "create_item.receiver="
+	CreateItemSenderEvent   = "create_item.sender="
+
+	TransferEventKey = "transfer"
+
+	TxTypeSend    = "SEND"
+	TxTypeReceive = "RECEIVE"
+	TxTypeNFTBuy  = "NFTBUY"
+	TxTypeNFTSell = "NFTSELL"
+
+	KeyAmount     = "amount"
+	KeyReceiver   = "receiver"
+	KeyRecipient  = "recipient"
+	KeySender     = "sender"
+	KeyCookbookID = "cookbookID"
+	KeyRecipeID   = "recipeID"
+
+	ValZero = "0"
+
+	AddressInvalid      = "invalid address"
+	AddressNotFound     = "address not found"
+	OffsetInvalid       = "offset must greater than 0"
+	LimitInvalid        = "limit must greater than 0"
+	GetErrorHistoryMsg  = "unable to get transaction history"
+	GetErrorHistoryCode = "GetHistoryError"
+
+	HTTPContentTypeKey = "Content-Type"
+	HTTPContentTypeVal = "application/json"
+)
