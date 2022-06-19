@@ -13,6 +13,7 @@ import (
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// this line is used by starport scaffolding # genesis/module/init
 	// Set all the redeemInfo
+	n := 0
 	for _, elem := range genState.RedeemInfoList {
 		k.SetRedeemInfo(ctx, elem)
 	}
@@ -20,6 +21,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	// Set all the paymentInfo
 	for _, elem := range genState.PaymentInfoList {
 		k.SetPaymentInfo(ctx, elem)
+		n++
 	}
 
 	// Set all the account mappings
