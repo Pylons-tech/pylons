@@ -21,6 +21,8 @@ import (
 func TestCreateAccount(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
+	t.Cleanup(net.Cleanup)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
@@ -133,6 +135,8 @@ func TestCreateAccount(t *testing.T) {
 func TestUpdateAccount(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
+	t.Cleanup(net.Cleanup)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 

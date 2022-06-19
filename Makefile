@@ -135,7 +135,7 @@ proto-gen:
 test: test-unit
 
 test-unit:
-	@VERSION=$(VERSION) go test -mod=readonly -v -timeout 60m $(PACKAGES)
+	@VERSION=$(VERSION) go test -mod=readonly -v -timeout 30m $(PACKAGES)
 
 test-race:
 	@VERSION=$(VERSION) go test -mod=readonly -v -race -timeout 60m  $(PACKAGES)

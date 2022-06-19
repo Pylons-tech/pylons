@@ -20,6 +20,8 @@ import (
 func TestCreateCookbook(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
+	t.Cleanup(net.Cleanup)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	id := "testID"
@@ -188,6 +190,8 @@ func TestCreateCookbook(t *testing.T) {
 func TestUpdateCookbook(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
+	t.Cleanup(net.Cleanup)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	id := "testID"

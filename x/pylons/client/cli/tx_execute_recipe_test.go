@@ -29,6 +29,8 @@ func GenerateAddress() {
 func TestExecuteRecipeNoInputOutput(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
+	t.Cleanup(net.Cleanup)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
@@ -183,6 +185,8 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 func TestExecuteRecipeQuantityField(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
+	t.Cleanup(net.Cleanup)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
@@ -373,6 +377,8 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 func TestLimitReachExecuteRecipe(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
+	t.Cleanup(net.Cleanup)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
@@ -514,6 +520,8 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 func TestExecuteUpdatedRecipe(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
+	t.Cleanup(net.Cleanup)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
@@ -683,6 +691,8 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 func TestExecuteDisableRecipe(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
+	t.Cleanup(net.Cleanup)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
@@ -798,6 +808,8 @@ func TestExecuteDisableRecipe(t *testing.T) {
 func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
+	t.Cleanup(net.Cleanup)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
@@ -988,6 +1000,8 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 func TestExecuteRecipeMutableStringField(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
+	t.Cleanup(net.Cleanup)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
@@ -1144,6 +1158,8 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 func TestExecuteRecipeNoInputOutputInvalidArgs(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
+	t.Cleanup(net.Cleanup)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"

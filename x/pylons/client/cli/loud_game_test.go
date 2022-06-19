@@ -42,6 +42,8 @@ type loudBasicSim struct {
 func TestLOUDBasic(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
+	t.Cleanup(net.Cleanup)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	var err error
