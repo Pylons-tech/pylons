@@ -108,6 +108,8 @@ const (
 	Name = "pylons"
 )
 
+var AccountTrack = make(map[string]uint64)
+
 func init() {
 	appparams.SetupDenomsAndPrefixes()
 }
@@ -543,7 +545,7 @@ func New(
 		//	app.AccountKeeper, app.BankKeeper, ante.DefaultSigVerificationGasConsumer,
 		//	encodingConfig.TxConfig.SignModeHandler(),
 		// ),
-		NewAnteHandler(app.AccountKeeper, encodingConfig.TxConfig.SignModeHandler()),
+		NewAnteHandler(app.AccountKeeper, encodingConfig.TxConfig.SignModeHandler(), app.PylonsKeeper),
 	)
 	app.SetEndBlocker(app.EndBlocker)
 
@@ -570,6 +572,9 @@ func (app *App) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.R
 
 // EndBlocker application updates every end block
 func (app *App) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
+	for k := range AccountTrack {
+		delete(AccountTrack, k)
+	}
 	return app.mm.EndBlock(ctx, req)
 }
 

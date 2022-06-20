@@ -3,6 +3,8 @@ package app
 import (
 	"fmt"
 
+	pylonsmodulekeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -11,8 +13,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // NewAnteHandler returns an AnteHandler that checks and increments sequence
@@ -22,8 +22,10 @@ func NewAnteHandler(
 	// bankKeeper types.BankKeeper,
 	// sigGasConsumer authsigning.SignatureVerificationGasConsumer,
 	signModeHandler authsigning.SignModeHandler,
+	pk pylonsmodulekeeper.Keeper,
 ) sdk.AnteHandler {
 	return sdk.ChainAnteDecorators(
+		NewSpamMigitationAnteDecorator(pk),
 		ante.NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
 		ante.NewRejectExtensionOptionsDecorator(),
 		// ante.NewMempoolFeeDecorator(),
