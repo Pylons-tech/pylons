@@ -65,7 +65,7 @@ func TestShowPaymentInfo(t *testing.T) {
 
 func TestListPaymentInfo(t *testing.T) {
 	net, objs := networkWithPaymentInfoObjects(t, 5)
-
+	t.Cleanup(net.Cleanup)
 	ctx := net.Validators[0].ClientCtx
 	request := func(next []byte, offset, limit uint64, total bool) []string {
 		args := []string{
