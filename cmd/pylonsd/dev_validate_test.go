@@ -41,6 +41,7 @@ const badCookbookLiteral = `{
     "enabled": true,
     "extraInfo": "extraInfo"
 }`
+
 const goodCookbookLiteral = `{
 	"creator": "pylo199cq5r46uqsjxqv05c5x7nx22yxdawne550hsy",
 	"ID": "cookbookLoudTest",
@@ -51,6 +52,7 @@ const goodCookbookLiteral = `{
 	"supportEmail": "noreply@pylons.tech",
 	"enabled": true
   }`
+
 const badRecipeLiteral = `{
     "cookbookID": "cookbookLoudTest",
     "ID": "LOUDGetCharacter",
@@ -87,23 +89,9 @@ const badRecipeLiteral = `{
             }
         ],
         "itemModifyOutputs": []
-    },
-    "outputs": [
-        {
-            "entryIDs": [
-                "character"
-            ],
-            "weight": 1
-        }
-    ],
-    "blockInterval": 0,
-    "costPerBlock": {
-        "denom": "upylon",
-        "amount": "1000000"
-    },
-    "enabled": true,
-    "extraInfo": "extraInfo"
+    }
 }`
+
 const goodRecipeLiteral = `{
     "cookbookID": "cookbookLoudTest",
     "ID": "LOUDGetCharacter",
@@ -324,24 +312,20 @@ func TestValidate(t *testing.T) {
 // This is kinda icky, but it lets us test the entire production implementation w/o having to
 // deal w/ finding the testdata from an unknown state.
 func preTestValidate(t *testing.T) {
-	file, err := os.Create(badPLC)
+	writeFile(badPLC, badCookbookLiteral)
+	writeFile(goodPLC, goodCookbookLiteral)
+	writeFile(badPLR, badRecipeLiteral)
+	writeFile(goodPLR, goodRecipeLiteral)
+}
+
+func writeFile(name string, data string) {
+	file, err := os.Create(name)
 	if err != nil {
-		file.WriteString(badCookbookLiteral)
-		file.Close()
+		panic(err)
 	}
-	file, err = os.Create(goodPLC)
+	defer file.Close()
+	_, err = file.WriteString(data)
 	if err != nil {
-		file.WriteString(goodCookbookLiteral)
-		file.Close()
-	}
-	file, err = os.Create(badPLR)
-	if err != nil {
-		file.WriteString(badRecipeLiteral)
-		file.Close()
-	}
-	file, err = os.Create(goodPLR)
-	if err != nil {
-		file.WriteString(goodRecipeLiteral)
-		file.Close()
+		panic(err)
 	}
 }
