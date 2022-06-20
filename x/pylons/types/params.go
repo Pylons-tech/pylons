@@ -60,6 +60,7 @@ var (
 	DefaultMaxTransferFee               = sdk.NewInt(10000)
 	DefaultDistrEpochIdentifier         = "day"
 	DefaultEngineVersion                = uint64(0)
+	DefaultMaxTxsInBlock                = uint64(4)
 )
 
 // Parameter Store Keys
@@ -74,6 +75,7 @@ var (
 	ParamStoreKeyUpdateUsernameFee         = []byte("UpdateUsernameFee")
 	ParamStoreKeyDistrEpochIdentifier      = []byte("DistrEpochIdentifier")
 	ParamStoreKeyEngineVersion             = []byte("EngineVersion")
+	ParamStoreKeyMaxTxsInBlock             = []byte("MaxTxsInBlock")
 )
 
 // NewParams creates a new Params object
@@ -88,6 +90,7 @@ func NewParams(
 	updateUsernameFee sdk.Coin,
 	distrEpochIdentifier string,
 	engineVersion uint64,
+	maxTxs uint64,
 ) Params {
 	return Params{
 		CoinIssuers:               coinIssuers,
@@ -100,6 +103,7 @@ func NewParams(
 		UpdateUsernameFee:         updateUsernameFee,
 		DistrEpochIdentifier:      distrEpochIdentifier,
 		EngineVersion:             engineVersion,
+		MaxTxsInBlock:             maxTxs,
 	}
 }
 
@@ -116,6 +120,7 @@ func DefaultParams() Params {
 		DefaultUpdateUsernameFee,
 		DefaultDistrEpochIdentifier,
 		DefaultEngineVersion,
+		DefaultMaxTxsInBlock,
 	)
 }
 
@@ -132,6 +137,7 @@ func NetworkTestParams() Params {
 		sdk.NewCoin("node0token", sdk.NewInt(10)),
 		DefaultDistrEpochIdentifier,
 		DefaultEngineVersion,
+		DefaultMaxTxsInBlock,
 	)
 }
 
@@ -159,6 +165,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(ParamStoreKeyUpdateUsernameFee, &p.UpdateUsernameFee, validateCoinFee),
 		paramtypes.NewParamSetPair(ParamStoreKeyDistrEpochIdentifier, &p.DistrEpochIdentifier, validateString),
 		paramtypes.NewParamSetPair(ParamStoreKeyEngineVersion, &p.EngineVersion, validateInt64),
+		paramtypes.NewParamSetPair(ParamStoreKeyMaxTxsInBlock, &p.MaxTxsInBlock, validateInt64),
 	}
 }
 
