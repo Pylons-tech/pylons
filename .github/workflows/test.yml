@@ -29,7 +29,7 @@ jobs:
 
 
   test:
-    runs-on: buildjet-4vcpu-ubuntu-2004
+    runs-on: buildjet-16vcpu-ubuntu-2004
     steps:
       - uses: actions/checkout@v2
 
