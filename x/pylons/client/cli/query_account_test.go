@@ -16,6 +16,7 @@ import (
 
 func TestShowAccountByUsername(t *testing.T) {
 	net, accs := networkWithAccountObjects(t, 2)
+	t.Cleanup(net.Cleanup)
 
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
@@ -62,6 +63,7 @@ func TestShowAccountByUsername(t *testing.T) {
 
 func TestShowUsernameByAccount(t *testing.T) {
 	net, accs := networkWithAccountObjects(t, 2)
+	t.Cleanup(net.Cleanup)
 
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
