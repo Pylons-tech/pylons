@@ -76,6 +76,7 @@ const (
 
 const (
 	PaymentInfoKey = "PaymentInfo-value-"
+	PaymentProcessHistoryKey = "PaymentProcessHistory-value-"
 )
 
 const (
