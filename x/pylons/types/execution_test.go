@@ -100,7 +100,7 @@ func TestEntryListsByIDsInvalid1(t *testing.T) {
 	idList := []string{"id"}
 
 	_, _, _, err := EntryListsByIDs(idList, recipe)
-	expected := fmt.Errorf("no entry with the Id %s available", idList[0])
+	expected := fmt.Errorf("no entry with the ID %s available", idList[0])
 	require.Contains(t, err.Error(), expected.Error())
 }
 
@@ -132,6 +132,6 @@ func TestEntryListsByIDsInvalid2(t *testing.T) {
 	idList := []string{"id1", "id2", "id3"}
 
 	_, _, _, err := EntryListsByIDs(idList, recipe)
-	expected := fmt.Errorf("no entry with the Id %s available", idList[1])
+	expected := fmt.Errorf("no entry with the ID %s available", idList[1])
 	require.Contains(t, err.Error(), expected.Error())
 }

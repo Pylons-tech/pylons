@@ -12,7 +12,7 @@ import (
 
 // genTestPaymentInfoSignature generates a signed PaymentInfo message using privKey
 func genTestPaymentInfoSignature(purchaseID, address, productID string, amount types.Int, privKey cryptotypes.PrivKey) string {
-	msg := fmt.Sprintf("{\"purchaseID\":\"%s\",\"address\":\"%s\",\"amount\":\"%s\",\"productID\":\"%s\"}", purchaseID, address, amount.String(), productID)
+	msg := fmt.Sprintf("{\"purchase_id\":\"%s\",\"address\":\"%s\",\"amount\":\"%s\",\"product_id\":\"%s\"}", purchaseID, address, amount.String(), productID)
 	msgBytes := []byte(msg)
 	signedMsg, err := privKey.Sign(msgBytes)
 	if err != nil {
@@ -23,7 +23,7 @@ func genTestPaymentInfoSignature(purchaseID, address, productID string, amount t
 
 // genTestRedeemInfoSignature generates a signed RedeemInfo message using privKey
 func genTestRedeemInfoSignature(payoutID, address string, amount types.Int, privKey cryptotypes.PrivKey) string {
-	msg := fmt.Sprintf("{\"payoutID\":\"%s\",\"address\":\"%s\",\"amount\":\"%s\"}", payoutID, address, amount.String())
+	msg := fmt.Sprintf("{\"payout_id\":\"%s\",\"address\":\"%s\",\"amount\":\"%s\"}", payoutID, address, amount.String())
 	msgBytes := []byte(msg)
 	signedMsg, err := privKey.Sign(msgBytes)
 	if err != nil {
