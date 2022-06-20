@@ -31,7 +31,6 @@ func (k Keeper) RefundPayments(ctx sdk.Context, paymentInfos []types.PaymentInfo
 				burnCoins := sdk.NewCoins(sdk.NewCoin(pp.CoinDenom, burnAmt))
 				feesCoins := sdk.NewCoins(sdk.NewCoin(pp.CoinDenom, feesAmt))
 
-
 				// mint token, pay for fees
 				err := k.RevertMintCreditToAddr(ctx, addr, mintCoins, burnCoins, feesCoins)
 				if err != nil {

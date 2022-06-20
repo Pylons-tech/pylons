@@ -96,7 +96,7 @@ func (k Keeper) RevertMintCreditToAddr(ctx sdk.Context, addr sdk.AccAddress, min
 	if err != nil {
 		return err
 	}
-	
+
 	return nil
 }
 

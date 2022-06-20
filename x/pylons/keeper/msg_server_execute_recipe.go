@@ -158,9 +158,9 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 
 	id := k.AppendPendingExecution(ctx, execution, recipe.BlockInterval)
 
-	if len(msg.PaymentInfos) != 0 {		
+	if len(msg.PaymentInfos) != 0 {
 		paymentProcess := types.PaymentProcessHistory{
-			ExecutionId: id,
+			ExecutionId:   id,
 			PaymentInfors: msg.PaymentInfos,
 		}
 		k.SetPaymentProcessHistory(ctx, paymentProcess)
