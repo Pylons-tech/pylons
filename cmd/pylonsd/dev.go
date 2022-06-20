@@ -17,13 +17,17 @@ import (
 
 var Out io.Writer = os.Stdout // modified during testing
 
-const cookbookExtension = ".plc"
-const recipeExtension = ".plr"
+const (
+	cookbookExtension = ".plc"
+	recipeExtension   = ".plr"
+)
 
-//const moduleExtension = ".pdt" // we don't use this yet, but we will
+// const moduleExtension = ".pdt" // we don't use this yet, but we will
 
-const schemaPathRoot = "https://raw.githubusercontent.com/Pylons-tech/pylons_protos/main/schema/pylons/"
-const dotJSON = ".json"
+const (
+	schemaPathRoot = "https://raw.githubusercontent.com/Pylons-tech/pylons_protos/main/schema/pylons/"
+	dotJSON        = ".json"
+)
 
 func forFile(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.Recipe)) {
 	if filepath.Ext(path) == cookbookExtension {

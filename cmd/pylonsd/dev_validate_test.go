@@ -10,10 +10,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const badPLC = "bad.plc"
-const goodPLC = "good.plc"
-const badPLR = "bad.plr"
-const goodPLR = "good.plr"
+const (
+	badPLC  = "bad.plc"
+	goodPLC = "good.plc"
+	badPLR  = "bad.plr"
+	goodPLR = "good.plr"
+)
 
 const badCookbookLiteral = `{
     "cookbookID": "cookbookLoudTest",
