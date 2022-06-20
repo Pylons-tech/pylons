@@ -13,3 +13,8 @@ message PaymentInfo {
   string product_id = 5;
   string signature = 6;
 }
+
+message PaymentProcessHistory {
+  string execution_id = 1;
+  repeated PaymentInfo payment_infors = 2 [(gogoproto.nullable) = false];;
+}
