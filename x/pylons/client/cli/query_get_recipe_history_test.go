@@ -17,6 +17,7 @@ import (
 
 func TestGetRecipeHistory(t *testing.T) {
 	net, objs, _ := networkWithRecipeObjectsHistory(t, 2)
+	t.Cleanup(net.Cleanup)
 	val := net.Validators[0]
 	ctx := net.Validators[0].ClientCtx
 	address, err := GenerateAddressWithAccount(ctx, t, net)

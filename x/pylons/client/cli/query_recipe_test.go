@@ -16,7 +16,7 @@ import (
 
 func TestShowRecipe(t *testing.T) {
 	net, objs, _ := networkWithRecipeObjects(t, 2)
-
+	t.Cleanup(net.Cleanup)
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),

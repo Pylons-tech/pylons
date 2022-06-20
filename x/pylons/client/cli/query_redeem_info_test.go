@@ -18,7 +18,7 @@ import (
 
 func TestShowRedeemInfo(t *testing.T) {
 	net, objs := networkWithRedeemInfoObjects(t, 2)
-
+	t.Cleanup(net.Cleanup)
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
@@ -65,7 +65,7 @@ func TestShowRedeemInfo(t *testing.T) {
 
 func TestListRedeemInfo(t *testing.T) {
 	net, objs := networkWithRedeemInfoObjects(t, 5)
-
+	t.Cleanup(net.Cleanup)
 	ctx := net.Validators[0].ClientCtx
 	request := func(next []byte, offset, limit uint64, total bool) []string {
 		args := []string{
