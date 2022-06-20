@@ -22,7 +22,7 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
 	// create N items for each cookbook, all with same owner
 	items := make([]types.Item, 0)
 	for _, cookbook := range cookbooks {
-		items = append(items, createNItemSameOwnerAndCookbook(k, ctx, 5, cookbook.ID, true)...)
+		items = append(items, createNItemSameOwnerAndCookbook(k, ctx, 5, cookbook.Id, true)...)
 	}
 
 	owner := items[0].Owner
@@ -42,7 +42,7 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
 
 	itemsRequestList := make([]types.ItemRef, 25)
 	for i, item := range items {
-		itemsRequestList[i] = types.ItemRef{CookbookID: item.CookbookID, ItemID: item.ID}
+		itemsRequestList[i] = types.ItemRef{CookbookId: item.CookbookId, ItemId: item.Id}
 	}
 
 	for _, tc := range []struct {
@@ -73,7 +73,7 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
 			request: &types.MsgSendItems{
 				Creator:  owner,
 				Receiver: receiver,
-				Items:    []types.ItemRef{{CookbookID: "not_found", ItemID: "not_found"}},
+				Items:    []types.ItemRef{{CookbookId: "not_found", ItemId: "not_found"}},
 			},
 			err: sdkerrors.ErrInvalidRequest,
 		},
@@ -89,11 +89,11 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
 				senderAddr, _ := sdk.AccAddressFromBech32(tc.request.Creator)
 				senderItems := k.GetAllItemByOwner(ctx, senderAddr)
 				for _, itemRef := range tc.request.Items {
-					item, _ := k.GetItem(ctx, itemRef.CookbookID, itemRef.ItemID)
+					item, _ := k.GetItem(ctx, itemRef.CookbookId, itemRef.ItemId)
 					require.Equal(tc.request.Receiver, item.Owner)
 					for _, senderItem := range senderItems {
-						require.NotEqual(itemRef.ItemID, senderItem.ID)
-						require.NotEqual(itemRef.CookbookID, senderItem.CookbookID)
+						require.NotEqual(itemRef.ItemId, senderItem.Id)
+						require.NotEqual(itemRef.CookbookId, senderItem.CookbookId)
 					}
 				}
 				// check that balance of sender is now 0pylon
@@ -118,7 +118,7 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItemsNonTradable() {
 	// create N items for each cookbook, all with same owner
 	items := make([]types.Item, 0)
 	for _, cookbook := range cookbooks {
-		items = append(items, createNItemSameOwnerAndCookbook(k, ctx, 5, cookbook.ID, false)...)
+		items = append(items, createNItemSameOwnerAndCookbook(k, ctx, 5, cookbook.Id, false)...)
 	}
 
 	owner := items[0].Owner
@@ -138,7 +138,7 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItemsNonTradable() {
 
 	itemsRequestList := make([]types.ItemRef, 25)
 	for i, item := range items {
-		itemsRequestList[i] = types.ItemRef{CookbookID: item.CookbookID, ItemID: item.ID}
+		itemsRequestList[i] = types.ItemRef{CookbookId: item.CookbookId, ItemId: item.Id}
 	}
 
 	for _, tc := range []struct {
@@ -169,7 +169,7 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItemsNonTradable() {
 			request: &types.MsgSendItems{
 				Creator:  owner,
 				Receiver: receiver,
-				Items:    []types.ItemRef{{CookbookID: "not_found", ItemID: "not_found"}},
+				Items:    []types.ItemRef{{CookbookId: "not_found", ItemId: "not_found"}},
 			},
 			err: sdkerrors.ErrInvalidRequest,
 		},
@@ -185,11 +185,11 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItemsNonTradable() {
 				senderAddr, _ := sdk.AccAddressFromBech32(tc.request.Creator)
 				senderItems := k.GetAllItemByOwner(ctx, senderAddr)
 				for _, itemRef := range tc.request.Items {
-					item, _ := k.GetItem(ctx, itemRef.CookbookID, itemRef.ItemID)
+					item, _ := k.GetItem(ctx, itemRef.CookbookId, itemRef.ItemId)
 					require.Equal(tc.request.Receiver, item.Owner)
 					for _, senderItem := range senderItems {
-						require.NotEqual(itemRef.ItemID, senderItem.ID)
-						require.NotEqual(itemRef.CookbookID, senderItem.CookbookID)
+						require.NotEqual(itemRef.ItemId, senderItem.Id)
+						require.NotEqual(itemRef.CookbookId, senderItem.CookbookId)
 					}
 				}
 				// check that balance of sender is now 0pylon

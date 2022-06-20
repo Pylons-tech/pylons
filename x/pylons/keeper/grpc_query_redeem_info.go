@@ -45,7 +45,7 @@ func (k Keeper) RedeemInfo(c context.Context, req *types.QueryGetRedeemInfoReque
 	}
 	ctx := sdk.UnwrapSDKContext(c)
 
-	val, found := k.GetRedeemInfo(ctx, req.ID)
+	val, found := k.GetRedeemInfo(ctx, req.Id)
 	if !found {
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}

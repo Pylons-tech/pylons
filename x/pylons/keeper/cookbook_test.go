@@ -10,7 +10,7 @@ func (suite *IntegrationTestSuite) TestCookbookGet() {
 
 	items := createNCookbook(k, ctx, 10)
 	for _, item := range items {
-		rst, found := k.GetCookbook(ctx, item.ID)
+		rst, found := k.GetCookbook(ctx, item.Id)
 		suite.Require()
 		require.True(found)
 		require.Equal(item, rst)

@@ -124,5 +124,5 @@ func (wol WeightedOutputsList) Actualize() ([]string, error) {
 	randWeight := rand.Float64()
 	index := sample(randWeight, normCDF)
 
-	return wol[index].EntryIDs, nil
+	return wol[index].EntryIds, nil
 }

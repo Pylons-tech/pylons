@@ -101,7 +101,7 @@ func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, addr sdk.AccA
 	return Item{
 		// ID not set - it's handled internally
 		Owner:           addr.String(),
-		CookbookID:      cookbookID,
+		CookbookId:      cookbookID,
 		NodeVersion:     nodeVersion,
 		Doubles:         dblActualize,
 		Longs:           longActualize,
@@ -195,11 +195,11 @@ func (itemInput ItemInput) MatchItem(item Item, ec CelEnvCollection) error {
 		for _, param := range itemInput.Doubles {
 			double, ok := item.FindDouble(param.Key)
 			if !ok {
-				return sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.ID)
+				return sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.Id)
 			}
 
 			if !param.Has(double) {
-				return sdkerrors.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", param.Key, item.ID)
+				return sdkerrors.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", param.Key, item.Id)
 			}
 		}
 	}
@@ -208,11 +208,11 @@ func (itemInput ItemInput) MatchItem(item Item, ec CelEnvCollection) error {
 		for _, param := range itemInput.Longs {
 			long, ok := item.FindLong(param.Key)
 			if !ok {
-				return sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.ID)
+				return sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.Id)
 			}
 
 			if !param.Has(long) {
-				return sdkerrors.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", param.Key, item.ID)
+				return sdkerrors.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", param.Key, item.Id)
 			}
 		}
 	}
@@ -221,10 +221,10 @@ func (itemInput ItemInput) MatchItem(item Item, ec CelEnvCollection) error {
 		for _, param := range itemInput.Strings {
 			str, ok := item.FindString(param.Key)
 			if !ok {
-				return sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.ID)
+				return sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.Id)
 			}
 			if str != param.Value {
-				return sdkerrors.Wrapf(ErrItemMatch, "%s key value does not match: item_id=%s", param.Key, item.ID)
+				return sdkerrors.Wrapf(ErrItemMatch, "%s key value does not match: item_id=%s", param.Key, item.Id)
 			}
 		}
 	}
@@ -308,7 +308,7 @@ func FindValidPaymentsPermutation(items []Item, balance sdk.Coins) ([]int, error
 			}
 		}
 		if noMatchingDenoms {
-			return nil, fmt.Errorf("insufficient balance to transfer item with ID %v in cookbook with ID %v", item.ID, item.CookbookID)
+			return nil, fmt.Errorf("insufficient balance to transfer item with ID %v in cookbook with ID %v", item.Id, item.CookbookId)
 		}
 	}
 

@@ -42,7 +42,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	}
 
 	// Set googlIAPOrder count
-	k.SetGoogleIAPOrderCount(ctx, genState.GoogleIAPOrderCount)
+	k.SetGoogleIAPOrderCount(ctx, genState.GoogleIapOrderCount)
 
 	// Set all the execution
 	for _, elem := range genState.ExecutionList {
@@ -118,7 +118,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis.GoogleInAppPurchaseOrderList = append(genesis.GoogleInAppPurchaseOrderList, googlIAPOrderList...)
 
 	// Set the current count
-	genesis.GoogleIAPOrderCount = k.GetGoogleIAPOrderCount(ctx)
+	genesis.GoogleIapOrderCount = k.GetGoogleIAPOrderCount(ctx)
 
 	// Get all pending execution
 	pendingExecutionList := k.GetAllPendingExecution(ctx)

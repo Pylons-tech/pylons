@@ -30,7 +30,7 @@ func TestShowRecipe(t *testing.T) {
 	}{
 		{
 			desc: "found",
-			id:   objs[0].ID,
+			id:   objs[0].Id,
 			args: common,
 			obj:  objs[0],
 		},

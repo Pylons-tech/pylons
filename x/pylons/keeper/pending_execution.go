@@ -50,7 +50,7 @@ func (k Keeper) AppendPendingExecution(ctx sdk.Context, execution types.Executio
 	targetHeight := execution.BlockHeight + blockInterval
 	id := fmt.Sprintf("%v-%v", targetHeight, count+k.GetExecutionCount(ctx))
 	// Set the ID of the appended value
-	execution.ID = id
+	execution.Id = id
 
 	k.SetPendingExecution(ctx, execution)
 
@@ -72,7 +72,7 @@ func (k Keeper) GetPendingExecution(ctx sdk.Context, id string) types.Execution 
 func (k Keeper) SetPendingExecution(ctx sdk.Context, execution types.Execution) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PendingExecutionKey))
 	value := k.cdc.MustMarshal(&execution)
-	store.Set(types.KeyPrefix(execution.ID), value)
+	store.Set(types.KeyPrefix(execution.Id), value)
 
 	// add execution to recipe mapping
 	k.setExecutionByRecipe(ctx, execution)
@@ -102,13 +102,13 @@ func (k Keeper) removePendingExecution(ctx sdk.Context, id string) {
 // UpdatePendingExecutionWithTargetBlockHeight updates a pendingExecution with a new ID
 func (k Keeper) UpdatePendingExecutionWithTargetBlockHeight(ctx sdk.Context, execution types.Execution, blockHeight int64) string {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PendingExecutionKey))
-	store.Delete(types.KeyPrefix(execution.ID))
+	store.Delete(types.KeyPrefix(execution.Id))
 
-	idParts := strings.Split(execution.ID, "-")
-	execution.ID = fmt.Sprintf("%v-%v", blockHeight, idParts[1])
+	idParts := strings.Split(execution.Id, "-")
+	execution.Id = fmt.Sprintf("%v-%v", blockHeight, idParts[1])
 	k.SetPendingExecution(ctx, execution)
 
-	return execution.ID
+	return execution.Id
 }
 
 // GetAllPendingExecution returns all execution

@@ -203,7 +203,7 @@ func SimulateCreateCookbook(bk types.BankKeeper, k keeper.Keeper) simtypes.Opera
 
 		msg := &types.MsgCreateCookbook{
 			Creator:      simAccount.Address.String(),
-			ID:           id,
+			Id:           id,
 			Name:         "namenamenamenamename",
 			Description:  "descriptiondescriptiondescription",
 			Developer:    "developer",
@@ -250,8 +250,8 @@ func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operati
 
 		msg := &types.MsgCreateRecipe{
 			Creator:       simAccount.Address.String(),
-			CookbookID:    cookbookID,
-			ID:            id,
+			CookbookId:    cookbookID,
+			Id:            id,
 			Name:          "namenamenamenamenamename",
 			Description:   "descriptiondescriptiondescription",
 			Version:       "v0.0.1",
@@ -297,10 +297,10 @@ func SimulateExecuteRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 
 		msg := &types.MsgExecuteRecipe{
 			Creator:         simAccount.Address.String(),
-			CookbookID:      cookbookID,
-			RecipeID:        recipeID,
+			CookbookId:      cookbookID,
+			RecipeId:        recipeID,
 			CoinInputsIndex: 0,
-			ItemIDs:         nil,
+			ItemIds:         nil,
 		}
 
 		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil

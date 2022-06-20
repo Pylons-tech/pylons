@@ -66,7 +66,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{{
-			ID: "sword",
+			Id: "sword",
 			Doubles: []types.DoubleParam{
 				{
 					Key: "damage",
@@ -129,7 +129,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"sword"},
+			EntryIds: []string{"sword"},
 			Weight:   1,
 		},
 	})
@@ -194,7 +194,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 	fmt.Println(itemResp.Item)
 
 	// create recipe to modify the sword
@@ -206,7 +206,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 
 	itemInputs, err := json.Marshal([]types.ItemInput{
 		{
-			ID: "weapon",
+			Id: "weapon",
 			Strings: []types.StringInputParam{
 				{
 					Key:   "ItemType",
@@ -222,7 +222,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 		ItemOutputs: nil,
 		ItemModifyOutputs: []types.ItemModifyOutput{
 			{
-				ID:           "enchantedWeapon",
+				Id:           "enchantedWeapon",
 				ItemInputRef: "weapon",
 				Strings: []types.StringParam{
 					{
@@ -241,7 +241,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 
 	outputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"enchantedWeapon"},
+			EntryIds: []string{"enchantedWeapon"},
 			Weight:   1,
 		},
 	})
@@ -304,5 +304,5 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 }

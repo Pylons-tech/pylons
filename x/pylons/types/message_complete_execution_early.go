@@ -10,7 +10,7 @@ var _ sdk.Msg = &MsgCompleteExecutionEarly{}
 func NewMsgCompleteExecutionEarly(creator string, id string) *MsgCompleteExecutionEarly {
 	return &MsgCompleteExecutionEarly{
 		Creator: creator,
-		ID:      id,
+		Id:      id,
 	}
 }
 

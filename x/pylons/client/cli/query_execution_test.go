@@ -30,7 +30,7 @@ func TestShowExecution(t *testing.T) {
 	}{
 		{
 			desc: "found",
-			id:   fmt.Sprintf("%s", objs[0].ID),
+			id:   fmt.Sprintf("%s", objs[0].Id),
 			args: common,
 			obj:  objs[0],
 		},

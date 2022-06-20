@@ -23,7 +23,7 @@ func (k Keeper) removeCookbookFromAddress(ctx sdk.Context, cookbookID string, ad
 	store.Delete(byteKey)
 }
 
-func (k Keeper) getCookbookIDsByAddr(ctx sdk.Context, addr sdk.AccAddress) (list []string) {
+func (k Keeper) getCookbookIdsByAddr(ctx sdk.Context, addr sdk.AccAddress) (list []string) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrCookbookKey))
 	iterator := sdk.KVStorePrefixIterator(store, addr.Bytes())
 
@@ -40,18 +40,18 @@ func (k Keeper) getCookbookIDsByAddr(ctx sdk.Context, addr sdk.AccAddress) (list
 func (k Keeper) SetCookbook(ctx sdk.Context, cookbook types.Cookbook) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CookbookKey))
 	b := k.cdc.MustMarshal(&cookbook)
-	store.Set(types.KeyPrefix(cookbook.ID), b)
+	store.Set(types.KeyPrefix(cookbook.Id), b)
 
 	// required for random seed init given how it's handled rn
 	k.IncrementEntityCount(ctx)
 
 	addr, _ := sdk.AccAddressFromBech32(cookbook.Creator)
-	k.addCookbookToAddress(ctx, cookbook.ID, addr)
+	k.addCookbookToAddress(ctx, cookbook.Id, addr)
 }
 
 // UpdateCookbook updates a cookbook removing it from previous owner store
 func (k Keeper) UpdateCookbook(ctx sdk.Context, cookbook types.Cookbook, prevAddr sdk.AccAddress) {
-	k.removeCookbookFromAddress(ctx, cookbook.ID, prevAddr)
+	k.removeCookbookFromAddress(ctx, cookbook.Id, prevAddr)
 	k.SetCookbook(ctx, cookbook)
 }
 
@@ -86,9 +86,9 @@ func (k Keeper) GetAllCookbook(ctx sdk.Context) (list []types.Cookbook) {
 
 // GetAllCookbookByCreator returns cookbooks owned by a specific creator
 func (k Keeper) GetAllCookbookByCreator(ctx sdk.Context, creator sdk.AccAddress) (list []types.Cookbook) {
-	cookbookIDs := k.getCookbookIDsByAddr(ctx, creator)
+	cookbookIds := k.getCookbookIdsByAddr(ctx, creator)
 
-	for _, id := range cookbookIDs {
+	for _, id := range cookbookIds {
 		cookbook, _ := k.GetCookbook(ctx, id)
 		list = append(list, cookbook)
 	}

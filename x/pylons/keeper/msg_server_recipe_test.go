@@ -24,7 +24,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreate() {
 		idx := fmt.Sprintf("%d", i)
 		cookbook := &types.MsgCreateCookbook{
 			Creator:      creator,
-			ID:           idx,
+			Id:           idx,
 			Name:         "testCookbookName",
 			Description:  "descdescdescdescdescdesc",
 			Developer:    "",
@@ -36,8 +36,8 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreate() {
 		require.NoError(err)
 		expected := &types.MsgCreateRecipe{
 			Creator:       creator,
-			CookbookID:    idx,
-			ID:            idx,
+			CookbookId:    idx,
+			Id:            idx,
 			Name:          "testRecipeName",
 			Description:   "decdescdescdescdescdescdescdesc",
 			Version:       "v0.0.1",
@@ -52,9 +52,9 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreate() {
 		}
 		_, err = srv.CreateRecipe(wctx, expected)
 		require.NoError(err)
-		rst, found := k.GetRecipe(ctx, expected.CookbookID, expected.ID)
+		rst, found := k.GetRecipe(ctx, expected.CookbookId, expected.Id)
 		require.True(found)
-		require.Equal(expected.ID, rst.ID)
+		require.Equal(expected.Id, rst.Id)
 	}
 }
 
@@ -71,7 +71,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidAlreadyExists
 		idx := fmt.Sprintf("%d", i)
 		cookbook := &types.MsgCreateCookbook{
 			Creator:      creator,
-			ID:           idx,
+			Id:           idx,
 			Name:         "testCookbookName",
 			Description:  "descdescdescdescdescdesc",
 			Developer:    "",
@@ -83,8 +83,8 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidAlreadyExists
 		require.NoError(err)
 		expected := &types.MsgCreateRecipe{
 			Creator:       creator,
-			CookbookID:    idx,
-			ID:            idx,
+			CookbookId:    idx,
+			Id:            idx,
 			Name:          "testRecipeName",
 			Description:   "descdescdescdescdescdesc",
 			Version:       "v0.0.1",
@@ -118,7 +118,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidCookbookNotOw
 		idx := fmt.Sprintf("%d", i)
 		cookbook := &types.MsgCreateCookbook{
 			Creator:      creator,
-			ID:           idx,
+			Id:           idx,
 			Name:         "testCookbookName",
 			Description:  "descdescdescdescdescdesc",
 			Developer:    "",
@@ -130,8 +130,8 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidCookbookNotOw
 		require.NoError(err)
 		expected := &types.MsgCreateRecipe{
 			Creator:       "B",
-			CookbookID:    idx,
-			ID:            idx,
+			CookbookId:    idx,
+			Id:            idx,
 			Name:          "testRecipeName",
 			Description:   "descdescdescdescdescdesc",
 			Version:       "v0.0.1",
@@ -163,8 +163,8 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidNoCookbook() 
 
 		expected := &types.MsgCreateRecipe{
 			Creator:       creator,
-			CookbookID:    idx,
-			ID:            idx,
+			CookbookId:    idx,
+			Id:            idx,
 			Name:          "testRecipeName",
 			Description:   "descdescdescdescdescdesc",
 			Version:       "v0.0.1",
@@ -194,7 +194,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 
 	cookbook := &types.MsgCreateCookbook{
 		Creator:      creator,
-		ID:           index,
+		Id:           index,
 		Name:         "testCookbookName",
 		Description:  "descdescdescdescdescdesc",
 		Developer:    "",
@@ -206,8 +206,8 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 	require.NoError(err)
 	expected := &types.MsgCreateRecipe{
 		Creator:       creator,
-		CookbookID:    index,
-		ID:            index,
+		CookbookId:    index,
+		Id:            index,
 		Name:          "testRecipeNameOriginal",
 		Description:   "decdescdescdescdescdescdescdesc",
 		Version:       "v0.0.1",
@@ -233,8 +233,8 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 			desc: "Completed",
 			request: &types.MsgUpdateRecipe{
 				Creator:       creator,
-				CookbookID:    index,
-				ID:            index,
+				CookbookId:    index,
+				Id:            index,
 				Name:          "testRecipeNameNew",
 				Description:   "decdescdescdescdescdescdescdesc",
 				Version:       "v0.0.2",
@@ -251,8 +251,8 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 			desc: "Unauthorized",
 			request: &types.MsgUpdateRecipe{
 				Creator:       "B",
-				CookbookID:    index,
-				ID:            index,
+				CookbookId:    index,
+				Id:            index,
 				Name:          "testRecipeNameNewNew",
 				Description:   "decdescdescdescdescdescdescdesc",
 				Version:       "v0.0.3",
@@ -270,8 +270,8 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 			desc: "incorrect version",
 			request: &types.MsgUpdateRecipe{
 				Creator:       "A",
-				CookbookID:    index,
-				ID:            index,
+				CookbookId:    index,
+				Id:            index,
 				Name:          "testRecipeNameNewNewNew",
 				Description:   "decdescdescdescdescdescdescdesc",
 				Version:       "v0.0.1",
@@ -289,8 +289,8 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 			desc: "KeyNotFound",
 			request: &types.MsgUpdateRecipe{
 				Creator:       creator,
-				CookbookID:    "missing",
-				ID:            "missing",
+				CookbookId:    "missing",
+				Id:            "missing",
 				Name:          "testRecipeNameNewNewNewNew",
 				Description:   "decdescdescdescdescdescdescdesc",
 				Version:       "v0.0.4",
@@ -312,9 +312,9 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 				require.ErrorIs(err, tc.err)
 			} else {
 				require.NoError(err)
-				rst, found := k.GetRecipe(ctx, expected.CookbookID, expected.ID)
+				rst, found := k.GetRecipe(ctx, expected.CookbookId, expected.Id)
 				require.True(found)
-				require.Equal(expected.ID, rst.ID)
+				require.Equal(expected.Id, rst.Id)
 			}
 		})
 	}

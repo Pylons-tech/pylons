@@ -11,13 +11,13 @@ import (
 )
 
 // GenerateExecutionResult generates actual coins and items to be finalized in the store
-func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, entryIDs []string, recipe *types.Recipe, ec types.CelEnvCollection, matchedItems []types.ItemRecord) (sdk.Coins, []types.Item, []types.Item, error) {
-	coinOutputs, itemOutputs, itemModifyOutputs, err := types.EntryListsByIDs(entryIDs, *recipe)
+func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, entryIds []string, recipe *types.Recipe, ec types.CelEnvCollection, matchedItems []types.ItemRecord) (sdk.Coins, []types.Item, []types.Item, error) {
+	coinOutputs, itemOutputs, itemModifyOutputs, err := types.EntryListsByIDs(entryIds, *recipe)
 	if err != nil {
 		return nil, nil, nil, err
 	}
 
-	// coinPrefix := strings.ReplaceAll(recipe.CookbookID, "_", "")
+	// coinPrefix := strings.ReplaceAll(recipe.CookbookId, "_", "")
 	coins := make([]sdk.Coin, len(coinOutputs))
 	for i, coinOutput := range coinOutputs {
 		coins[i].Denom = coinOutput.Coin.Denom
@@ -40,7 +40,7 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 		if itemOutput.Quantity != 0 && itemOutput.Quantity <= recipe.Entries.ItemOutputs[idx].AmountMinted {
 			return nil, nil, nil, sdkerrors.Wrapf(types.ErrItemQuantityExceeded, "quantity: %d, already minted: %d", itemOutput.Quantity, itemOutput.AmountMinted)
 		}
-		item, err := itemOutput.Actualize(ctx, recipe.CookbookID, addr, ec, k.EngineVersion(ctx))
+		item, err := itemOutput.Actualize(ctx, recipe.CookbookId, addr, ec, k.EngineVersion(ctx))
 		if err != nil {
 			return nil, nil, nil, err
 		}
@@ -55,14 +55,14 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 		}
 		itemInputIdx := 0
 		for i, itemInput := range recipe.ItemInputs {
-			if itemInput.ID == itemModifyOutput.ItemInputRef {
+			if itemInput.Id == itemModifyOutput.ItemInputRef {
 				itemInputIdx = i
 				break
 			}
 		}
-		item, found := k.GetItem(ctx, recipe.CookbookID, matchedItems[itemInputIdx].ID)
+		item, found := k.GetItem(ctx, recipe.CookbookId, matchedItems[itemInputIdx].Id)
 		if !found {
-			return nil, nil, nil, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "item %s to modify not found", matchedItems[itemInputIdx].ID)
+			return nil, nil, nil, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "item %s to modify not found", matchedItems[itemInputIdx].Id)
 		}
 		err := itemModifyOutput.Actualize(&item, ctx, addr, ec)
 		if err != nil {
@@ -76,8 +76,8 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 
 // CompletePendingExecution completes the execution
 func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types.Execution) (types.Execution, types.EventCompleteExecution, bool, error) {
-	recipe, _ := k.GetRecipe(ctx, pendingExecution.CookbookID, pendingExecution.RecipeID)
-	cookbook, _ := k.GetCookbook(ctx, pendingExecution.CookbookID)
+	recipe, _ := k.GetRecipe(ctx, pendingExecution.CookbookId, pendingExecution.RecipeId)
+	cookbook, _ := k.GetCookbook(ctx, pendingExecution.CookbookId)
 	cookbookOwnerAddr, _ := sdk.AccAddressFromBech32(cookbook.Creator)
 	// check if recipe was updated after execution is submitted, and error out in such a case
 	if semver.Compare(recipe.Version, pendingExecution.RecipeVersion) != 0 {
@@ -114,16 +114,16 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}
 	// add mint items to keeper
-	itemOutputIDs := make([]string, len(mintItems))
+	itemOutputIds := make([]string, len(mintItems))
 	for i, item := range mintItems {
 		id := k.AppendItem(ctx, item)
-		itemOutputIDs[i] = id
+		itemOutputIds[i] = id
 	}
 	// update modify items in keeper
-	itemModifyOutputIDs := make([]string, len(modifyItems))
+	itemModifyOutputIds := make([]string, len(modifyItems))
 	for i, item := range modifyItems {
 		k.UnlockItemForExecution(ctx, item, pendingExecution.Creator)
-		itemModifyOutputIDs[i] = item.ID
+		itemModifyOutputIds[i] = item.Id
 	}
 	// update recipe in keeper to keep track of mintedAmounts
 	k.SetRecipe(ctx, recipe)
@@ -170,12 +170,12 @@ coinLoop:
 	}
 
 	pendingExecution.CoinOutputs = coins
-	pendingExecution.ItemModifyOutputIDs = itemModifyOutputIDs
-	pendingExecution.ItemOutputIDs = itemOutputIDs
+	pendingExecution.ItemModifyOutputIds = itemModifyOutputIds
+	pendingExecution.ItemOutputIds = itemOutputIds
 
 	event := types.EventCompleteExecution{
 		Creator:       pendingExecution.Creator,
-		ID:            pendingExecution.ID,
+		Id:            pendingExecution.Id,
 		BurnCoins:     burnCoins,
 		PayCoins:      payCoins,
 		TransferCoins: transferCoins,
@@ -185,7 +185,7 @@ coinLoop:
 		ModifyItems:   modifyItems,
 	}
 
-	telemetry.IncrCounter(1, "execution", "cookbookID", pendingExecution.CookbookID, "recipeID", pendingExecution.RecipeID)
+	telemetry.IncrCounter(1, "execution", "cookbookID", pendingExecution.CookbookId, "recipeID", pendingExecution.RecipeId)
 	telemetry.IncrCounter(1, "execution", "total")
 
 	return pendingExecution, event, true, nil
