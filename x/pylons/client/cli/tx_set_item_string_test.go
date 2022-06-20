@@ -12,15 +12,13 @@ import (
 	"github.com/spf13/cast"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func TestSetItemString(t *testing.T) {
-	config := app.DefaultConfig()
-	net := network.New(t, config)
+	net := network.New(t)
 
 	val := net.Validators[0]
 	ctx := val.ClientCtx
