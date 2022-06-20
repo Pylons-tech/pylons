@@ -37,7 +37,7 @@ jobs:
           key: ${{ runner.os }}-go-runsim-binary
 
   test-sim-nondeterminism:
-    runs-on: buildjet-4vcpu-ubuntu-2004
+    runs-on: buildjet-16vcpu-ubuntu-2004
     needs: [build, install-runsim]
     steps:
       - uses: actions/checkout@v2
@@ -111,7 +111,7 @@ jobs:
   #      if: env.GIT_DIFF
 
   test-sim-multi-seed-short:
-    runs-on: buildjet-4vcpu-ubuntu-2004
+    runs-on: buildjet-16vcpu-ubuntu-2004
     needs: [build, install-runsim]
     steps:
       - uses: actions/checkout@v2
