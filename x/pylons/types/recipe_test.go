@@ -124,7 +124,7 @@ func TestValidateItemInput(t *testing.T) {
 	}{
 		{desc: "ValidEmpty", obj: "{}"},
 		{desc: "Valid", obj: "{conditions: {}}"},
-		{desc: "Invalid", obj: "{\"doubles\": [{\"key\": \"test\", \"minValue\": \"1.01\", \"maxValue\": \"1\"}]}", err: ErrInvalidRequestField},
+		{desc: "Invalid", obj: "{\"doubles\": [{\"key\": \"test\", \"min_value\": \"1.01\", \"max_value\": \"1\"}]}", err: ErrInvalidRequestField},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
@@ -291,13 +291,13 @@ func TestValidateItemOutputs(t *testing.T) {
 		err  error
 	}{
 		{desc: "ValidEmpty", obj: "[]"},
-		{desc: "ValidSingle", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\"}], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
-		{desc: "ValidSingle1", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\"}], \"mutableStrings\": [],\"tradePercentage\": \"0\", \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
-		{desc: "ValidMultiple", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\"}], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}, {\"ID\": \"test2\", \"doubles\": [], \"longs\": [{\"key\": \"test2\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
-		{desc: "InvalidSingle1", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": [{\"denom\": \"\", \"amount\": \"\"}]}]", err: ErrInvalidRequestField},
-		{desc: "InvalidtradePercentage", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\"}], \"mutableStrings\": [],\"tradePercentage\": \"-1\", \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
-		{desc: "InvalidtradePercentage1", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\"}], \"mutableStrings\": [],\"tradePercentage\": \"1\", \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
-		{desc: "InValidMultiple", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test\"}], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": {\"denom\": \"\", \"amount\": \"\"}}, {\"ID\": \"test\", \"doubles\": [], \"longs\": [{\"key\": \"test\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"mutableStrings\": [],\"tradePercentage\": \"0.01\", \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
+		{desc: "ValidSingle", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\"}], \"mutable_strings\": [],\"trade_percentage\": \"0.01\", \"transfer_fee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
+		{desc: "ValidSingle1", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\"}], \"mutable_strings\": [],\"trade_percentage\": \"0\", \"transfer_fee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
+		{desc: "ValidMultiple", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\"}], \"mutable_strings\": [],\"trade_percentage\": \"0.01\", \"transfer_fee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}, {\"ID\": \"test2\", \"doubles\": [], \"longs\": [{\"key\": \"test2\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"mutable_strings\": [],\"trade_percentage\": \"0.01\", \"transfer_fee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
+		{desc: "InvalidSingle1", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [], \"mutable_strings\": [],\"trade_percentage\": \"0.01\", \"transfer_fee\": [{\"denom\": \"\", \"amount\": \"\"}]}]", err: ErrInvalidRequestField},
+		{desc: "InvalidtradePercentage", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\"}], \"mutable_strings\": [],\"trade_percentage\": \"-1\", \"transfer_fee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
+		{desc: "InvalidtradePercentage1", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\"}], \"mutable_strings\": [],\"trade_percentage\": \"1\", \"transfer_fee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
+		{desc: "InValidMultiple", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test\"}], \"mutable_strings\": [],\"trade_percentage\": \"0.01\", \"transfer_fee\": {\"denom\": \"\", \"amount\": \"\"}}, {\"ID\": \"test\", \"doubles\": [], \"longs\": [{\"key\": \"test\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"mutable_strings\": [],\"trade_percentage\": \"0.01\", \"transfer_fee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
@@ -321,10 +321,10 @@ func TestValidateItemModifyOutputs(t *testing.T) {
 		err  error
 	}{
 		{desc: "ValidEmpty", obj: "[]"},
-		{desc: "ValidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
-		{desc: "ValidMultiple", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\"}],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}, {\"ID\": \"test2\", \"doubles\": [], \"longs\": [{\"key\": \"test2\", \"lower\": 1, \"upper\": 2}], \"strings\": [],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
-		{desc: "InvalidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
-		{desc: "InValidMultiple", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test\"}],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"\", \"amount\": \"0.01\"}]}, {\"ID\": \"test\", \"doubles\": [], \"longs\": [{\"key\": \"test\", \"lower\": 1, \"upper\": 2}], \"strings\": [],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
+		{desc: "ValidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [],\"trade_percentage\": \"0.01\",  \"transfer_fee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
+		{desc: "ValidMultiple", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\"}],\"trade_percentage\": \"0.01\",  \"transfer_fee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}, {\"ID\": \"test2\", \"doubles\": [], \"longs\": [{\"key\": \"test2\", \"lower\": 1, \"upper\": 2}], \"strings\": [],\"trade_percentage\": \"0.01\",  \"transfer_fee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
+		{desc: "InvalidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [],\"trade_percentage\": \"0.01\",  \"transfer_fee\": [{\"denom\": \"\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
+		{desc: "InValidMultiple", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test\"}],\"trade_percentage\": \"0.01\",  \"transfer_fee\": [{\"denom\": \"\", \"amount\": \"0.01\"}]}, {\"ID\": \"test\", \"doubles\": [], \"longs\": [{\"key\": \"test\", \"lower\": 1, \"upper\": 2}], \"strings\": [],\"trade_percentage\": \"0.01\",  \"transfer_fee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
