@@ -19,10 +19,11 @@ var Out io.Writer = os.Stdout // modified during testing
 
 const cookbookExtension = ".plc"
 const recipeExtension = ".plr"
-const moduleExtension = ".pdt"
+
+//const moduleExtension = ".pdt" // we don't use this yet, but we will
 
 const schemaPathRoot = "https://raw.githubusercontent.com/Pylons-tech/pylons_protos/main/schema/pylons/"
-const dotJson = ".json"
+const dotJSON = ".json"
 
 func forFile(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.Recipe)) {
 	if filepath.Ext(path) == cookbookExtension {
@@ -30,7 +31,7 @@ func forFile(path string, perCookbook func(path string, cookbook types.Cookbook)
 		if err != nil {
 			fmt.Fprintln(Out, "File ", path, " is not a cookbook - parsing error:\n", err)
 		} else {
-			result, _ := validateJson(json, reflect.TypeOf(cb))
+			result, _ := validateJSON(json, reflect.TypeOf(cb))
 			if !result.Valid() {
 				fmt.Fprintln(Out, "File ", path, " is not a cookbook - parsing error:\n", result.Errors())
 			} else {
@@ -42,7 +43,7 @@ func forFile(path string, perCookbook func(path string, cookbook types.Cookbook)
 		if err != nil {
 			fmt.Fprintln(Out, "File ", path, " is not a recipe - parsing error:\n", err)
 		} else {
-			result, _ := validateJson(json, reflect.TypeOf(rcp))
+			result, _ := validateJSON(json, reflect.TypeOf(rcp))
 			if !result.Valid() {
 				fmt.Fprintln(Out, "File ", path, " is not a recipe - parsing error:\n", result.Errors())
 			} else {
@@ -62,12 +63,15 @@ func ForFiles(path string, perCookbook func(path string, cookbook types.Cookbook
 		fmt.Fprintln(Out, "Path ", path, " not found")
 	} else {
 		if file.IsDir() {
-			filepath.Walk(path, func(p string, info os.FileInfo, e error) error {
+			err := filepath.Walk(path, func(p string, info os.FileInfo, e error) error {
 				if !info.IsDir() {
 					forFile(p, perCookbook, perRecipe)
 				}
 				return nil
 			})
+			if err != nil {
+				panic(err)
+			}
 		} else {
 			forFile(path, perCookbook, perRecipe)
 		}
@@ -88,16 +92,16 @@ func loadRecipeFromPath(path string) (types.Recipe, string, error) {
 	return rcp, string(bytes), err
 }
 
-func getSchemaUrl(t reflect.Type) string {
+func getSchemaURL(t reflect.Type) string {
 	var b bytes.Buffer
 	b.WriteString(schemaPathRoot)
 	b.WriteString(t.Name())
-	b.WriteString(dotJson)
+	b.WriteString(dotJSON)
 	return b.String()
 }
 
-func validateJson(json string, t reflect.Type) (*gojsonschema.Result, error) {
-	schemaLoader := gojsonschema.NewReferenceLoader(getSchemaUrl(t))
+func validateJSON(json string, t reflect.Type) (*gojsonschema.Result, error) {
+	schemaLoader := gojsonschema.NewReferenceLoader(getSchemaURL(t))
 	stringLoader := gojsonschema.NewStringLoader(json)
 	result, err := gojsonschema.Validate(schemaLoader, stringLoader)
 	return result, err

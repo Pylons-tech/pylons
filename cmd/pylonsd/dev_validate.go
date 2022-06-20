@@ -3,8 +3,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/spf13/cobra"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func CmdDevValidate() *cobra.Command {
