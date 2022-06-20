@@ -18,6 +18,7 @@ import (
 
 func TestCmdListExecutionsByRecipe(t *testing.T) {
 	net, executions := networkWithExecutionObjects(t, 2)
+	t.Cleanup(net.Cleanup)
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
