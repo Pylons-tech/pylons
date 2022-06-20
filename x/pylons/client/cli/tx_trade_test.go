@@ -16,16 +16,14 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
 
+	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
-	"github.com/cosmos/cosmos-sdk/testutil/network"
 )
 
 // TODO test for multiple paymentTokens
 
 func TestCreateTradeNoItemOutput1(t *testing.T) {
-	config := app.DefaultConfig()
-	net := network.New(t, config)
-	t.Cleanup(net.Cleanup)
+	net := network.New(t)
 
 	val := net.Validators[0]
 	ctx := val.ClientCtx

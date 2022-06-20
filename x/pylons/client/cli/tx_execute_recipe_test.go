@@ -18,18 +18,16 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/Pylons-tech/pylons/app"
+	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/cosmos/cosmos-sdk/testutil/network"
 )
 
 func GenerateAddress() {
 }
 
 func TestExecuteRecipeNoInputOutput(t *testing.T) {
-	config := app.DefaultConfig()
-	net := network.New(t, config)
-	t.Cleanup(net.Cleanup)
+	net := network.New(t)
 
 	val := net.Validators[0]
 	ctx := val.ClientCtx

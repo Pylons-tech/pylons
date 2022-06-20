@@ -13,10 +13,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Pylons-tech/pylons/app"
+	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/cosmos/cosmos-sdk/testutil/network"
 )
 
 type tradeSimInfo struct {
@@ -106,9 +105,7 @@ func getTestCoins(t *testing.T, simInfo *tradeSimInfo, common []string) {
 }
 
 func TestFulfillTradeItemForCoins(t *testing.T) {
-	config := app.DefaultConfig()
-	net := network.New(t, config)
-	t.Cleanup(net.Cleanup)
+	net := network.New(t)
 
 	val := net.Validators[0]
 	ctx := val.ClientCtx
