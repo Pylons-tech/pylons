@@ -14,6 +14,12 @@ func (k Keeper) SetPaymentInfo(ctx sdk.Context, paymentInfo types.PaymentInfo) {
 	store.Set(types.KeyPrefix(paymentInfo.PurchaseId), b)
 }
 
+// Delete payment so can use for another execution
+func (k Keeper) RemovePaymentInfo(ctx sdk.Context, paymentInfo types.PaymentInfo) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PaymentInfoKey))
+	store.Delete(types.KeyPrefix(paymentInfo.PurchaseId))
+}
+
 // GetPaymentInfo returns a paymentInfo from its index
 func (k Keeper) GetPaymentInfo(ctx sdk.Context, purchaseID string) (val types.PaymentInfo, found bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PaymentInfoKey))
