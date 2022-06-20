@@ -116,26 +116,26 @@ func request_Query_GetRecipeHistory_0(ctx context.Context, marshaler runtime.Mar
 		_   = err
 	)
 
-	val, ok = pathParams["cookbookID"]
+	val, ok = pathParams["cookbook_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cookbookID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cookbook_id")
 	}
 
-	protoReq.CookbookID, err = runtime.String(val)
+	protoReq.CookbookId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cookbookID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cookbook_id", err)
 	}
 
-	val, ok = pathParams["recipeID"]
+	val, ok = pathParams["recipe_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "recipeID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "recipe_id")
 	}
 
-	protoReq.RecipeID, err = runtime.String(val)
+	protoReq.RecipeId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "recipeID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "recipe_id", err)
 	}
 
 	msg, err := client.GetRecipeHistory(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -154,26 +154,26 @@ func local_request_Query_GetRecipeHistory_0(ctx context.Context, marshaler runti
 		_   = err
 	)
 
-	val, ok = pathParams["cookbookID"]
+	val, ok = pathParams["cookbook_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cookbookID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cookbook_id")
 	}
 
-	protoReq.CookbookID, err = runtime.String(val)
+	protoReq.CookbookId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cookbookID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cookbook_id", err)
 	}
 
-	val, ok = pathParams["recipeID"]
+	val, ok = pathParams["recipe_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "recipeID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "recipe_id")
 	}
 
-	protoReq.RecipeID, err = runtime.String(val)
+	protoReq.RecipeId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "recipeID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "recipe_id", err)
 	}
 
 	msg, err := server.GetRecipeHistory(ctx, &protoReq)
@@ -192,15 +192,15 @@ func request_Query_RedeemInfo_0(ctx context.Context, marshaler runtime.Marshaler
 		_   = err
 	)
 
-	val, ok = pathParams["ID"]
+	val, ok = pathParams["id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.ID, err = runtime.String(val)
+	protoReq.Id, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
 	msg, err := client.RedeemInfo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -219,15 +219,15 @@ func local_request_Query_RedeemInfo_0(ctx context.Context, marshaler runtime.Mar
 		_   = err
 	)
 
-	val, ok = pathParams["ID"]
+	val, ok = pathParams["id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.ID, err = runtime.String(val)
+	protoReq.Id, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
 	msg, err := server.RedeemInfo(ctx, &protoReq)
@@ -282,15 +282,15 @@ func request_Query_PaymentInfo_0(ctx context.Context, marshaler runtime.Marshale
 		_   = err
 	)
 
-	val, ok = pathParams["purchaseID"]
+	val, ok = pathParams["purchase_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "purchaseID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "purchase_id")
 	}
 
-	protoReq.PurchaseID, err = runtime.String(val)
+	protoReq.PurchaseId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "purchaseID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "purchase_id", err)
 	}
 
 	msg, err := client.PaymentInfo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -309,15 +309,15 @@ func local_request_Query_PaymentInfo_0(ctx context.Context, marshaler runtime.Ma
 		_   = err
 	)
 
-	val, ok = pathParams["purchaseID"]
+	val, ok = pathParams["purchase_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "purchaseID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "purchase_id")
 	}
 
-	protoReq.PurchaseID, err = runtime.String(val)
+	protoReq.PurchaseId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "purchaseID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "purchase_id", err)
 	}
 
 	msg, err := server.PaymentInfo(ctx, &protoReq)
@@ -480,15 +480,15 @@ func request_Query_Trade_0(ctx context.Context, marshaler runtime.Marshaler, cli
 		_   = err
 	)
 
-	val, ok = pathParams["ID"]
+	val, ok = pathParams["id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.ID, err = runtime.Uint64(val)
+	protoReq.Id, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
 	msg, err := client.Trade(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -507,15 +507,15 @@ func local_request_Query_Trade_0(ctx context.Context, marshaler runtime.Marshale
 		_   = err
 	)
 
-	val, ok = pathParams["ID"]
+	val, ok = pathParams["id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.ID, err = runtime.Uint64(val)
+	protoReq.Id, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
 	msg, err := server.Trade(ctx, &protoReq)
@@ -606,15 +606,15 @@ func request_Query_GoogleInAppPurchaseOrder_0(ctx context.Context, marshaler run
 		_   = err
 	)
 
-	val, ok = pathParams["PurchaseToken"]
+	val, ok = pathParams["purchase_token"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "PurchaseToken")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "purchase_token")
 	}
 
 	protoReq.PurchaseToken, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "PurchaseToken", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "purchase_token", err)
 	}
 
 	msg, err := client.GoogleInAppPurchaseOrder(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -633,15 +633,15 @@ func local_request_Query_GoogleInAppPurchaseOrder_0(ctx context.Context, marshal
 		_   = err
 	)
 
-	val, ok = pathParams["PurchaseToken"]
+	val, ok = pathParams["purchase_token"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "PurchaseToken")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "purchase_token")
 	}
 
 	protoReq.PurchaseToken, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "PurchaseToken", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "purchase_token", err)
 	}
 
 	msg, err := server.GoogleInAppPurchaseOrder(ctx, &protoReq)
@@ -650,7 +650,7 @@ func local_request_Query_GoogleInAppPurchaseOrder_0(ctx context.Context, marshal
 }
 
 var (
-	filter_Query_ListExecutionsByItem_0 = &utilities.DoubleArray{Encoding: map[string]int{"CookbookID": 0, "ItemID": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
+	filter_Query_ListExecutionsByItem_0 = &utilities.DoubleArray{Encoding: map[string]int{"cookbook_id": 0, "item_id": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
 )
 
 func request_Query_ListExecutionsByItem_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
@@ -664,26 +664,26 @@ func request_Query_ListExecutionsByItem_0(ctx context.Context, marshaler runtime
 		_   = err
 	)
 
-	val, ok = pathParams["CookbookID"]
+	val, ok = pathParams["cookbook_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "CookbookID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cookbook_id")
 	}
 
-	protoReq.CookbookID, err = runtime.String(val)
+	protoReq.CookbookId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "CookbookID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cookbook_id", err)
 	}
 
-	val, ok = pathParams["ItemID"]
+	val, ok = pathParams["item_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ItemID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "item_id")
 	}
 
-	protoReq.ItemID, err = runtime.String(val)
+	protoReq.ItemId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ItemID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "item_id", err)
 	}
 
 	if err := req.ParseForm(); err != nil {
@@ -709,26 +709,26 @@ func local_request_Query_ListExecutionsByItem_0(ctx context.Context, marshaler r
 		_   = err
 	)
 
-	val, ok = pathParams["CookbookID"]
+	val, ok = pathParams["cookbook_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "CookbookID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cookbook_id")
 	}
 
-	protoReq.CookbookID, err = runtime.String(val)
+	protoReq.CookbookId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "CookbookID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cookbook_id", err)
 	}
 
-	val, ok = pathParams["ItemID"]
+	val, ok = pathParams["item_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ItemID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "item_id")
 	}
 
-	protoReq.ItemID, err = runtime.String(val)
+	protoReq.ItemId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ItemID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "item_id", err)
 	}
 
 	if err := req.ParseForm(); err != nil {
@@ -744,7 +744,7 @@ func local_request_Query_ListExecutionsByItem_0(ctx context.Context, marshaler r
 }
 
 var (
-	filter_Query_ListExecutionsByRecipe_0 = &utilities.DoubleArray{Encoding: map[string]int{"CookbookID": 0, "RecipeID": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
+	filter_Query_ListExecutionsByRecipe_0 = &utilities.DoubleArray{Encoding: map[string]int{"cookbook_id": 0, "recipe_id": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
 )
 
 func request_Query_ListExecutionsByRecipe_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
@@ -758,26 +758,26 @@ func request_Query_ListExecutionsByRecipe_0(ctx context.Context, marshaler runti
 		_   = err
 	)
 
-	val, ok = pathParams["CookbookID"]
+	val, ok = pathParams["cookbook_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "CookbookID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cookbook_id")
 	}
 
-	protoReq.CookbookID, err = runtime.String(val)
+	protoReq.CookbookId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "CookbookID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cookbook_id", err)
 	}
 
-	val, ok = pathParams["RecipeID"]
+	val, ok = pathParams["recipe_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "RecipeID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "recipe_id")
 	}
 
-	protoReq.RecipeID, err = runtime.String(val)
+	protoReq.RecipeId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "RecipeID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "recipe_id", err)
 	}
 
 	if err := req.ParseForm(); err != nil {
@@ -803,26 +803,26 @@ func local_request_Query_ListExecutionsByRecipe_0(ctx context.Context, marshaler
 		_   = err
 	)
 
-	val, ok = pathParams["CookbookID"]
+	val, ok = pathParams["cookbook_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "CookbookID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cookbook_id")
 	}
 
-	protoReq.CookbookID, err = runtime.String(val)
+	protoReq.CookbookId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "CookbookID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cookbook_id", err)
 	}
 
-	val, ok = pathParams["RecipeID"]
+	val, ok = pathParams["recipe_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "RecipeID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "recipe_id")
 	}
 
-	protoReq.RecipeID, err = runtime.String(val)
+	protoReq.RecipeId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "RecipeID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "recipe_id", err)
 	}
 
 	if err := req.ParseForm(); err != nil {
@@ -848,15 +848,15 @@ func request_Query_Execution_0(ctx context.Context, marshaler runtime.Marshaler,
 		_   = err
 	)
 
-	val, ok = pathParams["ID"]
+	val, ok = pathParams["id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.ID, err = runtime.String(val)
+	protoReq.Id, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
 	msg, err := client.Execution(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -875,15 +875,15 @@ func local_request_Query_Execution_0(ctx context.Context, marshaler runtime.Mars
 		_   = err
 	)
 
-	val, ok = pathParams["ID"]
+	val, ok = pathParams["id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.ID, err = runtime.String(val)
+	protoReq.Id, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
 	msg, err := server.Execution(ctx, &protoReq)
@@ -892,7 +892,7 @@ func local_request_Query_Execution_0(ctx context.Context, marshaler runtime.Mars
 }
 
 var (
-	filter_Query_ListRecipesByCookbook_0 = &utilities.DoubleArray{Encoding: map[string]int{"CookbookID": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_Query_ListRecipesByCookbook_0 = &utilities.DoubleArray{Encoding: map[string]int{"cookbook_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
 func request_Query_ListRecipesByCookbook_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
@@ -906,15 +906,15 @@ func request_Query_ListRecipesByCookbook_0(ctx context.Context, marshaler runtim
 		_   = err
 	)
 
-	val, ok = pathParams["CookbookID"]
+	val, ok = pathParams["cookbook_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "CookbookID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cookbook_id")
 	}
 
-	protoReq.CookbookID, err = runtime.String(val)
+	protoReq.CookbookId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "CookbookID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cookbook_id", err)
 	}
 
 	if err := req.ParseForm(); err != nil {
@@ -940,15 +940,15 @@ func local_request_Query_ListRecipesByCookbook_0(ctx context.Context, marshaler 
 		_   = err
 	)
 
-	val, ok = pathParams["CookbookID"]
+	val, ok = pathParams["cookbook_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "CookbookID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cookbook_id")
 	}
 
-	protoReq.CookbookID, err = runtime.String(val)
+	protoReq.CookbookId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "CookbookID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cookbook_id", err)
 	}
 
 	if err := req.ParseForm(); err != nil {
@@ -974,26 +974,26 @@ func request_Query_Item_0(ctx context.Context, marshaler runtime.Marshaler, clie
 		_   = err
 	)
 
-	val, ok = pathParams["CookbookID"]
+	val, ok = pathParams["cookbook_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "CookbookID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cookbook_id")
 	}
 
-	protoReq.CookbookID, err = runtime.String(val)
+	protoReq.CookbookId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "CookbookID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cookbook_id", err)
 	}
 
-	val, ok = pathParams["ID"]
+	val, ok = pathParams["id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.ID, err = runtime.String(val)
+	protoReq.Id, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
 	msg, err := client.Item(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -1012,26 +1012,26 @@ func local_request_Query_Item_0(ctx context.Context, marshaler runtime.Marshaler
 		_   = err
 	)
 
-	val, ok = pathParams["CookbookID"]
+	val, ok = pathParams["cookbook_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "CookbookID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cookbook_id")
 	}
 
-	protoReq.CookbookID, err = runtime.String(val)
+	protoReq.CookbookId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "CookbookID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cookbook_id", err)
 	}
 
-	val, ok = pathParams["ID"]
+	val, ok = pathParams["id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.ID, err = runtime.String(val)
+	protoReq.Id, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
 	msg, err := server.Item(ctx, &protoReq)
@@ -1050,26 +1050,26 @@ func request_Query_Recipe_0(ctx context.Context, marshaler runtime.Marshaler, cl
 		_   = err
 	)
 
-	val, ok = pathParams["CookbookID"]
+	val, ok = pathParams["cookbook_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "CookbookID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cookbook_id")
 	}
 
-	protoReq.CookbookID, err = runtime.String(val)
+	protoReq.CookbookId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "CookbookID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cookbook_id", err)
 	}
 
-	val, ok = pathParams["ID"]
+	val, ok = pathParams["id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.ID, err = runtime.String(val)
+	protoReq.Id, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
 	msg, err := client.Recipe(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -1088,26 +1088,26 @@ func local_request_Query_Recipe_0(ctx context.Context, marshaler runtime.Marshal
 		_   = err
 	)
 
-	val, ok = pathParams["CookbookID"]
+	val, ok = pathParams["cookbook_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "CookbookID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cookbook_id")
 	}
 
-	protoReq.CookbookID, err = runtime.String(val)
+	protoReq.CookbookId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "CookbookID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cookbook_id", err)
 	}
 
-	val, ok = pathParams["ID"]
+	val, ok = pathParams["id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.ID, err = runtime.String(val)
+	protoReq.Id, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
 	msg, err := server.Recipe(ctx, &protoReq)
@@ -1198,15 +1198,15 @@ func request_Query_Cookbook_0(ctx context.Context, marshaler runtime.Marshaler, 
 		_   = err
 	)
 
-	val, ok = pathParams["ID"]
+	val, ok = pathParams["id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.ID, err = runtime.String(val)
+	protoReq.Id, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
 	msg, err := client.Cookbook(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -1225,15 +1225,15 @@ func local_request_Query_Cookbook_0(ctx context.Context, marshaler runtime.Marsh
 		_   = err
 	)
 
-	val, ok = pathParams["ID"]
+	val, ok = pathParams["id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ID")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.ID, err = runtime.String(val)
+	protoReq.Id, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ID", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
 
 	msg, err := server.Cookbook(ctx, &protoReq)
@@ -2111,13 +2111,13 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 var (
 	pattern_Query_ListTradesByCreator_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "trades", "creator"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_GetRecipeHistory_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"Pylons-tech", "pylons", "get_recipe_history", "cookbookID", "recipeID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetRecipeHistory_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"Pylons-tech", "pylons", "get_recipe_history", "cookbook_id", "recipe_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_RedeemInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "redeem", "ID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_RedeemInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "redeem", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_RedeemInfoAll_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"pylons", "redeems"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_PaymentInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "payment", "purchaseID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_PaymentInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "payment", "purchase_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_PaymentInfoAll_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"pylons", "payments"}, "", runtime.AssumeColonVerbOpt(true)))
 
@@ -2125,27 +2125,27 @@ var (
 
 	pattern_Query_AddressByUsername_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 2}, []string{"pylons", "account", "username"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_Trade_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "trade", "ID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Trade_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "trade", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_ListItemByOwner_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "items", "owner"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_GoogleInAppPurchaseOrder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "iap", "PurchaseToken"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GoogleInAppPurchaseOrder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "iap", "purchase_token"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_ListExecutionsByItem_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"pylons", "executions", "item", "CookbookID", "ItemID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ListExecutionsByItem_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"pylons", "executions", "item", "cookbook_id", "item_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_ListExecutionsByRecipe_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"pylons", "executions", "recipe", "CookbookID", "RecipeID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ListExecutionsByRecipe_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"pylons", "executions", "recipe", "cookbook_id", "recipe_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_Execution_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "execution", "ID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Execution_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "execution", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_ListRecipesByCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "recipes", "CookbookID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ListRecipesByCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "recipes", "cookbook_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_Item_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 1, 0, 4, 1, 5, 3}, []string{"pylons", "item", "CookbookID", "ID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Item_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 1, 0, 4, 1, 5, 3}, []string{"pylons", "item", "cookbook_id", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_Recipe_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 1, 0, 4, 1, 5, 3}, []string{"pylons", "recipe", "CookbookID", "ID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Recipe_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 1, 0, 4, 1, 5, 3}, []string{"pylons", "recipe", "cookbook_id", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_ListCookbooksByCreator_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "cookbooks", "creator"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_Cookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "cookbook", "ID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Cookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "cookbook", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (

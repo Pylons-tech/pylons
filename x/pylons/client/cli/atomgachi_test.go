@@ -89,7 +89,7 @@ func createMintRecipe(t *testing.T, simInfo *atomgachiBasicSim) {
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{{
-			ID: "atomgachiTestCreate",
+			Id: "atomgachiTestCreate",
 			Strings: []types.StringParam{
 				{
 					Key:     "name",
@@ -108,7 +108,7 @@ func createMintRecipe(t *testing.T, simInfo *atomgachiBasicSim) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"atomgachiTestCreate"},
+			EntryIds: []string{"atomgachiTestCreate"},
 			Weight:   1,
 		},
 	})
@@ -175,5 +175,5 @@ func mint(t *testing.T, simInfo *atomgachiBasicSim) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookIDAtomgachi, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookIDAtomgachi, itemResp.Item.CookbookId)
 }

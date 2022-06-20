@@ -23,17 +23,17 @@ func (suite *IntegrationTestSuite) TestRedeemInfoQuerySingle() {
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetRedeemInfoRequest{ID: msgs[0].ID},
+			request:  &types.QueryGetRedeemInfoRequest{Id: msgs[0].Id},
 			response: &types.QueryGetRedeemInfoResponse{RedeemInfo: msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetRedeemInfoRequest{ID: msgs[1].ID},
+			request:  &types.QueryGetRedeemInfoRequest{Id: msgs[1].Id},
 			response: &types.QueryGetRedeemInfoResponse{RedeemInfo: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetRedeemInfoRequest{ID: "missing"},
+			request: &types.QueryGetRedeemInfoRequest{Id: "missing"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{

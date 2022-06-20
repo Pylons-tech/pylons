@@ -11,7 +11,7 @@ import (
 func (k Keeper) SetPaymentInfo(ctx sdk.Context, paymentInfo types.PaymentInfo) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PaymentInfoKey))
 	b := k.cdc.MustMarshal(&paymentInfo)
-	store.Set(types.KeyPrefix(paymentInfo.PurchaseID), b)
+	store.Set(types.KeyPrefix(paymentInfo.PurchaseId), b)
 }
 
 // GetPaymentInfo returns a paymentInfo from its index

@@ -11,13 +11,13 @@ import (
 
 // ValidatePaymentInfo validates the payment receipt using the provided signature
 func (pp PaymentProcessor) ValidatePaymentInfo(pi PaymentInfo) error {
-	msg := fmt.Sprintf("{\"purchaseID\":\"%s\",\"address\":\"%s\",\"amount\":\"%s\",\"productID\":\"%s\"}", pi.PurchaseID, pi.PayerAddr, pi.Amount.String(), pi.ProductID)
+	msg := fmt.Sprintf("{\"purchase_id\":\"%s\",\"address\":\"%s\",\"amount\":\"%s\",\"product_id\":\"%s\"}", pi.PurchaseId, pi.PayerAddr, pi.Amount.String(), pi.ProductId)
 	return pp.verifySignature(msg, pi.Signature)
 }
 
 // ValidateRedeemInfo validates the payment receipt using the provided signature
 func (pp PaymentProcessor) ValidateRedeemInfo(ri RedeemInfo) error {
-	msg := fmt.Sprintf("{\"payoutID\":\"%s\",\"address\":\"%s\",\"amount\":\"%s\"}", ri.ID, ri.Address, ri.Amount.String())
+	msg := fmt.Sprintf("{\"payout_id\":\"%s\",\"address\":\"%s\",\"amount\":\"%s\"}", ri.Id, ri.Address, ri.Amount.String())
 	return pp.verifySignature(msg, ri.Signature)
 }
 

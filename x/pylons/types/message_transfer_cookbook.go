@@ -10,7 +10,7 @@ var _ sdk.Msg = &MsgTransferCookbook{}
 func NewMsgTransferCookbook(creator string, cookbookID string, recipient string) *MsgTransferCookbook {
 	return &MsgTransferCookbook{
 		Creator:   creator,
-		ID:        cookbookID,
+		Id:        cookbookID,
 		Recipient: recipient,
 	}
 }
@@ -47,7 +47,7 @@ func (msg *MsgTransferCookbook) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid recipient address (%s)", err)
 	}
 
-	if err = ValidateID(msg.ID); err != nil {
+	if err = ValidateID(msg.Id); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 

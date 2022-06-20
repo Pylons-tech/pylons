@@ -27,8 +27,8 @@ func (suite *IntegrationTestSuite) TestListExecutionsByRecipe() {
 				Limit:      limit,
 				CountTotal: total,
 			},
-			CookbookID: cookbookID,
-			RecipeID:   recipeID,
+			CookbookId: cookbookID,
+			RecipeId:   recipeID,
 		}
 	}
 

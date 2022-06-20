@@ -50,7 +50,7 @@ func TestSetItemString(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: executedItemID,
+				Id: executedItemID,
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -89,7 +89,7 @@ func TestSetItemString(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{executedItemID},
+			EntryIds: []string{executedItemID},
 			Weight:   1,
 		},
 	})
@@ -170,10 +170,10 @@ func TestSetItemString(t *testing.T) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
-	executedItemID = itemResp.Item.ID
+	executedItemID = itemResp.Item.Id
 
 	for _, tc := range []struct {
 		desc               string

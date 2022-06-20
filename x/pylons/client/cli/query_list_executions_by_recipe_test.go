@@ -33,14 +33,14 @@ func TestCmdListExecutionsByRecipe(t *testing.T) {
 	}{
 		{
 			desc:     "found1",
-			recipeId: executions[0].RecipeID,
+			recipeId: executions[0].RecipeId,
 			args:     common,
 			obj:      types.QueryListExecutionsByRecipeResponse{},
 		},
 		{
 			desc:       "found2",
-			recipeId:   executions[1].ID,
-			cookbookId: executions[1].CookbookID,
+			recipeId:   executions[1].Id,
+			cookbookId: executions[1].CookbookId,
 			args:       common,
 			obj:        types.QueryListExecutionsByRecipeResponse{},
 		},

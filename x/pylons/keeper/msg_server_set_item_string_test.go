@@ -38,7 +38,7 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 		idx := fmt.Sprintf("%d", i)
 		cookbook := &types.MsgCreateCookbook{
 			Creator:      creator,
-			ID:           idx,
+			Id:           idx,
 			Name:         "testCookbookName",
 			Description:  "descdescdescdescdescdescdescdesc",
 			Developer:    "",
@@ -52,8 +52,8 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 
 		// set dummy item in store
 		item := types.Item{
-			CookbookID: idx,
-			ID:         idx,
+			CookbookId: idx,
+			Id:         idx,
 			Owner:      creator,
 			MutableStrings: []types.StringKeyValue{
 				{Key: expectedString, Value: expectedString},
@@ -63,8 +63,8 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 		// update item by setting the MutableString value to ""
 		updateItemStringMsg := &types.MsgSetItemString{
 			Creator:    creator,
-			CookbookID: idx,
-			ID:         idx,
+			CookbookId: idx,
+			Id:         idx,
 			Field:      expectedString,
 			Value:      "new string",
 		}
@@ -72,7 +72,7 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 		require.NoError(err)
 
 		// get item
-		rst, found := k.GetItem(ctx, item.CookbookID, item.ID)
+		rst, found := k.GetItem(ctx, item.CookbookId, item.Id)
 		require.True(found)
 		require.NotEqual(expectedString, rst.MutableStrings[0].Value)
 		expectedString = "new string"

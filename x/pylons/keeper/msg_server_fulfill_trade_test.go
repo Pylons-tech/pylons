@@ -30,11 +30,11 @@ func (suite *IntegrationTestSuite) TestFulfillTradeMsgServerSimple() {
 
 		respCreate, err := srv.CreateTrade(wctx, msgCreate)
 		require.NoError(err)
-		require.Equal(i, int(respCreate.ID))
+		require.Equal(i, int(respCreate.Id))
 
 		msgFulfill := &types.MsgFulfillTrade{
 			Creator:         creatorB,
-			ID:              respCreate.ID,
+			Id:              respCreate.Id,
 			CoinInputsIndex: 0,
 			Items:           nil,
 		}

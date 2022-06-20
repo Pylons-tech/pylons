@@ -54,7 +54,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -89,7 +89,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -175,7 +175,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		require.NoError(t, err)
 		var itemResp types.QueryGetItemResponse
 		require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-		require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+		require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 		require.Equal(t, height, itemResp.Item.LastUpdate)
 	}
 }
@@ -209,7 +209,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -248,7 +248,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -324,7 +324,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	// check the recipe to see if the AmountMinted has been updated
@@ -401,7 +401,7 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -440,7 +440,7 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -544,7 +544,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -584,7 +584,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -712,7 +712,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -752,7 +752,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -828,7 +828,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	}
 	itemInputs, err := json.Marshal([]types.ItemInput{
 		{
-			ID: "itemInputID",
+			Id: "itemInputID",
 			Doubles: []types.DoubleInputParam{
 				{
 					Key:      "main",
@@ -853,7 +853,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -888,7 +888,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -991,7 +991,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 }
 
@@ -1025,7 +1025,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -1065,7 +1065,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -1139,7 +1139,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	// check the recipe to see if the Mutable string is represented properly

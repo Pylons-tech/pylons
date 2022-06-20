@@ -11,18 +11,18 @@ import "pylons/item.proto";
 message DoubleInputParam {
   string key = 1;
   // The minimum legal value of this parameter.
-  string minValue = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string min_value = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   // The maximum legal value of this parameter.
-  string  maxValue = 3 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string  max_value = 3 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
 }
 
 // LongInputParam describes the bounds on an item input/output parameter of type int64
 message LongInputParam {
   string key = 1;
   // The minimum legal value of this parameter.
-  int64 minValue = 2;
+  int64 min_value = 2;
   // The maximum legal value of this parameter.
-  int64 maxValue = 3;
+  int64 max_value = 3;
 }
 
 // StringInputParam describes the bounds on an item input/output parameter of type string
@@ -34,7 +34,7 @@ message StringInputParam {
 
 // ItemInput is a struct for describing an input item
 message ItemInput  {
-  string ID = 1;
+  string id = 1;
   repeated DoubleInputParam doubles = 2 [(gogoproto.nullable) = false];
   repeated LongInputParam longs = 3 [(gogoproto.nullable) = false];
   repeated StringInputParam strings = 4[(gogoproto.nullable) = false];
@@ -80,56 +80,56 @@ message StringParam {
 
 // CoinOutput models the continuum of valid outcomes for coin generation in recipes
 message CoinOutput{
-  string ID = 1;
+  string id = 1;
   cosmos.base.v1beta1.Coin coin = 2 [(gogoproto.nullable) = false];
   string program = 3;
 }
 
 // ItemOutput models the continuum of valid outcomes for item generation in recipes
 message ItemOutput {
-  string ID = 1;
+  string id = 1;
   repeated DoubleParam doubles = 2 [(gogoproto.nullable) = false];
   repeated LongParam longs = 3 [(gogoproto.nullable) = false];
   repeated StringParam strings = 4 [(gogoproto.nullable) = false];
   // defines a list of mutable strings whose value can be customized by the user
-  repeated StringKeyValue mutableStrings = 5 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin transferFee = 6 [(gogoproto.nullable) = false];
+  repeated StringKeyValue mutable_strings = 5 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin transfer_fee = 6 [(gogoproto.nullable) = false];
   // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
-  string tradePercentage = 7 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string trade_percentage = 7 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
   uint64 quantity = 8;
-  uint64 amountMinted = 9;
+  uint64 amount_minted = 9;
   bool tradeable = 10;
 }
 
 // ItemModifyOutput describes what is modified from item input
 message ItemModifyOutput {
-  string ID = 1;
-  string itemInputRef = 2;
+  string id = 1;
+  string item_input_ref = 2;
   repeated DoubleParam doubles = 3 [(gogoproto.nullable) = false];
   repeated LongParam longs = 4 [(gogoproto.nullable) = false];
   repeated StringParam strings = 5 [(gogoproto.nullable) = false];
   // defines a list of mutable strings whose value can be customized by the user
-  repeated StringKeyValue mutableStrings = 6 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin transferFee = 7 [(gogoproto.nullable) = false];
+  repeated StringKeyValue mutable_strings = 6 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin transfer_fee = 7 [(gogoproto.nullable) = false];
   // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
-  string tradePercentage = 8 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string trade_percentage = 8 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
   uint64 quantity = 9;
-  uint64 amountMinted = 10;
+  uint64 amount_minted = 10;
   bool tradeable = 11;
 }
 
 // EntriesList is a struct to keep list of items and coins
 message EntriesList {
-  repeated CoinOutput coinOutputs = 1 [(gogoproto.nullable) = false];
-  repeated ItemOutput itemOutputs = 2 [(gogoproto.nullable) = false];
-  repeated ItemModifyOutput itemModifyOutputs = 3 [(gogoproto.nullable) = false];
+  repeated CoinOutput coin_outputs = 1 [(gogoproto.nullable) = false];
+  repeated ItemOutput item_outputs = 2 [(gogoproto.nullable) = false];
+  repeated ItemModifyOutput item_modify_outputs = 3 [(gogoproto.nullable) = false];
 }
 
 // WeightedOutputs is to make structs which is using weight to be based on
 message  WeightedOutputs {
-  repeated string entryIDs = 1 [(gogoproto.nullable) = false];
+  repeated string entry_ids = 1 [(gogoproto.nullable) = false];
   uint64 weight = 2;
 }
 
@@ -138,21 +138,21 @@ message CoinInput{
 }
 
 message Recipe {
-  string cookbookID = 1;
-  string ID = 2;
-  uint64 nodeVersion = 3;
+  string cookbook_id = 1;
+  string id = 2;
+  uint64 node_version = 3;
   string name = 4;
   string description = 5;
   string version = 6;
-  repeated CoinInput coinInputs = 7 [(gogoproto.nullable) = false];
-  repeated ItemInput itemInputs = 8 [(gogoproto.nullable) = false];
+  repeated CoinInput coin_inputs = 7 [(gogoproto.nullable) = false];
+  repeated ItemInput item_inputs = 8 [(gogoproto.nullable) = false];
   EntriesList entries = 9 [(gogoproto.nullable) = false];
   repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
-  int64 blockInterval = 11;
-  cosmos.base.v1beta1.Coin costPerBlock = 12 [(gogoproto.nullable) = false];
+  int64 block_interval = 11;
+  cosmos.base.v1beta1.Coin cost_per_block = 12 [(gogoproto.nullable) = false];
   bool enabled = 13;
-  string extraInfo = 14;
-  int64 createdAt = 15;
-  int64 updatedAt = 16;
+  string extra_info = 14;
+  int64 created_at = 15;
+  int64 updated_at = 16;
 }
 

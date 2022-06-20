@@ -6,7 +6,7 @@ func (suite *IntegrationTestSuite) TestRedeemInfoGet() {
 	require := suite.Require()
 	items := createNRedeemInfo(k, ctx, 10)
 	for _, item := range items {
-		rst, found := k.GetRedeemInfo(ctx, item.ID)
+		rst, found := k.GetRedeemInfo(ctx, item.Id)
 		require.True(found)
 		require.Equal(item, rst)
 	}

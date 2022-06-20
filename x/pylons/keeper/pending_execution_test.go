@@ -7,7 +7,7 @@ func (suite *IntegrationTestSuite) TestPendingExecutionGet() {
 
 	items := createNPendingExecution(k, ctx, 10)
 	for _, item := range items {
-		require.Equal(item, k.GetPendingExecution(ctx, item.ID))
+		require.Equal(item, k.GetPendingExecution(ctx, item.Id))
 	}
 }
 
@@ -18,7 +18,7 @@ func (suite *IntegrationTestSuite) TestPendingExecutionExist() {
 
 	items := createNPendingExecution(k, ctx, 10)
 	for _, item := range items {
-		require.True(k.HasPendingExecution(ctx, item.ID))
+		require.True(k.HasPendingExecution(ctx, item.Id))
 	}
 }
 

@@ -6,10 +6,10 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 import "gogoproto/gogo.proto";
 
 message PaymentInfo {
-  string purchaseID = 1;
-  string processorName = 2;
-  string payerAddr = 3;
+  string purchase_id = 1;
+  string processor_name = 2;
+  string payer_addr = 3;
   string amount = 4 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
-  string productID = 5;
+  string product_id = 5;
   string signature = 6;
 }

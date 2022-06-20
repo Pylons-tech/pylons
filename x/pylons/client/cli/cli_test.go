@@ -89,7 +89,7 @@ func networkWithRedeemInfoObjects(t *testing.T, n int) (*network.Network, []type
 
 	addresses := types.GenTestBech32List(n)
 	for i := 0; i < n; i++ {
-		state.RedeemInfoList = append(state.RedeemInfoList, types.RedeemInfo{Address: addresses[i], ID: strconv.Itoa(i), Amount: sdk.OneInt()})
+		state.RedeemInfoList = append(state.RedeemInfoList, types.RedeemInfo{Address: addresses[i], Id: strconv.Itoa(i), Amount: sdk.OneInt()})
 	}
 
 	buf, err := cfg.Codec.MarshalJSON(&state)
@@ -133,7 +133,7 @@ func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Tra
 	for i := 0; i < n; i++ {
 		state.TradeList = append(state.TradeList, types.Trade{
 			Creator:          addresses[i],
-			ID:               uint64(i),
+			Id:               uint64(i),
 			CoinInputs:       coinInputs,
 			ItemInputs:       make([]types.ItemInput, 0),
 			CoinOutputs:      sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}},
@@ -160,7 +160,7 @@ func networkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, 
 	for i := 0; i < n; i++ {
 		state.TradeList = append(state.TradeList, types.Trade{
 			Creator:          addresses[0],
-			ID:               uint64(i),
+			Id:               uint64(i),
 			CoinInputs:       []types.CoinInput{{Coins: sdk.NewCoins()}},
 			ItemInputs:       make([]types.ItemInput, 0),
 			CoinOutputs:      sdk.NewCoins(),
@@ -189,7 +189,7 @@ func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 	for i := 0; i < n; i++ {
 		state.CookbookList = append(state.CookbookList, types.Cookbook{
 			Creator:      addresses[i],
-			ID:           strconv.Itoa(i),
+			Id:           strconv.Itoa(i),
 			NodeVersion:  0,
 			Name:         "testCookbookName" + strconv.Itoa(i),
 			Description:  "testCookbookDescription" + strconv.Itoa(i),
@@ -221,17 +221,17 @@ func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types
 		state.ExecutionList = append(state.ExecutionList,
 			types.Execution{
 				Creator:     addresses[i],
-				ID:          strconv.Itoa(i),
+				Id:          strconv.Itoa(i),
 				NodeVersion: 0,
 				CoinOutputs: sdk.NewCoins(sdk.NewCoin(
 					"testDenom"+strconv.Itoa(i),
 					sdk.OneInt(),
 				)),
 				ItemInputs:          make([]types.ItemRecord, 0),
-				ItemOutputIDs:       []string{"itemID1"},
-				ItemModifyOutputIDs: make([]string, 0),
-				RecipeID:            "RecipeID1",
-				CookbookID:          "CookbookID1",
+				ItemOutputIds:       []string{"itemID1"},
+				ItemModifyOutputIds: make([]string, 0),
+				RecipeId:            "RecipeID1",
+				CookbookId:          "CookbookID1",
 				CoinInputs:          sdk.NewCoins(),
 			})
 	}
@@ -264,7 +264,7 @@ func networkWithPaymentInfoObjects(t *testing.T, n int) (*network.Network, []typ
 
 	addresses := types.GenTestBech32List(n)
 	for i := 0; i < n; i++ {
-		state.PaymentInfoList = append(state.PaymentInfoList, types.PaymentInfo{PayerAddr: addresses[i], PurchaseID: strconv.Itoa(i), Amount: sdk.OneInt()})
+		state.PaymentInfoList = append(state.PaymentInfoList, types.PaymentInfo{PayerAddr: addresses[i], PurchaseId: strconv.Itoa(i), Amount: sdk.OneInt()})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
@@ -284,8 +284,8 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item
 		state.ItemList = append(state.ItemList,
 			types.Item{
 				Owner:           addresses[i],
-				ID:              strconv.Itoa(i),
-				CookbookID:      "testCookbookID",
+				Id:              strconv.Itoa(i),
+				CookbookId:      "testCookbookID",
 				NodeVersion:     0,
 				Doubles:         make([]types.DoubleKeyValue, 0),
 				Longs:           make([]types.LongKeyValue, 0),
@@ -315,8 +315,8 @@ func networkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, [
 		state.ItemList = append(state.ItemList,
 			types.Item{
 				Owner:           addresses[0],
-				ID:              strconv.Itoa(i),
-				CookbookID:      "testCookbookID",
+				Id:              strconv.Itoa(i),
+				CookbookId:      "testCookbookID",
 				NodeVersion:     0,
 				Doubles:         make([]types.DoubleKeyValue, 0),
 				Longs:           make([]types.LongKeyValue, 0),
@@ -344,8 +344,8 @@ func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Re
 		state.RecipeList = append(
 			state.RecipeList,
 			types.Recipe{
-				CookbookID:    strconv.Itoa(i),
-				ID:            strconv.Itoa(i),
+				CookbookId:    strconv.Itoa(i),
+				Id:            strconv.Itoa(i),
 				NodeVersion:   0,
 				Name:          "",
 				Description:   "",
@@ -376,8 +376,8 @@ func networkWithRecipeObjectsHistory(t *testing.T, n int) (*network.Network, []t
 		state.RecipeList = append(
 			state.RecipeList,
 			types.Recipe{
-				CookbookID:    "testCookbook",
-				ID:            "testRecipe",
+				CookbookId:    "testCookbook",
+				Id:            "testRecipe",
 				NodeVersion:   0,
 				Name:          "",
 				Description:   "",

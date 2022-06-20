@@ -15,8 +15,8 @@ var (
 func NewMsgCreateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput []CoinInput, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, costPerBlock sdk.Coin, enabled bool, extraInfo string) *MsgCreateRecipe {
 	return &MsgCreateRecipe{
 		Creator:       creator,
-		CookbookID:    cookbookID,
-		ID:            id,
+		CookbookId:    cookbookID,
+		Id:            id,
 		Name:          name,
 		Description:   description,
 		Version:       version,
@@ -67,11 +67,11 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	if err = ValidateID(msg.CookbookID); err != nil {
+	if err = ValidateID(msg.CookbookId); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	if err = ValidateID(msg.ID); err != nil {
+	if err = ValidateID(msg.Id); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
@@ -102,8 +102,8 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 			for _, coin := range coins {
 				if IsCookbookDenom(coin.Denom) {
 					split := strings.Split(coin.Denom, denomDivider)
-					if split[0] != msg.CookbookID {
-						return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s must be from the recipe-owning cookbook ID %s", coin.Denom, msg.CookbookID)
+					if split[0] != msg.CookbookId {
+						return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s must be from the recipe-owning cookbook ID %s", coin.Denom, msg.CookbookId)
 					}
 
 					if IsIBCDenomRepresentation(coin.Denom) {
@@ -155,7 +155,7 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 	// global local denoms "denom"  INVALID
 	// cookbook denoms "cookbookID/denom" VALID if cookbookID == msg.cookbookID
 	// external ibc denoms "ibc/{hash}" INVALID
-	msg.Entries.CoinOutputs, err = CreateValidCoinOutputsList(msg.CookbookID, msg.Entries.CoinOutputs)
+	msg.Entries.CoinOutputs, err = CreateValidCoinOutputsList(msg.CookbookId, msg.Entries.CoinOutputs)
 	if err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unable to build valid coin outputs list")
 	}
@@ -166,8 +166,8 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 func NewMsgUpdateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput []CoinInput, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, costPerBlock sdk.Coin, enabled bool, extraInfo string) *MsgUpdateRecipe {
 	return &MsgUpdateRecipe{
 		Creator:       creator,
-		CookbookID:    cookbookID,
-		ID:            id,
+		CookbookId:    cookbookID,
+		Id:            id,
 		Name:          name,
 		Description:   description,
 		Version:       version,
@@ -218,11 +218,11 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	if err = ValidateID(msg.CookbookID); err != nil {
+	if err = ValidateID(msg.CookbookId); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	if err = ValidateID(msg.ID); err != nil {
+	if err = ValidateID(msg.Id); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
@@ -253,8 +253,8 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 			for _, coin := range coins {
 				if IsCookbookDenom(coin.Denom) {
 					split := strings.Split(coin.Denom, denomDivider)
-					if split[0] != msg.CookbookID {
-						return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s must be from the recipe-owning cookbook ID %s", coin.Denom, msg.CookbookID)
+					if split[0] != msg.CookbookId {
+						return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s must be from the recipe-owning cookbook ID %s", coin.Denom, msg.CookbookId)
 					}
 
 					if IsIBCDenomRepresentation(coin.Denom) {
@@ -306,7 +306,7 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 	// global local denoms "denom"  INVALID
 	// cookbook denoms "cookbookID/denom" VALID if cookbookID == msg.cookbookID
 	// external ibc denoms "ibc/{hash}" INVALID
-	msg.Entries.CoinOutputs, err = CreateValidCoinOutputsList(msg.CookbookID, msg.Entries.CoinOutputs)
+	msg.Entries.CoinOutputs, err = CreateValidCoinOutputsList(msg.CookbookId, msg.Entries.CoinOutputs)
 	if err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unable to build valid coin outputs list")
 	}

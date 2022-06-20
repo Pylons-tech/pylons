@@ -30,8 +30,8 @@ func TestListRecipesByCookbook(t *testing.T) {
 	}{
 		{
 			desc:       "found",
-			cookbookID: objs[0].CookbookID,
-			recipeID:   objs[0].ID,
+			cookbookID: objs[0].CookbookId,
+			recipeID:   objs[0].Id,
 			args:       common,
 			obj:        []types.Recipe{objs[0]},
 		},

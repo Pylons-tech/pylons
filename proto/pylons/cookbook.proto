@@ -8,12 +8,12 @@ import "cosmos/base/v1beta1/coin.proto";
 
 message Cookbook {
   string creator = 1;
-  string ID = 2;
-  uint64 nodeVersion = 3;
+  string id = 2;
+  uint64 node_version = 3;
   string name = 4; 
   string description = 5; 
   string developer = 6; 
   string version = 7; 
-  string supportEmail = 8;
+  string support_email = 8;
   bool enabled = 9;
 }

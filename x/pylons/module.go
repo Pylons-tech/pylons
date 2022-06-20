@@ -188,9 +188,9 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 			}
 			// make sure locked item's ownership is set back to the execution creator
 			for _, itemRecord := range pendingExec.ItemInputs {
-				item, found := am.keeper.GetItem(ctx, pendingExec.CookbookID, itemRecord.ID)
+				item, found := am.keeper.GetItem(ctx, pendingExec.CookbookId, itemRecord.Id)
 				if !found {
-					panic(fmt.Errorf("item with ID %v in cookbook with ID %v not found", itemRecord.ID, pendingExec.CookbookID))
+					panic(fmt.Errorf("item with ID %v in cookbook with ID %v not found", itemRecord.Id, pendingExec.CookbookId))
 				}
 				item.Owner = pendingExec.Creator
 				am.keeper.UnlockItemForExecution(ctx, item, pendingExec.Creator)
@@ -199,7 +199,7 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 			am.keeper.ActualizeExecution(ctx, pendingExec)
 			_ = ctx.EventManager().EmitTypedEvent(&types.EventDropExecution{
 				Creator: pendingExec.Creator,
-				ID:      pendingExec.ID,
+				Id:      pendingExec.Id,
 			})
 
 			continue

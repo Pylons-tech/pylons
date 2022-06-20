@@ -28,7 +28,7 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreateSimple() {
 			ExtraInfo:   "",
 		})
 		require.NoError(err)
-		require.Equal(i, int(resp.ID))
+		require.Equal(i, int(resp.Id))
 	}
 }
 
@@ -52,7 +52,7 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreateInvalidCoinInputs() {
 			CoinInputs:  coinInputs,
 			ItemInputs:  nil,
 			CoinOutputs: sdk.Coins{},
-			ItemOutputs: []types.ItemRef{{CookbookID: items[i].CookbookID, ItemID: items[i].ID}},
+			ItemOutputs: []types.ItemRef{{CookbookId: items[i].CookbookId, ItemId: items[i].Id}},
 			ExtraInfo:   "extraInfo",
 		})
 		require.ErrorIs(err, sdkerrors.ErrInvalidCoins)
@@ -75,16 +75,16 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCancel() {
 	}{
 		{
 			desc:    "Completed",
-			request: &types.MsgCancelTrade{Creator: creator, ID: 0},
+			request: &types.MsgCancelTrade{Creator: creator, Id: 0},
 		},
 		{
 			desc:    "Unauthorized",
-			request: &types.MsgCancelTrade{Creator: "B", ID: 1},
+			request: &types.MsgCancelTrade{Creator: "B", Id: 1},
 			err:     sdkerrors.ErrUnauthorized,
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.MsgCancelTrade{Creator: creator, ID: 10},
+			request: &types.MsgCancelTrade{Creator: creator, Id: 10},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 	} {

@@ -121,7 +121,7 @@ func CreateValidCoinOutputsList(cookbookID string, coinOutputs []CoinOutput) ([]
 			}
 
 			validCoinOutputs[i] = CoinOutput{
-				ID:      coinOutput.ID,
+				Id:      coinOutput.Id,
 				Coin:    sdk.NewCoin(cookbookDenom, coinOutput.Coin.Amount),
 				Program: coinOutput.Program,
 			}

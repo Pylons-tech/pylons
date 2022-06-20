@@ -100,7 +100,7 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	testedExecution := executionsResponse.PendingExecutions[0]
 
 	t.Run("Test Complete Execution Early, existing cookbook", func(t *testing.T) {
-		testedExecutionId := testedExecution.ID
+		testedExecutionId := testedExecution.Id
 		args = []string{testedExecutionId}
 		args = append(args, common...)
 
