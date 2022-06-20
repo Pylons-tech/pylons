@@ -26,13 +26,13 @@ func (ad AnteSpamMigitationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, sim
 	}
 
 	// get max txs in a block
-	maxTxs := ad.pk.GetMaxTxsInBlock(ctx)
-
+	// maxTxs := ad.pk.GetMaxTxsInBlock(ctx)
+	maxTxs := uint64(2)
 	// increment sequence of all signers
 	for _, addr := range sigTx.GetSigners() {
 		AccountTrack[addr.String()] += 1
 		if AccountTrack[addr.String()] > maxTxs {
-			return ctx, sdkerrors.Wrapf(sdkerrors.ErrMemoTooLarge, "maximum txs in block is %d ", maxTxs)
+			return ctx, sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "maximum txs in block is %d ", maxTxs)
 		}
 	}
 
