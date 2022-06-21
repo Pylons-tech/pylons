@@ -12,12 +12,12 @@ import (
 )
 
 func ValidateApplePay(msg *MsgAppleIap) (*AppleInAppPurchaseOrder, error) {
-	receipt_data, err := verifyCertificate(msg.Data)
+	receiptData, err := verifyCertificate(msg.Data)
 	if err != nil {
 		return nil, err
 	}
 	var info asn1.RawValue
-	rest, err := extractMainReceipt(receipt_data)
+	rest, err := extractMainReceipt(receiptData)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func ValidateApplePay(msg *MsgAppleIap) (*AppleInAppPurchaseOrder, error) {
 	if err != nil {
 		return nil, err
 	}
-	transactionId, err := getValue(info.Bytes)
+	transactionID, err := getValue(info.Bytes)
 	if err != nil {
 		return nil, err
 	}
@@ -53,14 +53,14 @@ func ValidateApplePay(msg *MsgAppleIap) (*AppleInAppPurchaseOrder, error) {
 		return nil, err
 	}
 	// object for product id
-	productId, err := getValue(info.Bytes)
+	productID, err := getValue(info.Bytes)
 	if err != nil {
 		return nil, err
 	}
 	return &AppleInAppPurchaseOrder{
-		TransactionId: transactionId,
+		TransactionID: transactionID,
 		PurchaseDate:  txDate,
-		ProductId:     productId,
+		ProductID:     productID,
 	}, nil
 }
 
@@ -95,24 +95,24 @@ func getObject(n int, r []byte, info *asn1.RawValue) (rest []byte, err error) {
 }
 
 func verifyCertificate(data string) ([]byte, error) {
-	decoded_receipt, err := base64.StdEncoding.DecodeString(data)
+	decodedReceipt, err := base64.StdEncoding.DecodeString(data)
 	if err != nil {
 		return nil, err
 	}
-	pkcs_container, err := pkcs7.ParseCMS(decoded_receipt)
-	if err != nil {
-		return nil, err
-	}
-
-	certificates := pkcs_container.Certificates
-	receipt_data := pkcs_container.Content
-
-	itunes_cert, err := x509.ParseCertificate(certificates[0].Raw)
+	pkcsContainer, err := pkcs7.ParseCMS(decodedReceipt)
 	if err != nil {
 		return nil, err
 	}
 
-	wwdr_cert, err := x509.ParseCertificate(certificates[1].Raw)
+	certificates := pkcsContainer.Certificates
+	receiptData := pkcsContainer.Content
+
+	itunesCert, err := x509.ParseCertificate(certificates[0].Raw)
+	if err != nil {
+		return nil, err
+	}
+
+	wwdrCert, err := x509.ParseCertificate(certificates[1].Raw)
 	if err != nil {
 		return nil, err
 	}
@@ -127,30 +127,30 @@ func verifyCertificate(data string) ([]byte, error) {
 		return nil, err
 	}
 
-	trusted_root, err := x509.ParseCertificate(cf)
+	trustedRoot, err := x509.ParseCertificate(cf)
 	if err != nil {
 		return nil, err
 	}
 
-	err = trusted_root.CheckSignature(x509.SHA1WithRSA, wwdr_cert.RawTBSCertificate, wwdr_cert.Signature)
+	err = trustedRoot.CheckSignature(x509.SHA1WithRSA, wwdrCert.RawTBSCertificate, wwdrCert.Signature)
 	if err != nil {
 		return nil, err
 	}
-	err = wwdr_cert.CheckSignature(x509.SHA1WithRSA, itunes_cert.RawTBSCertificate, itunes_cert.Signature)
+	err = wwdrCert.CheckSignature(x509.SHA1WithRSA, itunesCert.RawTBSCertificate, itunesCert.Signature)
 	if err != nil {
 		return nil, err
 	}
-	return receipt_data, nil
+	return receiptData, nil
 }
 
-func extractMainReceipt(receipt_data []byte) ([]byte, error) {
+func extractMainReceipt(receiptData []byte) ([]byte, error) {
 	var d asn1.RawValue
-	_, err := asn1.Unmarshal(receipt_data, &d)
+	_, err := asn1.Unmarshal(receiptData, &d)
 	if err != nil {
 		return nil, err
 	}
 	var info asn1.RawValue
-	rest, err := getObject(SkipObjectParse21, d.Bytes[:], &info)
+	rest, err := getObject(SkipObjectParse21, d.Bytes, &info)
 	if err != nil {
 		return nil, err
 	}
