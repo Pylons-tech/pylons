@@ -25,8 +25,8 @@ func (suite *IntegrationTestSuite) TestListCompletedExecutionByItem() {
 				Limit:      limit,
 				CountTotal: total,
 			},
-			CookbookID: cookbookID,
-			ItemID:     itemID,
+			CookbookId: cookbookID,
+			ItemId:     itemID,
 		}
 	}
 
@@ -38,23 +38,23 @@ func (suite *IntegrationTestSuite) TestListCompletedExecutionByItem() {
 	}{
 		{
 			desc:     "All",
-			request:  requestFunc(nil, 0, 0, false, msgs[0].CookbookID, msgs[0].ItemOutputIDs[0]),
+			request:  requestFunc(nil, 0, 0, false, msgs[0].CookbookId, msgs[0].ItemOutputIds[0]),
 			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: msgs, PendingExecutions: []types.Execution{}, Pagination: nil},
 		},
 		{
 			desc:     "WithLimit",
-			request:  requestFunc(nil, 0, 5, false, msgs[0].CookbookID, msgs[0].ItemOutputIDs[0]),
+			request:  requestFunc(nil, 0, 5, false, msgs[0].CookbookId, msgs[0].ItemOutputIds[0]),
 			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: msgs[:5], PendingExecutions: []types.Execution{}, Pagination: nil},
 		},
 		{
-			desc:     "NoExecutionsInvalidCookbookID",
-			request:  requestFunc(nil, 0, 0, true, "missing", msgs[0].ItemOutputIDs[0]),
+			desc:     "NoExecutionsInvalidCookbookId",
+			request:  requestFunc(nil, 0, 0, true, "missing", msgs[0].ItemOutputIds[0]),
 			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
 		},
 
 		{
-			desc:     "NoExecutionsInvalidItemID",
-			request:  requestFunc(nil, 0, 0, true, msgs[0].CookbookID, "missing"),
+			desc:     "NoExecutionsInvalidItemId",
+			request:  requestFunc(nil, 0, 0, true, msgs[0].CookbookId, "missing"),
 			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
 		},
 		{
@@ -99,8 +99,8 @@ func (suite *IntegrationTestSuite) TestListPendingExecutionByItem() {
 				Limit:      limit,
 				CountTotal: total,
 			},
-			CookbookID: cookbookID,
-			ItemID:     itemID,
+			CookbookId: cookbookID,
+			ItemId:     itemID,
 		}
 	}
 
@@ -112,23 +112,23 @@ func (suite *IntegrationTestSuite) TestListPendingExecutionByItem() {
 	}{
 		{
 			desc:     "All",
-			request:  requestFunc(nil, 0, 0, false, msgs[0].CookbookID, msgs[0].ItemOutputIDs[0]),
+			request:  requestFunc(nil, 0, 0, false, msgs[0].CookbookId, msgs[0].ItemOutputIds[0]),
 			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: msgs, Pagination: nil},
 		},
 		{
 			desc:     "WithLimit",
-			request:  requestFunc(nil, 0, 5, false, msgs[0].CookbookID, msgs[0].ItemOutputIDs[0]),
+			request:  requestFunc(nil, 0, 5, false, msgs[0].CookbookId, msgs[0].ItemOutputIds[0]),
 			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: msgs[:5], Pagination: nil},
 		},
 		{
-			desc:     "NoExecutionsInvalidCookbookID",
-			request:  requestFunc(nil, 0, 0, true, "missing", msgs[0].ItemOutputIDs[0]),
+			desc:     "NoExecutionsInvalidCookbookId",
+			request:  requestFunc(nil, 0, 0, true, "missing", msgs[0].ItemOutputIds[0]),
 			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
 		},
 
 		{
-			desc:     "NoExecutionsInvalidItemID",
-			request:  requestFunc(nil, 0, 0, true, msgs[0].CookbookID, "missing"),
+			desc:     "NoExecutionsInvalidItemId",
+			request:  requestFunc(nil, 0, 0, true, msgs[0].CookbookId, "missing"),
 			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
 		},
 		{
@@ -162,8 +162,8 @@ func (suite *IntegrationTestSuite) TestListAllExecutionByItem() {
 
 	wctx := sdk.WrapSDKContext(ctx)
 	pending, completed := createNMixedExecutionForSingleItem(k, ctx, 10)
-	cookbookID := pending[0].CookbookID
-	itemID := pending[0].ItemOutputIDs[0]
+	cookbookID := pending[0].CookbookId
+	itemID := pending[0].ItemOutputIds[0]
 
 	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID string, itemID string) *types.QueryListExecutionsByItemRequest {
 		return &types.QueryListExecutionsByItemRequest{
@@ -173,8 +173,8 @@ func (suite *IntegrationTestSuite) TestListAllExecutionByItem() {
 				Limit:      limit,
 				CountTotal: total,
 			},
-			CookbookID: cookbookID,
-			ItemID:     itemID,
+			CookbookId: cookbookID,
+			ItemId:     itemID,
 		}
 	}
 
@@ -190,13 +190,13 @@ func (suite *IntegrationTestSuite) TestListAllExecutionByItem() {
 			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: completed, PendingExecutions: pending, Pagination: nil},
 		},
 		{
-			desc:     "NoExecutionsInvalidCookbookID",
+			desc:     "NoExecutionsInvalidCookbookId",
 			request:  requestFunc(nil, 0, 0, true, "missing", itemID),
 			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
 		},
 
 		{
-			desc:     "NoExecutionsInvalidItemID",
+			desc:     "NoExecutionsInvalidItemId",
 			request:  requestFunc(nil, 0, 0, true, cookbookID, "missing"),
 			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
 		},

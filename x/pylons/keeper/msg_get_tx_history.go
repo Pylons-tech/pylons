@@ -290,9 +290,9 @@ func ExtractExecuteRecipeEvent(e sdkTypes.StringEvent, nft *types.History, sende
 				nft.Amount = attr.Value
 			}
 		case types.KeyCookbookID:
-			nft.CookbookID = attr.Value
+			nft.CookbookId = attr.Value
 		case types.KeyRecipeID:
-			nft.RecipeID = attr.Value
+			nft.RecipeId = attr.Value
 		case types.KeySender:
 			if sender {
 				nft.Address = attr.Value

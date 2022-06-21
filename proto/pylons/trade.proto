@@ -8,18 +8,18 @@ import "gogoproto/gogo.proto";
 import "pylons/recipe.proto";
 
 message ItemRef {
-  string cookbookID = 1;
-  string itemID = 2;
+  string cookbook_id = 1;
+  string item_id = 2;
 }
 
 message Trade {
   string creator = 1;
-  uint64 ID = 2;
-  repeated CoinInput coinInputs = 3 [(gogoproto.nullable) = false];
-  repeated ItemInput itemInputs = 4 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin coinOutputs = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated ItemRef itemOutputs = 6 [(gogoproto.nullable) = false];
-  string extraInfo = 7;
+  uint64 id = 2;
+  repeated CoinInput coin_inputs = 3 [(gogoproto.nullable) = false];
+  repeated ItemInput item_inputs = 4 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin coin_outputs = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated ItemRef item_outputs = 6 [(gogoproto.nullable) = false];
+  string extra_info = 7;
   string receiver = 8;
-  repeated ItemRef tradedItemInputs = 9 [(gogoproto.nullable) = false];
+  repeated ItemRef traded_item_inputs = 9 [(gogoproto.nullable) = false];
 }

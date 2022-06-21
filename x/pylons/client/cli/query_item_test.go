@@ -31,8 +31,8 @@ func TestShowItem(t *testing.T) {
 	}{
 		{
 			desc:       "found",
-			cookbookID: objs[0].CookbookID,
-			id:         objs[0].ID,
+			cookbookID: objs[0].CookbookId,
+			id:         objs[0].Id,
 			args:       common,
 			obj:        objs[0],
 		},

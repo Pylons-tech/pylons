@@ -16,7 +16,7 @@ var _ sdk.Msg = &MsgGoogleInAppPurchaseGetCoins{}
 func NewMsgGoogleIAPGetCoins(creator string, productID string, purchaseToken string, receiptDataBase64 string, signature string) *MsgGoogleInAppPurchaseGetCoins {
 	return &MsgGoogleInAppPurchaseGetCoins{
 		Creator:           creator,
-		ProductID:         productID,
+		ProductId:         productID,
 		PurchaseToken:     purchaseToken,
 		ReceiptDataBase64: receiptDataBase64,
 		Signature:         signature,
@@ -64,7 +64,7 @@ func (msg *MsgGoogleInAppPurchaseGetCoins) ValidateBasic() error {
 	if msg.PurchaseToken != jsonData["purchaseToken"] {
 		return fmt.Errorf("purchaseToken does not match with receipt data")
 	}
-	if msg.ProductID != jsonData["productId"] {
+	if msg.ProductId != jsonData["productId"] {
 		return fmt.Errorf("productId does not match with receipt data")
 	}
 	return nil

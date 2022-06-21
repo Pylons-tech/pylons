@@ -11,7 +11,7 @@ import (
 func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.PaymentInfo, senderAddr sdk.AccAddress) error {
 	paymentProcessors := k.PaymentProcessors(ctx)
 	for _, pi := range paymentInfos {
-		if k.HasPaymentInfo(ctx, pi.PurchaseID) {
+		if k.HasPaymentInfo(ctx, pi.PurchaseId) {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the purchase ID is already being used")
 		}
 
@@ -22,7 +22,7 @@ func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.Paymen
 
 				addr, _ := sdk.AccAddressFromBech32(pi.PayerAddr)
 				if !addr.Equals(senderAddr) {
-					return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", pi.PurchaseID)
+					return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", pi.PurchaseId)
 				}
 
 				amt := pi.Amount
@@ -36,7 +36,7 @@ func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.Paymen
 
 				err := pp.ValidatePaymentInfo(pi)
 				if err != nil {
-					return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", pi.PurchaseID, err.Error())
+					return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", pi.PurchaseId, err.Error())
 				}
 
 				// mint token, pay for fees
@@ -72,7 +72,7 @@ func (k Keeper) ValidatePaymentInfo(ctx sdk.Context, paymentInfos []types.Paymen
 			if pi.ProcessorName == pp.Name {
 				err = nil
 				denomsPaymentInfoMap[pp.CoinDenom] = append(denomsPaymentInfoMap[pp.CoinDenom], pi)
-				paymentInfoProcessorMap[pi.PurchaseID] = pp
+				paymentInfoProcessorMap[pi.PurchaseId] = pp
 				break
 			}
 		}
@@ -101,7 +101,7 @@ func (k Keeper) ValidatePaymentInfo(ctx sdk.Context, paymentInfos []types.Paymen
 			mintAmt := sdk.ZeroInt()
 			for _, paymentInfo := range denomsPaymentInfoMap[coin.Denom] {
 				mintAmt = mintAmt.Add(paymentInfo.Amount)
-				paymentProcessor := paymentInfoProcessorMap[paymentInfo.PurchaseID]
+				paymentProcessor := paymentInfoProcessorMap[paymentInfo.PurchaseId]
 				// account for network fees
 				amt := paymentInfo.Amount
 				burnAmt := amt.ToDec().Mul(paymentProcessor.ProcessorPercentage).RoundInt()

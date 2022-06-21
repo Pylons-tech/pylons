@@ -23,17 +23,17 @@ func (suite *IntegrationTestSuite) TestCookbookQuerySingle() {
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetCookbookRequest{ID: msgs[0].ID},
+			request:  &types.QueryGetCookbookRequest{Id: msgs[0].Id},
 			response: &types.QueryGetCookbookResponse{Cookbook: msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetCookbookRequest{ID: msgs[1].ID},
+			request:  &types.QueryGetCookbookRequest{Id: msgs[1].Id},
 			response: &types.QueryGetCookbookResponse{Cookbook: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetCookbookRequest{ID: "missing"},
+			request: &types.QueryGetCookbookRequest{Id: "missing"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{

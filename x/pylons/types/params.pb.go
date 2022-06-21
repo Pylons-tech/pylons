@@ -26,8 +26,8 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type GoogleInAppPurchasePackage struct {
-	PackageName string                                 `protobuf:"bytes,1,opt,name=packageName,proto3" json:"packageName,omitempty" yaml:"package_name"`
-	ProductID   string                                 `protobuf:"bytes,2,opt,name=productID,proto3" json:"productID,omitempty" yaml:"product_id"`
+	PackageName string                                 `protobuf:"bytes,1,opt,name=package_name,json=packageName,proto3" json:"package_name,omitempty" yaml:"package_name"`
+	ProductId   string                                 `protobuf:"bytes,2,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty" yaml:"product_id"`
 	Amount      github_com_cosmos_cosmos_sdk_types.Int `protobuf:"bytes,3,opt,name=amount,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Int" json:"amount" yaml:"amount"`
 }
 
@@ -71,19 +71,19 @@ func (m *GoogleInAppPurchasePackage) GetPackageName() string {
 	return ""
 }
 
-func (m *GoogleInAppPurchasePackage) GetProductID() string {
+func (m *GoogleInAppPurchasePackage) GetProductId() string {
 	if m != nil {
-		return m.ProductID
+		return m.ProductId
 	}
 	return ""
 }
 
 // CoinIssuer represents an entity or external blockchain
 type CoinIssuer struct {
-	CoinDenom                 string                       `protobuf:"bytes,1,opt,name=coinDenom,proto3" json:"coinDenom,omitempty" yaml:"coin_denom"`
+	CoinDenom                 string                       `protobuf:"bytes,1,opt,name=coin_denom,json=coinDenom,proto3" json:"coin_denom,omitempty" yaml:"coin_denom"`
 	Packages                  []GoogleInAppPurchasePackage `protobuf:"bytes,2,rep,name=packages,proto3" json:"packages" yaml:"google_iap_packages"`
-	GoogleInAppPurchasePubKey string                       `protobuf:"bytes,3,opt,name=googleInAppPurchasePubKey,proto3" json:"googleInAppPurchasePubKey,omitempty" yaml:"google_iap_pubkey"`
-	EntityName                string                       `protobuf:"bytes,4,opt,name=entityName,proto3" json:"entityName,omitempty"`
+	GoogleInAppPurchasePubKey string                       `protobuf:"bytes,3,opt,name=google_in_app_purchase_pub_key,json=googleInAppPurchasePubKey,proto3" json:"google_in_app_purchase_pub_key,omitempty" yaml:"google_iap_pubkey"`
+	EntityName                string                       `protobuf:"bytes,4,opt,name=entity_name,json=entityName,proto3" json:"entity_name,omitempty"`
 }
 
 func (m *CoinIssuer) Reset()         { *m = CoinIssuer{} }
@@ -148,13 +148,13 @@ func (m *CoinIssuer) GetEntityName() string {
 }
 
 type PaymentProcessor struct {
-	CoinDenom string `protobuf:"bytes,1,opt,name=CoinDenom,proto3" json:"CoinDenom,omitempty" yaml:"coin_denom"`
+	CoinDenom string `protobuf:"bytes,1,opt,name=coin_denom,json=coinDenom,proto3" json:"coin_denom,omitempty" yaml:"coin_denom"`
 	// pubKey is assumed to be ed25519
-	PubKey string `protobuf:"bytes,2,opt,name=pubKey,proto3" json:"pubKey,omitempty" yaml:"pub_key"`
+	PubKey string `protobuf:"bytes,2,opt,name=pub_key,json=pubKey,proto3" json:"pub_key,omitempty" yaml:"pub_key"`
 	// Represents the percentage retained by the payment processor when new coins are minted. In the range [0, 1), this amount is burned on-chain, actual fee is retained at the source.
-	ProcessorPercentage github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,3,opt,name=processorPercentage,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"processorPercentage" yaml:"processor_percentage"`
+	ProcessorPercentage github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,3,opt,name=processor_percentage,json=processorPercentage,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"processor_percentage" yaml:"processor_percentage"`
 	// Represents the percentage distributed to stakers. In the range [0, 1). The sum with processingCut cannot exceed 1.
-	ValidatorsPercentage github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,4,opt,name=validatorsPercentage,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"validatorsPercentage" yaml:"validators_pecentage"`
+	ValidatorsPercentage github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,4,opt,name=validators_percentage,json=validatorsPercentage,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"validators_percentage" yaml:"validators_pecentage"`
 	Name                 string                                 `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
 }
 
@@ -402,7 +402,7 @@ func (this *GoogleInAppPurchasePackage) Equal(that interface{}) bool {
 	if this.PackageName != that1.PackageName {
 		return false
 	}
-	if this.ProductID != that1.ProductID {
+	if this.ProductId != that1.ProductId {
 		return false
 	}
 	if !this.Amount.Equal(that1.Amount) {
@@ -578,10 +578,10 @@ func (m *GoogleInAppPurchasePackage) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	i--
 	dAtA[i] = 0x1a
-	if len(m.ProductID) > 0 {
-		i -= len(m.ProductID)
-		copy(dAtA[i:], m.ProductID)
-		i = encodeVarintParams(dAtA, i, uint64(len(m.ProductID)))
+	if len(m.ProductId) > 0 {
+		i -= len(m.ProductId)
+		copy(dAtA[i:], m.ProductId)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.ProductId)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -866,7 +866,7 @@ func (m *GoogleInAppPurchasePackage) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovParams(uint64(l))
 	}
-	l = len(m.ProductID)
+	l = len(m.ProductId)
 	if l > 0 {
 		n += 1 + l + sovParams(uint64(l))
 	}
@@ -1039,7 +1039,7 @@ func (m *GoogleInAppPurchasePackage) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProductID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ProductId", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1067,7 +1067,7 @@ func (m *GoogleInAppPurchasePackage) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ProductID = string(dAtA[iNdEx:postIndex])
+			m.ProductId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {

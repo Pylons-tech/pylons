@@ -24,7 +24,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerCreate() {
 		idx := fmt.Sprintf("%d", i)
 		expected := &types.MsgCreateCookbook{
 			Creator:      creator,
-			ID:           idx,
+			Id:           idx,
 			Name:         desc,
 			Description:  desc,
 			Developer:    desc,
@@ -62,7 +62,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 
 	expected := &types.MsgCreateCookbook{
 		Creator:      creator,
-		ID:           index,
+		Id:           index,
 		Name:         "originalNameOriginalName",
 		Description:  "descdescdescdescdescdescdescdescdesc",
 		Developer:    "",
@@ -82,7 +82,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 			desc: "Completed",
 			request: &types.MsgUpdateCookbook{
 				Creator:      creator,
-				ID:           index,
+				Id:           index,
 				Name:         name,
 				Description:  description,
 				Developer:    "",
@@ -96,7 +96,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 			desc: "Unauthorized",
 			request: &types.MsgUpdateCookbook{
 				Creator:      "B",
-				ID:           index,
+				Id:           index,
 				Name:         name,
 				Description:  description,
 				Developer:    "",
@@ -109,7 +109,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 			desc: "KeyNotFound",
 			request: &types.MsgUpdateCookbook{
 				Creator:      creator,
-				ID:           "not-found",
+				Id:           "not-found",
 				Name:         name,
 				Description:  description,
 				Developer:    "",
@@ -126,7 +126,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 				require.ErrorIs(err, tc.err)
 			} else {
 				require.NoError(err)
-				rst, found := k.GetCookbook(ctx, expected.ID)
+				rst, found := k.GetCookbook(ctx, expected.Id)
 				require.True(found)
 				require.Equal(expected.Creator, rst.Creator)
 			}

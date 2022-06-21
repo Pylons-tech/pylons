@@ -35,7 +35,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerTransfer() {
 
 	expected := &types.MsgCreateCookbook{
 		Creator:      creator,
-		ID:           index,
+		Id:           index,
 		Name:         "originalNameOriginalName",
 		Description:  "descdescdescdescdescdescdescdescdesc",
 		Developer:    "",
@@ -58,7 +58,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerTransfer() {
 			desc: "Cookbook not owned",
 			request: &types.MsgTransferCookbook{
 				Creator:   recipient,
-				ID:        index,
+				Id:        index,
 				Recipient: recipient,
 			},
 			err: sdkerrors.ErrInvalidRequest,
@@ -67,7 +67,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerTransfer() {
 			desc: "Completed",
 			request: &types.MsgTransferCookbook{
 				Creator:   creator,
-				ID:        index,
+				Id:        index,
 				Recipient: recipient,
 			},
 			err: nil,
@@ -76,7 +76,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerTransfer() {
 			desc: "Invalid Cookbook ID",
 			request: &types.MsgTransferCookbook{
 				Creator:   creator,
-				ID:        "Invalid ID",
+				Id:        "Invalid ID",
 				Recipient: recipient,
 			},
 			err: sdkerrors.ErrInvalidRequest,
@@ -89,7 +89,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerTransfer() {
 				require.ErrorIs(err, tc.err)
 			} else {
 				require.NoError(err)
-				rst, found := k.GetCookbook(ctx, expected.ID)
+				rst, found := k.GetCookbook(ctx, expected.Id)
 				require.True(found)
 				require.Equal(tc.request.Recipient, rst.Creator)
 			}

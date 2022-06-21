@@ -18,7 +18,7 @@ func (k msgServer) MatchItemInputsForTrade(ctx sdk.Context, creatorAddr string, 
 	}
 	matchedInputItems := make([]types.Item, len(trade.ItemInputs))
 
-	// build Item list from inputItemIDs
+	// build Item list from inputItemIds
 	inputItemMap := make(map[types.ItemRef]types.Item)
 	checkedInputItems := make([]bool, len(itemRefs))
 
@@ -30,18 +30,18 @@ func (k msgServer) MatchItemInputsForTrade(ctx sdk.Context, creatorAddr string, 
 			}
 			inputItem, found := inputItemMap[itemRef]
 			if !found {
-				inputItem, found = k.GetItem(ctx, itemRef.CookbookID, itemRef.ItemID)
+				inputItem, found = k.GetItem(ctx, itemRef.CookbookId, itemRef.ItemId)
 				if !found {
-					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v not found", itemRef.ItemID)
+					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v not found", itemRef.ItemId)
 				}
 				if inputItem.Owner != creatorAddr {
-					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %s not owned by sender", inputItem.ID)
+					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %s not owned by sender", inputItem.Id)
 				}
 			}
 			inputItemMap[itemRef] = inputItem
 			// match
 			var ec types.CelEnvCollection
-			ec, err = k.NewCelEnvCollectionFromItem(ctx, "", strconv.FormatUint(trade.ID, 10), inputItem)
+			ec, err = k.NewCelEnvCollectionFromItem(ctx, "", strconv.FormatUint(trade.Id, 10), inputItem)
 			if err != nil {
 				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
@@ -63,10 +63,10 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// get the trade from keeper
-	if !k.HasTrade(ctx, msg.ID) {
+	if !k.HasTrade(ctx, msg.Id) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "trade does not exist")
 	}
-	trade := k.GetTrade(ctx, msg.ID)
+	trade := k.GetTrade(ctx, msg.Id)
 	coinInputsIndex := int(msg.CoinInputsIndex)
 	var coinInputs sdk.Coins
 	// nolint: gocritic
@@ -109,7 +109,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	// check coinOutput is GTE amount to pay (from flat fees of itemInputs)
 	for _, item := range matchedInputItems {
 		if !item.Tradeable {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v cannot be traded", item.ID, item.CookbookID)
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v cannot be traded", item.Id, item.CookbookId)
 		}
 	}
 
@@ -124,7 +124,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 
 	outputItems := make([]types.Item, len(trade.ItemOutputs))
 	for i, itemRef := range trade.ItemOutputs {
-		item, _ := k.GetItem(ctx, itemRef.CookbookID, itemRef.ItemID)
+		item, _ := k.GetItem(ctx, itemRef.CookbookId, itemRef.ItemId)
 		outputItems[i] = item
 	}
 
@@ -172,7 +172,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		transferAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(cookbookAmt.Amount).Sub(chainAmt.Amount))
 		inputChainTotAmt = inputChainTotAmt.Add(chainAmt)
 		inputTransferTotAmt = inputTransferTotAmt.Add(transferAmt)
-		inputCookbookOwnersTotAmtMap[item.CookbookID] = inputCookbookOwnersTotAmtMap[item.CookbookID].Add(cookbookAmt)
+		inputCookbookOwnersTotAmtMap[item.CookbookId] = inputCookbookOwnersTotAmtMap[item.CookbookId].Add(cookbookAmt)
 	}
 	outputChainTotAmt := sdk.NewCoins()
 	outputTransferTotAmt := sdk.NewCoins()
@@ -190,7 +190,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		transferAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(cookbookAmt.Amount).Sub(chainAmt.Amount))
 		outputChainTotAmt = outputChainTotAmt.Add(chainAmt)
 		outputTransferTotAmt = outputTransferTotAmt.Add(transferAmt)
-		outputCookbookOwnersTotAmtMap[item.CookbookID] = outputCookbookOwnersTotAmtMap[item.CookbookID].Add(cookbookAmt)
+		outputCookbookOwnersTotAmtMap[item.CookbookId] = outputCookbookOwnersTotAmtMap[item.CookbookId].Add(cookbookAmt)
 	}
 
 	tradeCreatorAddr, _ := sdk.AccAddressFromBech32(trade.Creator)
@@ -242,10 +242,10 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 
 	itemInputsRefs := make([]types.ItemRef, len(matchedInputItems))
 	for i, item := range matchedInputItems {
-		itemInputsRefs[i] = types.ItemRef{CookbookID: item.CookbookID, ItemID: item.ID}
+		itemInputsRefs[i] = types.ItemRef{CookbookId: item.CookbookId, ItemId: item.Id}
 	}
 	err = ctx.EventManager().EmitTypedEvent(&types.EventFulfillTrade{
-		ID:           trade.ID,
+		Id:           trade.Id,
 		Creator:      trade.Creator,
 		Fulfiller:    msg.Creator,
 		ItemInputs:   itemInputsRefs,

@@ -10,7 +10,7 @@ var _ sdk.Msg = &MsgFulfillTrade{}
 func NewMsgFulfillTrade(creator string, id, coinInputsIndex uint64, items []ItemRef, paymentInfos []PaymentInfo) *MsgFulfillTrade {
 	return &MsgFulfillTrade{
 		Creator:         creator,
-		ID:              id,
+		Id:              id,
 		CoinInputsIndex: coinInputsIndex,
 		Items:           items,
 		PaymentInfos:    paymentInfos,
@@ -45,11 +45,11 @@ func (msg *MsgFulfillTrade) ValidateBasic() error {
 	}
 
 	for _, item := range msg.Items {
-		err = ValidateItemID(item.ItemID)
+		err = ValidateItemID(item.ItemId)
 		if err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
-		err = ValidateID(item.CookbookID)
+		err = ValidateID(item.CookbookId)
 		if err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}

@@ -10,10 +10,10 @@ var _ sdk.Msg = &MsgExecuteRecipe{}
 func NewMsgExecuteRecipe(creator string, cookbookID string, recipeID string, coinInputsIndex uint64, itemIDs []string, paymentInfos []PaymentInfo) *MsgExecuteRecipe {
 	return &MsgExecuteRecipe{
 		Creator:         creator,
-		CookbookID:      cookbookID,
-		RecipeID:        recipeID,
+		CookbookId:      cookbookID,
+		RecipeId:        recipeID,
 		CoinInputsIndex: coinInputsIndex,
-		ItemIDs:         itemIDs,
+		ItemIds:         itemIDs,
 		PaymentInfos:    paymentInfos,
 	}
 }
@@ -44,14 +44,14 @@ func (msg *MsgExecuteRecipe) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
-	if err = ValidateID(msg.CookbookID); err != nil {
+	if err = ValidateID(msg.CookbookId); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
-	if err = ValidateID(msg.RecipeID); err != nil {
+	if err = ValidateID(msg.RecipeId); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	for _, id := range msg.ItemIDs {
+	for _, id := range msg.ItemIds {
 		if err = ValidateItemID(id); err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}

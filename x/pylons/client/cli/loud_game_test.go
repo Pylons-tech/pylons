@@ -98,7 +98,7 @@ func createCharacterRecipe(t *testing.T, simInfo *loudBasicSim) {
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{{
-			ID: "basic_character_lv1",
+			Id: "basic_character_lv1",
 			Doubles: []types.DoubleParam{{
 				Key:          "XP",
 				WeightRanges: nil,
@@ -143,7 +143,7 @@ func createCharacterRecipe(t *testing.T, simInfo *loudBasicSim) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"basic_character_lv1"},
+			EntryIds: []string{"basic_character_lv1"},
 			Weight:   1,
 		},
 	})
@@ -210,14 +210,14 @@ func createCharacter(t *testing.T, simInfo *loudBasicSim) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookIDLOUD, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookIDLOUD, itemResp.Item.CookbookId)
 }
 
 func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 	denom := "loudCoin"
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: []types.CoinOutput{{
-			ID:   "loudCoin",
+			Id:   "loudCoin",
 			Coin: sdk.Coin{Denom: denom, Amount: sdk.NewInt(10000)},
 		}},
 		ItemOutputs:       nil,
@@ -227,7 +227,7 @@ func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 
 	outputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"loudCoin"},
+			EntryIds: []string{"loudCoin"},
 			Weight:   1,
 		},
 	})
@@ -296,7 +296,7 @@ func createBuyCopperSwordRecipe(t *testing.T, simInfo *loudBasicSim) {
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{{
-			ID: "copper_sword_lv1",
+			Id: "copper_sword_lv1",
 			Doubles: []types.DoubleParam{{
 				Key:          "attack",
 				WeightRanges: nil,
@@ -327,7 +327,7 @@ func createBuyCopperSwordRecipe(t *testing.T, simInfo *loudBasicSim) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"copper_sword_lv1"},
+			EntryIds: []string{"copper_sword_lv1"},
 			Weight:   1,
 		},
 	})
@@ -393,13 +393,13 @@ func buyCopperSword(t *testing.T, simInfo *loudBasicSim) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookIDLOUD, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookIDLOUD, itemResp.Item.CookbookId)
 }
 
 func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 	itemInputs, err := json.Marshal([]types.ItemInput{
 		{
-			ID: "character",
+			Id: "character",
 			Doubles: []types.DoubleInputParam{
 				{
 					Key:      "XP",
@@ -422,7 +422,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 			},
 		},
 		{
-			ID: "sword",
+			Id: "sword",
 			Doubles: []types.DoubleInputParam{
 				{
 					Key:      "attack",
@@ -444,14 +444,14 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: []types.CoinOutput{
 			{
-				ID:      "coin_reward",
+				Id:      "coin_reward",
 				Coin:    sdk.Coin{Denom: "loudCoin", Amount: sdk.NewInt(10)},
 				Program: "",
 			},
 		},
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "wolf_tail",
+				Id: "wolf_tail",
 				Doubles: []types.DoubleParam{
 					{
 						Key:          "attack",
@@ -486,7 +486,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 				Tradeable:       true,
 			},
 			{
-				ID: "wolf_fur",
+				Id: "wolf_fur",
 				Doubles: []types.DoubleParam{
 					{
 						Key:          "attack",
@@ -523,7 +523,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 		},
 		ItemModifyOutputs: []types.ItemModifyOutput{
 			{
-				ID:           "modified_character",
+				Id:           "modified_character",
 				ItemInputRef: "character",
 				Doubles: []types.DoubleParam{
 					{
@@ -546,7 +546,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 				Tradeable:       true,
 			},
 			{
-				ID:              "sword",
+				Id:              "sword",
 				ItemInputRef:    "sword",
 				Doubles:         nil,
 				Longs:           nil,
@@ -562,23 +562,23 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 
 	outputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{},
+			EntryIds: []string{},
 			Weight:   3,
 		},
 		{
-			EntryIDs: []string{"coin_reward", "modified_character"},
+			EntryIds: []string{"coin_reward", "modified_character"},
 			Weight:   3,
 		},
 		{
-			EntryIDs: []string{"coin_reward", "modified_character", "sword"},
+			EntryIds: []string{"coin_reward", "modified_character", "sword"},
 			Weight:   24,
 		},
 		{
-			EntryIDs: []string{"coin_reward", "modified_character", "sword", "wolf_tail"},
+			EntryIds: []string{"coin_reward", "modified_character", "sword", "wolf_tail"},
 			Weight:   40,
 		},
 		{
-			EntryIDs: []string{"coin_reward", "modified_character", "sword", "wolf_fur"},
+			EntryIds: []string{"coin_reward", "modified_character", "sword", "wolf_fur"},
 			Weight:   30,
 		},
 	})
@@ -642,7 +642,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 
 		// some items could have been minted from this execution
 		// increase itemCount accordingly
-		simInfo.itemCount += len(execResp.Execution.ItemOutputIDs)
+		simInfo.itemCount += len(execResp.Execution.ItemOutputIds)
 
 		// if the character died or their sword was broken, get a new one!
 		var itemResp types.QueryGetItemResponse

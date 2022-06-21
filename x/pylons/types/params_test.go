@@ -95,7 +95,7 @@ func Test_validateCoinIssuers(t *testing.T) {
 	invalidPackages := make([]GoogleInAppPurchasePackage, 0)
 	invalidPackage := GoogleInAppPurchasePackage{
 		PackageName: "",
-		ProductID:   "",
+		ProductId:   "",
 		Amount:      sdk.Int{},
 	}
 
@@ -104,7 +104,7 @@ func Test_validateCoinIssuers(t *testing.T) {
 	validPackages := make([]GoogleInAppPurchasePackage, 0)
 	validPackage := GoogleInAppPurchasePackage{
 		PackageName: "package",
-		ProductID:   "product",
+		ProductId:   "product",
 		Amount:      sdk.OneInt(),
 	}
 

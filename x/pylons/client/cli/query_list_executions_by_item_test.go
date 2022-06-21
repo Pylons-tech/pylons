@@ -33,16 +33,16 @@ func TestListExecutionsByItem(t *testing.T) {
 	}{
 		{
 			desc:         "found1",
-			id:           objs[0].ItemOutputIDs[0],
-			cookBookID:   objs[0].CookbookID,
+			id:           objs[0].ItemOutputIds[0],
+			cookBookID:   objs[0].CookbookId,
 			args:         common,
 			execs:        objs,
 			pendingExecs: []types.Execution{},
 		},
 		{
 			desc:         "found2",
-			id:           objs[1].ItemOutputIDs[0],
-			cookBookID:   objs[1].CookbookID,
+			id:           objs[1].ItemOutputIds[0],
+			cookBookID:   objs[1].CookbookId,
 			args:         common,
 			execs:        objs,
 			pendingExecs: []types.Execution{},
@@ -50,7 +50,7 @@ func TestListExecutionsByItem(t *testing.T) {
 		{
 			desc:         "not found",
 			id:           types.GenTestBech32FromString("not_found"),
-			cookBookID:   objs[0].CookbookID,
+			cookBookID:   objs[0].CookbookId,
 			args:         common,
 			execs:        []types.Execution{},
 			pendingExecs: []types.Execution{},

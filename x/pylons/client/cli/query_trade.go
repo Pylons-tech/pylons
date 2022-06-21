@@ -27,7 +27,7 @@ func CmdShowTrade() *cobra.Command {
 			}
 
 			params := &types.QueryGetTradeRequest{
-				ID: id,
+				Id: id,
 			}
 
 			res, err := queryClient.Trade(context.Background(), params)

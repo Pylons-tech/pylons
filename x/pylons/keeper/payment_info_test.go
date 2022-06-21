@@ -6,7 +6,7 @@ func (suite *IntegrationTestSuite) TestPaymentInfoGet() {
 	require := suite.Require()
 	items := createNPaymentInfo(k, ctx, 10)
 	for _, item := range items {
-		rst, found := k.GetPaymentInfo(ctx, item.PurchaseID)
+		rst, found := k.GetPaymentInfo(ctx, item.PurchaseId)
 		require.True(found)
 		require.Equal(item, rst)
 	}

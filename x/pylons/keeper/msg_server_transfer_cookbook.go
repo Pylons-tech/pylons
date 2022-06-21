@@ -14,7 +14,7 @@ func (k msgServer) TransferCookbook(goCtx context.Context, msg *types.MsgTransfe
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// check if cookbook is currently owned by creator
-	cookbook, found := k.Keeper.GetCookbook(ctx, msg.ID)
+	cookbook, found := k.Keeper.GetCookbook(ctx, msg.Id)
 	if !found {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cookbook not found")
 	}
@@ -33,7 +33,7 @@ func (k msgServer) TransferCookbook(goCtx context.Context, msg *types.MsgTransfe
 	err = ctx.EventManager().EmitTypedEvent(&types.EventTransferCookbook{
 		Sender:   msg.Creator,
 		Receiver: cookbook.Creator,
-		ID:       cookbook.ID,
+		Id:       cookbook.Id,
 	})
 
 	return &types.MsgTransferCookbookResponse{}, err

@@ -196,7 +196,7 @@ func (suite *IntegrationTestSuite) TestLockItemForExecution() {
 
 	orig := createNItem(k, ctx, 1, true)
 	k.LockItemForExecution(ctx, orig[0])
-	item, _ := k.GetItem(ctx, orig[0].CookbookID, orig[0].ID)
+	item, _ := k.GetItem(ctx, orig[0].CookbookId, orig[0].Id)
 	require.Equal(item.Owner, k.ExecutionsLockerAddress().String())
 }
 
@@ -208,10 +208,10 @@ func (suite *IntegrationTestSuite) TestUnlockItemForExecution() {
 	orig := createNItem(k, ctx, 1, true)
 	origOwner := orig[0].Owner
 	k.LockItemForExecution(ctx, orig[0])
-	item, _ := k.GetItem(ctx, orig[0].CookbookID, orig[0].ID)
+	item, _ := k.GetItem(ctx, orig[0].CookbookId, orig[0].Id)
 	require.Equal(item.Owner, k.ExecutionsLockerAddress().String())
 	k.UnlockItemForExecution(ctx, item, origOwner)
-	item, _ = k.GetItem(ctx, orig[0].CookbookID, orig[0].ID)
+	item, _ = k.GetItem(ctx, orig[0].CookbookId, orig[0].Id)
 	require.Equal(item.Owner, origOwner)
 }
 
@@ -222,7 +222,7 @@ func (suite *IntegrationTestSuite) TestLockItemForTrade() {
 
 	orig := createNItem(k, ctx, 1, true)
 	k.LockItemForTrade(ctx, orig[0])
-	item, _ := k.GetItem(ctx, orig[0].CookbookID, orig[0].ID)
+	item, _ := k.GetItem(ctx, orig[0].CookbookId, orig[0].Id)
 	require.Equal(item.Owner, k.TradesLockerAddress().String())
 }
 
@@ -234,9 +234,9 @@ func (suite *IntegrationTestSuite) TestUnlockItemForTrade() {
 	orig := createNItem(k, ctx, 1, true)
 	origOwner := orig[0].Owner
 	k.LockItemForTrade(ctx, orig[0])
-	item, _ := k.GetItem(ctx, orig[0].CookbookID, orig[0].ID)
+	item, _ := k.GetItem(ctx, orig[0].CookbookId, orig[0].Id)
 	require.Equal(item.Owner, k.TradesLockerAddress().String())
 	k.UnlockItemForTrade(ctx, item, origOwner)
-	item, _ = k.GetItem(ctx, orig[0].CookbookID, orig[0].ID)
+	item, _ = k.GetItem(ctx, orig[0].CookbookId, orig[0].Id)
 	require.Equal(item.Owner, origOwner)
 }

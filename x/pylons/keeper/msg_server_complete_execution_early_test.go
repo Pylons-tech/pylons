@@ -20,7 +20,7 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 	creator := types.GenTestBech32FromString("test")
 	cookbookMsg := &types.MsgCreateCookbook{
 		Creator:      creator,
-		ID:           "testCookbookID",
+		Id:           "testCookbookID",
 		Name:         "testCookbookName",
 		Description:  "descdescdescdescdescdesc",
 		Version:      "v0.0.1",
@@ -31,8 +31,8 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 	require.NoError(err)
 	recipeMsg := &types.MsgCreateRecipe{
 		Creator:       creator,
-		CookbookID:    "testCookbookID",
-		ID:            "testRecipeID",
+		CookbookId:    "testCookbookID",
+		Id:            "testRecipeID",
 		Name:          "recipeName",
 		Description:   "descdescdescdescdescdesc",
 		Version:       "v0.0.1",
@@ -42,7 +42,7 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 	}
 	_, err = srv.CreateRecipe(wctx, recipeMsg)
 	require.NoError(err)
-	recipe, found := k.GetRecipe(ctx, recipeMsg.CookbookID, recipeMsg.ID)
+	recipe, found := k.GetRecipe(ctx, recipeMsg.CookbookId, recipeMsg.Id)
 	require.True(found)
 	// create only one pendingExecution
 	pendingExecution := createNPendingExecutionForSingleRecipe(k, ctx, 1, recipe)[0]
@@ -56,19 +56,19 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 	// submit early execution request
 	completeEarly := &types.MsgCompleteExecutionEarly{
 		Creator: pendingExecution.Creator,
-		ID:      pendingExecution.ID,
+		Id:      pendingExecution.Id,
 	}
 	resp, err := srv.CompleteExecutionEarly(wctx, completeEarly)
 	require.NoError(err)
 
 	// manually trigger complete execution - simulate endBlocker
-	pendingExecution = k.GetPendingExecution(ctx, resp.ID)
+	pendingExecution = k.GetPendingExecution(ctx, resp.Id)
 	execution, _, _, err := k.CompletePendingExecution(ctx, pendingExecution)
 	require.NoError(err)
 	k.ActualizeExecution(ctx, execution)
 
 	// verify execution completion and that requester has no balance left
-	require.True(k.HasExecution(ctx, resp.ID))
+	require.True(k.HasExecution(ctx, resp.Id))
 	balance := bk.SpendableCoins(ctx, requesterAddr)
 	require.Nil(balance)
 }

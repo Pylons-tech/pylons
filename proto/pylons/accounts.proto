@@ -6,7 +6,7 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 import "gogoproto/gogo.proto";
 
 message UserMap {
-  string accountAddr = 1;
+  string account_addr = 1;
   string username = 2;
 }
 
