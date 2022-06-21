@@ -7,12 +7,6 @@ message AppleInAppPurchaseOrder {
   string quantity = 1; 
   string productId = 2; 
   string transactionId = 3; 
-  string originalTransactionId = 4; 
-  string purchaseDate = 5; 
-  string originalPurchaseDate = 6; 
-  string expiresDate = 7; 
-  string isInIntroOfferPeriod = 8; 
-  string cancellationDate = 9;
-  string webOrderLineItemId = 10;
-  string Creator = 11;
+  string purchaseDate = 4; 
+  string Creator = 5;
 }

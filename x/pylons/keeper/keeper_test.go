@@ -200,6 +200,18 @@ func createNGoogleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.Goog
 	return items
 }
 
+func createNAppleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.AppleInAppPurchaseOrder {
+	items := make([]types.AppleInAppPurchaseOrder, n)
+	creators := types.GenTestBech32List(n)
+	for i := range items {
+		items[i].Creator = creators[i]
+		items[i].TransactionId = strconv.Itoa(i)
+		k.AppendAppleIAPOrder(ctx, items[i])
+	}
+
+	return items
+}
+
 func createNPaymentInfo(k keeper.Keeper, ctx sdk.Context, n int) []types.PaymentInfo {
 	items := make([]types.PaymentInfo, n)
 	creators := types.GenTestBech32List(n)

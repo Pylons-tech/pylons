@@ -1171,6 +1171,74 @@ func (m *EventStripePurchase) GetId() string {
 	return ""
 }
 
+type EventApplePurchase struct {
+	Creator           string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	ProductID         string `protobuf:"bytes,2,opt,name=productID,proto3" json:"productID,omitempty"`
+	TransactionID     string `protobuf:"bytes,3,opt,name=transactionID,proto3" json:"transactionID,omitempty"`
+	ReceiptDataBase64 string `protobuf:"bytes,4,opt,name=receiptDataBase64,proto3" json:"receiptDataBase64,omitempty"`
+}
+
+func (m *EventApplePurchase) Reset()         { *m = EventApplePurchase{} }
+func (m *EventApplePurchase) String() string { return proto.CompactTextString(m) }
+func (*EventApplePurchase) ProtoMessage()    {}
+func (*EventApplePurchase) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3d5fff376ba53ecd, []int{19}
+}
+func (m *EventApplePurchase) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EventApplePurchase) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_EventApplePurchase.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *EventApplePurchase) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EventApplePurchase.Merge(m, src)
+}
+func (m *EventApplePurchase) XXX_Size() int {
+	return m.Size()
+}
+func (m *EventApplePurchase) XXX_DiscardUnknown() {
+	xxx_messageInfo_EventApplePurchase.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EventApplePurchase proto.InternalMessageInfo
+
+func (m *EventApplePurchase) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+func (m *EventApplePurchase) GetProductID() string {
+	if m != nil {
+		return m.ProductID
+	}
+	return ""
+}
+
+func (m *EventApplePurchase) GetTransactionID() string {
+	if m != nil {
+		return m.TransactionID
+	}
+	return ""
+}
+
+func (m *EventApplePurchase) GetReceiptDataBase64() string {
+	if m != nil {
+		return m.ReceiptDataBase64
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*EventBurnDebtToken)(nil), "Pylonstech.pylons.pylons.EventBurnDebtToken")
 	proto.RegisterType((*EventCreateAccount)(nil), "Pylonstech.pylons.pylons.EventCreateAccount")
@@ -1191,6 +1259,7 @@ func init() {
 	proto.RegisterType((*EventFulfillTrade)(nil), "Pylonstech.pylons.pylons.EventFulfillTrade")
 	proto.RegisterType((*EventGooglePurchase)(nil), "Pylonstech.pylons.pylons.EventGooglePurchase")
 	proto.RegisterType((*EventStripePurchase)(nil), "Pylonstech.pylons.pylons.EventStripePurchase")
+	proto.RegisterType((*EventApplePurchase)(nil), "Pylonstech.pylons.pylons.EventApplePurchase")
 }
 
 func init() { proto.RegisterFile("pylons/event.proto", fileDescriptor_3d5fff376ba53ecd) }
@@ -2210,6 +2279,57 @@ func (m *EventStripePurchase) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *EventApplePurchase) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EventApplePurchase) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EventApplePurchase) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ReceiptDataBase64) > 0 {
+		i -= len(m.ReceiptDataBase64)
+		copy(dAtA[i:], m.ReceiptDataBase64)
+		i = encodeVarintEvent(dAtA, i, uint64(len(m.ReceiptDataBase64)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.TransactionID) > 0 {
+		i -= len(m.TransactionID)
+		copy(dAtA[i:], m.TransactionID)
+		i = encodeVarintEvent(dAtA, i, uint64(len(m.TransactionID)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.ProductID) > 0 {
+		i -= len(m.ProductID)
+		copy(dAtA[i:], m.ProductID)
+		i = encodeVarintEvent(dAtA, i, uint64(len(m.ProductID)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintEvent(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintEvent(dAtA []byte, offset int, v uint64) int {
 	offset -= sovEvent(v)
 	base := offset
@@ -2635,6 +2755,31 @@ func (m *EventStripePurchase) Size() (n int) {
 		n += 1 + l + sovEvent(uint64(l))
 	}
 	l = len(m.Id)
+	if l > 0 {
+		n += 1 + l + sovEvent(uint64(l))
+	}
+	return n
+}
+
+func (m *EventApplePurchase) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovEvent(uint64(l))
+	}
+	l = len(m.ProductID)
+	if l > 0 {
+		n += 1 + l + sovEvent(uint64(l))
+	}
+	l = len(m.TransactionID)
+	if l > 0 {
+		n += 1 + l + sovEvent(uint64(l))
+	}
+	l = len(m.ReceiptDataBase64)
 	if l > 0 {
 		n += 1 + l + sovEvent(uint64(l))
 	}
@@ -5393,6 +5538,184 @@ func (m *EventStripePurchase) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Id = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipEvent(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthEvent
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EventApplePurchase) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowEvent
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EventApplePurchase: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EventApplePurchase: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvent
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthEvent
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthEvent
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProductID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvent
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthEvent
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthEvent
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ProductID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TransactionID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvent
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthEvent
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthEvent
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TransactionID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReceiptDataBase64", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvent
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthEvent
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthEvent
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ReceiptDataBase64 = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

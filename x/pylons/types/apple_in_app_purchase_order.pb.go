@@ -23,17 +23,11 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type AppleInAppPurchaseOrder struct {
-	Quantity              string `protobuf:"bytes,1,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	ProductId             string `protobuf:"bytes,2,opt,name=productId,proto3" json:"productId,omitempty"`
-	TransactionId         string `protobuf:"bytes,3,opt,name=transactionId,proto3" json:"transactionId,omitempty"`
-	OriginalTransactionId string `protobuf:"bytes,4,opt,name=originalTransactionId,proto3" json:"originalTransactionId,omitempty"`
-	PurchaseDate          string `protobuf:"bytes,5,opt,name=purchaseDate,proto3" json:"purchaseDate,omitempty"`
-	OriginalPurchaseDate  string `protobuf:"bytes,6,opt,name=originalPurchaseDate,proto3" json:"originalPurchaseDate,omitempty"`
-	ExpiresDate           string `protobuf:"bytes,7,opt,name=expiresDate,proto3" json:"expiresDate,omitempty"`
-	IsInIntroOfferPeriod  string `protobuf:"bytes,8,opt,name=isInIntroOfferPeriod,proto3" json:"isInIntroOfferPeriod,omitempty"`
-	CancellationDate      string `protobuf:"bytes,9,opt,name=cancellationDate,proto3" json:"cancellationDate,omitempty"`
-	WebOrderLineItemId    string `protobuf:"bytes,10,opt,name=webOrderLineItemId,proto3" json:"webOrderLineItemId,omitempty"`
-	Creator               string `protobuf:"bytes,11,opt,name=Creator,proto3" json:"Creator,omitempty"`
+	Quantity      string `protobuf:"bytes,1,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	ProductId     string `protobuf:"bytes,2,opt,name=productId,proto3" json:"productId,omitempty"`
+	TransactionId string `protobuf:"bytes,3,opt,name=transactionId,proto3" json:"transactionId,omitempty"`
+	PurchaseDate  string `protobuf:"bytes,4,opt,name=purchaseDate,proto3" json:"purchaseDate,omitempty"`
+	Creator       string `protobuf:"bytes,5,opt,name=Creator,proto3" json:"Creator,omitempty"`
 }
 
 func (m *AppleInAppPurchaseOrder) Reset()         { *m = AppleInAppPurchaseOrder{} }
@@ -90,51 +84,9 @@ func (m *AppleInAppPurchaseOrder) GetTransactionId() string {
 	return ""
 }
 
-func (m *AppleInAppPurchaseOrder) GetOriginalTransactionId() string {
-	if m != nil {
-		return m.OriginalTransactionId
-	}
-	return ""
-}
-
 func (m *AppleInAppPurchaseOrder) GetPurchaseDate() string {
 	if m != nil {
 		return m.PurchaseDate
-	}
-	return ""
-}
-
-func (m *AppleInAppPurchaseOrder) GetOriginalPurchaseDate() string {
-	if m != nil {
-		return m.OriginalPurchaseDate
-	}
-	return ""
-}
-
-func (m *AppleInAppPurchaseOrder) GetExpiresDate() string {
-	if m != nil {
-		return m.ExpiresDate
-	}
-	return ""
-}
-
-func (m *AppleInAppPurchaseOrder) GetIsInIntroOfferPeriod() string {
-	if m != nil {
-		return m.IsInIntroOfferPeriod
-	}
-	return ""
-}
-
-func (m *AppleInAppPurchaseOrder) GetCancellationDate() string {
-	if m != nil {
-		return m.CancellationDate
-	}
-	return ""
-}
-
-func (m *AppleInAppPurchaseOrder) GetWebOrderLineItemId() string {
-	if m != nil {
-		return m.WebOrderLineItemId
 	}
 	return ""
 }
@@ -155,30 +107,23 @@ func init() {
 }
 
 var fileDescriptor_ac0a95fd515feea7 = []byte{
-	// 366 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x92, 0xcf, 0x4a, 0xeb, 0x40,
-	0x14, 0xc6, 0x9b, 0xdb, 0x7b, 0xfb, 0x67, 0x7a, 0x2f, 0x5c, 0x06, 0xc5, 0x41, 0x24, 0x94, 0xe2,
-	0xa2, 0x88, 0xa6, 0xa0, 0xbe, 0x40, 0x55, 0x84, 0x80, 0xd0, 0x20, 0xae, 0xdc, 0x84, 0x69, 0x72,
-	0xda, 0x0e, 0xa4, 0x33, 0xe3, 0x64, 0x82, 0xed, 0x5b, 0xf8, 0x58, 0x2e, 0x0b, 0x6e, 0x5c, 0x4a,
-	0xfb, 0x22, 0x92, 0xd3, 0x46, 0x5b, 0xcc, 0x2a, 0xe7, 0x7c, 0xdf, 0xef, 0x3b, 0x24, 0xe1, 0x23,
-	0x5d, 0x3d, 0x4f, 0x94, 0x4c, 0x7b, 0x5c, 0xeb, 0x04, 0x42, 0x21, 0x43, 0xae, 0x75, 0xa8, 0x33,
-	0x13, 0x4d, 0x78, 0x0a, 0xa1, 0x32, 0x31, 0x18, 0x4f, 0x1b, 0x65, 0x15, 0x65, 0x6b, 0xd2, 0x42,
-	0x34, 0xf1, 0xd6, 0xe3, 0xe6, 0xd1, 0x79, 0xab, 0x92, 0x83, 0x7e, 0x9e, 0xf7, 0x65, 0x5f, 0xeb,
-	0x60, 0x13, 0x1e, 0xe4, 0x59, 0x7a, 0x48, 0x1a, 0x4f, 0x19, 0x97, 0x56, 0xd8, 0x39, 0x73, 0xda,
-	0x4e, 0xb7, 0x79, 0xff, 0xb5, 0xd3, 0x23, 0xd2, 0xd4, 0x46, 0xc5, 0x59, 0x64, 0xfd, 0x98, 0xfd,
-	0x42, 0xf3, 0x5b, 0xa0, 0xc7, 0xe4, 0x9f, 0x35, 0x5c, 0xa6, 0x3c, 0xb2, 0x42, 0x49, 0x3f, 0x66,
-	0x55, 0x24, 0x76, 0x45, 0x7a, 0x49, 0xf6, 0x95, 0x11, 0x63, 0x21, 0x79, 0xf2, 0xb0, 0x43, 0xff,
-	0x46, 0xba, 0xdc, 0xa4, 0x1d, 0xf2, 0xb7, 0xf8, 0xc6, 0x1b, 0x6e, 0x81, 0xfd, 0x41, 0x78, 0x47,
-	0xa3, 0xe7, 0x64, 0xaf, 0x08, 0x07, 0xdb, 0x6c, 0x0d, 0xd9, 0x52, 0x8f, 0xb6, 0x49, 0x0b, 0x66,
-	0x5a, 0x18, 0x48, 0x11, 0xad, 0x23, 0xba, 0x2d, 0xe5, 0x57, 0x45, 0xea, 0x4b, 0x5f, 0x5a, 0xa3,
-	0x06, 0xa3, 0x11, 0x98, 0x00, 0x8c, 0x50, 0x31, 0x6b, 0xac, 0xaf, 0x96, 0x79, 0xf4, 0x84, 0xfc,
-	0x8f, 0xb8, 0x8c, 0x20, 0x49, 0x78, 0xfe, 0xfe, 0x78, 0xba, 0x89, 0xfc, 0x0f, 0x9d, 0x7a, 0x84,
-	0x3e, 0xc3, 0x10, 0xff, 0xfd, 0x9d, 0x90, 0xe0, 0x5b, 0x98, 0xfa, 0x31, 0x23, 0x48, 0x97, 0x38,
-	0x94, 0x91, 0xfa, 0xb5, 0x01, 0x6e, 0x95, 0x61, 0x2d, 0x84, 0x8a, 0xf5, 0xea, 0xf6, 0x75, 0xe9,
-	0x3a, 0x8b, 0xa5, 0xeb, 0x7c, 0x2c, 0x5d, 0xe7, 0x65, 0xe5, 0x56, 0x16, 0x2b, 0xb7, 0xf2, 0xbe,
-	0x72, 0x2b, 0x8f, 0xa7, 0x63, 0x61, 0x27, 0xd9, 0xd0, 0x8b, 0xd4, 0xb4, 0x17, 0x60, 0x05, 0xce,
-	0xf2, 0x56, 0xf4, 0x36, 0x55, 0x9a, 0x15, 0x83, 0x9d, 0x6b, 0x48, 0x87, 0x35, 0xac, 0xcf, 0xc5,
-	0x67, 0x00, 0x00, 0x00, 0xff, 0xff, 0xf0, 0x10, 0x78, 0xdb, 0x6a, 0x02, 0x00, 0x00,
+	// 255 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x54, 0x50, 0x4d, 0x4a, 0xc4, 0x30,
+	0x14, 0x6e, 0xfc, 0x9f, 0xa0, 0x9b, 0x6c, 0x0c, 0x22, 0x41, 0x06, 0x17, 0xb3, 0xd0, 0x76, 0xe1,
+	0x09, 0x46, 0x45, 0xe8, 0xca, 0xc1, 0xa5, 0x9b, 0x92, 0x49, 0x83, 0x2d, 0x8c, 0xc9, 0xf3, 0xf5,
+	0x15, 0xec, 0x2d, 0xbc, 0x8d, 0x57, 0x70, 0x39, 0x4b, 0x97, 0xd2, 0x5e, 0x44, 0x9a, 0x69, 0x95,
+	0x59, 0xe5, 0x7d, 0x7f, 0x90, 0xef, 0xe3, 0x33, 0x68, 0x56, 0xde, 0x55, 0x89, 0x06, 0x58, 0xd9,
+	0xac, 0x74, 0x99, 0x06, 0xc8, 0xa0, 0x46, 0x53, 0xe8, 0xca, 0x66, 0x1e, 0x73, 0x8b, 0x31, 0xa0,
+	0x27, 0x2f, 0xe4, 0xc6, 0x49, 0xd6, 0x14, 0xf1, 0xe6, 0x1c, 0x9e, 0xe9, 0x27, 0xe3, 0xa7, 0xf3,
+	0x3e, 0x9f, 0xba, 0x39, 0xc0, 0x62, 0x08, 0x3f, 0xf6, 0x59, 0x71, 0xc6, 0x8f, 0xde, 0x6a, 0xed,
+	0xa8, 0xa4, 0x46, 0xb2, 0x0b, 0x36, 0x9b, 0x3c, 0xfd, 0x61, 0x71, 0xce, 0x27, 0x80, 0x3e, 0xaf,
+	0x0d, 0xa5, 0xb9, 0xdc, 0x09, 0xe2, 0x3f, 0x21, 0x2e, 0xf9, 0x09, 0xa1, 0x76, 0x95, 0x36, 0x54,
+	0x7a, 0x97, 0xe6, 0x72, 0x37, 0x38, 0xb6, 0x49, 0x31, 0xe5, 0xc7, 0xe3, 0x6f, 0xef, 0x35, 0x59,
+	0xb9, 0x17, 0x4c, 0x5b, 0x9c, 0x90, 0xfc, 0xf0, 0x0e, 0xad, 0x26, 0x8f, 0x72, 0x3f, 0xc8, 0x23,
+	0xbc, 0x7d, 0xf8, 0x6a, 0x15, 0x5b, 0xb7, 0x8a, 0xfd, 0xb4, 0x8a, 0x7d, 0x74, 0x2a, 0x5a, 0x77,
+	0x2a, 0xfa, 0xee, 0x54, 0xf4, 0x7c, 0xf5, 0x52, 0x52, 0x51, 0x2f, 0x63, 0xe3, 0x5f, 0x93, 0x45,
+	0xa8, 0x79, 0xdd, 0x37, 0x4f, 0x86, 0xb9, 0xde, 0xc7, 0x83, 0x1a, 0xb0, 0xd5, 0xf2, 0x20, 0x4c,
+	0x74, 0xf3, 0x1b, 0x00, 0x00, 0xff, 0xff, 0xd9, 0x37, 0x79, 0xc8, 0x4e, 0x01, 0x00, 0x00,
 }
 
 func (m *AppleInAppPurchaseOrder) Marshal() (dAtA []byte, err error) {
@@ -206,54 +151,12 @@ func (m *AppleInAppPurchaseOrder) MarshalToSizedBuffer(dAtA []byte) (int, error)
 		copy(dAtA[i:], m.Creator)
 		i = encodeVarintAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.Creator)))
 		i--
-		dAtA[i] = 0x5a
-	}
-	if len(m.WebOrderLineItemId) > 0 {
-		i -= len(m.WebOrderLineItemId)
-		copy(dAtA[i:], m.WebOrderLineItemId)
-		i = encodeVarintAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.WebOrderLineItemId)))
-		i--
-		dAtA[i] = 0x52
-	}
-	if len(m.CancellationDate) > 0 {
-		i -= len(m.CancellationDate)
-		copy(dAtA[i:], m.CancellationDate)
-		i = encodeVarintAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.CancellationDate)))
-		i--
-		dAtA[i] = 0x4a
-	}
-	if len(m.IsInIntroOfferPeriod) > 0 {
-		i -= len(m.IsInIntroOfferPeriod)
-		copy(dAtA[i:], m.IsInIntroOfferPeriod)
-		i = encodeVarintAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.IsInIntroOfferPeriod)))
-		i--
-		dAtA[i] = 0x42
-	}
-	if len(m.ExpiresDate) > 0 {
-		i -= len(m.ExpiresDate)
-		copy(dAtA[i:], m.ExpiresDate)
-		i = encodeVarintAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.ExpiresDate)))
-		i--
-		dAtA[i] = 0x3a
-	}
-	if len(m.OriginalPurchaseDate) > 0 {
-		i -= len(m.OriginalPurchaseDate)
-		copy(dAtA[i:], m.OriginalPurchaseDate)
-		i = encodeVarintAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.OriginalPurchaseDate)))
-		i--
-		dAtA[i] = 0x32
+		dAtA[i] = 0x2a
 	}
 	if len(m.PurchaseDate) > 0 {
 		i -= len(m.PurchaseDate)
 		copy(dAtA[i:], m.PurchaseDate)
 		i = encodeVarintAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.PurchaseDate)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.OriginalTransactionId) > 0 {
-		i -= len(m.OriginalTransactionId)
-		copy(dAtA[i:], m.OriginalTransactionId)
-		i = encodeVarintAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.OriginalTransactionId)))
 		i--
 		dAtA[i] = 0x22
 	}
@@ -310,31 +213,7 @@ func (m *AppleInAppPurchaseOrder) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovAppleInAppPurchaseOrder(uint64(l))
 	}
-	l = len(m.OriginalTransactionId)
-	if l > 0 {
-		n += 1 + l + sovAppleInAppPurchaseOrder(uint64(l))
-	}
 	l = len(m.PurchaseDate)
-	if l > 0 {
-		n += 1 + l + sovAppleInAppPurchaseOrder(uint64(l))
-	}
-	l = len(m.OriginalPurchaseDate)
-	if l > 0 {
-		n += 1 + l + sovAppleInAppPurchaseOrder(uint64(l))
-	}
-	l = len(m.ExpiresDate)
-	if l > 0 {
-		n += 1 + l + sovAppleInAppPurchaseOrder(uint64(l))
-	}
-	l = len(m.IsInIntroOfferPeriod)
-	if l > 0 {
-		n += 1 + l + sovAppleInAppPurchaseOrder(uint64(l))
-	}
-	l = len(m.CancellationDate)
-	if l > 0 {
-		n += 1 + l + sovAppleInAppPurchaseOrder(uint64(l))
-	}
-	l = len(m.WebOrderLineItemId)
 	if l > 0 {
 		n += 1 + l + sovAppleInAppPurchaseOrder(uint64(l))
 	}
@@ -478,38 +357,6 @@ func (m *AppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OriginalTransactionId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAppleInAppPurchaseOrder
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAppleInAppPurchaseOrder
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAppleInAppPurchaseOrder
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.OriginalTransactionId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PurchaseDate", wireType)
 			}
 			var stringLen uint64
@@ -540,167 +387,7 @@ func (m *AppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 			}
 			m.PurchaseDate = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OriginalPurchaseDate", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAppleInAppPurchaseOrder
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAppleInAppPurchaseOrder
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAppleInAppPurchaseOrder
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.OriginalPurchaseDate = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExpiresDate", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAppleInAppPurchaseOrder
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAppleInAppPurchaseOrder
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAppleInAppPurchaseOrder
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ExpiresDate = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IsInIntroOfferPeriod", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAppleInAppPurchaseOrder
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAppleInAppPurchaseOrder
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAppleInAppPurchaseOrder
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.IsInIntroOfferPeriod = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 9:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CancellationDate", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAppleInAppPurchaseOrder
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAppleInAppPurchaseOrder
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAppleInAppPurchaseOrder
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CancellationDate = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WebOrderLineItemId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAppleInAppPurchaseOrder
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAppleInAppPurchaseOrder
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAppleInAppPurchaseOrder
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.WebOrderLineItemId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 11:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
 			}

@@ -127,3 +127,17 @@ const (
 	HTTPContentTypeKey = "Content-Type"
 	HTTPContentTypeVal = "application/json"
 )
+
+// Constants used for apple pay
+
+const (
+	// Default base value to decimals
+	Base            = 10
+	URL             = "https://www.apple.com/appleca/AppleIncRootCertificate.cer"
+	SkipIndexString = 2
+
+	// Skip Index Constants Required for parsing the recipe data
+	SkipObjectParse21 = 21
+	SkipObjectParse15 = 15
+	SkipObjectParse3  = 3
+)
