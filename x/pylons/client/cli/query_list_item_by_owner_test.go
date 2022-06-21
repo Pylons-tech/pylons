@@ -16,7 +16,6 @@ import (
 
 func TestListItemByOwner(t *testing.T) {
 	net, objs := networkWithItemObjectsSingleOwner(t, 10)
-	t.Cleanup(net.Cleanup)
 	ctx := net.Validators[0].ClientCtx
 
 	common := []string{

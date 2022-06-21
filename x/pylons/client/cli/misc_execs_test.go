@@ -13,8 +13,8 @@ import (
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
-	"github.com/cosmos/cosmos-sdk/testutil/network"
 
 	"github.com/stretchr/testify/require"
 )
@@ -22,7 +22,6 @@ import (
 func TestSingleItemModifyOutput(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
-	t.Cleanup(net.Cleanup)
 
 	val := net.Validators[0]
 	ctx := val.ClientCtx

@@ -8,8 +8,8 @@ import (
 	"github.com/Pylons-tech/pylons/x/epochs/client/cli"
 	"github.com/Pylons-tech/pylons/x/epochs/types"
 
+	"github.com/Pylons-tech/pylons/testutil/network"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
-	"github.com/cosmos/cosmos-sdk/testutil/network"
 )
 
 type IntegrationTestSuite struct {

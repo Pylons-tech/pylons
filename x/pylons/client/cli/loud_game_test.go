@@ -16,8 +16,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
+	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
-	"github.com/cosmos/cosmos-sdk/testutil/network"
 )
 
 const (
@@ -42,7 +42,6 @@ type loudBasicSim struct {
 func TestLOUDBasic(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
-	t.Cleanup(net.Cleanup)
 
 	val := net.Validators[0]
 	ctx := val.ClientCtx

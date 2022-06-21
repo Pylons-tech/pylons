@@ -18,7 +18,6 @@ import (
 
 func TestCreateCookbook(t *testing.T) {
 	net := network.New(t)
-
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	id := "testID"
@@ -186,7 +185,6 @@ func TestCreateCookbook(t *testing.T) {
 
 func TestUpdateCookbook(t *testing.T) {
 	net := network.New(t)
-
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	id := "testID"

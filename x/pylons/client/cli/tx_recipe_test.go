@@ -94,7 +94,6 @@ func TestCreateRecipe(t *testing.T) {
 func TestUpdateRecipe(t *testing.T) {
 	config := app.DefaultConfig()
 	net := network.New(t, config)
-	t.Cleanup(net.Cleanup)
 
 	val := net.Validators[0]
 	ctx := val.ClientCtx
