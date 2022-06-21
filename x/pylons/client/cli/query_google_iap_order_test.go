@@ -16,7 +16,6 @@ import (
 
 func TestShowGoogleIAPOrder(t *testing.T) {
 	net, objs := networkWithGoogleIAPOrderObjects(t, 2)
-
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),

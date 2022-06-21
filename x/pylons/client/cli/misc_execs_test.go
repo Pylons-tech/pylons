@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
@@ -19,7 +20,9 @@ import (
 )
 
 func TestSingleItemModifyOutput(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	var err error

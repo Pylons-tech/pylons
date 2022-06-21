@@ -24,14 +24,12 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	// this line is used by starport scaffolding # ibc/module/import
 )
 
 var (
 	_ module.AppModule           = AppModule{}
 	_ module.AppModuleBasic      = AppModuleBasic{}
 	_ module.AppModuleSimulation = AppModule{}
-	// this line is used by starport scaffolding # ibc/module/interface
 )
 
 // ----------------------------------------------------------------------------

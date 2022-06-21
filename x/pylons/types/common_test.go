@@ -27,7 +27,6 @@ func GenerateRSAPublicKey(privatekey *rsa.PrivateKey) string {
 }
 
 func toBase64(bytes []byte) string {
-
 	return base64.StdEncoding.EncodeToString(bytes)
 }
 
@@ -40,7 +39,6 @@ func GenerateBase64Digest(message string) []byte {
 }
 
 func SignPKCS1v15(privatekey *rsa.PrivateKey, digest []byte) ([]byte, error) {
-
 	signature, err := rsa.SignPKCS1v15(rand.Reader, privatekey, crypto.SHA1, digest)
 	if err != nil {
 		return nil, err
