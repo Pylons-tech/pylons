@@ -3,7 +3,6 @@ package app
 import (
 	"fmt"
 
-	pylonsmodulekeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/telemetry"
@@ -22,7 +21,7 @@ func NewAnteHandler(
 	// bankKeeper types.BankKeeper,
 	// sigGasConsumer authsigning.SignatureVerificationGasConsumer,
 	signModeHandler authsigning.SignModeHandler,
-	pk pylonsmodulekeeper.Keeper,
+	pk PylonsKeeper,
 ) sdk.AnteHandler {
 	return sdk.ChainAnteDecorators(
 		NewSpamMigitationAnteDecorator(pk),

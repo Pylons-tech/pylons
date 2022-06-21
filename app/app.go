@@ -494,6 +494,7 @@ func New(
 		slashingtypes.ModuleName,
 		govtypes.ModuleName,
 		minttypes.ModuleName,
+		pylonsmoduletypes.ModuleName,
 		crisistypes.ModuleName,
 		ibchost.ModuleName,
 		genutiltypes.ModuleName,
@@ -501,7 +502,6 @@ func New(
 		ibctransfertypes.ModuleName,
 		epochsmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
-		pylonsmoduletypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)

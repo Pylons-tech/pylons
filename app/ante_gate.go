@@ -1,17 +1,16 @@
 package app
 
 import (
-	pylonsmodulekeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 )
 
 type AnteSpamMigitationDecorator struct {
-	pk pylonsmodulekeeper.Keeper
+	pk PylonsKeeper
 }
 
-func NewSpamMigitationAnteDecorator(pylonsmodulekeeper pylonsmodulekeeper.Keeper) AnteSpamMigitationDecorator {
+func NewSpamMigitationAnteDecorator(pylonsmodulekeeper PylonsKeeper) AnteSpamMigitationDecorator {
 	return AnteSpamMigitationDecorator{
 		pk: pylonsmodulekeeper,
 	}
@@ -24,14 +23,15 @@ func (ad AnteSpamMigitationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, sim
 		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
 	}
 
-	// get max txs in a block
+	// get max txs in a block, default is 5
 	params := ad.pk.GetParams(ctx)
 	maxTxs := params.MaxTxsInBlock
+
 	// increment sequence of all signers
 	for _, addr := range sigTx.GetSigners() {
 		AccountTrack[addr.String()]++
 		if AccountTrack[addr.String()] > maxTxs {
-			return ctx, sdkerrors.Wrapf(sdkerrors.ErrMemoTooLarge, "maximum txs in block is %d ", maxTxs)
+			panic(sdkerrors.Wrapf(sdkerrors.ErrMemoTooLarge, "maximum txs in block is %d ", maxTxs))
 		}
 	}
 
