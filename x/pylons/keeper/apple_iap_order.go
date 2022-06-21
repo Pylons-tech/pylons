@@ -65,22 +65,22 @@ func (k Keeper) SetAppleIAPOrder(ctx sdk.Context, appleIAPOrder types.AppleInApp
 }
 
 // GetAppleIAPOrder returns a AppleIAPOrder from its id
-func (k Keeper) GetAppleIAPOrder(ctx sdk.Context, transactionId string) types.AppleInAppPurchaseOrder {
+func (k Keeper) GetAppleIAPOrder(ctx sdk.Context, transactionID string) types.AppleInAppPurchaseOrder {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AppleInAppPurchaseOrderKey))
 	var appleIAPOrder types.AppleInAppPurchaseOrder
-	k.cdc.MustUnmarshal(store.Get(types.KeyPrefix(transactionId)), &appleIAPOrder)
+	k.cdc.MustUnmarshal(store.Get(types.KeyPrefix(transactionID)), &appleIAPOrder)
 	return appleIAPOrder
 }
 
 // HasAppleIAPOrder checks if the AppleIAPOrder exists in the store
-func (k Keeper) HasAppleIAPOrder(ctx sdk.Context, transactionId string) bool {
+func (k Keeper) HasAppleIAPOrder(ctx sdk.Context, transactionID string) bool {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AppleInAppPurchaseOrderKey))
-	return store.Has(types.KeyPrefix(transactionId))
+	return store.Has(types.KeyPrefix(transactionID))
 }
 
 // GetAppleIAPOrderOwner returns the creator of the
-func (k Keeper) GetAppleIAPOrderOwner(ctx sdk.Context, transactionId string) string {
-	return k.GetAppleIAPOrder(ctx, transactionId).Creator
+func (k Keeper) GetAppleIAPOrderOwner(ctx sdk.Context, transactionID string) string {
+	return k.GetAppleIAPOrder(ctx, transactionID).Creator
 }
 
 // GetAllAppleIAPOrder returns all AppleIAPOrder
