@@ -1,6 +1,8 @@
 package app
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
@@ -31,7 +33,7 @@ func (ad AnteSpamMigitationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, sim
 	for _, addr := range sigTx.GetSigners() {
 		AccountTrack[addr.String()]++
 		if AccountTrack[addr.String()] > maxTxs {
-			panic(sdkerrors.Wrapf(sdkerrors.ErrMemoTooLarge, "maximum txs in block is %d ", maxTxs))
+			panic(fmt.Sprintf("maximum txs in block is %d ", maxTxs))
 		}
 	}
 

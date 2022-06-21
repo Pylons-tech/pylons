@@ -60,7 +60,7 @@ var (
 	DefaultMaxTransferFee               = sdk.NewInt(10000)
 	DefaultDistrEpochIdentifier         = "day"
 	DefaultEngineVersion                = uint64(0)
-	DefaultMaxTxsInBlock                = uint64(4)
+	DefaultMaxTxsInBlock                = uint64(20)
 )
 
 // Parameter Store Keys
