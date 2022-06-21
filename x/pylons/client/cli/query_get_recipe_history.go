@@ -29,8 +29,8 @@ func CmdGetRecipeHistory() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			params := &types.QueryGetRecipeHistoryRequest{
-				CookbookID: reqCookbookID,
-				RecipeID:   reqRecipeID,
+				CookbookId: reqCookbookID,
+				RecipeId:   reqRecipeID,
 			}
 
 			res, err := queryClient.GetRecipeHistory(cmd.Context(), params)

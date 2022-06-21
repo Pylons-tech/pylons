@@ -12,9 +12,9 @@ import (
 // SetRecipe set a specific recipe in the store from its ID
 func (k Keeper) SetRecipe(ctx sdk.Context, recipe types.Recipe) {
 	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey))
-	cookbookRecipesStore := prefix.NewStore(recipesStore, types.KeyPrefix(recipe.CookbookID))
+	cookbookRecipesStore := prefix.NewStore(recipesStore, types.KeyPrefix(recipe.CookbookId))
 	b := k.cdc.MustMarshal(&recipe)
-	cookbookRecipesStore.Set(types.KeyPrefix(recipe.ID), b)
+	cookbookRecipesStore.Set(types.KeyPrefix(recipe.Id), b)
 
 	// required for random seed init given how it's handled rn
 	k.IncrementEntityCount(ctx)

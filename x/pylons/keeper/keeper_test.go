@@ -8,7 +8,6 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/Pylons-tech/pylons/app"
-	pylonsSimapp "github.com/Pylons-tech/pylons/testutil/simapp"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
@@ -29,7 +28,7 @@ func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	creators := types.GenTestBech32List(n)
 	for i := range items {
 		items[i].Creator = creators[i]
-		items[i].ID = fmt.Sprintf("%d", i)
+		items[i].Id = fmt.Sprintf("%d", i)
 		k.SetCookbook(ctx, items[i])
 	}
 	return items
@@ -51,7 +50,7 @@ func createNCookbookForSingleOwner(k keeper.Keeper, ctx sdk.Context, n int) []ty
 	creator := types.GenTestBech32FromString("any")
 	for i := range items {
 		items[i].Creator = creator
-		items[i].ID = fmt.Sprintf("%d", i)
+		items[i].Id = fmt.Sprintf("%d", i)
 		k.SetCookbook(ctx, items[i])
 	}
 	return items
@@ -62,7 +61,7 @@ func createNExecution(k keeper.Keeper, ctx sdk.Context, n int) []types.Execution
 	creators := types.GenTestBech32List(n)
 	for i := range execs {
 		execs[i].Creator = creators[i]
-		execs[i].ID = strconv.Itoa(i)
+		execs[i].Id = strconv.Itoa(i)
 		k.SetExecution(ctx, execs[i])
 	}
 	return execs
@@ -73,9 +72,9 @@ func createNExecutionForSingleRecipe(k keeper.Keeper, ctx sdk.Context, n int, co
 	creators := types.GenTestBech32List(n)
 	for i := range execs {
 		execs[i].Creator = creators[i]
-		execs[i].ID = strconv.Itoa(i)
-		execs[i].CookbookID = cookbookID
-		execs[i].RecipeID = recipeID
+		execs[i].Id = strconv.Itoa(i)
+		execs[i].CookbookId = cookbookID
+		execs[i].RecipeId = recipeID
 		k.SetExecution(ctx, execs[i])
 	}
 	return execs
@@ -85,12 +84,12 @@ func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []ty
 	exec := types.Execution{
 		ItemInputs: []types.ItemRecord{
 			{
-				ID: "test1",
+				Id: "test1",
 			},
 		},
-		ItemOutputIDs: []string{"test1"},
-		RecipeID:      "testRecipeID",
-		CookbookID:    "testCookbookID",
+		ItemOutputIds: []string{"test1"},
+		RecipeId:      "testRecipeID",
+		CookbookId:    "testCookbookID",
 	}
 
 	execs := make([]types.Execution, n)
@@ -99,7 +98,7 @@ func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []ty
 	for i := range execs {
 		execs[i] = exec
 		execs[i].Creator = creators[i] // ok if different people ran executions
-		execs[i].ID = strconv.Itoa(i)
+		execs[i].Id = strconv.Itoa(i)
 		k.SetExecution(ctx, execs[i])
 
 	}
@@ -111,12 +110,12 @@ func createNPendingExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n in
 	exec := types.Execution{
 		ItemInputs: []types.ItemRecord{
 			{
-				ID: "test1",
+				Id: "test1",
 			},
 		},
-		ItemOutputIDs: []string{"test1"},
-		RecipeID:      "testRecipeID",
-		CookbookID:    "testCookbookID",
+		ItemOutputIds: []string{"test1"},
+		RecipeId:      "testRecipeID",
+		CookbookId:    "testCookbookID",
 	}
 
 	execs := make([]types.Execution, n)
@@ -125,7 +124,7 @@ func createNPendingExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n in
 	for i := range execs {
 		execs[i] = exec
 		execs[i].Creator = creators[i] // ok if different people ran executions
-		execs[i].ID = strconv.Itoa(i)
+		execs[i].Id = strconv.Itoa(i)
 		k.SetPendingExecution(ctx, execs[i])
 	}
 
@@ -137,12 +136,12 @@ func createNMixedExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int)
 	exec := types.Execution{
 		ItemInputs: []types.ItemRecord{
 			{
-				ID: "test1",
+				Id: "test1",
 			},
 		},
-		ItemOutputIDs: []string{"test1"},
-		RecipeID:      "testRecipeID",
-		CookbookID:    "testCookbookID",
+		ItemOutputIds: []string{"test1"},
+		RecipeId:      "testRecipeID",
+		CookbookId:    "testCookbookID",
 	}
 
 	completedExecs := make([]types.Execution, n)
@@ -152,14 +151,14 @@ func createNMixedExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int)
 	for i := range pendingExecs {
 		pendingExecs[i] = exec
 		pendingExecs[i].Creator = creators[i] // ok if different people ran executions
-		pendingExecs[i].ID = strconv.Itoa(i)
+		pendingExecs[i].Id = strconv.Itoa(i)
 		k.SetPendingExecution(ctx, pendingExecs[i])
 	}
 
 	for i := range completedExecs {
 		completedExecs[i] = exec
 		completedExecs[i].Creator = creators[i] // ok if different people ran executions
-		completedExecs[i].ID = strconv.Itoa(i + n)
+		completedExecs[i].Id = strconv.Itoa(i + n)
 		k.SetExecution(ctx, completedExecs[i])
 	}
 
@@ -171,7 +170,7 @@ func createNPendingExecution(k keeper.Keeper, ctx sdk.Context, n int) []types.Ex
 	creators := types.GenTestBech32List(n)
 	for i := range execs {
 		execs[i].Creator = creators[i]
-		execs[i].ID = k.AppendPendingExecution(ctx, execs[i], 0)
+		execs[i].Id = k.AppendPendingExecution(ctx, execs[i], 0)
 	}
 	return execs
 }
@@ -181,10 +180,10 @@ func createNPendingExecutionForSingleRecipe(k keeper.Keeper, ctx sdk.Context, n 
 	creators := types.GenTestBech32List(n)
 	for i := range execs {
 		execs[i].Creator = creators[i]
-		execs[i].CookbookID = recipe.CookbookID
-		execs[i].RecipeID = recipe.ID
+		execs[i].CookbookId = recipe.CookbookId
+		execs[i].RecipeId = recipe.Id
 		execs[i].RecipeVersion = recipe.Version
-		execs[i].ID = k.AppendPendingExecution(ctx, execs[i], recipe.BlockInterval)
+		execs[i].Id = k.AppendPendingExecution(ctx, execs[i], recipe.BlockInterval)
 	}
 	return execs
 }
@@ -206,7 +205,7 @@ func createNPaymentInfo(k keeper.Keeper, ctx sdk.Context, n int) []types.Payment
 	creators := types.GenTestBech32List(n)
 	for i := range items {
 		items[i].PayerAddr = creators[i]
-		items[i].PurchaseID = fmt.Sprintf("%d", i)
+		items[i].PurchaseId = fmt.Sprintf("%d", i)
 		items[i].Amount = sdk.OneInt()
 		k.SetPaymentInfo(ctx, items[i])
 	}
@@ -218,7 +217,7 @@ func createNRedeemInfo(k keeper.Keeper, ctx sdk.Context, n int) []types.RedeemIn
 	creators := types.GenTestBech32List(n)
 	for i := range items {
 		items[i].Address = creators[i]
-		items[i].ID = fmt.Sprintf("%d", i)
+		items[i].Id = fmt.Sprintf("%d", i)
 		items[i].Amount = sdk.OneInt()
 		k.SetRedeemInfo(ctx, items[i])
 	}
@@ -231,11 +230,11 @@ func createNItem(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []type
 	coin := []sdk.Coin{sdk.NewCoin(types.PylonsCoinDenom, sdk.OneInt())}
 	for i := range items {
 		items[i].Owner = owners[i]
-		items[i].CookbookID = fmt.Sprintf("%d", i)
+		items[i].CookbookId = fmt.Sprintf("%d", i)
 		items[i].TransferFee = coin
 		items[i].Tradeable = tradeable
 		items[i].TradePercentage = sdk.ZeroDec()
-		items[i].ID = k.AppendItem(ctx, items[i])
+		items[i].Id = k.AppendItem(ctx, items[i])
 	}
 	return items
 }
@@ -246,10 +245,10 @@ func createNItemSameOwnerAndCookbook(k keeper.Keeper, ctx sdk.Context, n int, co
 	coin := []sdk.Coin{sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))}
 	for i := range items {
 		items[i].Owner = owner
-		items[i].CookbookID = cookbookID
+		items[i].CookbookId = cookbookID
 		items[i].TransferFee = coin
 		items[i].Tradeable = tradeable
-		items[i].ID = k.AppendItem(ctx, items[i])
+		items[i].Id = k.AppendItem(ctx, items[i])
 	}
 	return items
 }
@@ -260,11 +259,11 @@ func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int, tradeable b
 	coin := []sdk.Coin{sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))}
 	for i := range items {
 		items[i].Owner = owner[0]
-		items[i].CookbookID = fmt.Sprintf("%d", i)
+		items[i].CookbookId = fmt.Sprintf("%d", i)
 		items[i].TransferFee = coin
 		items[i].Tradeable = tradeable
 		items[i].TradePercentage = sdk.ZeroDec()
-		items[i].ID = k.AppendItem(ctx, items[i])
+		items[i].Id = k.AppendItem(ctx, items[i])
 	}
 	return items
 }
@@ -272,8 +271,8 @@ func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int, tradeable b
 func createNRecipe(k keeper.Keeper, ctx sdk.Context, cb types.Cookbook, n int) []types.Recipe {
 	items := make([]types.Recipe, n)
 	for i := range items {
-		items[i].CookbookID = cb.ID
-		items[i].ID = fmt.Sprintf("%d", i)
+		items[i].CookbookId = cb.Id
+		items[i].Id = fmt.Sprintf("%d", i)
 		items[i].CostPerBlock = sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
 
 		k.SetRecipe(ctx, items[i])
@@ -292,7 +291,7 @@ func createNTrade(k keeper.Keeper, ctx sdk.Context, n int) []types.Trade {
 		items[i].Creator = owners[i]
 		items[i].CoinInputs = coinInputs
 		items[i].CoinOutputs = sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}
-		items[i].ID = k.AppendTrade(ctx, items[i])
+		items[i].Id = k.AppendTrade(ctx, items[i])
 	}
 	return items
 }
@@ -308,7 +307,7 @@ func createNTradeSameOwner(k keeper.Keeper, ctx sdk.Context, n int) []types.Trad
 		items[i].Creator = owners[0]
 		items[i].CoinInputs = coinInputs
 		items[i].CoinOutputs = sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}
-		items[i].ID = k.AppendTrade(ctx, items[i])
+		items[i].Id = k.AppendTrade(ctx, items[i])
 	}
 	return items
 }
@@ -316,7 +315,7 @@ func createNTradeSameOwner(k keeper.Keeper, ctx sdk.Context, n int) []types.Trad
 type IntegrationTestSuite struct {
 	suite.Suite
 
-	app           *app.App
+	pylonsApp     *app.PylonsApp
 	ctx           sdk.Context
 	k             keeper.Keeper
 	bankKeeper    types.BankKeeper
@@ -324,25 +323,18 @@ type IntegrationTestSuite struct {
 	stakingKeeper types.StakingKeeper
 }
 
+// TODO: Fisal, Khanh, or Vuong, please fix this test.  Needs simapp.
 func (suite *IntegrationTestSuite) SetupTest() {
-	cmdApp := pylonsSimapp.New("./")
+	pylonsApp := app.Setup(false)
 
-	var a *app.App
-	switch cmdApp.(type) {
-	case *app.App:
-		a = cmdApp.(*app.App)
-	default:
-		panic("imported simApp incorrectly")
-	}
+	ctx := pylonsApp.BaseApp.NewContext(false, tmproto.Header{})
 
-	ctx := a.BaseApp.NewContext(false, tmproto.Header{})
-
-	suite.app = a
+	suite.pylonsApp = pylonsApp
 	suite.ctx = ctx
-	suite.k = a.PylonsKeeper
-	suite.bankKeeper = a.BankKeeper
-	suite.accountKeeper = a.AccountKeeper
-	suite.stakingKeeper = a.StakingKeeper
+	suite.k = pylonsApp.PylonsKeeper
+	suite.bankKeeper = pylonsApp.BankKeeper
+	suite.accountKeeper = pylonsApp.AccountKeeper
+	suite.stakingKeeper = pylonsApp.StakingKeeper
 }
 
 func TestKeeperTestSuite(t *testing.T) {

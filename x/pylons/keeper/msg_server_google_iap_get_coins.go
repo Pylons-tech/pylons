@@ -23,7 +23,7 @@ func (k msgServer) GoogleInAppPurchaseGetCoins(goCtx context.Context, msg *types
 CoinIssuersLoop:
 	for _, ci := range types.DefaultCoinIssuers {
 		for _, p := range ci.Packages {
-			if p.ProductID == msg.ProductID {
+			if p.ProductId == msg.ProductId {
 				coinIssuer = ci
 				googleIapPackage = p
 				break CoinIssuersLoop
@@ -37,7 +37,7 @@ CoinIssuersLoop:
 
 	iap := types.GoogleInAppPurchaseOrder{
 		Creator:           msg.Creator,
-		ProductID:         msg.ProductID,
+		ProductId:         msg.ProductId,
 		PurchaseToken:     msg.PurchaseToken,
 		ReceiptDataBase64: msg.ReceiptDataBase64,
 		Signature:         msg.Signature,
@@ -55,7 +55,7 @@ CoinIssuersLoop:
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventGooglePurchase{
 		Creator:           iap.Creator,
-		ProductID:         iap.ProductID,
+		ProductId:         iap.ProductId,
 		PurchaseToken:     iap.PurchaseToken,
 		ReceiptDataBase64: iap.ReceiptDataBase64,
 		Signature:         iap.Signature,

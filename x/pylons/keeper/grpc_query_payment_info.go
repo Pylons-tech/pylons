@@ -45,7 +45,7 @@ func (k Keeper) PaymentInfo(c context.Context, req *types.QueryGetPaymentInfoReq
 	}
 	ctx := sdk.UnwrapSDKContext(c)
 
-	val, found := k.GetPaymentInfo(ctx, req.PurchaseID)
+	val, found := k.GetPaymentInfo(ctx, req.PurchaseId)
 	if !found {
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}

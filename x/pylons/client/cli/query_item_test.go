@@ -16,7 +16,6 @@ import (
 
 func TestShowItem(t *testing.T) {
 	net, objs := networkWithItemObjects(t, 2)
-
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
@@ -31,8 +30,8 @@ func TestShowItem(t *testing.T) {
 	}{
 		{
 			desc:       "found",
-			cookbookID: objs[0].CookbookID,
-			id:         objs[0].ID,
+			cookbookID: objs[0].CookbookId,
+			id:         objs[0].Id,
 			args:       common,
 			obj:        objs[0],
 		},

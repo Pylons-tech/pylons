@@ -18,7 +18,6 @@ import (
 
 func TestShowPaymentInfo(t *testing.T) {
 	net, objs := networkWithPaymentInfoObjects(t, 2)
-
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
@@ -32,7 +31,7 @@ func TestShowPaymentInfo(t *testing.T) {
 	}{
 		{
 			desc: "found",
-			id:   objs[0].PurchaseID,
+			id:   objs[0].PurchaseId,
 			args: common,
 			obj:  objs[0],
 		},
@@ -65,7 +64,6 @@ func TestShowPaymentInfo(t *testing.T) {
 
 func TestListPaymentInfo(t *testing.T) {
 	net, objs := networkWithPaymentInfoObjects(t, 5)
-
 	ctx := net.Validators[0].ClientCtx
 	request := func(next []byte, offset, limit uint64, total bool) []string {
 		args := []string{

@@ -15,6 +15,7 @@ import (
 	bank "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	"github.com/stretchr/testify/require"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
@@ -82,13 +83,13 @@ func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.N
 
 func networkWithRedeemInfoObjects(t *testing.T, n int) (*network.Network, []types.RedeemInfo) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
 	addresses := types.GenTestBech32List(n)
 	for i := 0; i < n; i++ {
-		state.RedeemInfoList = append(state.RedeemInfoList, types.RedeemInfo{Address: addresses[i], ID: strconv.Itoa(i), Amount: sdk.OneInt()})
+		state.RedeemInfoList = append(state.RedeemInfoList, types.RedeemInfo{Address: addresses[i], Id: strconv.Itoa(i), Amount: sdk.OneInt()})
 	}
 
 	buf, err := cfg.Codec.MarshalJSON(&state)
@@ -99,7 +100,7 @@ func networkWithRedeemInfoObjects(t *testing.T, n int) (*network.Network, []type
 
 func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.UserMap) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -120,7 +121,7 @@ func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.U
 
 func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Trade) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -132,7 +133,7 @@ func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Tra
 	for i := 0; i < n; i++ {
 		state.TradeList = append(state.TradeList, types.Trade{
 			Creator:          addresses[i],
-			ID:               uint64(i),
+			Id:               uint64(i),
 			CoinInputs:       coinInputs,
 			ItemInputs:       make([]types.ItemInput, 0),
 			CoinOutputs:      sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}},
@@ -150,7 +151,7 @@ func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Tra
 
 func networkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, []types.Trade) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -159,7 +160,7 @@ func networkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, 
 	for i := 0; i < n; i++ {
 		state.TradeList = append(state.TradeList, types.Trade{
 			Creator:          addresses[0],
-			ID:               uint64(i),
+			Id:               uint64(i),
 			CoinInputs:       []types.CoinInput{{Coins: sdk.NewCoins()}},
 			ItemInputs:       make([]types.ItemInput, 0),
 			CoinOutputs:      sdk.NewCoins(),
@@ -179,7 +180,7 @@ func networkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, 
 //	 	N cookbooks
 func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.Cookbook) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -188,7 +189,7 @@ func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 	for i := 0; i < n; i++ {
 		state.CookbookList = append(state.CookbookList, types.Cookbook{
 			Creator:      addresses[i],
-			ID:           strconv.Itoa(i),
+			Id:           strconv.Itoa(i),
 			NodeVersion:  0,
 			Name:         "testCookbookName" + strconv.Itoa(i),
 			Description:  "testCookbookDescription" + strconv.Itoa(i),
@@ -210,7 +211,7 @@ func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 // 		N executions (1 per recipe)
 func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types.Execution) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -220,17 +221,17 @@ func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types
 		state.ExecutionList = append(state.ExecutionList,
 			types.Execution{
 				Creator:     addresses[i],
-				ID:          strconv.Itoa(i),
+				Id:          strconv.Itoa(i),
 				NodeVersion: 0,
 				CoinOutputs: sdk.NewCoins(sdk.NewCoin(
 					"testDenom"+strconv.Itoa(i),
 					sdk.OneInt(),
 				)),
 				ItemInputs:          make([]types.ItemRecord, 0),
-				ItemOutputIDs:       []string{"itemID1"},
-				ItemModifyOutputIDs: make([]string, 0),
-				RecipeID:            "RecipeID1",
-				CookbookID:          "CookbookID1",
+				ItemOutputIds:       []string{"itemID1"},
+				ItemModifyOutputIds: make([]string, 0),
+				RecipeId:            "RecipeID1",
+				CookbookId:          "CookbookID1",
 				CoinInputs:          sdk.NewCoins(),
 			})
 	}
@@ -242,7 +243,7 @@ func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types
 
 func networkWithGoogleIAPOrderObjects(t *testing.T, n int) (*network.Network, []types.GoogleInAppPurchaseOrder) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -257,13 +258,13 @@ func networkWithGoogleIAPOrderObjects(t *testing.T, n int) (*network.Network, []
 
 func networkWithPaymentInfoObjects(t *testing.T, n int) (*network.Network, []types.PaymentInfo) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
 	addresses := types.GenTestBech32List(n)
 	for i := 0; i < n; i++ {
-		state.PaymentInfoList = append(state.PaymentInfoList, types.PaymentInfo{PayerAddr: addresses[i], PurchaseID: strconv.Itoa(i), Amount: sdk.OneInt()})
+		state.PaymentInfoList = append(state.PaymentInfoList, types.PaymentInfo{PayerAddr: addresses[i], PurchaseId: strconv.Itoa(i), Amount: sdk.OneInt()})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
@@ -273,7 +274,7 @@ func networkWithPaymentInfoObjects(t *testing.T, n int) (*network.Network, []typ
 
 func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -283,8 +284,8 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item
 		state.ItemList = append(state.ItemList,
 			types.Item{
 				Owner:           addresses[i],
-				ID:              strconv.Itoa(i),
-				CookbookID:      "testCookbookID",
+				Id:              strconv.Itoa(i),
+				CookbookId:      "testCookbookID",
 				NodeVersion:     0,
 				Doubles:         make([]types.DoubleKeyValue, 0),
 				Longs:           make([]types.LongKeyValue, 0),
@@ -304,7 +305,7 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item
 
 func networkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, []types.Item) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -314,8 +315,8 @@ func networkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, [
 		state.ItemList = append(state.ItemList,
 			types.Item{
 				Owner:           addresses[0],
-				ID:              strconv.Itoa(i),
-				CookbookID:      "testCookbookID",
+				Id:              strconv.Itoa(i),
+				CookbookId:      "testCookbookID",
 				NodeVersion:     0,
 				Doubles:         make([]types.DoubleKeyValue, 0),
 				Longs:           make([]types.LongKeyValue, 0),
@@ -335,7 +336,7 @@ func networkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, [
 
 func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Recipe, []types.Cookbook) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -343,8 +344,8 @@ func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Re
 		state.RecipeList = append(
 			state.RecipeList,
 			types.Recipe{
-				CookbookID:    strconv.Itoa(i),
-				ID:            strconv.Itoa(i),
+				CookbookId:    strconv.Itoa(i),
+				Id:            strconv.Itoa(i),
 				NodeVersion:   0,
 				Name:          "",
 				Description:   "",
@@ -367,7 +368,7 @@ func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Re
 
 func networkWithRecipeObjectsHistory(t *testing.T, n int) (*network.Network, []types.Recipe, []types.Cookbook) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -375,8 +376,8 @@ func networkWithRecipeObjectsHistory(t *testing.T, n int) (*network.Network, []t
 		state.RecipeList = append(
 			state.RecipeList,
 			types.Recipe{
-				CookbookID:    "testCookbook",
-				ID:            "testRecipe",
+				CookbookId:    "testCookbook",
+				Id:            "testRecipe",
 				NodeVersion:   0,
 				Name:          "",
 				Description:   "",

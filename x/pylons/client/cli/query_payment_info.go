@@ -54,7 +54,7 @@ func CmdShowPaymentInfo() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			params := &types.QueryGetPaymentInfoRequest{
-				PurchaseID: args[0],
+				PurchaseId: args[0],
 			}
 
 			res, err := queryClient.PaymentInfo(context.Background(), params)

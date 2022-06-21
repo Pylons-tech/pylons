@@ -54,7 +54,7 @@ func CmdShowRedeemInfo() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			params := &types.QueryGetRedeemInfoRequest{
-				ID: args[0],
+				Id: args[0],
 			}
 
 			res, err := queryClient.RedeemInfo(context.Background(), params)

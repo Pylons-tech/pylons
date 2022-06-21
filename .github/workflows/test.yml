@@ -23,19 +23,13 @@ jobs:
         with:
           go-version: 1.18
 
-      - uses: technote-space/get-diff-action@v4
-        id: git_diff
-        with:
-          PATTERNS: |
-            **/**.go
-            go.mod
-            go.sum
+
       - name: Build
         run: GOARCH=${{matrix.go-arch}} make build
 
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: buildjet-16vcpu-ubuntu-2004
     steps:
       - uses: actions/checkout@v2
 
@@ -43,13 +37,5 @@ jobs:
         uses: actions/setup-go@v2.1.3
         with:
           go-version: 1.18
-
-      - uses: technote-space/get-diff-action@v4
-        id: git_diff
-        with:
-          PATTERNS: |
-            **/**.go
-            go.mod
-            go.sum
       - name: tests
         run:  make test

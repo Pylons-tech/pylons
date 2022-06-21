@@ -49,10 +49,10 @@ func (msg *MsgSendItems) ValidateBasic() error {
 	}
 
 	for _, itemRef := range msg.Items {
-		if err = ValidateID(itemRef.CookbookID); err != nil {
+		if err = ValidateID(itemRef.CookbookId); err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
-		if err = ValidateItemID(itemRef.ItemID); err != nil {
+		if err = ValidateItemID(itemRef.ItemId); err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}

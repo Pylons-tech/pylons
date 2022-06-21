@@ -27,8 +27,8 @@ func CmdListExecutionsByRecipe() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			params := &types.QueryListExecutionsByRecipeRequest{
-				CookbookID: reqCookbookID,
-				RecipeID:   reqRecipeID,
+				CookbookId: reqCookbookID,
+				RecipeId:   reqRecipeID,
 			}
 
 			res, err := queryClient.ListExecutionsByRecipe(cmd.Context(), params)

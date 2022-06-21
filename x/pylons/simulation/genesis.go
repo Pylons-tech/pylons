@@ -73,7 +73,7 @@ func RandomizedGenState(simState *module.SimulationState) {
 		},
 		EntityCount:                  0,
 		GoogleInAppPurchaseOrderList: nil,
-		GoogleIAPOrderCount:          0,
+		GoogleIapOrderCount:          0,
 		ExecutionList:                nil,
 		ExecutionCount:               0,
 		PendingExecutionList:         nil,

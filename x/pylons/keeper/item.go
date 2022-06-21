@@ -47,31 +47,31 @@ func (k Keeper) AppendItem(ctx sdk.Context, item types.Item) string {
 	// Create the execution
 	count := k.GetItemCount(ctx)
 
-	item.ID = types.EncodeItemID(count)
+	item.Id = types.EncodeItemID(count)
 	k.SetItem(ctx, item)
 
 	// Update item count
 	k.SetItemCount(ctx, count+1)
 
-	return item.ID
+	return item.Id
 }
 
 // SetItem set a specific item in the store from its index
 func (k Keeper) SetItem(ctx sdk.Context, item types.Item) {
 	itemsStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))
-	cookbookItemsStore := prefix.NewStore(itemsStore, types.KeyPrefix(item.CookbookID))
+	cookbookItemsStore := prefix.NewStore(itemsStore, types.KeyPrefix(item.CookbookId))
 	b := k.cdc.MustMarshal(&item)
-	cookbookItemsStore.Set(types.KeyPrefix(item.ID), b)
+	cookbookItemsStore.Set(types.KeyPrefix(item.Id), b)
 
 	addr, _ := sdk.AccAddressFromBech32(item.Owner)
-	k.addItemToAddress(ctx, item.CookbookID, item.ID, addr)
+	k.addItemToAddress(ctx, item.CookbookId, item.Id, addr)
 	// required for random seed init given how it's handled rn
 	k.IncrementEntityCount(ctx)
 }
 
 // UpdateItem updates an item removing it from previous owner store
 func (k Keeper) UpdateItem(ctx sdk.Context, item types.Item, prevAddr sdk.AccAddress) {
-	k.removeItemFromAddress(ctx, item.CookbookID, item.ID, prevAddr)
+	k.removeItemFromAddress(ctx, item.CookbookId, item.Id, prevAddr)
 	k.SetItem(ctx, item)
 }
 

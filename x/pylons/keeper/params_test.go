@@ -49,8 +49,8 @@ func (suite *IntegrationTestSuite) TestSetParams() {
 			{
 				CoinDenom: types.PylonsCoinDenom,
 				Packages: []types.GoogleInAppPurchasePackage{
-					{PackageName: "com.pylons.loud", ProductID: "pylons_1000", Amount: sdk.NewInt(1000)},
-					{PackageName: "com.pylons.loud", ProductID: "pylons_55000", Amount: sdk.NewInt(55000)},
+					{PackageName: "com.pylons.loud", ProductId: "pylons_1000", Amount: sdk.NewInt(1000)},
+					{PackageName: "com.pylons.loud", ProductId: "pylons_55000", Amount: sdk.NewInt(55000)},
 				},
 				GoogleInAppPurchasePubKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwZsjhk6eN5Pve9pP3uqz2MwBFixvmCRtQJoDQLTEJo3zTd9VMZcXoerQX8cnDPclZWmMZWkO+BWcN1ikYdGHvU2gC7yBLi+TEkhsEkixMlbqOGRdmNptJJhqxuVmXK+drWTb6W0IgQ9g8CuCjZUiMTc0UjHb5mPOE/IhcuTZ0wCHdoqc5FS2spdQqrohvSEP7gR4ZgGzYNI1U+YZHskIEm2qC4ZtSaX9J/fDkAmmJFV2hzeDMcljCxY9+ZM1mdzIpZKwM7O6UdWRpwD1QJ7yXND8AQ9M46p16F0VQuZbbMKCs90NIcKkx6jDDGbVmJrFnUT1Oq1uYxNYtiZjTp+JowIDAQAB",
 				EntityName:                "Pylons_Inc",

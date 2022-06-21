@@ -26,7 +26,7 @@ func (suite *IntegrationTestSuite) TestListRecipesByCookbook() {
 				Limit:      limit,
 				CountTotal: total,
 			},
-			CookbookID: cookbookID,
+			CookbookId: cookbookID,
 		}
 	}
 
@@ -38,12 +38,12 @@ func (suite *IntegrationTestSuite) TestListRecipesByCookbook() {
 	}{
 		{
 			desc:     "ByLimit",
-			request:  requestFunc(nil, 0, 5, false, cookbooks[0].ID),
+			request:  requestFunc(nil, 0, 5, false, cookbooks[0].Id),
 			response: &types.QueryListRecipesByCookbookResponse{Recipes: msgs[:5]},
 		},
 		{
 			desc:     "All",
-			request:  requestFunc(nil, 0, 0, true, cookbooks[0].ID),
+			request:  requestFunc(nil, 0, 0, true, cookbooks[0].Id),
 			response: &types.QueryListRecipesByCookbookResponse{Recipes: msgs},
 		},
 		{

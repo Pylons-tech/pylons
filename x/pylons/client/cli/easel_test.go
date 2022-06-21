@@ -12,6 +12,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -35,7 +36,9 @@ type easelBasicSim struct {
 }
 
 func TestEaselBasic(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	var err error
@@ -89,7 +92,7 @@ func createMintRecipe1(t *testing.T, simInfo *easelBasicSim) {
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{{
-			ID: "title_title",
+			Id: "title_title",
 			Strings: []types.StringParam{
 				{
 					Key:     "NFT_URL",
@@ -108,7 +111,7 @@ func createMintRecipe1(t *testing.T, simInfo *easelBasicSim) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"title_title"},
+			EntryIds: []string{"title_title"},
 			Weight:   1,
 		},
 	})
@@ -175,7 +178,7 @@ func mintNFT1(t *testing.T, simInfo *easelBasicSim) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookIDEasel, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookIDEasel, itemResp.Item.CookbookId)
 }
 
 func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
@@ -237,7 +240,7 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 					Program: "",
 				},
 			},
-			ID: "id1",
+			Id: "id1",
 			Strings: []types.StringParam{
 				{
 					Key:     "App_Type",
@@ -281,7 +284,7 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"id1"},
+			EntryIds: []string{"id1"},
 			Weight:   1,
 		},
 	})
@@ -348,7 +351,7 @@ func mintNFT2(t *testing.T, simInfo *easelBasicSim) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookIDEasel, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookIDEasel, itemResp.Item.CookbookId)
 
 	args = []string{cookbookIDEasel, simInfo.mintRecipeID2}
 	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowRecipe(), args)

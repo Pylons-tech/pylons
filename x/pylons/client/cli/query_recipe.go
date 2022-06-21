@@ -21,8 +21,8 @@ func CmdShowRecipe() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			params := &types.QueryGetRecipeRequest{
-				CookbookID: args[0],
-				ID:         args[1],
+				CookbookId: args[0],
+				Id:         args[1],
 			}
 
 			res, err := queryClient.Recipe(context.Background(), params)

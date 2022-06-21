@@ -4,22 +4,17 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/version"
-
-	// "strings"
-
 	"github.com/spf13/cobra"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	// "github.com/cosmos/cosmos-sdk/client/flags"
-	// sdk "github.com/cosmos/cosmos-sdk/types"
-
 	"github.com/Pylons-tech/pylons/x/epochs/types"
+
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/version"
 )
 
-// GetQueryCmd returns the cli query commands for this module
-func GetQueryCmd(queryRoute string) *cobra.Command {
+// GetQueryCmd returns the cli query commands for this module.
+func GetQueryCmd() *cobra.Command {
 	// Group epochs queries under a subcommand
 	cmd := &cobra.Command{
 		Use:                        types.ModuleName,
@@ -29,7 +24,6 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	// this line is used by starport scaffolding # 1
 	cmd.AddCommand(
 		GetCmdEpochsInfos(),
 		GetCmdCurrentEpoch(),
@@ -38,13 +32,14 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 	return cmd
 }
 
-// GetCmdEpochsInfos provide running epochInfos
+// GetCmdEpochsInfos provide running epochInfos.
 func GetCmdEpochsInfos() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "epoch-infos",
 		Short: "Query running epochInfos",
 		Long: strings.TrimSpace(
 			fmt.Sprintf(`Query running epoch infos.
+
 Example:
 $ %s query epochs epoch-infos
 `,
@@ -73,15 +68,16 @@ $ %s query epochs epoch-infos
 	return cmd
 }
 
-// GetCmdCurrentEpoch provides current epoch by specified identifier
+// GetCmdCurrentEpoch provides current epoch by specified identifier.
 func GetCmdCurrentEpoch() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "current-epoch",
 		Short: "Query current epoch by specified identifier",
 		Long: strings.TrimSpace(
 			fmt.Sprintf(`Query current epoch by specified identifier.
+
 Example:
-$ %s query epochs current-epoch weekly
+$ %s query epochs current-epoch day
 `,
 				version.AppName,
 			),
