@@ -201,7 +201,10 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 			if !found {
 				panic(err.Error())
 			}
-			am.keeper.RefundPayments(ctx, paymentProcessHistory.PaymentInfors)
+			err := am.keeper.RefundPayments(ctx, paymentProcessHistory.PaymentInfors)
+			if err != nil {
+				panic(err)
+			}
 			am.keeper.RemovePaymentProcessHistory(ctx, paymentProcessHistory)
 
 			am.keeper.ActualizeExecution(ctx, pendingExec)

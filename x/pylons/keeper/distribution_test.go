@@ -11,7 +11,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
-	sdknetwork "github.com/cosmos/cosmos-sdk/testutil/network"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	bankcli "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	stakingcli "github.com/cosmos/cosmos-sdk/x/staking/client/cli"
@@ -78,7 +77,7 @@ func distributionNetworkConfig(feesAmount sdk.Coin) network.Config {
 }
 
 // Give some balance to validators and generate additional accounts with same balance
-func generateAccountsWithBalance(numAccounts int, validator *sdknetwork.Validator, coin sdk.Coin, req *require.Assertions) []string {
+func generateAccountsWithBalance(numAccounts int, validator *network.Validator, coin sdk.Coin, req *require.Assertions) []string {
 	accounts := make([]string, 0)
 	clientCtx := validator.ClientCtx
 	accAddrresses := GenerateAddressesInKeyring(clientCtx.Keyring, numAccounts)
@@ -102,7 +101,7 @@ func generateAccountsWithBalance(numAccounts int, validator *sdknetwork.Validato
 	return accounts
 }
 
-func generateDistributionMap(validators []*sdknetwork.Validator, numDelegations int, minAmount, maxAmount sdk.Int, accounts []string) map[string][]TestDelegation {
+func generateDistributionMap(validators []*network.Validator, numDelegations int, minAmount, maxAmount sdk.Int, accounts []string) map[string][]TestDelegation {
 	// init random seed
 	rand.Seed(time.Now().UnixNano())
 
@@ -135,7 +134,7 @@ func generateDistributionMap(validators []*sdknetwork.Validator, numDelegations 
 	return delegations
 }
 
-func computeDistrPercentages(validators []*sdknetwork.Validator, distrMap map[string][]TestDelegation, bondingTokens, totalStake sdk.Int) (distrPercentages map[string]sdk.Dec) {
+func computeDistrPercentages(validators []*network.Validator, distrMap map[string][]TestDelegation, bondingTokens, totalStake sdk.Int) (distrPercentages map[string]sdk.Dec) {
 	distrPercentages = make(map[string]sdk.Dec)
 	for _, val := range validators {
 		valAddr := val.Address.String()

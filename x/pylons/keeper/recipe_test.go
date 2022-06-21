@@ -1,6 +1,8 @@
 package keeper_test
 
 import (
+	"fmt"
+
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	transfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
@@ -64,6 +66,9 @@ func (suite *IntegrationTestSuite) TestUpdateCoinsIBCDenom() {
 	mintAmt = mintAmt.Add(coin)
 
 	err := k.MintCoinsToAddr(ctx, addr, mintAmt)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	updatedCoinsInput, err := k.UpdateCoinsDenom(ctx, addr, coinInputs)
 	require.NoError(err)

@@ -18,10 +18,10 @@ func (k Keeper) RemovePaymentProcessHistory(ctx sdk.Context, processHistory type
 	store.Delete(types.KeyPrefix(processHistory.ExecutionId))
 }
 
-func (k Keeper) GetPaymentProcessHistory(ctx sdk.Context, executionId string) (val types.PaymentProcessHistory, found bool) {
+func (k Keeper) GetPaymentProcessHistory(ctx sdk.Context, executionID string) (val types.PaymentProcessHistory, found bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PaymentProcessHistoryKey))
 
-	b := store.Get(types.KeyPrefix(executionId))
+	b := store.Get(types.KeyPrefix(executionID))
 	if b == nil {
 		return val, false
 	}
@@ -30,9 +30,9 @@ func (k Keeper) GetPaymentProcessHistory(ctx sdk.Context, executionId string) (v
 	return val, true
 }
 
-func (k Keeper) HasPaymentProcessHistory(ctx sdk.Context, executionId string) bool {
+func (k Keeper) HasPaymentProcessHistory(ctx sdk.Context, executionID string) bool {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PaymentProcessHistoryKey))
-	return store.Has(types.KeyPrefix(executionId))
+	return store.Has(types.KeyPrefix(executionID))
 }
 
 func (k Keeper) GetAllPaymentProcessHistory(ctx sdk.Context) (list []types.PaymentProcessHistory) {
