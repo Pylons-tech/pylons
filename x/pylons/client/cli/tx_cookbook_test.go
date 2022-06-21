@@ -186,7 +186,6 @@ func TestCreateCookbook(t *testing.T) {
 
 func TestUpdateCookbook(t *testing.T) {
 	net := network.New(t)
-	t.Cleanup(net.Cleanup)
 
 	val := net.Validators[0]
 	ctx := val.ClientCtx
