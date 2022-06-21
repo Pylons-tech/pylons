@@ -16,7 +16,6 @@ import (
 
 func TestListTradesByCreator(t *testing.T) {
 	net, objs := networkWithTradeObjectsSingleOwner(t, 10)
-
 	ctx := net.Validators[0].ClientCtx
 
 	common := []string{

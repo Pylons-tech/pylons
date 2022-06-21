@@ -1,7 +1,6 @@
 syntax = "proto3";
 package Pylonstech.pylons.pylons;
 
-// this line is used by starport scaffolding # genesis/proto/import
 import "pylons/redeem_info.proto";
 import "pylons/payment_info.proto";
 import "pylons/accounts.proto";

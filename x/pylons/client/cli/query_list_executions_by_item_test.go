@@ -16,7 +16,6 @@ import (
 
 func TestListExecutionsByItem(t *testing.T) {
 	net, objs := networkWithExecutionObjects(t, 10)
-
 	ctx := net.Validators[0].ClientCtx
 
 	common := []string{

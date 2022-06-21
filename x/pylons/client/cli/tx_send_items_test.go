@@ -18,6 +18,7 @@ import (
 
 func TestSendItems(t *testing.T) {
 	net := network.New(t)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"

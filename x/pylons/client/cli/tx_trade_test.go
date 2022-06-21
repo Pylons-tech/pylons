@@ -8,6 +8,7 @@ import (
 
 	"github.com/spf13/cast"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
@@ -23,6 +24,7 @@ import (
 
 func TestCreateTradeNoItemOutput1(t *testing.T) {
 	net := network.New(t)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
@@ -88,14 +90,16 @@ func TestCreateTradeNoItemOutput1(t *testing.T) {
 }
 
 func TestCreateTradeNoItemOutput2(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin(testIBCDenom, sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin(testIBCDenom, sdk.NewInt(1))),
 			},
 		},
 	)
@@ -161,7 +165,9 @@ func TestCreateTradeNoItemOutput2(t *testing.T) {
 }
 
 func TestCreateTradeItemOutput(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
@@ -371,7 +377,9 @@ func TestCreateTradeItemOutput(t *testing.T) {
 }
 
 func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
@@ -592,7 +600,9 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 }
 
 func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
@@ -813,7 +823,9 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 }
 
 func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	address, err := GenerateAddressWithAccount(ctx, t, net)
@@ -1034,7 +1046,9 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 }
 
 func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	address, err := GenerateAddressWithAccount(ctx, t, net)
@@ -1184,7 +1198,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
 			},
 		},
 	)
@@ -1255,14 +1269,16 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 }
 
 func TestCreateTradeInvalidCoinOutput(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
 			},
 		},
 	)
@@ -1329,14 +1345,16 @@ func TestCreateTradeInvalidCoinOutput(t *testing.T) {
 }
 
 func TestCreateTradeInvalidItemOutput(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
 			},
 		},
 	)
@@ -1408,7 +1426,9 @@ func TestCreateTradeInvalidItemOutput(t *testing.T) {
 }
 
 func TestCancelTrade(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
