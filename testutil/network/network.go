@@ -119,12 +119,12 @@ func CustomGenesisHelper(cdc codec.Codec) json.RawMessage {
 
 // ConfigWithMaxTxsInBlock will initialize config for the network with custom application,
 // genesis and single validator.
-func ConfigWithMaxTxsInBlock(MaxTxsInBlock uint64) network.Config {
+func ConfigWithMaxTxsInBlock(maxTxsInBlock uint64) network.Config {
 	encoding := app.MakeEncodingConfig()
 
 	genState := app.ModuleBasics.DefaultGenesis(encoding.Codec)
 	genesisPylons := types.NetworkTestGenesis()
-	genesisPylons.Params.MaxTxsInBlock = MaxTxsInBlock
+	genesisPylons.Params.MaxTxsInBlock = maxTxsInBlock
 
 	genState["pylons"] = encoding.Codec.MustMarshalJSON(genesisPylons)
 
