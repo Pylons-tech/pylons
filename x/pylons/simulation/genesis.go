@@ -70,6 +70,7 @@ func RandomizedGenState(simState *module.SimulationState) {
 			MinTransferFee:            minTransferFee,
 			MaxTransferFee:            maxTransferFee,
 			DistrEpochIdentifier:      "hour",
+			MaxTxsInBlock:             uint64(10),
 		},
 		EntityCount:                  0,
 		GoogleInAppPurchaseOrderList: nil,
