@@ -23,23 +23,23 @@ func (ad AnteSpamMigitationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, sim
 	fmt.Println("simulate")
 
 	fmt.Println(simulate)
-	if simulate {
-		return next(ctx, tx, simulate)
-	}
-	sigTx, ok := tx.(authsigning.SigVerifiableTx)
-	if !ok {
-		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
-	}
+	if (ctx.IsCheckTx() || ctx.IsReCheckTx()) && !simulate {
 
-	// get max txs in a block, default is 5
-	params := ad.pk.GetParams(ctx)
-	maxTxs := params.MaxTxsInBlock
+		sigTx, ok := tx.(authsigning.SigVerifiableTx)
+		if !ok {
+			return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
+		}
 
-	// increment sequence of all signers
-	for _, addr := range sigTx.GetSigners() {
-		AccountTrack[addr.String()]++
-		if AccountTrack[addr.String()] > maxTxs {
-			panic(fmt.Sprintf("maximum txs in block is %d ", maxTxs))
+		// get max txs in a block, default is 5
+		params := ad.pk.GetParams(ctx)
+		maxTxs := params.MaxTxsInBlock
+
+		// increment sequence of all signers
+		for _, addr := range sigTx.GetSigners() {
+			AccountTrack[addr.String()]++
+			if AccountTrack[addr.String()] > maxTxs {
+				panic(fmt.Sprintf("maximum txs in block is %d ", maxTxs))
+			}
 		}
 	}
 
