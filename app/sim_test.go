@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
+	"os"
+	"testing"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -11,14 +13,11 @@ import (
 	simulation2 "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 	"github.com/stretchr/testify/require"
-	"github.com/tendermint/spm/cosmoscmd"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
 
+	"github.com/Pylons-tech/pylons/app"
 	pylons "github.com/Pylons-tech/pylons/app"
-
-	"os"
-	"testing"
 )
 
 func init() {
@@ -52,15 +51,7 @@ func fullAppSimulation(tb testing.TB, is_testing bool) {
 		}
 	}()
 
-	// fauxMerkleModeOpt returns a BaseApp option to use a dbStoreAdapter instead of
-	// an IAVLStore for faster simulation speed.
-	fauxMerkleModeOpt := func(bapp *baseapp.BaseApp) {
-		if is_testing {
-			bapp.SetFauxMerkleMode()
-		}
-	}
-
-	cmdApp := pylons.New(
+	pylonsApp := app.New(
 		logger,
 		db,
 		nil,
@@ -68,34 +59,26 @@ func fullAppSimulation(tb testing.TB, is_testing bool) {
 		map[int64]bool{},
 		pylons.DefaultNodeHome,
 		simapp.FlagPeriodValue,
-		cosmoscmd.MakeEncodingConfig(pylons.ModuleBasics),
+		app.MakeEncodingConfig(),
 		simapp.EmptyAppOptions{},
 		interBlockCacheOpt(),
-		fauxMerkleModeOpt)
-
-	var app *pylons.App
-	switch cmdApp.(type) {
-	case *pylons.App:
-		app = cmdApp.(*pylons.App)
-	default:
-		panic("imported simApp incorrectly")
-	}
+	)
 
 	// Run randomized simulation:
 	_, simParams, simErr := simulation.SimulateFromSeed(
 		tb,
 		os.Stdout,
-		app.BaseApp,
-		simapp.AppStateFn(app.AppCodec(), app.SimulationManager()),
+		pylonsApp.BaseApp,
+		simapp.AppStateFn(pylonsApp.AppCodec(), pylonsApp.SimulationManager()),
 		simulation2.RandomAccounts, // Replace with own random account function if using keys other than secp256k1
-		simapp.SimulationOperations(app, app.AppCodec(), config),
-		app.ModuleAccountAddrs(),
+		simapp.SimulationOperations(pylonsApp, pylonsApp.AppCodec(), config),
+		pylonsApp.ModuleAccountAddrs(),
 		config,
-		app.AppCodec(),
+		pylonsApp.AppCodec(),
 	)
 
 	// export state and simParams before the simulation error is checked
-	if err = simapp.CheckExportSimulation(app, config, simParams); err != nil {
+	if err = simapp.CheckExportSimulation(pylonsApp, config, simParams); err != nil {
 		tb.Fatal(err)
 	}
 
@@ -124,32 +107,24 @@ func BenchmarkFullAppSimulation(b *testing.B) {
 		}
 	}()
 
-	encoding := cosmoscmd.MakeEncodingConfig(pylons.ModuleBasics)
-	cmdApp := pylons.New(logger, db, nil, true, map[int64]bool{}, pylons.DefaultNodeHome, simapp.FlagPeriodValue, encoding, simapp.EmptyAppOptions{}, interBlockCacheOpt())
-
-	var app *pylons.App
-	switch cmdApp.(type) {
-	case *pylons.App:
-		app = cmdApp.(*pylons.App)
-	default:
-		panic("imported simApp incorrectly")
-	}
+	encoding := app.MakeEncodingConfig()
+	pylonsApp := pylons.New(logger, db, nil, true, map[int64]bool{}, pylons.DefaultNodeHome, simapp.FlagPeriodValue, encoding, simapp.EmptyAppOptions{}, interBlockCacheOpt())
 
 	// Run randomized simulation:
 	_, simParams, simErr := simulation.SimulateFromSeed(
 		b,
 		os.Stdout,
-		app.BaseApp,
-		simapp.AppStateFn(app.AppCodec(), app.SimulationManager()),
+		pylonsApp.BaseApp,
+		simapp.AppStateFn(pylonsApp.AppCodec(), pylonsApp.SimulationManager()),
 		simulation2.RandomAccounts, // Replace with own random account function if using keys other than secp256k1
-		simapp.SimulationOperations(app, app.AppCodec(), config),
-		app.ModuleAccountAddrs(),
+		simapp.SimulationOperations(pylonsApp, pylonsApp.AppCodec(), config),
+		pylonsApp.ModuleAccountAddrs(),
 		config,
-		app.AppCodec(),
+		pylonsApp.AppCodec(),
 	)
 
 	// export state and simParams before the simulation error is checked
-	if err = simapp.CheckExportSimulation(app, config, simParams); err != nil {
+	if err = simapp.CheckExportSimulation(pylonsApp, config, simParams); err != nil {
 		b.Fatal(err)
 	}
 
@@ -196,16 +171,8 @@ func TestAppStateDeterminism(t *testing.T) {
 			}
 
 			db := dbm.NewMemDB()
-			encoding := cosmoscmd.MakeEncodingConfig(pylons.ModuleBasics)
-			cmdApp := pylons.New(logger, db, nil, true, map[int64]bool{}, pylons.DefaultNodeHome, simapp.FlagPeriodValue, encoding, simapp.EmptyAppOptions{}, interBlockCacheOpt())
-
-			var app *pylons.App
-			switch cmdApp.(type) {
-			case *pylons.App:
-				app = cmdApp.(*pylons.App)
-			default:
-				panic("imported simApp incorrectly")
-			}
+			encoding := app.MakeEncodingConfig()
+			pylonsApp := pylons.New(logger, db, nil, true, map[int64]bool{}, pylons.DefaultNodeHome, simapp.FlagPeriodValue, encoding, simapp.EmptyAppOptions{}, interBlockCacheOpt())
 
 			fmt.Printf(
 				"running non-determinism simulation; seed %d: %d/%d, attempt: %d/%d\n",
@@ -215,13 +182,13 @@ func TestAppStateDeterminism(t *testing.T) {
 			_, _, err := simulation.SimulateFromSeed(
 				t,
 				os.Stdout,
-				app.BaseApp,
-				simapp.AppStateFn(app.AppCodec(), app.SimulationManager()),
+				pylonsApp.BaseApp,
+				simapp.AppStateFn(pylonsApp.AppCodec(), pylonsApp.SimulationManager()),
 				simulation2.RandomAccounts, // Replace with own random account function if using keys other than secp256k1
-				simapp.SimulationOperations(app, app.AppCodec(), config),
-				app.ModuleAccountAddrs(),
+				simapp.SimulationOperations(pylonsApp, pylonsApp.AppCodec(), config),
+				pylonsApp.ModuleAccountAddrs(),
 				config,
-				app.AppCodec(),
+				pylonsApp.AppCodec(),
 			)
 			require.NoError(t, err)
 
@@ -229,7 +196,7 @@ func TestAppStateDeterminism(t *testing.T) {
 				simapp.PrintStats(db)
 			}
 
-			appHash := app.LastCommitID().Hash
+			appHash := pylonsApp.LastCommitID().Hash
 			appHashList[j] = appHash
 
 			if j != 0 {

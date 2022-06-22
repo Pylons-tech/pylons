@@ -17,17 +17,18 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func GenerateAddress() {
-
 }
-func TestExecuteRecipeNoInputOutput(t *testing.T) {
 
+func TestExecuteRecipeNoInputOutput(t *testing.T) {
 	net := network.New(t)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
@@ -53,7 +54,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -88,7 +89,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -174,13 +175,15 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		require.NoError(t, err)
 		var itemResp types.QueryGetItemResponse
 		require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-		require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+		require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 		require.Equal(t, height, itemResp.Item.LastUpdate)
 	}
 }
 
 func TestExecuteRecipeQuantityField(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
@@ -205,7 +208,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -244,7 +247,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -320,7 +323,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	// check the recipe to see if the AmountMinted has been updated
@@ -369,7 +372,9 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 }
 
 func TestLimitReachExecuteRecipe(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
@@ -394,7 +399,7 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -433,7 +438,7 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -509,7 +514,9 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 }
 
 func TestExecuteUpdatedRecipe(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
@@ -534,7 +541,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -574,7 +581,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -677,7 +684,9 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 }
 
 func TestExecuteDisableRecipe(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
@@ -699,7 +708,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -739,7 +748,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -791,7 +800,9 @@ func TestExecuteDisableRecipe(t *testing.T) {
 }
 
 func TestExecuteRecipeItemInputOutput(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
@@ -812,7 +823,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	}
 	itemInputs, err := json.Marshal([]types.ItemInput{
 		{
-			ID: "itemInputID",
+			Id: "itemInputID",
 			Doubles: []types.DoubleInputParam{
 				{
 					Key:      "main",
@@ -831,13 +842,13 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	//itemInputIDs, err := json.Marshal([]string{types.EncodeItemID(0)})
+	// itemInputIDs, err := json.Marshal([]string{types.EncodeItemID(0)})
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -872,7 +883,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -975,13 +986,14 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
-
 }
 
 func TestExecuteRecipeMutableStringField(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
@@ -1007,7 +1019,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -1047,7 +1059,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -1121,7 +1133,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	// check the recipe to see if the Mutable string is represented properly
@@ -1133,11 +1145,12 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 	var recipeResp types.QueryGetRecipeResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &recipeResp))
 	require.Equal(t, expectedMutableString, recipeResp.Recipe.Entries.ItemOutputs[0].MutableStrings)
-
 }
 
 func TestExecuteRecipeNoInputOutputInvalidArgs(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"

@@ -19,8 +19,8 @@ import (
 )
 
 func TestCmdCompleteExecutionEarly(t *testing.T) {
-
 	net := network.New(t)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
@@ -42,7 +42,7 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 		"true",
 	}
 
-	//Common arguments
+	// Common arguments
 	common := CommonArgs(val.Address.String(), net)
 	args := []string{cookbookID}
 	args = append(args, cbFields...)
@@ -97,11 +97,10 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &executionsResponse))
 	require.NotEmpty(t, executionsResponse.PendingExecutions)
 
-	var testedExecution = executionsResponse.PendingExecutions[0]
+	testedExecution := executionsResponse.PendingExecutions[0]
 
 	t.Run("Test Complete Execution Early, existing cookbook", func(t *testing.T) {
-
-		testedExecutionId := testedExecution.ID
+		testedExecutionId := testedExecution.Id
 		args = []string{testedExecutionId}
 		args = append(args, common...)
 
@@ -129,7 +128,5 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 		require.NoError(t, err)
 		require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &executionsResponse))
 		require.True(t, executionsResponse.Completed)
-
 	})
-
 }

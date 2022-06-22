@@ -110,7 +110,7 @@ clean:
 go.sum: go.mod
 	@echo "Ensure dependencies have not been modified ..."
 	@go mod verify
-	@go mod tidy -go=1.17
+	@go mod tidy -go=1.18
 
 .PHONY: install go.sum clean build build-linux build-reproducible
 
@@ -138,17 +138,17 @@ test-unit:
 	@VERSION=$(VERSION) go test -mod=readonly -v -timeout 30m $(PACKAGES)
 
 test-race:
-	@VERSION=$(VERSION) go test -mod=readonly -v -race -timeout 30m  $(PACKAGES)
+	@VERSION=$(VERSION) go test -mod=readonly -v -race -timeout 60m  $(PACKAGES)
 
 COVER_FILE := coverage.txt
 COVER_HTML_FILE := cover.html
 
 test-cover:
-	@VERSION=$(VERSION) go test -mod=readonly -v -timeout 30m -coverprofile=$(COVER_FILE) -covermode=atomic $(PACKAGES)
+	@VERSION=$(VERSION) go test -mod=readonly -v -timeout 60m -coverprofile=$(COVER_FILE) -covermode=atomic $(PACKAGES)
 	@go tool cover -html=$(COVER_FILE) -o $(COVER_HTML_FILE)
 
 bench:
-	@VERSION=$(VERSION) go test -mod=readonly -v -timeout 30m -bench=. $(PACKAGES)
+	@VERSION=$(VERSION) go test -mod=readonly -v -timeout 60m -bench=. $(PACKAGES)
 
 
 .PHONY: test test-unit test-race test-cover bench

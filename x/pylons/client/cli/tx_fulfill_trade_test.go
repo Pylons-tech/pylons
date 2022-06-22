@@ -35,7 +35,7 @@ func createGetTestCoinsRecipe(t *testing.T, simInfo *tradeSimInfo) {
 	denom := "testCoin"
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: []types.CoinOutput{{
-			ID:   "testCoin",
+			Id:   "testCoin",
 			Coin: sdk.Coin{Denom: denom, Amount: sdk.NewInt(10000)},
 		}},
 		ItemOutputs:       nil,
@@ -45,7 +45,7 @@ func createGetTestCoinsRecipe(t *testing.T, simInfo *tradeSimInfo) {
 
 	outputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testCoin"},
+			EntryIds: []string{"testCoin"},
 			Weight:   1,
 		},
 	})
@@ -106,6 +106,7 @@ func getTestCoins(t *testing.T, simInfo *tradeSimInfo, common []string) {
 
 func TestFulfillTradeItemForCoins(t *testing.T) {
 	net := network.New(t)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	var err error
@@ -157,7 +158,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -193,7 +194,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -264,7 +265,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	// no coinInputs
@@ -283,15 +284,15 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 
 	// no coinOutputs
 	coinOutputs, err := json.Marshal(sdk.Coins{
-		//sdk.NewCoin(testDenom, sdk.NewInt(10)),
+		// sdk.NewCoin(testDenom, sdk.NewInt(10)),
 	})
 	require.NoError(t, err)
 
 	// no  item outputs
 	itemOutputs, err = json.Marshal([]types.ItemRef{
 		{
-			CookbookID: cookbookID,
-			ItemID:     itemID,
+			CookbookId: cookbookID,
+			ItemId:     itemID,
 		},
 	})
 	require.NoError(t, err)
@@ -355,5 +356,4 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	require.NoError(t, err)
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &listItemResp))
 	require.Equal(t, 1, len(listItemResp.Items))
-
 }

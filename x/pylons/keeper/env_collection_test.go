@@ -10,7 +10,6 @@ import (
 )
 
 func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromItem() {
-
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -103,7 +102,7 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 		{
 			desc: "Testing an ItemRecord not found in store",
 			execution: types.Execution{
-				ID: "NotFound1",
+				Id: "NotFound1",
 				ItemInputs: []types.ItemRecord{
 					{
 						Strings: []types.StringKeyValue{
@@ -121,15 +120,15 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 			desc: "Valid Test",
 			execution: types.Execution{
 				Creator:       types.GenTestBech32FromString("test1"),
-				ID:            "execution1",
-				RecipeID:      "recipe1",
-				CookbookID:    "cookbook1",
+				Id:            "execution1",
+				RecipeId:      "recipe1",
+				CookbookId:    "cookbook1",
 				RecipeVersion: "v1.1.1",
 				NodeVersion:   0,
 				BlockHeight:   0,
 				ItemInputs: []types.ItemRecord{
 					{
-						ID:      "item1",
+						Id:      "item1",
 						Doubles: nil,
 						Longs:   nil,
 						Strings: nil,
@@ -137,12 +136,12 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 				},
 				CoinInputs:          nil,
 				CoinOutputs:         nil,
-				ItemOutputIDs:       nil,
-				ItemModifyOutputIDs: nil,
+				ItemOutputIds:       nil,
+				ItemModifyOutputIds: nil,
 			},
 			recipe: types.Recipe{
-				CookbookID:  "cookbook1",
-				ID:          "recipe1",
+				CookbookId:  "cookbook1",
+				Id:          "recipe1",
 				NodeVersion: 0,
 				Name:        "Test Recipe",
 				Description: "",
@@ -150,7 +149,7 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 				CoinInputs:  nil,
 				ItemInputs: []types.ItemInput{
 					{
-						ID:      "item1",
+						Id:      "item1",
 						Doubles: nil,
 						Longs:   nil,
 						Strings: nil,
@@ -168,8 +167,8 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 			},
 			item: types.Item{
 				Owner:       types.GenTestBech32FromString("test1"),
-				CookbookID:  "cookbook1",
-				ID:          "item1",
+				CookbookId:  "cookbook1",
+				Id:          "item1",
 				NodeVersion: 0,
 				Doubles: []types.DoubleKeyValue{
 					{
@@ -240,7 +239,6 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 					require.Equal(variables[fieldName], tc.expected[fieldName], "values of fields %s are not equal", fieldName)
 				}
 			}
-
 		})
 	}
 }

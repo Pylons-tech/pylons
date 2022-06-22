@@ -94,11 +94,11 @@ func ValidatePaymentInfo(p PaymentInfo) error {
 		return sdkerrors.Wrap(ErrInvalidRequestField, "empty payment processor name in payment info")
 	}
 
-	if p.PurchaseID == "" {
+	if p.PurchaseId == "" {
 		return sdkerrors.Wrap(ErrInvalidRequestField, "empty purchase ID in payment info")
 	}
 
-	if p.ProductID == "" {
+	if p.ProductId == "" {
 		return sdkerrors.Wrap(ErrInvalidRequestField, "empty product ID in payment info")
 	}
 
@@ -124,7 +124,7 @@ func ValidateRedeemInfo(r RedeemInfo) error {
 		return sdkerrors.Wrap(ErrInvalidRequestField, "empty payment processor name in redeem info")
 	}
 
-	if r.ID == "" {
+	if r.Id == "" {
 		return sdkerrors.Wrap(ErrInvalidRequestField, "empty purchase ID in redeem info")
 	}
 

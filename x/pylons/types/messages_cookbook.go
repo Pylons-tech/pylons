@@ -10,7 +10,7 @@ var _ sdk.Msg = &MsgCreateCookbook{}
 func NewMsgCreateCookbook(creator string, id string, name string, description string, developer string, version string, supportEmail string, enabled bool) *MsgCreateCookbook {
 	return &MsgCreateCookbook{
 		Creator:      creator,
-		ID:           id,
+		Id:           id,
 		Name:         name,
 		Description:  description,
 		Developer:    developer,
@@ -56,7 +56,7 @@ func (msg *MsgCreateCookbook) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	if err = ValidateID(msg.ID); err != nil {
+	if err = ValidateID(msg.Id); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
@@ -75,7 +75,7 @@ var _ sdk.Msg = &MsgUpdateCookbook{}
 func NewMsgUpdateCookbook(creator string, id string, name string, description string, developer string, version string, supportEmail string, enabled bool) *MsgUpdateCookbook {
 	return &MsgUpdateCookbook{
 		Creator:      creator,
-		ID:           id,
+		Id:           id,
 		Name:         name,
 		Description:  description,
 		Developer:    developer,
@@ -121,7 +121,7 @@ func (msg *MsgUpdateCookbook) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	if err = ValidateID(msg.ID); err != nil {
+	if err = ValidateID(msg.Id); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 

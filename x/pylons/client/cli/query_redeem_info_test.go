@@ -18,7 +18,6 @@ import (
 
 func TestShowRedeemInfo(t *testing.T) {
 	net, objs := networkWithRedeemInfoObjects(t, 2)
-
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
@@ -32,7 +31,7 @@ func TestShowRedeemInfo(t *testing.T) {
 	}{
 		{
 			desc: "found",
-			id:   objs[0].ID,
+			id:   objs[0].Id,
 			args: common,
 			obj:  objs[0],
 		},
@@ -65,7 +64,6 @@ func TestShowRedeemInfo(t *testing.T) {
 
 func TestListRedeemInfo(t *testing.T) {
 	net, objs := networkWithRedeemInfoObjects(t, 5)
-
 	ctx := net.Validators[0].ClientCtx
 	request := func(next []byte, offset, limit uint64, total bool) []string {
 		args := []string{

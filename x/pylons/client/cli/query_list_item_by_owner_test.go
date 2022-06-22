@@ -16,7 +16,6 @@ import (
 
 func TestListItemByOwner(t *testing.T) {
 	net, objs := networkWithItemObjectsSingleOwner(t, 10)
-
 	ctx := net.Validators[0].ClientCtx
 
 	common := []string{
@@ -61,7 +60,7 @@ func TestListItemByOwner(t *testing.T) {
 				require.NoError(t, err)
 				var resp types.QueryListItemByOwnerResponse
 				require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
-				//require.NotNil(t, resp.Items)
+				// require.NotNil(t, resp.Items)
 				require.Equal(t, tc.items, resp.Items)
 			}
 		})

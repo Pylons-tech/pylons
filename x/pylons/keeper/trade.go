@@ -49,7 +49,7 @@ func (k Keeper) AppendTrade(
 	count := k.GetTradeCount(ctx)
 
 	// Set the ID of the appended value
-	trade.ID = count
+	trade.Id = count
 
 	k.SetTrade(ctx, trade)
 
@@ -65,9 +65,9 @@ func (k Keeper) SetTrade(ctx sdk.Context, trade types.Trade) {
 	b := k.cdc.MustMarshal(&trade)
 
 	addr, _ := sdk.AccAddressFromBech32(trade.Creator)
-	k.addTradeToAddress(ctx, getTradeIDBytes(trade.ID), addr)
+	k.addTradeToAddress(ctx, getTradeIDBytes(trade.Id), addr)
 
-	store.Set(getTradeIDBytes(trade.ID), b)
+	store.Set(getTradeIDBytes(trade.Id), b)
 }
 
 // GetTrade returns a trade from its id
@@ -142,7 +142,6 @@ func (k Keeper) GetTradesByCreatorPaginated(ctx sdk.Context, creator sdk.AccAddr
 		trades = append(trades, trade)
 		return nil
 	})
-
 	if err != nil {
 		return nil, nil, err
 	}

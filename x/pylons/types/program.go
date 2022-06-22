@@ -99,7 +99,6 @@ func sample(r float64, cdf []float64) int {
 
 // Actualize generate result entries from WeightedOutputsList
 func (wol WeightedOutputsList) Actualize() ([]string, error) {
-
 	if len(wol) == 0 {
 		return nil, nil
 	}
@@ -125,5 +124,5 @@ func (wol WeightedOutputsList) Actualize() ([]string, error) {
 	randWeight := rand.Float64()
 	index := sample(randWeight, normCDF)
 
-	return wol[index].EntryIDs, nil
+	return wol[index].EntryIds, nil
 }

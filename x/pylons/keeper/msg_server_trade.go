@@ -41,15 +41,15 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 
 	// check that each item provided for trade is owned by sender, and lock it
 	for _, itemRef := range msg.ItemOutputs {
-		item, found := k.GetItem(ctx, itemRef.CookbookID, itemRef.ItemID)
+		item, found := k.GetItem(ctx, itemRef.CookbookId, itemRef.ItemId)
 		if !found {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v not found", itemRef.ItemID, itemRef.CookbookID)
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v not found", itemRef.ItemId, itemRef.CookbookId)
 		}
 		if item.Owner != msg.Creator {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v not owned", itemRef.ItemID, itemRef.CookbookID)
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v not owned", itemRef.ItemId, itemRef.CookbookId)
 		}
 		if !item.Tradeable {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v cannot be traded", itemRef.ItemID, itemRef.CookbookID)
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v cannot be traded", itemRef.ItemId, itemRef.CookbookId)
 		}
 		k.LockItemForTrade(ctx, item)
 		items = append(items, item)
@@ -68,7 +68,7 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	var trade = types.Trade{
+	trade := types.Trade{
 		Creator:     msg.Creator,
 		CoinInputs:  msg.CoinInputs,
 		ItemInputs:  msg.ItemInputs,
@@ -84,23 +84,23 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateTrade{
 		Creator: msg.Creator,
-		ID:      id,
+		Id:      id,
 	})
 
 	telemetry.IncrCounter(1, "trade", "create")
 
 	return &types.MsgCreateTradeResponse{
-		ID: id,
+		Id: id,
 	}, err
 }
 
 func (k msgServer) CancelTrade(goCtx context.Context, msg *types.MsgCancelTrade) (*types.MsgCancelTradeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !k.HasTrade(ctx, msg.ID) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.ID))
+	if !k.HasTrade(ctx, msg.Id) {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
 	}
-	trade := k.GetTrade(ctx, msg.ID)
+	trade := k.GetTrade(ctx, msg.Id)
 	if msg.Creator != trade.Creator {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
@@ -108,7 +108,7 @@ func (k msgServer) CancelTrade(goCtx context.Context, msg *types.MsgCancelTrade)
 	// unlock locked items
 	for _, itemRef := range trade.ItemOutputs {
 		// checks where passed at trade creation, we just need to unlock
-		item, _ := k.GetItem(ctx, itemRef.CookbookID, itemRef.ItemID)
+		item, _ := k.GetItem(ctx, itemRef.CookbookId, itemRef.ItemId)
 		k.UnlockItemForTrade(ctx, item, msg.Creator)
 	}
 
@@ -120,11 +120,11 @@ func (k msgServer) CancelTrade(goCtx context.Context, msg *types.MsgCancelTrade)
 		panic(err)
 	}
 
-	k.RemoveTrade(ctx, msg.ID, addr)
+	k.RemoveTrade(ctx, msg.Id, addr)
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCancelTrade{
 		Creator: msg.Creator,
-		ID:      msg.ID,
+		Id:      msg.Id,
 	})
 
 	telemetry.IncrCounter(1, "trade", "cancel")

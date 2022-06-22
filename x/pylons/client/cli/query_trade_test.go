@@ -16,7 +16,6 @@ import (
 
 func TestShowTrade(t *testing.T) {
 	net, objs := networkWithTradeObjects(t, 2)
-
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
@@ -30,19 +29,19 @@ func TestShowTrade(t *testing.T) {
 	}{
 		{
 			desc: "found1",
-			id:   fmt.Sprintf("%d", objs[0].ID),
+			id:   fmt.Sprintf("%d", objs[0].Id),
 			args: common,
 			obj:  objs[0],
 		},
 		{
 			desc: "found2",
-			id:   fmt.Sprintf("%d", objs[1].ID),
+			id:   fmt.Sprintf("%d", objs[1].Id),
 			args: common,
 			obj:  objs[1],
 		},
 		{
 			desc: "not found",
-			id:   fmt.Sprintf("%d", objs[1].ID+1),
+			id:   fmt.Sprintf("%d", objs[1].Id+1),
 			args: common,
 			err:  status.Error(codes.InvalidArgument, "not found"),
 		},

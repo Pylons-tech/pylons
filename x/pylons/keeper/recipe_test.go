@@ -1,8 +1,9 @@
 package keeper_test
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	transfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 )
 
@@ -14,7 +15,7 @@ func (suite *IntegrationTestSuite) TestRecipeGet() {
 	cookbooks := createNCookbook(k, ctx, 1)
 	items := createNRecipe(k, ctx, cookbooks[0], 10)
 	for _, item := range items {
-		rst, found := k.GetRecipe(ctx, cookbooks[0].ID, item.ID)
+		rst, found := k.GetRecipe(ctx, cookbooks[0].Id, item.Id)
 		require.True(found)
 		require.Equal(item, rst)
 	}

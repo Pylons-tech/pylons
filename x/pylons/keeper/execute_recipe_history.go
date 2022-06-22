@@ -9,10 +9,10 @@ import (
 
 // SetRecipe set a specific recipe in the store from its ID
 func (k Keeper) SetExecuteRecipeHis(ctx sdk.Context, history types.RecipeHistory) {
-	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(history.CookbookID+history.RecipeID))
+	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(history.CookbookId+history.RecipeId))
 	recipesHistoryStore := prefix.NewStore(recipesStore, types.KeyPrefix(types.RecipeHistoryKey))
 	b := k.cdc.MustMarshal(&history)
-	recipesHistoryStore.Set(types.KeyPrefix(history.ItemID), b)
+	recipesHistoryStore.Set(types.KeyPrefix(history.ItemId), b)
 
 	// required for random seed init given how it's handled rn
 	k.IncrementEntityCount(ctx)
@@ -28,7 +28,10 @@ func (k Keeper) GetAllExecuteRecipeHis(ctx sdk.Context, cookbookID string, id st
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.RecipeHistory
-		k.cdc.MustUnmarshal(iterator.Value(), &val)
+		err := k.cdc.Unmarshal(iterator.Value(), &val)
+		if err != nil {
+			continue
+		}
 		list = append(list, &val)
 	}
 

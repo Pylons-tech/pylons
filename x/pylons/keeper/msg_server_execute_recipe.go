@@ -9,40 +9,40 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr string, inputItemsIDs []string, recipe types.Recipe) ([]types.Item, error) {
-	if len(inputItemsIDs) != len(recipe.ItemInputs) {
+func (k Keeper) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr string, inputItemsIds []string, recipe types.Recipe) ([]types.Item, error) {
+	if len(inputItemsIds) != len(recipe.ItemInputs) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "size mismatch between provided input items and items required by recipe")
 	}
 	matchedItems := make([]types.Item, len(recipe.ItemInputs))
 
-	// build Item list from inputItemIDs
+	// build Item list from inputItemIds
 	inputItemMap := make(map[string]types.Item)
-	checkedInputItems := make([]bool, len(inputItemsIDs))
+	checkedInputItems := make([]bool, len(inputItemsIds))
 
 	for i, recipeItemInput := range recipe.ItemInputs {
 		var err error
-		for j, id := range inputItemsIDs {
+		for j, id := range inputItemsIds {
 			if checkedInputItems[j] {
 				continue
 			}
 			inputItem, found := inputItemMap[id]
 			if !found {
-				inputItem, found = k.GetItem(ctx, recipe.CookbookID, id)
+				inputItem, found = k.GetItem(ctx, recipe.CookbookId, id)
 				if !found {
 					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v not found", id)
 				}
 				if inputItem.Owner != creatorAddr {
 					modAcc := k.accountKeeper.GetModuleAddress(types.ExecutionsLockerName)
 					if inputItem.Owner == modAcc.String() {
-						return nil, sdkerrors.Wrapf(types.ErrItemLocked, "item with id %s locked", inputItem.ID)
+						return nil, sdkerrors.Wrapf(types.ErrItemLocked, "item with id %s locked", inputItem.Id)
 					}
-					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %s not owned by sender", inputItem.ID)
+					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %s not owned by sender", inputItem.Id)
 				}
 			}
 			inputItemMap[id] = inputItem
 			// match
 			var ec types.CelEnvCollection
-			ec, err = k.NewCelEnvCollectionFromItem(ctx, recipe.ID, "", inputItem)
+			ec, err = k.NewCelEnvCollectionFromItem(ctx, recipe.Id, "", inputItem)
 			if err != nil {
 				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
@@ -66,12 +66,12 @@ func (k Keeper) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr string,
 func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRecipe) (*types.MsgExecuteRecipeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	recipe, found := k.GetRecipe(ctx, msg.CookbookID, msg.RecipeID)
+	recipe, found := k.GetRecipe(ctx, msg.CookbookId, msg.RecipeId)
 	if !found {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "requested recipe not found")
 	}
 
-	cookbook, found := k.GetCookbook(ctx, msg.CookbookID)
+	cookbook, found := k.GetCookbook(ctx, msg.CookbookId)
 
 	if !found {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "main cookbook not found")
@@ -86,7 +86,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "this recipe or its parent cookbook are disabled")
 	}
 
-	matchedItems, err := k.MatchItemInputsForExecution(ctx, msg.Creator, msg.ItemIDs, recipe)
+	matchedItems, err := k.MatchItemInputsForExecution(ctx, msg.Creator, msg.ItemIds, recipe)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
@@ -133,7 +133,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	itemRecords := make([]types.ItemRecord, len(matchedItems))
 	for i, item := range matchedItems {
 		itemRecords[i] = types.ItemRecord{
-			ID:      item.ID,
+			Id:      item.Id,
 			Doubles: item.Doubles,
 			Longs:   item.Longs,
 			Strings: item.Strings,
@@ -150,8 +150,8 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		NodeVersion:   k.EngineVersion(ctx),
 		BlockHeight:   ctx.BlockHeight(),
 		ItemInputs:    itemRecords,
-		RecipeID:      recipe.ID,
-		CookbookID:    recipe.CookbookID,
+		RecipeId:      recipe.Id,
+		CookbookId:    recipe.CookbookId,
 		RecipeVersion: recipe.Version,
 		CoinInputs:    coinInputs,
 	}
@@ -184,28 +184,28 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		sdk.NewEvent(
 			types.CreateItemKey,
 			sdk.NewAttribute("itemID", id),
-			sdk.NewAttribute("cookbookID", recipe.CookbookID),
-			sdk.NewAttribute("recipeID", recipe.ID),
+			sdk.NewAttribute("cookbookID", recipe.CookbookId),
+			sdk.NewAttribute("recipeID", recipe.Id),
 			sdk.NewAttribute("sender", msg.Creator),
 			sdk.NewAttribute("receiver", cookbook.Creator),
 			sdk.NewAttribute("senderName", senderName.GetValue()),
 			sdk.NewAttribute("amount", coinInputs.String()),
-			sdk.NewAttribute("time", ctx.BlockTime().String()),
+			sdk.NewAttribute("createdAt", ctx.BlockTime().String()),
 		),
 	)
 
 	executionTrack := types.RecipeHistory{
-		ItemID:     id,
-		CookbookID: recipe.CookbookID,
-		RecipeID:   recipe.ID,
+		ItemId:     id,
+		CookbookId: recipe.CookbookId,
+		RecipeId:   recipe.Id,
 		Sender:     msg.Creator,
 		Receiver:   cookbook.Creator,
 		SenderName: senderName.GetValue(),
 		Amount:     coinInputs.String(),
-		Time:       ctx.BlockTime().Unix(),
+		CreatedAt:  ctx.BlockTime().Unix(),
 	}
 
 	k.SetExecuteRecipeHis(ctx, executionTrack)
 
-	return &types.MsgExecuteRecipeResponse{ID: id}, err
+	return &types.MsgExecuteRecipeResponse{Id: id}, err
 }

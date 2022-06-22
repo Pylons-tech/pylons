@@ -316,7 +316,7 @@ func AddVariableFromItem(varDefs []*exprpb.Decl, variables map[string]interface{
 	)
 
 	variables[prefix+"owner"] = item.Owner
-	variables[prefix+"itemID"] = item.ID
+	variables[prefix+"itemID"] = item.Id
 	variables[prefix+"lastUpdate"] = item.LastUpdate
 	// due to how transferFee was changed to support multiple alternatives,
 	// transferFee has been removed from the cel vars

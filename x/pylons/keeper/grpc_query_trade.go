@@ -20,12 +20,12 @@ func (k Keeper) Trade(c context.Context, req *types.QueryGetTradeRequest) (*type
 	var trade types.Trade
 	ctx := sdk.UnwrapSDKContext(c)
 
-	if !k.HasTrade(ctx, req.ID) {
+	if !k.HasTrade(ctx, req.Id) {
 		return nil, sdkerrors.ErrKeyNotFound
 	}
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
-	k.cdc.MustUnmarshal(store.Get(getTradeIDBytes(req.ID)), &trade)
+	k.cdc.MustUnmarshal(store.Get(getTradeIDBytes(req.Id)), &trade)
 
 	return &types.QueryGetTradeResponse{Trade: trade}, nil
 }

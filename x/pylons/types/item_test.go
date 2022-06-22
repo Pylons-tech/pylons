@@ -3,9 +3,10 @@ package types
 import (
 	"errors"
 	"fmt"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"math"
 	"testing"
+
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -41,9 +42,9 @@ func TestFindValidPaymentsPermutation(t *testing.T) {
 	// item1's TransferFees: {"coin2", 4}, {"coin3", 5}, {"coin4", 6}
 	// item2's TransferFees: {"coin0", 4}, {"coin4", 5}, {"coin5", 6}, {"coin6", 7}
 	items := []Item{
-		{ID: "item0", CookbookID: "cb0", TransferFee: sdk.Coins{sdk.NewCoin("coin0", sdk.NewInt(10)), sdk.NewCoin("coin1", sdk.NewInt(10)), sdk.NewCoin("coin2", sdk.NewInt(10))}},
-		{ID: "item1", CookbookID: "cb1", TransferFee: sdk.Coins{sdk.NewCoin("coin2", sdk.NewInt(4)), sdk.NewCoin("coin3", sdk.NewInt(5)), sdk.NewCoin("coin4", sdk.NewInt(6))}},
-		{ID: "item2", CookbookID: "cb2", TransferFee: sdk.Coins{sdk.NewCoin("coin0", sdk.NewInt(4)), sdk.NewCoin("coin4", sdk.NewInt(5)), sdk.NewCoin("coin5", sdk.NewInt(6)), sdk.NewCoin("coin6", sdk.NewInt(7))}},
+		{Id: "item0", CookbookId: "cb0", TransferFee: sdk.Coins{sdk.NewCoin("coin0", sdk.NewInt(10)), sdk.NewCoin("coin1", sdk.NewInt(10)), sdk.NewCoin("coin2", sdk.NewInt(10))}},
+		{Id: "item1", CookbookId: "cb1", TransferFee: sdk.Coins{sdk.NewCoin("coin2", sdk.NewInt(4)), sdk.NewCoin("coin3", sdk.NewInt(5)), sdk.NewCoin("coin4", sdk.NewInt(6))}},
+		{Id: "item2", CookbookId: "cb2", TransferFee: sdk.Coins{sdk.NewCoin("coin0", sdk.NewInt(4)), sdk.NewCoin("coin4", sdk.NewInt(5)), sdk.NewCoin("coin5", sdk.NewInt(6)), sdk.NewCoin("coin6", sdk.NewInt(7))}},
 	}
 
 	for _, tc := range []struct {
@@ -101,7 +102,7 @@ func TestFindValidPaymentsPermutation(t *testing.T) {
 			desc: "Invalid1",
 			// {"coin0", 10}
 			balance: sdk.Coins{sdk.NewCoin("coin0", sdk.NewInt(10))},
-			err:     fmt.Errorf("insufficient balance to transfer item with ID %v in cookbook with ID %v", items[1].ID, items[1].CookbookID),
+			err:     fmt.Errorf("insufficient balance to transfer item with ID %v in cookbook with ID %v", items[1].Id, items[1].CookbookId),
 		},
 		{
 			desc: "Invalid2",
@@ -202,7 +203,8 @@ func TestFindDoubleKey(t *testing.T) {
 			testedValue:  "one",
 			expectedBool: true,
 			expectedInt:  0,
-		}, {
+		},
+		{
 			desc: "Found, position non zero",
 			testedItem: Item{
 				Doubles: []DoubleKeyValue{
@@ -247,6 +249,7 @@ func TestFindDoubleKey(t *testing.T) {
 		})
 	}
 }
+
 func TestFindLong(t *testing.T) {
 	for _, tc := range []struct {
 		desc         string
@@ -326,7 +329,8 @@ func TestFindLongKey(t *testing.T) {
 			testedValue:  "zero",
 			expectedBool: true,
 			expectedInt:  1,
-		}, {
+		},
+		{
 			desc: "Found in position zero",
 			testedItem: Item{
 				Longs: []LongKeyValue{
@@ -397,7 +401,8 @@ func TestFindString(t *testing.T) {
 			testedValue:    "secondOne",
 			expectedBool:   true,
 			expectedString: "ipsum",
-		}, {
+		},
+		{
 			desc: "Empty string found",
 			testedItem: Item{
 				Strings: []StringKeyValue{
@@ -496,6 +501,7 @@ func TestFindStringKey(t *testing.T) {
 		})
 	}
 }
+
 func TestMatchItem(t *testing.T) {
 	for _, tc := range []struct {
 		desc             string
@@ -506,7 +512,7 @@ func TestMatchItem(t *testing.T) {
 		{
 			desc: "Match Successful",
 			itemInputToMatch: ItemInput{
-				ID: "test1",
+				Id: "test1",
 				Doubles: []DoubleInputParam{
 					{
 						Key:      "doubleone",
@@ -578,7 +584,7 @@ func TestMatchItem(t *testing.T) {
 		{
 			desc: "Double Key Not Available",
 			itemInputToMatch: ItemInput{
-				ID: "test1",
+				Id: "test1",
 				Doubles: []DoubleInputParam{
 					{
 						Key:      "doubleone",
@@ -593,7 +599,7 @@ func TestMatchItem(t *testing.T) {
 				},
 			},
 			itemToMatch: Item{
-				ID: "test1",
+				Id: "test1",
 				Doubles: []DoubleKeyValue{
 					{
 						Key:   "doubleone",
@@ -605,10 +611,11 @@ func TestMatchItem(t *testing.T) {
 				},
 			},
 			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", "doublethree", "test1"),
-		}, {
+		},
+		{
 			desc: "Double key is available but range do not match",
 			itemInputToMatch: ItemInput{
-				ID: "test1",
+				Id: "test1",
 				Doubles: []DoubleInputParam{
 					{
 						Key:      "doubleone",
@@ -623,7 +630,7 @@ func TestMatchItem(t *testing.T) {
 				},
 			},
 			itemToMatch: Item{
-				ID: "test1",
+				Id: "test1",
 				Doubles: []DoubleKeyValue{
 					{
 						Key:   "doubleone",
@@ -635,10 +642,11 @@ func TestMatchItem(t *testing.T) {
 				},
 			},
 			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", "doubletwo", "test1"),
-		}, {
+		},
+		{
 			desc: "Long Key Not Available",
 			itemInputToMatch: ItemInput{
-				ID: "test1",
+				Id: "test1",
 				Longs: []LongInputParam{
 					{
 						Key:      "longone",
@@ -653,7 +661,7 @@ func TestMatchItem(t *testing.T) {
 				},
 			},
 			itemToMatch: Item{
-				ID: "test1",
+				Id: "test1",
 				Longs: []LongKeyValue{
 					{
 						Key:   "longone",
@@ -665,10 +673,11 @@ func TestMatchItem(t *testing.T) {
 				},
 			},
 			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", "longthree", "test1"),
-		}, {
+		},
+		{
 			desc: "Long key is available but range do not match",
 			itemInputToMatch: ItemInput{
-				ID: "test1",
+				Id: "test1",
 				Longs: []LongInputParam{
 					{
 						Key:      "longone",
@@ -683,7 +692,7 @@ func TestMatchItem(t *testing.T) {
 				},
 			},
 			itemToMatch: Item{
-				ID: "test1",
+				Id: "test1",
 				Longs: []LongKeyValue{
 					{
 						Key:   "longone",
@@ -695,10 +704,11 @@ func TestMatchItem(t *testing.T) {
 				},
 			},
 			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", "longtwo", "test1"),
-		}, {
+		},
+		{
 			desc: "String Key Not Available",
 			itemInputToMatch: ItemInput{
-				ID: "test1",
+				Id: "test1",
 				Strings: []StringInputParam{
 					{
 						Key:   "stringone",
@@ -711,7 +721,7 @@ func TestMatchItem(t *testing.T) {
 				},
 			},
 			itemToMatch: Item{
-				ID: "test1",
+				Id: "test1",
 				Strings: []StringKeyValue{
 					{
 						Key:   "longone",
@@ -723,10 +733,11 @@ func TestMatchItem(t *testing.T) {
 				},
 			},
 			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", "stringone", "test1"),
-		}, {
+		},
+		{
 			desc: "String key is available but values do not match",
 			itemInputToMatch: ItemInput{
-				ID: "test1",
+				Id: "test1",
 				Strings: []StringInputParam{
 					{
 						Key:   "stringone",
@@ -739,7 +750,7 @@ func TestMatchItem(t *testing.T) {
 				},
 			},
 			itemToMatch: Item{
-				ID: "test1",
+				Id: "test1",
 				Strings: []StringKeyValue{
 					{
 						Key:   "stringone",

@@ -43,10 +43,10 @@ func (k Keeper) SetExecutionCount(ctx sdk.Context, count uint64) {
 // setExecutionByRecipe maps adds the execution to the store that maps executions on recipes
 func (k Keeper) setExecutionByRecipe(ctx sdk.Context, execution types.Execution) {
 	recpExecStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeExecutionKey))
-	recpExecStore = prefix.NewStore(recpExecStore, types.KeyPrefix(execution.CookbookID))
-	recpExecStore = prefix.NewStore(recpExecStore, types.KeyPrefix(execution.RecipeID))
-	byteKey := types.KeyPrefix(execution.ID)
-	bz := []byte(execution.ID)
+	recpExecStore = prefix.NewStore(recpExecStore, types.KeyPrefix(execution.CookbookId))
+	recpExecStore = prefix.NewStore(recpExecStore, types.KeyPrefix(execution.RecipeId))
+	byteKey := types.KeyPrefix(execution.Id)
+	bz := []byte(execution.Id)
 	recpExecStore.Set(byteKey, bz)
 }
 
@@ -70,7 +70,6 @@ func (k Keeper) getExecutionsByRecipePaginated(ctx sdk.Context, cookbookID, reci
 		}
 		return nil
 	})
-
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -106,17 +105,17 @@ func (k Keeper) GetAllExecutionByRecipe(ctx sdk.Context, cookbookID, recipeID st
 // setExecutionByItem maps adds the execution to the store that maps executions on items
 func (k Keeper) setExecutionByItem(ctx sdk.Context, execution types.Execution) {
 	itemExecStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemExecutionKey))
-	itemExecStore = prefix.NewStore(itemExecStore, types.KeyPrefix(execution.CookbookID))
-	for _, itemOutputID := range execution.ItemOutputIDs {
+	itemExecStore = prefix.NewStore(itemExecStore, types.KeyPrefix(execution.CookbookId))
+	for _, itemOutputID := range execution.ItemOutputIds {
 		itemExecStore = prefix.NewStore(itemExecStore, types.KeyPrefix(itemOutputID))
-		byteKey := types.KeyPrefix(execution.ID)
-		bz := []byte(execution.ID)
+		byteKey := types.KeyPrefix(execution.Id)
+		bz := []byte(execution.Id)
 		itemExecStore.Set(byteKey, bz)
 	}
-	for _, itemModifyOutputID := range execution.ItemModifyOutputIDs {
+	for _, itemModifyOutputID := range execution.ItemModifyOutputIds {
 		itemExecStore = prefix.NewStore(itemExecStore, types.KeyPrefix(itemModifyOutputID))
-		byteKey := types.KeyPrefix(execution.ID)
-		bz := []byte(execution.ID)
+		byteKey := types.KeyPrefix(execution.Id)
+		bz := []byte(execution.Id)
 		itemExecStore.Set(byteKey, bz)
 	}
 }
@@ -141,7 +140,6 @@ func (k Keeper) getExecutionsByItemPaginated(ctx sdk.Context, cookbookID, itemID
 		}
 		return nil
 	})
-
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -176,7 +174,7 @@ func (k Keeper) GetAllExecutionByItem(ctx sdk.Context, cookbookID, itemID string
 
 // ActualizeExecution removes a pending execution and moves it to the execution store
 func (k Keeper) ActualizeExecution(ctx sdk.Context, execution types.Execution) {
-	k.removePendingExecution(ctx, execution.ID)
+	k.removePendingExecution(ctx, execution.Id)
 	k.appendExecution(ctx, execution)
 }
 
@@ -185,7 +183,7 @@ func (k Keeper) appendExecution(ctx sdk.Context, execution types.Execution) {
 	// Create the execution
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
 	appendedValue := k.cdc.MustMarshal(&execution)
-	store.Set(types.KeyPrefix(execution.ID), appendedValue)
+	store.Set(types.KeyPrefix(execution.Id), appendedValue)
 
 	// Update execution count
 	count := k.GetExecutionCount(ctx)
@@ -204,7 +202,7 @@ func (k Keeper) GetExecution(ctx sdk.Context, id string) types.Execution {
 func (k Keeper) SetExecution(ctx sdk.Context, execution types.Execution) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
 	value := k.cdc.MustMarshal(&execution)
-	store.Set(types.KeyPrefix(execution.ID), value)
+	store.Set(types.KeyPrefix(execution.Id), value)
 
 	// add execution to recipe mapping
 	k.setExecutionByRecipe(ctx, execution)

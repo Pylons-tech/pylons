@@ -13,13 +13,13 @@ import (
 func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCookbook) (*types.MsgCreateCookbookResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	// Check if the value already exists
-	_, isFound := k.GetCookbook(ctx, msg.ID)
+	_, isFound := k.GetCookbook(ctx, msg.Id)
 	if isFound {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "ID %v already set", msg.ID)
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "ID %v already set", msg.Id)
 	}
 
-	var cookbook = types.Cookbook{
-		ID:           msg.ID,
+	cookbook := types.Cookbook{
+		Id:           msg.Id,
 		Creator:      msg.Creator,
 		NodeVersion:  k.EngineVersion(ctx),
 		Name:         msg.Name,
@@ -37,7 +37,7 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 
 	err := ctx.EventManager().EmitTypedEvent(&types.EventCreateCookbook{
 		Creator: cookbook.Creator,
-		ID:      cookbook.ID,
+		Id:      cookbook.Id,
 	})
 
 	telemetry.IncrCounter(1, "cookbook", "create")
@@ -49,9 +49,9 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Check if the value exists
-	origCookbook, isFound := k.GetCookbook(ctx, msg.ID)
+	origCookbook, isFound := k.GetCookbook(ctx, msg.Id)
 	if !isFound {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "ID %v not set", msg.ID)
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "ID %v not set", msg.Id)
 	}
 
 	// Check if the msg sender is the same as the current owner
@@ -59,8 +59,8 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
-	var updatedCookbook = types.Cookbook{
-		ID:           msg.ID,
+	updatedCookbook := types.Cookbook{
+		Id:           msg.Id,
 		Creator:      msg.Creator,
 		NodeVersion:  k.EngineVersion(ctx),
 		Name:         msg.Name,

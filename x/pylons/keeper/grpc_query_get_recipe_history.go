@@ -3,10 +3,11 @@ package keeper
 import (
 	"context"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (k Keeper) GetRecipeHistory(goCtx context.Context, req *types.QueryGetRecipeHistoryRequest) (*types.QueryGetRecipeHistoryResponse, error) {
@@ -16,11 +17,10 @@ func (k Keeper) GetRecipeHistory(goCtx context.Context, req *types.QueryGetRecip
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	val := k.GetAllExecuteRecipeHis(ctx, req.GetCookbookID(), req.GetRecipeID())
+	val := k.GetAllExecuteRecipeHis(ctx, req.GetCookbookId(), req.GetRecipeId())
 	if len(val) == 0 {
-		return nil, status.Error(codes.NotFound, "not found")
+		return &types.QueryGetRecipeHistoryResponse{History: []*types.RecipeHistory{}}, nil
 	}
 
 	return &types.QueryGetRecipeHistoryResponse{History: val}, nil
-
 }

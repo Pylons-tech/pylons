@@ -18,6 +18,7 @@ import (
 
 func TestSendItems(t *testing.T) {
 	net := network.New(t)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
@@ -45,7 +46,7 @@ func TestSendItems(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: executedItemID,
+				Id: executedItemID,
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -86,7 +87,7 @@ func TestSendItems(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{executedItemID},
+			EntryIds: []string{executedItemID},
 			Weight:   1,
 		},
 	})
@@ -172,13 +173,13 @@ func TestSendItems(t *testing.T) {
 		require.NoError(t, err)
 		var itemResp types.QueryGetItemResponse
 		require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-		require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+		require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 		require.Equal(t, height, itemResp.Item.LastUpdate)
 
 		itemRef := []types.ItemRef{
 			{
-				CookbookID: cookbookID,
-				ItemID:     itemResp.Item.ID,
+				CookbookId: cookbookID,
+				ItemId:     itemResp.Item.Id,
 			},
 		}
 

@@ -24,27 +24,27 @@ func (suite *IntegrationTestSuite) TestExecutionQuerySingle() {
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetExecutionRequest{ID: msgs[0].ID},
+			request:  &types.QueryGetExecutionRequest{Id: msgs[0].Id},
 			response: &types.QueryGetExecutionResponse{Completed: true, Execution: msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetExecutionRequest{ID: msgs[1].ID},
+			request:  &types.QueryGetExecutionRequest{Id: msgs[1].Id},
 			response: &types.QueryGetExecutionResponse{Completed: true, Execution: msgs[1]},
 		},
 		{
 			desc:     "Pending",
-			request:  &types.QueryGetExecutionRequest{ID: msgs[2].ID},
+			request:  &types.QueryGetExecutionRequest{Id: msgs[2].Id},
 			response: &types.QueryGetExecutionResponse{Completed: false, Execution: msgs[2]},
 		},
 		{
 			desc:    "InvalidKey",
-			request: &types.QueryGetExecutionRequest{ID: "not_found"},
+			request: &types.QueryGetExecutionRequest{Id: "not_found"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetExecutionRequest{ID: "90325"},
+			request: &types.QueryGetExecutionRequest{Id: "90325"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{

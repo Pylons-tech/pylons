@@ -23,17 +23,17 @@ func (suite *IntegrationTestSuite) TestPaymentInfoQuerySingle() {
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetPaymentInfoRequest{PurchaseID: msgs[0].PurchaseID},
+			request:  &types.QueryGetPaymentInfoRequest{PurchaseId: msgs[0].PurchaseId},
 			response: &types.QueryGetPaymentInfoResponse{PaymentInfo: msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetPaymentInfoRequest{PurchaseID: msgs[1].PurchaseID},
+			request:  &types.QueryGetPaymentInfoRequest{PurchaseId: msgs[1].PurchaseId},
 			response: &types.QueryGetPaymentInfoResponse{PaymentInfo: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetPaymentInfoRequest{PurchaseID: "missing"},
+			request: &types.QueryGetPaymentInfoRequest{PurchaseId: "missing"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{

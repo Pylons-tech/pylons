@@ -93,11 +93,11 @@ func (msg *MsgCreateTrade) ValidateBasic() error {
 	}
 
 	for _, item := range msg.ItemOutputs {
-		err := ValidateItemID(item.ItemID)
+		err := ValidateItemID(item.ItemId)
 		if err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
-		err = ValidateID(item.CookbookID)
+		err = ValidateID(item.CookbookId)
 		if err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
@@ -116,10 +116,11 @@ var _ sdk.Msg = &MsgCancelTrade{}
 
 func NewMsgCancelTrade(creator string, id uint64) *MsgCancelTrade {
 	return &MsgCancelTrade{
-		ID:      id,
+		Id:      id,
 		Creator: creator,
 	}
 }
+
 func (msg *MsgCancelTrade) Route() string {
 	return RouterKey
 }

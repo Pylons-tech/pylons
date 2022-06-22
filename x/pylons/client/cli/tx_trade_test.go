@@ -8,6 +8,7 @@ import (
 
 	"github.com/spf13/cast"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
@@ -23,6 +24,7 @@ import (
 
 func TestCreateTradeNoItemOutput1(t *testing.T) {
 	net := network.New(t)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
@@ -34,7 +36,7 @@ func TestCreateTradeNoItemOutput1(t *testing.T) {
 	// expect a dummy item
 	itemInputs, err := json.Marshal([]types.ItemInput{
 		{
-			ID:      "item",
+			Id:      "item",
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
@@ -88,14 +90,16 @@ func TestCreateTradeNoItemOutput1(t *testing.T) {
 }
 
 func TestCreateTradeNoItemOutput2(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin(testIBCDenom, sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin(testIBCDenom, sdk.NewInt(1))),
 			},
 		},
 	)
@@ -104,7 +108,7 @@ func TestCreateTradeNoItemOutput2(t *testing.T) {
 	// expect a dummy item
 	itemInputs, err := json.Marshal([]types.ItemInput{
 		{
-			ID:      "item",
+			Id:      "item",
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
@@ -161,7 +165,9 @@ func TestCreateTradeNoItemOutput2(t *testing.T) {
 }
 
 func TestCreateTradeItemOutput(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
@@ -188,7 +194,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -224,7 +230,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -294,7 +300,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	coinInputs, err := json.Marshal(
@@ -309,7 +315,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	// expect a dummy item
 	itemInputs, err := json.Marshal([]types.ItemInput{
 		{
-			ID:      "item",
+			Id:      "item",
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
@@ -325,8 +331,8 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	// no  item outputs
 	itemOutputs, err = json.Marshal([]types.ItemRef{
 		{
-			CookbookID: cookbookID,
-			ItemID:     itemID,
+			CookbookId: cookbookID,
+			ItemId:     itemID,
 		},
 	})
 	require.NoError(t, err)
@@ -371,7 +377,9 @@ func TestCreateTradeItemOutput(t *testing.T) {
 }
 
 func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
@@ -398,7 +406,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -434,7 +442,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -516,7 +524,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	coinInputs, err := json.Marshal(
@@ -531,7 +539,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 	// expect a dummy item
 	itemInputs, err := json.Marshal([]types.ItemInput{
 		{
-			ID:      "item",
+			Id:      "item",
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
@@ -547,8 +555,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 	// no  item outputs
 	itemOutputs, err = json.Marshal([]types.ItemRef{
 		{
-			CookbookID: cookbookID,
-			ItemID:     itemID,
+			CookbookId: cookbookID,
+			ItemId:     itemID,
 		},
 	})
 	require.NoError(t, err)
@@ -592,7 +600,9 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 }
 
 func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
@@ -619,7 +629,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -655,7 +665,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -737,7 +747,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	coinInputs, err := json.Marshal(
@@ -752,7 +762,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 	// expect a dummy item
 	itemInputs, err := json.Marshal([]types.ItemInput{
 		{
-			ID:      "item",
+			Id:      "item",
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
@@ -768,8 +778,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 	// no  item outputs
 	itemOutputs, err = json.Marshal([]types.ItemRef{
 		{
-			CookbookID: cookbookID,
-			ItemID:     itemID,
+			CookbookId: cookbookID,
+			ItemId:     itemID,
 		},
 	})
 	require.NoError(t, err)
@@ -813,7 +823,9 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 }
 
 func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	address, err := GenerateAddressWithAccount(ctx, t, net)
@@ -840,7 +852,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -876,7 +888,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -958,7 +970,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	coinInputs, err := json.Marshal(
@@ -973,7 +985,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 	// expect a dummy item
 	itemInputs, err := json.Marshal([]types.ItemInput{
 		{
-			ID:      "item",
+			Id:      "item",
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
@@ -989,8 +1001,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 	// no  item outputs
 	itemOutputs, err = json.Marshal([]types.ItemRef{
 		{
-			CookbookID: cookbookID,
-			ItemID:     itemID,
+			CookbookId: cookbookID,
+			ItemId:     itemID,
 		},
 	})
 	require.NoError(t, err)
@@ -1034,7 +1046,9 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 }
 
 func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	address, err := GenerateAddressWithAccount(ctx, t, net)
@@ -1061,7 +1075,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -1096,7 +1110,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -1178,13 +1192,13 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookID, itemResp.Item.CookbookId)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
 			},
 		},
 	)
@@ -1193,7 +1207,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	// expect a dummy item
 	itemInputs, err := json.Marshal([]types.ItemInput{
 		{
-			ID:      "item",
+			Id:      "item",
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
@@ -1209,8 +1223,8 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	// no  item outputs
 	itemOutputs, err = json.Marshal([]types.ItemRef{
 		{
-			CookbookID: cookbookID,
-			ItemID:     itemID,
+			CookbookId: cookbookID,
+			ItemId:     itemID,
 		},
 	})
 	require.NoError(t, err)
@@ -1255,14 +1269,16 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 }
 
 func TestCreateTradeInvalidCoinOutput(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
 			},
 		},
 	)
@@ -1271,7 +1287,7 @@ func TestCreateTradeInvalidCoinOutput(t *testing.T) {
 	// expect a dummy item
 	itemInputs, err := json.Marshal([]types.ItemInput{
 		{
-			ID:      "item",
+			Id:      "item",
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
@@ -1329,14 +1345,16 @@ func TestCreateTradeInvalidCoinOutput(t *testing.T) {
 }
 
 func TestCreateTradeInvalidItemOutput(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
 			},
 		},
 	)
@@ -1345,7 +1363,7 @@ func TestCreateTradeInvalidItemOutput(t *testing.T) {
 	// expect a dummy item
 	itemInputs, err := json.Marshal([]types.ItemInput{
 		{
-			ID:      "item",
+			Id:      "item",
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,
@@ -1362,8 +1380,8 @@ func TestCreateTradeInvalidItemOutput(t *testing.T) {
 	// no  item outputs
 	itemOutputs, err := json.Marshal([]types.ItemRef{
 		{
-			CookbookID: "fakeCookbook",
-			ItemID:     types.EncodeItemID(113345),
+			CookbookId: "fakeCookbook",
+			ItemId:     types.EncodeItemID(113345),
 		},
 	})
 	require.NoError(t, err)
@@ -1408,7 +1426,9 @@ func TestCreateTradeInvalidItemOutput(t *testing.T) {
 }
 
 func TestCancelTrade(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
@@ -1419,7 +1439,7 @@ func TestCancelTrade(t *testing.T) {
 	// expect a dummy item
 	itemInputs, err := json.Marshal([]types.ItemInput{
 		{
-			ID:      "item",
+			Id:      "item",
 			Doubles: nil,
 			Longs:   nil,
 			Strings: nil,

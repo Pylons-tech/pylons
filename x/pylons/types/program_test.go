@@ -203,9 +203,9 @@ func TestWeightedOutputActualize(t *testing.T) {
 	numIters := 10000000
 
 	wol1 := WeightedOutputsList{
-		WeightedOutputs{EntryIDs: []string{"one"}, Weight: 1},
-		WeightedOutputs{EntryIDs: []string{"two"}, Weight: 1},
-		WeightedOutputs{EntryIDs: []string{"three"}, Weight: 1},
+		WeightedOutputs{EntryIds: []string{"one"}, Weight: 1},
+		WeightedOutputs{EntryIds: []string{"two"}, Weight: 1},
+		WeightedOutputs{EntryIds: []string{"three"}, Weight: 1},
 	}
 
 	counts := []int{0, 0, 0}
@@ -231,9 +231,9 @@ func TestWeightedOutputActualize(t *testing.T) {
 	}
 
 	wol2 := WeightedOutputsList{
-		WeightedOutputs{EntryIDs: []string{"one"}, Weight: 10},
-		WeightedOutputs{EntryIDs: []string{"two"}, Weight: 10},
-		WeightedOutputs{EntryIDs: []string{"three"}, Weight: 10},
+		WeightedOutputs{EntryIds: []string{"one"}, Weight: 10},
+		WeightedOutputs{EntryIds: []string{"two"}, Weight: 10},
+		WeightedOutputs{EntryIds: []string{"three"}, Weight: 10},
 	}
 
 	counts = []int{0, 0, 0}
@@ -259,9 +259,9 @@ func TestWeightedOutputActualize(t *testing.T) {
 	}
 
 	wol3 := WeightedOutputsList{
-		WeightedOutputs{EntryIDs: []string{"one"}, Weight: 5},
-		WeightedOutputs{EntryIDs: []string{"two"}, Weight: 5},
-		WeightedOutputs{EntryIDs: []string{"three"}, Weight: 20},
+		WeightedOutputs{EntryIds: []string{"one"}, Weight: 5},
+		WeightedOutputs{EntryIds: []string{"two"}, Weight: 5},
+		WeightedOutputs{EntryIds: []string{"three"}, Weight: 20},
 	}
 
 	counts = []int{0, 0, 0}

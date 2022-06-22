@@ -16,7 +16,6 @@ import (
 
 func TestShowCookbook(t *testing.T) {
 	net, objs := networkWithCookbookObjects(t, 2)
-
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
@@ -30,7 +29,7 @@ func TestShowCookbook(t *testing.T) {
 	}{
 		{
 			desc: "found",
-			id:   objs[0].ID,
+			id:   objs[0].Id,
 			args: common,
 			obj:  objs[0],
 		},

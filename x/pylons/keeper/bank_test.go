@@ -1,12 +1,12 @@
 package keeper_test
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestHasEnoughBalance() {
-
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
@@ -33,7 +33,6 @@ func (suite *IntegrationTestSuite) TestHasEnoughBalance() {
 }
 
 func (suite *IntegrationTestSuite) TestHasEnoughIBCDenomBalance() {
-
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx

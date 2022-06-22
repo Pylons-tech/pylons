@@ -4,7 +4,6 @@ package Pylonstech.pylons.pylons;
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
-// this line is used by starport scaffolding # 1
 import "pylons/redeem_info.proto";
 import "pylons/payment_info.proto";
 import "pylons/accounts.proto";
@@ -26,14 +25,13 @@ service Query {
 
 // Queries a list of GetRecipeHistory items.
 	rpc GetRecipeHistory(QueryGetRecipeHistoryRequest) returns (QueryGetRecipeHistoryResponse) {
-		option (google.api.http).get = "/Pylons-tech/pylons/pylons/get_recipe_history/{cookbookID}/{recipeID}";
+		option (google.api.http).get = "/Pylons-tech/pylons/pylons/get_recipe_history/{cookbook_id}/{recipe_id}";
 	}
 
-// this line is used by starport scaffolding # 2
 
 	// Queries a redeemInfo by index.
 	rpc RedeemInfo(QueryGetRedeemInfoRequest) returns (QueryGetRedeemInfoResponse) {
-		option (google.api.http).get = "/pylons/redeem/{ID}";
+		option (google.api.http).get = "/pylons/redeem/{id}";
 	}
 
 	// Queries a list of redeemInfo items.
@@ -44,7 +42,7 @@ service Query {
 
 	// Queries a paymentInfo by index.
 	rpc PaymentInfo(QueryGetPaymentInfoRequest) returns (QueryGetPaymentInfoResponse) {
-		option (google.api.http).get = "/pylons/payment/{purchaseID}";
+		option (google.api.http).get = "/pylons/payment/{purchase_id}";
 	}
 
 	// Queries a list of paymentInfo items.
@@ -65,7 +63,7 @@ service Query {
 
 	// Queries a trade by id.
 	rpc Trade(QueryGetTradeRequest) returns (QueryGetTradeResponse) {
-		option (google.api.http).get = "/pylons/trade/{ID}";
+		option (google.api.http).get = "/pylons/trade/{id}";
 	}
 
 	// Queries a list of listItemByOwner items.
@@ -73,39 +71,39 @@ service Query {
 		option (google.api.http).get = "/pylons/items/{owner}";
 	}
 
-	// Queries a googleIAPOrder by PurchaseToken.
+	// Queries a googleIAPOrder by purchase_token.
 	rpc GoogleInAppPurchaseOrder(QueryGetGoogleInAppPurchaseOrderRequest) returns (QueryGetGoogleInAppPurchaseOrderResponse) {
-		option (google.api.http).get = "/pylons/iap/{PurchaseToken}";
+		option (google.api.http).get = "/pylons/iap/{purchase_token}";
 	}
 
 	// Queries a list of listExecutionsByItem items.
 	rpc ListExecutionsByItem(QueryListExecutionsByItemRequest) returns (QueryListExecutionsByItemResponse) {
-		option (google.api.http).get = "/pylons/executions/item/{CookbookID}/{ItemID}";
+		option (google.api.http).get = "/pylons/executions/item/{cookbook_id}/{item_id}";
 	}
 
 	// Queries a list of listExecutionsByRecipe items.
 	rpc ListExecutionsByRecipe(QueryListExecutionsByRecipeRequest) returns (QueryListExecutionsByRecipeResponse) {
-		option (google.api.http).get = "/pylons/executions/recipe/{CookbookID}/{RecipeID}";
+		option (google.api.http).get = "/pylons/executions/recipe/{cookbook_id}/{recipe_id}";
 	}
 
 	// Queries a execution by id.
 	rpc Execution(QueryGetExecutionRequest) returns (QueryGetExecutionResponse) {
-		option (google.api.http).get = "/pylons/execution/{ID}";
+		option (google.api.http).get = "/pylons/execution/{id}";
 	}
 
 	// Queries a list of listRecipesByCookbook items.
 	rpc ListRecipesByCookbook(QueryListRecipesByCookbookRequest) returns (QueryListRecipesByCookbookResponse) {
-		option (google.api.http).get = "/pylons/recipes/{CookbookID}";
+		option (google.api.http).get = "/pylons/recipes/{cookbook_id}";
 	}
 
-	// Queries a item by ID.
+	// Queries a item by id.
 	rpc Item(QueryGetItemRequest) returns (QueryGetItemResponse) {
-		option (google.api.http).get = "/pylons/item/{CookbookID}/{ID}";
+		option (google.api.http).get = "/pylons/item/{cookbook_id}/{id}";
 	}
 
-	// Retrieves a recipe by ID.
+	// Retrieves a recipe by id.
 	rpc Recipe(QueryGetRecipeRequest) returns (QueryGetRecipeResponse) {
-		option (google.api.http).get = "/pylons/recipe/{CookbookID}/{ID}";
+		option (google.api.http).get = "/pylons/recipe/{cookbook_id}/{id}";
 	}
 
 	// Retrieves the list of cookbooks owned by an address
@@ -113,9 +111,9 @@ service Query {
 		option (google.api.http).get = "/pylons/cookbooks/{creator}";
 	}
 
-	// Retrieves a cookbook by ID.
+	// Retrieves a cookbook by id.
 	rpc Cookbook(QueryGetCookbookRequest) returns (QueryGetCookbookResponse) {
-		option (google.api.http).get = "/pylons/cookbook/{ID}";
+		option (google.api.http).get = "/pylons/cookbook/{id}";
 	}
 }
 
@@ -127,15 +125,15 @@ message QueryListTradesByCreatorRequest {
 message QueryListTradesByCreatorResponse {
 	option (gogoproto.equal)           = false;
 	option (gogoproto.goproto_getters) = false;
-	repeated Trade Trades = 1 [(gogoproto.nullable) = false];
+	repeated Trade trades = 1 [(gogoproto.nullable) = false];
 
 	// pagination defines the pagination in the response.
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 message QueryGetRecipeHistoryRequest {
-  string cookbookID = 1;
-  string recipeID = 2;
+  string cookbook_id = 1;
+  string recipe_id = 2;
 }
 
 message QueryGetRecipeHistoryResponse {
@@ -143,22 +141,21 @@ message QueryGetRecipeHistoryResponse {
 }
 
 message RecipeHistory {
-	string ItemID = 1;
-	string CookbookID = 2;
-	string RecipeID = 3;
-	string Sender = 4;
-	string SenderName = 5;
-	string Receiver = 6;
-	string Amount = 7;
-	int64 Time = 8;
+	string item_id = 1;
+	string cookbook_id = 2;
+	string recipe_id = 3;
+	string sender = 4;
+	string sender_name = 5;
+	string receiver = 6;
+	string amount = 7;
+	int64 created_at = 8;
 }
-// this line is used by starport scaffolding # 3
 message QueryGetRedeemInfoRequest {
-	string ID = 1;
+	string id = 1;
 }
 
 message QueryGetRedeemInfoResponse {
-	RedeemInfo RedeemInfo = 1 [(gogoproto.nullable) = false];
+	RedeemInfo redeem_info = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryAllRedeemInfoRequest {
@@ -166,15 +163,15 @@ message QueryAllRedeemInfoRequest {
 }
 
 message QueryAllRedeemInfoResponse {
-	repeated RedeemInfo RedeemInfo = 1 [(gogoproto.nullable) = false];
+	repeated RedeemInfo redeem_info = 1 [(gogoproto.nullable) = false];
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 message QueryGetPaymentInfoRequest {
-	string purchaseID = 1;
+	string purchase_id = 1;
 }
 
 message QueryGetPaymentInfoResponse {
-	PaymentInfo PaymentInfo = 1 [(gogoproto.nullable) = false];
+	PaymentInfo payment_info = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryAllPaymentInfoRequest {
@@ -182,7 +179,7 @@ message QueryAllPaymentInfoRequest {
 }
 
 message QueryAllPaymentInfoResponse {
-	repeated PaymentInfo PaymentInfo = 1 [(gogoproto.nullable) = false];
+	repeated PaymentInfo payment_info = 1 [(gogoproto.nullable) = false];
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 message QueryGetUsernameByAddressRequest {
@@ -202,11 +199,11 @@ message QueryGetAddressByUsernameResponse {
 }
 
 message QueryGetTradeRequest {
-	uint64 ID = 1;
+	uint64 id = 1;
 }
 
 message QueryGetTradeResponse {
-	Trade Trade = 1 [(gogoproto.nullable) = false];
+	Trade trade = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryListItemByOwnerRequest {
@@ -219,34 +216,34 @@ message QueryListItemByOwnerRequest {
 message QueryListItemByOwnerResponse {
 	option (gogoproto.equal)           = false;
 	option (gogoproto.goproto_getters) = false;
-	repeated Item Items = 1 [(gogoproto.nullable) = false];
+	repeated Item items = 1 [(gogoproto.nullable) = false];
 
 	// pagination defines the pagination in the response.
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 message QueryGetGoogleInAppPurchaseOrderRequest {
-	string PurchaseToken = 1;
+	string purchase_token = 1;
 }
 
 message QueryGetGoogleInAppPurchaseOrderResponse {
-	GoogleInAppPurchaseOrder Order = 1 [(gogoproto.nullable) = false];
+	GoogleInAppPurchaseOrder order = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryListExecutionsByItemRequest {
 	option (gogoproto.equal)           = false;
 	option (gogoproto.goproto_getters) = false;
 
-	string CookbookID = 1;
-	string ItemID = 2;
+	string cookbook_id = 1;
+	string item_id = 2;
 
 	// pagination defines an optional pagination for the request.
 	cosmos.base.query.v1beta1.PageRequest pagination = 3;
 }
 
 message QueryListExecutionsByItemResponse {
-	repeated Execution CompletedExecutions = 1 [(gogoproto.nullable) = false];
-	repeated Execution PendingExecutions = 2 [(gogoproto.nullable) = false];
+	repeated Execution completed_executions = 1 [(gogoproto.nullable) = false];
+	repeated Execution pending_executions = 2 [(gogoproto.nullable) = false];
 
 	// pagination defines the pagination in the response.
 	cosmos.base.query.v1beta1.PageResponse pagination = 3;
@@ -256,60 +253,60 @@ message QueryListExecutionsByRecipeRequest {
 	option (gogoproto.equal)           = false;
 	option (gogoproto.goproto_getters) = false;
 
-	string CookbookID = 1;
-	string RecipeID = 2;
+	string cookbook_id = 1;
+	string recipe_id = 2;
 
 	// pagination defines an optional pagination for the request.
 	cosmos.base.query.v1beta1.PageRequest pagination = 3;
 }
 
 message QueryListExecutionsByRecipeResponse {
-	repeated Execution CompletedExecutions = 1 [(gogoproto.nullable) = false];
-	repeated Execution PendingExecutions = 2 [(gogoproto.nullable) = false];
+	repeated Execution completed_executions = 1 [(gogoproto.nullable) = false];
+	repeated Execution pending_executions = 2 [(gogoproto.nullable) = false];
 
 	// pagination defines the pagination in the response.
 	cosmos.base.query.v1beta1.PageResponse pagination = 3;
 }
 
 message QueryGetExecutionRequest {
-	string ID = 1;
+	string id = 1;
 }
 
 message QueryGetExecutionResponse {
-	Execution Execution = 1 [(gogoproto.nullable) = false];
-	bool Completed = 2;
+	Execution execution = 1 [(gogoproto.nullable) = false];
+	bool completed = 2;
 }
 
 message QueryListRecipesByCookbookRequest {
-  string CookbookID = 1;
+  string cookbook_id = 1;
 
 	// pagination defines an optional pagination for the request.
 	cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
 message QueryListRecipesByCookbookResponse {
-	repeated Recipe Recipes = 1 [(gogoproto.nullable) = false];
+	repeated Recipe recipes = 1 [(gogoproto.nullable) = false];
 
 	// pagination defines the pagination in the response.
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 message QueryGetItemRequest {
-	string CookbookID = 1;
-	string ID = 3;
+	string cookbook_id = 1;
+	string id = 3;
 }
 
 message QueryGetItemResponse {
-	Item Item = 1 [(gogoproto.nullable) = false];
+	Item item = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryGetRecipeRequest {
-	string CookbookID = 1;
-	string ID = 2;
+	string cookbook_id = 1;
+	string id = 2;
 }
 
 message QueryGetRecipeResponse {
-	Recipe Recipe = 1 [(gogoproto.nullable) = false];
+	Recipe recipe = 1 [(gogoproto.nullable) = false];
 }
 
 
@@ -321,17 +318,17 @@ message QueryListCookbooksByCreatorRequest {
 }
 
 message QueryListCookbooksByCreatorResponse {
-  repeated Cookbook Cookbooks = 1 [(gogoproto.nullable) = false];
+  repeated Cookbook cookbooks = 1 [(gogoproto.nullable) = false];
 
 	// pagination defines the pagination in the response.
 	cosmos.base.query.v1beta1.PageResponse pagination = 3;
 }
 
 message QueryGetCookbookRequest {
-	string ID = 1;
+	string id = 1;
 }
 
 message QueryGetCookbookResponse {
-	Cookbook Cookbook = 1 [(gogoproto.nullable) = false];
+	Cookbook cookbook = 1 [(gogoproto.nullable) = false];
 }
 

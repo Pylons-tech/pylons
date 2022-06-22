@@ -19,6 +19,7 @@ import (
 
 func TestCreateAccount(t *testing.T) {
 	net := network.New(t)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
@@ -130,6 +131,7 @@ func TestCreateAccount(t *testing.T) {
 
 func TestUpdateAccount(t *testing.T) {
 	net := network.New(t)
+
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 

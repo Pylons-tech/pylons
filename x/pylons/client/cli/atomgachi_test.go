@@ -12,6 +12,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -35,7 +36,8 @@ type atomgachiBasicSim struct {
 }
 
 func TestAtomgachiBasic(t *testing.T) {
-	net := network.New(t)
+	config := app.DefaultConfig()
+	net := network.New(t, config)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	var err error
@@ -86,13 +88,14 @@ func createMintRecipe(t *testing.T, simInfo *atomgachiBasicSim) {
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{{
-			ID: "atomgachiTestCreate",
+			Id: "atomgachiTestCreate",
 			Strings: []types.StringParam{
 				{
 					Key:     "name",
 					Value:   "testObject",
 					Program: "",
-				}},
+				},
+			},
 			MutableStrings:  nil,
 			TransferFee:     nil,
 			TradePercentage: simInfo.basicTradePercentage,
@@ -104,7 +107,7 @@ func createMintRecipe(t *testing.T, simInfo *atomgachiBasicSim) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"atomgachiTestCreate"},
+			EntryIds: []string{"atomgachiTestCreate"},
 			Weight:   1,
 		},
 	})
@@ -171,5 +174,5 @@ func mint(t *testing.T, simInfo *atomgachiBasicSim) {
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, simInfo.ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
-	require.Equal(t, cookbookIDAtomgachi, itemResp.Item.CookbookID)
+	require.Equal(t, cookbookIDAtomgachi, itemResp.Item.CookbookId)
 }

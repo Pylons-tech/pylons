@@ -12,7 +12,7 @@ import (
 
 // genTestPaymentInfoSignature generates a signed PaymentInfo message using privKey
 func genTestPaymentInfoSignature(purchaseID, address, productID string, amount types.Int, privKey cryptotypes.PrivKey) string {
-	msg := fmt.Sprintf("{\"purchaseID\":\"%s\",\"address\":\"%s\",\"amount\":\"%s\",\"productID\":\"%s\"}", purchaseID, address, amount.String(), productID)
+	msg := fmt.Sprintf("{\"purchase_id\":\"%s\",\"address\":\"%s\",\"amount\":\"%s\",\"product_id\":\"%s\"}", purchaseID, address, amount.String(), productID)
 	msgBytes := []byte(msg)
 	signedMsg, err := privKey.Sign(msgBytes)
 	if err != nil {
@@ -23,7 +23,7 @@ func genTestPaymentInfoSignature(purchaseID, address, productID string, amount t
 
 // genTestRedeemInfoSignature generates a signed RedeemInfo message using privKey
 func genTestRedeemInfoSignature(payoutID, address string, amount types.Int, privKey cryptotypes.PrivKey) string {
-	msg := fmt.Sprintf("{\"payoutID\":\"%s\",\"address\":\"%s\",\"amount\":\"%s\"}", payoutID, address, amount.String())
+	msg := fmt.Sprintf("{\"payout_id\":\"%s\",\"address\":\"%s\",\"amount\":\"%s\"}", payoutID, address, amount.String())
 	msgBytes := []byte(msg)
 	signedMsg, err := privKey.Sign(msgBytes)
 	if err != nil {
@@ -61,12 +61,12 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 			},
 			args: args{
 				pi: PaymentInfo{
-					PurchaseID:    "testPurchaseID",
+					PurchaseId:    "testPurchaseId",
 					ProcessorName: "Pylons_Inc",
 					PayerAddr:     GenTestBech32FromString("test"),
 					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
-					ProductID:     "testProductID",
-					Signature:     genTestPaymentInfoSignature("testPurchaseID", GenTestBech32FromString("test"), "testProductID", types.NewInt(1_000_000_000), privKey),
+					ProductId:     "testProductId",
+					Signature:     genTestPaymentInfoSignature("testPurchaseId", GenTestBech32FromString("test"), "testProductId", types.NewInt(1_000_000_000), privKey),
 				},
 			},
 			wantErr: false,
@@ -82,11 +82,11 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 			},
 			args: args{
 				pi: PaymentInfo{
-					PurchaseID:    "testPurchaseID",
+					PurchaseId:    "testPurchaseId",
 					ProcessorName: "Pylons_Inc",
 					PayerAddr:     GenTestBech32FromString("test"),
 					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
-					ProductID:     "testProductID",
+					ProductId:     "testProductId",
 					Signature:     "INVALID_SIGNATURE",
 				},
 			},
@@ -138,7 +138,7 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 			},
 			args: args{
 				ri: RedeemInfo{
-					ID:            "testRedeemID",
+					Id:            "testRedeemID",
 					ProcessorName: "Pylons_Inc",
 					Address:       GenTestBech32FromString("test"),
 					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
@@ -158,7 +158,7 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 			},
 			args: args{
 				ri: RedeemInfo{
-					ID:            "testRedeemID",
+					Id:            "testRedeemID",
 					ProcessorName: "Pylons_Inc",
 					Address:       GenTestBech32FromString("test"),
 					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd

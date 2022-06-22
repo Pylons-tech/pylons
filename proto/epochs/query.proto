@@ -5,14 +5,12 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "epochs/genesis.proto";
-// this line is used by starport scaffolding # 1
 
 option go_package = "github.com/Pylons-tech/pylons/x/epochs/types";
 
 // Query defines the gRPC querier service.
 service Query {
-    // this line is used by starport scaffolding # 2
-    // EpochInfos provide running epochInfos
+  // EpochInfos provide running epochInfos
   rpc EpochInfos(QueryEpochsInfoRequest) returns (QueryEpochsInfoResponse) {
     option (google.api.http).get = "/pylons/epochs/v1beta1/epochs";
   }
@@ -23,7 +21,6 @@ service Query {
   }
 }
 
-// this line is used by starport scaffolding # 3
 message QueryEpochsInfoRequest {}
 message QueryEpochsInfoResponse {
   repeated EpochInfo epochs = 1 [ (gogoproto.nullable) = false ];

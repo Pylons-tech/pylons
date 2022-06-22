@@ -60,7 +60,6 @@ func init() {
 func WeightedOperations(
 	appParams simtypes.AppParams, cdc codec.JSONCodec, bk types.BankKeeper, k keeper.Keeper,
 ) simulation.WeightedOperations {
-
 	var weightMsgCreateAcc int
 	var weightMsgUpdateAcc int
 	var weightMsgCreateCookbook int
@@ -127,7 +126,6 @@ func SimulateCreateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
 		msgType := (&types.MsgCreateAccount{}).Type()
@@ -161,7 +159,6 @@ func SimulateUpdateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
 		msgType := (&types.MsgCreateAccount{}).Type()
@@ -187,7 +184,6 @@ func SimulateCreateCookbook(bk types.BankKeeper, k keeper.Keeper) simtypes.Opera
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
 		msgType := (&types.MsgCreateCookbook{}).Type()
@@ -207,7 +203,7 @@ func SimulateCreateCookbook(bk types.BankKeeper, k keeper.Keeper) simtypes.Opera
 
 		msg := &types.MsgCreateCookbook{
 			Creator:      simAccount.Address.String(),
-			ID:           id,
+			Id:           id,
 			Name:         "namenamenamenamename",
 			Description:  "descriptiondescriptiondescription",
 			Developer:    "developer",
@@ -225,7 +221,6 @@ func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operati
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
 		msgType := (&types.MsgCreateRecipe{}).Type()
@@ -255,8 +250,8 @@ func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operati
 
 		msg := &types.MsgCreateRecipe{
 			Creator:       simAccount.Address.String(),
-			CookbookID:    cookbookID,
-			ID:            id,
+			CookbookId:    cookbookID,
+			Id:            id,
 			Name:          "namenamenamenamenamename",
 			Description:   "descriptiondescriptiondescription",
 			Version:       "v0.0.1",
@@ -279,7 +274,6 @@ func SimulateExecuteRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
-
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
 		msgType := (&types.MsgExecuteRecipe{}).Type()
@@ -303,10 +297,10 @@ func SimulateExecuteRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 
 		msg := &types.MsgExecuteRecipe{
 			Creator:         simAccount.Address.String(),
-			CookbookID:      cookbookID,
-			RecipeID:        recipeID,
+			CookbookId:      cookbookID,
+			RecipeId:        recipeID,
 			CoinInputsIndex: 0,
-			ItemIDs:         nil,
+			ItemIds:         nil,
 		}
 
 		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil

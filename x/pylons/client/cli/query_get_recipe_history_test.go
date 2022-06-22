@@ -39,13 +39,13 @@ func TestGetRecipeHistory(t *testing.T) {
 		},
 		{
 			desc:       "found",
-			cookbookID: objs[0].CookbookID,
-			recipeID:   objs[0].ID,
+			cookbookID: objs[0].CookbookId,
+			recipeID:   objs[0].Id,
 			args:       common,
 			obj: []types.RecipeHistory{
 				{
-					CookbookID: objs[0].CookbookID,
-					RecipeID:   objs[0].ID,
+					CookbookId: objs[0].CookbookId,
+					RecipeId:   objs[0].Id,
 					Sender:     address,
 					SenderName: "user",
 					Receiver:   net.Validators[0].Address.String(),
@@ -89,7 +89,7 @@ func TestGetRecipeHistory(t *testing.T) {
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
 			{
-				ID: "testID",
+				Id: "testID",
 				Doubles: []types.DoubleParam{
 					{
 						Key: "Mass",
@@ -124,7 +124,7 @@ func TestGetRecipeHistory(t *testing.T) {
 
 	itemOutputs, err := json.Marshal([]types.WeightedOutputs{
 		{
-			EntryIDs: []string{"testID"},
+			EntryIds: []string{"testID"},
 			Weight:   1,
 		},
 	})
@@ -181,5 +181,4 @@ func TestGetRecipeHistory(t *testing.T) {
 		require.Equal(t, len(tc[0].obj), len(resp.History))
 		require.Equal(t, tc[1].obj[0].Sender, resp.History[0].Sender)
 	}
-
 }

@@ -14,5 +14,4 @@ var (
 	ErrInvalidPendingExecution = sdkerrors.Register(ModuleName, 1103, "completing execution would create an inconsistent state")
 	ErrDuplicateUsername       = sdkerrors.Register(ModuleName, 1104, "username already taken by another account")
 	ErrItemLocked              = sdkerrors.Register(ModuleName, 1105, "item locked")
-	// this line is used by starport scaffolding # ibc/errors
 )

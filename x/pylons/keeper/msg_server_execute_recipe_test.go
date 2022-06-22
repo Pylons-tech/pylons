@@ -3,10 +3,11 @@ package keeper_test
 import (
 	"fmt"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestExecuteRecipe() {
@@ -27,7 +28,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe() {
 		idx := fmt.Sprintf("%d", i)
 		cookbook := &types.MsgCreateCookbook{
 			Creator:      creator,
-			ID:           idx,
+			Id:           idx,
 			Name:         "testCookbookName",
 			Description:  "descdescdescdescdescdesc",
 			Developer:    "",
@@ -39,8 +40,8 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe() {
 		require.NoError(err)
 		recipe := &types.MsgCreateRecipe{
 			Creator:       creator,
-			CookbookID:    idx,
-			ID:            idx,
+			CookbookId:    idx,
+			Id:            idx,
 			Name:          "testRecipeName",
 			Description:   "decdescdescdescdescdescdescdesc",
 			Version:       "v0.0.1",
@@ -55,28 +56,27 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe() {
 		}
 		_, err = srv.CreateRecipe(wctx, recipe)
 		require.NoError(err)
-		rst, found := k.GetRecipe(ctx, recipe.CookbookID, recipe.ID)
+		rst, found := k.GetRecipe(ctx, recipe.CookbookId, recipe.Id)
 		require.True(found)
-		require.Equal(recipe.ID, rst.ID)
+		require.Equal(recipe.Id, rst.Id)
 
 		execution := &types.MsgExecuteRecipe{
 			Creator:         types.TestCreator,
-			CookbookID:      idx,
-			RecipeID:        idx,
+			CookbookId:      idx,
+			RecipeId:        idx,
 			CoinInputsIndex: 0,
-			ItemIDs:         nil,
+			ItemIds:         nil,
 		}
 		_, err = srv.ExecuteRecipe(wctx, execution)
 		require.NoError(err)
 
-		completed, pending := k.GetAllExecutionByRecipe(ctx, recipe.CookbookID, recipe.ID)
+		completed, pending := k.GetAllExecutionByRecipe(ctx, recipe.CookbookId, recipe.Id)
 		require.Equal(0, len(completed))
 		require.Equal(1, len(pending))
 	}
 }
 
 func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
-
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -87,7 +87,7 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 
 	cookbook := types.Cookbook{
 		Creator:     owner,
-		ID:          "0",
+		Id:          "0",
 		NodeVersion: 0,
 		Name:        "Testing cookbook",
 		Enabled:     false,
@@ -96,7 +96,7 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 
 	for i := range items {
 		items[i].Owner = owner
-		items[i].CookbookID = cookbook.ID
+		items[i].CookbookId = cookbook.Id
 		items[i].TransferFee = coin
 		items[i].Tradeable = true
 		items[i].TradePercentage = sdk.ZeroDec()
@@ -119,13 +119,13 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 				Value: strIndex,
 			},
 		}
-		items[i].ID = k.AppendItem(ctx, items[i])
+		items[i].Id = k.AppendItem(ctx, items[i])
 	}
 
 	itemStr := make([]string, len(items))
 
 	for i, it := range items {
-		itemStr[i] = it.ID
+		itemStr[i] = it.Id
 	}
 
 	// Lock item 3 test the error
@@ -135,23 +135,23 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 		name          string
 		creator       string
 		testedMsg     types.MsgExecuteRecipe
-		inputItemsIDs []string
+		inputItemsIds []string
 		recipe        types.Recipe
 		expected      []types.Item
 		expectedError error
 	}{
 		{
 			name: "Size Mismatch Error Testing",
-			inputItemsIDs: []string{
+			inputItemsIds: []string{
 				"dummyInfo",
 			},
 			recipe: types.Recipe{
 				ItemInputs: []types.ItemInput{
 					{
-						ID: "dummyId1",
+						Id: "dummyId1",
 					},
 					{
-						ID: "dummyId2",
+						Id: "dummyId2",
 					},
 				},
 			},
@@ -160,13 +160,13 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 		}, {
 			name:    "Expect item with ID not found",
 			creator: types.GenTestBech32FromString("test2"),
-			inputItemsIDs: []string{
+			inputItemsIds: []string{
 				"nonExistentId",
 			},
 			recipe: types.Recipe{
 				ItemInputs: []types.ItemInput{
 					{
-						ID: "NonExistentId",
+						Id: "NonExistentId",
 					},
 				},
 			},
@@ -174,9 +174,9 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 		}, {
 			name:          "Different Owner",
 			creator:       types.GenTestBech32FromString("notyourkeysnotyouratoms"),
-			inputItemsIDs: itemStr,
+			inputItemsIds: itemStr,
 			recipe: types.Recipe{
-				CookbookID: cookbook.ID,
+				CookbookId: cookbook.Id,
 				ItemInputs: mapItems(itemStr),
 			},
 			expected:      nil,
@@ -184,12 +184,12 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 		}, {
 			name:          "Expect Locked Item Error",
 			creator:       owner,
-			inputItemsIDs: itemStr[3:4],
+			inputItemsIds: itemStr[3:4],
 			recipe: types.Recipe{
-				CookbookID: cookbook.ID,
+				CookbookId: cookbook.Id,
 				ItemInputs: []types.ItemInput{
 					{
-						ID: "validInput1",
+						Id: "validInput1",
 						Doubles: []types.DoubleInputParam{
 							{
 								Key:      "3",
@@ -217,12 +217,12 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 		}, {
 			name:          "Matching Successfull",
 			creator:       owner,
-			inputItemsIDs: itemStr[0:2],
+			inputItemsIds: itemStr[0:2],
 			recipe: types.Recipe{
-				CookbookID: cookbook.ID,
+				CookbookId: cookbook.Id,
 				ItemInputs: []types.ItemInput{
 					{
-						ID: "validInput1",
+						Id: "validInput1",
 						Doubles: []types.DoubleInputParam{
 							{
 								Key:      "0",
@@ -245,7 +245,7 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 						},
 					},
 					{
-						ID: "validInput2",
+						Id: "validInput2",
 						Doubles: []types.DoubleInputParam{
 							{
 								Key:      "1",
@@ -273,12 +273,12 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 		}, {
 			name:          "No Match Found",
 			creator:       owner,
-			inputItemsIDs: itemStr[0:1],
+			inputItemsIds: itemStr[0:1],
 			recipe: types.Recipe{
-				CookbookID: cookbook.ID,
+				CookbookId: cookbook.Id,
 				ItemInputs: []types.ItemInput{
 					{
-						ID: "UnexistentInput1",
+						Id: "UnexistentInput1",
 						Doubles: []types.DoubleInputParam{
 							{
 								Key:      "11",
@@ -307,7 +307,7 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 	}
 	for _, tc := range tests {
 		suite.Run(tc.name, func() {
-			listOfItems, err := k.MatchItemInputsForExecution(ctx, tc.creator, tc.inputItemsIDs, tc.recipe)
+			listOfItems, err := k.MatchItemInputsForExecution(ctx, tc.creator, tc.inputItemsIds, tc.recipe)
 			if err != nil {
 				require.Equal(err.Error(), tc.expectedError.Error())
 			} else {
@@ -321,7 +321,7 @@ func mapItems(items []string) []types.ItemInput {
 	returnInput := []types.ItemInput{}
 	for i, it := range items {
 		input := types.ItemInput{
-			ID: it,
+			Id: it,
 			Strings: []types.StringInputParam{
 				{
 					Key:   "strtest",

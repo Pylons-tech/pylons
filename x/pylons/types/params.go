@@ -27,10 +27,11 @@ var (
 		{
 			CoinDenom: PylonsCoinDenom,
 			Packages: []GoogleInAppPurchasePackage{
-				{PackageName: "com.pylons.loud", ProductID: "pylons_1000", Amount: sdk.NewInt(1000)},
-				{PackageName: "com.pylons.loud", ProductID: "pylons_55000", Amount: sdk.NewInt(55000)},
+				{PackageName: "tech.pylons.wallet", ProductId: "pylons_5", Amount: sdk.NewInt(5)},
+				{PackageName: "tech.pylons.wallet", ProductId: "pylons_20", Amount: sdk.NewInt(20)},
+				{PackageName: "tech.pylons.wallet", ProductId: "pylons_50", Amount: sdk.NewInt(50)},
 			},
-			GoogleInAppPurchasePubKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwZsjhk6eN5Pve9pP3uqz2MwBFixvmCRtQJoDQLTEJo3zTd9VMZcXoerQX8cnDPclZWmMZWkO+BWcN1ikYdGHvU2gC7yBLi+TEkhsEkixMlbqOGRdmNptJJhqxuVmXK+drWTb6W0IgQ9g8CuCjZUiMTc0UjHb5mPOE/IhcuTZ0wCHdoqc5FS2spdQqrohvSEP7gR4ZgGzYNI1U+YZHskIEm2qC4ZtSaX9J/fDkAmmJFV2hzeDMcljCxY9+ZM1mdzIpZKwM7O6UdWRpwD1QJ7yXND8AQ9M46p16F0VQuZbbMKCs90NIcKkx6jDDGbVmJrFnUT1Oq1uYxNYtiZjTp+JowIDAQAB",
+			GoogleInAppPurchasePubKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuMzgsJOZzyZvmOG8T9baGxDR/DWx6dgku7UdDfc6aGKthPGYouOa4KvLGEuNd+YTilwtEEryi3mmYAtl8MNtiAQCiry7HjdRNle8lLUHSKwBLVCswY3WGEAuW+5mo/V6X0klS8se65fIqCv2x/SKjtTZvKO/Oe3uehREMY1b8uWLrD5roubXzmaLsFGIRi5wdg8UWRe639LCNb2ghD2Uw0svBTJqn/ymsPmCfVjmCNNRDxfxzlA8O4EEKCK1qOdwIejMAfFMrN87u+0HTQbCKQ/xUQrR6fUhWT2mqttBGhi1NmTNBlUDyXYU+7ILbfJUVqQcKNDbFQd+xv9wBnXAhwIDAQAB",
 			EntityName:                "Pylons_Inc",
 		},
 	}
@@ -194,7 +195,7 @@ func (p Params) ValidateBasic() error {
 
 		if ci.GoogleInAppPurchasePubKey != "" {
 			for _, iapPackage := range ci.Packages {
-				if iapPackage.ProductID == "" {
+				if iapPackage.ProductId == "" {
 					return fmt.Errorf("empty string for PackageID")
 				}
 				if iapPackage.PackageName == "" {
@@ -272,7 +273,7 @@ func validateCoinIssuers(i interface{}) error {
 		}
 		if ci.GoogleInAppPurchasePubKey != "" {
 			for _, p := range ci.Packages {
-				if p.ProductID == "" {
+				if p.ProductId == "" {
 					return fmt.Errorf("empty string for PackageID")
 				}
 				if p.PackageName == "" {

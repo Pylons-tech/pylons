@@ -17,9 +17,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-var (
-	DefaultRelativePacketTimeoutTimestamp = uint64((time.Duration(10) * time.Minute).Nanoseconds())
-)
+var DefaultRelativePacketTimeoutTimestamp = uint64((time.Duration(10) * time.Minute).Nanoseconds())
 
 const (
 	// nolint: deadcode, unused
@@ -36,7 +34,6 @@ func GetTxCmd() *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	// this line is used by starport scaffolding # 1
 	cmd.AddCommand(CmdBurnDebtToken())
 
 	cmd.AddCommand(CmdUpdateAccount())

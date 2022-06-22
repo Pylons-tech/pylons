@@ -24,7 +24,6 @@ func (k Keeper) NewCelEnvCollectionFromItem(ctx sdk.Context, recipeID, tradeID s
 			varDefs...,
 		),
 	)
-
 	if err != nil {
 		return types.CelEnvCollection{}, err
 	}
@@ -37,12 +36,12 @@ func (k Keeper) NewCelEnvCollectionFromItem(ctx sdk.Context, recipeID, tradeID s
 func (k Keeper) NewCelEnvCollectionFromRecipe(ctx sdk.Context, pendingExecution types.Execution, recipe types.Recipe) (types.CelEnvCollection, error) {
 	// create environment variables from matched items
 	varDefs := types.BasicVarDefs()
-	variables := types.BasicVariables(ctx.BlockHeight(), recipe.ID, "")
+	variables := types.BasicVariables(ctx.BlockHeight(), recipe.Id, "")
 	itemInputs := recipe.ItemInputs
 
 	for idx, itemRecord := range pendingExecution.ItemInputs {
 		iPrefix1 := fmt.Sprintf("input%d", idx) + "."
-		item, found := k.GetItem(ctx, recipe.CookbookID, itemRecord.ID)
+		item, found := k.GetItem(ctx, recipe.CookbookId, itemRecord.Id)
 		if !found {
 			return types.NewCelEnvCollection(nil, nil, nil), sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "itemRecord item not found in store")
 		}
@@ -53,8 +52,8 @@ func (k Keeper) NewCelEnvCollectionFromRecipe(ctx sdk.Context, pendingExecution 
 		}
 
 		varDefs, variables = types.AddVariableFromItem(varDefs, variables, iPrefix1, item) // input0.level, input1.attack, input2.HP
-		if itemInputs[idx].ID != "" {
-			iPrefix2 := itemInputs[idx].ID + "."
+		if itemInputs[idx].Id != "" {
+			iPrefix2 := itemInputs[idx].Id + "."
 			varDefs, variables = types.AddVariableFromItem(varDefs, variables, iPrefix2, item) // sword.attack, monster.attack
 		}
 	}

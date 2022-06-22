@@ -16,7 +16,6 @@ import (
 
 func TestShowExecution(t *testing.T) {
 	net, objs := networkWithExecutionObjects(t, 2)
-
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
@@ -30,7 +29,7 @@ func TestShowExecution(t *testing.T) {
 	}{
 		{
 			desc: "found",
-			id:   fmt.Sprintf("%s", objs[0].ID),
+			id:   fmt.Sprintf("%s", objs[0].Id),
 			args: common,
 			obj:  objs[0],
 		},

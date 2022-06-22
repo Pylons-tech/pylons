@@ -10,8 +10,8 @@ var _ sdk.Msg = &MsgSetItemString{}
 func NewMsgSetItemString(creator string, cookbookID string, id string, field string, value string) *MsgSetItemString {
 	return &MsgSetItemString{
 		Creator:    creator,
-		CookbookID: cookbookID,
-		ID:         id,
+		CookbookId: cookbookID,
+		Id:         id,
 		Field:      field,
 		Value:      value,
 	}
@@ -43,10 +43,10 @@ func (msg *MsgSetItemString) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
-	if err = ValidateID(msg.CookbookID); err != nil {
+	if err = ValidateID(msg.CookbookId); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
-	if err = ValidateItemID(msg.ID); err != nil {
+	if err = ValidateItemID(msg.Id); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 	if err = ValidateID(msg.Field); err != nil {
