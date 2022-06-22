@@ -1,10 +1,12 @@
 package main
 
 import (
-	"fmt"
+	"strconv"
 
 	"github.com/spf13/cobra"
+	"github.com/tendermint/tendermint/libs/json"
 
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
@@ -14,18 +16,39 @@ func CmdDevCreate() *cobra.Command {
 		Short: "Creates and executes creation transactions Pylons recipe or cookbook files in the provided path, using credentials of provided account",
 		Args:  cobra.ExactArgs(2),
 		Run: func(cmd *cobra.Command, args []string) {
-			account := args[0]
+			accountName := args[0]
 			path := args[1]
-			ForFiles(path, perCookbook_Create, perRecipe_Create) // this can't work as-is, we need to use account credentials to generate anonymous functions
+			ForFiles(path, func(path string, cb types.Cookbook) {
+				c := cli.CmdCreateCookbook()
+				c.SetArgs([]string{cb.Id, cb.Name, cb.Description, cb.Developer, cb.Version, cb.SupportEmail, strconv.FormatBool(cb.Enabled)})
+				c.Flags().Set("from", accountName)
+				c.Execute()
+			}, func(path string, rcp types.Recipe) {
+				c := cli.CmdCreateRecipe()
+				coinInputJSON, err := json.Marshal(rcp.CoinInputs)
+				if err != nil {
+					panic(err)
+				}
+
+				itemInputJSON, err := json.Marshal(rcp.ItemInputs)
+				if err != nil {
+					panic(err)
+				}
+
+				outputJSON, err := json.Marshal(rcp.Outputs)
+				if err != nil {
+					panic(err)
+				}
+
+				c.SetArgs([]string{
+					rcp.CookbookId, rcp.Id, rcp.Name, rcp.Description, rcp.Version,
+					string(coinInputJSON), string(itemInputJSON), rcp.Entries.String(), string(outputJSON), strconv.FormatInt(rcp.BlockInterval, 10),
+					rcp.CostPerBlock.String(), rcp.ExtraInfo,
+				})
+				c.Flags().Set("from", accountName)
+				c.Execute()
+			})
 		},
 	}
 	return cmd
-}
-
-func perCookbook_Create(path string, _ types.Cookbook) {
-	fmt.Fprintln(Out, path, "is a valid cookbook")
-}
-
-func perRecipe_Create(path string, _ types.Recipe) {
-	fmt.Fprintln(Out, path, "is a valid recipe")
 }
