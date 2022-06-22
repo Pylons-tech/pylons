@@ -598,11 +598,11 @@ func (app *PylonsApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) 
 }
 
 // EndBlocker application updates every end block
-func (app *App) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
+func (app *PylonsApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
 	for k := range AccountTrack {
 		delete(AccountTrack, k)
 	}
-
+	return app.mm.EndBlock(ctx, req)
 }
 
 // InitChainer application update at chain initialization
