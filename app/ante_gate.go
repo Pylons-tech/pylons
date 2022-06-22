@@ -26,7 +26,7 @@ func (ad AnteSpamMigitationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, sim
 			return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
 		}
 
-		// get max txs in a block, default is 5
+		// get max txs in a block, default is 20
 		params := ad.pk.GetParams(ctx)
 		maxTxs := params.MaxTxsInBlock
 
