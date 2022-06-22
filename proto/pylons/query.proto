@@ -50,6 +50,16 @@ service Query {
 		option (google.api.http).get = "/pylons/payments";
 	}
 
+	// Queries a paymentRefund by index.
+	rpc PaymentRefund(QueryGetPaymentRefundRequest) returns (QueryGetPaymentRefundResponse) {
+		option (google.api.http).get = "/pylons/payment/{purchase_id}";
+	}
+
+	// Queries a list of paymentInfo items.
+	rpc PaymentRefundAll(QueryAllPaymentRefundRequest) returns (QueryAllPaymentRefundResponse) {
+		option (google.api.http).get = "/pylons/payments";
+	}
+
 
 	// Queries a list of getAccountByAddress items.
 	rpc UsernameByAddress(QueryGetUsernameByAddressRequest) returns (QueryGetUsernameByAddressResponse) {
@@ -174,6 +184,14 @@ message QueryGetPaymentInfoResponse {
 	PaymentInfo payment_info = 1 [(gogoproto.nullable) = false];
 }
 
+message QueryGetPaymentRefundRequest {
+	string purchase_id = 1;
+}
+
+message QueryGetPaymentRefundResponse {
+	PaymentInfo payment_refund = 1 [(gogoproto.nullable) = false];
+}
+
 message QueryAllPaymentInfoRequest {
 	cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
@@ -182,6 +200,16 @@ message QueryAllPaymentInfoResponse {
 	repeated PaymentInfo payment_info = 1 [(gogoproto.nullable) = false];
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
+
+message QueryAllPaymentRefundRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllPaymentRefundResponse {
+	repeated PaymentInfo payment_refund = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
 message QueryGetUsernameByAddressRequest {
   string address = 1;
 }
