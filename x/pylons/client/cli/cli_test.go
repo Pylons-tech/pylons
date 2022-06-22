@@ -15,6 +15,7 @@ import (
 	bank "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	"github.com/stretchr/testify/require"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
@@ -82,7 +83,7 @@ func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.N
 
 func networkWithRedeemInfoObjects(t *testing.T, n int) (*network.Network, []types.RedeemInfo) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -99,7 +100,7 @@ func networkWithRedeemInfoObjects(t *testing.T, n int) (*network.Network, []type
 
 func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.UserMap) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -120,7 +121,7 @@ func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.U
 
 func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Trade) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -150,7 +151,7 @@ func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Tra
 
 func networkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, []types.Trade) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -179,7 +180,7 @@ func networkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, 
 //	 	N cookbooks
 func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.Cookbook) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -210,7 +211,7 @@ func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 // 		N executions (1 per recipe)
 func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types.Execution) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -242,7 +243,7 @@ func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types
 
 func networkWithGoogleIAPOrderObjects(t *testing.T, n int) (*network.Network, []types.GoogleInAppPurchaseOrder) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -257,7 +258,7 @@ func networkWithGoogleIAPOrderObjects(t *testing.T, n int) (*network.Network, []
 
 func networkWithPaymentInfoObjects(t *testing.T, n int) (*network.Network, []types.PaymentInfo) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -273,7 +274,7 @@ func networkWithPaymentInfoObjects(t *testing.T, n int) (*network.Network, []typ
 
 func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -304,7 +305,7 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item
 
 func networkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, []types.Item) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -335,7 +336,7 @@ func networkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, [
 
 func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Recipe, []types.Cookbook) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
@@ -367,7 +368,7 @@ func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Re
 
 func networkWithRecipeObjectsHistory(t *testing.T, n int) (*network.Network, []types.Recipe, []types.Cookbook) {
 	t.Helper()
-	cfg := network.DefaultConfig()
+	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 

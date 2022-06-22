@@ -17,9 +17,10 @@ import (
 	stakingcli "github.com/cosmos/cosmos-sdk/x/staking/client/cli"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Pylons-tech/pylons/testutil/network"
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/cosmos/cosmos-sdk/testutil/network"
 
 	epochtypes "github.com/Pylons-tech/pylons/x/epochs/types"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -66,7 +67,7 @@ func distributionPylonsGenesis(feesAmount sdk.Coin) *types.GenesisState {
 // DefaultConfig will initialize config for the network with custom application,
 // genesis and single validator. All other parameters are inherited from cosmos-sdk/testutil/network.DefaultConfig
 func distributionNetworkConfig(feesAmount sdk.Coin) network.Config {
-	config := network.DefaultConfig()
+	config := app.DefaultConfig()
 	config.NumValidators = 1
 
 	cdc := config.Codec
