@@ -3,8 +3,13 @@ package network
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"testing"
 	"time"
+
+	pruningtypes "github.com/cosmos/cosmos-sdk/pruning/types"
+	"github.com/cosmos/cosmos-sdk/server"
+	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
@@ -21,7 +26,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/simapp"
-	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -36,6 +40,53 @@ type (
 	Config  = network.Config
 )
 
+type startArgs struct {
+	algo          string
+	apiAddress    string
+	chainID       string
+	enableLogging bool
+	grpcAddress   string
+	minGasPrices  string
+	numValidators int
+	outputDir     string
+	printMnemonic bool
+	rpcAddress    string
+}
+
+var (
+	flagNodeDirPrefix     = "node-dir-prefix"
+	flagNumValidators     = "v"
+	flagOutputDir         = "output-dir"
+	flagNodeDaemonHome    = "node-daemon-home"
+	flagStartingIPAddress = "starting-ip-address"
+	flagEnableLogging     = "enable-logging"
+	flagGRPCAddress       = "grpc.address"
+	flagRPCAddress        = "rpc.address"
+	flagAPIAddress        = "api.address"
+	flagPrintMnemonic     = "print-mnemonic"
+)
+
+type initArgs struct {
+	algo              string
+	chainID           string
+	keyringBackend    string
+	minGasPrices      string
+	nodeDaemonHome    string
+	nodeDirPrefix     string
+	numValidators     int
+	outputDir         string
+	startingIPAddress string
+	accountType       string
+}
+
+func addTestnetFlagsToCmd(cmd *cobra.Command) {
+	cmd.Flags().Int(flagNumValidators, 4, "Number of validators to initialize the testnet with")
+	cmd.Flags().StringP(flagOutputDir, "o", "./.testnets", "Directory to store initialization data for the testnet")
+	cmd.Flags().String(flags.FlagChainID, "", "genesis file chain-id, if left blank will be randomly created")
+	cmd.Flags().String(server.FlagMinGasPrices, fmt.Sprintf("0.000006%s", sdk.DefaultBondDenom), "Minimum gas prices to accept for transactions; All fees in a tx must meet this minimum (e.g. 0.01photino,0.001stake)")
+	cmd.Flags().String(flags.FlagKeyAlgorithm, string(hd.Secp256k1Type), "Key signing algorithm to generate keys for")
+}
+
 // New creates instance with fully configured cosmos network.
 // Accepts optional config, that will be used in place of the DefaultConfig() if provided.
 func New(t *testing.T, configs ...network.Config) *network.Network {
@@ -48,7 +99,36 @@ func New(t *testing.T, configs ...network.Config) *network.Network {
 	} else {
 		cfg = configs[0]
 	}
-	net := network.New(t, cfg)
+
+	networkConfig := network.DefaultConfig()
+	args := initArgs{}
+
+	// Default networkConfig.ChainID is random, and we should only override it if chainID provided
+	// is non-empty
+	if args.chainID != "" {
+		networkConfig.ChainID = args.chainID
+	}
+	networkConfig.SigningAlgo = args.algo
+	networkConfig.MinGasPrices = args.minGasPrices
+	networkConfig.NumValidators = args.numValidators
+	networkConfig.EnableTMLogging = args.enableLogging
+	networkConfig.RPCAddress = args.rpcAddress
+	networkConfig.APIAddress = args.apiAddress
+	networkConfig.GRPCAddress = args.grpcAddress
+	networkConfig.PrintMnemonic = args.printMnemonic
+	networkLogger := network.NewCLILogger(cmd)
+
+	baseDir := fmt.Sprintf("%s/%s", args.outputDir, networkConfig.ChainID)
+	if _, err := os.Stat(baseDir); !os.IsNotExist(err) {
+		return fmt.Errorf(
+			"testnests directory already exists for chain-id '%s': %s, please remove or select a new --chain-id",
+			networkConfig.ChainID, baseDir)
+	}
+
+	net, err := network.New(networkLogger, baseDir, cfg)
+	if err != nil {
+		panic(err)
+	}
 	t.Cleanup(net.Cleanup)
 
 	// create accounts for the validators
@@ -92,20 +172,20 @@ func DefaultConfig() network.Config {
 				val.Ctx.Logger, tmdb.NewMemDB(), nil, true, map[int64]bool{}, val.Ctx.Config.RootDir, 0,
 				encoding,
 				simapp.EmptyAppOptions{},
-				baseapp.SetPruning(storetypes.NewPruningOptionsFromString(val.AppConfig.Pruning)),
+				baseapp.SetPruning(pruningtypes.NewPruningOptionsFromString(val.AppConfig.Pruning)),
 				baseapp.SetMinGasPrices(val.AppConfig.MinGasPrices),
 			)
 		},
 		GenesisState:    genState,
 		TimeoutCommit:   2 * time.Second,
-		ChainID:         "chain-" + tmrand.NewRand().Str(6),
+		ChainID:         "chain-" + tmrand.Str(6),
 		NumValidators:   1,
 		BondDenom:       sdk.DefaultBondDenom,
 		MinGasPrices:    fmt.Sprintf("0%s", sdk.DefaultBondDenom),
 		AccountTokens:   sdk.TokensFromConsensusPower(1_000_000, sdk.DefaultPowerReduction),
 		StakingTokens:   sdk.TokensFromConsensusPower(1_000_000, sdk.DefaultPowerReduction),
 		BondedTokens:    sdk.TokensFromConsensusPower(30, sdk.DefaultPowerReduction),
-		PruningStrategy: storetypes.PruningOptionNothing,
+		PruningStrategy: pruningtypes.PruningOptionNothing,
 		CleanupDir:      true,
 		SigningAlgo:     string(hd.Secp256k1Type),
 		KeyringOptions:  []keyring.Option{},
