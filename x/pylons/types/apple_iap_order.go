@@ -12,7 +12,7 @@ import (
 )
 
 func ValidateApplePay(msg *MsgAppleIap) (*AppleInAppPurchaseOrder, error) {
-	receiptData, err := verifyCertificate(msg.Data)
+	receiptData, err := verifyCertificate(msg.ReceiptDataBase64)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,16 @@ func ValidateApplePay(msg *MsgAppleIap) (*AppleInAppPurchaseOrder, error) {
 	if err != nil {
 		return nil, err
 	}
-	transactionID, err := getValue(info.Bytes)
+	// object for product id
+	productID, err := getValue(info.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	rest, err = asn1.Unmarshal(rest, &info)
+	if err != nil {
+		return nil, err
+	}
+	purchaseID, err := getValue(info.Bytes)
 	if err != nil {
 		return nil, err
 	}
@@ -52,15 +61,10 @@ func ValidateApplePay(msg *MsgAppleIap) (*AppleInAppPurchaseOrder, error) {
 	if err != nil {
 		return nil, err
 	}
-	// object for product id
-	productID, err := getValue(info.Bytes)
-	if err != nil {
-		return nil, err
-	}
 	return &AppleInAppPurchaseOrder{
-		TransactionID: transactionID,
-		PurchaseDate:  txDate,
-		ProductID:     productID,
+		PurchaseID:   purchaseID,
+		PurchaseDate: txDate,
+		ProductID:    productID,
 	}, nil
 }
 
@@ -172,7 +176,7 @@ func skipIndices(rest []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	rest, err = getObject(SkipObjectParse15, info.Bytes, &info)
+	rest, err = getObject(SkipObjectParse14, info.Bytes, &info)
 	if err != nil {
 		return nil, err
 	}

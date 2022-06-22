@@ -7,7 +7,7 @@ func (suite *IntegrationTestSuite) TestAppleIAPOrderGet() {
 
 	items := createNAppleIAPOrder(k, ctx, 10)
 	for _, item := range items {
-		require.Equal(item, k.GetAppleIAPOrder(ctx, item.TransactionID))
+		require.Equal(item, k.GetAppleIAPOrder(ctx, item.PurchaseID))
 	}
 }
 
@@ -18,7 +18,7 @@ func (suite *IntegrationTestSuite) TestAppleIAPOrderExist() {
 
 	items := createNAppleIAPOrder(k, ctx, 10)
 	for _, item := range items {
-		require.True(k.HasAppleIAPOrder(ctx, item.TransactionID))
+		require.True(k.HasAppleIAPOrder(ctx, item.PurchaseID))
 	}
 }
 

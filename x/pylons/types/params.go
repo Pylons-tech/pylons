@@ -27,9 +27,9 @@ var (
 		{
 			CoinDenom: PylonsCoinDenom,
 			Packages: []GoogleInAppPurchasePackage{
-				{PackageName: "tech.pylons.wallet", ProductId: "pylons_5", Amount: sdk.NewInt(5)},
-				{PackageName: "tech.pylons.wallet", ProductId: "pylons_20", Amount: sdk.NewInt(20)},
-				{PackageName: "tech.pylons.wallet", ProductId: "pylons_50", Amount: sdk.NewInt(50)},
+				{PackageName: "tech.pylons.wallet", ProductId: "pylons_10", Amount: sdk.NewInt(10)},
+				{PackageName: "tech.pylons.wallet", ProductId: "pylons_35", Amount: sdk.NewInt(35)},
+				{PackageName: "tech.pylons.wallet", ProductId: "pylons_60", Amount: sdk.NewInt(60)},
 			},
 			GoogleInAppPurchasePubKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuMzgsJOZzyZvmOG8T9baGxDR/DWx6dgku7UdDfc6aGKthPGYouOa4KvLGEuNd+YTilwtEEryi3mmYAtl8MNtiAQCiry7HjdRNle8lLUHSKwBLVCswY3WGEAuW+5mo/V6X0klS8se65fIqCv2x/SKjtTZvKO/Oe3uehREMY1b8uWLrD5roubXzmaLsFGIRi5wdg8UWRe639LCNb2ghD2Uw0svBTJqn/ymsPmCfVjmCNNRDxfxzlA8O4EEKCK1qOdwIejMAfFMrN87u+0HTQbCKQ/xUQrR6fUhWT2mqttBGhi1NmTNBlUDyXYU+7ILbfJUVqQcKNDbFQd+xv9wBnXAhwIDAQAB",
 			EntityName:                "Pylons_Inc",

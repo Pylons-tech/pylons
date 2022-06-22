@@ -18,8 +18,8 @@ func TestValidateAppleIAPSignatureSelfSigned(t *testing.T) {
 		msg     *MsgAppleIap
 		wantErr bool
 	}{
-		{"valid purchase", &MsgAppleIap{Data: data}, false},
-		{"invalid purchase", &MsgAppleIap{Data: "testdata"}, true},
+		{"valid purchase", &MsgAppleIap{ReceiptDataBase64: data}, false},
+		{"invalid purchase", &MsgAppleIap{ReceiptDataBase64: "testdata"}, true},
 	}
 
 	for _, tt := range tests {

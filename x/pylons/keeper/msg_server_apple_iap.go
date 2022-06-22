@@ -17,7 +17,14 @@ func (k msgServer) AppleIap(goCtx context.Context, msg *types.MsgAppleIap) (*typ
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid receipt")
 	}
 
-	if k.HasAppleIAPOrder(ctx, receipt.TransactionID) {
+	if receipt.PurchaseID != msg.PurchaseID {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid transaction token")
+	}
+	if receipt.ProductID != msg.ProductID {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid product id")
+	}
+
+	if k.HasAppleIAPOrder(ctx, receipt.PurchaseID) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the Apple IAP order ID is already being used")
 	}
 
@@ -26,7 +33,7 @@ func (k msgServer) AppleIap(goCtx context.Context, msg *types.MsgAppleIap) (*typ
 CoinIssuersLoop:
 	for _, ci := range types.DefaultCoinIssuers {
 		for _, p := range ci.Packages {
-			if p.ProductID == receipt.ProductID {
+			if p.ProductId == receipt.ProductID {
 				coinIssuer = ci
 				iapPackage = p
 				break CoinIssuersLoop
@@ -38,14 +45,8 @@ CoinIssuersLoop:
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid product id")
 	}
 
-	iap := types.AppleInAppPurchaseOrder{
-		Quantity:      receipt.Quantity,
-		ProductID:     receipt.ProductID,
-		TransactionID: receipt.TransactionID,
-		PurchaseDate:  receipt.PurchaseDate,
-		Creator:       msg.Creator,
-	}
-	k.SetAppleIAPOrder(ctx, iap)
+	receipt.Creator = msg.Creator
+	k.SetAppleIAPOrder(ctx, *receipt)
 	// if address is invalid, it will already fail before the message handling gets here
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
 
@@ -58,8 +59,8 @@ CoinIssuersLoop:
 	_ = ctx.EventManager().EmitTypedEvent(&types.EventApplePurchase{
 		Creator:           msg.Creator,
 		ProductID:         receipt.ProductID,
-		TransactionID:     receipt.TransactionID,
-		ReceiptDataBase64: msg.Data,
+		TransactionID:     receipt.PurchaseID,
+		ReceiptDataBase64: msg.ReceiptDataBase64,
 	})
 
 	return &types.MsgAppleIapResponse{}, nil
