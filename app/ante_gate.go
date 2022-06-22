@@ -20,11 +20,7 @@ func NewSpamMigitationAnteDecorator(pylonsmodulekeeper PylonsKeeper) AnteSpamMig
 
 // AnteDecorator
 func (ad AnteSpamMigitationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
-	fmt.Println("simulate")
-
-	fmt.Println(simulate)
 	if (ctx.IsCheckTx() || ctx.IsReCheckTx()) && !simulate {
-
 		sigTx, ok := tx.(authsigning.SigVerifiableTx)
 		if !ok {
 			return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
