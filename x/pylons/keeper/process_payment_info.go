@@ -57,6 +57,79 @@ func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.Paymen
 	return nil
 }
 
+// ValidateProcessPaymentInfos lock payments to store, check provided paymentInfos can process later
+func (k Keeper) ValidateProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.PaymentInfo, senderAddr sdk.AccAddress) error {
+	paymentProcessors := k.PaymentProcessors(ctx)
+	for _, pi := range paymentInfos {
+		if k.HasPaymentInfo(ctx, pi.PurchaseId) {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the purchase ID is already being used")
+		}
+
+		found := false
+		for _, pp := range paymentProcessors {
+			if pi.ProcessorName == pp.Name {
+				found = true
+
+				addr, _ := sdk.AccAddressFromBech32(pi.PayerAddr)
+				if !addr.Equals(senderAddr) {
+					return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", pi.PurchaseId)
+				}
+
+				err := pp.ValidatePaymentInfo(pi)
+				if err != nil {
+					return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", pi.PurchaseId, err.Error())
+				}
+
+				k.SetPaymentInfo(ctx, pi)
+				break
+			}
+		}
+		if !found {
+			return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "could not find %s among valid payment processors", pi.ProcessorName)
+		}
+	}
+
+	return nil
+}
+
+// CompleteProcessPaymentInfos issues coins based on provided paymentInfos to the senderAddr (use when execution is completed)
+func (k Keeper) CompleteProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.PaymentInfo) error {
+	paymentProcessors := k.PaymentProcessors(ctx)
+	for _, pi := range paymentInfos {
+		// check payment be locked before
+		paymentInfor, found := k.GetPaymentInfo(ctx, pi.PurchaseId)
+		if !found || pi != paymentInfor {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the payment info is not existing")
+		}
+
+		for _, pp := range paymentProcessors {
+			if pi.ProcessorName == pp.Name {
+
+				addr, _ := sdk.AccAddressFromBech32(pi.PayerAddr)
+
+				amt := pi.Amount
+				// account for network fees
+				burnAmt := amt.ToDec().Mul(pp.ProcessorPercentage).RoundInt()
+				feesAmt := amt.ToDec().Mul(pp.ValidatorsPercentage).RoundInt()
+
+				mintCoins := sdk.NewCoins(sdk.NewCoin(pp.CoinDenom, pi.Amount))
+				burnCoins := sdk.NewCoins(sdk.NewCoin(pp.CoinDenom, burnAmt))
+				feesCoins := sdk.NewCoins(sdk.NewCoin(pp.CoinDenom, feesAmt))
+
+				// mint token, pay for fees
+				err := k.MintCreditToAddr(ctx, addr, mintCoins, burnCoins, feesCoins)
+				if err != nil {
+					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				}
+
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
 // ValidatePaymentInfo verifies that the receipts provided can cover for the entire balance of coins controlled by paymentProcessors
 // where sendEnable is false
 func (k Keeper) ValidatePaymentInfo(ctx sdk.Context, paymentInfos []types.PaymentInfo, toPay sdk.Coins) error {

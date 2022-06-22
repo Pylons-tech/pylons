@@ -66,40 +66,6 @@ func (k Keeper) MintCreditToAddr(ctx sdk.Context, addr sdk.AccAddress, amounts, 
 	return nil
 }
 
-// revert from MintCreditToAddr
-func (k Keeper) RevertMintCreditToAddr(ctx sdk.Context, addr sdk.AccAddress, mintedAmounts, burnedAmount, fees sdk.Coins) error {
-	ppMacc := types.PaymentsProcessorName
-	feesMacc := types.FeeCollectorName
-
-	sentAmount := mintedAmounts.Sub(burnedAmount).Sub(fees)
-
-	// get back the fee sent to the fee collector
-	err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, feesMacc, ppMacc, fees)
-	if err != nil {
-		return err
-	}
-
-	//  get back coins sent to the address
-	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, addr, ppMacc, sentAmount)
-	if err != nil {
-		return err
-	}
-
-	// revert burn action
-	err = k.MintCoins(ctx, ppMacc, burnedAmount)
-	if err != nil {
-		return err
-	}
-
-	// revert mint coins to minter module account
-	err = k.BurnCoins(ctx, ppMacc, mintedAmounts)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (k Keeper) BurnCreditFromAddr(ctx sdk.Context, addr sdk.AccAddress, amt sdk.Coins) error {
 	macc := types.PaymentsProcessorName
 

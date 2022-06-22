@@ -112,7 +112,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 
 	if len(msg.PaymentInfos) != 0 {
 		// client is providing payments receipts
-		err = k.ProcessPaymentInfos(ctx, msg.PaymentInfos, addr)
+		err = k.ValidateProcessPaymentInfos(ctx, msg.PaymentInfos, addr)
 		if err != nil {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}

@@ -13,11 +13,6 @@ func (k Keeper) SetPaymentProcessHistory(ctx sdk.Context, processHistory types.P
 	store.Set(types.KeyPrefix(processHistory.ExecutionId), b)
 }
 
-func (k Keeper) RemovePaymentProcessHistory(ctx sdk.Context, processHistory types.PaymentProcessHistory) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PaymentProcessHistoryKey))
-	store.Delete(types.KeyPrefix(processHistory.ExecutionId))
-}
-
 func (k Keeper) GetPaymentProcessHistory(ctx sdk.Context, executionID string) (val types.PaymentProcessHistory, found bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PaymentProcessHistoryKey))
 
