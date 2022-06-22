@@ -94,7 +94,7 @@ func CustomCompleteAndBroadcastTxCLI(txf tx.Factory, clientCtx client.Context, m
 		return nil
 	}
 
-	txs, err := tx.BuildUnsignedTx(txf, msgs...)
+	txs, err := txf.BuildUnsignedTx(msgs...)
 	if err != nil {
 		return err
 	}
