@@ -188,5 +188,14 @@ coinLoop:
 	telemetry.IncrCounter(1, "execution", "cookbookID", pendingExecution.CookbookId, "recipeID", pendingExecution.RecipeId)
 	telemetry.IncrCounter(1, "execution", "total")
 
+	// handle payments attached with execution
+	if k.HasPaymentProcessHistory(ctx, pendingExecution.Id) {
+		ph, _ := k.GetPaymentProcessHistory(ctx, pendingExecution.Id)
+		err = k.CompleteProcessPaymentInfos(ctx, ph.PaymentInfors)
+		if err != nil {
+			return types.Execution{}, types.EventCompleteExecution{}, true, err
+		}
+	}
+
 	return pendingExecution, event, true, nil
 }

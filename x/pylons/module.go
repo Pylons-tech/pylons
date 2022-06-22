@@ -196,16 +196,13 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 				am.keeper.UnlockItemForExecution(ctx, item, pendingExec.Creator)
 			}
 
-			// refund payment to user, so can use this payment for another execution
-			paymentProcessHistory, found := am.keeper.GetPaymentProcessHistory(ctx, pendingExec.Id)
-			if !found {
-				panic(err.Error())
+			// if execution has payments attached, add them to the refund list
+			if am.keeper.HasPaymentProcessHistory(ctx, pendingExec.Id) {
+				ph, _ := am.keeper.GetPaymentProcessHistory(ctx, pendingExec.Id)
+				for _, pi := range ph.PaymentInfors {
+					am.keeper.SetPaymentRefund(ctx, pi)
+				}
 			}
-			err := am.keeper.RefundPayments(ctx, paymentProcessHistory.PaymentInfors)
-			if err != nil {
-				panic(err)
-			}
-			am.keeper.RemovePaymentProcessHistory(ctx, paymentProcessHistory)
 
 			am.keeper.ActualizeExecution(ctx, pendingExec)
 			_ = ctx.EventManager().EmitTypedEvent(&types.EventDropExecution{
