@@ -30,7 +30,6 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// this line is used by starport scaffolding # proto/tx/message
 type MsgBurnDebtToken struct {
 	Creator    string     `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
 	RedeemInfo RedeemInfo `protobuf:"bytes,2,opt,name=redeem_info,json=redeemInfo,proto3" json:"redeem_info"`
@@ -2055,7 +2054,6 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
-	// this line is used by starport scaffolding # proto/tx/rpc
 	BurnDebtToken(ctx context.Context, in *MsgBurnDebtToken, opts ...grpc.CallOption) (*MsgBurnDebtTokenResponse, error)
 	UpdateAccount(ctx context.Context, in *MsgUpdateAccount, opts ...grpc.CallOption) (*MsgUpdateAccountResponse, error)
 	FulfillTrade(ctx context.Context, in *MsgFulfillTrade, opts ...grpc.CallOption) (*MsgFulfillTradeResponse, error)
@@ -2228,7 +2226,6 @@ func (c *msgClient) UpdateCookbook(ctx context.Context, in *MsgUpdateCookbook, o
 
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
-	// this line is used by starport scaffolding # proto/tx/rpc
 	BurnDebtToken(context.Context, *MsgBurnDebtToken) (*MsgBurnDebtTokenResponse, error)
 	UpdateAccount(context.Context, *MsgUpdateAccount) (*MsgUpdateAccountResponse, error)
 	FulfillTrade(context.Context, *MsgFulfillTrade) (*MsgFulfillTradeResponse, error)
