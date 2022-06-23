@@ -12,6 +12,7 @@ import (
 )
 
 func ValidateApplePay(msg *MsgAppleIap) (*AppleInAppPurchaseOrder, error) {
+	// certificates verification using pkcs container and x509 of crypto
 	receiptData, err := verifyCertificate(msg.ReceiptDataBase64)
 	if err != nil {
 		return nil, err
