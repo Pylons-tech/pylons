@@ -158,7 +158,7 @@ func extractMainReceipt(receiptData []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	// Main Recite Date Starts here
+	// Main Receipt Date Starts here
 	_, err = asn1.Unmarshal(rest, &info)
 	if err != nil {
 		return nil, err

@@ -23,14 +23,14 @@ func (k Keeper) GetAppleIAPOrderCount(ctx sdk.Context) uint64 {
 	// Parse bytes
 	count, err := strconv.ParseUint(string(bz), 10, 64)
 	if err != nil {
-		// Panic because the count should be always formattable to uint64
+		// Panic because the count should be always convertible to uint64
 		panic("cannot decode count")
 	}
 
 	return count
 }
 
-// SetAppleIAPOrderCount set the total number of googlIAPOrder
+// SetAppleIAPOrderCount set the total number of appleIAPOrder
 func (k Keeper) SetAppleIAPOrderCount(ctx sdk.Context, count uint64) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AppleInAppPurchaseOrderCountKey))
 	byteKey := types.KeyPrefix(types.AppleInAppPurchaseOrderCountKey)
@@ -78,7 +78,7 @@ func (k Keeper) HasAppleIAPOrder(ctx sdk.Context, purchaseID string) bool {
 	return store.Has(types.KeyPrefix(purchaseID))
 }
 
-// GetAppleIAPOrderOwner returns the creator of the
+// GetAppleIAPOrderOwner returns the creator of the appleIAPOrder
 func (k Keeper) GetAppleIAPOrderOwner(ctx sdk.Context, purchaseID string) string {
 	return k.GetAppleIAPOrder(ctx, purchaseID).Creator
 }

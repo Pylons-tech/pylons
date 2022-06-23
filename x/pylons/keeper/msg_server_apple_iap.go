@@ -11,7 +11,6 @@ import (
 func (k msgServer) AppleIap(goCtx context.Context, msg *types.MsgAppleIap) (*types.MsgAppleIapResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Handling the message
 	receipt, err := types.ValidateApplePay(msg)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid receipt")
