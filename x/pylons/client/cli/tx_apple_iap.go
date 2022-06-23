@@ -14,11 +14,13 @@ var _ = strconv.Itoa(0)
 
 func CmdAppleIap() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "apple-iap [data]",
+		Use:   "apple-iap [productID] [purchaseToken] [recieptDataBase64]",
 		Short: "Broadcast message apple_iap",
-		Args:  cobra.ExactArgs(1),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			argData := args[0]
+			argsProductID := args[0]
+			argsPurchaseID := args[1]
+			argsRecieptDataBase64 := args[2]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -27,7 +29,9 @@ func CmdAppleIap() *cobra.Command {
 
 			msg := types.NewMsgAppleIap(
 				clientCtx.GetFromAddress().String(),
-				argData,
+				argsProductID,
+				argsPurchaseID,
+				argsRecieptDataBase64,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
