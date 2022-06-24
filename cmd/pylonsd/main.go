@@ -16,7 +16,8 @@ import (
 func main() {
 	rootCmd, _ := pyloncmd.NewRootCmd()
 	rootCmd.Short = "Stargate Pylons App"
-	rootCmd.AddCommand(CmdDevValidate())
+	rootCmd.AddCommand(pyloncmd.DevValidate())
+	rootCmd.AddCommand(pyloncmd.DevCreate())
 	rootCmd.AddCommand(pyloncmd.Completion())
 	removeLineBreaksInCobraArgs(rootCmd)
 

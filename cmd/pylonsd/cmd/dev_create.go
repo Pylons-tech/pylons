@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"strconv"
@@ -10,7 +10,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func CmdDevCreate() *cobra.Command {
+func DevCreate() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create [account] [path]",
 		Short: "Creates and executes creation transactions Pylons recipe or cookbook files in the provided path, using credentials of provided account",
