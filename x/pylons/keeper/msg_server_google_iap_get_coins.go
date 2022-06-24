@@ -30,6 +30,9 @@ CoinIssuersLoop:
 			}
 		}
 	}
+	if len(coinIssuer.CoinDenom) == 0 {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid product id")
+	}
 
 	if err := types.ValidateGoogleIAPSignature(msg, coinIssuer); err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrorInvalidSigner, "Google IAP Signature is invalid")

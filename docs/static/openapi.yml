@@ -51035,6 +51035,8 @@ definitions:
     title: >-
       LongParam describes the bounds on an item input/output parameter of type
       int64
+  Pylonstech.pylons.pylons.MsgAppleIapResponse:
+    type: object
   Pylonstech.pylons.pylons.MsgBurnDebtTokenResponse:
     type: object
   Pylonstech.pylons.pylons.MsgCancelTradeResponse:
