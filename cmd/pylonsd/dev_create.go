@@ -21,8 +21,14 @@ func CmdDevCreate() *cobra.Command {
 			ForFiles(path, func(path string, cb types.Cookbook) {
 				c := cli.CmdCreateCookbook()
 				c.SetArgs([]string{cb.Id, cb.Name, cb.Description, cb.Developer, cb.Version, cb.SupportEmail, strconv.FormatBool(cb.Enabled)})
-				c.Flags().Set("from", accountName)
-				c.Execute()
+				err := c.Flags().Set("from", accountName)
+				if err != nil {
+					panic(err)
+				}
+				err = c.Execute()
+				if err != nil {
+					panic(err)
+				}
 			}, func(path string, rcp types.Recipe) {
 				c := cli.CmdCreateRecipe()
 				coinInputJSON, err := json.Marshal(rcp.CoinInputs)
@@ -45,8 +51,14 @@ func CmdDevCreate() *cobra.Command {
 					string(coinInputJSON), string(itemInputJSON), rcp.Entries.String(), string(outputJSON), strconv.FormatInt(rcp.BlockInterval, 10),
 					rcp.CostPerBlock.String(), rcp.ExtraInfo,
 				})
-				c.Flags().Set("from", accountName)
-				c.Execute()
+				err = c.Flags().Set("from", accountName)
+				if err != nil {
+					panic(err)
+				}
+				err = c.Execute()
+				if err != nil {
+					panic(err)
+				}
 			})
 		},
 	}
