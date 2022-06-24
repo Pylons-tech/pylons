@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/ddulesov/pkcs7"
+	"github.com/Pylons-tech/pkcs7"
 )
 
 func ValidateApplePay(msg *MsgAppleIap) (*AppleInAppPurchaseOrder, error) {
@@ -104,7 +104,7 @@ func verifyCertificate(data string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	pkcsContainer, err := pkcs7.ParseCMS(decodedReceipt)
+	pkcsContainer, err := pkcs7.Parse(decodedReceipt)
 	if err != nil {
 		return nil, err
 	}
