@@ -8,7 +8,10 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/testutil/network"
 )
+
+var debugValidator *network.Validator = nil
 
 func DevCreate() *cobra.Command {
 	cmd := &cobra.Command{
@@ -21,7 +24,12 @@ func DevCreate() *cobra.Command {
 			ForFiles(path, func(path string, cb types.Cookbook) {
 				c := cli.CmdCreateCookbook()
 				c.SetArgs([]string{cb.Id, cb.Name, cb.Description, cb.Developer, cb.Version, cb.SupportEmail, strconv.FormatBool(cb.Enabled)})
-				err := c.Flags().Set("from", accountName)
+				var err error = nil
+				if debugValidator != nil {
+					err = c.Flags().Set("from", debugValidator.Address.String())
+				} else {
+					err = c.Flags().Set("from", accountName)
+				}
 				if err != nil {
 					panic(err)
 				}

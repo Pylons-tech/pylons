@@ -257,7 +257,7 @@ func TestValidate(t *testing.T) {
 		var buf bytes.Buffer
 		Out = &buf
 		defer func() { Out = os.Stdout }()
-		cmd := CmdDevValidate()
+		cmd := DevValidate()
 		cmd.SetArgs([]string{badPLC})
 		cmd.Execute()
 		log.SetOutput(os.Stderr)
@@ -271,7 +271,7 @@ func TestValidate(t *testing.T) {
 		Out = &buf
 		defer func() { Out = os.Stdout }()
 		fmt.Print()
-		cmd := CmdDevValidate()
+		cmd := DevValidate()
 		cmd.SetArgs([]string{goodPLC})
 		cmd.Execute()
 		log.SetOutput(os.Stderr)
@@ -284,7 +284,7 @@ func TestValidate(t *testing.T) {
 		var buf bytes.Buffer
 		Out = &buf
 		defer func() { Out = os.Stdout }()
-		cmd := CmdDevValidate()
+		cmd := DevValidate()
 		cmd.SetArgs([]string{badPLR})
 		cmd.Execute()
 		log.SetOutput(os.Stderr)
@@ -298,7 +298,7 @@ func TestValidate(t *testing.T) {
 		Out = &buf
 		defer func() { Out = os.Stdout }()
 		fmt.Print()
-		cmd := CmdDevValidate()
+		cmd := DevValidate()
 		cmd.SetArgs([]string{goodPLR})
 		cmd.Execute()
 		log.SetOutput(os.Stderr)
