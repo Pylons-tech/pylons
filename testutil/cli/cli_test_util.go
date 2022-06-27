@@ -62,7 +62,7 @@ func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.N
 	var resp sdk.TxResponse
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	if uint32(0) != resp.Code {
-		return "", fmt.Errorf("Error Code Not Success")
+		return "", fmt.Errorf("Error code not 'Success'")
 	}
 
 	common = CommonArgs(net.Validators[0].Address.String(), net)
@@ -75,7 +75,7 @@ func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.N
 	}
 	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	if uint32(0) != resp.Code {
-		return "", fmt.Errorf("Error Code Not Success")
+		return "", fmt.Errorf("Error code not 'Success'")
 	}
 
 	return accs[0].String(), nil
