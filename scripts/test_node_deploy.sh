@@ -7,6 +7,7 @@ MONIKER="localtestnet"
 KEYALGO="secp256k1"
 LOGLEVEL="info"
 
+rm -rf ~/.pylon*
 # retrieve all args
 WILL_RECOVER=0
 WILL_INSTALL=0
