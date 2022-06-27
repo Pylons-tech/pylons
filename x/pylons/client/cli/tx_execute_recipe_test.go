@@ -18,6 +18,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/Pylons-tech/pylons/app"
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -32,7 +33,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 
 	cookbookID := "testCookbookID"
@@ -121,7 +122,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -139,7 +140,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 
 	// this recipe can be run infinitely
 	// run it 5x in a loop
-	common = CommonArgs(address, net)
+	common = util.CommonArgs(address, net)
 	for i := 0; i < 5; i++ {
 		// create execution
 		args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
@@ -189,7 +190,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
 
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 
 	cbFields := []string{
@@ -267,7 +268,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -289,7 +290,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create execution
-	commonExec := CommonArgs(address, net)
+	commonExec := util.CommonArgs(address, net)
 
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, commonExec...)
@@ -380,7 +381,7 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
 
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 
 	cbFields := []string{
@@ -458,7 +459,7 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -480,7 +481,7 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create execution
-	common = CommonArgs(address, net)
+	common = util.CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -521,7 +522,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 	ctx := val.ClientCtx
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
 
@@ -601,7 +602,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -622,7 +623,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create execution
-	commonExec := CommonArgs(address, net)
+	commonExec := util.CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, commonExec...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -769,7 +770,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -809,7 +810,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	recipeID := "testRecipeID"
 	recipeID2 := "testRecipeID2"
 
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
 
@@ -929,7 +930,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -953,7 +954,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = CommonArgs(address, net)
+	common = util.CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -999,7 +1000,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
 
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
 
@@ -1079,7 +1080,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -1100,7 +1101,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create execution
-	common = CommonArgs(address, net)
+	common = util.CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -1156,7 +1157,7 @@ func TestExecuteRecipeNoInputOutputInvalidArgs(t *testing.T) {
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 
 	// invalid coininputs index
 	args := []string{cookbookID, recipeID, "invalid", "[]", "[]"} // empty list for item-ids since there is no item input

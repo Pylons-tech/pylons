@@ -1,4 +1,4 @@
-package cli_test
+package cli
 
 import (
 	"fmt"
@@ -81,7 +81,7 @@ func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.N
 	return accs[0].String(), nil
 }
 
-func networkWithRedeemInfoObjects(t *testing.T, n int) (*network.Network, []types.RedeemInfo) {
+func NetworkWithRedeemInfoObjects(t *testing.T, n int) (*network.Network, []types.RedeemInfo) {
 	t.Helper()
 	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
@@ -98,7 +98,7 @@ func networkWithRedeemInfoObjects(t *testing.T, n int) (*network.Network, []type
 	return network.New(t, cfg), state.RedeemInfoList
 }
 
-func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.UserMap) {
+func NetworkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.UserMap) {
 	t.Helper()
 	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
@@ -119,7 +119,7 @@ func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.U
 	return network.New(t, cfg), state.AccountList
 }
 
-func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Trade) {
+func NetworkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Trade) {
 	t.Helper()
 	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
@@ -149,7 +149,7 @@ func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Tra
 	return network.New(t, cfg), state.TradeList
 }
 
-func networkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, []types.Trade) {
+func NetworkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, []types.Trade) {
 	t.Helper()
 	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
@@ -178,7 +178,7 @@ func networkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, 
 
 // A network with cookbook object just contains a state of:
 //	 	N cookbooks
-func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.Cookbook) {
+func NetworkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.Cookbook) {
 	t.Helper()
 	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
@@ -209,7 +209,7 @@ func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 //	 	N cookbooks
 //		N recipes (1 per cookbook)
 // 		N executions (1 per recipe)
-func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types.Execution) {
+func NetworkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types.Execution) {
 	t.Helper()
 	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
@@ -241,7 +241,7 @@ func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types
 	return network.New(t, cfg), state.ExecutionList
 }
 
-func networkWithGoogleIAPOrderObjects(t *testing.T, n int) (*network.Network, []types.GoogleInAppPurchaseOrder) {
+func NetworkWithGoogleIAPOrderObjects(t *testing.T, n int) (*network.Network, []types.GoogleInAppPurchaseOrder) {
 	t.Helper()
 	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
@@ -256,7 +256,7 @@ func networkWithGoogleIAPOrderObjects(t *testing.T, n int) (*network.Network, []
 	return network.New(t, cfg), state.GoogleInAppPurchaseOrderList
 }
 
-func networkWithPaymentInfoObjects(t *testing.T, n int) (*network.Network, []types.PaymentInfo) {
+func NetworkWithPaymentInfoObjects(t *testing.T, n int) (*network.Network, []types.PaymentInfo) {
 	t.Helper()
 	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
@@ -272,7 +272,7 @@ func networkWithPaymentInfoObjects(t *testing.T, n int) (*network.Network, []typ
 	return network.New(t, cfg), state.PaymentInfoList
 }
 
-func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item) {
+func NetworkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item) {
 	t.Helper()
 	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
@@ -303,7 +303,7 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item
 	return network.New(t, cfg), state.ItemList
 }
 
-func networkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, []types.Item) {
+func NetworkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, []types.Item) {
 	t.Helper()
 	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
@@ -334,7 +334,7 @@ func networkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, [
 	return network.New(t, cfg), state.ItemList
 }
 
-func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Recipe, []types.Cookbook) {
+func NetworkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Recipe, []types.Cookbook) {
 	t.Helper()
 	cfg := app.DefaultConfig()
 	state := types.GenesisState{}
@@ -366,7 +366,7 @@ func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Re
 	return network.New(t, cfg), state.RecipeList, nil
 }
 
-func networkWithRecipeObjectsHistory(t *testing.T, n int) (*network.Network, []types.Recipe, []types.Cookbook) {
+func NetworkWithRecipeObjectsHistory(t *testing.T, n int) (*network.Network, []types.Recipe, []types.Cookbook) {
 	t.Helper()
 	cfg := app.DefaultConfig()
 	state := types.GenesisState{}

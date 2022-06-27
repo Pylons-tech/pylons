@@ -16,6 +16,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
 
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 )
@@ -66,7 +67,7 @@ func TestCreateTradeNoItemOutput1(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: CommonArgs(val.Address.String(), net),
+			args: util.CommonArgs(val.Address.String(), net),
 			err:  nil,
 			code: uint32(0),
 		},
@@ -99,7 +100,7 @@ func TestCreateTradeNoItemOutput2(t *testing.T) {
 	coinInputs, err := json.Marshal(
 		[]types.CoinInput{
 			{
-				Coins: sdk.NewCoins(sdk.NewCoin(testIBCDenom, sdk.NewInt(1))),
+				Coins: sdk.NewCoins(sdk.NewCoin(util.TestIBCDenom, sdk.NewInt(1))),
 			},
 		},
 	)
@@ -117,7 +118,7 @@ func TestCreateTradeNoItemOutput2(t *testing.T) {
 	require.NoError(t, err)
 
 	coinOutputs, err := json.Marshal(
-		sdk.NewCoins(sdk.NewCoin(testIBCDenom, sdk.NewInt(10))),
+		sdk.NewCoins(sdk.NewCoin(util.TestIBCDenom, sdk.NewInt(10))),
 	)
 	require.NoError(t, err)
 
@@ -141,7 +142,7 @@ func TestCreateTradeNoItemOutput2(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: CommonArgs(val.Address.String(), net),
+			args: util.CommonArgs(val.Address.String(), net),
 			err:  nil,
 			code: sdkerrors.ErrInvalidRequest.ABCICode(), // we are able to validate the trade, but it is invalid at the keeper stage since the node does not own any ibc tokens
 		},
@@ -174,7 +175,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	// simulate full execution of recipe to generate an item
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
 
@@ -250,7 +251,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -267,7 +268,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = CommonArgs(address, net)
+	common = util.CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -353,7 +354,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: CommonArgs(address, net),
+			args: util.CommonArgs(address, net),
 			err:  nil,
 			code: uint32(0),
 		},
@@ -386,7 +387,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 	// simulate full execution of recipe to generate an item
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
 
@@ -474,7 +475,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -491,7 +492,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = CommonArgs(address, net)
+	common = util.CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -577,7 +578,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: CommonArgs(address, net),
+			args: util.CommonArgs(address, net),
 			err:  sdkerrors.ErrInvalidRequest,
 		},
 	} {
@@ -609,7 +610,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 	// simulate full execution of recipe to generate an item
 	cookbookID := "testCookbookID"
 	recipeID := "testRecipeID"
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
 
@@ -697,7 +698,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -714,7 +715,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = CommonArgs(address, net)
+	common = util.CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -800,7 +801,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: CommonArgs(address, net),
+			args: util.CommonArgs(address, net),
 			err:  sdkerrors.ErrInvalidRequest,
 		},
 	} {
@@ -828,7 +829,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 
 	val := net.Validators[0]
 	ctx := val.ClientCtx
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
 
@@ -920,7 +921,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -937,7 +938,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = CommonArgs(address, net)
+	common = util.CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -994,7 +995,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 	require.NoError(t, err)
 
 	coinOutputs, err := json.Marshal(
-		sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(10)), sdk.NewCoin(testIBCDenom, sdk.NewInt(10))),
+		sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(10)), sdk.NewCoin(util.TestIBCDenom, sdk.NewInt(10))),
 	)
 	require.NoError(t, err)
 
@@ -1023,7 +1024,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: CommonArgs(address, net),
+			args: util.CommonArgs(address, net),
 			err:  sdkerrors.ErrInvalidRequest,
 		},
 	} {
@@ -1051,7 +1052,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 
 	val := net.Validators[0]
 	ctx := val.ClientCtx
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
 
@@ -1142,7 +1143,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -1159,7 +1160,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = CommonArgs(address, net)
+	common = util.CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
@@ -1245,7 +1246,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: CommonArgs(address, net),
+			args: util.CommonArgs(address, net),
 			err:  nil,
 			code: sdkerrors.ErrInvalidRequest.ABCICode(),
 		},
@@ -1321,7 +1322,7 @@ func TestCreateTradeInvalidCoinOutput(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: CommonArgs(val.Address.String(), net),
+			args: util.CommonArgs(val.Address.String(), net),
 			err:  nil,
 			code: sdkerrors.ErrInvalidRequest.ABCICode(),
 		},
@@ -1402,7 +1403,7 @@ func TestCreateTradeInvalidItemOutput(t *testing.T) {
 	}{
 		{
 			desc: "valid",
-			args: CommonArgs(val.Address.String(), net),
+			args: util.CommonArgs(val.Address.String(), net),
 			err:  nil,
 			code: sdkerrors.ErrInvalidRequest.ABCICode(),
 		},
@@ -1465,7 +1466,7 @@ func TestCancelTrade(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 	args := make([]string, 0)
 	args = append(args, fields...)
 	args = append(args, common...)

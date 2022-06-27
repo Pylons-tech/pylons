@@ -11,17 +11,18 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func TestGetRecipeHistory(t *testing.T) {
-	net, objs, _ := networkWithRecipeObjectsHistory(t, 2)
+	net, objs, _ := util.NetworkWithRecipeObjectsHistory(t, 2)
 	val := net.Validators[0]
 	ctx := net.Validators[0].ClientCtx
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
-	common := CommonArgs(address, net)
+	common := util.CommonArgs(address, net)
 	tc := []struct {
 		desc       string
 		cookbookID string
@@ -79,7 +80,7 @@ func TestGetRecipeHistory(t *testing.T) {
 	// create a cookbook
 	args = []string{tc[1].cookbookID}
 	args = append(args, cbFields...)
-	args = append(args, CommonArgs(val.Address.String(), net)...)
+	args = append(args, util.CommonArgs(val.Address.String(), net)...)
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
 	// create a recipe
@@ -156,7 +157,7 @@ func TestGetRecipeHistory(t *testing.T) {
 	}
 	args = []string{tc[1].cookbookID, tc[1].recipeID}
 	args = append(args, recipeFields...)
-	args = append(args, CommonArgs(val.Address.String(), net)...)
+	args = append(args, util.CommonArgs(val.Address.String(), net)...)
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 
