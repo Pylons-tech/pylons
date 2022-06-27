@@ -34,4 +34,4 @@ resources: {}
 
 
 host: wallet.pylons.tech
-mongoURL: mongodb://104.156.226.17:27017/big-dipper-v1?serverSelectionTimeoutMS=5000&connectTimeoutMS=10000
+mongoURL: mongoUrlVal
