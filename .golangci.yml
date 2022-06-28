@@ -37,22 +37,6 @@ linters:
 
 
 linters-settings:
-  dogsled:
-    max-blank-identifiers: 3
   gosec:
     excludes:
       - G404
-  maligned:
-    # print struct with more effective memory layout or not, false by default
-    suggest-new: true
-  nolintlint:
-    allow-unused: false
-    allow-leading-space: true
-    require-explanation: false
-    require-specific: false
-
-  staticcheck:
-    go: "1.16"
-    checks: ["all", "-SA1019"]
-  stylecheck:
-    checks: ["all", "-ST1016", "ST1003"]
