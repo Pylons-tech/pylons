@@ -19,8 +19,6 @@ func TestCreate(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
-	debugValidator = val
-
 	// skip these - we know they're not real/working tests and i need to make sure i didn't break anything
 
 	t.Run("Bad cookbook", func(t *testing.T) {
@@ -39,7 +37,7 @@ func TestCreate(t *testing.T) {
 	t.Run("Good cookbook", func(t *testing.T) {
 		_, err := util.GenerateAddressWithAccount(ctx, t, net)
 		require.NoError(t, err)
-		args := []string{"user", goodPLC}
+		args := []string{val.Address.String(), goodPLC}
 		cmd := DevCreate()
 		out, err := clitestutil.ExecTestCLICmd(ctx, cmd, args)
 		fmt.Println("start")

@@ -8,10 +8,8 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/cosmos/cosmos-sdk/testutil/network"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 )
-
-var debugValidator *network.Validator
 
 func DevCreate() *cobra.Command {
 	cmd := &cobra.Command{
@@ -25,11 +23,15 @@ func DevCreate() *cobra.Command {
 				c := cli.CmdCreateCookbook()
 				c.SetArgs([]string{cb.Id, cb.Name, cb.Description, cb.Developer, cb.Version, cb.SupportEmail, strconv.FormatBool(cb.Enabled)})
 				var err error
-				if debugValidator != nil {
-					err = c.Flags().Set("from", debugValidator.Address.String())
-				} else {
-					err = c.Flags().Set("from", accountName)
+				err = c.Flags().Set(flags.FlagSkipConfirmation, "true")
+				if err != nil {
+					panic(err)
 				}
+				err = c.Flags().Set(flags.FlagBroadcastMode, flags.BroadcastBlock)
+				if err != nil {
+					panic(err)
+				}
+				err = c.Flags().Set("from", accountName)
 				if err != nil {
 					panic(err)
 				}
