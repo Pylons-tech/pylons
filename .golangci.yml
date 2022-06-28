@@ -34,3 +34,8 @@ linters:
     - unparam
     - misspell
     - nolintlint
+    
+  linters-settings:
+    gosec:
+      excludes:
+        - G404
