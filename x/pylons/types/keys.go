@@ -76,7 +76,7 @@ const (
 	CreateItemKey = "create_item"
 	// CreateExecutionKey is a string used as event name in msg execute recipe
 	CreateExecutionKey = "create_execution"
-	// StripeRefundKey used to store stripe refund records 
+	// StripeRefundKey used to store stripe refund records
 	StripeRefundKey = "StripeRefund-value-"
 )
 

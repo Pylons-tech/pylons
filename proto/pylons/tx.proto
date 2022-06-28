@@ -5,18 +5,20 @@ import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "pylons/trade.proto";
 import "pylons/google_iap_order.proto";
-import "pylons/payment_info.proto";
 import "pylons/redeem_info.proto";
 import "pylons/execution.proto";
 import "pylons/item.proto";
 import "pylons/recipe.proto";
 import "pylons/cookbook.proto";
+// this line is used by starport scaffolding # proto/tx/import
+import "pylons/payment_info.proto";
 
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 // Msg defines the Msg service.
 service Msg {
     rpc AppleIap(MsgAppleIap) returns (MsgAppleIapResponse);
+  rpc AddStripeRefund(MsgAddStripeRefund) returns (MsgAddStripeRefundResponse);
 // this line is used by starport scaffolding # proto/tx/rpc
   rpc BurnDebtToken(MsgBurnDebtToken) returns (MsgBurnDebtTokenResponse);
   rpc UpdateAccount(MsgUpdateAccount) returns (MsgUpdateAccountResponse);
@@ -44,6 +46,14 @@ message MsgAppleIap {
 }
 
 message MsgAppleIapResponse {
+}
+
+message MsgAddStripeRefund {
+  string creator = 1;
+  PaymentInfo payment = 2;
+}
+
+message MsgAddStripeRefundResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message

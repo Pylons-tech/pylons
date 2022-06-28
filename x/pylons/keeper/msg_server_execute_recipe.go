@@ -111,11 +111,12 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	}
 
 	// calling helper function check item quantity
-	// case: no more available, adds an entry to kv store  and return err
-	// case: quantity available return nil
-	err = k.checkNFTExist(&recipe, msg.PaymentInfos, ctx)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	// case: no more available return err
+	for _, item := range recipe.Entries.ItemOutputs {
+		if item.Quantity != 0 && item.Quantity <= item.AmountMinted {
+			// returning error not found in case recipe is no more available
+			return nil, sdkerrors.Wrap(sdkerrors.ErrNotFound, "Amount minted reached maximum limit")
+		}
 	}
 
 	if len(msg.PaymentInfos) != 0 {
@@ -210,19 +211,4 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	k.SetExecuteRecipeHis(ctx, executionTrack)
 
 	return &types.MsgExecuteRecipeResponse{Id: id}, err
-}
-
-func (k msgServer) checkNFTExist(recipe *types.Recipe, payment []types.PaymentInfo, ctx sdk.Context) error {
-	for _, item := range recipe.Entries.ItemOutputs {
-		if item.Quantity != 0 && item.Quantity <= item.AmountMinted {
-			for _, p := range payment {
-				k.SetStripeRefund(ctx, &types.StripeRefund{
-					Payment: &p,
-					Settled: false,
-				})
-			}
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Amount minted reached maximium limit")
-		}
-	}
-	return nil
 }
