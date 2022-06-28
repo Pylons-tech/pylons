@@ -1,5 +1,5 @@
 syntax = "proto3";
-package Pylonstech.pylons.epochs;
+package pylons.epochs;
 
 option go_package = "github.com/Pylons-tech/pylons/x/epochs/types";
 
