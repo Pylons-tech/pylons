@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"testing"
 
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
+	"github.com/stretchr/testify/require"
 )
 
 const testAccountName = "nono"
@@ -19,14 +21,13 @@ func TestCreate(t *testing.T) {
 
 	debugValidator = val
 
-	// address, err := cli_test.GenerateAddressWithAccount(ctx, t, net)
-	// equire.NoError(t, err)
-
 	// skip these - we know they're not real/working tests and i need to make sure i didn't break anything
 
 	t.Run("Bad cookbook", func(t *testing.T) {
-		t.Skip()
-		args := []string{testAccountName, badPLC}
+		t.Skip() // it fails, we need to check that
+		address, err := util.GenerateAddressWithAccount(ctx, t, net)
+		require.NoError(t, err)
+		args := []string{address, badPLC}
 		cmd := DevCreate()
 		out, err := clitestutil.ExecTestCLICmd(ctx, cmd, args)
 		fmt.Println("start")
@@ -36,8 +37,9 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("Good cookbook", func(t *testing.T) {
-		t.Skip()
-		args := []string{testAccountName, goodPLC}
+		_, err := util.GenerateAddressWithAccount(ctx, t, net)
+		require.NoError(t, err)
+		args := []string{"user", goodPLC}
 		cmd := DevCreate()
 		out, err := clitestutil.ExecTestCLICmd(ctx, cmd, args)
 		fmt.Println("start")
