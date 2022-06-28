@@ -36,6 +36,6 @@ linters:
     - nolintlint
     
  linters-settings:
-   gosec:
-     excludes:
-       - G404
+  gosec:
+    excludes:
+      - G404
