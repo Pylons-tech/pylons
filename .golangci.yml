@@ -35,7 +35,7 @@ linters:
     - misspell
     - nolintlint
     
-  linters-settings:
-    gosec:
-      excludes:
-        - G404
+ linters-settings:
+   gosec:
+     excludes:
+       - G404
