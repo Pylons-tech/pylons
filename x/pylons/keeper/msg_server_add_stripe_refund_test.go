@@ -19,7 +19,10 @@ func (suite *IntegrationTestSuite) TestAddStripeRefund() {
 	correctAddr := "pylo1xn72u3jxlpqx8tfgmjf0xg970q36xensjngsme"
 	amount := sdk.NewIntFromUint64(10020060)
 	productID := "recipe/Easel_CookBook_auto_cookbook_2022_06_14_114716_442/Easel_Recipe_auto_recipe_2022_06_14_114722_895"
-
+	signature := "8lZsKTOdMuJSoFn0RCGEUGpPXl4YzLmhJMrEiAd4qZh99S4IIGbvcsXyOcOHdlKi6Yys9NhmkLN4LqSlq8Y1Cw=="
+	purchaseId := "pi_3LFdcNEdpQgutKvr1aspFGXh"
+	incPurchaseId := "pi_3LFgx7EdpQgutKvr1cp5"
+	processorName := "Pylons_Inc"
 	for _, tc := range []struct {
 		desc    string
 		request *types.MsgAddStripeRefund
@@ -29,12 +32,12 @@ func (suite *IntegrationTestSuite) TestAddStripeRefund() {
 			desc: "Valid Payment Info",
 			request: &types.MsgAddStripeRefund{
 				Payment: &types.PaymentInfo{
-					PurchaseId:    "pi_3LFdcNEdpQgutKvr1aspFGXh",
-					ProcessorName: "Pylons_Inc",
+					PurchaseId:    purchaseId,
+					ProcessorName: processorName,
 					PayerAddr:     correctAddr,
 					Amount:        amount,
 					ProductId:     productID,
-					Signature:     "gdYEQI7I6h80ZUMgpeuEwXNDvTpxcq/1qCDmupehxIGduXPL5DMtRoiiEbz9Pddpoogpm1gFkazxKDEe+IIMAQ==",
+					Signature:     signature,
 				},
 				Creator: correctAddr,
 			},
@@ -43,26 +46,27 @@ func (suite *IntegrationTestSuite) TestAddStripeRefund() {
 			desc: "Payment Info Already Used",
 			request: &types.MsgAddStripeRefund{
 				Payment: &types.PaymentInfo{
-					PurchaseId:    "pi_3LFdcNEdpQgutKvr1aspFGXh",
-					ProcessorName: "Pylons_Inc",
+					PurchaseId:    purchaseId,
+					ProcessorName: processorName,
 					PayerAddr:     correctAddr,
 					Amount:        amount,
 					ProductId:     productID,
-					Signature:     "gdYEQI7I6h80ZUMgpeuEwXNDvTpxcq/1qCDmupehxIGduXPL5DMtRoiiEbz9Pddpoogpm1gFkazxKDEe+IIMAQ==",
+					Signature:     signature,
 				},
 				Creator: correctAddr,
 			},
+			err: sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the purchase ID is already being used"),
 		},
 		{
 			desc: "Address Do Not Match",
 			request: &types.MsgAddStripeRefund{
 				Payment: &types.PaymentInfo{
-					PurchaseId:    "pi_3LFdcNEdpQgutKvr1aspFGXh",
-					ProcessorName: "Pylons_Inc",
+					PurchaseId:    purchaseId,
+					ProcessorName: processorName,
 					PayerAddr:     correctAddr,
 					Amount:        amount,
 					ProductId:     productID,
-					Signature:     "gdYEQI7I6h80ZUMgpeuEwXNDvTpxcq/1qCDmupehxIGduXPL5DMtRoiiEbz9Pddpoogpm1gFkazxKDEe+IIMAQ==",
+					Signature:     signature,
 				},
 				Creator: addr[0],
 			},
@@ -72,12 +76,12 @@ func (suite *IntegrationTestSuite) TestAddStripeRefund() {
 			desc: "Signature Invalid",
 			request: &types.MsgAddStripeRefund{
 				Payment: &types.PaymentInfo{
-					PurchaseId:    "pi_3Ju3j843klKuxW9",
-					ProcessorName: "Pylons_Inc",
+					PurchaseId:    incPurchaseId,
+					ProcessorName: processorName,
 					PayerAddr:     correctAddr,
 					Amount:        sdk.NewIntFromUint64(1003009027),
 					ProductId:     "recipe/loud1234567/recipeNostripe1",
-					Signature:     "gdYEQI7I6h80ZUMgpeuEwXNDvTpxcq/1qCDmupehxIGduXPL5DMtRoiiEbz9Pddpoogpm1gFkazxKDEe+IIMAQ==",
+					Signature:     signature,
 				},
 				Creator: correctAddr,
 			},

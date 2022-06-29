@@ -115,7 +115,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	for _, item := range recipe.Entries.ItemOutputs {
 		if item.Quantity != 0 && item.Quantity <= item.AmountMinted {
 			// returning error not found in case recipe is no more available
-			return nil, sdkerrors.Wrap(sdkerrors.ErrNotFound, "Amount minted reached maximum limit")
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Amount minted reached maximum limit")
 		}
 	}
 

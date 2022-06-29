@@ -16,7 +16,10 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 	addrInc, _ := sdk.AccAddressFromBech32("tester incorrect")
 	amount := sdk.NewIntFromUint64(10020060)
 	productID := "recipe/Easel_CookBook_auto_cookbook_2022_06_14_114716_442/Easel_Recipe_auto_recipe_2022_06_14_114722_895"
-
+	signature := "+f11IPGOtgMTpQou8V2anPSK9KCyQbi3UXFvocFDzmUKxcloXavWIzKIhIXg7pHwfRut62l1Jgo/J7a6uyusDQ=="
+	purchaseId := "pi_3LFgx7EdpQgutKvr1cp5nqtP"
+	incPurchaseId := "pi_3LFgx7EdpQgutKvr1cp5"
+	processorName := "Pylons_Inc"
 	for _, tc := range []struct {
 		desc    string
 		request *types.PaymentInfo
@@ -26,40 +29,40 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 		{
 			desc: "Valid Payment Info",
 			request: &types.PaymentInfo{
-				PurchaseId:    "pi_3LFgx7EdpQgutKvr1cp5nqtP",
-				ProcessorName: "Pylons_Inc",
+				PurchaseId:    purchaseId,
+				ProcessorName: processorName,
 				PayerAddr:     correctAddr,
 				Amount:        amount,
 				ProductId:     productID,
-				Signature:     "LDT82evxVF8oHdPR/h9Dj+B/BbVROvEjJ3wADMk7ow06o9Xv/7R3aRXylMdbhkMX8HciH6RPj+GwJLw8XSJeDQ==",
+				Signature:     signature,
 			},
 			addr: addr,
 		},
 		{
 			desc: "Address Do Not Match",
 			request: &types.PaymentInfo{
-				PurchaseId:    "pi_3LFgx7EdpQgutKvr1cp5nqtP",
-				ProcessorName: "Pylons_Inc",
+				PurchaseId:    purchaseId,
+				ProcessorName: processorName,
 				PayerAddr:     correctAddr,
 				Amount:        amount,
 				ProductId:     productID,
-				Signature:     "LDT82evxVF8oHdPR/h9Dj+B/BbVROvEjJ3wADMk7ow06o9Xv/7R3aRXylMdbhkMX8HciH6RPj+GwJLw8XSJeDQ==",
+				Signature:     signature,
 			},
 			addr: addrInc,
-			err:  sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", "pi_3LFdcNEdpQgutKvr1aspFGXw"),
+			err:  sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", purchaseId),
 		},
 		{
 			desc: "Signature Invalid",
 			request: &types.PaymentInfo{
-				PurchaseId:    "pi_3Ju3j843klKuxW9f0Jra",
-				ProcessorName: "Pylons_Inc",
+				PurchaseId:    incPurchaseId,
+				ProcessorName: processorName,
 				PayerAddr:     correctAddr,
-				Amount:        sdk.NewIntFromUint64(1003009027),
-				ProductId:     "recipe/loud1234567/recipeNostripe1",
-				Signature:     "LDT82evxVF8oHdPR/h9Dj+B/BbVROvEjJ3wADMk7ow06o9Xv/7R3aRXylMdbhkMX8HciH6RPj+GwJLw8XSJeDQ==",
+				Amount:        amount,
+				ProductId:     productID,
+				Signature:     signature,
 			},
 			addr: addr,
-			err:  sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", "pi_3Ju3j843klKuxW9f0Jra", sdkerrors.Wrapf(sdkerrors.ErrorInvalidSigner, "signature for %s is invalid", "Pylons_Inc").Error()),
+			err:  sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", purchaseId, sdkerrors.Wrapf(sdkerrors.ErrorInvalidSigner, "signature for %s is invalid", processorName).Error()),
 		},
 	} {
 		tc := tc
