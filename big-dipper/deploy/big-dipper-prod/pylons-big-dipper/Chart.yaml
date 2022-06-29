@@ -1,0 +1,5 @@
+apiVersion: v2
+name: big-dipper-v1
+description:  Pylons Big Dipper
+version: 0.0.1
+appVersion: 0.0.1
