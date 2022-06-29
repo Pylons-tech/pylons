@@ -60,7 +60,7 @@ func (suite *IntegrationTestSuite) TestBurnCoins() {
 	err := k.MintCoins(ctx, types.PaymentsProcessorName, mintAmt)
 	require.NoError(err)
 
-	// PaymentsProcessor account has buner permissions
+	// PaymentsProcessor account has burner permissions
 	err = k.BurnCoins(ctx, types.PaymentsProcessorName, mintAmt)
 	require.NoError(err)
 
