@@ -11,7 +11,7 @@ import (
 func (k msgServer) AddStripeRefund(goCtx context.Context, msg *types.MsgAddStripeRefund) (*types.MsgAddStripeRefundResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// search is purchase id is already reserved
+	// search if purchase id is already reserved
 	if k.HasPaymentInfo(ctx, msg.Payment.PurchaseId) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the purchase ID is already being used")
 	}
