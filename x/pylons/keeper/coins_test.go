@@ -7,7 +7,6 @@ import (
 )
 
 func (suite *IntegrationTestSuite) TestMintCoins() {
-	// k, ctx := setupKeeper(t)
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
@@ -27,7 +26,6 @@ func (suite *IntegrationTestSuite) TestMintCoins() {
 }
 
 func (suite *IntegrationTestSuite) TestMintCoinsToAddr() {
-	// k, ctx := setupKeeper(t)
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
@@ -49,7 +47,6 @@ func (suite *IntegrationTestSuite) TestMintCoinsToAddr() {
 }
 
 func (suite *IntegrationTestSuite) TestBurnCoins() {
-	// k, ctx := setupKeeper(t)
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
@@ -73,7 +70,6 @@ func (suite *IntegrationTestSuite) TestBurnCoins() {
 }
 
 func (suite *IntegrationTestSuite) TestBurnCoinsFromAddress() {
-	// k, ctx := setupKeeper(t)
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
@@ -96,7 +92,6 @@ func (suite *IntegrationTestSuite) TestBurnCoinsFromAddress() {
 }
 
 func (suite *IntegrationTestSuite) TestMintCreditToAddr() {
-	// k, ctx := setupKeeper(t)
 	k := suite.k
 	bk := suite.bankKeeper
 	ak := suite.accountKeeper
@@ -133,7 +128,6 @@ func (suite *IntegrationTestSuite) TestMintCreditToAddr() {
 }
 
 func (suite *IntegrationTestSuite) TestSendRewardsFromFeeCollector() {
-	// k, ctx := setupKeeper(t)
 	k := suite.k
 	bk := suite.bankKeeper
 	ak := suite.accountKeeper
