@@ -36,7 +36,6 @@ func forFile(path string, perCookbook func(path string, cookbook types.Cookbook)
 			fmt.Fprintln(Out, "File ", path, " is not a cookbook - parsing error:\n", err)
 		} else {
 			result, _ := validateJSON(json, reflect.TypeOf(cb))
-			fmt.Println(result)
 			if result == nil || !result.Valid() {
 				fmt.Fprintln(Out, "File ", path, " is not a cookbook - parsing error:\n", result.Errors())
 			} else {
