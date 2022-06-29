@@ -86,10 +86,10 @@ func (suite *IntegrationTestSuite) TestBurnCoinsFromAddress() {
 	mintAmt := sdk.NewCoins()
 	mintAmt = mintAmt.Add(coin)
 
-	err := suite.FundAccount(suite.ctx, addr, mintAmt)
+	err := suite.FundAccount(ctx, addr, mintAmt)
 	require.NoError(err)
 
-	err = k.BurnCreditFromAddr(suite.ctx, addr, mintAmt)
+	err = k.BurnCreditFromAddr(ctx, addr, mintAmt)
 
 	balance := bk.SpendableCoins(ctx, addr)
 	require.True(balance.IsEqual(sdk.Coins{}))
@@ -116,7 +116,7 @@ func (suite *IntegrationTestSuite) TestMintCreditToAddr() {
 	feesCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, feesAmt))
 
 	// Mint credits to account
-	err := k.MintCreditToAddr(suite.ctx, addr, mintCoins, burnCoins, feesCoins)
+	err := k.MintCreditToAddr(ctx, addr, mintCoins, burnCoins, feesCoins)
 	require.NoError(err)
 
 	// Check account, module balances
@@ -130,5 +130,43 @@ func (suite *IntegrationTestSuite) TestMintCreditToAddr() {
 	require.True(userBalance.IsEqual(mintCoins.Sub(burnCoins).Sub(feesCoins)))
 	require.True(processorBalances.IsEqual(sdk.Coins{}))
 	require.True(feeCollectorBalances.IsEqual(feesCoins))
+}
+
+func (suite *IntegrationTestSuite) TestSendRewardsFromFeeCollector() {
+	// k, ctx := setupKeeper(t)
+	k := suite.k
+	bk := suite.bankKeeper
+	ak := suite.accountKeeper
+	ctx := suite.ctx
+	require := suite.Require()
+
+	addrString := types.GenTestBech32FromString("test")
+	collector := types.GenTestBech32FromString("collector")
+	addr, _ := sdk.AccAddressFromBech32(addrString)
+	collectorAddr, _ := sdk.AccAddressFromBech32(collector)
+	feeCollectorAddr := ak.GetModuleAddress(types.FeeCollectorName)
+
+	// First mint credits
+	amt := sdk.NewInt(100)
+	burnAmt := amt.ToDec().Mul(types.DefaultProcessorPercentage).RoundInt()
+	feesAmt := amt.ToDec().Mul(types.DefaultValidatorsPercentage).RoundInt()
+
+	mintCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amt))
+	burnCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, burnAmt))
+	feesCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, feesAmt))
+
+	err := k.MintCreditToAddr(ctx, addr, mintCoins, burnCoins, feesCoins)
+	require.NoError(err)
+
+	// Collector claim reward
+	err = k.SendRewardsFromFeeCollector(ctx, addr, feesCoins)
+	require.NoError(err)
+
+	// Check balances
+	feeCollectorBalances := bk.SpendableCoins(ctx, feeCollectorAddr)
+	collectorBalance := bk.SpendableCoins(ctx, collectorAddr)
+
+	require.True(collectorBalance.IsEqual(feesCoins))
+	require.True(feeCollectorBalances.IsEqual(sdk.Coins{}))
 
 }
