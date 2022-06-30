@@ -35,7 +35,7 @@ message PaymentProcessor {
 // Params represent the parameters used by the pylons module
 message Params {
   option (gogoproto.goproto_stringer) = false;
-  repeated CoinIssuer coinIssuers = 1 [(gogoproto.moretags) = "yaml:\"coin_issuers\"", (gogoproto.nullable) = false];
+  repeated CoinIssuer coin_issuers = 1 [(gogoproto.moretags) = "yaml:\"coin_issuers\"", (gogoproto.nullable) = false];
   repeated PaymentProcessor payment_processors = 2 [(gogoproto.moretags) = "yaml:\"payment_processors\"", (gogoproto.nullable) = false];
   string recipe_fee_percentage = 3 [(gogoproto.moretags) = "yaml:\"recipe_fee_percentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   string item_transfer_fee_percentage = 4 [(gogoproto.moretags) = "yaml:\"item_transfer_fee_percentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];

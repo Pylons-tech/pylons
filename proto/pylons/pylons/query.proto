@@ -137,7 +137,7 @@ message QueryGetRecipeHistoryRequest {
 }
 
 message QueryGetRecipeHistoryResponse {
-	repeated RecipeHistory History = 1;
+	repeated RecipeHistory history = 1;
 }
 
 message RecipeHistory {
