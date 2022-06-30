@@ -16,10 +16,10 @@ func (k msgServer) AppleIap(goCtx context.Context, msg *types.MsgAppleIap) (*typ
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid receipt")
 	}
 
-	if receipt.PurchaseId != msg.PurchaseID {
+	if receipt.PurchaseId != msg.PurchaseId {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid transaction token")
 	}
-	if receipt.ProductId != msg.ProductID {
+	if receipt.ProductId != msg.ProductId {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid product id")
 	}
 
@@ -57,8 +57,8 @@ CoinIssuersLoop:
 
 	_ = ctx.EventManager().EmitTypedEvent(&types.EventApplePurchase{
 		Creator:           msg.Creator,
-		ProductID:         receipt.ProductId,
-		TransactionID:     receipt.PurchaseId,
+		ProductId:         receipt.ProductId,
+		TransactionId:     receipt.PurchaseId,
 		ReceiptDataBase64: msg.ReceiptDataBase64,
 	})
 

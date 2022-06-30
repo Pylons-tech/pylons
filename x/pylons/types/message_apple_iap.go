@@ -12,8 +12,8 @@ var _ sdk.Msg = &MsgAppleIap{}
 func NewMsgAppleIap(creator string, productID string, purchaseID string, receiptDataBase64 string) *MsgAppleIap {
 	return &MsgAppleIap{
 		Creator:           creator,
-		ProductID:         productID,
-		PurchaseID:        purchaseID,
+		ProductId:         productID,
+		PurchaseId:        purchaseID,
 		ReceiptDataBase64: receiptDataBase64,
 	}
 }
