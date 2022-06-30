@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"os"
 	"strconv"
 
 	"github.com/spf13/cobra"
@@ -11,7 +10,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -40,7 +38,7 @@ func DevCreate() *cobra.Command {
 					break
 				}
 			}
-			cli.SetAlternativeContext(clientCtx.WithFromAddress(addr)))
+			cli.SetAlternativeContext(clientCtx.WithFromAddress(addr))
 			ForFiles(path, func(path string, cb types.Cookbook) {
 				c := cli.CmdCreateCookbook()
 				c.SetArgs([]string{cb.Id, cb.Name, cb.Description, cb.Developer, cb.Version, cb.SupportEmail, strconv.FormatBool(cb.Enabled)})
