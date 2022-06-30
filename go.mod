@@ -40,6 +40,9 @@ require (
 	cloud.google.com/go/storage v1.14.0 // indirect
 	cosmossdk.io/api v0.1.0-alpha8 // indirect
 	filippo.io/edwards25519 v1.0.0-rc.1 // indirect
+)
+
+require (
 	github.com/99designs/keyring v1.1.6 // indirect
 	github.com/ChainSafe/go-schnorrkel v0.0.0-20200405005733-88cbf1b4c40d // indirect
 	github.com/Workiva/go-datastructures v1.0.53 // indirect
@@ -76,6 +79,7 @@ require (
 	github.com/go-logfmt/logfmt v0.5.1 // indirect
 	github.com/godbus/dbus v0.0.0-20190726142602-4481cbc300e2 // indirect
 	github.com/gogo/gateway v1.1.0 // indirect
+	github.com/golang-jwt/jwt/v4 v4.4.2
 	github.com/golang/glog v1.0.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/snappy v0.0.4 // indirect

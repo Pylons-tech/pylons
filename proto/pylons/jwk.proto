@@ -1,0 +1,23 @@
+syntax = "proto3";
+package pylonstech.pylons.pylons;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
+
+
+
+// Json Web Keys is a response holder for firebase query to get keys 
+// for decoding JWT of fire base app check
+
+message JWK {
+  
+  // algorithm name, e.g. RSA
+  string kty = 1; 
+  string use = 2;
+  // algorithm type, e.g. RSA256 
+  string alg = 3; 
+  // app check decoding key id
+  string kid = 4; 
+  // app check specific variable used to generate a public key to decode the token
+  string n = 5; 
+  string e = 6; 
+}

@@ -66,6 +66,7 @@ var (
 	DefaultDistrEpochIdentifier         = "day"
 	DefaultEngineVersion                = uint64(0)
 	DefaultMaxTxsInBlock                = uint64(20)
+	DefaultAppCheckConfig               = false
 )
 
 // Parameter Store Keys
