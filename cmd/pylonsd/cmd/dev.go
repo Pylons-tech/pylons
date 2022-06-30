@@ -1,18 +1,15 @@
 package cmd
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
-	"reflect"
-
-	"github.com/xeipuuv/gojsonschema"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	_ "github.com/gogo/protobuf/gogoproto"
+	"github.com/gogo/protobuf/jsonpb"
 )
 
 var Out io.Writer = os.Stdout // modified during testing
@@ -31,29 +28,18 @@ const (
 
 func forFile(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.Recipe)) {
 	if filepath.Ext(path) == cookbookExtension {
-		cb, json, err := loadCookbookFromPath(path)
+		cb, _, err := loadCookbookFromPath(path)
 		if err != nil {
 			fmt.Fprintln(Out, "File ", path, " is not a cookbook - parsing error:\n", err)
 		} else {
-			result, _ := validateJSON(json, reflect.TypeOf(cb))
-			if !result.Valid() {
-				fmt.Fprintln(Out, "File ", path, " is not a cookbook - parsing error:\n", result.Errors())
-			} else {
-				perCookbook(path, cb)
-			}
+			perCookbook(path, cb)
 		}
 	} else if filepath.Ext(path) == recipeExtension {
-		rcp, json, err := loadRecipeFromPath(path)
+		rcp, _, err := loadRecipeFromPath(path)
 		if err != nil {
 			fmt.Fprintln(Out, "File ", path, " is not a recipe - parsing error:\n", err)
 		} else {
-			result, _ := validateJSON(json, reflect.TypeOf(rcp))
-			if !result.Valid() {
-				fmt.Fprintln(Out, "File ", path, " is not a recipe - parsing error:\n", result.Errors())
-			} else {
-				perRecipe(path, rcp)
-			}
-
+			perRecipe(path, rcp)
 		}
 	}
 }
@@ -85,28 +71,14 @@ func ForFiles(path string, perCookbook func(path string, cookbook types.Cookbook
 func loadCookbookFromPath(path string) (types.Cookbook, string, error) {
 	bytes, _ := os.ReadFile(path)
 	var cb types.Cookbook
-	err := json.Unmarshal(bytes, &cb)
+	println(string(bytes))
+	err := jsonpb.UnmarshalString(string(bytes), &cb)
 	return cb, string(bytes), err
 }
 
 func loadRecipeFromPath(path string) (types.Recipe, string, error) {
 	bytes, _ := os.ReadFile(path)
 	var rcp types.Recipe
-	err := json.Unmarshal(bytes, &rcp)
+	err := jsonpb.UnmarshalString(string(bytes), &rcp)
 	return rcp, string(bytes), err
-}
-
-func getSchemaURL(t reflect.Type) string {
-	var b bytes.Buffer
-	b.WriteString(schemaPathRoot)
-	b.WriteString(t.Name())
-	b.WriteString(dotJSON)
-	return b.String()
-}
-
-func validateJSON(json string, t reflect.Type) (*gojsonschema.Result, error) {
-	schemaLoader := gojsonschema.NewReferenceLoader(getSchemaURL(t))
-	stringLoader := gojsonschema.NewStringLoader(json)
-	result, err := gojsonschema.Validate(schemaLoader, stringLoader)
-	return result, err
 }

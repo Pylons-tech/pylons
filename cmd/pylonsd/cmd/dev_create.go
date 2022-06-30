@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"os"
 	"strconv"
 
 	"github.com/spf13/cobra"
@@ -8,7 +9,10 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/crypto/keyring"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func DevCreate() *cobra.Command {
@@ -19,6 +23,24 @@ func DevCreate() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			accountName := args[0]
 			path := args[1]
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				panic(err)
+			}
+			ks, err := clientCtx.Keyring.List()
+			if err != nil {
+				panic(err)
+			}
+
+			var addr sdk.AccAddress
+			// This is slower than Keyring.Key, but we need to not break on in-memory keyrings
+			for _, k := range ks {
+				if k.GetName() == accountName {
+					addr = k.GetAddress()
+					break
+				}
+			}
+			cli.SetAlternativeContext(clientCtx.WithFromAddress(addr)))
 			ForFiles(path, func(path string, cb types.Cookbook) {
 				c := cli.CmdCreateCookbook()
 				c.SetArgs([]string{cb.Id, cb.Name, cb.Description, cb.Developer, cb.Version, cb.SupportEmail, strconv.FormatBool(cb.Enabled)})

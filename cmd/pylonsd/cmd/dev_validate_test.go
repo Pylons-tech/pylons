@@ -42,18 +42,20 @@ const badCookbookLiteral = `{
     "extraInfo": "extraInfo"
 }`
 
-const goodCookbookLiteral = `{
+const goodCookbookLiteral = `
+{
 	"creator": "pylo199cq5r46uqsjxqv05c5x7nx22yxdawne550hsy",
-	"ID": "cookbookLoudTest",
+	"id": "cookbookLoudTest",
 	"name": "Legend of the Undead Dragon",
 	"description": "Cookbook for running pylons game experience LOUD",
 	"developer": "Pylons Inc",
 	"version": "v0.0.1",
 	"supportEmail": "noreply@pylons.tech",
 	"enabled": true
-  }`
+}`
 
-const badRecipeLiteral = `{
+const badRecipeLiteral = `
+{
     "cookbookID": "cookbookLoudTest",
     "ID": "LOUDGetCharacter",
     "name": "LOUD-Get-Character-Recipe",
@@ -92,7 +94,8 @@ const badRecipeLiteral = `{
     }
 }`
 
-const goodRecipeLiteral = `{
+const goodRecipeLiteral = `
+{
     "cookbookID": "cookbookLoudTest",
     "ID": "LOUDGetCharacter",
     "name": "LOUD-Get-Character-Recipe",

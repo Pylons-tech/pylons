@@ -6,6 +6,7 @@ import (
 
 	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/testutil/network"
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/stretchr/testify/require"
 )
@@ -18,6 +19,7 @@ func TestCreate(t *testing.T) {
 	net := network.New(t)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
+	cli.ForceSkipConfirm = true
 
 	// skip these - we know they're not real/working tests and i need to make sure i didn't break anything
 
@@ -35,10 +37,9 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("Good cookbook", func(t *testing.T) {
-		t.Skip()
 		_, err := util.GenerateAddressWithAccount(ctx, t, net)
 		require.NoError(t, err)
-		args := []string{val.Address.String(), goodPLC}
+		args := []string{"NewUser0", goodPLC}
 		cmd := DevCreate()
 		out, err := clitestutil.ExecTestCLICmd(ctx, cmd, args)
 		fmt.Println("start")
