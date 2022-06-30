@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"fmt"
 	"testing"
 
 	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -21,46 +21,21 @@ func TestCreate(t *testing.T) {
 	ctx := val.ClientCtx
 	cli.ForceSkipConfirm = true
 
-	// skip these - we know they're not real/working tests and i need to make sure i didn't break anything
+	// we don't need to test the bad cb/rcp cases b/c they fail validation
 
-	t.Run("Bad cookbook", func(t *testing.T) {
-		t.Skip() // it fails, we need to check that
-		address, err := util.GenerateAddressWithAccount(ctx, t, net)
-		require.NoError(t, err)
-		args := []string{address, badPLC}
-		cmd := DevCreate()
-		out, err := clitestutil.ExecTestCLICmd(ctx, cmd, args)
-		fmt.Println("start")
-		fmt.Println(out)
-		fmt.Println(err)
-		fmt.Println("end")
-	})
-
-	t.Run("Good cookbook", func(t *testing.T) {
+	t.Run("Cookbook", func(t *testing.T) {
 		_, err := util.GenerateAddressWithAccount(ctx, t, net)
 		require.NoError(t, err)
 		args := []string{"NewUser0", goodPLC}
 		cmd := DevCreate()
-		out, err := clitestutil.ExecTestCLICmd(ctx, cmd, args)
-		fmt.Println("start")
-		fmt.Println(out)
-		fmt.Println(err)
-		fmt.Println("end")
+		_, err = clitestutil.ExecTestCLICmd(ctx, cmd, args)
+		assert.Nil(t, err)
 	})
 
-	t.Run("Bad recipe", func(t *testing.T) {
-		t.Skip()
-		args := []string{badPLR, testAccountName}
-		out, err := clitestutil.ExecTestCLICmd(ctx, DevCreate(), args)
-		t.Log(out)
-		t.Log(err)
-	})
-
-	t.Run("Good recipe", func(t *testing.T) {
-		t.Skip()
-		args := []string{goodPLR, testAccountName}
-		out, err := clitestutil.ExecTestCLICmd(ctx, DevCreate(), args)
-		t.Log(out)
-		t.Log(err)
+	t.Run("Recipe", func(t *testing.T) {
+		args := []string{"NewUser0", goodPLR}
+		cmd := DevCreate()
+		_, err := clitestutil.ExecTestCLICmd(ctx, cmd, args)
+		assert.Nil(t, err)
 	})
 }

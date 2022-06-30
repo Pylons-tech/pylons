@@ -96,8 +96,8 @@ const badRecipeLiteral = `
 
 const goodRecipeLiteral = `
 {
-    "cookbookID": "cookbookLoudTest",
-    "ID": "LOUDGetCharacter",
+    "cookbookId": "cookbookLoudTest",
+    "id": "LOUDGetCharacter",
     "name": "LOUD-Get-Character-Recipe",
     "description": "Creates a basic character in LOUD",
     "version": "v0.0.1",
@@ -107,7 +107,7 @@ const goodRecipeLiteral = `
         "coinOutputs": [],
         "itemOutputs": [
             {
-                "ID": "character",
+                "id": "character",
                 "doubles": [
                     {
                         "key": "XP",
@@ -238,7 +238,7 @@ const goodRecipeLiteral = `
     },
     "outputs": [
         {
-            "entryIDs": [
+            "entryIds": [
                 "character"
             ],
             "weight": 1

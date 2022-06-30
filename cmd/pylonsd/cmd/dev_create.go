@@ -9,8 +9,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func DevCreate() *cobra.Command {
@@ -18,43 +16,22 @@ func DevCreate() *cobra.Command {
 		Use:   "create [account] [path]",
 		Short: "Creates and executes creation transactions Pylons recipe or cookbook files in the provided path, using credentials of provided account",
 		Args:  cobra.ExactArgs(2),
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			accountName := args[0]
 			path := args[1]
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				panic(err)
 			}
-			ks, err := clientCtx.Keyring.List()
+			k, err := clientCtx.Keyring.Key(accountName)
 			if err != nil {
 				panic(err)
 			}
-
-			var addr sdk.AccAddress
-			// This is slower than Keyring.Key, but we need to not break on in-memory keyrings
-			for _, k := range ks {
-				if k.GetName() == accountName {
-					addr = k.GetAddress()
-					break
-				}
-			}
-			cli.SetAlternativeContext(clientCtx.WithFromAddress(addr))
+			cli.SetAlternativeContext(clientCtx.WithFromAddress(k.GetAddress()).WithFromName(accountName).WithBroadcastMode("sync"))
 			ForFiles(path, func(path string, cb types.Cookbook) {
 				c := cli.CmdCreateCookbook()
 				c.SetArgs([]string{cb.Id, cb.Name, cb.Description, cb.Developer, cb.Version, cb.SupportEmail, strconv.FormatBool(cb.Enabled)})
 				var err error
-				err = c.Flags().Set(flags.FlagSkipConfirmation, "true")
-				if err != nil {
-					panic(err)
-				}
-				err = c.Flags().Set(flags.FlagBroadcastMode, flags.BroadcastBlock)
-				if err != nil {
-					panic(err)
-				}
-				err = c.Flags().Set("from", accountName)
-				if err != nil {
-					panic(err)
-				}
 				err = c.Execute()
 				if err != nil {
 					panic(err)
@@ -71,25 +48,26 @@ func DevCreate() *cobra.Command {
 					panic(err)
 				}
 
-				outputJSON, err := json.Marshal(rcp.Outputs)
+				entryJSON, err := json.Marshal(rcp.Entries)
 				if err != nil {
 					panic(err)
 				}
 
-				c.SetArgs([]string{
-					rcp.CookbookId, rcp.Id, rcp.Name, rcp.Description, rcp.Version,
-					string(coinInputJSON), string(itemInputJSON), rcp.Entries.String(), string(outputJSON), strconv.FormatInt(rcp.BlockInterval, 10),
-					rcp.CostPerBlock.String(), rcp.ExtraInfo,
-				})
-				err = c.Flags().Set("from", accountName)
+				outputJSON, err := json.Marshal(rcp.Outputs)
 				if err != nil {
 					panic(err)
 				}
+				c.SetArgs([]string{
+					rcp.CookbookId, rcp.Id, rcp.Name, rcp.Description, rcp.Version,
+					string(coinInputJSON), string(itemInputJSON), string(entryJSON), string(outputJSON), strconv.FormatInt(rcp.BlockInterval, 10),
+					rcp.CostPerBlock.String(), strconv.FormatBool(rcp.Enabled), rcp.ExtraInfo,
+				})
 				err = c.Execute()
 				if err != nil {
 					panic(err)
 				}
 			})
+			return nil
 		},
 	}
 	return cmd

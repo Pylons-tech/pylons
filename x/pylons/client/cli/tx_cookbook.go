@@ -52,26 +52,29 @@ pylonsd tx pylons create-cookbook "loud123456" "Legend of the Undead Dragon" "Co
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
+			var clientCtx client.Context
+
+			if GetAltenativeContext() != nil {
 				altCtx := GetAltenativeContext()
 				if altCtx != nil {
 					clientCtx = altCtx.WithSkipConfirmation(ForceSkipConfirm)
 				} else {
 					return err
 				}
+			} else {
+				c, err := client.GetClientTxContext(cmd)
+				if err != nil {
+					return err
+				}
+				clientCtx = c
 			}
-
 			msg := types.NewMsgCreateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, argsEnabled)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
-			println("aaaaa")
-			println(clientCtx.KeyringDir)
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
-
 	flags.AddTxFlagsToCmd(cmd)
 	return cmd
 }
