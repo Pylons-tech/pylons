@@ -12,7 +12,7 @@ import (
 )
 
 // genTestPaymentInfoSignature generates a signed PaymentInfo message using privKey
-func genTestPaymentInfoSignature(purchaseID, address, productID string, amount types.Int, privKey cryptotypes.PrivKey) string {
+func genTestPaymentInfoSignature(purchaseID, address, productID string, amount sdk.Int, privKey cryptotypes.PrivKey) string {
 	msg := fmt.Sprintf("{\"purchase_id\":\"%s\",\"address\":\"%s\",\"amount\":\"%s\",\"product_id\":\"%s\"}", purchaseID, address, amount.String(), productID)
 	msgBytes := []byte(msg)
 	signedMsg, err := privKey.Sign(msgBytes)
