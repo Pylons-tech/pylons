@@ -15,6 +15,7 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 )
 
 func generateAddress() sdk.AccAddress {
@@ -347,6 +348,14 @@ func (suite *IntegrationTestSuite) SetupTest() {
 	suite.bankKeeper = pylonsApp.BankKeeper
 	suite.accountKeeper = pylonsApp.AccountKeeper
 	suite.stakingKeeper = pylonsApp.StakingKeeper
+}
+
+func (suite *IntegrationTestSuite) FundAccount( ctx sdk.Context, addr sdk.AccAddress, amounts sdk.Coins) error {
+	if err := suite.bankKeeper.MintCoins(ctx, minttypes.ModuleName, amounts); err != nil {
+		return err
+	}
+
+	return suite.bankKeeper.SendCoinsFromModuleToAccount(ctx, minttypes.ModuleName, addr, amounts)
 }
 
 func TestKeeperTestSuite(t *testing.T) {
