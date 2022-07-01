@@ -6,9 +6,9 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	"github.com/cosmos/cosmos-sdk/types"
-
-	pylonstypes "github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // genTestPaymentInfoSignature generates a signed PaymentInfo message using privKey
@@ -26,8 +26,8 @@ func (suite *IntegrationTestSuite) TestA() {
 	k := suite.k
 	privKey := ed25519.GenPrivKey()
 	type args struct {
-		pi    []pylonstypes.PaymentInfo
-		toPay types.Coins
+		pi    []types.PaymentInfo
+		toPay sdk.Coins
 	}
 	for _, tc := range []struct {
 		name    string
@@ -37,45 +37,45 @@ func (suite *IntegrationTestSuite) TestA() {
 		{
 			name: "Valid",
 			args: args{
-				pi: []pylonstypes.PaymentInfo{{
+				pi: []types.PaymentInfo{{
 					PurchaseId:    "testPurchaseId",
 					ProcessorName: "Pylons_Inc",
-					PayerAddr:     pylonstypes.GenTestBech32FromString("test"),
-					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
+					PayerAddr:     types.GenTestBech32FromString("test"),
+					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
 					ProductId:     "testProductId",
-					Signature:     genTestPaymentInfoSignature("testPurchaseId", pylonstypes.GenTestBech32FromString("test"), "testProductId", types.NewInt(1_000_000_000), privKey),
+					Signature:     genTestPaymentInfoSignature("testPurchaseId", types.GenTestBech32FromString("test"), "testProductId", sdk.NewInt(1_000_000_000), privKey),
 				}},
-				toPay: types.NewCoins(types.NewCoin(pylonstypes.StripeCoinDenom, types.NewInt(997_000_000))),
+				toPay: sdk.NewCoins(sdk.NewCoin(types.StripeCoinDenom, sdk.NewInt(997_000_000))),
 			},
 			wantErr: false,
 		},
 		{
 			name: "Invalid payment processors",
 			args: args{
-				pi: []pylonstypes.PaymentInfo{{
+				pi: []types.PaymentInfo{{
 					PurchaseId:    "testPurchaseId",
 					ProcessorName: "Invalid",
-					PayerAddr:     pylonstypes.GenTestBech32FromString("test"),
-					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
+					PayerAddr:     types.GenTestBech32FromString("test"),
+					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
 					ProductId:     "testProductId",
-					Signature:     genTestPaymentInfoSignature("testPurchaseId", pylonstypes.GenTestBech32FromString("test"), "testProductId", types.NewInt(1_000_000_000), privKey),
+					Signature:     genTestPaymentInfoSignature("testPurchaseId", types.GenTestBech32FromString("test"), "testProductId", sdk.NewInt(1_000_000_000), privKey),
 				}},
-				toPay: types.NewCoins(types.NewCoin(pylonstypes.StripeCoinDenom, types.NewInt(997_000_000))),
+				toPay: sdk.NewCoins(sdk.NewCoin(types.StripeCoinDenom, sdk.NewInt(997_000_000))),
 			},
 			wantErr: true,
 		},
 		{
 			name: "Insufficient anount",
 			args: args{
-				pi: []pylonstypes.PaymentInfo{{
+				pi: []types.PaymentInfo{{
 					PurchaseId:    "testPurchaseId",
 					ProcessorName: "Pylons_Inc",
-					PayerAddr:     pylonstypes.GenTestBech32FromString("test"),
-					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
+					PayerAddr:     types.GenTestBech32FromString("test"),
+					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
 					ProductId:     "testProductId",
-					Signature:     genTestPaymentInfoSignature("testPurchaseId", pylonstypes.GenTestBech32FromString("test"), "testProductId", types.NewInt(1_000_000_000), privKey),
+					Signature:     genTestPaymentInfoSignature("testPurchaseId", types.GenTestBech32FromString("test"), "testProductId", sdk.NewInt(1_000_000_000), privKey),
 				}},
-				toPay: types.NewCoins(types.NewCoin(pylonstypes.StripeCoinDenom, types.NewInt(1_000_000_000))),
+				toPay: sdk.NewCoins(sdk.NewCoin(types.StripeCoinDenom, sdk.NewInt(1_000_000_000))),
 			},
 			wantErr: true,
 		},
@@ -100,7 +100,7 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 	bk := suite.bankKeeper
 	ak := suite.accountKeeper
 
-	feeCollectorAddr := ak.GetModuleAddress(pylonstypes.FeeCollectorName)
+	feeCollectorAddr := ak.GetModuleAddress(types.FeeCollectorName)
 	privKey := ed25519.GenPrivKey()
 
 	// Create a payment infor with id = "1"
@@ -108,18 +108,18 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 
 	// set up new payment processor using private key
 	params := k.GetParams(suite.ctx)
-	params.PaymentProcessors = append(params.PaymentProcessors, pylonstypes.PaymentProcessor{
+	params.PaymentProcessors = append(params.PaymentProcessors, types.PaymentProcessor{
 		CoinDenom:            "ustripeusd",
 		PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-		ProcessorPercentage:  pylonstypes.DefaultProcessorPercentage,
-		ValidatorsPercentage: pylonstypes.DefaultValidatorsPercentage,
+		ProcessorPercentage:  types.DefaultProcessorPercentage,
+		ValidatorsPercentage: types.DefaultValidatorsPercentage,
 		Name:                 "Test",
 	})
 	k.SetParams(suite.ctx, params)
 
 	type args struct {
-		pi     []pylonstypes.PaymentInfo
-		sender types.AccAddress
+		pi     []types.PaymentInfo
+		sender sdk.AccAddress
 	}
 	for _, tc := range []struct {
 		name    string
@@ -129,75 +129,75 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 		{
 			name: "Valid",
 			args: args{
-				pi: []pylonstypes.PaymentInfo{{
+				pi: []types.PaymentInfo{{
 					PurchaseId:    "testPurchaseId",
 					ProcessorName: "Test",
-					PayerAddr:     pylonstypes.GenTestBech32FromString("test"),
-					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
+					PayerAddr:     types.GenTestBech32FromString("test"),
+					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
 					ProductId:     "testProductId",
-					Signature:     genTestPaymentInfoSignature("testPurchaseId", pylonstypes.GenTestBech32FromString("test"), "testProductId", types.NewInt(1_000_000_000), privKey),
+					Signature:     genTestPaymentInfoSignature("testPurchaseId", types.GenTestBech32FromString("test"), "testProductId", sdk.NewInt(1_000_000_000), privKey),
 				}},
-				sender: pylonstypes.GenAccAddressFromString("test"),
+				sender: types.GenAccAddressFromString("test"),
 			},
 			wantErr: false,
 		},
 		{
 			name: "Invalid purchase ID",
 			args: args{
-				pi: []pylonstypes.PaymentInfo{{
+				pi: []types.PaymentInfo{{
 					PurchaseId:    "1",
 					ProcessorName: "Test",
-					PayerAddr:     pylonstypes.GenTestBech32FromString("test"),
-					Amount:        types.NewInt(1_000_000_000), // 1300stripeusd
+					PayerAddr:     types.GenTestBech32FromString("test"),
+					Amount:        sdk.NewInt(1_000_000_000), // 1300stripeusd
 					ProductId:     "testProductId",
-					Signature:     genTestPaymentInfoSignature("testPurchaseId", pylonstypes.GenTestBech32FromString("test"), "testProductId", types.NewInt(1_000_000_000), privKey),
+					Signature:     genTestPaymentInfoSignature("testPurchaseId", types.GenTestBech32FromString("test"), "testProductId", sdk.NewInt(1_000_000_000), privKey),
 				}},
-				sender: pylonstypes.GenAccAddressFromString("test"),
+				sender: types.GenAccAddressFromString("test"),
 			},
 			wantErr: true,
 		},
 		{
 			name: "Invalid sender address",
 			args: args{
-				pi: []pylonstypes.PaymentInfo{{
+				pi: []types.PaymentInfo{{
 					PurchaseId:    "testPurchaseId",
 					ProcessorName: "Test",
-					PayerAddr:     pylonstypes.GenTestBech32FromString("test"),
-					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
+					PayerAddr:     types.GenTestBech32FromString("test"),
+					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
 					ProductId:     "testProductId",
-					Signature:     genTestPaymentInfoSignature("testPurchaseId", pylonstypes.GenTestBech32FromString("test"), "testProductId", types.NewInt(1_000_000_000), privKey),
+					Signature:     genTestPaymentInfoSignature("testPurchaseId", types.GenTestBech32FromString("test"), "testProductId", sdk.NewInt(1_000_000_000), privKey),
 				}},
-				sender: pylonstypes.GenAccAddressFromString("invalid"),
+				sender: types.GenAccAddressFromString("invalid"),
 			},
 			wantErr: true,
 		},
 		{
 			name: "Invalid signature",
 			args: args{
-				pi: []pylonstypes.PaymentInfo{{
+				pi: []types.PaymentInfo{{
 					PurchaseId:    "testPurchaseId",
 					ProcessorName: "Test",
-					PayerAddr:     pylonstypes.GenTestBech32FromString("test"),
-					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
+					PayerAddr:     types.GenTestBech32FromString("test"),
+					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
 					ProductId:     "testProductId",
 					Signature:     "INVALID_SIGNATURE",
 				}},
-				sender: pylonstypes.GenAccAddressFromString("test"),
+				sender: types.GenAccAddressFromString("test"),
 			},
 			wantErr: true,
 		},
 		{
 			name: "Invalid payment processor",
 			args: args{
-				pi: []pylonstypes.PaymentInfo{{
+				pi: []types.PaymentInfo{{
 					PurchaseId:    "testPurchaseId",
 					ProcessorName: "Invalid",
-					PayerAddr:     pylonstypes.GenTestBech32FromString("test"),
-					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
+					PayerAddr:     types.GenTestBech32FromString("test"),
+					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
 					ProductId:     "testProductId",
-					Signature:     genTestPaymentInfoSignature("testPurchaseId", pylonstypes.GenTestBech32FromString("test"), "testProductId", types.NewInt(1_000_000_000), privKey),
+					Signature:     genTestPaymentInfoSignature("testPurchaseId", types.GenTestBech32FromString("test"), "testProductId", sdk.NewInt(1_000_000_000), privKey),
 				}},
-				sender: pylonstypes.GenAccAddressFromString("test"),
+				sender: types.GenAccAddressFromString("test"),
 			},
 			wantErr: true,
 		},
@@ -215,12 +215,84 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 				suite.Require().NoError(err)
 
 				//Check balances
-				userBalances := bk.SpendableCoins(suite.ctx, pylonstypes.GenAccAddressFromString("test"))
+				userBalances := bk.SpendableCoins(suite.ctx, types.GenAccAddressFromString("test"))
 				feeCollectorBalances := bk.SpendableCoins(suite.ctx, feeCollectorAddr)
-				suite.Require().True(userBalances.IsEqual(types.NewCoins(types.NewCoin(pylonstypes.StripeCoinDenom, types.NewInt(997000000)))))
-				suite.Require().True(feeCollectorBalances.IsEqual(types.NewCoins(types.NewCoin(pylonstypes.StripeCoinDenom, types.NewInt(3000000)))))
+				suite.Require().True(userBalances.IsEqual(sdk.NewCoins(sdk.NewCoin(types.StripeCoinDenom, sdk.NewInt(997000000)))))
+				suite.Require().True(feeCollectorBalances.IsEqual(sdk.NewCoins(sdk.NewCoin(types.StripeCoinDenom, sdk.NewInt(3000000)))))
 
 			}
 		})
 	}
+}
+
+func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
+	correctAddr := "pylo1xn72u3jxlpqx8tfgmjf0xg970q36xensjngsme"
+	addr, _ := sdk.AccAddressFromBech32(correctAddr)
+	addrInc, _ := sdk.AccAddressFromBech32("tester incorrect")
+	amount := sdk.NewIntFromUint64(10020060)
+	productID := "recipe/Easel_CookBook_auto_cookbook_2022_06_14_114716_442/Easel_Recipe_auto_recipe_2022_06_14_114722_895"
+	signature := "+f11IPGOtgMTpQou8V2anPSK9KCyQbi3UXFvocFDzmUKxcloXavWIzKIhIXg7pHwfRut62l1Jgo/J7a6uyusDQ=="
+	purchaseId := "pi_3LFgx7EdpQgutKvr1cp5nqtP"
+	incPurchaseId := "pi_3LFgx7EdpQgutKvr1cp5"
+	processorName := "Pylons_Inc"
+	for _, tc := range []struct {
+		desc    string
+		request *types.PaymentInfo
+		err     error
+		addr    sdk.AccAddress
+	}{
+		{
+			desc: "Valid Payment Info",
+			request: &types.PaymentInfo{
+				PurchaseId:    purchaseId,
+				ProcessorName: processorName,
+				PayerAddr:     correctAddr,
+				Amount:        amount,
+				ProductId:     productID,
+				Signature:     signature,
+			},
+			addr: addr,
+		},
+		{
+			desc: "Address Do Not Match",
+			request: &types.PaymentInfo{
+				PurchaseId:    purchaseId,
+				ProcessorName: processorName,
+				PayerAddr:     correctAddr,
+				Amount:        amount,
+				ProductId:     productID,
+				Signature:     signature,
+			},
+			addr: addrInc,
+			err:  sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", purchaseId),
+		},
+		{
+			desc: "Signature Invalid",
+			request: &types.PaymentInfo{
+				PurchaseId:    incPurchaseId,
+				ProcessorName: processorName,
+				PayerAddr:     correctAddr,
+				Amount:        amount,
+				ProductId:     productID,
+				Signature:     signature,
+			},
+			addr: addr,
+			err:  sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", purchaseId, sdkerrors.Wrapf(sdkerrors.ErrorInvalidSigner, "signature for %s is invalid", processorName).Error()),
+		},
+	} {
+		tc := tc
+		suite.Run(tc.desc, func() {
+			err := k.VerifyPaymentInfos(ctx, tc.request, tc.addr)
+			if tc.err != nil {
+				require.ErrorIs(err, tc.err)
+			} else {
+				require.NoError(err)
+			}
+		})
+	}
+
 }

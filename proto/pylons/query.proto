@@ -4,6 +4,7 @@ package Pylonstech.pylons.pylons;
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
+// this line is used by starport scaffolding # 1
 import "pylons/redeem_info.proto";
 import "pylons/payment_info.proto";
 import "pylons/accounts.proto";
@@ -13,6 +14,7 @@ import "pylons/execution.proto";
 import "pylons/item.proto";
 import "pylons/recipe.proto";
 import "pylons/cookbook.proto";
+import "pylons/stripe_refund.proto";
 
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
@@ -28,6 +30,12 @@ service Query {
 		option (google.api.http).get = "/Pylons-tech/pylons/pylons/get_recipe_history/{cookbook_id}/{recipe_id}";
 	}
 
+// Queries a list of GetStripeRefund items.
+	rpc GetStripeRefund(QueryGetStripeRefundRequest) returns (QueryGetStripeRefundResponse) {
+		option (google.api.http).get = "/pylons/get_stripe_refund";
+	}
+
+// this line is used by starport scaffolding # 2
 
 	// Queries a redeemInfo by index.
 	rpc RedeemInfo(QueryGetRedeemInfoRequest) returns (QueryGetRedeemInfoResponse) {
@@ -150,6 +158,15 @@ message RecipeHistory {
 	string amount = 7;
 	int64 created_at = 8;
 }
+message QueryGetStripeRefundRequest {
+}
+
+message QueryGetStripeRefundResponse {
+	repeated StripeRefund refunds = 1;
+}
+
+// this line is used by starport scaffolding # 3
+
 message QueryGetRedeemInfoRequest {
 	string id = 1;
 }

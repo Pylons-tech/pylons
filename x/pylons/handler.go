@@ -25,6 +25,9 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 		case *types.MsgAppleIap:
 			res, err := msgServer.AppleIap(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
+		case *types.MsgAddStripeRefund:
+			res, err := msgServer.AddStripeRefund(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
 			// this line is used by starport scaffolding # 1
 		case *types.MsgBurnDebtToken:
 			res, err := msgServer.BurnDebtToken(sdk.WrapSDKContext(ctx), msg)
