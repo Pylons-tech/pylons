@@ -14,8 +14,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func generateAddress() sdk.AccAddress {
@@ -350,7 +351,7 @@ func (suite *IntegrationTestSuite) SetupTest() {
 	suite.stakingKeeper = pylonsApp.StakingKeeper
 }
 
-func (suite *IntegrationTestSuite) FundAccount( ctx sdk.Context, addr sdk.AccAddress, amounts sdk.Coins) error {
+func (suite *IntegrationTestSuite) FundAccount(ctx sdk.Context, addr sdk.AccAddress, amounts sdk.Coins) error {
 	if err := suite.bankKeeper.MintCoins(ctx, minttypes.ModuleName, amounts); err != nil {
 		return err
 	}

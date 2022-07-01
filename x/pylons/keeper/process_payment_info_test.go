@@ -7,6 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	"github.com/cosmos/cosmos-sdk/types"
+
 	pylonstypes "github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
@@ -25,7 +26,7 @@ func (suite *IntegrationTestSuite) TestA() {
 	k := suite.k
 	privKey := ed25519.GenPrivKey()
 	type args struct {
-		pi []pylonstypes.PaymentInfo
+		pi    []pylonstypes.PaymentInfo
 		toPay types.Coins
 	}
 	for _, tc := range []struct {
@@ -80,8 +81,8 @@ func (suite *IntegrationTestSuite) TestA() {
 		},
 	} {
 		tc := tc
-		suite.Run(tc.name, func() {			
-			err := k.ValidatePaymentInfo(suite.ctx,tc.args.pi, tc.args.toPay);
+		suite.Run(tc.name, func() {
+			err := k.ValidatePaymentInfo(suite.ctx, tc.args.pi, tc.args.toPay)
 			if tc.wantErr {
 				suite.Require().Error(err)
 				suite.Errorf(err, "ValidatePaymentInfo() wantErr %v", tc.name)
@@ -115,10 +116,9 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 		Name:                 "Test",
 	})
 	k.SetParams(suite.ctx, params)
-	
 
 	type args struct {
-		pi []pylonstypes.PaymentInfo
+		pi     []pylonstypes.PaymentInfo
 		sender types.AccAddress
 	}
 	for _, tc := range []struct {
@@ -204,8 +204,8 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 	} {
 		tc := tc
 		suite.Run(tc.name, func() {
-			
-			err := k.ProcessPaymentInfos(suite.ctx,tc.args.pi, tc.args.sender);
+
+			err := k.ProcessPaymentInfos(suite.ctx, tc.args.pi, tc.args.sender)
 			if tc.wantErr {
 				suite.Require().Error(err)
 				suite.Errorf(err, "ProcessPaymentInfos() wantErr %v", tc.name)
@@ -224,4 +224,3 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 		})
 	}
 }
-
