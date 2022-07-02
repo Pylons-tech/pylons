@@ -1,0 +1,36 @@
+name: proto_checks
+
+on: [pull_request]
+
+jobs:
+  proto_checks:
+    name: proto lint, breaking changes detection and generating stubs from protos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: wizhi/setup-buf@v1
+        with:
+          version: '0.36.0'
+      - uses: arduino/setup-protoc@v1
+        with:
+          version: '3.x'
+
+      - name: Fetching base branch
+        run: |
+                    git fetch -u origin ${{ github.base_ref }}:${{ github.base_ref }}
+      - name: Running linter, checking breaking changes
+        run: |
+          buf lint
+          buf breaking --against ".git#branch=${{ github.base_ref }}"          
+      - name: Installing protoc-gen-go
+        run: |
+          go get github.com/golang/protobuf/protoc-gen-go
+          go get google.golang.org/grpc/cmd/protoc-gen-go-grpc          
+      - name: Generating protos
+        run: |
+          protoc -I=$PROTO_DIR \ 
+          --go_out=$GEN_OUT_DIR \ 
+          $(find $PROTO_DIR -type f -name '*.proto')          
+        env:
+          GEN_OUT_DIR: contracts/build/go
+          PROTO_DIR: contracts/proto
