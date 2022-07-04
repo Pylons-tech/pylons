@@ -10,10 +10,18 @@ var (
 	_ sdk.Msg = &MsgUpdateAccount{}
 )
 
-func NewMsgCreateAccount(creator string, username string) *MsgCreateAccount {
-	return &MsgCreateAccount{
-		Creator:  creator,
-		Username: username,
+func NewMsgCreateAccount(creator string, username string, check ...bool) *MsgCreateAccount {
+	if len(check) == 0 {
+		return &MsgCreateAccount{
+			Creator:  creator,
+			Username: username,
+		}
+	} else {
+		return &MsgCreateAccount{
+			Creator:  creator,
+			Username: username,
+			AppCheck: check[0],
+		}
 	}
 }
 

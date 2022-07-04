@@ -9,13 +9,12 @@ const TypeMsgAppleIap = "apple_iap"
 
 var _ sdk.Msg = &MsgAppleIap{}
 
-func NewMsgAppleIap(creator string, productID string, purchaseID string, receiptDataBase64 string, token string) *MsgAppleIap {
+func NewMsgAppleIap(creator string, productID string, purchaseID string, receiptDataBase64 string) *MsgAppleIap {
 	return &MsgAppleIap{
 		Creator:           creator,
 		ProductId:         productID,
 		PurchaseId:        purchaseID,
 		ReceiptDataBase64: receiptDataBase64,
-		Token:             token,
 	}
 }
 
@@ -46,11 +45,5 @@ func (msg *MsgAppleIap) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
-	if DefaultAppCheckConfig {
-		err = VerifyAppCheckToken(msg.Token)
-		if err != nil {
-			return sdkerrors.Wrapf(sdkerrors.ErrUnauthorized, "invalid app check token (%s)", err)
-		}
-	}
 	return nil
 }

@@ -32,9 +32,9 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type MsgAppleIap struct {
 	Creator           string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	ProductId         string `protobuf:"bytes,2,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
-	PurchaseId        string `protobuf:"bytes,3,opt,name=purchase_id,json=purchaseId,proto3" json:"purchase_id,omitempty"`
-	ReceiptDataBase64 string `protobuf:"bytes,4,opt,name=receipt_data_base64,json=receiptDataBase64,proto3" json:"receipt_data_base64,omitempty"`
+	ProductID         string `protobuf:"bytes,2,opt,name=productID,proto3" json:"productID,omitempty"`
+	PurchaseID        string `protobuf:"bytes,3,opt,name=purchaseID,proto3" json:"purchaseID,omitempty"`
+	ReceiptDataBase64 string `protobuf:"bytes,4,opt,name=receiptDataBase64,proto3" json:"receiptDataBase64,omitempty"`
 }
 
 func (m *MsgAppleIap) Reset()         { *m = MsgAppleIap{} }
@@ -402,6 +402,7 @@ var xxx_messageInfo_MsgUpdateAccountResponse proto.InternalMessageInfo
 type MsgCreateAccount struct {
 	Creator  string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
 	Username string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	AppCheck bool   `protobuf:"varint,3,opt,name=app_check,json=appCheck,proto3" json:"app_check,omitempty"`
 }
 
 func (m *MsgCreateAccount) Reset()         { *m = MsgCreateAccount{} }
@@ -449,6 +450,13 @@ func (m *MsgCreateAccount) GetUsername() string {
 		return m.Username
 	}
 	return ""
+}
+
+func (m *MsgCreateAccount) GetAppCheck() bool {
+	if m != nil {
+		return m.AppCheck
+	}
+	return false
 }
 
 type MsgCreateAccountResponse struct {
@@ -3220,6 +3228,16 @@ func (m *MsgCreateAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.AppCheck {
+		i--
+		if m.AppCheck {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x18
+	}
 	if len(m.Username) > 0 {
 		i -= len(m.Username)
 		copy(dAtA[i:], m.Username)
@@ -4691,6 +4709,9 @@ func (m *MsgCreateAccount) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
+	if m.AppCheck {
+		n += 2
+	}
 	return n
 }
 
@@ -6108,6 +6129,26 @@ func (m *MsgCreateAccount) Unmarshal(dAtA []byte) error {
 			}
 			m.Username = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppCheck", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.AppCheck = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])

@@ -19,6 +19,10 @@ type JSONWebKeys struct {
 	Key map[string]interface{}
 }
 
+type JWKRES struct {
+	Key []*JWK `json:"keys"`
+}
+
 var (
 	// ErrKID indicates that the JWT had an invalid kid.
 	ErrKID = errors.New("the JWT has an invalid kid")
@@ -84,7 +88,7 @@ func verifyAudClaim(auds []interface{}) bool {
 * Returns @Error in case of any error
  */
 func requestJWK() (*JSONWebKeys, error) {
-	keys := []*JWK{}
+	keys := JWKRES{}
 	req, err := http.NewRequest(http.MethodGet, jwkURL, bytes.NewReader(nil))
 	if err != nil {
 		return nil, err
@@ -101,7 +105,7 @@ func requestJWK() (*JSONWebKeys, error) {
 	if err != nil {
 		return nil, err
 	}
-	if len(jwkBytes) != 0 {
+	if len(jwkBytes) == 0 {
 		return nil, err
 	}
 
@@ -109,9 +113,9 @@ func requestJWK() (*JSONWebKeys, error) {
 	if err != nil {
 		return nil, err
 	}
-	keysMap := make(map[string]interface{}, len(keys))
+	keysMap := make(map[string]interface{}, len(keys.Key))
 	// iterate over the json web keys and extract the public key
-	for _, key := range keys {
+	for _, key := range keys.Key {
 		var keyInter interface{}
 		switch key.Kty {
 		case ktyRSA:

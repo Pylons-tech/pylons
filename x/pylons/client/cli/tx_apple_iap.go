@@ -21,7 +21,6 @@ func CmdAppleIap() *cobra.Command {
 			argsProductID := args[0]
 			argsPurchaseID := args[1]
 			argsReceiptDataBase64 := args[2]
-			argsToken := args[4]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -33,7 +32,6 @@ func CmdAppleIap() *cobra.Command {
 				argsProductID,
 				argsPurchaseID,
 				argsReceiptDataBase64,
-				argsToken,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err

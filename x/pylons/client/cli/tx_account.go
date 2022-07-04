@@ -49,7 +49,7 @@ pylonsd tx pylons create-account john --from pylo1tqqp6wmctv0ykatyaefsqy6stj92ln
 				return err
 			}
 
-			msg := types.NewMsgCreateAccount(clientCtx.GetFromAddress().String(), username)
+			msg := types.NewMsgCreateAccount(clientCtx.GetFromAddress().String(), username, true)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

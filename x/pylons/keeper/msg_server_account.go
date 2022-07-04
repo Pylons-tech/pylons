@@ -4,6 +4,9 @@ import (
 	"context"
 
 	"github.com/cosmos/cosmos-sdk/telemetry"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -14,6 +17,11 @@ import (
 
 func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAccount) (*types.MsgCreateAccountResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	err := k.verifyAppCheck(goCtx, msg.AppCheck)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
 
 	addr, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
@@ -82,4 +90,23 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 	telemetry.IncrCounter(1, "account", "update")
 
 	return &types.MsgUpdateAccountResponse{}, err
+}
+
+func (k msgServer) verifyAppCheck(ctx context.Context, appCheck bool) error {
+	if !appCheck {
+		return nil
+	}
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return status.Error(codes.Internal, "unable to retrieve metadata")
+	}
+	app_check := md.Get("app-check-token")
+	if len(app_check) != 1 {
+		return status.Error(codes.Unauthenticated, "invalid app-check header")
+	}
+	err := types.VerifyAppCheckToken(app_check[0])
+	if err != nil {
+		return status.Error(codes.Unauthenticated, "unable to verify app-check token")
+	}
+	return nil
 }
