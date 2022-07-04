@@ -8,6 +8,7 @@ import (
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
@@ -75,7 +76,7 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 					PurchaseId:    "1",
 					ProcessorName: "Test",
 					PayerAddr:     types.GenTestBech32FromString("test"),
-					Amount:        sdk.NewInt(1_000_000_000), // 1300stripeusd
+					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
 					ProductId:     "testProductId",
 					Signature:     genTestPaymentInfoSignature("testPurchaseId", types.GenTestBech32FromString("test"), "testProductId", sdk.NewInt(1_000_000_000), privKey),
 				}},
