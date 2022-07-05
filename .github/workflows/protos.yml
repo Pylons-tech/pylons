@@ -18,19 +18,18 @@ jobs:
       - name: Fetching base branch
         run: |
                     git fetch -u origin ${{ github.base_ref }}:${{ github.base_ref }}
-      - name: Running linter, checking breaking changes
+      # - name: Running linter, checking breaking changes
+      #   run: |
+      #     buf lint
+      #     buf breaking --against ".git#branch=${{ github.base_ref }}"          
+      - name: Running buf build
+        working-directory: proto/
         run: |
-          buf lint
-          buf breaking --against ".git#branch=${{ github.base_ref }}"          
-      - name: Installing protoc-gen-go
-        run: |
-          go get github.com/golang/protobuf/protoc-gen-go
-          go get google.golang.org/grpc/cmd/protoc-gen-go-grpc          
+          buf build --error-format=json
       - name: Generating protos
+        working-directory: proto/
         run: |
-          protoc -I=$PROTO_DIR \ 
-          --go_out=$GEN_OUT_DIR \ 
-          $(find $PROTO_DIR -type f -name '*.proto')          
+          buf generate --template buf.gen.gogo.yaml        
         env:
           GEN_OUT_DIR: contracts/build/go
           PROTO_DIR: contracts/proto
