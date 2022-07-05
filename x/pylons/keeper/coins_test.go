@@ -162,5 +162,4 @@ func (suite *IntegrationTestSuite) TestSendRewardsFromFeeCollector() {
 
 	require.True(collectorBalance.IsEqual(feesCoins))
 	require.True(feeCollectorBalances.IsEqual(sdk.Coins{}))
-
 }

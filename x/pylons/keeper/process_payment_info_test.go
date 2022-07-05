@@ -75,5 +75,4 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 			}
 		})
 	}
-
 }

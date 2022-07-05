@@ -350,7 +350,7 @@ func (suite *IntegrationTestSuite) SetupTest() {
 	suite.stakingKeeper = pylonsApp.StakingKeeper
 }
 
-func (suite *IntegrationTestSuite) FundAccount( ctx sdk.Context, addr sdk.AccAddress, amounts sdk.Coins) error {
+func (suite *IntegrationTestSuite) FundAccount(ctx sdk.Context, addr sdk.AccAddress, amounts sdk.Coins) error {
 	if err := suite.bankKeeper.MintCoins(ctx, minttypes.ModuleName, amounts); err != nil {
 		return err
 	}
