@@ -2172,7 +2172,7 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 var (
 	pattern_Query_ListTradesByCreator_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "trades", "creator"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_GetRecipeHistory_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"Pylons-tech", "pylons", "get_recipe_history", "cookbook_id", "recipe_id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_GetRecipeHistory_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 1, 0, 4, 1, 5, 3}, []string{"pylons", "get_recipe_history", "cookbook_id", "recipe_id"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_Query_GetStripeRefund_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"pylons", "get_stripe_refund"}, "", runtime.AssumeColonVerbOpt(false)))
 

@@ -26,7 +26,7 @@ service Query {
 
 // Queries a list of GetRecipeHistory items.
 	rpc GetRecipeHistory(QueryGetRecipeHistoryRequest) returns (QueryGetRecipeHistoryResponse) {
-		option (google.api.http).get = "/Pylons-tech/pylons/pylons/get_recipe_history/{cookbook_id}/{recipe_id}";
+		option (google.api.http).get = "/pylons/get_recipe_history/{cookbook_id}/{recipe_id}";
 	}
 
 // Queries a list of GetStripeRefund items.

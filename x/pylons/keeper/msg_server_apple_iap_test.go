@@ -50,7 +50,7 @@ func (suite *IntegrationTestSuite) TestMsgServerappleInAppPurchaseGetCoins() {
 				ProductId:         "pylons_10",
 				PurchaseId:        "2000000086523782",
 			},
-			balance: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))),
+			balance: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10000000))),
 		},
 		{
 			// valid recipet 2 35 coins
@@ -61,7 +61,7 @@ func (suite *IntegrationTestSuite) TestMsgServerappleInAppPurchaseGetCoins() {
 				ProductId:         "pylons_35",
 				PurchaseId:        "2000000086528808",
 			},
-			balance: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(45))),
+			balance: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(45000000))),
 		},
 		{
 			// valid recipet 3 60 coins
@@ -72,7 +72,7 @@ func (suite *IntegrationTestSuite) TestMsgServerappleInAppPurchaseGetCoins() {
 				ProductId:         "pylons_60",
 				PurchaseId:        "2000000086529484",
 			},
-			balance: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(105))),
+			balance: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(105000000))),
 		},
 		{
 			// invalid product id is embedded within the receipt data
@@ -83,7 +83,7 @@ func (suite *IntegrationTestSuite) TestMsgServerappleInAppPurchaseGetCoins() {
 				ProductId:         "pylons_60",
 				PurchaseId:        "2000000086529484",
 			},
-			err: sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the Apple IAP order ID is already being used"),
+			err: sdkerrors.Wrap(types.ErrReceiptAlreadyUsed, "the Apple IAP order ID is already being used"),
 		},
 	} {
 		tc := tc
