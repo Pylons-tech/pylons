@@ -27,8 +27,8 @@ func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.Paymen
 
 				amt := pi.Amount
 				// account for network fees
-				burnAmt := amt.ToDec().Mul(pp.ProcessorPercentage).RoundInt()
-				feesAmt := amt.ToDec().Mul(pp.ValidatorsPercentage).RoundInt()
+				burnAmt := amt.Mul(pp.ProcessorPercentage)
+				feesAmt := amt.Mul(pp.ValidatorsPercentage)
 
 				mintCoins := sdk.NewCoins(sdk.NewCoin(pp.CoinDenom, pi.Amount))
 				burnCoins := sdk.NewCoins(sdk.NewCoin(pp.CoinDenom, burnAmt))

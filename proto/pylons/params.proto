@@ -26,9 +26,9 @@ message PaymentProcessor {
   // pubKey is assumed to be ed25519
   string pub_key = 2 [(gogoproto.moretags) = "yaml:\"pub_key\""];
   // Represents the percentage retained by the payment processor when new coins are minted. In the range [0, 1), this amount is burned on-chain, actual fee is retained at the source.
-  string processor_percentage = 3 [(gogoproto.moretags) = "yaml:\"processor_percentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string processor_percentage = 3 [(gogoproto.moretags) = "yaml:\"processor_percentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
   // Represents the percentage distributed to stakers. In the range [0, 1). The sum with processingCut cannot exceed 1.
-  string validators_percentage = 4 [(gogoproto.moretags) = "yaml:\"validators_pecentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string validators_percentage = 4 [(gogoproto.moretags) = "yaml:\"validators_pecentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
   string name = 5;
 }
 
@@ -37,8 +37,8 @@ message Params {
   option (gogoproto.goproto_stringer) = false;
   repeated CoinIssuer coin_issuers = 1 [(gogoproto.moretags) = "yaml:\"coin_issuers\"", (gogoproto.nullable) = false];
   repeated PaymentProcessor payment_processors = 2 [(gogoproto.moretags) = "yaml:\"payment_processors\"", (gogoproto.nullable) = false];
-  string recipe_fee_percentage = 3 [(gogoproto.moretags) = "yaml:\"recipe_fee_percentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
-  string item_transfer_fee_percentage = 4 [(gogoproto.moretags) = "yaml:\"item_transfer_fee_percentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string recipe_fee_percentage = 3 [(gogoproto.moretags) = "yaml:\"recipe_fee_percentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
+  string item_transfer_fee_percentage = 4 [(gogoproto.moretags) = "yaml:\"item_transfer_fee_percentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
   cosmos.base.v1beta1.Coin update_item_string_fee = 5 [(gogoproto.moretags) = "yaml:\"update_item_string_fee\"", (gogoproto.nullable) = false];
   string min_transfer_fee = 6 [(gogoproto.moretags) = "yaml:\"min_transfer_fee\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
   string max_transfer_fee = 7 [(gogoproto.moretags) = "yaml:\"max_transfer_fee\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];

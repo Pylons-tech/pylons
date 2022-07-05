@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -71,12 +72,12 @@ func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.Stak
 	return distrPercentages
 }
 
-func CalculateRewardsHelper(distrPercentages map[string]sdk.Dec, rewardsTotalAmount sdk.Coins) (delegatorsRewards map[string]sdk.Coins) {
+func CalculateRewardsHelper(distrPercentages map[string]math.Int, rewardsTotalAmount sdk.Coins) (delegatorsRewards map[string]sdk.Coins) {
 	delegatorsRewards = make(map[string]sdk.Coins)
 	for addr, percentage := range distrPercentages {
 		totalAmountsForAddr := sdk.NewCoins()
 		for _, coin := range rewardsTotalAmount {
-			amountForAddr := coin.Amount.ToDec().Mul(percentage).TruncateInt()
+			amountForAddr := coin.Amount.Mul(percentage)
 			if amountForAddr.IsPositive() {
 				// only add strictly positive amounts
 				totalAmountsForAddr = totalAmountsForAddr.Add(sdk.NewCoin(coin.Denom, amountForAddr))
@@ -89,7 +90,7 @@ func CalculateRewardsHelper(distrPercentages map[string]sdk.Dec, rewardsTotalAmo
 	return
 }
 
-func (k Keeper) CalculateDelegatorsRewards(ctx sdk.Context, distrPercentages map[string]sdk.Dec) map[string]sdk.Coins {
+func (k Keeper) CalculateDelegatorsRewards(ctx sdk.Context, distrPercentages map[string]math.Int) map[string]sdk.Coins {
 	// get the balance of the feeCollector moduleAcc
 	rewardsTotalAmount := k.bankKeeper.SpendableCoins(ctx, k.FeeCollectorAddress())
 	if !rewardsTotalAmount.IsZero() {
