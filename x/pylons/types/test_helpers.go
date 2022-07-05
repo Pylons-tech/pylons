@@ -43,3 +43,9 @@ func GenTestBech32FromString(s string) string {
 
 	return addr
 }
+
+func GenAccAddressFromString(s string) sdk.AccAddress {
+	addrStr := GenTestBech32FromString(s)
+	addr, _ := sdk.AccAddressFromBech32(addrStr)
+	return addr
+}
