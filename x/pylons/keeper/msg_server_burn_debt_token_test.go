@@ -136,7 +136,6 @@ func (suite *IntegrationTestSuite) TestBurnDebtToken() {
 			}
 			wctx := sdk.WrapSDKContext(suite.ctx)
 			_, err := srv.BurnDebtToken(wctx, &msg)
-			fmt.Println(err)
 			if tc.wantErr {
 				suite.Require().Error(err)
 				suite.Errorf(err, "ProcessRedeemInfos() wantErr %v", tc.name)
