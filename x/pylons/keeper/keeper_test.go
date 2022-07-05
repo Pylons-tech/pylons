@@ -206,7 +206,7 @@ func createNAppleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.Apple
 	creators := types.GenTestBech32List(n)
 	for i := range items {
 		items[i].Creator = creators[i]
-		items[i].PurchaseID = strconv.Itoa(i)
+		items[i].PurchaseId = strconv.Itoa(i)
 		k.AppendAppleIAPOrder(ctx, items[i])
 	}
 

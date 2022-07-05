@@ -1,5 +1,5 @@
 syntax = "proto3";
-package Pylonstech.pylons.pylons;
+package pylons.pylons;
 
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 option (gogoproto.equal_all) = true;
@@ -35,15 +35,15 @@ message PaymentProcessor {
 // Params represent the parameters used by the pylons module
 message Params {
   option (gogoproto.goproto_stringer) = false;
-  repeated CoinIssuer coinIssuers = 1 [(gogoproto.moretags) = "yaml:\"coin_issuers\"", (gogoproto.nullable) = false];
-  repeated PaymentProcessor paymentProcessors = 2 [(gogoproto.moretags) = "yaml:\"payment_processors\"", (gogoproto.nullable) = false];
-  string recipeFeePercentage = 3 [(gogoproto.moretags) = "yaml:\"recipe_fee_percentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
-  string itemTransferFeePercentage = 4 [(gogoproto.moretags) = "yaml:\"item_transfer_fee_percentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
-  cosmos.base.v1beta1.Coin updateItemStringFee = 5 [(gogoproto.moretags) = "yaml:\"update_item_string_fee\"", (gogoproto.nullable) = false];
-  string minTransferFee = 6 [(gogoproto.moretags) = "yaml:\"min_transfer_fee\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
-  string maxTransferFee = 7 [(gogoproto.moretags) = "yaml:\"max_transfer_fee\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
-  cosmos.base.v1beta1.Coin updateUsernameFee = 8 [(gogoproto.moretags) = "yaml:\"update_username_fee\"", (gogoproto.nullable) = false];
-  string distrEpochIdentifier = 9 [(gogoproto.moretags) = "yaml:\"distr_epoch_identifier\""];
-  uint64 engineVersion = 10 [(gogoproto.moretags) = "yaml:\"engine_version\""];
-  uint64 maxTxsInBlock = 11 [(gogoproto.moretags) = "yaml:\"max_txs\""];
+  repeated CoinIssuer coin_issuers = 1 [(gogoproto.moretags) = "yaml:\"coin_issuers\"", (gogoproto.nullable) = false];
+  repeated PaymentProcessor payment_processors = 2 [(gogoproto.moretags) = "yaml:\"payment_processors\"", (gogoproto.nullable) = false];
+  string recipe_fee_percentage = 3 [(gogoproto.moretags) = "yaml:\"recipe_fee_percentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string item_transfer_fee_percentage = 4 [(gogoproto.moretags) = "yaml:\"item_transfer_fee_percentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  cosmos.base.v1beta1.Coin update_item_string_fee = 5 [(gogoproto.moretags) = "yaml:\"update_item_string_fee\"", (gogoproto.nullable) = false];
+  string min_transfer_fee = 6 [(gogoproto.moretags) = "yaml:\"min_transfer_fee\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
+  string max_transfer_fee = 7 [(gogoproto.moretags) = "yaml:\"max_transfer_fee\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
+  cosmos.base.v1beta1.Coin update_username_fee = 8 [(gogoproto.moretags) = "yaml:\"update_username_fee\"", (gogoproto.nullable) = false];
+  string distr_epoch_identifier = 9 [(gogoproto.moretags) = "yaml:\"distr_epoch_identifier\""];
+  uint64 engine_version = 10 [(gogoproto.moretags) = "yaml:\"engine_version\""];
+  uint64 max_txs_in_block = 11 [(gogoproto.moretags) = "yaml:\"max_txs_in_block\""];
 }

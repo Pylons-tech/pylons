@@ -1,5 +1,5 @@
 syntax = "proto3";
-package Pylonstech.pylons.pylons;
+package pylons.pylons;
 
 
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
@@ -39,8 +39,8 @@ message Item {
   repeated cosmos.base.v1beta1.Coin transfer_fee = 11 [(gogoproto.nullable) = false];
   // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
   string trade_percentage = 12 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
-  int64 createdAt = 13;
-  int64 updatedAt = 14;
+  int64 created_at = 13;
+  int64 updated_at = 14;
   string recipe_id = 15;
 }
 

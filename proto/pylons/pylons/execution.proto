@@ -1,12 +1,12 @@
 syntax = "proto3";
-package Pylonstech.pylons.pylons;
+package pylons.pylons;
 
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
-import "pylons/item.proto";
-import "pylons/recipe.proto";
+import "pylons/pylons/item.proto";
+import "pylons/pylons/recipe.proto";
 
 message ItemRecord {
   string id = 1;
@@ -27,6 +27,6 @@ message Execution {
   repeated cosmos.base.v1beta1.Coin coin_inputs = 9 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
   repeated cosmos.base.v1beta1.Coin coin_outputs = 10 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
   repeated string item_output_ids = 11 [(gogoproto.nullable) = false];
-  repeated string itemModify_output_ids = 12 [(gogoproto.nullable) = false];
+  repeated string item_modify_output_ids = 12 [(gogoproto.nullable) = false];
   }
 

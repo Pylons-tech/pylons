@@ -1,5 +1,5 @@
 syntax = "proto3";
-package Pylonstech.pylons.pylons;
+package pylons.pylons;
 
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
