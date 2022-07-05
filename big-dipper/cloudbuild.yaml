@@ -1,0 +1,56 @@
+timeout: 12000s
+substitutions:
+  _CUSTOM_REGION: us-west2-a
+  _CUSTOM_CLUSTER: cluster-1
+steps:
+  - name: gcr.io/cloud-builders/docker
+    entrypoint: bash
+    args:
+      - '-c'
+      - >-
+        docker pull gcr.io/zinc-interface-241613/big-dipper-v1:latest
+        || exit 0
+  - name: "gcr.io/cloud-builders/gcloud"
+    id: Write Secrets to Env
+    entrypoint: bash
+    args: 
+      - -c
+      - |
+        sed -i "s#mongoUrlVal#$(gcloud beta secrets versions access --secret=mongourl latest)#g" ./deploy/pylons-big-dipper/values.yaml
+  - name: gcr.io/cloud-builders/docker
+    id: Build
+    args:
+      - build
+      - .
+      - -t
+      - gcr.io/zinc-interface-241613/big-dipper-v1
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - 'gcr.io/zinc-interface-241613/big-dipper-v1'
+    id: PushLatest
+  - name: gcr.io/cloud-builders/kubectl
+    id: Configure kubectl
+    args:
+      - cluster-info
+    env:
+      - CLOUDSDK_COMPUTE_REGION=$_CUSTOM_REGION
+      - CLOUDSDK_CONTAINER_CLUSTER=$_CUSTOM_CLUSTER
+      - KUBECONFIG=/workspace/.kube/config
+
+  - name: gcr.io/zinc-interface-241613/helm
+    id: Deploy chart
+    args:
+      - upgrade
+      - big-dipper-v1
+      - ./deploy/pylons-big-dipper
+      - -f
+      - ./deploy/pylons-big-dipper/values.yaml
+      # - --set-file 
+      # - applicationSettingsJson="default_settings.json"
+    env:
+      - KUBECONFIG=/workspace/.kube/config
+      - TILLERLESS=true
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_32'

@@ -110,6 +110,15 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
+	// calling helper function check item quantity
+	// case: no more available return err
+	for _, item := range recipe.Entries.ItemOutputs {
+		if item.Quantity != 0 && item.Quantity <= item.AmountMinted {
+			// returning error not found in case recipe is no more available
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Amount minted reached maximum limit")
+		}
+	}
+
 	if len(msg.PaymentInfos) != 0 {
 		// client is providing payments receipts
 		err = k.ProcessPaymentInfos(ctx, msg.PaymentInfos, addr)
@@ -121,12 +130,6 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	err = k.LockCoinsForExecution(ctx, addr, coinInputs)
 	if err != nil {
 		return nil, err
-	}
-
-	for _, item := range recipe.Entries.ItemOutputs {
-		if item.Quantity != 0 && item.Quantity <= item.AmountMinted {
-			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Amount minted reached maximium limit")
-		}
 	}
 
 	// create ItemRecord list

@@ -34,6 +34,9 @@ func GetTxCmd() *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
+	cmd.AddCommand(CmdAppleIap())
+	cmd.AddCommand(CmdAddStripeRefund())
+	// this line is used by starport scaffolding # 1
 	cmd.AddCommand(CmdBurnDebtToken())
 
 	cmd.AddCommand(CmdUpdateAccount())
