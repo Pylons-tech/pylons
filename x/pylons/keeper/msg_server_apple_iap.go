@@ -24,7 +24,7 @@ func (k msgServer) AppleIap(goCtx context.Context, msg *types.MsgAppleIap) (*typ
 	}
 
 	if k.HasAppleIAPOrder(ctx, receipt.PurchaseID) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the Apple IAP order ID is already being used")
+		return nil, sdkerrors.Wrap(types.ErrReceiptAlreadyUsed, "the Apple IAP order ID is already being used")
 	}
 
 	var coinIssuer types.CoinIssuer
