@@ -13,6 +13,7 @@ import "pylons/pylons/execution.proto";
 import "pylons/pylons/item.proto";
 import "pylons/pylons/recipe.proto";
 import "pylons/pylons/cookbook.proto";
+import "pylons/pylons/stripe_refund.proto";
 
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
@@ -28,6 +29,12 @@ service Query {
 		option (google.api.http).get = "/Pylons-tech/pylons/pylons/get_recipe_history/{cookbook_id}/{recipe_id}";
 	}
 
+// Queries a list of GetStripeRefund items.
+	rpc GetStripeRefund(QueryGetStripeRefundRequest) returns (QueryGetStripeRefundResponse) {
+		option (google.api.http).get = "/pylons/get_stripe_refund";
+	}
+
+// this line is used by starport scaffolding # 2
 
 	// Queries a redeemInfo by index.
 	rpc RedeemInfo(QueryGetRedeemInfoRequest) returns (QueryGetRedeemInfoResponse) {
@@ -150,6 +157,15 @@ message RecipeHistory {
 	string amount = 7;
 	int64 created_at = 8;
 }
+message QueryGetStripeRefundRequest {
+}
+
+message QueryGetStripeRefundResponse {
+	repeated StripeRefund refunds = 1;
+}
+
+// this line is used by starport scaffolding # 3
+
 message QueryGetRedeemInfoRequest {
 	string id = 1;
 }
