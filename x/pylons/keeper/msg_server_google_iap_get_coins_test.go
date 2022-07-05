@@ -58,7 +58,7 @@ func (suite *IntegrationTestSuite) TestMsgServerGoogleInAppPurchaseGetCoins() {
 				ReceiptDataBase64: "eyJvcmRlcklkIjoiR1BBLjMzOTYtNjQwNy00NDUyLTYyMDIwIiwicGFja2FnZU5hbWUiOiJ0ZWNoLnB5bG9ucy53YWxsZXQiLCJwcm9kdWN0SWQiOiJweWxvbnNfMTAiLCJwdXJjaGFzZVRpbWUiOjE2NTU5MDEzMTY5NDEsInB1cmNoYXNlU3RhdGUiOjAsInB1cmNoYXNlVG9rZW4iOiJoZm9vY2Jsam9nZ21kZWlla2ZvbGJpbWUuQU8tSjFPd0Jyc3J3TFNnZ3ZNU1ZMSlI2d2wxeGF4Q1FDRjBNNW9ON3ZpRUVldjVHRVJMOGEwR04zdDh6MVpQcGROcnE4dHBnelpDTTNJZ2NQNXYya2FiRWxObHRzYmg2R0EiLCJhY2tub3dsZWRnZWQiOmZhbHNlfQ==",
 				Signature:         "LZXvpQwMzGPUnPx06ueOhHDT8INhvxo+YYpqNK17pv1JoU5efoQk7/nHiNvMIHUaX9n0DRF0+Cg/VhZw70zvb4n+18jqRRyKBj/wHt8VSJEco1cHmnwh15OE4FY49YINidBERCBo01xD6qhuMnh7ZB0CwWRBSrDLHKuk4Y9Qybhn72/MtVeMCs+4aK1iWi7iJ9ABfHFbbomFDkOSQvxwAboPcg7VfiZMXS2K67dxWK6YaSQVc21zLtABgigiAqg6mRKiG5d2BdHSXo5qh13f/py2fj6CRf+b9lcVDM0cDGXcsBkPME/OUWQNyqd2tFMlcZn6SwOR7suuzzoB4A8rHg==",
 			},
-			balance: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))),
+			balance: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10000000))),
 		},
 		{
 			desc: "Valid2",
@@ -69,7 +69,7 @@ func (suite *IntegrationTestSuite) TestMsgServerGoogleInAppPurchaseGetCoins() {
 				ReceiptDataBase64: "eyJvcmRlcklkIjoiR1BBLjMzODYtMjU3MC00NDY4LTQ3MTY0IiwicGFja2FnZU5hbWUiOiJ0ZWNoLnB5bG9ucy53YWxsZXQiLCJwcm9kdWN0SWQiOiJweWxvbnNfMzUiLCJwdXJjaGFzZVRpbWUiOjE2NTU5MDEzNjk3NTUsInB1cmNoYXNlU3RhdGUiOjAsInB1cmNoYXNlVG9rZW4iOiJuZmlwZnBqYWNoYmZkb2xwaWtoaGJpZWEuQU8tSjFPeDEyNWRHMzI1MGphWGxiZHJWem4wQ2ZOdHlsMUE1MWQ2ZjdJM29xQkhBUXc3TjNZS1VsWWhWRGM4SEVZVGFMQ3pZUnBWcEI4TmpxVlpVUzNrXzZKMEF0LWotM3ciLCJhY2tub3dsZWRnZWQiOmZhbHNlfQ==",
 				Signature:         "kj8+9dVWtJbCtT92KhrXiXpq6oDfSu+yq+eOGjsiX856vS4ZD0JptbV0aB75NV2vIfbmsMcWafuLip64c78akqPxCwXTCH1eNcJxzHdsUumYt7y7BrdsrDc7PwDTloV9+Qe2ReRVUQISD4a+J7fGiQTVHkAbVvUoRAtShojByJHxqgMIx2/WGqtY+tDwlyqMtc44JlK+zrEn+1n93/v6ZS9X1Nv+I9HYWMhdxMXaJ+POnxH7hz/2LzKWlyoi82L/RBouOVzGpVfqiqyap0hiVxmQPP6K+vNBSiUgreNpMD+2qlslOHDugORgjqHf1eLs4hrBO99iDjYMWX5g+Bz0bQ==",
 			},
-			balance: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(45))),
+			balance: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(45000000))),
 		},
 		{
 			desc: "Valid3",
@@ -80,7 +80,7 @@ func (suite *IntegrationTestSuite) TestMsgServerGoogleInAppPurchaseGetCoins() {
 				ReceiptDataBase64: "eyJvcmRlcklkIjoiR1BBLjMzMTgtMjc2MS0zODk1LTI5NDcwIiwicGFja2FnZU5hbWUiOiJ0ZWNoLnB5bG9ucy53YWxsZXQiLCJwcm9kdWN0SWQiOiJweWxvbnNfNjAiLCJwdXJjaGFzZVRpbWUiOjE2NTU5MDEzODY4MjAsInB1cmNoYXNlU3RhdGUiOjAsInB1cmNoYXNlVG9rZW4iOiJtY25wa25vamtwY2lnZWdib21jaGlraW4uQU8tSjFPeUZlZ1kxRkRlTkE5S3psWWVFbU9Jd2tYaUFYZWhmVnlsb3F2YjhUWGYyV21vYnIxdzhlbWNjQUtuamV6XzllNk5DMWk0Q0txN0tuVGxQa2tTa2xkVnI4QzFjMWciLCJhY2tub3dsZWRnZWQiOmZhbHNlfQ==",
 				Signature:         "FREfEWfRXaNzRCgD6MLAaKpc1kZ2FbNVfeXLazKoxpY4tHFo1VsmEqCPdsYymCZys0yehWczPaQJMkB5YwGgwPSKGtWKgwP68gG6SsO21f5SKqcLjvuWyShspifDNjJ7vNy+XPwfjd6PWwYQWVNogr2dC8dN433X+1guY+FExeT0UwbgY8SedsaxRT2nOH2ONLDVx/rR0+kNie13bg/AUZzRkFKYKtUuUQtXq3F1CyDGg/ARgut0EFNJVaW6nrK9as2/7l6V3/+16iDP3dknk7sL9y+VpgfwFrGwQKX23DR33qepjhh7uY67DjxST7Ci4AoALkYdRJ7/TRyDXKe8xw==",
 			},
-			balance: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(105))),
+			balance: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(105000000))),
 		},
 		{
 			// re-using IAP from Valid1
@@ -92,7 +92,7 @@ func (suite *IntegrationTestSuite) TestMsgServerGoogleInAppPurchaseGetCoins() {
 				ReceiptDataBase64: "eyJvcmRlcklkIjoiR1BBLjMzMTgtMjc2MS0zODk1LTI5NDcwIiwicGFja2FnZU5hbWUiOiJ0ZWNoLnB5bG9ucy53YWxsZXQiLCJwcm9kdWN0SWQiOiJweWxvbnNfNjAiLCJwdXJjaGFzZVRpbWUiOjE2NTU5MDEzODY4MjAsInB1cmNoYXNlU3RhdGUiOjAsInB1cmNoYXNlVG9rZW4iOiJtY25wa25vamtwY2lnZWdib21jaGlraW4uQU8tSjFPeUZlZ1kxRkRlTkE5S3psWWVFbU9Jd2tYaUFYZWhmVnlsb3F2YjhUWGYyV21vYnIxdzhlbWNjQUtuamV6XzllNk5DMWk0Q0txN0tuVGxQa2tTa2xkVnI4QzFjMWciLCJhY2tub3dsZWRnZWQiOmZhbHNlfQ==",
 				Signature:         "FREfEWfRXaNzRCgD6MLAaKpc1kZ2FbNVfeXLazKoxpY4tHFo1VsmEqCPdsYymCZys0yehWczPaQJMkB5YwGgwPSKGtWKgwP68gG6SsO21f5SKqcLjvuWyShspifDNjJ7vNy+XPwfjd6PWwYQWVNogr2dC8dN433X+1guY+FExeT0UwbgY8SedsaxRT2nOH2ONLDVx/rR0+kNie13bg/AUZzRkFKYKtUuUQtXq3F1CyDGg/ARgut0EFNJVaW6nrK9as2/7l6V3/+16iDP3dknk7sL9y+VpgfwFrGwQKX23DR33qepjhh7uY67DjxST7Ci4AoALkYdRJ7/TRyDXKe8xw==",
 			},
-			err: sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the Google IAP order ID is already being used"),
+			err: sdkerrors.Wrap(types.ErrReceiptAlreadyUsed, "the Google IAP order ID is already being used"),
 		},
 	} {
 		tc := tc
