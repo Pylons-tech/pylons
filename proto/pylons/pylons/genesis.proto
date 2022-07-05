@@ -1,0 +1,39 @@
+syntax = "proto3";
+package pylons.pylons;
+
+import "pylons/pylons/redeem_info.proto";
+import "pylons/pylons/payment_info.proto";
+import "pylons/pylons/accounts.proto";
+import "pylons/pylons/trade.proto";
+import "pylons/pylons/google_iap_order.proto";
+import "pylons/pylons/execution.proto";
+import "pylons/pylons/item.proto";
+import "pylons/pylons/recipe.proto";
+import "pylons/pylons/cookbook.proto";
+import "pylons/pylons/params.proto";
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
+
+import "gogoproto/gogo.proto";
+
+// GenesisState defines the pylons module's genesis state.
+message GenesisState {
+    // this line is used by starport scaffolding # genesis/proto/state
+		repeated RedeemInfo redeem_info_list = 16 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
+		repeated PaymentInfo payment_info_list = 15 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
+		repeated UserMap account_list = 14 [(gogoproto.nullable) = false];  // this line is used by starport scaffolding # genesis/proto/stateField
+		repeated Trade trade_list = 13 [(gogoproto.nullable) = false];  // this line is used by starport scaffolding # genesis/proto/stateField
+		uint64 trade_count = 12; // this line is used by starport scaffolding # genesis/proto/stateField
+		uint64 entity_count = 11; // this line is used by starport scaffolding # genesis/proto/stateField
+	  	Params params = 10 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
+		repeated GoogleInAppPurchaseOrder google_in_app_purchase_order_list = 8 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
+		uint64 google_iap_order_count = 9; // this line is used by starport scaffolding # genesis/proto/stateField
+		repeated Execution execution_list = 7 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
+		uint64 execution_count = 6; // this line is used by starport scaffolding # genesis/proto/stateField
+		repeated Execution pending_execution_list = 5 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
+		uint64 pending_execution_count = 4; // this line is used by starport scaffolding # genesis/proto/stateField
+		repeated Item item_list = 3 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
+		repeated Recipe recipe_list = 2 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
+		repeated Cookbook cookbook_list = 1 [(gogoproto.nullable) = false]; // this line is used by starport scaffolding # genesis/proto/stateField
+    // this line is used by starport scaffolding # ibc/genesis/proto
+}

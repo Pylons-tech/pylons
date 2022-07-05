@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "big-dipper-v1.fullname" . }}
+  labels:
+    {{- include "big-dipper-v1.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "big-dipper-v1.selectorLabels" . | nindent 4 }}

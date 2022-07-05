@@ -16,15 +16,15 @@ func (k msgServer) AppleIap(goCtx context.Context, msg *types.MsgAppleIap) (*typ
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid receipt")
 	}
 
-	if receipt.PurchaseID != msg.PurchaseID {
+	if receipt.PurchaseId != msg.PurchaseId {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid transaction token")
 	}
-	if receipt.ProductID != msg.ProductID {
+	if receipt.ProductId != msg.ProductId {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid product id")
 	}
 
-	if k.HasAppleIAPOrder(ctx, receipt.PurchaseID) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the Apple IAP order ID is already being used")
+	if k.HasAppleIAPOrder(ctx, receipt.PurchaseId) {
+		return nil, sdkerrors.Wrap(types.ErrReceiptAlreadyUsed, "the Apple IAP order ID is already being used")
 	}
 
 	var coinIssuer types.CoinIssuer
@@ -32,7 +32,7 @@ func (k msgServer) AppleIap(goCtx context.Context, msg *types.MsgAppleIap) (*typ
 CoinIssuersLoop:
 	for _, ci := range types.DefaultCoinIssuers {
 		for _, p := range ci.Packages {
-			if p.ProductId == receipt.ProductID {
+			if p.ProductId == receipt.ProductId {
 				coinIssuer = ci
 				iapPackage = p
 				break CoinIssuersLoop
@@ -57,8 +57,8 @@ CoinIssuersLoop:
 
 	_ = ctx.EventManager().EmitTypedEvent(&types.EventApplePurchase{
 		Creator:           msg.Creator,
-		ProductID:         receipt.ProductID,
-		TransactionID:     receipt.PurchaseID,
+		ProductId:         receipt.ProductId,
+		TransactionId:     receipt.PurchaseId,
 		ReceiptDataBase64: msg.ReceiptDataBase64,
 	})
 

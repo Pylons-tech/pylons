@@ -14,7 +14,7 @@ func (k msgServer) GoogleInAppPurchaseGetCoins(goCtx context.Context, msg *types
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if k.HasGoogleIAPOrder(ctx, msg.PurchaseToken) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the Google IAP order ID is already being used")
+		return nil, sdkerrors.Wrap(types.ErrReceiptAlreadyUsed, "the Google IAP order ID is already being used")
 	}
 
 	// find matching package from list of coin issuers
