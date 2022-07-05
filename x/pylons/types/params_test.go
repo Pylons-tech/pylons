@@ -3,6 +3,7 @@ package types
 import (
 	"testing"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
@@ -96,7 +97,7 @@ func Test_validateCoinIssuers(t *testing.T) {
 	invalidPackage := GoogleInAppPurchasePackage{
 		PackageName: "",
 		ProductId:   "",
-		Amount:      sdk.Int{},
+		Amount:      math.Int{},
 	}
 
 	invalidPackages = append(invalidPackages, invalidPackage)

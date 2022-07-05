@@ -27,8 +27,8 @@ func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.Paymen
 
 				amt := pi.Amount
 				// account for network fees
-				burnAmt := amt.ToDec().Mul(pp.ProcessorPercentage).RoundInt()
-				feesAmt := amt.ToDec().Mul(pp.ValidatorsPercentage).RoundInt()
+				burnAmt := amt.Mul(pp.ProcessorPercentage)
+				feesAmt := amt.Mul(pp.ValidatorsPercentage)
 
 				mintCoins := sdk.NewCoins(sdk.NewCoin(pp.CoinDenom, pi.Amount))
 				burnCoins := sdk.NewCoins(sdk.NewCoin(pp.CoinDenom, burnAmt))
@@ -114,5 +114,38 @@ func (k Keeper) ValidatePaymentInfo(ctx sdk.Context, paymentInfos []types.Paymen
 			}
 		}
 	}
+	return nil
+}
+
+// VerifyPaymentInfos verifies payment info for stripe refund
+func (k Keeper) VerifyPaymentInfos(ctx sdk.Context, paymentInfos *types.PaymentInfo, senderAddr sdk.AccAddress) error {
+	paymentProcessors := k.PaymentProcessors(ctx)
+
+	found := false
+	for _, pp := range paymentProcessors {
+		// find respective payment processor
+		if paymentInfos.ProcessorName == pp.Name {
+			found = true
+
+			addr, _ := sdk.AccAddressFromBech32(paymentInfos.PayerAddr)
+			if !addr.Equals(senderAddr) {
+				return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", paymentInfos.PurchaseId)
+			}
+
+			// validate signature of payment
+			err := pp.ValidatePaymentInfo(*paymentInfos)
+			if err != nil {
+				return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", paymentInfos.PurchaseId, err.Error())
+			}
+
+			// set the payment info so it cannot be used again later
+			k.SetPaymentInfo(ctx, *paymentInfos)
+			break
+		}
+	}
+	if !found {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "could not find %s among valid payment processors", paymentInfos.ProcessorName)
+	}
+
 	return nil
 }

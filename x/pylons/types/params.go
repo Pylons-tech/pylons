@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
@@ -27,9 +28,9 @@ var (
 		{
 			CoinDenom: PylonsCoinDenom,
 			Packages: []GoogleInAppPurchasePackage{
-				{PackageName: "tech.pylons.wallet", ProductId: "pylons_5", Amount: sdk.NewInt(5)},
-				{PackageName: "tech.pylons.wallet", ProductId: "pylons_20", Amount: sdk.NewInt(20)},
-				{PackageName: "tech.pylons.wallet", ProductId: "pylons_50", Amount: sdk.NewInt(50)},
+				{PackageName: "tech.pylons.wallet", ProductId: "pylons_10", Amount: sdk.NewInt(10)},
+				{PackageName: "tech.pylons.wallet", ProductId: "pylons_35", Amount: sdk.NewInt(35)},
+				{PackageName: "tech.pylons.wallet", ProductId: "pylons_60", Amount: sdk.NewInt(60)},
 			},
 			GoogleInAppPurchasePubKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuMzgsJOZzyZvmOG8T9baGxDR/DWx6dgku7UdDfc6aGKthPGYouOa4KvLGEuNd+YTilwtEEryi3mmYAtl8MNtiAQCiry7HjdRNle8lLUHSKwBLVCswY3WGEAuW+5mo/V6X0klS8se65fIqCv2x/SKjtTZvKO/Oe3uehREMY1b8uWLrD5roubXzmaLsFGIRi5wdg8UWRe639LCNb2ghD2Uw0svBTJqn/ymsPmCfVjmCNNRDxfxzlA8O4EEKCK1qOdwIejMAfFMrN87u+0HTQbCKQ/xUQrR6fUhWT2mqttBGhi1NmTNBlUDyXYU+7ILbfJUVqQcKNDbFQd+xv9wBnXAhwIDAQAB",
 			EntityName:                "Pylons_Inc",
@@ -60,6 +61,7 @@ var (
 	DefaultMaxTransferFee               = sdk.NewInt(10000)
 	DefaultDistrEpochIdentifier         = "day"
 	DefaultEngineVersion                = uint64(0)
+	DefaultMaxTxsInBlock                = uint64(20)
 )
 
 // Parameter Store Keys
@@ -74,6 +76,7 @@ var (
 	ParamStoreKeyUpdateUsernameFee         = []byte("UpdateUsernameFee")
 	ParamStoreKeyDistrEpochIdentifier      = []byte("DistrEpochIdentifier")
 	ParamStoreKeyEngineVersion             = []byte("EngineVersion")
+	ParamStoreKeyMaxTxsInBlock             = []byte("MaxTxsInBlock")
 )
 
 // NewParams creates a new Params object
@@ -83,11 +86,12 @@ func NewParams(
 	recipeFeePercentage sdk.Dec,
 	itemTransferFeePercentage sdk.Dec,
 	updateItemStringFee sdk.Coin,
-	minTransferFee sdk.Int,
-	maxTransferFee sdk.Int,
+	minTransferFee math.Int,
+	maxTransferFee math.Int,
 	updateUsernameFee sdk.Coin,
 	distrEpochIdentifier string,
 	engineVersion uint64,
+	maxTxs uint64,
 ) Params {
 	return Params{
 		CoinIssuers:               coinIssuers,
@@ -100,6 +104,7 @@ func NewParams(
 		UpdateUsernameFee:         updateUsernameFee,
 		DistrEpochIdentifier:      distrEpochIdentifier,
 		EngineVersion:             engineVersion,
+		MaxTxsInBlock:             maxTxs,
 	}
 }
 
@@ -116,6 +121,7 @@ func DefaultParams() Params {
 		DefaultUpdateUsernameFee,
 		DefaultDistrEpochIdentifier,
 		DefaultEngineVersion,
+		DefaultMaxTxsInBlock,
 	)
 }
 
@@ -132,6 +138,7 @@ func NetworkTestParams() Params {
 		sdk.NewCoin("node0token", sdk.NewInt(10)),
 		DefaultDistrEpochIdentifier,
 		DefaultEngineVersion,
+		DefaultMaxTxsInBlock,
 	)
 }
 
@@ -159,6 +166,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(ParamStoreKeyUpdateUsernameFee, &p.UpdateUsernameFee, validateCoinFee),
 		paramtypes.NewParamSetPair(ParamStoreKeyDistrEpochIdentifier, &p.DistrEpochIdentifier, validateString),
 		paramtypes.NewParamSetPair(ParamStoreKeyEngineVersion, &p.EngineVersion, validateInt64),
+		paramtypes.NewParamSetPair(ParamStoreKeyMaxTxsInBlock, &p.MaxTxsInBlock, validateInt64),
 	}
 }
 
@@ -233,7 +241,7 @@ func validateDecPercentage(i interface{}) error {
 }
 
 func validateInt(i interface{}) error {
-	v, ok := i.(sdk.Int)
+	v, ok := i.(math.Int)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}

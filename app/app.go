@@ -106,6 +106,8 @@ const (
 	Name = "pylons"
 )
 
+var AccountTrack = make(map[string]uint64)
+
 // These constants are derived from the above variables.
 // These are the ones we will want to use in the code, based on
 // any overrides above.
@@ -527,6 +529,7 @@ func New(
 		slashingtypes.ModuleName,
 		govtypes.ModuleName,
 		minttypes.ModuleName,
+		pylonsmoduletypes.ModuleName,
 		crisistypes.ModuleName,
 		ibchost.ModuleName,
 		genutiltypes.ModuleName,
@@ -535,8 +538,6 @@ func New(
 		paramstypes.ModuleName,
 		ibctransfertypes.ModuleName,
 		vestingtypes.ModuleName,
-
-		pylonsmoduletypes.ModuleName,
 		epochsmoduletypes.ModuleName,
 	)
 
@@ -581,7 +582,7 @@ func New(
 		//	app.AccountKeeper, app.BankKeeper, ante.DefaultSigVerificationGasConsumer,
 		//	encodingConfig.TxConfig.SignModeHandler(),
 		// ),
-		NewAnteHandler(app.AccountKeeper, encodingConfig.TxConfig.SignModeHandler()),
+		NewAnteHandler(app.AccountKeeper, encodingConfig.TxConfig.SignModeHandler(), app.PylonsKeeper),
 	)
 	app.SetEndBlocker(app.EndBlocker)
 
@@ -607,6 +608,9 @@ func (app *PylonsApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) 
 
 // EndBlocker application updates every end block
 func (app *PylonsApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
+	for k := range AccountTrack {
+		delete(AccountTrack, k)
+	}
 	return app.mm.EndBlock(ctx, req)
 }
 

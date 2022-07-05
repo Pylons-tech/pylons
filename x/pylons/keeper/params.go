@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -34,7 +35,7 @@ func (k Keeper) RecipeFeePercentage(ctx sdk.Context) (res sdk.Dec) {
 }
 
 // ItemTransferFeePercentage returns the CoinIssuedList param
-func (k Keeper) ItemTransferFeePercentage(ctx sdk.Context) (res sdk.Dec) {
+func (k Keeper) ItemTransferFeePercentage(ctx sdk.Context) (res math.Int) {
 	k.paramSpace.Get(ctx, types.ParamStoreKeyItemTransferFeePercentage, &res)
 	return
 }
@@ -52,13 +53,13 @@ func (k Keeper) UpdateUsernameFee(ctx sdk.Context) (res sdk.Coin) {
 }
 
 // MinTransferFee returns the MinTransferFee param
-func (k Keeper) MinTransferFee(ctx sdk.Context) (res sdk.Int) {
+func (k Keeper) MinTransferFee(ctx sdk.Context) (res math.Int) {
 	k.paramSpace.Get(ctx, types.ParamStoreKeyMinTransferFee, &res)
 	return
 }
 
 // MaxTransferFee returns the MaxTransferFee param
-func (k Keeper) MaxTransferFee(ctx sdk.Context) (res sdk.Int) {
+func (k Keeper) MaxTransferFee(ctx sdk.Context) (res math.Int) {
 	k.paramSpace.Get(ctx, types.ParamStoreKeyMaxTransferFee, &res)
 	return
 }

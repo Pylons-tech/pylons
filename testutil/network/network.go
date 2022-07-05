@@ -196,3 +196,45 @@ func DefaultConfig() network.Config {
 func CustomGenesisHelper(cdc codec.Codec) json.RawMessage {
 	return cdc.MustMarshalJSON(types.NetworkTestGenesis())
 }
+
+// ConfigWithMaxTxsInBlock will initialize config for the network with custom application,
+// genesis and single validator.
+func ConfigWithMaxTxsInBlock(maxTxsInBlock uint64) network.Config {
+	encoding := app.MakeEncodingConfig()
+
+	genState := app.ModuleBasics.DefaultGenesis(encoding.Codec)
+	genesisPylons := types.NetworkTestGenesis()
+	genesisPylons.Params.MaxTxsInBlock = maxTxsInBlock
+
+	genState["pylons"] = encoding.Codec.MustMarshalJSON(genesisPylons)
+
+	return network.Config{
+		Codec:             encoding.Codec,
+		TxConfig:          encoding.TxConfig,
+		LegacyAmino:       encoding.Amino,
+		InterfaceRegistry: encoding.InterfaceRegistry,
+		AccountRetriever:  authtypes.AccountRetriever{},
+		AppConstructor: func(val network.Validator) servertypes.Application {
+			return app.New(
+				val.Ctx.Logger, tmdb.NewMemDB(), nil, true, map[int64]bool{}, val.Ctx.Config.RootDir, 0,
+				encoding,
+				simapp.EmptyAppOptions{},
+				baseapp.SetPruning(storetypes.NewPruningOptionsFromString(val.AppConfig.Pruning)),
+				baseapp.SetMinGasPrices(val.AppConfig.MinGasPrices),
+			)
+		},
+		GenesisState:    genState,
+		TimeoutCommit:   2 * time.Second,
+		ChainID:         "chain-" + tmrand.NewRand().Str(6),
+		NumValidators:   1,
+		BondDenom:       sdk.DefaultBondDenom,
+		MinGasPrices:    fmt.Sprintf("0%s", sdk.DefaultBondDenom),
+		AccountTokens:   sdk.TokensFromConsensusPower(1_000_000, sdk.DefaultPowerReduction),
+		StakingTokens:   sdk.TokensFromConsensusPower(1_000_000, sdk.DefaultPowerReduction),
+		BondedTokens:    sdk.TokensFromConsensusPower(30, sdk.DefaultPowerReduction),
+		PruningStrategy: storetypes.PruningOptionNothing,
+		CleanupDir:      true,
+		SigningAlgo:     string(hd.Secp256k1Type),
+		KeyringOptions:  []keyring.Option{},
+	}
+}

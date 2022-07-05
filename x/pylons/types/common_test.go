@@ -8,6 +8,9 @@ import (
 	"crypto/sha1"
 	"crypto/x509"
 	"encoding/base64"
+
+	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 const (
@@ -44,4 +47,10 @@ func SignPKCS1v15(privatekey *rsa.PrivateKey, digest []byte) ([]byte, error) {
 		return nil, err
 	}
 	return signature, nil
+}
+
+func AccAddress() string {
+	pk := ed25519.GenPrivKey().PubKey()
+	addr := pk.Address()
+	return sdk.AccAddress(addr).String()
 }

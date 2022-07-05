@@ -15,6 +15,7 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 )
 
 func generateAddress() sdk.AccAddress {
@@ -200,6 +201,18 @@ func createNGoogleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.Goog
 	return items
 }
 
+func createNAppleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.AppleInAppPurchaseOrder {
+	items := make([]types.AppleInAppPurchaseOrder, n)
+	creators := types.GenTestBech32List(n)
+	for i := range items {
+		items[i].Creator = creators[i]
+		items[i].PurchaseID = strconv.Itoa(i)
+		k.AppendAppleIAPOrder(ctx, items[i])
+	}
+
+	return items
+}
+
 func createNPaymentInfo(k keeper.Keeper, ctx sdk.Context, n int) []types.PaymentInfo {
 	items := make([]types.PaymentInfo, n)
 	creators := types.GenTestBech32List(n)
@@ -335,6 +348,14 @@ func (suite *IntegrationTestSuite) SetupTest() {
 	suite.bankKeeper = pylonsApp.BankKeeper
 	suite.accountKeeper = pylonsApp.AccountKeeper
 	suite.stakingKeeper = pylonsApp.StakingKeeper
+}
+
+func (suite *IntegrationTestSuite) FundAccount( ctx sdk.Context, addr sdk.AccAddress, amounts sdk.Coins) error {
+	if err := suite.bankKeeper.MintCoins(ctx, minttypes.ModuleName, amounts); err != nil {
+		return err
+	}
+
+	return suite.bankKeeper.SendCoinsFromModuleToAccount(ctx, minttypes.ModuleName, addr, amounts)
 }
 
 func TestKeeperTestSuite(t *testing.T) {

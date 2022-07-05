@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
@@ -28,14 +29,14 @@ import (
 
 type TestDelegation struct {
 	address string
-	amount  sdk.Int
+	amount  math.Int
 }
 
 func GenerateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 	addrs := make([]sdk.AccAddress, n)
 	for i := 0; i < n; i++ {
 		info, _, _ := ring.NewMnemonic("NewUser"+strconv.Itoa(i), keyring.English, sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)
-		addrs[i] = info.GetAddress()
+		addrs[i], err = info.GetAddress()
 	}
 	return addrs
 }
@@ -102,7 +103,7 @@ func generateAccountsWithBalance(numAccounts int, validator *sdknetwork.Validato
 	return accounts
 }
 
-func generateDistributionMap(validators []*sdknetwork.Validator, numDelegations int, minAmount, maxAmount sdk.Int, accounts []string) map[string][]TestDelegation {
+func generateDistributionMap(validators []*sdknetwork.Validator, numDelegations int, minAmount, maxAmount math.Int, accounts []string) map[string][]TestDelegation {
 	// init random seed
 	rand.Seed(time.Now().UnixNano())
 
@@ -135,7 +136,7 @@ func generateDistributionMap(validators []*sdknetwork.Validator, numDelegations 
 	return delegations
 }
 
-func computeDistrPercentages(validators []*sdknetwork.Validator, distrMap map[string][]TestDelegation, bondingTokens, totalStake sdk.Int) (distrPercentages map[string]sdk.Dec) {
+func computeDistrPercentages(validators []*sdknetwork.Validator, distrMap map[string][]TestDelegation, bondingTokens, totalStake math.Int) (distrPercentages map[string]sdk.Dec) {
 	distrPercentages = make(map[string]sdk.Dec)
 	for _, val := range validators {
 		valAddr := val.Address.String()

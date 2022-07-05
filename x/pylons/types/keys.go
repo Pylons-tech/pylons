@@ -56,6 +56,10 @@ const (
 	GoogleInAppPurchaseOrderKey = "GoogleInAppPurchaseOrder-value-"
 	// GoogleInAppPurchaseOrderCountKey is a string key used as a prefix to the KVStore
 	GoogleInAppPurchaseOrderCountKey = "GoogleInAppPurchaseOrder-count-"
+	// GoogleInAppPurchaseOrderKey is a string key used as a prefix to the KVStore
+	AppleInAppPurchaseOrderKey = "AppleInAppPurchaseOrder-value-"
+	// GoogleInAppPurchaseOrderCountKey is a string key used as a prefix to the KVStore
+	AppleInAppPurchaseOrderCountKey = "AppleInAppPurchaseOrder-count-"
 	// GlobalEntityCountKey is a string used as prefix to the KVStore
 	GlobalEntityCountKey = "GlobalEntity-count-"
 	// TradeKey is a string used as prefix to the KVStore
@@ -72,6 +76,8 @@ const (
 	CreateItemKey = "create_item"
 	// CreateExecutionKey is a string used as event name in msg execute recipe
 	CreateExecutionKey = "create_execution"
+	// StripeRefundKey used to store stripe refund records
+	StripeRefundKey = "StripeRefund-value-"
 )
 
 const (
@@ -122,4 +128,18 @@ const (
 
 	HTTPContentTypeKey = "Content-Type"
 	HTTPContentTypeVal = "application/json"
+)
+
+// Constants used for apple pay
+
+const (
+	// Default base value to decimals
+	Base            = 10
+	URL             = "https://www.apple.com/appleca/AppleIncRootCertificate.cer"
+	SkipIndexString = 2
+
+	// Skip Index Constants Required for parsing the recipe data
+	SkipObjectParse21 = 21
+	SkipObjectParse14 = 14
+	SkipObjectParse3  = 3
 )
