@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
@@ -83,8 +84,8 @@ func NewParams(
 	recipeFeePercentage sdk.Dec,
 	itemTransferFeePercentage sdk.Dec,
 	updateItemStringFee sdk.Coin,
-	minTransferFee sdk.Int,
-	maxTransferFee sdk.Int,
+	minTransferFee math.Int,
+	maxTransferFee math.Int,
 	updateUsernameFee sdk.Coin,
 	distrEpochIdentifier string,
 	engineVersion uint64,
@@ -233,7 +234,7 @@ func validateDecPercentage(i interface{}) error {
 }
 
 func validateInt(i interface{}) error {
-	v, ok := i.(sdk.Int)
+	v, ok := i.(math.Int)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}

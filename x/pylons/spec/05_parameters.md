@@ -13,8 +13,8 @@ The pylons module contains the following parameters:
 | ItemTransferFeePercentage             | sdk.Dec       | 20.0                             |
 | UpdateItemStringFee                   | sdk.Coin      | {"denom": "upylon", "amount", 10}                               |
 | UpdateUsernameFee                   | sdk.Coin      | {"denom": "upylon", "amount", 10}                               |
-| MinTransferFee                        | sdk.Int       | 20                               |
-| MaxTransferFee                        | sdk.Int       | 20                               |
+| MinTransferFee                        | math.Int       | 20                               |
+| MaxTransferFee                        | math.Int       | 20                               |
 | PaymentProcessors                     | []PaymentProcessor| (see below)                  |
 | DistrEpochIdentifier                  | string         | "day"                           |
 | EngineVersion                         | uint64         | 1                               |
