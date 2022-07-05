@@ -107,8 +107,8 @@ All the recipe fields are mandatory:
 
 			var clientCtx client.Context
 
-			if GetAltenativeContext() != nil {
-				altCtx := GetAltenativeContext()
+			altCtx := GetAltenativeContext()
+			if altCtx != nil {
 				if altCtx != nil {
 					clientCtx = altCtx.WithSkipConfirmation(ForceSkipConfirm)
 				} else {
@@ -189,9 +189,21 @@ func CmdUpdateRecipe() *cobra.Command {
 			}
 			argsExtraInfo := args[12]
 
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
+			var clientCtx client.Context
+
+			altCtx := GetAltenativeContext()
+			if altCtx != nil {
+				if altCtx != nil {
+					clientCtx = altCtx.WithSkipConfirmation(ForceSkipConfirm)
+				} else {
+					return err
+				}
+			} else {
+				c, err := client.GetClientTxContext(cmd)
+				if err != nil {
+					return err
+				}
+				clientCtx = c
 			}
 
 			msg := types.NewMsgUpdateRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, id, argsName, argsDescription, argsVersion, jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsEntries, jsonArgsOutputs, argsBlockInterval, jsonArgsCostPerBlock, argsEnabled, argsExtraInfo)

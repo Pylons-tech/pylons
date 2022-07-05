@@ -21,11 +21,6 @@ const (
 
 // const moduleExtension = ".pdt" // we don't use this yet, but we will
 
-const (
-	schemaPathRoot = "https://raw.githubusercontent.com/Pylons-tech/pylons_protos/main/schema/pylons/"
-	dotJSON        = ".json"
-)
-
 func forFile(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.Recipe)) {
 	if filepath.Ext(path) == cookbookExtension {
 		cb, _, err := loadCookbookFromPath(path)
@@ -71,7 +66,6 @@ func ForFiles(path string, perCookbook func(path string, cookbook types.Cookbook
 func loadCookbookFromPath(path string) (types.Cookbook, string, error) {
 	bytes, _ := os.ReadFile(path)
 	var cb types.Cookbook
-	println(string(bytes))
 	err := jsonpb.UnmarshalString(string(bytes), &cb)
 	return cb, string(bytes), err
 }

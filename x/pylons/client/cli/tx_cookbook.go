@@ -54,8 +54,8 @@ pylonsd tx pylons create-cookbook "loud123456" "Legend of the Undead Dragon" "Co
 
 			var clientCtx client.Context
 
-			if GetAltenativeContext() != nil {
-				altCtx := GetAltenativeContext()
+			altCtx := GetAltenativeContext()
+			if altCtx != nil {
 				if altCtx != nil {
 					clientCtx = altCtx.WithSkipConfirmation(ForceSkipConfirm)
 				} else {
@@ -97,9 +97,21 @@ func CmdUpdateCookbook() *cobra.Command {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
+			var clientCtx client.Context
+
+			altCtx := GetAltenativeContext()
+			if altCtx != nil {
+				if altCtx != nil {
+					clientCtx = altCtx.WithSkipConfirmation(ForceSkipConfirm)
+				} else {
+					return err
+				}
+			} else {
+				c, err := client.GetClientTxContext(cmd)
+				if err != nil {
+					return err
+				}
+				clientCtx = c
 			}
 
 			msg := types.NewMsgUpdateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, argsEnabled)
