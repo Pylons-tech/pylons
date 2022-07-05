@@ -9,7 +9,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
-	_ "github.com/gogo/protobuf/gogoproto"
 )
 
 func DevUpdate() *cobra.Command {
