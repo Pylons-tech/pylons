@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"strings"
 	"testing"
 
 	util "github.com/Pylons-tech/pylons/testutil/cli"
@@ -25,6 +26,9 @@ func TestUpdate(t *testing.T) {
 		_, err := util.GenerateAddressWithAccount(ctx, t, net)
 		require.NoError(t, err)
 		args := []string{"NewUser0", goodPLC}
+		_, err = clitestutil.ExecTestCLICmd(ctx, DevCreate(), args)
+		assert.Nil(t, err)
+		args = []string{"NewUser0", strings.Replace(goodPLC, "0.0.1", "0.0.2", 1)}
 		cmd := DevUpdate()
 		_, err = clitestutil.ExecTestCLICmd(ctx, cmd, args)
 		assert.Nil(t, err)
@@ -32,8 +36,11 @@ func TestUpdate(t *testing.T) {
 
 	t.Run("Recipe", func(t *testing.T) {
 		args := []string{"NewUser0", goodPLR}
+		_, err := clitestutil.ExecTestCLICmd(ctx, DevCreate(), args)
+		assert.Nil(t, err)
+		args = []string{"NewUser0", strings.Replace(goodPLR, "0.0.1", "0.0.2", 1)}
 		cmd := DevUpdate()
-		_, err := clitestutil.ExecTestCLICmd(ctx, cmd, args)
+		_, err = clitestutil.ExecTestCLICmd(ctx, cmd, args)
 		assert.Nil(t, err)
 	})
 }
