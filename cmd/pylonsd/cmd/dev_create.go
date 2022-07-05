@@ -14,7 +14,7 @@ import (
 func DevCreate() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create [account] [path]",
-		Short: "Creates and executes creation transactions Pylons recipe or cookbook files in the provided path, using credentials of provided account",
+		Short: "Creates and executes creation transactions for Pylons recipe or cookbook files in the provided path, using credentials of provided account",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			accountName := args[0]
