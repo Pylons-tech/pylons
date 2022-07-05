@@ -21,18 +21,20 @@ func DevCreate() *cobra.Command {
 			path := args[1]
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
-				panic(err)
+				return err
 			}
 			k, err := clientCtx.Keyring.Key(accountName)
 			if err != nil {
-				panic(err)
+				return err
 			}
-			cli.SetAlternativeContext(clientCtx.WithFromAddress(k.GetAddress()).WithFromName(accountName).WithBroadcastMode("sync"))
+			err = cli.SetAlternativeContext(clientCtx.WithFromAddress(k.GetAddress()).WithFromName(accountName).WithBroadcastMode("sync"))
+			if err != nil {
+				return err
+			}
 			ForFiles(path, func(path string, cb types.Cookbook) {
 				c := cli.CmdCreateCookbook()
 				c.SetArgs([]string{cb.Id, cb.Name, cb.Description, cb.Developer, cb.Version, cb.SupportEmail, strconv.FormatBool(cb.Enabled)})
-				var err error
-				err = c.Execute()
+				err := c.Execute()
 				if err != nil {
 					panic(err)
 				}

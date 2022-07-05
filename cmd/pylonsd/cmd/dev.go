@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	_ "github.com/gogo/protobuf/gogoproto"
+	_ "github.com/gogo/protobuf/gogoproto" //nolint:revive // imported for side effects
 	"github.com/gogo/protobuf/jsonpb"
 )
 
@@ -21,10 +21,10 @@ const (
 
 // const moduleExtension = ".pdt" // we don't use this yet, but we will
 
-const (
-	schemaPathRoot = "https://raw.githubusercontent.com/Pylons-tech/pylons_protos/main/schema/pylons/"
-	dotJSON        = ".json"
-)
+// const (
+//	schemaPathRoot = "https://raw.githubusercontent.com/Pylons-tech/pylons_protos/main/schema/pylons/"
+//	dotJSON        = ".json"
+// )
 
 func forFile(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.Recipe)) {
 	if filepath.Ext(path) == cookbookExtension {

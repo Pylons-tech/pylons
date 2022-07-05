@@ -33,7 +33,6 @@ linters:
     - unused
     - unparam
     - misspell
-    - nolintlint
 
 
 linters-settings:
@@ -51,8 +50,4 @@ linters-settings:
     require-explanation: false
     require-specific: false
 
-  staticcheck:
-    go: "1.16"
-    checks: ["all", "-SA1019"]
-  stylecheck:
-    checks: ["all", "-ST1016", "ST1003"]
+
