@@ -7,7 +7,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (suite *IntegrationTestSuite) TestA() {
+func (suite *IntegrationTestSuite) TestCompletePendingExecution() {
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
