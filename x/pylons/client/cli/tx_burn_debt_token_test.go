@@ -118,8 +118,8 @@ func TestCmdBurnDebtToken(t *testing.T) {
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			}
 			redeemInfoBytes, _ := json.Marshal(tc.args.ri)
-			redeemInfoStr := []string{string(redeemInfoBytes)}
-			args := append(redeemInfoStr, common...)
+			args := []string{string(redeemInfoBytes)}
+			args = append(args, common...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdBurnDebtToken(), args)
 			fmt.Println(err, out)
 			if tc.wantErr {
