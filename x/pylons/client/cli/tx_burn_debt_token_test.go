@@ -40,7 +40,6 @@ func TestCmdBurnDebtToken(t *testing.T) {
 	ctx := val.ClientCtx
 
 	address, err := GenerateAddressWithAccount(ctx, t, net)
-	fmt.Println(address)
 	require.NoError(t, err)
 
 	type field struct {
@@ -121,7 +120,6 @@ func TestCmdBurnDebtToken(t *testing.T) {
 			args := []string{string(redeemInfoBytes)}
 			args = append(args, common...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdBurnDebtToken(), args)
-			fmt.Println(err, out)
 			if tc.wantErr {
 				var resp sdk.TxResponse
 				ctx.Codec.UnmarshalJSON(out.Bytes(), &resp)
