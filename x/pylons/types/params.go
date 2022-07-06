@@ -128,9 +128,8 @@ func DefaultParams() Params {
 
 // NetworkTestParams returns default pylons Params
 func NetworkTestParams() Params {
-
 	// Add a processor with node0token denom
-	paymentProcessors := append(DefaultPaymentProcessors, PaymentProcessor{
+	DefaultPaymentProcessors = append(DefaultPaymentProcessors, PaymentProcessor{
 		CoinDenom:            "node0token",
 		PubKey:               DefaultTestPubKey,
 		ProcessorPercentage:  DefaultProcessorPercentage,
@@ -140,7 +139,7 @@ func NetworkTestParams() Params {
 
 	return NewParams(
 		DefaultCoinIssuers,
-		paymentProcessors,
+		DefaultPaymentProcessors,
 		DefaultRecipeFeePercentage,
 		DefaultItemTransferFeePercentage,
 		sdk.NewCoin("node0token", sdk.NewInt(10)),
