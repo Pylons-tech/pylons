@@ -1,20 +1,19 @@
 syntax = "proto3";
-package Pylonstech.pylons.pylons;
+package pylons.pylons;
 
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
-// this line is used by starport scaffolding # 1
-import "pylons/redeem_info.proto";
-import "pylons/payment_info.proto";
-import "pylons/accounts.proto";
-import "pylons/trade.proto";
-import "pylons/google_iap_order.proto";
-import "pylons/execution.proto";
-import "pylons/item.proto";
-import "pylons/recipe.proto";
-import "pylons/cookbook.proto";
-import "pylons/stripe_refund.proto";
+import "pylons/pylons/redeem_info.proto";
+import "pylons/pylons/payment_info.proto";
+import "pylons/pylons/accounts.proto";
+import "pylons/pylons/trade.proto";
+import "pylons/pylons/google_iap_order.proto";
+import "pylons/pylons/execution.proto";
+import "pylons/pylons/item.proto";
+import "pylons/pylons/recipe.proto";
+import "pylons/pylons/cookbook.proto";
+import "pylons/pylons/stripe_refund.proto";
 
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
@@ -145,7 +144,7 @@ message QueryGetRecipeHistoryRequest {
 }
 
 message QueryGetRecipeHistoryResponse {
-	repeated RecipeHistory History = 1;
+	repeated RecipeHistory history = 1;
 }
 
 message RecipeHistory {

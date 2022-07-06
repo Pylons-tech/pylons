@@ -63,9 +63,9 @@ func ValidateApplePay(msg *MsgAppleIap) (*AppleInAppPurchaseOrder, error) {
 		return nil, err
 	}
 	return &AppleInAppPurchaseOrder{
-		PurchaseID:   purchaseID,
+		PurchaseId:   purchaseID,
 		PurchaseDate: txDate,
-		ProductID:    productID,
+		ProductId:    productID,
 	}, nil
 }
 

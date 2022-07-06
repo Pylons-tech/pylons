@@ -14,8 +14,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func generateAddress() sdk.AccAddress {
@@ -206,7 +207,7 @@ func createNAppleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.Apple
 	creators := types.GenTestBech32List(n)
 	for i := range items {
 		items[i].Creator = creators[i]
-		items[i].PurchaseID = strconv.Itoa(i)
+		items[i].PurchaseId = strconv.Itoa(i)
 		k.AppendAppleIAPOrder(ctx, items[i])
 	}
 

@@ -58,7 +58,7 @@ func (k Keeper) AppendAppleIAPOrder(
 func (k Keeper) SetAppleIAPOrder(ctx sdk.Context, appleIAPOrder types.AppleInAppPurchaseOrder) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AppleInAppPurchaseOrderKey))
 	b := k.cdc.MustMarshal(&appleIAPOrder)
-	store.Set(types.KeyPrefix(appleIAPOrder.PurchaseID), b)
+	store.Set(types.KeyPrefix(appleIAPOrder.PurchaseId), b)
 
 	// required for random seed init given how it's handled rn
 	k.IncrementEntityCount(ctx)

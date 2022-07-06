@@ -1,18 +1,18 @@
 syntax = "proto3";
-package Pylonstech.pylons.pylons;
+package pylons.pylons;
 
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
-import "pylons/google_iap_order.proto";
-import "pylons/execution.proto";
-import "pylons/item.proto";
-import "pylons/recipe.proto";
-import "pylons/cookbook.proto";
-import "pylons/trade.proto";
-import "pylons/payment_info.proto";
-import "pylons/redeem_info.proto";
+import "pylons/pylons/google_iap_order.proto";
+import "pylons/pylons/execution.proto";
+import "pylons/pylons/item.proto";
+import "pylons/pylons/recipe.proto";
+import "pylons/pylons/cookbook.proto";
+import "pylons/pylons/trade.proto";
+import "pylons/pylons/payment_info.proto";
+import "pylons/pylons/redeem_info.proto";
 
 message EventBurnDebtToken {
   RedeemInfo redeem_info = 1 [ (gogoproto.nullable) = false ];
@@ -159,7 +159,7 @@ message EventStripePurchase {
 
 message EventApplePurchase {
   string creator = 1;
-  string productID = 2;
-  string transactionID = 3;
-  string receiptDataBase64 = 4;
+  string product_id = 2;
+  string transaction_id = 3;
+  string receipt_data_base64 = 4;
 }
