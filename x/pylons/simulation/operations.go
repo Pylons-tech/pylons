@@ -147,7 +147,7 @@ func SimulateCreateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 
 		msg := types.NewMsgCreateAccount(
 			simAccount.Address.String(),
-			username)
+			username, "", true)
 
 		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
 	}
@@ -172,7 +172,7 @@ func SimulateUpdateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 
 		msg := types.NewMsgCreateAccount(
 			simAccount.Address.String(),
-			username)
+			username, "", true)
 
 		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
 	}

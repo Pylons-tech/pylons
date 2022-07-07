@@ -81,7 +81,8 @@ message MsgUpdateAccountResponse {
 message MsgCreateAccount {
   string creator = 1;
   string username = 2;
-  bool app_check = 3;
+  string token = 3;
+  bool no_app_check = 4;
 }
 
 message MsgCreateAccountResponse {

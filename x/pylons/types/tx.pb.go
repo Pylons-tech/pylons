@@ -400,9 +400,10 @@ func (m *MsgUpdateAccountResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgUpdateAccountResponse proto.InternalMessageInfo
 
 type MsgCreateAccount struct {
-	Creator  string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Username string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
-	AppCheck bool   `protobuf:"varint,3,opt,name=app_check,json=appCheck,proto3" json:"app_check,omitempty"`
+	Creator    string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Username   string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Token      string `protobuf:"bytes,3,opt,name=token,proto3" json:"token,omitempty"`
+	NoAppCheck bool   `protobuf:"varint,4,opt,name=no_app_check,json=noAppCheck,proto3" json:"no_app_check,omitempty"`
 }
 
 func (m *MsgCreateAccount) Reset()         { *m = MsgCreateAccount{} }
@@ -452,9 +453,16 @@ func (m *MsgCreateAccount) GetUsername() string {
 	return ""
 }
 
-func (m *MsgCreateAccount) GetAppCheck() bool {
+func (m *MsgCreateAccount) GetToken() string {
 	if m != nil {
-		return m.AppCheck
+		return m.Token
+	}
+	return ""
+}
+
+func (m *MsgCreateAccount) GetNoAppCheck() bool {
+	if m != nil {
+		return m.NoAppCheck
 	}
 	return false
 }
@@ -3228,15 +3236,22 @@ func (m *MsgCreateAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.AppCheck {
+	if m.NoAppCheck {
 		i--
-		if m.AppCheck {
+		if m.NoAppCheck {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
 		i--
-		dAtA[i] = 0x18
+		dAtA[i] = 0x20
+	}
+	if len(m.Token) > 0 {
+		i -= len(m.Token)
+		copy(dAtA[i:], m.Token)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Token)))
+		i--
+		dAtA[i] = 0x1a
 	}
 	if len(m.Username) > 0 {
 		i -= len(m.Username)
@@ -4709,7 +4724,11 @@ func (m *MsgCreateAccount) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	if m.AppCheck {
+	l = len(m.Token)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.NoAppCheck {
 		n += 2
 	}
 	return n
@@ -6130,8 +6149,40 @@ func (m *MsgCreateAccount) Unmarshal(dAtA []byte) error {
 			m.Username = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Token", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Token = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AppCheck", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NoAppCheck", wireType)
 			}
 			var v int
 			for shift := uint(0); ; shift += 7 {
@@ -6148,7 +6199,7 @@ func (m *MsgCreateAccount) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-			m.AppCheck = bool(v != 0)
+			m.NoAppCheck = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
