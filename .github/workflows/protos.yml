@@ -3,13 +3,28 @@ name: Generate Protos
 on: [pull_request]
 
 jobs:
-  proto_checks:
+  proto_lint:
+    if: github.event.review.state == 'approved'
     name: Generate Protos
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: wizhi/setup-buf@v1
         with:
-          ref: ${{ github.ref }}
+          version: '0.36.0'
+      - uses: arduino/setup-protoc@v1
+        with:
+          version: '3.x'
+      - name: Running linter, checking breaking changes
+        run: |
+          buf lint
+          buf breaking --against ".git#branch=${{ github.base_ref }}"         
+  proto_build:
+    if: github.event.review.state == 'approved'
+    name: Generate Protos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
       - uses: wizhi/setup-buf@v1
         with:
           version: '0.36.0'
