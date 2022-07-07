@@ -37,8 +37,8 @@ var (
 		},
 	}
 
-	DefaultProcessorPercentage  = sdk.ZeroDec()
-	DefaultValidatorsPercentage = sdk.MustNewDecFromStr("0.003")
+	DefaultProcessorPercentage  = sdk.ZeroInt()
+	DefaultValidatorsPercentage = sdk.MustNewDecFromStr("0.003").RoundInt()
 	DefaultPylonsIncPubKey      = "EVK1dqjD6K8hGylacMpWAa/ru/OnWUDtCZ+lPkv2TTA=" // this is a testing key, do not use in production!
 	DefaultPaymentProcessors    = []PaymentProcessor{
 		{
@@ -83,8 +83,8 @@ var (
 func NewParams(
 	coinIssuers []CoinIssuer,
 	paymentProcessors []PaymentProcessor,
-	recipeFeePercentage sdk.Dec,
-	itemTransferFeePercentage sdk.Dec,
+	recipeFeePercentage math.Int,
+	itemTransferFeePercentage math.Int,
 	updateItemStringFee sdk.Coin,
 	minTransferFee math.Int,
 	maxTransferFee math.Int,

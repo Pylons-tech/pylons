@@ -103,8 +103,8 @@ func (suite *IntegrationTestSuite) TestMintCreditToAddr() {
 
 	amt := sdk.NewInt(100)
 	// account for network fees
-	burnAmt := amt.ToDec().Mul(types.DefaultProcessorPercentage).RoundInt()
-	feesAmt := amt.ToDec().Mul(types.DefaultValidatorsPercentage).RoundInt()
+	burnAmt := amt.Mul(types.DefaultProcessorPercentage).RoundInt()
+	feesAmt := amt.Mul(types.DefaultValidatorsPercentage).RoundInt()
 
 	mintCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amt))
 	burnCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, burnAmt))
