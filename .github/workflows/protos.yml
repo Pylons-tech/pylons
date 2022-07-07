@@ -23,13 +23,13 @@ jobs:
       #     buf lint
       #     buf breaking --against ".git#branch=${{ github.base_ref }}"          
       - name: Running buf build
+        working-directory: ${GITHUB_WORKSPACE}/proto
         run: |
-          cd proto
           buf build --error-format=json
       - name: Generating protos
+        working-directory: ${GITHUB_WORKSPACE}/proto
         run: |
-          cd proto
-          buf generate --template buf.gen.gogo.yaml        
+          buf generate --template ./proto/buf.gen.gogo.yaml        
         env:
           GEN_OUT_DIR: contracts/build/go
           PROTO_DIR: contracts/proto

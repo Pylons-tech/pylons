@@ -1,4 +1,12 @@
-version: v1
+version: v1beta1
+deps:
+  - buf.build/cosmos/cosmos-sdk
+  - buf.build/cosmos/cosmos-proto
+  - buf.build/cosmos/gogo-proto
+  - buf.build/googleapis/googleapis
+breaking:
+  use:
+    - FILE
 lint:
   use:
     - DEFAULT
@@ -12,16 +20,3 @@ lint:
     - RPC_REQUEST_STANDARD_NAME
   ignore:
     - tendermint
-    - gogoproto
-    - cosmos_proto
-    - google
-    - confio
-breaking:
-  use:
-    - FILE
-  ignore:
-    - tendermint
-    - gogoproto
-    - cosmos_proto
-    - google
-    - confio
