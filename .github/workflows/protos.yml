@@ -7,7 +7,7 @@ jobs:
     name: Generate Protos
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: wizhi/setup-buf@v1
         with:
           version: '0.36.0'
@@ -23,17 +23,13 @@ jobs:
     name: Generate Protos
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: wizhi/setup-buf@v1
         with:
           version: '0.36.0'
       - uses: arduino/setup-protoc@v1
         with:
-          version: '3.x'
-      # - name: Running linter, checking breaking changes
-      #   run: |
-      #     buf lint
-      #     buf breaking --against ".git#branch=${{ github.base_ref }}"          
+          version: '3.x'  
       - name: Running buf build
         working-directory:  ${{ github.workspace }}/proto
         run: |
