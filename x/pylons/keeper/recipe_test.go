@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	transfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
+	transfertypes "github.com/cosmos/ibc-go/v4/modules/apps/transfer/types"
 )
 
 func (suite *IntegrationTestSuite) TestRecipeGet() {
