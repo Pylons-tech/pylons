@@ -19,7 +19,7 @@ jobs:
           buf lint
           buf breaking --against ".git#branch=${{ github.base_ref }}"         
   proto_build:
-    if: github.event.review.state == 'approved'
+    # if: github.event.review.state == 'approved'
     name: Generate Protos
     runs-on: ubuntu-latest
     steps:
