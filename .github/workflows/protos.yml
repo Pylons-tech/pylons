@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-        ref: ${{ github.ref }}
+          ref: ${{ github.ref }}
       - uses: wizhi/setup-buf@v1
         with:
           version: '0.36.0'
