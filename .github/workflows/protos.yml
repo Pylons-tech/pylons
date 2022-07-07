@@ -33,7 +33,6 @@ jobs:
       - name: Running buf build
         working-directory:  ${{ github.workspace }}/proto
         run: |
-          git checkout $(( GITHUB_SHA ))
           buf build --error-format=json
       - name: Generating protos
         working-directory:  ${{ github.workspace }}/proto
