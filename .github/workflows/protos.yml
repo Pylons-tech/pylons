@@ -14,10 +14,6 @@ jobs:
       - uses: arduino/setup-protoc@v1
         with:
           version: '3.x'
-
-      - name: Fetching base branch
-        run: |
-                    git fetch -u origin ${{ github.base_ref }}:${{ github.base_ref }}
       # - name: Running linter, checking breaking changes
       #   run: |
       #     buf lint
