@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/gogo/protobuf/jsonpb"
@@ -16,9 +18,10 @@ var Out io.Writer = os.Stdout // modified during testing
 const (
 	cookbookExtension = ".plc"
 	recipeExtension   = ".plr"
-)
+	moduleExtension   = ".pdt"
 
-// const moduleExtension = ".pdt" // we don't use this yet, but we will
+	includeDirective = "#include "
+)
 
 func forFile(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.Recipe)) {
 	if filepath.Ext(path) == cookbookExtension {
@@ -62,16 +65,43 @@ func ForFiles(path string, perCookbook func(path string, cookbook types.Cookbook
 	}
 }
 
+func loadModuleFromPath(modulePath string, currentPath string) string {
+	bytes, err := os.ReadFile(path.Join(currentPath, modulePath))
+	if err != nil {
+		panic(err)
+	}
+	return string(bytes)
+}
+
+func loadModuleInline(bytes []byte, path string, info os.FileInfo) string {
+	json := string(bytes)
+	lines := strings.Split(json, "\n")
+	for i, line := range lines {
+		if strings.Contains(line, includeDirective) {
+			lines[i] = loadModuleFromPath(strings.Split(line, includeDirective)[1], strings.TrimSuffix(path, info.Name())) + "\n"
+		}
+	}
+	json = strings.Join(lines, "")
+	return json
+}
+
 func loadCookbookFromPath(path string) (types.Cookbook, string, error) {
 	bytes, _ := os.ReadFile(path)
+	info, _ := os.Stat(path)
 	var cb types.Cookbook
-	err := jsonpb.UnmarshalString(string(bytes), &cb)
-	return cb, string(bytes), err
+
+	json := loadModuleInline(bytes, path, info)
+	err := jsonpb.UnmarshalString(json, &cb)
+
+	return cb, json, err
 }
 
 func loadRecipeFromPath(path string) (types.Recipe, string, error) {
 	bytes, _ := os.ReadFile(path)
+	info, _ := os.Stat(path)
 	var rcp types.Recipe
-	err := jsonpb.UnmarshalString(string(bytes), &rcp)
+
+	json := loadModuleInline(bytes, path, info)
+	err := jsonpb.UnmarshalString(json, &rcp)
 	return rcp, string(bytes), err
 }
