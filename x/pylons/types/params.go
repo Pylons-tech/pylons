@@ -55,8 +55,8 @@ var (
 		{Denom: StripeCoinDenom, Enabled: false},
 	}
 
-	DefaultRecipeFeePercentage, _       = sdk.NewDecFromStr("0.10")
-	DefaultItemTransferFeePercentage, _ = sdk.NewDecFromStr("0.10")
+	DefaultRecipeFeePercentage, _       = math.NewIntFromString("0.10")
+	DefaultItemTransferFeePercentage, _ = math.NewIntFromString("0.10")
 	DefaultUpdateItemStringFee          = sdk.NewCoin(PylonsCoinDenom, sdk.NewInt(10))
 	DefaultUpdateUsernameFee            = sdk.NewCoin(PylonsCoinDenom, sdk.NewInt(10))
 	DefaultMinTransferFee               = sdk.OneInt()
@@ -85,8 +85,8 @@ var (
 func NewParams(
 	coinIssuers []CoinIssuer,
 	paymentProcessors []PaymentProcessor,
-	recipeFeePercentage sdk.Dec,
-	itemTransferFeePercentage sdk.Dec,
+	recipeFeePercentage math.Int,
+	itemTransferFeePercentage math.Int,
 	updateItemStringFee sdk.Coin,
 	minTransferFee math.Int,
 	maxTransferFee math.Int,
@@ -231,12 +231,12 @@ func (p Params) ValidateBasic() error {
 }
 
 func validateDecPercentage(i interface{}) error {
-	v, ok := i.(sdk.Dec)
+	v, ok := i.(math.Int)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	if !(v.GTE(sdk.ZeroDec()) && v.LT(sdk.OneDec())) {
+	if !(v.GTE(math.ZeroInt()) && v.LT(math.OneInt())) {
 		return fmt.Errorf("percentage parameter should be in the range [0,1)")
 	}
 	return nil

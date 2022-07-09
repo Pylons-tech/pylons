@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"strconv"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkmath "cosmossdk.io/math"
 )
 
 type (
@@ -84,7 +84,7 @@ func getFloat(unk interface{}) (float64, error) {
 func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, error) {
 	m := make([]DoubleKeyValue, 0, len(dpm))
 	for _, param := range dpm {
-		var valDec sdk.Dec
+		var valInt sdkmath.Int
 		var err error
 
 		if len(param.Program) > 0 {
@@ -93,16 +93,16 @@ func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, e
 			if err != nil {
 				return m, err
 			}
-			valDec, err = sdk.NewDecFromStr(fmt.Sprintf("%v", val))
+			valInt, ok = sdkmath.NewIntFromString(fmt.Sprintf("%v", val))
 		} else {
-			valDec, err = DoubleWeightTable(param.WeightRanges).Generate()
+			valInt, err = DoubleWeightTable(param.WeightRanges).Generate()
 		}
 		if err != nil {
 			return m, err
 		}
 		m = append(m, DoubleKeyValue{
 			Key:   param.Key,
-			Value: valDec,
+			Value: valInt,
 		})
 	}
 	return m, nil
@@ -155,7 +155,7 @@ func (spm StringParamList) Actualize(ec CelEnvCollection) (StringKeyValueList, e
 }
 
 // Has check if an input is between double input param range
-func (dp DoubleInputParam) Has(input sdk.Dec) bool {
+func (dp DoubleInputParam) Has(input sdkmath.Int) bool {
 	return input.GTE(dp.MinValue) && input.LTE(dp.MaxValue)
 }
 

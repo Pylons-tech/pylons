@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client"
 
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
@@ -21,7 +22,7 @@ import (
 type tradeSimInfo struct {
 	net                  *network.Network
 	ctx                  client.Context
-	basicTradePercentage sdk.Dec
+	basicTradePercentage math.Int
 	err                  error
 	traderCommon         []string
 	fulfillerCommon      []string
@@ -125,7 +126,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	simInfo := &tradeSimInfo{
 		net:                  net,
 		ctx:                  val.ClientCtx,
-		basicTradePercentage: sdk.Dec{},
+		basicTradePercentage: math.Int{},
 		err:                  nil,
 		traderCommon:         traderCommon,
 		fulfillerCommon:      fulFillercommon,
@@ -134,8 +135,10 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 		cookbookID:           cookbookID,
 	}
 
-	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
-	require.NoError(t, err)
+	// ok checks to see if the integer is created from the string.
+	var ok bool
+	simInfo.basicTradePercentage, ok = math.NewIntFromString("0.10")
+	require.True(t, ok)
 
 	// simulate full execution of recipe to generate an item
 

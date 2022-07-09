@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client"
 
 	"github.com/Pylons-tech/pylons/app"
@@ -27,7 +28,7 @@ const (
 type loudBasicSim struct {
 	net                    *network.Network
 	ctx                    client.Context
-	basicTradePercentage   sdk.Dec
+	basicTradePercentage   math.Int
 	err                    error
 	common                 []string
 	executorCommon         []string
@@ -53,7 +54,7 @@ func TestLOUDBasic(t *testing.T) {
 	simInfo := &loudBasicSim{
 		net:                    net,
 		ctx:                    ctx,
-		basicTradePercentage:   sdk.Dec{},
+		basicTradePercentage:   math.Int{},
 		err:                    nil,
 		common:                 nil,
 		execCount:              0,
@@ -64,8 +65,10 @@ func TestLOUDBasic(t *testing.T) {
 		buyCopperSwordRecipeID: "",
 	}
 
-	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
-	require.NoError(t, err)
+	// checks to see if the integer is made correctly from the string
+	var ok bool
+	simInfo.basicTradePercentage, ok = math.NewIntFromString("0.10")
+	require.False(t, ok)
 
 	simInfo.executorCommon = CommonArgs(address, net)
 	simInfo.common = CommonArgs(val.Address.String(), net)

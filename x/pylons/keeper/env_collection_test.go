@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"reflect"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -192,7 +193,7 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 				Tradeable:       false,
 				LastUpdate:      0,
 				TransferFee:     nil,
-				TradePercentage: sdk.Dec{},
+				TradePercentage: math.Int{},
 			},
 			expected: map[string]interface{}{
 				"lastUpdate":         int64(0),

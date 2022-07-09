@@ -43,7 +43,7 @@ func (suite *IntegrationTestSuite) TestSetParams() {
 
 	// set params to new values
 	recipeFeePercentage, _ := math.NewIntFromString("0.20")
-	itemTransferFeePercentage, _ := sdk.NewIntFromString("0.20")
+	itemTransferFeePercentage, _ := math.NewIntFromString("0.20")
 
 	newParams := types.Params{
 		CoinIssuers: []types.CoinIssuer{

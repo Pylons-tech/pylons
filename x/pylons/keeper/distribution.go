@@ -9,9 +9,9 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper) (distrPercentages map[string]sdk.Dec) {
-	distrPercentages = make(map[string]sdk.Dec)
-	sharesMap := make(map[string]sdk.Dec)
+func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper) (distrPercentages map[string]math.Int) {
+	distrPercentages = make(map[string]math.Int)
+	sharesMap := make(map[string]math.Int)
 	validators := make(map[string]bool)
 	totalShares := sdk.ZeroDec()
 

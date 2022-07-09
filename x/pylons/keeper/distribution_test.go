@@ -136,23 +136,25 @@ func generateDistributionMap(validators []*sdknetwork.Validator, numDelegations 
 	return delegations
 }
 
-func computeDistrPercentages(validators []*sdknetwork.Validator, distrMap map[string][]TestDelegation, bondingTokens, totalStake math.Int) (distrPercentages map[string]sdk.Dec) {
-	distrPercentages = make(map[string]sdk.Dec)
+func computeDistrPercentages(validators []*sdknetwork.Validator, distrMap map[string][]TestDelegation, bondingTokens, totalStake math.Int) (distrPercentages map[string]math.Int) {
+	distrPercentages = make(map[string]math.Int)
 	for _, val := range validators {
 		valAddr := val.Address.String()
 		delegations := distrMap[valAddr]
-		distrPercentages[valAddr] = sdk.ZeroDec()
+		distrPercentages[valAddr] = math.ZeroInt()
 		for _, del := range delegations {
 			amt := del.amount
 			if del.address == valAddr {
 				amt = del.amount.Add(bondingTokens)
 			}
-			percentage := amt.ToDec().Quo(totalStake.ToDec())
+			percentage := amt.Quo(totalStake)
 			if del.address == valAddr {
 				distrPercentages[del.address] = distrPercentages[valAddr].Add(percentage)
 			} else {
 				// 0.5 is the default value given to validators. see cosmos-sdk/testutil/network/network.go
-				commission := percentage.Mul(sdk.MustNewDecFromStr("0.5"))
+
+				comm, _ := math.NewIntFromString("0.5")
+				commission := percentage.Mul(comm)
 				actualPercentage := percentage.Sub(commission)
 				distrPercentages[del.address] = actualPercentage
 				distrPercentages[valAddr] = distrPercentages[valAddr].Add(commission)

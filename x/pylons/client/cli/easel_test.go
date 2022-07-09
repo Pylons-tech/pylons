@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -25,7 +26,7 @@ const (
 type easelBasicSim struct {
 	net                  *network.Network
 	ctx                  client.Context
-	basicTradePercentage sdk.Dec
+	basicTradePercentage math.Int
 	err                  error
 	common               []string
 	executorCommon       []string
@@ -49,13 +50,15 @@ func TestEaselBasic(t *testing.T) {
 	simInfo := &easelBasicSim{
 		net:                  net,
 		ctx:                  ctx,
-		basicTradePercentage: sdk.Dec{},
+		basicTradePercentage: math.Int{},
 		err:                  nil,
 		common:               nil,
 	}
 
-	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
-	require.NoError(t, err)
+	var ok bool
+
+	simInfo.basicTradePercentage, ok = math.NewIntFromString("0.10")
+	require.True(t, ok)
 
 	simInfo.executorCommon = CommonArgs(address, net)
 
