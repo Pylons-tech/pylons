@@ -17,6 +17,7 @@ import (
 	bankcli "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	stakingcli "github.com/cosmos/cosmos-sdk/x/staking/client/cli"
 	"github.com/stretchr/testify/require"
+	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
@@ -36,7 +37,7 @@ func GenerateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 	addrs := make([]sdk.AccAddress, n)
 	for i := 0; i < n; i++ {
 		info, _, _ := ring.NewMnemonic("NewUser"+strconv.Itoa(i), keyring.English, sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)
-		addrs[i], err = info.GetAddress()
+		addrs[i], _ = info.GetAddress()
 	}
 	return addrs
 }
@@ -170,7 +171,8 @@ func (suite *IntegrationTestSuite) TestGetRewardsDistributionPercentages() {
 	numDelegationsPerValidators := 10
 
 	cfg := distributionNetworkConfig(feesAmount)
-	net := network.New(suite.T(), cfg)
+	log := log.TestingLogger()
+	net, err := network.New(suite.T(), log, cfg)
 	senderValidator := net.Validators[0]
 	keyringCtx := senderValidator.ClientCtx
 	delegatorsInitialBalance := sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(100_000_000))
