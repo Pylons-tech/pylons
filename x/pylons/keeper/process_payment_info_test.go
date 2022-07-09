@@ -132,7 +132,6 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 	} {
 		tc := tc
 		suite.Run(tc.name, func() {
-
 			err := k.ProcessPaymentInfos(suite.ctx, tc.args.pi, tc.args.sender)
 			if tc.wantErr {
 				suite.Require().Error(err)
@@ -142,7 +141,7 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 			if !tc.wantErr {
 				suite.Require().NoError(err)
 
-				//Check balances
+				// Check balances
 				userBalances := bk.SpendableCoins(suite.ctx, types.GenAccAddressFromString("test"))
 				feeCollectorBalances := bk.SpendableCoins(suite.ctx, feeCollectorAddr)
 				suite.Require().True(userBalances.IsEqual(sdk.NewCoins(sdk.NewCoin(types.StripeCoinDenom, sdk.NewInt(997000000)))))
