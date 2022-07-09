@@ -96,8 +96,8 @@ func TestGetRecipeHistory(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewDec(50),
-								Upper:  sdk.NewDec(100),
+								Lower:  math.NewInt(50),
+								Upper:  math.NewInt(100),
 								Weight: 1,
 							},
 						},
@@ -113,7 +113,7 @@ func TestGetRecipeHistory(t *testing.T) {
 					},
 				},
 				MutableStrings:  nil,
-				TransferFee:     []sdk.Coin{sdk.NewCoin("upylon", sdk.OneInt())},
+				TransferFee:     []sdk.Coin{sdk.NewCoin("upylon", math.OneInt())},
 				TradePercentage: tradePercentage,
 				Quantity:        0,
 				AmountMinted:    0,

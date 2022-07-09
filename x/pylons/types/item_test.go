@@ -139,11 +139,11 @@ func TestFindDouble(t *testing.T) {
 				Doubles: []DoubleKeyValue{
 					{
 						Key:   "one",
-						Value: sdkmath.NewDec(1),
+						Value: sdkmath.OneInt(),
 					},
 					{
 						Key:   "two",
-						Value: sdkmath.NewDec(1),
+						Value: sdkmath.OneInt(),
 					},
 				},
 			},
@@ -173,7 +173,7 @@ func TestFindDouble(t *testing.T) {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			returnedDec, returnedBool := tc.testedItem.FindDouble(tc.testedValue)
-			require.Equal(t, returnedDec, tc.expectedDec)
+			require.Equal(t, returnedDec, tc.expectedInt)
 			require.Equal(t, returnedBool, tc.expectedBool)
 		})
 	}

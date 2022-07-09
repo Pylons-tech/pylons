@@ -409,8 +409,8 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 			Doubles: []types.DoubleInputParam{
 				{
 					Key:      "XP",
-					MinValue: sdk.NewDec(1),
-					MaxValue: sdk.NewDec(10000000),
+					MinValue: math.NewInt(1),
+					MaxValue: math.NewInt(10000000),
 				},
 			},
 			Longs: []types.LongInputParam{
@@ -432,8 +432,8 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 			Doubles: []types.DoubleInputParam{
 				{
 					Key:      "attack",
-					MinValue: sdk.NewDec(1),
-					MaxValue: sdk.NewDec(10000000),
+					MinValue: math.OneInt(),
+					MaxValue: math.NewInt(10000000),
 				},
 			},
 			Longs: []types.LongInputParam{
