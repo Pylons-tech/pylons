@@ -190,7 +190,7 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 	})
 	require.NoError(t, err)
 
-	residual, _ := sdk.NewDecFromStr("2.000000000000000000")
+	residual, _ := math.NewIntFromString("2.000000000000000000")
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,

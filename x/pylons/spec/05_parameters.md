@@ -97,7 +97,7 @@ Example:
 
 ```go
 	DefaultProcessorPercentage  = sdk.ZeroDec()
-    DefaultValidatorsPercentage = sdk.MustNewDecFromStr("0.003")
+    DefaultValidatorsPercentage, _ = math.NewIntFromString("0.003")
     DefaultPylonsIncPubKey      = "EVK1dqjD6K8hGylacMpWAa/ru/OnWUDtCZ+lPkv2TTA=" // this is a testing key, do not use in production!
     DefaultPaymentProcessors    = []PaymentProcessor{
         {

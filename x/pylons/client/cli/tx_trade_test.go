@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	"cosmossdk.io/math"
 	"github.com/spf13/cast"
 
 	"github.com/Pylons-tech/pylons/app"
@@ -187,8 +188,8 @@ func TestCreateTradeItemOutput(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, err := sdk.NewDecFromStr("0.01")
-	require.NoError(t, err)
+	tradePercentage, ok := math.NewIntFromString("0.01")
+	require.True(t, ok)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -395,12 +396,12 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 		"DescriptionDescriptionDescription",
 		"Developer",
 		"v0.0.1",
-		"test@email.com",
+		"test@email.com", // todo: huge scary spam risk
 		"true",
 	}
 
-	tradePercentage, err := sdk.NewDecFromStr("0.01")
-	require.NoError(t, err)
+	tradePercentage, ok := math.NewIntFromString("0.01")
+	require.True(t, ok)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -622,8 +623,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, err := sdk.NewDecFromStr("0.01")
-	require.NoError(t, err)
+	tradePercentage, ok := math.NewIntFromString("0.01")
+	require.True(t, ok)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -845,8 +846,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, err := sdk.NewDecFromStr("0.01")
-	require.NoError(t, err)
+	tradePercentage, ok := math.NewIntFromString("0.01")
+	require.True(t, ok)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -1068,8 +1069,8 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, err := sdk.NewDecFromStr("0.01")
-	require.NoError(t, err)
+	tradePercentage, ok := math.NewIntFromString("0.01")
+	require.True(t, ok)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,

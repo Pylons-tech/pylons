@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	"cosmossdk.io/math"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cast"
@@ -39,8 +40,8 @@ func TestSendItems(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, err := sdk.NewDecFromStr("0.01")
-	require.NoError(t, err)
+	tradePercentage, ok := math.NewIntFromString("0.01")
+	require.True(t, ok)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	"cosmossdk.io/math"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -13,26 +14,26 @@ import (
 // TODO Add tests for RecipeModified, ItemInputsEqual, EntriesListEqual, OutputsEqual from recipe.go
 
 func TestValidateInputDoubles(t *testing.T) {
-	valGTone, _ := sdk.NewDecFromStr("1.01")
-	valLTone, _ := sdk.NewDecFromStr("0.99")
+	valGTone, _ := math.NewIntFromString("1.01")
+	valLTone, _ := math.NewIntFromString("0.99")
 	for _, tc := range []struct {
 		desc string
 		obj  []DoubleInputParam
 		err  error
 	}{
 		{desc: "ValidSingle", obj: []DoubleInputParam{
-			{Key: "test", MinValue: sdk.OneDec(), MaxValue: valGTone},
+			{Key: "test", MinValue: math.OneInt(), MaxValue: valGTone},
 		}},
 		{desc: "ValidMultiple", obj: []DoubleInputParam{
-			{Key: "test1", MinValue: sdk.OneDec(), MaxValue: valGTone},
-			{Key: "test2", MinValue: sdk.OneDec(), MaxValue: valGTone},
+			{Key: "test1", MinValue: math.OneInt(), MaxValue: valGTone},
+			{Key: "test2", MinValue: math.OneInt(), MaxValue: valGTone},
 		}},
 		{desc: "InvalidSingle", obj: []DoubleInputParam{
-			{Key: "test", MinValue: sdk.OneDec(), MaxValue: valLTone},
+			{Key: "test", MinValue: math.OneInt(), MaxValue: valLTone},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidMultiple", obj: []DoubleInputParam{
-			{Key: "test", MinValue: sdk.OneDec(), MaxValue: valGTone},
-			{Key: "test", MinValue: sdk.OneDec(), MaxValue: valGTone},
+			{Key: "test", MinValue: math.OneInt(), MaxValue: valGTone},
+			{Key: "test", MinValue: math.OneInt(), MaxValue: valGTone},
 		}, err: ErrInvalidRequestField},
 	} {
 		tc := tc
@@ -169,8 +170,8 @@ func TestValidateCoinOutput(t *testing.T) {
 }
 
 func TestValidateDoubles(t *testing.T) {
-	valGTone, _ := sdk.NewDecFromStr("1.01")
-	valLTone, _ := sdk.NewDecFromStr("0.99")
+	valGTone, _ := math.NewIntFromString("1.01")
+	valLTone, _ := math.NewIntFromString("0.99")
 	for _, tc := range []struct {
 		desc string
 		obj  []DoubleParam
@@ -180,8 +181,8 @@ func TestValidateDoubles(t *testing.T) {
 			{Key: "test"},
 		}},
 		{desc: "ValidMultiple", obj: []DoubleParam{
-			{Key: "test1", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
-			{Key: "test2", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
+			{Key: "test1", WeightRanges: []DoubleWeightRange{{Lower: math.OneInt(), Upper: valGTone}}},
+			{Key: "test2", WeightRanges: []DoubleWeightRange{{Lower: math.OneInt(), Upper: valGTone}}},
 		}},
 		{desc: "InvalidSingle1", obj: []DoubleParam{
 			{Key: "1test"},
@@ -190,11 +191,11 @@ func TestValidateDoubles(t *testing.T) {
 			{Key: "2test"},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidSingle3", obj: []DoubleParam{
-			{Key: "test", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valLTone}}},
+			{Key: "test", WeightRanges: []DoubleWeightRange{{Lower: math.OneInt(), Upper: valLTone}}},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidMultiple", obj: []DoubleParam{
-			{Key: "test", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
-			{Key: "test", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
+			{Key: "test", WeightRanges: []DoubleWeightRange{{Lower: math.OneInt(), Upper: valGTone}}},
+			{Key: "test", WeightRanges: []DoubleWeightRange{{Lower: math.OneInt(), Upper: valGTone}}},
 		}, err: ErrInvalidRequestField},
 	} {
 		tc := tc

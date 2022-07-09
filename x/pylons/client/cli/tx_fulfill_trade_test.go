@@ -151,8 +151,8 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, err := sdk.NewDecFromStr("0.01")
-	require.NoError(t, err)
+	tradePercentage, ok := math.NewIntFromString("0.01")
+	require.True(t, ok)
 
 	testDenom, err := types.CookbookDenom(simInfo.cookbookID, "testCoin")
 	require.NoError(t, err)

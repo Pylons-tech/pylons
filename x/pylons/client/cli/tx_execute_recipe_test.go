@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"cosmossdk.io/math"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -47,8 +48,8 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, err := sdk.NewDecFromStr("0.01")
-	require.NoError(t, err)
+	tradePercentage, ok := sdk.NewIntFromString("0.01")
+	require.True(t, ok)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -201,8 +202,8 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, err := sdk.NewDecFromStr("0.01")
-	require.NoError(t, err)
+	tradePercentage, ok := sdk.NewIntFromString("0.01")
+	require.True(t, ok)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -392,8 +393,8 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, err := sdk.NewDecFromStr("0.01")
-	require.NoError(t, err)
+	tradePercentage, ok := math.NewIntFromString("0.01")
+	require.True(t, ok)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -534,8 +535,8 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, err := sdk.NewDecFromStr("0.01")
-	require.NoError(t, err)
+	tradePercentage, ok := math.NewIntFromString("0.01")
+	require.True(t, ok)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -701,8 +702,8 @@ func TestExecuteDisableRecipe(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, err := sdk.NewDecFromStr("0.01")
-	require.NoError(t, err)
+	tradePercentage, ok := math.NewIntFromString("0.01")
+	require.True(t, ok)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -1008,12 +1009,12 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 		"DescriptionDescriptionDescription",
 		"Developer",
 		"v0.0.1",
-		"test@email.com",
+		"test@email.com", // todo: huge spam risk scary huge big
 		"true",
 	}
 
-	tradePercentage, err := sdk.NewDecFromStr("0.01")
-	require.NoError(t, err)
+	tradePercentage, ok := sdk.NewIntFromString("0.01")
+	require.True(t, ok)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
