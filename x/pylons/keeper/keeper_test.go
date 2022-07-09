@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"testing"
 
+	"cosmossdk.io/math"
 	"github.com/stretchr/testify/suite"
 
 	"github.com/Pylons-tech/pylons/app"
@@ -247,7 +248,7 @@ func createNItem(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []type
 		items[i].CookbookId = fmt.Sprintf("%d", i)
 		items[i].TransferFee = coin
 		items[i].Tradeable = tradeable
-		items[i].TradePercentage = sdk.ZeroDec()
+		items[i].TradePercentage = math.ZeroInt()
 		items[i].Id = k.AppendItem(ctx, items[i])
 	}
 	return items
@@ -276,7 +277,7 @@ func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int, tradeable b
 		items[i].CookbookId = fmt.Sprintf("%d", i)
 		items[i].TransferFee = coin
 		items[i].Tradeable = tradeable
-		items[i].TradePercentage = sdk.ZeroDec()
+		items[i].TradePercentage = math.ZeroInt()
 		items[i].Id = k.AppendItem(ctx, items[i])
 	}
 	return items

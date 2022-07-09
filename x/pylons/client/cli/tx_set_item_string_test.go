@@ -55,8 +55,8 @@ func TestSetItemString(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewDec(50),
-								Upper:  sdk.NewDec(100),
+								Lower:  math.NewInt(50),
+								Upper:  math.NewInt(100),
 								Weight: 1,
 							},
 						},

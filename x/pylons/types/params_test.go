@@ -51,7 +51,7 @@ func Test_validateDecPercentage(t *testing.T) {
 		{"invalid type int64 1", args{int64(1)}, true},
 		{"invalid type uint32 1", args{uint32(1)}, true},
 
-		{"invalid percentage 1", args{sdk.OneDec()}, true},
+		{"invalid percentage 1", args{math.OneInt()}, true},
 		{"invalid negative percentage", args{sdk.NewDec(-1)}, true},
 		{"valid percentage", args{sdk.ZeroDec()}, false},
 	}

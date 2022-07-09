@@ -39,7 +39,7 @@ func SetupDenomsAndPrefixes() {
 
 func RegisterDenoms() {
 	// register pylon
-	// err := sdk.RegisterDenom(PylonsHumanCoinUnit, sdk.OneDec())
+	// err := sdk.RegisterDenom(PylonsHumanCoinUnit, math.OneInt())
 	// if err != nil {
 	//	panic(err)
 	// }

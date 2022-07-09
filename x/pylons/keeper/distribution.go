@@ -13,7 +13,7 @@ func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.Stak
 	distrPercentages = make(map[string]math.Int)
 	sharesMap := make(map[string]math.Int)
 	validators := make(map[string]bool)
-	totalShares := sdk.ZeroDec()
+	totalShares := math.ZeroInt()
 
 	// get all delegations
 	delegations := sk.GetAllSDKDelegations(ctx)
@@ -34,7 +34,7 @@ func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.Stak
 		delegatorAddr := delegation.GetDelegatorAddr()
 		// the shares of a delegator represents already the absolute shares percentage of the total shares (not just relative to the validator)
 		if _, ok := sharesMap[delegatorAddr.String()]; !ok {
-			sharesMap[delegatorAddr.String()] = sdk.ZeroDec()
+			sharesMap[delegatorAddr.String()] = math.ZeroInt()
 		}
 		sharesMap[delegatorAddr.String()] = sharesMap[delegatorAddr.String()].Add(delegation.GetShares())
 		prunedDelegations = append(prunedDelegations, delegation)
@@ -50,7 +50,7 @@ func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.Stak
 		sharesPercentage := shares.Quo(totalShares)
 
 		if _, ok := distrPercentages[delegation.DelegatorAddress]; !ok {
-			distrPercentages[delegation.DelegatorAddress] = sdk.ZeroDec()
+			distrPercentages[delegation.DelegatorAddress] = math.ZeroInt()
 		}
 
 		if valAccAddr.String() == delegation.DelegatorAddress {
@@ -63,7 +63,7 @@ func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.Stak
 			// we also add the commission percentage to the validator
 			if _, ok := distrPercentages[valAccAddr.String()]; !ok {
 				// in case the validator was not yet added to the map
-				distrPercentages[valAccAddr.String()] = sdk.ZeroDec()
+				distrPercentages[valAccAddr.String()] = math.ZeroInt()
 			}
 			distrPercentages[valAccAddr.String()] = distrPercentages[valAccAddr.String()].Add(commissionPercentage)
 		}

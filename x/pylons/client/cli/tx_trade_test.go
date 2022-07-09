@@ -201,8 +201,8 @@ func TestCreateTradeItemOutput(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewDec(50),
-								Upper:  sdk.NewDec(100),
+								Lower:  sdk.NewInt(50),
+								Upper:  sdk.NewInt(100),
 								Weight: 1,
 							},
 						},
@@ -413,8 +413,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewDec(50),
-								Upper:  sdk.NewDec(100),
+								Lower:  sdk.NewInt(50),
+								Upper:  sdk.NewInt(100),
 								Weight: 1,
 							},
 						},
@@ -636,8 +636,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewDec(50),
-								Upper:  sdk.NewDec(100),
+								Lower:  sdk.NewInt(50),
+								Upper:  sdk.NewInt(100),
 								Weight: 1,
 							},
 						},
@@ -859,8 +859,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewDec(50),
-								Upper:  sdk.NewDec(100),
+								Lower:  sdk.NewInt(50),
+								Upper:  sdk.NewInt(100),
 								Weight: 1,
 							},
 						},
@@ -1082,8 +1082,8 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewDec(50),
-								Upper:  sdk.NewDec(100),
+								Lower:  sdk.NewInt(50),
+								Upper:  sdk.NewInt(100),
 								Weight: 1,
 							},
 						},

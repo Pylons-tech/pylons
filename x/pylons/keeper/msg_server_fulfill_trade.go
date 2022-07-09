@@ -162,13 +162,13 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	coinOutputs := trade.CoinOutputs
 	for i, item := range matchedInputItems {
 		baseItemTransferFee := item.TransferFee[itemInputsTransferFeePermutation[i]]
-		itemTransferFeeAmt := coinOutputs.AmountOf(baseItemTransferFee.Denom).ToDec().Mul(inputItemWeights[i]).RoundInt()
-		tmpCookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.ToDec().Mul(item.TradePercentage).RoundInt())
+		itemTransferFeeAmt := coinOutputs.AmountOf(baseItemTransferFee.Denom).Mul(inputItemWeights[i])
+		tmpCookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Mul(item.TradePercentage))
 		if tmpCookbookAmt.Amount.GT(maxTransferFee) {
 			// clamp to maxTransferFee - maxTransferFee and minTransferFee are global (i.e. same for every coin)
 			tmpCookbookAmt.Amount = maxTransferFee
 		}
-		chainAmt := sdk.NewCoin(baseItemTransferFee.Denom, tmpCookbookAmt.Amount.ToDec().Mul(k.ItemTransferFeePercentage(ctx)).RoundInt())
+		chainAmt := sdk.NewCoin(baseItemTransferFee.Denom, tmpCookbookAmt.Amount.Mul(k.ItemTransferFeePercentage(ctx)))
 		cookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(chainAmt.Amount))
 		transferAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(cookbookAmt.Amount).Sub(chainAmt.Amount))
 		inputChainTotAmt = inputChainTotAmt.Add(chainAmt)
@@ -181,7 +181,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	for i, item := range outputItems {
 		baseItemTransferFee := item.TransferFee[itemOutputsTransferFeePermutation[i]]
 		itemTransferFeeAmt := coinInputs.AmountOf(baseItemTransferFee.Denom).Mul(outputItemWeights[i])
-		tmpCookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.ToDec().Mul(item.TradePercentage).RoundInt())
+		tmpCookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Mul(item.TradePercentage))
 		if tmpCookbookAmt.Amount.GT(maxTransferFee) {
 			// clamp to maxTransferFee - maxTransferFee and minTransferFee are global (i.e. same for every coin)
 			tmpCookbookAmt.Amount = maxTransferFee
