@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -41,8 +42,8 @@ func (suite *IntegrationTestSuite) TestSetParams() {
 	require := suite.Require()
 
 	// set params to new values
-	recipeFeePercentage, _ := sdk.NewDecFromStr("0.20")
-	itemTransferFeePercentage, _ := sdk.NewDecFromStr("0.20")
+	recipeFeePercentage, _ := math.NewIntFromString("0.20")
+	itemTransferFeePercentage, _ := sdk.NewIntFromString("0.20")
 
 	newParams := types.Params{
 		CoinIssuers: []types.CoinIssuer{

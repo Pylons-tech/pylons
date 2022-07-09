@@ -104,8 +104,8 @@ func (k Keeper) ValidatePaymentInfo(ctx sdk.Context, paymentInfos []types.Paymen
 				paymentProcessor := paymentInfoProcessorMap[paymentInfo.PurchaseId]
 				// account for network fees
 				amt := paymentInfo.Amount
-				burnAmt := amt.ToDec().Mul(paymentProcessor.ProcessorPercentage).RoundInt()
-				feesAmt := amt.ToDec().Mul(paymentProcessor.ValidatorsPercentage).RoundInt()
+				burnAmt := amt.Mul(paymentProcessor.ProcessorPercentage)
+				feesAmt := amt.Mul(paymentProcessor.ValidatorsPercentage)
 				coin = coin.AddAmount(burnAmt).AddAmount(feesAmt)
 			}
 			if mintAmt.LT(coin.Amount) {

@@ -103,8 +103,8 @@ func (suite *IntegrationTestSuite) TestMintCreditToAddr() {
 
 	amt := sdk.NewInt(100)
 	// account for network fees
-	burnAmt := amt.ToDec().Mul(types.DefaultProcessorPercentage).RoundInt()
-	feesAmt := amt.ToDec().Mul(types.DefaultValidatorsPercentage).RoundInt()
+	burnAmt := amt.Mul(types.DefaultProcessorPercentage)
+	feesAmt := amt.Mul(types.DefaultValidatorsPercentage)
 
 	mintCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amt))
 	burnCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, burnAmt))
@@ -142,8 +142,8 @@ func (suite *IntegrationTestSuite) TestSendRewardsFromFeeCollector() {
 
 	// First mint credits
 	amt := sdk.NewInt(100)
-	burnAmt := amt.ToDec().Mul(types.DefaultProcessorPercentage).RoundInt()
-	feesAmt := amt.ToDec().Mul(types.DefaultValidatorsPercentage).RoundInt()
+	burnAmt := amt.Mul(types.DefaultProcessorPercentage)
+	feesAmt := amt.Mul(types.DefaultValidatorsPercentage)
 
 	mintCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amt))
 	burnCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, burnAmt))

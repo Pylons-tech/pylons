@@ -16,10 +16,10 @@ import (
 
 // cookbook -> recipe -> execution -> item
 
-func randomPercentage(r *rand.Rand) sdk.Dec {
+func randomPercentage(r *rand.Rand) sdk.Int {
 	percent := r.Int63n(101) // range [1 - 100]
-	dec := sdk.NewDec(percent)
-	return dec.Quo(sdk.NewDec(100))
+	dec := math.NewInt(percent)
+	return dec.Quo(sdk.NewInt(100))
 }
 
 func randomCoinFee(r *rand.Rand) sdk.Coin {
@@ -35,13 +35,13 @@ func randomTransferFeePair(r *rand.Rand) (math.Int, math.Int) {
 // RandomizedGenState generates a random GenesisState for bank
 func RandomizedGenState(simState *module.SimulationState) {
 	// TODO add logic for randomizing stateMap
-	var recipeFeePercentage sdk.Dec
+	var recipeFeePercentage math.Int
 	simState.AppParams.GetOrGenerate(
 		simState.Cdc, string(types.ParamStoreKeyRecipeFeePercentage),
 		&recipeFeePercentage, simState.Rand,
 		func(r *rand.Rand) { recipeFeePercentage = randomPercentage(r) })
 
-	var itemTransferFeePercentage sdk.Dec
+	var itemTransferFeePercentage math.Int
 	simState.AppParams.GetOrGenerate(
 		simState.Cdc, string(types.ParamStoreKeyItemTransferFeePercentage),
 		&itemTransferFeePercentage, simState.Rand,

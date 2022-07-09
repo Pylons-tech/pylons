@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"testing"
 
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	"github.com/cosmos/cosmos-sdk/types"
@@ -37,8 +38,8 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 	type fields struct {
 		CoinDenom            string
 		PubKey               string
-		ProcessorPercentange types.Dec
-		ValidatorsPercentage types.Dec
+		ProcessorPercentange math.Int
+		ValidatorsPercentage math.Int
 		Name                 string
 	}
 	type args struct {
@@ -114,8 +115,8 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 	type fields struct {
 		CoinDenom            string
 		PubKey               string
-		ProcessorPercentange types.Dec
-		ValidatorsPercentage types.Dec
+		ProcessorPercentange math.Int
+		ValidatorsPercentage math.Int
 		Name                 string
 	}
 	type args struct {
