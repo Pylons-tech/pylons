@@ -6,6 +6,7 @@ replace (
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.1.7-0.20210622111912-ef00f8ac3d76
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 	google.golang.org/grpc => google.golang.org/grpc v1.33.2
+	github.com/tendermint/tm-db => github.com/notional-labs/tm-db v0.6.7-0.20220620174020-3051b49128a7
 )
 
 require (
@@ -30,16 +31,10 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 )
 
-require github.com/golang/glog v1.0.0 // indirect
-
 require (
-	github.com/ghodss/yaml v1.0.0 // indirect
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.3 // indirect
+	github.com/golang/glog v1.0.0 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20180127040702-4e3ac2762d5f // indirect
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
-)
-
-require (
 	filippo.io/edwards25519 v1.0.0-beta.2 // indirect
 	github.com/99designs/keyring v1.1.6 // indirect
 	github.com/ChainSafe/go-schnorrkel v0.0.0-20200405005733-88cbf1b4c40d // indirect
@@ -147,4 +142,3 @@ require (
 	nhooyr.io/websocket v1.8.6 // indirect
 )
 
-replace github.com/tendermint/tm-db => github.com/notional-labs/tm-db v0.6.7-0.20220620174020-3051b49128a7
