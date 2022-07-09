@@ -10,7 +10,7 @@ import "cosmos/base/v1beta1/coin.proto";
 // DoubleKeyValue describes double key/value set
 message  DoubleKeyValue {
   string key = 1;
-  string value = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string value = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "cosmossdk.io/math.Int"];
 }
 
 // LongKeyValue describes long key/value set
@@ -38,7 +38,7 @@ message Item {
   int64 last_update = 10;
   repeated cosmos.base.v1beta1.Coin transfer_fee = 11 [(gogoproto.nullable) = false];
   // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
-  string trade_percentage = 12 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string trade_percentage = 12 [(gogoproto.nullable) = false,(gogoproto.customtype) = "cosmossdk.io/math.Int"];
   int64 created_at = 13;
   int64 updated_at = 14;
   string recipe_id = 15;

@@ -174,11 +174,11 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 
 // ValidateBasic performs basic validation on distribution parameters.
 func (p Params) ValidateBasic() error {
-	if !(p.RecipeFeePercentage.GTE(sdk.ZeroDec()) && p.RecipeFeePercentage.LT(sdk.OneDec())) {
+	if !(p.RecipeFeePercentage.GTE(math.ZeroInt()) && p.RecipeFeePercentage.LT(math.OneInt())) {
 		return fmt.Errorf("percentage parameter should be in the range [0,1)")
 	}
 
-	if !(p.ItemTransferFeePercentage.GTE(sdk.ZeroDec()) && p.ItemTransferFeePercentage.LT(sdk.OneDec())) {
+	if !(p.ItemTransferFeePercentage.GTE(math.ZeroInt()) && p.ItemTransferFeePercentage.LT(math.OneInt())) {
 		return fmt.Errorf("percentage parameter should be in the range [0,1)")
 	}
 
