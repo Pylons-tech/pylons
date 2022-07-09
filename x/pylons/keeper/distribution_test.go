@@ -17,7 +17,6 @@ import (
 	bankcli "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	stakingcli "github.com/cosmos/cosmos-sdk/x/staking/client/cli"
 	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
@@ -171,7 +170,6 @@ func (suite *IntegrationTestSuite) TestGetRewardsDistributionPercentages() {
 	numDelegationsPerValidators := 10
 
 	cfg := distributionNetworkConfig(feesAmount)
-	log := log.TestingLogger()
 	net, err := network.New(suite.T(), log, cfg)
 	senderValidator := net.Validators[0]
 	keyringCtx := senderValidator.ClientCtx
@@ -221,7 +219,7 @@ func (suite *IntegrationTestSuite) TestGetRewardsDistributionPercentages() {
 	}
 	args := []string{"testNewUsername"}
 	args = append(args, flgs...)
-	_, err := clitestutil.ExecTestCLICmd(keyringCtx, cli.CmdUpdateAccount(), args)
+	_, err = clitestutil.ExecTestCLICmd(keyringCtx, cli.CmdUpdateAccount(), args)
 	req.NoError(err)
 
 	// simulate waiting for later block heights
