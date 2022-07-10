@@ -101,7 +101,7 @@ func (suite *IntegrationTestSuite) TestMintCreditToAddr() {
 	addrString := types.GenTestBech32FromString("test")
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 
-	amt := sdk.NewInt(100)
+	amt := sdk.NewDec(100)
 	// account for network fees
 	burnAmt := amt.Mul(types.DefaultProcessorPercentage)
 	feesAmt := amt.Mul(types.DefaultValidatorsPercentage)
@@ -122,7 +122,7 @@ func (suite *IntegrationTestSuite) TestMintCreditToAddr() {
 	feeCollectorBalances := bk.SpendableCoins(ctx, feeCollectorAddr)
 	userBalance := bk.SpendableCoins(ctx, addr)
 
-	require.True(userBalance.IsEqual(mintCoins.Sub(burnCoins).Sub(feesCoins)))
+	require.True(userBalance.IsEqual(mintCoins.Sub(burnCoins[0]).Sub(feesCoins)))
 	require.True(processorBalances.IsEqual(sdk.Coins{}))
 	require.True(feeCollectorBalances.IsEqual(feesCoins))
 }
