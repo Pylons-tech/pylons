@@ -6,7 +6,6 @@ import (
 	"testing"
 	"time"
 
-	"cosmossdk.io/math"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cast"
@@ -40,8 +39,8 @@ func TestSendItems(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, ok := math.NewIntFromString("0.01")
-	require.True(t, ok)
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -53,8 +52,8 @@ func TestSendItems(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  math.NewInt(50),
-								Upper:  math.NewInt(100),
+								Lower:  sdk.NewDec(50),
+								Upper:  sdk.NewDec(100),
 								Weight: 1,
 							},
 						},

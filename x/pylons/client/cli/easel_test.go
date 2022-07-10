@@ -7,7 +7,6 @@ import (
 	"testing"
 	"time"
 
-	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -26,7 +25,7 @@ const (
 type easelBasicSim struct {
 	net                  *network.Network
 	ctx                  client.Context
-	basicTradePercentage math.Int
+	basicTradePercentage sdk.Dec
 	err                  error
 	common               []string
 	executorCommon       []string
@@ -50,15 +49,13 @@ func TestEaselBasic(t *testing.T) {
 	simInfo := &easelBasicSim{
 		net:                  net,
 		ctx:                  ctx,
-		basicTradePercentage: math.Int{},
+		basicTradePercentage: sdk.Dec{},
 		err:                  nil,
 		common:               nil,
 	}
 
-	var ok bool
-
-	simInfo.basicTradePercentage, ok = math.NewIntFromString("0.10")
-	require.True(t, ok)
+	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
+	require.NoError(t, err)
 
 	simInfo.executorCommon = CommonArgs(address, net)
 
@@ -190,7 +187,7 @@ func createMintRecipe2(t *testing.T, simInfo *easelBasicSim) {
 	})
 	require.NoError(t, err)
 
-	residual, _ := math.NewIntFromString("2.000000000000000000")
+	residual, _ := sdk.NewDecFromStr("2.000000000000000000")
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,

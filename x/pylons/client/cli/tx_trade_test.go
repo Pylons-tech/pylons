@@ -6,7 +6,6 @@ import (
 	"testing"
 	"time"
 
-	"cosmossdk.io/math"
 	"github.com/spf13/cast"
 
 	"github.com/Pylons-tech/pylons/app"
@@ -188,8 +187,8 @@ func TestCreateTradeItemOutput(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, ok := math.NewIntFromString("0.01")
-	require.True(t, ok)
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -201,8 +200,8 @@ func TestCreateTradeItemOutput(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewInt(50),
-								Upper:  sdk.NewInt(100),
+								Lower:  sdk.NewDec(50),
+								Upper:  sdk.NewDec(100),
 								Weight: 1,
 							},
 						},
@@ -400,8 +399,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, ok := math.NewIntFromString("0.01")
-	require.True(t, ok)
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -413,8 +412,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewInt(50),
-								Upper:  sdk.NewInt(100),
+								Lower:  sdk.NewDec(50),
+								Upper:  sdk.NewDec(100),
 								Weight: 1,
 							},
 						},
@@ -623,8 +622,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, ok := math.NewIntFromString("0.01")
-	require.True(t, ok)
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -636,8 +635,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewInt(50),
-								Upper:  sdk.NewInt(100),
+								Lower:  sdk.NewDec(50),
+								Upper:  sdk.NewDec(100),
 								Weight: 1,
 							},
 						},
@@ -846,8 +845,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, ok := math.NewIntFromString("0.01")
-	require.True(t, ok)
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -859,8 +858,8 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewInt(50),
-								Upper:  sdk.NewInt(100),
+								Lower:  sdk.NewDec(50),
+								Upper:  sdk.NewDec(100),
 								Weight: 1,
 							},
 						},
@@ -1069,8 +1068,8 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, ok := math.NewIntFromString("0.01")
-	require.True(t, ok)
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -1082,8 +1081,8 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewInt(50),
-								Upper:  sdk.NewInt(100),
+								Lower:  sdk.NewDec(50),
+								Upper:  sdk.NewDec(100),
 								Weight: 1,
 							},
 						},

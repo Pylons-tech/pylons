@@ -7,7 +7,6 @@ import (
 	"testing"
 	"time"
 
-	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client"
 
 	"github.com/Pylons-tech/pylons/app"
@@ -28,7 +27,7 @@ const (
 type loudBasicSim struct {
 	net                    *network.Network
 	ctx                    client.Context
-	basicTradePercentage   math.Int
+	basicTradePercentage   sdk.Dec
 	err                    error
 	common                 []string
 	executorCommon         []string
@@ -54,7 +53,7 @@ func TestLOUDBasic(t *testing.T) {
 	simInfo := &loudBasicSim{
 		net:                    net,
 		ctx:                    ctx,
-		basicTradePercentage:   math.Int{},
+		basicTradePercentage:   sdk.Dec{},
 		err:                    nil,
 		common:                 nil,
 		execCount:              0,
@@ -66,9 +65,8 @@ func TestLOUDBasic(t *testing.T) {
 	}
 
 	// checks to see if the integer is made correctly from the string
-	var ok bool
-	simInfo.basicTradePercentage, ok = math.NewIntFromString("0.10")
-	require.False(t, ok)
+	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
+	require.NoError(t, err)
 
 	simInfo.executorCommon = CommonArgs(address, net)
 	simInfo.common = CommonArgs(val.Address.String(), net)
@@ -409,8 +407,8 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 			Doubles: []types.DoubleInputParam{
 				{
 					Key:      "XP",
-					MinValue: math.NewInt(1),
-					MaxValue: math.NewInt(10000000),
+					MinValue: sdk.NewDec(1),
+					MaxValue: sdk.NewDec(10000000),
 				},
 			},
 			Longs: []types.LongInputParam{
@@ -432,8 +430,8 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 			Doubles: []types.DoubleInputParam{
 				{
 					Key:      "attack",
-					MinValue: math.OneInt(),
-					MaxValue: math.NewInt(10000000),
+					MinValue: sdk.OneDec(),
+					MaxValue: sdk.NewDec(10000000),
 				},
 			},
 			Longs: []types.LongInputParam{

@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"math/rand"
 
-	"cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // Has check if an input is between double weight range
-func (wr DoubleWeightRange) Has(number math.Int) bool {
+func (wr DoubleWeightRange) Has(number sdk.Dec) bool {
 	return wr.Lower.GTE(number) && wr.Upper.LTE(number)
 }
 
@@ -18,7 +18,7 @@ func (wr DoubleWeightRange) Has(number math.Int) bool {
 // E.g. 2 weight ranges are provided with values [100.00, 500.00  weight: 8] and [600.00, 800.00 weight: 2] so now we
 // generate a random number from 0 to 10 and if its from 0 to 8 then selected range = [100.00, 500.00] else [600.00, 800.00].
 // next we get a random number from the selected range and return that
-func (wt DoubleWeightTable) Generate() (math.Int, error) {
+func (wt DoubleWeightTable) Generate() (sdk.Dec, error) {
 	var lastWeight int64
 	weights := make([]int64, len(wt))
 	for i, weightRange := range wt {
@@ -26,7 +26,7 @@ func (wt DoubleWeightTable) Generate() (math.Int, error) {
 		weights[i] = lastWeight
 	}
 	if lastWeight == 0 {
-		return math.ZeroInt(), errors.New("total weight of DoubleWeightTable shouldn't be zero")
+		return sdk.ZeroDec(), errors.New("total weight of DoubleWeightTable shouldn't be zero")
 	}
 	randWeight := rand.Int63n(lastWeight)
 
@@ -41,7 +41,7 @@ func (wt DoubleWeightTable) Generate() (math.Int, error) {
 	}
 
 	if chosenIndex < 0 || chosenIndex >= len(wt) {
-		return math.ZeroInt(), errors.New("something went wrong generating random double value")
+		return sdk.ZeroDec(), errors.New("something went wrong generating random double value")
 	}
 
 	selectedWeightRange := wt[chosenIndex]
@@ -52,16 +52,15 @@ func (wt DoubleWeightTable) Generate() (math.Int, error) {
 
 	randNum := rand.Float64()
 	randStr := fmt.Sprintf("%f", randNum)
-	randDec, ok := math.NewIntFromString(randStr)
-	if ok == false {
-		var err error
-		return selectedWeightRange.Lower, sdkerrors.Wrapf(err, "error creating random sdk.Int : float: %f, string %s", randNum, randStr)
+	randDec, err := sdk.NewDecFromStr(randStr)
+	if err != nil {
+		return selectedWeightRange.Lower, sdkerrors.Wrapf(err, "error creating random sdk.Dec : float: %f, string %s", randNum, randStr)
 	}
 	return randDec.Mul(selectedWeightRange.Upper.Sub(selectedWeightRange.Lower)).Add(selectedWeightRange.Lower), nil
 }
 
 // Has checks if any of the weight ranges has the number
-func (wt DoubleWeightTable) Has(number math.Int) bool {
+func (wt DoubleWeightTable) Has(number sdk.Dec) bool {
 	for _, weightRange := range wt {
 		if weightRange.Has(number) {
 			return true

@@ -7,7 +7,6 @@ import (
 	"testing"
 	"time"
 
-	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -26,7 +25,7 @@ const (
 type atomgachiBasicSim struct {
 	net                  *network.Network
 	ctx                  client.Context
-	basicTradePercentage math.Int
+	basicTradePercentage sdk.Dec
 	err                  error
 	common               []string
 	commonExec           []string
@@ -48,16 +47,14 @@ func TestAtomgachiBasic(t *testing.T) {
 	simInfo := &atomgachiBasicSim{
 		net:                  net,
 		ctx:                  ctx,
-		basicTradePercentage: math.Int{},
+		basicTradePercentage: sdk.Dec{},
 		err:                  nil,
 		common:               nil,
 	}
 
 	// checks if the integer has been made correctly from the input string
-	var ok bool
-
-	simInfo.basicTradePercentage, ok = math.NewIntFromString("0.10")
-	require.True(t, ok)
+	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
+	require.NoError(t, err)
 
 	simInfo.common = CommonArgs(val.Address.String(), net)
 	simInfo.commonExec = CommonArgs(address, net)

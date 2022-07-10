@@ -3,7 +3,6 @@ package keeper_test
 import (
 	"reflect"
 
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -31,11 +30,11 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromItem() {
 				Doubles: []types.DoubleKeyValue{
 					{
 						Key:   "XP",
-						Value: math.OneInt(),
+						Value: sdk.OneDec(),
 					},
 					{
 						Key:   "MP",
-						Value: math.NewInt(4),
+						Value: sdk.NewDec(4),
 					},
 				},
 				Longs: []types.LongKeyValue{
@@ -174,7 +173,7 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 				Doubles: []types.DoubleKeyValue{
 					{
 						Key:   "doubleParam",
-						Value: math.ZeroInt(),
+						Value: sdk.ZeroDec(),
 					},
 				},
 				Longs: []types.LongKeyValue{
@@ -193,7 +192,7 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 				Tradeable:       false,
 				LastUpdate:      0,
 				TransferFee:     nil,
-				TradePercentage: math.Int{},
+				TradePercentage: sdk.Dec{},
 			},
 			expected: map[string]interface{}{
 				"lastUpdate":         int64(0),

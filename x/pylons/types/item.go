@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 
-	"cosmossdk.io/math"
 	"github.com/btcsuite/btcutil/base58"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -25,13 +24,13 @@ func DecodeItemID(id string) uint64 {
 }
 
 // FindDouble is a function to get a double attribute from an item
-func (it Item) FindDouble(key string) (math.Int, bool) {
+func (it Item) FindDouble(key string) (sdk.Dec, bool) {
 	for _, v := range it.Doubles {
 		if v.Key == key {
 			return v.Value, true
 		}
 	}
-	return math.ZeroInt(), false
+	return sdk.ZeroDec(), false
 }
 
 // FindDoubleKey is a function get double key index

@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	sdkerrors "cosmossdk.io/errors"
-	sdkmath "cosmossdk.io/math"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -130,7 +129,7 @@ func TestFindDouble(t *testing.T) {
 		desc         string
 		testedItem   Item
 		testedValue  string
-		expectedInt  sdkmath.Int
+		expectedDec  sdk.Dec
 		expectedBool bool
 	}{
 		{
@@ -139,17 +138,17 @@ func TestFindDouble(t *testing.T) {
 				Doubles: []DoubleKeyValue{
 					{
 						Key:   "one",
-						Value: sdkmath.OneInt(),
+						Value: sdk.OneDec(),
 					},
 					{
 						Key:   "two",
-						Value: sdkmath.OneInt(),
+						Value: sdk.OneDec(),
 					},
 				},
 			},
 			testedValue:  "one",
 			expectedBool: true,
-			expectedInt:  sdkmath.OneInt(),
+			expectedDec:  sdk.OneDec(),
 		},
 		{
 			desc: "Not Found",
@@ -157,23 +156,23 @@ func TestFindDouble(t *testing.T) {
 				Doubles: []DoubleKeyValue{
 					{
 						Key:   "one",
-						Value: sdkmath.OneInt(),
+						Value: sdk.OneDec(),
 					},
 					{
 						Key:   "two",
-						Value: sdkmath.OneInt(),
+						Value: sdk.OneDec(),
 					},
 				},
 			},
 			testedValue:  "three",
 			expectedBool: false,
-			expectedInt:  sdkmath.ZeroInt(),
+			expectedDec:  sdk.ZeroDec(),
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			returnedDec, returnedBool := tc.testedItem.FindDouble(tc.testedValue)
-			require.Equal(t, returnedDec, tc.expectedInt)
+			require.Equal(t, returnedDec, tc.expectedDec)
 			require.Equal(t, returnedBool, tc.expectedBool)
 		})
 	}
@@ -193,11 +192,11 @@ func TestFindDoubleKey(t *testing.T) {
 				Doubles: []DoubleKeyValue{
 					{
 						Key:   "one",
-						Value: sdkmath.NewInt(1),
+						Value: sdk.NewDec(1),
 					},
 					{
 						Key:   "two",
-						Value: sdkmath.NewInt(1),
+						Value: sdk.NewDec(1),
 					},
 				},
 			},
@@ -211,11 +210,11 @@ func TestFindDoubleKey(t *testing.T) {
 				Doubles: []DoubleKeyValue{
 					{
 						Key:   "one",
-						Value: sdkmath.NewInt(1),
+						Value: sdk.NewDec(1),
 					},
 					{
 						Key:   "two",
-						Value: sdkmath.NewInt(1),
+						Value: sdk.NewDec(1),
 					},
 				},
 			},
@@ -229,11 +228,11 @@ func TestFindDoubleKey(t *testing.T) {
 				Doubles: []DoubleKeyValue{
 					{
 						Key:   "one",
-						Value: sdkmath.NewInt(1),
+						Value: sdk.NewDec(1),
 					},
 					{
 						Key:   "two",
-						Value: sdkmath.NewInt(1),
+						Value: sdk.NewDec(1),
 					},
 				},
 			},
@@ -517,13 +516,13 @@ func TestMatchItem(t *testing.T) {
 				Doubles: []DoubleInputParam{
 					{
 						Key:      "doubleone",
-						MinValue: sdkmath.OneInt(),
-						MaxValue: sdkmath.OneInt(),
+						MinValue: sdk.OneDec(),
+						MaxValue: sdk.OneDec(),
 					},
 					{
 						Key:      "doubletwo",
-						MinValue: sdkmath.NewInt(2),
-						MaxValue: sdkmath.NewInt(2),
+						MinValue: sdk.NewDec(2),
+						MaxValue: sdk.NewDec(2),
 					},
 				},
 				Longs: []LongInputParam{
@@ -553,10 +552,10 @@ func TestMatchItem(t *testing.T) {
 				Doubles: []DoubleKeyValue{
 					{
 						Key:   "doubleone",
-						Value: sdkmath.NewInt(1),
+						Value: sdk.NewDec(1),
 					}, {
 						Key:   "doubletwo",
-						Value: sdkmath.NewInt(2),
+						Value: sdk.NewDec(2),
 					},
 				},
 				Longs: []LongKeyValue{
@@ -589,13 +588,13 @@ func TestMatchItem(t *testing.T) {
 				Doubles: []DoubleInputParam{
 					{
 						Key:      "doubleone",
-						MinValue: sdkmath.OneInt(),
-						MaxValue: sdkmath.OneInt(),
+						MinValue: sdk.OneDec(),
+						MaxValue: sdk.OneDec(),
 					},
 					{
 						Key:      "doublethree",
-						MinValue: sdkmath.NewInt(3),
-						MaxValue: sdkmath.NewInt(3),
+						MinValue: sdk.NewDec(3),
+						MaxValue: sdk.NewDec(3),
 					},
 				},
 			},
@@ -604,10 +603,10 @@ func TestMatchItem(t *testing.T) {
 				Doubles: []DoubleKeyValue{
 					{
 						Key:   "doubleone",
-						Value: sdkmath.NewInt(1),
+						Value: sdk.NewDec(1),
 					}, {
 						Key:   "doubletwo",
-						Value: sdkmath.NewInt(2),
+						Value: sdk.NewDec(2),
 					},
 				},
 			},
@@ -620,13 +619,13 @@ func TestMatchItem(t *testing.T) {
 				Doubles: []DoubleInputParam{
 					{
 						Key:      "doubleone",
-						MinValue: sdkmath.OneInt(),
-						MaxValue: sdkmath.OneInt(),
+						MinValue: sdk.OneDec(),
+						MaxValue: sdk.OneDec(),
 					},
 					{
 						Key:      "doubletwo",
-						MinValue: sdkmath.NewInt(3),
-						MaxValue: sdkmath.NewInt(4),
+						MinValue: sdk.NewDec(3),
+						MaxValue: sdk.NewDec(4),
 					},
 				},
 			},
@@ -635,10 +634,10 @@ func TestMatchItem(t *testing.T) {
 				Doubles: []DoubleKeyValue{
 					{
 						Key:   "doubleone",
-						Value: sdkmath.NewInt(1),
+						Value: sdk.NewDec(1),
 					}, {
 						Key:   "doubletwo",
-						Value: sdkmath.NewInt(2),
+						Value: sdk.NewDec(2),
 					},
 				},
 			},

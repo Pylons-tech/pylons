@@ -7,7 +7,6 @@ import (
 	"testing"
 	"time"
 
-	"cosmossdk.io/math"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -48,8 +47,8 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, ok := sdk.NewIntFromString("0.01")
-	require.True(t, ok)
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -61,8 +60,8 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewInt(50),
-								Upper:  sdk.NewInt(100),
+								Lower:  sdk.NewDec(50),
+								Upper:  sdk.NewDec(100),
 								Weight: 1,
 							},
 						},
@@ -202,8 +201,8 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, ok := sdk.NewIntFromString("0.01")
-	require.True(t, ok)
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -215,8 +214,8 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewInt(50),
-								Upper:  sdk.NewInt(100),
+								Lower:  sdk.NewDec(50),
+								Upper:  sdk.NewDec(100),
 								Weight: 1,
 							},
 						},
@@ -393,8 +392,8 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, ok := math.NewIntFromString("0.01")
-	require.True(t, ok)
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -406,8 +405,8 @@ func TestLimitReachExecuteRecipe(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewInt(50),
-								Upper:  sdk.NewInt(100),
+								Lower:  sdk.NewDec(50),
+								Upper:  sdk.NewDec(100),
 								Weight: 1,
 							},
 						},
@@ -535,8 +534,8 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, ok := math.NewIntFromString("0.01")
-	require.True(t, ok)
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -548,8 +547,8 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewInt(50),
-								Upper:  sdk.NewInt(100),
+								Lower:  sdk.NewDec(50),
+								Upper:  sdk.NewDec(100),
 								Weight: 1,
 							},
 						},
@@ -702,8 +701,8 @@ func TestExecuteDisableRecipe(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, ok := math.NewIntFromString("0.01")
-	require.True(t, ok)
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -715,8 +714,8 @@ func TestExecuteDisableRecipe(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewInt(50),
-								Upper:  sdk.NewInt(100),
+								Lower:  sdk.NewDec(50),
+								Upper:  sdk.NewDec(100),
 								Weight: 1,
 							},
 						},
@@ -828,8 +827,8 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 			Doubles: []types.DoubleInputParam{
 				{
 					Key:      "main",
-					MinValue: sdk.NewInt(50),
-					MaxValue: sdk.NewInt(100),
+					MinValue: sdk.NewDec(50),
+					MaxValue: sdk.NewDec(100),
 				},
 			},
 			Longs: nil,
@@ -855,8 +854,8 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewInt(50),
-								Upper:  sdk.NewInt(100),
+								Lower:  sdk.NewDec(50),
+								Upper:  sdk.NewDec(100),
 								Weight: 1,
 							},
 						},
@@ -873,7 +872,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 				},
 				MutableStrings:  nil,
 				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
-				TradePercentage: math.ZeroInt(),
+				TradePercentage: sdk.ZeroDec(),
 				Quantity:        0,
 				AmountMinted:    0,
 			},
@@ -1013,8 +1012,8 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, ok := sdk.NewIntFromString("0.01")
-	require.True(t, ok)
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
@@ -1026,8 +1025,8 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  sdk.NewInt(50),
-								Upper:  sdk.NewInt(100),
+								Lower:  sdk.NewDec(50),
+								Upper:  sdk.NewDec(100),
 								Weight: 1,
 							},
 						},

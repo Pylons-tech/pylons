@@ -106,9 +106,9 @@ func (suite *IntegrationTestSuite) TestMintCreditToAddr() {
 	burnAmt := amt.Mul(types.DefaultProcessorPercentage)
 	feesAmt := amt.Mul(types.DefaultValidatorsPercentage)
 
-	mintCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amt))
-	burnCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, burnAmt))
-	feesCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, feesAmt))
+	mintCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amt.RoundInt()))
+	burnCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, burnAmt.RoundInt()))
+	feesCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, feesAmt.RoundInt()))
 
 	// Mint credits to account
 	err := k.MintCreditToAddr(ctx, addr, mintCoins, burnCoins, feesCoins)
@@ -122,7 +122,7 @@ func (suite *IntegrationTestSuite) TestMintCreditToAddr() {
 	feeCollectorBalances := bk.SpendableCoins(ctx, feeCollectorAddr)
 	userBalance := bk.SpendableCoins(ctx, addr)
 
-	require.True(userBalance.IsEqual(mintCoins.Sub(burnCoins[0]).Sub(feesCoins)))
+	require.True(userBalance.IsEqual(mintCoins.Sub(burnCoins[0]).Sub(feesCoins[0])))
 	require.True(processorBalances.IsEqual(sdk.Coins{}))
 	require.True(feeCollectorBalances.IsEqual(feesCoins))
 }
@@ -141,13 +141,13 @@ func (suite *IntegrationTestSuite) TestSendRewardsFromFeeCollector() {
 	feeCollectorAddr := ak.GetModuleAddress(types.FeeCollectorName)
 
 	// First mint credits
-	amt := sdk.NewInt(100)
+	amt := sdk.NewDec(100)
 	burnAmt := amt.Mul(types.DefaultProcessorPercentage)
 	feesAmt := amt.Mul(types.DefaultValidatorsPercentage)
 
-	mintCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amt))
-	burnCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, burnAmt))
-	feesCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, feesAmt))
+	mintCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amt.RoundInt()))
+	burnCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, burnAmt.RoundInt()))
+	feesCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, feesAmt.RoundInt()))
 
 	err := k.MintCreditToAddr(ctx, addr, mintCoins, burnCoins, feesCoins)
 	require.NoError(err)

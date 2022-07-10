@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -9,11 +8,11 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper) (distrPercentages map[string]math.Int) {
-	distrPercentages = make(map[string]math.Int)
-	sharesMap := make(map[string]math.Int)
+func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper) (distrPercentages map[string]sdk.Dec) {
+	distrPercentages = make(map[string]sdk.Dec)
+	sharesMap := make(map[string]sdk.Dec)
 	validators := make(map[string]bool)
-	totalShares := math.ZeroInt()
+	totalShares := sdk.ZeroDec()
 
 	// get all delegations
 	delegations := sk.GetAllSDKDelegations(ctx)
@@ -34,7 +33,7 @@ func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.Stak
 		delegatorAddr := delegation.GetDelegatorAddr()
 		// the shares of a delegator represents already the absolute shares percentage of the total shares (not just relative to the validator)
 		if _, ok := sharesMap[delegatorAddr.String()]; !ok {
-			sharesMap[delegatorAddr.String()] = math.ZeroInt()
+			sharesMap[delegatorAddr.String()] = sdk.ZeroDec()
 		}
 		sharesMap[delegatorAddr.String()] = sharesMap[delegatorAddr.String()].Add(delegation.GetShares())
 		prunedDelegations = append(prunedDelegations, delegation)
@@ -50,7 +49,7 @@ func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.Stak
 		sharesPercentage := shares.Quo(totalShares)
 
 		if _, ok := distrPercentages[delegation.DelegatorAddress]; !ok {
-			distrPercentages[delegation.DelegatorAddress] = math.ZeroInt()
+			distrPercentages[delegation.DelegatorAddress] = sdk.ZeroDec()
 		}
 
 		if valAccAddr.String() == delegation.DelegatorAddress {
@@ -63,7 +62,7 @@ func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.Stak
 			// we also add the commission percentage to the validator
 			if _, ok := distrPercentages[valAccAddr.String()]; !ok {
 				// in case the validator was not yet added to the map
-				distrPercentages[valAccAddr.String()] = math.ZeroInt()
+				distrPercentages[valAccAddr.String()] = sdk.ZeroDec()
 			}
 			distrPercentages[valAccAddr.String()] = distrPercentages[valAccAddr.String()].Add(commissionPercentage)
 		}
@@ -72,12 +71,12 @@ func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.Stak
 	return distrPercentages
 }
 
-func CalculateRewardsHelper(distrPercentages map[string]math.Int, rewardsTotalAmount sdk.Coins) (delegatorsRewards map[string]sdk.Coins) {
+func CalculateRewardsHelper(distrPercentages map[string]sdk.Dec, rewardsTotalAmount sdk.Coins) (delegatorsRewards map[string]sdk.Coins) {
 	delegatorsRewards = make(map[string]sdk.Coins)
 	for addr, percentage := range distrPercentages {
 		totalAmountsForAddr := sdk.NewCoins()
 		for _, coin := range rewardsTotalAmount {
-			amountForAddr := coin.Amount.Mul(percentage)
+			amountForAddr := sdk.NewDecFromInt(coin.Amount).Mul(percentage).TruncateInt()
 			if amountForAddr.IsPositive() {
 				// only add strictly positive amounts
 				totalAmountsForAddr = totalAmountsForAddr.Add(sdk.NewCoin(coin.Denom, amountForAddr))
@@ -90,7 +89,7 @@ func CalculateRewardsHelper(distrPercentages map[string]math.Int, rewardsTotalAm
 	return
 }
 
-func (k Keeper) CalculateDelegatorsRewards(ctx sdk.Context, distrPercentages map[string]math.Int) map[string]sdk.Coins {
+func (k Keeper) CalculateDelegatorsRewards(ctx sdk.Context, distrPercentages map[string]sdk.Dec) map[string]sdk.Coins {
 	// get the balance of the feeCollector moduleAcc
 	rewardsTotalAmount := k.bankKeeper.SpendableCoins(ctx, k.FeeCollectorAddress())
 	if !rewardsTotalAmount.IsZero() {

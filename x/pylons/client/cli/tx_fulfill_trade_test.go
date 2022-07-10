@@ -7,7 +7,6 @@ import (
 	"testing"
 	"time"
 
-	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client"
 
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
@@ -22,7 +21,7 @@ import (
 type tradeSimInfo struct {
 	net                  *network.Network
 	ctx                  client.Context
-	basicTradePercentage math.Int
+	basicTradePercentage sdk.Dec
 	err                  error
 	traderCommon         []string
 	fulfillerCommon      []string
@@ -126,7 +125,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	simInfo := &tradeSimInfo{
 		net:                  net,
 		ctx:                  val.ClientCtx,
-		basicTradePercentage: math.Int{},
+		basicTradePercentage: sdk.Dec{},
 		err:                  nil,
 		traderCommon:         traderCommon,
 		fulfillerCommon:      fulFillercommon,
@@ -136,9 +135,8 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	}
 
 	// ok checks to see if the integer is created from the string.
-	var ok bool
-	simInfo.basicTradePercentage, ok = math.NewIntFromString("0.10")
-	require.True(t, ok)
+	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
+	require.NoError(t, err)
 
 	// simulate full execution of recipe to generate an item
 
@@ -151,8 +149,8 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 		"true",
 	}
 
-	tradePercentage, ok := math.NewIntFromString("0.01")
-	require.True(t, ok)
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
 
 	testDenom, err := types.CookbookDenom(simInfo.cookbookID, "testCoin")
 	require.NoError(t, err)
@@ -167,8 +165,8 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  math.NewInt(50),
-								Upper:  math.NewInt(100),
+								Lower:  sdk.NewDec(50),
+								Upper:  sdk.NewDec(100),
 								Weight: 1,
 							},
 						},

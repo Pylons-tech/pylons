@@ -5,7 +5,6 @@ import (
 	"strconv"
 	"testing"
 
-	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
@@ -298,7 +297,7 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item
 				MutableStrings:  make([]types.StringKeyValue, 0),
 				Tradeable:       false,
 				LastUpdate:      0,
-				TradePercentage: math.ZeroInt(),
+				TradePercentage: sdk.ZeroDec(),
 				TransferFee:     []sdk.Coin{{Denom: "test", Amount: sdk.OneInt()}},
 			})
 	}
@@ -329,7 +328,7 @@ func networkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, [
 				MutableStrings:  make([]types.StringKeyValue, 0),
 				Tradeable:       false,
 				LastUpdate:      0,
-				TradePercentage: math.ZeroInt(),
+				TradePercentage: sdk.ZeroDec(),
 				TransferFee:     []sdk.Coin{{Denom: "test", Amount: sdk.OneInt()}},
 			})
 	}

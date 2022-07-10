@@ -3,7 +3,6 @@ package keeper_test
 import (
 	"fmt"
 
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -100,7 +99,7 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 		items[i].CookbookId = cookbook.Id
 		items[i].TransferFee = coin
 		items[i].Tradeable = true
-		items[i].TradePercentage = math.ZeroInt()
+		items[i].TradePercentage = sdk.ZeroDec()
 		strIndex := fmt.Sprintf("%d", i)
 		items[i].Longs = []types.LongKeyValue{
 			{
@@ -111,7 +110,7 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 		items[i].Doubles = []types.DoubleKeyValue{
 			{
 				Key:   strIndex,
-				Value: math.NewInt(int64(i)),
+				Value: sdk.NewDec(int64(i)),
 			},
 		}
 		items[i].Strings = []types.StringKeyValue{
@@ -194,8 +193,8 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 						Doubles: []types.DoubleInputParam{
 							{
 								Key:      "3",
-								MinValue: math.NewInt(3),
-								MaxValue: math.NewInt(3),
+								MinValue: sdk.NewDec(3),
+								MaxValue: sdk.NewDec(3),
 							},
 						},
 						Longs: []types.LongInputParam{
@@ -227,8 +226,8 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 						Doubles: []types.DoubleInputParam{
 							{
 								Key:      "0",
-								MinValue: math.NewInt(0),
-								MaxValue: math.NewInt(0),
+								MinValue: sdk.NewDec(0),
+								MaxValue: sdk.NewDec(0),
 							},
 						},
 						Longs: []types.LongInputParam{
@@ -250,8 +249,8 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 						Doubles: []types.DoubleInputParam{
 							{
 								Key:      "1",
-								MinValue: math.NewInt(1),
-								MaxValue: math.NewInt(1),
+								MinValue: sdk.NewDec(1),
+								MaxValue: sdk.NewDec(1),
 							},
 						},
 						Longs: []types.LongInputParam{
@@ -283,8 +282,8 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 						Doubles: []types.DoubleInputParam{
 							{
 								Key:      "11",
-								MinValue: math.NewInt(11),
-								MaxValue: math.NewInt(11),
+								MinValue: sdk.NewDec(11),
+								MaxValue: sdk.NewDec(11),
 							},
 						},
 						Longs: []types.LongInputParam{
@@ -332,8 +331,8 @@ func mapItems(items []string) []types.ItemInput {
 			Doubles: []types.DoubleInputParam{
 				{
 					Key:      "dbltest",
-					MinValue: math.NewInt(1),
-					MaxValue: math.NewInt(2),
+					MinValue: sdk.NewDec(1),
+					MaxValue: sdk.NewDec(2),
 				},
 			},
 			Longs: []types.LongInputParam{

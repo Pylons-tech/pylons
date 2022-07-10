@@ -194,40 +194,40 @@ func Test_validatePaymentProcessor(t *testing.T) {
 		CoinDenom:            "$",
 		PubKey:               DefaultPaymentProcessors[0].PubKey,
 		Name:                 "test",
-		ProcessorPercentage:  math.ZeroInt(),
-		ValidatorsPercentage: math.ZeroInt(),
+		ProcessorPercentage:  sdk.ZeroDec(),
+		ValidatorsPercentage: sdk.ZeroDec(),
 	}
 
 	invaliPaymentProcessorPubkey[0] = PaymentProcessor{
 		CoinDenom:            "test",
 		PubKey:               "",
 		Name:                 "test",
-		ProcessorPercentage:  sdk.ZeroInt(),
-		ValidatorsPercentage: sdk.ZeroInt(),
+		ProcessorPercentage:  sdk.ZeroDec(),
+		ValidatorsPercentage: sdk.ZeroDec(),
 	}
 
 	invaliPaymentProcessorPercentages[0] = PaymentProcessor{
 		CoinDenom:            "test",
 		PubKey:               DefaultPaymentProcessors[0].PubKey,
 		Name:                 "test",
-		ProcessorPercentage:  sdk.OneInt(),
-		ValidatorsPercentage: sdk.ZeroInt(),
+		ProcessorPercentage:  sdk.OneDec(),
+		ValidatorsPercentage: sdk.ZeroDec(),
 	}
 
 	invaliPaymentProcessorName[0] = PaymentProcessor{
 		CoinDenom:            "test",
 		PubKey:               DefaultPaymentProcessors[0].PubKey,
 		Name:                 "",
-		ProcessorPercentage:  sdk.ZeroInt(),
-		ValidatorsPercentage: sdk.ZeroInt(),
+		ProcessorPercentage:  sdk.ZeroDec(),
+		ValidatorsPercentage: sdk.ZeroDec(),
 	}
 
 	validPaymentProcessor[0] = PaymentProcessor{
 		CoinDenom:            "test",
 		PubKey:               DefaultPaymentProcessors[0].PubKey,
 		Name:                 "test",
-		ProcessorPercentage:  sdk.ZeroInt(),
-		ValidatorsPercentage: sdk.ZeroInt(),
+		ProcessorPercentage:  sdk.ZeroDec(),
+		ValidatorsPercentage: sdk.ZeroDec(),
 	}
 
 	tests := []struct {

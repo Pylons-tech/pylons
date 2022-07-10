@@ -84,8 +84,8 @@ func TestGetRecipeHistory(t *testing.T) {
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
 	// create a recipe
-	tradePercentage, ok := math.NewIntFromString("0.01")
-	require.True(t, ok)
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
@@ -96,8 +96,8 @@ func TestGetRecipeHistory(t *testing.T) {
 						Key: "Mass",
 						WeightRanges: []types.DoubleWeightRange{
 							{
-								Lower:  math.NewInt(50),
-								Upper:  math.NewInt(100),
+								Lower:  sdk.NewDec(50),
+								Upper:  sdk.NewDec(100),
 								Weight: 1,
 							},
 						},

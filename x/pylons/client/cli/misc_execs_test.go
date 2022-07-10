@@ -7,7 +7,6 @@ import (
 	"testing"
 	"time"
 
-	"cosmossdk.io/math"
 	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
@@ -34,8 +33,8 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	require.NoError(t, err)
 	var resp sdk.TxResponse
 
-	basicTradePercentage, ok := math.NewIntFromString("0.10")
-	require.True(t, ok)
+	basicTradePercentage, err := sdk.NewDecFromStr("0.10")
+	require.NoError(t, err)
 
 	common := CommonArgs(val.Address.String(), net)
 
@@ -62,10 +61,10 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	damageAmt, ok := math.NewIntFromString("8")
-	require.True(t, ok)
-	accuracyAmt, ok := math.NewIntFromString("0.10")
-	require.True(t, ok)
+	damageAmt, err := sdk.NewDecFromStr("8")
+	require.NoError(t, err)
+	accuracyAmt, err := sdk.NewDecFromStr("0.10")
+	require.NoError(t, err)
 
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
