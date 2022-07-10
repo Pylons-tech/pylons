@@ -2,6 +2,7 @@ import bech32 from 'bech32'
 import { HTTP } from 'meteor/http';
 import * as cheerio from 'cheerio';
 import { tmhash } from 'tendermint/lib/hash'
+import { sanitizeUrl } from '@braintree/sanitize-url';
 
 Meteor.methods({
     hexToBech32: function(address, prefix) {
@@ -110,7 +111,7 @@ Meteor.methods({
         return bech32.encode(Meteor.settings.public.bech32PrefixAccAddr, address.words);
     }, 
     getKeybaseTeamPic: function(keybaseUrl){
-        let teamPage = HTTP.get(keybaseUrl);
+        let teamPage = HTTP.get(sanitizeUrl(keybaseUrl));
         if (teamPage.statusCode == 200){
             let page = cheerio.load(teamPage.content);
             return page(".kb-main-card img").attr('src');
