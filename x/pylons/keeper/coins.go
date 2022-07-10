@@ -49,7 +49,14 @@ func (k Keeper) MintCreditToAddr(ctx sdk.Context, addr sdk.AccAddress, amounts, 
 		return err
 	}
 
-	actualAmt := amounts.Sub(burn[0]).Sub(fees[0])
+	actualAmt := amounts
+	for _, c := range burn {
+		actualAmt = actualAmt.Sub(c)
+	}
+
+	for _, c := range fees {
+		actualAmt = actualAmt.Sub(c)
+	}
 
 	// send coins to the address
 	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, ppMacc, addr, actualAmt)

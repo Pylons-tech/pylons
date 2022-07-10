@@ -122,7 +122,15 @@ func (suite *IntegrationTestSuite) TestMintCreditToAddr() {
 	feeCollectorBalances := bk.SpendableCoins(ctx, feeCollectorAddr)
 	userBalance := bk.SpendableCoins(ctx, addr)
 
-	require.True(userBalance.IsEqual(mintCoins.Sub(burnCoins[0]).Sub(feesCoins[0])))
+	for _, c := range burnCoins {
+		mintCoins.Sub(c)
+	}
+
+	for _, c := range feesCoins {
+		mintCoins.Sub(c)
+	}
+
+	require.True(userBalance.IsEqual(mintCoins))
 	require.True(processorBalances.IsEqual(sdk.Coins{}))
 	require.True(feeCollectorBalances.IsEqual(feesCoins))
 }

@@ -173,6 +173,7 @@ func (suite *IntegrationTestSuite) TestGetRewardsDistributionPercentages() {
 
 	cfg := distributionNetworkConfig(feesAmount)
 	net, err := network.New(suite.T(), suite.T().TempDir(), cfg)
+	suite.Require().NoError(err)
 	senderValidator := net.Validators[0]
 	keyringCtx := senderValidator.ClientCtx
 	delegatorsInitialBalance := sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(100_000_000))
