@@ -11,9 +11,9 @@ import "pylons/pylons/item.proto";
 message DoubleInputParam {
   string key = 1;
   // The minimum legal value of this parameter.
-  string min_value = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "cosmossdk.io/math.Int"];
+  string min_value = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   // The maximum legal value of this parameter.
-  string  max_value = 3 [(gogoproto.nullable) = false, (gogoproto.customtype) = "cosmossdk.io/math.Int"];
+  string  max_value = 3 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
 }
 
 // LongInputParam describes the bounds on an item input/output parameter of type int64
@@ -42,8 +42,8 @@ message ItemInput  {
 
 // DoubleWeightRange describes weight range that produce double value
 message DoubleWeightRange {
-  string lower = 1 [(gogoproto.nullable) = false, (gogoproto.customtype) = "cosmossdk.io/math.Int"];
-  string upper = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "cosmossdk.io/math.Int"];
+  string lower = 1 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string upper = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   uint64 weight = 3;
 }
 
@@ -95,7 +95,7 @@ message ItemOutput {
   repeated StringKeyValue mutable_strings = 5 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin transfer_fee = 6 [(gogoproto.nullable) = false];
   // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
-  string trade_percentage = 7 [(gogoproto.nullable) = false,(gogoproto.customtype) = "cosmossdk.io/math.Int"];
+  string trade_percentage = 7 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
   uint64 quantity = 8;
   uint64 amount_minted = 9;
@@ -113,7 +113,7 @@ message ItemModifyOutput {
   repeated StringKeyValue mutable_strings = 6 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin transfer_fee = 7 [(gogoproto.nullable) = false];
   // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
-  string trade_percentage = 8 [(gogoproto.nullable) = false,(gogoproto.customtype) = "cosmossdk.io/math.Int"];
+  string trade_percentage = 8 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
   uint64 quantity = 9;
   uint64 amount_minted = 10;
