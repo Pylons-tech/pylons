@@ -265,7 +265,8 @@ func Test_validatePaymentProcessor(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			require.Equal(t, tt.wantErr, validatePaymentProcessor(tt.args.i) != nil)
+			err := validatePaymentProcessor(tt.args.i)
+			require.Equal(t, tt.wantErr, err != nil)
 		})
 	}
 }

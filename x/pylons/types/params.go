@@ -231,12 +231,12 @@ func (p Params) ValidateBasic() error {
 }
 
 func validateDecPercentage(i interface{}) error {
-	v, ok := i.(math.Int)
+	v, ok := i.(sdk.Dec)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	if !(v.GTE(math.ZeroInt()) && v.LT(math.OneInt())) {
+	if !(v.GTE(sdk.ZeroDec()) && v.LT(sdk.OneDec())) {
 		return fmt.Errorf("percentage parameter should be in the range [0,1)")
 	}
 	return nil

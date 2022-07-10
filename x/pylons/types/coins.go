@@ -76,11 +76,14 @@ func IBCDenom(hash string) (string, error) {
 // IsIBCDenomRepresentation checks if an inputted denom is a valid IBCDenom
 func IsIBCDenomRepresentation(denom string) bool {
 	split := strings.Split(denom, denomDivider)
+	fmt.Printf("split = %v \n", split)
 	if len(split) != 2 {
 		return false
 	}
 
 	err := ValidateIBCDenom(denom)
+	fmt.Printf("denom = %v, err = %v \n", denom, err == nil)
+
 	return err == nil
 }
 
