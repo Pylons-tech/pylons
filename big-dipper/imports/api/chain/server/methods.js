@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 import { Chain, ChainStates } from '../chain.js';
 import Coin from '../../../../both/utils/coins.js';
+import { sanitizeUrl } from '@braintree/sanitize-url';
 
 findVotingPower = (validator, genValidators) => {
     for (let v in genValidators){
@@ -14,7 +15,7 @@ findVotingPower = (validator, genValidators) => {
 Meteor.methods({
     'chain.getConsensusState': function(){
         this.unblock();
-        let url = RPC+'/dump_consensus_state';
+        let url = sanitizeUrl(RPC+'/dump_consensus_state');
         try{
             let response = HTTP.get(url);
             let consensus = JSON.parse(response.content);
@@ -43,7 +44,7 @@ Meteor.methods({
         this.unblock();
         let url = "";
         try{
-            url = API + '/blocks/latest';
+            url = sanitizeUrl(API + '/blocks/latest');
             let response = HTTP.get(url);
             let latestBlock = JSON.parse(response.content);
 
@@ -66,7 +67,7 @@ Meteor.methods({
             let page = 0;
 
             do {
-                url = RPC+`/validators?page=${++page}&per_page=100`;
+                url = sanitizeUrl(RPC+`/validators?page=${++page}&per_page=100`);
                 let response = HTTP.get(url);
                 result = JSON.parse(response.content).result;
                 validators = [...validators, ...result.validators];
@@ -83,7 +84,7 @@ Meteor.methods({
 
             // update staking params
             try {
-                url = API + '/cosmos/staking/v1beta1/params';
+                url = sanitizeUrl(API + '/cosmos/staking/v1beta1/params');
                 response = HTTP.get(url);
                 chain.staking = JSON.parse(response.content);
             }
@@ -98,7 +99,7 @@ Meteor.methods({
                 chainStates.time = new Date(chain.latestBlockTime);
 
                 try{
-                    url = API + '/cosmos/staking/v1beta1/pool';
+                    url = sanitizeUrl(API + '/cosmos/staking/v1beta1/pool');
                     let response = HTTP.get(url);
                     let bonding = JSON.parse(response.content).pool;
                     chainStates.bondedTokens = parseInt(bonding.bonded_tokens);
@@ -111,7 +112,7 @@ Meteor.methods({
                 if ( Coin.StakingCoin.denom ) {
                     if (Meteor.settings.public.modules.bank){
                         try{
-                            url = API + '/cosmos/bank/v1beta1/supply/' + Coin.StakingCoin.denom;
+                            url = sanitizeUrl(API + '/cosmos/bank/v1beta1/supply/' + Coin.StakingCoin.denom);
                             let response = HTTP.get(url);
                             let supply = JSON.parse(response.content);
                             chainStates.totalSupply = parseInt(supply.amount.amount);
@@ -122,7 +123,7 @@ Meteor.methods({
 
                         // update bank params
                         try {
-                            url = API + '/cosmos/bank/v1beta1/params';
+                            url = sanitizeUrl(API + '/cosmos/bank/v1beta1/params');
                             response = HTTP.get(url);
                             chain.bank = JSON.parse(response.content);
                         }
@@ -134,7 +135,7 @@ Meteor.methods({
 
                     if (Meteor.settings.public.modules.distribution){
                         try {
-                            url = API + '/cosmos/distribution/v1beta1/community_pool';
+                            url = sanitizeUrl(API + '/cosmos/distribution/v1beta1/community_pool');
                             let response = HTTP.get(url);
                             let pool = JSON.parse(response.content).pool;
                             if (pool && pool.length > 0){
@@ -153,7 +154,7 @@ Meteor.methods({
 
                         // update distribution params
                         try {
-                            url = API + '/cosmos/distribution/v1beta1/params';
+                            url = sanitizeUrl(API + '/cosmos/distribution/v1beta1/params');
                             response = HTTP.get(url);
                             chain.distribution = JSON.parse(response.content);
                         }
@@ -164,7 +165,7 @@ Meteor.methods({
 
                     if (Meteor.settings.public.modules.minting){
                         try{
-                            url = API + '/cosmos/mint/v1beta1/inflation';
+                            url = sanitizeUrl(API + '/cosmos/mint/v1beta1/inflation');
                             let response = HTTP.get(url);
                             let inflation = JSON.parse(response.content).inflation;
                             // response = HTTP.get(url);
@@ -178,7 +179,7 @@ Meteor.methods({
                         }
 
                         try{
-                            url = API + '/cosmos/mint/v1beta1/annual_provisions';
+                            url = sanitizeUrl(API + '/cosmos/mint/v1beta1/annual_provisions');
                             let response = HTTP.get(url);
                             let provisions = JSON.parse(response.content).annual_provisions;
                             console.log(provisions)
@@ -192,7 +193,7 @@ Meteor.methods({
 
                         // update mint params
                         try {
-                            url = API + '/cosmos/mint/v1beta1/params';
+                            url = sanitizeUrl(API + '/cosmos/mint/v1beta1/params');
                             response = HTTP.get(url);
                             chain.mint = JSON.parse(response.content);
                         }
@@ -204,7 +205,7 @@ Meteor.methods({
                     if (Meteor.settings.public.modules.gov){
                         // update gov params
                         try {
-                            url = API + '/cosmos/gov/v1beta1/params/tallying';
+                            url = sanitizeUrl(API + '/cosmos/gov/v1beta1/params/tallying');
                             response = HTTP.get(url);
                             chain.gov = JSON.parse(response.content);
                         }

@@ -3,20 +3,21 @@ import { HTTP } from 'meteor/http';
 import { Proposals } from '../proposals.js';
 import { Chain } from '../../chain/chain.js';
 import { Validators } from '../../validators/validators.js';
+import { sanitizeUrl } from '@braintree/sanitize-url';
 
 Meteor.methods({
     'proposals.getProposals': function(){
         this.unblock();
 
         // get gov tally prarams
-        let url = API + '/cosmos/gov/v1beta1/params/tallying';
+        let url = sanitizeUrl(API + '/cosmos/gov/v1beta1/params/tallying');
         try{
             let response = HTTP.get(url);
             let params = JSON.parse(response.content);
 
             Chain.update({chainId: Meteor.settings.public.chainId}, {$set:{"gov.tally_params":params.tally_params}});
 
-            url = API + '/cosmos/gov/v1beta1/proposals';
+            url = sanitizeUrl(API + '/cosmos/gov/v1beta1/proposals');
             response = HTTP.get(url);
             let proposals = JSON.parse(response.content).proposals;
             // console.log(proposals);
@@ -38,7 +39,7 @@ Meteor.methods({
                     proposalIds.push(proposal.proposalId);
                     if (proposal.proposalId > 0 && !finishedProposalIds.has(proposal.proposalId)) {
                         try{
-                            url = API + '/gov/proposals/'+proposal.proposalId+'/proposer';
+                            url = sanitizeUrl(API + '/gov/proposals/'+proposal.proposalId+'/proposer');
                             let response = HTTP.get(url);
                             if (response.statusCode == 200){
                                 let proposer = JSON.parse(response?.content)?.result;
@@ -51,7 +52,7 @@ Meteor.methods({
                                 let page = 0;
 
                                 do {
-                                    url = RPC + `/validators?page=${++page}&per_page=100`;
+                                    url = sanitizeUrl(RPC + `/validators?page=${++page}&per_page=100`);
                                     let response = HTTP.get(url);
                                     result = JSON.parse(response.content).result;
                                     validators = [...validators, ...result.validators];
@@ -95,7 +96,7 @@ Meteor.methods({
                     let url = "";
                     try{
                         // get proposal deposits
-                        url = API + '/cosmos/gov/v1beta1/proposals/'+proposals[i].proposalId+'/deposits?pagination.limit=2000&pagination.count_total=true';
+                        url = API + sanitizeUrl('/cosmos/gov/v1beta1/proposals/'+proposals[i].proposalId+'/deposits?pagination.limit=2000&pagination.count_total=true');
                         let response = HTTP.get(url);
                         let proposal = {proposalId: proposals[i].proposalId};
                         if (response.statusCode == 200){
@@ -103,14 +104,14 @@ Meteor.methods({
                             proposal.deposits = deposits;
                         }
 
-                        url = API + '/cosmos/gov/v1beta1/proposals/'+proposals[i].proposalId+'/votes?pagination.limit=2000&pagination.count_total=true';
+                        url = sanitizeUrl(API + '/cosmos/gov/v1beta1/proposals/'+proposals[i].proposalId+'/votes?pagination.limit=2000&pagination.count_total=true');
                         response = HTTP.get(url);
                         if (response.statusCode == 200){
                             let votes = JSON.parse(response.content).votes;
                             proposal.votes = getVoteDetail(votes);
                         }
 
-                        url = API + '/cosmos/gov/v1beta1/proposals/'+proposals[i].proposalId+'/tally';
+                        url = sanitizeUrl(API + '/cosmos/gov/v1beta1/proposals/'+proposals[i].proposalId+'/tally');
                         response = HTTP.get(url);
                         if (response.statusCode == 200){
                             let tally = JSON.parse(response.content).tally;
@@ -152,7 +153,7 @@ const getVoteDetail = (votes) => {
     voters.forEach((voter) => {
         if (!votingPowerMap[voter]) {
             // voter is not a validator
-            let url = `${API}/cosmos/staking/v1beta1/delegations/${voter}`;
+            let url = sanitizeUrl(`${API}/cosmos/staking/v1beta1/delegations/${voter}`);
             let delegations;
             let votingPower = 0;
             try{
