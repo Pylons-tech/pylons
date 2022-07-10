@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Delegations } from '../delegations.js';
 import { Validators } from '../../validators/validators.js';
+import { sanitizeUrl } from '@braintree/sanitize-url';
 
 Meteor.methods({
     'delegations.getDelegations': async function(){
@@ -10,7 +11,7 @@ Meteor.methods({
         console.log("=== Getting delegations ===");
         for (v in validators){
             if (validators[v].operator_address){
-                let url = API + '/cosmos/staking/v1beta1/validators/'+validators[v].operatorAddress+"/delegations";
+                let url = sanitizeUrl(API + '/cosmos/staking/v1beta1/validators/'+validators[v].operatorAddress+"/delegations");
                 try{
                     let response = HTTP.get(url);
                     if (response.statusCode == 200){

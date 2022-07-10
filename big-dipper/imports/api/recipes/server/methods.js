@@ -3,6 +3,7 @@ import { HTTP } from "meteor/http";
 import { Recipes } from "../recipes.js";
 import { Transactions } from "/imports/api/transactions/transactions.js";
 import { Cookbooks } from "/imports/api/cookbooks/cookbooks.js";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 
 Meteor.methods({
   "recipes.getRecipes": function () {
@@ -33,9 +34,9 @@ Meteor.methods({
         }
       }
 
-      let url = API + "/pylons/recipes/";
+      let url = sanitizeUrl(API + "/pylons/recipes/");
       let response = HTTP.get(url);
-      let recipes = JSON.parse(response.content).Recipes;
+      let recipes = JSON.parse(response.content).recipes;
 
       if (recipes == null || recipes.length == 0) {
         return false;
@@ -56,16 +57,16 @@ Meteor.methods({
           let deeplink =
             Meteor.settings.public.baseURL +
             "?action=purchase_nft&recipe_id=" +
-            recipe.ID +
+            recipe.id +
             "&cookbook_id=" +
-            recipe.cookbookID;
+            recipe.cookbook_id;
           recipe.deeplink = deeplink;
           var cookbook_owner = "",
             creator = "";
           try {
-            let cookbooks = Cookbooks.find({ ID: recipe.cookbookID }).fetch();
+            let cookbooks = Cookbooks.find({ ID: recipe.cookbook_id }).fetch();
             if (cookbooks.length > 0) {
-              cookbook_owner = recipe.ID;
+              cookbook_owner = recipe.id;
               creator = cookbooks[0].creator;
             }
           } catch (e) {
@@ -74,8 +75,8 @@ Meteor.methods({
           recipe.cookbook_owner = cookbook_owner;
           recipe.creator = creator;
 
-          recipeIds.push(recipe.ID);
-          if (recipe.NO != -1 && !finishedRecipeIds.has(recipe.ID)) {
+          recipeIds.push(recipe.id);
+          if (recipe.NO != -1 && !finishedRecipeIds.has(recipe.id)) {
             try {
               let date = new Date();
               recipe.NO =
@@ -88,12 +89,12 @@ Meteor.methods({
                 date.getMilliseconds();
               recipe.recipeId = recipe.NO;
               bulkRecipes
-                .find({ ID: recipe.ID })
+                .find({ ID: recipe.id })
                 .upsert()
                 .updateOne({ $set: recipe });
             } catch (e) {
               bulkRecipes
-                .find({ ID: recipe.ID })
+                .find({ ID: recipe.id })
                 .upsert()
                 .updateOne({ $set: recipe });
             }
@@ -115,11 +116,11 @@ Meteor.methods({
     let recipes = Recipes.find({ enabled: { $nin: [true, false] } }).fetch();
     if (recipes && recipes.length > 0) {
       for (let i in recipes) {
-        if (recipes[i].ID != -1) {
+        if (recipes[i].id != -1) {
           let url = "";
           try {
-            let recipe = { ID: recipes[i].ID };
-            Recipes.update({ ID: recipes[i].ID }, { $set: recipe });
+            let recipe = { ID: recipes[i].id };
+            Recipes.update({ ID: recipes[i].id }, { $set: recipe });
           } catch (e) {
             console.log(url);
             console.log(e);

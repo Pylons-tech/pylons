@@ -6,6 +6,7 @@ import { Blockscon } from '../../blocks/blocks.js';
 import { Validators } from '../../validators/validators.js';
 import { Chain } from '../../chain/chain.js';
 import { getValidatorProfileUrl } from '../../blocks/server/methods.js';
+import { sanitizeUrl } from '@braintree/sanitize-url';
 
 
 Meteor.methods({
@@ -31,7 +32,7 @@ Meteor.methods({
     },
     'Validators.getAllDelegations'(address){
         this.unblock();
-        let url = `${API}/cosmos/staking/v1beta1/validators/${address}/delegations?pagination.limit=10&pagination.count_total=true`;
+        let url = sanitizeUrl(`${API}/cosmos/staking/v1beta1/validators/${address}/delegations?pagination.limit=10&pagination.count_total=true`);
 
         try {
             let delegations = HTTP.get(url);
@@ -51,7 +52,7 @@ Meteor.methods({
         // fetching keybase every base on keybaseFetchingInterval settings
         // default to every 5 hours 
         
-        let url = RPC + '/status';
+        let url = sanitizeUrl(RPC + '/status');
         let chainId;
         try {
             let response = HTTP.get(url);
