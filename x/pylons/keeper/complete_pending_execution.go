@@ -143,7 +143,7 @@ coinLoop:
 		}
 
 		payCoins = payCoins.Add(coin)
-		feeAmt := coin.Amount.Mul(k.RecipeFeePercentage(ctx))
+		feeAmt := sdk.NewDecFromInt(coin.Amount).Mul(k.RecipeFeePercentage(ctx)).RoundInt()
 		coin.Amount = coin.Amount.Sub(feeAmt)
 		transferCoins = transferCoins.Add(coin)
 		coin.Amount = feeAmt

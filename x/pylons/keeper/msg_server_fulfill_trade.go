@@ -168,7 +168,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 			// clamp to maxTransferFee - maxTransferFee and minTransferFee are global (i.e. same for every coin)
 			tmpCookbookAmt.Amount = maxTransferFee
 		}
-		chainAmt := sdk.NewCoin(baseItemTransferFee.Denom, tmpCookbookAmt.Amount.Mul(k.ItemTransferFeePercentage(ctx)))
+		chainAmt := sdk.NewCoin(baseItemTransferFee.Denom, sdk.NewDecFromInt(tmpCookbookAmt.Amount).Mul(k.ItemTransferFeePercentage(ctx)).RoundInt())
 		cookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(chainAmt.Amount))
 		transferAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(cookbookAmt.Amount).Sub(chainAmt.Amount))
 		inputChainTotAmt = inputChainTotAmt.Add(chainAmt)
@@ -186,7 +186,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 			// clamp to maxTransferFee - maxTransferFee and minTransferFee are global (i.e. same for every coin)
 			tmpCookbookAmt.Amount = maxTransferFee
 		}
-		chainAmt := sdk.NewCoin(baseItemTransferFee.Denom, tmpCookbookAmt.Amount.Mul(k.ItemTransferFeePercentage(ctx)))
+		chainAmt := sdk.NewCoin(baseItemTransferFee.Denom, sdk.NewDecFromInt(tmpCookbookAmt.Amount).Mul(k.ItemTransferFeePercentage(ctx)).RoundInt())
 		cookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(chainAmt.Amount))
 		transferAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(cookbookAmt.Amount).Sub(chainAmt.Amount))
 		outputChainTotAmt = outputChainTotAmt.Add(chainAmt)

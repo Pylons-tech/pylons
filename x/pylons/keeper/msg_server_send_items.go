@@ -77,7 +77,7 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 				coin.Amount = maxTransferFee
 			}
 			// separate fees to account for percentage to be retained by module account
-			modAccAmt := coin.Amount.Mul(itemTransferFeePercentage)
+			modAccAmt := sdk.NewDecFromInt(coin.Amount).Mul(itemTransferFeePercentage).RoundInt()
 			coin.Amount = coin.Amount.Sub(modAccAmt)
 			cookbookOwnerFees = cookbookOwnerFees.Add(coin)
 			coin.Amount = modAccAmt

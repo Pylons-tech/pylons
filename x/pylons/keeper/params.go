@@ -29,13 +29,13 @@ func (k Keeper) CoinIssuedDenomsList(ctx sdk.Context) (res []string) {
 }
 
 // RecipeFeePercentage returns the RecipeFeePercentage param
-func (k Keeper) RecipeFeePercentage(ctx sdk.Context) (res math.Int) {
+func (k Keeper) RecipeFeePercentage(ctx sdk.Context) (res sdk.Dec) {
 	k.paramSpace.Get(ctx, types.ParamStoreKeyRecipeFeePercentage, &res)
 	return
 }
 
 // ItemTransferFeePercentage returns the CoinIssuedList param
-func (k Keeper) ItemTransferFeePercentage(ctx sdk.Context) (res math.Int) {
+func (k Keeper) ItemTransferFeePercentage(ctx sdk.Context) (res sdk.Dec) {
 	k.paramSpace.Get(ctx, types.ParamStoreKeyItemTransferFeePercentage, &res)
 	return
 }
