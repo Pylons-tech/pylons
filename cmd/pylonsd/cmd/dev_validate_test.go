@@ -11,10 +11,12 @@ import (
 )
 
 const (
-	badPLC  = "bad.plc"
-	goodPLC = "good.plc"
-	badPLR  = "bad.plr"
-	goodPLR = "good.plr"
+	badPLC        = "bad.plc"
+	goodPLC       = "good.plc"
+	badPLR        = "bad.plr"
+	goodPLR       = "good.plr"
+	moduledPLR    = "moduled.plr"
+	testModulePLM = "test-module.plm"
 )
 
 const badCookbookLiteral = `{
@@ -253,6 +255,169 @@ const goodRecipeLiteral = `
     "extraInfo": "extraInfo"
 }`
 
+const goodRecipeLiteralWithModuleInclude = `
+{
+    "cookbookId": "cookbookLoudTest",
+    "id": "LOUDGetCharacter2",
+    "name": "LOUD-Get-Character-Recipe-2",
+    "description": "Creates a basic character in LOUD",
+    "version": "v0.0.1",
+    "coinInputs": [],
+    "itemInputs": [],
+    "entries": {
+        "coinOutputs": [],
+        "itemOutputs": [
+            {
+                "id": "character",
+                "doubles": [
+                    {
+                        "key": "XP",
+                        "weightRanges": [],
+                        "program": "1"
+                    }
+                ],
+                "longs": [
+#include test-module
+                    {
+                        "key": "trollKills",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "dragonKills",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_00",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_01",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_02",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_03",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_04",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_05",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_06",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_07",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_00",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_01",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_02",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_03",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_04",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_05",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_06",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_07",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "vendorState_00",
+                        "weightRanges": [],
+                        "program": "0"
+                    }
+                ],
+                "strings": [
+                    {
+                        "key": "entityType",
+                        "value": "character"
+                    }
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+        ],
+        "itemModifyOutputs": []
+    },
+    "outputs": [
+        {
+            "entryIds": [
+                "character"
+            ],
+            "weight": 1
+        }
+    ],
+    "blockInterval": 0,
+    "costPerBlock": {
+        "denom": "upylon",
+        "amount": "1000000"
+    },
+    "enabled": true,
+    "extraInfo": "extraInfo"
+}`
+
+const testModuleLiteral = `
+{
+    "key": "level",
+    "weightRanges": [],
+    "program": "1"
+},
+{
+    "key": "goblinKills",
+    "weightRanges": [],
+    "program": "0"
+},
+`
+
 func TestValidate(t *testing.T) {
 	preTestValidate(t)
 
@@ -309,6 +474,20 @@ func TestValidate(t *testing.T) {
 		assert.Equal(t, "good.plr is a valid recipe\n", str)
 		t.Log(str)
 	})
+
+	t.Run("Module", func(t *testing.T) {
+		var buf bytes.Buffer
+		Out = &buf
+		defer func() { Out = os.Stdout }()
+		fmt.Print()
+		cmd := DevValidate()
+		cmd.SetArgs([]string{moduledPLR})
+		cmd.Execute()
+		log.SetOutput(os.Stderr)
+		str := buf.String()
+		assert.Equal(t, "moduled.plr is a valid recipe\n", str)
+		t.Log(str)
+	})
 }
 
 // Generates the test files in the appropriate paths under the current working directory.
@@ -319,6 +498,8 @@ func preTestValidate(t *testing.T) {
 	writeFile(goodPLC, goodCookbookLiteral)
 	writeFile(badPLR, badRecipeLiteral)
 	writeFile(goodPLR, goodRecipeLiteral)
+	writeFile(moduledPLR, goodRecipeLiteralWithModuleInclude)
+	writeFile(testModulePLM, testModuleLiteral)
 }
 
 func writeFile(name string, data string) {
