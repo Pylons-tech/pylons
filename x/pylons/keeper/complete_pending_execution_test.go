@@ -86,5 +86,4 @@ func (suite *IntegrationTestSuite) TestCompletePendingExecution() {
 	require.Equal(feeCollectorBalance, sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))))
 	// should be 100 - 10 = 90
 	require.Equal(creatorBalance, sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(90))))
-
 }
