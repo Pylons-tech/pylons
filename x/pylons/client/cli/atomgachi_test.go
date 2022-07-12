@@ -53,6 +53,7 @@ func TestAtomgachiBasic(t *testing.T) {
 		common:               nil,
 	}
 
+	// checks if the integer has been made correctly from the input string
 	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 

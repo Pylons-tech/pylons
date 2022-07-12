@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math/rand"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
@@ -25,7 +26,7 @@ func randomCoinFee(r *rand.Rand) sdk.Coin {
 	return sdk.NewCoin("upylon", sdk.NewInt(r.Int63n(10)+1)) // [1, 100]
 }
 
-func randomTransferFeePair(r *rand.Rand) (sdk.Int, sdk.Int) {
+func randomTransferFeePair(r *rand.Rand) (math.Int, math.Int) {
 	min := sdk.NewInt(r.Int63n(11))              // [0, 10]
 	max := sdk.NewInt(r.Int63n(10) + 1).Add(min) // [min, min + 10]
 	return min, max

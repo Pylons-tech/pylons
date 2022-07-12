@@ -873,7 +873,7 @@ func TestExecuteRecipeItemInputOutput(t *testing.T) {
 				},
 				MutableStrings:  nil,
 				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
-				TradePercentage: sdk.SmallestDec(),
+				TradePercentage: sdk.ZeroDec(),
 				Quantity:        0,
 				AmountMinted:    0,
 			},
@@ -1009,7 +1009,7 @@ func TestExecuteRecipeMutableStringField(t *testing.T) {
 		"DescriptionDescriptionDescription",
 		"Developer",
 		"v0.0.1",
-		"test@email.com",
+		"test@email.com", // todo: huge spam risk scary huge big
 		"true",
 	}
 

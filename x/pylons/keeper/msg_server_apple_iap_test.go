@@ -1,6 +1,8 @@
 package keeper_test
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -10,7 +12,6 @@ import (
 
 func (suite *IntegrationTestSuite) TestMsgServerappleInAppPurchaseGetCoins() {
 	k := suite.k
-	bk := suite.bankKeeper
 	ctx := suite.ctx
 	require := suite.Require()
 
@@ -92,8 +93,12 @@ func (suite *IntegrationTestSuite) TestMsgServerappleInAppPurchaseGetCoins() {
 			if tc.err != nil {
 				require.ErrorIs(err, tc.err)
 			} else {
-				addr, _ := sdk.AccAddressFromBech32(tc.request.Creator)
-				balance := bk.SpendableCoins(ctx, addr)
+				require.NoError(err)
+				fmt.Printf("tc = %v \n", tc)
+				addr, err := sdk.AccAddressFromBech32(tc.request.Creator)
+				require.NoError(err)
+				balance := suite.pylonsApp.BankKeeper.SpendableCoins(ctx, addr)
+				fmt.Printf("balance = %v \n", balance)
 				require.True(balance.IsEqual(tc.balance))
 			}
 		})

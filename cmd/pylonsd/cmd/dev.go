@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	_ "github.com/gogo/protobuf/gogoproto" //nolint:revive // imported for side effects
 	"github.com/gogo/protobuf/jsonpb"
 )
 

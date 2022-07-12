@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
@@ -28,14 +29,14 @@ import (
 
 type TestDelegation struct {
 	address string
-	amount  sdk.Int
+	amount  math.Int
 }
 
 func GenerateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 	addrs := make([]sdk.AccAddress, n)
 	for i := 0; i < n; i++ {
 		info, _, _ := ring.NewMnemonic("NewUser"+strconv.Itoa(i), keyring.English, sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)
-		addrs[i] = info.GetAddress()
+		addrs[i], _ = info.GetAddress()
 	}
 	return addrs
 }
@@ -102,7 +103,7 @@ func generateAccountsWithBalance(numAccounts int, validator *sdknetwork.Validato
 	return accounts
 }
 
-func generateDistributionMap(validators []*sdknetwork.Validator, numDelegations int, minAmount, maxAmount sdk.Int, accounts []string) map[string][]TestDelegation {
+func generateDistributionMap(validators []*sdknetwork.Validator, numDelegations int, minAmount, maxAmount math.Int, accounts []string) map[string][]TestDelegation {
 	// init random seed
 	rand.Seed(time.Now().UnixNano())
 
@@ -135,7 +136,7 @@ func generateDistributionMap(validators []*sdknetwork.Validator, numDelegations 
 	return delegations
 }
 
-func computeDistrPercentages(validators []*sdknetwork.Validator, distrMap map[string][]TestDelegation, bondingTokens, totalStake sdk.Int) (distrPercentages map[string]sdk.Dec) {
+func computeDistrPercentages(validators []*sdknetwork.Validator, distrMap map[string][]TestDelegation, bondingTokens, totalStake math.Int) (distrPercentages map[string]sdk.Dec) {
 	distrPercentages = make(map[string]sdk.Dec)
 	for _, val := range validators {
 		valAddr := val.Address.String()
@@ -146,12 +147,14 @@ func computeDistrPercentages(validators []*sdknetwork.Validator, distrMap map[st
 			if del.address == valAddr {
 				amt = del.amount.Add(bondingTokens)
 			}
-			percentage := amt.ToDec().Quo(totalStake.ToDec())
+			percentage := sdk.NewDecFromInt(amt).Quo(sdk.NewDecFromInt(totalStake))
 			if del.address == valAddr {
 				distrPercentages[del.address] = distrPercentages[valAddr].Add(percentage)
 			} else {
 				// 0.5 is the default value given to validators. see cosmos-sdk/testutil/network/network.go
-				commission := percentage.Mul(sdk.MustNewDecFromStr("0.5"))
+
+				comm, _ := sdk.NewDecFromStr("0.5")
+				commission := percentage.Mul(comm)
 				actualPercentage := percentage.Sub(commission)
 				distrPercentages[del.address] = actualPercentage
 				distrPercentages[valAddr] = distrPercentages[valAddr].Add(commission)
@@ -169,7 +172,8 @@ func (suite *IntegrationTestSuite) TestGetRewardsDistributionPercentages() {
 	numDelegationsPerValidators := 10
 
 	cfg := distributionNetworkConfig(feesAmount)
-	net := network.New(suite.T(), cfg)
+	net, err := network.New(suite.T(), suite.T().TempDir(), cfg)
+	suite.Require().NoError(err)
 	senderValidator := net.Validators[0]
 	keyringCtx := senderValidator.ClientCtx
 	delegatorsInitialBalance := sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(100_000_000))
@@ -218,7 +222,7 @@ func (suite *IntegrationTestSuite) TestGetRewardsDistributionPercentages() {
 	}
 	args := []string{"testNewUsername"}
 	args = append(args, flgs...)
-	_, err := clitestutil.ExecTestCLICmd(keyringCtx, cli.CmdUpdateAccount(), args)
+	_, err = clitestutil.ExecTestCLICmd(keyringCtx, cli.CmdUpdateAccount(), args)
 	req.NoError(err)
 
 	// simulate waiting for later block heights
