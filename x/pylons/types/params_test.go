@@ -3,6 +3,7 @@ package types
 import (
 	"testing"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
@@ -50,7 +51,7 @@ func Test_validateDecPercentage(t *testing.T) {
 		{"invalid type int64 1", args{int64(1)}, true},
 		{"invalid type uint32 1", args{uint32(1)}, true},
 
-		{"invalid percentage 1", args{sdk.OneDec()}, true},
+		{"invalid percentage 1", args{math.OneInt()}, true},
 		{"invalid negative percentage", args{sdk.NewDec(-1)}, true},
 		{"valid percentage", args{sdk.ZeroDec()}, false},
 	}
@@ -96,7 +97,7 @@ func Test_validateCoinIssuers(t *testing.T) {
 	invalidPackage := GoogleInAppPurchasePackage{
 		PackageName: "",
 		ProductId:   "",
-		Amount:      sdk.Int{},
+		Amount:      math.Int{},
 	}
 
 	invalidPackages = append(invalidPackages, invalidPackage)
@@ -264,7 +265,8 @@ func Test_validatePaymentProcessor(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			require.Equal(t, tt.wantErr, validatePaymentProcessor(tt.args.i) != nil)
+			err := validatePaymentProcessor(tt.args.i)
+			require.Equal(t, tt.wantErr, err != nil)
 		})
 	}
 }

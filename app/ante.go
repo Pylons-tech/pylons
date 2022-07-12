@@ -26,7 +26,8 @@ func NewAnteHandler(
 	return sdk.ChainAnteDecorators(
 		NewSpamMigitationAnteDecorator(pk),
 		ante.NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
-		ante.NewRejectExtensionOptionsDecorator(),
+		//		ante.NewExtensionOptionsDecorator(),
+		// ante.NewMempoolFeeDecorator(),
 		ante.NewValidateBasicDecorator(),
 		ante.TxTimeoutHeightDecorator{},
 		ante.NewValidateMemoDecorator(ak),

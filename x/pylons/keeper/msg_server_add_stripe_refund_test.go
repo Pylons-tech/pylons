@@ -98,5 +98,4 @@ func (suite *IntegrationTestSuite) TestAddStripeRefund() {
 			}
 		})
 	}
-
 }

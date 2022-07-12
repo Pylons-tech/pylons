@@ -65,6 +65,7 @@ func TestLOUDBasic(t *testing.T) {
 		buyCopperSwordRecipeID: "",
 	}
 
+	// checks to see if the integer is made correctly from the string
 	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 
@@ -430,7 +431,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 			Doubles: []types.DoubleInputParam{
 				{
 					Key:      "attack",
-					MinValue: sdk.NewDec(1),
+					MinValue: sdk.OneDec(),
 					MaxValue: sdk.NewDec(10000000),
 				},
 			},

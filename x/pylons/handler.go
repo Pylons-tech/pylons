@@ -22,9 +22,11 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 		ctx = ctx.WithEventManager(sdk.NewEventManager())
 
 		switch msg := msg.(type) {
+
 		case *types.MsgAppleIap:
 			res, err := msgServer.AppleIap(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
+
 		case *types.MsgAddStripeRefund:
 			res, err := msgServer.AddStripeRefund(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
@@ -76,15 +78,19 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 		case *types.MsgSetItemString:
 			res, err := msgServer.SetItemString(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
+
 		case *types.MsgCreateRecipe:
 			res, err := msgServer.CreateRecipe(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
+
 		case *types.MsgUpdateRecipe:
 			res, err := msgServer.UpdateRecipe(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
+
 		case *types.MsgCreateCookbook:
 			res, err := msgServer.CreateCookbook(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
+
 		case *types.MsgUpdateCookbook:
 			res, err := msgServer.UpdateCookbook(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)

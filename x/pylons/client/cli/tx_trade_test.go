@@ -396,7 +396,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 		"DescriptionDescriptionDescription",
 		"Developer",
 		"v0.0.1",
-		"test@email.com",
+		"test@email.com", // todo: huge scary spam risk
 		"true",
 	}
 

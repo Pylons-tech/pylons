@@ -6,6 +6,8 @@ import (
 	"testing"
 	"time"
 
+	pruningtypes "github.com/cosmos/cosmos-sdk/pruning/types"
+
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/stretchr/testify/require"
@@ -21,7 +23,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/simapp"
-	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -48,7 +49,8 @@ func New(t *testing.T, configs ...network.Config) *network.Network {
 	} else {
 		cfg = configs[0]
 	}
-	net := network.New(t, cfg)
+	net, err := network.New(t, t.TempDir(), cfg)
+	require.NoError(t, err)
 	t.Cleanup(net.Cleanup)
 
 	// create accounts for the validators
@@ -92,20 +94,20 @@ func DefaultConfig() network.Config {
 				val.Ctx.Logger, tmdb.NewMemDB(), nil, true, map[int64]bool{}, val.Ctx.Config.RootDir, 0,
 				encoding,
 				simapp.EmptyAppOptions{},
-				baseapp.SetPruning(storetypes.NewPruningOptionsFromString(val.AppConfig.Pruning)),
+				baseapp.SetPruning(pruningtypes.NewPruningOptionsFromString(val.AppConfig.Pruning)),
 				baseapp.SetMinGasPrices(val.AppConfig.MinGasPrices),
 			)
 		},
 		GenesisState:    genState,
 		TimeoutCommit:   2 * time.Second,
-		ChainID:         "chain-" + tmrand.NewRand().Str(6),
+		ChainID:         "chain-" + tmrand.Str(6),
 		NumValidators:   1,
 		BondDenom:       sdk.DefaultBondDenom,
 		MinGasPrices:    fmt.Sprintf("0%s", sdk.DefaultBondDenom),
 		AccountTokens:   sdk.TokensFromConsensusPower(1_000_000, sdk.DefaultPowerReduction),
 		StakingTokens:   sdk.TokensFromConsensusPower(1_000_000, sdk.DefaultPowerReduction),
 		BondedTokens:    sdk.TokensFromConsensusPower(30, sdk.DefaultPowerReduction),
-		PruningStrategy: storetypes.PruningOptionNothing,
+		PruningStrategy: pruningtypes.PruningOptionNothing,
 		CleanupDir:      true,
 		SigningAlgo:     string(hd.Secp256k1Type),
 		KeyringOptions:  []keyring.Option{},
@@ -139,7 +141,7 @@ func ConfigWithMaxTxsInBlock(maxTxsInBlock uint64) network.Config {
 				val.Ctx.Logger, tmdb.NewMemDB(), nil, true, map[int64]bool{}, val.Ctx.Config.RootDir, 0,
 				encoding,
 				simapp.EmptyAppOptions{},
-				baseapp.SetPruning(storetypes.NewPruningOptionsFromString(val.AppConfig.Pruning)),
+				baseapp.SetPruning(pruningtypes.NewPruningOptionsFromString(val.AppConfig.Pruning)),
 				baseapp.SetMinGasPrices(val.AppConfig.MinGasPrices),
 			)
 		},
@@ -152,7 +154,7 @@ func ConfigWithMaxTxsInBlock(maxTxsInBlock uint64) network.Config {
 		AccountTokens:   sdk.TokensFromConsensusPower(1_000_000, sdk.DefaultPowerReduction),
 		StakingTokens:   sdk.TokensFromConsensusPower(1_000_000, sdk.DefaultPowerReduction),
 		BondedTokens:    sdk.TokensFromConsensusPower(30, sdk.DefaultPowerReduction),
-		PruningStrategy: storetypes.PruningOptionNothing,
+		PruningStrategy: pruningtypes.PruningOptionNothing,
 		CleanupDir:      true,
 		SigningAlgo:     string(hd.Secp256k1Type),
 		KeyringOptions:  []keyring.Option{},

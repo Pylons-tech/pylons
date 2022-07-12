@@ -40,10 +40,20 @@ func CommonArgs(address string, net *network.Network) []string {
 func GenerateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 	addrs := make([]sdk.AccAddress, n)
 	for i := 0; i < n; i++ {
+		var err error
 		info, _, _ := ring.NewMnemonic("NewUser"+strconv.Itoa(i), keyring.English, sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)
-		addrs[i] = info.GetAddress()
-		ring.SaveMultisig("NewUser"+strconv.Itoa(i), info.GetPubKey()) //nolint:errcheck // handling this error is too complex.
-
+		addrs[i], err = info.GetAddress()
+		if err != nil {
+			panic(err)
+		}
+		pubkey, err := info.GetPubKey()
+		if err != nil {
+			panic(err)
+		}
+		_, err = ring.SaveMultisig("NewUser"+strconv.Itoa(i), pubkey)
+		if err != nil {
+			panic(err)
+		}
 	}
 	return addrs
 }
@@ -295,7 +305,7 @@ func NetworkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item
 				MutableStrings:  make([]types.StringKeyValue, 0),
 				Tradeable:       false,
 				LastUpdate:      0,
-				TradePercentage: sdk.NewDec(0),
+				TradePercentage: sdk.ZeroDec(),
 				TransferFee:     []sdk.Coin{{Denom: "test", Amount: sdk.OneInt()}},
 			})
 	}
@@ -326,7 +336,7 @@ func NetworkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, [
 				MutableStrings:  make([]types.StringKeyValue, 0),
 				Tradeable:       false,
 				LastUpdate:      0,
-				TradePercentage: sdk.NewDec(0),
+				TradePercentage: sdk.ZeroDec(),
 				TransferFee:     []sdk.Coin{{Denom: "test", Amount: sdk.OneInt()}},
 			})
 	}

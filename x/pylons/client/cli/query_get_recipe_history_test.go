@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	"cosmossdk.io/math"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cast"
@@ -113,7 +114,7 @@ func TestGetRecipeHistory(t *testing.T) {
 					},
 				},
 				MutableStrings:  nil,
-				TransferFee:     []sdk.Coin{sdk.NewCoin("upylon", sdk.OneInt())},
+				TransferFee:     []sdk.Coin{sdk.NewCoin("upylon", math.OneInt())},
 				TradePercentage: tradePercentage,
 				Quantity:        0,
 				AmountMinted:    0,

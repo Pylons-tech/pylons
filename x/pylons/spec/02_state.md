@@ -105,7 +105,7 @@ message Item {
   int64 lastUpdate = 10;
   repeated cosmos.base.v1beta1.Coin transferFee = 11 [(gogoproto.nullable) = false];
   // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
-  string tradePercentage = 12 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string tradePercentage = 12 [(gogoproto.nullable) = false,(gogoproto.customtype) = "cosmossdk.io/math.Int"];
 }
 ````
 

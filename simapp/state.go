@@ -2,12 +2,14 @@ package simapp
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
-	"log"
 	"math/rand"
 	"time"
 
+	"cosmossdk.io/math"
 	"github.com/Pylons-tech/pylons/app"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdksimapp "github.com/cosmos/cosmos-sdk/simapp"
 	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
@@ -134,7 +136,7 @@ func AppStateFn(cdc codec.JSONCodec, simManager *module.SimulationManager) simty
 }
 
 // AppStateRandomizedFn creates calls each module's GenesisState generator function
-// and creates the simulation params.
+// and creates the simulation params
 func AppStateRandomizedFn(
 	simManager *module.SimulationManager, r *rand.Rand, cdc codec.JSONCodec,
 	accs []simtypes.Account, genesisTimestamp time.Time, appParams simtypes.AppParams,
@@ -144,10 +146,13 @@ func AppStateRandomizedFn(
 
 	// generate a random amount of initial stake coins and a random initial
 	// number of bonded accounts
-	var initialStake, numInitiallyBonded int64
+	var (
+		numInitiallyBonded int64
+		initialStake       math.Int
+	)
 	appParams.GetOrGenerate(
 		cdc, simappparams.StakePerAccount, &initialStake, r,
-		func(r *rand.Rand) { initialStake = r.Int63n(1e12) },
+		func(r *rand.Rand) { initialStake = math.NewInt(r.Int63n(1e12)) },
 	)
 	appParams.GetOrGenerate(
 		cdc, simappparams.InitiallyBondedValidators, &numInitiallyBonded, r,
@@ -158,7 +163,7 @@ func AppStateRandomizedFn(
 		numInitiallyBonded = numAccs
 	}
 
-	log.Printf(
+	fmt.Printf(
 		`Selected randomly generated parameters for simulated genesis:
 {
   stake_per_account: "%d",
