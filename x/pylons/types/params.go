@@ -39,10 +39,10 @@ var (
 
 	// default validators percentage comes from here
 
-	DefaultProcessorPercentage      = sdk.ZeroDec()
-	DefaultValidatorsPercentage, ok = sdk.NewDecFromStr("0.003")
-	DefaultPylonsIncPubKey          = "EVK1dqjD6K8hGylacMpWAa/ru/OnWUDtCZ+lPkv2TTA=" // this is a testing key, do not use in production!
-	DefaultPaymentProcessors        = []PaymentProcessor{
+	DefaultProcessorPercentage     = sdk.ZeroDec()
+	DefaultValidatorsPercentage, _ = sdk.NewDecFromStr("0.003")
+	DefaultPylonsIncPubKey         = "EVK1dqjD6K8hGylacMpWAa/ru/OnWUDtCZ+lPkv2TTA=" // this is a testing key, do not use in production!
+	DefaultPaymentProcessors       = []PaymentProcessor{
 		{
 			CoinDenom:            StripeCoinDenom,
 			PubKey:               DefaultPylonsIncPubKey,
