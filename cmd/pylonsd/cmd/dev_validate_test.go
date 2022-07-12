@@ -16,7 +16,7 @@ const (
 	badPLR        = "bad.plr"
 	goodPLR       = "good.plr"
 	moduledPLR    = "moduled.plr"
-	testModulePLM = "test-module.plm"
+	testModulePDT = "test-module.pdt"
 )
 
 const badCookbookLiteral = `{
@@ -499,7 +499,7 @@ func preTestValidate(t *testing.T) {
 	writeFile(badPLR, badRecipeLiteral)
 	writeFile(goodPLR, goodRecipeLiteral)
 	writeFile(moduledPLR, goodRecipeLiteralWithModuleInclude)
-	writeFile(testModulePLM, testModuleLiteral)
+	writeFile(testModulePDT, testModuleLiteral)
 }
 
 func writeFile(name string, data string) {

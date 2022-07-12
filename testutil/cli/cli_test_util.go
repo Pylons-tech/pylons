@@ -46,11 +46,7 @@ func GenerateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 		if err != nil {
 			panic(err)
 		}
-		pubkey, err := info.GetPubKey()
-		if err != nil {
-			panic(err)
-		}
-		_, err = ring.SaveMultisig("NewUser"+strconv.Itoa(i), pubkey)
+		_, err = info.GetPubKey()
 		if err != nil {
 			panic(err)
 		}

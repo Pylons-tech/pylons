@@ -31,10 +31,7 @@ func DevCreate() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			err = cli.SetAlternativeContext(clientCtx.WithFromAddress(addr).WithFromName(accountName).WithBroadcastMode("sync"))
-			if err != nil {
-				return err
-			}
+			cli.SetAlternativeContext(clientCtx.WithFromAddress(addr).WithFromName(accountName).WithBroadcastMode("sync"))
 			ForFiles(path, func(path string, cb types.Cookbook) {
 				c := cli.CmdCreateCookbook()
 				c.SetArgs([]string{cb.Id, cb.Name, cb.Description, cb.Developer, cb.Version, cb.SupportEmail, strconv.FormatBool(cb.Enabled)})

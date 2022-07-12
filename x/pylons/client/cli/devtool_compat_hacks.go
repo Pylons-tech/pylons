@@ -1,8 +1,6 @@
 package cli
 
 import (
-	"errors"
-
 	"github.com/cosmos/cosmos-sdk/client"
 )
 
@@ -14,10 +12,6 @@ func GetAltenativeContext() *client.Context {
 	return altContext
 }
 
-func SetAlternativeContext(ctx client.Context) error {
-	if altContext != nil {
-		return errors.New("alternative context already set - should not be trying to set it again")
-	}
+func SetAlternativeContext(ctx client.Context) {
 	altContext = &ctx
-	return nil
 }

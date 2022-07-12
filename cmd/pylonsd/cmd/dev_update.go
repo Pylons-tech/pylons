@@ -31,7 +31,7 @@ func DevUpdate() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			err = cli.SetAlternativeContext(clientCtx.WithFromAddress(addr).WithFromName(accountName).WithBroadcastMode("sync"))
+			cli.SetAlternativeContext(clientCtx.WithFromAddress(addr).WithFromName(accountName).WithBroadcastMode("sync"))
 			if err != nil {
 				panic(err)
 			}
