@@ -45,7 +45,7 @@ func DefaultConfig() network.Config {
 			)
 		},
 		GenesisState:    ModuleBasics.DefaultGenesis(encCfg.Codec),
-		TimeoutCommit:   2 * time.Second,
+		TimeoutCommit:   0 * time.Second,
 		ChainID:         "pylons-code-test",
 		NumValidators:   1,
 		BondDenom:       sdk.DefaultBondDenom,
