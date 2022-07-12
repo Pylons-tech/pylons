@@ -14,22 +14,26 @@ import (
 func DevCreate() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create [account] [path]",
-		Short: "Creates and executes creation transactions Pyl.ons recipe or cookbook files in the provided path, using credentials of provided account",
+		Short: "Creates and executes creation transactions for Pylons recipe or cookbook files in the provided path, using credentials of provided account",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			accountName := args[0]
 			path := args[1]
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
-				panic(err)
+				return err
 			}
 			k, err := clientCtx.Keyring.Key(accountName)
 			if err != nil {
-				panic(err)
+				return err
 			}
-			err = cli.SetAlternativeContext(clientCtx.WithFromAddress(k.GetAddress()).WithFromName(accountName).WithBroadcastMode("sync"))
+			addr, err := k.GetAddress()
 			if err != nil {
-				panic(err)
+				return err
+			}
+			err = cli.SetAlternativeContext(clientCtx.WithFromAddress(addr).WithFromName(accountName).WithBroadcastMode("sync"))
+			if err != nil {
+				return err
 			}
 			ForFiles(path, func(path string, cb types.Cookbook) {
 				c := cli.CmdCreateCookbook()

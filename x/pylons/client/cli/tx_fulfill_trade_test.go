@@ -135,6 +135,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 		cookbookID:           cookbookID,
 	}
 
+	// ok checks to see if the integer is created from the string.
 	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 

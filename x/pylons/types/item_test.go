@@ -6,7 +6,7 @@ import (
 	"math"
 	"testing"
 
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	sdkerrors "cosmossdk.io/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -138,17 +138,17 @@ func TestFindDouble(t *testing.T) {
 				Doubles: []DoubleKeyValue{
 					{
 						Key:   "one",
-						Value: sdk.NewDec(1),
+						Value: sdk.OneDec(),
 					},
 					{
 						Key:   "two",
-						Value: sdk.NewDec(1),
+						Value: sdk.OneDec(),
 					},
 				},
 			},
 			testedValue:  "one",
 			expectedBool: true,
-			expectedDec:  sdk.NewDec(1),
+			expectedDec:  sdk.OneDec(),
 		},
 		{
 			desc: "Not Found",
@@ -156,11 +156,11 @@ func TestFindDouble(t *testing.T) {
 				Doubles: []DoubleKeyValue{
 					{
 						Key:   "one",
-						Value: sdk.NewDec(1),
+						Value: sdk.OneDec(),
 					},
 					{
 						Key:   "two",
-						Value: sdk.NewDec(1),
+						Value: sdk.OneDec(),
 					},
 				},
 			},

@@ -101,7 +101,7 @@ func GenerateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 	addrs := make([]sdk.AccAddress, n)
 	for i := 0; i < n; i++ {
 		info, _, _ := ring.NewMnemonic("NewUser"+strconv.Itoa(i), keyring.English, sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)
-		addrs[i] = info.GetAddress()
+		addrs[i], _ = info.GetAddress()
 	}
 	return addrs
 }
