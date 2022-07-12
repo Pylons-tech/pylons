@@ -97,7 +97,7 @@ func DefaultConfig() network.Config {
 			)
 		},
 		GenesisState:    genState,
-		TimeoutCommit:   0,
+		TimeoutCommit:   0 * time.Second,
 		ChainID:         "chain-" + tmrand.NewRand().Str(6),
 		NumValidators:   1,
 		BondDenom:       sdk.DefaultBondDenom,
