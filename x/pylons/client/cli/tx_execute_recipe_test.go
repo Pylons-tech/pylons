@@ -141,7 +141,8 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 	// this recipe can be run infinitely
 	// run it 5x in a loop
 	common = util.CommonArgs(address, net)
-	for i := 0; i < 5; i++ {
+	const numReps = 5
+	for i := 0; i < numReps; i++ {
 		// create execution
 		args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 		args = append(args, common...)
