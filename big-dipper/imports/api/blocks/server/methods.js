@@ -11,6 +11,7 @@ import { Evidences } from '../../evidences/evidences.js';
 import { sha256 } from 'js-sha256';
 // import { getAddress } from 'tendermint/lib/pubkey';
 import * as cheerio from 'cheerio';
+import { sanitizeUrl } from '@braintree/sanitize-url';
 
 
 getRemovedValidators = (prevValidators, validators) => {
@@ -47,7 +48,8 @@ getValidatorFromConsensusKey = (validators, consensusKey) => {
 export const getValidatorProfileUrl = (identity) => {
     console.log("Get validator avatar.")
     if (identity.length == 16){
-        let response = HTTP.get(`https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`)
+        var url = sanitizeUrl(`https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`)
+        let response = HTTP.get()
         if (response.statusCode == 200) {
             let them = response?.data?.them
             return them && them.length && them[0]?.pictures && them[0]?.pictures?.primary && them[0]?.pictures?.primary?.url;
@@ -70,7 +72,7 @@ getValidatorUptime = async (validatorSet) => {
 
     // get validator uptime
   
-    let url = `${API}/cosmos/slashing/v1beta1/params`;
+    let url = sanitizeUrl(`${API}/cosmos/slashing/v1beta1/params`);
     let response = HTTP.get(url);
     let slashingParams = JSON.parse(response.content)
 
@@ -81,7 +83,7 @@ getValidatorUptime = async (validatorSet) => {
         try {
             // console.log("=== Signing Info ===: %o", signingInfo)
 
-            url = `${API}/cosmos/slashing/v1beta1/signing_infos/${validatorSet[key].bech32ValConsAddress}`
+            url = sanitizeUrl(`${API}/cosmos/slashing/v1beta1/signing_infos/${validatorSet[key].bech32ValConsAddress}`)
             let response = HTTP.get(url);
             let signingInfo = JSON.parse(response.content).val_signing_info;
             if (signingInfo){
@@ -177,7 +179,7 @@ Meteor.methods({
     },
     'blocks.getLatestHeight': function() {
         this.unblock();
-        let url = RPC+'/status';
+        let url = sanitizeUrl(RPC+'/status');
         try{
             let response = HTTP.get(url);
             let status = JSON.parse(response.content);
@@ -218,7 +220,7 @@ Meteor.methods({
             let validatorSet = [];
             // get latest validator candidate information
 
-            let url = API + '/cosmos/staking/v1beta1/validators?status=BOND_STATUS_BONDED&pagination.limit=200&pagination.count_total=true';
+            let url = sanitizeUrl(API + '/cosmos/staking/v1beta1/validators?status=BOND_STATUS_BONDED&pagination.limit=200&pagination.count_total=true');
 
             try{
                 let response = HTTP.get(url);
@@ -231,7 +233,7 @@ Meteor.methods({
             }
 
             try{
-                url = API + '/cosmos/staking/v1beta1/validators?status=BOND_STATUS_UNBONDING&pagination.limit=200&pagination.count_total=true';
+                url = sanitizeUrl(API + '/cosmos/staking/v1beta1/validators?status=BOND_STATUS_UNBONDING&pagination.limit=200&pagination.count_total=true');
                 let response = HTTP.get(url);
                 let result = JSON.parse(response.content).validators;
                 result.forEach((validator) => validatorSet[validator.consensus_pubkey.key] = validator);
@@ -242,7 +244,7 @@ Meteor.methods({
             }
 
             try{
-                url = API + '/cosmos/staking/v1beta1/validators?status=BOND_STATUS_UNBONDED&pagination.limit=200&pagination.count_total=true';
+                url = sanitizeUrl(API + '/cosmos/staking/v1beta1/validators?status=BOND_STATUS_UNBONDED&pagination.limit=200&pagination.count_total=true');
                 let response = HTTP.get(url);
                 let result = JSON.parse(response.content).validators;
                 result.forEach((validator) => validatorSet[validator.consensus_pubkey.key] = validator);
@@ -264,7 +266,7 @@ Meteor.methods({
                 this.unblock();
                 // let url = RPC+'/block?height=' + height;
 
-                url = `${API}/blocks/${height}`;
+                url = sanitizeUrl(`${API}/blocks/${height}`);
                 let analyticsData = {};
 
                 const bulkValidators = Validators.rawCollection().initializeUnorderedBulkOp();
@@ -342,7 +344,7 @@ Meteor.methods({
                         let result;
 
                         do {
-                            let url = RPC+`/validators?height=${height}&page=${++page}&per_page=100`;
+                            let url = sanitizeUrl(RPC+`/validators?height=${height}&page=${++page}&per_page=100`);
                             let response = HTTP.get(url);
                             result = JSON.parse(response.content).result;
                             // console.log("========= validator result ==========: %o", result)
@@ -364,7 +366,7 @@ Meteor.methods({
                         let genesisResult;
 
                         do {
-                            let url = RPC+`/genesis`;
+                            let url = sanitizeUrl(RPC+`/genesis`);
                             let response = HTTP.get(url);
                             genesisResult = JSON.parse(response.content).result;
 
@@ -619,7 +621,7 @@ Meteor.methods({
                         if ((height == curr+1) || (height == Meteor.settings.params.startHeight+1) || (height == until) || (height % Meteor.settings.params.validatorUpdateWindow == 0)){
                             if ((height == Meteor.settings.params.startHeight+1) || (height % Meteor.settings.params.validatorUpdateWindow == 0)){    
                                 if (valData.status == 'BOND_STATUS_BONDED'){
-                                    url = `${API}/cosmos/staking/v1beta1/validators/${valData.operator_address}/delegations/${valData.delegator_address}`
+                                    url = sanitizeUrl(`${API}/cosmos/staking/v1beta1/validators/${valData.operator_address}/delegations/${valData.delegator_address}`)
                                     try{
                                         console.log("Getting self delegation");
         

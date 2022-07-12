@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strconv"
 	"testing"
-	"time"
 
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 
 	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -55,7 +55,7 @@ func TestLOUDBasic(t *testing.T) {
 		ctx:                    ctx,
 		basicTradePercentage:   sdk.Dec{},
 		err:                    nil,
-		common:                 nil,
+		common:                 []string{fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastAsync)},
 		execCount:              0,
 		itemCount:              0,
 		characterID:            "",
@@ -189,12 +189,9 @@ func createCharacter(t *testing.T, simInfo *loudBasicSim) {
 
 	// simulate waiting for later block heights
 	height, err := simInfo.net.LatestHeight()
-	targetHeight := height + 1
 	// build execID from the execution height
 	execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(simInfo.execCount)
 	simInfo.execCount++
-	require.NoError(t, err)
-	_, err = simInfo.net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
 	require.NoError(t, err)
 
 	// check the execution
@@ -270,12 +267,9 @@ func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 
 	// simulate waiting for later block heights
 	height, err := simInfo.net.LatestHeight()
-	targetHeight := height + 1
 	// build execID from the execution height
 	execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(simInfo.execCount)
 	simInfo.execCount++
-	require.NoError(t, err)
-	_, err = simInfo.net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
 	require.NoError(t, err)
 
 	// check the execution
@@ -372,12 +366,9 @@ func buyCopperSword(t *testing.T, simInfo *loudBasicSim) {
 
 	// simulate waiting for later block heights
 	height, err := simInfo.net.LatestHeight()
-	targetHeight := height + 1
 	// build execID from the execution height
 	execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(simInfo.execCount)
 	simInfo.execCount++
-	require.NoError(t, err)
-	_, err = simInfo.net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
 	require.NoError(t, err)
 
 	// check the execution
@@ -627,12 +618,9 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 
 		// simulate waiting for later block heights
 		height, err := simInfo.net.LatestHeight()
-		targetHeight := height + 1
 		// build execID from the execution height
 		execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(simInfo.execCount)
 		simInfo.execCount++
-		require.NoError(t, err)
-		_, err = simInfo.net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
 		require.NoError(t, err)
 
 		// check the execution
