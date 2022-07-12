@@ -76,7 +76,7 @@ func SetupWithGenesisValSet(valSet *tmtypes.ValidatorSet, genAccs []authtypes.Ge
 func SetupTestingAppWithLevelDB(isCheckTx bool) (app *PylonsApp, cleanupFn func()) {
 	dir := "pylons_testing"
 	cdc := app.AppCodec()
-	db, err := sdk.NewLevelDB("pylons_leveldb_testing", dir)
+	db, err := sdk.NewLevelDB("pylons_leveldb_testing", dir) //nolint:staticcheck
 	if err != nil {
 		panic(err)
 	}
