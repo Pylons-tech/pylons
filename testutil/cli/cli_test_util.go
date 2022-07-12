@@ -42,10 +42,6 @@ func GenerateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 	for i := 0; i < n; i++ {
 		var err error
 		info, _, _ := ring.NewMnemonic("NewUser"+strconv.Itoa(i), keyring.English, sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)
-<<<<<<< HEAD
-		addrs[i] = info.GetAddress()
-		_, err := ring.SaveMultisig("NewUser"+strconv.Itoa(i), info.GetPubKey())
-=======
 		addrs[i], err = info.GetAddress()
 		if err != nil {
 			panic(err)
@@ -55,7 +51,6 @@ func GenerateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 			panic(err)
 		}
 		_, err = ring.SaveMultisig("NewUser"+strconv.Itoa(i), pubkey)
->>>>>>> feat/create
 		if err != nil {
 			panic(err)
 		}
