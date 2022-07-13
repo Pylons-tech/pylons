@@ -6,32 +6,10 @@
     "version": "v0.0.4",
     "coinInputs": [],
     "itemInputs": [
-        {
 #include character_input
-		,
-        {
-            "ID": "iron_sword_lv1",
-            "Doubles": [
-                {
-                    "Key": "attack",
-                    "MinValue": "1.0",
-                    "MaxValue": "10000000.0"
-                }
-            ],
-            "Longs": [
-                {
-                    "Key": "level",
-                    "MinValue": 1,
-                    "MaxValue": 10000000
-                }
-            ],
-            "Strings": [
-                {
-                    "Key": "name",
-                    "Value": "Iron sword"
-                }
-            ]
-        }
+            ,
+#include iron_sword_input
+			,
     ],
     "entries": {
         "coinOutputs": [
