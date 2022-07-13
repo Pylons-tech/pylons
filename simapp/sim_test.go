@@ -22,6 +22,7 @@ import (
 
 // Profile with:
 // /usr/local/go/bin/go test -benchmem -run=^$ github.com/Pylons-tech/pylons/simapp -bench ^BenchmarkFullAppSimulation$ -Commit=true -cpuprofile cpu.out
+/*
 func BenchmarkFullAppSimulation(b *testing.B) {
 	// -Enabled=true -NumBlocks=1000 -BlockSize=200 \
 	// -Period=1 -Commit=true -Seed=57 -v -timeout 24h
@@ -33,7 +34,9 @@ func BenchmarkFullAppSimulation(b *testing.B) {
 	// sdkSimapp.FlagPeriodValue = 1000
 	fullAppSimulation(b, false)
 }
+*/
 
+/*
 func TestFullAppSimulation(t *testing.T) {
 	// -Enabled=true -NumBlocks=1000 -BlockSize=200 \
 	// -Period=1 -Commit=true -Seed=57 -v -timeout 24h
@@ -46,6 +49,7 @@ func TestFullAppSimulation(t *testing.T) {
 	sdkSimapp.FlagSeedValue = 10
 	fullAppSimulation(t, true)
 }
+*/
 
 func fullAppSimulation(tb testing.TB, is_testing bool) {
 	config, db, dir, logger, _, err := sdkSimapp.SetupSimulation("goleveldb-app-sim", "Simulation")
@@ -85,6 +89,7 @@ func fullAppSimulation(tb testing.TB, is_testing bool) {
 		interBlockCacheOpt(),
 		fauxMerkleModeOpt)
 
+/*
 	// Run randomized simulation:
 	_, simParams, simErr := simulation.SimulateFromSeed(
 		tb,
@@ -197,4 +202,4 @@ func TestAppStateDeterminism(t *testing.T) {
 			}
 		}
 	}
-}
+}*/
