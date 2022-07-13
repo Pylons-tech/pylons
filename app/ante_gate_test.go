@@ -52,7 +52,7 @@ func TestOtherTransactionIsValid(t *testing.T) {
 	ctx := val.ClientCtx
 	addr := GenerateAddressesInKeyring(ctx.Keyring, 1)
 
-	//init balances
+	// init balances
 	executeOtherSendTx(ctx, net, net.Validators[0].Address.String(), addr[0].String())
 	net.WaitForNextBlock()
 
@@ -70,7 +70,6 @@ func TestOtherTransactionIsValid(t *testing.T) {
 
 	require.NoError(t, ctx.Codec.UnmarshalJSON(validRes.Bytes(), &resp))
 	require.Equal(t, successCode, resp.Code)
-
 }
 
 func CommonArgs(net *network.Network) []string {

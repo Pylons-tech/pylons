@@ -92,6 +92,7 @@ func (suite *IntegrationTestSuite) TestMsgServerappleInAppPurchaseGetCoins() {
 			if tc.err != nil {
 				require.ErrorIs(err, tc.err)
 			} else {
+				require.NoError(err)
 				addr, _ := sdk.AccAddressFromBech32(tc.request.Creator)
 				balance := bk.SpendableCoins(ctx, addr)
 				require.True(balance.IsEqual(tc.balance))

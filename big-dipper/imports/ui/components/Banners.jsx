@@ -1,6 +1,7 @@
 import React from 'react';
 import { HTTP } from 'meteor/http'
 import { Container, Row, Col } from 'reactstrap';
+import { sanitizeUrl } from '@braintree/sanitize-url';
 
 export default class Banners extends React.Component {
     constructor(props) {
@@ -11,7 +12,7 @@ export default class Banners extends React.Component {
     }
     componentDidMount(){
         const url = this.props.url;
-        HTTP.get(url, (error, result) => {
+        HTTP.get(sanitizeUrl(url), (error, result) => {
             if (result.statusCode == 200){
                 let banners = JSON.parse(result.content);
                 if (banners.banners && (banners.banners.length > 0)){
