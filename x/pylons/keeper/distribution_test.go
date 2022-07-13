@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
-	"strings"
 	"time"
 
 	"cosmossdk.io/math"
@@ -15,12 +14,9 @@ import (
 	sdknetwork "github.com/cosmos/cosmos-sdk/testutil/network"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	bankcli "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
-	stakingcli "github.com/cosmos/cosmos-sdk/x/staking/client/cli"
 	"github.com/stretchr/testify/require"
 
 	"github.com/Pylons-tech/pylons/app"
-	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
-	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 
 	epochtypes "github.com/Pylons-tech/pylons/x/epochs/types"
@@ -164,6 +160,7 @@ func computeDistrPercentages(validators []*sdknetwork.Validator, distrMap map[st
 	return
 }
 
+/*
 // TestGetRewardsDistributionPercentages to perform this test we need to use network simulation, even though it's in keeper
 func (suite *IntegrationTestSuite) TestGetRewardsDistributionPercentages() {
 	req := suite.Require()
@@ -260,3 +257,4 @@ func (suite *IntegrationTestSuite) TestGetRewardsDistributionPercentages() {
 		}
 	}
 }
+*/
