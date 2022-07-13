@@ -1,0 +1,112 @@
+{
+    "cookbookID": "cookbookLoudTest",
+    "ID": "LOUDFightDragonWithAngelSword",
+    "name": "LOUD-Fight-Dragon-With-Angel-Sword-Recipe",
+    "description": "creates a fight instance with a dragon requiring a character and a angel sword",
+    "version": "v0.0.4",
+    "coinInputs": [],
+    "itemInputs": [
+        {
+            "ID": "character",
+            "Doubles": [
+                {
+                    "Key": "XP",
+                    "MinValue": "1.0",
+                    "MaxValue": "10000000.0"
+                }
+            ],
+            "Longs": [
+                {
+                    "Key": "level",
+                    "MinValue": 1,
+                    "MaxValue": 10000000
+                }
+            ],
+            "Strings": [
+                {
+                    "Key": "entityType",
+                    "Value": "character"
+                }
+            ]
+        },
+        {
+            "ID": "angel_sword_lv1",
+            "Doubles": [
+                {
+                    "Key": "attack",
+                    "MinValue": "1.0",
+                    "MaxValue": "10000000.0"
+                }
+            ],
+            "Longs": [
+                {
+                    "Key": "level",
+                    "MinValue": 1,
+                    "MaxValue": 10000000
+                }
+            ],
+            "Strings": [
+                {
+                    "Key": "name",
+                    "Value": "Angel sword"
+                }
+            ]
+        }
+    ],
+    "entries": {
+        "coinOutputs": [
+            {
+                "ID": "coin_reward",
+                "coin": {
+                    "denom": "loudCoin",
+                    "amount": "30"
+                }
+            }
+        ],
+        "itemOutputs": [],
+        "itemModifyOutputs": [
+            {
+                "ID": "character_after_defeat_dragon",
+                "itemInputRef": "character",
+                "doubles": [
+                    {
+                        "key": "XP",
+                        "weightRanges": [],
+                        "program": "XP + double(15 * 3)"
+                    }
+                ],
+                "longs": [
+                    {
+                        "key": "level",
+                        "weightRanges": [],
+                        "program": "level + int(XP / double(level * level * level + 5))"
+                    }
+                ],
+                "strings": [],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+        ]
+    },
+    "outputs": [
+        {
+            "weight": 3
+        },
+        {
+            "entryIDs": [
+                "coin_reward",
+                "character_after_defeat_dragon"
+            ],
+            "weight": 24
+        }
+    ],
+    "blockInterval": 0,
+    "costPerBlock": {
+        "denom": "upylon",
+        "amount": "1000000"
+    },
+    "enabled": true,
+    "extraInfo": "extraInfo"
+}

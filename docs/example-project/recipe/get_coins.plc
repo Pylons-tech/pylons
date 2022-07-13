@@ -1,0 +1,24 @@
+{
+    "cookbookID": "cookbookLoudTest",
+
+    "description": "Gives a player 10000 loudCoin",
+    "version": "v0.0.1",
+    "coinInputs": [],
+    "itemInputs": [],
+    "entries": "nar",
+    "outputs": [
+        {
+            "entryIDs": [
+                "loudCoin"
+            ],
+            "weight": 1
+        }
+    ],
+    "blockInterval": 0,
+    "costPerBlock": {
+        "denom": "upylon",
+        "amount": "1000000"
+    },
+    "enabled": true,
+    "extraInfo": "extraInfo"
+}

@@ -1,0 +1,121 @@
+{
+    "cookbookID": "cookbookLoudTest",
+    "ID": "LOUDFightTrollWithAngelSword",
+    "name": "LOUD-Fight-Troll-With-Angel-Sword-Recipe",
+    "description": "creates a fight instance with a troll requiring a character and a angel sword",
+    "version": "v0.0.4",
+    "coinInputs": [],
+    "itemInputs": [
+        {
+            "ID": "character",
+            "Doubles": [
+                {
+                    "Key": "XP",
+                    "MinValue": "1.0",
+                    "MaxValue": "10000000.0"
+                }
+            ],
+            "Longs": [
+                {
+                    "Key": "level",
+                    "MinValue": 1,
+                    "MaxValue": 10000000
+                },
+                {
+                    "Key": "foeState_01",
+                    "MinValue": 0,
+                    "MaxValue": 0
+                }
+            ],
+            "Strings": [
+                {
+                    "Key": "entityType",
+                    "Value": "character"
+                }
+            ]
+        },
+        {
+            "ID": "angel_sword_lv1",
+            "Doubles": [
+                {
+                    "Key": "attack",
+                    "MinValue": "1.0",
+                    "MaxValue": "10000000.0"
+                }
+            ],
+            "Longs": [
+                {
+                    "Key": "level",
+                    "MinValue": 1,
+                    "MaxValue": 10000000
+                }
+            ],
+            "Strings": [
+                {
+                    "Key": "name",
+                    "Value": "Angel sword"
+                }
+            ]
+        }
+    ],
+    "entries": {
+        "coinOutputs": [
+            {
+                "ID": "coin_reward",
+                "coin": {
+                    "denom": "loudCoin",
+                    "amount": "20"
+                }
+            }
+        ],
+        "itemModifyOutputs": [
+            {
+                "ID": "character_after_defeat_troll",
+                "itemInputRef": "character",
+                "doubles": [
+                    {
+                        "key": "XP",
+                        "weightRanges": [],
+                        "program": "XP + double(15 * 3)"
+                    }
+                ],
+                "longs": [
+                    {
+                        "key": "level",
+                        "weightRanges": [],
+                        "program": "level + int(XP / double(level * level + 5))"
+                    },
+                    {
+                        "Key": "foeState_01",
+                        "weightRanges": [],
+                        "program": "1"
+                    }
+                ],
+                "strings": [],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+        ]
+    },
+    "outputs": [
+        {
+            "weight": 3
+        },
+        {
+            "entryIDs": [
+                "coin_reward",
+                "character_after_defeat_troll"
+            ],
+            "weight": 3
+        }
+    ],
+    "blockInterval": 0,
+    "costPerBlock": {
+        "denom": "upylon",
+        "amount": "1000000"
+    },
+    "enabled": true,
+    "extraInfo": "extraInfo"
+}
