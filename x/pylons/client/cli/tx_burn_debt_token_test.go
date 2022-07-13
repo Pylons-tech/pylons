@@ -7,6 +7,8 @@ import (
 
 	"testing"
 
+	"github.com/cosmos/cosmos-sdk/client"
+
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -101,7 +103,7 @@ func TestCmdBurnDebtToken(t *testing.T) {
 					ProcessorName: "Test",
 					Address:       types.GenTestBech32FromString("test"),
 					Amount:        sdk.NewInt(1100), // 1100node0token
-					Signature:     genTestRedeemInfoSignature("testId", address, sdk.NewInt(1000), types.DefaultTestPrivateKey),
+					Signature:     genTestRedeemInfoSignature("testId", address, sdk.NewInt(1000), types.Def),
 				},
 				sender: address,
 			},
@@ -131,4 +133,8 @@ func TestCmdBurnDebtToken(t *testing.T) {
 			}
 		})
 	}
+}
+
+func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.Network) {
+	panic("unimplemented")
 }
