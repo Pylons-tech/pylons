@@ -1,25 +1,5 @@
 package simapp
 
-import (
-	"encoding/json"
-	"fmt"
-	"math/rand"
-	"os"
-	"testing"
-
-	"github.com/Pylons-tech/pylons/app"
-	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/libs/log"
-	dbm "github.com/tendermint/tm-db"
-
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	sdkSimapp "github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/cosmos/cosmos-sdk/simapp/helpers"
-	"github.com/cosmos/cosmos-sdk/store"
-	simulation2 "github.com/cosmos/cosmos-sdk/types/simulation"
-	"github.com/cosmos/cosmos-sdk/x/simulation"
-)
-
 // Profile with:
 // /usr/local/go/bin/go test -benchmem -run=^$ github.com/Pylons-tech/pylons/simapp -bench ^BenchmarkFullAppSimulation$ -Commit=true -cpuprofile cpu.out
 /*
@@ -51,6 +31,7 @@ func TestFullAppSimulation(t *testing.T) {
 }
 */
 
+/*
 func fullAppSimulation(tb testing.TB, is_testing bool) {
 	config, db, dir, logger, _, err := sdkSimapp.SetupSimulation("goleveldb-app-sim", "Simulation")
 	if err != nil {
@@ -89,7 +70,7 @@ func fullAppSimulation(tb testing.TB, is_testing bool) {
 		interBlockCacheOpt(),
 		fauxMerkleModeOpt)
 
-/*
+
 	// Run randomized simulation:
 	_, simParams, simErr := simulation.SimulateFromSeed(
 		tb,
