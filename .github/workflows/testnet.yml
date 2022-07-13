@@ -31,4 +31,4 @@ jobs:
         run: |
           cd cmd/*
           go build .
-          timeout 120 ./pylonsd testnet start --enable-logging 
+          timeout 240 ./pylonsd testnet start --enable-logging 
