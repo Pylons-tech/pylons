@@ -6,29 +6,8 @@
     "version": "v0.0.4",
     "coinInputs": [],
     "itemInputs": [
-        {
-            "ID": "character",
-            "Doubles": [
-                {
-                    "Key": "XP",
-                    "MinValue": "1.0",
-                    "MaxValue": "10000000.0"
-                }
-            ],
-            "Longs": [
-                {
-                    "Key": "level",
-                    "MinValue": 1,
-                    "MaxValue": 10000000
-                }
-            ],
-            "Strings": [
-                {
-                    "Key": "entityType",
-                    "Value": "character"
-                }
-            ]
-        },
+#include character_input
+		,
         {
             "ID": "iron_sword_lv1",
             "Doubles": [

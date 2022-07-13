@@ -1,0 +1,27 @@
+"ID": "character",
+            "Doubles": [
+                {
+                    "Key": "XP",
+                    "MinValue": "1.0",
+                    "MaxValue": "10000000.0"
+                }
+            ],
+            "Longs": [
+                {
+                    "Key": "level",
+                    "MinValue": 1,
+                    "MaxValue": 10000000
+                },
+                {
+                    "Key": "foeState_01",
+                    "MinValue": 0,
+                    "MaxValue": 0
+                }
+            ],
+            "Strings": [
+                {
+                    "Key": "entityType",
+                    "Value": "character"
+                }
+            ]
+        }
