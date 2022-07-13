@@ -13,6 +13,7 @@ import (
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 
@@ -29,14 +30,14 @@ func TestSingleItemModifyOutput(t *testing.T) {
 	execCount := 0
 	itemCount := 0
 
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
 
 	basicTradePercentage, err := sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 
 	cookbookID := "COOKBOOK_ID"
 	cbFields := []string{
@@ -162,7 +163,7 @@ func TestSingleItemModifyOutput(t *testing.T) {
 
 	// Execute recipe and check item
 	// execute recipe to mint
-	commonExec := CommonArgs(address, net)
+	commonExec := util.CommonArgs(address, net)
 	args = []string{cookbookID, mintItemRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, commonExec...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)

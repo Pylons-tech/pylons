@@ -13,6 +13,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -112,12 +113,12 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	var err error
 
 	// getting address and creating account from the created helper function
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 
-	traderCommon := CommonArgs(val.Address.String(), net)
+	traderCommon := util.CommonArgs(val.Address.String(), net)
 
-	fulFillercommon := CommonArgs(address, net)
+	fulFillercommon := util.CommonArgs(address, net)
 
 	cookbookID := "testCookbookID"
 	itemRecipeID := "itemRecipeID"

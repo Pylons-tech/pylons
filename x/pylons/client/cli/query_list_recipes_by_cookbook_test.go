@@ -9,12 +9,13 @@ import (
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 	"google.golang.org/grpc/status"
 
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func TestListRecipesByCookbook(t *testing.T) {
-	net, objs, _ := networkWithRecipeObjects(t, 2)
+	net, objs, _ := util.NetworkWithRecipeObjects(t, 2)
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),

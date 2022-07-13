@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cast"
 	"github.com/stretchr/testify/require"
 
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -27,7 +28,7 @@ func TestSendItems(t *testing.T) {
 	itemMutableStringField := "itemMutableStringField"
 	itemMutableStringValue := "itemMutableStringValue"
 
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 
 	cbFields := []string{
@@ -119,7 +120,7 @@ func TestSendItems(t *testing.T) {
 		"extraInfo",
 	}
 
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 
 	// create cookbook
 	args := []string{cookbookID}
@@ -138,7 +139,7 @@ func TestSendItems(t *testing.T) {
 	numTests := 1
 	executedItemRefs := make([]string, numTests)
 
-	commonExe := CommonArgs(address, net)
+	commonExe := util.CommonArgs(address, net)
 	for i := 0; i < numTests; i++ {
 		// create execution
 		args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input

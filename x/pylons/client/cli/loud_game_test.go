@@ -16,6 +16,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 )
@@ -47,7 +48,7 @@ func TestLOUDBasic(t *testing.T) {
 	ctx := val.ClientCtx
 	var err error
 
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 
 	simInfo := &loudBasicSim{
@@ -68,8 +69,8 @@ func TestLOUDBasic(t *testing.T) {
 	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 
-	simInfo.executorCommon = CommonArgs(address, net)
-	simInfo.common = CommonArgs(val.Address.String(), net)
+	simInfo.executorCommon = util.CommonArgs(address, net)
+	simInfo.common = util.CommonArgs(val.Address.String(), net)
 
 	createLOUDCookbook(t, simInfo)
 	createCharacterRecipe(t, simInfo)

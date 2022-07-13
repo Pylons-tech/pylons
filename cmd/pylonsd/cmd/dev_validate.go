@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func CmdDevValidate() *cobra.Command {
+func DevValidate() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "validate [path]",
 		Short: "Validates all Pylons recipe or cookbook files in the provided path",

@@ -13,6 +13,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 )
@@ -23,7 +24,7 @@ func TestCreateAccount(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
-	accs := GenerateAddressesInKeyring(val.ClientCtx.Keyring, 2)
+	accs := util.GenerateAddressesInKeyring(val.ClientCtx.Keyring, 2)
 
 	for _, tc := range []struct {
 		desc     string
@@ -135,7 +136,7 @@ func TestUpdateAccount(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
-	accs := GenerateAddressesInKeyring(val.ClientCtx.Keyring, 2)
+	accs := util.GenerateAddressesInKeyring(val.ClientCtx.Keyring, 2)
 	common := []string{
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),

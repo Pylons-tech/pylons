@@ -15,6 +15,7 @@ import (
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/stretchr/testify/require"
 
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 )
 
@@ -25,7 +26,7 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
 
@@ -44,7 +45,7 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	}
 
 	// Common arguments
-	common := CommonArgs(val.Address.String(), net)
+	common := util.CommonArgs(val.Address.String(), net)
 	args := []string{cookbookID}
 	args = append(args, cbFields...)
 	args = append(args, common...)
@@ -83,7 +84,7 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	common = CommonArgs(address, net)
+	common = util.CommonArgs(address, net)
 	args = []string{cookbookID, recipeID, "1", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err2 := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
