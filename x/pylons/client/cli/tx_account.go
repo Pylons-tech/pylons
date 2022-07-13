@@ -50,7 +50,7 @@ pylonsd tx pylons create-account john app-check-token --from pylo1tqqp6wmctv0yka
 				return err
 			}
 
-			msg := types.NewMsgCreateAccount(clientCtx.GetFromAddress().String(), username, token, true)
+			msg := types.NewMsgCreateAccount(clientCtx.GetFromAddress().String(), username, token)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -61,7 +61,6 @@ pylonsd tx pylons create-account john app-check-token --from pylo1tqqp6wmctv0yka
 	}
 
 	flags.AddTxFlagsToCmd(cmd)
-	cmd.Flags().Bool("no-app-check", true, "will ignore app check token verification")
 
 	return cmd
 }

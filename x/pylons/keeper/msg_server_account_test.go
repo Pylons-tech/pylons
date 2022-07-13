@@ -18,6 +18,7 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 	wctx := sdk.WrapSDKContext(ctx)
 
 	addr := types.GenTestBech32List(2)
+	types.UpdateAppCheckFlagTest(types.FlagTrue)
 
 	for _, tc := range []struct {
 		desc    string
@@ -49,6 +50,7 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 			}
 		})
 	}
+	types.UpdateAppCheckFlagTest(types.FlagFalse)
 }
 
 func (suite *IntegrationTestSuite) TestUpdateAccount() {
@@ -60,6 +62,8 @@ func (suite *IntegrationTestSuite) TestUpdateAccount() {
 	wctx := sdk.WrapSDKContext(ctx)
 
 	addr := types.GenTestBech32List(2)
+	types.UpdateAppCheckFlagTest(types.FlagTrue)
+
 	request := &types.MsgCreateAccount{Creator: addr[0], Username: "testUser"}
 	_, err := srv.CreateAccount(wctx, request)
 	require.NoError(err)
@@ -104,4 +108,5 @@ func (suite *IntegrationTestSuite) TestUpdateAccount() {
 			}
 		})
 	}
+	types.UpdateAppCheckFlagTest(types.FlagFalse)
 }

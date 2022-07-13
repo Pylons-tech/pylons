@@ -23,10 +23,8 @@ type JWKRES struct {
 	Key []*JWK `json:"keys"`
 }
 
-var (
-	// ErrKID indicates that the JWT had an invalid kid.
-	ErrKID = errors.New("the JWT has an invalid kid")
-)
+// ErrKID indicates that the JWT had an invalid kid.
+var ErrKID = errors.New("the JWT has an invalid kid")
 
 // Keyfunc matches the signature of github.com/golang-jwt/jwt/v4's jwt.Keyfunc function.
 func (jwk JSONWebKeys) Keyfunc(token *jwt.Token) (interface{}, error) {
@@ -56,17 +54,21 @@ func VerifyAppCheckToken(token string) error {
 
 	if !payload.Valid {
 		return errors.New("invalid token")
-	} else if payload.Header["alg"] != "RS256" {
+	}
+	if payload.Header["alg"] != "RS256" {
 		// Ensure the token's header uses the algorithm RS256
 		return errors.New("invalid algorithm")
-	} else if payload.Header["typ"] != "JWT" {
+	}
+	if payload.Header["typ"] != "JWT" {
 		// Ensure the token's header has type JWT
 		return errors.New("invalid type")
-	} else if !verifyAudClaim(payload.Claims.(jwt.MapClaims)["aud"].([]interface{})) {
+	}
+	if !verifyAudClaim(payload.Claims.(jwt.MapClaims)["aud"].([]interface{})) {
 		// Ensure the token's audience matches your project
 		return errors.New("invalid audience")
-	} else if !strings.Contains(payload.Claims.(jwt.MapClaims)["iss"].(string),
-		"https://firebaseappcheck.googleapis.com/628365338383") {
+	}
+	if !strings.Contains(payload.Claims.(jwt.MapClaims)["iss"].(string),
+		(firebaseURL + projectID)) {
 		// Ensure the token is issued by App Check
 		return errors.New("invalid issuer")
 	}
@@ -75,7 +77,7 @@ func VerifyAppCheckToken(token string) error {
 
 func verifyAudClaim(auds []interface{}) bool {
 	for _, aud := range auds {
-		if aud == "projects/628365338383" {
+		if aud == "projects/"+projectID {
 			return true
 		}
 	}
@@ -117,8 +119,7 @@ func requestJWK() (*JSONWebKeys, error) {
 	// iterate over the json web keys and extract the public key
 	for _, key := range keys.Key {
 		var keyInter interface{}
-		switch key.Kty {
-		case ktyRSA:
+		if key.Kty == ktyRSA {
 			keyInter, err = getRSAKey(key)
 			if err != nil {
 				continue
@@ -161,7 +162,6 @@ func getRSAKey(key *JWK) (publicKey *rsa.PublicKey, err error) {
 	publicKey.N = big.NewInt(0).SetBytes(modulus)
 
 	return publicKey, nil
-
 }
 
 /*

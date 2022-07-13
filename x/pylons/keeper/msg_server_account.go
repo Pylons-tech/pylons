@@ -92,7 +92,7 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 }
 
 func (k msgServer) verifyAppCheck(ctx context.Context, msg *types.MsgCreateAccount) error {
-	if msg.NoAppCheck {
+	if types.DefaultNoAppCheckConfig {
 		return nil
 	}
 	err := types.VerifyAppCheckToken(msg.Token)
