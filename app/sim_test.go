@@ -1,29 +1,14 @@
 package app_test
 
 import (
-	"encoding/json"
-	"fmt"
-	"math/rand"
-	"os"
-	"testing"
-
-	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/cosmos/cosmos-sdk/store"
-	simulation2 "github.com/cosmos/cosmos-sdk/types/simulation"
-	"github.com/cosmos/cosmos-sdk/x/simulation"
-	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/libs/log"
-	dbm "github.com/tendermint/tm-db"
-
-	"github.com/Pylons-tech/pylons/app"
-	pylons "github.com/Pylons-tech/pylons/app"
 )
 
 func init() {
 	simapp.GetSimulatorFlags()
 }
 
+/*
 func TestFullAppSimulation(t *testing.T) {
 	// -Enabled=true -NumBlocks=1000 -BlockSize=200 \
 	// -Period=1 -Commit=true -Seed=57 -v -timeout 24h
@@ -208,3 +193,4 @@ func TestAppStateDeterminism(t *testing.T) {
 		}
 	}
 }
+*/
