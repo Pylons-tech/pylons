@@ -27,7 +27,7 @@ jobs:
 
 # we build and install in case we want to run it or capture an artifact as we do in the step below. 
 # we also start a chain, so that if we can't do that we know we've failed and move on
-      - name: Compile chain
+      - name: testnet
         run: |
           cd cmd/*
           go build .
