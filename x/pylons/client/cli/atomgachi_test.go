@@ -13,6 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/Pylons-tech/pylons/app"
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -41,7 +42,7 @@ func TestAtomgachiBasic(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 	var err error
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 
 	simInfo := &atomgachiBasicSim{
@@ -52,11 +53,12 @@ func TestAtomgachiBasic(t *testing.T) {
 		common:               nil,
 	}
 
+	// checks if the integer has been made correctly from the input string
 	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 
-	simInfo.common = CommonArgs(val.Address.String(), net)
-	simInfo.commonExec = CommonArgs(address, net)
+	simInfo.common = util.CommonArgs(val.Address.String(), net)
+	simInfo.commonExec = util.CommonArgs(address, net)
 
 	createAtomgachiCookbook(t, simInfo)
 	createMintRecipe(t, simInfo)

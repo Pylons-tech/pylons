@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 import { Transactions } from '../../transactions/transactions.js';
 import { Validators } from '../../validators/validators.js';
+import { sanitizeUrl } from '@braintree/sanitize-url';
 
 const AddressLength = 40;
 
@@ -18,7 +19,7 @@ Meteor.methods({
             for (let i in transactions){
                 let url = "";
                 try {
-                    url = API+ '/cosmos/tx/v1beta1/txs/'+transactions[i].txhash;
+                    url = sanitizeUrl(API+ '/cosmos/tx/v1beta1/txs/'+transactions[i].txhash);
                     let response = HTTP.get(url);
                     let tx = JSON.parse(response.content);
 

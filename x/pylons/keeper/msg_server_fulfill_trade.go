@@ -4,6 +4,7 @@ import (
 	"context"
 	"strconv"
 
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -138,16 +139,16 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	}
 
 	// calculate item "weights" as a relative percentage of the total sum of items transferFees
-	inputItemWeights := make([]sdk.Dec, len(matchedInputItems))
+	inputItemWeights := make([]math.Int, len(matchedInputItems))
 	for i, item := range matchedInputItems {
 		transferFee := item.TransferFee[itemInputsTransferFeePermutation[i]]
-		weight := transferFee.Amount.ToDec().Quo(minItemInputsTransferFees.AmountOf(transferFee.Denom).ToDec())
+		weight := transferFee.Amount.Quo(minItemInputsTransferFees.AmountOf(transferFee.Denom))
 		inputItemWeights[i] = weight
 	}
-	outputItemWeights := make([]sdk.Dec, len(outputItems))
+	outputItemWeights := make([]math.Int, len(outputItems))
 	for i, item := range outputItems {
 		transferFee := item.TransferFee[itemOutputsTransferFeePermutation[i]]
-		weight := transferFee.Amount.ToDec().Quo(minItemOutputsTransferFees.AmountOf(transferFee.Denom).ToDec())
+		weight := transferFee.Amount.Quo(minItemOutputsTransferFees.AmountOf(transferFee.Denom))
 		outputItemWeights[i] = weight
 	}
 
@@ -161,13 +162,13 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	coinOutputs := trade.CoinOutputs
 	for i, item := range matchedInputItems {
 		baseItemTransferFee := item.TransferFee[itemInputsTransferFeePermutation[i]]
-		itemTransferFeeAmt := coinOutputs.AmountOf(baseItemTransferFee.Denom).ToDec().Mul(inputItemWeights[i]).RoundInt()
-		tmpCookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.ToDec().Mul(item.TradePercentage).RoundInt())
+		itemTransferFeeAmt := coinOutputs.AmountOf(baseItemTransferFee.Denom).Mul(inputItemWeights[i])
+		tmpCookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, sdk.NewDecFromInt(itemTransferFeeAmt).Mul(item.TradePercentage).RoundInt())
 		if tmpCookbookAmt.Amount.GT(maxTransferFee) {
 			// clamp to maxTransferFee - maxTransferFee and minTransferFee are global (i.e. same for every coin)
 			tmpCookbookAmt.Amount = maxTransferFee
 		}
-		chainAmt := sdk.NewCoin(baseItemTransferFee.Denom, tmpCookbookAmt.Amount.ToDec().Mul(k.ItemTransferFeePercentage(ctx)).RoundInt())
+		chainAmt := sdk.NewCoin(baseItemTransferFee.Denom, sdk.NewDecFromInt(tmpCookbookAmt.Amount).Mul(k.ItemTransferFeePercentage(ctx)).RoundInt())
 		cookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(chainAmt.Amount))
 		transferAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(cookbookAmt.Amount).Sub(chainAmt.Amount))
 		inputChainTotAmt = inputChainTotAmt.Add(chainAmt)
@@ -179,13 +180,13 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	outputCookbookOwnersTotAmtMap := make(map[string]sdk.Coins)
 	for i, item := range outputItems {
 		baseItemTransferFee := item.TransferFee[itemOutputsTransferFeePermutation[i]]
-		itemTransferFeeAmt := coinInputs.AmountOf(baseItemTransferFee.Denom).ToDec().Mul(outputItemWeights[i]).RoundInt()
-		tmpCookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.ToDec().Mul(item.TradePercentage).RoundInt())
+		itemTransferFeeAmt := coinInputs.AmountOf(baseItemTransferFee.Denom).Mul(outputItemWeights[i])
+		tmpCookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, sdk.NewDecFromInt(itemTransferFeeAmt).Mul(item.TradePercentage).RoundInt())
 		if tmpCookbookAmt.Amount.GT(maxTransferFee) {
 			// clamp to maxTransferFee - maxTransferFee and minTransferFee are global (i.e. same for every coin)
 			tmpCookbookAmt.Amount = maxTransferFee
 		}
-		chainAmt := sdk.NewCoin(baseItemTransferFee.Denom, tmpCookbookAmt.Amount.ToDec().Mul(k.ItemTransferFeePercentage(ctx)).RoundInt())
+		chainAmt := sdk.NewCoin(baseItemTransferFee.Denom, sdk.NewDecFromInt(tmpCookbookAmt.Amount).Mul(k.ItemTransferFeePercentage(ctx)).RoundInt())
 		cookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(chainAmt.Amount))
 		transferAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(cookbookAmt.Amount).Sub(chainAmt.Amount))
 		outputChainTotAmt = outputChainTotAmt.Add(chainAmt)

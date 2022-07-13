@@ -30,7 +30,7 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromItem() {
 				Doubles: []types.DoubleKeyValue{
 					{
 						Key:   "XP",
-						Value: sdk.NewDec(1),
+						Value: sdk.OneDec(),
 					},
 					{
 						Key:   "MP",
@@ -173,7 +173,7 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 				Doubles: []types.DoubleKeyValue{
 					{
 						Key:   "doubleParam",
-						Value: sdk.NewDec(0),
+						Value: sdk.ZeroDec(),
 					},
 				},
 				Longs: []types.LongKeyValue{

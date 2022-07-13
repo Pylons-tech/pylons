@@ -13,6 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/Pylons-tech/pylons/app"
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -43,7 +44,7 @@ func TestEaselBasic(t *testing.T) {
 	ctx := val.ClientCtx
 	var err error
 
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 
 	simInfo := &easelBasicSim{
@@ -57,9 +58,9 @@ func TestEaselBasic(t *testing.T) {
 	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 
-	simInfo.executorCommon = CommonArgs(address, net)
+	simInfo.executorCommon = util.CommonArgs(address, net)
 
-	simInfo.common = CommonArgs(val.Address.String(), net)
+	simInfo.common = util.CommonArgs(val.Address.String(), net)
 	createEaselCookbook(t, simInfo)
 	createMintRecipe1(t, simInfo)
 	mintNFT1(t, simInfo)

@@ -16,11 +16,12 @@ import (
 func main() {
 	rootCmd, _ := pyloncmd.NewRootCmd()
 	rootCmd.Short = "Stargate Pylons App"
-	rootCmd.AddCommand(CmdDevValidate())
+	rootCmd.AddCommand(pyloncmd.DevValidate())
+	rootCmd.AddCommand(pyloncmd.DevCreate())
 	rootCmd.AddCommand(pyloncmd.Completion())
 	removeLineBreaksInCobraArgs(rootCmd)
 
-	if err := svrcmd.Execute(rootCmd, app.DefaultNodeHome); err != nil {
+	if err := svrcmd.Execute(rootCmd, "PYLONSD", app.DefaultNodeHome); err != nil {
 		switch e := err.(type) {
 		case server.ErrorCode:
 			os.Exit(e.Code)

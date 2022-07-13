@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strconv"
 	"testing"
-	"time"
 
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 
 	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -16,6 +16,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 )
@@ -47,7 +48,7 @@ func TestLOUDBasic(t *testing.T) {
 	ctx := val.ClientCtx
 	var err error
 
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 
 	simInfo := &loudBasicSim{
@@ -55,7 +56,7 @@ func TestLOUDBasic(t *testing.T) {
 		ctx:                    ctx,
 		basicTradePercentage:   sdk.Dec{},
 		err:                    nil,
-		common:                 nil,
+		common:                 []string{fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastAsync)},
 		execCount:              0,
 		itemCount:              0,
 		characterID:            "",
@@ -64,11 +65,12 @@ func TestLOUDBasic(t *testing.T) {
 		buyCopperSwordRecipeID: "",
 	}
 
+	// checks to see if the integer is made correctly from the string
 	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 
-	simInfo.executorCommon = CommonArgs(address, net)
-	simInfo.common = CommonArgs(val.Address.String(), net)
+	simInfo.executorCommon = util.CommonArgs(address, net)
+	simInfo.common = util.CommonArgs(val.Address.String(), net)
 
 	createLOUDCookbook(t, simInfo)
 	createCharacterRecipe(t, simInfo)
@@ -188,12 +190,9 @@ func createCharacter(t *testing.T, simInfo *loudBasicSim) {
 
 	// simulate waiting for later block heights
 	height, err := simInfo.net.LatestHeight()
-	targetHeight := height + 1
 	// build execID from the execution height
 	execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(simInfo.execCount)
 	simInfo.execCount++
-	require.NoError(t, err)
-	_, err = simInfo.net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
 	require.NoError(t, err)
 
 	// check the execution
@@ -269,12 +268,9 @@ func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 
 	// simulate waiting for later block heights
 	height, err := simInfo.net.LatestHeight()
-	targetHeight := height + 1
 	// build execID from the execution height
 	execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(simInfo.execCount)
 	simInfo.execCount++
-	require.NoError(t, err)
-	_, err = simInfo.net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
 	require.NoError(t, err)
 
 	// check the execution
@@ -371,12 +367,9 @@ func buyCopperSword(t *testing.T, simInfo *loudBasicSim) {
 
 	// simulate waiting for later block heights
 	height, err := simInfo.net.LatestHeight()
-	targetHeight := height + 1
 	// build execID from the execution height
 	execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(simInfo.execCount)
 	simInfo.execCount++
-	require.NoError(t, err)
-	_, err = simInfo.net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
 	require.NoError(t, err)
 
 	// check the execution
@@ -429,7 +422,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 			Doubles: []types.DoubleInputParam{
 				{
 					Key:      "attack",
-					MinValue: sdk.NewDec(1),
+					MinValue: sdk.OneDec(),
 					MaxValue: sdk.NewDec(10000000),
 				},
 			},
@@ -626,12 +619,9 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 
 		// simulate waiting for later block heights
 		height, err := simInfo.net.LatestHeight()
-		targetHeight := height + 1
 		// build execID from the execution height
 		execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(simInfo.execCount)
 		simInfo.execCount++
-		require.NoError(t, err)
-		_, err = simInfo.net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
 		require.NoError(t, err)
 
 		// check the execution

@@ -93,7 +93,7 @@ func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, e
 			if err != nil {
 				return m, err
 			}
-			valDec, err = sdk.NewDecFromStr(fmt.Sprintf("%v", val))
+			valDec, _ = sdk.NewDecFromStr(fmt.Sprintf("%v", val))
 		} else {
 			valDec, err = DoubleWeightTable(param.WeightRanges).Generate()
 		}

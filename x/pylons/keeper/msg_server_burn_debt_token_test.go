@@ -144,7 +144,7 @@ func (suite *IntegrationTestSuite) TestBurnDebtToken() {
 			if !tc.wantErr {
 				suite.Require().NoError(err)
 
-				//Check balances
+				// Check balances
 				userBalances := bk.SpendableCoins(suite.ctx, types.GenAccAddressFromString("test"))
 				suite.Require().True(userBalances.IsEqual(sdk.NewCoins(sdk.NewCoin(types.StripeCoinDenom, sdk.NewInt(0)))))
 

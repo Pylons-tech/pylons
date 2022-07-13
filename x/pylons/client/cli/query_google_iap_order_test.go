@@ -10,12 +10,13 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func TestShowGoogleIAPOrder(t *testing.T) {
-	net, objs := networkWithGoogleIAPOrderObjects(t, 2)
+	net, objs := util.NetworkWithGoogleIAPOrderObjects(t, 2)
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),

@@ -12,12 +12,13 @@ import (
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 	"google.golang.org/grpc/status"
 
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func TestCmdListExecutionsByRecipe(t *testing.T) {
-	net, executions := networkWithExecutionObjects(t, 2)
+	net, executions := util.NetworkWithExecutionObjects(t, 2)
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
