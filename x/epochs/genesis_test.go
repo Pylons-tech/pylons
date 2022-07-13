@@ -1,17 +1,6 @@
 package epochs_test
 
-import (
-	"testing"
-	"time"
-
-	"github.com/stretchr/testify/require"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-
-	simapp "github.com/Pylons-tech/pylons/app"
-	"github.com/Pylons-tech/pylons/x/epochs"
-	"github.com/Pylons-tech/pylons/x/epochs/types"
-)
-
+/*
 func TestEpochsExportGenesis(t *testing.T) {
 	app := simapp.Setup(false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
@@ -102,3 +91,4 @@ func TestEpochsInitGenesis(t *testing.T) {
 	require.Equal(t, epochInfo.CurrentEpochStartTime.UTC().String(), time.Time{}.String())
 	require.Equal(t, epochInfo.EpochCountingStarted, true)
 }
+*/
