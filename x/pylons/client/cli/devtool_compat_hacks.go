@@ -21,13 +21,12 @@ func HandleAlternativeContextForCommand(cmd *cobra.Command) (*client.Context, er
 		if altCtx != nil {
 			c := altCtx.WithSkipConfirmation(ForceSkipConfirm)
 			return &c, nil
-		} else {
-			return nil, errors.New("No alternative context set")
 		}
-	} else {
-		c, err := client.GetClientTxContext(cmd)
-		return &c, err
+		return nil, errors.New("no alternative context set")
+
 	}
+	c, err := client.GetClientTxContext(cmd)
+	return &c, err
 }
 
 func SetAlternativeContext(ctx client.Context) {
