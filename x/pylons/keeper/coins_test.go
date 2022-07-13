@@ -101,14 +101,14 @@ func (suite *IntegrationTestSuite) TestMintCreditToAddr() {
 	addrString := types.GenTestBech32FromString("test")
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 
-	amt := sdk.NewInt(100)
+	amt := sdk.NewDec(100)
 	// account for network fees
-	burnAmt := amt.ToDec().Mul(types.DefaultProcessorPercentage).RoundInt()
-	feesAmt := amt.ToDec().Mul(types.DefaultValidatorsPercentage).RoundInt()
+	burnAmt := amt.Mul(types.DefaultProcessorPercentage)
+	feesAmt := amt.Mul(types.DefaultValidatorsPercentage)
 
-	mintCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amt))
-	burnCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, burnAmt))
-	feesCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, feesAmt))
+	mintCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amt.RoundInt()))
+	burnCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, burnAmt.RoundInt()))
+	feesCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, feesAmt.RoundInt()))
 
 	// Mint credits to account
 	err := k.MintCreditToAddr(ctx, addr, mintCoins, burnCoins, feesCoins)
@@ -122,7 +122,15 @@ func (suite *IntegrationTestSuite) TestMintCreditToAddr() {
 	feeCollectorBalances := bk.SpendableCoins(ctx, feeCollectorAddr)
 	userBalance := bk.SpendableCoins(ctx, addr)
 
-	require.True(userBalance.IsEqual(mintCoins.Sub(burnCoins).Sub(feesCoins)))
+	for _, c := range burnCoins {
+		mintCoins.Sub(c)
+	}
+
+	for _, c := range feesCoins {
+		mintCoins.Sub(c)
+	}
+
+	require.True(userBalance.IsEqual(mintCoins))
 	require.True(processorBalances.IsEqual(sdk.Coins{}))
 	require.True(feeCollectorBalances.IsEqual(feesCoins))
 }
@@ -141,13 +149,13 @@ func (suite *IntegrationTestSuite) TestSendRewardsFromFeeCollector() {
 	feeCollectorAddr := ak.GetModuleAddress(types.FeeCollectorName)
 
 	// First mint credits
-	amt := sdk.NewInt(100)
-	burnAmt := amt.ToDec().Mul(types.DefaultProcessorPercentage).RoundInt()
-	feesAmt := amt.ToDec().Mul(types.DefaultValidatorsPercentage).RoundInt()
+	amt := sdk.NewDec(100)
+	burnAmt := amt.Mul(types.DefaultProcessorPercentage)
+	feesAmt := amt.Mul(types.DefaultValidatorsPercentage)
 
-	mintCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amt))
-	burnCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, burnAmt))
-	feesCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, feesAmt))
+	mintCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amt.RoundInt()))
+	burnCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, burnAmt.RoundInt()))
+	feesCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, feesAmt.RoundInt()))
 
 	err := k.MintCreditToAddr(ctx, addr, mintCoins, burnCoins, feesCoins)
 	require.NoError(err)

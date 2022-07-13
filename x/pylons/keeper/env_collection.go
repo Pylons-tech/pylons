@@ -17,7 +17,7 @@ func (k Keeper) NewCelEnvCollectionFromItem(ctx sdk.Context, recipeID, tradeID s
 	variables := types.BasicVariables(ctx.BlockHeight(), recipeID, tradeID)
 	varDefs, variables = types.AddVariableFromItem(varDefs, variables, "", item) // HP, level, attack
 
-	funcs := cel.Functions()
+	funcs := cel.Functions() //nolint:staticcheck // TODO: FIX THIS VIA A REFACTOR OF THIS LINE, WHICH WILL INVOLVE MORE CODE.
 
 	env, err := cel.NewEnv(
 		cel.Declarations(
@@ -58,7 +58,7 @@ func (k Keeper) NewCelEnvCollectionFromRecipe(ctx sdk.Context, pendingExecution 
 		}
 	}
 
-	funcs := cel.Functions()
+	funcs := cel.Functions() //nolint:staticcheck // TODO: FIX THIS VIA A REFACTOR OF THIS LINE, WHICH WILL REQUIRE MORE CODE
 
 	env, err := cel.NewEnv(
 		cel.Declarations(

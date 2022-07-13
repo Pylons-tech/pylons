@@ -12,12 +12,13 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func TestShowPaymentInfo(t *testing.T) {
-	net, objs := networkWithPaymentInfoObjects(t, 2)
+	net, objs := util.NetworkWithPaymentInfoObjects(t, 2)
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
@@ -63,7 +64,7 @@ func TestShowPaymentInfo(t *testing.T) {
 }
 
 func TestListPaymentInfo(t *testing.T) {
-	net, objs := networkWithPaymentInfoObjects(t, 5)
+	net, objs := util.NetworkWithPaymentInfoObjects(t, 5)
 	ctx := net.Validators[0].ClientCtx
 	request := func(next []byte, offset, limit uint64, total bool) []string {
 		args := []string{

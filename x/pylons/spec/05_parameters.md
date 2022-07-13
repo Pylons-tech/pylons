@@ -6,18 +6,18 @@ order: 5
 
 The pylons module contains the following parameters:
 
-| Key                                   | Type          | Example                          |
-| ------------------------------------- | ------------- | -------------------------------- |
-| CoinIssuers                           | []CoinIssuer  |(see below)                       | 
-| RecipeFeePercentage                    |sdk.Dec       | 10.0                             |
-| ItemTransferFeePercentage             | sdk.Dec       | 20.0                             |
-| UpdateItemStringFee                   | sdk.Coin      | {"denom": "upylon", "amount", 10}                               |
-| UpdateUsernameFee                   | sdk.Coin      | {"denom": "upylon", "amount", 10}                               |
-| MinTransferFee                        | sdk.Int       | 20                               |
-| MaxTransferFee                        | sdk.Int       | 20                               |
-| PaymentProcessors                     | []PaymentProcessor| (see below)                  |
-| DistrEpochIdentifier                  | string         | "day"                           |
-| EngineVersion                         | uint64         | 1                               |
+| Key                                   | Type          | Example                           |
+| ------------------------------------- | ------------- | --------------------------------- |
+| CoinIssuers                           | []CoinIssuer  |(see below)                        | 
+| RecipeFeePercentage                   | math.Int       | 10.0                             |
+| ItemTransferFeePercentage             | math.Int       | 20.0                             |
+| UpdateItemStringFee                   | sdk.Coin      | {"denom": "upylon", "amount", 10} |
+| UpdateUsernameFee                     | sdk.Coin      | {"denom": "upylon", "amount", 10} |
+| MinTransferFee                        | math.Int       | 20                               |
+| MaxTransferFee                        | math.Int       | 20                               |
+| PaymentProcessors                     | []PaymentProcessor| (see below)                   |
+| DistrEpochIdentifier                  | string         | "day"                            |
+| EngineVersion                         | uint64         | 1                                |
 
 ## CoinIssuers
 
@@ -97,7 +97,7 @@ Example:
 
 ```go
 	DefaultProcessorPercentage  = sdk.ZeroDec()
-    DefaultValidatorsPercentage = sdk.MustNewDecFromStr("0.003")
+    DefaultValidatorsPercentage, _ = math.NewIntFromString("0.003")
     DefaultPylonsIncPubKey      = "EVK1dqjD6K8hGylacMpWAa/ru/OnWUDtCZ+lPkv2TTA=" // this is a testing key, do not use in production!
     DefaultPaymentProcessors    = []PaymentProcessor{
         {

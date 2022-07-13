@@ -18,4 +18,3 @@ message CreatePaymentAccount {
   string token = 2;
   string signature = 3;
 }
-
