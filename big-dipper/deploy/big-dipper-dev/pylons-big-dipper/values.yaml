@@ -34,4 +34,4 @@ resources: {}
 
 
 host: wallet.pylons.tech
-mongoURL: mongoUrlVal
+mongoURL: mongodb://devops:nKH.%3DXdYp%23-ECw%2C%3DgW@34.105.11.201:27017/test?serverSelectionTimeoutMS=5000&connectTimeoutMS=10000&authSource=admin&authMechanism=SCRAM-SHA-256

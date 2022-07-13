@@ -99,8 +99,8 @@ func DefaultConfig() network.Config {
 			)
 		},
 		GenesisState:    genState,
-		TimeoutCommit:   2 * time.Second,
-		ChainID:         "chain-" + tmrand.Str(6),
+		TimeoutCommit:   0 * time.Second,
+		ChainID:         "chain-" + tmrand.NewRand().Str(6),
 		NumValidators:   1,
 		BondDenom:       sdk.DefaultBondDenom,
 		MinGasPrices:    fmt.Sprintf("0%s", sdk.DefaultBondDenom),

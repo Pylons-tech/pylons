@@ -59,6 +59,26 @@ updateTransactions = () => {
     })
 }
 
+upsertSales = () => {
+    Meteor.call('Analytics.upsertSales', (error, result) => {
+        if (error) {
+            console.log("Upsert Sales Failed: %o", error);
+        } else {
+            console.log("Upsert Sales Success");
+        }
+    })
+}
+
+upsertListings = () => {
+    Meteor.call('Analytics.upsertListings', (error, result) => {
+        if (error) {
+            console.log("Upsert Listing Failed: %o", error);
+        } else {
+            console.log("Upsert Listing Success");
+        }
+    })
+}
+
 getConsensusState = () => {
     Meteor.call('chain.getConsensusState', (error, result) => {
         if (error) {
@@ -267,6 +287,8 @@ Meteor.startup(async function() {
 
         timerTransactions = Meteor.setInterval(function() {
             updateTransactions();
+            upsertSales();
+            upsertListings();
         }, Meteor.settings.params.transactionsInterval);
 
         timerChain = Meteor.setInterval(function() {
