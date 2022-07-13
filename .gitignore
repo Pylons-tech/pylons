@@ -6,6 +6,7 @@
 *.iml
 .dir-locals.el
 .vscode
+.testnets
 
 # starport generated folders
 ./vue/
