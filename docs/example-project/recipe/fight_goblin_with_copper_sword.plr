@@ -8,29 +8,7 @@
     "itemInputs": [
 #include character_input
 		,
-        {
-            "ID": "copper_sword_lv1",
-            "Doubles": [
-                {
-                    "Key": "attack",
-                    "MinValue": "1.0",
-                    "MaxValue": "10000000.0"
-                }
-            ],
-            "Longs": [
-                {
-                    "Key": "level",
-                    "MinValue": 1,
-                    "MaxValue": 1
-                }
-            ],
-            "Strings": [
-                {
-                    "Key": "name",
-                    "Value": "Copper sword"
-                }
-            ]
-        }
+#include copper_sword_input
     ],
     "entries": {
         "coinOutputs": [

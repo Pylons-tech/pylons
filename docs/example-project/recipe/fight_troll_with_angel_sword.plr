@@ -8,29 +8,7 @@
     "itemInputs": [
 #include character_input
 		,
-        {
-            "ID": "angel_sword_lv1",
-            "Doubles": [
-                {
-                    "Key": "attack",
-                    "MinValue": "1.0",
-                    "MaxValue": "10000000.0"
-                }
-            ],
-            "Longs": [
-                {
-                    "Key": "level",
-                    "MinValue": 1,
-                    "MaxValue": 10000000
-                }
-            ],
-            "Strings": [
-                {
-                    "Key": "name",
-                    "Value": "Angel sword"
-                }
-            ]
-        }
+#include angel_sword_input
     ],
     "entries": {
         "coinOutputs": [
