@@ -13,9 +13,7 @@ jobs:
       matrix:
         arch: [amd64, arm64]
         targetos: [darwin, linux]
-        include:
-          - targetos: windows
-            arch: amd64
+
 
     name: pylons ${{ matrix.arch }} for ${{ matrix.targetos }}
     steps:
