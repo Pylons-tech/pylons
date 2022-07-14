@@ -112,6 +112,10 @@ func (msg *MsgUpdateCookbook) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
+	if !ValidatedDenom(msg.Id) {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid cookbook denom can only contain a-z A-Z 0-9 '-' and '_'")
+	}
+
 	// check length of the name and description fields
 	if err = ValidateFieldLength(msg.Name, DefaultMinFieldLength, DefaultMaxFieldLength); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())

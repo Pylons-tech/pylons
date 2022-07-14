@@ -17,6 +17,12 @@ func ValidateFieldLength(field string, minLength, maxLength int) error {
 	return nil
 }
 
+// Special Characters Exclusion exception '-' & '_'
+func ValidatedDenom(denom string) bool {
+	nameRegex := regexp.MustCompile(`^([a-zA-Z0-9_-])$`)
+	return nameRegex.MatchString(denom)
+}
+
 // ValidateEmail validates the email string provided
 func ValidateEmail(email string) error {
 	exp := regexp.MustCompile(`^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z0-9]{2,})$`)
