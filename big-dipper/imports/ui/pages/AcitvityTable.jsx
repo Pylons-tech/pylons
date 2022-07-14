@@ -96,12 +96,12 @@ function AcitvityTable({}) {
                 <td>
                   <div className="user-profile">
                     <img
-                      src={item.itemImg}
+                      src={item.item_img}
                       height="100"
                       width="100"
                       alt="profile"
                     />
-                    <a href="#">{item.itemName}</a>
+                    <a href="#">{item.item_name}</a>
                   </div>
                 </td>
                 <td>

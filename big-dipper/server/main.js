@@ -26,6 +26,7 @@ timerMissedBlock = 0;
 timerDelegation = 0;
 timerAggregate = 0;
 timerFetchKeybase = 0;
+timersendnunsettledotifications = 0
 
 const DEFAULTSETTINGS = '/settings.json';
 
@@ -207,6 +208,17 @@ getDelegations = () => {
     });
 }
 
+sendUnsettledNotifications = () => {
+    Meteor.call("Notifications.sendPushNotifications", (error, res) => {
+      if (error) {
+        console.log("Error Sending Notifications",error);
+      } else {
+        console.log("Notification have been sent ",res);
+      }
+    });
+  };
+
+
 aggregateMinutely = () => {
     // doing something every min
     Meteor.call('Analytics.aggregateBlockTimeAndVotingPower', "m", (error, result) => {
@@ -277,6 +289,11 @@ Meteor.startup(async function() {
     }  
 
     if (Meteor.settings.debug.startTimer) {
+
+        timersendnunsettledotifications = Meteor.setInterval(function () {
+            sendUnsettledNotifications();
+          }, 10000);
+
         timerConsensus = Meteor.setInterval(function() {
             getConsensusState();
         }, Meteor.settings.params.consensusInterval);

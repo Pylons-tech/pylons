@@ -13,8 +13,6 @@ const InternalServerError = 500;
 const Success = "Success";
 const Failed = "Failed";
 const BadRequest = "Bad Request";
-const ActionTypeLike = "Like";
-const ActionTypeView = "View";
 
 Api.addRoute(
   "fcmtoken/update/:address/:token",

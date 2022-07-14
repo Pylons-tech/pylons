@@ -43,8 +43,8 @@ if (Meteor.isServer) {
           var sale = {
             txhash: txns[i]?.txhash,
             type: "Sale",
-            itemName: nftName,
-            itemImg: nftUrl,
+            item_name: nftName,
+            item_img: nftUrl,
             amount: amount,
             coin: coin,
             from: receiver,
@@ -54,17 +54,28 @@ if (Meteor.isServer) {
 
           // inserting the extracted information in nft-analytics collection
           Analytics.upsert({ txhash: txns[i].txhash }, { $set: sale });
-          
+
           //additional properties for notifications
+          var res = Notifications.findOne({ txhash: txns[i].txhash });
+
           sale.settled = false;
           sale.read = false;
-          var Recipe = getRecipebyID(cookbook_id, recipeID)?.recipe;
-          sale.created_at = Recipe.created_at;
-          sale.updated_at = Recipe.updated_at;
-          
-          //inserting info into Notifcations collection
+          timestamp = Math.floor(new Date() / 1000); //in seconds
+          sale.created_at = timestamp;
+
+          //preserved values
+          if (res && 1) {
+            sale.settled = res.settled;
+            sale.read = res.read;
+            sale.created_at = res.created_at;
+          }
+
+          //updated values
+          sale.time = null;
+          sale.updated_at = timestamp; // in seconds
+
+          //upserting info into Notifcations collection
           Notifications.upsert({ txhash: txns[i].txhash }, { $set: sale });
-          
         }
       } catch (e) {
         console.log("upsertSales error: ", e);
