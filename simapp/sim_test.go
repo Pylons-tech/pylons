@@ -1,27 +1,8 @@
 package simapp
 
-import (
-	"encoding/json"
-	"fmt"
-	"math/rand"
-	"os"
-	"testing"
-
-	"github.com/Pylons-tech/pylons/app"
-	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/libs/log"
-	dbm "github.com/tendermint/tm-db"
-
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	sdkSimapp "github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/cosmos/cosmos-sdk/simapp/helpers"
-	"github.com/cosmos/cosmos-sdk/store"
-	simulation2 "github.com/cosmos/cosmos-sdk/types/simulation"
-	"github.com/cosmos/cosmos-sdk/x/simulation"
-)
-
 // Profile with:
 // /usr/local/go/bin/go test -benchmem -run=^$ github.com/Pylons-tech/pylons/simapp -bench ^BenchmarkFullAppSimulation$ -Commit=true -cpuprofile cpu.out
+/*
 func BenchmarkFullAppSimulation(b *testing.B) {
 	// -Enabled=true -NumBlocks=1000 -BlockSize=200 \
 	// -Period=1 -Commit=true -Seed=57 -v -timeout 24h
@@ -33,7 +14,9 @@ func BenchmarkFullAppSimulation(b *testing.B) {
 	// sdkSimapp.FlagPeriodValue = 1000
 	fullAppSimulation(b, false)
 }
+*/
 
+/*
 func TestFullAppSimulation(t *testing.T) {
 	// -Enabled=true -NumBlocks=1000 -BlockSize=200 \
 	// -Period=1 -Commit=true -Seed=57 -v -timeout 24h
@@ -46,7 +29,9 @@ func TestFullAppSimulation(t *testing.T) {
 	sdkSimapp.FlagSeedValue = 10
 	fullAppSimulation(t, true)
 }
+*/
 
+/*
 func fullAppSimulation(tb testing.TB, is_testing bool) {
 	config, db, dir, logger, _, err := sdkSimapp.SetupSimulation("goleveldb-app-sim", "Simulation")
 	if err != nil {
@@ -84,6 +69,7 @@ func fullAppSimulation(tb testing.TB, is_testing bool) {
 		sdkSimapp.EmptyAppOptions{},
 		interBlockCacheOpt(),
 		fauxMerkleModeOpt)
+
 
 	// Run randomized simulation:
 	_, simParams, simErr := simulation.SimulateFromSeed(
@@ -197,4 +183,4 @@ func TestAppStateDeterminism(t *testing.T) {
 			}
 		}
 	}
-}
+}*/
