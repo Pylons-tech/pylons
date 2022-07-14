@@ -579,7 +579,7 @@ export default class EaselBuy extends Component {
                       <button onClick={this.handleLoginConfirmed}>
                         <img
                           alt="bg"
-                          src="/img/btnbg.svg"
+                          src="/img/btnbg.png"
                           style={{ width: "100%", height: "100%" }}
                           className="btnbg"
                         />

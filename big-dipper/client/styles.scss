@@ -1097,7 +1097,7 @@ div#voting-power-dist .card {
         }
       }
     }
-    @media(max-width: 575px) {
+    @media (max-width: 575px) {
       .title-publisher {
         h4 {
           font-size: 25px;
@@ -1188,7 +1188,10 @@ div#voting-power-dist .card {
                   font-weight: 400;
                   width: 50%;
                   a {
-                    color: #8f8fce;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    display: block;
                   }
                 }
 
@@ -1221,7 +1224,7 @@ div#voting-power-dist .card {
           }
         }
       }
-      @media(max-width: 500px) {
+      @media (max-width: 500px) {
         .left-side {
           ul li {
             justify-content: space-between;
