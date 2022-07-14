@@ -6,6 +6,11 @@
 *.iml
 .dir-locals.el
 .vscode
+.testnets
+cmd/pylonsd/cmd/*.plc
+cmd/pylonsd/cmd/*.plr
+cmd/pylonsd/cmd/*.pdt
+
 
 # starport generated folders
 ./vue/
