@@ -1,51 +1,43 @@
-package cmd
+package cmd_test
 
 import (
-	"context"
 	"fmt"
 	"testing"
 
-	"github.com/spf13/viper"
 	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/libs/log"
 
-	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/server"
+	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 	"github.com/cosmos/cosmos-sdk/simapp"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	genutiltest "github.com/cosmos/cosmos-sdk/x/genutil/client/testutil"
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+	"github.com/cosmos/cosmos-sdk/simapp/simd/cmd"
+	"github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 )
 
-func Test_TestnetCmd(t *testing.T) {
-	home := t.TempDir()
-	encodingConfig := simapp.MakeTestEncodingConfig()
-	logger := log.NewNopLogger()
-	cfg, err := genutiltest.CreateDefaultTendermintConfig(home)
+func TestInitCmd(t *testing.T) {
+	rootCmd, _ := cmd.NewRootCmd()
+	rootCmd.SetArgs([]string{
+		"init",        // Test the init cmd
+		"simapp-test", // Moniker
+		fmt.Sprintf("--%s=%s", cli.FlagOverwrite, "true"), // Overwrite genesis.json, in case it already exists
+	})
+
+	require.NoError(t, svrcmd.Execute(rootCmd, "", simapp.DefaultNodeHome))
+}
+
+func TestHomeFlagRegistration(t *testing.T) {
+	homeDir := "/tmp/foo"
+
+	rootCmd, _ := cmd.NewRootCmd()
+
+	rootCmd.SetArgs([]string{
+		"query",
+		fmt.Sprintf("--%s", flags.FlagHome),
+		homeDir,
+	})
+
+	require.NoError(t, svrcmd.Execute(rootCmd, "", simapp.DefaultNodeHome))
+
+	result, err := rootCmd.Flags().GetString(flags.FlagHome)
 	require.NoError(t, err)
-
-	err = genutiltest.ExecInitCmd(simapp.ModuleBasics, home, encodingConfig.Codec)
-	require.NoError(t, err)
-
-	serverCtx := server.NewContext(viper.New(), cfg, logger)
-	clientCtx := client.Context{}.
-		WithCodec(encodingConfig.Codec).
-		WithHomeDir(home).
-		WithTxConfig(encodingConfig.TxConfig)
-
-	ctx := context.Background()
-	ctx = context.WithValue(ctx, server.ServerContextKey, serverCtx)
-	ctx = context.WithValue(ctx, client.ClientContextKey, &clientCtx)
-	cmd := testnetInitFilesCmd(simapp.ModuleBasics, banktypes.GenesisBalancesIterator{})
-	cmd.SetArgs([]string{fmt.Sprintf("--%s=test", flags.FlagKeyringBackend), fmt.Sprintf("--output-dir=%s", home)})
-	err = cmd.ExecuteContext(ctx)
-	require.NoError(t, err)
-
-	genFile := cfg.GenesisFile()
-	appState, _, err := genutiltypes.GenesisStateFromGenFile(genFile)
-	require.NoError(t, err)
-
-	bankGenState := banktypes.GetGenesisStateFromAppState(encodingConfig.Codec, appState)
-	require.NotEmpty(t, bankGenState.Supply.String())
+	require.Equal(t, result, homeDir)
 }
