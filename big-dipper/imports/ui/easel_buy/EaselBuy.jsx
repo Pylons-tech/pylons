@@ -6,6 +6,7 @@ import settings from "../../../settings.json";
 import { FlowRouter } from "meteor/ostrio:flow-router-extra";
 import moment from "moment";
 import _ from "lodash";
+
 import {
   FlowRouterMeta,
   FlowRouterTitle,
@@ -114,7 +115,7 @@ export default class EaselBuy extends Component {
         let price;
         let edition;
         let denom;
-        const tradePercent = 100;
+        const tradePercent = 1000000000000000000;
         const res = _.cloneDeep(response);
         this.setState({ loading: false });
         const selectedRecipe = _.cloneDeep(res.data.recipe);
@@ -123,6 +124,7 @@ export default class EaselBuy extends Component {
         );
         const strings = _.cloneDeep(itemOutputs?.strings);
         const coinInputs = [...selectedRecipe?.coin_inputs];
+
         if (coinInputs.length > 0) {
           const resCoins = coinInputs[0]?.coins[0];
           denom = resCoins?.denom;
@@ -173,7 +175,7 @@ export default class EaselBuy extends Component {
             nftType,
             dimentions,
             displayName: coin?.displayName,
-            royalty: itemOutputs.trade_percentage * tradePercent,
+            royalty: +itemOutputs.trade_percentage * tradePercent,
             edition,
             media,
             createdAt: selectedRecipe.created_at,
@@ -440,7 +442,7 @@ export default class EaselBuy extends Component {
                                 </div>
                                 <div className="item">
                                   <p>Royalty</p>
-                                  <p>{this.state.royalty}</p>
+                                  <p>{this.state.royalty}%</p>
                                 </div>
                                 <div className="item">
                                   <p>Size</p>
