@@ -3,6 +3,7 @@ package keeper
 import (
 	"fmt"
 
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
 	"github.com/tendermint/tendermint/libs/log"
@@ -16,8 +17,8 @@ import (
 type (
 	Keeper struct {
 		cdc            codec.Codec
-		storeKey       sdk.StoreKey
-		memKey         sdk.StoreKey
+		storeKey       storetypes.StoreKey
+		memKey         storetypes.StoreKey
 		bankKeeper     types.BankKeeper
 		accountKeeper  types.AccountKeeper
 		transferKeeper types.TransferKeeper
@@ -28,7 +29,7 @@ type (
 func NewKeeper(
 	cdc codec.Codec,
 	storeKey,
-	memKey sdk.StoreKey,
+	memKey storetypes.StoreKey,
 	bk types.BankKeeper,
 	ak types.AccountKeeper,
 	tk types.TransferKeeper,

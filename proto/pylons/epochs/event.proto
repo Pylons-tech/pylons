@@ -1,0 +1,20 @@
+syntax = "proto3";
+package pylons.epochs;
+
+option go_package = "github.com/Pylons-tech/pylons/x/epochs/types";
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+message EventEndEpoch {
+  int64 current_epoch = 1;
+}
+
+message EventBeginEpoch {
+  int64 current_epoch = 1;
+  google.protobuf.Timestamp start_time = 2 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false,
+    (gogoproto.moretags) = "yaml:\"start_time\""
+  ];
+}

@@ -76,7 +76,7 @@ func CalculateRewardsHelper(distrPercentages map[string]sdk.Dec, rewardsTotalAmo
 	for addr, percentage := range distrPercentages {
 		totalAmountsForAddr := sdk.NewCoins()
 		for _, coin := range rewardsTotalAmount {
-			amountForAddr := coin.Amount.ToDec().Mul(percentage).TruncateInt()
+			amountForAddr := sdk.NewDecFromInt(coin.Amount).Mul(percentage).TruncateInt()
 			if amountForAddr.IsPositive() {
 				// only add strictly positive amounts
 				totalAmountsForAddr = totalAmountsForAddr.Add(sdk.NewCoin(coin.Denom, amountForAddr))

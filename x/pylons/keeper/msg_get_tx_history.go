@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"encoding/json"
+	"math"
 	"net/http"
 	"sort"
 	"strconv"
@@ -13,6 +14,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	sdkTypes "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	q "github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/cosmos/cosmos-sdk/types/tx"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 )
@@ -117,7 +119,7 @@ func GetTxHistory(ctx client.Context, address, denom string, limit, offset int64
 func QueryHistoryCosmos(txService tx.ServiceServer, query string) (history *tx.GetTxsEventResponse, err error) {
 	history, err = txService.GetTxsEvent(context.Background(), &tx.GetTxsEventRequest{Events: []string{
 		query,
-	}})
+	}, Pagination: &q.PageRequest{Limit: math.MaxInt}})
 	if err != nil {
 		return nil, err
 	}

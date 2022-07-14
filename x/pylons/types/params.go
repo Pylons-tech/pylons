@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
@@ -27,19 +28,21 @@ var (
 		{
 			CoinDenom: PylonsCoinDenom,
 			Packages: []GoogleInAppPurchasePackage{
-				{PackageName: "tech.pylons.wallet", ProductId: "pylons_10", Amount: sdk.NewInt(10)},
-				{PackageName: "tech.pylons.wallet", ProductId: "pylons_35", Amount: sdk.NewInt(35)},
-				{PackageName: "tech.pylons.wallet", ProductId: "pylons_60", Amount: sdk.NewInt(60)},
+				{PackageName: "tech.pylons.wallet", ProductId: "pylons_10", Amount: sdk.NewInt(10000000)},
+				{PackageName: "tech.pylons.wallet", ProductId: "pylons_35", Amount: sdk.NewInt(35000000)},
+				{PackageName: "tech.pylons.wallet", ProductId: "pylons_60", Amount: sdk.NewInt(60000000)},
 			},
 			GoogleInAppPurchasePubKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuMzgsJOZzyZvmOG8T9baGxDR/DWx6dgku7UdDfc6aGKthPGYouOa4KvLGEuNd+YTilwtEEryi3mmYAtl8MNtiAQCiry7HjdRNle8lLUHSKwBLVCswY3WGEAuW+5mo/V6X0klS8se65fIqCv2x/SKjtTZvKO/Oe3uehREMY1b8uWLrD5roubXzmaLsFGIRi5wdg8UWRe639LCNb2ghD2Uw0svBTJqn/ymsPmCfVjmCNNRDxfxzlA8O4EEKCK1qOdwIejMAfFMrN87u+0HTQbCKQ/xUQrR6fUhWT2mqttBGhi1NmTNBlUDyXYU+7ILbfJUVqQcKNDbFQd+xv9wBnXAhwIDAQAB",
 			EntityName:                "Pylons_Inc",
 		},
 	}
 
-	DefaultProcessorPercentage  = sdk.ZeroDec()
-	DefaultValidatorsPercentage = sdk.MustNewDecFromStr("0.003")
-	DefaultPylonsIncPubKey      = "EVK1dqjD6K8hGylacMpWAa/ru/OnWUDtCZ+lPkv2TTA=" // this is a testing key, do not use in production!
-	DefaultPaymentProcessors    = []PaymentProcessor{
+	// default validators percentage comes from here
+
+	DefaultProcessorPercentage     = sdk.ZeroDec()
+	DefaultValidatorsPercentage, _ = sdk.NewDecFromStr("0.003")
+	DefaultPylonsIncPubKey         = "EVK1dqjD6K8hGylacMpWAa/ru/OnWUDtCZ+lPkv2TTA=" // this is a testing key, do not use in production!
+	DefaultPaymentProcessors       = []PaymentProcessor{
 		{
 			CoinDenom:            StripeCoinDenom,
 			PubKey:               DefaultPylonsIncPubKey,
@@ -85,8 +88,8 @@ func NewParams(
 	recipeFeePercentage sdk.Dec,
 	itemTransferFeePercentage sdk.Dec,
 	updateItemStringFee sdk.Coin,
-	minTransferFee sdk.Int,
-	maxTransferFee sdk.Int,
+	minTransferFee math.Int,
+	maxTransferFee math.Int,
 	updateUsernameFee sdk.Coin,
 	distrEpochIdentifier string,
 	engineVersion uint64,
@@ -240,7 +243,7 @@ func validateDecPercentage(i interface{}) error {
 }
 
 func validateInt(i interface{}) error {
-	v, ok := i.(sdk.Int)
+	v, ok := i.(math.Int)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}

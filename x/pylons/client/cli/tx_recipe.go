@@ -105,9 +105,21 @@ All the recipe fields are mandatory:
 			}
 			argsExtraInfo := args[12]
 
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
+			var clientCtx client.Context
+
+			altCtx := GetAlternativeContext()
+			if altCtx != nil {
+				if altCtx != nil {
+					clientCtx = altCtx.WithSkipConfirmation(ForceSkipConfirm)
+				} else {
+					return err
+				}
+			} else {
+				c, err := client.GetClientTxContext(cmd)
+				if err != nil {
+					return err
+				}
+				clientCtx = c
 			}
 
 			msg := types.NewMsgCreateRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, id, argsName, argsDescription, argsVersion, jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsEntries, jsonArgsOutputs, argsBlockInterval, jsonArgsCostPerBlock, argsEnabled, argsExtraInfo)
@@ -177,7 +189,7 @@ func CmdUpdateRecipe() *cobra.Command {
 			}
 			argsExtraInfo := args[12]
 
-			clientCtx, err := client.GetClientTxContext(cmd)
+			clientCtx, err := HandleAlternativeContextForCommand(cmd)
 			if err != nil {
 				return err
 			}
@@ -186,7 +198,7 @@ func CmdUpdateRecipe() *cobra.Command {
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+			return tx.GenerateOrBroadcastTxCLI(*clientCtx, cmd.Flags(), msg)
 		},
 	}
 

@@ -29,7 +29,7 @@ func NewDefaultGenesisState(cdc codec.JSONCodec) GenesisState {
 		var bankGenesisState banktypes.GenesisState
 		cdc.MustUnmarshalJSON(bankModule, &bankGenesisState)
 		for _, token := range types.DefaultPaymentProcessorsTokensBankParams {
-			bankGenesisState.Params.SetSendEnabledParam(token.Denom, token.Enabled)
+			bankGenesisState.Params = bankGenesisState.Params.SetSendEnabledParam(token.Denom, token.Enabled)
 		}
 		gs[bankModuleName] = cdc.MustMarshalJSON(&bankGenesisState)
 	}

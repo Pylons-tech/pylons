@@ -1,9 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 import { Validators } from '/imports/api/validators/validators.js';
+import { sanitizeUrl } from '@braintree/sanitize-url';
 const fetchFromUrl = (url) => {
     try {
-        let res = HTTP.get(API + url);
+        var url = sanitizeUrl(API + url)
+        let res = HTTP.get(url);
         if (res.statusCode == 200) {
             return res
         };
@@ -16,7 +18,7 @@ const fetchFromUrl = (url) => {
 Meteor.methods({
     'accounts.getAccountDetail': function(address) {
         this.unblock(); 
-        let url = API + '/auth/accounts/' + address;
+        let url = sanitizeUrl(API + '/auth/accounts/' + address);
         
         try {
             let available = HTTP.get(url);
@@ -30,7 +32,7 @@ Meteor.methods({
                     account = response.value.BaseVestingAccount.BaseAccount
 
                 try {
-                    url = API + '/bank/balances/' + address;
+                    url = sanitizeUrl(API + '/bank/balances/' + address);
                     response = HTTP.get(url);
                     let balances = JSON.parse(response.content).result;
                     account.coins = balances;
@@ -52,7 +54,7 @@ Meteor.methods({
         let balance = {}
 
         // get available atoms
-        let url = API + '/cosmos/bank/v1beta1/balances/' + address;
+        let url = sanitizeUrl(API + '/cosmos/bank/v1beta1/balances/' + address);
         try {
             let available = HTTP.get(url);
             if (available.statusCode == 200) {
@@ -65,7 +67,7 @@ Meteor.methods({
         }
 
         // get delegated amnounts
-        url = API + '/cosmos/staking/v1beta1/delegations/' + address;
+        url = sanitizeUrl(API + '/cosmos/staking/v1beta1/delegations/' + address);
         try {
             let delegations = HTTP.get(url);
             if (delegations.statusCode == 200) {
@@ -76,7 +78,7 @@ Meteor.methods({
             console.log(e);
         }
         // get unbonding
-        url = API + '/cosmos/staking/v1beta1/delegators/' + address + '/unbonding_delegations';
+        url = API + sanitizeUrl('/cosmos/staking/v1beta1/delegators/' + address + '/unbonding_delegations');
         try {
             let unbonding = HTTP.get(url);
             if (unbonding.statusCode == 200) {
@@ -88,7 +90,7 @@ Meteor.methods({
         }
 
         // get rewards
-        url = API + '/cosmos/distribution/v1beta1/delegators/' + address + '/rewards';
+        url = sanitizeUrl(API + '/cosmos/distribution/v1beta1/delegators/' + address + '/rewards');
         try {
             let rewards = HTTP.get(url);
             if (rewards.statusCode == 200) {
@@ -106,7 +108,7 @@ Meteor.methods({
         // get commission
         let validator = Validators.findOne({ $or: [{ operator_address: address }, { delegator_address: address }, { address: address }] })
         if (validator) {
-            let url = API + '/cosmos/distribution/v1beta1/validators/' + validator.operator_address + '/commission';
+            let url = sanitizeUrl(API + '/cosmos/distribution/v1beta1/validators/' + validator.operator_address + '/commission');
             balance.operatorAddress = validator.operator_address;
             try {
                 let rewards = HTTP.get(url);
@@ -159,7 +161,7 @@ Meteor.methods({
     },
     'accounts.getAllDelegations' (address) {
         this.unblock();
-        let url = API + '/cosmos/staking/v1beta1/delegators/' + address + '/delegations';
+        let url = sanitizeUrl(API + '/cosmos/staking/v1beta1/delegators/' + address + '/delegations');
 
         try {
             let delegations = HTTP.get(url);
@@ -181,7 +183,7 @@ Meteor.methods({
     },
     'accounts.getAllUnbondings' (address) {
         this.unblock();
-        let url = API + '/cosmos/staking/v1beta1/delegators/' + address + '/unbonding_delegations';
+        let url = sanitizeUrl(API + '/cosmos/staking/v1beta1/delegators/' + address + '/unbonding_delegations');
 
         try {
             let unbondings = HTTP.get(url);
@@ -217,7 +219,7 @@ Meteor.methods({
     },
     'accounts.getRedelegations' (address) {
         this.unblock();
-        let url = API + '/cosmos/staking/v1beta1/v1beta1/delegators/' + address + '/redelegations';
+        let url = sanitizeUrl(API + '/cosmos/staking/v1beta1/v1beta1/delegators/' + address + '/redelegations');
 
         try {
             let userRedelegations = HTTP.get(url);

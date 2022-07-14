@@ -52,11 +52,22 @@ pylonsd tx pylons create-cookbook "loud123456" "Legend of the Undead Dragon" "Co
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
+			var clientCtx client.Context
 
+			altCtx := GetAlternativeContext()
+			if altCtx != nil {
+				if altCtx != nil {
+					clientCtx = altCtx.WithSkipConfirmation(ForceSkipConfirm)
+				} else {
+					return err
+				}
+			} else {
+				c, err := client.GetClientTxContext(cmd)
+				if err != nil {
+					return err
+				}
+				clientCtx = c
+			}
 			msg := types.NewMsgCreateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, argsEnabled)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
@@ -64,9 +75,7 @@ pylonsd tx pylons create-cookbook "loud123456" "Legend of the Undead Dragon" "Co
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
-
 	flags.AddTxFlagsToCmd(cmd)
-
 	return cmd
 }
 
@@ -88,7 +97,7 @@ func CmdUpdateCookbook() *cobra.Command {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			clientCtx, err := client.GetClientTxContext(cmd)
+			clientCtx, err := HandleAlternativeContextForCommand(cmd)
 			if err != nil {
 				return err
 			}
@@ -97,7 +106,7 @@ func CmdUpdateCookbook() *cobra.Command {
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+			return tx.GenerateOrBroadcastTxCLI(*clientCtx, cmd.Flags(), msg)
 		},
 	}
 

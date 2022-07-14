@@ -59,7 +59,7 @@ Meteor.startup(() => {
         if (querys['?action'] == "purchase_nft" && querys['recipe_id'] != null && querys['cookbook_id'] != null) {
             const recipe_id = sanitizeUrl(querys['recipe_id']);
             const cookbook_id = sanitizeUrl(querys['cookbook_id']);
-            let recipesUrl =`${Meteor.settings.remote.api}/pylons/recipe/${cookbook_id}/${recipe_id}`;
+            let recipesUrl = sanitizeUrl(`${Meteor.settings.remote.api}/pylons/recipe/${cookbook_id}/${recipe_id}`);
 
             try { 
                 let response = HTTP.get(recipesUrl);
@@ -225,7 +225,7 @@ Meteor.startup(() => {
         else if (querys['?action'] == "resell_nft" && querys['recipe_id'] != null) {
             const recipe_id = sanitizeUrl(querys['recipe_id']);
             const cookbook_id = sanitizeUrl(querys['cookbook_id']);
-            let recipesUrl =`${Meteor.settings.remote.api}/pylons/recipe/${cookbook_id}/${recipe_id}`;
+            let recipesUrl = sanitizeUrl(`${Meteor.settings.remote.api}/pylons/recipe/${cookbook_id}/${recipe_id}`);
 
             try { 
                 let response = HTTP.get(recipesUrl);
