@@ -462,7 +462,7 @@ func calculateIP(ip string, i int) (string, error) {
 }
 
 func writeFile(name string, dir string, contents []byte) error {
-	writePath := filepath.Dir(dir)
+	writePath := filepath.Join(dir)
 	file := filepath.Join(writePath, name)
 
 	err := tmos.EnsureDir(writePath, 0o755)
