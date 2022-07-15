@@ -25,15 +25,17 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+        cache: 'yarn'
         cache-dependency-path: 'big-dipper/package-lock.json'
 
     - run: |
         cd big-dipper
-        npm ci
+        npm i -g meteor
+        
     - run: |
         cd big-dipper
-        npm run build --if-present
+        yarn install
+
     - run: 
         cd big-dipper
-        npm test
+        meteor test --once --driver-package meteortesting:mocha
