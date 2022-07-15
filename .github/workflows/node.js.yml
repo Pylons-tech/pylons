@@ -26,7 +26,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
-        cache-dependency-path: 'big-dipper/package-lock.json'
+        cache-dependency-path: 'big-dipper/yarn.lock'
 
     - run: |
         cd big-dipper
@@ -36,6 +36,6 @@ jobs:
         cd big-dipper
         yarn install
 
-    - run: 
+    - run: |
         cd big-dipper
         meteor test --once --driver-package meteortesting:mocha
