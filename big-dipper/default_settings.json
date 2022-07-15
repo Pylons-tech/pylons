@@ -118,6 +118,8 @@
     "nftInterval": 5000,
     "cookbookInterval": 5000,
     "missedBlocksInterval": 60000,
-    "delegationInterval": 900000
+    "delegationInterval": 900000,
+    "sendNotifications" : 1,
+    "collectNotificationsInterval" : 10000 
   }
 }
