@@ -1065,7 +1065,7 @@ div#voting-power-dist .card {
         font-size: 50px;
         line-height: 50px;
         margin: 0 0 1.5rem;
-        word-break: break-all;
+        word-break: keep-all;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
@@ -1097,6 +1097,14 @@ div#voting-power-dist .card {
         }
       }
     }
+    @media (max-width: 575px) {
+      .title-publisher {
+        h4 {
+          font-size: 25px;
+          line-height: 35px;
+        }
+      }
+    }
     .description {
       margin: 5rem 0;
       p {
@@ -1104,7 +1112,7 @@ div#voting-power-dist .card {
         font-size: 25px;
         font-weight: 700;
         margin: 0;
-        word-break: break-all;
+        word-break: keep-all;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
@@ -1160,7 +1168,8 @@ div#voting-power-dist .card {
               background-color: transparent;
               border: none;
               margin: 0 0 0 2rem;
-              width: 2rem;
+              padding: 0;
+              width: 3.5rem;
             }
             .tab-panel {
               width: 100%;
@@ -1179,7 +1188,10 @@ div#voting-power-dist .card {
                   font-weight: 400;
                   width: 50%;
                   a {
-                    color: #8f8fce;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    display: block;
                   }
                 }
 
@@ -1209,6 +1221,13 @@ div#voting-power-dist .card {
             line-height: 22px;
             text-align: center;
             margin: 0.25rem 0 0;
+          }
+        }
+      }
+      @media (max-width: 500px) {
+        .left-side {
+          ul li {
+            justify-content: space-between;
           }
         }
       }

@@ -89,10 +89,6 @@ import (
 
 	"github.com/Pylons-tech/pylons/docs"
 
-	epochsmodule "github.com/Pylons-tech/pylons/x/epochs"
-	epochsmodulekeeper "github.com/Pylons-tech/pylons/x/epochs/keeper"
-	epochsmoduletypes "github.com/Pylons-tech/pylons/x/epochs/types"
-
 	appparams "github.com/Pylons-tech/pylons/app/params"
 	pylonsmodule "github.com/Pylons-tech/pylons/x/pylons"
 	pylonsmodulekeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
@@ -167,7 +163,6 @@ var (
 		evidence.AppModuleBasic{},
 		transfer.AppModuleBasic{},
 		vesting.AppModuleBasic{},
-		epochsmodule.AppModuleBasic{},
 		pylonsmodule.AppModuleBasic{},
 	)
 
@@ -236,8 +231,6 @@ type PylonsApp struct {
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
 
-	EpochsKeeper epochsmodulekeeper.Keeper
-
 	PylonsKeeper pylonsmodulekeeper.Keeper
 
 	// the module manager
@@ -281,7 +274,6 @@ func New(
 		evidencetypes.StoreKey,
 		ibctransfertypes.StoreKey,
 		capabilitytypes.StoreKey,
-		epochsmoduletypes.StoreKey,
 		pylonsmoduletypes.StoreKey,
 	)
 
@@ -416,20 +408,6 @@ func New(
 		app.GetSubspace(pylonsmoduletypes.ModuleName),
 	)
 
-	epochsKeeper := epochsmodulekeeper.NewKeeper(
-		appCodec,
-		keys[epochsmoduletypes.StoreKey],
-	)
-
-	app.EpochsKeeper = *epochsKeeper.SetHooks(
-		epochsmoduletypes.NewMultiEpochHooks(
-			// insert epoch hook receivers here
-			app.PylonsKeeper.Hooks(app.StakingKeeper),
-		),
-	)
-
-	epochsModule := epochsmodule.NewAppModule(appCodec, app.EpochsKeeper)
-
 	pylonsModule := pylonsmodule.NewAppModule(appCodec, app.PylonsKeeper, app.BankKeeper)
 
 	/****  Module Options ****/
@@ -461,7 +439,6 @@ func New(
 		ibc.NewAppModule(app.IBCKeeper),
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
-		epochsModule,
 		pylonsModule,
 	)
 
@@ -489,7 +466,6 @@ func New(
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
 		pylonsmoduletypes.ModuleName,
-		epochsmoduletypes.ModuleName,
 	)
 
 	app.mm.SetOrderEndBlockers(
@@ -512,7 +488,6 @@ func New(
 		ibctransfertypes.ModuleName,
 		vestingtypes.ModuleName,
 		pylonsmoduletypes.ModuleName,
-		epochsmoduletypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -538,7 +513,6 @@ func New(
 		paramstypes.ModuleName,
 		ibctransfertypes.ModuleName,
 		vestingtypes.ModuleName,
-		epochsmoduletypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
@@ -561,7 +535,6 @@ func New(
 		params.NewAppModule(app.ParamsKeeper),
 		evidence.NewAppModule(app.EvidenceKeeper),
 		ibc.NewAppModule(app.IBCKeeper),
-		epochsmodule.NewAppModule(appCodec, app.EpochsKeeper),
 
 		transferModule,
 		pylonsModule,
@@ -754,7 +727,6 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(crisistypes.ModuleName)
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibchost.ModuleName)
-	paramsKeeper.Subspace(epochsmoduletypes.ModuleName)
 	paramsKeeper.Subspace(pylonsmoduletypes.ModuleName)
 
 	return paramsKeeper

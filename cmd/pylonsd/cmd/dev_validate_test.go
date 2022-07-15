@@ -494,15 +494,15 @@ func TestValidate(t *testing.T) {
 // This is kinda icky, but it lets us test the entire production implementation w/o having to
 // deal w/ finding the testdata from an unknown state.
 func preTestValidate(t *testing.T) {
-	writeFile(badPLC, badCookbookLiteral)
-	writeFile(goodPLC, goodCookbookLiteral)
-	writeFile(badPLR, badRecipeLiteral)
-	writeFile(goodPLR, goodRecipeLiteral)
-	writeFile(moduledPLR, goodRecipeLiteralWithModuleInclude)
-	writeFile(testModulePDT, testModuleLiteral)
+	writeFileValidate(badPLC, badCookbookLiteral)
+	writeFileValidate(goodPLC, goodCookbookLiteral)
+	writeFileValidate(badPLR, badRecipeLiteral)
+	writeFileValidate(goodPLR, goodRecipeLiteral)
+	writeFileValidate(moduledPLR, goodRecipeLiteralWithModuleInclude)
+	writeFileValidate(testModulePDT, testModuleLiteral)
 }
 
-func writeFile(name string, data string) {
+func writeFileValidate(name string, data string) {
 	file, err := os.Create(name)
 	if err != nil {
 		panic(err)
