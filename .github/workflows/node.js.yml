@@ -29,8 +29,7 @@ jobs:
         cache-dependency-path: 'big-dipper/yarn.lock'
 
     - run: |
-        cd big-dipper
-        yarn add --global meteor
+        npm i -g meteor
         
     - run: |
         cd big-dipper
