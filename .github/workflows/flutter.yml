@@ -14,6 +14,17 @@ jobs:
        - uses: subosito/flutter-action@v2
          with:
             channel: 'stable' # or: 'beta' or 'master'
-       - run: |
+       - name: analyze
+         run: |
           cd easel
-          flutter lint
+          flutter analyze
+          
+       - name: test
+         run: |
+          cd easel
+          flutter test
+          
+       - name: build
+         run: |
+          cd easel
+          flutter build
