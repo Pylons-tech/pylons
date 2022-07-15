@@ -26,6 +26,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: 'big-dipper/package-lock.json'
+
     - run: |
         cd big-dipper
         npm ci
