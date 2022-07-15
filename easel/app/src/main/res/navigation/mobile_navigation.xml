@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="tech.pylons.easel.ui.home.HomeFragment"
+        android:label=""
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="tech.pylons.easel.ui.dashboard.DashboardFragment"
+        android:label=""
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_create_nft"
+        android:name="tech.pylons.easel.ui.createNft.CollectionCreateNftFragment"
+        android:label=""
+        tools:layout="@layout/fragment_collection_create_nft">
+
+        <action
+            android:id="@+id/action_CreateNft_to_DashboardFragment"
+            app:destination="@id/navigation_dashboard" />
+    </fragment>
+</navigation>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.createNft.CreateNftFirstFragment">
+
+    <data>
+
+        <variable
+            name="createViewModel"
+            type="tech.pylons.easel.ui.createNft.CreateNftViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:requiresFadingEdge="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/nft_first_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/nft_name_prompt_title"
+                style="@style/TitlePromptForm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:gravity="center_horizontal"
+                android:text="@string/nft_name_prompt_title"
+                app:layout_constraintBottom_toTopOf="@+id/nft_name_prompt_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/nft_name_prompt_text"
+                style="@style/TextPromptForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/form_inner_title_text"
+                android:gravity="center_horizontal"
+                android:text="@string/nft_name_prompt_text"
+                app:layout_constraintBottom_toTopOf="@+id/nft_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nft_name_prompt_title" />
+
+            <EditText
+                android:id="@+id/nft_name"
+                style="@style/EditTextForm"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_text_height"
+                android:layout_marginHorizontal="@dimen/padding_default"
+                android:layout_marginTop="@dimen/form_inner_text_edit"
+                android:hint="@string/nft_name_prompt_title"
+                android:inputType="textPersonName"
+                android:paddingStart="20dp"
+                android:paddingEnd="10dp"
+                android:text="@={createViewModel.nftName}"
+                android:textAlignment="textStart"
+                app:layout_constraintBottom_toTopOf="@+id/nft_description_prompt_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nft_name_prompt_text"
+                tools:ignore="RtlCompat" />
+
+            <TextView
+                android:id="@+id/nft_description_prompt_title"
+                style="@style/TitlePromptForm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/form_section_space"
+                android:text="@string/nft_description_prompt_title"
+                app:layout_constraintBottom_toTopOf="@+id/nft_description_prompt_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nft_name" />
+
+            <TextView
+                android:id="@+id/nft_description_prompt_text"
+                style="@style/TextPromptForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/form_inner_title_text"
+                android:gravity="center"
+                android:text="@string/nft_description_prompt_text"
+                app:layout_constraintBottom_toTopOf="@+id/nft_text_field_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nft_description_prompt_title" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nft_text_field_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="10dp"
+                app:counterEnabled="true"
+                app:layout_constraintBottom_toTopOf="@+id/button_next"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nft_description_prompt_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nft_description"
+                    style="@style/EditTextForm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:hint="@string/description_hint"
+                    android:inputType="textMultiLine"
+                    android:minHeight="100dp"
+                    android:padding="0dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="10dp"
+                    android:text="@={createViewModel.nftDescription}"
+                    android:textAlignment="textStart"
+                    tools:ignore="RtlCompat" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/button_next"
+                style="@style/TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/form_section_space"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rounded_corners_box_50"
+                android:onClick="@{()-> createViewModel.onNext(1)}"
+                android:text="@string/next"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nft_text_field_description"
+                app:layout_constraintVertical_bias="0.107"
+                app:layout_constraintVertical_weight="1" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>

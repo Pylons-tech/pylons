@@ -1,0 +1,12 @@
+<resources>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="gallery_img_width">139dp</dimen>
+    <dimen name="gallery_img_height">139dp</dimen>
+    <dimen name="icon_info_size">18dp</dimen>
+    <dimen name="edit_text_height">38dp</dimen>
+    <dimen name="form_section_space">27dp</dimen>
+    <dimen name="form_inner_title_text">6dp</dimen>
+    <dimen name="form_inner_text_edit">10dp</dimen>
+    <dimen name="padding_default">26dp</dimen>
+</resources>

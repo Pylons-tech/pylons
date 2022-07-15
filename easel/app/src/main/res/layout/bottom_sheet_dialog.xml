@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <data></data>
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet_dialog"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:background="@drawable/top_rounded_corners_10">
+
+        <TextView
+            android:id="@+id/dialog_title"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text=""
+            android:fontFamily="@font/space_mono_bold"
+            android:textColor="@color/blue_magenta_100"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/dialog_text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="16dp"
+            android:fontFamily="@font/space_mono_regular"
+            android:textColor="@color/blue_magenta_100"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/dialog_text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_margin="16dp"
+            android:fontFamily="@font/space_mono_regular"
+            android:textColor="@color/blue_magenta_100"
+            android:text="" />
+
+        <Button
+            android:id="@+id/btn_copy_weblink"
+            style="@style/TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/rounded_corners_box_50"
+            android:text="@string/copy_weblink"
+            android:textColor="@color/white"
+            />
+
+    </LinearLayout>
+
+</layout>

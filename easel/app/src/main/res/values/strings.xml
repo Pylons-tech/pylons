@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">Easel</string>
+
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Created NFTs</string>
+    <string name="title_create">Create</string>
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="next">Next</string>
+    <string name="create">Create</string>
+
+    <!-- Strings used for fragments Content -->
+    <string name="slogan">NFTs Made</string>
+    <string name="title">Easel</string>
+    <string name="created_nft_title">Created NFTs</string>
+    <string name="created_nft_text">Give your digital art pieces unique markers that you can sell.</string>
+
+    <string name="nft_location_prompt_title">Location</string>
+    <string name="nft_location_prompt_text">Where can a buyer access your piece once they buy it?</string>
+    <string name="nft_url_prompt_text">Or insert your url</string>
+    <string name="nft_url_info_title">URLs for artwork</string>
+    <string name="nft_url_info_text">All art pieces need a permanent home at a URL somewhere on the web. TK guidance here.</string>
+    <string name="nft_url_info_guide">Guidance</string>
+
+    <string name="nft_upload_prompt_text">Take a picture, touch HERE</string>
+
+    <string name="nft_name_prompt_title">Title</string>
+    <string name="nft_name_prompt_text">What’s it called?</string>
+    <string name="nft_description_prompt_title">Description</string>
+    <string name="nft_description_prompt_text">Tell us about it</string>
+
+    <string name="nft_qty_prompt_title">Quantity</string>
+    <string name="nft_qty_prompt_text">How many are you selling?</string>
+    <string name="nft_price_prompt_title">Price</string>
+    <string name="nft_price_prompt_text">How much are you selling it for?</string>
+
+    <string name="nft_royalty_prompt_title">Royalties</string>
+    <string name="nft_royalty_prompt_text">If the piece is resold, you get a percentage. How much is up to you.</string>
+    <string name="nft_royalty_info_title">How do I set royalties?</string>
+    <string name="nft_royalty_info_text">It can be hard to decide on an appropriate residual amount, since it’s not often up to the artist. TK guidance goes here.</string>
+    <string name="nft_royalty_info_guide">Guidance</string>
+
+    <string name="url_hint">https://www…</string>
+    <string name="description_hint">Minimum 21 characters</string>
+    <string name="qty_hint">1</string>
+    <string name="price_hint">10 pylons</string>
+    <string name="residual_hint">10%</string>
+
+    <string name="info_check_your_notifications">Check your notifications</string>
+    <string name="copy_weblink">Copy Weblink</string>
+    <string name="loading">Loading…</string>
+    <string-array name="currency_array">
+        <item>pylon</item>
+        <item>USD</item>
+    </string-array>
+</resources>

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.createNft.CreateNftSecondFragment">
+
+    <data>
+
+        <variable
+            name="createViewModel"
+            type="tech.pylons.easel.ui.createNft.CreateNftViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:requiresFadingEdge="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:paddingStart="37dp"
+            android:paddingLeft="37dp"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingEnd="37dp"
+            android:paddingRight="37dp">
+
+            <TextView
+                android:id="@+id/nft_qty_prompt_title"
+                style="@style/TitlePromptForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/nft_qty_prompt_title"
+                app:layout_constraintBottom_toTopOf="@+id/nft_qty_prompt_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/nft_qty_prompt_text"
+                style="@style/TextPromptForm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/form_inner_title_text"
+                android:gravity="center_horizontal"
+                android:text="@string/nft_qty_prompt_text"
+                app:layout_constraintBottom_toTopOf="@+id/nft_qty"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nft_qty_prompt_title" />
+
+            <EditText
+                android:id="@+id/nft_qty"
+                style="@style/EditTextForm"
+                android:layout_width="93dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="@string/qty_hint"
+                android:inputType="number"
+                android:text="@={createViewModel.nftQty}"
+                app:layout_constraintBottom_toTopOf="@+id/nft_price_prompt_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nft_qty_prompt_text" />
+
+            <TextView
+                android:id="@+id/nft_price_prompt_title"
+                style="@style/TitlePromptForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/form_section_space"
+                android:gravity="center_horizontal"
+                android:text="@string/nft_price_prompt_title"
+                app:layout_constraintBottom_toTopOf="@+id/nft_price_prompt_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nft_qty" />
+
+            <TextView
+                android:id="@+id/nft_price_prompt_text"
+                style="@style/TextPromptForm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/form_inner_title_text"
+                android:gravity="center_horizontal"
+                android:text="@string/nft_price_prompt_text"
+                app:layout_constraintBottom_toTopOf="@+id/nft_price_container"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nft_price_prompt_title" />
+
+
+            <LinearLayout
+                android:id="@+id/nft_price_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/form_inner_text_edit"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/nft_royalty_prompt_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nft_price_prompt_text">
+
+                <EditText
+                    android:id="@+id/nft_price"
+                    style="@style/EditTextForm"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:hint="@string/price_hint"
+                    android:inputType="numberDecimal"
+                    android:text="@={createViewModel.nftPrice}" />
+
+                <Spinner
+                    android:id="@+id/currency"
+                    style="@style/EditTextForm"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:entries="@array/currency_array"
+                    android:selectedItemPosition="@={createViewModel.nftCurrency}"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/nft_royalty_prompt_title"
+                style="@style/TitlePromptForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/form_section_space"
+                android:gravity="center_horizontal"
+                android:text="@string/nft_royalty_prompt_title"
+                app:layout_constraintBottom_toTopOf="@+id/nft_royalty_prompt_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nft_price_container" />
+
+            <TextView
+                android:id="@+id/nft_royalty_prompt_text"
+                style="@style/TextPromptForm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/form_inner_title_text"
+                android:gravity="center_horizontal"
+                android:text="@string/nft_royalty_prompt_text"
+                app:layout_constraintBottom_toTopOf="@+id/royalty_info"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nft_royalty_prompt_title" />
+
+            <LinearLayout
+                android:id="@+id/royalty_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/form_inner_text_edit"
+                android:baselineAligned="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/button_create_nft"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nft_royalty_prompt_text">
+
+                <EditText
+                    android:id="@+id/royalty"
+                    style="@style/EditTextForm"
+                    android:layout_width="91dp"
+                    android:layout_height="@dimen/edit_text_height"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="0dp"
+                    android:hint="@string/residual_hint"
+                    android:inputType="numberDecimal"
+                    android:paddingStart="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="@={createViewModel.nftRoyalty}"
+                    tools:ignore="RtlCompat" />
+
+                <ImageView
+                    android:id="@+id/icon_royalty_info"
+                    android:layout_width="@dimen/icon_info_size"
+                    android:layout_height="@dimen/icon_info_size"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/nft_royalty_info_title"
+                    android:focusable="true"
+                    android:src="@drawable/ic_info_rounded" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button_create_nft"
+                style="@style/TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rounded_corners_box_50"
+                android:text="@string/create"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/royalty_info" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

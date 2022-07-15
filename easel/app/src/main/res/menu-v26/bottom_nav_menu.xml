@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:title="@string/title_home"
+        android:autoSizeTextType="uniform" />
+
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:title="@string/title_dashboard"
+        android:autoSizeTextType="uniform"/>
+
+    <item
+        android:id="@+id/navigation_create_nft"
+        android:font="@font/space_mono_regular"
+        android:title="@string/title_create"
+        android:autoSizeTextType="uniform"/>
+</menu>
