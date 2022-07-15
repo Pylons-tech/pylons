@@ -1,5 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import { FCMToken } from "../fcmtoken.js";
+import { appCheckVerification } from "../../app-check.js";
 
 // Global API configuration
 var Api = new Restivus({
@@ -26,6 +27,24 @@ Api.addRoute(
           Message: BadRequest,
           Data: null,
         };
+      }
+
+
+      let h = this.request.headers;
+      if(!h['X-Firebase-AppCheck']){
+        return {
+          Code: StatusInvalidInput,
+          Message: AppCheckFailed,
+          Data: "X-Firebase-AppCheck header missing",
+        }; 
+      }else{
+        if(appCheckVerification(h['X-Firebase-AppCheck'])!== 1){
+          return {
+            Code: StatusInvalidInput,
+            Message: AppCheckFailed,
+            Data: "X-Firebase-AppCheck Failed",
+          }; 
+        }
       }
 
       var result = updateFCMToken(this.urlParams.address, this.urlParams.token);
