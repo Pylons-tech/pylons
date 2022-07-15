@@ -14,15 +14,11 @@ jobs:
        - uses: subosito/flutter-action@v2
          with:
             channel: 'stable' # or: 'beta' or 'master'
+            
        - name: analyze
          run: |
           cd easel
           flutter analyze
-          
-       - name: test
-         run: |
-          cd easel
-          flutter test
           
        - name: build
          run: |
