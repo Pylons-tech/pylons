@@ -18,7 +18,7 @@ const StatusInvalidInput = 400;
 const InternalServerError = 500;
 const Success = "Success";
 const BadRequest = "Bad Request";
-const InvalidHash = "Invalid TxHash";
+const InvalidID = "Invalid Notification ID";
 
 var Api = new Restivus({
   useDefaultAuth: true,
@@ -30,19 +30,19 @@ Api.addRoute(
   { authRequired: false },
   {
     post: function () {
-      const txs = this.bodyParams.txhashs;
+      const notifcationIDs = this.bodyParams.notifcationIDs;
 
-      if (txs && txs.length > 0) {
-        for (let index = 0; index < txs.length; index++) {
-          const hash = txs[index];
+      if (notifcationIDs && notifcationIDs.length > 0) {
+        for (let index = 0; index < notifcationIDs.length; index++) {
+          const id = notifcationIDs[index];
 
           //mark as Read
-          var result = markRead(hash);
+          var result = markRead(id);
           if (result != 1) {
             return {
               Code: StatusInvalidInput,
-              Message: InvalidHash,
-              Data: hash,
+              Message: InvalidID,
+              Data: id,
             };
           }
         }
@@ -111,9 +111,8 @@ Meteor.methods({
     unSettled
       .forEach((sale) => {
         var sellerAddress = sale.from;
-        var salehash = sale.txhash;
-    
-        var token;
+        var saleID = sale._id;
+        var token;      
         //get Firebase token for specieifed user address
         getFCMToken(sellerAddress).then((token) => {
           const buyerUserName = getUserNameInfo(sale.to).username.value;
@@ -128,12 +127,12 @@ Meteor.methods({
             priority: "high",
             timeToLive: 86400,
           };
-
+          
           admin
             .messaging()
             .sendToDevice(token, message, options)
             .then((n) => {
-              markSent(salehash);
+              markSent(saleID);
             })
             .catch((e) => {
               console.log("Notification not sent to ", token);
@@ -166,35 +165,12 @@ function getFCMToken(address) {
   return obj;
 }
 
-async function sendNotification(
-  token,
-  NFTName,
-  buyerAddress,
-  priority = "high",
-  ttl = 86400
-) {
-  const buyerUserName = getUserNameInfo(buyerAddress).username.value;
-
-  const message = {
-    notification: {
-      title: "NFT Sold",
-      body: `Your NFT ${NFTName} has been sold to ${buyerUserName}`,
-    },
-  };
-
-  const options = {
-    priority: priority,
-    timeToLive: ttl,
-  };
-
-  return admin.messaging().sendToDevice(token, message, options);
-}
-function markRead(hash) {
-  return Notifications.update({ txhash: hash }, { $set: { read: true } });
+function markRead(id) {
+  return Notifications.update({ _id: id }, { $set: { read: true } });
 }
 
-function markSent(hash) {
-  return Notifications.update({ txhash: hash }, { $set: { settled: true } });
+function markSent(id) {
+  return Notifications.update({ _id: id }, { $set: { settled: true } });
 }
 function getNotifications(address, limit, offset) {
   return Notifications.find(
