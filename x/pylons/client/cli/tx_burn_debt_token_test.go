@@ -7,8 +7,6 @@ import (
 
 	"testing"
 
-	"github.com/cosmos/cosmos-sdk/client"
-
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -22,6 +20,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
+	util "github.com/Pylons-tech/pylons/testutil/cli"
 )
 
 // genTestRedeemInfoSignature generates a signed RedeemInfo message using privKey
@@ -41,7 +40,7 @@ func TestCmdBurnDebtToken(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
-	address, err := GenerateAddressWithAccount(ctx, t, net)
+	address, err := util.GenerateAddressWithAccount(ctx, t, net)
 	require.NoError(t, err)
 
 	type field struct {
@@ -103,7 +102,7 @@ func TestCmdBurnDebtToken(t *testing.T) {
 					ProcessorName: "Test",
 					Address:       types.GenTestBech32FromString("test"),
 					Amount:        sdk.NewInt(1100), // 1100node0token
-					Signature:     genTestRedeemInfoSignature("testId", address, sdk.NewInt(1000), types.Def),
+					Signature:     genTestRedeemInfoSignature("testId", address, sdk.NewInt(1000), types.DefaultTestPrivateKey),
 				},
 				sender: address,
 			},
@@ -133,8 +132,4 @@ func TestCmdBurnDebtToken(t *testing.T) {
 			}
 		})
 	}
-}
-
-func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.Network) {
-	panic("unimplemented")
 }
