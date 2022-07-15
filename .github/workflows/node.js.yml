@@ -7,7 +7,6 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
 
 jobs:
   build:
@@ -16,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [14.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -29,7 +28,7 @@ jobs:
         cache-dependency-path: 'big-dipper/yarn.lock'
 
     - run: |
-        sudo npm i --location=global meteor
+        curl https://install.meteor.com/ | sh
         
     - run: |
         cd big-dipper
