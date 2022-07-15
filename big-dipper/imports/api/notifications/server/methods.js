@@ -4,14 +4,12 @@ import { FCMToken } from "../../fcmtoken/fcmtoken.js";
 import { isNumber } from "lodash";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { HTTP } from "meteor/http";
+import admin from "../../admin.js"
+import { appCheckVerification } from "../../app-check.js";
 
-var admin = require("firebase-admin");
 
-var serviceAccount = require("./firebase.json");
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+
 
 const StatusOk = 200;
 const StatusInvalidInput = 400;
@@ -19,6 +17,7 @@ const InternalServerError = 500;
 const Success = "Success";
 const BadRequest = "Bad Request";
 const InvalidID = "Invalid Notification ID";
+const AppCheckFailed = "App Check Failed"
 
 var Api = new Restivus({
   useDefaultAuth: true,
@@ -30,6 +29,24 @@ Api.addRoute(
   { authRequired: false },
   {
     post: function () {
+      
+      let h = this.request.headers;
+      if(!h['X-Firebase-AppCheck']){
+        return {
+          Code: StatusInvalidInput,
+          Message: AppCheckFailed,
+          Data: "X-Firebase-AppCheck header missing",
+        }; 
+      }else{
+        if(appCheckVerification(h['X-Firebase-AppCheck'])!== 1){
+          return {
+            Code: StatusInvalidInput,
+            Message: AppCheckFailed,
+            Data: "X-Firebase-AppCheck Failed",
+          }; 
+        }
+      }
+      
       const notifcationIDs = this.bodyParams.notifcationIDs;
 
       if (notifcationIDs && notifcationIDs.length > 0) {
@@ -108,40 +125,49 @@ Meteor.methods({
 
     const unSettled = Notifications.find({ settled: false });
 
+
+   
     unSettled
       .forEach((sale) => {
         var sellerAddress = sale.from;
         var saleID = sale._id;
         var token;      
         //get Firebase token for specieifed user address
-        getFCMToken(sellerAddress).then((token) => {
-          const buyerUserName = getUserNameInfo(sale.to).username.value;
-          const message = {
-            notification: {
-              title: "NFT Sold",
-              body: `Your NFT ${sale.item_name} has been sold to ${buyerUserName}`,
-            },
-          };
+        try{
+          token = FCMToken.findOne({ address: address }).token
+        }catch(e){
+          return e
+        }
+        
+        const buyerUserName = getUserNameInfo(sale.to).username.value;
+        const message = {
+          notification: {
+            title: "NFT Sold",
+            body: `Your NFT ${sale.item_name} has been sold to ${buyerUserName}`,
+          },
+        };
+        
+        const options = {
+          priority: "high",
+          timeToLive: 86400,
+        };
+        
+        if(Meteor.settings.params.sendNotifications === 1){
 
-          const options = {
-            priority: "high",
-            timeToLive: 86400,
-          };
-          
           admin
-            .messaging()
-            .sendToDevice(token, message, options)
-            .then((n) => {
-              markSent(saleID);
-            })
-            .catch((e) => {
-              console.log("Notification not sent to ", token);
-            });
-        });
+          .messaging()
+          .sendToDevice(token, message, options)
+          .then((n) => {
+            markSent(saleID);
+            console.log(n)
+          })
+          .catch((e) => {
+            console.log("Notification not sent to ", token);
+          });
+          
+        }
       })
-      .catch((e) => {
-        console.log("unable to get fcmtoken");
-      });
+      
   },
 });
 
@@ -153,16 +179,6 @@ function Valid(parameter) {
     return false;
   }
   return true;
-}
-
-function getFCMToken(address) {
-  var obj = null;
-  try {
-    obj = FCMToken.findOne({ address: address });
-  } catch (e) {
-    console.log("token not found");
-  }
-  return obj;
 }
 
 function markRead(id) {

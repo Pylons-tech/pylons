@@ -292,7 +292,7 @@ Meteor.startup(async function() {
 
         timersendnunsettledotifications = Meteor.setInterval(function () {
             sendUnsettledNotifications();
-          }, 10000);
+          }, Meteor.settings.params.collectNotificationsInterval);
 
         timerConsensus = Meteor.setInterval(function() {
             getConsensusState();
