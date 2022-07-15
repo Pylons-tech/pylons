@@ -19,8 +19,8 @@ import (
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	util "github.com/Pylons-tech/pylons/testutil/cli"
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 )
 
 // genTestRedeemInfoSignature generates a signed RedeemInfo message using privKey
