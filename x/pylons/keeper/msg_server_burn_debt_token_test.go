@@ -115,7 +115,7 @@ func (suite *IntegrationTestSuite) TestBurnDebtToken() {
 			args: args{
 				ri: types.RedeemInfo{
 					Id:            "testId",
-					ProcessorName: "Invalid",
+					ProcessorName: "Test",
 					Address:       types.GenTestBech32FromString("test"),
 					Amount:        sdk.NewInt(1_200_000_000), // 1000stripeusd
 					Signature:     genTestRedeemInfoSignature("testId", types.GenTestBech32FromString("test"), sdk.NewInt(1_000_000_000), privKey),

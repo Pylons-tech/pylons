@@ -41,7 +41,7 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 		PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
 		ProcessorPercentage:  types.DefaultProcessorPercentage,
 		ValidatorsPercentage: types.DefaultValidatorsPercentage,
-		Name:                 "Test",
+		Name:                 "TestPayment",
 	})
 	k.SetParams(suite.ctx, params)
 
@@ -59,7 +59,7 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 			args: args{
 				pi: []types.PaymentInfo{{
 					PurchaseId:    "testPurchaseId",
-					ProcessorName: "Test",
+					ProcessorName: "TestPayment",
 					PayerAddr:     types.GenTestBech32FromString("test"),
 					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
 					ProductId:     "testProductId",
@@ -74,7 +74,7 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 			args: args{
 				pi: []types.PaymentInfo{{
 					PurchaseId:    "1",
-					ProcessorName: "Test",
+					ProcessorName: "TestPayment",
 					PayerAddr:     types.GenTestBech32FromString("test"),
 					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
 					ProductId:     "testProductId",
@@ -89,7 +89,7 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 			args: args{
 				pi: []types.PaymentInfo{{
 					PurchaseId:    "testPurchaseId",
-					ProcessorName: "Test",
+					ProcessorName: "TestPayment",
 					PayerAddr:     types.GenTestBech32FromString("test"),
 					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
 					ProductId:     "testProductId",
@@ -104,7 +104,7 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 			args: args{
 				pi: []types.PaymentInfo{{
 					PurchaseId:    "testPurchaseId",
-					ProcessorName: "Test",
+					ProcessorName: "TestPayment",
 					PayerAddr:     types.GenTestBech32FromString("test"),
 					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
 					ProductId:     "testProductId",

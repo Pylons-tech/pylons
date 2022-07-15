@@ -41,7 +41,9 @@ var (
 
 	DefaultProcessorPercentage     = sdk.ZeroDec()
 	DefaultValidatorsPercentage, _ = sdk.NewDecFromStr("0.003")
-	DefaultPylonsIncPubKey         = "EVK1dqjD6K8hGylacMpWAa/ru/OnWUDtCZ+lPkv2TTA=" // this is a testing key, do not use in production!
+	DefaultPylonsIncPubKey         = "EVK1dqjD6K8hGylacMpWAa/ru/OnWUDtCZ+lPkv2TTA="                            // this is a testing key, do not use in production!
+	DefaultTestPrivateKey          = ed25519.GenPrivKey()                                                      // for test environment, do not use in production!
+	DefaultTestPubKey              = base64.StdEncoding.EncodeToString(DefaultTestPrivateKey.PubKey().Bytes()) // for test environment, do not use in production
 	DefaultPaymentProcessors       = []PaymentProcessor{
 		{
 			CoinDenom:            StripeCoinDenom,
@@ -129,6 +131,15 @@ func DefaultParams() Params {
 
 // NetworkTestParams returns default pylons Params
 func NetworkTestParams() Params {
+	// Add a processor with node0token denom
+	DefaultPaymentProcessors = append(DefaultPaymentProcessors, PaymentProcessor{
+		CoinDenom:            "node0token",
+		PubKey:               DefaultTestPubKey,
+		ProcessorPercentage:  DefaultProcessorPercentage,
+		ValidatorsPercentage: DefaultValidatorsPercentage,
+		Name:                 "Test",
+	})
+
 	return NewParams(
 		DefaultCoinIssuers,
 		DefaultPaymentProcessors,
