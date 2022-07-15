@@ -213,7 +213,7 @@ sendUnsettledNotifications = () => {
       if (error) {
         console.log("Error Sending Notifications",error);
       } else {
-        console.log("Notification have been sent ",res);
+        console.log("Notification have been sent ",res,error);
       }
     });
   };

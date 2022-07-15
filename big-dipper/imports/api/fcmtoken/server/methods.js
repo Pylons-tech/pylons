@@ -1,7 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import { FCMToken } from "../fcmtoken.js";
-import { appCheckVerification } from "../../app-check.js";
-
+import { admin } from "../../admin.js";
 // Global API configuration
 var Api = new Restivus({
   useDefaultAuth: true,
@@ -14,6 +13,7 @@ const InternalServerError = 500;
 const Success = "Success";
 const Failed = "Failed";
 const BadRequest = "Bad Request";
+const AppCheckFailed = "App Check Failed"
 
 Api.addRoute(
   "fcmtoken/update/:address/:token",
@@ -31,36 +31,45 @@ Api.addRoute(
 
 
       let h = this.request.headers;
-      if(!h['X-Firebase-AppCheck']){
+      if(!h['x-firebase-appcheck']){
         return {
           Code: StatusInvalidInput,
           Message: AppCheckFailed,
-          Data: "X-Firebase-AppCheck header missing",
+          Data: "x-firebase-appcheck header not found",
         }; 
-      }else{
-        if(appCheckVerification(h['X-Firebase-AppCheck'])!== 1){
+      }
+      
+      // admin.appCheck().verifyToken(h['x-firebase-appcheck']).then((res) => {
+          var result = updateFCMToken(this.urlParams.address, this.urlParams.token);
+          
+          if (result === false) {
+            return {
+              Code: InternalServerError,
+              Message: Failed,
+              Data: "",
+            };
+          }
+    
           return {
-            Code: StatusInvalidInput,
-            Message: AppCheckFailed,
-            Data: "X-Firebase-AppCheck Failed",
-          }; 
-        }
-      }
+            Code: StatusOk,
+            Message: Success,
+            Data: result,
+          };
 
-      var result = updateFCMToken(this.urlParams.address, this.urlParams.token);
-      if (result === false) {
-        return {
-          Code: InternalServerError,
-          Message: Failed,
-          Data: "",
-        };
-      }
-
+      // }).catch((e)=>{
+      //   return {
+      //     Code: StatusInvalidInput,
+      //     Message: AppCheckFailed,
+      //     Data: "x-firebase-appcheck Failed",
+      //   };
+      // })
+        
       return {
-        Code: StatusOk,
-        Message: Success,
-        Data: result,
+        Code: StatusInvalidInput,
+        Message: BadRequest,
+        Data: null,
       };
+       
     },
   }
 );

@@ -4,9 +4,7 @@ import { FCMToken } from "../../fcmtoken/fcmtoken.js";
 import { isNumber } from "lodash";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { HTTP } from "meteor/http";
-import admin from "../../admin.js"
-import { appCheckVerification } from "../../app-check.js";
-
+import {admin} from "../../admin.js"
 
 
 
@@ -31,46 +29,48 @@ Api.addRoute(
     post: function () {
       
       let h = this.request.headers;
-      if(!h['X-Firebase-AppCheck']){
+      if(!h['x-firebase-appcheck']){
         return {
           Code: StatusInvalidInput,
           Message: AppCheckFailed,
-          Data: "X-Firebase-AppCheck header missing",
+          Data: "x-firebase-appcheck header missing",
         }; 
-      }else{
-        if(appCheckVerification(h['X-Firebase-AppCheck'])!== 1){
+      }
+
+      admin.appCheck().verifyToken(h['x-firebase-appcheck']).then((res)=>{
+        const notifcationIDs = this.bodyParams.notifcationIDs;
+
+        if (notifcationIDs && notifcationIDs.length > 0) {
+          for (let index = 0; index < notifcationIDs.length; index++) {
+            const id = notifcationIDs[index];
+  
+            //mark as Read
+            var result = markRead(id);
+            if (result != 1) {
+              return {
+                Code: StatusInvalidInput,
+                Message: InvalidID,
+                Data: id,
+              };
+            }
+          }
+  
+          return {
+            Code: StatusOk,
+            Message: Success,
+            Data: "Notifications Marked as Read",
+          };
+        }
+      }).catch((e)=>{
           return {
             Code: StatusInvalidInput,
             Message: AppCheckFailed,
-            Data: "X-Firebase-AppCheck Failed",
-          }; 
-        }
-      }
+            Data: "x-firebase-appcheck Failed",
+          };
+      })
       
-      const notifcationIDs = this.bodyParams.notifcationIDs;
-
-      if (notifcationIDs && notifcationIDs.length > 0) {
-        for (let index = 0; index < notifcationIDs.length; index++) {
-          const id = notifcationIDs[index];
-
-          //mark as Read
-          var result = markRead(id);
-          if (result != 1) {
-            return {
-              Code: StatusInvalidInput,
-              Message: InvalidID,
-              Data: id,
-            };
-          }
-        }
-
-        return {
-          Code: StatusOk,
-          Message: Success,
-          Data: "Notifications Marked as Read",
-        };
-      }
-
+      
+      
       return {
         Code: StatusInvalidInput,
         Message: BadRequest,
@@ -134,7 +134,7 @@ Meteor.methods({
         var token;      
         //get Firebase token for specieifed user address
         try{
-          token = FCMToken.findOne({ address: address }).token
+          token = FCMToken.findOne({ address: sellerAddress }).token
         }catch(e){
           return e
         }
@@ -159,10 +159,11 @@ Meteor.methods({
           .sendToDevice(token, message, options)
           .then((n) => {
             markSent(saleID);
-            console.log(n)
+           console.log(n)
           })
           .catch((e) => {
             console.log("Notification not sent to ", token);
+            console.log(e)
           });
           
         }
@@ -186,6 +187,7 @@ function markRead(id) {
 }
 
 function markSent(id) {
+  Notifications.update({ _id: id }, { $set: { settled: true } });
   return Notifications.update({ _id: id }, { $set: { settled: true } });
 }
 function getNotifications(address, limit, offset) {
