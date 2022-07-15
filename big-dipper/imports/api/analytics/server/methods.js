@@ -34,6 +34,7 @@ if (Meteor.isServer){
                     var recipe = Recipes.findOne({ID: recipeID})
                     var nftName = getNftName(recipe)
                     var nftUrl = getNftUrl(recipe)
+                    var nftFormat = getNftFormat(recipe);
                     var amountString = getAmountString(txns[i])
                     var amount = getAmount(amountString)
                     var coin = getCoin(amountString)
@@ -46,6 +47,7 @@ if (Meteor.isServer){
                         type: "Sale",
                         itemName: nftName,
                         itemImg: nftUrl,
+                        itemformat : nftFormat,
                         amount: amount,
                         coin: coin,
                         from: receiver,
@@ -388,6 +390,27 @@ function getNftUrl(recipe) {
     }
     return nftUrl
 }
+
+function getNftFormat(recipe) {
+
+    var nftFormat = ""
+    var item_outputs = recipe?.entries?.item_outputs
+    if (item_outputs != null && item_outputs != undefined ){
+        if (item_outputs[0] != null){
+            var properties = item_outputs[0].strings
+            for (var i = 0; i < properties.length; i++){
+                if (properties[i].key == "NFT_Format"){
+                    nftFormat = properties[i].value
+                    break;
+                }
+            }
+            
+        }
+    }
+    return nftFormat
+}
+
+
 
 //getting the nft name out of the recipe object
 function getNftName(recipe) {
