@@ -126,6 +126,7 @@ if (Meteor.isServer) {
           });
           var nftName = getNftName(recipe);
           var nftUrl = getNftUrl(recipe);
+          var nftFormat = getNftFormat(recipe);
           var coinInvolved =
             txns[i]?.tx?.body?.messages[0]?.coin_inputs[0]?.coins[0];
           var creator = txns[i]?.tx?.body?.messages[0]?.creator;
@@ -135,6 +136,7 @@ if (Meteor.isServer) {
             txhash: txns[i]?.txhash,
             itemImg: nftUrl,
             itemName: nftName,
+            format : nftFormat,
             amount: parseFloat(coinInvolved?.amount),
             coin: coinInvolved?.denom,
             type: "Listing",
@@ -399,6 +401,25 @@ function getNftUrl(recipe) {
   }
   return nftUrl;
 }
+
+
+function getNftFormat(recipe) {
+  var nftUrl = "";
+  var item_outputs = recipe?.entries?.item_outputs;
+  if (item_outputs != null && item_outputs != undefined) {
+    if (item_outputs[0] != null) {
+      var properties = item_outputs[0].strings;
+      for (var i = 0; i < properties.length; i++) {
+        if (properties[i].key == "NFT_Format") {
+          nftUrl = properties[i].value;
+          break;
+        }
+      }
+    }
+  }
+  return nftUrl;
+}
+
 
 //getting the nft name out of the recipe object
 function getNftName(recipe) {
