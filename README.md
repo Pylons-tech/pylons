@@ -44,10 +44,13 @@ We could potentially replace this "# Pylons" header with a custom image (see htt
 
 <!-- TODO rewrite this description --->
 
-Built on [Cosmos](http://www.cosmos.network/), **Pylons** is a fast and interoperable system for brands and creators to build engaging products with meaningful NFT experiences.
+Pylons is a blockchain network that allows artists, game studios, and other creatives to sell unique items using Stripe, Apple Pay, and Google Pay.
 
-This repository provides the `pylonsd` daemon, the program for running a node on the [Pylons](https://pylons.tech) blockchain.
-It connects to the other nodes in the network to form a consensus, and responds to API and CLI commands from clients, including the [Pylons SDK](https://github.com/Pylons-tech/pylons_sdk).
+This repository contains:
+
+* The Pylons blockchain software, written in Go using the Cosmos-SDK.
+* Easel, a flutter application.
+* Big Dipper, a block explorer.
 
 ## Documentation
 
