@@ -19,7 +19,6 @@ import (
 	"github.com/Pylons-tech/pylons/app"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 
-	epochtypes "github.com/Pylons-tech/pylons/x/epochs/types"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
@@ -35,20 +34,6 @@ func GenerateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 		addrs[i], _ = info.GetAddress()
 	}
 	return addrs
-}
-
-func distributionEpochGenesis() *epochtypes.GenesisState {
-	epochs := []epochtypes.EpochInfo{
-		{
-			Identifier:            "thirtySeconds",
-			StartTime:             time.Time{},
-			Duration:              time.Second * 30,
-			CurrentEpoch:          0,
-			CurrentEpochStartTime: time.Time{},
-			EpochCountingStarted:  false,
-		},
-	}
-	return epochtypes.NewGenesisState(epochs)
 }
 
 func distributionPylonsGenesis(feesAmount sdk.Coin) *types.GenesisState {
@@ -68,7 +53,6 @@ func distributionNetworkConfig(feesAmount sdk.Coin) network.Config {
 	config.NumValidators = 1
 
 	cdc := config.Codec
-	config.GenesisState["epochs"] = cdc.MustMarshalJSON(distributionEpochGenesis())
 	config.GenesisState["pylons"] = cdc.MustMarshalJSON(distributionPylonsGenesis(feesAmount))
 
 	return config

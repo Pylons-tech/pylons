@@ -45,3 +45,6 @@ import "../../api/analytics/server/publications.js";
 
 import "../../api/actions/server/methods.js";
 import "../../api/actions/server/publications.js";
+
+import "../../api/fcmtoken/server/methods.js";
+import "../../api/notifications/server/methods";

@@ -5,3 +5,4 @@ output/
 .envrc
 settings.json
 ali-scripts.txt
+firebase.json
