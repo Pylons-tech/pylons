@@ -430,38 +430,26 @@ function getAmountString(txn) {
 
 // getting the receiver out of the transaction object
 function getReceiver(txn) {
-  var receiver = "";
-  var events = txn?.tx_response?.logs[0]?.events;
-
-  if (events !== null && events !== undefined) {
-    for (var i = 0; i < events.length; i++) {
-      if (events[i].type === "coin_received") {
-        var attributes = events[i].attributes;
-        for (var j = 0; j < attributes.length; j++) {
-          if (attributes[j].key === "receiver") {
-            receiver = attributes[j].value;
-            break;
-          }
-        }
-      }
-    }
-  }
-
-  return receiver;
+  return getAttributeFromEvent(txn,"coin_received","receiver")
 }
 
 // getting the spender object out of the transaction object
 function getSpender(txn) {
-  var spender = "";
+  return getAttributeFromEvent(txn,"coin_spent","spender")
+}
+
+
+function getAttributeFromEvent(txn,event,attribute){  
+  var Val = "";
   var events = txn?.tx_response?.logs[0]?.events;
 
   if (events !== null && events !== undefined) {
     for (var i = 0; i < events.length; i++) {
-      if (events[i].type === "coin_spent") {
+      if (events[i].type === event) {
         var attributes = events[i].attributes;
         for (var j = 0; j < attributes.length; j++) {
-          if (attributes[j].key === "spender") {
-            spender = attributes[j].value;
+          if (attributes[j].key === attribute) {
+            Val = attributes[j].value;
             break;
           }
         }
@@ -469,8 +457,9 @@ function getSpender(txn) {
     }
   }
 
-  return spender;
+  return Val;
 }
+
 
 // separating amount from the amountString which is like '100000upylon'
 function getAmount(amountString) {
