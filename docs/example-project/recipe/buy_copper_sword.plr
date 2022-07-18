@@ -1,21 +1,25 @@
 {
-    "cookbookID": "cookbookLoudTest",
-    "ID": "LOUDBuyCopperSword",
+    "cookbookId": "cookbookLoudTest",
+    "id": "LOUDBuyCopperSword",
     "name": "LOUD-Buy-Copper-Sword",
     "description": "Purchases a copper sword for loudCoin",
     "version": "v0.0.2",
     "coinInputs": [
-        {
-            "Coin": "loudcoin",
-            "Count": "250"
-        }
+		{
+			"coins" : [
+			    {
+				"denom": "loudcoin",
+				"amount": "250"
+			}
+		]
+		}
     ],
     "itemInputs": [],
     "entries": {
         "coinOutputs": [],
         "itemOutputs": [
             {
-                "ID": "copper_sword_lv1",
+                "id": "copper_sword_lv1",
                 "doubles": [
                     {
                         "key": "attack",
@@ -51,7 +55,7 @@
     },
     "outputs": [
         {
-            "entryIDs": [
+            "entryIds": [
                 "copper_sword_lv1"
             ],
             "weight": 1

@@ -1,21 +1,25 @@
 {
-    "cookbookID": "cookbookLoudTest",
-    "ID": "LOUDBuyIronSword",
+    "cookbookId": "cookbookLoudTest",
+    "id": "LOUDBuyIronSword",
     "name": "LOUD-Buy-Iron-Sword",
     "description": "Purchases a iron sword for loudCoin",
     "version": "v0.0.2",
     "coinInputs": [
-        {
-            "Coin": "loudcoin",
-            "Count": "250"
-        }
+		{
+			"coins" : [
+			    {
+				"denom": "loudcoin",
+				"amount": "250"
+			}
+		]
+		}
     ],
     "itemInputs": [],
     "entries": {
         "coinOutputs": [],
         "itemOutputs": [
             {
-                "ID": "iron_sword_lv1",
+                "id": "iron_sword_lv1",
                 "doubles": [
                     {
                         "key": "attack",
@@ -51,7 +55,7 @@
     },
     "outputs": [
         {
-            "entryIDs": [
+            "entryIds": [
                 "iron_sword_lv1"
             ],
             "weight": 1
