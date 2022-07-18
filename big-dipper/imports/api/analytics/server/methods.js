@@ -1,163 +1,69 @@
-import { Meteor } from "meteor/meteor";
-import { Analytics } from "../analytics.js";
-import { Recipes } from "../../recipes/recipes.js";
-import { Transactions } from "../../transactions/transactions.js";
-import { sanitizeUrl } from "@braintree/sanitize-url";
-import { isoFormat } from "d3";
-import { HTTP } from "meteor/http";
-import { Notifications } from "../../notifications/notifications.js";
-import { result } from "lodash";
+import { Meteor } from 'meteor/meteor';
+import { Analytics } from '../analytics.js';
+import { Recipes } from '../../recipes/recipes.js';
+import { Transactions } from '../../transactions/transactions.js';
+import {sanitizeUrl} from "@braintree/sanitize-url";
+import { isoFormat } from 'd3';
+import { HTTP } from 'meteor/http';
 
-const SalesAnalyticsDenom = "upylon";
-if (Meteor.isServer) {
-  Meteor.methods({
-    "Analytics.upsertSales": async function () {
-      this.unblock();
-      try {
-        // finding the transactions of sales type
-        var txns = Transactions.find(
-          {
-            "tx_response.raw_log": /ExecuteRecipe/,
-            "tx_response.logs.events.type": { $ne: "burn" },
-          },
-          {
-            sort: { "tx_response.timestamp": -1 },
-          }
-        ).fetch();
 
-        // looping through these transactions and extracting the required fields
-        for (var i = 0; i < txns.length; i++) {
-          //extracting the required fields
-          var cookbook_id = txns[i]?.tx?.body?.messages[0]?.cookbook_id;
-          var recipeID = txns[i]?.tx?.body?.messages[0]?.recipe_id;
-          var recipe = Recipes.findOne({ ID: recipeID });
-          var nftName = getNftName(recipe);
-          var nftUrl = getNftUrl(recipe);
-          var amountString = getAmountString(txns[i]);
-          var amount = getAmount(amountString);
-          var coin = getCoin(amountString);
-          var receiver = getReceiver(txns[i]);
-          var spender = getSpender(txns[i]);
+const SalesAnalyticsDenom = "upylon"
+if (Meteor.isServer){
 
-          //constructing the sale object
-          var sale = {
-            txhash: txns[i]?.txhash,
-            type: "Sale",
-            item_name: nftName,
-            item_img: nftUrl,
-            amount: amount,
-            coin: coin,
-            from: receiver,
-            to: spender,
-            time: txns[i]?.tx_response?.timestamp,
-          };
+    Meteor.methods({
+        
+        'Analytics.upsertSales': async function(){
+            this.unblock();
+            try{
+                
+                // finding the transactions of sales type
+                var txns = Transactions.find({
+                    'tx_response.raw_log': /ExecuteRecipe/,
+                    'tx_response.logs.events.type': {$ne: 'burn'}
+                },
+                {
+                    sort:{'tx_response.timestamp': -1}
+                }
+                ).fetch();
 
-          // inserting the extracted information in nft-analytics collection
-          Analytics.upsert({ txhash: txns[i].txhash }, { $set: sale });
+                // looping through these transactions and extracting the required fields
+                for (var i = 0; i < txns.length; i++){
 
-          //additional properties for notifications
-          var res = Notifications.findOne({ txhash: txns[i].txhash });
+                    //extracting the required fields
+                    var recipeID = txns[i]?.tx?.body?.messages[0]?.recipe_id
+                    var recipe = Recipes.findOne({ID: recipeID})
+                    var nftName = getNftName(recipe)
+                    var nftUrl = getNftUrl(recipe)
+                    var nftFormat = getNftFormat(recipe);
+                    var amountString = getAmountString(txns[i])
+                    var amount = getAmount(amountString)
+                    var coin = getCoin(amountString)
+                    var receiver = getReceiver(txns[i])
+                    var spender = getSpender(txns[i])
+                    
+                    //constructing the sale object
+                    var sale = {
+                        txhash: txns[i]?.txhash,
+                        type: "Sale",
+                        itemName: nftName,
+                        itemImg: nftUrl,
+                        itemformat : nftFormat,
+                        amount: amount,
+                        coin: coin,
+                        from: receiver,
+                        to: spender,
+                        time: txns[i]?.tx_response?.timestamp
+                    }
+                    
+                    // inserting the extracted information in nft-analytics collection
+                    Analytics.upsert({'txhash': txns[i].txhash},{$set: sale})
 
-          sale.settled = false;
-          sale.read = false;
-          timestamp = Math.floor(new Date() / 1000); //in seconds
-          sale.created_at = timestamp;
+                }
 
-          //preserved values
-          if (res && 1) {
-            sale.settled = res.settled;
-            sale.read = res.read;
-            sale.created_at = res.created_at;
-          }
-
-          //updated values
-          sale.time = null;
-          sale.updated_at = timestamp; // in seconds
-
-          //upserting info into Notifcations collection
-          Notifications.upsert({ txhash: txns[i].txhash }, { $set: sale });
-        }
-      } catch (e) {
-        console.log("upsertSales error: ", e);
-      }
-    },
-    "Analytics.getAllRecords": async function (limit, offset) {
-      //all listings with limit and starting from offset
-      var records = Analytics.find(
-        {},
-        {
-          sort: { time: -1 },
-          limit: limit,
-          skip: offset,
-        }
-      ).fetch();
-
-      for (var i = 0; i < records.length; i++) {
-        let from = getUserNameInfo(records[i]?.from);
-        let to = getUserNameInfo(records[i].to);
-        records[i].from = from?.username?.value;
-        records[i].to = to?.username?.value;
-      }
-
-      var count = Analytics.find({}).count();
-
-      return {
-        records: records,
-        count: count,
-      };
-    },
-    "Analytics.upsertListings": async function () {
-      this.unblock();
-      try {
-        // finding the transactions of sales type
-        var txns = Transactions.find(
-          { "tx_response.raw_log": /EventCreateRecipe/ },
-          { sort: { "tx_response.timestamp": -1 } }
-        ).fetch();
-
-        // looping through these transactions and extracting the required fields
-        for (i = 0; i < txns.length; i++) {
-          // extracting the required fields
-          var recipeID = txns[i]?.tx?.body?.messages[0]?.id;
-          var cookBookId = txns[i]?.tx?.body?.messages[0]?.cookbook_id;
-          var recipe = Recipes.findOne({
-            ID: recipeID,
-            cookbook_id: cookBookId,
-          });
-          var nftName = getNftName(recipe);
-          var nftUrl = getNftUrl(recipe);
-          var nftFormat = getNftFormat(recipe);
-          var coinInvolved =
-            txns[i]?.tx?.body?.messages[0]?.coin_inputs[0]?.coins[0];
-          var creator = txns[i]?.tx?.body?.messages[0]?.creator;
-
-          // constructing the listing object
-          var listing = {
-            txhash: txns[i]?.txhash,
-            itemImg: nftUrl,
-            itemName: nftName,
-            format : nftFormat,
-            amount: parseFloat(coinInvolved?.amount),
-            coin: coinInvolved?.denom,
-            type: "Listing",
-            from: creator,
-            to: "-",
-            time: txns[i]?.tx_response?.timestamp,
-          };
-
-          // inserting the extracted information in nft-analytics collection
-
-          Analytics.upsert({ txhash: txns[i]?.txhash }, { $set: listing });
-        }
-      } catch (e) {
-        console.log("upserListing error: ", e);
-      }
-    },
-    "Analytics.getListings": async function (limit, offset) {
-      //all listings with limit and starting from offset
-      var listings = Analytics.find(
-        {
-          type: "Listing",
+            }
+            catch (e) {
+                console.log("upsertSales error: ", e)
+            }  
         },
         {
           sort: { time: -1 },
@@ -419,6 +325,27 @@ function getNftFormat(recipe) {
   }
   return nftUrl;
 }
+
+function getNftFormat(recipe) {
+
+    var nftFormat = ""
+    var item_outputs = recipe?.entries?.item_outputs
+    if (item_outputs != null && item_outputs != undefined ){
+        if (item_outputs[0] != null){
+            var properties = item_outputs[0].strings
+            for (var i = 0; i < properties.length; i++){
+                if (properties[i].key == "NFT_Format"){
+                    nftFormat = properties[i].value
+                    break;
+                }
+            }
+            
+        }
+    }
+    return nftFormat
+}
+
+
 
 
 //getting the nft name out of the recipe object
