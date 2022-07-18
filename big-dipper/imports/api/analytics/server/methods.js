@@ -33,7 +33,7 @@ if (Meteor.isServer) {
           const nftUrl = getNftProperty(recipe, 'NFT_URL')
           const nftFormat = getNftProperty(recipe, 'NFT_Format')
           const amountString = getAmountString(txns[i])
-          const amount = getAmount(amountString)
+          const amountVal = getAmount(amountString)
           const coinDenom = getCoin(amountString)
           const receiver = getReceiver(txns[i])
           const spender = getSpender(txns[i])
@@ -45,7 +45,7 @@ if (Meteor.isServer) {
             item_name: nftName,
             item_img: nftUrl,
             item_format: nftFormat,
-            amount: amount,
+            amount: amountVal,
             coin: coinDenom,
             from: receiver,
             to: spender,
@@ -81,28 +81,28 @@ if (Meteor.isServer) {
         console.log('upsertSales error: ', e)
       }
     },
-    'Analytics.getAllRecords': async function (limit, offset) {
+    'Analytics.getAllRecords': async function (limitVal, offsetVal) {
       // all listings with limit and starting from offset
-      const records = Analytics.find(
+      const recordsList = Analytics.find(
         {},
         {
           sort: { time: -1 },
-          limit: limit,
-          skip: offset
+          limit: limitVal,
+          skip: offsetVal
         }
       ).fetch()
 
-      for (let i = 0; i < records.length; i++) {
-        const from = getUserNameInfo(records[i]?.from)
-        const to = getUserNameInfo(records[i].to)
-        records[i].from = from?.username?.value
-        records[i].to = to?.username?.value
+      for (let i = 0; i < recordsList.length; i++) {
+        const from = getUserNameInfo(recordsList[i]?.from)
+        const to = getUserNameInfo(recordsList[i].to)
+        recordsList[i].from = from?.username?.value
+        recordsList[i].to = to?.username?.value
       }
 
       const counts = Analytics.find({}).count()
 
       return {
-        records: records,
+        records: recordsList,
         count: counts
       }
     },
@@ -153,7 +153,7 @@ if (Meteor.isServer) {
         console.log('upserListing error: ', e)
       }
     },
-    'Analytics.getListings': async function (limit, offset) {
+    'Analytics.getListings': async function (limitVal, offsetVal) {
       // all listings with limit and starting from offset
       const listings = Analytics.find(
         {
@@ -161,8 +161,8 @@ if (Meteor.isServer) {
         },
         {
           sort: { time: -1 },
-          limit: limit,
-          skip: offset
+          limit: limitVal,
+          skip: offsetVal
         }
       ).fetch()
 
@@ -175,9 +175,9 @@ if (Meteor.isServer) {
       return listings
     },
     'Analytics.getCreatorOfAllTime': async function () {
-      var mongoListing = Analytics.rawCollection()
+      let mongoListing = Analytics.rawCollection()
 
-      var creatorOfAllTime = await mongoListing
+      let creatorOfAllTime = await mongoListing
         .aggregate([
           {
             $match: {
@@ -209,18 +209,18 @@ if (Meteor.isServer) {
     },
     'Analytics.getCreatorOfTheDay': async function () {
       // start of today
-      let start = new Date()
+      const start = new Date()
       start.setHours(0, 0, 0, 0)
       const startDate = getFormattedDate(start)
 
       // end of today
-      let end = new Date()
+      const end = new Date()
       end.setDate(end.getDate() + 1)
       end.setHours(0, 0, 0, 0)
       const endDate = getFormattedDate(end)
 
       const mongoListing = Analytics.rawCollection()
-      let creatorOfTheDay = await mongoListing
+      const creatorOfTheDay = await mongoListing
         .aggregate([
           {
             $match: {
@@ -247,23 +247,22 @@ if (Meteor.isServer) {
         .toArray()
 
       if (creatorOfTheDay[0] !== null && creatorOfTheDay[0] !== undefined) {
-        var creatorUsername = getUserNameInfo(creatorOfTheDay[0]._id)
-        creatorOfTheDay[0]['from'] = creatorUsername?.username?.value
+        const creatorUsername = getUserNameInfo(creatorOfTheDay[0]._id)
+        creatorOfTheDay[0].from = creatorUsername?.username?.value
         return creatorOfTheDay[0]
       }
-      d
       return null
     },
-    'Analytics.getSales': async function (limit, offset) {
+    'Analytics.getSales': async function (limitVal, offsetVal) {
       // all sales with limit and starting from offset
-      var sales = Analytics.find(
+      let sales = Analytics.find(
         {
           type: 'Sale'
         },
         {
           sort: { time: -1 },
-          limit: limit,
-          skip: offset
+          limit: limitVal,
+          skip: offsetVal
         }
       ).fetch()
 
@@ -278,7 +277,7 @@ if (Meteor.isServer) {
     },
     'Analytics.getSaleOfAllTime': async function () {
       // sale of all time
-      var sale = Analytics.find(
+      const sale = Analytics.find(
         {
           type: 'Sale',
           coin: SalesAnalyticsDenom
@@ -292,18 +291,18 @@ if (Meteor.isServer) {
       return extractSaleFromSales(sale)
     },
     'Analytics.getSaleOfTheDay': async function () {
-      var start = new Date()
+      const start = new Date()
       start.setDate(start.getDate() - 1)
       start.setHours(0, 0, 0, 0)
-      var startDate = getFormattedDate(start)
+      const startDate = getFormattedDate(start)
 
-      var end = new Date()
+      const end = new Date()
       end.setDate(end.getDate() + 1)
       end.setHours(0, 0, 0, 0)
-      var endDate = getFormattedDate(end)
+      const endDate = getFormattedDate(end)
 
       // sale of today
-      var sale = Analytics.find(
+      const sale = Analytics.find(
         {
           type: 'Sale',
           coin: SalesAnalyticsDenom,
@@ -318,27 +317,28 @@ if (Meteor.isServer) {
       return extractSaleFromSales(sale)
     },
     'Analytics.getSalesGraph': async function () {
-      var start = new Date()
-      var end = new Date()
+      const start = new Date()
+      const end = new Date()
       start.setDate(start.getDate() - 7)
       end.setDate(end.getDate() - 6)
 
-      var graphData = []
+      let graphData = []
 
       for (let i = 0; i < 7; i++) {
         start.setDate(start.getDate() + 1)
         start.setHours(0, 0, 0, 0)
-        var startDate = getFormattedDate(start)
+        const startDate = getFormattedDate(start)
 
         end.setDate(end.getDate() + 1)
         end.setHours(0, 0, 0, 0)
-        var endDate = getFormattedDate(end)
+        const endDate = getFormattedDate(end)
 
         // sales
-        var sales = Analytics.find({
+        const sales = Analytics.find({
           type: 'Sale',
           time: { $gte: startDate, $lt: endDate }
         }).fetch()
+
         graphData.push({
           date: startDate,
           sales: sales?.length
@@ -351,27 +351,27 @@ if (Meteor.isServer) {
 }
 
 // getFormattedDate to get date in format (2022-04-12)
-function getFormattedDate(date) {
-  var monthString = date.getMonth() + 1 + ''
+function getFormattedDate (date) {
+  let monthString = date.getMonth() + 1 + ''
   if (monthString.length === 1) {
     monthString = '0' + (date.getMonth() + 1)
   }
 
-  var dateString = date.getDate() + ''
+  let dateString = date.getDate() + ''
   if (dateString.length === 1) {
     dateString = '0' + date.getDate()
   }
 
-  var formattedDate = date.getFullYear() + '-' + monthString + '-' + dateString
+  const formattedDate = date.getFullYear() + '-' + monthString + '-' + dateString
   return formattedDate
 }
 
-function getNftProperty(recipe, property) {
-  var nftUrl = ''
-  let item_outputs = recipe?.entries?.item_outputs
-  if (item_outputs !== null && item_outputs !== undefined) {
-    if (!isNil(item_outputs[0])) {
-      var properties = item_outputs[0].strings
+function getNftProperty (recipe, property) {
+  let nftUrl = ''
+  const itemOutputs = recipe?.entries?.item_outputs
+  if (itemOutputs !== null && itemOutputs !== undefined) {
+    if (!isNil(itemOutputs[0])) {
+      const properties = itemOutputs[0].strings
       for (let i = 0; i < properties.length; i++) {
         if (properties[i].key === property) {
           nftUrl = properties[i].value
@@ -384,18 +384,18 @@ function getNftProperty(recipe, property) {
 }
 
 // getting the nft name out of the recipe object
-function getNftName(recipe) {
+function getNftName (recipe) {
   return recipe?.name
 }
 
 // fetching username info
-function getUserNameInfo(address) {
-  var result
-  var url = sanitizeUrl(
+function getUserNameInfo (address) {
+  let result
+  const url = sanitizeUrl(
     `${Meteor.settings.remote.api}/pylons/account/address/${address}`
   )
   try {
-    let response = HTTP.get(url)
+    const response = HTTP.get(url)
     result = JSON.parse(response.content)
   } catch (e) {
     console.log('error getting userNameInfo: ', e)
@@ -404,12 +404,12 @@ function getUserNameInfo(address) {
 }
 
 // getting amountString from the executed transaction
-function getAmountString(txn) {
+function getAmountString (txn) {
   return getAttributeFromEvent(txn, 'coin_received', 'amount')
 }
 
 // getting the receiver out of the transaction object
-function getReceiver(txn) {
+function getReceiver (txn) {
   return getAttributeFromEvent(txn, 'coin_received', 'receiver')
 }
 
@@ -419,14 +419,14 @@ function getSpender(txn) {
 }
 
 function getAttributeFromEvent(txn, event, attribute) {
-  var Val = ''
-  var events = txn?.tx_response?.logs[0]?.events
+  let Val = ''
+  const events = txn?.tx_response?.logs[0]?.events
 
   if (events !== null && events !== undefined) {
     for (let i = 0; i < events.length; i++) {
       if (events[i].type === event) {
-        var attributes = events[i].attributes
-        for (var j = 0; j < attributes.length; j++) {
+        let attributes = events[i].attributes
+        for (let j = 0; j < attributes.length; j++) {
           if (attributes[j].key === attribute) {
             Val = attributes[j].value
             break
@@ -440,19 +440,19 @@ function getAttributeFromEvent(txn, event, attribute) {
 }
 
 // separating amount from the amountString which is like '100000upylon'
-function getAmount(amountString) {
+function getAmount (amountString) {
   var quantity = parseFloat(amountString.replace(/[^\d\.]*/g, ''))
   return quantity
 }
 
 // separating the coin from the amountString
-function getCoin(amountString) {
+function getCoin (amountString) {
   const quantity = parseFloat(amountString.replace(/[^\d\.]*/g, ''))
   const coin = amountString.replace(quantity, '')
   return coin
 }
 
-function extractSaleFromSales(sales) {
+function extractSaleFromSales (sales) {
   if (!isNil(sales[0])) {
     const buyerUsername = getUserNameInfo(sales[0].to)
     const sellerUsername = getUserNameInfo(sales[0].from)
