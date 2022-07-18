@@ -175,9 +175,9 @@ if (Meteor.isServer) {
       return listings
     },
     'Analytics.getCreatorOfAllTime': async function () {
-      let mongoListing = Analytics.rawCollection()
+      const mongoListing = Analytics.rawCollection()
 
-      let creatorOfAllTime = await mongoListing
+      const creatorOfAllTime = await mongoListing
         .aggregate([
           {
             $match: {
@@ -255,7 +255,7 @@ if (Meteor.isServer) {
     },
     'Analytics.getSales': async function (limitVal, offsetVal) {
       // all sales with limit and starting from offset
-      let sales = Analytics.find(
+      const sales = Analytics.find(
         {
           type: 'Sale'
         },
@@ -322,7 +322,7 @@ if (Meteor.isServer) {
       start.setDate(start.getDate() - 7)
       end.setDate(end.getDate() - 6)
 
-      let graphData = []
+      const graphData = []
 
       for (let i = 0; i < 7; i++) {
         start.setDate(start.getDate() + 1)
@@ -414,18 +414,18 @@ function getReceiver (txn) {
 }
 
 // getting the spender object out of the transaction object
-function getSpender(txn) {
+function getSpender (txn) {
   return getAttributeFromEvent(txn, 'coin_spent', 'spender')
 }
 
-function getAttributeFromEvent(txn, event, attribute) {
+function getAttributeFromEvent (txn, event, attribute) {
   let Val = ''
   const events = txn?.tx_response?.logs[0]?.events
 
   if (events !== null && events !== undefined) {
     for (let i = 0; i < events.length; i++) {
       if (events[i].type === event) {
-        let attributes = events[i].attributes
+        const attributes = events[i].attributes
         for (let j = 0; j < attributes.length; j++) {
           if (attributes[j].key === attribute) {
             Val = attributes[j].value
@@ -441,13 +441,13 @@ function getAttributeFromEvent(txn, event, attribute) {
 
 // separating amount from the amountString which is like '100000upylon'
 function getAmount (amountString) {
-  var quantity = parseFloat(amountString.replace(/[^\d\.]*/g, ''))
+  const quantity = parseFloat(amountString.replace(/[^\d.]*/g, ''))
   return quantity
 }
 
 // separating the coin from the amountString
 function getCoin (amountString) {
-  const quantity = parseFloat(amountString.replace(/[^\d\.]*/g, ''))
+  const quantity = parseFloat(amountString.replace(/[^d\.]*/g, ''))
   const coin = amountString.replace(quantity, '')
   return coin
 }
