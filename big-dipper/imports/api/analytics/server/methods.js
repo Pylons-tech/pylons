@@ -424,26 +424,6 @@ function getNftFormat(recipe) {
   return nftUrl;
 }
 
-function getNftFormat(recipe) {
-
-    var nftFormat = ""
-    var item_outputs = recipe?.entries?.item_outputs
-    if (item_outputs != null && item_outputs != undefined ){
-        if (item_outputs[0] != null){
-            var properties = item_outputs[0].strings
-            for (var i = 0; i < properties.length; i++){
-                if (properties[i].key == "NFT_Format"){
-                    nftFormat = properties[i].value
-                    break;
-                }
-            }
-            
-        }
-    }
-    return nftFormat
-}
-
-
 
 
 //getting the nft name out of the recipe object
