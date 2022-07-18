@@ -114,9 +114,7 @@ if (Meteor.isServer) {
           { 'tx_response.raw_log': /EventCreateRecipe/ },
           { sort: { 'tx_response.timestamp': -1 } }
         ).fetch()
-
         for (let i = 0; i < txns.length; i++) {
-  
           const cookBookId = txns[i]?.tx?.body?.messages[0]?.cookbook_id
           const recipeID = txns[i]?.tx?.body?.messages[0]?.id
           const recipe = Recipes.findOne({
@@ -440,13 +438,13 @@ function getAttributeFromEvent (txn, event, attribute) {
 
 // separating amount from the amountString which is like '100000upylon'
 function getAmount (amountString) {
-  const quantity = parseFloat(amountString.replace(/[^\d.]*/g, ''))
+  const quantity = parseFloat(amountString.replace(/\D/g, ''))
   return quantity
 }
 
 // separating the coin from the amountString
 function getCoin (amountString) {
-  const quantity = parseFloat(amountString.replace(/[^d\.]*/g, ''))
+  const quantity = parseFloat(amountString.replace(/\D/g, ''))
   const coin = amountString.replace(quantity, '')
   return coin
 }
