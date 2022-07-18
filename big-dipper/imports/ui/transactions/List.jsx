@@ -42,8 +42,8 @@ export default class Transactions extends Component{
                 <Row className="header text-nowrap d-none d-lg-flex">
                     <Col xs={9} lg={this.state.homepage ? 5 : 7}><i className="material-icons">message</i> <span className="d-none d-md-inline-block"><T>transactions.activities</T></span></Col>
                     <Col xs={3} lg={!this.state.homepage ? { size: 1, order: "last" } : { size: 2, order: "last" }}><span className={this.state.homepage ? "ml-5" : null}><i className="fas fa-hashtag"></i> <span className="d-none d-md-inline-block"><T>transactions.txHash</T></span></span></Col>
-                    <Col xs={4} md={2} lg={1}><i className="fas fa-database"></i> <span className="d-none d-md-inline-block"><T>common.height</T></span></Col>
-                    <Col xs={2} md={1} className="text-nowrap"><span className={this.state.homepage ? "ml-4" : null}><i className="material-icons">check_circle</i> <span className="d-none d-lg-inline-block"><T>transactions.valid</T></span></span></Col>
+                    <Col xs={4} md={2} lg={2}><i className="fas fa-database"></i> <span className="d-none d-md-inline-block"><T>common.height</T></span></Col>
+                    <Col xs={2} md={2} lg={2} className="text-nowrap"><span className={this.state.homepage ? "ml-4" : null}><i className="material-icons">check_circle</i> <span className="d-none d-lg-inline-block"><T>transactions.valid</T></span></span></Col>
                     {!this.state.homepage ? <Col xs={12} lg={2}><i className="material-icons">monetization_on</i> <span className="d-none d-md-inline-block"><T>transactions.fee</T></span></Col> : null }
                 </Row>
                 {this.state.txs}
