@@ -17,10 +17,10 @@ if (Meteor.isServer) {
         const txns = Transactions.find(
           {
             'tx_response.raw_log': /ExecuteRecipe/,
-            'tx_response.logs.events.type': { $ne: 'burn' },
+            'tx_response.logs.events.type': { $ne: 'burn' }
           },
           {
-            sort: { 'tx_response.timestamp': -1 },
+            sort: { 'tx_response.timestamp': -1 }
           }
         ).fetch()
 
@@ -28,7 +28,7 @@ if (Meteor.isServer) {
         for (let i = 0; i < txns.length; i++) {
           // extracting the required fields
           const recipeID = txns[i]?.tx?.body?.messages[0]?.recipe_id
-          let recipe = Recipes.findOne({ ID: recipeID })
+          const recipe = Recipes.findOne({ ID: recipeID })
           const nftName = getNftName(recipe)
           const nftUrl = getNftProperty(recipe, 'NFT_URL')
           const nftFormat = getNftProperty(recipe, 'NFT_Format')
@@ -49,18 +49,18 @@ if (Meteor.isServer) {
             coin: coinDenom,
             from: receiver,
             to: spender,
-            time: txns[i]?.tx_response?.timestamp,
+            time: txns[i]?.tx_response?.timestamp
           }
 
           // inserting the extracted information in nft-analytics collection
           Analytics.upsert({ txhash: txns[i].txhash }, { $set: sale })
 
           // additional properties for notifications
-          let res = Notifications.findOne({ txhash: txns[i].txhash })
+          const res = Notifications.findOne({ txhash: txns[i].txhash })
 
           sale.settled = false
           sale.read = false
-          let timestamp = Math.floor(new Date() / 1000) // in seconds
+          const timestamp = Math.floor(new Date() / 1000) // in seconds
           sale.created_at = timestamp
 
           // preserved values
@@ -99,11 +99,11 @@ if (Meteor.isServer) {
         records[i].to = to?.username?.value
       }
 
-      let counts = Analytics.find({}).count()
+      const counts = Analytics.find({}).count()
 
       return {
         records: records,
-        count: counts,
+        count: counts
       }
     },
     'Analytics.upsertListings': async function () {
@@ -122,12 +122,13 @@ if (Meteor.isServer) {
           const cookBookId = txns[i]?.tx?.body?.messages[0]?.cookbook_id
           const recipe = Recipes.findOne({
             ID: recipeID,
-            cookbook_id: cookBookId,
+            cookbook_id: cookBookId
           })
           const nftName = getNftName(recipe)
           const nftUrl = getNftProperty(recipe, 'NFT_URL')
           const nftFormat = getNftProperty(recipe, 'NFT_Format')
-          const coinInvolved = txns[i]?.tx?.body?.messages[0]?.coin_inputs[0]?.coins[0]
+          const coinInvolved =
+            txns[i]?.tx?.body?.messages[0]?.coin_inputs[0]?.coins[0]
           const creator = txns[i]?.tx?.body?.messages[0]?.creator
 
           // constructing the listing object
@@ -141,7 +142,7 @@ if (Meteor.isServer) {
             type: 'Listing',
             from: creator,
             to: '-',
-            time: txns[i]?.tx_response?.timestamp,
+            time: txns[i]?.tx_response?.timestamp
           }
 
           // inserting the extracted information in nft-analytics collection
@@ -154,14 +155,14 @@ if (Meteor.isServer) {
     },
     'Analytics.getListings': async function (limit, offset) {
       // all listings with limit and starting from offset
-      let listings = Analytics.find(
+      const listings = Analytics.find(
         {
-          type: 'Listing',
+          type: 'Listing'
         },
         {
           sort: { time: -1 },
           limit: limit,
-          skip: offset,
+          skip: offset
         }
       ).fetch()
 
@@ -180,26 +181,26 @@ if (Meteor.isServer) {
         .aggregate([
           {
             $match: {
-              type: 'Listing',
-            },
+              type: 'Listing'
+            }
           },
           {
             $group: {
               _id: '$from', // grouping on from field
-              count: { $sum: 1 },
-            },
+              count: { $sum: 1 }
+            }
           },
           {
-            $sort: { count: -1 }, // sorting on the basis of count in descending order
+            $sort: { count: -1 } // sorting on the basis of count in descending order
           },
           {
-            $limit: 1, // fetching the top-most document
-          },
+            $limit: 1 // fetching the top-most document
+          }
         ])
         .toArray()
 
       if (creatorOfAllTime[0] !== null && creatorOfAllTime[0] !== undefined) {
-        var creatorUsername = getUserNameInfo(creatorOfAllTime[0]._id)
+        const creatorUsername = getUserNameInfo(creatorOfAllTime[0]._id)
         creatorOfAllTime[0].from = creatorUsername?.username?.value
         return creatorOfAllTime[0]
       }
@@ -208,40 +209,40 @@ if (Meteor.isServer) {
     },
     'Analytics.getCreatorOfTheDay': async function () {
       // start of today
-      var start = new Date()
+      let start = new Date()
       start.setHours(0, 0, 0, 0)
-      var startDate = getFormattedDate(start)
+      const startDate = getFormattedDate(start)
 
       // end of today
-      var end = new Date()
+      let end = new Date()
       end.setDate(end.getDate() + 1)
       end.setHours(0, 0, 0, 0)
-      var endDate = getFormattedDate(end)
+      const endDate = getFormattedDate(end)
 
-      var mongoListing = Analytics.rawCollection()
-      var creatorOfTheDay = await mongoListing
+      const mongoListing = Analytics.rawCollection()
+      let creatorOfTheDay = await mongoListing
         .aggregate([
           {
             $match: {
               type: 'Listing',
               time: {
                 $gte: startDate, // documents with time greater than or equal to startDate
-                $lt: endDate, // and documents with time less than endDate
-              },
-            },
+                $lt: endDate // and documents with time less than endDate
+              }
+            }
           },
           {
             $group: {
               _id: '$from', // group the matching documents on from field
-              count: { $sum: 1 }, // count the documents in each group
-            },
+              count: { $sum: 1 } // count the documents in each group
+            }
           },
           {
-            $sort: { count: -1 }, // sort the groups on count field in descending order
+            $sort: { count: -1 } // sort the groups on count field in descending order
           },
           {
-            $limit: 1, // get the top-most document
-          },
+            $limit: 1 // get the top-most document
+          }
         ])
         .toArray()
 
@@ -257,12 +258,12 @@ if (Meteor.isServer) {
       // all sales with limit and starting from offset
       var sales = Analytics.find(
         {
-          type: 'Sale',
+          type: 'Sale'
         },
         {
           sort: { time: -1 },
           limit: limit,
-          skip: offset,
+          skip: offset
         }
       ).fetch()
 
@@ -280,11 +281,11 @@ if (Meteor.isServer) {
       var sale = Analytics.find(
         {
           type: 'Sale',
-          coin: SalesAnalyticsDenom,
+          coin: SalesAnalyticsDenom
         },
         {
           sort: { amount: -1, time: -1 },
-          limit: 1,
+          limit: 1
         }
       ).fetch()
 
@@ -306,11 +307,11 @@ if (Meteor.isServer) {
         {
           type: 'Sale',
           coin: SalesAnalyticsDenom,
-          time: { $gte: startDate, $lt: endDate },
+          time: { $gte: startDate, $lt: endDate }
         },
         {
           sort: { amount: -1 },
-          limit: 1,
+          limit: 1
         }
       ).fetch()
 
@@ -336,16 +337,16 @@ if (Meteor.isServer) {
         // sales
         var sales = Analytics.find({
           type: 'Sale',
-          time: { $gte: startDate, $lt: endDate },
+          time: { $gte: startDate, $lt: endDate }
         }).fetch()
         graphData.push({
           date: startDate,
-          sales: sales?.length,
+          sales: sales?.length
         })
       }
 
       return graphData
-    },
+    }
   })
 }
 
