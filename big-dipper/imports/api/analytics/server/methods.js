@@ -115,11 +115,10 @@ if (Meteor.isServer) {
           { sort: { 'tx_response.timestamp': -1 } }
         ).fetch()
 
-        // looping through these transactions and extracting the required fields
         for (let i = 0; i < txns.length; i++) {
-          // extracting the required fields
-          const recipeID = txns[i]?.tx?.body?.messages[0]?.id
+  
           const cookBookId = txns[i]?.tx?.body?.messages[0]?.cookbook_id
+          const recipeID = txns[i]?.tx?.body?.messages[0]?.id
           const recipe = Recipes.findOne({
             ID: recipeID,
             cookbook_id: cookBookId
