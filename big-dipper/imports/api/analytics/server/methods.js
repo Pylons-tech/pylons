@@ -31,8 +31,8 @@ if (Meteor.isServer) {
           var recipeID = txns[i]?.tx?.body?.messages[0]?.recipe_id;
           var recipe = Recipes.findOne({ ID: recipeID });
           var nftName = getNftName(recipe);
-          var nftUrl = getNftUrl(recipe);
-          var nftFormat = getNftFormat(recipe);
+          var nftUrl = getNftProperty(recipe,"NFT_URL");
+          var nftFormat = getNftProperty(recipe,"NFT_Format");
           var amountString = getAmountString(txns[i]);
           var amount = getAmount(amountString);
           var coin = getCoin(amountString);
@@ -126,8 +126,8 @@ if (Meteor.isServer) {
             cookbook_id: cookBookId,
           });
           var nftName = getNftName(recipe);
-          var nftUrl = getNftUrl(recipe);
-          var nftFormat = getNftFormat(recipe);
+          var nftUrl = getNftProperty(recipe,"NFT_URL");
+          var nftFormat = getNftProperty(recipe,"NFT_Format");
           var coinInvolved =
             txns[i]?.tx?.body?.messages[0]?.coin_inputs[0]?.coins[0];
           var creator = txns[i]?.tx?.body?.messages[0]?.creator;
@@ -367,15 +367,15 @@ function getFormattedDate(date) {
   return formattedDate;
 }
 
-// getting the nft url out of the recipe object
-function getNftUrl(recipe) {
+
+function getNftProperty(recipe,property) {
   var nftUrl = "";
   var item_outputs = recipe?.entries?.item_outputs;
   if (item_outputs !== null && item_outputs !== undefined) {
     if (!isNil(item_outputs[0])) {
       var properties = item_outputs[0].strings;
       for (var i = 0; i < properties.length; i++) {
-        if (properties[i].key == "NFT_URL") {
+        if (properties[i].key === property) {
           nftUrl = properties[i].value;
           break;
         }
@@ -385,22 +385,6 @@ function getNftUrl(recipe) {
   return nftUrl;
 }
 
-function getNftFormat(recipe) {
-  var nftUrl = "";
-  var item_outputs = recipe?.entries?.item_outputs;
-  if (item_outputs !== null && item_outputs !== undefined) {
-    if (!isNil(item_outputs[0])) {
-      var properties = item_outputs[0].strings;
-      for (var i = 0; i < properties.length; i++) {
-        if (properties[i].key === "NFT_Format") {
-          nftUrl = properties[i].value;
-          break;
-        }
-      }
-    }
-  }
-  return nftUrl;
-}
 
 // getting the nft name out of the recipe object
 function getNftName(recipe) {
