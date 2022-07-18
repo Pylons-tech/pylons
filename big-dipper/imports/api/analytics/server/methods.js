@@ -1,48 +1,48 @@
-import { Meteor } from "meteor/meteor";
-import { Analytics } from "../analytics.js";
-import { Recipes } from "../../recipes/recipes.js";
-import { Transactions } from "../../transactions/transactions.js";
-import { sanitizeUrl } from "@braintree/sanitize-url";
-import { HTTP } from "meteor/http";
-import { Notifications } from "../../notifications/notifications.js";
-import { isNil } from "lodash";
+import { Meteor } from 'meteor/meteor';
+import { Analytics } from '../analytics.js';
+import { Recipes } from '../../recipes/recipes.js';
+import { Transactions } from '../../transactions/transactions.js';
+import { sanitizeUrl } from '@braintree/sanitize-url';
+import { HTTP } from 'meteor/http';
+import { Notifications } from '../../notifications/notifications.js';
+import { isNil } from 'lodash';
 
-const SalesAnalyticsDenom = "upylon";
+const SalesAnalyticsDenom = 'upylon';
 if (Meteor.isServer) {
   Meteor.methods({
-    "Analytics.upsertSales": async function () {
+    'Analytics.upsertSales': async function () {
       this.unblock();
       try {
         // finding the transactions of sales type
-        var txns = Transactions.find(
+        let txns = Transactions.find(
           {
-            "tx_response.raw_log": /ExecuteRecipe/,
-            "tx_response.logs.events.type": { $ne: "burn" },
+            'tx_response.raw_log': /ExecuteRecipe/,
+            'tx_response.logs.events.type': { $ne: 'burn' },
           },
           {
-            sort: { "tx_response.timestamp": -1 },
+            sort: { 'tx_response.timestamp': -1 },
           }
         ).fetch();
 
         // looping through these transactions and extracting the required fields
-        for (var i = 0; i < txns.length; i++) {
+        for (let i = 0; i < txns.length; i++) {
           // extracting the required fields
-          var cookbook_id = txns[i]?.tx?.body?.messages[0]?.cookbook_id;
-          var recipeID = txns[i]?.tx?.body?.messages[0]?.recipe_id;
-          var recipe = Recipes.findOne({ ID: recipeID });
-          var nftName = getNftName(recipe);
-          var nftUrl = getNftProperty(recipe,"NFT_URL");
-          var nftFormat = getNftProperty(recipe,"NFT_Format");
-          var amountString = getAmountString(txns[i]);
-          var amount = getAmount(amountString);
-          var coin = getCoin(amountString);
-          var receiver = getReceiver(txns[i]);
-          var spender = getSpender(txns[i]);
+          let cookbook_id = txns[i]?.tx?.body?.messages[0]?.cookbook_id;
+          let recipeID = txns[i]?.tx?.body?.messages[0]?.recipe_id;
+          let recipe = Recipes.findOne({ ID: recipeID });
+          let nftName = getNftName(recipe);
+          let nftUrl = getNftProperty(recipe,'NFT_URL');
+          let nftFormat = getNftProperty(recipe,'NFT_Format');
+          let amountString = getAmountString(txns[i]);
+          let amount = getAmount(amountString);
+          let coin = getCoin(amountString);
+          let receiver = getReceiver(txns[i]);
+          let spender = getSpender(txns[i]);
 
           // constructing the sale object
-          var sale = {
+          let sale = {
             txhash: txns[i]?.txhash,
-            type: "Sale",
+            type: 'Sale',
             item_name: nftName,
             item_img: nftUrl,
             item_format: nftFormat,
@@ -57,7 +57,7 @@ if (Meteor.isServer) {
           Analytics.upsert({ txhash: txns[i].txhash }, { $set: sale });
 
           // additional properties for notifications
-          var res = Notifications.findOne({ txhash: txns[i].txhash });
+          let res = Notifications.findOne({ txhash: txns[i].txhash });
 
           sale.settled = false;
           sale.read = false;
@@ -79,12 +79,12 @@ if (Meteor.isServer) {
           Notifications.upsert({ txhash: txns[i].txhash }, { $set: sale });
         }
       } catch (e) {
-        console.log("upsertSales error: ", e);
+        console.log('upsertSales error: ', e);
       }
     },
-    "Analytics.getAllRecords": async function (limit, offset) {
+    'Analytics.getAllRecords': async function (limit, offset) {
       // all listings with limit and starting from offset
-      var records = Analytics.find(
+      let records = Analytics.find(
         {},
         {
           sort: { time: -1 },
@@ -107,13 +107,13 @@ if (Meteor.isServer) {
         count: count,
       };
     },
-    "Analytics.upsertListings": async function () {
+    'Analytics.upsertListings': async function () {
       this.unblock();
       try {
         // finding the transactions of sales type
         var txns = Transactions.find(
-          { "tx_response.raw_log": /EventCreateRecipe/ },
-          { sort: { "tx_response.timestamp": -1 } }
+          { 'tx_response.raw_log': /EventCreateRecipe/ },
+          { sort: { 'tx_response.timestamp': -1 } }
         ).fetch();
 
         // looping through these transactions and extracting the required fields
@@ -126,8 +126,8 @@ if (Meteor.isServer) {
             cookbook_id: cookBookId,
           });
           var nftName = getNftName(recipe);
-          var nftUrl = getNftProperty(recipe,"NFT_URL");
-          var nftFormat = getNftProperty(recipe,"NFT_Format");
+          var nftUrl = getNftProperty(recipe,'NFT_URL');
+          var nftFormat = getNftProperty(recipe,'NFT_Format');
           var coinInvolved =
             txns[i]?.tx?.body?.messages[0]?.coin_inputs[0]?.coins[0];
           var creator = txns[i]?.tx?.body?.messages[0]?.creator;
@@ -140,9 +140,9 @@ if (Meteor.isServer) {
             itemFormat: nftFormat,
             amount: parseFloat(coinInvolved?.amount),
             coin: coinInvolved?.denom,
-            type: "Listing",
+            type: 'Listing',
             from: creator,
-            to: "-",
+            to: '-',
             time: txns[i]?.tx_response?.timestamp,
           };
 
@@ -151,14 +151,14 @@ if (Meteor.isServer) {
           Analytics.upsert({ txhash: txns[i]?.txhash }, { $set: listing });
         }
       } catch (e) {
-        console.log("upserListing error: ", e);
+        console.log('upserListing error: ', e);
       }
     },
-    "Analytics.getListings": async function (limit, offset) {
+    'Analytics.getListings': async function (limit, offset) {
       // all listings with limit and starting from offset
       var listings = Analytics.find(
         {
-          type: "Listing",
+          type: 'Listing',
         },
         {
           sort: { time: -1 },
@@ -175,19 +175,19 @@ if (Meteor.isServer) {
 
       return listings;
     },
-    "Analytics.getCreatorOfAllTime": async function () {
+    'Analytics.getCreatorOfAllTime': async function () {
       var mongoListing = Analytics.rawCollection();
 
       var creatorOfAllTime = await mongoListing
         .aggregate([
           {
             $match: {
-              type: "Listing",
+              type: 'Listing',
             },
           },
           {
             $group: {
-              _id: "$from", // grouping on from field
+              _id: '$from', // grouping on from field
               count: { $sum: 1 },
             },
           },
@@ -202,13 +202,13 @@ if (Meteor.isServer) {
 
       if (creatorOfAllTime[0] !== null && creatorOfAllTime[0] !== undefined) {
         var creatorUsername = getUserNameInfo(creatorOfAllTime[0]._id);
-        creatorOfAllTime[0]["from"] = creatorUsername?.username?.value;
+        creatorOfAllTime[0]['from'] = creatorUsername?.username?.value;
         return creatorOfAllTime[0];
       }
 
       return null;
     },
-    "Analytics.getCreatorOfTheDay": async function () {
+    'Analytics.getCreatorOfTheDay': async function () {
       // start of today
       var start = new Date();
       start.setHours(0, 0, 0, 0);
@@ -225,7 +225,7 @@ if (Meteor.isServer) {
         .aggregate([
           {
             $match: {
-              type: "Listing",
+              type: 'Listing',
               time: {
                 $gte: startDate, // documents with time greater than or equal to startDate
                 $lt: endDate, // and documents with time less than endDate
@@ -234,7 +234,7 @@ if (Meteor.isServer) {
           },
           {
             $group: {
-              _id: "$from", // group the matching documents on from field
+              _id: '$from', // group the matching documents on from field
               count: { $sum: 1 }, // count the documents in each group
             },
           },
@@ -249,17 +249,17 @@ if (Meteor.isServer) {
 
       if (creatorOfTheDay[0] !== null && creatorOfTheDay[0] !== undefined) {
         var creatorUsername = getUserNameInfo(creatorOfTheDay[0]._id);
-        creatorOfTheDay[0]["from"] = creatorUsername?.username?.value;
+        creatorOfTheDay[0]['from'] = creatorUsername?.username?.value;
         return creatorOfTheDay[0];
       }
       d;
       return null;
     },
-    "Analytics.getSales": async function (limit, offset) {
+    'Analytics.getSales': async function (limit, offset) {
       // all sales with limit and starting from offset
       var sales = Analytics.find(
         {
-          type: "Sale",
+          type: 'Sale',
         },
         {
           sort: { time: -1 },
@@ -277,11 +277,11 @@ if (Meteor.isServer) {
       }
       return sales;
     },
-    "Analytics.getSaleOfAllTime": async function () {
+    'Analytics.getSaleOfAllTime': async function () {
       // sale of all time
       var sale = Analytics.find(
         {
-          type: "Sale",
+          type: 'Sale',
           coin: SalesAnalyticsDenom,
         },
         {
@@ -292,7 +292,7 @@ if (Meteor.isServer) {
 
       return extractSaleFromSales(sale);
     },
-    "Analytics.getSaleOfTheDay": async function () {
+    'Analytics.getSaleOfTheDay': async function () {
       var start = new Date();
       start.setDate(start.getDate() - 1);
       start.setHours(0, 0, 0, 0);
@@ -306,7 +306,7 @@ if (Meteor.isServer) {
       // sale of today
       var sale = Analytics.find(
         {
-          type: "Sale",
+          type: 'Sale',
           coin: SalesAnalyticsDenom,
           time: { $gte: startDate, $lt: endDate },
         },
@@ -318,7 +318,7 @@ if (Meteor.isServer) {
 
       return extractSaleFromSales(sale);
     },
-    "Analytics.getSalesGraph": async function () {
+    'Analytics.getSalesGraph': async function () {
       var start = new Date();
       var end = new Date();
       start.setDate(start.getDate() - 7);
@@ -337,7 +337,7 @@ if (Meteor.isServer) {
 
         // sales
         var sales = Analytics.find({
-          type: "Sale",
+          type: 'Sale',
           time: { $gte: startDate, $lt: endDate },
         }).fetch();
         graphData.push({
@@ -353,23 +353,23 @@ if (Meteor.isServer) {
 
 // getFormattedDate to get date in format (2022-04-12)
 function getFormattedDate(date) {
-  var monthString = date.getMonth() + 1 + "";
+  var monthString = date.getMonth() + 1 + '';
   if (monthString.length === 1) {
-    monthString = "0" + (date.getMonth() + 1);
+    monthString = '0' + (date.getMonth() + 1);
   }
 
-  var dateString = date.getDate() + "";
+  var dateString = date.getDate() + '';
   if (dateString.length === 1) {
-    dateString = "0" + date.getDate();
+    dateString = '0' + date.getDate();
   }
 
-  var formattedDate = date.getFullYear() + "-" + monthString + "-" + dateString;
+  var formattedDate = date.getFullYear() + '-' + monthString + '-' + dateString;
   return formattedDate;
 }
 
 
 function getNftProperty(recipe,property) {
-  var nftUrl = "";
+  var nftUrl = '';
   var item_outputs = recipe?.entries?.item_outputs;
   if (item_outputs !== null && item_outputs !== undefined) {
     if (!isNil(item_outputs[0])) {
@@ -401,30 +401,30 @@ function getUserNameInfo(address) {
     let response = HTTP.get(url);
     result = JSON.parse(response.content);
   } catch (e) {
-    console.log("error getting userNameInfo: ", e);
+    console.log('error getting userNameInfo: ', e);
   }
   return result;
 }
 
 // getting amountString from the executed transaction
 function getAmountString(txn) {
-  return getAttributeFromEvent(txn,"coin_received","amount")
+  return getAttributeFromEvent(txn,'coin_received','amount')
 
 }
 
 // getting the receiver out of the transaction object
 function getReceiver(txn) {
-  return getAttributeFromEvent(txn,"coin_received","receiver")
+  return getAttributeFromEvent(txn,'coin_received','receiver')
 }
 
 // getting the spender object out of the transaction object
 function getSpender(txn) {
-  return getAttributeFromEvent(txn,"coin_spent","spender")
+  return getAttributeFromEvent(txn,'coin_spent','spender')
 }
 
 
-function getAttributeFromEvent(txn,event,attribute){  
-  var Val = "";
+function getAttributeFromEvent(txn,event,attribute) {  
+  var Val = '';
   var events = txn?.tx_response?.logs[0]?.events;
 
   if (events !== null && events !== undefined) {
@@ -447,21 +447,21 @@ function getAttributeFromEvent(txn,event,attribute){
 
 // separating amount from the amountString which is like '100000upylon'
 function getAmount(amountString) {
-  var quantity = parseFloat(amountString.replace(/[^\d\.]*/g, ""));
+  var quantity = parseFloat(amountString.replace(/[^\d\.]*/g, ''));
   return quantity;
 }
 
 // separating the coin from the amountString
 function getCoin(amountString) {
-  const quantity = parseFloat(amountString.replace(/[^\d\.]*/g, ""));
-  const coin = amountString.replace(quantity, "");
+  const quantity = parseFloat(amountString.replace(/[^\d\.]*/g, ''));
+  const coin = amountString.replace(quantity, '');
   return coin;
 }
 
 function extractSaleFromSales(sales) {
   if (!isNil(sales[0])) {
-    let buyerUsername = getUserNameInfo(sales[0].to);
-    let sellerUsername = getUserNameInfo(sales[0].from);
+    const buyerUsername = getUserNameInfo(sales[0].to);
+    const sellerUsername = getUserNameInfo(sales[0].from);
 
     sales[0].to = buyerUsername?.username?.value;
     sales[0].from = sellerUsername?.username?.value;
