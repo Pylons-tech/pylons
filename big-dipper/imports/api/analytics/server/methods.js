@@ -408,24 +408,8 @@ function getUserNameInfo(address) {
 
 // getting amountString from the executed transaction
 function getAmountString(txn) {
-  var amountString = "";
-  var events = txn?.tx_response?.logs[0]?.events;
+  return getAttributeFromEvent(txn,"coin_received","amount")
 
-  if (events !== null && events !== undefined) {
-    for (var i = 0; i < events.length; i++) {
-      if (events[i].type === "coin_received") {
-        var attributes = events[i].attributes;
-        for (var j = 0; j < attributes.length; j++) {
-          if (attributes[j].key === "amount") {
-            amountString = attributes[j].value;
-            break;
-          }
-        }
-      }
-    }
-  }
-
-  return amountString;
 }
 
 // getting the receiver out of the transaction object
