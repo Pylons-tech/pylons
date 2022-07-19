@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import { WebApp } from 'meteor/webapp'
 import { Notifications } from '../notifications.js'
 import { FCMToken } from '../../fcmtoken/fcmtoken.js'
-import { isNumber } from 'lodash'
+import { isNumber, isString } from 'lodash'
 import { sanitizeUrl } from '@braintree/sanitize-url'
 import { HTTP } from 'meteor/http'
 import { admin } from '../../admin.js'
@@ -15,7 +15,7 @@ const BadRequest = 'Bad Request'
 const InvalidID = 'Invalid Notification ID'
 const AppCheckFailed = 'App Check Failed'
 
-var Api = new Restivus({
+const Api = new Restivus({
   useDefaultAuth: true,
   prettyJson: true
 })
@@ -31,7 +31,7 @@ Api.addRoute(
         isNumber(this.urlParams.offset)
       ) {
         try {
-          var res = getNotifications(
+          const res = getNotifications(
             this.urlParams.address,
             this.urlParams.limit,
             this.urlParams.offset
@@ -105,7 +105,7 @@ WebApp.connectHandlers.use(
 
               // mark as Read
               const result = markRead(id)
-              if (result != 1) {
+              if (result !== 1) {
                 res.writeHead(StatusOk, {
                   'Content-Type': 'text/html'
                 })
@@ -125,7 +125,7 @@ WebApp.connectHandlers.use(
               'Content-Type': 'text/html'
             })
 
-            res.end(
+            res.end (
               JSON.stringify({
                 Code: StatusOk,
                 Message: Success,
@@ -200,7 +200,7 @@ Meteor.methods({
   }
 })
 
-function Valid(parameter) {
+function Valid (parameter) {
   if (isString(parameter)) {
     return false
   }
@@ -210,15 +210,15 @@ function Valid(parameter) {
   return true
 }
 
-function markRead(id) {
+function markRead (id) {
   return Notifications.update({ _id: id }, { $set: { read: true } })
 }
 
-function markSent(id) {
+function markSent (id) {
   Notifications.update({ _id: id }, { $set: { settled: true } })
   return Notifications.update({ _id: id }, { $set: { settled: true } })
 }
-function getNotifications(address, limit, offset) {
+function getNotifications (address, limit, offset) {
   return Notifications.find(
     { from: address },
     {
@@ -229,7 +229,7 @@ function getNotifications(address, limit, offset) {
   ).fetch()
 }
 
-function getUserNameInfo(address) {
+function getUserNameInfo (address) {
   let result
   const url = sanitizeUrl(
     `${Meteor.settings.remote.api}/pylons/account/address/${address}`
@@ -243,7 +243,7 @@ function getUserNameInfo(address) {
   return result
 }
 
-async function verifyAppCheckToken(appCheckToken) {
+async function verifyAppCheckToken (appCheckToken) {
   if (!appCheckToken) {
     return null
   }

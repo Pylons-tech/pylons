@@ -65,7 +65,7 @@ WebApp.connectHandlers.use(
           )
         }
 
-       const result = updateFCMToken(req.params.address, req.params.token)
+        const result = updateFCMToken(req.params.address, req.params.token)
 
         if (result === false) {
           res.writeHead(400, {
@@ -125,7 +125,7 @@ function Valid (parameter) {
   return true
 }
 
-async function verifyAppCheckToken (appCheckToken){
+async function verifyAppCheckToken (appCheckToken) {
   if (!appCheckToken) {
     return null
   }
