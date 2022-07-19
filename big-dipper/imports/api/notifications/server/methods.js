@@ -10,7 +10,6 @@ import connectRoute from 'connect-route'
 
 const StatusOk = 200
 const StatusInvalidInput = 400
-const InternalServerError = 500
 const Success = 'Success'
 const BadRequest = 'Bad Request'
 const InvalidID = 'Invalid Notification ID'
@@ -20,8 +19,6 @@ var Api = new Restivus({
   useDefaultAuth: true,
   prettyJson: true
 })
-
-
 
 Api.addRoute(
   'notifications/getAllNotifcations/:address/:limit/:offset',
@@ -48,7 +45,7 @@ Api.addRoute(
           return {
             Code: StatusInvalidInput,
             Message: BadRequest,
-            Data: e //"Error Fetching Notifcations",
+            Data: e // "Error Fetching Notifcations",
           }
         }
       }
@@ -63,115 +60,110 @@ Api.addRoute(
 
 WebApp.connectHandlers.use(
   connectRoute(function (router) {
-    router.post(
-      '/notifications/markread',
-      async function (req,res) {
-        let h = req.headers
-        let notificationIDs = req.body.notificationIDs
+    router.post('/notifications/markread', async function (req, res) {
+      const h = req.headers
+      const notificationIDs = req.body.notificationIDs
 
-        if (!h['x-firebase-appcheck']) {
-          res.writeHead(StatusOk, {
-            'Content-Type': 'text/html'
+      if (!h['x-firebase-appcheck']) {
+        res.writeHead(StatusOk, {
+          'Content-Type': 'text/html'
+        })
+
+        res.end(
+          JSON.stringify({
+            Code: StatusInvalidInput,
+            Message: AppCheckFailed,
+            Data: 'x-firebase-appcheck header missing'
           })
-
-          res.end(
-            JSON.stringify({
-              Code: StatusInvalidInput,
-              Message: AppCheckFailed,
-              Data: 'x-firebase-appcheck header missing'
-            })
+        )
+      } else {
+        if (notificationIDs && notificationIDs.length > 0) {
+          // performing app check
+          const appCheckClaims = await verifyAppCheckToken(
+            h['x-firebase-appcheck']
           )
-        } else {
-          if (notificationIDs && notificationIDs.length > 0) {
-            
-            // performing app check
-            const appCheckClaims = await verifyAppCheckToken(
-              h['x-firebase-appcheck']
+
+          // app check failed
+          if (!appCheckClaims) {
+            res.writeHead(StatusOk, {
+              'Content-Type': 'text/html'
+            })
+
+            res.end(
+              JSON.stringify({
+                Code: StatusInvalidInput,
+                Message: AppCheckFailed,
+                Data: 'invalid x-firebase-appcheck header'
+              })
             )
-
-            // app check failed
-            if (!appCheckClaims) {
-              res.writeHead(StatusOk, {
-                'Content-Type': 'text/html'
-              })
-
-              res.end(
-                JSON.stringify({
-                  Code: StatusInvalidInput,
-                  Message: AppCheckFailed,
-                  Data: 'invalid x-firebase-appcheck header'
-                })
-              )
-            }
-
-
-            //app check passed
-            if (notificationIDs && notificationIDs.length > 0) {
-              for (let index = 0; index < notificationIDs.length; index++) {
-                const id = notificationIDs[index]
-  
-                //mark as Read
-                var result = markRead(id)
-                if (result != 1) {
-                  res.writeHead(StatusOk, {
-                    'Content-Type': 'text/html'
-                  })
-        
-                  res.end(
-                    JSON.stringify({
-                      Code: StatusInvalidInput,
-                      Message: InvalidID,
-                      Data: `notificationID ${id} is invalid`
-                    })
-                  )
-                }
-              }
-              
-              //Success
-              res.writeHead(StatusOk, {
-                'Content-Type': 'text/html'
-              })
-    
-              res.end(
-                JSON.stringify({
-                  Code: StatusOk,
-                  Message: Success,
-                  Data: 'notifications marked as Read'
-                })
-              )
-            }
           }
 
-          //invalid request
-          res.writeHead(StatusOk, {
-            'Content-Type': 'text/html'
-          })
+          // app check passed
+          if (notificationIDs && notificationIDs.length > 0) {
+            for (let index = 0; index < notificationIDs.length; index++) {
+              const id = notificationIDs[index]
 
-          res.end(
-            JSON.stringify({
-              Code: StatusInvalidInput,
-              Message: BadRequest,
-              Data: 'notifcationIDs list is missing or corrupt'
+              // mark as Read
+              const result = markRead(id)
+              if (result != 1) {
+                res.writeHead(StatusOk, {
+                  'Content-Type': 'text/html'
+                })
+
+                res.end(
+                  JSON.stringify({
+                    Code: StatusInvalidInput,
+                    Message: InvalidID,
+                    Data: `notificationID ${id} is invalid`
+                  })
+                )
+              }
+            }
+
+            // Success
+            res.writeHead(StatusOk, {
+              'Content-Type': 'text/html'
             })
-          )
+
+            res.end(
+              JSON.stringify({
+                Code: StatusOk,
+                Message: Success,
+                Data: 'notifications marked as Read'
+              })
+            )
+          }
         }
+
+        // invalid request
+        res.writeHead(StatusOk, {
+          'Content-Type': 'text/html'
+        })
+
+        res.end(
+          JSON.stringify({
+            Code: StatusInvalidInput,
+            Message: BadRequest,
+            Data: 'notifcationIDs list is missing or corrupt'
+          })
+        )
       }
-    )
+    })
   })
 )
 
 Meteor.methods({
-  //send un settleed notifications
+  // send un settleed notifications
   'Notifications.sendPushNotifications': function () {
     this.unblock()
 
     const unSettled = Notifications.find({ settled: false })
 
     unSettled.forEach((sale) => {
-      var sellerAddress = sale.from
-      var saleID = sale._id
-      var token
-      //get Firebase token for specified user address
+      const sellerAddress = sale.from
+      const saleID = sale._id
+      let token
+      // get Firebase token for specified user address
       try {
         token = FCMToken.findOne({ address: sellerAddress }).token
       } catch (e) {
@@ -209,10 +201,10 @@ Meteor.methods({
 })
 
 function Valid(parameter) {
-  if (typeof parameter != 'string') {
+  if (isString(parameter)) {
     return false
   }
-  if (parameter.length == 0) {
+  if (parameter.length === 0) {
     return false
   }
   return true
@@ -238,12 +230,12 @@ function getNotifications(address, limit, offset) {
 }
 
 function getUserNameInfo(address) {
-  var result
-  var url = sanitizeUrl(
+  let result
+  const url = sanitizeUrl(
     `${Meteor.settings.remote.api}/pylons/account/address/${address}`
   )
   try {
-    let response = HTTP.get(url)
+    const response = HTTP.get(url)
     result = JSON.parse(response.content)
   } catch (e) {
     console.log('error getting userNameInfo: ', e)
@@ -251,7 +243,7 @@ function getUserNameInfo(address) {
   return result
 }
 
-const verifyAppCheckToken = async (appCheckToken) => {
+async function verifyAppCheckToken(appCheckToken) {
   if (!appCheckToken) {
     return null
   }
