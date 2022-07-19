@@ -1,79 +1,108 @@
-import { Meteor } from "meteor/meteor";
-import { FCMToken } from "../fcmtoken.js";
-import { admin } from "../../admin.js";
+import { WebApp } from 'meteor/webapp'
+import { FCMToken } from '../fcmtoken.js'
+import { admin } from '../../admin.js'
+import connectRoute from 'connect-route'
 // Global API configuration
 var Api = new Restivus({
   useDefaultAuth: true,
-  prettyJson: true,
-});
-
-const StatusOk = 200;
-const StatusInvalidInput = 400;
-const InternalServerError = 500;
-const Success = "Success";
-const Failed = "Failed";
-const BadRequest = "Bad Request";
-const AppCheckFailed = "App Check Failed"
-
-Api.addRoute(
-  "fcmtoken/update/:address/:token",
-  { authRequired: false },
-  {
-    //update fcm token against address
-    post: function () {
-      if (!Valid(this.urlParams.address) || !Valid(this.urlParams.token)) {
-        return {
-          Code: StatusInvalidInput,
-          Message: BadRequest,
-          Data: null,
-        };
-      }
+  prettyJson: true
+})
 
 
-      let h = this.request.headers;
-      if(!h['x-firebase-appcheck']){
-        return {
-          Code: StatusInvalidInput,
-          Message: AppCheckFailed,
-          Data: "x-firebase-appcheck header not found",
-        }; 
-      }
+const StatusOk = 200
+const StatusInvalidInput = 400
+const InternalServerError = 500
+const Success = 'Success'
+const Failed = 'Failed'
+const BadRequest = 'Bad Request'
+const AppCheckFailed = 'App Check Failed'
+
+WebApp.connectHandlers.use(
+  connectRoute(function (router) {
+    router.post('/fcmtoken/update/:address/:token', async function (req, res) {
       
-      // admin.appCheck().verifyToken(h['x-firebase-appcheck']).then((res) => {
-          var result = updateFCMToken(this.urlParams.address, this.urlParams.token);
-          
-          if (result === false) {
-            return {
-              Code: InternalServerError,
+      // validate that params exist
+      if (!Valid(req.params.address) || !Valid(req.params.token)) {
+        res.writeHead(StatusOk, {
+          'Content-Type': 'text/html'
+        })
+        
+        res.end(
+          JSON.stringify({
+            Code: StatusInvalidInput,
+            Message: BadRequest,
+            Data: null
+          })
+          )
+        }
+        
+      let h = req.headers
+      // app check header check
+      if (!h['x-firebase-appcheck']) {
+        res.writeHead(StatusOk, {
+          'Content-Type': 'text/html'
+        })
+
+        res.end(
+          JSON.stringify({
+            Code: StatusInvalidInput,
+            Message: AppCheckFailed,
+            Data: 'x-firebase-appcheck header missing'
+          })
+        )
+      } else {
+        // performing app check
+        // const appCheckClaims = await verifyAppCheckToken(
+        //   h['x-firebase-appcheck']
+        // )
+
+        // // app check failed
+        // if (!appCheckClaims) {
+        //   res.writeHead(StatusOk, {
+        //     'Content-Type': 'text/html'
+        //   })
+
+        //   res.end(
+        //     JSON.stringify({
+        //       Code: StatusInvalidInput,
+        //       Message: AppCheckFailed,
+        //       Data: 'invalid x-firebase-appcheck header'
+        //     })
+        //   )
+        // }
+
+        var result = updateFCMToken(req.params.address, req.params.token)
+
+        if (result === false) {
+          res.writeHead(400, {
+            'Content-Type': 'text/html'
+          })
+
+          res.end(
+            JSON.stringify({
+              Code: StatusInvalidInput,
               Message: Failed,
-              Data: "",
-            };
-          }
-    
-          return {
+              Data: null
+            })
+          )
+        }
+
+        res.writeHead(200, {
+          'Content-Type': 'text/html'
+        })
+
+        res.end(
+          JSON.stringify({
             Code: StatusOk,
             Message: Success,
-            Data: result,
-          };
+            Data: null
+          })
+        )
+      }
+    })
+  })
+)
 
-      // Useful for future debug
-      // }).catch((e)=>{
-      //   return {
-      //     Code: StatusInvalidInput,
-      //     Message: AppCheckFailed,
-      //     Data: "x-firebase-appcheck Failed",
-      //   };
-      // })
-        
-      return {
-        Code: StatusInvalidInput,
-        Message: BadRequest,
-        Data: null,
-      };
-       
-    },
-  }
-);
 
 function updateFCMToken(userAddress, fcmToken) {
   try {
@@ -82,23 +111,34 @@ function updateFCMToken(userAddress, fcmToken) {
       {
         $set: {
           address: userAddress,
-          token: fcmToken,
-        },
+          token: fcmToken
+        }
       }
-    );
+    )
   } catch (error) {
     console.log(error)
-    return false;
-  }
-  return true;
-}
-
-function Valid(parameter) {
-  if (typeof(parameter) != "string"){
-    return false
-  }
-  if (parameter.length == 0){
     return false
   }
   return true
+}
+
+function Valid(parameter) {
+  if (typeof parameter != 'string') {
+    return false
+  }
+  if (parameter.length == 0) {
+    return false
+  }
+  return true
+}
+
+const verifyAppCheckToken = async (appCheckToken) => {
+  if (!appCheckToken) {
+    return null
+  }
+  try {
+    return admin.appCheck().verifyToken(appCheckToken)
+  } catch (err) {
+    return null
+  }
 }
