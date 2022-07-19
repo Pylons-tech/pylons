@@ -1,27 +1,28 @@
-"ID": "character",
-            "Doubles": [
+{
+"id": "character",
+            "doubles": [
                 {
-                    "Key": "XP",
-                    "MinValue": "1.0",
-                    "MaxValue": "10000000.0"
+                    "key": "XP",
+                    "minValue": "1.0",
+                    "maxValue": "10000000.0"
                 }
             ],
-            "Longs": [
+            "longs": [
                 {
-                    "Key": "level",
-                    "MinValue": 1,
-                    "MaxValue": 10000000
+                    "key": "level",
+                    "minValue": 1,
+                    "maxValue": 10000000
                 },
                 {
-                    "Key": "foeState_01",
-                    "MinValue": 0,
-                    "MaxValue": 0
+                    "key": "foeState_01",
+                    "minValue": 0,
+                    "maxValue": 0
                 }
             ],
-            "Strings": [
+            "strings": [
                 {
-                    "Key": "entityType",
-                    "Value": "character"
+                    "key": "entityType",
+                    "value": "character"
                 }
             ]
         }

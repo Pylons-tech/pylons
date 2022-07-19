@@ -1,23 +1,23 @@
         {
-            "ID": "angel_sword_lv1",
-            "Doubles": [
+            "id": "angel_sword_lv1",
+            "doubles": [
                 {
-                    "Key": "attack",
-                    "MinValue": "1.0",
-                    "MaxValue": "10000000.0"
+                    "key": "attack",
+                    "minValue": "1.0",
+                    "maxValue": "10000000.0"
                 }
             ],
-            "Longs": [
+            "longs": [
                 {
-                    "Key": "level",
-                    "MinValue": 1,
-                    "MaxValue": 10000000
+                    "key": "level",
+                    "minValue": 1,
+                    "maxValue": 10000000
                 }
             ],
-            "Strings": [
+            "strings": [
                 {
-                    "Key": "name",
-                    "Value": "Angel sword"
+                    "key": "name",
+                    "value": "Angel sword"
                 }
             ]
         }

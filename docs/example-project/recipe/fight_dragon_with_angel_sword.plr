@@ -1,6 +1,6 @@
 {
-    "cookbookID": "cookbookLoudTest",
-    "ID": "LOUDFightDragonWithAngelSword",
+    "cookbookId": "cookbookLoudTest",
+    "id": "LOUDFightDragonWithAngelSword",
     "name": "LOUD-Fight-Dragon-With-Angel-Sword-Recipe",
     "description": "creates a fight instance with a dragon requiring a character and a angel sword",
     "version": "v0.0.4",
@@ -13,7 +13,7 @@
     "entries": {
         "coinOutputs": [
             {
-                "ID": "coin_reward",
+                "id": "coin_reward",
                 "coin": {
                     "denom": "loudCoin",
                     "amount": "30"
@@ -23,7 +23,7 @@
         "itemOutputs": [],
         "itemModifyOutputs": [
             {
-                "ID": "character_after_defeat_dragon",
+                "id": "character_after_defeat_dragon",
                 "itemInputRef": "character",
                 "doubles": [
                     {
@@ -52,7 +52,7 @@
             "weight": 3
         },
         {
-            "entryIDs": [
+            "entryIds": [
                 "coin_reward",
                 "character_after_defeat_dragon"
             ],
