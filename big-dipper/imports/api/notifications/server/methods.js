@@ -15,6 +15,7 @@ const BadRequest = 'Bad Request'
 const InvalidID = 'Invalid Notification ID'
 const AppCheckFailed = 'App Check Failed'
 
+/* eslint-disable */
 const Api = new Restivus({
   useDefaultAuth: true,
   prettyJson: true
