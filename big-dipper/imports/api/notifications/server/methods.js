@@ -125,7 +125,7 @@ WebApp.connectHandlers.use(
               'Content-Type': 'text/html'
             })
 
-            res.end (
+            res.end(
               JSON.stringify({
                 Code: StatusOk,
                 Message: Success,
