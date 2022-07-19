@@ -6,7 +6,7 @@
     "version": "v0.0.4",
     "coinInputs": [],
     "itemInputs": [
-#include characterinput
+#include character_input
 		,
 #include angel_sword_input
     ],
