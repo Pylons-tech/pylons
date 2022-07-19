@@ -1,0 +1,105 @@
+                    {
+                        "key": "level",
+                        "weightRanges": [],
+                        "program": "1"
+                    },
+                    {
+                        "key": "goblinKills",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "trollKills",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "dragonKills",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_00",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_01",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_02",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_03",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_04",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_05",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_06",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "chestState_07",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_00",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_01",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_02",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_03",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_04",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_05",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_06",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "foeState_07",
+                        "weightRanges": [],
+                        "program": "0"
+                    },
+                    {
+                        "key": "vendorState_00",
+                        "weightRanges": [],
+                        "program": "0"
+                    }

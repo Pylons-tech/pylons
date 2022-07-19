@@ -1,6 +1,6 @@
 {
-    "cookbookID": "cookbookLoudTest",
-    "ID": "LOUDFightGoblinWithCopperSword",
+    "cookbookId": "cookbookLoudTest",
+    "id": "LOUDFightGoblinWithCopperSword",
     "name": "LOUD-Fight-Goblin-With-Copper-Sword-Recipe",
     "description": "creates a fight instance with a goblin requiring a character and a copper sword",
     "version": "v0.0.21",
@@ -13,7 +13,7 @@
     "entries": {
         "coinOutputs": [
             {
-                "ID": "coin_reward",
+                "id": "coin_reward",
                 "coin": {
                     "denom": "loudCoin",
                     "amount": "10"
@@ -22,7 +22,7 @@
         ],
         "itemOutputs": [
             {
-                "ID": "iron_sword_lv1",
+                "id": "iron_sword_lv1",
                 "doubles": [
                     {
                         "key": "attack",
@@ -56,7 +56,7 @@
         ],
         "itemModifyOutputs": [
             {
-                "ID": "character_after_defeat_goblin",
+                "id": "character_after_defeat_goblin",
                 "itemInputRef": "character",
                 "doubles": [
                     {
@@ -72,7 +72,7 @@
                         "program": "level + int(XP / double(level + 5))"
                     },
                     {
-                        "Key": "foeState_00",
+                        "key": "foeState_00",
                         "weightRanges": [],
                         "program": "1"
                     }
@@ -90,14 +90,14 @@
             "weight": 3
         },
         {
-            "entryIDs": [
+            "entryIds": [
                 "coin_reward",
                 "character_after_defeat_goblin"
             ],
             "weight": 3
         },
         {
-            "entryIDs": [
+            "entryIds": [
                 "coin_reward",
                 "character_after_defeat_goblin",
                 "iron_sword_lv1"

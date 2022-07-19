@@ -1,6 +1,6 @@
 {
-    "cookbookID": "cookbookLoudTest",
-    "ID": "LOUDFightDragonWithIronSword",
+    "cookbookId": "cookbookLoudTest",
+    "id": "LOUDFightDragonWithIronSword",
     "name": "LOUD-Fight-Dragon-With-Iron-Sword-Recipe",
     "description": "creates a fight instance with a dragon requiring a character and a iron sword",
     "version": "v0.0.4",
@@ -9,7 +9,6 @@
 #include character_input
             ,
 #include iron_sword_input
-			,
     ],
     "entries": {},
     "outputs": [],

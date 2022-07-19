@@ -1,6 +1,6 @@
 {
-    "cookbookID": "cookbookLoudTest",
-    "ID": "LOUDFightGoblinWithIronSword",
+    "cookbookId": "cookbookLoudTest",
+    "id": "LOUDFightGoblinWithIronSword",
     "name": "LOUD-Fight-Goblin-With-Iron-Sword-Recipe",
     "description": "creates a fight instance with a goblin requiring a character and a iron sword",
     "version": "v0.0.4",
@@ -9,12 +9,11 @@
 #include character_input
             ,
 #include iron_sword_input
-			,
     ],
     "entries": {
         "coinOutputs": [
             {
-                "ID": "coin_reward",
+                "id": "coin_reward",
                 "coin": {
                     "denom": "loudCoin",
                     "amount": "10"
@@ -23,7 +22,7 @@
         ],
         "itemModifyOutputs": [
             {
-                "ID": "character_after_defeat_goblin",
+                "id": "character_after_defeat_goblin",
                 "itemInputRef": "character",
                 "doubles": [
                     {
@@ -39,7 +38,7 @@
                         "program": "level + int(XP / double(level + 5))"
                     },
                     {
-                        "Key": "foeState_00",
+                        "key": "foeState_00",
                         "weightRanges": [],
                         "program": "1"
                     }
@@ -57,7 +56,7 @@
             "weight": 3
         },
         {
-            "entryIDs": [
+            "entryIds": [
                 "coin_reward",
                 "character_after_defeat_goblin"
             ],

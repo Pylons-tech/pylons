@@ -1,6 +1,6 @@
 {
-    "cookbookID": "cookbookLoudTest",
-    "ID": "LOUDFightTrollWithCopperSword",
+    "cookbookId": "cookbookLoudTest",
+    "id": "LOUDFightTrollWithCopperSword",
     "name": "LOUD-Fight-Troll-With-Copper-Sword-Recipe",
     "description": "creates a fight instance with a troll requiring a character and a copper sword",
     "version": "v0.0.4",
@@ -13,7 +13,7 @@
     "entries": {
         "coinOutputs": [
             {
-                "ID": "coin_reward",
+                "id": "coin_reward",
                 "coin": {
                     "denom": "loudCoin",
                     "amount": "20"
@@ -22,7 +22,7 @@
         ],
         "itemModifyOutputs": [
             {
-                "ID": "character_after_defeat_troll",
+                "id": "character_after_defeat_troll",
                 "itemInputRef": "character",
                 "doubles": [
                     {
@@ -38,7 +38,7 @@
                         "program": "level + int(XP / double(level * level + 5))"
                     },
                     {
-                        "Key": "foeState_01",
+                        "key": "foeState_01",
                         "weightRanges": [],
                         "program": "1"
                     }
@@ -56,7 +56,7 @@
             "weight": 3
         },
         {
-            "entryIDs": [
+            "entryIds": [
                 "coin_reward",
                 "character_after_defeat_troll"
             ],

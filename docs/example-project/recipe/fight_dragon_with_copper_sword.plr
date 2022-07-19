@@ -1,6 +1,6 @@
 {
-    "cookbookID": "cookbookLoudTest",
-    "ID": "LOUDFightDragonWithCopperSword",
+    "cookbookId": "cookbookLoudTest",
+    "id": "LOUDFightDragonWithCopperSword",
     "name": "LOUD-Fight-Dragon-With-Copper-Sword-Recipe",
     "description": "creates a fight instance with a dragon requiring a character and a copper sword",
     "version": "v0.0.4",

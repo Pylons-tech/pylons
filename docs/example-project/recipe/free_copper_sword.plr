@@ -1,6 +1,6 @@
 {
-    "cookbookID": "cookbookLoudTest",
-    "ID": "LOUDGiveCopperSword",
+    "cookbookId": "cookbookLoudTest",
+    "id": "LOUDGiveCopperSword",
     "name": "LOUD-Give-Copper-Sword",
     "description": "Gives a free copper sword - for test use only",
     "version": "v0.0.2",
@@ -11,7 +11,7 @@
         "coinOutputs": [],
         "itemOutputs": [
             {
-                "ID": "copper_sword_lv1",
+                "id": "copper_sword_lv1",
                 "doubles": [
                     {
                         "key": "attack",
@@ -47,7 +47,7 @@
     },
     "outputs": [
         {
-            "entryIDs": [
+            "entryIds": [
                 "copper_sword_lv1"
             ],
             "weight": 1

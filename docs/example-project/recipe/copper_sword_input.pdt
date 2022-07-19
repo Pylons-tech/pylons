@@ -1,23 +1,23 @@
         {
-            "ID": "copper_sword_lv1",
-            "Doubles": [
+            "id": "copper_sword_lv1",
+            "doubles": [
                 {
-                    "Key": "attack",
-                    "MinValue": "1.0",
-                    "MaxValue": "10000000.0"
+                    "key": "attack",
+                    "minValue": "1.0",
+                    "maxValue": "10000000.0"
                 }
             ],
-            "Longs": [
+            "longs": [
                 {
-                    "Key": "level",
-                    "MinValue": 1,
-                    "MaxValue": 1
+                    "key": "level",
+                    "minValue": 1,
+                    "maxValue": 1
                 }
             ],
-            "Strings": [
+            "strings": [
                 {
-                    "Key": "name",
-                    "Value": "Copper sword"
+                    "key": "name",
+                    "value": "Copper sword"
                 }
             ]
         }
