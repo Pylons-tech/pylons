@@ -6,7 +6,6 @@ run:
 linters:
   disable-all: true
   enable:
-    - bodyclose
     - deadcode
     - depguard
     - dogsled
@@ -26,12 +25,10 @@ linters:
     - prealloc
     - exportloopref
     - staticcheck
-    - structcheck
     - stylecheck
     - typecheck
     - unconvert
     - unused
-    - unparam
     - misspell
 
 
