@@ -19,7 +19,7 @@ func ValidateFieldLength(field string, minLength, maxLength int) error {
 
 // Special Characters Exclusion exception '-' & '_'
 func ValidatedDenom(denom string) bool {
-	nameRegex := regexp.MustCompile(`^([a-zA-Z0-9_-])$`)
+	nameRegex := regexp.MustCompile(`([a-zA-Z0-9_-])`)
 	return nameRegex.MatchString(denom)
 }
 
