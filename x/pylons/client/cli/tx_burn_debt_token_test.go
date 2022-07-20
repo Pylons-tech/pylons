@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-
 	"testing"
 
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"

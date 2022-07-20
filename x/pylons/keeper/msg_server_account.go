@@ -17,7 +17,7 @@ import (
 func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAccount) (*types.MsgCreateAccountResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	err := k.verifyAppCheck(goCtx, msg)
+	err := k.verifyAppCheck(msg)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
@@ -91,7 +91,7 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 	return &types.MsgUpdateAccountResponse{}, err
 }
 
-func (k msgServer) verifyAppCheck(ctx context.Context, msg *types.MsgCreateAccount) error {
+func (k msgServer) verifyAppCheck(msg *types.MsgCreateAccount) error {
 	if types.DefaultNoAppCheckConfig {
 		return nil
 	}
