@@ -45,7 +45,7 @@ func Setup(isCheckTx bool) *PylonsApp {
 }
 
 func SetupWithGenesisValSet(valSet *tmtypes.ValidatorSet, genAccs []authtypes.GenesisAccount, balances ...banktypes.Balance) *PylonsApp {
-	app, genesisState := setup(true, 5)
+	app, genesisState := setup(true)
 	genesisState = genesisStateWithValSet(app, genesisState, valSet, genAccs, balances...)
 
 	stateBytes, _ := json.MarshalIndent(genesisState, "", " ")
@@ -169,7 +169,7 @@ func genesisStateWithValSet(app *PylonsApp, genesisState GenesisState,
 	return genesisState
 }
 
-func setup(withGenesis bool, invCheckPeriod uint) (*PylonsApp, GenesisState) {
+func setup(withGenesis bool) (*PylonsApp, GenesisState) {
 	db := dbm.NewMemDB()
 	cdc := MakeEncodingConfig()
 	app := New(log.NewNopLogger(), db, nil, true, map[int64]bool{}, DefaultNodeHome, 5, cdc, simapp.EmptyAppOptions{})

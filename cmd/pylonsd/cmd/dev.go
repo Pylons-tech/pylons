@@ -79,7 +79,8 @@ func loadModuleInline(bytes []byte, path string, info os.FileInfo) string {
 	lines := strings.Split(json, "\n")
 	for i, line := range lines {
 		if strings.Contains(line, includeDirective) {
-			lines[i] = loadModuleFromPath(strings.Split(line, includeDirective)[1], strings.TrimSuffix(path, info.Name())) + "\n"
+			modulePath := strings.TrimSpace(strings.Split(line, includeDirective)[1])
+			lines[i] = loadModuleFromPath(modulePath, strings.TrimSuffix(path, info.Name())) + "\n"
 		}
 	}
 	json = strings.Join(lines, "")
