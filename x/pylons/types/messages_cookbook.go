@@ -48,7 +48,7 @@ func (msg *MsgCreateCookbook) ValidateBasic() error {
 	}
 
 	if !ValidatedDenom(msg.Id) {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid cookbook denom can only contain a-z A-Z 0-9 '-' and '_'")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid ID: Only letters, numbers and underscore (should not be the first character) are allowed")
 	}
 
 	// check length of the name and description fields
