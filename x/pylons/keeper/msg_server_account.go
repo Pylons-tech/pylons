@@ -97,7 +97,7 @@ func (k msgServer) verifyAppCheck(ctx context.Context, msg *types.MsgCreateAccou
 	}
 	err := types.VerifyAppCheckToken(msg.Token)
 	if err != nil {
-		return status.Error(codes.Unauthenticated, "unable to verify app-check token")
+		return status.Errorf(codes.Unauthenticated, "unable to verify app-check token %v", err)
 	}
 	return nil
 }

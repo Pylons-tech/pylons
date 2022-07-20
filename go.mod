@@ -40,8 +40,6 @@ require (
 	cloud.google.com/go/storage v1.14.0 // indirect
 	cosmossdk.io/api v0.1.0-alpha8 // indirect
 	filippo.io/edwards25519 v1.0.0-rc.1 // indirect
-	github.com/ghodss/yaml v1.0.0 // indirect
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.3 // indirect
 )
 
 require (
