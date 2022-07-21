@@ -402,17 +402,17 @@ function getUserNameInfo (address) {
 
 // getting amountString from the executed transaction
 function getAmountString (txn) {
-  return getAttributeFromEvent(txn, 'coin_received', 'amount')
+  return getAttributeFromEvent(txn, 'create_item', 'amount')
 }
 
 // getting the receiver out of the transaction object
 function getReceiver (txn) {
-  return getAttributeFromEvent(txn, 'coin_received', 'receiver')
+  return getAttributeFromEvent(txn, 'create_item', 'receiver')
 }
 
 // getting the spender object out of the transaction object
 function getSpender (txn) {
-  return getAttributeFromEvent(txn, 'coin_spent', 'spender')
+  return getAttributeFromEvent(txn, 'create_item', 'spender')
 }
 
 function getAttributeFromEvent (txn, event, attribute) {
