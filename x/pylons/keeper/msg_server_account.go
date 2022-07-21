@@ -34,13 +34,14 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 
 	username := types.Username{Value: msg.Username}
 	accountAddr := types.AccountAddr{Value: msg.Creator}
+	referralAddr := types.AccountAddr{Value: msg.ReferralAddress}
 
 	found := k.HasUsername(ctx, username) || k.HasAccountAddr(ctx, accountAddr)
 	if found {
 		return nil, types.ErrDuplicateUsername
 	}
 
-	k.SetPylonsAccount(ctx, accountAddr, username)
+	k.SetPylonsAccount(ctx, accountAddr, username, referralAddr)
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateAccount{
 		Address:  msg.Creator,
@@ -72,7 +73,7 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 		return nil, types.ErrDuplicateUsername
 	}
 
-	k.SetPylonsAccount(ctx, accountAddr, username)
+	k.SetPylonsAccount(ctx, accountAddr, username, accountAddr) //TODO:: Fix add referral address
 
 	// perform payment after update
 	updateFee := k.Keeper.UpdateUsernameFee(ctx)

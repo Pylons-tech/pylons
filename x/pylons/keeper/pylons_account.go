@@ -10,14 +10,17 @@ import (
 // SetPylonsAccount set a specific pylons account in the store from its index
 // this function sets two symmetric KVStores with address -> username
 // and username -> address mappings
-func (k Keeper) SetPylonsAccount(ctx sdk.Context, accountAddr types.AccountAddr, username types.Username) {
+func (k Keeper) SetPylonsAccount(ctx sdk.Context, accountAddr types.AccountAddr, username types.Username, referral types.AccountAddr) {
 	binaryAddr := k.cdc.MustMarshal(&accountAddr)
 	binaryUsername := k.cdc.MustMarshal(&username)
+	binaryReferral := k.cdc.MustMarshal(&username)
 	usernamePrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
 	accountPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AccountKey))
+	referralPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ReferralKey))
 
 	usernamePrefixStore.Set(types.KeyPrefix(username.Value), binaryAddr)
 	accountPrefixStore.Set(types.KeyPrefix(accountAddr.Value), binaryUsername)
+	referralPrefixStore.Set(types.KeyPrefix(referral.Value), binaryReferral)
 }
 
 // HasUsername checks if the username exists in the store
@@ -48,6 +51,24 @@ func (k Keeper) GetAddressByUsername(ctx sdk.Context, username string) (val type
 	}
 
 	k.cdc.MustUnmarshal(b, &val)
+	return val, true
+}
+
+// GetAddressByUsername returns an address corresponding to its username
+func (k Keeper) GetAccountByReferral(ctx sdk.Context, referralAddress string) (val []types.UserMap, found bool) {
+	referralPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ReferralKey))
+
+	iterator := sdk.KVStorePrefixIterator(referralPrefixStore, []byte(referralAddress))
+
+	for ; iterator.Valid(); iterator.Next() {
+		var account types.AccountAddr
+		k.cdc.MustUnmarshal(iterator.Value(), &account)
+		username, found := k.GetUsernameByAddress(ctx, account.Value)
+		if found {
+			val = append(val, types.UserMap{AccountAddr: account.Value, Username: username.Value})
+		}
+
+	}
 	return val, true
 }
 
