@@ -3,6 +3,64 @@ import { Spinner } from "reactstrap";
 import moment from "moment";
 import Pagination from "react-responsive-pagination";
 
+const getMedia = (type, source) => {
+  if (type?.toLowerCase() === "image") {
+    console.log("source", source);
+    return (
+      <img
+        height="100"
+        width="100"
+        alt="profile"
+        src={source}
+        className="mobin-img"
+      />
+    );
+  }
+  //no-image.png
+  else if (type?.toLowerCase() === "video")
+    return (
+      <video width="100" height="100" controls>
+        <source src={source} type="video/mp4" />
+        <source src={source} type="video/ogg" />
+        Your browser does not support the video tag.
+      </video>
+    );
+  else if (type?.toLowerCase() === "audio")
+    return (
+      <audio controls height="100" width="100" alt="profile">
+        <source src={source} type="video/mp4" />
+        <source src={source} type="video/ogg" />
+        Your browser does not support the audio element.
+      </audio>
+    );
+  else if (type?.toLowerCase() === "3d")
+    return (
+      <model-viewer
+        alt="3D NFT"
+        src={source}
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        environment-image="shared-assets/environments/moon_1k.hdr"
+        poster="shared-assets/models/NeilArmstrong.webp"
+        seamless-poster
+        shadow-intensity="1"
+        camera-controls
+        enable-pan
+        height="100"
+        width="100"
+      ></model-viewer>
+    );
+  else
+    return (
+      <img
+        height="100"
+        width="100"
+        alt="profile"
+        src="/img/no-image.png"
+        className="mobin-img"
+      />
+    );
+};
 function AcitvityTable({}) {
   const [activityFeedList, setActivityFeedList] = useState([]);
   const [loadingTableData, setLoadingTableData] = useState(false);
@@ -42,52 +100,11 @@ function AcitvityTable({}) {
           <thead>
             <tr>
               <th>Item</th>
-              <th>
-                Amount
-                {/* <ButtonDropdown
-            isOpen={this.state.dropdownAmount}
-            toggle={this.toggleAmount}
-          >
-            <DropdownToggle caret>Amount</DropdownToggle>
-            <DropdownMenu>
-              <Button>{`< $100`}</Button>
-              <Button>$100-$1000</Button>
-              <Button>$1000-$5000</Button>
-              <Button>{`> $5000`}</Button>
-            </DropdownMenu>
-          </ButtonDropdown> */}
-              </th>
-              <th>
-                Type
-                {/* <ButtonDropdown
-            isOpen={this.state.dropdownType}
-            toggle={this.toggleType}
-          >
-            <DropdownToggle caret>Type</DropdownToggle>
-            <DropdownMenu>
-              <Button>Sale</Button>
-              <Button>Transfer</Button>
-              <Button>Listing</Button>
-            </DropdownMenu>
-          </ButtonDropdown> */}
-              </th>
+              <th>Amount</th>
+              <th>Type</th>
               <th>From</th>
               <th>To</th>
-              <th>
-                Time
-                {/* <ButtonDropdown
-            isOpen={this.state.dropdownTime}
-            toggle={this.toggleTime}
-          >
-            <DropdownToggle caret>Time</DropdownToggle>
-            <DropdownMenu>
-              <Button>Last 1 day</Button>
-              <Button>Last 1 week</Button>
-              <Button>Last 1 month</Button>
-              <Button>All time</Button>
-            </DropdownMenu>
-          </ButtonDropdown> */}
-              </th>
+              <th>Time</th>
             </tr>
           </thead>
           <tbody>
@@ -95,13 +112,12 @@ function AcitvityTable({}) {
               <tr key={index}>
                 <td>
                   <div className="user-profile">
-                    <img
-                      src={item.itemImg}
-                      height="100"
-                      width="100"
-                      alt="profile"
-                    />
-                    <a href="#">{item.itemName}</a>
+                    {getMedia(
+                      item.itemFormat,
+                      item.itemImg ? item.itemImg : item.item_img
+                    )}
+
+                    <a href="#">{item.item_name}</a>
                   </div>
                 </td>
                 <td>

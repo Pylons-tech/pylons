@@ -43,6 +43,7 @@ func New(t *testing.T, configs ...network.Config) *network.Network {
 	if len(configs) > 1 {
 		panic("at most one config should be provided")
 	}
+	types.UpdateAppCheckFlagTest(types.FlagTrue)
 	var cfg network.Config
 	if len(configs) == 0 {
 		cfg = DefaultConfig()
@@ -64,14 +65,14 @@ func New(t *testing.T, configs ...network.Config) *network.Network {
 			fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 		}
 
-		args := []string{fmt.Sprintf("val%d", i)}
+		args := []string{fmt.Sprintf("val%d", i), "testtoken"}
 		args = append(args, flags...)
 		_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
 		require.NoError(t, err)
 		// var resp sdk.TxResponse
 		// require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 	}
-
+	types.UpdateAppCheckFlagTest(types.FlagFalse)
 	return net
 }
 

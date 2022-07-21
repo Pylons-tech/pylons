@@ -1,0 +1,69 @@
+{
+    "cookbookId": "cookbookLoudTest",
+    "id": "LOUDFightDragonWithAngelSword",
+    "name": "LOUD-Fight-Dragon-With-Angel-Sword-Recipe",
+    "description": "creates a fight instance with a dragon requiring a character and a angel sword",
+    "version": "v0.0.4",
+    "coinInputs": [],
+    "itemInputs": [
+#include character_input
+		,
+#include angel_sword_input
+    ],
+    "entries": {
+        "coinOutputs": [
+            {
+                "id": "coin_reward",
+                "coin": {
+                    "denom": "loudCoin",
+                    "amount": "30"
+                }
+            }
+        ],
+        "itemOutputs": [],
+        "itemModifyOutputs": [
+            {
+                "id": "character_after_defeat_dragon",
+                "itemInputRef": "character",
+                "doubles": [
+                    {
+                        "key": "XP",
+                        "weightRanges": [],
+                        "program": "XP + double(15 * 3)"
+                    }
+                ],
+                "longs": [
+                    {
+                        "key": "level",
+                        "weightRanges": [],
+                        "program": "level + int(XP / double(level * level * level + 5))"
+                    }
+                ],
+                "strings": [],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+        ]
+    },
+    "outputs": [
+        {
+            "weight": 3
+        },
+        {
+            "entryIds": [
+                "coin_reward",
+                "character_after_defeat_dragon"
+            ],
+            "weight": 24
+        }
+    ],
+    "blockInterval": 0,
+    "costPerBlock": {
+        "denom": "upylon",
+        "amount": "1000000"
+    },
+    "enabled": true,
+    "extraInfo": "extraInfo"
+}
