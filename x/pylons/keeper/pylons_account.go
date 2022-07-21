@@ -10,17 +10,49 @@ import (
 // SetPylonsAccount set a specific pylons account in the store from its index
 // this function sets two symmetric KVStores with address -> username
 // and username -> address mappings
-func (k Keeper) SetPylonsAccount(ctx sdk.Context, accountAddr types.AccountAddr, username types.Username, referral types.AccountAddr) {
+func (k Keeper) SetPylonsAccount(ctx sdk.Context, accountAddr types.AccountAddr, username types.Username) {
 	binaryAddr := k.cdc.MustMarshal(&accountAddr)
 	binaryUsername := k.cdc.MustMarshal(&username)
-	binaryReferral := k.cdc.MustMarshal(&username)
 	usernamePrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
 	accountPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AccountKey))
-	referralPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ReferralKey))
 
 	usernamePrefixStore.Set(types.KeyPrefix(username.Value), binaryAddr)
 	accountPrefixStore.Set(types.KeyPrefix(accountAddr.Value), binaryUsername)
-	referralPrefixStore.Set(types.KeyPrefix(referral.Value), binaryReferral)
+}
+
+func (k Keeper) SetPylonsReferral(ctx sdk.Context, address, username, referral string) {
+	val, found := k.GetPylonsReferral(ctx, referral)
+	if found {
+		val.Users = append(val.Users, &types.RefereeSignup{
+			Username: username,
+			Address:  address,
+		})
+		binaryReferral := k.cdc.MustMarshal(&val)
+		referralPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ReferralKey))
+		referralPrefixStore.Set(types.KeyPrefix(referral), binaryReferral)
+	} else {
+		binaryReferral := k.cdc.MustMarshal(&types.ReferralKV{
+			Address: referral,
+			Users: []*types.RefereeSignup{
+				{
+					Username: username,
+					Address:  address,
+				},
+			},
+		})
+		referralPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ReferralKey))
+		referralPrefixStore.Set(types.KeyPrefix(referral), binaryReferral)
+	}
+}
+
+func (k Keeper) GetPylonsReferral(ctx sdk.Context, addr string) (val types.ReferralKV, found bool) {
+	referralPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ReferralKey))
+	b := referralPrefixStore.Get(types.KeyPrefix(addr))
+	if b == nil {
+		return val, false
+	}
+	k.cdc.MustUnmarshal(b, &val)
+	return val, true
 }
 
 // HasUsername checks if the username exists in the store
@@ -51,24 +83,6 @@ func (k Keeper) GetAddressByUsername(ctx sdk.Context, username string) (val type
 	}
 
 	k.cdc.MustUnmarshal(b, &val)
-	return val, true
-}
-
-// GetAddressByUsername returns an address corresponding to its username
-func (k Keeper) GetAccountByReferral(ctx sdk.Context, referralAddress string) (val []types.UserMap, found bool) {
-	referralPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ReferralKey))
-
-	iterator := sdk.KVStorePrefixIterator(referralPrefixStore, []byte(referralAddress))
-
-	for ; iterator.Valid(); iterator.Next() {
-		var account types.AccountAddr
-		k.cdc.MustUnmarshal(iterator.Value(), &account)
-		username, found := k.GetUsernameByAddress(ctx, account.Value)
-		if found {
-			val = append(val, types.UserMap{AccountAddr: account.Value, Username: username.Value})
-		}
-
-	}
 	return val, true
 }
 
