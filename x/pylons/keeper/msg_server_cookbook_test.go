@@ -12,7 +12,6 @@ import (
 )
 
 func (suite *IntegrationTestSuite) TestCookbookMsgServerCreate() {
-
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -59,7 +58,8 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerCreate() {
 			desc: "Valid",
 			msgs: []types.MsgCreateCookbook{
 				*anchorMsg,
-				{Creator: creator,
+				{
+					Creator:      creator,
 					Id:           "validcase",
 					Name:         desc,
 					Description:  desc,
