@@ -22,11 +22,14 @@ func (suite *IntegrationTestSuite) TestCompletePendingExecution() {
 	executor := types.GenTestBech32FromString("executor")
 	feeCollectorAddr := ak.GetModuleAddress(types.FeeCollectorName)
 
+	types.UpdateAppCheckFlagTest(types.FlagTrue)
+
 	srv.CreateAccount(wctx, &types.MsgCreateAccount{
 		Creator:  executor,
 		Username: "Executor",
 	})
 
+	types.UpdateAppCheckFlagTest(types.FlagFalse)
 	cookbookMsg := &types.MsgCreateCookbook{
 		Creator:      creator,
 		Id:           "testCookbookID",

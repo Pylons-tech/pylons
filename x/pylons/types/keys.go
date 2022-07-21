@@ -143,3 +143,15 @@ const (
 	SkipObjectParse14 = 14
 	SkipObjectParse3  = 3
 )
+
+// Constants for App Check Service
+const (
+	jwkURL = "https://firebaseappcheck.googleapis.com/v1beta/jwks"
+	ktyRSA = "RSA"
+
+	firebaseURL = "https://firebaseappcheck.googleapis.com/"
+	projectID   = "628365338383"
+
+	FlagTrue  = true
+	FlagFalse = false
+)

@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	"fmt"
+
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -77,7 +78,6 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 		},
 	} {
 		suite.Run(fmt.Sprintf("Case %s", tc.desc), func() {
-
 			// give coins to requester
 			requesterAddr, err := sdk.AccAddressFromBech32(pendingExecution.Creator)
 			require.NoError(err)
