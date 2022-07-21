@@ -412,7 +412,7 @@ function getReceiver (txn) {
 
 // getting the spender object out of the transaction object
 function getSpender (txn) {
-  return getAttributeFromEvent(txn, 'create_item', 'spender')
+  return getAttributeFromEvent(txn, 'create_item', 'sender')
 }
 
 function getAttributeFromEvent (txn, event, attribute) {
