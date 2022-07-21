@@ -114,14 +114,27 @@ if (Meteor.isServer) {
           { 'tx_response.raw_log': /EventCreateRecipe/ },
           { sort: { 'tx_response.timestamp': -1 } }
         ).fetch()
+
+
+
+          
+
         for (let i = 0; i < txns.length; i++) {
           const cookBookId = txns[i]?.tx?.body?.messages[0]?.cookbook_id
           const recipeID = txns[i]?.tx?.body?.messages[0]?.id
-          const recipe = Recipes.findOne({
-            ID: recipeID,
-            cookbook_id: cookBookId
-          })
-          const nftName = getNftName(recipe)
+          const recipe = getRecipe(cookBookId,recipeID)
+
+
+
+
+          // const recipe = Recipes.findOne({
+          //   ID: recipeID,
+          //   cookbook_id: cookBookId
+          // })
+
+
+
+          const nftName = recipe.name//getNftName(recipe)
           const nftUrl = getNftProperty(recipe, 'NFT_URL')
           const nftFormat = getNftProperty(recipe, 'NFT_Format')
           const coinInvolved =
@@ -461,4 +474,20 @@ function extractSaleFromSales (sales) {
   }
 
   return null
+}
+
+
+function getRecipe(cookBookID,recipeID){
+  let result
+  const url = sanitizeUrl(
+    `${Meteor.settings.remote.api}/pylons/recipe/${cookBookID}/${recipeID}`
+  )
+  try {
+    const response = HTTP.get(url)
+    result = JSON.parse(response.content)?.recipe
+  } catch (e) {
+    console.log('error getting userNameInfo: ', e)
+    // Recipes.insert(result)
+  }
+  return result
 }
