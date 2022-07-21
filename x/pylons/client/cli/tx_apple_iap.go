@@ -14,8 +14,8 @@ var _ = strconv.Itoa(0)
 
 func CmdAppleIap() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "apple-iap [productID] [purchaseToken] [receiptDataBase64]",
-		Short: "Broadcast message apple_iap",
+		Use:   "apple-iap [productID] [purchaseID] [receiptDataBase64]",
+		Short: "Get Coins Using Apple In App Purchase",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			argsProductID := args[0]

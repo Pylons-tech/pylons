@@ -59,9 +59,11 @@ func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.N
 	common := CommonArgs(accs[0].String(), net)
 
 	username := "user"
+	usernameToken := "usernameToken"
+	types.UpdateAppCheckFlagTest(types.FlagTrue)
 
 	// create account
-	args := []string{username}
+	args := []string{username, usernameToken}
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
 	if err != nil {
@@ -85,6 +87,7 @@ func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.N
 	if uint32(0) != resp.Code {
 		return "", fmt.Errorf("error code not 'Success'")
 	}
+	types.UpdateAppCheckFlagTest(types.FlagTrue)
 
 	return accs[0].String(), nil
 }
