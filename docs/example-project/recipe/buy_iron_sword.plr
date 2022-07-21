@@ -1,0 +1,71 @@
+{
+    "cookbookId": "cookbookLoudTest",
+    "id": "LOUDBuyIronSword",
+    "name": "LOUD-Buy-Iron-Sword",
+    "description": "Purchases a iron sword for loudCoin",
+    "version": "v0.0.2",
+    "coinInputs": [
+		{
+			"coins" : [
+			    {
+				"denom": "loudcoin",
+				"amount": "250"
+			}
+		]
+		}
+    ],
+    "itemInputs": [],
+    "entries": {
+        "coinOutputs": [],
+        "itemOutputs": [
+            {
+                "id": "iron_sword_lv1",
+                "doubles": [
+                    {
+                        "key": "attack",
+                        "weightRanges": [],
+                        "program": "20.0"
+                    }
+                ],
+                "longs": [
+                    {
+                        "key": "level",
+                        "weightRanges": [],
+                        "program": "1"
+                    },
+                    {
+                        "key": "value",
+                        "weightRanges": [],
+                        "program": "500"
+                    }
+                ],
+                "strings": [
+                    {
+                        "key": "name",
+                        "value": "Iron sword"
+                    }
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+        ],
+        "itemModifyOutputs": []
+    },
+    "outputs": [
+        {
+            "entryIds": [
+                "iron_sword_lv1"
+            ],
+            "weight": 1
+        }
+    ],
+    "blockInterval": 0,
+    "costPerBlock": {
+        "denom": "upylon",
+        "amount": "1000000"
+    },
+    "enabled": true,
+    "extraInfo": "extraInfo"
+}

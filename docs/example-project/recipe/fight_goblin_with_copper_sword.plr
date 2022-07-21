@@ -1,0 +1,115 @@
+{
+    "cookbookId": "cookbookLoudTest",
+    "id": "LOUDFightGoblinWithCopperSword",
+    "name": "LOUD-Fight-Goblin-With-Copper-Sword-Recipe",
+    "description": "creates a fight instance with a goblin requiring a character and a copper sword",
+    "version": "v0.0.21",
+    "coinInputs": [],
+    "itemInputs": [
+#include character_input
+		,
+#include copper_sword_input
+    ],
+    "entries": {
+        "coinOutputs": [
+            {
+                "id": "coin_reward",
+                "coin": {
+                    "denom": "loudCoin",
+                    "amount": "10"
+                }
+            }
+        ],
+        "itemOutputs": [
+            {
+                "id": "iron_sword_lv1",
+                "doubles": [
+                    {
+                        "key": "attack",
+                        "weightRanges": [],
+                        "program": "20.0"
+                    }
+                ],
+                "longs": [
+                    {
+                        "key": "level",
+                        "weightRanges": [],
+                        "program": "1"
+                    },
+                    {
+                        "key": "value",
+                        "weightRanges": [],
+                        "program": "500"
+                    }
+                ],
+                "strings": [
+                    {
+                        "key": "name",
+                        "value": "Iron Sword"
+                    }
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+        ],
+        "itemModifyOutputs": [
+            {
+                "id": "character_after_defeat_goblin",
+                "itemInputRef": "character",
+                "doubles": [
+                    {
+                        "key": "XP",
+                        "weightRanges": [],
+                        "program": "XP + double(15 * 3)"
+                    }
+                ],
+                "longs": [
+                    {
+                        "key": "level",
+                        "weightRanges": [],
+                        "program": "level + int(XP / double(level + 5))"
+                    },
+                    {
+                        "key": "foeState_00",
+                        "weightRanges": [],
+                        "program": "1"
+                    }
+                ],
+                "strings": [],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+        ]
+    },
+    "outputs": [
+        {
+            "weight": 3
+        },
+        {
+            "entryIds": [
+                "coin_reward",
+                "character_after_defeat_goblin"
+            ],
+            "weight": 3
+        },
+        {
+            "entryIds": [
+                "coin_reward",
+                "character_after_defeat_goblin",
+                "iron_sword_lv1"
+            ],
+            "weight": 24
+        }
+    ],
+    "blockInterval": 0,
+    "costPerBlock": {
+        "denom": "upylon",
+        "amount": "1000000"
+    },
+    "enabled": true,
+    "extraInfo": "extraInfo"
+}
