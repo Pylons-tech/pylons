@@ -40,7 +40,7 @@ or
 
 pylonsd tx pylons create-account john app-check-token pylo1tqqp6wmctv0ykatyaefsqy6stj92lnt800lkel --from pylo1tqqp6wmctv0ykatyaefsqy6stj92lnt800lkee 
 		`,
-		Args: cobra.ExactArgs(2),
+		Args: cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			username := args[0]
 			token := args[1]
