@@ -11,8 +11,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-const testAccountName = "nono"
-
 func TestCreate(t *testing.T) {
 	preTestValidate(t)
 

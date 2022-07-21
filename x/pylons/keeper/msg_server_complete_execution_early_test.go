@@ -1,10 +1,10 @@
 package keeper_test
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
+	"fmt"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
@@ -18,6 +18,10 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 
 	amountToPay := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10)))
 	creator := types.GenTestBech32FromString("test")
+
+	trashStr := types.GenTestBech32FromString("trash")
+	trashAddress := sdk.MustAccAddressFromBech32(trashStr)
+
 	cookbookMsg := &types.MsgCreateCookbook{
 		Creator:      creator,
 		Id:           "testCookbookID",
@@ -47,28 +51,63 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 	// create only one pendingExecution
 	pendingExecution := createNPendingExecutionForSingleRecipe(k, ctx, 1, recipe)[0]
 
-	// give coins to requester
-	requesterAddr, err := sdk.AccAddressFromBech32(pendingExecution.Creator)
-	require.NoError(err)
-	err = k.MintCoinsToAddr(ctx, requesterAddr, amountToPay)
-	require.NoError(err)
+	for _, tc := range []struct {
+		desc         string
+		Id           string
+		amountMinted sdk.Coins
+		valid        bool
+	}{
+		{
+			desc:         "Cannot find a pending execution with ID given",
+			Id:           "2",
+			amountMinted: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))),
+			valid:        false,
+		},
+		{
+			desc:         "Amout coint of requester is not enough",
+			Id:           pendingExecution.Id,
+			amountMinted: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(0))),
+			valid:        false,
+		},
+		{
+			desc:         "Valid",
+			Id:           pendingExecution.Id,
+			amountMinted: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))),
+			valid:        true,
+		},
+	} {
+		suite.Run(fmt.Sprintf("Case %s", tc.desc), func() {
 
-	// submit early execution request
-	completeEarly := &types.MsgCompleteExecutionEarly{
-		Creator: pendingExecution.Creator,
-		Id:      pendingExecution.Id,
+			// give coins to requester
+			requesterAddr, err := sdk.AccAddressFromBech32(pendingExecution.Creator)
+			require.NoError(err)
+
+			if bk.SpendableCoins(ctx, requesterAddr) != nil {
+				suite.pylonsApp.BankKeeper.SendCoins(ctx, requesterAddr, trashAddress, bk.SpendableCoins(ctx, requesterAddr))
+			}
+			err = k.MintCoinsToAddr(ctx, requesterAddr, tc.amountMinted)
+			require.NoError(err)
+
+			// submit early execution request
+			completeEarly := &types.MsgCompleteExecutionEarly{
+				Creator: pendingExecution.Creator,
+				Id:      tc.Id,
+			}
+			resp, err := srv.CompleteExecutionEarly(wctx, completeEarly)
+			if tc.valid {
+				require.NoError(err)
+				pendingExecution = k.GetPendingExecution(ctx, resp.Id)
+				execution, _, _, err := k.CompletePendingExecution(ctx, pendingExecution)
+				require.NoError(err)
+				k.ActualizeExecution(ctx, execution)
+
+				// verify execution completion and that requester has no balance left
+				require.True(k.HasExecution(ctx, resp.Id))
+				balance := bk.SpendableCoins(ctx, requesterAddr)
+				require.Nil(balance)
+			} else {
+				suite.Require().Error(err)
+			}
+		})
 	}
-	resp, err := srv.CompleteExecutionEarly(wctx, completeEarly)
-	require.NoError(err)
-
-	// manually trigger complete execution - simulate endBlocker
-	pendingExecution = k.GetPendingExecution(ctx, resp.Id)
-	execution, _, _, err := k.CompletePendingExecution(ctx, pendingExecution)
-	require.NoError(err)
-	k.ActualizeExecution(ctx, execution)
-
-	// verify execution completion and that requester has no balance left
-	require.True(k.HasExecution(ctx, resp.Id))
-	balance := bk.SpendableCoins(ctx, requesterAddr)
-	require.Nil(balance)
 }
