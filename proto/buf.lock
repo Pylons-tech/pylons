@@ -8,7 +8,7 @@ deps:
   - remote: buf.build
     owner: cosmos
     repository: cosmos-sdk
-    commit: e72fba7631bc4d25ac5ae72d85e9ab22
+    commit: d69a32d07ca5483f84fbac9501748801
   - remote: buf.build
     owner: cosmos
     repository: gogo-proto
@@ -16,8 +16,4 @@ deps:
   - remote: buf.build
     owner: googleapis
     repository: googleapis
-<<<<<<< HEAD
-    commit: 76b29b5063a4450d870f9f91678e3d95
-=======
     commit: 61dea4c7129940a2aac61f35386b960c
->>>>>>> added referral in create account

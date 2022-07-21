@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	"google.golang.org/grpc/codes"
@@ -44,7 +43,6 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 	k.SetPylonsAccount(ctx, accountAddr, username)
 	if len(msg.ReferralAddress) > 0 {
 		k.SetPylonsReferral(ctx, msg.Creator, msg.Username, msg.ReferralAddress)
-		fmt.Println(k.GetPylonsReferral(ctx, msg.ReferralAddress))
 	}
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateAccount{
