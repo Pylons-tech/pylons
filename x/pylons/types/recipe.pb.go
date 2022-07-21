@@ -264,7 +264,7 @@ func (m *ItemInput) GetStrings() []StringInputParam {
 type DoubleWeightRange struct {
 	Lower  github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,1,opt,name=lower,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"lower"`
 	Upper  github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,2,opt,name=upper,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"upper"`
-	Weight uint64                                 `protobuf:"varint,3,opt,name=weight,proto3" json:"weight,omitempty,string"`
+	Weight uint64                                 `protobuf:"varint,3,opt,name=weight,proto3" json:"weight,omitempty"`
 }
 
 func (m *DoubleWeightRange) Reset()         { *m = DoubleWeightRange{} }
@@ -373,7 +373,7 @@ func (m *DoubleParam) GetProgram() string {
 type IntWeightRange struct {
 	Lower  int64  `protobuf:"varint,1,opt,name=lower,proto3" json:"lower,omitempty"`
 	Upper  int64  `protobuf:"varint,2,opt,name=upper,proto3" json:"upper,omitempty"`
-	Weight uint64 `protobuf:"varint,3,opt,name=weight,proto3" json:"weight,omitempty,string"`
+	Weight uint64 `protobuf:"varint,3,opt,name=weight,proto3" json:"weight,omitempty"`
 }
 
 func (m *IntWeightRange) Reset()         { *m = IntWeightRange{} }
@@ -627,8 +627,8 @@ type ItemOutput struct {
 	// The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
 	TradePercentage github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,7,opt,name=trade_percentage,json=tradePercentage,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"trade_percentage"`
 	// quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
-	Quantity     uint64 `protobuf:"varint,8,opt,name=quantity,proto3" json:"quantity,omitempty,string"`
-	AmountMinted uint64 `protobuf:"varint,9,opt,name=amount_minted,json=amountMinted,proto3" json:"amount_minted,omitempty,string"`
+	Quantity     uint64 `protobuf:"varint,8,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	AmountMinted uint64 `protobuf:"varint,9,opt,name=amount_minted,json=amountMinted,proto3" json:"amount_minted,omitempty"`
 	Tradeable    bool   `protobuf:"varint,10,opt,name=tradeable,proto3" json:"tradeable,omitempty"`
 }
 
@@ -741,8 +741,8 @@ type ItemModifyOutput struct {
 	// The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
 	TradePercentage github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,8,opt,name=trade_percentage,json=tradePercentage,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"trade_percentage"`
 	// quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
-	Quantity     uint64 `protobuf:"varint,9,opt,name=quantity,proto3" json:"quantity,omitempty,string"`
-	AmountMinted uint64 `protobuf:"varint,10,opt,name=amount_minted,json=amountMinted,proto3" json:"amount_minted,omitempty,string"`
+	Quantity     uint64 `protobuf:"varint,9,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	AmountMinted uint64 `protobuf:"varint,10,opt,name=amount_minted,json=amountMinted,proto3" json:"amount_minted,omitempty"`
 	Tradeable    bool   `protobuf:"varint,11,opt,name=tradeable,proto3" json:"tradeable,omitempty"`
 }
 
@@ -913,7 +913,7 @@ func (m *EntriesList) GetItemModifyOutputs() []ItemModifyOutput {
 // WeightedOutputs is to make structs which is using weight to be based on
 type WeightedOutputs struct {
 	EntryIds []string `protobuf:"bytes,1,rep,name=entry_ids,json=entryIds,proto3" json:"entry_ids,omitempty"`
-	Weight   uint64   `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty,string"`
+	Weight   uint64   `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
 }
 
 func (m *WeightedOutputs) Reset()         { *m = WeightedOutputs{} }
