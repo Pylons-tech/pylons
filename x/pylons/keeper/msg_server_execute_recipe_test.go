@@ -19,6 +19,8 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe() {
 	wctx := sdk.WrapSDKContext(ctx)
 
 	creator := "A"
+	types.UpdateAppCheckFlagTest(types.FlagTrue)
+
 	_, err := srv.CreateAccount(wctx, &types.MsgCreateAccount{
 		Creator:  types.TestCreator,
 		Username: "test",
@@ -74,6 +76,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe() {
 		require.Equal(0, len(completed))
 		require.Equal(1, len(pending))
 	}
+	types.UpdateAppCheckFlagTest(types.FlagFalse)
 }
 
 func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
