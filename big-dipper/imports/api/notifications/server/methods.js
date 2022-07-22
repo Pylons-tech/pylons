@@ -8,7 +8,6 @@ import {admin} from "../../admin.js"
 
 
 
-
 const StatusOk = 200;
 const StatusInvalidInput = 400;
 const InternalServerError = 500;
@@ -38,11 +37,11 @@ Api.addRoute(
       }
 
       admin.appCheck().verifyToken(h['x-firebase-appcheck']).then((res)=>{
-        const notifcationIDs = this.bodyParams.notifcationIDs;
+        const notificationIDs = this.bodyParams.notifcationIDs;
 
-        if (notifcationIDs && notifcationIDs.length > 0) {
-          for (let index = 0; index < notifcationIDs.length; index++) {
-            const id = notifcationIDs[index];
+        if (notificationIDs && notificationIDs.length > 0) {
+          for (let index = 0; index < notificationIDs.length; index++) {
+            const id = notificationIDs[index];
   
             //mark as Read
             var result = markRead(id);
@@ -81,7 +80,7 @@ Api.addRoute(
 );
 
 Api.addRoute(
-  "notifications/getAllNotifcations/:address/:limit/:offset",
+  "notifications/getAllNotifications/:address/:limit/:offset",
   { authRequired: false },
   {
     get: function () {
@@ -119,7 +118,7 @@ Api.addRoute(
 );
 
 Meteor.methods({
-  //send un settleed notifications
+  //send un settled notifications
   "Notifications.sendPushNotifications": function () {
     this.unblock();
 

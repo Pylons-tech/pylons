@@ -29,9 +29,7 @@ if (Meteor.isServer) {
           // extracting the required fields
           const recipeID = txns[i]?.tx?.body?.messages[0]?.recipe_id
 
-          //const recipe = Recipes.findOne({ ID: recipeID })
           const recipe = getRecipe(cookBookId, recipeID)
-
           const nftName = getNftName(recipe)
           const nftUrl = getNftProperty(recipe, 'NFT_URL')
           const nftFormat = getNftProperty(recipe, 'NFT_Format')
@@ -122,7 +120,6 @@ if (Meteor.isServer) {
           const cookBookId = txns[i]?.tx?.body?.messages[0]?.cookbook_id
           const recipeID = txns[i]?.tx?.body?.messages[0]?.id
           const recipe = getRecipe(cookBookId, recipeID)
-
           const nftName = getNftName(recipe)
           const nftUrl = getNftProperty(recipe, 'NFT_URL')
           const nftFormat = getNftProperty(recipe, 'NFT_Format')
