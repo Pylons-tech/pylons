@@ -17,3 +17,13 @@ message Username {
 message AccountAddr {
   string value = 2;
 }
+
+message ReferralKV {
+  string address = 1;
+  repeated RefereeSignup users = 2; 
+}
+
+message RefereeSignup {
+  string username = 1;
+  string address = 2;
+}

@@ -65,7 +65,7 @@ func New(t *testing.T, configs ...network.Config) *network.Network {
 			fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 		}
 
-		args := []string{fmt.Sprintf("val%d", i), "testtoken"}
+		args := []string{fmt.Sprintf("val%d", i), "testtoken", ""}
 		args = append(args, flags...)
 		_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
 		require.NoError(t, err)

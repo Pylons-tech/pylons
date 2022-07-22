@@ -27,16 +27,16 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 	}{
 		{
 			desc:    "Valid",
-			request: &types.MsgCreateAccount{Creator: addr[0], Username: "testUser"},
+			request: &types.MsgCreateAccount{Creator: addr[0], Username: "testUser", ReferralAddress: ""},
 		},
 		{
 			desc:    "InvalidCreator",
-			request: &types.MsgCreateAccount{Creator: "invalid", Username: "testUser"},
+			request: &types.MsgCreateAccount{Creator: "invalid", Username: "testUser", ReferralAddress: ""},
 			err:     sdkerrors.ErrInvalidRequest,
 		},
 		{
 			desc:    "DuplicateUsername",
-			request: &types.MsgCreateAccount{Creator: addr[1], Username: "testUser"},
+			request: &types.MsgCreateAccount{Creator: addr[1], Username: "testUser", ReferralAddress: ""},
 			err:     types.ErrDuplicateUsername,
 		},
 	} {

@@ -25,6 +25,7 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdListTradesByCreator())
+	cmd.AddCommand(CmdListReferralsByAddress())
 
 	cmd.AddCommand(CmdGetRecipeHistory())
 	cmd.AddCommand(CmdGetStripeRefund())

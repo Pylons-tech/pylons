@@ -41,6 +41,9 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 	}
 
 	k.SetPylonsAccount(ctx, accountAddr, username)
+	if len(msg.ReferralAddress) > 0 {
+		k.SetPylonsReferral(ctx, msg.Creator, msg.Username, msg.ReferralAddress)
+	}
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateAccount{
 		Address:  msg.Creator,
