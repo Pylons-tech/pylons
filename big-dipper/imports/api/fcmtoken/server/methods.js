@@ -116,7 +116,7 @@ function updateFCMToken (userAddress, fcmToken) {
 }
 
 function Valid (parameter) {
-  if (isString(parameter)) {
+  if (!isString(parameter)) {
     return false
   }
   if (parameter.length === 0) {

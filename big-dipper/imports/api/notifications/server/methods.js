@@ -26,9 +26,9 @@ Api.addRoute(
   {
     get: function () {
       if (
-        Valid(this.urlParams.address) ||
-        isNumber(this.urlParams.limit) ||
-        isNumber(this.urlParams.offset)
+        Valid(this.urlParams.address) &&
+        this.urlParams.limit &&
+        this.urlParams.offset
       ) {
         try {
           const res = getNotifications(
@@ -52,7 +52,7 @@ Api.addRoute(
       return {
         Code: StatusInvalidInput,
         Message: BadRequest,
-        Data: 'Invalid Params'
+        Data: "requires params /:address/:limit/:offset"
       }
     }
   }
@@ -144,7 +144,7 @@ WebApp.connectHandlers.use(
           JSON.stringify({
             Code: StatusInvalidInput,
             Message: BadRequest,
-            Data: 'notifcationIDs list is missing or corrupt'
+            Data: 'notificationIDs list is missing or corrupt'
           })
         )
       }
@@ -207,7 +207,7 @@ Meteor.methods({
 })
 
 function Valid (parameter) {
-  if (isString(parameter)) {
+  if (!isString(parameter)) {
     return false
   }
   if (parameter.length === 0) {
