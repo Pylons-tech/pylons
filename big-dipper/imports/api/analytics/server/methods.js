@@ -28,7 +28,7 @@ if (Meteor.isServer) {
         for (let i = 0; i < txns.length; i++) {
           // extracting the required fields
           const recipeID = txns[i]?.tx?.body?.messages[0]?.recipe_id
-
+          const cookBookId = txns[i]?.tx?.body?.messages[0]?.cookbook_id
           const recipe = getRecipe(cookBookId, recipeID)
           const nftName = getNftName(recipe)
           const nftUrl = getNftProperty(recipe, 'NFT_URL')
