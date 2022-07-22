@@ -6,7 +6,10 @@ $primary: $forbole-red !default;
 body {
   font-size: inherit !important;
 }
-
+model-viewer {
+  width: 100px;
+  height: 100px;
+}
 .no-select {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
