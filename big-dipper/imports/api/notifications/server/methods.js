@@ -137,7 +137,7 @@ Meteor.methods({
           token = FCMToken.findOne({ address: sellerAddress }).token
         }catch(e){
           return e
-        }
+        } 
         
         const buyerUserName = getUserNameInfo(sale.to).username.value;
         const message = {
@@ -194,7 +194,7 @@ function getNotifications(address, limit, offset) {
   return Notifications.find(
     { from: address },
     {
-      sort: { time: -1 },
+      sort:{created_at:-1},
       limit: parseInt(limit),
       skip: parseInt(offset),
     }

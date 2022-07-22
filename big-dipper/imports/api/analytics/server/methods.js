@@ -28,7 +28,10 @@ if (Meteor.isServer) {
         for (let i = 0; i < txns.length; i++) {
           // extracting the required fields
           const recipeID = txns[i]?.tx?.body?.messages[0]?.recipe_id
-          const recipe = Recipes.findOne({ ID: recipeID })
+
+          //const recipe = Recipes.findOne({ ID: recipeID })
+          const recipe = getRecipe(cookBookId, recipeID)
+
           const nftName = getNftName(recipe)
           const nftUrl = getNftProperty(recipe, 'NFT_URL')
           const nftFormat = getNftProperty(recipe, 'NFT_Format')
@@ -115,26 +118,12 @@ if (Meteor.isServer) {
           { sort: { 'tx_response.timestamp': -1 } }
         ).fetch()
 
-
-
-          
-
         for (let i = 0; i < txns.length; i++) {
           const cookBookId = txns[i]?.tx?.body?.messages[0]?.cookbook_id
           const recipeID = txns[i]?.tx?.body?.messages[0]?.id
-          const recipe = getRecipe(cookBookId,recipeID)
+          const recipe = getRecipe(cookBookId, recipeID)
 
-
-
-
-          // const recipe = Recipes.findOne({
-          //   ID: recipeID,
-          //   cookbook_id: cookBookId
-          // })
-
-
-
-          const nftName = recipe.name//getNftName(recipe)
+          const nftName = getNftName(recipe)
           const nftUrl = getNftProperty(recipe, 'NFT_URL')
           const nftFormat = getNftProperty(recipe, 'NFT_Format')
           const coinInvolved =
@@ -152,7 +141,8 @@ if (Meteor.isServer) {
             type: 'Listing',
             from: creator,
             to: '-',
-            time: txns[i]?.tx_response?.timestamp
+            time: txns[i]?.tx_response?.timestamp,
+            R: recipe
           }
 
           // inserting the extracted information in nft-analytics collection
@@ -361,7 +351,7 @@ if (Meteor.isServer) {
 }
 
 // getFormattedDate to get date in format (2022-04-12)
-function getFormattedDate (date) {
+function getFormattedDate(date) {
   let monthString = date.getMonth() + 1 + ''
   if (monthString.length === 1) {
     monthString = '0' + (date.getMonth() + 1)
@@ -372,11 +362,12 @@ function getFormattedDate (date) {
     dateString = '0' + date.getDate()
   }
 
-  const formattedDate = date.getFullYear() + '-' + monthString + '-' + dateString
+  const formattedDate =
+    date.getFullYear() + '-' + monthString + '-' + dateString
   return formattedDate
 }
 
-function getNftProperty (recipe, property) {
+function getNftProperty(recipe, property) {
   let nftUrl = ''
   const itemOutputs = recipe?.entries?.item_outputs
   if (itemOutputs !== null && itemOutputs !== undefined) {
@@ -394,12 +385,12 @@ function getNftProperty (recipe, property) {
 }
 
 // getting the nft name out of the recipe object
-function getNftName (recipe) {
+function getNftName(recipe) {
   return recipe?.name
 }
 
 // fetching username info
-function getUserNameInfo (address) {
+function getUserNameInfo(address) {
   let result
   const url = sanitizeUrl(
     `${Meteor.settings.remote.api}/pylons/account/address/${address}`
@@ -414,21 +405,21 @@ function getUserNameInfo (address) {
 }
 
 // getting amountString from the executed transaction
-function getAmountString (txn) {
+function getAmountString(txn) {
   return getAttributeFromEvent(txn, 'create_item', 'amount')
 }
 
 // getting the receiver out of the transaction object
-function getReceiver (txn) {
+function getReceiver(txn) {
   return getAttributeFromEvent(txn, 'create_item', 'receiver')
 }
 
 // getting the spender object out of the transaction object
-function getSpender (txn) {
+function getSpender(txn) {
   return getAttributeFromEvent(txn, 'create_item', 'sender')
 }
 
-function getAttributeFromEvent (txn, event, attribute) {
+function getAttributeFromEvent(txn, event, attribute) {
   let Val = ''
   const events = txn?.tx_response?.logs[0]?.events
 
@@ -450,19 +441,19 @@ function getAttributeFromEvent (txn, event, attribute) {
 }
 
 // separating amount from the amountString which is like '100000upylon'
-function getAmount (amountString) {
+function getAmount(amountString) {
   const quantity = parseFloat(amountString.replace(/\D/g, ''))
   return quantity
 }
 
 // separating the coin from the amountString
-function getCoin (amountString) {
+function getCoin(amountString) {
   const quantity = parseFloat(amountString.replace(/\D/g, ''))
   const coin = amountString.replace(quantity, '')
   return coin
 }
 
-function extractSaleFromSales (sales) {
+function extractSaleFromSales(sales) {
   if (!isNil(sales[0])) {
     const buyerUsername = getUserNameInfo(sales[0].to)
     const sellerUsername = getUserNameInfo(sales[0].from)
@@ -476,8 +467,7 @@ function extractSaleFromSales (sales) {
   return null
 }
 
-
-function getRecipe(cookBookID,recipeID){
+function getRecipe(cookBookID, recipeID) {
   let result
   const url = sanitizeUrl(
     `${Meteor.settings.remote.api}/pylons/recipe/${cookBookID}/${recipeID}`
@@ -486,7 +476,7 @@ function getRecipe(cookBookID,recipeID){
     const response = HTTP.get(url)
     result = JSON.parse(response.content)?.recipe
   } catch (e) {
-    console.log('error getting userNameInfo: ', e)
+    console.log('error getting recipe from api: ', cookBookID, recipeID, url)
     // Recipes.insert(result)
   }
   return result
