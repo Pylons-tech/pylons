@@ -35,3 +35,5 @@ ostrio:flow-router-meta
 ostrio:flow-router-extra
 server-render@0.4.0
 nimble:restivus
+meteorhacks:async
+webapp
