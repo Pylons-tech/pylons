@@ -145,6 +145,10 @@ Meteor.methods({
             title: "NFT Sold",
             body: `Your NFT ${sale.item_name} has been sold to ${buyerUserName}`,
           },
+          data : {
+            type : "NFT Sold"
+          }
+
         };
         
         const options = {
