@@ -10,4 +10,5 @@ message History {
   string recipe_id = 4; 
   int64 created_at = 5; 
   string type = 6;
+  string tx_id = 7;
 }
