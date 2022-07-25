@@ -8,4 +8,4 @@ plugins:
     opt: logtostderr=true,allow_colon_final_segments=true
   - remote: buf.build/protocolbuffers/plugins/dart
     out: proto/dart/
-    opt:
+    opt: grpc
