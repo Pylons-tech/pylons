@@ -713,7 +713,7 @@ func (app *PylonsApp) RegisterTendermintService(clientCtx client.Context) {
 
 // RegisterUpgradeHandlers returns upgrade handlers
 func (app *PylonsApp) RegisterUpgradeHandlers(cfg module.Configurator) {
-	app.UpgradeKeeper.SetUpgradeHandler(upgradev46.UpgradeName, upgradev46.CreateUpgradeHandler(app.mm, cfg))
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev46.UpgradeName, upgradev46.CreateUpgradeHandler(app.mm, cfg, &app.StakingKeeper))
 }
 
 func (app *PylonsApp) setupUpgradeStoreLoaders() {
