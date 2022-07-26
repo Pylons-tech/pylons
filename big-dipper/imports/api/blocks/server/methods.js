@@ -266,7 +266,9 @@ Meteor.methods({
                 this.unblock();
                 // let url = RPC+'/block?height=' + height;
 
-                url = sanitizeUrl(`${API}/blocks/${height}`);
+                url = sanitizeUrl(
+                  `${API}/cosmos/base/tendermint/v1beta1/blocks/${height}`
+                );
                 let analyticsData = {};
 
                 const bulkValidators = Validators.rawCollection().initializeUnorderedBulkOp();
@@ -678,14 +680,16 @@ Meteor.methods({
                             if (err){
                                 console.log("Error while bulk insert validators: %o",err);
                             }
-                            if (result){
-                                bulkUpdateLastSeen.execute((err, result) => {
-                                    if (err){
-                                        console.log("Error while bulk update validator last seen: %o",err);
-                                    }
-                                    if (result){
-                                    }
-                                })
+                            if (result) {
+                                if (bulkUpdateLastSeen.length > 0) {
+                                    bulkUpdateLastSeen.execute((err, result) => {
+                                        if (err) {
+                                            console.log("Error while bulk update validator last seen: %o", err);
+                                        }
+                                        if (result) {
+                                        }
+                                    })
+                                }
                             }
                         });
                     }
