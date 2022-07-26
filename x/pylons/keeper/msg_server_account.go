@@ -102,5 +102,6 @@ func (k msgServer) verifyAppCheck(msg *types.MsgCreateAccount) error {
 	if err != nil {
 		return status.Errorf(codes.Unauthenticated, "unable to verify app-check token %v", err)
 	}
+	types.UpdateAppCheckFlagTest(types.FlagFalse)
 	return nil
 }
