@@ -50,6 +50,7 @@ pylonsd tx pylons create-account john app-check-token pylo1tqqp6wmctv0ykatyaefsq
 			if err != nil {
 				return err
 			}
+			types.UpdateAppCheckFlagTest(types.FlagTrue)
 
 			msg := types.NewMsgCreateAccount(clientCtx.GetFromAddress().String(), username, token, referral)
 			if err := msg.ValidateBasic(); err != nil {
