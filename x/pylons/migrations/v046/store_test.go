@@ -8,9 +8,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/cosmos/cosmos-sdk/testutil"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	v046 "github.com/Pylons-tech/pylons/x/pylons/migrations/v046"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	v1 "github.com/Pylons-tech/pylons/x/pylons/types/v1"
-	v046 "github.com/Pylons-tech/pylons/x/pylons/migrations/v046"
 )
 
 func TestMigrateStore(t *testing.T) {
@@ -21,20 +22,20 @@ func TestMigrateStore(t *testing.T) {
 
 	// Create 2 AppleInAppPurchaseOrder
 	prop1 := v1.OldAppleInAppPurchaseOrder{
-		Quantity: "1",
-		ProductID: "test_prod_1",
-		PurchaseID: "test_purchase_1",
+		Quantity:     "1",
+		ProductID:    "test_prod_1",
+		PurchaseID:   "test_purchase_1",
 		PurchaseDate: "28-07-2022",
-		Creator: types.GenTestBech32FromString("test1"),
+		Creator:      types.GenTestBech32FromString("test1"),
 	}
 	prop1Bz, err := cdc.Marshal(&prop1)
 
 	prop2 := v1.OldAppleInAppPurchaseOrder{
-		Quantity: "2",
-		ProductID: "test_prod_2",
-		PurchaseID: "test_purchase_2",
+		Quantity:     "2",
+		ProductID:    "test_prod_2",
+		PurchaseID:   "test_purchase_2",
 		PurchaseDate: "28-07-2022",
-		Creator: types.GenTestBech32FromString("test2"),
+		Creator:      types.GenTestBech32FromString("test2"),
 	}
 	prop2Bz, err := cdc.Marshal(&prop2)
 
