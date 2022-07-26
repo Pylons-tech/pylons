@@ -729,7 +729,7 @@ func (app *PylonsApp) setupUpgradeStoreLoaders() {
 	// TODO: add module name.
 	if upgradeInfo.Name == upgradev46.UpgradeName && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
 		storeUpgrades := storetypes.StoreUpgrades{
-			Added: []string{},
+			Deleted: []string{"epoch"},
 		}
 
 		// configure store loader that checks if version == upgradeHeight and applies store upgrades
