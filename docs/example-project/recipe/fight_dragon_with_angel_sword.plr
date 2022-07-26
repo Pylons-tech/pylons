@@ -1,7 +1,6 @@
 {
     #boilerplate v0.0.4 true,
-    "id": "LOUDFightDragonWithAngelSword",
-    "name": "LOUD-Fight-Dragon-With-Angel-Sword-Recipe",
+    #id_name LOUDFightDragonWithAngelSword LOUD-Fight-Dragon-With-Angel-Sword,
     "description": "creates a fight instance with a dragon requiring a character and a angel sword",
     #no_coin_input,
     "itemInputs": [
@@ -18,7 +17,7 @@
                 }
             }
         ],
-        "itemOutputs": [],
+        #no_item_output,
         "itemModifyOutputs": [
             {
                 "id": "character_after_defeat_dragon",

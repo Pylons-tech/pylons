@@ -1,14 +1,12 @@
 {
     #boilerplate v0.0.4 true,
-    "id": "LOUDFightDragonWithIronSword",
-    "name": "LOUD-Fight-Dragon-With-Iron-Sword-Recipe",
+    #id_name LOUDFightDragonWithIronSword LOUD-Fight-Dragon-With-Iron-Sword,
     "description": "creates a fight instance with a dragon requiring a character and a iron sword",
     #no_coin_input,
     "itemInputs": [
         #include character_input,
         #include iron_sword_input
     ],
-    "entries": {},
-    "outputs": [],
+    #no_output,
     "extraInfo": "extraInfo",
 }

@@ -1,7 +1,6 @@
 {
     #boilerplate v0.0.4 true,
-    "id": "LOUDFightTrollWithCopperSword",
-    "name": "LOUD-Fight-Troll-With-Copper-Sword-Recipe",
+    #id_name LOUDFightTrollWithCopperSword LOUD-Fight-Troll-With-Copper-Sword,
     "description": "creates a fight instance with a troll requiring a character and a copper sword",
     #no_coin_input,
     "itemInputs": [

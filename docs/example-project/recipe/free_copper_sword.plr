@@ -1,54 +1,12 @@
 {
     #boilerplate v0.0.2 true,
-    "id": "LOUDGiveCopperSword",
-    "name": "LOUD-Give-Copper-Sword",
+    #id_name LOUDGiveCopperSword LOUD-Give-Copper-Sword,
     "description": "Gives a free copper sword - for test use only",
     #no_input,
     "entries": {
-        "coinOutputs": [],
-        "itemOutputs": [
-            {
-                "id": "copper_sword_lv1",
-                "doubles": [
-                    {
-                        "key": "attack",
-                        "weightRanges": [],
-                        "program": "10.0"
-                    }
-                ],
-                "longs": [
-                    {
-                        "key": "level",
-                        "weightRanges": [],
-                        "program": "1"
-                    },
-                    {
-                        "key": "value",
-                        "weightRanges": [],
-                        "program": "250"
-                    }
-                ],
-                "strings": [
-                    {
-                        "key": "name",
-                        "value": "Copper sword"
-                    }
-                ],
-                "mutableStrings": [],
-                "transferFee": [],
-                "tradePercentage": "0.100000000000000000",
-                "tradeable": true
-            }
-        ],
-        "itemModifyOutputs": []
+        #no_coin_or_item_modify_output,
+        #sword_output copper_sword_lv1 10.0 1 250 '''Copper sword'''
     },
-    "outputs": [
-        {
-            "entryIds": [
-                "copper_sword_lv1"
-            ],
-            "weight": 1
-        }
-    ],
+    #solo_output copper_sword_lv1
     "extraInfo": "extraInfo"
 }

@@ -1,11 +1,10 @@
 {
     #boilerplate v0.0.1 true,
-    "id": "LOUDGetCharacter",
-    "name": "LOUD-Get-Character-Recipe",
+    #id_name LOUDGetCharacter LOUD-Get-Character,
     "description": "Creates a basic character in LOUD",
     #no_input,
     "entries": {
-        "coinOutputs": [],
+        #no_coin_or_item_modify_output,
         "itemOutputs": [
             {
                 "id": "character",
@@ -30,16 +29,8 @@
                 "tradePercentage": "0.100000000000000000",
                 "tradeable": true
             }
-        ],
-        "itemModifyOutputs": []
+        ]
     },
-    "outputs": [
-        {
-            "entryIds": [
-                "character"
-            ],
-            "weight": 1
-        }
-    ],
+    #solo_output character
     "extraInfo": "extraInfo"
 }

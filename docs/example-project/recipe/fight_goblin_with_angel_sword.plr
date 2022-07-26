@@ -1,7 +1,6 @@
 {
     #boilerplate v0.0.4 true,
-    "id": "LOUDFightGoblinWithAngelSword",
-    "name": "LOUD-Fight-Goblin-With-Angel-Sword-Recipe",
+    #id_name LOUDFightGoblinWithAngelSword LOUD-Fight-Goblin-With-Angel-Sword,
     "description": "creates a fight instance with a goblin requiring a character and a angel sword",
     #no_coin_input,
     "itemInputs": [

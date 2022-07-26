@@ -47,7 +47,65 @@ var builtinGadgets []Gadget = []Gadget{
 		`"itemInputs": []`,
 		0,
 	},
+	{
+		"id_name",
+		`"id": "%0",
+		"name": "%1",`,
+		2,
+	},
+	{
+		"no_coin_output",
+		`"coinOutputs": []`,
+		0,
+	},
+	{
+		"no_item_output",
+		`"itemOutputs": []`,
+		0,
+	},
+	{
+		"no_item_modify_output",
+		`"coinOutputs": []`,
+		0,
+	},
+	{
+		"no_coin_or_item_output",
+		`"coinOutputs": [],
+		itemOutputs": []`,
+		0,
+	},
+	{
+		"no_coin_or_item_modify_output",
+		`"coinOutputs": [],
+		itemModifyOutputs": []`,
+		0,
+	},
+	{
+		"no_item_or_item_modify_output",
+		`"itemOutputs": [],
+		itemModifyOutputs": []`,
+		0,
+	},
+	{
+		"solo_output",
+		`"outputs": [
+			{
+				"entryIds": [
+					"%0"
+				],
+				"weight": 1
+			}
+		],`,
+		1,
+	},
+	{
+		"no_output",
+		`"entries": {},
+		"outputs": [],`,
+		0,
+	},
 }
+
 var reservedNames = []string{"include"}
 
 // one iteration

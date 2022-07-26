@@ -1,7 +1,6 @@
 {
     #boilerplate v0.0.4 true,
-    "id": "LOUDFightTrollWithAngelSword",
-    "name": "LOUD-Fight-Troll-With-Angel-Sword-Recipe",
+    #id_name LOUDFightTrollWithAngelSword LOUD-Fight-Troll-With-Angel-Sword,
     "description": "creates a fight instance with a troll requiring a character and a angel sword",
     #no_coin_input,
     "itemInputs": [

@@ -93,7 +93,7 @@ func loadModulesInline(bytes []byte, path string, info os.FileInfo, gadgets *[]G
 				modulePath := strings.TrimSpace(strings.Split(line, includeDirective)[1])
 				lines[i] = loadModuleFromPath(modulePath, strings.TrimSuffix(path, info.Name())) + "\n"
 			} else {
-				splut := gadgetParamParseRegex.Split(strings.TrimPrefix(lineTrimmed, "#"), -1)
+				splut := gadgetParamParseRegex.Split(strings.TrimSuffix(strings.TrimPrefix(lineTrimmed, "#"), ","), -1)
 				gadget := GetGadget(strings.TrimSpace(splut[0]), gadgets)
 				lines[i] = ExpandGadget(gadget, splut[1:])
 			}

@@ -1,22 +1,13 @@
 {
     #boilerplate v0.0.4 true,
-    "id": "LOUDBuyIronSword",
-    "name": "LOUD-Buy-Iron-Sword",
+    #id_name LOUDBuyIronSword LOUD-Buy-Iron-Sword,
     "description": "Purchases a iron sword for loudCoin",
     #price loudCoin 500,
     #no_item_input,
     "entries": {
-        "coinOutputs": [],
+        #no_coin_or_item_modify_output,
         #sword_output iron_sword_lv1 20.0 1 500 '''Iron sword''',
-        "itemModifyOutputs": []
     },
-    "outputs": [
-        {
-            "entryIds": [
-                "iron_sword_lv1"
-            ],
-            "weight": 1
-        }
-    ],
+    #solo_output copper_sword_lv1,
     "extraInfo": "extraInfo"
 }

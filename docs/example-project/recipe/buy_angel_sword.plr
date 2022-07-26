@@ -1,22 +1,13 @@
 {
     #boilerplate v0.0.4 true,
-    "id": "LOUDBuyAngelSword",
-    "name": "LOUD-Buy-Angel-Sword",
-    "description": "Purchases a angel sword for loudCoin",
+    #id_name LOUDBuyAngelSword LOUD-Buy-Angel-Sword,
+    "description": "Purchases an angel sword for loudCoin",
     #price loudCoin 1000,
     #no_item_input,
     "entries": {
-        "coinOutputs": [],
+        #no_coin_or_item_modify_output,
         #sword_output angel_sword_lv1 40.0 1 1000 '''Angel sword''',
-        "itemModifyOutputs": []
     },
-    "outputs": [
-        {
-            "entryIds": [
-                "angel_sword_lv1"
-            ],
-            "weight": 1
-        }
-    ],
+    #solo_output angel_sword_lv1,
     "extraInfo": "extraInfo"
 }

@@ -1,7 +1,6 @@
 {
     #boilerplate v0.0.21 true
-    "id": "LOUDFightGoblinWithCopperSword",
-    "name": "LOUD-Fight-Goblin-With-Copper-Sword-Recipe",
+    #id_name LOUDFightGoblinWithCopperSword LOUD-Fight-Goblin-With-Copper-Sword,
     "description": "creates a fight instance with a goblin requiring a character and a copper sword",
     #no_coin_input,
     "itemInputs": [
