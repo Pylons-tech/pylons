@@ -260,7 +260,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			valid:                 false,
 		},
 		{
-			decs:                "Error lock coins for execution",
+			decs:                "Error locking coins for execution",
 			cookbook:            *cookbook,
 			unEnabledCookbook:   false,
 			changeIdCookbook:    false,
@@ -279,7 +279,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			valid:                 false,
 		},
 		{
-			decs:                "User account username not found",
+			decs:                "Username not found",
 			cookbook:            *cookbook,
 			unEnabledCookbook:   false,
 			changeIdCookbook:    false,
