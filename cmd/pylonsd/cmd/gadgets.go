@@ -17,7 +17,6 @@ type Gadget struct {
 const gadgetsFilename = "pylons.gadgets"
 
 var builtinGadgets []Gadget = []Gadget{
-	{"test_gadget", `{"%0" : "%1"}`, 2},
 	{
 		"price",
 		`"coinInputs": [
@@ -31,6 +30,22 @@ var builtinGadgets []Gadget = []Gadget{
 			}
 		]`,
 		2,
+	},
+	{
+		"no_input",
+		`"coinInputs": [],
+		"itemInputs": []`,
+		0,
+	},
+	{
+		"no_coin_input",
+		`"coinInputs": []`,
+		0,
+	},
+	{
+		"no_item_input",
+		`"itemInputs": []`,
+		0,
 	},
 }
 var reservedNames = []string{"include"}

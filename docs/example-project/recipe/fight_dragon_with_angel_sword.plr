@@ -1,14 +1,12 @@
 {
-    "cookbookId": "cookbookLoudTest",
+    #boilerplate v0.0.4 true,
     "id": "LOUDFightDragonWithAngelSword",
     "name": "LOUD-Fight-Dragon-With-Angel-Sword-Recipe",
     "description": "creates a fight instance with a dragon requiring a character and a angel sword",
-    "version": "v0.0.4",
-    "coinInputs": [],
+    #no_coin_input,
     "itemInputs": [
-#include character_input
-		,
-#include angel_sword_input
+        #include character_input,
+        #include angel_sword_input
     ],
     "entries": {
         "coinOutputs": [
@@ -59,11 +57,5 @@
             "weight": 24
         }
     ],
-    "blockInterval": 0,
-    "costPerBlock": {
-        "denom": "upylon",
-        "amount": "1000000"
-    },
-    "enabled": true,
     "extraInfo": "extraInfo"
 }

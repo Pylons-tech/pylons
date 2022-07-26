@@ -1,47 +1,13 @@
 {
-    "cookbookId": "cookbookLoudTest",
+    #boilerplate v0.0.4 true,
     "id": "LOUDBuyAngelSword",
     "name": "LOUD-Buy-Angel-Sword",
     "description": "Purchases a angel sword for loudCoin",
-    "version": "v0.0.2",
-    #price loudCoin 750
-    "itemInputs": [],
+    #price loudCoin 1000,
+    #no_item_input,
     "entries": {
         "coinOutputs": [],
-        "itemOutputs": [
-            {
-                "id": "angel_sword_lv1",
-                "doubles": [
-                    {
-                        "key": "attack",
-                        "weightRanges": [],
-                        "program": "40.0"
-                    }
-                ],
-                "longs": [
-                    {
-                        "key": "level",
-                        "weightRanges": [],
-                        "program": "1"
-                    },
-                    {
-                        "key": "value",
-                        "weightRanges": [],
-                        "program": "1000"
-                    }
-                ],
-                "strings": [
-                    {
-                        "key": "name",
-                        "value": "Angel sword"
-                    }
-                ],
-                "mutableStrings": [],
-                "transferFee": [],
-                "tradePercentage": "0.100000000000000000",
-                "tradeable": true
-            }
-        ],
+        #sword_output angel_sword_lv1 40.0 1 1000 '''Angel sword''',
         "itemModifyOutputs": []
     },
     "outputs": [
@@ -52,11 +18,5 @@
             "weight": 1
         }
     ],
-    "blockInterval": 0,
-    "costPerBlock": {
-        "denom": "upylon",
-        "amount": "1000000"
-    },
-    "enabled": true,
     "extraInfo": "extraInfo"
 }

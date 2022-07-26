@@ -1,37 +1,39 @@
-{
-    #boilerplate v0.0.2 true,
-    "id": "LOUDGiveCopperSword",
-    "name": "LOUD-Give-Copper-Sword",
-    "description": "Gives a free copper sword - for test use only",
-    #no_input,
-    "entries": {
-        "coinOutputs": [],
+#boilerplate 2
+    "cookbookId": "cookbookLoudTest",
+    "blockInterval": 0,
+    "costPerBlock": {
+        "denom": "upylon",
+        "amount": "1000000"
+    },
+    "version": "%0",
+    "enabled": %1
+#sword_output 5
         "itemOutputs": [
             {
-                "id": "copper_sword_lv1",
+                "id": "%0",
                 "doubles": [
                     {
                         "key": "attack",
                         "weightRanges": [],
-                        "program": "10.0"
+                        "program": "%1"
                     }
                 ],
                 "longs": [
                     {
                         "key": "level",
                         "weightRanges": [],
-                        "program": "1"
+                        "program": "%2"
                     },
                     {
                         "key": "value",
                         "weightRanges": [],
-                        "program": "250"
+                        "program": "%3"
                     }
                 ],
                 "strings": [
                     {
                         "key": "name",
-                        "value": "Copper sword"
+                        "value": "%4"
                     }
                 ],
                 "mutableStrings": [],
@@ -40,15 +42,3 @@
                 "tradeable": true
             }
         ],
-        "itemModifyOutputs": []
-    },
-    "outputs": [
-        {
-            "entryIds": [
-                "copper_sword_lv1"
-            ],
-            "weight": 1
-        }
-    ],
-    "extraInfo": "extraInfo"
-}

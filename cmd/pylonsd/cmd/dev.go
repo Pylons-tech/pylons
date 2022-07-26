@@ -82,6 +82,7 @@ func loadModulesInline(bytes []byte, path string, info os.FileInfo, gadgets *[]G
 	for i, line := range lines {
 		lineTrimmed := strings.TrimLeft(line, " ")
 		if lineTrimmed[0] == '#' {
+			appendComma := strings.HasSuffix(lines[i], ",")
 			if strings.Contains(line, includeDirective) {
 				modulePath := strings.TrimSpace(strings.Split(line, includeDirective)[1])
 				lines[i] = loadModuleFromPath(modulePath, strings.TrimSuffix(path, info.Name())) + "\n"
@@ -89,6 +90,9 @@ func loadModulesInline(bytes []byte, path string, info os.FileInfo, gadgets *[]G
 				splut := strings.Split(strings.TrimPrefix(lineTrimmed, "#"), " ")
 				gadget := GetGadget(strings.TrimSpace(splut[0]), gadgets)
 				lines[i] = ExpandGadget(gadget, splut[1:])
+			}
+			if appendComma {
+				lines[i] = lines[i] + "," // this is slow/clumsy but worry abt it later
 			}
 		}
 	}
