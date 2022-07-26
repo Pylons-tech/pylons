@@ -25,10 +25,7 @@ func migrateAppleInAppPurchaseOrder(store sdk.KVStore, cdc codec.BinaryCodec) er
 			return err
 		}
 
-		newProp, err := convertToNewAppleInAppPurchaseOrder(oldProp)
-		if err != nil {
-			return err
-		}
+		newProp := convertToNewAppleInAppPurchaseOrder(oldProp)
 		bz, err := cdc.Marshal(&newProp)
 		if err != nil {
 			return err
