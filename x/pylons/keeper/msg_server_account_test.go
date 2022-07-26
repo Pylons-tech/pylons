@@ -18,6 +18,7 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 	wctx := sdk.WrapSDKContext(ctx)
 
 	addr := types.GenTestBech32List(2)
+	types.UpdateAppCheckFlagTest(types.FlagTrue)
 
 	for _, tc := range []struct {
 		desc    string
@@ -26,16 +27,16 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 	}{
 		{
 			desc:    "Valid",
-			request: &types.MsgCreateAccount{Creator: addr[0], Username: "testUser"},
+			request: &types.MsgCreateAccount{Creator: addr[0], Username: "testUser", ReferralAddress: ""},
 		},
 		{
 			desc:    "InvalidCreator",
-			request: &types.MsgCreateAccount{Creator: "invalid", Username: "testUser"},
+			request: &types.MsgCreateAccount{Creator: "invalid", Username: "testUser", ReferralAddress: ""},
 			err:     sdkerrors.ErrInvalidRequest,
 		},
 		{
 			desc:    "DuplicateUsername",
-			request: &types.MsgCreateAccount{Creator: addr[1], Username: "testUser"},
+			request: &types.MsgCreateAccount{Creator: addr[1], Username: "testUser", ReferralAddress: ""},
 			err:     types.ErrDuplicateUsername,
 		},
 	} {
@@ -49,6 +50,7 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 			}
 		})
 	}
+	types.UpdateAppCheckFlagTest(types.FlagFalse)
 }
 
 func (suite *IntegrationTestSuite) TestUpdateAccount() {
@@ -60,6 +62,8 @@ func (suite *IntegrationTestSuite) TestUpdateAccount() {
 	wctx := sdk.WrapSDKContext(ctx)
 
 	addr := types.GenTestBech32List(2)
+	types.UpdateAppCheckFlagTest(types.FlagTrue)
+
 	request := &types.MsgCreateAccount{Creator: addr[0], Username: "testUser"}
 	_, err := srv.CreateAccount(wctx, request)
 	require.NoError(err)
@@ -104,4 +108,5 @@ func (suite *IntegrationTestSuite) TestUpdateAccount() {
 			}
 		})
 	}
+	types.UpdateAppCheckFlagTest(types.FlagFalse)
 }

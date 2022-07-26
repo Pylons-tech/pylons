@@ -20,28 +20,76 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerCreate() {
 	wctx := sdk.WrapSDKContext(ctx)
 	creator := "TestCreator"
 	desc := "TestDescriptionTestDescription"
-	for i := 0; i < 5; i++ {
-		idx := fmt.Sprintf("%d", i)
-		expected := &types.MsgCreateCookbook{
-			Creator:      creator,
-			Id:           idx,
-			Name:         desc,
-			Description:  desc,
-			Developer:    desc,
-			Version:      "v0.0.1",
-			SupportEmail: "test@email.com",
-			Enabled:      false,
-		}
-		_, err := srv.CreateCookbook(wctx, expected)
-		require.NoError(err)
-	}
+	index := "testing"
 
-	for i := 0; i < 5; i++ {
-		idx := fmt.Sprintf("%d", i)
-		rst, found := k.GetCookbook(ctx, idx)
-		require.True(found)
-		require.Equal(creator, rst.Creator)
-		require.Equal(desc, rst.Description)
+	anchorMsg := &types.MsgCreateCookbook{
+		Creator:      creator,
+		Id:           index,
+		Name:         desc,
+		Description:  desc,
+		Developer:    desc,
+		Version:      "v0.0.1",
+		SupportEmail: "test@email.com",
+		Enabled:      false,
+	}
+	for _, tc := range []struct {
+		desc  string
+		msgs  []types.MsgCreateCookbook
+		valid bool
+	}{
+		{
+			desc: "Invalid request: ID already set",
+			msgs: []types.MsgCreateCookbook{
+				*anchorMsg,
+				{
+					Creator:      creator,
+					Id:           index,
+					Name:         desc,
+					Description:  desc,
+					Developer:    desc,
+					Version:      "v0.0.1",
+					SupportEmail: "test@email.com",
+					Enabled:      false,
+				},
+			},
+			valid: false,
+		},
+		{
+			desc: "Valid",
+			msgs: []types.MsgCreateCookbook{
+				*anchorMsg,
+				{
+					Creator:      creator,
+					Id:           "validcase",
+					Name:         desc,
+					Description:  desc,
+					Developer:    desc,
+					Version:      "v0.0.1",
+					SupportEmail: "test@email.com",
+					Enabled:      false,
+				},
+			},
+			valid: true,
+		},
+	} {
+		suite.Run(fmt.Sprintf("Case %s", tc.desc), func() {
+			var err error
+			for _, msg := range tc.msgs {
+				_, err = srv.CreateCookbook(wctx, &msg)
+			}
+			if tc.valid {
+				suite.Require().NoError(err)
+				for _, msg := range tc.msgs {
+					rst, found := k.GetCookbook(ctx, msg.Id)
+					require.True(found)
+					require.Equal(creator, rst.Creator)
+					require.Equal(desc, rst.Description)
+				}
+
+			} else {
+				suite.Require().Error(err)
+			}
+		})
 	}
 }
 

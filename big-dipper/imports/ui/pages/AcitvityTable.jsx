@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Spinner } from "reactstrap";
 import moment from "moment";
 import Pagination from "react-responsive-pagination";
-
+import NewPagination from "./ActivityPagination";
 const getMedia = (type, source) => {
   if (type?.toLowerCase() === "image") {
     console.log("source", source);
@@ -83,7 +83,7 @@ function AcitvityTable({}) {
         } else {
           console.log("your data count is", result);
           setActivityFeedList(result.records);
-          setTotalPages(Math.ceil(result.count / 10));
+          setTotalPages(result.count);
           setLoadingTableData(false);
         }
       }
@@ -143,11 +143,19 @@ function AcitvityTable({}) {
           </tbody>
         </table>
       </div>
-      <div style={{ marginTop: "20px" }}>
-        <Pagination
+      <div
+        style={{
+          marginTop: "20px",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <NewPagination
           current={currentPage}
-          total={totalPages}
-          onPageChange={setCurrentPage}
+          totalRecords={totalPages}
+          onPageChangeSetPage={setCurrentPage}
         />
       </div>
     </div>

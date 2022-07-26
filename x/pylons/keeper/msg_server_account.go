@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"github.com/cosmos/cosmos-sdk/telemetry"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -14,6 +16,11 @@ import (
 
 func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAccount) (*types.MsgCreateAccountResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	err := k.verifyAppCheck(msg)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
 
 	addr, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
@@ -34,6 +41,9 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 	}
 
 	k.SetPylonsAccount(ctx, accountAddr, username)
+	if len(msg.ReferralAddress) > 0 {
+		k.SetPylonsReferral(ctx, msg.Creator, msg.Username, msg.ReferralAddress)
+	}
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateAccount{
 		Address:  msg.Creator,
@@ -82,4 +92,16 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 	telemetry.IncrCounter(1, "account", "update")
 
 	return &types.MsgUpdateAccountResponse{}, err
+}
+
+func (k msgServer) verifyAppCheck(msg *types.MsgCreateAccount) error {
+	if types.DefaultNoAppCheckConfig {
+		return nil
+	}
+	err := types.VerifyAppCheckToken(msg.Token)
+	if err != nil {
+		return status.Errorf(codes.Unauthenticated, "unable to verify app-check token %v", err)
+	}
+	types.UpdateAppCheckFlagTest(types.FlagFalse)
+	return nil
 }

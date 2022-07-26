@@ -66,7 +66,12 @@ var (
 	DefaultDistrEpochIdentifier         = "day"
 	DefaultEngineVersion                = uint64(0)
 	DefaultMaxTxsInBlock                = uint64(20)
+	DefaultNoAppCheckConfig             = false
 )
+
+func UpdateAppCheckFlagTest(flag bool) {
+	DefaultNoAppCheckConfig = flag
+}
 
 // Parameter Store Keys
 var (

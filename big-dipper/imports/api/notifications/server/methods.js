@@ -1,132 +1,164 @@
-import { Meteor } from "meteor/meteor";
-import { Notifications } from "../notifications.js";
-import { FCMToken } from "../../fcmtoken/fcmtoken.js";
-import { isNumber } from "lodash";
-import { sanitizeUrl } from "@braintree/sanitize-url";
-import { HTTP } from "meteor/http";
-import {admin} from "../../admin.js"
+import { Meteor } from 'meteor/meteor'
+import { WebApp } from 'meteor/webapp'
+import { Notifications } from '../notifications.js'
+import { FCMToken } from '../../fcmtoken/fcmtoken.js'
+import { isNumber, isString } from 'lodash'
+import { sanitizeUrl } from '@braintree/sanitize-url'
+import { HTTP } from 'meteor/http'
+import { admin } from '../../admin.js'
+import connectRoute from 'connect-route'
 
+const StatusOk = 200
+const StatusInvalidInput = 400
+const Success = 'Success'
+const BadRequest = 'Bad Request'
+const InvalidID = 'Invalid Notification ID'
+const AppCheckFailed = 'App Check Failed'
 
-
-
-const StatusOk = 200;
-const StatusInvalidInput = 400;
-const InternalServerError = 500;
-const Success = "Success";
-const BadRequest = "Bad Request";
-const InvalidID = "Invalid Notification ID";
-const AppCheckFailed = "App Check Failed"
-
-var Api = new Restivus({
+const Api = new Restivus({
   useDefaultAuth: true,
-  prettyJson: true,
-});
+  prettyJson: true
+})
 
 Api.addRoute(
-  "notifications/markread",
-  { authRequired: false },
-  {
-    post: function () {
-      
-      let h = this.request.headers;
-      if(!h['x-firebase-appcheck']){
-        return {
-          Code: StatusInvalidInput,
-          Message: AppCheckFailed,
-          Data: "x-firebase-appcheck header missing",
-        }; 
-      }
-
-      admin.appCheck().verifyToken(h['x-firebase-appcheck']).then((res)=>{
-        const notifcationIDs = this.bodyParams.notifcationIDs;
-
-        if (notifcationIDs && notifcationIDs.length > 0) {
-          for (let index = 0; index < notifcationIDs.length; index++) {
-            const id = notifcationIDs[index];
-  
-            //mark as Read
-            var result = markRead(id);
-            if (result != 1) {
-              return {
-                Code: StatusInvalidInput,
-                Message: InvalidID,
-                Data: id,
-              };
-            }
-          }
-  
-          return {
-            Code: StatusOk,
-            Message: Success,
-            Data: "Notifications Marked as Read",
-          };
-        }
-      }).catch((e)=>{
-          return {
-            Code: StatusInvalidInput,
-            Message: AppCheckFailed,
-            Data: "x-firebase-appcheck Failed",
-          };
-      })
-      
-      
-      
-      return {
-        Code: StatusInvalidInput,
-        Message: BadRequest,
-        Data: null,
-      };
-    },
-  }
-);
-
-Api.addRoute(
-  "notifications/getAllNotifcations/:address/:limit/:offset",
+  'notifications/getAllNotifications/:address/:limit/:offset',
   { authRequired: false },
   {
     get: function () {
       if (
-        Valid(this.urlParams.address) ||
-        isNumber(this.urlParams.limit) ||
-        isNumber(this.urlParams.offset)
+        Valid(this.urlParams.address) &&
+        this.urlParams.limit &&
+        this.urlParams.offset
       ) {
         try {
-          var res = getNotifications(
+          const res = getNotifications(
             this.urlParams.address,
             this.urlParams.limit,
             this.urlParams.offset
-          );
+          )
           return {
             Code: StatusOk,
             Message: Success,
-            Data: { results: res },
-          };
+            Data: { results: res }
+          }
         } catch (e) {
           return {
             Code: StatusInvalidInput,
             Message: BadRequest,
-            Data: e, //"Error Fetching Notifcations",
-          };
+            Data: null
+          }
         }
       }
       return {
         Code: StatusInvalidInput,
         Message: BadRequest,
-        Data: "Invalid Params",
-      };
-    },
+        Data: "requires params /:address/:limit/:offset"
+      }
+    }
   }
-);
+)
+
+WebApp.connectHandlers.use(
+  connectRoute(function (router) {
+    router.post('notifications/markread', async function (req, res) {
+      const h = req.headers
+      const notificationIDs = req.body.notificationIDs
+
+      if (!h['x-firebase-appcheck']) {
+        res.writeHead(StatusOk, {
+          'Content-Type': 'text/html'
+        })
+
+        res.end(
+          JSON.stringify({
+            Code: StatusInvalidInput,
+            Message: AppCheckFailed,
+            Data: 'x-firebase-appcheck header missing'
+          })
+        )
+      } else {
+        if (notificationIDs && notificationIDs.length > 0) {
+          // performing app check
+          const appCheckClaims = await verifyAppCheckToken(
+            h['x-firebase-appcheck']
+          )
+
+          // app check failed
+          if (!appCheckClaims) {
+            res.writeHead(StatusOk, {
+              'Content-Type': 'text/html'
+            })
+
+            res.end(
+              JSON.stringify({
+                Code: StatusInvalidInput,
+                Message: AppCheckFailed,
+                Data: 'invalid x-firebase-appcheck header'
+              })
+            )
+          }
+
+          // app check passed
+          if (notificationIDs && notificationIDs.length > 0) {
+            for (let index = 0; index < notificationIDs.length; index++) {
+              const id = notificationIDs[index]
+
+              // mark as Read
+              const result = markRead(id)
+              if (result !== 1) {
+                res.writeHead(StatusOk, {
+                  'Content-Type': 'text/html'
+                })
+
+                res.end(
+                  JSON.stringify({
+                    Code: StatusInvalidInput,
+                    Message: InvalidID,
+                    Data: `notificationID ${id} is invalid`
+                  })
+                )
+              }
+            }
+
+            // Success
+            res.writeHead(StatusOk, {
+              'Content-Type': 'text/html'
+            })
+
+            res.end(
+              JSON.stringify({
+                Code: StatusOk,
+                Message: Success,
+                Data: 'notifications marked as Read'
+              })
+            )
+          }
+        }
+
+        // invalid request
+        res.writeHead(StatusOk, {
+          'Content-Type': 'text/html'
+        })
+
+        res.end(
+          JSON.stringify({
+            Code: StatusInvalidInput,
+            Message: BadRequest,
+            Data: 'notificationIDs list is missing or corrupt'
+          })
+        )
+      }
+    })
+  })
+)
 
 Meteor.methods({
-  //send un settleed notifications
+  //send un settled notifications
   "Notifications.sendPushNotifications": function () {
     this.unblock();
 
-    const unSettled = Notifications.find({ settled: false });
-
-
-   
+    const unSettled = Notifications.find({ settled: false })
+ 
     unSettled
       .forEach((sale) => {
         var sellerAddress = sale.from;
@@ -137,7 +169,7 @@ Meteor.methods({
           token = FCMToken.findOne({ address: sellerAddress }).token
         }catch(e){
           return e
-        }
+        } 
         
         const buyerUserName = getUserNameInfo(sale.to).username.value;
         const message = {
@@ -145,6 +177,10 @@ Meteor.methods({
             title: "NFT Sold",
             body: `Your NFT ${sale.item_name} has been sold to ${buyerUserName}`,
           },
+          data : {
+            type : "NFT Sold"
+          }
+
         };
         
         const options = {
@@ -152,65 +188,75 @@ Meteor.methods({
           timeToLive: 86400,
         };
         
-        if(Meteor.settings.params.sendNotifications === 1){
-
-          admin
-          .messaging()
-          .sendToDevice(token, message, options)
-          .then((n) => {
-            markSent(saleID);
-           console.log(n)
-          })
-          .catch((e) => {
-            console.log("Notification not sent to ", token);
-            console.log(e)
-          });
-          
-        }
-      })
       
-  },
-});
-
-function Valid(parameter) {
-  if (typeof parameter != "string") {
-    return false;
+        if (Meteor.settings.params.sendNotifications === 1) {
+          admin
+            .messaging()
+            .sendToDevice(token, message, options)
+            .then((n) => {
+              markSent(saleID)
+              console.log(n)
+            })
+            .catch((e) => {
+              console.log('Notification not sent to ', token)
+              console.log(e)
+            })
+        }
+    })
   }
-  if (parameter.length == 0) {
-    return false;
+})
+
+function Valid (parameter) {
+  if (!isString(parameter)) {
+    return false
   }
-  return true;
+  if (parameter.length === 0) {
+    return false
+  }
+  return true
 }
 
-function markRead(id) {
-  return Notifications.update({ _id: id }, { $set: { read: true } });
+function markRead (id) {
+  return Notifications.update({ _id: id }, { $set: { read: true } })
 }
 
-function markSent(id) {
-  Notifications.update({ _id: id }, { $set: { settled: true } });
-  return Notifications.update({ _id: id }, { $set: { settled: true } });
+function markSent (id) {
+  Notifications.update({ _id: id }, { $set: { settled: true } })
+  return Notifications.update({ _id: id }, { $set: { settled: true } })
 }
-function getNotifications(address, limit, offset) {
+function getNotifications (address, limit, offset) {
   return Notifications.find(
     { from: address },
     {
-      sort: { time: -1 },
+      sort:{created_at:-1},
       limit: parseInt(limit),
-      skip: parseInt(offset),
+      skip: parseInt(offset)
     }
-  ).fetch();
+  ).fetch()
 }
 
-function getUserNameInfo(address) {
-  var result;
-  var url = sanitizeUrl(
+function getUserNameInfo (address) {
+  let result
+  const url = sanitizeUrl(
     `${Meteor.settings.remote.api}/pylons/account/address/${address}`
-  );
+  )
   try {
-    let response = HTTP.get(url);
-    result = JSON.parse(response.content);
+    const response = HTTP.get(url)
+    result = JSON.parse(response.content)
   } catch (e) {
-    console.log("error getting userNameInfo: ", e);
+    console.log('error getting userNameInfo: ', e)
   }
-  return result;
+  return result
+}
+
+async function verifyAppCheckToken (appCheckToken) {
+  if (!appCheckToken) {
+    return null
+  }
+  try {
+    const res = await admin.appCheck().verifyToken(appCheckToken)
+    return res
+  } catch (err) {
+    return null
+  }
 }

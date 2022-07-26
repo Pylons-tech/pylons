@@ -75,6 +75,8 @@ message MsgUpdateAccountResponse {
 message MsgCreateAccount {
   string creator = 1;
   string username = 2;
+  string token = 3;
+  string referral_address = 4;
 }
 
 message MsgCreateAccountResponse {

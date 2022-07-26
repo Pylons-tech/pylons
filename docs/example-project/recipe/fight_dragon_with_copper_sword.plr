@@ -1,0 +1,22 @@
+{
+    "cookbookId": "cookbookLoudTest",
+    "id": "LOUDFightDragonWithCopperSword",
+    "name": "LOUD-Fight-Dragon-With-Copper-Sword-Recipe",
+    "description": "creates a fight instance with a dragon requiring a character and a copper sword",
+    "version": "v0.0.4",
+    "coinInputs": [],
+    "itemInputs": [
+#include character_input
+		,
+#include copper_sword_input
+    ],
+    "entries": {},
+    "outputs": [],
+    "blockInterval": 0,
+    "costPerBlock": {
+        "denom": "upylon",
+        "amount": "1000000"
+    },
+    "enabled": true,
+    "extraInfo": "extraInfo"
+}
