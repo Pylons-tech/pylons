@@ -19,7 +19,10 @@ func CreateUpgradeHandler(mm *module.Manager, configurator module.Configurator, 
 			return newVM, err
 		}
 		FixMinCommisionRate(ctx, staking)
-		MigrateStore(ctx, pylonStoreKey, cdc)
+		err = MigrateStore(ctx, pylonStoreKey, cdc)
+		if err != nil {
+			return newVM, err
+		}
 
 		// override here
 		return newVM, err
