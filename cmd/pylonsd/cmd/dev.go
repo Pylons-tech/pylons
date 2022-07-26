@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -15,6 +16,11 @@ import (
 )
 
 var Out io.Writer = os.Stdout // modified during testing
+
+// group 1: (whole raw string tokens encapsulated '''like this'')
+// group 2: (tokens not contianing whitespace, separated by whitespace)
+// group 3: (whatever is in front of the first whitespace)
+var gadgetParamParseRegex = regexp.MustCompile(`(\s'''.*''')|(\s.\S*)|(\S*)`)
 
 const (
 	cookbookExtension = ".plc"
@@ -87,7 +93,7 @@ func loadModulesInline(bytes []byte, path string, info os.FileInfo, gadgets *[]G
 				modulePath := strings.TrimSpace(strings.Split(line, includeDirective)[1])
 				lines[i] = loadModuleFromPath(modulePath, strings.TrimSuffix(path, info.Name())) + "\n"
 			} else {
-				splut := strings.Split(strings.TrimPrefix(lineTrimmed, "#"), " ")
+				splut := gadgetParamParseRegex.Split(strings.TrimPrefix(lineTrimmed, "#"), -1)
 				gadget := GetGadget(strings.TrimSpace(splut[0]), gadgets)
 				lines[i] = ExpandGadget(gadget, splut[1:])
 			}
