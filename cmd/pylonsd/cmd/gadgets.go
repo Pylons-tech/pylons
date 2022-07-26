@@ -18,6 +18,20 @@ const gadgetsFilename = "pylons.gadgets"
 
 var builtinGadgets []Gadget = []Gadget{
 	{"test_gadget", `{"%0" : "%1"}`, 2},
+	{
+		"price",
+		`"coinInputs": [
+			{
+				"coins" : [
+					{
+					"denom": "%0",
+					"amount": "%1"
+					}
+				]
+			}
+		]`,
+		2,
+	},
 }
 var reservedNames = []string{"include"}
 

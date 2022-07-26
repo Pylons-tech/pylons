@@ -4,16 +4,7 @@
     "name": "LOUD-Buy-Angel-Sword",
     "description": "Purchases a angel sword for loudCoin",
     "version": "v0.0.2",
-    "coinInputs": [
-		{
-			"coins" : [
-			    {
-				"denom": "loudcoin",
-				"amount": "250"
-			}
-		]
-		}
-    ],
+    #price loudCoin 750
     "itemInputs": [],
     "entries": {
         "coinOutputs": [],

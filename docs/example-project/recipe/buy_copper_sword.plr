@@ -4,16 +4,7 @@
     "name": "LOUD-Buy-Copper-Sword",
     "description": "Purchases a copper sword for loudCoin",
     "version": "v0.0.2",
-    "coinInputs": [
-		{
-			"coins" : [
-			    {
-				"denom": "loudcoin",
-				"amount": "250"
-			}
-		]
-		}
-    ],
+    #price loudCoin 150
     "itemInputs": [],
     "entries": {
         "coinOutputs": [],
