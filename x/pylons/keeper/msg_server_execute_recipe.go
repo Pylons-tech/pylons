@@ -66,15 +66,14 @@ func (k Keeper) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr string,
 func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRecipe) (*types.MsgExecuteRecipeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	cookbook, found := k.GetCookbook(ctx, msg.CookbookId)
+	if !found {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "main cookbook not found")
+	}
+
 	recipe, found := k.GetRecipe(ctx, msg.CookbookId, msg.RecipeId)
 	if !found {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "requested recipe not found")
-	}
-
-	cookbook, found := k.GetCookbook(ctx, msg.CookbookId)
-
-	if !found {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "main cookbook not found")
 	}
 
 	// check if the recipe creator and the recipe executor are same
