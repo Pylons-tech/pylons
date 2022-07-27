@@ -46,9 +46,7 @@ func getBlock(height int64, ctx client.Context) (*coretypes.ResultBlock, error) 
 		return nil, err
 	}
 
-	// header -> BlockchainInfo
-	// header, tx -> Block
-	// results -> BlockResults
+	// get block at specific height 
 	res, err := node.Block(context.Background(), &height)
 	if err != nil {
 		return nil, err

@@ -260,11 +260,9 @@ Meteor.methods({
             Chain.update({chainId:Meteor.settings.public.chainId}, {$set:{totalValidators:totalValidators}});
 
             for (let height = curr+1 ; height <= until ; height++) {
-            // for (let height = curr+1 ; height <= curr+1 ; height++) {
                 let startBlockTime = new Date();
                 // add timeout here? and outside this loop (for catched up and keep fetching)?
                 this.unblock();
-                // let url = RPC+'/block?height=' + height;
 
                 url = sanitizeUrl(`${API}/blocks?height=${height}`);
                 let analyticsData = {};
