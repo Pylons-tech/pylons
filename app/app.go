@@ -1,14 +1,10 @@
 package app
 
 import (
-	"context"
-	"encoding/json"
-	"errors"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 
 	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
 
@@ -27,7 +23,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
-	"github.com/cosmos/cosmos-sdk/client/rpc"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/server/api"
 	"github.com/cosmos/cosmos-sdk/server/config"
@@ -692,46 +687,7 @@ func (app *PylonsApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.API
 		pylonsmodulekeeper.TxHistoryRequestHandler(w, r, clientCtx)
 	})
 	apiSvr.Router.HandleFunc("/blocks", func(w http.ResponseWriter, r *http.Request) {
-		data := r.URL.Query()
-
-		height, err := strconv.ParseInt(data.Get("height"), 10, 64)
-		if err != nil {
-			info, _ := json.Marshal(err)
-			_, _ = w.Write(info)
-			return
-		}
-		chainHeight, err := rpc.GetChainHeight(clientCtx)
-		if err != nil {
-			info, _ := json.Marshal(err)
-			_, _ = w.Write(info)
-			return
-		}
-		if height > chainHeight {
-			info, _ := json.Marshal(errors.New("requested block height is bigger then the chain length"))
-			_, _ = w.Write(info)
-			return
-		}
-
-		// get the node
-		node, err := clientCtx.GetNode()
-		if err != nil {
-			info, _ := json.Marshal(err)
-			_, _ = w.Write(info)
-			return
-		}
-
-		// header -> BlockchainInfo
-		// header, tx -> Block
-		// results -> BlockResults
-		res, err := node.Block(context.Background(), &height)
-		if err != nil {
-			info, _ := json.Marshal(err)
-			_, _ = w.Write(info)
-			return
-		}
-
-		info, _ := json.Marshal(res)
-		_, _ = w.Write(info)
+		pylonsmodulekeeper.GetBlockByHeight(w, r, clientCtx)
 	})
 }
 
