@@ -266,9 +266,7 @@ Meteor.methods({
                 this.unblock();
                 // let url = RPC+'/block?height=' + height;
 
-                url = sanitizeUrl(
-                  `${API}/cosmos/base/tendermint/v1beta1/blocks/${height}`
-                );
+                url = sanitizeUrl(`${API}/blocks?height=${height}`);
                 let analyticsData = {};
 
                 const bulkValidators = Validators.rawCollection().initializeUnorderedBulkOp();
