@@ -16,6 +16,11 @@ type Gadget struct {
 
 const gadgetsFilename = "pylons.gadgets"
 
+const err_duplicateName = "Duplicate gadget name: "
+const err_reservedName = "Can't register a gadget of reserved name "
+const err_noHeader = "pylons.gadgets file does not start with a valid gadget header"
+const err_badHeader = "Not a valid gadget header: \n"
+
 var builtinGadgets []Gadget = []Gadget{
 	{
 		"price",
@@ -65,7 +70,7 @@ var builtinGadgets []Gadget = []Gadget{
 	},
 	{
 		"no_item_modify_output",
-		`"coinOutputs": []`,
+		`"itemModifyOutputs": []`,
 		0,
 	},
 	{
@@ -133,17 +138,17 @@ func loadGadgetsForPath(p string, gadgets *[]Gadget) (string, string, *[]Gadget)
 func parseGadget(header string, json string, gadgets *[]Gadget) *Gadget {
 	splut := strings.Split(strings.TrimPrefix(header, "#"), " ")
 	if len(splut) != 2 {
-		panic(errors.New("Not a valid gadget header: \n" + header))
+		panic(errors.New(err_badHeader + header))
 	}
 	gadgetName := splut[0]
 	if GetGadget(gadgetName, gadgets) != nil {
-		panic(errors.New("Duplicate gadget name: " + gadgetName))
+		panic(errors.New(err_duplicateName + gadgetName))
 	}
 
 	// we will never have enough reserved names to warrant a real search algorithm here
 	for _, s := range reservedNames {
 		if s == gadgetName {
-			panic("Can't register a gadget of reserved name " + gadgetName)
+			panic(err_reservedName + gadgetName)
 		}
 	}
 
@@ -165,7 +170,7 @@ func parseGadgets(s string) []Gadget {
 	}
 	splut := strings.Split(s, nl)
 	if splut[0][0] != '#' {
-		panic(errors.New("pylons.gadgets file does not start with a valid gadget header")) // todo: this should specify which file, but that can wait
+		panic(errors.New(err_noHeader)) // todo: this should specify which file, but that can wait
 	}
 	gadgetHeader := ""
 	gadgetJson := ""
