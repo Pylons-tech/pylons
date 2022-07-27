@@ -10,7 +10,6 @@ import (
 // don't have a legacy message will return a "nil" content
 
 func convertToNewAppleInAppPurchaseOrder(oldProp v1.AppleInAppPurchaseOrder) types.AppleInAppPurchaseOrder {
-
 	return types.AppleInAppPurchaseOrder{
 		Quantity:     oldProp.Quantity,
 		ProductId:    oldProp.ProductID,
