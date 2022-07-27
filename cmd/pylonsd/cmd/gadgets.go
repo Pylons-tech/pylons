@@ -194,7 +194,7 @@ func parseGadgets(s string) []Gadget {
 func ExpandGadget(gadget *Gadget, params []string) string {
 	str := gadget.json
 	for i := 0; i < gadget.parametersCount; i++ {
-		strings.ReplaceAll(str, "%"+strconv.Itoa(i), strings.TrimSpace(params[i]))
+		str = strings.ReplaceAll(str, "%"+strconv.Itoa(i), strings.TrimSpace(params[i]))
 	}
 	return str
 }
