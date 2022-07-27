@@ -211,16 +211,18 @@ func GetGadget(name string, gadgets *[]Gadget) *Gadget {
 
 func LoadGadgetsForPath(p string) *[]Gadget {
 	gadgets := &builtinGadgets
-	info, err := os.Stat(p)
-	if err != nil {
-		panic(err)
-	}
-
 	searchDir := p
-	if !info.IsDir() {
-		searchDir, _ = path.Split(p)
-	}
+	// this logic breaks if we're just starting from the working directory, but nothing it's doing needs to happen in that case anyway
+	if len(p) != 0 {
+		info, err := os.Stat(p)
+		if err != nil {
+			panic(err)
+		}
 
+		if !info.IsDir() {
+			searchDir, _ = path.Split(p)
+		}
+	}
 	var dir string
 	// refactor this to not be for/break, it's gross
 	for true {
