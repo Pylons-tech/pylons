@@ -87,7 +87,7 @@ func loadModulesInline(bytes []byte, path string, info os.FileInfo, gadgets *[]G
 	lines := strings.Split(json, "\n")
 	for i, line := range lines {
 		lineTrimmed := strings.TrimLeft(line, " ")
-		if lineTrimmed[0] == '#' {
+		if len(lineTrimmed) != 0 && lineTrimmed[0] == '#' {
 			appendComma := strings.HasSuffix(lines[i], ",")
 			if strings.Contains(line, includeDirective) {
 				modulePath := strings.TrimSpace(strings.Split(line, includeDirective)[1])

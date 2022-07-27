@@ -401,8 +401,7 @@ const goodRecipeLiteralWithModuleInclude = `
         "denom": "upylon",
         "amount": "1000000"
     },
-    "enabled": true,
-    "extraInfo": "extraInfo"
+    "enabled": true
 }`
 
 const testModuleLiteral = `
