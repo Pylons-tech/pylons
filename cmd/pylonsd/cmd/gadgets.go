@@ -76,19 +76,19 @@ var builtinGadgets []Gadget = []Gadget{
 	{
 		"no_coin_or_item_output",
 		`"coinOutputs": [],
-		itemOutputs": []`,
+		"itemOutputs": []`,
 		0,
 	},
 	{
 		"no_coin_or_item_modify_output",
 		`"coinOutputs": [],
-		itemModifyOutputs": []`,
+		"itemModifyOutputs": []`,
 		0,
 	},
 	{
 		"no_item_or_item_modify_output",
 		`"itemOutputs": [],
-		itemModifyOutputs": []`,
+		"itemModifyOutputs": []`,
 		0,
 	},
 	{
