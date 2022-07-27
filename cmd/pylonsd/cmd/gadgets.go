@@ -115,7 +115,8 @@ var reservedNames = []string{"include"}
 
 // one iteration
 func loadGadgetsForPath(p string, gadgets *[]Gadget) (string, string, *[]Gadget) {
-	_, err := os.Stat(path.Join(p, gadgetsFilename))
+	fpath := path.Join(p, gadgetsFilename)
+	_, err := os.Stat(fpath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return "", "", nil
@@ -123,7 +124,7 @@ func loadGadgetsForPath(p string, gadgets *[]Gadget) (string, string, *[]Gadget)
 			panic(err)
 		}
 	} else {
-		bytes, err := os.ReadFile(p)
+		bytes, err := os.ReadFile(fpath)
 		if err != nil {
 			panic(err)
 		}
