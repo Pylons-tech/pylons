@@ -46,7 +46,7 @@ func getBlock(height int64, ctx client.Context) (*coretypes.ResultBlock, error) 
 		return nil, err
 	}
 
-	// get block at specific height 
+	// get block at specific height
 	res, err := node.Block(context.Background(), &height)
 	if err != nil {
 		return nil, err
