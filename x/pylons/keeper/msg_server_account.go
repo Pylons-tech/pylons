@@ -42,7 +42,12 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 
 	k.SetPylonsAccount(ctx, accountAddr, username)
 	if len(msg.ReferralAddress) > 0 {
-		k.SetPylonsReferral(ctx, msg.Creator, msg.Username, msg.ReferralAddress)
+		referralAddr := types.AccountAddr{Value: msg.ReferralAddress}
+		if k.HasAccountAddr(ctx, referralAddr) {
+			k.SetPylonsReferral(ctx, msg.Creator, msg.Username, msg.ReferralAddress)
+		} else {
+			return nil, types.ErrReferralUserNotFound
+		}
 	}
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateAccount{
@@ -102,6 +107,5 @@ func (k msgServer) verifyAppCheck(msg *types.MsgCreateAccount) error {
 	if err != nil {
 		return status.Errorf(codes.Unauthenticated, "unable to verify app-check token %v", err)
 	}
-	types.UpdateAppCheckFlagTest(types.FlagFalse)
 	return nil
 }
