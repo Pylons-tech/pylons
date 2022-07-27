@@ -686,6 +686,9 @@ func (app *PylonsApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.API
 	apiSvr.Router.HandleFunc("/pylons/tx", func(w http.ResponseWriter, r *http.Request) {
 		pylonsmodulekeeper.TxHistoryRequestHandler(w, r, clientCtx)
 	})
+	apiSvr.Router.HandleFunc("/blocks", func(w http.ResponseWriter, r *http.Request) {
+		pylonsmodulekeeper.GetBlockByHeight(w, r, clientCtx)
+	})
 }
 
 // RegisterTxService implements the Application.RegisterTxService method.

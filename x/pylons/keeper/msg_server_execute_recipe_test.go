@@ -318,7 +318,6 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 		},
 	} {
 		suite.Run(tc.decs, func() {
-
 			// Start check/config params
 
 			if tc.unEnabledCookbook {
@@ -346,7 +345,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 
 			tc.recipe.CookbookId = tc.cookbook.Id
 
-			//check Update CoinInputs of recipe
+			// check Update CoinInputs of recipe
 			if tc.updateCoinInputs {
 				tc.recipe.CoinInputs = []types.CoinInput{{
 					Coins: sdk.NewCoins(
@@ -357,7 +356,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 				tc.recipe.CoinInputs = nil
 			}
 
-			//check Update Entries of recipe and setup PaymentInfos
+			// check Update Entries of recipe and setup PaymentInfos
 			if tc.updateEntriesRecipe && tc.execution.PaymentInfos != nil {
 				params := k.GetParams(suite.ctx)
 				params.PaymentProcessors = append(params.PaymentProcessors, types.PaymentProcessor{
@@ -385,7 +384,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			}
 			// End check/config params
 
-			//Create Cookbook
+			// Create Cookbook
 			_, err := srv.CreateCookbook(wctx, &tc.cookbook)
 			require.NoError(err)
 
