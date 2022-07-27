@@ -19,7 +19,7 @@ func migrateAppleInAppPurchaseOrder(store sdk.KVStore, cdc codec.BinaryCodec) er
 	defer iter.Close()
 
 	for ; iter.Valid(); iter.Next() {
-		var oldProp v1.OldAppleInAppPurchaseOrder
+		var oldProp v1.AppleInAppPurchaseOrder
 		err := cdc.Unmarshal(iter.Value(), &oldProp)
 		if err != nil {
 			return err

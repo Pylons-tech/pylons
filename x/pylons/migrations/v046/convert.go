@@ -9,7 +9,7 @@ import (
 // legacy proposal format. This conversion is best effort. New proposal types that
 // don't have a legacy message will return a "nil" content
 
-func convertToNewAppleInAppPurchaseOrder(oldProp v1.OldAppleInAppPurchaseOrder) types.AppleInAppPurchaseOrder {
+func convertToNewAppleInAppPurchaseOrder(oldProp v1.AppleInAppPurchaseOrder) types.AppleInAppPurchaseOrder {
 
 	return types.AppleInAppPurchaseOrder{
 		Quantity:     oldProp.Quantity,

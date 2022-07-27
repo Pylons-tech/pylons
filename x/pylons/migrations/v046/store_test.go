@@ -21,7 +21,7 @@ func TestMigrateStore(t *testing.T) {
 	store := ctx.KVStore(key)
 
 	// Create 2 AppleInAppPurchaseOrder
-	prop1 := v1.OldAppleInAppPurchaseOrder{
+	prop1 := v1.AppleInAppPurchaseOrder{
 		Quantity:     "1",
 		ProductID:    "test_prod_1",
 		PurchaseID:   "test_purchase_1",
@@ -30,7 +30,7 @@ func TestMigrateStore(t *testing.T) {
 	}
 	prop1Bz, err := cdc.Marshal(&prop1)
 
-	prop2 := v1.OldAppleInAppPurchaseOrder{
+	prop2 := v1.AppleInAppPurchaseOrder{
 		Quantity:     "2",
 		ProductID:    "test_prod_2",
 		PurchaseID:   "test_purchase_2",
@@ -57,7 +57,7 @@ func TestMigrateStore(t *testing.T) {
 	compareProps(t, prop2, newProp2)
 }
 
-func compareProps(t *testing.T, oldProp v1.OldAppleInAppPurchaseOrder, newProp types.AppleInAppPurchaseOrder) {
+func compareProps(t *testing.T, oldProp v1.AppleInAppPurchaseOrder, newProp types.AppleInAppPurchaseOrder) {
 	require.Equal(t, oldProp.PurchaseID, newProp.PurchaseId)
 	require.Equal(t, oldProp.Quantity, newProp.Quantity)
 	require.Equal(t, oldProp.ProductID, newProp.ProductId)

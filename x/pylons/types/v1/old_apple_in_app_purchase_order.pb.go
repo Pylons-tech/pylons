@@ -22,7 +22,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-type OldAppleInAppPurchaseOrder struct {
+type AppleInAppPurchaseOrder struct {
 	Quantity     string `protobuf:"bytes,1,opt,name=quantity,proto3" json:"quantity,omitempty"`
 	ProductID    string `protobuf:"bytes,2,opt,name=productID,proto3" json:"productID,omitempty"`
 	PurchaseID   string `protobuf:"bytes,3,opt,name=purchaseID,proto3" json:"purchaseID,omitempty"`
@@ -30,18 +30,18 @@ type OldAppleInAppPurchaseOrder struct {
 	Creator      string `protobuf:"bytes,5,opt,name=Creator,proto3" json:"Creator,omitempty"`
 }
 
-func (m *OldAppleInAppPurchaseOrder) Reset()         { *m = OldAppleInAppPurchaseOrder{} }
-func (m *OldAppleInAppPurchaseOrder) String() string { return proto.CompactTextString(m) }
-func (*OldAppleInAppPurchaseOrder) ProtoMessage()    {}
-func (*OldAppleInAppPurchaseOrder) Descriptor() ([]byte, []int) {
+func (m *AppleInAppPurchaseOrder) Reset()         { *m = AppleInAppPurchaseOrder{} }
+func (m *AppleInAppPurchaseOrder) String() string { return proto.CompactTextString(m) }
+func (*AppleInAppPurchaseOrder) ProtoMessage()    {}
+func (*AppleInAppPurchaseOrder) Descriptor() ([]byte, []int) {
 	return fileDescriptor_4ffbb9b156e7ce4d, []int{0}
 }
-func (m *OldAppleInAppPurchaseOrder) XXX_Unmarshal(b []byte) error {
+func (m *AppleInAppPurchaseOrder) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *OldAppleInAppPurchaseOrder) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *AppleInAppPurchaseOrder) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_OldAppleInAppPurchaseOrder.Marshal(b, m, deterministic)
+		return xxx_messageInfo_AppleInAppPurchaseOrder.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -51,47 +51,47 @@ func (m *OldAppleInAppPurchaseOrder) XXX_Marshal(b []byte, deterministic bool) (
 		return b[:n], nil
 	}
 }
-func (m *OldAppleInAppPurchaseOrder) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OldAppleInAppPurchaseOrder.Merge(m, src)
+func (m *AppleInAppPurchaseOrder) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AppleInAppPurchaseOrder.Merge(m, src)
 }
-func (m *OldAppleInAppPurchaseOrder) XXX_Size() int {
+func (m *AppleInAppPurchaseOrder) XXX_Size() int {
 	return m.Size()
 }
-func (m *OldAppleInAppPurchaseOrder) XXX_DiscardUnknown() {
-	xxx_messageInfo_OldAppleInAppPurchaseOrder.DiscardUnknown(m)
+func (m *AppleInAppPurchaseOrder) XXX_DiscardUnknown() {
+	xxx_messageInfo_AppleInAppPurchaseOrder.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_OldAppleInAppPurchaseOrder proto.InternalMessageInfo
+var xxx_messageInfo_AppleInAppPurchaseOrder proto.InternalMessageInfo
 
-func (m *OldAppleInAppPurchaseOrder) GetQuantity() string {
+func (m *AppleInAppPurchaseOrder) GetQuantity() string {
 	if m != nil {
 		return m.Quantity
 	}
 	return ""
 }
 
-func (m *OldAppleInAppPurchaseOrder) GetProductID() string {
+func (m *AppleInAppPurchaseOrder) GetProductID() string {
 	if m != nil {
 		return m.ProductID
 	}
 	return ""
 }
 
-func (m *OldAppleInAppPurchaseOrder) GetPurchaseID() string {
+func (m *AppleInAppPurchaseOrder) GetPurchaseID() string {
 	if m != nil {
 		return m.PurchaseID
 	}
 	return ""
 }
 
-func (m *OldAppleInAppPurchaseOrder) GetPurchaseDate() string {
+func (m *AppleInAppPurchaseOrder) GetPurchaseDate() string {
 	if m != nil {
 		return m.PurchaseDate
 	}
 	return ""
 }
 
-func (m *OldAppleInAppPurchaseOrder) GetCreator() string {
+func (m *AppleInAppPurchaseOrder) GetCreator() string {
 	if m != nil {
 		return m.Creator
 	}
@@ -99,7 +99,7 @@ func (m *OldAppleInAppPurchaseOrder) GetCreator() string {
 }
 
 func init() {
-	proto.RegisterType((*OldAppleInAppPurchaseOrder)(nil), "pylons.pylons.OldAppleInAppPurchaseOrder")
+	proto.RegisterType((*AppleInAppPurchaseOrder)(nil), "pylons.pylons.AppleInAppPurchaseOrder")
 }
 
 func init() {
@@ -126,7 +126,7 @@ var fileDescriptor_4ffbb9b156e7ce4d = []byte{
 	0xff, 0xff, 0x7f, 0xd7, 0x14, 0x2b, 0x47, 0x01, 0x00, 0x00,
 }
 
-func (m *OldAppleInAppPurchaseOrder) Marshal() (dAtA []byte, err error) {
+func (m *AppleInAppPurchaseOrder) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -136,12 +136,12 @@ func (m *OldAppleInAppPurchaseOrder) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *OldAppleInAppPurchaseOrder) MarshalTo(dAtA []byte) (int, error) {
+func (m *AppleInAppPurchaseOrder) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *OldAppleInAppPurchaseOrder) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *AppleInAppPurchaseOrder) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -149,43 +149,43 @@ func (m *OldAppleInAppPurchaseOrder) MarshalToSizedBuffer(dAtA []byte) (int, err
 	if len(m.Creator) > 0 {
 		i -= len(m.Creator)
 		copy(dAtA[i:], m.Creator)
-		i = encodeVarintOldAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.Creator)))
+		i = encodeVarintAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.Creator)))
 		i--
 		dAtA[i] = 0x2a
 	}
 	if len(m.PurchaseDate) > 0 {
 		i -= len(m.PurchaseDate)
 		copy(dAtA[i:], m.PurchaseDate)
-		i = encodeVarintOldAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.PurchaseDate)))
+		i = encodeVarintAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.PurchaseDate)))
 		i--
 		dAtA[i] = 0x22
 	}
 	if len(m.PurchaseID) > 0 {
 		i -= len(m.PurchaseID)
 		copy(dAtA[i:], m.PurchaseID)
-		i = encodeVarintOldAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.PurchaseID)))
+		i = encodeVarintAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.PurchaseID)))
 		i--
 		dAtA[i] = 0x1a
 	}
 	if len(m.ProductID) > 0 {
 		i -= len(m.ProductID)
 		copy(dAtA[i:], m.ProductID)
-		i = encodeVarintOldAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.ProductID)))
+		i = encodeVarintAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.ProductID)))
 		i--
 		dAtA[i] = 0x12
 	}
 	if len(m.Quantity) > 0 {
 		i -= len(m.Quantity)
 		copy(dAtA[i:], m.Quantity)
-		i = encodeVarintOldAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.Quantity)))
+		i = encodeVarintAppleInAppPurchaseOrder(dAtA, i, uint64(len(m.Quantity)))
 		i--
 		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-func encodeVarintOldAppleInAppPurchaseOrder(dAtA []byte, offset int, v uint64) int {
-	offset -= sovOldAppleInAppPurchaseOrder(v)
+func encodeVarintAppleInAppPurchaseOrder(dAtA []byte, offset int, v uint64) int {
+	offset -= sovAppleInAppPurchaseOrder(v)
 	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
@@ -195,7 +195,7 @@ func encodeVarintOldAppleInAppPurchaseOrder(dAtA []byte, offset int, v uint64) i
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *OldAppleInAppPurchaseOrder) Size() (n int) {
+func (m *AppleInAppPurchaseOrder) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -203,34 +203,34 @@ func (m *OldAppleInAppPurchaseOrder) Size() (n int) {
 	_ = l
 	l = len(m.Quantity)
 	if l > 0 {
-		n += 1 + l + sovOldAppleInAppPurchaseOrder(uint64(l))
+		n += 1 + l + sovAppleInAppPurchaseOrder(uint64(l))
 	}
 	l = len(m.ProductID)
 	if l > 0 {
-		n += 1 + l + sovOldAppleInAppPurchaseOrder(uint64(l))
+		n += 1 + l + sovAppleInAppPurchaseOrder(uint64(l))
 	}
 	l = len(m.PurchaseID)
 	if l > 0 {
-		n += 1 + l + sovOldAppleInAppPurchaseOrder(uint64(l))
+		n += 1 + l + sovAppleInAppPurchaseOrder(uint64(l))
 	}
 	l = len(m.PurchaseDate)
 	if l > 0 {
-		n += 1 + l + sovOldAppleInAppPurchaseOrder(uint64(l))
+		n += 1 + l + sovAppleInAppPurchaseOrder(uint64(l))
 	}
 	l = len(m.Creator)
 	if l > 0 {
-		n += 1 + l + sovOldAppleInAppPurchaseOrder(uint64(l))
+		n += 1 + l + sovAppleInAppPurchaseOrder(uint64(l))
 	}
 	return n
 }
 
-func sovOldAppleInAppPurchaseOrder(x uint64) (n int) {
+func sovAppleInAppPurchaseOrder(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
-func sozOldAppleInAppPurchaseOrder(x uint64) (n int) {
-	return sovOldAppleInAppPurchaseOrder(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+func sozAppleInAppPurchaseOrder(x uint64) (n int) {
+	return sovAppleInAppPurchaseOrder(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *OldAppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
+func (m *AppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -238,7 +238,7 @@ func (m *OldAppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
 			if shift >= 64 {
-				return ErrIntOverflowOldAppleInAppPurchaseOrder
+				return ErrIntOverflowAppleInAppPurchaseOrder
 			}
 			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
@@ -253,10 +253,10 @@ func (m *OldAppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: OldAppleInAppPurchaseOrder: wiretype end group for non-group")
+			return fmt.Errorf("proto: AppleInAppPurchaseOrder: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OldAppleInAppPurchaseOrder: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: AppleInAppPurchaseOrder: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -266,7 +266,7 @@ func (m *OldAppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowOldAppleInAppPurchaseOrder
+					return ErrIntOverflowAppleInAppPurchaseOrder
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -280,11 +280,11 @@ func (m *OldAppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthOldAppleInAppPurchaseOrder
+				return ErrInvalidLengthAppleInAppPurchaseOrder
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthOldAppleInAppPurchaseOrder
+				return ErrInvalidLengthAppleInAppPurchaseOrder
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
@@ -298,7 +298,7 @@ func (m *OldAppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowOldAppleInAppPurchaseOrder
+					return ErrIntOverflowAppleInAppPurchaseOrder
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -312,11 +312,11 @@ func (m *OldAppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthOldAppleInAppPurchaseOrder
+				return ErrInvalidLengthAppleInAppPurchaseOrder
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthOldAppleInAppPurchaseOrder
+				return ErrInvalidLengthAppleInAppPurchaseOrder
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
@@ -330,7 +330,7 @@ func (m *OldAppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowOldAppleInAppPurchaseOrder
+					return ErrIntOverflowAppleInAppPurchaseOrder
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -344,11 +344,11 @@ func (m *OldAppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthOldAppleInAppPurchaseOrder
+				return ErrInvalidLengthAppleInAppPurchaseOrder
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthOldAppleInAppPurchaseOrder
+				return ErrInvalidLengthAppleInAppPurchaseOrder
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
@@ -362,7 +362,7 @@ func (m *OldAppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowOldAppleInAppPurchaseOrder
+					return ErrIntOverflowAppleInAppPurchaseOrder
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -376,11 +376,11 @@ func (m *OldAppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthOldAppleInAppPurchaseOrder
+				return ErrInvalidLengthAppleInAppPurchaseOrder
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthOldAppleInAppPurchaseOrder
+				return ErrInvalidLengthAppleInAppPurchaseOrder
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
@@ -394,7 +394,7 @@ func (m *OldAppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowOldAppleInAppPurchaseOrder
+					return ErrIntOverflowAppleInAppPurchaseOrder
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -408,11 +408,11 @@ func (m *OldAppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthOldAppleInAppPurchaseOrder
+				return ErrInvalidLengthAppleInAppPurchaseOrder
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthOldAppleInAppPurchaseOrder
+				return ErrInvalidLengthAppleInAppPurchaseOrder
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
@@ -421,12 +421,12 @@ func (m *OldAppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
-			skippy, err := skipOldAppleInAppPurchaseOrder(dAtA[iNdEx:])
+			skippy, err := skipAppleInAppPurchaseOrder(dAtA[iNdEx:])
 			if err != nil {
 				return err
 			}
 			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthOldAppleInAppPurchaseOrder
+				return ErrInvalidLengthAppleInAppPurchaseOrder
 			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
@@ -440,7 +440,7 @@ func (m *OldAppleInAppPurchaseOrder) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func skipOldAppleInAppPurchaseOrder(dAtA []byte) (n int, err error) {
+func skipAppleInAppPurchaseOrder(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
 	depth := 0
@@ -448,7 +448,7 @@ func skipOldAppleInAppPurchaseOrder(dAtA []byte) (n int, err error) {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
 			if shift >= 64 {
-				return 0, ErrIntOverflowOldAppleInAppPurchaseOrder
+				return 0, ErrIntOverflowAppleInAppPurchaseOrder
 			}
 			if iNdEx >= l {
 				return 0, io.ErrUnexpectedEOF
@@ -465,7 +465,7 @@ func skipOldAppleInAppPurchaseOrder(dAtA []byte) (n int, err error) {
 		case 0:
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return 0, ErrIntOverflowOldAppleInAppPurchaseOrder
+					return 0, ErrIntOverflowAppleInAppPurchaseOrder
 				}
 				if iNdEx >= l {
 					return 0, io.ErrUnexpectedEOF
@@ -481,7 +481,7 @@ func skipOldAppleInAppPurchaseOrder(dAtA []byte) (n int, err error) {
 			var length int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return 0, ErrIntOverflowOldAppleInAppPurchaseOrder
+					return 0, ErrIntOverflowAppleInAppPurchaseOrder
 				}
 				if iNdEx >= l {
 					return 0, io.ErrUnexpectedEOF
@@ -494,14 +494,14 @@ func skipOldAppleInAppPurchaseOrder(dAtA []byte) (n int, err error) {
 				}
 			}
 			if length < 0 {
-				return 0, ErrInvalidLengthOldAppleInAppPurchaseOrder
+				return 0, ErrInvalidLengthAppleInAppPurchaseOrder
 			}
 			iNdEx += length
 		case 3:
 			depth++
 		case 4:
 			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupOldAppleInAppPurchaseOrder
+				return 0, ErrUnexpectedEndOfGroupAppleInAppPurchaseOrder
 			}
 			depth--
 		case 5:
@@ -510,7 +510,7 @@ func skipOldAppleInAppPurchaseOrder(dAtA []byte) (n int, err error) {
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
 		if iNdEx < 0 {
-			return 0, ErrInvalidLengthOldAppleInAppPurchaseOrder
+			return 0, ErrInvalidLengthAppleInAppPurchaseOrder
 		}
 		if depth == 0 {
 			return iNdEx, nil
@@ -520,7 +520,7 @@ func skipOldAppleInAppPurchaseOrder(dAtA []byte) (n int, err error) {
 }
 
 var (
-	ErrInvalidLengthOldAppleInAppPurchaseOrder        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowOldAppleInAppPurchaseOrder          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupOldAppleInAppPurchaseOrder = fmt.Errorf("proto: unexpected end of group")
+	ErrInvalidLengthAppleInAppPurchaseOrder        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowAppleInAppPurchaseOrder          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupAppleInAppPurchaseOrder = fmt.Errorf("proto: unexpected end of group")
 )
