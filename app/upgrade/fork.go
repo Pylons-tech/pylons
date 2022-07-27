@@ -18,7 +18,7 @@ func CreateUpgradeHandler(mm *module.Manager, configurator module.Configurator, 
 		if err != nil {
 			return newVM, err
 		}
-		FixMinCommisionRate(ctx, staking)
+		FixMinCommissionRate(ctx, staking)
 		err = MigrateStore(ctx, pylonStoreKey, cdc)
 		if err != nil {
 			return newVM, err
@@ -31,7 +31,7 @@ func CreateUpgradeHandler(mm *module.Manager, configurator module.Configurator, 
 
 // Fixes an error where validators can be created with a commission rate
 // less than the network minimum rate.
-func FixMinCommisionRate(ctx sdk.Context, staking *stakingkeeper.Keeper) {
+func FixMinCommissionRate(ctx sdk.Context, staking *stakingkeeper.Keeper) {
 	// Upgrade every validators min-commission rate
 	validators := staking.GetAllValidators(ctx)
 	minCommissionRate := staking.GetParams(ctx).MinCommissionRate
