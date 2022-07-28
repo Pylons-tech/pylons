@@ -17,10 +17,12 @@ type Gadget struct {
 
 const gadgetsFilename = "pylons.gadgets"
 
-const err_duplicateName = "Duplicate gadget name: %s"
-const err_reservedName = "Can't register a gadget of reserved name %s"
-const err_noHeader = "pylons.gadgets file does not start with a valid gadget header"
-const err_badHeader = "Not a valid gadget header: \n%s"
+const (
+	err_duplicateName = "Duplicate gadget name: %s"
+	err_reservedName  = "Can't register a gadget of reserved name %s"
+	err_noHeader      = "pylons.gadgets file does not start with a valid gadget header"
+	err_badHeader     = "Not a valid gadget header: \n%s"
+)
 
 var builtinGadgets []Gadget = []Gadget{
 	{
@@ -172,7 +174,7 @@ func parseGadgets(s string) ([]Gadget, error) {
 	gadgets := []Gadget{}
 	const winNewline = "\r\n"
 	const normalNewline = "\n"
-	var nl = normalNewline
+	nl := normalNewline
 	if strings.Contains(s, winNewline) {
 		nl = winNewline
 	}
