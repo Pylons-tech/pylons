@@ -6,6 +6,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	testutil "github.com/Pylons-tech/pylons/testutil/cli"
 )
 
 const pylonsGadgetsLiteral_duplicateName = `#foobar 1
@@ -134,32 +136,32 @@ func TestGadgets(t *testing.T) {
 	// gadget parse panics
 
 	t.Run("Should not be able to register gadget with reserved name", func(t *testing.T) {
-		writeFixtureAtTestRuntime(gadgetsFilename, pylonsGadgetsLiteral_reservedName)
-		assert.PanicsWithErrorf(t, fmt.Sprintf(err_reservedName, "include"), func() { LoadGadgetsForPath("") }, err_reservedName, "include")
+		testutil.WriteFixtureAtTestRuntime(gadgetsFilename, pylonsGadgetsLiteral_reservedName)
+		assert.PanicsWithErrorf(t, fmt.Sprintf(errReservedName, "include"), func() { LoadGadgetsForPath("") }, errReservedName, "include")
 		os.Remove(gadgetsFilename)
 	})
 
 	t.Run("Should not be able to register duplicate gadget names", func(t *testing.T) {
-		writeFixtureAtTestRuntime(gadgetsFilename, pylonsGadgetsLiteral_duplicateName)
-		assert.PanicsWithErrorf(t, fmt.Sprintf(err_duplicateName, "foobar"), func() { LoadGadgetsForPath("") }, err_duplicateName, "foobar")
+		testutil.WriteFixtureAtTestRuntime(gadgetsFilename, pylonsGadgetsLiteral_duplicateName)
+		assert.PanicsWithErrorf(t, fmt.Sprintf(errDuplicateName, "foobar"), func() { LoadGadgetsForPath("") }, errDuplicateName, "foobar")
 		os.Remove(gadgetsFilename)
 	})
 
 	t.Run("pylons.gadgets file must start with a gadget header", func(t *testing.T) {
-		writeFixtureAtTestRuntime(gadgetsFilename, pylonsGadgetsLiteral_noHeader)
-		assert.PanicsWithError(t, err_noHeader, func() { LoadGadgetsForPath("") })
+		testutil.WriteFixtureAtTestRuntime(gadgetsFilename, pylonsGadgetsLiteral_noHeader)
+		assert.PanicsWithError(t, errNoHeader, func() { LoadGadgetsForPath("") })
 		os.Remove(gadgetsFilename)
 	})
 
 	t.Run("Should not be able to register gadget with a bad header", func(t *testing.T) {
-		writeFixtureAtTestRuntime(gadgetsFilename, pylonsGadgetsLiteral_badHeader)
-		assert.PanicsWithErrorf(t, fmt.Sprintf(err_badHeader, "#test_gadget_with_bad_header 1 additional_garbage"), func() { LoadGadgetsForPath("") }, err_badHeader, "#test_gadget_with_bad_header 1 additional_garbage")
+		testutil.WriteFixtureAtTestRuntime(gadgetsFilename, pylonsGadgetsLiteral_badHeader)
+		assert.PanicsWithErrorf(t, fmt.Sprintf(errBadHeader, "#test_gadget_with_bad_header 1 additional_garbage"), func() { LoadGadgetsForPath("") }, errBadHeader, "#test_gadget_with_bad_header 1 additional_garbage")
 		os.Remove(gadgetsFilename)
 	})
 
 	t.Run("Registered custom gadget expands to expected value", func(t *testing.T) {
 		const expected = `"foo": "a","bar": "b","is_a_gadget": "true"`
-		writeFixtureAtTestRuntime(gadgetsFilename, pylonsGadgetsLiteral_good)
+		testutil.WriteFixtureAtTestRuntime(gadgetsFilename, pylonsGadgetsLiteral_good)
 		gadgets, _ := LoadGadgetsForPath("")
 		gadget := GetGadget("go_go_gadget_gadgets", gadgets)
 		assert.EqualValues(t, expected, ExpandGadget(gadget, []string{"a", "b", "is_a_gadget"}))

@@ -101,7 +101,7 @@ func loadModulesInline(bytes []byte, path string, info os.FileInfo, gadgets *[]G
 				lines[i] = ExpandGadget(gadget, splut[1:])
 			}
 			if appendComma {
-				lines[i] = lines[i] + "," // this is slow/clumsy but worry abt it later
+				lines[i] += "," // this is slow/clumsy but worry abt it later
 			}
 		}
 	}
