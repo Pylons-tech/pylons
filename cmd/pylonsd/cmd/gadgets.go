@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path"
 	"strconv"
@@ -16,10 +17,10 @@ type Gadget struct {
 
 const gadgetsFilename = "pylons.gadgets"
 
-const err_duplicateName = "Duplicate gadget name: "
-const err_reservedName = "Can't register a gadget of reserved name "
+const err_duplicateName = "Duplicate gadget name: %s"
+const err_reservedName = "Can't register a gadget of reserved name %s"
 const err_noHeader = "pylons.gadgets file does not start with a valid gadget header"
-const err_badHeader = "Not a valid gadget header: \n"
+const err_badHeader = "Not a valid gadget header: \n%s"
 
 var builtinGadgets []Gadget = []Gadget{
 	{
@@ -114,12 +115,12 @@ var builtinGadgets []Gadget = []Gadget{
 var reservedNames = []string{"include"}
 
 // one iteration
-func loadGadgetsForPath(p string, gadgets *[]Gadget) (string, string, *[]Gadget) {
+func loadGadgetsForPath(p string, gadgets *[]Gadget) (string, string, *[]Gadget, error) {
 	fpath := path.Join(p, gadgetsFilename)
 	_, err := os.Stat(fpath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			return "", "", nil
+			return "", "", nil, nil // swallow this, it's expected
 		} else {
 			panic(err)
 		}
@@ -128,40 +129,46 @@ func loadGadgetsForPath(p string, gadgets *[]Gadget) (string, string, *[]Gadget)
 		if err != nil {
 			panic(err)
 		}
-		parse := parseGadgets(string(bytes))
+		parse, err := parseGadgets(string(bytes))
+		if err != nil {
+			return "", "", nil, err
+		}
 		g := append(parse, *gadgets...)
 		gadgets = &g
 	}
 	dir, file := path.Split(p)
-	return dir, file, gadgets
+	return dir, file, gadgets, nil
 }
 
-func parseGadget(header string, json string, gadgets *[]Gadget) *Gadget {
+func parseGadget(header string, json string, gadgets *[]Gadget) (*Gadget, error) {
 	splut := strings.Split(strings.TrimPrefix(header, "#"), " ")
 	if len(splut) != 2 {
-		panic(errors.New(err_badHeader + header))
+		panic(fmt.Errorf(err_badHeader, header))
 	}
 	gadgetName := splut[0]
-	if GetGadget(gadgetName, gadgets) != nil {
-		panic(errors.New(err_duplicateName + gadgetName))
-	}
 
 	// we will never have enough reserved names to warrant a real search algorithm here
 	for _, s := range reservedNames {
 		if s == gadgetName {
-			panic(err_reservedName + gadgetName)
+			panic(fmt.Errorf(err_reservedName, gadgetName))
 		}
+	}
+
+	gadget := GetGadget(gadgetName, gadgets)
+
+	if gadget != nil {
+		panic(fmt.Errorf(err_duplicateName, gadgetName))
 	}
 
 	gadgetArgs, err := strconv.Atoi(splut[1])
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	// todo: we should actually validate the json!
-	return &Gadget{name: gadgetName, json: json, parametersCount: gadgetArgs}
+	return &Gadget{name: gadgetName, json: json, parametersCount: gadgetArgs}, nil
 }
 
-func parseGadgets(s string) []Gadget {
+func parseGadgets(s string) ([]Gadget, error) {
 	gadgets := []Gadget{}
 	const winNewline = "\r\n"
 	const normalNewline = "\n"
@@ -176,20 +183,29 @@ func parseGadgets(s string) []Gadget {
 	gadgetHeader := ""
 	gadgetJson := ""
 	for i, s := range splut {
-		if s[0] == '#' {
+		str := strings.TrimSpace(s)
+		if str[0] == '#' {
 			// this line is a header, so parse out the gadget we've built. unless this is the first gadget.
 			if i != 0 {
-				gadgets = append(gadgets, *parseGadget(gadgetHeader, gadgetJson, &gadgets))
+				gadget, err := parseGadget(gadgetHeader, gadgetJson, &gadgets)
+				if err != nil {
+					return nil, err
+				}
+				gadgets = append(gadgets, *gadget)
 			}
-			gadgetHeader = s
+			gadgetHeader = str
 			gadgetJson = ""
 		} else {
-			gadgetJson = gadgetJson + s
+			gadgetJson = gadgetJson + str
 		}
 	}
 	// last gadget will never be parsed by the loop
-	gadgets = append(gadgets, *parseGadget(gadgetHeader, gadgetJson, &gadgets))
-	return gadgets
+	gadget, err := parseGadget(gadgetHeader, gadgetJson, &gadgets)
+	if err != nil {
+		return nil, err
+	}
+	gadgets = append(gadgets, *gadget)
+	return gadgets, nil
 }
 
 func ExpandGadget(gadget *Gadget, params []string) string {
@@ -210,9 +226,10 @@ func GetGadget(name string, gadgets *[]Gadget) *Gadget {
 	return nil
 }
 
-func LoadGadgetsForPath(p string) *[]Gadget {
+func LoadGadgetsForPath(p string) (*[]Gadget, error) {
 	gadgets := &builtinGadgets
 	searchDir := p
+	err := (error)(nil)
 	// this logic breaks if we're just starting from the working directory, but nothing it's doing needs to happen in that case anyway
 	if len(p) != 0 {
 		info, err := os.Stat(p)
@@ -227,12 +244,15 @@ func LoadGadgetsForPath(p string) *[]Gadget {
 	var dir string
 	// refactor this to not be for/break, it's gross
 	for true {
-		dir, _, gadgets = loadGadgetsForPath(searchDir, gadgets)
+		dir, _, gadgets, err = loadGadgetsForPath(searchDir, gadgets)
+		if err != nil {
+			return nil, err
+		}
 		if dir != "" {
 			searchDir = dir
 		} else {
 			break
 		}
 	}
-	return gadgets
+	return gadgets, nil
 }
