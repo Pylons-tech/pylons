@@ -1,11 +1,13 @@
 package app
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
 
+	upgradev46 "github.com/Pylons-tech/pylons/app/upgrade"
 	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
 
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
@@ -238,6 +240,9 @@ type PylonsApp struct {
 
 	// simulation manager
 	sm *module.SimulationManager
+
+	// module migration manager
+	configurator module.Configurator
 }
 
 // New returns a reference to an initialized Pylons.
@@ -407,6 +412,8 @@ func New(
 		app.TransferKeeper,
 		app.GetSubspace(pylonsmoduletypes.ModuleName),
 	)
+	// upgrade handlers
+	cfg := module.NewConfigurator(appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
 
 	pylonsModule := pylonsmodule.NewAppModule(appCodec, app.PylonsKeeper, app.BankKeeper)
 
@@ -418,6 +425,7 @@ func New(
 
 	// NOTE: Any module instantiated in the module manager that is later modified
 	// must be passed by reference here.
+	app.setupUpgradeStoreLoaders()
 
 	app.mm = module.NewManager(
 		genutil.NewAppModule(
@@ -517,7 +525,8 @@ func New(
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
 	app.mm.RegisterRoutes(app.Router(), app.QueryRouter(), encodingConfig.Amino)
-	app.mm.RegisterServices(module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter()))
+	app.configurator = module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
+	app.mm.RegisterServices(app.configurator)
 
 	// create the simulation manager and define the order of the modules for deterministic simulations
 	//
@@ -541,6 +550,9 @@ func New(
 	)
 
 	app.sm.RegisterStoreDecoders()
+
+	// register upgrade
+	app.RegisterUpgradeHandlers(cfg)
 
 	// initialize stores
 	app.MountKVStores(keys)
@@ -704,6 +716,28 @@ func (app *PylonsApp) RegisterTendermintService(clientCtx client.Context) {
 		app.interfaceRegistry,
 		app.Query,
 	)
+}
+
+// RegisterUpgradeHandlers returns upgrade handlers
+func (app *PylonsApp) RegisterUpgradeHandlers(cfg module.Configurator) {
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev46.UpgradeName, upgradev46.CreateUpgradeHandler(app.mm, app.configurator, &app.StakingKeeper, app.keys[pylonsmoduletypes.StoreKey], app.appCodec))
+}
+
+func (app *PylonsApp) setupUpgradeStoreLoaders() {
+	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	if err != nil {
+		panic(fmt.Sprintf("failed to read upgrade info from disk %s", err))
+	}
+
+	// TODO: add module name.
+	if upgradeInfo.Name == upgradev46.UpgradeName && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		storeUpgrades := storetypes.StoreUpgrades{
+			Deleted: []string{"epoch"},
+		}
+
+		// configure store loader that checks if version == upgradeHeight and applies store upgrades
+		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
+	}
 }
 
 // GetMaccPerms returns a copy of the module account permissions
