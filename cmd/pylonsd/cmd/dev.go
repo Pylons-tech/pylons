@@ -71,9 +71,8 @@ func ForFiles(path string, perCookbook func(path string, cookbook types.Cookbook
 			if err != nil {
 				panic(err)
 			}
-		} else {
-			forFile(path, perCookbook, perRecipe)
 		}
+		forFile(path, perCookbook, perRecipe)
 	}
 }
 
