@@ -230,7 +230,7 @@ func GetGadget(name string, gadgets *[]Gadget) *Gadget {
 func LoadGadgetsForPath(p string) (*[]Gadget, error) {
 	gadgets := &builtinGadgets
 	searchDir := p
-	err := (error)(nil)
+	var err error
 	// this logic breaks if we're just starting from the working directory, but nothing it's doing needs to happen in that case anyway
 	if len(p) != 0 {
 		info, err := os.Stat(p)
