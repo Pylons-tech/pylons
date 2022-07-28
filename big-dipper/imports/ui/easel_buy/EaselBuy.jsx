@@ -93,7 +93,7 @@ export default class EaselBuy extends Component {
     const url = settings.remote.api;
     axios
       .get(
-        `${url}/Pylons-tech/pylons/pylons/get_recipe_history/${this.props.cookbook_id}/${this.props.recipe_id}`
+        `${url}/pylons/get_recipe_history/${this.props.cookbook_id}/${this.props.recipe_id}`
       )
       .then((res) => {
         console.log("res.data.History", res.data.History);
