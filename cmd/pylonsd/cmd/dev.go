@@ -18,7 +18,7 @@ import (
 var Out io.Writer = os.Stdout // modified during testing
 
 // group 1: (whole raw string tokens encapsulated '''like this'')
-// group 2: (tokens not contianing whitespace, separated by whitespace)
+// group 2: (tokens not containing whitespace, separated by whitespace)
 // group 3: (whatever is in front of the first whitespace)
 var gadgetParamParseRegex = regexp.MustCompile(`(\s'''.*''')|(\s.\S*)|(\S*)`)
 
