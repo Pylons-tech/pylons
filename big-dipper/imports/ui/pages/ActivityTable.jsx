@@ -19,19 +19,23 @@ const getMedia = (type, source) => {
   //no-image.png
   else if (type?.toLowerCase() === "video")
     return (
-      <video width="100" height="100" controls>
-        <source src={source} type="video/mp4" />
-        <source src={source} type="video/ogg" />
-        Your browser does not support the video tag.
-      </video>
+      <img
+        height="100"
+        width="100"
+        alt="profile"
+        src={source}
+        className="mobin-img"
+      />
     );
   else if (type?.toLowerCase() === "audio")
     return (
-      <audio controls height="100" width="100" alt="profile">
-        <source src={source} type="video/mp4" />
-        <source src={source} type="video/ogg" />
-        Your browser does not support the audio element.
-      </audio>
+      <img
+        height="100"
+        width="100"
+        alt="profile"
+        src={source}
+        className="mobin-img"
+      />
     );
   else if (type?.toLowerCase() === "3d")
     return (
@@ -61,7 +65,7 @@ const getMedia = (type, source) => {
       />
     );
 };
-function AcitvityTable({}) {
+function ActivityTable({}) {
   const [activityFeedList, setActivityFeedList] = useState([]);
   const [loadingTableData, setLoadingTableData] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -81,7 +85,7 @@ function AcitvityTable({}) {
           setTotalPages(0);
           setLoadingTableData(false);
         } else {
-          console.log("your data count is", result);
+          console.log("your data count is", result?.records);
           setActivityFeedList(result.records);
           setTotalPages(result.count);
           setLoadingTableData(false);
@@ -114,7 +118,12 @@ function AcitvityTable({}) {
                   <div className="user-profile">
                     {getMedia(
                       item.itemFormat,
-                      item.itemImg ? item.itemImg : item.item_img
+                      item?.itemFormat?.toLowerCase() === "image" ||
+                        item?.itemFormat?.toLowerCase() === "3d"
+                        ? item.itemImg
+                        : item.R?.entries?.item_outputs[0]?.strings?.find(
+                            (val) => val.key === "Thumbnail_URL"
+                          )?.value
                     )}
 
                     <a href="#">{item.item_name}</a>
@@ -122,7 +131,7 @@ function AcitvityTable({}) {
                 </td>
                 <td>
                   <div className="amount">
-                    <>{item.amount}</>
+                    <>{isNaN(item.amount) ? "free drop" : item.amount}</>
                     <span>{item.extra}</span>
                   </div>
                 </td>
@@ -162,4 +171,4 @@ function AcitvityTable({}) {
   );
 }
 
-export default AcitvityTable;
+export default ActivityTable;
