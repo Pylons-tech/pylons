@@ -100,20 +100,21 @@ func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID stri
 
 	return Item{
 		// ID not set - it's handled internally
-		Owner:           addr.String(),
-		CookbookId:      cookbookID,
-		NodeVersion:     nodeVersion,
-		Doubles:         dblActualize,
-		Longs:           longActualize,
-		Strings:         stringActualize,
-		MutableStrings:  io.MutableStrings,
-		Tradeable:       io.Tradeable,
-		LastUpdate:      ctx.BlockHeight(),
-		TransferFee:     io.TransferFee,
-		TradePercentage: io.TradePercentage,
-		RecipeId:        recipeID,
-		CreatedAt:       ctx.BlockTime().Unix(),
-		UpdatedAt:       ctx.BlockTime().Unix(),
+		Owner:            addr.String(),
+		CookbookId:       cookbookID,
+		NodeVersion:      nodeVersion,
+		Doubles:          dblActualize,
+		Longs:            longActualize,
+		Strings:          stringActualize,
+		MutableStrings:   io.MutableStrings,
+		Tradeable:        io.Tradeable,
+		LastUpdate:       ctx.BlockHeight(),
+		TransferFee:      io.TransferFee,
+		TradePercentage:  io.TradePercentage,
+		RecipeId:         recipeID,
+		CreatedAt:        ctx.BlockTime().Unix(),
+		UpdatedAt:        ctx.BlockTime().Unix(),
+		ItemMintedNumber: io.AmountMinted,
 	}, nil
 }
 
@@ -349,4 +350,11 @@ func FindValidPaymentsPermutation(items []Item, balance sdk.Coins) ([]int, error
 		}
 	}
 	return nil, errors.New("no valid set of items' transferFees exists that can be covered by the provided balance")
+}
+
+func (i Item) NewItemHistory() ItemHistory {
+	return ItemHistory{
+		ItemMintedNumber: i.ItemMintedNumber,
+		CookbookId:       i.CookbookId,
+	}
 }
