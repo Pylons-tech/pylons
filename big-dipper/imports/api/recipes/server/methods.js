@@ -56,7 +56,7 @@ Meteor.methods({
           let recipe = recipes[i];
           let deeplink =
             Meteor.settings.public.baseURL +
-            "?action=purchase_nft&recipe_id=" +
+            "?recipe_id=" +
             recipe.id +
             "&cookbook_id=" +
             recipe.cookbook_id;
