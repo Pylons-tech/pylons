@@ -123,9 +123,8 @@ func loadGadgetsForPath(p string, gadgets *[]Gadget) (string, string, *[]Gadget,
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return "", "", nil, nil // swallow this, it's expected
-		} else {
-			panic(err)
 		}
+		panic(err)
 	} else {
 		bytes, err := os.ReadFile(fpath)
 		if err != nil {
