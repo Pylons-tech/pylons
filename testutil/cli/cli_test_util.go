@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"testing"
 
@@ -407,4 +408,16 @@ func NetworkWithRecipeObjectsHistory(t *testing.T, n int) (*network.Network, []t
 	require.NoError(t, err)
 	cfg.GenesisState[types.ModuleName] = buf
 	return network.New(t, cfg), state.RecipeList, nil
+}
+
+func WriteFixtureAtTestRuntime(name string, data string) {
+	file, err := os.Create(name)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+	_, err = file.WriteString(data)
+	if err != nil {
+		panic(err)
+	}
 }

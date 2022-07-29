@@ -1,71 +1,13 @@
 {
-    "cookbookId": "cookbookLoudTest",
-    "id": "LOUDBuyCopperSword",
-    "name": "LOUD-Buy-Copper-Sword",
+    #boilerplate v0.0.4 true,
+    #id_name LOUDBuyCopperSword LOUD-Buy-Copper-Sword,
     "description": "Purchases a copper sword for loudCoin",
-    "version": "v0.0.2",
-    "coinInputs": [
-		{
-			"coins" : [
-			    {
-				"denom": "loudcoin",
-				"amount": "250"
-			}
-		]
-		}
-    ],
-    "itemInputs": [],
+    #price loudCoin 250,
+    #no_item_input,
     "entries": {
-        "coinOutputs": [],
-        "itemOutputs": [
-            {
-                "id": "copper_sword_lv1",
-                "doubles": [
-                    {
-                        "key": "attack",
-                        "weightRanges": [],
-                        "program": "10.0"
-                    }
-                ],
-                "longs": [
-                    {
-                        "key": "level",
-                        "weightRanges": [],
-                        "program": "1"
-                    },
-                    {
-                        "key": "value",
-                        "weightRanges": [],
-                        "program": "250"
-                    }
-                ],
-                "strings": [
-                    {
-                        "key": "name",
-                        "value": "Copper sword"
-                    }
-                ],
-                "mutableStrings": [],
-                "transferFee": [],
-                "tradePercentage": "0.100000000000000000",
-                "tradeable": true
-            }
-        ],
-        "itemModifyOutputs": []
+        #no_coin_or_item_modify_output,
+        #sword_output copper_sword_lv1 10.0 1 250 '''Copper sword''',
     },
-    "outputs": [
-        {
-            "entryIds": [
-                "copper_sword_lv1"
-            ],
-            "weight": 1
-        }
-    ],
-    "blockInterval": 0,
-    "costPerBlock": {
-        "denom": "upylon",
-        "amount": "1000000"
-    },
-    "enabled": true,
+    #solo_output copper_sword_lv1,
     "extraInfo": "extraInfo"
 }
