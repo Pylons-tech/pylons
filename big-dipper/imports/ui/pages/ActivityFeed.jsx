@@ -13,7 +13,7 @@ import {
   Button,
 } from "reactstrap";
 import ActivityGraph from "./ActivityGraph";
-import ActivityTable from "./AcitvityTable";
+import ActivityTable from "./ActivityTable";
 import { constrainZoomValues } from "plottable/build/src/interactions/panZoomConstraints";
 
 export default class ActivityFeed extends Component {

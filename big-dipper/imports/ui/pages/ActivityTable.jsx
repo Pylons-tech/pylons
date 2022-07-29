@@ -65,7 +65,7 @@ const getMedia = (type, source) => {
       />
     );
 };
-function AcitvityTable({}) {
+function ActivityTable({}) {
   const [activityFeedList, setActivityFeedList] = useState([]);
   const [loadingTableData, setLoadingTableData] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -171,4 +171,4 @@ function AcitvityTable({}) {
   );
 }
 
-export default AcitvityTable;
+export default ActivityTable;
