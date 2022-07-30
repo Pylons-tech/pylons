@@ -58,7 +58,7 @@ var builtinGadgets []Gadget = []Gadget{
 	{
 		"id_name",
 		`"id": "%0",
-		"name": "%1",`,
+		"name": "%1"`,
 		2,
 	},
 	{
@@ -122,7 +122,7 @@ func loadGadgetsForPath(p string, gadgets *[]Gadget) (string, string, *[]Gadget,
 	_, err := os.Stat(fpath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			return "", "", nil, nil // swallow this, it's expected
+			return "", "", gadgets, nil // swallow this, it's expected
 		}
 		panic(err)
 	} else {
@@ -153,7 +153,6 @@ func parseGadget(header string, json string, gadgets *[]Gadget) (*Gadget, error)
 			panic(fmt.Errorf(errReservedName, gadgetName))
 		}
 	}
-
 	gadget := GetGadget(gadgetName, gadgets)
 
 	if gadget != nil {

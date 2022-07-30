@@ -101,14 +101,12 @@ const badRecipeLiteral = `
 const goodRecipeLiteral = `
 {
     "cookbookId": "cookbookLoudTest",
-    "id": "LOUDGetCharacter",
-    "name": "LOUD-Get-Character-Recipe",
+    #id_name LOUDGetCharacter LOUD-Get-Character-Recipe,
     "description": "Creates a basic character in LOUD",
     "version": "v0.0.1",
-    "coinInputs": [],
-    "itemInputs": [],
+    #no_input,
     "entries": {
-        "coinOutputs": [],
+        #no_coin_or_item_modify_output,
         "itemOutputs": [
             {
                 "id": "character",
@@ -237,8 +235,7 @@ const goodRecipeLiteral = `
                 "tradePercentage": "0.100000000000000000",
                 "tradeable": true
             }
-        ],
-        "itemModifyOutputs": []
+        ]
     },
     "outputs": [
         {
