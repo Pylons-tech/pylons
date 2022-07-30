@@ -69,7 +69,7 @@ func TestGadgets(t *testing.T) {
 
 	t.Run("Builtin gadget: id_name", func(t *testing.T) {
 		const expected = `"id": "foo",
-		"name": "bar",`
+		"name": "bar"`
 		gadget := GetGadget("id_name", &builtinGadgets)
 		assert.EqualValues(t, expected, ExpandGadget(gadget, []string{"foo", "bar"}))
 	})
