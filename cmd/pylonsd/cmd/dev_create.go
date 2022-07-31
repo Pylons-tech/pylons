@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/spf13/cobra"
@@ -60,6 +61,9 @@ func DevCreate() *cobra.Command {
 				if err != nil {
 					panic(err)
 				}
+
+				fmt.Printf("output json = %v, output = %v \n", string(outputJSON), rcp.Outputs)
+
 				c.SetArgs([]string{
 					rcp.CookbookId, rcp.Id, rcp.Name, rcp.Description, rcp.Version,
 					string(coinInputJSON), string(itemInputJSON), string(entryJSON), string(outputJSON), strconv.FormatInt(rcp.BlockInterval, 10),

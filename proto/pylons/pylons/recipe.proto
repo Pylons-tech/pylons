@@ -130,7 +130,7 @@ message EntriesList {
 // WeightedOutputs is to make structs which is using weight to be based on
 message  WeightedOutputs {
   repeated string entry_ids = 1 [(gogoproto.nullable) = false];
-  uint64 weight = 2;
+  uint64 weight = 2 [(gogoproto.jsontag) = "weight,string,omitempty"];
 }
 
 message CoinInput{
