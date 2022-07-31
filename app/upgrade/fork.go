@@ -16,7 +16,6 @@ import (
 	icahosttypes "github.com/cosmos/ibc-go/v5/modules/apps/27-interchain-accounts/host/types"
 	icatypes "github.com/cosmos/ibc-go/v5/modules/apps/27-interchain-accounts/types"
 
-	v046 "github.com/Pylons-tech/pylons/x/pylons/migrations/v046"
 
 )
 
