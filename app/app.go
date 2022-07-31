@@ -95,6 +95,13 @@ import (
 	pylonsmodule "github.com/Pylons-tech/pylons/x/pylons"
 	pylonsmodulekeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
 	pylonsmoduletypes "github.com/Pylons-tech/pylons/x/pylons/types"
+
+	ica "github.com/cosmos/ibc-go/v5/modules/apps/27-interchain-accounts"
+	icacontrollertypes "github.com/cosmos/ibc-go/v5/modules/apps/27-interchain-accounts/controller/types"
+	icahost "github.com/cosmos/ibc-go/v5/modules/apps/27-interchain-accounts/host"
+	icahostkeeper "github.com/cosmos/ibc-go/v5/modules/apps/27-interchain-accounts/host/keeper"
+	icahosttypes "github.com/cosmos/ibc-go/v5/modules/apps/27-interchain-accounts/host/types"
+	icatypes "github.com/cosmos/ibc-go/v5/modules/apps/27-interchain-accounts/types"
 )
 
 const (
@@ -177,6 +184,7 @@ var (
 		stakingtypes.NotBondedPoolName:          {authtypes.Burner, authtypes.Staking},
 		govtypes.ModuleName:                     {authtypes.Burner},
 		ibctransfertypes.ModuleName:             {authtypes.Minter, authtypes.Burner},
+		icatypes.ModuleName:                     nil,
 		pylonsmoduletypes.FeeCollectorName:      nil,
 		pylonsmoduletypes.TradesLockerName:      nil,
 		pylonsmoduletypes.ExecutionsLockerName:  {authtypes.Burner, authtypes.Minter},
@@ -232,8 +240,10 @@ type PylonsApp struct {
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
+	ScopedICAHostKeeper  capabilitykeeper.ScopedKeeper
 
-	PylonsKeeper pylonsmodulekeeper.Keeper
+	PylonsKeeper  pylonsmodulekeeper.Keeper
+	ICAHostKeeper icahostkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -278,6 +288,7 @@ func New(
 		upgradetypes.StoreKey,
 		evidencetypes.StoreKey,
 		ibctransfertypes.StoreKey,
+		icahosttypes.StoreKey,
 		capabilitytypes.StoreKey,
 		pylonsmoduletypes.StoreKey,
 	)
@@ -307,6 +318,7 @@ func New(
 	// grant capabilities for the ibc and ibc-transfer modules
 	scopedIBCKeeper := app.CapabilityKeeper.ScopeToModule(ibchost.ModuleName)
 	scopedTransferKeeper := app.CapabilityKeeper.ScopeToModule(ibctransfertypes.ModuleName)
+	scopedICAHostKeeper := app.CapabilityKeeper.ScopeToModule(icahosttypes.SubModuleName)
 
 	// seal capability keeper after scoping modules
 	app.CapabilityKeeper.Seal()
@@ -346,12 +358,25 @@ func New(
 	)
 	app.StakingKeeper = stakingKeeper
 
-	// ... other modules keepers
-
 	// Create IBC Keeper
 	app.IBCKeeper = ibckeeper.NewKeeper(
 		appCodec, keys[ibchost.StoreKey], app.GetSubspace(ibchost.ModuleName), app.StakingKeeper, app.UpgradeKeeper, scopedIBCKeeper,
 	)
+
+	// ... other modules keepers
+	app.ICAHostKeeper = icahostkeeper.NewKeeper(
+		appCodec,
+		keys[icahosttypes.StoreKey],
+		app.GetSubspace(icahosttypes.SubModuleName),
+		app.IBCKeeper.ChannelKeeper,
+		&app.IBCKeeper.PortKeeper,
+		app.AccountKeeper,
+		scopedICAHostKeeper,
+		app.MsgServiceRouter(),
+	)
+
+	icaModule := ica.NewAppModule(nil, &app.ICAHostKeeper)
+	icaHostIBCModule := icahost.NewIBCModule(app.ICAHostKeeper)
 
 	// register the proposal types
 	govRouter := govv1beta1.NewRouter()
@@ -392,7 +417,8 @@ func New(
 
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := ibcporttypes.NewRouter()
-	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferIBCModule)
+	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferIBCModule).
+		AddRoute(icahosttypes.SubModuleName, icaHostIBCModule)
 
 	app.IBCKeeper.SetRouter(ibcRouter)
 
@@ -447,6 +473,7 @@ func New(
 		ibc.NewAppModule(app.IBCKeeper),
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
+		icaModule,
 		pylonsModule,
 	)
 
@@ -473,6 +500,7 @@ func New(
 		// feegrant.ModuleName,
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
+		icatypes.ModuleName,
 		pylonsmoduletypes.ModuleName,
 	)
 
@@ -495,6 +523,7 @@ func New(
 		vestingtypes.ModuleName,
 		ibctransfertypes.ModuleName,
 		vestingtypes.ModuleName,
+		icatypes.ModuleName,
 		pylonsmoduletypes.ModuleName,
 	)
 
@@ -520,6 +549,7 @@ func New(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		ibctransfertypes.ModuleName,
+		icatypes.ModuleName,
 		vestingtypes.ModuleName,
 	)
 
@@ -732,6 +762,7 @@ func (app *PylonsApp) setupUpgradeStoreLoaders() {
 	// TODO: add module name.
 	if upgradeInfo.Name == upgradev46.UpgradeName && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
 		storeUpgrades := storetypes.StoreUpgrades{
+			Added:   []string{icacontrollertypes.StoreKey, icahosttypes.StoreKey},
 			Deleted: []string{"epoch"},
 		}
 
@@ -764,6 +795,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(crisistypes.ModuleName)
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibchost.ModuleName)
+	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(pylonsmoduletypes.ModuleName)
 
 	return paramsKeeper
