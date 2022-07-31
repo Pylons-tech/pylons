@@ -5,8 +5,16 @@ import (
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	"github.com/cosmos/cosmos-sdk/x/authz"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
+
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	ica "github.com/cosmos/ibc-go/v5/modules/apps/27-interchain-accounts"
+	icacontrollertypes "github.com/cosmos/ibc-go/v5/modules/apps/27-interchain-accounts/controller/types"
+	icahosttypes "github.com/cosmos/ibc-go/v5/modules/apps/27-interchain-accounts/host/types"
+	icatypes "github.com/cosmos/ibc-go/v5/modules/apps/27-interchain-accounts/types"
 
 	v046 "github.com/Pylons-tech/pylons/x/pylons/migrations/v046"
 )
@@ -23,6 +31,35 @@ func CreateUpgradeHandler(mm *module.Manager, configurator module.Configurator, 
 		if err != nil {
 			return newVM, err
 		}
+
+		vm[icatypes.ModuleName] = mm.Modules[icatypes.ModuleName].ConsensusVersion()
+
+		// create ICS27 Controller submodule params, controller module not enabled.
+		controllerParams := icacontrollertypes.Params{}
+
+		// create ICS27 Host submodule params
+		hostParams := icahosttypes.Params{
+			HostEnabled: true,
+			AllowMessages: []string{
+				sdk.MsgTypeURL(&banktypes.MsgSend{}),
+				sdk.MsgTypeURL(&stakingtypes.MsgDelegate{}),
+				sdk.MsgTypeURL(&stakingtypes.MsgBeginRedelegate{}),
+				sdk.MsgTypeURL(&stakingtypes.MsgCreateValidator{}),
+				sdk.MsgTypeURL(&stakingtypes.MsgEditValidator{}),
+				sdk.MsgTypeURL(&authz.MsgExec{}),
+				sdk.MsgTypeURL(&authz.MsgGrant{}),
+				sdk.MsgTypeURL(&authz.MsgRevoke{}),
+				// wasm msgs here
+				// note we only support these three for now
+			},
+		}
+
+		// initialize ICS27 module
+		icamodule, correctTypecast := mm.Modules[icatypes.ModuleName].(ica.AppModule)
+		if !correctTypecast {
+			panic("mm.Modules[icatypes.ModuleName] is not of type ica.AppModule")
+		}
+		icamodule.InitModule(ctx, controllerParams, hostParams)
 
 		// override here
 		return newVM, err
