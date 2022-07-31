@@ -83,7 +83,6 @@ All the recipe fields are mandatory:
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			// MEGUMIN
 			argsOutputs := args[8]
 			jsonArgsOutputs := make([]types.WeightedOutputs, 0)
 			err = json.Unmarshal([]byte(argsOutputs), &jsonArgsOutputs)
