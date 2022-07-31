@@ -7,8 +7,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
-
-	v046 "github.com/Pylons-tech/pylons/x/pylons/migrations/v046"
 )
 
 // CreateUpgradeHandler make upgrade handler
@@ -19,7 +17,6 @@ func CreateUpgradeHandler(mm *module.Manager, configurator module.Configurator, 
 			return newVM, err
 		}
 		FixMinCommissionRate(ctx, staking)
-		err = MigrateStore(ctx, pylonStoreKey, cdc)
 		if err != nil {
 			return newVM, err
 		}
@@ -53,8 +50,4 @@ func FixMinCommissionRate(ctx sdk.Context, staking *stakingkeeper.Keeper) {
 			staking.SetValidator(ctx, v)
 		}
 	}
-}
-
-func MigrateStore(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Codec) error {
-	return v046.MigrateStore(ctx, storeKey, cdc)
 }
