@@ -7,6 +7,7 @@ import (
 	"math/rand"
 
 	"github.com/Pylons-tech/pylons/x/pylons/simulation"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
@@ -22,7 +23,6 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 var (
@@ -46,39 +46,39 @@ func NewAppModuleBasic(cdc codec.Codec) AppModuleBasic {
 
 // Name returns the capability module's name.
 func (AppModuleBasic) Name() string {
-	return types.ModuleName
+	return v1beta1.ModuleName
 }
 
 func (AppModuleBasic) RegisterCodec(cdc *codec.LegacyAmino) {
-	types.RegisterCodec(cdc)
+	v1beta1.RegisterCodec(cdc)
 }
 
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	types.RegisterCodec(cdc)
+	v1beta1.RegisterCodec(cdc)
 }
 
 // RegisterInterfaces registers the module's interface types
 func (a AppModuleBasic) RegisterInterfaces(reg cdctypes.InterfaceRegistry) {
-	types.RegisterInterfaces(reg)
+	v1beta1.RegisterInterfaces(reg)
 }
 
 // DefaultGenesis returns the pylons module's default genesis state.
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	return cdc.MustMarshalJSON(types.DefaultGenesis())
+	return cdc.MustMarshalJSON(v1beta1.DefaultGenesis())
 }
 
 // ValidateGenesis performs genesis state validation for the capability module.
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
-	var genState types.GenesisState
+	var genState v1beta1.GenesisState
 	if err := cdc.UnmarshalJSON(bz, &genState); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
+		return fmt.Errorf("failed to unmarshal %s genesis state: %w", v1beta1.ModuleName, err)
 	}
 	return genState.Validate()
 }
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the module.
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	err := types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx))
+	err := v1beta1.RegisterQueryHandlerClient(context.Background(), mux, v1beta1.NewQueryClient(clientCtx))
 	if err != nil {
 		return
 	}
@@ -91,7 +91,7 @@ func (a AppModuleBasic) GetTxCmd() *cobra.Command {
 
 // GetQueryCmd returns the capability module's root query command.
 func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return cli.GetQueryCmd(types.StoreKey)
+	return cli.GetQueryCmd(v1beta1.StoreKey)
 }
 
 // ----------------------------------------------------------------------------
@@ -103,10 +103,10 @@ type AppModule struct {
 	AppModuleBasic
 
 	keeper     keeper.Keeper
-	bankKeeper types.BankKeeper
+	bankKeeper v1beta1.BankKeeper
 }
 
-func NewAppModule(cdc codec.Codec, keeper keeper.Keeper, bk types.BankKeeper) AppModule {
+func NewAppModule(cdc codec.Codec, keeper keeper.Keeper, bk v1beta1.BankKeeper) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,
@@ -121,11 +121,11 @@ func (am AppModule) Name() string {
 
 // Route returns the capability module's message routing key.
 func (am AppModule) Route() sdk.Route {
-	return sdk.NewRoute(types.RouterKey, NewHandler(am.keeper))
+	return sdk.NewRoute(v1beta1.RouterKey, NewHandler(am.keeper))
 }
 
 // QuerierRoute returns the capability module's query routing key.
-func (AppModule) QuerierRoute() string { return types.QuerierRoute }
+func (AppModule) QuerierRoute() string { return v1beta1.QuerierRoute }
 
 // LegacyQuerierHandler returns the capability module's Querier.
 func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
@@ -135,10 +135,10 @@ func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sd
 // RegisterServices registers a GRPC query service to respond to the
 // module-specific GRPC queries.
 func (am AppModule) RegisterServices(cfg module.Configurator) {
-	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
+	v1beta1.RegisterQueryServer(cfg.QueryServer(), am.keeper)
 
 	m := keeper.NewMigrator(am.keeper)
-	err := cfg.RegisterMigration(types.ModuleName, 1, m.Migrate1to2)
+	err := cfg.RegisterMigration(v1beta1.ModuleName, 1, m.Migrate1to2)
 	if err != nil {
 		panic(err)
 	}
@@ -150,7 +150,7 @@ func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 // InitGenesis performs the capability module's genesis initialization It returns
 // no validator updates.
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) []abci.ValidatorUpdate {
-	var genState types.GenesisState
+	var genState v1beta1.GenesisState
 	// Initialize global index to index in genesis state
 	cdc.MustUnmarshalJSON(gs, &genState)
 
@@ -198,7 +198,7 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 			}
 
 			am.keeper.ActualizeExecution(ctx, pendingExec)
-			_ = ctx.EventManager().EmitTypedEvent(&types.EventDropExecution{
+			_ = ctx.EventManager().EmitTypedEvent(&v1beta1.EventDropExecution{
 				Creator: pendingExec.Creator,
 				Id:      pendingExec.Id,
 			})
@@ -238,17 +238,17 @@ func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
 
 // RegisterStoreDecoder registers a decoder for supply module's types
 func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
-	sdr[types.StoreKey] = simulation.NewDecodeStore(am.cdc)
+	sdr[v1beta1.StoreKey] = simulation.NewDecodeStore(am.cdc)
 }
 
 // WeightedOperations returns the all the gov module operations with their respective weights.
 func (am AppModule) WeightedOperations(simState module.SimulationState) (res []simtypes.WeightedOperation) {
-	types.UpdateAppCheckFlagTest(types.FlagTrue)
+	v1beta1.UpdateAppCheckFlagTest(v1beta1.FlagTrue)
 
 	res = simulation.WeightedOperations(
 		simState.AppParams, simState.Cdc, am.bankKeeper, am.keeper,
 	)
 
-	types.UpdateAppCheckFlagTest(types.FlagFalse)
+	v1beta1.UpdateAppCheckFlagTest(v1beta1.FlagFalse)
 	return res
 }

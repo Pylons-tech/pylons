@@ -4,12 +4,12 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 )
 
 // InitGenesis initializes the capability module's state from a provided genesis
 // state.
-func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
+func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState v1beta1.GenesisState) {
 	// Set all the redeemInfo
 	for _, elem := range genState.RedeemInfoList {
 		k.SetRedeemInfo(ctx, elem)
@@ -22,8 +22,8 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 	// Set all the account mappings
 	for _, elem := range genState.AccountList {
-		username := types.Username{Value: elem.Username}
-		accountAddr := types.AccountAddr{Value: elem.AccountAddr}
+		username := v1beta1.Username{Value: elem.Username}
+		accountAddr := v1beta1.AccountAddr{Value: elem.AccountAddr}
 		k.SetPylonsAccount(ctx, accountAddr, username)
 	}
 
@@ -78,8 +78,8 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 }
 
 // ExportGenesis returns the capability module's exported genesis.
-func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
-	genesis := types.DefaultGenesis()
+func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *v1beta1.GenesisState {
+	genesis := v1beta1.DefaultGenesis()
 
 	// Set the current count
 	genesis.EntityCount = k.GetEntityCount(ctx)

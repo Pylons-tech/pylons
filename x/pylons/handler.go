@@ -8,7 +8,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 )
 
 // NewHandler ...
@@ -23,80 +23,80 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 
 		switch msg := msg.(type) {
 
-		case *types.MsgAppleIap:
+		case *v1beta1.MsgAppleIap:
 			res, err := msgServer.AppleIap(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgAddStripeRefund:
+		case *v1beta1.MsgAddStripeRefund:
 			res, err := msgServer.AddStripeRefund(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 			// this line is used by starport scaffolding # 1
-		case *types.MsgBurnDebtToken:
+		case *v1beta1.MsgBurnDebtToken:
 			res, err := msgServer.BurnDebtToken(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgUpdateAccount:
+		case *v1beta1.MsgUpdateAccount:
 			res, err := msgServer.UpdateAccount(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgFulfillTrade:
+		case *v1beta1.MsgFulfillTrade:
 			res, err := msgServer.FulfillTrade(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgCreateTrade:
+		case *v1beta1.MsgCreateTrade:
 			res, err := msgServer.CreateTrade(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgCancelTrade:
+		case *v1beta1.MsgCancelTrade:
 			res, err := msgServer.CancelTrade(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgCompleteExecutionEarly:
+		case *v1beta1.MsgCompleteExecutionEarly:
 			res, err := msgServer.CompleteExecutionEarly(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgTransferCookbook:
+		case *v1beta1.MsgTransferCookbook:
 			res, err := msgServer.TransferCookbook(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgGoogleInAppPurchaseGetCoins:
+		case *v1beta1.MsgGoogleInAppPurchaseGetCoins:
 			res, err := msgServer.GoogleInAppPurchaseGetCoins(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgCreateAccount:
+		case *v1beta1.MsgCreateAccount:
 			res, err := msgServer.CreateAccount(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgSendItems:
+		case *v1beta1.MsgSendItems:
 			res, err := msgServer.SendItems(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgExecuteRecipe:
+		case *v1beta1.MsgExecuteRecipe:
 			res, err := msgServer.ExecuteRecipe(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgSetItemString:
+		case *v1beta1.MsgSetItemString:
 			res, err := msgServer.SetItemString(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgCreateRecipe:
+		case *v1beta1.MsgCreateRecipe:
 			res, err := msgServer.CreateRecipe(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgUpdateRecipe:
+		case *v1beta1.MsgUpdateRecipe:
 			res, err := msgServer.UpdateRecipe(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgCreateCookbook:
+		case *v1beta1.MsgCreateCookbook:
 			res, err := msgServer.CreateCookbook(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgUpdateCookbook:
+		case *v1beta1.MsgUpdateCookbook:
 			res, err := msgServer.UpdateCookbook(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		default:
-			errMsg := fmt.Sprintf("unrecognized %s message type: %T", types.ModuleName, msg)
+			errMsg := fmt.Sprintf("unrecognized %s message type: %T", v1beta1.ModuleName, msg)
 			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, errMsg)
 		}
 	}
