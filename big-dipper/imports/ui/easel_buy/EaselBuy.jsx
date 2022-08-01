@@ -96,9 +96,9 @@ export default class EaselBuy extends Component {
         `${url}/pylons/get_recipe_history/${this.props.cookbook_id}/${this.props.recipe_id}`
       )
       .then((res) => {
-        console.log("res.data.History", res.data.History);
+        console.log("res.data.history", res.data.history);
         this.setState({
-          nftHistory: res.data.History,
+          nftHistory: res.data.history,
         });
       });
   };

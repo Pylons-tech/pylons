@@ -21,18 +21,21 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
-    const querys = queryString.parse(this.props.location.search);
+    const querys = new URLSearchParams(this.props.location.search)
+
     if (
-      querys["?action"] == "purchase_nft" &&
-      querys["recipe_id"] != null &&
-      querys["cookbook_id"] != null
+      // querys["?action"] == "purchase_nft" &&
+      querys.get("recipe_id") !== null &&
+      querys.get("cookbook_id") !== null
     ) {
+     
+      
       this.setState({
         recipeExist: true,
-        recipe_id: querys["recipe_id"],
-        cookbook_id: querys["cookbook_id"],
+        recipe_id: querys.get("recipe_id"),
+        cookbook_id: querys.get("cookbook_id"),
       });
-      console.log("querys['recipe_id']", querys["recipe_id"]);
+      
     } else {
       this.setState({ recipeExist: false });
     }
