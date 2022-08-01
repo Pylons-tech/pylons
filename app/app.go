@@ -169,6 +169,7 @@ var (
 		slashing.AppModuleBasic{},
 		ibc.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
+		ica.AppModuleBasic{},
 		evidence.AppModuleBasic{},
 		transfer.AppModuleBasic{},
 		vesting.AppModuleBasic{},
@@ -584,6 +585,9 @@ func New(
 
 	app.sm.RegisterStoreDecoders()
 
+	// register upgrade
+	app.RegisterUpgradeHandlers(cfg)
+
 	// initialize stores
 	app.MountKVStores(keys)
 	app.MountTransientStores(tkeys)
@@ -606,7 +610,6 @@ func New(
 		NewAnteHandler(app.AccountKeeper, encodingConfig.TxConfig.SignModeHandler(), app.PylonsKeeper),
 	)
 	app.SetEndBlocker(app.EndBlocker)
-
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
 			tmos.Exit(err.Error())
@@ -802,6 +805,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
+	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
 	paramsKeeper.Subspace(pylonsmoduletypes.ModuleName)
 
 	return paramsKeeper
