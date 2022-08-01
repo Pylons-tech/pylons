@@ -58,14 +58,14 @@ Meteor.startup(() => {
         var recipes = null;
         
         
-        if (querys.get('recipe_id') !== null && querys.get('cookbook_id') !== null) {
+        if (querys.get('recipe_id') !== null && querys.get('cookbook_id') !== null && querys.get('address') !== null ) {
             
             const recipe_id = sanitizeUrl(querys.get('recipe_id'));
             const cookbook_id = sanitizeUrl(querys.get('cookbook_id'));
             let recipesUrl = sanitizeUrl(`${Meteor.settings.remote.api}/pylons/recipe/${cookbook_id}/${recipe_id}`);
             
             try { 
-                console.log(recipesUrl)
+                
                 let response = HTTP.get(recipesUrl);
                 selectedRecipe = JSON.parse(response.content).recipe;
                 
@@ -366,8 +366,6 @@ Meteor.startup(() => {
         else
         { 
             sink.appendToHead(defaultMetaTags);
-            console.log(url)
-            console.log("Still in else")
         }
     });
 });

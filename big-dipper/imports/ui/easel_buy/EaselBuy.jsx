@@ -124,7 +124,8 @@ export default class EaselBuy extends Component {
         );
         const strings = _.cloneDeep(itemOutputs?.strings);
         const coinInputs = [...selectedRecipe?.coin_inputs];
-
+      
+        
         if (coinInputs.length > 0) {
           const resCoins = coinInputs[0]?.coins[0];
           denom = resCoins?.denom;
@@ -163,7 +164,7 @@ export default class EaselBuy extends Component {
         const creator = strings.find(
           (val) => val.key.toLowerCase() === "creator"
         )?.value;
-
+       
         const dimentions = this.getNFTDimentions(nftType, itemOutputs);
         (edition = `${itemOutputs.amount_minted} of ${itemOutputs.quantity}`),
           this.setState({
@@ -181,6 +182,7 @@ export default class EaselBuy extends Component {
             createdAt: selectedRecipe.created_at,
             id: selectedRecipe.id,
           });
+          
       })
       .catch((err) => {
         this.setState({ loading: false });
@@ -189,21 +191,21 @@ export default class EaselBuy extends Component {
   };
   getNFTDimentions = (nftType, data) => {
     if (
-      nftType.toLowerCase() === "image" ||
-      nftType.toLowerCase() === "video"
+      nftType?.toLowerCase() === "image" ||
+      nftType?.toLowerCase() === "video"
     ) {
       return (
         data.longs[1].weightRanges[0].lower +
         " x " +
         data.longs[2].weightRanges[0].lower
       );
-    } else if (nftType.toLowerCase() === "audio") {
+    } else if (nftType?.toLowerCase() === "audio") {
       const millisecondsDuration = data.longs[3].weightRanges[0].lower;
       var minutes = Math.floor(millisecondsDuration / 60000);
       var seconds = ((millisecondsDuration % 60000) / 1000).toFixed(0);
       return minutes + ":" + (seconds < 10 ? "0" : "") + seconds + " min";
-    } else if (nftType.toLowerCase() === "3d") {
-      return data.strings.find((val) => val.key.toLowerCase() === "size").value;
+    } else if (nftType?.toLowerCase() === "3d") {
+      return data.strings.find((val) => val.key.toLowerCase() === "size")?.value;
     } else {
     }
   };
@@ -222,6 +224,11 @@ export default class EaselBuy extends Component {
     window.location = `${baseURL}ofl=${ofl}&link=${encodeURIComponent(
       window.location.href
     )}`;
+
+    console.log(encodeURIComponent(
+      window.location.href
+    ))
+    debugger
   };
 
   render() {
@@ -267,7 +274,9 @@ export default class EaselBuy extends Component {
           return "";
       }
     };
+   
     const getMedia = () => {
+     
       if (loading) return <Spinner type="grow" color="primary" />;
       else if (!nftType) return null;
       else if (nftType.toLowerCase() === "image")
@@ -451,6 +460,9 @@ export default class EaselBuy extends Component {
                                 <div className="item">
                                   <p>Creation Date</p>
                                   <p>
+                                    {console.log(createdAt,moment
+                                          .unix(createdAt)
+                                          .format("DD/MM/YYYY hh:mm:ss"))}
                                     {!!createdAt
                                       ? moment
                                           .unix(createdAt)

@@ -32,6 +32,7 @@ export default HomeContainer = withTracker((props) => {
     name = selectedRecipe.name;
     description = selectedRecipe.description;
     const coin_inputs = selectedRecipe.coin_inputs;
+    
     if (coin_inputs.length > 0) {
       if (coin_inputs[0].coins[0].denom == "USD") {
         price =

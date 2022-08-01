@@ -24,9 +24,9 @@ export default class Home extends Component {
     const querys = new URLSearchParams(this.props.location.search)
 
     if (
-      // querys["?action"] == "purchase_nft" &&
       querys.get("recipe_id") !== null &&
-      querys.get("cookbook_id") !== null
+      querys.get("cookbook_id") !== null && 
+      querys.get('address') !== null 
     ) {
      
       
