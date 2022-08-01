@@ -13,10 +13,9 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 
 	"github.com/cosmos/cosmos-sdk/codec"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
@@ -43,7 +42,7 @@ func New(t *testing.T, configs ...network.Config) *network.Network {
 	if len(configs) > 1 {
 		panic("at most one config should be provided")
 	}
-	types.UpdateAppCheckFlagTest(types.FlagTrue)
+	v1beta1.UpdateAppCheckFlagTest(v1beta1.FlagTrue)
 	var cfg network.Config
 	if len(configs) == 0 {
 		cfg = DefaultConfig()
@@ -72,7 +71,7 @@ func New(t *testing.T, configs ...network.Config) *network.Network {
 		// var resp sdk.TxResponse
 		// require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 	}
-	types.UpdateAppCheckFlagTest(types.FlagFalse)
+	v1beta1.UpdateAppCheckFlagTest(v1beta1.FlagFalse)
 	return net
 }
 
@@ -117,7 +116,7 @@ func DefaultConfig() network.Config {
 
 // CustomGenesisHelper returns the pylons module's custom genesis state.
 func CustomGenesisHelper(cdc codec.Codec) json.RawMessage {
-	return cdc.MustMarshalJSON(types.NetworkTestGenesis())
+	return cdc.MustMarshalJSON(v1beta1.NetworkTestGenesis())
 }
 
 // ConfigWithMaxTxsInBlock will initialize config for the network with custom application,
@@ -126,7 +125,7 @@ func ConfigWithMaxTxsInBlock(maxTxsInBlock uint64) network.Config {
 	encoding := app.MakeEncodingConfig()
 
 	genState := app.ModuleBasics.DefaultGenesis(encoding.Codec)
-	genesisPylons := types.NetworkTestGenesis()
+	genesisPylons := v1beta1.NetworkTestGenesis()
 	genesisPylons.Params.MaxTxsInBlock = maxTxsInBlock
 
 	genState["pylons"] = encoding.Codec.MustMarshalJSON(genesisPylons)

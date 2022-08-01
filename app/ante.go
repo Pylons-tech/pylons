@@ -3,7 +3,7 @@ package app
 import (
 	"fmt"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -17,8 +17,8 @@ import (
 // NewAnteHandler returns an AnteHandler that checks and increments sequence
 // numbers, checks signatures & account numbers, and doesn't deduct fees.
 func NewAnteHandler(
-	ak types.AccountKeeper,
-	// bankKeeper types.BankKeeper,
+	ak v1beta1.AccountKeeper,
+	// bankKeeper v1beta1.BankKeeper,
 	// sigGasConsumer authsigning.SignatureVerificationGasConsumer,
 	signModeHandler authsigning.SignModeHandler,
 	pk PylonsKeeper,
@@ -47,11 +47,11 @@ func NewAnteHandler(
 
 // AccountCreationDecorator create an account if it does not exist
 type AccountCreationDecorator struct {
-	ak types.AccountKeeper
+	ak v1beta1.AccountKeeper
 }
 
 // NewAccountCreationDecorator create account if account does not exist already
-func NewAccountCreationDecorator(ak types.AccountKeeper) AccountCreationDecorator {
+func NewAccountCreationDecorator(ak v1beta1.AccountKeeper) AccountCreationDecorator {
 	return AccountCreationDecorator{
 		ak: ak,
 	}
@@ -70,7 +70,7 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 		return ctx, sdkerrors.Wrap(err, "getting signatures of tx is failed")
 	}
 
-	msgCreateAccount, ok := messages[0].(*types.MsgCreateAccount)
+	msgCreateAccount, ok := messages[0].(*v1beta1.MsgCreateAccount)
 	if len(messages) == 1 && sigTxSignatures != nil && len(sigTxSignatures) > 0 && ok {
 		// we don't support multi-message transaction for create_account
 		pubkey := sigTxSignatures[0].PubKey
@@ -105,12 +105,12 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 
 // CustomSigVerificationDecorator is a custom verification decorator designed for create_account
 type CustomSigVerificationDecorator struct {
-	ak              types.AccountKeeper
+	ak              v1beta1.AccountKeeper
 	signModeHandler authsigning.SignModeHandler
 }
 
 // NewCustomSigVerificationDecorator automatically sign transaction if it's create-account msg
-func NewCustomSigVerificationDecorator(ak types.AccountKeeper, signModeHandler authsigning.SignModeHandler) CustomSigVerificationDecorator {
+func NewCustomSigVerificationDecorator(ak v1beta1.AccountKeeper, signModeHandler authsigning.SignModeHandler) CustomSigVerificationDecorator {
 	return CustomSigVerificationDecorator{
 		ak:              ak,
 		signModeHandler: signModeHandler,
@@ -138,7 +138,7 @@ func OnlyLegacyAminoSigners(sigData signing.SignatureData) bool {
 	}
 }
 
-func GetSignerAcc(ctx sdk.Context, ak types.AccountKeeper, addr sdk.AccAddress) (authtypes.AccountI, error) {
+func GetSignerAcc(ctx sdk.Context, ak v1beta1.AccountKeeper, addr sdk.AccAddress) (authtypes.AccountI, error) {
 	if acc := ak.GetAccount(ctx, addr); acc != nil {
 		return acc, nil
 	}
@@ -204,7 +204,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 		}
 
 		messages := sigTx.GetMsgs()
-		_, ok := messages[0].(*types.MsgCreateAccount)
+		_, ok := messages[0].(*v1beta1.MsgCreateAccount)
 		if len(messages) == 1 && ok {
 			_, err := codectypes.NewAnyWithValue(pubKey)
 			if err != nil {

@@ -94,7 +94,7 @@ import (
 	appparams "github.com/Pylons-tech/pylons/app/params"
 	pylonsmodule "github.com/Pylons-tech/pylons/x/pylons"
 	pylonsmodulekeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
-	pylonsmoduletypes "github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 
 	ica "github.com/cosmos/ibc-go/v5/modules/apps/27-interchain-accounts"
 	icacontrollertypes "github.com/cosmos/ibc-go/v5/modules/apps/27-interchain-accounts/controller/types"
@@ -179,17 +179,17 @@ var (
 	maccPerms = map[string][]string{
 		authtypes.FeeCollectorName: nil,
 		// distrtypes.ModuleName:                    nil,
-		minttypes.ModuleName:                    {authtypes.Minter},
-		stakingtypes.BondedPoolName:             {authtypes.Burner, authtypes.Staking},
-		stakingtypes.NotBondedPoolName:          {authtypes.Burner, authtypes.Staking},
-		govtypes.ModuleName:                     {authtypes.Burner},
-		ibctransfertypes.ModuleName:             {authtypes.Minter, authtypes.Burner},
-		icatypes.ModuleName:                     nil,
-		pylonsmoduletypes.FeeCollectorName:      nil,
-		pylonsmoduletypes.TradesLockerName:      nil,
-		pylonsmoduletypes.ExecutionsLockerName:  {authtypes.Burner, authtypes.Minter},
-		pylonsmoduletypes.CoinsIssuerName:       {authtypes.Minter},
-		pylonsmoduletypes.PaymentsProcessorName: {authtypes.Burner, authtypes.Minter},
+		minttypes.ModuleName:           {authtypes.Minter},
+		stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
+		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
+		govtypes.ModuleName:            {authtypes.Burner},
+		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+		icatypes.ModuleName:            nil,
+		v1beta1.FeeCollectorName:       nil,
+		v1beta1.TradesLockerName:       nil,
+		v1beta1.ExecutionsLockerName:   {authtypes.Burner, authtypes.Minter},
+		v1beta1.CoinsIssuerName:        {authtypes.Minter},
+		v1beta1.PaymentsProcessorName:  {authtypes.Burner, authtypes.Minter},
 	}
 )
 
@@ -290,7 +290,7 @@ func New(
 		ibctransfertypes.StoreKey,
 		icahosttypes.StoreKey,
 		capabilitytypes.StoreKey,
-		pylonsmoduletypes.StoreKey,
+		v1beta1.StoreKey,
 	)
 
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -431,12 +431,12 @@ func New(
 
 	app.PylonsKeeper = pylonsmodulekeeper.NewKeeper(
 		appCodec,
-		keys[pylonsmoduletypes.StoreKey],
-		keys[pylonsmoduletypes.MemStoreKey],
+		keys[v1beta1.StoreKey],
+		keys[v1beta1.MemStoreKey],
 		app.BankKeeper,
 		app.AccountKeeper,
 		app.TransferKeeper,
-		app.GetSubspace(pylonsmoduletypes.ModuleName),
+		app.GetSubspace(v1beta1.ModuleName),
 	)
 	// upgrade handlers
 	cfg := module.NewConfigurator(appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
@@ -501,7 +501,7 @@ func New(
 		paramstypes.ModuleName,
 		vestingtypes.ModuleName,
 		icatypes.ModuleName,
-		pylonsmoduletypes.ModuleName,
+		v1beta1.ModuleName,
 	)
 
 	app.mm.SetOrderEndBlockers(
@@ -524,7 +524,7 @@ func New(
 		ibctransfertypes.ModuleName,
 		vestingtypes.ModuleName,
 		icatypes.ModuleName,
-		pylonsmoduletypes.ModuleName,
+		v1beta1.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -541,7 +541,7 @@ func New(
 		slashingtypes.ModuleName,
 		govtypes.ModuleName,
 		minttypes.ModuleName,
-		pylonsmoduletypes.ModuleName,
+		v1beta1.ModuleName,
 		crisistypes.ModuleName,
 		ibchost.ModuleName,
 		genutiltypes.ModuleName,
@@ -750,7 +750,7 @@ func (app *PylonsApp) RegisterTendermintService(clientCtx client.Context) {
 
 // RegisterUpgradeHandlers returns upgrade handlers
 func (app *PylonsApp) RegisterUpgradeHandlers(cfg module.Configurator) {
-	app.UpgradeKeeper.SetUpgradeHandler(upgradev46.UpgradeName, upgradev46.CreateUpgradeHandler(app.mm, app.configurator, &app.StakingKeeper, app.keys[pylonsmoduletypes.StoreKey], app.appCodec))
+	app.UpgradeKeeper.SetUpgradeHandler(upgradev46.UpgradeName, upgradev46.CreateUpgradeHandler(app.mm, app.configurator, &app.StakingKeeper, app.keys[v1beta1.StoreKey], app.appCodec))
 }
 
 func (app *PylonsApp) setupUpgradeStoreLoaders() {
@@ -796,7 +796,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
-	paramsKeeper.Subspace(pylonsmoduletypes.ModuleName)
+	paramsKeeper.Subspace(v1beta1.ModuleName)
 
 	return paramsKeeper
 }

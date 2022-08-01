@@ -18,7 +18,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 
 	"github.com/Pylons-tech/pylons/testutil/network"
 )
@@ -61,7 +61,7 @@ func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.N
 
 	username := "user"
 	usernameToken := "usernameToken"
-	types.UpdateAppCheckFlagTest(types.FlagTrue)
+	v1beta1.UpdateAppCheckFlagTest(v1beta1.FlagTrue)
 
 	// create account
 	args := []string{username, usernameToken, ""}
@@ -88,118 +88,118 @@ func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.N
 	if uint32(0) != resp.Code {
 		return "", fmt.Errorf("error code not 'Success'")
 	}
-	types.UpdateAppCheckFlagTest(types.FlagTrue)
+	v1beta1.UpdateAppCheckFlagTest(v1beta1.FlagTrue)
 
 	return accs[0].String(), nil
 }
 
-func NetworkWithRedeemInfoObjects(t *testing.T, n int) (*network.Network, []types.RedeemInfo) {
+func NetworkWithRedeemInfoObjects(t *testing.T, n int) (*network.Network, []v1beta1.RedeemInfo) {
 	t.Helper()
 	cfg := app.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+	state := v1beta1.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[v1beta1.ModuleName], &state))
 
-	addresses := types.GenTestBech32List(n)
+	addresses := v1beta1.GenTestBech32List(n)
 	for i := 0; i < n; i++ {
-		state.RedeemInfoList = append(state.RedeemInfoList, types.RedeemInfo{Address: addresses[i], Id: strconv.Itoa(i), Amount: sdk.OneInt()})
+		state.RedeemInfoList = append(state.RedeemInfoList, v1beta1.RedeemInfo{Address: addresses[i], Id: strconv.Itoa(i), Amount: sdk.OneInt()})
 	}
 
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
+	cfg.GenesisState[v1beta1.ModuleName] = buf
 	return network.New(t, cfg), state.RedeemInfoList
 }
 
-func NetworkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.UserMap) {
+func NetworkWithAccountObjects(t *testing.T, n int) (*network.Network, []v1beta1.UserMap) {
 	t.Helper()
 	cfg := app.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+	state := v1beta1.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[v1beta1.ModuleName], &state))
 
-	creators := types.GenTestBech32List(n)
+	creators := v1beta1.GenTestBech32List(n)
 
 	for i := 0; i < n; i++ {
 		state.AccountList = append(state.AccountList,
-			types.UserMap{
+			v1beta1.UserMap{
 				AccountAddr: creators[i],
 				Username:    "user" + strconv.Itoa(i),
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
+	cfg.GenesisState[v1beta1.ModuleName] = buf
 	return network.New(t, cfg), state.AccountList
 }
 
-func NetworkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Trade) {
+func NetworkWithTradeObjects(t *testing.T, n int) (*network.Network, []v1beta1.Trade) {
 	t.Helper()
 	cfg := app.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+	state := v1beta1.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[v1beta1.ModuleName], &state))
 
-	addresses := types.GenTestBech32List(n)
+	addresses := v1beta1.GenTestBech32List(n)
 
-	coinInputs := make([]types.CoinInput, 0)
-	coinInputs = append(coinInputs, types.CoinInput{Coins: sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}})
+	coinInputs := make([]v1beta1.CoinInput, 0)
+	coinInputs = append(coinInputs, v1beta1.CoinInput{Coins: sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}})
 
 	for i := 0; i < n; i++ {
-		state.TradeList = append(state.TradeList, types.Trade{
+		state.TradeList = append(state.TradeList, v1beta1.Trade{
 			Creator:          addresses[i],
 			Id:               uint64(i),
 			CoinInputs:       coinInputs,
-			ItemInputs:       make([]types.ItemInput, 0),
+			ItemInputs:       make([]v1beta1.ItemInput, 0),
 			CoinOutputs:      sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}},
-			ItemOutputs:      make([]types.ItemRef, 0),
+			ItemOutputs:      make([]v1beta1.ItemRef, 0),
 			ExtraInfo:        "extra info",
 			Receiver:         "receiver",
-			TradedItemInputs: make([]types.ItemRef, 0),
+			TradedItemInputs: make([]v1beta1.ItemRef, 0),
 		})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
+	cfg.GenesisState[v1beta1.ModuleName] = buf
 	return network.New(t, cfg), state.TradeList
 }
 
-func NetworkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, []types.Trade) {
+func NetworkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, []v1beta1.Trade) {
 	t.Helper()
 	cfg := app.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+	state := v1beta1.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[v1beta1.ModuleName], &state))
 
-	addresses := types.GenTestBech32List(1)
+	addresses := v1beta1.GenTestBech32List(1)
 
 	for i := 0; i < n; i++ {
-		state.TradeList = append(state.TradeList, types.Trade{
+		state.TradeList = append(state.TradeList, v1beta1.Trade{
 			Creator:          addresses[0],
 			Id:               uint64(i),
-			CoinInputs:       []types.CoinInput{{Coins: sdk.NewCoins()}},
-			ItemInputs:       make([]types.ItemInput, 0),
+			CoinInputs:       []v1beta1.CoinInput{{Coins: sdk.NewCoins()}},
+			ItemInputs:       make([]v1beta1.ItemInput, 0),
 			CoinOutputs:      sdk.NewCoins(),
-			ItemOutputs:      make([]types.ItemRef, 0),
+			ItemOutputs:      make([]v1beta1.ItemRef, 0),
 			ExtraInfo:        "extra info",
 			Receiver:         "receiver",
-			TradedItemInputs: make([]types.ItemRef, 0),
+			TradedItemInputs: make([]v1beta1.ItemRef, 0),
 		})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
+	cfg.GenesisState[v1beta1.ModuleName] = buf
 	return network.New(t, cfg), state.TradeList
 }
 
 // A network with cookbook object just contains a state of:
 //	 	N cookbooks
-func NetworkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.Cookbook) {
+func NetworkWithCookbookObjects(t *testing.T, n int) (*network.Network, []v1beta1.Cookbook) {
 	t.Helper()
 	cfg := app.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+	state := v1beta1.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[v1beta1.ModuleName], &state))
 
-	addresses := types.GenTestBech32List(n)
+	addresses := v1beta1.GenTestBech32List(n)
 
 	for i := 0; i < n; i++ {
-		state.CookbookList = append(state.CookbookList, types.Cookbook{
+		state.CookbookList = append(state.CookbookList, v1beta1.Cookbook{
 			Creator:      addresses[i],
 			Id:           strconv.Itoa(i),
 			NodeVersion:  0,
@@ -213,7 +213,7 @@ func NetworkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
+	cfg.GenesisState[v1beta1.ModuleName] = buf
 	return network.New(t, cfg), state.CookbookList
 }
 
@@ -221,17 +221,17 @@ func NetworkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 //	 	N cookbooks
 //		N recipes (1 per cookbook)
 // 		N executions (1 per recipe)
-func NetworkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types.Execution) {
+func NetworkWithExecutionObjects(t *testing.T, n int) (*network.Network, []v1beta1.Execution) {
 	t.Helper()
 	cfg := app.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+	state := v1beta1.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[v1beta1.ModuleName], &state))
 
-	addresses := types.GenTestBech32List(n)
+	addresses := v1beta1.GenTestBech32List(n)
 
 	for i := 0; i < n; i++ {
 		state.ExecutionList = append(state.ExecutionList,
-			types.Execution{
+			v1beta1.Execution{
 				Creator:     addresses[i],
 				Id:          strconv.Itoa(i),
 				NodeVersion: 0,
@@ -239,7 +239,7 @@ func NetworkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types
 					"testDenom"+strconv.Itoa(i),
 					sdk.OneInt(),
 				)),
-				ItemInputs:          make([]types.ItemRecord, 0),
+				ItemInputs:          make([]v1beta1.ItemRecord, 0),
 				ItemOutputIds:       []string{"itemID1"},
 				ItemModifyOutputIds: make([]string, 0),
 				RecipeId:            "RecipeID1",
@@ -249,60 +249,60 @@ func NetworkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
+	cfg.GenesisState[v1beta1.ModuleName] = buf
 	return network.New(t, cfg), state.ExecutionList
 }
 
-func NetworkWithGoogleIAPOrderObjects(t *testing.T, n int) (*network.Network, []types.GoogleInAppPurchaseOrder) {
+func NetworkWithGoogleIAPOrderObjects(t *testing.T, n int) (*network.Network, []v1beta1.GoogleInAppPurchaseOrder) {
 	t.Helper()
 	cfg := app.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+	state := v1beta1.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[v1beta1.ModuleName], &state))
 
 	for i := 0; i < n; i++ {
-		state.GoogleInAppPurchaseOrderList = append(state.GoogleInAppPurchaseOrderList, types.GoogleInAppPurchaseOrder{Creator: "ANY", PurchaseToken: strconv.Itoa(i)})
+		state.GoogleInAppPurchaseOrderList = append(state.GoogleInAppPurchaseOrderList, v1beta1.GoogleInAppPurchaseOrder{Creator: "ANY", PurchaseToken: strconv.Itoa(i)})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
+	cfg.GenesisState[v1beta1.ModuleName] = buf
 	return network.New(t, cfg), state.GoogleInAppPurchaseOrderList
 }
 
-func NetworkWithPaymentInfoObjects(t *testing.T, n int) (*network.Network, []types.PaymentInfo) {
+func NetworkWithPaymentInfoObjects(t *testing.T, n int) (*network.Network, []v1beta1.PaymentInfo) {
 	t.Helper()
 	cfg := app.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+	state := v1beta1.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[v1beta1.ModuleName], &state))
 
-	addresses := types.GenTestBech32List(n)
+	addresses := v1beta1.GenTestBech32List(n)
 	for i := 0; i < n; i++ {
-		state.PaymentInfoList = append(state.PaymentInfoList, types.PaymentInfo{PayerAddr: addresses[i], PurchaseId: strconv.Itoa(i), Amount: sdk.OneInt()})
+		state.PaymentInfoList = append(state.PaymentInfoList, v1beta1.PaymentInfo{PayerAddr: addresses[i], PurchaseId: strconv.Itoa(i), Amount: sdk.OneInt()})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
+	cfg.GenesisState[v1beta1.ModuleName] = buf
 	return network.New(t, cfg), state.PaymentInfoList
 }
 
-func NetworkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item) {
+func NetworkWithItemObjects(t *testing.T, n int) (*network.Network, []v1beta1.Item) {
 	t.Helper()
 	cfg := app.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+	state := v1beta1.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[v1beta1.ModuleName], &state))
 
-	addresses := types.GenTestBech32List(n)
+	addresses := v1beta1.GenTestBech32List(n)
 
 	for i := 0; i < n; i++ {
 		state.ItemList = append(state.ItemList,
-			types.Item{
+			v1beta1.Item{
 				Owner:           addresses[i],
 				Id:              strconv.Itoa(i),
 				CookbookId:      "testCookbookID",
 				NodeVersion:     0,
-				Doubles:         make([]types.DoubleKeyValue, 0),
-				Longs:           make([]types.LongKeyValue, 0),
-				Strings:         make([]types.StringKeyValue, 0),
-				MutableStrings:  make([]types.StringKeyValue, 0),
+				Doubles:         make([]v1beta1.DoubleKeyValue, 0),
+				Longs:           make([]v1beta1.LongKeyValue, 0),
+				Strings:         make([]v1beta1.StringKeyValue, 0),
+				MutableStrings:  make([]v1beta1.StringKeyValue, 0),
 				Tradeable:       false,
 				LastUpdate:      0,
 				TradePercentage: sdk.ZeroDec(),
@@ -311,29 +311,29 @@ func NetworkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
+	cfg.GenesisState[v1beta1.ModuleName] = buf
 	return network.New(t, cfg), state.ItemList
 }
 
-func NetworkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, []types.Item) {
+func NetworkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, []v1beta1.Item) {
 	t.Helper()
 	cfg := app.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+	state := v1beta1.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[v1beta1.ModuleName], &state))
 
-	addresses := types.GenTestBech32List(1)
+	addresses := v1beta1.GenTestBech32List(1)
 
 	for i := 0; i < n; i++ {
 		state.ItemList = append(state.ItemList,
-			types.Item{
+			v1beta1.Item{
 				Owner:           addresses[0],
 				Id:              strconv.Itoa(i),
 				CookbookId:      "testCookbookID",
 				NodeVersion:     0,
-				Doubles:         make([]types.DoubleKeyValue, 0),
-				Longs:           make([]types.LongKeyValue, 0),
-				Strings:         make([]types.StringKeyValue, 0),
-				MutableStrings:  make([]types.StringKeyValue, 0),
+				Doubles:         make([]v1beta1.DoubleKeyValue, 0),
+				Longs:           make([]v1beta1.LongKeyValue, 0),
+				Strings:         make([]v1beta1.StringKeyValue, 0),
+				MutableStrings:  make([]v1beta1.StringKeyValue, 0),
 				Tradeable:       false,
 				LastUpdate:      0,
 				TradePercentage: sdk.ZeroDec(),
@@ -342,30 +342,30 @@ func NetworkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, [
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
+	cfg.GenesisState[v1beta1.ModuleName] = buf
 	return network.New(t, cfg), state.ItemList
 }
 
-func NetworkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Recipe, []types.Cookbook) {
+func NetworkWithRecipeObjects(t *testing.T, n int) (*network.Network, []v1beta1.Recipe, []v1beta1.Cookbook) {
 	t.Helper()
 	cfg := app.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+	state := v1beta1.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[v1beta1.ModuleName], &state))
 
 	for i := 0; i < n; i++ {
 		state.RecipeList = append(
 			state.RecipeList,
-			types.Recipe{
+			v1beta1.Recipe{
 				CookbookId:    strconv.Itoa(i),
 				Id:            strconv.Itoa(i),
 				NodeVersion:   0,
 				Name:          "",
 				Description:   "",
 				Version:       "",
-				CoinInputs:    []types.CoinInput{{Coins: sdk.NewCoins()}},
-				ItemInputs:    make([]types.ItemInput, 0),
-				Entries:       types.EntriesList{CoinOutputs: []types.CoinOutput{}, ItemOutputs: []types.ItemOutput{}, ItemModifyOutputs: []types.ItemModifyOutput{}},
-				Outputs:       make([]types.WeightedOutputs, 0),
+				CoinInputs:    []v1beta1.CoinInput{{Coins: sdk.NewCoins()}},
+				ItemInputs:    make([]v1beta1.ItemInput, 0),
+				Entries:       v1beta1.EntriesList{CoinOutputs: []v1beta1.CoinOutput{}, ItemOutputs: []v1beta1.ItemOutput{}, ItemModifyOutputs: []v1beta1.ItemModifyOutput{}},
+				Outputs:       make([]v1beta1.WeightedOutputs, 0),
 				BlockInterval: 0x0,
 				CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.OneInt()},
 				Enabled:       false,
@@ -374,30 +374,30 @@ func NetworkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Re
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
+	cfg.GenesisState[v1beta1.ModuleName] = buf
 	return network.New(t, cfg), state.RecipeList, nil
 }
 
-func NetworkWithRecipeObjectsHistory(t *testing.T, n int) (*network.Network, []types.Recipe, []types.Cookbook) {
+func NetworkWithRecipeObjectsHistory(t *testing.T, n int) (*network.Network, []v1beta1.Recipe, []v1beta1.Cookbook) {
 	t.Helper()
 	cfg := app.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+	state := v1beta1.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[v1beta1.ModuleName], &state))
 
 	for i := 0; i < n; i++ {
 		state.RecipeList = append(
 			state.RecipeList,
-			types.Recipe{
+			v1beta1.Recipe{
 				CookbookId:    "testCookbook",
 				Id:            "testRecipe",
 				NodeVersion:   0,
 				Name:          "",
 				Description:   "",
 				Version:       "",
-				CoinInputs:    []types.CoinInput{{Coins: sdk.NewCoins()}},
-				ItemInputs:    make([]types.ItemInput, 0),
-				Entries:       types.EntriesList{CoinOutputs: []types.CoinOutput{}, ItemOutputs: []types.ItemOutput{}, ItemModifyOutputs: []types.ItemModifyOutput{}},
-				Outputs:       make([]types.WeightedOutputs, 0),
+				CoinInputs:    []v1beta1.CoinInput{{Coins: sdk.NewCoins()}},
+				ItemInputs:    make([]v1beta1.ItemInput, 0),
+				Entries:       v1beta1.EntriesList{CoinOutputs: []v1beta1.CoinOutput{}, ItemOutputs: []v1beta1.ItemOutput{}, ItemModifyOutputs: []v1beta1.ItemModifyOutput{}},
+				Outputs:       make([]v1beta1.WeightedOutputs, 0),
 				BlockInterval: 0x0,
 				CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.OneInt()},
 				Enabled:       true,
@@ -406,7 +406,7 @@ func NetworkWithRecipeObjectsHistory(t *testing.T, n int) (*network.Network, []t
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
+	cfg.GenesisState[v1beta1.ModuleName] = buf
 	return network.New(t, cfg), state.RecipeList, nil
 }
 

@@ -7,7 +7,7 @@ import (
 	"github.com/tendermint/tendermint/libs/json"
 
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/client"
 )
 
@@ -32,14 +32,14 @@ func DevCreate() *cobra.Command {
 				return err
 			}
 			cli.SetAlternativeContext(clientCtx.WithFromAddress(addr).WithFromName(accountName).WithBroadcastMode("sync"))
-			ForFiles(path, func(path string, cb types.Cookbook) {
+			ForFiles(path, func(path string, cb v1beta1.Cookbook) {
 				c := cli.CmdCreateCookbook()
 				c.SetArgs([]string{cb.Id, cb.Name, cb.Description, cb.Developer, cb.Version, cb.SupportEmail, strconv.FormatBool(cb.Enabled)})
 				err := c.Execute()
 				if err != nil {
 					panic(err)
 				}
-			}, func(path string, rcp types.Recipe) {
+			}, func(path string, rcp v1beta1.Recipe) {
 				c := cli.CmdCreateRecipe()
 				coinInputJSON, err := json.Marshal(rcp.CoinInputs)
 				if err != nil {

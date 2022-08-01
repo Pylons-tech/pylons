@@ -3,9 +3,8 @@ package app
 import (
 	"encoding/json"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 )
@@ -28,7 +27,7 @@ func NewDefaultGenesisState(cdc codec.JSONCodec) GenesisState {
 	if ok {
 		var bankGenesisState banktypes.GenesisState
 		cdc.MustUnmarshalJSON(bankModule, &bankGenesisState)
-		for _, token := range types.DefaultPaymentProcessorsTokensBankParams {
+		for _, token := range v1beta1.DefaultPaymentProcessorsTokensBankParams {
 			bankGenesisState.Params = bankGenesisState.Params.SetSendEnabledParam(token.Denom, token.Enabled)
 		}
 		gs[bankModuleName] = cdc.MustMarshalJSON(&bankGenesisState)

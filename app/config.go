@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
 
@@ -62,5 +62,5 @@ func DefaultConfig() network.Config {
 
 // CustomGenesisHelper returns the pylons module's custom genesis state.
 func CustomGenesisHelper(cdc codec.Codec) json.RawMessage {
-	return cdc.MustMarshalJSON(types.NetworkTestGenesis())
+	return cdc.MustMarshalJSON(v1beta1.NetworkTestGenesis())
 }

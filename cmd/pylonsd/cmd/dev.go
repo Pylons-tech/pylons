@@ -10,7 +10,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	_ "github.com/gogo/protobuf/gogoproto" //nolint:revive // imported for side effects
 	"github.com/gogo/protobuf/jsonpb"
 )
@@ -30,7 +30,7 @@ const (
 	includeDirective = "#include "
 )
 
-func forFile(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.Recipe)) {
+func forFile(path string, perCookbook func(path string, cookbook v1beta1.Cookbook), perRecipe func(path string, recipe v1beta1.Recipe)) {
 	// this is slow, we should avoid reloading gadgets w/ every file when we can do some rewriting
 	gadgets, err := LoadGadgetsForPath(path)
 	if err != nil {
@@ -56,7 +56,7 @@ func forFile(path string, perCookbook func(path string, cookbook types.Cookbook)
 // Calls the provided callbacks on each cookbook file or recipe file found in the provided path.
 // Path is walked using filepath.Walk, so note that this can potentially take a very, very long time
 // if you give it too much to do.
-func ForFiles(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.Recipe)) {
+func ForFiles(path string, perCookbook func(path string, cookbook v1beta1.Cookbook), perRecipe func(path string, recipe v1beta1.Recipe)) {
 	file, err := os.Stat(path)
 	if errors.Is(err, os.ErrNotExist) {
 		fmt.Fprintln(Out, "Path ", path, " not found")
@@ -108,10 +108,10 @@ func loadModulesInline(bytes []byte, path string, info os.FileInfo, gadgets *[]G
 	return json
 }
 
-func loadCookbookFromPath(path string, gadgets *[]Gadget) (types.Cookbook, string, error) {
+func loadCookbookFromPath(path string, gadgets *[]Gadget) (v1beta1.Cookbook, string, error) {
 	bytes, _ := os.ReadFile(path)
 	info, _ := os.Stat(path)
-	var cb types.Cookbook
+	var cb v1beta1.Cookbook
 
 	json := loadModulesInline(bytes, path, info, gadgets)
 	err := jsonpb.UnmarshalString(json, &cb)
@@ -119,10 +119,10 @@ func loadCookbookFromPath(path string, gadgets *[]Gadget) (types.Cookbook, strin
 	return cb, json, err
 }
 
-func loadRecipeFromPath(path string, gadgets *[]Gadget) (types.Recipe, string, error) {
+func loadRecipeFromPath(path string, gadgets *[]Gadget) (v1beta1.Recipe, string, error) {
 	bytes, _ := os.ReadFile(path)
 	info, _ := os.Stat(path)
-	var rcp types.Recipe
+	var rcp v1beta1.Recipe
 
 	json := loadModulesInline(bytes, path, info, gadgets)
 	err := jsonpb.UnmarshalString(json, &rcp)
