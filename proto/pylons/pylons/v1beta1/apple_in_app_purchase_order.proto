@@ -1,0 +1,12 @@
+syntax = "proto3";
+package pylons.pylons.v1beta1;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types/v1beta1";
+
+message AppleInAppPurchaseOrder {
+  string quantity = 1; 
+  string product_id = 2; 
+  string purchase_id = 3; 
+  string purchase_date = 4; 
+  string creator = 5;
+}

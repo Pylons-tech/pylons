@@ -1,0 +1,11 @@
+syntax = "proto3";
+package pylons.pylons.v1beta1;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types/v1beta1";
+import "pylons/pylons/v1beta1/payment_info.proto"; 
+
+message StripeRefund {
+  
+  PaymentInfo payment = 1; 
+  bool settled = 2; 
+}

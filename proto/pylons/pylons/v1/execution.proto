@@ -1,0 +1,31 @@
+syntax = "proto3";
+package Pylonstech.pylons.pylons;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types/v1";
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "pylons/pylons/v1/item.proto";
+import "pylons/pylons/v1/recipe.proto";
+
+message ItemRecord {
+  string ID = 1;
+  repeated DoubleKeyValue doubles = 2 [(gogoproto.nullable) = false];
+  repeated LongKeyValue longs = 3 [(gogoproto.nullable) = false];
+  repeated StringKeyValue strings = 4 [(gogoproto.nullable) = false];
+}
+
+message Execution {
+  string creator = 1;
+  string ID = 2;
+  string recipeID = 3;
+  string cookbookID = 4;
+  string recipeVersion = 5;
+  uint64 nodeVersion = 6;
+  int64 blockHeight = 7;
+  repeated ItemRecord itemInputs = 8 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin coinInputs = 9 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin coinOutputs = 10 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated string itemOutputIDs = 11 [(gogoproto.nullable) = false];
+  repeated string itemModifyOutputIDs = 12 [(gogoproto.nullable) = false];
+  }
+
