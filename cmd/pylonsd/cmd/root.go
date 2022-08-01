@@ -141,6 +141,8 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 
 func addUpgradeHandlerFlags(startCmd *cobra.Command) {
 	//addupgradeflag(startcmd)
+	//startCmd.Flags().Bool(FlagSkipGenesisInvariants, false, "Skip x/crisis invariants check on startup")
+	// example for true/false
 }
 
 func addModuleInitFlags(startCmd *cobra.Command) {
