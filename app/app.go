@@ -111,6 +111,11 @@ const (
 	Name = "pylons"
 )
 
+// flag Upgrade Handler
+const (
+	flagUpgradeHandler = "run-upgrade-handlers"
+)
+
 var AccountTrack = make(map[string]uint64)
 
 // These constants are derived from the above variables.
@@ -449,7 +454,7 @@ func New(
 	// NOTE: we may consider parsing `appOpts` inside module constructors. For the moment
 	// we prefer to be more strict in what arguments the modules expect.
 	skipGenesisInvariants := cast.ToBool(appOpts.Get(crisis.FlagSkipGenesisInvariants))
-	isUpgrade := cast.ToBool(appOpts.Get("run-upgrade-handlers"))
+	isUpgrade := cast.ToBool(appOpts.Get(flagUpgradeHandler))
 
 	// NOTE: Any module instantiated in the module manager that is later modified
 	// must be passed by reference here.
@@ -598,7 +603,7 @@ func New(
 	app.SetBeginBlocker(app.BeginBlocker)
 
 	// register upgrade
-	if(isUpgrade) {
+	if isUpgrade {
 		app.RegisterUpgradeHandlers(cfg)
 	}
 
