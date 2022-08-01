@@ -115,7 +115,6 @@ func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID stri
 		CreatedAt:        ctx.BlockTime().Unix(),
 		UpdatedAt:        ctx.BlockTime().Unix(),
 		ItemMintedNumber: io.AmountMinted + 1,
-		ItemId:           io.Id,
 	}, nil
 }
 
@@ -357,7 +356,7 @@ func (i Item) NewItemHistory(ctx sdk.Context, to, from string) ItemHistory {
 	return ItemHistory{
 		ItemMintedNumber: i.ItemMintedNumber,
 		CookbookId:       i.CookbookId,
-		Id:               i.ItemId,
+		Id:               i.Id,
 		To:               to,
 		From:             from,
 		CreatedAt:        ctx.BlockTime().Unix(),

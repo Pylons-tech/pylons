@@ -43,7 +43,6 @@ message Item {
   int64 updated_at = 14;
   string recipe_id = 15;
   uint64 item_minted_number = 16;
-  string item_id = 17;
 }
 
 message ItemHistory {
