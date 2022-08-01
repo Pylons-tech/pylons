@@ -591,7 +591,9 @@ func New(
 	app.sm.RegisterStoreDecoders()
 
 	// register upgrade
-	app.RegisterUpgradeHandlers(cfg)
+	if isUpgrade {
+		app.RegisterUpgradeHandlers(cfg)
+	}
 
 	// initialize stores
 	app.MountKVStores(keys)
@@ -601,12 +603,6 @@ func New(
 	// initialize BaseApp
 	app.SetInitChainer(app.InitChainer)
 	app.SetBeginBlocker(app.BeginBlocker)
-
-	// register upgrade
-	if isUpgrade {
-		app.RegisterUpgradeHandlers(cfg)
-	}
-
 	app.SetAnteHandler(
 		// ante.NewAnteHandler(
 		//	app.AccountKeeper, app.BankKeeper, ante.DefaultSigVerificationGasConsumer,
