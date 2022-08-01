@@ -139,6 +139,7 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 
 	m := keeper.NewMigrator(am.keeper)
 	err := cfg.RegisterMigration(v1beta1.ModuleName, 1, m.Migrate1to2)
+
 	if err != nil {
 		panic(err)
 	}
@@ -215,7 +216,7 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 2 }
+func (AppModule) ConsensusVersion() uint64 { return 3 }
 
 // ____________________________________________________________________________
 

@@ -490,7 +490,6 @@ func New(
 		slashingtypes.ModuleName,
 		evidencetypes.ModuleName,
 		stakingtypes.ModuleName,
-		ibchost.ModuleName,
 		ibctransfertypes.ModuleName,
 		authtypes.ModuleName,
 		banktypes.ModuleName,
@@ -502,6 +501,7 @@ func New(
 		vestingtypes.ModuleName,
 		icatypes.ModuleName,
 		v1beta1.ModuleName,
+		ibchost.ModuleName,
 	)
 
 	app.mm.SetOrderEndBlockers(
@@ -513,7 +513,6 @@ func New(
 		banktypes.ModuleName,
 		// distrtypes.ModuleName,
 		slashingtypes.ModuleName,
-		ibchost.ModuleName,
 		minttypes.ModuleName,
 		genutiltypes.ModuleName,
 		evidencetypes.ModuleName,
@@ -525,6 +524,7 @@ func New(
 		vestingtypes.ModuleName,
 		icatypes.ModuleName,
 		v1beta1.ModuleName,
+		ibchost.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -543,13 +543,13 @@ func New(
 		minttypes.ModuleName,
 		v1beta1.ModuleName,
 		crisistypes.ModuleName,
-		ibchost.ModuleName,
 		genutiltypes.ModuleName,
 		evidencetypes.ModuleName,
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		ibctransfertypes.ModuleName,
 		icatypes.ModuleName,
+		ibchost.ModuleName,
 		vestingtypes.ModuleName,
 	)
 
@@ -581,9 +581,6 @@ func New(
 
 	app.sm.RegisterStoreDecoders()
 
-	// register upgrade
-	app.RegisterUpgradeHandlers(cfg)
-
 	// initialize stores
 	app.MountKVStores(keys)
 	app.MountTransientStores(tkeys)
@@ -592,6 +589,10 @@ func New(
 	// initialize BaseApp
 	app.SetInitChainer(app.InitChainer)
 	app.SetBeginBlocker(app.BeginBlocker)
+
+	// register upgrade
+	app.RegisterUpgradeHandlers(cfg)
+
 	app.SetAnteHandler(
 		// ante.NewAnteHandler(
 		//	app.AccountKeeper, app.BankKeeper, ante.DefaultSigVerificationGasConsumer,

@@ -20,15 +20,6 @@ import (
 // CreateUpgradeHandler make upgrade handler
 func CreateUpgradeHandler(mm *module.Manager, configurator module.Configurator, staking *stakingkeeper.Keeper, pylonStoreKey storetypes.StoreKey, cdc codec.Codec) upgradetypes.UpgradeHandler {
 	return func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
-		newVM, err := mm.RunMigrations(ctx, configurator, vm)
-		if err != nil {
-			return newVM, err
-		}
-		FixMinCommissionRate(ctx, staking)
-		if err != nil {
-			return newVM, err
-		}
-
 		vm[icatypes.ModuleName] = mm.Modules[icatypes.ModuleName].ConsensusVersion()
 
 		// create ICS27 Controller submodule params, controller module not enabled.
@@ -57,6 +48,15 @@ func CreateUpgradeHandler(mm *module.Manager, configurator module.Configurator, 
 			panic("mm.Modules[icatypes.ModuleName] is not of type ica.AppModule")
 		}
 		icamodule.InitModule(ctx, controllerParams, hostParams)
+
+		newVM, err := mm.RunMigrations(ctx, configurator, vm)
+		if err != nil {
+			return newVM, err
+		}
+		FixMinCommissionRate(ctx, staking)
+		if err != nil {
+			return newVM, err
+		}
 
 		// override here
 		return newVM, err
