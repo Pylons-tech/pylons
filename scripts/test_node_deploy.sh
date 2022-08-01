@@ -55,7 +55,7 @@ then
 else
     echo >&1 "installing pylonsd"
     rm -rf $HOME/.pylons*
-    make install
+    go install ./...
 fi
 
 pylonsd config keyring-backend $KEYRING

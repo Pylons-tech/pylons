@@ -140,13 +140,13 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 }
 
 func addUpgradeHandlerFlags(startCmd *cobra.Command) {
-	//addupgradeflag(startcmd)
-	//startCmd.Flags().Bool(FlagSkipGenesisInvariants, false, "Skip x/crisis invariants check on startup")
-	// example for true/false
+	startCmd.Flags().Bool("run-upgrade-handlers",false,"For upgrade handler")
 }
 
 func addModuleInitFlags(startCmd *cobra.Command) {
 	crisis.AddModuleInitFlags(startCmd)
+	addUpgradeHandlerFlags(startCmd)
+	
 }
 
 // initTendermintConfig helps to override default Tendermint Config values.
