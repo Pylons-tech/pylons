@@ -16,7 +16,7 @@ func (k Keeper) GetItemOwnershipHistory(c context.Context, req *types.QueryGetIt
 	}
 	ctx := sdk.UnwrapSDKContext(c)
 
-	val := k.GetItemHistory(ctx, req.CookbookId, req.ItemId, req.MintedNumber)
+	val := k.GetItemHistory(ctx, req.CookbookId, req.ItemId)
 	if len(val) == 0 {
 		return &types.QueryGetItemHistoryResponse{History: []*types.ItemHistory{}}, nil
 	}

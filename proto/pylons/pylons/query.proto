@@ -41,7 +41,7 @@ service Query {
 
 	// Retrieves an item history by id.
 	rpc GetItemOwnershipHistory(QueryGetItemHistoryRequest) returns (QueryGetItemHistoryResponse) {
-		option (google.api.http).get = "/pylons/item_history/{cookbook_id}/{item_id}/{minted_number}";
+		option (google.api.http).get = "/pylons/item_history/{cookbook_id}/{item_id}";
 	}
 
 

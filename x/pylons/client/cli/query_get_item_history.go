@@ -14,13 +14,12 @@ var _ = strconv.Itoa(0)
 
 func CmdGetItemHistory() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "get-item-history [cookbook-id] [item-id] [minted-number]",
+		Use:   "get-item-history [cookbook-id] [item-id]",
 		Short: "Get Item Ownership History",
-		Args:  cobra.ExactArgs(3),
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			reqCookbookID := args[0]
 			reqItemID := args[1]
-			reqMintedNumber := args[2]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -30,9 +29,8 @@ func CmdGetItemHistory() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			params := &types.QueryGetItemHistoryRequest{
-				CookbookId:   reqCookbookID,
-				ItemId:       reqItemID,
-				MintedNumber: reqMintedNumber,
+				CookbookId: reqCookbookID,
+				ItemId:     reqItemID,
 			}
 
 			res, err := queryClient.GetItemOwnershipHistory(cmd.Context(), params)

@@ -100,21 +100,20 @@ func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID stri
 
 	return Item{
 		// ID not set - it's handled internally
-		Owner:            addr.String(),
-		CookbookId:       cookbookID,
-		NodeVersion:      nodeVersion,
-		Doubles:          dblActualize,
-		Longs:            longActualize,
-		Strings:          stringActualize,
-		MutableStrings:   io.MutableStrings,
-		Tradeable:        io.Tradeable,
-		LastUpdate:       ctx.BlockHeight(),
-		TransferFee:      io.TransferFee,
-		TradePercentage:  io.TradePercentage,
-		RecipeId:         recipeID,
-		CreatedAt:        ctx.BlockTime().Unix(),
-		UpdatedAt:        ctx.BlockTime().Unix(),
-		ItemMintedNumber: io.AmountMinted + 1,
+		Owner:           addr.String(),
+		CookbookId:      cookbookID,
+		NodeVersion:     nodeVersion,
+		Doubles:         dblActualize,
+		Longs:           longActualize,
+		Strings:         stringActualize,
+		MutableStrings:  io.MutableStrings,
+		Tradeable:       io.Tradeable,
+		LastUpdate:      ctx.BlockHeight(),
+		TransferFee:     io.TransferFee,
+		TradePercentage: io.TradePercentage,
+		RecipeId:        recipeID,
+		CreatedAt:       ctx.BlockTime().Unix(),
+		UpdatedAt:       ctx.BlockTime().Unix(),
 	}, nil
 }
 
@@ -354,11 +353,10 @@ func FindValidPaymentsPermutation(items []Item, balance sdk.Coins) ([]int, error
 
 func (i Item) NewItemHistory(ctx sdk.Context, to, from string) ItemHistory {
 	return ItemHistory{
-		ItemMintedNumber: i.ItemMintedNumber,
-		CookbookId:       i.CookbookId,
-		Id:               i.Id,
-		To:               to,
-		From:             from,
-		CreatedAt:        ctx.BlockTime().Unix(),
+		CookbookId: i.CookbookId,
+		Id:         i.Id,
+		To:         to,
+		From:       from,
+		CreatedAt:  ctx.BlockTime().Unix(),
 	}
 }

@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -42,7 +40,7 @@ func (k Keeper) GetAllExecuteRecipeHis(ctx sdk.Context, cookbookID string, id st
 
 // SetRecipe set a specific recipe in the store from its ID
 func (k Keeper) SetItemHistory(ctx sdk.Context, history types.ItemHistory) {
-	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix((history.CookbookId + history.Id + fmt.Sprintf("%v", history.ItemMintedNumber))))
+	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix((history.CookbookId + history.Id)))
 	recipesHistoryStore := prefix.NewStore(recipesStore, types.KeyPrefix(types.ItemHistoryKey))
 	b := k.cdc.MustMarshal(&history)
 	recipesHistoryStore.Set(types.KeyPrefix(history.To), b)
@@ -52,8 +50,8 @@ func (k Keeper) SetItemHistory(ctx sdk.Context, history types.ItemHistory) {
 }
 
 // SetRecipe set a specific recipe in the store from its ID
-func (k Keeper) GetItemHistory(ctx sdk.Context, cookbookID, id, minted_number string) (list []*types.ItemHistory) {
-	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix((cookbookID + id + minted_number)))
+func (k Keeper) GetItemHistory(ctx sdk.Context, cookbookID, id string) (list []*types.ItemHistory) {
+	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix((cookbookID + id)))
 	recipesHistoryStore := prefix.NewStore(recipesStore, types.KeyPrefix(types.ItemHistoryKey))
 	iterator := sdk.KVStorePrefixIterator(recipesHistoryStore, []byte{})
 

@@ -122,6 +122,7 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 		to, _ := k.GetUsernameByAddress(ctx, pendingExecution.Creator)
 		from, _ := k.GetUsernameByAddress(ctx, cookbook.Creator)
 		history := item.NewItemHistory(ctx, to.Value, from.Value)
+		history.Id = id
 		k.SetItemHistory(ctx, history)
 	}
 	// update modify items in keeper
