@@ -1,8 +1,6 @@
 package keeper_test
 
-import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-)
+import "github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 
 const (
 	COMMON_SENDER     = "COMMON_SENDER"
@@ -13,8 +11,8 @@ const (
 	COMMON_RECEIVER   = "COMMON_RECEIVER"
 )
 
-func NewStandardError(code, msg string) types.StandardError {
-	return types.StandardError{
+func NewStandardError(code, msg string) v1beta1.StandardError {
+	return v1beta1.StandardError{
 		Code:    code,
 		Message: msg,
 	}

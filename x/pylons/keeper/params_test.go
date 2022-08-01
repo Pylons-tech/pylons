@@ -1,9 +1,8 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 const (
@@ -16,23 +15,23 @@ func (suite *IntegrationTestSuite) TestDefaultParams() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	require.Equal(types.DefaultCoinIssuers, k.CoinIssuers(ctx))
-	require.Equal(types.DefaultPaymentProcessors, k.PaymentProcessors(ctx))
-	require.Equal(types.DefaultRecipeFeePercentage, k.RecipeFeePercentage(ctx))
-	require.Equal(types.DefaultItemTransferFeePercentage, k.ItemTransferFeePercentage(ctx))
-	require.Equal(types.DefaultUpdateItemStringFee, k.UpdateItemStringFee(ctx))
-	require.Equal(types.DefaultMinTransferFee, k.MinTransferFee(ctx))
-	require.Equal(types.DefaultMaxTransferFee, k.MaxTransferFee(ctx))
-	require.Equal(types.DefaultUpdateUsernameFee, k.UpdateUsernameFee(ctx))
+	require.Equal(v1beta1.DefaultCoinIssuers, k.CoinIssuers(ctx))
+	require.Equal(v1beta1.DefaultPaymentProcessors, k.PaymentProcessors(ctx))
+	require.Equal(v1beta1.DefaultRecipeFeePercentage, k.RecipeFeePercentage(ctx))
+	require.Equal(v1beta1.DefaultItemTransferFeePercentage, k.ItemTransferFeePercentage(ctx))
+	require.Equal(v1beta1.DefaultUpdateItemStringFee, k.UpdateItemStringFee(ctx))
+	require.Equal(v1beta1.DefaultMinTransferFee, k.MinTransferFee(ctx))
+	require.Equal(v1beta1.DefaultMaxTransferFee, k.MaxTransferFee(ctx))
+	require.Equal(v1beta1.DefaultUpdateUsernameFee, k.UpdateUsernameFee(ctx))
 
 	coinIssuedDenomsList := k.CoinIssuedDenomsList(ctx)
-	require.Equal(len(coinIssuedDenomsList), len(types.DefaultCoinIssuers))
+	require.Equal(len(coinIssuedDenomsList), len(v1beta1.DefaultCoinIssuers))
 	for i, denom := range coinIssuedDenomsList {
-		require.Equal(types.DefaultCoinIssuers[i].CoinDenom, denom)
+		require.Equal(v1beta1.DefaultCoinIssuers[i].CoinDenom, denom)
 	}
 
 	params := k.GetParams(ctx)
-	require.Equal(types.DefaultParams(), params)
+	require.Equal(v1beta1.DefaultParams(), params)
 }
 
 func (suite *IntegrationTestSuite) TestSetParams() {
@@ -44,11 +43,11 @@ func (suite *IntegrationTestSuite) TestSetParams() {
 	recipeFeePercentage, _ := sdk.NewDecFromStr("0.20")
 	itemTransferFeePercentage, _ := sdk.NewDecFromStr("0.20")
 
-	newParams := types.Params{
-		CoinIssuers: []types.CoinIssuer{
+	newParams := v1beta1.Params{
+		CoinIssuers: []v1beta1.CoinIssuer{
 			{
-				CoinDenom: types.PylonsCoinDenom,
-				Packages: []types.GoogleInAppPurchasePackage{
+				CoinDenom: v1beta1.PylonsCoinDenom,
+				Packages: []v1beta1.GoogleInAppPurchasePackage{
 					{PackageName: "com.pylons.loud", ProductId: "pylons_1000", Amount: sdk.NewInt(1000)},
 					{PackageName: "com.pylons.loud", ProductId: "pylons_55000", Amount: sdk.NewInt(55000)},
 				},
@@ -56,7 +55,7 @@ func (suite *IntegrationTestSuite) TestSetParams() {
 				EntityName:                "Pylons_Inc",
 			},
 			{
-				CoinDenom:  types.CosmosCoinDenom,
+				CoinDenom:  v1beta1.CosmosCoinDenom,
 				EntityName: "Cosmos_Hub",
 			},
 		},

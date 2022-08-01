@@ -1,11 +1,10 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestExecutionQuerySingle() {
@@ -18,33 +17,33 @@ func (suite *IntegrationTestSuite) TestExecutionQuerySingle() {
 	msgs = append(msgs, createNPendingExecution(k, ctx, 1)...)
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryGetExecutionRequest
-		response *types.QueryGetExecutionResponse
+		request  *v1beta1.QueryGetExecutionRequest
+		response *v1beta1.QueryGetExecutionResponse
 		err      error
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetExecutionRequest{Id: msgs[0].Id},
-			response: &types.QueryGetExecutionResponse{Completed: true, Execution: msgs[0]},
+			request:  &v1beta1.QueryGetExecutionRequest{Id: msgs[0].Id},
+			response: &v1beta1.QueryGetExecutionResponse{Completed: true, Execution: msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetExecutionRequest{Id: msgs[1].Id},
-			response: &types.QueryGetExecutionResponse{Completed: true, Execution: msgs[1]},
+			request:  &v1beta1.QueryGetExecutionRequest{Id: msgs[1].Id},
+			response: &v1beta1.QueryGetExecutionResponse{Completed: true, Execution: msgs[1]},
 		},
 		{
 			desc:     "Pending",
-			request:  &types.QueryGetExecutionRequest{Id: msgs[2].Id},
-			response: &types.QueryGetExecutionResponse{Completed: false, Execution: msgs[2]},
+			request:  &v1beta1.QueryGetExecutionRequest{Id: msgs[2].Id},
+			response: &v1beta1.QueryGetExecutionResponse{Completed: false, Execution: msgs[2]},
 		},
 		{
 			desc:    "InvalidKey",
-			request: &types.QueryGetExecutionRequest{Id: "not_found"},
+			request: &v1beta1.QueryGetExecutionRequest{Id: "not_found"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetExecutionRequest{Id: "90325"},
+			request: &v1beta1.QueryGetExecutionRequest{Id: "90325"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{

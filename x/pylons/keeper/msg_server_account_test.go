@@ -2,11 +2,10 @@ package keeper_test
 
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestCreateAccount() {
@@ -17,27 +16,27 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
 
-	addr := types.GenTestBech32List(2)
-	types.UpdateAppCheckFlagTest(types.FlagTrue)
+	addr := v1beta1.GenTestBech32List(2)
+	v1beta1.UpdateAppCheckFlagTest(v1beta1.FlagTrue)
 
 	for _, tc := range []struct {
 		desc    string
-		request *types.MsgCreateAccount
+		request *v1beta1.MsgCreateAccount
 		err     error
 	}{
 		{
 			desc:    "Valid",
-			request: &types.MsgCreateAccount{Creator: addr[0], Username: "testUser", ReferralAddress: ""},
+			request: &v1beta1.MsgCreateAccount{Creator: addr[0], Username: "testUser", ReferralAddress: ""},
 		},
 		{
 			desc:    "InvalidCreator",
-			request: &types.MsgCreateAccount{Creator: "invalid", Username: "testUser", ReferralAddress: ""},
+			request: &v1beta1.MsgCreateAccount{Creator: "invalid", Username: "testUser", ReferralAddress: ""},
 			err:     sdkerrors.ErrInvalidRequest,
 		},
 		{
 			desc:    "DuplicateUsername",
-			request: &types.MsgCreateAccount{Creator: addr[1], Username: "testUser", ReferralAddress: ""},
-			err:     types.ErrDuplicateUsername,
+			request: &v1beta1.MsgCreateAccount{Creator: addr[1], Username: "testUser", ReferralAddress: ""},
+			err:     v1beta1.ErrDuplicateUsername,
 		},
 	} {
 		tc := tc
@@ -50,7 +49,7 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 			}
 		})
 	}
-	types.UpdateAppCheckFlagTest(types.FlagFalse)
+	v1beta1.UpdateAppCheckFlagTest(v1beta1.FlagFalse)
 }
 
 func (suite *IntegrationTestSuite) TestUpdateAccount() {
@@ -61,10 +60,10 @@ func (suite *IntegrationTestSuite) TestUpdateAccount() {
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
 
-	addr := types.GenTestBech32List(2)
-	types.UpdateAppCheckFlagTest(types.FlagTrue)
+	addr := v1beta1.GenTestBech32List(2)
+	v1beta1.UpdateAppCheckFlagTest(v1beta1.FlagTrue)
 
-	request := &types.MsgCreateAccount{Creator: addr[0], Username: "testUser"}
+	request := &v1beta1.MsgCreateAccount{Creator: addr[0], Username: "testUser"}
 	_, err := srv.CreateAccount(wctx, request)
 	require.NoError(err)
 
@@ -80,22 +79,22 @@ func (suite *IntegrationTestSuite) TestUpdateAccount() {
 
 	for _, tc := range []struct {
 		desc    string
-		request *types.MsgUpdateAccount
+		request *v1beta1.MsgUpdateAccount
 		err     error
 	}{
 		{
 			desc:    "Valid",
-			request: &types.MsgUpdateAccount{Creator: addr[0], Username: "testUserUpdated"},
+			request: &v1beta1.MsgUpdateAccount{Creator: addr[0], Username: "testUserUpdated"},
 		},
 		{
 			desc:    "InvalidCreator",
-			request: &types.MsgUpdateAccount{Creator: "invalid", Username: "testUser"},
+			request: &v1beta1.MsgUpdateAccount{Creator: "invalid", Username: "testUser"},
 			err:     sdkerrors.ErrInvalidRequest,
 		},
 		{
 			desc:    "DuplicateUsername",
-			request: &types.MsgUpdateAccount{Creator: addr[0], Username: "testUserUpdated"},
-			err:     types.ErrDuplicateUsername,
+			request: &v1beta1.MsgUpdateAccount{Creator: addr[0], Username: "testUserUpdated"},
+			err:     v1beta1.ErrDuplicateUsername,
 		},
 	} {
 		tc := tc
@@ -108,5 +107,5 @@ func (suite *IntegrationTestSuite) TestUpdateAccount() {
 			}
 		})
 	}
-	types.UpdateAppCheckFlagTest(types.FlagFalse)
+	v1beta1.UpdateAppCheckFlagTest(v1beta1.FlagFalse)
 }

@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -10,11 +11,9 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAccount) (*types.MsgCreateAccountResponse, error) {
+func (k msgServer) CreateAccount(goCtx context.Context, msg *v1beta1.MsgCreateAccount) (*v1beta1.MsgCreateAccountResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	err := k.verifyAppCheck(msg)
@@ -32,35 +31,35 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 		defer telemetry.IncrCounter(1, "new", "account")
 	}
 
-	username := types.Username{Value: msg.Username}
-	accountAddr := types.AccountAddr{Value: msg.Creator}
+	username := v1beta1.Username{Value: msg.Username}
+	accountAddr := v1beta1.AccountAddr{Value: msg.Creator}
 
 	found := k.HasUsername(ctx, username) || k.HasAccountAddr(ctx, accountAddr)
 	if found {
-		return nil, types.ErrDuplicateUsername
+		return nil, v1beta1.ErrDuplicateUsername
 	}
 
 	k.SetPylonsAccount(ctx, accountAddr, username)
 	if len(msg.ReferralAddress) > 0 {
-		referralAddr := types.AccountAddr{Value: msg.ReferralAddress}
+		referralAddr := v1beta1.AccountAddr{Value: msg.ReferralAddress}
 		if k.HasAccountAddr(ctx, referralAddr) {
 			k.SetPylonsReferral(ctx, msg.Creator, msg.Username, msg.ReferralAddress)
 		} else {
-			return nil, types.ErrReferralUserNotFound
+			return nil, v1beta1.ErrReferralUserNotFound
 		}
 	}
 
-	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateAccount{
+	err = ctx.EventManager().EmitTypedEvent(&v1beta1.EventCreateAccount{
 		Address:  msg.Creator,
 		Username: msg.Username,
 	})
 
 	telemetry.IncrCounter(1, "account", "create")
 
-	return &types.MsgCreateAccountResponse{}, err
+	return &v1beta1.MsgCreateAccountResponse{}, err
 }
 
-func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAccount) (*types.MsgUpdateAccountResponse, error) {
+func (k msgServer) UpdateAccount(goCtx context.Context, msg *v1beta1.MsgUpdateAccount) (*v1beta1.MsgUpdateAccountResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	addr, err := sdk.AccAddressFromBech32(msg.Creator)
@@ -72,12 +71,12 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "account not created")
 	}
 
-	username := types.Username{Value: msg.Username}
-	accountAddr := types.AccountAddr{Value: msg.Creator}
+	username := v1beta1.Username{Value: msg.Username}
+	accountAddr := v1beta1.AccountAddr{Value: msg.Creator}
 
 	found := k.HasUsername(ctx, username)
 	if found {
-		return nil, types.ErrDuplicateUsername
+		return nil, v1beta1.ErrDuplicateUsername
 	}
 
 	k.SetPylonsAccount(ctx, accountAddr, username)
@@ -89,21 +88,21 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	err = ctx.EventManager().EmitTypedEvent(&types.EventUpdateAccount{
+	err = ctx.EventManager().EmitTypedEvent(&v1beta1.EventUpdateAccount{
 		Address:  msg.Creator,
 		Username: msg.Username,
 	})
 
 	telemetry.IncrCounter(1, "account", "update")
 
-	return &types.MsgUpdateAccountResponse{}, err
+	return &v1beta1.MsgUpdateAccountResponse{}, err
 }
 
-func (k msgServer) verifyAppCheck(msg *types.MsgCreateAccount) error {
-	if types.DefaultNoAppCheckConfig {
+func (k msgServer) verifyAppCheck(msg *v1beta1.MsgCreateAccount) error {
+	if v1beta1.DefaultNoAppCheckConfig {
 		return nil
 	}
-	err := types.VerifyAppCheckToken(msg.Token)
+	err := v1beta1.VerifyAppCheckToken(msg.Token)
 	if err != nil {
 		return status.Errorf(codes.Unauthenticated, "unable to verify app-check token %v", err)
 	}

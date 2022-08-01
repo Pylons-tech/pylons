@@ -3,14 +3,13 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) Execution(c context.Context, req *types.QueryGetExecutionRequest) (*types.QueryGetExecutionResponse, error) {
+func (k Keeper) Execution(c context.Context, req *v1beta1.QueryGetExecutionRequest) (*v1beta1.QueryGetExecutionResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -18,7 +17,7 @@ func (k Keeper) Execution(c context.Context, req *types.QueryGetExecutionRequest
 	ctx := sdk.UnwrapSDKContext(c)
 
 	completed := false
-	var execution types.Execution
+	var execution v1beta1.Execution
 	switch {
 	case k.HasPendingExecution(ctx, req.Id):
 		execution = k.GetPendingExecution(ctx, req.Id)
@@ -29,5 +28,5 @@ func (k Keeper) Execution(c context.Context, req *types.QueryGetExecutionRequest
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}
 
-	return &types.QueryGetExecutionResponse{Execution: execution, Completed: completed}, nil
+	return &v1beta1.QueryGetExecutionResponse{Execution: execution, Completed: completed}, nil
 }

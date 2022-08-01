@@ -3,11 +3,10 @@ package cli
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func CmdShowCookbook() *cobra.Command {
@@ -18,9 +17,9 @@ func CmdShowCookbook() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
-			queryClient := types.NewQueryClient(clientCtx)
+			queryClient := v1beta1.NewQueryClient(clientCtx)
 
-			params := &types.QueryGetCookbookRequest{
+			params := &v1beta1.QueryGetCookbookRequest{
 				Id: args[0],
 			}
 

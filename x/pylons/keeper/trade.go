@@ -4,17 +4,16 @@ import (
 	"encoding/binary"
 	"strconv"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // GetTradeCount get the total number of TypeName.LowerCamel
 func (k Keeper) GetTradeCount(ctx sdk.Context) uint64 {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeCountKey))
-	byteKey := types.KeyPrefix(types.TradeCountKey)
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.TradeCountKey))
+	byteKey := v1beta1.KeyPrefix(v1beta1.TradeCountKey)
 	bz := store.Get(byteKey)
 
 	// Count doesn't exist: no element
@@ -34,8 +33,8 @@ func (k Keeper) GetTradeCount(ctx sdk.Context) uint64 {
 
 // SetTradeCount set the total number of trade
 func (k Keeper) SetTradeCount(ctx sdk.Context, count uint64) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeCountKey))
-	byteKey := types.KeyPrefix(types.TradeCountKey)
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.TradeCountKey))
+	byteKey := v1beta1.KeyPrefix(v1beta1.TradeCountKey)
 	bz := []byte(strconv.FormatUint(count, 10))
 	store.Set(byteKey, bz)
 }
@@ -43,7 +42,7 @@ func (k Keeper) SetTradeCount(ctx sdk.Context, count uint64) {
 // AppendTrade appends a trade in the store with a new id and update the count
 func (k Keeper) AppendTrade(
 	ctx sdk.Context,
-	trade types.Trade,
+	trade v1beta1.Trade,
 ) uint64 {
 	// Create the trade
 	count := k.GetTradeCount(ctx)
@@ -60,8 +59,8 @@ func (k Keeper) AppendTrade(
 }
 
 // SetTrade set a specific trade in the store
-func (k Keeper) SetTrade(ctx sdk.Context, trade types.Trade) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
+func (k Keeper) SetTrade(ctx sdk.Context, trade v1beta1.Trade) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.TradeKey))
 	b := k.cdc.MustMarshal(&trade)
 
 	addr, _ := sdk.AccAddressFromBech32(trade.Creator)
@@ -71,16 +70,16 @@ func (k Keeper) SetTrade(ctx sdk.Context, trade types.Trade) {
 }
 
 // GetTrade returns a trade from its id
-func (k Keeper) GetTrade(ctx sdk.Context, id uint64) types.Trade {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
-	var trade types.Trade
+func (k Keeper) GetTrade(ctx sdk.Context, id uint64) v1beta1.Trade {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.TradeKey))
+	var trade v1beta1.Trade
 	k.cdc.MustUnmarshal(store.Get(getTradeIDBytes(id)), &trade)
 	return trade
 }
 
 // HasTrade checks if the trade exists in the store
 func (k Keeper) HasTrade(ctx sdk.Context, id uint64) bool {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.TradeKey))
 	return store.Has(getTradeIDBytes(id))
 }
 
@@ -91,20 +90,20 @@ func (k Keeper) GetTradeOwner(ctx sdk.Context, id uint64) string {
 
 // RemoveTrade removes a trade from the store
 func (k Keeper) RemoveTrade(ctx sdk.Context, id uint64, creator sdk.AccAddress) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.TradeKey))
 	k.removeTradeFromAddress(ctx, getTradeIDBytes(id), creator)
 	store.Delete(getTradeIDBytes(id))
 }
 
 // GetAllTrade returns all trade
-func (k Keeper) GetAllTrade(ctx sdk.Context) (list []types.Trade) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
+func (k Keeper) GetAllTrade(ctx sdk.Context) (list []v1beta1.Trade) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.TradeKey))
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})
 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var val types.Trade
+		var val v1beta1.Trade
 		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
@@ -119,21 +118,21 @@ func getTradeIDBytes(id uint64) []byte {
 }
 
 func (k Keeper) addTradeToAddress(ctx sdk.Context, tradeIDBytes []byte, addr sdk.AccAddress) {
-	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrTradeKey))
+	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AddrTradeKey))
 	addrStore := prefix.NewStore(parentStore, addr.Bytes())
 	addrStore.Set(tradeIDBytes, tradeIDBytes)
 }
 
 func (k Keeper) removeTradeFromAddress(ctx sdk.Context, tradeIDBytes []byte, addr sdk.AccAddress) {
-	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrTradeKey))
+	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AddrTradeKey))
 	addrStore := prefix.NewStore(parentStore, addr.Bytes())
 	addrStore.Delete(tradeIDBytes)
 }
 
-func (k Keeper) GetTradesByCreatorPaginated(ctx sdk.Context, creator sdk.AccAddress, pagination *query.PageRequest) ([]types.Trade, *query.PageResponse, error) {
-	trades := make([]types.Trade, 0)
+func (k Keeper) GetTradesByCreatorPaginated(ctx sdk.Context, creator sdk.AccAddress, pagination *query.PageRequest) ([]v1beta1.Trade, *query.PageResponse, error) {
+	trades := make([]v1beta1.Trade, 0)
 
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrTradeKey))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AddrTradeKey))
 	store = prefix.NewStore(store, creator.Bytes())
 
 	pageRes, err := query.Paginate(store, pagination, func(_, value []byte) error {

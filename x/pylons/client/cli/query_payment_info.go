@@ -3,11 +3,10 @@ package cli
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func CmdListPaymentInfo() *cobra.Command {
@@ -22,9 +21,9 @@ func CmdListPaymentInfo() *cobra.Command {
 				return err
 			}
 
-			queryClient := types.NewQueryClient(clientCtx)
+			queryClient := v1beta1.NewQueryClient(clientCtx)
 
-			params := &types.QueryAllPaymentInfoRequest{
+			params := &v1beta1.QueryAllPaymentInfoRequest{
 				Pagination: pageReq,
 			}
 
@@ -51,9 +50,9 @@ func CmdShowPaymentInfo() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
-			queryClient := types.NewQueryClient(clientCtx)
+			queryClient := v1beta1.NewQueryClient(clientCtx)
 
-			params := &types.QueryGetPaymentInfoRequest{
+			params := &v1beta1.QueryGetPaymentInfoRequest{
 				PurchaseId: args[0],
 			}
 

@@ -3,28 +3,27 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) RedeemInfoAll(c context.Context, req *types.QueryAllRedeemInfoRequest) (*types.QueryAllRedeemInfoResponse, error) {
+func (k Keeper) RedeemInfoAll(c context.Context, req *v1beta1.QueryAllRedeemInfoRequest) (*v1beta1.QueryAllRedeemInfoResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var redeemInfos []types.RedeemInfo
+	var redeemInfos []v1beta1.RedeemInfo
 	ctx := sdk.UnwrapSDKContext(c)
 
 	store := ctx.KVStore(k.storeKey)
-	redeemInfoStore := prefix.NewStore(store, types.KeyPrefix(types.RedeemInfoKey))
+	redeemInfoStore := prefix.NewStore(store, v1beta1.KeyPrefix(v1beta1.RedeemInfoKey))
 
 	pageRes, err := query.Paginate(redeemInfoStore, req.Pagination, func(key []byte, value []byte) error {
-		var redeemInfo types.RedeemInfo
+		var redeemInfo v1beta1.RedeemInfo
 		if err := k.cdc.Unmarshal(value, &redeemInfo); err != nil {
 			return err
 		}
@@ -36,10 +35,10 @@ func (k Keeper) RedeemInfoAll(c context.Context, req *types.QueryAllRedeemInfoRe
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	return &types.QueryAllRedeemInfoResponse{RedeemInfo: redeemInfos, Pagination: pageRes}, nil
+	return &v1beta1.QueryAllRedeemInfoResponse{RedeemInfo: redeemInfos, Pagination: pageRes}, nil
 }
 
-func (k Keeper) RedeemInfo(c context.Context, req *types.QueryGetRedeemInfoRequest) (*types.QueryGetRedeemInfoResponse, error) {
+func (k Keeper) RedeemInfo(c context.Context, req *v1beta1.QueryGetRedeemInfoRequest) (*v1beta1.QueryGetRedeemInfoResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -50,5 +49,5 @@ func (k Keeper) RedeemInfo(c context.Context, req *types.QueryGetRedeemInfoReque
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}
 
-	return &types.QueryGetRedeemInfoResponse{RedeemInfo: val}, nil
+	return &v1beta1.QueryGetRedeemInfoResponse{RedeemInfo: val}, nil
 }

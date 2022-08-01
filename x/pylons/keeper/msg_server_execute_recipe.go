@@ -3,20 +3,19 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr string, inputItemsIds []string, recipe types.Recipe) ([]types.Item, error) {
+func (k Keeper) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr string, inputItemsIds []string, recipe v1beta1.Recipe) ([]v1beta1.Item, error) {
 	if len(inputItemsIds) != len(recipe.ItemInputs) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "size mismatch between provided input items and items required by recipe")
 	}
-	matchedItems := make([]types.Item, len(recipe.ItemInputs))
+	matchedItems := make([]v1beta1.Item, len(recipe.ItemInputs))
 
 	// build Item list from inputItemIds
-	inputItemMap := make(map[string]types.Item)
+	inputItemMap := make(map[string]v1beta1.Item)
 	checkedInputItems := make([]bool, len(inputItemsIds))
 
 	for i, recipeItemInput := range recipe.ItemInputs {
@@ -32,16 +31,16 @@ func (k Keeper) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr string,
 					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v not found", id)
 				}
 				if inputItem.Owner != creatorAddr {
-					modAcc := k.accountKeeper.GetModuleAddress(types.ExecutionsLockerName)
+					modAcc := k.accountKeeper.GetModuleAddress(v1beta1.ExecutionsLockerName)
 					if inputItem.Owner == modAcc.String() {
-						return nil, sdkerrors.Wrapf(types.ErrItemLocked, "item with id %s locked", inputItem.Id)
+						return nil, sdkerrors.Wrapf(v1beta1.ErrItemLocked, "item with id %s locked", inputItem.Id)
 					}
 					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %s not owned by sender", inputItem.Id)
 				}
 			}
 			inputItemMap[id] = inputItem
 			// match
-			var ec types.CelEnvCollection
+			var ec v1beta1.CelEnvCollection
 			ec, err = k.NewCelEnvCollectionFromItem(ctx, recipe.Id, "", inputItem)
 			if err != nil {
 				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
@@ -63,7 +62,7 @@ func (k Keeper) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr string,
 // ExecuteRecipe will excute the recipe provided in msg
 // We will update coins of during locking if user did not have enough normal coin
 // But user have enough IBC coins
-func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRecipe) (*types.MsgExecuteRecipeResponse, error) {
+func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *v1beta1.MsgExecuteRecipe) (*v1beta1.MsgExecuteRecipeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	cookbook, found := k.GetCookbook(ctx, msg.CookbookId)
@@ -132,9 +131,9 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	}
 
 	// create ItemRecord list
-	itemRecords := make([]types.ItemRecord, len(matchedItems))
+	itemRecords := make([]v1beta1.ItemRecord, len(matchedItems))
 	for i, item := range matchedItems {
-		itemRecords[i] = types.ItemRecord{
+		itemRecords[i] = v1beta1.ItemRecord{
 			Id:      item.Id,
 			Doubles: item.Doubles,
 			Longs:   item.Longs,
@@ -147,7 +146,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	}
 
 	// create PendingExecution passing the current blockHeight
-	execution := types.Execution{
+	execution := v1beta1.Execution{
 		Creator:       msg.Creator,
 		NodeVersion:   k.EngineVersion(ctx),
 		BlockHeight:   ctx.BlockHeight(),
@@ -168,7 +167,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	// emit to register an execution event
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			types.CreateExecutionKey,
+			v1beta1.CreateExecutionKey,
 			sdk.NewAttribute("creator", execution.Creator),
 			sdk.NewAttribute("ID", id),
 			sdk.NewAttribute("paymentInfos", paymentInfo),
@@ -184,7 +183,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	// event to register execution history details history of a recipe
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
-			types.CreateItemKey,
+			v1beta1.CreateItemKey,
 			sdk.NewAttribute("itemID", id),
 			sdk.NewAttribute("cookbookID", recipe.CookbookId),
 			sdk.NewAttribute("recipeID", recipe.Id),
@@ -196,7 +195,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		),
 	)
 
-	executionTrack := types.RecipeHistory{
+	executionTrack := v1beta1.RecipeHistory{
 		ItemId:     id,
 		CookbookId: recipe.CookbookId,
 		RecipeId:   recipe.Id,
@@ -209,5 +208,5 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 
 	k.SetExecuteRecipeHis(ctx, executionTrack)
 
-	return &types.MsgExecuteRecipeResponse{Id: id}, err
+	return &v1beta1.MsgExecuteRecipeResponse{Id: id}, err
 }

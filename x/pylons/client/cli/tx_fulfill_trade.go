@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"strconv"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/spf13/cast"
 
 	"github.com/spf13/cobra"
@@ -11,8 +12,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 var _ = strconv.Itoa(0)
@@ -32,13 +31,13 @@ func CmdFulfillTrade() *cobra.Command {
 				return err
 			}
 			argsItems := args[2]
-			jsonArgsItems := make([]types.ItemRef, 0)
+			jsonArgsItems := make([]v1beta1.ItemRef, 0)
 			err = json.Unmarshal([]byte(argsItems), &jsonArgsItems)
 			if err != nil {
 				return err
 			}
 			argsPaymentInfo := args[3]
-			jsonArgsPaymentInfo := make([]types.PaymentInfo, 0)
+			jsonArgsPaymentInfo := make([]v1beta1.PaymentInfo, 0)
 			err = json.Unmarshal([]byte(argsPaymentInfo), &jsonArgsPaymentInfo)
 			if err != nil {
 				return err
@@ -49,7 +48,7 @@ func CmdFulfillTrade() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgFulfillTrade(clientCtx.GetFromAddress().String(), argsID, argsCoinInputsIndex, jsonArgsItems, jsonArgsPaymentInfo)
+			msg := v1beta1.NewMsgFulfillTrade(clientCtx.GetFromAddress().String(), argsID, argsCoinInputsIndex, jsonArgsItems, jsonArgsPaymentInfo)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

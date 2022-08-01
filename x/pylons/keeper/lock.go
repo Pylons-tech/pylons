@@ -1,9 +1,8 @@
 package keeper
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // lockCoins sends an account's coins to the given module account
@@ -28,28 +27,28 @@ func (k Keeper) unlockCoins(ctx sdk.Context, recieverAddr sdk.AccAddress, amt sd
 
 // PayFees transfers coins to the FeeCollector module account
 func (k Keeper) PayFees(ctx sdk.Context, senderAddr sdk.AccAddress, amt sdk.Coins) error {
-	return k.lockCoins(ctx, senderAddr, amt, types.FeeCollectorName)
+	return k.lockCoins(ctx, senderAddr, amt, v1beta1.FeeCollectorName)
 }
 
 func (k Keeper) LockCoinsForExecution(ctx sdk.Context, senderAddr sdk.AccAddress, amt sdk.Coins) error {
-	return k.lockCoins(ctx, senderAddr, amt, types.ExecutionsLockerName)
+	return k.lockCoins(ctx, senderAddr, amt, v1beta1.ExecutionsLockerName)
 }
 
 func (k Keeper) LockCoinsForTrade(ctx sdk.Context, senderAddr sdk.AccAddress, amt sdk.Coins) error {
-	return k.lockCoins(ctx, senderAddr, amt, types.TradesLockerName)
+	return k.lockCoins(ctx, senderAddr, amt, v1beta1.TradesLockerName)
 }
 
 func (k Keeper) UnLockCoinsForExecution(ctx sdk.Context, revcAddr sdk.AccAddress, amt sdk.Coins) error {
-	return k.unlockCoins(ctx, revcAddr, amt, types.ExecutionsLockerName)
+	return k.unlockCoins(ctx, revcAddr, amt, v1beta1.ExecutionsLockerName)
 }
 
 func (k Keeper) UnLockCoinsForTrade(ctx sdk.Context, revcAddr sdk.AccAddress, amt sdk.Coins) error {
-	return k.unlockCoins(ctx, revcAddr, amt, types.TradesLockerName)
+	return k.unlockCoins(ctx, revcAddr, amt, v1beta1.TradesLockerName)
 }
 
 // LockItem sends an account's items to the provided module account
 // Changing ownership of the item in the store will unlock the item from the module account
-func (k Keeper) lockItem(ctx sdk.Context, item types.Item, modAccName string) {
+func (k Keeper) lockItem(ctx sdk.Context, item v1beta1.Item, modAccName string) {
 	// lock item by transferring ownership to module account
 	modAcc := k.accountKeeper.GetModuleAddress(modAccName)
 	prevAddr, _ := sdk.AccAddressFromBech32(item.Owner)
@@ -57,24 +56,24 @@ func (k Keeper) lockItem(ctx sdk.Context, item types.Item, modAccName string) {
 	k.UpdateItem(ctx, item, prevAddr)
 }
 
-func (k Keeper) unlockItem(ctx sdk.Context, item types.Item, modAccName string, addr string) {
+func (k Keeper) unlockItem(ctx sdk.Context, item v1beta1.Item, modAccName string, addr string) {
 	modAcc := k.accountKeeper.GetModuleAddress(modAccName)
 	item.Owner = addr
 	k.UpdateItem(ctx, item, modAcc)
 }
 
-func (k Keeper) LockItemForExecution(ctx sdk.Context, item types.Item) {
-	k.lockItem(ctx, item, types.ExecutionsLockerName)
+func (k Keeper) LockItemForExecution(ctx sdk.Context, item v1beta1.Item) {
+	k.lockItem(ctx, item, v1beta1.ExecutionsLockerName)
 }
 
-func (k Keeper) UnlockItemForExecution(ctx sdk.Context, item types.Item, addr string) {
-	k.unlockItem(ctx, item, types.ExecutionsLockerName, addr)
+func (k Keeper) UnlockItemForExecution(ctx sdk.Context, item v1beta1.Item, addr string) {
+	k.unlockItem(ctx, item, v1beta1.ExecutionsLockerName, addr)
 }
 
-func (k Keeper) LockItemForTrade(ctx sdk.Context, item types.Item) {
-	k.lockItem(ctx, item, types.TradesLockerName)
+func (k Keeper) LockItemForTrade(ctx sdk.Context, item v1beta1.Item) {
+	k.lockItem(ctx, item, v1beta1.TradesLockerName)
 }
 
-func (k Keeper) UnlockItemForTrade(ctx sdk.Context, item types.Item, addr string) {
-	k.unlockItem(ctx, item, types.TradesLockerName, addr)
+func (k Keeper) UnlockItemForTrade(ctx sdk.Context, item v1beta1.Item, addr string) {
+	k.unlockItem(ctx, item, v1beta1.TradesLockerName, addr)
 }

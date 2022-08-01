@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -17,13 +17,13 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
 
-	amountToPay := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10)))
-	creator := types.GenTestBech32FromString("test")
+	amountToPay := sdk.NewCoins(sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(10)))
+	creator := v1beta1.GenTestBech32FromString("test")
 
-	trashStr := types.GenTestBech32FromString("trash")
+	trashStr := v1beta1.GenTestBech32FromString("trash")
 	trashAddress := sdk.MustAccAddressFromBech32(trashStr)
 
-	cookbookMsg := &types.MsgCreateCookbook{
+	cookbookMsg := &v1beta1.MsgCreateCookbook{
 		Creator:      creator,
 		Id:           "testCookbookID",
 		Name:         "testCookbookName",
@@ -34,15 +34,15 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 	}
 	_, err := srv.CreateCookbook(wctx, cookbookMsg)
 	require.NoError(err)
-	recipeMsg := &types.MsgCreateRecipe{
+	recipeMsg := &v1beta1.MsgCreateRecipe{
 		Creator:       creator,
 		CookbookId:    "testCookbookID",
 		Id:            "testRecipeID",
 		Name:          "recipeName",
 		Description:   "descdescdescdescdescdesc",
 		Version:       "v0.0.1",
-		BlockInterval: amountToPay.AmountOf(types.PylonsCoinDenom).Int64(),
-		CostPerBlock:  sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.OneInt()},
+		BlockInterval: amountToPay.AmountOf(v1beta1.PylonsCoinDenom).Int64(),
+		CostPerBlock:  sdk.Coin{Denom: v1beta1.PylonsCoinDenom, Amount: sdk.OneInt()},
 		Enabled:       true,
 	}
 	_, err = srv.CreateRecipe(wctx, recipeMsg)
@@ -61,19 +61,19 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 		{
 			desc:         "Cannot find a pending execution with ID given",
 			Id:           "2",
-			amountMinted: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))),
+			amountMinted: sdk.NewCoins(sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(10))),
 			valid:        false,
 		},
 		{
 			desc:         "Amout coint of requester is not enough",
 			Id:           pendingExecution.Id,
-			amountMinted: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(0))),
+			amountMinted: sdk.NewCoins(sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(0))),
 			valid:        false,
 		},
 		{
 			desc:         "Valid",
 			Id:           pendingExecution.Id,
-			amountMinted: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))),
+			amountMinted: sdk.NewCoins(sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(10))),
 			valid:        true,
 		},
 	} {
@@ -89,7 +89,7 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 			require.NoError(err)
 
 			// submit early execution request
-			completeEarly := &types.MsgCompleteExecutionEarly{
+			completeEarly := &v1beta1.MsgCompleteExecutionEarly{
 				Creator: pendingExecution.Creator,
 				Id:      tc.Id,
 			}

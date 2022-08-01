@@ -1,24 +1,23 @@
 package keeper
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // SetPaymentInfo set a specific paymentInfo in the store from its index
-func (k Keeper) SetPaymentInfo(ctx sdk.Context, paymentInfo types.PaymentInfo) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PaymentInfoKey))
+func (k Keeper) SetPaymentInfo(ctx sdk.Context, paymentInfo v1beta1.PaymentInfo) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.PaymentInfoKey))
 	b := k.cdc.MustMarshal(&paymentInfo)
-	store.Set(types.KeyPrefix(paymentInfo.PurchaseId), b)
+	store.Set(v1beta1.KeyPrefix(paymentInfo.PurchaseId), b)
 }
 
 // GetPaymentInfo returns a paymentInfo from its index
-func (k Keeper) GetPaymentInfo(ctx sdk.Context, purchaseID string) (val types.PaymentInfo, found bool) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PaymentInfoKey))
+func (k Keeper) GetPaymentInfo(ctx sdk.Context, purchaseID string) (val v1beta1.PaymentInfo, found bool) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.PaymentInfoKey))
 
-	b := store.Get(types.KeyPrefix(purchaseID))
+	b := store.Get(v1beta1.KeyPrefix(purchaseID))
 	if b == nil {
 		return val, false
 	}
@@ -29,19 +28,19 @@ func (k Keeper) GetPaymentInfo(ctx sdk.Context, purchaseID string) (val types.Pa
 
 // HasPaymentInfo checks if the execution exists in the store
 func (k Keeper) HasPaymentInfo(ctx sdk.Context, purchaseID string) bool {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PaymentInfoKey))
-	return store.Has(types.KeyPrefix(purchaseID))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.PaymentInfoKey))
+	return store.Has(v1beta1.KeyPrefix(purchaseID))
 }
 
 // GetAllPaymentInfo returns all paymentInfo
-func (k Keeper) GetAllPaymentInfo(ctx sdk.Context) (list []types.PaymentInfo) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PaymentInfoKey))
+func (k Keeper) GetAllPaymentInfo(ctx sdk.Context) (list []v1beta1.PaymentInfo) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.PaymentInfoKey))
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})
 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var val types.PaymentInfo
+		var val v1beta1.PaymentInfo
 		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}

@@ -3,18 +3,17 @@ package keeper
 import (
 	"strconv"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // GetExecutionCount get the total number of TypeName.LowerCamel
 func (k Keeper) GetExecutionCount(ctx sdk.Context) uint64 {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionCountKey))
-	byteKey := types.KeyPrefix(types.ExecutionCountKey)
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ExecutionCountKey))
+	byteKey := v1beta1.KeyPrefix(v1beta1.ExecutionCountKey)
 	bz := store.Get(byteKey)
 
 	// Count doesn't exist: no element
@@ -34,30 +33,30 @@ func (k Keeper) GetExecutionCount(ctx sdk.Context) uint64 {
 
 // SetExecutionCount set the total number of execution
 func (k Keeper) SetExecutionCount(ctx sdk.Context, count uint64) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionCountKey))
-	byteKey := types.KeyPrefix(types.ExecutionCountKey)
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ExecutionCountKey))
+	byteKey := v1beta1.KeyPrefix(v1beta1.ExecutionCountKey)
 	bz := []byte(strconv.FormatUint(count, 10))
 	store.Set(byteKey, bz)
 }
 
 // setExecutionByRecipe maps adds the execution to the store that maps executions on recipes
-func (k Keeper) setExecutionByRecipe(ctx sdk.Context, execution types.Execution) {
-	recpExecStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeExecutionKey))
-	recpExecStore = prefix.NewStore(recpExecStore, types.KeyPrefix(execution.CookbookId))
-	recpExecStore = prefix.NewStore(recpExecStore, types.KeyPrefix(execution.RecipeId))
-	byteKey := types.KeyPrefix(execution.Id)
+func (k Keeper) setExecutionByRecipe(ctx sdk.Context, execution v1beta1.Execution) {
+	recpExecStore := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.RecipeExecutionKey))
+	recpExecStore = prefix.NewStore(recpExecStore, v1beta1.KeyPrefix(execution.CookbookId))
+	recpExecStore = prefix.NewStore(recpExecStore, v1beta1.KeyPrefix(execution.RecipeId))
+	byteKey := v1beta1.KeyPrefix(execution.Id)
 	bz := []byte(execution.Id)
 	recpExecStore.Set(byteKey, bz)
 }
 
 // GetExecutionsByRecipe returns paginated completed and pending Executions of the specified RecipeID
-func (k Keeper) getExecutionsByRecipePaginated(ctx sdk.Context, cookbookID, recipeID string, pagination *query.PageRequest) ([]types.Execution, []types.Execution, *query.PageResponse, error) {
-	completedExecutions := make([]types.Execution, 0)
-	pendingExecutions := make([]types.Execution, 0)
+func (k Keeper) getExecutionsByRecipePaginated(ctx sdk.Context, cookbookID, recipeID string, pagination *query.PageRequest) ([]v1beta1.Execution, []v1beta1.Execution, *query.PageResponse, error) {
+	completedExecutions := make([]v1beta1.Execution, 0)
+	pendingExecutions := make([]v1beta1.Execution, 0)
 
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeExecutionKey))
-	store = prefix.NewStore(store, types.KeyPrefix(cookbookID))
-	store = prefix.NewStore(store, types.KeyPrefix(recipeID))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.RecipeExecutionKey))
+	store = prefix.NewStore(store, v1beta1.KeyPrefix(cookbookID))
+	store = prefix.NewStore(store, v1beta1.KeyPrefix(recipeID))
 
 	pageRes, err := query.Paginate(store, pagination, func(_, value []byte) error {
 		id := string(value)
@@ -78,13 +77,13 @@ func (k Keeper) getExecutionsByRecipePaginated(ctx sdk.Context, cookbookID, reci
 }
 
 // GetAllExecutionByRecipe returns completed and pending Executions of the specified RecipeID
-func (k Keeper) GetAllExecutionByRecipe(ctx sdk.Context, cookbookID, recipeID string) ([]types.Execution, []types.Execution) {
-	completedExecutions := make([]types.Execution, 0)
-	pendingExecutions := make([]types.Execution, 0)
+func (k Keeper) GetAllExecutionByRecipe(ctx sdk.Context, cookbookID, recipeID string) ([]v1beta1.Execution, []v1beta1.Execution) {
+	completedExecutions := make([]v1beta1.Execution, 0)
+	pendingExecutions := make([]v1beta1.Execution, 0)
 
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeExecutionKey))
-	store = prefix.NewStore(store, types.KeyPrefix(cookbookID))
-	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(recipeID))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.RecipeExecutionKey))
+	store = prefix.NewStore(store, v1beta1.KeyPrefix(cookbookID))
+	iterator := sdk.KVStorePrefixIterator(store, v1beta1.KeyPrefix(recipeID))
 
 	defer iterator.Close()
 
@@ -103,31 +102,31 @@ func (k Keeper) GetAllExecutionByRecipe(ctx sdk.Context, cookbookID, recipeID st
 }
 
 // setExecutionByItem maps adds the execution to the store that maps executions on items
-func (k Keeper) setExecutionByItem(ctx sdk.Context, execution types.Execution) {
-	itemExecStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemExecutionKey))
-	itemExecStore = prefix.NewStore(itemExecStore, types.KeyPrefix(execution.CookbookId))
+func (k Keeper) setExecutionByItem(ctx sdk.Context, execution v1beta1.Execution) {
+	itemExecStore := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ItemExecutionKey))
+	itemExecStore = prefix.NewStore(itemExecStore, v1beta1.KeyPrefix(execution.CookbookId))
 	for _, itemOutputID := range execution.ItemOutputIds {
-		itemExecStore = prefix.NewStore(itemExecStore, types.KeyPrefix(itemOutputID))
-		byteKey := types.KeyPrefix(execution.Id)
+		itemExecStore = prefix.NewStore(itemExecStore, v1beta1.KeyPrefix(itemOutputID))
+		byteKey := v1beta1.KeyPrefix(execution.Id)
 		bz := []byte(execution.Id)
 		itemExecStore.Set(byteKey, bz)
 	}
 	for _, itemModifyOutputID := range execution.ItemModifyOutputIds {
-		itemExecStore = prefix.NewStore(itemExecStore, types.KeyPrefix(itemModifyOutputID))
-		byteKey := types.KeyPrefix(execution.Id)
+		itemExecStore = prefix.NewStore(itemExecStore, v1beta1.KeyPrefix(itemModifyOutputID))
+		byteKey := v1beta1.KeyPrefix(execution.Id)
 		bz := []byte(execution.Id)
 		itemExecStore.Set(byteKey, bz)
 	}
 }
 
 // getExecutionsByItemPaginated returns paginated completed and pending Executions of the specified itemID
-func (k Keeper) getExecutionsByItemPaginated(ctx sdk.Context, cookbookID, itemID string, pagination *query.PageRequest) ([]types.Execution, []types.Execution, *query.PageResponse, error) {
-	completedExecutions := make([]types.Execution, 0)
-	pendingExecutions := make([]types.Execution, 0)
+func (k Keeper) getExecutionsByItemPaginated(ctx sdk.Context, cookbookID, itemID string, pagination *query.PageRequest) ([]v1beta1.Execution, []v1beta1.Execution, *query.PageResponse, error) {
+	completedExecutions := make([]v1beta1.Execution, 0)
+	pendingExecutions := make([]v1beta1.Execution, 0)
 
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemExecutionKey))
-	store = prefix.NewStore(store, types.KeyPrefix(cookbookID))
-	store = prefix.NewStore(store, types.KeyPrefix(itemID))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ItemExecutionKey))
+	store = prefix.NewStore(store, v1beta1.KeyPrefix(cookbookID))
+	store = prefix.NewStore(store, v1beta1.KeyPrefix(itemID))
 
 	pageRes, err := query.Paginate(store, pagination, func(_, value []byte) error {
 		id := string(value)
@@ -148,13 +147,13 @@ func (k Keeper) getExecutionsByItemPaginated(ctx sdk.Context, cookbookID, itemID
 }
 
 // GetAllExecutionByItem returns completed and pending Executions of the specified itemID
-func (k Keeper) GetAllExecutionByItem(ctx sdk.Context, cookbookID, itemID string) ([]types.Execution, []types.Execution) {
-	completedExecutions := make([]types.Execution, 0)
-	pendingExecutions := make([]types.Execution, 0)
+func (k Keeper) GetAllExecutionByItem(ctx sdk.Context, cookbookID, itemID string) ([]v1beta1.Execution, []v1beta1.Execution) {
+	completedExecutions := make([]v1beta1.Execution, 0)
+	pendingExecutions := make([]v1beta1.Execution, 0)
 
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemExecutionKey))
-	store = prefix.NewStore(store, types.KeyPrefix(cookbookID))
-	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(itemID))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ItemExecutionKey))
+	store = prefix.NewStore(store, v1beta1.KeyPrefix(cookbookID))
+	iterator := sdk.KVStorePrefixIterator(store, v1beta1.KeyPrefix(itemID))
 
 	defer iterator.Close()
 
@@ -173,17 +172,17 @@ func (k Keeper) GetAllExecutionByItem(ctx sdk.Context, cookbookID, itemID string
 }
 
 // ActualizeExecution removes a pending execution and moves it to the execution store
-func (k Keeper) ActualizeExecution(ctx sdk.Context, execution types.Execution) {
+func (k Keeper) ActualizeExecution(ctx sdk.Context, execution v1beta1.Execution) {
 	k.removePendingExecution(ctx, execution.Id)
 	k.appendExecution(ctx, execution)
 }
 
 // appendExecution appends an execution in the store and updates the count
-func (k Keeper) appendExecution(ctx sdk.Context, execution types.Execution) {
+func (k Keeper) appendExecution(ctx sdk.Context, execution v1beta1.Execution) {
 	// Create the execution
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ExecutionKey))
 	appendedValue := k.cdc.MustMarshal(&execution)
-	store.Set(types.KeyPrefix(execution.Id), appendedValue)
+	store.Set(v1beta1.KeyPrefix(execution.Id), appendedValue)
 
 	// Update execution count
 	count := k.GetExecutionCount(ctx)
@@ -191,18 +190,18 @@ func (k Keeper) appendExecution(ctx sdk.Context, execution types.Execution) {
 }
 
 // GetExecution returns an execution from its id
-func (k Keeper) GetExecution(ctx sdk.Context, id string) types.Execution {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
-	var execution types.Execution
-	k.cdc.MustUnmarshal(store.Get(types.KeyPrefix(id)), &execution)
+func (k Keeper) GetExecution(ctx sdk.Context, id string) v1beta1.Execution {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ExecutionKey))
+	var execution v1beta1.Execution
+	k.cdc.MustUnmarshal(store.Get(v1beta1.KeyPrefix(id)), &execution)
 	return execution
 }
 
 // SetExecution sets an execution in the store
-func (k Keeper) SetExecution(ctx sdk.Context, execution types.Execution) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
+func (k Keeper) SetExecution(ctx sdk.Context, execution v1beta1.Execution) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ExecutionKey))
 	value := k.cdc.MustMarshal(&execution)
-	store.Set(types.KeyPrefix(execution.Id), value)
+	store.Set(v1beta1.KeyPrefix(execution.Id), value)
 
 	// add execution to recipe mapping
 	k.setExecutionByRecipe(ctx, execution)
@@ -215,19 +214,19 @@ func (k Keeper) SetExecution(ctx sdk.Context, execution types.Execution) {
 
 // HasExecution checks if the execution exists in the store
 func (k Keeper) HasExecution(ctx sdk.Context, id string) bool {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
-	return store.Has(types.KeyPrefix(id))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ExecutionKey))
+	return store.Has(v1beta1.KeyPrefix(id))
 }
 
 // GetAllExecution returns all execution
-func (k Keeper) GetAllExecution(ctx sdk.Context) (list []types.Execution) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
+func (k Keeper) GetAllExecution(ctx sdk.Context) (list []v1beta1.Execution) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ExecutionKey))
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})
 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var val types.Execution
+		var val v1beta1.Execution
 		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}

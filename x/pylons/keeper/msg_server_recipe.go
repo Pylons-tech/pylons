@@ -3,16 +3,15 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/rogpeppe/go-internal/semver"
 
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecipe) (*types.MsgCreateRecipeResponse, error) {
+func (k msgServer) CreateRecipe(goCtx context.Context, msg *v1beta1.MsgCreateRecipe) (*v1beta1.MsgCreateRecipeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	var err error
 	// Check if the value already exists
@@ -30,7 +29,7 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
-	recipe := types.Recipe{
+	recipe := v1beta1.Recipe{
 		Id:            msg.Id,
 		NodeVersion:   k.EngineVersion(ctx),
 		CookbookId:    msg.CookbookId,
@@ -54,7 +53,7 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 		recipe,
 	)
 
-	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateRecipe{
+	err = ctx.EventManager().EmitTypedEvent(&v1beta1.EventCreateRecipe{
 		Creator:    cookbook.Creator,
 		CookbookId: recipe.CookbookId,
 		Id:         recipe.Id,
@@ -62,10 +61,10 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 
 	telemetry.IncrCounter(1, "recipe", "create")
 
-	return &types.MsgCreateRecipeResponse{}, err
+	return &v1beta1.MsgCreateRecipeResponse{}, err
 }
 
-func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecipe) (*types.MsgUpdateRecipeResponse, error) {
+func (k msgServer) UpdateRecipe(goCtx context.Context, msg *v1beta1.MsgUpdateRecipe) (*v1beta1.MsgUpdateRecipeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Check if the value exists
@@ -87,7 +86,7 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "user does not own the cookbook")
 	}
 
-	updatedRecipe := types.Recipe{
+	updatedRecipe := v1beta1.Recipe{
 		Id:            msg.Id,
 		NodeVersion:   k.EngineVersion(ctx),
 		CookbookId:    msg.CookbookId,
@@ -106,7 +105,7 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 		UpdatedAt:     ctx.BlockTime().Unix(),
 	}
 
-	modified, err := types.RecipeModified(origRecipe, updatedRecipe)
+	modified, err := v1beta1.RecipeModified(origRecipe, updatedRecipe)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
@@ -115,11 +114,11 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 		k.SetRecipe(ctx, updatedRecipe)
 	}
 
-	err = ctx.EventManager().EmitTypedEvent(&types.EventUpdateRecipe{
+	err = ctx.EventManager().EmitTypedEvent(&v1beta1.EventUpdateRecipe{
 		OriginalRecipe: origRecipe,
 	})
 
 	telemetry.IncrCounter(1, "recipe", "update")
 
-	return &types.MsgUpdateRecipeResponse{}, err
+	return &v1beta1.MsgUpdateRecipeResponse{}, err
 }

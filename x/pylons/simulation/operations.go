@@ -4,6 +4,7 @@ import (
 	"math/rand"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -11,8 +12,6 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // Simulation operation weights constants
@@ -58,7 +57,7 @@ func init() {
 
 // WeightedOperations returns all the operations from the module with their respective weights
 func WeightedOperations(
-	appParams simtypes.AppParams, cdc codec.JSONCodec, bk types.BankKeeper, k keeper.Keeper,
+	appParams simtypes.AppParams, cdc codec.JSONCodec, bk v1beta1.BankKeeper, k keeper.Keeper,
 ) simulation.WeightedOperations {
 	var weightMsgCreateAcc int
 	var weightMsgUpdateAcc int
@@ -121,18 +120,18 @@ func WeightedOperations(
 }
 
 // SimulateCreateAccount generates a MsgCreateAccount with random values
-func SimulateCreateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+func SimulateCreateAccount(bk v1beta1.BankKeeper, k keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
-		msgType := (&types.MsgCreateAccount{}).Type()
+		msgType := (&v1beta1.MsgCreateAccount{}).Type()
 
 		if simCoins.Len() <= 0 {
 			return simtypes.NoOpMsg(
-				types.ModuleName, msgType, "Account has no balance"), nil, nil
+				v1beta1.ModuleName, msgType, "Account has no balance"), nil, nil
 		}
 
 		// initialize stateMap struct for this address
@@ -145,7 +144,7 @@ func SimulateCreateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 
 		username := generateRandomUsername(r)
 
-		msg := types.NewMsgCreateAccount(
+		msg := v1beta1.NewMsgCreateAccount(
 			simAccount.Address.String(),
 			username, "", "")
 
@@ -154,23 +153,23 @@ func SimulateCreateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 }
 
 // SimulateUpdateAccount generates a MsgUpdateAccount with random values
-func SimulateUpdateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+func SimulateUpdateAccount(bk v1beta1.BankKeeper, k keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
-		msgType := (&types.MsgCreateAccount{}).Type()
+		msgType := (&v1beta1.MsgCreateAccount{}).Type()
 
 		if simCoins.Len() <= 0 {
 			return simtypes.NoOpMsg(
-				types.ModuleName, msgType, "Account has no balance"), nil, nil
+				v1beta1.ModuleName, msgType, "Account has no balance"), nil, nil
 		}
 
 		username := generateRandomUsername(r)
 
-		msg := types.NewMsgCreateAccount(
+		msg := v1beta1.NewMsgCreateAccount(
 			simAccount.Address.String(),
 			username, "", "")
 
@@ -179,18 +178,18 @@ func SimulateUpdateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 }
 
 // SimulateCreateCookbook generates a MsgCreateCookbook with random values
-func SimulateCreateCookbook(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+func SimulateCreateCookbook(bk v1beta1.BankKeeper, k keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
-		msgType := (&types.MsgCreateCookbook{}).Type()
+		msgType := (&v1beta1.MsgCreateCookbook{}).Type()
 
 		if simCoins.Len() <= 0 {
 			return simtypes.NoOpMsg(
-				types.ModuleName, msgType, "Account has no balance"), nil, nil
+				v1beta1.ModuleName, msgType, "Account has no balance"), nil, nil
 		}
 
 		id := generateRandomStringID(r)
@@ -201,7 +200,7 @@ func SimulateCreateCookbook(bk types.BankKeeper, k keeper.Keeper) simtypes.Opera
 		accState.CookbookIDs = append(accState.CookbookIDs, id)
 		stateMap[simAccount.Address.String()] = accState
 
-		msg := &types.MsgCreateCookbook{
+		msg := &v1beta1.MsgCreateCookbook{
 			Creator:      simAccount.Address.String(),
 			Id:           id,
 			Name:         "namenamenamenamename",
@@ -216,18 +215,18 @@ func SimulateCreateCookbook(bk types.BankKeeper, k keeper.Keeper) simtypes.Opera
 }
 
 // SimulateCreateRecipe generates a MsgCreateRecipe with random values
-func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+func SimulateCreateRecipe(bk v1beta1.BankKeeper, k keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
-		msgType := (&types.MsgCreateRecipe{}).Type()
+		msgType := (&v1beta1.MsgCreateRecipe{}).Type()
 
 		if simCoins.Len() <= 0 {
 			return simtypes.NoOpMsg(
-				types.ModuleName, msgType, "Account has no balance"), nil, nil
+				v1beta1.ModuleName, msgType, "Account has no balance"), nil, nil
 		}
 
 		id := generateRandomStringID(r)
@@ -248,7 +247,7 @@ func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operati
 			recipeInfoList = append(recipeInfoList, info)
 		}
 
-		msg := &types.MsgCreateRecipe{
+		msg := &v1beta1.MsgCreateRecipe{
 			Creator:       simAccount.Address.String(),
 			CookbookId:    cookbookID,
 			Id:            id,
@@ -257,7 +256,7 @@ func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operati
 			Version:       "v0.0.1",
 			CoinInputs:    nil,
 			ItemInputs:    nil,
-			Entries:       types.EntriesList{},
+			Entries:       v1beta1.EntriesList{},
 			Outputs:       nil,
 			BlockInterval: 0,
 			CostPerBlock:  sdk.Coin{},
@@ -269,18 +268,18 @@ func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operati
 }
 
 // SimulateExecuteRecipe generates a MsgExecuteRecipe with random values
-func SimulateExecuteRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+func SimulateExecuteRecipe(bk v1beta1.BankKeeper, k keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
-		msgType := (&types.MsgExecuteRecipe{}).Type()
+		msgType := (&v1beta1.MsgExecuteRecipe{}).Type()
 
 		if simCoins.Len() <= 0 {
 			return simtypes.NoOpMsg(
-				types.ModuleName, msgType, "Account has no balance"), nil, nil
+				v1beta1.ModuleName, msgType, "Account has no balance"), nil, nil
 		}
 
 		// add cookbook id to global stateMap store
@@ -295,7 +294,7 @@ func SimulateExecuteRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 			recipeID = info.ID
 		}
 
-		msg := &types.MsgExecuteRecipe{
+		msg := &v1beta1.MsgExecuteRecipe{
 			Creator:         simAccount.Address.String(),
 			CookbookId:      cookbookID,
 			RecipeId:        recipeID,

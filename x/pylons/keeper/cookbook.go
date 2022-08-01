@@ -1,30 +1,29 @@
 package keeper
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (k Keeper) addCookbookToAddress(ctx sdk.Context, cookbookID string, addr sdk.AccAddress) {
-	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrCookbookKey))
+	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AddrCookbookKey))
 	store := prefix.NewStore(parentStore, addr.Bytes())
-	byteKey := types.KeyPrefix(cookbookID)
+	byteKey := v1beta1.KeyPrefix(cookbookID)
 	bz := []byte(cookbookID)
 	store.Set(byteKey, bz)
 }
 
 func (k Keeper) removeCookbookFromAddress(ctx sdk.Context, cookbookID string, addr sdk.AccAddress) {
-	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrCookbookKey))
+	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AddrCookbookKey))
 	store := prefix.NewStore(parentStore, addr.Bytes())
-	byteKey := types.KeyPrefix(cookbookID)
+	byteKey := v1beta1.KeyPrefix(cookbookID)
 	store.Delete(byteKey)
 }
 
 func (k Keeper) getCookbookIdsByAddr(ctx sdk.Context, addr sdk.AccAddress) (list []string) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrCookbookKey))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AddrCookbookKey))
 	iterator := sdk.KVStorePrefixIterator(store, addr.Bytes())
 
 	defer iterator.Close()
@@ -37,10 +36,10 @@ func (k Keeper) getCookbookIdsByAddr(ctx sdk.Context, addr sdk.AccAddress) (list
 }
 
 // SetCookbook set a specific cookbook in the store from its ID
-func (k Keeper) SetCookbook(ctx sdk.Context, cookbook types.Cookbook) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CookbookKey))
+func (k Keeper) SetCookbook(ctx sdk.Context, cookbook v1beta1.Cookbook) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.CookbookKey))
 	b := k.cdc.MustMarshal(&cookbook)
-	store.Set(types.KeyPrefix(cookbook.Id), b)
+	store.Set(v1beta1.KeyPrefix(cookbook.Id), b)
 
 	// required for random seed init given how it's handled rn
 	k.IncrementEntityCount(ctx)
@@ -50,16 +49,16 @@ func (k Keeper) SetCookbook(ctx sdk.Context, cookbook types.Cookbook) {
 }
 
 // UpdateCookbook updates a cookbook removing it from previous owner store
-func (k Keeper) UpdateCookbook(ctx sdk.Context, cookbook types.Cookbook, prevAddr sdk.AccAddress) {
+func (k Keeper) UpdateCookbook(ctx sdk.Context, cookbook v1beta1.Cookbook, prevAddr sdk.AccAddress) {
 	k.removeCookbookFromAddress(ctx, cookbook.Id, prevAddr)
 	k.SetCookbook(ctx, cookbook)
 }
 
 // GetCookbook returns a cookbook from its ID
-func (k Keeper) GetCookbook(ctx sdk.Context, id string) (val types.Cookbook, found bool) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CookbookKey))
+func (k Keeper) GetCookbook(ctx sdk.Context, id string) (val v1beta1.Cookbook, found bool) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.CookbookKey))
 
-	b := store.Get(types.KeyPrefix(id))
+	b := store.Get(v1beta1.KeyPrefix(id))
 	if b == nil {
 		return val, false
 	}
@@ -69,14 +68,14 @@ func (k Keeper) GetCookbook(ctx sdk.Context, id string) (val types.Cookbook, fou
 }
 
 // GetAllCookbook returns all cookbook
-func (k Keeper) GetAllCookbook(ctx sdk.Context) (list []types.Cookbook) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CookbookKey))
+func (k Keeper) GetAllCookbook(ctx sdk.Context) (list []v1beta1.Cookbook) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.CookbookKey))
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})
 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var val types.Cookbook
+		var val v1beta1.Cookbook
 		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
@@ -85,7 +84,7 @@ func (k Keeper) GetAllCookbook(ctx sdk.Context) (list []types.Cookbook) {
 }
 
 // GetAllCookbookByCreator returns cookbooks owned by a specific creator
-func (k Keeper) GetAllCookbookByCreator(ctx sdk.Context, creator sdk.AccAddress) (list []types.Cookbook) {
+func (k Keeper) GetAllCookbookByCreator(ctx sdk.Context, creator sdk.AccAddress) (list []v1beta1.Cookbook) {
 	cookbookIds := k.getCookbookIdsByAddr(ctx, creator)
 
 	for _, id := range cookbookIds {
@@ -96,10 +95,10 @@ func (k Keeper) GetAllCookbookByCreator(ctx sdk.Context, creator sdk.AccAddress)
 	return
 }
 
-func (k Keeper) getCookbooksByCreatorPaginated(ctx sdk.Context, creator sdk.AccAddress, pagination *query.PageRequest) ([]types.Cookbook, *query.PageResponse, error) {
-	cookbooks := make([]types.Cookbook, 0)
+func (k Keeper) getCookbooksByCreatorPaginated(ctx sdk.Context, creator sdk.AccAddress, pagination *query.PageRequest) ([]v1beta1.Cookbook, *query.PageResponse, error) {
+	cookbooks := make([]v1beta1.Cookbook, 0)
 
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrCookbookKey))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AddrCookbookKey))
 	store = prefix.NewStore(store, creator.Bytes())
 
 	pageRes, err := query.Paginate(store, pagination, func(_, value []byte) error {

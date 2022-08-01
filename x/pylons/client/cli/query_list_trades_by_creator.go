@@ -3,6 +3,7 @@ package cli
 import (
 	"strconv"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -10,8 +11,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 var _ = strconv.Itoa(0)
@@ -35,9 +34,9 @@ func CmdListTradesByCreator() *cobra.Command {
 				return err
 			}
 
-			queryClient := types.NewQueryClient(clientCtx)
+			queryClient := v1beta1.NewQueryClient(clientCtx)
 
-			params := &types.QueryListTradesByCreatorRequest{
+			params := &v1beta1.QueryListTradesByCreatorRequest{
 				Creator: reqAddress,
 			}
 

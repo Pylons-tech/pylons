@@ -1,12 +1,11 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestListItemByOwner() {
@@ -17,8 +16,8 @@ func (suite *IntegrationTestSuite) TestListItemByOwner() {
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNItemSingleOwner(k, ctx, 10, true)
 
-	requestFunc := func(next []byte, offset, limit uint64, total bool, owner string) *types.QueryListItemByOwnerRequest {
-		return &types.QueryListItemByOwnerRequest{
+	requestFunc := func(next []byte, offset, limit uint64, total bool, owner string) *v1beta1.QueryListItemByOwnerRequest {
+		return &v1beta1.QueryListItemByOwnerRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
@@ -31,19 +30,19 @@ func (suite *IntegrationTestSuite) TestListItemByOwner() {
 
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryListItemByOwnerRequest
-		response *types.QueryListItemByOwnerResponse
+		request  *v1beta1.QueryListItemByOwnerRequest
+		response *v1beta1.QueryListItemByOwnerResponse
 		err      error
 	}{
 		{
 			desc:     "All",
 			request:  requestFunc(nil, 0, 0, false, msgs[0].Owner),
-			response: &types.QueryListItemByOwnerResponse{Items: msgs, Pagination: nil},
+			response: &v1beta1.QueryListItemByOwnerResponse{Items: msgs, Pagination: nil},
 		},
 		{
 			desc:     "WithLimit",
 			request:  requestFunc(nil, 0, 5, false, msgs[0].Owner),
-			response: &types.QueryListItemByOwnerResponse{Items: msgs[:5], Pagination: nil},
+			response: &v1beta1.QueryListItemByOwnerResponse{Items: msgs[:5], Pagination: nil},
 		},
 		{
 			desc:     "NoItemsInvalidOwnerID",

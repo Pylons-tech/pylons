@@ -3,16 +3,15 @@ package keeper
 import (
 	"strconv"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // GetAppleIAPOrderCount get the total number of TypeName.LowerCamel
 func (k Keeper) GetAppleIAPOrderCount(ctx sdk.Context) uint64 {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AppleInAppPurchaseOrderCountKey))
-	byteKey := types.KeyPrefix(types.AppleInAppPurchaseOrderCountKey)
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AppleInAppPurchaseOrderCountKey))
+	byteKey := v1beta1.KeyPrefix(v1beta1.AppleInAppPurchaseOrderCountKey)
 	bz := store.Get(byteKey)
 
 	// Count doesn't exist: no element
@@ -32,8 +31,8 @@ func (k Keeper) GetAppleIAPOrderCount(ctx sdk.Context) uint64 {
 
 // SetAppleIAPOrderCount set the total number of appleIAPOrder
 func (k Keeper) SetAppleIAPOrderCount(ctx sdk.Context, count uint64) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AppleInAppPurchaseOrderCountKey))
-	byteKey := types.KeyPrefix(types.AppleInAppPurchaseOrderCountKey)
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AppleInAppPurchaseOrderCountKey))
+	byteKey := v1beta1.KeyPrefix(v1beta1.AppleInAppPurchaseOrderCountKey)
 	bz := []byte(strconv.FormatUint(count, 10))
 	store.Set(byteKey, bz)
 }
@@ -41,7 +40,7 @@ func (k Keeper) SetAppleIAPOrderCount(ctx sdk.Context, count uint64) {
 // AppendAppleIAPOrder appends a AppleIAPOrder in the store with a new id and update the count
 func (k Keeper) AppendAppleIAPOrder(
 	ctx sdk.Context,
-	appleIAPOrder types.AppleInAppPurchaseOrder,
+	appleIAPOrder v1beta1.AppleInAppPurchaseOrder,
 ) uint64 {
 	// Create the AppleIAPOrder
 	count := k.GetAppleIAPOrderCount(ctx)
@@ -55,27 +54,27 @@ func (k Keeper) AppendAppleIAPOrder(
 }
 
 // SetAppleIAPOrder set a specific AppleIAPOrder in the store
-func (k Keeper) SetAppleIAPOrder(ctx sdk.Context, appleIAPOrder types.AppleInAppPurchaseOrder) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AppleInAppPurchaseOrderKey))
+func (k Keeper) SetAppleIAPOrder(ctx sdk.Context, appleIAPOrder v1beta1.AppleInAppPurchaseOrder) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AppleInAppPurchaseOrderKey))
 	b := k.cdc.MustMarshal(&appleIAPOrder)
-	store.Set(types.KeyPrefix(appleIAPOrder.PurchaseId), b)
+	store.Set(v1beta1.KeyPrefix(appleIAPOrder.PurchaseId), b)
 
 	// required for random seed init given how it's handled rn
 	k.IncrementEntityCount(ctx)
 }
 
 // GetAppleIAPOrder returns a AppleIAPOrder from its id
-func (k Keeper) GetAppleIAPOrder(ctx sdk.Context, purchaseID string) types.AppleInAppPurchaseOrder {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AppleInAppPurchaseOrderKey))
-	var appleIAPOrder types.AppleInAppPurchaseOrder
-	k.cdc.MustUnmarshal(store.Get(types.KeyPrefix(purchaseID)), &appleIAPOrder)
+func (k Keeper) GetAppleIAPOrder(ctx sdk.Context, purchaseID string) v1beta1.AppleInAppPurchaseOrder {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AppleInAppPurchaseOrderKey))
+	var appleIAPOrder v1beta1.AppleInAppPurchaseOrder
+	k.cdc.MustUnmarshal(store.Get(v1beta1.KeyPrefix(purchaseID)), &appleIAPOrder)
 	return appleIAPOrder
 }
 
 // HasAppleIAPOrder checks if the AppleIAPOrder exists in the store
 func (k Keeper) HasAppleIAPOrder(ctx sdk.Context, purchaseID string) bool {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AppleInAppPurchaseOrderKey))
-	return store.Has(types.KeyPrefix(purchaseID))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AppleInAppPurchaseOrderKey))
+	return store.Has(v1beta1.KeyPrefix(purchaseID))
 }
 
 // GetAppleIAPOrderOwner returns the creator of the appleIAPOrder
@@ -84,14 +83,14 @@ func (k Keeper) GetAppleIAPOrderOwner(ctx sdk.Context, purchaseID string) string
 }
 
 // GetAllAppleIAPOrder returns all AppleIAPOrder
-func (k Keeper) GetAllAppleIAPOrder(ctx sdk.Context) (list []types.AppleInAppPurchaseOrder) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AppleInAppPurchaseOrderKey))
+func (k Keeper) GetAllAppleIAPOrder(ctx sdk.Context) (list []v1beta1.AppleInAppPurchaseOrder) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AppleInAppPurchaseOrderKey))
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})
 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var val types.AppleInAppPurchaseOrder
+		var val v1beta1.AppleInAppPurchaseOrder
 		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}

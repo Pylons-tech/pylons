@@ -8,7 +8,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 )
 
@@ -22,15 +22,15 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 
 	privKey := ed25519.GenPrivKey()
 	creator := "testPylon"
-	types.UpdateAppCheckFlagTest(types.FlagTrue)
+	v1beta1.UpdateAppCheckFlagTest(v1beta1.FlagTrue)
 
-	_, err := srv.CreateAccount(wctx, &types.MsgCreateAccount{
-		Creator:  types.TestCreator,
+	_, err := srv.CreateAccount(wctx, &v1beta1.MsgCreateAccount{
+		Creator:  v1beta1.TestCreator,
 		Username: "test",
 	})
 	require.NoError(err)
 
-	cookbook := &types.MsgCreateCookbook{
+	cookbook := &v1beta1.MsgCreateCookbook{
 		Creator:      creator,
 		Id:           "",
 		Name:         "testCookbookName",
@@ -41,7 +41,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 		Enabled:      true,
 	}
 
-	recipe := &types.MsgCreateRecipe{
+	recipe := &v1beta1.MsgCreateRecipe{
 		Creator:       creator,
 		CookbookId:    "",
 		Id:            "",
@@ -50,7 +50,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 		Version:       "v0.0.1",
 		CoinInputs:    nil,
 		ItemInputs:    nil,
-		Entries:       types.EntriesList{},
+		Entries:       v1beta1.EntriesList{},
 		Outputs:       nil,
 		BlockInterval: 0,
 		CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
@@ -59,14 +59,14 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 	}
 	for index, tc := range []struct {
 		decs                  string
-		cookbook              types.MsgCreateCookbook
+		cookbook              v1beta1.MsgCreateCookbook
 		unEnabledCookbook     bool
 		changeIdCookbook      bool
-		recipe                types.MsgCreateRecipe
+		recipe                v1beta1.MsgCreateRecipe
 		changeIdRecipe        bool
 		updateCoinInputs      bool
 		updateEntriesRecipe   bool
-		execution             types.MsgExecuteRecipe
+		execution             v1beta1.MsgExecuteRecipe
 		changeExcutionCreator bool
 		valid                 bool
 	}{
@@ -79,8 +79,8 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			changeIdRecipe:      false,
 			updateCoinInputs:    false,
 			updateEntriesRecipe: false,
-			execution: types.MsgExecuteRecipe{
-				Creator:         types.TestCreator,
+			execution: v1beta1.MsgExecuteRecipe{
+				Creator:         v1beta1.TestCreator,
 				CookbookId:      "",
 				RecipeId:        "",
 				CoinInputsIndex: 0,
@@ -98,8 +98,8 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			changeIdRecipe:      true,
 			updateCoinInputs:    false,
 			updateEntriesRecipe: false,
-			execution: types.MsgExecuteRecipe{
-				Creator:         types.TestCreator,
+			execution: v1beta1.MsgExecuteRecipe{
+				Creator:         v1beta1.TestCreator,
 				CookbookId:      "",
 				RecipeId:        "",
 				CoinInputsIndex: 0,
@@ -117,8 +117,8 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			changeIdRecipe:      false,
 			updateCoinInputs:    false,
 			updateEntriesRecipe: false,
-			execution: types.MsgExecuteRecipe{
-				Creator:         types.TestCreator,
+			execution: v1beta1.MsgExecuteRecipe{
+				Creator:         v1beta1.TestCreator,
 				CookbookId:      "",
 				RecipeId:        "",
 				CoinInputsIndex: 0,
@@ -136,8 +136,8 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			changeIdRecipe:      false,
 			updateCoinInputs:    false,
 			updateEntriesRecipe: false,
-			execution: types.MsgExecuteRecipe{
-				Creator:         types.TestCreator,
+			execution: v1beta1.MsgExecuteRecipe{
+				Creator:         v1beta1.TestCreator,
 				CookbookId:      "",
 				RecipeId:        "",
 				CoinInputsIndex: 0,
@@ -155,8 +155,8 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			changeIdRecipe:      false,
 			updateCoinInputs:    false,
 			updateEntriesRecipe: false,
-			execution: types.MsgExecuteRecipe{
-				Creator:         types.TestCreator,
+			execution: v1beta1.MsgExecuteRecipe{
+				Creator:         v1beta1.TestCreator,
 				CookbookId:      "",
 				RecipeId:        "",
 				CoinInputsIndex: 0,
@@ -174,8 +174,8 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			changeIdRecipe:      false,
 			updateCoinInputs:    true,
 			updateEntriesRecipe: false,
-			execution: types.MsgExecuteRecipe{
-				Creator:         types.TestCreator,
+			execution: v1beta1.MsgExecuteRecipe{
+				Creator:         v1beta1.TestCreator,
 				CookbookId:      "",
 				RecipeId:        "",
 				CoinInputsIndex: 2,
@@ -193,13 +193,13 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			changeIdRecipe:      false,
 			updateCoinInputs:    false,
 			updateEntriesRecipe: false,
-			execution: types.MsgExecuteRecipe{
-				Creator:         types.TestCreator,
+			execution: v1beta1.MsgExecuteRecipe{
+				Creator:         v1beta1.TestCreator,
 				CookbookId:      "",
 				RecipeId:        "",
 				CoinInputsIndex: 0,
 				ItemIds:         nil,
-				PaymentInfos: []types.PaymentInfo{
+				PaymentInfos: []v1beta1.PaymentInfo{
 					{
 						PurchaseId:    "1",
 						ProcessorName: "test",
@@ -222,8 +222,8 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			changeIdRecipe:      false,
 			updateCoinInputs:    false,
 			updateEntriesRecipe: true,
-			execution: types.MsgExecuteRecipe{
-				Creator:         types.TestCreator,
+			execution: v1beta1.MsgExecuteRecipe{
+				Creator:         v1beta1.TestCreator,
 				CookbookId:      "",
 				RecipeId:        "",
 				CoinInputsIndex: 0,
@@ -241,19 +241,19 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			changeIdRecipe:      false,
 			updateCoinInputs:    false,
 			updateEntriesRecipe: true,
-			execution: types.MsgExecuteRecipe{
-				Creator:         types.TestCreator,
+			execution: v1beta1.MsgExecuteRecipe{
+				Creator:         v1beta1.TestCreator,
 				CookbookId:      "",
 				RecipeId:        "",
 				CoinInputsIndex: 0,
 				ItemIds:         nil,
-				PaymentInfos: []types.PaymentInfo{{
+				PaymentInfos: []v1beta1.PaymentInfo{{
 					PurchaseId:    "test",
 					ProcessorName: "TestPayment",
-					PayerAddr:     types.GenTestBech32FromString(types.TestCreator),
+					PayerAddr:     v1beta1.GenTestBech32FromString(v1beta1.TestCreator),
 					Amount:        sdk.NewInt(2),
 					ProductId:     "testProductId",
-					Signature:     genTestPaymentInfoSignature("testPurchaseId", types.GenTestBech32FromString(types.TestCreator), "testProductId", sdk.NewInt(2), privKey),
+					Signature:     genTestPaymentInfoSignature("testPurchaseId", v1beta1.GenTestBech32FromString(v1beta1.TestCreator), "testProductId", sdk.NewInt(2), privKey),
 				}},
 			},
 			changeExcutionCreator: false,
@@ -268,8 +268,8 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			changeIdRecipe:      false,
 			updateCoinInputs:    true,
 			updateEntriesRecipe: false,
-			execution: types.MsgExecuteRecipe{
-				Creator:         types.TestCreator,
+			execution: v1beta1.MsgExecuteRecipe{
+				Creator:         v1beta1.TestCreator,
 				CookbookId:      "",
 				RecipeId:        "",
 				CoinInputsIndex: 0,
@@ -287,7 +287,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			changeIdRecipe:      false,
 			updateCoinInputs:    false,
 			updateEntriesRecipe: false,
-			execution: types.MsgExecuteRecipe{
+			execution: v1beta1.MsgExecuteRecipe{
 				Creator:         "invalid",
 				CookbookId:      "",
 				RecipeId:        "",
@@ -306,8 +306,8 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			changeIdRecipe:      false,
 			updateCoinInputs:    false,
 			updateEntriesRecipe: false,
-			execution: types.MsgExecuteRecipe{
-				Creator:         types.TestCreator,
+			execution: v1beta1.MsgExecuteRecipe{
+				Creator:         v1beta1.TestCreator,
 				CookbookId:      "",
 				RecipeId:        "",
 				CoinInputsIndex: 0,
@@ -347,9 +347,9 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 
 			// check Update CoinInputs of recipe
 			if tc.updateCoinInputs {
-				tc.recipe.CoinInputs = []types.CoinInput{{
+				tc.recipe.CoinInputs = []v1beta1.CoinInput{{
 					Coins: sdk.NewCoins(
-						sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10)),
+						sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(10)),
 					),
 				}}
 			} else {
@@ -359,16 +359,16 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			// check Update Entries of recipe and setup PaymentInfos
 			if tc.updateEntriesRecipe && tc.execution.PaymentInfos != nil {
 				params := k.GetParams(suite.ctx)
-				params.PaymentProcessors = append(params.PaymentProcessors, types.PaymentProcessor{
-					CoinDenom:            types.PylonsCoinDenom,
+				params.PaymentProcessors = append(params.PaymentProcessors, v1beta1.PaymentProcessor{
+					CoinDenom:            v1beta1.PylonsCoinDenom,
 					PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-					ProcessorPercentage:  types.DefaultProcessorPercentage,
-					ValidatorsPercentage: types.DefaultValidatorsPercentage,
+					ProcessorPercentage:  v1beta1.DefaultProcessorPercentage,
+					ValidatorsPercentage: v1beta1.DefaultValidatorsPercentage,
 					Name:                 "TestPayment",
 				})
 				k.SetParams(suite.ctx, params)
 			} else if tc.updateEntriesRecipe {
-				tc.recipe.Entries.ItemOutputs = []types.ItemOutput{
+				tc.recipe.Entries.ItemOutputs = []v1beta1.ItemOutput{
 					{
 						Quantity:     10,
 						AmountMinted: 10,
@@ -405,7 +405,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 				completed, pending := k.GetAllExecutionByRecipe(ctx, tc.recipe.CookbookId, tc.recipe.Id)
 				require.Equal(0, len(completed))
 				require.Equal(1, len(pending))
-				types.UpdateAppCheckFlagTest(types.FlagFalse)
+				v1beta1.UpdateAppCheckFlagTest(v1beta1.FlagFalse)
 			} else {
 				suite.Require().Error(err)
 			}
@@ -418,11 +418,11 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	items := make([]types.Item, 4)
-	owner := types.GenTestBech32FromString("testedCookbook")
-	coin := []sdk.Coin{sdk.NewCoin(types.PylonsCoinDenom, sdk.OneInt())}
+	items := make([]v1beta1.Item, 4)
+	owner := v1beta1.GenTestBech32FromString("testedCookbook")
+	coin := []sdk.Coin{sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.OneInt())}
 
-	cookbook := types.Cookbook{
+	cookbook := v1beta1.Cookbook{
 		Creator:     owner,
 		Id:          "0",
 		NodeVersion: 0,
@@ -438,19 +438,19 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 		items[i].Tradeable = true
 		items[i].TradePercentage = sdk.ZeroDec()
 		strIndex := fmt.Sprintf("%d", i)
-		items[i].Longs = []types.LongKeyValue{
+		items[i].Longs = []v1beta1.LongKeyValue{
 			{
 				Key:   strIndex,
 				Value: int64(i),
 			},
 		}
-		items[i].Doubles = []types.DoubleKeyValue{
+		items[i].Doubles = []v1beta1.DoubleKeyValue{
 			{
 				Key:   strIndex,
 				Value: sdk.NewDec(int64(i)),
 			},
 		}
-		items[i].Strings = []types.StringKeyValue{
+		items[i].Strings = []v1beta1.StringKeyValue{
 			{
 				Key:   strIndex,
 				Value: strIndex,
@@ -471,10 +471,10 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 	tests := []struct {
 		name          string
 		creator       string
-		testedMsg     types.MsgExecuteRecipe
+		testedMsg     v1beta1.MsgExecuteRecipe
 		inputItemsIds []string
-		recipe        types.Recipe
-		expected      []types.Item
+		recipe        v1beta1.Recipe
+		expected      []v1beta1.Item
 		expectedError error
 	}{
 		{
@@ -482,8 +482,8 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 			inputItemsIds: []string{
 				"dummyInfo",
 			},
-			recipe: types.Recipe{
-				ItemInputs: []types.ItemInput{
+			recipe: v1beta1.Recipe{
+				ItemInputs: []v1beta1.ItemInput{
 					{
 						Id: "dummyId1",
 					},
@@ -492,16 +492,16 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 					},
 				},
 			},
-			creator:       types.GenTestBech32FromString("test1"),
+			creator:       v1beta1.GenTestBech32FromString("test1"),
 			expectedError: sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "size mismatch between provided input items and items required by recipe"),
 		}, {
 			name:    "Expect item with ID not found",
-			creator: types.GenTestBech32FromString("test2"),
+			creator: v1beta1.GenTestBech32FromString("test2"),
 			inputItemsIds: []string{
 				"nonExistentId",
 			},
-			recipe: types.Recipe{
-				ItemInputs: []types.ItemInput{
+			recipe: v1beta1.Recipe{
+				ItemInputs: []v1beta1.ItemInput{
 					{
 						Id: "NonExistentId",
 					},
@@ -510,9 +510,9 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 			expectedError: sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v not found", "nonExistentId"),
 		}, {
 			name:          "Different Owner",
-			creator:       types.GenTestBech32FromString("notyourkeysnotyouratoms"),
+			creator:       v1beta1.GenTestBech32FromString("notyourkeysnotyouratoms"),
 			inputItemsIds: itemStr,
-			recipe: types.Recipe{
+			recipe: v1beta1.Recipe{
 				CookbookId: cookbook.Id,
 				ItemInputs: mapItems(itemStr),
 			},
@@ -522,26 +522,26 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 			name:          "Expect Locked Item Error",
 			creator:       owner,
 			inputItemsIds: itemStr[3:4],
-			recipe: types.Recipe{
+			recipe: v1beta1.Recipe{
 				CookbookId: cookbook.Id,
-				ItemInputs: []types.ItemInput{
+				ItemInputs: []v1beta1.ItemInput{
 					{
 						Id: "validInput1",
-						Doubles: []types.DoubleInputParam{
+						Doubles: []v1beta1.DoubleInputParam{
 							{
 								Key:      "3",
 								MinValue: sdk.NewDec(3),
 								MaxValue: sdk.NewDec(3),
 							},
 						},
-						Longs: []types.LongInputParam{
+						Longs: []v1beta1.LongInputParam{
 							{
 								Key:      "3",
 								MinValue: 3,
 								MaxValue: 3,
 							},
 						},
-						Strings: []types.StringInputParam{
+						Strings: []v1beta1.StringInputParam{
 							{
 								Key:   "3",
 								Value: "3",
@@ -550,31 +550,31 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 					},
 				},
 			},
-			expectedError: sdkerrors.Wrapf(types.ErrItemLocked, "item with id %s locked", itemStr[3]),
+			expectedError: sdkerrors.Wrapf(v1beta1.ErrItemLocked, "item with id %s locked", itemStr[3]),
 		}, {
 			name:          "Matching Successfull",
 			creator:       owner,
 			inputItemsIds: itemStr[0:2],
-			recipe: types.Recipe{
+			recipe: v1beta1.Recipe{
 				CookbookId: cookbook.Id,
-				ItemInputs: []types.ItemInput{
+				ItemInputs: []v1beta1.ItemInput{
 					{
 						Id: "validInput1",
-						Doubles: []types.DoubleInputParam{
+						Doubles: []v1beta1.DoubleInputParam{
 							{
 								Key:      "0",
 								MinValue: sdk.NewDec(0),
 								MaxValue: sdk.NewDec(0),
 							},
 						},
-						Longs: []types.LongInputParam{
+						Longs: []v1beta1.LongInputParam{
 							{
 								Key:      "0",
 								MinValue: 0,
 								MaxValue: 0,
 							},
 						},
-						Strings: []types.StringInputParam{
+						Strings: []v1beta1.StringInputParam{
 							{
 								Key:   "0",
 								Value: "0",
@@ -583,21 +583,21 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 					},
 					{
 						Id: "validInput2",
-						Doubles: []types.DoubleInputParam{
+						Doubles: []v1beta1.DoubleInputParam{
 							{
 								Key:      "1",
 								MinValue: sdk.NewDec(1),
 								MaxValue: sdk.NewDec(1),
 							},
 						},
-						Longs: []types.LongInputParam{
+						Longs: []v1beta1.LongInputParam{
 							{
 								Key:      "1",
 								MinValue: 1,
 								MaxValue: 1,
 							},
 						},
-						Strings: []types.StringInputParam{
+						Strings: []v1beta1.StringInputParam{
 							{
 								Key:   "1",
 								Value: "1",
@@ -611,26 +611,26 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 			name:          "No Match Found",
 			creator:       owner,
 			inputItemsIds: itemStr[0:1],
-			recipe: types.Recipe{
+			recipe: v1beta1.Recipe{
 				CookbookId: cookbook.Id,
-				ItemInputs: []types.ItemInput{
+				ItemInputs: []v1beta1.ItemInput{
 					{
 						Id: "UnexistentInput1",
-						Doubles: []types.DoubleInputParam{
+						Doubles: []v1beta1.DoubleInputParam{
 							{
 								Key:      "11",
 								MinValue: sdk.NewDec(11),
 								MaxValue: sdk.NewDec(11),
 							},
 						},
-						Longs: []types.LongInputParam{
+						Longs: []v1beta1.LongInputParam{
 							{
 								Key:      "11",
 								MinValue: 1,
 								MaxValue: 1,
 							},
 						},
-						Strings: []types.StringInputParam{
+						Strings: []v1beta1.StringInputParam{
 							{
 								Key:   "11",
 								Value: "11",
@@ -654,25 +654,25 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 	}
 }
 
-func mapItems(items []string) []types.ItemInput {
-	returnInput := []types.ItemInput{}
+func mapItems(items []string) []v1beta1.ItemInput {
+	returnInput := []v1beta1.ItemInput{}
 	for i, it := range items {
-		input := types.ItemInput{
+		input := v1beta1.ItemInput{
 			Id: it,
-			Strings: []types.StringInputParam{
+			Strings: []v1beta1.StringInputParam{
 				{
 					Key:   "strtest",
 					Value: fmt.Sprintf("%d", i),
 				},
 			},
-			Doubles: []types.DoubleInputParam{
+			Doubles: []v1beta1.DoubleInputParam{
 				{
 					Key:      "dbltest",
 					MinValue: sdk.NewDec(1),
 					MaxValue: sdk.NewDec(2),
 				},
 			},
-			Longs: []types.LongInputParam{
+			Longs: []v1beta1.LongInputParam{
 				{
 					Key:      "lngtest",
 					MinValue: 1,

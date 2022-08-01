@@ -3,14 +3,13 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k msgServer) BurnDebtToken(goCtx context.Context, msg *types.MsgBurnDebtToken) (*types.MsgBurnDebtTokenResponse, error) {
+func (k msgServer) BurnDebtToken(goCtx context.Context, msg *v1beta1.MsgBurnDebtToken) (*v1beta1.MsgBurnDebtTokenResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	paymentProcessors := k.PaymentProcessors(ctx)
 
@@ -38,9 +37,9 @@ func (k msgServer) BurnDebtToken(goCtx context.Context, msg *types.MsgBurnDebtTo
 
 	k.SetRedeemInfo(ctx, msg.RedeemInfo)
 
-	err := ctx.EventManager().EmitTypedEvent(&types.EventBurnDebtToken{
+	err := ctx.EventManager().EmitTypedEvent(&v1beta1.EventBurnDebtToken{
 		RedeemInfo: msg.RedeemInfo,
 	})
 
-	return &types.MsgBurnDebtTokenResponse{}, err
+	return &v1beta1.MsgBurnDebtTokenResponse{}, err
 }

@@ -4,10 +4,9 @@ import (
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
@@ -21,7 +20,7 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
 
-	creator := types.GenTestBech32FromString("test")
+	creator := v1beta1.GenTestBech32FromString("test")
 	updateFee := k.UpdateItemStringFee(ctx)
 	// need enough balance to update num_tests items
 	updateFee.Amount = updateFee.Amount.Mul(sdk.NewInt(int64(numTests)))
@@ -36,7 +35,7 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 	for i := 0; i < numTests; i++ {
 		expectedString := "test"
 		idx := fmt.Sprintf("%d", i)
-		cookbook := &types.MsgCreateCookbook{
+		cookbook := &v1beta1.MsgCreateCookbook{
 			Creator:      creator,
 			Id:           idx,
 			Name:         "testCookbookName",
@@ -51,17 +50,17 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 		require.NoError(err)
 
 		// set dummy item in store
-		item := types.Item{
+		item := v1beta1.Item{
 			CookbookId: idx,
 			Id:         idx,
 			Owner:      creator,
-			MutableStrings: []types.StringKeyValue{
+			MutableStrings: []v1beta1.StringKeyValue{
 				{Key: expectedString, Value: expectedString},
 			},
 		}
 		k.SetItem(ctx, item)
 		// update item by setting the MutableString value to ""
-		updateItemStringMsg := &types.MsgSetItemString{
+		updateItemStringMsg := &v1beta1.MsgSetItemString{
 			Creator:    creator,
 			CookbookId: idx,
 			Id:         idx,

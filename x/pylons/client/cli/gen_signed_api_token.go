@@ -5,13 +5,12 @@ import (
 	"errors"
 	"strconv"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 var _ = strconv.Itoa(0)
@@ -67,7 +66,7 @@ func SignAPIToken(txf tx.Factory, name, apiToken string) ([]byte, error) {
 }
 
 func printOutput(ctx client.Context, token, sigBase64 string) error {
-	msg := types.CreatePaymentAccount{
+	msg := v1beta1.CreatePaymentAccount{
 		Address:   ctx.GetFromAddress().String(),
 		Token:     token,
 		Signature: sigBase64,

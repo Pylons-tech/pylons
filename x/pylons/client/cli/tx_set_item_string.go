@@ -3,13 +3,12 @@ package cli
 import (
 	"strconv"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 var _ = strconv.Itoa(0)
@@ -30,7 +29,7 @@ func CmdSetItemString() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgSetItemString(clientCtx.GetFromAddress().String(), argsCookbookID, argsID, argsField, argsValue)
+			msg := v1beta1.NewMsgSetItemString(clientCtx.GetFromAddress().String(), argsCookbookID, argsID, argsField, argsValue)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

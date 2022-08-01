@@ -3,14 +3,13 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) ListRecipesByCookbook(goCtx context.Context, req *types.QueryListRecipesByCookbookRequest) (*types.QueryListRecipesByCookbookResponse, error) {
+func (k Keeper) ListRecipesByCookbook(goCtx context.Context, req *v1beta1.QueryListRecipesByCookbookRequest) (*v1beta1.QueryListRecipesByCookbookResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -23,5 +22,5 @@ func (k Keeper) ListRecipesByCookbook(goCtx context.Context, req *types.QueryLis
 		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
 	}
 
-	return &types.QueryListRecipesByCookbookResponse{Recipes: recipes, Pagination: pageRes}, nil
+	return &v1beta1.QueryListRecipesByCookbookResponse{Recipes: recipes, Pagination: pageRes}, nil
 }

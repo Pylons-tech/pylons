@@ -4,11 +4,10 @@ import (
 	"context"
 	"strconv"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func CmdShowTrade() *cobra.Command {
@@ -19,14 +18,14 @@ func CmdShowTrade() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
-			queryClient := types.NewQueryClient(clientCtx)
+			queryClient := v1beta1.NewQueryClient(clientCtx)
 
 			id, err := strconv.ParseUint(args[0], 10, 64)
 			if err != nil {
 				return err
 			}
 
-			params := &types.QueryGetTradeRequest{
+			params := &v1beta1.QueryGetTradeRequest{
 				Id: id,
 			}
 

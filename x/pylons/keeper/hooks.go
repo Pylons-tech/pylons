@@ -1,15 +1,14 @@
 package keeper
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) BeforeEpochStart(ctx sdk.Context, epochIdentifier string, epochNumber int64, sk types.StakingKeeper) {
+func (k Keeper) BeforeEpochStart(ctx sdk.Context, epochIdentifier string, epochNumber int64, sk v1beta1.StakingKeeper) {
 }
 
-func (k Keeper) AfterEpochEnd(ctx sdk.Context, epochIdentifier string, epochNumber int64, sk types.StakingKeeper) {
+func (k Keeper) AfterEpochEnd(ctx sdk.Context, epochIdentifier string, epochNumber int64, sk v1beta1.StakingKeeper) {
 	if epochIdentifier == k.DistrEpochIdentifier(ctx) {
 		distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
 		delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages)
@@ -39,10 +38,10 @@ check if expected distribution corresponds
 // Hooks wrapper struct for incentives keeper
 type Hooks struct {
 	k  Keeper
-	sk types.StakingKeeper
+	sk v1beta1.StakingKeeper
 }
 
 // Hooks returns the wrapper struct
-func (k Keeper) Hooks(sk types.StakingKeeper) Hooks {
+func (k Keeper) Hooks(sk v1beta1.StakingKeeper) Hooks {
 	return Hooks{k: k, sk: sk}
 }

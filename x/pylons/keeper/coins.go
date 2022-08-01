@@ -1,13 +1,12 @@
 package keeper
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (k Keeper) SendRewardsFromFeeCollector(ctx sdk.Context, addr sdk.AccAddress, amounts sdk.Coins) error {
-	feeCollector := types.FeeCollectorName
+	feeCollector := v1beta1.FeeCollectorName
 
 	// send coins
 	err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, feeCollector, addr, amounts)
@@ -16,7 +15,7 @@ func (k Keeper) SendRewardsFromFeeCollector(ctx sdk.Context, addr sdk.AccAddress
 }
 
 func (k Keeper) MintCoinsToAddr(ctx sdk.Context, addr sdk.AccAddress, amounts sdk.Coins) error {
-	coinMint := types.CoinsIssuerName
+	coinMint := v1beta1.CoinsIssuerName
 
 	// mint coins to minter module account
 	err := k.MintCoins(ctx, coinMint, amounts)
@@ -34,8 +33,8 @@ func (k Keeper) MintCoinsToAddr(ctx sdk.Context, addr sdk.AccAddress, amounts sd
 }
 
 func (k Keeper) MintCreditToAddr(ctx sdk.Context, addr sdk.AccAddress, amounts, burn, fees sdk.Coins) error {
-	ppMacc := types.PaymentsProcessorName
-	feesMacc := types.FeeCollectorName
+	ppMacc := v1beta1.PaymentsProcessorName
+	feesMacc := v1beta1.FeeCollectorName
 
 	// mint coins to minter module account
 	err := k.MintCoins(ctx, ppMacc, amounts)
@@ -74,7 +73,7 @@ func (k Keeper) MintCreditToAddr(ctx sdk.Context, addr sdk.AccAddress, amounts, 
 }
 
 func (k Keeper) BurnCreditFromAddr(ctx sdk.Context, addr sdk.AccAddress, amt sdk.Coins) error {
-	macc := types.PaymentsProcessorName
+	macc := v1beta1.PaymentsProcessorName
 
 	// send coins to the module account
 	err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, addr, macc, amt)

@@ -1,11 +1,10 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestRecipeQuerySingle() {
@@ -18,23 +17,23 @@ func (suite *IntegrationTestSuite) TestRecipeQuerySingle() {
 	msgs := createNRecipe(k, ctx, cookbooks[0], 2)
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryGetRecipeRequest
-		response *types.QueryGetRecipeResponse
+		request  *v1beta1.QueryGetRecipeRequest
+		response *v1beta1.QueryGetRecipeResponse
 		err      error
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetRecipeRequest{CookbookId: msgs[0].CookbookId, Id: msgs[0].Id},
-			response: &types.QueryGetRecipeResponse{Recipe: msgs[0]},
+			request:  &v1beta1.QueryGetRecipeRequest{CookbookId: msgs[0].CookbookId, Id: msgs[0].Id},
+			response: &v1beta1.QueryGetRecipeResponse{Recipe: msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetRecipeRequest{CookbookId: msgs[1].CookbookId, Id: msgs[1].Id},
-			response: &types.QueryGetRecipeResponse{Recipe: msgs[1]},
+			request:  &v1beta1.QueryGetRecipeRequest{CookbookId: msgs[1].CookbookId, Id: msgs[1].Id},
+			response: &v1beta1.QueryGetRecipeResponse{Recipe: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetRecipeRequest{CookbookId: "missing", Id: "missing"},
+			request: &v1beta1.QueryGetRecipeRequest{CookbookId: "missing", Id: "missing"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{

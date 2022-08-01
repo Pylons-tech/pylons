@@ -17,9 +17,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/Pylons-tech/pylons/app"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/testutil/network"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 type TestDelegation struct {
@@ -36,8 +35,8 @@ func GenerateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 	return addrs
 }
 
-func distributionPylonsGenesis(feesAmount sdk.Coin) *types.GenesisState {
-	genState := types.DefaultGenesis()
+func distributionPylonsGenesis(feesAmount sdk.Coin) *v1beta1.GenesisState {
+	genState := v1beta1.DefaultGenesis()
 
 	// set a high `updateAccount` fee since we'll use it to accumulate balance in the module account
 	genState.Params.UpdateUsernameFee = feesAmount

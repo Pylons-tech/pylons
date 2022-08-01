@@ -3,12 +3,12 @@ package keeper
 import (
 	"context"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-func (k msgServer) AddStripeRefund(goCtx context.Context, msg *types.MsgAddStripeRefund) (*types.MsgAddStripeRefundResponse, error) {
+func (k msgServer) AddStripeRefund(goCtx context.Context, msg *v1beta1.MsgAddStripeRefund) (*v1beta1.MsgAddStripeRefundResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// search if purchase id is already reserved
@@ -25,10 +25,10 @@ func (k msgServer) AddStripeRefund(goCtx context.Context, msg *types.MsgAddStrip
 	}
 
 	// now the payment info is verified we will store it in our store
-	k.SetStripeRefund(ctx, &types.StripeRefund{
+	k.SetStripeRefund(ctx, &v1beta1.StripeRefund{
 		Payment: msg.Payment,
 		Settled: false,
 	})
 
-	return &types.MsgAddStripeRefundResponse{}, nil
+	return &v1beta1.MsgAddStripeRefundResponse{}, nil
 }

@@ -3,13 +3,12 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k msgServer) SetItemString(goCtx context.Context, msg *types.MsgSetItemString) (*types.MsgSetItemStringResponse, error) {
+func (k msgServer) SetItemString(goCtx context.Context, msg *v1beta1.MsgSetItemString) (*v1beta1.MsgSetItemStringResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	item, found := k.GetItem(ctx, msg.CookbookId, msg.Id)
 	if !found {
@@ -21,7 +20,7 @@ func (k msgServer) SetItemString(goCtx context.Context, msg *types.MsgSetItemStr
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unauthorized")
 	}
 
-	originalMutableStrings := make([]types.StringKeyValue, len(item.MutableStrings))
+	originalMutableStrings := make([]v1beta1.StringKeyValue, len(item.MutableStrings))
 	copy(originalMutableStrings, item.MutableStrings)
 
 	for i, kv := range originalMutableStrings {
@@ -41,12 +40,12 @@ func (k msgServer) SetItemString(goCtx context.Context, msg *types.MsgSetItemStr
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	err = ctx.EventManager().EmitTypedEvent(&types.EventSetItemString{
+	err = ctx.EventManager().EmitTypedEvent(&v1beta1.EventSetItemString{
 		Creator:                msg.Creator,
 		CookbookId:             msg.CookbookId,
 		Id:                     msg.Id,
 		OriginalMutableStrings: originalMutableStrings,
 	})
 
-	return &types.MsgSetItemStringResponse{}, err
+	return &v1beta1.MsgSetItemStringResponse{}, err
 }

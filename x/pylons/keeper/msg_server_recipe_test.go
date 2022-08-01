@@ -4,11 +4,10 @@ import (
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestRecipeMsgServerCreate() {
@@ -22,7 +21,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreate() {
 	creator := "A"
 	for i := 0; i < 5; i++ {
 		idx := fmt.Sprintf("%d", i)
-		cookbook := &types.MsgCreateCookbook{
+		cookbook := &v1beta1.MsgCreateCookbook{
 			Creator:      creator,
 			Id:           idx,
 			Name:         "testCookbookName",
@@ -34,7 +33,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreate() {
 		}
 		_, err := srv.CreateCookbook(wctx, cookbook)
 		require.NoError(err)
-		expected := &types.MsgCreateRecipe{
+		expected := &v1beta1.MsgCreateRecipe{
 			Creator:       creator,
 			CookbookId:    idx,
 			Id:            idx,
@@ -43,7 +42,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreate() {
 			Version:       "v0.0.1",
 			CoinInputs:    nil,
 			ItemInputs:    nil,
-			Entries:       types.EntriesList{},
+			Entries:       v1beta1.EntriesList{},
 			Outputs:       nil,
 			BlockInterval: 0,
 			CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
@@ -69,7 +68,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidAlreadyExists
 	creator := "A"
 	for i := 0; i < 5; i++ {
 		idx := fmt.Sprintf("%d", i)
-		cookbook := &types.MsgCreateCookbook{
+		cookbook := &v1beta1.MsgCreateCookbook{
 			Creator:      creator,
 			Id:           idx,
 			Name:         "testCookbookName",
@@ -81,7 +80,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidAlreadyExists
 		}
 		_, err := srv.CreateCookbook(wctx, cookbook)
 		require.NoError(err)
-		expected := &types.MsgCreateRecipe{
+		expected := &v1beta1.MsgCreateRecipe{
 			Creator:       creator,
 			CookbookId:    idx,
 			Id:            idx,
@@ -90,7 +89,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidAlreadyExists
 			Version:       "v0.0.1",
 			CoinInputs:    nil,
 			ItemInputs:    nil,
-			Entries:       types.EntriesList{},
+			Entries:       v1beta1.EntriesList{},
 			Outputs:       nil,
 			BlockInterval: 0,
 			CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
@@ -116,7 +115,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidCookbookNotOw
 	creator := "A"
 	for i := 0; i < 5; i++ {
 		idx := fmt.Sprintf("%d", i)
-		cookbook := &types.MsgCreateCookbook{
+		cookbook := &v1beta1.MsgCreateCookbook{
 			Creator:      creator,
 			Id:           idx,
 			Name:         "testCookbookName",
@@ -128,7 +127,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidCookbookNotOw
 		}
 		_, err := srv.CreateCookbook(wctx, cookbook)
 		require.NoError(err)
-		expected := &types.MsgCreateRecipe{
+		expected := &v1beta1.MsgCreateRecipe{
 			Creator:       "B",
 			CookbookId:    idx,
 			Id:            idx,
@@ -137,7 +136,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidCookbookNotOw
 			Version:       "v0.0.1",
 			CoinInputs:    nil,
 			ItemInputs:    nil,
-			Entries:       types.EntriesList{},
+			Entries:       v1beta1.EntriesList{},
 			Outputs:       nil,
 			BlockInterval: 0,
 			CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
@@ -161,7 +160,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidNoCookbook() 
 	for i := 0; i < 5; i++ {
 		idx := fmt.Sprintf("%d", i)
 
-		expected := &types.MsgCreateRecipe{
+		expected := &v1beta1.MsgCreateRecipe{
 			Creator:       creator,
 			CookbookId:    idx,
 			Id:            idx,
@@ -170,7 +169,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidNoCookbook() 
 			Version:       "v0.0.1",
 			CoinInputs:    nil,
 			ItemInputs:    nil,
-			Entries:       types.EntriesList{},
+			Entries:       v1beta1.EntriesList{},
 			Outputs:       nil,
 			BlockInterval: 0,
 			Enabled:       false,
@@ -192,7 +191,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 	creator := "A"
 	index := "any"
 
-	cookbook := &types.MsgCreateCookbook{
+	cookbook := &v1beta1.MsgCreateCookbook{
 		Creator:      creator,
 		Id:           index,
 		Name:         "testCookbookName",
@@ -204,7 +203,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 	}
 	_, err := srv.CreateCookbook(wctx, cookbook)
 	require.NoError(err)
-	expected := &types.MsgCreateRecipe{
+	expected := &v1beta1.MsgCreateRecipe{
 		Creator:       creator,
 		CookbookId:    index,
 		Id:            index,
@@ -213,7 +212,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 		Version:       "v0.0.1",
 		CoinInputs:    nil,
 		ItemInputs:    nil,
-		Entries:       types.EntriesList{},
+		Entries:       v1beta1.EntriesList{},
 		Outputs:       nil,
 		BlockInterval: 0,
 		CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
@@ -226,12 +225,12 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 
 	for _, tc := range []struct {
 		desc    string
-		request *types.MsgUpdateRecipe
+		request *v1beta1.MsgUpdateRecipe
 		err     error
 	}{
 		{
 			desc: "Completed",
-			request: &types.MsgUpdateRecipe{
+			request: &v1beta1.MsgUpdateRecipe{
 				Creator:       creator,
 				CookbookId:    index,
 				Id:            index,
@@ -240,7 +239,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 				Version:       "v0.0.2",
 				CoinInputs:    nil,
 				ItemInputs:    nil,
-				Entries:       types.EntriesList{},
+				Entries:       v1beta1.EntriesList{},
 				Outputs:       nil,
 				BlockInterval: 0,
 				Enabled:       false,
@@ -249,7 +248,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 		},
 		{
 			desc: "Unauthorized",
-			request: &types.MsgUpdateRecipe{
+			request: &v1beta1.MsgUpdateRecipe{
 				Creator:       "B",
 				CookbookId:    index,
 				Id:            index,
@@ -258,7 +257,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 				Version:       "v0.0.3",
 				CoinInputs:    nil,
 				ItemInputs:    nil,
-				Entries:       types.EntriesList{},
+				Entries:       v1beta1.EntriesList{},
 				Outputs:       nil,
 				BlockInterval: 0,
 				Enabled:       false,
@@ -268,7 +267,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 		},
 		{
 			desc: "incorrect version",
-			request: &types.MsgUpdateRecipe{
+			request: &v1beta1.MsgUpdateRecipe{
 				Creator:       "A",
 				CookbookId:    index,
 				Id:            index,
@@ -277,7 +276,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 				Version:       "v0.0.1",
 				CoinInputs:    nil,
 				ItemInputs:    nil,
-				Entries:       types.EntriesList{},
+				Entries:       v1beta1.EntriesList{},
 				Outputs:       nil,
 				BlockInterval: 0,
 				Enabled:       false,
@@ -287,7 +286,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 		},
 		{
 			desc: "KeyNotFound",
-			request: &types.MsgUpdateRecipe{
+			request: &v1beta1.MsgUpdateRecipe{
 				Creator:       creator,
 				CookbookId:    "missing",
 				Id:            "missing",
@@ -296,7 +295,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 				Version:       "v0.0.4",
 				CoinInputs:    nil,
 				ItemInputs:    nil,
-				Entries:       types.EntriesList{},
+				Entries:       v1beta1.EntriesList{},
 				Outputs:       nil,
 				BlockInterval: 0,
 				Enabled:       false,

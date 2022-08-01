@@ -10,24 +10,23 @@ import (
 	"github.com/Pylons-tech/pylons/app"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func generateAddress() sdk.AccAddress {
-	addrString := types.GenTestBech32FromString("test")
+	addrString := v1beta1.GenTestBech32FromString("test")
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 	return addr
 }
 
-func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
-	items := make([]types.Cookbook, n)
-	creators := types.GenTestBech32List(n)
+func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []v1beta1.Cookbook {
+	items := make([]v1beta1.Cookbook, n)
+	creators := v1beta1.GenTestBech32List(n)
 	for i := range items {
 		items[i].Creator = creators[i]
 		items[i].Id = fmt.Sprintf("%d", i)
@@ -36,20 +35,20 @@ func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	return items
 }
 
-func createNPylonsAccount(k keeper.Keeper, ctx sdk.Context, n int) []types.UserMap {
-	items := make([]types.UserMap, n)
-	creators := types.GenTestBech32List(n)
+func createNPylonsAccount(k keeper.Keeper, ctx sdk.Context, n int) []v1beta1.UserMap {
+	items := make([]v1beta1.UserMap, n)
+	creators := v1beta1.GenTestBech32List(n)
 	for i := range items {
 		items[i].AccountAddr = creators[i]
 		items[i].Username = "user" + strconv.Itoa(i)
-		k.SetPylonsAccount(ctx, types.AccountAddr{Value: items[i].AccountAddr}, types.Username{Value: items[i].Username})
+		k.SetPylonsAccount(ctx, v1beta1.AccountAddr{Value: items[i].AccountAddr}, v1beta1.Username{Value: items[i].Username})
 	}
 	return items
 }
 
-func createNCookbookForSingleOwner(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
-	items := make([]types.Cookbook, n)
-	creator := types.GenTestBech32FromString("any")
+func createNCookbookForSingleOwner(k keeper.Keeper, ctx sdk.Context, n int) []v1beta1.Cookbook {
+	items := make([]v1beta1.Cookbook, n)
+	creator := v1beta1.GenTestBech32FromString("any")
 	for i := range items {
 		items[i].Creator = creator
 		items[i].Id = fmt.Sprintf("%d", i)
@@ -58,9 +57,9 @@ func createNCookbookForSingleOwner(k keeper.Keeper, ctx sdk.Context, n int) []ty
 	return items
 }
 
-func createNExecution(k keeper.Keeper, ctx sdk.Context, n int) []types.Execution {
-	execs := make([]types.Execution, n)
-	creators := types.GenTestBech32List(n)
+func createNExecution(k keeper.Keeper, ctx sdk.Context, n int) []v1beta1.Execution {
+	execs := make([]v1beta1.Execution, n)
+	creators := v1beta1.GenTestBech32List(n)
 	for i := range execs {
 		execs[i].Creator = creators[i]
 		execs[i].Id = strconv.Itoa(i)
@@ -69,9 +68,9 @@ func createNExecution(k keeper.Keeper, ctx sdk.Context, n int) []types.Execution
 	return execs
 }
 
-func createNExecutionForSingleRecipe(k keeper.Keeper, ctx sdk.Context, n int, cookbookID, recipeID string) []types.Execution {
-	execs := make([]types.Execution, n)
-	creators := types.GenTestBech32List(n)
+func createNExecutionForSingleRecipe(k keeper.Keeper, ctx sdk.Context, n int, cookbookID, recipeID string) []v1beta1.Execution {
+	execs := make([]v1beta1.Execution, n)
+	creators := v1beta1.GenTestBech32List(n)
 	for i := range execs {
 		execs[i].Creator = creators[i]
 		execs[i].Id = strconv.Itoa(i)
@@ -82,9 +81,9 @@ func createNExecutionForSingleRecipe(k keeper.Keeper, ctx sdk.Context, n int, co
 	return execs
 }
 
-func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []types.Execution {
-	exec := types.Execution{
-		ItemInputs: []types.ItemRecord{
+func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []v1beta1.Execution {
+	exec := v1beta1.Execution{
+		ItemInputs: []v1beta1.ItemRecord{
 			{
 				Id: "test1",
 			},
@@ -94,8 +93,8 @@ func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []ty
 		CookbookId:    "testCookbookID",
 	}
 
-	execs := make([]types.Execution, n)
-	creators := types.GenTestBech32List(n)
+	execs := make([]v1beta1.Execution, n)
+	creators := v1beta1.GenTestBech32List(n)
 
 	for i := range execs {
 		execs[i] = exec
@@ -108,9 +107,9 @@ func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []ty
 	return execs
 }
 
-func createNPendingExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []types.Execution {
-	exec := types.Execution{
-		ItemInputs: []types.ItemRecord{
+func createNPendingExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []v1beta1.Execution {
+	exec := v1beta1.Execution{
+		ItemInputs: []v1beta1.ItemRecord{
 			{
 				Id: "test1",
 			},
@@ -120,8 +119,8 @@ func createNPendingExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n in
 		CookbookId:    "testCookbookID",
 	}
 
-	execs := make([]types.Execution, n)
-	creators := types.GenTestBech32List(n)
+	execs := make([]v1beta1.Execution, n)
+	creators := v1beta1.GenTestBech32List(n)
 
 	for i := range execs {
 		execs[i] = exec
@@ -134,9 +133,9 @@ func createNPendingExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n in
 }
 
 // returns (pendingExecs, completedExecs)
-func createNMixedExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) ([]types.Execution, []types.Execution) {
-	exec := types.Execution{
-		ItemInputs: []types.ItemRecord{
+func createNMixedExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) ([]v1beta1.Execution, []v1beta1.Execution) {
+	exec := v1beta1.Execution{
+		ItemInputs: []v1beta1.ItemRecord{
 			{
 				Id: "test1",
 			},
@@ -146,9 +145,9 @@ func createNMixedExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int)
 		CookbookId:    "testCookbookID",
 	}
 
-	completedExecs := make([]types.Execution, n)
-	pendingExecs := make([]types.Execution, n)
-	creators := types.GenTestBech32List(n)
+	completedExecs := make([]v1beta1.Execution, n)
+	pendingExecs := make([]v1beta1.Execution, n)
+	creators := v1beta1.GenTestBech32List(n)
 
 	for i := range pendingExecs {
 		pendingExecs[i] = exec
@@ -167,9 +166,9 @@ func createNMixedExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int)
 	return pendingExecs, completedExecs
 }
 
-func createNPendingExecution(k keeper.Keeper, ctx sdk.Context, n int) []types.Execution {
-	execs := make([]types.Execution, n)
-	creators := types.GenTestBech32List(n)
+func createNPendingExecution(k keeper.Keeper, ctx sdk.Context, n int) []v1beta1.Execution {
+	execs := make([]v1beta1.Execution, n)
+	creators := v1beta1.GenTestBech32List(n)
 	for i := range execs {
 		execs[i].Creator = creators[i]
 		execs[i].Id = k.AppendPendingExecution(ctx, execs[i], 0)
@@ -177,9 +176,9 @@ func createNPendingExecution(k keeper.Keeper, ctx sdk.Context, n int) []types.Ex
 	return execs
 }
 
-func createNPendingExecutionForSingleRecipe(k keeper.Keeper, ctx sdk.Context, n int, recipe types.Recipe) []types.Execution {
-	execs := make([]types.Execution, n)
-	creators := types.GenTestBech32List(n)
+func createNPendingExecutionForSingleRecipe(k keeper.Keeper, ctx sdk.Context, n int, recipe v1beta1.Recipe) []v1beta1.Execution {
+	execs := make([]v1beta1.Execution, n)
+	creators := v1beta1.GenTestBech32List(n)
 	for i := range execs {
 		execs[i].Creator = creators[i]
 		execs[i].CookbookId = recipe.CookbookId
@@ -190,9 +189,9 @@ func createNPendingExecutionForSingleRecipe(k keeper.Keeper, ctx sdk.Context, n 
 	return execs
 }
 
-func createNGoogleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.GoogleInAppPurchaseOrder {
-	items := make([]types.GoogleInAppPurchaseOrder, n)
-	creators := types.GenTestBech32List(n)
+func createNGoogleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []v1beta1.GoogleInAppPurchaseOrder {
+	items := make([]v1beta1.GoogleInAppPurchaseOrder, n)
+	creators := v1beta1.GenTestBech32List(n)
 	for i := range items {
 		items[i].Creator = creators[i]
 		items[i].PurchaseToken = strconv.Itoa(i)
@@ -202,9 +201,9 @@ func createNGoogleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.Goog
 	return items
 }
 
-func createNAppleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.AppleInAppPurchaseOrder {
-	items := make([]types.AppleInAppPurchaseOrder, n)
-	creators := types.GenTestBech32List(n)
+func createNAppleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []v1beta1.AppleInAppPurchaseOrder {
+	items := make([]v1beta1.AppleInAppPurchaseOrder, n)
+	creators := v1beta1.GenTestBech32List(n)
 	for i := range items {
 		items[i].Creator = creators[i]
 		items[i].PurchaseId = strconv.Itoa(i)
@@ -214,9 +213,9 @@ func createNAppleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.Apple
 	return items
 }
 
-func createNPaymentInfo(k keeper.Keeper, ctx sdk.Context, n int) []types.PaymentInfo {
-	items := make([]types.PaymentInfo, n)
-	creators := types.GenTestBech32List(n)
+func createNPaymentInfo(k keeper.Keeper, ctx sdk.Context, n int) []v1beta1.PaymentInfo {
+	items := make([]v1beta1.PaymentInfo, n)
+	creators := v1beta1.GenTestBech32List(n)
 	for i := range items {
 		items[i].PayerAddr = creators[i]
 		items[i].PurchaseId = fmt.Sprintf("%d", i)
@@ -226,9 +225,9 @@ func createNPaymentInfo(k keeper.Keeper, ctx sdk.Context, n int) []types.Payment
 	return items
 }
 
-func createNRedeemInfo(k keeper.Keeper, ctx sdk.Context, n int) []types.RedeemInfo {
-	items := make([]types.RedeemInfo, n)
-	creators := types.GenTestBech32List(n)
+func createNRedeemInfo(k keeper.Keeper, ctx sdk.Context, n int) []v1beta1.RedeemInfo {
+	items := make([]v1beta1.RedeemInfo, n)
+	creators := v1beta1.GenTestBech32List(n)
 	for i := range items {
 		items[i].Address = creators[i]
 		items[i].Id = fmt.Sprintf("%d", i)
@@ -238,10 +237,10 @@ func createNRedeemInfo(k keeper.Keeper, ctx sdk.Context, n int) []types.RedeemIn
 	return items
 }
 
-func createNItem(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []types.Item {
-	items := make([]types.Item, n)
-	owners := types.GenTestBech32List(n)
-	coin := []sdk.Coin{sdk.NewCoin(types.PylonsCoinDenom, sdk.OneInt())}
+func createNItem(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []v1beta1.Item {
+	items := make([]v1beta1.Item, n)
+	owners := v1beta1.GenTestBech32List(n)
+	coin := []sdk.Coin{sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.OneInt())}
 	for i := range items {
 		items[i].Owner = owners[i]
 		items[i].CookbookId = fmt.Sprintf("%d", i)
@@ -253,10 +252,10 @@ func createNItem(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []type
 	return items
 }
 
-func createNItemSameOwnerAndCookbook(k keeper.Keeper, ctx sdk.Context, n int, cookbookID string, tradeable bool) []types.Item {
-	items := make([]types.Item, n)
-	owner := types.GenTestBech32FromString("test")
-	coin := []sdk.Coin{sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))}
+func createNItemSameOwnerAndCookbook(k keeper.Keeper, ctx sdk.Context, n int, cookbookID string, tradeable bool) []v1beta1.Item {
+	items := make([]v1beta1.Item, n)
+	owner := v1beta1.GenTestBech32FromString("test")
+	coin := []sdk.Coin{sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(100))}
 	for i := range items {
 		items[i].Owner = owner
 		items[i].CookbookId = cookbookID
@@ -267,10 +266,10 @@ func createNItemSameOwnerAndCookbook(k keeper.Keeper, ctx sdk.Context, n int, co
 	return items
 }
 
-func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []types.Item {
-	items := make([]types.Item, n)
-	owner := types.GenTestBech32List(1)
-	coin := []sdk.Coin{sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))}
+func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []v1beta1.Item {
+	items := make([]v1beta1.Item, n)
+	owner := v1beta1.GenTestBech32List(1)
+	coin := []sdk.Coin{sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(100))}
 	for i := range items {
 		items[i].Owner = owner[0]
 		items[i].CookbookId = fmt.Sprintf("%d", i)
@@ -282,24 +281,24 @@ func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int, tradeable b
 	return items
 }
 
-func createNRecipe(k keeper.Keeper, ctx sdk.Context, cb types.Cookbook, n int) []types.Recipe {
-	items := make([]types.Recipe, n)
+func createNRecipe(k keeper.Keeper, ctx sdk.Context, cb v1beta1.Cookbook, n int) []v1beta1.Recipe {
+	items := make([]v1beta1.Recipe, n)
 	for i := range items {
 		items[i].CookbookId = cb.Id
 		items[i].Id = fmt.Sprintf("%d", i)
-		items[i].CostPerBlock = sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+		items[i].CostPerBlock = sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(100))
 
 		k.SetRecipe(ctx, items[i])
 	}
 	return items
 }
 
-func createNTrade(k keeper.Keeper, ctx sdk.Context, n int) []types.Trade {
-	items := make([]types.Trade, n)
-	owners := types.GenTestBech32List(n)
+func createNTrade(k keeper.Keeper, ctx sdk.Context, n int) []v1beta1.Trade {
+	items := make([]v1beta1.Trade, n)
+	owners := v1beta1.GenTestBech32List(n)
 
-	coinInputs := make([]types.CoinInput, 0)
-	coinInputs = append(coinInputs, types.CoinInput{Coins: sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}})
+	coinInputs := make([]v1beta1.CoinInput, 0)
+	coinInputs = append(coinInputs, v1beta1.CoinInput{Coins: sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}})
 
 	for i := range items {
 		items[i].Creator = owners[i]
@@ -310,12 +309,12 @@ func createNTrade(k keeper.Keeper, ctx sdk.Context, n int) []types.Trade {
 	return items
 }
 
-func createNTradeSameOwner(k keeper.Keeper, ctx sdk.Context, n int) []types.Trade {
-	items := make([]types.Trade, n)
-	owners := types.GenTestBech32List(1)
+func createNTradeSameOwner(k keeper.Keeper, ctx sdk.Context, n int) []v1beta1.Trade {
+	items := make([]v1beta1.Trade, n)
+	owners := v1beta1.GenTestBech32List(1)
 
-	coinInputs := make([]types.CoinInput, 0)
-	coinInputs = append(coinInputs, types.CoinInput{Coins: sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}})
+	coinInputs := make([]v1beta1.CoinInput, 0)
+	coinInputs = append(coinInputs, v1beta1.CoinInput{Coins: sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}})
 
 	for i := range items {
 		items[i].Creator = owners[0]
@@ -332,9 +331,9 @@ type IntegrationTestSuite struct {
 	pylonsApp     *app.PylonsApp
 	ctx           sdk.Context
 	k             keeper.Keeper
-	bankKeeper    types.BankKeeper
-	accountKeeper types.AccountKeeper
-	stakingKeeper types.StakingKeeper
+	bankKeeper    v1beta1.BankKeeper
+	accountKeeper v1beta1.AccountKeeper
+	stakingKeeper v1beta1.StakingKeeper
 }
 
 // TODO: Fisal, Khanh, or Vuong, please fix this test.  Needs simapp.

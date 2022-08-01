@@ -8,10 +8,9 @@ import (
 	"math/rand"
 
 	"cosmossdk.io/math"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // cookbook -> recipe -> execution -> item
@@ -37,33 +36,33 @@ func RandomizedGenState(simState *module.SimulationState) {
 	// TODO add logic for randomizing stateMap
 	var recipeFeePercentage sdk.Dec
 	simState.AppParams.GetOrGenerate(
-		simState.Cdc, string(types.ParamStoreKeyRecipeFeePercentage),
+		simState.Cdc, string(v1beta1.ParamStoreKeyRecipeFeePercentage),
 		&recipeFeePercentage, simState.Rand,
 		func(r *rand.Rand) { recipeFeePercentage = randomPercentage(r) })
 
 	var itemTransferFeePercentage sdk.Dec
 	simState.AppParams.GetOrGenerate(
-		simState.Cdc, string(types.ParamStoreKeyItemTransferFeePercentage),
+		simState.Cdc, string(v1beta1.ParamStoreKeyItemTransferFeePercentage),
 		&itemTransferFeePercentage, simState.Rand,
 		func(r *rand.Rand) { itemTransferFeePercentage = randomPercentage(r) })
 
 	var updateItemStringFee sdk.Coin
 	simState.AppParams.GetOrGenerate(
-		simState.Cdc, string(types.ParamStoreKeyUpdateItemStringFee),
+		simState.Cdc, string(v1beta1.ParamStoreKeyUpdateItemStringFee),
 		&updateItemStringFee, simState.Rand,
 		func(r *rand.Rand) { updateItemStringFee = randomCoinFee(r) })
 
 	var updateUsernameFee sdk.Coin
 	simState.AppParams.GetOrGenerate(
-		simState.Cdc, string(types.ParamStoreKeyUpdateUsernameFee),
+		simState.Cdc, string(v1beta1.ParamStoreKeyUpdateUsernameFee),
 		&updateUsernameFee, simState.Rand,
 		func(r *rand.Rand) { updateUsernameFee = randomCoinFee(r) })
 
 	minTransferFee, maxTransferFee := randomTransferFeePair(simState.Rand)
 
-	genesis := types.GenesisState{
-		Params: types.Params{
-			CoinIssuers:               types.DefaultCoinIssuers, // set as default for simplicity
+	genesis := v1beta1.GenesisState{
+		Params: v1beta1.Params{
+			CoinIssuers:               v1beta1.DefaultCoinIssuers, // set as default for simplicity
 			RecipeFeePercentage:       recipeFeePercentage,
 			ItemTransferFeePercentage: itemTransferFeePercentage,
 			UpdateItemStringFee:       updateItemStringFee,
@@ -90,5 +89,5 @@ func RandomizedGenState(simState *module.SimulationState) {
 		panic(err)
 	}
 	fmt.Printf("Selected randomly generated bank parameters:\n%s\n", paramsBytes)
-	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(&genesis)
+	simState.GenState[v1beta1.ModuleName] = simState.Cdc.MustMarshalJSON(&genesis)
 }

@@ -3,14 +3,13 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) Recipe(c context.Context, req *types.QueryGetRecipeRequest) (*types.QueryGetRecipeResponse, error) {
+func (k Keeper) Recipe(c context.Context, req *v1beta1.QueryGetRecipeRequest) (*v1beta1.QueryGetRecipeResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -21,5 +20,5 @@ func (k Keeper) Recipe(c context.Context, req *types.QueryGetRecipeRequest) (*ty
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}
 
-	return &types.QueryGetRecipeResponse{Recipe: val}, nil
+	return &v1beta1.QueryGetRecipeResponse{Recipe: val}, nil
 }

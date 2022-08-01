@@ -1,9 +1,8 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestMintCoins() {
@@ -12,12 +11,12 @@ func (suite *IntegrationTestSuite) TestMintCoins() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+	coin := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(100))
 	mintAmt := sdk.NewCoins()
 	mintAmt = mintAmt.Add(coin)
 
 	// CoinsIssuer module account has minter permissions
-	err := k.MintCoins(ctx, types.CoinsIssuerName, mintAmt)
+	err := k.MintCoins(ctx, v1beta1.CoinsIssuerName, mintAmt)
 	require.NoError(err)
 
 	addr := k.CoinsIssuerAddress()
@@ -31,10 +30,10 @@ func (suite *IntegrationTestSuite) TestMintCoinsToAddr() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	addrString := types.GenTestBech32FromString("test")
+	addrString := v1beta1.GenTestBech32FromString("test")
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 
-	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+	coin := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(100))
 	mintAmt := sdk.NewCoins()
 	mintAmt = mintAmt.Add(coin)
 
@@ -52,16 +51,16 @@ func (suite *IntegrationTestSuite) TestBurnCoins() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+	coin := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(100))
 	mintAmt := sdk.NewCoins()
 	mintAmt = mintAmt.Add(coin)
 
 	// Mint coins to PaymentProcessor module
-	err := k.MintCoins(ctx, types.PaymentsProcessorName, mintAmt)
+	err := k.MintCoins(ctx, v1beta1.PaymentsProcessorName, mintAmt)
 	require.NoError(err)
 
 	// PaymentsProcessor account has burner permissions
-	err = k.BurnCoins(ctx, types.PaymentsProcessorName, mintAmt)
+	err = k.BurnCoins(ctx, v1beta1.PaymentsProcessorName, mintAmt)
 	require.NoError(err)
 
 	addr := k.CoinsIssuerAddress()
@@ -75,10 +74,10 @@ func (suite *IntegrationTestSuite) TestBurnCoinsFromAddress() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	addrString := types.GenTestBech32FromString("test")
+	addrString := v1beta1.GenTestBech32FromString("test")
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 
-	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+	coin := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(100))
 	mintAmt := sdk.NewCoins()
 	mintAmt = mintAmt.Add(coin)
 
@@ -98,25 +97,25 @@ func (suite *IntegrationTestSuite) TestMintCreditToAddr() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	addrString := types.GenTestBech32FromString("test")
+	addrString := v1beta1.GenTestBech32FromString("test")
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 
 	amt := sdk.NewDec(100)
 	// account for network fees
-	burnAmt := amt.Mul(types.DefaultProcessorPercentage)
-	feesAmt := amt.Mul(types.DefaultValidatorsPercentage)
+	burnAmt := amt.Mul(v1beta1.DefaultProcessorPercentage)
+	feesAmt := amt.Mul(v1beta1.DefaultValidatorsPercentage)
 
-	mintCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amt.RoundInt()))
-	burnCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, burnAmt.RoundInt()))
-	feesCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, feesAmt.RoundInt()))
+	mintCoins := sdk.NewCoins(sdk.NewCoin(v1beta1.PylonsCoinDenom, amt.RoundInt()))
+	burnCoins := sdk.NewCoins(sdk.NewCoin(v1beta1.PylonsCoinDenom, burnAmt.RoundInt()))
+	feesCoins := sdk.NewCoins(sdk.NewCoin(v1beta1.PylonsCoinDenom, feesAmt.RoundInt()))
 
 	// Mint credits to account
 	err := k.MintCreditToAddr(ctx, addr, mintCoins, burnCoins, feesCoins)
 	require.NoError(err)
 
 	// Check account, module balances
-	processorAddr := ak.GetModuleAddress(types.PaymentsProcessorName)
-	feeCollectorAddr := ak.GetModuleAddress(types.FeeCollectorName)
+	processorAddr := ak.GetModuleAddress(v1beta1.PaymentsProcessorName)
+	feeCollectorAddr := ak.GetModuleAddress(v1beta1.FeeCollectorName)
 
 	processorBalances := bk.SpendableCoins(ctx, processorAddr)
 	feeCollectorBalances := bk.SpendableCoins(ctx, feeCollectorAddr)
@@ -142,20 +141,20 @@ func (suite *IntegrationTestSuite) TestSendRewardsFromFeeCollector() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	addrString := types.GenTestBech32FromString("test")
-	collector := types.GenTestBech32FromString("collector")
+	addrString := v1beta1.GenTestBech32FromString("test")
+	collector := v1beta1.GenTestBech32FromString("collector")
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 	collectorAddr, _ := sdk.AccAddressFromBech32(collector)
-	feeCollectorAddr := ak.GetModuleAddress(types.FeeCollectorName)
+	feeCollectorAddr := ak.GetModuleAddress(v1beta1.FeeCollectorName)
 
 	// First mint credits
 	amt := sdk.NewDec(100)
-	burnAmt := amt.Mul(types.DefaultProcessorPercentage)
-	feesAmt := amt.Mul(types.DefaultValidatorsPercentage)
+	burnAmt := amt.Mul(v1beta1.DefaultProcessorPercentage)
+	feesAmt := amt.Mul(v1beta1.DefaultValidatorsPercentage)
 
-	mintCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amt.RoundInt()))
-	burnCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, burnAmt.RoundInt()))
-	feesCoins := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, feesAmt.RoundInt()))
+	mintCoins := sdk.NewCoins(sdk.NewCoin(v1beta1.PylonsCoinDenom, amt.RoundInt()))
+	burnCoins := sdk.NewCoins(sdk.NewCoin(v1beta1.PylonsCoinDenom, burnAmt.RoundInt()))
+	feesCoins := sdk.NewCoins(sdk.NewCoin(v1beta1.PylonsCoinDenom, feesAmt.RoundInt()))
 
 	err := k.MintCreditToAddr(ctx, addr, mintCoins, burnCoins, feesCoins)
 	require.NoError(err)

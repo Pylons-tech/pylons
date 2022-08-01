@@ -1,31 +1,30 @@
 package keeper
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // SetRecipe set a specific recipe in the store from its ID
-func (k Keeper) SetRecipe(ctx sdk.Context, recipe types.Recipe) {
-	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey))
-	cookbookRecipesStore := prefix.NewStore(recipesStore, types.KeyPrefix(recipe.CookbookId))
+func (k Keeper) SetRecipe(ctx sdk.Context, recipe v1beta1.Recipe) {
+	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.RecipeKey))
+	cookbookRecipesStore := prefix.NewStore(recipesStore, v1beta1.KeyPrefix(recipe.CookbookId))
 	b := k.cdc.MustMarshal(&recipe)
-	cookbookRecipesStore.Set(types.KeyPrefix(recipe.Id), b)
+	cookbookRecipesStore.Set(v1beta1.KeyPrefix(recipe.Id), b)
 
 	// required for random seed init given how it's handled rn
 	k.IncrementEntityCount(ctx)
 }
 
 // GetRecipe returns a recipe from its ID
-func (k Keeper) GetRecipe(ctx sdk.Context, cookbookID string, id string) (val types.Recipe, found bool) {
-	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey))
-	cookbookRecipesStore := prefix.NewStore(recipesStore, types.KeyPrefix(cookbookID))
+func (k Keeper) GetRecipe(ctx sdk.Context, cookbookID string, id string) (val v1beta1.Recipe, found bool) {
+	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.RecipeKey))
+	cookbookRecipesStore := prefix.NewStore(recipesStore, v1beta1.KeyPrefix(cookbookID))
 
-	b := cookbookRecipesStore.Get(types.KeyPrefix(id))
+	b := cookbookRecipesStore.Get(v1beta1.KeyPrefix(id))
 	if b == nil {
 		return val, false
 	}
@@ -35,14 +34,14 @@ func (k Keeper) GetRecipe(ctx sdk.Context, cookbookID string, id string) (val ty
 }
 
 // GetAllRecipe returns all recipe
-func (k Keeper) GetAllRecipe(ctx sdk.Context) (list []types.Recipe) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey))
+func (k Keeper) GetAllRecipe(ctx sdk.Context) (list []v1beta1.Recipe) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.RecipeKey))
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})
 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var val types.Recipe
+		var val v1beta1.Recipe
 		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
@@ -51,14 +50,14 @@ func (k Keeper) GetAllRecipe(ctx sdk.Context) (list []types.Recipe) {
 }
 
 // GetAllRecipesByCookbook returns all recipes owned by cookbook
-func (k Keeper) GetAllRecipesByCookbook(ctx sdk.Context, cookbookID string) (list []types.Recipe) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey))
-	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(cookbookID))
+func (k Keeper) GetAllRecipesByCookbook(ctx sdk.Context, cookbookID string) (list []v1beta1.Recipe) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.RecipeKey))
+	iterator := sdk.KVStorePrefixIterator(store, v1beta1.KeyPrefix(cookbookID))
 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var val types.Recipe
+		var val v1beta1.Recipe
 		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
@@ -66,14 +65,14 @@ func (k Keeper) GetAllRecipesByCookbook(ctx sdk.Context, cookbookID string) (lis
 	return
 }
 
-func (k Keeper) getRecipesByCookbookPaginated(ctx sdk.Context, cookbookID string, pagination *query.PageRequest) ([]types.Recipe, *query.PageResponse, error) {
-	recipes := make([]types.Recipe, 0)
+func (k Keeper) getRecipesByCookbookPaginated(ctx sdk.Context, cookbookID string, pagination *query.PageRequest) ([]v1beta1.Recipe, *query.PageResponse, error) {
+	recipes := make([]v1beta1.Recipe, 0)
 
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey))
-	store = prefix.NewStore(store, types.KeyPrefix(cookbookID))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.RecipeKey))
+	store = prefix.NewStore(store, v1beta1.KeyPrefix(cookbookID))
 
 	pageRes, err := query.Paginate(store, pagination, func(_, value []byte) error {
-		var val types.Recipe
+		var val v1beta1.Recipe
 		k.cdc.MustUnmarshal(value, &val)
 		recipes = append(recipes, val)
 		return nil
@@ -86,11 +85,11 @@ func (k Keeper) getRecipesByCookbookPaginated(ctx sdk.Context, cookbookID string
 }
 
 // GetCoinsInputsByIndex will return coins that are provided in recipe at index
-func (k Keeper) GetCoinsInputsByIndex(ctx sdk.Context, recipe types.Recipe, coinInputsIndex int) (sdk.Coins, error) {
+func (k Keeper) GetCoinsInputsByIndex(ctx sdk.Context, recipe v1beta1.Recipe, coinInputsIndex int) (sdk.Coins, error) {
 	var coinInputs sdk.Coins
 	switch {
 	case len(recipe.CoinInputs) == 0:
-		coinInputs = sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.ZeroInt()))
+		coinInputs = sdk.NewCoins(sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.ZeroInt()))
 	case coinInputsIndex >= len(recipe.CoinInputs) && len(recipe.CoinInputs) != 0:
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid coinInputs index")
 	default:

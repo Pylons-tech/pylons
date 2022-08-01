@@ -3,12 +3,11 @@ package cli
 import (
 	"strconv"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 var _ = strconv.Itoa(0)
@@ -24,9 +23,9 @@ func CmdListExecutionsByRecipe() *cobra.Command {
 
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
-			queryClient := types.NewQueryClient(clientCtx)
+			queryClient := v1beta1.NewQueryClient(clientCtx)
 
-			params := &types.QueryListExecutionsByRecipeRequest{
+			params := &v1beta1.QueryListExecutionsByRecipeRequest{
 				CookbookId: reqCookbookID,
 				RecipeId:   reqRecipeID,
 			}

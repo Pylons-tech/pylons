@@ -1,8 +1,6 @@
 package keeper
 
-import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-)
+import "github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 
 type msgServer struct {
 	Keeper
@@ -10,8 +8,8 @@ type msgServer struct {
 
 // NewMsgServerImpl returns an implementation of the MsgServer interface
 // for the provided Keeper.
-func NewMsgServerImpl(keeper Keeper) types.MsgServer {
+func NewMsgServerImpl(keeper Keeper) v1beta1.MsgServer {
 	return &msgServer{Keeper: keeper}
 }
 
-var _ types.MsgServer = msgServer{}
+var _ v1beta1.MsgServer = msgServer{}

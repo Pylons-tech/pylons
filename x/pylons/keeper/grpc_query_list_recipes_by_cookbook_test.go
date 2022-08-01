@@ -1,12 +1,11 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestListRecipesByCookbook() {
@@ -18,8 +17,8 @@ func (suite *IntegrationTestSuite) TestListRecipesByCookbook() {
 	cookbooks := createNCookbook(k, ctx, 1)
 	msgs := createNRecipe(k, ctx, cookbooks[0], 10)
 
-	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID string) *types.QueryListRecipesByCookbookRequest {
-		return &types.QueryListRecipesByCookbookRequest{
+	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID string) *v1beta1.QueryListRecipesByCookbookRequest {
+		return &v1beta1.QueryListRecipesByCookbookRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
@@ -32,24 +31,24 @@ func (suite *IntegrationTestSuite) TestListRecipesByCookbook() {
 
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryListRecipesByCookbookRequest
-		response *types.QueryListRecipesByCookbookResponse
+		request  *v1beta1.QueryListRecipesByCookbookRequest
+		response *v1beta1.QueryListRecipesByCookbookResponse
 		err      error
 	}{
 		{
 			desc:     "ByLimit",
 			request:  requestFunc(nil, 0, 5, false, cookbooks[0].Id),
-			response: &types.QueryListRecipesByCookbookResponse{Recipes: msgs[:5]},
+			response: &v1beta1.QueryListRecipesByCookbookResponse{Recipes: msgs[:5]},
 		},
 		{
 			desc:     "All",
 			request:  requestFunc(nil, 0, 0, true, cookbooks[0].Id),
-			response: &types.QueryListRecipesByCookbookResponse{Recipes: msgs},
+			response: &v1beta1.QueryListRecipesByCookbookResponse{Recipes: msgs},
 		},
 		{
 			desc:     "NoRecipes",
 			request:  requestFunc(nil, 0, 0, true, "missing"),
-			response: &types.QueryListRecipesByCookbookResponse{Recipes: []types.Recipe{}},
+			response: &v1beta1.QueryListRecipesByCookbookResponse{Recipes: []v1beta1.Recipe{}},
 		},
 		{
 			desc: "InvalidRequest",

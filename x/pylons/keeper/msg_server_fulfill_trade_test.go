@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 )
 
 func (suite *IntegrationTestSuite) TestFulfillTradeMsgServerSimple() {
@@ -15,11 +15,11 @@ func (suite *IntegrationTestSuite) TestFulfillTradeMsgServerSimple() {
 	wctx := sdk.WrapSDKContext(ctx)
 	srv := keeper.NewMsgServerImpl(k)
 
-	creatorA := types.GenTestBech32FromString("creatorA")
-	creatorB := types.GenTestBech32FromString("creatorB")
+	creatorA := v1beta1.GenTestBech32FromString("creatorA")
+	creatorB := v1beta1.GenTestBech32FromString("creatorB")
 
 	for i := 0; i < 5; i++ {
-		msgCreate := &types.MsgCreateTrade{
+		msgCreate := &v1beta1.MsgCreateTrade{
 			Creator:     creatorA,
 			CoinInputs:  nil,
 			ItemInputs:  nil,
@@ -32,7 +32,7 @@ func (suite *IntegrationTestSuite) TestFulfillTradeMsgServerSimple() {
 		require.NoError(err)
 		require.Equal(i, int(respCreate.Id))
 
-		msgFulfill := &types.MsgFulfillTrade{
+		msgFulfill := &v1beta1.MsgFulfillTrade{
 			Creator:         creatorB,
 			Id:              respCreate.Id,
 			CoinInputsIndex: 0,

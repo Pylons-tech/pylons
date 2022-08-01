@@ -3,25 +3,24 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k msgServer) GoogleInAppPurchaseGetCoins(goCtx context.Context, msg *types.MsgGoogleInAppPurchaseGetCoins) (*types.MsgGoogleInAppPurchaseGetCoinsResponse, error) {
+func (k msgServer) GoogleInAppPurchaseGetCoins(goCtx context.Context, msg *v1beta1.MsgGoogleInAppPurchaseGetCoins) (*v1beta1.MsgGoogleInAppPurchaseGetCoinsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if k.HasGoogleIAPOrder(ctx, msg.PurchaseToken) {
-		return nil, sdkerrors.Wrap(types.ErrReceiptAlreadyUsed, "the Google IAP order ID is already being used")
+		return nil, sdkerrors.Wrap(v1beta1.ErrReceiptAlreadyUsed, "the Google IAP order ID is already being used")
 	}
 
 	// find matching package from list of coin issuers
-	var coinIssuer types.CoinIssuer
-	var googleIapPackage types.GoogleInAppPurchasePackage
+	var coinIssuer v1beta1.CoinIssuer
+	var googleIapPackage v1beta1.GoogleInAppPurchasePackage
 CoinIssuersLoop:
-	for _, ci := range types.DefaultCoinIssuers {
+	for _, ci := range v1beta1.DefaultCoinIssuers {
 		for _, p := range ci.Packages {
 			if p.ProductId == msg.ProductId {
 				coinIssuer = ci
@@ -34,11 +33,11 @@ CoinIssuersLoop:
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid product id")
 	}
 
-	if err := types.ValidateGoogleIAPSignature(msg, coinIssuer); err != nil {
+	if err := v1beta1.ValidateGoogleIAPSignature(msg, coinIssuer); err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrorInvalidSigner, "Google IAP Signature is invalid")
 	}
 
-	iap := types.GoogleInAppPurchaseOrder{
+	iap := v1beta1.GoogleInAppPurchaseOrder{
 		Creator:           msg.Creator,
 		ProductId:         msg.ProductId,
 		PurchaseToken:     msg.PurchaseToken,
@@ -56,7 +55,7 @@ CoinIssuersLoop:
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	err = ctx.EventManager().EmitTypedEvent(&types.EventGooglePurchase{
+	err = ctx.EventManager().EmitTypedEvent(&v1beta1.EventGooglePurchase{
 		Creator:           iap.Creator,
 		ProductId:         iap.ProductId,
 		PurchaseToken:     iap.PurchaseToken,
@@ -64,5 +63,5 @@ CoinIssuersLoop:
 		Signature:         iap.Signature,
 	})
 
-	return &types.MsgGoogleInAppPurchaseGetCoinsResponse{}, err
+	return &v1beta1.MsgGoogleInAppPurchaseGetCoinsResponse{}, err
 }

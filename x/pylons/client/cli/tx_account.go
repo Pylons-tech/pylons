@@ -3,6 +3,7 @@ package cli
 import (
 	"strconv"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/spf13/cobra"
@@ -10,8 +11,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 var _ = strconv.Itoa(0)
@@ -51,7 +50,7 @@ pylonsd tx pylons create-account john app-check-token pylo1tqqp6wmctv0ykatyaefsq
 				return err
 			}
 
-			msg := types.NewMsgCreateAccount(clientCtx.GetFromAddress().String(), username, token, referral)
+			msg := v1beta1.NewMsgCreateAccount(clientCtx.GetFromAddress().String(), username, token, referral)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -79,7 +78,7 @@ func CmdUpdateAccount() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgUpdateAccount(clientCtx.GetFromAddress().String(), argsUsername)
+			msg := v1beta1.NewMsgUpdateAccount(clientCtx.GetFromAddress().String(), argsUsername)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

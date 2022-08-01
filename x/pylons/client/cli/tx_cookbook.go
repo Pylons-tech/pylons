@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/spf13/cobra"
@@ -12,8 +13,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func CmdCreateCookbook() *cobra.Command {
@@ -30,7 +29,7 @@ Create a new cookbook using the following arguments :
 
 Note that the --from flag is mandatory, as indicates the key to be used to sign the transaction. 
 
-		`, types.DefaultMinFieldLength, types.DefaultMinFieldLength)
+		`, v1beta1.DefaultMinFieldLength, v1beta1.DefaultMinFieldLength)
 	cmd := &cobra.Command{
 		Use:   "create-cookbook [id] [name] [description] [developer] [version] [support-email] [enabled]",
 		Short: "create new cookbook",
@@ -68,7 +67,7 @@ pylonsd tx pylons create-cookbook "loud123456" "Legend of the Undead Dragon" "Co
 				}
 				clientCtx = c
 			}
-			msg := types.NewMsgCreateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, argsEnabled)
+			msg := v1beta1.NewMsgCreateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, argsEnabled)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -102,7 +101,7 @@ func CmdUpdateCookbook() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgUpdateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, argsEnabled)
+			msg := v1beta1.NewMsgUpdateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, argsEnabled)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

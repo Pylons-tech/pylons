@@ -3,14 +3,13 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCookbook) (*types.MsgCreateCookbookResponse, error) {
+func (k msgServer) CreateCookbook(goCtx context.Context, msg *v1beta1.MsgCreateCookbook) (*v1beta1.MsgCreateCookbookResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	// Check if the value already exists
 	_, isFound := k.GetCookbook(ctx, msg.Id)
@@ -18,7 +17,7 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "ID %v already set", msg.Id)
 	}
 
-	cookbook := types.Cookbook{
+	cookbook := v1beta1.Cookbook{
 		Id:           msg.Id,
 		Creator:      msg.Creator,
 		NodeVersion:  k.EngineVersion(ctx),
@@ -35,17 +34,17 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 		cookbook,
 	)
 
-	err := ctx.EventManager().EmitTypedEvent(&types.EventCreateCookbook{
+	err := ctx.EventManager().EmitTypedEvent(&v1beta1.EventCreateCookbook{
 		Creator: cookbook.Creator,
 		Id:      cookbook.Id,
 	})
 
 	telemetry.IncrCounter(1, "cookbook", "create")
 
-	return &types.MsgCreateCookbookResponse{}, err
+	return &v1beta1.MsgCreateCookbookResponse{}, err
 }
 
-func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCookbook) (*types.MsgUpdateCookbookResponse, error) {
+func (k msgServer) UpdateCookbook(goCtx context.Context, msg *v1beta1.MsgUpdateCookbook) (*v1beta1.MsgUpdateCookbookResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Check if the value exists
@@ -59,7 +58,7 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
-	updatedCookbook := types.Cookbook{
+	updatedCookbook := v1beta1.Cookbook{
 		Id:           msg.Id,
 		Creator:      msg.Creator,
 		NodeVersion:  k.EngineVersion(ctx),
@@ -70,7 +69,7 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 		SupportEmail: msg.SupportEmail,
 	}
 
-	modified, err := types.CookbookModified(origCookbook, updatedCookbook)
+	modified, err := v1beta1.CookbookModified(origCookbook, updatedCookbook)
 	if err != nil {
 		return nil, err
 	}
@@ -79,11 +78,11 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 		k.SetCookbook(ctx, updatedCookbook)
 	}
 
-	err = ctx.EventManager().EmitTypedEvent(&types.EventUpdateCookbook{
+	err = ctx.EventManager().EmitTypedEvent(&v1beta1.EventUpdateCookbook{
 		OriginalCookbook: origCookbook,
 	})
 
 	telemetry.IncrCounter(1, "cookbook", "update")
 
-	return &types.MsgUpdateCookbookResponse{}, err
+	return &v1beta1.MsgUpdateCookbookResponse{}, err
 }

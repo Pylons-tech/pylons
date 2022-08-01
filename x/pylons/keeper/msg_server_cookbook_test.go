@@ -4,11 +4,10 @@ import (
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestCookbookMsgServerCreate() {
@@ -22,7 +21,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerCreate() {
 	desc := "TestDescriptionTestDescription"
 	index := "testing"
 
-	anchorMsg := &types.MsgCreateCookbook{
+	anchorMsg := &v1beta1.MsgCreateCookbook{
 		Creator:      creator,
 		Id:           index,
 		Name:         desc,
@@ -34,12 +33,12 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerCreate() {
 	}
 	for _, tc := range []struct {
 		desc  string
-		msgs  []types.MsgCreateCookbook
+		msgs  []v1beta1.MsgCreateCookbook
 		valid bool
 	}{
 		{
 			desc: "Invalid request: ID already set",
-			msgs: []types.MsgCreateCookbook{
+			msgs: []v1beta1.MsgCreateCookbook{
 				*anchorMsg,
 				{
 					Creator:      creator,
@@ -56,7 +55,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerCreate() {
 		},
 		{
 			desc: "Valid",
-			msgs: []types.MsgCreateCookbook{
+			msgs: []v1beta1.MsgCreateCookbook{
 				*anchorMsg,
 				{
 					Creator:      creator,
@@ -108,7 +107,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 	version := "v1.0.0"
 	email := "test@email.com"
 
-	expected := &types.MsgCreateCookbook{
+	expected := &v1beta1.MsgCreateCookbook{
 		Creator:      creator,
 		Id:           index,
 		Name:         "originalNameOriginalName",
@@ -123,12 +122,12 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 
 	for _, tc := range []struct {
 		desc    string
-		request *types.MsgUpdateCookbook
+		request *v1beta1.MsgUpdateCookbook
 		err     error
 	}{
 		{
 			desc: "Completed",
-			request: &types.MsgUpdateCookbook{
+			request: &v1beta1.MsgUpdateCookbook{
 				Creator:      creator,
 				Id:           index,
 				Name:         name,
@@ -142,7 +141,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 		},
 		{
 			desc: "Unauthorized",
-			request: &types.MsgUpdateCookbook{
+			request: &v1beta1.MsgUpdateCookbook{
 				Creator:      "B",
 				Id:           index,
 				Name:         name,
@@ -155,7 +154,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 		},
 		{
 			desc: "KeyNotFound",
-			request: &types.MsgUpdateCookbook{
+			request: &v1beta1.MsgUpdateCookbook{
 				Creator:      creator,
 				Id:           "not-found",
 				Name:         name,

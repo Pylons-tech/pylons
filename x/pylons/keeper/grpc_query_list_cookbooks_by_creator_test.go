@@ -1,12 +1,11 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestListCookbooksByCreator() {
@@ -17,8 +16,8 @@ func (suite *IntegrationTestSuite) TestListCookbooksByCreator() {
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNCookbookForSingleOwner(k, ctx, 10)
 
-	requestFunc := func(next []byte, offset, limit uint64, total bool, creator string) *types.QueryListCookbooksByCreatorRequest {
-		return &types.QueryListCookbooksByCreatorRequest{
+	requestFunc := func(next []byte, offset, limit uint64, total bool, creator string) *v1beta1.QueryListCookbooksByCreatorRequest {
+		return &v1beta1.QueryListCookbooksByCreatorRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
@@ -31,28 +30,28 @@ func (suite *IntegrationTestSuite) TestListCookbooksByCreator() {
 
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryListCookbooksByCreatorRequest
-		response *types.QueryListCookbooksByCreatorResponse
+		request  *v1beta1.QueryListCookbooksByCreatorRequest
+		response *v1beta1.QueryListCookbooksByCreatorResponse
 		err      error
 	}{
 		{
 			desc:     "ByOffset",
 			request:  requestFunc(nil, 0, 5, false, msgs[0].Creator),
-			response: &types.QueryListCookbooksByCreatorResponse{Cookbooks: msgs[:5]},
+			response: &v1beta1.QueryListCookbooksByCreatorResponse{Cookbooks: msgs[:5]},
 		},
 		{
 			desc:     "All",
 			request:  requestFunc(nil, 0, 0, true, msgs[0].Creator),
-			response: &types.QueryListCookbooksByCreatorResponse{Cookbooks: msgs},
+			response: &v1beta1.QueryListCookbooksByCreatorResponse{Cookbooks: msgs},
 		},
 		{
 			desc:     "KeyNotFound",
-			request:  requestFunc(nil, 0, 0, true, types.GenTestBech32FromString("missing")),
-			response: &types.QueryListCookbooksByCreatorResponse{Cookbooks: []types.Cookbook{}},
+			request:  requestFunc(nil, 0, 0, true, v1beta1.GenTestBech32FromString("missing")),
+			response: &v1beta1.QueryListCookbooksByCreatorResponse{Cookbooks: []v1beta1.Cookbook{}},
 		},
 		{
 			desc:    "InvalidRequest1",
-			request: &types.QueryListCookbooksByCreatorRequest{Creator: "invalid"},
+			request: &v1beta1.QueryListCookbooksByCreatorRequest{Creator: "invalid"},
 			err:     status.Error(codes.InvalidArgument, "invalid address"),
 		},
 		{

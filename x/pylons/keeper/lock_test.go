@@ -1,9 +1,8 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestPayFees() {
@@ -13,12 +12,12 @@ func (suite *IntegrationTestSuite) TestPayFees() {
 	require := suite.Require()
 
 	// Create an initial supply
-	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+	coin := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(100))
 	mintAmt := sdk.NewCoins()
 	mintAmt = mintAmt.Add(coin)
 
 	// Create a test address
-	addrString := types.GenTestBech32FromString("test")
+	addrString := v1beta1.GenTestBech32FromString("test")
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 
 	// Transfer coins to our test address
@@ -26,7 +25,7 @@ func (suite *IntegrationTestSuite) TestPayFees() {
 	require.NoError(err)
 
 	// Pay Fees
-	fee := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+	fee := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(100))
 	feeCoins := sdk.NewCoins()
 	feeCoins = feeCoins.Add(fee)
 	err = k.PayFees(ctx, addr, feeCoins)
@@ -44,12 +43,12 @@ func (suite *IntegrationTestSuite) TestLockCoinsForExecution() {
 	require := suite.Require()
 
 	// Create an initial supply
-	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+	coin := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(100))
 	mintAmt := sdk.NewCoins()
 	mintAmt = mintAmt.Add(coin)
 
 	// Create a test address
-	addrString := types.GenTestBech32FromString("test")
+	addrString := v1beta1.GenTestBech32FromString("test")
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 
 	// Transfer coins to our test address
@@ -57,7 +56,7 @@ func (suite *IntegrationTestSuite) TestLockCoinsForExecution() {
 	require.NoError(err)
 
 	// Lock coins for execution
-	lc := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))
+	lc := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(10))
 	lockedCoins := sdk.NewCoins()
 	lockedCoins = lockedCoins.Add(lc)
 	err = k.LockCoinsForExecution(ctx, addr, lockedCoins)
@@ -75,12 +74,12 @@ func (suite *IntegrationTestSuite) TestLockCoinsForTrade() {
 	require := suite.Require()
 
 	// Create an initial supply
-	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+	coin := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(100))
 	mintAmt := sdk.NewCoins()
 	mintAmt = mintAmt.Add(coin)
 
 	// Create a test address
-	addrString := types.GenTestBech32FromString("test")
+	addrString := v1beta1.GenTestBech32FromString("test")
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 
 	// Transfer coins to our test address
@@ -88,7 +87,7 @@ func (suite *IntegrationTestSuite) TestLockCoinsForTrade() {
 	require.NoError(err)
 
 	// Lock coins for trade
-	lc := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))
+	lc := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(10))
 	lockedCoins := sdk.NewCoins()
 	lockedCoins = lockedCoins.Add(lc)
 	err = k.LockCoinsForTrade(ctx, addr, lockedCoins)
@@ -106,12 +105,12 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForTrade() {
 	require := suite.Require()
 
 	// Create an initial supply
-	initialSupply := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+	initialSupply := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(100))
 	coinsOfInitialSupply := sdk.NewCoins()
 	coinsOfInitialSupply = coinsOfInitialSupply.Add(initialSupply)
 
 	// Create a test address
-	addrString := types.GenTestBech32FromString("test")
+	addrString := v1beta1.GenTestBech32FromString("test")
 	testAddr, _ := sdk.AccAddressFromBech32(addrString)
 
 	// Transfer coins to our test address
@@ -119,10 +118,10 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForTrade() {
 	require.NoError(err)
 
 	// Save the initial balance to use as validation test later
-	initialAddrBalance := bk.SpendableCoins(ctx, testAddr).AmountOf(types.PylonsCoinDenom)
+	initialAddrBalance := bk.SpendableCoins(ctx, testAddr).AmountOf(v1beta1.PylonsCoinDenom)
 
 	// Lock coins for trade
-	lc := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))
+	lc := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(10))
 	lockedCoins := sdk.NewCoins()
 	lockedCoins = lockedCoins.Add(lc)
 	err = k.LockCoinsForTrade(ctx, testAddr, lockedCoins)
@@ -131,7 +130,7 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForTrade() {
 	// Verify that the balance of the test address has been debited
 	balance := bk.SpendableCoins(ctx, testAddr)
 	newBalance := sdk.NewInt(90)
-	testAddrBalance := balance.AmountOf(types.PylonsCoinDenom)
+	testAddrBalance := balance.AmountOf(v1beta1.PylonsCoinDenom)
 	require.True(newBalance.Equal(testAddrBalance))
 
 	// Unlock the coins
@@ -140,7 +139,7 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForTrade() {
 
 	// Assert that the unlocked balance is equal to the previous balance.
 	unlockedBalance := bk.SpendableCoins(ctx, testAddr)
-	testAddrUnlockedBalance := unlockedBalance.AmountOf(types.PylonsCoinDenom)
+	testAddrUnlockedBalance := unlockedBalance.AmountOf(v1beta1.PylonsCoinDenom)
 	require.True(initialAddrBalance.Equal(testAddrUnlockedBalance))
 }
 
@@ -151,12 +150,12 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForExecution() {
 	require := suite.Require()
 
 	// Create an initial supply
-	initialSupply := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+	initialSupply := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(100))
 	coinsOfInitialSupply := sdk.NewCoins()
 	coinsOfInitialSupply = coinsOfInitialSupply.Add(initialSupply)
 
 	// Create a test address
-	addrString := types.GenTestBech32FromString("test")
+	addrString := v1beta1.GenTestBech32FromString("test")
 	testAddr, _ := sdk.AccAddressFromBech32(addrString)
 
 	// Transfer coins to our test address
@@ -164,10 +163,10 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForExecution() {
 	require.NoError(err)
 
 	// Save the initial balance to use as validation test later
-	initialAddrBalance := bk.SpendableCoins(ctx, testAddr).AmountOf(types.PylonsCoinDenom)
+	initialAddrBalance := bk.SpendableCoins(ctx, testAddr).AmountOf(v1beta1.PylonsCoinDenom)
 
 	// Lock coins for execution
-	lc := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))
+	lc := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(10))
 	lockedCoins := sdk.NewCoins()
 	lockedCoins = lockedCoins.Add(lc)
 	err = k.LockCoinsForExecution(ctx, testAddr, lockedCoins)
@@ -176,7 +175,7 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForExecution() {
 	// Verify that the balance of the test address has been debited
 	balance := bk.SpendableCoins(ctx, testAddr)
 	newBalance := sdk.NewInt(90)
-	testAddrBalance := balance.AmountOf(types.PylonsCoinDenom)
+	testAddrBalance := balance.AmountOf(v1beta1.PylonsCoinDenom)
 	require.True(newBalance.Equal(testAddrBalance))
 
 	// Unlock the coins
@@ -185,7 +184,7 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForExecution() {
 
 	// Assert that the unlocked balance is equal to the previous balance.
 	unlockedBalance := bk.SpendableCoins(ctx, testAddr)
-	testAddrUnlockedBalance := unlockedBalance.AmountOf(types.PylonsCoinDenom)
+	testAddrUnlockedBalance := unlockedBalance.AmountOf(v1beta1.PylonsCoinDenom)
 	require.True(initialAddrBalance.Equal(testAddrUnlockedBalance))
 }
 

@@ -3,11 +3,10 @@ package cli
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func CmdListReferralsByAddress() *cobra.Command {
@@ -18,11 +17,11 @@ func CmdListReferralsByAddress() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
-			queryClient := types.NewQueryClient(clientCtx)
+			queryClient := v1beta1.NewQueryClient(clientCtx)
 
 			addr := args[0]
 
-			params := &types.QueryListSignUpByReferee{
+			params := &v1beta1.QueryListSignUpByReferee{
 				Creator: addr,
 			}
 

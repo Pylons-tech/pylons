@@ -96,11 +96,11 @@ Emitted when an `Execution` is successfully completed.  Contains extra informati
 message EventCompleteExecution {
   string creator = 1;
   string ID = 2;
-  repeated cosmos.base.v1beta1.Coin burnCoins = 3 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated cosmos.base.v1beta1.Coin payCoins = 4 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated cosmos.base.v1beta1.Coin transferCoins = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated cosmos.base.v1beta1.Coin feeCoins = 6 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated cosmos.base.v1beta1.Coin coinOutputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin burnCoins = 3 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/v1beta1.Coins"];
+  repeated cosmos.base.v1beta1.Coin payCoins = 4 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/v1beta1.Coins"];
+  repeated cosmos.base.v1beta1.Coin transferCoins = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/v1beta1.Coins"];
+  repeated cosmos.base.v1beta1.Coin feeCoins = 6 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/v1beta1.Coins"];
+  repeated cosmos.base.v1beta1.Coin coinOutputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/v1beta1.Coins"];
   repeated Item mintItems = 8 [(gogoproto.nullable) = false];
   repeated Item modifyItems = 9 [(gogoproto.nullable) = false];
 }
@@ -177,9 +177,9 @@ message EventFulfillTrade {
   string creator = 2;
   string fulfiller = 3;
   repeated ItemRef itemInputs = 4 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin coinInputs = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin coinInputs = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/v1beta1.Coins"];
   repeated ItemRef itemOutputs = 6 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin coinOutputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin coinOutputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/v1beta1.Coins"];
 }
 ```
 

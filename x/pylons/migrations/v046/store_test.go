@@ -10,13 +10,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	v046 "github.com/Pylons-tech/pylons/x/pylons/migrations/v046"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	v1 "github.com/Pylons-tech/pylons/x/pylons/types/v1"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 )
 
 func TestMigrateStore(t *testing.T) {
 	cdc := simapp.MakeTestEncodingConfig().Codec
-	key := sdk.NewKVStoreKey(types.AppleInAppPurchaseOrderKey)
+	key := sdk.NewKVStoreKey(v1beta1.AppleInAppPurchaseOrderKey)
 	ctx := testutil.DefaultContext(key, sdk.NewTransientStoreKey("transient_test"))
 	store := ctx.KVStore(key)
 
@@ -26,7 +26,7 @@ func TestMigrateStore(t *testing.T) {
 		ProductID:    "test_prod_1",
 		PurchaseID:   "test_purchase_1",
 		PurchaseDate: "28-07-2022",
-		Creator:      types.GenTestBech32FromString("test1"),
+		Creator:      v1beta1.GenTestBech32FromString("test1"),
 	}
 	prop1Bz, err := cdc.Marshal(&prop1)
 
@@ -35,29 +35,29 @@ func TestMigrateStore(t *testing.T) {
 		ProductID:    "test_prod_2",
 		PurchaseID:   "test_purchase_2",
 		PurchaseDate: "28-07-2022",
-		Creator:      types.GenTestBech32FromString("test2"),
+		Creator:      v1beta1.GenTestBech32FromString("test2"),
 	}
 	prop2Bz, err := cdc.Marshal(&prop2)
 
-	store.Set(types.KeyPrefix(prop1.PurchaseID), prop1Bz)
-	store.Set(types.KeyPrefix(prop2.PurchaseID), prop2Bz)
+	store.Set(v1beta1.KeyPrefix(prop1.PurchaseID), prop1Bz)
+	store.Set(v1beta1.KeyPrefix(prop2.PurchaseID), prop2Bz)
 
 	// Run migrations.
 	err = v046.MigrateStore(ctx, key, cdc)
 	require.NoError(t, err)
 
-	var newProp1 types.AppleInAppPurchaseOrder
-	err = cdc.Unmarshal(store.Get(types.KeyPrefix(prop1.PurchaseID)), &newProp1)
+	var newProp1 v1beta1.AppleInAppPurchaseOrder
+	err = cdc.Unmarshal(store.Get(v1beta1.KeyPrefix(prop1.PurchaseID)), &newProp1)
 	require.NoError(t, err)
 	compareProps(t, prop1, newProp1)
 
-	var newProp2 types.AppleInAppPurchaseOrder
-	err = cdc.Unmarshal(store.Get(types.KeyPrefix(prop2.PurchaseID)), &newProp2)
+	var newProp2 v1beta1.AppleInAppPurchaseOrder
+	err = cdc.Unmarshal(store.Get(v1beta1.KeyPrefix(prop2.PurchaseID)), &newProp2)
 	require.NoError(t, err)
 	compareProps(t, prop2, newProp2)
 }
 
-func compareProps(t *testing.T, oldProp v1.AppleInAppPurchaseOrder, newProp types.AppleInAppPurchaseOrder) {
+func compareProps(t *testing.T, oldProp v1.AppleInAppPurchaseOrder, newProp v1beta1.AppleInAppPurchaseOrder) {
 	require.Equal(t, oldProp.PurchaseID, newProp.PurchaseId)
 	require.Equal(t, oldProp.Quantity, newProp.Quantity)
 	require.Equal(t, oldProp.ProductID, newProp.ProductId)

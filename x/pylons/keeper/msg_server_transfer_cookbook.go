@@ -3,14 +3,13 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k msgServer) TransferCookbook(goCtx context.Context, msg *types.MsgTransferCookbook) (*types.MsgTransferCookbookResponse, error) {
+func (k msgServer) TransferCookbook(goCtx context.Context, msg *v1beta1.MsgTransferCookbook) (*v1beta1.MsgTransferCookbookResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// check if cookbook is currently owned by creator
@@ -30,11 +29,11 @@ func (k msgServer) TransferCookbook(goCtx context.Context, msg *types.MsgTransfe
 	}
 	k.Keeper.UpdateCookbook(ctx, cookbook, creatorAddr)
 
-	err = ctx.EventManager().EmitTypedEvent(&types.EventTransferCookbook{
+	err = ctx.EventManager().EmitTypedEvent(&v1beta1.EventTransferCookbook{
 		Sender:   msg.Creator,
 		Receiver: cookbook.Creator,
 		Id:       cookbook.Id,
 	})
 
-	return &types.MsgTransferCookbookResponse{}, err
+	return &v1beta1.MsgTransferCookbookResponse{}, err
 }

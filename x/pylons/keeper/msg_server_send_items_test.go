@@ -5,7 +5,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 )
 
 func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
@@ -20,18 +20,18 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
 	// create N cookbook for N different creators
 	cookbooks := createNCookbook(k, ctx, 5)
 	// create N items for each cookbook, all with same owner
-	items := make([]types.Item, 0)
+	items := make([]v1beta1.Item, 0)
 	for _, cookbook := range cookbooks {
 		items = append(items, createNItemSameOwnerAndCookbook(k, ctx, 5, cookbook.Id, true)...)
 	}
 
 	owner := items[0].Owner
-	receiver := types.GenTestBech32FromString("receiver")
+	receiver := v1beta1.GenTestBech32FromString("receiver")
 
 	// assign coins to owner to pay for transfers - 5*5*100 = 2500pylon since every item created by
 	// createNItemSameOwnerAndCookbook costs 100pylon to transfer
 	// first, create an initial supply
-	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(2500))
+	coin := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(2500))
 	mintAmt := sdk.NewCoins()
 	mintAmt = mintAmt.Add(coin)
 
@@ -40,20 +40,20 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
 	err := k.MintCoinsToAddr(ctx, ownerAddr, mintAmt)
 	require.NoError(err)
 
-	itemsRequestList := make([]types.ItemRef, 25)
+	itemsRequestList := make([]v1beta1.ItemRef, 25)
 	for i, item := range items {
-		itemsRequestList[i] = types.ItemRef{CookbookId: item.CookbookId, ItemId: item.Id}
+		itemsRequestList[i] = v1beta1.ItemRef{CookbookId: item.CookbookId, ItemId: item.Id}
 	}
 
 	for _, tc := range []struct {
 		desc    string
-		request *types.MsgSendItems
+		request *v1beta1.MsgSendItems
 		err     error
 	}{
 		{
 			desc: "Unauthorized",
-			request: &types.MsgSendItems{
-				Creator:  types.GenTestBech32FromString("wrong_owner"),
+			request: &v1beta1.MsgSendItems{
+				Creator:  v1beta1.GenTestBech32FromString("wrong_owner"),
 				Receiver: receiver,
 				Items:    itemsRequestList,
 			},
@@ -61,7 +61,7 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
 		},
 		{
 			desc: "Valid",
-			request: &types.MsgSendItems{
+			request: &v1beta1.MsgSendItems{
 				Creator:  owner,
 				Receiver: receiver,
 				Items:    itemsRequestList,
@@ -70,10 +70,10 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
 		},
 		{
 			desc: "InvalidRequest",
-			request: &types.MsgSendItems{
+			request: &v1beta1.MsgSendItems{
 				Creator:  owner,
 				Receiver: receiver,
-				Items:    []types.ItemRef{{CookbookId: "not_found", ItemId: "not_found"}},
+				Items:    []v1beta1.ItemRef{{CookbookId: "not_found", ItemId: "not_found"}},
 			},
 			err: sdkerrors.ErrInvalidRequest,
 		},
@@ -98,7 +98,7 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
 				}
 				// check that balance of sender is now 0pylon
 				balance := bk.SpendableCoins(ctx, senderAddr)
-				require.True(balance.IsEqual(sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.ZeroInt()))))
+				require.True(balance.IsEqual(sdk.NewCoins(sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.ZeroInt()))))
 			}
 		})
 	}
@@ -116,18 +116,18 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItemsNonTradable() {
 	// create N cookbook for N different creators
 	cookbooks := createNCookbook(k, ctx, 5)
 	// create N items for each cookbook, all with same owner
-	items := make([]types.Item, 0)
+	items := make([]v1beta1.Item, 0)
 	for _, cookbook := range cookbooks {
 		items = append(items, createNItemSameOwnerAndCookbook(k, ctx, 5, cookbook.Id, false)...)
 	}
 
 	owner := items[0].Owner
-	receiver := types.GenTestBech32FromString("receiver")
+	receiver := v1beta1.GenTestBech32FromString("receiver")
 
 	// assign coins to owner to pay for transfers - 5*5*100 = 2500pylon since every item created by
 	// createNItemSameOwnerAndCookbook costs 100pylon to transfer
 	// first, create an initial supply
-	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(2500))
+	coin := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(2500))
 	mintAmt := sdk.NewCoins()
 	mintAmt = mintAmt.Add(coin)
 
@@ -136,20 +136,20 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItemsNonTradable() {
 	err := k.MintCoinsToAddr(ctx, ownerAddr, mintAmt)
 	require.NoError(err)
 
-	itemsRequestList := make([]types.ItemRef, 25)
+	itemsRequestList := make([]v1beta1.ItemRef, 25)
 	for i, item := range items {
-		itemsRequestList[i] = types.ItemRef{CookbookId: item.CookbookId, ItemId: item.Id}
+		itemsRequestList[i] = v1beta1.ItemRef{CookbookId: item.CookbookId, ItemId: item.Id}
 	}
 
 	for _, tc := range []struct {
 		desc    string
-		request *types.MsgSendItems
+		request *v1beta1.MsgSendItems
 		err     error
 	}{
 		{
 			desc: "Unauthorized",
-			request: &types.MsgSendItems{
-				Creator:  types.GenTestBech32FromString("wrong_owner"),
+			request: &v1beta1.MsgSendItems{
+				Creator:  v1beta1.GenTestBech32FromString("wrong_owner"),
 				Receiver: receiver,
 				Items:    itemsRequestList,
 			},
@@ -157,7 +157,7 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItemsNonTradable() {
 		},
 		{
 			desc: "NonTradable",
-			request: &types.MsgSendItems{
+			request: &v1beta1.MsgSendItems{
 				Creator:  owner,
 				Receiver: receiver,
 				Items:    itemsRequestList,
@@ -166,10 +166,10 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItemsNonTradable() {
 		},
 		{
 			desc: "InvalidRequest",
-			request: &types.MsgSendItems{
+			request: &v1beta1.MsgSendItems{
 				Creator:  owner,
 				Receiver: receiver,
-				Items:    []types.ItemRef{{CookbookId: "not_found", ItemId: "not_found"}},
+				Items:    []v1beta1.ItemRef{{CookbookId: "not_found", ItemId: "not_found"}},
 			},
 			err: sdkerrors.ErrInvalidRequest,
 		},
@@ -194,7 +194,7 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItemsNonTradable() {
 				}
 				// check that balance of sender is now 0pylon
 				balance := bk.SpendableCoins(ctx, senderAddr)
-				require.True(balance.IsEqual(sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.ZeroInt()))))
+				require.True(balance.IsEqual(sdk.NewCoins(sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.ZeroInt()))))
 			}
 		})
 	}

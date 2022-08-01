@@ -5,18 +5,17 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // GetItemCount get the total number of items
 func (k Keeper) GetItemCount(ctx sdk.Context) uint64 {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemCountKey))
-	byteKey := types.KeyPrefix(types.ItemCountKey)
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ItemCountKey))
+	byteKey := v1beta1.KeyPrefix(v1beta1.ItemCountKey)
 	bz := store.Get(byteKey)
 
 	// Count doesn't exist: no element
@@ -36,18 +35,18 @@ func (k Keeper) GetItemCount(ctx sdk.Context) uint64 {
 
 // SetItemCount set the total number of items
 func (k Keeper) SetItemCount(ctx sdk.Context, count uint64) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemCountKey))
-	byteKey := types.KeyPrefix(types.ItemCountKey)
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ItemCountKey))
+	byteKey := v1beta1.KeyPrefix(v1beta1.ItemCountKey)
 	bz := []byte(strconv.FormatUint(count, 10))
 	store.Set(byteKey, bz)
 }
 
 // AppendItem appends an item in the store with a new id and update the count
-func (k Keeper) AppendItem(ctx sdk.Context, item types.Item) string {
+func (k Keeper) AppendItem(ctx sdk.Context, item v1beta1.Item) string {
 	// Create the execution
 	count := k.GetItemCount(ctx)
 
-	item.Id = types.EncodeItemID(count)
+	item.Id = v1beta1.EncodeItemID(count)
 	k.SetItem(ctx, item)
 
 	// Update item count
@@ -57,11 +56,11 @@ func (k Keeper) AppendItem(ctx sdk.Context, item types.Item) string {
 }
 
 // SetItem set a specific item in the store from its index
-func (k Keeper) SetItem(ctx sdk.Context, item types.Item) {
-	itemsStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))
-	cookbookItemsStore := prefix.NewStore(itemsStore, types.KeyPrefix(item.CookbookId))
+func (k Keeper) SetItem(ctx sdk.Context, item v1beta1.Item) {
+	itemsStore := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ItemKey))
+	cookbookItemsStore := prefix.NewStore(itemsStore, v1beta1.KeyPrefix(item.CookbookId))
 	b := k.cdc.MustMarshal(&item)
-	cookbookItemsStore.Set(types.KeyPrefix(item.Id), b)
+	cookbookItemsStore.Set(v1beta1.KeyPrefix(item.Id), b)
 
 	addr, _ := sdk.AccAddressFromBech32(item.Owner)
 	k.addItemToAddress(ctx, item.CookbookId, item.Id, addr)
@@ -70,23 +69,23 @@ func (k Keeper) SetItem(ctx sdk.Context, item types.Item) {
 }
 
 // UpdateItem updates an item removing it from previous owner store
-func (k Keeper) UpdateItem(ctx sdk.Context, item types.Item, prevAddr sdk.AccAddress) {
+func (k Keeper) UpdateItem(ctx sdk.Context, item v1beta1.Item, prevAddr sdk.AccAddress) {
 	k.removeItemFromAddress(ctx, item.CookbookId, item.Id, prevAddr)
 	k.SetItem(ctx, item)
 }
 
 // HasItem checks if the item exists in the store
 func (k Keeper) HasItem(ctx sdk.Context, cookbookID, id string) bool {
-	itemsStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))
-	cookbookItemsStore := prefix.NewStore(itemsStore, types.KeyPrefix(cookbookID))
-	return cookbookItemsStore.Has(types.KeyPrefix(id))
+	itemsStore := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ItemKey))
+	cookbookItemsStore := prefix.NewStore(itemsStore, v1beta1.KeyPrefix(cookbookID))
+	return cookbookItemsStore.Has(v1beta1.KeyPrefix(id))
 }
 
 // GetItem returns an item from its index
-func (k Keeper) GetItem(ctx sdk.Context, cookbookID, id string) (val types.Item, found bool) {
-	itemsStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))
-	cookbookItemsStore := prefix.NewStore(itemsStore, types.KeyPrefix(cookbookID))
-	b := cookbookItemsStore.Get(types.KeyPrefix(id))
+func (k Keeper) GetItem(ctx sdk.Context, cookbookID, id string) (val v1beta1.Item, found bool) {
+	itemsStore := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ItemKey))
+	cookbookItemsStore := prefix.NewStore(itemsStore, v1beta1.KeyPrefix(cookbookID))
+	b := cookbookItemsStore.Get(v1beta1.KeyPrefix(id))
 	if b == nil {
 		return val, false
 	}
@@ -95,14 +94,14 @@ func (k Keeper) GetItem(ctx sdk.Context, cookbookID, id string) (val types.Item,
 }
 
 // GetAllItem returns all item
-func (k Keeper) GetAllItem(ctx sdk.Context) (list []types.Item) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))
+func (k Keeper) GetAllItem(ctx sdk.Context) (list []v1beta1.Item) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.ItemKey))
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})
 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var val types.Item
+		var val v1beta1.Item
 		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
@@ -111,24 +110,24 @@ func (k Keeper) GetAllItem(ctx sdk.Context) (list []types.Item) {
 }
 
 func (k Keeper) addItemToAddress(ctx sdk.Context, cookbookID, itemID string, addr sdk.AccAddress) {
-	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrItemKey))
+	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AddrItemKey))
 	addrStore := prefix.NewStore(parentStore, addr.Bytes())
-	store := prefix.NewStore(addrStore, types.KeyPrefix(cookbookID))
-	byteKey := types.KeyPrefix(itemID)
+	store := prefix.NewStore(addrStore, v1beta1.KeyPrefix(cookbookID))
+	byteKey := v1beta1.KeyPrefix(itemID)
 	bz := []byte(fmt.Sprintf("%v-%v", cookbookID, itemID))
 	store.Set(byteKey, bz)
 }
 
 func (k Keeper) removeItemFromAddress(ctx sdk.Context, cookbookID, itemID string, addr sdk.AccAddress) {
-	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrItemKey))
+	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AddrItemKey))
 	addrStore := prefix.NewStore(parentStore, addr.Bytes())
-	store := prefix.NewStore(addrStore, types.KeyPrefix(cookbookID))
-	byteKey := types.KeyPrefix(itemID)
+	store := prefix.NewStore(addrStore, v1beta1.KeyPrefix(cookbookID))
+	byteKey := v1beta1.KeyPrefix(itemID)
 	store.Delete(byteKey)
 }
 
-func (k Keeper) GetAllItemByOwner(ctx sdk.Context, owner sdk.AccAddress) (list []types.Item) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrItemKey))
+func (k Keeper) GetAllItemByOwner(ctx sdk.Context, owner sdk.AccAddress) (list []v1beta1.Item) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AddrItemKey))
 	iterator := sdk.KVStorePrefixIterator(store, owner.Bytes())
 
 	defer iterator.Close()
@@ -142,10 +141,10 @@ func (k Keeper) GetAllItemByOwner(ctx sdk.Context, owner sdk.AccAddress) (list [
 	return
 }
 
-func (k Keeper) GetItemsByOwnerPaginated(ctx sdk.Context, owner sdk.AccAddress, pagination *query.PageRequest) ([]types.Item, *query.PageResponse, error) {
-	items := make([]types.Item, 0)
+func (k Keeper) GetItemsByOwnerPaginated(ctx sdk.Context, owner sdk.AccAddress, pagination *query.PageRequest) ([]v1beta1.Item, *query.PageResponse, error) {
+	items := make([]v1beta1.Item, 0)
 
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrItemKey))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.AddrItemKey))
 	store = prefix.NewStore(store, owner.Bytes())
 
 	pageRes, err := query.Paginate(store, pagination, func(_, value []byte) error {

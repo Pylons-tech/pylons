@@ -2,7 +2,7 @@ package keeper_test
 
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -15,7 +15,7 @@ func (suite *IntegrationTestSuite) TestAddStripeRefund() {
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
 
-	addr := types.GenTestBech32List(1)
+	addr := v1beta1.GenTestBech32List(1)
 	correctAddr := "pylo1xn72u3jxlpqx8tfgmjf0xg970q36xensjngsme"
 	amount := sdk.NewIntFromUint64(10020060)
 	productID := "recipe/Easel_CookBook_auto_cookbook_2022_06_14_114716_442/Easel_Recipe_auto_recipe_2022_06_14_114722_895"
@@ -25,13 +25,13 @@ func (suite *IntegrationTestSuite) TestAddStripeRefund() {
 	processorName := "Pylons_Inc"
 	for _, tc := range []struct {
 		desc    string
-		request *types.MsgAddStripeRefund
+		request *v1beta1.MsgAddStripeRefund
 		err     error
 	}{
 		{
 			desc: "Valid Payment Info",
-			request: &types.MsgAddStripeRefund{
-				Payment: &types.PaymentInfo{
+			request: &v1beta1.MsgAddStripeRefund{
+				Payment: &v1beta1.PaymentInfo{
 					PurchaseId:    purchaseId,
 					ProcessorName: processorName,
 					PayerAddr:     correctAddr,
@@ -44,8 +44,8 @@ func (suite *IntegrationTestSuite) TestAddStripeRefund() {
 		},
 		{
 			desc: "Payment Info Already Used",
-			request: &types.MsgAddStripeRefund{
-				Payment: &types.PaymentInfo{
+			request: &v1beta1.MsgAddStripeRefund{
+				Payment: &v1beta1.PaymentInfo{
 					PurchaseId:    purchaseId,
 					ProcessorName: processorName,
 					PayerAddr:     correctAddr,
@@ -59,8 +59,8 @@ func (suite *IntegrationTestSuite) TestAddStripeRefund() {
 		},
 		{
 			desc: "Address Do Not Match",
-			request: &types.MsgAddStripeRefund{
-				Payment: &types.PaymentInfo{
+			request: &v1beta1.MsgAddStripeRefund{
+				Payment: &v1beta1.PaymentInfo{
 					PurchaseId:    purchaseId,
 					ProcessorName: processorName,
 					PayerAddr:     correctAddr,
@@ -74,8 +74,8 @@ func (suite *IntegrationTestSuite) TestAddStripeRefund() {
 		},
 		{
 			desc: "Signature Invalid",
-			request: &types.MsgAddStripeRefund{
-				Payment: &types.PaymentInfo{
+			request: &v1beta1.MsgAddStripeRefund{
+				Payment: &v1beta1.PaymentInfo{
 					PurchaseId:    incPurchaseId,
 					ProcessorName: processorName,
 					PayerAddr:     correctAddr,

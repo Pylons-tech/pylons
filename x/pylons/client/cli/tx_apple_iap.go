@@ -3,7 +3,7 @@ package cli
 import (
 	"strconv"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -27,7 +27,7 @@ func CmdAppleIap() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgAppleIap(
+			msg := v1beta1.NewMsgAppleIap(
 				clientCtx.GetFromAddress().String(),
 				argsProductID,
 				argsPurchaseID,

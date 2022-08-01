@@ -1,12 +1,11 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestTradeQuerySingle() {
@@ -18,23 +17,23 @@ func (suite *IntegrationTestSuite) TestTradeQuerySingle() {
 	msgs := createNTrade(k, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryGetTradeRequest
-		response *types.QueryGetTradeResponse
+		request  *v1beta1.QueryGetTradeRequest
+		response *v1beta1.QueryGetTradeResponse
 		err      error
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetTradeRequest{Id: msgs[0].Id},
-			response: &types.QueryGetTradeResponse{Trade: msgs[0]},
+			request:  &v1beta1.QueryGetTradeRequest{Id: msgs[0].Id},
+			response: &v1beta1.QueryGetTradeResponse{Trade: msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetTradeRequest{Id: msgs[1].Id},
-			response: &types.QueryGetTradeResponse{Trade: msgs[1]},
+			request:  &v1beta1.QueryGetTradeRequest{Id: msgs[1].Id},
+			response: &v1beta1.QueryGetTradeResponse{Trade: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetTradeRequest{Id: uint64(len(msgs))},
+			request: &v1beta1.QueryGetTradeRequest{Id: uint64(len(msgs))},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 		{

@@ -3,7 +3,7 @@ package cli
 import (
 	"strconv"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
@@ -22,9 +22,9 @@ func CmdGetStripeRefund() *cobra.Command {
 				return err
 			}
 
-			queryClient := types.NewQueryClient(clientCtx)
+			queryClient := v1beta1.NewQueryClient(clientCtx)
 
-			params := &types.QueryGetStripeRefundRequest{}
+			params := &v1beta1.QueryGetStripeRefundRequest{}
 
 			res, err := queryClient.GetStripeRefund(cmd.Context(), params)
 			if err != nil {

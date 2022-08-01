@@ -3,14 +3,13 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) AddressByUsername(goCtx context.Context, req *types.QueryGetAddressByUsernameRequest) (*types.QueryGetAddressByUsernameResponse, error) {
+func (k Keeper) AddressByUsername(goCtx context.Context, req *v1beta1.QueryGetAddressByUsernameRequest) (*v1beta1.QueryGetAddressByUsernameResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -21,10 +20,10 @@ func (k Keeper) AddressByUsername(goCtx context.Context, req *types.QueryGetAddr
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}
 
-	return &types.QueryGetAddressByUsernameResponse{Address: val}, nil
+	return &v1beta1.QueryGetAddressByUsernameResponse{Address: val}, nil
 }
 
-func (k Keeper) UsernameByAddress(goCtx context.Context, req *types.QueryGetUsernameByAddressRequest) (*types.QueryGetUsernameByAddressResponse, error) {
+func (k Keeper) UsernameByAddress(goCtx context.Context, req *v1beta1.QueryGetUsernameByAddressRequest) (*v1beta1.QueryGetUsernameByAddressResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -40,5 +39,5 @@ func (k Keeper) UsernameByAddress(goCtx context.Context, req *types.QueryGetUser
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}
 
-	return &types.QueryGetUsernameByAddressResponse{Username: val}, nil
+	return &v1beta1.QueryGetUsernameByAddressResponse{Username: val}, nil
 }

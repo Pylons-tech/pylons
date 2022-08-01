@@ -1,9 +1,8 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestHasEnoughBalance() {
@@ -12,10 +11,10 @@ func (suite *IntegrationTestSuite) TestHasEnoughBalance() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	addrString := types.GenTestBech32FromString("test")
+	addrString := v1beta1.GenTestBech32FromString("test")
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 
-	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+	coin := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(100))
 	mintAmt := sdk.NewCoins()
 	mintAmt = mintAmt.Add(coin)
 
@@ -38,10 +37,10 @@ func (suite *IntegrationTestSuite) TestHasEnoughIBCDenomBalance() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	addrString := types.GenTestBech32FromString("test")
+	addrString := v1beta1.GenTestBech32FromString("test")
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 
-	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+	coin := sdk.NewCoin(v1beta1.PylonsCoinDenom, sdk.NewInt(100))
 	mintAmt := sdk.NewCoins()
 	mintAmt = mintAmt.Add(coin)
 

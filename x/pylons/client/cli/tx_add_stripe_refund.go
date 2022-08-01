@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"strconv"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -19,7 +19,7 @@ func CmdAddStripeRefund() *cobra.Command {
 		Short: "Broadcast message add-stripe-refund",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			argPayment := new(types.PaymentInfo)
+			argPayment := new(v1beta1.PaymentInfo)
 			err = json.Unmarshal([]byte(args[0]), argPayment)
 			if err != nil {
 				return err
@@ -30,7 +30,7 @@ func CmdAddStripeRefund() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgAddStripeRefund(
+			msg := v1beta1.NewMsgAddStripeRefund(
 				clientCtx.GetFromAddress().String(),
 				argPayment,
 			)

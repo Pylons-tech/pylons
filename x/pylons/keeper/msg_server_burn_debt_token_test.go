@@ -9,7 +9,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 )
 
 // genTestRedeemInfoSignature generates a signed RedeemInfo message using privKey
@@ -36,17 +36,17 @@ func (suite *IntegrationTestSuite) TestBurnDebtToken() {
 
 	// set up new payment processor using private key
 	params := k.GetParams(suite.ctx)
-	params.PaymentProcessors = append(params.PaymentProcessors, types.PaymentProcessor{
+	params.PaymentProcessors = append(params.PaymentProcessors, v1beta1.PaymentProcessor{
 		CoinDenom:            "ustripeusd",
 		PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-		ProcessorPercentage:  types.DefaultProcessorPercentage,
-		ValidatorsPercentage: types.DefaultValidatorsPercentage,
+		ProcessorPercentage:  v1beta1.DefaultProcessorPercentage,
+		ValidatorsPercentage: v1beta1.DefaultValidatorsPercentage,
 		Name:                 "Test",
 	})
 	k.SetParams(suite.ctx, params)
 
 	type args struct {
-		ri     types.RedeemInfo
+		ri     v1beta1.RedeemInfo
 		sender string
 	}
 	for _, tc := range []struct {
@@ -57,70 +57,70 @@ func (suite *IntegrationTestSuite) TestBurnDebtToken() {
 		{
 			name: "Valid",
 			args: args{
-				ri: types.RedeemInfo{
+				ri: v1beta1.RedeemInfo{
 					Id:            "testId",
 					ProcessorName: "Test",
-					Address:       types.GenTestBech32FromString("test"),
+					Address:       v1beta1.GenTestBech32FromString("test"),
 					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
-					Signature:     genTestRedeemInfoSignature("testId", types.GenTestBech32FromString("test"), sdk.NewInt(1_000_000_000), privKey),
+					Signature:     genTestRedeemInfoSignature("testId", v1beta1.GenTestBech32FromString("test"), sdk.NewInt(1_000_000_000), privKey),
 				},
-				sender: types.GenTestBech32FromString("test"),
+				sender: v1beta1.GenTestBech32FromString("test"),
 			},
 			wantErr: false,
 		},
 		{
 			name: "Invalid purchase ID",
 			args: args{
-				ri: types.RedeemInfo{
+				ri: v1beta1.RedeemInfo{
 					Id:            "1",
 					ProcessorName: "Test",
-					Address:       types.GenTestBech32FromString("test"),
+					Address:       v1beta1.GenTestBech32FromString("test"),
 					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
-					Signature:     genTestRedeemInfoSignature("testId", types.GenTestBech32FromString("test"), sdk.NewInt(1_000_000_000), privKey),
+					Signature:     genTestRedeemInfoSignature("testId", v1beta1.GenTestBech32FromString("test"), sdk.NewInt(1_000_000_000), privKey),
 				},
-				sender: types.GenTestBech32FromString("test"),
+				sender: v1beta1.GenTestBech32FromString("test"),
 			},
 			wantErr: true,
 		},
 		{
 			name: "Invalid signature",
 			args: args{
-				ri: types.RedeemInfo{
+				ri: v1beta1.RedeemInfo{
 					Id:            "testId",
 					ProcessorName: "Test",
-					Address:       types.GenTestBech32FromString("test"),
+					Address:       v1beta1.GenTestBech32FromString("test"),
 					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
 					Signature:     "INVALID_SIGNATURE",
 				},
-				sender: types.GenTestBech32FromString("test"),
+				sender: v1beta1.GenTestBech32FromString("test"),
 			},
 			wantErr: true,
 		},
 		{
 			name: "Invalid payment processor",
 			args: args{
-				ri: types.RedeemInfo{
+				ri: v1beta1.RedeemInfo{
 					Id:            "testId",
 					ProcessorName: "Invalid",
-					Address:       types.GenTestBech32FromString("test"),
+					Address:       v1beta1.GenTestBech32FromString("test"),
 					Amount:        sdk.NewInt(1_000_000_000), // 1000stripeusd
-					Signature:     genTestRedeemInfoSignature("testId", types.GenTestBech32FromString("test"), sdk.NewInt(1_000_000_000), privKey),
+					Signature:     genTestRedeemInfoSignature("testId", v1beta1.GenTestBech32FromString("test"), sdk.NewInt(1_000_000_000), privKey),
 				},
-				sender: types.GenTestBech32FromString("test"),
+				sender: v1beta1.GenTestBech32FromString("test"),
 			},
 			wantErr: true,
 		},
 		{
 			name: "Insufficient amount",
 			args: args{
-				ri: types.RedeemInfo{
+				ri: v1beta1.RedeemInfo{
 					Id:            "testId",
 					ProcessorName: "Test",
-					Address:       types.GenTestBech32FromString("test"),
+					Address:       v1beta1.GenTestBech32FromString("test"),
 					Amount:        sdk.NewInt(1_200_000_000), // 1000stripeusd
-					Signature:     genTestRedeemInfoSignature("testId", types.GenTestBech32FromString("test"), sdk.NewInt(1_000_000_000), privKey),
+					Signature:     genTestRedeemInfoSignature("testId", v1beta1.GenTestBech32FromString("test"), sdk.NewInt(1_000_000_000), privKey),
 				},
-				sender: types.GenTestBech32FromString("test"),
+				sender: v1beta1.GenTestBech32FromString("test"),
 			},
 			wantErr: true,
 		},
@@ -128,9 +128,9 @@ func (suite *IntegrationTestSuite) TestBurnDebtToken() {
 		tc := tc
 		suite.Run(tc.name, func() {
 			// Fund stripe usd to addr for testing
-			suite.FundAccount(suite.ctx, types.GenAccAddressFromString("test"), sdk.NewCoins(sdk.NewCoin(types.StripeCoinDenom, sdk.NewInt(1_000_000_000))))
+			suite.FundAccount(suite.ctx, v1beta1.GenAccAddressFromString("test"), sdk.NewCoins(sdk.NewCoin(v1beta1.StripeCoinDenom, sdk.NewInt(1_000_000_000))))
 
-			msg := types.MsgBurnDebtToken{
+			msg := v1beta1.MsgBurnDebtToken{
 				Creator:    tc.args.sender,
 				RedeemInfo: tc.args.ri,
 			}
@@ -145,8 +145,8 @@ func (suite *IntegrationTestSuite) TestBurnDebtToken() {
 				suite.Require().NoError(err)
 
 				// Check balances
-				userBalances := bk.SpendableCoins(suite.ctx, types.GenAccAddressFromString("test"))
-				suite.Require().True(userBalances.IsEqual(sdk.NewCoins(sdk.NewCoin(types.StripeCoinDenom, sdk.NewInt(0)))))
+				userBalances := bk.SpendableCoins(suite.ctx, v1beta1.GenAccAddressFromString("test"))
+				suite.Require().True(userBalances.IsEqual(sdk.NewCoins(sdk.NewCoin(v1beta1.StripeCoinDenom, sdk.NewInt(0)))))
 
 			}
 		})

@@ -2,7 +2,7 @@ package keeper_test
 
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdkTypes "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -13,43 +13,43 @@ func (suite *IntegrationTestSuite) TestGetTxHistorySuccess() {
 				{
 					Events: sdkTypes.StringEvents{
 						sdkTypes.StringEvent{
-							Type: types.CreateItemKey,
+							Type: v1beta1.CreateItemKey,
 							Attributes: []sdkTypes.Attribute{
 								{
-									Key:   types.KeyAmount,
+									Key:   v1beta1.KeyAmount,
 									Value: COMMON_AMOUNT,
 								},
 								{
-									Key:   types.KeyCookbookID,
+									Key:   v1beta1.KeyCookbookID,
 									Value: COMMON_COOKBOOKID,
 								},
 								{
-									Key:   types.KeyRecipeID,
+									Key:   v1beta1.KeyRecipeID,
 									Value: COMMON_RECIPEID,
 								},
 								{
-									Key:   types.KeyReceiver,
+									Key:   v1beta1.KeyReceiver,
 									Value: COMMON_RECIPEID,
 								},
 								{
-									Key:   types.KeySender,
+									Key:   v1beta1.KeySender,
 									Value: COMMON_SENDER,
 								},
 							},
 						},
 						sdkTypes.StringEvent{
-							Type: types.TransferEventKey,
+							Type: v1beta1.TransferEventKey,
 							Attributes: []sdkTypes.Attribute{
 								{
-									Key:   types.KeyAmount,
+									Key:   v1beta1.KeyAmount,
 									Value: COMMON_AMOUNT,
 								},
 								{
-									Key:   types.KeySender,
+									Key:   v1beta1.KeySender,
 									Value: COMMON_SENDER,
 								},
 								{
-									Key:   types.KeyRecipient,
+									Key:   v1beta1.KeyRecipient,
 									Value: COMMON_RECIPIENT,
 								},
 							},
@@ -74,18 +74,18 @@ func (suite *IntegrationTestSuite) TestGetTxHistoryWithoutNFT() {
 				{
 					Events: sdkTypes.StringEvents{
 						sdkTypes.StringEvent{
-							Type: types.TransferEventKey,
+							Type: v1beta1.TransferEventKey,
 							Attributes: []sdkTypes.Attribute{
 								{
-									Key:   types.KeyAmount,
+									Key:   v1beta1.KeyAmount,
 									Value: COMMON_AMOUNT,
 								},
 								{
-									Key:   types.KeySender,
+									Key:   v1beta1.KeySender,
 									Value: COMMON_SENDER,
 								},
 								{
-									Key:   types.KeyRecipient,
+									Key:   v1beta1.KeyRecipient,
 									Value: COMMON_RECIPIENT,
 								},
 							},

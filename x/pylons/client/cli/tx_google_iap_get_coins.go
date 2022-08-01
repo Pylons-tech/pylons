@@ -3,13 +3,12 @@ package cli
 import (
 	"strconv"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 var _ = strconv.Itoa(0)
@@ -30,7 +29,7 @@ func CmdGoogleInAppPurchaseGetCoins() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgGoogleIAPGetCoins(clientCtx.GetFromAddress().String(), argsProductID, argsPurchaseToken, argsRecieptDataBase64, argsSignature)
+			msg := v1beta1.NewMsgGoogleIAPGetCoins(clientCtx.GetFromAddress().String(), argsProductID, argsPurchaseToken, argsRecieptDataBase64, argsSignature)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

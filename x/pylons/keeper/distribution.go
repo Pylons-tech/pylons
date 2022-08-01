@@ -1,14 +1,13 @@
 package keeper
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper) (distrPercentages map[string]sdk.Dec) {
+func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk v1beta1.StakingKeeper) (distrPercentages map[string]sdk.Dec) {
 	distrPercentages = make(map[string]sdk.Dec)
 	sharesMap := make(map[string]sdk.Dec)
 	validators := make(map[string]bool)

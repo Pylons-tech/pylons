@@ -4,18 +4,17 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade) (*types.MsgCreateTradeResponse, error) {
+func (k msgServer) CreateTrade(goCtx context.Context, msg *v1beta1.MsgCreateTrade) (*v1beta1.MsgCreateTradeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
-	items := make([]types.Item, 0)
+	items := make([]v1beta1.Item, 0)
 
 	// coins with send_enable to false cannot be added to CoinOutputs
 	err := k.bankKeeper.IsSendEnabledCoins(ctx, msg.CoinOutputs...)
@@ -56,7 +55,7 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 	}
 	if len(items) != 0 {
 		for i, coinInputs := range msg.CoinInputs {
-			_, err := types.FindValidPaymentsPermutation(items, coinInputs.Coins)
+			_, err := v1beta1.FindValidPaymentsPermutation(items, coinInputs.Coins)
 			if err != nil {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "provided coinInputs at index %d cannot satisfy itemOutputs transferFees requirements", i)
 			}
@@ -68,7 +67,7 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	trade := types.Trade{
+	trade := v1beta1.Trade{
 		Creator:     msg.Creator,
 		CoinInputs:  msg.CoinInputs,
 		ItemInputs:  msg.ItemInputs,
@@ -82,19 +81,19 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		trade,
 	)
 
-	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateTrade{
+	err = ctx.EventManager().EmitTypedEvent(&v1beta1.EventCreateTrade{
 		Creator: msg.Creator,
 		Id:      id,
 	})
 
 	telemetry.IncrCounter(1, "trade", "create")
 
-	return &types.MsgCreateTradeResponse{
+	return &v1beta1.MsgCreateTradeResponse{
 		Id: id,
 	}, err
 }
 
-func (k msgServer) CancelTrade(goCtx context.Context, msg *types.MsgCancelTrade) (*types.MsgCancelTradeResponse, error) {
+func (k msgServer) CancelTrade(goCtx context.Context, msg *v1beta1.MsgCancelTrade) (*v1beta1.MsgCancelTradeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !k.HasTrade(ctx, msg.Id) {
@@ -122,12 +121,12 @@ func (k msgServer) CancelTrade(goCtx context.Context, msg *types.MsgCancelTrade)
 
 	k.RemoveTrade(ctx, msg.Id, addr)
 
-	err = ctx.EventManager().EmitTypedEvent(&types.EventCancelTrade{
+	err = ctx.EventManager().EmitTypedEvent(&v1beta1.EventCancelTrade{
 		Creator: msg.Creator,
 		Id:      msg.Id,
 	})
 
 	telemetry.IncrCounter(1, "trade", "cancel")
 
-	return &types.MsgCancelTradeResponse{}, err
+	return &v1beta1.MsgCancelTradeResponse{}, err
 }

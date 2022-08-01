@@ -3,11 +3,10 @@ package cli
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func CmdListRedeemInfo() *cobra.Command {
@@ -22,9 +21,9 @@ func CmdListRedeemInfo() *cobra.Command {
 				return err
 			}
 
-			queryClient := types.NewQueryClient(clientCtx)
+			queryClient := v1beta1.NewQueryClient(clientCtx)
 
-			params := &types.QueryAllRedeemInfoRequest{
+			params := &v1beta1.QueryAllRedeemInfoRequest{
 				Pagination: pageReq,
 			}
 
@@ -51,9 +50,9 @@ func CmdShowRedeemInfo() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
-			queryClient := types.NewQueryClient(clientCtx)
+			queryClient := v1beta1.NewQueryClient(clientCtx)
 
-			params := &types.QueryGetRedeemInfoRequest{
+			params := &v1beta1.QueryGetRedeemInfoRequest{
 				Id: args[0],
 			}
 

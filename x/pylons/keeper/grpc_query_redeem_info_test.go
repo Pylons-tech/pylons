@@ -1,12 +1,11 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestRedeemInfoQuerySingle() {
@@ -17,23 +16,23 @@ func (suite *IntegrationTestSuite) TestRedeemInfoQuerySingle() {
 	msgs := createNRedeemInfo(k, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryGetRedeemInfoRequest
-		response *types.QueryGetRedeemInfoResponse
+		request  *v1beta1.QueryGetRedeemInfoRequest
+		response *v1beta1.QueryGetRedeemInfoResponse
 		err      error
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetRedeemInfoRequest{Id: msgs[0].Id},
-			response: &types.QueryGetRedeemInfoResponse{RedeemInfo: msgs[0]},
+			request:  &v1beta1.QueryGetRedeemInfoRequest{Id: msgs[0].Id},
+			response: &v1beta1.QueryGetRedeemInfoResponse{RedeemInfo: msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetRedeemInfoRequest{Id: msgs[1].Id},
-			response: &types.QueryGetRedeemInfoResponse{RedeemInfo: msgs[1]},
+			request:  &v1beta1.QueryGetRedeemInfoRequest{Id: msgs[1].Id},
+			response: &v1beta1.QueryGetRedeemInfoResponse{RedeemInfo: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetRedeemInfoRequest{Id: "missing"},
+			request: &v1beta1.QueryGetRedeemInfoRequest{Id: "missing"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{
@@ -60,8 +59,8 @@ func (suite *IntegrationTestSuite) TestRedeemInfoQueryPaginated() {
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNRedeemInfo(k, ctx, 5)
 
-	request := func(next []byte, offset, limit uint64, total bool) *types.QueryAllRedeemInfoRequest {
-		return &types.QueryAllRedeemInfoRequest{
+	request := func(next []byte, offset, limit uint64, total bool) *v1beta1.QueryAllRedeemInfoRequest {
+		return &v1beta1.QueryAllRedeemInfoRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,

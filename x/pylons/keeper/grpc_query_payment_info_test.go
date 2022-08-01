@@ -1,12 +1,11 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestPaymentInfoQuerySingle() {
@@ -17,23 +16,23 @@ func (suite *IntegrationTestSuite) TestPaymentInfoQuerySingle() {
 	msgs := createNPaymentInfo(k, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryGetPaymentInfoRequest
-		response *types.QueryGetPaymentInfoResponse
+		request  *v1beta1.QueryGetPaymentInfoRequest
+		response *v1beta1.QueryGetPaymentInfoResponse
 		err      error
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetPaymentInfoRequest{PurchaseId: msgs[0].PurchaseId},
-			response: &types.QueryGetPaymentInfoResponse{PaymentInfo: msgs[0]},
+			request:  &v1beta1.QueryGetPaymentInfoRequest{PurchaseId: msgs[0].PurchaseId},
+			response: &v1beta1.QueryGetPaymentInfoResponse{PaymentInfo: msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetPaymentInfoRequest{PurchaseId: msgs[1].PurchaseId},
-			response: &types.QueryGetPaymentInfoResponse{PaymentInfo: msgs[1]},
+			request:  &v1beta1.QueryGetPaymentInfoRequest{PurchaseId: msgs[1].PurchaseId},
+			response: &v1beta1.QueryGetPaymentInfoResponse{PaymentInfo: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetPaymentInfoRequest{PurchaseId: "missing"},
+			request: &v1beta1.QueryGetPaymentInfoRequest{PurchaseId: "missing"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{
@@ -60,8 +59,8 @@ func (suite *IntegrationTestSuite) TestPaymentInfoQueryPaginated() {
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNPaymentInfo(k, ctx, 5)
 
-	request := func(next []byte, offset, limit uint64, total bool) *types.QueryAllPaymentInfoRequest {
-		return &types.QueryAllPaymentInfoRequest{
+	request := func(next []byte, offset, limit uint64, total bool) *v1beta1.QueryAllPaymentInfoRequest {
+		return &v1beta1.QueryAllPaymentInfoRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,

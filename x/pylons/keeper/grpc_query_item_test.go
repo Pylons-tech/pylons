@@ -1,11 +1,10 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestItemQuerySingle() {
@@ -17,23 +16,23 @@ func (suite *IntegrationTestSuite) TestItemQuerySingle() {
 	msgs := createNItem(k, ctx, 2, true)
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryGetItemRequest
-		response *types.QueryGetItemResponse
+		request  *v1beta1.QueryGetItemRequest
+		response *v1beta1.QueryGetItemResponse
 		err      error
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetItemRequest{CookbookId: msgs[0].CookbookId, Id: msgs[0].Id},
-			response: &types.QueryGetItemResponse{Item: msgs[0]},
+			request:  &v1beta1.QueryGetItemRequest{CookbookId: msgs[0].CookbookId, Id: msgs[0].Id},
+			response: &v1beta1.QueryGetItemResponse{Item: msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetItemRequest{CookbookId: msgs[1].CookbookId, Id: msgs[1].Id},
-			response: &types.QueryGetItemResponse{Item: msgs[1]},
+			request:  &v1beta1.QueryGetItemRequest{CookbookId: msgs[1].CookbookId, Id: msgs[1].Id},
+			response: &v1beta1.QueryGetItemResponse{Item: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetItemRequest{Id: "missing"},
+			request: &v1beta1.QueryGetItemRequest{Id: "missing"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{

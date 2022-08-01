@@ -1,14 +1,13 @@
 package keeper
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // ProcessPaymentInfos issues coins based on provided paymentInfos to the senderAddr
-func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.PaymentInfo, senderAddr sdk.AccAddress) error {
+func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []v1beta1.PaymentInfo, senderAddr sdk.AccAddress) error {
 	paymentProcessors := k.PaymentProcessors(ctx)
 	for _, pi := range paymentInfos {
 		if k.HasPaymentInfo(ctx, pi.PurchaseId) {
@@ -59,13 +58,13 @@ func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.Paymen
 
 // ValidatePaymentInfo verifies that the receipts provided can cover for the entire balance of coins controlled by paymentProcessors
 // where sendEnable is false
-func (k Keeper) ValidatePaymentInfo(ctx sdk.Context, paymentInfos []types.PaymentInfo, toPay sdk.Coins) error {
+func (k Keeper) ValidatePaymentInfo(ctx sdk.Context, paymentInfos []v1beta1.PaymentInfo, toPay sdk.Coins) error {
 	// when paying, cannot use existing balance for denoms controlled by paymentProcessors where send is disabled
 	// we need to do this check before processing payments
 	// first, build denomsPaymentInfoMap and paymentProcessofInfoMap from the provided paymentInfos
 	allPaymentProcessors := k.PaymentProcessors(ctx)
-	denomsPaymentInfoMap := make(map[string][]types.PaymentInfo)
-	paymentInfoProcessorMap := make(map[string]types.PaymentProcessor)
+	denomsPaymentInfoMap := make(map[string][]v1beta1.PaymentInfo)
+	paymentInfoProcessorMap := make(map[string]v1beta1.PaymentProcessor)
 	for _, pi := range paymentInfos {
 		err := sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "could not find %s among valid payment processors", pi.ProcessorName)
 		for _, pp := range allPaymentProcessors {
@@ -118,7 +117,7 @@ func (k Keeper) ValidatePaymentInfo(ctx sdk.Context, paymentInfos []types.Paymen
 }
 
 // VerifyPaymentInfos verifies payment info for stripe refund
-func (k Keeper) VerifyPaymentInfos(ctx sdk.Context, paymentInfos *types.PaymentInfo, senderAddr sdk.AccAddress) error {
+func (k Keeper) VerifyPaymentInfos(ctx sdk.Context, paymentInfos *v1beta1.PaymentInfo, senderAddr sdk.AccAddress) error {
 	paymentProcessors := k.PaymentProcessors(ctx)
 
 	found := false

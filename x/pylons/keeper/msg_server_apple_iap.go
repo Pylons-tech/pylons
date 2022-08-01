@@ -3,15 +3,15 @@ package keeper
 import (
 	"context"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-func (k msgServer) AppleIap(goCtx context.Context, msg *types.MsgAppleIap) (*types.MsgAppleIapResponse, error) {
+func (k msgServer) AppleIap(goCtx context.Context, msg *v1beta1.MsgAppleIap) (*v1beta1.MsgAppleIapResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	receipt, err := types.ValidateApplePay(msg)
+	receipt, err := v1beta1.ValidateApplePay(msg)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid receipt")
 	}
@@ -24,13 +24,13 @@ func (k msgServer) AppleIap(goCtx context.Context, msg *types.MsgAppleIap) (*typ
 	}
 
 	if k.HasAppleIAPOrder(ctx, receipt.PurchaseId) {
-		return nil, sdkerrors.Wrap(types.ErrReceiptAlreadyUsed, "the Apple IAP order ID is already being used")
+		return nil, sdkerrors.Wrap(v1beta1.ErrReceiptAlreadyUsed, "the Apple IAP order ID is already being used")
 	}
 
-	var coinIssuer types.CoinIssuer
-	var iapPackage types.GoogleInAppPurchasePackage
+	var coinIssuer v1beta1.CoinIssuer
+	var iapPackage v1beta1.GoogleInAppPurchasePackage
 CoinIssuersLoop:
-	for _, ci := range types.DefaultCoinIssuers {
+	for _, ci := range v1beta1.DefaultCoinIssuers {
 		for _, p := range ci.Packages {
 			if p.ProductId == receipt.ProductId {
 				coinIssuer = ci
@@ -55,12 +55,12 @@ CoinIssuersLoop:
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	_ = ctx.EventManager().EmitTypedEvent(&types.EventApplePurchase{
+	_ = ctx.EventManager().EmitTypedEvent(&v1beta1.EventApplePurchase{
 		Creator:           msg.Creator,
 		ProductId:         receipt.ProductId,
 		TransactionId:     receipt.PurchaseId,
 		ReceiptDataBase64: msg.ReceiptDataBase64,
 	})
 
-	return &types.MsgAppleIapResponse{}, nil
+	return &v1beta1.MsgAppleIapResponse{}, nil
 }

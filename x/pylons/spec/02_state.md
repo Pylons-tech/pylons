@@ -77,8 +77,8 @@ message Execution {
   uint64 nodeVersion = 6;
   int64 blockHeight = 7;
   repeated ItemRecord itemInputs = 8 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin coinInputs = 9 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated cosmos.base.v1beta1.Coin coinOutputs = 10 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin coinInputs = 9 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/v1beta1.Coins"];
+  repeated cosmos.base.v1beta1.Coin coinOutputs = 10 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/v1beta1.Coins"];
   repeated string itemOutputIDs = 11 [(gogoproto.nullable) = false];
   repeated string itemModifyOutputIDs = 12 [(gogoproto.nullable) = false];
 }
@@ -122,7 +122,7 @@ message Trade {
   uint64 ID = 2;
   repeated CoinInput coinInputs = 3 [(gogoproto.nullable) = false];
   repeated ItemInput itemInputs = 4 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin coinOutputs = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin coinOutputs = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/v1beta1.Coins"];
   repeated ItemRef itemOutputs = 6 [(gogoproto.nullable) = false];
   string extraInfo = 7;
   string receiver = 8;
@@ -153,7 +153,7 @@ message PaymentInfo {
   string purchaseID = 1;
   string processorName = 2;
   string payerAddr = 3;
-  string amount = 4 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
+  string amount = 4 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/v1beta1.Int"];
   string productID = 5;
   string signature = 6;
 }
@@ -168,7 +168,7 @@ message RedeemInfo {
   string ID = 1;
   string processorName = 2;
   string address = 3;
-  string amount = 4 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];;
+  string amount = 4 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/v1beta1.Int"];;
   string signature = 5;
 }
 ```

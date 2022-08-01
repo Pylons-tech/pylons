@@ -3,11 +3,10 @@ package cli
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func CmdGetAddressByUsername() *cobra.Command {
@@ -18,9 +17,9 @@ func CmdGetAddressByUsername() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
-			queryClient := types.NewQueryClient(clientCtx)
+			queryClient := v1beta1.NewQueryClient(clientCtx)
 
-			params := &types.QueryGetAddressByUsernameRequest{
+			params := &v1beta1.QueryGetAddressByUsernameRequest{
 				Username: args[0],
 			}
 
@@ -46,9 +45,9 @@ func CmdGetUsernameByAddress() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
-			queryClient := types.NewQueryClient(clientCtx)
+			queryClient := v1beta1.NewQueryClient(clientCtx)
 
-			params := &types.QueryGetUsernameByAddressRequest{
+			params := &v1beta1.QueryGetUsernameByAddressRequest{
 				Address: args[0],
 			}
 

@@ -5,22 +5,21 @@ import (
 	"strconv"
 
 	"cosmossdk.io/math"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k msgServer) MatchItemInputsForTrade(ctx sdk.Context, creatorAddr string, itemRefs []types.ItemRef, trade types.Trade) ([]types.Item, error) {
+func (k msgServer) MatchItemInputsForTrade(ctx sdk.Context, creatorAddr string, itemRefs []v1beta1.ItemRef, trade v1beta1.Trade) ([]v1beta1.Item, error) {
 	if len(itemRefs) != len(trade.ItemInputs) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "size mismatch between provided input items and items required by trade")
 	}
-	matchedInputItems := make([]types.Item, len(trade.ItemInputs))
+	matchedInputItems := make([]v1beta1.Item, len(trade.ItemInputs))
 
 	// build Item list from inputItemIds
-	inputItemMap := make(map[types.ItemRef]types.Item)
+	inputItemMap := make(map[v1beta1.ItemRef]v1beta1.Item)
 	checkedInputItems := make([]bool, len(itemRefs))
 
 	for i, recipeItemInput := range trade.ItemInputs {
@@ -41,7 +40,7 @@ func (k msgServer) MatchItemInputsForTrade(ctx sdk.Context, creatorAddr string, 
 			}
 			inputItemMap[itemRef] = inputItem
 			// match
-			var ec types.CelEnvCollection
+			var ec v1beta1.CelEnvCollection
 			ec, err = k.NewCelEnvCollectionFromItem(ctx, "", strconv.FormatUint(trade.Id, 10), inputItem)
 			if err != nil {
 				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
@@ -60,7 +59,7 @@ func (k msgServer) MatchItemInputsForTrade(ctx sdk.Context, creatorAddr string, 
 	return matchedInputItems, nil
 }
 
-func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrade) (*types.MsgFulfillTradeResponse, error) {
+func (k msgServer) FulfillTrade(goCtx context.Context, msg *v1beta1.MsgFulfillTrade) (*v1beta1.MsgFulfillTradeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// get the trade from keeper
@@ -115,7 +114,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	}
 
 	minItemInputsTransferFees := sdk.NewCoins()
-	itemInputsTransferFeePermutation, err := types.FindValidPaymentsPermutation(matchedInputItems, trade.CoinOutputs)
+	itemInputsTransferFeePermutation, err := v1beta1.FindValidPaymentsPermutation(matchedInputItems, trade.CoinOutputs)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cannot use coinOutputs to pay for the items provided")
 	}
@@ -123,14 +122,14 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		minItemInputsTransferFees = minItemInputsTransferFees.Add(matchedInputItems[i].TransferFee[itemInputsTransferFeePermutation[i]])
 	}
 
-	outputItems := make([]types.Item, len(trade.ItemOutputs))
+	outputItems := make([]v1beta1.Item, len(trade.ItemOutputs))
 	for i, itemRef := range trade.ItemOutputs {
 		item, _ := k.GetItem(ctx, itemRef.CookbookId, itemRef.ItemId)
 		outputItems[i] = item
 	}
 
 	minItemOutputsTransferFees := sdk.NewCoins()
-	itemOutputsTransferFeePermutation, err := types.FindValidPaymentsPermutation(outputItems, coinInputs)
+	itemOutputsTransferFeePermutation, err := v1beta1.FindValidPaymentsPermutation(outputItems, coinInputs)
 	if err != nil {
 		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "coinInputs not sufficient to pay transfer fees")
 	}
@@ -241,11 +240,11 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		}
 	}
 
-	itemInputsRefs := make([]types.ItemRef, len(matchedInputItems))
+	itemInputsRefs := make([]v1beta1.ItemRef, len(matchedInputItems))
 	for i, item := range matchedInputItems {
-		itemInputsRefs[i] = types.ItemRef{CookbookId: item.CookbookId, ItemId: item.Id}
+		itemInputsRefs[i] = v1beta1.ItemRef{CookbookId: item.CookbookId, ItemId: item.Id}
 	}
-	err = ctx.EventManager().EmitTypedEvent(&types.EventFulfillTrade{
+	err = ctx.EventManager().EmitTypedEvent(&v1beta1.EventFulfillTrade{
 		Id:           trade.Id,
 		Creator:      trade.Creator,
 		Fulfiller:    msg.Creator,
@@ -258,5 +257,5 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 
 	telemetry.IncrCounter(1, "trade", "fulfill")
 
-	return &types.MsgFulfillTradeResponse{}, err
+	return &v1beta1.MsgFulfillTradeResponse{}, err
 }

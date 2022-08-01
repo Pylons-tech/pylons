@@ -1,12 +1,11 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestListCompletedExecutionByItem() {
@@ -17,8 +16,8 @@ func (suite *IntegrationTestSuite) TestListCompletedExecutionByItem() {
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNExecutionForSingleItem(k, ctx, 10)
 
-	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID string, itemID string) *types.QueryListExecutionsByItemRequest {
-		return &types.QueryListExecutionsByItemRequest{
+	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID string, itemID string) *v1beta1.QueryListExecutionsByItemRequest {
+		return &v1beta1.QueryListExecutionsByItemRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
@@ -32,35 +31,35 @@ func (suite *IntegrationTestSuite) TestListCompletedExecutionByItem() {
 
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryListExecutionsByItemRequest
-		response *types.QueryListExecutionsByItemResponse
+		request  *v1beta1.QueryListExecutionsByItemRequest
+		response *v1beta1.QueryListExecutionsByItemResponse
 		err      error
 	}{
 		{
 			desc:     "All",
 			request:  requestFunc(nil, 0, 0, false, msgs[0].CookbookId, msgs[0].ItemOutputIds[0]),
-			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: msgs, PendingExecutions: []types.Execution{}, Pagination: nil},
+			response: &v1beta1.QueryListExecutionsByItemResponse{CompletedExecutions: msgs, PendingExecutions: []v1beta1.Execution{}, Pagination: nil},
 		},
 		{
 			desc:     "WithLimit",
 			request:  requestFunc(nil, 0, 5, false, msgs[0].CookbookId, msgs[0].ItemOutputIds[0]),
-			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: msgs[:5], PendingExecutions: []types.Execution{}, Pagination: nil},
+			response: &v1beta1.QueryListExecutionsByItemResponse{CompletedExecutions: msgs[:5], PendingExecutions: []v1beta1.Execution{}, Pagination: nil},
 		},
 		{
 			desc:     "NoExecutionsInvalidCookbookId",
 			request:  requestFunc(nil, 0, 0, true, "missing", msgs[0].ItemOutputIds[0]),
-			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
+			response: &v1beta1.QueryListExecutionsByItemResponse{CompletedExecutions: []v1beta1.Execution{}, PendingExecutions: []v1beta1.Execution{}, Pagination: nil},
 		},
 
 		{
 			desc:     "NoExecutionsInvalidItemId",
 			request:  requestFunc(nil, 0, 0, true, msgs[0].CookbookId, "missing"),
-			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
+			response: &v1beta1.QueryListExecutionsByItemResponse{CompletedExecutions: []v1beta1.Execution{}, PendingExecutions: []v1beta1.Execution{}, Pagination: nil},
 		},
 		{
 			desc:     "InvalidRequest",
 			request:  requestFunc(nil, 0, 0, true, "missing", "missing"),
-			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
+			response: &v1beta1.QueryListExecutionsByItemResponse{CompletedExecutions: []v1beta1.Execution{}, PendingExecutions: []v1beta1.Execution{}, Pagination: nil},
 		},
 		{
 			desc:     "NilRequest",
@@ -91,8 +90,8 @@ func (suite *IntegrationTestSuite) TestListPendingExecutionByItem() {
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNPendingExecutionForSingleItem(k, ctx, 10)
 
-	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID string, itemID string) *types.QueryListExecutionsByItemRequest {
-		return &types.QueryListExecutionsByItemRequest{
+	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID string, itemID string) *v1beta1.QueryListExecutionsByItemRequest {
+		return &v1beta1.QueryListExecutionsByItemRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
@@ -106,35 +105,35 @@ func (suite *IntegrationTestSuite) TestListPendingExecutionByItem() {
 
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryListExecutionsByItemRequest
-		response *types.QueryListExecutionsByItemResponse
+		request  *v1beta1.QueryListExecutionsByItemRequest
+		response *v1beta1.QueryListExecutionsByItemResponse
 		err      error
 	}{
 		{
 			desc:     "All",
 			request:  requestFunc(nil, 0, 0, false, msgs[0].CookbookId, msgs[0].ItemOutputIds[0]),
-			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: msgs, Pagination: nil},
+			response: &v1beta1.QueryListExecutionsByItemResponse{CompletedExecutions: []v1beta1.Execution{}, PendingExecutions: msgs, Pagination: nil},
 		},
 		{
 			desc:     "WithLimit",
 			request:  requestFunc(nil, 0, 5, false, msgs[0].CookbookId, msgs[0].ItemOutputIds[0]),
-			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: msgs[:5], Pagination: nil},
+			response: &v1beta1.QueryListExecutionsByItemResponse{CompletedExecutions: []v1beta1.Execution{}, PendingExecutions: msgs[:5], Pagination: nil},
 		},
 		{
 			desc:     "NoExecutionsInvalidCookbookId",
 			request:  requestFunc(nil, 0, 0, true, "missing", msgs[0].ItemOutputIds[0]),
-			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
+			response: &v1beta1.QueryListExecutionsByItemResponse{CompletedExecutions: []v1beta1.Execution{}, PendingExecutions: []v1beta1.Execution{}, Pagination: nil},
 		},
 
 		{
 			desc:     "NoExecutionsInvalidItemId",
 			request:  requestFunc(nil, 0, 0, true, msgs[0].CookbookId, "missing"),
-			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
+			response: &v1beta1.QueryListExecutionsByItemResponse{CompletedExecutions: []v1beta1.Execution{}, PendingExecutions: []v1beta1.Execution{}, Pagination: nil},
 		},
 		{
 			desc:     "InvalidRequest",
 			request:  requestFunc(nil, 0, 0, true, "missing", "missing"),
-			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
+			response: &v1beta1.QueryListExecutionsByItemResponse{CompletedExecutions: []v1beta1.Execution{}, PendingExecutions: []v1beta1.Execution{}, Pagination: nil},
 		},
 		{
 			desc: "InvalidRequest2",
@@ -165,8 +164,8 @@ func (suite *IntegrationTestSuite) TestListAllExecutionByItem() {
 	cookbookID := pending[0].CookbookId
 	itemID := pending[0].ItemOutputIds[0]
 
-	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID string, itemID string) *types.QueryListExecutionsByItemRequest {
-		return &types.QueryListExecutionsByItemRequest{
+	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID string, itemID string) *v1beta1.QueryListExecutionsByItemRequest {
+		return &v1beta1.QueryListExecutionsByItemRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
@@ -180,30 +179,30 @@ func (suite *IntegrationTestSuite) TestListAllExecutionByItem() {
 
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryListExecutionsByItemRequest
-		response *types.QueryListExecutionsByItemResponse
+		request  *v1beta1.QueryListExecutionsByItemRequest
+		response *v1beta1.QueryListExecutionsByItemResponse
 		err      error
 	}{
 		{
 			desc:     "All",
 			request:  requestFunc(nil, 0, 0, false, cookbookID, itemID),
-			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: completed, PendingExecutions: pending, Pagination: nil},
+			response: &v1beta1.QueryListExecutionsByItemResponse{CompletedExecutions: completed, PendingExecutions: pending, Pagination: nil},
 		},
 		{
 			desc:     "NoExecutionsInvalidCookbookId",
 			request:  requestFunc(nil, 0, 0, true, "missing", itemID),
-			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
+			response: &v1beta1.QueryListExecutionsByItemResponse{CompletedExecutions: []v1beta1.Execution{}, PendingExecutions: []v1beta1.Execution{}, Pagination: nil},
 		},
 
 		{
 			desc:     "NoExecutionsInvalidItemId",
 			request:  requestFunc(nil, 0, 0, true, cookbookID, "missing"),
-			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
+			response: &v1beta1.QueryListExecutionsByItemResponse{CompletedExecutions: []v1beta1.Execution{}, PendingExecutions: []v1beta1.Execution{}, Pagination: nil},
 		},
 		{
 			desc:     "InvalidRequest",
 			request:  requestFunc(nil, 0, 0, true, "missing", "missing"),
-			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
+			response: &v1beta1.QueryListExecutionsByItemResponse{CompletedExecutions: []v1beta1.Execution{}, PendingExecutions: []v1beta1.Execution{}, Pagination: nil},
 		},
 	} {
 		tc := tc

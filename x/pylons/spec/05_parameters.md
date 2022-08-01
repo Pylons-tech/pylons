@@ -108,7 +108,7 @@ Example:
             Name:                 "Pylons_Inc",
         },
     }
-    DefaultPaymentProcessorsTokensBankParams = []types.SendEnabled{
+    DefaultPaymentProcessorsTokensBankParams = []v1beta1.SendEnabled{
         {Denom: StripeCoinDenom, Enabled: false},
     }
 ```

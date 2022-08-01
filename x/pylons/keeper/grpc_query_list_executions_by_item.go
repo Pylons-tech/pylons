@@ -3,14 +3,13 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) ListExecutionsByItem(goCtx context.Context, req *types.QueryListExecutionsByItemRequest) (*types.QueryListExecutionsByItemResponse, error) {
+func (k Keeper) ListExecutionsByItem(goCtx context.Context, req *v1beta1.QueryListExecutionsByItemRequest) (*v1beta1.QueryListExecutionsByItemResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -22,5 +21,5 @@ func (k Keeper) ListExecutionsByItem(goCtx context.Context, req *types.QueryList
 		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
 	}
 
-	return &types.QueryListExecutionsByItemResponse{CompletedExecutions: completedExecs, PendingExecutions: pendingExecs, Pagination: pageRes}, nil
+	return &v1beta1.QueryListExecutionsByItemResponse{CompletedExecutions: completedExecs, PendingExecutions: pendingExecs, Pagination: pageRes}, nil
 }

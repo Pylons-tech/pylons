@@ -3,14 +3,13 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) ListItemByOwner(goCtx context.Context, req *types.QueryListItemByOwnerRequest) (*types.QueryListItemByOwnerResponse, error) {
+func (k Keeper) ListItemByOwner(goCtx context.Context, req *v1beta1.QueryListItemByOwnerRequest) (*v1beta1.QueryListItemByOwnerResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -27,5 +26,5 @@ func (k Keeper) ListItemByOwner(goCtx context.Context, req *types.QueryListItemB
 		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
 	}
 
-	return &types.QueryListItemByOwnerResponse{Items: items, Pagination: pageRes}, nil
+	return &v1beta1.QueryListItemByOwnerResponse{Items: items, Pagination: pageRes}, nil
 }

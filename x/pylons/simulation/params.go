@@ -13,13 +13,13 @@ import (
 func ParamChanges(r *rand.Rand) []simtypes.ParamChange {
 	/*
 		return []simtypes.ParamChange{
-			simulation.NewSimParamChange(types.ModuleName, string(types.ParamStoreKeyItemTransferFeePercentage),
+			simulation.NewSimParamChange(v1beta1.ModuleName, string(v1beta1.ParamStoreKeyItemTransferFeePercentage),
 				func(r *rand.Rand) string {
 
 					return "TODO"
 				},
 			),
-			simulation.NewSimParamChange(types.ModuleName, string(types.ParamStoreKeyMaxTransferFee),
+			simulation.NewSimParamChange(v1beta1.ModuleName, string(v1beta1.ParamStoreKeyMaxTransferFee),
 				func(r *rand.Rand) string {
 
 					return "TODO"

@@ -3,16 +3,15 @@ package keeper
 import (
 	"strconv"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // GetEntityCount get the total number of entities
 func (k Keeper) GetEntityCount(ctx sdk.Context) uint64 {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GlobalEntityCountKey))
-	byteKey := types.KeyPrefix(types.GlobalEntityCountKey)
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.GlobalEntityCountKey))
+	byteKey := v1beta1.KeyPrefix(v1beta1.GlobalEntityCountKey)
 	bz := store.Get(byteKey)
 
 	// Count doesn't exist: no element
@@ -32,8 +31,8 @@ func (k Keeper) GetEntityCount(ctx sdk.Context) uint64 {
 
 // SetEntityCount set the total number of entities
 func (k Keeper) SetEntityCount(ctx sdk.Context, count uint64) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GlobalEntityCountKey))
-	byteKey := types.KeyPrefix(types.GlobalEntityCountKey)
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), v1beta1.KeyPrefix(v1beta1.GlobalEntityCountKey))
+	byteKey := v1beta1.KeyPrefix(v1beta1.GlobalEntityCountKey)
 	bz := []byte(strconv.FormatUint(count, 10))
 	store.Set(byteKey, bz)
 }

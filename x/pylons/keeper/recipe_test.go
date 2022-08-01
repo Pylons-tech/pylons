@@ -1,9 +1,9 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	transfertypes "github.com/cosmos/ibc-go/v5/modules/apps/transfer/types"
 )
 
@@ -37,12 +37,12 @@ func (suite *IntegrationTestSuite) TestUpdateCoinsDenom() {
 	require := suite.Require()
 
 	addr := generateAddress()
-	coinInputs := sdk.Coins{sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(1)}}
+	coinInputs := sdk.Coins{sdk.Coin{Denom: v1beta1.PylonsCoinDenom, Amount: sdk.NewInt(1)}}
 
 	updatedCoinsInput, err := k.UpdateCoinsDenom(ctx, addr, coinInputs)
 	require.NoError(err)
 
-	require.Equal(updatedCoinsInput[0].Denom, types.PylonsCoinDenom)
+	require.Equal(updatedCoinsInput[0].Denom, v1beta1.PylonsCoinDenom)
 }
 
 func (suite *IntegrationTestSuite) TestUpdateCoinsIBCDenom() {

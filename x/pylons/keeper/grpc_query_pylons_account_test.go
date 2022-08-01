@@ -1,11 +1,10 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestAddressQueryByUsernameSingle() {
@@ -17,23 +16,23 @@ func (suite *IntegrationTestSuite) TestAddressQueryByUsernameSingle() {
 	msgs := createNPylonsAccount(k, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryGetAddressByUsernameRequest
-		response *types.QueryGetAddressByUsernameResponse
+		request  *v1beta1.QueryGetAddressByUsernameRequest
+		response *v1beta1.QueryGetAddressByUsernameResponse
 		err      error
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetAddressByUsernameRequest{Username: msgs[0].Username},
-			response: &types.QueryGetAddressByUsernameResponse{Address: types.AccountAddr{Value: msgs[0].AccountAddr}},
+			request:  &v1beta1.QueryGetAddressByUsernameRequest{Username: msgs[0].Username},
+			response: &v1beta1.QueryGetAddressByUsernameResponse{Address: v1beta1.AccountAddr{Value: msgs[0].AccountAddr}},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetAddressByUsernameRequest{Username: msgs[1].Username},
-			response: &types.QueryGetAddressByUsernameResponse{Address: types.AccountAddr{Value: msgs[1].AccountAddr}},
+			request:  &v1beta1.QueryGetAddressByUsernameRequest{Username: msgs[1].Username},
+			response: &v1beta1.QueryGetAddressByUsernameResponse{Address: v1beta1.AccountAddr{Value: msgs[1].AccountAddr}},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetAddressByUsernameRequest{Username: "missing"},
+			request: &v1beta1.QueryGetAddressByUsernameRequest{Username: "missing"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{
@@ -62,23 +61,23 @@ func (suite *IntegrationTestSuite) TestUsernameQueryByAddressSingle() {
 	msgs := createNPylonsAccount(k, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryGetUsernameByAddressRequest
-		response *types.QueryGetUsernameByAddressResponse
+		request  *v1beta1.QueryGetUsernameByAddressRequest
+		response *v1beta1.QueryGetUsernameByAddressResponse
 		err      error
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetUsernameByAddressRequest{Address: msgs[0].AccountAddr},
-			response: &types.QueryGetUsernameByAddressResponse{Username: types.Username{Value: msgs[0].Username}},
+			request:  &v1beta1.QueryGetUsernameByAddressRequest{Address: msgs[0].AccountAddr},
+			response: &v1beta1.QueryGetUsernameByAddressResponse{Username: v1beta1.Username{Value: msgs[0].Username}},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetUsernameByAddressRequest{Address: msgs[1].AccountAddr},
-			response: &types.QueryGetUsernameByAddressResponse{Username: types.Username{Value: msgs[1].Username}},
+			request:  &v1beta1.QueryGetUsernameByAddressRequest{Address: msgs[1].AccountAddr},
+			response: &v1beta1.QueryGetUsernameByAddressResponse{Username: v1beta1.Username{Value: msgs[1].Username}},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetUsernameByAddressRequest{Address: "missing"},
+			request: &v1beta1.QueryGetUsernameByAddressRequest{Address: "missing"},
 			err:     status.Error(codes.InvalidArgument, "invalid address"),
 		},
 		{

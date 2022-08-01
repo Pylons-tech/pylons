@@ -366,7 +366,7 @@ message MsgCreateTrade {
   string creator = 1;
   repeated CoinInput coinInputs = 2 [(gogoproto.nullable) = false];
   repeated ItemInput itemInputs = 3 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin coinOutputs = 4 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin coinOutputs = 4 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/v1beta1.Coins"];
   repeated ItemRef itemOutputs = 5 [(gogoproto.nullable) = false];
   string extraInfo = 6;
 }

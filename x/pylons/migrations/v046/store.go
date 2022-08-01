@@ -6,14 +6,14 @@ import (
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	v1 "github.com/Pylons-tech/pylons/x/pylons/types/v1"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 )
 
 // migrateProposals migrates all legacy proposals into MsgExecLegacyContent
 // proposals.
 func migrateAppleInAppPurchaseOrder(store sdk.KVStore, cdc codec.BinaryCodec) error {
-	orderStore := prefix.NewStore(store, []byte(types.AppleInAppPurchaseOrderKey))
+	orderStore := prefix.NewStore(store, []byte(v1beta1.AppleInAppPurchaseOrderKey))
 
 	iter := orderStore.Iterator(nil, nil)
 	defer iter.Close()

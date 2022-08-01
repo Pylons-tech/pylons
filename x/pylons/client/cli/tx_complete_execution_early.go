@@ -3,13 +3,12 @@ package cli
 import (
 	"strconv"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 var _ = strconv.Itoa(0)
@@ -27,7 +26,7 @@ func CmdCompleteExecutionEarly() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgCompleteExecutionEarly(clientCtx.GetFromAddress().String(), argsID)
+			msg := v1beta1.NewMsgCompleteExecutionEarly(clientCtx.GetFromAddress().String(), argsID)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

@@ -5,14 +5,13 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k msgServer) CompleteExecutionEarly(goCtx context.Context, msg *types.MsgCompleteExecutionEarly) (*types.MsgCompleteExecutionEarlyResponse, error) {
+func (k msgServer) CompleteExecutionEarly(goCtx context.Context, msg *v1beta1.MsgCompleteExecutionEarly) (*v1beta1.MsgCompleteExecutionEarlyResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !k.HasPendingExecution(ctx, msg.Id) {
@@ -36,10 +35,10 @@ func (k msgServer) CompleteExecutionEarly(goCtx context.Context, msg *types.MsgC
 	pendingExecution.CoinInputs = pendingExecution.CoinInputs.Add(completeEarlyCoin)
 	id := k.UpdatePendingExecutionWithTargetBlockHeight(ctx, pendingExecution, ctx.BlockHeight())
 
-	err = ctx.EventManager().EmitTypedEvent(&types.EventCompleteExecutionEarly{
+	err = ctx.EventManager().EmitTypedEvent(&v1beta1.EventCompleteExecutionEarly{
 		Creator: cookbook.Creator,
 		Id:      cookbook.Id,
 	})
 
-	return &types.MsgCompleteExecutionEarlyResponse{Id: id}, err
+	return &v1beta1.MsgCompleteExecutionEarlyResponse{Id: id}, err
 }

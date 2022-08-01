@@ -1,12 +1,11 @@
 package keeper_test
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestListExecutionsByRecipe() {
@@ -19,8 +18,8 @@ func (suite *IntegrationTestSuite) TestListExecutionsByRecipe() {
 	recipeID := "testRecipeID"
 	msgs := createNExecutionForSingleRecipe(k, ctx, 10, cookbookID, recipeID)
 
-	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID, recipeID string) *types.QueryListExecutionsByRecipeRequest {
-		return &types.QueryListExecutionsByRecipeRequest{
+	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID, recipeID string) *v1beta1.QueryListExecutionsByRecipeRequest {
+		return &v1beta1.QueryListExecutionsByRecipeRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
@@ -34,24 +33,24 @@ func (suite *IntegrationTestSuite) TestListExecutionsByRecipe() {
 
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryListExecutionsByRecipeRequest
-		response *types.QueryListExecutionsByRecipeResponse
+		request  *v1beta1.QueryListExecutionsByRecipeRequest
+		response *v1beta1.QueryListExecutionsByRecipeResponse
 		err      error
 	}{
 		{
 			desc:     "ByOffset",
 			request:  requestFunc(nil, 5, 5, false, cookbookID, recipeID),
-			response: &types.QueryListExecutionsByRecipeResponse{CompletedExecutions: msgs[5:]},
+			response: &v1beta1.QueryListExecutionsByRecipeResponse{CompletedExecutions: msgs[5:]},
 		},
 		{
 			desc:     "All",
 			request:  requestFunc(nil, 0, 0, true, cookbookID, recipeID),
-			response: &types.QueryListExecutionsByRecipeResponse{CompletedExecutions: msgs},
+			response: &v1beta1.QueryListExecutionsByRecipeResponse{CompletedExecutions: msgs},
 		},
 		{
 			desc:     "NoExecutions",
 			request:  requestFunc(nil, 5, 5, true, "missing", "missing"),
-			response: &types.QueryListExecutionsByRecipeResponse{CompletedExecutions: []types.Execution{}},
+			response: &v1beta1.QueryListExecutionsByRecipeResponse{CompletedExecutions: []v1beta1.Execution{}},
 		},
 		{
 			desc: "InvalidRequest",

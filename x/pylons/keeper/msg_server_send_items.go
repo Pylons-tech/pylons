@@ -3,20 +3,19 @@ package keeper
 import (
 	"context"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*types.MsgSendItemsResponse, error) {
+func (k msgServer) SendItems(goCtx context.Context, msg *v1beta1.MsgSendItems) (*v1beta1.MsgSendItemsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// STATEFUL CHECKS
-	itemsByCookbook := make(map[string][]types.Item)
-	items := make([]types.Item, 0)
+	itemsByCookbook := make(map[string][]v1beta1.Item)
+	items := make([]v1beta1.Item, 0)
 	for _, itemRef := range msg.Items {
 		// check it item exists and if it is owned by message creator
 		item, found := k.Keeper.GetItem(ctx, itemRef.CookbookId, itemRef.ItemId)
@@ -41,7 +40,7 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 	// get sender balance
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
 	balance := k.bankKeeper.SpendableCoins(ctx, addr)
-	permutation, err := types.FindValidPaymentsPermutation(items, balance)
+	permutation, err := v1beta1.FindValidPaymentsPermutation(items, balance)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
@@ -94,7 +93,7 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 		}
 	}
 
-	err = ctx.EventManager().EmitTypedEvent(&types.EventSendItems{
+	err = ctx.EventManager().EmitTypedEvent(&v1beta1.EventSendItems{
 		Sender:   msg.Creator,
 		Receiver: msg.Receiver,
 		Items:    msg.Items,
@@ -102,5 +101,5 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 
 	telemetry.IncrCounter(float32(len(msg.Items)), "send_items", "send")
 
-	return &types.MsgSendItemsResponse{}, err
+	return &v1beta1.MsgSendItemsResponse{}, err
 }

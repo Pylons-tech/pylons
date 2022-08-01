@@ -5,7 +5,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 )
 
 // create a network w cookbook
@@ -30,10 +30,10 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerTransfer() {
 	wctx := sdk.WrapSDKContext(ctx)
 	srv := keeper.NewMsgServerImpl(k)
 
-	creator := types.GenTestBech32FromString("A")
+	creator := v1beta1.GenTestBech32FromString("A")
 	index := "any"
 
-	expected := &types.MsgCreateCookbook{
+	expected := &v1beta1.MsgCreateCookbook{
 		Creator:      creator,
 		Id:           index,
 		Name:         "originalNameOriginalName",
@@ -47,16 +47,16 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerTransfer() {
 	require.NoError(err)
 
 	// now we have a network with a cookbook
-	recipient := types.GenTestBech32FromString("B")
+	recipient := v1beta1.GenTestBech32FromString("B")
 
 	for _, tc := range []struct {
 		desc    string
-		request *types.MsgTransferCookbook
+		request *v1beta1.MsgTransferCookbook
 		err     error
 	}{
 		{
 			desc: "Cookbook not owned",
-			request: &types.MsgTransferCookbook{
+			request: &v1beta1.MsgTransferCookbook{
 				Creator:   recipient,
 				Id:        index,
 				Recipient: recipient,
@@ -65,7 +65,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerTransfer() {
 		},
 		{
 			desc: "Completed",
-			request: &types.MsgTransferCookbook{
+			request: &v1beta1.MsgTransferCookbook{
 				Creator:   creator,
 				Id:        index,
 				Recipient: recipient,
@@ -74,7 +74,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerTransfer() {
 		},
 		{
 			desc: "Invalid Cookbook ID",
-			request: &types.MsgTransferCookbook{
+			request: &v1beta1.MsgTransferCookbook{
 				Creator:   creator,
 				Id:        "Invalid ID",
 				Recipient: recipient,

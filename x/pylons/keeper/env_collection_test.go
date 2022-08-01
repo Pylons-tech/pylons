@@ -3,10 +3,9 @@ package keeper_test
 import (
 	"reflect"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromItem() {
@@ -18,7 +17,7 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromItem() {
 		desc     string
 		recipeID string
 		tradeID  string
-		item     types.Item
+		item     v1beta1.Item
 		expected map[string]interface{}
 		err      error
 	}{
@@ -26,8 +25,8 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromItem() {
 			desc:     "Valid Item",
 			recipeID: "recipeId1",
 			tradeID:  "tradeId1",
-			item: types.Item{
-				Doubles: []types.DoubleKeyValue{
+			item: v1beta1.Item{
+				Doubles: []v1beta1.DoubleKeyValue{
 					{
 						Key:   "XP",
 						Value: sdk.OneDec(),
@@ -37,13 +36,13 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromItem() {
 						Value: sdk.NewDec(4),
 					},
 				},
-				Longs: []types.LongKeyValue{
+				Longs: []v1beta1.LongKeyValue{
 					{
 						Key:   "level",
 						Value: 1,
 					},
 				},
-				Strings: []types.StringKeyValue{
+				Strings: []v1beta1.StringKeyValue{
 					{
 						Key:   "entityType",
 						Value: "character",
@@ -93,19 +92,19 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 
 	tests := []struct {
 		desc      string
-		execution types.Execution
-		recipe    types.Recipe
-		item      types.Item
+		execution v1beta1.Execution
+		recipe    v1beta1.Recipe
+		item      v1beta1.Item
 		expected  map[string]interface{}
 		err       error
 	}{
 		{
 			desc: "Testing an ItemRecord not found in store",
-			execution: types.Execution{
+			execution: v1beta1.Execution{
 				Id: "NotFound1",
-				ItemInputs: []types.ItemRecord{
+				ItemInputs: []v1beta1.ItemRecord{
 					{
-						Strings: []types.StringKeyValue{
+						Strings: []v1beta1.StringKeyValue{
 							{
 								Key:   "entityType",
 								Value: "character",
@@ -118,15 +117,15 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 		},
 		{
 			desc: "Valid Test",
-			execution: types.Execution{
-				Creator:       types.GenTestBech32FromString("test1"),
+			execution: v1beta1.Execution{
+				Creator:       v1beta1.GenTestBech32FromString("test1"),
 				Id:            "execution1",
 				RecipeId:      "recipe1",
 				CookbookId:    "cookbook1",
 				RecipeVersion: "v1.1.1",
 				NodeVersion:   0,
 				BlockHeight:   0,
-				ItemInputs: []types.ItemRecord{
+				ItemInputs: []v1beta1.ItemRecord{
 					{
 						Id:      "item1",
 						Doubles: nil,
@@ -139,7 +138,7 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 				ItemOutputIds:       nil,
 				ItemModifyOutputIds: nil,
 			},
-			recipe: types.Recipe{
+			recipe: v1beta1.Recipe{
 				CookbookId:  "cookbook1",
 				Id:          "recipe1",
 				NodeVersion: 0,
@@ -147,7 +146,7 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 				Description: "",
 				Version:     "v1.1.1",
 				CoinInputs:  nil,
-				ItemInputs: []types.ItemInput{
+				ItemInputs: []v1beta1.ItemInput{
 					{
 						Id:      "item1",
 						Doubles: nil,
@@ -155,7 +154,7 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 						Strings: nil,
 					},
 				},
-				Entries:       types.EntriesList{},
+				Entries:       v1beta1.EntriesList{},
 				Outputs:       nil,
 				BlockInterval: 0,
 				CostPerBlock: sdk.Coin{
@@ -165,24 +164,24 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 				Enabled:   true,
 				ExtraInfo: "",
 			},
-			item: types.Item{
-				Owner:       types.GenTestBech32FromString("test1"),
+			item: v1beta1.Item{
+				Owner:       v1beta1.GenTestBech32FromString("test1"),
 				CookbookId:  "cookbook1",
 				Id:          "item1",
 				NodeVersion: 0,
-				Doubles: []types.DoubleKeyValue{
+				Doubles: []v1beta1.DoubleKeyValue{
 					{
 						Key:   "doubleParam",
 						Value: sdk.ZeroDec(),
 					},
 				},
-				Longs: []types.LongKeyValue{
+				Longs: []v1beta1.LongKeyValue{
 					{
 						Key:   "longParam",
 						Value: 0,
 					},
 				},
-				Strings: []types.StringKeyValue{
+				Strings: []v1beta1.StringKeyValue{
 					{
 						Key:   "entityType",
 						Value: "testItem",

@@ -13,13 +13,12 @@ import (
 
 	"github.com/Pylons-tech/pylons/testutil/network"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/stretchr/testify/require"
 
 	util "github.com/Pylons-tech/pylons/testutil/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
+	"github.com/Pylons-tech/pylons/x/pylons/types/v1beta1"
 )
 
 // genTestRedeemInfoSignature generates a signed RedeemInfo message using privKey
@@ -43,7 +42,7 @@ func TestCmdBurnDebtToken(t *testing.T) {
 	require.NoError(t, err)
 
 	type field struct {
-		ri     types.RedeemInfo
+		ri     v1beta1.RedeemInfo
 		sender string
 	}
 	for _, tc := range []struct {
@@ -54,12 +53,12 @@ func TestCmdBurnDebtToken(t *testing.T) {
 		{
 			name: "Valid",
 			args: field{
-				ri: types.RedeemInfo{
+				ri: v1beta1.RedeemInfo{
 					Id:            "testId",
 					ProcessorName: "Test",
 					Address:       address,
 					Amount:        sdk.NewInt(1000), // 1000node0token
-					Signature:     genTestRedeemInfoSignature("testId", address, sdk.NewInt(1000), types.DefaultTestPrivateKey),
+					Signature:     genTestRedeemInfoSignature("testId", address, sdk.NewInt(1000), v1beta1.DefaultTestPrivateKey),
 				},
 				sender: address,
 			},
@@ -68,7 +67,7 @@ func TestCmdBurnDebtToken(t *testing.T) {
 		{
 			name: "Invalid signature",
 			args: field{
-				ri: types.RedeemInfo{
+				ri: v1beta1.RedeemInfo{
 					Id:            "testId",
 					ProcessorName: "Test",
 					Address:       address,
@@ -82,12 +81,12 @@ func TestCmdBurnDebtToken(t *testing.T) {
 		{
 			name: "Invalid payment processor",
 			args: field{
-				ri: types.RedeemInfo{
+				ri: v1beta1.RedeemInfo{
 					Id:            "testId",
 					ProcessorName: "Invalid",
 					Address:       address,
 					Amount:        sdk.NewInt(1000), // 1000node0token
-					Signature:     genTestRedeemInfoSignature("testId", address, sdk.NewInt(1000), types.DefaultTestPrivateKey),
+					Signature:     genTestRedeemInfoSignature("testId", address, sdk.NewInt(1000), v1beta1.DefaultTestPrivateKey),
 				},
 				sender: address,
 			},
@@ -96,12 +95,12 @@ func TestCmdBurnDebtToken(t *testing.T) {
 		{
 			name: "Insufficient amount",
 			args: field{
-				ri: types.RedeemInfo{
+				ri: v1beta1.RedeemInfo{
 					Id:            "testId",
 					ProcessorName: "Test",
-					Address:       types.GenTestBech32FromString("test"),
+					Address:       v1beta1.GenTestBech32FromString("test"),
 					Amount:        sdk.NewInt(1100), // 1100node0token
-					Signature:     genTestRedeemInfoSignature("testId", address, sdk.NewInt(1000), types.DefaultTestPrivateKey),
+					Signature:     genTestRedeemInfoSignature("testId", address, sdk.NewInt(1000), v1beta1.DefaultTestPrivateKey),
 				},
 				sender: address,
 			},
