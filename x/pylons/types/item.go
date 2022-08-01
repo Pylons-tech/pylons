@@ -351,10 +351,10 @@ func FindValidPaymentsPermutation(items []Item, balance sdk.Coins) ([]int, error
 	return nil, errors.New("no valid set of items' transferFees exists that can be covered by the provided balance")
 }
 
-func (i Item) NewItemHistory(ctx sdk.Context, to, from string) ItemHistory {
+func (it Item) NewItemHistory(ctx sdk.Context, to, from string) ItemHistory {
 	return ItemHistory{
-		CookbookId: i.CookbookId,
-		Id:         i.Id,
+		CookbookId: it.CookbookId,
+		Id:         it.Id,
 		To:         to,
 		From:       from,
 		CreatedAt:  ctx.BlockTime().Unix(),
