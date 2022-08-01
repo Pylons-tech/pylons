@@ -114,7 +114,8 @@ func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID stri
 		RecipeId:         recipeID,
 		CreatedAt:        ctx.BlockTime().Unix(),
 		UpdatedAt:        ctx.BlockTime().Unix(),
-		ItemMintedNumber: io.AmountMinted,
+		ItemMintedNumber: io.AmountMinted + 1,
+		ItemId:           io.Id,
 	}, nil
 }
 
@@ -352,9 +353,13 @@ func FindValidPaymentsPermutation(items []Item, balance sdk.Coins) ([]int, error
 	return nil, errors.New("no valid set of items' transferFees exists that can be covered by the provided balance")
 }
 
-func (i Item) NewItemHistory() ItemHistory {
+func (i Item) NewItemHistory(ctx sdk.Context, to, from string) ItemHistory {
 	return ItemHistory{
 		ItemMintedNumber: i.ItemMintedNumber,
 		CookbookId:       i.CookbookId,
+		Id:               i.ItemId,
+		To:               to,
+		From:             from,
+		CreatedAt:        ctx.BlockTime().Unix(),
 	}
 }

@@ -118,7 +118,11 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 	for i, item := range mintItems {
 		id := k.AppendItem(ctx, item)
 		itemOutputIds[i] = id
-		// add history here
+		// username will always be found as checked previously
+		to, _ := k.GetUsernameByAddress(ctx, pendingExecution.Creator)
+		from, _ := k.GetUsernameByAddress(ctx, cookbook.Creator)
+		history := item.NewItemHistory(ctx, to.Value, from.Value)
+		k.SetItemHistory(ctx, history)
 	}
 	// update modify items in keeper
 	itemModifyOutputIds := make([]string, len(modifyItems))

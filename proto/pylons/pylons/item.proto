@@ -43,13 +43,14 @@ message Item {
   int64 updated_at = 14;
   string recipe_id = 15;
   uint64 item_minted_number = 16;
+  string item_id = 17;
 }
 
 message ItemHistory {
   uint64 item_minted_number = 1;
   string cookbook_id = 2;
   string id = 3;
-  string owner = 4;
-  int64 created_at = 5;
-  int64 updated_at = 6;
+  string from = 4;
+  string to = 5;
+  int64 created_at = 6;
 }
