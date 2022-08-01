@@ -6,6 +6,7 @@ import settings from "../../../settings.json";
 import { FlowRouter } from "meteor/ostrio:flow-router-extra";
 import moment from "moment";
 import _ from "lodash";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 
 import {
   FlowRouterMeta,
@@ -28,7 +29,6 @@ const T = i18n.createComponent();
 export default class EaselBuy extends Component {
   constructor(props) {
     super(props);
-    console.log("[EasyBuy]: props in constructor", this.props);
     this.state = {
       name: this.props.name,
       description: this.props.description,
@@ -88,7 +88,6 @@ export default class EaselBuy extends Component {
     this.handleFetchhistory();
   }
   handleFetchhistory = () => {
-    console.log("this.state.history", this.state.history);
     console.log("fetch history");
     const url = settings.remote.api;
     axios
@@ -96,7 +95,6 @@ export default class EaselBuy extends Component {
         `${url}/pylons/get_recipe_history/${this.props.cookbook_id}/${this.props.recipe_id}`
       )
       .then((res) => {
-        console.log("res.data.history", res.data.history);
         this.setState({
           nftHistory: res.data.history,
         });
@@ -124,8 +122,7 @@ export default class EaselBuy extends Component {
         );
         const strings = _.cloneDeep(itemOutputs?.strings);
         const coinInputs = [...selectedRecipe?.coin_inputs];
-      
-        
+
         if (coinInputs.length > 0) {
           const resCoins = coinInputs[0]?.coins[0];
           denom = resCoins?.denom;
@@ -164,7 +161,7 @@ export default class EaselBuy extends Component {
         const creator = strings.find(
           (val) => val.key.toLowerCase() === "creator"
         )?.value;
-       
+
         const dimentions = this.getNFTDimentions(nftType, itemOutputs);
         (edition = `${itemOutputs.amount_minted} of ${itemOutputs.quantity}`),
           this.setState({
@@ -182,7 +179,6 @@ export default class EaselBuy extends Component {
             createdAt: selectedRecipe.created_at,
             id: selectedRecipe.id,
           });
-          
       })
       .catch((err) => {
         this.setState({ loading: false });
@@ -205,7 +201,8 @@ export default class EaselBuy extends Component {
       var seconds = ((millisecondsDuration % 60000) / 1000).toFixed(0);
       return minutes + ":" + (seconds < 10 ? "0" : "") + seconds + " min";
     } else if (nftType?.toLowerCase() === "3d") {
-      return data.strings.find((val) => val.key.toLowerCase() === "size")?.value;
+      return data.strings.find((val) => val.key.toLowerCase() === "size")
+        ?.value;
     } else {
     }
   };
@@ -218,17 +215,12 @@ export default class EaselBuy extends Component {
     if (isMacLike) {
       ofl = oflIOS;
     }
-
+    debugger;
     ofl = encodeURIComponent(ofl);
     const baseURL = `https://pylons.page.link/?amv=1&apn=${apn}&ibi=${ibi}&imv=1&efr=1&isi=${isi}&`;
     window.location = `${baseURL}ofl=${ofl}&link=${encodeURIComponent(
       window.location.href
     )}`;
-
-    console.log(encodeURIComponent(
-      window.location.href
-    ))
-    debugger
   };
 
   render() {
@@ -274,9 +266,8 @@ export default class EaselBuy extends Component {
           return "";
       }
     };
-   
+
     const getMedia = () => {
-     
       if (loading) return <Spinner type="grow" color="primary" />;
       else if (!nftType) return null;
       else if (nftType.toLowerCase() === "image")
@@ -460,9 +451,6 @@ export default class EaselBuy extends Component {
                                 <div className="item">
                                   <p>Creation Date</p>
                                   <p>
-                                    {console.log(createdAt,moment
-                                          .unix(createdAt)
-                                          .format("DD/MM/YYYY hh:mm:ss"))}
                                     {!!createdAt
                                       ? moment
                                           .unix(createdAt)
