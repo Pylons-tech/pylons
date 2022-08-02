@@ -7,8 +7,9 @@ import (
 	"os"
 	"path/filepath"
 
-	upgradev46 "github.com/Pylons-tech/pylons/app/upgrade"
 	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
+
+	upgradev46 "github.com/Pylons-tech/pylons/app/upgrade"
 
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	"github.com/cosmos/cosmos-sdk/version"
@@ -114,7 +115,7 @@ const (
 // flag Upgrade Handler
 const (
 	FlagUpgradeHandler = "run-upgrade-handlers"
-	FlagUpgradeHeight = "upgrade-height"
+	FlagUpgradeHeight  = "upgrade-height"
 )
 
 var AccountTrack = make(map[string]uint64)
@@ -632,7 +633,7 @@ func (app *PylonsApp) Name() string { return app.BaseApp.Name() }
 
 // BeginBlocker application updates every begin block
 func (app *PylonsApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
-	if(app.upgradeHeight != 0 && app.upgradeHeight == ctx.BlockHeight()) {
+	if app.upgradeHeight != 0 && app.upgradeHeight == ctx.BlockHeight() {
 		app.UpgradeKeeper.ScheduleUpgrade(ctx, upgradetypes.Plan{Name: upgradev46.UpgradeName, Height: ctx.BlockHeight()})
 	}
 	return app.mm.BeginBlock(ctx, req)
