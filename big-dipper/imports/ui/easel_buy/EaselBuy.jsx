@@ -6,6 +6,7 @@ import settings from "../../../settings.json";
 import { FlowRouter } from "meteor/ostrio:flow-router-extra";
 import moment from "moment";
 import _ from "lodash";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 
 import {
   FlowRouterMeta,
@@ -28,7 +29,6 @@ const T = i18n.createComponent();
 export default class EaselBuy extends Component {
   constructor(props) {
     super(props);
-    console.log("[EasyBuy]: props in constructor", this.props);
     this.state = {
       name: this.props.name,
       description: this.props.description,
@@ -88,7 +88,6 @@ export default class EaselBuy extends Component {
     this.handleFetchhistory();
   }
   handleFetchhistory = () => {
-    console.log("this.state.history", this.state.history);
     console.log("fetch history");
     const url = settings.remote.api;
     axios
@@ -96,9 +95,8 @@ export default class EaselBuy extends Component {
         `${url}/pylons/get_recipe_history/${this.props.cookbook_id}/${this.props.recipe_id}`
       )
       .then((res) => {
-        console.log("res.data.History", res.data.History);
         this.setState({
-          nftHistory: res.data.History,
+          nftHistory: res.data.history,
         });
       });
   };
@@ -189,21 +187,22 @@ export default class EaselBuy extends Component {
   };
   getNFTDimentions = (nftType, data) => {
     if (
-      nftType.toLowerCase() === "image" ||
-      nftType.toLowerCase() === "video"
+      nftType?.toLowerCase() === "image" ||
+      nftType?.toLowerCase() === "video"
     ) {
       return (
         data.longs[1].weightRanges[0].lower +
         " x " +
         data.longs[2].weightRanges[0].lower
       );
-    } else if (nftType.toLowerCase() === "audio") {
+    } else if (nftType?.toLowerCase() === "audio") {
       const millisecondsDuration = data.longs[3].weightRanges[0].lower;
       var minutes = Math.floor(millisecondsDuration / 60000);
       var seconds = ((millisecondsDuration % 60000) / 1000).toFixed(0);
       return minutes + ":" + (seconds < 10 ? "0" : "") + seconds + " min";
-    } else if (nftType.toLowerCase() === "3d") {
-      return data.strings.find((val) => val.key.toLowerCase() === "size").value;
+    } else if (nftType?.toLowerCase() === "3d") {
+      return data.strings.find((val) => val.key.toLowerCase() === "size")
+        ?.value;
     } else {
     }
   };
@@ -216,7 +215,6 @@ export default class EaselBuy extends Component {
     if (isMacLike) {
       ofl = oflIOS;
     }
-
     ofl = encodeURIComponent(ofl);
     const baseURL = `https://pylons.page.link/?amv=1&apn=${apn}&ibi=${ibi}&imv=1&efr=1&isi=${isi}&`;
     window.location = `${baseURL}ofl=${ofl}&link=${encodeURIComponent(
@@ -267,6 +265,7 @@ export default class EaselBuy extends Component {
           return "";
       }
     };
+
     const getMedia = () => {
       if (loading) return <Spinner type="grow" color="primary" />;
       else if (!nftType) return null;
