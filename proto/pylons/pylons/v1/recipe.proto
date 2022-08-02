@@ -1,0 +1,27 @@
+syntax = "proto3";
+package pylons.pylons.v1;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types/v1";
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "pylons/pylons/item.proto";
+import "pylons/pylons/recipe.proto";
+
+message Recipe {
+  string cookbookID = 1;
+  string ID = 2;
+  uint64 nodeVersion = 3;
+  string name = 4;
+  string description = 5;
+  string version = 6;
+  repeated CoinInput coinInputs = 7 [(gogoproto.nullable) = false];
+  repeated ItemInput itemInputs = 8 [(gogoproto.nullable) = false];
+  EntriesList entries = 9 [(gogoproto.nullable) = false];
+  repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
+  int64 blockInterval = 11;
+  cosmos.base.v1beta1.Coin costPerBlock = 12 [(gogoproto.nullable) = false];
+  bool enabled = 13;
+  string extraInfo = 14;
+}
+
