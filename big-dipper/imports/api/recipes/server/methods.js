@@ -54,12 +54,12 @@ Meteor.methods({
 
         for (let i in recipes) {
           let recipe = recipes[i];
-          let deeplink =
+          let deeplink = sanitizeUrl(
             Meteor.settings.public.baseURL +
-            "?action=purchase_nft&recipe_id=" +
+            "?recipe_id=" +
             recipe.id +
             "&cookbook_id=" +
-            recipe.cookbook_id;
+            recipe.cookbook_id);
           recipe.deeplink = deeplink;
           var cookbook_owner = "",
             creator = "";
