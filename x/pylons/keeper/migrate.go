@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	v046 "github.com/Pylons-tech/pylons/x/pylons/migrations/v046"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -17,5 +16,5 @@ func NewMigrator(keeper Keeper) Migrator {
 
 // Migrate2to3 migrates from version 2 to 3.
 func (m Migrator) Migrate2to3(ctx sdk.Context) error {
-	return v046.MigrateStore(ctx, m.keeper.storeKey, m.keeper.paramSpace, m.keeper.cdc)
+	return nil
 }
