@@ -2,8 +2,11 @@ version: '3'
 
 services:
   node0:
-    container_name: pylonsnode0
-    image: "pylons-node"
+    container_name: pylonsnode
+    build:
+      context: .
+      args:
+        - BINARY_VERSION=v0.1.1
     ports:
       - "26657:26657"
       - "1317:1317"
