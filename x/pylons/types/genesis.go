@@ -2,6 +2,8 @@ package types
 
 import (
 	"fmt"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // DefaultIndex is the default capability global index
@@ -10,17 +12,68 @@ const DefaultIndex uint64 = 1
 // DefaultGenesis returns the default Pylons genesis state
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
-		RedeemInfoList:               []RedeemInfo{},
-		PaymentInfoList:              []PaymentInfo{},
-		AccountList:                  []UserMap{},
+		// this line is used by starport scaffolding # ibc/genesistype/default
+		// this line is used by starport scaffolding # genesis/types/default
+		RedeemInfoList:  []RedeemInfo{},
+		PaymentInfoList: []PaymentInfo{},
+		AccountList: []UserMap{
+			{
+				AccountAddr: "pylo1gna56yt36rznvm90zcxa7payfcn6490zagswtn",
+				Username:    "test",
+			},
+		},
 		TradeList:                    []Trade{},
 		GoogleInAppPurchaseOrderList: []GoogleInAppPurchaseOrder{},
 		PendingExecutionList:         []Execution{},
 		ExecutionList:                []Execution{},
-		ItemList:                     []Item{},
-		RecipeList:                   []Recipe{},
-		CookbookList:                 []Cookbook{},
-		Params:                       DefaultParams(),
+		ItemList: []Item{
+			{
+				Owner:           "pylo1gna56yt36rznvm90zcxa7payfcn6490zagswtn",
+				CookbookId:      "1",
+				Id:              "1",
+				NodeVersion:     1,
+				Doubles:         []DoubleKeyValue{},
+				Longs:           []LongKeyValue{},
+				Strings:         []StringKeyValue{},
+				MutableStrings:  []StringKeyValue{},
+				Tradeable:       true,
+				LastUpdate:      1,
+				TransferFee:     sdk.Coins{},
+				TradePercentage: sdk.NewDec(0),
+			},
+		},
+		RecipeList: []Recipe{
+			{
+				CookbookId:    "1",
+				Id:            "1",
+				NodeVersion:   1,
+				Name:          "test",
+				Description:   "test",
+				Version:       "0.0.1",
+				CoinInputs:    []CoinInput{},
+				ItemInputs:    []ItemInput{},
+				Entries:       EntriesList{},
+				Outputs:       []WeightedOutputs{},
+				BlockInterval: 0,
+				CostPerBlock:  sdk.Coin{},
+				Enabled:       true,
+				ExtraInfo:     "",
+			},
+		},
+		CookbookList: []Cookbook{
+			{
+				Creator:      "test",
+				Id:           "1",
+				NodeVersion:  1,
+				Name:         "test",
+				Description:  "des",
+				Developer:    "test",
+				Version:      "0.0.1",
+				SupportEmail: "hieuvubk@gmail.com",
+				Enabled:      true,
+			},
+		},
+		Params: DefaultParams(),
 	}
 }
 
