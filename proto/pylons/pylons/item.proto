@@ -44,5 +44,10 @@ message Item {
   string recipe_id = 15;
 }
 
-
-
+message ItemHistory {
+  string cookbook_id = 2;
+  string id = 3;
+  string from = 4;
+  string to = 5;
+  int64 created_at = 6;
+}

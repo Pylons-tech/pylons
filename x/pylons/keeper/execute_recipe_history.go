@@ -37,3 +37,33 @@ func (k Keeper) GetAllExecuteRecipeHis(ctx sdk.Context, cookbookID string, id st
 
 	return
 }
+
+// SetRecipe set a specific recipe in the store from its ID
+func (k Keeper) SetItemHistory(ctx sdk.Context, history types.ItemHistory) {
+	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix((history.CookbookId + history.Id)))
+	recipesHistoryStore := prefix.NewStore(recipesStore, types.KeyPrefix(types.ItemHistoryKey))
+	b := k.cdc.MustMarshal(&history)
+	recipesHistoryStore.Set(types.KeyPrefix(history.To), b)
+
+	// required for random seed init given how it's handled rn
+	k.IncrementEntityCount(ctx)
+}
+
+// SetRecipe set a specific recipe in the store from its ID
+func (k Keeper) GetItemHistory(ctx sdk.Context, cookbookID, id string) (list []*types.ItemHistory) {
+	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix((cookbookID + id)))
+	recipesHistoryStore := prefix.NewStore(recipesStore, types.KeyPrefix(types.ItemHistoryKey))
+	iterator := sdk.KVStorePrefixIterator(recipesHistoryStore, []byte{})
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var val types.ItemHistory
+		err := k.cdc.Unmarshal(iterator.Value(), &val)
+		if err != nil {
+			continue
+		}
+		list = append(list, &val)
+	}
+	return
+}
