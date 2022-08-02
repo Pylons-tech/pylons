@@ -52,31 +52,40 @@ Meteor.startup(() => {
             sink.appendToHead(defaultMetaTags); 
             return;
         }    
-        const querys = queryString.parse(url); 
+        const querys = new URLSearchParams(url)
         var img = ''; 
         var selectedRecipe = null;
         var recipes = null;
-        if (querys['?action'] == "purchase_nft" && querys['recipe_id'] != null && querys['cookbook_id'] != null) {
-            const recipe_id = sanitizeUrl(querys['recipe_id']);
-            const cookbook_id = sanitizeUrl(querys['cookbook_id']);
+        
+        
+        if (querys.get('recipe_id') !== null && querys.get('cookbook_id') !== null && querys.get('address') !== null ) {
+            
+            const recipe_id = sanitizeUrl(querys.get('recipe_id'));
+            const cookbook_id = sanitizeUrl(querys.get('cookbook_id'));
             let recipesUrl = sanitizeUrl(`${Meteor.settings.remote.api}/pylons/recipe/${cookbook_id}/${recipe_id}`);
-
+            
             try { 
+                
                 let response = HTTP.get(recipesUrl);
-                selectedRecipe = JSON.parse(response.content).Recipe;
+                selectedRecipe = JSON.parse(response.content).recipe;
+                
                 
             } catch (e) { 
-                console.log(e);
+                console.log("Error in get recipe",e);
             }
             
-            if (selectedRecipe != undefined && selectedRecipe != null && selectedRecipe.entries.itemOutputs.length > 0) {
-                const strings = selectedRecipe.entries.itemOutputs[0].strings; 
+            if (selectedRecipe != undefined && selectedRecipe != null && selectedRecipe.entries.item_outputs.length > 0) {
+                const strings = selectedRecipe.entries.item_outputs[0].strings; 
                 var priceValue = "";
                 var priceCurrency = "";
-                if (selectedRecipe?.coinInputs?.[0]?.coins?.[0]) {
-                    priceValue = selectedRecipe?.coinInputs?.[0]?.coins?.[0]?.amount || "" ;
-                    priceCurrency = selectedRecipe?.coinInputs?.[0]?.coins?.[0]?.denom || "";
+               
+                
+                if (selectedRecipe?.coin_inputs?.[0]?.coins?.[0]) {
+                    priceValue = selectedRecipe?.coin_inputs?.[0]?.coins?.[0]?.amount || "" ;
+                    priceCurrency = selectedRecipe?.coin_inputs?.[0]?.coins?.[0]?.denom || "";
                 }
+                
+
                 if (strings != undefined && strings != null && strings.length > 0) { 
                     if(strings != null)
                     {
@@ -95,13 +104,13 @@ Meteor.startup(() => {
                             
                         } 
                     }
-                    let longs = selectedRecipe.entries.itemOutputs[0].longs; 
+                    let longs = selectedRecipe.entries.item_outputs[0].longs; 
                  
                     if(longs != null)
                     {
                         for (j = 0; j < longs.length; j++) { 
                             let key = longs[j].key;
-                            let value = longs[j].weightRanges[0].lower; 
+                            let value = longs[j].weightRanges[0]?.lower; 
                             if(key == "Width"){
                                 picWidth = value; 
                             }
@@ -132,6 +141,8 @@ Meteor.startup(() => {
                         price = priceValue + ' ' + priceCurrency;
                     }
                 }
+
+              
 
                 //slackbot-linkexpanding
                 //discordbot
@@ -165,7 +176,7 @@ Meteor.startup(() => {
                 }
                 
                 if (selectedRecipe.entries != null) {
-                    const itemoutputs = selectedRecipe.entries.itemOutputs; 
+                    const itemoutputs = selectedRecipe.entries.item_outputs; 
                     if (itemoutputs.length > 0) {
                         let longs = itemoutputs[0].Longs; 
                         if(longs != null)
@@ -204,6 +215,7 @@ Meteor.startup(() => {
                     } 
                 }    
                 
+                
                 const MetaTags = `  
                 <meta name="description"              content="${description}">
                 <meta property="og:type"              content="article">
@@ -217,12 +229,13 @@ Meteor.startup(() => {
                 <meta name="twitter:title"            content="${siteName}" />
                 <meta name="twitter:description"      content="${description}">
                 `;
-
+            
                 sink.appendToHead(MetaTags);
             }
             
+            
         }  
-        else if (querys['?action'] == "resell_nft" && querys['recipe_id'] != null) {
+        else if (querys.get('recipe_id') !== null) {
             const recipe_id = sanitizeUrl(querys['recipe_id']);
             const cookbook_id = sanitizeUrl(querys['cookbook_id']);
             let recipesUrl = sanitizeUrl(`${Meteor.settings.remote.api}/pylons/recipe/${cookbook_id}/${recipe_id}`);
@@ -236,13 +249,13 @@ Meteor.startup(() => {
                 console.log(e);
             }
             
-            if (selectedRecipe != undefined && selectedRecipe != null && selectedRecipe.entries.itemOutputs.length > 0) {                 
-                const strings = selectedRecipe.entries.itemOutputs[0].strings; 
+            if (selectedRecipe != undefined && selectedRecipe != null && selectedRecipe.entries.item_outputs.length > 0) {                 
+                const strings = selectedRecipe.entries.item_outputs[0].strings; 
                 var priceValue = "";
                 var priceCurrency = "";
-                if (selectedRecipe?.coinInputs?.[0]?.coins?.[0]) {
-                    priceValue = selectedRecipe?.coinInputs?.[0]?.coins?.[0]?.amount || "" ;
-                    priceCurrency = selectedRecipe?.coinInputs?.[0]?.coins?.[0]?.denom || "";
+                if (selectedRecipe?.coin_inputs?.[0]?.coins?.[0]) {
+                    priceValue = selectedRecipe?.coin_inputs?.[0]?.coins?.[0]?.amount || "" ;
+                    priceCurrency = selectedRecipe?.coin_inputs?.[0]?.coins?.[0]?.denom || "";
                 }
                 if (strings != undefined && strings != null && strings.length > 0) { 
                     if(strings != null)
@@ -263,7 +276,7 @@ Meteor.startup(() => {
                             
                         } 
                     }
-                    let longs = selectedRecipe.entries.itemOutputs[0].longs; 
+                    let longs = selectedRecipe.entries.item_outputs[0].longs; 
                  
                     if(longs != null)
                     {
@@ -352,7 +365,7 @@ Meteor.startup(() => {
         } 
         else
         { 
-            sink.appendToHead(defaultMetaTags); 
+            sink.appendToHead(defaultMetaTags);
         }
     });
 });
