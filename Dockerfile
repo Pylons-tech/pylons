@@ -1,21 +1,20 @@
 FROM golang:1.18-alpine3.16 AS go-builder
+ARG BINARY_VERSION=v0.4.2
 
 RUN set -eux
-
-RUN apk add --no-cache ca-certificates git build-base linux-headers
 
 WORKDIR /code
 
 # Install babyd binary
 RUN echo "Installing pylonsd binary"
-ADD https://github.com/Pylons-tech/pylons/archive/refs/tags/v0.4.2.tar.gz /code/
-RUN tar -xf v0.4.2.tar.gz -C /code/ --strip-components=1
+ADD https://github.com/Pylons-tech/pylons/archive/refs/tags/${BINARY_VERSION}.tar.gz /code/
+RUN tar -xf ${BINARY_VERSION}.tar.gz -C /code/ --strip-components=1
 RUN go build -o bin/pylonsd -mod=readonly ./cmd/pylonsd
 
 #-------------------------------------------
 FROM golang:1.18-alpine3.16
 
-RUN apk add --no-cache bash py3-pip jq curl
+RUN apk add --no-cache git bash py3-pip jq curl
 RUN pip install toml-cli
 
 WORKDIR /
@@ -35,4 +34,4 @@ EXPOSE 26656
 EXPOSE 9090
 
 # wrong ENTRYPOINT can lead to executable not running
-ENTRYPOINT ["/bin/bash", "test_node_deploy.sh"]
+ENTRYPOINT ["/bin/bash"]
