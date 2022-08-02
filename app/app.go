@@ -633,6 +633,8 @@ func (app *PylonsApp) Name() string { return app.BaseApp.Name() }
 
 // BeginBlocker application updates every begin block
 func (app *PylonsApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
+	// Because we upgrade directly on the node without the proposal. 
+	// So create an upgrade plan at the block that needs to be upgraded
 	if app.upgradeHeight != 0 && app.upgradeHeight == ctx.BlockHeight() {
 		app.UpgradeKeeper.ScheduleUpgrade(ctx, upgradetypes.Plan{Name: upgradev46.UpgradeName, Height: ctx.BlockHeight()})
 	}
