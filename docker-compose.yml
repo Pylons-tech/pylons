@@ -6,7 +6,8 @@ services:
     build:
       context: .
       args:
-        - BINARY_VERSION=v0.1.1
+        - BINARY_VERSION=v0.4.2
+    command: test_node_deploy.sh
     ports:
       - "26657:26657"
       - "1317:1317"

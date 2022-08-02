@@ -3,8 +3,6 @@ ARG BINARY_VERSION=v0.4.2
 
 RUN set -eux
 
-RUN apk add --no-cache ca-certificates build-base linux-headers
-
 WORKDIR /code
 
 # Install babyd binary
@@ -16,7 +14,7 @@ RUN go build -o bin/pylonsd -mod=readonly ./cmd/pylonsd
 #-------------------------------------------
 FROM golang:1.18-alpine3.16
 
-RUN apk add --no-cache bash py3-pip jq curl
+RUN apk add --no-cache git bash py3-pip jq curl
 RUN pip install toml-cli
 
 WORKDIR /
@@ -36,4 +34,4 @@ EXPOSE 26656
 EXPOSE 9090
 
 # wrong ENTRYPOINT can lead to executable not running
-ENTRYPOINT ["/bin/bash", "test_node_deploy.sh"]
+ENTRYPOINT ["/bin/bash"]
