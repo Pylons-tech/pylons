@@ -27,3 +27,5 @@ artifacts
 
 cmd/pylonsd/__debug_bin
 proto/dart/*
+
+debug

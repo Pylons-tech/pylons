@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  node0:
+    container_name: pylonsnode0
+    image: "pylons-node"
+    ports:
+      - "26657:26657"
+      - "1317:1317"
+    volumes:
+      - ./debug:/debug
