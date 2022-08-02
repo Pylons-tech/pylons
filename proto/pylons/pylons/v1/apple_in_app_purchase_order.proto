@@ -1,8 +1,7 @@
 syntax = "proto3";
-package pylons.pylons;
+package pylons.pylons.v1;
 
-option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
-
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types/v1";
 message AppleInAppPurchaseOrder {
   string quantity = 1; 
   string productID = 2; 

@@ -1,0 +1,153 @@
+syntax = "proto3";
+package pylons.pylons.v1;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types/v1";
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "pylons/pylons/item.proto";
+import "pylons/pylons/recipe.proto";
+
+// DoubleInputParam describes the bounds on an item input/output parameter of type float64
+message DoubleInputParam {
+  string key = 1;
+  // The minimum legal value of this parameter.
+  string minValue = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  // The maximum legal value of this parameter.
+  string  maxValue = 3 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+}
+
+// LongInputParam describes the bounds on an item input/output parameter of type int64
+message LongInputParam {
+  string key = 1;
+  // The minimum legal value of this parameter.
+  int64 minValue = 2;
+  // The maximum legal value of this parameter.
+  int64 maxValue = 3;
+}
+
+// StringInputParam describes the bounds on an item input/output parameter of type string
+message StringInputParam {
+  string key = 1;
+  // The value of the parameter
+  string value = 2;
+}
+
+// ItemInput is a struct for describing an input item
+message ItemInput  {
+  string ID = 1;
+  repeated DoubleInputParam doubles = 2 [(gogoproto.nullable) = false];
+  repeated LongInputParam longs = 3 [(gogoproto.nullable) = false];
+  repeated StringInputParam strings = 4[(gogoproto.nullable) = false];
+}
+
+// DoubleWeightRange describes weight range that produce double value
+message DoubleWeightRange {
+  string lower = 1 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string upper = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  uint64 weight = 3;
+}
+
+// DoubleParam describes the bounds on an item input/output parameter of type float64
+message DoubleParam  {
+  string key = 1;
+  repeated DoubleWeightRange weightRanges = 2 [(gogoproto.nullable) = false];
+  // When program is not empty, weightRanges is ignored
+  string program = 3;
+}
+
+// IntWeightRange describes weight range that produce int value
+message IntWeightRange {
+  int64 lower = 1;
+  int64 upper = 2;
+  uint64 weight = 3;
+}
+
+// LongParam describes the bounds on an item input/output parameter of type int64
+message LongParam {
+  string key = 1;
+  repeated IntWeightRange weightRanges = 2 [(gogoproto.nullable) = false];
+  // When program is not empty, weightRanges is ignored
+  string program = 3;
+}
+
+// StringParam describes an item input/output parameter of type string
+message StringParam {
+  string key = 1;
+  string value = 2;
+  // When program is not empty, value is ignored
+  string program = 3;
+}
+
+// CoinOutput models the continuum of valid outcomes for coin generation in recipes
+message CoinOutput{
+  string ID = 1;
+  cosmos.base.v1beta1.Coin coin = 2 [(gogoproto.nullable) = false];
+  string program = 3;
+}
+
+// ItemOutput models the continuum of valid outcomes for item generation in recipes
+message ItemOutput {
+  string ID = 1;
+  repeated DoubleParam doubles = 2 [(gogoproto.nullable) = false];
+  repeated LongParam longs = 3 [(gogoproto.nullable) = false];
+  repeated StringParam strings = 4 [(gogoproto.nullable) = false];
+  // defines a list of mutable strings whose value can be customized by the user
+  repeated StringKeyValue mutableStrings = 5 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin transferFee = 6 [(gogoproto.nullable) = false];
+  // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
+  string tradePercentage = 7 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
+  uint64 quantity = 8;
+  uint64 amountMinted = 9;
+  bool tradeable = 10;
+}
+
+// ItemModifyOutput describes what is modified from item input
+message ItemModifyOutput {
+  string ID = 1;
+  string itemInputRef = 2;
+  repeated DoubleParam doubles = 3 [(gogoproto.nullable) = false];
+  repeated LongParam longs = 4 [(gogoproto.nullable) = false];
+  repeated StringParam strings = 5 [(gogoproto.nullable) = false];
+  // defines a list of mutable strings whose value can be customized by the user
+  repeated StringKeyValue mutableStrings = 6 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin transferFee = 7 [(gogoproto.nullable) = false];
+  // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
+  string tradePercentage = 8 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
+  uint64 quantity = 9;
+  uint64 amountMinted = 10;
+  bool tradeable = 11;
+}
+
+// EntriesList is a struct to keep list of items and coins
+message EntriesList {
+  repeated CoinOutput coinOutputs = 1 [(gogoproto.nullable) = false];
+  repeated ItemOutput itemOutputs = 2 [(gogoproto.nullable) = false];
+  repeated ItemModifyOutput itemModifyOutputs = 3 [(gogoproto.nullable) = false];
+}
+
+// WeightedOutputs is to make structs which is using weight to be based on
+message  WeightedOutputs {
+  repeated string entryIDs = 1 [(gogoproto.nullable) = false];
+  uint64 weight = 2;
+}
+
+
+message Recipe {
+  string cookbookID = 1;
+  string ID = 2;
+  uint64 nodeVersion = 3;
+  string name = 4;
+  string description = 5;
+  string version = 6;
+  repeated CoinInput coinInputs = 7 [(gogoproto.nullable) = false];
+  repeated ItemInput itemInputs = 8 [(gogoproto.nullable) = false];
+  EntriesList entries = 9 [(gogoproto.nullable) = false];
+  repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
+  int64 blockInterval = 11;
+  cosmos.base.v1beta1.Coin costPerBlock = 12 [(gogoproto.nullable) = false];
+  bool enabled = 13;
+  string extraInfo = 14;
+}
+

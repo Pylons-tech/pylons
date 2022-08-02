@@ -1,0 +1,14 @@
+syntax = "proto3";
+package pylons.pylons.v1;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types/v1";
+import "gogoproto/gogo.proto";
+
+message PaymentInfo {
+  string purchaseID = 1;
+  string processorName = 2;
+  string payerAddr = 3;
+  string amount = 4 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
+  string productID = 5;
+  string signature = 6;
+}

@@ -1,0 +1,11 @@
+syntax = "proto3";
+package pylons.pylons.v1;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types/v1";
+message GoogleInAppPurchaseOrder {
+  string creator = 1;
+  string productID = 2;
+  string purchaseToken = 3;
+  string receiptDataBase64 = 4;
+  string signature = 5;
+}

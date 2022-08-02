@@ -1,0 +1,20 @@
+syntax = "proto3";
+package pylons.pylons.v1;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types/v1";
+import "gogoproto/gogo.proto";
+
+message RedeemInfo {
+  string ID = 1;
+  string processorName = 2;
+  string address = 3;
+  string amount = 4 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];;
+  string signature = 5;
+}
+
+message CreatePaymentAccount {
+  string address = 1;
+  string token = 2;
+  string signature = 3;
+}
+
