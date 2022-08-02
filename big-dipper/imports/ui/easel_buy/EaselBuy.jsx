@@ -215,7 +215,6 @@ export default class EaselBuy extends Component {
     if (isMacLike) {
       ofl = oflIOS;
     }
-    debugger;
     ofl = encodeURIComponent(ofl);
     const baseURL = `https://pylons.page.link/?amv=1&apn=${apn}&ibi=${ibi}&imv=1&efr=1&isi=${isi}&`;
     window.location = `${baseURL}ofl=${ofl}&link=${encodeURIComponent(
