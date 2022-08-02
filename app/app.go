@@ -113,7 +113,8 @@ const (
 
 // flag Upgrade Handler
 const (
-	flagUpgradeHandler = "run-upgrade-handlers"
+	FlagUpgradeHandler = "run-upgrade-handlers"
+	FlagUpgradeHeight = "upgrade-height"
 )
 
 var AccountTrack = make(map[string]uint64)
@@ -259,6 +260,9 @@ type PylonsApp struct {
 
 	// module migration manager
 	configurator module.Configurator
+
+	//upgrade height
+	upgradeHeight int64
 }
 
 // New returns a reference to an initialized Pylons.
@@ -454,7 +458,8 @@ func New(
 	// NOTE: we may consider parsing `appOpts` inside module constructors. For the moment
 	// we prefer to be more strict in what arguments the modules expect.
 	skipGenesisInvariants := cast.ToBool(appOpts.Get(crisis.FlagSkipGenesisInvariants))
-	isUpgrade := cast.ToBool(appOpts.Get(flagUpgradeHandler))
+	isUpgrade := cast.ToBool(appOpts.Get(FlagUpgradeHandler))
+	app.upgradeHeight = cast.ToInt64(appOpts.Get(FlagUpgradeHeight))
 
 	// NOTE: Any module instantiated in the module manager that is later modified
 	// must be passed by reference here.
@@ -619,7 +624,6 @@ func New(
 
 	app.ScopedIBCKeeper = scopedIBCKeeper
 	app.ScopedTransferKeeper = scopedTransferKeeper
-
 	return app
 }
 
@@ -628,6 +632,9 @@ func (app *PylonsApp) Name() string { return app.BaseApp.Name() }
 
 // BeginBlocker application updates every begin block
 func (app *PylonsApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
+	if(app.upgradeHeight != 0 && app.upgradeHeight == ctx.BlockHeight()) {
+		app.UpgradeKeeper.ScheduleUpgrade(ctx, upgradetypes.Plan{Name: upgradev46.UpgradeName, Height: ctx.BlockHeight()})
+	}
 	return app.mm.BeginBlock(ctx, req)
 }
 

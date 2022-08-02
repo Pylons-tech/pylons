@@ -142,7 +142,8 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 }
 
 func addUpgradeHandlerFlags(startCmd *cobra.Command) {
-	startCmd.Flags().Bool("run-upgrade-handlers", false, "For upgrade handler")
+	startCmd.Flags().Bool(app.FlagUpgradeHandler, false, "For upgrade handler")
+	startCmd.Flags().Int64(app.FlagUpgradeHeight, 0, "Upgrade execution block")
 }
 
 func addModuleInitFlags(startCmd *cobra.Command) {
