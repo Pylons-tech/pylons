@@ -148,7 +148,6 @@ func addUpgradeHandlerFlags(startCmd *cobra.Command) {
 func addModuleInitFlags(startCmd *cobra.Command) {
 	crisis.AddModuleInitFlags(startCmd)
 	addUpgradeHandlerFlags(startCmd)
-
 }
 
 // initTendermintConfig helps to override default Tendermint Config values.
