@@ -10,8 +10,6 @@ import (
 	v1 "github.com/Pylons-tech/pylons/x/pylons/types/v1"
 )
 
-// migrateProposals migrates all legacy proposals into MsgExecLegacyContent
-// proposals.
 func migrateAppleInAppPurchaseOrder(store sdk.KVStore, cdc codec.BinaryCodec) error {
 	orderStore := prefix.NewStore(store, []byte(types.AppleInAppPurchaseOrderKey))
 
