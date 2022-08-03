@@ -2248,9 +2248,9 @@ eslint-plugin-jsx-a11y@^6.6.1:
     minimatch "^3.1.2"
     semver "^6.3.0"
 
-eslint-plugin-meteor@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.npmjs.org/eslint-plugin-meteor/-/eslint-plugin-meteor-5.2.0.tgz"
+eslint-plugin-meteor@^7.3.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-meteor/-/eslint-plugin-meteor-7.3.0.tgz#83261609035976c06a2c9e91cc7a835bd72f5fff"
   dependencies:
     invariant "2.2.4"
 
