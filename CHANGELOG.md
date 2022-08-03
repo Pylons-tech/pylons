@@ -7,7 +7,7 @@
 - [#591](https://github.com/Pylons-tech/pylons/pull/591) Change CamelCase field name to snake_case in proto
 
 ### Changes:
-
+- [#706](https://github.com/Pylons-tech/pylons/pull/706) Add flag "--run-upgrade-handlers" and "--upgrade-height" to "pylonsd start" cmd for immediate upgrade
 - [#710](https://github.com/Pylons-tech/pylons/pull/710) Bump IBC-Go to v5.
 - [#691](https://github.com/Pylons-tech/pylons/pull/691) Bump Cosmos SDK to v0.46.0.
 - [#537](https://github.com/Pylons-tech/pylons/pull/537) CEL execution environment cleanup.
