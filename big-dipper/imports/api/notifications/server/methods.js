@@ -164,6 +164,7 @@ Meteor.methods({
       var saleID = sale._id;
       var token;
       //get Firebase token for specified user address
+      console.log("sale item:", sale);
       try {
         token = FCMToken.findOne({ address: sellerAddress }).token;
       } catch (e) {
@@ -180,23 +181,27 @@ Meteor.methods({
           type: "NFT Sold",
         },
       };
-      if (sale?.quantity > 0 && sale?.amountMinted === sale?.quantity) {
+      quantity = parseInt(sale?.quantity, 10);
+      amountMinted = parseInt(sale?.amountMinted, 10);
+      totalSale = sale?.amount * amountMinted;
+      let coins = Meteor.settings.public.coins;
+      let totalProceeds;
+      coin = coins.find(
+        (coin) => coin?.denom?.toLowerCase() === sale?.coin?.toLowerCase()
+      );
+      if (coin) {
+        totalProceeds = totalSale / coin?.fraction + " " + coin?.displayName;
+      }
+      if (quantity > 0 && amountMinted === quantity) {
         // All editions for [NFT Title] have been sold. Your total proceeds are [$XYZ USD]
+        message.notification.body = `All editions for ${sale.item_name} have been sold. You’re total proceeds are ${totalProceeds}}`;
       } else if (
-        sale?.quantity > 0 &&
-        sale?.amountMinted * 2 === sale?.quantity
+        quantity > 0 &&
+        (amountMinted * 2 === quantity || amountMinted * 2 === quantity + 1)
       ) {
-        // “Half of the editions for [NFT Title] have been sold. You’re total proceeds are [$XYZ USD]”
+        message.notification.body = `Half of the editions for ${sale.item_name} have been sold. You’re total proceeds are ${totalProceeds}}`;
       } else {
-        message.notification.body = {
-          notification: {
-            title: "NFT Sold",
-            body: `Your NFT ${sale.item_name} has been sold to ${buyerUserName}`,
-          },
-          data: {
-            type: "NFT Sold",
-          },
-        };
+        message.notification.body = `Your NFT ${sale.item_name} have been sold. You’re total proceeds are ${totalProceeds}}`;
       }
       const options = {
         priority: "high",
