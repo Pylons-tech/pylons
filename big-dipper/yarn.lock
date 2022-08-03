@@ -4401,9 +4401,9 @@ signal-exit@^3.0.2:
   version "3.0.7"
   resolved "https://registry.npmjs.org/signal-exit/-/signal-exit-3.0.7.tgz"
 
-simpl-schema@^1.12.2:
-  version "1.12.2"
-  resolved "https://registry.npmjs.org/simpl-schema/-/simpl-schema-1.12.2.tgz"
+simpl-schema@^1.12.3:
+  version "1.12.3"
+  resolved "https://registry.yarnpkg.com/simpl-schema/-/simpl-schema-1.12.3.tgz#592ca1daacb6cd68faa6a82952b0ab8c1968b7fb"
   dependencies:
     clone "^2.1.2"
     message-box "^0.2.7"
