@@ -636,7 +636,10 @@ func (app *PylonsApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) 
 	// Because we upgrade directly on the node without the proposal.
 	// So create an upgrade plan at the block that needs to be upgraded
 	if app.upgradeHeight != 0 && app.upgradeHeight == ctx.BlockHeight() {
-		app.UpgradeKeeper.ScheduleUpgrade(ctx, upgradetypes.Plan{Name: upgradev46.UpgradeName, Height: ctx.BlockHeight()})
+		err := app.UpgradeKeeper.ScheduleUpgrade(ctx, upgradetypes.Plan{Name: upgradev46.UpgradeName, Height: ctx.BlockHeight()})
+		if err != nil {
+			panic(err)
+		}
 	}
 	return app.mm.BeginBlock(ctx, req)
 }
