@@ -164,7 +164,6 @@ Meteor.methods({
       var saleID = sale._id;
       var token;
       //get Firebase token for specified user address
-      console.log("sale item:", sale);
       try {
         token = FCMToken.findOne({ address: sellerAddress }).token;
       } catch (e) {
