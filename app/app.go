@@ -113,10 +113,10 @@ const (
 )
 
 // flag Upgrade Handler
-const (
-	FlagUpgradeHandler = "run-upgrade-handlers"
-	FlagUpgradeHeight  = "upgrade-height"
-)
+// const (
+// 	FlagUpgradeHandler = "run-upgrade-handlers"
+// 	FlagUpgradeHeight  = "upgrade-height"
+// )
 
 var AccountTrack = make(map[string]uint64)
 
@@ -263,7 +263,7 @@ type PylonsApp struct {
 	configurator module.Configurator
 
 	// upgrade height
-	upgradeHeight int64
+	// upgradeHeight int64
 }
 
 // New returns a reference to an initialized Pylons.
@@ -459,14 +459,14 @@ func New(
 	// NOTE: we may consider parsing `appOpts` inside module constructors. For the moment
 	// we prefer to be more strict in what arguments the modules expect.
 	skipGenesisInvariants := cast.ToBool(appOpts.Get(crisis.FlagSkipGenesisInvariants))
-	isUpgrade := cast.ToBool(appOpts.Get(FlagUpgradeHandler))
-	app.upgradeHeight = cast.ToInt64(appOpts.Get(FlagUpgradeHeight))
+	// isUpgrade := cast.ToBool(appOpts.Get(FlagUpgradeHandler))
+	// app.upgradeHeight = cast.ToInt64(appOpts.Get(FlagUpgradeHeight))
 
 	// NOTE: Any module instantiated in the module manager that is later modified
 	// must be passed by reference here.
-	if isUpgrade {
-		app.setupUpgradeStoreLoaders()
-	}
+	// if isUpgrade {
+	app.setupUpgradeStoreLoaders()
+	// }
 
 	app.mm = module.NewManager(
 		genutil.NewAppModule(
@@ -597,9 +597,9 @@ func New(
 	app.sm.RegisterStoreDecoders()
 
 	// register upgrade
-	if isUpgrade {
-		app.RegisterUpgradeHandlers(cfg)
-	}
+	// if isUpgrade {
+	app.RegisterUpgradeHandlers(cfg)
+	// }
 
 	// initialize stores
 	app.MountKVStores(keys)
@@ -635,12 +635,12 @@ func (app *PylonsApp) Name() string { return app.BaseApp.Name() }
 func (app *PylonsApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
 	// Because we upgrade directly on the node without the proposal.
 	// So create an upgrade plan at the block that needs to be upgraded
-	if app.upgradeHeight != 0 && app.upgradeHeight == ctx.BlockHeight() {
-		err := app.UpgradeKeeper.ScheduleUpgrade(ctx, upgradetypes.Plan{Name: upgradev46.UpgradeName, Height: ctx.BlockHeight()})
-		if err != nil {
-			panic(err)
-		}
-	}
+	// if app.upgradeHeight != 0 && app.upgradeHeight == ctx.BlockHeight() {
+	// 	err := app.UpgradeKeeper.ScheduleUpgrade(ctx, upgradetypes.Plan{Name: upgradev46.UpgradeName, Height: ctx.BlockHeight()})
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
+	// }
 	return app.mm.BeginBlock(ctx, req)
 }
 
