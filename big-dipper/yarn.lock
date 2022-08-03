@@ -326,14 +326,14 @@
   version "6.10.1"
   resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-6.10.1.tgz#510688251b6261744c6b1cde6cfd2dfb13fc27b2"
 
-"@ledgerhq/hw-transport-web-ble@^5.50.0":
-  version "5.51.1"
-  resolved "https://registry.npmjs.org/@ledgerhq/hw-transport-web-ble/-/hw-transport-web-ble-5.51.1.tgz"
+"@ledgerhq/hw-transport-web-ble@^6.27.2":
+  version "6.27.2"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-web-ble/-/hw-transport-web-ble-6.27.2.tgz#3fe829b6cbb9dcdef0266d0f3603a17f860cec77"
   dependencies:
-    "@ledgerhq/devices" "^5.51.1"
-    "@ledgerhq/errors" "^5.50.0"
-    "@ledgerhq/hw-transport" "^5.51.1"
-    "@ledgerhq/logs" "^5.50.0"
+    "@ledgerhq/devices" "^7.0.0"
+    "@ledgerhq/errors" "^6.10.1"
+    "@ledgerhq/hw-transport" "^6.27.2"
+    "@ledgerhq/logs" "^6.10.0"
     rxjs "6"
 
 "@ledgerhq/hw-transport-webusb@^6.27.2":
@@ -345,7 +345,7 @@
     "@ledgerhq/hw-transport" "^6.27.2"
     "@ledgerhq/logs" "^6.10.0"
 
-"@ledgerhq/hw-transport@^5.25.0", "@ledgerhq/hw-transport@^5.51.1":
+"@ledgerhq/hw-transport@^5.25.0":
   version "5.51.1"
   resolved "https://registry.npmjs.org/@ledgerhq/hw-transport/-/hw-transport-5.51.1.tgz"
   dependencies:
