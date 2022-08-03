@@ -141,14 +141,14 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 	rootCmd.AddCommand(server.RosettaCommand(encodingConfig.InterfaceRegistry, encodingConfig.Codec))
 }
 
-func addUpgradeHandlerFlags(startCmd *cobra.Command) {
-	startCmd.Flags().Bool(app.FlagUpgradeHandler, false, "For upgrade handler")
-	startCmd.Flags().Int64(app.FlagUpgradeHeight, 0, "Upgrade execution block")
-}
+// func addUpgradeHandlerFlags(startCmd *cobra.Command) {
+// 	startCmd.Flags().Bool(app.FlagUpgradeHandler, false, "For upgrade handler")
+// 	startCmd.Flags().Int64(app.FlagUpgradeHeight, 0, "Upgrade execution block")
+// }
 
 func addModuleInitFlags(startCmd *cobra.Command) {
 	crisis.AddModuleInitFlags(startCmd)
-	addUpgradeHandlerFlags(startCmd)
+	// addUpgradeHandlerFlags(startCmd)
 }
 
 // initTendermintConfig helps to override default Tendermint Config values.
