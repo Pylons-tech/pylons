@@ -103,7 +103,7 @@ var builtinGadgets []Gadget = []Gadget{
 				],
 				"weight": 1
 			}
-		],`,
+		]`,
 		1,
 	},
 	{
@@ -182,6 +182,9 @@ func parseGadgets(s string) ([]Gadget, error) {
 	gadgetHeader := ""
 	gadgetJSON := ""
 	for i, s := range splut {
+		if len(s) == 0 {
+			continue // skip empty lines
+		}
 		str := strings.TrimSpace(s)
 		if str[0] == '#' {
 			// this line is a header, so parse out the gadget we've built. unless this is the first gadget.
@@ -242,10 +245,11 @@ func LoadGadgetsForPath(p string) (*[]Gadget, error) {
 	}
 	var dir string
 	// refactor this to not be for/break, it's gross
+	// this logic is also v. hacky
 	for {
 		dir, _, gadgets, err = loadGadgetsForPath(searchDir, gadgets)
-		if err != nil {
-			return nil, err
+		if err != nil || dir == searchDir {
+			return gadgets, err
 		}
 		if dir != "" {
 			searchDir = dir

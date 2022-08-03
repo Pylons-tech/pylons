@@ -85,18 +85,22 @@ func loadModuleFromPath(modulePath string, currentPath string) string {
 }
 
 func loadModulesInline(bytes []byte, path string, info os.FileInfo, gadgets *[]Gadget) string {
+	// TODO: this function is slightly kludgy due to hotfixes rn - rewrite it
 	json := string(bytes)
 	lines := strings.Split(json, "\n")
 	for i, line := range lines {
-		lineTrimmed := strings.TrimLeft(line, " ")
-		if len(lineTrimmed) != 0 && lineTrimmed[0] == '#' {
-			appendComma := strings.HasSuffix(lines[i], ",")
+		line = strings.TrimSpace(line)
+		if len(line) != 0 && line[0] == '#' {
+			appendComma := strings.HasSuffix(line, ",")
+			if appendComma {
+				line = strings.TrimSuffix(line, ",")
+			}
 			if strings.Contains(line, includeDirective) {
 				modulePath := strings.TrimSpace(strings.Split(line, includeDirective)[1])
 				lines[i] = loadModuleFromPath(modulePath, strings.TrimSuffix(path, info.Name())) + "\n"
 			} else {
-				splut := gadgetParamParseRegex.FindAllString(strings.TrimSuffix(strings.TrimPrefix(lineTrimmed, "#"), ","), -1)
-				gadget := GetGadget(strings.TrimSpace(splut[0]), gadgets)
+				splut := gadgetParamParseRegex.FindAllString(strings.TrimSuffix(strings.TrimPrefix(line, "#"), ","), -1)
+				gadget := GetGadget(strings.TrimSuffix(strings.TrimSpace(splut[0]), ","), gadgets)
 				lines[i] = ExpandGadget(gadget, splut[1:])
 			}
 			if appendComma {
