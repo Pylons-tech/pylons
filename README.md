@@ -5,7 +5,7 @@ Pylons is a blockchain network that allows artists, game studios, and other crea
 
 This repository contains:
 
-* The Pylons blockchain software, written in Go using the Cosmos-SDK.
+* The Pylons blockchain software, written in Go using the Cosmos-SDK on Tendermint consensus. 
 * Big Dipper, a block explorer from Forbole that we have customized for use with Pylons.  Thank you Forbole!
 * Our genesis state
 
