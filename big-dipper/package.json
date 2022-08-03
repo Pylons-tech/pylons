@@ -74,7 +74,7 @@
     "eslint-config-airbnb": "^17.1.1",
     "eslint-import-resolver-meteor": "^0.4.0",
     "eslint-plugin-import": "^2.23.3",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-meteor": "^5.2.0",
     "eslint-plugin-react": "^7.23.2"
   }
