@@ -19,7 +19,7 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/google/cel-go v0.12.0
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
-	github.com/ignite/cli v0.22.2
+	github.com/ignite/cli v0.23.0
 	github.com/rogpeppe/go-internal v1.8.1
 	github.com/spf13/cast v1.5.0
 	github.com/spf13/cobra v1.5.0
