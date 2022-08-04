@@ -4,10 +4,10 @@ import (
 	"io"
 	"os"
 
-	"github.com/Pylons-tech/pylons/app/params"
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 
-	"github.com/Pylons-tech/pylons/app"
+	"github.com/Pylons-tech/pylons/app/params"
+
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/config"
@@ -32,6 +32,8 @@ import (
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
+
+	"github.com/Pylons-tech/pylons/app"
 )
 
 // NewRootCmd creates a new root command for simd. It is called once in the
@@ -139,8 +141,14 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 	rootCmd.AddCommand(server.RosettaCommand(encodingConfig.InterfaceRegistry, encodingConfig.Codec))
 }
 
+func addUpgradeHandlerFlags(startCmd *cobra.Command) {
+	startCmd.Flags().Bool(app.FlagUpgradeHandler, false, "For upgrade handler")
+	startCmd.Flags().Int64(app.FlagUpgradeHeight, 0, "Upgrade execution block")
+}
+
 func addModuleInitFlags(startCmd *cobra.Command) {
 	crisis.AddModuleInitFlags(startCmd)
+	addUpgradeHandlerFlags(startCmd)
 }
 
 // initTendermintConfig helps to override default Tendermint Config values.

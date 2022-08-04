@@ -34,6 +34,8 @@ const (
 	RecipeKey = "Recipe-value-"
 	// RecipeHistory is a string key used as a prefix to the KVStore
 	RecipeHistoryKey = "Recipe-History-value-"
+	// ItemHistoryKey is a string key used as a prefix to the KVStore
+	ItemHistoryKey = "Item-History-value-"
 	// ItemKey is a string key used as a prefix to the KVStore
 	ItemKey = "Item-value-"
 	// ItemCountKey is a string key used as a prefix to the KVStore

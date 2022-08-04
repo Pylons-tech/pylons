@@ -121,7 +121,7 @@ func TestGadgets(t *testing.T) {
 				],
 				"weight": 1
 			}
-		],`
+		]`
 		gadget := GetGadget("solo_output", &builtinGadgets)
 		assert.EqualValues(t, expected, ExpandGadget(gadget, []string{"grumble"}))
 	})

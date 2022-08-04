@@ -14,6 +14,8 @@ export default HomeContainer = withTracker((props) => {
   var price = "0 Pylon";
   var selectedRecipe = null;
   recipe_id = props.recipe_id;
+  
+  console.log(props)
 
   if (Meteor.isClient) {
     recipesHandle = Meteor.subscribe("recipes.list", recipe_id);
@@ -29,25 +31,26 @@ export default HomeContainer = withTracker((props) => {
   if (selectedRecipe != null) {
     name = selectedRecipe.name;
     description = selectedRecipe.description;
-    const coinInputs = selectedRecipe.coinInputs;
-    if (coinInputs.length > 0) {
-      if (coinInputs[0].coins[0].denom == "USD") {
+    const coin_inputs = selectedRecipe.coin_inputs;
+    
+    if (coin_inputs.length > 0) {
+      if (coin_inputs[0].coins[0].denom == "USD") {
         price =
-          Math.floor(coinInputs[0].coins[0].amount / 100) +
+          Math.floor(coin_inputs[0].coins[0].amount / 100) +
           "." +
-          (coinInputs[0].coins[0].amount % 100) +
+          (coin_inputs[0].coins[0].amount % 100) +
           " " +
-          coinInputs[0].coins[0].denom;
+          coin_inputs[0].coins[0].denom;
       } else {
         price =
-          coinInputs[0].coins[0].amount + " " + coinInputs[0].coins[0].denom;
+          coin_inputs[0].coins[0].amount + " " + coin_inputs[0].coins[0].denom;
       }
     }
     const entries = selectedRecipe.entries;
     if (entries != null) {
-      const itemoutputs = entries.itemOutputs;
-      if (itemoutputs.length > 0) {
-        let strings = itemoutputs[0].strings;
+      const item_outputs = entries.item_outputs;
+      if (item_outputs.length > 0) {
+        let strings = item_outputs[0].strings;
         for (i = 0; i < strings.length; i++) {
           try {
             if (
@@ -65,7 +68,13 @@ export default HomeContainer = withTracker((props) => {
       }
     }
   }
-
+  console.log({
+    name,
+    description,
+    price,
+    img: img,
+    url: url,
+  })
   return {
     name,
     description,

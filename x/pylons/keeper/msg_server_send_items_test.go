@@ -26,8 +26,17 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
 	}
 
 	owner := items[0].Owner
+	k.SetPylonsAccount(ctx, types.AccountAddr{
+		Value: owner,
+	}, types.Username{
+		Value: "owner",
+	})
 	receiver := types.GenTestBech32FromString("receiver")
-
+	k.SetPylonsAccount(ctx, types.AccountAddr{
+		Value: receiver,
+	}, types.Username{
+		Value: "receiver",
+	})
 	// assign coins to owner to pay for transfers - 5*5*100 = 2500pylon since every item created by
 	// createNItemSameOwnerAndCookbook costs 100pylon to transfer
 	// first, create an initial supply

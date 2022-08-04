@@ -200,10 +200,18 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	for _, item := range matchedInputItems {
 		item.Owner = trade.Creator
 		k.UpdateItem(ctx, item, tradeFulfillerAddr)
+		to, _ := k.GetUsernameByAddress(ctx, trade.Creator)
+		from, _ := k.GetUsernameByAddress(ctx, msg.Creator)
+		history := item.NewItemHistory(ctx, to.Value, from.Value)
+		k.SetItemHistory(ctx, history)
 	}
 	for _, item := range outputItems {
 		item.Owner = msg.Creator
 		k.UpdateItem(ctx, item, tradeCreatorAddr)
+		to, _ := k.GetUsernameByAddress(ctx, msg.Creator)
+		from, _ := k.GetUsernameByAddress(ctx, trade.Creator)
+		history := item.NewItemHistory(ctx, to.Value, from.Value)
+		k.SetItemHistory(ctx, history)
 	}
 
 	// send payments

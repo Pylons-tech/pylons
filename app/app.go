@@ -7,8 +7,9 @@ import (
 	"os"
 	"path/filepath"
 
-	upgradev46 "github.com/Pylons-tech/pylons/app/upgrade"
 	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
+
+	upgradev46 "github.com/Pylons-tech/pylons/app/upgrade"
 
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	"github.com/cosmos/cosmos-sdk/version"
@@ -109,6 +110,12 @@ const (
 	AccountAddressPrefix = "pylo"
 	// Name is the name of the app, here "pylons"
 	Name = "pylons"
+)
+
+// flag Upgrade Handler
+const (
+	FlagUpgradeHandler = "run-upgrade-handlers"
+	FlagUpgradeHeight  = "upgrade-height"
 )
 
 var AccountTrack = make(map[string]uint64)
@@ -254,6 +261,9 @@ type PylonsApp struct {
 
 	// module migration manager
 	configurator module.Configurator
+
+	// upgrade height
+	upgradeHeight int64
 }
 
 // New returns a reference to an initialized Pylons.
@@ -449,10 +459,14 @@ func New(
 	// NOTE: we may consider parsing `appOpts` inside module constructors. For the moment
 	// we prefer to be more strict in what arguments the modules expect.
 	skipGenesisInvariants := cast.ToBool(appOpts.Get(crisis.FlagSkipGenesisInvariants))
+	isUpgrade := cast.ToBool(appOpts.Get(FlagUpgradeHandler))
+	app.upgradeHeight = cast.ToInt64(appOpts.Get(FlagUpgradeHeight))
 
 	// NOTE: Any module instantiated in the module manager that is later modified
 	// must be passed by reference here.
-	app.setupUpgradeStoreLoaders()
+	if isUpgrade {
+		app.setupUpgradeStoreLoaders()
+	}
 
 	app.mm = module.NewManager(
 		genutil.NewAppModule(
@@ -583,7 +597,9 @@ func New(
 	app.sm.RegisterStoreDecoders()
 
 	// register upgrade
-	app.RegisterUpgradeHandlers(cfg)
+	if isUpgrade {
+		app.RegisterUpgradeHandlers(cfg)
+	}
 
 	// initialize stores
 	app.MountKVStores(keys)
@@ -609,7 +625,6 @@ func New(
 
 	app.ScopedIBCKeeper = scopedIBCKeeper
 	app.ScopedTransferKeeper = scopedTransferKeeper
-
 	return app
 }
 
@@ -618,6 +633,14 @@ func (app *PylonsApp) Name() string { return app.BaseApp.Name() }
 
 // BeginBlocker application updates every begin block
 func (app *PylonsApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
+	// Because we upgrade directly on the node without the proposal.
+	// So create an upgrade plan at the block that needs to be upgraded
+	if app.upgradeHeight != 0 && app.upgradeHeight == ctx.BlockHeight() {
+		err := app.UpgradeKeeper.ScheduleUpgrade(ctx, upgradetypes.Plan{Name: upgradev46.UpgradeName, Height: ctx.BlockHeight()})
+		if err != nil {
+			panic(err)
+		}
+	}
 	return app.mm.BeginBlock(ctx, req)
 }
 

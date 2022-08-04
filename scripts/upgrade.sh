@@ -19,7 +19,7 @@ cat $HOME/.pylonsd/config/genesis.json | jq '.app_state["staking"]["params"]["mi
 pylonsd start
 # Create proposals
 
-pylonsd tx gov submit-proposal --title="existing passing prop" --description="passing prop"  --from=validator --deposit=1000valtoken --chain-id=testing --keyring-backend=test --broadcast-mode=block  --type="Text"
+pylonsd tx gov submit-proposal --title="existing passing prop" --description="passing prop"  --from=test --deposit=1000valtoken --chain-id=testing --keyring-backend=test --broadcast-mode=block  --type="Text"
 pylonsd tx gov vote 1 yes --from=validator --keyring-backend=test --chain-id=testing --yes
 pylonsd tx gov submit-proposal --title="prop with enough osmo deposit" --description="prop w/ enough deposit"  --from=validator --deposit=500000000upylon --chain-id=testing --keyring-backend=test --broadcast-mode=block  --type="Text"
 # Check that we have proposal 1 passed, and proposal 2 in deposit period
