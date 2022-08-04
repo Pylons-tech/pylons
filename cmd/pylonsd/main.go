@@ -18,6 +18,7 @@ func main() {
 	rootCmd.Short = "Stargate Pylons App"
 	rootCmd.AddCommand(pyloncmd.DevValidate())
 	rootCmd.AddCommand(pyloncmd.DevCreate())
+	rootCmd.AddCommand(pyloncmd.DevLoadTest())
 	rootCmd.AddCommand(pyloncmd.Completion())
 	removeLineBreaksInCobraArgs(rootCmd)
 
