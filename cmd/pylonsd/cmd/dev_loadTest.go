@@ -93,16 +93,16 @@ func readCsvFile(filePath string) [][]string {
 	return records
 }
 
-func threadedLoadTest(myKey string, myaddress string, myprivateKey string, m sdk.Msg, counter *atomic.Uint32) {
+func threadedLoadTest(myKey string, myaddress string, myprivateKey string, m sdk.Msg, atomicCounter *atomic.Uint32) {
 	defer wg.Done()
 	config := pylonsApp.DefaultConfig()
 	res, err := transaction.CosmosTx(myaddress, myprivateKey, grpcURL, m, chainID, config)
 	if err != nil {
-		counter.Add(1)
+		atomicCounter.Add(1)
 		return
 	}
 	if res.TxResponse.Code != 0 {
-		counter.Add(1)
+		atomicCounter.Add(1)
 		return
 	}
 	return
