@@ -184,7 +184,7 @@ Meteor.methods({
       amountMinted = parseInt(sale?.amountMinted, 10);
       totalSale = sale?.amount * amountMinted;
       let coins = Meteor.settings.public.coins;
-      let totalProceeds;
+      let totalProceeds = "0 USD";
       coin = coins.find(
         (coin) => coin?.denom?.toLowerCase() === sale?.coin?.toLowerCase()
       );
