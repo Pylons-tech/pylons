@@ -3,8 +3,9 @@ package cmd
 import (
 	"strconv"
 
+	"encoding/json"
+
 	"github.com/spf13/cobra"
-	"github.com/tendermint/tendermint/libs/json"
 
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
