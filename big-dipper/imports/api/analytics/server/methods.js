@@ -316,13 +316,18 @@ if (Meteor.isServer) {
       return extractSaleFromSales(sale);
     },
     "Analytics.getSalesGraph": async function () {
+      // used to generate sales graph on activity page
       const start = new Date();
       const end = new Date();
-      start.setDate(start.getDate() - 7);
-      end.setDate(end.getDate() - 6);
+      const weekStart = 7;
+      // moving 7 days back to week start
+      start.setDate(start.getDate() - weekStart);
+      // finding the next day
+      end.setDate(start.getDate() + 1);
 
       const graphData = [];
 
+      // looping over the week to find the total sales per day
       for (let i = 0; i < 7; i++) {
         start.setDate(start.getDate() + 1);
         start.setHours(0, 0, 0, 0);
