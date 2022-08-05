@@ -4200,9 +4200,9 @@ react@^16.14.0:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
 
-reactstrap@^9.1.2:
-  version "9.1.2"
-  resolved "https://registry.yarnpkg.com/reactstrap/-/reactstrap-9.1.2.tgz#fea88b94876d69175f17ceccfab31b37bd0b5342"
+reactstrap@^9.1.3:
+  version "9.1.3"
+  resolved "https://registry.yarnpkg.com/reactstrap/-/reactstrap-9.1.3.tgz#8eac694667fa14a39763baf67574a78ab5cb345a"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@popperjs/core" "^2.6.0"
