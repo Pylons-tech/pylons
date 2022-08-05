@@ -20,6 +20,8 @@ func (suite *IntegrationTestSuite) TestItemHistory() {
 	}{
 		{
 			desc: "Invalid request",
+			req:  nil,
+			res:  nil,
 			err:  status.Error(codes.InvalidArgument, "invalid request"),
 		},
 		{
@@ -49,6 +51,7 @@ func (suite *IntegrationTestSuite) TestItemHistory() {
 			res: &types.QueryGetItemResponse{
 				Item: msgs[0],
 			},
+			err: nil,
 		},
 	} {
 		tc := tc
