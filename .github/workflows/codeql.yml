@@ -2,8 +2,6 @@ name: "CodeQL"
 
 on:
   pull_request:
-    paths:
-      - "**.go"
   push:
     branches:
       - main
@@ -30,7 +28,7 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:
-          languages: "go"
+          languages: "go, dart, javascript"
           queries: crypto-com/cosmos-sdk-codeql@main,security-and-quality
           # If you wish to specify custom queries, you can do so here or in a config file.
           # By default, queries listed here will override any specified in a config file.
