@@ -14,3 +14,14 @@ updates:
     schedule:
       interval: daily
     open-pull-requests-limit: 10
+  - package-ecosystem: pub
+    directory: "/flutter_wallet"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+  - package-ecosystem: pub
+    directory: "/easel_flutter"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+
