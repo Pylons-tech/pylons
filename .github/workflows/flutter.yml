@@ -38,4 +38,9 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable" # or: 'beta', 'dev' or 'master'
-      - run: flutter --version
+      - run: |
+          flutter --version
+          cd flutter_easel
+          flutter pub get
+          flutter analyze
+          flutter lint
