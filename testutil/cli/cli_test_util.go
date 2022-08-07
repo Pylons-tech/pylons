@@ -189,7 +189,7 @@ func NetworkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, 
 }
 
 // A network with cookbook object just contains a state of:
-//	 	N cookbooks
+// N cookbooks
 func NetworkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.Cookbook) {
 	t.Helper()
 	cfg := app.DefaultConfig()
@@ -218,9 +218,10 @@ func NetworkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 }
 
 // A network with execution objects  contains a state of:
+//
 //	 	N cookbooks
 //		N recipes (1 per cookbook)
-// 		N executions (1 per recipe)
+//		N executions (1 per recipe)
 func NetworkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types.Execution) {
 	t.Helper()
 	cfg := app.DefaultConfig()
