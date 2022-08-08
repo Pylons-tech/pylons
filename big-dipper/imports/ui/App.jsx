@@ -4,7 +4,6 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { Container } from 'reactstrap';
 import Header from '/imports/ui/components/Header.jsx';
-import Footer from '/imports/ui/components/Footer.jsx';
 import Home from '/imports/ui/home/Home.jsx';
 import Validators from '/imports/ui/validators/ValidatorsList.jsx';
 import BlocksTable from '/imports/ui/blocks/BlocksTable.jsx';
@@ -114,7 +113,6 @@ class App extends Component {
             </Switch>
           </SentryBoundary>
         </Container>
-        <Footer />
       </div>
       // </Router>
     );
