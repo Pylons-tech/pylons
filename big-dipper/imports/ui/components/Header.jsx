@@ -23,9 +23,7 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import SearchBar from './SearchBar.jsx';
 import i18n from 'meteor/universe:i18n';
-import Account from './Account.jsx';
 import { sanitizeUrl } from '@braintree/sanitize-url';
 
 const T = i18n.createComponent();
@@ -223,7 +221,6 @@ export default class Header extends Component {
           </DropdownToggle>
           {this.state.networks}
         </UncontrolledDropdown>
-        <SearchBar id='header-search' history={this.props.history} />
         <NavbarToggler onClick={this.toggle} />
         <Collapse isOpen={this.state.isOpen} navbar>
           <Nav className='ml-auto text-nowrap' navbar>
