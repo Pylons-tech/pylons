@@ -2,7 +2,7 @@
   "name": "@forbole/big-dipper",
   "private": true,
   "engines": {
-    "node": ">=16.0.0"
+    "node": "14.20.0"
   },
   "scripts": {
     "start": "meteor  run",
