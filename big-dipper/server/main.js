@@ -299,7 +299,7 @@ Meteor.startup(async function() {
         }, Meteor.settings.params.consensusInterval);
 
         timerBlocks = Meteor.setInterval(function() {
-            updateBlock();
+        //    updateBlock();
         }, Meteor.settings.params.blockInterval);
 
         timerTransactions = Meteor.setInterval(function() {
