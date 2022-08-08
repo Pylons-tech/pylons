@@ -3,15 +3,16 @@ import 'dart:io';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_message.dart';
 
 Future<void> main(List<String> args) async {
-
-
   final arg = args.isNotEmpty ? args[0] : 'createCookbook';
 
   if (arg == 'createCookbook') {
     final file = await getProjectFile("cookbook.json");
     final jsonContent = await file.readAsString();
-    final sdkipcMessage =
-        SdkIpcMessage(action: 'txCreateCookbook', json: jsonContent, sender: 'example', requestResponse: true);
+    final sdkipcMessage = SdkIpcMessage(
+        action: 'txCreateCookbook',
+        json: jsonContent,
+        sender: 'example',
+        requestResponse: true);
 
     final msg = sdkipcMessage.createMessage();
     execute(msg);
@@ -19,8 +20,11 @@ Future<void> main(List<String> args) async {
   if (arg == 'createRecipe') {
     final file = await getProjectFile("recipe.json");
     final jsonContent = await file.readAsString();
-    final sdkipcMessage =
-        SdkIpcMessage(action: 'txCreateRecipe', json: jsonContent, sender: 'example', requestResponse: true);
+    final sdkipcMessage = SdkIpcMessage(
+        action: 'txCreateRecipe',
+        json: jsonContent,
+        sender: 'example',
+        requestResponse: true);
     execute(sdkipcMessage.createMessage());
   }
 

@@ -6,7 +6,8 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 abstract class ThumbnailHelper {
   String ifThumbnailAlreadyExists(String nftName, String thumbnailsPath);
 
-  Future<String?> generateVideoThumbnailIfRequired(String nftUrl, String nftName, String thumbnailsPath);
+  Future<String?> generateVideoThumbnailIfRequired(
+      String nftUrl, String nftName, String thumbnailsPath);
 }
 
 /// [ThumbnailHelperImp] implementation of [ThumbnailHelper]
@@ -25,7 +26,8 @@ class ThumbnailHelperImp implements ThumbnailHelper {
   /// This method will be responsible for generating video thumbnails and storing in temp storage
   /// This will return the path for generated thumbnail
   @override
-  Future<String?> generateVideoThumbnailIfRequired(String nftUrl, String nftName, String thumbnailsPath) async {
+  Future<String?> generateVideoThumbnailIfRequired(
+      String nftUrl, String nftName, String thumbnailsPath) async {
     final temp = ifThumbnailAlreadyExists(nftName, thumbnailsPath);
 
     if (temp.isNotEmpty) {
@@ -40,7 +42,8 @@ class ThumbnailHelperImp implements ThumbnailHelper {
       quality: 75,
     );
 
-    final newFile = File(thumbnailPath!).renameSync('$thumbnailsPath/$nftName.webp');
+    final newFile =
+        File(thumbnailPath!).renameSync('$thumbnailsPath/$nftName.webp');
 
     return newFile.path;
   }

@@ -4,7 +4,7 @@
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:transaction_signing_gateway/model/account_public_info.dart'
-as _i2;
+    as _i2;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -14,8 +14,8 @@ as _i2;
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: unnecessary_parenthesis
 
-class _FakeWalletPublicInfo_0 extends _i1.Fake implements _i2.AccountPublicInfo {
-}
+class _FakeWalletPublicInfo_0 extends _i1.Fake
+    implements _i2.AccountPublicInfo {}
 
 /// A class which mocks [WalletPublicInfo].
 ///
@@ -31,26 +31,26 @@ class MockAccountPublicInfo extends _i1.Mock implements _i2.AccountPublicInfo {
   @override
   String get publicAddress =>
       (super.noSuchMethod(Invocation.getter(#publicAddress), returnValue: '')
-      as String);
+          as String);
   @override
   String get accountId =>
       (super.noSuchMethod(Invocation.getter(#walletId), returnValue: '')
-      as String);
+          as String);
   @override
   String get chainId =>
       (super.noSuchMethod(Invocation.getter(#chainId), returnValue: '')
-      as String);
+          as String);
   @override
   List<Object?> get props =>
       (super.noSuchMethod(Invocation.getter(#props), returnValue: <Object?>[])
-      as List<Object?>);
+          as List<Object?>);
   @override
   _i2.AccountPublicInfo copyWith(
-      {String? name,
-        String? publicAddress,
-        String? accountId,
-        String? chainId,
-        String? additionalData}) =>
+          {String? name,
+          String? publicAddress,
+          String? accountId,
+          String? chainId,
+          String? additionalData}) =>
       (super.noSuchMethod(
           Invocation.method(#copyWith, [], {
             #name: name,

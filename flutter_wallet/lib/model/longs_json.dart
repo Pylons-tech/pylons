@@ -16,15 +16,13 @@ class Longs {
   });
 
   Longs.fromJson(dynamic json) {
-
-
-    if(json['key'] != null ){
+    if (json['key'] != null) {
       key = json['key'] as String;
     }
 
     if (json['weightRanges'] != null) {
       weightRanges = [];
-      for(final weightRangesJson in json['weightRanges']){
+      for (final weightRangesJson in json['weightRanges']) {
         weightRanges.add(WeightRanges.fromJson(weightRangesJson));
       }
     }

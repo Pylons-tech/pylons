@@ -5,8 +5,11 @@ import 'package:pylons_wallet/components/buttons/pylons_blue_button_with_loader.
 import '../../helpers/size_extensions.dart';
 
 void main() {
-  testWidgets('should show pylons blue button loading button and make sure user is able to tap', (tester) async {
-    final imageIconFinder = find.byKey(const ValueKey("Pylons-Blue-Button-Loading"));
+  testWidgets(
+      'should show pylons blue button loading button and make sure user is able to tap',
+      (tester) async {
+    final imageIconFinder =
+        find.byKey(const ValueKey("Pylons-Blue-Button-Loading"));
     final isTapped = ValueNotifier(false);
 
     await tester.setScreenSize();
@@ -21,7 +24,6 @@ void main() {
     ));
 
     expect(imageIconFinder, findsOneWidget);
-
 
     // Expect user can press the button
     await tester.tap(imageIconFinder);

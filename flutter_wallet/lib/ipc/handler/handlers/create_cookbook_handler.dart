@@ -29,8 +29,7 @@ class CreateCookbookHandler implements BaseHandler {
     if (response.error == "") {
       "Cookbook ${jsonMap['name']} created".show();
     } else {
-
-          "Cookbook ${jsonMap['name']} error: ${response.error}".show();
+      "Cookbook ${jsonMap['name']} error: ${response.error}".show();
     }
 
     return SynchronousFuture(response);

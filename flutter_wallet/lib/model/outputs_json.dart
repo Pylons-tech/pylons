@@ -4,7 +4,7 @@ class Outputs {
 
   Outputs({required this.entryIDs, required this.weight});
 
-  Outputs.fromJson(Map<String, dynamic > json) {
+  Outputs.fromJson(Map<String, dynamic> json) {
     entryIDs = (json['entryIDs'] as List).cast<String>();
     weight = json['weight'] as String;
   }

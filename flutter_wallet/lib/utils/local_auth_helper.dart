@@ -28,21 +28,20 @@ class LocalAuthHelperImp implements LocalAuthHelper {
       throw 'something_wrong'.tr();
     }
 
-
-    if(deviceHasBiometric(biometricList)){
+    if (deviceHasBiometric(biometricList)) {
       return BiometricType.fingerprint;
     }
 
     return biometricList.first;
-
-
   }
 
-  bool deviceHasBiometric(List<BiometricType> biometricList) => biometricList.length >1  && biometricList.contains(BiometricType.fingerprint);
+  bool deviceHasBiometric(List<BiometricType> biometricList) =>
+      biometricList.length > 1 &&
+      biometricList.contains(BiometricType.fingerprint);
 
   @override
   Future<bool> authenticate() async {
-    return  localAuth.authenticate(
+    return localAuth.authenticate(
       localizedReason: 'authenticate'.tr(),
     );
   }

@@ -21,7 +21,8 @@ class CreateRecipeHandler implements BaseHandler {
     final jsonMap = jsonDecode(sdkIpcMessage.json) as Map;
 
     jsonMap.remove('nodeVersion');
-    final loading = Loading()..showLoading(message: "${'creating_recipe'.tr()}...");
+    final loading = Loading()
+      ..showLoading(message: "${'creating_recipe'.tr()}...");
 
     final walletsStore = GetIt.I.get<WalletsStore>();
 
@@ -32,10 +33,11 @@ class CreateRecipeHandler implements BaseHandler {
 
     if (response.success) {
       if (shouldShowNFTPreview()) {
-
         GetIt.I.get<HomeProvider>().changeTabs(0);
-        navigatorKey.currentState!.pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME , (_) => false);
-        GetIt.I.get<CollectionViewModel>().collectionsType = CollectionsType.creations;
+        navigatorKey.currentState!
+            .pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (_) => false);
+        GetIt.I.get<CollectionViewModel>().collectionsType =
+            CollectionsType.creations;
         GetIt.I.get<CollectionViewModel>().loadPurchasesAndCreationsData();
       } else {
         "Recipe ${jsonMap['name']} Created".show();

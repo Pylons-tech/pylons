@@ -7,7 +7,8 @@ class NftImageWidget extends StatelessWidget {
   final String url;
 
   final double opacity;
-  const NftImageWidget({Key? key, required this.url, required this.opacity}) : super(key: key);
+  const NftImageWidget({Key? key, required this.url, required this.opacity})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

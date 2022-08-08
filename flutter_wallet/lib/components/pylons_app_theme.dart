@@ -18,7 +18,8 @@ class PylonsAppTheme extends CosmosThemeData {
 
   static Color cardBackground = const Color(0xFFC4C4C4).withOpacity(0.2);
 
-  static Color cardBackgroundSelected = const Color(0xFF1212C4).withOpacity(0.2);
+  static Color cardBackgroundSelected =
+      const Color(0xFF1212C4).withOpacity(0.2);
 
   /// Retrieves the correct [StaggeredTile] for provided tile index [index], for the Pylons app theme.
   ///
@@ -72,8 +73,7 @@ class PylonsAppTheme extends CosmosThemeData {
             bodyText2: TextStyle(
                 fontWeight: FontWeight.normal,
                 fontFamily: 'Inter',
-              color: Colors.black54
-            ),
+                color: Colors.black54),
             headline5: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.normal,

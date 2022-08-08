@@ -26,15 +26,15 @@ class StripeUpdateAccountResponse {
   }
 
   factory StripeUpdateAccountResponse.fromJson(Map<String, dynamic> ret) {
-      return StripeUpdateAccountResponse(
-          accountlink: ret.entries
-              .firstWhere((entry) => entry.key == 'accountlink',
-              orElse: () => const MapEntry('accountlink', ''))
-              .value as String,
-          account: ret.entries
-              .firstWhere((entry) => entry.key == 'account',
-              orElse: () => const MapEntry('account', ''))
-              .value as String,
-          success: true);
-
-  }}
+    return StripeUpdateAccountResponse(
+        accountlink: ret.entries
+            .firstWhere((entry) => entry.key == 'accountlink',
+                orElse: () => const MapEntry('accountlink', ''))
+            .value as String,
+        account: ret.entries
+            .firstWhere((entry) => entry.key == 'account',
+                orElse: () => const MapEntry('account', ''))
+            .value as String,
+        success: true);
+  }
+}

@@ -13,6 +13,6 @@ class Currency {
       required this.asset,
       required this.currency,
       required this.abbrev,
-        required this.ibcCoins,
+      required this.ibcCoins,
       required this.isDefault});
 }

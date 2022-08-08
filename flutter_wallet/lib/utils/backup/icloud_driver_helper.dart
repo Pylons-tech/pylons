@@ -11,19 +11,21 @@ import 'package:pylons_wallet/utils/backup/common/i_driver_client.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 
-
 class ICloudDriverApiImpl extends IDriverApi {
   Future<Either<Failure, ICloudStorage>> _getDriveApi() async {
     try {
-      final iCloudStorage = await ICloudStorage.getInstance('iCloud.pylonsStorage');
+      final iCloudStorage =
+          await ICloudStorage.getInstance('iCloud.pylonsStorage');
       return Right(iCloudStorage);
     } catch (e) {
-      return const Left(ICloudInitializationFailedFailure(message: SOMETHING_WENT_WRONG));
+      return const Left(
+          ICloudInitializationFailedFailure(message: SOMETHING_WENT_WRONG));
     }
   }
 
   @override
-  Future<bool> uploadMnemonic({required String mnemonic, required String username}) async {
+  Future<bool> uploadMnemonic(
+      {required String mnemonic, required String username}) async {
     final driverEither = await _getDriveApi();
     if (driverEither.isLeft()) {
       throw driverEither.swap().toOption().toNullable()!.message;
@@ -35,7 +37,8 @@ class ICloudDriverApiImpl extends IDriverApi {
     final data = jsonEncode({"username": username, "mnemonic": mnemonic});
     final dt.Directory tempDir = await getTemporaryDirectory();
     final String tempPath = tempDir.path; //Get path to that location
-    final dt.File file = dt.File('$tempPath/pylons_mnemonic.txt'); //Create a dummy file
+    final dt.File file =
+        dt.File('$tempPath/pylons_mnemonic.txt'); //Create a dummy file
     await file.writeAsString(data);
 
     final Completer<bool> completer = Completer();
@@ -82,7 +85,8 @@ class ICloudDriverApiImpl extends IDriverApi {
         stream.listen(
           (progress) => log('Download File Progress: $progress'),
           onDone: () {
-            final String content = file.readAsStringSync(); // Read String from the file
+            final String content =
+                file.readAsStringSync(); // Read String from the file
             file.delete();
             completer.complete(BackupData.fromJson(jsonDecode(content) as Map));
           },
@@ -96,5 +100,4 @@ class ICloudDriverApiImpl extends IDriverApi {
 
     return completer.future;
   }
-
 }

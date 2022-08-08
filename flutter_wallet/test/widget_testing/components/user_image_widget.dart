@@ -25,14 +25,32 @@ void main() {
         color: Colors.white,
         builder: (BuildContext context, w) {
           log('Expect default avatar, since no extant values in sharedPreferences');
-          expect(avatar.getImage(UserAvatarWidget.defaultImage, UserAvatarWidget.uriKey), UserAvatarWidget.defaultImage);
+          expect(
+              avatar.getImage(
+                  UserAvatarWidget.defaultImage, UserAvatarWidget.uriKey),
+              UserAvatarWidget.defaultImage);
           log('Set avatar to legal value; expect that image now');
-          UserImageWidget.setToFile(UserAvatarWidget.filesizeLimit, UserAvatarWidget.uriKey, File('assets/images/testing/low_res_low_filesize.png'), context);
-          expect(avatar.getImage(UserAvatarWidget.defaultImage, UserAvatarWidget.uriKey), isNot(UserAvatarWidget.defaultImage));
+          UserImageWidget.setToFile(
+              UserAvatarWidget.filesizeLimit,
+              UserAvatarWidget.uriKey,
+              File('assets/images/testing/low_res_low_filesize.png'),
+              context);
+          expect(
+              avatar.getImage(
+                  UserAvatarWidget.defaultImage, UserAvatarWidget.uriKey),
+              isNot(UserAvatarWidget.defaultImage));
           log('Set avatar to illegal (high-filesize) value; expect unchanged');
-          final avatarToExpect = avatar.getImage(UserAvatarWidget.defaultImage, UserAvatarWidget.uriKey);
-          UserImageWidget.setToFile(UserAvatarWidget.filesizeLimit, UserAvatarWidget.uriKey, File('assets/images/testing/low_res_high_filesize.png'), context);
-          expect(avatar.getImage(UserAvatarWidget.defaultImage, UserAvatarWidget.uriKey), avatarToExpect);
+          final avatarToExpect = avatar.getImage(
+              UserAvatarWidget.defaultImage, UserAvatarWidget.uriKey);
+          UserImageWidget.setToFile(
+              UserAvatarWidget.filesizeLimit,
+              UserAvatarWidget.uriKey,
+              File('assets/images/testing/low_res_high_filesize.png'),
+              context);
+          expect(
+              avatar.getImage(
+                  UserAvatarWidget.defaultImage, UserAvatarWidget.uriKey),
+              avatarToExpect);
           return avatar;
         }));
     await tester.pumpAndSettle();
@@ -40,7 +58,8 @@ void main() {
 
   testWidgets('Test banner loading/rejection', (tester) async {
     await tester.setScreenSize();
-    await tester.testAppForWidgetTesting(Material(child: UserBannerWidget(height: 0.25.sh)));
+    await tester.testAppForWidgetTesting(
+        Material(child: UserBannerWidget(height: 0.25.sh)));
     final widget = find.byType(UserBannerWidget);
     expect(widget, findsOneWidget);
     final banner = tester.widget(widget) as UserBannerWidget;
@@ -48,14 +67,32 @@ void main() {
         color: Colors.white,
         builder: (BuildContext context, w) {
           log('Expect default banner, since no extant values in sharedPreferences');
-          expect(banner.getImage(UserBannerWidget.defaultImage, UserBannerWidget.uriKey), UserBannerWidget.defaultImage);
+          expect(
+              banner.getImage(
+                  UserBannerWidget.defaultImage, UserBannerWidget.uriKey),
+              UserBannerWidget.defaultImage);
           log('Set banner to legal value; expect that image now');
-          UserImageWidget.setToFile(UserBannerWidget.filesizeLimit, UserBannerWidget.uriKey, File('assets/images/testing/low_res_low_filesize.png'), context);
-          expect(banner.getImage(UserBannerWidget.defaultImage, UserBannerWidget.uriKey), isNot(UserBannerWidget.defaultImage));
+          UserImageWidget.setToFile(
+              UserBannerWidget.filesizeLimit,
+              UserBannerWidget.uriKey,
+              File('assets/images/testing/low_res_low_filesize.png'),
+              context);
+          expect(
+              banner.getImage(
+                  UserBannerWidget.defaultImage, UserBannerWidget.uriKey),
+              isNot(UserBannerWidget.defaultImage));
           log('Set banner to illegal (high-filesize) value; expect unchanged');
-          final bannerToExpect = banner.getImage(UserBannerWidget.defaultImage, UserBannerWidget.uriKey);
-          UserImageWidget.setToFile(UserBannerWidget.filesizeLimit, UserBannerWidget.uriKey, File('assets/images/testing/low_res_high_filesize.png'), context);
-          expect(banner.getImage(UserBannerWidget.defaultImage, UserBannerWidget.uriKey), bannerToExpect);
+          final bannerToExpect = banner.getImage(
+              UserBannerWidget.defaultImage, UserBannerWidget.uriKey);
+          UserImageWidget.setToFile(
+              UserBannerWidget.filesizeLimit,
+              UserBannerWidget.uriKey,
+              File('assets/images/testing/low_res_high_filesize.png'),
+              context);
+          expect(
+              banner.getImage(
+                  UserBannerWidget.defaultImage, UserBannerWidget.uriKey),
+              bannerToExpect);
           return banner;
         }));
     await tester.pumpAndSettle();

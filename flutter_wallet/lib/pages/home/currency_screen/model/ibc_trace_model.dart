@@ -6,8 +6,11 @@ class IBCTraceModel {
 
   IBCTraceModel({required this.denomTrace, required this.ibcHash});
 
-  factory IBCTraceModel.fromJson(Map<String, dynamic> json,  String ibcHash) {
-   return  IBCTraceModel(denomTrace: DenomTrace.fromJson(json['denom_trace'] as Map<String, dynamic>), ibcHash: ibcHash);
+  factory IBCTraceModel.fromJson(Map<String, dynamic> json, String ibcHash) {
+    return IBCTraceModel(
+        denomTrace:
+            DenomTrace.fromJson(json['denom_trace'] as Map<String, dynamic>),
+        ibcHash: ibcHash);
   }
 
   @override
@@ -23,7 +26,9 @@ class DenomTrace {
   DenomTrace({required this.path, required this.baseDenom});
 
   factory DenomTrace.fromJson(Map<String, dynamic> json) {
-    return DenomTrace(path: json['path'].toString(), baseDenom: json['base_denom'].toString().toIBCCoinsEnum());
+    return DenomTrace(
+        path: json['path'].toString(),
+        baseDenom: json['base_denom'].toString().toIBCCoinsEnum());
   }
 
   @override

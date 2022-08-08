@@ -13,7 +13,6 @@ class Amount {
   String toString() => value.toStringAsPrecision(10);
 
   String get displayText => value.toStringAsPrecision(10);
-
 }
 
 extension StringAmount on String {

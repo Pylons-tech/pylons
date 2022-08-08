@@ -96,7 +96,8 @@ abstract class LocalDataSource {
   /// Input : [networkEnvironment] is the network Environment preference of the user
   /// Output: if successful will return [String] which tells which network is selected
   /// else throw error
-  Future<bool> saveNetworkEnvironmentPreference({required String networkEnvironment});
+  Future<bool> saveNetworkEnvironmentPreference(
+      {required String networkEnvironment});
 
   /// This method will return the selected network environment
   /// Output: if successful will return [String] NetworkEnvironment preference
@@ -152,13 +153,9 @@ abstract class LocalDataSource {
   /// Output: [bool] tells whether ths operation is successful or not
   Future<bool> saveInviteeAddress({required String address});
 
-
-
   /// This method will return the saved invitee address if exists
   /// Output: [String] will return the address of invitee if saved else will give empty string
   String getInviteeAddress();
-
-
 }
 
 class LocalDataSourceImp implements LocalDataSource {
@@ -168,10 +165,16 @@ class LocalDataSourceImp implements LocalDataSource {
   final ImagePicker picker;
   final FlutterSecureStorage flutterSecureStorage;
 
-  static const iosOptions = IOSOptions(accessibility: IOSAccessibility.passcode);
-  static const androidOptions = AndroidOptions(encryptedSharedPreferences: true);
+  static const iosOptions =
+      IOSOptions(accessibility: IOSAccessibility.passcode);
+  static const androidOptions =
+      AndroidOptions(encryptedSharedPreferences: true);
 
-  LocalDataSourceImp({required this.sharedPreferences, required this.picker, required this.flutterSecureStorage, required this.permissionService});
+  LocalDataSourceImp(
+      {required this.sharedPreferences,
+      required this.picker,
+      required this.flutterSecureStorage,
+      required this.permissionService});
 
   static String STRIPE_TOKEN_KEY = 'stripe_token_key';
   static String STRIPE_ACCOUNT_KEY = 'stripe_account_key';
@@ -237,14 +240,23 @@ class LocalDataSourceImp implements LocalDataSource {
   Future<String> pickImageFromGallery(PickImageModel pickImageModel) async {
     final permissionStatus = await permissionService.status(Permission.photos);
     if (permissionStatus.isGranted || permissionStatus.isLimited) {
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery, maxWidth: pickImageModel.maxWidth, maxHeight: pickImageModel.maxHeight, imageQuality: pickImageModel.imageQuality);
+      final XFile? image = await picker.pickImage(
+          source: ImageSource.gallery,
+          maxWidth: pickImageModel.maxWidth,
+          maxHeight: pickImageModel.maxHeight,
+          imageQuality: pickImageModel.imageQuality);
       return image?.path ?? '';
     }
 
-    final afterPermissionStatus = await permissionService.request(Permission.photos);
+    final afterPermissionStatus =
+        await permissionService.request(Permission.photos);
 
     if (afterPermissionStatus.isGranted || permissionStatus.isLimited) {
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery, maxWidth: pickImageModel.maxWidth, maxHeight: pickImageModel.maxHeight, imageQuality: pickImageModel.imageQuality);
+      final XFile? image = await picker.pickImage(
+          source: ImageSource.gallery,
+          maxWidth: pickImageModel.maxWidth,
+          maxHeight: pickImageModel.maxHeight,
+          imageQuality: pickImageModel.imageQuality);
       return image?.path ?? '';
     }
 
@@ -282,7 +294,8 @@ class LocalDataSourceImp implements LocalDataSource {
 
   @override
   bool saveInitialLink(String initialLink) {
-    cacheContainer.update(INITIAL_LINK, (v) => initialLink, ifAbsent: () => initialLink);
+    cacheContainer.update(INITIAL_LINK, (v) => initialLink,
+        ifAbsent: () => initialLink);
     return cacheContainer.containsValue(initialLink);
   }
 
@@ -307,8 +320,10 @@ class LocalDataSourceImp implements LocalDataSource {
   }
 
   @override
-  Future<bool> saveNotificationsPreference({required bool notificationStatus}) async {
-    return sharedPreferences.setBool(NOTIFICATION_PREFERENCE, notificationStatus);
+  Future<bool> saveNotificationsPreference(
+      {required bool notificationStatus}) async {
+    return sharedPreferences.setBool(
+        NOTIFICATION_PREFERENCE, notificationStatus);
   }
 
   @override
@@ -320,14 +335,16 @@ class LocalDataSourceImp implements LocalDataSource {
     final String path = cacheContainer[APPLICATION_DIRECTORY].toString();
     final image = File(imagePath);
 
-    final File newImage = await image.copy('$path/${imagePath.split("/").last}');
+    final File newImage =
+        await image.copy('$path/${imagePath.split("/").last}');
 
     return newImage.path;
   }
 
   @override
   Future<String> getMnemonics() async {
-    final mnemonic = await flutterSecureStorage.read(key: MNEMONIC, aOptions: androidOptions, iOptions: iosOptions);
+    final mnemonic = await flutterSecureStorage.read(
+        key: MNEMONIC, aOptions: androidOptions, iOptions: iosOptions);
     if (mnemonic == null) {
       throw CacheFailure("no_data_saved".tr());
     }
@@ -336,7 +353,11 @@ class LocalDataSourceImp implements LocalDataSource {
 
   @override
   Future<bool> saveMnemonics(String mnemonics) async {
-    await flutterSecureStorage.write(key: MNEMONIC, value: mnemonics, aOptions: androidOptions, iOptions: iosOptions);
+    await flutterSecureStorage.write(
+        key: MNEMONIC,
+        value: mnemonics,
+        aOptions: androidOptions,
+        iOptions: iosOptions);
     return true;
   }
 
@@ -347,7 +368,8 @@ class LocalDataSourceImp implements LocalDataSource {
   }
 
   @override
-  Future<bool> saveDefaultSecurityBiometric({required bool biometricEnabled}) async {
+  Future<bool> saveDefaultSecurityBiometric(
+      {required bool biometricEnabled}) async {
     await sharedPreferences.setBool(SECURITY_BIOMETRIC, biometricEnabled);
     return true;
   }
@@ -383,7 +405,8 @@ class LocalDataSourceImp implements LocalDataSource {
   }
 
   @override
-  Future<bool> saveNetworkEnvironmentPreference({required String networkEnvironment}) {
+  Future<bool> saveNetworkEnvironmentPreference(
+      {required String networkEnvironment}) {
     return sharedPreferences.setString(ENVIRONMENT_NETWORK, networkEnvironment);
   }
 

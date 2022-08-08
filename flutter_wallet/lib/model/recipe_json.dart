@@ -74,38 +74,30 @@ class Recipe {
     version = json['version'] as String;
     if (json['coinInputs'] != null) {
       coinInputs = [];
-      for(final  coinInputsJson in json['coinInputs']){
-        if(coinInputsJson is Map<String, dynamic>){
+      for (final coinInputsJson in json['coinInputs']) {
+        if (coinInputsJson is Map<String, dynamic>) {
           coinInputs.add(CoinInputs.fromJson(coinInputsJson));
         }
       }
     }
 
-
     if (json['itemInputs'] != null) {
       itemInputs = [];
-      for(final  itemInputsJson in json['itemInputs']){
-        if(itemInputsJson is Map<String, dynamic>){
-        }
+      for (final itemInputsJson in json['itemInputs']) {
+        if (itemInputsJson is Map<String, dynamic>) {}
       }
     }
-
-
 
     entries = Entries.fromJson(json['entries']);
 
-
     if (json['outputs'] != null) {
       outputs = [];
-      for(final  outputsJson in json['itemInputs']){
-        if(outputsJson is Map<String, dynamic>){
+      for (final outputsJson in json['itemInputs']) {
+        if (outputsJson is Map<String, dynamic>) {
           outputs.add(Outputs.fromJson(outputsJson));
-
         }
       }
     }
-
-
 
     blockInterval = json['blockInterval'] as String;
     enabled = json['enabled'] as bool;

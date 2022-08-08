@@ -11,7 +11,11 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-TextStyle kDeleteHeaderTextStyle = TextStyle(fontSize: 14.sp, fontFamily: 'UniversalSans', color: kWhite, fontWeight: FontWeight.w600);
+TextStyle kDeleteHeaderTextStyle = TextStyle(
+    fontSize: 14.sp,
+    fontFamily: 'UniversalSans',
+    color: kWhite,
+    fontWeight: FontWeight.w600);
 
 class DeleteDialog {
   final BuildContext context;
@@ -26,7 +30,8 @@ class DeleteDialog {
         builder: (_) {
           return Dialog(
             elevation: 0,
-            insetPadding: EdgeInsets.symmetric(horizontal: isTablet ? 45.w : 15.w),
+            insetPadding:
+                EdgeInsets.symmetric(horizontal: isTablet ? 45.w : 15.w),
             backgroundColor: Colors.transparent,
             child: ClipPath(
               clipper: DialogClipper(),
@@ -75,27 +80,43 @@ class DeleteDialog {
                                   onPressed: () async {
                                     final navigator = Navigator.of(context);
 
-                                    final selectedEnvResponse = GetIt.I.get<Repository>().getNetworkEnvironmentPreference();
+                                    final selectedEnvResponse = GetIt.I
+                                        .get<Repository>()
+                                        .getNetworkEnvironmentPreference();
 
                                     if (selectedEnvResponse.isLeft()) {
                                       navigator.pop();
                                       return;
                                     }
 
-                                    final deleteResponse = await GetIt.I.get<WalletsStore>().deleteAccounts();
+                                    final deleteResponse = await GetIt.I
+                                        .get<WalletsStore>()
+                                        .deleteAccounts();
 
-                                    if (isDeletionNotSuccessful(deleteResponse)) {
+                                    if (isDeletionNotSuccessful(
+                                        deleteResponse)) {
                                       navigator.pop();
                                       return;
                                     }
 
-                                    await GetIt.I.get<Repository>().saveNetworkEnvironmentPreference(networkEnvironment: selectedEnvResponse.getOrElse(() => ''));
-                                    navigator.pushNamedAndRemoveUntil(RouteUtil.ROUTE_ONBOARDING, (route) => false);
+                                    await GetIt.I
+                                        .get<Repository>()
+                                        .saveNetworkEnvironmentPreference(
+                                            networkEnvironment:
+                                                selectedEnvResponse
+                                                    .getOrElse(() => ''));
+                                    navigator.pushNamedAndRemoveUntil(
+                                        RouteUtil.ROUTE_ONBOARDING,
+                                        (route) => false);
                                   })),
                           SizedBox(
                             width: 15.w,
                           ),
-                          Expanded(child: buildButton(title: "no", bgColor: kWhite.withOpacity(0.3), onPressed: Navigator.of(context).pop)),
+                          Expanded(
+                              child: buildButton(
+                                  title: "no",
+                                  bgColor: kWhite.withOpacity(0.3),
+                                  onPressed: Navigator.of(context).pop)),
                         ],
                       ),
                     ),
@@ -114,7 +135,10 @@ class DeleteDialog {
 
   bool isDeletionNotSuccessful(bool deleteResponse) => !deleteResponse;
 
-  Widget buildButton({required String title, required Color bgColor, required Function onPressed}) {
+  Widget buildButton(
+      {required String title,
+      required Color bgColor,
+      required Function onPressed}) {
     return InkWell(
       onTap: () => onPressed(),
       child: CustomPaint(
@@ -128,7 +152,10 @@ class DeleteDialog {
             child: Center(
                 child: Text(
               title.tr(),
-              style: TextStyle(color: bgColor == kButtonColor ? kBlue : kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                  color: bgColor == kButtonColor ? kBlue : kWhite,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             )),
           ),

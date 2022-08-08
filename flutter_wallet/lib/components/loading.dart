@@ -6,21 +6,21 @@ import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 
 extension SnackbarToast on String {
-  Future show({BuildContext? context}) async{
-    final scaffoldMessenger= ScaffoldMessenger.of(context ?? navigatorKey.currentState!.overlay!.context);
+  Future show({BuildContext? context}) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(
+        context ?? navigatorKey.currentState!.overlay!.context);
 
-    scaffoldMessenger.showSnackBar(
-      SnackBar(
-        content: Text(this),
-        duration:const Duration(milliseconds: 1500),
-      ),
-
-    ).closed
+    scaffoldMessenger
+        .showSnackBar(
+          SnackBar(
+            content: Text(this),
+            duration: const Duration(milliseconds: 1500),
+          ),
+        )
+        .closed
         .then((value) => scaffoldMessenger.clearSnackBars());
   }
 }
-
-
 
 class Loading {
   Loading();

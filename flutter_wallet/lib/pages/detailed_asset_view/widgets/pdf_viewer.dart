@@ -20,13 +20,11 @@ class PdfViewer extends StatefulWidget {
 }
 
 class _PdfViewerState extends State<PdfViewer> {
-
   late PDFDocument doc;
   bool _isLoading = true;
 
   @override
   void initState() {
-
     initializeDoc();
     super.initState();
   }
@@ -39,38 +37,38 @@ class _PdfViewerState extends State<PdfViewer> {
 
   @override
   Widget build(BuildContext context) {
-
-   if(_isLoading) {
-     return Center(
-       child: SizedBox(
-         height: 50.h,
-         child: Image.asset(
-           ImageUtil.LOADING_GIF,
-         ),
-       ),
-     );   }
-     return Padding(
-       padding:  EdgeInsets.only(top: 100.h, bottom: 145.h),
-       child: Center(
-         child: Stack(
-           children: [
-             PDFViewer(
-               document: doc,
-               showNavigation: false,
-               showPicker: false,
-               progressIndicator: SizedBox(
-                 height: 50.0.h,
-                 child: Image.asset(
-                   ImageUtil.LOADING_GIF,
-                 ),
-               ),
-             ),
-             _buildPdfFullScreenIcon()
-           ],
-         ),
-       ),
-     );
-   }
+    if (_isLoading) {
+      return Center(
+        child: SizedBox(
+          height: 50.h,
+          child: Image.asset(
+            ImageUtil.LOADING_GIF,
+          ),
+        ),
+      );
+    }
+    return Padding(
+      padding: EdgeInsets.only(top: 100.h, bottom: 145.h),
+      child: Center(
+        child: Stack(
+          children: [
+            PDFViewer(
+              document: doc,
+              showNavigation: false,
+              showPicker: false,
+              progressIndicator: SizedBox(
+                height: 50.0.h,
+                child: Image.asset(
+                  ImageUtil.LOADING_GIF,
+                ),
+              ),
+            ),
+            _buildPdfFullScreenIcon()
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _buildPdfFullScreenIcon() {
     return Positioned(
@@ -80,7 +78,8 @@ class _PdfViewerState extends State<PdfViewer> {
         clipper: CustomTriangleClipper(),
         child: InkWell(
           onTap: () {
-            Navigator.of(context).pushNamed(RouteUtil.ROUTE_PDF_FULL_SCREEN, arguments: [doc]);
+            Navigator.of(context)
+                .pushNamed(RouteUtil.ROUTE_PDF_FULL_SCREEN, arguments: [doc]);
           },
           child: Container(
             width: 30.w,
@@ -90,7 +89,7 @@ class _PdfViewerState extends State<PdfViewer> {
             child: Padding(
               padding: EdgeInsets.all(5.w),
               child: RotationTransition(
-                turns:  const AlwaysStoppedAnimation(0.25),
+                turns: const AlwaysStoppedAnimation(0.25),
                 child: SvgPicture.asset(
                   SVGUtil.FULL_SCREEN_ICON,
                   fit: BoxFit.fill,

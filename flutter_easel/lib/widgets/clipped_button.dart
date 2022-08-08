@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+enum ClipperType { topLeftBottomRight, bottomLeftTopRight }
 
-enum ClipperType {
-topLeftBottomRight , bottomLeftTopRight
-}
 class ClippedButton extends StatelessWidget {
-
   final VoidCallback onPressed;
   final String title;
   final Color bgColor;
@@ -14,45 +11,75 @@ class ClippedButton extends StatelessWidget {
   final double cuttingHeight;
   final ClipperType clipperType;
   final FontWeight fontWeight;
-  bool? isShadow= true;
+  bool? isShadow = true;
 
-  ClippedButton({Key? key, required this.onPressed, required this.title, required this.bgColor, required this.textColor,required this.cuttingHeight, this.isShadow= true , required this.clipperType, required this.fontWeight}) : super(key: key);
+  ClippedButton(
+      {Key? key,
+      required this.onPressed,
+      required this.title,
+      required this.bgColor,
+      required this.textColor,
+      required this.cuttingHeight,
+      this.isShadow = true,
+      required this.clipperType,
+      required this.fontWeight})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-
         onPressed.call();
       },
-      child:isShadow!? CustomPaint(
-        painter:  clipperType == ClipperType.bottomLeftTopRight?  BoxShadowPainterBottomLeftTopRight(cuttingHeight: cuttingHeight):BoxShadowPainterTopLeftBottomRight(cuttingHeight: cuttingHeight),
-        child: ClipPath(
-          clipper: clipperType == ClipperType.bottomLeftTopRight? ButtonClipperBottomLeftTopRight(cuttingHeight: cuttingHeight) :ButtonClipperTopLeftBottomRight(cuttingHeight: cuttingHeight) ,
-          child: Container(
-            color: bgColor,
-            height: 40.h,
-            child: Center(
-                child: Text(
+      child: isShadow!
+          ? CustomPaint(
+              painter: clipperType == ClipperType.bottomLeftTopRight
+                  ? BoxShadowPainterBottomLeftTopRight(
+                      cuttingHeight: cuttingHeight)
+                  : BoxShadowPainterTopLeftBottomRight(
+                      cuttingHeight: cuttingHeight),
+              child: ClipPath(
+                clipper: clipperType == ClipperType.bottomLeftTopRight
+                    ? ButtonClipperBottomLeftTopRight(
+                        cuttingHeight: cuttingHeight)
+                    : ButtonClipperTopLeftBottomRight(
+                        cuttingHeight: cuttingHeight),
+                child: Container(
+                  color: bgColor,
+                  height: 40.h,
+                  child: Center(
+                      child: Text(
+                    title,
+                    style: TextStyle(
+                        color: textColor,
+                        fontSize: 16.sp,
+                        fontWeight: fontWeight),
+                    textAlign: TextAlign.center,
+                  )),
+                ),
+              ),
+            )
+          : ClipPath(
+              clipper: clipperType == ClipperType.bottomLeftTopRight
+                  ? ButtonClipperBottomLeftTopRight(
+                      cuttingHeight: cuttingHeight)
+                  : ButtonClipperTopLeftBottomRight(
+                      cuttingHeight: cuttingHeight),
+              child: Container(
+                color: bgColor,
+                height: 40.h,
+                child: Center(
+                    child: Text(
                   title,
-                  style: TextStyle(color: textColor, fontSize: 16.sp, fontWeight: fontWeight),
+                  style: TextStyle(
+                    color: textColor,
+                    fontSize: 16.sp,
+                    fontWeight: fontWeight,
+                  ),
                   textAlign: TextAlign.center,
                 )),
-          ),
-        ),
-      ):ClipPath(
-        clipper: clipperType == ClipperType.bottomLeftTopRight? ButtonClipperBottomLeftTopRight(cuttingHeight: cuttingHeight) :ButtonClipperTopLeftBottomRight(cuttingHeight: cuttingHeight) ,
-        child: Container(
-          color: bgColor,
-          height: 40.h,
-          child: Center(
-              child: Text(
-                title,
-                style: TextStyle(color: textColor, fontSize: 16.sp, fontWeight: fontWeight,),
-                textAlign: TextAlign.center,
-              )),
-        ),
-      ) ,
+              ),
+            ),
     );
   }
 }
@@ -86,10 +113,10 @@ class ButtonClipperTopLeftBottomRight extends CustomClipper<Path> {
   Path getClip(Size size) {
     final path = Path();
     path.moveTo(0, size.height);
-    path.lineTo(0,   cuttingHeight);
-    path.lineTo( cuttingHeight,0);
+    path.lineTo(0, cuttingHeight);
+    path.lineTo(cuttingHeight, 0);
     path.lineTo(size.width, 0);
-    path.lineTo(size.width, size.height- cuttingHeight);
+    path.lineTo(size.width, size.height - cuttingHeight);
     path.lineTo(size.width - cuttingHeight, size.height);
     path.lineTo(0, size.height);
 
@@ -101,7 +128,6 @@ class ButtonClipperTopLeftBottomRight extends CustomClipper<Path> {
     return false;
   }
 }
-
 
 class BoxShadowPainterBottomLeftTopRight extends CustomPainter {
   final double cuttingHeight;
@@ -132,13 +158,12 @@ class BoxShadowPainterTopLeftBottomRight extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final path = Path();
     path.moveTo(0, size.height);
-    path.lineTo(0,   cuttingHeight);
-    path.lineTo( cuttingHeight,0);
+    path.lineTo(0, cuttingHeight);
+    path.lineTo(cuttingHeight, 0);
     path.lineTo(size.width, 0);
-    path.lineTo(size.width, size.height- cuttingHeight);
+    path.lineTo(size.width, size.height - cuttingHeight);
     path.lineTo(size.width - cuttingHeight, size.height);
     path.lineTo(0, size.height);
-
 
     canvas.drawShadow(path, Colors.black45, 10.0, true);
   }

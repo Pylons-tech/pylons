@@ -9,32 +9,25 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import '../../../../mocks/mock_constants.dart';
 import '../../../../mocks/mock_wallet_store.dart';
 
-
-
 void main() {
   testWidgets('should return the user name from get profile', (tester) async {
-
     final mockWalletStore = MockWalletStore();
 
     GetIt.I.registerSingleton<WalletsStore>(mockWalletStore);
 
-
-
-
-    await tester.pumpWidget( MaterialApp(
+    await tester.pumpWidget(MaterialApp(
       navigatorKey: navigatorKey,
       home: const Scaffold(),
     ));
 
-
-    final sdkipcMessage = SdkIpcMessage(action: HandlerFactory.GET_PROFILE, json: '', sender: SENDER_APP, requestResponse: true);
-
+    final sdkipcMessage = SdkIpcMessage(
+        action: HandlerFactory.GET_PROFILE,
+        json: '',
+        sender: SENDER_APP,
+        requestResponse: true);
 
     final handler = GetProfileHandler(sdkipcMessage);
     final response = await handler.handle();
-
-
-
 
     expect(MOCK_USERNAME, response.data['username']);
     expect(SENDER_APP, response.sender);

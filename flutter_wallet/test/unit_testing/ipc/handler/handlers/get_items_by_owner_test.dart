@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -17,14 +16,14 @@ void main() {
 
     GetIt.I.registerSingleton<WalletsStore>(mockWalletStore);
 
-    final sdkipcMessage = SdkIpcMessage(action: HandlerFactory.GET_ITEMS_BY_OWNER, json: jsonEncode({
-      HandlerFactory.OWNER_ADDRESS : MOCK_ADDRESS
-    }), sender: SENDER_APP, requestResponse: true);
+    final sdkipcMessage = SdkIpcMessage(
+        action: HandlerFactory.GET_ITEMS_BY_OWNER,
+        json: jsonEncode({HandlerFactory.OWNER_ADDRESS: MOCK_ADDRESS}),
+        sender: SENDER_APP,
+        requestResponse: true);
 
     final handler = GetItemsByOwnerHandler(sdkipcMessage);
     final response = await handler.handle();
-
-
 
     expect(SENDER_APP, response.sender);
     expect(HandlerFactory.GET_ITEMS_BY_OWNER, response.action);

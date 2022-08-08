@@ -6,7 +6,6 @@ import 'package:pylons_wallet/components/loading.dart';
 
 /// Abstract Class for providing audio player
 abstract class AudioPlayerHelper {
-
   /// This method is used to initialize the Audio player
   /// Input : [url] for the network audio to be play via Audio Player
   /// Output : [bool] this boolean future represents whether the player is initialized successfully or not

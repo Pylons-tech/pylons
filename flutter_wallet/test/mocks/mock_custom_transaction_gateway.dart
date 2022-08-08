@@ -5,31 +5,30 @@
 import 'dart:async' as _i4;
 
 import 'package:alan/wallet/network_info.dart' as _i11;
-import 'package:cosmos_utils/credentials_storage_failure.dart'
-as _i5;
+import 'package:cosmos_utils/credentials_storage_failure.dart' as _i5;
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:pylons_wallet/stores/models/transaction_response.dart' as _i13;
 import 'package:pylons_wallet/utils/custom_transaction_signing_gateaway/custom_transaction_signing_gateway.dart'
-as _i3;
+    as _i3;
 import 'package:transaction_signing_gateway/model/account_derivation_failure.dart'
-as _i14;
+    as _i14;
 import 'package:transaction_signing_gateway/model/account_derivation_info.dart'
-as _i15;
+    as _i15;
 import 'package:transaction_signing_gateway/model/account_lookup_key.dart'
-as _i10;
+    as _i10;
 import 'package:transaction_signing_gateway/model/account_public_info.dart'
-as _i16;
+    as _i16;
 import 'package:transaction_signing_gateway/model/signed_transaction.dart'
-as _i8;
+    as _i8;
 import 'package:transaction_signing_gateway/model/transaction_broadcasting_failure.dart'
-as _i12;
+    as _i12;
 import 'package:transaction_signing_gateway/model/transaction_signing_failure.dart'
-as _i7;
+    as _i7;
 import 'package:transaction_signing_gateway/model/unsigned_transaction.dart'
-as _i9;
+    as _i9;
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart'
-as _i6;
+    as _i6;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -38,8 +37,6 @@ as _i6;
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: unnecessary_parenthesis
-
-
 
 class _FakeEither_0<L, R> extends _i1.Fake implements _i2.Either<L, R> {}
 
@@ -54,31 +51,31 @@ class MockCustomTransactionSigningGateway extends _i1.Mock
 
   @override
   _i4.Future<_i2.Either<_i5.CredentialsStorageFailure, _i2.Unit>>
-  storeWalletCredentials(
-      {_i6.PrivateAccountCredentials? credentials, String? password}) =>
-      (super.noSuchMethod(
-          Invocation.method(#storeWalletCredentials, [],
-              {#credentials: credentials, #password: password}),
-          returnValue:
-          Future<_i2.Either<_i5.CredentialsStorageFailure, _i2.Unit>>.value(
-              _FakeEither_0<_i5.CredentialsStorageFailure, _i2.Unit>())) as _i4
-          .Future<_i2.Either<_i5.CredentialsStorageFailure, _i2.Unit>>);
+      storeWalletCredentials(
+              {_i6.PrivateAccountCredentials? credentials, String? password}) =>
+          (super.noSuchMethod(
+              Invocation.method(#storeWalletCredentials, [],
+                  {#credentials: credentials, #password: password}),
+              returnValue:
+                  Future<_i2.Either<_i5.CredentialsStorageFailure, _i2.Unit>>.value(
+                      _FakeEither_0<_i5.CredentialsStorageFailure, _i2.Unit>())) as _i4
+              .Future<_i2.Either<_i5.CredentialsStorageFailure, _i2.Unit>>);
   @override
   _i4.Future<_i2.Either<_i7.TransactionSigningFailure, _i8.SignedTransaction>> signTransaction(
-      {_i9.UnsignedTransaction? transaction,
-        _i10.AccountLookupKey? walletLookupKey}) =>
+          {_i9.UnsignedTransaction? transaction,
+          _i10.AccountLookupKey? walletLookupKey}) =>
       (super.noSuchMethod(
           Invocation.method(#signTransaction, [],
               {#transaction: transaction, #walletLookupKey: walletLookupKey}),
           returnValue:
-          Future<_i2.Either<_i7.TransactionSigningFailure, _i8.SignedTransaction>>.value(
-              _FakeEither_0<_i7.TransactionSigningFailure, _i8.SignedTransaction>())) as _i4
+              Future<_i2.Either<_i7.TransactionSigningFailure, _i8.SignedTransaction>>.value(
+                  _FakeEither_0<_i7.TransactionSigningFailure, _i8.SignedTransaction>())) as _i4
           .Future<_i2.Either<_i7.TransactionSigningFailure, _i8.SignedTransaction>>);
   @override
   _i4.Future<String> signPureMessage(
-      {_i11.NetworkInfo? networkInfo,
-        _i10.AccountLookupKey? walletLookupKey,
-        String? msg}) =>
+          {_i11.NetworkInfo? networkInfo,
+          _i10.AccountLookupKey? walletLookupKey,
+          String? msg}) =>
       (super.noSuchMethod(
           Invocation.method(#signPureMessage, [], {
             #networkInfo: networkInfo,
@@ -88,8 +85,8 @@ class MockCustomTransactionSigningGateway extends _i1.Mock
           returnValue: Future<String>.value('')) as _i4.Future<String>);
   @override
   _i4.Future<_i2.Either<_i12.TransactionBroadcastingFailure, _i13.TransactionResponse>> broadcastTransaction(
-      {_i10.AccountLookupKey? walletLookupKey,
-        _i8.SignedTransaction? transaction}) =>
+          {_i10.AccountLookupKey? walletLookupKey,
+          _i8.SignedTransaction? transaction}) =>
       (super.noSuchMethod(
           Invocation.method(#broadcastTransaction, [],
               {#walletLookupKey: walletLookupKey, #transaction: transaction}),
@@ -97,29 +94,30 @@ class MockCustomTransactionSigningGateway extends _i1.Mock
               _FakeEither_0<_i12.TransactionBroadcastingFailure, _i13.TransactionResponse>())) as _i4
           .Future<_i2.Either<_i12.TransactionBroadcastingFailure, _i13.TransactionResponse>>);
   @override
-  _i4.Future<_i2.Either<_i14.AccountDerivationFailure, _i6.PrivateAccountCredentials>>
-  deriveWallet({_i15.AccountDerivationInfo? walletDerivationInfo}) => (super.noSuchMethod(
-      Invocation.method(
-          #deriveWallet, [], {#walletDerivationInfo: walletDerivationInfo}),
-      returnValue:
-      Future<_i2.Either<_i14.AccountDerivationFailure, _i6.PrivateAccountCredentials>>.value(
-          _FakeEither_0<_i14.AccountDerivationFailure, _i6.PrivateAccountCredentials>())) as _i4
-      .Future<_i2.Either<_i14.AccountDerivationFailure, _i6.PrivateAccountCredentials>>);
+  _i4.Future<_i2.Either<_i14.AccountDerivationFailure, _i6.PrivateAccountCredentials>> deriveWallet(
+          {_i15.AccountDerivationInfo? walletDerivationInfo}) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #deriveWallet, [], {#walletDerivationInfo: walletDerivationInfo}),
+          returnValue:
+              Future<_i2.Either<_i14.AccountDerivationFailure, _i6.PrivateAccountCredentials>>.value(
+                  _FakeEither_0<_i14.AccountDerivationFailure, _i6.PrivateAccountCredentials>())) as _i4
+          .Future<_i2.Either<_i14.AccountDerivationFailure, _i6.PrivateAccountCredentials>>);
   @override
   _i4.Future<_i2.Either<_i5.CredentialsStorageFailure, List<_i16.AccountPublicInfo>>>
-  getWalletsList() => (super.noSuchMethod(Invocation.method(#getWalletsList, []),
-      returnValue:
-      Future<_i2.Either<_i5.CredentialsStorageFailure, List<_i16.AccountPublicInfo>>>.value(
-          _FakeEither_0<_i5.CredentialsStorageFailure,
-              List<_i16.AccountPublicInfo>>())) as _i4
-      .Future<_i2.Either<_i5.CredentialsStorageFailure, List<_i16.AccountPublicInfo>>>);
+      getWalletsList() => (super.noSuchMethod(Invocation.method(#getWalletsList, []),
+          returnValue:
+              Future<_i2.Either<_i5.CredentialsStorageFailure, List<_i16.AccountPublicInfo>>>.value(
+                  _FakeEither_0<_i5.CredentialsStorageFailure,
+                      List<_i16.AccountPublicInfo>>())) as _i4
+          .Future<_i2.Either<_i5.CredentialsStorageFailure, List<_i16.AccountPublicInfo>>>);
   @override
   _i4.Future<_i2.Either<_i7.TransactionSigningFailure, bool>> verifyLookupKey(
-      _i10.AccountLookupKey? walletLookupKey) =>
+          _i10.AccountLookupKey? walletLookupKey) =>
       (super.noSuchMethod(
-          Invocation.method(#verifyLookupKey, [walletLookupKey]),
-          returnValue:
-          Future<_i2.Either<_i7.TransactionSigningFailure, bool>>.value(
-              _FakeEither_0<_i7.TransactionSigningFailure, bool>()))
-      as _i4.Future<_i2.Either<_i7.TransactionSigningFailure, bool>>);
+              Invocation.method(#verifyLookupKey, [walletLookupKey]),
+              returnValue:
+                  Future<_i2.Either<_i7.TransactionSigningFailure, bool>>.value(
+                      _FakeEither_0<_i7.TransactionSigningFailure, bool>()))
+          as _i4.Future<_i2.Either<_i7.TransactionSigningFailure, bool>>);
 }

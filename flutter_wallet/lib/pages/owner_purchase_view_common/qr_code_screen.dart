@@ -35,7 +35,8 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
   }
 
   void createLink() {
-    final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
+    final address =
+        GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
 
     switch (widget.nft.type) {
       case NftType.TYPE_TRADE:
@@ -43,11 +44,13 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
         break;
 
       case NftType.TYPE_ITEM:
-        link = widget.nft.itemID.createPurchaseNFT(cookBookId: widget.nft.cookbookID, address: address);
+        link = widget.nft.itemID.createPurchaseNFT(
+            cookBookId: widget.nft.cookbookID, address: address);
         break;
 
       case NftType.TYPE_RECIPE:
-        link = widget.nft.recipeID.createDynamicLink(cookbookId: widget.nft.cookbookID, address: address);
+        link = widget.nft.recipeID.createDynamicLink(
+            cookbookId: widget.nft.cookbookID, address: address);
         break;
     }
   }
@@ -60,7 +63,8 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
         children: [
           getTypeWidget(widget.nft),
           Padding(
-            padding: EdgeInsets.only(left: 23.w, top: MediaQuery.of(context).viewPadding.top + 13.h),
+            padding: EdgeInsets.only(
+                left: 23.w, top: MediaQuery.of(context).viewPadding.top + 13.h),
             child: GestureDetector(
               onTap: () async {
                 Navigator.pop(context);

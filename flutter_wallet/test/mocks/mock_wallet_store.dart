@@ -19,8 +19,6 @@ import 'mock_constants.dart';
 import 'mock_wallet_public_info.dart';
 
 class MockWalletStore implements WalletsStore {
-
-
   @override
   Observable<bool> getAreWalletsLoading() {
     // TODO: implement getAreWalletsLoading
@@ -39,7 +37,8 @@ class MockWalletStore implements WalletsStore {
       const AccountPublicInfo(
           name: 'test',
           publicAddress: 'pylo1e5s74e92q3gunldrpqdnrlc8jg9l3xw6s7hea9',
-          chainId: 'pylons-devtestnet', accountId: '0')
+          chainId: 'pylons-devtestnet',
+          accountId: '0')
     ]);
   }
 
@@ -115,7 +114,6 @@ class MockWalletStore implements WalletsStore {
     throw UnimplementedError();
   }
 
-
   @override
   Future<String> getAccountAddressByName(String username) {
     // TODO: implement getAccountAddressByName
@@ -127,8 +125,6 @@ class MockWalletStore implements WalletsStore {
     // TODO: implement getAccountNameByAddress
     throw UnimplementedError();
   }
-
-
 
   @override
   Future<List<Execution>> getRecipeExecutions(
@@ -306,7 +302,6 @@ class MockWalletStore implements WalletsStore {
     return Right(MockAccountPublicInfo());
   }
 
-
   @override
   Future<bool> deleteAccounts() async {
     return true;
@@ -331,13 +326,15 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<Either<Failure, String>>  sendGoogleInAppPurchaseCoinsRequest(GoogleInAppPurchaseModel googleInAppPurchaseModel) {
+  Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(
+      GoogleInAppPurchaseModel googleInAppPurchaseModel) {
     // TODO: implement sendGoogleInAppPurchaseCoinsRequest
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(AppleInAppPurchaseModel appleInAppPurchaseModel) {
+  Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(
+      AppleInAppPurchaseModel appleInAppPurchaseModel) {
     // TODO: implement sendAppleInAppPurchaseCoinsRequest
     throw UnimplementedError();
   }

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:pylons_wallet/components/buttons/custom_paint_button.dart' as button;
+import 'package:pylons_wallet/components/buttons/custom_paint_button.dart'
+    as button;
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
 import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
@@ -13,8 +14,16 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
-TextStyle kGeneralLabelText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
-TextStyle kGeneralOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w600);
+TextStyle kGeneralLabelText = TextStyle(
+    fontSize: 28.sp,
+    fontFamily: kUniversalFontFamily,
+    color: Colors.black,
+    fontWeight: FontWeight.w800);
+TextStyle kGeneralOptionsText = TextStyle(
+    fontSize: 18.sp,
+    fontFamily: kUniversalFontFamily,
+    color: Colors.black,
+    fontWeight: FontWeight.w600);
 
 class GeneralScreen extends StatefulWidget {
   const GeneralScreen({Key? key}) : super(key: key);
@@ -93,7 +102,6 @@ class _GeneralScreenState extends State<GeneralScreen> {
                 _modalBottomSheetMenu(_languageViewModel);
               },
             ),
-
           ],
         ),
       ),
@@ -114,7 +122,8 @@ class _GeneralScreenState extends State<GeneralScreen> {
           return ChangeNotifierProvider.value(
               value: value,
               builder: (context, child) {
-                return Consumer<GeneralScreenLocalizationViewModel>(builder: (context, model, child) {
+                return Consumer<GeneralScreenLocalizationViewModel>(
+                    builder: (context, model, child) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
@@ -126,7 +135,10 @@ class _GeneralScreenState extends State<GeneralScreen> {
                         padding: EdgeInsets.symmetric(horizontal: 10.0.w),
                         child: Text(
                           "select_language".tr(),
-                          style: TextStyle(color: kTextBlackColor, fontSize: 19.0.sp, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              color: kTextBlackColor,
+                              fontSize: 19.0.sp,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                       SizedBox(
@@ -143,14 +155,18 @@ class _GeneralScreenState extends State<GeneralScreen> {
                                 languagesSupported[index]['name']! as String,
                                 style: TextStyle(fontSize: 16.sp),
                               ).tr(),
-                              trailing: languagesSupported[index]['selected']! as bool
-                                  ? const Icon(
-                                      Icons.check,
-                                      color: kDarkGreen,
-                                    )
-                                  : const SizedBox(),
+                              trailing:
+                                  languagesSupported[index]['selected']! as bool
+                                      ? const Icon(
+                                          Icons.check,
+                                          color: kDarkGreen,
+                                        )
+                                      : const SizedBox(),
                               onTap: () {
-                                model.switchLanguage(index, languagesSupported[index]['name']! as String);
+                                model.switchLanguage(
+                                    index,
+                                    languagesSupported[index]['name']!
+                                        as String);
                               },
                             );
                           },
@@ -169,18 +185,24 @@ class _GeneralScreenState extends State<GeneralScreen> {
                         },
                         child: Center(
                           child: CustomPaint(
-                            painter: button.BoxShadowPainter(cuttingHeight: 10.h),
+                            painter:
+                                button.BoxShadowPainter(cuttingHeight: 10.h),
                             child: ClipPath(
-                              clipper: button.MnemonicClipper(cuttingHeight: 10.h),
+                              clipper:
+                                  button.MnemonicClipper(cuttingHeight: 10.h),
                               child: Container(
                                 color: kBlue,
                                 height: 40.h,
                                 width: 250.0.w,
-                                padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: 20.0.w),
                                 child: Center(
                                     child: Text(
                                   "apply".tr(),
-                                  style: TextStyle(color: kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
+                                  style: TextStyle(
+                                      color: kWhite,
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w600),
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -204,9 +226,12 @@ class GeneralForwardItem extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
 
-  const GeneralForwardItem({required this.title, Key? key, required this.onPressed}) : super(key: key);
+  const GeneralForwardItem(
+      {required this.title, Key? key, required this.onPressed})
+      : super(key: key);
 
-  GeneralScreenLocalizationViewModel get _languageViewModel => GetIt.I.get<GeneralScreenLocalizationViewModel>();
+  GeneralScreenLocalizationViewModel get _languageViewModel =>
+      GetIt.I.get<GeneralScreenLocalizationViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -230,8 +255,14 @@ class GeneralForwardItem extends StatelessWidget {
                   ChangeNotifierProvider.value(
                       value: _languageViewModel,
                       builder: (context, child) {
-                        return Consumer<GeneralScreenLocalizationViewModel>(builder: (context, model, child) {
-                          return Text(model.getLanguageName(context), style: TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: kUserInputTextColor, fontWeight: FontWeight.w500));
+                        return Consumer<GeneralScreenLocalizationViewModel>(
+                            builder: (context, model, child) {
+                          return Text(model.getLanguageName(context),
+                              style: TextStyle(
+                                  fontSize: 15.sp,
+                                  fontFamily: kUniversalFontFamily,
+                                  color: kUserInputTextColor,
+                                  fontWeight: FontWeight.w500));
                         });
                       })
                 else if (title == "invite_others".tr())
@@ -257,7 +288,8 @@ class GeneralForwardItem extends StatelessWidget {
 class NotificationsListItem extends StatefulWidget {
   final String title;
 
-  const NotificationsListItem({Key? key, required this.title}) : super(key: key);
+  const NotificationsListItem({Key? key, required this.title})
+      : super(key: key);
 
   @override
   State<NotificationsListItem> createState() => _NotificationsListItemState();
@@ -270,7 +302,8 @@ class _NotificationsListItemState extends State<NotificationsListItem> {
   void initState() {
     super.initState();
 
-    final notificationPreferenceEither = GetIt.I.get<Repository>().getNotificationsPreference();
+    final notificationPreferenceEither =
+        GetIt.I.get<Repository>().getNotificationsPreference();
 
     isNotificationEnabled = notificationPreferenceEither.getOrElse(() => false);
   }
@@ -295,7 +328,9 @@ class _NotificationsListItemState extends State<NotificationsListItem> {
                 trackColor: kSwitchInactiveColor,
                 value: isNotificationEnabled,
                 onChanged: (value) {
-                  GetIt.I.get<Repository>().saveNotificationsPreference(notificationStatus: value);
+                  GetIt.I
+                      .get<Repository>()
+                      .saveNotificationsPreference(notificationStatus: value);
                   setState(() {
                     isNotificationEnabled = value;
                   });

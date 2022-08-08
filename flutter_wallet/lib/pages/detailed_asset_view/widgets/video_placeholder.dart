@@ -35,7 +35,8 @@ class VideoPlaceHolder extends StatelessWidget {
           child: Container(
             width: 35.w,
             height: 35.h,
-            decoration: BoxDecoration(color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
+            decoration: BoxDecoration(
+                color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
             child: Image.asset(
               ImageUtil.VIDEO_ICON,
               color: kBlack,
@@ -64,7 +65,8 @@ class VideoPlaceHolder extends StatelessWidget {
       child: Container(
         width: 35.w,
         height: 35.h,
-        decoration: BoxDecoration(color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
+        decoration: BoxDecoration(
+            color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
         child: Image.asset(
           ImageUtil.VIDEO_ICON,
           color: kBlack.withOpacity(0.7),
@@ -75,16 +77,27 @@ class VideoPlaceHolder extends StatelessWidget {
 
   Widget getSuccessWidget(AsyncSnapshot<String?> snapshot) {
     return Stack(children: [
-      Positioned.fill(child: Image.file(File(snapshot.data.toString()), fit: BoxFit.fitWidth, cacheWidth: 100, cacheHeight: 110)),
+      Positioned.fill(
+          child: Image.file(File(snapshot.data.toString()),
+              fit: BoxFit.fitWidth, cacheWidth: 100, cacheHeight: 110)),
       Align(
           child: Container(
-              width: 35.w, height: 35.h, decoration: BoxDecoration(color: kWhite.withOpacity(0.5), shape: BoxShape.circle), child: Image.asset(ImageUtil.VIDEO_ICON, color: kBlack.withOpacity(0.7))))
+              width: 35.w,
+              height: 35.h,
+              decoration: BoxDecoration(
+                  color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
+              child: Image.asset(ImageUtil.VIDEO_ICON,
+                  color: kBlack.withOpacity(0.7))))
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(color: kWhite, child: thumbnailUrl.isNotEmpty ? getVideoThumbnailFromUrl() : getVideoPlaceHolder());
+    return Container(
+        color: kWhite,
+        child: thumbnailUrl.isNotEmpty
+            ? getVideoThumbnailFromUrl()
+            : getVideoPlaceHolder());
   }
 }
 

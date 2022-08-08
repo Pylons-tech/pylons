@@ -17,7 +17,8 @@ class StripeScreen extends StatefulWidget {
   final String url;
   final VoidCallback onBack;
 
-  const StripeScreen({Key? key, required this.url, required this.onBack}) : super(key: key);
+  const StripeScreen({Key? key, required this.url, required this.onBack})
+      : super(key: key);
 
   @override
   State<StripeScreen> createState() => _StripeScreenState();
@@ -47,9 +48,11 @@ class _StripeScreenState extends State<StripeScreen> {
 
   Future<bool> loadLoginLink() async {
     final loading = Loading()..showLoading();
-    final account_response = await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
+    final account_response =
+        await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
     loading.dismiss();
-    account_response.fold((fail) => {fail.message.show()}, (accountlink) => {_controller.loadUrl(accountlink)});
+    account_response.fold((fail) => {fail.message.show()},
+        (accountlink) => {_controller.loadUrl(accountlink)});
 
     return true;
   }
@@ -92,14 +95,17 @@ class _StripeScreenState extends State<StripeScreen> {
                 },
                 javascriptChannels: {
                   _extractDataJSChannel(context),
-                  JavascriptChannel(name: 'Print', onMessageReceived: (JavascriptMessage message) {}),
+                  JavascriptChannel(
+                      name: 'Print',
+                      onMessageReceived: (JavascriptMessage message) {}),
                 },
                 navigationDelegate: (NavigationRequest request) {
                   if (request.url.contains(baseEnv.baseStripeCallbackUrl)) {
                     getAccountLinkAndRedirect();
                     return NavigationDecision.prevent;
                   }
-                  if (request.url.contains(baseEnv.baseStripeCallbackRefreshUrl)) {
+                  if (request.url
+                      .contains(baseEnv.baseStripeCallbackRefreshUrl)) {
                     getAccountLinkAndRedirect();
                     return NavigationDecision.prevent;
                   }
@@ -156,7 +162,8 @@ class _StripeScreenState extends State<StripeScreen> {
   Future getAccountLinkAndRedirect() async {
     final loading = Loading()..showLoading();
 
-    final account_response = await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
+    final account_response =
+        await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
     loading.dismiss();
     account_response.fold((fail) => {fail.message.show()}, (accountlink) {
       _controller.loadUrl(accountlink);

@@ -42,7 +42,8 @@ class TransactionCard extends StatelessWidget {
       return SizedBox(width: 22.w);
     }
 
-    final formattedDate = formatDate(date, DateFormatEnum.shortUIDateDay).split(" ");
+    final formattedDate =
+        formatDate(date, DateFormatEnum.shortUIDateDay).split(" ");
 
     return SizedBox(
       width: 22.w,
@@ -70,7 +71,8 @@ class TransactionCard extends StatelessWidget {
           getDateStamp(date: date),
           SizedBox(width: 10.w),
           LeadingBuilder(
-            onSendReceive: (context) => SvgPicture.asset(SVGUtil.PAYMENT_SEND_RECEIVE),
+            onSendReceive: (context) =>
+                SvgPicture.asset(SVGUtil.PAYMENT_SEND_RECEIVE),
             onBuySell: (context) => SvgPicture.asset(SVGUtil.PAYMENT_TAG),
             transactionType: transactionTypeEnum,
           ),
@@ -78,7 +80,8 @@ class TransactionCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(transactionType, style: kTransactionTitle.copyWith(fontSize: 16.sp)),
+              Text(transactionType,
+                  style: kTransactionTitle.copyWith(fontSize: 16.sp)),
             ],
           ),
           const Spacer(),
@@ -87,11 +90,15 @@ class TransactionCard extends StatelessWidget {
             children: [
               Text(
                 '${!isOutGoing() ? '-' : '+'}${amountText.toUpperCase()}',
-                style: kTransactionTitle.copyWith(color: !isOutGoing() ? kTransactionRed : kTransactionGreen, fontSize: 16.sp),
+                style: kTransactionTitle.copyWith(
+                    color: !isOutGoing() ? kTransactionRed : kTransactionGreen,
+                    fontSize: 16.sp),
               ),
               Text(
                 denomText.toUpperCase(),
-                style: kTransactionTitle.copyWith(color: !isOutGoing() ? kTransactionRed : kTransactionGreen, fontSize: 12.sp),
+                style: kTransactionTitle.copyWith(
+                    color: !isOutGoing() ? kTransactionRed : kTransactionGreen,
+                    fontSize: 12.sp),
               )
             ],
           ),

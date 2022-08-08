@@ -5,7 +5,8 @@ import 'package:pylons_wallet/components/buttons/add_friend_button.dart';
 import '../../helpers/size_extensions.dart';
 
 void main() {
-  testWidgets('should show add friend button and make sure user is able to tap', (tester) async {
+  testWidgets('should show add friend button and make sure user is able to tap',
+      (tester) async {
     final imageIconFinder = find.byKey(const ValueKey("Add-Friend-Button"));
     var isTapped = false;
 

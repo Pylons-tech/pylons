@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,8 +22,6 @@ class _PdfViewerFullScreenState extends State<PdfViewerFullScreen> {
     super.initState();
 
     getArguments();
-
-
   }
 
   @override
@@ -53,7 +50,8 @@ class _PdfViewerFullScreenState extends State<PdfViewerFullScreen> {
         return;
       }
 
-      final pdfList = ModalRoute.of(context)?.settings.arguments as List<PDFDocument>?;
+      final pdfList =
+          ModalRoute.of(context)?.settings.arguments as List<PDFDocument>?;
 
       if (pdfList == null) {
         return;

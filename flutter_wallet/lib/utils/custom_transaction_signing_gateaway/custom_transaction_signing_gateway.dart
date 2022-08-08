@@ -162,13 +162,13 @@ class CustomTransactionSigningGateway {
       );
 
   AccountDerivator _findCapableDerivator(
-      AccountDerivationInfo walletDerivationInfo) =>
+          AccountDerivationInfo walletDerivationInfo) =>
       _derivators.firstWhere(
         (element) => element.canDerive(walletDerivationInfo),
         orElse: () => NotFoundDerivator(),
       );
 
-
   /// Removes all stored account's data. If it fails, a [ClearCredentialsFailure] is returned.
-  Future<Either<ClearCredentialsFailure, Unit>> clearAllCredentials() => _infoStorage.clearCredentials();
+  Future<Either<ClearCredentialsFailure, Unit>> clearAllCredentials() =>
+      _infoStorage.clearCredentials();
 }

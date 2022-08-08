@@ -5,7 +5,9 @@ import 'package:pylons_wallet/components/buttons/more_button.dart';
 import '../../helpers/size_extensions.dart';
 
 void main() {
-  testWidgets('should show more button and make sure user is able to tap with no text', (tester) async {
+  testWidgets(
+      'should show more button and make sure user is able to tap with no text',
+      (tester) async {
     final imageIconFinder = find.byIcon(Icons.keyboard_arrow_right_rounded);
     final more_text_finder = find.text("more");
 
@@ -30,7 +32,9 @@ void main() {
     expect(more_text_finder, findsNothing);
   });
 
-  testWidgets('should show more button and make sure user is able to tap with show text', (tester) async {
+  testWidgets(
+      'should show more button and make sure user is able to tap with show text',
+      (tester) async {
     final imageIconFinder = find.byIcon(Icons.keyboard_arrow_right_rounded);
     final more_text_finder = find.text("more");
 

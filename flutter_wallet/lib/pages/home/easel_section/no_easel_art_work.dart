@@ -40,10 +40,9 @@ class NoEaselArtWork extends StatelessWidget {
 
               final easelAppInstallLink = isAndroidDevice
                   ? kAndroidEaselInstallLink
-                  :kIOSEaselInstallLink;
-              final easelAppLink = isAndroidDevice
-                  ? kAndroidEaselLink
-                  : kIOSEaselLink;
+                  : kIOSEaselInstallLink;
+              final easelAppLink =
+                  isAndroidDevice ? kAndroidEaselLink : kIOSEaselLink;
 
               final isInstalled = await canLaunchUrlString(easelAppLink);
 

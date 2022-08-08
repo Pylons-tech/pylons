@@ -14,7 +14,6 @@ import 'package:pylons_wallet/utils/backup/common/i_driver_client.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 
-
 class GoogleDriveApiImpl extends IDriverApi {
   final googleSignIn = GoogleSignIn.standard(scopes: [
     drive.DriveApi.driveAppdataScope,
@@ -34,7 +33,8 @@ class GoogleDriveApiImpl extends IDriverApi {
   }
 
   @override
-  Future<bool> uploadMnemonic({required String mnemonic, required String username}) async {
+  Future<bool> uploadMnemonic(
+      {required String mnemonic, required String username}) async {
     final driverEither = await _getDriveApi();
     if (driverEither.isLeft()) {
       throw driverEither.swap().toOption().toNullable()!.message;
@@ -45,7 +45,8 @@ class GoogleDriveApiImpl extends IDriverApi {
     final driveApi = driverEither.toOption().toNullable()!;
 
     // Create Content
-    final Stream<List<int>> mediaStream = Future.value(data.codeUnits).asStream().asBroadcastStream();
+    final Stream<List<int>> mediaStream =
+        Future.value(data.codeUnits).asStream().asBroadcastStream();
     final media = drive.Media(mediaStream, data.length);
 
     // Set up File info
@@ -53,7 +54,6 @@ class GoogleDriveApiImpl extends IDriverApi {
 
     // Upload
     await driveApi.files.create(driveFile, uploadMedia: media);
-
 
     return true;
   }
@@ -83,7 +83,9 @@ class GoogleDriveApiImpl extends IDriverApi {
     if (files.files == null || files.files!.isEmpty) {
       throw "no_mnemonic_found".tr();
     }
-    final drive.Media response = await driveApi.files.get(files.files?.first.id ?? '', downloadOptions: DownloadOptions.fullMedia) as Media;
+    final drive.Media response = await driveApi.files.get(
+        files.files?.first.id ?? '',
+        downloadOptions: DownloadOptions.fullMedia) as Media;
 
     final List<int> dataStore = [];
 

@@ -45,23 +45,19 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
   static String ibcTrace = "IBC_TRACE_URL";
   static String mongoUrl = "MONGO_URL";
 
-
-  RemoteConfigServiceImpl({required this.firebaseRemoteConfig, required this.localDataSource, required this.crashlyticsHelper});
-
-
-
+  RemoteConfigServiceImpl(
+      {required this.firebaseRemoteConfig,
+      required this.localDataSource,
+      required this.crashlyticsHelper});
 
   @override
   BaseEnv getBaseEnv() {
-
-
-
     return BaseEnv()
       ..setEnv(
         lcdUrl: firebaseRemoteConfig.getString(lcdUrl),
         grpcUrl: firebaseRemoteConfig.getString(grpcUrl),
         lcdPort: firebaseRemoteConfig.getString(lcdPort),
-        mongoUrl:firebaseRemoteConfig.getString(mongoUrl),
+        mongoUrl: firebaseRemoteConfig.getString(mongoUrl),
         grpcPort: firebaseRemoteConfig.getString(grpcPort),
         ethUrl: firebaseRemoteConfig.getString(ethUrl),
         faucetUrl: firebaseRemoteConfig.getString(faucetUrl),
@@ -69,7 +65,8 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
         stripePubKey: firebaseRemoteConfig.getString(stripePubKey),
         stripeTestEnv: firebaseRemoteConfig.getString(stripeTestEnv) == 'true',
         stripeCallbackUrl: firebaseRemoteConfig.getString(stripeCallbackUrl),
-        stripeCallbackRefreshUrl: firebaseRemoteConfig.getString(stripeCallbackRefreshUrl),
+        stripeCallbackRefreshUrl:
+            firebaseRemoteConfig.getString(stripeCallbackRefreshUrl),
         chainId: firebaseRemoteConfig.getString(chainId),
         ibcTraceUrl: firebaseRemoteConfig.getString(ibcTrace),
       );
@@ -81,16 +78,15 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
           grpcUrl: dotenv.env['TEST_GRPC_URL'].toString(),
           lcdPort: dotenv.env['TEST_LCD_PORT'].toString(),
           mongoUrl: dotenv.env['TEST_MONGO_URL'].toString(),
-
           grpcPort: dotenv.env['TEST_GRPC_PORT'].toString(),
           ethUrl: dotenv.env['TEST_ETH_URL'].toString(),
           faucetUrl: dotenv.env['TEST_FAUCET_URL'].toString(),
-
           stripeUrl: dotenv.env['TEST_STRIPE_SERVER'].toString(),
           stripePubKey: dotenv.env['TEST_STRIPE_PUB_KEY'].toString(),
           stripeTestEnv: dotenv.env['TEST_STRIPE_TEST_ENV'] == 'true',
           stripeCallbackUrl: dotenv.env['TEST_STRIPE_CALLBACK_URL'] ?? "",
-          stripeCallbackRefreshUrl: dotenv.env['TEST_STRIPE_CALLBACK_REFRESH_URL'] ?? "",
+          stripeCallbackRefreshUrl:
+              dotenv.env['TEST_STRIPE_CALLBACK_REFRESH_URL'] ?? "",
           chainId: dotenv.env['TEST_CHAIN_ID'].toString(),
           ibcTraceUrl: dotenv.env['TEST_IBC_TRACE'].toString(),
         );
@@ -115,7 +111,8 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
         stripePubKey: firebaseRemoteConfig.getString(stripePubKey),
         stripeTestEnv: firebaseRemoteConfig.getString(stripeTestEnv) == 'true',
         stripeCallbackUrl: firebaseRemoteConfig.getString(stripeCallbackUrl),
-        stripeCallbackRefreshUrl: firebaseRemoteConfig.getString(stripeCallbackRefreshUrl),
+        stripeCallbackRefreshUrl:
+            firebaseRemoteConfig.getString(stripeCallbackRefreshUrl),
         chainId: firebaseRemoteConfig.getString(chainId),
         ibcTraceUrl: firebaseRemoteConfig.getString(ibcTrace),
       );

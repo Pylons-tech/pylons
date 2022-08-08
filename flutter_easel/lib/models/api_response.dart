@@ -8,4 +8,4 @@ class ApiResponse<T> {
   ApiResponse.success({required this.data}) : status = Status.success;
 }
 
-enum Status {error, success}
+enum Status { error, success }

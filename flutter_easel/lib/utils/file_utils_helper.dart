@@ -26,12 +26,14 @@ abstract class FileUtilsHelper {
   /// This function is used to generate the NFT link to be shared with others after publishing
   /// Input: [recipeId] and [cookbookId] used in the link generation as query parameters
   /// Output: [String] returns the generated NFTs link to be shared with others
-  String generateEaselLinkForShare({required String recipeId, required String cookbookId});
+  String generateEaselLinkForShare(
+      {required String recipeId, required String cookbookId});
 
   /// This function is used to generate the NFT link to be open in the pylons wallet
   /// Input: [recipeId] and [cookbookId] used in the link generation as query parameters
   /// Output: [String] returns the generated NFTs link to be shared with others
-  String generateEaselLinkForOpeningInPylonsApp({required String recipeId, required String cookbookId});
+  String generateEaselLinkForOpeningInPylonsApp(
+      {required String recipeId, required String cookbookId});
 
   /// This function is used to launch the link generated and open the link in external source platform
   /// Input: [url] is the link to be launched by the launcher
@@ -75,7 +77,8 @@ class FileUtilsHelperImpl implements FileUtilsHelper {
         break;
     }
 
-    FilePickerResult? result = await filePicker.pickFiles(type: _type, allowedExtensions: allowedExtensions);
+    FilePickerResult? result = await filePicker.pickFiles(
+        type: _type, allowedExtensions: allowedExtensions);
 
     if (result == null) {
       return PickedFileModel(
@@ -104,11 +107,13 @@ class FileUtilsHelperImpl implements FileUtilsHelper {
   @override
   String getFileSizeString({required int fileLength, required int precision}) {
     var i = (log(fileLength) / log(1024)).floor();
-    return ((fileLength / pow(1024, i)).toStringAsFixed(precision)) + suffixes[i];
+    return ((fileLength / pow(1024, i)).toStringAsFixed(precision)) +
+        suffixes[i];
   }
 
   @override
-  String generateEaselLinkForShare({required String recipeId, required String cookbookId}) {
+  String generateEaselLinkForShare(
+      {required String recipeId, required String cookbookId}) {
     return "$kWalletWebLink/?action=purchase_nft&recipe_id=$recipeId&cookbook_id=$cookbookId";
   }
 
@@ -126,9 +131,20 @@ class FileUtilsHelperImpl implements FileUtilsHelper {
     try {
       CroppedFile? croppedFile = await imageCropper.cropImage(
         sourcePath: filePath,
-        aspectRatioPresets: [CropAspectRatioPreset.square, CropAspectRatioPreset.ratio3x2, CropAspectRatioPreset.original, CropAspectRatioPreset.ratio4x3, CropAspectRatioPreset.ratio16x9],
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ],
         uiSettings: [
-          AndroidUiSettings(toolbarTitle: kPylons, toolbarColor: EaselAppTheme.kBlue, toolbarWidgetColor: Colors.white, initAspectRatio: CropAspectRatioPreset.original, lockAspectRatio: false),
+          AndroidUiSettings(
+              toolbarTitle: kPylons,
+              toolbarColor: EaselAppTheme.kBlue,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false),
           IOSUiSettings(
             title: kPylons,
           ),
@@ -141,13 +157,15 @@ class FileUtilsHelperImpl implements FileUtilsHelper {
   }
 
   @override
-  String generateEaselLinkForOpeningInPylonsApp({required String recipeId, required String cookbookId}) {
+  String generateEaselLinkForOpeningInPylonsApp(
+      {required String recipeId, required String cookbookId}) {
     return Uri.https('pylons.page.link', "/", {
       kAmvKey: "1",
       kApnKey: "tech.pylons.wallet",
       kIbiKey: "xyz.pylons.wallet",
       kImvKey: "1",
-      kLinkKey: "https://wallet.pylons.tech/?action=purchase_nft&recipe_id=$recipeId&cookbook_id=$cookbookId&nft_amount=1"
+      kLinkKey:
+          "https://wallet.pylons.tech/?action=purchase_nft&recipe_id=$recipeId&cookbook_id=$cookbookId&nft_amount=1"
     }).toString();
   }
 }

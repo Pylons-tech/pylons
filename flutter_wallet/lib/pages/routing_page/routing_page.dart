@@ -41,7 +41,8 @@ class _RoutingPageState extends State<RoutingPage> {
 
     if (walletsStore.getWallets().value.isEmpty) {
       //Loads the last used wallet.
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
+      Navigator.of(navigatorKey.currentState!.overlay!.context)
+          .pushNamed(RouteUtil.ROUTE_ONBOARDING);
     } else {
       final repository = GetIt.I.get<Repository>();
 
@@ -68,7 +69,8 @@ class _RoutingPageState extends State<RoutingPage> {
   }
 
   void moveToHome() {
-    Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_HOME);
+    Navigator.of(navigatorKey.currentState!.overlay!.context)
+        .pushNamed(RouteUtil.ROUTE_HOME);
   }
 
   @override
@@ -89,7 +91,8 @@ class _RoutingPageState extends State<RoutingPage> {
   Future<bool> checkAppLatestOrNot() async {
     final getAppInfoResult = await getAppInfo();
 
-    final appVersion = "${getAppInfoResult.version}+${getAppInfoResult.buildNumber}";
+    final appVersion =
+        "${getAppInfoResult.version}+${getAppInfoResult.buildNumber}";
 
     String remoteConfigVersion;
     if (Platform.isAndroid) {
@@ -105,9 +108,8 @@ class _RoutingPageState extends State<RoutingPage> {
 
     await walletsStore.loadWallets();
 
-
-
-    Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_APP_UPDATE, arguments: remoteConfigVersion);
+    Navigator.of(navigatorKey.currentState!.overlay!.context)
+        .pushNamed(RouteUtil.ROUTE_APP_UPDATE, arguments: remoteConfigVersion);
 
     return false;
   }

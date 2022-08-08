@@ -9,13 +9,19 @@ import 'package:pylons_wallet/utils/extension.dart';
 class TransactionsListView extends StatelessWidget {
   final List<TransactionHistory> transactionsHistoryList;
 
-  const TransactionsListView({Key? key, required this.transactionsHistoryList}) : super(key: key);
-
+  const TransactionsListView({Key? key, required this.transactionsHistoryList})
+      : super(key: key);
 
   bool isDateSame({required int index}) {
     if (index == 0) return false;
-    return formatDate(DateTime.fromMillisecondsSinceEpoch(transactionsHistoryList[index].createdAt), DateFormatEnum.shortUIDateDay) ==
-        formatDate(DateTime.fromMillisecondsSinceEpoch(transactionsHistoryList[index - 1].createdAt), DateFormatEnum.shortUIDateDay);
+    return formatDate(
+            DateTime.fromMillisecondsSinceEpoch(
+                transactionsHistoryList[index].createdAt),
+            DateFormatEnum.shortUIDateDay) ==
+        formatDate(
+            DateTime.fromMillisecondsSinceEpoch(
+                transactionsHistoryList[index - 1].createdAt),
+            DateFormatEnum.shortUIDateDay);
   }
 
   @override
@@ -28,8 +34,10 @@ class TransactionsListView extends StatelessWidget {
           return TransactionCard(
             transactionType: transactionHistory.transactionType,
             denomText: coin.getAbbrev(),
-            amountText: coin.getCoinWithProperDenomination(transactionHistory.amount.splitNumberAndAlpha()[0]),
-            date: DateTime.fromMillisecondsSinceEpoch(transactionHistory.createdAt * kTimeStampInt),
+            amountText: coin.getCoinWithProperDenomination(
+                transactionHistory.amount.splitNumberAndAlpha()[0]),
+            date: DateTime.fromMillisecondsSinceEpoch(
+                transactionHistory.createdAt * kTimeStampInt),
             transactionTypeEnum: transactionHistory.transactionTypeEnum,
             isDateSame: isDateSame(index: index),
           );

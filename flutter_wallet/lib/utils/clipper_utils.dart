@@ -58,7 +58,6 @@ class RightTriangleClipper extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper old) {
     return old != this;
   }
-
 }
 
 class CustomTriangleClipper extends CustomClipper<Path> {
@@ -75,4 +74,3 @@ class CustomTriangleClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(CustomTriangleClipper oldClipper) => false;
 }
-

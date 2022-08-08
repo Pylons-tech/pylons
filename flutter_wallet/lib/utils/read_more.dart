@@ -10,26 +10,26 @@ enum TrimMode {
 
 class ReadMoreText extends StatefulWidget {
   const ReadMoreText(
-      this.data, {
-        Key? key,
-        this.trimExpandedText = 'show less',
-        this.trimCollapsedText = 'read more',
-        this.colorClickableText,
-        this.trimLength = 240,
-        this.trimLines = 2,
-        this.trimMode = TrimMode.Line,
-        this.style,
-        this.textAlign,
-        this.textDirection,
-        this.locale,
-        this.textScaleFactor,
-        this.semanticsLabel,
-        this.moreStyle,
-        this.lessStyle,
-        this.delimiter = '$_kEllipsis  ',
-        this.delimiterStyle,
-        this.callback,
-      }) : super(key: key);
+    this.data, {
+    Key? key,
+    this.trimExpandedText = 'show less',
+    this.trimCollapsedText = 'read more',
+    this.colorClickableText,
+    this.trimLength = 240,
+    this.trimLines = 2,
+    this.trimMode = TrimMode.Line,
+    this.style,
+    this.textAlign,
+    this.textDirection,
+    this.locale,
+    this.textScaleFactor,
+    this.semanticsLabel,
+    this.moreStyle,
+    this.lessStyle,
+    this.delimiter = '$_kEllipsis  ',
+    this.delimiterStyle,
+    this.callback,
+  }) : super(key: key);
 
   /// Used on TrimMode.Length
   final int trimLength;
@@ -115,8 +115,8 @@ class ReadMoreTextState extends State<ReadMoreText> {
     final TextSpan _delimiter = TextSpan(
       text: _readMore
           ? widget.trimCollapsedText.isNotEmpty
-          ? widget.delimiter
-          : ''
+              ? widget.delimiter
+              : ''
           : '',
       style: _defaultDelimiterStyle,
       recognizer: TapGestureRecognizer()..onTap = _onTapLink,
@@ -143,12 +143,12 @@ class ReadMoreTextState extends State<ReadMoreText> {
           ellipsis: overflow == TextOverflow.ellipsis ? widget.delimiter : null,
           locale: locale,
         );
-        textPainter.layout( maxWidth: maxWidth);
+        textPainter.layout(maxWidth: maxWidth);
         final linkSize = textPainter.size;
 
         // Layout and measure delimiter
         textPainter.text = _delimiter;
-        textPainter.layout( maxWidth: maxWidth);
+        textPainter.layout(maxWidth: maxWidth);
         final delimiterSize = textPainter.size;
 
         // Layout and measure text
@@ -201,7 +201,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
                 style: effectiveTextStyle,
                 text: _readMore
                     ? widget.data.substring(0, endIndex) +
-                    (linkLongerThanLine ? _kLineSeparator : '')
+                        (linkLongerThanLine ? _kLineSeparator : '')
                     : widget.data,
                 children: <TextSpan>[_delimiter, link],
               );

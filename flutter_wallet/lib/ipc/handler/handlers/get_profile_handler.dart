@@ -19,7 +19,8 @@ class GetProfileHandler implements BaseHandler {
   Future<SdkIpcResponse> handle() async {
     final walletsStore = GetIt.I.get<WalletsStore>();
 
-    final loading = Loading()..showLoading(message: "${'getting_profile'.tr()}...");
+    final loading = Loading()
+      ..showLoading(message: "${'getting_profile'.tr()}...");
 
     final response = await walletsStore.getProfile();
     loading.dismiss();
@@ -38,7 +39,13 @@ class Profile {
   final List<Item> items;
   final List<String> supportedCoins;
 
-  Profile({required this.address, required this.username, required this.coins, required this.stripeExists, required this.items, required this.supportedCoins});
+  Profile(
+      {required this.address,
+      required this.username,
+      required this.coins,
+      required this.stripeExists,
+      required this.items,
+      required this.supportedCoins});
 
   Map<String, dynamic> toJson() => {
         "address": address,
@@ -46,7 +53,7 @@ class Profile {
         "stripeExists": stripeExists,
         "coins": coins.map((Balance balance) => balance.toJson()).toList(),
         "items": items.map((Item item) => item.toProto3Json()).toList(),
-        "supportedCoins" : supportedCoins
+        "supportedCoins": supportedCoins
       };
 
   @override

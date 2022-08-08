@@ -15,10 +15,10 @@ extension AccountActionTypeDePar on ActionType {
       'purchased': ActionType.actionPurchase,
     };
 
-    return _stringMap.keys.firstWhere((key) => _stringMap[key] == this, orElse: () => 'unknown');
+    return _stringMap.keys
+        .firstWhere((key) => _stringMap[key] == this, orElse: () => 'unknown');
   }
 }
-
 
 extension AccountActionTypePar on String {
   ActionType fromString() {
@@ -32,7 +32,6 @@ extension AccountActionTypePar on String {
     return _stringMap[this] ?? ActionType.actionUnknonwn;
   }
 }
-
 
 class Activity {
   static const db_id = "id";
@@ -57,10 +56,6 @@ class Activity {
   ActionType action = ActionType.actionUnknonwn;
   int id = 0;
 
-
-
-
-
   Activity({
     required this.id,
     required this.username,
@@ -80,16 +75,16 @@ class Activity {
 
   Activity.fromMap(Map<String, dynamic> map)
       : this(
-            id: map[db_id] == null?  (map[db_id] as int) :  0,
+            id: map[db_id] == null ? (map[db_id] as int) : 0,
             username: (map[db_username]).toString(),
             action: map[db_action].toString().fromString(),
             itemName: (map[db_item_name] ?? '').toString(),
             itemUrl: (map[db_item_url] ?? '').toString(),
             itemDesc: (map[db_item_cookbookid] ?? '').toString(),
-            cookbookID: (map[db_item_cookbookid] ?? '').toString() ,
+            cookbookID: (map[db_item_cookbookid] ?? '').toString(),
             recipeID: (map[db_item_recipeid] ?? '').toString(),
             timestamp: (map[db_timestamp] ?? '').toString(),
-      itemID: (map[db_timestamp] ?? '').toString());
+            itemID: (map[db_timestamp] ?? '').toString());
 
   Map<String, dynamic> toMap() {
     return {

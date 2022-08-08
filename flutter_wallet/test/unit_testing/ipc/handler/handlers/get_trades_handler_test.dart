@@ -18,7 +18,8 @@ void main() {
     final sdkipcMessage = SdkIpcMessage(
         action: HandlerFactory.GET_TRADES,
         json: jsonEncode({HandlerFactory.CREATOR: MOCK_ADDRESS}),
-        sender: SENDER_APP, requestResponse: true);
+        sender: SENDER_APP,
+        requestResponse: true);
 
     final handler = GetTradesHandler(sdkipcMessage);
     final response = await handler.handle();

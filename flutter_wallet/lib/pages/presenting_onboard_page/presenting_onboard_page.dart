@@ -18,7 +18,11 @@ class PresentingOnboardPage extends StatefulWidget {
   State<PresentingOnboardPage> createState() => __PresentingOnboardPageState();
 }
 
-TextStyle kSubHeadlineTextStyle = TextStyle(fontSize: 30.sp, fontFamily: kUniversalFontFamily, color: kBlack, fontWeight: FontWeight.w600);
+TextStyle kSubHeadlineTextStyle = TextStyle(
+    fontSize: 30.sp,
+    fontFamily: kUniversalFontFamily,
+    color: kBlack,
+    fontWeight: FontWeight.w600);
 
 class __PresentingOnboardPageState extends State<PresentingOnboardPage> {
   WalletsStore get walletsStore => GetIt.I.get();
@@ -26,78 +30,87 @@ class __PresentingOnboardPageState extends State<PresentingOnboardPage> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark,
-        child: Scaffold(
-      backgroundColor: kWhite,
-      body: Stack(
-        children: [
-          Positioned(
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-            child: SvgPicture.asset(
-              SVGUtil.MAIN_SCREEN_BG,
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        SVGUtil.PYLONS_LOGO,
-                        fit: BoxFit.cover,
-                      ),
-                      HorizontalSpace(20.w),
-                      SvgPicture.asset(
-                        SVGUtil.PYLON,
-                        fit: BoxFit.cover,
-                      ),
-                    ],
-                  ),
-                  VerticalSpace(5.h),
-                  Text(
-                    "stake_your_digital_claim".tr(),
-                    style: TextStyle(fontSize: 26.sp, fontFamily: kUniversalFontFamily, color: kBlack, fontWeight: FontWeight.w700),
-                  ),
-                  VerticalSpace(100.h),
-                  buildBackupButton(
-                      title: "create_wallet".tr(),
-                      bgColor: kCreateWalletButtonColorDark,
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(RouteUtil.ROUTE_CREATE_WALLET);
-                      }),
-                  VerticalSpace(25.h),
-                  buildBackupButton(
-                      title: "restore_wallet".tr(),
-                      bgColor: kButtonColor,
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(RouteUtil.ROUTE_RESTORE_WALLET);
-                      }),
-                  VerticalSpace(25.h),
-                ],
+      value: SystemUiOverlayStyle.dark,
+      child: Scaffold(
+        backgroundColor: kWhite,
+        body: Stack(
+          children: [
+            Positioned(
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              child: SvgPicture.asset(
+                SVGUtil.MAIN_SCREEN_BG,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                fit: BoxFit.cover,
               ),
             ),
-          )
-        ],
+            Positioned(
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          SVGUtil.PYLONS_LOGO,
+                          fit: BoxFit.cover,
+                        ),
+                        HorizontalSpace(20.w),
+                        SvgPicture.asset(
+                          SVGUtil.PYLON,
+                          fit: BoxFit.cover,
+                        ),
+                      ],
+                    ),
+                    VerticalSpace(5.h),
+                    Text(
+                      "stake_your_digital_claim".tr(),
+                      style: TextStyle(
+                          fontSize: 26.sp,
+                          fontFamily: kUniversalFontFamily,
+                          color: kBlack,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    VerticalSpace(100.h),
+                    buildBackupButton(
+                        title: "create_wallet".tr(),
+                        bgColor: kCreateWalletButtonColorDark,
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed(RouteUtil.ROUTE_CREATE_WALLET);
+                        }),
+                    VerticalSpace(25.h),
+                    buildBackupButton(
+                        title: "restore_wallet".tr(),
+                        bgColor: kButtonColor,
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed(RouteUtil.ROUTE_RESTORE_WALLET);
+                        }),
+                    VerticalSpace(25.h),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
-    ),
     );
   }
 
-  Widget buildBackupButton({required String title, required Color bgColor, required VoidCallback onPressed}) {
+  Widget buildBackupButton(
+      {required String title,
+      required Color bgColor,
+      required VoidCallback onPressed}) {
     return InkWell(
       onTap: () {
         onPressed.call();
@@ -113,7 +126,10 @@ class __PresentingOnboardPageState extends State<PresentingOnboardPage> {
             child: Center(
                 child: Text(
               title,
-              style: TextStyle(color: bgColor == kButtonColor ? kBlue : kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                  color: bgColor == kButtonColor ? kBlue : kWhite,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             )),
           ),

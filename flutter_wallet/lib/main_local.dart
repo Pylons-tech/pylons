@@ -7,7 +7,6 @@ import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart'
     as di;
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
@@ -15,8 +14,6 @@ Future<void> main() async {
   // Read the values from .env file
   await dotenv.load(fileName: "env/.local_env");
   await di.init();
-
-
 
   runApp(
     EasyLocalization(

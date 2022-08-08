@@ -7,7 +7,11 @@ class PylonsBlueButtonLoading extends StatelessWidget {
   final bool enabled;
 
   const PylonsBlueButtonLoading(
-      {Key? key, required this.onTap, this.text = "", required this.loader, this.enabled = true})
+      {Key? key,
+      required this.onTap,
+      this.text = "",
+      required this.loader,
+      this.enabled = true})
       : super(key: key);
 
   @override
@@ -16,7 +20,7 @@ class PylonsBlueButtonLoading extends StatelessWidget {
         valueListenable: loader,
         builder: (context, loading, child) {
           return ElevatedButton(
-            onPressed: isUserAllowedToTap(loading: loading) ?  onTap : null,
+            onPressed: isUserAllowedToTap(loading: loading) ? onTap : null,
             child: SizedBox(
               width: double.infinity,
               child: Row(
@@ -45,5 +49,5 @@ class PylonsBlueButtonLoading extends StatelessWidget {
         });
   }
 
-  bool isUserAllowedToTap({required bool loading}) => enabled &&  !loading ;
+  bool isUserAllowedToTap({required bool loading}) => enabled && !loading;
 }

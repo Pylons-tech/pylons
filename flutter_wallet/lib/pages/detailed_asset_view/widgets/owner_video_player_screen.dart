@@ -52,13 +52,16 @@ class _OwnerVideoPlayerScreenState extends State<OwnerVideoPlayerScreen> {
                   : Center(
                       child: viewModel.videoPlayerController.value.isInitialized
                           ? AspectRatio(
-                              aspectRatio: viewModel.videoPlayerController.value.aspectRatio,
-                              child: VideoPlayer(viewModel.videoPlayerController),
+                              aspectRatio: viewModel
+                                  .videoPlayerController.value.aspectRatio,
+                              child:
+                                  VideoPlayer(viewModel.videoPlayerController),
                             )
                           : const Center(
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(kWhite),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(kWhite),
                               ),
                             ),
                     ),

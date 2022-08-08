@@ -25,20 +25,36 @@ class TransactionHistory {
     required this.transactionTypeEnum,
   });
 
-  factory TransactionHistory.fromJson(Map<String, dynamic> json) => TransactionHistory(
-      txID: json[kTxId] as String,
-      address: json[kAddressKey] as String,
-      amount: json[kAmountKey].toString() != "0" ? json[kAmountKey] as String : "0$kPylonDenom",
-      cookbookId: json.containsKey(kCookbookIdKey) ? json[kCookbookIdKey] as String : "",
-      recipeId: json.containsKey(kRecipeIdKey) ? json[kRecipeIdKey] as String : "",
-      createdAt: json[kCreatedAtKey] as int,
-      transactionType: json[kTypeKey] as String,
-      transactionTypeEnum: TransactionType.values.byName(json[kTypeKey] as String),
-      ibcCoin: json[kAmountKey].toString() != "0" ? splitNumberAndAlpha(json[kAmountKey] as String)[1].toIBCCoinsEnum() : IBCCoins.upylon);
+  factory TransactionHistory.fromJson(Map<String, dynamic> json) =>
+      TransactionHistory(
+          txID: json[kTxId] as String,
+          address: json[kAddressKey] as String,
+          amount: json[kAmountKey].toString() != "0"
+              ? json[kAmountKey] as String
+              : "0$kPylonDenom",
+          cookbookId: json.containsKey(kCookbookIdKey)
+              ? json[kCookbookIdKey] as String
+              : "",
+          recipeId: json.containsKey(kRecipeIdKey)
+              ? json[kRecipeIdKey] as String
+              : "",
+          createdAt: json[kCreatedAtKey] as int,
+          transactionType: json[kTypeKey] as String,
+          transactionTypeEnum:
+              TransactionType.values.byName(json[kTypeKey] as String),
+          ibcCoin: json[kAmountKey].toString() != "0"
+              ? splitNumberAndAlpha(json[kAmountKey] as String)[1]
+                  .toIBCCoinsEnum()
+              : IBCCoins.upylon);
 
   static bool isFreeDrop(String amount) => amount == "0";
 
-  static List<String> splitNumberAndAlpha(String input) => <String>[...RegExp(r'\d+|\D+').allMatches(input).map((match) => match[0]!).map((string) => string)];
+  static List<String> splitNumberAndAlpha(String input) => <String>[
+        ...RegExp(r'\d+|\D+')
+            .allMatches(input)
+            .map((match) => match[0]!)
+            .map((string) => string)
+      ];
 }
 
 enum TransactionType { SEND, RECEIVE, NFTBUY, NFTSELL }

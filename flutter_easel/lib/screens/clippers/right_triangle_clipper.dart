@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+
 enum Orientation {
   orientationSE,
   orientationNE,
   orientationNW,
   orientationSW,
 }
+
 class RightTriangleClipper extends CustomClipper<Path> {
   final Orientation orientation;
 

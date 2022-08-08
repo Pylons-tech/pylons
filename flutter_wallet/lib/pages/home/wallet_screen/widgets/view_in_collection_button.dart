@@ -8,7 +8,9 @@ class ViewInCollectionButton extends StatelessWidget {
   final String text;
   final bool enabled;
 
-  const ViewInCollectionButton({Key? key, required this.onTap, this.text = "", this.enabled = true}) : super(key: key);
+  const ViewInCollectionButton(
+      {Key? key, required this.onTap, this.text = "", this.enabled = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,9 @@ class ViewInCollectionButton extends StatelessWidget {
           child: Center(
               child: Text(
             text,
-            style: TextStyle(color: enabled ? kWhite : kDarkGrey.withOpacity(0.5), fontSize: 16.sp),
+            style: TextStyle(
+                color: enabled ? kWhite : kDarkGrey.withOpacity(0.5),
+                fontSize: 16.sp),
             textAlign: TextAlign.center,
           )),
         ),

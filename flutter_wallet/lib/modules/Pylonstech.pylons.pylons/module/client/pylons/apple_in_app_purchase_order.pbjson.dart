@@ -8,17 +8,20 @@
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
+
 @$core.Deprecated('Use appleInAppPurchaseOrderDescriptor instead')
-const AppleInAppPurchaseOrder$json = const {
+const AppleInAppPurchaseOrder$json = {
   '1': 'AppleInAppPurchaseOrder',
-  '2': const [
-    const {'1': 'quantity', '3': 1, '4': 1, '5': 9, '10': 'quantity'},
-    const {'1': 'product_id', '3': 2, '4': 1, '5': 9, '10': 'productId'},
-    const {'1': 'purchase_id', '3': 3, '4': 1, '5': 9, '10': 'purchaseId'},
-    const {'1': 'purchase_date', '3': 4, '4': 1, '5': 9, '10': 'purchaseDate'},
-    const {'1': 'creator', '3': 5, '4': 1, '5': 9, '10': 'creator'},
+  '2': [
+    {'1': 'quantity', '3': 1, '4': 1, '5': 9, '10': 'quantity'},
+    {'1': 'product_id', '3': 2, '4': 1, '5': 9, '10': 'productId'},
+    {'1': 'purchase_id', '3': 3, '4': 1, '5': 9, '10': 'purchaseId'},
+    {'1': 'purchase_date', '3': 4, '4': 1, '5': 9, '10': 'purchaseDate'},
+    {'1': 'creator', '3': 5, '4': 1, '5': 9, '10': 'creator'},
   ],
 };
 
 /// Descriptor for `AppleInAppPurchaseOrder`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List appleInAppPurchaseOrderDescriptor = $convert.base64Decode('ChdBcHBsZUluQXBwUHVyY2hhc2VPcmRlchIaCghxdWFudGl0eRgBIAEoCVIIcXVhbnRpdHkSHQoKcHJvZHVjdF9pZBgCIAEoCVIJcHJvZHVjdElkEh8KC3B1cmNoYXNlX2lkGAMgASgJUgpwdXJjaGFzZUlkEiMKDXB1cmNoYXNlX2RhdGUYBCABKAlSDHB1cmNoYXNlRGF0ZRIYCgdjcmVhdG9yGAUgASgJUgdjcmVhdG9y');
+final $typed_data.Uint8List appleInAppPurchaseOrderDescriptor =
+    $convert.base64Decode(
+        'ChdBcHBsZUluQXBwUHVyY2hhc2VPcmRlchIaCghxdWFudGl0eRgBIAEoCVIIcXVhbnRpdHkSHQoKcHJvZHVjdF9pZBgCIAEoCVIJcHJvZHVjdElkEh8KC3B1cmNoYXNlX2lkGAMgASgJUgpwdXJjaGFzZUlkEiMKDXB1cmNoYXNlX2RhdGUYBCABKAlSDHB1cmNoYXNlRGF0ZRIYCgdjcmVhdG9yGAUgASgJUgdjcmVhdG9y');

@@ -13,8 +13,7 @@ class CoinInputs {
     if (json['coins'] != null) {
       coins = [];
 
-
-      for(final coin in json['coins']){
+      for (final coin in json['coins']) {
         coins.add(Coins.fromJson(coin));
       }
     }

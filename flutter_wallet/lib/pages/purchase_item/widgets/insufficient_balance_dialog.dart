@@ -1,5 +1,3 @@
-
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,9 +9,17 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-TextStyle kHeadingTextStyle = TextStyle(fontSize: isTablet ? 23.sp : 27.sp, fontFamily: 'UniversalSans', color: kWhite, fontWeight: FontWeight.w700);
+TextStyle kHeadingTextStyle = TextStyle(
+    fontSize: isTablet ? 23.sp : 27.sp,
+    fontFamily: 'UniversalSans',
+    color: kWhite,
+    fontWeight: FontWeight.w700);
 
-TextStyle kMsgTextStyle = TextStyle(fontSize: isTablet ? 12.sp : 14.sp, fontFamily: 'UniversalSans', color: kWhite, fontWeight: FontWeight.w700);
+TextStyle kMsgTextStyle = TextStyle(
+    fontSize: isTablet ? 12.sp : 14.sp,
+    fontFamily: 'UniversalSans',
+    color: kWhite,
+    fontWeight: FontWeight.w700);
 
 class InsufficientBalanceDialog {
   final BuildContext context;
@@ -28,13 +34,15 @@ class InsufficientBalanceDialog {
         builder: (_) {
           return Dialog(
             elevation: 0,
-            insetPadding: EdgeInsets.symmetric(horizontal: isTablet ? 54.w : 15.w),
+            insetPadding:
+                EdgeInsets.symmetric(horizontal: isTablet ? 54.w : 15.w),
             backgroundColor: Colors.transparent,
             child: ClipPath(
               clipper: DialogClipper(),
               child: Container(
                 color: kDarkRed.withOpacity(0.8),
-                padding: EdgeInsets.symmetric(horizontal: isTablet ? 32.w : 36.w),
+                padding:
+                    EdgeInsets.symmetric(horizontal: isTablet ? 32.w : 36.w),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -82,14 +90,18 @@ class InsufficientBalanceDialog {
                                   title: "add_pylons".tr(),
                                   bgColor: kTextBlackColor,
                                   onPressed: () async {
-                                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_ADD_PYLON);
+                                    Navigator.of(context)
+                                        .pushNamed(RouteUtil.ROUTE_ADD_PYLON);
                                   })),
                           Expanded(
                             child: TextButton(
                                 onPressed: Navigator.of(context).pop,
                                 child: Text(
                                   "cancel".tr(),
-                                  style: TextStyle(color: kWhite, fontSize: 15.sp, fontWeight: FontWeight.w300),
+                                  style: TextStyle(
+                                      color: kWhite,
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.w300),
                                   textAlign: TextAlign.center,
                                 )),
                           ),
@@ -109,7 +121,10 @@ class InsufficientBalanceDialog {
         });
   }
 
-  Widget buildButton({required String title, required Color bgColor, required Function onPressed}) {
+  Widget buildButton(
+      {required String title,
+      required Color bgColor,
+      required Function onPressed}) {
     return InkWell(
       onTap: () => onPressed(),
       child: CustomPaint(
@@ -123,7 +138,10 @@ class InsufficientBalanceDialog {
             child: Center(
                 child: Text(
               title,
-              style: TextStyle(color: kWhite, fontSize: isTablet ? 14.sp : 16.sp, fontWeight: FontWeight.w700),
+              style: TextStyle(
+                  color: kWhite,
+                  fontSize: isTablet ? 14.sp : 16.sp,
+                  fontWeight: FontWeight.w700),
               textAlign: TextAlign.center,
             )),
           ),

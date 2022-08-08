@@ -10,10 +10,12 @@ import 'package:video_player/video_player.dart';
 class PurchaseVideoPlayerScreen extends StatefulWidget {
   final NFT nft;
 
-  const PurchaseVideoPlayerScreen({Key? key, required this.nft}) : super(key: key);
+  const PurchaseVideoPlayerScreen({Key? key, required this.nft})
+      : super(key: key);
 
   @override
-  State<PurchaseVideoPlayerScreen> createState() => _PurchaseVideoPlayerScreenState();
+  State<PurchaseVideoPlayerScreen> createState() =>
+      _PurchaseVideoPlayerScreenState();
 }
 
 class _PurchaseVideoPlayerScreenState extends State<PurchaseVideoPlayerScreen> {
@@ -45,13 +47,14 @@ class _PurchaseVideoPlayerScreenState extends State<PurchaseVideoPlayerScreen> {
                     padding: const EdgeInsets.all(10),
                     child: Text(
                       "video_player_network_error".tr(),
-                      style:  TextStyle(fontSize: 18.sp, color: kWhite),
+                      style: TextStyle(fontSize: 18.sp, color: kWhite),
                     ),
                   ))
                 : Center(
                     child: viewModel.videoPlayerController.value.isInitialized
                         ? AspectRatio(
-                            aspectRatio: viewModel.videoPlayerController.value.aspectRatio,
+                            aspectRatio: viewModel
+                                .videoPlayerController.value.aspectRatio,
                             child: VideoPlayer(viewModel.videoPlayerController),
                           )
                         : const Center(

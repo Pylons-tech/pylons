@@ -19,16 +19,23 @@ class _OwnerAudioWidgetState extends State<OwnerAudioWidget> {
   Widget build(BuildContext context) {
     return Consumer<OwnerViewViewModel>(builder: (context, viewModel, _) {
       return Row(
-        crossAxisAlignment: viewModel.collapsed ? CrossAxisAlignment.center : CrossAxisAlignment.end,
+        crossAxisAlignment: viewModel.collapsed
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.end,
         children: [
           Padding(
-            padding: EdgeInsets.only(right: 10.w, bottom: 10.h, top: 10.h, left: 5.w),
+            padding: EdgeInsets.only(
+                right: 10.w, bottom: 10.h, top: 10.h, left: 5.w),
             child: ValueListenableBuilder<ButtonState>(
               valueListenable: viewModel.buttonNotifier,
               builder: (_, value, __) {
                 switch (value) {
                   case ButtonState.loading:
-                    return SizedBox(height: 22.h, width: 22.h, child: CircularProgressIndicator(strokeWidth: 2.w, color: kWhite));
+                    return SizedBox(
+                        height: 22.h,
+                        width: 22.h,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2.w, color: kWhite));
                   case ButtonState.paused:
                     return InkWell(
                       onTap: viewModel.playAudio,
@@ -57,7 +64,8 @@ class _OwnerAudioWidgetState extends State<OwnerAudioWidget> {
               valueListenable: viewModel.audioProgressNotifier,
               builder: (_, value, __) {
                 return Padding(
-                  padding: EdgeInsets.only(bottom: viewModel.collapsed ? 0 : 3.h, right: 10.w),
+                  padding: EdgeInsets.only(
+                      bottom: viewModel.collapsed ? 0 : 3.h, right: 10.w),
                   child: ProgressBar(
                     progressBarColor: kWhite,
                     thumbColor: kWhite,
@@ -66,8 +74,13 @@ class _OwnerAudioWidgetState extends State<OwnerAudioWidget> {
                     bufferedBarColor: kWhite,
                     buffered: value.buffered,
                     total: value.total,
-                    timeLabelLocation: viewModel.collapsed ? TimeLabelLocation.none : TimeLabelLocation.below,
-                    timeLabelTextStyle: TextStyle(color: kWhite, fontWeight: FontWeight.w800, fontSize: 9.sp),
+                    timeLabelLocation: viewModel.collapsed
+                        ? TimeLabelLocation.none
+                        : TimeLabelLocation.below,
+                    timeLabelTextStyle: TextStyle(
+                        color: kWhite,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 9.sp),
                     thumbRadius: 6.h,
                     timeLabelPadding: 2.h,
                     onSeek: viewModel.seekAudio,

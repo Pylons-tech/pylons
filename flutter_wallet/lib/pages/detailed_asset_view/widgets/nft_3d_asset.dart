@@ -6,7 +6,12 @@ class Nft3dWidget extends StatefulWidget {
   final bool cameraControls;
   final Color backgroundColor;
 
-  const Nft3dWidget({Key? key, required this.backgroundColor, required this.url, required this.cameraControls}) : super(key: key);
+  const Nft3dWidget(
+      {Key? key,
+      required this.backgroundColor,
+      required this.url,
+      required this.cameraControls})
+      : super(key: key);
 
   @override
   _Nft3dWidgetState createState() => _Nft3dWidgetState();

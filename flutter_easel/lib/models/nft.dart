@@ -83,34 +83,97 @@ class NFT extends Equatable {
   });
 
   factory NFT.fromRecipe(Recipe recipe) {
-    final royalties = recipe.entries.itemOutputs.firstOrNull?.tradePercentage.fromBigInt().toInt().toString();
+    final royalties = recipe.entries.itemOutputs.firstOrNull?.tradePercentage
+        .fromBigInt()
+        .toInt()
+        .toString();
     return NFT(
       id: null,
       type: NftType.TYPE_RECIPE.name,
       recipeID: recipe.id,
       cookbookID: recipe.cookbookId,
-      name: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kName, orElse: () => StringParam()).value ?? "",
-      url: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kNFTURL, orElse: () => StringParam()).value ?? "",
-      thumbnailUrl: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl, orElse: () => StringParam()).value ?? "",
-      description: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kDescription, orElse: () => StringParam()).value ?? "",
-      appType: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kAppType, orElse: () => StringParam()).value ?? "",
-      creator: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kCreator, orElse: () => StringParam()).value ?? "",
-      cid: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kCID, orElse: () => StringParam()).value ?? "",
-      width: recipe.entries.itemOutputs.firstOrNull?.longs.firstWhere((longKeyValue) => longKeyValue.key == kWidth, orElse: () => LongParam()).weightRanges.firstOrNull?.upper.toString() ?? "0",
-      height: recipe.entries.itemOutputs.firstOrNull?.longs.firstWhere((longKeyValue) => longKeyValue.key == kHeight, orElse: () => LongParam()).weightRanges.firstOrNull?.upper.toString() ?? "0",
-      amountMinted: int.parse(recipe.entries.itemOutputs.firstOrNull?.amountMinted.toString() ?? "0"),
-      quantity: recipe.entries.itemOutputs.firstOrNull?.quantity.toString() ?? "0",
+      name: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kName,
+                  orElse: () => StringParam())
+              .value ??
+          "",
+      url: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kNFTURL,
+                  orElse: () => StringParam())
+              .value ??
+          "",
+      thumbnailUrl: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl,
+                  orElse: () => StringParam())
+              .value ??
+          "",
+      description: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kDescription,
+                  orElse: () => StringParam())
+              .value ??
+          "",
+      appType: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kAppType,
+                  orElse: () => StringParam())
+              .value ??
+          "",
+      creator: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kCreator,
+                  orElse: () => StringParam())
+              .value ??
+          "",
+      cid: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kCID,
+                  orElse: () => StringParam())
+              .value ??
+          "",
+      width: recipe.entries.itemOutputs.firstOrNull?.longs
+              .firstWhere((longKeyValue) => longKeyValue.key == kWidth,
+                  orElse: () => LongParam())
+              .weightRanges
+              .firstOrNull
+              ?.upper
+              .toString() ??
+          "0",
+      height: recipe.entries.itemOutputs.firstOrNull?.longs
+              .firstWhere((longKeyValue) => longKeyValue.key == kHeight,
+                  orElse: () => LongParam())
+              .weightRanges
+              .firstOrNull
+              ?.upper
+              .toString() ??
+          "0",
+      amountMinted: int.parse(
+          recipe.entries.itemOutputs.firstOrNull?.amountMinted.toString() ??
+              "0"),
+      quantity:
+          recipe.entries.itemOutputs.firstOrNull?.quantity.toString() ?? "0",
       tradePercentage: royalties == null ? kNone : "$royalties%",
       price: recipe.coinInputs.firstOrNull?.coins.firstOrNull?.amount ?? "0",
       denom: recipe.coinInputs.firstOrNull?.coins.firstOrNull?.denom ?? "",
-      ibcCoins: recipe.coinInputs.firstOrNull?.coins.firstOrNull?.denom ?? IBCCoins.upylon.name,
-      assetType: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kNftFormat, orElse: () => StringParam()).value ?? AssetType.Image.name,
-      duration:
-          recipe.entries.itemOutputs.firstOrNull?.longs.firstWhere((longKeyValue) => longKeyValue.key == kDuration, orElse: () => LongParam()).weightRanges.firstOrNull?.upper.toInt().toSeconds() ??
-              "0",
+      ibcCoins: recipe.coinInputs.firstOrNull?.coins.firstOrNull?.denom ??
+          IBCCoins.upylon.name,
+      assetType: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kNftFormat,
+                  orElse: () => StringParam())
+              .value ??
+          AssetType.Image.name,
+      duration: recipe.entries.itemOutputs.firstOrNull?.longs
+              .firstWhere((longKeyValue) => longKeyValue.key == kDuration,
+                  orElse: () => LongParam())
+              .weightRanges
+              .firstOrNull
+              ?.upper
+              .toInt()
+              .toSeconds() ??
+          "0",
       step: "",
       isFreeDrop: false,
-      hashtags: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kHashtags, orElse: () => StringParam()).value ?? "",
+      hashtags: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kHashtags,
+                  orElse: () => StringParam())
+              .value ??
+          "",
       isEnabled: recipe.enabled,
     );
   }

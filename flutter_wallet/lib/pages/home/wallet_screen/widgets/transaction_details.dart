@@ -18,7 +18,11 @@ import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-TextStyle _titleTextStyle = TextStyle(color: kBlack, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.bold, fontSize: 20.sp);
+TextStyle _titleTextStyle = TextStyle(
+    color: kBlack,
+    fontFamily: kUniversalFontFamily,
+    fontWeight: FontWeight.bold,
+    fontSize: 20.sp);
 
 class TransactionDetailsScreen extends StatelessWidget {
   const TransactionDetailsScreen({Key? key}) : super(key: key);
@@ -51,7 +55,8 @@ class TransactionDetailsScreen extends StatelessWidget {
           child: Container(
             width: 35.w,
             height: 35.h,
-            decoration: BoxDecoration(color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
+            decoration: BoxDecoration(
+                color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
             child: Image.asset(
               ImageUtil.AUDIO_ICON,
               width: 35.w,
@@ -64,7 +69,11 @@ class TransactionDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildNftPreviewWidget({required AssetType nftType, required String nftName, required String nftUrl, required String thumbnailUrl}) {
+  Widget buildNftPreviewWidget(
+      {required AssetType nftType,
+      required String nftName,
+      required String nftUrl,
+      required String thumbnailUrl}) {
     return PreviewNFTGrid(
       assetType: nftType,
       on3dNFT: (BuildContext context) => Container(
@@ -78,11 +87,19 @@ class TransactionDetailsScreen extends StatelessWidget {
           ),
         ),
       ),
-      onPdfNFT: (BuildContext context) => PdfPlaceHolder(nftUrl: nftUrl, nftName: nftName, thumbnailUrl: thumbnailUrl),
-      onVideoNFT: (BuildContext context) => VideoPlaceHolder(nftUrl: nftUrl, nftName: nftName, thumbnailUrl: thumbnailUrl),
-      onImageNFT: (BuildContext context) =>
-          CachedNetworkImage(placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()), imageUrl: nftUrl, fit: BoxFit.cover),
-      onAudioNFT: (BuildContext context) => thumbnailUrl.isEmpty ? Image.asset(ImageUtil.AUDIO_BACKGROUND, fit: BoxFit.cover) : getAudioThumbnailFromUrl(thumbnailUrl: thumbnailUrl),
+      onPdfNFT: (BuildContext context) => PdfPlaceHolder(
+          nftUrl: nftUrl, nftName: nftName, thumbnailUrl: thumbnailUrl),
+      onVideoNFT: (BuildContext context) => VideoPlaceHolder(
+          nftUrl: nftUrl, nftName: nftName, thumbnailUrl: thumbnailUrl),
+      onImageNFT: (BuildContext context) => CachedNetworkImage(
+          placeholder: (context, url) => Shimmer(
+              color: PylonsAppTheme.cardBackground,
+              child: const SizedBox.expand()),
+          imageUrl: nftUrl,
+          fit: BoxFit.cover),
+      onAudioNFT: (BuildContext context) => thumbnailUrl.isEmpty
+          ? Image.asset(ImageUtil.AUDIO_BACKGROUND, fit: BoxFit.cover)
+          : getAudioThumbnailFromUrl(thumbnailUrl: thumbnailUrl),
     );
   }
 
@@ -122,7 +139,13 @@ class TransactionDetailsScreen extends StatelessWidget {
             Expanded(
               child: Text(
                 "${getTxTypeFlag(txType: args.transactionEnum) ? "+" : "-"} ${args.price}",
-                style: TextStyle(color: getTxTypeFlag(txType: args.transactionEnum) ? kBlack : kDarkRed, fontFamily: kUniversalFontFamily, fontSize: 15.sp, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: getTxTypeFlag(txType: args.transactionEnum)
+                        ? kBlack
+                        : kDarkRed,
+                    fontFamily: kUniversalFontFamily,
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.bold),
               ),
             )
           ],
@@ -131,7 +154,8 @@ class TransactionDetailsScreen extends StatelessWidget {
     );
   }
 
-  Map<String, String> transactionDetailBodyMap({required TxDetailArguments txArgs}) {
+  Map<String, String> transactionDetailBodyMap(
+      {required TxDetailArguments txArgs}) {
     return {
       "nft_title".tr(): txArgs.recipe.name,
       "creator".tr(): txArgs.creator,
@@ -147,7 +171,9 @@ class TransactionDetailsScreen extends StatelessWidget {
   Padding buildTxDetailBody({required TxDetailArguments txArgs}) {
     final txDetailMap = transactionDetailBodyMap(txArgs: txArgs);
 
-    final detailList = txDetailMap.entries.map((element) => buildRow(key: element.key, value: element.value)).toList();
+    final detailList = txDetailMap.entries
+        .map((element) => buildRow(key: element.key, value: element.value))
+        .toList();
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 30.h),
@@ -166,9 +192,15 @@ class TransactionDetailsScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(key, style: _titleTextStyle.copyWith(fontSize: 13.sp, fontWeight: FontWeight.w600)),
+        Text(key,
+            style: _titleTextStyle.copyWith(
+                fontSize: 13.sp, fontWeight: FontWeight.w600)),
         SizedBox(height: 20.h),
-        Text(value.trimString(stringTrimConstantMax), style: _titleTextStyle.copyWith(fontSize: 13.sp, fontWeight: FontWeight.bold, color: getColor(key))),
+        Text(value.trimString(stringTrimConstantMax),
+            style: _titleTextStyle.copyWith(
+                fontSize: 13.sp,
+                fontWeight: FontWeight.bold,
+                color: getColor(key))),
       ],
     );
   }
@@ -179,7 +211,8 @@ class TransactionDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments! as TxDetailArguments;
+    final args =
+        ModalRoute.of(context)!.settings.arguments! as TxDetailArguments;
 
     return Scaffold(
       body: Container(

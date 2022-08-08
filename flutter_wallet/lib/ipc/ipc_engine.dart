@@ -70,7 +70,8 @@ class IPCEngine {
 
     final initialLink = await getInitialLink();
 
-    final PendingDynamicLinkData? firebaseInitialLink = await FirebaseDynamicLinks.instance.getInitialLink();
+    final PendingDynamicLinkData? firebaseInitialLink =
+        await FirebaseDynamicLinks.instance.getInitialLink();
 
     log('$firebaseInitialLink', name: '[IPCEngine : firebaseIntialLink]');
     if (firebaseInitialLink != null) {
@@ -101,7 +102,8 @@ class IPCEngine {
   /// Input]  [msg] is the string received from the wallet
   /// Output : [List] contains the decoded response
   String encodeMessage(List<String> msg) {
-    final encodedMessageWithComma = msg.map((element) => base64Url.encode(utf8.encode(element))).join(',');
+    final encodedMessageWithComma =
+        msg.map((element) => base64Url.encode(utf8.encode(element))).join(',');
     return base64Url.encode(utf8.encode(encodedMessageWithComma));
   }
 
@@ -110,7 +112,10 @@ class IPCEngine {
   /// Output : [List] contains the decoded response
   List<String> decodeMessage(String msg) {
     final decoded = utf8.decode(base64Url.decode(msg));
-    return decoded.split(',').map((element) => utf8.decode(base64Url.decode(element))).toList();
+    return decoded
+        .split(',')
+        .map((element) => utf8.decode(base64Url.decode(element)))
+        .toList();
   }
 
   /// This method handles the link that the wallet received from the 3rd Party apps
@@ -135,10 +140,16 @@ class IPCEngine {
   Future<void> _handleEaselLink(String link) async {
     final queryParameters = Uri.parse(link).queryParameters;
 
-    final recipeId = (queryParameters.containsKey(kRecipeIdKey)) ? queryParameters[kRecipeIdKey] ?? '' : "";
-    final cookbookId = (queryParameters.containsKey(kCookbookIdKey)) ? queryParameters[kCookbookIdKey] ?? "" : "";
+    final recipeId = (queryParameters.containsKey(kRecipeIdKey))
+        ? queryParameters[kRecipeIdKey] ?? ''
+        : "";
+    final cookbookId = (queryParameters.containsKey(kCookbookIdKey))
+        ? queryParameters[kCookbookIdKey] ?? ""
+        : "";
     final currentWallets = walletsStore.getWallets().value;
-    final address = (queryParameters.containsKey(kAddress)) ? queryParameters[kAddress] ?? "" : "";
+    final address = (queryParameters.containsKey(kAddress))
+        ? queryParameters[kAddress] ?? ""
+        : "";
 
     if (currentWallets.isEmpty) {
       "create_an_account_first".tr().show();
@@ -147,7 +158,8 @@ class IPCEngine {
       return;
     }
 
-    final nullableNFT = await getNFtFromRecipe(cookbookId: cookbookId, recipeId: recipeId);
+    final nullableNFT =
+        await getNFtFromRecipe(cookbookId: cookbookId, recipeId: recipeId);
 
     if (nullableNFT == null) {
       return;
@@ -176,12 +188,18 @@ class IPCEngine {
     walletsStore.setStateUpdatedFlag(flag: true);
   }
 
-  bool isOwnerIsViewing(NFT nullableNFT, List<AccountPublicInfo> currentWallets) => nullableNFT.ownerAddress == currentWallets.last.publicAddress;
+  bool isOwnerIsViewing(
+          NFT nullableNFT, List<AccountPublicInfo> currentWallets) =>
+      nullableNFT.ownerAddress == currentWallets.last.publicAddress;
 
   Future<void> _handleNFTTradeLink(String link) async {
     final queryParameters = Uri.parse(link).queryParameters;
-    final tradeId = queryParameters.containsKey(kTradeIdKey) ? queryParameters[kTradeIdKey] ?? "" : "0";
-    final address = queryParameters.containsKey(kAddress) ? queryParameters[kAddress] ?? "" : "";
+    final tradeId = queryParameters.containsKey(kTradeIdKey)
+        ? queryParameters[kTradeIdKey] ?? ""
+        : "0";
+    final address = queryParameters.containsKey(kAddress)
+        ? queryParameters[kAddress] ?? ""
+        : "";
     final currentWallets = walletsStore.getWallets().value;
     if (currentWallets.isEmpty) {
       "create_an_account_first".tr().show();
@@ -192,7 +210,8 @@ class IPCEngine {
 
     final showLoader = Loading()..showLoading();
 
-    final recipeResult = await walletsStore.getTradeByID(Int64.parseInt(tradeId));
+    final recipeResult =
+        await walletsStore.getTradeByID(Int64.parseInt(tradeId));
 
     if (recipeResult == null) {
       "nft_does_not_exists".tr().show();
@@ -228,7 +247,8 @@ class IPCEngine {
     showLoader.dismiss();
 
     if (recipeResult == null) {
-      ScaffoldMessenger.of(navigatorKey.currentState!.overlay!.context).showSnackBar(
+      ScaffoldMessenger.of(navigatorKey.currentState!.overlay!.context)
+          .showSnackBar(
         SnackBar(
           content: Text("nft_does_not_exists".tr()),
         ),
@@ -304,7 +324,12 @@ class IPCEngine {
       return;
     }
 
-    biometricAuthenticationResponse.swap().toOption().toNullable()!.message.show();
+    biometricAuthenticationResponse
+        .swap()
+        .toOption()
+        .toNullable()!
+        .message
+        .show();
   }
 
   Future<void> showDialogForConfirmation(SdkIpcMessage sdkIPCMessage) async {
@@ -324,22 +349,33 @@ class IPCEngine {
   /// This method is called when the user cancels the transaction
   /// Input: [sdkIPCMessage] the transaction that the user cancels
   Future<void> onUserCancelled(SdkIpcMessage sdkIPCMessage) async {
-    final cancelledResponse = SdkIpcResponse.failure(sender: sdkIPCMessage.sender, error: 'user_declined_request'.tr(), errorCode: HandlerFactory.ERR_USER_DECLINED);
-    await checkAndDispatchUniLinkIfNeeded(handlerMessage: cancelledResponse, responseSendingNeeded: true);
+    final cancelledResponse = SdkIpcResponse.failure(
+        sender: sdkIPCMessage.sender,
+        error: 'user_declined_request'.tr(),
+        errorCode: HandlerFactory.ERR_USER_DECLINED);
+    await checkAndDispatchUniLinkIfNeeded(
+        handlerMessage: cancelledResponse, responseSendingNeeded: true);
   }
 
   /// This method is called when the user approves the transaction
   /// Input: [SdkIpcMessage] the transaction that the user approves.
   Future<void> onUserApproval(SdkIpcMessage sdkIPCMessage) async {
-    final handlerMessage = await GetIt.I.get<HandlerFactory>().getHandler(sdkIPCMessage).handle();
-    await checkAndDispatchUniLinkIfNeeded(handlerMessage: handlerMessage, responseSendingNeeded: sdkIPCMessage.requestResponse);
+    final handlerMessage =
+        await GetIt.I.get<HandlerFactory>().getHandler(sdkIPCMessage).handle();
+    await checkAndDispatchUniLinkIfNeeded(
+        handlerMessage: handlerMessage,
+        responseSendingNeeded: sdkIPCMessage.requestResponse);
   }
 
-  bool shouldNotDoBiometric(Either<Failure, bool> biometricResponse) => !biometricResponse.getOrElse(() => false);
+  bool shouldNotDoBiometric(Either<Failure, bool> biometricResponse) =>
+      !biometricResponse.getOrElse(() => false);
 
-  Future<void> checkAndDispatchUniLinkIfNeeded({required SdkIpcResponse handlerMessage, required bool responseSendingNeeded}) async {
+  Future<void> checkAndDispatchUniLinkIfNeeded(
+      {required SdkIpcResponse handlerMessage,
+      required bool responseSendingNeeded}) async {
     if (responseSendingNeeded) {
-      await dispatchUniLink(handlerMessage.createMessageLink(isAndroid: Platform.isAndroid));
+      await dispatchUniLink(
+          handlerMessage.createMessageLink(isAndroid: Platform.isAndroid));
     }
   }
 
@@ -351,7 +387,8 @@ class IPCEngine {
   /// This method disconnect any new signal. If another signal is already in process
   /// Input : [sender] The sender of the signal
   /// Output : [key] The signal kind against which the signal is sent
-  Future<void> disconnectThisSignal({required String sender, required String key}) async {
+  Future<void> disconnectThisSignal(
+      {required String sender, required String key}) async {
     final encodedMessage = encodeMessage([key, kIpcEncodeMessage]);
     await dispatchUniLink('pylons://$sender/$encodedMessage');
   }
@@ -359,17 +396,23 @@ class IPCEngine {
   ///This method checks if the incoming link is generated from Easel
   bool _isEaselUniLink(String link) {
     final queryParam = Uri.parse(link).queryParameters;
-    return queryParam.containsKey(kRecipeIdKey) && queryParam.containsKey(kCookbookIdKey);
+    return queryParam.containsKey(kRecipeIdKey) &&
+        queryParam.containsKey(kCookbookIdKey);
   }
 
   bool _isNFTViewUniLink(String link) {
     final queryParam = Uri.parse(link).queryParameters;
-    return queryParam.containsKey(kActionKey) && queryParam[kActionKey] == kNftViewKey && queryParam.containsKey(kItemIdKey) && queryParam.containsKey(kCookbookIdKey);
+    return queryParam.containsKey(kActionKey) &&
+        queryParam[kActionKey] == kNftViewKey &&
+        queryParam.containsKey(kItemIdKey) &&
+        queryParam.containsKey(kCookbookIdKey);
   }
 
   bool _isNFTTradeUniLink(String link) {
     final queryParam = Uri.parse(link).queryParameters;
-    return queryParam.containsKey(kActionKey) && queryParam[kActionKey] == kNftTradeKey && queryParam.containsKey(kTradeIdKey);
+    return queryParam.containsKey(kActionKey) &&
+        queryParam[kActionKey] == kNftTradeKey &&
+        queryParam.containsKey(kTradeIdKey);
   }
 
   Future<String> checkAndUnWrapFirebaseLink(String link) async {
@@ -383,7 +426,8 @@ class IPCEngine {
       return uri.queryParameters[kLinkKey] ?? '';
     }
 
-    final pendingDynamicLink = await FirebaseDynamicLinks.instance.getDynamicLink(Uri.parse(link));
+    final pendingDynamicLink =
+        await FirebaseDynamicLinks.instance.getDynamicLink(Uri.parse(link));
 
     return pendingDynamicLink?.link.toString() ?? "";
   }
@@ -391,7 +435,8 @@ class IPCEngine {
   /// This method get the NFT based on the cookbookId and the recipeId
   /// Input : [cookbookId] the id of the cookbook, [recipeId] the id of the recipe
   /// Output: returns [NFT] if successful otherwise returns [null]
-  Future<NFT?> getNFtFromRecipe({required String cookbookId, required String recipeId}) async {
+  Future<NFT?> getNFtFromRecipe(
+      {required String cookbookId, required String recipeId}) async {
     final walletsStore = GetIt.I.get<WalletsStore>();
 
     final showLoader = Loading()..showLoading();
@@ -411,6 +456,4 @@ class IPCEngine {
 
     return nft;
   }
-
-
 }

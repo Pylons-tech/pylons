@@ -89,7 +89,6 @@ class AccountAlreadyExistsFailure extends Failure {
   List<Object?> get props => [message];
 }
 
-
 class AccountCreationFailure extends Failure {
   const AccountCreationFailure(String message) : super(message);
 
@@ -104,14 +103,12 @@ class CacheFailure extends Failure {
   List<Object?> get props => [message];
 }
 
-
 class FirebaseDynamicLinkFailure extends Failure {
   const FirebaseDynamicLinkFailure(String message) : super(message);
 
   @override
   List<Object?> get props => [message];
 }
-
 
 class PlatformFailure extends Failure {
   const PlatformFailure(String message) : super(message);
@@ -123,43 +120,36 @@ class PlatformFailure extends Failure {
 class TransactionSigningFailure extends Failure {
   final String type;
 
-  const TransactionSigningFailure({required String message, required this.type}) : super(message);
+  const TransactionSigningFailure({required String message, required this.type})
+      : super(message);
 
   @override
   List<Object?> get props => [message, type];
 }
 
-
 class SignInFailedFailure extends Failure {
-
   const SignInFailedFailure({required String message}) : super(message);
 
   @override
   List<Object?> get props => [message];
 }
 
-
-
 class UploadFailedFailure extends Failure {
-
   const UploadFailedFailure({required String message}) : super(message);
 
   @override
   List<Object?> get props => [message];
 }
 
-
 class ICloudInitializationFailedFailure extends Failure {
-
-  const ICloudInitializationFailedFailure({required String message}) : super(message);
+  const ICloudInitializationFailedFailure({required String message})
+      : super(message);
 
   @override
   List<Object?> get props => [message];
 }
 
-
 class InAppPurchaseFailure extends Failure {
-
   const InAppPurchaseFailure({required String message}) : super(message);
 
   @override
@@ -167,7 +157,6 @@ class InAppPurchaseFailure extends Failure {
 }
 
 class FetchAllNotificationFailure extends Failure {
-
   const FetchAllNotificationFailure({required String message}) : super(message);
 
   @override
@@ -181,7 +170,6 @@ class FcmTokenRetrievalError extends Failure {
   List<Object?> get props => [message];
 }
 
-
 class AppCheckTokenFailure extends Failure {
   const AppCheckTokenFailure(String message) : super(message);
 
@@ -189,26 +177,24 @@ class AppCheckTokenFailure extends Failure {
   List<Object?> get props => [message];
 }
 
-
 class UpdateFcmTokenFailure extends Failure {
   const UpdateFcmTokenFailure({required String message}) : super(message);
 
   @override
   List<Object?> get props => [message];
 }
-class FetchNftOwnershipHistoryFailure extends Failure {
 
-  const FetchNftOwnershipHistoryFailure({required String message}) : super(message);
+class FetchNftOwnershipHistoryFailure extends Failure {
+  const FetchNftOwnershipHistoryFailure({required String message})
+      : super(message);
 
   @override
   List<Object?> get props => [message];
 }
 
-
-
 class AppCheckTokenCreationFailure extends Failure {
-
-  const AppCheckTokenCreationFailure({required String message}) : super(message);
+  const AppCheckTokenCreationFailure({required String message})
+      : super(message);
 
   @override
   List<Object?> get props => [message];

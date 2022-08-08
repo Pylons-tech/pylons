@@ -66,7 +66,9 @@ class _OwnerViewState extends State<OwnerView> {
       case AssetType.Video:
         return OwnerVideoPlayerScreen(nft: widget.nft);
       case AssetType.Pdf:
-        return PdfViewer(fileUrl: widget.nft.url,);
+        return PdfViewer(
+          fileUrl: widget.nft.url,
+        );
       case AssetType.ThreeD:
         return Container(
           color: Colors.grey.shade200,
@@ -104,14 +106,19 @@ class _OwnerViewState extends State<OwnerView> {
                 children: [
                   getTypeWidget(widget.ownerViewViewModel),
                   Padding(
-                    padding: EdgeInsets.only(left: 8, right: 8, bottom: 8, top: MediaQuery.of(context).viewPadding.top),
+                    padding: EdgeInsets.only(
+                        left: 8,
+                        right: 8,
+                        bottom: 8,
+                        top: MediaQuery.of(context).viewPadding.top),
                     child: SizedBox(
                       height: 100.h,
                       width: double.infinity,
                       child: ListTile(
                         leading: GestureDetector(
                           onTap: () async {
-                            widget.ownerViewViewModel.destroyPlayers(widget.nft);
+                            widget.ownerViewViewModel
+                                .destroyPlayers(widget.nft);
 
                             Navigator.pop(context);
                           },
@@ -123,7 +130,10 @@ class _OwnerViewState extends State<OwnerView> {
                         title: Text(
                           "my_nft".tr(),
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w800),
                         ),
                         trailing: GestureDetector(
                           child: SvgPicture.asset(
@@ -134,7 +144,9 @@ class _OwnerViewState extends State<OwnerView> {
                       ),
                     ),
                   ),
-                  const Align(alignment: Alignment.bottomCenter, child: OwnerBottomDrawer())
+                  const Align(
+                      alignment: Alignment.bottomCenter,
+                      child: OwnerBottomDrawer())
                 ],
               ),
             );
@@ -228,7 +240,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   ),
                   _title(
                     nft: viewModel.nft,
-                    owner: viewModel.nft.type == NftType.TYPE_RECIPE ? "you".tr() : viewModel.nft.creator,
+                    owner: viewModel.nft.type == NftType.TYPE_RECIPE
+                        ? "you".tr()
+                        : viewModel.nft.creator,
                   ),
                   const SizedBox(
                     height: 20,
@@ -243,8 +257,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       Column(
                         children: [
                           if (viewModel.nft.type != NftType.TYPE_ITEM)
-                            Text("${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
-                                style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold))
+                            Text(
+                                "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.bold))
                         ],
                       ),
                       const Spacer(),
@@ -280,7 +298,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 Align(
                   alignment: Alignment.topRight,
                   child: ClipPath(
-                    clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SW),
+                    clipper: RightTriangleClipper(
+                        orientation: enums.Orientation.Orientation_SW),
                     child: Container(
                       color: kDarkRed,
                       height: 50,
@@ -306,7 +325,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   child: Align(
                     alignment: Alignment.bottomLeft,
                     child: ClipPath(
-                      clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NE),
+                      clipper: RightTriangleClipper(
+                          orientation: enums.Orientation.Orientation_NE),
                       child: Container(
                         color: kDarkRed,
                         height: 30.h,
@@ -326,7 +346,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? "you".tr() : viewModel.nft.creator),
+                          _title(
+                              nft: viewModel.nft,
+                              owner: viewModel.nft.type == NftType.TYPE_RECIPE
+                                  ? "you".tr()
+                                  : viewModel.nft.creator),
                           SizedBox(
                             height: 10.h,
                           ),
@@ -337,8 +361,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 width: 10.w,
                               ),
                               Text(
-                                viewModel.viewsCount == 1 ? "${viewModel.viewsCount.toString()} ${'view'.tr()}" : "${viewModel.viewsCount.toString()} ${'views'.tr()}",
-                                style: TextStyle(color: Colors.white, fontSize: 12.sp),
+                                viewModel.viewsCount == 1
+                                    ? "${viewModel.viewsCount.toString()} ${'view'.tr()}"
+                                    : "${viewModel.viewsCount.toString()} ${'views'.tr()}",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12.sp),
                               )
                             ],
                           ),
@@ -359,7 +386,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             Container(
                               width: 250.w,
                               color: kWhite.withOpacity(0.2),
-                              child: OwnerVideoProgressWidget(url: viewModel.nft.url),
+                              child: OwnerVideoProgressWidget(
+                                  url: viewModel.nft.url),
                             ),
                             SizedBox(
                               height: 20.h,
@@ -372,7 +400,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                     viewModel.hashtagList.length,
                                     (index) => SizedBox(
                                           child: DetectableText(
-                                            text: "#${viewModel.hashtagList[index]}",
+                                            text:
+                                                "#${viewModel.hashtagList[index]}",
                                             detectionRegExp: detectionRegExp()!,
                                             detectedStyle: TextStyle(
                                               fontSize: 12.sp,
@@ -391,8 +420,14 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             viewModel.nft.description,
                             trimExpandedText: "collapse".tr(),
                             trimCollapsedText: "read_more".tr(),
-                            moreStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: kCopyColor),
-                            lessStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: kCopyColor),
+                            moreStyle: TextStyle(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w500,
+                                color: kCopyColor),
+                            lessStyle: TextStyle(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w500,
+                                color: kCopyColor),
                           ),
                           SizedBox(
                             height: 20.h,
@@ -422,8 +457,15 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         NftOwnershipHistoryList: const [],
                                       ),
                                       SizedBox(height: 10.h),
-                                      if (viewModel.nft.type != NftType.TYPE_RECIPE)
-                                        TabField(name: "history".tr(), icon: 'history', nft: viewModel.nft, owner: viewModel.nft.owner, NftOwnershipHistoryList: viewModel.nftOwnershipHistoryList),
+                                      if (viewModel.nft.type !=
+                                          NftType.TYPE_RECIPE)
+                                        TabField(
+                                            name: "history".tr(),
+                                            icon: 'history',
+                                            nft: viewModel.nft,
+                                            owner: viewModel.nft.owner,
+                                            NftOwnershipHistoryList: viewModel
+                                                .nftOwnershipHistoryList),
                                       SizedBox(height: 30.h),
                                     ],
                                   ),
@@ -439,9 +481,18 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                             ignoring: viewModel.isLiking,
                                             child: GestureDetector(
                                               onTap: () async {
-                                                await viewModel.updateLikeStatus(cookBookID: viewModel.nft.cookbookID, recipeId: viewModel.nft.recipeID);
+                                                await viewModel
+                                                    .updateLikeStatus(
+                                                        cookBookID: viewModel
+                                                            .nft.cookbookID,
+                                                        recipeId: viewModel
+                                                            .nft.recipeID);
                                               },
-                                              child: viewModel.isLiking ? getLikingLoader() : getLikeIcon(likedByMe: viewModel.likedByMe),
+                                              child: viewModel.isLiking
+                                                  ? getLikingLoader()
+                                                  : getLikeIcon(
+                                                      likedByMe:
+                                                          viewModel.likedByMe),
                                             ),
                                           ),
                                           SizedBox(
@@ -449,7 +500,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                           ),
                                           Text(
                                             viewModel.likesCount.toString(),
-                                            style: const TextStyle(color: Colors.white, fontSize: 12),
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12),
                                           ),
                                         ],
                                       ),
@@ -474,7 +527,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          final Size size = MediaQuery.of(context).size;
+                                          final Size size =
+                                              MediaQuery.of(context).size;
 
                                           viewModel.shareNFTLink(size);
                                         },
@@ -497,8 +551,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               Column(
                                 children: [
                                   if (viewModel.nft.type != NftType.TYPE_ITEM)
-                                    Text("${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
-                                        style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold))
+                                    Text(
+                                        "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 15.sp,
+                                            fontWeight: FontWeight.bold))
                                 ],
                               ),
                             ],
@@ -526,7 +584,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             Flexible(
               child: Text(
                 nft.name,
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25.sp),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25.sp),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -538,7 +599,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 ),
                 child: Text(
                   ' (${nft.amountMinted} of ${nft.quantity})',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12.sp),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12.sp),
                 ),
               ),
           ],
@@ -553,7 +617,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 text: "created_by".tr(),
                 style: TextStyle(color: Colors.white, fontSize: 18.sp),
               ),
-              TextSpan(text: owner, style: TextStyle(color: kCopyColor, fontSize: 18.sp)),
+              TextSpan(
+                  text: owner,
+                  style: TextStyle(color: kCopyColor, fontSize: 18.sp)),
               WidgetSpan(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),

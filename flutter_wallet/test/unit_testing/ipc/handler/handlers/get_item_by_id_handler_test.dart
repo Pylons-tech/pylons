@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -18,10 +16,14 @@ void main() {
 
     GetIt.I.registerSingleton<WalletsStore>(mockWalletStore);
 
-    final sdkipcMessage = SdkIpcMessage(action: HandlerFactory.GET_ITEM_BY_ID, json: jsonEncode({
-      HandlerFactory.COOKBOOK_ID : MOCK_COOKBOOK_ID,
-      HandlerFactory.ITEM_ID : MOCK_ITEM_ID
-    }), sender: SENDER_APP, requestResponse: true);
+    final sdkipcMessage = SdkIpcMessage(
+        action: HandlerFactory.GET_ITEM_BY_ID,
+        json: jsonEncode({
+          HandlerFactory.COOKBOOK_ID: MOCK_COOKBOOK_ID,
+          HandlerFactory.ITEM_ID: MOCK_ITEM_ID
+        }),
+        sender: SENDER_APP,
+        requestResponse: true);
 
     final handler = GetItemByIdHandler(sdkipcMessage);
     final response = await handler.handle();

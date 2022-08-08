@@ -11,8 +11,16 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
-TextStyle kRecoveryOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w600);
-TextStyle kRecoveryHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
+TextStyle kRecoveryOptionsText = TextStyle(
+    fontSize: 18.sp,
+    fontFamily: kUniversalFontFamily,
+    color: Colors.black,
+    fontWeight: FontWeight.w600);
+TextStyle kRecoveryHeadlineText = TextStyle(
+    fontSize: 28.sp,
+    fontFamily: kUniversalFontFamily,
+    color: Colors.black,
+    fontWeight: FontWeight.w800);
 
 class RecoveryScreen extends StatefulWidget {
   const RecoveryScreen({Key? key}) : super(key: key);
@@ -24,8 +32,8 @@ class RecoveryScreen extends StatefulWidget {
 class _RecoveryScreenState extends State<RecoveryScreen> {
   bool shouldShowTestNetRecovery = false;
 
-  ValueNotifier<String> mnemonicsNotifier =
-      ValueNotifier('focus broom energy drift gravity plastic rigid busy iron collect metal squirrel ankle cousin cheap erupt media output merge couch window share ignore exclude');
+  ValueNotifier<String> mnemonicsNotifier = ValueNotifier(
+      'focus broom energy drift gravity plastic rigid busy iron collect metal squirrel ankle cousin cheap erupt media output merge couch window share ignore exclude');
 
   @override
   void initState() {
@@ -86,7 +94,8 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
             RecoveryForwardItem(
               title: "view_recovery_phrase".tr(),
               onPressed: () {
-                Navigator.of(context).pushNamed(RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE);
+                Navigator.of(context)
+                    .pushNamed(RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE);
               },
             ),
             RecoveryForwardItem(
@@ -125,7 +134,8 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
       return;
     }
 
-    final response = await walletStore.importAlanWallet(mnemonicsNotifier.value, name);
+    final response =
+        await walletStore.importAlanWallet(mnemonicsNotifier.value, name);
 
     if (response.isLeft()) {
       response.swap().toOption().toNullable()?.message.show();
@@ -147,7 +157,9 @@ class RecoveryForwardItem extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
 
-  const RecoveryForwardItem({required this.title, Key? key, required this.onPressed}) : super(key: key);
+  const RecoveryForwardItem(
+      {required this.title, Key? key, required this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

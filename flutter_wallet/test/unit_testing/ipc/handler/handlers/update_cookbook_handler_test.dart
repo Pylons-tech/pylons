@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/ipc/handler/handler_factory.dart';
@@ -15,7 +14,9 @@ void main() {
 
     GetIt.I.registerSingleton<WalletsStore>(mockWalletStore);
 
-    final sdkipcMessage = SdkIpcMessage(action: HandlerFactory.TX_UPDATE_COOKBOOK, json: """
+    final sdkipcMessage = SdkIpcMessage(
+        action: HandlerFactory.TX_UPDATE_COOKBOOK,
+        json: """
     {
     "ID": "LOUD-v0.1.0-1589853709",
     "Name": "Legend of Undead Dragon v0.1.0-1589853709",
@@ -26,12 +27,12 @@ void main() {
         "SupportEmail": "stalepresh121@outlook.com",
         "Version": "1.0.0",
         "CostPerBlock": "50"
-        }""", sender: SENDER_APP, requestResponse: true);
+        }""",
+        sender: SENDER_APP,
+        requestResponse: true);
 
     final handler = UpdateCookbookHandler(sdkipcMessage);
     final response = await handler.handle();
-
-
 
     expect(SENDER_APP, response.sender);
     expect(HandlerFactory.TX_UPDATE_COOKBOOK, response.action);

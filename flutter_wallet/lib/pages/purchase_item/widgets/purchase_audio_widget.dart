@@ -22,31 +22,37 @@ class _AudioWidgetState extends State<PurchaseAudioWidget> {
   Widget build(BuildContext context) {
     return Consumer<PurchaseItemViewModel>(builder: (context, viewModel, _) {
       return Row(
-        crossAxisAlignment: viewModel.collapsed ? CrossAxisAlignment.center : CrossAxisAlignment.end,
+        crossAxisAlignment: viewModel.collapsed
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.end,
         children: [
           Padding(
-            padding: EdgeInsets.only(right: 10.w, bottom: 10.h, top: 10.h, left: 5.w),
+            padding: EdgeInsets.only(
+                right: 10.w, bottom: 10.h, top: 10.h, left: 5.w),
             child: ValueListenableBuilder<ButtonState>(
               valueListenable: viewModel.buttonNotifier,
               builder: (_, value, __) {
                 switch (value) {
                   case ButtonState.loading:
-                    return SizedBox(height: 22.h, width: 22.h, child: CircularProgressIndicator(strokeWidth: 2.w, color: kWhite));
+                    return SizedBox(
+                        height: 22.h,
+                        width: 22.h,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2.w, color: kWhite));
                   case ButtonState.paused:
                     return InkWell(
                       onTap: viewModel.playAudio,
-                      child:  Icon(
+                      child: Icon(
                         Icons.play_arrow_outlined,
                         color: kWhite,
                         size: 22.h,
-
                       ),
                     );
 
                   case ButtonState.playing:
                     return InkWell(
                       onTap: viewModel.pauseAudio,
-                      child:  Icon(
+                      child: Icon(
                         Icons.pause,
                         color: kWhite,
                         size: 22.h,
@@ -61,7 +67,8 @@ class _AudioWidgetState extends State<PurchaseAudioWidget> {
               valueListenable: viewModel.progressNotifier,
               builder: (_, value, __) {
                 return Padding(
-                  padding: EdgeInsets.only(bottom: viewModel.collapsed ? 0 : 3.h, right: 10.w),
+                  padding: EdgeInsets.only(
+                      bottom: viewModel.collapsed ? 0 : 3.h, right: 10.w),
                   child: ProgressBar(
                     progressBarColor: kWhite,
                     thumbColor: kWhite,
@@ -70,8 +77,13 @@ class _AudioWidgetState extends State<PurchaseAudioWidget> {
                     bufferedBarColor: kWhite,
                     buffered: value.buffered,
                     total: value.total,
-                    timeLabelLocation: viewModel.collapsed ? TimeLabelLocation.none : TimeLabelLocation.below,
-                    timeLabelTextStyle: TextStyle(color: kWhite, fontWeight: FontWeight.w800, fontSize: 9.sp),
+                    timeLabelLocation: viewModel.collapsed
+                        ? TimeLabelLocation.none
+                        : TimeLabelLocation.below,
+                    timeLabelTextStyle: TextStyle(
+                        color: kWhite,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 9.sp),
                     thumbRadius: 6.h,
                     timeLabelPadding: 2.h,
                     onSeek: viewModel.seekAudio,

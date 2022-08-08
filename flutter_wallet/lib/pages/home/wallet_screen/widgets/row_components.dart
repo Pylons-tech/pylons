@@ -25,7 +25,6 @@ class RowComponents extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-
           GestureDetector(
             onTap: () {
               handleStripeAccountLink(context);
@@ -35,12 +34,12 @@ class RowComponents extends StatelessWidget {
               width: 40,
             ),
           ),
-
           SizedBox(
             width: 20.w,
           ),
           GestureDetector(
-            onTap: () => Navigator.of(context).pushNamed(RouteUtil.ROUTE_TRANSACTION_HISTORY),
+            onTap: () => Navigator.of(context)
+                .pushNamed(RouteUtil.ROUTE_TRANSACTION_HISTORY),
             child: SvgPicture.asset(SVGUtil.WALLET_TRANSACTION_HISTORY),
           ),
           SizedBox(
@@ -48,12 +47,17 @@ class RowComponents extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              final publicAddress = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
+              final publicAddress = GetIt.I
+                  .get<WalletsStore>()
+                  .getWallets()
+                  .value
+                  .last
+                  .publicAddress;
 
               Clipboard.setData(ClipboardData(text: publicAddress)).then(
                 (_) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: const Text("copied_to_clipboard").tr()));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: const Text("copied_to_clipboard").tr()));
                 },
               );
             },
@@ -67,11 +71,11 @@ class RowComponents extends StatelessWidget {
     );
   }
 
-
   Future<void> handleStripeAccountLink(BuildContext context) async {
     final loading = Loading()..showLoading();
 
-    final account_response = await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
+    final account_response =
+        await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
     loading.dismiss();
     account_response.fold((fail) => {fail.message.show()}, (accountlink) {
       showDialog(

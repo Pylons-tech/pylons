@@ -6,5 +6,9 @@ class PickImageModel {
   int? imageQuality;
   ImageSource imageSource;
 
-  PickImageModel({this.maxHeight,  this.maxWidth,  this.imageQuality, required this.imageSource});
+  PickImageModel(
+      {this.maxHeight,
+      this.maxWidth,
+      this.imageQuality,
+      required this.imageSource});
 }

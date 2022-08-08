@@ -50,7 +50,6 @@ class CustomTxSigner {
     //   );
     // }
 
-
     // Get the public key from the account, or generate it if the
     // chain does not have it yet
 

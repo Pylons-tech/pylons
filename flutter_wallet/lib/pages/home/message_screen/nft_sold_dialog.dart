@@ -9,8 +9,10 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/route_util.dart';
 
-TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 13.sp);
-TextStyle _headingTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 30.sp);
+TextStyle _rowTitleTextStyle = TextStyle(
+    color: Colors.white, fontWeight: FontWeight.w500, fontSize: 13.sp);
+TextStyle _headingTextStyle = TextStyle(
+    color: Colors.white, fontWeight: FontWeight.w800, fontSize: 30.sp);
 
 class NftSoldDialog {
   final RemoteNotification _notification;
@@ -18,17 +20,16 @@ class NftSoldDialog {
 
   NftSoldDialog({
     required RemoteNotification notification,
-    required BuildContext context,})
-      :
-        _notification = notification,
+    required BuildContext context,
+  })  : _notification = notification,
         _buildContext = context;
 
   void show() {
     showDialog(
-      barrierDismissible: false,
+        barrierDismissible: false,
         context: _buildContext,
         builder: (context) {
-          return  Dialog(
+          return Dialog(
               backgroundColor: Colors.transparent,
               child: NftSoldContent(
                 notification: _notification,
@@ -40,7 +41,8 @@ class NftSoldDialog {
 class NftSoldContent extends StatefulWidget {
   final RemoteNotification notification;
 
-  const NftSoldContent({Key? key,
+  const NftSoldContent({
+    Key? key,
     required this.notification,
   }) : super(key: key);
 
@@ -49,15 +51,15 @@ class NftSoldContent extends StatefulWidget {
 }
 
 class _NftSoldContentState extends State<NftSoldContent> {
-
   @override
   Widget build(BuildContext context) {
-    final List<String> message= widget.notification.body!.split(kTo);
+    final List<String> message = widget.notification.body!.split(kTo);
 
     return Container(
       color: Colors.black.withOpacity(0.7),
-      height: 280.h ,
-      margin: isTablet ? EdgeInsets.symmetric(horizontal: 50.w) : EdgeInsets.zero,
+      height: 280.h,
+      margin:
+          isTablet ? EdgeInsets.symmetric(horizontal: 50.w) : EdgeInsets.zero,
       child: Stack(
         children: [
           Positioned(
@@ -67,7 +69,8 @@ class _NftSoldContentState extends State<NftSoldContent> {
               height: 60.h,
               width: 60.h,
               child: ClipPath(
-                clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NW),
+                clipper: RightTriangleClipper(
+                    orientation: enums.Orientation.Orientation_NW),
                 child: Container(
                   color: kDarkRed,
                 ),
@@ -81,7 +84,8 @@ class _NftSoldContentState extends State<NftSoldContent> {
               height: 60.h,
               width: 60.h,
               child: ClipPath(
-                clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SE),
+                clipper: RightTriangleClipper(
+                    orientation: enums.Orientation.Orientation_SE),
                 child: Container(
                   color: kDarkRed,
                 ),
@@ -94,7 +98,7 @@ class _NftSoldContentState extends State<NftSoldContent> {
             top: 0,
             bottom: 0,
             child: Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 20.w),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -106,17 +110,22 @@ class _NftSoldContentState extends State<NftSoldContent> {
                     "nft_sold".tr(),
                     style: _headingTextStyle,
                     textAlign: TextAlign.center,
-                  ),                SizedBox(
+                  ),
+                  SizedBox(
                     height: 25.h,
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: isTablet ? 20.w: 30.w),
-
-                    child:      RichText(
-                        text: TextSpan(text: "${message.first} to", style: _rowTitleTextStyle, children: [
+                    padding: EdgeInsets.symmetric(
+                        horizontal: isTablet ? 20.w : 30.w),
+                    child: RichText(
+                        text: TextSpan(
+                            text: "${message.first} to",
+                            style: _rowTitleTextStyle,
+                            children: [
                           TextSpan(
                             text: message.last,
-                            style: _rowTitleTextStyle.copyWith(color: kTradeReceiptTextColor),
+                            style: _rowTitleTextStyle.copyWith(
+                                color: kTradeReceiptTextColor),
                           )
                         ])),
                   ),
@@ -125,26 +134,28 @@ class _NftSoldContentState extends State<NftSoldContent> {
                   ),
                   Row(
                     children: [
-                      SizedBox(width: 10.w,),
+                      SizedBox(
+                        width: 10.w,
+                      ),
                       Expanded(
-                        flex:60,
+                        flex: 60,
                         child: ClipPath(
                           clipper: TradeReceiptClipper(),
                           child: InkWell(
                             onTap: () {
                               Navigator.of(context).pop();
-                              Navigator.of(context).pushNamed(RouteUtil.ROUTE_MESSAGE);
-
+                              Navigator.of(context)
+                                  .pushNamed(RouteUtil.ROUTE_MESSAGE);
                             },
                             child: Container(
                               height: 40.h,
                               color: kPayNowBackgroundGrey.withOpacity(0.2),
-
                               child: Center(
                                 child: Text(
                                   "view_detail".tr(),
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14.sp),
                                 ),
                               ),
                             ),
@@ -152,7 +163,7 @@ class _NftSoldContentState extends State<NftSoldContent> {
                         ),
                       ),
                       Expanded(
-                        flex:40,
+                        flex: 40,
                         child: InkWell(
                           onTap: () {
                             Navigator.of(context).pop();
@@ -160,7 +171,8 @@ class _NftSoldContentState extends State<NftSoldContent> {
                           child: Text(
                             "close".tr(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 14.sp),
                           ),
                         ),
                       ),
@@ -178,4 +190,3 @@ class _NftSoldContentState extends State<NftSoldContent> {
     );
   }
 }
-

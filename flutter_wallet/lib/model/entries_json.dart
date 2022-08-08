@@ -16,8 +16,6 @@ class Entries {
   });
 
   Entries.fromJson(dynamic json) {
-
-
     if (json['coinOutputs'] != null) {
       coinOutputs = [];
       json['coinOutputs'].forEach((v) {

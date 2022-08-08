@@ -18,7 +18,8 @@ import 'package:pylons_wallet/utils/screen_responsive.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-TextStyle kUpdateAppSkipText = const TextStyle(fontWeight: FontWeight.w500, color: Colors.black54);
+TextStyle kUpdateAppSkipText =
+    const TextStyle(fontWeight: FontWeight.w500, color: Colors.black54);
 
 class UpdateApp extends StatefulWidget {
   const UpdateApp({Key? key}) : super(key: key);
@@ -51,13 +52,13 @@ class _UpdateAppState extends State<UpdateApp> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark,
-        child: Scaffold(
-        backgroundColor: kWhite01,
-        body: ScreenResponsive(
-          tabletScreen: (BuildContext context) => buildTabletScreen(context),
-          mobileScreen: (BuildContext context) => buildMobileScreen(context),
-        )),
+      value: SystemUiOverlayStyle.dark,
+      child: Scaffold(
+          backgroundColor: kWhite01,
+          body: ScreenResponsive(
+            tabletScreen: (BuildContext context) => buildTabletScreen(context),
+            mobileScreen: (BuildContext context) => buildMobileScreen(context),
+          )),
     );
   }
 
@@ -73,7 +74,8 @@ class _UpdateAppState extends State<UpdateApp> {
             right: 0,
             top: 0,
             bottom: 0,
-            child: SvgPicture.asset(SVGUtil.UPDATE_NOW_IPAD_BACKGROUND, fit: BoxFit.fill)),
+            child: SvgPicture.asset(SVGUtil.UPDATE_NOW_IPAD_BACKGROUND,
+                fit: BoxFit.fill)),
         Positioned(
             child: Container(
           padding: EdgeInsets.symmetric(horizontal: 25.w),
@@ -137,7 +139,7 @@ class _UpdateAppState extends State<UpdateApp> {
                           }
                         },
                         child: SvgPicture.asset(SVGUtil.BUTTON_BACKGROUND))),
-                 Positioned(
+                Positioned(
                     left: 0,
                     right: 0,
                     top: 0,
@@ -179,7 +181,8 @@ class _UpdateAppState extends State<UpdateApp> {
           right: 0,
           top: 0,
           bottom: 0,
-          child: SvgPicture.asset(SVGUtil.UPDATE_NOW_BACKGROUND, fit: BoxFit.cover),
+          child: SvgPicture.asset(SVGUtil.UPDATE_NOW_BACKGROUND,
+              fit: BoxFit.cover),
         ),
         Positioned(
             child: Container(
@@ -241,7 +244,7 @@ class _UpdateAppState extends State<UpdateApp> {
                           }
                         },
                         child: SvgPicture.asset(SVGUtil.BUTTON_BACKGROUND))),
-                 Positioned(
+                Positioned(
                     left: 0,
                     right: 0,
                     top: 0,
@@ -287,10 +290,12 @@ class _UpdateAppState extends State<UpdateApp> {
 
     if (walletsStore.getWallets().value.isEmpty) {
       //Loads the last used wallet.
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
+      Navigator.of(navigatorKey.currentState!.overlay!.context)
+          .pushNamed(RouteUtil.ROUTE_ONBOARDING);
     } else {
       // Assigning the latest wallet to the app.
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_HOME);
+      Navigator.of(navigatorKey.currentState!.overlay!.context)
+          .pushNamed(RouteUtil.ROUTE_HOME);
     }
   }
 
@@ -302,6 +307,7 @@ class _UpdateAppState extends State<UpdateApp> {
     _launchURL(kIOSAppLink);
   }
 
-  Future _launchURL(String _url) async =>
-      await canLaunchUrlString(_url) ? await launchUrlString(_url) : throw '${"could_not_launch".tr()} $_url';
+  Future _launchURL(String _url) async => await canLaunchUrlString(_url)
+      ? await launchUrlString(_url)
+      : throw '${"could_not_launch".tr()} $_url';
 }

@@ -120,7 +120,10 @@ class LocalDataSourceImpl implements LocalDataSource {
 
   final CacheManager cacheManager;
 
-  LocalDataSourceImpl({required this.sharedPreferences, required this.database, required this.cacheManager});
+  LocalDataSourceImpl(
+      {required this.sharedPreferences,
+      required this.database,
+      required this.cacheManager});
 
   /// gets cookbookId from local storage
   ///return String or null
@@ -191,16 +194,34 @@ class LocalDataSourceImpl implements LocalDataSource {
   }
 
   bool checkValuesForDescription({required SaveNft saveNft}) =>
-      saveNft.id != null && saveNft.nftName != null && saveNft.nftDescription != null && saveNft.creatorName != null && saveNft.step != null && saveNft.hashtags != null;
+      saveNft.id != null &&
+      saveNft.nftName != null &&
+      saveNft.nftDescription != null &&
+      saveNft.creatorName != null &&
+      saveNft.step != null &&
+      saveNft.hashtags != null;
 
   bool checkValuesForPrice({required SaveNft saveNft}) =>
-      saveNft.id != null && saveNft.tradePercentage != null && saveNft.price != null && saveNft.quantity != null && saveNft.step != null && saveNft.denomSymbol != null && saveNft.isFreeDrop != null;
+      saveNft.id != null &&
+      saveNft.tradePercentage != null &&
+      saveNft.price != null &&
+      saveNft.quantity != null &&
+      saveNft.step != null &&
+      saveNft.denomSymbol != null &&
+      saveNft.isFreeDrop != null;
 
   @override
   Future<bool> updateNftFromDescription(SaveNft saveNft) async {
     try {
       if (!checkValuesForDescription(saveNft: saveNft)) return false;
-      await database.nftDao.updateNFTFromDescription(saveNft.id!, saveNft.nftName!, saveNft.nftDescription!, saveNft.creatorName!, saveNft.step!, saveNft.hashtags!, saveNft.dateTime!);
+      await database.nftDao.updateNFTFromDescription(
+          saveNft.id!,
+          saveNft.nftName!,
+          saveNft.nftDescription!,
+          saveNft.creatorName!,
+          saveNft.step!,
+          saveNft.hashtags!,
+          saveNft.dateTime!);
       return true;
     } catch (e) {
       return throw "upload_error".tr();
@@ -211,7 +232,15 @@ class LocalDataSourceImpl implements LocalDataSource {
   Future<bool> updateNftFromPrice(SaveNft saveNft) async {
     try {
       if (!checkValuesForPrice(saveNft: saveNft)) return false;
-      await database.nftDao.updateNFTFromPrice(saveNft.id!, saveNft.tradePercentage!, saveNft.price!, saveNft.quantity!, saveNft.step!, saveNft.denomSymbol!, saveNft.isFreeDrop!, saveNft.dateTime!);
+      await database.nftDao.updateNFTFromPrice(
+          saveNft.id!,
+          saveNft.tradePercentage!,
+          saveNft.price!,
+          saveNft.quantity!,
+          saveNft.step!,
+          saveNft.denomSymbol!,
+          saveNft.isFreeDrop!,
+          saveNft.dateTime!);
       return true;
     } catch (e) {
       throw CacheFailure("upload_error".tr());

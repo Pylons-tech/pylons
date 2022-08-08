@@ -8,13 +8,16 @@ import 'package:video_player/video_player.dart';
 class PurchaseVideoProgressWidget extends StatefulWidget {
   final String url;
 
-  const PurchaseVideoProgressWidget({Key? key, required this.url}) : super(key: key);
+  const PurchaseVideoProgressWidget({Key? key, required this.url})
+      : super(key: key);
 
   @override
-  _PurchaseVideoProgressWidgetState createState() => _PurchaseVideoProgressWidgetState();
+  _PurchaseVideoProgressWidgetState createState() =>
+      _PurchaseVideoProgressWidgetState();
 }
 
-class _PurchaseVideoProgressWidgetState extends State<PurchaseVideoProgressWidget> {
+class _PurchaseVideoProgressWidgetState
+    extends State<PurchaseVideoProgressWidget> {
   String _getDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     final String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
@@ -45,7 +48,11 @@ class _PurchaseVideoProgressWidgetState extends State<PurchaseVideoProgressWidge
               Row(
                 children: [
                   if (viewModel.isVideoLoading)
-                    SizedBox(height: 22.h, width: 22.h, child: CircularProgressIndicator(strokeWidth: 2.w, color: kWhite))
+                    SizedBox(
+                        height: 22.h,
+                        width: 22.h,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2.w, color: kWhite))
                   else if (viewModel.videoPlayerController.value.isPlaying)
                     InkWell(
                       onTap: viewModel.pauseVideo,
@@ -87,20 +94,28 @@ class _PurchaseVideoProgressWidgetState extends State<PurchaseVideoProgressWidge
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     StreamBuilder<Duration?>(
-                        stream: viewModel.videoPlayerController.position.asStream(),
-                        builder: (BuildContext context, AsyncSnapshot<Duration?> snapshot) {
+                        stream:
+                            viewModel.videoPlayerController.position.asStream(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<Duration?> snapshot) {
                           if (snapshot.hasData) {
-                            final String duration = _getDuration(snapshot.data!);
+                            final String duration =
+                                _getDuration(snapshot.data!);
                             return Text(
                               duration,
                               style: const TextStyle(color: Colors.white),
                             );
                           } else {
-                            return SizedBox(height: 22.h, width: 18.w, child: CircularProgressIndicator(strokeWidth: 2.w, color: kWhite));
+                            return SizedBox(
+                                height: 22.h,
+                                width: 18.w,
+                                child: CircularProgressIndicator(
+                                    strokeWidth: 2.w, color: kWhite));
                           }
                         }),
                     Text(
-                      formatDuration(viewModel.videoPlayerController.value.duration.inSeconds),
+                      formatDuration(viewModel
+                          .videoPlayerController.value.duration.inSeconds),
                       style: const TextStyle(color: kWhite),
                     ),
                   ],

@@ -56,7 +56,7 @@ class MockFirebaseAppCheck extends _i1.Mock implements _i3.FirebaseAppCheck {
           returnValue: Future<String?>.value()) as _i4.Future<String?>);
   @override
   _i4.Future<void> setTokenAutoRefreshEnabled(
-      bool? isTokenAutoRefreshEnabled) =>
+          bool? isTokenAutoRefreshEnabled) =>
       (super.noSuchMethod(
           Invocation.method(
               #setTokenAutoRefreshEnabled, [isTokenAutoRefreshEnabled]),

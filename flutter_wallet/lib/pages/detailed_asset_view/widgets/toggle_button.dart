@@ -19,9 +19,13 @@ class _ToggleButtonState extends State<ToggleButton> {
       child: Container(
         height: 50,
         width: 100,
-        color: assetProvider.toggled ?  kGreenBackground.withOpacity(.7) : kDarkRed.withOpacity(.7),
+        color: assetProvider.toggled
+            ? kGreenBackground.withOpacity(.7)
+            : kDarkRed.withOpacity(.7),
         padding: const EdgeInsets.all(6.0),
-        child: assetProvider.toggled ? enabledRow(assetProvider): disableRow(assetProvider),
+        child: assetProvider.toggled
+            ? enabledRow(assetProvider)
+            : disableRow(assetProvider),
       ),
     );
   }
@@ -38,7 +42,8 @@ class _ToggleButtonState extends State<ToggleButton> {
               alignment: Alignment.center,
               child: Container(
                 height: 10,
-                decoration: const BoxDecoration(shape: BoxShape.circle, color: kButtonBuyNowColor),
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: kButtonBuyNowColor),
               ),
             ),
           ),
@@ -66,7 +71,7 @@ class _ToggleButtonState extends State<ToggleButton> {
       children: [
         Expanded(
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               assetProvider.setToggle(toggle: true);
             },
             child: ClipPath(
@@ -80,7 +85,7 @@ class _ToggleButtonState extends State<ToggleButton> {
         ),
         Expanded(
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               assetProvider.setToggle(toggle: true);
             },
             child: SizedBox.expand(
@@ -88,7 +93,8 @@ class _ToggleButtonState extends State<ToggleButton> {
                 alignment: Alignment.center,
                 child: Container(
                   height: 10,
-                  decoration: const BoxDecoration(shape: BoxShape.circle, color: kDarkRed),
+                  decoration: const BoxDecoration(
+                      shape: BoxShape.circle, color: kDarkRed),
                 ),
               ),
             ),
@@ -97,9 +103,6 @@ class _ToggleButtonState extends State<ToggleButton> {
       ],
     );
   }
-
-
-
 }
 
 class ToggleClipper extends CustomClipper<Path> {

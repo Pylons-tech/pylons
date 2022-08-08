@@ -15,7 +15,8 @@ void main() {
     final mockCrashlytics = MockCrashlytics();
 
     walletsStoreImp = WalletsStoreImp(
-      repository: repository, crashlyticsHelper: mockCrashlytics,
+      repository: repository,
+      crashlyticsHelper: mockCrashlytics,
     );
   });
 

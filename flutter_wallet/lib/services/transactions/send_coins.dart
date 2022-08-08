@@ -33,13 +33,15 @@ class TokenSender {
       accountId: info.accountId,
     );
 
-    final signedAlanTransaction = await transactionSigningGateway.signTransaction(
+    final signedAlanTransaction =
+        await transactionSigningGateway.signTransaction(
       transaction: unsignedTransaction,
       accountLookupKey: walletLookupKey,
     );
     await signedAlanTransaction.fold<Future?>(
       (fail) => null,
-      (signedTransaction) => transactionSigningGateway.broadcastTransaction(accountLookupKey: walletLookupKey, transaction: signedTransaction),
+      (signedTransaction) => transactionSigningGateway.broadcastTransaction(
+          accountLookupKey: walletLookupKey, transaction: signedTransaction),
     );
   }
 }

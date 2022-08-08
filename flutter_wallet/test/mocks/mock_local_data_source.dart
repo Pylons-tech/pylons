@@ -157,7 +157,8 @@ class MockLocalDataSource extends LocalDataSource {
   }
 
   @override
-  Future<bool> saveNetworkEnvironmentPreference({required String networkEnvironment}) {
+  Future<bool> saveNetworkEnvironmentPreference(
+      {required String networkEnvironment}) {
     // TODO: implement saveNetworkEnvironmentPreference
     throw UnimplementedError();
   }

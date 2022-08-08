@@ -19,7 +19,9 @@ extension AmountValue on String {
   }
 
   String ValToUval() {
-    return (Decimal.parse(this) * Decimal.fromInt(constants.kBigIntBase)).toBigInt().toString();
+    return (Decimal.parse(this) * Decimal.fromInt(constants.kBigIntBase))
+        .toBigInt()
+        .toString();
   }
 }
 

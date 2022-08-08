@@ -23,11 +23,6 @@ class Balance extends Equatable {
         amount,
       ];
 
-
-  Map<String, dynamic> toJson() => {
-    'denom' : denom,
-    'amount' : amount.displayText
-  };
-
-
+  Map<String, dynamic> toJson() =>
+      {'denom': denom, 'amount': amount.displayText};
 }

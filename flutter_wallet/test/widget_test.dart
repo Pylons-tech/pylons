@@ -9,9 +9,4 @@
 // import 'package:flutter_test/flutter_test.dart';
 // import 'package:pylons_wallet/pylons_app.dart';
 
-
-void main() {
-
-
-
-}
+void main() {}

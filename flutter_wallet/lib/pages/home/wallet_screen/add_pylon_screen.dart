@@ -1,4 +1,3 @@
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,9 +9,21 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-TextStyle kPylonLabelText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: kTextBlackColor, fontWeight: FontWeight.w800);
-TextStyle kTitleText = TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: kBlack, fontWeight: FontWeight.w700);
-TextStyle kSubTitleText = TextStyle(fontSize: 13.sp, fontFamily: kUniversalFontFamily, color: kPriceTagColor, fontWeight: FontWeight.w700);
+TextStyle kPylonLabelText = TextStyle(
+    fontSize: 18.sp,
+    fontFamily: kUniversalFontFamily,
+    color: kTextBlackColor,
+    fontWeight: FontWeight.w800);
+TextStyle kTitleText = TextStyle(
+    fontSize: 15.sp,
+    fontFamily: kUniversalFontFamily,
+    color: kBlack,
+    fontWeight: FontWeight.w700);
+TextStyle kSubTitleText = TextStyle(
+    fontSize: 13.sp,
+    fontFamily: kUniversalFontFamily,
+    color: kPriceTagColor,
+    fontWeight: FontWeight.w700);
 
 class AddPylonScreen extends StatefulWidget {
   const AddPylonScreen({Key? key}) : super(key: key);
@@ -100,7 +111,12 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
     );
   }
 
-  Widget buildBuyRow({required String svgAsset, required String pylonText, required String bonusText, required String subtitle, required VoidCallback onPressed}) {
+  Widget buildBuyRow(
+      {required String svgAsset,
+      required String pylonText,
+      required String bonusText,
+      required String subtitle,
+      required VoidCallback onPressed}) {
     return Row(children: [
       SizedBox(
         height: 40.h,
@@ -163,14 +179,16 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
         inAppPurchaseResponse.swap().toOption().toNullable()!.message.show();
         return;
       }
-      final productsListResponse = await repository.getProductsForSale(itemId: itemId);
+      final productsListResponse =
+          await repository.getProductsForSale(itemId: itemId);
       loading.dismiss();
 
       if (productsListResponse.isLeft()) {
         productsListResponse.swap().toOption().toNullable()!.message.show();
         return;
       }
-      final buyProductResponse = await repository.buyProduct(productsListResponse.toOption().toNullable()!);
+      final buyProductResponse = await repository
+          .buyProduct(productsListResponse.toOption().toNullable()!);
       if (buyProductResponse.isLeft()) {
         buyProductResponse.swap().toOption().toNullable()!.message.show();
         return;

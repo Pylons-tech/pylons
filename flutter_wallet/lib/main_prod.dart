@@ -11,7 +11,8 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart' as di;
+import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart'
+    as di;
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 
 bool isTablet = false;
@@ -32,11 +33,22 @@ Future<void> main() async {
   Stripe.merchantIdentifier = "merchant.tech.pylons.wallet";
 
   runZonedGuarded<Future<void>>(() async {
-    isTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide >= TABLET_MIN_LENGTH;
+    isTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+            .size
+            .shortestSide >=
+        TABLET_MIN_LENGTH;
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     runApp(
       EasyLocalization(
-        supportedLocales: const [Locale('en'), Locale('ru'), Locale('id'), Locale('de'), Locale('ko'), Locale('ja'), Locale('es')],
+        supportedLocales: const [
+          Locale('en'),
+          Locale('ru'),
+          Locale('id'),
+          Locale('de'),
+          Locale('ko'),
+          Locale('ja'),
+          Locale('es')
+        ],
         path: 'i18n',
         fallbackLocale: const Locale('en'),
         useOnlyLangCode: true,
@@ -49,6 +61,8 @@ Future<void> main() async {
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

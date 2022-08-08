@@ -10,16 +10,25 @@ import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
-
-TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: isTablet ? 10.sp : 14.sp);
-TextStyle _rowSubtitleTextStyle = TextStyle(color: Colors.white, fontSize: isTablet ? 9.sp : 13.sp, fontWeight: FontWeight.w800);
-TextStyle _rowBlueTextStyle = TextStyle(color: kTradeReceiptTextColor, fontSize: isTablet ? 9.sp : 13.sp, fontWeight: FontWeight.w400);
+TextStyle _rowTitleTextStyle = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w800,
+    fontSize: isTablet ? 10.sp : 14.sp);
+TextStyle _rowSubtitleTextStyle = TextStyle(
+    color: Colors.white,
+    fontSize: isTablet ? 9.sp : 13.sp,
+    fontWeight: FontWeight.w800);
+TextStyle _rowBlueTextStyle = TextStyle(
+    color: kTradeReceiptTextColor,
+    fontSize: isTablet ? 9.sp : 13.sp,
+    fontWeight: FontWeight.w400);
 
 class TradeReceiptDialog {
   final TradeReceiptModel _model;
   final BuildContext _buildContext;
 
-  TradeReceiptDialog({required TradeReceiptModel model, required BuildContext context})
+  TradeReceiptDialog(
+      {required TradeReceiptModel model, required BuildContext context})
       : _model = model,
         _buildContext = context;
 
@@ -51,7 +60,8 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
     return Container(
       color: Colors.black.withOpacity(0.7),
       height: isTablet ? 400.h : 420.h,
-      margin: isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
+      margin:
+          isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
       child: Stack(
         children: [
           Positioned(
@@ -61,7 +71,8 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
               height: 60,
               width: 80,
               child: ClipPath(
-                clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NW),
+                clipper: RightTriangleClipper(
+                    orientation: enums.Orientation.Orientation_NW),
                 child: Container(
                   color: kDarkRed,
                 ),
@@ -75,7 +86,8 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
               height: 60,
               width: 80,
               child: ClipPath(
-                clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SE),
+                clipper: RightTriangleClipper(
+                    orientation: enums.Orientation.Orientation_SE),
                 child: Container(
                   color: kDarkRed,
                 ),
@@ -102,9 +114,11 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
                   height: 20.h,
                 ),
                 SizedBox(height: 20.h),
-                buildRowWithBlueSubtitle(subtitle: widget.model.createdBy, title: "created_by".tr()),
+                buildRowWithBlueSubtitle(
+                    subtitle: widget.model.createdBy, title: "created_by".tr()),
                 SizedBox(height: 3.h),
-                buildRowWithBlueSubtitle(subtitle: widget.model.soldBy, title: "sold_by".tr()),
+                buildRowWithBlueSubtitle(
+                    subtitle: widget.model.soldBy, title: "sold_by".tr()),
                 SizedBox(height: 20.h),
                 buildRowWithElipses(
                   subtitle: widget.model.transactionId,
@@ -150,7 +164,8 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
                           child: Text(
                             "close".tr(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 14.sp),
                           ),
                         ),
                       ),
@@ -192,7 +207,8 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
     );
   }
 
-  InkWell buildRowWithElipses({required String title, required String subtitle}) {
+  InkWell buildRowWithElipses(
+      {required String title, required String subtitle}) {
     return InkWell(
       onTap: () {
         openTransactionInBigDipper(txId: subtitle);
@@ -224,7 +240,8 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
                       style: _rowSubtitleTextStyle,
                     ),
                     Text(
-                      subtitle.substring(subtitle.length - 4, subtitle.length - 1),
+                      subtitle.substring(
+                          subtitle.length - 4, subtitle.length - 1),
                       style: _rowSubtitleTextStyle,
                     ),
                   ],
@@ -235,7 +252,8 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
     );
   }
 
-  Row buildRowWithBlueSubtitle({required String title, required String subtitle}) {
+  Row buildRowWithBlueSubtitle(
+      {required String title, required String subtitle}) {
     return Row(
       children: [
         Expanded(
@@ -258,7 +276,7 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
   }
 
   void showLoading(BuildContext context) {
-    Loading()..showLoading();
+    Loading().showLoading();
   }
 
   Future openTransactionInBigDipper({required String txId}) async {

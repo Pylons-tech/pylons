@@ -24,8 +24,6 @@ class BaseEnv {
       required String lcdPort,
       required String grpcPort,
       required String ethUrl,
-
-
       required String chainId,
       required String faucetUrl,
       required String ibcTraceUrl,
@@ -41,7 +39,9 @@ class BaseEnv {
       grpcInfo: GRPCInfo(
         host: grpcUrl,
         port: int.parse(grpcPort),
-        credentials: (dotenv.env[kENV]! == kLocal) ? const ChannelCredentials.insecure() : const ChannelCredentials.insecure(),
+        credentials: (dotenv.env[kENV]! == kLocal)
+            ? const ChannelCredentials.insecure()
+            : const ChannelCredentials.insecure(),
       ),
       chainId: chainId,
     );
@@ -66,7 +66,6 @@ class BaseEnv {
   String get baseMongoUrl => _baseMongoUrl;
 
   String get baseEthUrl => _baseEthUrl;
-
 
   String get baseStripeUrl => _stripeUrl;
 

@@ -8,47 +8,52 @@
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
+
 @$core.Deprecated('Use coinDescriptor instead')
-const Coin$json = const {
+const Coin$json = {
   '1': 'Coin',
-  '2': const [
-    const {'1': 'denom', '3': 1, '4': 1, '5': 9, '10': 'denom'},
-    const {'1': 'amount', '3': 2, '4': 1, '5': 9, '8': const {}, '10': 'amount'},
+  '2': [
+    {'1': 'denom', '3': 1, '4': 1, '5': 9, '10': 'denom'},
+    {'1': 'amount', '3': 2, '4': 1, '5': 9, '8': {}, '10': 'amount'},
   ],
-  '7': const {},
+  '7': {},
 };
 
 /// Descriptor for `Coin`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List coinDescriptor = $convert.base64Decode('CgRDb2luEhQKBWRlbm9tGAEgASgJUgVkZW5vbRIjCgZhbW91bnQYAiABKAlCC9reHwNJbnTI3h8AUgZhbW91bnQ6BOigHwE=');
+final $typed_data.Uint8List coinDescriptor = $convert.base64Decode(
+    'CgRDb2luEhQKBWRlbm9tGAEgASgJUgVkZW5vbRIjCgZhbW91bnQYAiABKAlCC9reHwNJbnTI3h8AUgZhbW91bnQ6BOigHwE=');
 @$core.Deprecated('Use decCoinDescriptor instead')
-const DecCoin$json = const {
+const DecCoin$json = {
   '1': 'DecCoin',
-  '2': const [
-    const {'1': 'denom', '3': 1, '4': 1, '5': 9, '10': 'denom'},
-    const {'1': 'amount', '3': 2, '4': 1, '5': 9, '8': const {}, '10': 'amount'},
+  '2': [
+    {'1': 'denom', '3': 1, '4': 1, '5': 9, '10': 'denom'},
+    {'1': 'amount', '3': 2, '4': 1, '5': 9, '8': {}, '10': 'amount'},
   ],
-  '7': const {},
+  '7': {},
 };
 
 /// Descriptor for `DecCoin`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List decCoinDescriptor = $convert.base64Decode('CgdEZWNDb2luEhQKBWRlbm9tGAEgASgJUgVkZW5vbRIjCgZhbW91bnQYAiABKAlCC9reHwNEZWPI3h8AUgZhbW91bnQ6BOigHwE=');
+final $typed_data.Uint8List decCoinDescriptor = $convert.base64Decode(
+    'CgdEZWNDb2luEhQKBWRlbm9tGAEgASgJUgVkZW5vbRIjCgZhbW91bnQYAiABKAlCC9reHwNEZWPI3h8AUgZhbW91bnQ6BOigHwE=');
 @$core.Deprecated('Use intProtoDescriptor instead')
-const IntProto$json = const {
+const IntProto$json = {
   '1': 'IntProto',
-  '2': const [
-    const {'1': 'int', '3': 1, '4': 1, '5': 9, '8': const {}, '10': 'int'},
+  '2': [
+    {'1': 'int', '3': 1, '4': 1, '5': 9, '8': {}, '10': 'int'},
   ],
 };
 
 /// Descriptor for `IntProto`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List intProtoDescriptor = $convert.base64Decode('CghJbnRQcm90bxIdCgNpbnQYASABKAlCC9reHwNJbnTI3h8AUgNpbnQ=');
+final $typed_data.Uint8List intProtoDescriptor = $convert
+    .base64Decode('CghJbnRQcm90bxIdCgNpbnQYASABKAlCC9reHwNJbnTI3h8AUgNpbnQ=');
 @$core.Deprecated('Use decProtoDescriptor instead')
-const DecProto$json = const {
+const DecProto$json = {
   '1': 'DecProto',
-  '2': const [
-    const {'1': 'dec', '3': 1, '4': 1, '5': 9, '8': const {}, '10': 'dec'},
+  '2': [
+    {'1': 'dec', '3': 1, '4': 1, '5': 9, '8': {}, '10': 'dec'},
   ],
 };
 
 /// Descriptor for `DecProto`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List decProtoDescriptor = $convert.base64Decode('CghEZWNQcm90bxIdCgNkZWMYASABKAlCC9reHwNEZWPI3h8AUgNkZWM=');
+final $typed_data.Uint8List decProtoDescriptor = $convert
+    .base64Decode('CghEZWNQcm90bxIdCgNkZWMYASABKAlCC9reHwNEZWPI3h8AUgNkZWM=');

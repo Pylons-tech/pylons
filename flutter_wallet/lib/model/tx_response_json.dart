@@ -1,6 +1,3 @@
-
-
-
 class TxResponseJson {
   TxResponseJson({
     required this.txhash,
@@ -9,17 +6,15 @@ class TxResponseJson {
   });
 
   factory TxResponseJson.fromJson(Map<String, dynamic> json) => TxResponseJson(
-    txhash: json['txhash'] as String? ?? '',
-    tx: TxJson.fromJson(json['tx'] as Map<String, dynamic>),
-    timestamp: DateTime.parse(json['timestamp'] as String),
-  );
+        txhash: json['txhash'] as String? ?? '',
+        tx: TxJson.fromJson(json['tx'] as Map<String, dynamic>),
+        timestamp: DateTime.parse(json['timestamp'] as String),
+      );
 
   String txhash;
   TxJson tx;
   DateTime timestamp;
 }
-
-
 
 class TxJson {
   TxJson({
@@ -28,26 +23,25 @@ class TxJson {
   });
 
   factory TxJson.fromJson(Map<String, dynamic> json) => TxJson(
-    type: json['@type'] as String? ?? '',
-    body: TxBodyJson.fromJson(json['body'] as Map<String, dynamic>),
-  );
+        type: json['@type'] as String? ?? '',
+        body: TxBodyJson.fromJson(json['body'] as Map<String, dynamic>),
+      );
 
   String type;
   TxBodyJson body;
 }
 
-
-
 class TxBodyJson {
   TxBodyJson({required this.messages});
 
   factory TxBodyJson.fromJson(Map<String, dynamic> json) => TxBodyJson(
-    messages: (json['messages'] as List).map((x) => TxBodyMessageJson.fromJson(x as Map<String, dynamic>)).toList(),
-  );
+        messages: (json['messages'] as List)
+            .map((x) => TxBodyMessageJson.fromJson(x as Map<String, dynamic>))
+            .toList(),
+      );
 
   List<TxBodyMessageJson> messages;
 }
-
 
 class TxBodyMessageJson {
   TxBodyMessageJson({
@@ -62,7 +56,9 @@ class TxBodyMessageJson {
       type: json['@type'] as String? ?? '',
       fromAddress: json['from_address'] as String? ?? '',
       toAddress: json['to_address'] as String? ?? '',
-      amount: (json['amount'] as List).map((x) => AmountJson.fromJson(x as Map<String, dynamic>)).toList(),
+      amount: (json['amount'] as List)
+          .map((x) => AmountJson.fromJson(x as Map<String, dynamic>))
+          .toList(),
     );
   }
 
@@ -79,9 +75,9 @@ class AmountJson {
   });
 
   factory AmountJson.fromJson(Map<String, dynamic> json) => AmountJson(
-    denom: json['denom'] as String? ?? '',
-    amount: json['amount'] as String? ?? '',
-  );
+        denom: json['denom'] as String? ?? '',
+        amount: json['amount'] as String? ?? '',
+      );
 
   String denom;
   String amount;

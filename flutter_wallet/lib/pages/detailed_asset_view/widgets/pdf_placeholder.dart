@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,16 +23,17 @@ class PdfPlaceHolder extends StatelessWidget {
         Positioned.fill(
             child: CachedNetworkImage(
                 placeholder: (context, url) => Shimmer(
-                  color: PylonsAppTheme.cardBackground,
-                  child: const SizedBox.expand(),
-                ),
+                      color: PylonsAppTheme.cardBackground,
+                      child: const SizedBox.expand(),
+                    ),
                 imageUrl: thumbnailUrl,
                 fit: BoxFit.cover)),
         Align(
           child: Container(
             width: 35.w,
             height: 35.h,
-            decoration: BoxDecoration(color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
+            decoration: BoxDecoration(
+                color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
             child: const Icon(Icons.picture_as_pdf),
           ),
         ),
@@ -41,23 +41,24 @@ class PdfPlaceHolder extends StatelessWidget {
     );
   }
 
-
   Widget getPdfPlaceHolder() {
     return Align(
       child: Container(
         width: 35.w,
         height: 35.h,
-        decoration: BoxDecoration(color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
-        child:const Icon(Icons.picture_as_pdf),
+        decoration: BoxDecoration(
+            color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
+        child: const Icon(Icons.picture_as_pdf),
       ),
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Container(color: kWhite, child: thumbnailUrl.isNotEmpty ? getPdfThumbnailFromUrl() : getPdfPlaceHolder());
+    return Container(
+        color: kWhite,
+        child: thumbnailUrl.isNotEmpty
+            ? getPdfThumbnailFromUrl()
+            : getPdfPlaceHolder());
   }
 }
-
-

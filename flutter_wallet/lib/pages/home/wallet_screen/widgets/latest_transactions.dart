@@ -14,8 +14,10 @@ import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-var _headingTextStyle = TextStyle(color: kWhite, fontWeight: FontWeight.w600, fontSize: 11.sp);
-var _subtitleTextStyle = TextStyle(color: kWhite, fontWeight: FontWeight.w600, fontSize: 9.sp); //7
+var _headingTextStyle =
+    TextStyle(color: kWhite, fontWeight: FontWeight.w600, fontSize: 11.sp);
+var _subtitleTextStyle =
+    TextStyle(color: kWhite, fontWeight: FontWeight.w600, fontSize: 9.sp); //7
 
 Map<int, String> monthStrMap = {
   1: 'jan'.tr(),
@@ -31,19 +33,27 @@ Map<int, String> monthStrMap = {
   11: 'nov'.tr(),
   12: 'dec'.tr()
 };
-Map<String, String> denomAbbr = {kPylonCoinName: kPYLN_ABBREVATION, kUSD: kStripeUSD_ABR};
+Map<String, String> denomAbbr = {
+  kPylonCoinName: kPYLN_ABBREVATION,
+  kUSD: kStripeUSD_ABR
+};
 
 class LatestTransactions extends StatelessWidget {
   final List<TransactionHistory> denomSpecificTxList;
 
   final String defaultCurrency;
 
-  const LatestTransactions({Key? key, required this.denomSpecificTxList, required this.defaultCurrency}) : super(key: key);
+  const LatestTransactions(
+      {Key? key,
+      required this.denomSpecificTxList,
+      required this.defaultCurrency})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: denomSpecificTxList.map((tx) => buildRow(txHistory: tx)).toList(),
+      children:
+          denomSpecificTxList.map((tx) => buildRow(txHistory: tx)).toList(),
     );
   }
 
@@ -62,7 +72,8 @@ class LatestTransactions extends StatelessWidget {
   }
 
   Column getAmountColumn({required TransactionHistory txHistory}) {
-    if (txHistory.transactionTypeEnum == TransactionType.NFTSELL || txHistory.transactionTypeEnum == TransactionType.RECEIVE) {
+    if (txHistory.transactionTypeEnum == TransactionType.NFTSELL ||
+        txHistory.transactionTypeEnum == TransactionType.RECEIVE) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -101,7 +112,10 @@ class LatestTransactions extends StatelessWidget {
           dense: true,
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
           minVerticalPadding: 0,
-          leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(SVGUtil.WALLET_NFT_PURCHASE)),
+          leading: SizedBox(
+              width: 25.w,
+              height: 25.h,
+              child: SvgPicture.asset(SVGUtil.WALLET_NFT_PURCHASE)),
           title: Text(
             "nft_purchase".tr(),
             softWrap: false,
@@ -124,7 +138,10 @@ class LatestTransactions extends StatelessWidget {
         return ListTile(
           dense: true,
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-          leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(SVGUtil.WALLET_NFT_SELL)),
+          leading: SizedBox(
+              width: 25.w,
+              height: 25.h,
+              child: SvgPicture.asset(SVGUtil.WALLET_NFT_SELL)),
           title: Text(
             "nft_sold".tr(),
             softWrap: false,
@@ -146,7 +163,10 @@ class LatestTransactions extends StatelessWidget {
         return ListTile(
           dense: true,
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-          leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(SVGUtil.WALLET_CURRENCY_RECEIVE)),
+          leading: SizedBox(
+              width: 25.w,
+              height: 25.h,
+              child: SvgPicture.asset(SVGUtil.WALLET_CURRENCY_RECEIVE)),
           title: Text(
             "pylons_purchase".tr(),
             softWrap: false,
@@ -158,7 +178,10 @@ class LatestTransactions extends StatelessWidget {
         return ListTile(
           dense: true,
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-          leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(SVGUtil.WALLET_CURRENCY_SENT)),
+          leading: SizedBox(
+              width: 25.w,
+              height: 25.h,
+              child: SvgPicture.asset(SVGUtil.WALLET_CURRENCY_SENT)),
           title: Text(
             "pylons_sent".tr(),
             softWrap: false,
@@ -177,21 +200,26 @@ class LatestTransactions extends StatelessWidget {
     String seller = "";
     String buyer = "";
 
-    if (txHistory.transactionTypeEnum == TransactionType.NFTSELL || txHistory.transactionTypeEnum == TransactionType.NFTBUY) {
+    if (txHistory.transactionTypeEnum == TransactionType.NFTSELL ||
+        txHistory.transactionTypeEnum == TransactionType.NFTBUY) {
       final showLoader = Loading()..showLoading();
 
       if (txHistory.transactionTypeEnum == TransactionType.NFTSELL) {
-        seller = await walletsStore.getAccountNameByAddress(walletsStore.getWallets().value.first.publicAddress);
+        seller = await walletsStore.getAccountNameByAddress(
+            walletsStore.getWallets().value.first.publicAddress);
         buyer = await walletsStore.getAccountNameByAddress(txHistory.address);
       }
 
       if (txHistory.transactionTypeEnum == TransactionType.NFTBUY) {
         seller = await walletsStore.getAccountNameByAddress(txHistory.address);
-        buyer = await walletsStore.getAccountNameByAddress(walletsStore.getWallets().value.first.publicAddress);
+        buyer = await walletsStore.getAccountNameByAddress(
+            walletsStore.getWallets().value.first.publicAddress);
       }
 
-      final recipeResult = await walletsStore.getRecipe(txHistory.cookbookId, txHistory.recipeId);
-      final creator = await walletsStore.getAccountNameByAddress(txHistory.address);
+      final recipeResult = await walletsStore.getRecipe(
+          txHistory.cookbookId, txHistory.recipeId);
+      final creator =
+          await walletsStore.getAccountNameByAddress(txHistory.address);
       showLoader.dismiss();
       if (recipeResult.isLeft()) {
         "nft_does_not_exists".tr().show();
@@ -199,30 +227,46 @@ class LatestTransactions extends StatelessWidget {
       }
       final recipe = recipeResult.toOption().toNullable()!;
 
-      final AssetType nftType = recipe.entries.itemOutputs.first.strings.firstWhere((strKeyValue) => strKeyValue.key == kNftFormat, orElse: () => StringParam()).value.toAssetTypeEnum();
-      final String nftUrl = recipe.entries.itemOutputs.first.strings.firstWhere((strKeyValue) => strKeyValue.key == kNFTURL, orElse: () => StringParam()).value;
-      final String thumbnailUrl = recipe.entries.itemOutputs.first.strings.firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl, orElse: () => StringParam()).value;
+      final AssetType nftType = recipe.entries.itemOutputs.first.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kNftFormat,
+              orElse: () => StringParam())
+          .value
+          .toAssetTypeEnum();
+      final String nftUrl = recipe.entries.itemOutputs.first.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kNFTURL,
+              orElse: () => StringParam())
+          .value;
+      final String thumbnailUrl = recipe.entries.itemOutputs.first.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl,
+              orElse: () => StringParam())
+          .value;
 
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_TRANSACTION_DETAIL,
-          arguments: TxDetailArguments(
-            recipe: recipe,
-            creator: creator,
-            seller: seller,
-            buyer: buyer,
-            txID: txHistory.txID,
-            transactionTime: DateFormat("MMM dd yyyy HH:mm").format(DateTime.fromMillisecondsSinceEpoch(txHistory.createdAt * kDateConverterConstant)),
-            currency: (denomAbbr[defaultCurrency])!,
-            price: "${defaultCurrency.convertFromU(txHistory)} ${denomAbbr[defaultCurrency]}",
-            transactionEnum: txHistory.transactionTypeEnum,
-            nftType: nftType,
-            nftThumbnailUrl: thumbnailUrl,
-            nftUrl: nftUrl,
-          ));
+      Navigator.of(navigatorKey.currentState!.overlay!.context)
+          .pushNamed(RouteUtil.ROUTE_TRANSACTION_DETAIL,
+              arguments: TxDetailArguments(
+                recipe: recipe,
+                creator: creator,
+                seller: seller,
+                buyer: buyer,
+                txID: txHistory.txID,
+                transactionTime: DateFormat("MMM dd yyyy HH:mm").format(
+                    DateTime.fromMillisecondsSinceEpoch(
+                        txHistory.createdAt * kDateConverterConstant)),
+                currency: (denomAbbr[defaultCurrency])!,
+                price:
+                    "${defaultCurrency.convertFromU(txHistory)} ${denomAbbr[defaultCurrency]}",
+                transactionEnum: txHistory.transactionTypeEnum,
+                nftType: nftType,
+                nftThumbnailUrl: thumbnailUrl,
+                nftUrl: nftUrl,
+              ));
     }
   }
 
   InkWell buildRow({required TransactionHistory txHistory}) {
-    final DateTime date = DateTime.fromMillisecondsSinceEpoch(txHistory.createdAt * kDateConverterConstant, isUtc: true);
+    final DateTime date = DateTime.fromMillisecondsSinceEpoch(
+        txHistory.createdAt * kDateConverterConstant,
+        isUtc: true);
     return InkWell(
       onTap: () => onTxTapped(txHistory: txHistory),
       child: Row(

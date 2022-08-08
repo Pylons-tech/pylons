@@ -10,8 +10,16 @@ import 'package:pylons_wallet/services/third_party_services/stripe_handler.dart'
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
-TextStyle kPaymentLabelText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
-TextStyle kPaymentOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w600);
+TextStyle kPaymentLabelText = TextStyle(
+    fontSize: 28.sp,
+    fontFamily: kUniversalFontFamily,
+    color: Colors.black,
+    fontWeight: FontWeight.w800);
+TextStyle kPaymentOptionsText = TextStyle(
+    fontSize: 18.sp,
+    fontFamily: kUniversalFontFamily,
+    color: Colors.black,
+    fontWeight: FontWeight.w600);
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({Key? key}) : super(key: key);
@@ -66,7 +74,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
             PaymentForwardItem(
               title: "transaction_history".tr(),
               onPressed: () {
-                Navigator.of(context).pushNamed(RouteUtil.ROUTE_TRANSACTION_HISTORY);
+                Navigator.of(context)
+                    .pushNamed(RouteUtil.ROUTE_TRANSACTION_HISTORY);
               },
             )
           ],
@@ -78,7 +87,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Future<void> handleStripeAccountLink() async {
     final loading = Loading()..showLoading();
 
-    final account_response = await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
+    final account_response =
+        await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
     loading.dismiss();
     account_response.fold((fail) => {fail.message.show()}, (accountlink) {
       showDialog(
@@ -99,7 +109,9 @@ class PaymentForwardItem extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
 
-  const PaymentForwardItem({required this.title, Key? key, required this.onPressed}) : super(key: key);
+  const PaymentForwardItem(
+      {required this.title, Key? key, required this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

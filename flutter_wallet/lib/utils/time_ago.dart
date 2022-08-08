@@ -1,5 +1,3 @@
-
-
 String _default = 'en';
 
 Map<String, LookupMessages> _lookupMessagesMap = {
@@ -16,7 +14,7 @@ Map<String, LookupMessages> _lookupMessagesMap = {
 /// ```
 void setDefaultLocale(String locale) {
   assert(_lookupMessagesMap.containsKey(locale),
-  '[locale] must be a registered locale');
+      '[locale] must be a registered locale');
   _default = locale;
 }
 
@@ -46,8 +44,7 @@ void setLocaleMessages(String locale, LookupMessages lookupMessages) {
 String format(DateTime date,
     {String? locale, DateTime? clock, bool allowFromNow = false}) {
   final _locale = locale ?? _default;
-  if (_lookupMessagesMap[_locale] == null) {
-  }
+  if (_lookupMessagesMap[_locale] == null) {}
   final _allowFromNow = allowFromNow;
   final messages = _lookupMessagesMap[_locale] ?? EnMessages();
   final _clock = clock ?? DateTime.now();
@@ -101,7 +98,6 @@ String format(DateTime date,
       .where((str) => str.isNotEmpty)
       .join(messages.wordSeparator());
 }
-
 
 /// English Messages
 class EnMessages implements LookupMessages {

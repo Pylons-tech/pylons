@@ -10,7 +10,15 @@ class PreviewNFTGrid extends StatelessWidget {
 
   final AssetType assetType;
 
-  const PreviewNFTGrid({Key? key, required this.on3dNFT, required this.onAudioNFT, required this.onVideoNFT,required this.onPdfNFT, required this.onImageNFT, required this.assetType}) : super(key: key);
+  const PreviewNFTGrid(
+      {Key? key,
+      required this.on3dNFT,
+      required this.onAudioNFT,
+      required this.onVideoNFT,
+      required this.onPdfNFT,
+      required this.onImageNFT,
+      required this.assetType})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

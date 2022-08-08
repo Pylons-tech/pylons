@@ -7,7 +7,7 @@ import 'dart:async' as _i5;
 import 'package:firebase_core/firebase_core.dart' as _i2;
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart' as _i4;
 import 'package:firebase_dynamic_links_platform_interface/firebase_dynamic_links_platform_interface.dart'
-as _i3;
+    as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -46,8 +46,8 @@ class MockFirebaseDynamicLinks extends _i1.Mock
   @override
   _i5.Stream<_i3.PendingDynamicLinkData> get onLink =>
       (super.noSuchMethod(Invocation.getter(#onLink),
-          returnValue: Stream<_i3.PendingDynamicLinkData>.empty())
-      as _i5.Stream<_i3.PendingDynamicLinkData>);
+              returnValue: Stream<_i3.PendingDynamicLinkData>.empty())
+          as _i5.Stream<_i3.PendingDynamicLinkData>);
   @override
   Map<dynamic, dynamic> get pluginConstants =>
       (super.noSuchMethod(Invocation.getter(#pluginConstants),
@@ -55,22 +55,22 @@ class MockFirebaseDynamicLinks extends _i1.Mock
   @override
   _i5.Future<_i3.PendingDynamicLinkData?> getInitialLink() =>
       (super.noSuchMethod(Invocation.method(#getInitialLink, []),
-          returnValue: Future<_i3.PendingDynamicLinkData?>.value())
-      as _i5.Future<_i3.PendingDynamicLinkData?>);
+              returnValue: Future<_i3.PendingDynamicLinkData?>.value())
+          as _i5.Future<_i3.PendingDynamicLinkData?>);
   @override
   _i5.Future<_i3.PendingDynamicLinkData?> getDynamicLink(Uri? url) =>
       (super.noSuchMethod(Invocation.method(#getDynamicLink, [url]),
-          returnValue: Future<_i3.PendingDynamicLinkData?>.value())
-      as _i5.Future<_i3.PendingDynamicLinkData?>);
+              returnValue: Future<_i3.PendingDynamicLinkData?>.value())
+          as _i5.Future<_i3.PendingDynamicLinkData?>);
   @override
   _i5.Future<Uri> buildLink(_i3.DynamicLinkParameters? parameters) =>
       (super.noSuchMethod(Invocation.method(#buildLink, [parameters]),
           returnValue: Future<Uri>.value(_FakeUri_1())) as _i5.Future<Uri>);
   @override
   _i5.Future<_i3.ShortDynamicLink> buildShortLink(
-      _i3.DynamicLinkParameters? parameters,
-      {_i3.ShortDynamicLinkType? shortLinkType =
-          _i3.ShortDynamicLinkType.short}) =>
+          _i3.DynamicLinkParameters? parameters,
+          {_i3.ShortDynamicLinkType? shortLinkType =
+              _i3.ShortDynamicLinkType.short}) =>
       (super.noSuchMethod(
           Invocation.method(
               #buildShortLink, [parameters], {#shortLinkType: shortLinkType}),

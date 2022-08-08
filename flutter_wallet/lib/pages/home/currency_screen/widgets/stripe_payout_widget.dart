@@ -11,7 +11,8 @@ class StripePayoutWidget {
   String amount;
   Function? onCallback;
 
-  StripePayoutWidget({required this.context, required this.amount, this.onCallback});
+  StripePayoutWidget(
+      {required this.context, required this.amount, this.onCallback});
 
   Future show() {
     return showModalBottomSheet(
@@ -23,7 +24,9 @@ class StripePayoutWidget {
             topRight: Radius.circular(30.0),
           ),
         ),
-        builder: (context) => Wrap(children: [StripePayoutForm(maxAmount: amount, onCallback: onCallback)]));
+        builder: (context) => Wrap(children: [
+              StripePayoutForm(maxAmount: amount, onCallback: onCallback)
+            ]));
   }
 }
 
@@ -32,7 +35,8 @@ class StripePayoutForm extends StatefulWidget {
   final String maxAmount;
   final Function? onCallback;
 
-  const StripePayoutForm({Key? key, required this.maxAmount, this.onCallback}) : super(key: key);
+  const StripePayoutForm({Key? key, required this.maxAmount, this.onCallback})
+      : super(key: key);
 
   @override
   StripePayoutFormState createState() => StripePayoutFormState();
@@ -56,13 +60,21 @@ class StripePayoutFormState extends State<StripePayoutForm> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 50, bottom: MediaQuery.of(context).viewInsets.bottom),
+              padding: EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  top: 50,
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Column(
                 children: [
                   const VerticalSpace(30),
-                  Text("request_payout".tr(), style: const TextStyle(color: Colors.black, fontSize: 16)),
+                  Text("request_payout".tr(),
+                      style:
+                          const TextStyle(color: Colors.black, fontSize: 16)),
                   const VerticalSpace(30),
-                  Text("${"available_amount".tr()} ${widget.maxAmount.UvalToVal()} USD", textAlign: TextAlign.start),
+                  Text(
+                      "${"available_amount".tr()} ${widget.maxAmount.UvalToVal()} USD",
+                      textAlign: TextAlign.start),
                   const VerticalSpace(30),
                   PylonsTextInput(
                     controller: amountController,
@@ -72,7 +84,8 @@ class StripePayoutFormState extends State<StripePayoutForm> {
                       if (textValue == null || textValue.isEmpty) {
                         return "empty_amount".tr();
                       } else {
-                        if (Decimal.parse(textValue) > Decimal.parse(widget.maxAmount.UvalToVal())) {
+                        if (Decimal.parse(textValue) >
+                            Decimal.parse(widget.maxAmount.UvalToVal())) {
                           return "exceed_amount".tr();
                         }
                       }

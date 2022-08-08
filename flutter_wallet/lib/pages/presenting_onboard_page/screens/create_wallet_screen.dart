@@ -11,7 +11,6 @@ class CreateWalletScreen extends StatelessWidget {
 
   WalletsStore get walletsStore => GetIt.I.get();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

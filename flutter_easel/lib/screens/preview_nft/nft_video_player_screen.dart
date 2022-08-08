@@ -25,7 +25,8 @@ class NFTVideoPlayerScreen extends StatelessWidget {
                   onVideoLoading: (BuildContext context) => const Center(
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(EaselAppTheme.kWhite),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              EaselAppTheme.kWhite),
                         ),
                       ),
                   onVideoHasError: (BuildContext context) => Center(
@@ -33,12 +34,14 @@ class NFTVideoPlayerScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         child: Text(
                           videoPlayerError,
-                          style: TextStyle(fontSize: 18.sp, color: EaselAppTheme.kWhite),
+                          style: TextStyle(
+                              fontSize: 18.sp, color: EaselAppTheme.kWhite),
                         ),
                       )),
                   onVideoInitialized: (BuildContext context) => Center(
                         child: AspectRatio(
-                          aspectRatio: viewModel.videoPlayerController.value.aspectRatio,
+                          aspectRatio:
+                              viewModel.videoPlayerController.value.aspectRatio,
                           child: VideoPlayer(viewModel.videoPlayerController),
                         ),
                       ),
@@ -56,7 +59,8 @@ class NFTVideoPlayerScreen extends StatelessWidget {
                         color: Colors.black.withOpacity(0.3),
                         child: Padding(
                           padding: EdgeInsets.only(bottom: 30.h),
-                          child: const VideoProgressWidget(darkMode: true, isForFile: false),
+                          child: const VideoProgressWidget(
+                              darkMode: true, isForFile: false),
                         ),
                       ),
                     ),

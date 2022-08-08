@@ -6,7 +6,8 @@ import 'package:easel_flutter/screens/splash_screen.dart';
 import 'package:easel_flutter/screens/tutorial_screen.dart';
 import 'package:easel_flutter/screens/welcome_easel.dart';
 import 'package:easel_flutter/utils/constants.dart';
-import 'package:easel_flutter/utils/dependency_injection/dependency_injection_container.dart' as di;
+import 'package:easel_flutter/utils/dependency_injection/dependency_injection_container.dart'
+    as di;
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/route_util.dart';
 import 'package:easel_flutter/widgets/pdf_viewer_full_screen.dart';
@@ -28,7 +29,10 @@ Future<void> main() async {
   PylonsWallet.setup(mode: PylonsMode.prod, host: 'easel');
   di.init();
 
-  isTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide >= TABLET_MIN_WIDTH;
+  isTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+          .size
+          .shortestSide >=
+      TABLET_MIN_WIDTH;
 
   runApp(
     EasyLocalization(
@@ -73,12 +77,17 @@ class MyApp extends StatelessWidget {
                 routes: {
                   '/': (context) => const SplashScreen(),
                   RouteUtil.kRouteTutorial: (context) => const TutorialScreen(),
-                  RouteUtil.kRouteCreatorHub: (context) => const CreatorHubScreen(),
-                  RouteUtil.kRoutePreviewNFTFullScreen: (context) => const PreviewNFTFullScreen(),
+                  RouteUtil.kRouteCreatorHub: (context) =>
+                      const CreatorHubScreen(),
+                  RouteUtil.kRoutePreviewNFTFullScreen: (context) =>
+                      const PreviewNFTFullScreen(),
                   RouteUtil.kRouteHome: (context) => const HomeScreen(),
-                  RouteUtil.kVideoFullScreen: (context) => const VideoWidgetFullScreen(),
-                  RouteUtil.kPdfFullScreen: (context) => const PdfViewerFullScreen(),
-                  RouteUtil.kRouteWelcomeEasel: (context) => const WelcomeEasel(),
+                  RouteUtil.kVideoFullScreen: (context) =>
+                      const VideoWidgetFullScreen(),
+                  RouteUtil.kPdfFullScreen: (context) =>
+                      const PdfViewerFullScreen(),
+                  RouteUtil.kRouteWelcomeEasel: (context) =>
+                      const WelcomeEasel(),
                 },
               )),
     );

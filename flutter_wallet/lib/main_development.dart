@@ -10,11 +10,8 @@ import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart'
-as di;
+    as di;
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
-
-
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,11 +24,10 @@ Future<void> main() async {
   await dotenv.load(fileName: "env/.dev_env");
   await di.init();
 
-
-
-  isTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide >= TABLET_MIN_LENGTH;
-
-
+  isTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+          .size
+          .shortestSide >=
+      TABLET_MIN_LENGTH;
 
   Stripe.publishableKey = sl<BaseEnv>().baseStripPubKey;
   Stripe.merchantIdentifier = "merchant.tech.pylons.wallet";

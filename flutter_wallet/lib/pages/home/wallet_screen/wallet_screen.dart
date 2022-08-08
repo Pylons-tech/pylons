@@ -89,7 +89,8 @@ class _WalletScreenState extends State<WalletScreen> {
                           provider.newOrder(newIndex);
                         },
                         itemCount: provider.items.length,
-                        proxyDecorator: (Widget widget, int index, Animation animation) {
+                        proxyDecorator:
+                            (Widget widget, int index, Animation animation) {
                           return widget;
                         },
                         itemBuilder: (context, index) {
@@ -100,7 +101,8 @@ class _WalletScreenState extends State<WalletScreen> {
                             currencyModel: currencyModel,
                             onFaucetPressed: () {
                               if (currencyModel.ibcCoins.getName() == kPylons) {
-                                Navigator.of(context).pushNamed(RouteUtil.ROUTE_ADD_PYLON);
+                                Navigator.of(context)
+                                    .pushNamed(RouteUtil.ROUTE_ADD_PYLON);
                               }
                             },
                           );
@@ -126,7 +128,10 @@ class _WalletScreenState extends State<WalletScreen> {
     faucetEither.fold((failure) {
       faucetEither.swap().toOption().toNullable()!.message.show();
     }, (success) {
-      sprintf("faucet_added".tr(), [faucetEither.getOrElse(() => 0).toString().UvalToVal(), denom.UdenomToDenom()]).show();
+      sprintf("faucet_added".tr(), [
+        faucetEither.getOrElse(() => 0).toString().UvalToVal(),
+        denom.UdenomToDenom()
+      ]).show();
       Timer(const Duration(milliseconds: 400), () {
         context.read<HomeProvider>().buildAssetsList();
       });

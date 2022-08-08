@@ -16,14 +16,23 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-TextStyle kHeadlineTextStyle = TextStyle(fontSize: 16.sp, fontFamily: kUniversalFontFamily, color: Colors.black);
-TextStyle kSettingsOptionsTextStyle = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w600);
+TextStyle kHeadlineTextStyle = TextStyle(
+    fontSize: 16.sp, fontFamily: kUniversalFontFamily, color: Colors.black);
+TextStyle kSettingsOptionsTextStyle = TextStyle(
+    fontSize: 18.sp,
+    fontFamily: kUniversalFontFamily,
+    color: Colors.black,
+    fontWeight: FontWeight.w600);
 TextStyle kSettingsUserEnteredTextStyle = TextStyle(
   fontSize: 14.sp,
   fontFamily: kUniversalFontFamily,
   color: kUserInputTextColor,
 );
-TextStyle kSettingsUserNameTextStyle = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: kSettingsUserNameColor, fontWeight: FontWeight.w500);
+TextStyle kSettingsUserNameTextStyle = TextStyle(
+    fontSize: 18.sp,
+    fontFamily: kUniversalFontFamily,
+    color: kSettingsUserNameColor,
+    fontWeight: FontWeight.w500);
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -105,7 +114,9 @@ class _SettingScreenState extends State<SettingScreen> {
                       maxLength: 120,
                       maxLines: 4,
                       onChanged: (value) {
-                        GetIt.I.get<Repository>().saveDescription(description: value);
+                        GetIt.I
+                            .get<Repository>()
+                            .saveDescription(description: value);
                       },
                       decoration: InputDecoration(
                           hintText: "bio_text".tr(),
@@ -143,10 +154,16 @@ class _SettingScreenState extends State<SettingScreen> {
                             ),
                           ),
                           TextButton.icon(
-                              style:
-                                  ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(0))), backgroundColor: MaterialStateProperty.all(kCopyColor)),
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(0))),
+                                  backgroundColor:
+                                      MaterialStateProperty.all(kCopyColor)),
                               onPressed: () {
-                                Clipboard.setData(ClipboardData(text: address)).then((_) {
+                                Clipboard.setData(ClipboardData(text: address))
+                                    .then((_) {
                                   "wallet_copied".tr().show(context: context);
                                 });
                               },
@@ -183,16 +200,26 @@ class _SettingScreenState extends State<SettingScreen> {
                             color: kCopyColor,
                             child: TextButton.icon(
                                 style: ButtonStyle(
-                                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(0))), backgroundColor: MaterialStateProperty.all(kCopyColor)),
+                                    shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(0))),
+                                    backgroundColor:
+                                        MaterialStateProperty.all(kCopyColor)),
                                 onPressed: () async {
                                   if (emailController.text.isNotEmpty) {
-                                    if (RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(emailController.text)) {
-                                      GetIt.I.get<Repository>().saveEmail(value: emailController.text);
+                                    if (RegExp(
+                                            r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$")
+                                        .hasMatch(emailController.text)) {
+                                      GetIt.I.get<Repository>().saveEmail(
+                                          value: emailController.text);
                                       "email_saved".tr().show(context: context);
                                       return;
                                     }
 
-                                    "email_format_incorrect".tr().show(context: context);
+                                    "email_format_incorrect"
+                                        .tr()
+                                        .show(context: context);
                                     return;
                                   }
                                   "email_empty".tr().show(context: context);
@@ -323,7 +350,12 @@ class SettingListItem extends StatefulWidget {
   final String imagePath;
   final VoidCallback onPressed;
 
-  const SettingListItem({Key? key, required this.title, required this.imagePath, required this.onPressed}) : super(key: key);
+  const SettingListItem(
+      {Key? key,
+      required this.title,
+      required this.imagePath,
+      required this.onPressed})
+      : super(key: key);
 
   @override
   State<SettingListItem> createState() => _SettingListItemState();

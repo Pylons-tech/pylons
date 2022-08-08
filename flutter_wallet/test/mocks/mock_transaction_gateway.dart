@@ -4,17 +4,16 @@
 
 import 'dart:async' as _i4;
 
-import 'package:cosmos_utils/credentials_storage_failure.dart'
-as _i5;
+import 'package:cosmos_utils/credentials_storage_failure.dart' as _i5;
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:transaction_signing_gateway/gateway/transaction_signing_gateway.dart';
 import 'package:transaction_signing_gateway/model/account_lookup_key.dart'
-as _i7;
+    as _i7;
 import 'package:transaction_signing_gateway/model/transaction_signing_failure.dart'
-as _i6;
+    as _i6;
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart'
-as _i3;
+    as _i3;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -23,7 +22,6 @@ as _i3;
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: unnecessary_parenthesis
-
 
 class _FakeEither_0<L, R> extends _i1.Fake implements _i2.Either<L, R> {}
 
@@ -36,34 +34,30 @@ class MockTransactionSigningGateway extends _i1.Mock
     _i1.throwOnMissingStub(this);
   }
 
-
   @override
   _i4.Future<_i2.Either<_i5.CredentialsStorageFailure, _i2.Unit>>
-  updateAccountPublicInfo({_i3.AccountPublicInfo? info}) => (super.noSuchMethod(
-      Invocation.method(#updateWalletPublicInfo, [], {#info: info}),
-      returnValue: Future<
-          _i2.Either<_i5.CredentialsStorageFailure, _i2.Unit>>.value(
-          _FakeEither_0<_i5.CredentialsStorageFailure, _i2.Unit>())) as _i4
-      .Future<_i2.Either<_i5.CredentialsStorageFailure, _i2.Unit>>);
-
-
+      updateAccountPublicInfo({_i3.AccountPublicInfo? info}) => (super.noSuchMethod(
+          Invocation.method(#updateWalletPublicInfo, [], {#info: info}),
+          returnValue: Future<
+                  _i2.Either<_i5.CredentialsStorageFailure, _i2.Unit>>.value(
+              _FakeEither_0<_i5.CredentialsStorageFailure, _i2.Unit>())) as _i4
+          .Future<_i2.Either<_i5.CredentialsStorageFailure, _i2.Unit>>);
 
   @override
   _i4.Future<_i2.Either<_i5.CredentialsStorageFailure, List<_i3.AccountPublicInfo>>>
-  getAccountsList() => (super.noSuchMethod(Invocation.method(#getWalletsList, []),
-      returnValue:
-      Future<_i2.Either<_i5.CredentialsStorageFailure, List<_i3.AccountPublicInfo>>>.value(
-          _FakeEither_0<_i5.CredentialsStorageFailure,
-              List<_i3.AccountPublicInfo>>())) as _i4
-      .Future<_i2.Either<_i5.CredentialsStorageFailure, List<_i3.AccountPublicInfo>>>);
+      getAccountsList() => (super.noSuchMethod(Invocation.method(#getWalletsList, []),
+          returnValue:
+              Future<_i2.Either<_i5.CredentialsStorageFailure, List<_i3.AccountPublicInfo>>>.value(
+                  _FakeEither_0<_i5.CredentialsStorageFailure,
+                      List<_i3.AccountPublicInfo>>())) as _i4
+          .Future<_i2.Either<_i5.CredentialsStorageFailure, List<_i3.AccountPublicInfo>>>);
   @override
   _i4.Future<_i2.Either<_i6.TransactionSigningFailure, bool>> verifyLookupKey(
-      _i7.AccountLookupKey? walletLookupKey) =>
+          _i7.AccountLookupKey? walletLookupKey) =>
       (super.noSuchMethod(
-          Invocation.method(#verifyLookupKey, [walletLookupKey]),
-          returnValue:
-          Future<_i2.Either<_i6.TransactionSigningFailure, bool>>.value(
-              _FakeEither_0<_i6.TransactionSigningFailure, bool>()))
-      as _i4.Future<_i2.Either<_i6.TransactionSigningFailure, bool>>);
-
+              Invocation.method(#verifyLookupKey, [walletLookupKey]),
+              returnValue:
+                  Future<_i2.Either<_i6.TransactionSigningFailure, bool>>.value(
+                      _FakeEither_0<_i6.TransactionSigningFailure, bool>()))
+          as _i4.Future<_i2.Either<_i6.TransactionSigningFailure, bool>>);
 }

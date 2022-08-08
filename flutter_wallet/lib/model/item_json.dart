@@ -64,11 +64,9 @@ class Item {
     if (json['strings'] != null) {
       strings = [];
       json['strings'].forEach((v) {
-
-        if(v is Map<String, dynamic>){
+        if (v is Map<String, dynamic>) {
           strings.add(Strings.fromJson(v));
         }
-
       });
     }
     if (json['mutableStrings'] != null) {

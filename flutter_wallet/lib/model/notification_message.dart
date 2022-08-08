@@ -47,7 +47,21 @@ class NotificationMessage {
     final to = json[kTo] as String;
     final type = json[kType] as String;
     final updatedAt = json[kUpdatedAt] as int;
-    return NotificationMessage(id: id, txHash: txHash , amount: amount, coin: coin, createdAt: createdAt, from: from, itemFormat: itemFormat, itemImg: itemImg, read: read, settled: settled, to: to, type: type, updatedAt: updatedAt, itemName: itemName);
+    return NotificationMessage(
+        id: id,
+        txHash: txHash,
+        amount: amount,
+        coin: coin,
+        createdAt: createdAt,
+        from: from,
+        itemFormat: itemFormat,
+        itemImg: itemImg,
+        read: read,
+        settled: settled,
+        to: to,
+        type: type,
+        updatedAt: updatedAt,
+        itemName: itemName);
   }
 
   @override

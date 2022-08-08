@@ -9,14 +9,18 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.sp);
+TextStyle _rowTitleTextStyle = TextStyle(
+    color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.sp);
 
 class TradeCompleteDialog {
   final TradeReceiptModel _model;
   final BuildContext _buildContext;
   final VoidCallback _onBackPressed;
 
-  TradeCompleteDialog({required TradeReceiptModel model, required BuildContext context, required VoidCallback onBackPressed})
+  TradeCompleteDialog(
+      {required TradeReceiptModel model,
+      required BuildContext context,
+      required VoidCallback onBackPressed})
       : _model = model,
         _buildContext = context,
         _onBackPressed = onBackPressed;
@@ -28,7 +32,8 @@ class TradeCompleteDialog {
           return Dialog(
               backgroundColor: Colors.transparent,
               child: TradeCompleteWidget(
-                model: _model, onBackPressed: _onBackPressed ,
+                model: _model,
+                onBackPressed: _onBackPressed,
               ));
         });
   }
@@ -38,7 +43,9 @@ class TradeCompleteWidget extends StatefulWidget {
   final TradeReceiptModel model;
   final VoidCallback onBackPressed;
 
-  const TradeCompleteWidget({Key? key, required this.model, required this.onBackPressed}) : super(key: key);
+  const TradeCompleteWidget(
+      {Key? key, required this.model, required this.onBackPressed})
+      : super(key: key);
 
   @override
   State<TradeCompleteWidget> createState() => _TradeCompleteWidgetState();
@@ -49,8 +56,9 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black.withOpacity(0.7),
-      height: 200.h ,
-      margin: isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
+      height: 200.h,
+      margin:
+          isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
       child: Stack(
         children: [
           Positioned(
@@ -60,7 +68,8 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
               height: 60,
               width: 80,
               child: ClipPath(
-                clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NW),
+                clipper: RightTriangleClipper(
+                    orientation: enums.Orientation.Orientation_NW),
                 child: Container(
                   color: kDarkRed,
                 ),
@@ -74,7 +83,8 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
               height: 60,
               width: 80,
               child: ClipPath(
-                clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SE),
+                clipper: RightTriangleClipper(
+                    orientation: enums.Orientation.Orientation_SE),
                 child: Container(
                   color: kDarkRed,
                 ),
@@ -93,14 +103,19 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
                 SizedBox(
                   height: 20.h,
                 ),
-                SvgPicture.asset(SVGUtil.TRANSACTION_COMPLETE, height: isTablet ? 24.h : null,),
+                SvgPicture.asset(
+                  SVGUtil.TRANSACTION_COMPLETE,
+                  height: isTablet ? 24.h : null,
+                ),
                 SizedBox(
                   height: 25.h,
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: isTablet ? 20.w: 30.w),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: isTablet ? 20.w : 30.w),
                   child: Text(
-                    "transaction_complete_desc".tr(args: [widget.model.nftName]),
+                    "transaction_complete_desc"
+                        .tr(args: [widget.model.nftName]),
                     style: _rowTitleTextStyle,
                     textAlign: TextAlign.center,
                   ),
@@ -124,7 +139,8 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
                           child: Text(
                             "view_receipt".tr(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 14.sp),
                           ),
                         ),
                       ),

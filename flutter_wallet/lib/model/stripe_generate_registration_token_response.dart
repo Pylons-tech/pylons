@@ -22,14 +22,11 @@ class StripeGenerateRegistrationTokenResponse {
 
   factory StripeGenerateRegistrationTokenResponse.fromJson(
       Map<String, dynamic> ret) {
-
-      return StripeGenerateRegistrationTokenResponse(
-          token: ret.entries
-              .firstWhere((entry) => entry.key == 'token',
-              orElse: () => const MapEntry('token', ''))
-              .value as String,
-          success: true);
+    return StripeGenerateRegistrationTokenResponse(
+        token: ret.entries
+            .firstWhere((entry) => entry.key == 'token',
+                orElse: () => const MapEntry('token', ''))
+            .value as String,
+        success: true);
   }
-
-
 }

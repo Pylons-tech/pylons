@@ -20,7 +20,11 @@ void main() {
       home: const Scaffold(),
     ));
 
-    final sdkipcMessage = SdkIpcMessage(action: HandlerFactory.TX_CREATE_RECIPE, json: MOCK_RECIPE, sender: SENDER_APP, requestResponse: true);
+    final sdkipcMessage = SdkIpcMessage(
+        action: HandlerFactory.TX_CREATE_RECIPE,
+        json: MOCK_RECIPE,
+        sender: SENDER_APP,
+        requestResponse: true);
 
     final handler = CreateRecipeHandler(sdkipcMessage);
     final response = await handler.handle();

@@ -8,7 +8,8 @@ import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.d
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:transaction_signing_gateway/model/transaction_hash.dart';
 
-TransactionHash MOCK_TRANSACTION = const TransactionHash(hash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E');
+TransactionHash MOCK_TRANSACTION = const TransactionHash(
+    hash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E');
 
 String MOCK_USERNAME = "Jawad";
 String SENDER_APP = 'Sending app';
@@ -192,7 +193,8 @@ const String MOCK_EXECUTION_ID = 'executionId';
 const String MOCK_ERROR = 'SOMETHING_WENT_WRONG';
 const String MOCK_RECIPE_VERSION = 'recipe version';
 const String MOCK_NODE_VERSION = 'node version';
-const String MOCK_MNEMONIC = "laundry number match ring spatial surround gadget rally teach second cover crucial";
+const String MOCK_MNEMONIC =
+    "laundry number match ring spatial surround gadget rally teach second cover crucial";
 
 const String MOCK_TOKEN = 'tokenXYZ';
 const String SIGNATURE = 'signature';
@@ -201,8 +203,11 @@ const String MOCK_ACCOUNT_LINK = 'mock_account_link';
 const String MOCK_ACCOUNT = 'mock_account';
 const bool MOCK_STRIPE_ACCOUNT_EXISTS = true;
 
-StripeUpdateAccountRequest MOCK_STRIPE_UPDATE_ACCOUNT_REQUEST = StripeUpdateAccountRequest(Address: MOCK_ADDRESS, Token: MOCK_TOKEN, Signature: SIGNATURE);
-StripeGetLoginBasedOnAddressRequest MOCK_STRIPE_LOGIN_BASED_ADDRESS_REQUEST = StripeGetLoginBasedOnAddressRequest(MOCK_ADDRESS);
+StripeUpdateAccountRequest MOCK_STRIPE_UPDATE_ACCOUNT_REQUEST =
+    StripeUpdateAccountRequest(
+        Address: MOCK_ADDRESS, Token: MOCK_TOKEN, Signature: SIGNATURE);
+StripeGetLoginBasedOnAddressRequest MOCK_STRIPE_LOGIN_BASED_ADDRESS_REQUEST =
+    StripeGetLoginBasedOnAddressRequest(MOCK_ADDRESS);
 
 Item MOCK_ITEM = Item(
   owner: '',
@@ -229,9 +234,7 @@ BaseEnv MOCK_BASE_ENV = BaseEnv()
       lcdPort: '9090',
       grpcPort: '9090',
       ethUrl: '',
-
       faucetUrl: '',
-
       stripeUrl: '',
       stripePubKey: '',
       stripeTestEnv: false,
@@ -241,4 +244,7 @@ BaseEnv MOCK_BASE_ENV = BaseEnv()
       ibcTraceUrl: "",
       mongoUrl: '');
 
-IBCTraceModel MOCK_IBC_TRACE_MODEL = IBCTraceModel(denomTrace: DenomTrace(baseDenom: IBCCoins.ujunox, path: ''), ibcHash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E');
+IBCTraceModel MOCK_IBC_TRACE_MODEL = IBCTraceModel(
+    denomTrace: DenomTrace(baseDenom: IBCCoins.ujunox, path: ''),
+    ibcHash:
+        '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E');

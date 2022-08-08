@@ -1,4 +1,3 @@
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -23,16 +22,18 @@ class CreateStripeAccountHandler implements BaseHandler {
     final walletsStore = GetIt.I.get<WalletsStore>();
 
     if (walletsStore.getWallets().value.isEmpty) {
-      final SdkIpcResponse sdkIpcResponse = SdkIpcResponse.failure(error: 'create_profile_before_using'.tr(), sender: sdkIpcMessage.sender, errorCode: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
+      final SdkIpcResponse sdkIpcResponse = SdkIpcResponse.failure(
+          error: 'create_profile_before_using'.tr(),
+          sender: sdkIpcMessage.sender,
+          errorCode: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
       return sdkIpcResponse;
     }
 
     final loading = Loading()..showLoading();
 
-    final account_response = await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
+    final account_response =
+        await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
     loading.dismiss();
-
-
 
     account_response.fold((fail) => {fail.message.show()}, (accountlink) {
       showDialog(
@@ -47,7 +48,8 @@ class CreateStripeAccountHandler implements BaseHandler {
           });
     });
 
-    final SdkIpcResponse sdkIpcResponse = SdkIpcResponse.success(transaction: '', data: {}, sender: sdkIpcMessage.sender);
+    final SdkIpcResponse sdkIpcResponse = SdkIpcResponse.success(
+        transaction: '', data: {}, sender: sdkIpcMessage.sender);
 
     return sdkIpcResponse;
   }

@@ -5,7 +5,8 @@ import 'package:pylons_wallet/components/buttons/next_button.dart';
 import '../../helpers/size_extensions.dart';
 
 void main() {
-  testWidgets('should show next button and make sure user is able to tap', (tester) async {
+  testWidgets('should show next button and make sure user is able to tap',
+      (tester) async {
     final iconFinder = find.byKey(const ValueKey('NextButton'));
     var isTapped = false;
 

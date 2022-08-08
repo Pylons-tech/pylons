@@ -11,14 +11,13 @@ import 'package:mobx/mobx.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart'
-as pylons;
+    as pylons;
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/stores/wallet_store_imp.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:transaction_signing_gateway/model/account_public_info.dart';
-
 
 /// [WalletsStore] implementation that wraps a [WalletsStoreImp] instance, but injects mocked data into the responses
 /// to queries relating to on-chain objects. Should never, ever be seen in production.
@@ -30,8 +29,9 @@ class WalletsStoreDummyInventory extends WalletsStore {
   static const String _ownedSelf = "OWNED_SELF";
 
   static final List<pylons.Cookbook> _mockedCookbooksDefault = [
-    pylons.Cookbook(id: "Easel_CookBook_auto_cookbook_2022_01_20_200756_163",
-        name:  "",
+    pylons.Cookbook(
+        id: "Easel_CookBook_auto_cookbook_2022_01_20_200756_163",
+        name: "",
         creator: _ownedSelf,
         description: "",
         developer: "",
@@ -42,9 +42,7 @@ class WalletsStoreDummyInventory extends WalletsStore {
 
   static late List<pylons.Cookbook> _mockedCookbooks;
 
-  static const List<pylons.Execution> _mockedExecutionsDefault = [
-
-  ];
+  static const List<pylons.Execution> _mockedExecutionsDefault = [];
 
   static late List<pylons.Execution> _mockedExecutions;
 
@@ -171,78 +169,50 @@ class WalletsStoreDummyInventory extends WalletsStore {
   static late List<pylons.Recipe> _mockedRecipes;
 
   static final List<pylons.Item> _mockedItemsDefault = [
-    pylons.Item(
-      id: "",
-      owner: _ownedSelf,
-      doubles: [
-        pylons.DoubleKeyValue(
-          key: 'Residual',
-          value: '0'
-        )
-      ],
-      longs: [
-        pylons.LongKeyValue(
-          key: 'Quantity',
-          value : Int64()
-        ),
-        pylons.LongKeyValue(
-            key: 'Height',
-            value : Int64(1080)
-        ),
-        pylons.LongKeyValue(
-            key: 'Width',
-            value : Int64(720)
-        )
-      ],
-      strings: [
-        pylons.StringKeyValue(
-          key: 'Name',
-          value: 'Dummy item'
-        ),
-        pylons.StringKeyValue(
-          key: 'Description',
-          value: 'Instantiated item dummy value'
-        ),
-        pylons.StringKeyValue(
-          key: 'App_Type',
-          value: 'Easel'
-        ),
-        pylons.StringKeyValue(
+    pylons.Item(id: "", owner: _ownedSelf, doubles: [
+      pylons.DoubleKeyValue(key: 'Residual', value: '0')
+    ], longs: [
+      pylons.LongKeyValue(key: 'Quantity', value: Int64()),
+      pylons.LongKeyValue(key: 'Height', value: Int64(1080)),
+      pylons.LongKeyValue(key: 'Width', value: Int64(720))
+    ], strings: [
+      pylons.StringKeyValue(key: 'Name', value: 'Dummy item'),
+      pylons.StringKeyValue(
+          key: 'Description', value: 'Instantiated item dummy value'),
+      pylons.StringKeyValue(key: 'App_Type', value: 'Easel'),
+      pylons.StringKeyValue(
           key: 'NFT_URL',
-          value: 'https://ipfs.io/ipfs/bafkreiahbnmfa6ukihwragzjpnuukvodfipq3wukmtheec423mzvqwhxhq'
-        ),
-        pylons.StringKeyValue(
-          key: 'Creator',
-          value: 'Dummy'
-        )
-      ]
-    )
+          value:
+              'https://ipfs.io/ipfs/bafkreiahbnmfa6ukihwragzjpnuukvodfipq3wukmtheec423mzvqwhxhq'),
+      pylons.StringKeyValue(key: 'Creator', value: 'Dummy')
+    ])
   ];
 
   static late List<pylons.Item> _mockedItems;
 
   static late List<pylons.Trade> _mockedTrades;
-  static const List<pylons.Trade> _mockedTradesDefault = [
-
-  ];
+  static const List<pylons.Trade> _mockedTradesDefault = [];
 
   /// Wraps the current WalletsStoreImp instance with a WalletsStoreDummyInventory instance
-  static Future<void> dummyInventory () async {
-    if (!kDebugMode) throw Exception('WalletStoreDummyInventory.dummyInventory() was called in a production build! This should never happen!');
+  static Future<void> dummyInventory() async {
+    if (!kDebugMode)
+      throw Exception(
+          'WalletStoreDummyInventory.dummyInventory() was called in a production build! This should never happen!');
     final WalletsStore walletsStore = GetIt.I.get();
     final prf = await walletsStore.getProfile();
-    final addr = await walletsStore.getAccountAddressByName(prf.data["username"] as String);
+    final addr = await walletsStore
+        .getAccountAddressByName(prf.data["username"] as String);
 
     if (walletsStore is WalletsStoreImp) {
-      final WalletsStoreDummyInventory dummy = WalletsStoreDummyInventory(walletsStore);
+      final WalletsStoreDummyInventory dummy =
+          WalletsStoreDummyInventory(walletsStore);
       GetIt.I.allowReassignment = true;
       GetIt.I.registerSingleton<WalletsStore>(dummy);
       GetIt.I.allowReassignment = false;
-    }
-    else if (walletsStore is! WalletsStoreDummyInventory) {
-      throw Exception("Can't wrap a wallet store of type other than WalletsStoreImp");
-    }
-    else {
+    } else if (walletsStore is! WalletsStoreDummyInventory) {
+      throw Exception(
+          "Can't wrap a wallet store of type other than WalletsStoreImp");
+    } else {
       log('tried to wrap wallet store w/ dummy inventory, but wallet store was already wrapped');
     }
     _mockedCookbooks = _mockedCookbooksDefault;
@@ -259,7 +229,8 @@ class WalletsStoreDummyInventory extends WalletsStore {
     }
     _mockedRecipes = List<pylons.Recipe>.empty(growable: true);
     for (var i = 0; i < _mockedRecipesDefault.length; i++) {
-      _mockedRecipes.add(pylons.Recipe.create()..mergeFromProto3Json(json.decode(_mockedRecipesDefault[i])));
+      _mockedRecipes.add(pylons.Recipe.create()
+        ..mergeFromProto3Json(json.decode(_mockedRecipesDefault[i])));
     }
     _mockedItems = _mockedItemsDefault;
     for (var i = 0; i < _mockedItems.length; i++) {
@@ -273,10 +244,7 @@ class WalletsStoreDummyInventory extends WalletsStore {
         _mockedTrades[i].creator = addr;
       }
     }
-
   }
-
-
 
   @override
   Future<SdkIpcResponse> createCookbook(Map json) {
@@ -314,7 +282,8 @@ class WalletsStoreDummyInventory extends WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> getAllRecipesByCookbookId({required String cookbookId}) {
+  Future<SdkIpcResponse> getAllRecipesByCookbookId(
+      {required String cookbookId}) {
     return _baseInstance.getAllRecipesByCookbookId(cookbookId: cookbookId);
   }
 
@@ -325,7 +294,7 @@ class WalletsStoreDummyInventory extends WalletsStore {
 
   @override
   Future<pylons.Cookbook?> getCookbookById(String cookbookID) async {
-    for (int i = 0; i < _mockedCookbooks.length; i ++) {
+    for (int i = 0; i < _mockedCookbooks.length; i++) {
       if (_mockedCookbooks[i].id == cookbookID) return _mockedCookbooks[i];
     }
     return _baseInstance.getCookbookById(cookbookID);
@@ -338,7 +307,10 @@ class WalletsStoreDummyInventory extends WalletsStore {
 
   @override
   Future<List<pylons.Cookbook>> getCookbooksByCreator(String creator) async {
-    return await _baseInstance.getCookbooksByCreator(creator) + _mockedCookbooks.where((element) => element.creator == creator).toList();
+    return await _baseInstance.getCookbooksByCreator(creator) +
+        _mockedCookbooks
+            .where((element) => element.creator == creator)
+            .toList();
   }
 
   @override
@@ -347,8 +319,10 @@ class WalletsStoreDummyInventory extends WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> getExecutionByRecipeId({required String cookbookId, required String recipeId}) {
-    return _baseInstance.getExecutionByRecipeId(cookbookId: cookbookId, recipeId: recipeId);
+  Future<SdkIpcResponse> getExecutionByRecipeId(
+      {required String cookbookId, required String recipeId}) {
+    return _baseInstance.getExecutionByRecipeId(
+        cookbookId: cookbookId, recipeId: recipeId);
   }
 
   @override
@@ -359,7 +333,8 @@ class WalletsStoreDummyInventory extends WalletsStore {
   @override
   Future<pylons.Item?> getItem(String cookbookID, String itemID) async {
     for (var i = 0; i < _mockedItems.length; i++) {
-      if (_mockedItems[i].id == itemID && _mockedItems[i].cookbookId == cookbookID) {
+      if (_mockedItems[i].id == itemID &&
+          _mockedItems[i].cookbookId == cookbookID) {
         return _mockedItems[i];
       }
     }
@@ -367,20 +342,21 @@ class WalletsStoreDummyInventory extends WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> getItemByIdForSDK({required String cookBookId, required String itemId}) {
-    return _baseInstance.getItemByIdForSDK(cookBookId: cookBookId, itemId: itemId);
+  Future<SdkIpcResponse> getItemByIdForSDK(
+      {required String cookBookId, required String itemId}) {
+    return _baseInstance.getItemByIdForSDK(
+        cookBookId: cookBookId, itemId: itemId);
   }
 
-
-
   @override
-  Future<SdkIpcResponse> getItemListByOwner({required String owner}){
+  Future<SdkIpcResponse> getItemListByOwner({required String owner}) {
     return _baseInstance.getItemListByOwner(owner: owner);
   }
 
   @override
   Future<List<pylons.Item>> getItemsByOwner(String owner) async {
-    return await _baseInstance.getItemsByOwner(owner) + _mockedItems.where((element) => element.owner == owner).toList();
+    return await _baseInstance.getItemsByOwner(owner) +
+        _mockedItems.where((element) => element.owner == owner).toList();
   }
 
   @override
@@ -394,9 +370,11 @@ class WalletsStoreDummyInventory extends WalletsStore {
   }
 
   @override
-  Future<Either<Failure, pylons.Recipe>> getRecipe(String cookbookID, String recipeID) async {
+  Future<Either<Failure, pylons.Recipe>> getRecipe(
+      String cookbookID, String recipeID) async {
     for (var i = 0; i < _mockedRecipes.length; i++) {
-      if (_mockedRecipes[i].id == recipeID && _mockedRecipes[i].cookbookId == cookbookID) {
+      if (_mockedRecipes[i].id == recipeID &&
+          _mockedRecipes[i].cookbookId == cookbookID) {
         return Right(_mockedRecipes[i]);
       }
     }
@@ -404,19 +382,29 @@ class WalletsStoreDummyInventory extends WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> getRecipeByIdForSDK({required String cookbookId, required String recipeId}) {
-    return _baseInstance.getRecipeByIdForSDK(cookbookId: cookbookId, recipeId: recipeId);
+  Future<SdkIpcResponse> getRecipeByIdForSDK(
+      {required String cookbookId, required String recipeId}) {
+    return _baseInstance.getRecipeByIdForSDK(
+        cookbookId: cookbookId, recipeId: recipeId);
   }
 
   @override
-  Future<List<pylons.Execution>> getRecipeExecutions(String cookbookID, String recipeID) async {
-    return await _baseInstance.getRecipeExecutions(cookbookID, recipeID) + _mockedExecutions.where((element) => element.recipeId == recipeID && element.cookbookId == cookbookID).toList();
+  Future<List<pylons.Execution>> getRecipeExecutions(
+      String cookbookID, String recipeID) async {
+    return await _baseInstance.getRecipeExecutions(cookbookID, recipeID) +
+        _mockedExecutions
+            .where((element) =>
+                element.recipeId == recipeID &&
+                element.cookbookId == cookbookID)
+            .toList();
   }
-
 
   @override
   Future<List<pylons.Recipe>> getRecipesByCookbookID(String cookbookID) async {
-    return await _baseInstance.getRecipesByCookbookID(cookbookID) + _mockedRecipes.where((element) => element.cookbookId == cookbookID).toList();
+    return await _baseInstance.getRecipesByCookbookID(cookbookID) +
+        _mockedRecipes
+            .where((element) => element.cookbookId == cookbookID)
+            .toList();
   }
 
   @override
@@ -434,7 +422,8 @@ class WalletsStoreDummyInventory extends WalletsStore {
 
   @override
   Future<List<pylons.Trade>> getTrades(String creator) async {
-    return await _baseInstance.getTrades(creator) + _mockedTrades.where((element) => element.creator == creator).toList();
+    return await _baseInstance.getTrades(creator) +
+        _mockedTrades.where((element) => element.creator == creator).toList();
   }
 
   @override
@@ -453,13 +442,16 @@ class WalletsStoreDummyInventory extends WalletsStore {
   }
 
   @override
-  Future<Either<Failure, AccountPublicInfo>> importAlanWallet(String mnemonic, String userName) {
+  Future<Either<Failure, AccountPublicInfo>> importAlanWallet(
+      String mnemonic, String userName) {
     return _baseInstance.importAlanWallet(mnemonic, userName);
   }
 
   @override
-  Future<Either<Failure, AccountPublicInfo>> importPylonsAccount({required String mnemonic, required String username}) {
-    return _baseInstance.importPylonsAccount(mnemonic: mnemonic, username: username);
+  Future<Either<Failure, AccountPublicInfo>> importPylonsAccount(
+      {required String mnemonic, required String username}) {
+    return _baseInstance.importPylonsAccount(
+        mnemonic: mnemonic, username: username);
   }
 
   @override
@@ -497,7 +489,6 @@ class WalletsStoreDummyInventory extends WalletsStore {
     return _baseInstance.updateRecipe(jsonMap);
   }
 
-
   @override
   Future<bool> deleteAccounts() {
     return _baseInstance.deleteAccounts();
@@ -505,26 +496,25 @@ class WalletsStoreDummyInventory extends WalletsStore {
 
   @override
   Either<Failure, bool> saveInitialLink({required String initialLink}) {
-  return  _baseInstance.saveInitialLink(initialLink: initialLink);
+    return _baseInstance.saveInitialLink(initialLink: initialLink);
   }
 
   @override
   Either<Failure, String> getInitialLink() {
-    return  _baseInstance.getInitialLink();
-
+    return _baseInstance.getInitialLink();
   }
 
   @override
-  Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(GoogleInAppPurchaseModel googleInAppPurchaseModel) {
+  Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(
+      GoogleInAppPurchaseModel googleInAppPurchaseModel) {
     // TODO: implement sendGoogleInAppPurchaseCoinsRequest
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(AppleInAppPurchaseModel appleInAppPurchaseModel) {
+  Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(
+      AppleInAppPurchaseModel appleInAppPurchaseModel) {
     // TODO: implement sendAppleInAppPurchaseCoinsRequest
     throw UnimplementedError();
   }
-
-
 }

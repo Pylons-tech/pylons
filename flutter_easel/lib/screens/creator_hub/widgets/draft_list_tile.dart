@@ -19,7 +19,8 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 class DraftListTile extends StatelessWidget {
   final NFT nft;
   final CreatorHubViewModel viewModel;
-  const DraftListTile({Key? key, required this.nft, required this.viewModel}) : super(key: key);
+  const DraftListTile({Key? key, required this.nft, required this.viewModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,49 +64,58 @@ class DraftListTile extends StatelessWidget {
             child: Row(
               children: [
                 SizedBox(
-                  height: 45.h,
-                  width: 45.h,
-                  child:
-                  NftTypeBuilder(
-                    onImage: (context) => CachedNetworkImage(
-                      errorWidget: (context, url, error) => Align(
-                        child: SvgPicture.asset(
-                          kSvgNftFormatImage,
-                          color: EaselAppTheme.kBlack,
+                    height: 45.h,
+                    width: 45.h,
+                    child: NftTypeBuilder(
+                      onImage: (context) => CachedNetworkImage(
+                        errorWidget: (context, url, error) => Align(
+                          child: SvgPicture.asset(
+                            kSvgNftFormatImage,
+                            color: EaselAppTheme.kBlack,
+                          ),
                         ),
+                        placeholder: (context, url) => Shimmer(
+                            color: EaselAppTheme.cardBackground,
+                            child: const SizedBox.expand()),
+                        imageUrl: nft.url.changeDomain(),
+                        fit: BoxFit.cover,
                       ),
-                      placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
-                      imageUrl:  nft.url.changeDomain(),
-                      fit: BoxFit.cover,
-                    ),
-                    onVideo: (context) => CachedNetworkImage(
-                      fit: BoxFit.fill,
-                      imageUrl: nft.thumbnailUrl.changeDomain(),
-                      errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
-                      placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
-                    ),
-                    onPdf: (context) => CachedNetworkImage(
-                      fit: BoxFit.fill,
-                      imageUrl: nft.thumbnailUrl,
-                      errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
-                      placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
-                    ),
-                    onAudio: (context) => CachedNetworkImage(
-                      fit: BoxFit.fill,
-                      imageUrl: nft.thumbnailUrl.changeDomain(),
-                      errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
-                      placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
-                    ),
-                    on3D: (context) => ModelViewer(
-                      src: nft.url.changeDomain(),
-                      backgroundColor: EaselAppTheme.kWhite,
-                      ar: false,
-                      autoRotate: false,
-                      cameraControls: false,
-                    ),
-                    assetType: nft.assetType.toAssetTypeEnum(),
-                  )
-                ),
+                      onVideo: (context) => CachedNetworkImage(
+                        fit: BoxFit.fill,
+                        imageUrl: nft.thumbnailUrl.changeDomain(),
+                        errorWidget: (a, b, c) =>
+                            const Center(child: Icon(Icons.error_outline)),
+                        placeholder: (context, url) => Shimmer(
+                            color: EaselAppTheme.cardBackground,
+                            child: const SizedBox.expand()),
+                      ),
+                      onPdf: (context) => CachedNetworkImage(
+                        fit: BoxFit.fill,
+                        imageUrl: nft.thumbnailUrl,
+                        errorWidget: (a, b, c) =>
+                            const Center(child: Icon(Icons.error_outline)),
+                        placeholder: (context, url) => Shimmer(
+                            color: EaselAppTheme.cardBackground,
+                            child: const SizedBox.expand()),
+                      ),
+                      onAudio: (context) => CachedNetworkImage(
+                        fit: BoxFit.fill,
+                        imageUrl: nft.thumbnailUrl.changeDomain(),
+                        errorWidget: (a, b, c) =>
+                            const Center(child: Icon(Icons.error_outline)),
+                        placeholder: (context, url) => Shimmer(
+                            color: EaselAppTheme.cardBackground,
+                            child: const SizedBox.expand()),
+                      ),
+                      on3D: (context) => ModelViewer(
+                        src: nft.url.changeDomain(),
+                        backgroundColor: EaselAppTheme.kWhite,
+                        ar: false,
+                        autoRotate: false,
+                        cameraControls: false,
+                      ),
+                      assetType: nft.assetType.toAssetTypeEnum(),
+                    )),
                 SizedBox(
                   width: 10.w,
                 ),
@@ -114,8 +124,11 @@ class DraftListTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "nft_name".tr(args: [nft.name.isNotEmpty ? nft.name : 'Nft Name']),
-                        style: titleStyle.copyWith(fontSize: isTablet ? 13.sp : 18.sp),
+                        "nft_name".tr(args: [
+                          nft.name.isNotEmpty ? nft.name : 'Nft Name'
+                        ]),
+                        style: titleStyle.copyWith(
+                            fontSize: isTablet ? 13.sp : 18.sp),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -127,10 +140,13 @@ class DraftListTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(3.h),
                           color: EaselAppTheme.kLightRed,
                         ),
-                        padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 6.w, vertical: 3.h),
                         child: Text(
                           "draft".tr(),
-                          style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
+                          style: EaselAppTheme.titleStyle.copyWith(
+                              color: EaselAppTheme.kWhite,
+                              fontSize: isTablet ? 8.sp : 11.sp),
                         ),
                       ),
                     ],
@@ -141,7 +157,8 @@ class DraftListTile extends StatelessWidget {
                 ),
                 InkWell(
                     onTap: () {
-                      final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
+                      final DraftsBottomSheet draftsBottomSheet =
+                          DraftsBottomSheet(
                         buildContext: context,
                         nft: nft,
                       );

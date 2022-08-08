@@ -12,8 +12,10 @@ class GeneralScreenLocalizationViewModel extends ChangeNotifier {
   WalletsStore walletStore;
   ShareHelper shareHelper;
 
-  GeneralScreenLocalizationViewModel({required this.walletStore, required this.repository, required this.shareHelper});
-
+  GeneralScreenLocalizationViewModel(
+      {required this.walletStore,
+      required this.repository,
+      required this.shareHelper});
 
   Locale get local => _local;
 
@@ -77,5 +79,4 @@ class GeneralScreenLocalizationViewModel extends ChangeNotifier {
 
     return name;
   }
-
 }

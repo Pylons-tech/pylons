@@ -6,7 +6,12 @@ class CidOrIpfs extends StatelessWidget {
   final WidgetBuilder viewIpfs;
   final String type;
 
-  const CidOrIpfs({Key? key, required this.viewCid, required this.viewIpfs, required this.type}) : super(key: key);
+  const CidOrIpfs(
+      {Key? key,
+      required this.viewCid,
+      required this.viewIpfs,
+      required this.type})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

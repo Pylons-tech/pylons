@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-TextStyle kCurrencyStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16.sp);
-TextStyle kDropdownText = TextStyle(color: kBlack, fontSize: 13.sp, fontWeight: FontWeight.w600);
-TextStyle kTransactionTitle = TextStyle(color: kBlack, fontSize: 20.sp, fontWeight: FontWeight.w700, fontFamily: 'UniversalSans');
+TextStyle kCurrencyStyle = TextStyle(
+    color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16.sp);
+TextStyle kDropdownText =
+    TextStyle(color: kBlack, fontSize: 13.sp, fontWeight: FontWeight.w600);
+TextStyle kTransactionTitle = TextStyle(
+    color: kBlack,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w700,
+    fontFamily: 'UniversalSans');
 
 const Color kMainBG = Color(0xFFF2EFEA);
 const Color kSelectedIcon = Color(0xFF616161);
@@ -87,7 +93,13 @@ const int kDenomInitial = 1;
 const int kDenomFinal = 4;
 
 const Map<String, dynamic> kCoinDenom = {
-  'upylon': {"name": "Pylon", "denom": "upylon", "short": "pylon", "icon": "assets/images/icons/pylons_logo_24x24.png", "faucet": true},
+  'upylon': {
+    "name": "Pylon",
+    "denom": "upylon",
+    "short": "pylon",
+    "icon": "assets/images/icons/pylons_logo_24x24.png",
+    "faucet": true
+  },
   'BTC': {
     "name": "Bitcoin",
     "denom": "BTC",
@@ -95,9 +107,24 @@ const Map<String, dynamic> kCoinDenom = {
     //"icon": "assets/images/icons/bitcoin.png", // todo - get bitcoin icon
     "faucet": false
   },
-  'ustripeusd': {'name': "USD", "denom": "ustripeusd", "short": "usd", "icon": "assets/images/icons/ico_usd.png"},
-  'UST': {'name': "USTerra", "denom": "uusd", "short": "ust", "icon": "assets/images/icons/ico_usd.png"},
-  'Juno': {'name': "Juno", "denom": "ujunox", "short": "juno", "icon": "assets/images/icons/ico_usd.png"}
+  'ustripeusd': {
+    'name': "USD",
+    "denom": "ustripeusd",
+    "short": "usd",
+    "icon": "assets/images/icons/ico_usd.png"
+  },
+  'UST': {
+    'name': "USTerra",
+    "denom": "uusd",
+    "short": "ust",
+    "icon": "assets/images/icons/ico_usd.png"
+  },
+  'Juno': {
+    'name': "Juno",
+    "denom": "ujunox",
+    "short": "juno",
+    "icon": "assets/images/icons/ico_usd.png"
+  }
 };
 
 const String kAndroidEaselInstallLink = "market://details?id=tech.pylons.easel";
@@ -114,7 +141,8 @@ const String kStripeMerchantCountry = "US";
 const String kStripeMerchantDisplayName = 'Pylons';
 
 const String kStripeLoginLinkPrefix = "https://connect.stripe.com/express/";
-const String kStripeAccountLinkPrefix = "https://connect.stripe.com/express/onboarding/";
+const String kStripeAccountLinkPrefix =
+    "https://connect.stripe.com/express/onboarding/";
 const String kStripeEditSuffix = "/edit";
 const String kStripeAccountSuffix = "#/account";
 const String kStripeSignoutJS =
@@ -123,15 +151,21 @@ const String kStripeSignoutJS =
 const String SOMETHING_WENT_WRONG = 'Something went wrong';
 
 //STRIPE ERROR STRING
-const String CREATE_PAYMENTINTENT_FAILED = 'Stripe PaymentIntent Creation Failed';
-const String GEN_PAYMENTRECEIPT_FAILED = 'Stripe Payment Receipt Generation Failed';
+const String CREATE_PAYMENTINTENT_FAILED =
+    'Stripe PaymentIntent Creation Failed';
+const String GEN_PAYMENTRECEIPT_FAILED =
+    'Stripe Payment Receipt Generation Failed';
 const String GEN_PAYOUTTOKEN_FAILED = 'Stripe Payout Token Generation Failed';
-const String GEN_REGISTRATIONTOKEN_FAILED = 'Stripe Registration Token Generation Failed';
+const String GEN_REGISTRATIONTOKEN_FAILED =
+    'Stripe Registration Token Generation Failed';
 const String GEN_UPDATETOKEN_FAILED = 'Stripe Update Token Generation Failed';
-const String GET_ACCOUNTLINK_FAILED = 'Stripe Get Connected Account Link Failed';
-const String GET_LOGINLINK_FAILED = 'Stripe Get Connected Account LOGIN Link Failed';
+const String GET_ACCOUNTLINK_FAILED =
+    'Stripe Get Connected Account Link Failed';
+const String GET_LOGINLINK_FAILED =
+    'Stripe Get Connected Account LOGIN Link Failed';
 const String PAYOUT_FAILED = 'Stripe Payout Request Failed';
-const String REGISTERACCOUNT_FAILED = 'Stripe Register Connected Account Failed';
+const String REGISTERACCOUNT_FAILED =
+    'Stripe Register Connected Account Failed';
 const String UPDATEACCOUNT_FAILED = 'Stripe Update Account Failed';
 const String IBC_HASH_UPDATE_FAILED = 'IBC hash info getting Failed';
 const String PLATFORM_FAILED = 'Platform exception occured';
@@ -139,7 +173,8 @@ const String CACHE_FAILED = 'No data saved';
 const String NETWORK_ERROR = 'Network Error';
 
 /// Repository
-const String SOMETHING_WRONG_FETCHING_WALLETS = "Something went wrong while fetching wallets";
+const String SOMETHING_WRONG_FETCHING_WALLETS =
+    "Something went wrong while fetching wallets";
 
 const String kIOSWalletId = 'xyz.pylons.wallet';
 const String kAndroidId = 'tech.pylons.wallet';
@@ -167,7 +202,13 @@ const IOS_VERSION = '1.0.8+1';
 
 const kCurrencyDecimalLength = 2;
 
-const List<Color> colorList = [kYellow, kBlue, kDarkPurple, kDarkRed, kDarkGreen];
+const List<Color> colorList = [
+  kYellow,
+  kBlue,
+  kDarkPurple,
+  kDarkRed,
+  kDarkGreen
+];
 const List<Color> colorListForPracticeTest = [
   kYellow,
   kDarkPurple,
@@ -203,7 +244,8 @@ const String kRecoveryMigration = 'Migrate Account';
 /// Settings screen
 const String kSettingsEmailAddress = "Email Address (optional)";
 const String kCopy = "Copy";
-const String kAlertDialogText = "Are you sure you want to delete your Pylons wallet from this device?";
+const String kAlertDialogText =
+    "Are you sure you want to delete your Pylons wallet from this device?";
 const String kYes = "Yes";
 const String kNo = "No";
 
@@ -211,7 +253,8 @@ const String kNo = "No";
 const String kSaveText = "Save";
 const String kWalletAddressText = "Wallet Address";
 const String kBioText = "Bio";
-const String kBioHintText = "Media Artist (3D, Motiongraphics) \nCreating & Collecting NFTs";
+const String kBioHintText =
+    "Media Artist (3D, Motiongraphics) \nCreating & Collecting NFTs";
 const String kStakeDigitalClaim = "Stake your digital claim";
 const String kCreateWallet = "Create Wallet";
 const String kRestoreWallet = "Restore Wallet";
@@ -234,8 +277,10 @@ const String kJapanText = "japanese";
 const String kSpanishText = "spanish";
 
 /// Update screen
-const String kAndroidAppLink = 'https://play.google.com/store/apps/details?id=tech.pylons.wallet';
-const String kIOSAppLink = 'https://apps.apple.com/gb/app/cashero/id1598732789?ign-mpt=uo%3D2';
+const String kAndroidAppLink =
+    'https://play.google.com/store/apps/details?id=tech.pylons.wallet';
+const String kIOSAppLink =
+    'https://apps.apple.com/gb/app/cashero/id1598732789?ign-mpt=uo%3D2';
 
 const String kRecipeId = 'Recipe ID';
 const String kRecipes = 'recipes';
@@ -249,8 +294,10 @@ const String kSoldOut = 'Sold Out';
 
 /// Repository
 const String NO_PROFILE_FOUND = 'No profile found in wallet';
-const String SOMETHING_WRONG_SIGNING_TRANSACTION = 'Something went wrong while signing transaction';
-const String VIDEO_PLAYER_NETWORK_ERROR = 'Unable to play the video right now. Please check your internet connection and try again.';
+const String SOMETHING_WRONG_SIGNING_TRANSACTION =
+    'Something went wrong while signing transaction';
+const String VIDEO_PLAYER_NETWORK_ERROR =
+    'Unable to play the video right now. Please check your internet connection and try again.';
 
 /// Trade Receipt Screen
 const String kCloseText = "Close";
@@ -258,22 +305,66 @@ const String kCancelText = "Cancel";
 
 /// Trade Receipt Screen
 const String kTransactionCompleteText = "View Receipt";
-const String kBigDipperTransactionViewingUrl = "https://wallet.pylons.tech/transactions/";
+const String kBigDipperTransactionViewingUrl =
+    "https://wallet.pylons.tech/transactions/";
 
 /// languages supported
 List<Map<String, dynamic>> languagesSupported = [
-  {"name": "english", "flag": "🇬🇧", 'selected': false, "abbreviation": "(U.S.)", 'languageCode': 'en'},
-  {"name": "russian", "flag": "🇷🇺", 'selected': false, "abbreviation": "(RU)", 'languageCode': 'ru'},
-  {"name": "indonesian", "flag": "🇮🇩", 'selected': false, "abbreviation": "(IN)", 'languageCode': 'id'},
-  {"name": "german", "flag": "🇩🇪", 'selected': false, "abbreviation": "(DU)", 'languageCode': 'de'},
-  {"name": "korean", "flag": "🇰🇷", 'selected': false, "abbreviation": "(KO)", 'languageCode': 'ko'},
-  {"name": "japanese", "flag": "🇯🇵", 'selected': false, "abbreviation": "(JA)", 'languageCode': 'ja'},
-  {"name": "spanish", "flag": "🇪🇸", 'selected': false, "abbreviation": "(ES)", 'languageCode': 'es'},
+  {
+    "name": "english",
+    "flag": "🇬🇧",
+    'selected': false,
+    "abbreviation": "(U.S.)",
+    'languageCode': 'en'
+  },
+  {
+    "name": "russian",
+    "flag": "🇷🇺",
+    'selected': false,
+    "abbreviation": "(RU)",
+    'languageCode': 'ru'
+  },
+  {
+    "name": "indonesian",
+    "flag": "🇮🇩",
+    'selected': false,
+    "abbreviation": "(IN)",
+    'languageCode': 'id'
+  },
+  {
+    "name": "german",
+    "flag": "🇩🇪",
+    'selected': false,
+    "abbreviation": "(DU)",
+    'languageCode': 'de'
+  },
+  {
+    "name": "korean",
+    "flag": "🇰🇷",
+    'selected': false,
+    "abbreviation": "(KO)",
+    'languageCode': 'ko'
+  },
+  {
+    "name": "japanese",
+    "flag": "🇯🇵",
+    'selected': false,
+    "abbreviation": "(JA)",
+    'languageCode': 'ja'
+  },
+  {
+    "name": "spanish",
+    "flag": "🇪🇸",
+    'selected': false,
+    "abbreviation": "(ES)",
+    'languageCode': 'es'
+  },
 ];
 
 ///review your nft
 
-const String kPylonsFeeMsg = "The Pylons fee is the network fee assessed on all transactions equal to 10% of the listed price.";
+const String kPylonsFeeMsg =
+    "The Pylons fee is the network fee assessed on all transactions equal to 10% of the listed price.";
 const String kStripeAccountNotCreatedIdentifier = "onboarding";
 const String kNftFormat = "NFT_Format";
 const String kDuration = "Duration";
@@ -372,7 +463,8 @@ const String kNftViewKey = "nft_view";
 const String kItemIdKey = "item_id";
 const String kTradeIdKey = "trade_id";
 const String kLinkKey = "link";
-const String kIpcEncodeMessage = "Wallet Busy: A transaction is already in progress";
+const String kIpcEncodeMessage =
+    "Wallet Busy: A transaction is already in progress";
 
 //stripe payment receipt keys
 const String kProductID = "productID";

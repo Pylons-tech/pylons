@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
@@ -9,7 +8,6 @@ import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/formatter.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
-
 
 class BalanceIBCCoins extends StatefulWidget {
   final Balance balance;
@@ -29,7 +27,10 @@ class _BalanceIBCCoinsState extends State<BalanceIBCCoins> {
   void initState() {
     super.initState();
 
-    GetIt.I.get<Repository>().getIBCHashTrace(ibcHash: widget.balance.denom.replaceFirst('ibc/', '')).then((value) {
+    GetIt.I
+        .get<Repository>()
+        .getIBCHashTrace(ibcHash: widget.balance.denom.replaceFirst('ibc/', ''))
+        .then((value) {
       if (value.isLeft()) {
         return;
       }
@@ -60,7 +61,9 @@ class _BalanceIBCCoinsState extends State<BalanceIBCCoins> {
               image: DecorationImage(
                   image: const AssetImage('assets/images/masks/card_luma.png'),
                   fit: BoxFit.fill,
-                  colorFilter: ColorFilter.mode(denomColors[widget.balance.denom] ?? Colors.blueGrey, BlendMode.overlay))),
+                  colorFilter: ColorFilter.mode(
+                      denomColors[widget.balance.denom] ?? Colors.blueGrey,
+                      BlendMode.overlay))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,9 +74,9 @@ class _BalanceIBCCoinsState extends State<BalanceIBCCoins> {
                   color: Colors.red,
                   child: showShimmer
                       ? SizedBox(
-                    width: 30.w,
-                    height: 30.w,
-                  )
+                          width: 30.w,
+                          height: 30.w,
+                        )
                       : ibcCoins.getAssets(),
                 ),
                 SizedBox(
@@ -84,13 +87,16 @@ class _BalanceIBCCoinsState extends State<BalanceIBCCoins> {
                   enabled: showShimmer,
                   child: showShimmer
                       ? SizedBox(
-                    width: 60.w,
-                    height: 40.w,
-                  )
+                          width: 60.w,
+                          height: 40.w,
+                        )
                       : Text(
-                    ibcCoins.getName(),
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontSize: 18),
-                  ),
+                          ibcCoins.getName(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1!
+                              .copyWith(color: Colors.white, fontSize: 18),
+                        ),
                 ),
                 const Spacer(),
               ]),
@@ -101,18 +107,23 @@ class _BalanceIBCCoinsState extends State<BalanceIBCCoins> {
                   color: Colors.red,
                   child: showShimmer
                       ? SizedBox(
-                    width: 50.w,
-                    height: 50.w,
-                  )
+                          width: 50.w,
+                          height: 50.w,
+                        )
                       : Text(
-                    "\$${"${widget.balance.amount.toHumanReadable()}".trimZero()}",
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontSize: 24, fontFamily: 'Inter'),
-                  ),
+                          "\$${"${widget.balance.amount.toHumanReadable()}".trimZero()}",
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1!
+                              .copyWith(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontFamily: 'Inter'),
+                        ),
                 ),
               ),
             ],
           ),
         ));
   }
-
 }

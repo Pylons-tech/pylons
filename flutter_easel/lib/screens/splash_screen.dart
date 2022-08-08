@@ -33,7 +33,12 @@ class _SplashScreenState extends State<SplashScreen> {
   Stack buildMobileScreen(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Positioned(left: 0, right: 0, top: 0, bottom: 0, child: SvgPicture.asset(kSvgSplash, fit: BoxFit.cover)),
+        Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: SvgPicture.asset(kSvgSplash, fit: BoxFit.cover)),
         Positioned(
           top: 0.3.sh,
           bottom: 0,
@@ -56,7 +61,12 @@ class _SplashScreenState extends State<SplashScreen> {
     return Stack(
       children: <Widget>[
         Container(),
-        Positioned(left: 0, right: 0, top: 0, bottom: 0, child: SvgPicture.asset(kSvgTabSplash, fit: BoxFit.fill)),
+        Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: SvgPicture.asset(kSvgTabSplash, fit: BoxFit.fill)),
         Positioned(
           top: 0.26.sh,
           left: 0.2.sw,
@@ -67,9 +77,13 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Align(alignment: Alignment.centerLeft, child: SvgPicture.asset(kSplashTabEasel)),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: SvgPicture.asset(kSplashTabEasel)),
                 SizedBox(height: 10.h),
-                Align(alignment: Alignment.centerLeft, child: SvgPicture.asset(kSplashNFTCreatorTab)),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: SvgPicture.asset(kSplashNFTCreatorTab)),
               ],
             ),
           ),

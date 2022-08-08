@@ -9,7 +9,6 @@ import 'package:transaction_signing_gateway/model/transaction_signing_failure.da
 import 'package:transaction_signing_gateway/model/unsigned_transaction.dart';
 import 'package:transaction_signing_gateway/transaction_signer.dart';
 
-
 class CustomTransactionSigner implements TransactionSigner {
   final NetworkInfo _networkInfo;
 

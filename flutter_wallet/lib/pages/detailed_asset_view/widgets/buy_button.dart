@@ -9,7 +9,8 @@ const btcAsset = "assets/images/icons/ico_btc.png";
 class BuyButton extends StatelessWidget {
   final NFT nft;
   final double usdAmount;
-  const BuyButton({Key? key, required this.nft, required this.usdAmount}) : super(key: key);
+  const BuyButton({Key? key, required this.nft, required this.usdAmount})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,8 @@ class BuyButton extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 10),
                     height: 10,
                     width: 10,
-                    decoration: const BoxDecoration(color: kButtonBuyNowColor, shape: BoxShape.circle),
+                    decoration: const BoxDecoration(
+                        color: kButtonBuyNowColor, shape: BoxShape.circle),
                   ),
                 ),
                 const SizedBox(
@@ -51,7 +53,8 @@ class BuyButton extends StatelessWidget {
                         child: AutoSizeText(
                           'Buy for ${double.parse(nft.price).toStringAsFixed(fixedDecimal)}',
                           maxLines: 2,
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Image.asset(

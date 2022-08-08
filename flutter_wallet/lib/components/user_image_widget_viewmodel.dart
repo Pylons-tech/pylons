@@ -7,7 +7,8 @@ import 'package:pylons_wallet/pages/error.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 
 class UserBannerViewModel extends ChangeNotifier {
-  void setToFile(int filesizeLimit, String uriKey, File? file, BuildContext context) {
+  void setToFile(
+      int filesizeLimit, String uriKey, File? file, BuildContext context) {
     if (file == null) return;
 
     final bytes = file.readAsBytesSync();

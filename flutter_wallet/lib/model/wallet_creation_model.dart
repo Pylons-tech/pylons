@@ -6,6 +6,8 @@ class WalletCreationModel {
   final String creatorAddress;
   final String userName;
 
-
-  WalletCreationModel({required this.creds, required this.creatorAddress, required this.userName});
+  WalletCreationModel(
+      {required this.creds,
+      required this.creatorAddress,
+      required this.userName});
 }

@@ -18,12 +18,15 @@ import '../../../mocks/mock_firebase_dynamic_link.dart';
 import '../../../mocks/mock_store_payment_service.dart';
 
 void main() {
-  test('should get account link and account id on getAccountLinkBasedOnUpdateToken', () async {
+  test(
+      'should get account link and account id on getAccountLinkBasedOnUpdateToken',
+      () async {
     dotenv.testLoad(fileInput: '''ENV=true''');
 
     final CrashlyticsHelper crashlyticsHelper = MockCrashlytics();
     final StorePaymentService storePaymentService = MockStripePaymentService();
-    final MockFirebaseDynamicLinks mockFirebaseDynamicLinks = MockFirebaseDynamicLinks();
+    final MockFirebaseDynamicLinks mockFirebaseDynamicLinks =
+        MockFirebaseDynamicLinks();
 
     GetIt.I.registerSingleton(MOCK_BASE_ENV);
 
@@ -36,7 +39,9 @@ void main() {
       dynamicLinksGenerator: mockFirebaseDynamicLinks,
     );
 
-    final response = await remoteDataStore.getAccountLinkBasedOnUpdateToken(req: StripeUpdateAccountRequest(Address: MOCK_ADDRESS, Token: MOCK_TOKEN, Signature: SIGNATURE));
+    final response = await remoteDataStore.getAccountLinkBasedOnUpdateToken(
+        req: StripeUpdateAccountRequest(
+            Address: MOCK_ADDRESS, Token: MOCK_TOKEN, Signature: SIGNATURE));
 
     expect(MOCK_ACCOUNT_LINK, response.accountlink);
     expect(MOCK_ACCOUNT, response.account);
@@ -50,5 +55,7 @@ Future<Response> requestHandler(Request request) async {
   expect(mapBody["token"], MOCK_TOKEN);
   expect(mapBody["signature"], SIGNATURE);
 
-  return http.Response(jsonEncode({"accountlink": MOCK_ACCOUNT_LINK, "account": MOCK_ACCOUNT}), 200);
+  return http.Response(
+      jsonEncode({"accountlink": MOCK_ACCOUNT_LINK, "account": MOCK_ACCOUNT}),
+      200);
 }

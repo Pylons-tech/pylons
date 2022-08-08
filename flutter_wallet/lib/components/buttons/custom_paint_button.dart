@@ -4,19 +4,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
 class CustomPaintButton extends StatelessWidget {
-
   final VoidCallback onPressed;
   final String title;
   final Color bgColor;
   final double width;
 
-   CustomPaintButton({Key? key, required this.onPressed, required this.title, required this.bgColor, required this.width}) : super(key: key);
+  CustomPaintButton(
+      {Key? key,
+      required this.onPressed,
+      required this.title,
+      required this.bgColor,
+      required this.width})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-
         onPressed.call();
       },
       child: CustomPaint(
@@ -29,10 +33,13 @@ class CustomPaintButton extends StatelessWidget {
             width: width,
             child: Center(
                 child: Text(
-                  title,
-                  style: TextStyle(color: bgColor == kButtonColor ? kBlue : kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.center,
-                )),
+              title,
+              style: TextStyle(
+                  color: bgColor == kButtonColor ? kBlue : kWhite,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
+            )),
           ),
         ),
       ),
