@@ -9,7 +9,6 @@ import PChart from '../components/Chart.jsx';
 import numbro from 'numbro';
 import { Markdown } from 'react-showdown';
 import { Helmet } from 'react-helmet';
-import posed from 'react-pose';
 import i18n from 'meteor/universe:i18n';
 import { Meteor } from 'meteor/meteor';
 import Coin from '../../../both/utils/coins.js';
@@ -28,11 +27,6 @@ const CookbookeRow = (props) => {
         <td className="title">{props.cookbook.SupportEmail ? props.cookbook.SupportEmail : props.cookbook.supportEmail}</td>  
     </tr>
 }
-
-const Result = posed.div({
-    closed: { height: 0},
-    open: { height: 'auto'}
-});
 
 export default class Cookbook extends Component{
     constructor(props){
