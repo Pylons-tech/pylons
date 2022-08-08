@@ -1,7 +1,5 @@
 // Register your apis here
 
-import "../../api/ledger/server/methods.js";
-
 import "../../api/chain/server/methods.js";
 import "../../api/chain/server/publications.js";
 
@@ -45,6 +43,3 @@ import "../../api/analytics/server/publications.js";
 
 import "../../api/actions/server/methods.js";
 import "../../api/actions/server/publications.js";
-
-import "../../api/fcmtoken/server/methods.js";
-import "../../api/notifications/server/methods";
