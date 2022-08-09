@@ -24,6 +24,9 @@ COPY --from=go-builder /code/bin/pylonsd /
 COPY scripts/* /
 RUN chmod +x /*.sh
 
+RUN pylonsd init test
+COPY networks/pylons-testnet-3/genesis.json /root/.pylons/config/genesis.json
+
 # rest server
 EXPOSE 1317
 # tendermint rpc
@@ -34,4 +37,4 @@ EXPOSE 26656
 EXPOSE 9090
 
 # wrong ENTRYPOINT can lead to executable not running
-ENTRYPOINT ["/bin/bash"]
+CMD ["/start.sh"]
