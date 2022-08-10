@@ -1,5 +1,5 @@
 FROM golang:1.18-alpine3.16 AS go-builder
-ARG BINARY_VERSION=v0.4.2
+ARG BINARY_VERSION=v1.0.0-rc1
 
 RUN set -eux
 
