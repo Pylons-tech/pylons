@@ -11,7 +11,6 @@ import { Badge, Row, Col, Card,
 import KeybaseCheck from '../components/KeybaseCheck.jsx';
 import ValidatorDelegations from './Delegations.jsx';
 import ValidatorTransactions from '../components/TransactionsContainer.js';
-import { DelegationButtons } from '../ledger/LedgerActions.jsx';
 import { Helmet } from 'react-helmet';
 import LinkIcon from '../components/LinkIcon.jsx';
 import i18n from 'meteor/universe:i18n';
