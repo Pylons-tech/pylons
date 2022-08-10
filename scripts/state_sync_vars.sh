@@ -13,6 +13,6 @@ echo "trust_hash: $TRUST_HASH"
 # Export state sync variables.
 export PYLONSD_STATESYNC_ENABLE=true
 export PYLONSD_P2P_MAX_NUM_OUTBOUND_PEERS=200
-export PYLONSD_STATESYNC_RPC_SERVERS="https://rpc-pylons-ia.notional.ventures:443,https://rpc-pylons-ia.notional.ventures:443"
+export PYLONSD_STATESYNC_RPC_SERVERS="http://51.79.26.26:26657,https://rpc-pylons-ia.notional.ventures:443"
 export PYLONSD_STATESYNC_TRUST_HEIGHT=$BLOCK_HEIGHT
 export PYLONSD_STATESYNC_TRUST_HASH=$TRUST_HASH

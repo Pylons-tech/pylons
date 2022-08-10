@@ -1,5 +1,5 @@
 FROM golang:1.18-alpine3.16 AS go-builder
-ARG BINARY_VERSION=v1.0.0-rc1
+ARG BINARY_VERSION=v1.0.0-rc2
 
 RUN set -eux
 
@@ -24,7 +24,7 @@ COPY --from=go-builder /code/bin/pylonsd /
 COPY scripts/* /
 RUN chmod +x /*.sh
 
-RUN pylonsd init test
+RUN pylonsd init test --chain-id pylons-testnet-3
 COPY networks/pylons-testnet-3/genesis.json /root/.pylons/config/genesis.json
 
 # rest server
