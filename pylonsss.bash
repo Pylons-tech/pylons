@@ -8,9 +8,9 @@ export GOPATH=~/go
 export PATH=$PATH:~/go/bin
 
 # Install Juno with pebbledb 
-go mod edit -replace github.com/tendermint/tm-db=github.com/notional-labs/tm-db@136c7b6
-go mod tidy
-go install -ldflags '-w -s -X github.com/cosmos/cosmos-sdk/types.DBBackend=pebbledb' -tags pebbledb ./...
+#go mod edit -replace github.com/tendermint/tm-db=github.com/notional-labs/tm-db@136c7b6
+#go mod tidy
+#go install -ldflags '-w -s -X github.com/cosmos/cosmos-sdk/types.DBBackend=pebbledb' -tags pebbledb ./...
 
 # NOTE: ABOVE YOU CAN USE ALTERNATIVE DATABASES, HERE ARE THE EXACT COMMANDS
 # go install -ldflags '-w -s -X github.com/cosmos/cosmos-sdk/types.DBBackend=rocksdb' -tags rocksdb ./...
@@ -42,4 +42,4 @@ export PYLONSD_STATESYNC_TRUST_HASH=$TRUST_HASH
 
 # Fetch and set list of seeds from chain registry.
 export PYLONSD_P2P_PERSISTENT_PEERS="762470be4082ae197feb82e50f7c50bfd79a0db8@141.95.65.26:44657,2bebe6b738e849ad7355c05c4b645c381e76b774@65.108.203.219:26656"
-pylonsd start --db_backend pebbledb
+pylonsd start 
