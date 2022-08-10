@@ -21,7 +21,7 @@ go install -ldflags '-w -s -X github.com/cosmos/cosmos-sdk/types.DBBackend=pebbl
 pylonsd init test --chain-id pylons-testnet-3
 
 # Get Genesis
-curl https://rpc-pylons-ia.notional.ventures/genesis | jq .result.genesis > ~/.pylons/config/genesis.json
+curl http://51.79.26.26:26657/genesis | jq .result.genesis > ~/.pylons/config/genesis.json
 
 # Get "trust_hash" and "trust_height".
 INTERVAL=1000
