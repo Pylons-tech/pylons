@@ -14,11 +14,15 @@ services:
       - ./debug:/debug
       - trace:/tmp/trace
   logger:
-    image: "rust:1-buster"
+    image: "ruby:latest"
     depends_on:
       - "node"
     volumes:
       - trace:/tmp/trace
-    command: "tail -f /tmp/trace/trace.fifo"
+      - ./trace.rb:/root/trace.rb
+    command: bash -c 'tail -f /tmp/trace/trace.fifo | ruby /root/trace.rb'
 volumes:
   trace:
+    #driver_opts:
+    #  type: tmpfs
+    #  device: tmpfs
