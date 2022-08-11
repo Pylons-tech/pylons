@@ -26,8 +26,7 @@ const (
 	cookbookExtension = ".plc"
 	recipeExtension   = ".plr"
 	moduleExtension   = ".pdt"
-
-	includeDirective = "#include "
+	includeDirective  = "#include "
 )
 
 func forFile(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.Recipe)) {
