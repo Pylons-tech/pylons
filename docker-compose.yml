@@ -5,6 +5,8 @@ services:
     container_name: pylonsnode
     build:
       context: .
+      args:
+        - BINARY_VERSION=v1.0.0-rc2
     ports:
       - "26657:26657"
       - "1317:1317"

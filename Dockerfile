@@ -39,3 +39,4 @@ EXPOSE 9090
 RUN mkdir -p /tmp/trace
 RUN mkfifo /tmp/trace/trace.fifo
 CMD ["/start.sh"]
+

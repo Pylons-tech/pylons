@@ -3,7 +3,7 @@ set -e
 # Get "trust_hash" and "trust_height".
 INTERVAL=1000
 LATEST_HEIGHT=$(curl -s https://rpc-pylons-ia.notional.ventures/status | jq -r .result.sync_info.latest_block_height)
-BLOCK_HEIGHT=$(($LATEST_HEIGHT-$INTERVAL)) 
+BLOCK_HEIGHT=$(($LATEST_HEIGHT-$INTERVAL))
 TRUST_HASH=$(curl -s "https://rpc-pylons-ia.notional.ventures/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
 
 # Print out block and transaction hash from which to sync state.
