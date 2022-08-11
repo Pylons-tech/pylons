@@ -36,5 +36,6 @@ EXPOSE 26656
 # gRPC address
 EXPOSE 9090
 
-# wrong ENTRYPOINT can lead to executable not running
+RUN mkdir -p /tmp/trace
+RUN mkfifo /tmp/trace/trace.fifo
 CMD ["/start.sh"]

@@ -1,15 +1,22 @@
 version: '3'
 
 services:
-  node0:
+  node:
     container_name: pylonsnode
     build:
       context: .
-      args:
-        - BINARY_VERSION=v0.4.2
-    command: test_node_deploy.sh
     ports:
       - "26657:26657"
       - "1317:1317"
     volumes:
       - ./debug:/debug
+      - trace:/tmp/trace
+  logger:
+    image: "rust:1-buster"
+    depends_on:
+      - "node"
+    volumes:
+      - trace:/tmp/trace
+    command: "tail -f /tmp/trace/trace.fifo"
+volumes:
+  trace:
