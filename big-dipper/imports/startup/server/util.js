@@ -1,8 +1,9 @@
-import bech32 from 'bech32'
+import {bech32} from 'bech32'
 import { HTTP } from 'meteor/http';
 import * as cheerio from 'cheerio';
 import { tmhash } from 'tendermint/lib/hash'
 import { sanitizeUrl } from '@braintree/sanitize-url';
+
 
 Meteor.methods({
     hexToBech32: function(address, prefix) {
