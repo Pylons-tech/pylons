@@ -217,10 +217,10 @@ func NetworkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 	return network.New(t, cfg), state.CookbookList
 }
 
-// A network with execution objects  contains a state of:
+//		A network with execution objects  contains a state of:
 //	 	N cookbooks
 //		N recipes (1 per cookbook)
-// 		N executions (1 per recipe)
+//		N executions (1 per recipe)
 func NetworkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types.Execution) {
 	t.Helper()
 	cfg := app.DefaultConfig()
