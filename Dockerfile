@@ -37,4 +37,4 @@ EXPOSE 26656
 EXPOSE 9090
 
 # wrong ENTRYPOINT can lead to executable not running
-CMD ["/start.sh"]
+ENTRYPOINT [ "/bin/bash" ]

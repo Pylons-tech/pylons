@@ -14,8 +14,7 @@ This repository contains:
 ### Docker build
 Add your favorite peers to scripts/peers.sh and then you can run
 ```
-docker build .
-docker run <hash>
+docker-compose up -d
 ```
 Should be fun!
 
