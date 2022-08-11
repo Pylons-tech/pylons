@@ -410,7 +410,7 @@ func NetworkWithRecipeObjectsHistory(t *testing.T, n int) (*network.Network, []t
 	return network.New(t, cfg), state.RecipeList, nil
 }
 
-func WriteFixtureAtTestRuntime(name string, data string) {
+func WriteFixtureAtTestRuntime(name, data string) {
 	file, err := os.Create(name)
 	if err != nil {
 		panic(err)

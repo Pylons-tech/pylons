@@ -75,7 +75,7 @@ func ForFiles(path string, perCookbook func(path string, cookbook types.Cookbook
 	}
 }
 
-func loadModuleFromPath(modulePath string, currentPath string) string {
+func loadModuleFromPath(modulePath, currentPath string) string {
 	bytes, err := os.ReadFile(path.Join(currentPath, modulePath+moduleExtension))
 	if err != nil {
 		panic(err)

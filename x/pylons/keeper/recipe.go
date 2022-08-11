@@ -21,7 +21,7 @@ func (k Keeper) SetRecipe(ctx sdk.Context, recipe types.Recipe) {
 }
 
 // GetRecipe returns a recipe from its ID
-func (k Keeper) GetRecipe(ctx sdk.Context, cookbookID string, id string) (val types.Recipe, found bool) {
+func (k Keeper) GetRecipe(ctx sdk.Context, cookbookID, id string) (val types.Recipe, found bool) {
 	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey))
 	cookbookRecipesStore := prefix.NewStore(recipesStore, types.KeyPrefix(cookbookID))
 

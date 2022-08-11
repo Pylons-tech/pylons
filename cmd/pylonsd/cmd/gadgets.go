@@ -140,7 +140,7 @@ func loadGadgetsForPath(p string, gadgets *[]Gadget) (string, string, *[]Gadget,
 	return dir, file, gadgets, nil
 }
 
-func parseGadget(header string, json string, gadgets *[]Gadget) (*Gadget, error) {
+func parseGadget(header, json string, gadgets *[]Gadget) (*Gadget, error) {
 	splut := strings.Split(strings.TrimPrefix(header, "#"), " ")
 	if len(splut) != 2 {
 		panic(fmt.Errorf(errBadHeader, header))

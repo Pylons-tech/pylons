@@ -23,7 +23,7 @@ func (k Keeper) RedeemInfoAll(c context.Context, req *types.QueryAllRedeemInfoRe
 	store := ctx.KVStore(k.storeKey)
 	redeemInfoStore := prefix.NewStore(store, types.KeyPrefix(types.RedeemInfoKey))
 
-	pageRes, err := query.Paginate(redeemInfoStore, req.Pagination, func(key []byte, value []byte) error {
+	pageRes, err := query.Paginate(redeemInfoStore, req.Pagination, func(key, value []byte) error {
 		var redeemInfo types.RedeemInfo
 		if err := k.cdc.Unmarshal(value, &redeemInfo); err != nil {
 			return err
