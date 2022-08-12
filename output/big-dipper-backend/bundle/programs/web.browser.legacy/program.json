@@ -1,0 +1,428 @@
+{
+  "format": "web-program-pre1",
+  "manifest": [
+    {
+      "path": "1fb749aca81fd25eb9feee22d2e8404e2f34a1c4.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/1fb749aca81fd25eb9feee22d2e8404e2f34a1c4.js?meteor_js_resource=true",
+      "replaceable": false,
+      "size": 1085266,
+      "hash": "1fb749aca81fd25eb9feee22d2e8404e2f34a1c4",
+      "sri": "XF0QWjXmgI62wkShs38zxVnE8Ixg/1659LbCo0BmMsRvpQhL5b2yNjW9MVeyJyJDL9R2N/GkDRBL7XX4bj3B3Q=="
+    },
+    {
+      "path": "1fb749aca81fd25eb9feee22d2e8404e2f34a1c4.stats.json",
+      "where": "client",
+      "type": "json",
+      "cacheable": true,
+      "url": "/1fb749aca81fd25eb9feee22d2e8404e2f34a1c4.stats.json?meteor_js_resource=true",
+      "size": 44909,
+      "hash": "302bd2af03de8fc7b615ccc426b7304b6bacceea",
+      "sri": "fFuBpV4u3S1cpVK1wVA3T7r9qg/Sr3/ybL/2enUPnaoA7Pxns5edV+sl2/Kz46oS+Ct1tbtOFLvUeD5UD5pgIQ=="
+    },
+    {
+      "path": "app/.well-known/apple-app-site-association",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/.well-known/apple-app-site-association",
+      "size": 215,
+      "hash": "09d014a9471a5b285f5e58309dd3d57dddde3d8f",
+      "sri": null
+    },
+    {
+      "path": "app/.well-known/assetlinks.json",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/.well-known/assetlinks.json",
+      "size": 359,
+      "hash": "a755fd51d85d45b693fe1a7ae1757fb950c1d71f",
+      "sri": null
+    },
+    {
+      "path": "app/img/big-dipper-icon-light.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/big-dipper-icon-light.svg",
+      "size": 383,
+      "hash": "4c1387b99e7d72784d30ff126003e7fb9ae88052",
+      "sri": null
+    },
+    {
+      "path": "app/img/big-dipper-logo-light.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/big-dipper-logo-light.svg",
+      "size": 3679,
+      "hash": "c21ae5a46c13f2f52ffab6e2afb05ad267c948c1",
+      "sri": null
+    },
+    {
+      "path": "app/img/big-dipper.png",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/big-dipper.png",
+      "size": 2812,
+      "hash": "b3e96650d1fc22054b0831fbc4641a295e95941c",
+      "sri": null
+    },
+    {
+      "path": "app/img/bluetooth.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/bluetooth.svg",
+      "size": 2093,
+      "hash": "1812ef9926b4bc4e9af7758a2277f6aa91227121",
+      "sri": null
+    },
+    {
+      "path": "app/img/btc.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/btc.svg",
+      "size": 12682,
+      "hash": "7d4d362a3c5a45b10daf8fc42afb311b10e6f0b8",
+      "sri": null
+    },
+    {
+      "path": "app/img/btnbg.png",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/btnbg.png",
+      "size": 635,
+      "hash": "557ce2e9c72b0071afb3971b9a93deec8295febe",
+      "sri": null
+    },
+    {
+      "path": "app/img/buy_icon.png",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/buy_icon.png",
+      "size": 9313,
+      "hash": "79e95e407fd34d1ad5d68578b28e9915c9373155",
+      "sri": null
+    },
+    {
+      "path": "app/img/buybg.png",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/buybg.png",
+      "size": 11003,
+      "hash": "0e9904da143da06455207be17f5cadc3cf3dce5c",
+      "sri": null
+    },
+    {
+      "path": "app/img/check.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/check.svg",
+      "size": 757,
+      "hash": "914921ede293368b55afd315b6dfffd2f2930517",
+      "sri": null
+    },
+    {
+      "path": "app/img/detail.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/detail.svg",
+      "size": 328,
+      "hash": "b9d32426aa61d458d1bc0e7ad4073902010f8f24",
+      "sri": null
+    },
+    {
+      "path": "app/img/easel.png",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/easel.png",
+      "size": 1088,
+      "hash": "ba0076201e29ef8ec3c902d66efef08c20d1f4e9",
+      "sri": null
+    },
+    {
+      "path": "app/img/eeur.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/eeur.svg",
+      "size": 2302,
+      "hash": "9a43e2ee5575abeb08c30bc3d0c7960faffa658f",
+      "sri": null
+    },
+    {
+      "path": "app/img/expand.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/expand.svg",
+      "size": 246,
+      "hash": "51e9993e350751f368e244672ab2787a86c27a62",
+      "sri": null
+    },
+    {
+      "path": "app/img/external.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/external.svg",
+      "size": 245,
+      "hash": "981708a797ea1593baf2ef9da1e460d8af584c7d",
+      "sri": null
+    },
+    {
+      "path": "app/img/eye.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/eye.svg",
+      "size": 346,
+      "hash": "f13e5df8d98007564eec33a5ad4f9446428c6d70",
+      "sri": null
+    },
+    {
+      "path": "app/img/favicon.png",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/favicon.png",
+      "size": 1088,
+      "hash": "ba0076201e29ef8ec3c902d66efef08c20d1f4e9",
+      "sri": null
+    },
+    {
+      "path": "app/img/frame.png",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/frame.png",
+      "size": 53227,
+      "hash": "0dba2f454033cc173755ccdaef64ad685f18840b",
+      "sri": null
+    },
+    {
+      "path": "app/img/googleapp.png",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/googleapp.png",
+      "size": 45579,
+      "hash": "87e2dea04c481f67f63ff988095719f05362faea",
+      "sri": null
+    },
+    {
+      "path": "app/img/history.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/history.svg",
+      "size": 259,
+      "hash": "0fcf85ca4ee5624e4b8a0ea50171c085c472b80c",
+      "sri": null
+    },
+    {
+      "path": "app/img/ico_artwork.png",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/ico_artwork.png",
+      "size": 18701,
+      "hash": "463146616f68e291e8c7a938538c3558bae31585",
+      "sri": null
+    },
+    {
+      "path": "app/img/ico_battleresult.png",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/ico_battleresult.png",
+      "size": 20688,
+      "hash": "3b0a9fd72a60d665e0e6d3e5ee9b8bbb96e8c287",
+      "sri": null
+    },
+    {
+      "path": "app/img/ico_constuction.png",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/ico_constuction.png",
+      "size": 19225,
+      "hash": "2a00bc8c2caab0afa2a83f7fbf153d011832f5c4",
+      "sri": null
+    },
+    {
+      "path": "app/img/ico_quest.png",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/ico_quest.png",
+      "size": 20934,
+      "hash": "6cccd96548acf249b84452338b95b5e4e8748769",
+      "sri": null
+    },
+    {
+      "path": "app/img/ico_sold.png",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/ico_sold.png",
+      "size": 18137,
+      "hash": "377b3892eb0fb3b85eb2c1660c7c31da51e45743",
+      "sri": null
+    },
+    {
+      "path": "app/img/likes.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/likes.svg",
+      "size": 259,
+      "hash": "9578155c7793012a7780345aa89dd54c3a4d40d0",
+      "sri": null
+    },
+    {
+      "path": "app/img/line.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/line.svg",
+      "size": 326,
+      "hash": "cadf7ac279f2ab7469d5f42d2fe9f62584ac80bd",
+      "sri": null
+    },
+    {
+      "path": "app/img/minimize.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/minimize.svg",
+      "size": 171,
+      "hash": "ce5aba3f9e6decaaf753ed58e14b6124bd9668b0",
+      "sri": null
+    },
+    {
+      "path": "app/img/no-image.png",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/no-image.png",
+      "size": 121355,
+      "hash": "6f190fbc4adfa1ed858b6b4dfca177cefa774496",
+      "sri": null
+    },
+    {
+      "path": "app/img/pylon_logo.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/pylon_logo.svg",
+      "size": 832,
+      "hash": "50bfba80867aa7affc840d9eb260ca9b14c897ab",
+      "sri": null
+    },
+    {
+      "path": "app/img/pylons.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/pylons.svg",
+      "size": 81714,
+      "hash": "32f630a5fe44367f8fce628c61d9b238707a64ab",
+      "sri": null
+    },
+    {
+      "path": "app/img/trophy.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/trophy.svg",
+      "size": 455,
+      "hash": "7eb961d26e35ba474e0ea333a36fa742807760d4",
+      "sri": null
+    },
+    {
+      "path": "app/img/uatom.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/uatom.svg",
+      "size": 3675,
+      "hash": "3d36090f2e42eb89674888d71b7637dbbd8a3d5e",
+      "sri": null
+    },
+    {
+      "path": "app/img/urun.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/urun.svg",
+      "size": 1239,
+      "hash": "ec587f578fd949e4b2c344e4709c4b663a4ae038",
+      "sri": null
+    },
+    {
+      "path": "app/img/usb.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/usb.svg",
+      "size": 1898,
+      "hash": "704fad58804b0162dd8ef04a6fb3fbc5c5810493",
+      "sri": null
+    },
+    {
+      "path": "app/img/ust.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/ust.svg",
+      "size": 14205,
+      "hash": "5b38499638a9d2d3d962642270ac542b5afdb6e8",
+      "sri": null
+    },
+    {
+      "path": "app/img/ustripeusd.svg",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/ustripeusd.svg",
+      "size": 1860,
+      "hash": "c8ea4748445dafe9a740ea87c4d4f01640f3a056",
+      "sri": null
+    },
+    {
+      "path": "app/img/wallet.png",
+      "where": "client",
+      "type": "asset",
+      "cacheable": false,
+      "url": "/img/wallet.png",
+      "size": 2206,
+      "hash": "6f64a4a7095bdc5cb2a92ba0901dc578166b8c34",
+      "sri": null
+    },
+    {
+      "path": "head.html",
+      "where": "internal",
+      "type": "head",
+      "hash": "f5562dd2e63b71c08fa47091a5355cf99a5fdcf3"
+    },
+    {
+      "path": "body.html",
+      "where": "internal",
+      "type": "body",
+      "hash": "1b433f33b806b0ddfe84c13b41b6b68881ee49ec"
+    }
+  ]
+}

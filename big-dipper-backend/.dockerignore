@@ -1,5 +1,5 @@
-**/node_modules
-**/.meteor/local
-**/.github
+/node_modules
+/.meteor/local
+/.github
 .git
 .envrc
