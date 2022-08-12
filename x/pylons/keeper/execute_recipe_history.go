@@ -19,7 +19,7 @@ func (k Keeper) SetExecuteRecipeHis(ctx sdk.Context, history types.RecipeHistory
 }
 
 // GetAllExecuteRecipeHis returns all recipe histories
-func (k Keeper) GetAllExecuteRecipeHis(ctx sdk.Context, cookbookID string, id string) (list []*types.RecipeHistory) {
+func (k Keeper) GetAllExecuteRecipeHis(ctx sdk.Context, cookbookID, id string) (list []*types.RecipeHistory) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(cookbookID+id))
 	recipesHistoryStore := prefix.NewStore(store, types.KeyPrefix(types.RecipeHistoryKey))
 	iterator := sdk.KVStorePrefixIterator(recipesHistoryStore, []byte{})

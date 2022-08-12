@@ -84,7 +84,7 @@ func (it Item) FindStringKey(key string) (int, bool) {
 }
 
 // Actualize function actualize an item from item output data
-func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID string, addr sdk.AccAddress, ec CelEnvCollection, nodeVersion uint64) (Item, error) {
+func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID, recipeID string, addr sdk.AccAddress, ec CelEnvCollection, nodeVersion uint64) (Item, error) {
 	dblActualize, err := DoubleParamList(io.Doubles).Actualize(ec)
 	if err != nil {
 		return Item{}, err
