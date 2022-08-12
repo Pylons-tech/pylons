@@ -1,5 +1,5 @@
 FROM golang:1.18-alpine3.16 AS go-builder
-ARG BINARY_VERSION=v0.4.2
+ARG BINARY_VERSION=v1.0.0-rc2
 
 RUN set -eux
 
@@ -24,6 +24,9 @@ COPY --from=go-builder /code/bin/pylonsd /
 COPY scripts/* /
 RUN chmod +x /*.sh
 
+RUN pylonsd init test --chain-id pylons-testnet-3
+COPY networks/pylons-testnet-3/genesis.json /root/.pylons/config/genesis.json
+
 # rest server
 EXPOSE 1317
 # tendermint rpc
@@ -33,5 +36,7 @@ EXPOSE 26656
 # gRPC address
 EXPOSE 9090
 
-# wrong ENTRYPOINT can lead to executable not running
-ENTRYPOINT ["/bin/bash"]
+RUN mkdir -p /tmp/trace
+RUN mkfifo /tmp/trace/trace.fifo
+CMD ["/start.sh"]
+
