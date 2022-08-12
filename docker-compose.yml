@@ -20,7 +20,9 @@ services:
     volumes:
       - trace:/tmp/trace
       - ./trace.rb:/root/trace.rb
-    command: bash -c 'tail -f /tmp/trace/trace.fifo | ruby /root/trace.rb'
+      - ./bigquery_keyfile.json:/root/bigquery_keyfile.json
+
+    command: bash -c 'gem install google-cloud-bigquery && tail -f /tmp/trace/trace.fifo | ruby /root/trace.rb'
 volumes:
   trace:
     #driver_opts:
