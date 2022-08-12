@@ -71,6 +71,32 @@ You will need to have [MongoDB >= 4.x](https://docs.mongodb.com/manual/administr
 
 big-dipper docker image is a multi stage build that is based on [disney/meteor-base](https://github.com/disney/meteor-base/). When you change the meteor or node version, change the lines `FROM geoffreybooth/meteor-base:2` and `FROM node:12.16.1-alpine` respectively. When running the image follow the same [environment variable principles](https://guide.meteor.com/deployment.html#environment) mentioned above. If you get an `non-zero exit (137)` error during the build phase, increase docker container memory and swap limit. Ideally you can set up [remote docker host](https://www.digitalocean.com/community/tutorials/how-to-provision-and-manage-remote-docker-hosts-with-docker-machine-on-ubuntu-18-04) to prevent your computer's fan going brrrrrr.
 
+
+#### passing configs as .env
+json configs can be passed as .env in docker-compose as such
+
+```
+...
+environment:
+      ROOT_URL: ${APP_ROOT_URL:-http://localhost}
+      MONGO_URL: mongodb://mongo:27017/meteor
+      PORT: 3000
+      METEOR_SETTINGS: ${METEOR_SETTINGS}
+      FIREBASE_CONFIG: ${FIREBASE_CONFIG}
+
+...
+```
+.env file
+
+```
+FIREBASE_CONFIG=<firebase json object single line without ''>
+ROOT_URL=https:<url>
+MONGO_URL=mongodb://127.0.0.1:3001
+METEOR_SETTINGS=<settings json object single line without ''>
+
+```
+
+
 ---
 
 ## Donations :pray:
