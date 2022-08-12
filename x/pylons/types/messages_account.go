@@ -10,7 +10,7 @@ var (
 	_ sdk.Msg = &MsgUpdateAccount{}
 )
 
-func NewMsgCreateAccount(creator string, username string, token string, referral string) *MsgCreateAccount {
+func NewMsgCreateAccount(creator, username, token, referral string) *MsgCreateAccount {
 	return &MsgCreateAccount{
 		Creator:         creator,
 		Username:        username,
@@ -53,7 +53,7 @@ func (msg *MsgCreateAccount) ValidateBasic() error {
 	return nil
 }
 
-func NewMsgUpdateAccount(creator string, username string) *MsgUpdateAccount {
+func NewMsgUpdateAccount(creator, username string) *MsgUpdateAccount {
 	return &MsgUpdateAccount{
 		Creator:  creator,
 		Username: username,

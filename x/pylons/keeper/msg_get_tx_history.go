@@ -165,7 +165,7 @@ func QueryEventSender(block []*sdkTypes.TxResponse) (userHistory []*types.Histor
 	return userHistory
 }
 
-func GetBankCreateItemEvent(events sdkTypes.StringEvents, entry *types.History, nft *types.History) (*types.History, *types.History) {
+func GetBankCreateItemEvent(events sdkTypes.StringEvents, entry, nft *types.History) (*types.History, *types.History) {
 	for _, e := range events {
 		switch e.Type {
 		// case transfer event found, i.e. user have sent amount user bank send

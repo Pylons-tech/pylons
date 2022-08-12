@@ -17,7 +17,7 @@ func (suite *IntegrationTestSuite) TestListCompletedExecutionByItem() {
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNExecutionForSingleItem(k, ctx, 10)
 
-	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID string, itemID string) *types.QueryListExecutionsByItemRequest {
+	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID, itemID string) *types.QueryListExecutionsByItemRequest {
 		return &types.QueryListExecutionsByItemRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
@@ -91,7 +91,7 @@ func (suite *IntegrationTestSuite) TestListPendingExecutionByItem() {
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNPendingExecutionForSingleItem(k, ctx, 10)
 
-	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID string, itemID string) *types.QueryListExecutionsByItemRequest {
+	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID, itemID string) *types.QueryListExecutionsByItemRequest {
 		return &types.QueryListExecutionsByItemRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
@@ -165,7 +165,7 @@ func (suite *IntegrationTestSuite) TestListAllExecutionByItem() {
 	cookbookID := pending[0].CookbookId
 	itemID := pending[0].ItemOutputIds[0]
 
-	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID string, itemID string) *types.QueryListExecutionsByItemRequest {
+	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID, itemID string) *types.QueryListExecutionsByItemRequest {
 		return &types.QueryListExecutionsByItemRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
