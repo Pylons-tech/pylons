@@ -36,7 +36,7 @@ func (suite *IntegrationTestSuite) TestBurnDebtToken() {
 
 	// set up new payment processor using private key
 	params := k.GetParams(suite.ctx)
-	params.PaymentProcessors = append(params.PaymentProcessors, types.PaymentProcessor{
+	types.DefaultPaymentProcessors = append(params.PaymentProcessors, types.PaymentProcessor{
 		CoinDenom:            "ustripeusd",
 		PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
 		ProcessorPercentage:  types.DefaultProcessorPercentage,
