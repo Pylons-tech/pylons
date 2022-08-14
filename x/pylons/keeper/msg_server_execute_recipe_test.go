@@ -366,7 +366,6 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 					ValidatorsPercentage: types.DefaultValidatorsPercentage,
 					Name:                 "TestPayment",
 				})
-				k.SetParams(suite.ctx, params)
 			} else if tc.updateEntriesRecipe {
 				tc.recipe.Entries.ItemOutputs = []types.ItemOutput{
 					{

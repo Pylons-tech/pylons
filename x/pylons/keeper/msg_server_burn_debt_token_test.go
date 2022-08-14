@@ -43,7 +43,6 @@ func (suite *IntegrationTestSuite) TestBurnDebtToken() {
 		ValidatorsPercentage: types.DefaultValidatorsPercentage,
 		Name:                 "Test",
 	})
-	k.SetParams(suite.ctx, params)
 
 	type args struct {
 		ri     types.RedeemInfo

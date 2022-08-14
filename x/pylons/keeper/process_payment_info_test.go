@@ -43,7 +43,6 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 		ValidatorsPercentage: types.DefaultValidatorsPercentage,
 		Name:                 "TestPayment",
 	})
-	k.SetParams(suite.ctx, params)
 
 	type args struct {
 		pi     []types.PaymentInfo
