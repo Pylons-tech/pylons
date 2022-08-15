@@ -24,7 +24,7 @@ const (
 	errBadHeader     = "not a valid gadget header: \n%s"
 )
 
-var builtinGadgets []Gadget = []Gadget{
+var builtinGadgets = []Gadget{
 	{
 		"price",
 		`"coinInputs": [
