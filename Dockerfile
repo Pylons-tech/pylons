@@ -14,7 +14,7 @@ RUN go build -o bin/pylonsd -mod=readonly ./cmd/pylonsd
 #-------------------------------------------
 FROM golang:1.18-alpine3.16
 
-RUN apk add --no-cache git bash py3-pip jq curl
+RUN apk add --no-cache git bash py3-pip jq curl ruby supervisor
 RUN pip install toml-cli
 
 WORKDIR /
@@ -35,8 +35,21 @@ EXPOSE 26657
 EXPOSE 26656
 # gRPC address
 EXPOSE 9090
-
+# crete fifo trace file
 RUN mkdir -p /tmp/trace
 RUN mkfifo /tmp/trace/trace.fifo
-CMD ["/start.sh"]
+
+# create and install the config to 
+RUN mkdir -p /var/log/supervisor
+
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+CMD ["/usr/bin/supervisord"]
+
+
+RUN bash -c 'gem install google-cloud-bigquery'
+
+# RUN eco `tail -f /tmp/trace/trace.fifo | ruby /root/trace.rb'` >> ruby_process.sh
+
+# CMD ["/start.sh"]
 
