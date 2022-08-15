@@ -40,16 +40,15 @@ RUN mkdir -p /tmp/trace
 RUN mkfifo /tmp/trace/trace.fifo
 
 # create and install the config to 
-RUN mkdir -p /var/log/supervisor
+RUN mkdir -p /var/log/supervisord
 
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-CMD ["/usr/bin/supervisord"]
+COPY supervisord.conf /etc/supervisord/conf.d/supervisord.conf
 
 
 RUN bash -c 'gem install google-cloud-bigquery'
 
-# RUN eco `tail -f /tmp/trace/trace.fifo | ruby /root/trace.rb'` >> ruby_process.sh
 
-# CMD ["/start.sh"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord/conf.d/supervisord.conf"]
+
+ #CMD ["/start.sh"]
 
