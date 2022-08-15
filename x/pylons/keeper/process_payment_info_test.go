@@ -35,8 +35,7 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 	createNPaymentInfo(k, suite.ctx, 1)
 
 	// set up new payment processor using private key
-	params := k.GetParams(suite.ctx)
-	types.DefaultPaymentProcessors = append(params.PaymentProcessors, types.PaymentProcessor{
+	types.DefaultPaymentProcessors = append(types.DefaultPaymentProcessors, types.PaymentProcessor{
 		CoinDenom:            "ustripeusd",
 		PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
 		ProcessorPercentage:  types.DefaultProcessorPercentage,
@@ -149,6 +148,7 @@ func (suite *IntegrationTestSuite) TestProcessPaymentInfos() {
 			}
 		})
 	}
+	types.DefaultPaymentProcessors = types.DefaultPaymentProcessors[:1]
 }
 
 func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {

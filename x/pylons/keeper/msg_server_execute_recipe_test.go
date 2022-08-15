@@ -358,8 +358,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 
 			// check Update Entries of recipe and setup PaymentInfos
 			if tc.updateEntriesRecipe && tc.execution.PaymentInfos != nil {
-				params := k.GetParams(suite.ctx)
-				types.DefaultPaymentProcessors = append(params.PaymentProcessors, types.PaymentProcessor{
+				types.DefaultPaymentProcessors = append(types.DefaultPaymentProcessors, types.PaymentProcessor{
 					CoinDenom:            types.PylonsCoinDenom,
 					PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
 					ProcessorPercentage:  types.DefaultProcessorPercentage,
@@ -410,6 +409,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			}
 		})
 	}
+	types.DefaultPaymentProcessors = types.DefaultPaymentProcessors[:1]
 }
 
 func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
