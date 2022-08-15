@@ -7,7 +7,7 @@ import (
 
 var _ sdk.Msg = &MsgExecuteRecipe{}
 
-func NewMsgExecuteRecipe(creator string, cookbookID string, recipeID string, coinInputsIndex uint64, itemIDs []string, paymentInfos []PaymentInfo) *MsgExecuteRecipe {
+func NewMsgExecuteRecipe(creator, cookbookID, recipeID string, coinInputsIndex uint64, itemIDs []string, paymentInfos []PaymentInfo) *MsgExecuteRecipe {
 	return &MsgExecuteRecipe{
 		Creator:         creator,
 		CookbookId:      cookbookID,

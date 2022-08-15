@@ -17,7 +17,7 @@ import (
 
 var Out io.Writer = os.Stdout // modified during testing
 
-// group 1: (whole raw string tokens encapsulated '''like this'')
+// group 1: (whole raw string tokens encapsulated ```like this```)
 // group 2: (tokens not containing whitespace, separated by whitespace)
 // group 3: (whatever is in front of the first whitespace)
 var gadgetParamParseRegex = regexp.MustCompile(`(\s'''.*''')|(\s.\S*)|(\S*)`)
@@ -26,8 +26,7 @@ const (
 	cookbookExtension = ".plc"
 	recipeExtension   = ".plr"
 	moduleExtension   = ".pdt"
-
-	includeDirective = "#include "
+	includeDirective  = "#include "
 )
 
 func forFile(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.Recipe)) {
@@ -76,7 +75,7 @@ func ForFiles(path string, perCookbook func(path string, cookbook types.Cookbook
 	}
 }
 
-func loadModuleFromPath(modulePath string, currentPath string) string {
+func loadModuleFromPath(modulePath, currentPath string) string {
 	bytes, err := os.ReadFile(path.Join(currentPath, modulePath+moduleExtension))
 	if err != nil {
 		panic(err)
