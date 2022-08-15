@@ -217,8 +217,7 @@ func NetworkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 	return network.New(t, cfg), state.CookbookList
 }
 
-// A network with execution objects  contains a state of:
-//
+//		A network with execution objects  contains a state of:
 //	 	N cookbooks
 //		N recipes (1 per cookbook)
 //		N executions (1 per recipe)
@@ -411,7 +410,7 @@ func NetworkWithRecipeObjectsHistory(t *testing.T, n int) (*network.Network, []t
 	return network.New(t, cfg), state.RecipeList, nil
 }
 
-func WriteFixtureAtTestRuntime(name string, data string) {
+func WriteFixtureAtTestRuntime(name, data string) {
 	file, err := os.Create(name)
 	if err != nil {
 		panic(err)

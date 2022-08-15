@@ -9,7 +9,7 @@ const TypeMsgAppleIap = "apple_iap"
 
 var _ sdk.Msg = &MsgAppleIap{}
 
-func NewMsgAppleIap(creator string, productID string, purchaseID string, receiptDataBase64 string) *MsgAppleIap {
+func NewMsgAppleIap(creator, productID, purchaseID, receiptDataBase64 string) *MsgAppleIap {
 	return &MsgAppleIap{
 		Creator:           creator,
 		ProductId:         productID,

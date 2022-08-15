@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
-import GoogleTagManager from '/imports/ui/components/GoogleTagManager.jsx';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { Container } from 'reactstrap';
 import Header from '/imports/ui/components/Header.jsx';
-import Footer from '/imports/ui/components/Footer.jsx';
 import Home from '/imports/ui/home/Home.jsx';
 import Validators from '/imports/ui/validators/ValidatorsList.jsx';
-import Account from '/imports/ui/accounts/Account.jsx';
 import BlocksTable from '/imports/ui/blocks/BlocksTable.jsx';
-import Proposals from '/imports/ui/proposals/Proposals.jsx';
 import ValidatorDetails from '/imports/ui/validators/ValidatorDetails.jsx';
 import Transactions from '/imports/ui/transactions/TransactionsList.jsx';
 import Recipes from '/imports/ui/easel_transactions/Recipes.jsx';
 import Distribution from '/imports/ui/voting-power/Distribution.jsx';
-import SearchBar from '/imports/ui/components/SearchBar.jsx';
 import moment from 'moment';
 import SentryBoundary from '/imports/ui/components/SentryBoundary.jsx';
 import NotFound from '/imports/ui/pages/NotFound.jsx';
@@ -28,9 +23,6 @@ if (Meteor.isClient) import 'react-toastify/dist/ReactToastify.min.css';
 // import './App.js'
 
 const RouteHeader = withRouter((props) => <Header {...props} />);
-const MobileSearchBar = withRouter(({ history }) => (
-  <SearchBar history={history} id='mobile-searchbar' mobile />
-));
 
 function getLang() {
   return (
@@ -79,11 +71,6 @@ class App extends Component {
     return (
       // <Router history={history}>
       <div>
-        {Meteor.settings.public.gtm ? (
-          <GoogleTagManager gtmId={Meteor.settings.public.gtm} />
-        ) : (
-          ''
-        )}
         <RouteHeader refreshApp={this.propagateStateChange} />
         <Container fluid id='main'>
           {Meteor.settings.public.banners ? (
@@ -93,18 +80,13 @@ class App extends Component {
           )}
           <ToastContainer />
           <SentryBoundary>
-            <MobileSearchBar />
             <Switch>
               <Route exact path='/' component={Home} />
               <Route path='/blocks' component={BlocksTable} />
               <Route path='/transactions' component={Transactions} />
               <Route path='/art_sales' component={Recipes} />
               <Route path='/activity_feed' component={ActivityFeed} />
-              <Route
-                path='/account/:address'
-                render={(props) => <Account {...props} />}
-              />
-              <Route path='/validators' exact component={Validators} />
+	      <Route path='/validators' exact component={Validators} />
               <Route
                 path='/validators/inactive'
                 render={(props) => <Validators {...props} inactive={true} />}
@@ -117,14 +99,10 @@ class App extends Component {
                 path='/(validator|validators)'
                 component={ValidatorDetails}
               />
-              {Meteor.settings.public.modules.gov ? (
-                <Route path='/proposals' component={Proposals} />
-              ) : null}
               <Route component={NotFound} />
             </Switch>
           </SentryBoundary>
         </Container>
-        <Footer />
       </div>
       // </Router>
     );

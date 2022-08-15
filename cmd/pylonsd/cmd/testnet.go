@@ -461,7 +461,7 @@ func calculateIP(ip string, i int) (string, error) {
 	return ipv4.String(), nil
 }
 
-func writeFile(name string, dir string, contents []byte) error {
+func writeFile(name, dir string, contents []byte) error {
 	writePath := filepath.Dir(dir)
 	file := filepath.Join(writePath, name)
 

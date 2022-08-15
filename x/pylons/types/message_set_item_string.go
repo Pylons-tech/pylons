@@ -7,7 +7,7 @@ import (
 
 var _ sdk.Msg = &MsgSetItemString{}
 
-func NewMsgSetItemString(creator string, cookbookID string, id string, field string, value string) *MsgSetItemString {
+func NewMsgSetItemString(creator, cookbookID, id, field, value string) *MsgSetItemString {
 	return &MsgSetItemString{
 		Creator:    creator,
 		CookbookId: cookbookID,
