@@ -196,16 +196,6 @@ Meteor.methods({
   }
 })
 
-function Valid(parameter) {
-  if (!isString(parameter)) {
-    return false
-  }
-  if (parameter.length === 0) {
-    return false
-  }
-  return true
-}
-
 function markRead(id) {
   return Notifications.update({ _id: id }, { $set: { read: true } })
 }
@@ -237,16 +227,4 @@ function getUserNameInfo(address) {
     console.log('error getting userNameInfo: ', e)
   }
   return result
-}
-
-async function verifyAppCheckToken(appCheckToken) {
-  if (!appCheckToken) {
-    return null
-  }
-  try {
-    const res = await admin.appCheck().verifyToken(appCheckToken)
-    return res
-  } catch (err) {
-    return null
-  }
 }
