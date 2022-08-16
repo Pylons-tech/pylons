@@ -5,8 +5,6 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
-import "pylons/pylons/google_iap_order.proto";
-import "pylons/pylons/execution.proto";
 import "pylons/pylons/item.proto";
 import "pylons/pylons/recipe.proto";
 import "pylons/pylons/cookbook.proto";

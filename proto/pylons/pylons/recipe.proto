@@ -50,8 +50,8 @@ message DoubleWeightRange {
 // DoubleParam describes the bounds on an item input/output parameter of type float64
 message DoubleParam  {
   string key = 1;
-  repeated DoubleWeightRange weightRanges = 2 [(gogoproto.nullable) = false];
-  // When program is not empty, weightRanges is ignored
+  repeated DoubleWeightRange weight_ranges = 2 [(gogoproto.nullable) = false];
+  // When program is not empty, weight_ranges is ignored
   string program = 3;
 }
 
@@ -65,8 +65,8 @@ message IntWeightRange {
 // LongParam describes the bounds on an item input/output parameter of type int64
 message LongParam {
   string key = 1;
-  repeated IntWeightRange weightRanges = 2 [(gogoproto.nullable) = false];
-  // When program is not empty, weightRanges is ignored
+  repeated IntWeightRange weight_ranges = 2 [(gogoproto.nullable) = false];
+  // When program is not empty, weight_ranges is ignored
   string program = 3;
 }
 
