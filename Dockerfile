@@ -46,8 +46,8 @@ EXPOSE 26656
 # gRPC address
 EXPOSE 9090
 # crete fifo trace file
-RUN mkdir -p /tmp/trace
-RUN mkfifo /tmp/trace/trace.fifo
+RUN mkdir -p /home/big-dipper/trace
+RUN mkfifo /home/big-dipper/trace/trace.fifo
 
 
 

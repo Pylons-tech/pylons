@@ -11,4 +11,4 @@ toml set --toml-path $HOME/.pylons/config/app.toml api.swagger true
 toml set --toml-path $HOME/.pylons/config/app.toml api.enable true
 
 # explicitly set rpc to 0.0.0.0 so that docker expose port would work
-exec pylonsd start --rpc.laddr tcp://0.0.0.0:26657 --trace-store /tmp/trace/trace.fifo
+exec pylonsd start --rpc.laddr tcp://0.0.0.0:26657 --trace-store /$HOME/trace/trace.fifo
