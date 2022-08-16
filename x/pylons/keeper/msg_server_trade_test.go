@@ -116,7 +116,7 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 			err:              sdkerrors.ErrInvalidRequest,
 		},
 		{
-			desc: "Item and Cookbook ID can not be trade",
+			desc: "Item and Cookbook ID cannot be traded",
 			request: types.MsgCreateTrade{
 				Creator:     items[0].Owner,
 				CoinInputs:  coinInputs,
