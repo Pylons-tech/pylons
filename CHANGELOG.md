@@ -3,7 +3,7 @@
 ## Unreleased 
 
 ### State Machine Breaking Changes:
-
+- [#786](https://github.com/Pylons-tech/pylons/pull/786) Add buf lint github workflow and refactor proto to comply with lint
 - [#591](https://github.com/Pylons-tech/pylons/pull/591) Change CamelCase field name to snake_case in proto
 
 ### Changes:
