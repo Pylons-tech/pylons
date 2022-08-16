@@ -1,31 +1,40 @@
 FROM golang:1.18-alpine3.16 AS go-builder
 ARG BINARY_VERSION=v1.0.0-rc2
-
+RUN addgroup -S appgroup && adduser -S big-dipper -G appgroup
+USER big-dipper
 RUN set -eux
 
-WORKDIR /code
+WORKDIR /home/big-dipper/code
 
 # Install babyd binary
 RUN echo "Installing pylonsd binary"
-ADD https://github.com/Pylons-tech/pylons/archive/refs/tags/${BINARY_VERSION}.tar.gz /code/
-RUN tar -xf ${BINARY_VERSION}.tar.gz -C /code/ --strip-components=1
+ADD https://github.com/Pylons-tech/pylons/archive/refs/tags/${BINARY_VERSION}.tar.gz /home/big-dipper/code/
+USER root
+RUN tar -xf /home/big-dipper/code/${BINARY_VERSION}.tar.gz -C /home/big-dipper/code/ --strip-components=1
+
 RUN go build -o bin/pylonsd -mod=readonly ./cmd/pylonsd
 
 #-------------------------------------------
 FROM golang:1.18-alpine3.16
-
 RUN apk add --no-cache git bash py3-pip jq curl ruby supervisor
+RUN addgroup -S appgroup && adduser -S big-dipper -G appgroup
+USER big-dipper
+
 RUN pip install toml-cli
 
-WORKDIR /
+WORKDIR /home/big-dipper/
 
-COPY --from=go-builder /code/bin/pylonsd /usr/bin/pylonsd
-COPY --from=go-builder /code/bin/pylonsd /
-COPY scripts/* /
-RUN chmod +x /*.sh
-
+COPY --from=go-builder /home/big-dipper/code/bin/pylonsd /usr/bin/pylonsd
+COPY --from=go-builder /home/big-dipper/code/bin/pylonsd /home/big-dipper/
+COPY scripts/* /home/big-dipper/
+USER root
+RUN chmod +x /home/big-dipper/*.sh
+RUN bash -c 'gem install google-cloud-bigquery'
+# create and install the config to 
+RUN mkdir -p /var/log/supervisord
+USER big-dipper
 RUN pylonsd init test --chain-id pylons-testnet-3
-COPY networks/pylons-testnet-3/genesis.json /root/.pylons/config/genesis.json
+COPY networks/pylons-testnet-3/genesis.json /home/big-dipper/.pylons/config/genesis.json
 
 # rest server
 EXPOSE 1317
@@ -39,13 +48,12 @@ EXPOSE 9090
 RUN mkdir -p /tmp/trace
 RUN mkfifo /tmp/trace/trace.fifo
 
-# create and install the config to 
-RUN mkdir -p /var/log/supervisord
+
 
 COPY supervisord.conf /etc/supervisord/conf.d/supervisord.conf
 
 
-RUN bash -c 'gem install google-cloud-bigquery'
+
 
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord/conf.d/supervisord.conf"]
