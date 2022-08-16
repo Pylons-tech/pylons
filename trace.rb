@@ -21,12 +21,14 @@ class TraceTable
   end
   
   def initialize
-    Google::Cloud::Bigquery.configure do |config|
-      config.project_id  = "zinc-interface-241613"
-#      config.credentials = "/home/big-dipper/bigquery_keyfile.json"
-    end  
-    @bigquery = Google::Cloud::Bigquery.new
-    @table = @bigquery.dataset("chain").table("trace")
+    if ENV["env"] == "prod" 
+      Google::Cloud::Bigquery.configure do |config|
+        config.project_id  = "zinc-interface-241613"
+  #      config.credentials = "/home/big-dipper/bigquery_keyfile.json"
+      end  
+      @bigquery = Google::Cloud::Bigquery.new
+      @table = @bigquery.dataset("chain").table("trace")
+    end
   end
 end
 
@@ -44,8 +46,15 @@ def massage json
   json
 end
 
-table = TraceTable.new().table
-ARGF.each_line{|line| json = massage JSON.parse line
-  next if boring json
-  puts table.insert(json).insert_errors.map(&:errors)
-}
+if ENV["env"] == "prod"
+  table = TraceTable.new().table
+  ARGF.each_line{|line| json = massage JSON.parse line
+    next if boring json
+    puts table.insert(json).insert_errors.map(&:errors)
+  }
+  else
+  ARGF.each_line{|line| json = massage JSON.parse line
+    next if boring json
+    puts json
+  }
+end
