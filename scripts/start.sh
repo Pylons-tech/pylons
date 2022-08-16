@@ -1,5 +1,4 @@
 #! /bin/bash
-echo "HELLO"
 source ./state_sync_vars.sh
 source ./peers.sh
 echo "trust_height: $BLOCK_HEIGHT"
