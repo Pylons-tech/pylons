@@ -26,6 +26,7 @@ WORKDIR /home/big-dipper/
 COPY --from=go-builder /home/big-dipper/code/bin/pylonsd /usr/bin/pylonsd
 COPY --from=go-builder /home/big-dipper/code/bin/pylonsd /home/big-dipper/
 COPY scripts/* /home/big-dipper/
+COPY trace.rb /home/big-dipper/trace.rb
 USER root
 RUN chmod +x /home/big-dipper/*.sh
 RUN bash -c 'gem install google-cloud-bigquery'
