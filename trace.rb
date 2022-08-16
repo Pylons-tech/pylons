@@ -61,6 +61,6 @@ puts "Starting logger with cloud =" + cloud?.to_s
 
 ARGF.each_line{|line| json = massage JSON.parse line
     next if boring json
-    result = deliver table.insert(json)
+    result = deliver json
     puts result.insert_errors.map(&:errors) if result
 }
