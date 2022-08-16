@@ -2,7 +2,7 @@ version: '3'
 
 services:
   node:
-    container_name: pylonsnode
+    container_name: node
     build:
       context: .
       args:
@@ -12,19 +12,5 @@ services:
       - "1317:1317"
     volumes:
       - ./debug:/debug
-      - trace:/tmp/trace
-  logger:
-    image: "ruby:latest"
-    depends_on:
-      - "node"
-    volumes:
-      - trace:/tmp/trace
-      - ./trace.rb:/root/trace.rb
-      - ./bigquery_keyfile.json:/root/bigquery_keyfile.json
-
-    command: bash -c 'gem install google-cloud-bigquery && tail -f /tmp/trace/trace.fifo | ruby /root/trace.rb'
-volumes:
-  trace:
-    #driver_opts:
-    #  type: tmpfs
-    #  device: tmpfs
+      - ./trace.rb:/home/big-dipper/trace.rb
+      - ./bigquery_keyfile.json:/home/big-dipper/bigquery_keyfile.json

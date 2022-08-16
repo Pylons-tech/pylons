@@ -25,14 +25,15 @@ WORKDIR /home/big-dipper/
 
 COPY --from=go-builder /home/big-dipper/code/bin/pylonsd /usr/bin/pylonsd
 COPY --from=go-builder /home/big-dipper/code/bin/pylonsd /home/big-dipper/
-COPY scripts/* /home/big-dipper/
-COPY trace.rb /home/big-dipper/trace.rb
+
 USER root
-RUN chmod +x /home/big-dipper/*.sh
-RUN bash -c 'gem install google-cloud-bigquery'
+RUN bash -c 'gem install google-cloud-bigquery pry'
 # create and install the config to 
 RUN mkdir -p /var/log/supervisord
 RUN chown -R big-dipper:appgroup /var/log/supervisord
+COPY scripts/* /home/big-dipper/
+COPY trace.rb /home/big-dipper/trace.rb
+RUN chmod +x /home/big-dipper/*.sh
 USER big-dipper
 RUN pylonsd init test --chain-id pylons-testnet-3
 RUN mkdir -p /home/big-dipper/.pylons/config/
@@ -56,6 +57,4 @@ COPY supervisord.conf /etc/supervisord/conf.d/supervisord.conf
 
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord/conf.d/supervisord.conf"]
-
- #CMD ["/start.sh"]
 

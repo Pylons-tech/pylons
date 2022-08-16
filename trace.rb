@@ -1,3 +1,4 @@
+#! /usr/bin/ruby
 require "json"
 require "base64"
 require "google/cloud/bigquery"
@@ -21,16 +22,19 @@ class TraceTable
   end
   
   def initialize
-    if ENV["env"] == "prod" 
-      Google::Cloud::Bigquery.configure do |config|
-        config.project_id  = "zinc-interface-241613"
-  #      config.credentials = "/home/big-dipper/bigquery_keyfile.json"
-      end  
+      if !cloud? do
+        Google::Cloud::Bigquery.configure do |config|
+          config.project_id  = "zinc-interface-241613"
+          config.credentials = "/home/big-dipper/bigquery_keyfile.json"
+        end
+      end
       @bigquery = Google::Cloud::Bigquery.new
       @table = @bigquery.dataset("chain").table("trace")
     end
   end
 end
+
+def cloud?; ENV["env"] == "prod"; end
 
 def boring json
   return true if ["staking","slashing","upgrade"].member? json["store_name"]
@@ -46,15 +50,17 @@ def massage json
   json
 end
 
-if ENV["env"] == "prod"
-  table = TraceTable.new().table
-  ARGF.each_line{|line| json = massage JSON.parse line
-    next if boring json
-    puts table.insert(json).insert_errors.map(&:errors)
-  }
-  else
-  ARGF.each_line{|line| json = massage JSON.parse line
-    next if boring json
-    puts json
-  }
+table = TraceTable.new().table if cloud?
+
+def deliver json
+  return table.insert json if cloud?
+  puts json
 end
+
+puts "Starting logger with cloud =" + cloud?.to_s
+
+ARGF.each_line{|line| json = massage JSON.parse line
+    next if boring json
+    result = deliver table.insert(json)
+    puts result.insert_errors.map(&:errors) if result
+}
