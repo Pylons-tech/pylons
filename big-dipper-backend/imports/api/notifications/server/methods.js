@@ -173,7 +173,28 @@ Meteor.methods({
           type: 'NFT Sold'
         }
       }
-
+      quantity = parseInt(sale?.quantity, 10)
+      amountMinted = parseInt(sale?.amountMinted, 10)
+      totalSale = sale?.amount * amountMinted
+      let coins = Meteor.settings.public.coins
+      let totalProceeds = '0 USD'
+      coin = coins.find(
+        (coin) => coin?.denom?.toLowerCase() === sale?.coin?.toLowerCase()
+      )
+      if (coin) {
+        totalProceeds = totalSale / coin?.fraction + ' ' + coin?.displayName
+      }
+      if (quantity > 0 && amountMinted === quantity) {
+        // All editions for [NFT Title] have been sold. Your total proceeds are [$XYZ USD]
+        message.notification.body = `All editions for ${sale.item_name} have been sold. You’re total proceeds are ${totalProceeds}}`
+      } else if (
+        quantity > 0 &&
+        (amountMinted * 2 === quantity || amountMinted * 2 === quantity + 1)
+      ) {
+        message.notification.body = `Half of the editions for ${sale.item_name} have been sold. You’re total proceeds are ${totalProceeds}}`
+      } else {
+        message.notification.body = `Your NFT ${sale.item_name} have been sold. You’re total proceeds are ${totalProceeds}}`
+      }
       const options = {
         priority: 'high',
         timeToLive: 86400
