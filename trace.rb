@@ -23,7 +23,7 @@ class TraceTable
   def initialize
     Google::Cloud::Bigquery.configure do |config|
       config.project_id  = "zinc-interface-241613"
-      config.credentials = "/root/bigquery_keyfile.json"
+#      config.credentials = "/home/big-dipper/bigquery_keyfile.json"
     end  
     @bigquery = Google::Cloud::Bigquery.new
     @table = @bigquery.dataset("chain").table("trace")
