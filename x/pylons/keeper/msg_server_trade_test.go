@@ -25,6 +25,7 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 	creator := types.GenTestBech32FromString("creator")
 
 	fooCoin := sdk.NewCoin("testPylons", sdk.OneInt())
+	// bondCoin := sdk.NewCoin("testPylons1", sdk.OneInt())
 
 	// Set default send_enabled to !enabled, add a foodenom that overrides default as enabled
 	params.DefaultSendEnabled = !enabled
@@ -39,10 +40,11 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 	coinOutputs = append(coinOutputs, *&fooCoin)
 
 	for _, tc := range []struct {
-		desc          string
-		request       types.MsgCreateTrade
-		itemTradeable bool
-		err           error
+		desc             string
+		request          types.MsgCreateTrade
+		itemTradeable    bool
+		lockCoinfortrade bool
+		err              error
 	}{
 		{
 			desc: "Completed",
@@ -54,7 +56,8 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 				ItemOutputs: nil,
 				ExtraInfo:   "extrainfo",
 			},
-			itemTradeable: false,
+			lockCoinfortrade: false,
+			itemTradeable:    false,
 		},
 		{
 			desc: "Send enabled is disabled",
@@ -66,8 +69,9 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 				ItemOutputs: nil,
 				ExtraInfo:   "",
 			},
-			itemTradeable: false,
-			err:           sdkerrors.ErrInvalidRequest,
+			lockCoinfortrade: false,
+			itemTradeable:    false,
+			err:              sdkerrors.ErrInvalidRequest,
 		},
 		{
 			desc: "Coin cannot be traded",
@@ -79,8 +83,9 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 				ItemOutputs: nil,
 				ExtraInfo:   "",
 			},
-			itemTradeable: false,
-			err:           sdkerrors.ErrInvalidRequest,
+			lockCoinfortrade: false,
+			itemTradeable:    false,
+			err:              sdkerrors.ErrInvalidRequest,
 		},
 		{
 			desc: "Item and Cookbook ID not found",
@@ -92,8 +97,9 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 				ItemOutputs: []types.ItemRef{{CookbookId: "testCookbookId", ItemId: "testItemId"}},
 				ExtraInfo:   "extraInfo",
 			},
-			itemTradeable: false,
-			err:           sdkerrors.ErrInvalidRequest,
+			lockCoinfortrade: false,
+			itemTradeable:    false,
+			err:              sdkerrors.ErrInvalidRequest,
 		},
 		{
 			desc: "Creator and item owner difference",
@@ -105,8 +111,9 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 				ItemOutputs: []types.ItemRef{{CookbookId: items[0].CookbookId, ItemId: items[0].Id}},
 				ExtraInfo:   "extraInfo",
 			},
-			itemTradeable: false,
-			err:           sdkerrors.ErrInvalidRequest,
+			lockCoinfortrade: false,
+			itemTradeable:    false,
+			err:              sdkerrors.ErrInvalidRequest,
 		},
 		{
 			desc: "Item and Cookbook ID can not be trade",
@@ -118,8 +125,9 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 				ItemOutputs: []types.ItemRef{{CookbookId: items[0].CookbookId, ItemId: items[0].Id}},
 				ExtraInfo:   "extraInfo",
 			},
-			itemTradeable: true,
-			err:           sdkerrors.ErrInvalidRequest,
+			lockCoinfortrade: false,
+			itemTradeable:    true,
+			err:              sdkerrors.ErrInvalidRequest,
 		},
 		{
 			desc: "Invalid Coin Inputs",
@@ -131,8 +139,23 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 				ItemOutputs: []types.ItemRef{{CookbookId: items[0].CookbookId, ItemId: items[0].Id}},
 				ExtraInfo:   "extraInfo",
 			},
-			itemTradeable: false,
-			err:           sdkerrors.ErrInvalidCoins,
+			lockCoinfortrade: false,
+			itemTradeable:    false,
+			err:              sdkerrors.ErrInvalidCoins,
+		},
+		{
+			desc: "Coins cannot be lock for trade",
+			request: types.MsgCreateTrade{
+				Creator:     creator,
+				CoinInputs:  nil,
+				ItemInputs:  nil,
+				CoinOutputs: append(coinOutputs, sdk.Coin{Denom: "testPylons1", Amount: sdk.NewInt(10)}),
+				ItemOutputs: nil,
+				ExtraInfo:   "",
+			},
+			lockCoinfortrade: true,
+			itemTradeable:    false,
+			err:              sdkerrors.ErrInvalidRequest,
 		},
 	} {
 		tc := tc
@@ -142,7 +165,15 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 			} else {
 				items[0].Tradeable = true
 			}
+
+			if tc.lockCoinfortrade {
+				params.DefaultSendEnabled = tc.lockCoinfortrade
+				params = params.SetSendEnabledParam(fooCoin.Denom, tc.lockCoinfortrade)
+				app.BankKeeper.SetParams(ctx, params)
+			}
+
 			k.SetItem(ctx, items[0])
+
 			_, err := srv.CreateTrade(wctx, &tc.request)
 			if tc.err != nil {
 				require.ErrorIs(err, tc.err)
