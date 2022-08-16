@@ -1,29 +1,21 @@
-
-# Pylons
+<p align="center">
+  <a href="https://www.pylons.tech/">
+    <img src="https://www.pylons.tech/assets/img/brand.svg" alt="Pylons Logo" height="70" /></a>
+  <br />
+  <span><strong>Web3, Made Simple.</strong></span>
+</p>
 
 Pylons is a blockchain network that allows artists, game studios, and other creatives to sell unique items using Stripe, Apple Pay, and Google Pay.  These items can then move freely through the IBC network.
 
 This repository contains:
 
 * The Pylons blockchain software, written in Go using the Cosmos-SDK.
-* Big Dipper, a block explorer from Forbole that we have customized for use with Pylons.  Thank you Forbole!
-* Our genesis state
+* Big Dipper, a block explorer from Forbole that we have customized for use with Pylons. Thank you Forbole!
+* Our genesis state.
 
 ## Documentation
 
-### Docker build
-Add your favorite peers to scripts/peers.sh and then you can run
-```
-docker-compose up -- build
-```
-You can use -d if you want it in the background
-Should be fun!
-
-### Outdated stuff
-To learn how to use run a Pylons node, check out the [documentation pages](./docs/README.md).
-
-### SDK
-To learn more about developing NFTs on Pylons, see the [Pylons SDK](https://github.com/Pylons-tech/pylons_dart_sdk) project.
+To learn how to use/run a Pylons node, check out the [documentation pages](./docs/README.md).  To learn more about developing NFTs on Pylons, see the [Pylons SDK](https://github.com/Pylons-tech/pylons_dart_sdk) project.
 
 ## Our Research
 
@@ -33,9 +25,9 @@ To learn more about developing NFTs on Pylons, see the [Pylons SDK](https://gith
 
 ## Talk to us!
 
-Pylons is maintained by Pylons, LLC in collaboration with RNS and Notional Labs.
+Pylons is maintained by Pylons, INC in collaboration with RNS and Notional Labs.
 
-* [Discord](https://discord.gg/dZgUGy32j7)
+* [Discord](https://discord.gg/pylons)
 * [Twitter](https://twitter.com/pylonstech)
 * [Jobs](https://www.linkedin.com/company/pylons/jobs/)
 
