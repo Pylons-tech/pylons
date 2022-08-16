@@ -25,7 +25,6 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 	creator := types.GenTestBech32FromString("creator")
 
 	fooCoin := sdk.NewCoin("testPylons", sdk.OneInt())
-	// bondCoin := sdk.NewCoin("testPylons1", sdk.OneInt())
 
 	// Set default send_enabled to !enabled, add a foodenom that overrides default as enabled
 	params.DefaultSendEnabled = !enabled
