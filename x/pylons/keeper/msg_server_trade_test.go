@@ -10,56 +10,6 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
-func (suite *IntegrationTestSuite) TestTradeMsgServerCreateSimple() {
-	k := suite.k
-	ctx := suite.ctx
-	require := suite.Require()
-
-	wctx := sdk.WrapSDKContext(ctx)
-	srv := keeper.NewMsgServerImpl(k)
-
-	creator := types.GenTestBech32FromString("creator")
-	for i := 0; i < 5; i++ {
-		resp, err := srv.CreateTrade(wctx, &types.MsgCreateTrade{
-			Creator:     creator,
-			CoinInputs:  nil,
-			ItemInputs:  nil,
-			CoinOutputs: sdk.Coins{},
-			ItemOutputs: nil,
-			ExtraInfo:   "",
-		})
-		require.NoError(err)
-		require.Equal(i, int(resp.Id))
-	}
-}
-
-func (suite *IntegrationTestSuite) TestTradeMsgServerCreateInvalidCoinInputs() {
-	k := suite.k
-	ctx := suite.ctx
-	require := suite.Require()
-
-	wctx := sdk.WrapSDKContext(ctx)
-	srv := keeper.NewMsgServerImpl(k)
-
-	numTests := 5
-	items := createNItem(k, ctx, numTests, true)
-
-	coinInputs := make([]types.CoinInput, 0)
-	coinInputs = append(coinInputs, types.CoinInput{Coins: sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}})
-
-	for i := 0; i < 5; i++ {
-		_, err := srv.CreateTrade(wctx, &types.MsgCreateTrade{
-			Creator:     items[i].Owner,
-			CoinInputs:  coinInputs,
-			ItemInputs:  nil,
-			CoinOutputs: sdk.Coins{},
-			ItemOutputs: []types.ItemRef{{CookbookId: items[i].CookbookId, ItemId: items[i].Id}},
-			ExtraInfo:   "extraInfo",
-		})
-		require.ErrorIs(err, sdkerrors.ErrInvalidCoins)
-	}
-}
-
 func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 	k := suite.k
 	ctx := suite.ctx
@@ -68,7 +18,6 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 
 	enabled := true
 	params := banktypes.DefaultParams()
-	// app.BankKeeper.SetParams(ctx, params)
 
 	wctx := sdk.WrapSDKContext(ctx)
 	srv := keeper.NewMsgServerImpl(k)
@@ -76,7 +25,7 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 	creator := types.GenTestBech32FromString("creator")
 
 	fooCoin := sdk.NewCoin("testPylons", sdk.OneInt())
-	var items []types.Item
+
 	// Set default send_enabled to !enabled, add a foodenom that overrides default as enabled
 	params.DefaultSendEnabled = !enabled
 	params = params.SetSendEnabledParam(fooCoin.Denom, !enabled)
@@ -84,7 +33,7 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 
 	coinInputs := make([]types.CoinInput, 0)
 	coinInputs = append(coinInputs, types.CoinInput{Coins: sdk.Coins{sdk.Coin{Denom: "ustripeusd", Amount: sdk.NewInt(0)}}})
-	items = createNItem(k, ctx, 1, true)
+	items := createNItem(k, ctx, 1, true)
 
 	coinOutputs := sdk.NewCoins()
 	coinOutputs = append(coinOutputs, *&fooCoin)
@@ -121,6 +70,32 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 			err:           sdkerrors.ErrInvalidRequest,
 		},
 		{
+			desc: "Coin cannot be traded",
+			request: types.MsgCreateTrade{
+				Creator:     creator,
+				CoinInputs:  append(coinInputs, types.CoinInput{Coins: sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}}),
+				ItemInputs:  nil,
+				CoinOutputs: nil,
+				ItemOutputs: nil,
+				ExtraInfo:   "",
+			},
+			itemTradeable: false,
+			err:           sdkerrors.ErrInvalidRequest,
+		},
+		{
+			desc: "Item and Cookbook ID not found",
+			request: types.MsgCreateTrade{
+				Creator:     items[0].Owner,
+				CoinInputs:  coinInputs,
+				ItemInputs:  nil,
+				CoinOutputs: sdk.Coins{},
+				ItemOutputs: []types.ItemRef{{CookbookId: "testCookbookId", ItemId: "testItemId"}},
+				ExtraInfo:   "extraInfo",
+			},
+			itemTradeable: false,
+			err:           sdkerrors.ErrInvalidRequest,
+		},
+		{
 			desc: "Creator and item owner difference",
 			request: types.MsgCreateTrade{
 				Creator:     creator,
@@ -131,6 +106,19 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 				ExtraInfo:   "extraInfo",
 			},
 			itemTradeable: false,
+			err:           sdkerrors.ErrInvalidRequest,
+		},
+		{
+			desc: "Item and Cookbook ID can not be trade",
+			request: types.MsgCreateTrade{
+				Creator:     items[0].Owner,
+				CoinInputs:  coinInputs,
+				ItemInputs:  nil,
+				CoinOutputs: sdk.Coins{},
+				ItemOutputs: []types.ItemRef{{CookbookId: items[0].CookbookId, ItemId: items[0].Id}},
+				ExtraInfo:   "extraInfo",
+			},
+			itemTradeable: true,
 			err:           sdkerrors.ErrInvalidRequest,
 		},
 		{
@@ -150,10 +138,11 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 		tc := tc
 		suite.Run(tc.desc, func() {
 			if tc.itemTradeable {
-				items = createNItem(k, ctx, 1, false)
+				items[0].Tradeable = false
 			} else {
-				items = createNItem(k, ctx, 1, true)
+				items[0].Tradeable = true
 			}
+			k.SetItem(ctx, items[0])
 			_, err := srv.CreateTrade(wctx, &tc.request)
 			if tc.err != nil {
 				require.ErrorIs(err, tc.err)
