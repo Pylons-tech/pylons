@@ -49,7 +49,7 @@ EXPOSE 26656
 EXPOSE 9090
 # crete fifo trace file
 RUN mkdir -p /home/big-dipper/trace
-RUN touch /home/big-dipper/trace/trace.fifo
+RUN mkfifo /home/big-dipper/trace/trace.fifo
 
 
 
