@@ -17,9 +17,14 @@ class BuildPublishedNFTsBottomSheet {
   final NFT nft;
   final EaselProvider easelProvider;
 
-  BuildPublishedNFTsBottomSheet({required this.context, required this.nft, required this.easelProvider});
+  BuildPublishedNFTsBottomSheet(
+      {required this.context, required this.nft, required this.easelProvider});
 
-  Widget moreOptionTile({required String title, required String image, required VoidCallback onPressed, final bool isSvg = true}) {
+  Widget moreOptionTile(
+      {required String title,
+      required String image,
+      required VoidCallback onPressed,
+      final bool isSvg = true}) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: InkWell(
@@ -45,7 +50,8 @@ class BuildPublishedNFTsBottomSheet {
   }
 
   void onViewOnPylonsPressed({required NFT nft}) async {
-    String url = nft.recipeID.generateEaselLinkForOpeningInPylonsApp(cookbookId: nft.cookbookID);
+    String url = nft.recipeID
+        .generateEaselLinkForOpeningInPylonsApp(cookbookId: nft.cookbookID);
 
     await easelProvider.repository.launchMyUrl(url: url);
   }

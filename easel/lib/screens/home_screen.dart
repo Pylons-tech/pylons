@@ -40,7 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
     homeViewModel.init(
       setTextField: () {
-        easelProvider.setTextFieldValuesDescription(artName: homeViewModel.nft?.name, description: homeViewModel.nft?.description, hashtags: homeViewModel.nft?.hashtags);
+        easelProvider.setTextFieldValuesDescription(
+            artName: homeViewModel.nft?.name,
+            description: homeViewModel.nft?.description,
+            hashtags: homeViewModel.nft?.hashtags);
         easelProvider.setTextFieldValuesPrice(
             royalties: homeViewModel.nft?.tradePercentage,
             price: homeViewModel.nft?.price,
@@ -62,7 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
     easelProvider.isVideoLoading = true;
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     homeViewModel.previousPage();
-    if (homeViewModel.currentPage.value == 0 || homeViewModel.currentPage.value == 1) {
+    if (homeViewModel.currentPage.value == 0 ||
+        homeViewModel.currentPage.value == 1) {
       Navigator.of(context).pop();
     }
   }
@@ -79,7 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SafeArea(
           bottom: false,
           child: Scaffold(
-            body: ChangeNotifierProvider.value(value: homeViewModel, child: const HomeScreenContent()),
+            body: ChangeNotifierProvider.value(
+                value: homeViewModel, child: const HomeScreenContent()),
           ),
         ),
       ),
@@ -104,7 +109,12 @@ class HomeScreenContent extends StatelessWidget {
         homeViewModel.currentStep.value = map[page]!;
       },
       itemBuilder: (BuildContext context, int index) {
-        final map = {0: chooseFormatScreen, 1: describeScreen, 2: priceScreen, 3: publishScreen};
+        final map = {
+          0: chooseFormatScreen,
+          1: describeScreen,
+          2: priceScreen,
+          3: publishScreen
+        };
 
         return map[index]?.call() ?? const SizedBox();
       },

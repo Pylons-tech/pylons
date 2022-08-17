@@ -25,13 +25,15 @@ class _PreviewNFTFullScreenState extends State<PreviewNFTFullScreen> {
   @override
   void initState() {
     scheduleMicrotask(() {
-      easelProvider.initializePlayers(publishedNFT: easelProvider.publishedNFTClicked);
+      easelProvider.initializePlayers(
+          publishedNFT: easelProvider.publishedNFTClicked);
     });
     super.initState();
   }
 
   onBackPressed({required BuildContext context}) {
-    if (easelProvider.publishedNFTClicked.assetType == AssetType.Video.name && easelProvider.videoPlayerController.value.isInitialized) {
+    if (easelProvider.publishedNFTClicked.assetType == AssetType.Video.name &&
+        easelProvider.videoPlayerController.value.isInitialized) {
       if (easelProvider.videoPlayerController.value.isPlaying) {
         easelProvider.videoPlayerController.pause();
       }
@@ -52,13 +54,15 @@ class _PreviewNFTFullScreenState extends State<PreviewNFTFullScreen> {
         child: Stack(
           children: [
             PreviewNFTBuilder(
-                onImage: (context) => NftImageWidget(imageUrl: easelProvider.publishedNFTClicked.url),
+                onImage: (context) => NftImageWidget(
+                    imageUrl: easelProvider.publishedNFTClicked.url),
                 onVideo: (context) => const NFTVideoPlayerScreen(),
                 on3D: (context) => Model3dViewer(
                       isFile: false,
                       path: easelProvider.publishedNFTClicked.url,
                     ),
-                assetType: easelProvider.publishedNFTClicked.assetType.toAssetTypeEnum()),
+                assetType: easelProvider.publishedNFTClicked.assetType
+                    .toAssetTypeEnum()),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -81,7 +85,8 @@ class _PreviewNFTFullScreenState extends State<PreviewNFTFullScreen> {
                           ),
                           Text(
                             kBack,
-                            style: EaselAppTheme.titleStyle.copyWith(fontSize: 18.sp, color: EaselAppTheme.kWhite),
+                            style: EaselAppTheme.titleStyle.copyWith(
+                                fontSize: 18.sp, color: EaselAppTheme.kWhite),
                           ),
                         ],
                       ),

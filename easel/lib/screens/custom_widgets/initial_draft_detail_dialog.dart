@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/main.dart';
-import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart' as clipper;
+import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart'
+    as clipper;
 import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
@@ -17,14 +18,20 @@ import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-TextStyle _rowTitleTextStyle(Color color) => TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: isTablet ? 11.sp : 10.sp);
+TextStyle _rowTitleTextStyle(Color color) => TextStyle(
+    color: color,
+    fontWeight: FontWeight.bold,
+    fontSize: isTablet ? 11.sp : 10.sp);
 
 class DraftDetailDialog {
   final BuildContext context;
   final VoidCallback onClose;
   final EaselProvider easelProvider;
 
-  DraftDetailDialog({required this.context, required this.onClose, required this.easelProvider});
+  DraftDetailDialog(
+      {required this.context,
+      required this.onClose,
+      required this.easelProvider});
 
   Future<void> show() async {
     if (dialogAlreadyShown(easelProvider)) return;
@@ -107,7 +114,8 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
                   height: 60.h,
                   width: 60.h,
                   child: ClipPath(
-                    clipper: RightTriangleClipper(orientation: clipper.Orientation.orientationNW),
+                    clipper: RightTriangleClipper(
+                        orientation: clipper.Orientation.orientationNW),
                     child: Container(
                       color: EaselAppTheme.kLightRed,
                     ),
@@ -121,7 +129,8 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
                   height: 60.h,
                   width: 60.h,
                   child: ClipPath(
-                    clipper: RightTriangleClipper(orientation: clipper.Orientation.orientationSE),
+                    clipper: RightTriangleClipper(
+                        orientation: clipper.Orientation.orientationSE),
                     child: Container(
                       color: EaselAppTheme.kLightRed,
                     ),
@@ -200,7 +209,8 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
                         bgColor: EaselAppTheme.kGrey.withOpacity(0.8),
                         textColor: EaselAppTheme.kWhite,
                         onPressed: () async {
-                          Navigator.popUntil(context, ModalRoute.withName(RouteUtil.kRouteHome));
+                          Navigator.popUntil(context,
+                              ModalRoute.withName(RouteUtil.kRouteHome));
                           widget.onClose();
                         },
                         cuttingHeight: 15.h,
@@ -230,7 +240,10 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
     }
   }
 
-  Widget buildViewOnIPFS({required String title, required String subtitle, required Function onPressed}) {
+  Widget buildViewOnIPFS(
+      {required String title,
+      required String subtitle,
+      required Function onPressed}) {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: isTablet ? 20.w : 40.w,
@@ -240,7 +253,10 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
         children: [
           Text(
             title,
-            style: TextStyle(color: EaselAppTheme.kWhite, fontWeight: FontWeight.w700, fontSize: isTablet ? 11.sp : 10.sp),
+            style: TextStyle(
+                color: EaselAppTheme.kWhite,
+                fontWeight: FontWeight.w700,
+                fontSize: isTablet ? 11.sp : 10.sp),
           ),
           InkWell(
             onTap: () {
@@ -256,7 +272,11 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
     );
   }
 
-  Widget buildRow({required String title, required String subtitle, final color = Colors.white, final bool canCopy = false}) {
+  Widget buildRow(
+      {required String title,
+      required String subtitle,
+      final color = Colors.white,
+      final bool canCopy = false}) {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: isTablet ? 20.w : 40.w,
@@ -266,7 +286,10 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
         children: [
           Text(
             title,
-            style: TextStyle(color: EaselAppTheme.kWhite, fontWeight: FontWeight.w700, fontSize: isTablet ? 11.sp : 10.sp),
+            style: TextStyle(
+                color: EaselAppTheme.kWhite,
+                fontWeight: FontWeight.w700,
+                fontSize: isTablet ? 11.sp : 10.sp),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
