@@ -22,19 +22,19 @@ class TraceTable
   end
   
   def initialize
-      if !cloud? do
-        Google::Cloud::Bigquery.configure do |config|
-          config.project_id  = "zinc-interface-241613"
-          config.credentials = "/home/big-dipper/bigquery_keyfile.json"
-        end
+    if !cloud?
+      Google::Cloud::Bigquery.configure do |config|
+        config.project_id  = "zinc-interface-241613"
+        config.credentials = "/home/big-dipper/bigquery_keyfile.json"
       end
-      @bigquery = Google::Cloud::Bigquery.new
-      @table = @bigquery.dataset("chain").table("trace")
     end
+    @bigquery = Google::Cloud::Bigquery.new
+    @table = @bigquery.dataset("chain").table("trace")
   end
 end
 
 def cloud?; ENV["env"] == "prod"; end
+def push?; ARGV[1] != "local"; end
 
 def boring json
   return true if ["staking","slashing","upgrade"].member? json["store_name"]
@@ -50,10 +50,9 @@ def massage json
   json
 end
 
-table = TraceTable.new().table if cloud?
-
+$table = push? ? TraceTable.new().table : nil
 def deliver json
-  return table.insert json if cloud?
+  return $table.insert json if push?
   puts json
 end
 
