@@ -31,3 +31,4 @@ proto/dart/*
 debug
 big-dipper/settings.json
 
+*.env

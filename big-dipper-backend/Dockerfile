@@ -1,18 +1,10 @@
-FROM geoffreybooth/meteor-base:1.12.1
-
-COPY package*.json app/
-
-RUN bash scripts/build-app-npm-dependencies.sh
+FROM geoffreybooth/meteor-base:2.7.3
 
 COPY . app/
 
-#bundle is part of buld now
-#RUN bash scripts/build-meteor-bundle.sh
+RUN bash app/scripts/build.sh
 
-FROM node:12.16.1-alpine
-
-ENV APP_BUNDLE_FOLDER /opt/bundle
-ENV SCRIPTS_FOLDER /docker
+FROM node:14.2.0-alpine
 
 RUN apk --no-cache add \
     bash \
@@ -20,28 +12,8 @@ RUN apk --no-cache add \
     make \
     python
 
-COPY --from=0 scripts scripts/
 
-COPY --from=0 $APP_BUNDLE_FOLDER/bundle $APP_BUNDLE_FOLDER/bundle/
+COPY --from=0 app/output/bundle app/bundle/
 
-RUN bash scripts/build-meteor-npm-dependencies.sh --build-from-source
-
-FROM node:12.16.1-alpine
-
-ENV APP_BUNDLE_FOLDER /opt/bundle
-ENV SCRIPTS_FOLDER /docker
-
-RUN apk --no-cache add \
-    bash \
-    ca-certificates
-
-COPY --from=1 scripts scripts/
-
-COPY --from=1 $APP_BUNDLE_FOLDER/bundle $APP_BUNDLE_FOLDER/bundle/
-COPY default_settings.json $APP_BUNDLE_FOLDER/bundle/settings.json
-
-
-ENTRYPOINT ["/docker/entrypoint.sh"]
-
-CMD ["node","--max-old-space-size=4096", "main.js"]
+CMD ["node","--max-old-space-size=4096", "app/bundle/main.js"]
 
