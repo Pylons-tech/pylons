@@ -1,0 +1,126 @@
+{
+  "cookbookID": "cookbook_for_test_stripe_34",
+  "ID": "cookbook_for_test_stripe_3",
+  "name": "Test NFT Stripe",
+  "description": " A simple test recipe to be executed",
+  "version": "v1.0.0",
+  "coinInputs": [
+    {
+      "coins": [
+        {
+          "denom": "upylon",
+          "amount": "5000000"
+        }
+      ]
+    }
+  ],
+  "itemInputs": [],
+  "entries": {
+    "coinOutputs": [],
+    "itemOutputs": [
+      {
+        "ID": "How_do_you_do_turn_this_on",
+        "doubles": [
+          {
+            "key": "Residual",
+            "weightRanges": [
+              {
+                "lower": "2000000000000000000",
+                "upper": "2000000000000000000",
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "longs": [
+          {
+            "key": "Quantity",
+            "weightRanges": [
+              {
+                "lower": 34,
+                "upper": 34,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "key": "Width",
+            "weightRanges": [
+              {
+                "lower": 960,
+                "upper": 960,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "key": "Height",
+            "weightRanges": [
+              {
+                "lower": 1280,
+                "upper": 1280,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "strings": [
+          {
+            "key": "Name",
+            "value": "How do you do turn this on"
+          },
+          {
+            "key": "App_Type",
+            "value": "Easel"
+          },
+          {
+            "key": "Description",
+            "value": "This is NFT Description for Test "
+          },
+          {
+            "key": "NFT_URL",
+            "value": "https://i.imgur.com/QechbvX.jpg"
+          },
+          {
+            "key": "Currency",
+            "value": "upylon"
+          },
+          {
+            "key": "Price",
+            "value": "450"
+          },
+          {
+            "key": "Creator",
+            "value": "NFT Studio"
+          }
+        ],
+        "mutableStrings": [],
+        "transferFee": [
+          {
+            "denom": "upylon",
+            "amount": "1000000"
+          }
+        ],
+        "tradePercentage": "100000000000000000",
+        "amountMinted": 0,
+        "quantity": 30,
+        "tradeable": true
+      }
+    ],
+    "itemModifyOutputs": []
+  },
+  "outputs": [
+    {
+      "entryIDs": [
+        "How_do_you_do_turn_this_on"
+      ],
+      "weight": 1
+    }
+  ],
+  "costPerBlock": {
+    "denom": "upylon",
+    "amount": "0"
+  },
+  "blockInterval": 1,
+  "enabled": true
+}
