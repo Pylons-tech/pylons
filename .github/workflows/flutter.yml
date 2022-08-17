@@ -1,0 +1,46 @@
+name: "Flutter"
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  analyze:
+    name: Wallet
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable" # or: 'beta', 'dev' or 'master'
+      - run: |
+          flutter --version
+          cd flutter_wallet
+          flutter pub get
+          flutter analyze
+          flutter lint
+
+  easel:
+    name: easel
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable" # or: 'beta', 'dev' or 'master'
+      - run: |
+          flutter --version
+          cd easel
+          flutter pub get
+          flutter analyze
+          flutter lint
