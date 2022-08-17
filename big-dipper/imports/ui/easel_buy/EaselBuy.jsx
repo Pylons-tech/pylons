@@ -126,7 +126,7 @@ export default class EaselBuy extends Component {
         let price;
         let edition;
         let denom;
-        const tradePercent = 1000000000000000000;
+        const tradePercent = 100;
         const res = _.cloneDeep(response);
         this.setState({ loading: false });
         const selectedRecipe = _.cloneDeep(res.data.recipe);

@@ -7,7 +7,7 @@ import (
 
 var _ sdk.Msg = &MsgTransferCookbook{}
 
-func NewMsgTransferCookbook(creator string, cookbookID string, recipient string) *MsgTransferCookbook {
+func NewMsgTransferCookbook(creator, cookbookID, recipient string) *MsgTransferCookbook {
 	return &MsgTransferCookbook{
 		Creator:   creator,
 		Id:        cookbookID,

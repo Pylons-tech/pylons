@@ -7,7 +7,7 @@ import (
 
 var _ sdk.Msg = &MsgSendItems{}
 
-func NewMsgSendItems(sender string, receiver string, items []ItemRef) *MsgSendItems {
+func NewMsgSendItems(sender, receiver string, items []ItemRef) *MsgSendItems {
 	return &MsgSendItems{
 		Creator:  sender,
 		Receiver: receiver,
