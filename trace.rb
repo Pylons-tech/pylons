@@ -52,19 +52,26 @@ end
 
 $table = push? ? TraceTable.new().table : nil
 def deliver json
-  return $table.insert json if push?
-  puts json
+  begin
+    return $table.insert json if push?
+    puts json
+  rescue JSON::GeneratorError
+    puts "JSON ERROR"
+    puts json
+    puts "THIS HAS BEEN A JSON ERROR"
+    raise
+  end
 end
 
-puts "Starting logger with cloud =" + cloud?.to_s
+puts "Starting logger with cloud = " + cloud?.to_s
 
 fifo = File.open ARGV[0]
 puts "file open"
 while !fifo.eof? do
-  json = massage JSON.parse fifo.readline
+  line = fifo.readline
+  json = massage JSON.parse line
   next if boring json
-  puts json
   result = deliver json
   puts result.insert_errors.map(&:errors) if result
 end
-puts "exiting"
+puts "logger exiting"
