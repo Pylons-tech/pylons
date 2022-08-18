@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/repository/repository.dart';
