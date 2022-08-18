@@ -41,6 +41,7 @@ require (
 	github.com/cockroachdb/redact v1.0.8 // indirect
 	github.com/cockroachdb/sentry-go v0.6.1-cockroachdb.2 // indirect
 	github.com/cosmos/gorocksdb v1.2.0 // indirect
+	github.com/google/flatbuffers v1.12.1 // indirect
 	github.com/kr/pretty v0.3.0 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	golang.org/x/exp v0.0.0-20200513190911-00229845015e // indirect
@@ -93,7 +94,6 @@ require (
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/btree v1.1.2 // indirect
-	github.com/google/flatbuffers v1.12.1 // indirect
 	github.com/google/gxui v0.0.0-20151028112939-f85e0a97b3a4 // indirect
 	github.com/google/orderedcode v0.0.1 // indirect
 	github.com/googleapis/gax-go/v2 v2.4.0 // indirect

@@ -11,7 +11,19 @@ This repository contains:
 
 ## Documentation
 
-To learn how to use run a Pylons node, check out the [documentation pages](./docs/README.md).  To learn more about developing NFTs on Pylons, see the [Pylons SDK](https://github.com/Pylons-tech/pylons_dart_sdk) project.
+### Docker build
+Add your favorite peers to scripts/peers.sh and then you can run
+```
+docker-compose up -- build
+```
+You can use -d if you want it in the background
+Should be fun!
+
+### Outdated stuff
+To learn how to use run a Pylons node, check out the [documentation pages](./docs/README.md).
+
+### SDK
+To learn more about developing NFTs on Pylons, see the [Pylons SDK](https://github.com/Pylons-tech/pylons_dart_sdk) project.
 
 ## Our Research
 
