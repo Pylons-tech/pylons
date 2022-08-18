@@ -26,7 +26,7 @@ sleep 5
 echo "===> Begin test spam tx"
 
 counter=1
-while [ $counter -le 10 ]
+while [ $counter -le 50 ]
 do
     echo "=================$counter================="
     RES=$(pylonsd tx bank send $MY_TESTING_ACCOUNT_1 $MY_TESTING_ACCOUNT_2 1000000upylon --keyring-backend $KEYRING --yes)
