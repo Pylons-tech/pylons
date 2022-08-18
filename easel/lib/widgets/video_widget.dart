@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:easel_flutter/easel_provider.dart';
-import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart' as clipper;
+import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart'
+    as clipper;
 import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart';
 import 'package:easel_flutter/screens/clippers/small_bottom_corner_clipper.dart';
 import 'package:easel_flutter/utils/constants.dart';
@@ -25,7 +26,14 @@ class VideoWidget extends StatefulWidget {
   final bool isForFile;
   final bool isDarkMode;
 
-  const VideoWidget({Key? key, this.file, this.filePath, required this.isDarkMode, required this.previewFlag, required this.isForFile}) : super(key: key);
+  const VideoWidget(
+      {Key? key,
+      this.file,
+      this.filePath,
+      required this.isDarkMode,
+      required this.previewFlag,
+      required this.isForFile})
+      : super(key: key);
 
   @override
   _VideoWidgetState createState() => _VideoWidgetState();
@@ -40,7 +48,8 @@ class _VideoWidgetState extends State<VideoWidget> {
       if (widget.file != null) {
         easelProvider.initializeVideoPlayerWithFile();
       } else {
-        easelProvider.initializeVideoPlayerWithUrl(publishedNftUrl: widget.filePath!);
+        easelProvider.initializeVideoPlayerWithUrl(
+            publishedNftUrl: widget.filePath!);
       }
     });
     super.initState();
@@ -51,7 +60,8 @@ class _VideoWidgetState extends State<VideoWidget> {
       left: -1,
       bottom: 0,
       child: ClipPath(
-        clipper: RightTriangleClipper(orientation: clipper.Orientation.orientationNE),
+        clipper: RightTriangleClipper(
+            orientation: clipper.Orientation.orientationNE),
         child: InkWell(
           onTap: () {
             Navigator.pushNamed(context, RouteUtil.kVideoFullScreen);
@@ -63,7 +73,7 @@ class _VideoWidgetState extends State<VideoWidget> {
             color: EaselAppTheme.kLightRed,
             child: Padding(
               padding: EdgeInsets.all(5.w),
-              child:  RotationTransition(
+              child: RotationTransition(
                 turns: const AlwaysStoppedAnimation(0.25),
                 child: SvgPicture.asset(
                   kFullScreenIcon,
@@ -118,7 +128,6 @@ class _VideoWidgetState extends State<VideoWidget> {
     return !widget.previewFlag;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<EaselProvider>.value(
@@ -133,7 +142,9 @@ class _VideoWidgetState extends State<VideoWidget> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                shouldShowThumbnailButton() ? VerticalSpace(80.h) : const SizedBox(),
+                shouldShowThumbnailButton()
+                    ? VerticalSpace(80.h)
+                    : const SizedBox(),
                 if (!shouldShowThumbnailButton()) ...[
                   VideoBuilder(
                       onVideoLoading: (BuildContext context) => Center(
@@ -149,13 +160,17 @@ class _VideoWidgetState extends State<VideoWidget> {
                               padding: const EdgeInsets.all(10),
                               child: Text(
                                 videoPlayerError,
-                                style: TextStyle(fontSize: 18.sp, color: EaselAppTheme.kWhite),
+                                style: TextStyle(
+                                    fontSize: 18.sp,
+                                    color: EaselAppTheme.kWhite),
                               ),
                             ),
                           ),
                       onVideoInitialized: (BuildContext context) => AspectRatio(
-                            aspectRatio: easelProvider.videoPlayerController.value.aspectRatio,
-                            child: VideoPlayer(easelProvider.videoPlayerController),
+                            aspectRatio: easelProvider
+                                .videoPlayerController.value.aspectRatio,
+                            child: VideoPlayer(
+                                easelProvider.videoPlayerController),
                           ),
                       easelProvider: easelProvider)
                 ],
@@ -176,15 +191,21 @@ class _VideoWidgetState extends State<VideoWidget> {
                               padding: const EdgeInsets.all(10),
                               child: Text(
                                 videoPlayerError,
-                                style: TextStyle(fontSize: 18.sp, color: EaselAppTheme.kBlack),
+                                style: TextStyle(
+                                    fontSize: 18.sp,
+                                    color: EaselAppTheme.kBlack),
                               ),
                             )),
                         onVideoInitialized: (BuildContext context) => Center(
                               child: Stack(
                                 children: [
                                   AspectRatio(
-                                    aspectRatio: easelProvider.videoPlayerController.value.aspectRatio,
-                                    child: VideoPlayer(easelProvider.videoPlayerController),
+                                    aspectRatio: easelProvider
+                                        .videoPlayerController
+                                        .value
+                                        .aspectRatio,
+                                    child: VideoPlayer(
+                                        easelProvider.videoPlayerController),
                                   ),
                                   _buildVideoFullScreenIcon(),
                                 ],
@@ -197,13 +218,16 @@ class _VideoWidgetState extends State<VideoWidget> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(bottom: 70.h),
-                    child: VideoProgressWidget(darkMode: false, isForFile: widget.isForFile),
+                    child: VideoProgressWidget(
+                        darkMode: false, isForFile: widget.isForFile),
                   ),
                 ],
                 SizedBox(
                   height: 10.w,
                 ),
-                shouldShowThumbnailButton() ? _buildThumbnailButton() : const SizedBox(),
+                shouldShowThumbnailButton()
+                    ? _buildThumbnailButton()
+                    : const SizedBox(),
               ],
             ),
           ),

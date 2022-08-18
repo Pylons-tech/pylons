@@ -12,7 +12,10 @@ class MessageDialog {
       builder: (ctx) => WillPopScope(
         onWillPop: () => Future.value(false),
         child: AlertDialog(
-          content: Text(message, style: TextStyle(fontSize: 16.sp),),
+          content: Text(
+            message,
+            style: TextStyle(fontSize: 16.sp),
+          ),
           actions: [button],
         ),
       ),

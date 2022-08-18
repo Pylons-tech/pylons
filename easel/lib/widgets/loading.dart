@@ -5,8 +5,6 @@ import 'package:easel_flutter/utils/image_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
-
 class Loading {
   Loading();
 

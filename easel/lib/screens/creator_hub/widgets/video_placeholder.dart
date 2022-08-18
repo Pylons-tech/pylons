@@ -29,21 +29,23 @@ class VideoPlaceHolder extends StatelessWidget {
                         color: EaselAppTheme.cardBackground,
                         child: const SizedBox.expand(),
                       ),
-                  errorWidget: (context, url, error) => Align(child: Container(color: EaselAppTheme.kWhite)),
+                  errorWidget: (context, url, error) =>
+                      Align(child: Container(color: EaselAppTheme.kWhite)),
                   imageUrl: thumbnailUrl,
                   fit: BoxFit.cover)),
           Align(
             child: Container(
               width: 25.w,
               height: 25.h,
-              decoration: BoxDecoration(color: EaselAppTheme.kWhite.withOpacity(0.5), shape: BoxShape.circle),
+              decoration: BoxDecoration(
+                  color: EaselAppTheme.kWhite.withOpacity(0.5),
+                  shape: BoxShape.circle),
               child: Image.asset(
                 kVideoIcon,
                 color: EaselAppTheme.kBlack,
               ),
             ),
           ),
-
         ],
       ),
     );

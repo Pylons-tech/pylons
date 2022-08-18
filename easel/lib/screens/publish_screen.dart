@@ -5,7 +5,8 @@ import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/main.dart';
 import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/repository/repository.dart';
-import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart' as clipper;
+import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart'
+    as clipper;
 import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
@@ -32,7 +33,10 @@ import 'package:provider/provider.dart';
 
 import '../widgets/video_progress_widget.dart';
 
-TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: isTablet ? 11.sp : 13.sp);
+TextStyle _rowTitleTextStyle = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w700,
+    fontSize: isTablet ? 11.sp : 13.sp);
 
 class PublishScreen extends StatefulWidget {
   const PublishScreen({
@@ -62,7 +66,14 @@ class _PublishScreenState extends State<PublishScreen> {
       body: Consumer<EaselProvider>(builder: (_, easelProvider, __) {
         return Stack(
           children: [
-            Positioned(left: 0, right: 0, top: 0, bottom: 0, child: SizedBox(width: double.infinity, child: buildPreviewWidget(easelProvider))),
+            Positioned(
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                child: SizedBox(
+                    width: double.infinity,
+                    child: buildPreviewWidget(easelProvider))),
             Positioned(
                 left: 10.w,
                 top: 30.h,
@@ -110,7 +121,8 @@ class _PublishScreenState extends State<PublishScreen> {
               isFile: false,
             ));
       case kAudioText:
-        return AudioWidget(filePath: provider.nft.url.changeDomain(), previewFlag: false);
+        return AudioWidget(
+            filePath: provider.nft.url.changeDomain(), previewFlag: false);
       case kPdfText:
         return PdfViewer(
           fileUrl: provider.nft.url,
@@ -146,7 +158,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
       return viewModel.selectedDenom.name;
     }
 
-    return viewModel.supportedDenomList.firstWhere((denom) => denom.symbol == widget.nft.denom).name;
+    return viewModel.supportedDenomList
+        .firstWhere((denom) => denom.symbol == widget.nft.denom)
+        .name;
   }
 
   String getPriceSubtitle() {
@@ -171,7 +185,14 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           BuildPublishBottomSheet(
             collapseStatus: viewModel.collapsed,
             onCollapsed: (context) => Container(
-              decoration: const BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [EaselAppTheme.kTransparent, EaselAppTheme.kBlack])),
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                    EaselAppTheme.kTransparent,
+                    EaselAppTheme.kBlack
+                  ])),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -192,7 +213,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                     ),
                     _title(
                       nft: widget.nft,
-                      owner: widget.nft.type == NftType.TYPE_RECIPE.name ? "you".tr() : widget.nft.creator,
+                      owner: widget.nft.type == NftType.TYPE_RECIPE.name
+                          ? "you".tr()
+                          : widget.nft.creator,
                     ),
                     const SizedBox(
                       height: 20,
@@ -213,7 +236,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                     builder: (_, value, __) {
                                       switch (value) {
                                         case ButtonState.loading:
-                                          return SizedBox(height: 20.h, width: 15.h, child: CircularProgressIndicator(strokeWidth: 2.w, color: EaselAppTheme.kWhite));
+                                          return SizedBox(
+                                              height: 20.h,
+                                              width: 15.h,
+                                              child: CircularProgressIndicator(
+                                                  strokeWidth: 2.w,
+                                                  color: EaselAppTheme.kWhite));
                                         case ButtonState.paused:
                                           return InkWell(
                                             onTap: () {
@@ -242,24 +270,33 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: ValueListenableBuilder<ProgressBarState>(
-                                    valueListenable: viewModel.audioProgressNotifier,
+                                  child:
+                                      ValueListenableBuilder<ProgressBarState>(
+                                    valueListenable:
+                                        viewModel.audioProgressNotifier,
                                     builder: (_, value, __) {
                                       return Padding(
-                                        padding: EdgeInsets.only(bottom: 3.h, right: 20.w),
+                                        padding: EdgeInsets.only(
+                                            bottom: 3.h, right: 20.w),
                                         child: ProgressBar(
-                                          progressBarColor: EaselAppTheme.kWhite,
+                                          progressBarColor:
+                                              EaselAppTheme.kWhite,
                                           thumbColor: EaselAppTheme.kWhite,
                                           progress: value.current,
                                           baseBarColor: EaselAppTheme.kBlack,
-                                          bufferedBarColor: EaselAppTheme.kLightGrey,
+                                          bufferedBarColor:
+                                              EaselAppTheme.kLightGrey,
                                           buffered: value.buffered,
                                           total: value.total,
-                                          timeLabelTextStyle: TextStyle(color: EaselAppTheme.kWhite, fontWeight: FontWeight.w800, fontSize: 9.sp),
+                                          timeLabelTextStyle: TextStyle(
+                                              color: EaselAppTheme.kWhite,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 9.sp),
                                           thumbRadius: 10.h,
                                           timeLabelPadding: 3.h,
                                           onSeek: (position) {
-                                            viewModel.seekAudio(position, false);
+                                            viewModel.seekAudio(
+                                                position, false);
                                           },
                                         ),
                                       );
@@ -270,7 +307,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             ));
                       },
                       videoProgressBar: (context) {
-                        return const VideoProgressWidget(darkMode: true, isForFile: false);
+                        return const VideoProgressWidget(
+                            darkMode: true, isForFile: false);
                       },
                       assetType: viewModel.nft.assetType,
                       others: (BuildContext context) => const SizedBox(),
@@ -288,7 +326,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _title(nft: widget.nft, owner: widget.nft.type == NftType.TYPE_RECIPE.name ? "you".tr() : widget.nft.creator),
+                      _title(
+                          nft: widget.nft,
+                          owner: widget.nft.type == NftType.TYPE_RECIPE.name
+                              ? "you".tr()
+                              : widget.nft.creator),
                       SizedBox(
                         height: 30.h,
                       ),
@@ -299,7 +341,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 viewModel.hashtagsList.length,
                                 (index) => SizedBox(
                                       child: DetectableText(
-                                        text: "#${viewModel.hashtagsList[index]}",
+                                        text:
+                                            "#${viewModel.hashtagsList[index]}",
                                         detectionRegExp: detectionRegExp()!,
                                         detectedStyle: TextStyle(
                                           fontSize: 12.sp,
@@ -319,8 +362,14 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         widget.nft.description,
                         trimExpandedText: "collapse".tr(),
                         trimCollapsedText: "read_more".tr(),
-                        moreStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w300, color: EaselAppTheme.kLightPurple),
-                        lessStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w300, color: EaselAppTheme.kLightPurple),
+                        moreStyle: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w300,
+                            color: EaselAppTheme.kLightPurple),
+                        lessStyle: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w300,
+                            color: EaselAppTheme.kLightPurple),
                       ),
                       SizedBox(
                         height: 30.h,
@@ -332,10 +381,15 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           children: [
                             buildRow(
                               title: "currency".tr(),
-                              subtitle: widget.nft.isFreeDrop == FreeDrop.yes.name ? kPylonText : getCurrency(),
+                              subtitle:
+                                  widget.nft.isFreeDrop == FreeDrop.yes.name
+                                      ? kPylonText
+                                      : getCurrency(),
                             ),
                             SizedBox(height: 5.h),
-                            buildRow(title: "price".tr(), subtitle: getPriceSubtitle()),
+                            buildRow(
+                                title: "price".tr(),
+                                subtitle: getPriceSubtitle()),
                             SizedBox(height: 5.h),
                             buildRow(
                               title: "editions".tr(),
@@ -347,14 +401,20 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               subtitle: "${widget.nft.tradePercentage}%",
                             ),
                             SizedBox(height: 5.h),
-                            buildRow(title: "content_identifier".tr(), subtitle: widget.nft.cid, canCopy: true),
+                            buildRow(
+                                title: "content_identifier".tr(),
+                                subtitle: widget.nft.cid,
+                                canCopy: true),
                             SizedBox(height: 5.h),
                             CidOrIpfs(
                               viewCid: (context) {
                                 return const SizedBox.shrink();
                               },
                               viewIpfs: (context) {
-                                return buildRow(title: "asset_uri".tr(), subtitle: "view".tr(), viewIPFS: true);
+                                return buildRow(
+                                    title: "asset_uri".tr(),
+                                    subtitle: "view".tr(),
+                                    viewIPFS: true);
                               },
                               type: widget.nft.assetType,
                             ),
@@ -367,11 +427,14 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 if (viewModel.nft.assetType == kAudioText) {
                                   viewModel.disposeAudioController();
                                 }
-                                bool isRecipeCreated = await viewModel.verifyPylonsAndMint(nft: viewModel.nft);
+                                bool isRecipeCreated = await viewModel
+                                    .verifyPylonsAndMint(nft: viewModel.nft);
                                 if (!isRecipeCreated) {
                                   return;
                                 }
-                                Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.kRouteCreatorHub, (route) => false);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    RouteUtil.kRouteCreatorHub,
+                                    (route) => false);
                               },
                               cuttingHeight: 15.h,
                               clipperType: ClipperType.bottomLeftTopRight,
@@ -386,7 +449,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               bgColor: Colors.white.withOpacity(0.2),
                               textColor: EaselAppTheme.kWhite,
                               onPressed: () async {
-                                Navigator.of(context).popUntil(ModalRoute.withName(RouteUtil.kRouteCreatorHub));
+                                Navigator.of(context).popUntil(
+                                    ModalRoute.withName(
+                                        RouteUtil.kRouteCreatorHub));
                               },
                               cuttingHeight: 15.h,
                               clipperType: ClipperType.bottomLeftTopRight,
@@ -402,7 +467,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 Align(
                   alignment: Alignment.topRight,
                   child: ClipPath(
-                    clipper: RightTriangleClipper(orientation: clipper.Orientation.orientationSW),
+                    clipper: RightTriangleClipper(
+                        orientation: clipper.Orientation.orientationSW),
                     child: Container(
                       color: EaselAppTheme.kLightRed,
                       height: 50.h,
@@ -438,7 +504,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             Flexible(
               child: Text(
                 nft.name,
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 25.sp),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 25.sp),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -453,9 +522,17 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             children: [
               TextSpan(
                 text: "created_by".tr(),
-                style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w500),
               ),
-              TextSpan(text: owner, style: TextStyle(color: EaselAppTheme.kLightPurple, fontSize: 18.sp, fontWeight: FontWeight.w500)),
+              TextSpan(
+                  text: owner,
+                  style: TextStyle(
+                      color: EaselAppTheme.kLightPurple,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w500)),
               WidgetSpan(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -483,13 +560,18 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Padding(
-                padding: EdgeInsets.only(right: 10.w, bottom: 10.h, top: 10.h, left: 5.w),
+                padding: EdgeInsets.only(
+                    right: 10.w, bottom: 10.h, top: 10.h, left: 5.w),
                 child: ValueListenableBuilder<ButtonState>(
                   valueListenable: viewModel.buttonNotifier,
                   builder: (_, value, __) {
                     switch (value) {
                       case ButtonState.loading:
-                        return SizedBox(height: 22.h, width: 22.h, child: CircularProgressIndicator(strokeWidth: 2.w, color: EaselAppTheme.kWhite));
+                        return SizedBox(
+                            height: 22.h,
+                            width: 22.h,
+                            child: CircularProgressIndicator(
+                                strokeWidth: 2.w, color: EaselAppTheme.kWhite));
                       case ButtonState.paused:
                         return InkWell(
                           onTap: () {
@@ -531,7 +613,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         bufferedBarColor: EaselAppTheme.kLightGrey,
                         buffered: value.buffered,
                         total: value.total,
-                        timeLabelTextStyle: TextStyle(color: EaselAppTheme.kWhite, fontWeight: FontWeight.w800, fontSize: 9.sp),
+                        timeLabelTextStyle: TextStyle(
+                            color: EaselAppTheme.kWhite,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 9.sp),
                         thumbRadius: 6.h,
                         timeLabelPadding: 2.h,
                         onSeek: (position) {
@@ -566,7 +651,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     await provider.repository.launchMyUrl(url: provider.nft.url.changeDomain());
   }
 
-  Widget buildRow({required String title, required String subtitle, final viewIPFS = false, final bool canCopy = false}) {
+  Widget buildRow(
+      {required String title,
+      required String subtitle,
+      final viewIPFS = false,
+      final bool canCopy = false}) {
     final viewModel = context.watch<EaselProvider>();
 
     return Row(
@@ -587,7 +676,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
               },
               child: Text(
                 subtitle.trimString(kTwelve),
-                style: viewIPFS ? _rowTitleTextStyle.copyWith(color: EaselAppTheme.kLightPurple) : _rowTitleTextStyle,
+                style: viewIPFS
+                    ? _rowTitleTextStyle.copyWith(
+                        color: EaselAppTheme.kLightPurple)
+                    : _rowTitleTextStyle,
               ),
             ),
             if (canCopy) ...[
@@ -621,7 +713,12 @@ class BuildPublishBottomSheet extends StatelessWidget {
   final WidgetBuilder onOpened;
   final bool collapseStatus;
 
-  const BuildPublishBottomSheet({Key? key, required this.onCollapsed, required this.onOpened, required this.collapseStatus}) : super(key: key);
+  const BuildPublishBottomSheet(
+      {Key? key,
+      required this.onCollapsed,
+      required this.onOpened,
+      required this.collapseStatus})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

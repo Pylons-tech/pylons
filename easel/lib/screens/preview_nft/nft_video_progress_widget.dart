@@ -36,7 +36,11 @@ class _VideoProgressWidgetState extends State<VideoProgressWidget> {
               Row(
                 children: [
                   if (viewModel.isVideoLoading)
-                    SizedBox(height: 22.h, width: 22.h, child: CircularProgressIndicator(strokeWidth: 2.w, color: EaselAppTheme.kWhite))
+                    SizedBox(
+                        height: 22.h,
+                        width: 22.h,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2.w, color: EaselAppTheme.kWhite))
                   else if (viewModel.videoPlayerController.value.isPlaying)
                     InkWell(
                       onTap: viewModel.pauseVideo,
@@ -78,16 +82,24 @@ class _VideoProgressWidgetState extends State<VideoProgressWidget> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     StreamBuilder<Duration?>(
-                        stream: viewModel.videoPlayerController.position.asStream(),
-                        builder: (BuildContext context, AsyncSnapshot<Duration?> snapshot) {
+                        stream:
+                            viewModel.videoPlayerController.position.asStream(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<Duration?> snapshot) {
                           if (snapshot.hasData) {
-                            final String duration = _getDuration(snapshot.data!);
+                            final String duration =
+                                _getDuration(snapshot.data!);
                             return Text(
                               duration,
                               style: const TextStyle(color: Colors.white),
                             );
                           } else {
-                            return SizedBox(height: 22.h, width: 18.w, child: CircularProgressIndicator(strokeWidth: 2.w, color: EaselAppTheme.kWhite));
+                            return SizedBox(
+                                height: 22.h,
+                                width: 18.w,
+                                child: CircularProgressIndicator(
+                                    strokeWidth: 2.w,
+                                    color: EaselAppTheme.kWhite));
                           }
                         }),
                   ],

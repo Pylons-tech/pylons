@@ -98,7 +98,9 @@ class CreatorHubViewModel extends ChangeNotifier {
     forSaleCount = 0;
     nftForSaleList = [];
     for (int i = 0; i < nftPublishedList.length; i++) {
-      if (nftPublishedList[i].isEnabled && nftPublishedList[i].amountMinted < int.parse(nftPublishedList[i].quantity)) {
+      if (nftPublishedList[i].isEnabled &&
+          nftPublishedList[i].amountMinted <
+              int.parse(nftPublishedList[i].quantity)) {
         forSaleCount++;
         nftForSaleList.add(nftPublishedList[i]);
       }
@@ -125,7 +127,8 @@ class CreatorHubViewModel extends ChangeNotifier {
       return;
     }
 
-    final recipesListEither = await repository.getRecipesBasedOnCookBookId(cookBookId: cookBookId);
+    final recipesListEither =
+        await repository.getRecipesBasedOnCookBookId(cookBookId: cookBookId);
 
     if (recipesListEither.isLeft()) {
       return;
