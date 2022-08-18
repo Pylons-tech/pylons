@@ -36,8 +36,3 @@ do
     ((counter++))
 done
 
-
-
-
-#query balances
-#pylonsd query bank balances $MY_TESTING_ACCOUNT_1
