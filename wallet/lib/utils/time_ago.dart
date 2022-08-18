@@ -43,18 +43,18 @@ void setLocaleMessages(String locale, LookupMessages lookupMessages) {
 ///   5 minutes from now in 'en' locale will display as "5 minutes from now"
 String format(DateTime date,
     {String? locale, DateTime? clock, bool allowFromNow = false}) {
-  final _locale = locale ?? _default;
-  if (_lookupMessagesMap[_locale] == null) {}
-  final _allowFromNow = allowFromNow;
-  final messages = _lookupMessagesMap[_locale] ?? EnMessages();
-  final _clock = clock ?? DateTime.now();
-  var elapsed = _clock.millisecondsSinceEpoch - date.millisecondsSinceEpoch;
+  final locale = locale ?? _default;
+  if (_lookupMessagesMap[locale] == null) {}
+  final allowFromNow = allowFromNow;
+  final messages = _lookupMessagesMap[locale] ?? EnMessages();
+  final clock = clock ?? DateTime.now();
+  var elapsed = clock.millisecondsSinceEpoch - date.millisecondsSinceEpoch;
 
   // ignore: avoid_multiple_declarations_per_line
   String prefix, suffix;
 
-  if (_allowFromNow && elapsed < 0) {
-    elapsed = date.isBefore(_clock) ? elapsed : elapsed.abs();
+  if (allowFromNow && elapsed < 0) {
+    elapsed = date.isBefore(clock) ? elapsed : elapsed.abs();
     prefix = messages.prefixFromNow();
     suffix = messages.suffixFromNow();
   } else {
