@@ -1,4 +1,14 @@
-enum IBCCoins { urun, ujunox, none, ujuno, upylon, ustripeusd, eeur, uatom, weth_wei }
+enum IBCCoins {
+  urun,
+  ujunox,
+  none,
+  ujuno,
+  upylon,
+  ustripeusd,
+  eeur,
+  uatom,
+  weth_wei
+}
 
 enum NftType {
   TYPE_RECIPE,
@@ -6,21 +16,9 @@ enum NftType {
   TYPE_TRADE,
 }
 
-enum AssetType {
-  Audio,
-  Image,
-  Video,
-  ThreeD,
-  Pdf
-}
+enum AssetType { Audio, Image, Video, ThreeD, Pdf }
 
-enum UploadStep {
-  assetUploaded,
-  descriptionAdded,
-  priceAdded,
-  none
-}
-
+enum UploadStep { assetUploaded, descriptionAdded, priceAdded, none }
 
 extension ToUploadStepPar on String {
   UploadStep toUploadStepEnum() {

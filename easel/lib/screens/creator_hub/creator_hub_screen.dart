@@ -90,7 +90,11 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
     color: EaselAppTheme.kWhite,
     fontFamily: kUniversalFontFamily,
   );
-  TextStyle subTextStyle = TextStyle(color: EaselAppTheme.kWhite, fontWeight: FontWeight.w700, fontFamily: kUniversalFontFamily, fontSize: isTablet ? 9.sp : 11.sp);
+  TextStyle subTextStyle = TextStyle(
+      color: EaselAppTheme.kWhite,
+      fontWeight: FontWeight.w700,
+      fontFamily: kUniversalFontFamily,
+      fontSize: isTablet ? 9.sp : 11.sp);
 
   EaselProvider get easelProvider => sl();
 
@@ -144,11 +148,20 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                     children: [
                       getRefreshButton(viewModel),
                       InkWell(
-                        onTap: () => Navigator.of(context).pushNamed(RouteUtil.kRouteHome),
+                        onTap: () => Navigator.of(context)
+                            .pushNamed(RouteUtil.kRouteHome),
                         child: Container(
-                          decoration:
-                              BoxDecoration(color: EaselAppTheme.kpurpleDark, boxShadow: [BoxShadow(color: EaselAppTheme.kpurpleDark.withOpacity(0.6), offset: const Offset(0, 0), blurRadius: 8.0)]),
-                          child: Icon(Icons.add, size: 27.h, color: EaselAppTheme.kWhite),
+                          decoration: BoxDecoration(
+                              color: EaselAppTheme.kpurpleDark,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: EaselAppTheme.kpurpleDark
+                                        .withOpacity(0.6),
+                                    offset: const Offset(0, 0),
+                                    blurRadius: 8.0)
+                              ]),
+                          child: Icon(Icons.add,
+                              size: 27.h, color: EaselAppTheme.kWhite),
                         ),
                       ),
                     ],
@@ -174,7 +187,9 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                     "welcome_msg".tr(),
                     textAlign: TextAlign.center,
                     maxLines: 4,
-                    style: titleStyle.copyWith(color: EaselAppTheme.kTextGrey, fontSize: isTablet ? 12.sp : 15.sp),
+                    style: titleStyle.copyWith(
+                        color: EaselAppTheme.kTextGrey,
+                        fontSize: isTablet ? 12.sp : 15.sp),
                   ),
                 ),
                 SizedBox(height: 25.h),
@@ -183,24 +198,56 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                   child: Row(
                     children: [
                       viewModel.selectedCollectionType == CollectionType.draft
-                          ? buildSelectedBox(title: "draft".tr(), viewModel: viewModel, color: EaselAppTheme.kLightRed, collectionType: CollectionType.draft)
-                          : buildOutlinedBox(title: "draft".tr(), viewModel: viewModel, collectionType: CollectionType.draft),
+                          ? buildSelectedBox(
+                              title: "draft".tr(),
+                              viewModel: viewModel,
+                              color: EaselAppTheme.kLightRed,
+                              collectionType: CollectionType.draft)
+                          : buildOutlinedBox(
+                              title: "draft".tr(),
+                              viewModel: viewModel,
+                              collectionType: CollectionType.draft),
                       SizedBox(width: 14.w),
-                      viewModel.selectedCollectionType == CollectionType.published
-                          ? buildSelectedBox(title: "published".tr(), viewModel: viewModel, color: EaselAppTheme.kDarkGreen, collectionType: CollectionType.published)
-                          : buildOutlinedBox(title: "published".tr(), viewModel: viewModel, collectionType: CollectionType.published),
+                      viewModel.selectedCollectionType ==
+                              CollectionType.published
+                          ? buildSelectedBox(
+                              title: "published".tr(),
+                              viewModel: viewModel,
+                              color: EaselAppTheme.kDarkGreen,
+                              collectionType: CollectionType.published)
+                          : buildOutlinedBox(
+                              title: "published".tr(),
+                              viewModel: viewModel,
+                              collectionType: CollectionType.published),
                       SizedBox(width: 14.w),
                       viewModel.selectedCollectionType == CollectionType.forSale
-                          ? buildSelectedBox(title: "for_sale".tr(), viewModel: viewModel, color: EaselAppTheme.kBlue, collectionType: CollectionType.forSale)
-                          : buildOutlinedBox(title: "for_sale".tr(), viewModel: viewModel, collectionType: CollectionType.forSale),
+                          ? buildSelectedBox(
+                              title: "for_sale".tr(),
+                              viewModel: viewModel,
+                              color: EaselAppTheme.kBlue,
+                              collectionType: CollectionType.forSale)
+                          : buildOutlinedBox(
+                              title: "for_sale".tr(),
+                              viewModel: viewModel,
+                              collectionType: CollectionType.forSale),
                       SizedBox(width: 16.w),
                       InkWell(
-                          onTap: () => viewModel.updateViewType(ViewType.viewGrid),
-                          child: SvgPicture.asset(kGridIcon, height: 15.h, color: viewModel.viewType == ViewType.viewGrid ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon)),
+                          onTap: () =>
+                              viewModel.updateViewType(ViewType.viewGrid),
+                          child: SvgPicture.asset(kGridIcon,
+                              height: 15.h,
+                              color: viewModel.viewType == ViewType.viewGrid
+                                  ? EaselAppTheme.kBlack
+                                  : EaselAppTheme.kGreyIcon)),
                       SizedBox(width: 14.w),
                       InkWell(
-                        onTap: () => viewModel.updateViewType(ViewType.viewList),
-                        child: SvgPicture.asset(kListIcon, height: 15.h, color: viewModel.viewType == ViewType.viewList ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon),
+                        onTap: () =>
+                            viewModel.updateViewType(ViewType.viewList),
+                        child: SvgPicture.asset(kListIcon,
+                            height: 15.h,
+                            color: viewModel.viewType == ViewType.viewList
+                                ? EaselAppTheme.kBlack
+                                : EaselAppTheme.kGreyIcon),
                       ),
                     ],
                   ),
@@ -213,29 +260,35 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                         onGridSelected: (context) => BuildNFTsContent(
                             onDraftList: (context) => BuildGridView(
                                   nftsList: viewModel.nftDraftList,
-                                  onEmptyList: (context) => getEmptyDraftListWidget(),
+                                  onEmptyList: (context) =>
+                                      getEmptyDraftListWidget(),
                                 ),
                             onForSaleList: (context) => BuildGridView(
                                   nftsList: viewModel.nftForSaleList,
-                                  onEmptyList: (context) => getEmptyWidgetForSale(),
+                                  onEmptyList: (context) =>
+                                      getEmptyWidgetForSale(),
                                 ),
                             onPublishedList: (context) => BuildGridView(
                                   nftsList: viewModel.nftPublishedList,
-                                  onEmptyList: (context) => getEmptyPublishedWidget(),
+                                  onEmptyList: (context) =>
+                                      getEmptyPublishedWidget(),
                                 ),
                             collectionType: viewModel.selectedCollectionType),
                         onListSelected: (context) => BuildNFTsContent(
                             onDraftList: (context) => BuildListView(
                                   nftsList: viewModel.nftDraftList,
-                                  onEmptyList: (context) => getEmptyDraftListWidget(),
+                                  onEmptyList: (context) =>
+                                      getEmptyDraftListWidget(),
                                 ),
                             onForSaleList: (context) => BuildListView(
                                   nftsList: viewModel.nftForSaleList,
-                                  onEmptyList: (context) => getEmptyWidgetForSale(),
+                                  onEmptyList: (context) =>
+                                      getEmptyWidgetForSale(),
                                 ),
                             onPublishedList: (context) => BuildListView(
                                   nftsList: viewModel.nftPublishedList,
-                                  onEmptyList: (context) => getEmptyPublishedWidget(),
+                                  onEmptyList: (context) =>
+                                      getEmptyPublishedWidget(),
                                 ),
                             collectionType: viewModel.selectedCollectionType),
                         viewType: viewModel.viewType),
@@ -250,14 +303,20 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
   Widget getEmptyWidgetForSale() {
     return Text(
       "no_for_sale_nft".tr(),
-      style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
+      style: TextStyle(
+          fontWeight: FontWeight.w700,
+          color: EaselAppTheme.kLightGrey,
+          fontSize: isTablet ? 12.sp : 15.sp),
     );
   }
 
   Widget getEmptyPublishedWidget() {
     return Text(
       "no_published_nft".tr(),
-      style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
+      style: TextStyle(
+          fontWeight: FontWeight.w700,
+          color: EaselAppTheme.kLightGrey,
+          fontSize: isTablet ? 12.sp : 15.sp),
     );
   }
 
@@ -268,7 +327,10 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
       children: [
         Text(
           "no_nft_created".tr(),
-          style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
+          style: TextStyle(
+              fontWeight: FontWeight.w700,
+              color: EaselAppTheme.kLightGrey,
+              fontSize: isTablet ? 12.sp : 15.sp),
         ),
         Padding(
           padding: EdgeInsets.only(bottom: 20.h),
@@ -289,7 +351,10 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
     );
   }
 
-  Widget buildOutlinedBox({required String title, required CreatorHubViewModel viewModel, required CollectionType collectionType}) {
+  Widget buildOutlinedBox(
+      {required String title,
+      required CreatorHubViewModel viewModel,
+      required CollectionType collectionType}) {
     return Expanded(
       child: InkWell(
         onTap: () => viewModel.changeSelectedCollection(collectionType),
@@ -300,7 +365,8 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 5.h),
             child: Center(
-              child: Text(title, style: subTextStyle.copyWith(color: EaselAppTheme.kBlack)),
+              child: Text(title,
+                  style: subTextStyle.copyWith(color: EaselAppTheme.kBlack)),
             ),
           ),
         ),
@@ -308,16 +374,22 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
     );
   }
 
-  Widget buildSelectedBox({required String title, required CreatorHubViewModel viewModel, required Color color, required CollectionType collectionType}) {
+  Widget buildSelectedBox(
+      {required String title,
+      required CreatorHubViewModel viewModel,
+      required Color color,
+      required CollectionType collectionType}) {
     return Expanded(
       child: InkWell(
         onTap: () => viewModel.changeSelectedCollection(collectionType),
         child: Container(
-          decoration: BoxDecoration(border: Border.all(width: 2.sp, color: color), color: color),
+          decoration: BoxDecoration(
+              border: Border.all(width: 2.sp, color: color), color: color),
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 5.h),
             child: Center(
-              child: Text(title, style: subTextStyle.copyWith(color: EaselAppTheme.kWhite)),
+              child: Text(title,
+                  style: subTextStyle.copyWith(color: EaselAppTheme.kWhite)),
             ),
           ),
         ),
@@ -382,7 +454,9 @@ class BuildGridView extends StatelessWidget {
   final List<NFT> nftsList;
   final WidgetBuilder onEmptyList;
 
-  const BuildGridView({Key? key, required this.nftsList, required this.onEmptyList}) : super(key: key);
+  const BuildGridView(
+      {Key? key, required this.nftsList, required this.onEmptyList})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -408,7 +482,9 @@ class BuildListView extends StatelessWidget {
   final List<NFT> nftsList;
   final WidgetBuilder onEmptyList;
 
-  const BuildListView({Key? key, required this.nftsList, required this.onEmptyList}) : super(key: key);
+  const BuildListView(
+      {Key? key, required this.nftsList, required this.onEmptyList})
+      : super(key: key);
 
   CreatorHubViewModel get viewModel => sl();
 
@@ -422,7 +498,9 @@ class BuildListView extends StatelessWidget {
         itemCount: nftsList.length,
         itemBuilder: (context, index) {
           final nft = nftsList[index];
-          return viewModel.selectedCollectionType == CollectionType.draft ? DraftListTile(nft: nft, viewModel: viewModel) : NFTsListTile(publishedNFT: nft);
+          return viewModel.selectedCollectionType == CollectionType.draft
+              ? DraftListTile(nft: nft, viewModel: viewModel)
+              : NFTsListTile(publishedNFT: nft);
         });
   }
 }

@@ -22,7 +22,8 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 class DraftListTile extends StatefulWidget {
   final NFT nft;
   final CreatorHubViewModel viewModel;
-  const DraftListTile({Key? key, required this.nft, required this.viewModel}) : super(key: key);
+  const DraftListTile({Key? key, required this.nft, required this.viewModel})
+      : super(key: key);
 
   @override
   State<DraftListTile> createState() => _DraftListTileState();
@@ -41,7 +42,8 @@ class _DraftListTileState extends State<DraftListTile> {
           buildSlidableAction(
             context,
             callback: () {
-              final DeleteDialog deleteDialog = DeleteDialog(contextt: context, nft: widget.nft);
+              final DeleteDialog deleteDialog =
+                  DeleteDialog(contextt: context, nft: widget.nft);
               deleteDialog.show();
             },
             icon: kSvgDelete,
@@ -78,8 +80,13 @@ class _DraftListTileState extends State<DraftListTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "nft_name".tr(args: [widget.nft.name.isNotEmpty ? widget.nft.name : 'Nft Name']),
-                        style: titleStyle.copyWith(fontSize: isTablet ? 13.sp : 18.sp),
+                        "nft_name".tr(args: [
+                          widget.nft.name.isNotEmpty
+                              ? widget.nft.name
+                              : 'Nft Name'
+                        ]),
+                        style: titleStyle.copyWith(
+                            fontSize: isTablet ? 13.sp : 18.sp),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -91,10 +98,13 @@ class _DraftListTileState extends State<DraftListTile> {
                           borderRadius: BorderRadius.circular(3.h),
                           color: EaselAppTheme.kLightRed,
                         ),
-                        padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 6.w, vertical: 3.h),
                         child: Text(
                           "draft".tr(),
-                          style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
+                          style: EaselAppTheme.titleStyle.copyWith(
+                              color: EaselAppTheme.kWhite,
+                              fontSize: isTablet ? 8.sp : 11.sp),
                         ),
                       ),
                     ],
@@ -105,7 +115,8 @@ class _DraftListTileState extends State<DraftListTile> {
                 ),
                 InkWell(
                     onTap: () {
-                      final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
+                      final DraftsBottomSheet draftsBottomSheet =
+                          DraftsBottomSheet(
                         buildContext: context,
                         nft: widget.nft,
                       );
@@ -121,7 +132,10 @@ class _DraftListTileState extends State<DraftListTile> {
     );
   }
 
-  Widget buildSlidableAction(BuildContext context, {required VoidCallback callback, required String icon, bool isSvg = true}) {
+  Widget buildSlidableAction(BuildContext context,
+      {required VoidCallback callback,
+      required String icon,
+      bool isSvg = true}) {
     return Expanded(
       child: InkWell(
         onTap: callback,
@@ -135,10 +149,14 @@ class _DraftListTileState extends State<DraftListTile> {
         height: 45.h,
         width: 45.h,
         child: NftTypeBuilder(
-          onImage: (context) => buildCachedNetworkImage(widget.nft.url.changeDomain()),
-          onVideo: (context) => buildCachedNetworkImage(widget.nft.thumbnailUrl.changeDomain()),
-          onPdf: (context) => buildCachedNetworkImage(widget.nft.thumbnailUrl.changeDomain()),
-          onAudio: (context) => buildCachedNetworkImage(widget.nft.thumbnailUrl.changeDomain()),
+          onImage: (context) =>
+              buildCachedNetworkImage(widget.nft.url.changeDomain()),
+          onVideo: (context) =>
+              buildCachedNetworkImage(widget.nft.thumbnailUrl.changeDomain()),
+          onPdf: (context) =>
+              buildCachedNetworkImage(widget.nft.thumbnailUrl.changeDomain()),
+          onAudio: (context) =>
+              buildCachedNetworkImage(widget.nft.thumbnailUrl.changeDomain()),
           on3D: (context) => ModelViewer(
             src: widget.nft.url.changeDomain(),
             backgroundColor: EaselAppTheme.kWhite,
@@ -155,11 +173,13 @@ class _DraftListTileState extends State<DraftListTile> {
       fit: BoxFit.fill,
       imageUrl: url,
       errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
-      placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
+      placeholder: (context, url) => Shimmer(
+          color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
     );
   }
 
-  void onViewOnIPFSPressed({required BuildContext context, required NFT nft}) async {
+  void onViewOnIPFSPressed(
+      {required BuildContext context, required NFT nft}) async {
     switch (nft.assetType) {
       case k3dText:
       case kPdfText:
@@ -171,7 +191,8 @@ class _DraftListTileState extends State<DraftListTile> {
         }
         break;
       default:
-        final easelProvider = Provider.of<EaselProvider>(context, listen: false);
+        final easelProvider =
+            Provider.of<EaselProvider>(context, listen: false);
         await easelProvider.repository.launchMyUrl(url: nft.url.changeDomain());
     }
   }

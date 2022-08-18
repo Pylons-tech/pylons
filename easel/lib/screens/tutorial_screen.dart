@@ -29,14 +29,16 @@ class _TutorialScreenState extends State<TutorialScreen> {
 
   List<Widget> indicator() => List<Widget>.generate(
       slides.length,
-          (index) => Container(
-        margin: EdgeInsets.symmetric(horizontal: 4.w),
-        height: currentPage.round() == index ? 16.w : 12.h,
-        width: currentPage.round() == index ? 18.w : 12.h,
-        decoration: BoxDecoration(
-          color: currentPage.round() == index ? getColorPerPage(index) : EaselAppTheme.kLightGrey,
-        ),
-      ));
+      (index) => Container(
+            margin: EdgeInsets.symmetric(horizontal: 4.w),
+            height: currentPage.round() == index ? 16.w : 12.h,
+            width: currentPage.round() == index ? 18.w : 12.h,
+            decoration: BoxDecoration(
+              color: currentPage.round() == index
+                  ? getColorPerPage(index)
+                  : EaselAppTheme.kLightGrey,
+            ),
+          ));
 
   double currentPage = 0.0;
   final _pageViewController = PageController();
@@ -60,57 +62,84 @@ class _TutorialScreenState extends State<TutorialScreen> {
     myBottomDrawerController = BottomDrawerController();
     slides = kTutorialItems
         .map((item) => Column(
-      children: <Widget>[
-        SizedBox(height: 0.1.sh),
-        Padding(
-            padding: EdgeInsets.symmetric(horizontal: 0.22.sw),
-            child: Image.asset(
-              item[kImageTutorial],
-              height: 10.h,
-              width: 40,
-              fit: BoxFit.fill,
-            )),
-        SizedBox(height: 0.1.sh),
-        Text(item[kHeaderTutorial], style: TextStyle(fontSize: isTablet ? 16.sp : 18.sp, fontWeight: FontWeight.w800, color: EaselAppTheme.kDartGrey), textAlign: TextAlign.center),
-        SizedBox(height: 15.h),
-        SizedBox(width: 0.63.sw, child: Text(item[kDescriptionTutorial], style: TextStyle(color: Colors.black, fontSize: 13.sp, fontWeight: FontWeight.w400), textAlign: TextAlign.center)),
-      ],
-    ))
+              children: <Widget>[
+                SizedBox(height: 0.1.sh),
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 0.22.sw),
+                    child: Image.asset(
+                      item[kImageTutorial],
+                      height: 10.h,
+                      width: 40,
+                      fit: BoxFit.fill,
+                    )),
+                SizedBox(height: 0.1.sh),
+                Text(item[kHeaderTutorial],
+                    style: TextStyle(
+                        fontSize: isTablet ? 16.sp : 18.sp,
+                        fontWeight: FontWeight.w800,
+                        color: EaselAppTheme.kDartGrey),
+                    textAlign: TextAlign.center),
+                SizedBox(height: 15.h),
+                SizedBox(
+                    width: 0.63.sw,
+                    child: Text(item[kDescriptionTutorial],
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w400),
+                        textAlign: TextAlign.center)),
+              ],
+            ))
         .toList();
     _pageViewController.addListener(() {
-      if(doMoveForwardToMessageScreen()) {
+      if (doMoveForwardToMessageScreen()) {
         moveForwardToEaselMessage();
         return;
       }
       setState(() {
         currentPage = _pageViewController.page!;
       });
-
     });
   }
 
-  bool doMoveForwardToMessageScreen() => currentPage==2&&_pageViewController.position.userScrollDirection==ScrollDirection.reverse&&!tutorialProvider.isForwarding;
+  bool doMoveForwardToMessageScreen() =>
+      currentPage == 2 &&
+      _pageViewController.position.userScrollDirection ==
+          ScrollDirection.reverse &&
+      !tutorialProvider.isForwarding;
 
   @override
   Widget build(BuildContext context) {
     slides = kTutorialItems
         .map((item) => Column(
-      children: <Widget>[
-        SizedBox(height: 0.2.sh),
-        Padding(
-            padding: EdgeInsets.symmetric(horizontal: 0.22.sw),
-            child: Image.asset(
-              item[kImageTutorial],
-              height: isTablet ? 140.w : 200.w,
-              width: isTablet ? 140.w : 200.w,
-              fit: BoxFit.fill,
-            )),
-        SizedBox(height: 0.15.sh),
-        Text(item[kHeaderTutorial], style: TextStyle(fontSize: isTablet ? 16.sp : 18.sp, fontWeight: FontWeight.w800, color: EaselAppTheme.kDartGrey), textAlign: TextAlign.center),
-        SizedBox(height: 15.h),
-        SizedBox(width: 0.63.sw, child: Text(item[kDescriptionTutorial], style: TextStyle(color: Colors.black, fontSize: 13.sp, fontWeight: FontWeight.w400), textAlign: TextAlign.center)),
-      ],
-    ))
+              children: <Widget>[
+                SizedBox(height: 0.2.sh),
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 0.22.sw),
+                    child: Image.asset(
+                      item[kImageTutorial],
+                      height: isTablet ? 140.w : 200.w,
+                      width: isTablet ? 140.w : 200.w,
+                      fit: BoxFit.fill,
+                    )),
+                SizedBox(height: 0.15.sh),
+                Text(item[kHeaderTutorial],
+                    style: TextStyle(
+                        fontSize: isTablet ? 16.sp : 18.sp,
+                        fontWeight: FontWeight.w800,
+                        color: EaselAppTheme.kDartGrey),
+                    textAlign: TextAlign.center),
+                SizedBox(height: 15.h),
+                SizedBox(
+                    width: 0.63.sw,
+                    child: Text(item[kDescriptionTutorial],
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w400),
+                        textAlign: TextAlign.center)),
+              ],
+            ))
         .toList();
     return Scaffold(
       backgroundColor: EaselAppTheme.kWhite03,
@@ -118,7 +147,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
         children: <Widget>[
           PageView.builder(
             controller: _pageViewController,
-            physics: const  BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             itemCount: slides.length,
             itemBuilder: (BuildContext context, int index) {
               return slides[index];
@@ -167,7 +196,19 @@ class _TutorialScreenState extends State<TutorialScreen> {
                   width: 0.7.sw,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Text(kWhyAppNeededDesc1, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)), SizedBox(height: 8.h), Text(kWhyAppNeededDescSummary1, style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))],
+                    children: [
+                      Text(kWhyAppNeededDesc1,
+                          style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black)),
+                      SizedBox(height: 8.h),
+                      Text(kWhyAppNeededDescSummary1,
+                          style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w400,
+                              color: EaselAppTheme.kLightGrey))
+                    ],
                   ),
                 )
               ],
@@ -188,7 +229,19 @@ class _TutorialScreenState extends State<TutorialScreen> {
                   width: 0.7.sw,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Text(kWhyAppNeededDesc2, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)), SizedBox(height: 8.h), Text(kWhyAppNeededDescSummary2, style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))],
+                    children: [
+                      Text(kWhyAppNeededDesc2,
+                          style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black)),
+                      SizedBox(height: 8.h),
+                      Text(kWhyAppNeededDescSummary2,
+                          style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w400,
+                              color: EaselAppTheme.kLightGrey))
+                    ],
                   ),
                 )
               ],
@@ -209,7 +262,19 @@ class _TutorialScreenState extends State<TutorialScreen> {
                   width: 0.7.sw,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Text(kWhyAppNeededDesc3, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)), SizedBox(height: 8.h), Text(kWhyAppNeededDescSummary3, style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))],
+                    children: [
+                      Text(kWhyAppNeededDesc3,
+                          style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black)),
+                      SizedBox(height: 8.h),
+                      Text(kWhyAppNeededDescSummary3,
+                          style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w400,
+                              color: EaselAppTheme.kLightGrey))
+                    ],
                   ),
                 )
               ],
@@ -260,7 +325,8 @@ class _TutorialScreenState extends State<TutorialScreen> {
 
   void moveForwardToEaselMessage() async {
     tutorialProvider.forwarding();
-    await navigatorKey.currentState!.pushReplacementNamed(RouteUtil.kRouteWelcomeEasel);
+    await navigatorKey.currentState!
+        .pushReplacementNamed(RouteUtil.kRouteWelcomeEasel);
     tutorialProvider.forwarding();
   }
 }
