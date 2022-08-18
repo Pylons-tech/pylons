@@ -1,0 +1,49 @@
+{
+  "NodeVersion": "0.0.1",
+  "ID": "testTradeId1",
+  "CoinInputs": null,
+  "ItemInputs": [
+    {
+      "CookbookID": "cb1",
+      "ItemInput": {
+        "ID": "",
+        "Doubles": [
+          {
+            "Key": "XP",
+            "MinValue": "1",
+            "MaxValue": "1000000"
+          }
+        ],
+        "Longs": [
+          {
+            "Key": "level",
+            "MinValue": "1",
+            "MaxValue": "2"
+          }
+        ],
+        "Strings": [
+          {
+            "Key": "Name",
+            "Value": "IndustryBaby"
+          }
+        ],
+        "TransferFee": {
+          "MinValue": "0",
+          "MaxValue": "0"
+        }
+      }
+    }
+  ],
+  "CoinOutputs": [
+    {
+      "denom": "pylon",
+      "amount": "444"
+    }
+  ],
+  "ItemOutputs": null,
+  "ExtraInfo": "testing trade",
+  "Sender": "testId",
+  "FulFiller": "testId2",
+  "Disabled": false,
+  "Completed": true
+}

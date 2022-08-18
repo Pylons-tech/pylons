@@ -35,15 +35,13 @@ func (suite *IntegrationTestSuite) TestBurnDebtToken() {
 	createNRedeemInfo(k, suite.ctx, 1)
 
 	// set up new payment processor using private key
-	params := k.GetParams(suite.ctx)
-	params.PaymentProcessors = append(params.PaymentProcessors, types.PaymentProcessor{
+	types.DefaultPaymentProcessors = append(types.DefaultPaymentProcessors, types.PaymentProcessor{
 		CoinDenom:            "ustripeusd",
 		PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
 		ProcessorPercentage:  types.DefaultProcessorPercentage,
 		ValidatorsPercentage: types.DefaultValidatorsPercentage,
 		Name:                 "Test",
 	})
-	k.SetParams(suite.ctx, params)
 
 	type args struct {
 		ri     types.RedeemInfo
@@ -151,4 +149,5 @@ func (suite *IntegrationTestSuite) TestBurnDebtToken() {
 			}
 		})
 	}
+	types.DefaultPaymentProcessors = types.DefaultPaymentProcessors[:1]
 }

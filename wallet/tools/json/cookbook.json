@@ -1,0 +1,10 @@
+{
+  "creator": "pylo1np6w3qwugamt8yzqyns5wr5e5",
+  "ID": "cookbook_for_test_stripe_110",
+  "name": "A nice cookbook",
+  "description": "A test cookbook where everything works",
+  "developer": "Pylons Tech",
+  "version": "v1.0.0",
+  "supportEmail": "pylons@pylons.tech",
+  "enabled": true
+}

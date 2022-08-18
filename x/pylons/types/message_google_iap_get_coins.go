@@ -13,7 +13,7 @@ import (
 
 var _ sdk.Msg = &MsgGoogleInAppPurchaseGetCoins{}
 
-func NewMsgGoogleIAPGetCoins(creator string, productID string, purchaseToken string, receiptDataBase64 string, signature string) *MsgGoogleInAppPurchaseGetCoins {
+func NewMsgGoogleIAPGetCoins(creator, productID, purchaseToken, receiptDataBase64, signature string) *MsgGoogleInAppPurchaseGetCoins {
 	return &MsgGoogleInAppPurchaseGetCoins{
 		Creator:           creator,
 		ProductId:         productID,

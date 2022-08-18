@@ -24,15 +24,15 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-        cache-dependency-path: 'big-dipper/yarn.lock'
+        cache: 'npm'
+        cache-dependency-path: 'big-dipper/package-lock.json'
 
     - run: |
         curl https://install.meteor.com/ | sh
         
     - run: |
         cd big-dipper
-        yarn install
+        meteor npm install
 
     - run: |
         cd big-dipper

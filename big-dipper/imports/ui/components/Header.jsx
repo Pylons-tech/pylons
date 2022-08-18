@@ -23,11 +23,9 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import SearchBar from './SearchBar.jsx';
 import i18n from 'meteor/universe:i18n';
-import LedgerModal from '../ledger/LedgerModal.jsx';
-import Account from './Account.jsx';
 import { sanitizeUrl } from '@braintree/sanitize-url';
+import { includes } from 'lodash';
 
 const T = i18n.createComponent();
 
@@ -79,6 +77,7 @@ export default class Header extends Component {
   }
 
   componentDidMount() {
+    console.log("ssssssss", this.props.location.search.includes("recipe_id") && this.props.location.search.includes("cookbook_id"))
     const url = Meteor.settings.public.networks;
     if (url) {
       try {
@@ -224,7 +223,6 @@ export default class Header extends Component {
           </DropdownToggle>
           {this.state.networks}
         </UncontrolledDropdown>
-        <SearchBar id='header-search' history={this.props.history} />
         <NavbarToggler onClick={this.toggle} />
         <Collapse isOpen={this.state.isOpen} navbar>
           <Nav className='ml-auto text-nowrap' navbar>
@@ -327,14 +325,7 @@ export default class Header extends Component {
                   </span>
                 </span>
               )}
-              <LedgerModal
-                isOpen={this.state.isSignInOpen}
-                toggle={this.toggleSignIn}
-                refreshApp={this.props.refreshApp}
-                handleLoginConfirmed={
-                  this.shouldLogin() ? this.handleLoginConfirmed : null
-                }
-              />
+              
             </NavItem>
             <NavItem>
               <UncontrolledDropdown inNavbar>
