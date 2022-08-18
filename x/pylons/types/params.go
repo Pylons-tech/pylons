@@ -63,7 +63,7 @@ var (
 	DefaultUpdateUsernameFee            = sdk.NewCoin(PylonsCoinDenom, sdk.NewInt(10))
 	DefaultMinTransferFee               = sdk.OneInt()
 	DefaultMaxTransferFee               = sdk.NewInt(10000)
-	DefaultDistrEpochIdentifier         = "day"
+	DefaultDistrEpochIdentifier         = "thirtySeconds"
 	DefaultEngineVersion                = uint64(0)
 	DefaultMaxTxsInBlock                = uint64(20)
 	DefaultNoAppCheckConfig             = true
