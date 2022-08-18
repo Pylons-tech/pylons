@@ -20,7 +20,7 @@ jobs:
           channel: "stable" # or: 'beta', 'dev' or 'master'
       - run: |
           flutter --version
-          cd flutter_wallet
+          cd wallet
           flutter pub get
           flutter analyze
           flutter lint
