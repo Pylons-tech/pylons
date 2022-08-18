@@ -11,6 +11,19 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
+// Test for SetItemString function
+
+// TEST 1
+// we create message (type: types.MsgSetItemString) with default Creator, CookbookId and Id
+// check if no error
+
+// TEST 2
+// we create message (type: types.MsgSetItemString) with invalid CookbookId and Id
+// check if if error is proper
+
+// TEST 3
+// we create message (type: types.MsgSetItemString) with invalid Creator
+// check if if error is proper
 func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField1() {
 	k := suite.k
 	bk := suite.bankKeeper

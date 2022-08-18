@@ -10,6 +10,39 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
+// Test for CreateTrade function
+
+// TEST 1
+// we create message (type: types.MsgCreateTrade) with nil CoinInputs, CoinOutputs and ItemOutputs
+// check if no error
+
+// TEST 2
+// we create message (type: types.MsgCreateTrade) with CoinOutputs(disable SendEnabled Coins) nil CoinInputs, ItemOutputs
+// check if if error is proper
+
+// TEST 3
+// we create message (type: types.MsgCreateTrade) with CoinInputs(disable SendEnabled Coins) nil CoinOutputs, ItemOutputs
+// check if if error is proper
+
+// TEST 4
+// we create message (type: types.MsgCreateTrade) with ItemOutputs(Invalid Item ID and Cookbook ID)
+// check if no error
+
+// TEST 5
+// we create message (type: types.MsgCreateTrade) with ItemOutputs(Item owner not equal Creator)
+// check if if error is proper
+
+// TEST 6
+// we create message (type: types.MsgCreateTrade) with ItemOutputs(Tradeable is false)
+// check if if error is proper
+
+// TEST 7
+// we create message (type: types.MsgCreateTrade) with CoinInputs(denom is Invalid)
+// check if if error is proper
+
+// TEST 8
+// we create message (type: types.MsgCreateTrade) with CoinOutputs(with Amount = 10) nil CoinInputs, ItemOutputs
+// check if if error is proper
 func (suite *IntegrationTestSuite) TestTradeMsgServerCreate1() {
 	k := suite.k
 	ctx := suite.ctx

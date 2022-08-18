@@ -7,6 +7,15 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+// Test for GetRecipeHistory function
+
+// TEST 1
+// we create message (type: types.QueryGetRecipeHistoryRequest) with default CookbookId and RecipeId
+// check if no error
+
+// TEST 2
+// we create nil message (type: types.QueryGetRecipeHistoryRequest)
+// check if if error is proper
 func (suite *IntegrationTestSuite) TestGetRecipeHistory() {
 	k := suite.k
 	ctx := suite.ctx

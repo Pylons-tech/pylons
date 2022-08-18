@@ -8,6 +8,19 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+// Test for ListSignUpByReferee function
+
+// TEST 1
+// we create message (type: types.QueryListSignUpByReferee) with default Creator
+// check if no error
+
+// TEST 2
+// we create nil message (type: types.QueryListSignUpByReferee)
+// check if if error is proper
+
+// TEST 3
+// we create message (type: types.QueryListSignUpByReferee) with invalid Creator
+// check if if error is proper
 func (suite *IntegrationTestSuite) TestListSignUpByReferee() {
 	k := suite.k
 	ctx := suite.ctx
