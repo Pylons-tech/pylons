@@ -1,0 +1,79 @@
+{
+  "cookbookID": "cookbookLOUD",
+  "ID": "LOUDGetCharacter123125",
+  "name": "LOUD-Get-Character-Recipe",
+  "description": "Creates a basic character in LOUD",
+  "version": "v0.0.1",
+  "coinInputs": [],
+  "itemInputs": [],
+  "entries": {
+    "coinOutputs": [],
+    "itemOutputs": [
+      {
+        "ID": "basic_character_lv1",
+        "doubles": [
+          {
+            "key": "XP",
+            "rate": "1.000000000000000000",
+            "weightRanges": [],
+            "program": "1"
+          }
+        ],
+        "longs": [
+          {
+            "key": "level",
+            "rate": "1.000000000000000000",
+            "weightRanges": [],
+            "program": "1"
+          },
+          {
+            "key": "giantKills",
+            "rate": "1.000000000000000000",
+            "weightRanges": [],
+            "program": "0"
+          },
+          {
+            "key": "special",
+            "rate": "1.000000000000000000",
+            "weightRanges": [],
+            "program": "0"
+          },
+          {
+            "key": "specialDragonKill",
+            "rate": "1.000000000000000000",
+            "weightRanges": [],
+            "program": "0"
+          },
+          {
+            "key": "undeadDragonKill",
+            "rate": "1.000000000000000000",
+            "weightRanges": [],
+            "program": "0"
+          }
+        ],
+        "strings": [
+          {
+            "key": "entityType",
+            "rate": "1.000000000000000000",
+            "value": "character"
+          }
+        ],
+        "mutableStrings": [],
+        "transferFee": [],
+        "tradePercentage": "0.100000000000000000",
+        "tradeable": true
+      }
+    ],
+    "itemModifyOutputs": []
+  },
+  "outputs": [
+    {
+      "entryIDs": [
+        "basic_character_lv1"
+      ],
+      "weight": 1
+    }
+  ],
+  "enabled": true,
+  "extraInfo": "extraInfo"
+}
