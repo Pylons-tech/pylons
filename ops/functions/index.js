@@ -1,5 +1,4 @@
 const functions = require('@google-cloud/functions-framework');
-var bodyParser = require('body-parser')
 const { IncomingWebhook } = require('@slack/webhook');
 const url = process.env.SLACK_WEBHOOK_URL;
 
@@ -7,16 +6,17 @@ const webhook = new IncomingWebhook(url);
 
 
 module.exports = functions.http('discordAlerts', (request, response) => {
-  let error = JSON.parse(request.body);
-  json = bodyParser.raw(request.body)
-  console.log(error)
+  var reqBody = request.body.toString();
+  //error = JSON.parse(reqBody);
   
   // const tag = request.body.queryResult.intent
 
   // let jsonResponse = {};
     //fulfillment response to be sent to the agent if the request tag is equal to "welcome tag"
   // errAlert = parseEvent(request.data)
-  message = createDiscordMessage(error)
+  reqBody =request.body.toString();  
+  
+  message = createDiscordMessage(reqBody)
   webhook.send(message);
   response.end()
 
@@ -28,16 +28,16 @@ const createDiscordMessage = (error) => {
   let message = {
     text: "GCP Alerts",
     mrkdwn: true,
-    attachments: [
-      {
-        title: error.incident.condition.displayName,
-        title_link: error.incident.url,
-        fields: [{
-        title: error.exception_info.state,
-        value: error.incident.summary
-      }]
-  }
-]
+//     attachments: [
+//       {
+//         title: "Alert",
+//         title_link: "#",
+//         fields: [{
+//         title: "GCP ERROR",
+//         value: "BODY HERE"
+//       }]
+//   }
+// ]
 };
 embeds.push({
   title: "test",
