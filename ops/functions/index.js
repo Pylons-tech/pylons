@@ -1,4 +1,5 @@
 const functions = require('@google-cloud/functions-framework');
+var bodyParser = require('body-parser')
 const { IncomingWebhook } = require('@slack/webhook');
 const url = process.env.SLACK_WEBHOOK_URL;
 
@@ -6,8 +7,9 @@ const webhook = new IncomingWebhook(url);
 
 
 module.exports = functions.http('discordAlerts', (request, response) => {
-  console.log(request.body)
   let error = JSON.parse(request.body);
+  json = bodyParser.raw(request.body)
+  console.log(error)
   
   // const tag = request.body.queryResult.intent
 
@@ -28,11 +30,11 @@ const createDiscordMessage = (error) => {
     mrkdwn: true,
     attachments: [
       {
-        title: error.exception_info.type,
-        title_link: "http://google.com",
+        title: error.incident.condition.displayName,
+        title_link: error.incident.url,
         fields: [{
-        title: error.exception_info.type,
-        value: error.exception_info.message
+        title: error.exception_info.state,
+        value: error.incident.summary
       }]
   }
 ]
