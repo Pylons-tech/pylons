@@ -25,6 +25,7 @@ import {
 import { Link } from 'react-router-dom';
 import i18n from 'meteor/universe:i18n';
 import { sanitizeUrl } from '@braintree/sanitize-url';
+import { includes } from 'lodash';
 
 const T = i18n.createComponent();
 
@@ -76,6 +77,7 @@ export default class Header extends Component {
   }
 
   componentDidMount() {
+    console.log("ssssssss", this.props.location.search.includes("recipe_id") && this.props.location.search.includes("cookbook_id"))
     const url = Meteor.settings.public.networks;
     if (url) {
       try {

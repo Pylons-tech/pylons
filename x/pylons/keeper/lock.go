@@ -57,7 +57,7 @@ func (k Keeper) lockItem(ctx sdk.Context, item types.Item, modAccName string) {
 	k.UpdateItem(ctx, item, prevAddr)
 }
 
-func (k Keeper) unlockItem(ctx sdk.Context, item types.Item, modAccName string, addr string) {
+func (k Keeper) unlockItem(ctx sdk.Context, item types.Item, modAccName, addr string) {
 	modAcc := k.accountKeeper.GetModuleAddress(modAccName)
 	item.Owner = addr
 	k.UpdateItem(ctx, item, modAcc)

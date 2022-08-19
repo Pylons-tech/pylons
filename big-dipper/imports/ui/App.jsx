@@ -40,6 +40,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    console.log("props props props",this.props)
     let lastDay = moment('2019-02-10');
     let now = moment();
     if (now.diff(lastDay) < 0) {
@@ -71,7 +72,9 @@ class App extends Component {
     return (
       // <Router history={history}>
       <div>
+        <div className={this.props.location.search.includes("recipe_id") && this.props.location.search.includes("cookbook_id")? "hide-xs" : null}>
         <RouteHeader refreshApp={this.propagateStateChange} />
+        </div>
         <Container fluid id='main'>
           {Meteor.settings.public.banners ? (
             <Banners url={Meteor.settings.public.banners} />
@@ -86,7 +89,7 @@ class App extends Component {
               <Route path='/transactions' component={Transactions} />
               <Route path='/art_sales' component={Recipes} />
               <Route path='/activity_feed' component={ActivityFeed} />
-	      <Route path='/validators' exact component={Validators} />
+	            <Route path='/validators' exact component={Validators} />
               <Route
                 path='/validators/inactive'
                 render={(props) => <Validators {...props} inactive={true} />}
@@ -109,4 +112,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);

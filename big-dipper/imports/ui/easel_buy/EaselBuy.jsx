@@ -46,8 +46,10 @@ export default class EaselBuy extends Component {
       showHideComp2: false,
       showHideComp3: false,
       showHideComp4: false,
+      showHideDetails: false,
     };
     this.hideComponent = this.hideComponent.bind(this);
+    // this.hideComponentDesc = this.hideComponent.bind(this);
   }
 
   hideComponent(name) {
@@ -78,10 +80,21 @@ export default class EaselBuy extends Component {
           showHideComp4: !this.state.showHideComp4,
         });
         break;
+      case "showHideDetails":
+          this.setState({
+            showHideDetails: !this.state.showHideDetails,
+          });
+          break;
       default:
         null;
     }
   }
+
+  // hideComponentDesc() {
+  //   this.setState({
+  //     showHideDetails: !this.state.showHideDetails,
+  //   });
+  // }
 
   componentDidMount() {
     this.handleFetchData();
@@ -113,7 +126,7 @@ export default class EaselBuy extends Component {
         let price;
         let edition;
         let denom;
-        const tradePercent = 1000000000000000000;
+        const tradePercent = 100;
         const res = _.cloneDeep(response);
         this.setState({ loading: false });
         const selectedRecipe = _.cloneDeep(res.data.recipe);
@@ -228,6 +241,7 @@ export default class EaselBuy extends Component {
       showHideComp2,
       showHideComp3,
       showHideComp4,
+      showHideDetails,
       nftType,
       loading,
       media,
@@ -292,6 +306,7 @@ export default class EaselBuy extends Component {
             shadow-intensity="1"
             camera-controls
             enable-pan
+            className="model-viewer"
           ></model-viewer>
         );
       else
@@ -305,7 +320,9 @@ export default class EaselBuy extends Component {
     };
 
     if (this.state.loading) {
-      return <Spinner type="grow" color="primary" />;
+      return <div className="loader">
+        <Spinner type="grow" color="primary" />
+        </div>;
     } else {
       return (
         <div className="buy-page">
@@ -313,300 +330,647 @@ export default class EaselBuy extends Component {
             <Container>
               <Row>
                 <Col xl={5} lg={5} md={12} sm={12}>
-                  <div className="mob-img">
-                    <img
-                      alt="frame"
-                      src="/img/frame.png"
-                      width="100%"
-                      height="100%"
-                      className="mob-frame"
-                    />
-                    {getMedia()}
+                  <div className="desktop-view">
+                    <div className="mob-img">
+                      <img
+                        alt="frame"
+                        src="/img/frame.png"
+                        width="100%"
+                        height="100%"
+                        className="mob-frame"
+                      />
+                      {getMedia()}
+                    </div>
                   </div>
-                </Col>
+                </Col> 
                 <Col xl={7} lg={7} md={12} sm={12}>
-                  <div className="details">
+                  <div className="desktop-view">
+                    <div className="details">
                     <div className="title-publisher">
-                      <h4>{this.state.name}</h4>
-                      <div className="publisher">
-                        <p>
-                          Created by <span>{createdBy}</span>
+                        <h4>{this.state.name}</h4>
+                        <div className="publisher">
+                          <p>
+                            Created by <span>{createdBy}</span>
+                            <img
+                              alt="Published"
+                              src="/img/check.svg"
+                              style={{ width: "16px", height: "16px" }}
+                            />
+                          </p>
+                        </div>
+                        <div className="views">
+                          {" "}
                           <img
-                            alt="Published"
-                            src="/img/check.svg"
-                            style={{ width: "16px", height: "16px" }}
+                            alt="views"
+                            src="/img/eye.svg"
+                            style={{ width: "34px", height: "20px" }}
                           />
-                        </p>
+                          <p>0 views</p>
+                        </div>
                       </div>
-                      <div className="views">
-                        {" "}
-                        <img
-                          alt="views"
-                          src="/img/eye.svg"
-                          style={{ width: "34px", height: "20px" }}
-                        />
-                        <p>0 views</p>
-                      </div>
-                    </div>
-                    {this.state.description?.length > 35 ? (
-                      <>
+                      {this.state.description?.length > 35 ? (
+                        <>
+                          <div className="description">
+                            {showHideComp4 ? (
+                              <>
+                                <p>{this.state.description}</p>
+                                <a
+                                  onClick={() =>
+                                    this.hideComponent("showHideComp4")
+                                  }
+                                >
+                                  read less
+                                </a>
+                              </>
+                            ) : (
+                              <>
+                                <p>
+                                  {this.state.description?.substr(0, 35) +
+                                    ". . ."}
+                                </p>
+                                <a
+                                  onClick={() =>
+                                    this.hideComponent("showHideComp4")
+                                  }
+                                >
+                                  read more
+                                </a>
+                              </>
+                            )}
+                          </div>
+                        </>
+                      ) : (
                         <div className="description">
-                          {showHideComp4 ? (
-                            <>
-                              <p>{this.state.description}</p>
-                              <a
-                                onClick={() =>
-                                  this.hideComponent("showHideComp4")
-                                }
-                              >
-                                read less
-                              </a>
-                            </>
-                          ) : (
-                            <>
-                              <p>
-                                {this.state.description?.substr(0, 35) +
-                                  ". . ."}
-                              </p>
-                              <a
-                                onClick={() =>
-                                  this.hideComponent("showHideComp4")
-                                }
-                              >
-                                read more
-                              </a>
-                            </>
-                          )}
+                          <p>{this.state.description}</p>
                         </div>
-                      </>
-                    ) : (
-                      <div className="description">
-                        <p>{this.state.description}</p>
-                      </div>
-                    )}
+                      )}
 
-                    <div className="description"></div>
+                      <div className="more-details">
+                        <div className="left-side">
+                          <ul>
+                            <li>
+                              <div className="tab-name">
+                                <p>Ownership</p>
+                                <img
+                                  alt="Ownership"
+                                  src="/img/trophy.svg"
+                                  width="100%"
+                                  height="100%"
+                                  className="icon-img"
+                                />
+                                <img
+                                  alt="line"
+                                  src="/img/line.svg"
+                                  style={{ width: "100%", height: "24px" }}
+                                  className="line"
+                                />
+                              </div>
+                              <button
+                                onClick={() =>
+                                  this.hideComponent("showHideComp1")
+                                }
+                              >
+                                {showHideComp1 ? (
+                                  <img
+                                    alt="minimize"
+                                    src="/img/minimize.svg"
+                                    height="100%"
+                                    width="100%"
+                                    className="plus-minus"
+                                  />
+                                ) : (
+                                  <img
+                                    alt="expand"
+                                    src="/img/expand.svg"
 
-                    <div className="more-details">
-                      <div className="left-side">
-                        <ul>
-                          <li>
-                            <div className="tab-name">
-                              <p>Ownership</p>
-                              <img
-                                alt="Ownership"
-                                src="/img/trophy.svg"
-                                style={{ width: "40px", height: "40px" }}
-                              />
-                              <img
-                                alt="line"
-                                src="/img/line.svg"
-                                style={{ width: "100%", height: "24px" }}
-                                className="line"
-                              />
-                            </div>
-                            <button
-                              onClick={() =>
-                                this.hideComponent("showHideComp1")
-                              }
-                            >
+height="100%"
+width="100%"                                    className="plus-minus"
+                                  />
+                                )}
+                              </button>
                               {showHideComp1 ? (
+                                <div className="tab-panel">
+                                  <div className="item">
+                                    <p>Owned by</p>
+                                    <p>
+                                      {!!(nftHistory && nftHistory.length)
+                                        ? nftHistory[nftHistory.length - 1]
+                                            .sender_name
+                                        : createdBy}
+                                    </p>
+                                  </div>
+                                  <div className="item">
+                                    <p>Edition</p>
+                                    <p>{this.state.edition}</p>
+                                  </div>
+                                  <div className="item">
+                                    <p>Royalty</p>
+                                    <p>{this.state.royalty}%</p>
+                                  </div>
+                                  <div className="item">
+                                    <p>Size</p>
+                                    <p>{this.state.dimentions}</p>
+                                  </div>
+                                  <div className="item">
+                                    <p>Creation Date</p>
+                                    <p>
+                                      {!!createdAt
+                                        ? moment
+                                            .unix(createdAt)
+                                            .format("DD/MM/YYYY hh:mm:ss")
+                                        : ""}
+                                    </p>
+                                  </div>
+                                </div>
+                              ) : null}
+                            </li>
+                            <li>
+                              <div className="tab-name">
+                                <p>NFT Detail</p>
                                 <img
-                                  alt="minimize"
-                                  src="/img/minimize.svg"
-                                  style={{ width: "27px", height: "27px" }}
+                                  alt="NFT Detail"
+                                  src="/img/detail.svg"
+                                  width="100%"
+                                  height="100%"
+                                  className="icon-img"
                                 />
-                              ) : (
                                 <img
-                                  alt="expand"
-                                  src="/img/expand.svg"
-                                  style={{ width: "27px", height: "27px" }}
+                                  alt="line"
+                                  src="/img/line.svg"
+                                  style={{ width: "100%", height: "24px" }}
+                                  className="line"
                                 />
-                              )}
-                            </button>
-                            {showHideComp1 ? (
-                              <div className="tab-panel">
-                                <div className="item">
-                                  <p>Owned by</p>
-                                  <p>
-                                    {!!(nftHistory && nftHistory.length)
-                                      ? nftHistory[nftHistory.length - 1]
-                                          .sender_name
-                                      : createdBy}
-                                  </p>
-                                </div>
-                                <div className="item">
-                                  <p>Edition</p>
-                                  <p>{this.state.edition}</p>
-                                </div>
-                                <div className="item">
-                                  <p>Royalty</p>
-                                  <p>{this.state.royalty}%</p>
-                                </div>
-                                <div className="item">
-                                  <p>Size</p>
-                                  <p>{this.state.dimentions}</p>
-                                </div>
-                                <div className="item">
-                                  <p>Creation Date</p>
-                                  <p>
-                                    {!!createdAt
-                                      ? moment
-                                          .unix(createdAt)
-                                          .format("DD/MM/YYYY hh:mm:ss")
-                                      : ""}
-                                  </p>
-                                </div>
                               </div>
-                            ) : null}
-                          </li>
-                          <li>
-                            <div className="tab-name">
-                              <p>NFT Detail</p>
-                              <img
-                                alt="NFT Detail"
-                                src="/img/detail.svg"
-                                style={{ width: "40px", height: "40px" }}
-                              />
-                              <img
-                                alt="line"
-                                src="/img/line.svg"
-                                style={{ width: "100%", height: "24px" }}
-                                className="line"
-                              />
-                            </div>
-                            <button
-                              onClick={() =>
-                                this.hideComponent("showHideComp2")
-                              }
-                            >
+                              <button
+                                onClick={() =>
+                                  this.hideComponent("showHideComp2")
+                                }
+                              >
+                                {showHideComp2 ? (
+                                  <img
+                                    alt="minimize"
+                                    src="/img/minimize.svg"
+                                    height="100%"
+                                    width="100%"
+                                    className="plus-minus"
+                                  />
+                                ) : (
+                                  <img
+                                    alt="expand"
+                                    src="/img/expand.svg"
+
+height="100%"
+width="100%"                                    className="plus-minus"
+                                  />
+                                )}
+                              </button>
                               {showHideComp2 ? (
+                                <div className="tab-panel">
+                                  <div className="item">
+                                    <p>Recipe ID</p>
+                                    <p>
+                                      <a href="#">{this.state.id}</a>
+                                    </p>
+                                  </div>
+                                  <div className="item">
+                                    <p>Blockchain</p>
+                                    <p>Pylons</p>
+                                  </div>
+                                  <div className="item">
+                                    <p>Permission</p>
+                                    <p>Exclusive</p>
+                                  </div>
+                                </div>
+                              ) : null}
+                            </li>
+                            <li>
+                              <div className="tab-name">
+                                <p>History</p>
                                 <img
-                                  alt="minimize"
-                                  src="/img/minimize.svg"
-                                  style={{ width: "27px", height: "27px" }}
+                                  alt="History"
+                                  src="/img/history.svg"
+                                  width="100%"
+                                  height="100%"
+                                  className="icon-img"
                                 />
-                              ) : (
                                 <img
-                                  alt="expand"
-                                  src="/img/expand.svg"
-                                  style={{ width: "27px", height: "27px" }}
+                                  alt="line"
+                                  src="/img/line.svg"
+                                  style={{ width: "100%", height: "24px" }}
+                                  className="line"
                                 />
-                              )}
-                            </button>
-                            {showHideComp2 ? (
-                              <div className="tab-panel">
-                                <div className="item">
-                                  <p>Recipe ID</p>
-                                  <p>
-                                    <a href="#">{this.state.id}</a>
-                                  </p>
-                                </div>
-                                <div className="item">
-                                  <p>Blockchain</p>
-                                  <p>Pylons</p>
-                                </div>
-                                <div className="item">
-                                  <p>Permission</p>
-                                  <p>Exclusive</p>
-                                </div>
                               </div>
-                            ) : null}
-                          </li>
-                          <li>
-                            <div className="tab-name">
-                              <p>History</p>
-                              <img
-                                alt="History"
-                                src="/img/history.svg"
-                                style={{ width: "40px", height: "40px" }}
-                              />
-                              <img
-                                alt="line"
-                                src="/img/line.svg"
-                                style={{ width: "100%", height: "24px" }}
-                                className="line"
-                              />
-                            </div>
-                            <button
-                              onClick={() =>
-                                this.hideComponent("showHideComp3")
-                              }
-                            >
+                              <button
+                                onClick={() =>
+                                  this.hideComponent("showHideComp3")
+                                }
+                              >
+                                {showHideComp3 ? (
+                                  <img
+                                    alt="minimize"
+                                    src="/img/minimize.svg"
+                                    height="100%"
+                                    width="100%"
+                                    className="plus-minus"
+                                  />
+                                ) : (
+                                  <img
+                                    alt="expand"
+                                    src="/img/expand.svg"
+
+height="100%"
+width="100%"                                    className="plus-minus"
+                                  />
+                                )}
+                              </button>
                               {showHideComp3 ? (
-                                <img
-                                  alt="minimize"
-                                  src="/img/minimize.svg"
-                                  style={{ width: "27px", height: "27px" }}
-                                />
-                              ) : (
-                                <img
-                                  alt="expand"
-                                  src="/img/expand.svg"
-                                  style={{ width: "27px", height: "27px" }}
-                                />
-                              )}
-                            </button>
-                            {showHideComp3 ? (
-                              <div className="tab-panel">
-                                {nftHistory &&
-                                  nftHistory.map((val, i) => (
-                                    <div className="item" key={i}>
-                                      <p>
-                                        {moment(val.createdAt).format(
-                                          "DD/MM/YYYY hh:mm:ss"
-                                        )}
-                                      </p>
-                                      <p>{val.sender_name}</p>
-                                    </div>
-                                  ))}
-                              </div>
-                            ) : null}
-                          </li>
-                        </ul>
+                                <div className="tab-panel">
+                                  {nftHistory &&
+                                    nftHistory.map((val, i) => (
+                                      <div className="item" key={i}>
+                                        <p>
+                                          {moment(val.createdAt).format(
+                                            "DD/MM/YYYY hh:mm:ss"
+                                          )}
+                                        </p>
+                                        <p>{val.sender_name}</p>
+                                      </div>
+                                    ))}
+                                </div>
+                              ) : null}
+                            </li>
+                          </ul>
+                        </div>
+                        <div className="right-side">
+                          <div className="likes">
+                            <img
+                              alt="expand"
+                              src="/img/likes.svg"
+                              style={{ width: "41px", height: "39px" }}
+                            />
+                            <p>0</p>
+                          </div>
+                        </div>
                       </div>
-                      <div className="right-side">
-                        <div className="likes">
+                      <div className="buy-btn">
+                        <button onClick={this.handleLoginConfirmed}>
                           <img
-                            alt="expand"
-                            src="/img/likes.svg"
-                            style={{ width: "41px", height: "39px" }}
+                            alt="bg"
+                            src="/img/btnbg.png"
+                            style={{ width: "100%", height: "100%" }}
+                            className="btnbg"
                           />
-                          <p>0</p>
-                        </div>
+                          <span className="dot"></span>
+                          <div className="value-icon">
+                            <div className="values">
+                              <p>
+                                Buy for{" "}
+                                {price === undefined ||
+                                price === "undefined undefined"
+                                  ? "Free"
+                                  : price}
+                              </p>
+                            </div>
+                            <div className="icon">
+                              {getCurrencySymbol() ? (
+                                <img
+                                  alt="coin"
+                                  src={getCurrencySymbol()}
+                                  style={{ width: "30px", height: "29px" }}
+                                />
+                              ) : null}
+                            </div>
+                          </div>
+                        </button>
                       </div>
                     </div>
-                    <div className="buy-btn">
-                      <button onClick={this.handleLoginConfirmed}>
-                        <img
-                          alt="bg"
-                          src="/img/btnbg.png"
-                          style={{ width: "100%", height: "100%" }}
-                          className="btnbg"
-                        />
-                        <span className="dot"></span>
-                        <div className="value-icon">
-                          <div className="values">
-                            <p>
-                              Buy for{" "}
-                              {price === undefined ||
-                              price === "undefined undefined"
-                                ? "Free"
-                                : price}
-                            </p>
+                  </div>
+                  <div className="mobile-view">
+                  <div className="mob-img">
+                      <img
+                        alt="frame"
+                        src="/img/frame.png"
+                        width="100%"
+                        height="100%"
+                        className="mob-frame"
+                      />
+                      {getMedia()}
+                    </div>
+                    <div className={`${showHideDetails ? "bg2 details" : "bg details"}`}>
+                    <button
+                                onClick={() =>
+                                  this.hideComponent("showHideDetails")
+                                }
+                                className={`${showHideDetails ? "collapsebg collapse-btn" : "collapse-btn"}`}
+                              >
+                                {showHideDetails ? (
+                                  <i className="fa fa-angle-down" />
+                                ) : (
+                                  <i className="fa fa-angle-up" />
+                                )}
+                              </button>
+                      <div className="title-publisher">
+                        <h4>{this.state.name}</h4>
+                        <div className="publisher">
+                          <p>
+                            Created by <span>{createdBy}</span>
+                            <img
+                              alt="Published"
+                              src="/img/check.svg"
+                              style={{ width: "16px", height: "16px" }}
+                            />
+                          </p>
+                        </div>
+                        <div className="views">
+                          {" "}
+                          <img
+                            alt="views"
+                            src="/img/eye.svg"
+                            style={{ width: "34px", height: "20px" }}
+                          />
+                          <p>0 views</p>
+                        </div>
+                      </div>
+                      {showHideDetails ? (
+                        <>
+                      {this.state.description?.length > 35 ? (
+                        <>
+                          <div className="description">
+                            {showHideComp4 ? (
+                              <>
+                                <p>{this.state.description}</p>
+                                <a
+                                  onClick={() =>
+                                    this.hideComponent("showHideComp4")
+                                  }
+                                >
+                                  read less
+                                </a>
+                              </>
+                            ) : (
+                              <>
+                                <p>
+                                  {this.state.description?.substr(0, 35) +
+                                    ". . ."}
+                                </p>
+                                <a
+                                  onClick={() =>
+                                    this.hideComponent("showHideComp4")
+                                  }
+                                >
+                                  read more
+                                </a>
+                              </>
+                            )}
                           </div>
-                          <div className="icon">
-                            {getCurrencySymbol() ? (
-                              <img
-                                alt="coin"
-                                src={getCurrencySymbol()}
-                                style={{ width: "30px", height: "29px" }}
-                              />
-                            ) : null}
+                        </>
+                      ) : (
+                        <div className="description">
+                          <p>{this.state.description}</p>
+                        </div>
+                      )}
+
+                      <div className="more-details">
+                        <div className="left-side">
+                          <ul>
+                            <li>
+                              <div className="tab-name">
+                                <p>Ownership</p>
+                                <img
+                                  alt="Ownership"
+                                  src="/img/trophy.svg"
+                                  width="100%"
+                                  height="100%"
+                                  className="icon-img"
+                                />
+                                <img
+                                  alt="line"
+                                  src="/img/line.svg"
+                                  style={{ width: "100%", height: "24px" }}
+                                  className="line"
+                                />
+                              </div>
+                              <button
+                                onClick={() =>
+                                  this.hideComponent("showHideComp1")
+                                }
+                              >
+                                {showHideComp1 ? (
+                                  <img
+                                    alt="minimize"
+                                    src="/img/minimize.svg"
+                                    height="100%"
+                                    width="100%"
+                                    className="plus-minus"
+                                  />
+                                ) : (
+                                  <img
+                                    alt="expand"
+                                    src="/img/expand.svg"
+
+height="100%"
+width="100%"                                    className="plus-minus"
+                                  />
+                                )}
+                              </button>
+                              {showHideComp1 ? (
+                                <div className="tab-panel">
+                                  <div className="item">
+                                    <p>Owned by</p>
+                                    <p>
+                                      {!!(nftHistory && nftHistory.length)
+                                        ? nftHistory[nftHistory.length - 1]
+                                            .sender_name
+                                        : createdBy}
+                                    </p>
+                                  </div>
+                                  <div className="item">
+                                    <p>Edition</p>
+                                    <p>{this.state.edition}</p>
+                                  </div>
+                                  <div className="item">
+                                    <p>Royalty</p>
+                                    <p>{this.state.royalty}%</p>
+                                  </div>
+                                  <div className="item">
+                                    <p>Size</p>
+                                    <p>{this.state.dimentions}</p>
+                                  </div>
+                                  <div className="item">
+                                    <p>Creation Date</p>
+                                    <p>
+                                      {!!createdAt
+                                        ? moment
+                                            .unix(createdAt)
+                                            .format("DD/MM/YYYY hh:mm:ss")
+                                        : ""}
+                                    </p>
+                                  </div>
+                                </div>
+                              ) : null}
+                            </li>
+                            <li>
+                              <div className="tab-name">
+                                <p>NFT Detail</p>
+                                <img
+                                  alt="NFT Detail"
+                                  src="/img/detail.svg"
+                                  width="100%"
+                                  height="100%"
+                                  className="icon-img"
+                                />
+                                <img
+                                  alt="line"
+                                  src="/img/line.svg"
+                                  style={{ width: "100%", height: "24px" }}
+                                  className="line"
+                                />
+                              </div>
+                              <button
+                                onClick={() =>
+                                  this.hideComponent("showHideComp2")
+                                }
+                              >
+                                {showHideComp2 ? (
+                                  <img
+                                    alt="minimize"
+                                    src="/img/minimize.svg"
+                                    height="100%"
+                                    width="100%"
+                                    className="plus-minus"
+                                  />
+                                ) : (
+                                  <img
+                                    alt="expand"
+                                    src="/img/expand.svg"
+
+height="100%"
+width="100%"                                    className="plus-minus"
+                                  />
+                                )}
+                              </button>
+                              {showHideComp2 ? (
+                                <div className="tab-panel">
+                                  <div className="item">
+                                    <p>Recipe ID</p>
+                                    <p>
+                                      <a href="#">{this.state.id}</a>
+                                    </p>
+                                  </div>
+                                  <div className="item">
+                                    <p>Blockchain</p>
+                                    <p>Pylons</p>
+                                  </div>
+                                  <div className="item">
+                                    <p>Permission</p>
+                                    <p>Exclusive</p>
+                                  </div>
+                                </div>
+                              ) : null}
+                            </li>
+                            <li>
+                              <div className="tab-name">
+                                <p>History</p>
+                                <img
+                                  alt="History"
+                                  src="/img/history.svg"
+                                  width="100%"
+                                  height="100%"
+                                  className="icon-img"
+                                />
+                                <img
+                                  alt="line"
+                                  src="/img/line.svg"
+                                  style={{ width: "100%", height: "24px" }}
+                                  className="line"
+                                />
+                              </div>
+                              <button
+                                onClick={() =>
+                                  this.hideComponent("showHideComp3")
+                                }
+                              >
+                                {showHideComp3 ? (
+                                  <img
+                                    alt="minimize"
+                                    src="/img/minimize.svg"
+                                    height="100%"
+                                    width="100%"
+                                    className="plus-minus"
+                                  />
+                                ) : (
+                                  <img
+                                    alt="expand"
+                                    src="/img/expand.svg"
+
+height="100%"
+width="100%"                                    className="plus-minus"
+                                  />
+                                )}
+                              </button>
+                              {showHideComp3 ? (
+                                <div className="tab-panel">
+                                  {nftHistory &&
+                                    nftHistory.map((val, i) => (
+                                      <div className="item" key={i}>
+                                        <p>
+                                          {moment(val.createdAt).format(
+                                            "DD/MM/YYYY hh:mm:ss"
+                                          )}
+                                        </p>
+                                        <p>{val.sender_name}</p>
+                                      </div>
+                                    ))}
+                                </div>
+                              ) : null}
+                            </li>
+                          </ul>
+                        </div>
+                        <div className="right-side">
+                          <div className="likes">
+                            <img
+                              alt="expand"
+                              src="/img/likes.svg"
+                              style={{ width: "41px", height: "39px" }}
+                            />
+                            <p>0</p>
                           </div>
                         </div>
-                      </button>
-                    </div>
+                      </div>
+                       </>
+                  ) :null}
+                      <div className="buy-btn">
+                        <button onClick={this.handleLoginConfirmed}>
+                          <img
+                            alt="bg"
+                            src="/img/btnbg.png"
+                            style={{ width: "100%", height: "100%" }}
+                            className="btnbg"
+                          />
+                          <span className="dot"></span>
+                          <div className="value-icon">
+                            <div className="values">
+                              <p>
+                                Buy for{" "}
+                                {price === undefined ||
+                                price === "undefined undefined"
+                                  ? "Free"
+                                  : price}
+                              </p>
+                            </div>
+                            <div className="icon">
+                              {getCurrencySymbol() ? (
+                                <img
+                                  alt="coin"
+                                  src={getCurrencySymbol()}
+                                  style={{ width: "30px", height: "29px" }}
+                                />
+                              ) : null}
+                            </div>
+                          </div>
+                        </button>
+                      </div>
+                    </div>                         
                   </div>
                 </Col>
               </Row>
