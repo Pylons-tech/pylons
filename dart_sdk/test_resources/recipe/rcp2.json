@@ -1,0 +1,52 @@
+{
+  "name": "good-recipe2",
+  "cookbook": "cb2",
+  "latestVersion": "0.1.0",
+  "ids": {
+    "local": ""
+  },
+  "versions": {
+    "0.1.0": {
+      "NodeVersion": "",
+      "ID": "",
+      "Sender": "",
+      "Disabled": false,
+      "Name": "good-recipe2",
+      "CookbookID": "cb1",
+      "Description": "0.1.0|description of a recipe aaaaa",
+      "BlockInterval": 0,
+      "ExtraInfo": "",
+      "CoinInputs": [
+        {
+          "Coin": "pylon",
+          "Count": 3
+        }
+      ],
+      "ItemInputs": [],
+      "Entries": {
+        "CoinOutputs": [
+          {
+            "ID": "scripOut",
+            "Coin": "testcoin",
+            "Count": "333"
+          }
+        ],
+        "ItemOutputs": [],
+        "ItemModifyOutputs": []
+      },
+      "Outputs": [
+        {
+          "EntryIDs": [
+            "scripOut"
+          ],
+          "Weight": "1"
+        }
+      ]
+    }
+  },
+  "remotes": {},
+  "targetVersions": {
+    "local": "0.1.0",
+    "testnet": "0.1.0"
+  }
+}
