@@ -8,7 +8,13 @@ class PdfViewerFullOrHalf extends StatelessWidget {
   final bool previewFlag;
   final bool isLoading;
 
-  const PdfViewerFullOrHalf({Key? key, required this.pdfViewerFullScreen, required this.pdfViewerHalfScreen, required this.previewFlag, required this.isLoading}) : super(key: key);
+  const PdfViewerFullOrHalf(
+      {Key? key,
+      required this.pdfViewerFullScreen,
+      required this.pdfViewerHalfScreen,
+      required this.previewFlag,
+      required this.isLoading})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

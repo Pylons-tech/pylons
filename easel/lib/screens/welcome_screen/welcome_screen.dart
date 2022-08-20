@@ -25,13 +25,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             alignment: Alignment.topLeft,
             child: Text(
               kWelcomeToEaselText,
-              style: Theme.of(context).textTheme.bodyText1!.copyWith(color: EaselAppTheme.kDarkText, fontSize: 24.sp, fontWeight: FontWeight.w800),
+              style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  color: EaselAppTheme.kDarkText,
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.w800),
             ),
           ),
           SizedBox(height: 50.h),
           Text(
             kEaselDescriptionText,
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(color: EaselAppTheme.kDarkText, fontSize: 16.sp, fontWeight: FontWeight.w400),
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                color: EaselAppTheme.kDarkText,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w400),
           ),
           SizedBox(height: 50.h),
           Container(
