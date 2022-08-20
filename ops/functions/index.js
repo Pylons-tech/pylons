@@ -50,26 +50,26 @@ return message;
 
 
 // subscribeSlack is the main function called by Cloud Functions.
-// module.exports.subscribeSlack = (pubSubEvent, context) => {
-//   // const build = eventToBuild(pubSubEvent.data);
-//  // const alert = eventToError(pubSubEvent.data)
-//   console.log("DATA: " + pubSubEvent.data);
+module.exports.subscribeSlack = (pubSubEvent, context) => {
+  // const build = eventToBuild(pubSubEvent.data);
+ // const alert = eventToError(pubSubEvent.data)
+  console.log("DATA: " + pubSubEvent.data);
 
-//   // Skip if the current status is not in the status list.
-//   // Add additional statuses to list if you'd like:
-//   // QUEUED, WORKING, SUCCESS, FAILURE,
-//   // INTERNAL_ERROR, TIMEOUT, CANCELLED
-//   // const status = ['SUCCESS', 'FAILURE', 'INTERNAL_ERROR', 'TIMEOUT'];
-//   // if (status.indexOf(build.status) === -1) {
-//   //   return;
-//   // }
+  // Skip if the current status is not in the status list.
+  // Add additional statuses to list if you'd like:
+  // QUEUED, WORKING, SUCCESS, FAILURE,
+  // INTERNAL_ERROR, TIMEOUT, CANCELLED
+  // const status = ['SUCCESS', 'FAILURE', 'INTERNAL_ERROR', 'TIMEOUT'];
+  // if (status.indexOf(build.status) === -1) {
+  //   return;
+  // }
 
-//   // Send message to Slack.
-//   event = parseEvent(pubSubEvent.data)
-//   const message = createDiscordMessage();
-//   //const message = createSlackMessage(build);
-//   webhook.send(message);
-// };
+  // Send message to Slack.
+  // event = parseEvent(pubSubEvent.data)
+  // const message = createDiscordMessage();
+  const message = parseEvent(build);
+  webhook.send(message);
+};
 
 
 // eventToBuild transforms pubsub event message to a build object.
@@ -85,36 +85,36 @@ const parseEvent = (data) => {
 
 
 // // createSlackMessage create a message from a build object.
-// const createSlackMessage = (build) => {
-//   var embeds = []
-// let repoName = build.substitutions.REPO_NAME
-//   let message = {
-//    text: repoName,
-//     mrkdwn: true,
-//     attachments: [
-//       {
-//         title: build.name,
-//         title_link: build.logUrl,
-//         fields: [{
-//           title: 'Status',
-//           value: build.status
-//         }]
-//       }
-//     ]
-//   };
-//       if (build && build.steps) {
-//         build.steps.forEach(function (step) {
-//             var time = '';
-//             if (step.timing && step.timing.endTime) {
-//                 time = "took " + (new Date(step.timing.endTime) - new Date(step.timing.startTime)) * .001;
-//             }
-//             embeds.push({
-//                 title: step.name,
-//                 description: step.entrypoint + " " + step.args.join(' ') + " " + time + " and " + step.status,
-//                 color: build.status === 'FAILURE' ? 16714507 : 6618931
-//             });
-//         });
-//         message.embeds = embeds;
-//     }
-//   return message
-// }
+const createSlackMessage = (build) => {
+  var embeds = []
+let repoName = build.substitutions.REPO_NAME
+  let message = {
+   text: repoName,
+    mrkdwn: true,
+    attachments: [
+      {
+        title: build.name,
+        title_link: build.logUrl,
+        fields: [{
+          title: 'Status',
+          value: build.status
+        }]
+      }
+    ]
+  };
+      if (build && build.steps) {
+        build.steps.forEach(function (step) {
+            var time = '';
+            if (step.timing && step.timing.endTime) {
+                time = "took " + (new Date(step.timing.endTime) - new Date(step.timing.startTime)) * .001;
+            }
+            embeds.push({
+                title: step.name,
+                description: step.entrypoint + " " + step.args.join(' ') + " " + time + " and " + step.status,
+                color: build.status === 'FAILURE' ? 16714507 : 6618931
+            });
+        });
+        message.embeds = embeds;
+    }
+  return message
+}
