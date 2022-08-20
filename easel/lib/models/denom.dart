@@ -79,11 +79,14 @@ class Denom {
       case kEuroSymbol:
       case kAgoricSymbol:
       case kJunoSymbol:
-        return (double.parse(price.replaceAll(",", "").trim()) * kBigIntBase).toStringAsFixed(0);
+        return (double.parse(price.replaceAll(",", "").trim()) * kBigIntBase)
+            .toStringAsFixed(0);
       case kEthereumSymbol:
-        return (double.parse(price.replaceAll(",", "").trim()) * kEthIntBase).toStringAsFixed(0);
+        return (double.parse(price.replaceAll(",", "").trim()) * kEthIntBase)
+            .toStringAsFixed(0);
       default:
-        return (double.parse(price.replaceAll(",", "").trim()) * kBigIntBase).toStringAsFixed(0);
+        return (double.parse(price.replaceAll(",", "").trim()) * kBigIntBase)
+            .toStringAsFixed(0);
     }
   }
 }

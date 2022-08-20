@@ -14,7 +14,10 @@ class ShowSomethingWentWrongDialog {
   String errorMessage;
   VoidCallback onClose;
 
-  ShowSomethingWentWrongDialog({required this.context, required this.errorMessage, required this.onClose});
+  ShowSomethingWentWrongDialog(
+      {required this.context,
+      required this.errorMessage,
+      required this.onClose});
 
   Future show() {
     return showDialog(
@@ -23,7 +26,6 @@ class ShowSomethingWentWrongDialog {
           return Dialog(
             elevation: 0,
             backgroundColor: Colors.transparent,
-
             child: ScreenResponsive(
               mobileScreen: (context) => buildMobile(context),
               tabletScreen: (context) => buildTablet(context),
@@ -51,11 +53,13 @@ class ShowSomethingWentWrongDialog {
             SizedBox(height: 30.h),
             Text(
               errorMessage,
-              style: TextStyle(color: Colors.white, fontSize: 12.sp, fontWeight: FontWeight.w800),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w800),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 40.h),
-
             GestureDetector(
               child: SizedBox(
                 width: 0.35.sw,
@@ -63,19 +67,22 @@ class ShowSomethingWentWrongDialog {
                 child: Stack(
                   children: [
                     Positioned(
-
-                      left: 0,
+                        left: 0,
                         right: 0,
                         top: 0,
                         bottom: 0,
-
-                        child: Center(child: SizedBox(
-                            width: 130.w,
-                            child: SvgPicture.asset(kSvgCloseButton, fit: BoxFit.cover)))),
+                        child: Center(
+                            child: SizedBox(
+                                width: 130.w,
+                                child: SvgPicture.asset(kSvgCloseButton,
+                                    fit: BoxFit.cover)))),
                     Center(
                       child: Text(
                         kCloseText,
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            fontSize: 16.sp,
+                            color: EaselAppTheme.kWhite,
+                            fontWeight: FontWeight.w300),
                       ),
                     ),
                   ],
@@ -123,7 +130,6 @@ class ShowSomethingWentWrongDialog {
                 ),
               ),
               SizedBox(height: 40.h),
-
               GestureDetector(
                 child: SizedBox(
                   width: 0.35.sw,
@@ -131,19 +137,25 @@ class ShowSomethingWentWrongDialog {
                   child: Stack(
                     children: [
                       Positioned(
-
                           left: 0,
                           right: 0,
                           top: 0,
                           bottom: 0,
-
-                          child: Center(child: SizedBox(
-                              width: 130.w,
-                              child: SvgPicture.asset(kSvgCloseButton, fit: BoxFit.cover)))),
+                          child: Center(
+                              child: SizedBox(
+                                  width: 130.w,
+                                  child: SvgPicture.asset(kSvgCloseButton,
+                                      fit: BoxFit.cover)))),
                       Center(
                         child: Text(
                           kCloseText,
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(
+                                  fontSize: 16.sp,
+                                  color: EaselAppTheme.kWhite,
+                                  fontWeight: FontWeight.w300),
                         ),
                       ),
                     ],
@@ -170,6 +182,3 @@ class ShowSomethingWentWrongDialog {
     }
   }
 }
-
-
-

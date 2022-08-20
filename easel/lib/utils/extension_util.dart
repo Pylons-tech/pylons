@@ -77,13 +77,16 @@ extension AssetTypePar on String {
       value = kThreeDText;
     }
 
-    return AssetType.values.firstWhere((e) => e.toString() == 'AssetType.$value', orElse: () => AssetType.Image);
+    return AssetType.values.firstWhere(
+        (e) => e.toString() == 'AssetType.$value',
+        orElse: () => AssetType.Image);
   }
 }
 
 extension FreeDropEnum on String {
   FreeDrop toFreeDropEnum() {
-    return FreeDrop.values.firstWhere((e) => e.toString() == 'FreeDrop.$this', orElse: () => FreeDrop.unselected);
+    return FreeDrop.values.firstWhere((e) => e.toString() == 'FreeDrop.$this',
+        orElse: () => FreeDrop.unselected);
   }
 }
 
@@ -118,7 +121,8 @@ extension NFTValue on NFT {
 
 extension MyStringSnackBar on String {
   void show({BuildContext? context}) {
-    ScaffoldMessenger.of(context ?? navigatorKey.currentState!.overlay!.context).showSnackBar(
+    ScaffoldMessenger.of(context ?? navigatorKey.currentState!.overlay!.context)
+        .showSnackBar(
       SnackBar(
         content: Text(
           this,
@@ -161,7 +165,8 @@ extension GenerateEaselLinkToOpenPylons on String {
       "apn": "tech.pylons.wallet",
       "ibi": "xyz.pylons.wallet",
       "imv": "1",
-      "link": "https://wallet.pylons.tech/?action=purchase_nft&recipe_id=$this&cookbook_id=$cookbookId&nft_amount=1"
+      "link":
+          "https://wallet.pylons.tech/?action=purchase_nft&recipe_id=$this&cookbook_id=$cookbookId&nft_amount=1"
     }).toString();
   }
 }

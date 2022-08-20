@@ -8,7 +8,8 @@ class BackgroundWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = ScreenSizeUtil(context);
-    return SvgPicture.asset("assets/images/svg/background.svg",
+    return SvgPicture.asset(
+      "assets/images/svg/background.svg",
       width: screenSize.width(percent: 50),
       height: screenSize.height(percent: 60),
       fit: BoxFit.fill,

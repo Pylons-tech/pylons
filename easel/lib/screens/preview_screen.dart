@@ -21,7 +21,8 @@ import '../utils/easel_app_theme.dart';
 class PreviewScreen extends StatefulWidget {
   final VoidCallback onMoveToNextScreen;
 
-  const PreviewScreen({Key? key, required this.onMoveToNextScreen}) : super(key: key);
+  const PreviewScreen({Key? key, required this.onMoveToNextScreen})
+      : super(key: key);
 
   @override
   State<PreviewScreen> createState() => _PreviewScreenState();
@@ -52,7 +53,11 @@ class _PreviewScreenState extends State<PreviewScreen> {
                 Align(
                   alignment: Alignment.center,
                   child: Text(kPreviewNoticeText,
-                      textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: EaselAppTheme.kLightPurple, fontSize: 15.sp, fontWeight: FontWeight.w600)),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                          color: EaselAppTheme.kLightPurple,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w600)),
                 ),
                 Align(
                   alignment: Alignment.centerLeft,

@@ -24,7 +24,8 @@ abstract class Repository {
   /// Input : [cookBookId] id of the cookbook
   /// Output: if successful the output will be the list of [pylons.Recipe]
   /// will return error in the form of failure
-  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId});
+  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId(
+      {required String cookBookId});
 
   /// This method will return the saved String if exists
   /// Input: [key] the key of the value
@@ -92,7 +93,8 @@ abstract class Repository {
   /// This method will update draft in the local database from description Page
   /// Input:[SaveNft] this model data contains bring [id],[nftName],[nftDescription],[creatorName],[step]
   /// Output: [bool] returns whether the operation is successful or not
-  Future<Either<Failure, bool>> updateNftFromDescription({required SaveNft saveNft});
+  Future<Either<Failure, bool>> updateNftFromDescription(
+      {required SaveNft saveNft});
 
   /// This method will update the draft of the NFT
   /// Input: [id] of the draft that will be updated
@@ -107,7 +109,9 @@ abstract class Repository {
   /// This method is used uploading provided file to the server using [httpClient]
   /// Input : [file] which needs to be uploaded , [onUploadProgressCallback] a callback method which needs to be call on each progress
   /// Output : [ApiResponse] the ApiResponse which can contain [success] or [error] response
-  Future<Either<Failure, ApiResponse>> uploadFile({required File file, required OnUploadProgressCallback onUploadProgressCallback});
+  Future<Either<Failure, ApiResponse>> uploadFile(
+      {required File file,
+      required OnUploadProgressCallback onUploadProgressCallback});
 
   /// This method will get the drafts List from the local database
   /// Output: [List] returns that contains a number of [NFT]
@@ -146,7 +150,8 @@ abstract class Repository {
   /// This function is used to generate the NFT link to be shared with others after publishing
   /// Input: [recipeId] and [cookbookId] used in the link generation as query parameters
   /// Output: [String] returns the generated NFTs link to be shared with others
-  String generateEaselLinkForShare({required String recipeId, required String cookbookId});
+  String generateEaselLinkForShare(
+      {required String recipeId, required String cookbookId});
 
   /// This function is used to launch the link generated and open the link in external source platform
   /// Input: [url] is the link to be launched by the launcher
@@ -168,16 +173,23 @@ class RepositoryImp implements Repository {
   final FileUtilsHelper fileUtilsHelper;
   final CrashlyticsHelper crashlyticsHelper;
 
-  RepositoryImp({required this.networkInfo, required this.remoteDataSource, required this.localDataSource, required this.fileUtilsHelper, required this.crashlyticsHelper});
+  RepositoryImp(
+      {required this.networkInfo,
+      required this.remoteDataSource,
+      required this.localDataSource,
+      required this.fileUtilsHelper,
+      required this.crashlyticsHelper});
 
   @override
-  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId}) async {
+  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId(
+      {required String cookBookId}) async {
     if (!await networkInfo.isConnected) {
       return const Left(NoInternetFailure(kNoInternet));
     }
 
     try {
-      var sdkResponse = await remoteDataSource.getRecipesByCookbookID(cookBookId);
+      var sdkResponse =
+          await remoteDataSource.getRecipesByCookbookID(cookBookId);
       log(sdkResponse.toString(), name: 'pylons_sdk');
 
       return Right(sdkResponse);
@@ -264,7 +276,8 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> updateNftFromDescription({required SaveNft saveNft}) async {
+  Future<Either<Failure, bool>> updateNftFromDescription(
+      {required SaveNft saveNft}) async {
     try {
       bool result = await localDataSource.updateNftFromDescription(saveNft);
 
@@ -294,7 +307,8 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> updateNftFromPrice({required SaveNft saveNft}) async {
+  Future<Either<Failure, bool>> updateNftFromPrice(
+      {required SaveNft saveNft}) async {
     try {
       bool result = await localDataSource.updateNftFromPrice(saveNft);
 
@@ -306,9 +320,12 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, ApiResponse>> uploadFile({required File file, required OnUploadProgressCallback onUploadProgressCallback}) async {
+  Future<Either<Failure, ApiResponse>> uploadFile(
+      {required File file,
+      required OnUploadProgressCallback onUploadProgressCallback}) async {
     try {
-      ApiResponse apiResponse = await remoteDataSource.uploadFile(file: file, uploadProgressCallback: onUploadProgressCallback);
+      ApiResponse apiResponse = await remoteDataSource.uploadFile(
+          file: file, uploadProgressCallback: onUploadProgressCallback);
 
       return Right(apiResponse);
     } on Exception catch (_) {
@@ -357,7 +374,6 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, PickedFileModel>> pickFile(NftFormat format) async {
     try {
-
       PickedFileModel pickedFileModel = await fileUtilsHelper.pickFile(format);
 
       return Right(pickedFileModel);
@@ -383,7 +399,8 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  String generateEaselLinkForShare({required String recipeId, required String cookbookId}) {
+  String generateEaselLinkForShare(
+      {required String recipeId, required String cookbookId}) {
     return recipeId.generateEaselLinkToShare(cookbookId: cookbookId);
   }
 

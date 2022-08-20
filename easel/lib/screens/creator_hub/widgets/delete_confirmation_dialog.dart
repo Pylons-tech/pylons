@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
 class DeleteDialog {
   final BuildContext contextt;
   final NFT nft;
@@ -28,7 +27,8 @@ class DeleteDialog {
         builder: (_) {
           return Dialog(
             elevation: 0,
-            insetPadding: EdgeInsets.symmetric(horizontal: isTablet ? 45.w : 15.w),
+            insetPadding:
+                EdgeInsets.symmetric(horizontal: isTablet ? 45.w : 15.w),
             backgroundColor: Colors.transparent,
             child: ClipPath(
               clipper: DialogClipper(),
@@ -88,7 +88,7 @@ class DeleteDialog {
                               title: "no".tr(),
                               bgColor: EaselAppTheme.kWhite.withOpacity(0.3),
                               textColor: EaselAppTheme.kWhite,
-                              onPressed: ()  {
+                              onPressed: () {
                                 Navigator.of(_).pop();
                               },
                               cuttingHeight: 12.h,
