@@ -5,7 +5,9 @@ class ScreenResponsive extends StatelessWidget {
   final WidgetBuilder mobileScreen;
   final WidgetBuilder tabletScreen;
 
-  const ScreenResponsive({Key? key, required this.mobileScreen, required this.tabletScreen}) : super(key: key);
+  const ScreenResponsive(
+      {Key? key, required this.mobileScreen, required this.tabletScreen})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

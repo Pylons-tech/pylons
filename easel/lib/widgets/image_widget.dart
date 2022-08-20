@@ -25,7 +25,8 @@ class ImageWidget extends StatelessWidget {
             child: CachedNetworkImage(
               fit: BoxFit.fitHeight,
               imageUrl: filePath!,
-              errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
+              errorWidget: (a, b, c) =>
+                  const Center(child: Icon(Icons.error_outline)),
               placeholder: (context, url) => Center(
                 child: SizedBox(
                   height: 50.0.h,

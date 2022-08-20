@@ -12,7 +12,14 @@ class PylonsButton extends StatelessWidget {
   final Color color;
   final Color textColor;
 
-  const PylonsButton({Key? key, this.showArrow = false, this.textColor = Colors.white, required this.btnText, required this.onPressed, this.mobileScreenButtonWidth = 0.5, required this.color})
+  const PylonsButton(
+      {Key? key,
+      this.showArrow = false,
+      this.textColor = Colors.white,
+      required this.btnText,
+      required this.onPressed,
+      this.mobileScreenButtonWidth = 0.5,
+      required this.color})
       : super(key: key);
 
   @override
@@ -42,7 +49,10 @@ class PylonsButton extends StatelessWidget {
               Center(
                 child: Text(
                   btnText,
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 15.sp, color: textColor, fontWeight: FontWeight.w600),
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      fontSize: 15.sp,
+                      color: textColor,
+                      fontWeight: FontWeight.w600),
                 ),
               )
             ],

@@ -23,18 +23,25 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
     return Scaffold(
       backgroundColor: EaselAppTheme.kLightWhiteBackground,
       body: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 40.0.w),
+        padding: EdgeInsets.symmetric(horizontal: 40.0.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 80.h,),
+            SizedBox(
+              height: 80.h,
+            ),
             Text(
               "welcome_to_easel".tr(),
-              style: TextStyle(color: EaselAppTheme.kBlack, fontSize: 20.sp, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: EaselAppTheme.kBlack,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.bold),
               textAlign: TextAlign.start,
             ),
-            SizedBox(height: 50.h,),
+            SizedBox(
+              height: 50.h,
+            ),
             Text(
               "easel_is_tool".tr(),
               style: TextStyle(
@@ -42,27 +49,29 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
                 fontSize: 14.sp,
               ),
             ),
-            SizedBox(height: 30.h,),
-
+            SizedBox(
+              height: 30.h,
+            ),
             Text(
               "after_you_successfully".tr(),
               style: TextStyle(
                 color: EaselAppTheme.kBlack,
                 fontSize: 14.sp,
-
               ),
             ),
-            SizedBox(height: 30.h,),
-
+            SizedBox(
+              height: 30.h,
+            ),
             Text(
               "once_you_press".tr(),
               style: TextStyle(
                 color: EaselAppTheme.kBlack,
                 fontSize: 14.sp,
-
               ),
             ),
-            SizedBox(height: 180.h,),
+            SizedBox(
+              height: 180.h,
+            ),
             ClippedButton(
               title: "start".tr(),
               bgColor: EaselAppTheme.kBlue,

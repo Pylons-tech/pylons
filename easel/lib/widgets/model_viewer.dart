@@ -6,7 +6,8 @@ class Model3dViewer extends StatefulWidget {
   final bool isFile;
   final String? path;
 
-  const Model3dViewer({Key? key, required this.isFile, required this.path}) : super(key: key);
+  const Model3dViewer({Key? key, required this.isFile, required this.path})
+      : super(key: key);
 
   @override
   _Model3dViewerState createState() => _Model3dViewerState();
