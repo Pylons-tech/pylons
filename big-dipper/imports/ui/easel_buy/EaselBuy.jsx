@@ -306,6 +306,7 @@ export default class EaselBuy extends Component {
             shadow-intensity="1"
             camera-controls
             enable-pan
+            className="model-viewer"
           ></model-viewer>
         );
       else
@@ -329,17 +330,19 @@ export default class EaselBuy extends Component {
             <Container>
               <Row>
                 <Col xl={5} lg={5} md={12} sm={12}>
-                  <div className="mob-img">
-                    <img
-                      alt="frame"
-                      src="/img/frame.png"
-                      width="100%"
-                      height="100%"
-                      className="mob-frame"
-                    />
-                    {getMedia()}
+                  <div className="desktop-view">
+                    <div className="mob-img">
+                      <img
+                        alt="frame"
+                        src="/img/frame.png"
+                        width="100%"
+                        height="100%"
+                        className="mob-frame"
+                      />
+                      {getMedia()}
+                    </div>
                   </div>
-                </Col>
+                </Col> 
                 <Col xl={7} lg={7} md={12} sm={12}>
                   <div className="desktop-view">
                     <div className="details">
@@ -643,6 +646,16 @@ width="100%"                                    className="plus-minus"
                     </div>
                   </div>
                   <div className="mobile-view">
+                  <div className="mob-img">
+                      <img
+                        alt="frame"
+                        src="/img/frame.png"
+                        width="100%"
+                        height="100%"
+                        className="mob-frame"
+                      />
+                      {getMedia()}
+                    </div>
                     <div className={`${showHideDetails ? "bg2 details" : "bg details"}`}>
                     <button
                                 onClick={() =>
