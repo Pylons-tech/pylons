@@ -104,7 +104,7 @@ var MaxFuncDecls = decls.NewFunction("max",
 var MinIntIntFunc = &functions.Overload{
 	// operator for 2 param
 	Operator: "min_int_int",
-	Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+	Binary: func(lhs, rhs ref.Val) ref.Val {
 		lftInt64 := lhs.Value().(int64)
 		rgtInt64 := rhs.Value().(int64)
 		if lftInt64 > rgtInt64 {
@@ -118,7 +118,7 @@ var MinIntIntFunc = &functions.Overload{
 var MinDoubleDoubleFunc = &functions.Overload{
 	// operator for 2 param
 	Operator: "min_double_double",
-	Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+	Binary: func(lhs, rhs ref.Val) ref.Val {
 		lftInt64 := lhs.Value().(float64)
 		rgtInt64 := rhs.Value().(float64)
 		if lftInt64 > rgtInt64 {
@@ -132,7 +132,7 @@ var MinDoubleDoubleFunc = &functions.Overload{
 var MinIntDoubleFunc = &functions.Overload{
 	// operator for 2 param
 	Operator: "min_int_double",
-	Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+	Binary: func(lhs, rhs ref.Val) ref.Val {
 		lftInt64 := float64(lhs.Value().(int64))
 		rgtInt64 := rhs.Value().(float64)
 		if lftInt64 > rgtInt64 {
@@ -146,7 +146,7 @@ var MinIntDoubleFunc = &functions.Overload{
 var MinDoubleIntFunc = &functions.Overload{
 	// operator for 2 param
 	Operator: "min_double_int",
-	Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+	Binary: func(lhs, rhs ref.Val) ref.Val {
 		lftInt64 := lhs.Value().(float64)
 		rgtInt64 := float64(rhs.Value().(int64))
 		if lftInt64 > rgtInt64 {
@@ -160,7 +160,7 @@ var MinDoubleIntFunc = &functions.Overload{
 var MaxIntIntFunc = &functions.Overload{
 	// operator for 2 param
 	Operator: "max_int_int",
-	Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+	Binary: func(lhs, rhs ref.Val) ref.Val {
 		lftInt64 := lhs.Value().(int64)
 		rgtInt64 := rhs.Value().(int64)
 		if lftInt64 < rgtInt64 {
@@ -174,7 +174,7 @@ var MaxIntIntFunc = &functions.Overload{
 var MaxDoubleDoubleFunc = &functions.Overload{
 	// operator for 2 param
 	Operator: "max_double_double",
-	Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+	Binary: func(lhs, rhs ref.Val) ref.Val {
 		lftInt64 := lhs.Value().(float64)
 		rgtInt64 := rhs.Value().(float64)
 		if lftInt64 < rgtInt64 {
@@ -188,7 +188,7 @@ var MaxDoubleDoubleFunc = &functions.Overload{
 var MaxIntDoubleFunc = &functions.Overload{
 	// operator for 2 param
 	Operator: "max_int_double",
-	Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+	Binary: func(lhs, rhs ref.Val) ref.Val {
 		lftInt64 := float64(lhs.Value().(int64))
 		rgtInt64 := rhs.Value().(float64)
 		if lftInt64 < rgtInt64 {
@@ -202,7 +202,7 @@ var MaxIntDoubleFunc = &functions.Overload{
 var MaxDoubleIntFunc = &functions.Overload{
 	// operator for 2 param
 	Operator: "max_double_int",
-	Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+	Binary: func(lhs, rhs ref.Val) ref.Val {
 		lftInt64 := lhs.Value().(float64)
 		rgtInt64 := float64(rhs.Value().(int64))
 		if lftInt64 < rgtInt64 {
@@ -239,7 +239,7 @@ var MultiplyFuncDecls = decls.NewFunction("multiply",
 var MultiplyFunc = &functions.Overload{
 	// operator for 2 param
 	Operator: "multiply_int_int",
-	Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+	Binary: func(lhs, rhs ref.Val) ref.Val {
 		return types.Int(lhs.Value().(int64) * rhs.Value().(int64))
 	},
 }

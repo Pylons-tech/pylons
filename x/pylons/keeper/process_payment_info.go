@@ -9,7 +9,7 @@ import (
 
 // ProcessPaymentInfos issues coins based on provided paymentInfos to the senderAddr
 func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.PaymentInfo, senderAddr sdk.AccAddress) error {
-	paymentProcessors := k.PaymentProcessors(ctx)
+	paymentProcessors := types.DefaultPaymentProcessors
 	for _, pi := range paymentInfos {
 		if k.HasPaymentInfo(ctx, pi.PurchaseId) {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the purchase ID is already being used")
@@ -63,7 +63,7 @@ func (k Keeper) ValidatePaymentInfo(ctx sdk.Context, paymentInfos []types.Paymen
 	// when paying, cannot use existing balance for denoms controlled by paymentProcessors where send is disabled
 	// we need to do this check before processing payments
 	// first, build denomsPaymentInfoMap and paymentProcessofInfoMap from the provided paymentInfos
-	allPaymentProcessors := k.PaymentProcessors(ctx)
+	allPaymentProcessors := types.DefaultPaymentProcessors
 	denomsPaymentInfoMap := make(map[string][]types.PaymentInfo)
 	paymentInfoProcessorMap := make(map[string]types.PaymentProcessor)
 	for _, pi := range paymentInfos {
@@ -119,7 +119,7 @@ func (k Keeper) ValidatePaymentInfo(ctx sdk.Context, paymentInfos []types.Paymen
 
 // VerifyPaymentInfos verifies payment info for stripe refund
 func (k Keeper) VerifyPaymentInfos(ctx sdk.Context, paymentInfos *types.PaymentInfo, senderAddr sdk.AccAddress) error {
-	paymentProcessors := k.PaymentProcessors(ctx)
+	paymentProcessors := types.DefaultPaymentProcessors
 
 	found := false
 	for _, pp := range paymentProcessors {

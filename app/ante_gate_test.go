@@ -89,7 +89,7 @@ func executeSendTx(ctx client.Context, net *network.Network, addressSent string)
 }
 
 // tx send coin from addressSent to
-func executeOtherSendTx(ctx client.Context, net *network.Network, addressSent string, addressReceive string) testutil.BufferWriter {
+func executeOtherSendTx(ctx client.Context, net *network.Network, addressSent, addressReceive string) testutil.BufferWriter {
 	common := CommonArgs(net)
 	args := []string{addressSent, addressReceive, "10stake"}
 	args = append(args, common...)

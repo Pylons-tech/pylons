@@ -55,12 +55,12 @@ func ValidateID(s string) error {
 
 // ValidateUsername validates Usernames
 // A valid username follows:
-// 		Usernames can consist of lowercase and capitals
-//		Usernames can consist of alphanumeric characters
-//		Usernames can consist of underscore and hyphens and spaces
-//		Cannot be two underscores, two hypens or two spaces in a row
-//		Cannot have a underscore, hypen or space at the start or end
-//		Cannot be a valid cosmos SDK address
+// Usernames can consist of lowercase and capitals
+// Usernames can consist of alphanumeric characters
+// Usernames can consist of underscore and hyphens and spaces
+// Cannot be two underscores, two hypens or two spaces in a row
+// Cannot have a underscore, hypen or space at the start or end
+// Cannot be a valid cosmos SDK address
 func ValidateUsername(s string) error {
 	regex := regexp.MustCompile(`^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$`)
 	if regex.MatchString(s) {

@@ -1,15 +1,28 @@
 version: '3'
 
 services:
-  node0:
+  node:
     container_name: pylonsnode
     build:
       context: .
       args:
-        - BINARY_VERSION=v0.4.2
-    command: test_node_deploy.sh
+        - BINARY_VERSION=v1.0.0-rc2
     ports:
       - "26657:26657"
       - "1317:1317"
     volumes:
       - ./debug:/debug
+      - trace:/tmp/trace
+  logger:
+    image: "ruby:latest"
+    depends_on:
+      - "node"
+    volumes:
+      - trace:/tmp/trace
+      - ./trace.rb:/root/trace.rb
+    command: bash -c 'tail -f /tmp/trace/trace.fifo | ruby /root/trace.rb'
+volumes:
+  trace:
+    #driver_opts:
+    #  type: tmpfs
+    #  device: tmpfs
