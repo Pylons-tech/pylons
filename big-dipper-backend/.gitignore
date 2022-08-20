@@ -1,0 +1,9 @@
+.DS_Store
+node_modules/
+.vscode
+output/
+.envrc
+settings.json
+ali-scripts.txt
+firebase.json
+
