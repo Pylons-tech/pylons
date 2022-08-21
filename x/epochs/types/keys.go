@@ -17,7 +17,5 @@ const (
 	MemStoreKey = "mem_epochs"
 )
 
-var (
-	// KeyPrefixEpoch defines prefix key for storing epochs
-	KeyPrefixEpoch = []byte{0x01}
-)
+// KeyPrefixEpoch defines prefix key for storing epochs
+var KeyPrefixEpoch = []byte{0x01}
