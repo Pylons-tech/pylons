@@ -10,7 +10,7 @@
 cmd/pylonsd/cmd/*.plc
 cmd/pylonsd/cmd/*.plr
 cmd/pylonsd/cmd/*.pdt
-
+node_modules
 
 # starport generated folders
 ./vue/
