@@ -28,5 +28,6 @@ artifacts
 cmd/pylonsd/__debug_bin
 proto/dart/*
 
-debug
-log.txt
+big-dipper/settings.json
+
+*.env
