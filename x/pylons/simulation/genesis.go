@@ -70,7 +70,7 @@ func RandomizedGenState(simState *module.SimulationState) {
 			UpdateUsernameFee:         updateUsernameFee,
 			MinTransferFee:            minTransferFee,
 			MaxTransferFee:            maxTransferFee,
-			DistrEpochIdentifier:      "thirtySeconds",
+			DistrEpochIdentifier:      "hour",
 			MaxTxsInBlock:             uint64(1000),
 		},
 		EntityCount:                  0,
