@@ -222,6 +222,7 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 		})
 	}
 }
+
 func (suite *IntegrationTestSuite) TestValidatePaymentInfo() {
 	k := suite.k
 	ctx := suite.ctx
