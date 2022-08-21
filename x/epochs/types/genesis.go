@@ -17,7 +17,7 @@ func NewGenesisState(epochs []EpochInfo) *GenesisState {
 func DefaultGenesis() *GenesisState {
 	epochs := []EpochInfo{
 		{
-			Identifier:            "thirtySeconds",
+			Identifier:            "week",
 			StartTime:             time.Time{},
 			Duration:              time.Second * 30,
 			CurrentEpoch:          0,
@@ -25,7 +25,7 @@ func DefaultGenesis() *GenesisState {
 			EpochCountingStarted:  false,
 		},
 		{
-			Identifier:            "minute",
+			Identifier:            "day",
 			StartTime:             time.Time{},
 			Duration:              time.Minute * 1,
 			CurrentEpoch:          0,
