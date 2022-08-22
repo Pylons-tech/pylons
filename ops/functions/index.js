@@ -8,22 +8,9 @@ const webhook = new IncomingWebhook(url);
 
 module.exports = functions.http('discordAlerts', (request, response) => {
 
-  
-  // const tag = request.body.queryResult.intent
-
-  // let jsonResponse = {};
-    //fulfillment response to be sent to the agent if the request tag is equal to "welcome tag"
-  // errAlert = parseEvent(request.data)
-
-  
   message = createDiscordMessage(request.body)
   console.log(request.body)
   webhook.send(message)
-
-
-
-  // response.end()
-
 
 });
 
