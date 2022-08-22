@@ -124,11 +124,11 @@ abstract class RemoteDataStore {
       {required String recipeId, required String cookBookID});
 
   /// This method is used to get history of nft owners
-  /// Input: [recipeId] and [cookBookID] of the NFT
+  /// Input: [itemId] and [cookBookID] of the NFT
   /// Output : [List][NftOwnershipHistory] will contain the list of NftOwnershipHistory data if success
   /// else will throw error
   Future<List<NftOwnershipHistory>> getNftOwnershipHistory(
-      {required String recipeId, required String cookBookId});
+      {required String itemId, required String cookBookId});
 
   /// This method is used to get views count of NFT
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
@@ -719,11 +719,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
   @override
   Future<List<NftOwnershipHistory>> getNftOwnershipHistory(
-      {required String recipeId, required String cookBookId}) async {
+      {required String itemId, required String cookBookId}) async {
     final baseApiUrl = getBaseEnv().baseApiUrl;
-
     final uri = Uri.parse(
-        "$baseApiUrl/pylons/get_recipe_history/$cookBookId/$recipeId");
+        "$baseApiUrl/pylons/item_history/$cookBookId/$itemId");
     final List<NftOwnershipHistory> historyList = [];
 
     final historyResponse = await httpClient.get(uri);

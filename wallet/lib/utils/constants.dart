@@ -425,12 +425,8 @@ const kEaselNFT = "Easel_NFT";
 const kUpylon = "upylon";
 const kExtraInfo = "extraInfo";
 
-const kItemId = "item_id";
+const kItemId = "id";
 const kCookbookId = "cookbook_id";
-const kRecipe_id = "recipe_id";
-const kSender = "sender";
-const kSenderName = "sender_name";
-const kReceiver = "receiver";
 const kAmount = "amount";
 const kCreatedAt = "created_at";
 
