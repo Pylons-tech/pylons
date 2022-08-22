@@ -338,5 +338,10 @@
   "user_declined_request" : "User Declined the request",
   "nft_sold" : "NFT sold!",
   "view_detail" : "View detail",
-  "your_nft_sold_msg_to": "Your NFT \"{}\" has been sold to "
+  "your_nft_sold_msg_to": "Your NFT \"{}\" has been sold to ",
+  "submit_feedback": "Submit Feedback",
+  "subject": "Subject",
+  "character_limit" :"{} character limit",
+  "enter_description_text" : "Enter description",
+  "enter_subject_text": "Enter subject"
 }

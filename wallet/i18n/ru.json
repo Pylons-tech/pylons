@@ -311,5 +311,10 @@
   "no_notifications_yet": "Уведомлений пока нет",
   "nft_sold" : "NFT Продано!",
   "view_detail" : "Подробнее",
-  "your_nft_sold_msg_to": "Ваш NFT \"{}\" продан к "
+  "your_nft_sold_msg_to": "Ваш NFT \"{}\" продан к ",
+  "submit_feedback": "Отправить отзыв",
+  "subject": "Предмет",
+  "character_limit" :"{} лимит символов",
+  "enter_description_text" : "Введите описание",
+  "enter_subject_text": "Введите тему"
 }

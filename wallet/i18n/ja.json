@@ -305,5 +305,10 @@
   "nft_sold" : "NFT 販売済み!",
   "view_detail" : "詳細を表示",
   "your_nft_sold_msg_to": "あなたのNFT \"{}\"は販売されました ",
-  "no_notifications_yet": "通知はまだありません"
+  "no_notifications_yet": "通知はまだありません",
+  "submit_feedback": "フィードバックを送信",
+  "subject": "主題",
+  "character_limit" :"{} 文字数制限",
+  "enter_description_text" : "説明を入力",
+  "enter_subject_text": "件名を入力してください"
 }

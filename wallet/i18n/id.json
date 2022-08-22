@@ -305,5 +305,10 @@
   "wallet_address_arg": "Alamat Dompet: {}",
   "account_creation_failed" : "Pembuatan akun Gagal",
   "invite_others" : "Undang Lainnya",
-  "dynamic_link_failure" : "Dynamic link kegagalan penciptaan"
+  "dynamic_link_failure" : "Dynamic link kegagalan penciptaan",
+  "submit_feedback": "Berikan umpan balik",
+  "subject": "Subjek",
+  "character_limit" :"{} batas karakter",
+  "enter_description_text" : "Masukkan deskripsi",
+  "enter_subject_text": "Masukkan subjek"
 }

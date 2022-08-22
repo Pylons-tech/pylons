@@ -305,5 +305,10 @@
   "wallet_address_arg": "Portemonnee-adres: {}",
   "account_creation_failed" : "Kontoerstellung fehlgeschlagen",
   "invite_others" : "Andere einladen",
-  "dynamic_link_failure" : "Dynamic link erstellungsfehler"
+  "dynamic_link_failure" : "Dynamic link erstellungsfehler",
+  "submit_feedback": "Feedback senden",
+  "subject": "Thema",
+  "character_limit" :"{} Zeichenbegrenzung",
+  "enter_description_text" : "Beschreibung eingeben",
+  "enter_subject_text": "Betreff eingeben"
 }

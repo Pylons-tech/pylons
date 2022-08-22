@@ -510,3 +510,6 @@ const String kZeroInt = "0";
 
 const ipfsDomain = 'https://ipfs.io/ipfs';
 const proxyIpfsDomain = 'https://proxy.pylons.tech/ipfs';
+
+const kMaxDescription = 256;
+

@@ -334,5 +334,10 @@
   "user_declined_request" : "Người dùng đã từ chối yêu cầu",
   "nft_sold" : "NFT đã bán!",
   "view_detail" : "Xem chi tiết",
-  "your_nft_sold_msg_to": "NFT của bạn \"{}\" đã được bán cho "
+  "your_nft_sold_msg_to": "NFT của bạn \"{}\" đã được bán cho ",
+  "submit_feedback": "Gửi phản hồi",
+  "subject": "Môn học",
+  "character_limit" :"{} giới hạn ký tự",
+  "enter_description_text" : "Nhập mô tả",
+  "enter_subject_text": "Nhập chủ đề"
 }

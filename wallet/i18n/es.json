@@ -305,5 +305,10 @@
   "no_internet_connection": "Comprueba tu conexión a Internet e inténtalo de nuevo. Si este problema persiste, envíenos un correo electrónico:",
   "purchase_successful": "Purchase successful",
   "view": "vista",
-  "views": "puntos de vista"
+  "views": "puntos de vista",
+  "submit_feedback": "Enviar comentarios",
+  "subject": "Sujeta",
+  "character_limit" :"{} límite de caracteres",
+  "enter_description_text" : "Introduce la descripción",
+  "enter_subject_text": "Introduce el asunto"
 }
