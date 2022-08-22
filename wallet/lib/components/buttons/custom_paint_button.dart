@@ -9,7 +9,7 @@ class CustomPaintButton extends StatelessWidget {
   final Color bgColor;
   final double width;
 
-  CustomPaintButton(
+  const CustomPaintButton(
       {Key? key,
       required this.onPressed,
       required this.title,
