@@ -193,7 +193,6 @@ flutter:
           weight: 700
 
 dependency_overrides:
-  path: 1.8.2
   webview_flutter_android: "2.8.14"
   alan:
     git:
