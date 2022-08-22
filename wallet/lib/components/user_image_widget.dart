@@ -194,7 +194,7 @@ class UserBannerPickerWidget extends UserBannerWidget {
   UserBannerPickerWidget();
 
   int getBrightness(File file) {
-    im.Image? image = im.decodeImage(file.readAsBytesSync());
+    final im.Image? image = im.decodeImage(file.readAsBytesSync());
     final data = image?.getBytes();
     var colorSum = 0;
     for (var x = 0; x < data!.length; x += 4) {
@@ -242,8 +242,8 @@ class UserBannerPickerWidget extends UserBannerWidget {
               File(newImagePathEither.getOrElse(() => '')),
               context);
 
-          int brightness = getBrightness(file);
-          bool isBannerDark = getIsBannerDark(brightness);
+          final int brightness = getBrightness(file);
+          final bool isBannerDark = getIsBannerDark(brightness);
 
           repository.saveIsBannerDark(isBannerDark);
           viewModel.refresh();
