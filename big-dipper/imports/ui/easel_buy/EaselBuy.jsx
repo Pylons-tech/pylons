@@ -89,12 +89,6 @@ export default class EaselBuy extends Component {
         null;
     }
   }
-
-  // hideComponentDesc() {
-  //   this.setState({
-  //     showHideDetails: !this.state.showHideDetails,
-  //   });
-  // }
  
   componentDidMount() {
     this.handleFetchData();
