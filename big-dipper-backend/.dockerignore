@@ -3,3 +3,4 @@
 /.github
 .git
 .envrc
+package-lock.json

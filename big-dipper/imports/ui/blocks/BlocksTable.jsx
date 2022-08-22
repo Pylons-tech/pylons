@@ -78,7 +78,7 @@ export default class BlocksTable extends Component {
 
     render(){
 
-        return !this.props.homepage ? <div>
+        return !this.props.homepage ? <div id="blocks">
             <Helmet>
                 <title>Latest Blocks | Big Dipper</title>
                 <meta name="description" content="Latest blocks committed by validators" />

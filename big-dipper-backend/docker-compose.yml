@@ -14,6 +14,7 @@ services:
       MONGO_URL: mongodb://mongo:27017/meteor
       PORT: 3000
       METEOR_SETTINGS: ${METEOR_SETTINGS}
+      FIREBASE_CONFIG: ${FIREBASE_CONFIG}
 
   mongo:
     image: mongo:latest
