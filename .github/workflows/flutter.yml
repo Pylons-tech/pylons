@@ -21,6 +21,7 @@ jobs:
       - run: |
           flutter --version
           cd wallet
+          mkdir .env
           flutter pub get
           flutter analyze
           flutter lint
