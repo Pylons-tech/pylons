@@ -21,7 +21,7 @@ jobs:
       - run: |
           flutter --version
           cd wallet
-          mkdir .env
+          mkdir env
           flutter pub get
           flutter analyze
           flutter lint
@@ -42,6 +42,7 @@ jobs:
       - run: |
           flutter --version
           cd easel
+          touch lib/env.dart
           flutter pub get
           flutter analyze
           flutter lint
