@@ -102,7 +102,6 @@ class WalletsStoreImp implements WalletsStore {
       creds: creds,
     ));
 
-    print(wallets.value.length);
 
     if (!response.success) {
       crashlyticsHelper.recordFatalError(error: response.error);

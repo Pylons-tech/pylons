@@ -13,6 +13,11 @@ import 'package:flutter/rendering.dart';
 /// object the corresponding scrollables should be given unique keys.
 /// Without the keys, Flutter may reuse a controller after it has been disposed,
 /// which can cause the controller offsets to fall out of sync.
+
+
+// ignore_for_file: cast_nullable_to_non_nullable
+
+
 class LinkedScrollControllerGroup {
   LinkedScrollControllerGroup() {
     _offsetNotifier = _LinkedScrollControllerGroupOffsetNotifier(this);
@@ -351,6 +356,11 @@ class _LinkedScrollActivity extends ScrollActivity {
         commonDirection = ScrollDirection.idle;
       }
     }
+
+
+
+
+
     delegate.updateUserScrollDirection(commonDirection);
   }
 
