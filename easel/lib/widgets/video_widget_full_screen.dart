@@ -40,7 +40,8 @@ class _VideoWidgetFullScreenState extends State<VideoWidgetFullScreen> {
                 onVideoLoading: (BuildContext context) => const Center(
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(EaselAppTheme.kBlack),
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(EaselAppTheme.kBlack),
                       ),
                     ),
                 onVideoHasError: (BuildContext context) => Center(
@@ -48,12 +49,14 @@ class _VideoWidgetFullScreenState extends State<VideoWidgetFullScreen> {
                       padding: const EdgeInsets.all(10),
                       child: Text(
                         videoPlayerError,
-                        style: TextStyle(fontSize: 18.sp, color: EaselAppTheme.kBlack),
+                        style: TextStyle(
+                            fontSize: 18.sp, color: EaselAppTheme.kBlack),
                       ),
                     )),
                 onVideoInitialized: (BuildContext context) => Center(
                       child: AspectRatio(
-                        aspectRatio: easelProvider.videoPlayerController.value.aspectRatio,
+                        aspectRatio: easelProvider
+                            .videoPlayerController.value.aspectRatio,
                         child: VideoPlayer(easelProvider.videoPlayerController),
                       ),
                     ),
@@ -71,7 +74,8 @@ class _VideoWidgetFullScreenState extends State<VideoWidgetFullScreen> {
                       color: Colors.black.withOpacity(0.3),
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 30.h),
-                        child: const VideoProgressWidget(darkMode: true, isForFile: false),
+                        child: const VideoProgressWidget(
+                            darkMode: true, isForFile: false),
                       ),
                     ),
                   ),

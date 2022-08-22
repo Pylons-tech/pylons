@@ -26,7 +26,9 @@ class ChooseFormatScreen extends StatefulWidget {
 class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
   ValueNotifier<String> errorText = ValueNotifier(kErrFileNotPicked);
 
-  void proceedToNext({required PickedFileModel result, required EaselProvider easelProvider}) async {
+  void proceedToNext(
+      {required PickedFileModel result,
+      required EaselProvider easelProvider}) async {
     EaselProvider provider = context.read();
 
     if (result.path.isEmpty) {
@@ -39,13 +41,16 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
       return;
     }
 
-    NftFormat? nftFormat = await provider.resolveNftFormat(context, result.extension);
+    NftFormat? nftFormat =
+        await provider.resolveNftFormat(context, result.extension);
 
     if (nftFormat == null) {
       return;
     }
 
-    if (easelProvider.repository.getFileSizeInGB(File(result.path).lengthSync()) > kFileSizeLimitForAudiVideoInGB) {
+    if (easelProvider.repository
+            .getFileSizeInGB(File(result.path).lengthSync()) >
+        kFileSizeLimitForAudiVideoInGB) {
       errorText.value = 'size_error'.tr();
       showErrorDialog(type: nftFormat.format);
       return;
@@ -105,7 +110,10 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
               builder: (_, int currentPage, __) {
                 return Text(
                   homeViewModel.pageTitles[homeViewModel.currentPage.value],
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kDarkText),
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w400,
+                      color: EaselAppTheme.kDarkText),
                 );
               },
             ),
@@ -114,7 +122,8 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
           Expanded(
             child: _CardWidget(
               typeIdx: 0,
-              selected: provider.nftFormat.format == NftFormat.supportedFormats[0].format,
+              selected: provider.nftFormat.format ==
+                  NftFormat.supportedFormats[0].format,
               onFilePicked: (result) async {
                 proceedToNext(result: result, easelProvider: provider);
               },
@@ -125,7 +134,8 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
           Expanded(
             child: _CardWidget(
               typeIdx: 1,
-              selected: provider.nftFormat.format == NftFormat.supportedFormats[1].format,
+              selected: provider.nftFormat.format ==
+                  NftFormat.supportedFormats[1].format,
               onFilePicked: (result) async {
                 proceedToNext(result: result, easelProvider: provider);
               },
@@ -135,7 +145,8 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
           Expanded(
             child: _CardWidget(
               typeIdx: 2,
-              selected: provider.nftFormat.format == NftFormat.supportedFormats[2].format,
+              selected: provider.nftFormat.format ==
+                  NftFormat.supportedFormats[2].format,
               onFilePicked: (result) async {
                 proceedToNext(result: result, easelProvider: provider);
               },
@@ -146,7 +157,8 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
           Expanded(
             child: _CardWidget(
               typeIdx: 3,
-              selected: provider.nftFormat.format == NftFormat.supportedFormats[3].format,
+              selected: provider.nftFormat.format ==
+                  NftFormat.supportedFormats[3].format,
               onFilePicked: (result) async {
                 proceedToNext(result: result, easelProvider: provider);
               },
@@ -156,7 +168,8 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
           Expanded(
             child: _CardWidget(
               typeIdx: 4,
-              selected: provider.nftFormat.format == NftFormat.supportedFormats[4].format,
+              selected: provider.nftFormat.format ==
+                  NftFormat.supportedFormats[4].format,
               onFilePicked: (result) async {
                 proceedToNext(result: result, easelProvider: provider);
               },
@@ -200,15 +213,20 @@ class _CardWidget extends StatelessWidget {
               child: GestureDetector(
                 onTap: () async {
                   EaselProvider provider = context.read();
-                  provider.setFormat(context, NftFormat.supportedFormats[typeIdx]);
-                  final pickedFile = await provider.repository.pickFile(provider.nftFormat);
-                  final result = pickedFile.getOrElse(() => PickedFileModel(path: "", fileName: "", extension: ""));
+                  provider.setFormat(
+                      context, NftFormat.supportedFormats[typeIdx]);
+                  final pickedFile =
+                      await provider.repository.pickFile(provider.nftFormat);
+                  final result = pickedFile.getOrElse(() =>
+                      PickedFileModel(path: "", fileName: "", extension: ""));
                   onFilePicked(result);
                 },
                 child: Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 0.02.sw, vertical: 4.5.h),
-                    decoration: BoxDecoration(color: NftFormat.supportedFormats[typeIdx].color),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 0.02.sw, vertical: 4.5.h),
+                    decoration: BoxDecoration(
+                        color: NftFormat.supportedFormats[typeIdx].color),
                     child: Stack(
                       children: [
                         Row(
@@ -229,16 +247,30 @@ class _CardWidget extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    NftFormat.supportedFormats[typeIdx].format.getTitle(),
-                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: textIconColor, fontSize: 45.sp, fontWeight: FontWeight.bold),
+                                    NftFormat.supportedFormats[typeIdx].format
+                                        .getTitle(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(
+                                            color: textIconColor,
+                                            fontSize: 45.sp,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                   SizedBox(height: 3.h),
                                   RichText(
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.center,
                                     text: TextSpan(
-                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(color: textIconColor, fontSize: 12.sp, fontWeight: FontWeight.w600),
-                                      text: NftFormat.supportedFormats[typeIdx].getExtensionsList(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .copyWith(
+                                              color: textIconColor,
+                                              fontSize: 12.sp,
+                                              fontWeight: FontWeight.w600),
+                                      text: NftFormat.supportedFormats[typeIdx]
+                                          .getExtensionsList(),
                                     ),
                                   ),
                                 ],
@@ -247,7 +279,8 @@ class _CardWidget extends StatelessWidget {
                           ],
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0.w, vertical: 5.0.h),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10.0.w, vertical: 5.0.h),
                           child: Align(
                             alignment: Alignment.topRight,
                             child: SizedBox(
@@ -270,7 +303,12 @@ class _CardWidget extends StatelessWidget {
 }
 
 class _ErrorMessageWidget extends StatelessWidget {
-  const _ErrorMessageWidget({Key? key, required this.errorMessage, required this.onClose, this.nftTypes}) : super(key: key);
+  const _ErrorMessageWidget(
+      {Key? key,
+      required this.errorMessage,
+      required this.onClose,
+      this.nftTypes})
+      : super(key: key);
 
   final String errorMessage;
   final VoidCallback onClose;
@@ -288,7 +326,8 @@ class _ErrorMessageWidget extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 0.17.sw),
       child: Container(
-        decoration: const BoxDecoration(image: DecorationImage(image: svg_provider.Svg(kSvgUploadErrorBG))),
+        decoration: const BoxDecoration(
+            image: DecorationImage(image: svg_provider.Svg(kSvgUploadErrorBG))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -300,16 +339,33 @@ class _ErrorMessageWidget extends StatelessWidget {
             SizedBox(height: 30.h),
             Text(
               errorMessage,
-              style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w800),
             ),
             SizedBox(height: 30.h),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text((nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio) ? "• ${(kFileSizeLimitForAudiVideoInGB * 1000).toStringAsFixed(0)}MB Limit" : "• ${kFileSizeLimitInGB}GB Limit",
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
-                Text(kUploadHint2, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
-                Text(kUploadHint3, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
+                Text(
+                    (nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio)
+                        ? "• ${(kFileSizeLimitForAudiVideoInGB * 1000).toStringAsFixed(0)}MB Limit"
+                        : "• ${kFileSizeLimitInGB}GB Limit",
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w800)),
+                Text(kUploadHint2,
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w800)),
+                Text(kUploadHint3,
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w800)),
               ],
             ),
             SizedBox(height: 30.h),
@@ -319,11 +375,16 @@ class _ErrorMessageWidget extends StatelessWidget {
                 height: 0.09.sw,
                 child: Stack(
                   children: [
-                    Positioned.fill(child: SvgPicture.asset(kSvgCloseButton, fit: BoxFit.cover)),
+                    Positioned.fill(
+                        child: SvgPicture.asset(kSvgCloseButton,
+                            fit: BoxFit.cover)),
                     Center(
                       child: Text(
                         kCloseText,
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            fontSize: 16.sp,
+                            color: EaselAppTheme.kWhite,
+                            fontWeight: FontWeight.w300),
                       ),
                     ),
                   ],
@@ -343,7 +404,8 @@ class _ErrorMessageWidget extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 0.10.sw),
       child: Container(
-        decoration: const BoxDecoration(image: DecorationImage(image: svg_provider.Svg(kSvgUploadErrorBG))),
+        decoration: const BoxDecoration(
+            image: DecorationImage(image: svg_provider.Svg(kSvgUploadErrorBG))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -356,16 +418,33 @@ class _ErrorMessageWidget extends StatelessWidget {
             SizedBox(height: 30.h),
             Text(
               errorMessage,
-              style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w800),
             ),
             SizedBox(height: 30.h),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text((nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio) ? "• ${(kFileSizeLimitForAudiVideoInGB * 1000).toStringAsFixed(0)}MB Limit" : "• ${kFileSizeLimitInGB}GB Limit",
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
-                Text(kUploadHint2, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
-                Text(kUploadHint3, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
+                Text(
+                    (nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio)
+                        ? "• ${(kFileSizeLimitForAudiVideoInGB * 1000).toStringAsFixed(0)}MB Limit"
+                        : "• ${kFileSizeLimitInGB}GB Limit",
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w800)),
+                Text(kUploadHint2,
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w800)),
+                Text(kUploadHint3,
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w800)),
               ],
             ),
             SizedBox(height: 30.h),
@@ -375,11 +454,16 @@ class _ErrorMessageWidget extends StatelessWidget {
                 height: 0.09.sw,
                 child: Stack(
                   children: [
-                    Positioned.fill(child: SvgPicture.asset(kSvgCloseButton, fit: BoxFit.cover)),
+                    Positioned.fill(
+                        child: SvgPicture.asset(kSvgCloseButton,
+                            fit: BoxFit.cover)),
                     Center(
                       child: Text(
                         kCloseText,
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            fontSize: 16.sp,
+                            color: EaselAppTheme.kWhite,
+                            fontWeight: FontWeight.w300),
                       ),
                     ),
                   ],

@@ -7,7 +7,13 @@ class ProgressBarBuilder extends StatelessWidget {
   final WidgetBuilder others;
   final String assetType;
 
-  const ProgressBarBuilder({Key? key, required this.audioProgressBar, required this.videoProgressBar, required this.assetType, required this.others}) : super(key: key);
+  const ProgressBarBuilder(
+      {Key? key,
+      required this.audioProgressBar,
+      required this.videoProgressBar,
+      required this.assetType,
+      required this.others})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -33,7 +33,9 @@ class StepLabels extends StatelessWidget {
                           fontSize: 8.sp,
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w700,
-                          color: currentStep.value >= index ? EaselAppTheme.kBlue : EaselAppTheme.kGrey,
+                          color: currentStep.value >= index
+                              ? EaselAppTheme.kBlue
+                              : EaselAppTheme.kGrey,
                         ),
                   ),
                 ],

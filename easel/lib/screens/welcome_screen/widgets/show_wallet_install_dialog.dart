@@ -14,7 +14,12 @@ class ShowWalletInstallDialog {
   VoidCallback onClose;
   VoidCallback onButtonPressed;
 
-  ShowWalletInstallDialog({required this.context, required this.errorMessage, required this.buttonMessage, required this.onClose, required this.onButtonPressed});
+  ShowWalletInstallDialog(
+      {required this.context,
+      required this.errorMessage,
+      required this.buttonMessage,
+      required this.onClose,
+      required this.onButtonPressed});
 
   Future show() {
     return showDialog(
@@ -50,7 +55,10 @@ class ShowWalletInstallDialog {
             SizedBox(height: 30.h),
             Text(
               errorMessage,
-              style: TextStyle(color: Colors.white, fontSize: 12.sp, fontWeight: FontWeight.w800),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w800),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 40.h),
@@ -75,7 +83,10 @@ class ShowWalletInstallDialog {
                     Center(
                       child: Text(
                         kCancel,
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 14.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            fontSize: 14.sp,
+                            color: EaselAppTheme.kWhite,
+                            fontWeight: FontWeight.w300),
                       ),
                     ),
                   ],
@@ -143,7 +154,13 @@ class ShowWalletInstallDialog {
                       Center(
                         child: Text(
                           kCancel,
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w200),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(
+                                  fontSize: 16.sp,
+                                  color: EaselAppTheme.kWhite,
+                                  fontWeight: FontWeight.w200),
                         ),
                       ),
                     ],

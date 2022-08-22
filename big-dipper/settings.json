@@ -1,7 +1,7 @@
 {
   "public": {
     "chainName": "Pylons",
-    "chainId": "pylons-testnet-3",
+    "chainId": "pylons-testnet-1",
     "gtm": "{Add your Google Tag Manager ID here}",
     "slashingWindow": 10000,
     "uptimeWindow": 250,
@@ -40,7 +40,7 @@
       },
       {
         "denom": "ustripeusd",
-        "displayName": "STRIPEUSD",
+        "displayName": "USD",
         "fraction": 1000000
       },
       {

@@ -89,13 +89,7 @@ export default class EaselBuy extends Component {
         null;
     }
   }
-
-  // hideComponentDesc() {
-  //   this.setState({
-  //     showHideDetails: !this.state.showHideDetails,
-  //   });
-  // }
-
+ 
   componentDidMount() {
     this.handleFetchData();
     this.handleFetchhistory();
@@ -163,14 +157,20 @@ export default class EaselBuy extends Component {
           }
         }
         const entries = _.cloneDeep(selectedRecipe.entries);
-
-        if (entries != null) {
-          const mediaUrl = strings.find((val) => val.key === "NFT_URL");
-          media = mediaUrl ? mediaUrl.value : "";
-        }
         const nftType = strings.find(
           (val) => val.key.toLowerCase() === "nft_format"
         )?.value;
+        if (entries != null) {
+          if(nftType.toLowerCase()=="pdf"){
+            const mediaUrl = strings.find((val) => val.key === "Thumbnail_URL");
+            media = mediaUrl ? mediaUrl.value : "";
+          }
+          else{
+          const mediaUrl = strings.find((val) => val.key === "NFT_URL");
+          media = mediaUrl ? mediaUrl.value : "";
+        }
+      }
+
         const creator = strings.find(
           (val) => val.key.toLowerCase() === "creator"
         )?.value;
@@ -279,23 +279,35 @@ export default class EaselBuy extends Component {
           return "";
       }
     };
-
+    const handleClick = (e) => {
+      if (e.type === "click") {
+        console.log("Left click");
+      } else if (e.type === "contextmenu") {
+        e.preventDefault();
+        return false
+      }
+    };
     const getMedia = () => {
       if (loading) return <Spinner type="grow" color="primary" />;
       else if (!nftType) return null;
       else if (nftType.toLowerCase() === "image")
-        return <img alt="views" src={media} className="mobin-img" />;
+        return <img alt="views" src={media} className="mobin-img" onClick={handleClick}  onContextMenu={handleClick}/>;
       else if (nftType.toLowerCase() === "audio")
         return (
-          <audio controls>
+          <audio controls onClick={handleClick}  onContextMenu={handleClick}>
             <source src={media} type="video/mp4" />
             <source src={media} type="video/ogg" />
             Your browser does not support the audio element.
           </audio>
         );
+        else if (nftType.toLowerCase() === "pdf")
+        return (
+          <img alt="views" src={media} className="mobin-img" onClick={handleClick}  onContextMenu={handleClick}/>
+        );
       else if (nftType.toLowerCase() === "3d")
         return (
           <model-viewer
+          onClick={handleClick}  onContextMenu={handleClick}
             alt="3D NFT"
             src={media}
             ar
@@ -306,11 +318,12 @@ export default class EaselBuy extends Component {
             shadow-intensity="1"
             camera-controls
             enable-pan
+            className="model-viewer"
           ></model-viewer>
         );
       else
         return (
-          <video width="75%" height="50%" controls>
+          <video width="75%" height="50%" controls controlsList="nodownload" onClick={handleClick}  onContextMenu={handleClick} >
             <source src={media} type="video/mp4" />
             <source src={media} type="video/ogg" />
             Your browser does not support the video tag.
@@ -329,17 +342,19 @@ export default class EaselBuy extends Component {
             <Container>
               <Row>
                 <Col xl={5} lg={5} md={12} sm={12}>
-                  <div className="mob-img">
-                    <img
-                      alt="frame"
-                      src="/img/frame.png"
-                      width="100%"
-                      height="100%"
-                      className="mob-frame"
-                    />
-                    {getMedia()}
+                  <div className="desktop-view">
+                    <div className="mob-img">
+                      <img
+                        alt="frame"
+                        src="/img/frame.png"
+                        width="100%"
+                        height="100%"
+                        className="mob-frame"
+                      />
+                      {getMedia()}
+                    </div>
                   </div>
-                </Col>
+                </Col> 
                 <Col xl={7} lg={7} md={12} sm={12}>
                   <div className="desktop-view">
                     <div className="details">
@@ -643,6 +658,16 @@ width="100%"                                    className="plus-minus"
                     </div>
                   </div>
                   <div className="mobile-view">
+                  <div className="mob-img">
+                      <img
+                        alt="frame"
+                        src="/img/frame.png"
+                        width="100%"
+                        height="100%"
+                        className="mob-frame"
+                      />
+                      {getMedia()}
+                    </div>
                     <div className={`${showHideDetails ? "bg2 details" : "bg details"}`}>
                     <button
                                 onClick={() =>

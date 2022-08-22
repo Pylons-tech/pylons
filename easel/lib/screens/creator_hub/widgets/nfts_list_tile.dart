@@ -23,7 +23,8 @@ class NFTsListTile extends StatelessWidget {
   EaselProvider get _easelProvider => GetIt.I.get();
 
   void buildBottomSheet({required BuildContext context}) {
-    final bottomSheet = BuildPublishedNFTsBottomSheet(context: context, nft: publishedNFT, easelProvider: _easelProvider);
+    final bottomSheet = BuildPublishedNFTsBottomSheet(
+        context: context, nft: publishedNFT, easelProvider: _easelProvider);
 
     bottomSheet.show();
   }
@@ -54,27 +55,38 @@ class NFTsListTile extends StatelessWidget {
                           color: EaselAppTheme.kBlack,
                         ),
                       ),
-                      placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
+                      placeholder: (context, url) => Shimmer(
+                          color: EaselAppTheme.cardBackground,
+                          child: const SizedBox.expand()),
                       imageUrl: publishedNFT.url.changeDomain(),
                       fit: BoxFit.cover,
                     ),
                     onVideo: (context) => CachedNetworkImage(
                       fit: BoxFit.fill,
                       imageUrl: publishedNFT.thumbnailUrl.changeDomain(),
-                      errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
-                      placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
+                      errorWidget: (a, b, c) =>
+                          const Center(child: Icon(Icons.error_outline)),
+                      placeholder: (context, url) => Shimmer(
+                          color: EaselAppTheme.cardBackground,
+                          child: const SizedBox.expand()),
                     ),
                     onPdf: (context) => CachedNetworkImage(
                       fit: BoxFit.fill,
                       imageUrl: publishedNFT.thumbnailUrl,
-                      errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
-                      placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
+                      errorWidget: (a, b, c) =>
+                          const Center(child: Icon(Icons.error_outline)),
+                      placeholder: (context, url) => Shimmer(
+                          color: EaselAppTheme.cardBackground,
+                          child: const SizedBox.expand()),
                     ),
                     onAudio: (context) => CachedNetworkImage(
                       fit: BoxFit.fill,
                       imageUrl: publishedNFT.thumbnailUrl.changeDomain(),
-                      errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
-                      placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
+                      errorWidget: (a, b, c) =>
+                          const Center(child: Icon(Icons.error_outline)),
+                      placeholder: (context, url) => Shimmer(
+                          color: EaselAppTheme.cardBackground,
+                          child: const SizedBox.expand()),
                     ),
                     on3D: (context) => ModelViewer(
                       src: publishedNFT.url.changeDomain(),
@@ -96,7 +108,8 @@ class NFTsListTile extends StatelessWidget {
                       publishedNFT.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: EaselAppTheme.titleStyle.copyWith(fontSize: isTablet ? 13.sp : 18.sp),
+                      style: EaselAppTheme.titleStyle
+                          .copyWith(fontSize: isTablet ? 13.sp : 18.sp),
                     ),
                     SizedBox(
                       height: 6.h,
@@ -108,19 +121,27 @@ class NFTsListTile extends StatelessWidget {
                             borderRadius: BorderRadius.circular(3.h),
                             color: EaselAppTheme.kDarkGreen,
                           ),
-                          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 6.w, vertical: 3.h),
                           child: Text(
                             "publish".tr(),
-                            style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
+                            style: EaselAppTheme.titleStyle.copyWith(
+                                color: EaselAppTheme.kWhite,
+                                fontSize: isTablet ? 8.sp : 11.sp),
                           ),
                         ),
                         SizedBox(width: 9.w),
-                        if (publishedNFT.isEnabled && publishedNFT.amountMinted < int.parse(publishedNFT.quantity))
+                        if (publishedNFT.isEnabled &&
+                            publishedNFT.amountMinted <
+                                int.parse(publishedNFT.quantity))
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 6.w, vertical: 3.h),
                             child: Text(
                               "for_sale".tr(),
-                              style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
+                              style: EaselAppTheme.titleStyle.copyWith(
+                                  color: EaselAppTheme.kWhite,
+                                  fontSize: isTablet ? 8.sp : 11.sp),
                             ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(3.h),
