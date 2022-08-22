@@ -1,0 +1,12 @@
+{{- if .Values.settings }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-archive
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "chart.labels" . | indent 4 }}
+data:
+  settings.json: |-
+{{ .Values.applicationSettingsJson | indent 4}}
+{{- end }}
