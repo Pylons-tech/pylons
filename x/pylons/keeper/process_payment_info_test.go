@@ -8,6 +8,7 @@ import (
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
@@ -213,6 +214,87 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 		tc := tc
 		suite.Run(tc.desc, func() {
 			err := k.VerifyPaymentInfos(ctx, tc.request, tc.addr)
+			if tc.err != nil {
+				require.ErrorIs(err, tc.err)
+			} else {
+				require.NoError(err)
+			}
+		})
+	}
+}
+func (suite *IntegrationTestSuite) TestValidatePaymentInfo() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
+	correctAddr := "pylo1xn72u3jxlpqx8tfgmjf0xg970q36xensjngsme"
+	productID := "recipe/Easel_CookBook_auto_cookbook_2022_06_14_114716_442/Easel_Recipe_auto_recipe_2022_06_14_114722_895"
+	signature := "+f11IPGOtgMTpQou8V2anPSK9KCyQbi3UXFvocFDzmUKxcloXavWIzKIhIXg7pHwfRut62l1Jgo/J7a6uyusDQ=="
+	purchaseId := "pi_3LFgx7EdpQgutKvr1cp5nqtP"
+	processorName := "Pylons_Inc"
+
+	req_paymentinfo := make([]types.PaymentInfo, 0)
+
+	enabled := true
+	params := banktypes.DefaultParams()
+
+	fooCoin := sdk.NewCoin("ustripeusd", sdk.NewInt(1000))
+
+	params.DefaultSendEnabled = !enabled
+	params = params.SetSendEnabledParam(fooCoin.Denom, !enabled)
+	suite.pylonsApp.BankKeeper.SetParams(ctx, params)
+
+	toPay_Coins := sdk.NewCoins()
+	toPay_Coins = append(toPay_Coins, *&fooCoin)
+
+	for _, tc := range []struct {
+		desc    string
+		request []types.PaymentInfo
+		coin    sdk.Coins
+		err     error
+	}{
+		{
+			desc: "Valid Payment Info",
+			request: append(req_paymentinfo, types.PaymentInfo{
+				PurchaseId:    purchaseId,
+				ProcessorName: processorName,
+				PayerAddr:     correctAddr,
+				Amount:        sdk.NewIntFromUint64(10000),
+				ProductId:     productID,
+				Signature:     signature,
+			}),
+			coin: nil,
+		},
+		{
+			desc: "Invalid Payment processor",
+			request: append(req_paymentinfo, types.PaymentInfo{
+				PurchaseId:    purchaseId,
+				ProcessorName: "testprocessorName",
+				PayerAddr:     correctAddr,
+				Amount:        sdk.NewIntFromUint64(10000),
+				ProductId:     productID,
+				Signature:     signature,
+			}),
+			coin: nil,
+			err:  sdkerrors.ErrInvalidRequest,
+		},
+		{
+			desc: "Not enough recepts",
+			request: append(req_paymentinfo, types.PaymentInfo{
+				PurchaseId:    purchaseId,
+				ProcessorName: processorName,
+				PayerAddr:     correctAddr,
+				Amount:        sdk.NewIntFromUint64(999),
+				ProductId:     productID,
+				Signature:     signature,
+			}),
+			coin: toPay_Coins,
+			err:  sdkerrors.ErrInvalidRequest,
+		},
+	} {
+		tc := tc
+		suite.Run(tc.desc, func() {
+			err := k.ValidatePaymentInfo(ctx, tc.request, tc.coin)
 			if tc.err != nil {
 				require.ErrorIs(err, tc.err)
 			} else {
