@@ -95,7 +95,7 @@ export default class EaselBuy extends Component {
   //     showHideDetails: !this.state.showHideDetails,
   //   });
   // }
-
+ 
   componentDidMount() {
     this.handleFetchData();
     this.handleFetchhistory();
@@ -163,14 +163,20 @@ export default class EaselBuy extends Component {
           }
         }
         const entries = _.cloneDeep(selectedRecipe.entries);
-
-        if (entries != null) {
-          const mediaUrl = strings.find((val) => val.key === "NFT_URL");
-          media = mediaUrl ? mediaUrl.value : "";
-        }
         const nftType = strings.find(
           (val) => val.key.toLowerCase() === "nft_format"
         )?.value;
+        if (entries != null) {
+          if(nftType.toLowerCase()=="pdf"){
+            const mediaUrl = strings.find((val) => val.key === "Thumbnail_URL");
+            media = mediaUrl ? mediaUrl.value : "";
+          }
+          else{
+          const mediaUrl = strings.find((val) => val.key === "NFT_URL");
+          media = mediaUrl ? mediaUrl.value : "";
+        }
+      }
+
         const creator = strings.find(
           (val) => val.key.toLowerCase() === "creator"
         )?.value;
@@ -279,23 +285,35 @@ export default class EaselBuy extends Component {
           return "";
       }
     };
-
+    const handleClick = (e) => {
+      if (e.type === "click") {
+        console.log("Left click");
+      } else if (e.type === "contextmenu") {
+        e.preventDefault();
+        return false
+      }
+    };
     const getMedia = () => {
       if (loading) return <Spinner type="grow" color="primary" />;
       else if (!nftType) return null;
       else if (nftType.toLowerCase() === "image")
-        return <img alt="views" src={media} className="mobin-img" />;
+        return <img alt="views" src={media} className="mobin-img" onClick={handleClick}  onContextMenu={handleClick}/>;
       else if (nftType.toLowerCase() === "audio")
         return (
-          <audio controls>
+          <audio controls onClick={handleClick}  onContextMenu={handleClick}>
             <source src={media} type="video/mp4" />
             <source src={media} type="video/ogg" />
             Your browser does not support the audio element.
           </audio>
         );
+        else if (nftType.toLowerCase() === "pdf")
+        return (
+          <img alt="views" src={media} className="mobin-img" onClick={handleClick}  onContextMenu={handleClick}/>
+        );
       else if (nftType.toLowerCase() === "3d")
         return (
           <model-viewer
+          onClick={handleClick}  onContextMenu={handleClick}
             alt="3D NFT"
             src={media}
             ar
@@ -311,7 +329,7 @@ export default class EaselBuy extends Component {
         );
       else
         return (
-          <video width="75%" height="50%" controls>
+          <video width="75%" height="50%" controls controlsList="nodownload" onClick={handleClick}  onContextMenu={handleClick} >
             <source src={media} type="video/mp4" />
             <source src={media} type="video/ogg" />
             Your browser does not support the video tag.

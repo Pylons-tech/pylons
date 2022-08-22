@@ -6,6 +6,11 @@ $primary: $forbole-red !default;
 body {
   font-size: inherit !important;
 }
+img {
+  pointer-events: none;
+}
+
+
 .no-select {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -1347,6 +1352,7 @@ div#voting-power-dist .card {
   @media(max-width: 600px) {
     background: #000;
     padding: 0;
+    height: 100%;
     .container {
       max-width: 100%;
     }
@@ -1373,7 +1379,7 @@ div#voting-power-dist .card {
     }
     .mobile-view {
       display: block;
-      height: 100vh;
+      // height: 100vh;
       .collapse-btn {
         background-color: transparent;
         border: none;
