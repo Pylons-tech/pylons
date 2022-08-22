@@ -29,3 +29,6 @@ cmd/pylonsd/__debug_bin
 proto/dart/*
 
 debug
+big-dipper/settings.json
+
+*.env

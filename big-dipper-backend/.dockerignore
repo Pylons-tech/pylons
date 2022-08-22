@@ -1,0 +1,6 @@
+/node_modules
+/.meteor/local
+/.github
+.git
+.envrc
+package-lock.json
