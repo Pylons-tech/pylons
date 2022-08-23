@@ -3,6 +3,7 @@ package cmd
 import (
 	"strconv"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/google/cel-go/cel"
 	"github.com/spf13/cobra"
 )
@@ -40,35 +41,32 @@ func DevCelCheck() *cobra.Command {
 					panic(err)
 				}
 			}
-			env, err := cel.NewEnv(celVars...)
+
+			env, err := cel.NewEnv(append(celVars, cel.Declarations(types.BasicVarDefs()...))...)
 			if err != nil {
 				panic(err)
 			}
-			ast, iss := env.Parse(args[0])
-			if iss.Err() != nil {
-				panic(iss.Err())
-			}
-			checked, iss := env.Check(ast)
-			// Report semantic errors, if present.
-			if iss.Err() != nil {
-				panic(iss.Err())
-			}
-			program, err := env.Program(checked)
-			if err != nil {
-				panic(err)
-			}
-			out, _, err := program.Eval(varVals)
-			if err != nil {
-				panic(err)
-			}
+			ec := types.NewCelEnvCollection(env, varVals, cel.Functions())
 			println("Result:")
 			switch returnType {
 			case "long":
-				println(out.Value().(int64))
+				r, err := ec.EvalInt64(args[0])
+				if err != nil {
+					panic(err)
+				}
+				println(r)
 			case "double":
-				println(out.Value().(float64))
+				r, err := ec.EvalFloat64(args[0])
+				if err != nil {
+					panic(err)
+				}
+				println(r)
 			case "string":
-				println(out.Value().(string))
+				r, err := ec.EvalString(args[0])
+				if err != nil {
+					panic(err)
+				}
+				println(r)
 			}
 
 		},
