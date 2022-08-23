@@ -1,6 +1,6 @@
 {
   "app_title": "Pylons",
-  "something_wrong": "Algo salió mal ",
+  "something_wrong": "Algo salió mal. Intenta reiniciar la aplicación.",
   "wallet_retrieving_err_msg": "Tuvimos problemas recuperarando la billetera del almacenamiento.",
   "home": "Hogar",
   "discover": "Descubrir",
@@ -290,7 +290,7 @@
   "get_balance_failed": "Obtener saldo fallido",
   "no_data_saved": "No hay datos guardados",
   "video_player_network_error": "No se puede reproducir el video en este momento. Comprueba tu conexión a Internet e inténtalo de nuevo.",
-  "something_wrong_signing_transaction": "Algo salió mal al firmar la transacción",
+  "something_wrong_signing_transaction": "Algo salió mal al firmar la transacción. Intenta reiniciar la aplicación.",
   "no_profile_found": "No se encontró ningún perfil en la billetera",
   "insufficient_balance_msg": "No tienes suficiente Pylon para completar esta transacción. Haga clic a continuación para Agregar Pylon y vuelva a intentarlo.",
   "insufficient_balance": "Saldo insuficiente",
