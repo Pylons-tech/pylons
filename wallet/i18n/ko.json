@@ -1,6 +1,6 @@
 {
   "app_title": "지갑 삭제",
-  "something_wrong": "문제가 발생했습니다. 응용 프로그램을 다시 시작해 보십시오.",
+  "something_wrong": "문제가 발생했습니다, 앱을 다시 시작해 보세요.",
   "wallet_retrieving_err_msg": "보안 저장소에서 지갑을 검색하는 데 문제가 있습니다.",
   "home": "집",
   "discover": "발견하다",
