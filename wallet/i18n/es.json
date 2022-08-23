@@ -1,6 +1,6 @@
 {
   "app_title": "Pylons",
-  "something_wrong": "Algo salió mal ",
+  "something_wrong": "Algo salió mal, Intenta reiniciar la aplicación.",
   "wallet_retrieving_err_msg": "Tuvimos problemas recuperarando la billetera del almacenamiento.",
   "home": "Hogar",
   "discover": "Descubrir",

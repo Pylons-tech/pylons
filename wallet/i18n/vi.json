@@ -1,6 +1,6 @@
 {
   "app_title": "Ví Pylons",
-  "something_wrong": "Đã xảy ra sự cố",
+  "something_wrong": "Đã xảy ra sự cố, Thử khởi động lại ứng dụng.",
   "wallet_retrieving_err_msg": "Chúng tôi đã gặp sự cố khi truy xuất ví từ bộ nhớ an toàn.",
   "home": "Trang chủ",
   "discover": "Khám phá",

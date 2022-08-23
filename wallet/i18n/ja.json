@@ -1,6 +1,6 @@
 {
   "app_title": "パイロンウォレット",
-  "something_wrong": "Something went wrong",
+  "something_wrong": "エラーが発生しました, アプリを再起動してみてください。",
   "wallet_retrieving_err_msg": "安全なストレージからウォレットを取得する際に問題が発生しました。",
   "home": "家",
   "discover": "発見する",
