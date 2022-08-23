@@ -65,8 +65,16 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
 
   @override
   void didChangeDependencies() {
+    EaselProvider easelProvider = context.read<EaselProvider>();
+
+    if (easelProvider.nft.assetType != k3dText) {
+      setState(() {
+        status = LoadingStatus.loading;
+      });
+      return;
+    }
     setState(() {
-      status = LoadingStatus.loading;
+      status = LoadingStatus.success;
     });
     super.didChangeDependencies();
   }

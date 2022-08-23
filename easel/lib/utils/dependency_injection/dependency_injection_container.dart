@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:easel_flutter/easel_provider.dart';
+import 'package:easel_flutter/env.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/tutorial_screen.dart';
@@ -25,7 +26,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../services/third_party_services/audio_player_helper.dart';
-import '../env.dart';
 
 final sl = GetIt.instance;
 
