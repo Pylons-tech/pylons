@@ -43,7 +43,7 @@ jobs:
           flutter --version
           cd easel
           touch lib/env.dart
-          echo "const apiKey = ${{ secrets.API_KEY }}; >> lib/env.dart
+          echo "const apiKey = ${{ secrets.API_KEY }}; " >> lib/env.dart
           cat lib/env.dart
           flutter pub get
           flutter analyze
