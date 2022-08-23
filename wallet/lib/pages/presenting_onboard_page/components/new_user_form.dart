@@ -164,9 +164,9 @@ class NewUserFormState extends State<NewUserForm> {
       navigator.pop();
       return;
     }
-    final _mnemonic = await generateMnemonic(strength: kMnemonicStrength);
+    final mnemonic = await generateMnemonic(strength: kMnemonicStrength);
     final result =
-        await widget.walletsStore.importAlanWallet(_mnemonic, userName);
+        await widget.walletsStore.importAlanWallet(mnemonic, userName);
 
     isLoadingNotifier.value = false;
     result.fold((failure) {

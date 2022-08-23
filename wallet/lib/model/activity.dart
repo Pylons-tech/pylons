@@ -8,28 +8,28 @@ enum ActionType {
 
 extension AccountActionTypeDePar on ActionType {
   String itemToString() {
-    final _stringMap = <String, ActionType>{
+    final stringMap = <String, ActionType>{
       'unknown': ActionType.actionUnknonwn,
       'created': ActionType.actionCreateRecipe,
       'minted': ActionType.actionMint,
       'purchased': ActionType.actionPurchase,
     };
 
-    return _stringMap.keys
-        .firstWhere((key) => _stringMap[key] == this, orElse: () => 'unknown');
+    return stringMap.keys
+        .firstWhere((key) => stringMap[key] == this, orElse: () => 'unknown');
   }
 }
 
 extension AccountActionTypePar on String {
   ActionType fromString() {
-    final _stringMap = <String, ActionType>{
+    final stringMap = <String, ActionType>{
       'unknown': ActionType.actionUnknonwn,
       'created': ActionType.actionCreateRecipe,
       'minted': ActionType.actionMint,
       'purchased': ActionType.actionPurchase,
     };
 
-    return _stringMap[this] ?? ActionType.actionUnknonwn;
+    return stringMap[this] ?? ActionType.actionUnknonwn;
   }
 }
 
