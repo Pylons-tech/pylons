@@ -60,9 +60,9 @@
   "download_pylons_description": "Please download the Pylons app and create a username to publish a NFT in Easel.",
   "create_username_description": "Please Open Pylons app and create a username to publish a NFT in Easel.",
   "create_stripe_description": "Please Register with stripe in the Pylons app to list your NFT for USD.",
-  "welcome_msg":"Draft NFTs contain an IPFS Content ID, but require additional information to be published on the pylons chain and listed for sale on the pylons app. You can remove an active NFT listing, but you can never unpublish a NFT.",
+  "welcome_msg": "Draft NFTs contain an IPFS Content ID, but require additional information to be published on the pylons chain and listed for sale on the pylons app. You can remove an active NFT listing, but you can never unpublish a NFT.",
   "hello": "Hello, ",
-  "no_nft_created":"There are no Draft NFTs",
+  "no_nft_created": "There are no Draft NFTs",
   "loading": "loading ...",
   "are_you_sure_you_want_to_delete": "Are you sure you want to delete this draft?",
   "something_wrong_while_uploading": "Something went wrong while uploading. Please try later.",
@@ -98,6 +98,9 @@
   "first_pick_pdf": "First select a pdf file",
   "nft_manager": "Your NFT Manager",
   "create_draft": "Create Draft",
-  "no_published_nft":"There are no Published NFTs",
-  "no_for_sale_nft":"There are no For Sale NFTs"
+  "no_published_nft": "There are no Published NFTs",
+  "no_for_sale_nft": "There are no For Sale NFTs",
+  "success": "Success",
+  "in_progress": "In Progress",
+  "failed": "Failed"
 }
