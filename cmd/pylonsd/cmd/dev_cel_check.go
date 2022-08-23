@@ -46,7 +46,7 @@ func DevCelCheck() *cobra.Command {
 			if err != nil {
 				panic(err)
 			}
-			ec := types.NewCelEnvCollection(env, varVals, cel.Functions()) // nolint: staticcheck - this is wrong, but it's wrong in the upstream code too
+			ec := types.NewCelEnvCollection(env, varVals, cel.Functions()) // nolint:staticcheck - this is wrong, but it's wrong in the upstream code too
 			println("Result:")
 			switch returnType {
 			case "long":
