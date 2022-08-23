@@ -5,11 +5,16 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
+
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+	wasmTypes "github.com/CosmWasm/wasmd/x/wasm/types"
+
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
@@ -22,6 +27,8 @@ func NewAnteHandler(
 	// sigGasConsumer authsigning.SignatureVerificationGasConsumer,
 	signModeHandler authsigning.SignModeHandler,
 	pk PylonsKeeper,
+	wasmOptions wasmTypes.WasmConfig,
+	txCounterStoreKey storetypes.StoreKey,
 ) sdk.AnteHandler {
 	return sdk.ChainAnteDecorators(
 		NewSpamMigitationAnteDecorator(pk),
@@ -31,6 +38,9 @@ func NewAnteHandler(
 		ante.NewValidateBasicDecorator(),
 		ante.TxTimeoutHeightDecorator{},
 		ante.NewValidateMemoDecorator(ak),
+		wasmkeeper.NewLimitSimulationGasDecorator(wasmOptions.SimulationGasLimit),
+		wasmkeeper.NewCountTXDecorator(txCounterStoreKey),
+
 		// ante.NewConsumeGasForTxSizeDecorator(ak),
 		// ante.NewRejectFeeGranterDecorator(),
 		// we create the account locally before there is any access for it
