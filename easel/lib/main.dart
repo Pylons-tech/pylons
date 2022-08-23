@@ -42,7 +42,7 @@ Future<void> main() async {
     isTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window)
             .size
             .shortestSide >=
-        tableMinWidth;
+        tabletMinWidth;
 
     FlutterError.onError = firebaseCrashlytics.recordFlutterError;
 
