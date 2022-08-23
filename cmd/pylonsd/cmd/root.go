@@ -104,11 +104,11 @@ func initAppConfig() (string, interface{}) {
 	srvCfg.StateSync.SnapshotKeepRecent = 2
 	srvCfg.MinGasPrices = "0stake"
 
-	CraftAppCfg := CustomAppConfig{Config: *srvCfg}
+	AppCfg := CustomAppConfig{Config: *srvCfg}
 
-	CraftAppTemplate := serverconfig.DefaultConfigTemplate
+	AppTemplate := serverconfig.DefaultConfigTemplate
 
-	return CraftAppTemplate, CraftAppCfg
+	return AppTemplate, AppCfg
 }
 
 func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
@@ -116,7 +116,6 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 	cfg.Seal()
 
 	debugCmd := debug.Cmd()
-
 	rootCmd.AddCommand(
 		genutilcli.InitCmd(app.ModuleBasics, app.DefaultNodeHome),
 		genutilcli.CollectGenTxsCmd(banktypes.GenesisBalancesIterator{}, app.DefaultNodeHome),
@@ -129,6 +128,7 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 		tmcmds.RollbackStateCmd,
 		debugCmd,
 		config.Cmd(),
+		AddGenesisWasmMsgCmd(app.DefaultNodeHome),
 	)
 
 	server.AddCommands(rootCmd, app.DefaultNodeHome, newApp, createCraftAppAndExport, addModuleInitFlags)
