@@ -84,31 +84,30 @@ func loadModuleFromPath(modulePath, currentPath string) string {
 }
 
 func loadModulesInline(bytes []byte, path string, info os.FileInfo, gadgets *[]Gadget) string {
-	// TODO: this function is slightly kludgy due to hotfixes rn - rewrite it
-	json := string(bytes)
-	lines := strings.Split(json, "\n")
+	lines := strings.Split(string(bytes), "\n")
 	for i, line := range lines {
 		line = strings.TrimSpace(line)
 		if len(line) != 0 && line[0] == '#' {
-			appendComma := strings.HasSuffix(line, ",")
+			appendComma := line[len(line)-1] == ','
 			if appendComma {
-				line = strings.TrimSuffix(line, ",")
+				// we know it ends w/ `,`
+				line = line[:len(line)-1]
 			}
 			if strings.Contains(line, includeDirective) {
 				modulePath := strings.TrimSpace(strings.Split(line, includeDirective)[1])
 				lines[i] = loadModuleFromPath(modulePath, strings.TrimSuffix(path, info.Name())) + "\n"
 			} else {
-				splut := gadgetParamParseRegex.FindAllString(strings.TrimSuffix(strings.TrimPrefix(line, "#"), ","), -1)
+				// we know first character of line is `#`
+				splut := gadgetParamParseRegex.FindAllString(line[1:], -1)
 				gadget := GetGadget(strings.TrimSuffix(strings.TrimSpace(splut[0]), ","), gadgets)
 				lines[i] = ExpandGadget(gadget, splut[1:])
 			}
 			if appendComma {
-				lines[i] += "," // this is slow/clumsy but worry abt it later
+				lines[i] += ","
 			}
 		}
 	}
-	json = strings.Join(lines, "\n")
-	return json
+	return strings.Join(lines, "\n")
 }
 
 func loadCookbookFromPath(path string, gadgets *[]Gadget) (types.Cookbook, string, error) {
