@@ -11,7 +11,7 @@ import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'item.pb.dart' as $3;
-import '../../cosmos/base/v1beta1/coin.pb.dart' as $2;
+import '../cosmos/base/v1beta1/coin.pb.dart' as $2;
 
 class ItemRecord extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ItemRecord', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
@@ -254,4 +254,3 @@ class Execution extends $pb.GeneratedMessage {
   @$pb.TagNumber(12)
   $core.List<$core.String> get itemModifyOutputIds => $_getList(11);
 }
-
