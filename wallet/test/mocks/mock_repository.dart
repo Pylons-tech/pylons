@@ -267,7 +267,7 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> saveIsBannerDark(bool isBannerDark) {
+  Future<Either<Failure, bool>> saveIsBannerDark({required bool isBannerDark}) {
     throw UnimplementedError();
   }
 

@@ -48,7 +48,7 @@ void _registerExternalDependencies() {
   sl.registerLazySingleton<Dio>(
     () => Dio(
       BaseOptions(
-          baseUrl: baseUrl,
+          baseUrl: "https://api.nft.storage",
           headers: {"Authorization": "Bearer $apiKey"},
           validateStatus: (statusCode) {
             return statusCode! <= HttpStatus.internalServerError;

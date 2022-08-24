@@ -9,6 +9,8 @@ import 'package:pylons_sdk/pylons_sdk.dart';
 
 import '../utils/enums.dart';
 
+//ignore_for_file:  must_be_immutable
+
 enum FreeDrop { yes, no, unselected }
 
 @entity
