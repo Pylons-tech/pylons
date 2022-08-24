@@ -778,7 +778,9 @@ div#voting-power-dist .card {
   .navbar.fixed-top {
     padding: 0 1rem;
   }
-  #home,
+  #home {
+    margin: 0 !important;
+  }
   #transactions,
   #blocks,
   #validator-list {
@@ -1029,7 +1031,7 @@ div#voting-power-dist .card {
 
 .buy-page {
   background: url(https://i.imgur.com/S4IInYS.png) repeat;
-  padding: 5rem 0 8rem;
+  padding: 0rem 0 8rem;
   width: 100%;
   left: 0;
   position: absolute;
@@ -1372,6 +1374,8 @@ div#voting-power-dist .card {
       .mobin-img {
         border-radius: 0;
         padding: 0;
+        height: 100vh;
+        width: 100vh;
       }
     }
     .desktop-view {
