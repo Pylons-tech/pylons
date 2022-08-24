@@ -12,7 +12,7 @@ import (
 
 func (k msgServer) BurnDebtToken(goCtx context.Context, msg *types.MsgBurnDebtToken) (*types.MsgBurnDebtTokenResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	paymentProcessors := k.PaymentProcessors(ctx)
+	paymentProcessors := types.DefaultPaymentProcessors
 
 	found := false
 	for _, pp := range paymentProcessors {

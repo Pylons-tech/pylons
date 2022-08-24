@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"testing"
 
@@ -188,7 +189,7 @@ func NetworkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, 
 }
 
 // A network with cookbook object just contains a state of:
-//	 	N cookbooks
+// N cookbooks
 func NetworkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.Cookbook) {
 	t.Helper()
 	cfg := app.DefaultConfig()
@@ -216,10 +217,10 @@ func NetworkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 	return network.New(t, cfg), state.CookbookList
 }
 
-// A network with execution objects  contains a state of:
+//		A network with execution objects  contains a state of:
 //	 	N cookbooks
 //		N recipes (1 per cookbook)
-// 		N executions (1 per recipe)
+//		N executions (1 per recipe)
 func NetworkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types.Execution) {
 	t.Helper()
 	cfg := app.DefaultConfig()
@@ -407,4 +408,16 @@ func NetworkWithRecipeObjectsHistory(t *testing.T, n int) (*network.Network, []t
 	require.NoError(t, err)
 	cfg.GenesisState[types.ModuleName] = buf
 	return network.New(t, cfg), state.RecipeList, nil
+}
+
+func WriteFixtureAtTestRuntime(name, data string) {
+	file, err := os.Create(name)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+	_, err = file.WriteString(data)
+	if err != nil {
+		panic(err)
+	}
 }

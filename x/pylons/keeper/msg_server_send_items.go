@@ -54,6 +54,10 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "invalid sender address")
 		}
 		k.Keeper.UpdateItem(ctx, item, senderAddr)
+		to, _ := k.GetUsernameByAddress(ctx, msg.Receiver)
+		from, _ := k.GetUsernameByAddress(ctx, msg.Creator)
+		history := item.NewItemHistory(ctx, to.Value, from.Value)
+		k.SetItemHistory(ctx, history)
 		transferFeeIdx := permutation[idx]
 		transferFees[item.CookbookId] = transferFees[item.CookbookId].Add(item.TransferFee[transferFeeIdx])
 	}

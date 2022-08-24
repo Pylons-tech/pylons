@@ -38,6 +38,13 @@ service Query {
 		option (google.api.http).get = "/pylons/get_stripe_refund";
 	}
 
+
+	// Retrieves an item history by id.
+	rpc GetItemOwnershipHistory(QueryGetItemHistoryRequest) returns (QueryGetItemHistoryResponse) {
+		option (google.api.http).get = "/pylons/item_history/{cookbook_id}/{item_id}";
+	}
+
+
 // this line is used by starport scaffolding # 2
 
 	// Queries a redeemInfo by index.
@@ -149,6 +156,17 @@ message QueryListTradesByCreatorResponse {
 	// pagination defines the pagination in the response.
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
+
+message QueryGetItemHistoryRequest {
+  string cookbook_id = 1;
+  string item_id = 2;
+  string minted_number = 3;
+}
+
+message QueryGetItemHistoryResponse {
+	repeated ItemHistory history = 1;
+}
+
 
 message QueryGetRecipeHistoryRequest {
   string cookbook_id = 1;

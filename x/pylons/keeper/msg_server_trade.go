@@ -23,7 +23,7 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 	// coins with sendEnable to false cannot be added to CoinInputs unless they can be issued by a payment processor
-	paymentProcessors := k.PaymentProcessors(ctx)
+	paymentProcessors := types.DefaultPaymentProcessors
 	for _, coinInput := range msg.CoinInputs {
 		for _, coin := range coinInput.Coins {
 			checkSendEnable := true

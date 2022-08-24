@@ -17,30 +17,30 @@ export GO111MODULE = on
 
 build_tags = netgo
 ifeq ($(LEDGER_ENABLED),true)
-  ifeq ($(OS),Windows_NT)
-    GCCEXE = $(shell where gcc.exe 2> NUL)
-    ifeq ($(GCCEXE),)
-      $(error gcc.exe not installed for ledger support, please install or set LEDGER_ENABLED=false)
-    else
-      build_tags += ledger
-    endif
-  else
-    UNAME_S = $(shell uname -s)
-    ifeq ($(UNAME_S),OpenBSD)
-      $(warning OpenBSD detected, disabling ledger support (https://github.com/cosmos/cosmos-sdk/issues/1988))
-    else
-      GCC = $(shell command -v gcc 2> /dev/null)
-      ifeq ($(GCC),)
-        $(error gcc not installed for ledger support, please install or set LEDGER_ENABLED=false)
-      else
-        build_tags += ledger
-      endif
-    endif
-  endif
+	ifeq ($(OS),Windows_NT)
+	GCCEXE = $(shell where gcc.exe 2> NUL)
+	ifeq ($(GCCEXE),)
+	$(error gcc.exe not installed for ledger support, please install or set LEDGER_ENABLED=false)
+	else
+	build_tags += ledger
+	endif
+	else
+	UNAME_S = $(shell uname -s)
+	ifeq ($(UNAME_S),OpenBSD)
+	$(warning OpenBSD detected, disabling ledger support (https://github.com/cosmos/cosmos-sdk/issues/1988))
+	else
+	GCC = $(shell command -v gcc 2> /dev/null)
+	ifeq ($(GCC),)
+	$(error gcc not installed for ledger support, please install or set LEDGER_ENABLED=false)
+	else
+	build_tags += ledger
+	endif
+	endif
+	endif
 endif
 
 ifeq (cleveldb,$(findstring cleveldb,$(PYLONS_BUILD_OPTIONS)))
-  build_tags += gcc
+	build_tags += gcc
 endif
 build_tags += $(BUILD_TAGS)
 build_tags := $(strip $(build_tags))
@@ -59,10 +59,10 @@ ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=pylons \
 
 
 ifeq (cleveldb,$(findstring cleveldb,$(PYLONS_BUILD_OPTIONS)))
-  ldflags += -X github.com/cosmos/cosmos-sdk/types.DBBackend=cleveldb
+	ldflags += -X github.com/cosmos/cosmos-sdk/types.DBBackend=cleveldb
 endif
 ifeq (,$(findstring nostrip,$(PYLONS_BUILD_OPTIONS)))
-  ldflags += -w -s
+	ldflags += -w -s
 endif
 ldflags += $(LDFLAGS)
 ldflags := $(strip $(ldflags))
@@ -70,7 +70,7 @@ ldflags := $(strip $(ldflags))
 BUILD_FLAGS := -tags "$(build_tags)" -ldflags '$(ldflags)'
 # check for nostrip option
 ifeq (,$(findstring nostrip,$(PYLONS_BUILD_OPTIONS)))
-  BUILD_FLAGS += -trimpath
+	BUILD_FLAGS += -trimpath
 endif
 
 # The below include contains the tools target.
@@ -96,12 +96,12 @@ build-linux: go.sum
 build-reproducible: go.sum
 	$(DOCKER) rm latest-build || true
 	$(DOCKER) run --volume=$(CURDIR):/sources:ro \
-        --env TARGET_PLATFORMS='linux/amd64 darwin/amd64 linux/arm6' \
-        --env APP=pylonsd \
-        --env VERSION=$(VERSION) \
-        --env COMMIT=$(COMMIT) \
-        --env LEDGER_ENABLED=$(LEDGER_ENABLED) \
-        --name latest-build cosmossdk/rbuilder:latest
+	--env TARGET_PLATFORMS='linux/amd64 darwin/amd64 linux/arm6' \
+	--env APP=pylonsd \
+	--env VERSION=$(VERSION) \
+	--env COMMIT=$(COMMIT) \
+	--env LEDGER_ENABLED=$(LEDGER_ENABLED) \
+	--name latest-build cosmossdk/rbuilder:latest
 	$(DOCKER) cp -a latest-build:/home/builder/artifacts/ $(CURDIR)/
 
 clean:
@@ -249,3 +249,12 @@ proto-lint:
 
 
 .PHONY: lint format proto-lint
+
+
+###############################################################################
+###                                Localnet                                 ###
+###############################################################################
+
+# Build image for a local testnet
+localnet-build:
+	docker build -f Dockerfile -t pylons-node .

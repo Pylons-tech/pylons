@@ -143,10 +143,12 @@ func QueryEventSender(block []*sdkTypes.TxResponse) (userHistory []*types.Histor
 		entry := &types.History{
 			CreatedAt: date.Unix(),
 			Type:      types.TxTypeSend,
+			TxId:      txRes.TxHash,
 		}
 		nft := &types.History{
 			CreatedAt: date.Unix(),
 			Type:      types.TxTypeNFTBuy,
+			TxId:      txRes.TxHash,
 		}
 		for _, log := range txRes.Logs {
 			entry, nft = GetBankCreateItemEvent(log.Events, entry, nft)
@@ -163,7 +165,7 @@ func QueryEventSender(block []*sdkTypes.TxResponse) (userHistory []*types.Histor
 	return userHistory
 }
 
-func GetBankCreateItemEvent(events sdkTypes.StringEvents, entry *types.History, nft *types.History) (*types.History, *types.History) {
+func GetBankCreateItemEvent(events sdkTypes.StringEvents, entry, nft *types.History) (*types.History, *types.History) {
 	for _, e := range events {
 		switch e.Type {
 		// case transfer event found, i.e. user have sent amount user bank send
@@ -196,6 +198,7 @@ func QueryEventRecipientBank(block []*sdkTypes.TxResponse) (userHistory []*types
 		entry := &types.History{
 			CreatedAt: date.Unix(),
 			Type:      types.TxTypeReceive,
+			TxId:      txRes.TxHash,
 		}
 		for _, log := range txRes.Logs {
 			entry = GetBankEvent(log.Events, entry)
@@ -231,6 +234,7 @@ func QueryEventNFTSell(block []*sdkTypes.TxResponse) (userHistory []*types.Histo
 		nft := &types.History{
 			CreatedAt: date.Unix(),
 			Type:      types.TxTypeNFTSell,
+			TxId:      txRes.TxHash,
 		}
 		for _, log := range txRes.Logs {
 			nft = GetCreateItemEvent(log.Events, nft)
