@@ -119,14 +119,14 @@ Meteor.methods({
       }
       if (quantity > 0 && amountMinted === quantity) {
         // All editions for [NFT Title] have been sold. Your total proceeds are [$XYZ USD]
-        message.notification.body = `All editions for ${sale.item_name} have been sold. You’re total proceeds are ${totalProceeds}}`
+        message.notification.body = `All editions for ${sale.item_name} have been sold. Your total proceeds are ${totalProceeds}}`
       } else if (
         quantity > 0 &&
         (amountMinted * 2 === quantity || amountMinted * 2 === quantity + 1)
       ) {
-        message.notification.body = `Half of the editions for ${sale.item_name} have been sold. You’re total proceeds are ${totalProceeds}}`
+        message.notification.body = `Half of the editions for ${sale.item_name} have been sold. Your total proceeds are ${totalProceeds}}`;
       } else {
-        message.notification.body = `Your NFT ${sale.item_name} have been sold. You’re total proceeds are ${totalProceeds}}`
+        message.notification.body = `Your NFT ${sale.item_name} have been sold. Your total proceeds are ${totalProceeds}}`;
       }
       const options = {
         priority: 'high',
