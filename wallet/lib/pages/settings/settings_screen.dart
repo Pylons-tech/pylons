@@ -208,7 +208,7 @@ class _SettingScreenState extends State<SettingScreen> {
                             controller: emailController,
                             style: kSettingsUserEnteredTextStyle,
                             decoration: InputDecoration(
-                                suffix: Container(
+                                suffix: ColoredBox(
                                   color: kCopyColor,
                                   child: TextButton.icon(
                                       style: ButtonStyle(

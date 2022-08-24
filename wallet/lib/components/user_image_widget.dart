@@ -245,7 +245,7 @@ class UserBannerPickerWidget extends UserBannerWidget {
           final int brightness = getBrightness(file);
           final bool isBannerDark = getIsBannerDark(brightness);
 
-          repository.saveIsBannerDark(isBannerDark);
+          repository.saveIsBannerDark(isBannerDark: isBannerDark);
           viewModel.refresh();
 
           setState(() {});
