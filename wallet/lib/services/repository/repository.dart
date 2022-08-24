@@ -231,7 +231,7 @@ abstract class Repository {
   /// This method saves the boolean value that indicates whether the banner has a dark or light brightness value
   /// Input: [isBannerDark] contains the boolean value that was determine from the images brightness
   /// Output: if successful will return [bool] which tells whether the operation is successful or not else this will give [Failure]
-  Future<Either<Failure, bool>> saveIsBannerDark(bool isBannerDark);
+  Future<Either<Failure, bool>> saveIsBannerDark({required bool isBannerDark});
 
   /// This method gets the boolean value that indicates whether the banner has a dark or light brightness value
   /// Output: if successful will return [bool] indicating whether the banner is dark or light else this will give [Failure]
@@ -1160,9 +1160,9 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> saveIsBannerDark(bool isBannerDark) async {
+  Future<Either<Failure, bool>> saveIsBannerDark({required bool isBannerDark}) async {
     try {
-      return Right(await localDataSource.saveIsBannerDark(isBannerDark));
+      return Right(await localDataSource.saveIsBannerDark( isBannerDark: isBannerDark));
     } on Exception catch (_) {
       return const Left(CacheFailure(PLATFORM_FAILED));
     }

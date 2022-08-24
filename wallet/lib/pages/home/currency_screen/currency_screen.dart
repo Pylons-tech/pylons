@@ -264,7 +264,9 @@ class _BalanceWidgetState extends State<_BalanceWidget> {
                         widget.onCallFaucet();
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: constants.kWhite,
+
+
+                        onSurface: constants.kWhite,
                         maximumSize: const Size(100, 20),
                         minimumSize: const Size(100, 20),
                       ),
