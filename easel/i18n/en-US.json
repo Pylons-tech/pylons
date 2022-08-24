@@ -39,7 +39,7 @@
   "uploading": "Uploading ...",
   "nft_name": "{}",
   "could_not_uploaded": "{} could not be uploaded",
-  "something_wrong": "Something went wrong",
+  "something_wrong": "Something went wrong. Please try Restarting the application.",
   "err_add_audio_thumbnail": "Please select audio thumbnail",
   "err_add_video_thumbnail": "Please select video thumbnail",
   "created_by": "Created By ",

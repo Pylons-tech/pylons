@@ -22,8 +22,6 @@ class NftGridViewItem extends StatelessWidget {
 
   EaselProvider get _easelProvider => GetIt.I.get();
 
-
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -60,7 +58,7 @@ class NftGridViewItem extends StatelessWidget {
                 src: nft.url.changeDomain(),
                 ar: false,
                 autoRotate: false,
-                backgroundColor: EaselAppTheme.kGrey,
+                backgroundColor: EaselAppTheme.kWhite,
                 cameraControls: false,
               ),
               assetType: nft.assetType.toAssetTypeEnum(),
