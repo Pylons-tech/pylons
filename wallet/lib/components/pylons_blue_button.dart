@@ -18,7 +18,7 @@ class PylonsBlueButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
-          primary: fulfilled ? kBlue : kWhite,
+          onSurface: fulfilled ? kBlue : kWhite,
           side: const BorderSide(width: 2.0, color: kBlue)),
       child: SizedBox(
         // height: 43,

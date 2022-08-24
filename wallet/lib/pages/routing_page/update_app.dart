@@ -65,8 +65,8 @@ class _UpdateAppState extends State<UpdateApp> {
   Stack buildTabletScreen(BuildContext context) {
     return Stack(
       children: [
-        Positioned(
-            child: Container(
+        const Positioned(
+            child: ColoredBox(
           color: Colors.white,
         )),
         Positioned(
@@ -307,7 +307,7 @@ class _UpdateAppState extends State<UpdateApp> {
     _launchURL(kIOSAppLink);
   }
 
-  Future _launchURL(String _url) async => await canLaunchUrlString(_url)
-      ? await launchUrlString(_url)
-      : throw '${"could_not_launch".tr()} $_url';
+  Future _launchURL(String url) async => await canLaunchUrlString(url)
+      ? await launchUrlString(url)
+      : throw '${"could_not_launch".tr()} $url';
 }

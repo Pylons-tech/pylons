@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:easel_flutter/main.dart';
@@ -27,7 +26,6 @@ import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:media_info/media_info.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
-import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 
