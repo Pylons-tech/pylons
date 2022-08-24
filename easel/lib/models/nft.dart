@@ -15,41 +15,66 @@ enum FreeDrop { yes, no, unselected }
 class NFT extends Equatable {
   @primaryKey
   final int? id;
-  String url = "";
-  String thumbnailUrl = "";
-  String name = "";
-  String description = "";
-  String denom = "";
-  String price = "0";
-  String creator = "";
-  String owner = "";
-  int amountMinted = 0;
-  String quantity = "0";
-  String tradePercentage = "0";
-  String cookbookID = "";
-  String recipeID = "";
-  String itemID = "";
-  String width = "";
-  String height = "";
-  String appType = "";
-  String tradeID = "";
-  String ownerAddress = "";
-  String step = "";
-  String ibcCoins = IBCCoins.upylon.name;
-  String isFreeDrop;
-  String type = NftType.TYPE_ITEM.name;
-  String assetType = AssetType.Image.name;
-  String duration = "";
-  String hashtags = "";
-  String fileName = "";
-  String fileSize = "";
-  String cid = "";
-  int dateTime = 0;
-  bool isDialogShown = false;
+  final String url;
 
-  bool isEnabled = true;
+  final String thumbnailUrl;
+  final String name;
 
-  NFT({
+  final String description;
+
+  final String denom;
+
+  final String price;
+
+  final String creator;
+
+  final String owner;
+
+  final int amountMinted;
+
+  final String quantity;
+
+  final String tradePercentage;
+
+  final String cookbookID;
+
+  final String recipeID;
+  final String itemID;
+
+  final String width;
+  final String height;
+
+  final String appType;
+
+  final String tradeID;
+
+  final String ownerAddress;
+
+  final String step;
+
+  final String ibcCoins;
+
+  final String isFreeDrop;
+  final String type;
+
+  final String assetType;
+
+  final String duration;
+
+  final String hashtags;
+
+  final String fileName;
+
+  final String fileSize;
+
+  final String cid;
+  final int dateTime;
+
+  final bool isDialogShown;
+
+  final bool isEnabled;
+
+  const NFT({
     this.id,
     this.url = "",
     this.thumbnailUrl = "",
@@ -82,6 +107,7 @@ class NFT extends Equatable {
     this.isEnabled = true,
     this.isDialogShown = false,
     this.dateTime = 0,
+    this.ownerAddress = "",
   });
 
   factory NFT.fromRecipe(Recipe recipe) {
