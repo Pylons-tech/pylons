@@ -134,7 +134,7 @@ dev_dependencies:
 
 #  For Firebase
   firebase_crashlytics: ^2.8.8
-  firebase_core: 1.20.1
+  firebase_core: ^1.21.0
 
 
 
