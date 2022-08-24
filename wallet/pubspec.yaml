@@ -3,6 +3,10 @@ description: Pylons Wallet
 publish_to: "none"
 version: 1.0.1+142
 
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
 dependencies:
   flutter:
     sdk: flutter
@@ -189,7 +193,6 @@ flutter:
           weight: 700
 
 dependency_overrides:
-  path: 1.8.2
   webview_flutter_android: "2.8.14"
   alan:
     git:

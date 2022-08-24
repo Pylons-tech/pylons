@@ -476,7 +476,7 @@ class PracticeTestMnemonic extends StatelessWidget {
             right: 0,
             top: 0,
             bottom: 0,
-            child: Container(
+            child: ColoredBox(
                 color: mnemonic.cardColor,
                 child: Center(
                     child: Text(

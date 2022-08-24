@@ -59,7 +59,7 @@ abstract class LocalDataSource {
   /// This method saves the boolean value that indicates whether the banner has a dark or light brightness value
   /// Input: [isBannerDark] contains the boolean value that was determine from the images brightness
   /// Output: if successful will return [bool] which tells whether the operation is successful or not
-  Future<bool> saveIsBannerDark(bool isBannerDark);
+  Future<bool> saveIsBannerDark({required bool isBannerDark});
 
   /// This method gets the boolean value that indicates whether the banner has a dark or light brightness value
   /// Output: if successful will return [bool] indicating whether the banner is dark or light
@@ -279,7 +279,7 @@ class LocalDataSourceImp implements LocalDataSource {
   }
 
   @override
-  Future<bool> saveIsBannerDark(bool isBannerDark) {
+  Future<bool> saveIsBannerDark({required bool isBannerDark}) {
     return sharedPreferences.setBool(IS_BANNER_DARK, isBannerDark);
   }
 
