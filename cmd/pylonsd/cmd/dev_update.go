@@ -1,10 +1,10 @@
 package cmd
 
 import (
+	"encoding/json"
 	"strconv"
 
 	"github.com/spf13/cobra"
-	"github.com/tendermint/tendermint/libs/json"
 
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -31,7 +31,7 @@ func DevUpdate() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			cli.SetAlternativeContext(clientCtx.WithFromAddress(addr).WithFromName(accountName).WithBroadcastMode("sync"))
+			cli.SetAlternativeContext(clientCtx.WithFromAddress(addr).WithFromName(accountName).WithBroadcastMode("block"))
 			if err != nil {
 				panic(err)
 			}
