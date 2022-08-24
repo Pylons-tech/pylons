@@ -29,6 +29,5 @@ cmd/pylonsd/__debug_bin
 proto/dart/*
 
 debug
-*/settings.json
 
 *.env
