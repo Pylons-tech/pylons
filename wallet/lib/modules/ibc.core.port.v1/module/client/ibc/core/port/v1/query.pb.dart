@@ -11,7 +11,6 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 import '../../channel/v1/channel.pb.dart' as $5;
 
-import '../../channel/v1/channel.pbenum.dart' as $5;
 
 class QueryAppVersionRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
