@@ -31,6 +31,8 @@ export default ChainStatusContainer = withTracker((curr) => {
         }
     }
 
+    console.log("Loging Chain Status Info\n",states,states)
+
     return {
         loading,
         statusExist,
