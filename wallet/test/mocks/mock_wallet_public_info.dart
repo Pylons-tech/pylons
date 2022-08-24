@@ -13,7 +13,9 @@ import 'package:transaction_signing_gateway/model/account_public_info.dart'
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: unnecessary_parenthesis
-
+// ignore_for_file: camel_case_types
+// ignore_for_file: avoid_implementing_value_types
+// ignore_for_file: must_be_immutable
 class _FakeWalletPublicInfo_0 extends i1.Fake implements i2.AccountPublicInfo {}
 
 /// A class which mocks [WalletPublicInfo].

@@ -75,7 +75,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
               ),
             ),
           ),
-          Container(
+          ColoredBox(
             color: kBlack.withOpacity(0.5),
             child: Align(
               child: RepaintBoundary(
