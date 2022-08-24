@@ -1,3 +1,6 @@
+
+// ignore_for_file: constant_identifier_names
+
 enum IBCCoins {
   urun,
   ujunox,
@@ -9,6 +12,8 @@ enum IBCCoins {
   uatom,
   weth_wei
 }
+
+
 
 enum NftType {
   TYPE_RECIPE,

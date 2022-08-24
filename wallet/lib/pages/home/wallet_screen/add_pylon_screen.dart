@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -195,7 +197,7 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
       }
     } catch (e) {
       e.toString().show();
-      print(e);
+      log(e.toString());
     }
   }
 }
