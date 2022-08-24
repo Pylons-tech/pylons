@@ -273,13 +273,13 @@ aggregateDaily = () => {
 Meteor.startup(async function() {
     if (Meteor.isDevelopment) {
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = 1;
-        const settings = Meteor.settings;
-        Object.keys(settings).forEach((key) => {
-            if (Meteor.settings[key] == undefined) {
+        import DEFAULTSETTINGSJSON from '../settings.json'
+        Object.keys(DEFAULTSETTINGSJSON).forEach((key) => {
+            if(Meteor.settings[key] == undefined) {
                 console.warn(`CHECK SETTINGS JSON: ${key} is missing from settings`)
                 Meteor.settings[key] = {};
             }
-            Object.keys(Meteor.settings[key]).forEach((param) => {
+            Object.keys(DEFAULTSETTINGSJSON[key]).forEach((param) => {
                 if (Meteor.settings[key][param] == undefined) {
                     console.warn(`CHECK SETTINGS JSON: ${key}.${param} is missing from settings`)
                     Meteor.settings[key][param] = DEFAULTSETTINGSJSON[key][param]
