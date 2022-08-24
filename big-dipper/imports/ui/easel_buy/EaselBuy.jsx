@@ -47,6 +47,8 @@ export default class EaselBuy extends Component {
       showHideComp3: false,
       showHideComp4: false,
       showHideDetails: false,
+      nftViews: 0,
+      nftLikes: 0,
     };
     this.hideComponent = this.hideComponent.bind(this);
     // this.hideComponentDesc = this.hideComponent.bind(this);
@@ -93,6 +95,8 @@ export default class EaselBuy extends Component {
   componentDidMount() {
     this.handleFetchData();
     this.handleFetchhistory();
+    this.handleFetchLikes();
+    this.handleFetchViews();
   }
   handleFetchhistory = () => {
     console.log("fetch history");
@@ -198,6 +202,36 @@ export default class EaselBuy extends Component {
         console.log(err);
       });
   };
+
+  handleFetchLikes = () => {
+    const url = settings.public.baseURL;
+    axios
+      .get(
+        `${url}/api/actions/likes/${this.props.cookbook_id}/${this.props.recipe_id}`
+      )
+      .then((res) => {
+        if (res.data.Code === 200) {
+          this.setState({
+            nftLikes: res.data.Data.totalLikes,
+          });
+        }
+      });
+  };
+  handleFetchViews = () => {
+    const url = settings.public.baseURL;
+    axios
+      .get(
+        `${url}/api/actions/views/${this.props.cookbook_id}/${this.props.recipe_id}`
+      )
+      .then((res) => {
+        if (res.data.Code === 200) {
+          this.setState({
+            nftViews: res.data.Data.totalViews,
+          });
+        }
+      });
+  };
+
   getNFTDimentions = (nftType, data) => {
     if (
       nftType?.toLowerCase() === "image" ||
@@ -377,7 +411,7 @@ export default class EaselBuy extends Component {
                             src="/img/eye.svg"
                             style={{ width: "34px", height: "20px" }}
                           />
-                          <p>0 views</p>
+                          <p>{this.state.nftViews} views</p>
                         </div>
                       </div>
                       {this.state.description?.length > 35 ? (
@@ -454,9 +488,9 @@ export default class EaselBuy extends Component {
                                   <img
                                     alt="expand"
                                     src="/img/expand.svg"
-
-height="100%"
-width="100%"                                    className="plus-minus"
+                                    height="100%"
+                                    width="100%"
+                                    className="plus-minus"
                                   />
                                 )}
                               </button>
@@ -530,9 +564,9 @@ width="100%"                                    className="plus-minus"
                                   <img
                                     alt="expand"
                                     src="/img/expand.svg"
-
-height="100%"
-width="100%"                                    className="plus-minus"
+                                    height="100%"
+                                    width="100%"
+                                    className="plus-minus"
                                   />
                                 )}
                               </button>
@@ -589,9 +623,9 @@ width="100%"                                    className="plus-minus"
                                   <img
                                     alt="expand"
                                     src="/img/expand.svg"
-
-height="100%"
-width="100%"                                    className="plus-minus"
+                                    height="100%"
+                                    width="100%"
+                                    className="plus-minus"
                                   />
                                 )}
                               </button>
@@ -620,7 +654,7 @@ width="100%"                                    className="plus-minus"
                               src="/img/likes.svg"
                               style={{ width: "41px", height: "39px" }}
                             />
-                            <p>0</p>
+                            <p>{this.state.nftLikes}</p>
                           </div>
                         </div>
                       </div>
@@ -700,7 +734,7 @@ width="100%"                                    className="plus-minus"
                             src="/img/eye.svg"
                             style={{ width: "34px", height: "20px" }}
                           />
-                          <p>0 views</p>
+                          <p>{this.state.nftViews} views</p>
                         </div>
                       </div>
                       {showHideDetails ? (
@@ -779,178 +813,178 @@ width="100%"                                    className="plus-minus"
                                   <img
                                     alt="expand"
                                     src="/img/expand.svg"
-
-height="100%"
-width="100%"                                    className="plus-minus"
-                                  />
-                                )}
-                              </button>
-                              {showHideComp1 ? (
-                                <div className="tab-panel">
-                                  <div className="item">
-                                    <p>Owned by</p>
-                                    <p>
-                                      {!!(nftHistory && nftHistory.length)
-                                        ? nftHistory[nftHistory.length - 1]
-                                            .sender_name
-                                        : createdBy}
-                                    </p>
-                                  </div>
-                                  <div className="item">
-                                    <p>Edition</p>
-                                    <p>{this.state.edition}</p>
-                                  </div>
-                                  <div className="item">
-                                    <p>Royalty</p>
-                                    <p>{this.state.royalty}%</p>
-                                  </div>
-                                  <div className="item">
-                                    <p>Size</p>
-                                    <p>{this.state.dimentions}</p>
-                                  </div>
-                                  <div className="item">
-                                    <p>Creation Date</p>
-                                    <p>
-                                      {!!createdAt
-                                        ? moment
-                                            .unix(createdAt)
-                                            .format("DD/MM/YYYY hh:mm:ss")
-                                        : ""}
-                                    </p>
-                                  </div>
-                                </div>
-                              ) : null}
-                            </li>
-                            <li>
-                              <div className="tab-name">
-                                <p>NFT Detail</p>
-                                <img
-                                  alt="NFT Detail"
-                                  src="/img/detail.svg"
-                                  width="100%"
-                                  height="100%"
-                                  className="icon-img"
-                                />
-                                <img
-                                  alt="line"
-                                  src="/img/line.svg"
-                                  style={{ width: "100%", height: "24px" }}
-                                  className="line"
-                                />
-                              </div>
-                              <button
-                                onClick={() =>
-                                  this.hideComponent("showHideComp2")
-                                }
-                              >
-                                {showHideComp2 ? (
-                                  <img
-                                    alt="minimize"
-                                    src="/img/minimize.svg"
-                                    height="100%"
-                                    width="100%"
-                                    className="plus-minus"
-                                  />
-                                ) : (
-                                  <img
-                                    alt="expand"
-                                    src="/img/expand.svg"
-
-height="100%"
-width="100%"                                    className="plus-minus"
-                                  />
-                                )}
-                              </button>
-                              {showHideComp2 ? (
-                                <div className="tab-panel">
-                                  <div className="item">
-                                    <p>Recipe ID</p>
-                                    <p>
-                                      <a href="#">{this.state.id}</a>
-                                    </p>
-                                  </div>
-                                  <div className="item">
-                                    <p>Blockchain</p>
-                                    <p>Pylons</p>
-                                  </div>
-                                  <div className="item">
-                                    <p>Permission</p>
-                                    <p>Exclusive</p>
-                                  </div>
-                                </div>
-                              ) : null}
-                            </li>
-                            <li>
-                              <div className="tab-name">
-                                <p>History</p>
-                                <img
-                                  alt="History"
-                                  src="/img/history.svg"
-                                  width="100%"
-                                  height="100%"
-                                  className="icon-img"
-                                />
-                                <img
-                                  alt="line"
-                                  src="/img/line.svg"
-                                  style={{ width: "100%", height: "24px" }}
-                                  className="line"
-                                />
-                              </div>
-                              <button
-                                onClick={() =>
-                                  this.hideComponent("showHideComp3")
-                                }
-                              >
-                                {showHideComp3 ? (
-                                  <img
-                                    alt="minimize"
-                                    src="/img/minimize.svg"
-                                    height="100%"
-                                    width="100%"
-                                    className="plus-minus"
-                                  />
-                                ) : (
-                                  <img
-                                    alt="expand"
-                                    src="/img/expand.svg"
-
-height="100%"
-width="100%"                                    className="plus-minus"
-                                  />
-                                )}
-                              </button>
-                              {showHideComp3 ? (
-                                <div className="tab-panel">
-                                  {nftHistory &&
-                                    nftHistory.map((val, i) => (
-                                      <div className="item" key={i}>
+                                        height="100%"
+                                        width="100%"
+                                        className="plus-minus"
+                                      />
+                                    )}
+                                  </button>
+                                  {showHideComp1 ? (
+                                    <div className="tab-panel">
+                                      <div className="item">
+                                        <p>Owned by</p>
                                         <p>
-                                          {moment(val.createdAt).format(
-                                            "DD/MM/YYYY hh:mm:ss"
-                                          )}
+                                          {!!(nftHistory && nftHistory.length)
+                                            ? nftHistory[nftHistory.length - 1]
+                                                .sender_name
+                                            : createdBy}
                                         </p>
-                                        <p>{val.sender_name}</p>
                                       </div>
-                                    ))}
-                                </div>
-                              ) : null}
-                            </li>
-                          </ul>
-                        </div>
-                        <div className="right-side">
-                          <div className="likes">
-                            <img
-                              alt="expand"
-                              src="/img/likes.svg"
-                              style={{ width: "41px", height: "39px" }}
-                            />
-                            <p>0</p>
+                                      <div className="item">
+                                        <p>Edition</p>
+                                        <p>{this.state.edition}</p>
+                                      </div>
+                                      <div className="item">
+                                        <p>Royalty</p>
+                                        <p>{this.state.royalty}%</p>
+                                      </div>
+                                      <div className="item">
+                                        <p>Size</p>
+                                        <p>{this.state.dimentions}</p>
+                                      </div>
+                                      <div className="item">
+                                        <p>Creation Date</p>
+                                        <p>
+                                          {!!createdAt
+                                            ? moment
+                                                .unix(createdAt)
+                                                .format("DD/MM/YYYY hh:mm:ss")
+                                            : ""}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  ) : null}
+                                </li>
+                                <li>
+                                  <div className="tab-name">
+                                    <p>NFT Detail</p>
+                                    <img
+                                      alt="NFT Detail"
+                                      src="/img/detail.svg"
+                                      width="100%"
+                                      height="100%"
+                                      className="icon-img"
+                                    />
+                                    <img
+                                      alt="line"
+                                      src="/img/line.svg"
+                                      style={{ width: "100%", height: "24px" }}
+                                      className="line"
+                                    />
+                                  </div>
+                                  <button
+                                    onClick={() =>
+                                      this.hideComponent("showHideComp2")
+                                    }
+                                  >
+                                    {showHideComp2 ? (
+                                      <img
+                                        alt="minimize"
+                                        src="/img/minimize.svg"
+                                        height="100%"
+                                        width="100%"
+                                        className="plus-minus"
+                                      />
+                                    ) : (
+                                      <img
+                                        alt="expand"
+                                        src="/img/expand.svg"
+                                        height="100%"
+                                        width="100%"
+                                        className="plus-minus"
+                                      />
+                                    )}
+                                  </button>
+                                  {showHideComp2 ? (
+                                    <div className="tab-panel">
+                                      <div className="item">
+                                        <p>Recipe ID</p>
+                                        <p>
+                                          <a href="#">{this.state.id}</a>
+                                        </p>
+                                      </div>
+                                      <div className="item">
+                                        <p>Blockchain</p>
+                                        <p>Pylons</p>
+                                      </div>
+                                      <div className="item">
+                                        <p>Permission</p>
+                                        <p>Exclusive</p>
+                                      </div>
+                                    </div>
+                                  ) : null}
+                                </li>
+                                <li>
+                                  <div className="tab-name">
+                                    <p>History</p>
+                                    <img
+                                      alt="History"
+                                      src="/img/history.svg"
+                                      width="100%"
+                                      height="100%"
+                                      className="icon-img"
+                                    />
+                                    <img
+                                      alt="line"
+                                      src="/img/line.svg"
+                                      style={{ width: "100%", height: "24px" }}
+                                      className="line"
+                                    />
+                                  </div>
+                                  <button
+                                    onClick={() =>
+                                      this.hideComponent("showHideComp3")
+                                    }
+                                  >
+                                    {showHideComp3 ? (
+                                      <img
+                                        alt="minimize"
+                                        src="/img/minimize.svg"
+                                        height="100%"
+                                        width="100%"
+                                        className="plus-minus"
+                                      />
+                                    ) : (
+                                      <img
+                                        alt="expand"
+                                        src="/img/expand.svg"
+                                        height="100%"
+                                        width="100%"
+                                        className="plus-minus"
+                                      />
+                                    )}
+                                  </button>
+                                  {showHideComp3 ? (
+                                    <div className="tab-panel">
+                                      {nftHistory &&
+                                        nftHistory.map((val, i) => (
+                                          <div className="item" key={i}>
+                                            <p>
+                                              {moment(val.createdAt).format(
+                                                "DD/MM/YYYY hh:mm:ss"
+                                              )}
+                                            </p>
+                                            <p>{val.sender_name}</p>
+                                          </div>
+                                        ))}
+                                    </div>
+                                  ) : null}
+                                </li>
+                              </ul>
+                            </div>
+                            <div className="right-side">
+                              <div className="likes">
+                                <img
+                                  alt="expand"
+                                  src="/img/likes.svg"
+                                  style={{ width: "41px", height: "39px" }}
+                                />
+                                <p>{this.state.nftLikes}</p>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                       </>
-                  ) :null}
+                        </>
+                      ) : null}
                       <div className="buy-btn">
                         <button onClick={this.handleLoginConfirmed}>
                           <img
@@ -982,7 +1016,7 @@ width="100%"                                    className="plus-minus"
                           </div>
                         </button>
                       </div>
-                    </div>                         
+                    </div>
                   </div>
                 </Col>
               </Row>
