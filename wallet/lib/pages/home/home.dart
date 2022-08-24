@@ -90,7 +90,7 @@ class HomeScreenState extends State<HomeScreen>
                 : SystemUiOverlayStyle.dark,
             child: RotatedBox(
               quarterTurns: 0,
-              child: Container(
+              child: ColoredBox(
                 color: kMainBG,
                 child: WillPopScope(
                   onWillPop: () async => false,

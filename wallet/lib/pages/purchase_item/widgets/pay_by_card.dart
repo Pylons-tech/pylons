@@ -68,7 +68,7 @@ class PayByCardWidget extends StatelessWidget {
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(14), bottomLeft: Radius.circular(14)),
           ),
-          child: Container(
+          child: DecoratedBox(
             // padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: kBlue.withOpacity(0.5),

@@ -192,7 +192,7 @@ class PurchasesCollection extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = context.watch<CollectionViewModel>();
     final isSelected = viewModel.collectionsType == CollectionsType.purchases;
-    return Container(
+    return DecoratedBox(
       decoration: const BoxDecoration(
         color: kMainBG,
       ),
@@ -212,7 +212,7 @@ class PurchasesCollection extends StatelessWidget {
                         bottom: 0,
                         left: 0.w,
                         right: 0.w,
-                        child: Container(
+                        child: DecoratedBox(
                           decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(
@@ -379,7 +379,7 @@ class CreationsCollection extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = context.watch<CollectionViewModel>();
     final isSelected = viewModel.collectionsType == CollectionsType.creations;
-    return Container(
+    return DecoratedBox(
       decoration: const BoxDecoration(
         color: kMainBG,
       ),
@@ -400,7 +400,7 @@ class CreationsCollection extends StatelessWidget {
                         bottom: 0,
                         left: 0.w,
                         right: 0.w,
-                        child: Container(
+                        child: DecoratedBox(
                           decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(

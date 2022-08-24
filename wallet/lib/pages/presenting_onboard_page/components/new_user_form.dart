@@ -13,7 +13,7 @@ import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class NewUserForm extends StatefulWidget {
   final WalletsStore walletsStore;
@@ -107,7 +107,7 @@ class NewUserFormState extends State<NewUserForm> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          launch(kPrivacyPolicyLink);
+                          launchUrlString(kPrivacyPolicyLink);
                         }),
                 ],
               ),

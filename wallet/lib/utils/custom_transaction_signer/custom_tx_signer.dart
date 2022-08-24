@@ -11,13 +11,13 @@ class CustomTxSigner {
   CustomTxSigner(this._chainId);
 
   /// Builds a new [TxSigner] from a given gRPC client channel and HTTP client.
-  factory CustomTxSigner.build(String _chainId) {
-    return CustomTxSigner(_chainId);
+  factory CustomTxSigner.build(String chainId) {
+    return CustomTxSigner(chainId);
   }
 
   /// Builds a new [TxSigner] from the given [NetworkInfo].
-  factory CustomTxSigner.fromNetworkInfo(String _chainId) {
-    return CustomTxSigner.build(_chainId);
+  factory CustomTxSigner.fromNetworkInfo(String chainId) {
+    return CustomTxSigner.build(chainId);
   }
 
   /// Creates a new [Tx] object containing the given [msgs] and signs it using
