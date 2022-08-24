@@ -13,7 +13,6 @@ import 'package:easel_flutter/services/third_party_services/crashlytics_helper.d
 import 'package:easel_flutter/services/third_party_services/database.dart';
 import 'package:easel_flutter/services/third_party_services/network_info.dart';
 import 'package:easel_flutter/services/third_party_services/video_player_helper.dart';
-import 'package:easel_flutter/utils/env.dart';
 import 'package:easel_flutter/utils/file_utils_helper.dart';
 import 'package:easel_flutter/viewmodels/home_viewmodel.dart';
 import 'package:file_picker/file_picker.dart';
@@ -24,6 +23,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
+import 'package:easel_flutter/env.dart';
 
 final sl = GetIt.instance;
 

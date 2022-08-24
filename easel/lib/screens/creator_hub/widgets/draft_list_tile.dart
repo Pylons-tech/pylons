@@ -31,7 +31,76 @@ class DraftListTile extends StatefulWidget {
 }
 
 class _DraftListTileState extends State<DraftListTile> {
-  int count = 0;
+  String getThumbnailUrl() {
+    AssetType assetType = widget.nft.assetType.toAssetTypeEnum();
+
+    switch (assetType) {
+      case AssetType.Audio:
+      case AssetType.Video:
+      case AssetType.Pdf:
+        return widget.nft.thumbnailUrl.changeDomain();
+      case AssetType.Image:
+      case AssetType.ThreeD:
+        return widget.nft.url.changeDomain();
+    }
+  }
+
+  Widget getPlaceHolder() {
+    return Container(
+        margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 3.w),
+        decoration: BoxDecoration(color: EaselAppTheme.kDarkGrey02, boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            offset: const Offset(0.0, 1.0),
+            blurRadius: 4.0,
+          ),
+        ]),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+          child: Row(
+            children: [
+              Container(
+                width: 50.0.w,
+                height: 50.0.w,
+                decoration: const BoxDecoration(
+                  color: EaselAppTheme.kLightGrey03,
+                ),
+              ),
+              SizedBox(
+                width: 10.w,
+              ),
+              Expanded(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      width: 30.0.w,
+                      height: 9.0.h,
+                      color: EaselAppTheme.kLightGrey03,
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox(
+                      height: 8.0.h,
+                    );
+                  },
+                  itemCount: 3,
+                ),
+              ),
+              SizedBox(
+                width: 10.w,
+              ),
+              Padding(
+                padding: EdgeInsets.all(4.0.w),
+                child: SvgPicture.asset(
+                  kSvgMoreOption,
+                  color: EaselAppTheme.kLightGrey03,
+                ),
+              )
+            ],
+          ),
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,68 +200,11 @@ class _DraftListTileState extends State<DraftListTile> {
                   height: 85.0.h,
                   width: double.infinity,
                   child: CachedNetworkImage(
-                    imageUrl: widget.nft.assetType.toAssetTypeEnum() == AssetType.Image ? widget.nft.url.changeDomain() : widget.nft.thumbnailUrl.changeDomain(),
+                    imageUrl: getThumbnailUrl(),
                     fit: BoxFit.fill,
                     color: Colors.transparent,
                     colorBlendMode: BlendMode.clear,
-                    placeholder: (context, _) {
-                      return Container(
-                          margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 3.w),
-                          decoration: BoxDecoration(color: EaselAppTheme.kDarkGrey02, boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              offset: const Offset(0.0, 1.0),
-                              blurRadius: 4.0,
-                            ),
-                          ]),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 50.0.w,
-                                  height: 50.0.w,
-                                  decoration: const BoxDecoration(
-                                    color: EaselAppTheme.kLightGrey03,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10.w,
-                                ),
-                                Expanded(
-                                  child: ListView.separated(
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index) {
-                                      return Container(
-                                        width: 30.0.w,
-                                        height: 9.0.h,
-                                        color: EaselAppTheme.kLightGrey03,
-                                      );
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return SizedBox(
-                                        height: 8.0.h,
-                                      );
-                                    },
-                                    itemCount: 3,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10.w,
-                                ),
-                                InkWell(
-                                    onTap: () {},
-                                    child: Padding(
-                                      padding: EdgeInsets.all(4.0.w),
-                                      child: SvgPicture.asset(
-                                        kSvgMoreOption,
-                                        color: EaselAppTheme.kLightGrey03,
-                                      ),
-                                    ))
-                              ],
-                            ),
-                          ));
-                    },
+                    placeholder: (context, _) => getPlaceHolder(),
                     errorWidget: (context, _, __) {
                       return const IgnorePointer(child: SizedBox());
                     },
