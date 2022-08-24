@@ -65,8 +65,8 @@ class _UpdateAppState extends State<UpdateApp> {
   Stack buildTabletScreen(BuildContext context) {
     return Stack(
       children: [
-        Positioned(
-            child: Container(
+        const Positioned(
+            child: ColoredBox(
           color: Colors.white,
         )),
         Positioned(

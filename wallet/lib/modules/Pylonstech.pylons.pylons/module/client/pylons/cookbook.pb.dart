@@ -168,4 +168,3 @@ class Cookbook extends $pb.GeneratedMessage {
   @$pb.TagNumber(9)
   void clearEnabled() => clearField(9);
 }
-
