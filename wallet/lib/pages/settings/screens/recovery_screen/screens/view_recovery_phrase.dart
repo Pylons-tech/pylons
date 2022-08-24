@@ -452,7 +452,7 @@ class MnemonicList extends StatelessWidget {
             right: 0,
             top: 0,
             bottom: 0,
-            child: Container(
+            child: ColoredBox(
                 color: color,
                 child: Center(
                     child: Text(

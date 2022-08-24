@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cosmos_ui_components/cosmos_theme.dart';
@@ -9,7 +10,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
-
 //import for AppStoreProductDetails
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -244,7 +244,7 @@ class _PylonsAppState extends State<PylonsApp> {
         await InAppPurchase.instance.completePurchase(purchaseDetails);
       }
     } catch (e) {
-      print("Main Catch $e");
+      log("Main Catch $e");
     }
   }
 
