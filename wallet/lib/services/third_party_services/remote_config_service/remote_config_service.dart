@@ -44,6 +44,7 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
   static String chainId = "CHAIN_ID";
   static String ibcTrace = "IBC_TRACE_URL";
   static String mongoUrl = "MONGO_URL";
+  static String skus = "skus";
 
   RemoteConfigServiceImpl(
       {required this.firebaseRemoteConfig,
@@ -69,6 +70,7 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
             firebaseRemoteConfig.getString(stripeCallbackRefreshUrl),
         chainId: firebaseRemoteConfig.getString(chainId),
         ibcTraceUrl: firebaseRemoteConfig.getString(ibcTrace),
+        skus: firebaseRemoteConfig.getString(skus),
       );
 
     // if (localDataSource.getNetworkEnvironmentPreference() == kDevNet) {

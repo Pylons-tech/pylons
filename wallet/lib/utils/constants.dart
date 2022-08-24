@@ -394,18 +394,10 @@ const int kDateConverterConstant = 1000;
 
 const kHashtags = "Hashtags";
 
-const kBuyPylonOne = "10 PYLN";
-const kBuyPylonThree = "30 PYLN";
-const kBuyPylonFive = "50 PYLN";
-const kOneUSD = "\$1.00";
-const kThreeUSD = "\$3.00";
-const kFiveUSD = "\$5.00";
 
 const kLOW_LOW_BALANCE_CONSTANT = "Tx error:5";
 
-const kPylons1 = "pylons_10";
-const kPylons3 = "pylons_35";
-const kPylons5 = "pylons_60";
+
 
 //NFT STRINGS KEYS
 const kResidual = "Residual";
