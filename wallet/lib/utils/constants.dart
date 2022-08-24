@@ -277,7 +277,7 @@ List<Map<String, dynamic>> languagesSupported = [
 
 ///review your nft
 
-const String kPylonsFeeMsg = "The Pylons fee is the network fee assessed on all transactions equal to 10% of the listed price.";
+const String kPylonsFeeMsg = "The Pylons fee is the network fee assessed on all transactions which is equal to 10% of the listed price.";
 const String kStripeAccountNotCreatedIdentifier = "onboarding";
 const String kNftFormat = "NFT_Format";
 const String kDuration = "Duration";
