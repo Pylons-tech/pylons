@@ -734,7 +734,7 @@ export default class EaselBuy extends Component {
                             src="/img/eye.svg"
                             style={{ width: "34px", height: "20px" }}
                           />
-                          <p>0 views</p>
+                          <p>{this.state.nftViews} views</p>
                         </div>
                       </div>
                       {showHideDetails ? (
@@ -979,7 +979,7 @@ export default class EaselBuy extends Component {
                                   src="/img/likes.svg"
                                   style={{ width: "41px", height: "39px" }}
                                 />
-                                <p>0</p>
+                                <p>{this.state.nftLikes}</p>
                               </div>
                             </div>
                           </div>
