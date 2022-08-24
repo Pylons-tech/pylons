@@ -205,3 +205,5 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 
+dependency_overrides:
+  webview_flutter_android: "2.8.14"
