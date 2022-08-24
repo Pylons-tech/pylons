@@ -10,7 +10,7 @@
 cmd/pylonsd/cmd/*.plc
 cmd/pylonsd/cmd/*.plr
 cmd/pylonsd/cmd/*.pdt
-
+node_modules
 
 # starport generated folders
 ./vue/
@@ -26,3 +26,9 @@ genesis/pylonsd
 artifacts
 
 cmd/pylonsd/__debug_bin
+proto/dart/*
+
+debug
+*/settings.json
+
+*.env

@@ -7,7 +7,7 @@ import (
 
 var _ sdk.Msg = &MsgCreateCookbook{}
 
-func NewMsgCreateCookbook(creator string, id string, name string, description string, developer string, version string, supportEmail string, enabled bool) *MsgCreateCookbook {
+func NewMsgCreateCookbook(creator, id, name, description, developer, version, supportEmail string, enabled bool) *MsgCreateCookbook {
 	return &MsgCreateCookbook{
 		Creator:      creator,
 		Id:           id,
@@ -76,7 +76,7 @@ func (msg *MsgCreateCookbook) ValidateBasic() error {
 
 var _ sdk.Msg = &MsgUpdateCookbook{}
 
-func NewMsgUpdateCookbook(creator string, id string, name string, description string, developer string, version string, supportEmail string, enabled bool) *MsgUpdateCookbook {
+func NewMsgUpdateCookbook(creator, id, name, description, developer, version, supportEmail string, enabled bool) *MsgUpdateCookbook {
 	return &MsgUpdateCookbook{
 		Creator:      creator,
 		Id:           id,

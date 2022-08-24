@@ -34,6 +34,8 @@ const (
 	RecipeKey = "Recipe-value-"
 	// RecipeHistory is a string key used as a prefix to the KVStore
 	RecipeHistoryKey = "Recipe-History-value-"
+	// ItemHistoryKey is a string key used as a prefix to the KVStore
+	ItemHistoryKey = "Item-History-value-"
 	// ItemKey is a string key used as a prefix to the KVStore
 	ItemKey = "Item-value-"
 	// ItemCountKey is a string key used as a prefix to the KVStore
@@ -72,6 +74,8 @@ const (
 	UsernameKey = "Username-value-"
 	// AccountKey is a string used as prefix to the KVStore
 	AccountKey = "PylonsAccount-value-"
+	// AccountKey is a string used as prefix to the KVStore
+	ReferralKey = "PylonsAccount-Referral-value-"
 	// CreateItemKey is a string used as event name in msg execute recipe
 	CreateItemKey = "create_item"
 	// CreateExecutionKey is a string used as event name in msg execute recipe

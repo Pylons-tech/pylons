@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"testing"
 
@@ -63,7 +64,7 @@ func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.N
 	types.UpdateAppCheckFlagTest(types.FlagTrue)
 
 	// create account
-	args := []string{username, usernameToken}
+	args := []string{username, usernameToken, ""}
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
 	if err != nil {
@@ -188,7 +189,7 @@ func NetworkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, 
 }
 
 // A network with cookbook object just contains a state of:
-//	 	N cookbooks
+// N cookbooks
 func NetworkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.Cookbook) {
 	t.Helper()
 	cfg := app.DefaultConfig()
@@ -216,10 +217,10 @@ func NetworkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 	return network.New(t, cfg), state.CookbookList
 }
 
-// A network with execution objects  contains a state of:
+//		A network with execution objects  contains a state of:
 //	 	N cookbooks
 //		N recipes (1 per cookbook)
-// 		N executions (1 per recipe)
+//		N executions (1 per recipe)
 func NetworkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types.Execution) {
 	t.Helper()
 	cfg := app.DefaultConfig()
@@ -407,4 +408,16 @@ func NetworkWithRecipeObjectsHistory(t *testing.T, n int) (*network.Network, []t
 	require.NoError(t, err)
 	cfg.GenesisState[types.ModuleName] = buf
 	return network.New(t, cfg), state.RecipeList, nil
+}
+
+func WriteFixtureAtTestRuntime(name, data string) {
+	file, err := os.Create(name)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+	_, err = file.WriteString(data)
+	if err != nil {
+		panic(err)
+	}
 }

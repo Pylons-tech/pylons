@@ -20,6 +20,41 @@ func (k Keeper) SetPylonsAccount(ctx sdk.Context, accountAddr types.AccountAddr,
 	accountPrefixStore.Set(types.KeyPrefix(accountAddr.Value), binaryUsername)
 }
 
+func (k Keeper) SetPylonsReferral(ctx sdk.Context, address, username, referral string) {
+	val, found := k.GetPylonsReferral(ctx, referral)
+	if found {
+		val.Users = append(val.Users, &types.RefereeSignup{
+			Username: username,
+			Address:  address,
+		})
+		binaryReferral := k.cdc.MustMarshal(&val)
+		referralPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ReferralKey))
+		referralPrefixStore.Set(types.KeyPrefix(referral), binaryReferral)
+	} else {
+		binaryReferral := k.cdc.MustMarshal(&types.ReferralKV{
+			Address: referral,
+			Users: []*types.RefereeSignup{
+				{
+					Username: username,
+					Address:  address,
+				},
+			},
+		})
+		referralPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ReferralKey))
+		referralPrefixStore.Set(types.KeyPrefix(referral), binaryReferral)
+	}
+}
+
+func (k Keeper) GetPylonsReferral(ctx sdk.Context, addr string) (val types.ReferralKV, found bool) {
+	referralPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ReferralKey))
+	b := referralPrefixStore.Get(types.KeyPrefix(addr))
+	if b == nil {
+		return val, false
+	}
+	k.cdc.MustUnmarshal(b, &val)
+	return val, true
+}
+
 // HasUsername checks if the username exists in the store
 func (k Keeper) HasUsername(ctx sdk.Context, username types.Username) bool {
 	usernamePrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))

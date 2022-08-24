@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -16,24 +17,33 @@ import (
 
 var Out io.Writer = os.Stdout // modified during testing
 
+// group 1: (whole raw string tokens encapsulated ```like this```)
+// group 2: (tokens not containing whitespace, separated by whitespace)
+// group 3: (whatever is in front of the first whitespace)
+var gadgetParamParseRegex = regexp.MustCompile(`(\s'''.*''')|(\s.\S*)|(\S*)`)
+
 const (
 	cookbookExtension = ".plc"
 	recipeExtension   = ".plr"
 	moduleExtension   = ".pdt"
-
-	includeDirective = "#include "
+	includeDirective  = "#include "
 )
 
 func forFile(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.Recipe)) {
+	// this is slow, we should avoid reloading gadgets w/ every file when we can do some rewriting
+	gadgets, err := LoadGadgetsForPath(path)
+	if err != nil {
+		panic(err)
+	}
 	if filepath.Ext(path) == cookbookExtension {
-		cb, _, err := loadCookbookFromPath(path)
+		cb, _, err := loadCookbookFromPath(path, gadgets)
 		if err != nil {
 			fmt.Fprintln(Out, "File ", path, " is not a cookbook - parsing error:\n", err)
 		} else {
 			perCookbook(path, cb)
 		}
 	} else if filepath.Ext(path) == recipeExtension {
-		rcp, _, err := loadRecipeFromPath(path)
+		rcp, _, err := loadRecipeFromPath(path, gadgets)
 		if err != nil {
 			fmt.Fprintln(Out, "File ", path, " is not a recipe - parsing error:\n", err)
 		} else {
@@ -60,13 +70,12 @@ func ForFiles(path string, perCookbook func(path string, cookbook types.Cookbook
 			if err != nil {
 				panic(err)
 			}
-		} else {
-			forFile(path, perCookbook, perRecipe)
 		}
+		forFile(path, perCookbook, perRecipe)
 	}
 }
 
-func loadModuleFromPath(modulePath string, currentPath string) string {
+func loadModuleFromPath(modulePath, currentPath string) string {
 	bytes, err := os.ReadFile(path.Join(currentPath, modulePath+moduleExtension))
 	if err != nil {
 		panic(err)
@@ -74,36 +83,51 @@ func loadModuleFromPath(modulePath string, currentPath string) string {
 	return string(bytes)
 }
 
-func loadModuleInline(bytes []byte, path string, info os.FileInfo) string {
+func loadModulesInline(bytes []byte, path string, info os.FileInfo, gadgets *[]Gadget) string {
+	// TODO: this function is slightly kludgy due to hotfixes rn - rewrite it
 	json := string(bytes)
 	lines := strings.Split(json, "\n")
 	for i, line := range lines {
-		if strings.Contains(line, includeDirective) {
-			modulePath := strings.TrimSpace(strings.Split(line, includeDirective)[1])
-			lines[i] = loadModuleFromPath(modulePath, strings.TrimSuffix(path, info.Name())) + "\n"
+		line = strings.TrimSpace(line)
+		if len(line) != 0 && line[0] == '#' {
+			appendComma := strings.HasSuffix(line, ",")
+			if appendComma {
+				line = strings.TrimSuffix(line, ",")
+			}
+			if strings.Contains(line, includeDirective) {
+				modulePath := strings.TrimSpace(strings.Split(line, includeDirective)[1])
+				lines[i] = loadModuleFromPath(modulePath, strings.TrimSuffix(path, info.Name())) + "\n"
+			} else {
+				splut := gadgetParamParseRegex.FindAllString(strings.TrimSuffix(strings.TrimPrefix(line, "#"), ","), -1)
+				gadget := GetGadget(strings.TrimSuffix(strings.TrimSpace(splut[0]), ","), gadgets)
+				lines[i] = ExpandGadget(gadget, splut[1:])
+			}
+			if appendComma {
+				lines[i] += "," // this is slow/clumsy but worry abt it later
+			}
 		}
 	}
-	json = strings.Join(lines, "")
+	json = strings.Join(lines, "\n")
 	return json
 }
 
-func loadCookbookFromPath(path string) (types.Cookbook, string, error) {
+func loadCookbookFromPath(path string, gadgets *[]Gadget) (types.Cookbook, string, error) {
 	bytes, _ := os.ReadFile(path)
 	info, _ := os.Stat(path)
 	var cb types.Cookbook
 
-	json := loadModuleInline(bytes, path, info)
+	json := loadModulesInline(bytes, path, info, gadgets)
 	err := jsonpb.UnmarshalString(json, &cb)
 
 	return cb, json, err
 }
 
-func loadRecipeFromPath(path string) (types.Recipe, string, error) {
+func loadRecipeFromPath(path string, gadgets *[]Gadget) (types.Recipe, string, error) {
 	bytes, _ := os.ReadFile(path)
 	info, _ := os.Stat(path)
 	var rcp types.Recipe
 
-	json := loadModuleInline(bytes, path, info)
+	json := loadModulesInline(bytes, path, info, gadgets)
 	err := jsonpb.UnmarshalString(json, &rcp)
 	return rcp, string(bytes), err
 }

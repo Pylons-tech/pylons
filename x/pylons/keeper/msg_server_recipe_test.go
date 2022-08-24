@@ -11,7 +11,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (suite *IntegrationTestSuite) TestRecipeMsgServerCreate() {
+func (suite *IntegrationTestSuite) TestRecipeMsgServerCreate2() {
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -19,165 +19,166 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreate() {
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
 
-	creator := "A"
-	for i := 0; i < 5; i++ {
-		idx := fmt.Sprintf("%d", i)
-		cookbook := &types.MsgCreateCookbook{
-			Creator:      creator,
-			Id:           idx,
-			Name:         "testCookbookName",
-			Description:  "descdescdescdescdescdesc",
-			Developer:    "",
-			Version:      "v0.0.1",
-			SupportEmail: "test@email.com",
-			Enabled:      false,
-		}
-		_, err := srv.CreateCookbook(wctx, cookbook)
-		require.NoError(err)
-		expected := &types.MsgCreateRecipe{
-			Creator:       creator,
-			CookbookId:    idx,
-			Id:            idx,
-			Name:          "testRecipeName",
-			Description:   "decdescdescdescdescdescdescdesc",
-			Version:       "v0.0.1",
-			CoinInputs:    nil,
-			ItemInputs:    nil,
-			Entries:       types.EntriesList{},
-			Outputs:       nil,
-			BlockInterval: 0,
-			CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
-			Enabled:       false,
-			ExtraInfo:     "",
-		}
-		_, err = srv.CreateRecipe(wctx, expected)
-		require.NoError(err)
-		rst, found := k.GetRecipe(ctx, expected.CookbookId, expected.Id)
-		require.True(found)
-		require.Equal(expected.Id, rst.Id)
+	creator := "testPylon"
+
+	expected := &types.MsgCreateRecipe{
+		Creator:       creator,
+		CookbookId:    "",
+		Id:            "",
+		Name:          "testRecipeName",
+		Description:   "decdescdescdescdescdescdescdesc",
+		Version:       "v0.0.1",
+		CoinInputs:    nil,
+		ItemInputs:    nil,
+		Entries:       types.EntriesList{},
+		Outputs:       nil,
+		BlockInterval: 0,
+		CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
+		Enabled:       false,
+		ExtraInfo:     "",
 	}
-}
 
-func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidAlreadyExists() {
-	k := suite.k
-	ctx := suite.ctx
-	require := suite.Require()
+	for index, tc := range []struct {
+		desc             string
+		cookbook         types.MsgCreateCookbook
+		request          types.MsgCreateRecipe
+		create_Cookbook  bool
+		duplicate_Recipe bool
+		err              error
+	}{
+		{
+			desc: "Completed",
+			cookbook: types.MsgCreateCookbook{
+				Creator:      creator,
+				Name:         "testCookbookName",
+				Description:  "descdescdescdescdescdesc",
+				Developer:    "",
+				Version:      "v0.0.1",
+				SupportEmail: "test@email.com",
+				Enabled:      false,
+			},
+			request: types.MsgCreateRecipe{
+				Creator:       creator,
+				Name:          "testRecipeName",
+				Description:   "decdescdescdescdescdescdescdesc",
+				Version:       "v0.0.1",
+				CoinInputs:    nil,
+				ItemInputs:    nil,
+				Entries:       types.EntriesList{},
+				Outputs:       nil,
+				BlockInterval: 0,
+				CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
+				Enabled:       false,
+				ExtraInfo:     "",
+			},
+			create_Cookbook:  true,
+			duplicate_Recipe: false,
+		},
+		{
+			desc: "Incorrect Owner",
+			cookbook: types.MsgCreateCookbook{
+				Creator:      creator,
+				Name:         "testCookbookName",
+				Description:  "descdescdescdescdescdesc",
+				Developer:    "",
+				Version:      "v0.0.1",
+				SupportEmail: "test@email.com",
+				Enabled:      false,
+			},
+			request: types.MsgCreateRecipe{
+				Creator:       "testPylon_1",
+				Name:          "testRecipeName",
+				Description:   "descdescdescdescdescdesc",
+				Version:       "v0.0.1",
+				CoinInputs:    nil,
+				ItemInputs:    nil,
+				Entries:       types.EntriesList{},
+				Outputs:       nil,
+				BlockInterval: 0,
+				CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
+				Enabled:       false,
+				ExtraInfo:     "",
+			},
+			create_Cookbook:  true,
+			duplicate_Recipe: false,
+			err:              sdkerrors.ErrUnauthorized,
+		},
+		{
+			desc: "Cookbook does not exist",
+			request: types.MsgCreateRecipe{
+				Creator:       creator,
+				Name:          "testRecipeName",
+				Description:   "descdescdescdescdescdesc",
+				Version:       "v0.0.1",
+				CoinInputs:    nil,
+				ItemInputs:    nil,
+				Entries:       types.EntriesList{},
+				Outputs:       nil,
+				BlockInterval: 0,
+				CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
+				Enabled:       false,
+				ExtraInfo:     "",
+			},
+			create_Cookbook:  false,
+			duplicate_Recipe: false,
+			err:              sdkerrors.ErrInvalidRequest,
+		},
+		{
+			desc: "Recipe already set",
+			cookbook: types.MsgCreateCookbook{
+				Creator:      creator,
+				Name:         "testCookbookName",
+				Description:  "descdescdescdescdescdesc",
+				Developer:    "",
+				Version:      "v0.0.1",
+				SupportEmail: "test@email.com",
+				Enabled:      false,
+			},
+			request: types.MsgCreateRecipe{
+				Creator:       creator,
+				Name:          "testRecipeName",
+				Description:   "descdescdescdescdescdesc",
+				Version:       "v0.0.1",
+				CoinInputs:    nil,
+				ItemInputs:    nil,
+				Entries:       types.EntriesList{},
+				Outputs:       nil,
+				BlockInterval: 0,
+				CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
+				Enabled:       false,
+				ExtraInfo:     "",
+			},
+			create_Cookbook:  true,
+			duplicate_Recipe: true,
+			err:              sdkerrors.ErrInvalidRequest,
+		},
+	} {
+		suite.Run(tc.desc, func() {
+			tc.cookbook.Id = fmt.Sprintf("%d", index)
+			tc.request.CookbookId = fmt.Sprintf("%d", index)
+			tc.request.Id = fmt.Sprintf("%d", index)
+			expected.CookbookId = fmt.Sprintf("%d", index)
+			expected.Id = fmt.Sprintf("%d", index)
 
-	srv := keeper.NewMsgServerImpl(k)
-	wctx := sdk.WrapSDKContext(ctx)
+			if tc.create_Cookbook {
+				_, err := srv.CreateCookbook(wctx, &tc.cookbook)
+				require.NoError(err)
+			}
+			if tc.duplicate_Recipe {
+				_, err := srv.CreateRecipe(wctx, &tc.request)
+				require.NoError(err)
+			}
+			_, err := srv.CreateRecipe(wctx, &tc.request)
 
-	creator := "A"
-	for i := 0; i < 5; i++ {
-		idx := fmt.Sprintf("%d", i)
-		cookbook := &types.MsgCreateCookbook{
-			Creator:      creator,
-			Id:           idx,
-			Name:         "testCookbookName",
-			Description:  "descdescdescdescdescdesc",
-			Developer:    "",
-			Version:      "v0.0.1",
-			SupportEmail: "test@email.com",
-			Enabled:      false,
-		}
-		_, err := srv.CreateCookbook(wctx, cookbook)
-		require.NoError(err)
-		expected := &types.MsgCreateRecipe{
-			Creator:       creator,
-			CookbookId:    idx,
-			Id:            idx,
-			Name:          "testRecipeName",
-			Description:   "descdescdescdescdescdesc",
-			Version:       "v0.0.1",
-			CoinInputs:    nil,
-			ItemInputs:    nil,
-			Entries:       types.EntriesList{},
-			Outputs:       nil,
-			BlockInterval: 0,
-			CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
-			Enabled:       false,
-			ExtraInfo:     "",
-		}
-		_, err = srv.CreateRecipe(wctx, expected)
-		require.NoError(err)
-
-		_, err = srv.CreateRecipe(wctx, expected)
-		require.ErrorIs(err, sdkerrors.ErrInvalidRequest)
-	}
-}
-
-func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidCookbookNotOwned() {
-	k := suite.k
-	ctx := suite.ctx
-	require := suite.Require()
-
-	srv := keeper.NewMsgServerImpl(k)
-	wctx := sdk.WrapSDKContext(ctx)
-
-	creator := "A"
-	for i := 0; i < 5; i++ {
-		idx := fmt.Sprintf("%d", i)
-		cookbook := &types.MsgCreateCookbook{
-			Creator:      creator,
-			Id:           idx,
-			Name:         "testCookbookName",
-			Description:  "descdescdescdescdescdesc",
-			Developer:    "",
-			Version:      "v0.0.1",
-			SupportEmail: "test@email.com",
-			Enabled:      false,
-		}
-		_, err := srv.CreateCookbook(wctx, cookbook)
-		require.NoError(err)
-		expected := &types.MsgCreateRecipe{
-			Creator:       "B",
-			CookbookId:    idx,
-			Id:            idx,
-			Name:          "testRecipeName",
-			Description:   "descdescdescdescdescdesc",
-			Version:       "v0.0.1",
-			CoinInputs:    nil,
-			ItemInputs:    nil,
-			Entries:       types.EntriesList{},
-			Outputs:       nil,
-			BlockInterval: 0,
-			CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
-			Enabled:       false,
-			ExtraInfo:     "",
-		}
-		_, err = srv.CreateRecipe(wctx, expected)
-		require.ErrorIs(err, sdkerrors.ErrUnauthorized)
-	}
-}
-
-func (suite *IntegrationTestSuite) TestRecipeMsgServerCreateInvalidNoCookbook() {
-	k := suite.k
-	ctx := suite.ctx
-	require := suite.Require()
-
-	srv := keeper.NewMsgServerImpl(k)
-	wctx := sdk.WrapSDKContext(ctx)
-
-	creator := "A"
-	for i := 0; i < 5; i++ {
-		idx := fmt.Sprintf("%d", i)
-
-		expected := &types.MsgCreateRecipe{
-			Creator:       creator,
-			CookbookId:    idx,
-			Id:            idx,
-			Name:          "testRecipeName",
-			Description:   "descdescdescdescdescdesc",
-			Version:       "v0.0.1",
-			CoinInputs:    nil,
-			ItemInputs:    nil,
-			Entries:       types.EntriesList{},
-			Outputs:       nil,
-			BlockInterval: 0,
-			Enabled:       false,
-			ExtraInfo:     "",
-		}
-		_, err := srv.CreateRecipe(wctx, expected)
-		require.ErrorIs(err, sdkerrors.ErrInvalidRequest)
+			if tc.err != nil {
+				require.ErrorIs(err, tc.err)
+			} else {
+				require.NoError(err)
+				rst, found := k.GetRecipe(ctx, expected.CookbookId, expected.Id)
+				require.True(found)
+				require.Equal(expected.Id, rst.Id)
+			}
+		})
 	}
 }
 

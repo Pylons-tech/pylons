@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	transfertypes "github.com/cosmos/ibc-go/v4/modules/apps/transfer/types"
+	transfertypes "github.com/cosmos/ibc-go/v5/modules/apps/transfer/types"
 )
 
 // BankKeeper defines the expected interface needed to retrieve account balances.
@@ -14,10 +14,10 @@ type BankKeeper interface {
 	IsSendEnabledCoin(ctx sdk.Context, coin sdk.Coin) bool
 	IsSendEnabledCoins(ctx sdk.Context, coins ...sdk.Coin) error
 	MintCoins(ctx sdk.Context, moduleName string, amt sdk.Coins) error
-	SendCoins(ctx sdk.Context, fromAddr sdk.AccAddress, toAddr sdk.AccAddress, amt sdk.Coins) error
+	SendCoins(ctx sdk.Context, fromAddr, toAddr sdk.AccAddress, amt sdk.Coins) error
 	SendCoinsFromAccountToModule(ctx sdk.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins) error
 	SendCoinsFromModuleToAccount(ctx sdk.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
-	SendCoinsFromModuleToModule(ctx sdk.Context, senderModule string, recipientModule string, amt sdk.Coins) error
+	SendCoinsFromModuleToModule(ctx sdk.Context, senderModule, recipientModule string, amt sdk.Coins) error
 	SpendableCoins(ctx sdk.Context, addr sdk.AccAddress) sdk.Coins
 }
 

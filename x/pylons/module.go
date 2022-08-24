@@ -136,6 +136,12 @@ func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sd
 // module-specific GRPC queries.
 func (am AppModule) RegisterServices(cfg module.Configurator) {
 	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
+
+	m := keeper.NewMigrator(am.keeper)
+	err := cfg.RegisterMigration(types.ModuleName, 2, m.Migrate2to3)
+	if err != nil {
+		panic(err)
+	}
 }
 
 // RegisterInvariants registers the capability module's invariants.
@@ -209,7 +215,7 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 2 }
+func (AppModule) ConsensusVersion() uint64 { return 3 }
 
 // ____________________________________________________________________________
 
@@ -236,8 +242,13 @@ func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
 }
 
 // WeightedOperations returns the all the gov module operations with their respective weights.
-func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
-	return simulation.WeightedOperations(
+func (am AppModule) WeightedOperations(simState module.SimulationState) (res []simtypes.WeightedOperation) {
+	types.UpdateAppCheckFlagTest(types.FlagTrue)
+
+	res = simulation.WeightedOperations(
 		simState.AppParams, simState.Cdc, am.bankKeeper, am.keeper,
 	)
+
+	types.UpdateAppCheckFlagTest(types.FlagFalse)
+	return res
 }

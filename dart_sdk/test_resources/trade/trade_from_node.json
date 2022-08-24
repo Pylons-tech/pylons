@@ -1,0 +1,23 @@
+{
+  "creator": "pylo15skmjtnajjg65f30r9ujjz4yfzs9we8zv7uksh",
+  "coinInputs": [
+    {
+      "coins": [
+        {
+          "denom": "testCookbookID/testCoin",
+          "amount": "110"
+        }
+      ]
+    }
+  ],
+  "itemInputs": [],
+  "coinOutputs": [],
+  "itemOutputs": [
+    {
+      "cookbookID": "testCookbookID",
+      "itemID": "11111111"
+    }
+  ],
+  "extraInfo": "extraInfo",
+  "tradedItemInputs": []
+}

@@ -1,13 +1,10 @@
 {
-    "cookbookId": "cookbookLoudTest",
-    "id": "LOUDGetCharacter",
-    "name": "LOUD-Get-Character-Recipe",
+    #boilerplate v0.0.1 true,
+    #id_name LOUDGetCharacter LOUD-Get-Character,
     "description": "Creates a basic character in LOUD",
-    "version": "v0.0.1",
-    "coinInputs": [],
-    "itemInputs": [],
+    #no_input,
     "entries": {
-        "coinOutputs": [],
+        #no_coin_or_item_modify_output,
         "itemOutputs": [
             {
                 "id": "character",
@@ -19,7 +16,7 @@
                     }
                 ],
                 "longs": [
-#include character_state_table
+                    #include character_state_table
                 ],
                 "strings": [
                     {
@@ -32,22 +29,8 @@
                 "tradePercentage": "0.100000000000000000",
                 "tradeable": true
             }
-        ],
-        "itemModifyOutputs": []
+        ]
     },
-    "outputs": [
-        {
-            "entryIds": [
-                "character"
-            ],
-            "weight": 1
-        }
-    ],
-    "blockInterval": 0,
-    "costPerBlock": {
-        "denom": "upylon",
-        "amount": "1000000"
-    },
-    "enabled": true,
+    #solo_output character
     "extraInfo": "extraInfo"
 }

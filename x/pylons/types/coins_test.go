@@ -9,7 +9,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	ibctypes "github.com/cosmos/ibc-go/v4/modules/apps/transfer/types"
+	ibctypes "github.com/cosmos/ibc-go/v5/modules/apps/transfer/types"
 
 	"github.com/stretchr/testify/require"
 )
@@ -46,7 +46,7 @@ func TestCookbookDenom(t *testing.T) {
 }
 
 func TestIBCDenom(t *testing.T) {
-	valid1Trace := ibctypes.ParseDenomTrace("transfer/channelidone/uatom")
+	valid1Trace := ibctypes.ParseDenomTrace("transfer/channel-0/uatom")
 	valid1 := valid1Trace.IBCDenom()
 	valid2 := "ibc/529ba5e3e86ba7796d7caab4fc02728935fbc75c0f7b25a9e611c49dd7d68a35"
 

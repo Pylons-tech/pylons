@@ -8,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	testutil "github.com/Pylons-tech/pylons/testutil/cli"
 )
 
 const (
@@ -99,14 +101,12 @@ const badRecipeLiteral = `
 const goodRecipeLiteral = `
 {
     "cookbookId": "cookbookLoudTest",
-    "id": "LOUDGetCharacter",
-    "name": "LOUD-Get-Character-Recipe",
+    #id_name LOUDGetCharacter LOUD-Get-Character-Recipe,
     "description": "Creates a basic character in LOUD",
     "version": "v0.0.1",
-    "coinInputs": [],
-    "itemInputs": [],
+    #no_input,
     "entries": {
-        "coinOutputs": [],
+        #no_coin_or_item_modify_output,
         "itemOutputs": [
             {
                 "id": "character",
@@ -235,8 +235,7 @@ const goodRecipeLiteral = `
                 "tradePercentage": "0.100000000000000000",
                 "tradeable": true
             }
-        ],
-        "itemModifyOutputs": []
+        ]
     },
     "outputs": [
         {
@@ -401,8 +400,7 @@ const goodRecipeLiteralWithModuleInclude = `
         "denom": "upylon",
         "amount": "1000000"
     },
-    "enabled": true,
-    "extraInfo": "extraInfo"
+    "enabled": true
 }`
 
 const testModuleLiteral = `
@@ -494,22 +492,10 @@ func TestValidate(t *testing.T) {
 // This is kinda icky, but it lets us test the entire production implementation w/o having to
 // deal w/ finding the testdata from an unknown state.
 func preTestValidate(t *testing.T) {
-	writeFileValidate(badPLC, badCookbookLiteral)
-	writeFileValidate(goodPLC, goodCookbookLiteral)
-	writeFileValidate(badPLR, badRecipeLiteral)
-	writeFileValidate(goodPLR, goodRecipeLiteral)
-	writeFileValidate(moduledPLR, goodRecipeLiteralWithModuleInclude)
-	writeFileValidate(testModulePDT, testModuleLiteral)
-}
-
-func writeFileValidate(name string, data string) {
-	file, err := os.Create(name)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-	_, err = file.WriteString(data)
-	if err != nil {
-		panic(err)
-	}
+	testutil.WriteFixtureAtTestRuntime(badPLC, badCookbookLiteral)
+	testutil.WriteFixtureAtTestRuntime(goodPLC, goodCookbookLiteral)
+	testutil.WriteFixtureAtTestRuntime(badPLR, badRecipeLiteral)
+	testutil.WriteFixtureAtTestRuntime(goodPLR, goodRecipeLiteral)
+	testutil.WriteFixtureAtTestRuntime(moduledPLR, goodRecipeLiteralWithModuleInclude)
+	testutil.WriteFixtureAtTestRuntime(testModulePDT, testModuleLiteral)
 }
