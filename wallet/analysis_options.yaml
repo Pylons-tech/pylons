@@ -8,7 +8,7 @@ analyzer:
     - lib/**.gr.dart
     - lib/**.config.dart
     - lib/generated/**.dart
-    - lib/modules/*/*
+#    - lib/modules/*/*
 #    - test/*/*
 #  strong-mode:
 #    implicit-dynamic: true
@@ -22,6 +22,12 @@ analyzer:
     missing_required_param: error
 #    implicit_dynamic_map_literal: ignore
     prefer_single_quotes: ignore
+    sort_unnamed_constructors_first: ignore
+    prefer_constructors_over_static_methods: ignore
+    no_leading_underscores_for_local_identifiers: ignore
+    directives_ordering: ignore
+    always_use_package_imports: ignore
+    avoid_classes_with_only_static_members: ignore
     missing_return: error
     always_declare_return_types: error
     override_on_non_overriding_member: error

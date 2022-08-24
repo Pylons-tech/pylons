@@ -140,4 +140,3 @@ class History extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   void clearTxId() => clearField(7);
 }
-
