@@ -10,7 +10,6 @@ import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 TextStyle kPylonLabelText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: kTextBlackColor, fontWeight: FontWeight.w800);
 TextStyle kTitleText = TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: kBlack, fontWeight: FontWeight.w700);

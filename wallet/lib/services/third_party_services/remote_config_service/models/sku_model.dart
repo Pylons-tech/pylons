@@ -13,7 +13,7 @@ class SKUModel {
   String pylons;
 
   SKUModel({required this.id, required this.bonus, required this.subtitle, required this.pylons});
-  factory SKUModel.fromJson(Map<String, String> json) {
+  factory SKUModel.fromJson(Map json) {
     return SKUModel(
       pylons: json['pylons'].toString(),
       subtitle: json['subtitle'].toString(),

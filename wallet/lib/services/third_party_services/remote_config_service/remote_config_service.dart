@@ -1,3 +1,4 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
@@ -139,6 +140,10 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
       iosVERSION: IOS_VERSION,
       androidVersion: ANDROID_VERSION,
       chainId: dotenv.env['CHAIN_ID'],
+      skus: defaultPylonsSKUs,
+      mongoUrl: dotenv.env[mongoUrl] ?? "",
+
+
     });
 
     firebaseRemoteConfig.setConfigSettings(RemoteConfigSettings(
@@ -151,6 +156,8 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
     } on FormatException catch (_) {
       /// Happens when there is no internet on first launch.
       crashlyticsHelper.recordFatalError(error: _.message);
+    } on FirebaseException catch(_){
+      crashlyticsHelper.recordFatalError(error: _.message ?? "");
     }
   }
 

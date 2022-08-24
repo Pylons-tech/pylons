@@ -64,8 +64,8 @@ class BaseEnv {
     _faucetUrl = faucetUrl;
 
 
-    final List<Map> jsonSkuList = jsonDecode(skus) as List<Map<String, String>>;
-    _skus = jsonSkuList.map(( e) => SKUModel.fromJson(e as Map<String, String>)).toList();
+    final List jsonSkuList = jsonDecode(skus) as List;
+    _skus = jsonSkuList.map(( e) => SKUModel.fromJson(e as Map )).toList();
 
   }
 
