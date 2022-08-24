@@ -1,22 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 
 List kTutorialItems = [
-  {
-    'header': 'upload_your_ipfs'.tr(),
-    'description': 'pick_the_file'.tr(),
-    'image': 'assets/images/tutorial1.png'
-  },
-  {
-    'header': 'edit_your_nft'.tr(),
-    'description': 'enter_information_describing_your_nft'.tr(),
-    'image': 'assets/images/tutorial2.png'
-  },
-  {
-    'header': 'publish_your_nft'.tr(),
-    'header1': 'pylons_app'.tr(),
-    'description': 'once_you_enter_all'.tr(),
-    'image': 'assets/images/tutorial3.png'
-  },
+  {'header': 'upload_your_ipfs'.tr(), 'description': 'pick_the_file'.tr(), 'image': 'assets/images/tutorial1.png'},
+  {'header': 'edit_your_nft'.tr(), 'description': 'enter_information_describing_your_nft'.tr(), 'image': 'assets/images/tutorial2.png'},
+  {'header': 'publish_your_nft'.tr(), 'header1': 'pylons_app'.tr(), 'description': 'once_you_enter_all'.tr(), 'image': 'assets/images/tutorial3.png'},
 ];
 
 /// ```PNG assets
@@ -76,8 +63,7 @@ const String kLoadingGif = 'assets/images/gifs/loading.gif';
 /// ```URL constants
 const ipfsDomain = 'https://ipfs.io/ipfs';
 const proxyIpfsDomain = 'https://proxy.pylons.tech/ipfs';
-const kPlayStoreUrl =
-    'https://play.google.com/store/apps/details?id=tech.pylons.wallet';
+const kPlayStoreUrl = 'https://play.google.com/store/apps/details?id=tech.pylons.wallet';
 const kWalletIOSId = 'xyz.pylons.wallet';
 const kWalletAndroidId = 'tech.pylons.wallet';
 const kWalletWebLink = 'https://wallet.pylons.tech';
@@ -140,10 +126,8 @@ const kBack = 'Back';
 const String kUniversalFontFamily = "UniversalSans";
 
 /// ```Text constants
-const kPreviewNoticeText =
-    'The resolution & orientation of your NFT will remain fixed as seen in the grid.';
-const kPriceNoticeText =
-    'You can remove an active listing or revise the price of your NFT in your Pylons wallet';
+const kPreviewNoticeText = 'The resolution & orientation of your NFT will remain fixed as seen in the grid.';
+const kPriceNoticeText = 'You can remove an active listing or revise the price of your NFT in your Pylons wallet';
 const kNameAsArtistText = 'Your name as the artist';
 const kGiveNFTNameText = 'Give your NFT a name';
 const kEnterArtistNameText = 'Enter artist name';
@@ -159,8 +143,7 @@ const kNoOfEditionText = 'Number of editions';
 const kEnterRoyaltyText = 'Enter royalty in percentage';
 const kRoyaltiesText = 'Royalties';
 const kRoyaltyHintText = '5%';
-const kRoyaltyNoteText =
-    'Percentage of all secondary market sales automatically distributed to the NFT creator';
+const kRoyaltyNoteText = 'Percentage of all secondary market sales automatically distributed to the NFT creator';
 const kRoyaltyRangeText = 'Allowed royalty is between';
 const kMinIsText = 'Minimum is';
 const kMaxIsTextText = 'Maximum is';
@@ -169,8 +152,7 @@ const kEnterMoreThanText = 'Enter more than';
 const kCharactersText = 'characters';
 const kMaxText = 'maximum';
 const kOkText = 'Ok';
-const kPylonsAppNotInstalledText =
-    'Pylons app is not installed on this device. Please install Pylons app to continue';
+const kPylonsAppNotInstalledText = 'Pylons app is not installed on this device. Please install Pylons app to continue';
 const kClickToInstallText = 'Click here to install';
 const kClickToLogInText = 'Click here to log into Pylons';
 const kWelcomeToEaselText = 'Welcome to Easel,';
@@ -209,15 +191,12 @@ const String kThreeDText = "ThreeD";
 const kGetStarted = 'Get Started';
 const kContinue = 'Continue';
 const kWhyAppNeeded = 'Why the app is\nneeded?        \u21E9';
-const kWhyAppNeededDesc1 =
-    'Your Pylons app is your gateway to the Pylons ecosystem';
+const kWhyAppNeededDesc1 = 'Your Pylons app is your gateway to the Pylons ecosystem';
 const kWhyAppNeededDescSummary1 = 'Discover new NFTs, apps & adventures';
 const kWhyAppNeededDesc2 = 'It makes managing your crypto easy';
-const kWhyAppNeededDescSummary2 =
-    'No frills. No complexities. One wallet  address for all your crypto';
+const kWhyAppNeededDescSummary2 = 'No frills. No complexities. One wallet  address for all your crypto';
 const kWhyAppNeededDesc3 = 'You can always delete it if you’d like';
-const kWhyAppNeededDescSummary3 =
-    'No subscriptions. We don’t sell your information. We only charge a fee when you purchase a NFT';
+const kWhyAppNeededDescSummary3 = 'No subscriptions. We don’t sell your information. We only charge a fee when you purchase a NFT';
 const kPylonsAlreadyInstalled = 'Pylons already installed.';
 const kTapToSelect = 'Tap to Select';
 const kCloseText = 'Close';
@@ -228,8 +207,7 @@ const kUploadHintAll = 'GB Limit.\nOne file per upload.';
 const kRecipeCreated = 'Recipe created';
 const kErrProfileNotExist = 'profileDoesNotExist';
 const kErrProfileFetch = 'Error occurred while fetching wallet profile';
-const kErrPickFileFetch =
-    'Error occurred while uploading the file, please try again';
+const kErrPickFileFetch = 'Error occurred while uploading the file, please try again';
 const kErrUpload = 'Upload error occurred';
 const kErrFileNotPicked = 'Pick a file';
 const kErrUnsupportedFormat = 'Unsupported format';
@@ -239,13 +217,10 @@ const kErrNoStripeAccount = 'Kindly register Stripe account in wallet';
 const kTryAgain = "Try again";
 const kPleaseTryAgain = "Something went wrong.\n Please try again.";
 const kCancel = "Cancel";
-const String videoPlayerNetworkError =
-    'Unable to play the video right now. Please check your internet connection and try again.';
-const kChooseFifteenSecondsOfAudio =
-    "Choose 15s highlight of your audio for preview";
+const String videoPlayerNetworkError = 'Unable to play the video right now. Please check your internet connection and try again.';
+const kChooseFifteenSecondsOfAudio = "Choose 15s highlight of your audio for preview";
 const kUploadingThumbnailMessage = "Uploading Thumbnail";
-const videoPlayerError =
-    "Some Error Occurred while playing the video. Please try again later.";
+const videoPlayerError = "Some Error Occurred while playing the video. Please try again later.";
 const kCannotLaunchThisUrl = "Cannot launch this URL";
 
 //NFT STRINGS KEYS
@@ -278,7 +253,7 @@ const kLoadingMessage = "Loading...";
 
 final List<String> stepLabels = ["upload", "detail", "price   "];
 
-final List<String> imageAllowedExts = ["png", "jpg", "jpeg", "svg", "heif"];
+final List<String> imageAllowedExts = ["png", "jpg", "jpeg", "svg", "heif", "gif"];
 final List<String> audioAllowedExts = ['mp3', 'ogg', 'wav', 'aac'];
 final List<String> threedAllowedExts = ['gltf', 'glb'];
 

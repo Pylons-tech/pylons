@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:easel_flutter/easel_provider.dart';
-import 'package:easel_flutter/env.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/tutorial_screen.dart';
@@ -25,9 +24,6 @@ import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../env.dart';
-import '../../services/third_party_services/audio_player_helper.dart';
-
 final sl = GetIt.instance;
 
 void init() {
@@ -39,12 +35,10 @@ void init() {
 }
 
 void _registerExternalDependencies() {
-  sl.registerSingletonAsync<SharedPreferences>(
-      () => SharedPreferences.getInstance());
+  sl.registerSingletonAsync<SharedPreferences>(() => SharedPreferences.getInstance());
   sl.registerLazySingleton<FilePicker>(() => FilePicker.platform);
   sl.registerLazySingleton<ImageCropper>(() => ImageCropper());
-  sl.registerLazySingleton<FirebaseCrashlytics>(
-      () => FirebaseCrashlytics.instance);
+  sl.registerLazySingleton<FirebaseCrashlytics>(() => FirebaseCrashlytics.instance);
   sl.registerLazySingleton<Dio>(
     () => Dio(
       BaseOptions(
@@ -55,55 +49,36 @@ void _registerExternalDependencies() {
           }),
     ),
   );
-  sl.registerSingletonAsync<AppDatabase>(
-      () => $FloorAppDatabase.databaseBuilder('app_database.db').build());
+  sl.registerSingletonAsync<AppDatabase>(() => $FloorAppDatabase.databaseBuilder('app_database.db').build());
 
   sl.registerLazySingleton<AudioPlayer>(() => AudioPlayer());
 
-  sl.registerLazySingleton<InternetConnectionChecker>(
-      () => InternetConnectionChecker());
-  sl.registerFactory<VideoPlayerController>(
-      () => VideoPlayerController.file(File('')));
+  sl.registerLazySingleton<InternetConnectionChecker>(() => InternetConnectionChecker());
+  sl.registerFactory<VideoPlayerController>(() => VideoPlayerController.file(File('')));
 }
 
 void _registerRemoteDataSources() {
-  sl.registerLazySingleton<RemoteDataSource>(
-      () => RemoteDataSourceImpl(httpClient: sl<Dio>()));
+  sl.registerLazySingleton<RemoteDataSource>(() => RemoteDataSourceImpl(httpClient: sl<Dio>()));
 }
 
 void _registerLocalDataSources() {
-  sl.registerLazySingleton<LocalDataSource>(() => LocalDataSourceImpl(
-      sharedPreferences: sl(), database: sl(), cacheManager: sl()));
+  sl.registerLazySingleton<LocalDataSource>(() => LocalDataSourceImpl(sharedPreferences: sl(), database: sl(), cacheManager: sl()));
 }
 
 void _registerProviders() {
-  sl.registerLazySingleton<EaselProvider>(() => EaselProvider(
-      videoPlayerHelper: sl(),
-      audioPlayerHelperForFile: sl(),
-      fileUtilsHelper: sl(),
-      repository: sl(),
-      audioPlayerHelperForUrl: sl()));
+  sl.registerLazySingleton<EaselProvider>(() => EaselProvider(videoPlayerHelper: sl(), audioPlayerHelperForFile: sl(), fileUtilsHelper: sl(), repository: sl(), audioPlayerHelperForUrl: sl()));
 
-  sl.registerLazySingleton<CreatorHubViewModel>(
-      () => CreatorHubViewModel(sl()));
+  sl.registerLazySingleton<CreatorHubViewModel>(() => CreatorHubViewModel(sl()));
   sl.registerLazySingleton<HomeViewModel>(() => HomeViewModel(sl()));
-  sl.registerLazySingleton<TutorialScreenViewModel>(
-      () => TutorialScreenViewModel());
+  sl.registerLazySingleton<TutorialScreenViewModel>(() => TutorialScreenViewModel());
 }
 
 void _registerServices() {
-  sl.registerFactory<FileUtilsHelper>(
-      () => FileUtilsHelperImpl(imageCropper: sl(), filePicker: sl()));
+  sl.registerFactory<FileUtilsHelper>(() => FileUtilsHelperImpl(imageCropper: sl(), filePicker: sl()));
   sl.registerLazySingleton<CacheManager>(() => CacheManagerImp());
   sl.registerFactory<VideoPlayerHelper>(() => VideoPlayerHelperImp(sl()));
   sl.registerFactory<AudioPlayerHelper>(() => AudioPlayerHelperImpl(sl()));
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
-  sl.registerLazySingleton<CrashlyticsHelper>(
-      () => CrashlyticsHelperImp(crashlytics: sl()));
-  sl.registerLazySingleton<Repository>(() => RepositoryImp(
-      networkInfo: sl(),
-      localDataSource: sl(),
-      remoteDataSource: sl(),
-      fileUtilsHelper: sl(),
-      crashlyticsHelper: sl()));
+  sl.registerLazySingleton<CrashlyticsHelper>(() => CrashlyticsHelperImp(crashlytics: sl()));
+  sl.registerLazySingleton<Repository>(() => RepositoryImp(networkInfo: sl(), localDataSource: sl(), remoteDataSource: sl(), fileUtilsHelper: sl(), crashlyticsHelper: sl()));
 }
