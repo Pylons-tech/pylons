@@ -53,37 +53,37 @@ class FileUtilsHelperImpl implements FileUtilsHelper {
 
   @override
   Future<PickedFileModel> pickFile(NftFormat format) async {
-    FileType _type;
+    FileType type;
     List<String>? allowedExtensions;
     switch (format.format) {
       case NFTTypes.image:
         if (Platform.isAndroid) {
-          _type = FileType.custom;
+          type = FileType.custom;
           allowedExtensions = imageAllowedExts;
           break;
         }
-        _type = FileType.image;
+        type = FileType.image;
         break;
 
       case NFTTypes.video:
-        _type = FileType.video;
+        type = FileType.video;
         break;
 
       case NFTTypes.audio:
         if (!Platform.isAndroid) {
-          _type = FileType.custom;
+          type = FileType.custom;
           allowedExtensions = audioAllowedExts;
         } else {
-          _type = FileType.audio;
+          type = FileType.audio;
         }
         break;
       default:
-        _type = FileType.any;
+        type = FileType.any;
         break;
     }
 
     FilePickerResult? result = await filePicker.pickFiles(
-        type: _type, allowedExtensions: allowedExtensions);
+        type: type, allowedExtensions: allowedExtensions);
 
     if (result == null) {
       return PickedFileModel(
