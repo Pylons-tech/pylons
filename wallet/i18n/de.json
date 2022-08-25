@@ -1,6 +1,6 @@
 {
   "app_title": "Pylonen-Geldbörse",
-  "something_wrong": "Etwas ist schief gelaufen, Probeer de app opnieuw te starten.",
+  "something_wrong": "Etwas ist schief gelaufen, Probieren de app opnieuw te starten.",
   "wallet_retrieving_err_msg": "Wir hatten Probleme beim Abrufen von Wallets aus einem sicheren Speicher.",
   "home": "Heim",
   "discover": "Entdecken",

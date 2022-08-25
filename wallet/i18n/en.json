@@ -1,6 +1,6 @@
 {
   "app_title": "Pylons Wallet",
-  "something_wrong": "Something went wrong, Try restarting the app.",
+  "something_wrong": "Something went wrong, Try Restarting the Application.",
   "wallet_retrieving_err_msg": "We had problems retrieving wallets from secure storage.",
   "home": "Home",
   "discover": "Discover",
