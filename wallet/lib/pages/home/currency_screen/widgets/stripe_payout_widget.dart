@@ -5,7 +5,6 @@ import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/utils/formatter.dart';
-import 'package:simple_rich_text/simple_rich_text.dart';
 
 class StripePayoutWidget {
   BuildContext context;
@@ -61,7 +60,7 @@ class StripePayoutFormState extends State<StripePayoutForm> {
               child: Column(
                 children: [
                   const VerticalSpace(30),
-                  SimpleRichText("request_payout".tr(), style: const TextStyle(color: Colors.black, fontSize: 16)),
+                  Text("request_payout".tr(), style: const TextStyle(color: Colors.black, fontSize: 16)),
                   const VerticalSpace(30),
                   Text("${"available_amount".tr()} ${widget.maxAmount.UvalToVal()} USD", textAlign: TextAlign.start),
                   const VerticalSpace(30),

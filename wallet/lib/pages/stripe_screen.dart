@@ -11,7 +11,6 @@ import 'package:pylons_wallet/services/third_party_services/stripe_handler.dart'
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
-import 'package:simple_rich_text/simple_rich_text.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class StripeScreen extends StatefulWidget {
@@ -109,7 +108,7 @@ class _StripeScreenState extends State<StripeScreen> {
                     ScaffoldMessenger.of(context)
                       ..hideCurrentSnackBar()
                       ..showSnackBar(SnackBar(
-                        content: SimpleRichText("blob_type_not_supported".tr()),
+                        content: Text("blob_type_not_supported".tr()),
                       ));
                     return NavigationDecision.prevent;
                   }

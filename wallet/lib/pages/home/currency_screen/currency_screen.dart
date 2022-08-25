@@ -24,7 +24,6 @@ import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:pylons_wallet/utils/formatter.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/screen_size_utils.dart';
-import 'package:simple_rich_text/simple_rich_text.dart';
 import 'package:sprintf/sprintf.dart';
 
 class CurrencyScreen extends StatefulWidget {
@@ -236,7 +235,7 @@ class _BalanceWidgetState extends State<_BalanceWidget> {
                         maximumSize: const Size(100, 20),
                         minimumSize: const Size(100, 20),
                       ),
-                      child: SimpleRichText("faucet".tr(), style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 12, fontFamily: 'Inter')))
+                      child: Text("faucet".tr(), style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 12, fontFamily: 'Inter')))
                 else
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),

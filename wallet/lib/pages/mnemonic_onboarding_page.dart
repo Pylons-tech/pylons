@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:simple_rich_text/simple_rich_text.dart';
 
 class MnemonicOnboardingPage extends StatefulWidget {
   const MnemonicOnboardingPage({Key? key}) : super(key: key);
@@ -43,7 +42,7 @@ class _MnemonicOnboardingPageState extends State<MnemonicOnboardingPage> {
                 children: [
                   CosmosMnemonicWordsGrid(mnemonicWords: mnemonicWords),
                   const SizedBox(height: 8),
-                  SimpleRichText(
+                  Text(
                     'security_hint'.tr(),
                     style: PylonsAppTheme.HOME_LABEL,
                   ),

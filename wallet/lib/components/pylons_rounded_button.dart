@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:simple_rich_text/simple_rich_text.dart';
 
 class PylonsRoundedButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -53,12 +52,12 @@ class PylonsRoundedButton extends StatelessWidget {
         ),
         const HorizontalSpace(10),
         Expanded(
-          child: SimpleRichText(text, textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Inter', color: textColor, fontSize: 16.sp, fontWeight: FontWeight.w400)),
+          child: Text(text, textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Inter', color: textColor, fontSize: 16.sp, fontWeight: FontWeight.w400)),
         ),
       ];
     } else {
       return [
-        SimpleRichText(text, style: TextStyle(color: textColor)),
+        Text(text, style: TextStyle(color: textColor)),
       ];
     }
   }

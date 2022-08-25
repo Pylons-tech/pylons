@@ -29,7 +29,6 @@ import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
-import 'package:simple_rich_text/simple_rich_text.dart';
 
 TextStyle _titleTextStyle = TextStyle(color: Colors.white, fontSize: 16.sp);
 TextStyle _subtitleTextStyle = TextStyle(color: Colors.white, fontSize: 12.sp);
@@ -128,7 +127,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                       imageUrl: widget.nft.url,
                       width: 1.sw,
                       errorWidget: (a, b, c) => Center(
-                          child: SimpleRichText(
+                          child: Text(
                         "unable_to_fetch_nft_item".tr(),
                         style: Theme.of(context).textTheme.bodyText1,
                       )),
@@ -252,7 +251,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   onTap: () {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(SnackBar(
-                          content: SimpleRichText("pylons_fee_msg".tr()),
+                          content: Text("pylons_fee_msg".tr()),
                           margin: const EdgeInsets.all(10),
                           behavior: SnackBarBehavior.floating,
                         ))

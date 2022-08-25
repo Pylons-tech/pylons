@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:simple_rich_text/simple_rich_text.dart';
 
 class PylonsPayWithSwipe extends StatefulWidget {
   final Color inactiveColor;
@@ -74,7 +73,7 @@ class _PylonsPayWithSwipeState extends State<PylonsPayWithSwipe> {
                     bottom: 0,
                     child: IgnorePointer(
                       child: Center(
-                          child: SimpleRichText(
+                          child: Text(
                         'swipe_right_to_pay'.tr(),
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white, fontSize: 14.sp),

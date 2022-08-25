@@ -20,7 +20,6 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/screen_responsive.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
-import 'package:simple_rich_text/simple_rich_text.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -191,7 +190,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
           textAlign: TextAlign.center,
         ),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SimpleRichText(
+          Text(
             "wallet_address_arg".tr(args: [walletsStore.getWallets().value.last.publicAddress]),
             style: TextStyle(color: Colors.black, fontSize: 9.sp),
             textAlign: TextAlign.center,
@@ -308,7 +307,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         ),
         SizedBox(height: 5.h),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SimpleRichText(
+          Text(
             "wallet_address_arg".tr(args: [walletsStore.getWallets().value.last.publicAddress]),
             style: TextStyle(color: Colors.black, fontSize: 9.sp),
             textAlign: TextAlign.center,

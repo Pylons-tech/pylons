@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
-import 'package:simple_rich_text/simple_rich_text.dart';
 
 extension SnackbarToast on String {
   Future show({BuildContext? context}) async {
@@ -13,7 +12,7 @@ extension SnackbarToast on String {
     scaffoldMessenger
         .showSnackBar(
           SnackBar(
-            content: contains('-') ? SimpleRichText(this) : Text(this),
+            content: Text(this),
             duration: const Duration(milliseconds: 1500),
           ),
         )

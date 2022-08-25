@@ -7,7 +7,6 @@ import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
-import 'package:simple_rich_text/simple_rich_text.dart';
 
 TextStyle _rowTitleTextStyle = TextStyle(color: kWhite, fontWeight: FontWeight.w800, fontSize: isTablet ? 14.sp : 12.sp);
 TextStyle _rowSubtitleTextStyle = TextStyle(
@@ -105,7 +104,7 @@ class _WhatIsPylonWidgetState extends State<WhatIsPylonWidget> {
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: isTablet ? 20.w : 30.w),
-                      child: SimpleRichText(
+                      child: Text(
                         "what_is_pylon_info".tr(),
                         style: _rowSubtitleTextStyle,
                         textAlign: TextAlign.left,

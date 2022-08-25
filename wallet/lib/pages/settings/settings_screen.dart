@@ -15,10 +15,9 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
-import 'package:simple_rich_text/simple_rich_text.dart';
 
 TextStyle kHeadlineTextStyle = TextStyle(fontSize: 16.sp, fontFamily: kUniversalFontFamily, color: Colors.black);
-TextStyle kSettingsOptionsTextStyle = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w600);
+TextStyle kSettingsOptionsTextStyle = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
 TextStyle kSettingsUserEnteredTextStyle = TextStyle(
   fontSize: 14.sp,
   fontFamily: kUniversalFontFamily,
@@ -123,14 +122,15 @@ class _SettingScreenState extends State<SettingScreen> {
                                 counterText: '',
                                 focusedBorder: InputBorder.none,
                                 errorBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none),
+                                enabledBorder: InputBorder.none,
+                                hintStyle: const TextStyle(fontWeight: FontWeight.w400)),
                           ),
                         ),
                       ),
                       SizedBox(
                         height: 30.h,
                       ),
-                      SimpleRichText(
+                      Text(
                         "wallet_address".tr(),
                         style: kHeadlineTextStyle,
                       ),
@@ -173,7 +173,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       SizedBox(
                         height: 30.h,
                       ),
-                      SimpleRichText(
+                      Text(
                         "email_address_optional".tr(),
                         style: kHeadlineTextStyle,
                       ),

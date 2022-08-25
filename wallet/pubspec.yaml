@@ -132,7 +132,6 @@ dependencies:
 
   qr_flutter: 4.0.0
   image: 3.2.0
-  simple_rich_text: 2.0.49
 
 dev_dependencies:
   flutter_test:
@@ -182,16 +181,9 @@ flutter:
         - asset: assets/fonts/PylonsV3-Condensed.otf
     - family: UniversalSans
       fonts:
-        - asset: assets/fonts/UniversalSans-300.ttf
-          weight: 300
-        - asset: assets/fonts/UniversalSans-400.ttf
-          weight: 400
-        - asset: assets/fonts/UniversalSans-500.ttf
-          weight: 500
         - asset: assets/fonts/UniversalSans-600.ttf
           weight: 600
-        - asset: assets/fonts/UniversalSans-750.ttf
-          weight: 700
+
 
 dependency_overrides:
   webview_flutter_android: "2.8.14"
