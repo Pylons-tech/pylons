@@ -20,11 +20,6 @@ class Denom {
   static List<Denom> get availableDenoms => [
         Denom(name: kUSDText, symbol: kUsdSymbol, icon: kIconDenomUsd),
         Denom(name: kPylonText, symbol: kPylonSymbol, icon: kIconDenomPylon),
-        Denom(name: kAtomText, symbol: kAtomSymbol, icon: kIconDenomAtom),
-        Denom(name: kEurText, symbol: kEuroSymbol, icon: kIconDenomEmoney),
-        Denom(name: kAgoricText, symbol: kAgoricSymbol, icon: kIconDenomAgoric),
-        Denom(name: kJunoText, symbol: kJunoSymbol, icon: kIconDenomJuno),
-        Denom(name: kEthereum, symbol: kEthereumSymbol, icon: kIconDenomETH),
       ];
 
   TextInputFormatter getFormatter() {
