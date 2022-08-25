@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,24 +8,12 @@ import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
+import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
-TextStyle kPylonLabelText = TextStyle(
-    fontSize: 18.sp,
-    fontFamily: kUniversalFontFamily,
-    color: kTextBlackColor,
-    fontWeight: FontWeight.w800);
-TextStyle kTitleText = TextStyle(
-    fontSize: 15.sp,
-    fontFamily: kUniversalFontFamily,
-    color: kBlack,
-    fontWeight: FontWeight.w700);
-TextStyle kSubTitleText = TextStyle(
-    fontSize: 13.sp,
-    fontFamily: kUniversalFontFamily,
-    color: kPriceTagColor,
-    fontWeight: FontWeight.w700);
+TextStyle kPylonLabelText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: kTextBlackColor, fontWeight: FontWeight.w800);
+TextStyle kTitleText = TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: kBlack, fontWeight: FontWeight.w700);
+TextStyle kSubTitleText = TextStyle(fontSize: 13.sp, fontFamily: kUniversalFontFamily, color: kPriceTagColor, fontWeight: FontWeight.w700);
 
 class AddPylonScreen extends StatefulWidget {
   const AddPylonScreen({Key? key}) : super(key: key);
@@ -34,6 +24,7 @@ class AddPylonScreen extends StatefulWidget {
 
 class _AddPylonScreenState extends State<AddPylonScreen> {
   Repository get repository => GetIt.I.get();
+  BaseEnv get baseEnv => GetIt.I.get();
 
   @override
   Widget build(BuildContext context) {
@@ -70,39 +61,21 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
                 SizedBox(
                   height: 80.h,
                 ),
-                buildBuyRow(
-                  svgAsset: SVGUtil.PYLON_ONE_CURRENCY,
-                  pylonText: kBuyPylonOne,
-                  bonusText: "",
-                  subtitle: kOneUSD,
-                  onPressed: () async {
-                    buyProduct(itemId: kPylons1);
-                  },
-                ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                buildBuyRow(
-                  svgAsset: SVGUtil.PYLON_THREE_CURRENCY,
-                  pylonText: kBuyPylonThree,
-                  bonusText: "bonus_five".tr(),
-                  subtitle: kThreeUSD,
-                  onPressed: () async {
-                    buyProduct(itemId: kPylons3);
-                  },
-                ),
-                SizedBox(
-                  height: 40.h,
-                ),
-                buildBuyRow(
-                  svgAsset: SVGUtil.PYLON_FIVE_CURRENCY,
-                  pylonText: kBuyPylonFive,
-                  bonusText: "bonus_ten".tr(),
-                  subtitle: kFiveUSD,
-                  onPressed: () {
-                    buyProduct(itemId: kPylons5);
-                  },
-                ),
+                Expanded(
+                    child: ListView.separated(
+                        itemBuilder: (context, index) => buildBuyRow(
+                              svgAsset: baseEnv.skus[index].getSvgAsset(),
+                              pylonText: baseEnv.skus[index].pylons,
+                              bonusText: baseEnv.skus[index].bonus,
+                              subtitle: baseEnv.skus[index].subtitle,
+                              onPressed: () async {
+                                buyProduct(itemId: baseEnv.skus[index].id);
+                              },
+                            ),
+                        separatorBuilder: (_, __) => SizedBox(
+                              height: 30.h,
+                            ),
+                        itemCount: baseEnv.skus.length)),
               ],
             ),
           ],
@@ -111,12 +84,7 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
     );
   }
 
-  Widget buildBuyRow(
-      {required String svgAsset,
-      required String pylonText,
-      required String bonusText,
-      required String subtitle,
-      required VoidCallback onPressed}) {
+  Widget buildBuyRow({required String svgAsset, required String pylonText, required String bonusText, required String subtitle, required VoidCallback onPressed}) {
     return Row(children: [
       SizedBox(
         height: 40.h,
@@ -179,23 +147,21 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
         inAppPurchaseResponse.swap().toOption().toNullable()!.message.show();
         return;
       }
-      final productsListResponse =
-          await repository.getProductsForSale(itemId: itemId);
+      final productsListResponse = await repository.getProductsForSale(itemId: itemId);
       loading.dismiss();
 
       if (productsListResponse.isLeft()) {
         productsListResponse.swap().toOption().toNullable()!.message.show();
         return;
       }
-      final buyProductResponse = await repository
-          .buyProduct(productsListResponse.toOption().toNullable()!);
+      final buyProductResponse = await repository.buyProduct(productsListResponse.toOption().toNullable()!);
       if (buyProductResponse.isLeft()) {
         buyProductResponse.swap().toOption().toNullable()!.message.show();
         return;
       }
     } catch (e) {
       e.toString().show();
-      print(e);
+      log(e.toString());
     }
   }
 }

@@ -47,6 +47,8 @@ export default class EaselBuy extends Component {
       showHideComp3: false,
       showHideComp4: false,
       showHideDetails: false,
+      nftViews: 0,
+      nftLikes: 0,
     };
     this.hideComponent = this.hideComponent.bind(this);
     // this.hideComponentDesc = this.hideComponent.bind(this);
@@ -89,16 +91,12 @@ export default class EaselBuy extends Component {
         null;
     }
   }
-
-  // hideComponentDesc() {
-  //   this.setState({
-  //     showHideDetails: !this.state.showHideDetails,
-  //   });
-  // }
-
+ 
   componentDidMount() {
     this.handleFetchData();
     this.handleFetchhistory();
+    this.handleFetchLikes();
+    this.handleFetchViews();
   }
   handleFetchhistory = () => {
     console.log("fetch history");
@@ -163,14 +161,20 @@ export default class EaselBuy extends Component {
           }
         }
         const entries = _.cloneDeep(selectedRecipe.entries);
-
-        if (entries != null) {
-          const mediaUrl = strings.find((val) => val.key === "NFT_URL");
-          media = mediaUrl ? mediaUrl.value : "";
-        }
         const nftType = strings.find(
           (val) => val.key.toLowerCase() === "nft_format"
         )?.value;
+        if (entries != null) {
+          if(nftType.toLowerCase()=="pdf"){
+            const mediaUrl = strings.find((val) => val.key === "Thumbnail_URL");
+            media = mediaUrl ? mediaUrl.value : "";
+          }
+          else{
+          const mediaUrl = strings.find((val) => val.key === "NFT_URL");
+          media = mediaUrl ? mediaUrl.value : "";
+        }
+      }
+
         const creator = strings.find(
           (val) => val.key.toLowerCase() === "creator"
         )?.value;
@@ -198,6 +202,36 @@ export default class EaselBuy extends Component {
         console.log(err);
       });
   };
+
+  handleFetchLikes = () => {
+    const url = settings.public.baseURL;
+    axios
+      .get(
+        `${url}/api/actions/likes/${this.props.cookbook_id}/${this.props.recipe_id}`
+      )
+      .then((res) => {
+        if (res.data.Code === 200) {
+          this.setState({
+            nftLikes: res.data.Data.totalLikes,
+          });
+        }
+      });
+  };
+  handleFetchViews = () => {
+    const url = settings.public.baseURL;
+    axios
+      .get(
+        `${url}/api/actions/views/${this.props.cookbook_id}/${this.props.recipe_id}`
+      )
+      .then((res) => {
+        if (res.data.Code === 200) {
+          this.setState({
+            nftViews: res.data.Data.totalViews,
+          });
+        }
+      });
+  };
+
   getNFTDimentions = (nftType, data) => {
     if (
       nftType?.toLowerCase() === "image" ||
@@ -279,23 +313,35 @@ export default class EaselBuy extends Component {
           return "";
       }
     };
-
+    const handleClick = (e) => {
+      if (e.type === "click") {
+        console.log("Left click");
+      } else if (e.type === "contextmenu") {
+        e.preventDefault();
+        return false
+      }
+    };
     const getMedia = () => {
       if (loading) return <Spinner type="grow" color="primary" />;
       else if (!nftType) return null;
       else if (nftType.toLowerCase() === "image")
-        return <img alt="views" src={media} className="mobin-img" />;
+        return <img alt="views" src={media} className="mobin-img" onClick={handleClick}  onContextMenu={handleClick}/>;
       else if (nftType.toLowerCase() === "audio")
         return (
-          <audio controls>
+          <audio controls onClick={handleClick}  onContextMenu={handleClick}>
             <source src={media} type="video/mp4" />
             <source src={media} type="video/ogg" />
             Your browser does not support the audio element.
           </audio>
         );
+        else if (nftType.toLowerCase() === "pdf")
+        return (
+          <img alt="views" src={media} className="mobin-img" onClick={handleClick}  onContextMenu={handleClick}/>
+        );
       else if (nftType.toLowerCase() === "3d")
         return (
           <model-viewer
+          onClick={handleClick}  onContextMenu={handleClick}
             alt="3D NFT"
             src={media}
             ar
@@ -311,7 +357,7 @@ export default class EaselBuy extends Component {
         );
       else
         return (
-          <video width="75%" height="50%" controls>
+          <video width="75%" height="50%" controls controlsList="nodownload" onClick={handleClick}  onContextMenu={handleClick} >
             <source src={media} type="video/mp4" />
             <source src={media} type="video/ogg" />
             Your browser does not support the video tag.
@@ -365,7 +411,7 @@ export default class EaselBuy extends Component {
                             src="/img/eye.svg"
                             style={{ width: "34px", height: "20px" }}
                           />
-                          <p>0 views</p>
+                          <p>{this.state.nftViews} views</p>
                         </div>
                       </div>
                       {this.state.description?.length > 35 ? (
@@ -442,9 +488,9 @@ export default class EaselBuy extends Component {
                                   <img
                                     alt="expand"
                                     src="/img/expand.svg"
-
-height="100%"
-width="100%"                                    className="plus-minus"
+                                    height="100%"
+                                    width="100%"
+                                    className="plus-minus"
                                   />
                                 )}
                               </button>
@@ -518,9 +564,9 @@ width="100%"                                    className="plus-minus"
                                   <img
                                     alt="expand"
                                     src="/img/expand.svg"
-
-height="100%"
-width="100%"                                    className="plus-minus"
+                                    height="100%"
+                                    width="100%"
+                                    className="plus-minus"
                                   />
                                 )}
                               </button>
@@ -577,9 +623,9 @@ width="100%"                                    className="plus-minus"
                                   <img
                                     alt="expand"
                                     src="/img/expand.svg"
-
-height="100%"
-width="100%"                                    className="plus-minus"
+                                    height="100%"
+                                    width="100%"
+                                    className="plus-minus"
                                   />
                                 )}
                               </button>
@@ -608,7 +654,7 @@ width="100%"                                    className="plus-minus"
                               src="/img/likes.svg"
                               style={{ width: "41px", height: "39px" }}
                             />
-                            <p>0</p>
+                            <p>{this.state.nftLikes}</p>
                           </div>
                         </div>
                       </div>
@@ -688,7 +734,7 @@ width="100%"                                    className="plus-minus"
                             src="/img/eye.svg"
                             style={{ width: "34px", height: "20px" }}
                           />
-                          <p>0 views</p>
+                          <p>{this.state.nftViews} views</p>
                         </div>
                       </div>
                       {showHideDetails ? (
@@ -767,178 +813,178 @@ width="100%"                                    className="plus-minus"
                                   <img
                                     alt="expand"
                                     src="/img/expand.svg"
-
-height="100%"
-width="100%"                                    className="plus-minus"
-                                  />
-                                )}
-                              </button>
-                              {showHideComp1 ? (
-                                <div className="tab-panel">
-                                  <div className="item">
-                                    <p>Owned by</p>
-                                    <p>
-                                      {!!(nftHistory && nftHistory.length)
-                                        ? nftHistory[nftHistory.length - 1]
-                                            .sender_name
-                                        : createdBy}
-                                    </p>
-                                  </div>
-                                  <div className="item">
-                                    <p>Edition</p>
-                                    <p>{this.state.edition}</p>
-                                  </div>
-                                  <div className="item">
-                                    <p>Royalty</p>
-                                    <p>{this.state.royalty}%</p>
-                                  </div>
-                                  <div className="item">
-                                    <p>Size</p>
-                                    <p>{this.state.dimentions}</p>
-                                  </div>
-                                  <div className="item">
-                                    <p>Creation Date</p>
-                                    <p>
-                                      {!!createdAt
-                                        ? moment
-                                            .unix(createdAt)
-                                            .format("DD/MM/YYYY hh:mm:ss")
-                                        : ""}
-                                    </p>
-                                  </div>
-                                </div>
-                              ) : null}
-                            </li>
-                            <li>
-                              <div className="tab-name">
-                                <p>NFT Detail</p>
-                                <img
-                                  alt="NFT Detail"
-                                  src="/img/detail.svg"
-                                  width="100%"
-                                  height="100%"
-                                  className="icon-img"
-                                />
-                                <img
-                                  alt="line"
-                                  src="/img/line.svg"
-                                  style={{ width: "100%", height: "24px" }}
-                                  className="line"
-                                />
-                              </div>
-                              <button
-                                onClick={() =>
-                                  this.hideComponent("showHideComp2")
-                                }
-                              >
-                                {showHideComp2 ? (
-                                  <img
-                                    alt="minimize"
-                                    src="/img/minimize.svg"
-                                    height="100%"
-                                    width="100%"
-                                    className="plus-minus"
-                                  />
-                                ) : (
-                                  <img
-                                    alt="expand"
-                                    src="/img/expand.svg"
-
-height="100%"
-width="100%"                                    className="plus-minus"
-                                  />
-                                )}
-                              </button>
-                              {showHideComp2 ? (
-                                <div className="tab-panel">
-                                  <div className="item">
-                                    <p>Recipe ID</p>
-                                    <p>
-                                      <a href="#">{this.state.id}</a>
-                                    </p>
-                                  </div>
-                                  <div className="item">
-                                    <p>Blockchain</p>
-                                    <p>Pylons</p>
-                                  </div>
-                                  <div className="item">
-                                    <p>Permission</p>
-                                    <p>Exclusive</p>
-                                  </div>
-                                </div>
-                              ) : null}
-                            </li>
-                            <li>
-                              <div className="tab-name">
-                                <p>History</p>
-                                <img
-                                  alt="History"
-                                  src="/img/history.svg"
-                                  width="100%"
-                                  height="100%"
-                                  className="icon-img"
-                                />
-                                <img
-                                  alt="line"
-                                  src="/img/line.svg"
-                                  style={{ width: "100%", height: "24px" }}
-                                  className="line"
-                                />
-                              </div>
-                              <button
-                                onClick={() =>
-                                  this.hideComponent("showHideComp3")
-                                }
-                              >
-                                {showHideComp3 ? (
-                                  <img
-                                    alt="minimize"
-                                    src="/img/minimize.svg"
-                                    height="100%"
-                                    width="100%"
-                                    className="plus-minus"
-                                  />
-                                ) : (
-                                  <img
-                                    alt="expand"
-                                    src="/img/expand.svg"
-
-height="100%"
-width="100%"                                    className="plus-minus"
-                                  />
-                                )}
-                              </button>
-                              {showHideComp3 ? (
-                                <div className="tab-panel">
-                                  {nftHistory &&
-                                    nftHistory.map((val, i) => (
-                                      <div className="item" key={i}>
+                                        height="100%"
+                                        width="100%"
+                                        className="plus-minus"
+                                      />
+                                    )}
+                                  </button>
+                                  {showHideComp1 ? (
+                                    <div className="tab-panel">
+                                      <div className="item">
+                                        <p>Owned by</p>
                                         <p>
-                                          {moment(val.createdAt).format(
-                                            "DD/MM/YYYY hh:mm:ss"
-                                          )}
+                                          {!!(nftHistory && nftHistory.length)
+                                            ? nftHistory[nftHistory.length - 1]
+                                                .sender_name
+                                            : createdBy}
                                         </p>
-                                        <p>{val.sender_name}</p>
                                       </div>
-                                    ))}
-                                </div>
-                              ) : null}
-                            </li>
-                          </ul>
-                        </div>
-                        <div className="right-side">
-                          <div className="likes">
-                            <img
-                              alt="expand"
-                              src="/img/likes.svg"
-                              style={{ width: "41px", height: "39px" }}
-                            />
-                            <p>0</p>
+                                      <div className="item">
+                                        <p>Edition</p>
+                                        <p>{this.state.edition}</p>
+                                      </div>
+                                      <div className="item">
+                                        <p>Royalty</p>
+                                        <p>{this.state.royalty}%</p>
+                                      </div>
+                                      <div className="item">
+                                        <p>Size</p>
+                                        <p>{this.state.dimentions}</p>
+                                      </div>
+                                      <div className="item">
+                                        <p>Creation Date</p>
+                                        <p>
+                                          {!!createdAt
+                                            ? moment
+                                                .unix(createdAt)
+                                                .format("DD/MM/YYYY hh:mm:ss")
+                                            : ""}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  ) : null}
+                                </li>
+                                <li>
+                                  <div className="tab-name">
+                                    <p>NFT Detail</p>
+                                    <img
+                                      alt="NFT Detail"
+                                      src="/img/detail.svg"
+                                      width="100%"
+                                      height="100%"
+                                      className="icon-img"
+                                    />
+                                    <img
+                                      alt="line"
+                                      src="/img/line.svg"
+                                      style={{ width: "100%", height: "24px" }}
+                                      className="line"
+                                    />
+                                  </div>
+                                  <button
+                                    onClick={() =>
+                                      this.hideComponent("showHideComp2")
+                                    }
+                                  >
+                                    {showHideComp2 ? (
+                                      <img
+                                        alt="minimize"
+                                        src="/img/minimize.svg"
+                                        height="100%"
+                                        width="100%"
+                                        className="plus-minus"
+                                      />
+                                    ) : (
+                                      <img
+                                        alt="expand"
+                                        src="/img/expand.svg"
+                                        height="100%"
+                                        width="100%"
+                                        className="plus-minus"
+                                      />
+                                    )}
+                                  </button>
+                                  {showHideComp2 ? (
+                                    <div className="tab-panel">
+                                      <div className="item">
+                                        <p>Recipe ID</p>
+                                        <p>
+                                          <a href="#">{this.state.id}</a>
+                                        </p>
+                                      </div>
+                                      <div className="item">
+                                        <p>Blockchain</p>
+                                        <p>Pylons</p>
+                                      </div>
+                                      <div className="item">
+                                        <p>Permission</p>
+                                        <p>Exclusive</p>
+                                      </div>
+                                    </div>
+                                  ) : null}
+                                </li>
+                                <li>
+                                  <div className="tab-name">
+                                    <p>History</p>
+                                    <img
+                                      alt="History"
+                                      src="/img/history.svg"
+                                      width="100%"
+                                      height="100%"
+                                      className="icon-img"
+                                    />
+                                    <img
+                                      alt="line"
+                                      src="/img/line.svg"
+                                      style={{ width: "100%", height: "24px" }}
+                                      className="line"
+                                    />
+                                  </div>
+                                  <button
+                                    onClick={() =>
+                                      this.hideComponent("showHideComp3")
+                                    }
+                                  >
+                                    {showHideComp3 ? (
+                                      <img
+                                        alt="minimize"
+                                        src="/img/minimize.svg"
+                                        height="100%"
+                                        width="100%"
+                                        className="plus-minus"
+                                      />
+                                    ) : (
+                                      <img
+                                        alt="expand"
+                                        src="/img/expand.svg"
+                                        height="100%"
+                                        width="100%"
+                                        className="plus-minus"
+                                      />
+                                    )}
+                                  </button>
+                                  {showHideComp3 ? (
+                                    <div className="tab-panel">
+                                      {nftHistory &&
+                                        nftHistory.map((val, i) => (
+                                          <div className="item" key={i}>
+                                            <p>
+                                              {moment(val.createdAt).format(
+                                                "DD/MM/YYYY hh:mm:ss"
+                                              )}
+                                            </p>
+                                            <p>{val.sender_name}</p>
+                                          </div>
+                                        ))}
+                                    </div>
+                                  ) : null}
+                                </li>
+                              </ul>
+                            </div>
+                            <div className="right-side">
+                              <div className="likes">
+                                <img
+                                  alt="expand"
+                                  src="/img/likes.svg"
+                                  style={{ width: "41px", height: "39px" }}
+                                />
+                                <p>{this.state.nftLikes}</p>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                       </>
-                  ) :null}
+                        </>
+                      ) : null}
                       <div className="buy-btn">
                         <button onClick={this.handleLoginConfirmed}>
                           <img
@@ -970,7 +1016,7 @@ width="100%"                                    className="plus-minus"
                           </div>
                         </button>
                       </div>
-                    </div>                         
+                    </div>
                   </div>
                 </Col>
               </Row>

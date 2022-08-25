@@ -9,8 +9,10 @@ class EaselAppTheme {
   static const Color kLightGreyText = Color(0xFF9B9A9A);
   static const Color kLightGrey = Color(0xFFC4C4C4);
   static const Color kLightGrey02 = Color(0xFFF2EFEA);
+  static const Color kDarkGrey02 = Color(0xFF808080);
   static const Color kDartGrey = Color(0xFF333333);
   static const Color kDartGrey02 = Color(0xFFA1A1A1);
+  static const Color kLightGrey03 = Color(0xFFD9D9D9);
   static const Color kBlack = Colors.black;
   static const Color kTransparent = Colors.transparent;
   static const Color kBlue = Color(0xFF1212C4);

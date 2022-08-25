@@ -13,6 +13,8 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 
+// ignore_for_file: must_be_immutable
+
 class NFT extends Equatable {
   String url = "";
   String thumbnailUrl = "";
@@ -158,6 +160,8 @@ class NFT extends Equatable {
     final item =
         await walletsStore.getItem(cookbookID, itemID) ?? Item.create();
     final owner = await walletsStore.getAccountNameByAddress(trade.creator);
+
+
 
     return NFT(
       type: NftType.TYPE_TRADE,
