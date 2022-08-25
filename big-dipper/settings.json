@@ -91,8 +91,8 @@
     "cosmos_sdk": 43
   },
   "remote": {
-    "rpc": "http://58.65.160.225:26687",
-    "api": "http://58.65.160.225:26688"
+    "rpc": "https://rpc.pylons.tech",
+    "api": "https://lcd.pylons.tech"
   },
   "debug": {
     "startTimer": true
@@ -113,7 +113,7 @@
     "cookbookInterval": 5000,
     "missedBlocksInterval": 60000,
     "delegationInterval": 900000,
-    "sendNotifications" : 1,
-    "collectNotificationsInterval" : 10000 
+    "sendNotifications": 1,
+    "collectNotificationsInterval": 10000
   }
 }
