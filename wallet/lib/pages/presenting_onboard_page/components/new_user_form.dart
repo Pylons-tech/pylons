@@ -65,10 +65,7 @@ class NewUserFormState extends State<NewUserForm> {
               ),
             )
           ]),
-          PylonsTextInput(
-              controller: usernameController,
-              label: "user_name".tr(),
-              errorText: validateUsername),
+          PylonsTextInput(controller: usernameController, label: "user_name".tr(), errorText: validateUsername),
           VerticalSpace(30.h),
           CheckboxListTile(
             value: _ackChecked1,
@@ -165,18 +162,14 @@ class NewUserFormState extends State<NewUserForm> {
       return;
     }
     final mnemonic = await generateMnemonic(strength: kMnemonicStrength);
-    final result =
-        await widget.walletsStore.importAlanWallet(mnemonic, userName);
+    final result = await widget.walletsStore.importAlanWallet(mnemonic, userName);
 
     isLoadingNotifier.value = false;
     result.fold((failure) {
       failure.message.show();
       navigator.pop();
     }, (walletInfo) async {
-      Navigator.of(navigatorKey.currentState!.overlay!.context)
-          .pushAndRemoveUntil(
-              MaterialPageRoute(builder: (_) => const HomeScreen()),
-              (route) => true);
+      Navigator.of(navigatorKey.currentState!.overlay!.context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => true);
     });
   }
 }
