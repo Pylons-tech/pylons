@@ -55,6 +55,10 @@ extension ScaffoldMessengerKeyHelper on GlobalKey<NavigatorState> {
       return null;
     }
 
+    if (navigatorKey.currentState!.overlay == null) {
+      return null;
+    }
+
     return ScaffoldMessenger.maybeOf(navigatorKey.currentState!.overlay!.context);
   }
 }
