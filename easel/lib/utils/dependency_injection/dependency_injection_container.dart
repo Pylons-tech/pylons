@@ -23,6 +23,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
+import 'package:easel_flutter/env.dart';
 
 final sl = GetIt.instance;
 
