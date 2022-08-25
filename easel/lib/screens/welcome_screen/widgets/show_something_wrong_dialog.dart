@@ -1,5 +1,6 @@
 import 'package:easel_flutter/screens/welcome_screen/widgets/common/dialog_clipper.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
+import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:easel_flutter/utils/screen_responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -146,18 +147,7 @@ class ShowSomethingWentWrongDialog {
     if (!appAlreadyInstalled) {
       PylonsWallet.instance.goToInstall();
     } else {
-      scaffoldMessenger
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(
-          content: Text(
-            kPylonsAlreadyInstalled,
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontSize: 14.sp,
-            ),
-          ),
-          duration: const Duration(seconds: 2),
-        ));
+      scaffoldMessenger.show( message: kPylonsAlreadyInstalled);
     }
   }
 }
