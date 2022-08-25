@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:simple_rich_text/simple_rich_text.dart';
 
 class PylonsPayWithSwipe extends StatefulWidget {
   final Color inactiveColor;
@@ -9,14 +10,7 @@ class PylonsPayWithSwipe extends StatefulWidget {
   final double initialWidth;
   final VoidCallback onSwipeComplete;
 
-  const PylonsPayWithSwipe(
-      {Key? key,
-      required this.activeColor,
-      required this.inactiveColor,
-      required this.height,
-      required this.initialWidth,
-      required this.onSwipeComplete})
-      : super(key: key);
+  const PylonsPayWithSwipe({Key? key, required this.activeColor, required this.inactiveColor, required this.height, required this.initialWidth, required this.onSwipeComplete}) : super(key: key);
 
   @override
   State<PylonsPayWithSwipe> createState() => _PylonsPayWithSwipeState();
@@ -44,17 +38,13 @@ class _PylonsPayWithSwipeState extends State<PylonsPayWithSwipe> {
                   child: GestureDetector(
                     onHorizontalDragUpdate: (details) {
                       setState(() {
-                        if (details.globalPosition.dx > widget.initialWidth &&
-                            ((left + widget.initialWidth) <
-                                constraint.maxWidth)) {
-                          left =
-                              details.globalPosition.dx - widget.initialWidth;
+                        if (details.globalPosition.dx > widget.initialWidth && ((left + widget.initialWidth) < constraint.maxWidth)) {
+                          left = details.globalPosition.dx - widget.initialWidth;
                         }
                       });
                     },
                     onHorizontalDragEnd: (details) {
-                      if ((left + widget.initialWidth) >=
-                          constraint.maxWidth * 0.9) {
+                      if ((left + widget.initialWidth) >= constraint.maxWidth * 0.9) {
                         widget.onSwipeComplete();
                       }
                     },
@@ -84,7 +74,7 @@ class _PylonsPayWithSwipeState extends State<PylonsPayWithSwipe> {
                     bottom: 0,
                     child: IgnorePointer(
                       child: Center(
-                          child: Text(
+                          child: SimpleRichText(
                         'swipe_right_to_pay'.tr(),
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white, fontSize: 14.sp),

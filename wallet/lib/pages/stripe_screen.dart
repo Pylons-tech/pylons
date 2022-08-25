@@ -11,14 +11,14 @@ import 'package:pylons_wallet/services/third_party_services/stripe_handler.dart'
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+import 'package:simple_rich_text/simple_rich_text.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class StripeScreen extends StatefulWidget {
   final String url;
   final VoidCallback onBack;
 
-  const StripeScreen({Key? key, required this.url, required this.onBack})
-      : super(key: key);
+  const StripeScreen({Key? key, required this.url, required this.onBack}) : super(key: key);
 
   @override
   State<StripeScreen> createState() => _StripeScreenState();
@@ -48,11 +48,9 @@ class _StripeScreenState extends State<StripeScreen> {
 
   Future<bool> loadLoginLink() async {
     final loading = Loading()..showLoading();
-    final account_response =
-        await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
+    final account_response = await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
     loading.dismiss();
-    account_response.fold((fail) => {fail.message.show()},
-        (accountlink) => {_controller.loadUrl(accountlink)});
+    account_response.fold((fail) => {fail.message.show()}, (accountlink) => {_controller.loadUrl(accountlink)});
 
     return true;
   }
@@ -95,17 +93,14 @@ class _StripeScreenState extends State<StripeScreen> {
                 },
                 javascriptChannels: {
                   _extractDataJSChannel(context),
-                  JavascriptChannel(
-                      name: 'Print',
-                      onMessageReceived: (JavascriptMessage message) {}),
+                  JavascriptChannel(name: 'Print', onMessageReceived: (JavascriptMessage message) {}),
                 },
                 navigationDelegate: (NavigationRequest request) {
                   if (request.url.contains(baseEnv.baseStripeCallbackUrl)) {
                     getAccountLinkAndRedirect();
                     return NavigationDecision.prevent;
                   }
-                  if (request.url
-                      .contains(baseEnv.baseStripeCallbackRefreshUrl)) {
+                  if (request.url.contains(baseEnv.baseStripeCallbackRefreshUrl)) {
                     getAccountLinkAndRedirect();
                     return NavigationDecision.prevent;
                   }
@@ -114,7 +109,7 @@ class _StripeScreenState extends State<StripeScreen> {
                     ScaffoldMessenger.of(context)
                       ..hideCurrentSnackBar()
                       ..showSnackBar(SnackBar(
-                        content: Text("blob_type_not_supported".tr()),
+                        content: SimpleRichText("blob_type_not_supported".tr()),
                       ));
                     return NavigationDecision.prevent;
                   }
@@ -162,8 +157,7 @@ class _StripeScreenState extends State<StripeScreen> {
   Future getAccountLinkAndRedirect() async {
     final loading = Loading()..showLoading();
 
-    final account_response =
-        await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
+    final account_response = await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
     loading.dismiss();
     account_response.fold((fail) => {fail.message.show()}, (accountlink) {
       _controller.loadUrl(accountlink);

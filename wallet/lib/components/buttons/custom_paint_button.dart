@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:pylons_wallet/utils/constants.dart';
+import 'package:simple_rich_text/simple_rich_text.dart';
 
 class CustomPaintButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -9,13 +9,7 @@ class CustomPaintButton extends StatelessWidget {
   final Color bgColor;
   final double width;
 
-  const CustomPaintButton(
-      {Key? key,
-      required this.onPressed,
-      required this.title,
-      required this.bgColor,
-      required this.width})
-      : super(key: key);
+  const CustomPaintButton({Key? key, required this.onPressed, required this.title, required this.bgColor, required this.width}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +26,9 @@ class CustomPaintButton extends StatelessWidget {
             height: 45.h,
             width: width,
             child: Center(
-                child: Text(
+                child: SimpleRichText(
               title,
-              style: TextStyle(
-                  color: bgColor == kButtonColor ? kBlue : kWhite,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600),
+              style: TextStyle(color: bgColor == kButtonColor ? kBlue : kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             )),
           ),

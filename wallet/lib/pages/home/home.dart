@@ -20,6 +20,7 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/screen_responsive.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+import 'package:simple_rich_text/simple_rich_text.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -28,8 +29,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   WalletsStore get walletsStore => GetIt.I.get();
@@ -41,8 +41,7 @@ class HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    _tabController =
-        TabController(vsync: this, length: homeProvider.pages.length);
+    _tabController = TabController(vsync: this, length: homeProvider.pages.length);
     getInitialLink();
   }
 
@@ -85,9 +84,7 @@ class HomeScreenState extends State<HomeScreen>
         ],
         child: Consumer<HomeProvider>(builder: (context, provider, _) {
           return AnnotatedRegion<SystemUiOverlayStyle>(
-            value: provider.isBannerDark()
-                ? SystemUiOverlayStyle.light
-                : SystemUiOverlayStyle.dark,
+            value: provider.isBannerDark() ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
             child: RotatedBox(
               quarterTurns: 0,
               child: ColoredBox(
@@ -150,11 +147,9 @@ class HomeScreenState extends State<HomeScreen>
                       height: 15.h,
                       width: 15.w,
                       fit: BoxFit.fill,
-                      color:
-                          provider.isBannerDark() ? Colors.white : Colors.black,
+                      color: provider.isBannerDark() ? Colors.white : Colors.black,
                     ),
-                    if (provider.showBadge)
-                      Positioned(right: 0.w, top: 0.h, child: buildBadge()),
+                    if (provider.showBadge) Positioned(right: 0.w, top: 0.h, child: buildBadge()),
                   ],
                 ),
               ),
@@ -169,8 +164,7 @@ class HomeScreenState extends State<HomeScreen>
                   behavior: HitTestBehavior.translucent,
                   child: SvgPicture.asset(
                     SVGUtil.SORT,
-                    color:
-                        provider.isBannerDark() ? Colors.white : Colors.black,
+                    color: provider.isBannerDark() ? Colors.white : Colors.black,
                     height: 20.h,
                     width: 20.w,
                   )),
@@ -193,34 +187,24 @@ class HomeScreenState extends State<HomeScreen>
         ),
         Text(
           walletsStore.getWallets().value.last.name,
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w600,
-              fontSize: 20.sp),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20.sp),
           textAlign: TextAlign.center,
         ),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(
-            "wallet_address_arg"
-                .tr(args: [walletsStore.getWallets().value.last.publicAddress]),
+          SimpleRichText(
+            "wallet_address_arg".tr(args: [walletsStore.getWallets().value.last.publicAddress]),
             style: TextStyle(color: Colors.black, fontSize: 9.sp),
             textAlign: TextAlign.center,
           ),
           SizedBox(width: 5.w),
           GestureDetector(
             onTap: () async {
-              final publicAddress = GetIt.I
-                  .get<WalletsStore>()
-                  .getWallets()
-                  .value
-                  .last
-                  .publicAddress;
+              final publicAddress = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
 
               await Clipboard.setData(ClipboardData(text: publicAddress));
               "copied_to_clipboard".tr().show();
             },
-            child: SvgPicture.asset(SVGUtil.WALLET_COPY,
-                height: 10.h, width: 10.w, fit: BoxFit.scaleDown),
+            child: SvgPicture.asset(SVGUtil.WALLET_COPY, height: 10.h, width: 10.w, fit: BoxFit.scaleDown),
           ),
         ]),
         SizedBox(height: 20.h),
@@ -279,11 +263,9 @@ class HomeScreenState extends State<HomeScreen>
                       height: 15.h,
                       width: 15.w,
                       fit: BoxFit.fill,
-                      color:
-                          provider.isBannerDark() ? Colors.white : Colors.black,
+                      color: provider.isBannerDark() ? Colors.white : Colors.black,
                     ),
-                    if (provider.showBadge)
-                      Positioned(right: 0.w, top: 0.h, child: buildBadge()),
+                    if (provider.showBadge) Positioned(right: 0.w, top: 0.h, child: buildBadge()),
                   ],
                 ),
               ),
@@ -298,8 +280,7 @@ class HomeScreenState extends State<HomeScreen>
                   behavior: HitTestBehavior.translucent,
                   child: SvgPicture.asset(
                     SVGUtil.SORT,
-                    color:
-                        provider.isBannerDark() ? Colors.white : Colors.black,
+                    color: provider.isBannerDark() ? Colors.white : Colors.black,
                     height: 15.h,
                     width: 15.w,
                   )),
@@ -322,34 +303,24 @@ class HomeScreenState extends State<HomeScreen>
         ),
         Text(
           walletsStore.getWallets().value.last.name,
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w600,
-              fontSize: 20.sp),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20.sp),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 5.h),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(
-            "wallet_address_arg"
-                .tr(args: [walletsStore.getWallets().value.last.publicAddress]),
+          SimpleRichText(
+            "wallet_address_arg".tr(args: [walletsStore.getWallets().value.last.publicAddress]),
             style: TextStyle(color: Colors.black, fontSize: 9.sp),
             textAlign: TextAlign.center,
           ),
           SizedBox(width: 5.w),
           GestureDetector(
             onTap: () async {
-              final publicAddress = GetIt.I
-                  .get<WalletsStore>()
-                  .getWallets()
-                  .value
-                  .last
-                  .publicAddress;
+              final publicAddress = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
               await Clipboard.setData(ClipboardData(text: publicAddress));
               "copied_to_clipboard".tr().show();
             },
-            child: SvgPicture.asset(SVGUtil.WALLET_COPY,
-                height: 15.h, width: 15.w, fit: BoxFit.scaleDown),
+            child: SvgPicture.asset(SVGUtil.WALLET_COPY, height: 15.h, width: 15.w, fit: BoxFit.scaleDown),
           ),
         ]),
         SizedBox(height: 20.h),
@@ -376,11 +347,7 @@ class DiagonalLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     const pointMode = ui.PointMode.polygon;
-    final points = [
-      const Offset(0, 10),
-      const Offset(100, 10),
-      const Offset(110, -2)
-    ];
+    final points = [const Offset(0, 10), const Offset(100, 10), const Offset(110, -2)];
     final paint = Paint()
       ..color = kDarkRed
       ..strokeWidth = 3;
@@ -397,8 +364,7 @@ class WalletTab extends StatelessWidget {
   final int index;
   final String tabName;
 
-  const WalletTab({Key? key, required this.tabName, required this.index})
-      : super(key: key);
+  const WalletTab({Key? key, required this.tabName, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -417,8 +383,7 @@ class WalletTab extends StatelessWidget {
                 child: Text(
                   tabName.tr(),
                   style: TextStyle(
-                    color:
-                        index == homeProvider.selectedIndex ? kDarkRed : kBlack,
+                    color: index == homeProvider.selectedIndex ? kDarkRed : kBlack,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -427,11 +392,8 @@ class WalletTab extends StatelessWidget {
                 visible: index == homeProvider.selectedIndex,
                 child: Positioned.fill(
                   child: Align(
-                    alignment: isTablet
-                        ? Alignment.bottomCenter
-                        : Alignment.bottomLeft,
-                    child: CustomPaint(
-                        size: Size(100, 10.h), painter: DiagonalLinePainter()),
+                    alignment: isTablet ? Alignment.bottomCenter : Alignment.bottomLeft,
+                    child: CustomPaint(size: Size(100, 10.h), painter: DiagonalLinePainter()),
                   ),
                 ),
               ),
