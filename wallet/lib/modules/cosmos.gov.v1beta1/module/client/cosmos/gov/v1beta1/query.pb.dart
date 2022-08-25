@@ -13,7 +13,7 @@ import 'package:protobuf/protobuf.dart' as $pb;
 import 'gov.pb.dart' as $6;
 import '../../base/query/v1beta1/pagination.pb.dart' as $8;
 
-import 'gov.pbenum.dart' as $6;
+
 
 class QueryProposalRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
