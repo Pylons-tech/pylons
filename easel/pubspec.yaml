@@ -114,6 +114,12 @@ dependencies:
 
   percent_indicator: ^4.2.2
 
+  equatable: ^2.0.5
+
+  sqflite: ^2.0.3+1
+
+
+
   media_info:
     git:
       url: https://github.com/ened/flutter_plugin_media_info.git
@@ -121,6 +127,16 @@ dependencies:
   advance_pdf_viewer:
     git:
       url: https://github.com/lohanidamodar/pdf_viewer.git
+
+
+    #  For Firebase
+  firebase_crashlytics: ^2.8.8
+  firebase_core: 1.20.1
+
+
+  collection: ^1.16.0
+
+
 
 
 dev_dependencies:
@@ -132,9 +148,6 @@ dev_dependencies:
   build_runner: 2.1.2
 
 
-#  For Firebase
-  firebase_crashlytics: 2.8.7
-  firebase_core: 1.20.1
 
 
 
@@ -143,7 +156,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.4
+  flutter_lints: ^2.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -205,3 +218,5 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 
+dependency_overrides:
+  webview_flutter_android: "2.8.14"

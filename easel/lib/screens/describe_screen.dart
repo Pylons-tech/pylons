@@ -118,26 +118,7 @@ class _DescribeScreenState extends State<DescribeScreen> {
                         );
                       },
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: ValueListenableBuilder(
-                          valueListenable: homeViewModel.currentPage,
-                          builder: (_, int currentPage, __) => Padding(
-                                padding: EdgeInsets.only(right: 20.w),
-                                child: InkWell(
-                                  onTap: () {
-                                    validateAndUpdateDescription(true);
-                                  },
-                                  child: Text(
-                                    "next".tr(),
-                                    style: TextStyle(
-                                        fontSize: 18.sp,
-                                        fontWeight: FontWeight.w700,
-                                        color: EaselAppTheme.kBlue),
-                                  ),
-                                ),
-                              )),
-                    )
+
                   ],
                 ),
                 ScreenResponsive(
@@ -289,11 +270,11 @@ class _DescribeScreenState extends State<DescribeScreen> {
                       const EaselHashtagInputField(),
                       VerticalSpace(20.h),
                       ClippedButton(
-                        title: "save_as_draft".tr(),
+                        title: "continue".tr(),
                         bgColor: EaselAppTheme.kBlue,
                         textColor: EaselAppTheme.kWhite,
                         onPressed: () {
-                          validateAndUpdateDescription(false);
+                          validateAndUpdateDescription(true);
                         },
                         cuttingHeight: 15.h,
                         clipperType: ClipperType.bottomLeftTopRight,
@@ -304,11 +285,11 @@ class _DescribeScreenState extends State<DescribeScreen> {
                       Center(
                         child: InkWell(
                           onTap: () {
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                            Navigator.of(context).pop();
+                            validateAndUpdateDescription(false);
+
                           },
                           child: Text(
-                            "discard".tr(),
+                            "save_as_draft".tr(),
                             style: TextStyle(
                                 color: EaselAppTheme.kLightGreyText,
                                 fontSize: 14.sp,

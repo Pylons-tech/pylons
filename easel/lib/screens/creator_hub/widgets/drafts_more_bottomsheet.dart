@@ -100,9 +100,10 @@ class DraftsMoreBottomSheet extends StatelessWidget {
                 viewCid: (context) {
                   return moreOptionTile(
                     onPressed: () async {
+                      final state = ScaffoldMessenger.of(context);
                       Navigator.of(context).pop();
                       await Clipboard.setData(ClipboardData(text: nft.cid));
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      state..hideCurrentSnackBar()..showSnackBar(
                         SnackBar(content: Text("copied_to_clipboard".tr())),
                       );
                     },
