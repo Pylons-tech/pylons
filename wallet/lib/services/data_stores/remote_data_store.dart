@@ -279,7 +279,11 @@ class RemoteDataStoreImp implements RemoteDataStore {
       kTimeStampKey: timeStamp,
       kAddressKey: walletAddress,
     };
-    await documentReference.set(data).then((value) => "thank_you_for_feedback".tr().show()).catchError((e) => log(e.toString()));
+    try {
+      await documentReference.set(data);
+    } catch (e) {
+      throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
+    }
   }
 
   @override
