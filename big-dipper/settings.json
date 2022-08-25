@@ -87,12 +87,12 @@
       "distribution": false
     },
     "banners": false,
-    "baseURL": "http://wallet.pylons.tech",
+    "baseURL": "https://wallet.pylons.tech",
     "cosmos_sdk": 43
   },
   "remote": {
-    "rpc": "https://rpc.pylons.tech",
-    "api": "https://lcd.pylons.tech"
+    "rpc": "http://58.65.160.225:26687",
+    "api": "http://58.65.160.225:26688"
   },
   "debug": {
     "startTimer": true
