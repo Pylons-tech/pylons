@@ -9,8 +9,10 @@ class EaselAppTheme {
   static const Color kLightGreyText = Color(0xFF9B9A9A);
   static const Color kLightGrey = Color(0xFFC4C4C4);
   static const Color kLightGrey02 = Color(0xFFF2EFEA);
+  static const Color kDarkGrey02 = Color(0xFF808080);
   static const Color kDartGrey = Color(0xFF333333);
   static const Color kDartGrey02 = Color(0xFFA1A1A1);
+  static const Color kLightGrey03 = Color(0xFFD9D9D9);
   static const Color kBlack = Colors.black;
   static const Color kTransparent = Colors.transparent;
   static const Color kBlue = Color(0xFF1212C4);
@@ -28,6 +30,7 @@ class EaselAppTheme {
   static const Color kLightPurple = Color(0xFFB6B6E8);
   static const Color kDarkGreen = Color(0xFF3A8977);
   static const Color kYellow = Color(0xFFF3BA2F);
+  static const Color kLightYellow = Color(0xFFFED564);
   static const Color kLightRed = Color(0xFFEF4421);
   static const Color kBgWhite = Color(0xFFE5E5E5);
   static const Color kLightBlackText = Color(0xFFA0A6AB);
@@ -51,8 +54,7 @@ class EaselAppTheme {
       );
 
   static Color cardBackground = const Color(0xFFC4C4C4).withOpacity(0.2);
-  static Color cardBackgroundSelected =
-      const Color(0x801212C4).withOpacity(0.2);
+  static Color cardBackgroundSelected = const Color(0x801212C4).withOpacity(0.2);
 
   static TextStyle titleStyle = TextStyle(
     fontSize: 18.sp,
@@ -67,9 +69,5 @@ class EaselAppTheme {
     fontFamily: universalSansFamily,
   );
 
-  static TextStyle kDeleteHeaderTextStyle = TextStyle(
-      fontSize: 14.sp,
-      fontFamily: 'UniversalSans',
-      color: EaselAppTheme.kWhite,
-      fontWeight: FontWeight.w600);
+  static TextStyle kDeleteHeaderTextStyle = TextStyle(fontSize: 14.sp, fontFamily: 'UniversalSans', color: EaselAppTheme.kWhite, fontWeight: FontWeight.w600);
 }
