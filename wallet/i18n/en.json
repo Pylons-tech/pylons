@@ -343,5 +343,6 @@
   "subject": "Subject",
   "character_limit" :"{} character limit",
   "enter_description_text" : "Enter description",
-  "enter_subject_text": "Enter subject"
+  "enter_subject_text": "Enter subject",
+  "thank_you_for_feedback": "Thank you for your feedback."
 }

@@ -310,5 +310,7 @@
   "subject": "Thema",
   "character_limit" :"{} Zeichenbegrenzung",
   "enter_description_text" : "Beschreibung eingeben",
-  "enter_subject_text": "Betreff eingeben"
+  "enter_subject_text": "Betreff eingeben",
+  "thank_you_for_feedback": "Danke für deine Rückmeldung."
+
 }

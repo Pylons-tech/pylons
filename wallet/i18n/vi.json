@@ -339,5 +339,7 @@
   "subject": "Môn học",
   "character_limit" :"{} giới hạn ký tự",
   "enter_description_text" : "Nhập mô tả",
-  "enter_subject_text": "Nhập chủ đề"
+  "enter_subject_text": "Nhập chủ đề",
+  "thank_you_for_feedback": "Cảm ơn phản hôi của bạn."
+
 }

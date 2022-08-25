@@ -310,5 +310,7 @@
   "subject": "Subjek",
   "character_limit" :"{} batas karakter",
   "enter_description_text" : "Masukkan deskripsi",
-  "enter_subject_text": "Masukkan subjek"
+  "enter_subject_text": "Masukkan subjek",
+  "thank_you_for_feedback": "Terima kasih atas tanggapan Anda."
+
 }

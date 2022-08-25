@@ -310,5 +310,6 @@
   "subject": "Sujeta",
   "character_limit" :"{} límite de caracteres",
   "enter_description_text" : "Introduce la descripción",
-  "enter_subject_text": "Introduce el asunto"
+  "enter_subject_text": "Introduce el asunto",
+  "thank_you_for_feedback": "Gracias por tus comentarios."
 }

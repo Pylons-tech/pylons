@@ -310,5 +310,7 @@
   "subject": "주제",
   "character_limit" :"{} 글자수 제한",
   "enter_description_text" : "설명 입력",
-  "enter_subject_text": "제목 입력"
+  "enter_subject_text": "제목 입력",
+  "thank_you_for_feedback": "의견을 보내 주셔서 감사합니다."
+
 }

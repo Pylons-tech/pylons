@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
@@ -40,6 +41,7 @@ import 'package:pylons_wallet/stores/wallet_store_imp.dart';
 import 'package:pylons_wallet/utils/backup/google_drive_helper.dart';
 import 'package:pylons_wallet/utils/backup/icloud_driver_helper.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
+import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/custom_transaction_broadcaster/custom_transaction_broadcaster_imp.dart';
 import 'package:pylons_wallet/utils/custom_transaction_signer/custom_transaction_signer.dart';
 import 'package:pylons_wallet/utils/custom_transaction_signing_gateaway/custom_transaction_signing_gateway.dart';
@@ -63,61 +65,46 @@ final sl = GetIt.instance;
 /// This method is used for initializing the dependencies
 Future<void> init() async {
   /// Services
-  sl.registerLazySingleton<InternetConnectionChecker>(
-      () => InternetConnectionChecker());
+  sl.registerLazySingleton<InternetConnectionChecker>(() => InternetConnectionChecker());
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
-  sl.registerLazySingleton<IPCEngine>(
-      () => IPCEngine(repository: sl(), walletsStore: sl()));
+  sl.registerLazySingleton<IPCEngine>(() => IPCEngine(repository: sl(), walletsStore: sl()));
   sl.registerFactory<AudioPlayerHelper>(() => AudioPlayerHelperImpl(sl()));
   sl.registerFactory<VideoPlayerHelper>(() => VideoPlayerHelperImp(sl()));
   sl.registerFactory<ThumbnailHelper>(() => ThumbnailHelperImp());
-  sl.registerLazySingleton<CrashlyticsHelper>(
-      () => CrashlyticsHelperImpl(sl()));
+  sl.registerLazySingleton<CrashlyticsHelper>(() => CrashlyticsHelperImpl(sl()));
   sl.registerFactory<ShareHelper>(() => ShareHelperImpl());
-  sl.registerLazySingleton<RemoteNotificationsService>(
-      () => RemoteNotificationsServiceImp(
-            firebaseMessaging: sl(),
-            flutterLocalNotificationsPlugin: sl(),
-          ));
+  sl.registerLazySingleton<RemoteNotificationsService>(() => RemoteNotificationsServiceImp(
+        firebaseMessaging: sl(),
+        flutterLocalNotificationsPlugin: sl(),
+      ));
 
   /// External Dependencies
   sl.registerLazySingleton<FirebaseAppCheck>(() => FirebaseAppCheck.instance);
-  sl.registerLazySingleton<FlutterLocalNotificationsPlugin>(
-      () => FlutterLocalNotificationsPlugin());
+  sl.registerLazySingleton<FlutterLocalNotificationsPlugin>(() => FlutterLocalNotificationsPlugin());
   sl.registerLazySingleton<FirebaseMessaging>(() => FirebaseMessaging.instance);
   sl.registerLazySingleton<ImagePicker>(() => ImagePicker());
   sl.registerLazySingleton<LocalAuthentication>(() => LocalAuthentication());
-  sl.registerSingletonAsync<SharedPreferences>(
-      () => SharedPreferences.getInstance());
+  sl.registerSingletonAsync<SharedPreferences>(() => SharedPreferences.getInstance());
   sl.registerLazySingleton<GoogleDriveApiImpl>(() => GoogleDriveApiImpl());
   sl.registerLazySingleton<ICloudDriverApiImpl>(() => ICloudDriverApiImpl());
   sl.registerLazySingleton(() => FirebaseRemoteConfig.instance);
   sl.registerLazySingleton(() => const FlutterSecureStorage());
   sl.registerFactory<AudioPlayer>(() => AudioPlayer());
-  sl.registerFactory<VideoPlayerController>(
-      () => VideoPlayerController.network(''));
+  sl.registerFactory<VideoPlayerController>(() => VideoPlayerController.network(''));
   sl.registerLazySingleton<http.Client>(() => http.Client());
-  sl.registerLazySingleton<AlanTransactionSigner>(
-      () => AlanTransactionSigner(sl.get<BaseEnv>().networkInfo));
-  sl.registerLazySingleton<AlanTransactionBroadcaster>(
-      () => AlanTransactionBroadcaster(sl.get<BaseEnv>().networkInfo));
-  sl.registerLazySingleton<SharedPrefsPlainDataStore>(
-      () => SharedPrefsPlainDataStore());
-  sl.registerLazySingleton<NoOpTransactionSummaryUI>(
-      () => NoOpTransactionSummaryUI());
-  sl.registerLazySingleton<CustomTransactionSigner>(
-      () => CustomTransactionSigner(sl.get<BaseEnv>().networkInfo));
-  sl.registerLazySingleton<CustomTransactionBroadcasterImp>(
-      () => CustomTransactionBroadcasterImp(sl.get<BaseEnv>().networkInfo));
+  sl.registerLazySingleton<AlanTransactionSigner>(() => AlanTransactionSigner(sl.get<BaseEnv>().networkInfo));
+  sl.registerLazySingleton<AlanTransactionBroadcaster>(() => AlanTransactionBroadcaster(sl.get<BaseEnv>().networkInfo));
+  sl.registerLazySingleton<SharedPrefsPlainDataStore>(() => SharedPrefsPlainDataStore());
+  sl.registerLazySingleton<NoOpTransactionSummaryUI>(() => NoOpTransactionSummaryUI());
+  sl.registerLazySingleton<CustomTransactionSigner>(() => CustomTransactionSigner(sl.get<BaseEnv>().networkInfo));
+  sl.registerLazySingleton<CustomTransactionBroadcasterImp>(() => CustomTransactionBroadcasterImp(sl.get<BaseEnv>().networkInfo));
   sl.registerLazySingleton(() => FirebaseCrashlytics.instance);
   sl.registerLazySingleton<AlanAccountDerivator>(() => AlanAccountDerivator());
-  sl.registerLazySingleton<FirebaseDynamicLinks>(
-      () => FirebaseDynamicLinks.instance);
+  sl.registerLazySingleton<FirebaseDynamicLinks>(() => FirebaseDynamicLinks.instance);
+  sl.registerLazySingleton<CollectionReference>(() => FirebaseFirestore.instance.collection(kFeedbacks));
 
-  sl.registerLazySingleton<FlutterSecureStorageDataStore>(
-      () => FlutterSecureStorageDataStore(storage: sl()));
-  sl.registerLazySingleton<AlanCredentialsSerializer>(
-      () => AlanCredentialsSerializer());
+  sl.registerLazySingleton<FlutterSecureStorageDataStore>(() => FlutterSecureStorageDataStore(storage: sl()));
+  sl.registerLazySingleton<AlanCredentialsSerializer>(() => AlanCredentialsSerializer());
 
   sl.registerLazySingleton<CosmosKeyInfoStorage>(() => CosmosKeyInfoStorage(
         serializers: [sl.get<AlanCredentialsSerializer>()],
@@ -149,11 +136,7 @@ Future<void> init() async {
 
   /// Data Sources
   sl.registerLazySingleton<LocalDataSource>(
-    () => LocalDataSourceImp(
-        picker: sl(),
-        sharedPreferences: sl(),
-        flutterSecureStorage: sl(),
-        permissionService: sl()),
+    () => LocalDataSourceImp(picker: sl(), sharedPreferences: sl(), flutterSecureStorage: sl(), permissionService: sl()),
   );
 
   sl.registerLazySingleton<PermissionService>(
@@ -162,10 +145,7 @@ Future<void> init() async {
 
   await sl.isReady<SharedPreferences>();
 
-  final remoteConfigService = RemoteConfigServiceImpl(
-      firebaseRemoteConfig: sl(),
-      localDataSource: sl(),
-      crashlyticsHelper: sl());
+  final remoteConfigService = RemoteConfigServiceImpl(firebaseRemoteConfig: sl(), localDataSource: sl(), crashlyticsHelper: sl());
   await remoteConfigService.init();
 
   sl.registerLazySingleton<RemoteConfigService>(
@@ -182,23 +162,16 @@ Future<void> init() async {
         storePaymentService: sl(),
         firebaseAppCheck: sl(),
         dynamicLinksGenerator: sl(),
+        mainFeedbacksCollection: sl(),
       ));
 
-  sl.registerLazySingleton<StorePaymentService>(
-      () => StorePaymentServiceImpl());
+  sl.registerLazySingleton<StorePaymentService>(() => StorePaymentServiceImpl());
 
   sl.registerLazySingleton<QueryHelper>(() => QueryHelper(httpClient: sl()));
 
   /// Repository
-  sl.registerLazySingleton<Repository>(() => RepositoryImp(
-      networkInfo: sl(),
-      queryHelper: sl(),
-      remoteDataStore: sl(),
-      localDataSource: sl(),
-      localAuthHelper: sl(),
-      googleDriveApi: sl(),
-      iCloudDriverApi: sl(),
-      crashlyticsHelper: sl()));
+  sl.registerLazySingleton<Repository>(() =>
+      RepositoryImp(networkInfo: sl(), queryHelper: sl(), remoteDataStore: sl(), localDataSource: sl(), localAuthHelper: sl(), googleDriveApi: sl(), iCloudDriverApi: sl(), crashlyticsHelper: sl()));
 
   /// ViewModels
   sl.registerLazySingleton<WalletsStore>(() => WalletsStoreImp(
@@ -212,16 +185,12 @@ Future<void> init() async {
         repository: sl(),
         shareHelper: sl(),
       ));
-  sl.registerLazySingleton(
-      () => CollectionViewModel(walletsStore: sl(), thumbnailHelper: sl()));
-  sl.registerLazySingleton(() => StripeHandler(
-      walletsStore: sl(), localDataSource: sl(), repository: sl()));
-  sl.registerLazySingleton(
-      () => HomeProvider(walletStore: sl(), repository: sl()));
+  sl.registerLazySingleton(() => CollectionViewModel(walletsStore: sl(), thumbnailHelper: sl()));
+  sl.registerLazySingleton(() => StripeHandler(walletsStore: sl(), localDataSource: sl(), repository: sl()));
+  sl.registerLazySingleton(() => HomeProvider(walletStore: sl(), repository: sl()));
   sl.registerLazySingleton(() => GeneralScreenViewModel());
   sl.registerLazySingleton(() => UserInfoProvider(sl()));
-  sl.registerLazySingleton(() => GeneralScreenLocalizationViewModel(
-      shareHelper: sl(), repository: sl(), walletStore: sl()));
+  sl.registerLazySingleton(() => GeneralScreenLocalizationViewModel(shareHelper: sl(), repository: sl(), walletStore: sl()));
   sl.registerLazySingleton(() => PracticeTestViewModel(sl()));
   sl.registerFactory(() => OwnerViewViewModel(
         repository: sl(),

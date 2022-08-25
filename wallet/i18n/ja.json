@@ -310,5 +310,7 @@
   "subject": "主題",
   "character_limit" :"{} 文字数制限",
   "enter_description_text" : "説明を入力",
-  "enter_subject_text": "件名を入力してください"
+  "enter_subject_text": "件名を入力してください",
+  "thank_you_for_feedback": "ご意見ありがとうございます"
+
 }

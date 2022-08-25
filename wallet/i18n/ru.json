@@ -316,5 +316,7 @@
   "subject": "Предмет",
   "character_limit" :"{} лимит символов",
   "enter_description_text" : "Введите описание",
-  "enter_subject_text": "Введите тему"
+  "enter_subject_text": "Введите тему",
+  "thank_you_for_feedback": "Спасибо за ваш отзыв."
+
 }
