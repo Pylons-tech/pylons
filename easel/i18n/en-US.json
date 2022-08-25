@@ -62,7 +62,7 @@
   "create_stripe_description": "Please register with Stripe in the Pylons app to list your NFT for USD.",
   "welcome_msg":"Draft NFTs contain an IPFS Content ID, but require additional information to be published on the Pylons chain and listed for sale on the Pylons app. You can remove an active NFT listing, but you can never unpublish a NFT.",
   "hello": "Hello, ",
-  "no_nft_created":"There are no Draft NFTs",
+  "no_nft_created": "There are no Draft NFTs",
   "loading": "loading ...",
   "are_you_sure_you_want_to_delete": "Are you sure you want to delete this draft?",
   "something_wrong_while_uploading": "Something went wrong while uploading. Please try again.",
