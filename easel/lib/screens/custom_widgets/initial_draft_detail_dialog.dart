@@ -128,7 +128,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
         });
       });
     }
-    if (count == 1) {
+    if (count == one) {
       scheduleMicrotask(() {
         setState(() {
           status = LoadingStatus.success;
