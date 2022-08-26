@@ -341,5 +341,7 @@
   "your_nft_sold_msg_to": "Your NFT \"{}\" has been sold to ",
   "recipe_id": "Recipe ID",
   "exclusive": "Exclusive",
-  "pylons": "Pylons"
+  "pylons": "Pylons",
+  "vietnamese": "Vietnamese"
+
 }
