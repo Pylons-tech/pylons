@@ -44,4 +44,4 @@ str='
 apiKeyPlaceHolder=SET_CURRENT_KEY
 replaceWithApiKey=$1
 newStr=${str//$oauthKeyPlaceHolder/$oAuthKey}
-echo $newStr >> android/app/google_services.json
+echo $newStr >> android/app/google-services.json
