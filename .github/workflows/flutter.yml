@@ -47,5 +47,6 @@ jobs:
           ./android/app/json_manipulator.sh RANDOM_STRING
           flutter pub get
           flutter analyze
+          flutter build appbundle
 
 
