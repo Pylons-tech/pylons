@@ -338,5 +338,8 @@
   "user_declined_request": "Пользователь отклонил запрос",
   "nft_sold": "NFT Продано!",
   "view_detail": "Подробнее",
-  "your_nft_sold_msg_to": "Ваш NFT \"{}\" продан к "
+  "your_nft_sold_msg_to": "Ваш NFT \"{}\" продан к ",
+  "recipe_id": "Рецепт ID",
+  "exclusive": "Эксклюзивный",
+  "pylons": "Pylons"
 }

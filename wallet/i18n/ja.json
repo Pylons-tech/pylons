@@ -111,7 +111,7 @@
   "payout": "支払い",
   "exceed_amount": "現在の値が利用可能な量を超えています現在の値が利用可能な量を超えています",
   "empty_amount": "金額を空にすることはできません",
-  "request_payout": "現在のStripeアカウントへの支払いをリクエストする",
+  "request_payout": "現在の Stripe アカウントへの支払いをリクエストする",
   "available_amount": "利用可能な金額：",
   "stripe_register_account_failed": "ストライプ登録接続アカウントが失敗しました",
   "stripe_registration_token_failed": "ストライプ登録トークンの生成に失敗しました",
@@ -233,7 +233,7 @@
   "my_creations": "私の作品",
   "my_purchase": "私の購入",
   "biometric_id": "生体認証 ID",
-  "connect_stripe_to_get_paid": "Stripeを接続して支払いを受ける",
+  "connect_stripe_to_get_paid": "Stripe を接続して支払いを受ける",
   "transaction_history": "取引履歴",
   "view_recovery_phrase": "回復フレーズを表示",
   "practice_test": "模擬試験",
@@ -338,5 +338,8 @@
   "user_declined_request": "ユーザーがリクエストを拒否しました",
   "nft_sold": "NFT 販売済み!",
   "view_detail": "詳細を表示",
-  "your_nft_sold_msg_to": "あなたのNFT \"{}\"は販売されました "
+  "your_nft_sold_msg_to": "あなたのNFT \"{}\"は販売されました ",
+  "recipe_id": "レシピ ID",
+  "exclusive": "エクスクルーシブ",
+  "pylons": "Pylons"
 }

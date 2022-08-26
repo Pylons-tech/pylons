@@ -338,5 +338,8 @@
   "user_declined_request": "El usuario rechazó la solicitud",
   "nft_sold": "NFT vendido!",
   "view_detail": "Ver Detalle",
-  "your_nft_sold_msg_to": "Nuestro NFT \"{}\" ha sido vendido a "
+  "your_nft_sold_msg_to": "Nuestro NFT \"{}\" ha sido vendido a ",
+  "recipe_id": "Receta ID",
+  "exclusive": "Exclusiva",
+  "pylons": "Pylons"
 }

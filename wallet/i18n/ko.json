@@ -233,7 +233,7 @@
   "my_creations": "내 작품",
   "my_purchase": "내 구매",
   "biometric_id": "생체 인식 ID",
-  "connect_stripe_to_get_paid": "지불을 받으려면 Stripe를 연결하십시오",
+  "connect_stripe_to_get_paid": "지불을 받으려면 Stripe 를 연결하십시오",
   "transaction_history": "거래 내역",
   "view_recovery_phrase": "복구 문구 보기",
   "practice_test": "연습 시험",
@@ -338,5 +338,8 @@
   "user_declined_request": "사용자가 요청을 거부했습니다.",
   "nft_sold": "NFT 판매되었음!",
   "view_detail": "자세히보기",
-  "your_nft_sold_msg_to": "귀하의 NFT \"{}\"는 판매되었습니다."
+  "your_nft_sold_msg_to": "귀하의 NFT \"{}\"는 판매되었습니다.",
+  "recipe_id": "레시피 ID",
+  "exclusive": "독점적인",
+  "pylons": "Pylons"
 }

@@ -279,7 +279,7 @@
   "no_biometric": "Perangkat Anda tidak mendukung biometrik.",
   "collapse": " Jatuh",
   "read_more": "Baca selengkapnya",
-  "my_nft": "-ku nft",
+  "my_nft": "ku nft",
   "pylons_fee_msg": "Biaya Pylons adalah biaya jaringan yang dinilai pada semua transaksi sebesar 10% dari harga yang tercantum.",
   "you": "Anda",
   "recipe_not_found": "Recipe tidak ditemukan",
@@ -338,5 +338,8 @@
   "user_declined_request": "Pengguna Menolak Permintaan",
   "nft_sold": "NFT Terjual!",
   "view_detail": "Lihat Detail",
-  "your_nft_sold_msg_to": "NFT \"{}\" Anda telah terjual ke "
+  "your_nft_sold_msg_to": "NFT \"{}\" Anda telah terjual ke ",
+  "recipe_id": "Resep ID",
+  "exclusive": "Eksklusif",
+  "pylons": "Pylons"
 }
