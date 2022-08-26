@@ -29,7 +29,10 @@ bool isTablet = false;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    name: "Easel",
+    options: FirebaseOptions(apiKey: apiKey, appId: appId, messagingSenderId: messagingSenderId, projectId: "easel-6a999");
+  );
   di.init();
   final firebaseCrashlytics = GetIt.I.get<FirebaseCrashlytics>();
 
