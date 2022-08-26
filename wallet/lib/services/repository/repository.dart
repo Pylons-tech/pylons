@@ -1056,7 +1056,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, bool>> saveIsBannerDark({required bool isBannerDark}) async {
     try {
-      return Right(await localDataSource.saveIsBannerDark(isBannerDark));
+      return Right(await localDataSource.saveIsBannerDark( isBannerDark: isBannerDark));
     } on Exception catch (_) {
       return const Left(CacheFailure(PLATFORM_FAILED));
     }

@@ -30,6 +30,7 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
       {required PickedFileModel result,
       required EaselProvider easelProvider}) async {
     EaselProvider provider = context.read();
+    final navigator = Navigator.of(context);
 
     if (result.path.isEmpty) {
       return;
@@ -58,7 +59,7 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
 
     await provider.setFile(fileName: result.fileName, filePath: result.path);
 
-    Navigator.of(context).push(MaterialPageRoute(
+    navigator.push(MaterialPageRoute(
         builder: (_) => PreviewScreen(
               onMoveToNextScreen: () {
                 context.read<HomeViewModel>().nextPage();

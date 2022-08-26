@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,10 +8,7 @@ import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 
-TextStyle _rowTitleTextStyle = TextStyle(
-    color: kWhite,
-    fontWeight: FontWeight.w800,
-    fontSize: isTablet ? 14.sp : 12.sp);
+TextStyle _rowTitleTextStyle = TextStyle(color: kWhite, fontWeight: FontWeight.w800, fontSize: isTablet ? 14.sp : 12.sp);
 TextStyle _rowSubtitleTextStyle = TextStyle(
   color: kWhite,
   fontSize: isTablet ? 12.sp : 10.sp,
@@ -20,19 +18,13 @@ class WhatIsPylonDialog {
   final BuildContext _buildContext;
   final VoidCallback onBackPressed;
 
-  WhatIsPylonDialog(
-      {required BuildContext context, required this.onBackPressed})
-      : _buildContext = context;
+  WhatIsPylonDialog({required BuildContext context, required this.onBackPressed}) : _buildContext = context;
 
   void show() {
     showDialog(
       context: _buildContext,
       builder: (context) {
-        return Dialog(
-            backgroundColor: Colors.transparent,
-            alignment:
-                Alignment.lerp(Alignment.center, Alignment.bottomCenter, 0.15),
-            child: const WhatIsPylonWidget());
+        return Dialog(backgroundColor: Colors.transparent, alignment: Alignment.lerp(Alignment.center, Alignment.bottomCenter, 0.15), child: const WhatIsPylonWidget());
       },
       barrierColor: Colors.transparent,
     );
@@ -66,9 +58,8 @@ class _WhatIsPylonWidgetState extends State<WhatIsPylonWidget> {
                   height: 60,
                   width: 80,
                   child: ClipPath(
-                    clipper: RightTriangleClipper(
-                        orientation: enums.Orientation.Orientation_NW),
-                    child: Container(
+                    clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NW),
+                    child: const ColoredBox(
                       color: kDarkRed,
                     ),
                   ),
@@ -81,9 +72,8 @@ class _WhatIsPylonWidgetState extends State<WhatIsPylonWidget> {
                   height: 60,
                   width: 80,
                   child: ClipPath(
-                    clipper: RightTriangleClipper(
-                        orientation: enums.Orientation.Orientation_SE),
-                    child: Container(
+                    clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SE),
+                    child: const ColoredBox(
                       color: kDarkRed,
                     ),
                   ),
@@ -102,8 +92,7 @@ class _WhatIsPylonWidgetState extends State<WhatIsPylonWidget> {
                       height: 20.h,
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: isTablet ? 20.w : 30.w),
+                      padding: EdgeInsets.symmetric(horizontal: isTablet ? 20.w : 30.w),
                       child: Text(
                         "what_is_pylon".tr(),
                         style: _rowTitleTextStyle,
@@ -114,8 +103,7 @@ class _WhatIsPylonWidgetState extends State<WhatIsPylonWidget> {
                       height: 15.h,
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: isTablet ? 20.w : 30.w),
+                      padding: EdgeInsets.symmetric(horizontal: isTablet ? 20.w : 30.w),
                       child: Text(
                         "what_is_pylon_info".tr(),
                         style: _rowSubtitleTextStyle,
@@ -140,8 +128,7 @@ class _WhatIsPylonWidgetState extends State<WhatIsPylonWidget> {
                               child: Text(
                                 "close".tr(),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: kUnselectedIcon, fontSize: 14.sp),
+                                style: TextStyle(color: kUnselectedIcon, fontSize: 14.sp),
                               ),
                             ),
                           ),

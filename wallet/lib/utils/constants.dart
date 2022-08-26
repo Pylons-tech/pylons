@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -281,7 +283,7 @@ List<Map<String, dynamic>> languagesSupported = [
 
 ///review your nft
 
-const String kPylonsFeeMsg = "The Pylons fee is the network fee assessed on all transactions equal to 10% of the listed price.";
+const String kPylonsFeeMsg = "The Pylons fee is the network fee assessed on all transactions which is equal to 10% of the listed price.";
 const String kStripeAccountNotCreatedIdentifier = "onboarding";
 const String kNftFormat = "NFT_Format";
 const String kDuration = "Duration";
@@ -303,18 +305,7 @@ const int kDateConverterConstant = 1000;
 
 const kHashtags = "Hashtags";
 
-const kBuyPylonOne = "10 PYLN";
-const kBuyPylonThree = "30 PYLN";
-const kBuyPylonFive = "50 PYLN";
-const kOneUSD = "\$1.00";
-const kThreeUSD = "\$3.00";
-const kFiveUSD = "\$5.00";
-
 const kLOW_LOW_BALANCE_CONSTANT = "Tx error:5";
-
-const kPylons1 = "pylons_10";
-const kPylons3 = "pylons_35";
-const kPylons5 = "pylons_60";
 
 //NFT STRINGS KEYS
 const kResidual = "Residual";
@@ -418,5 +409,11 @@ const String kZeroInt = "0";
 
 const ipfsDomain = 'https://ipfs.io/ipfs';
 const proxyIpfsDomain = 'https://proxy.pylons.tech/ipfs';
+
+final defaultPylonsSKUs = jsonEncode([
+  {"id": "pylons_10", "bonus": "", "subtitle": "\$1.00", "pylons": "10 PYLN"},
+  {"id": "pylons_35", "bonus": "(+5 Bonus)", "subtitle": "\$3.00", "pylons": "35 PYLN"},
+  {"id": "pylons_60", "bonus": "(+10 Bonus)", "subtitle": "\$5.00", "pylons": "50 PYLN"}
+]);
 
 const kMaxDescription = 256;
