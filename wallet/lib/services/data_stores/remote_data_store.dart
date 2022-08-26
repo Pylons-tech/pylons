@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:alan/proto/cosmos/bank/v1beta1/export.dart' as bank;
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cosmos_utils/cosmos_utils.dart';
 import 'package:decimal/decimal.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -14,7 +13,6 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:protobuf/protobuf.dart';
-import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/ipc/handler/handler_factory.dart';
 import 'package:pylons_wallet/model/amount.dart';
 import 'package:pylons_wallet/model/balance.dart';
@@ -29,6 +27,7 @@ import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dar
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
+import 'package:pylons_wallet/services/third_party_services/firestore_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/store_payment_service.dart';
 import 'package:pylons_wallet/stores/models/transaction_response.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
@@ -250,7 +249,8 @@ abstract class RemoteDataStore {
 
   /// This method will save users feedback to firebase based on its wallet address
   /// Input : [walletAddress], [subject] and [feedback] the address against which the feedbacks needs to be stored
-  Future<void> saveUserFeedback({required String walletAddress, required String subject, required String feedback});
+  /// Output : [bool] It will return true if the saving feedback is successful otherwise false
+  Future<bool> saveUserFeedback({required String walletAddress, required String subject, required String feedback});
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -259,32 +259,15 @@ class RemoteDataStoreImp implements RemoteDataStore {
   final StorePaymentService storePaymentService;
   final FirebaseAppCheck firebaseAppCheck;
   final FirebaseDynamicLinks dynamicLinksGenerator;
-  final CollectionReference mainFeedbacksCollection;
+  final FirestoreHelper firebaseHelper;
 
   RemoteDataStoreImp(
       {required this.dynamicLinksGenerator,
       required this.httpClient,
-      required this.mainFeedbacksCollection,
+      required this.firebaseHelper,
       required this.crashlyticsHelper,
       required this.storePaymentService,
       required this.firebaseAppCheck});
-
-  @override
-  Future<void> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) async {
-    final DocumentReference documentReference = mainFeedbacksCollection.doc();
-    final timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
-    final Map<String, dynamic> data = <String, dynamic>{
-      kSubjectKey: subject,
-      kFeedbackKey: feedback,
-      kTimeStampKey: timeStamp,
-      kAddressKey: walletAddress,
-    };
-    try {
-      await documentReference.set(data);
-    } catch (e) {
-      throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
-    }
-  }
 
   @override
   Future<void> updateLikeStatus({required String recipeId, required String cookBookID, required String walletAddress}) async {
@@ -1038,6 +1021,15 @@ class RemoteDataStoreImp implements RemoteDataStore {
     }
 
     return result.getOrElse(() => TransactionResponse.initial());
+  }
+
+  @override
+  Future<bool> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) async {
+    try {
+      return await firebaseHelper.saveUserFeedback(walletAddress: walletAddress, subject: subject, feedback: feedback);
+    } catch (e) {
+      throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
+    }
   }
 }
 

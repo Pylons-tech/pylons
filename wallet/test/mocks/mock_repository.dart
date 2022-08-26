@@ -235,7 +235,7 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> saveIsBannerDark(bool isBannerDark) {
+  Future<Either<Failure, bool>> saveIsBannerDark({required bool isBannerDark}) {
     throw UnimplementedError();
   }
 
@@ -508,7 +508,7 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, void>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) {
+  Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) {
     // TODO: implement saveUserFeedback
     throw UnimplementedError();
   }

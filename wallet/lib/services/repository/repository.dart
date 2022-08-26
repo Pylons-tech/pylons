@@ -204,7 +204,7 @@ abstract class Repository {
   /// This method saves the boolean value that indicates whether the banner has a dark or light brightness value
   /// Input: [isBannerDark] contains the boolean value that was determine from the images brightness
   /// Output: if successful will return [bool] which tells whether the operation is successful or not else this will give [Failure]
-  Future<Either<Failure, bool>> saveIsBannerDark(bool isBannerDark);
+  Future<Either<Failure, bool>> saveIsBannerDark({required bool isBannerDark});
 
   /// This method gets the boolean value that indicates whether the banner has a dark or light brightness value
   /// Output: if successful will return [bool] indicating whether the banner is dark or light else this will give [Failure]
@@ -384,7 +384,8 @@ abstract class Repository {
 
   /// This method is used to save user's feedback into Firebase
   /// Input: [subject],[feedback] and [walletAddress] of the given Account
-  Future<Either<Failure, void>> saveUserFeedback({required String walletAddress, required String subject, required String feedback});
+  /// Output: [bool] This will return true if its success otherwise false
+  Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback});
 
   ///This method is used to send apple in app purchase coins
   /// Input: [AppleInAppPurchaseModel] will be given
@@ -1053,7 +1054,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> saveIsBannerDark(bool isBannerDark) async {
+  Future<Either<Failure, bool>> saveIsBannerDark({required bool isBannerDark}) async {
     try {
       return Right(await localDataSource.saveIsBannerDark(isBannerDark));
     } on Exception catch (_) {
@@ -1779,12 +1780,12 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, void>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) async {
+  Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure("no_internet".tr()));
     }
     try {
-      return Right(await remoteDataStore.saveUserFeedback(walletAddress: walletAddress ,subject: subject, feedback: feedback));
+      return Right(await remoteDataStore.saveUserFeedback(walletAddress: walletAddress, subject: subject, feedback: feedback));
     } on Failure catch (e) {
       return Left(e);
     } on Exception catch (e) {

@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
@@ -11,7 +9,7 @@ import 'package:pylons_wallet/model/export.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/store_payment_service.dart';
-import 'package:pylons_wallet/utils/constants.dart';
+import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 
 import '../../../mocks/mock_constants.dart';
 import '../../../mocks/mock_crashlytics_helper.dart';
@@ -36,7 +34,7 @@ void main() {
       storePaymentService: storePaymentService,
       firebaseAppCheck: MockFirebaseAppCheck(),
       dynamicLinksGenerator: mockFirebaseDynamicLinks,
-      mainFeedbacksCollection: FirebaseFirestore.instance.collection(kFeedbacks),
+      firebaseHelper: sl(),
     );
 
     final response = await remoteDataStore.getAccountLinkBasedOnUpdateToken(req: StripeUpdateAccountRequest(Address: MOCK_ADDRESS, Token: MOCK_TOKEN, Signature: SIGNATURE));
