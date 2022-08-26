@@ -17,7 +17,7 @@ import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
 TextStyle kHeadlineTextStyle = TextStyle(fontSize: 16.sp, fontFamily: kUniversalFontFamily, color: Colors.black);
-TextStyle kSettingsOptionsTextStyle = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
+TextStyle kSettingsOptionsTextStyle = TextStyle(fontSize: 20.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
 TextStyle kSettingsUserEnteredTextStyle = TextStyle(
   fontSize: 14.sp,
   fontFamily: kUniversalFontFamily,
@@ -361,7 +361,7 @@ class _SettingListItemState extends State<SettingListItem> {
             ),
             Text(
               widget.title,
-              style: kSettingsOptionsTextStyle,
+              style: TextStyle(fontSize: 20.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500),
             )
           ],
         ),

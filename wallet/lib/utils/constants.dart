@@ -272,7 +272,7 @@ List<Map<String, dynamic>> languagesSupported = [
   {"name": "korean", "flag": "🇰🇷", 'selected': false, "abbreviation": "(KO)", 'languageCode': 'ko'},
   {"name": "japanese", "flag": "🇯🇵", 'selected': false, "abbreviation": "(JA)", 'languageCode': 'ja'},
   {"name": "spanish", "flag": "🇪🇸", 'selected': false, "abbreviation": "(ES)", 'languageCode': 'es'},
-  {"name": "vietnamese", "flag": "🇻🇳", 'selected': false, "abbreviation": "(VIE)", 'languageCode': 'vie'},
+  {"name": "vietnamese", "flag": "🇻🇳", 'selected': false, "abbreviation": "(VIE)", 'languageCode': 'vi'},
 ];
 
 ///review your nft
