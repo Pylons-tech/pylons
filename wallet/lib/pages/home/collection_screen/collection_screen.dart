@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
@@ -70,6 +71,17 @@ class _CollectionScreenState extends State<CollectionScreen> {
     scheduleMicrotask(() {
       context.read<CollectionViewModel>().init();
     });
+  }
+
+  Future<void> updateAppWidget() async {
+    final viewModel = context.watch<CollectionViewModel>();
+    final List<CachedNetworkImage> list = [];
+    for (int index = 0; index < viewModel.assets.length; index++) {
+      list.add(CachedNetworkImage(
+          placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()), imageUrl: viewModel.assets[index].url, fit: BoxFit.cover));
+    }
+    await HomeWidget.saveWidgetData<List<CachedNetworkImage>>('nft image list', list);
+    await HomeWidget.updateWidget(name: 'PylonsWidgetProvider', iOSName: 'PylonsWidget');
   }
 
   @override
