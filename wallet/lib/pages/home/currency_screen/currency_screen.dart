@@ -33,11 +33,7 @@ class CurrencyScreen extends StatefulWidget {
   State<CurrencyScreen> createState() => _CurrencyScreenState();
 }
 
-Map<String, Color> denomColors = {
-  'upylon': const Color(0xFF5252d5),
-  'ustripeusd': const Color(0xFF85bb65),
-  'uusd': const Color(0xFF85bb65)
-};
+Map<String, Color> denomColors = {'upylon': const Color(0xFF5252d5), 'ustripeusd': const Color(0xFF85bb65), 'uusd': const Color(0xFF85bb65)};
 
 class _CurrencyScreenState extends State<CurrencyScreen> {
   @override
@@ -56,14 +52,12 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
 
     final loading = Loading()..showLoading();
 
-    final payout_response =
-        await GetIt.I.get<StripeHandler>().handleStripePayout(amount);
+    final payout_response = await GetIt.I.get<StripeHandler>().handleStripePayout(amount);
     loading.dismiss();
     payout_response.fold(
         (fail) => {fail.message.show()},
         (payout_transfer_id) => {
-              sprintf("payout_request_success".tr(), [payout_transfer_id])
-                  .show()
+              sprintf("payout_request_success".tr(), [payout_transfer_id]).show()
             });
 
     await _buildAssetsList();
@@ -95,9 +89,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
               _buildAssetsList();
             },
           ),
-          const SizedBox(
-              width:
-                  8) // hack - is there a better (more durable) way to align things within an appbar?
+          const SizedBox(width: 8) // hack - is there a better (more durable) way to align things within an appbar?
         ],
       ),
       body: ListView(
@@ -140,8 +132,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
 
     final walletStore = GetIt.I.get<WalletsStore>().getWallets().value.last;
 
-    final response =
-        await GetIt.I.get<Repository>().getBalance(walletStore.publicAddress);
+    final response = await GetIt.I.get<Repository>().getBalance(walletStore.publicAddress);
 
     if (response.isLeft()) {
       showErrorMessageToUser(response);
@@ -159,17 +150,14 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
   }
 
   Future copyClipboard() async {
-    final msg =
-        GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
+    final msg = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
     Clipboard.setData(ClipboardData(text: msg)).then((_) {
       "wallet_copied".tr().show();
     });
   }
 
   Future getPayout(BuildContext context, String amount) async {
-    StripePayoutWidget(
-            context: context, amount: amount, onCallback: handleStripePayout)
-        .show();
+    StripePayoutWidget(context: context, amount: amount, onCallback: handleStripePayout).show();
   }
 
   void showErrorMessageToUser(dz.Either<Failure, List<Balance>> response) {
@@ -181,13 +169,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
 }
 
 class _BalanceWidget extends StatefulWidget {
-  const _BalanceWidget(
-      {Key? key,
-      required this.balance,
-      required this.onCallFaucet,
-      required this.onCallStripePayout,
-      required this.backgroundColor})
-      : super(key: key);
+  const _BalanceWidget({Key? key, required this.balance, required this.onCallFaucet, required this.onCallStripePayout, required this.backgroundColor}) : super(key: key);
 
   final Balance balance;
   final Function onCallFaucet;
@@ -209,13 +191,7 @@ class _BalanceWidgetState extends State<_BalanceWidget> {
     final screenSize = ScreenSizeUtil(context);
     final coinMeta = constants.kCoinDenom.keys.contains(widget.balance.denom)
         ? constants.kCoinDenom[widget.balance.denom]
-        : {
-            "name": widget.balance.denom,
-            "icon": "",
-            "denom": widget.balance.denom,
-            "short": widget.balance.denom,
-            "faucet": false
-          };
+        : {"name": widget.balance.denom, "icon": "", "denom": widget.balance.denom, "short": widget.balance.denom, "faucet": false};
 
     return Card(
         shape: RoundedRectangleBorder(
@@ -231,11 +207,7 @@ class _BalanceWidgetState extends State<_BalanceWidget> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.0),
               color: widget.backgroundColor,
-              image: DecorationImage(
-                  image: const AssetImage('assets/images/masks/card_luma.png'),
-                  fit: BoxFit.fill,
-                  colorFilter: ColorFilter.mode(
-                      widget.backgroundColor, BlendMode.overlay))),
+              image: DecorationImage(image: const AssetImage('assets/images/masks/card_luma.png'), fit: BoxFit.fill, colorFilter: ColorFilter.mode(widget.backgroundColor, BlendMode.overlay))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,19 +215,14 @@ class _BalanceWidgetState extends State<_BalanceWidget> {
               Row(children: [
                 if (coinMeta["icon"] != "") ...[
                   if (coinMeta["icon"].toString().contains(".svg"))
-                    SvgPicture.asset(coinMeta["icon"].toString(),
-                        width: 30, height: 30)
+                    SvgPicture.asset(coinMeta["icon"].toString(), width: 30, height: 30)
                   else
-                    Image.asset(coinMeta["icon"].toString(),
-                        width: 30, height: 30),
+                    Image.asset(coinMeta["icon"].toString(), width: 30, height: 30),
                   const SizedBox(width: 10),
                 ],
                 Text(
                   "${coinMeta["name"]}",
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle1!
-                      .copyWith(color: Colors.white, fontSize: 18),
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontSize: 18),
                 ),
                 const Spacer(),
                 if (widget.balance.denom != constants.kUSDDenom)
@@ -264,17 +231,11 @@ class _BalanceWidgetState extends State<_BalanceWidget> {
                         widget.onCallFaucet();
                       },
                       style: ElevatedButton.styleFrom(
-
-
                         onSurface: constants.kWhite,
                         maximumSize: const Size(100, 20),
                         minimumSize: const Size(100, 20),
                       ),
-                      child: Text("faucet".tr(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle1!
-                              .copyWith(fontSize: 12, fontFamily: 'Inter')))
+                      child: Text("faucet".tr(), style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 12, fontFamily: 'Inter')))
                 else
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
@@ -294,16 +255,14 @@ class _BalanceWidgetState extends State<_BalanceWidget> {
                   alignment: Alignment.centerRight,
                   child: Text(
                     "\$${_getMultiplier(widget.balance.denom)} = 1 ${coinMeta['short']}",
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                        color: Colors.white, fontSize: 12, fontFamily: 'Inter'),
+                    style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontSize: 12, fontFamily: 'Inter'),
                   ),
                 ),
               Align(
                 alignment: Alignment.centerRight,
                 child: Text(
                   "\$${"${widget.balance.amount.toHumanReadable() * _getMultiplier(widget.balance.denom)}".trimZero()}",
-                  style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                      color: Colors.white, fontSize: 24, fontFamily: 'Inter'),
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontSize: 24, fontFamily: 'Inter'),
                 ),
               ),
             ],
@@ -325,8 +284,7 @@ class _BalanceWidgetState extends State<_BalanceWidget> {
   Future<void> handleStripeAccountLink() async {
     final loading = Loading()..showLoading();
 
-    final account_response =
-        await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
+    final account_response = await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
     loading.dismiss();
     account_response.fold((fail) => {fail.message.show()}, (accountlink) {
       showDialog(
@@ -347,9 +305,7 @@ class BalanceIBCCoins extends StatefulWidget {
   final Balance balance;
   final IBCCoins ibcCoins;
 
-  const BalanceIBCCoins(
-      {Key? key, required this.balance, required this.ibcCoins})
-      : super(key: key);
+  const BalanceIBCCoins({Key? key, required this.balance, required this.ibcCoins}) : super(key: key);
 
   @override
   _BalanceIBCCoinsState createState() => _BalanceIBCCoinsState();
@@ -380,9 +336,7 @@ class _BalanceIBCCoinsState extends State<BalanceIBCCoins> {
               image: DecorationImage(
                   image: const AssetImage('assets/images/masks/card_luma.png'),
                   fit: BoxFit.fill,
-                  colorFilter: ColorFilter.mode(
-                      denomColors[widget.balance.denom] ?? Colors.blueGrey,
-                      BlendMode.overlay))),
+                  colorFilter: ColorFilter.mode(denomColors[widget.balance.denom] ?? Colors.blueGrey, BlendMode.overlay))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -394,10 +348,7 @@ class _BalanceIBCCoinsState extends State<BalanceIBCCoins> {
                 ),
                 Text(
                   widget.ibcCoins.getName(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle1!
-                      .copyWith(color: Colors.white, fontSize: 18),
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontSize: 18),
                 ),
                 const Spacer(),
               ]),
@@ -405,8 +356,7 @@ class _BalanceIBCCoinsState extends State<BalanceIBCCoins> {
                 alignment: Alignment.centerRight,
                 child: Text(
                   "\$${"${widget.balance.amount.toHumanReadable()}".trimZero()}",
-                  style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                      color: Colors.white, fontSize: 24, fontFamily: 'Inter'),
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white, fontSize: 24, fontFamily: 'Inter'),
                 ),
               ),
             ],
