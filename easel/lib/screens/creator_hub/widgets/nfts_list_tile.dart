@@ -95,13 +95,13 @@ class NFTsListTile extends StatelessWidget {
                             if (publishedNFT.isEnabled && publishedNFT.amountMinted < int.parse(publishedNFT.quantity))
                               Container(
                                 padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
-                                child: Text(
-                                  "for_sale".tr(),
-                                  style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
-                                ),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(3.h),
                                   color: EaselAppTheme.kBlue,
+                                ),
+                                child: Text(
+                                  "for_sale".tr(),
+                                  style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
                                 ),
                               )
                           ],
