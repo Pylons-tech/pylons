@@ -82,9 +82,10 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   alignment: Alignment.bottomRight,
                   child: PylonsButton(
                     onPressed: () async {
+                      final navigator = Navigator.of(context);
                       final result = await onUploadPressed();
                       if (result) {
-                        Navigator.pop(context);
+                        navigator.pop;
                         widget.onMoveToNextScreen();
                       }
                     },

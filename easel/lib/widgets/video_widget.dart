@@ -36,10 +36,10 @@ class VideoWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  _VideoWidgetState createState() => _VideoWidgetState();
+  VideoWidgetState createState() => VideoWidgetState();
 }
 
-class _VideoWidgetState extends State<VideoWidget> {
+class VideoWidgetState extends State<VideoWidget> {
   EaselProvider get easelProvider => GetIt.I.get();
 
   @override
