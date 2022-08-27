@@ -117,7 +117,7 @@ class _HashtagInputFieldState extends State<EaselHashtagInputField> {
                   children: _hashtagsNotifier.value
                       .map((hashtag) => Row(
                             children: [
-                              Text('#' + hashtag,
+                              Text('#$hashtag',
                                   style: TextStyle(
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w400,
