@@ -305,7 +305,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               child: Container(
                                 width: 200.w,
                                 height: 60.h,
-                                color: kDarkRed.withOpacity(0.5),
+                                color: kDarkRed.withOpacity(0.8),
                                 child: Row(
                                   children: [
                                     Container(
