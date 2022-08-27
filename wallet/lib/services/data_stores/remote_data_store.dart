@@ -1024,12 +1024,8 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<bool> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) async {
-    try {
-      return await firebaseHelper.saveUserFeedback(walletAddress: walletAddress, subject: subject, feedback: feedback);
-    } catch (e) {
-      throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
-    }
+  Future<bool> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) {
+    return firebaseHelper.saveUserFeedback(walletAddress: walletAddress, subject: subject, feedback: feedback);
   }
 }
 
