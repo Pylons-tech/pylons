@@ -404,6 +404,8 @@ const String kZeroInt = "0";
 const ipfsDomain = 'https://ipfs.io/ipfs';
 const proxyIpfsDomain = 'https://proxy.pylons.tech/ipfs';
 
+const hintTextEmail = 'x@pylons.tech';
+
 final defaultPylonsSKUs = jsonEncode([
   {"id": "pylons_10", "bonus": "", "subtitle": "\$1.00", "pylons": "10 PYLN"},
   {"id": "pylons_35", "bonus": "(+5 Bonus)", "subtitle": "\$3.00", "pylons": "35 PYLN"},

@@ -186,6 +186,10 @@ class _SettingScreenState extends State<SettingScreen> {
                             controller: emailController,
                             style: kSettingsUserEnteredTextStyle,
                             decoration: InputDecoration(
+                                hintText: hintTextEmail,
+                                hintStyle: const TextStyle(
+                                  color: kUserInputTextColor,
+                                ),
                                 suffix: ColoredBox(
                                   color: kCopyColor,
                                   child: TextButton.icon(
@@ -227,6 +231,9 @@ class _SettingScreenState extends State<SettingScreen> {
                         height: 20.h,
                       ),
                       buildLowerBottomOptions(),
+                      SizedBox(
+                        height: 20.h,
+                      ),
                     ],
                   ),
                 );
