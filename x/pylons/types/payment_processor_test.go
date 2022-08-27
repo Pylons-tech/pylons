@@ -73,6 +73,27 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 			wantErr: false,
 		},
 		{
+			name: "InvalidPubkey",
+			fields: fields{
+				CoinDenom:            "ustripeusd",
+				PubKey:               "INVALID_PUBKEY",
+				ProcessorPercentange: DefaultProcessorPercentage,
+				ValidatorsPercentage: DefaultValidatorsPercentage,
+				Name:                 "Pylons_Inc",
+			},
+			args: args{
+				pi: PaymentInfo{
+					PurchaseId:    "testPurchaseId",
+					ProcessorName: "Pylons_Inc",
+					PayerAddr:     GenTestBech32FromString("test"),
+					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
+					ProductId:     "testProductId",
+					Signature:     genTestPaymentInfoSignature("testPurchaseId", GenTestBech32FromString("test"), "testProductId", types.NewInt(1_000_000_000), privKey),
+				},
+			},
+			wantErr: true,
+		},
+		{
 			name: "InvalidSignature",
 			fields: fields{
 				CoinDenom:            "ustripeusd",
@@ -89,6 +110,27 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
 					ProductId:     "testProductId",
 					Signature:     "INVALID_SIGNATURE",
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "InvalidName",
+			fields: fields{
+				CoinDenom:            "ustripeusd",
+				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
+				ProcessorPercentange: DefaultProcessorPercentage,
+				ValidatorsPercentage: DefaultValidatorsPercentage,
+				Name:                 "testName",
+			},
+			args: args{
+				pi: PaymentInfo{
+					PurchaseId:    "testPurchaseId",
+					ProcessorName: "Pylons_Inc",
+					PayerAddr:     GenTestBech32FromString("test"),
+					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
+					ProductId:     "testProductId",
+					Signature:     genTestPaymentInfoSignature("testName", GenTestBech32FromString("test"), "testProductId", types.NewInt(1_000_000_000), privKey),
 				},
 			},
 			wantErr: true,
@@ -149,6 +191,26 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 			wantErr: false,
 		},
 		{
+			name: "InvalidPubkey",
+			fields: fields{
+				CoinDenom:            "ustripeusd",
+				PubKey:               "INVALID_PUBKEY",
+				ProcessorPercentange: DefaultProcessorPercentage,
+				ValidatorsPercentage: DefaultValidatorsPercentage,
+				Name:                 "Pylons_Inc",
+			},
+			args: args{
+				ri: RedeemInfo{
+					Id:            "testRedeemID",
+					ProcessorName: "Pylons_Inc",
+					Address:       GenTestBech32FromString("test"),
+					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
+					Signature:     genTestRedeemInfoSignature("testRedeemID", GenTestBech32FromString("test"), types.NewInt(1_000_000_000), privKey),
+				},
+			},
+			wantErr: true,
+		},
+		{
 			name: "InvalidSignature",
 			fields: fields{
 				CoinDenom:            "ustripeusd",
@@ -164,6 +226,26 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 					Address:       GenTestBech32FromString("test"),
 					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
 					Signature:     "INVALID_SIGNATURE",
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "InvalidName",
+			fields: fields{
+				CoinDenom:            "ustripeusd",
+				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
+				ProcessorPercentange: DefaultProcessorPercentage,
+				ValidatorsPercentage: DefaultValidatorsPercentage,
+				Name:                 "testName",
+			},
+			args: args{
+				ri: RedeemInfo{
+					Id:            "testRedeemID",
+					ProcessorName: "Pylons_Inc",
+					Address:       GenTestBech32FromString("test"),
+					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
+					Signature:     genTestRedeemInfoSignature("testName", GenTestBech32FromString("test"), types.NewInt(1_000_000_000), privKey),
 				},
 			},
 			wantErr: true,
