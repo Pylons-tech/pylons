@@ -244,9 +244,9 @@
   "audio_failed_to_load": "Failed to load an audio file",
   "swipe_right_to_pay": "Swipe right to pay",
   "copied_to_clipboard": "Copied to your clipboard!",
-  "no_internet": "No Internet Connection!",
+  "no_internet": "No Internet Connection",
   "stake_your_digital_claim": "Stake your digital claim",
-  "bio_text": "Media Artist (3D, Motiongraphics) \nCreating & Collecting NFTs",
+  "bio_text": "Media Artist (3D, Motiongraphics)\nCreating & Collecting NFTs",
   "save": "Save",
   "submit": "Submit",
   "place_your_recovery_phrase_in_correct_order": "Place your recovery phrase in correct order.",
@@ -303,7 +303,7 @@
   "duration": "Duration",
   "bonus_five": "(+5 Bonus)",
   "bonus_ten": "(+10 Bonus)",
-  "no_internet_connection": "Please check your internet connection and try again. If this problem persists, please email us: support@pylons.tech",
+  "no_internet_connection": "Please check your internet connection and try again. If this problem persists, please email us: ",
   "purchase_successful": "Purchase successful",
   "view": "view",
   "views": "views",
@@ -330,7 +330,7 @@
   "messages": "Messages",
   "your_nft_sold_msg": "Your NFT \"{}\" has been sold!",
   "received_likes_for_nft_msg": "You received {} likes for {}.",
-  "no_notifications_yet": "No notifications yet",
+  "no_notifications_yet": "No Notifications yet",
   "wallet_address_arg": "Wallet Address: {}",
   "account_creation_failed": "Account Creation Failed",
   "invite_others": "Invite others",
@@ -343,5 +343,4 @@
   "exclusive": "Exclusive",
   "pylons": "Pylons",
   "vietnamese": "Vietnamese"
-
 }

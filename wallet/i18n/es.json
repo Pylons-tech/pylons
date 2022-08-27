@@ -1,5 +1,5 @@
 {
-  "app_title": "Pylons",
+  "app_title": "Pylons Cartera",
   "something_wrong": "Algo salió mal. Intenta reiniciar la aplicación.",
   "wallet_retrieving_err_msg": "Tuvimos problemas recuperarando la billetera del almacenamiento.",
   "home": "Hogar",
@@ -73,7 +73,7 @@
   "filter_by": "FILTRADO POR",
   "pay": "Pagar",
   "congratulations": "Felicidades!",
-  "successfully_bought_the_item": "Has comprado correctamente el artículo.\\nSu artículo está en su Colección.",
+  "successfully_bought_the_item": "Ha comprado correctamente el artículo.\\nSu artículo está en su Colección.",
   "product_name": "Nombre del Producto",
   "continue": "Continuar",
   "wallet_creation": "Creación de Billetera",
@@ -244,9 +244,9 @@
   "audio_failed_to_load": "Error al cargar un archivo de audio",
   "swipe_right_to_pay": "Desliza hacia la derecha para pagar",
   "copied_to_clipboard": "Copiada a tu portapapeles!",
-  "no_internet": "No internet",
+  "no_internet": "Sin conexión a Internet",
   "stake_your_digital_claim": "Haga su reclamo digital",
-  "bio_text": "Artista Multimedia (3D, Motion Graphics)\nCreación y recopilación de NFT",
+  "bio_text": "Artista Multimedia (3D, Motiongraphics)\nCreación y recopilación de NFT",
   "save": "Guardar",
   "submit": "Enviar",
   "place_your_recovery_phrase_in_correct_order": "Coloque su frase de recuperación en el orden correcto.",
@@ -277,8 +277,8 @@
   "default": "Defecto",
   "recovery_migration": "Cuenta Migrante",
   "no_biometric": "Su dispositivo no admite datos biométricos.",
-  "collapse": " Colapsar",
-  "read_more": "leer mas",
+  "collapse": "Colapsar",
+  "read_more": "Leer mas",
   "my_nft": "mi nft",
   "pylons_fee_msg": "La tarifa Pylons es la tarifa de red que se aplica a todas las transacciones equivalente al 10 % del precio de lista.",
   "you": "tú",
@@ -303,7 +303,7 @@
   "duration": "Duración",
   "bonus_five": "(+5 de bonificación)",
   "bonus_ten": "(+10 de bonificación)",
-  "no_internet_connection": "Comprueba tu conexión a Internet e inténtalo de nuevo. Si este problema persiste, envíenos un correo electrónico:",
+  "no_internet_connection": "Comprueba tu conexión a Internet e inténtalo de nuevo. Si este problema persiste, envíenos un correo electrónico: ",
   "purchase_successful": "Purchase successful",
   "view": "vista",
   "views": "puntos de vista",
@@ -343,5 +343,4 @@
   "exclusive": "Exclusiva",
   "pylons": "Pylons",
   "vietnamese": "vietnamita"
-
 }
