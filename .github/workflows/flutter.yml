@@ -44,7 +44,9 @@ jobs:
           cd easel
           touch lib/env.dart
           echo "const apiKey = \"${{ secrets.EASEL_TOKEN }}\"; " >> lib/env.dart
+          ./android/app/json_manipulator.sh RANDOM_STRING
           flutter pub get
           flutter analyze
+          flutter build appbundle
 
 
