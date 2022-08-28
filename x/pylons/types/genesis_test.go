@@ -32,7 +32,7 @@ func TestValidateGenesis(t *testing.T) {
 			err: fmt.Errorf("duplicated index for redeemInfo"),
 		},
 		{
-			desc: "Duplicate index of Redeminqo",
+			desc: "Duplicate index of paymentInfo",
 			req: &GenesisState{
 				PaymentInfoList: []PaymentInfo{
 					{PurchaseId: "test"},

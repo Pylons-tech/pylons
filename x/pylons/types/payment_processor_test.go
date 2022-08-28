@@ -38,7 +38,7 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 	type fields struct {
 		CoinDenom            string
 		PubKey               string
-		ProcessorPercentange sdk.Dec
+		ProcessorPercentage  sdk.Dec
 		ValidatorsPercentage sdk.Dec
 		Name                 string
 	}
@@ -56,7 +56,7 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 			fields: fields{
 				CoinDenom:            "ustripeusd",
 				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-				ProcessorPercentange: DefaultProcessorPercentage,
+				ProcessorPercentage:  DefaultProcessorPercentage,
 				ValidatorsPercentage: DefaultValidatorsPercentage,
 				Name:                 "Pylons_Inc",
 			},
@@ -77,7 +77,7 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 			fields: fields{
 				CoinDenom:            "ustripeusd",
 				PubKey:               "INVALID_PUBKEY",
-				ProcessorPercentange: DefaultProcessorPercentage,
+				ProcessorPercentage:  DefaultProcessorPercentage,
 				ValidatorsPercentage: DefaultValidatorsPercentage,
 				Name:                 "Pylons_Inc",
 			},
@@ -98,7 +98,7 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 			fields: fields{
 				CoinDenom:            "ustripeusd",
 				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-				ProcessorPercentange: DefaultProcessorPercentage,
+				ProcessorPercentage:  DefaultProcessorPercentage,
 				ValidatorsPercentage: DefaultValidatorsPercentage,
 				Name:                 "Pylons_Inc",
 			},
@@ -119,7 +119,7 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 			fields: fields{
 				CoinDenom:            "ustripeusd",
 				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-				ProcessorPercentange: DefaultProcessorPercentage,
+				ProcessorPercentage:  DefaultProcessorPercentage,
 				ValidatorsPercentage: DefaultValidatorsPercentage,
 				Name:                 "testName",
 			},
@@ -141,7 +141,7 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 			pp := PaymentProcessor{
 				CoinDenom:            tt.fields.CoinDenom,
 				PubKey:               tt.fields.PubKey,
-				ProcessorPercentage:  tt.fields.ProcessorPercentange,
+				ProcessorPercentage:  tt.fields.ProcessorPercentage,
 				ValidatorsPercentage: tt.fields.ValidatorsPercentage,
 				Name:                 tt.fields.Name,
 			}
@@ -157,7 +157,7 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 	type fields struct {
 		CoinDenom            string
 		PubKey               string
-		ProcessorPercentange sdk.Dec
+		ProcessorPercentage  sdk.Dec
 		ValidatorsPercentage sdk.Dec
 		Name                 string
 	}
@@ -175,7 +175,7 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 			fields: fields{
 				CoinDenom:            "ustripeusd",
 				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-				ProcessorPercentange: DefaultProcessorPercentage,
+				ProcessorPercentage:  DefaultProcessorPercentage,
 				ValidatorsPercentage: DefaultValidatorsPercentage,
 				Name:                 "Pylons_Inc",
 			},
@@ -195,7 +195,7 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 			fields: fields{
 				CoinDenom:            "ustripeusd",
 				PubKey:               "INVALID_PUBKEY",
-				ProcessorPercentange: DefaultProcessorPercentage,
+				ProcessorPercentage:  DefaultProcessorPercentage,
 				ValidatorsPercentage: DefaultValidatorsPercentage,
 				Name:                 "Pylons_Inc",
 			},
@@ -215,7 +215,7 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 			fields: fields{
 				CoinDenom:            "ustripeusd",
 				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-				ProcessorPercentange: DefaultProcessorPercentage,
+				ProcessorPercentage:  DefaultProcessorPercentage,
 				ValidatorsPercentage: DefaultValidatorsPercentage,
 				Name:                 "Pylons_Inc",
 			},
@@ -235,7 +235,7 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 			fields: fields{
 				CoinDenom:            "ustripeusd",
 				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-				ProcessorPercentange: DefaultProcessorPercentage,
+				ProcessorPercentage:  DefaultProcessorPercentage,
 				ValidatorsPercentage: DefaultValidatorsPercentage,
 				Name:                 "testName",
 			},
@@ -256,7 +256,7 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 			pp := PaymentProcessor{
 				CoinDenom:            tt.fields.CoinDenom,
 				PubKey:               tt.fields.PubKey,
-				ProcessorPercentage:  tt.fields.ProcessorPercentange,
+				ProcessorPercentage:  tt.fields.ProcessorPercentage,
 				ValidatorsPercentage: tt.fields.ValidatorsPercentage,
 				Name:                 tt.fields.Name,
 			}

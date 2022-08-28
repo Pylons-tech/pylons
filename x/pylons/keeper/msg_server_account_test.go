@@ -108,7 +108,7 @@ func (suite *IntegrationTestSuite) TestUpdateAccount() {
 			err:     sdkerrors.ErrInvalidRequest,
 		},
 		{
-			desc:    "Invalid payfee",
+			desc:    "Invalid fee",
 			request: &types.MsgUpdateAccount{Creator: addr[0], Username: "testUserUpdated1"},
 			err:     sdkerrors.ErrInvalidRequest,
 		},
