@@ -31,7 +31,6 @@ class ImportFromGoogleForm extends StatefulWidget {
 class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
   final _formKey = GlobalKey<FormState>();
 
-  final usernameController = TextEditingController();
   final mnemonicController = TextEditingController();
 
   final isLoadingNotifier = ValueNotifier(false);
@@ -81,21 +80,6 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
             )
           ]),
           VerticalSpace(5.h),
-          // Row(children: [
-          //   Padding(
-          //     padding: const EdgeInsets.all(8.0),
-          //     child: Text(
-          //       "username".tr(),
-          //       style: TextStyle(
-          //         color: kBlack,
-          //         fontSize: 15.sp,
-          //         fontWeight: FontWeight.w500,
-          //       ),
-          //     ),
-          //   )
-          // ]),
-          // PylonsTextInput(controller: usernameController, label: "user_name".tr()),
-          // VerticalSpace(10.h),
           Row(children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
