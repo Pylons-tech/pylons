@@ -1,3 +1,5 @@
+package "tech.pylons.wallet"
+
 import java.util.ArrayList;
 import java.util.List;
 import android.appwidget.AppWidgetManager;
