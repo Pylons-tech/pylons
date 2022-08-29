@@ -28,7 +28,7 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/network_info.dart';
-import 'package:pylons_wallet/services/third_party_services/remote_config_service.dart';
+import 'package:pylons_wallet/services/third_party_services/remote_config_service/remote_config_service.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
 import 'package:pylons_wallet/services/third_party_services/share_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/store_payment_service.dart';
