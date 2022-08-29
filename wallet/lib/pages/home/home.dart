@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:easy_localization/easy_localization.dart';
@@ -15,6 +16,7 @@ import 'package:pylons_wallet/ipc/ipc_engine.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
+import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_localization_view_model.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
@@ -36,10 +38,14 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   HomeProvider get homeProvider => GetIt.I.get();
 
   CollectionViewModel get collectionViewModel => GetIt.I.get();
+  late GeneralScreenLocalizationViewModel languageViewModel;
+  String languageName = kEnglishText;
+  int index = 0;
 
   @override
   void initState() {
     super.initState();
+
     _tabController = TabController(vsync: this, length: homeProvider.pages.length);
     getInitialLink();
   }
@@ -52,6 +58,59 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
       await GetIt.I.get<IPCEngine>().handleLinksBasedOnUri(link);
     }
   }
+
+  // void setDefaultLocale() {
+  //   final String defaultLocale = Platform.localeName;
+  //
+  //   switch (defaultLocale.split("_")[0]) {
+  //     case 'en':
+  //       languageName = kEnglishText;
+  //       index = 0;
+  //       break;
+  //
+  //     case 'ru':
+  //       languageName = kRussianText;
+  //       index = 1;
+  //
+  //       break;
+  //     case 'id':
+  //       languageName = kIndonesiaText;
+  //       index = 2;
+  //       break;
+  //     case 'de':
+  //       languageName = kGermanyText;
+  //       index = 3;
+  //
+  //       break;
+  //     case 'ko':
+  //       languageName = kKoreanText;
+  //       index = 4;
+  //
+  //       break;
+  //     case 'ja':
+  //       languageName = kJapanText;
+  //       index = 5;
+  //
+  //       break;
+  //     case 'es':
+  //       languageName = kSpanishText;
+  //       index = 6;
+  //
+  //       break;
+  //     case 'vi':
+  //       languageName = kVietnameseText;
+  //       index = 7;
+  //
+  //       break;
+  //     default:
+  //       languageName = kEnglishText;
+  //       index = 0;
+  //
+  //       break;
+  //   }
+  //   languageViewModel.switchLanguage(index, languageName);
+  //   languageViewModel.applyLocal(context);
+  // }
 
   @override
   void dispose() {

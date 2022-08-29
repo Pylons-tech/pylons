@@ -8,6 +8,9 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
+import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_localization_view_model.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
@@ -38,13 +41,70 @@ Future<void> main() async {
       EasyLocalization(
         supportedLocales: const [Locale('en'), Locale('ru'), Locale('id'), Locale('de'), Locale('ko'), Locale('ja'), Locale('es'), Locale('vi')],
         path: 'i18n',
-        fallbackLocale: const Locale('en'),
+        fallbackLocale: Locale(Platform.localeName.split('_')[0]),
         useOnlyLangCode: true,
-        child: PylonsApp(),
+        child: ChangeNotifierProvider.value(
+            value: GetIt.instance.get<GeneralScreenLocalizationViewModel>(),
+            builder: (context, child) {
+              return PylonsApp();
+            }),
       ),
     );
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 }
+
+// void setDefaultLocale() {
+//   final String defaultLocale = Platform.localeName;
+//
+//   switch (defaultLocale.split("_")[0]) {
+//     case 'en':
+//       languageName = kEnglishText;
+//       index = 0;
+//       break;
+//
+//     case 'ru':
+//       languageName = kRussianText;
+//       index = 1;
+//
+//       break;
+//     case 'id':
+//       languageName = kIndonesiaText;
+//       index = 2;
+//       break;
+//     case 'de':
+//       languageName = kGermanyText;
+//       index = 3;
+//
+//       break;
+//     case 'ko':
+//       languageName = kKoreanText;
+//       index = 4;
+//
+//       break;
+//     case 'ja':
+//       languageName = kJapanText;
+//       index = 5;
+//
+//       break;
+//     case 'es':
+//       languageName = kSpanishText;
+//       index = 6;
+//
+//       break;
+//     case 'vi':
+//       languageName = kVietnameseText;
+//       index = 7;
+//
+//       break;
+//     default:
+//       languageName = kEnglishText;
+//       index = 0;
+//
+//       break;
+//   }
+//   languageViewModel.switchLanguage(index, languageName);
+//   languageViewModel.applyLocal(context);
+// }
 
 class MyHttpOverrides extends HttpOverrides {
   @override
