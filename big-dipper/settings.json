@@ -79,12 +79,6 @@
         "fraction": 1000000
       }
     ],
-    "ledger": {
-      "coinType": 118,
-      "appName": "Cosmos",
-      "appVersion": "2.16.0",
-      "gasPrice": 0.02
-    },
     "modules": {
       "bank": true,
       "supply": true,
@@ -119,7 +113,7 @@
     "cookbookInterval": 5000,
     "missedBlocksInterval": 60000,
     "delegationInterval": 900000,
-    "sendNotifications": 0,
+    "sendNotifications": 1,
     "collectNotificationsInterval": 10000
   }
 }

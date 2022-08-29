@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+
 //import for AppStoreProductDetails
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -93,25 +94,16 @@ class _PylonsAppState extends State<PylonsApp> {
                   RouteUtil.ROUTE_GENERAL: (context) => const GeneralScreen(),
                   RouteUtil.ROUTE_SECURITY: (context) => const SecurityScreen(),
                   RouteUtil.ROUTE_PAYMENT: (context) => const PaymentScreen(),
-                  RouteUtil.ROUTE_PRACTICE_TEST: (context) =>
-                      const PracticeTest(),
-                  RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE: (context) =>
-                      const ViewRecoveryScreen(),
-                  RouteUtil.ROUTE_TRANSACTION_HISTORY: (context) =>
-                      const TransactionHistoryScreen(),
-                  RouteUtil.ROUTE_ONBOARDING: (context) =>
-                      const PresentingOnboardPage(),
-                  RouteUtil.ROUTE_CREATE_WALLET: (context) =>
-                      const CreateWalletScreen(),
-                  RouteUtil.ROUTE_RESTORE_WALLET: (context) =>
-                      const RestoreWalletScreen(),
-                  RouteUtil.ROUTE_ADD_PYLON: (context) =>
-                      const AddPylonScreen(),
-                  RouteUtil.ROUTE_TRANSACTION_DETAIL: (context) =>
-                      const TransactionDetailsScreen(),
+                  RouteUtil.ROUTE_PRACTICE_TEST: (context) => const PracticeTest(),
+                  RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE: (context) => const ViewRecoveryScreen(),
+                  RouteUtil.ROUTE_TRANSACTION_HISTORY: (context) => const TransactionHistoryScreen(),
+                  RouteUtil.ROUTE_ONBOARDING: (context) => const PresentingOnboardPage(),
+                  RouteUtil.ROUTE_CREATE_WALLET: (context) => const CreateWalletScreen(),
+                  RouteUtil.ROUTE_RESTORE_WALLET: (context) => const RestoreWalletScreen(),
+                  RouteUtil.ROUTE_ADD_PYLON: (context) => const AddPylonScreen(),
+                  RouteUtil.ROUTE_TRANSACTION_DETAIL: (context) => const TransactionDetailsScreen(),
                   RouteUtil.ROUTE_MESSAGE: (context) => const MessagesScreen(),
-                  RouteUtil.ROUTE_PDF_FULL_SCREEN: (context) =>
-                      const PdfViewerFullScreen(),
+                  RouteUtil.ROUTE_PDF_FULL_SCREEN: (context) => const PdfViewerFullScreen(),
                 },
                 builder: (context, widget) {
                   ScreenUtil.setContext(context);
@@ -135,6 +127,10 @@ class _PylonsAppState extends State<PylonsApp> {
     }
 
     repository.getInternetStatus().listen((event) {
+      if (event == InternetConnectionStatus.connected && noInternet.isShowing) {
+        noInternet.dismiss();
+      }
+
       if (event == InternetConnectionStatus.disconnected) {
         if (!noInternet.isShowing) {
           noInternet.showNoInternet();
@@ -186,24 +182,13 @@ class _PylonsAppState extends State<PylonsApp> {
         if (purchaseDetails is AppStorePurchaseDetails) {
           final creator = walletStore.getWallets().value.last.publicAddress;
 
-          final AppleInAppPurchaseModel appleInAppPurchaseModel =
-              AppleInAppPurchaseModel(
-                  productID: purchaseDetails.productID,
-                  purchaseID: purchaseDetails.purchaseID ?? '',
-                  recieptData:
-                      purchaseDetails.verificationData.localVerificationData,
-                  creator: creator);
+          final AppleInAppPurchaseModel appleInAppPurchaseModel = AppleInAppPurchaseModel(
+              productID: purchaseDetails.productID, purchaseID: purchaseDetails.purchaseID ?? '', recieptData: purchaseDetails.verificationData.localVerificationData, creator: creator);
 
-          final appleInAppPurchaseResponse = await walletStore
-              .sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
+          final appleInAppPurchaseResponse = await walletStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
 
           if (appleInAppPurchaseResponse.isLeft()) {
-            appleInAppPurchaseResponse
-                .swap()
-                .toOption()
-                .toNullable()!
-                .message
-                .show();
+            appleInAppPurchaseResponse.swap().toOption().toNullable()!.message.show();
             return;
           }
 
@@ -217,19 +202,14 @@ class _PylonsAppState extends State<PylonsApp> {
       if (purchaseDetails is GooglePlayPurchaseDetails) {
         final creator = walletStore.getWallets().value.last.publicAddress;
 
-        final GoogleInAppPurchaseModel googleInAppPurchaseModel =
-            GoogleInAppPurchaseModel(
-                productID: purchaseDetails.productID,
-                purchaseToken:
-                    purchaseDetails.verificationData.serverVerificationData,
-                recieptData: jsonDecode(
-                        purchaseDetails.verificationData.localVerificationData)
-                    as Map,
-                signature: purchaseDetails.billingClientPurchase.signature,
-                creator: creator);
+        final GoogleInAppPurchaseModel googleInAppPurchaseModel = GoogleInAppPurchaseModel(
+            productID: purchaseDetails.productID,
+            purchaseToken: purchaseDetails.verificationData.serverVerificationData,
+            recieptData: jsonDecode(purchaseDetails.verificationData.localVerificationData) as Map,
+            signature: purchaseDetails.billingClientPurchase.signature,
+            creator: creator);
 
-        final googleInAppPurchase = await walletStore
-            .sendGoogleInAppPurchaseCoinsRequest(googleInAppPurchaseModel);
+        final googleInAppPurchase = await walletStore.sendGoogleInAppPurchaseCoinsRequest(googleInAppPurchaseModel);
 
         if (googleInAppPurchase.isLeft()) {
           googleInAppPurchase.swap().toOption().toNullable()!.message.show();

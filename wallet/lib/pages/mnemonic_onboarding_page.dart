@@ -56,8 +56,7 @@ class _MnemonicOnboardingPageState extends State<MnemonicOnboardingPage> {
     );
   }
 
-  void _generateMnemonicClicked() => setState(() async =>
-      mnemonic = await generateMnemonic(strength: kMnemonicStrength));
+  void _generateMnemonicClicked() => setState(() async => mnemonic = await generateMnemonic(strength: kMnemonicStrength));
 
   void _proceedClicked() => notImplemented(context);
 }

@@ -17,6 +17,7 @@ class NoInternetDialog {
 
   void dismiss() {
     navigatorKey.currentState?.pop();
+    setIsShowing = false;
   }
 
   bool get isShowing => _isShowing;
@@ -25,7 +26,11 @@ class NoInternetDialog {
     _isShowing = value;
   }
 
-  Future showNoInternet() {
+  Future showNoInternet() async {
+    if (navigatorKey.currentState == null || navigatorKey.currentState!.overlay == null) {
+      return;
+    }
+
     return showDialog(
       context: navigatorKey.currentState!.overlay!.context,
       barrierDismissible: true,
@@ -60,10 +65,7 @@ class NoInternetDialog {
             SizedBox(height: 30.h),
             Text(
               NETWORK_ERROR,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w800),
+              style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
             ),
             SizedBox(height: 20.h),
             Padding(
@@ -74,20 +76,14 @@ class NoInternetDialog {
                     children: [
                       TextSpan(
                         text: "no_internet_connection".tr(),
-                        style: Theme.of(navigatorKey.currentState!.context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(
+                        style: Theme.of(navigatorKey.currentState!.context).textTheme.bodyText2!.copyWith(
                               color: Colors.white,
                               fontSize: 12.sp,
                             ),
                       ),
                       TextSpan(
                           text: email,
-                          style: Theme.of(navigatorKey.currentState!.context)
-                              .textTheme
-                              .bodyText2!
-                              .copyWith(
+                          style: Theme.of(navigatorKey.currentState!.context).textTheme.bodyText2!.copyWith(
                                 color: Colors.white,
                                 fontSize: 12.sp,
                               ),
@@ -109,13 +105,7 @@ class NoInternetDialog {
                     child: Center(
                       child: Text(
                         kCancelText,
-                        style: Theme.of(navigatorKey.currentState!.context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(
-                                fontSize: 16.sp,
-                                color: kWhite,
-                                fontWeight: FontWeight.w300),
+                        style: Theme.of(navigatorKey.currentState!.context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: kWhite, fontWeight: FontWeight.w300),
                       ),
                     ),
                   ),
@@ -133,10 +123,7 @@ class NoInternetDialog {
     );
   }
 
-  Widget buildBackupButton(
-      {required String title,
-      required Color bgColor,
-      required VoidCallback onPressed}) {
+  Widget buildBackupButton({required String title, required Color bgColor, required VoidCallback onPressed}) {
     return InkWell(
       onTap: () {
         onPressed.call();
@@ -152,10 +139,7 @@ class NoInternetDialog {
             child: Center(
                 child: Text(
               title,
-              style: TextStyle(
-                  color: bgColor == kButtonColor ? kBlue : kWhite,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600),
+              style: TextStyle(color: bgColor == kButtonColor ? kBlue : kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             )),
           ),
