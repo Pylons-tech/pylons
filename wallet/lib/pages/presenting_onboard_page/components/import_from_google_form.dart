@@ -81,21 +81,21 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
             )
           ]),
           VerticalSpace(5.h),
-          Row(children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "username".tr(),
-                style: TextStyle(
-                  color: kBlack,
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            )
-          ]),
-          PylonsTextInput(controller: usernameController, label: "user_name".tr()),
-          VerticalSpace(10.h),
+          // Row(children: [
+          //   Padding(
+          //     padding: const EdgeInsets.all(8.0),
+          //     child: Text(
+          //       "username".tr(),
+          //       style: TextStyle(
+          //         color: kBlack,
+          //         fontSize: 15.sp,
+          //         fontWeight: FontWeight.w500,
+          //       ),
+          //     ),
+          //   )
+          // ]),
+          // PylonsTextInput(controller: usernameController, label: "user_name".tr()),
+          // VerticalSpace(10.h),
           Row(children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -115,7 +115,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
             alignment: Alignment.bottomRight,
             child: PylonsGetStartedButton(
               onTap: () {
-                _loginExistingUser(mnemonic: mnemonicController.text, userName: usernameController.text.trim());
+                _loginExistingUser(mnemonic: mnemonicController.text);
               },
               text: "continue".tr(),
               loader: isLoadingNotifier,
@@ -127,10 +127,10 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
   }
 
   /// Create the new wallet and associate the chosen username with it.
-  Future _loginExistingUser({required String userName, required String mnemonic}) async {
+  Future _loginExistingUser({required String mnemonic}) async {
     isLoadingNotifier.value = true;
 
-    final result = await widget.walletStore.importPylonsAccount(mnemonic: mnemonic, username: userName);
+    final result = await widget.walletStore.importPylonsAccount(mnemonic: mnemonic);
 
     isLoadingNotifier.value = false;
 
@@ -157,7 +157,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
 
     final data = response.toOption().toNullable()!;
 
-    final result = await widget.walletStore.importPylonsAccount(mnemonic: data.mnemonic, username: data.username);
+    final result = await widget.walletStore.importPylonsAccount(mnemonic: data.mnemonic);
 
     result.fold((failure) {
       loading.dismiss();
@@ -184,7 +184,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
 
     final data = response.toOption().toNullable()!;
 
-    final result = await widget.walletStore.importPylonsAccount(mnemonic: data.mnemonic, username: data.username);
+    final result = await widget.walletStore.importPylonsAccount(mnemonic: data.mnemonic);
 
     result.fold((failure) {
       loading.dismiss();
