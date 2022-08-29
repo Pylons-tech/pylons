@@ -39,6 +39,12 @@ class QueryClient extends $grpc.Client {
       ($0.QueryGetStripeRefundRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) =>
           $0.QueryGetStripeRefundResponse.fromBuffer(value));
+  static final _$getItemOwnershipHistory = $grpc.ClientMethod<
+          $0.QueryGetItemHistoryRequest, $0.QueryGetItemHistoryResponse>(
+      '/pylons.pylons.Query/GetItemOwnershipHistory',
+      ($0.QueryGetItemHistoryRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) =>
+          $0.QueryGetItemHistoryResponse.fromBuffer(value));
   static final _$redeemInfo = $grpc.ClientMethod<$0.QueryGetRedeemInfoRequest,
           $0.QueryGetRedeemInfoResponse>(
       '/pylons.pylons.Query/RedeemInfo',
@@ -177,6 +183,13 @@ class QueryClient extends $grpc.Client {
       $0.QueryGetStripeRefundRequest request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getStripeRefund, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.QueryGetItemHistoryResponse> getItemOwnershipHistory(
+      $0.QueryGetItemHistoryRequest request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getItemOwnershipHistory, request,
+        options: options);
   }
 
   $grpc.ResponseFuture<$0.QueryGetRedeemInfoResponse> redeemInfo(
@@ -326,6 +339,15 @@ abstract class QueryServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.QueryGetStripeRefundRequest.fromBuffer(value),
         ($0.QueryGetStripeRefundResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.QueryGetItemHistoryRequest,
+            $0.QueryGetItemHistoryResponse>(
+        'GetItemOwnershipHistory',
+        getItemOwnershipHistory_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.QueryGetItemHistoryRequest.fromBuffer(value),
+        ($0.QueryGetItemHistoryResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.QueryGetRedeemInfoRequest,
             $0.QueryGetRedeemInfoResponse>(
         'RedeemInfo',
@@ -509,6 +531,12 @@ abstract class QueryServiceBase extends $grpc.Service {
     return getStripeRefund(call, await request);
   }
 
+  $async.Future<$0.QueryGetItemHistoryResponse> getItemOwnershipHistory_Pre(
+      $grpc.ServiceCall call,
+      $async.Future<$0.QueryGetItemHistoryRequest> request) async {
+    return getItemOwnershipHistory(call, await request);
+  }
+
   $async.Future<$0.QueryGetRedeemInfoResponse> redeemInfo_Pre(
       $grpc.ServiceCall call,
       $async.Future<$0.QueryGetRedeemInfoRequest> request) async {
@@ -618,6 +646,8 @@ abstract class QueryServiceBase extends $grpc.Service {
       $grpc.ServiceCall call, $0.QueryGetRecipeHistoryRequest request);
   $async.Future<$0.QueryGetStripeRefundResponse> getStripeRefund(
       $grpc.ServiceCall call, $0.QueryGetStripeRefundRequest request);
+  $async.Future<$0.QueryGetItemHistoryResponse> getItemOwnershipHistory(
+      $grpc.ServiceCall call, $0.QueryGetItemHistoryRequest request);
   $async.Future<$0.QueryGetRedeemInfoResponse> redeemInfo(
       $grpc.ServiceCall call, $0.QueryGetRedeemInfoRequest request);
   $async.Future<$0.QueryAllRedeemInfoResponse> redeemInfoAll(

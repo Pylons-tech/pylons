@@ -31,7 +31,7 @@ class _OwnerVideoPlayerScreenState extends State<OwnerVideoPlayerScreen> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, OwnerViewViewModel viewModel, child) {
-        return Container(
+        return ColoredBox(
           color: kBlack,
           child: viewModel.isVideoLoading
               ? const Center(
