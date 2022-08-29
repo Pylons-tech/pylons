@@ -272,7 +272,7 @@ List<Map<String, dynamic>> languagesSupported = [
   {"name": "korean", "flag": "🇰🇷", 'selected': false, "abbreviation": "(KO)", 'languageCode': 'ko'},
   {"name": "japanese", "flag": "🇯🇵", 'selected': false, "abbreviation": "(JA)", 'languageCode': 'ja'},
   {"name": "spanish", "flag": "🇪🇸", 'selected': false, "abbreviation": "(ES)", 'languageCode': 'es'},
-  {"name": "vietnamese", "flag": "🇻🇳", 'selected': false, "abbreviation": "(VIE)", 'languageCode': 'vie'},
+  {"name": "vietnamese", "flag": "🇻🇳", 'selected': false, "abbreviation": "(VIE)", 'languageCode': 'vi'},
 ];
 
 ///review your nft
@@ -403,6 +403,8 @@ const String kZeroInt = "0";
 
 const ipfsDomain = 'https://ipfs.io/ipfs';
 const proxyIpfsDomain = 'https://proxy.pylons.tech/ipfs';
+
+const hintTextEmail = 'x@pylons.tech';
 
 final defaultPylonsSKUs = jsonEncode([
   {"id": "pylons_10", "bonus": "", "subtitle": "\$1.00", "pylons": "10 PYLN"},
