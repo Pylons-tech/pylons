@@ -27,6 +27,9 @@ func TestValidateInputDoubles(t *testing.T) {
 			{Key: "test1", MinValue: sdk.OneDec(), MaxValue: valGTone},
 			{Key: "test2", MinValue: sdk.OneDec(), MaxValue: valGTone},
 		}},
+		{desc: "Invalid MinValue", obj: []DoubleInputParam{
+			{Key: "test", MinValue: sdk.NewDec(-1), MaxValue: valGTone},
+		}, err: ErrInvalidRequestField},
 		{desc: "InvalidSingle", obj: []DoubleInputParam{
 			{Key: "test", MinValue: sdk.OneDec(), MaxValue: valLTone},
 		}, err: ErrInvalidRequestField},
