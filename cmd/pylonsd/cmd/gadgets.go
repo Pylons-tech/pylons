@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -22,6 +23,7 @@ const (
 	errReservedName  = "can't register a gadget of reserved name %s"
 	errNoHeader      = "pylons.gadgets file does not start with a valid gadget header: \n%s"
 	errBadHeader     = "not a valid gadget header: \n%s"
+	errBadJson       = "json validation failed for gadget of name %s"
 )
 
 var builtinGadgets = []Gadget{
@@ -140,7 +142,7 @@ func loadGadgetsForPath(p string, gadgets *[]Gadget) (string, string, *[]Gadget,
 	return dir, file, gadgets, nil
 }
 
-func parseGadget(header, json string, gadgets *[]Gadget) (*Gadget, error) {
+func parseGadget(header, j string, gadgets *[]Gadget) (*Gadget, error) {
 	splut := strings.Split(strings.TrimPrefix(header, "#"), " ")
 	if len(splut) != 2 {
 		panic(fmt.Errorf(errBadHeader, header))
@@ -163,8 +165,10 @@ func parseGadget(header, json string, gadgets *[]Gadget) (*Gadget, error) {
 	if err != nil {
 		return nil, err
 	}
-	// todo: we should actually validate the json!
-	return &Gadget{name: gadgetName, json: json, parametersCount: gadgetArgs}, nil
+	if !json.Valid([]byte(j)) {
+		panic(fmt.Errorf(errBadJson, gadgetName))
+	}
+	return &Gadget{name: gadgetName, json: j, parametersCount: gadgetArgs}, nil
 }
 
 func parseGadgets(path string, s string) ([]Gadget, error) {
