@@ -1,3 +1,5 @@
+package "tech.pylons.wallet"
+
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.SharedPreferences
