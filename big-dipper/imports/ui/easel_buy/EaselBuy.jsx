@@ -162,14 +162,14 @@ export default class EaselBuy extends Component {
           (val) => val.key.toLowerCase() === "nft_format"
         )?.value;
         if (entries != null) {
-          if (
-            nftType.toLowerCase() == "audio" ||
-            nftType.toLowerCase() == "pdf"
-          ) {
+          if (nftType.toLowerCase() == "audio") {
             const mediaUrl = strings.find((val) => val.key === "Thumbnail_URL");
             media = mediaUrl ? mediaUrl.value : "";
             const srcUrl = strings.find((val) => val.key === "NFT_URL");
             src = srcUrl ? srcUrl.value : "";
+          } else if (nftType.toLowerCase() == "pdf") {
+            const mediaUrl = strings.find((val) => val.key === "Thumbnail_URL");
+            media = mediaUrl ? mediaUrl.value : "";
           } else {
             const mediaUrl = strings.find((val) => val.key === "NFT_URL");
             media = mediaUrl ? mediaUrl.value : "";
