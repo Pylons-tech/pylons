@@ -162,7 +162,10 @@ export default class EaselBuy extends Component {
           (val) => val.key.toLowerCase() === "nft_format"
         )?.value;
         if (entries != null) {
-          if (nftType.toLowerCase() == "audio") {
+          if (
+            nftType.toLowerCase() == "audio" ||
+            nftType.toLowerCase() == "pdf"
+          ) {
             const mediaUrl = strings.find((val) => val.key === "Thumbnail_URL");
             media = mediaUrl ? mediaUrl.value : "";
             const srcUrl = strings.find((val) => val.key === "NFT_URL");
@@ -317,11 +320,13 @@ export default class EaselBuy extends Component {
         );
       else if (nftType.toLowerCase() === "pdf")
         return (
-          <iframe
-            src={media + "#toolbar=0"}
-            width="95%"
-            height="550px"
-          ></iframe>
+          <img
+            alt="views"
+            src={media}
+            className="mobin-img"
+            onClick={handleClick}
+            onContextMenu={handleClick}
+          />
         );
       else if (nftType.toLowerCase() === "3d")
         return (
