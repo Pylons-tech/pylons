@@ -1,0 +1,37 @@
+image: gcr.io/zinc-interface-241613/big-dipper-v1
+imagePullPolicy: Always
+
+replicas: 1
+
+nodeSelector: {}
+
+service:
+  type: LoadBalancer
+  port: 80
+
+ingress:
+  enabled: false
+  className: gce
+  annotations: 
+    kubernetes.io/ingress.global-static-ip-name: big-dipper-v1
+    networking.gke.io/managed-certificates: managed-cert
+    kubernetes.io/ingress.class: "gce"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: wallet.pylons.tech
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  # tls: 
+  #   - secretName: chart-example-tls
+  #     hosts:
+  #       - wallet.pylons.tech
+
+
+resources: {}
+
+
+
+host: wallet.pylons.tech
+mongoURL: mongodb://104.156.226.17:27017/big-dipper-v1?serverSelectionTimeoutMS=5000&connectTimeoutMS=10000

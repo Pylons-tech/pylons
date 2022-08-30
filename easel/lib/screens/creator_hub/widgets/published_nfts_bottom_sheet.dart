@@ -79,9 +79,10 @@ class BuildPublishedNFTsBottomSheet {
                     viewCid: (context) {
                       return moreOptionTile(
                         onPressed: () async {
+                          final scaffoldState  = ScaffoldMessenger.of(context);
                           Navigator.of(context).pop();
                           await Clipboard.setData(ClipboardData(text: nft.cid));
-                          ScaffoldMessenger.of(context).showSnackBar(
+                          scaffoldState..hideCurrentSnackBar()..showSnackBar(
                             SnackBar(content: Text("copied_to_clipboard".tr())),
                           );
                         },

@@ -18,10 +18,10 @@ class TutorialScreen extends StatefulWidget {
   const TutorialScreen({Key? key}) : super(key: key);
 
   @override
-  _TutorialScreenState createState() => _TutorialScreenState();
+  TutorialScreenState createState() => TutorialScreenState();
 }
 
-class _TutorialScreenState extends State<TutorialScreen> {
+class TutorialScreenState extends State<TutorialScreen> {
   BottomDrawerController myBottomDrawerController = BottomDrawerController();
   final tutorialProvider = GetIt.I.get<TutorialScreenViewModel>();
 
@@ -315,11 +315,13 @@ class _TutorialScreenState extends State<TutorialScreen> {
   }
 
   Future<void> onDownloadNowPressed(BuildContext context) async {
+
+    final scaffoldState = ScaffoldMessenger.of(context);
     final appAlreadyInstalled = await PylonsWallet.instance.exists();
     if (!appAlreadyInstalled) {
       PylonsWallet.instance.goToInstall();
     } else {
-      context.show(message: kPylonsAlreadyInstalled);
+      scaffoldState.show(message: kPylonsAlreadyInstalled);
     }
   }
 
@@ -334,7 +336,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
 class TutorialScreenViewModel extends ChangeNotifier {
   bool isForwarding = false;
 
-  forwarding() {
+  void forwarding() {
     isForwarding = !isForwarding;
     notifyListeners();
   }

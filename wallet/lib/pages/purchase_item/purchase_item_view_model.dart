@@ -74,7 +74,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _isLiking = false;
+  bool _isLiking = true;
 
   bool get isLiking => _isLiking;
 
@@ -136,6 +136,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
   void initializeData({required NFT nft}) {
     nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID);
+    getOwnershipHistory(recipeId: nft.recipeID, cookBookId: nft.cookbookID);
     initializePlayers(nft);
     toHashtagList();
   }
@@ -251,9 +252,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
   bool isUrlLoaded = false;
 
-  Future<void> nftDataInit(
-      {required String recipeId, required String cookBookId}) async {
-    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
+  Future<void> getOwnershipHistory({required String recipeId, required String cookBookId}) async {
     if (nft.type != NftType.TYPE_RECIPE) {
       final nftOwnershipHistory = await repository.getNftOwnershipHistory(
           recipeID: recipeId, cookBookId: cookBookId);
@@ -264,6 +263,12 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
       nftOwnershipHistoryList = nftOwnershipHistory.getOrElse(() => []);
     }
+  }
+
+    Future<void> nftDataInit(
+      {required String recipeId, required String cookBookId}) async {
+    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
+
     final likesCountEither = await repository.getLikesCount(
       cookBookID: cookBookId,
       recipeId: recipeId,
@@ -289,6 +294,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
     likedByMe = likedByMeEither.getOrElse(() => false);
 
+    isLiking=false;
     final countViewEither = await repository.countAView(
       recipeId: recipeId,
       walletAddress: walletAddress,
