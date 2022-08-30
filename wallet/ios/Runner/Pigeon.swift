@@ -7,13 +7,13 @@ import Flutter
 /// Generated class from Pigeon.
 
 /// Generated class from Pigeon that represents data sent in messages.
-struct NFT {
+struct NFTMessage {
   var imageUrl: String
 
-  static func fromMap(_ map: [String: Any?]) -> NFT? {
+  static func fromMap(_ map: [String: Any?]) -> NFTMessage? {
     let imageUrl = map["imageUrl"] as! String
 
-    return NFT(
+    return NFTMessage(
       imageUrl: imageUrl
     )
   }
@@ -27,7 +27,7 @@ private class CollectionsApiCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
       case 128:
-        return NFT.fromMap(self.readValue() as! [String: Any])      
+        return NFTMessage.fromMap(self.readValue() as! [String: Any])      
       default:
         return super.readValue(ofType: type)
       
@@ -36,7 +36,7 @@ private class CollectionsApiCodecReader: FlutterStandardReader {
 }
 private class CollectionsApiCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? NFT {
+    if let value = value as? NFTMessage {
       super.writeByte(128)
       super.writeValue(value.toMap())
     } else {
@@ -68,10 +68,10 @@ class CollectionsApi {
   var codec: FlutterStandardMessageCodec {
     return CollectionsApiCodec.shared
   }
-  func getCollection(completion: @escaping ([NFT]) -> Void) {
+  func getCollection(completion: @escaping ([NFTMessage]) -> Void) {
     let channel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.CollectionsApi.getCollection", binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage(nil) { response in
-      let result = response as! [NFT]
+      let result = response as! [NFTMessage]
       completion(result)
     }
   }

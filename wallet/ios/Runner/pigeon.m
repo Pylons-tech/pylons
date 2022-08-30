@@ -31,25 +31,25 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 }
 
 
-@interface NFT ()
-+ (NFT *)fromMap:(NSDictionary *)dict;
-+ (nullable NFT *)nullableFromMap:(NSDictionary *)dict;
+@interface NFTMessage ()
++ (NFTMessage *)fromMap:(NSDictionary *)dict;
++ (nullable NFTMessage *)nullableFromMap:(NSDictionary *)dict;
 - (NSDictionary *)toMap;
 @end
 
-@implementation NFT
+@implementation NFTMessage
 + (instancetype)makeWithImageUrl:(NSString *)imageUrl {
-  NFT* pigeonResult = [[NFT alloc] init];
+  NFTMessage* pigeonResult = [[NFTMessage alloc] init];
   pigeonResult.imageUrl = imageUrl;
   return pigeonResult;
 }
-+ (NFT *)fromMap:(NSDictionary *)dict {
-  NFT *pigeonResult = [[NFT alloc] init];
++ (NFTMessage *)fromMap:(NSDictionary *)dict {
+  NFTMessage *pigeonResult = [[NFTMessage alloc] init];
   pigeonResult.imageUrl = GetNullableObject(dict, @"imageUrl");
   NSAssert(pigeonResult.imageUrl != nil, @"");
   return pigeonResult;
 }
-+ (nullable NFT *)nullableFromMap:(NSDictionary *)dict { return (dict) ? [NFT fromMap:dict] : nil; }
++ (nullable NFTMessage *)nullableFromMap:(NSDictionary *)dict { return (dict) ? [NFTMessage fromMap:dict] : nil; }
 - (NSDictionary *)toMap {
   return @{
     @"imageUrl" : (self.imageUrl ?: [NSNull null]),
@@ -64,7 +64,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 {
   switch (type) {
     case 128:     
-      return [NFT fromMap:[self readValue]];
+      return [NFTMessage fromMap:[self readValue]];
     
     default:    
       return [super readValueOfType:type];
@@ -78,7 +78,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 @implementation CollectionsApiCodecWriter
 - (void)writeValue:(id)value 
 {
-  if ([value isKindOfClass:[NFT class]]) {
+  if ([value isKindOfClass:[NFTMessage class]]) {
     [self writeByte:128];
     [self writeValue:[value toMap]];
   } else 
@@ -123,14 +123,14 @@ NSObject<FlutterMessageCodec> *CollectionsApiGetCodec() {
   }
   return self;
 }
-- (void)getCollectionWithCompletion:(void(^)(NSArray<NFT *> *_Nullable, NSError *_Nullable))completion {
+- (void)getCollectionWithCompletion:(void(^)(NSArray<NFTMessage *> *_Nullable, NSError *_Nullable))completion {
   FlutterBasicMessageChannel *channel =
     [FlutterBasicMessageChannel
       messageChannelWithName:@"dev.flutter.pigeon.CollectionsApi.getCollection"
       binaryMessenger:self.binaryMessenger
       codec:CollectionsApiGetCodec()];
   [channel sendMessage:nil reply:^(id reply) {
-    NSArray<NFT *> *output = reply;
+    NSArray<NFTMessage *> *output = reply;
     completion(output, nil);
   }];
 }

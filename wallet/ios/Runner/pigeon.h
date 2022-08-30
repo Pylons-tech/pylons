@@ -8,9 +8,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class NFT;
+@class NFTMessage;
 
-@interface NFT : NSObject
+@interface NFTMessage : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)makeWithImageUrl:(NSString *)imageUrl;
@@ -22,6 +22,6 @@ NSObject<FlutterMessageCodec> *CollectionsApiGetCodec(void);
 
 @interface CollectionsApi : NSObject
 - (instancetype)initWithBinaryMessenger:(id<FlutterBinaryMessenger>)binaryMessenger;
-- (void)getCollectionWithCompletion:(void(^)(NSArray<NFT *> *_Nullable, NSError *_Nullable))completion;
+- (void)getCollectionWithCompletion:(void(^)(NSArray<NFTMessage *> *_Nullable, NSError *_Nullable))completion;
 @end
 NS_ASSUME_NONNULL_END

@@ -23,7 +23,7 @@ import java.util.HashMap;
 public class Pigeon {
 
   /** Generated class from Pigeon that represents data sent in messages. */
-  public static class NFT {
+  public static class NFTMessage {
     private @NonNull String imageUrl;
     public @NonNull String getImageUrl() { return imageUrl; }
     public void setImageUrl(@NonNull String setterArg) {
@@ -34,15 +34,15 @@ public class Pigeon {
     }
 
     /** Constructor is private to enforce null safety; use Builder. */
-    private NFT() {}
+    private NFTMessage() {}
     public static final class Builder {
       private @Nullable String imageUrl;
       public @NonNull Builder setImageUrl(@NonNull String setterArg) {
         this.imageUrl = setterArg;
         return this;
       }
-      public @NonNull NFT build() {
-        NFT pigeonReturn = new NFT();
+      public @NonNull NFTMessage build() {
+        NFTMessage pigeonReturn = new NFTMessage();
         pigeonReturn.setImageUrl(imageUrl);
         return pigeonReturn;
       }
@@ -52,8 +52,8 @@ public class Pigeon {
       toMapResult.put("imageUrl", imageUrl);
       return toMapResult;
     }
-    static @NonNull NFT fromMap(@NonNull Map<String, Object> map) {
-      NFT pigeonResult = new NFT();
+    static @NonNull NFTMessage fromMap(@NonNull Map<String, Object> map) {
+      NFTMessage pigeonResult = new NFTMessage();
       Object imageUrl = map.get("imageUrl");
       pigeonResult.setImageUrl((String)imageUrl);
       return pigeonResult;
@@ -66,7 +66,7 @@ public class Pigeon {
     protected Object readValueOfType(byte type, ByteBuffer buffer) {
       switch (type) {
         case (byte)128:         
-          return NFT.fromMap((Map<String, Object>) readValue(buffer));
+          return NFTMessage.fromMap((Map<String, Object>) readValue(buffer));
         
         default:        
           return super.readValueOfType(type, buffer);
@@ -75,9 +75,9 @@ public class Pigeon {
     }
     @Override
     protected void writeValue(ByteArrayOutputStream stream, Object value)     {
-      if (value instanceof NFT) {
+      if (value instanceof NFTMessage) {
         stream.write(128);
-        writeValue(stream, ((NFT) value).toMap());
+        writeValue(stream, ((NFTMessage) value).toMap());
       } else 
 {
         super.writeValue(stream, value);
@@ -98,12 +98,12 @@ public class Pigeon {
       return CollectionsApiCodec.INSTANCE;
     }
 
-    public void getCollection(Reply<List<NFT>> callback) {
+    public void getCollection(Reply<List<NFTMessage>> callback) {
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.CollectionsApi.getCollection", getCodec());
       channel.send(null, channelReply -> {
         @SuppressWarnings("ConstantConditions")
-        List<NFT> output = (List<NFT>)channelReply;
+        List<NFTMessage> output = (List<NFTMessage>)channelReply;
         callback.reply(output);
       });
     }

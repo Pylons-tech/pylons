@@ -7,8 +7,8 @@ import 'dart:typed_data' show Uint8List, Int32List, Int64List, Float64List;
 import 'package:flutter/foundation.dart' show WriteBuffer, ReadBuffer;
 import 'package:flutter/services.dart';
 
-class NFT {
-  NFT({
+class NFTMessage {
+  NFTMessage({
     required this.imageUrl,
   });
 
@@ -20,9 +20,9 @@ class NFT {
     return pigeonMap;
   }
 
-  static NFT decode(Object message) {
+  static NFTMessage decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
-    return NFT(
+    return NFTMessage(
       imageUrl: pigeonMap['imageUrl']! as String,
     );
   }
@@ -32,7 +32,7 @@ class _CollectionsApiCodec extends StandardMessageCodec {
   const _CollectionsApiCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is NFT) {
+    if (value is NFTMessage) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
     } else 
@@ -44,7 +44,7 @@ class _CollectionsApiCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:       
-        return NFT.decode(readValue(buffer)!);
+        return NFTMessage.decode(readValue(buffer)!);
       
       default:      
         return super.readValueOfType(type, buffer);
@@ -55,7 +55,7 @@ class _CollectionsApiCodec extends StandardMessageCodec {
 abstract class CollectionsApi {
   static const MessageCodec<Object?> codec = _CollectionsApiCodec();
 
-  List<NFT?> getCollection();
+  Future<List<NFTMessage?>> getCollection();
   static void setup(CollectionsApi? api, {BinaryMessenger? binaryMessenger}) {
     {
       final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
@@ -65,7 +65,7 @@ abstract class CollectionsApi {
       } else {
         channel.setMessageHandler((Object? message) async {
           // ignore message
-          final List<NFT?> output = api.getCollection();
+          final List<NFTMessage?> output = await api.getCollection();
           return output;
         });
       }
