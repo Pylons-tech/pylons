@@ -167,11 +167,14 @@ func TestMsgAddStripeRefundValidateBasic(t *testing.T) {
 			err: sdkerrors.ErrInvalidRequest,
 		},
 	} {
-		err := tc.req.ValidateBasic()
-		if err != nil {
-			require.ErrorIs(t, err, tc.err)
-		} else {
-			require.NoError(t, tc.err)
-		}
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			err := tc.req.ValidateBasic()
+			if err != nil {
+				require.ErrorIs(t, err, tc.err)
+			} else {
+				require.NoError(t, tc.err)
+			}
+		})
 	}
 }
