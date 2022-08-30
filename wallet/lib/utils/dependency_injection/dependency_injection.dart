@@ -183,6 +183,7 @@ Future<void> init() async {
         videoPlayerHelper: sl(),
         repository: sl(),
         shareHelper: sl(),
+        baseEnv: sl(),
       ));
   sl.registerLazySingleton(() => CollectionViewModel(walletsStore: sl(), thumbnailHelper: sl()));
   sl.registerLazySingleton(() => StripeHandler(walletsStore: sl(), localDataSource: sl(), repository: sl()));

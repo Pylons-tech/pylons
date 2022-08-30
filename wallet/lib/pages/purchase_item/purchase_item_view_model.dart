@@ -15,6 +15,7 @@ import 'package:pylons_wallet/services/third_party_services/audio_player_helper.
 import 'package:pylons_wallet/services/third_party_services/share_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/video_player_helper.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
+import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
@@ -32,12 +33,15 @@ class PurchaseItemViewModel extends ChangeNotifier {
   final VideoPlayerHelper videoPlayerHelper;
 
   final Repository repository;
-  ShareHelper shareHelper;
+  final ShareHelper shareHelper;
+
+  final BaseEnv baseEnv;
 
   PurchaseItemViewModel(this.walletsStore,
       {required this.audioPlayerHelper,
       required this.videoPlayerHelper,
       required this.repository,
+        required this.baseEnv,
       required this.shareHelper});
 
   late StreamSubscription playerStateSubscription;

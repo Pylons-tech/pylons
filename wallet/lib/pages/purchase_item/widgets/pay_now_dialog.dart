@@ -279,11 +279,12 @@ class _PayNowWidgetState extends State<PayNowWidget> {
     final ibcEnumCoins = widget.purchaseItemViewModel.nft.denom.toIBCCoinsEnum();
     switch (widget.nft.type) {
       case NftType.TYPE_RECIPE:
-        if (ibcEnumCoins == IBCCoins.ustripeusd) {
-          stripePaymentForRecipe(context, widget.nft);
-        } else {
+        if (ibcEnumCoins != IBCCoins.ustripeusd) {
           paymentByCoins();
+          return;
         }
+        stripePaymentForRecipe(context, widget.nft);
+
         break;
       case NftType.TYPE_ITEM:
         break;

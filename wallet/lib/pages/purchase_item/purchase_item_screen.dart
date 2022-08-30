@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:bottom_drawer/bottom_drawer.dart';
@@ -159,6 +160,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
                     ),
+                    trailing: const SizedBox(),
                   ),
                 ),
               ),
@@ -288,56 +290,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         const Spacer(),
 
                         /// BUY NFT BUTTON
-                        if (viewModel.nft.amountMinted < viewModel.nft.quantity)
-                          ClipPath(
-                            clipper: BuyClipper(),
-                            child: InkWell(
-                              onTap: () {
-                                final PayNowDialog payNowDialog = PayNowDialog(
-                                    buildContext: context,
-                                    nft: viewModel.nft,
-                                    purchaseItemViewModel: context.read<PurchaseItemViewModel>(),
-                                    onPurchaseDone: (txId) {
-                                      showTransactionCompleteDialog(txId);
-                                    });
-                                payNowDialog.show();
-                              },
-                              child: Container(
-                                width: 200.w,
-                                height: 60.h,
-                                color: kDarkRed.withOpacity(0.8),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.only(left: 20.w),
-                                      alignment: Alignment.center,
-                                      child: Container(
-                                        height: 10.w,
-                                        width: 10.w,
-                                        decoration: const BoxDecoration(shape: BoxShape.circle, color: kButtonBuyNowColor),
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "${"buy_for".tr()} ${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)}",
-                                          style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                                        ),
-                                        SizedBox(
-                                          width: 8.w,
-                                        ),
-                                        ibcEnumCoins.getAssets(),
-                                      ],
-                                    ),
-                                    const Spacer(),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
+                        if (viewModel.nft.amountMinted < viewModel.nft.quantity) buildBuyNowButton(context, ibcEnumCoins)
                       ],
                     ),
                   )
@@ -349,6 +302,64 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           ]
         ],
       ),
+    );
+  }
+
+  ShowBuyButton buildBuyNowButton(BuildContext context, IBCCoins ibcEnumCoins) {
+    final viewModel = context.watch<PurchaseItemViewModel>();
+
+    return ShowBuyButton(
+      onShow: (context) => ClipPath(
+        clipper: BuyClipper(),
+        child: InkWell(
+          onTap: () {
+            final PayNowDialog payNowDialog = PayNowDialog(
+                buildContext: context,
+                nft: viewModel.nft,
+                purchaseItemViewModel: context.read<PurchaseItemViewModel>(),
+                onPurchaseDone: (txId) {
+                  showTransactionCompleteDialog(txId);
+                });
+            payNowDialog.show();
+          },
+          child: Container(
+            width: 200.w,
+            height: 60.h,
+            color: kDarkRed.withOpacity(0.8),
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(left: 20.w),
+                  alignment: Alignment.center,
+                  child: Container(
+                    height: 10.w,
+                    width: 10.w,
+                    decoration: const BoxDecoration(shape: BoxShape.circle, color: kButtonBuyNowColor),
+                  ),
+                ),
+                const Spacer(),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${"buy_for".tr()} ${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)}",
+                      style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                    ),
+                    SizedBox(
+                      width: 8.w,
+                    ),
+                    ibcEnumCoins.getAssets(),
+                  ],
+                ),
+                const Spacer(),
+              ],
+            ),
+          ),
+        ),
+      ),
+      onHide: (BuildContext context) => const SizedBox.shrink(),
+      isIosStripeEnabled: viewModel.baseEnv.isIosStripeEnabled,
     );
   }
 
@@ -757,5 +768,26 @@ class BuyClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
     return false;
+  }
+}
+
+class ShowBuyButton extends StatelessWidget {
+  final bool isIosStripeEnabled;
+  final WidgetBuilder onShow;
+  final WidgetBuilder onHide;
+
+  const ShowBuyButton({Key? key, required this.isIosStripeEnabled, required this.onHide, required this.onShow}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (Platform.isAndroid) {
+      return onShow(context);
+    }
+
+    if (isIosStripeEnabled) {
+      return onShow(context);
+    }
+
+    return onHide(context);
   }
 }

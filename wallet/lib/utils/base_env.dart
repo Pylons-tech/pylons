@@ -21,6 +21,7 @@ class BaseEnv {
   late String _faucetUrl;
   late String _baseMongoUrl;
   late List<SKUModel> _skus;
+  late bool _isIosStripeEnabled;
 
   void setEnv(
       {required String lcdUrl,
@@ -32,7 +33,8 @@ class BaseEnv {
       required String faucetUrl,
       required String ibcTraceUrl,
       required String mongoUrl,
-        required String skus,
+      required String skus,
+      required bool isIosStripeEnabled,
       String? stripeUrl,
       String? stripePubKey,
       bool? stripeTestEnv,
@@ -44,9 +46,7 @@ class BaseEnv {
       grpcInfo: GRPCInfo(
         host: grpcUrl,
         port: int.parse(grpcPort),
-        credentials: (dotenv.env[kENV]! == kLocal)
-            ? const ChannelCredentials.insecure()
-            : const ChannelCredentials.insecure(),
+        credentials: (dotenv.env[kENV]! == kLocal) ? const ChannelCredentials.insecure() : const ChannelCredentials.insecure(),
       ),
       chainId: chainId,
     );
@@ -63,10 +63,10 @@ class BaseEnv {
     _ibcTraceUrl = ibcTraceUrl;
     _faucetUrl = faucetUrl;
 
-
     final List jsonSkuList = jsonDecode(skus) as List;
-    _skus = jsonSkuList.map(( e) => SKUModel.fromJson(e as Map )).toList();
+    _skus = jsonSkuList.map((e) => SKUModel.fromJson(e as Map)).toList();
 
+    _isIosStripeEnabled = isIosStripeEnabled;
   }
 
   NetworkInfo get networkInfo => _networkInfo;
@@ -93,13 +93,12 @@ class BaseEnv {
 
   String get faucetUrl => _faucetUrl;
 
-
   List<SKUModel> get skus => _skus;
+
+  bool get isIosStripeEnabled => _isIosStripeEnabled;
 
   @override
   String toString() {
     return 'BaseEnv{_networkInfo: $_networkInfo, _baseApiUrl: $_baseApiUrl, _baseEthUrl: $_baseEthUrl,  _stripeUrl: $_stripeUrl, _stripePubKey: $_stripePubKey, _stripeTestEnv: $_stripeTestEnv, _stripeCallbackUrl: $_stripeCallbackUrl, _stripeCallbackRefreshUrl: $_stripeCallbackRefreshUrl, _chainId: $_chainId, _ibcTraceUrl: $_ibcTraceUrl, _faucetUrl: $_faucetUrl}';
   }
-
-
 }

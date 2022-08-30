@@ -238,6 +238,6 @@ BaseEnv MOCK_BASE_ENV = BaseEnv()
       chainId: 'pylons-testnet-2',
       ibcTraceUrl: "",
       mongoUrl: '',
-      skus: '[]');
+      skus: '[]', isIosStripeEnabled: false);
 
 IBCTraceModel MOCK_IBC_TRACE_MODEL = IBCTraceModel(denomTrace: DenomTrace(baseDenom: IBCCoins.ujunox, path: ''), ibcHash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E');

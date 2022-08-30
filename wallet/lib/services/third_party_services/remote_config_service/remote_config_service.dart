@@ -46,33 +46,30 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
   static String ibcTrace = "IBC_TRACE_URL";
   static String mongoUrl = "MONGO_URL";
   static String skus = "skus";
+  static String stripeIOSEnabled = "stripe_ios_enabled";
 
-  RemoteConfigServiceImpl(
-      {required this.firebaseRemoteConfig,
-      required this.localDataSource,
-      required this.crashlyticsHelper});
+  RemoteConfigServiceImpl({required this.firebaseRemoteConfig, required this.localDataSource, required this.crashlyticsHelper});
 
   @override
   BaseEnv getBaseEnv() {
     return BaseEnv()
       ..setEnv(
-        lcdUrl: firebaseRemoteConfig.getString(lcdUrl),
-        grpcUrl: firebaseRemoteConfig.getString(grpcUrl),
-        lcdPort: firebaseRemoteConfig.getString(lcdPort),
-        mongoUrl: firebaseRemoteConfig.getString(mongoUrl),
-        grpcPort: firebaseRemoteConfig.getString(grpcPort),
-        ethUrl: firebaseRemoteConfig.getString(ethUrl),
-        faucetUrl: firebaseRemoteConfig.getString(faucetUrl),
-        stripeUrl: firebaseRemoteConfig.getString(stripeUrl),
-        stripePubKey: firebaseRemoteConfig.getString(stripePubKey),
-        stripeTestEnv: firebaseRemoteConfig.getString(stripeTestEnv) == 'true',
-        stripeCallbackUrl: firebaseRemoteConfig.getString(stripeCallbackUrl),
-        stripeCallbackRefreshUrl:
-            firebaseRemoteConfig.getString(stripeCallbackRefreshUrl),
-        chainId: firebaseRemoteConfig.getString(chainId),
-        ibcTraceUrl: firebaseRemoteConfig.getString(ibcTrace),
-        skus: firebaseRemoteConfig.getString(skus),
-      );
+          lcdUrl: firebaseRemoteConfig.getString(lcdUrl),
+          grpcUrl: firebaseRemoteConfig.getString(grpcUrl),
+          lcdPort: firebaseRemoteConfig.getString(lcdPort),
+          mongoUrl: firebaseRemoteConfig.getString(mongoUrl),
+          grpcPort: firebaseRemoteConfig.getString(grpcPort),
+          ethUrl: firebaseRemoteConfig.getString(ethUrl),
+          faucetUrl: firebaseRemoteConfig.getString(faucetUrl),
+          stripeUrl: firebaseRemoteConfig.getString(stripeUrl),
+          stripePubKey: firebaseRemoteConfig.getString(stripePubKey),
+          stripeTestEnv: firebaseRemoteConfig.getString(stripeTestEnv) == 'true',
+          stripeCallbackUrl: firebaseRemoteConfig.getString(stripeCallbackUrl),
+          stripeCallbackRefreshUrl: firebaseRemoteConfig.getString(stripeCallbackRefreshUrl),
+          chainId: firebaseRemoteConfig.getString(chainId),
+          ibcTraceUrl: firebaseRemoteConfig.getString(ibcTrace),
+          skus: firebaseRemoteConfig.getString(skus),
+          isIosStripeEnabled: firebaseRemoteConfig.getBool(stripeIOSEnabled));
 
     // if (localDataSource.getNetworkEnvironmentPreference() == kDevNet) {
     //   return BaseEnv()
@@ -142,8 +139,6 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
       chainId: dotenv.env['CHAIN_ID'],
       skus: defaultPylonsSKUs,
       mongoUrl: dotenv.env[mongoUrl] ?? "",
-
-
     });
 
     firebaseRemoteConfig.setConfigSettings(RemoteConfigSettings(
@@ -156,7 +151,7 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
     } on FormatException catch (_) {
       /// Happens when there is no internet on first launch.
       crashlyticsHelper.recordFatalError(error: _.message);
-    } on FirebaseException catch(_){
+    } on FirebaseException catch (_) {
       crashlyticsHelper.recordFatalError(error: _.message ?? "");
     }
   }
