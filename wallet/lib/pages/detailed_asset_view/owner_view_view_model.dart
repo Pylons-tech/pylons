@@ -13,7 +13,6 @@ import 'package:pylons_wallet/services/third_party_services/share_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/video_player_helper.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/enums.dart';
-import 'package:pylons_wallet/utils/extension.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
@@ -120,12 +119,10 @@ class OwnerViewViewModel extends ChangeNotifier {
     toHashtagList();
   }
 
-  Future<void> nftDataInit(
-      {required String recipeId, required String cookBookId}) async {
+  Future<void> nftDataInit({required String recipeId, required String cookBookId}) async {
     final walletAddress = walletsStore.getWallets().value.last.publicAddress;
     if (nft.type != NftType.TYPE_RECIPE) {
-      final nftOwnershipHistory = await repository.getNftOwnershipHistory(
-          recipeID: recipeId, cookBookId: cookBookId);
+      final nftOwnershipHistory = await repository.getNftOwnershipHistory(recipeID: recipeId, cookBookId: cookBookId);
       if (nftOwnershipHistory.isLeft()) {
         "something_wrong".tr().show();
         return;
@@ -182,8 +179,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     viewsCount = viewsCountEither.getOrElse(() => 0);
   }
 
-  Future<void> updateLikeStatus(
-      {required String recipeId, required String cookBookID}) async {
+  Future<void> updateLikeStatus({required String recipeId, required String cookBookID}) async {
     isLiking = true;
     final bool temp = likedByMe;
 
@@ -290,8 +286,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     isUrlLoaded = await audioPlayerHelper.setUrl(url: nft.url);
 
     if (isUrlLoaded) {
-      playerStateSubscription =
-          audioPlayerHelper.playerStateStream().listen((playerState) {
+      playerStateSubscription = audioPlayerHelper.playerStateStream().listen((playerState) {
         final isPlaying = playerState.playing;
         final processingState = playerState.processingState;
 
@@ -316,8 +311,7 @@ class OwnerViewViewModel extends ChangeNotifier {
       });
     }
 
-    positionStreamSubscription =
-        audioPlayerHelper.positionStream().listen((position) {
+    positionStreamSubscription = audioPlayerHelper.positionStream().listen((position) {
       final oldState = audioProgressNotifier.value;
       audioProgressNotifier.value = ProgressBarState(
         current: position,
@@ -326,8 +320,7 @@ class OwnerViewViewModel extends ChangeNotifier {
       );
     });
 
-    bufferPositionSubscription =
-        audioPlayerHelper.bufferedPositionStream().listen((bufferedPosition) {
+    bufferPositionSubscription = audioPlayerHelper.bufferedPositionStream().listen((bufferedPosition) {
       final oldState = audioProgressNotifier.value;
       audioProgressNotifier.value = ProgressBarState(
         current: oldState.current,
@@ -336,8 +329,7 @@ class OwnerViewViewModel extends ChangeNotifier {
       );
     });
 
-    durationStreamSubscription =
-        audioPlayerHelper.durationStream().listen((totalDuration) {
+    durationStreamSubscription = audioPlayerHelper.durationStream().listen((totalDuration) {
       final oldState = audioProgressNotifier.value;
       audioProgressNotifier.value = ProgressBarState(
         current: oldState.current,
@@ -383,28 +375,8 @@ class OwnerViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void shareNFTLink(Size size) {
-    String msg = "";
-    switch (nft.type) {
-      case NftType.TYPE_TRADE:
-        msg = nft.tradeID
-            .createTradeLink(address: accountPublicInfo?.publicAddress ?? "");
-        break;
-
-      case NftType.TYPE_ITEM:
-        msg = nft.itemID.createPurchaseNFT(
-            cookBookId: nft.cookbookID,
-            address: accountPublicInfo?.publicAddress ?? "");
-        break;
-
-      case NftType.TYPE_RECIPE:
-        msg = nft.recipeID.createDynamicLink(
-            cookbookId: nft.cookbookID,
-            address: accountPublicInfo?.publicAddress ?? "");
-        break;
-    }
-
-    shareHelper.shareText(text: msg, size: size);
+  void shareNFTLink(Size size, String link) {
+    shareHelper.shareText(text: link, size: size);
   }
 }
 

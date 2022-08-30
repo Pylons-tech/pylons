@@ -18,6 +18,7 @@ import 'package:pylons_wallet/model/amount.dart';
 import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
 import 'package:pylons_wallet/model/export.dart';
+import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
@@ -32,6 +33,7 @@ import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/custom_transaction_signing_gateaway/custom_transaction_signing_gateway.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
+import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
@@ -241,10 +243,20 @@ abstract class RemoteDataStore {
   /// Output: [String] return the generated dynamic link else will throw error
   Future<String> createDynamicLinkForUserInvite({required String address});
 
-  /// This method will create dynamic link for the nft share
-  /// Input : [address] the address against which the invite link to be generated
+  /// This method will create dynamic link for the nft share recipe
+  /// Input : [address] the address & [NFT] against which the invite link to be generated
   /// Output: [String] return the generated dynamic link else will throw error
-  Future<String> createDynamicLinkForNftShare({required String address, required String recipeId, required String cookbookId});
+  Future<String> createDynamicLinkForRecipeNftShare({required String address, required NFT nft});
+
+  /// This method will create dynamic link for the nft share trade
+  /// Input : [address] the address & [TradeId] against which the invite link to be generated
+  /// Output: [String] return the generated dynamic link else will throw error
+  Future<String> createDynamicLinkForTradeNftShare({required String address, required String tradeId});
+
+  /// This method will create dynamic link for the nft share purchase
+  /// Input : [address] the address & [itemId] & [cookbookId] against which the invite link to be generated
+  /// Output: [String] return the generated dynamic link else will throw error
+  Future<String> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId});
 
   /// This method will create User account based on account public info
   /// Input: [publicInfo] contains info related to user chain address, [walletCreationModel] contains user entered data, [appCheckToken] the app specific token, [referralToken] the invitee user address
@@ -991,23 +1003,26 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<String> createDynamicLinkForNftShare({required String address, required String recipeId, required String cookbookId}) async {
+  Future<String> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) async {
     final dynamicLinkParams = DynamicLinkParameters(
-      link: Uri.parse("https://wallet.pylons.tech?recipe_id=$recipeId&cookbook_id=$cookbookId&address=$address"),
-      // link: Uri.parse("https://test/welcome?recipe_id=$recipeId&cookbook_id=$cookbookId&address=$address"),
+      socialMetaTagParameters: SocialMetaTagParameters(title: nft.name, description: nft.description, imageUrl: getUri(nft)),
+      link: Uri.parse("https://wallet.pylons.tech?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address"),
       uriPrefix: kDeepLink,
-      androidParameters: AndroidParameters(packageName: "tech.pylons.wallet", fallbackUrl: Uri.parse("https://wallet.pylons.tech?recipe_id=$recipeId&cookbook_id=$cookbookId&address=$address")),
-      iosParameters: const IOSParameters(bundleId: "xyz.pylons.wallet"),
+      androidParameters:
+          AndroidParameters(packageName: "tech.pylons.wallet", fallbackUrl: Uri.parse("https://wallet.pylons.tech?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
+      iosParameters: IOSParameters(bundleId: "xyz.pylons.wallet", fallbackUrl: Uri.parse("https://wallet.pylons.tech?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
     );
-
     try {
-      final link = await dynamicLinksGenerator.buildLink(dynamicLinkParams);
-
-      return link.toString();
+      final link = await dynamicLinksGenerator.buildShortLink(dynamicLinkParams);
+      return link.shortUrl.toString();
     } catch (e) {
-      print(e);
       return '';
     }
+  }
+
+  Uri getUri(NFT nft) {
+    if (nft.assetType == AssetType.Image) return Uri.parse(nft.url);
+    return Uri.parse(nft.thumbnailUrl);
   }
 
   @override
@@ -1034,6 +1049,39 @@ class RemoteDataStoreImp implements RemoteDataStore {
     }
 
     return result.getOrElse(() => TransactionResponse.initial());
+  }
+
+  @override
+  Future<String> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId}) async {
+    final dynamicLinkParams = DynamicLinkParameters(
+      link: Uri.parse("https://wallet.pylons.tech?item_id=$itemId&cookbook_id=$cookbookId&address=$address"),
+      uriPrefix: kDeepLink,
+      androidParameters: AndroidParameters(packageName: "tech.pylons.wallet", fallbackUrl: Uri.parse("https://wallet.pylons.tech?item_id=$itemId&cookbook_id=$cookbookId&address=$address")),
+      iosParameters: const IOSParameters(bundleId: "xyz.pylons.wallet"),
+    );
+    try {
+      final link = await dynamicLinksGenerator.buildLink(dynamicLinkParams);
+      return link.toString();
+    } catch (e) {
+      return '';
+    }
+  }
+
+  @override
+  Future<String> createDynamicLinkForTradeNftShare({required String address, required String tradeId}) async {
+    final dynamicLinkParams = DynamicLinkParameters(
+      socialMetaTagParameters: SocialMetaTagParameters(),
+      link: Uri.parse("https://wallet.pylons.techtrade_id=$tradeId&address=$address"),
+      uriPrefix: kDeepLink,
+      androidParameters: AndroidParameters(packageName: "tech.pylons.wallet", fallbackUrl: Uri.parse("https://wallet.pylons.techtrade_id=$tradeId&address=$address")),
+      iosParameters: const IOSParameters(bundleId: "xyz.pylons.wallet"),
+    );
+    try {
+      final link = await dynamicLinksGenerator.buildShortLink(dynamicLinkParams);
+      return link.shortUrl.toString();
+    } catch (e) {
+      return '';
+    }
   }
 }
 
