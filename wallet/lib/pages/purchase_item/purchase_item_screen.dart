@@ -363,13 +363,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
 
     final link = await repo.createDynamicLinkForRecipeNftShare(address: address, nft: viewModel.nft);
-    link.fold((l) {
+    return link.fold((l) {
       "something_wrong".tr().show();
       return null;
     }, (r) async {
       return r;
     });
-    return null;
   }
 
   Widget soldOutButton(PurchaseItemViewModel viewModel) {
