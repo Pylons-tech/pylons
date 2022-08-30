@@ -338,4 +338,5 @@ class MockWalletStore implements WalletsStore {
     // TODO: implement sendAppleInAppPurchaseCoinsRequest
     throw UnimplementedError();
   }
+
 }

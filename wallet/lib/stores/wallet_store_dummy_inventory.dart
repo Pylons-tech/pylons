@@ -518,4 +518,5 @@ class WalletsStoreDummyInventory extends WalletsStore {
     // TODO: implement sendAppleInAppPurchaseCoinsRequest
     throw UnimplementedError();
   }
+
 }

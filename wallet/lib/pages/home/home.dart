@@ -15,6 +15,7 @@ import 'package:pylons_wallet/ipc/ipc_engine.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
+import 'package:pylons_wallet/pages/home/temp_screen.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
@@ -246,6 +247,27 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               top: 0.06.sh,
               left: 0.91.sw,
               child: UserBannerPickerWidget(),
+            ),
+            Positioned(
+              top: 0.062.sh,
+              left: 0.70.sw,
+              child: GestureDetector(
+                onTap: () async {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => TempScreen()));
+                },
+                behavior: HitTestBehavior.translucent,
+                child: Stack(
+                  children: [
+                    SvgPicture.asset(
+                      SVGUtil.APP_ICON,
+                      height: 15.h,
+                      width: 15.w,
+                      fit: BoxFit.fill,
+                      color: Colors.red,
+                    ),
+                  ],
+                ),
+              ),
             ),
             Positioned(
               top: 0.062.sh,

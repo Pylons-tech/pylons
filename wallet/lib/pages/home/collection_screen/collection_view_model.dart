@@ -85,7 +85,7 @@ class CollectionViewModel extends ChangeNotifier {
   }
 
   Future loadPurchasesAndCreationsData() async {
-    final loading = Loading()..showLoading();
+    // final loading = Loading()..showLoading();
 
     thumbnailsPath = (await getTemporaryDirectory()).path;
     try {
@@ -130,9 +130,9 @@ class CollectionViewModel extends ChangeNotifier {
       purchases = assets;
       this.creations = creations;
       notifyListeners();
-      loading.dismiss();
+      // loading.dismiss();
     } on Exception catch (_) {
-      loading.dismiss();
+      // loading.dismiss();
       if (await GetIt.I.get<NetworkInfo>().isConnected == false) {
         "no_internet".show();
       }
