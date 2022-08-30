@@ -163,7 +163,7 @@ func parseGadget(header, json string, gadgets *[]Gadget) (*Gadget, error) {
 	if err != nil {
 		return nil, err
 	}
-	// todo: we should actually validate the json!
+	// validating gadget json would be nice but actually entails a pretty serious amount of work! (#918)
 	return &Gadget{name: gadgetName, json: json, parametersCount: gadgetArgs}, nil
 }
 
