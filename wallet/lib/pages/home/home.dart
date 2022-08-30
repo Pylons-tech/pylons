@@ -244,23 +244,22 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             UserBannerWidget(height: 0.2.sh),
             Positioned(
               top: 0.06.sh,
-              left: 0.91.sw,
+              right: 0.02.sw,
               child: UserBannerPickerWidget(),
             ),
             Positioned(
               top: 0.062.sh,
-              left: 0.81.sw,
-              child: GestureDetector(
+              right: 0.12.sw,
+              child: InkResponse(
                 onTap: () async {
                   Navigator.of(context).pushNamed(RouteUtil.ROUTE_MESSAGE);
                 },
-                behavior: HitTestBehavior.translucent,
                 child: Stack(
                   children: [
                     SvgPicture.asset(
                       SVGUtil.MESSAGE_ENVELOPE,
-                      height: 15.h,
-                      width: 15.w,
+                      height: 20.h,
+                      width: 20.w,
                       fit: BoxFit.fill,
                       color: provider.isBannerDark() ? Colors.white : Colors.black,
                     ),
@@ -272,16 +271,15 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             Positioned(
               top: 0.06.sh,
               left: 0.09.sw,
-              child: GestureDetector(
+              child: InkResponse(
                   onTap: () {
                     Navigator.of(context).pushNamed(RouteUtil.ROUTE_SETTINGS);
                   },
-                  behavior: HitTestBehavior.translucent,
                   child: SvgPicture.asset(
                     SVGUtil.SORT,
                     color: provider.isBannerDark() ? Colors.white : Colors.black,
-                    height: 15.h,
-                    width: 15.w,
+                    height: 20.h,
+                    width: 20.w,
                   )),
             ),
             Positioned(
