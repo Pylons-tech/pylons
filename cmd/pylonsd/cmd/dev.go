@@ -117,6 +117,10 @@ func loadCookbookFromPath(path string, gadgets *[]Gadget) (types.Cookbook, strin
 	json := loadModulesInline(bytes, path, info, gadgets)
 	err := jsonpb.UnmarshalString(json, &cb)
 
+	if err != nil {
+		// get a better error
+	}
+
 	return cb, json, err
 }
 
@@ -127,5 +131,10 @@ func loadRecipeFromPath(path string, gadgets *[]Gadget) (types.Recipe, string, e
 
 	json := loadModulesInline(bytes, path, info, gadgets)
 	err := jsonpb.UnmarshalString(json, &rcp)
+
+	if err != nil {
+		// get a better error
+	}
+
 	return rcp, string(bytes), err
 }
