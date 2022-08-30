@@ -45,7 +45,7 @@ dependencies:
 
   # file_picker plugin is used so we can pick single/multiple files with extension filtering support.
   #  with this plugin, we can filter the file extension(not just images) we want users to pick.
-  file_picker: ^4.5.0
+  file_picker: ^5.0.1
 
   path: ^1.8.0
 
@@ -105,7 +105,7 @@ dependencies:
   shimmer_animation: 2.1.0+1
 
 
-  flutter_image_compress: 1.1.0
+  flutter_image_compress: ^1.1.1
 
   auto_size_text: 3.0.0
 
@@ -143,9 +143,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_launcher_icons: ^0.9.2
   floor_generator: 1.2.0
-  build_runner: 2.1.2
+  build_runner: ^2.2.0
 
 
 
