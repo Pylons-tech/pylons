@@ -531,10 +531,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   }
 
   Future<String?> generateLink(OwnerViewViewModel viewModel) async {
+    final loading = Loading()..showLoading();
     final repo = GetIt.instance.get<Repository>();
     final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
 
     final link = await repo.createDynamicLinkForRecipeNftShare(address: address, nft: viewModel.nft);
+    loading.dismiss();
     return link.fold((l) {
       "something_wrong".tr().show();
       return null;

@@ -1070,7 +1070,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
   @override
   Future<String> createDynamicLinkForTradeNftShare({required String address, required String tradeId}) async {
     final dynamicLinkParams = DynamicLinkParameters(
-      socialMetaTagParameters: SocialMetaTagParameters(),
+      socialMetaTagParameters: const SocialMetaTagParameters(),
       link: Uri.parse("https://wallet.pylons.techtrade_id=$tradeId&address=$address"),
       uriPrefix: kDeepLink,
       androidParameters: AndroidParameters(packageName: "tech.pylons.wallet", fallbackUrl: Uri.parse("https://wallet.pylons.techtrade_id=$tradeId&address=$address")),
@@ -1088,26 +1088,26 @@ class RemoteDataStoreImp implements RemoteDataStore {
 class AppleInAppPurchaseModel {
   String productID;
   String purchaseID;
-  String recieptData;
+  String receiptData;
   String creator;
 
-  AppleInAppPurchaseModel({required this.productID, required this.purchaseID, required this.recieptData, required this.creator});
+  AppleInAppPurchaseModel({required this.productID, required this.purchaseID, required this.receiptData, required this.creator});
 
-  Map<String, String> toJson() => {"productId": productID, "purchaseId": purchaseID, "receiptDataBase64": recieptData, "creator": creator};
+  Map<String, String> toJson() => {"productId": productID, "purchaseId": purchaseID, "receiptDataBase64": receiptData, "creator": creator};
 }
 
 class GoogleInAppPurchaseModel {
   String productID;
   String purchaseToken;
-  Map recieptData;
+  Map receiptData;
   String signature;
   String creator;
 
-  GoogleInAppPurchaseModel({required this.productID, required this.purchaseToken, required this.recieptData, required this.signature, required this.creator});
+  GoogleInAppPurchaseModel({required this.productID, required this.purchaseToken, required this.receiptData, required this.signature, required this.creator});
 
   Map<String, String> toJson() => {"product_id": productID, "purchase_token": purchaseToken, "receipt_data_base64": getReceiptDataInBase64(), "signature": signature, "creator": creator};
 
   String getReceiptDataInBase64() {
-    return base64Url.encode(utf8.encode(jsonEncode(recieptData)));
+    return base64Url.encode(utf8.encode(jsonEncode(receiptData)));
   }
 }
