@@ -5,7 +5,6 @@ import 'package:cosmos_utils/app_info_extractor.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
@@ -15,8 +14,6 @@ import 'package:pylons_wallet/services/third_party_services/remote_config_servic
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-
-import '../settings/screens/general_screen/general_screen_localization_view_model.dart';
 
 class RoutingPage extends StatefulWidget {
   const RoutingPage({Key? key}) : super(key: key);
@@ -31,11 +28,11 @@ class _RoutingPageState extends State<RoutingPage> {
   RemoteConfigService get remoteConfigService => GetIt.I.get();
 
   UserInfoProvider get userInfoProvider => GetIt.I.get();
-  late GeneralScreenLocalizationViewModel languageViewModel;
+  // late GeneralScreenLocalizationViewModel languageViewModel;
 
   @override
   void initState() {
-    languageViewModel = context.read<GeneralScreenLocalizationViewModel>();
+    // languageViewModel = context.read<GeneralScreenLocalizationViewModel>();
 
     super.initState();
     checkAppLatestOrNot().then((value) {
@@ -48,8 +45,6 @@ class _RoutingPageState extends State<RoutingPage> {
     await walletsStore.loadWallets();
 
     if (walletsStore.getWallets().value.isEmpty) {
-      // setDefaultLocale();
-
       Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
     } else {
       final repository = GetIt.I.get<Repository>();

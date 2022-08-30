@@ -8,9 +8,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
-import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_localization_view_model.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
@@ -39,16 +36,17 @@ Future<void> main() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     runApp(
       EasyLocalization(
-        supportedLocales: const [Locale('en'), Locale('ru'), Locale('id'), Locale('de'), Locale('ko'), Locale('ja'), Locale('es'), Locale('vi')],
-        path: 'i18n',
-        fallbackLocale: Locale(Platform.localeName.split('_')[0]),
-        useOnlyLangCode: true,
-        child: ChangeNotifierProvider.value(
-            value: GetIt.instance.get<GeneralScreenLocalizationViewModel>(),
-            builder: (context, child) {
-              return PylonsApp();
-            }),
-      ),
+          supportedLocales: const [Locale('en'), Locale('ru'), Locale('id'), Locale('de'), Locale('ko'), Locale('ja'), Locale('es'), Locale('vi')],
+          path: 'i18n',
+          fallbackLocale: Locale(Platform.localeName.split('_')[0]),
+          useOnlyLangCode: true,
+          child: PylonsApp()
+          // ChangeNotifierProvider.value(
+          //     value: GetIt.instance.get<GeneralScreenLocalizationViewModel>(),
+          //     builder: (context, child) {
+          //       return PylonsApp();
+          //     }),
+          ),
     );
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 }
