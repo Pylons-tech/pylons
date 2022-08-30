@@ -21,14 +21,17 @@ class GridRemoteViewsFactory(
     intent: Intent
 ) : RemoteViewsService.RemoteViewsFactory {
 
-    private lateinit var widgetItems: List<WidgetItem>
+    private lateinit var collectionsApi: CollectionsApi = CollectionsApi();
+
+    private lateinit var widgetItems: List<NFT>
 
     override fun onCreate() {
         // In onCreate() you setup any connections / cursors to your data
         // source. Heavy lifting, for example downloading or creating content
         // etc, should be deferred to onDataSetChanged() or getViewAt(). Taking
         // more than 20 seconds in this call will result in an ANR.
-        widgetItems = List(REMOTE_VIEW_COUNT) { index -> WidgetItem("$index!") }
+        widgetItems = collectionsApi.getCollections();
+        //widgetItems = List(REMOTE_VIEW_COUNT) { index -> WidgetItem("$index!") }
         ...
     }
 
