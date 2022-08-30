@@ -116,7 +116,7 @@ var builtinGadgets = []Gadget{
 
 var reservedNames = []string{"include"}
 
-var gadgetCache map[string]*[]Gadget
+var gadgetCache map[string]*[]Gadget = map[string]*[]Gadget{}
 
 // one iteration
 func loadGadgetsForPath(p string, gadgets *[]Gadget) (string, string, *[]Gadget, error) {
