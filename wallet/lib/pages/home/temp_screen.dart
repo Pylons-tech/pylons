@@ -76,7 +76,90 @@ class TempScreen extends StatelessWidget {
   // And for each voucher you generate it's {event_name: event, ticket_level:, voucher_type_count}, modify: incrmement voucher count, output: voucher_type}
   // Does that make sense?
 
-  Future<bool> createMyRecipe() async {
+  Future<bool> createMyRecipeForSubEvents() async {
+    final loading = Loading()..showLoading();
+
+    await createMyCookbook();
+    final recipeId = await autoGenerateEaselId();
+    const ticketName = "Fare-well Party";
+    const ticketDesc = "This party is getting hot.";
+    const allowedGuests = 10;
+
+    final recipe = Recipe(
+        cookbookId: cookbookId,
+        id: recipeId,
+        nodeVersion: Int64(1),
+        name: ticketName,
+        description: ticketDesc,
+        version: "v0.2.0",
+        coinInputs: [CoinInput()],
+        itemInputs: [],
+        costPerBlock: Coin(denom: kUpylon, amount: '0'),
+        entries: EntriesList(coinOutputs: [], itemOutputs: [
+          ItemOutput(
+            id: "Regular",
+            doubles: [],
+            longs: [],
+            strings: [
+              StringParam(key: "name", value: ticketName),
+              StringParam(key: "ticket_level", value: "Regular"),
+            ],
+            mutableStrings: [],
+            transferFee: [Coin(denom: kUpylon, amount: '1')],
+            tradePercentage: '0',
+            tradeable: true,
+            amountMinted: Int64(),
+            quantity: Int64(allowedGuests),
+          ),
+          ItemOutput(
+            id: "VIP",
+            doubles: [],
+            longs: [],
+            strings: [
+              StringParam(key: "name", value: ticketName),
+              StringParam(key: "ticket_level", value: "VIP"),
+            ],
+            mutableStrings: [],
+            transferFee: [Coin(denom: kUpylon, amount: '1')],
+            tradePercentage: '0',
+            tradeable: true,
+            amountMinted: Int64(),
+            quantity: Int64(allowedGuests),
+          ),
+        ], itemModifyOutputs: []),
+        outputs: [
+          WeightedOutputs(entryIds: ["Regular", "VIP"], weight: Int64(1))
+        ],
+        blockInterval: Int64(),
+        enabled: true,
+        extraInfo: kExtraInfo);
+
+    log("json: ${recipe.toProto3Json()}");
+
+    final walletStore = GetIt.I.get<WalletsStore>();
+
+    final recipeMap = recipe.toProto3Json()! as Map;
+
+    recipeMap.remove('nodeVersion');
+
+    final response = await walletStore.createRecipe(recipeMap);
+
+    if (!response.success) {
+      loading.dismiss();
+      log("failed: ${response.error}");
+      return false;
+    }
+
+    final jsonExecuteRecipe = {"creator": "newCreator", "cookbookId": cookbookId, "recipeId": recipeId, "coinInputsIndex": 0};
+
+    log("jsonExecuteRecipe: $jsonExecuteRecipe");
+
+    loading.dismiss();
+
+    return true;
+  }
+
+  Future<bool> createMyRecipeForTicket() async {
     final loading = Loading()..showLoading();
 
     await createMyCookbook();
@@ -198,7 +281,7 @@ class TempScreen extends StatelessWidget {
           children: [
             ElevatedButton(
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(kDarkRed)),
-              onPressed: () => createMyRecipe(),
+              onPressed: () => createMyRecipeForTicket(),
               child: const Text(" Create Recipe Please! "),
             ),
             ElevatedButton(
