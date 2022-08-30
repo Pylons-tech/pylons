@@ -23,7 +23,7 @@ class GridRemoteViewsFactory(
 
     private lateinit var collectionsApi: CollectionsApi = CollectionsApi();
 
-    private lateinit var widgetItems: List<NFT>
+    private lateinit var widgetItems: List<NFTMessage>
 
     override fun onCreate() {
         // In onCreate() you setup any connections / cursors to your data
