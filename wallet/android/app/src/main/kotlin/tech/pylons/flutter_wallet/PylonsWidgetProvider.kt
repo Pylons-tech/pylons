@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.widget.RemoteViews
-import es.antonborri.home_widget.HomeWidgetBackgroundIntent
-import es.antonborri.home_widget.HomeWidgetLaunchIntent
-import es.antonborri.home_widget.HomeWidgetProvider
+//import es.antonborri.home_widget.HomeWidgetBackgroundIntent
+//import es.antonborri.home_widget.HomeWidgetLaunchIntent
+//import es.antonborri.home_widget.HomeWidgetProvider
 
 class PylonsWidgetProvider : AppWidgetProvider() {
 
@@ -25,10 +25,10 @@ class PylonsWidgetProvider : AppWidgetProvider() {
             }
             val views = RemoteViews(context.packageName, R.layout.pylons_widget_layout).apply {
             }
-                val pendingIntent = HomeWidgetLaunchIntent.getActivity(
-                    context,
-                    MainActivity::class.java)
-                setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+//                val pendingIntent = HomeWidgetLaunchIntent.getActivity(
+//                    context,
+//                    MainActivity::class.java)
+//                setOnClickPendingIntent(R.id.widget_container, pendingIntent)
 
                 setRemoteAdapter(R.id.grid_view, intent)
 
