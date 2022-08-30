@@ -116,6 +116,8 @@ var builtinGadgets = []Gadget{
 
 var reservedNames = []string{"include"}
 
+var gadgetCache map[string]*[]Gadget
+
 // one iteration
 func loadGadgetsForPath(p string, gadgets *[]Gadget) (string, string, *[]Gadget, error) {
 	fpath := path.Join(p, gadgetsFilename)
@@ -130,9 +132,16 @@ func loadGadgetsForPath(p string, gadgets *[]Gadget) (string, string, *[]Gadget,
 		if err != nil {
 			panic(err)
 		}
-		parse, err := parseGadgets(fpath, string(bytes))
-		if err != nil {
-			return "", "", nil, err
+		var parse []Gadget
+		// use the cache to avoid needlessly re-parsing gadgets we've already parsed once
+		if val, ok := gadgetCache[p]; ok {
+			parse = *val
+		} else {
+			parse, err = parseGadgets(fpath, string(bytes))
+			if err != nil {
+				return "", "", nil, err
+			}
+			gadgetCache[p] = &parse
 		}
 		*gadgets = append(parse, *gadgets...)
 	}

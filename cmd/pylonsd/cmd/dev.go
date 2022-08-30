@@ -30,7 +30,6 @@ const (
 )
 
 func forFile(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.Recipe)) {
-	// this is slow, we should avoid reloading gadgets w/ every file when we can do some rewriting
 	gadgets, err := LoadGadgetsForPath(path)
 	if err != nil {
 		panic(err)
