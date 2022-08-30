@@ -1013,7 +1013,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
       iosParameters: IOSParameters(bundleId: "xyz.pylons.wallet", fallbackUrl: Uri.parse("https://wallet.pylons.tech?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
     );
     try {
-      final link = await dynamicLinksGenerator.buildShortLink(dynamicLinkParams);
+      final link = await dynamicLinksGenerator.buildShortLink(
+        dynamicLinkParams,
+        shortLinkType: ShortDynamicLinkType.unguessable,
+      );
       return link.shortUrl.toString();
     } catch (e) {
       return '';
