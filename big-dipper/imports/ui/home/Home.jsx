@@ -55,13 +55,13 @@ export default class Home extends Component {
     } else {
       return (
         <div id="home">
-          <Helmet>
+          {/* <Helmet>
             <title>Big Dipper | Built on Pylons</title>
             <meta
               name="description"
               content="Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus."
             />
-          </Helmet>
+          </Helmet> */}
           <ChainInfo />
           <Consensus />
           <ChainStatus />
