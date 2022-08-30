@@ -366,7 +366,7 @@ const String kMessageKey = "Message";
 const String kSuccessKey = "Success";
 
 //ipc engine keys
-const String kActionKey = "action";
+
 const String kNftPurchaseKey = "purchase_nft";
 const String kNftTradeKey = "purchase_trade";
 const String kNftViewKey = "nft_view";
