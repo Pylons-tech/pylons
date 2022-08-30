@@ -1,0 +1,52 @@
+name: "Flutter"
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  analyze:
+    name: Wallet
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable" # or: 'beta', 'dev' or 'master'
+      - run: |
+          flutter --version
+          cd wallet
+          mkdir env
+          flutter pub get
+          flutter analyze
+
+
+  easel:
+    name: easel
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable" # or: 'beta', 'dev' or 'master'
+      - run: |
+          flutter --version
+          cd easel
+          touch lib/env.dart
+          echo "const apiKey = \"${{ secrets.EASEL_TOKEN }}\"; " >> lib/env.dart
+          ./android/app/json_manipulator.sh RANDOM_STRING
+          flutter pub get
+          flutter analyze
+          flutter build appbundle
+
+

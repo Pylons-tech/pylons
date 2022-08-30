@@ -195,9 +195,10 @@ class WalletsStoreDummyInventory extends WalletsStore {
 
   /// Wraps the current WalletsStoreImp instance with a WalletsStoreDummyInventory instance
   static Future<void> dummyInventory() async {
-    if (!kDebugMode)
+    if (!kDebugMode) {
       throw Exception(
           'WalletStoreDummyInventory.dummyInventory() was called in a production build! This should never happen!');
+    }
     final WalletsStore walletsStore = GetIt.I.get();
     final prf = await walletsStore.getProfile();
     final addr = await walletsStore
@@ -449,9 +450,9 @@ class WalletsStoreDummyInventory extends WalletsStore {
 
   @override
   Future<Either<Failure, AccountPublicInfo>> importPylonsAccount(
-      {required String mnemonic, required String username}) {
+      {required String mnemonic}) {
     return _baseInstance.importPylonsAccount(
-        mnemonic: mnemonic, username: username);
+        mnemonic: mnemonic);
   }
 
   @override

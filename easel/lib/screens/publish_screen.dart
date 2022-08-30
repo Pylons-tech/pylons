@@ -424,6 +424,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               bgColor: EaselAppTheme.kLightRed,
                               textColor: EaselAppTheme.kWhite,
                               onPressed: () async {
+
+
+                                final navigator = Navigator.of(context);
                                 if (viewModel.nft.assetType == kAudioText) {
                                   viewModel.disposeAudioController();
                                 }
@@ -432,7 +435,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 if (!isRecipeCreated) {
                                   return;
                                 }
-                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                navigator.pushNamedAndRemoveUntil(
                                     RouteUtil.kRouteCreatorHub,
                                     (route) => false);
                               },

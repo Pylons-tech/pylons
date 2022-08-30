@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+// ignore_for_file: must_be_immutable
+
 enum ClipperType { topLeftBottomRight, bottomLeftTopRight }
 
 class ClippedButton extends StatelessWidget {

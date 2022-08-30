@@ -1,0 +1,14 @@
+{
+	"applinks": {
+		"details": [{
+			"appIDs": ["QV67PMQ8H3.xyz.pylons.wallet"],
+			"components": [{
+				"/": "*",
+				"comment": ""
+			}]
+		}]
+	},
+	"webcredentials": {
+		"apps": ["QV67PMQ8H3.xyz.pylons.wallet"]
+	}
+}

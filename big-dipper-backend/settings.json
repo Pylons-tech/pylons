@@ -1,0 +1,125 @@
+{
+  "public": {
+    "chainName": "Pylons",
+    "chainId": "pylons-testnet-3",
+    "gtm": "{Add your Google Tag Manager ID here}",
+    "slashingWindow": 10000,
+    "uptimeWindow": 250,
+    "initialPageSize": 30,
+    "secp256k1": false,
+    "bech32PrefixAccAddr": "pylo",
+    "bech32PrefixAccPub": "pylopub",
+    "bech32PrefixValAddr": "pylovaloper",
+    "bech32PrefixValPub": "pylovaloperpub",
+    "bech32PrefixConsAddr": "pylovalcons",
+    "bech32PrefixConsPub": "pylovalconspub",
+    "bondDenom": "uatom",
+    "powerReduction": 1000000,
+    "dynamicLink": {
+      "apn": "tech.pylons.wallet",
+      "ibi": "xyz.pylons.wallet",
+      "isi": "1598732789",
+      "oflPlay": "https://play.google.com/store/apps/details?id=tech.pylons.wallet&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1",
+      "oflIOS": "https://apps.apple.com/us/app/pylons/id1598732789"
+    },
+    "coins": [
+      {
+        "denom": "uatom",
+        "displayName": "ATOM",
+        "fraction": 1000000
+      },
+      {
+        "denom": "ubedrock",
+        "displayName": "UBEDROCK",
+        "fraction": 1000000
+      },
+      {
+        "denom": "umuon",
+        "displayName": "MUON",
+        "fraction": 1000000
+      },
+      {
+        "denom": "ustripeusd",
+        "displayName": "STRIPEUSD",
+        "fraction": 1000000
+      },
+      {
+        "denom": "ujunox",
+        "displayName": "JUNO",
+        "fraction": 1000000
+      },
+      {
+        "denom": "upylon",
+        "displayName": "PYLON",
+        "fraction": 1000000
+      },
+      {
+        "denom": "uusd",
+        "displayName": "UST",
+        "fraction": 1000000
+      },
+      {
+        "denom": "urun",
+        "displayName": "RUN",
+        "fraction": 1000000
+      },
+      {
+        "denom": "ujunox",
+        "displayName": "JUNO",
+        "fraction": 1000000
+      },
+      {
+        "denom": "eeur",
+        "displayName": "EEUR",
+        "fraction": 1000000
+      },
+      {
+        "denom": "weth-wei",
+        "displayName": "WETH",
+        "fraction": 1000000
+      }
+    ],
+    "ledger": {
+      "coinType": 118,
+      "appName": "Cosmos",
+      "appVersion": "2.16.0",
+      "gasPrice": 0.02
+    },
+    "modules": {
+      "bank": true,
+      "supply": true,
+      "minting": false,
+      "gov": true,
+      "distribution": false
+    },
+    "banners": false,
+    "baseURL": "https://wallet.pylons.tech",
+    "cosmos_sdk": 43
+  },
+  "remote": {
+    "rpc": "https://rpc.pylons.tech",
+    "api": "https://lcd.pylons.tech"
+  },
+  "debug": {
+    "startTimer": true
+  },
+  "params": {
+    "startHeight": 0,
+    "defaultBlockTime": 10000,
+    "validatorUpdateWindow": 300,
+    "blockInterval": 10000,
+    "transactionsInterval": 1000,
+    "keybaseFetchingInterval": 1000000,
+    "consensusInterval": 1000,
+    "statusInterval": 7500,
+    "signingInfoInterval": 1800000,
+    "proposalInterval": 5000,
+    "recipeInterval": 5000,
+    "nftInterval": 5000,
+    "cookbookInterval": 5000,
+    "missedBlocksInterval": 60000,
+    "delegationInterval": 900000,
+    "sendNotifications": 0,
+    "collectNotificationsInterval": 10000
+  }
+}
