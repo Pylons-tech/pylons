@@ -1006,10 +1006,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
   Future<String> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) async {
     final dynamicLinkParams = DynamicLinkParameters(
       socialMetaTagParameters: SocialMetaTagParameters(title: nft.name, description: nft.description, imageUrl: getUri(nft)),
-      link: Uri.parse("https://wallet.pylons.tech?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address"),
+      link: Uri.parse("https://pylons-bigdipper.rnssol.com?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address"),
       uriPrefix: kDeepLink,
       androidParameters:
-          AndroidParameters(packageName: "tech.pylons.wallet", fallbackUrl: Uri.parse("https://wallet.pylons.tech?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
+          AndroidParameters(packageName: "tech.pylons.wallet", fallbackUrl: Uri.parse("https://pylons-bigdipper.rnssol.com?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
       iosParameters: IOSParameters(bundleId: "xyz.pylons.wallet", fallbackUrl: Uri.parse("https://wallet.pylons.tech?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
     );
     try {
