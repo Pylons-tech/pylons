@@ -1,12 +1,13 @@
 import 'package:pigeon/pigeon.dart';
 
-class NFT {
+class NFTMessage {
   final String imageUrl;
 
-  NFT(this.imageUrl);
+  NFTMessage(this.imageUrl);
 }
 
 @FlutterApi()
 abstract class CollectionsApi {
-  List<NFT> getCollection();
+  @async
+  List<NFTMessage> getCollection();
 }
