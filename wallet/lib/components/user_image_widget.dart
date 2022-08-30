@@ -216,7 +216,7 @@ class UserBannerPickerWidget extends UserBannerWidget {
     final viewModel = context.watch<HomeProvider>();
     return StatefulBuilder(builder:
         (BuildContext context, void Function(void Function()) setState) {
-      return GestureDetector(
+      return InkResponse(
         onTap: () async {
           final file = await pickImageFromGallery(
               UserBannerWidget.resolutionLimitX.toDouble(),
@@ -250,11 +250,10 @@ class UserBannerPickerWidget extends UserBannerWidget {
 
           setState(() {});
         },
-        behavior: HitTestBehavior.translucent,
         child: SvgPicture.asset(
           SVGUtil.BANNER_IMAGE_EDIT,
-          height: isTablet ? 20.h : 15.h,
-          width: isTablet ? 20.w : 15.w,
+          height: isTablet ? 20.h : 22.h,
+          width: isTablet ? 20.w : 22.w,
           fit: BoxFit.fill,
           color: viewModel.isBannerDark() ? Colors.white : Colors.black,
         ),
