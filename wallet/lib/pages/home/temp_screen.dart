@@ -5,9 +5,7 @@ import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/loading.dart';
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/cosmos/base/v1beta1/coin.pb.dart';
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/cookbook.pb.dart';
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,10 +32,8 @@ class TempScreen extends StatelessWidget {
     return DateFormat('yyyy_MM_dd_HHmmss_SSS').format(DateTime.now());
   }
 
-  String cookbookId = "";
-
-  Future<bool> createMyCookbook() async {
-    cookbookId = await autoGenerateCookbookId();
+  Future<String> createMyCookbook() async {
+    final cookbookId = await autoGenerateCookbookId();
     const cookbookName = "Easel Cookbook";
     const cookbookDesc = "Cookbook for Easel NFT";
     const kVersionCookbook = "v0.0.1";
@@ -62,10 +58,10 @@ class TempScreen extends StatelessWidget {
 
     if (!resp.success) {
       log("Error while creating cookbook: ${resp.error}");
-      return false;
+      return '';
     }
 
-    return true;
+    return cookbookId;
   }
 
   // The first set of recipes is creating the ticket itself. There needs to be one for each ticket level
@@ -76,14 +72,14 @@ class TempScreen extends StatelessWidget {
   // And for each voucher you generate it's {event_name: event, ticket_level:, voucher_type_count}, modify: incrmement voucher count, output: voucher_type}
   // Does that make sense?
 
-  Future<bool> createMyRecipeForSubEvents() async {
+  Future<bool> createMyRecipeForSubEvents({required String cookbookId, required Item inputItem}) async {
     final loading = Loading()..showLoading();
 
-    await createMyCookbook();
+    final stringsInputs = inputItem.strings.map((e) => StringInputParam(key: e.key, value: e.value));
+    log("stringsInputs: $stringsInputs");
     final recipeId = await autoGenerateEaselId();
     const ticketName = "Fare-well Party";
     const ticketDesc = "This party is getting hot.";
-    const allowedGuests = 10;
 
     final recipe = Recipe(
         cookbookId: cookbookId,
@@ -93,43 +89,17 @@ class TempScreen extends StatelessWidget {
         description: ticketDesc,
         version: "v0.2.0",
         coinInputs: [CoinInput()],
-        itemInputs: [],
-        costPerBlock: Coin(denom: kUpylon, amount: '0'),
-        entries: EntriesList(coinOutputs: [], itemOutputs: [
-          ItemOutput(
+        itemInputs: [
+          ItemInput(
             id: "Regular",
             doubles: [],
             longs: [],
-            strings: [
-              StringParam(key: "name", value: ticketName),
-              StringParam(key: "ticket_level", value: "Regular"),
-            ],
-            mutableStrings: [],
-            transferFee: [Coin(denom: kUpylon, amount: '1')],
-            tradePercentage: '0',
-            tradeable: true,
-            amountMinted: Int64(),
-            quantity: Int64(allowedGuests),
+            strings: stringsInputs,
           ),
-          ItemOutput(
-            id: "VIP",
-            doubles: [],
-            longs: [],
-            strings: [
-              StringParam(key: "name", value: ticketName),
-              StringParam(key: "ticket_level", value: "VIP"),
-            ],
-            mutableStrings: [],
-            transferFee: [Coin(denom: kUpylon, amount: '1')],
-            tradePercentage: '0',
-            tradeable: true,
-            amountMinted: Int64(),
-            quantity: Int64(allowedGuests),
-          ),
-        ], itemModifyOutputs: []),
-        outputs: [
-          WeightedOutputs(entryIds: ["Regular", "VIP"], weight: Int64(1))
         ],
+        costPerBlock: Coin(denom: kUpylon, amount: '0'),
+        entries: EntriesList(coinOutputs: [], itemOutputs: [], itemModifyOutputs: []),
+        outputs: [],
         blockInterval: Int64(),
         enabled: true,
         extraInfo: kExtraInfo);
@@ -162,7 +132,7 @@ class TempScreen extends StatelessWidget {
   Future<bool> createMyRecipeForTicket() async {
     final loading = Loading()..showLoading();
 
-    await createMyCookbook();
+    final cookbookId = await createMyCookbook();
     final recipeId = await autoGenerateEaselId();
     const ticketName = "Fare-well Party";
     const ticketDesc = "This party is getting hot.";
@@ -217,12 +187,8 @@ class TempScreen extends StatelessWidget {
         enabled: true,
         extraInfo: kExtraInfo);
 
-    log("json: ${recipe.toProto3Json()}");
-
     final walletStore = GetIt.I.get<WalletsStore>();
-
     final recipeMap = recipe.toProto3Json()! as Map;
-
     recipeMap.remove('nodeVersion');
 
     final response = await walletStore.createRecipe(recipeMap);
@@ -246,10 +212,14 @@ class TempScreen extends StatelessWidget {
     final loading = Loading()..showLoading();
     final walletStore = GetIt.I.get<WalletsStore>();
 
+    const cookBookId = "Easel_CookBook_auto_cookbook_2022_08_29_121325_190";
+    const recipeId = "Easel_Recipe_auto_recipe_2022_08_29_121335_107";
+    const creator = "newCreator";
+
     final jsonExecuteRecipe = {
-      "creator": "newCreator",
-      "cookbookId": "Easel_CookBook_auto_cookbook_2022_08_29_121325_190",
-      "recipeId": "Easel_Recipe_auto_recipe_2022_08_29_121335_107",
+      "creator": creator,
+      "cookbookId": cookBookId,
+      "recipeId": recipeId,
       "coinInputsIndex": "0",
     };
 
@@ -269,7 +239,7 @@ class TempScreen extends StatelessWidget {
     log("items Length : ${items.length}");
     log("items Strings : ${items.first.strings}");
     loading.dismiss();
-    return true;
+    return createMyRecipeForSubEvents(cookbookId: cookBookId, inputItem: items.first);
   }
 
   @override
