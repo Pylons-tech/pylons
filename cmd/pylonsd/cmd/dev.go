@@ -16,6 +16,7 @@ import (
 )
 
 var Out io.Writer = os.Stdout // modified during testing
+var Verbose = false
 
 // group 1: (whole raw string tokens encapsulated ```like this```)
 // group 2: (tokens not containing whitespace, separated by whitespace)
@@ -115,6 +116,9 @@ func loadCookbookFromPath(path string, gadgets *[]Gadget) (types.Cookbook, strin
 	var cb types.Cookbook
 
 	json := loadModulesInline(bytes, path, info, gadgets)
+	if Verbose {
+		println(json)
+	}
 	err := jsonpb.UnmarshalString(json, &cb)
 
 	return cb, json, err
@@ -126,6 +130,9 @@ func loadRecipeFromPath(path string, gadgets *[]Gadget) (types.Recipe, string, e
 	var rcp types.Recipe
 
 	json := loadModulesInline(bytes, path, info, gadgets)
+	if Verbose {
+		println(json)
+	}
 	err := jsonpb.UnmarshalString(json, &rcp)
 	return rcp, string(bytes), err
 }
