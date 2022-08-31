@@ -311,7 +311,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               child: Container(
                                 width: 200.w,
                                 height: 60.h,
-                                color: kDarkRed.withOpacity(0.5),
+                                color: kDarkRed.withOpacity(0.8),
                                 child: Row(
                                   children: [
                                     Container(
@@ -726,7 +726,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   }
 
   void showTransactionCompleteDialog(String txId) {
-    final formatter = DateFormat('MMM dd yyyy HH:MM');
+    final formatter = DateFormat('MMM dd yyyy HH:mm');
     final viewModel = context.read<PurchaseItemViewModel>();
 
     var price = double.parse(viewModel.nft.price);

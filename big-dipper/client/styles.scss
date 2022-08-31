@@ -9,7 +9,20 @@ body {
 img {
   pointer-events: none;
 }
+.desktop-view {
+  margin-top: 2rem;
+}
 
+audio:hover,
+audio:focus,
+audio:active {
+  -webkit-box-shadow: 15px 15px 20px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 15px 15px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 15px 15px 20px rgba(0, 0, 0, 0.4);
+  -webkit-transform: scale(1.05);
+  -moz-transform: scale(1.05);
+  transform: scale(1.05);
+}
 .no-select {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -1340,7 +1353,7 @@ div#voting-power-dist .card {
       flex-wrap: wrap;
       .more-details {
         overflow-y: auto;
-        max-height: 45vh;
+        max-height: 40vh;
       }
       .left-side {
         width: 100% !important;
@@ -1365,6 +1378,10 @@ div#voting-power-dist .card {
     height: 100%;
     .container {
       max-width: 100%;
+    }
+    video {
+      width: 100%;
+      height: 75%;
     }
     .row > * {
       padding-left: 0 !important;
@@ -1622,6 +1639,6 @@ div#voting-power-dist .card {
 model-viewer {
   align-items: center;
   display: flex;
-  height: 200px !important;
+  height: 100% !important;
   width: 100% !important;
 }

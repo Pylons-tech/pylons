@@ -383,6 +383,11 @@ abstract class Repository {
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
   Future<Either<Failure, void>> updateLikeStatus({required String recipeId, required String cookBookID, required String walletAddress});
 
+  /// This method is used to save user's feedback into Firebase
+  /// Input: [subject],[feedback] and [walletAddress] of the given Account
+  /// Output: [bool] This will return true if its success otherwise false
+  Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback});
+
   ///This method is used to send apple in app purchase coins
   /// Input: [AppleInAppPurchaseModel] will be given
   /// Output: return [String] if succeed else this will give [Failure]
@@ -1814,6 +1819,21 @@ class RepositoryImp implements Repository {
       return Right(await remoteDataStore.createDynamicLinkForTradeNftShare(address: address, tradeId: tradeId));
     } on Exception catch (_) {
       return Left(FirebaseDynamicLinkFailure("dynamic_link_failure".tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) async {
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure("no_internet".tr()));
+    }
+    try {
+      return Right(await remoteDataStore.saveUserFeedback(walletAddress: walletAddress, subject: subject, feedback: feedback));
+    } on Failure catch (e) {
+      return Left(e);
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
     }
   }
 }

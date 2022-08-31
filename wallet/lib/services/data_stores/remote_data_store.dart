@@ -25,8 +25,11 @@ import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
+import 'package:pylons_wallet/services/third_party_services/firestore_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/store_payment_service.dart';
 import 'package:pylons_wallet/stores/models/transaction_response.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
@@ -263,6 +266,11 @@ abstract class RemoteDataStore {
   /// Output: if successful will give [TransactionResponse] else will throw error
 
   Future<TransactionResponse> createAccount({required AccountPublicInfo publicInfo, required WalletCreationModel walletCreationModel, required String appCheckToken, required String referralToken});
+
+  /// This method will save users feedback to firebase based on its wallet address
+  /// Input : [walletAddress], [subject] and [feedback] the address against which the feedbacks needs to be stored
+  /// Output : [bool] It will return true if the saving feedback is successful otherwise false
+  Future<bool> saveUserFeedback({required String walletAddress, required String subject, required String feedback});
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -271,8 +279,15 @@ class RemoteDataStoreImp implements RemoteDataStore {
   final StorePaymentService storePaymentService;
   final FirebaseAppCheck firebaseAppCheck;
   final FirebaseDynamicLinks dynamicLinksGenerator;
+  final FirestoreHelper firebaseHelper;
 
-  RemoteDataStoreImp({required this.dynamicLinksGenerator, required this.httpClient, required this.crashlyticsHelper, required this.storePaymentService, required this.firebaseAppCheck});
+  RemoteDataStoreImp(
+      {required this.dynamicLinksGenerator,
+      required this.httpClient,
+      required this.firebaseHelper,
+      required this.crashlyticsHelper,
+      required this.storePaymentService,
+      required this.firebaseAppCheck});
 
   @override
   Future<void> updateLikeStatus({required String recipeId, required String cookBookID, required String walletAddress}) async {
@@ -1085,6 +1100,11 @@ class RemoteDataStoreImp implements RemoteDataStore {
     } catch (e) {
       return '';
     }
+  }
+
+  @override
+  Future<bool> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) {
+    return firebaseHelper.saveUserFeedback(walletAddress: walletAddress, subject: subject, feedback: feedback);
   }
 }
 
