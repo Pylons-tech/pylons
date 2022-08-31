@@ -428,6 +428,7 @@ export default class EaselBuy extends Component {
                         ) : (
                           <></>
                         )}
+                        {/*For later Use*/}
                         {/* <div className="views">
                           <img
                             alt="views"
@@ -671,6 +672,7 @@ export default class EaselBuy extends Component {
                           </ul>
                         </div>
                         <div className="right-side">
+                          {/*For later Use*/}
                           {/* <div className="likes">
                             <img
                               alt="expand"
@@ -772,6 +774,7 @@ export default class EaselBuy extends Component {
                         ) : (
                           <></>
                         )}
+                        {/*For later Use*/}
                         {/* <div className="views">
                           {" "}
                           <img
@@ -1018,6 +1021,7 @@ export default class EaselBuy extends Component {
                               </ul>
                             </div>
                             <div className="right-side">
+                              {/*For later Use*/}
                               {/* <div className="likes">
                                 <img
                                   alt="expand"
