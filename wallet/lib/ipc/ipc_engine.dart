@@ -23,6 +23,7 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
+import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:transaction_signing_gateway/model/account_public_info.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -133,6 +134,7 @@ class IPCEngine {
   }
 
   Future<void> _handleEaselLink(String link) async {
+    navigatorKey.currentState!.popUntil(ModalRoute.withName(RouteUtil.ROUTE_HOME));
     final queryParameters = Uri.parse(link).queryParameters;
 
     final recipeId = (queryParameters.containsKey(kRecipeIdKey)) ? queryParameters[kRecipeIdKey] ?? '' : "";
@@ -369,7 +371,7 @@ class IPCEngine {
 
   bool _isNFTTradeUniLink(String link) {
     final queryParam = Uri.parse(link).queryParameters;
-    return  queryParam.containsKey(kTradeIdKey);
+    return queryParam.containsKey(kTradeIdKey);
   }
 
   Future<String> checkAndUnWrapFirebaseLink(String link) async {
