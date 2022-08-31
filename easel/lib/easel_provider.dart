@@ -100,11 +100,11 @@ class EaselProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool? _imageCheckBox = false;
+  bool _imageCheckBox = false;
 
-  bool? get imageCheckBox => _imageCheckBox;
+  bool get imageCheckBox => _imageCheckBox;
 
-  void setImageCheckBox(bool? value) {
+  void setImageCheckBox(bool value) {
     _imageCheckBox = value;
     notifyListeners();
   }

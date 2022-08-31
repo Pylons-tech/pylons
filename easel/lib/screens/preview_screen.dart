@@ -1,5 +1,6 @@
-
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easel_flutter/easel_provider.dart';
+import 'package:easel_flutter/main.dart';
 import 'package:easel_flutter/models/nft_format.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/utils/constants.dart';
@@ -32,17 +33,33 @@ class _PreviewScreenState extends State<PreviewScreen> {
   var repository = GetIt.I.get<Repository>();
 
   Widget buildCheckBox(EaselProvider easelProvider) {
-    return CheckboxListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 20.w),
-      value: easelProvider.imageCheckBox,
-      title: Text('maintain_aspect_ratio'.tr(), style: TextStyle(color: EaselAppTheme.kWhite, fontSize: 12.sp)),
-      onChanged: (value) {
-        easelProvider.setImageCheckBox(value);
-      },
-      selected: easelProvider.imageCheckBox!,
-      controlAffinity: ListTileControlAffinity.trailing,
-      activeColor: EaselAppTheme.kLightPurple,
-    );
+    switch (easelProvider.nftFormat.format) {
+      case NFTTypes.image:
+        return SizedBox(
+          width: 0.6.sw,
+          child: Theme(
+            data: Theme.of(context).copyWith(unselectedWidgetColor: Colors.white),
+            child: CheckboxListTile(
+              dense: true,
+              contentPadding: EdgeInsets.symmetric(horizontal: isTablet ? 50.w : 40.w),
+              value: easelProvider.imageCheckBox,
+              title: AutoSizeText(
+                'fit_to_screen'.tr(),
+                style: const TextStyle(color: EaselAppTheme.kWhite),
+              ),
+              onChanged: (value) => easelProvider.setImageCheckBox(value!),
+              selected: easelProvider.imageCheckBox,
+              controlAffinity: ListTileControlAffinity.leading,
+              activeColor: EaselAppTheme.kLightPurple,
+            ),
+          ),
+        );
+      case NFTTypes.audio:
+      case NFTTypes.video:
+      case NFTTypes.threeD:
+      case NFTTypes.pdf:
+        return const SizedBox();
+    }
   }
 
   @override
@@ -85,7 +102,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                             color: EaselAppTheme.kWhite,
                           ),
                         )),
-                    SizedBox(width: 0.6.sw, child: buildCheckBox(provider)),
+                    buildCheckBox(provider),
                   ],
                 )
               ]),

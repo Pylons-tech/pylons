@@ -103,5 +103,5 @@
   "success": "Успех",
   "in_progress": "В ходе выполнения",
   "failed": "Не удалось",
-  "maintain_aspect_ratio" : "Сохранять пропорции"
+  "fit_to_screen" : "По размеру экрана"
 }

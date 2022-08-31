@@ -103,5 +103,5 @@
   "success": "Success",
   "in_progress": "In Progress",
   "failed": "Failed",
-  "maintain_aspect_ratio": "Maintain Aspect Ratio"
+  "fit_to_screen": "Fit to Screen"
 }

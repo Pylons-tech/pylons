@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/utils/constants.dart';
+import 'package:easel_flutter/utils/dependency_injection/dependency_injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -10,6 +12,8 @@ class ImageWidget extends StatelessWidget {
   final String? filePath;
 
   const ImageWidget({Key? key, this.file, this.filePath}) : super(key: key);
+
+  EaselProvider get easelProvider => sl();
 
   Widget buildImage() {
     if (file == null) {
@@ -35,7 +39,7 @@ class ImageWidget extends StatelessWidget {
       file!.readAsBytesSync(),
       width: 1.sw,
       height: 1.sh,
-      fit: BoxFit.fitWidth,
+      fit: easelProvider.imageCheckBox ? BoxFit.fitHeight : BoxFit.fitWidth,
     );
   }
 
