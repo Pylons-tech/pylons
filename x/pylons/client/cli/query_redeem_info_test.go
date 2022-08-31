@@ -15,6 +15,36 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
+func TestListRedeemInfo(t *testing.T) {
+	net, redeemInfos := util.NetworkWithRedeemInfoObjects(t, 2)
+	ctx := net.Validators[0].ClientCtx
+	common := []string{
+		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
+	}
+	for _, tc := range []struct {
+		desc string
+		args []string
+		err  error
+		obj  []types.RedeemInfo
+	}{
+		{
+			desc: "Valid",
+			args: common,
+			obj:  redeemInfos,
+		},
+	} {
+		t.Run(tc.desc, func(t *testing.T) {
+
+			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdListRedeemInfo(), tc.args)
+			require.NoError(t, err)
+			var resp types.QueryAllRedeemInfoResponse
+			require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
+			require.NotNil(t, resp.RedeemInfo)
+			require.Equal(t, tc.obj, resp.RedeemInfo)
+		})
+	}
+}
+
 func TestShowRedeemInfo(t *testing.T) {
 	net, redeemInfos := util.NetworkWithRedeemInfoObjects(t, 2)
 	ctx := net.Validators[0].ClientCtx
