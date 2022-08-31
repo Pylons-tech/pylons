@@ -525,4 +525,9 @@ class MockRepository extends Repository {
     // TODO: implement createDynamicLinkForTradeNftShare
     throw UnimplementedError();
   }
+
+  @override
+  Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) {
+    throw UnimplementedError();
+  }
 }

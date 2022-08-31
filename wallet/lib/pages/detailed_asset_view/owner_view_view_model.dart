@@ -120,8 +120,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     toHashtagList();
   }
 
-  Future<void> nftDataInit({required String recipeId, required String cookBookId}) async {
-    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
+
   Future<void> getOwnershipHistory({required String recipeId, required String cookBookId}) async {
     if (nft.type != NftType.TYPE_RECIPE) {
       final nftOwnershipHistory = await repository.getNftOwnershipHistory(recipeID: recipeId, cookBookId: cookBookId);
