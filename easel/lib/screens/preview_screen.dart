@@ -85,7 +85,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                       final navigator = Navigator.of(context);
                       final result = await onUploadPressed();
                       if (result) {
-                        navigator.pop;
+                        navigator.pop();
                         widget.onMoveToNextScreen();
                       }
                     },

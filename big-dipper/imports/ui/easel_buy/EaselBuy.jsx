@@ -120,6 +120,7 @@ export default class EaselBuy extends Component {
         let price;
         let edition;
         let denom;
+        let src;
         const tradePercent = 100;
         const res = _.cloneDeep(response);
         this.setState({ loading: false });
@@ -161,7 +162,12 @@ export default class EaselBuy extends Component {
           (val) => val.key.toLowerCase() === "nft_format"
         )?.value;
         if (entries != null) {
-          if (nftType.toLowerCase() == "pdf") {
+          if (nftType.toLowerCase() == "audio") {
+            const mediaUrl = strings.find((val) => val.key === "Thumbnail_URL");
+            media = mediaUrl ? mediaUrl.value : "";
+            const srcUrl = strings.find((val) => val.key === "NFT_URL");
+            src = srcUrl ? srcUrl.value : "";
+          } else if (nftType.toLowerCase() == "pdf") {
             const mediaUrl = strings.find((val) => val.key === "Thumbnail_URL");
             media = mediaUrl ? mediaUrl.value : "";
           } else {
@@ -190,6 +196,7 @@ export default class EaselBuy extends Component {
             media,
             createdAt: selectedRecipe.created_at,
             id: selectedRecipe.id,
+            src,
           });
       })
       .catch((err) => {
@@ -251,6 +258,7 @@ export default class EaselBuy extends Component {
       nftHistory,
       price,
       denom,
+      src,
     } = this.state;
     const getCurrencySymbol = () => {
       switch (denom?.toLowerCase()) {
@@ -302,11 +310,13 @@ export default class EaselBuy extends Component {
         );
       else if (nftType.toLowerCase() === "audio")
         return (
-          <audio controls onClick={handleClick} onContextMenu={handleClick}>
-            <source src={media} type="video/mp4" />
-            <source src={media} type="video/ogg" />
-            Your browser does not support the audio element.
-          </audio>
+          <img
+            alt="views"
+            src={media}
+            className="mobin-img"
+            onClick={handleClick}
+            onContextMenu={handleClick}
+          />
         );
       else if (nftType.toLowerCase() === "pdf")
         return (
@@ -327,8 +337,6 @@ export default class EaselBuy extends Component {
             src={media}
             ar
             ar-modes="webxr scene-viewer quick-look"
-            environment-image="shared-assets/environments/moon_1k.hdr"
-            poster="shared-assets/models/NeilArmstrong.webp"
             seamless-poster
             shadow-intensity="1"
             camera-controls
@@ -342,6 +350,7 @@ export default class EaselBuy extends Component {
             width="75%"
             height="50%"
             controls
+            autoPlay
             controlsList="nodownload"
             onClick={handleClick}
             onContextMenu={handleClick}
@@ -394,6 +403,26 @@ export default class EaselBuy extends Component {
                             />
                           </p>
                         </div>
+                        {nftType?.toLowerCase() === "audio" ? (
+                          <>
+                            <audio
+                              controls
+                              onClick={handleClick}
+                              onContextMenu={handleClick}
+                              controlsList="nodownload"
+                              style={{
+                                marginTop: "25px",
+                                height: "50px",
+                              }}
+                            >
+                              <source src={src} type="audio/ogg" />
+                              <source src={src} type="audio/mpeg" />
+                              Your browser does not support the audio element.
+                            </audio>
+                          </>
+                        ) : (
+                          <></>
+                        )}
                         {/* <div className="views">
                           <img
                             alt="views"
@@ -710,7 +739,7 @@ export default class EaselBuy extends Component {
                         )}
                       </button>
                       <div className="title-publisher">
-                        <h4>{this.state.name}</h4>
+                        <h4 style={{ margin: "0px" }}>{this.state.name}</h4>
                         <div className="publisher">
                           <p>
                             Created by <span>{createdBy}</span>
@@ -721,6 +750,23 @@ export default class EaselBuy extends Component {
                             />
                           </p>
                         </div>
+                        {nftType?.toLowerCase() === "audio" ? (
+                          <audio
+                            controls
+                            onClick={handleClick}
+                            onContextMenu={handleClick}
+                            controlsList="nodownload"
+                            style={{
+                              height: "30px",
+                            }}
+                          >
+                            <source src={src} type="audio/ogg" />
+                            <source src={src} type="audio/mpeg" />
+                            Your browser does not support the audio element.
+                          </audio>
+                        ) : (
+                          <></>
+                        )}
                         {/* <div className="views">
                           {" "}
                           <img
