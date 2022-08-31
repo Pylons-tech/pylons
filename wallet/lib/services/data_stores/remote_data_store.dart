@@ -1006,11 +1006,11 @@ class RemoteDataStoreImp implements RemoteDataStore {
   Future<String> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) async {
     final dynamicLinkParams = DynamicLinkParameters(
       socialMetaTagParameters: SocialMetaTagParameters(title: nft.name, description: nft.description, imageUrl: getUri(nft)),
-      link: Uri.parse("https://pylons-bigdipper.rnssol.com?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address"),
+      link: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address"),
       uriPrefix: kDeepLink,
       androidParameters:
-          AndroidParameters(packageName: "tech.pylons.wallet", fallbackUrl: Uri.parse("https://pylons-bigdipper.rnssol.com?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
-      iosParameters: IOSParameters(bundleId: "xyz.pylons.wallet", fallbackUrl: Uri.parse("https://wallet.pylons.tech?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
+          AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
+      iosParameters: IOSParameters(bundleId: bundleId, fallbackUrl: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
     );
     try {
       final link = await dynamicLinksGenerator.buildShortLink(
@@ -1057,10 +1057,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
   @override
   Future<String> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId}) async {
     final dynamicLinkParams = DynamicLinkParameters(
-      link: Uri.parse("https://wallet.pylons.tech?item_id=$itemId&cookbook_id=$cookbookId&address=$address"),
+      link: Uri.parse("$bigDipperBaseLink?item_id=$itemId&cookbook_id=$cookbookId&address=$address"),
       uriPrefix: kDeepLink,
-      androidParameters: AndroidParameters(packageName: "tech.pylons.wallet", fallbackUrl: Uri.parse("https://wallet.pylons.tech?item_id=$itemId&cookbook_id=$cookbookId&address=$address")),
-      iosParameters: const IOSParameters(bundleId: "xyz.pylons.wallet"),
+      androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?item_id=$itemId&cookbook_id=$cookbookId&address=$address")),
+      iosParameters: const IOSParameters(bundleId: bundleId),
     );
     try {
       final link = await dynamicLinksGenerator.buildLink(dynamicLinkParams);
@@ -1074,10 +1074,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
   Future<String> createDynamicLinkForTradeNftShare({required String address, required String tradeId}) async {
     final dynamicLinkParams = DynamicLinkParameters(
       socialMetaTagParameters: const SocialMetaTagParameters(),
-      link: Uri.parse("https://wallet.pylons.techtrade_id=$tradeId&address=$address"),
+      link: Uri.parse("$bigDipperBaseLink?trade_id=$tradeId&address=$address"),
       uriPrefix: kDeepLink,
-      androidParameters: AndroidParameters(packageName: "tech.pylons.wallet", fallbackUrl: Uri.parse("https://wallet.pylons.techtrade_id=$tradeId&address=$address")),
-      iosParameters: const IOSParameters(bundleId: "xyz.pylons.wallet"),
+      androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?trade_id=$tradeId&address=$address")),
+      iosParameters: const IOSParameters(bundleId: bundleId),
     );
     try {
       final link = await dynamicLinksGenerator.buildShortLink(dynamicLinkParams);

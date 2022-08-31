@@ -110,6 +110,9 @@ const String kIOSEaselLink = "pylons-easel://open";
 const String kPrivacyPolicyLink = "https://www.pylons.tech/p/";
 const String kUnilinkUrl = "https://wallet.pylons.tech";
 const String kDeepLink = "https://pylons.page.link";
+const String bigDipperBaseLink = "https://pylons.page.link";
+const String packageName = "tech.pylons.wallet";
+const String bundleId = "xyz.pylons.wallet";
 const String kUnilinkUrl3 = "pylons://";
 const String kUnilinkSender = "wallet";
 
