@@ -200,7 +200,6 @@ func TestMsgFulfillTradeValidateBasic(t *testing.T) {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			tc.req.Id = uint64(index)
-			// tc.req = NewMsgFulfillTrade(tc.req.Creator, tc.req.Id, tc.req.CoinInputsIndex, tc.req.Items, tc.req.PaymentInfos)
 			err := tc.req.ValidateBasic()
 			if err != nil {
 				require.ErrorIs(t, err, tc.err)
