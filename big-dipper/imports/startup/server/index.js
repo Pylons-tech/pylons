@@ -182,45 +182,6 @@ Meteor.startup(() => {
                     description = price !== "No Price" ? description + "\nPrice: " + price : description;
                 }
                 
-                // if (selectedRecipe.entries != null) {
-                //     const itemoutputs = selectedRecipe.entries.item_outputs; 
-                //     if (itemoutputs.length > 0) {
-                //         let longs = itemoutputs[0].Longs; 
-                //         if(longs != null)
-                //         {
-                //             for (i = 0; i < longs.length; i++) { 
-                //                 let weightRanges = longs[i].weightRanges;
-                //                 if(longs[i].Key == "Width"){
-                //                     if(weightRanges != null){
-                //                         picWidth = weightRanges[0].lower * weightRanges[0].weight;  
-                //                     } 
-                //                 }
-                //                 else if(longs[i].Key == "Height"){
-                //                     if(weightRanges != null){
-                //                         picHeight = weightRanges[0].lower * weightRanges[0].weight;   
-                //                     } 
-                //                 }
-                //             }
-                //             picHeight = IMAGE_WIDTH * picHeight / picWidth;
-                //             picWidth = IMAGE_WIDTH;
-                //         }
-
-                //         // let strings = itemoutputs[0].strings; 
-                //         // for (i = 0; i < strings.length; i++) {
-                //         //     try {
-                //         //         var values = strings[i].value;
-                //         //         if (strings[i].key = "NFT_URL" && values.indexOf('http') >= 0) { 
-                //         //             img = values;     
-                //         //             break;
-                //         //         }
-                //         //     } catch (e) {
-                //         //         console.log('strings[i].Value', e)
-                //         //         break;
-                //         //     }
-        
-                //         // }
-                //     } 
-                // }    
                 var MetaTags;
                 if (nftType?.toLowerCase() === "video") {
                 MetaTags = `  
@@ -258,8 +219,11 @@ Meteor.startup(() => {
                         <meta name="twitter:title"            content="${siteName}" />
                         <meta name="twitter:description"      content="${description}">
                         `;
-} else if (nftType?.toLowerCase() === "pdf") {
-  MetaTags = `  
+                } else if (
+                    nftType?.toLowerCase() === "pdf" ||
+                    nftType?.toLowerCase() === "3d"
+                ) {
+                      MetaTags = `  
                         <meta name="description"              content="${description}">
                         <meta property="og:type"              content="article">
                         <meta property="og:title"             content="${siteName}" />
@@ -274,8 +238,8 @@ Meteor.startup(() => {
                         <meta name="twitter:title"            content="${siteName}" />
                         <meta name="twitter:description"      content="${description}">
                         `;
-} else {
-  MetaTags = `  
+                    } else {
+                      MetaTags = `  
                         <meta name="description"              content="${description}">
                         <meta property="og:type"              content="article">
                         <meta property="og:title"             content="${siteName}" />
@@ -290,13 +254,9 @@ Meteor.startup(() => {
                         <meta name="twitter:title"            content="${siteName}" />
                         <meta name="twitter:description"      content="${description}">
                         `;
-}
-
-            
-                sink.appendToHead(MetaTags);
-            }
-            
-            
+                    }    
+                    sink.appendToHead(MetaTags);
+            }            
         }  
         else if (querys.get('item_id') !== null && querys.get('cookbook_id') !== null && querys.get('address') !== null) {
             const item_id = sanitizeUrl(querys.get("item_id"));
