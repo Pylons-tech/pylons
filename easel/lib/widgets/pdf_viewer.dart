@@ -3,8 +3,7 @@ import 'dart:io';
 
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:easel_flutter/easel_provider.dart';
-import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart'
-    as clipper;
+import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart' as clipper;
 import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart';
 import 'package:easel_flutter/screens/clippers/small_bottom_corner_clipper.dart';
 import 'package:easel_flutter/utils/constants.dart';
@@ -24,9 +23,7 @@ class PdfViewer extends StatefulWidget {
   final String? fileUrl;
   final bool previewFlag;
 
-  const PdfViewer(
-      {Key? key, this.file, required this.previewFlag, this.fileUrl})
-      : super(key: key);
+  const PdfViewer({Key? key, this.file, required this.previewFlag, this.fileUrl}) : super(key: key);
 
   @override
   State<PdfViewer> createState() => _PdfViewerState();
@@ -141,12 +138,10 @@ class _PdfViewerState extends State<PdfViewer> {
       left: 5,
       bottom: 0,
       child: ClipPath(
-        clipper: RightTriangleClipper(
-            orientation: clipper.Orientation.orientationNE),
+        clipper: RightTriangleClipper(orientation: clipper.Orientation.orientationNE),
         child: InkWell(
           onTap: () {
-            Navigator.pushNamed(context, RouteUtil.kPdfFullScreen,
-                arguments: [doc]);
+            Navigator.pushNamed(context, RouteUtil.kPdfFullScreen, arguments: [doc]);
           },
           child: Container(
             width: 30.w,
