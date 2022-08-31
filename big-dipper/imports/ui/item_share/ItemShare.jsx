@@ -26,19 +26,19 @@ new FlowRouterTitle(FlowRouter);
 
 const T = i18n.createComponent();
 
-export default class EaselBuy extends Component {
+export default class ItemShare extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: this.props.name,
-      description: this.props.description,
-      price: this.props.price,
-      img: this.props.img,
-      createdAt: this.props.createdAt,
+      name: "",
+      description: "",
+      price: "",
+      img: "",
+      createdAt: "",
       createdBy: "",
-      royalty: this.props.royalty,
-      id: this.props.id,
-      history: this.props.history,
+      royalty: 0,
+      id: "",
+      history: "",
       nftHistory: [],
       loading: false,
       imageLoading: false,
@@ -49,7 +49,6 @@ export default class EaselBuy extends Component {
       showHideDetails: false,
     };
     this.hideComponent = this.hideComponent.bind(this);
-    // this.hideComponentDesc = this.hideComponent.bind(this);
   }
 
   hideComponent(name) {
@@ -95,11 +94,11 @@ export default class EaselBuy extends Component {
     this.handleFetchhistory();
   }
   handleFetchhistory = () => {
-    console.log("fetch history");
     const url = settings.remote.api;
+    // querying item history
     axios
       .get(
-        `${url}/pylons/get_recipe_history/${this.props.cookbook_id}/${this.props.recipe_id}`
+        `${url}/pylons/item_history/${this.props.cookbook_id}/${this.props.item_id}`
       )
       .then((res) => {
         this.setState({
@@ -110,58 +109,24 @@ export default class EaselBuy extends Component {
   handleFetchData = () => {
     const url = settings.remote.api;
     this.setState({ loading: true });
+    // querying item
     axios
-      .get(
-        `${url}/pylons/recipe/${this.props.cookbook_id}/${this.props.recipe_id}`
-      )
+      .get(`${url}/pylons/item/${this.props.cookbook_id}/${this.props.item_id}`)
       .then((response) => {
         let media;
         let coin;
-        let price;
-        let edition;
         let denom;
         let src;
         const tradePercent = 100;
         const res = _.cloneDeep(response);
         this.setState({ loading: false });
-        const selectedRecipe = _.cloneDeep(res.data.recipe);
-        const itemOutputs = _.cloneDeep(
-          selectedRecipe?.entries?.item_outputs[0]
-        );
-        const strings = _.cloneDeep(itemOutputs?.strings);
-        const coinInputs = [...selectedRecipe?.coin_inputs];
+        const selectedRecipe = _.cloneDeep(res.data.item);
+        const strings = _.cloneDeep(selectedRecipe?.strings);
 
-        if (coinInputs.length > 0) {
-          const resCoins = coinInputs[0]?.coins[0];
-          denom = resCoins?.denom;
-          if (resCoins?.denom == "USD") {
-            price =
-              Math.floor(resCoins.amount / 100) +
-              "." +
-              (resCoins.amount % 100) +
-              " " +
-              resCoins.denom;
-          } else {
-            let coins = Meteor.settings.public.coins;
-            coin = coins.length
-              ? coins.find(
-                  (coin) =>
-                    coin?.denom?.toLowerCase() ===
-                    resCoins?.denom?.toLowerCase()
-                )
-              : null;
-            if (coin) {
-              price = resCoins.amount / coin.fraction + " " + coin?.displayName;
-            } else {
-              price = resCoins?.amount + " " + resCoins?.denom;
-            }
-          }
-        }
-        const entries = _.cloneDeep(selectedRecipe.entries);
-        const nftType = strings.find(
+        const nftType = strings?.find(
           (val) => val.key.toLowerCase() === "nft_format"
         )?.value;
-        if (entries != null) {
+        if (strings != null) {
           if (nftType.toLowerCase() == "audio") {
             const mediaUrl = strings.find((val) => val.key === "Thumbnail_URL");
             media = mediaUrl ? mediaUrl.value : "";
@@ -180,19 +145,16 @@ export default class EaselBuy extends Component {
           (val) => val.key.toLowerCase() === "creator"
         )?.value;
 
-        const dimentions = this.getNFTDimentions(nftType, itemOutputs);
-        (edition = `${itemOutputs.amount_minted} of ${itemOutputs.quantity}`),
+        const dimentions = this.getNFTDimentions(nftType, selectedRecipe);
           this.setState({
             createdBy: creator,
             name: selectedRecipe.name,
-            description: selectedRecipe.description,
-            price,
+            description: selectedRecipe?.strings[2]?.value,
             denom,
             nftType,
             dimentions,
             displayName: coin?.displayName,
-            royalty: +itemOutputs.trade_percentage * tradePercent,
-            edition,
+            royalty: +selectedRecipe.trade_percentage * tradePercent,
             media,
             createdAt: selectedRecipe.created_at,
             id: selectedRecipe.id,
@@ -207,26 +169,23 @@ export default class EaselBuy extends Component {
 
   getNFTDimentions = (nftType, data) => {
     if (
-      nftType?.toLowerCase() === "image" 
+      nftType?.toLowerCase() === "image"
     ) {
       return (
-        data.longs[1].weightRanges[0].lower +
+        data?.longs[1]?.value +
         " x " +
-        data.longs[2].weightRanges[0].lower
+        data?.longs[2]?.value
       );
     } else if (
       nftType?.toLowerCase() === "audio" ||
       nftType?.toLowerCase() === "video"
     ) {
-      const millisecondsDuration = data.longs[3].weightRanges[0].lower;
+      const millisecondsDuration = data?.longs[3]?.value;
       var minutes = Math.floor(millisecondsDuration / 60000);
       var seconds = ((millisecondsDuration % 60000) / 1000).toFixed(0);
       return minutes + ":" + (seconds < 10 ? "0" : "") + seconds + " min";
-    } else if (
-      nftType?.toLowerCase() === "3d" ||
-      nftType?.toLowerCase() === "pdf"
-    ) {
-      return data.strings.find((val) => val.key === "fileSize")
+    } else if (nftType?.toLowerCase() === "3d" || nftType?.toLowerCase() === "pdf") {
+      return data?.strings?.find((val) => val.key.toLowerCase() === "fileSize")
         ?.value;
     } else {
     }
@@ -261,37 +220,10 @@ export default class EaselBuy extends Component {
       displayName,
       createdAt,
       nftHistory,
-      price,
       denom,
       src,
     } = this.state;
-    const getCurrencySymbol = () => {
-      switch (denom?.toLowerCase()) {
-        case "uatom":
-          return "/img/uatom.svg";
-        case "ustripeusd":
-          return "/img/ustripeusd.svg";
-        case "upylons":
-        case "upylon":
-          return "/img/pylon_logo.svg";
 
-        case "urun":
-          return "/img/urun.svg";
-
-        case "eeur":
-          return "/img/eeur.svg";
-        case "weth-wei":
-          return "/img/eth.svg";
-        case "uusd":
-        case "ubedrock":
-        case "umuon":
-        case "ujunox":
-        case "ujunox":
-          return "";
-        default:
-          return "";
-      }
-    };
     const handleClick = (e) => {
       if (e.type === "click") {
         console.log("Left click");
@@ -394,6 +326,7 @@ export default class EaselBuy extends Component {
                   </div>
                 </Col>
                 <Col xl={7} lg={7} md={12} sm={12}>
+                  {/*Desktop View Start*/}
                   <div className="desktop-view">
                     <div className="details">
                       <div className="title-publisher">
@@ -523,14 +456,9 @@ export default class EaselBuy extends Component {
                                     <p>Owned by</p>
                                     <p>
                                       {!!(nftHistory && nftHistory.length)
-                                        ? nftHistory[nftHistory.length - 1]
-                                            .sender_name
+                                        ? nftHistory[nftHistory.length - 1].to
                                         : createdBy}
                                     </p>
-                                  </div>
-                                  <div className="item">
-                                    <p>Edition</p>
-                                    <p>{this.state.edition}</p>
                                   </div>
                                   <div className="item">
                                     <p>Royalty</p>
@@ -662,7 +590,9 @@ export default class EaselBuy extends Component {
                                             "DD/MM/YYYY hh:mm:ss"
                                           )}
                                         </p>
-                                        <p>{val.sender_name}</p>
+                                        <p>
+                                          <p>{val.from + " to " + val.to}</p>
+                                        </p>
                                       </div>
                                     ))}
                                 </div>
@@ -689,30 +619,18 @@ export default class EaselBuy extends Component {
                             style={{ width: "100%", height: "100%" }}
                             className="btnbg"
                           />
-                          <div className="icon">
-                            {getCurrencySymbol() ? (
-                              <img
-                                alt="coin"
-                                src={getCurrencySymbol()}
-                                style={{ width: "30px", height: "29px" }}
-                              />
-                            ) : null}
-                          </div>
                           <div className="value-icon">
                             <div className="values">
-                              <p>
-                                Buy for{" "}
-                                {price === undefined ||
-                                price === "undefined undefined"
-                                  ? "Free"
-                                  : price}
-                              </p>
+                              <p>Open In App</p>
                             </div>
                           </div>
                         </button>
                       </div>
                     </div>
                   </div>
+                  {/*Desktop View End*/}
+                  {/*================*/}
+                  {/*Mobile View Start*/}
                   <div className="mobile-view">
                     <div className="mob-img">
                       <img
@@ -871,13 +789,9 @@ export default class EaselBuy extends Component {
                                         <p>
                                           {!!(nftHistory && nftHistory.length)
                                             ? nftHistory[nftHistory.length - 1]
-                                                .sender_name
+                                                .to
                                             : createdBy}
                                         </p>
-                                      </div>
-                                      <div className="item">
-                                        <p>Edition</p>
-                                        <p>{this.state.edition}</p>
                                       </div>
                                       <div className="item">
                                         <p>Royalty</p>
@@ -1009,7 +923,11 @@ export default class EaselBuy extends Component {
                                                 "DD/MM/YYYY hh:mm:ss"
                                               )}
                                             </p>
-                                            <p>{val.sender_name}</p>
+                                            <p>
+                                              <p>
+                                                {val.from + " to " + val.to}
+                                              </p>
+                                            </p>
                                           </div>
                                         ))}
                                     </div>
@@ -1038,30 +956,21 @@ export default class EaselBuy extends Component {
                             style={{ width: "100%", height: "100%" }}
                             className="btnbg"
                           />
-                          <div className="icon">
-                            {getCurrencySymbol() ? (
-                              <img
-                                alt="coin"
-                                src={getCurrencySymbol()}
-                                style={{ width: "30px", height: "29px" }}
-                              />
-                            ) : null}
-                          </div>
                           <div className="value-icon">
-                            <div className="values">
-                              <p>
-                                Buy for{" "}
-                                {price === undefined ||
-                                price === "undefined undefined"
-                                  ? "Free"
-                                  : price}
-                              </p>
+                            <div
+                              className="values"
+                              style={{
+                                margin: "auto",
+                              }}
+                            >
+                              <p>Open In App</p>
                             </div>
                           </div>
                         </button>
                       </div>
                     </div>
                   </div>
+                  {/*Mobile View End*/}
                 </Col>
               </Row>
             </Container>
