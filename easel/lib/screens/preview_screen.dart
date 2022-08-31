@@ -1,3 +1,4 @@
+
 import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/models/nft_format.dart';
 import 'package:easel_flutter/repository/repository.dart';
@@ -21,8 +22,7 @@ import '../utils/easel_app_theme.dart';
 class PreviewScreen extends StatefulWidget {
   final VoidCallback onMoveToNextScreen;
 
-  const PreviewScreen({Key? key, required this.onMoveToNextScreen})
-      : super(key: key);
+  const PreviewScreen({Key? key, required this.onMoveToNextScreen}) : super(key: key);
 
   @override
   State<PreviewScreen> createState() => _PreviewScreenState();
@@ -31,10 +31,24 @@ class PreviewScreen extends StatefulWidget {
 class _PreviewScreenState extends State<PreviewScreen> {
   var repository = GetIt.I.get<Repository>();
 
+  Widget buildCheckBox(EaselProvider easelProvider) {
+    return CheckboxListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 20.w),
+      value: easelProvider.imageCheckBox,
+      title: Text('maintain_aspect_ratio'.tr(), style: TextStyle(color: EaselAppTheme.kWhite, fontSize: 12.sp)),
+      onChanged: (value) {
+        easelProvider.setImageCheckBox(value);
+      },
+      selected: easelProvider.imageCheckBox!,
+      controlAffinity: ListTileControlAffinity.trailing,
+      activeColor: EaselAppTheme.kLightPurple,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: EaselAppTheme.kWhite,
+      backgroundColor: EaselAppTheme.kBlack,
       body: Consumer<EaselProvider>(
         builder: (_, provider, __) => WillPopScope(
           onWillPop: () {
@@ -53,27 +67,26 @@ class _PreviewScreenState extends State<PreviewScreen> {
                 Align(
                   alignment: Alignment.center,
                   child: Text(kPreviewNoticeText,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                          color: EaselAppTheme.kLightPurple,
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.w600)),
+                      textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: EaselAppTheme.kLightPurple, fontSize: 15.sp, fontWeight: FontWeight.w600)),
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                      padding: EdgeInsets.only(left: 10.sp),
-                      child: IconButton(
-                        onPressed: () {
-                          provider.setAudioThumbnail(null);
-                          provider.setVideoThumbnail(null);
-                          Navigator.of(context).pop();
-                        },
-                        icon: const Icon(
-                          Icons.arrow_back_ios,
-                          color: EaselAppTheme.kWhite,
-                        ),
-                      )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(left: 10.sp),
+                        child: IconButton(
+                          onPressed: () {
+                            provider.setAudioThumbnail(null);
+                            provider.setVideoThumbnail(null);
+                            Navigator.of(context).pop();
+                          },
+                          icon: const Icon(
+                            Icons.arrow_back_ios,
+                            color: EaselAppTheme.kWhite,
+                          ),
+                        )),
+                    SizedBox(width: 0.6.sw, child: buildCheckBox(provider)),
+                  ],
                 )
               ]),
               Padding(

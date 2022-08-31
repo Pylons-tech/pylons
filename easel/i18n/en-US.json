@@ -102,5 +102,6 @@
   "no_for_sale_nft":"There are no For Sale NFTs",
   "success": "Success",
   "in_progress": "In Progress",
-  "failed": "Failed"
+  "failed": "Failed",
+  "maintain_aspect_ratio": "Maintain Aspect Ratio"
 }

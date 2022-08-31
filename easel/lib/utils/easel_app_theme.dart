@@ -38,6 +38,7 @@ class EaselAppTheme {
   static const Color kpurpleDark = Color(0xFF1212C4);
   static const Color kTextGrey = Color(0xFF7A7A8F);
   static const Color kGreyIcon = Color(0xFFAEAEAE);
+  static const Color kPurpleCheckBox = Color(0xFFBF8FCE);
 
   static const Color kLightGreyColor = Color(0xFFE5E5E5);
   static const Color kPurple = Color(0xFF4421CC);

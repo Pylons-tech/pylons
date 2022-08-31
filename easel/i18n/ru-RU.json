@@ -102,5 +102,6 @@
   "no_for_sale_nft":"Нет NFT для продажи",
   "success": "Успех",
   "in_progress": "В ходе выполнения",
-  "failed": "Не удалось"
+  "failed": "Не удалось",
+  "maintain_aspect_ratio" : "Сохранять пропорции"
 }
