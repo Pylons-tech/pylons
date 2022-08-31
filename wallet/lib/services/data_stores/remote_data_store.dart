@@ -23,11 +23,11 @@ import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart'
-    as pylons;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
+import 'package:pylons_wallet/services/third_party_services/firestore_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/store_payment_service.dart';
 import 'package:pylons_wallet/stores/models/transaction_response.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
@@ -43,43 +43,37 @@ abstract class RemoteDataStore {
   /// Input: [Address] the address of the account
   /// Output : [StripeGenerateRegistrationTokenResponse] contains token of the account
   /// else will through error
-  Future<StripeGenerateRegistrationTokenResponse>
-      generateStripeRegistrationToken({required String address});
+  Future<StripeGenerateRegistrationTokenResponse> generateStripeRegistrationToken({required String address});
 
   /// This method is used to generate the stripe registration token
   /// Input: [Address] the address of the account
   /// Output : [StripeGenerateUpdateTokenResponse] contains token of the account
   /// else will through error
-  Future<StripeGenerateUpdateTokenResponse> generateUpdateToken(
-      {required String address});
+  Future<StripeGenerateUpdateTokenResponse> generateUpdateToken({required String address});
 
   /// This method is used to update the user stripe account
   /// Input: [StripeUpdateAccountRequest] the request parameters that are required for the update
   /// Output : [StripeUpdateAccountResponse] contains token of the account
   /// else will through error
-  Future<StripeUpdateAccountResponse> updateStripeAccount(
-      {required StripeUpdateAccountRequest req});
+  Future<StripeUpdateAccountResponse> updateStripeAccount({required StripeUpdateAccountRequest req});
 
   /// This method is used to get the account link and account id based on update token
   /// Input: [StripeUpdateAccountRequest] the request parameters that are required for the update
   /// Output : [StripeUpdateAccountResponse] contains account id and account link  of the user stripe account
   /// else will through error
-  Future<StripeUpdateAccountResponse> getAccountLinkBasedOnUpdateToken(
-      {required StripeUpdateAccountRequest req});
+  Future<StripeUpdateAccountResponse> getAccountLinkBasedOnUpdateToken({required StripeUpdateAccountRequest req});
 
   /// This method is used to get the account link and account id based on update token
   /// Input: [StripeUpdateAccountRequest] the request parameters that are required for the update
   /// Output : [StripeUpdateAccountResponse] contains account id and account link  of the user stripe account
   /// else will through error
-  Future<StripeRegisterAccountResponse> registerAccount(
-      {required StripeRegisterAccountRequest req});
+  Future<StripeRegisterAccountResponse> registerAccount({required StripeRegisterAccountRequest req});
 
   /// This method is used to get the account link or onboarding link if the account is not set up but user exists in system
   /// Input: [StripeGetLoginBasedOnAddressRequest] the request parameters that are required for the login link
   /// Output : [StripeGetLoginBasedOnAddressResponse] contains the response for the login link
   /// else will through error
-  Future<StripeGetLoginBasedOnAddressResponse> getLoginLinkBasedOnAddress(
-      {required StripeGetLoginBasedOnAddressRequest req});
+  Future<StripeGetLoginBasedOnAddressResponse> getLoginLinkBasedOnAddress({required StripeGetLoginBasedOnAddressRequest req});
 
   /// This method will return the ibc coin info
   /// Input: [ibcHash] hash of the ibc coin
@@ -100,16 +94,14 @@ abstract class RemoteDataStore {
   /// Input: [address] the address of the user
   /// Output: returns [List][TransactionHistory] if success
   /// else will through error
-  Future<List<TransactionHistory>> getTransactionHistory(
-      {required String address});
+  Future<List<TransactionHistory>> getTransactionHistory({required String address});
 
   /// This method will return list of notification messages
   /// Input: [walletAddress] of the user ,[limit] the maximum number of records to show at a time
   /// and [offset] is the last item's position
   /// Output: if successful will return [List][NotificationMessage] the list of the NotificationMessage
   /// else will throw error
-  Future<List<NotificationMessage>> getAllNotificationMessages(
-      {required String walletAddress, required int limit, required int offset});
+  Future<List<NotificationMessage>> getAllNotificationMessages({required String walletAddress, required int limit, required int offset});
 
   /// This method will update the recipe in the chain
   /// Input: [MsgUpdateRecipe] contains the info regarding the recipe update
@@ -120,49 +112,36 @@ abstract class RemoteDataStore {
   /// This method is used to get likes count of NFT
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
   /// Output : [int] will contain the likes count of the NFT
-  Future<int> getLikesCount(
-      {required String recipeId, required String cookBookID});
+  Future<int> getLikesCount({required String recipeId, required String cookBookID});
 
   /// This method is used to get history of nft owners
   /// Input: [recipeId] and [cookBookID] of the NFT
   /// Output : [List][NftOwnershipHistory] will contain the list of NftOwnershipHistory data if success
   /// else will throw error
-  Future<List<NftOwnershipHistory>> getNftOwnershipHistory(
-      {required String recipeId, required String cookBookId});
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String recipeId, required String cookBookId});
 
   /// This method is used to get views count of NFT
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
   /// Output : [int] will contain the views count of the NFT
-  Future<int> getViewsCount(
-      {required String recipeId, required String cookBookID});
+  Future<int> getViewsCount({required String recipeId, required String cookBookID});
 
   /// This method is used to increment a view for an NFT when a user view an NFT
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
-  Future<void> countAView(
-      {required String recipeId,
-      required String cookBookID,
-      required String walletAddress});
+  Future<void> countAView({required String recipeId, required String cookBookID, required String walletAddress});
 
   /// This method is used get the like status of the NFT ; if it is Liked by me or not
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
   /// Output : [bool] will be the status for NFT if it is Liked or not
-  Future<bool> ifLikedByMe(
-      {required String recipeId,
-      required String cookBookID,
-      required String walletAddress});
+  Future<bool> ifLikedByMe({required String recipeId, required String cookBookID, required String walletAddress});
 
   /// This method is used to update the like status of an NFT; it will toggle the like button
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
-  Future<void> updateLikeStatus(
-      {required String recipeId,
-      required String cookBookID,
-      required String walletAddress});
+  Future<void> updateLikeStatus({required String recipeId, required String cookBookID, required String walletAddress});
 
   /// This method is used get the recipe object based on CookbookId and RecipeId
   /// Input: [recipeId] and [cookBookId] of the given Recipe
   /// Output : [pylons.Recipe] will be the recipe object based on CookbookId and RecipeId
-  Future<pylons.Recipe> getRecipe(
-      {required String cookBookId, required String recipeId});
+  Future<pylons.Recipe> getRecipe({required String cookBookId, required String recipeId});
 
   /// This method is used get the username based on the wallet address
   /// Input: [address] wll be the public address of the user's wallet
@@ -172,8 +151,7 @@ abstract class RemoteDataStore {
   /// This method is used get the list of recipes object based on [cookBookId]
   /// Input: [cookBookId] of the given Recipe
   /// Output : [pylons.Recipe] will be the list of recipes object based on CookbookId
-  Future<List<pylons.Recipe>> getRecipesBasedOnCookBookId(
-      {required String cookBookId});
+  Future<List<pylons.Recipe>> getRecipesBasedOnCookBookId({required String cookBookId});
 
   /// This method is used get the cookbook object based on [cookBookId]
   /// Input: [cookBookId] of the given Cookbook
@@ -188,14 +166,12 @@ abstract class RemoteDataStore {
   /// This method is used get the list of executions based on [cookBookId] and [recipeId]
   /// Input: [cookBookId] and [recipeId] of the given Recipe
   /// Output : [ExecutionListByRecipeResponse] will be the list of recipes executions
-  Future<ExecutionListByRecipeResponse> getExecutionsByRecipeId(
-      {required String cookBookId, required String recipeId});
+  Future<ExecutionListByRecipeResponse> getExecutionsByRecipeId({required String cookBookId, required String recipeId});
 
   /// This method is used get the item based on [cookBookId] and [itemId]
   /// Input: [cookBookId] and [itemId] of the given Recipe
   /// Output : [pylons.Item] will be the item object
-  Future<pylons.Item> getItem(
-      {required String cookBookId, required String itemId});
+  Future<pylons.Item> getItem({required String cookBookId, required String itemId});
 
   /// This method is used get the list if items based on [owner]
   /// Input: [owner] will be the owner name to get the list of his items
@@ -215,23 +191,20 @@ abstract class RemoteDataStore {
   /// This method is used get the list of cookbooks based on its wallet [address]
   /// Input: [address] will the public address of user's wallet
   /// Output : [pylons.Trade] will be the the list of trades based on its [creator]
-  Future<List<pylons.Cookbook>> getCookbooksByCreator(
-      {required String address});
+  Future<List<pylons.Cookbook>> getCookbooksByCreator({required String address});
 
   /// This method is used get the trade based on its [id]
   /// Input: [id] will the the trade id to get complete trade
   /// Output : [pylons.Trade] will be the trade based on its [id]
   Future<pylons.Trade> getTradeByID({required Int64 id});
 
-  Future<String> sendGoogleInAppPurchaseCoinsRequest(
-      GoogleInAppPurchaseModel googleInAppPurchaseModel);
+  Future<String> sendGoogleInAppPurchaseCoinsRequest(GoogleInAppPurchaseModel googleInAppPurchaseModel);
 
   /// This method will send apple in app purchase request to the chain
   /// Input: [AppleInAppPurchaseModel] contains the input data for the api.
   /// Output: if successful will return the [String] hash of the transaction
   /// else will throw the error
-  Future<String> sendAppleInAppPurchaseCoinsRequest(
-      AppleInAppPurchaseModel googleInAppPurchaseModel);
+  Future<String> sendAppleInAppPurchaseCoinsRequest(AppleInAppPurchaseModel googleInAppPurchaseModel);
 
   /// This method will get the products For Sale from the underling store
   /// Input: [itemId] the id of the item
@@ -256,16 +229,12 @@ abstract class RemoteDataStore {
   /// This method will update fcm token against an address.
   /// Input: [address] the address whose fcm needs to be updated, [fcmToken] the user fcm token , [appCheckToken] the firebase app check token
   /// Output: [bool] returns true if successful else will throw error.
-  Future<bool> updateFcmToken(
-      {required String address,
-      required String fcmToken,
-      required String appCheckToken});
+  Future<bool> updateFcmToken({required String address, required String fcmToken, required String appCheckToken});
 
   /// This method will mark notification as read.
   /// Input: [List][id] the list containing ids of notifications which needed to be mark as read, [appCheckToken] the firebase app check token
   /// Output: [bool] returns true if successful else will throw error.
-  Future<bool> markNotificationAsRead(
-      {required List<String> idsList, required String appCheckToken});
+  Future<bool> markNotificationAsRead({required List<String> idsList, required String appCheckToken});
 
   /// This method will create dynamic link for the user invite
   /// Input : [address] the address against which the invite link to be generated
@@ -276,11 +245,12 @@ abstract class RemoteDataStore {
   /// Input: [publicInfo] contains info related to user chain address, [walletCreationModel] contains user entered data, [appCheckToken] the app specific token, [referralToken] the invitee user address
   /// Output: if successful will give [TransactionResponse] else will throw error
 
-  Future<TransactionResponse> createAccount(
-      {required AccountPublicInfo publicInfo,
-      required WalletCreationModel walletCreationModel,
-      required String appCheckToken,
-      required String referralToken});
+  Future<TransactionResponse> createAccount({required AccountPublicInfo publicInfo, required WalletCreationModel walletCreationModel, required String appCheckToken, required String referralToken});
+
+  /// This method will save users feedback to firebase based on its wallet address
+  /// Input : [walletAddress], [subject] and [feedback] the address against which the feedbacks needs to be stored
+  /// Output : [bool] It will return true if the saving feedback is successful otherwise false
+  Future<bool> saveUserFeedback({required String walletAddress, required String subject, required String feedback});
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -289,24 +259,22 @@ class RemoteDataStoreImp implements RemoteDataStore {
   final StorePaymentService storePaymentService;
   final FirebaseAppCheck firebaseAppCheck;
   final FirebaseDynamicLinks dynamicLinksGenerator;
+  final FirestoreHelper firebaseHelper;
 
   RemoteDataStoreImp(
       {required this.dynamicLinksGenerator,
       required this.httpClient,
+      required this.firebaseHelper,
       required this.crashlyticsHelper,
       required this.storePaymentService,
       required this.firebaseAppCheck});
 
   @override
-  Future<void> updateLikeStatus(
-      {required String recipeId,
-      required String cookBookID,
-      required String walletAddress}) async {
+  Future<void> updateLikeStatus({required String recipeId, required String cookBookID, required String walletAddress}) async {
     final baseApiUrl = getBaseEnv().baseMongoUrl;
     final body = {userIdKey: walletAddress};
 
-    final uri =
-        Uri.parse("$baseApiUrl/api/actions/likes/$cookBookID/$recipeId");
+    final uri = Uri.parse("$baseApiUrl/api/actions/likes/$cookBookID/$recipeId");
 
     final response = await httpClient.post(uri, body: body);
 
@@ -325,12 +293,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<int> getLikesCount(
-      {required String recipeId, required String cookBookID}) async {
+  Future<int> getLikesCount({required String recipeId, required String cookBookID}) async {
     final baseApiUrl = GetIt.I.get<BaseEnv>().baseMongoUrl;
 
-    final uri =
-        Uri.parse("$baseApiUrl/api/actions/likes/$cookBookID/$recipeId");
+    final uri = Uri.parse("$baseApiUrl/api/actions/likes/$cookBookID/$recipeId");
 
     log("$baseApiUrl/api/actions/likes/$cookBookID/$recipeId");
 
@@ -355,16 +321,12 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<void> countAView(
-      {required String recipeId,
-      required String cookBookID,
-      required String walletAddress}) async {
+  Future<void> countAView({required String recipeId, required String cookBookID, required String walletAddress}) async {
     final baseApiUrl = GetIt.I.get<BaseEnv>().baseMongoUrl;
 
     final body = {userIdKey: walletAddress};
 
-    final uri =
-        Uri.parse("$baseApiUrl/api/actions/views/$cookBookID/$recipeId");
+    final uri = Uri.parse("$baseApiUrl/api/actions/views/$cookBookID/$recipeId");
 
     final response = await httpClient.post(uri, body: body);
 
@@ -383,12 +345,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<int> getViewsCount(
-      {required String recipeId, required String cookBookID}) async {
+  Future<int> getViewsCount({required String recipeId, required String cookBookID}) async {
     final baseApiUrl = GetIt.I.get<BaseEnv>().baseMongoUrl;
 
-    final uri =
-        Uri.parse("$baseApiUrl/api/actions/views/$cookBookID/$recipeId");
+    final uri = Uri.parse("$baseApiUrl/api/actions/views/$cookBookID/$recipeId");
 
     final response = await httpClient.get(uri);
 
@@ -411,14 +371,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<bool> ifLikedByMe(
-      {required String recipeId,
-      required String cookBookID,
-      required String walletAddress}) async {
+  Future<bool> ifLikedByMe({required String recipeId, required String cookBookID, required String walletAddress}) async {
     final baseApiUrl = GetIt.I.get<BaseEnv>().baseMongoUrl;
 
-    final uri = Uri.parse(
-        "$baseApiUrl/api/actions/likes/$walletAddress/$cookBookID/$recipeId");
+    final uri = Uri.parse("$baseApiUrl/api/actions/likes/$walletAddress/$cookBookID/$recipeId");
 
     final response = await httpClient.get(uri);
 
@@ -441,25 +397,19 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<StripeGenerateRegistrationTokenResponse>
-      generateStripeRegistrationToken({required String address}) async {
+  Future<StripeGenerateRegistrationTokenResponse> generateStripeRegistrationToken({required String address}) async {
     final baseEnv = getBaseEnv();
-    final response = await httpClient
-        .get(Uri.parse(
-            "${baseEnv.baseStripeUrl}/generate-registration-token?address=$address"))
-        .timeout(
+    final response = await httpClient.get(Uri.parse("${baseEnv.baseStripeUrl}/generate-registration-token?address=$address")).timeout(
           const Duration(seconds: 30),
         );
 
     log(response.body, name: "Stripe | generateStripeRegistrationToken");
 
     if (response.statusCode == API_SUCCESS_CODE) {
-      return StripeGenerateRegistrationTokenResponse.fromJson(
-          json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>);
+      return StripeGenerateRegistrationTokenResponse.fromJson(json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>);
     }
 
-    if (response.statusCode == API_ERROR_CODE &&
-        response.body == 'account already exists\n') {
+    if (response.statusCode == API_ERROR_CODE && response.body == 'account already exists\n') {
       throw const AccountAlreadyExistsFailure('Account Already exists');
     }
 
@@ -467,15 +417,12 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<StripeGenerateUpdateTokenResponse> generateUpdateToken(
-      {required String address}) async {
+  Future<StripeGenerateUpdateTokenResponse> generateUpdateToken({required String address}) async {
     final baseEnv = getBaseEnv();
-    final response = await httpClient.get(Uri.parse(
-        "${baseEnv.baseStripeUrl}/generate-update-token?address=$address"));
+    final response = await httpClient.get(Uri.parse("${baseEnv.baseStripeUrl}/generate-update-token?address=$address"));
 
     if (response.statusCode == API_SUCCESS_CODE) {
-      return StripeGenerateUpdateTokenResponse.fromJson(
-          json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>);
+      return StripeGenerateUpdateTokenResponse.fromJson(json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>);
     }
 
     log(response.body, name: "Stripe | generateUpdateToken");
@@ -484,8 +431,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<StripeUpdateAccountResponse> updateStripeAccount(
-      {required StripeUpdateAccountRequest req}) async {
+  Future<StripeUpdateAccountResponse> updateStripeAccount({required StripeUpdateAccountRequest req}) async {
     final baseEnv = getBaseEnv();
     final response = await httpClient
         .post(
@@ -498,16 +444,14 @@ class RemoteDataStoreImp implements RemoteDataStore {
         );
 
     if (response.statusCode == API_SUCCESS_CODE) {
-      return StripeUpdateAccountResponse.fromJson(
-          json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>);
+      return StripeUpdateAccountResponse.fromJson(json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>);
     }
 
     throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
   }
 
   @override
-  Future<StripeUpdateAccountResponse> getAccountLinkBasedOnUpdateToken(
-      {required StripeUpdateAccountRequest req}) async {
+  Future<StripeUpdateAccountResponse> getAccountLinkBasedOnUpdateToken({required StripeUpdateAccountRequest req}) async {
     final baseEnv = getBaseEnv();
     final response = await httpClient
         .post(
@@ -522,8 +466,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     log(response.body, name: "Stripe | getAccountLinkBasedOnUpdateToken");
 
     if (response.statusCode == API_SUCCESS_CODE) {
-      return StripeUpdateAccountResponse.fromJson(
-          json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>);
+      return StripeUpdateAccountResponse.fromJson(json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>);
     }
 
     throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
@@ -541,16 +484,14 @@ class RemoteDataStoreImp implements RemoteDataStore {
         );
 
     if (response.statusCode == API_SUCCESS_CODE) {
-      return IBCTraceModel.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>, ibcHash);
+      return IBCTraceModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>, ibcHash);
     }
 
     throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
   }
 
   @override
-  Future<StripeGetLoginBasedOnAddressResponse> getLoginLinkBasedOnAddress(
-      {required StripeGetLoginBasedOnAddressRequest req}) async {
+  Future<StripeGetLoginBasedOnAddressResponse> getLoginLinkBasedOnAddress({required StripeGetLoginBasedOnAddressRequest req}) async {
     final baseEnv = getBaseEnv();
     final response = await httpClient
         .post(
@@ -564,16 +505,14 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     log(response.body, name: "Stripe | getLoginLinkBasedOnAddress");
     if (response.statusCode == API_SUCCESS_CODE) {
-      return StripeGetLoginBasedOnAddressResponse.from(
-          json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>);
+      return StripeGetLoginBasedOnAddressResponse.from(json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>);
     }
 
     throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
   }
 
   @override
-  Future<StripeRegisterAccountResponse> registerAccount(
-      {required StripeRegisterAccountRequest req}) async {
+  Future<StripeRegisterAccountResponse> registerAccount({required StripeRegisterAccountRequest req}) async {
     final baseEnv = getBaseEnv();
     final response = await httpClient
         .post(
@@ -587,12 +526,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     log(response.body, name: "Stripe | registerAccount");
     if (response.statusCode == API_SUCCESS_CODE) {
-      return StripeRegisterAccountResponse.from(
-          json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>);
+      return StripeRegisterAccountResponse.from(json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>);
     }
 
-    if (response.statusCode == API_ERROR_CODE &&
-        response.body == 'account already setup\n') {
+    if (response.statusCode == API_ERROR_CODE && response.body == 'account already setup\n') {
       throw const AccountAlreadyExistsFailure('Account Already exists');
     }
 
@@ -622,21 +559,16 @@ class RemoteDataStoreImp implements RemoteDataStore {
   Future<List<Balance>> getBalance(String walletAddress) async {
     final bank.QueryClient bankQueryClient = getBankQueryClient();
 
-    final queryAllBalancesRequest = bank.QueryAllBalancesRequest.create()
-      ..address = walletAddress;
+    final queryAllBalancesRequest = bank.QueryAllBalancesRequest.create()..address = walletAddress;
 
     final response = await bankQueryClient.allBalances(queryAllBalancesRequest);
 
     final balances = <Balance>[];
-    if (response.balances.isEmpty ||
-        response.balances.indexWhere((element) => element.denom == 'upylon') ==
-            -1) {
+    if (response.balances.isEmpty || response.balances.indexWhere((element) => element.denom == 'upylon') == -1) {
       balances.add(Balance(denom: "upylon", amount: Amount(Decimal.zero)));
     }
 
-    if (response.balances
-            .indexWhere((element) => element.denom == 'ustripeusd') ==
-        -1) {
+    if (response.balances.indexWhere((element) => element.denom == 'ustripeusd') == -1) {
       balances.add(Balance(denom: "ustripeusd", amount: Amount(Decimal.zero)));
     }
 
@@ -644,36 +576,29 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     for (final balance in response.balances) {
       if (balance.denom.contains("ibc")) {
-        futureIBCHashList.add(
-            getIBCHashTrace(ibcHash: balance.denom.replaceAll("ibc/", '')));
+        futureIBCHashList.add(getIBCHashTrace(ibcHash: balance.denom.replaceAll("ibc/", '')));
         continue;
       }
 
-      balances.add(Balance(
-          denom: balance.denom, amount: Amount(Decimal.parse(balance.amount))));
+      balances.add(Balance(denom: balance.denom, amount: Amount(Decimal.parse(balance.amount))));
     }
 
     final ibcHashResults = await Future.wait(futureIBCHashList);
 
     for (final ibcHashResult in ibcHashResults) {
-      final relatedBalance = response.balances.firstWhere(
-          (element) => element.denom == "ibc/${ibcHashResult.ibcHash}");
-      balances.add(Balance(
-          denom: ibcHashResult.denomTrace.baseDenom.name,
-          amount: Amount(Decimal.parse(relatedBalance.amount))));
+      final relatedBalance = response.balances.firstWhere((element) => element.denom == "ibc/${ibcHashResult.ibcHash}");
+      balances.add(Balance(denom: ibcHashResult.denomTrace.baseDenom.name, amount: Amount(Decimal.parse(relatedBalance.amount))));
     }
 
     return balances;
   }
 
   @override
-  Future<List<TransactionHistory>> getTransactionHistory(
-      {required String address}) async {
+  Future<List<TransactionHistory>> getTransactionHistory({required String address}) async {
     final baseEnv = getBaseEnv();
     final transactionList = <TransactionHistory>[];
 
-    final transactionUri =
-        '${baseEnv.baseApiUrl}/pylons/tx?address=%27$address%27';
+    final transactionUri = '${baseEnv.baseApiUrl}/pylons/tx?address=%27$address%27';
 
     final transactionResponse = await httpClient.get(Uri.parse(transactionUri));
 
@@ -681,21 +606,16 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     if (transactionMap == null) return transactionList;
 
-    transactionList.addAll((transactionMap as List<dynamic>)
-        .map((e) => TransactionHistory.fromJson(e as Map<String, dynamic>)));
+    transactionList.addAll((transactionMap as List<dynamic>).map((e) => TransactionHistory.fromJson(e as Map<String, dynamic>)));
 
     return transactionList;
   }
 
   @override
-  Future<List<NotificationMessage>> getAllNotificationMessages(
-      {required String walletAddress,
-      required int limit,
-      required int offset}) async {
+  Future<List<NotificationMessage>> getAllNotificationMessages({required String walletAddress, required int limit, required int offset}) async {
     final baseApiUrl = getBaseEnv().baseMongoUrl;
 
-    final uri = Uri.parse(
-        "$baseApiUrl/api/notifications/getAllNotifications/$walletAddress/$limit/$offset");
+    final uri = Uri.parse("$baseApiUrl/api/notifications/getAllNotifications/$walletAddress/$limit/$offset");
 
     final notificationResponse = await httpClient.get(uri);
 
@@ -718,12 +638,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<List<NftOwnershipHistory>> getNftOwnershipHistory(
-      {required String recipeId, required String cookBookId}) async {
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String recipeId, required String cookBookId}) async {
     final baseApiUrl = getBaseEnv().baseApiUrl;
 
-    final uri = Uri.parse(
-        "$baseApiUrl/pylons/get_recipe_history/$cookBookId/$recipeId");
+    final uri = Uri.parse("$baseApiUrl/pylons/get_recipe_history/$cookBookId/$recipeId");
     final List<NftOwnershipHistory> historyList = [];
 
     final historyResponse = await httpClient.get(uri);
@@ -749,39 +667,28 @@ class RemoteDataStoreImp implements RemoteDataStore {
   Future<String> _signAndBroadcast(GeneratedMessage message) async {
     final unsignedTransaction = UnsignedAlanTransaction(messages: [message]);
 
-    final customTransactionSigningGateway =
-        getCustomTransactionSigningGateway();
+    final customTransactionSigningGateway = getCustomTransactionSigningGateway();
     final transactionSigningGateway = getTransactionSigningGateway();
 
-    final walletsResultEither =
-        await customTransactionSigningGateway.getWalletsList();
+    final walletsResultEither = await customTransactionSigningGateway.getWalletsList();
 
     if (walletsResultEither.isLeft()) {
-      crashlyticsHelper.recordFatalError(
-          error: walletsResultEither.swap().toOption().toNullable()!.message);
-      throw const TransactionSigningFailure(
-          message: SOMETHING_WRONG_FETCHING_WALLETS,
-          type: HandlerFactory.ERR_FETCHING_WALLETS);
+      crashlyticsHelper.recordFatalError(error: walletsResultEither.swap().toOption().toNullable()!.message);
+      throw const TransactionSigningFailure(message: SOMETHING_WRONG_FETCHING_WALLETS, type: HandlerFactory.ERR_FETCHING_WALLETS);
     }
 
     final accountsList = walletsResultEither.getOrElse(() => []);
     if (accountsList.isEmpty) {
-      throw TransactionSigningFailure(
-          message: "no_profile_found".tr(),
-          type: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
+      throw TransactionSigningFailure(message: "no_profile_found".tr(), type: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
     }
     final info = accountsList.last;
     final walletLookupKey = createWalletLookUp(info);
 
-    final signedTransaction = await transactionSigningGateway.signTransaction(
-        transaction: unsignedTransaction, accountLookupKey: walletLookupKey);
+    final signedTransaction = await transactionSigningGateway.signTransaction(transaction: unsignedTransaction, accountLookupKey: walletLookupKey);
 
     if (signedTransaction.isLeft()) {
-      crashlyticsHelper.recordFatalError(
-          error: signedTransaction.swap().toOption().toNullable()!.toString());
-      throw TransactionSigningFailure(
-          message: "something_wrong_signing_transaction".tr(),
-          type: HandlerFactory.ERR_SIG_TRANSACTION);
+      crashlyticsHelper.recordFatalError(error: signedTransaction.swap().toOption().toNullable()!.toString());
+      throw TransactionSigningFailure(message: "something_wrong_signing_transaction".tr(), type: HandlerFactory.ERR_SIG_TRANSACTION);
     }
 
     final response = await customTransactionSigningGateway.broadcastTransaction(
@@ -790,11 +697,8 @@ class RemoteDataStoreImp implements RemoteDataStore {
     );
 
     if (response.isLeft()) {
-      crashlyticsHelper.recordFatalError(
-          error: response.swap().toOption().toNullable()!.toString());
-      throw TransactionSigningFailure(
-          message: response.swap().toOption().toNullable().toString(),
-          type: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
+      crashlyticsHelper.recordFatalError(error: response.swap().toOption().toNullable()!.toString());
+      throw TransactionSigningFailure(message: response.swap().toOption().toNullable().toString(), type: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
     }
 
     return response.getOrElse(() => TransactionResponse.initial()).hash;
@@ -815,8 +719,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<pylons.Recipe> getRecipe(
-      {required String cookBookId, required String recipeId}) async {
+  Future<pylons.Recipe> getRecipe({required String cookBookId, required String recipeId}) async {
     final pylons.QueryClient queryClient = getQueryClient();
     final request = pylons.QueryGetRecipeRequest.create()
       ..cookbookId = cookBookId
@@ -835,8 +738,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
   Future<String> getUsername({required String address}) async {
     final pylons.QueryClient queryClient = getQueryClient();
 
-    final request = pylons.QueryGetUsernameByAddressRequest.create()
-      ..address = address;
+    final request = pylons.QueryGetUsernameByAddressRequest.create()..address = address;
 
     final response = await queryClient.usernameByAddress(request);
 
@@ -847,11 +749,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<List<pylons.Recipe>> getRecipesBasedOnCookBookId(
-      {required String cookBookId}) async {
+  Future<List<pylons.Recipe>> getRecipesBasedOnCookBookId({required String cookBookId}) async {
     final pylons.QueryClient queryClient = getQueryClient();
-    final request = pylons.QueryListRecipesByCookbookRequest.create()
-      ..cookbookId = cookBookId;
+    final request = pylons.QueryListRecipesByCookbookRequest.create()..cookbookId = cookBookId;
 
     final response = await queryClient.listRecipesByCookbook(request);
 
@@ -859,8 +759,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<pylons.Cookbook> getCookbookBasedOnId(
-      {required String cookBookId}) async {
+  Future<pylons.Cookbook> getCookbookBasedOnId({required String cookBookId}) async {
     final pylons.QueryClient queryClient = getQueryClient();
     final request = pylons.QueryGetCookbookRequest.create()..id = cookBookId;
 
@@ -876,8 +775,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
   Future<String> getAddressBasedOnUsername(String username) async {
     final pylons.QueryClient queryClient = getQueryClient();
 
-    final request = pylons.QueryGetAddressByUsernameRequest.create()
-      ..username = username;
+    final request = pylons.QueryGetAddressByUsernameRequest.create()..username = username;
 
     final response = await queryClient.addressByUsername(request);
 
@@ -889,24 +787,18 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<ExecutionListByRecipeResponse> getExecutionsByRecipeId(
-      {required String cookBookId, required String recipeId}) async {
+  Future<ExecutionListByRecipeResponse> getExecutionsByRecipeId({required String cookBookId, required String recipeId}) async {
     final pylons.QueryClient queryClient = getQueryClient();
-    final queryExecutionListByRecipe =
-        pylons.QueryListExecutionsByRecipeRequest()
-          ..cookbookId = cookBookId
-          ..recipeId = recipeId;
-    final response =
-        await queryClient.listExecutionsByRecipe(queryExecutionListByRecipe);
+    final queryExecutionListByRecipe = pylons.QueryListExecutionsByRecipeRequest()
+      ..cookbookId = cookBookId
+      ..recipeId = recipeId;
+    final response = await queryClient.listExecutionsByRecipe(queryExecutionListByRecipe);
 
-    return ExecutionListByRecipeResponse(
-        completedExecutions: response.completedExecutions,
-        pendingExecutions: response.pendingExecutions);
+    return ExecutionListByRecipeResponse(completedExecutions: response.completedExecutions, pendingExecutions: response.pendingExecutions);
   }
 
   @override
-  Future<pylons.Item> getItem(
-      {required String cookBookId, required String itemId}) async {
+  Future<pylons.Item> getItem({required String cookBookId, required String itemId}) async {
     final pylons.QueryClient queryClient = getQueryClient();
     final queryGetItemRequest = pylons.QueryGetItemRequest()
       ..cookbookId = cookBookId
@@ -924,8 +816,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
   @override
   Future<List<pylons.Item>> getListItemByOwner({required String owner}) async {
     final pylons.QueryClient queryClient = getQueryClient();
-    final queryListItemByOwner = pylons.QueryListItemByOwnerRequest()
-      ..owner = owner;
+    final queryListItemByOwner = pylons.QueryListItemByOwnerRequest()..owner = owner;
 
     final response = await queryClient.listItemByOwner(queryListItemByOwner);
 
@@ -947,16 +838,12 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<bool> updateFcmToken(
-      {required String address,
-      required String fcmToken,
-      required String appCheckToken}) async {
+  Future<bool> updateFcmToken({required String address, required String fcmToken, required String appCheckToken}) async {
     final baseApiUrl = getBaseEnv().baseMongoUrl;
 
     final uri = Uri.parse("$baseApiUrl/fcmtoken/update/$address/$fcmToken");
 
-    final response = await httpClient
-        .post(uri, headers: {FIREBASE_APP_CHECK_HEADER: appCheckToken});
+    final response = await httpClient.post(uri, headers: {FIREBASE_APP_CHECK_HEADER: appCheckToken});
 
     if (response.statusCode == API_SUCCESS_CODE) {
       return true;
@@ -966,18 +853,12 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<bool> markNotificationAsRead(
-      {required List<String> idsList, required String appCheckToken}) async {
+  Future<bool> markNotificationAsRead({required List<String> idsList, required String appCheckToken}) async {
     final baseApiUrl = getBaseEnv().baseMongoUrl;
 
     final uri = Uri.parse("$baseApiUrl/api/notifications/markread");
 
-    final response = await httpClient.post(uri,
-        headers: {
-          FIREBASE_APP_CHECK_HEADER: appCheckToken,
-          'Content-type': 'application/json'
-        },
-        body: jsonEncode({kNotificationsIds: idsList}));
+    final response = await httpClient.post(uri, headers: {FIREBASE_APP_CHECK_HEADER: appCheckToken, 'Content-type': 'application/json'}, body: jsonEncode({kNotificationsIds: idsList}));
 
     if (response.statusCode == API_SUCCESS_CODE) {
       final historyMap = jsonDecode(response.body);
@@ -991,11 +872,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<List<pylons.Trade>> getTradesBasedOnCreator(
-      {required String creator}) async {
+  Future<List<pylons.Trade>> getTradesBasedOnCreator({required String creator}) async {
     final pylons.QueryClient queryClient = getQueryClient();
-    final request = pylons.QueryListTradesByCreatorRequest.create()
-      ..creator = creator;
+    final request = pylons.QueryListTradesByCreatorRequest.create()..creator = creator;
 
     final response = await queryClient.listTradesByCreator(request);
 
@@ -1022,11 +901,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<List<pylons.Cookbook>> getCookbooksByCreator(
-      {required String address}) async {
+  Future<List<pylons.Cookbook>> getCookbooksByCreator({required String address}) async {
     final pylons.QueryClient queryClient = getQueryClient();
-    final request = pylons.QueryListCookbooksByCreatorRequest.create()
-      ..creator = address;
+    final request = pylons.QueryListCookbooksByCreatorRequest.create()..creator = address;
 
     final response = await queryClient.listCookbooksByCreator(request);
     return response.cookbooks;
@@ -1063,29 +940,20 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<String> sendGoogleInAppPurchaseCoinsRequest(
-      GoogleInAppPurchaseModel googleInAppPurchaseModel) async {
-    final msgGoogleInAPPPurchase = pylons.MsgGoogleInAppPurchaseGetCoins()
-      ..mergeFromProto3Json(googleInAppPurchaseModel.toJson());
+  Future<String> sendGoogleInAppPurchaseCoinsRequest(GoogleInAppPurchaseModel googleInAppPurchaseModel) async {
+    final msgGoogleInAPPPurchase = pylons.MsgGoogleInAppPurchaseGetCoins()..mergeFromProto3Json(googleInAppPurchaseModel.toJson());
 
-    final customTransactionSigningGateway =
-        getCustomTransactionSigningGateway();
+    final customTransactionSigningGateway = getCustomTransactionSigningGateway();
 
-    final walletsResultEither =
-        await customTransactionSigningGateway.getWalletsList();
+    final walletsResultEither = await customTransactionSigningGateway.getWalletsList();
     if (walletsResultEither.isLeft()) {
-      crashlyticsHelper.recordFatalError(
-          error: walletsResultEither.swap().toOption().toNullable()!.message);
-      throw const TransactionSigningFailure(
-          message: SOMETHING_WRONG_FETCHING_WALLETS,
-          type: HandlerFactory.ERR_FETCHING_WALLETS);
+      crashlyticsHelper.recordFatalError(error: walletsResultEither.swap().toOption().toNullable()!.message);
+      throw const TransactionSigningFailure(message: SOMETHING_WRONG_FETCHING_WALLETS, type: HandlerFactory.ERR_FETCHING_WALLETS);
     }
 
     final accountsList = walletsResultEither.getOrElse(() => []);
     if (accountsList.isEmpty) {
-      throw TransactionSigningFailure(
-          message: "no_profile_found".tr(),
-          type: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
+      throw TransactionSigningFailure(message: "no_profile_found".tr(), type: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
     }
     final info = accountsList.last;
 
@@ -1095,10 +963,8 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<String> sendAppleInAppPurchaseCoinsRequest(
-      AppleInAppPurchaseModel appleInAppPurchaseModel) {
-    final msgAppleInAppPurchases = pylons.MsgAppleIap()
-      ..mergeFromProto3Json(appleInAppPurchaseModel.toJson());
+  Future<String> sendAppleInAppPurchaseCoinsRequest(AppleInAppPurchaseModel appleInAppPurchaseModel) {
+    final msgAppleInAppPurchases = pylons.MsgAppleIap()..mergeFromProto3Json(appleInAppPurchaseModel.toJson());
 
     return _signAndBroadcast(msgAppleInAppPurchases);
   }
@@ -1119,43 +985,29 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<String> createDynamicLinkForUserInvite(
-      {required String address}) async {
+  Future<String> createDynamicLinkForUserInvite({required String address}) async {
     final dynamicLinkParams = DynamicLinkParameters(
       link: Uri.parse("https://wallet.pylons.tech/invite/$address"),
       uriPrefix: "https://pylons.page.link/",
-      androidParameters:
-          const AndroidParameters(packageName: "tech.pylons.wallet"),
+      androidParameters: const AndroidParameters(packageName: "tech.pylons.wallet"),
       iosParameters: const IOSParameters(bundleId: "xyz.pylons.wallet"),
     );
 
-    final shortLink =
-        await dynamicLinksGenerator.buildShortLink(dynamicLinkParams);
+    final shortLink = await dynamicLinksGenerator.buildShortLink(dynamicLinkParams);
     return shortLink.shortUrl.toString();
   }
 
   @override
   Future<TransactionResponse> createAccount(
-      {required AccountPublicInfo publicInfo,
-      required WalletCreationModel walletCreationModel,
-      required String appCheckToken,
-      required String referralToken}) async {
-    final customTransactionSigningGateway =
-        getCustomTransactionSigningGateway();
+      {required AccountPublicInfo publicInfo, required WalletCreationModel walletCreationModel, required String appCheckToken, required String referralToken}) async {
+    final customTransactionSigningGateway = getCustomTransactionSigningGateway();
     final walletLookupKey = createWalletLookUp(publicInfo);
 
-    final msgObj = pylons.MsgCreateAccount(
-        creator: walletCreationModel.creatorAddress,
-        username: walletCreationModel.userName,
-        token: appCheckToken,
-        referralAddress: referralToken);
+    final msgObj = pylons.MsgCreateAccount(creator: walletCreationModel.creatorAddress, username: walletCreationModel.userName, token: appCheckToken, referralAddress: referralToken);
 
     final unsignedTransaction = UnsignedAlanTransaction(messages: [msgObj]);
 
-    final result = await customTransactionSigningGateway
-        .signTransaction(
-            transaction: unsignedTransaction, walletLookupKey: walletLookupKey)
-        .mapError<dynamic>((error) {
+    final result = await customTransactionSigningGateway.signTransaction(transaction: unsignedTransaction, walletLookupKey: walletLookupKey).mapError<dynamic>((error) {
       throw error;
     }).flatMap(
       (signed) => customTransactionSigningGateway.broadcastTransaction(
@@ -1170,6 +1022,11 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     return result.getOrElse(() => TransactionResponse.initial());
   }
+
+  @override
+  Future<bool> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) {
+    return firebaseHelper.saveUserFeedback(walletAddress: walletAddress, subject: subject, feedback: feedback);
+  }
 }
 
 class AppleInAppPurchaseModel {
@@ -1178,18 +1035,9 @@ class AppleInAppPurchaseModel {
   String recieptData;
   String creator;
 
-  AppleInAppPurchaseModel(
-      {required this.productID,
-      required this.purchaseID,
-      required this.recieptData,
-      required this.creator});
+  AppleInAppPurchaseModel({required this.productID, required this.purchaseID, required this.recieptData, required this.creator});
 
-  Map<String, String> toJson() => {
-        "productId": productID,
-        "purchaseId": purchaseID,
-        "receiptDataBase64": recieptData,
-        "creator": creator
-      };
+  Map<String, String> toJson() => {"productId": productID, "purchaseId": purchaseID, "receiptDataBase64": recieptData, "creator": creator};
 }
 
 class GoogleInAppPurchaseModel {
@@ -1199,20 +1047,9 @@ class GoogleInAppPurchaseModel {
   String signature;
   String creator;
 
-  GoogleInAppPurchaseModel(
-      {required this.productID,
-      required this.purchaseToken,
-      required this.recieptData,
-      required this.signature,
-      required this.creator});
+  GoogleInAppPurchaseModel({required this.productID, required this.purchaseToken, required this.recieptData, required this.signature, required this.creator});
 
-  Map<String, String> toJson() => {
-        "product_id": productID,
-        "purchase_token": purchaseToken,
-        "receipt_data_base64": getReceiptDataInBase64(),
-        "signature": signature,
-        "creator": creator
-      };
+  Map<String, String> toJson() => {"product_id": productID, "purchase_token": purchaseToken, "receipt_data_base64": getReceiptDataInBase64(), "signature": signature, "creator": creator};
 
   String getReceiptDataInBase64() {
     return base64Url.encode(utf8.encode(jsonEncode(recieptData)));
