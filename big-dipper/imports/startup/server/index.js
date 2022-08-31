@@ -17,15 +17,11 @@ import { Helmet } from 'react-helmet';
 const IMAGE_WIDTH = 1200;
 const IMAGE_HEIGHT = 800;
 
-var siteName = 'Big-Dipper';
-var description = 'Wallet deep link';
-var price = "No Price"
-var picWidth = IMAGE_WIDTH;
-var picHeight = IMAGE_HEIGHT;   
+  
 const defaultImage = '/img/buy_icon.png'; 
 const defaultMetaTags = `
-<meta property="og:title"       content="${siteName}" />
-<meta property="og:description" content="${description}" />
+<meta property="og:title"       content="${"Big-Dipper"}" />
+<meta property="og:description" content="${"Wallet deep link"}" />
 <meta property="og:image"       content="${defaultImage}" />
 <meta property="og:url"         content="" />
 `;
@@ -58,6 +54,12 @@ Meteor.startup(() => {
         var nftType = ''; 
         var selectedRecipe = null;
         var selectedItem = null;
+
+        var siteName = "Big-Dipper";
+        var description = "Wallet deep link";
+        var price = "No Price";
+        var picWidth = IMAGE_WIDTH;
+        var picHeight = IMAGE_HEIGHT; 
         
         
         if (querys.get('recipe_id') !== null && querys.get('cookbook_id') !== null && querys.get('address') !== null ) {
