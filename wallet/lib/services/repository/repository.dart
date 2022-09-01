@@ -16,6 +16,7 @@ import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_request.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_response.dart';
 import 'package:pylons_wallet/model/transaction.dart';
+import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pbgrpc.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
@@ -446,6 +447,22 @@ abstract class Repository {
   /// Input: [publicInfo] contains info related to user chain address, [walletCreationModel] contains user entered data
   /// Output: if successful will give [TransactionResponse] else will  return [Failure]
   Future<Either<Failure, TransactionResponse>> createAccount({required AccountPublicInfo publicInfo, required WalletCreationModel walletCreationModel});
+
+  /// This method will save the Transaction Failure data to local DB
+  /// Input: [TransactionManager] the Transaction Input needs to retry the retry the transaction
+  /// Output: [int] returns id of the inserted document
+  Future<Either<Failure, int>> saveTransactionFailure(TransactionManager txManager);
+
+  /// This method will get you all the transactionFailures from the DB
+  /// Output: This method will return the List of [TransactionManager] failures
+  Future<Either<Failure, List<TransactionManager>>> getAllTransactionFailures();
+
+  /// This method will remove the Transaction failure record from the DB
+  /// Input: [id] This method will take id of the transaction record to be removed
+  /// Output: [bool] status of the process is successful or not
+  Future<Either<Failure, bool>> deleteTransactionFailureRecord(int id);
+
+
 }
 
 class RepositoryImp implements Repository {
@@ -1791,6 +1808,36 @@ class RepositoryImp implements Repository {
     } on Exception catch (e) {
       recordErrorInCrashlytics(e);
       return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteTransactionFailureRecord(int id) async {
+    try {
+      final result = await localDataSource.deleteTransactionFailureRecord(id);
+      return Right(result);
+    } on Exception catch (_) {
+      return Left(CacheFailure("something_wrong".tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<TransactionManager>>> getAllTransactionFailures() async {
+    try {
+      final result = await localDataSource.getAllTransactionFailures();
+      return Right(result);
+    } on Exception catch (_) {
+      return Left(CacheFailure("something_wrong".tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> saveTransactionFailure(TransactionManager txManager) async {
+    try {
+      final result = await localDataSource.saveTransactionFailure(txManager);
+      return Right(result);
+    } on Exception catch (_) {
+      return Left(CacheFailure("something_wrong".tr()));
     }
   }
 }

@@ -12,3 +12,13 @@ enum Orientation {
   Orientation_NW,
   Orientation_SW,
 }
+
+enum FailureTypeEnum {
+  GeneratePaymentReceipt,
+  UpdateLikeStatus,
+  StripePayout,
+  AppleInAppCoinsRequest,
+  GoogleInAppCoinsRequest,
+  BuyProduct,
+  Unknown
+}

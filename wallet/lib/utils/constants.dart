@@ -347,6 +347,7 @@ const String kThreeDText = "ThreeD";
 
 const String kRecipeIdMap = "recipeId";
 const String kCookbookIdMap = "cookbookId";
+const String kWalletAddressIdMap = "walletAddress";
 const String FIREBASE_APP_CHECK_HEADER = "x-firebase-appcheck";
 
 const String kDateWithTimeFormat = "MM/dd/yyyy HH:mm";

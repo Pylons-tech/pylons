@@ -13,6 +13,7 @@ import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_request.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_response.dart';
 import 'package:pylons_wallet/model/transaction.dart';
+import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/cookbook.pb.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
@@ -510,6 +511,24 @@ class MockRepository extends Repository {
   @override
   Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) {
     // TODO: implement saveUserFeedback
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteTransactionFailureRecord(int id) {
+    // TODO: implement deleteTransactionFailureRecord
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, List<TransactionManager>>> getAllTransactionFailures() {
+    // TODO: implement getAllTransactionFailures
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, int>> saveTransactionFailure(TransactionManager txManager) {
+    // TODO: implement saveTransactionFailure
     throw UnimplementedError();
   }
 }

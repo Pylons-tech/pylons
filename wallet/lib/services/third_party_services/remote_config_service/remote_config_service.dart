@@ -1,7 +1,6 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
@@ -23,7 +22,6 @@ abstract class RemoteConfigService {
 
 class RemoteConfigServiceImpl implements RemoteConfigService {
   FirebaseRemoteConfig firebaseRemoteConfig;
-  LocalDataSource localDataSource;
   CrashlyticsHelper crashlyticsHelper;
 
   static String grpcUrl = "GRPC_URL";
@@ -49,7 +47,6 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
 
   RemoteConfigServiceImpl(
       {required this.firebaseRemoteConfig,
-      required this.localDataSource,
       required this.crashlyticsHelper});
 
   @override

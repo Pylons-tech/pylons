@@ -1,4 +1,5 @@
 import 'package:pylons_wallet/model/pick_image_model.dart';
+import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 
 class MockLocalDataSource extends LocalDataSource {
@@ -182,6 +183,24 @@ class MockLocalDataSource extends LocalDataSource {
   @override
   String getInviteeAddress() {
     // TODO: implement getInviteeAddress
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> deleteTransactionFailureRecord(int id) {
+    // TODO: implement deleteTransactionFailureRecord
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<TransactionManager>> getAllTransactionFailures() {
+    // TODO: implement getAllTransactionFailures
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<int> saveTransactionFailure(TransactionManager txManager) {
+    // TODO: implement saveTransactionFailure
     throw UnimplementedError();
   }
 }

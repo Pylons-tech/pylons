@@ -54,6 +54,12 @@ extension ConvertFromU on String {
   }
 }
 
+extension FailureTypeEnumExt on String {
+  FailureTypeEnum toFailureTypeEnum() {
+    return FailureTypeEnum.values.firstWhere((e) => e.toString() == 'FailureTypeEnum.$this', orElse: () => FailureTypeEnum.Unknown);
+  }
+}
+
 extension SplitNumAlpha on String {
   List<String> splitNumberAndAlpha() => <String>[
         ...RegExp(r'\d+|\D+')
