@@ -29,7 +29,6 @@ import 'package:pylons_sdk/pylons_sdk.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 
-import '../utils/enums.dart';
 
 typedef OnUploadProgressCallback = void Function(UploadProgress uploadProgress);
 
