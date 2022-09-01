@@ -109,6 +109,10 @@ const String kIOSEaselLink = "pylons-easel://open";
 
 const String kPrivacyPolicyLink = "https://www.pylons.tech/p/";
 const String kUnilinkUrl = "https://wallet.pylons.tech";
+const String kDeepLink = "https://pylons.page.link";
+const String bigDipperBaseLink = "https://wallet.pylons.tech/";
+const String packageName = "tech.pylons.wallet";
+const String bundleId = "xyz.pylons.wallet";
 const String kUnilinkUrl3 = "pylons://";
 const String kUnilinkSender = "wallet";
 
@@ -135,7 +139,7 @@ const String GET_LOGINLINK_FAILED = 'Stripe Get Connected Account LOGIN Link Fai
 const String PAYOUT_FAILED = 'Stripe Payout Request Failed';
 const String REGISTERACCOUNT_FAILED = 'Stripe Register Connected Account Failed';
 const String UPDATEACCOUNT_FAILED = 'Stripe Update Account Failed';
-const String IBC_HASH_UPDATE_FAILED = 'IBC hash info getting Failed';
+const String IBC_HASH_UPDATE_FAILED = 'IBC Hash Info failed';
 const String PLATFORM_FAILED = 'Platform exception occured';
 const String CACHE_FAILED = 'No data saved';
 const String NETWORK_ERROR = 'Network Error';
@@ -242,11 +246,17 @@ const String kIOSAppLink = 'https://apps.apple.com/gb/app/cashero/id1598732789?i
 
 const String kRecipeId = 'Recipe ID';
 const String kRecipes = 'recipes';
+const String kFeedbacks = 'UserFeedbacks';
 const String kLikes = 'likes';
 const String kAddress = 'address';
 const String kViews = 'views';
 const String kView = 'view';
 const String kYou = 'you';
+
+//feedback Ids
+const String kSubjectKey = 'subject';
+const String kFeedbackKey = 'feedback';
+const String kTimeStampKey = 'timestamp';
 
 const String kSoldOut = 'Sold Out';
 
@@ -360,7 +370,7 @@ const String kMessageKey = "Message";
 const String kSuccessKey = "Success";
 
 //ipc engine keys
-const String kActionKey = "action";
+
 const String kNftPurchaseKey = "purchase_nft";
 const String kNftTradeKey = "purchase_trade";
 const String kNftViewKey = "nft_view";
@@ -411,3 +421,5 @@ final defaultPylonsSKUs = jsonEncode([
   {"id": "pylons_35", "bonus": "(+5 Bonus)", "subtitle": "\$3.00", "pylons": "35 PYLN"},
   {"id": "pylons_60", "bonus": "(+10 Bonus)", "subtitle": "\$5.00", "pylons": "50 PYLN"}
 ]);
+
+const kMaxDescription = 256;
