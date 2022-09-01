@@ -20,7 +20,7 @@ const gadgetsFilename = "pylons.gadgets"
 const (
 	errDuplicateName = "duplicate gadget name: %s"
 	errReservedName  = "can't register a gadget of reserved name %s"
-	errNoHeader      = "pylons.gadgets file does not start with a valid gadget header"
+	errNoHeader      = "pylons.gadgets file does not start with a valid gadget header: \n%s"
 	errBadHeader     = "not a valid gadget header: \n%s"
 )
 
@@ -116,6 +116,8 @@ var builtinGadgets = []Gadget{
 
 var reservedNames = []string{"include"}
 
+var gadgetCache = map[string]*[]Gadget{}
+
 // one iteration
 func loadGadgetsForPath(p string, gadgets *[]Gadget) (string, string, *[]Gadget, error) {
 	fpath := path.Join(p, gadgetsFilename)
@@ -130,9 +132,16 @@ func loadGadgetsForPath(p string, gadgets *[]Gadget) (string, string, *[]Gadget,
 		if err != nil {
 			panic(err)
 		}
-		parse, err := parseGadgets(string(bytes))
-		if err != nil {
-			return "", "", nil, err
+		var parse []Gadget
+		// use the cache to avoid needlessly re-parsing gadgets we've already parsed once
+		if val, ok := gadgetCache[p]; ok {
+			parse = *val
+		} else {
+			parse, err = parseGadgets(fpath, string(bytes))
+			if err != nil {
+				return "", "", nil, err
+			}
+			gadgetCache[p] = &parse
 		}
 		*gadgets = append(parse, *gadgets...)
 	}
@@ -163,11 +172,11 @@ func parseGadget(header, json string, gadgets *[]Gadget) (*Gadget, error) {
 	if err != nil {
 		return nil, err
 	}
-	// todo: we should actually validate the json!
+	// validating gadget json would be nice but actually entails a pretty serious amount of work! (#918)
 	return &Gadget{name: gadgetName, json: json, parametersCount: gadgetArgs}, nil
 }
 
-func parseGadgets(s string) ([]Gadget, error) {
+func parseGadgets(path string, s string) ([]Gadget, error) {
 	gadgets := []Gadget{}
 	const winNewline = "\r\n"
 	const normalNewline = "\n"
@@ -177,7 +186,7 @@ func parseGadgets(s string) ([]Gadget, error) {
 	}
 	splut := strings.Split(s, nl)
 	if splut[0][0] != '#' {
-		panic(errors.New(errNoHeader)) // todo: this should specify which file, but that can wait
+		panic(fmt.Errorf(errNoHeader, path))
 	}
 	gadgetHeader := ""
 	gadgetJSON := ""
@@ -244,8 +253,7 @@ func LoadGadgetsForPath(p string) (*[]Gadget, error) {
 		}
 	}
 	var dir string
-	// refactor this to not be for/break, it's gross
-	// this logic is also v. hacky
+	// we will continue searching thru the tree until we return
 	for {
 		dir, _, gadgets, err = loadGadgetsForPath(searchDir, gadgets)
 		if err != nil || dir == searchDir {
@@ -254,8 +262,7 @@ func LoadGadgetsForPath(p string) (*[]Gadget, error) {
 		if dir != "" {
 			searchDir = dir
 		} else {
-			break
+			return gadgets, nil
 		}
 	}
-	return gadgets, nil
 }
