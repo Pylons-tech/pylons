@@ -180,7 +180,7 @@ export default class EaselBuy extends Component {
           (val) => val.key.toLowerCase() === "creator"
         )?.value;
 
-        const dimentions = this.getNFTDimentions(nftType, itemOutputs);
+        const dimentions = this.getNFTDimensions(nftType, itemOutputs);
         (edition = `${itemOutputs.amount_minted} of ${itemOutputs.quantity}`),
           this.setState({
             createdBy: creator,
@@ -205,13 +205,11 @@ export default class EaselBuy extends Component {
       });
   };
 
-  getNFTDimentions = (nftType, data) => {
+  getNFTDimensions = (nftType, data) => {
     const milli_seconds_to_minute = 60000;
     const milli_value = 1000;
     const sinlge_digit = 10;
-    if (
-      nftType?.toLowerCase() === "image" 
-    ) {
+    if (nftType?.toLowerCase() === "image") {
       return (
         data.longs[1].weightRanges[0].lower +
         " x " +
@@ -227,13 +225,14 @@ export default class EaselBuy extends Component {
         (millisecondsDuration % milli_seconds_to_minute) /
         milli_value
       ).toFixed(0);
-      return minutes + ":" + (seconds < sinlge_digit ? "0" : "") + seconds + " min";
+      return (
+        minutes + ":" + (seconds < sinlge_digit ? "0" : "") + seconds + " min"
+      );
     } else if (
       nftType?.toLowerCase() === "3d" ||
       nftType?.toLowerCase() === "pdf"
     ) {
-      return data.strings.find((val) => val.key === "fileSize")
-        ?.value;
+      return data.strings.find((val) => val.key === "fileSize")?.value;
     } else {
     }
   };

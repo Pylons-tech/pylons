@@ -145,21 +145,21 @@ export default class ItemShare extends Component {
           (val) => val.key.toLowerCase() === "creator"
         )?.value;
 
-        const dimentions = this.getNFTDimentions(nftType, selectedRecipe);
-          this.setState({
-            createdBy: creator,
-            name: selectedRecipe.name,
-            description: selectedRecipe?.strings[2]?.value,
-            denom,
-            nftType,
-            dimentions,
-            displayName: coin?.displayName,
-            royalty: +selectedRecipe.trade_percentage * tradePercent,
-            media,
-            createdAt: selectedRecipe.created_at,
-            id: selectedRecipe.id,
-            src,
-          });
+        const dimentions = this.getNFTDimensions(nftType, selectedRecipe);
+        this.setState({
+          createdBy: creator,
+          name: selectedRecipe.name,
+          description: selectedRecipe?.strings[2]?.value,
+          denom,
+          nftType,
+          dimentions,
+          displayName: coin?.displayName,
+          royalty: +selectedRecipe.trade_percentage * tradePercent,
+          media,
+          createdAt: selectedRecipe.created_at,
+          id: selectedRecipe.id,
+          src,
+        });
       })
       .catch((err) => {
         this.setState({ loading: false });
@@ -167,18 +167,12 @@ export default class ItemShare extends Component {
       });
   };
 
-  getNFTDimentions = (nftType, data) => {
+  getNFTDimensions = (nftType, data) => {
     const milli_seconds_to_minute = 60000;
     const milli_value = 1000;
     const sinlge_digit = 10;
-    if (
-      nftType?.toLowerCase() === "image"
-    ) {
-      return (
-        data?.longs[1]?.value +
-        " x " +
-        data?.longs[2]?.value
-      );
+    if (nftType?.toLowerCase() === "image") {
+      return data?.longs[1]?.value + " x " + data?.longs[2]?.value;
     } else if (
       nftType?.toLowerCase() === "audio" ||
       nftType?.toLowerCase() === "video"
@@ -192,7 +186,10 @@ export default class ItemShare extends Component {
       return (
         minutes + ":" + (seconds < sinlge_digit ? "0" : "") + seconds + " min"
       );
-    } else if (nftType?.toLowerCase() === "3d" || nftType?.toLowerCase() === "pdf") {
+    } else if (
+      nftType?.toLowerCase() === "3d" ||
+      nftType?.toLowerCase() === "pdf"
+    ) {
       return data?.strings?.find((val) => val.key.toLowerCase() === "fileSize")
         ?.value;
     } else {
