@@ -251,12 +251,12 @@ abstract class RemoteDataStore {
   Future<String> createDynamicLinkForRecipeNftShare({required String address, required NFT nft});
 
   /// This method will create dynamic link for the nft share trade
-  /// Input : [address] the address & [TradeId] against which the invite link to be generated
+  /// Input : [address] the address & [tradeId] against which the invite link to be generated
   /// Output: [String] return the generated dynamic link else will throw error
   Future<String> createDynamicLinkForTradeNftShare({required String address, required String tradeId});
 
   /// This method will create dynamic link for the nft share purchase
-  /// Input : [address] the address & [itemId] & [cookbookId] against which the invite link to be generated
+  /// Input : [address] the address & [itemId] the id of the item& [cookbookId] against which the invite link to be generated
   /// Output: [String] return the generated dynamic link else will throw error
   Future<String> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId});
 
@@ -1019,22 +1019,17 @@ class RemoteDataStoreImp implements RemoteDataStore {
   @override
   Future<String> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) async {
     final dynamicLinkParams = DynamicLinkParameters(
-      socialMetaTagParameters: SocialMetaTagParameters(title: nft.name, description: nft.description, imageUrl: getUri(nft)),
       link: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address"),
       uriPrefix: kDeepLink,
-      androidParameters:
-          AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
+      androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
       iosParameters: IOSParameters(bundleId: bundleId, fallbackUrl: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
     );
-    try {
-      final link = await dynamicLinksGenerator.buildShortLink(
-        dynamicLinkParams,
-        shortLinkType: ShortDynamicLinkType.unguessable,
-      );
-      return link.shortUrl.toString();
-    } catch (e) {
-      return '';
-    }
+
+    final link = await dynamicLinksGenerator.buildShortLink(
+      dynamicLinkParams,
+      shortLinkType: ShortDynamicLinkType.unguessable,
+    );
+    return link.shortUrl.toString();
   }
 
   Uri getUri(NFT nft) {
@@ -1076,29 +1071,22 @@ class RemoteDataStoreImp implements RemoteDataStore {
       androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?item_id=$itemId&cookbook_id=$cookbookId&address=$address")),
       iosParameters: const IOSParameters(bundleId: bundleId),
     );
-    try {
-      final link = await dynamicLinksGenerator.buildLink(dynamicLinkParams);
-      return link.toString();
-    } catch (e) {
-      return '';
-    }
+
+    final link = await dynamicLinksGenerator.buildLink(dynamicLinkParams);
+    return link.toString();
   }
 
   @override
   Future<String> createDynamicLinkForTradeNftShare({required String address, required String tradeId}) async {
     final dynamicLinkParams = DynamicLinkParameters(
-      socialMetaTagParameters: const SocialMetaTagParameters(),
       link: Uri.parse("$bigDipperBaseLink?trade_id=$tradeId&address=$address"),
       uriPrefix: kDeepLink,
       androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?trade_id=$tradeId&address=$address")),
       iosParameters: const IOSParameters(bundleId: bundleId),
     );
-    try {
-      final link = await dynamicLinksGenerator.buildShortLink(dynamicLinkParams);
-      return link.shortUrl.toString();
-    } catch (e) {
-      return '';
-    }
+
+    final link = await dynamicLinksGenerator.buildShortLink(dynamicLinkParams);
+    return link.shortUrl.toString();
   }
 
   @override

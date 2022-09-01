@@ -444,17 +444,17 @@ abstract class Repository {
   Future<Either<Failure, String>> createDynamicLinkForUserInvite({required String address});
 
   /// This method will create dynamic link for the nft share recipe
-  /// Input : [address] the address against which the invite link to be generated
+  /// Input : [address] the address against which the invite link to be generated, [nft] the nft whose link to be created
   /// Output: [String] return the generated dynamic link else will return [Failure]
   Future<Either<Failure, String>> createDynamicLinkForRecipeNftShare({required String address, required NFT nft});
 
   /// This method will create dynamic link for the nft share trade
-  /// Input : [address] the address against which the invite link to be generated
+  /// Input : [address] the address against which the invite link to be generated, [tradeId] the id of the trade item
   /// Output: [String] return the generated dynamic link else will throw error
   Future<Either<Failure, String>> createDynamicLinkForTradeNftShare({required String address, required String tradeId});
 
   /// This method will create dynamic link for the nft share item
-  /// Input : [address] the address against which the invite link to be generated
+  /// Input : [address] the address against which the invite link to be generated, [itemId] the id of the item, [cookbookId] the id of the cookbook
   /// Output: [String] return the generated dynamic link else will throw error
   Future<Either<Failure, String>> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId});
 
