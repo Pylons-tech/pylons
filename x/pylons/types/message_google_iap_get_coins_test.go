@@ -73,7 +73,7 @@ func TestMsgGoogleInAppPurchaseGetCoinsValidateBasic(t *testing.T) {
 			err: fmt.Errorf("purchaseToken does not match with receipt data"),
 		},
 		{
-			desc: "Valid",
+			desc: "Invalid Product Id",
 			req: &MsgGoogleInAppPurchaseGetCoins{
 				Creator:           correctAddr,
 				ProductId:         "INVALID_PRODUCTID",
