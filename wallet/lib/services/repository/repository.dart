@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:alan/alan.dart' as alan;
 import 'package:dartz/dartz.dart';
@@ -754,6 +755,14 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, StripeGeneratePaymentReceiptResponse>> GeneratePaymentReceipt(StripeGeneratePaymentReceiptRequest req) async {
     if (!await networkInfo.isConnected) {
+      final TransactionManager txManager = TransactionManager(
+          transactionType: 'FailureTypeEnum.GeneratePaymentReceipt',
+          transactionErrorCode: '00',
+          transactionData: jsonEncode(req.toJson()),
+          transactionDescription: 'Could not generate receipt',
+          dateTime: DateTime.now().millisecondsSinceEpoch);
+
+      saveTransactionFailure(txManager);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
@@ -859,6 +868,14 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, StripePayoutResponse>> Payout(StripePayoutRequest req) async {
     if (!await networkInfo.isConnected) {
+      final TransactionManager txManager = TransactionManager(
+          transactionType: 'FailureTypeEnum.StripePayout',
+          transactionErrorCode: '00',
+          transactionData: jsonEncode(req.toJson()),
+          transactionDescription: 'Error while stripe payout',
+          dateTime: DateTime.now().millisecondsSinceEpoch);
+
+      saveTransactionFailure(txManager);
       return Left(NoInternetFailure("no_internet".tr()));
     }
     try {
@@ -1558,7 +1575,7 @@ class RepositoryImp implements Repository {
       };
 
       final TransactionManager txManager = TransactionManager(
-          transactionType: 'updateLikeStatus',
+          transactionType: 'FailureTypeEnum.UpdateLikeStatus',
           transactionErrorCode: '00',
           transactionData: jsonEncode(jsonString),
           transactionDescription: 'Could not Update Like Status of NFT',
@@ -1580,6 +1597,14 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(AppleInAppPurchaseModel appleInAppPurchaseModel) async {
     if (!await networkInfo.isConnected) {
+      final TransactionManager txManager = TransactionManager(
+          transactionType: 'FailureTypeEnum.AppleInAppCoinsRequest',
+          transactionErrorCode: '00',
+          transactionData: jsonEncode(appleInAppPurchaseModel.toJson()),
+          transactionDescription: 'Error while purchasing apple coins',
+          dateTime: DateTime.now().millisecondsSinceEpoch);
+
+      saveTransactionFailure(txManager);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
@@ -1599,6 +1624,14 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(GoogleInAppPurchaseModel msgGoogleInAPPPurchase) async {
     if (!await networkInfo.isConnected) {
+      final TransactionManager txManager = TransactionManager(
+          transactionType: 'FailureTypeEnum.GoogleInAppCoinsRequest',
+          transactionErrorCode: '00',
+          transactionData: jsonEncode(msgGoogleInAPPPurchase.toJson()),
+          transactionDescription: 'Error while purchasing google coins',
+          dateTime: DateTime.now().millisecondsSinceEpoch);
+
+      saveTransactionFailure(txManager);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
@@ -1637,6 +1670,25 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, bool>> buyProduct(ProductDetails productDetails) async {
     if (!await networkInfo.isConnected) {
+      final Map<String, dynamic> data = {};
+      data.addAll({
+        'id': productDetails.id,
+        'title': productDetails.title,
+        'description': productDetails.description,
+        'price': productDetails.price,
+        'rawPrice': productDetails.rawPrice,
+        'currencyCode': productDetails.currencyCode,
+        'currencySymbol': productDetails.currencySymbol
+      });
+      log(jsonEncode(data));
+      final TransactionManager txManager = TransactionManager(
+          transactionType: 'FailureTypeEnum.BuyProduct',
+          transactionErrorCode: '00',
+          transactionData: jsonEncode(data),
+          transactionDescription: 'Could not Buy Product Like Status of NFT',
+          dateTime: DateTime.now().millisecondsSinceEpoch);
+
+      saveTransactionFailure(txManager);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 

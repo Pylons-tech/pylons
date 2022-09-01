@@ -32,9 +32,7 @@ extension ConvertToUSD on String {
   String convertToUSD(TransactionHistory item) {
     switch (this) {
       case kPylonCoinName:
-        return (double.parse(convertFromU(item)) * pyLonToUsdConstant)
-            .toInt()
-            .toString();
+        return (double.parse(convertFromU(item)) * pyLonToUsdConstant).toInt().toString();
     }
     return '';
   }
@@ -44,11 +42,7 @@ extension ConvertFromU on String {
   String convertFromU(TransactionHistory item) {
     switch (this) {
       case kPylonCoinName:
-        return (double.parse(item.amount
-                    .substring(0, item.amount.length - (length + 1))) /
-                kBigIntBase)
-            .toString()
-            .truncateAfterDecimal(2);
+        return (double.parse(item.amount.substring(0, item.amount.length - (length + 1))) / kBigIntBase).toString().truncateAfterDecimal(2);
     }
     return '';
   }
@@ -56,22 +50,16 @@ extension ConvertFromU on String {
 
 extension FailureTypeEnumExt on String {
   FailureTypeEnum toFailureTypeEnum() {
-    return FailureTypeEnum.values.firstWhere((e) => e.toString() == 'FailureTypeEnum.$this', orElse: () => FailureTypeEnum.Unknown);
+    return FailureTypeEnum.values.firstWhere((e) => e.toString() == this, orElse: () => FailureTypeEnum.Unknown);
   }
 }
 
 extension SplitNumAlpha on String {
-  List<String> splitNumberAndAlpha() => <String>[
-        ...RegExp(r'\d+|\D+')
-            .allMatches(this)
-            .map((match) => match[0]!)
-            .map((string) => string)
-      ];
+  List<String> splitNumberAndAlpha() => <String>[...RegExp(r'\d+|\D+').allMatches(this).map((match) => match[0]!).map((string) => string)];
 }
 
 extension GetDynamicLink on String {
-  String createDynamicLink(
-      {required String cookbookId, required String address}) {
+  String createDynamicLink({required String cookbookId, required String address}) {
     return "$kUnilinkUrl/?recipe_id=$this&cookbook_id=$cookbookId&address=$address";
   }
 
@@ -79,8 +67,7 @@ extension GetDynamicLink on String {
     return "$kUnilinkUrl/?trade_id=$this&address=$address";
   }
 
-  String createPurchaseNFT(
-      {required String cookBookId, required String address}) {
+  String createPurchaseNFT({required String cookBookId, required String address}) {
     return "$kUnilinkUrl/?cookbook_id=$cookBookId&item_id=$this&address=$address";
   }
 }
@@ -184,9 +171,7 @@ extension TrimStringShort on String {
 
 extension TransactionTypePar on dynamic {
   TransactionType toTransactionTypeEnum() {
-    return TransactionType.values.firstWhere(
-        (e) => e.toString() == 'AssetType.$this',
-        orElse: () => TransactionType.RECEIVE);
+    return TransactionType.values.firstWhere((e) => e.toString() == 'AssetType.$this', orElse: () => TransactionType.RECEIVE);
   }
 }
 
@@ -197,9 +182,7 @@ extension AssetTypePar on String {
       value = kThreeDText;
     }
 
-    return AssetType.values.firstWhere(
-        (e) => e.toString() == 'AssetType.$value',
-        orElse: () => AssetType.Image);
+    return AssetType.values.firstWhere((e) => e.toString() == 'AssetType.$value', orElse: () => AssetType.Image);
   }
 }
 

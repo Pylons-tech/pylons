@@ -23,6 +23,7 @@ import 'package:pylons_wallet/pages/settings/screens/general_screen/general_scre
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_viewmodel.dart';
 import 'package:pylons_wallet/pages/settings/screens/recovery_screen/screens/practice_test.dart';
 import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
+import 'package:pylons_wallet/pages/transaction_failure_manager/failure_manager_view_model.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
@@ -61,7 +62,6 @@ import 'package:transaction_signing_gateway/storage/cosmos_key_info_storage.dart
 import 'package:transaction_signing_gateway/storage/flutter_secure_storage_data_store.dart';
 import 'package:transaction_signing_gateway/storage/shared_prefs_plain_data_store.dart';
 import 'package:video_player/video_player.dart';
-
 
 final sl = GetIt.instance;
 
@@ -194,6 +194,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UserInfoProvider(sl()));
   sl.registerLazySingleton(() => GeneralScreenLocalizationViewModel(shareHelper: sl(), repository: sl(), walletStore: sl()));
   sl.registerLazySingleton(() => PracticeTestViewModel(sl()));
+  sl.registerLazySingleton(() => FailureManagerViewModel(repository: sl()));
   sl.registerFactory(() => OwnerViewViewModel(
         repository: sl(),
         walletsStore: sl(),

@@ -23,8 +23,8 @@ import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/firestore_helper.dart';
@@ -1037,6 +1037,12 @@ class AppleInAppPurchaseModel {
 
   AppleInAppPurchaseModel({required this.productID, required this.purchaseID, required this.recieptData, required this.creator});
 
+  AppleInAppPurchaseModel.fromJson(Map<String, dynamic> json)
+      : productID = json['productId'] as String,
+        purchaseID = json['purchaseId'] as String,
+        recieptData = json['receiptDataBase64'] as String,
+        creator = json['creator'] as String;
+
   Map<String, String> toJson() => {"productId": productID, "purchaseId": purchaseID, "receiptDataBase64": recieptData, "creator": creator};
 }
 
@@ -1048,6 +1054,13 @@ class GoogleInAppPurchaseModel {
   String creator;
 
   GoogleInAppPurchaseModel({required this.productID, required this.purchaseToken, required this.recieptData, required this.signature, required this.creator});
+
+  GoogleInAppPurchaseModel.fromJson(Map<String, dynamic> json)
+      : productID = json['product_id'] as String,
+        purchaseToken = json['purchase_token'] as String,
+        recieptData = json['receipt_data_base64'] as Map,
+        signature = json['signature'] as String,
+        creator = json['creator'] as String;
 
   Map<String, String> toJson() => {"product_id": productID, "purchase_token": purchaseToken, "receipt_data_base64": getReceiptDataInBase64(), "signature": signature, "creator": creator};
 

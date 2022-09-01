@@ -24,6 +24,7 @@ class AddPylonScreen extends StatefulWidget {
 
 class _AddPylonScreenState extends State<AddPylonScreen> {
   Repository get repository => GetIt.I.get();
+
   BaseEnv get baseEnv => GetIt.I.get();
 
   @override
@@ -144,6 +145,7 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
       final inAppPurchaseResponse = await repository.isInAppPurchaseAvailable();
 
       if (inAppPurchaseResponse.isLeft()) {
+        loading.dismiss();
         inAppPurchaseResponse.swap().toOption().toNullable()!.message.show();
         return;
       }
