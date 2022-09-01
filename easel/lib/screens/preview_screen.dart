@@ -36,16 +36,16 @@ class _PreviewScreenState extends State<PreviewScreen> {
     switch (easelProvider.nftFormat.format) {
       case NFTTypes.image:
         return SizedBox(
-          width: 0.6.sw,
+          width: isTablet ? 0.3.sw : 0.5.sw,
           child: Theme(
             data: Theme.of(context).copyWith(unselectedWidgetColor: Colors.white),
             child: CheckboxListTile(
               dense: true,
-              contentPadding: EdgeInsets.symmetric(horizontal: isTablet ? 50.w : 40.w),
+              // contentPadding: EdgeInsets.symmetric(horizontal: isTablet ? 50.w : 40.w),
               value: easelProvider.imageCheckBox,
               title: AutoSizeText(
                 'fit_to_screen'.tr(),
-                style: const TextStyle(color: EaselAppTheme.kWhite),
+                style: TextStyle(color: EaselAppTheme.kWhite, fontSize: 9.sp),
               ),
               onChanged: (value) => easelProvider.setImageCheckBox(value!),
               selected: easelProvider.imageCheckBox,
