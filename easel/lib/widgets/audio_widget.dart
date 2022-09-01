@@ -26,10 +26,10 @@ class AudioWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  _AudioWidgetState createState() => _AudioWidgetState();
+  AudioWidgetState createState() => AudioWidgetState();
 }
 
-class _AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
+class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
   EaselProvider get easelProvider => GetIt.I.get();
 
   Repository get repository => GetIt.I.get<Repository>();
