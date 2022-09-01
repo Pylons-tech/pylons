@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:alan/alan.dart' as alan;
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -461,8 +463,6 @@ abstract class Repository {
   /// Input: [id] This method will take id of the transaction record to be removed
   /// Output: [bool] status of the process is successful or not
   Future<Either<Failure, bool>> deleteTransactionFailureRecord(int id);
-
-
 }
 
 class RepositoryImp implements Repository {
@@ -1073,7 +1073,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, bool>> saveIsBannerDark({required bool isBannerDark}) async {
     try {
-      return Right(await localDataSource.saveIsBannerDark( isBannerDark: isBannerDark));
+      return Right(await localDataSource.saveIsBannerDark(isBannerDark: isBannerDark));
     } on Exception catch (_) {
       return const Left(CacheFailure(PLATFORM_FAILED));
     }
@@ -1551,6 +1551,20 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, void>> updateLikeStatus({required String recipeId, required String cookBookID, required String walletAddress}) async {
     if (!await networkInfo.isConnected) {
+      final jsonString = {
+        kWalletAddressIdMap: walletAddress,
+        kCookbookIdMap: cookBookID,
+        kRecipeIdMap: recipeId,
+      };
+
+      final TransactionManager txManager = TransactionManager(
+          transactionType: 'updateLikeStatus',
+          transactionErrorCode: '00',
+          transactionData: jsonEncode(jsonString),
+          transactionDescription: 'Could not Update Like Status of NFT',
+          dateTime: DateTime.now().millisecondsSinceEpoch);
+
+      saveTransactionFailure(txManager);
       return Left(NoInternetFailure("no_internet".tr()));
     }
     try {
