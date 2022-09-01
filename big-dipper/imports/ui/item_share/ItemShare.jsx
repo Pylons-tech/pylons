@@ -170,7 +170,7 @@ export default class ItemShare extends Component {
   getNFTDimensions = (nftType, data) => {
     const milli_seconds_to_minute = 60000;
     const milli_value = 1000;
-    const sinlge_digit = 10;
+    const single_digit = 10;
     if (nftType?.toLowerCase() === "image") {
       return data?.longs[1]?.value + " x " + data?.longs[2]?.value;
     } else if (
@@ -184,7 +184,7 @@ export default class ItemShare extends Component {
         milli_value
       ).toFixed(0);
       return (
-        minutes + ":" + (seconds < sinlge_digit ? "0" : "") + seconds + " min"
+        minutes + ":" + (seconds < single_digit ? "0" : "") + seconds + " min"
       );
     } else if (
       nftType?.toLowerCase() === "3d" ||

@@ -50,6 +50,10 @@ export default class EaselBuy extends Component {
     };
     this.hideComponent = this.hideComponent.bind(this);
     // this.hideComponentDesc = this.hideComponent.bind(this);
+    const milli_seconds_to_minute = 60000;
+    const milli_value = 1000;
+    const single_digit = 10;
+
   }
 
   hideComponent(name) {
@@ -206,9 +210,6 @@ export default class EaselBuy extends Component {
   };
 
   getNFTDimensions = (nftType, data) => {
-    const milli_seconds_to_minute = 60000;
-    const milli_value = 1000;
-    const sinlge_digit = 10;
     if (nftType?.toLowerCase() === "image") {
       return (
         data.longs[1].weightRanges[0].lower +
@@ -226,7 +227,7 @@ export default class EaselBuy extends Component {
         milli_value
       ).toFixed(0);
       return (
-        minutes + ":" + (seconds < sinlge_digit ? "0" : "") + seconds + " min"
+        minutes + ":" + (seconds < single_digit ? "0" : "") + seconds + " min"
       );
     } else if (
       nftType?.toLowerCase() === "3d" ||
