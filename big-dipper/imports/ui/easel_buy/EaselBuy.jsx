@@ -47,8 +47,6 @@ export default class EaselBuy extends Component {
       showHideComp3: false,
       showHideComp4: false,
       showHideDetails: false,
-      nftViews: 0,
-      nftLikes: 0,
     };
     this.hideComponent = this.hideComponent.bind(this);
     // this.hideComponentDesc = this.hideComponent.bind(this);
@@ -83,20 +81,18 @@ export default class EaselBuy extends Component {
         });
         break;
       case "showHideDetails":
-          this.setState({
-            showHideDetails: !this.state.showHideDetails,
-          });
-          break;
+        this.setState({
+          showHideDetails: !this.state.showHideDetails,
+        });
+        break;
       default:
         null;
     }
   }
- 
+
   componentDidMount() {
     this.handleFetchData();
     this.handleFetchhistory();
-    this.handleFetchLikes();
-    this.handleFetchViews();
   }
   handleFetchhistory = () => {
     console.log("fetch history");
@@ -124,6 +120,7 @@ export default class EaselBuy extends Component {
         let price;
         let edition;
         let denom;
+        let src;
         const tradePercent = 100;
         const res = _.cloneDeep(response);
         this.setState({ loading: false });
@@ -165,15 +162,19 @@ export default class EaselBuy extends Component {
           (val) => val.key.toLowerCase() === "nft_format"
         )?.value;
         if (entries != null) {
-          if(nftType.toLowerCase()=="pdf"){
+          if (nftType.toLowerCase() == "audio") {
             const mediaUrl = strings.find((val) => val.key === "Thumbnail_URL");
             media = mediaUrl ? mediaUrl.value : "";
+            const srcUrl = strings.find((val) => val.key === "NFT_URL");
+            src = srcUrl ? srcUrl.value : "";
+          } else if (nftType.toLowerCase() == "pdf") {
+            const mediaUrl = strings.find((val) => val.key === "Thumbnail_URL");
+            media = mediaUrl ? mediaUrl.value : "";
+          } else {
+            const mediaUrl = strings.find((val) => val.key === "NFT_URL");
+            media = mediaUrl ? mediaUrl.value : "";
           }
-          else{
-          const mediaUrl = strings.find((val) => val.key === "NFT_URL");
-          media = mediaUrl ? mediaUrl.value : "";
         }
-      }
 
         const creator = strings.find(
           (val) => val.key.toLowerCase() === "creator"
@@ -195,40 +196,12 @@ export default class EaselBuy extends Component {
             media,
             createdAt: selectedRecipe.created_at,
             id: selectedRecipe.id,
+            src,
           });
       })
       .catch((err) => {
         this.setState({ loading: false });
         console.log(err);
-      });
-  };
-
-  handleFetchLikes = () => {
-    const url = settings.public.baseURL;
-    axios
-      .get(
-        `${url}/api/actions/likes/${this.props.cookbook_id}/${this.props.recipe_id}`
-      )
-      .then((res) => {
-        if (res.data.Code === 200) {
-          this.setState({
-            nftLikes: res.data.Data.totalLikes,
-          });
-        }
-      });
-  };
-  handleFetchViews = () => {
-    const url = settings.public.baseURL;
-    axios
-      .get(
-        `${url}/api/actions/views/${this.props.cookbook_id}/${this.props.recipe_id}`
-      )
-      .then((res) => {
-        if (res.data.Code === 200) {
-          this.setState({
-            nftViews: res.data.Data.totalViews,
-          });
-        }
       });
   };
 
@@ -285,6 +258,7 @@ export default class EaselBuy extends Component {
       nftHistory,
       price,
       denom,
+      src,
     } = this.state;
     const getCurrencySymbol = () => {
       switch (denom?.toLowerCase()) {
@@ -301,13 +275,13 @@ export default class EaselBuy extends Component {
 
         case "eeur":
           return "/img/eeur.svg";
-
+        case "weth-wei":
+          return "/img/eth.svg";
         case "uusd":
         case "ubedrock":
         case "umuon":
         case "ujunox":
         case "ujunox":
-        case "weth-wei":
           return "";
         default:
           return "";
@@ -318,36 +292,51 @@ export default class EaselBuy extends Component {
         console.log("Left click");
       } else if (e.type === "contextmenu") {
         e.preventDefault();
-        return false
+        return false;
       }
     };
     const getMedia = () => {
       if (loading) return <Spinner type="grow" color="primary" />;
       else if (!nftType) return null;
       else if (nftType.toLowerCase() === "image")
-        return <img alt="views" src={media} className="mobin-img" onClick={handleClick}  onContextMenu={handleClick}/>;
+        return (
+          <img
+            alt="views"
+            src={media}
+            className="mobin-img"
+            onClick={handleClick}
+            onContextMenu={handleClick}
+          />
+        );
       else if (nftType.toLowerCase() === "audio")
         return (
-          <audio controls onClick={handleClick}  onContextMenu={handleClick}>
-            <source src={media} type="video/mp4" />
-            <source src={media} type="video/ogg" />
-            Your browser does not support the audio element.
-          </audio>
+          <img
+            alt="views"
+            src={media}
+            className="mobin-img"
+            onClick={handleClick}
+            onContextMenu={handleClick}
+          />
         );
-        else if (nftType.toLowerCase() === "pdf")
+      else if (nftType.toLowerCase() === "pdf")
         return (
-          <img alt="views" src={media} className="mobin-img" onClick={handleClick}  onContextMenu={handleClick}/>
+          <img
+            alt="views"
+            src={media}
+            className="mobin-img"
+            onClick={handleClick}
+            onContextMenu={handleClick}
+          />
         );
       else if (nftType.toLowerCase() === "3d")
         return (
           <model-viewer
-          onClick={handleClick}  onContextMenu={handleClick}
+            onClick={handleClick}
+            onContextMenu={handleClick}
             alt="3D NFT"
             src={media}
             ar
             ar-modes="webxr scene-viewer quick-look"
-            environment-image="shared-assets/environments/moon_1k.hdr"
-            poster="shared-assets/models/NeilArmstrong.webp"
             seamless-poster
             shadow-intensity="1"
             camera-controls
@@ -357,7 +346,15 @@ export default class EaselBuy extends Component {
         );
       else
         return (
-          <video width="75%" height="50%" controls controlsList="nodownload" onClick={handleClick}  onContextMenu={handleClick} >
+          <video
+            width="75%"
+            height="50%"
+            controls
+            autoPlay
+            controlsList="nodownload"
+            onClick={handleClick}
+            onContextMenu={handleClick}
+          >
             <source src={media} type="video/mp4" />
             <source src={media} type="video/ogg" />
             Your browser does not support the video tag.
@@ -366,9 +363,11 @@ export default class EaselBuy extends Component {
     };
 
     if (this.state.loading) {
-      return <div className="loader">
-        <Spinner type="grow" color="primary" />
-        </div>;
+      return (
+        <div className="loader">
+          <Spinner type="grow" color="primary" />
+        </div>
+      );
     } else {
       return (
         <div className="buy-page">
@@ -388,11 +387,11 @@ export default class EaselBuy extends Component {
                       {getMedia()}
                     </div>
                   </div>
-                </Col> 
+                </Col>
                 <Col xl={7} lg={7} md={12} sm={12}>
                   <div className="desktop-view">
                     <div className="details">
-                    <div className="title-publisher">
+                      <div className="title-publisher">
                         <h4>{this.state.name}</h4>
                         <div className="publisher">
                           <p>
@@ -404,15 +403,34 @@ export default class EaselBuy extends Component {
                             />
                           </p>
                         </div>
-                        <div className="views">
-                          {" "}
+                        {nftType?.toLowerCase() === "audio" ? (
+                          <>
+                            <audio
+                              controls
+                              onClick={handleClick}
+                              onContextMenu={handleClick}
+                              controlsList="nodownload"
+                              style={{
+                                marginTop: "25px",
+                                height: "50px",
+                              }}
+                            >
+                              <source src={src} type="audio/ogg" />
+                              <source src={src} type="audio/mpeg" />
+                              Your browser does not support the audio element.
+                            </audio>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                        {/* <div className="views">
                           <img
                             alt="views"
                             src="/img/eye.svg"
                             style={{ width: "34px", height: "20px" }}
                           />
                           <p>{this.state.nftViews} views</p>
-                        </div>
+                        </div> */}
                       </div>
                       {this.state.description?.length > 35 ? (
                         <>
@@ -648,14 +666,14 @@ export default class EaselBuy extends Component {
                           </ul>
                         </div>
                         <div className="right-side">
-                          <div className="likes">
+                          {/* <div className="likes">
                             <img
                               alt="expand"
                               src="/img/likes.svg"
                               style={{ width: "41px", height: "39px" }}
                             />
                             <p>{this.state.nftLikes}</p>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                       <div className="buy-btn">
@@ -666,7 +684,15 @@ export default class EaselBuy extends Component {
                             style={{ width: "100%", height: "100%" }}
                             className="btnbg"
                           />
-                          <span className="dot"></span>
+                          <div className="icon">
+                            {getCurrencySymbol() ? (
+                              <img
+                                alt="coin"
+                                src={getCurrencySymbol()}
+                                style={{ width: "30px", height: "29px" }}
+                              />
+                            ) : null}
+                          </div>
                           <div className="value-icon">
                             <div className="values">
                               <p>
@@ -677,22 +703,13 @@ export default class EaselBuy extends Component {
                                   : price}
                               </p>
                             </div>
-                            <div className="icon">
-                              {getCurrencySymbol() ? (
-                                <img
-                                  alt="coin"
-                                  src={getCurrencySymbol()}
-                                  style={{ width: "30px", height: "29px" }}
-                                />
-                              ) : null}
-                            </div>
                           </div>
                         </button>
                       </div>
                     </div>
                   </div>
                   <div className="mobile-view">
-                  <div className="mob-img">
+                    <div className="mob-img">
                       <img
                         alt="frame"
                         src="/img/frame.png"
@@ -702,21 +719,27 @@ export default class EaselBuy extends Component {
                       />
                       {getMedia()}
                     </div>
-                    <div className={`${showHideDetails ? "bg2 details" : "bg details"}`}>
-                    <button
-                                onClick={() =>
-                                  this.hideComponent("showHideDetails")
-                                }
-                                className={`${showHideDetails ? "collapsebg collapse-btn" : "collapse-btn"}`}
-                              >
-                                {showHideDetails ? (
-                                  <i className="fa fa-angle-down" />
-                                ) : (
-                                  <i className="fa fa-angle-up" />
-                                )}
-                              </button>
+                    <div
+                      className={`${
+                        showHideDetails ? "bg2 details" : "bg details"
+                      }`}
+                    >
+                      <button
+                        onClick={() => this.hideComponent("showHideDetails")}
+                        className={`${
+                          showHideDetails
+                            ? "collapsebg collapse-btn"
+                            : "collapse-btn"
+                        }`}
+                      >
+                        {showHideDetails ? (
+                          <i className="fa fa-angle-down" />
+                        ) : (
+                          <i className="fa fa-angle-up" />
+                        )}
+                      </button>
                       <div className="title-publisher">
-                        <h4>{this.state.name}</h4>
+                        <h4 style={{ margin: "0px" }}>{this.state.name}</h4>
                         <div className="publisher">
                           <p>
                             Created by <span>{createdBy}</span>
@@ -727,7 +750,24 @@ export default class EaselBuy extends Component {
                             />
                           </p>
                         </div>
-                        <div className="views">
+                        {nftType?.toLowerCase() === "audio" ? (
+                          <audio
+                            controls
+                            onClick={handleClick}
+                            onContextMenu={handleClick}
+                            controlsList="nodownload"
+                            style={{
+                              height: "30px",
+                            }}
+                          >
+                            <source src={src} type="audio/ogg" />
+                            <source src={src} type="audio/mpeg" />
+                            Your browser does not support the audio element.
+                          </audio>
+                        ) : (
+                          <></>
+                        )}
+                        {/* <div className="views">
                           {" "}
                           <img
                             alt="views"
@@ -735,84 +775,84 @@ export default class EaselBuy extends Component {
                             style={{ width: "34px", height: "20px" }}
                           />
                           <p>{this.state.nftViews} views</p>
-                        </div>
+                        </div> */}
                       </div>
                       {showHideDetails ? (
                         <>
-                      {this.state.description?.length > 35 ? (
-                        <>
-                          <div className="description">
-                            {showHideComp4 ? (
-                              <>
-                                <p>{this.state.description}</p>
-                                <a
-                                  onClick={() =>
-                                    this.hideComponent("showHideComp4")
-                                  }
-                                >
-                                  read less
-                                </a>
-                              </>
-                            ) : (
-                              <>
-                                <p>
-                                  {this.state.description?.substr(0, 35) +
-                                    ". . ."}
-                                </p>
-                                <a
-                                  onClick={() =>
-                                    this.hideComponent("showHideComp4")
-                                  }
-                                >
-                                  read more
-                                </a>
-                              </>
-                            )}
-                          </div>
-                        </>
-                      ) : (
-                        <div className="description">
-                          <p>{this.state.description}</p>
-                        </div>
-                      )}
-
-                      <div className="more-details">
-                        <div className="left-side">
-                          <ul>
-                            <li>
-                              <div className="tab-name">
-                                <p>Ownership</p>
-                                <img
-                                  alt="Ownership"
-                                  src="/img/trophy.svg"
-                                  width="100%"
-                                  height="100%"
-                                  className="icon-img"
-                                />
-                                <img
-                                  alt="line"
-                                  src="/img/line.svg"
-                                  style={{ width: "100%", height: "24px" }}
-                                  className="line"
-                                />
-                              </div>
-                              <button
-                                onClick={() =>
-                                  this.hideComponent("showHideComp1")
-                                }
-                              >
-                                {showHideComp1 ? (
-                                  <img
-                                    alt="minimize"
-                                    src="/img/minimize.svg"
-                                    height="100%"
-                                    width="100%"
-                                    className="plus-minus"
-                                  />
+                          {this.state.description?.length > 35 ? (
+                            <>
+                              <div className="description">
+                                {showHideComp4 ? (
+                                  <>
+                                    <p>{this.state.description}</p>
+                                    <a
+                                      onClick={() =>
+                                        this.hideComponent("showHideComp4")
+                                      }
+                                    >
+                                      read less
+                                    </a>
+                                  </>
                                 ) : (
-                                  <img
-                                    alt="expand"
-                                    src="/img/expand.svg"
+                                  <>
+                                    <p>
+                                      {this.state.description?.substr(0, 35) +
+                                        ". . ."}
+                                    </p>
+                                    <a
+                                      onClick={() =>
+                                        this.hideComponent("showHideComp4")
+                                      }
+                                    >
+                                      read more
+                                    </a>
+                                  </>
+                                )}
+                              </div>
+                            </>
+                          ) : (
+                            <div className="description">
+                              <p>{this.state.description}</p>
+                            </div>
+                          )}
+
+                          <div className="more-details">
+                            <div className="left-side">
+                              <ul>
+                                <li>
+                                  <div className="tab-name">
+                                    <p>Ownership</p>
+                                    <img
+                                      alt="Ownership"
+                                      src="/img/trophy.svg"
+                                      width="100%"
+                                      height="100%"
+                                      className="icon-img"
+                                    />
+                                    <img
+                                      alt="line"
+                                      src="/img/line.svg"
+                                      style={{ width: "100%", height: "24px" }}
+                                      className="line"
+                                    />
+                                  </div>
+                                  <button
+                                    onClick={() =>
+                                      this.hideComponent("showHideComp1")
+                                    }
+                                  >
+                                    {showHideComp1 ? (
+                                      <img
+                                        alt="minimize"
+                                        src="/img/minimize.svg"
+                                        height="100%"
+                                        width="100%"
+                                        className="plus-minus"
+                                      />
+                                    ) : (
+                                      <img
+                                        alt="expand"
+                                        src="/img/expand.svg"
                                         height="100%"
                                         width="100%"
                                         className="plus-minus"
@@ -973,14 +1013,14 @@ export default class EaselBuy extends Component {
                               </ul>
                             </div>
                             <div className="right-side">
-                              <div className="likes">
+                              {/* <div className="likes">
                                 <img
                                   alt="expand"
                                   src="/img/likes.svg"
                                   style={{ width: "41px", height: "39px" }}
                                 />
                                 <p>{this.state.nftLikes}</p>
-                              </div>
+                              </div> */}
                             </div>
                           </div>
                         </>
@@ -993,7 +1033,15 @@ export default class EaselBuy extends Component {
                             style={{ width: "100%", height: "100%" }}
                             className="btnbg"
                           />
-                          <span className="dot"></span>
+                          <div className="icon">
+                            {getCurrencySymbol() ? (
+                              <img
+                                alt="coin"
+                                src={getCurrencySymbol()}
+                                style={{ width: "30px", height: "29px" }}
+                              />
+                            ) : null}
+                          </div>
                           <div className="value-icon">
                             <div className="values">
                               <p>
@@ -1003,15 +1051,6 @@ export default class EaselBuy extends Component {
                                   ? "Free"
                                   : price}
                               </p>
-                            </div>
-                            <div className="icon">
-                              {getCurrencySymbol() ? (
-                                <img
-                                  alt="coin"
-                                  src={getCurrencySymbol()}
-                                  style={{ width: "30px", height: "29px" }}
-                                />
-                              ) : null}
                             </div>
                           </div>
                         </button>

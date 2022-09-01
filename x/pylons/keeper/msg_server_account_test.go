@@ -17,7 +17,7 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
 
-	addr := types.GenTestBech32List(2)
+	addr := types.GenTestBech32List(3)
 	types.UpdateAppCheckFlagTest(types.FlagTrue)
 
 	for _, tc := range []struct {
@@ -38,6 +38,11 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 			desc:    "DuplicateUsername",
 			request: &types.MsgCreateAccount{Creator: addr[1], Username: "testUser", ReferralAddress: ""},
 			err:     types.ErrDuplicateUsername,
+		},
+		{
+			desc:    "Referral Address not found",
+			request: &types.MsgCreateAccount{Creator: addr[1], Username: "testUser1", ReferralAddress: "testReferralAddr"},
+			err:     types.ErrReferralUserNotFound,
 		},
 	} {
 		tc := tc
@@ -96,6 +101,16 @@ func (suite *IntegrationTestSuite) TestUpdateAccount() {
 			desc:    "DuplicateUsername",
 			request: &types.MsgUpdateAccount{Creator: addr[0], Username: "testUserUpdated"},
 			err:     types.ErrDuplicateUsername,
+		},
+		{
+			desc:    "Account not created",
+			request: &types.MsgUpdateAccount{Creator: addr[1], Username: "testUserUpdated1"},
+			err:     sdkerrors.ErrInvalidRequest,
+		},
+		{
+			desc:    "Invalid fee",
+			request: &types.MsgUpdateAccount{Creator: addr[0], Username: "testUserUpdated1"},
+			err:     sdkerrors.ErrInvalidRequest,
 		},
 	} {
 		tc := tc

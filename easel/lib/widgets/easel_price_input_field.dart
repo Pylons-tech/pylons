@@ -127,12 +127,13 @@ class _CurrencyDropDown extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   value.getIconWidget(),
-                                  SizedBox(width: isTablet ? 10.w : 15.w),
+                                  SizedBox(width: isTablet ? 10.w : 10.w),
                                   Text(
                                     value.name,
                                     style: TextStyle(
                                         fontSize: isTablet ? 16.sp : 18.sp),
-                                  )
+                                  ),
+                                  SizedBox(width: isTablet ? 0.w : 5.w),
                                 ]),
                           );
                         }).toList(),
