@@ -191,11 +191,15 @@ Meteor.startup(() => {
                     <meta property="og:type"              content="video">
                     <meta property="og:title"             content="${siteName}" />
                     <meta property="og:description"       content="${description}" data-rh="true"/>
-                    <meta property="og:url"               content="${
+                    <meta property="og:url"               content="${sanitizeUrl(
                       Meteor.absoluteUrl() + url
-                    }" />
-                    <meta property="og:image"             content="${src}" />
-                    <meta property="og:video"             content="${img}" />
+                    )}" />
+                    <meta property="og:image"             content="${sanitizeUrl(
+                      src
+                    )}" />
+                    <meta property="og:video"             content="${sanitizeUrl(
+                      img
+                    )}" />
                     <meta property="og:video:width"       content="${IMAGE_HEIGHT}" />
                     <meta property="og:video:height"      content="${IMAGE_WIDTH}" />   
                     <meta name="twitter:card"             content="summary_large_image" />
@@ -210,13 +214,17 @@ Meteor.startup(() => {
                         <meta property="og:type"              content="article">
                         <meta property="og:title"             content="${siteName}" />
                         <meta property="og:description"       content="${description}" data-rh="true"/>
-                        <meta property="og:url"               content="${
+                        <meta property="og:url"               content="${sanitizeUrl(
                           Meteor.absoluteUrl() + url
-                        }" />
-                        <meta property="og:image"             content="${src}" />
+                        )}" />
+                        <meta property="og:image"             content="${sanitizeUrl(
+                          src
+                        )}" />
                         <meta property="og:image:width"       content="${picWidth}" />
                         <meta property="og:image:height"      content="${picHeight}" />   
-                        <meta property="og:music"             content="${img}" />
+                        <meta property="og:music"             content="${sanitizeUrl(
+                          img
+                        )}" />
                         <meta name="twitter:card"             content="summary_large_image" />
                         <meta name="twitter:title"            content="${siteName}" />
                         <meta name="twitter:description"      content="${description}">
@@ -233,7 +241,9 @@ Meteor.startup(() => {
                         <meta property="og:url"               content="${
                           Meteor.absoluteUrl() + url
                         }" />
-                        <meta property="og:image"             content="${src}" />
+                        <meta property="og:image"             content="${sanitizeUrl(
+                          src
+                        )}" />
                         <meta property="og:image:width"       content="${picWidth}" />
                         <meta property="og:image:height"      content="${picHeight}" />   
                         <meta name="twitter:card"             content="summary_large_image" />
@@ -249,7 +259,9 @@ Meteor.startup(() => {
                         <meta property="og:url"               content="${
                           Meteor.absoluteUrl() + url
                         }" />
-                        <meta property="og:image"             content="${img}" />
+                        <meta property="og:image"             content="${sanitizeUrl(
+                          img
+                        )}" />
                         <meta property="og:image:width"       content="${picWidth}" />
                         <meta property="og:image:height"      content="${picHeight}" />   
                         <meta name="twitter:card"             content="summary_large_image" />
@@ -299,10 +311,12 @@ Meteor.startup(() => {
                 <meta property="og:type"              content="video">
                 <meta property="og:title"             content="${siteName}" />
                 <meta property="og:description"       content="${description}" data-rh="true"/>
-                <meta property="og:url"               content="${
+                <meta property="og:url"               content="${sanitizeUrl(
                   Meteor.absoluteUrl() + url
-                }" />
-                <meta property="og:video"             content="${img}" />
+                )}" />
+                <meta property="og:video"             content="${sanitizeUrl(
+                  img
+                )}" />
                 <meta property="og:video:width"       content="${IMAGE_HEIGHT}" />
                 <meta property="og:video:height"      content="${IMAGE_WIDTH}" />   
                 <meta name="twitter:card"             content="summary_large_image" />
@@ -318,7 +332,9 @@ Meteor.startup(() => {
                 <meta property="og:url"               content="${
                   Meteor.absoluteUrl() + url
                 }" />
-                <meta property="og:image"             content="${img}" />
+                <meta property="og:image"             content="${sanitizeUrl(
+                  img
+                )}" />
                 <meta property="og:image:width"       content="${IMAGE_HEIGHT}" />
                 <meta property="og:image:height"      content="${IMAGE_WIDTH}" />   
                 <meta name="twitter:card"             content="summary_large_image" />

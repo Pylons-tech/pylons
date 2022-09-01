@@ -168,6 +168,9 @@ export default class ItemShare extends Component {
   };
 
   getNFTDimentions = (nftType, data) => {
+    const milli_seconds_to_minute = 60000;
+    const milli_value = 1000;
+    const sinlge_digit = 10;
     if (
       nftType?.toLowerCase() === "image"
     ) {
@@ -181,9 +184,14 @@ export default class ItemShare extends Component {
       nftType?.toLowerCase() === "video"
     ) {
       const millisecondsDuration = data?.longs[3]?.value;
-      var minutes = Math.floor(millisecondsDuration / 60000);
-      var seconds = ((millisecondsDuration % 60000) / 1000).toFixed(0);
-      return minutes + ":" + (seconds < 10 ? "0" : "") + seconds + " min";
+      var minutes = Math.floor(millisecondsDuration / milli_seconds_to_minute);
+      var seconds = (
+        (millisecondsDuration % milli_seconds_to_minute) /
+        milli_value
+      ).toFixed(0);
+      return (
+        minutes + ":" + (seconds < sinlge_digit ? "0" : "") + seconds + " min"
+      );
     } else if (nftType?.toLowerCase() === "3d" || nftType?.toLowerCase() === "pdf") {
       return data?.strings?.find((val) => val.key.toLowerCase() === "fileSize")
         ?.value;
