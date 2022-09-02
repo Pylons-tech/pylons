@@ -134,7 +134,7 @@ class IPCEngine {
   }
 
   Future<void> _handleEaselLink(String link) async {
-    navigatorKey.currentState!.popUntil(ModalRoute.withName(RouteUtil.ROUTE_HOME));
+    bool isHome = false;
     final queryParameters = Uri.parse(link).queryParameters;
 
     final recipeId = (queryParameters.containsKey(kRecipeIdKey)) ? queryParameters[kRecipeIdKey] ?? '' : "";
@@ -149,33 +149,55 @@ class IPCEngine {
       return;
     }
 
+    isHome = isHomeRoute();
+
+    if (!repository.getBool(key: kISUserCreatingAccount) && !isHome) {
+      navigatorKey.currentState!.popUntil(ModalRoute.withName(RouteUtil.ROUTE_HOME));
+    }
+
     final nullableNFT = await getNFtFromRecipe(cookbookId: cookbookId, recipeId: recipeId);
 
     if (nullableNFT == null) {
       return;
     }
 
+    repository.setBool(key: kISUserCreatingAccount, value: false);
+
     if (isOwnerIsViewing(nullableNFT, currentWallets)) {
       await navigatorKey.currentState!.push(
         MaterialPageRoute(
-          builder: (_) => OwnerView(
-            nft: nullableNFT,
-            ownerViewViewModel: sl(),
-          ),
-        ),
+            builder: (_) => OwnerView(
+                  nft: nullableNFT,
+                  ownerViewViewModel: sl(),
+                ),
+            settings: RouteSettings(name: RouteUtil.ROUTE_OWNER_VIEW)),
       );
     } else {
       await navigatorKey.currentState!.push(
         MaterialPageRoute(
-          builder: (_) => PurchaseItemScreen(
-            nft: nullableNFT,
-            purchaseItemViewModel: sl(),
-          ),
-        ),
+            builder: (_) => PurchaseItemScreen(
+                  nft: nullableNFT,
+                  purchaseItemViewModel: sl(),
+                ),
+            settings: RouteSettings(name: RouteUtil.ROUTE_OWNER_VIEW)),
       );
     }
 
     walletsStore.setStateUpdatedFlag(flag: true);
+  }
+
+  bool isHomeRoute() {
+    bool isHome = false;
+    navigatorKey.currentState!.popUntil((route) {
+      if (route.settings.name == RouteUtil.ROUTE_HOME) {
+        isHome = true;
+        return true;
+      }
+      isHome = false;
+
+      return true;
+    });
+    return isHome;
   }
 
   bool isOwnerIsViewing(NFT nullableNFT, List<AccountPublicInfo> currentWallets) => nullableNFT.ownerAddress == currentWallets.last.publicAddress;

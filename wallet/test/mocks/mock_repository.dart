@@ -512,4 +512,15 @@ class MockRepository extends Repository {
     // TODO: implement saveUserFeedback
     throw UnimplementedError();
   }
+
+  @override
+  bool getBool({required String key}) {
+    // TODO: implement getBool
+    throw UnimplementedError();
+  }
+
+  @override
+  void setBool({required String key, required bool value}) {
+    // TODO: implement setBool
+  }
 }

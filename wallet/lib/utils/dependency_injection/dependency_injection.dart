@@ -23,6 +23,7 @@ import 'package:pylons_wallet/pages/settings/screens/general_screen/general_scre
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_viewmodel.dart';
 import 'package:pylons_wallet/pages/settings/screens/recovery_screen/screens/practice_test.dart';
 import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
+import 'package:pylons_wallet/services/data_stores/cache_manager.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
@@ -132,10 +133,11 @@ Future<void> init() async {
 
   /// Core Logics
   sl.registerLazySingleton<HandlerFactory>(() => HandlerFactory());
+  sl.registerLazySingleton<MyCacheManager>(() => CacheManagerImp());
 
   /// Data Sources
   sl.registerLazySingleton<LocalDataSource>(
-    () => LocalDataSourceImp(picker: sl(), sharedPreferences: sl(), flutterSecureStorage: sl(), permissionService: sl()),
+    () => LocalDataSourceImp(picker: sl(), sharedPreferences: sl(), flutterSecureStorage: sl(), permissionService: sl(), cacheManager: sl()),
   );
 
   sl.registerLazySingleton<PermissionService>(

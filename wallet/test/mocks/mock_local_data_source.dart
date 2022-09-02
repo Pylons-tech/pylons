@@ -167,8 +167,7 @@ class MockLocalDataSource extends LocalDataSource {
   }
 
   @override
-  Future<bool> saveNetworkEnvironmentPreference(
-      {required String networkEnvironment}) {
+  Future<bool> saveNetworkEnvironmentPreference({required String networkEnvironment}) {
     // TODO: implement saveNetworkEnvironmentPreference
     throw UnimplementedError();
   }
@@ -183,5 +182,16 @@ class MockLocalDataSource extends LocalDataSource {
   String getInviteeAddress() {
     // TODO: implement getInviteeAddress
     throw UnimplementedError();
+  }
+
+  @override
+  bool getBool({required String key}) {
+    // TODO: implement getBool
+    throw UnimplementedError();
+  }
+
+  @override
+  void setBool({required String key, required bool value}) {
+    // TODO: implement setBool
   }
 }
