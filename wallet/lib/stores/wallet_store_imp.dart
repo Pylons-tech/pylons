@@ -576,8 +576,6 @@ class WalletsStoreImp implements WalletsStore {
 
     final userName = getUsernameBasedOnAddress.getOrElse(() => '');
 
-
-
     final creds = AlanPrivateAccountCredentials(
       publicInfo: AccountPublicInfo(
         chainId: baseEnv.chainId,
@@ -613,7 +611,12 @@ class WalletsStoreImp implements WalletsStore {
     final response = await transactionSigningGateway.clearAllCredentials();
     final customResponse = await customTransactionSigningGateway.clearAllCredentials();
 
-    return response.isRight() && customResponse.isRight();
+    if (response.isRight() && customResponse.isRight()) {
+      wallets.value.clear();
+      return true;
+    }
+
+    return false;
   }
 
   @override

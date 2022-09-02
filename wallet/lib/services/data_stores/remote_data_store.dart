@@ -322,6 +322,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
   @override
   Future<void> countAView({required String recipeId, required String cookBookID, required String walletAddress}) async {
+    if (walletAddress.isEmpty) return;
     final baseApiUrl = GetIt.I.get<BaseEnv>().baseMongoUrl;
 
     final body = {userIdKey: walletAddress};
@@ -372,6 +373,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
   @override
   Future<bool> ifLikedByMe({required String recipeId, required String cookBookID, required String walletAddress}) async {
+    if (walletAddress.isEmpty) return false;
     final baseApiUrl = GetIt.I.get<BaseEnv>().baseMongoUrl;
 
     final uri = Uri.parse("$baseApiUrl/api/actions/likes/$walletAddress/$cookBookID/$recipeId");

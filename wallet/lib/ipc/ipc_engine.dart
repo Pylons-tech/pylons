@@ -134,20 +134,13 @@ class IPCEngine {
   }
 
   Future<void> _handleEaselLink(String link) async {
-    navigatorKey.currentState!.popUntil(ModalRoute.withName(RouteUtil.ROUTE_HOME));
+    final currentWallets = walletsStore.getWallets().value;
+    if (currentWallets.isNotEmpty) {
+      navigatorKey.currentState!.popUntil(ModalRoute.withName(RouteUtil.ROUTE_HOME));
+    }
     final queryParameters = Uri.parse(link).queryParameters;
-
     final recipeId = (queryParameters.containsKey(kRecipeIdKey)) ? queryParameters[kRecipeIdKey] ?? '' : "";
     final cookbookId = (queryParameters.containsKey(kCookbookIdKey)) ? queryParameters[kCookbookIdKey] ?? "" : "";
-    final currentWallets = walletsStore.getWallets().value;
-    final address = (queryParameters.containsKey(kAddress)) ? queryParameters[kAddress] ?? "" : "";
-
-    if (currentWallets.isEmpty) {
-      "create_an_account_first".tr().show();
-      repository.saveInviteeAddressFromDynamicLink(dynamicLink: address);
-      walletsStore.saveInitialLink(initialLink: link);
-      return;
-    }
 
     final nullableNFT = await getNFtFromRecipe(cookbookId: cookbookId, recipeId: recipeId);
 
@@ -178,7 +171,10 @@ class IPCEngine {
     walletsStore.setStateUpdatedFlag(flag: true);
   }
 
-  bool isOwnerIsViewing(NFT nullableNFT, List<AccountPublicInfo> currentWallets) => nullableNFT.ownerAddress == currentWallets.last.publicAddress;
+  bool isOwnerIsViewing(NFT nullableNFT, List<AccountPublicInfo> currentWallets) {
+    if (currentWallets.isEmpty) return false;
+    return nullableNFT.ownerAddress == currentWallets.last.publicAddress;
+  }
 
   Future<void> _handleNFTTradeLink(String link) async {
     final queryParameters = Uri.parse(link).queryParameters;
