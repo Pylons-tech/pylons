@@ -13,7 +13,8 @@ class PylonsRoundButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),
         padding: const EdgeInsets.all(15),
-        onSurface: EaselAppTheme.kBlue,
+        disabledForegroundColor: EaselAppTheme.kBlue.withOpacity(0.38),
+        disabledBackgroundColor: EaselAppTheme.kBlue.withOpacity(0.12),
         shadowColor: EaselAppTheme.kBlue,
         elevation: 10,
       ),
