@@ -73,7 +73,7 @@ class FailureManagerViewModel extends ChangeNotifier {
     final txDataJson = jsonDecode(txManager.transactionData);
     final StripeGeneratePaymentReceiptRequest request = StripeGeneratePaymentReceiptRequest.fromJson(txDataJson as Map<String, dynamic>);
     final loading = Loading()..showLoading();
-    repository.GeneratePaymentReceipt(request);
+    await repository.GeneratePaymentReceipt(request);
     loading.dismiss();
   }
 
@@ -81,7 +81,7 @@ class FailureManagerViewModel extends ChangeNotifier {
     final txDataJson = jsonDecode(txManager.transactionData);
     final StripePayoutRequest request = StripePayoutRequest.fromJson(txDataJson as Map<String, dynamic>);
     final loading = Loading()..showLoading();
-    repository.Payout(request);
+    await repository.Payout(request);
     loading.dismiss();
   }
 
@@ -95,7 +95,7 @@ class FailureManagerViewModel extends ChangeNotifier {
         rawPrice: double.parse(txDataJson['rawPrice'] as String),
         currencyCode: txDataJson['currencyCode'] as String);
     final loading = Loading()..showLoading();
-    repository.buyProduct(productDetails);
+    await repository.buyProduct(productDetails);
     loading.dismiss();
   }
 
@@ -103,7 +103,7 @@ class FailureManagerViewModel extends ChangeNotifier {
     final txDataJson = jsonDecode(txManager.transactionData);
     final AppleInAppPurchaseModel request = AppleInAppPurchaseModel.fromJson(txDataJson as Map<String, dynamic>);
     final loading = Loading()..showLoading();
-    repository.sendAppleInAppPurchaseCoinsRequest(request);
+    await  repository.sendAppleInAppPurchaseCoinsRequest(request);
     loading.dismiss();
   }
 
@@ -111,7 +111,7 @@ class FailureManagerViewModel extends ChangeNotifier {
     final txDataJson = jsonDecode(txManager.transactionData);
     final GoogleInAppPurchaseModel request = GoogleInAppPurchaseModel.fromJson(txDataJson as Map<String, dynamic>);
     final loading = Loading()..showLoading();
-    repository.sendGoogleInAppPurchaseCoinsRequest(request);
+    await repository.sendGoogleInAppPurchaseCoinsRequest(request);
     loading.dismiss();
   }
 }
