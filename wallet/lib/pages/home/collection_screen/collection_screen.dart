@@ -31,11 +31,7 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 
 typedef OnNFTSelected = void Function(NFT asset);
 
-TextStyle kWalletTitle = TextStyle(
-    fontSize: 15.sp,
-    fontFamily: kUniversalFontFamily,
-    color: Colors.black,
-    fontWeight: FontWeight.w800);
+TextStyle kWalletTitle = TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
 
 class Collection {
   final String icon;
@@ -108,9 +104,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
             top: 0.h,
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 450),
-              child: viewModel.collectionsType == CollectionsType.purchases
-                  ? creationsCollection
-                  : purchasesCollection,
+              child: viewModel.collectionsType == CollectionsType.purchases ? creationsCollection : purchasesCollection,
             )),
         Positioned(
             left: 0,
@@ -119,9 +113,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
             top: 50.h,
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 450),
-              child: viewModel.collectionsType == CollectionsType.purchases
-                  ? purchasesCollection
-                  : creationsCollection,
+              child: viewModel.collectionsType == CollectionsType.purchases ? purchasesCollection : creationsCollection,
             )),
       ],
     );
@@ -162,8 +154,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
 class PurchasesCollection extends StatelessWidget {
   final OnNFTSelected onNFTSelected;
 
-  const PurchasesCollection({Key? key, required this.onNFTSelected})
-      : super(key: key);
+  const PurchasesCollection({Key? key, required this.onNFTSelected}) : super(key: key);
 
   Widget getAudioThumbnailFromUrl({required String thumbnailUrl}) {
     return Stack(
@@ -180,8 +171,7 @@ class PurchasesCollection extends StatelessWidget {
           child: Container(
             width: 35.w,
             height: 35.h,
-            decoration: BoxDecoration(
-                color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
+            decoration: BoxDecoration(color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
             child: Image.asset(
               ImageUtil.AUDIO_ICON,
               width: 35.w,
@@ -195,9 +185,7 @@ class PurchasesCollection extends StatelessWidget {
   }
 
   Widget getAudioPlaceHolder({required String thumbnailUrl}) {
-    return thumbnailUrl.isEmpty
-        ? Image.asset(ImageUtil.AUDIO_BACKGROUND, fit: BoxFit.cover)
-        : getAudioThumbnailFromUrl(thumbnailUrl: thumbnailUrl);
+    return thumbnailUrl.isEmpty ? Image.asset(ImageUtil.AUDIO_BACKGROUND, fit: BoxFit.cover) : getAudioThumbnailFromUrl(thumbnailUrl: thumbnailUrl);
   }
 
   @override
@@ -232,8 +220,7 @@ class PurchasesCollection extends StatelessWidget {
                                 spreadRadius: 3,
                                 color: Colors.grey.withOpacity(0.1),
                               ),
-                              const BoxShadow(
-                                  color: kMainBG, offset: Offset(0, 30)),
+                              const BoxShadow(color: kMainBG, offset: Offset(0, 30)),
                             ],
                           ),
                         )),
@@ -310,26 +297,11 @@ class PurchasesCollection extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              onPdfNFT: (BuildContext context) =>
-                                  PdfPlaceHolder(
-                                      nftUrl: nft.url,
-                                      nftName: nft.name,
-                                      thumbnailUrl: nft.thumbnailUrl),
-                              onVideoNFT: (BuildContext context) =>
-                                  VideoPlaceHolder(
-                                      nftUrl: nft.url,
-                                      nftName: nft.name,
-                                      thumbnailUrl: nft.thumbnailUrl),
-                              onImageNFT: (BuildContext context) =>
-                                  CachedNetworkImage(
-                                      placeholder: (context, url) => Shimmer(
-                                          color: PylonsAppTheme.cardBackground,
-                                          child: const SizedBox.expand()),
-                                      imageUrl: nft.url,
-                                      fit: BoxFit.cover),
-                              onAudioNFT: (BuildContext context) =>
-                                  getAudioPlaceHolder(
-                                      thumbnailUrl: nft.thumbnailUrl),
+                              onPdfNFT: (BuildContext context) => PdfPlaceHolder(nftUrl: nft.url, nftName: nft.name, thumbnailUrl: nft.thumbnailUrl),
+                              onVideoNFT: (BuildContext context) => VideoPlaceHolder(nftUrl: nft.url, nftName: nft.name, thumbnailUrl: nft.thumbnailUrl),
+                              onImageNFT: (BuildContext context) => CachedNetworkImage(
+                                  placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()), imageUrl: nft.url, fit: BoxFit.cover),
+                              onAudioNFT: (BuildContext context) => getAudioPlaceHolder(thumbnailUrl: nft.thumbnailUrl),
                             ),
                           ),
                         );
@@ -350,8 +322,7 @@ class PurchasesCollection extends StatelessWidget {
 class CreationsCollection extends StatelessWidget {
   final OnNFTSelected onNFTSelected;
 
-  const CreationsCollection({Key? key, required this.onNFTSelected})
-      : super(key: key);
+  const CreationsCollection({Key? key, required this.onNFTSelected}) : super(key: key);
 
   Widget getAudioThumbnailFromUrl({required String thumbnailUrl}) {
     return Stack(
@@ -368,8 +339,7 @@ class CreationsCollection extends StatelessWidget {
           child: Container(
             width: 35.w,
             height: 35.h,
-            decoration: BoxDecoration(
-                color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
+            decoration: BoxDecoration(color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
             padding: EdgeInsets.all(5.h),
             child: Image.asset(
               ImageUtil.AUDIO_ICON,
@@ -382,14 +352,13 @@ class CreationsCollection extends StatelessWidget {
   }
 
   Widget getAudioPlaceHolder({required String thumbnailUrl}) {
-    return thumbnailUrl.isEmpty
-        ? Image.asset(ImageUtil.AUDIO_BACKGROUND, fit: BoxFit.cover)
-        : getAudioThumbnailFromUrl(thumbnailUrl: thumbnailUrl);
+    return thumbnailUrl.isEmpty ? Image.asset(ImageUtil.AUDIO_BACKGROUND, fit: BoxFit.cover) : getAudioThumbnailFromUrl(thumbnailUrl: thumbnailUrl);
   }
 
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<CollectionViewModel>();
+
     final isSelected = viewModel.collectionsType == CollectionsType.creations;
     return DecoratedBox(
       decoration: const BoxDecoration(
@@ -420,8 +389,7 @@ class CreationsCollection extends StatelessWidget {
                                 spreadRadius: 3,
                                 color: Colors.grey.withOpacity(0.1),
                               ),
-                              const BoxShadow(
-                                  color: kMainBG, offset: Offset(0, 30)),
+                              const BoxShadow(color: kMainBG, offset: Offset(0, 30)),
                             ],
                           ),
                         )),
@@ -489,44 +457,25 @@ class CreationsCollection extends StatelessWidget {
                                       child: Banner(
                                         color: kPriceTagColor,
                                         location: BannerLocation.topStart,
-                                        message:
-                                            "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}  ${nft.ibcCoins.getAbbrev()}",
+                                        message: "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}  ${nft.ibcCoins.getAbbrev()}",
                                         child: PreviewNFTGrid(
                                             assetType: nft.assetType,
-                                            on3dNFT: (BuildContext context) =>
-                                                Container(
+                                            on3dNFT: (BuildContext context) => Container(
                                                   color: Colors.grey.shade200,
                                                   height: double.infinity,
                                                   child: IgnorePointer(
                                                     child: Nft3dWidget(
                                                       url: nft.url,
                                                       cameraControls: false,
-                                                      backgroundColor:
-                                                          k3DBackgroundColor,
+                                                      backgroundColor: k3DBackgroundColor,
                                                     ),
                                                   ),
                                                 ),
-                                            onPdfNFT: (BuildContext context) => PdfPlaceHolder(
-                                                nftUrl: nft.url,
-                                                nftName: nft.name,
-                                                thumbnailUrl: nft.thumbnailUrl),
-                                            onVideoNFT: (BuildContext context) =>
-                                                VideoPlaceHolder(
-                                                    nftUrl: nft.url,
-                                                    nftName: nft.name,
-                                                    thumbnailUrl:
-                                                        nft.thumbnailUrl),
-                                            onImageNFT: (BuildContext context) =>
-                                                CachedNetworkImage(
-                                                    placeholder: (context, url) => Shimmer(
-                                                        color: PylonsAppTheme
-                                                            .cardBackground,
-                                                        child: const SizedBox
-                                                            .expand()),
-                                                    imageUrl: nft.url,
-                                                    fit: BoxFit.cover),
-                                            onAudioNFT: (BuildContext context) =>
-                                                getAudioPlaceHolder(thumbnailUrl: nft.thumbnailUrl)),
+                                            onPdfNFT: (BuildContext context) => PdfPlaceHolder(nftUrl: nft.url, nftName: nft.name, thumbnailUrl: nft.thumbnailUrl),
+                                            onVideoNFT: (BuildContext context) => VideoPlaceHolder(nftUrl: nft.url, nftName: nft.name, thumbnailUrl: nft.thumbnailUrl),
+                                            onImageNFT: (BuildContext context) => CachedNetworkImage(
+                                                placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()), imageUrl: nft.url, fit: BoxFit.cover),
+                                            onAudioNFT: (BuildContext context) => getAudioPlaceHolder(thumbnailUrl: nft.thumbnailUrl)),
                                       ),
                                     ),
                                   );

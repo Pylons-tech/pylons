@@ -17,6 +17,7 @@ class NoInternetDialog {
 
   void dismiss() {
     navigatorKey.currentState?.pop();
+    setIsShowing = false;
   }
 
   bool get isShowing => _isShowing;
