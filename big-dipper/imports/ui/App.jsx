@@ -72,42 +72,37 @@ class App extends Component {
     return (
       // <Router history={history}>
       <div>
-        <div
-          className={
-            (this.props.location.search.includes("recipe_id") ||
+        <div className={
+          (this.props.location.search.includes("recipe_id") ||
             this.props.location.search.includes("item_id")) &&
-              this.props.location.search.includes("cookbook_id")
-              ? "hide-xs"
-              : null
-          }
-        >
-          <RouteHeader refreshApp={this.propagateStateChange} />
+            this.props.location.search.includes("cookbook_id") ? "hide-xs" : null}>
+        <RouteHeader refreshApp={this.propagateStateChange} />
         </div>
-        <Container fluid id="main">
+        <Container fluid id='main'>
           {Meteor.settings.public.banners ? (
             <Banners url={Meteor.settings.public.banners} />
           ) : (
-            ""
+            ''
           )}
           <ToastContainer />
           <SentryBoundary>
             <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path="/blocks" component={BlocksTable} />
-              <Route path="/transactions" component={Transactions} />
-              <Route path="/art_sales" component={Recipes} />
-              <Route path="/activity_feed" component={ActivityFeed} />
-              <Route path="/validators" exact component={Validators} />
+              <Route exact path='/' component={Home} />
+              <Route path='/blocks' component={BlocksTable} />
+              <Route path='/transactions' component={Transactions} />
+              <Route path='/art_sales' component={Recipes} />
+              <Route path='/activity_feed' component={ActivityFeed} />
+	            <Route path='/validators' exact component={Validators} />
               <Route
-                path="/validators/inactive"
+                path='/validators/inactive'
                 render={(props) => <Validators {...props} inactive={true} />}
               />
               <Route
-                path="/voting-power-distribution"
+                path='/voting-power-distribution'
                 component={Distribution}
               />
               <Route
-                path="/(validator|validators)"
+                path='/(validator|validators)'
                 component={ValidatorDetails}
               />
               <Route component={NotFound} />
