@@ -158,11 +158,6 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
                       ),
                     ),
                     trailing: const SizedBox(),
-                    title: Text(
-                      "my_nft".tr(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
-                    ),
                   ),
                 ),
               ),

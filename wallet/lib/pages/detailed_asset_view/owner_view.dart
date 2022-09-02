@@ -127,11 +127,6 @@ class _OwnerViewState extends State<OwnerView> {
                             height: 25.h,
                           ),
                         ),
-                        title: Text(
-                          "my_nft".tr(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
-                        ),
                         trailing: GestureDetector(
                           onTap: (){
                             final SubmitFeedback submitFeedbackDialog = SubmitFeedback(context: context);
