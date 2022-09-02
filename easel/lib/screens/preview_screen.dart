@@ -41,7 +41,6 @@ class _PreviewScreenState extends State<PreviewScreen> {
             data: Theme.of(context).copyWith(unselectedWidgetColor: Colors.white),
             child: CheckboxListTile(
               dense: true,
-              // contentPadding: EdgeInsets.symmetric(horizontal: isTablet ? 50.w : 40.w),
               value: easelProvider.imageCheckBox,
               title: AutoSizeText(
                 'fit_to_screen'.tr(),

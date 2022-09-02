@@ -46,11 +46,7 @@ class ImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        child: Stack(
-          children: [
-            buildImage(),
-          ],
-        ),
+        child: buildImage(),
         onWillPop: () {
           Navigator.pop(context);
           return Future.value(true);
