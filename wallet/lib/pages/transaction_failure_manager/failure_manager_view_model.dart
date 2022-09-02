@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:pylons_wallet/components/loading.dart';
@@ -50,15 +51,21 @@ class FailureManagerViewModel extends ChangeNotifier {
         retryBuyProduct(txManager);
         break;
       case FailureTypeEnum.Unknown:
-        retryUpdateLikeStatus(txManager);
+        'something_wrong'.tr().show();
         break;
     }
+  }
+
+  Future deleteFailure({required int id}) async {
+    await repository.deleteTransactionFailureRecord(id);
+    getAllFailuresFromDB();
   }
 
   Future retryUpdateLikeStatus(TransactionManager txManager) async {
     final txDataJson = jsonDecode(txManager.transactionData);
     final loading = Loading()..showLoading();
-    repository.updateLikeStatus(recipeId: txDataJson[kRecipeIdMap].toString(), cookBookID: txDataJson[kCookbookIdMap].toString(), walletAddress: txDataJson[kWalletAddressIdMap].toString());
+    await repository.updateLikeStatus(recipeId: txDataJson[kRecipeIdMap].toString(), cookBookID: txDataJson[kCookbookIdMap].toString(), walletAddress: txDataJson[kWalletAddressIdMap].toString());
+    deleteFailure(id: txManager.id!);
     loading.dismiss();
   }
 
