@@ -50,6 +50,7 @@ func TestFindValidPaymentsPermutation(t *testing.T) {
 	for _, tc := range []struct {
 		desc    string
 		balance sdk.Coins
+		noitems bool
 		res     []int
 		err     error
 	}{
@@ -99,6 +100,12 @@ func TestFindValidPaymentsPermutation(t *testing.T) {
 			err:     errors.New("invalid balance provided"),
 		},
 		{
+			desc: "Invalid item",
+			balance: sdk.Coins{sdk.NewCoin("coin0", sdk.NewInt(10)), sdk.NewCoin("coin1", sdk.NewInt(10)), sdk.NewCoin("coin4", sdk.NewInt(10))},
+			noitems: true,
+			err:     errors.New("invalid set of Items provided"),
+		},
+		{
 			desc: "Invalid1",
 			// {"coin0", 10}
 			balance: sdk.Coins{sdk.NewCoin("coin0", sdk.NewInt(10))},
@@ -113,7 +120,13 @@ func TestFindValidPaymentsPermutation(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			res, err := FindValidPaymentsPermutation(items, tc.balance)
+			var res []int
+			var err error
+			if tc.noitems {
+				res, err = FindValidPaymentsPermutation(nil, tc.balance)
+			} else {
+				res, err = FindValidPaymentsPermutation(items, tc.balance)
+			}
 			if tc.err != nil {
 				require.Equal(t, err, tc.err)
 			} else {
