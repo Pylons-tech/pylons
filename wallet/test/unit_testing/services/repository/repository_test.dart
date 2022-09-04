@@ -82,13 +82,6 @@ void main() {
         response.getOrElse(() => StripeGeneratePayoutTokenResponse()).success);
   });
 
-  test('test Payout', () async {
-    final req = StripePayoutRequest(
-      amount: Int64.ONE,
-    );
-    final response = await mockRepository.Payout(req);
-    expect(true, response.getOrElse(() => StripePayoutResponse()).success);
-  });
 
   test('test GetAccountLink', () async {
     final req = StripeAccountLinkRequest(Signature: '', Account: '');

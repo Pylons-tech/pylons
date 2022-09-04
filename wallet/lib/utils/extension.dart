@@ -48,9 +48,15 @@ extension ConvertFromU on String {
   }
 }
 
-extension FailureTypeEnumExt on String {
-  FailureTypeEnum toFailureTypeEnum() {
-    return FailureTypeEnum.values.firstWhere((e) => e.toString() == this, orElse: () => FailureTypeEnum.Unknown);
+extension TransactionTypeEnumExt on String {
+  TransactionTypeEnum toTransactionTypeEnum() {
+    return TransactionTypeEnum.values.firstWhere((e) => e.toString() == "AssetType.${this}", orElse: () => TransactionTypeEnum.Unknown);
+  }
+}
+
+extension TransactionStatusEnumExt on String {
+  TransactionStatus toTransactionStatusEnum() {
+    return TransactionStatus.values.firstWhere((e) => e.toString() == "TransactionStatus.${this}", orElse: () => TransactionStatus.Undefined);
   }
 }
 
@@ -169,9 +175,9 @@ extension TrimStringShort on String {
   }
 }
 
-extension TransactionTypePar on dynamic {
-  TransactionType toTransactionTypeEnum() {
-    return TransactionType.values.firstWhere((e) => e.toString() == 'AssetType.$this', orElse: () => TransactionType.RECEIVE);
+extension WalletHistroyTypePar on dynamic {
+  WalletHistoryTransactionType toTransactionTypeEnum() {
+    return WalletHistoryTransactionType.values.firstWhere((e) => e.toString() == 'AssetType.$this', orElse: () => WalletHistoryTransactionType.RECEIVE);
   }
 }
 

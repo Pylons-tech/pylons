@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:fixnum/fixnum.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/model/export.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
@@ -11,7 +10,6 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
-import 'package:pylons_wallet/utils/formatter.dart';
 
 class StripeHandler {
   Repository repository;
@@ -23,93 +21,93 @@ class StripeHandler {
       required this.walletsStore,
       required this.localDataSource});
 
-  /// handleStripePayout
-  /// @param amount
-  /// @return StripeFailure, String Payout Transfer id
-  Future<Either<Failure, String>> handleStripePayout(String amount) async {
-    final dataSource = GetIt.I.get<LocalDataSource>();
-
-    final walletsStore = GetIt.I.get<WalletsStore>();
-
-    var token = '';
-    var accountId = '';
-
-    accountId = dataSource.getStripeAccountId();
-
-    if (accountId == "") {
-      final response = await repository.GenerateRegistrationToken(
-          walletsStore.getWallets().value.last.publicAddress);
-
-      if (response.isLeft()) {
-        return left(StripeFailure("stripe_registration_token_failed".tr()));
-      }
-
-      token = response
-          .getOrElse(() => StripeGenerateRegistrationTokenResponse())
-          .token;
-
-      if (token == "") {
-        return left(StripeFailure("stripe_registration_token_failed".tr()));
-      }
-
-      dataSource.saveStripeToken(token: token);
-
-      final register_response = await repository.RegisterAccount(
-          StripeRegisterAccountRequest(
-              Token: token,
-              Signature: await walletsStore.signPureMessage(token),
-              Address: walletsStore.getWallets().value.last.publicAddress));
-
-      if (register_response.isLeft()) {
-        return left(StripeFailure("stripe_register_account_failed".tr()));
-      }
-
-      final register_info =
-          register_response.getOrElse(() => StripeRegisterAccountResponse());
-
-      if (register_info.account == "" || register_info.accountlink == "") {
-        return left(StripeFailure("stripe_register_account_failed".tr()));
-      }
-
-      dataSource.saveStripeAccountId(accountId: register_info.account);
-    }
-
-    final payoutToken_response =
-        await repository.GeneratePayoutToken(StripeGeneratePayoutTokenRequest(
-      amount: Int64.parseInt(amount.ValToUval()),
-      address: walletsStore.getWallets().value.last.publicAddress,
-    ));
-
-    if (payoutToken_response.isLeft()) {
-      return left(StripeFailure("stripe_payout_token_failed".tr()));
-    }
-
-    final payoutToken = payoutToken_response
-        .getOrElse(() => StripeGeneratePayoutTokenResponse());
-
-    if (payoutToken.token == "") {
-      return left(StripeFailure("stripe_payout_token_failed".tr()));
-    }
-
-    final payout_response = await repository.Payout(StripePayoutRequest(
-      address: walletsStore.getWallets().value.last.publicAddress,
-      token: payoutToken.token,
-      amount: Int64.parseInt(amount.ValToUval()),
-      signature: await walletsStore.signPureMessage(payoutToken.token),
-    ));
-
-    if (payout_response.isLeft()) {
-      return left(StripeFailure("stripe_payout_request_failed".tr()));
-    }
-
-    final payout_info = payout_response.getOrElse(() => StripePayoutResponse());
-
-    if (payout_info.transfer_id == "") {
-      return left(StripeFailure("stripe_payout_request_failed".tr()));
-    }
-
-    return right(payout_info.transfer_id);
-  }
+  // /// handleStripePayout
+  // /// @param amount
+  // /// @return StripeFailure, String Payout Transfer id
+  // Future<Either<Failure, String>> handleStripePayout(String amount) async {
+  //   final dataSource = GetIt.I.get<LocalDataSource>();
+  //
+  //   final walletsStore = GetIt.I.get<WalletsStore>();
+  //
+  //   var token = '';
+  //   var accountId = '';
+  //
+  //   accountId = dataSource.getStripeAccountId();
+  //
+  //   if (accountId == "") {
+  //     final response = await repository.GenerateRegistrationToken(
+  //         walletsStore.getWallets().value.last.publicAddress);
+  //
+  //     if (response.isLeft()) {
+  //       return left(StripeFailure("stripe_registration_token_failed".tr()));
+  //     }
+  //
+  //     token = response
+  //         .getOrElse(() => StripeGenerateRegistrationTokenResponse())
+  //         .token;
+  //
+  //     if (token == "") {
+  //       return left(StripeFailure("stripe_registration_token_failed".tr()));
+  //     }
+  //
+  //     dataSource.saveStripeToken(token: token);
+  //
+  //     final register_response = await repository.RegisterAccount(
+  //         StripeRegisterAccountRequest(
+  //             Token: token,
+  //             Signature: await walletsStore.signPureMessage(token),
+  //             Address: walletsStore.getWallets().value.last.publicAddress));
+  //
+  //     if (register_response.isLeft()) {
+  //       return left(StripeFailure("stripe_register_account_failed".tr()));
+  //     }
+  //
+  //     final register_info =
+  //         register_response.getOrElse(() => StripeRegisterAccountResponse());
+  //
+  //     if (register_info.account == "" || register_info.accountlink == "") {
+  //       return left(StripeFailure("stripe_register_account_failed".tr()));
+  //     }
+  //
+  //     dataSource.saveStripeAccountId(accountId: register_info.account);
+  //   }
+  //
+  //   final payoutToken_response =
+  //       await repository.GeneratePayoutToken(StripeGeneratePayoutTokenRequest(
+  //     amount: Int64.parseInt(amount.ValToUval()),
+  //     address: walletsStore.getWallets().value.last.publicAddress,
+  //   ));
+  //
+  //   if (payoutToken_response.isLeft()) {
+  //     return left(StripeFailure("stripe_payout_token_failed".tr()));
+  //   }
+  //
+  //   final payoutToken = payoutToken_response
+  //       .getOrElse(() => StripeGeneratePayoutTokenResponse());
+  //
+  //   if (payoutToken.token == "") {
+  //     return left(StripeFailure("stripe_payout_token_failed".tr()));
+  //   }
+  //
+  //   final payout_response = await repository.Payout(StripePayoutRequest(
+  //     address: walletsStore.getWallets().value.last.publicAddress,
+  //     token: payoutToken.token,
+  //     amount: Int64.parseInt(amount.ValToUval()),
+  //     signature: await walletsStore.signPureMessage(payoutToken.token),
+  //   ));
+  //
+  //   if (payout_response.isLeft()) {
+  //     return left(StripeFailure("stripe_payout_request_failed".tr()));
+  //   }
+  //
+  //   final payout_info = payout_response.getOrElse(() => StripePayoutResponse());
+  //
+  //   if (payout_info.transfer_id == "") {
+  //     return left(StripeFailure("stripe_payout_request_failed".tr()));
+  //   }
+  //
+  //   return right(payout_info.transfer_id);
+  // }
 
   /// handleStripeAccountLink
   /// @param

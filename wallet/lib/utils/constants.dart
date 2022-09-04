@@ -424,3 +424,5 @@ final defaultPylonsSKUs = jsonEncode([
 ]);
 
 const kMaxDescription = 256;
+
+Map<String, Color> denomColors = {'upylon': const Color(0xFF5252d5), 'ustripeusd': const Color(0xFF85bb65), 'uusd': const Color(0xFF85bb65)};

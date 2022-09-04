@@ -13,12 +13,18 @@ enum Orientation {
   Orientation_SW,
 }
 
-enum FailureTypeEnum {
+enum TransactionTypeEnum {
   GeneratePaymentReceipt,
   UpdateLikeStatus,
-  StripePayout,
+  // StripePayout,
   AppleInAppCoinsRequest,
   GoogleInAppCoinsRequest,
   BuyProduct,
   Unknown
+}
+
+enum TransactionStatus {
+  Success,
+  Failed,
+  Undefined
 }

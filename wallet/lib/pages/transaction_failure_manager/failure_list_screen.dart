@@ -21,7 +21,7 @@ class _FailureListScreenState extends State<FailureListScreen> {
         backgroundColor: Colors.black,
         title: const Text("Failures"),
       ),
-      body: FutureBuilder<List<TransactionManager>>(
+      body: FutureBuilder<List<LocalTransactionModel>>(
         future: failureManagerViewModel.getAllFailuresFromDB(),
         builder: (context, AsyncSnapshot snapshot) {
           if (ConnectionState.waiting == snapshot.connectionState) {
@@ -41,7 +41,7 @@ class _FailureListScreenState extends State<FailureListScreen> {
             child: ListView.builder(
                 itemCount: snapshot.data.length as int,
                 itemBuilder: (context, int index) {
-                  final TransactionManager txManager = snapshot.data[index] as TransactionManager;
+                  final LocalTransactionModel txManager = snapshot.data[index] as LocalTransactionModel;
                   return ListTile(
                     title: Text(
                       txManager.transactionDescription,

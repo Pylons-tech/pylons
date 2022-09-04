@@ -168,13 +168,13 @@ abstract class LocalDataSource {
   String getInviteeAddress();
 
   /// This method will save the Transaction Failure data to local DB
-  /// Input: [TransactionManager] the Transaction Input needs to retry the retry the transaction
+  /// Input: [LocalTransactionModel] the Transaction Input needs to retry the retry the transaction
   /// Output: [int] returns id of the inserted document
-  Future<int> saveTransactionFailure(TransactionManager txManager);
+  Future<int> saveTransactionFailure(LocalTransactionModel txManager);
 
   /// This method will get you all the transactionFailures from the DB
-  /// Output: This method will return the List of [TransactionManager] failures
-  Future<List<TransactionManager>> getAllTransactionFailures();
+  /// Output: This method will return the List of [LocalTransactionModel] failures
+  Future<List<LocalTransactionModel>> getAllTransactionFailures();
 
   /// This method will remove the Transaction failure record from the DB
   /// Input: [id] This method will take id of the transaction record to be removed
@@ -448,7 +448,7 @@ class LocalDataSourceImp implements LocalDataSource {
   }
 
   @override
-  Future<List<TransactionManager>> getAllTransactionFailures() async {
+  Future<List<LocalTransactionModel>> getAllTransactionFailures() async {
     try {
       return await database.txManagerDao.getAllFailuresEntries();
     } catch (e) {
@@ -457,7 +457,7 @@ class LocalDataSourceImp implements LocalDataSource {
   }
 
   @override
-  Future<int> saveTransactionFailure(TransactionManager txManager) async {
+  Future<int> saveTransactionFailure(LocalTransactionModel txManager) async {
     try {
       final result = await database.txManagerDao.insertTransactionFailure(txManager);
       return result;

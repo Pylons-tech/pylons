@@ -72,8 +72,8 @@ class LatestTransactions extends StatelessWidget {
   }
 
   Column getAmountColumn({required TransactionHistory txHistory}) {
-    if (txHistory.transactionTypeEnum == TransactionType.NFTSELL ||
-        txHistory.transactionTypeEnum == TransactionType.RECEIVE) {
+    if (txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTSELL ||
+        txHistory.transactionTypeEnum == WalletHistoryTransactionType.RECEIVE) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -107,7 +107,7 @@ class LatestTransactions extends StatelessWidget {
 
   ListTile buildTransactionListTile({required TransactionHistory txHistory}) {
     switch (txHistory.transactionTypeEnum) {
-      case TransactionType.NFTBUY:
+      case WalletHistoryTransactionType.NFTBUY:
         return ListTile(
           dense: true,
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
@@ -134,7 +134,7 @@ class LatestTransactions extends StatelessWidget {
             ],
           ),
         );
-      case TransactionType.NFTSELL:
+      case WalletHistoryTransactionType.NFTSELL:
         return ListTile(
           dense: true,
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
@@ -159,7 +159,7 @@ class LatestTransactions extends StatelessWidget {
             ],
           ),
         );
-      case TransactionType.RECEIVE:
+      case WalletHistoryTransactionType.RECEIVE:
         return ListTile(
           dense: true,
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
@@ -174,7 +174,7 @@ class LatestTransactions extends StatelessWidget {
           ),
           subtitle: SizedBox(height: 8.h),
         );
-      case TransactionType.SEND:
+      case WalletHistoryTransactionType.SEND:
         return ListTile(
           dense: true,
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
@@ -200,17 +200,17 @@ class LatestTransactions extends StatelessWidget {
     String seller = "";
     String buyer = "";
 
-    if (txHistory.transactionTypeEnum == TransactionType.NFTSELL ||
-        txHistory.transactionTypeEnum == TransactionType.NFTBUY) {
+    if (txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTSELL ||
+        txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTBUY) {
       final showLoader = Loading()..showLoading();
 
-      if (txHistory.transactionTypeEnum == TransactionType.NFTSELL) {
+      if (txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTSELL) {
         seller = await walletsStore.getAccountNameByAddress(
             walletsStore.getWallets().value.first.publicAddress);
         buyer = await walletsStore.getAccountNameByAddress(txHistory.address);
       }
 
-      if (txHistory.transactionTypeEnum == TransactionType.NFTBUY) {
+      if (txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTBUY) {
         seller = await walletsStore.getAccountNameByAddress(txHistory.address);
         buyer = await walletsStore.getAccountNameByAddress(
             walletsStore.getWallets().value.first.publicAddress);
@@ -305,7 +305,7 @@ class TxDetailArguments {
   final String transactionTime;
   final String currency;
   final String price;
-  final TransactionType transactionEnum;
+  final WalletHistoryTransactionType transactionEnum;
   final AssetType nftType;
 
   TxDetailArguments({

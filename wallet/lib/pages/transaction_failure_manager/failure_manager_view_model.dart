@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/stripe_generate_payment_receipt_request.dart';
-import 'package:pylons_wallet/model/stripe_payout_request.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
@@ -18,7 +17,7 @@ class FailureManagerViewModel extends ChangeNotifier {
 
   FailureManagerViewModel({required this.repository});
 
-  Future<List<TransactionManager>> getAllFailuresFromDB() async {
+  Future<List<LocalTransactionModel>> getAllFailuresFromDB() async {
     final failureEither = await repository.getAllTransactionFailures();
 
     if (failureEither.isLeft()) {
@@ -28,29 +27,29 @@ class FailureManagerViewModel extends ChangeNotifier {
     return failureEither.getOrElse(() => []);
   }
 
-  Future<void> handleRetry({required TransactionManager txManager}) async {
-    final FailureTypeEnum failureTypeEnum = txManager.transactionType.toFailureTypeEnum();
+  Future<void> handleRetry({required LocalTransactionModel txManager}) async {
+    final TransactionTypeEnum failureTypeEnum = txManager.transactionType.toTransactionTypeEnum();
 
     switch (failureTypeEnum) {
-      case FailureTypeEnum.GeneratePaymentReceipt:
+      case TransactionTypeEnum.GeneratePaymentReceipt:
         retryGeneratePaymentReceipt(txManager);
         break;
-      case FailureTypeEnum.UpdateLikeStatus:
+      case TransactionTypeEnum.UpdateLikeStatus:
         retryUpdateLikeStatus(txManager);
         break;
-      case FailureTypeEnum.StripePayout:
-        retryStripePayout(txManager);
-        break;
-      case FailureTypeEnum.AppleInAppCoinsRequest:
+      // case TransactionTypeEnum.StripePayout:
+      //   retryStripePayout(txManager);
+      //   break;
+      case TransactionTypeEnum.AppleInAppCoinsRequest:
         retryAppleInAppCoinsRequest(txManager);
         break;
-      case FailureTypeEnum.GoogleInAppCoinsRequest:
+      case TransactionTypeEnum.GoogleInAppCoinsRequest:
         retryGoogleInAppCoinsRequest(txManager);
         break;
-      case FailureTypeEnum.BuyProduct:
+      case TransactionTypeEnum.BuyProduct:
         retryBuyProduct(txManager);
         break;
-      case FailureTypeEnum.Unknown:
+      case TransactionTypeEnum.Unknown:
         'something_wrong'.tr().show();
         break;
     }
@@ -61,7 +60,7 @@ class FailureManagerViewModel extends ChangeNotifier {
     getAllFailuresFromDB();
   }
 
-  Future retryUpdateLikeStatus(TransactionManager txManager) async {
+  Future<void> retryUpdateLikeStatus(LocalTransactionModel txManager) async {
     final txDataJson = jsonDecode(txManager.transactionData);
     final loading = Loading()..showLoading();
     await repository.updateLikeStatus(recipeId: txDataJson[kRecipeIdMap].toString(), cookBookID: txDataJson[kCookbookIdMap].toString(), walletAddress: txDataJson[kWalletAddressIdMap].toString());
@@ -69,7 +68,7 @@ class FailureManagerViewModel extends ChangeNotifier {
     loading.dismiss();
   }
 
-  Future retryGeneratePaymentReceipt(TransactionManager txManager) async {
+  Future<void> retryGeneratePaymentReceipt(LocalTransactionModel txManager) async {
     final txDataJson = jsonDecode(txManager.transactionData);
     final StripeGeneratePaymentReceiptRequest request = StripeGeneratePaymentReceiptRequest.fromJson(txDataJson as Map<String, dynamic>);
     final loading = Loading()..showLoading();
@@ -77,15 +76,8 @@ class FailureManagerViewModel extends ChangeNotifier {
     loading.dismiss();
   }
 
-  Future retryStripePayout(TransactionManager txManager) async {
-    final txDataJson = jsonDecode(txManager.transactionData);
-    final StripePayoutRequest request = StripePayoutRequest.fromJson(txDataJson as Map<String, dynamic>);
-    final loading = Loading()..showLoading();
-    await repository.Payout(request);
-    loading.dismiss();
-  }
 
-  Future retryBuyProduct(TransactionManager txManager) async {
+  Future<void> retryBuyProduct(LocalTransactionModel txManager) async {
     final txDataJson = jsonDecode(txManager.transactionData);
     final ProductDetails productDetails = ProductDetails(
         id: txDataJson['id'] as String,
@@ -99,7 +91,7 @@ class FailureManagerViewModel extends ChangeNotifier {
     loading.dismiss();
   }
 
-  Future retryAppleInAppCoinsRequest(TransactionManager txManager) async {
+  Future<void> retryAppleInAppCoinsRequest(LocalTransactionModel txManager) async {
     final txDataJson = jsonDecode(txManager.transactionData);
     final AppleInAppPurchaseModel request = AppleInAppPurchaseModel.fromJson(txDataJson as Map<String, dynamic>);
     final loading = Loading()..showLoading();
@@ -107,7 +99,7 @@ class FailureManagerViewModel extends ChangeNotifier {
     loading.dismiss();
   }
 
-  Future retryGoogleInAppCoinsRequest(TransactionManager txManager) async {
+  Future<void> retryGoogleInAppCoinsRequest(LocalTransactionModel txManager) async {
     final txDataJson = jsonDecode(txManager.transactionData);
     final GoogleInAppPurchaseModel request = GoogleInAppPurchaseModel.fromJson(txDataJson as Map<String, dynamic>);
     final loading = Loading()..showLoading();

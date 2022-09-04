@@ -21,18 +21,18 @@ class TransactionCard extends StatelessWidget {
   final DateTime date;
   final String amountText;
   final String denomText;
-  final TransactionType transactionTypeEnum;
+  final WalletHistoryTransactionType transactionTypeEnum;
   final bool isDateSame;
 
   bool isOutGoing() {
     switch (transactionTypeEnum) {
-      case TransactionType.SEND:
+      case WalletHistoryTransactionType.SEND:
         return false;
-      case TransactionType.RECEIVE:
+      case WalletHistoryTransactionType.RECEIVE:
         return true;
-      case TransactionType.NFTBUY:
+      case WalletHistoryTransactionType.NFTBUY:
         return false;
-      case TransactionType.NFTSELL:
+      case WalletHistoryTransactionType.NFTSELL:
         return true;
     }
   }
@@ -111,7 +111,7 @@ class TransactionCard extends StatelessWidget {
 class LeadingBuilder extends StatelessWidget {
   final WidgetBuilder onSendReceive;
   final WidgetBuilder onBuySell;
-  final TransactionType transactionType;
+  final WalletHistoryTransactionType transactionType;
 
   const LeadingBuilder({
     Key? key,
@@ -123,13 +123,13 @@ class LeadingBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (transactionType) {
-      case TransactionType.SEND:
+      case WalletHistoryTransactionType.SEND:
         return onSendReceive(context);
-      case TransactionType.RECEIVE:
+      case WalletHistoryTransactionType.RECEIVE:
         return onSendReceive(context);
-      case TransactionType.NFTBUY:
+      case WalletHistoryTransactionType.NFTBUY:
         return onBuySell(context);
-      case TransactionType.NFTSELL:
+      case WalletHistoryTransactionType.NFTSELL:
         return onBuySell(context);
     }
   }

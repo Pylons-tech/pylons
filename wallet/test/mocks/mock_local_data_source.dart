@@ -193,13 +193,13 @@ class MockLocalDataSource extends LocalDataSource {
   }
 
   @override
-  Future<List<TransactionManager>> getAllTransactionFailures() {
+  Future<List<LocalTransactionModel>> getAllTransactionFailures() {
     // TODO: implement getAllTransactionFailures
     throw UnimplementedError();
   }
 
   @override
-  Future<int> saveTransactionFailure(TransactionManager txManager) {
+  Future<int> saveTransactionFailure(LocalTransactionModel txManager) {
     // TODO: implement saveTransactionFailure
     throw UnimplementedError();
   }

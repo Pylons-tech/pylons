@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 
 part 'database.g.dart';
 
-@Database(version: 1, entities: [TransactionManager])
+@Database(version: 1, entities: [LocalTransactionModel])
 abstract class AppDatabase extends FloorDatabase {
   TxManagerDao get txManagerDao;
 }

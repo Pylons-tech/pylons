@@ -27,15 +27,15 @@ TextStyle _titleTextStyle = TextStyle(
 class TransactionDetailsScreen extends StatelessWidget {
   const TransactionDetailsScreen({Key? key}) : super(key: key);
 
-  bool getTxTypeFlag({required TransactionType txType}) {
+  bool getTxTypeFlag({required WalletHistoryTransactionType txType}) {
     switch (txType) {
-      case TransactionType.SEND:
+      case WalletHistoryTransactionType.SEND:
         return false;
-      case TransactionType.RECEIVE:
+      case WalletHistoryTransactionType.RECEIVE:
         return true;
-      case TransactionType.NFTBUY:
+      case WalletHistoryTransactionType.NFTBUY:
         return false;
-      case TransactionType.NFTSELL:
+      case WalletHistoryTransactionType.NFTSELL:
         return true;
     }
   }

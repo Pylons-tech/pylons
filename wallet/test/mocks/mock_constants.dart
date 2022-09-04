@@ -21,7 +21,7 @@ List<TransactionHistory> MOCK_TRANSACTIONS_HISTORY = [
       cookbookId: "cookbookLOUD1",
       createdAt: 1654508506,
       transactionType: "NFTSELL",
-      transactionTypeEnum: TransactionType.values.byName("NFTSELL"),
+      transactionTypeEnum: WalletHistoryTransactionType.values.byName("NFTSELL"),
       ibcCoin: IBCCoins.upylon,
       txID: "txID"),
   TransactionHistory(
@@ -31,7 +31,7 @@ List<TransactionHistory> MOCK_TRANSACTIONS_HISTORY = [
       amount: "1000ubedrock",
       createdAt: 1655890906,
       transactionType: "RECEIVE",
-      transactionTypeEnum: TransactionType.values.byName("RECEIVE"),
+      transactionTypeEnum: WalletHistoryTransactionType.values.byName("RECEIVE"),
       ibcCoin: IBCCoins.uatom,
       txID: "txID"),
   TransactionHistory(
@@ -41,7 +41,7 @@ List<TransactionHistory> MOCK_TRANSACTIONS_HISTORY = [
       amount: "10upylon",
       createdAt: 1654508506,
       transactionType: "SEND",
-      transactionTypeEnum: TransactionType.values.byName("SEND"),
+      transactionTypeEnum: WalletHistoryTransactionType.values.byName("SEND"),
       ibcCoin: IBCCoins.upylon,
       txID: "txID"),
 ];

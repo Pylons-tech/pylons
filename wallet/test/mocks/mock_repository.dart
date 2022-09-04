@@ -67,11 +67,6 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, StripePayoutResponse>> Payout(StripePayoutRequest req) async {
-    return Right(StripePayoutResponse(success: true));
-  }
-
-  @override
   Future<Either<Failure, StripeRegisterAccountResponse>> RegisterAccount(StripeRegisterAccountRequest req) async {
     return Right(StripeRegisterAccountResponse(success: true));
   }
@@ -539,13 +534,13 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, List<TransactionManager>>> getAllTransactionFailures() {
+  Future<Either<Failure, List<LocalTransactionModel>>> getAllTransactionFailures() {
     // TODO: implement getAllTransactionFailures
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, int>> saveTransactionFailure(TransactionManager txManager) {
+  Future<Either<Failure, int>> saveLocalTransaction(LocalTransactionModel txManager) {
     // TODO: implement saveTransactionFailure
     throw UnimplementedError();
   }

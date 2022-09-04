@@ -1103,6 +1103,14 @@ class AppleInAppPurchaseModel {
 
   AppleInAppPurchaseModel({required this.productID, required this.purchaseID, required this.receiptData, required this.creator});
 
+
+
+  AppleInAppPurchaseModel.fromJson(Map<String, dynamic> json)
+      : productID = json['productId'] as String,
+        purchaseID = json['purchaseId'] as String,
+        receiptData = json['receiptDataBase64'] as String,
+        creator = json['creator'] as String;
+
   Map<String, String> toJson() => {"productId": productID, "purchaseId": purchaseID, "receiptDataBase64": receiptData, "creator": creator};
 }
 
@@ -1118,7 +1126,7 @@ class GoogleInAppPurchaseModel {
   GoogleInAppPurchaseModel.fromJson(Map<String, dynamic> json)
       : productID = json['product_id'] as String,
         purchaseToken = json['purchase_token'] as String,
-        recieptData = json['receipt_data_base64'] as Map,
+        receiptData = json['receipt_data_base64'] as Map,
         signature = json['signature'] as String,
         creator = json['creator'] as String;
 

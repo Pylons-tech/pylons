@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:alan/alan.dart' as alan;
 import 'package:dartz/dartz.dart';
@@ -36,6 +35,7 @@ import 'package:pylons_wallet/utils/backup/icloud_driver_helper.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
+import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:pylons_wallet/utils/local_auth_helper.dart';
 import 'package:pylons_wallet/utils/query_helper.dart';
@@ -152,11 +152,6 @@ abstract class Repository {
   /// Input: [StripeGeneratePayoutTokenRequest]
   /// return [StripeGeneratePayoutTokenResponse]
   Future<Either<Failure, StripeGeneratePayoutTokenResponse>> GeneratePayoutToken(StripeGeneratePayoutTokenRequest req);
-
-  /// Stripe Backend API to Payout request
-  /// Input: [StripePayoutRequest]
-  /// return [StripePayoutResponse]
-  Future<Either<Failure, StripePayoutResponse>> Payout(StripePayoutRequest req);
 
   /// Stripe Backend API to Get Connected Account Link matched to the wallet address
   /// Input: [StripeAccountLinkRequest] wallet account
@@ -468,13 +463,13 @@ abstract class Repository {
   Future<Either<Failure, TransactionResponse>> createAccount({required AccountPublicInfo publicInfo, required WalletCreationModel walletCreationModel});
 
   /// This method will save the Transaction Failure data to local DB
-  /// Input: [TransactionManager] the Transaction Input needs to retry the retry the transaction
+  /// Input: [LocalTransactionModel] the Transaction Input needs to retry the retry the transaction
   /// Output: [int] returns id of the inserted document
-  Future<Either<Failure, int>> saveTransactionFailure(TransactionManager txManager);
+  Future<Either<Failure, int>> saveLocalTransaction(LocalTransactionModel txManager);
 
   /// This method will get you all the transactionFailures from the DB
-  /// Output: This method will return the List of [TransactionManager] failures
-  Future<Either<Failure, List<TransactionManager>>> getAllTransactionFailures();
+  /// Output: This method will return the List of [LocalTransactionModel] failures
+  Future<Either<Failure, List<LocalTransactionModel>>> getAllTransactionFailures();
 
   /// This method will remove the Transaction failure record from the DB
   /// Input: [id] This method will take id of the transaction record to be removed
@@ -770,15 +765,11 @@ class RepositoryImp implements Repository {
   /// }
   @override
   Future<Either<Failure, StripeGeneratePaymentReceiptResponse>> GeneratePaymentReceipt(StripeGeneratePaymentReceiptRequest req) async {
-    if (!await networkInfo.isConnected) {
-      final TransactionManager txManager = TransactionManager(
-          transactionType: 'FailureTypeEnum.GeneratePaymentReceipt',
-          transactionErrorCode: '00',
-          transactionData: jsonEncode(req.toJson()),
-          transactionDescription: 'Could not generate receipt',
-          dateTime: DateTime.now().millisecondsSinceEpoch);
+    final localTransactionModel = createInitialLocalTransactionModel(
+        transactionTypeEnum: TransactionTypeEnum.GeneratePaymentReceipt, transactionData: jsonEncode(req.toJson()), transactionDescription: 'Could not generate receipt');
 
-      saveTransactionFailure(txManager);
+    if (!await networkInfo.isConnected) {
+      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
@@ -786,10 +777,14 @@ class RepositoryImp implements Repository {
       final baseEnv = getBaseEnv();
       final result = await queryHelper.queryPost("${baseEnv.baseStripeUrl}/generate-payment-receipt", req.toJson());
       if (!result.isSuccessful) {
+        saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
         return Left(StripeFailure(result.error ?? GEN_PAYMENTRECEIPT_FAILED));
       }
+
+      saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(StripeGeneratePaymentReceiptResponse.from(result));
     } on Exception catch (_) {
+      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       crashlyticsHelper.recordFatalError(error: _.toString());
       return const Left(StripeFailure(GEN_PAYMENTRECEIPT_FAILED));
     }
@@ -878,34 +873,33 @@ class RepositoryImp implements Repository {
     }
   }
 
-  /// Stripe Backend API to Payout Request
-  /// Input: [StripePayoutRequest] {address:String, token:String, signature:String, amount:int}
-  /// return [StripePayoutResponse] {transfer_id:String}
-  @override
-  Future<Either<Failure, StripePayoutResponse>> Payout(StripePayoutRequest req) async {
-    if (!await networkInfo.isConnected) {
-      final TransactionManager txManager = TransactionManager(
-          transactionType: 'FailureTypeEnum.StripePayout',
-          transactionErrorCode: '00',
-          transactionData: jsonEncode(req.toJson()),
-          transactionDescription: 'Error while stripe payout',
-          dateTime: DateTime.now().millisecondsSinceEpoch);
-
-      saveTransactionFailure(txManager);
-      return Left(NoInternetFailure("no_internet".tr()));
-    }
-    try {
-      final baseEnv = getBaseEnv();
-      final result = await queryHelper.queryPost("${baseEnv.baseStripeUrl}/payout", req.toJson());
-      if (!result.isSuccessful) {
-        return Left(StripeFailure(result.error ?? PAYOUT_FAILED));
-      }
-      return Right(StripePayoutResponse.from(result));
-    } on Exception catch (_) {
-      crashlyticsHelper.recordFatalError(error: _.toString());
-      return const Left(StripeFailure(PAYOUT_FAILED));
-    }
-  }
+  // /// Stripe Backend API to Payout Request
+  // /// Input: [StripePayoutRequest] {address:String, token:String, signature:String, amount:int}
+  // /// return [StripePayoutResponse] {transfer_id:String}
+  // @override
+  // Future<Either<Failure, StripePayoutResponse>> Payout(StripePayoutRequest req) async {
+  //   if (!await networkInfo.isConnected) {
+  //     final LocalTransactionModel txManager = LocalTransactionModel(
+  //         transactionType: 'FailureTypeEnum.StripePayout',
+  //         transactionData: jsonEncode(req.toJson()),
+  //         transactionDescription: 'Error while stripe payout',
+  //         dateTime: DateTime.now().millisecondsSinceEpoch);
+  //
+  //     saveLocalTransaction(txManager);
+  //     return Left(NoInternetFailure("no_internet".tr()));
+  //   }
+  //   try {
+  //     final baseEnv = getBaseEnv();
+  //     final result = await queryHelper.queryPost("${baseEnv.baseStripeUrl}/payout", req.toJson());
+  //     if (!result.isSuccessful) {
+  //       return Left(StripeFailure(result.error ?? PAYOUT_FAILED));
+  //     }
+  //     return Right(StripePayoutResponse.from(result));
+  //   } on Exception catch (_) {
+  //     crashlyticsHelper.recordFatalError(error: _.toString());
+  //     return const Left(StripeFailure(PAYOUT_FAILED));
+  //   }
+  // }
 
   /// Stripe Backend API to Register Stripe connected account
   /// Input: [StripeRegisterAccountRequest]
@@ -1584,20 +1578,6 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, void>> updateLikeStatus({required String recipeId, required String cookBookID, required String walletAddress}) async {
     if (!await networkInfo.isConnected) {
-      final jsonString = {
-        kWalletAddressIdMap: walletAddress,
-        kCookbookIdMap: cookBookID,
-        kRecipeIdMap: recipeId,
-      };
-
-      final TransactionManager txManager = TransactionManager(
-          transactionType: 'FailureTypeEnum.UpdateLikeStatus',
-          transactionErrorCode: '00',
-          transactionData: jsonEncode(jsonString),
-          transactionDescription: 'Could not Update Like Status of NFT',
-          dateTime: DateTime.now().millisecondsSinceEpoch);
-
-      saveTransactionFailure(txManager);
       return Left(NoInternetFailure("no_internet".tr()));
     }
     try {
@@ -1612,26 +1592,26 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(AppleInAppPurchaseModel appleInAppPurchaseModel) async {
-    if (!await networkInfo.isConnected) {
-      final TransactionManager txManager = TransactionManager(
-          transactionType: 'FailureTypeEnum.AppleInAppCoinsRequest',
-          transactionErrorCode: '00',
-          transactionData: jsonEncode(appleInAppPurchaseModel.toJson()),
-          transactionDescription: 'Error while purchasing apple coins',
-          dateTime: DateTime.now().millisecondsSinceEpoch);
+    final localTxModel = createInitialLocalTransactionModel(
+        transactionTypeEnum: TransactionTypeEnum.AppleInAppCoinsRequest, transactionData: jsonEncode(appleInAppPurchaseModel.toJson()), transactionDescription: 'Error while purchasing apple coins');
 
-      saveTransactionFailure(txManager);
+    if (!await networkInfo.isConnected) {
+      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
     try {
       final result = await remoteDataStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
+      saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTxModel);
       return Right(result);
     } on Failure catch (_) {
+      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
       return Left(_);
     } on String catch (_) {
+      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
       return Left(InAppPurchaseFailure(message: _));
     } on Exception catch (_) {
+      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
       recordErrorInCrashlytics(_);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
@@ -1639,29 +1619,46 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(GoogleInAppPurchaseModel msgGoogleInAPPPurchase) async {
-    if (!await networkInfo.isConnected) {
-      final TransactionManager txManager = TransactionManager(
-          transactionType: 'FailureTypeEnum.GoogleInAppCoinsRequest',
-          transactionErrorCode: '00',
-          transactionData: jsonEncode(msgGoogleInAPPPurchase.toJson()),
-          transactionDescription: 'Error while purchasing google coins',
-          dateTime: DateTime.now().millisecondsSinceEpoch);
+    final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
+      transactionTypeEnum: TransactionTypeEnum.GoogleInAppCoinsRequest,
+      transactionData: jsonEncode(msgGoogleInAPPPurchase.toJson()),
+      transactionDescription: 'Error while purchasing google coins',
+    );
 
-      saveTransactionFailure(txManager);
+    if (!await networkInfo.isConnected) {
+      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
     try {
       final result = await remoteDataStore.sendGoogleInAppPurchaseCoinsRequest(msgGoogleInAPPPurchase);
+      saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(result);
     } on Failure catch (_) {
+      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(_);
     } on String catch (_) {
+      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(InAppPurchaseFailure(message: _));
     } on Exception catch (_) {
+      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       recordErrorInCrashlytics(_);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
+  }
+
+  LocalTransactionModel createInitialLocalTransactionModel({
+    required TransactionTypeEnum transactionTypeEnum,
+    required String transactionData,
+    required String transactionDescription,
+  }) {
+    final LocalTransactionModel txManager = LocalTransactionModel(
+        transactionType: transactionTypeEnum.name,
+        transactionData: transactionData,
+        transactionDescription: transactionDescription,
+        dateTime: DateTime.now().millisecondsSinceEpoch,
+        status: TransactionStatus.Undefined.name);
+    return txManager;
   }
 
   @override
@@ -1685,40 +1682,49 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, bool>> buyProduct(ProductDetails productDetails) async {
-    if (!await networkInfo.isConnected) {
-      final Map<String, dynamic> data = {};
-      data.addAll({
-        'id': productDetails.id,
-        'title': productDetails.title,
-        'description': productDetails.description,
-        'price': productDetails.price,
-        'rawPrice': productDetails.rawPrice,
-        'currencyCode': productDetails.currencyCode,
-        'currencySymbol': productDetails.currencySymbol
-      });
-      log(jsonEncode(data));
-      final TransactionManager txManager = TransactionManager(
-          transactionType: 'FailureTypeEnum.BuyProduct',
-          transactionErrorCode: '00',
-          transactionData: jsonEncode(data),
-          transactionDescription: 'Could not Buy Product Like Status of NFT',
-          dateTime: DateTime.now().millisecondsSinceEpoch);
+    final Map<String, dynamic> data = {};
+    createJsonFormOfProductDetails(data, productDetails);
 
-      saveTransactionFailure(txManager);
+    final LocalTransactionModel txLocalModel =
+        createInitialLocalTransactionModel(transactionData: jsonEncode(data), transactionDescription: 'Could not Buy Product Like Status of NFT', transactionTypeEnum: TransactionTypeEnum.BuyProduct);
+
+    if (!await networkInfo.isConnected) {
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: txLocalModel);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
     try {
       final result = await remoteDataStore.buyProduct(productDetails);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: txLocalModel);
       return Right(result);
     } on Failure catch (_) {
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: txLocalModel);
       return Left(_);
     } on String catch (_) {
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: txLocalModel);
       return Left(InAppPurchaseFailure(message: _));
     } on Exception catch (_) {
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: txLocalModel);
       recordErrorInCrashlytics(_);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
+  }
+
+  Future<void> saveTransactionRecord({required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
+    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(status: transactionStatus, transactionModel: txLocalModel);
+    await saveLocalTransaction(txLocalModelWithStatus);
+  }
+
+  void createJsonFormOfProductDetails(Map<String, dynamic> data, ProductDetails productDetails) {
+    data.addAll({
+      'id': productDetails.id,
+      'title': productDetails.title,
+      'description': productDetails.description,
+      'price': productDetails.price,
+      'rawPrice': productDetails.rawPrice,
+      'currencyCode': productDetails.currencyCode,
+      'currencySymbol': productDetails.currencySymbol
+    });
   }
 
   @override
@@ -1931,7 +1937,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<TransactionManager>>> getAllTransactionFailures() async {
+  Future<Either<Failure, List<LocalTransactionModel>>> getAllTransactionFailures() async {
     try {
       final result = await localDataSource.getAllTransactionFailures();
       return Right(result);
@@ -1941,7 +1947,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, int>> saveTransactionFailure(TransactionManager txManager) async {
+  Future<Either<Failure, int>> saveLocalTransaction(LocalTransactionModel txManager) async {
     try {
       final result = await localDataSource.saveTransactionFailure(txManager);
       return Right(result);
