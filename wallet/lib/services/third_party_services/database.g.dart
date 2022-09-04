@@ -82,7 +82,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `TransactionManager` (`id` INTEGER, `transactionType` TEXT NOT NULL, `transactionErrorCode` TEXT NOT NULL, `transactionData` TEXT NOT NULL, `transactionDescription` TEXT NOT NULL, `dateTime` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `LocalTransactionModel` (`id` INTEGER, `transactionType` TEXT NOT NULL, `transactionData` TEXT NOT NULL, `transactionDescription` TEXT NOT NULL, `status` TEXT NOT NULL, `dateTime` INTEGER NOT NULL, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -99,15 +99,15 @@ class _$AppDatabase extends AppDatabase {
 class _$TxManagerDao extends TxManagerDao {
   _$TxManagerDao(this.database, this.changeListener)
       : _queryAdapter = QueryAdapter(database),
-        _transactionManagerInsertionAdapter = InsertionAdapter(
+        _localTransactionModelInsertionAdapter = InsertionAdapter(
             database,
-            'TransactionManager',
-            (TransactionManager item) => <String, Object?>{
+            'LocalTransactionModel',
+            (LocalTransactionModel item) => <String, Object?>{
                   'id': item.id,
                   'transactionType': item.transactionType,
-                  'transactionErrorCode': item.transactionErrorCode,
                   'transactionData': item.transactionData,
                   'transactionDescription': item.transactionDescription,
+                  'status': item.status,
                   'dateTime': item.dateTime
                 });
 
@@ -117,20 +117,20 @@ class _$TxManagerDao extends TxManagerDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<TransactionManager>
-      _transactionManagerInsertionAdapter;
+  final InsertionAdapter<LocalTransactionModel>
+      _localTransactionModelInsertionAdapter;
 
   @override
-  Future<List<TransactionManager>> getAllFailuresEntries() async {
+  Future<List<LocalTransactionModel>> getAllFailuresEntries() async {
     return _queryAdapter.queryList(
         'SELECT * FROM TransactionManager ORDER BY dateTime DESC',
-        mapper: (Map<String, Object?> row) => TransactionManager(
+        mapper: (Map<String, Object?> row) => LocalTransactionModel(
             id: row['id'] as int?,
             transactionType: row['transactionType'] as String,
-            transactionErrorCode: row['transactionErrorCode'] as String,
             transactionData: row['transactionData'] as String,
             transactionDescription: row['transactionDescription'] as String,
-            dateTime: row['dateTime'] as int));
+            dateTime: row['dateTime'] as int,
+            status: row['status'] as String));
   }
 
   @override
@@ -141,8 +141,8 @@ class _$TxManagerDao extends TxManagerDao {
   }
 
   @override
-  Future<int> insertTransactionFailure(TransactionManager txManager) {
-    return _transactionManagerInsertionAdapter.insertAndReturnId(
+  Future<int> insertTransactionFailure(LocalTransactionModel txManager) {
+    return _localTransactionModelInsertionAdapter.insertAndReturnId(
         txManager, OnConflictStrategy.abort);
   }
 }

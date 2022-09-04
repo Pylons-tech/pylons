@@ -16,6 +16,7 @@ import '../../../mocks/mock_crashlytics_helper.dart';
 import '../../../mocks/mock_firebase_appcheck.dart';
 import '../../../mocks/mock_firebase_dynamic_link.dart';
 import '../../../mocks/mock_store_payment_service.dart';
+import '../../../mocks/mock_firestore_helper.dart';
 
 void main() {
   test('should get account link and account id on getAccountLinkBasedOnUpdateToken', () async {
@@ -27,6 +28,7 @@ void main() {
 
     GetIt.I.registerSingleton(MOCK_BASE_ENV);
 
+
     final client = MockClient(requestHandler);
     final remoteDataStore = RemoteDataStoreImp(
       httpClient: client,
@@ -34,7 +36,7 @@ void main() {
       storePaymentService: storePaymentService,
       firebaseAppCheck: MockFirebaseAppCheck(),
       dynamicLinksGenerator: mockFirebaseDynamicLinks,
-      firebaseHelper: sl(),
+      firebaseHelper: MockFirestoreHelper(),
     );
 
     final response = await remoteDataStore.getAccountLinkBasedOnUpdateToken(req: StripeUpdateAccountRequest(Address: MOCK_ADDRESS, Token: MOCK_TOKEN, Signature: SIGNATURE));
