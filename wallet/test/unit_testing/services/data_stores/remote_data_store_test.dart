@@ -9,8 +9,6 @@ import 'package:pylons_wallet/model/export.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/store_payment_service.dart';
-import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
-
 import '../../../mocks/mock_constants.dart';
 import '../../../mocks/mock_crashlytics_helper.dart';
 import '../../../mocks/mock_firebase_appcheck.dart';

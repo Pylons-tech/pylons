@@ -6,5 +6,4 @@ class MockFirestoreHelper implements FirestoreHelper{
     // TODO: implement saveUserFeedback
     throw UnimplementedError();
   }
-
 }
