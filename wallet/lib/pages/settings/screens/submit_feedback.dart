@@ -23,11 +23,8 @@ class SubmitFeedback {
   Future<void> show() async {
     await showDialog<String>(
         context: context,
-        builder: (BuildContext context) => Dialog(
-              backgroundColor: Colors.transparent,
-              insetPadding: EdgeInsets.symmetric(horizontal: isTablet ? 65.w : 21.w),
-              child: const _SubmitFeedbackDialogContent(),
-            ));
+        builder: (BuildContext context) =>
+            Dialog(backgroundColor: Colors.transparent, insetPadding: EdgeInsets.symmetric(horizontal: isTablet ? 65.w : 21.w), child: const _SubmitFeedbackDialogContent()));
   }
 }
 

@@ -231,7 +231,8 @@ class _BalanceWidgetState extends State<_BalanceWidget> {
                         widget.onCallFaucet();
                       },
                       style: ElevatedButton.styleFrom(
-                        maximumSize: const Size(100, 20), disabledForegroundColor: constants.kWhite.withOpacity(0.38), disabledBackgroundColor: constants.kWhite.withOpacity(0.12),
+                        backgroundColor: constants.kWhite,
+                        maximumSize: const Size(100, 20),
                         minimumSize: const Size(100, 20),
                       ),
                       child: Text("faucet".tr(), style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 12, fontFamily: 'Inter')))

@@ -12,6 +12,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
 import 'package:pylons_wallet/model/export.dart';
+import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/pick_image_model.dart';
@@ -445,6 +446,21 @@ abstract class Repository {
   /// Input : [address] the address against which the invite link to be generated
   /// Output: [String] return the generated dynamic link else will return [Failure]
   Future<Either<Failure, String>> createDynamicLinkForUserInvite({required String address});
+
+  /// This method will create dynamic link for the nft share recipe
+  /// Input : [address] the address against which the invite link to be generated, [nft] the nft whose link to be created
+  /// Output: [String] return the generated dynamic link else will return [Failure]
+  Future<Either<Failure, String>> createDynamicLinkForRecipeNftShare({required String address, required NFT nft});
+
+  /// This method will create dynamic link for the nft share trade
+  /// Input : [address] the address against which the invite link to be generated, [tradeId] the id of the trade item
+  /// Output: [String] return the generated dynamic link else will throw error
+  Future<Either<Failure, String>> createDynamicLinkForTradeNftShare({required String address, required String tradeId});
+
+  /// This method will create dynamic link for the nft share item
+  /// Input : [address] the address against which the invite link to be generated, [itemId] the id of the item, [cookbookId] the id of the cookbook
+  /// Output: [String] return the generated dynamic link else will throw error
+  Future<Either<Failure, String>> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId});
 
   /// This method will create User account based on account public info
   /// Input: [publicInfo] contains info related to user chain address, [walletCreationModel] contains user entered data
@@ -1857,6 +1873,33 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, String>> createDynamicLinkForUserInvite({required String address}) async {
     try {
       return Right(await remoteDataStore.createDynamicLinkForUserInvite(address: address));
+    } on Exception catch (_) {
+      return Left(FirebaseDynamicLinkFailure("dynamic_link_failure".tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) async {
+    try {
+      return Right(await remoteDataStore.createDynamicLinkForRecipeNftShare(address: address, nft: nft));
+    } on Exception catch (_) {
+      return Left(FirebaseDynamicLinkFailure("dynamic_link_failure".tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId}) async {
+    try {
+      return Right(await remoteDataStore.createDynamicLinkForItemNftShare(address: address, itemId: itemId, cookbookId: cookbookId));
+    } on Exception catch (_) {
+      return Left(FirebaseDynamicLinkFailure("dynamic_link_failure".tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> createDynamicLinkForTradeNftShare({required String address, required String tradeId}) async {
+    try {
+      return Right(await remoteDataStore.createDynamicLinkForTradeNftShare(address: address, tradeId: tradeId));
     } on Exception catch (_) {
       return Left(FirebaseDynamicLinkFailure("dynamic_link_failure".tr()));
     }

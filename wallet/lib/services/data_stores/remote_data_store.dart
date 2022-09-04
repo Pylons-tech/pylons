@@ -18,6 +18,7 @@ import 'package:pylons_wallet/model/amount.dart';
 import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
 import 'package:pylons_wallet/model/export.dart';
+import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
@@ -34,9 +35,12 @@ import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/custom_transaction_signing_gateaway/custom_transaction_signing_gateway.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
+import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
+
+import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
 
 abstract class RemoteDataStore {
   /// This method is used to generate the stripe registration token
@@ -240,6 +244,21 @@ abstract class RemoteDataStore {
   /// Input : [address] the address against which the invite link to be generated
   /// Output: [String] return the generated dynamic link else will throw error
   Future<String> createDynamicLinkForUserInvite({required String address});
+
+  /// This method will create dynamic link for the nft share recipe
+  /// Input : [address] the address & [NFT] against which the invite link to be generated
+  /// Output: [String] return the generated dynamic link else will throw error
+  Future<String> createDynamicLinkForRecipeNftShare({required String address, required NFT nft});
+
+  /// This method will create dynamic link for the nft share trade
+  /// Input : [address] the address & [tradeId] against which the invite link to be generated
+  /// Output: [String] return the generated dynamic link else will throw error
+  Future<String> createDynamicLinkForTradeNftShare({required String address, required String tradeId});
+
+  /// This method will create dynamic link for the nft share purchase
+  /// Input : [address] the address & [itemId] the id of the item& [cookbookId] against which the invite link to be generated
+  /// Output: [String] return the generated dynamic link else will throw error
+  Future<String> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId});
 
   /// This method will create User account based on account public info
   /// Input: [publicInfo] contains info related to user chain address, [walletCreationModel] contains user entered data, [appCheckToken] the app specific token, [referralToken] the invitee user address
@@ -993,8 +1012,29 @@ class RemoteDataStoreImp implements RemoteDataStore {
       iosParameters: const IOSParameters(bundleId: "xyz.pylons.wallet"),
     );
 
-    final shortLink = await dynamicLinksGenerator.buildShortLink(dynamicLinkParams);
-    return shortLink.shortUrl.toString();
+    final link = await dynamicLinksGenerator.buildLink(dynamicLinkParams);
+    return link.toString();
+  }
+
+  @override
+  Future<String> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) async {
+    final dynamicLinkParams = DynamicLinkParameters(
+      link: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address"),
+      uriPrefix: kDeepLink,
+      androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
+      iosParameters: IOSParameters(bundleId: bundleId, fallbackUrl: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
+    );
+
+    final link = await dynamicLinksGenerator.buildShortLink(
+      dynamicLinkParams,
+      shortLinkType: ShortDynamicLinkType.unguessable,
+    );
+    return link.shortUrl.toString();
+  }
+
+  Uri getUri(NFT nft) {
+    if (nft.assetType == AssetType.Image) return Uri.parse(nft.url);
+    return Uri.parse(nft.thumbnailUrl);
   }
 
   @override
@@ -1024,6 +1064,32 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
+  Future<String> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId}) async {
+    final dynamicLinkParams = DynamicLinkParameters(
+      link: Uri.parse("$bigDipperBaseLink?item_id=$itemId&cookbook_id=$cookbookId&address=$address"),
+      uriPrefix: kDeepLink,
+      androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?item_id=$itemId&cookbook_id=$cookbookId&address=$address")),
+      iosParameters: const IOSParameters(bundleId: bundleId),
+    );
+
+    final link = await dynamicLinksGenerator.buildLink(dynamicLinkParams);
+    return link.toString();
+  }
+
+  @override
+  Future<String> createDynamicLinkForTradeNftShare({required String address, required String tradeId}) async {
+    final dynamicLinkParams = DynamicLinkParameters(
+      link: Uri.parse("$bigDipperBaseLink?trade_id=$tradeId&address=$address"),
+      uriPrefix: kDeepLink,
+      androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?trade_id=$tradeId&address=$address")),
+      iosParameters: const IOSParameters(bundleId: bundleId),
+    );
+
+    final link = await dynamicLinksGenerator.buildShortLink(dynamicLinkParams);
+    return link.shortUrl.toString();
+  }
+
+  @override
   Future<bool> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) {
     return firebaseHelper.saveUserFeedback(walletAddress: walletAddress, subject: subject, feedback: feedback);
   }
@@ -1032,28 +1098,22 @@ class RemoteDataStoreImp implements RemoteDataStore {
 class AppleInAppPurchaseModel {
   String productID;
   String purchaseID;
-  String recieptData;
+  String receiptData;
   String creator;
 
-  AppleInAppPurchaseModel({required this.productID, required this.purchaseID, required this.recieptData, required this.creator});
+  AppleInAppPurchaseModel({required this.productID, required this.purchaseID, required this.receiptData, required this.creator});
 
-  AppleInAppPurchaseModel.fromJson(Map<String, dynamic> json)
-      : productID = json['productId'] as String,
-        purchaseID = json['purchaseId'] as String,
-        recieptData = json['receiptDataBase64'] as String,
-        creator = json['creator'] as String;
-
-  Map<String, String> toJson() => {"productId": productID, "purchaseId": purchaseID, "receiptDataBase64": recieptData, "creator": creator};
+  Map<String, String> toJson() => {"productId": productID, "purchaseId": purchaseID, "receiptDataBase64": receiptData, "creator": creator};
 }
 
 class GoogleInAppPurchaseModel {
   String productID;
   String purchaseToken;
-  Map recieptData;
+  Map receiptData;
   String signature;
   String creator;
 
-  GoogleInAppPurchaseModel({required this.productID, required this.purchaseToken, required this.recieptData, required this.signature, required this.creator});
+  GoogleInAppPurchaseModel({required this.productID, required this.purchaseToken, required this.receiptData, required this.signature, required this.creator});
 
   GoogleInAppPurchaseModel.fromJson(Map<String, dynamic> json)
       : productID = json['product_id'] as String,
@@ -1065,6 +1125,6 @@ class GoogleInAppPurchaseModel {
   Map<String, String> toJson() => {"product_id": productID, "purchase_token": purchaseToken, "receipt_data_base64": getReceiptDataInBase64(), "signature": signature, "creator": creator};
 
   String getReceiptDataInBase64() {
-    return base64Url.encode(utf8.encode(jsonEncode(recieptData)));
+    return base64Url.encode(utf8.encode(jsonEncode(receiptData)));
   }
 }
