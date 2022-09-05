@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -19,7 +18,6 @@ class FailureManagerViewModel extends ChangeNotifier {
 
   Future<List<LocalTransactionModel>> getAllFailuresFromDB() async {
     final failureEither = await repository.getAllTransactionFailures();
-
     if (failureEither.isLeft()) {
       return [];
     }

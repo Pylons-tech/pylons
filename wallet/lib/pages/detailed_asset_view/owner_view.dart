@@ -244,13 +244,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             viewModel.toChangeCollapse();
                           },
                         )
-
                       ],
                     ),
-                  ),
-                  _title(
-                    nft: viewModel.nft,
-                    owner: viewModel.nft.type == NftType.TYPE_RECIPE ? "you".tr() : viewModel.nft.creator,
                   ),
                   const SizedBox(
                     height: 20,
