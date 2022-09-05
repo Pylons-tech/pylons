@@ -11,9 +11,8 @@ class PylonsRoundButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-          shape: const CircleBorder(),
+          shape: const CircleBorder(), backgroundColor: EaselAppTheme.kBlue,
           padding: const EdgeInsets.all(15),
-          primary: EaselAppTheme.kBlue,
           shadowColor: EaselAppTheme.kBlue,
           elevation: 10),
       child: const Icon(Icons.arrow_forward_ios, color: EaselAppTheme.kWhite),
