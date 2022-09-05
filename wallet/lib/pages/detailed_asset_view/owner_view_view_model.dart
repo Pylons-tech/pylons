@@ -162,7 +162,7 @@ class OwnerViewViewModel extends ChangeNotifier {
 
     likedByMe = likedByMeEither.getOrElse(() => false);
 
-    isLiking= false;
+
     final countViewEither = await repository.countAView(
       recipeId: recipeId,
       walletAddress: walletAddress,
@@ -170,7 +170,6 @@ class OwnerViewViewModel extends ChangeNotifier {
     );
 
     if (countViewEither.isLeft()) {
-      "something_wrong".tr().show();
       return;
     }
 
@@ -180,9 +179,10 @@ class OwnerViewViewModel extends ChangeNotifier {
     );
 
     if (viewsCountEither.isLeft()) {
-      "something_wrong".tr().show();
       return;
     }
+
+    isLiking= false;
 
     viewsCount = viewsCountEither.getOrElse(() => 0);
   }
