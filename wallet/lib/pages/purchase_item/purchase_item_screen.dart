@@ -705,7 +705,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   }
 
   void showTransactionCompleteDialog(String txId) {
-    final formatter = DateFormat('MMM dd yyyy HH:mm');
+    final formatter = DateFormat('MMM dd yyyy hh:mm aa');
     final viewModel = context.read<PurchaseItemViewModel>();
 
     var price = double.parse(viewModel.nft.price);
