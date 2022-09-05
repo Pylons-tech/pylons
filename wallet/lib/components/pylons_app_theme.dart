@@ -48,7 +48,7 @@ class PylonsAppTheme extends CosmosThemeData {
         fontFamily: kUniversalFontFamily,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            onSurface: kBlue,
+            disabledForegroundColor: kBlue.withOpacity(0.38), disabledBackgroundColor: kBlue.withOpacity(0.12),
           ),
         ),
         inputDecorationTheme: const InputDecorationTheme(
