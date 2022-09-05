@@ -26,6 +26,11 @@ new FlowRouterTitle(FlowRouter);
 
 const T = i18n.createComponent();
 
+const milli_seconds_to_minute = 60000;
+const milli_value = 1000;
+const single_digit = 10;
+
+
 export default class EaselBuy extends Component {
   constructor(props) {
     super(props);
@@ -50,6 +55,7 @@ export default class EaselBuy extends Component {
     };
     this.hideComponent = this.hideComponent.bind(this);
     // this.hideComponentDesc = this.hideComponent.bind(this);
+
   }
 
   hideComponent(name) {
@@ -120,6 +126,7 @@ export default class EaselBuy extends Component {
         let price;
         let edition;
         let denom;
+        let src;
         const tradePercent = 100;
         const res = _.cloneDeep(response);
         this.setState({ loading: false });
@@ -161,7 +168,12 @@ export default class EaselBuy extends Component {
           (val) => val.key.toLowerCase() === "nft_format"
         )?.value;
         if (entries != null) {
-          if (nftType.toLowerCase() == "pdf") {
+          if (nftType.toLowerCase() == "audio") {
+            const mediaUrl = strings.find((val) => val.key === "Thumbnail_URL");
+            media = mediaUrl ? mediaUrl.value : "";
+            const srcUrl = strings.find((val) => val.key === "NFT_URL");
+            src = srcUrl ? srcUrl.value : "";
+          } else if (nftType.toLowerCase() == "pdf") {
             const mediaUrl = strings.find((val) => val.key === "Thumbnail_URL");
             media = mediaUrl ? mediaUrl.value : "";
           } else {
@@ -174,7 +186,7 @@ export default class EaselBuy extends Component {
           (val) => val.key.toLowerCase() === "creator"
         )?.value;
 
-        const dimentions = this.getNFTDimentions(nftType, itemOutputs);
+        const dimentions = this.getNFTDimensions(nftType, itemOutputs);
         (edition = `${itemOutputs.amount_minted} of ${itemOutputs.quantity}`),
           this.setState({
             createdBy: creator,
@@ -190,6 +202,7 @@ export default class EaselBuy extends Component {
             media,
             createdAt: selectedRecipe.created_at,
             id: selectedRecipe.id,
+            src,
           });
       })
       .catch((err) => {
@@ -198,24 +211,31 @@ export default class EaselBuy extends Component {
       });
   };
 
-  getNFTDimentions = (nftType, data) => {
-    if (
-      nftType?.toLowerCase() === "image" ||
-      nftType?.toLowerCase() === "video"
-    ) {
+  getNFTDimensions = (nftType, data) => {
+    if (nftType?.toLowerCase() === "image") {
       return (
         data.longs[1].weightRanges[0].lower +
         " x " +
         data.longs[2].weightRanges[0].lower
       );
-    } else if (nftType?.toLowerCase() === "audio") {
+    } else if (
+      nftType?.toLowerCase() === "audio" ||
+      nftType?.toLowerCase() === "video"
+    ) {
       const millisecondsDuration = data.longs[3].weightRanges[0].lower;
-      var minutes = Math.floor(millisecondsDuration / 60000);
-      var seconds = ((millisecondsDuration % 60000) / 1000).toFixed(0);
-      return minutes + ":" + (seconds < 10 ? "0" : "") + seconds + " min";
-    } else if (nftType?.toLowerCase() === "3d") {
-      return data.strings.find((val) => val.key.toLowerCase() === "size")
-        ?.value;
+      var minutes = Math.floor(millisecondsDuration / milli_seconds_to_minute);
+      var seconds = (
+        (millisecondsDuration % milli_seconds_to_minute) /
+        milli_value
+      ).toFixed(0);
+      return (
+        minutes + ":" + (seconds < single_digit ? "0" : "") + seconds + " min"
+      );
+    } else if (
+      nftType?.toLowerCase() === "3d" ||
+      nftType?.toLowerCase() === "pdf"
+    ) {
+      return data.strings.find((val) => val.key === "fileSize")?.value;
     } else {
     }
   };
@@ -251,6 +271,7 @@ export default class EaselBuy extends Component {
       nftHistory,
       price,
       denom,
+      src,
     } = this.state;
     const getCurrencySymbol = () => {
       switch (denom?.toLowerCase()) {
@@ -302,11 +323,13 @@ export default class EaselBuy extends Component {
         );
       else if (nftType.toLowerCase() === "audio")
         return (
-          <audio controls onClick={handleClick} onContextMenu={handleClick}>
-            <source src={media} type="video/mp4" />
-            <source src={media} type="video/ogg" />
-            Your browser does not support the audio element.
-          </audio>
+          <img
+            alt="views"
+            src={media}
+            className="mobin-img"
+            onClick={handleClick}
+            onContextMenu={handleClick}
+          />
         );
       else if (nftType.toLowerCase() === "pdf")
         return (
@@ -327,8 +350,6 @@ export default class EaselBuy extends Component {
             src={media}
             ar
             ar-modes="webxr scene-viewer quick-look"
-            environment-image="shared-assets/environments/moon_1k.hdr"
-            poster="shared-assets/models/NeilArmstrong.webp"
             seamless-poster
             shadow-intensity="1"
             camera-controls
@@ -342,6 +363,7 @@ export default class EaselBuy extends Component {
             width="75%"
             height="50%"
             controls
+            autoPlay
             controlsList="nodownload"
             onClick={handleClick}
             onContextMenu={handleClick}
@@ -394,6 +416,27 @@ export default class EaselBuy extends Component {
                             />
                           </p>
                         </div>
+                        {nftType?.toLowerCase() === "audio" ? (
+                          <>
+                            <audio
+                              controls
+                              onClick={handleClick}
+                              onContextMenu={handleClick}
+                              controlsList="nodownload"
+                              style={{
+                                marginTop: "25px",
+                                height: "50px",
+                              }}
+                            >
+                              <source src={src} type="audio/ogg" />
+                              <source src={src} type="audio/mpeg" />
+                              Your browser does not support the audio element.
+                            </audio>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                        {/*For later Use*/}
                         {/* <div className="views">
                           <img
                             alt="views"
@@ -637,6 +680,7 @@ export default class EaselBuy extends Component {
                           </ul>
                         </div>
                         <div className="right-side">
+                          {/*For later Use*/}
                           {/* <div className="likes">
                             <img
                               alt="expand"
@@ -710,7 +754,7 @@ export default class EaselBuy extends Component {
                         )}
                       </button>
                       <div className="title-publisher">
-                        <h4>{this.state.name}</h4>
+                        <h4 style={{ margin: "0px" }}>{this.state.name}</h4>
                         <div className="publisher">
                           <p>
                             Created by <span>{createdBy}</span>
@@ -721,6 +765,24 @@ export default class EaselBuy extends Component {
                             />
                           </p>
                         </div>
+                        {nftType?.toLowerCase() === "audio" ? (
+                          <audio
+                            controls
+                            onClick={handleClick}
+                            onContextMenu={handleClick}
+                            controlsList="nodownload"
+                            style={{
+                              height: "30px",
+                            }}
+                          >
+                            <source src={src} type="audio/ogg" />
+                            <source src={src} type="audio/mpeg" />
+                            Your browser does not support the audio element.
+                          </audio>
+                        ) : (
+                          <></>
+                        )}
+                        {/*For later Use*/}
                         {/* <div className="views">
                           {" "}
                           <img
@@ -967,6 +1029,7 @@ export default class EaselBuy extends Component {
                               </ul>
                             </div>
                             <div className="right-side">
+                              {/*For later Use*/}
                               {/* <div className="likes">
                                 <img
                                   alt="expand"
