@@ -81,7 +81,7 @@
   "proceed": "Fortfahren",
   "security_hint": "Befolgen Sie Best Practices für die Sicherheit. Achten Sie darauf, Ihre mnemonische Passphrase an einem sicheren Ort aufzuschreiben. Dieser Satz ist die einzige Möglichkeit, Ihr Konto wiederherzustellen, wenn Sie Ihr Passwort vergessen haben. Ohne Ihr Passwort oder Ihre Wiederherstellungs-Passphrase ist eine Kontowiederherstellung nicht möglich.",
   "import_an_account": "Importieren Sie ein Konto",
-  "create_wallet": "Sleutel Maken",
+  "create_wallet": "Schlüssel Erstellen",
   "terms_of_service": "Nutzungsbedingungen",
   "manage_your_nft": "VERWALTEN SIE IHR NFT",
   "pylons_infrastructure": "Pylons ist eine schnelle NFT Infrastruktur",
