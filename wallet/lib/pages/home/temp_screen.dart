@@ -201,6 +201,7 @@ class TempScreen extends StatelessWidget {
 
     final jsonExecuteRecipe = {"creator": "newCreator", "cookbookId": cookbookId, "recipeId": recipeId, "coinInputsIndex": 0};
 
+    //TODO: PRINTING IT TO COPY AND PASTE WHEN YOU LOGIN FROM DIFFERENT WALLET TO EXECUTE RECIPE
     log("jsonExecuteRecipe: $jsonExecuteRecipe");
 
     loading.dismiss();
@@ -211,6 +212,8 @@ class TempScreen extends StatelessWidget {
   Future<bool> executeMyRecipe() async {
     final loading = Loading()..showLoading();
     final walletStore = GetIt.I.get<WalletsStore>();
+
+    //TODO: PASTE THE COOKBOOK AND RECIPE ID OF THE CREATED RECIPE HERE
 
     const cookBookId = "Easel_CookBook_auto_cookbook_2022_09_05_143014_526";
     const recipeId = "Easel_Recipe_auto_recipe_2022_09_05_143022_179";
