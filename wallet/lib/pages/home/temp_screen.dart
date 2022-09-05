@@ -11,7 +11,7 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TempScreen extends StatelessWidget {
-  TempScreen({Key? key}) : super(key: key);
+  const TempScreen({Key? key}) : super(key: key);
 
   Future<String> autoGenerateCookbookId() async {
     final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -212,8 +212,8 @@ class TempScreen extends StatelessWidget {
     final loading = Loading()..showLoading();
     final walletStore = GetIt.I.get<WalletsStore>();
 
-    const cookBookId = "Easel_CookBook_auto_cookbook_2022_08_29_121325_190";
-    const recipeId = "Easel_Recipe_auto_recipe_2022_08_29_121335_107";
+    const cookBookId = "Easel_CookBook_auto_cookbook_2022_09_05_143014_526";
+    const recipeId = "Easel_Recipe_auto_recipe_2022_09_05_143022_179";
     const creator = "newCreator";
 
     final jsonExecuteRecipe = {
@@ -232,12 +232,9 @@ class TempScreen extends StatelessWidget {
 
       return false;
     }
-    log("recipe Data: ${extRecipe.data}");
 
     final items = await walletStore.getItemsByOwner(walletStore.getWallets().value.last.publicAddress);
 
-    log("items Length : ${items.length}");
-    log("items Strings : ${items.first.strings}");
     loading.dismiss();
     return createMyRecipeForSubEvents(cookbookId: cookBookId, inputItem: items.first);
   }

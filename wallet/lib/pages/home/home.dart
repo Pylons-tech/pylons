@@ -253,7 +253,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               left: 0.70.sw,
               child: GestureDetector(
                 onTap: () async {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => TempScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const TempScreen()));
                 },
                 behavior: HitTestBehavior.translucent,
                 child: Stack(
