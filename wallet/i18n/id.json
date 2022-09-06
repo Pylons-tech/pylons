@@ -81,7 +81,7 @@
   "proceed": "Melanjutkan",
   "security_hint": "Ikuti praktik terbaik untuk keamanan. Pastikan untuk menulis frasa sandi mnemonik Anda di tempat yang aman. Frasa ini adalah satu-satunya cara untuk memulihkan akun Anda jika Anda lupa kata sandi Anda. Tanpa kata sandi atau frasa sandi pemulihan Anda, pemulihan akun tidak dapat dilakukan.",
   "import_an_account": "Impor akun",
-  "create_wallet": "Buat Dompet",
+  "create_wallet": "Buat Kunci",
   "terms_of_service": "Persyaratan layanan",
   "manage_your_nft": "KELOLA NFT ANDA",
   "pylons_infrastructure": "Pylons adalah infrastruktur NFT yang cepat",
