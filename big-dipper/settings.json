@@ -1,7 +1,7 @@
 {
   "public": {
     "chainName": "Pylons",
-    "chainId": "pylons-testnet-1",
+    "chainId": "pylons-testnet-3",
     "gtm": "{Add your Google Tag Manager ID here}",
     "slashingWindow": 10000,
     "uptimeWindow": 250,
@@ -87,12 +87,12 @@
       "distribution": false
     },
     "banners": false,
-    "baseURL": "http://wallet.pylons.tech",
+    "baseURL": "https://wallet.pylons.tech",
     "cosmos_sdk": 43
   },
   "remote": {
-    "rpc": "http://127.0.0.1:26657",
-    "api": "http://127.0.0.1:1317"
+    "rpc": "https://rpc.pylons.tech",
+    "api": "https://lcd.pylons.tech"
   },
   "debug": {
     "startTimer": true
@@ -113,7 +113,7 @@
     "cookbookInterval": 5000,
     "missedBlocksInterval": 60000,
     "delegationInterval": 900000,
-    "sendNotifications" : 1,
-    "collectNotificationsInterval" : 10000 
+    "sendNotifications": 1,
+    "collectNotificationsInterval": 10000
   }
 }

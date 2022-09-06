@@ -104,33 +104,6 @@ class _PriceScreenState extends State<PriceScreen> {
                         );
                       },
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: ValueListenableBuilder(
-                          valueListenable: homeViewModel.currentPage,
-                          builder: (_, int currentPage, __) => Padding(
-                                padding: EdgeInsets.only(right: 20.w),
-                                child: InkWell(
-                                  onTap: () {
-                                    if (provider.isFreeDrop !=
-                                        FreeDrop.unselected) {
-                                      FocusScope.of(context).unfocus();
-                                      validateAndUpdatePrice(true);
-                                    }
-                                  },
-                                  child: Text(
-                                    "next".tr(),
-                                    style: TextStyle(
-                                        fontSize: 18.sp,
-                                        fontWeight: FontWeight.w700,
-                                        color: provider.isFreeDrop !=
-                                                FreeDrop.unselected
-                                            ? EaselAppTheme.kBlue
-                                            : EaselAppTheme.kPurple03),
-                                  ),
-                                ),
-                              )),
-                    )
                   ],
                 ),
                 ScreenResponsive(
@@ -408,16 +381,18 @@ class _PriceScreenState extends State<PriceScreen> {
                         ),
                       VerticalSpace(20.h),
                       ClippedButton(
-                        title: "save_as_draft".tr(),
-                        bgColor: EaselAppTheme.kBlue,
+                        title: "continue".tr(),
+                        bgColor: provider.isFreeDrop !=
+                            FreeDrop.unselected
+                            ? EaselAppTheme.kBlue
+                            : EaselAppTheme.kPurple03,
                         textColor: EaselAppTheme.kWhite,
                         onPressed: () async {
-                          if (provider.isFreeDrop == FreeDrop.unselected) {
-                            Navigator.pop(context);
-                            return;
+                          if (provider.isFreeDrop !=
+                              FreeDrop.unselected) {
+                            FocusScope.of(context).unfocus();
+                            validateAndUpdatePrice(true);
                           }
-                          FocusScope.of(context).unfocus();
-                          validateAndUpdatePrice(false);
                         },
                         cuttingHeight: 15.h,
                         clipperType: ClipperType.bottomLeftTopRight,
@@ -428,10 +403,14 @@ class _PriceScreenState extends State<PriceScreen> {
                       Center(
                         child: InkWell(
                           onTap: () {
-                            Navigator.pop(context);
-                          },
+                            if (provider.isFreeDrop == FreeDrop.unselected) {
+                              Navigator.pop(context);
+                              return;
+                            }
+                            FocusScope.of(context).unfocus();
+                            validateAndUpdatePrice(false);                          },
                           child: Text(
-                            "discard".tr(),
+                            "save_as_draft".tr(),
                             style: TextStyle(
                                 color: EaselAppTheme.kLightGreyText,
                                 fontSize: 14.sp,
@@ -452,6 +431,10 @@ class _PriceScreenState extends State<PriceScreen> {
   }
 
   void validateAndUpdatePrice(bool moveNextPage) async {
+    final navigator = Navigator.of(context);
+    final HomeViewModel homeViewModel = context.read<HomeViewModel>();
+
+
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -460,16 +443,18 @@ class _PriceScreenState extends State<PriceScreen> {
           _noOfEditionsFieldError.value.isNotEmpty) return;
       await context.read<EaselProvider>().updateNftFromPrice(nft!.id!);
       moveNextPage
-          ? context.read<HomeViewModel>().nextPage()
-          : Navigator.pop(context);
-    } else {
+          ? homeViewModel.nextPage()
+          : navigator.pop();
+
+      return;
+    }
       if (_royaltiesFieldError.value.isNotEmpty ||
           _noOfEditionsFieldError.value.isNotEmpty ||
           _priceFieldError.value.isNotEmpty) return;
       await context.read<EaselProvider>().updateNftFromPrice(nft!.id!);
       moveNextPage
-          ? context.read<HomeViewModel>().nextPage()
-          : Navigator.pop(context);
-    }
+          ? homeViewModel.nextPage()
+          : navigator.pop();
+
   }
 }

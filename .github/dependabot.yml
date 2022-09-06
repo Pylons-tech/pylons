@@ -14,3 +14,13 @@ updates:
     schedule:
       interval: daily
     open-pull-requests-limit: 10
+  - package-ecosystem: pub
+    directory: "/wallet"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+  - package-ecosystem: pub
+    directory: "/easel"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10

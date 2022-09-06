@@ -194,7 +194,7 @@ class UserBannerPickerWidget extends UserBannerWidget {
   UserBannerPickerWidget();
 
   int getBrightness(File file) {
-    im.Image? image = im.decodeImage(file.readAsBytesSync());
+    final im.Image? image = im.decodeImage(file.readAsBytesSync());
     final data = image?.getBytes();
     var colorSum = 0;
     for (var x = 0; x < data!.length; x += 4) {
@@ -216,7 +216,7 @@ class UserBannerPickerWidget extends UserBannerWidget {
     final viewModel = context.watch<HomeProvider>();
     return StatefulBuilder(builder:
         (BuildContext context, void Function(void Function()) setState) {
-      return GestureDetector(
+      return InkResponse(
         onTap: () async {
           final file = await pickImageFromGallery(
               UserBannerWidget.resolutionLimitX.toDouble(),
@@ -242,19 +242,18 @@ class UserBannerPickerWidget extends UserBannerWidget {
               File(newImagePathEither.getOrElse(() => '')),
               context);
 
-          int brightness = getBrightness(file);
-          bool isBannerDark = getIsBannerDark(brightness);
+          final int brightness = getBrightness(file);
+          final bool isBannerDark = getIsBannerDark(brightness);
 
-          repository.saveIsBannerDark(isBannerDark);
+          repository.saveIsBannerDark(isBannerDark: isBannerDark);
           viewModel.refresh();
 
           setState(() {});
         },
-        behavior: HitTestBehavior.translucent,
         child: SvgPicture.asset(
           SVGUtil.BANNER_IMAGE_EDIT,
-          height: isTablet ? 20.h : 15.h,
-          width: isTablet ? 20.w : 15.w,
+          height: isTablet ? 20.h : 22.h,
+          width: isTablet ? 20.w : 22.w,
           fit: BoxFit.fill,
           color: viewModel.isBannerDark() ? Colors.white : Colors.black,
         ),
