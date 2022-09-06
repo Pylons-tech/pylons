@@ -113,8 +113,7 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   void initializeData({required NFT nft}) {
-    nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID);
-    getOwnershipHistory(recipeId: nft.recipeID, cookBookId: nft.cookbookID);
+    nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);
     initOwnerName();
     initializePlayers(nft);
     toHashtagList();
@@ -131,11 +130,6 @@ class OwnerViewViewModel extends ChangeNotifier {
       nftOwnershipHistoryList = nftOwnershipHistory.getOrElse(() => []);
     }
 
-  }
-
-  Future<void> nftDataInit(
-      {required String recipeId, required String cookBookId}) async {
-    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
 
     final likesCountEither = await repository.getLikesCount(
       cookBookID: cookBookId,
