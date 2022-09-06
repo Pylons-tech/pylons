@@ -13,7 +13,6 @@ import 'package:pylons_wallet/services/third_party_services/share_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/video_player_helper.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/enums.dart';
-import 'package:pylons_wallet/utils/extension.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
@@ -95,7 +94,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _isLiking = false;
+  bool _isLiking = true;
 
   bool get isLiking => _isLiking;
 
@@ -114,7 +113,8 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   void initializeData({required NFT nft}) {
-    nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);
+    nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID);
+    getOwnershipHistory(recipeId: nft.recipeID, cookBookId: nft.cookbookID);
     initOwnerName();
     initializePlayers(nft);
     toHashtagList();
@@ -128,9 +128,15 @@ class OwnerViewViewModel extends ChangeNotifier {
         "something_wrong".tr().show();
         return;
       }
-
       nftOwnershipHistoryList = nftOwnershipHistory.getOrElse(() => []);
     }
+
+  }
+
+  Future<void> nftDataInit(
+      {required String recipeId, required String cookBookId}) async {
+    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
+
     final likesCountEither = await repository.getLikesCount(
       cookBookID: cookBookId,
       recipeId: recipeId,
@@ -156,6 +162,7 @@ class OwnerViewViewModel extends ChangeNotifier {
 
     likedByMe = likedByMeEither.getOrElse(() => false);
 
+
     final countViewEither = await repository.countAView(
       recipeId: recipeId,
       walletAddress: walletAddress,
@@ -163,7 +170,6 @@ class OwnerViewViewModel extends ChangeNotifier {
     );
 
     if (countViewEither.isLeft()) {
-      "something_wrong".tr().show();
       return;
     }
 
@@ -173,9 +179,10 @@ class OwnerViewViewModel extends ChangeNotifier {
     );
 
     if (viewsCountEither.isLeft()) {
-      "something_wrong".tr().show();
       return;
     }
+
+    isLiking= false;
 
     viewsCount = viewsCountEither.getOrElse(() => 0);
   }
@@ -376,23 +383,8 @@ class OwnerViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void shareNFTLink(Size size) {
-    String msg = "";
-    switch (nft.type) {
-      case NftType.TYPE_TRADE:
-        msg = nft.tradeID.createTradeLink(address: accountPublicInfo?.publicAddress ?? "");
-        break;
-
-      case NftType.TYPE_ITEM:
-        msg = nft.itemID.createPurchaseNFT(cookBookId: nft.cookbookID, address: accountPublicInfo?.publicAddress ?? "");
-        break;
-
-      case NftType.TYPE_RECIPE:
-        msg = nft.recipeID.createDynamicLink(cookbookId: nft.cookbookID, address: accountPublicInfo?.publicAddress ?? "");
-        break;
-    }
-
-    shareHelper.shareText(text: msg, size: size);
+  void shareNFTLink(Size size, String link) {
+    shareHelper.shareText(text: link, size: size);
   }
 }
 

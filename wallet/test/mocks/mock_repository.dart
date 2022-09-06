@@ -6,6 +6,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
 import 'package:pylons_wallet/model/export.dart';
+import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/pick_image_model.dart';
@@ -19,8 +20,7 @@ import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pyl
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/item.pb.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/trade.pb.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart'
-    as pylons;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
@@ -34,59 +34,49 @@ import 'mock_constants.dart';
 
 class MockRepository extends Repository {
   @override
-  Future<Either<Failure, StripeCreatePaymentIntentResponse>>
-      CreatePaymentIntent(StripeCreatePaymentIntentRequest req) async {
+  Future<Either<Failure, StripeCreatePaymentIntentResponse>> CreatePaymentIntent(StripeCreatePaymentIntentRequest req) async {
     return Right(StripeCreatePaymentIntentResponse(success: true));
   }
 
   @override
-  Future<Either<Failure, StripeGeneratePaymentReceiptResponse>>
-      GeneratePaymentReceipt(StripeGeneratePaymentReceiptRequest req) async {
+  Future<Either<Failure, StripeGeneratePaymentReceiptResponse>> GeneratePaymentReceipt(StripeGeneratePaymentReceiptRequest req) async {
     return Right(StripeGeneratePaymentReceiptResponse(
       success: true,
     ));
   }
 
   @override
-  Future<Either<Failure, StripeGeneratePayoutTokenResponse>>
-      GeneratePayoutToken(StripeGeneratePayoutTokenRequest req) async {
-    return Right(StripeGeneratePayoutTokenResponse(
-        success: true, RedeemAmount: Int64.ONE));
+  Future<Either<Failure, StripeGeneratePayoutTokenResponse>> GeneratePayoutToken(StripeGeneratePayoutTokenRequest req) async {
+    return Right(StripeGeneratePayoutTokenResponse(success: true, RedeemAmount: Int64.ONE));
   }
 
   @override
-  Future<Either<Failure, StripeGenerateRegistrationTokenResponse>>
-      GenerateRegistrationToken(String address) async {
+  Future<Either<Failure, StripeGenerateRegistrationTokenResponse>> GenerateRegistrationToken(String address) async {
     return Right(StripeGenerateRegistrationTokenResponse(success: true));
   }
 
   @override
-  Future<Either<Failure, StripeGenerateUpdateTokenResponse>>
-      GenerateUpdateToken(String address) async {
+  Future<Either<Failure, StripeGenerateUpdateTokenResponse>> GenerateUpdateToken(String address) async {
     return Right(StripeGenerateUpdateTokenResponse(success: true));
   }
 
   @override
-  Future<Either<Failure, StripeAccountLinkResponse>> GetAccountLink(
-      StripeAccountLinkRequest req) async {
+  Future<Either<Failure, StripeAccountLinkResponse>> GetAccountLink(StripeAccountLinkRequest req) async {
     return Right(StripeAccountLinkResponse(success: true));
   }
 
   @override
-  Future<Either<Failure, StripePayoutResponse>> Payout(
-      StripePayoutRequest req) async {
+  Future<Either<Failure, StripePayoutResponse>> Payout(StripePayoutRequest req) async {
     return Right(StripePayoutResponse(success: true));
   }
 
   @override
-  Future<Either<Failure, StripeRegisterAccountResponse>> RegisterAccount(
-      StripeRegisterAccountRequest req) async {
+  Future<Either<Failure, StripeRegisterAccountResponse>> RegisterAccount(StripeRegisterAccountRequest req) async {
     return Right(StripeRegisterAccountResponse(success: true));
   }
 
   @override
-  Future<Either<Failure, StripeUpdateAccountResponse>> UpdateAccount(
-      StripeUpdateAccountRequest req) async {
+  Future<Either<Failure, StripeUpdateAccountResponse>> UpdateAccount(StripeUpdateAccountRequest req) async {
     return Right(StripeUpdateAccountResponse(success: true));
   }
 
@@ -103,72 +93,61 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, Cookbook>> getCookbookBasedOnId(
-      {required String cookBookId}) {
+  Future<Either<Failure, Cookbook>> getCookbookBasedOnId({required String cookBookId}) {
     // TODO: implement getCookbookBasedOnId
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, Execution>> getExecutionBasedOnId(
-      {required String id}) {
+  Future<Either<Failure, Execution>> getExecutionBasedOnId({required String id}) {
     // TODO: implement getExecutionBasedOnId
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, ExecutionListByRecipeResponse>>
-      getExecutionsByRecipeId(
-          {required String cookBookId, required String recipeId}) {
+  Future<Either<Failure, ExecutionListByRecipeResponse>> getExecutionsByRecipeId({required String cookBookId, required String recipeId}) {
     // TODO: implement getExecutionsByRecipeId
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, int>> getFaucetCoin(
-      {required String address, String? denom}) {
+  Future<Either<Failure, int>> getFaucetCoin({required String address, String? denom}) {
     // TODO: implement getFaucetCoin
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, Item>> getItem(
-      {required String cookBookId, required String itemId}) {
+  Future<Either<Failure, Item>> getItem({required String cookBookId, required String itemId}) {
     // TODO: implement getItem
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, List<Item>>> getListItemByOwner(
-      {required String owner}) {
+  Future<Either<Failure, List<Item>>> getListItemByOwner({required String owner}) {
     // TODO: implement getListItemByOwner
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, PrivateAccountCredentials>> getPrivateCredentials(
-      {required String mnemonic, required String username}) {
+  Future<Either<Failure, PrivateAccountCredentials>> getPrivateCredentials({required String mnemonic, required String username}) {
     // TODO: implement getPrivateCredentials
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, pylons.Recipe>> getRecipe(
-      {required String cookBookId, required String recipeId}) {
+  Future<Either<Failure, pylons.Recipe>> getRecipe({required String cookBookId, required String recipeId}) {
     // TODO: implement getRecipe
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, List<pylons.Recipe>>> getRecipesBasedOnCookBookId(
-      {required String cookBookId}) {
+  Future<Either<Failure, List<pylons.Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId}) {
     // TODO: implement getRecipesBasedOnCookBookId
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, List<Trade>>> getTradesBasedOnCreator(
-      {required String creator}) {
+  Future<Either<Failure, List<Trade>>> getTradesBasedOnCreator({required String creator}) {
     // TODO: implement getTradesBasedOnCreator
     throw UnimplementedError();
   }
@@ -180,36 +159,28 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, StripeLoginLinkResponse>> stripeGetLoginLink(
-      StripeLoginLinkRequest req) {
+  Future<Either<Failure, StripeLoginLinkResponse>> stripeGetLoginLink(StripeLoginLinkRequest req) {
     // TODO: implement StripeGetLoginLink
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, StripeUpdateAccountResponse>>
-      getAccountLinkBasedOnUpdateToken(StripeUpdateAccountRequest req) async {
-    return Right(StripeUpdateAccountResponse(
-        accountlink: MOCK_ACCOUNT_LINK, account: MOCK_ACCOUNT, success: true));
+  Future<Either<Failure, StripeUpdateAccountResponse>> getAccountLinkBasedOnUpdateToken(StripeUpdateAccountRequest req) async {
+    return Right(StripeUpdateAccountResponse(accountlink: MOCK_ACCOUNT_LINK, account: MOCK_ACCOUNT, success: true));
   }
 
   @override
-  Future<Either<Failure, StripeGetLoginBasedOnAddressResponse>>
-      getLoginLinkBasedOnAddress(
-          StripeGetLoginBasedOnAddressRequest req) async {
-    return Right(StripeGetLoginBasedOnAddressResponse(
-        accountlink: MOCK_ACCOUNT_LINK, account: MOCK_ACCOUNT, success: true));
+  Future<Either<Failure, StripeGetLoginBasedOnAddressResponse>> getLoginLinkBasedOnAddress(StripeGetLoginBasedOnAddressRequest req) async {
+    return Right(StripeGetLoginBasedOnAddressResponse(accountlink: MOCK_ACCOUNT_LINK, account: MOCK_ACCOUNT, success: true));
   }
 
   @override
-  Future<Either<Failure, IBCTraceModel>> getIBCHashTrace(
-      {required String ibcHash}) async {
+  Future<Either<Failure, IBCTraceModel>> getIBCHashTrace({required String ibcHash}) async {
     return Right(MOCK_IBC_TRACE_MODEL);
   }
 
   @override
-  Future<Either<Failure, bool>> doesStripeAccountExistsFromServer(
-      {required String address}) async {
+  Future<Either<Failure, bool>> doesStripeAccountExistsFromServer({required String address}) async {
     return const Right(MOCK_STRIPE_ACCOUNT_EXISTS);
   }
 
@@ -244,8 +215,7 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, String>> pickImageFromGallery(
-      PickImageModel pickImageModel) {
+  Future<Either<Failure, String>> pickImageFromGallery(PickImageModel pickImageModel) {
     throw UnimplementedError();
   }
 
@@ -260,8 +230,7 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> saveImage(
-      {required String key, required String imagePath}) {
+  Future<Either<Failure, bool>> saveImage({required String key, required String imagePath}) {
     // TODO: implement saveImage
     throw UnimplementedError();
   }
@@ -282,8 +251,7 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> saveNotificationsPreference(
-      {required bool notificationStatus}) {
+  Future<Either<Failure, bool>> saveNotificationsPreference({required bool notificationStatus}) {
     throw UnimplementedError();
   }
 
@@ -331,36 +299,31 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> saveBiometricLogin(
-      {required bool biometricEnabled}) {
+  Future<Either<Failure, bool>> saveBiometricLogin({required bool biometricEnabled}) {
     // TODO: implement saveBiometricLogin
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, bool>> saveBiometricTransaction(
-      {required bool biometricEnabled}) {
+  Future<Either<Failure, bool>> saveBiometricTransaction({required bool biometricEnabled}) {
     // TODO: implement saveBiometricTransaction
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, bool>> saveDefaultSecurityBiometric(
-      {required bool biometricEnabled}) {
+  Future<Either<Failure, bool>> saveDefaultSecurityBiometric({required bool biometricEnabled}) {
     // TODO: implement saveDefaultSecurityBiometric
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, List<TransactionHistory>>> getTransactionHistory(
-      {required String address}) {
+  Future<Either<Failure, List<TransactionHistory>>> getTransactionHistory({required String address}) {
     // TODO: implement getTransactionHistory
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, String>> updateRecipe(
-      {required MsgUpdateRecipe msgUpdateRecipe}) {
+  Future<Either<Failure, String>> updateRecipe({required MsgUpdateRecipe msgUpdateRecipe}) {
     // TODO: implement updateRecipe
     throw UnimplementedError();
   }
@@ -378,15 +341,13 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> uploadMnemonicGoogleDrive(
-      {required String mnemonic, required String username}) {
+  Future<Either<Failure, bool>> uploadMnemonicGoogleDrive({required String mnemonic, required String username}) {
     // TODO: implement uploadMnemonicGoogleDrive
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, bool>> uploadMnemonicICloud(
-      {required String mnemonic, required String username}) {
+  Future<Either<Failure, bool>> uploadMnemonicICloud({required String mnemonic, required String username}) {
     // TODO: implement uploadMnemonicICloud
     throw UnimplementedError();
   }
@@ -404,8 +365,7 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, List<Cookbook>>> getCookbooksByCreator(
-      {required String creator}) {
+  Future<Either<Failure, List<Cookbook>>> getCookbooksByCreator({required String creator}) {
     // TODO: implement getCookbooksByCreator
     throw UnimplementedError();
   }
@@ -423,8 +383,7 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> saveNetworkEnvironmentPreference(
-      {required String networkEnvironment}) {
+  Future<Either<Failure, bool>> saveNetworkEnvironmentPreference({required String networkEnvironment}) {
     // TODO: implement saveNetworkEnvironmentPreference
     throw UnimplementedError();
   }
@@ -442,63 +401,49 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, void>> countAView(
-      {required String recipeId,
-      required String cookBookID,
-      required String walletAddress}) {
+  Future<Either<Failure, void>> countAView({required String recipeId, required String cookBookID, required String walletAddress}) {
     // TODO: implement countAView
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, int>> getLikesCount(
-      {required String recipeId, required String cookBookID}) {
+  Future<Either<Failure, int>> getLikesCount({required String recipeId, required String cookBookID}) {
     // TODO: implement getLikesCount
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, int>> getViewsCount(
-      {required String recipeId, required String cookBookID}) {
+  Future<Either<Failure, int>> getViewsCount({required String recipeId, required String cookBookID}) {
     // TODO: implement getViewsCount
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, bool>> ifLikedByMe(
-      {required String recipeId,
-      required String cookBookID,
-      required String walletAddress}) {
+  Future<Either<Failure, bool>> ifLikedByMe({required String recipeId, required String cookBookID, required String walletAddress}) {
     // TODO: implement ifLikedByMe
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, void>> updateLikeStatus(
-      {required String recipeId,
-      required String cookBookID,
-      required String walletAddress}) {
+  Future<Either<Failure, void>> updateLikeStatus({required String recipeId, required String cookBookID, required String walletAddress}) {
     // TODO: implement updateLikeStatus
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(
-      AppleInAppPurchaseModel appleInAppPurchaseModel) {
+  Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(AppleInAppPurchaseModel appleInAppPurchaseModel) {
     // TODO: implement isInternetConnected
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(
-      GoogleInAppPurchaseModel msgGoogleInAPPPurchase) {
+  Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(GoogleInAppPurchaseModel msgGoogleInAPPPurchase) {
     // TODO: implement sendGoogleInAppPurchaseCoinsRequest
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, ProductDetails>> getProductsForSale(
-      {required String itemId}) {
+  Future<Either<Failure, ProductDetails>> getProductsForSale({required String itemId}) {
     // TODO: implement getProductsForSale
     throw UnimplementedError();
   }
@@ -523,18 +468,13 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> updateFcmToken(
-      {required String address, required String fcmToken}) {
+  Future<Either<Failure, bool>> updateFcmToken({required String address, required String fcmToken}) {
     // TODO: implement updateFcmToken
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, List<NotificationMessage>>>
-      getAllNotificationsMessages(
-          {required String walletAddress,
-          required int limit,
-          required int offset}) {
+  Future<Either<Failure, List<NotificationMessage>>> getAllNotificationsMessages({required String walletAddress, required int limit, required int offset}) {
     // TODO: implement getAllNotificationsMessages
     throw UnimplementedError();
   }
@@ -546,31 +486,49 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> saveInviteeAddressFromDynamicLink(
-      {required String dynamicLink}) {
+  Future<Either<Failure, bool>> saveInviteeAddressFromDynamicLink({required String dynamicLink}) {
     // TODO: implement saveInviteeAddress
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, TransactionResponse>> createAccount(
-      {required AccountPublicInfo publicInfo,
-      required WalletCreationModel walletCreationModel}) {
+  Future<Either<Failure, TransactionResponse>> createAccount({required AccountPublicInfo publicInfo, required WalletCreationModel walletCreationModel}) {
     // TODO: implement createAccount
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, String>> createDynamicLinkForUserInvite(
-      {required String address}) {
+  Future<Either<Failure, String>> createDynamicLinkForUserInvite({required String address}) {
     // TODO: implement createDynamicLinkForUserInvite
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, bool>> markNotificationAsRead(
-      {required List<String> idsList}) {
+  Future<Either<Failure, String>> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) {
+    // TODO: implement createDynamicLinkForUserInvite
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> markNotificationAsRead({required List<String> idsList}) {
     // TODO: implement markNotificationAsRead
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, String>> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId}) {
+    // TODO: implement createDynamicLinkForItemNftShare
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, String>> createDynamicLinkForTradeNftShare({required String address, required String tradeId}) {
+    // TODO: implement createDynamicLinkForTradeNftShare
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) {
     throw UnimplementedError();
   }
 }

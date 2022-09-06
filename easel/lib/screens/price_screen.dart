@@ -431,6 +431,10 @@ class _PriceScreenState extends State<PriceScreen> {
   }
 
   void validateAndUpdatePrice(bool moveNextPage) async {
+    final navigator = Navigator.of(context);
+    final HomeViewModel homeViewModel = context.read<HomeViewModel>();
+
+
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -439,16 +443,18 @@ class _PriceScreenState extends State<PriceScreen> {
           _noOfEditionsFieldError.value.isNotEmpty) return;
       await context.read<EaselProvider>().updateNftFromPrice(nft!.id!);
       moveNextPage
-          ? context.read<HomeViewModel>().nextPage()
-          : Navigator.pop(context);
-    } else {
+          ? homeViewModel.nextPage()
+          : navigator.pop();
+
+      return;
+    }
       if (_royaltiesFieldError.value.isNotEmpty ||
           _noOfEditionsFieldError.value.isNotEmpty ||
           _priceFieldError.value.isNotEmpty) return;
       await context.read<EaselProvider>().updateNftFromPrice(nft!.id!);
       moveNextPage
-          ? context.read<HomeViewModel>().nextPage()
-          : Navigator.pop(context);
-    }
+          ? homeViewModel.nextPage()
+          : navigator.pop();
+
   }
 }

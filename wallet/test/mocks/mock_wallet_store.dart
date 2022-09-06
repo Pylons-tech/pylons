@@ -294,8 +294,8 @@ class MockWalletStore implements WalletsStore {
 
   @override
   Future<Either<Failure, AccountPublicInfo>> importPylonsAccount(
-      {required String mnemonic, required String username}) async {
-    if (mnemonic != MOCK_MNEMONIC && username != MOCK_USERNAME) {
+      {required String mnemonic}) async {
+    if (mnemonic != MOCK_MNEMONIC ) {
       throw MOCK_ERROR;
     }
 
