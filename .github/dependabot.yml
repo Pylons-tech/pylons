@@ -3,24 +3,24 @@ updates:
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
-      interval: daily
+      interval: weekly
     open-pull-requests-limit: 10
   - package-ecosystem: gomod
     directory: "/"
     schedule:
-      interval: daily
+      interval: weekly
   - package-ecosystem: npm
     directory: "/big-dipper"
     schedule:
-      interval: daily
+      interval: weekly
     open-pull-requests-limit: 10
   - package-ecosystem: pub
     directory: "/wallet"
     schedule:
-      interval: daily
+      interval: weekly
     open-pull-requests-limit: 10
   - package-ecosystem: pub
     directory: "/easel"
     schedule:
-      interval: daily
+      interval: weekly
     open-pull-requests-limit: 10
