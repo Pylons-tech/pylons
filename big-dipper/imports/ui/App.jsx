@@ -72,7 +72,10 @@ class App extends Component {
     return (
       // <Router history={history}>
       <div>
-        <div className={this.props.location.search.includes("recipe_id") && this.props.location.search.includes("cookbook_id")? "hide-xs" : null}>
+        <div className={
+          (this.props.location.search.includes("recipe_id") ||
+            this.props.location.search.includes("item_id")) &&
+            this.props.location.search.includes("cookbook_id") ? "hide-xs" : null}>
         <RouteHeader refreshApp={this.propagateStateChange} />
         </div>
         <Container fluid id='main'>
