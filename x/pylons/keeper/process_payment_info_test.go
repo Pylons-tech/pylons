@@ -166,6 +166,7 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 	purchaseId := "pi_3LFgx7EdpQgutKvr1cp5nqtP"
 	incPurchaseId := "pi_3LFgx7EdpQgutKvr1cp5"
 	processorName := "Pylons_Inc"
+	test_processorName := "testprocessorName"
 	for _, tc := range []struct {
 		desc    string
 		request *types.PaymentInfo
@@ -209,6 +210,19 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 			},
 			addr: addr,
 			err:  sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", purchaseId, sdkerrors.Wrapf(sdkerrors.ErrorInvalidSigner, "signature for %s is invalid", processorName).Error()),
+		},
+		{
+			desc: "Invalid Payment processor",
+			request: &types.PaymentInfo{
+				PurchaseId:    incPurchaseId,
+				ProcessorName: test_processorName,
+				PayerAddr:     correctAddr,
+				Amount:        amount,
+				ProductId:     productID,
+				Signature:     signature,
+			},
+			addr: addr,
+			err:  sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "could not find %s among valid payment processors", test_processorName),
 		},
 	} {
 		tc := tc
