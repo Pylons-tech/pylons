@@ -2,7 +2,7 @@
   "name": "@forbole/big-dipper",
   "private": true,
   "engines": {
-    "node": "14.20.0"
+    "node": "^16"
   },
   "scripts": {
     "start": "meteor  run",
@@ -60,14 +60,12 @@
     "voca": "^1.4.0"
   },
   "devDependencies": {
-    "babel-eslint": "^10.1.0",
     "chai": "^4.3.4",
     "eslint": "^8.23.0",
-    "eslint-config-airbnb": "^17.1.1",
-    "eslint-import-resolver-meteor": "^0.4.0",
-    "eslint-plugin-import": "^2.23.3",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.6.1",
-    "eslint-plugin-meteor": "^7.3.0",
-    "eslint-plugin-react": "^7.31.7"
+    "eslint-plugin-react": "^7.31.7",
+    "eslint-plugin-react-hooks": "^4.6.0"
   }
 }
