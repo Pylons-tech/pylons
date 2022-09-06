@@ -24,3 +24,7 @@ updates:
     schedule:
       interval: daily
     open-pull-requests-limit: 10
+  - package-ecosystem: npm
+    directory: "/big-dipper-backend"
+    schedule:
+      interval: daily
