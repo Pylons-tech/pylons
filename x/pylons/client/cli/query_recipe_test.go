@@ -10,70 +10,68 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func settingItemObject(t *testing.T) (*network.Network, *types.Item) {
+func settingRecipeObject(t *testing.T) (*network.Network, *types.Recipe) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
-	address := types.GenTestBech32FromString("testAddress")
-	item := types.Item{
-		Owner:      address,
+	recipe := types.Recipe{
 		CookbookId: "testCookbookId",
 		Id:         "testId",
 	}
-	state.ItemList = append(state.ItemList, item)
+	state.RecipeList = append(state.RecipeList, recipe)
 
 	buffer, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
 	cfg.GenesisState[types.ModuleName] = buffer
-	return network.New(t, cfg), &item
+	return network.New(t, cfg), &recipe
 }
 
-func TestCmdShowItem(t *testing.T) {
-	net, item := settingItemObject(t)
+func TestCmdShowRecipe(t *testing.T) {
+	net, recipe := settingRecipeObject(t)
 	ctx := net.Validators[0].ClientCtx
 
 	for _, tc := range []struct {
 		desc       string
-		CookbookId string
-		Id         string
+		cookbookId string
+		id         string
 		shouldErr  bool
 	}{
 		{
 			desc:       "Valid",
-			CookbookId: item.CookbookId,
-			Id:         item.Id,
+			cookbookId: recipe.CookbookId,
+			id:         recipe.Id,
 			shouldErr:  false,
 		},
 		{
-			desc:       "Invalid - CookbookId",
-			CookbookId: "Invalid",
-			Id:         item.Id,
+			desc:       "Invalid CookbookId",
+			cookbookId: "Invalid",
+			id:         recipe.Id,
 			shouldErr:  true,
 		},
 		{
-			desc:       "Invalid - Id",
-			CookbookId: item.CookbookId,
-			Id:         "Invalid",
+			desc:       "Invalid Id",
+			cookbookId: recipe.CookbookId,
+			id:         "Invalid",
 			shouldErr:  true,
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			args := []string{}
-			args = append(args, tc.CookbookId, tc.Id)
-			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
+			args = append(args, tc.cookbookId, tc.id)
+			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdShowRecipe(), args)
 			if tc.shouldErr {
 				require.Error(t, err)
-				var resp types.QueryGetItemResponse
+				var resp types.QueryGetRecipeResponse
 				require.Error(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
 			} else {
 				require.NoError(t, err)
-				var resp types.QueryGetItemResponse
+				var resp types.QueryGetRecipeResponse
 				require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
-				require.NotNil(t, resp.Item)
-				require.Equal(t, resp.Item.CookbookId, tc.CookbookId)
-				require.Equal(t, resp.Item.Id, tc.Id)
+				require.NotNil(t, resp.Recipe)
+				require.Equal(t, resp.Recipe.CookbookId, tc.cookbookId)
+				require.Equal(t, resp.Recipe.Id, tc.id)
 			}
 		})
 	}
