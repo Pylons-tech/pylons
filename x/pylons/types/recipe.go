@@ -473,7 +473,7 @@ func ValidateInputDoubles(dip []DoubleInputParam) error {
 	doublesKeyMap := make(map[string]bool)
 	for _, d := range dip {
 		if d.MaxValue.LT(d.MinValue) {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "minValue cannot be less than maxValue for double %s", d.Key)
+			return sdkerrors.Wrapf(ErrInvalidRequestField, "maxValue cannot be less than minValue for double %s", d.Key)
 		}
 		if d.MinValue.IsNegative() {
 			return sdkerrors.Wrapf(ErrInvalidRequestField, "minValue cannot be less than 0 for double %s", d.Key)
@@ -491,7 +491,7 @@ func ValidateInputLongs(lip []LongInputParam) error {
 	longsKeyMap := make(map[string]bool)
 	for _, l := range lip {
 		if l.MaxValue < l.MinValue {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "minValue cannot be less than maxValue for long %s", l.Key)
+			return sdkerrors.Wrapf(ErrInvalidRequestField, "maxValue cannot be less than minValue for long %s", l.Key)
 		}
 		if l.MinValue < 0 {
 			return sdkerrors.Wrapf(ErrInvalidRequestField, "minValue cannot be less than 0 for long %s", l.Key)

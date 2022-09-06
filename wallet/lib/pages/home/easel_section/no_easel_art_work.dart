@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
+import 'package:pylons_wallet/pages/home/home_provider.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -10,6 +12,8 @@ class NoEaselArtWork extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<HomeProvider>();
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -22,8 +26,7 @@ class NoEaselArtWork extends StatelessWidget {
           ),
           child: Text(
             "creation_list_empty_text".tr(),
-            style: TextStyle(
-                fontSize: 15.sp, fontWeight: FontWeight.w700, color: kBlue),
+            style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700, color: kBlue),
             textAlign: TextAlign.center,
           ),
         ),
@@ -35,14 +38,10 @@ class NoEaselArtWork extends StatelessWidget {
             bgColor: kBlue,
             width: 200.w,
             onPressed: () async {
-              final isAndroidDevice =
-                  Theme.of(context).platform == TargetPlatform.android;
+              final isAndroidDevice = Theme.of(context).platform == TargetPlatform.android;
 
-              final easelAppInstallLink = isAndroidDevice
-                  ? kAndroidEaselInstallLink
-                  : kIOSEaselInstallLink;
-              final easelAppLink =
-                  isAndroidDevice ? kAndroidEaselLink : kIOSEaselLink;
+              final easelAppInstallLink = isAndroidDevice ? kAndroidEaselInstallLink : kIOSEaselInstallLink;
+              final easelAppLink = isAndroidDevice ? kAndroidEaselLink : kIOSEaselLink;
 
               final isInstalled = await canLaunchUrlString(easelAppLink);
 
