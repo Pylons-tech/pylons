@@ -81,7 +81,7 @@
   "proceed": "続行",
   "security_hint": "セキュリティのベストプラクティスに従ってください。ニーモニックパスフレーズは、必ず安全な場所に書き込んでください。このフレーズは、パスワードを忘れた場合にアカウントを回復する唯一の方法です。パスワードまたは回復パスフレーズがないと、アカウントの回復は不可能です。",
   "import_an_account": "アカウントをインポートする",
-  "create_wallet": "ウォレットを作成する",
+  "create_wallet": "キーの作成",
   "terms_of_service": "利用規約",
   "manage_your_nft": "NFTを管理する",
   "pylons_infrastructure": "Pylonsは高速なNFTインフラストラクチャです",
