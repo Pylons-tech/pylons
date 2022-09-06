@@ -135,7 +135,7 @@ func ValidateRedeemInfo(r RedeemInfo) error {
 	}
 
 	if r.Signature == "" {
-		return sdkerrors.Wrap(ErrInvalidRequestField, "empty signature in payment info")
+		return sdkerrors.Wrap(ErrInvalidRequestField, "empty signature in redeem info")
 	}
 
 	return nil
