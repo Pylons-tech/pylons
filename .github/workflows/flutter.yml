@@ -22,7 +22,11 @@ jobs:
           flutter --version
           cd wallet
           mkdir env
-          flutter packages get
+          cd pkgs
+          cd transaction_signing_gateway
+          flutter pub get
+          cd ..
+          cd ..
           flutter pub get
           flutter analyze
 
