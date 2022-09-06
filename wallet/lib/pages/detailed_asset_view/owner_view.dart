@@ -220,26 +220,33 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         children: [
           if (viewModel.collapsed) ...[
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w, top: 8.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.keyboard_arrow_up,
-                        size: 32.h,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        viewModel.toChangeCollapse();
-                      },
+                  SizedBox(
+                    height: 60.h,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: _title(
+                            nft: viewModel.nft,
+                            owner: viewModel.nft.type == NftType.TYPE_RECIPE ? "you".tr() : viewModel.nft.creator,
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.keyboard_arrow_up,
+                            size: 32.h,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            viewModel.toChangeCollapse();
+                          },
+                        )
+
+                      ],
                     ),
-                  ),
-                  _title(
-                    nft: viewModel.nft,
-                    owner: viewModel.nft.type == NftType.TYPE_RECIPE ? "you".tr() : viewModel.nft.creator,
                   ),
                   const SizedBox(
                     height: 20,

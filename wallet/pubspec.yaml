@@ -108,12 +108,12 @@ dependencies:
   local_auth: 1.1.11
 
   # Firebase dependencies
-  firebase_core: 1.19.2
+  firebase_core: ^1.20.0
   firebase_dynamic_links: 4.3.6
-# Firebase dependencies
   cloud_firestore: 3.4.0
   firebase_messaging: 11.4.4
   firebase_remote_config: 2.0.9
+  firebase_analytics: ^9.3.3
 
   flutter_local_notifications: 9.2.0
 
@@ -134,6 +134,7 @@ dependencies:
 
   qr_flutter: 4.0.0
   image: 3.2.0
+
 
 dev_dependencies:
   flutter_test:
