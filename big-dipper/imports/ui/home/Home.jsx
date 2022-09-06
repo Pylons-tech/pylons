@@ -9,6 +9,7 @@ import Transactions from "/imports/ui/transactions/TransactionsList.jsx";
 import EaselBuy from "../../ui/easel_buy/EaselBuyContainer.js";
 
 import queryString from "querystring";
+import ItemShare from "../item_share/ItemShare.jsx";
 
 export default class Home extends Component {
   constructor(props) {
@@ -16,28 +17,35 @@ export default class Home extends Component {
     this.state = {
       recipe_id: null,
       recipeExist: false,
+      itemExist: false,
       cookbook_id: "",
+      item_id: "",
     };
   }
 
   componentDidMount() {
-    const querys = new URLSearchParams(this.props.location.search)
+    const querys = new URLSearchParams(this.props.location.search);
 
     if (
       querys.get("recipe_id") !== null &&
-      querys.get("cookbook_id") !== null && 
-      querys.get('address') !== null 
+      querys.get("cookbook_id") !== null &&
+      querys.get("address") !== null
     ) {
-     
-      
       this.setState({
         recipeExist: true,
         recipe_id: querys.get("recipe_id"),
         cookbook_id: querys.get("cookbook_id"),
       });
-      
-    } else {
-      this.setState({ recipeExist: false });
+    } else if (
+      querys.get("item_id") !== null &&
+      querys.get("cookbook_id") !== null &&
+      querys.get("address") !== null
+    ) {
+      this.setState({
+        itemExist: true,
+        cookbook_id: querys.get("cookbook_id"),
+        item_id: querys.get("item_id"),
+      });
     }
   }
 
@@ -52,6 +60,16 @@ export default class Home extends Component {
           }
         ></EaselBuy>
       );
+    } else if (this.state.itemExist) {
+      return (
+        <ItemShare
+          item_id={this.state.item_id}
+          cookbook_id={this.state.cookbook_id}
+          url={
+            Meteor.settings.public.baseURL + "/" + this.props.location.search
+          }
+        ></ItemShare>
+      );      
     } else {
       return (
         <div id="home">
