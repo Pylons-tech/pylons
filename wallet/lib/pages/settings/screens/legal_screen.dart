@@ -5,7 +5,7 @@ import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-TextStyle kLegalOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
+TextStyle kLegalOptionsText = TextStyle(fontSize: 18.sp, color: Colors.black, fontWeight: FontWeight.w500);
 TextStyle kLegalHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
 
 class LegalScreen extends StatefulWidget {

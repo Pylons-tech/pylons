@@ -286,7 +286,6 @@ class _SettingScreenState extends State<SettingScreen> {
               submitFeedbackDialog.show();
             },
           ),
-
           const SettingsDivider(),
           SettingListItem(
             title: "delete_wallet".tr(),
@@ -381,7 +380,7 @@ class _SettingListItemState extends State<SettingListItem> {
             ),
             Text(
               widget.title,
-              style: TextStyle(fontSize: 20.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 18.sp, color: Colors.black, fontWeight: FontWeight.w500),
             )
           ],
         ),

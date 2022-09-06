@@ -11,7 +11,7 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
-TextStyle kRecoveryOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
+TextStyle kRecoveryOptionsText = TextStyle(fontSize: 16.sp, color: Colors.black, fontWeight: FontWeight.w600);
 TextStyle kRecoveryHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
 
 class RecoveryScreen extends StatefulWidget {

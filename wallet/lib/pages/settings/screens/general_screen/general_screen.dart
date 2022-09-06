@@ -14,7 +14,7 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
 TextStyle kGeneralLabelText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
-TextStyle kGeneralOptionsText = TextStyle(fontSize: 18.sp, color: Colors.black, fontWeight: FontWeight.w500);
+TextStyle kGeneralOptionsText = TextStyle(fontSize: 18.sp, color: Colors.black, fontWeight: FontWeight.w400);
 
 class GeneralScreen extends StatefulWidget {
   const GeneralScreen({Key? key}) : super(key: key);

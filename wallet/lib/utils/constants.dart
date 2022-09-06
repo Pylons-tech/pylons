@@ -278,7 +278,7 @@ List<Map<String, dynamic>> languagesSupported = [
   {"name": "english", "flag": "🇬🇧", 'selected': false, "abbreviation": "(U.S.)", 'languageCode': 'en'},
   {"name": "russian", "flag": "🇷🇺", 'selected': false, "abbreviation": "(RU)", 'languageCode': 'ru'},
   {"name": "indonesian", "flag": "🇮🇩", 'selected': false, "abbreviation": "(IN)", 'languageCode': 'id'},
-  {"name": "german", "flag": "🇩🇪", 'selected': false, "abbreviation": "(DU)", 'languageCode': 'de'},
+  {"name": "german", "flag": "🇩🇪", 'selected': false, "abbreviation": "(DE)", 'languageCode': 'de'},
   {"name": "korean", "flag": "🇰🇷", 'selected': false, "abbreviation": "(KO)", 'languageCode': 'ko'},
   {"name": "japanese", "flag": "🇯🇵", 'selected': false, "abbreviation": "(JA)", 'languageCode': 'ja'},
   {"name": "spanish", "flag": "🇪🇸", 'selected': false, "abbreviation": "(ES)", 'languageCode': 'es'},
