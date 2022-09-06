@@ -22,6 +22,7 @@ jobs:
           flutter --version
           cd wallet
           mkdir env
+          flutter packages get
           flutter pub get
           flutter analyze
 
