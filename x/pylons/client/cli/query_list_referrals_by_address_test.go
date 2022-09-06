@@ -30,7 +30,7 @@ func settingPylonsAccount(ctx client.Context, t *testing.T, net *network.Network
 
 	username := "testUsername"
 	usernameToken := "testUsernameToken"
-	referralAddress := acc[1].String()
+	referralAddress := acc[0].String()
 	types.UpdateAppCheckFlagTest(types.FlagTrue)
 	common = util.CommonArgs(acc[1].String(), net)
 
