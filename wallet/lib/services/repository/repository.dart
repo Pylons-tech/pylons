@@ -766,7 +766,10 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, StripeGeneratePaymentReceiptResponse>> GeneratePaymentReceipt(StripeGeneratePaymentReceiptRequest req) async {
     final localTransactionModel = createInitialLocalTransactionModel(
-        transactionTypeEnum: TransactionTypeEnum.GeneratePaymentReceipt, transactionData: jsonEncode(req.toJson()), transactionDescription: 'Could not generate receipt');
+      transactionTypeEnum: TransactionTypeEnum.GeneratePaymentReceipt,
+      transactionData: jsonEncode(req.toJson()),
+      transactionDescription: 'Generate Payment Receipt',
+    );
 
     if (!await networkInfo.isConnected) {
       saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
@@ -1593,7 +1596,10 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(AppleInAppPurchaseModel appleInAppPurchaseModel) async {
     final localTxModel = createInitialLocalTransactionModel(
-        transactionTypeEnum: TransactionTypeEnum.AppleInAppCoinsRequest, transactionData: jsonEncode(appleInAppPurchaseModel.toJson()), transactionDescription: 'Error while purchasing apple coins');
+      transactionTypeEnum: TransactionTypeEnum.AppleInAppCoinsRequest,
+      transactionData: jsonEncode(appleInAppPurchaseModel.toJson()),
+      transactionDescription: 'Pylons Coins Purchase',
+    );
 
     if (!await networkInfo.isConnected) {
       saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
@@ -1622,7 +1628,7 @@ class RepositoryImp implements Repository {
     final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
       transactionTypeEnum: TransactionTypeEnum.GoogleInAppCoinsRequest,
       transactionData: jsonEncode(msgGoogleInAPPPurchase.toJson()),
-      transactionDescription: 'Error while purchasing google coins',
+      transactionDescription: 'Pylons Coins Purchase',
     );
 
     if (!await networkInfo.isConnected) {
@@ -1685,8 +1691,11 @@ class RepositoryImp implements Repository {
     final Map<String, dynamic> data = {};
     createJsonFormOfProductDetails(data, productDetails);
 
-    final LocalTransactionModel txLocalModel =
-        createInitialLocalTransactionModel(transactionData: jsonEncode(data), transactionDescription: 'Could not Buy Product Like Status of NFT', transactionTypeEnum: TransactionTypeEnum.BuyProduct);
+    final LocalTransactionModel txLocalModel = createInitialLocalTransactionModel(
+      transactionData: jsonEncode(data),
+      transactionDescription: 'Buying a Product',
+      transactionTypeEnum: TransactionTypeEnum.BuyProduct,
+    );
 
     if (!await networkInfo.isConnected) {
       await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: txLocalModel);

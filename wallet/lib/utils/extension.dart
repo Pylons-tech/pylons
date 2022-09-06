@@ -50,7 +50,7 @@ extension ConvertFromU on String {
 
 extension TransactionTypeEnumExt on String {
   TransactionTypeEnum toTransactionTypeEnum() {
-    return TransactionTypeEnum.values.firstWhere((e) => e.toString() == "AssetType.${this}", orElse: () => TransactionTypeEnum.Unknown);
+    return TransactionTypeEnum.values.firstWhere((e) => e.toString() == "TransactionTypeEnum.${this}", orElse: () => TransactionTypeEnum.Unknown);
   }
 }
 

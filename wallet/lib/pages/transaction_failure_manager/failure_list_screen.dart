@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/pages/transaction_failure_manager/failure_manager_view_model.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
+import 'package:pylons_wallet/utils/enums.dart';
+import 'package:pylons_wallet/utils/extension.dart';
 
 class FailureListScreen extends StatefulWidget {
   const FailureListScreen({Key? key}) : super(key: key);
@@ -13,6 +15,33 @@ class FailureListScreen extends StatefulWidget {
 
 class _FailureListScreenState extends State<FailureListScreen> {
   FailureManagerViewModel get failureManagerViewModel => sl();
+
+  IconButton getTransactionStatusButton({required LocalTransactionModel txManager}) {
+    final TransactionStatus txStatusEnum = txManager.status.toTransactionStatusEnum();
+    switch (txStatusEnum) {
+      case TransactionStatus.Success:
+        return IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.done,
+              color: Colors.green,
+            ));
+      case TransactionStatus.Failed:
+        return IconButton(
+            onPressed: () => failureManagerViewModel.handleRetry(txManager: txManager),
+            icon: const Icon(
+              Icons.refresh,
+              color: Colors.redAccent,
+            ));
+      case TransactionStatus.Undefined:
+        return IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.error_outline,
+              color: Colors.redAccent,
+            ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,17 +72,11 @@ class _FailureListScreenState extends State<FailureListScreen> {
                 itemBuilder: (context, int index) {
                   final LocalTransactionModel txManager = snapshot.data[index] as LocalTransactionModel;
                   return ListTile(
-                    title: Text(
-                      txManager.transactionDescription,
-                      style: TextStyle(fontSize: 18.sp),
-                    ),
-                    trailing: IconButton(
-                        onPressed: () => failureManagerViewModel.handleRetry(txManager: txManager),
-                        icon: const Icon(
-                          Icons.refresh,
-                          color: Colors.redAccent,
-                        )),
-                  );
+                      title: Text(
+                        txManager.transactionDescription,
+                        style: TextStyle(fontSize: 18.sp),
+                      ),
+                      trailing: getTransactionStatusButton(txManager: txManager));
                 }),
           );
         },

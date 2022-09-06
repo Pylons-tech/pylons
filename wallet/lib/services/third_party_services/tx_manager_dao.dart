@@ -3,12 +3,12 @@ import 'package:pylons_wallet/model/transaction_failure_model.dart';
 
 @dao
 abstract class TxManagerDao {
-  @Query('SELECT * FROM TransactionManager ORDER BY dateTime DESC')
+  @Query('SELECT * FROM LocalTransactionModel ORDER BY dateTime DESC')
   Future<List<LocalTransactionModel>> getAllFailuresEntries();
 
   @insert
   Future<int> insertTransactionFailure(LocalTransactionModel txManager);
 
-  @Query('DELETE FROM TransactionManager WHERE id = :id')
+  @Query('DELETE FROM LocalTransactionModel WHERE id = :id')
   Future<void> delete(int id);
 }

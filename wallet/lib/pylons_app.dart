@@ -176,10 +176,6 @@ class _PylonsAppState extends State<PylonsApp> {
         if (purchaseDetails.pendingCompletePurchase) {
           await InAppPurchase.instance.completePurchase(purchaseDetails);
         }
-
-        if (purchaseDetails.pendingCompletePurchase) {
-          await InAppPurchase.instance.completePurchase(purchaseDetails);
-        }
         if (purchaseDetails is AppStorePurchaseDetails) {
           final creator = walletStore.getWallets().value.last.publicAddress;
 

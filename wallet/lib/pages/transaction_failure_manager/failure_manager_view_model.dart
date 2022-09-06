@@ -27,7 +27,6 @@ class FailureManagerViewModel extends ChangeNotifier {
 
   Future<void> handleRetry({required LocalTransactionModel txManager}) async {
     final TransactionTypeEnum failureTypeEnum = txManager.transactionType.toTransactionTypeEnum();
-
     switch (failureTypeEnum) {
       case TransactionTypeEnum.GeneratePaymentReceipt:
         retryGeneratePaymentReceipt(txManager);
@@ -55,14 +54,12 @@ class FailureManagerViewModel extends ChangeNotifier {
 
   Future deleteFailure({required int id}) async {
     await repository.deleteTransactionFailureRecord(id);
-    getAllFailuresFromDB();
   }
 
   Future<void> retryUpdateLikeStatus(LocalTransactionModel txManager) async {
     final txDataJson = jsonDecode(txManager.transactionData);
     final loading = Loading()..showLoading();
     await repository.updateLikeStatus(recipeId: txDataJson[kRecipeIdMap].toString(), cookBookID: txDataJson[kCookbookIdMap].toString(), walletAddress: txDataJson[kWalletAddressIdMap].toString());
-    deleteFailure(id: txManager.id!);
     loading.dismiss();
   }
 
@@ -74,16 +71,15 @@ class FailureManagerViewModel extends ChangeNotifier {
     loading.dismiss();
   }
 
-
   Future<void> retryBuyProduct(LocalTransactionModel txManager) async {
     final txDataJson = jsonDecode(txManager.transactionData);
     final ProductDetails productDetails = ProductDetails(
-        id: txDataJson['id'] as String,
-        title: txDataJson['title'] as String,
-        description: txDataJson['description'] as String,
-        price: txDataJson['price'] as String,
-        rawPrice: double.parse(txDataJson['rawPrice'] as String),
-        currencyCode: txDataJson['currencyCode'] as String);
+        id: txDataJson['id'].toString(),
+        title: txDataJson['title'].toString(),
+        description: txDataJson['description'].toString(),
+        price: txDataJson['price'].toString(),
+        rawPrice: double.parse(txDataJson['rawPrice'].toString()),
+        currencyCode: txDataJson['currencyCode'].toString());
     final loading = Loading()..showLoading();
     await repository.buyProduct(productDetails);
     loading.dismiss();
@@ -93,7 +89,7 @@ class FailureManagerViewModel extends ChangeNotifier {
     final txDataJson = jsonDecode(txManager.transactionData);
     final AppleInAppPurchaseModel request = AppleInAppPurchaseModel.fromJson(txDataJson as Map<String, dynamic>);
     final loading = Loading()..showLoading();
-    await  repository.sendAppleInAppPurchaseCoinsRequest(request);
+    await repository.sendAppleInAppPurchaseCoinsRequest(request);
     loading.dismiss();
   }
 
