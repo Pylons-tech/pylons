@@ -1,9 +1,9 @@
-import 'package:cosmos_ui_components/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/utils/constants.dart';
+import 'package:pylons_wallet/utils/date_utils.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
 class TransactionCard extends StatelessWidget {
