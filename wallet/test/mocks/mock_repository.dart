@@ -82,7 +82,6 @@ class MockRepository extends Repository {
 
   @override
   Future<Either<Failure, String>> getAddressBasedOnUsername(String username) {
-    // TODO: implement getAddressBasedOnUsername
     throw UnimplementedError();
   }
 
@@ -528,6 +527,11 @@ class MockRepository extends Repository {
 
   @override
   Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> setUserIdentifierInAnalytics({required String address}) {
     throw UnimplementedError();
   }
 }
