@@ -183,7 +183,7 @@ class _PylonsAppState extends State<PylonsApp> {
           final creator = walletStore.getWallets().value.last.publicAddress;
 
           final AppleInAppPurchaseModel appleInAppPurchaseModel = AppleInAppPurchaseModel(
-              productID: purchaseDetails.productID, purchaseID: purchaseDetails.purchaseID ?? '', recieptData: purchaseDetails.verificationData.localVerificationData, creator: creator);
+              productID: purchaseDetails.productID, purchaseID: purchaseDetails.purchaseID ?? '', receiptData: purchaseDetails.verificationData.localVerificationData, creator: creator);
 
           final appleInAppPurchaseResponse = await walletStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
 
@@ -205,7 +205,7 @@ class _PylonsAppState extends State<PylonsApp> {
         final GoogleInAppPurchaseModel googleInAppPurchaseModel = GoogleInAppPurchaseModel(
             productID: purchaseDetails.productID,
             purchaseToken: purchaseDetails.verificationData.serverVerificationData,
-            recieptData: jsonDecode(purchaseDetails.verificationData.localVerificationData) as Map,
+            receiptData: jsonDecode(purchaseDetails.verificationData.localVerificationData) as Map,
             signature: purchaseDetails.billingClientPurchase.signature,
             creator: creator);
 

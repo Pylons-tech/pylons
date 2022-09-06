@@ -16,8 +16,8 @@ func (k Keeper) SetPylonsAccount(ctx sdk.Context, accountAddr types.AccountAddr,
 	usernamePrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
 	accountPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AccountKey))
 
-	usernamePrefixStore.Set(types.KeyPrefix(username.Value), binaryAddr)
-	accountPrefixStore.Set(types.KeyPrefix(accountAddr.Value), binaryUsername)
+	usernamePrefixStore.Set(types.KeyPrefix(username.Value), binaryUsername)
+	accountPrefixStore.Set(types.KeyPrefix(accountAddr.Value), binaryAddr)
 }
 
 func (k Keeper) SetPylonsReferral(ctx sdk.Context, address, username, referral string) {
