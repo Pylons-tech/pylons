@@ -26,6 +26,11 @@ new FlowRouterTitle(FlowRouter);
 
 const T = i18n.createComponent();
 
+const milli_seconds_to_minute = 60000;
+const milli_value = 1000;
+const single_digit = 10;
+
+
 export default class EaselBuy extends Component {
   constructor(props) {
     super(props);
@@ -50,9 +55,6 @@ export default class EaselBuy extends Component {
     };
     this.hideComponent = this.hideComponent.bind(this);
     // this.hideComponentDesc = this.hideComponent.bind(this);
-    const milli_seconds_to_minute = 60000;
-    const milli_value = 1000;
-    const single_digit = 10;
 
   }
 
