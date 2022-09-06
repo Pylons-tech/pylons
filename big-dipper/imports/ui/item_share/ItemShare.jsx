@@ -148,7 +148,7 @@ export default class ItemShare extends Component {
         const dimentions = this.getNFTDimensions(nftType, selectedRecipe);
         this.setState({
           createdBy: creator,
-          name: selectedRecipe.name,
+          name: selectedRecipe?.strings[0]?.value,
           description: selectedRecipe?.strings[2]?.value,
           denom,
           nftType,
