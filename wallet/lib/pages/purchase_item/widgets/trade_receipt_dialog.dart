@@ -49,7 +49,7 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black.withOpacity(0.7),
-      height: isTablet ? 400.h : 420.h,
+      height: isTablet ? 410.h : 430.h,
       margin: isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
       child: Stack(
         children: [

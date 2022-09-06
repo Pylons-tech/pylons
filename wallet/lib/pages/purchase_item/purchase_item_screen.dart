@@ -243,7 +243,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(
-                    height: 60.h,
+                    height: 70.h,
                     child: Row(
                       children: [
                         Expanded(child: _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner)),
@@ -730,7 +730,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   }
 
   void showTransactionCompleteDialog(String txId) {
-    final formatter = DateFormat('MMM dd yyyy hh:mm aa');
+    final formatter = DateFormat('MMM dd yyyy HH:mm');
     final viewModel = context.read<PurchaseItemViewModel>();
 
     var price = double.parse(viewModel.nft.price);
@@ -744,7 +744,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         createdBy: viewModel.nft.creator,
         currency: viewModel.nft.ibcCoins.getAbbrev(),
         soldBy: viewModel.nft.owner.isEmpty ? viewModel.nft.creator : viewModel.nft.owner,
-        transactionTime: formatter.format(DateTime.now()),
+        transactionTime: "${formatter.format(DateTime.now().toUtc())} UTC",
         total: viewModel.nft.ibcCoins.getCoinWithDenominationAndSymbol(viewModel.nft.price, showDecimal: true),
         nftName: viewModel.nft.name,
         transactionId: txId);
