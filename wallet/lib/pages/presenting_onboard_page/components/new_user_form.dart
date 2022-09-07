@@ -4,14 +4,16 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/buttons/pylons_get_started_button.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
-import 'package:pylons_wallet/pages/home/home.dart';
 import 'package:pylons_wallet/pylons_app.dart';
+import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
+import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -29,6 +31,8 @@ class NewUserFormState extends State<NewUserForm> {
   final usernameController = TextEditingController();
 
   final isLoadingNotifier = ValueNotifier(false);
+
+  Repository get repository => GetIt.I.get<Repository>();
 
   bool _ackChecked1 = false;
   bool _ackChecked2 = false;
@@ -169,7 +173,8 @@ class NewUserFormState extends State<NewUserForm> {
       failure.message.show();
       navigator.pop();
     }, (walletInfo) async {
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => true);
+      repository.setBool(key: kISUserCreatingAccount, value: true);
+      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
     });
   }
 }

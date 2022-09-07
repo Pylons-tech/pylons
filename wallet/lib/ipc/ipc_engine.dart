@@ -134,19 +134,29 @@ class IPCEngine {
   }
 
   Future<void> _handleEaselLink(String link) async {
+    bool isHome = false;
     final currentWallets = walletsStore.getWallets().value;
-    if (currentWallets.isNotEmpty) {
+
+    isHome = isHomeRoute();
+    if (!repository.getBool(key: kISUserCreatingAccount) && isHome == false) {
       navigatorKey.currentState!.popUntil(ModalRoute.withName(RouteUtil.ROUTE_HOME));
     }
+
     final queryParameters = Uri.parse(link).queryParameters;
     final recipeId = (queryParameters.containsKey(kRecipeIdKey)) ? queryParameters[kRecipeIdKey] ?? '' : "";
     final cookbookId = (queryParameters.containsKey(kCookbookIdKey)) ? queryParameters[kCookbookIdKey] ?? "" : "";
+    final address = (queryParameters.containsKey(kAddress)) ? queryParameters[kAddress] ?? "" : "";
 
+    if (currentWallets.isEmpty) {
+      repository.saveInviteeAddressFromDynamicLink(dynamicLink: address);
+      walletsStore.saveInitialLink(initialLink: link);
+    }
     final nullableNFT = await getNFtFromRecipe(cookbookId: cookbookId, recipeId: recipeId);
 
     if (nullableNFT == null) {
       return;
     }
+    repository.setBool(key: kISUserCreatingAccount, value: false);
 
     if (isOwnerIsViewing(nullableNFT, currentWallets)) {
       await navigatorKey.currentState!.push(
@@ -155,6 +165,7 @@ class IPCEngine {
             nft: nullableNFT,
             ownerViewViewModel: sl(),
           ),
+          settings: RouteSettings(name: RouteUtil.ROUTE_OWNER_VIEW),
         ),
       );
     } else {
@@ -164,11 +175,25 @@ class IPCEngine {
             nft: nullableNFT,
             purchaseItemViewModel: sl(),
           ),
+          settings: RouteSettings(name: RouteUtil.ROUTE_PUCRCHASE_VIEW),
         ),
       );
     }
 
     walletsStore.setStateUpdatedFlag(flag: true);
+  }
+
+  bool isHomeRoute() {
+    bool isHome = false;
+    navigatorKey.currentState!.popUntil((route) {
+      if (route.settings.name == RouteUtil.ROUTE_HOME) {
+        isHome = true;
+        return true;
+      }
+      isHome = false;
+      return true;
+    });
+    return isHome;
   }
 
   bool isOwnerIsViewing(NFT nullableNFT, List<AccountPublicInfo> currentWallets) {
@@ -205,11 +230,11 @@ class IPCEngine {
 
     await navigatorKey.currentState!.push(
       MaterialPageRoute(
-        builder: (_) => PurchaseItemScreen(
-          nft: item,
-          purchaseItemViewModel: sl(),
-        ),
-      ),
+          builder: (_) => PurchaseItemScreen(
+                nft: item,
+                purchaseItemViewModel: sl(),
+              ),
+          settings: RouteSettings(name: RouteUtil.ROUTE_OWNER_VIEW)),
     );
     walletsStore.setStateUpdatedFlag(flag: true);
   }
@@ -235,11 +260,11 @@ class IPCEngine {
       final item = await NFT.fromItem(recipeResult);
       await navigatorKey.currentState!.push(
         MaterialPageRoute(
-          builder: (_) => OwnerView(
-            nft: item,
-            ownerViewViewModel: sl(),
-          ),
-        ),
+            builder: (_) => OwnerView(
+                  nft: item,
+                  ownerViewViewModel: sl(),
+                ),
+            settings: RouteSettings(name: RouteUtil.ROUTE_OWNER_VIEW)),
       );
       walletsStore.setStateUpdatedFlag(flag: true);
     }

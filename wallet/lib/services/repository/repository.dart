@@ -446,6 +446,15 @@ abstract class Repository {
   /// Input: [publicInfo] contains info related to user chain address, [walletCreationModel] contains user entered data
   /// Output: if successful will give [TransactionResponse] else will  return [Failure]
   Future<Either<Failure, TransactionResponse>> createAccount({required AccountPublicInfo publicInfo, required WalletCreationModel walletCreationModel});
+
+  /// This method will return the saved bool if exists
+  /// Input: [key] the key of the value
+  /// Output: [bool] return the value of the key
+  bool getBool({required String key});
+
+  /// This method will set the input in the cache
+  /// Input: [key] the key against which the value is to be set, [value] the value that is to be set.
+  void setBool({required String key, required bool value});
 }
 
 class RepositoryImp implements Repository {
@@ -1056,7 +1065,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, bool>> saveIsBannerDark({required bool isBannerDark}) async {
     try {
-      return Right(await localDataSource.saveIsBannerDark( isBannerDark: isBannerDark));
+      return Right(await localDataSource.saveIsBannerDark(isBannerDark: isBannerDark));
     } on Exception catch (_) {
       return const Left(CacheFailure(PLATFORM_FAILED));
     }
@@ -1792,5 +1801,15 @@ class RepositoryImp implements Repository {
       recordErrorInCrashlytics(e);
       return Left(ServerFailure(e.toString()));
     }
+  }
+
+  @override
+  bool getBool({required String key}) {
+    return localDataSource.getBool(key: key);
+  }
+
+  @override
+  void setBool({required String key, required bool value}) {
+    localDataSource.setBool(key: key, value: value);
   }
 }
