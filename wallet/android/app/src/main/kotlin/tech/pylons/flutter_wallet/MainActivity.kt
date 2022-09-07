@@ -10,13 +10,6 @@ class MainActivity: FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl("https://newsapi.org/")
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-
-        //val service: ArticleService = retrofit.create(ArticleService::class.java)
-
         collectionsApi = Pigeon.CollectionsApi(flutterEngine.dartExecutor.binaryMessenger)
     }
 

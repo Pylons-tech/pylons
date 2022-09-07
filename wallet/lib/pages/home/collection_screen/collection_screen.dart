@@ -68,17 +68,6 @@ class _CollectionScreenState extends State<CollectionScreen> {
     });
   }
 
-  // Future<void> updateAppWidget() async {
-  //   final viewModel = context.watch<CollectionViewModel>();
-  //   final List<CachedNetworkImage> list = [];
-  //   for (int index = 0; index < viewModel.assets.length; index++) {
-  //     list.add(CachedNetworkImage(
-  //         placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()), imageUrl: viewModel.assets[index].url, fit: BoxFit.cover));
-  //   }
-  //   await HomeWidget.saveWidgetData<List<CachedNetworkImage>>('nft image list', list);
-  //   await HomeWidget.updateWidget(name: 'PylonsWidgetProvider', iOSName: 'PylonsWidget');
-  // }
-
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<CollectionViewModel>();

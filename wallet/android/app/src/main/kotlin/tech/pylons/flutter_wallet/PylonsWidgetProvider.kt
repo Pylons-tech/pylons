@@ -1,15 +1,13 @@
-package tech.pylons.wallet
+package tech.pylons.flutter_wallet
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
-import android.content.SharedPreferences
 import android.net.Uri
 import android.widget.RemoteViews
 import android.content.Intent
 import android.appwidget.AppWidgetProvider
-//import es.antonborri.home_widget.HomeWidgetBackgroundIntent
-//import es.antonborri.home_widget.HomeWidgetLaunchIntent
-//import es.antonborri.home_widget.HomeWidgetProvider
+import tech.pylons.wallet.R
+
 
 class PylonsWidgetProvider : AppWidgetProvider() {
 
@@ -30,10 +28,7 @@ class PylonsWidgetProvider : AppWidgetProvider() {
 
                 setEmptyView(R.id.grid_view, R.id.empty_view)
             }
-//                val pendingIntent = HomeWidgetLaunchIntent.getActivity(
-//                    context,
-//                    MainActivity::class.java)
-//                setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+
             appWidgetManager.updateAppWidget(appWidgetId, views)
 
         }

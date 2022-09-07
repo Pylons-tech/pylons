@@ -132,7 +132,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
-        <receiver android:name="PylonsWidgetProvider"
+        <receiver android:name="tech.pylons.flutter_wallet.PylonsWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -141,7 +141,7 @@
                 android:resource="@xml/pylons_widget_provider_info" />
         </receiver>
 
-        <service android:name="PylonsWidgetService"
+        <service android:name="tech.pylons.flutter_wallet.PylonsWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
             android:exported="false" />
 
