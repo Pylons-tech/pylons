@@ -175,10 +175,10 @@ Meteor.startup(() => {
                 }
 
                 if(botType == TWITTER_BOT){
-                    description = description + "<h4>" + price + "</h4>";
+                    description = description +  price ;
                 }
                 else if(botType == FACEBOOK_BOT){
-                    siteName = siteName + "<h4>" + price + "</h4>";
+                    siteName = siteName + price ;
                 }
                 else if(botType != SLACK_BOT){
                     description = price !== "No Price" ? description + "\nPrice: " + price : description;
