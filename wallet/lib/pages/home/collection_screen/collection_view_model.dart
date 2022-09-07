@@ -2,12 +2,9 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_screen.dart';
-import 'package:pylons_wallet/services/third_party_services/network_info.dart';
 import 'package:pylons_wallet/services/third_party_services/thumbnail_helper.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 

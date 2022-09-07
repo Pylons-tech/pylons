@@ -1,7 +1,6 @@
 name: transaction_signing_gateway
 description: Transaction Signing gateway
 version: 0.0.1
-homepage: tendermint.com
 publish_to: 'none' # TODO publish it when ready
 
 environment:
