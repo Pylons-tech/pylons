@@ -10,6 +10,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_image_asset.dart';
@@ -295,7 +296,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             child: InkWell(
                               onTap: () {
                                 if (viewModel.walletsStore.getWallets().value.isEmpty) {
-                                  Navigator.of(context).pushNamed(RouteUtil.ROUTE_CREATE_WALLET);
+                                  "create_an_account_first".tr().show();
+                                  Navigator.of(context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
                                   return;
                                 }
                                 final PayNowDialog payNowDialog = PayNowDialog(
