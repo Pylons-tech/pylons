@@ -60,7 +60,7 @@ dependencies:
 
   internet_connection_checker: ^0.0.1+4
 
-  flutter_secure_storage: 5.0.2
+  flutter_secure_storage: ^6.0.0
 
   flutter_screenutil: 5.1.0
 
