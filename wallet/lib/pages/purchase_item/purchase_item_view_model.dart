@@ -17,6 +17,7 @@ import 'package:pylons_wallet/services/third_party_services/video_player_helper.
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
+import 'package:pylons_wallet/utils/extension.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
@@ -250,26 +251,22 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
   bool isUrlLoaded = false;
 
-  Future<void> nftDataInit(
-      {required String recipeId, required String cookBookId, required String itemId}) async {
-    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
+
+  Future<void> nftDataInit({required String recipeId, required String cookBookId, required String itemId}) async {
+    String walletAddress = '';
+    if (walletsStore.getWallets().value.isNotEmpty) {
+      isLiking = true;
+      walletAddress = walletsStore.getWallets().value.last.publicAddress;
+    }
+
     if (nft.type != NftType.TYPE_RECIPE) {
-      final nftOwnershipHistory = await repository.getNftOwnershipHistory(
-          itemId: itemId, cookBookId: cookBookId);
+      final nftOwnershipHistory = await repository.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
       if (nftOwnershipHistory.isLeft()) {
         "something_wrong".tr().show();
         return;
       }
 
       nftOwnershipHistoryList = nftOwnershipHistory.getOrElse(() => []);
-    }
-  }
-
-  Future<void> nftDataInit({required String recipeId, required String cookBookId}) async {
-    String walletAddress = '';
-    if (walletsStore.getWallets().value.isNotEmpty) {
-      isLiking = true;
-      walletAddress = walletsStore.getWallets().value.last.publicAddress;
     }
 
     final likesCountEither = await repository.getLikesCount(

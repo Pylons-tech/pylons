@@ -283,7 +283,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
 
                             final String? link = await generateLink(viewModel);
                             if (link == null) return;
-                            viewModel.shareNFTLink(size, link);
+                            viewModel.shareNFT(size);
                           },
                           child: Container(
                             padding: EdgeInsets.only(bottom: 12.h),
@@ -659,7 +659,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
 
                                   final String? link = await generateLink(viewModel);
                                   if (link == null) return;
-                                  viewModel.shareNFTLink(size, link);
+                                  viewModel.shareNFT(size);
                                 },
                                 child: SvgPicture.asset(
                                   SVGUtil.OWNER_SHARE,
