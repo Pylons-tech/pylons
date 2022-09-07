@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
@@ -27,6 +28,7 @@ import 'package:pylons_wallet/services/data_stores/cache_manager.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
+import 'package:pylons_wallet/services/third_party_services/analytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/firestore_helper.dart';
@@ -76,6 +78,8 @@ Future<void> init() async {
   sl.registerLazySingleton<CrashlyticsHelper>(() => CrashlyticsHelperImpl(sl()));
   sl.registerFactory<ShareHelper>(() => ShareHelperImpl());
   sl.registerLazySingleton<RemoteNotificationsService>(() => RemoteNotificationsServiceImp(firebaseMessaging: sl(), flutterLocalNotificationsPlugin: sl()));
+  sl.registerLazySingleton<FirestoreHelper>(() => FirestoreHelperImp(mainFeedbacksCollection: sl()));
+  sl.registerLazySingleton<AnalyticsHelper>(() => AnalyticsHelperImpl(firebaseAnalytics: sl()));
 
   /// External Dependencies
   sl.registerLazySingleton<FirebaseAppCheck>(() => FirebaseAppCheck.instance);
@@ -101,7 +105,7 @@ Future<void> init() async {
   sl.registerLazySingleton<AlanAccountDerivator>(() => AlanAccountDerivator());
   sl.registerLazySingleton<FirebaseDynamicLinks>(() => FirebaseDynamicLinks.instance);
   sl.registerLazySingleton<CollectionReference>(() => FirebaseFirestore.instance.collection(kFeedbacks));
-  sl.registerLazySingleton<FirestoreHelper>(() => FirestoreHelperImp(mainFeedbacksCollection: sl()));
+  sl.registerLazySingleton<FirebaseAnalytics>(() => FirebaseAnalytics.instance);
 
   sl.registerLazySingleton<FlutterSecureStorageDataStore>(() => FlutterSecureStorageDataStore(storage: sl()));
   sl.registerLazySingleton<AlanCredentialsSerializer>(() => AlanCredentialsSerializer());
@@ -164,6 +168,7 @@ Future<void> init() async {
         firebaseAppCheck: sl(),
         dynamicLinksGenerator: sl(),
         firebaseHelper: sl(),
+        analyticsHelper: sl(),
       ));
 
   sl.registerLazySingleton<StorePaymentService>(() => StorePaymentServiceImpl());

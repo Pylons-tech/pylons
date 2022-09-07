@@ -140,7 +140,7 @@ class NewUserFormState extends State<NewUserForm> {
 
   String? validateUsername(String? username) {
     if (username == null || username.isEmpty) {
-      return 'User name is Empty';
+      return 'user_name_empty'.tr();
     }
 
     return null;
@@ -153,7 +153,7 @@ class NewUserFormState extends State<NewUserForm> {
   }
 
   /// Create the new wallet and associate the chosen username with it.
-  Future _registerNewUser(String userName) async {
+  Future<void> _registerNewUser(String userName) async {
     isLoadingNotifier.value = true;
     final navigator = Navigator.of(context);
 

@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	fmt "fmt"
-	"io/ioutil"
+	io "io"
 	"math/big"
 	"net/http"
 	"strings"
@@ -103,7 +103,7 @@ func requestJWK() (*JSONWebKeys, error) {
 
 	defer resp.Body.Close()
 
-	jwkBytes, err := ioutil.ReadAll(resp.Body)
+	jwkBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}

@@ -6,6 +6,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
 import 'package:pylons_wallet/model/export.dart';
+import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/pick_image_model.dart';
@@ -81,7 +82,6 @@ class MockRepository extends Repository {
 
   @override
   Future<Either<Failure, String>> getAddressBasedOnUsername(String username) {
-    // TODO: implement getAddressBasedOnUsername
     throw UnimplementedError();
   }
 
@@ -460,7 +460,8 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String recipeID, required String cookBookId}) {
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory(
+      {required String itemId, required String cookBookId}) {
     // TODO: implement getNftOwnershipHistory
     throw UnimplementedError();
   }
@@ -502,14 +503,36 @@ class MockRepository extends Repository {
   }
 
   @override
+  Future<Either<Failure, String>> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) {
+    // TODO: implement createDynamicLinkForUserInvite
+    throw UnimplementedError();
+  }
+
+  @override
   Future<Either<Failure, bool>> markNotificationAsRead({required List<String> idsList}) {
     // TODO: implement markNotificationAsRead
     throw UnimplementedError();
   }
 
   @override
+  Future<Either<Failure, String>> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId}) {
+    // TODO: implement createDynamicLinkForItemNftShare
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, String>> createDynamicLinkForTradeNftShare({required String address, required String tradeId}) {
+    // TODO: implement createDynamicLinkForTradeNftShare
+    throw UnimplementedError();
+  }
+
+  @override
   Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) {
-    // TODO: implement saveUserFeedback
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> setUserIdentifierInAnalytics({required String address}) {
     throw UnimplementedError();
   }
 

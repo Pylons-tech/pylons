@@ -109,6 +109,10 @@ const String kIOSEaselLink = "pylons-easel://open";
 
 const String kPrivacyPolicyLink = "https://www.pylons.tech/p/";
 const String kUnilinkUrl = "https://wallet.pylons.tech";
+const String kDeepLink = "https://pylons.page.link";
+const String bigDipperBaseLink = "https://wallet.pylons.tech/";
+const String packageName = "tech.pylons.wallet";
+const String bundleId = "xyz.pylons.wallet";
 const String kUnilinkUrl3 = "pylons://";
 const String kUnilinkSender = "wallet";
 
@@ -325,12 +329,8 @@ const kEaselNFT = "Easel_NFT";
 const kUpylon = "upylon";
 const kExtraInfo = "extraInfo";
 
-const kItemId = "item_id";
+const kItemId = "id";
 const kCookbookId = "cookbook_id";
-const kRecipe_id = "recipe_id";
-const kSender = "sender";
-const kSenderName = "sender_name";
-const kReceiver = "receiver";
 const kAmount = "amount";
 const kCreatedAt = "created_at";
 

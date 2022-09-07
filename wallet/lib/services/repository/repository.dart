@@ -9,6 +9,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
 import 'package:pylons_wallet/model/export.dart';
+import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/pick_image_model.dart';
@@ -309,9 +310,10 @@ abstract class Repository {
   Either<Failure, bool> getBiometricTransaction();
 
   /// This method will get the nft history
-  /// Input: [recipeID] and [cookBookId] of the nft
+  /// Input: [itemId] and [cookBookId] of the nft
   /// Output: returns [List][NftOwnershipHistory] if success else this will give [Failure]
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String recipeID, required String cookBookId});
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory(
+      {required String itemId, required String cookBookId});
 
   /// This method will get the transaction history from the chain
   /// Input: [address] of the user
@@ -442,6 +444,21 @@ abstract class Repository {
   /// Output: [String] return the generated dynamic link else will return [Failure]
   Future<Either<Failure, String>> createDynamicLinkForUserInvite({required String address});
 
+  /// This method will create dynamic link for the nft share recipe
+  /// Input : [address] the address against which the invite link to be generated, [nft] the nft whose link to be created
+  /// Output: [String] return the generated dynamic link else will return [Failure]
+  Future<Either<Failure, String>> createDynamicLinkForRecipeNftShare({required String address, required NFT nft});
+
+  /// This method will create dynamic link for the nft share trade
+  /// Input : [address] the address against which the invite link to be generated, [tradeId] the id of the trade item
+  /// Output: [String] return the generated dynamic link else will throw error
+  Future<Either<Failure, String>> createDynamicLinkForTradeNftShare({required String address, required String tradeId});
+
+  /// This method will create dynamic link for the nft share item
+  /// Input : [address] the address against which the invite link to be generated, [itemId] the id of the item, [cookbookId] the id of the cookbook
+  /// Output: [String] return the generated dynamic link else will throw error
+  Future<Either<Failure, String>> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId});
+
   /// This method will create User account based on account public info
   /// Input: [publicInfo] contains info related to user chain address, [walletCreationModel] contains user entered data
   /// Output: if successful will give [TransactionResponse] else will  return [Failure]
@@ -455,6 +472,14 @@ abstract class Repository {
   /// This method will set the input in the cache
   /// Input: [key] the key against which the value is to be set, [value] the value that is to be set.
   void setBool({required String key, required bool value});
+
+
+  /// This method will set user app level identifier in the analytics
+  /// Input: [address] the address of the user
+  /// Output: [bool] tells whether the operation is successful or else will return [Failure]
+  Future<Either<Failure, bool>> setUserIdentifierInAnalytics({required String address});
+
+
 }
 
 class RepositoryImp implements Repository {
@@ -1692,13 +1717,15 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String recipeID, required String cookBookId}) async {
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory(
+      {required String itemId, required String cookBookId}) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
     try {
-      final result = await remoteDataStore.getNftOwnershipHistory(recipeId: recipeID, cookBookId: cookBookId);
+      final result = await remoteDataStore.getNftOwnershipHistory(
+          itemId: itemId, cookBookId: cookBookId);
 
       return Right(result);
     } on String catch (_) {
@@ -1789,6 +1816,33 @@ class RepositoryImp implements Repository {
   }
 
   @override
+  Future<Either<Failure, String>> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) async {
+    try {
+      return Right(await remoteDataStore.createDynamicLinkForRecipeNftShare(address: address, nft: nft));
+    } on Exception catch (_) {
+      return Left(FirebaseDynamicLinkFailure("dynamic_link_failure".tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId}) async {
+    try {
+      return Right(await remoteDataStore.createDynamicLinkForItemNftShare(address: address, itemId: itemId, cookbookId: cookbookId));
+    } on Exception catch (_) {
+      return Left(FirebaseDynamicLinkFailure("dynamic_link_failure".tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> createDynamicLinkForTradeNftShare({required String address, required String tradeId}) async {
+    try {
+      return Right(await remoteDataStore.createDynamicLinkForTradeNftShare(address: address, tradeId: tradeId));
+    } on Exception catch (_) {
+      return Left(FirebaseDynamicLinkFailure("dynamic_link_failure".tr()));
+    }
+  }
+
+  @override
   Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure("no_internet".tr()));
@@ -1802,6 +1856,21 @@ class RepositoryImp implements Repository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> setUserIdentifierInAnalytics({required String address}) async {
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure("no_internet".tr()));
+    }
+    try {
+      return Right(await remoteDataStore.setUpUserIdentifierInAnalytics(address: address));
+    } on Exception catch (e) {
+    recordErrorInCrashlytics(e);
+    return Left(ServerFailure(e.toString()));
+    }
+  }
+
+
 
   @override
   bool getBool({required String key}) {

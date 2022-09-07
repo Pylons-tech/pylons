@@ -107,6 +107,7 @@ class WalletsStoreImp implements WalletsStore {
     await repository.saveMnemonic(mnemonic);
     final String token = await getRemoteNotificationServiceToken();
     await repository.updateFcmToken(address: creds.publicInfo.publicAddress, fcmToken: token);
+    await repository.setUserIdentifierInAnalytics(address: creds.publicInfo.publicAddress);
     crashlyticsHelper.setUserIdentifier(identifier: creds.publicInfo.publicAddress);
     return Right(creds.publicInfo);
   }
@@ -594,7 +595,7 @@ class WalletsStoreImp implements WalletsStore {
     wallets.value.add(creds.publicInfo);
     final String fcmToken = await getRemoteNotificationServiceToken();
     await repository.updateFcmToken(address: creds.publicInfo.publicAddress, fcmToken: fcmToken);
-
+    await repository.setUserIdentifierInAnalytics(address: creds.publicInfo.publicAddress);
     crashlyticsHelper.setUserIdentifier(identifier: creds.publicInfo.publicAddress);
 
     await repository.saveMnemonic(mnemonic);

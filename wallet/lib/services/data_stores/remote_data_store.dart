@@ -18,6 +18,7 @@ import 'package:pylons_wallet/model/amount.dart';
 import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
 import 'package:pylons_wallet/model/export.dart';
+import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
@@ -26,6 +27,7 @@ import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
+import 'package:pylons_wallet/services/third_party_services/analytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/firestore_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/store_payment_service.dart';
@@ -34,9 +36,12 @@ import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/custom_transaction_signing_gateaway/custom_transaction_signing_gateway.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
+import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
+
+import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
 
 abstract class RemoteDataStore {
   /// This method is used to generate the stripe registration token
@@ -115,10 +120,10 @@ abstract class RemoteDataStore {
   Future<int> getLikesCount({required String recipeId, required String cookBookID});
 
   /// This method is used to get history of nft owners
-  /// Input: [recipeId] and [cookBookID] of the NFT
+  /// Input: [itemId] and [cookBookID] of the NFT
   /// Output : [List][NftOwnershipHistory] will contain the list of NftOwnershipHistory data if success
   /// else will throw error
-  Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String recipeId, required String cookBookId});
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String itemId, required String cookBookId});
 
   /// This method is used to get views count of NFT
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
@@ -241,16 +246,36 @@ abstract class RemoteDataStore {
   /// Output: [String] return the generated dynamic link else will throw error
   Future<String> createDynamicLinkForUserInvite({required String address});
 
+  /// This method will create dynamic link for the nft share recipe
+  /// Input : [address] the address & [NFT] against which the invite link to be generated
+  /// Output: [String] return the generated dynamic link else will throw error
+  Future<String> createDynamicLinkForRecipeNftShare({required String address, required NFT nft});
+
+  /// This method will create dynamic link for the nft share trade
+  /// Input : [address] the address & [tradeId] against which the invite link to be generated
+  /// Output: [String] return the generated dynamic link else will throw error
+  Future<String> createDynamicLinkForTradeNftShare({required String address, required String tradeId});
+
+  /// This method will create dynamic link for the nft share purchase
+  /// Input : [address] the address & [itemId] the id of the item& [cookbookId] against which the invite link to be generated
+  /// Output: [String] return the generated dynamic link else will throw error
+  Future<String> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId});
+
   /// This method will create User account based on account public info
   /// Input: [publicInfo] contains info related to user chain address, [walletCreationModel] contains user entered data, [appCheckToken] the app specific token, [referralToken] the invitee user address
   /// Output: if successful will give [TransactionResponse] else will throw error
-
   Future<TransactionResponse> createAccount({required AccountPublicInfo publicInfo, required WalletCreationModel walletCreationModel, required String appCheckToken, required String referralToken});
 
   /// This method will save users feedback to firebase based on its wallet address
   /// Input : [walletAddress], [subject] and [feedback] the address against which the feedbacks needs to be stored
   /// Output : [bool] It will return true if the saving feedback is successful otherwise false
   Future<bool> saveUserFeedback({required String walletAddress, required String subject, required String feedback});
+
+  /// This method will set the app level user identifier in the analytics
+  /// Input: [address] the address of the user
+  /// Output: [bool] return true if successful
+  Future<bool> setUpUserIdentifierInAnalytics({required String address});
+
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -260,11 +285,13 @@ class RemoteDataStoreImp implements RemoteDataStore {
   final FirebaseAppCheck firebaseAppCheck;
   final FirebaseDynamicLinks dynamicLinksGenerator;
   final FirestoreHelper firebaseHelper;
+  final AnalyticsHelper analyticsHelper;
 
   RemoteDataStoreImp(
       {required this.dynamicLinksGenerator,
       required this.httpClient,
       required this.firebaseHelper,
+      required this.analyticsHelper,
       required this.crashlyticsHelper,
       required this.storePaymentService,
       required this.firebaseAppCheck});
@@ -640,10 +667,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String recipeId, required String cookBookId}) async {
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String itemId, required String cookBookId}) async {
     final baseApiUrl = getBaseEnv().baseApiUrl;
-
-    final uri = Uri.parse("$baseApiUrl/pylons/get_recipe_history/$cookBookId/$recipeId");
+    final uri = Uri.parse("$baseApiUrl/pylons/item_history/$cookBookId/$itemId");
     final List<NftOwnershipHistory> historyList = [];
 
     final historyResponse = await httpClient.get(uri);
@@ -995,8 +1021,29 @@ class RemoteDataStoreImp implements RemoteDataStore {
       iosParameters: const IOSParameters(bundleId: "xyz.pylons.wallet"),
     );
 
-    final shortLink = await dynamicLinksGenerator.buildShortLink(dynamicLinkParams);
-    return shortLink.shortUrl.toString();
+    final link = await dynamicLinksGenerator.buildLink(dynamicLinkParams);
+    return link.toString();
+  }
+
+  @override
+  Future<String> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) async {
+    final dynamicLinkParams = DynamicLinkParameters(
+      link: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address"),
+      uriPrefix: kDeepLink,
+      androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
+      iosParameters: IOSParameters(bundleId: bundleId, fallbackUrl: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
+    );
+
+    final link = await dynamicLinksGenerator.buildShortLink(
+      dynamicLinkParams,
+      shortLinkType: ShortDynamicLinkType.unguessable,
+    );
+    return link.shortUrl.toString();
+  }
+
+  Uri getUri(NFT nft) {
+    if (nft.assetType == AssetType.Image) return Uri.parse(nft.url);
+    return Uri.parse(nft.thumbnailUrl);
   }
 
   @override
@@ -1026,34 +1073,66 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
+  Future<String> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId}) async {
+    final dynamicLinkParams = DynamicLinkParameters(
+      link: Uri.parse("$bigDipperBaseLink?item_id=$itemId&cookbook_id=$cookbookId&address=$address"),
+      uriPrefix: kDeepLink,
+      androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?item_id=$itemId&cookbook_id=$cookbookId&address=$address")),
+      iosParameters: const IOSParameters(bundleId: bundleId),
+    );
+
+    final link = await dynamicLinksGenerator.buildLink(dynamicLinkParams);
+    return link.toString();
+  }
+
+  @override
+  Future<String> createDynamicLinkForTradeNftShare({required String address, required String tradeId}) async {
+    final dynamicLinkParams = DynamicLinkParameters(
+      link: Uri.parse("$bigDipperBaseLink?trade_id=$tradeId&address=$address"),
+      uriPrefix: kDeepLink,
+      androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?trade_id=$tradeId&address=$address")),
+      iosParameters: const IOSParameters(bundleId: bundleId),
+    );
+
+    final link = await dynamicLinksGenerator.buildShortLink(dynamicLinkParams);
+    return link.shortUrl.toString();
+  }
+
+  @override
   Future<bool> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) {
     return firebaseHelper.saveUserFeedback(walletAddress: walletAddress, subject: subject, feedback: feedback);
+  }
+
+  @override
+  Future<bool> setUpUserIdentifierInAnalytics({required String address}) async {
+    await analyticsHelper.setUserId(address: address);
+    return true;
   }
 }
 
 class AppleInAppPurchaseModel {
   String productID;
   String purchaseID;
-  String recieptData;
+  String receiptData;
   String creator;
 
-  AppleInAppPurchaseModel({required this.productID, required this.purchaseID, required this.recieptData, required this.creator});
+  AppleInAppPurchaseModel({required this.productID, required this.purchaseID, required this.receiptData, required this.creator});
 
-  Map<String, String> toJson() => {"productId": productID, "purchaseId": purchaseID, "receiptDataBase64": recieptData, "creator": creator};
+  Map<String, String> toJson() => {"productId": productID, "purchaseId": purchaseID, "receiptDataBase64": receiptData, "creator": creator};
 }
 
 class GoogleInAppPurchaseModel {
   String productID;
   String purchaseToken;
-  Map recieptData;
+  Map receiptData;
   String signature;
   String creator;
 
-  GoogleInAppPurchaseModel({required this.productID, required this.purchaseToken, required this.recieptData, required this.signature, required this.creator});
+  GoogleInAppPurchaseModel({required this.productID, required this.purchaseToken, required this.receiptData, required this.signature, required this.creator});
 
   Map<String, String> toJson() => {"product_id": productID, "purchase_token": purchaseToken, "receipt_data_base64": getReceiptDataInBase64(), "signature": signature, "creator": creator};
 
   String getReceiptDataInBase64() {
-    return base64Url.encode(utf8.encode(jsonEncode(recieptData)));
+    return base64Url.encode(utf8.encode(jsonEncode(receiptData)));
   }
 }
