@@ -81,7 +81,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
     }
 
 
-    print(easelProvider.nft.thumbnailUrl.changeDomain());
+
     previewWidget = CachedNetworkImage(
       fit: BoxFit.contain,
       imageUrl: getImageUrl(easelProvider),

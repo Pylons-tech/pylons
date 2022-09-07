@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   equatable: ^2.0.3
-  flutter_secure_storage: ^5.0.2
+  flutter_secure_storage: ^6.0.0
   biometric_storage: 4.0.0
   encrypt: ^5.0.1
   alan: ^0.40.2+1
