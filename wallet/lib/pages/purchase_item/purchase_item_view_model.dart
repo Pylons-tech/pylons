@@ -128,8 +128,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
   }
 
   void initializeData({required NFT nft}) {
-    nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID);
-    getOwnershipHistory(recipeId: nft.recipeID, cookBookId: nft.cookbookID);
+    nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);
     initializePlayers(nft);
     toHashtagList();
   }
@@ -245,10 +244,12 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
   bool isUrlLoaded = false;
 
-
-  Future<void> getOwnershipHistory({required String recipeId, required String cookBookId}) async {
+  Future<void> nftDataInit(
+      {required String recipeId, required String cookBookId, required String itemId}) async {
+    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
     if (nft.type != NftType.TYPE_RECIPE) {
-      final nftOwnershipHistory = await repository.getNftOwnershipHistory(recipeID: recipeId, cookBookId: cookBookId);
+      final nftOwnershipHistory = await repository.getNftOwnershipHistory(
+          itemId: itemId, cookBookId: cookBookId);
       if (nftOwnershipHistory.isLeft()) {
         "something_wrong".tr().show();
         return;
@@ -256,11 +257,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
       nftOwnershipHistoryList = nftOwnershipHistory.getOrElse(() => []);
     }
-  }
-
-    Future<void> nftDataInit(
-      {required String recipeId, required String cookBookId}) async {
-    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
 
     final likesCountEither = await repository.getLikesCount(
       cookBookID: cookBookId,
@@ -287,7 +283,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
     likedByMe = likedByMeEither.getOrElse(() => false);
 
-    isLiking=false;
+
     final countViewEither = await repository.countAView(
       recipeId: recipeId,
       walletAddress: walletAddress,
@@ -295,7 +291,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
     );
 
     if (countViewEither.isLeft()) {
-      "something_wrong".tr().show();
       return;
     }
 
@@ -305,9 +300,9 @@ class PurchaseItemViewModel extends ChangeNotifier {
     );
 
     if (viewsCountEither.isLeft()) {
-      "something_wrong".tr().show();
       return;
     }
+    isLiking=false;
 
     viewsCount = viewsCountEither.getOrElse(() => 0);
   }

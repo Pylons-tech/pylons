@@ -1,6 +1,6 @@
 {
   "app_title": "Pylons Wallet",
-  "something_wrong": "Something went wrong. Try restarting the application.",
+  "something_wrong": "Something went wrong, Try Restarting the Application.",
   "wallet_retrieving_err_msg": "We had problems retrieving wallets from secure storage.",
   "home": "Home",
   "discover": "Discover",
@@ -81,7 +81,7 @@
   "proceed": "Proceed",
   "security_hint": "Follow best practices for security. Be sure to write your mnemonic passphrase in a safe place. This phrase is the only way to recover your account if you forget your password. Without your password or recovery passphrase, account recovery is not possible.",
   "import_an_account": "Import an account",
-  "create_wallet": "Create Wallet",
+  "create_wallet": "Create Key",
   "terms_of_service": "Terms of service",
   "manage_your_nft": "MANAGE YOUR NFT",
   "pylons_infrastructure": "Pylons is a fast NFT infrastructure",

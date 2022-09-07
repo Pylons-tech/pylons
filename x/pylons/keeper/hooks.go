@@ -3,6 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	epochstypes "github.com/Pylons-tech/pylons/x/epochs/types"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
@@ -37,12 +38,23 @@ check if expected distribution corresponds
 */
 
 // Hooks wrapper struct for incentives keeper
+
 type Hooks struct {
 	k  Keeper
 	sk types.StakingKeeper
 }
 
+var _ epochstypes.EpochHooks = Hooks{}
+
 // Hooks returns the wrapper struct
 func (k Keeper) Hooks(sk types.StakingKeeper) Hooks {
 	return Hooks{k: k, sk: sk}
+}
+
+func (h Hooks) BeforeEpochStart(ctx sdk.Context, epochIdentifier string, epochNumber int64) {
+	h.k.BeforeEpochStart(ctx, epochIdentifier, epochNumber, h.sk)
+}
+
+func (h Hooks) AfterEpochEnd(ctx sdk.Context, epochIdentifier string, epochNumber int64) {
+	h.k.AfterEpochEnd(ctx, epochIdentifier, epochNumber, h.sk)
 }

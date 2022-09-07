@@ -81,7 +81,7 @@
   "proceed": "진행하다",
   "security_hint": "보안을 위한 모범 사례를 따르십시오. 니모닉 암호 문구를 안전한 곳에 기록해 두십시오. 이 문구는 비밀번호를 잊어버린 경우 계정을 복구할 수 있는 유일한 방법입니다. 비밀번호 또는 복구 암호가 없으면 계정 복구가 불가능합니다. ",
   "import_an_account": "계정 가져오기",
-  "create_wallet": "지갑 생성",
+  "create_wallet": "키 생성",
   "terms_of_service": "서비스 약관",
   "manage_your_nft": "NFT 관리",
   "pylons_infrastructure": "Pylons는 빠른 NFT 인프라입니다.",

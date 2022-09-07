@@ -310,9 +310,10 @@ abstract class Repository {
   Either<Failure, bool> getBiometricTransaction();
 
   /// This method will get the nft history
-  /// Input: [recipeID] and [cookBookId] of the nft
+  /// Input: [itemId] and [cookBookId] of the nft
   /// Output: returns [List][NftOwnershipHistory] if success else this will give [Failure]
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String recipeID, required String cookBookId});
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory(
+      {required String itemId, required String cookBookId});
 
   /// This method will get the transaction history from the chain
   /// Input: [address] of the user
@@ -462,6 +463,14 @@ abstract class Repository {
   /// Input: [publicInfo] contains info related to user chain address, [walletCreationModel] contains user entered data
   /// Output: if successful will give [TransactionResponse] else will  return [Failure]
   Future<Either<Failure, TransactionResponse>> createAccount({required AccountPublicInfo publicInfo, required WalletCreationModel walletCreationModel});
+
+
+  /// This method will set user app level identifier in the analytics
+  /// Input: [address] the address of the user
+  /// Output: [bool] tells whether the operation is successful or else will return [Failure]
+  Future<Either<Failure, bool>> setUserIdentifierInAnalytics({required String address});
+
+
 }
 
 class RepositoryImp implements Repository {
@@ -1699,13 +1708,15 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String recipeID, required String cookBookId}) async {
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory(
+      {required String itemId, required String cookBookId}) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
     try {
-      final result = await remoteDataStore.getNftOwnershipHistory(recipeId: recipeID, cookBookId: cookBookId);
+      final result = await remoteDataStore.getNftOwnershipHistory(
+          itemId: itemId, cookBookId: cookBookId);
 
       return Right(result);
     } on String catch (_) {
@@ -1836,4 +1847,19 @@ class RepositoryImp implements Repository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> setUserIdentifierInAnalytics({required String address}) async {
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure("no_internet".tr()));
+    }
+    try {
+      return Right(await remoteDataStore.setUpUserIdentifierInAnalytics(address: address));
+    } on Exception catch (e) {
+    recordErrorInCrashlytics(e);
+    return Left(ServerFailure(e.toString()));
+    }
+  }
+
+
 }

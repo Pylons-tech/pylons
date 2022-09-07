@@ -1,9 +1,8 @@
-import 'package:cosmos_ui_components/cosmos_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
-class PylonsAppTheme extends CosmosThemeData {
+class PylonsAppTheme  {
   static const TextStyle HOME_TITLE = TextStyle(fontFamily: 'Inter', fontSize: 22);
   static const TextStyle HOME_LABEL = TextStyle(fontFamily: 'Inter', fontSize: 14, color: Colors.grey);
 

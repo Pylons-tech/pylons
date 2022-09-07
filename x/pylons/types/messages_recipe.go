@@ -95,20 +95,15 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 				return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
 			}
 
-			if !coins.IsAllPositive() {
-				return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
-			}
-
 			for _, coin := range coins {
 				if IsCookbookDenom(coin.Denom) {
 					split := strings.Split(coin.Denom, denomDivider)
 					if split[0] != msg.CookbookId {
 						return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s must be from the recipe-owning cookbook ID %s", coin.Denom, msg.CookbookId)
 					}
-
-					if IsIBCDenomRepresentation(coin.Denom) {
-						return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s is of same form as ibc/{hash}", coin.Denom)
-					}
+				}
+				if IsIBCDenomRepresentation(coin.Denom) {
+					return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s is of same form as ibc/{hash}", coin.Denom)
 				}
 			}
 		}
@@ -246,20 +241,15 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 				return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
 			}
 
-			if !coins.IsAllPositive() {
-				return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
-			}
-
 			for _, coin := range coins {
 				if IsCookbookDenom(coin.Denom) {
 					split := strings.Split(coin.Denom, denomDivider)
 					if split[0] != msg.CookbookId {
 						return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s must be from the recipe-owning cookbook ID %s", coin.Denom, msg.CookbookId)
 					}
-
-					if IsIBCDenomRepresentation(coin.Denom) {
-						return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s is of same form as ibc/{hash}", coin.Denom)
-					}
+				}
+				if IsIBCDenomRepresentation(coin.Denom) {
+					return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s is of same form as ibc/{hash}", coin.Denom)
 				}
 			}
 		}

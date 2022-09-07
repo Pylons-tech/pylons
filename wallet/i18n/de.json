@@ -1,6 +1,6 @@
 {
-  "app_title": "Pylons Geldbörse",
-  "something_wrong": "Etwas ist schief gelaufen",
+  "app_title": "Pylonen Geldbörse",
+  "something_wrong": "Etwas ist schief gelaufen, Probieren de app opnieuw te starten.",
   "wallet_retrieving_err_msg": "Wir hatten Probleme beim Abrufen von Wallets aus einem sicheren Speicher.",
   "home": "Heim",
   "discover": "Entdecken",
@@ -81,7 +81,7 @@
   "proceed": "Fortfahren",
   "security_hint": "Befolgen Sie Best Practices für die Sicherheit. Achten Sie darauf, Ihre mnemonische Passphrase an einem sicheren Ort aufzuschreiben. Dieser Satz ist die einzige Möglichkeit, Ihr Konto wiederherzustellen, wenn Sie Ihr Passwort vergessen haben. Ohne Ihr Passwort oder Ihre Wiederherstellungs-Passphrase ist eine Kontowiederherstellung nicht möglich.",
   "import_an_account": "Importieren Sie ein Konto",
-  "create_wallet": "Brieftasche erstellen",
+  "create_wallet": "Schlüssel Erstellen",
   "terms_of_service": "Nutzungsbedingungen",
   "manage_your_nft": "VERWALTEN SIE IHR NFT",
   "pylons_infrastructure": "Pylons ist eine schnelle NFT Infrastruktur",
