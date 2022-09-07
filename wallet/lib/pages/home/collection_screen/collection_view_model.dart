@@ -16,8 +16,7 @@ class CollectionViewModel extends ChangeNotifier {
 
   ThumbnailHelper thumbnailHelper;
 
-  CollectionViewModel(
-      {required this.walletsStore, required this.thumbnailHelper});
+  CollectionViewModel({required this.walletsStore, required this.thumbnailHelper});
 
   List<NFT> assets = [];
 
@@ -51,10 +50,7 @@ class CollectionViewModel extends ChangeNotifier {
 
   List<Collection> collectionType = [
     Collection(title: "art".tr(), icon: "art", type: 'cookbook'),
-    // Collection(title: "tickets".tr(), icon: "tickets", type: 'cookbook'),
-    // Collection(title: "transfer".tr(), icon: "transfer", type: 'cookbook'),
     Collection(title: "Easel", icon: "easel", type: 'app', app_name: "easel"),
-    // Collection(title: "Avatar", icon: "pylons_logo.svg", type: 'app', app_name: "avatar"),
   ];
 
   void init() {
@@ -78,15 +74,11 @@ class CollectionViewModel extends ChangeNotifier {
     });
   }
 
-  Future<String?> generateVideoThumbnailIfRequired(
-      String nftUrl, String nftName) async {
-    return thumbnailHelper.generateVideoThumbnailIfRequired(
-        nftUrl, nftName, thumbnailsPath);
+  Future<String?> generateVideoThumbnailIfRequired(String nftUrl, String nftName) async {
+    return thumbnailHelper.generateVideoThumbnailIfRequired(nftUrl, nftName, thumbnailsPath);
   }
 
   Future loadPurchasesAndCreationsData() async {
-    final loading = Loading()..showLoading();
-
     thumbnailsPath = (await getTemporaryDirectory()).path;
     try {
       final wallet = walletsStore.getWallets().value.last;
@@ -94,8 +86,7 @@ class CollectionViewModel extends ChangeNotifier {
       final creations = <NFT>[];
       final items = await walletsStore.getItemsByOwner(wallet.publicAddress);
       final trades = await walletsStore.getTrades(wallet.publicAddress);
-      final cookbooks =
-          await walletsStore.getCookbooksByCreator(wallet.publicAddress);
+      final cookbooks = await walletsStore.getCookbooksByCreator(wallet.publicAddress);
 
       if (items.isNotEmpty) {
         await Future.wait(items.map((item) async {
@@ -113,14 +104,12 @@ class CollectionViewModel extends ChangeNotifier {
 
       if (cookbooks.isNotEmpty) {
         await Future.wait(cookbooks.map((cookbook) async {
-          final recipes =
-              await walletsStore.getRecipesByCookbookID(cookbook.id);
+          final recipes = await walletsStore.getRecipesByCookbookID(cookbook.id);
 
           for (final recipe in recipes) {
             final nft = NFT.fromRecipe(recipe);
 
-            if (nft.appType.toLowerCase() == "easel" &&
-                cookbooks.any((cookbook) => cookbook.id == nft.cookbookID)) {
+            if (nft.appType.toLowerCase() == "easel" && cookbooks.any((cookbook) => cookbook.id == nft.cookbookID)) {
               creations.add(nft);
             }
           }
@@ -130,12 +119,8 @@ class CollectionViewModel extends ChangeNotifier {
       purchases = assets;
       this.creations = creations;
       notifyListeners();
-      loading.dismiss();
     } on Exception catch (_) {
-      loading.dismiss();
-      if (await GetIt.I.get<NetworkInfo>().isConnected == false) {
-        "no_internet".show();
-      }
+
     }
   }
 

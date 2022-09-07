@@ -104,7 +104,7 @@ class NoInternetDialog {
                     height: 0.09.sw,
                     child: Center(
                       child: Text(
-                        kCancelText,
+                        "cancel".tr(),
                         style: Theme.of(navigatorKey.currentState!.context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: kWhite, fontWeight: FontWeight.w300),
                       ),
                     ),

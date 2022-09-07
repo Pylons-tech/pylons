@@ -275,7 +275,6 @@ abstract class RemoteDataStore {
   /// Input: [address] the address of the user
   /// Output: [bool] return true if successful
   Future<bool> setUpUserIdentifierInAnalytics({required String address});
-
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -1016,7 +1015,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
       link: Uri.parse("https://wallet.pylons.tech/invite/$address"),
       uriPrefix: "https://pylons.page.link/",
       androidParameters: const AndroidParameters(packageName: "tech.pylons.wallet"),
-      iosParameters: const IOSParameters(bundleId: "xyz.pylons.wallet"),
+      iosParameters: const IOSParameters(
+        bundleId: "xyz.pylons.wallet",
+      ),
+      navigationInfoParameters: const NavigationInfoParameters(forcedRedirectEnabled: true),
     );
 
     final link = await dynamicLinksGenerator.buildLink(dynamicLinkParams);
@@ -1030,6 +1032,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       uriPrefix: kDeepLink,
       androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
       iosParameters: IOSParameters(bundleId: bundleId, fallbackUrl: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
+      navigationInfoParameters: const NavigationInfoParameters(forcedRedirectEnabled: true),
     );
 
     final link = await dynamicLinksGenerator.buildShortLink(
@@ -1077,6 +1080,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       uriPrefix: kDeepLink,
       androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?item_id=$itemId&cookbook_id=$cookbookId&address=$address")),
       iosParameters: const IOSParameters(bundleId: bundleId),
+      navigationInfoParameters: const NavigationInfoParameters(forcedRedirectEnabled: true),
     );
 
     final link = await dynamicLinksGenerator.buildLink(dynamicLinkParams);
@@ -1090,6 +1094,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       uriPrefix: kDeepLink,
       androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?trade_id=$tradeId&address=$address")),
       iosParameters: const IOSParameters(bundleId: bundleId),
+      navigationInfoParameters: const NavigationInfoParameters(forcedRedirectEnabled: true),
     );
 
     final link = await dynamicLinksGenerator.buildShortLink(dynamicLinkParams);
