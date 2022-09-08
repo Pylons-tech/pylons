@@ -35,6 +35,7 @@ service Msg {
   rpc UpdateRecipe(MsgUpdateRecipe) returns (MsgUpdateRecipeResponse);
   rpc CreateCookbook(MsgCreateCookbook) returns (MsgCreateCookbookResponse);
   rpc UpdateCookbook(MsgUpdateCookbook) returns (MsgUpdateCookbookResponse);
+  rpc RegisterKYCAddress(MsgRegisterKYCAddress) returns (MsgRegisterKYCAddressResponse);
 }
 
 message MsgAppleIap {
@@ -241,4 +242,12 @@ message MsgUpdateCookbook {
 }
 
 message MsgUpdateCookbookResponse {
+}
+
+message MsgRegisterKYCAddress {
+  string creator = 1;
+  string username = 2;
+}
+
+message MsgRegisterKYCAddressResponse {
 }

@@ -27,3 +27,7 @@ message RefereeSignup {
   string username = 1;
   string address = 2;
 }
+
+message KYCAddress {
+  string value = 1;
+}

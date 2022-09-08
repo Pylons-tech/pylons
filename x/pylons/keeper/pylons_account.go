@@ -55,6 +55,22 @@ func (k Keeper) GetPylonsReferral(ctx sdk.Context, addr string) (val types.Refer
 	return val, true
 }
 
+func (k Keeper) SetPylonsKYC(ctx sdk.Context, kycaddress types.KYCAddress, username types.Username) {
+	binaryKYC := k.cdc.MustMarshal(&kycaddress)
+	kycPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.KYCAddressKey))
+	kycPrefixStore.Set(types.KeyPrefix(kycaddress.Value), binaryKYC)
+}
+
+func (k Keeper) GetPylonsKYC(ctx sdk.Context, addr string) (val types.KYCAddress, found bool) {
+	kycPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.KYCAddressKey))
+	b := kycPrefixStore.Get(types.KeyPrefix(addr))
+	if b == nil {
+		return val, false
+	}
+	k.cdc.MustUnmarshal(b, &val)
+	return val, true
+}
+
 // HasUsername checks if the username exists in the store
 func (k Keeper) HasUsername(ctx sdk.Context, username types.Username) bool {
 	usernamePrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))

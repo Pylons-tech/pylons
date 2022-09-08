@@ -29,6 +29,11 @@ message EventUpdateAccount {
   string username = 2;
 }
 
+message EventRegisterKYCAccount {
+  string address = 1;
+  string username = 2;
+}
+
 message EventCreateCookbook {
   string creator = 1;
   string id = 2;
