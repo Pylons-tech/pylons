@@ -74,6 +74,13 @@ android {
     lintOptions {
         checkReleaseBuilds false
     }
+
+    dependencies {
+        // ...
+        implementation 'com.google.android.material:material:<version>'
+        // ...
+    }
+
 }
 
 flutter {
