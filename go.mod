@@ -32,6 +32,8 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 )
 
+require github.com/cosmos/gogoproto v1.4.1 // indirect
+
 require (
 	cloud.google.com/go v0.100.2 // indirect
 	cloud.google.com/go/compute v1.6.1 // indirect
