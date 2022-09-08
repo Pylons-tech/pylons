@@ -8,28 +8,24 @@ import (
 )
 
 // Burn ubedrock
-func BurnUbedrock(ctx sdk.Context, bk bankkeeper.Keeper) {
-	// Send all ubedrock to module
-	accs := bk.GetAccountsBalances(ctx)
-	totalubedrock := sdk.NewCoin("ubedrock", sdk.ZeroInt())
+func BurnUbedrock(ctx sdk.Context, bank *bankkeeper.BaseKeeper) {
+	// Get all account balances
+	accs := bank.GetAccountsBalances(ctx)
 	for _, acc := range accs {
-		balance := bk.GetBalance(ctx, sdk.AccAddress(acc.Address), "ubedrock")
-		if balance.Amount.GT(math.ZeroInt()) {
-			totalubedrock.Add(balance)
-			err := bk.SendCoinsFromAccountToModule(ctx, sdk.AccAddress(acc.Address), types.ModuleName, sdk.NewCoins(balance))
+		balanceUbedrock := acc.Coins.AmountOf(types.StakingCoinDenom)
+		// Check if ubedrock amount GT 0
+		if balanceUbedrock.GT(math.ZeroInt()) {
+			amount := sdk.NewCoin(types.StakingCoinDenom, balanceUbedrock)
+			// Send ubedrock to module
+			err := bank.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(acc.Address), types.PaymentsProcessorName, sdk.NewCoins(amount))
+			if err != nil {
+				panic(err)
+			}
+			// Burn ubedrock in module
+			err = bank.BurnCoins(ctx, types.PaymentsProcessorName, sdk.NewCoins(amount))
 			if err != nil {
 				panic(err)
 			}
 		}
 	}
-	// Burn ubedrock
-	err := bk.BurnCoins(ctx, types.ModuleName, sdk.NewCoins(totalubedrock))
-	if err != nil {
-		panic(err)
-	}
-}
-
-// Mint ubedrock for 8 security account
-func MintUbedrock(ctx sdk.Context, bk bankkeeper.Keeper) {
-
 }
