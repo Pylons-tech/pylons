@@ -27,6 +27,7 @@ import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
+import 'package:pylons_wallet/services/third_party_services/analytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/firestore_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/store_payment_service.dart';
@@ -119,10 +120,10 @@ abstract class RemoteDataStore {
   Future<int> getLikesCount({required String recipeId, required String cookBookID});
 
   /// This method is used to get history of nft owners
-  /// Input: [recipeId] and [cookBookID] of the NFT
+  /// Input: [itemId] and [cookBookID] of the NFT
   /// Output : [List][NftOwnershipHistory] will contain the list of NftOwnershipHistory data if success
   /// else will throw error
-  Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String recipeId, required String cookBookId});
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String itemId, required String cookBookId});
 
   /// This method is used to get views count of NFT
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
@@ -263,13 +264,18 @@ abstract class RemoteDataStore {
   /// This method will create User account based on account public info
   /// Input: [publicInfo] contains info related to user chain address, [walletCreationModel] contains user entered data, [appCheckToken] the app specific token, [referralToken] the invitee user address
   /// Output: if successful will give [TransactionResponse] else will throw error
-
   Future<TransactionResponse> createAccount({required AccountPublicInfo publicInfo, required WalletCreationModel walletCreationModel, required String appCheckToken, required String referralToken});
 
   /// This method will save users feedback to firebase based on its wallet address
   /// Input : [walletAddress], [subject] and [feedback] the address against which the feedbacks needs to be stored
   /// Output : [bool] It will return true if the saving feedback is successful otherwise false
   Future<bool> saveUserFeedback({required String walletAddress, required String subject, required String feedback});
+
+  /// This method will set the app level user identifier in the analytics
+  /// Input: [address] the address of the user
+  /// Output: [bool] return true if successful
+  Future<bool> setUpUserIdentifierInAnalytics({required String address});
+
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -279,11 +285,13 @@ class RemoteDataStoreImp implements RemoteDataStore {
   final FirebaseAppCheck firebaseAppCheck;
   final FirebaseDynamicLinks dynamicLinksGenerator;
   final FirestoreHelper firebaseHelper;
+  final AnalyticsHelper analyticsHelper;
 
   RemoteDataStoreImp(
       {required this.dynamicLinksGenerator,
       required this.httpClient,
       required this.firebaseHelper,
+      required this.analyticsHelper,
       required this.crashlyticsHelper,
       required this.storePaymentService,
       required this.firebaseAppCheck});
@@ -657,10 +665,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String recipeId, required String cookBookId}) async {
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String itemId, required String cookBookId}) async {
     final baseApiUrl = getBaseEnv().baseApiUrl;
-
-    final uri = Uri.parse("$baseApiUrl/pylons/get_recipe_history/$cookBookId/$recipeId");
+    final uri = Uri.parse("$baseApiUrl/pylons/item_history/$cookBookId/$itemId");
     final List<NftOwnershipHistory> historyList = [];
 
     final historyResponse = await httpClient.get(uri);
@@ -1092,6 +1099,12 @@ class RemoteDataStoreImp implements RemoteDataStore {
   @override
   Future<bool> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) {
     return firebaseHelper.saveUserFeedback(walletAddress: walletAddress, subject: subject, feedback: feedback);
+  }
+
+  @override
+  Future<bool> setUpUserIdentifierInAnalytics({required String address}) async {
+    await analyticsHelper.setUserId(address: address);
+    return true;
   }
 }
 
