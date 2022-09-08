@@ -1,11 +1,10 @@
-package tech.pylons.flutter_wallet
+package tech.pylons.wallet
 
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.core.net.toUri
-import tech.pylons.wallet.Pigeon
 import tech.pylons.wallet.R
 
 

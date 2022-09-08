@@ -1,4 +1,4 @@
-package tech.pylons.flutter_wallet
+package tech.pylons.wallet
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
