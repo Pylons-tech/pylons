@@ -1,6 +1,8 @@
 package pylons
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
@@ -73,6 +75,8 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	for _, elem := range genState.CookbookList {
 		k.SetCookbook(ctx, elem)
 	}
+
+	fmt.Println(genState.Params)
 
 	k.SetParams(ctx, genState.Params)
 }
