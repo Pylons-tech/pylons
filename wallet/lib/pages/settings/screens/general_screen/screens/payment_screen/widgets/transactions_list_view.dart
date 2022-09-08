@@ -1,9 +1,10 @@
-import 'package:cosmos_ui_components/utils/date_formatter.dart';
+
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/screens/payment_screen/widgets/transaction_card.dart';
 import 'package:pylons_wallet/utils/constants.dart';
+import 'package:pylons_wallet/utils/date_utils.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 
 class TransactionsListView extends StatelessWidget {
