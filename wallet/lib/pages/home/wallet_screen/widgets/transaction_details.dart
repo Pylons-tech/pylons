@@ -251,7 +251,7 @@ class TransactionDetailsScreen extends StatelessWidget {
               bottom: 20.h,
               left: 20.w,
               right: 20.w,
-              child: ViewInCollectionButton(
+              child: BlueClippedButton(
                 enabled: isCollectionButtonEnabled(),
                 onTap: () {
                   if (!isCollectionButtonEnabled()) {

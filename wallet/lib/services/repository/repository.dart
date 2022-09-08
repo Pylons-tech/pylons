@@ -1598,7 +1598,7 @@ class RepositoryImp implements Repository {
     final localTxModel = createInitialLocalTransactionModel(
       transactionTypeEnum: TransactionTypeEnum.AppleInAppCoinsRequest,
       transactionData: jsonEncode(appleInAppPurchaseModel.toJson()),
-      transactionDescription: 'Pylons Coins Purchase',
+      transactionDescription: 'buying_pylon_points'.tr(),
     );
 
     if (!await networkInfo.isConnected) {
@@ -1628,7 +1628,7 @@ class RepositoryImp implements Repository {
     final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
       transactionTypeEnum: TransactionTypeEnum.GoogleInAppCoinsRequest,
       transactionData: jsonEncode(msgGoogleInAPPPurchase.toJson()),
-      transactionDescription: 'Pylons Coins Purchase',
+      transactionDescription: 'buying_pylon_points'.tr(),
     );
 
     if (!await networkInfo.isConnected) {
@@ -1693,7 +1693,7 @@ class RepositoryImp implements Repository {
 
     final LocalTransactionModel txLocalModel = createInitialLocalTransactionModel(
       transactionData: jsonEncode(data),
-      transactionDescription: 'Buying a Product',
+      transactionDescription: 'buying_pylon_points'.tr(),
       transactionTypeEnum: TransactionTypeEnum.BuyProduct,
     );
 
@@ -1704,7 +1704,6 @@ class RepositoryImp implements Repository {
 
     try {
       final result = await remoteDataStore.buyProduct(productDetails);
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: txLocalModel);
       return Right(result);
     } on Failure catch (_) {
       await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: txLocalModel);

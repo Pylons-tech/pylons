@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
-class ViewInCollectionButton extends StatelessWidget {
+class BlueClippedButton extends StatelessWidget {
   final VoidCallback onTap;
   final String text;
   final bool enabled;
 
-  const ViewInCollectionButton(
+  const BlueClippedButton(
       {Key? key, required this.onTap, this.text = "", this.enabled = true})
       : super(key: key);
 

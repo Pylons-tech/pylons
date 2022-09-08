@@ -16,14 +16,20 @@ class FailureManagerViewModel extends ChangeNotifier {
 
   FailureManagerViewModel({required this.repository});
 
-  Future<List<LocalTransactionModel>> getAllFailuresFromDB() async {
+  Future<void> getAllFailuresFromDB() async {
     final failureEither = await repository.getAllTransactionFailures();
     if (failureEither.isLeft()) {
-      return [];
+      localTransactionsList = [];
+      notifyListeners();
+      'something_wrong'.tr().show();
+      return;
     }
 
-    return failureEither.getOrElse(() => []);
+    localTransactionsList = failureEither.getOrElse(() => []);
+    notifyListeners();
   }
+
+  List<LocalTransactionModel> localTransactionsList = [];
 
   Future<void> handleRetry({required LocalTransactionModel txManager}) async {
     final TransactionTypeEnum failureTypeEnum = txManager.transactionType.toTransactionTypeEnum();
@@ -34,9 +40,6 @@ class FailureManagerViewModel extends ChangeNotifier {
       case TransactionTypeEnum.UpdateLikeStatus:
         retryUpdateLikeStatus(txManager);
         break;
-      // case TransactionTypeEnum.StripePayout:
-      //   retryStripePayout(txManager);
-      //   break;
       case TransactionTypeEnum.AppleInAppCoinsRequest:
         retryAppleInAppCoinsRequest(txManager);
         break;
@@ -54,6 +57,7 @@ class FailureManagerViewModel extends ChangeNotifier {
 
   Future deleteFailure({required int id}) async {
     await repository.deleteTransactionFailureRecord(id);
+    await getAllFailuresFromDB();
   }
 
   Future<void> retryUpdateLikeStatus(LocalTransactionModel txManager) async {
@@ -82,6 +86,7 @@ class FailureManagerViewModel extends ChangeNotifier {
         currencyCode: txDataJson['currencyCode'].toString());
     final loading = Loading()..showLoading();
     await repository.buyProduct(productDetails);
+    await deleteFailure(id: txManager.id!);
     loading.dismiss();
   }
 

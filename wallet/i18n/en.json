@@ -22,7 +22,7 @@
   "suggested_accounts": "Suggested Accounts",
   "see_all": "See all",
   "more": "More",
-  "purchased": "purchased",
+  "purchased": "Purchased",
   "filter": "Filter",
   "reset": "Reset",
   "cancel": "Cancel",
@@ -334,8 +334,8 @@
   "wallet_address_arg": "Wallet Address: {}",
   "submit_feedback": "Submit Feedback",
   "subject": "Subject",
-  "character_limit" :"{} character limit",
-  "enter_description_text" : "Enter description",
+  "character_limit": "{} character limit",
+  "enter_description_text": "Enter description",
   "enter_subject_text": "Enter subject",
   "thank_you_for_feedback": "Thank you for your feedback.",
   "account_creation_failed": "Account Creation Failed",
@@ -348,5 +348,11 @@
   "recipe_id": "Recipe ID",
   "exclusive": "Exclusive",
   "pylons": "Pylons",
-  "vietnamese": "Vietnamese"
+  "vietnamese": "Vietnamese",
+  "buying_pylon_points": "Buying pylons points",
+  "all_transactions": "All Transactions",
+  "retry": "Retry",
+  "network_error_description": "A network error occurred while processing your transaction. Please try again to update your account. You won’t be charged twice for retrying.",
+  "transaction_id": "Transaction ID",
+  "transaction_date": "Transaction Date"
 }

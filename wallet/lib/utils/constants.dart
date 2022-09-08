@@ -61,6 +61,7 @@ const Color kSubtitleColor = Color(0xff767676);
 const Color kTransactionGreen = Color.fromRGBO(81, 161, 144, 1);
 const Color kTransactionRed = Color.fromRGBO(239, 68, 33, 1);
 Color k3DBackgroundColor = Colors.grey.shade200;
+Color kGreyColor = const Color.fromRGBO(141, 140, 140, 1);
 
 const double kIconSize = 24.0;
 const double kSmallIconSize = 18.0;
