@@ -127,12 +127,12 @@
 
         </activity>
 
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+<!--        <activity-->
+<!--            android:name="com.yalantis.ucrop.UCropActivity"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />-->
 
-        <receiver android:name="tech.pylons.flutter_wallet.PylonsWidgetProvider"
+        <receiver android:name=".PylonsWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -141,7 +141,7 @@
                 android:resource="@xml/pylons_widget_provider_info" />
         </receiver>
 
-        <service android:name="tech.pylons.flutter_wallet.PylonsWidgetService"
+        <service android:name=".PylonsWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
             android:exported="false" />
 
@@ -158,3 +158,5 @@
 
     </application>
 </manifest>
+
+
