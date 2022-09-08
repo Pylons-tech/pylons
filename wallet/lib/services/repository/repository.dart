@@ -310,9 +310,10 @@ abstract class Repository {
   Either<Failure, bool> getBiometricTransaction();
 
   /// This method will get the nft history
-  /// Input: [recipeID] and [cookBookId] of the nft
+  /// Input: [itemId] and [cookBookId] of the nft
   /// Output: returns [List][NftOwnershipHistory] if success else this will give [Failure]
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String recipeID, required String cookBookId});
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory(
+      {required String itemId, required String cookBookId});
 
   /// This method will get the transaction history from the chain
   /// Input: [address] of the user
@@ -1707,13 +1708,15 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String recipeID, required String cookBookId}) async {
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory(
+      {required String itemId, required String cookBookId}) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
     try {
-      final result = await remoteDataStore.getNftOwnershipHistory(recipeId: recipeID, cookBookId: cookBookId);
+      final result = await remoteDataStore.getNftOwnershipHistory(
+          itemId: itemId, cookBookId: cookBookId);
 
       return Right(result);
     } on String catch (_) {

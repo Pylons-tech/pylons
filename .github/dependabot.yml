@@ -28,3 +28,8 @@ updates:
     directory: "/big-dipper-backend"
     schedule:
       interval: daily
+  - package-ecosystem: pub
+    directory: "/dart_sdk"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
