@@ -337,6 +337,7 @@ export default class EaselBuy extends Component {
               onClick={handleClick}
               onContextMenu={handleClick}
               controlsList="nodownload"
+              className="desktop-view "
               style={{
                 marginTop: "25px",
                 height: "50px",
@@ -783,6 +784,7 @@ export default class EaselBuy extends Component {
                             />
                           </p>
                         </div>
+                        {/* Can Be Use For Later Version */}
                         {nftType?.toLowerCase() === "audio" ? (
                           <audio
                             controls
