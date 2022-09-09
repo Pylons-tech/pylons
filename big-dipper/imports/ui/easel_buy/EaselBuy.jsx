@@ -434,36 +434,6 @@ export default class EaselBuy extends Component {
                             />
                           </p>
                         </div>
-                        {/* Can Be Use For Later Version */}
-                        {/* {nftType?.toLowerCase() === "audio" ? (
-                          <>
-                            <audio
-                              controls
-                              onClick={handleClick}
-                              onContextMenu={handleClick}
-                              controlsList="nodownload"
-                              style={{
-                                marginTop: "25px",
-                                height: "50px",
-                              }}
-                            >
-                              <source src={src} type="audio/ogg" />
-                              <source src={src} type="audio/mpeg" />
-                              Your browser does not support the audio element.
-                            </audio>
-                          </>
-                        ) : (
-                          <></>
-                        )} */}
-                        {/*For later Use*/}
-                        {/* <div className="views">
-                          <img
-                            alt="views"
-                            src="/img/eye.svg"
-                            style={{ width: "34px", height: "20px" }}
-                          />
-                          <p>{this.state.nftViews} views</p>
-                        </div> */}
                       </div>
                       {this.state.description?.length > 35 ? (
                         <>
