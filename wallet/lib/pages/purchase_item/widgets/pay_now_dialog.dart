@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +27,10 @@ import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/enums.dart';
+import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:provider/provider.dart';
 
 TextStyle _titleTextStyle = TextStyle(color: Colors.white, fontSize: 16.sp);
 TextStyle _subtitleTextStyle = TextStyle(color: Colors.white, fontSize: 12.sp);
@@ -39,32 +41,40 @@ class PayNowDialog {
   final NFT nft;
   final PurchaseItemViewModel purchaseItemViewModel;
   final ValueChanged<String> onPurchaseDone;
+  final bool shouldBuy;
 
   BuildContext buildContext;
 
-  PayNowDialog({required this.buildContext, required this.nft, required this.purchaseItemViewModel, required this.onPurchaseDone});
+  PayNowDialog({required this.buildContext, required this.nft, required this.purchaseItemViewModel, required this.onPurchaseDone, required this.shouldBuy});
 
   void show() {
     showDialog(
-        context: buildContext,
-        builder: (context) {
-          return Dialog(
-              backgroundColor: Colors.transparent,
-              child: PayNowWidget(
+      context: buildContext,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: ChangeNotifierProvider<PurchaseItemViewModel>.value(
+            value: purchaseItemViewModel,
+            builder: (context, snapshot) {
+              return PayNowWidget(
                 nft: nft,
-                purchaseItemViewModel: purchaseItemViewModel,
                 onPurchaseDone: onPurchaseDone,
-              ));
-        });
+                shouldBuy: shouldBuy,
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 }
 
 class PayNowWidget extends StatefulWidget {
   final NFT nft;
-  final PurchaseItemViewModel purchaseItemViewModel;
   final ValueChanged<String> onPurchaseDone;
+  final bool shouldBuy;
 
-  const PayNowWidget({Key? key, required this.nft, required this.purchaseItemViewModel, required this.onPurchaseDone}) : super(key: key);
+  const PayNowWidget({Key? key, required this.nft, required this.onPurchaseDone, required this.shouldBuy}) : super(key: key);
 
   @override
   State<PayNowWidget> createState() => _PayNowWidgetState();
@@ -191,18 +201,30 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                 SizedBox(
                   height: 30.h,
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 30.w),
-                  child: PylonsPayWithSwipe(
-                    activeColor: kDarkRed,
-                    inactiveColor: kPayNowBackgroundGrey,
-                    height: 40.h,
-                    initialWidth: 40.w,
-                    onSwipeComplete: () {
-                      executeRecipe(context);
-                    },
+                if (!widget.shouldBuy)
+                  Center(
+                    child: buildButton(
+                        title: "add_pylons".tr(),
+                        bgColor: kDarkRed,
+                        onPressed: () async {
+                          final navigator = Navigator.of(context);
+                          navigator.pop();
+                          navigator.pushNamed(RouteUtil.ROUTE_ADD_PYLON);
+                        }),
                   ),
-                )
+                if (widget.shouldBuy)
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 30.w),
+                    child: PylonsPayWithSwipe(
+                      activeColor: kDarkRed,
+                      inactiveColor: kPayNowBackgroundGrey,
+                      height: 40.h,
+                      initialWidth: 40.w,
+                      onSwipeComplete: () {
+                        executeRecipe(context);
+                      },
+                    ),
+                  )
               ],
             ),
           )
@@ -275,8 +297,35 @@ class _PayNowWidgetState extends State<PayNowWidget> {
     );
   }
 
+  Widget buildButton({required String title, required Color bgColor, required Function onPressed}) {
+    return SizedBox(
+      height: 40.h,
+      child: InkWell(
+        onTap: () => onPressed(),
+        child: CustomPaint(
+          painter: BoxShadowPainter(cuttingHeight: 18.h),
+          child: ClipPath(
+            clipper: MnemonicClipper(cuttingHeight: 18.h),
+            child: Container(
+              color: bgColor,
+              height: 40.h,
+              width: 200.w,
+              child: Center(
+                  child: Text(
+                title,
+                style: TextStyle(color: kWhite, fontSize: isTablet ? 14.sp : 16.sp, fontWeight: FontWeight.w700),
+                textAlign: TextAlign.center,
+              )),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> executeRecipe(BuildContext context) async {
-    final ibcEnumCoins = widget.purchaseItemViewModel.nft.denom.toIBCCoinsEnum();
+    final provider = context.read<PurchaseItemViewModel>();
+    final ibcEnumCoins = provider.nft.denom.toIBCCoinsEnum();
     switch (widget.nft.type) {
       case NftType.TYPE_RECIPE:
         if (ibcEnumCoins == IBCCoins.ustripeusd) {
@@ -291,22 +340,19 @@ class _PayNowWidgetState extends State<PayNowWidget> {
         if (ibcEnumCoins == IBCCoins.ustripeusd) {
           stripePaymentForTrade(context, widget.nft);
         } else {
-          widget.purchaseItemViewModel.paymentForTrade();
+          provider.paymentForTrade();
         }
         break;
     }
   }
 
   Future paymentByCoins() async {
-    final executionResponse = await widget.purchaseItemViewModel.paymentForRecipe();
+    final provider = context.read<PurchaseItemViewModel>();
+    final executionResponse = await provider.paymentForRecipe();
 
     Navigator.pop(navigatorKey.currentState!.overlay!.context);
 
     if (!executionResponse.success) {
-      if (executionResponse.error.contains(kLOW_LOW_BALANCE_CONSTANT)) {
-        final InsufficientBalanceDialog insufficientBalanceDialog = InsufficientBalanceDialog(navigatorKey.currentState!.overlay!.context);
-        return insufficientBalanceDialog.show();
-      }
       executionResponse.error.show();
       return;
     }

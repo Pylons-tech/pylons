@@ -295,7 +295,7 @@
   "no_profile_found": "No se encontró ningún perfil en la billetera",
   "insufficient_balance_msg": "No tienes suficiente Pylon para completar esta transacción. Haga clic a continuación para Agregar Pylon y vuelva a intentarlo.",
   "insufficient_balance": "Saldo insuficiente",
-  "add_pylons": "Añadir Pylon",
+  "add_pylons": "Añadir points",
   "bonus_fifty": "(+50 de bonificación)",
   "bonus_hundred": "(+100 de bonificación)",
   "add_fund": "Agregar fondo",

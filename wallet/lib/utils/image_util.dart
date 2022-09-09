@@ -1,7 +1,6 @@
 class ImageUtil {
   ImageUtil();
   static String UPDATE_APP_ICON = 'assets/images/icons/update_app_icon.jpg';
-  static String BUY_NOW_ASSETS = 'assets/images/icons/card.png';
   static String DUMMY_USER = 'assets/images/dummy_user.png';
   static String LOADING_GIF = 'assets/images/gifs/loading.gif';
   static String DEFAULT_BANNER =

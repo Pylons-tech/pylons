@@ -295,7 +295,7 @@
   "no_profile_found": "Профиль в кошельке не найден",
   "insufficient_balance_msg": "\nУ вас недостаточно Pylon для завершения этой транзакции. Нажмите ниже, чтобы добавить Pylon, и повторите попытку.",
   "insufficient_balance": "Недостаточный баланс",
-  "add_pylons": "Добавить пилон",
+  "add_pylons": "Добавить points",
   "bonus_fifty": "(+50 бонус)",
   "bonus_hundred": "(+100 бонус)",
   "add_fund": "Добавить фонд",

@@ -295,7 +295,7 @@
   "no_profile_found": "No profile found in wallet",
   "insufficient_balance_msg": "You don’t have enough Pylon to complete this transaction. Please click below to Add Pylon and try again.",
   "insufficient_balance": "Insufficient Balance",
-  "add_pylons": "Add Pylon",
+  "add_pylons": "Add points",
   "bonus_fifty": "(+50 bonus)",
   "bonus_hundred": "(+100 bonus)",
   "add_fund": "Add fund",
