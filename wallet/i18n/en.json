@@ -349,10 +349,11 @@
   "exclusive": "Exclusive",
   "pylons": "Pylons",
   "vietnamese": "Vietnamese",
-  "buying_pylon_points": "Buying pylons points",
+  "buying_pylon_points": "Bought pylons points",
   "all_transactions": "All Transactions",
   "retry": "Retry",
   "network_error_description": "A network error occurred while processing your transaction. Please try again to update your account. You won’t be charged twice for retrying.",
   "transaction_id": "Transaction ID",
-  "transaction_date": "Transaction Date"
+  "transaction_date": "Transaction Date",
+  "bought_nft": "Bought"
 }

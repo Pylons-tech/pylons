@@ -20,8 +20,9 @@ class ExecuteRecipeHandler implements BaseHandler {
 
     final walletsStore = GetIt.I.get<WalletsStore>();
 
-    final response = await walletsStore.executeRecipe(jsonMap);
-    response.sender = sdkIpcMessage.sender;
+    final responseEither = await walletsStore.executeRecipe(jsonMap);
+    final response = responseEither.toOption().toNullable();
+    response!.sender = sdkIpcMessage.sender;
     response.action = sdkIpcMessage.action;
     return SynchronousFuture(response);
   }

@@ -150,11 +150,15 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
     final showLoader = Loading()..showLoading();
 
-    final response = await walletsStore.executeRecipe(jsonMap);
-
+    final responseEither = await walletsStore.executeRecipe(jsonMap);
     showLoader.dismiss();
 
-    return response;
+    if (responseEither.isLeft()) {
+      "something_wrong".tr().show();
+    }
+
+    final response = responseEither.toOption().toNullable();
+    return response!;
   }
 
   Future<void> paymentForTrade() async {
@@ -245,7 +249,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
   bool isUrlLoaded = false;
 
-
   Future<void> getOwnershipHistory({required String recipeId, required String cookBookId}) async {
     if (nft.type != NftType.TYPE_RECIPE) {
       final nftOwnershipHistory = await repository.getNftOwnershipHistory(recipeID: recipeId, cookBookId: cookBookId);
@@ -258,8 +261,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     }
   }
 
-    Future<void> nftDataInit(
-      {required String recipeId, required String cookBookId}) async {
+  Future<void> nftDataInit({required String recipeId, required String cookBookId}) async {
     final walletAddress = walletsStore.getWallets().value.last.publicAddress;
 
     final likesCountEither = await repository.getLikesCount(
@@ -287,7 +289,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
     likedByMe = likedByMeEither.getOrElse(() => false);
 
-
     final countViewEither = await repository.countAView(
       recipeId: recipeId,
       walletAddress: walletAddress,
@@ -306,7 +307,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     if (viewsCountEither.isLeft()) {
       return;
     }
-    isLiking=false;
+    isLiking = false;
 
     viewsCount = viewsCountEither.getOrElse(() => 0);
   }

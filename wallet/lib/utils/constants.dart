@@ -339,6 +339,9 @@ const kReceiver = "receiver";
 const kAmount = "amount";
 const kCreatedAt = "created_at";
 
+const cookbookIdKey = "cookbookId";
+const recipeIdKey = "recipeId";
+
 /// Assets
 
 const kAlertIcon = "assets/images/icons/alert.svg";

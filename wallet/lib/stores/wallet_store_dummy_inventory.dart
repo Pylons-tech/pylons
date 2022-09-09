@@ -263,7 +263,7 @@ class WalletsStoreDummyInventory extends WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> executeRecipe(Map json) {
+  Future<Either<Failure, SdkIpcResponse>> executeRecipe(Map json) {
     return _baseInstance.executeRecipe(json);
   }
 

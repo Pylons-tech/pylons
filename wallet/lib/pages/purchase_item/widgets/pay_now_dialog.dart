@@ -371,12 +371,18 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
       final loader = Loading()..showLoading();
 
-      final execution = await walletsStore.executeRecipe(jsonMap);
+      final executionEither = await walletsStore.executeRecipe(jsonMap);
       loader.dismiss();
 
       Navigator.of(navigatorKey.currentState!.overlay!.context).pop();
 
-      if (!execution.success) {
+      if (executionEither.isLeft()) {
+        "something_wrong".tr().show();
+        return;
+      }
+      final execution = executionEither.toOption().toNullable();
+
+      if (!execution!.success) {
         execution.error.show();
         return;
       }

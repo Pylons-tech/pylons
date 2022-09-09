@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get_it/get_it.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/stripe_generate_payment_receipt_request.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
+import 'package:pylons_wallet/pages/home/home_provider.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/utils/constants.dart';
+import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 
@@ -37,8 +39,8 @@ class FailureManagerViewModel extends ChangeNotifier {
       case TransactionTypeEnum.GeneratePaymentReceipt:
         retryGeneratePaymentReceipt(txManager);
         break;
-      case TransactionTypeEnum.UpdateLikeStatus:
-        retryUpdateLikeStatus(txManager);
+      case TransactionTypeEnum.BuyNFT:
+        retryBuyNFT(txManager);
         break;
       case TransactionTypeEnum.AppleInAppCoinsRequest:
         retryAppleInAppCoinsRequest(txManager);
@@ -60,10 +62,12 @@ class FailureManagerViewModel extends ChangeNotifier {
     await getAllFailuresFromDB();
   }
 
-  Future<void> retryUpdateLikeStatus(LocalTransactionModel txManager) async {
+  Future<void> retryBuyNFT(LocalTransactionModel txManager) async {
     final txDataJson = jsonDecode(txManager.transactionData);
     final loading = Loading()..showLoading();
-    await repository.updateLikeStatus(recipeId: txDataJson[kRecipeIdMap].toString(), cookBookID: txDataJson[kCookbookIdMap].toString(), walletAddress: txDataJson[kWalletAddressIdMap].toString());
+    final walletStore = GetIt.I.get<WalletsStore>();
+    await walletStore.executeRecipe(txDataJson as Map<dynamic, dynamic>);
+    await deleteFailure(id: txManager.id!);
     loading.dismiss();
   }
 
@@ -95,14 +99,18 @@ class FailureManagerViewModel extends ChangeNotifier {
     final AppleInAppPurchaseModel request = AppleInAppPurchaseModel.fromJson(txDataJson as Map<String, dynamic>);
     final loading = Loading()..showLoading();
     await repository.sendAppleInAppPurchaseCoinsRequest(request);
+    GetIt.I.get<HomeProvider>().buildAssetsList();
+    "purchase_successful".tr().show();
     loading.dismiss();
   }
 
   Future<void> retryGoogleInAppCoinsRequest(LocalTransactionModel txManager) async {
+    final loading = Loading()..showLoading();
     final txDataJson = jsonDecode(txManager.transactionData);
     final GoogleInAppPurchaseModel request = GoogleInAppPurchaseModel.fromJson(txDataJson as Map<String, dynamic>);
-    final loading = Loading()..showLoading();
     await repository.sendGoogleInAppPurchaseCoinsRequest(request);
+    await deleteFailure(id: txManager.id!);
+    GetIt.I.get<HomeProvider>().buildAssetsList();
     loading.dismiss();
   }
 }

@@ -43,16 +43,13 @@ class PayByCardWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 50),
               child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(14),
-                    bottomLeft: Radius.circular(14)),
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(14), bottomLeft: Radius.circular(14)),
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
                   child: Container(
                     height: screenSize.height(percent: 0.35),
                     // width: screenSize.width(),
-                    decoration:
-                        BoxDecoration(color: Colors.white.withOpacity(0.0)),
+                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
                   ),
                 ),
               ),
@@ -65,16 +62,13 @@ class PayByCardWidget extends StatelessWidget {
           margin: const EdgeInsets.only(left: 50),
           decoration: BoxDecoration(
             color: kWhite.withOpacity(0.4),
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(14), bottomLeft: Radius.circular(14)),
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(14), bottomLeft: Radius.circular(14)),
           ),
           child: DecoratedBox(
             // padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: kBlue.withOpacity(0.5),
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(14),
-                  bottomLeft: Radius.circular(14)),
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(14), bottomLeft: Radius.circular(14)),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -101,10 +95,7 @@ class PayByCardWidget extends StatelessWidget {
                     const HorizontalSpace(30),
                     Text(
                       recipe.price.UvalToVal(),
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2!
-                          .copyWith(fontSize: 20, color: Colors.white),
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 20, color: Colors.white),
                     ),
                   ],
                 ),
@@ -112,8 +103,7 @@ class PayByCardWidget extends StatelessWidget {
                   style: TextButton.styleFrom(
                     backgroundColor: kWhite.withOpacity(0.35),
                     side: BorderSide(color: kWhite.withOpacity(0.4)),
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                   ),
                   icon: Image.asset(
                     'assets/images/icons/card.png',
@@ -121,10 +111,7 @@ class PayByCardWidget extends StatelessWidget {
                   ),
                   label: Text(
                     "pay".tr(),
-                    style: Theme.of(context).textTheme.button!.copyWith(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.button!.copyWith(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   onPressed: () {
                     executeRecipe(context);
@@ -143,17 +130,12 @@ class PayByCardWidget extends StatelessWidget {
     final repository = GetIt.I.get<Repository>();
     final baseEnv = GetIt.I.get<BaseEnv>();
     showLoading(context);
-    final response = await repository.CreatePaymentIntent(
-        StripeCreatePaymentIntentRequest(
-            productID: "trade/${nft.tradeID}",
-            coinInputIndex: 0,
-            address: walletsStore.getWallets().value.last.publicAddress));
-    final pi_info =
-        response.getOrElse(() => StripeCreatePaymentIntentResponse());
+    final response =
+        await repository.CreatePaymentIntent(StripeCreatePaymentIntentRequest(productID: "trade/${nft.tradeID}", coinInputIndex: 0, address: walletsStore.getWallets().value.last.publicAddress));
+    final pi_info = response.getOrElse(() => StripeCreatePaymentIntentResponse());
     if (pi_info.clientsecret != "") {
       try {
-        final pi =
-            await Stripe.instance.retrievePaymentIntent(pi_info.clientsecret);
+        final pi = await Stripe.instance.retrievePaymentIntent(pi_info.clientsecret);
 
         await Stripe.instance.initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
@@ -168,12 +150,9 @@ class PayByCardWidget extends StatelessWidget {
 
         await Stripe.instance.presentPaymentSheet();
 
-        final receipt_response = await repository.GeneratePaymentReceipt(
-            StripeGeneratePaymentReceiptRequest(
-                paymentIntentID: pi.id, clientSecret: pi.clientSecret));
+        final receipt_response = await repository.GeneratePaymentReceipt(StripeGeneratePaymentReceiptRequest(paymentIntentID: pi.id, clientSecret: pi.clientSecret));
 
-        final receipt = receipt_response
-            .getOrElse(() => StripeGeneratePaymentReceiptResponse());
+        final receipt = receipt_response.getOrElse(() => StripeGeneratePaymentReceiptResponse());
 
         showLoading(navigatorKey.currentState!.overlay!.context);
         const json = '''
@@ -192,9 +171,7 @@ class PayByCardWidget extends StatelessWidget {
 
         Navigator.pop(navigatorKey.currentState!.overlay!.context);
 
-        tradeResponse.success
-            ? "purchase_nft_success".tr()
-            : tradeResponse.error.show();
+        tradeResponse.success ? "purchase_nft_success".tr() : tradeResponse.error.show();
       } catch (error) {
         Navigator.pop(navigatorKey.currentState!.overlay!.context);
       }
@@ -208,17 +185,12 @@ class PayByCardWidget extends StatelessWidget {
     showLoading(context);
 
     final response = await repository.CreatePaymentIntent(
-        StripeCreatePaymentIntentRequest(
-            productID: "recipe/${nft.cookbookID}/${nft.recipeID}",
-            coinInputIndex: 0,
-            address: walletsStore.getWallets().value.last.publicAddress));
-    final pi_info =
-        response.getOrElse(() => StripeCreatePaymentIntentResponse());
+        StripeCreatePaymentIntentRequest(productID: "recipe/${nft.cookbookID}/${nft.recipeID}", coinInputIndex: 0, address: walletsStore.getWallets().value.last.publicAddress));
+    final pi_info = response.getOrElse(() => StripeCreatePaymentIntentResponse());
 
     if (pi_info.clientsecret != "") {
       try {
-        final pi =
-            await Stripe.instance.retrievePaymentIntent(pi_info.clientsecret);
+        final pi = await Stripe.instance.retrievePaymentIntent(pi_info.clientsecret);
 
         await Stripe.instance.initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
@@ -232,12 +204,9 @@ class PayByCardWidget extends StatelessWidget {
         Navigator.pop(navigatorKey.currentState!.overlay!.context);
         await Stripe.instance.presentPaymentSheet();
 
-        final receipt_response = await repository.GeneratePaymentReceipt(
-            StripeGeneratePaymentReceiptRequest(
-                paymentIntentID: pi.id, clientSecret: pi.clientSecret));
+        final receipt_response = await repository.GeneratePaymentReceipt(StripeGeneratePaymentReceiptRequest(paymentIntentID: pi.id, clientSecret: pi.clientSecret));
 
-        final receipt = receipt_response
-            .getOrElse(() => StripeGeneratePaymentReceiptResponse());
+        final receipt = receipt_response.getOrElse(() => StripeGeneratePaymentReceiptResponse());
 
         const jsonExecuteRecipe = '''
         {
@@ -258,15 +227,20 @@ class PayByCardWidget extends StatelessWidget {
 
         showLoading(navigatorKey.currentState!.overlay!.context);
 
-        final execution = await walletsStore.executeRecipe(jsonMap);
+        final executionEither = await walletsStore.executeRecipe(jsonMap);
 
         Navigator.pop(navigatorKey.currentState!.overlay!.context);
 
-        (execution.success ? "purchase_nft_success".tr() : execution.error)
-            .show();
+        if (executionEither.isLeft()) {
+          "something_wrong".tr().show();
+          return;
+        }
 
-        Navigator.of(navigatorKey.currentState!.overlay!.context)
-            .pushNamed(RouteUtil.ROUTE_HOME);
+        final execution = executionEither.toOption().toNullable();
+
+        (execution!.success ? "purchase_nft_success".tr() : execution.error).show();
+
+        Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_HOME);
       } catch (error) {
         Navigator.pop(navigatorKey.currentState!.overlay!.context);
       }
@@ -276,8 +250,7 @@ class PayByCardWidget extends StatelessWidget {
   Future<void> executeRecipe(BuildContext context) async {
     switch (recipe.type) {
       case NftType.TYPE_RECIPE:
-        if (recipe.denom.UdenomToDenom().toLowerCase() ==
-            constants.kUSDCoinName) {
+        if (recipe.denom.UdenomToDenom().toLowerCase() == constants.kUSDCoinName) {
           stripePaymentForRecipe(context, recipe);
         } else {
           context.read<PurchaseItemViewModel>().paymentForRecipe();
@@ -286,8 +259,7 @@ class PayByCardWidget extends StatelessWidget {
       case NftType.TYPE_ITEM:
         break;
       case NftType.TYPE_TRADE:
-        if (recipe.denom.UdenomToDenom().toLowerCase() ==
-            constants.kUSDCoinName) {
+        if (recipe.denom.UdenomToDenom().toLowerCase() == constants.kUSDCoinName) {
           stripePaymentForTrade(context, recipe);
         } else {
           context.read<PurchaseItemViewModel>().paymentForTrade();

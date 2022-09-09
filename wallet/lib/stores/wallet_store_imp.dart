@@ -7,12 +7,14 @@ import 'package:cosmos_utils/credentials_storage_failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:fixnum/fixnum.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:protobuf/protobuf.dart';
 import 'package:pylons_wallet/ipc/handler/handler_factory.dart';
 import 'package:pylons_wallet/ipc/handler/handlers/get_profile_handler.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/model/balance.dart';
+import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
@@ -21,6 +23,7 @@ import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
+import 'package:pylons_wallet/services/third_party_services/network_info.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
 import 'package:pylons_wallet/stores/models/transaction_response.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
@@ -28,6 +31,7 @@ import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/custom_transaction_signing_gateaway/custom_transaction_signing_gateway.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
+import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:pylons_wallet/utils/token_sender.dart';
 import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
@@ -265,6 +269,20 @@ class WalletsStoreImp implements WalletsStore {
     return response;
   }
 
+  LocalTransactionModel createInitialLocalTransactionModel({
+    required TransactionTypeEnum transactionTypeEnum,
+    required String transactionData,
+    required String transactionDescription,
+  }) {
+    final LocalTransactionModel txManager = LocalTransactionModel(
+        transactionType: transactionTypeEnum.name,
+        transactionData: transactionData,
+        transactionDescription: transactionDescription,
+        dateTime: DateTime.now().millisecondsSinceEpoch,
+        status: TransactionStatus.Undefined.name);
+    return txManager;
+  }
+
   @override
   Future<SdkIpcResponse> createTrade(Map json) async {
     final msgObj = pylons.MsgCreateTrade.create()..mergeFromProto3Json(json);
@@ -272,12 +290,40 @@ class WalletsStoreImp implements WalletsStore {
     return _signAndBroadcast(msgObj);
   }
 
+  Future<void> saveTransactionRecord({required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
+    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(status: transactionStatus, transactionModel: txLocalModel);
+    await repository.saveLocalTransaction(txLocalModelWithStatus);
+  }
+
   @override
-  Future<SdkIpcResponse> executeRecipe(Map json) async {
-    final msgObj = pylons.MsgExecuteRecipe.create()..mergeFromProto3Json(json);
-    msgObj.creator = wallets.value.last.publicAddress;
-    final response = await _signAndBroadcast(msgObj);
-    return response;
+  Future<Either<Failure, SdkIpcResponse>> executeRecipe(Map json) async {
+    final networkInfo = GetIt.I.get<NetworkInfo>();
+
+    final recipeEither = await getRecipe(json[cookbookIdKey] as String, json[recipeIdKey] as String);
+    final recipe = recipeEither.toOption().toNullable();
+    final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
+      transactionTypeEnum: TransactionTypeEnum.BuyNFT,
+      transactionData: jsonEncode(json),
+      transactionDescription: "${'bought'.tr()} ${recipe?.name}",
+    );
+
+    if (!await networkInfo.isConnected) {
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      return Left(NoInternetFailure("no_internet".tr()));
+    }
+    try {
+      final msgObj = pylons.MsgExecuteRecipe.create()..mergeFromProto3Json(json);
+      msgObj.creator = wallets.value.last.publicAddress;
+      final response = await _signAndBroadcast(msgObj);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
+      return Right(response);
+    } on Failure catch (e) {
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      return Left(e);
+    } on Exception catch (e) {
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      return Left(ServerFailure(e.toString()));
+    }
   }
 
   @override
@@ -575,8 +621,6 @@ class WalletsStoreImp implements WalletsStore {
     }
 
     final userName = getUsernameBasedOnAddress.getOrElse(() => '');
-
-
 
     final creds = AlanPrivateAccountCredentials(
       publicInfo: AccountPublicInfo(

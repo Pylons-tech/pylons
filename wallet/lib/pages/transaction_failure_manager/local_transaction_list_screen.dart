@@ -55,7 +55,10 @@ class _FailureListScreenState extends State<FailureListScreen> {
               onTap: () => failureManagerViewModel.handleRetry(txManager: txManager),
               child: SvgPicture.asset(SVGUtil.TRANSACTION_RETRY, height: 12.h),
             ),
-            SvgPicture.asset(SVGUtil.TRANSACTION_FAILED, height: 15.h),
+            InkWell(
+              onTap: () => failureManagerViewModel.deleteFailure(id: txManager.id!),
+              child: SvgPicture.asset(SVGUtil.TRANSACTION_FAILED, height: 15.h),
+            ),
           ],
         );
       case TransactionStatus.Undefined:

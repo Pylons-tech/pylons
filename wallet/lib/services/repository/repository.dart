@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:alan/alan.dart' as alan;
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
 import 'package:pylons_wallet/model/export.dart';
@@ -24,6 +25,7 @@ import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pbgrpc.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
+import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
@@ -772,7 +774,7 @@ class RepositoryImp implements Repository {
     );
 
     if (!await networkInfo.isConnected) {
-      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
@@ -780,14 +782,14 @@ class RepositoryImp implements Repository {
       final baseEnv = getBaseEnv();
       final result = await queryHelper.queryPost("${baseEnv.baseStripeUrl}/generate-payment-receipt", req.toJson());
       if (!result.isSuccessful) {
-        saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+        await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
         return Left(StripeFailure(result.error ?? GEN_PAYMENTRECEIPT_FAILED));
       }
 
-      saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(StripeGeneratePaymentReceiptResponse.from(result));
     } on Exception catch (_) {
-      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       crashlyticsHelper.recordFatalError(error: _.toString());
       return const Left(StripeFailure(GEN_PAYMENTRECEIPT_FAILED));
     }
@@ -1602,22 +1604,23 @@ class RepositoryImp implements Repository {
     );
 
     if (!await networkInfo.isConnected) {
-      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
     try {
       final result = await remoteDataStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
-      saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTxModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTxModel);
       return Right(result);
     } on Failure catch (_) {
-      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
+      "something_wrong".tr().show();
       return Left(_);
     } on String catch (_) {
-      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
       return Left(InAppPurchaseFailure(message: _));
     } on Exception catch (_) {
-      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
       recordErrorInCrashlytics(_);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
@@ -1627,27 +1630,28 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(GoogleInAppPurchaseModel msgGoogleInAPPPurchase) async {
     final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
       transactionTypeEnum: TransactionTypeEnum.GoogleInAppCoinsRequest,
-      transactionData: jsonEncode(msgGoogleInAPPPurchase.toJson()),
+      transactionData: jsonEncode(msgGoogleInAPPPurchase.toJsonLocalRetry()),
       transactionDescription: 'buying_pylon_points'.tr(),
     );
 
     if (!await networkInfo.isConnected) {
-      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
     try {
       final result = await remoteDataStore.sendGoogleInAppPurchaseCoinsRequest(msgGoogleInAPPPurchase);
-      saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(result);
     } on Failure catch (_) {
-      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      "something_wrong".tr().show();
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(_);
     } on String catch (_) {
-      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(InAppPurchaseFailure(message: _));
     } on Exception catch (_) {
-      saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       recordErrorInCrashlytics(_);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
@@ -1721,6 +1725,11 @@ class RepositoryImp implements Repository {
   Future<void> saveTransactionRecord({required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
     final txLocalModelWithStatus = LocalTransactionModel.fromStatus(status: transactionStatus, transactionModel: txLocalModel);
     await saveLocalTransaction(txLocalModelWithStatus);
+    getMeToTheTransactionsScreen();
+  }
+
+  void getMeToTheTransactionsScreen() {
+    navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_LOCAL_TRX_DETAILS);
   }
 
   void createJsonFormOfProductDetails(Map<String, dynamic> data, ProductDetails productDetails) {
