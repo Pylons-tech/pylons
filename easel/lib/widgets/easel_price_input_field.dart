@@ -34,33 +34,28 @@ class EaselPriceInputField extends StatelessWidget {
             Positioned(
               child: Image.asset(kTextFieldSingleLine, width: 1.sw, height: isTablet ? 32.h : 40.h, fit: BoxFit.fill),
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: SizedBox(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                        flex: 2,
-                        child: TextFormField(
-                            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kDarkText),
-                            controller: controller,
-                            validator: validator,
-                            minLines: 1,
-                            maxLines: 1,
-                            keyboardType: TextInputType.number,
-                            textCapitalization: TextCapitalization.none,
-                            inputFormatters: inputFormatters,
-                            decoration: InputDecoration(
-                                hintText: "price_hint".tr(),
-                                hintStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kGrey),
-                                border: const OutlineInputBorder(borderSide: BorderSide.none),
-                                floatingLabelBehavior: FloatingLabelBehavior.always,
-                                contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h)))),
-                    const Expanded(flex: 1, child: _CurrencyDropDown())
-                  ],
-                ),
-              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                    flex: 2,
+                    child: TextFormField(
+                        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kDarkText),
+                        controller: controller,
+                        validator: validator,
+                        minLines: 1,
+                        maxLines: 1,
+                        keyboardType: TextInputType.number,
+                        textCapitalization: TextCapitalization.none,
+                        inputFormatters: inputFormatters,
+                        decoration: InputDecoration(
+                            hintText: "price_hint".tr(),
+                            hintStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kGrey),
+                            border: const OutlineInputBorder(borderSide: BorderSide.none),
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h)))),
+                const Expanded(flex: 1, child: _CurrencyDropDown())
+              ],
             ),
           ],
         ),
