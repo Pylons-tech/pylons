@@ -18,13 +18,15 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_play
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_progress_widget.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
+import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
+import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
-import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
+import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
@@ -42,6 +44,13 @@ class OwnerView extends StatefulWidget {
 }
 
 class _OwnerViewState extends State<OwnerView> {
+  Offset? _initialSwipeOffset;
+  Offset? _finalSwipeOffset;
+  SwipeDirection? _previousDirection;
+  SimpleSwipeConfig swipeConfig = const SimpleSwipeConfig();
+
+  CollectionViewModel get collectionViewModel => GetIt.I.get();
+
   @override
   void initState() {
     super.initState();
@@ -49,7 +58,7 @@ class _OwnerViewState extends State<OwnerView> {
     widget.ownerViewViewModel.initializeData(nft: widget.nft);
   }
 
-  Widget getAudioWidget({required String thumbnailUrl}) {
+  Widget getAudioWidget({required String thumbnailUrl, required OwnerViewViewModel viewModel}) {
     return thumbnailUrl.isEmpty
         ? Image.asset(
             ImageUtil.AUDIO_BACKGROUND,
@@ -58,16 +67,16 @@ class _OwnerViewState extends State<OwnerView> {
           )
         : NftImageWidget(
             url: widget.nft.thumbnailUrl,
-            opacity: 0.4,
+            opacity: viewModel.isViewingFullNft ? 0.0 : 0.4,
           );
   }
 
   Widget getTypeWidget(OwnerViewViewModel viewModel) {
     switch (viewModel.nft.assetType) {
       case AssetType.Audio:
-        return getAudioWidget(thumbnailUrl: viewModel.nft.thumbnailUrl);
+        return getAudioWidget(thumbnailUrl: viewModel.nft.thumbnailUrl, viewModel: viewModel);
       case AssetType.Image:
-        return NftImageWidget(url: widget.nft.url, opacity: 0.4);
+        return NftImageWidget(url: widget.nft.url, opacity: viewModel.isViewingFullNft ? 0.0 : 0.4);
       case AssetType.Video:
         return OwnerVideoPlayerScreen(nft: widget.nft);
       case AssetType.Pdf:
@@ -88,7 +97,7 @@ class _OwnerViewState extends State<OwnerView> {
       default:
         return NftImageWidget(
           url: widget.nft.url,
-          opacity: 0.4,
+          opacity: viewModel.isViewingFullNft ? 0.0 : 0.4,
         );
     }
   }
@@ -105,52 +114,256 @@ class _OwnerViewState extends State<OwnerView> {
       child: ChangeNotifierProvider<OwnerViewViewModel>.value(
           value: widget.ownerViewViewModel,
           builder: (context, snapshot) {
+            final viewModel = context.watch<OwnerViewViewModel>();
+
             return Scaffold(
               backgroundColor: kBlack,
-              body: Stack(
-                children: [
-                  getTypeWidget(widget.ownerViewViewModel),
-                  Padding(
-                    padding: EdgeInsets.only(left: 8, right: 8, bottom: 8, top: MediaQuery.of(context).viewPadding.top),
-                    child: SizedBox(
-                      height: 100.h,
-                      width: double.infinity,
-                      child: ListTile(
-                        leading: GestureDetector(
-                          onTap: () async {
-                            widget.ownerViewViewModel.destroyPlayers(widget.nft);
+              body: GestureDetector(
+                onLongPressStart: _onLongPressStart,
+                onLongPressEnd: _onLongPressEnd,
+                onVerticalDragStart: _onVerticalDragStart,
+                onVerticalDragEnd: _onVerticalDragEnd,
+                onVerticalDragUpdate: _onVerticalDragUpdate,
+                onHorizontalDragStart: _onHorizontalDragStart,
+                onHorizontalDragEnd: _onHorizontalDragEnd,
+                onHorizontalDragUpdate: _onHorizontalDragUpdate,
+                child: Stack(
+                  children: [
+                    getTypeWidget(widget.ownerViewViewModel),
+                    Visibility(
+                      visible: !viewModel.isViewingFullNft,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 8, right: 8, bottom: 8, top: MediaQuery.of(context).viewPadding.top),
+                        child: SizedBox(
+                          height: 100.h,
+                          width: double.infinity,
+                          child: ListTile(
+                            leading: GestureDetector(
+                              onTap: () async {
+                                widget.ownerViewViewModel.destroyPlayers(widget.nft);
 
-                            Navigator.pop(context);
-                          },
-                          child: SvgPicture.asset(
-                            SVGUtil.OWNER_BACK_ICON,
-                            height: 25.h,
-                          ),
-                        ),
-                        title: Text(
-                          "my_nft".tr(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
-                        ),
-                        trailing: GestureDetector(
-                          onTap: (){
-                            final SubmitFeedback submitFeedbackDialog = SubmitFeedback(context: context);
-                            submitFeedbackDialog.show();
-                          },
-                          child: SvgPicture.asset(
-                            SVGUtil.OWNER_REPORT,
-                            height: 25.h,
+                                Navigator.pop(context);
+                              },
+                              child: SvgPicture.asset(
+                                SVGUtil.OWNER_BACK_ICON,
+                                height: 25.h,
+                              ),
+                            ),
+                            title: Text(
+                              "my_nft".tr(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
+                            ),
+                            trailing: GestureDetector(
+                              onTap: () {
+                                final SubmitFeedback submitFeedbackDialog = SubmitFeedback(context: context);
+                                submitFeedbackDialog.show();
+                              },
+                              child: SvgPicture.asset(
+                                SVGUtil.OWNER_REPORT,
+                                height: 25.h,
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  const Align(alignment: Alignment.bottomCenter, child: OwnerBottomDrawer())
-                ],
+                    Visibility(visible: !viewModel.isViewingFullNft, child: const Align(alignment: Alignment.bottomCenter, child: OwnerBottomDrawer()))
+                  ],
+                ),
               ),
             );
           }),
     );
+  }
+
+  void _onVerticalDragStart(DragStartDetails details) {
+    _initialSwipeOffset = details.globalPosition;
+  }
+
+  void _onLongPressStart(LongPressStartDetails details) {
+    if (widget.ownerViewViewModel.collapsed == true) {
+      if (details.globalPosition.dy < 745) {
+        widget.ownerViewViewModel.isViewingFullNft = true;
+      }
+      return;
+    }
+    if (details.globalPosition.dy < 575) {
+      widget.ownerViewViewModel.isViewingFullNft = true;
+    }
+    if (details.globalPosition.dx > 210 && details.globalPosition.dx < 320) {
+      widget.ownerViewViewModel.isViewingFullNft = true;
+    }
+  }
+
+  void _onLongPressEnd(LongPressEndDetails details) {
+    widget.ownerViewViewModel.isViewingFullNft = false;
+  }
+
+  void _onVerticalDragUpdate(DragUpdateDetails details) {
+    _finalSwipeOffset = details.globalPosition;
+
+    if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
+      return;
+    }
+
+    final initialOffset = _initialSwipeOffset;
+    final finalOffset = _finalSwipeOffset;
+
+    if (initialOffset != null && finalOffset != null) {
+      final offsetDifference = initialOffset.dy - finalOffset.dy;
+
+      if (offsetDifference.abs() > swipeConfig.verticalThreshold) {
+        _initialSwipeOffset = swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singular ? null : _finalSwipeOffset;
+
+        final direction = offsetDifference > 0 ? SwipeDirection.up : SwipeDirection.down;
+
+        if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.continuous || _previousDirection == null || direction != _previousDirection) {
+          _previousDirection = direction;
+        }
+      }
+    }
+  }
+
+  void _onVerticalDragEnd(DragEndDetails details) {
+    if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
+      final initialOffset = _initialSwipeOffset;
+      final finalOffset = _finalSwipeOffset;
+
+      if (initialOffset != null && finalOffset != null) {
+        final offsetDifference = initialOffset.dy - finalOffset.dy;
+
+        if (offsetDifference.abs() > swipeConfig.verticalThreshold) {
+          final direction = offsetDifference > 0 ? SwipeDirection.up : SwipeDirection.down;
+          if (direction == SwipeDirection.up) {
+            widget.ownerViewViewModel.collapsed = false;
+            return;
+          }
+          widget.ownerViewViewModel.collapsed = true;
+        }
+      }
+    }
+
+    _initialSwipeOffset = null;
+    _previousDirection = null;
+  }
+
+  void _onHorizontalDragStart(DragStartDetails details) {
+    _initialSwipeOffset = details.globalPosition;
+  }
+
+  void _onHorizontalDragUpdate(DragUpdateDetails details) {
+    _finalSwipeOffset = details.globalPosition;
+
+    if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
+      return;
+    }
+
+    final initialOffset = _initialSwipeOffset;
+    final finalOffset = _finalSwipeOffset;
+
+    if (initialOffset != null && finalOffset != null) {
+      final offsetDifference = initialOffset.dx - finalOffset.dx;
+
+      if (offsetDifference.abs() > swipeConfig.horizontalThreshold) {
+        _initialSwipeOffset = swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singular ? null : _finalSwipeOffset;
+
+        final direction = offsetDifference > 0 ? SwipeDirection.left : SwipeDirection.right;
+
+        if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.continuous || _previousDirection == null || direction != _previousDirection) {
+          _previousDirection = direction;
+        }
+      }
+    }
+  }
+
+  void _onHorizontalDragEnd(DragEndDetails details) {
+    if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
+      final initialOffset = _initialSwipeOffset;
+      final finalOffset = _finalSwipeOffset;
+
+      if (initialOffset != null && finalOffset != null) {
+        final offsetDifference = initialOffset.dx - finalOffset.dx;
+
+        if (offsetDifference.abs() > swipeConfig.horizontalThreshold) {
+          final direction = offsetDifference > 0 ? SwipeDirection.left : SwipeDirection.right;
+          if (direction == SwipeDirection.left) {
+            navigateToNextNft();
+            return;
+          }
+          navigateToPreviousNft();
+        }
+      }
+    }
+
+    _initialSwipeOffset = null;
+    _previousDirection = null;
+  }
+
+  void navigateToNextNft() {
+    if (widget.nft.type == NftType.TYPE_RECIPE) {
+      int index = collectionViewModel.creations.indexOf(widget.nft);
+
+      if (collectionViewModel.creations.length - 1 == index) return;
+      index = index + 1;
+      final NFT nft = collectionViewModel.creations.elementAt(index);
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => OwnerView(
+            nft: nft,
+            ownerViewViewModel: sl(),
+          ),
+        ),
+      );
+    }
+    if (widget.nft.type == NftType.TYPE_ITEM) {
+      int index = collectionViewModel.purchases.indexOf(widget.nft);
+
+      if (collectionViewModel.purchases.length - 1 == index) return;
+      index = index + 1;
+      final NFT nft = collectionViewModel.purchases.elementAt(index);
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => OwnerView(
+            nft: nft,
+            ownerViewViewModel: sl(),
+          ),
+        ),
+      );
+    }
+  }
+
+  void navigateToPreviousNft() {
+    if (widget.nft.type == NftType.TYPE_RECIPE) {
+      int index = collectionViewModel.creations.indexOf(widget.nft);
+
+      if (index == 0) return;
+      index = index - 1;
+      final NFT nft = collectionViewModel.creations.elementAt(index);
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => OwnerView(
+            nft: nft,
+            ownerViewViewModel: sl(),
+          ),
+        ),
+      );
+    }
+    if (widget.nft.type == NftType.TYPE_ITEM) {
+      int index = collectionViewModel.purchases.indexOf(widget.nft);
+
+      if (index == 0) return;
+      index = index - 1;
+      final NFT nft = collectionViewModel.purchases.elementAt(index);
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => OwnerView(
+            nft: nft,
+            ownerViewViewModel: sl(),
+          ),
+        ),
+      );
+    }
   }
 }
 
@@ -244,7 +457,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             viewModel.toChangeCollapse();
                           },
                         )
-
                       ],
                     ),
                   ),
@@ -611,3 +823,27 @@ Widget _title({required NFT nft, required String owner}) {
     ],
   );
 }
+
+/// Behaviors describing swipe gesture detection.
+enum SwipeDetectionBehavior {
+  singular,
+  singularOnEnd,
+  continuous,
+  continuousDistinct,
+}
+
+class SimpleSwipeConfig {
+  final double verticalThreshold;
+
+  final double horizontalThreshold;
+
+  final SwipeDetectionBehavior swipeDetectionBehavior;
+
+  const SimpleSwipeConfig({
+    this.verticalThreshold = 50.0,
+    this.horizontalThreshold = 50.0,
+    this.swipeDetectionBehavior = SwipeDetectionBehavior.singularOnEnd,
+  });
+}
+
+enum SwipeDirection { left, right, up, down }

@@ -23,6 +23,14 @@ import 'package:video_player/video_player.dart';
 class PurchaseItemViewModel extends ChangeNotifier {
   NFT nft = NFT(ibcCoins: IBCCoins.upylon);
   bool darkMode = false;
+  bool _isViewingFullNft = false;
+
+  bool get isViewingFullNft => _isViewingFullNft;
+
+  set isViewingFullNft(bool value) {
+    _isViewingFullNft = value;
+    notifyListeners();
+  }
 
   WalletsStore walletsStore;
 
@@ -99,7 +107,14 @@ class PurchaseItemViewModel extends ChangeNotifier {
   late ValueNotifier<ProgressBarState> progressNotifier;
   late ValueNotifier<ButtonState> buttonNotifier;
 
-  late bool collapsed = true;
+  late bool _collapsed = true;
+
+  bool get collapsed => _collapsed;
+
+  set collapsed(bool value) {
+    _collapsed = value;
+    notifyListeners();
+  }
 
   List<String> hashtagList = [];
   List<NftOwnershipHistory> nftOwnershipHistoryList = [];
@@ -244,12 +259,10 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
   bool isUrlLoaded = false;
 
-  Future<void> nftDataInit(
-      {required String recipeId, required String cookBookId, required String itemId}) async {
+  Future<void> nftDataInit({required String recipeId, required String cookBookId, required String itemId}) async {
     final walletAddress = walletsStore.getWallets().value.last.publicAddress;
     if (nft.type != NftType.TYPE_RECIPE) {
-      final nftOwnershipHistory = await repository.getNftOwnershipHistory(
-          itemId: itemId, cookBookId: cookBookId);
+      final nftOwnershipHistory = await repository.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
       if (nftOwnershipHistory.isLeft()) {
         "something_wrong".tr().show();
         return;
@@ -283,7 +296,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
     likedByMe = likedByMeEither.getOrElse(() => false);
 
-
     final countViewEither = await repository.countAView(
       recipeId: recipeId,
       walletAddress: walletAddress,
@@ -302,7 +314,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     if (viewsCountEither.isLeft()) {
       return;
     }
-    isLiking=false;
+    isLiking = false;
 
     viewsCount = viewsCountEither.getOrElse(() => 0);
   }

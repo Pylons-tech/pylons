@@ -84,7 +84,14 @@ class OwnerViewViewModel extends ChangeNotifier {
 
   List<NftOwnershipHistory> nftOwnershipHistoryList = [];
 
-  late bool collapsed = true;
+  late bool _collapsed = true;
+
+  bool get collapsed => _collapsed;
+
+  set collapsed(bool value) {
+    _collapsed = value;
+    notifyListeners();
+  }
 
   AccountPublicInfo? accountPublicInfo;
 
@@ -95,6 +102,15 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   bool _isLiking = true;
+
+  bool _isViewingFullNft = false;
+
+  bool get isViewingFullNft => _isViewingFullNft;
+
+  set isViewingFullNft(bool value) {
+    _isViewingFullNft = value;
+    notifyListeners();
+  }
 
   bool get isLiking => _isLiking;
 
@@ -130,7 +146,6 @@ class OwnerViewViewModel extends ChangeNotifier {
       nftOwnershipHistoryList = nftOwnershipHistory.getOrElse(() => []);
     }
 
-
     final likesCountEither = await repository.getLikesCount(
       cookBookID: cookBookId,
       recipeId: recipeId,
@@ -156,7 +171,6 @@ class OwnerViewViewModel extends ChangeNotifier {
 
     likedByMe = likedByMeEither.getOrElse(() => false);
 
-
     final countViewEither = await repository.countAView(
       recipeId: recipeId,
       walletAddress: walletAddress,
@@ -176,7 +190,7 @@ class OwnerViewViewModel extends ChangeNotifier {
       return;
     }
 
-    isLiking= false;
+    isLiking = false;
 
     viewsCount = viewsCountEither.getOrElse(() => 0);
   }
@@ -373,7 +387,7 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   void toChangeCollapse() {
-    collapsed = !collapsed;
+    _collapsed = !_collapsed;
     notifyListeners();
   }
 
