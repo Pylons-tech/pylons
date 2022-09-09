@@ -209,5 +209,5 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 
 	k.SetExecuteRecipeHis(ctx, executionTrack)
 
-	return &types.MsgExecuteRecipeResponse{Id: id}, err
+	return &types.MsgExecuteRecipeResponse{Id: id, TxTime: ctx.BlockTime().Unix()}, err
 }
