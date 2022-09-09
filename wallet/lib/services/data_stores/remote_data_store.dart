@@ -1018,7 +1018,6 @@ class RemoteDataStoreImp implements RemoteDataStore {
       iosParameters: const IOSParameters(
         bundleId: "xyz.pylons.wallet",
       ),
-      navigationInfoParameters: const NavigationInfoParameters(forcedRedirectEnabled: true),
     );
 
     final link = await dynamicLinksGenerator.buildLink(dynamicLinkParams);
@@ -1080,7 +1079,6 @@ class RemoteDataStoreImp implements RemoteDataStore {
       uriPrefix: kDeepLink,
       androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?item_id=$itemId&cookbook_id=$cookbookId&address=$address")),
       iosParameters: const IOSParameters(bundleId: bundleId),
-      navigationInfoParameters: const NavigationInfoParameters(forcedRedirectEnabled: true),
     );
 
     final link = await dynamicLinksGenerator.buildLink(dynamicLinkParams);
@@ -1094,7 +1092,6 @@ class RemoteDataStoreImp implements RemoteDataStore {
       uriPrefix: kDeepLink,
       androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?trade_id=$tradeId&address=$address")),
       iosParameters: const IOSParameters(bundleId: bundleId),
-      navigationInfoParameters: const NavigationInfoParameters(forcedRedirectEnabled: true),
     );
 
     final link = await dynamicLinksGenerator.buildShortLink(dynamicLinkParams);
