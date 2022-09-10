@@ -27,7 +27,7 @@ dependencies:
 
   fixnum: ^1.0.0
 
-  bitstream: ^0.0.4
+  bitstream: ">=0.0.4 <2.0.0"
 
 dev_dependencies:
   flutter_test:
