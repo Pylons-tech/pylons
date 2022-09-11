@@ -49,7 +49,7 @@ func TestCmdCreateAccount(t *testing.T) {
 			token:           "app-check-token",
 			referralAddress: "",
 			common:          util.CommonArgs(acc[1].String(), net),
-			shouldErr:       true,
+			shouldErr:       false,
 		},
 		{
 			desc:            "Duplicate username",
@@ -95,12 +95,13 @@ func TestCmdCreateAccount(t *testing.T) {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			args := []string{}
+			args = append(args, tc.common...)
 			args = append(args, tc.username)
 			args = append(args, tc.token)
 			args = append(args, tc.referralAddress)
-			args = append(args, tc.common...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
 			if tc.shouldErr {
+				require.Error(t, err)
 				var resp sdk.TxResponse
 				ctx.Codec.UnmarshalJSON(out.Bytes(), &resp)
 				require.NotEqual(t, resp.Code, 0) // failed to execute message
