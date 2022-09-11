@@ -150,7 +150,6 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
                     leading: GestureDetector(
                       onTap: () {
                         viewModel.destroyPlayers(viewModel.nft);
-
                         Navigator.pop(context);
                       },
                       child: SvgPicture.asset(
@@ -158,11 +157,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
                         height: 25.h,
                       ),
                     ),
-                    title: Text(
-                      "my_nft".tr(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
-                    ),
+                    trailing: const SizedBox(),
                   ),
                 ),
               ),
@@ -238,24 +233,28 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         children: [
           if (viewModel.collapsed) ...[
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w, top: 8.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.keyboard_arrow_up,
-                        size: 32.h,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        viewModel.toChangeCollapse();
-                      },
+                  SizedBox(
+                    height: 60.h,
+                    child: Row(
+                      children: [
+                        Expanded(child: _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner)),
+                        IconButton(
+                          icon: Icon(
+                            Icons.keyboard_arrow_up,
+                            size: 32.h,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            viewModel.toChangeCollapse();
+                          },
+                        )
+                      ],
                     ),
                   ),
-                  _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner),
                   const SizedBox(
                     height: 10,
                   ),
@@ -298,14 +297,27 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           ClipPath(
                             clipper: BuyClipper(),
                             child: InkWell(
-                              onTap: () {
+                              onTap: () async {
+                                final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
+                                  selectedDenom: viewModel.nft.denom,
+                                  requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
+                                );
+
+                                if (balancesEither.isLeft()) {
+                                  balancesEither.swap().getOrElse(() => '').show();
+                                  return;
+                                }
+
+                                final balancesFetchResult = balancesEither.getOrElse(() => false);
+
                                 final PayNowDialog payNowDialog = PayNowDialog(
                                     buildContext: context,
                                     nft: viewModel.nft,
-                                    purchaseItemViewModel: context.read<PurchaseItemViewModel>(),
+                                    purchaseItemViewModel: viewModel,
                                     onPurchaseDone: (txId) {
                                       showTransactionCompleteDialog(txId);
-                                    });
+                                    },
+                                    shouldBuy: balancesFetchResult);
                                 payNowDialog.show();
                               },
                               child: Container(

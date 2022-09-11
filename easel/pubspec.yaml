@@ -31,7 +31,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  floor: 1.2.0
+  floor: ^1.3.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -73,7 +73,7 @@ dependencies:
 
 
   video_player: ^2.4.7
-  just_audio: 0.9.24
+  just_audio: ^0.9.28
   audio_video_progress_bar: ^0.10.0
   model_viewer_plus: 1.3.1
 
@@ -96,7 +96,7 @@ dependencies:
 
   focus_detector: ^2.0.1
 
-  flutter_screenutil: 5.5.3+2
+  flutter_screenutil: ^5.5.4
 
   bottom_drawer: ^0.0.5
 
@@ -143,7 +143,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  floor_generator: 1.2.0
+  floor_generator: ^1.3.0
   build_runner: ^2.2.0
 
 

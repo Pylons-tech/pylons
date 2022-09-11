@@ -1,8 +1,6 @@
 import 'dart:io';
-
-import 'package:cosmos_ui_components/cosmos_ui_components.dart';
 import 'package:cosmos_utils/app_info_extractor.dart';
-import 'package:easy_localization/easy_localization.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/loading.dart';
@@ -75,16 +73,8 @@ class _RoutingPageState extends State<RoutingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ContentStateSwitcher(
-        isLoading: walletsStore.getAreWalletsLoading().value,
-        isError: walletsStore.getLoadWalletsFailure().value != null,
-        errorChild: CosmosErrorView(
-          title: "something_wrong".tr(),
-          message: "wallet_retrieving_err_msg".tr(),
-        ),
-        contentChild: const SizedBox(),
-      ),
+    return const Scaffold(
+      body: SizedBox(),
     );
   }
 

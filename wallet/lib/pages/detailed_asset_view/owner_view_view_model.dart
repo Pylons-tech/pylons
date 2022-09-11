@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
@@ -113,29 +114,22 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   void initializeData({required NFT nft}) {
-    nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID);
-    getOwnershipHistory(recipeId: nft.recipeID, cookBookId: nft.cookbookID);
+    nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);
     initOwnerName();
     initializePlayers(nft);
     toHashtagList();
   }
 
-
-  Future<void> getOwnershipHistory({required String recipeId, required String cookBookId}) async {
+  Future<void> nftDataInit({required String recipeId, required String cookBookId, required String itemId}) async {
+    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
     if (nft.type != NftType.TYPE_RECIPE) {
-      final nftOwnershipHistory = await repository.getNftOwnershipHistory(recipeID: recipeId, cookBookId: cookBookId);
+      final nftOwnershipHistory = await repository.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
       if (nftOwnershipHistory.isLeft()) {
         "something_wrong".tr().show();
         return;
       }
       nftOwnershipHistoryList = nftOwnershipHistory.getOrElse(() => []);
     }
-
-  }
-
-  Future<void> nftDataInit(
-      {required String recipeId, required String cookBookId}) async {
-    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
 
     final likesCountEither = await repository.getLikesCount(
       cookBookID: cookBookId,
@@ -162,7 +156,6 @@ class OwnerViewViewModel extends ChangeNotifier {
 
     likedByMe = likedByMeEither.getOrElse(() => false);
 
-    isLiking= false;
     final countViewEither = await repository.countAView(
       recipeId: recipeId,
       walletAddress: walletAddress,
@@ -170,7 +163,6 @@ class OwnerViewViewModel extends ChangeNotifier {
     );
 
     if (countViewEither.isLeft()) {
-      "something_wrong".tr().show();
       return;
     }
 
@@ -180,9 +172,10 @@ class OwnerViewViewModel extends ChangeNotifier {
     );
 
     if (viewsCountEither.isLeft()) {
-      "something_wrong".tr().show();
       return;
     }
+
+    isLiking = false;
 
     viewsCount = viewsCountEither.getOrElse(() => 0);
   }
@@ -383,8 +376,17 @@ class OwnerViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void shareNFTLink(Size size, String link) {
-    shareHelper.shareText(text: link, size: size);
+  Future<void> shareNFTLink({required Size size}) async {
+    final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
+
+    final link = await repository.createDynamicLinkForRecipeNftShare(address: address, nft: nft);
+    return link.fold((l) {
+      "something_wrong".tr().show();
+      return null;
+    }, (r) {
+      shareHelper.shareText(text: r, size: size);
+      return null;
+    });
   }
 }
 

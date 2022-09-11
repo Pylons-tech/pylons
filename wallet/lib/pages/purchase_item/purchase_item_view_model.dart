@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -128,8 +129,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
   }
 
   void initializeData({required NFT nft}) {
-    nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID);
-    getOwnershipHistory(recipeId: nft.recipeID, cookBookId: nft.cookbookID);
+    nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);
     initializePlayers(nft);
     toHashtagList();
   }
@@ -245,10 +245,10 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
   bool isUrlLoaded = false;
 
-
-  Future<void> getOwnershipHistory({required String recipeId, required String cookBookId}) async {
+  Future<void> nftDataInit({required String recipeId, required String cookBookId, required String itemId}) async {
+    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
     if (nft.type != NftType.TYPE_RECIPE) {
-      final nftOwnershipHistory = await repository.getNftOwnershipHistory(recipeID: recipeId, cookBookId: cookBookId);
+      final nftOwnershipHistory = await repository.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
       if (nftOwnershipHistory.isLeft()) {
         "something_wrong".tr().show();
         return;
@@ -256,11 +256,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
       nftOwnershipHistoryList = nftOwnershipHistory.getOrElse(() => []);
     }
-  }
-
-    Future<void> nftDataInit(
-      {required String recipeId, required String cookBookId}) async {
-    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
 
     final likesCountEither = await repository.getLikesCount(
       cookBookID: cookBookId,
@@ -287,7 +282,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
     likedByMe = likedByMeEither.getOrElse(() => false);
 
-    isLiking=false;
     final countViewEither = await repository.countAView(
       recipeId: recipeId,
       walletAddress: walletAddress,
@@ -295,7 +289,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
     );
 
     if (countViewEither.isLeft()) {
-      "something_wrong".tr().show();
       return;
     }
 
@@ -305,9 +298,9 @@ class PurchaseItemViewModel extends ChangeNotifier {
     );
 
     if (viewsCountEither.isLeft()) {
-      "something_wrong".tr().show();
       return;
     }
+    isLiking = false;
 
     viewsCount = viewsCountEither.getOrElse(() => 0);
   }
@@ -435,6 +428,27 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
   void shareNFTLink(Size size, String link) {
     shareHelper.shareText(text: link, size: size);
+  }
+
+  Future<Either<String, bool>> getBalanceOfSelectedCurrency({required String selectedDenom, required double requiredAmount}) async {
+    final accountPublicInfo = walletsStore.getWallets().value.last;
+    final balancesEither = await repository.getBalance(accountPublicInfo.publicAddress);
+
+    if (balancesEither.isLeft()) {
+      return Left("something_wrong".tr());
+    }
+
+    final mappedBalances = balancesEither.getOrElse(() => []).where((element) => element.denom == selectedDenom).toList();
+    if (mappedBalances.isEmpty) {
+      return const Right(false);
+    }
+
+    final unWrappedBalanceAmountForSelectedCoin = double.parse(mappedBalances.first.amount.toString()) / kBigIntBase;
+
+    if (unWrappedBalanceAmountForSelectedCoin < requiredAmount) {
+      return const Right(false);
+    }
+    return const Right(true);
   }
 }
 

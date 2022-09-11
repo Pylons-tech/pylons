@@ -60,7 +60,7 @@ dependencies:
 
   internet_connection_checker: ^0.0.1+4
 
-  flutter_secure_storage: 5.0.2
+  flutter_secure_storage: ^6.0.0
 
   flutter_screenutil: 5.1.0
 
@@ -69,23 +69,11 @@ dependencies:
   # For dependency injection
   get_it: ^7.2.0
 
-  cosmos_ui_components:
-    git:
-      url: https://github.com/tendermint/flutter.git
-      path: packages/cosmos_ui_components
-      ref: main
 
-  cosmos_utils:
-    git:
-      url: https://github.com/tendermint/flutter.git
-      path: packages/cosmos_utils
-      ref: main
+
 
   transaction_signing_gateway:
-    git:
-      url: https://github.com/tendermint/flutter.git
-      path: packages/transaction_signing_gateway
-      ref: main
+    path: pkgs/transaction_signing_gateway
 
   advance_pdf_viewer:
     git:
@@ -108,12 +96,12 @@ dependencies:
   local_auth: 1.1.11
 
   # Firebase dependencies
-  firebase_core: 1.19.2
+  firebase_core: ^1.20.0
   firebase_dynamic_links: 4.3.6
-# Firebase dependencies
   cloud_firestore: 3.4.0
   firebase_messaging: 11.4.4
   firebase_remote_config: 2.0.9
+  firebase_analytics: ^9.3.3
 
   flutter_local_notifications: 9.2.0
 
@@ -135,6 +123,8 @@ dependencies:
   qr_flutter: 4.0.0
   image: 3.2.0
 
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -142,6 +132,7 @@ dev_dependencies:
   lints: ^1.0.1
   mockito: ^5.0.15
   build_runner: 2.2.0
+  pigeon: ^3.2.6
 
 flutter:
   uses-material-design: true

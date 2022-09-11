@@ -70,7 +70,6 @@ const int stringTrimConstantMax = 25;
 const int stringTrimConstantMid = 20;
 const int stringTrimConstantMin = 15;
 const double pyLonToUsdConstant = 0.01;
-const double kPrecision = 100000000000000000;
 const double kRoyaltyPrecision = 10000000000000000;
 const String kPylonDenom = "upylon";
 
@@ -194,28 +193,19 @@ const String kEthereumAbr = "ETH";
 const String kEthereumSymbol = "weth-wei";
 const String kDefault = 'Default';
 
-/// Legal Screen
-const String kLegalText = 'Legal';
-const String kTermsOfServiceText = 'Terms of service';
-const String kPrivacyPolicyText = 'Privacy policy';
 
-/// Recovery Screen
-const String kRecoveryText = 'Recovery';
-const String kRecoveryPhraseText = 'Recovery Phrase';
-const String kViewRecoveryPhraseText = 'View recovery phrase';
-const String kPracticeTestText = 'Practice test';
-const String kRecoveryMigration = 'Migrate Account';
 
-/// Settings screen
-const String kSettingsEmailAddress = "Email Address (optional)";
-const String kCopy = "Copy";
-const String kAlertDialogText = "Are you sure you want to delete your Pylons wallet from this device?";
-const String kYes = "Yes";
-const String kNo = "No";
+
+
+
+
+
+
+
+
 
 /// General screen
 const String kSaveText = "Save";
-const String kWalletAddressText = "Wallet Address";
 const String kBioText = "Bio";
 const String kBioHintText = "Media Artist (3D, Motiongraphics) \nCreating & Collecting NFTs";
 const String kStakeDigitalClaim = "Stake your digital claim";
@@ -260,14 +250,7 @@ const String kTimeStampKey = 'timestamp';
 
 const String kSoldOut = 'Sold Out';
 
-/// Repository
-const String NO_PROFILE_FOUND = 'No profile found in wallet';
-const String SOMETHING_WRONG_SIGNING_TRANSACTION = 'Something went wrong while signing transaction';
-const String VIDEO_PLAYER_NETWORK_ERROR = 'Unable to play the video right now. Please check your internet connection and try again.';
 
-/// Trade Receipt Screen
-const String kCloseText = "Close";
-const String kCancelText = "Cancel";
 
 /// Trade Receipt Screen
 const String kTransactionCompleteText = "View Receipt";
@@ -278,7 +261,7 @@ List<Map<String, dynamic>> languagesSupported = [
   {"name": "english", "flag": "🇬🇧", 'selected': false, "abbreviation": "(U.S.)", 'languageCode': 'en'},
   {"name": "russian", "flag": "🇷🇺", 'selected': false, "abbreviation": "(RU)", 'languageCode': 'ru'},
   {"name": "indonesian", "flag": "🇮🇩", 'selected': false, "abbreviation": "(IN)", 'languageCode': 'id'},
-  {"name": "german", "flag": "🇩🇪", 'selected': false, "abbreviation": "(DU)", 'languageCode': 'de'},
+  {"name": "german", "flag": "🇩🇪", 'selected': false, "abbreviation": "(DE)", 'languageCode': 'de'},
   {"name": "korean", "flag": "🇰🇷", 'selected': false, "abbreviation": "(KO)", 'languageCode': 'ko'},
   {"name": "japanese", "flag": "🇯🇵", 'selected': false, "abbreviation": "(JA)", 'languageCode': 'ja'},
   {"name": "spanish", "flag": "🇪🇸", 'selected': false, "abbreviation": "(ES)", 'languageCode': 'es'},
@@ -298,8 +281,7 @@ const String kCollapse = "  Collapse";
 /// Nft viewmodel key values
 const String kNftUrlKey = "NFT_URL";
 const String kAppTypeKey = "App_Type";
-const String kWidthKey = "Width";
-const String kHeightKey = "Height";
+
 
 const int kNumberOfSeconds = 1000;
 const int kSixtySeconds = 60;
@@ -312,8 +294,8 @@ const kHashtags = "Hashtags";
 const kLOW_LOW_BALANCE_CONSTANT = "Tx error:5";
 
 //NFT STRINGS KEYS
-const kResidual = "Residual";
-const kQuantity = "Quantity";
+
+
 const kWidth = "Width";
 const kHeight = "Height";
 const kName = "Name";
@@ -329,12 +311,8 @@ const kEaselNFT = "Easel_NFT";
 const kUpylon = "upylon";
 const kExtraInfo = "extraInfo";
 
-const kItemId = "item_id";
+const kItemId = "id";
 const kCookbookId = "cookbook_id";
-const kRecipe_id = "recipe_id";
-const kSender = "sender";
-const kSenderName = "sender_name";
-const kReceiver = "receiver";
 const kAmount = "amount";
 const kCreatedAt = "created_at";
 
