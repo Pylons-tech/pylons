@@ -9,7 +9,9 @@ import (
 
 	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
 
+	"github.com/Pylons-tech/pylons/app/upgrades"
 	upgradev46 "github.com/Pylons-tech/pylons/app/upgrades/v1"
+	v2 "github.com/Pylons-tech/pylons/app/upgrades/v2"
 
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	"github.com/cosmos/cosmos-sdk/version"
@@ -139,6 +141,8 @@ var (
 	Bech32PrefixConsAddr = AccountAddressPrefix + sdk.PrefixValidator + sdk.PrefixConsensus
 	// Bech32PrefixConsPub defines the Bech32 prefix of a consensus node public key.
 	Bech32PrefixConsPub = AccountAddressPrefix + sdk.PrefixValidator + sdk.PrefixConsensus + sdk.PrefixPublic
+	//List upgrades
+	Upgrades = []upgrades.Upgrade{upgradev46.Upgrade, v2.Upgrade}
 )
 
 func init() {
@@ -453,8 +457,6 @@ func New(
 		app.TransferKeeper,
 		app.GetSubspace(pylonsmoduletypes.ModuleName),
 	)
-	// upgrade handlers
-	cfg := module.NewConfigurator(appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
 
 	epochsKeeper := epochsmodulekeeper.NewKeeper(
 		appCodec,
@@ -622,7 +624,7 @@ func New(
 
 	// register upgrade
 	// if isUpgrade {
-	app.RegisterUpgradeHandlers(cfg)
+	app.setupUpgradeHandlers()
 	// }
 
 	// initialize stores
@@ -795,26 +797,36 @@ func (app *PylonsApp) RegisterTendermintService(clientCtx client.Context) {
 	)
 }
 
-// RegisterUpgradeHandlers returns upgrade handlers
-func (app *PylonsApp) RegisterUpgradeHandlers(cfg module.Configurator) {
-	app.UpgradeKeeper.SetUpgradeHandler(upgradev46.UpgradeName, upgradev46.CreateUpgradeHandler(app.mm, app.configurator, &app.StakingKeeper, app.keys[pylonsmoduletypes.StoreKey], app.appCodec))
+// setupUpgradeHandlers setup upgrade handlers
+func (app *PylonsApp) setupUpgradeHandlers() {
+	// upgradev46 upgrade handler
+	app.UpgradeKeeper.SetUpgradeHandler(
+		upgradev46.UpgradeName,
+		upgradev46.CreateUpgradeHandler(app.mm, app.configurator, &app.StakingKeeper, app.keys[pylonsmoduletypes.StoreKey], app.appCodec))
+	// v2 mainnet upgrade handler
+	app.UpgradeKeeper.SetUpgradeHandler(
+		v2.UpgradeName,
+		v2.CreateUpgradeHandler(app.mm, app.configurator, app.BankKeeper),
+	)
 }
 
 func (app *PylonsApp) setupUpgradeStoreLoaders() {
+	// When a planned update height is reached, the old binary will panic
+	// writing on disk the height and name of the update that triggered it
+	// This will read that value, and execute the preparations for the upgrade.
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
 	if err != nil {
-		panic(fmt.Sprintf("failed to read upgrade info from disk %s", err))
+		panic(fmt.Errorf("failed to read upgrade info from disk: %w", err))
 	}
 
-	// TODO: add module name.
-	if upgradeInfo.Name == upgradev46.UpgradeName && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
-		storeUpgrades := storetypes.StoreUpgrades{
-			Added:   []string{icacontrollertypes.StoreKey, icahosttypes.StoreKey},
-			Deleted: []string{"epoch"},
-		}
+	if app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		return
+	}
 
-		// configure store loader that checks if version == upgradeHeight and applies store upgrades
-		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
+	for _, upgrade := range Upgrades {
+		if upgradeInfo.Name == upgrade.UpgradeName {
+			app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &upgrade.StoreUpgrades))
+		}
 	}
 }
 

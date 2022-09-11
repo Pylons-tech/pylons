@@ -19,7 +19,7 @@ func CreateUpgradeHandler(
 		// logger := ctx.Logger()
 
 		if types.IsMainnet(ctx.ChainID()) {
-			// Logic upgadeHandler
+			// TODO: Logic upgadeHandler
 		}
 		return mm.RunMigrations(ctx, configurator, fromVM)
 	}

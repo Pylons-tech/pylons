@@ -1,8 +1,21 @@
 package v2
 
+import (
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
+
+	"github.com/Pylons-tech/pylons/app/upgrades"
+)
+
 const (
 	// UpgradeName is the shared upgrade plan name for mainnet and testnet
-	UpgradeName = "v2.0.0"
-	// MainnetUpgradeHeight defines the Pylons mainnet block height on which the upgrade will take place
-	MainnetUpgradeHeight = ""
+	UpgradeName = "mainnet"
 )
+
+// TODO: Update StoreUpgrades
+var Upgrade = upgrades.Upgrade{
+	UpgradeName: UpgradeName,
+	StoreUpgrades: storetypes.StoreUpgrades{
+		Added:   []string{},
+		Deleted: []string{},
+	},
+}
