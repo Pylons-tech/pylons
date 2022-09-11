@@ -9,7 +9,7 @@ import (
 
 	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
 
-	upgradev46 "github.com/Pylons-tech/pylons/app/upgrade"
+	upgradev46 "github.com/Pylons-tech/pylons/app/upgrades/v1"
 
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	"github.com/cosmos/cosmos-sdk/version"
