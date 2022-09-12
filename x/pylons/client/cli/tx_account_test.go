@@ -1,6 +1,7 @@
 package cli_test
 
 import (
+	"fmt"
 	"testing"
 
 	util "github.com/Pylons-tech/pylons/testutil/cli"
@@ -19,6 +20,10 @@ func TestCmdCreateAccount(t *testing.T) {
 
 	acc := util.GenerateAddressesInKeyring(ctx.Keyring, 2)
 
+	fmt.Println(acc)
+
+	types.UpdateAppCheckFlagTest(types.FlagTrue)
+
 	for _, tc := range []struct {
 		desc            string
 		username        string
@@ -30,7 +35,7 @@ func TestCmdCreateAccount(t *testing.T) {
 		{
 			desc:            "Invalid username 1",
 			username:        "",
-			token:           "app-check-token",
+			token:           "",
 			referralAddress: "",
 			common:          util.CommonArgs(acc[1].String(), net),
 			shouldErr:       true,
@@ -38,7 +43,7 @@ func TestCmdCreateAccount(t *testing.T) {
 		{
 			desc:            "Invalid username 2",
 			username:        types.GenTestBech32FromString("Address"),
-			token:           "app-check-token",
+			token:           "",
 			referralAddress: "",
 			common:          util.CommonArgs(acc[1].String(), net),
 			shouldErr:       true,
@@ -46,15 +51,15 @@ func TestCmdCreateAccount(t *testing.T) {
 		{
 			desc:            "Valid",
 			username:        "testUsername",
-			token:           "app-check-token",
+			token:           "",
 			referralAddress: "",
-			common:          util.CommonArgs(acc[1].String(), net),
+			common:          util.CommonArgs(acc[0].String(), net),
 			shouldErr:       false,
 		},
 		{
 			desc:            "Duplicate username",
 			username:        "testUsername",
-			token:           "app-check-token",
+			token:           "",
 			referralAddress: "",
 			common:          util.CommonArgs(acc[1].String(), net),
 			shouldErr:       true,
@@ -62,7 +67,7 @@ func TestCmdCreateAccount(t *testing.T) {
 		{
 			desc:            "Duplicate address",
 			username:        "testUsername2",
-			token:           "app-check-token",
+			token:           "",
 			referralAddress: "",
 			common:          util.CommonArgs(acc[0].String(), net),
 			shouldErr:       true,
@@ -70,7 +75,7 @@ func TestCmdCreateAccount(t *testing.T) {
 		{
 			desc:            "Invalid referral address",
 			username:        "testUsername2",
-			token:           "app-check-token",
+			token:           "",
 			referralAddress: "Invalid",
 			common:          util.CommonArgs(acc[1].String(), net),
 			shouldErr:       true,
@@ -78,42 +83,37 @@ func TestCmdCreateAccount(t *testing.T) {
 		{
 			desc:            "Referral address does not have account",
 			username:        "testUsername2",
-			token:           "app-check-token",
+			token:           "",
 			referralAddress: types.GenTestBech32FromString("RefferalAddress"),
 			common:          util.CommonArgs(acc[1].String(), net),
 			shouldErr:       true,
-		},
-		{
-			desc:            "Valid 2",
-			username:        "testUsername2",
-			token:           "app-check-token",
-			referralAddress: acc[0].String(),
-			common:          util.CommonArgs(acc[1].String(), net),
-			shouldErr:       false,
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			args := []string{}
-			args = append(args, tc.common...)
 			args = append(args, tc.username)
 			args = append(args, tc.token)
 			args = append(args, tc.referralAddress)
+			args = append(args, tc.common...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
 			if tc.shouldErr {
-				require.Error(t, err)
-				var resp sdk.TxResponse
-				ctx.Codec.UnmarshalJSON(out.Bytes(), &resp)
-				require.NotEqual(t, resp.Code, 0) // failed to execute message
+				if err != nil { // Error returned from Message validate
+					require.Error(t, err)
+				} else { // Error returned from Keeper
+					var resp sdk.TxResponse
+					ctx.Codec.UnmarshalJSON(out.Bytes(), &resp)
+					require.NotEqual(t, resp.Code, 0)
+				}
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse
 				require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
+				require.Equal(t, 0, int(resp.Code))
 			}
-
 		})
 	}
-
+	types.UpdateAppCheckFlagTest(types.FlagFalse)
 }
 
 func fundToken(t *testing.T, net *network.Network, addrs []string) {
@@ -135,10 +135,12 @@ func TestCmdUpdateAccount(t *testing.T) {
 
 	acc := util.GenerateAddressesInKeyring(ctx.Keyring, 3)
 
+	types.UpdateAppCheckFlagTest(types.FlagTrue)
+
 	fundToken(t, net, []string{acc[0].String(), acc[1].String()})
 
 	username := "testUsername"
-	token := "app-check_token"
+	token := ""
 	referralAddress := ""
 	common := util.CommonArgs(acc[0].String(), net)
 
@@ -170,7 +172,7 @@ func TestCmdUpdateAccount(t *testing.T) {
 			shouldErr: true,
 		},
 		{
-			desc:      "Invalid username 3",
+			desc:      "Duplicate username",
 			username:  "testUsername",
 			common:    util.CommonArgs(acc[0].String(), net),
 			shouldErr: true,
@@ -201,13 +203,18 @@ func TestCmdUpdateAccount(t *testing.T) {
 			args = append(args, tc.common...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdUpdateAccount(), args)
 			if tc.shouldErr {
-				var resp sdk.TxResponse
-				ctx.Codec.UnmarshalJSON(out.Bytes(), &resp)
-				require.NotEqual(t, resp.Code, 0) // failed to execute message
+				if err != nil { // Error returned from Message validate
+					require.Error(t, err)
+				} else {
+					var resp sdk.TxResponse
+					ctx.Codec.UnmarshalJSON(out.Bytes(), &resp)
+					require.NotEqual(t, resp.Code, 0) // failed to execute message
+				}
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse
 				require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
+				require.Equal(t, 0, int(resp.Code))
 			}
 		})
 	}
