@@ -17,13 +17,9 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_prog
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
 import 'package:pylons_wallet/pages/gestures_for_detail_screen.dart';
-import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
 import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
-import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
-import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
@@ -43,13 +39,6 @@ class OwnerView extends StatefulWidget {
 }
 
 class _OwnerViewState extends State<OwnerView> {
-  Offset? _initialSwipeOffset;
-  Offset? _finalSwipeOffset;
-  SwipeDirection? _previousDirection;
-  SimpleSwipeConfig swipeConfig = const SimpleSwipeConfig();
-
-  CollectionViewModel get collectionViewModel => GetIt.I.get();
-
   @override
   void initState() {
     super.initState();
@@ -289,11 +278,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       Column(
                         children: [
                           GestureDetector(
-                            onTap: ()  {
+                            onTap: () {
                               final Size size = MediaQuery.of(context).size;
 
                               context.read<OwnerViewViewModel>().shareNFTLink(size: size);
-
                             },
                             child: SvgPicture.asset(
                               SVGUtil.OWNER_SHARE,
@@ -514,7 +502,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       GestureDetector(
                                         onTap: () async {
                                           final Size size = MediaQuery.of(context).size;
-                                          viewModel.shareNFTLink( size: size);
+                                          viewModel.shareNFTLink(size: size);
                                         },
                                         child: SvgPicture.asset(
                                           SVGUtil.OWNER_SHARE,
@@ -553,7 +541,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
       ),
     );
   }
-
 }
 
 Widget _title({required NFT nft, required String owner}) {

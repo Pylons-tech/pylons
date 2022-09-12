@@ -88,10 +88,6 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
 
   final GlobalKey key = GlobalKey();
   final myBottomDrawerController = BottomDrawerController();
-  Offset? _initialSwipeOffset;
-  Offset? _finalSwipeOffset;
-  SwipeDirection? _previousDirection;
-  SimpleSwipeConfig swipeConfig = const SimpleSwipeConfig();
 
   Widget getTypeWidget(PurchaseItemViewModel viewModel) {
     switch (viewModel.nft.assetType) {
