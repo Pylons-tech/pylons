@@ -175,7 +175,8 @@ flutter:
     - assets/images/svg/
     - i18n/en-US.json
     - i18n/ru-RU.json
-
+    - i18n/de.json
+    - i18n/es.json
 
   fonts:
     - family: UniversalSans
