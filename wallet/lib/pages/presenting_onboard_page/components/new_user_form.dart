@@ -173,7 +173,7 @@ class NewUserFormState extends State<NewUserForm> {
       failure.message.show();
       navigator.pop();
     }, (walletInfo) async {
-      repository.setBool(key: kISUserCreatingAccount, value: true);
+      repository.setBool(key: kIsUserCreatingAccount, value: true);
       Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
     });
   }

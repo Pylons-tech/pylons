@@ -20,9 +20,9 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer.dart'
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
+import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
-import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
@@ -133,7 +133,7 @@ class _OwnerViewState extends State<OwnerView> {
                           style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
                         ),
                         trailing: GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             final SubmitFeedback submitFeedbackDialog = SubmitFeedback(context: context);
                             submitFeedbackDialog.show();
                           },
@@ -244,7 +244,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             viewModel.toChangeCollapse();
                           },
                         )
-
                       ],
                     ),
                   ),

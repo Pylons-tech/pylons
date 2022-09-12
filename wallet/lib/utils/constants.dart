@@ -419,4 +419,4 @@ final defaultPylonsSKUs = jsonEncode([
 ]);
 
 const kMaxDescription = 256;
-const String kISUserCreatingAccount = 'account_creating_first_time';
+const String kIsUserCreatingAccount = 'account_creating_first_time';

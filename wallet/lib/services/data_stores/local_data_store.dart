@@ -184,7 +184,7 @@ class LocalDataSourceImp implements LocalDataSource {
   final ImagePicker picker;
   final FlutterSecureStorage flutterSecureStorage;
 
-  static const iosOptions = IOSOptions(accessibility: IOSAccessibility.passcode);
+  static const iosOptions = IOSOptions(accessibility: KeychainAccessibility.passcode);
   static const androidOptions = AndroidOptions(encryptedSharedPreferences: true);
 
   LocalDataSourceImp({required this.sharedPreferences, required this.picker, required this.cacheManager, required this.flutterSecureStorage, required this.permissionService});

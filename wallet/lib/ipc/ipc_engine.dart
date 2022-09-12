@@ -138,7 +138,7 @@ class IPCEngine {
     final currentWallets = walletsStore.getWallets().value;
 
     isHome = isHomeRoute();
-    if (!repository.getBool(key: kISUserCreatingAccount) && isHome == false) {
+    if (!repository.getBool(key: kIsUserCreatingAccount) && isHome == false) {
       navigatorKey.currentState!.popUntil(ModalRoute.withName(RouteUtil.ROUTE_HOME));
     }
 
@@ -156,7 +156,7 @@ class IPCEngine {
     if (nullableNFT == null) {
       return;
     }
-    repository.setBool(key: kISUserCreatingAccount, value: false);
+    repository.setBool(key: kIsUserCreatingAccount, value: false);
 
     if (isOwnerIsViewing(nullableNFT, currentWallets)) {
       await navigatorKey.currentState!.push(

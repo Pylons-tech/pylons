@@ -277,22 +277,25 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         SizedBox(
                           width: 20.w,
                         ),
-                        GestureDetector(
-                          onTap: () async {
-                            final Size size = MediaQuery.of(context).size;
+                        if (isAccountExists())
+                          GestureDetector(
+                            onTap: () async {
+                              final Size size = MediaQuery.of(context).size;
 
-                            final String? link = await generateLink(viewModel);
-                            if (link == null) return;
-                            viewModel.shareNFT(size);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.only(bottom: 12.h),
-                            child: SvgPicture.asset(
-                              SVGUtil.OWNER_SHARE,
-                              height: 20.h,
+                              final String? link = await generateLink(viewModel);
+                              if (link == null) return;
+                              viewModel.shareNFT(size);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.only(bottom: 12.h),
+                              child: SvgPicture.asset(
+                                SVGUtil.OWNER_SHARE,
+                                height: 20.h,
+                              ),
                             ),
-                          ),
-                        ),
+                          )
+                        else
+                          const SizedBox(),
                         SizedBox(
                           width: 20.w,
                         ),
@@ -367,6 +370,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
       ),
     );
   }
+
+  bool isAccountExists() => GetIt.I.get<WalletsStore>().getWallets().value.isNotEmpty;
 
   Future<String?> generateLink(PurchaseItemViewModel viewModel) async {
     final repo = GetIt.instance.get<Repository>();
@@ -653,19 +658,22 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               SizedBox(
                                 height: 20.h,
                               ),
-                              GestureDetector(
-                                onTap: () async {
-                                  final Size size = MediaQuery.of(context).size;
+                              if (isAccountExists())
+                                GestureDetector(
+                                  onTap: () async {
+                                    final Size size = MediaQuery.of(context).size;
 
-                                  final String? link = await generateLink(viewModel);
-                                  if (link == null) return;
-                                  viewModel.shareNFT(size);
-                                },
-                                child: SvgPicture.asset(
-                                  SVGUtil.OWNER_SHARE,
-                                  height: 20.h,
-                                ),
-                              ),
+                                    final String? link = await generateLink(viewModel);
+                                    if (link == null) return;
+                                    viewModel.shareNFT(size);
+                                  },
+                                  child: SvgPicture.asset(
+                                    SVGUtil.OWNER_SHARE,
+                                    height: 20.h,
+                                  ),
+                                )
+                              else
+                                const SizedBox(),
                             ],
                           ),
                         )
