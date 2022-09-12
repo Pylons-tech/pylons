@@ -131,6 +131,7 @@ dev_dependencies:
   lints: ^1.0.1
   mockito: ^5.0.15
   build_runner: 2.2.0
+  pigeon: ^3.2.6
 
 flutter:
   uses-material-design: true

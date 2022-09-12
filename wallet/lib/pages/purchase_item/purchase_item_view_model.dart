@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -316,6 +317,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
       "something_wrong".tr().show();
       return;
     }
+    isLiking = false;
 
     viewsCount = viewsCountEither.getOrElse(() => 0);
   }
@@ -459,6 +461,27 @@ class PurchaseItemViewModel extends ChangeNotifier {
     }
 
     shareHelper.shareText(text: msg, size: size);
+  }
+
+  Future<Either<String, bool>> getBalanceOfSelectedCurrency({required String selectedDenom, required double requiredAmount}) async {
+    final accountPublicInfo = walletsStore.getWallets().value.last;
+    final balancesEither = await repository.getBalance(accountPublicInfo.publicAddress);
+
+    if (balancesEither.isLeft()) {
+      return Left("something_wrong".tr());
+    }
+
+    final mappedBalances = balancesEither.getOrElse(() => []).where((element) => element.denom == selectedDenom).toList();
+    if (mappedBalances.isEmpty) {
+      return const Right(false);
+    }
+
+    final unWrappedBalanceAmountForSelectedCoin = double.parse(mappedBalances.first.amount.toString()) / kBigIntBase;
+
+    if (unWrappedBalanceAmountForSelectedCoin < requiredAmount) {
+      return const Right(false);
+    }
+    return const Right(true);
   }
 }
 

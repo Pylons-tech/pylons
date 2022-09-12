@@ -21,6 +21,7 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart'
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
 import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
+import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
@@ -126,11 +127,6 @@ class _OwnerViewState extends State<OwnerView> {
                             SVGUtil.OWNER_BACK_ICON,
                             height: 25.h,
                           ),
-                        ),
-                        title: Text(
-                          "my_nft".tr(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
                         ),
                         trailing: GestureDetector(
                           onTap: () {
@@ -271,13 +267,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       Column(
                         children: [
                           GestureDetector(
-                            onTap: () async {
+                            onTap: ()  {
                               final Size size = MediaQuery.of(context).size;
 
-                              final String? link = await generateLink(viewModel);
+                              context.read<OwnerViewViewModel>().shareNFTLink(size: size);
 
-                              if (link == null) return;
-                              viewModel.shareNFTLink(size, link);
                             },
                             child: SvgPicture.asset(
                               SVGUtil.OWNER_SHARE,
@@ -498,10 +492,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       GestureDetector(
                                         onTap: () async {
                                           final Size size = MediaQuery.of(context).size;
-
-                                          final String? link = await generateLink(viewModel);
-                                          if (link == null) return;
-                                          viewModel.shareNFTLink(size, link);
+                                          viewModel.shareNFTLink( size: size);
                                         },
                                         child: SvgPicture.asset(
                                           SVGUtil.OWNER_SHARE,
@@ -541,20 +532,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     );
   }
 
-  Future<String?> generateLink(OwnerViewViewModel viewModel) async {
-    final loading = Loading()..showLoading();
-    final repo = GetIt.instance.get<Repository>();
-    final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
-
-    final link = await repo.createDynamicLinkForRecipeNftShare(address: address, nft: viewModel.nft);
-    loading.dismiss();
-    return link.fold((l) {
-      "something_wrong".tr().show();
-      return null;
-    }, (r) {
-      return r;
-    });
-  }
 }
 
 Widget _title({required NFT nft, required String owner}) {

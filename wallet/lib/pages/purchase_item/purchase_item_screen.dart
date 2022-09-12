@@ -159,11 +159,6 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
                       ),
                     ),
                     trailing: const SizedBox(),
-                    title: Text(
-                      "my_nft".tr(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
-                    ),
                   ),
                 ),
               ),
@@ -306,19 +301,27 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           ClipPath(
                             clipper: BuyClipper(),
                             child: InkWell(
-                              onTap: () {
-                                if (viewModel.walletsStore.getWallets().value.isEmpty) {
-                                  "create_an_account_first".tr().show();
-                                  Navigator.of(context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
+                              onTap: () async {
+                                final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
+                                  selectedDenom: viewModel.nft.denom,
+                                  requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
+                                );
+
+                                if (balancesEither.isLeft()) {
+                                  balancesEither.swap().getOrElse(() => '').show();
                                   return;
                                 }
+
+                                final balancesFetchResult = balancesEither.getOrElse(() => false);
+
                                 final PayNowDialog payNowDialog = PayNowDialog(
                                     buildContext: context,
                                     nft: viewModel.nft,
-                                    purchaseItemViewModel: context.read<PurchaseItemViewModel>(),
+                                    purchaseItemViewModel: viewModel,
                                     onPurchaseDone: (txId) {
                                       showTransactionCompleteDialog(txId);
-                                    });
+                                    },
+                                    shouldBuy: balancesFetchResult);
                                 payNowDialog.show();
                               },
                               child: Container(
