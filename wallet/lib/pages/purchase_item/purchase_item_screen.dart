@@ -320,14 +320,27 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           ClipPath(
                             clipper: BuyClipper(),
                             child: InkWell(
-                              onTap: () {
+                              onTap: () async {
+                                final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
+                                  selectedDenom: viewModel.nft.denom,
+                                  requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
+                                );
+
+                                if (balancesEither.isLeft()) {
+                                  balancesEither.swap().getOrElse(() => '').show();
+                                  return;
+                                }
+
+                                final balancesFetchResult = balancesEither.getOrElse(() => false);
+
                                 final PayNowDialog payNowDialog = PayNowDialog(
                                     buildContext: context,
                                     nft: viewModel.nft,
-                                    purchaseItemViewModel: context.read<PurchaseItemViewModel>(),
+                                    purchaseItemViewModel: viewModel,
                                     onPurchaseDone: (txId) {
                                       showTransactionCompleteDialog(txId);
-                                    });
+                                    },
+                                    shouldBuy: balancesFetchResult);
                                 payNowDialog.show();
                               },
                               child: Container(
@@ -802,27 +815,3 @@ class BuyClipper extends CustomClipper<Path> {
     return false;
   }
 }
-
-/// Behaviors describing swipe gesture detection.
-enum SwipeDetectionBehavior {
-  singular,
-  singularOnEnd,
-  continuous,
-  continuousDistinct,
-}
-
-class SimpleSwipeConfig {
-  final double verticalThreshold;
-
-  final double horizontalThreshold;
-
-  final SwipeDetectionBehavior swipeDetectionBehavior;
-
-  const SimpleSwipeConfig({
-    this.verticalThreshold = 50.0,
-    this.horizontalThreshold = 50.0,
-    this.swipeDetectionBehavior = SwipeDetectionBehavior.singularOnEnd,
-  });
-}
-
-enum SwipeDirection { left, right, up, down }

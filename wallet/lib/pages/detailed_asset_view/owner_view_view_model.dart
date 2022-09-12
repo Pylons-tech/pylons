@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
@@ -391,8 +392,17 @@ class OwnerViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void shareNFTLink(Size size, String link) {
-    shareHelper.shareText(text: link, size: size);
+  Future<void> shareNFTLink({required Size size}) async {
+    final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
+
+    final link = await repository.createDynamicLinkForRecipeNftShare(address: address, nft: nft);
+    return link.fold((l) {
+      "something_wrong".tr().show();
+      return null;
+    }, (r) {
+      shareHelper.shareText(text: r, size: size);
+      return null;
+    });
   }
 }
 
