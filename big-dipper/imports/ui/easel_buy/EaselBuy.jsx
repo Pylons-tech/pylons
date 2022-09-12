@@ -323,13 +323,31 @@ export default class EaselBuy extends Component {
         );
       else if (nftType.toLowerCase() === "audio")
         return (
-          <img
-            alt="views"
-            src={media}
-            className="mobin-img"
-            onClick={handleClick}
-            onContextMenu={handleClick}
-          />
+          <div className="img-audio">
+            <img
+              alt="views"
+              src={media}
+              className="mobin-img"
+              onClick={handleClick}
+              onContextMenu={handleClick}
+            />
+
+            <audio
+              controls
+              onClick={handleClick}
+              onContextMenu={handleClick}
+              controlsList="nodownload"
+              className="desktop-view "
+              style={{
+                marginTop: "25px",
+                height: "50px",
+              }}
+            >
+              <source src={src} type="audio/ogg" />
+              <source src={src} type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
+          </div>
         );
       else if (nftType.toLowerCase() === "pdf")
         return (
@@ -416,7 +434,8 @@ export default class EaselBuy extends Component {
                             />
                           </p>
                         </div>
-                        {nftType?.toLowerCase() === "audio" ? (
+                        {/* Can Be Use For Later Version */}
+                        {/* {nftType?.toLowerCase() === "audio" ? (
                           <>
                             <audio
                               controls
@@ -435,7 +454,7 @@ export default class EaselBuy extends Component {
                           </>
                         ) : (
                           <></>
-                        )}
+                        )} */}
                         {/*For later Use*/}
                         {/* <div className="views">
                           <img
@@ -765,6 +784,7 @@ export default class EaselBuy extends Component {
                             />
                           </p>
                         </div>
+                        {/* Can Be Use For Later Version */}
                         {nftType?.toLowerCase() === "audio" ? (
                           <audio
                             controls
