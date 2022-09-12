@@ -36,15 +36,7 @@ class _FailureListScreenState extends State<FailureListScreen> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            InkWell(
-              onTap: () async {
-                await failureManagerViewModel.deleteFailure(id: txManager.id!);
-              },
-              child: SvgPicture.asset(
-                SVGUtil.TRANSACTION_SUCCESS,
-                height: 15.h,
-              ),
-            ),
+            SvgPicture.asset(SVGUtil.TRANSACTION_SUCCESS, height: 15.h),
           ],
         );
       case TransactionStatus.Failed:
@@ -55,10 +47,7 @@ class _FailureListScreenState extends State<FailureListScreen> {
               onTap: () => failureManagerViewModel.handleRetry(txManager: txManager),
               child: SvgPicture.asset(SVGUtil.TRANSACTION_RETRY, height: 12.h),
             ),
-            InkWell(
-              onTap: () => failureManagerViewModel.deleteFailure(id: txManager.id!),
-              child: SvgPicture.asset(SVGUtil.TRANSACTION_FAILED, height: 15.h),
-            ),
+            SvgPicture.asset(SVGUtil.TRANSACTION_FAILED, height: 15.h),
           ],
         );
       case TransactionStatus.Undefined:
@@ -83,14 +72,16 @@ class _FailureListScreenState extends State<FailureListScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.w),
-          child: Text(txModel.transactionDescription.trimStringShort(stringTrimConstantMid),
-              style: TextStyle(
-                color: kBlack,
-                fontFamily: kUniversalFontFamily,
-                fontWeight: FontWeight.w800,
-                fontSize: 13.sp,
-              )),
+          padding: EdgeInsets.symmetric(horizontal: 6.w),
+          child: Text(
+            txModel.transactionDescription.trimStringMedium(stringTrimConstantMid),
+            style: TextStyle(
+              color: kBlack,
+              fontFamily: kUniversalFontFamily,
+              fontWeight: FontWeight.w800,
+              fontSize: 12.sp,
+            ),
+          ),
         ),
         const Spacer(),
         SizedBox(width: 40.w, child: getTransactionStatusButton(txManager: txModel)),
@@ -102,14 +93,14 @@ class _FailureListScreenState extends State<FailureListScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Text("20 USD",
+        Text("${txModel.transactionPrice}  ${txModel.transactionCurrency}",
             style: TextStyle(
               color: kBlack,
               fontFamily: kUniversalFontFamily,
               fontWeight: FontWeight.w800,
-              fontSize: 10.sp,
+              fontSize: 11.sp,
             )),
-        Icon(Icons.keyboard_arrow_right_rounded, size: 22.r)
+        Icon(Icons.keyboard_arrow_right_rounded, size: 20.r)
       ],
     );
   }

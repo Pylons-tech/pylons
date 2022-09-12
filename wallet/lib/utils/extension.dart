@@ -173,6 +173,13 @@ extension TrimStringShort on String {
     }
     return this;
   }
+
+  String trimStringMedium(int minThreshold) {
+    if (length > minThreshold) {
+      return "${substring(0, 12)}...${substring(length - 4, length)}";
+    }
+    return this;
+  }
 }
 
 extension WalletHistroyTypePar on dynamic {

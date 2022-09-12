@@ -134,12 +134,15 @@ class PurchaseItemViewModel extends ChangeNotifier {
     toHashtagList();
   }
 
-  Future<SdkIpcResponse> paymentForRecipe() async {
+  Future<SdkIpcResponse?> paymentForRecipe() async {
     const jsonExecuteRecipe = '''
       {
         "creator": "",
         "cookbookId": "",
         "recipeId": "",
+        "nftName": "",
+        "nftPrice": "",
+        "nftCurrency": "",
         "coinInputsIndex": 0
         }
         ''';
@@ -147,6 +150,9 @@ class PurchaseItemViewModel extends ChangeNotifier {
     final jsonMap = jsonDecode(jsonExecuteRecipe) as Map;
     jsonMap[kCookbookIdMap] = nft.cookbookID;
     jsonMap[kRecipeIdMap] = nft.recipeID;
+    jsonMap[kNftName] = nft.name;
+    jsonMap[kNftPrice] = nft.ibcCoins.getCoinWithProperDenomination(nft.price);
+    jsonMap[kNftCurrency] = nft.ibcCoins.getAbbrev();
 
     final showLoader = Loading()..showLoading();
 
@@ -155,6 +161,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
     if (responseEither.isLeft()) {
       "something_wrong".tr().show();
+      return null;
     }
 
     final response = responseEither.toOption().toNullable();

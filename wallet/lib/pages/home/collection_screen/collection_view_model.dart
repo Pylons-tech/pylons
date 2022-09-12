@@ -16,8 +16,7 @@ class CollectionViewModel extends ChangeNotifier {
 
   ThumbnailHelper thumbnailHelper;
 
-  CollectionViewModel(
-      {required this.walletsStore, required this.thumbnailHelper});
+  CollectionViewModel({required this.walletsStore, required this.thumbnailHelper});
 
   List<NFT> assets = [];
 
@@ -78,12 +77,6 @@ class CollectionViewModel extends ChangeNotifier {
     });
   }
 
-  Future<String?> generateVideoThumbnailIfRequired(
-      String nftUrl, String nftName) async {
-    return thumbnailHelper.generateVideoThumbnailIfRequired(
-        nftUrl, nftName, thumbnailsPath);
-  }
-
   Future loadPurchasesAndCreationsData() async {
     final loading = Loading()..showLoading();
 
@@ -94,8 +87,7 @@ class CollectionViewModel extends ChangeNotifier {
       final creations = <NFT>[];
       final items = await walletsStore.getItemsByOwner(wallet.publicAddress);
       final trades = await walletsStore.getTrades(wallet.publicAddress);
-      final cookbooks =
-          await walletsStore.getCookbooksByCreator(wallet.publicAddress);
+      final cookbooks = await walletsStore.getCookbooksByCreator(wallet.publicAddress);
 
       if (items.isNotEmpty) {
         await Future.wait(items.map((item) async {
@@ -113,14 +105,12 @@ class CollectionViewModel extends ChangeNotifier {
 
       if (cookbooks.isNotEmpty) {
         await Future.wait(cookbooks.map((cookbook) async {
-          final recipes =
-              await walletsStore.getRecipesByCookbookID(cookbook.id);
+          final recipes = await walletsStore.getRecipesByCookbookID(cookbook.id);
 
           for (final recipe in recipes) {
             final nft = NFT.fromRecipe(recipe);
 
-            if (nft.appType.toLowerCase() == "easel" &&
-                cookbooks.any((cookbook) => cookbook.id == nft.cookbookID)) {
+            if (nft.appType.toLowerCase() == "easel" && cookbooks.any((cookbook) => cookbook.id == nft.cookbookID)) {
               creations.add(nft);
             }
           }

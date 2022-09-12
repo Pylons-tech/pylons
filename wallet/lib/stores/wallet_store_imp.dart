@@ -272,11 +272,15 @@ class WalletsStoreImp implements WalletsStore {
   LocalTransactionModel createInitialLocalTransactionModel({
     required TransactionTypeEnum transactionTypeEnum,
     required String transactionData,
+    required String transactionCurrency,
+    required String transactionPrice,
     required String transactionDescription,
   }) {
     final LocalTransactionModel txManager = LocalTransactionModel(
         transactionType: transactionTypeEnum.name,
         transactionData: transactionData,
+        transactionCurrency: transactionCurrency,
+        transactionPrice: transactionPrice,
         transactionDescription: transactionDescription,
         dateTime: DateTime.now().millisecondsSinceEpoch,
         status: TransactionStatus.Undefined.name);
@@ -292,19 +296,19 @@ class WalletsStoreImp implements WalletsStore {
 
   Future<void> saveTransactionRecord({required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
     final txLocalModelWithStatus = LocalTransactionModel.fromStatus(status: transactionStatus, transactionModel: txLocalModel);
-    await repository.saveLocalTransaction(txLocalModelWithStatus);
+    repository.saveLocalTransaction(txLocalModelWithStatus);
   }
 
   @override
   Future<Either<Failure, SdkIpcResponse>> executeRecipe(Map json) async {
     final networkInfo = GetIt.I.get<NetworkInfo>();
 
-    final recipeEither = await getRecipe(json[cookbookIdKey] as String, json[recipeIdKey] as String);
-    final recipe = recipeEither.toOption().toNullable();
     final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
       transactionTypeEnum: TransactionTypeEnum.BuyNFT,
       transactionData: jsonEncode(json),
-      transactionDescription: "${'bought'.tr()} ${recipe?.name}",
+      transactionDescription: "${'bought_nft'.tr()}  ${json[kNftName] ?? ""}",
+      transactionCurrency: "${json[kNftCurrency] ?? ""}",
+      transactionPrice: "${json[kNftPrice] ?? ""}",
     );
 
     if (!await networkInfo.isConnected) {
@@ -312,6 +316,9 @@ class WalletsStoreImp implements WalletsStore {
       return Left(NoInternetFailure("no_internet".tr()));
     }
     try {
+      json.remove(kNftName);
+      json.remove(kNftCurrency);
+      json.remove(kNftPrice);
       final msgObj = pylons.MsgExecuteRecipe.create()..mergeFromProto3Json(json);
       msgObj.creator = wallets.value.last.publicAddress;
       final response = await _signAndBroadcast(msgObj);

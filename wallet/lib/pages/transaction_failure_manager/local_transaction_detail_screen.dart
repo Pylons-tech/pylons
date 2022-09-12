@@ -2,11 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/pages/home/wallet_screen/widgets/view_in_collection_button.dart';
 import 'package:pylons_wallet/pages/transaction_failure_manager/failure_manager_view_model.dart';
 import 'package:pylons_wallet/pylons_app.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
@@ -72,7 +72,7 @@ class LocalTransactionDetailScreen extends StatelessWidget {
             const Spacer(),
             Expanded(
               child: Text(
-                "${getTxTypeFlag(txType: args.status.toTransactionStatusEnum()) ? "+" : "-"} ${20}",
+                " ${args.transactionPrice}",
                 style: TextStyle(
                     color: getTxTypeFlag(txType: args.status.toTransactionStatusEnum()) ? kDarkGreen : kDarkRed, fontFamily: kUniversalFontFamily, fontSize: 15.sp, fontWeight: FontWeight.bold),
               ),
@@ -84,15 +84,13 @@ class LocalTransactionDetailScreen extends StatelessWidget {
   }
 
   Map<String, String> transactionDetailBodyMap({required LocalTransactionModel txArgs}) {
-    final owner = GetIt.I.get<WalletsStore>().getWallets().value.last.name;
 
     return {
-      "buyer".tr(): owner,
       "transaction_id".tr(): txArgs.id.toString(),
       "transaction_date".tr(): DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime)),
       "transaction_time".tr(): "${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime).toUtc())} UTC",
-      "currency".tr(): "USD",
-      "price".tr(): "20",
+      "currency".tr(): txArgs.transactionCurrency,
+      "price".tr(): txArgs.transactionPrice,
     };
   }
 
@@ -102,12 +100,6 @@ class LocalTransactionDetailScreen extends StatelessWidget {
     return Padding(padding: EdgeInsets.symmetric(horizontal: 30.h), child: Column(children: detailList));
   }
 
-  Color getColor(String key) {
-    if (key == "creator".tr() || key == "seller".tr() || key == "buyer".tr()) {
-      return kTradeReceiptTextColor;
-    }
-    return kBlack;
-  }
 
   Row buildRow({required String key, required String value}) {
     return Row(
@@ -115,7 +107,7 @@ class LocalTransactionDetailScreen extends StatelessWidget {
       children: [
         Text(key, style: _titleTextStyle.copyWith(fontSize: 13.sp, fontWeight: FontWeight.w600)),
         SizedBox(height: 20.h),
-        Text(value.trimString(stringTrimConstantMax), style: _titleTextStyle.copyWith(fontSize: 13.sp, fontWeight: FontWeight.bold, color: getColor(key))),
+        Text(value.trimString(stringTrimConstantMax), style: _titleTextStyle.copyWith(fontSize: 13.sp, fontWeight: FontWeight.bold, color: kBlack)),
       ],
     );
   }
@@ -145,8 +137,10 @@ class LocalTransactionDetailScreen extends StatelessWidget {
               right: 20.w,
               child: BlueClippedButton(
                 onTap: () async {
-                  await failureManagerViewModel.handleRetry(txManager: txModel);
                   Navigator.pop(navigatorKey.currentState!.overlay!.context);
+                  final showLoading = Loading()..showLoading();
+                  await failureManagerViewModel.handleRetry(txManager: txModel);
+                  showLoading.dismiss();
                 },
                 text: "retry".tr(),
               ),
@@ -156,11 +150,12 @@ class LocalTransactionDetailScreen extends StatelessWidget {
               left: 20.w,
               right: 20.w,
               child: TextButton(
-                  onPressed: () => Navigator.pop(navigatorKey.currentState!.overlay!.context),
-                  child: Text(
-                    "close".tr(),
-                    style: _titleTextStyle.copyWith(fontSize: 15.sp, color: kGreyColor),
-                  )),
+                onPressed: () => Navigator.pop(navigatorKey.currentState!.overlay!.context),
+                child: Text(
+                  "close".tr(),
+                  style: _titleTextStyle.copyWith(fontSize: 15.sp, color: kGreyColor),
+                ),
+              ),
             ),
           ],
         );

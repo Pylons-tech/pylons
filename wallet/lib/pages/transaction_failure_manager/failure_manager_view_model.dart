@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/stripe_generate_payment_receipt_request.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
@@ -49,7 +48,6 @@ class FailureManagerViewModel extends ChangeNotifier {
         retryGoogleInAppCoinsRequest(txManager);
         break;
       case TransactionTypeEnum.BuyProduct:
-        retryBuyProduct(txManager);
         break;
       case TransactionTypeEnum.Unknown:
         'something_wrong'.tr().show();
@@ -66,39 +64,42 @@ class FailureManagerViewModel extends ChangeNotifier {
     final txDataJson = jsonDecode(txManager.transactionData);
     final loading = Loading()..showLoading();
     final walletStore = GetIt.I.get<WalletsStore>();
-    await walletStore.executeRecipe(txDataJson as Map<dynamic, dynamic>);
-    await deleteFailure(id: txManager.id!);
+    final response = await walletStore.executeRecipe(txDataJson as Map<dynamic, dynamic>);
+    if (response.isLeft()){
+      "something_wrong".tr().show();
+      loading.dismiss();
+      return;
+    }
     loading.dismiss();
+    "purchase_successful".tr().show();
+    await deleteFailure(id: txManager.id!);
   }
 
   Future<void> retryGeneratePaymentReceipt(LocalTransactionModel txManager) async {
     final txDataJson = jsonDecode(txManager.transactionData);
     final StripeGeneratePaymentReceiptRequest request = StripeGeneratePaymentReceiptRequest.fromJson(txDataJson as Map<String, dynamic>);
     final loading = Loading()..showLoading();
-    await repository.GeneratePaymentReceipt(request);
+    final response = await repository.GeneratePaymentReceipt(request);
+    if (response.isLeft()){
+      "something_wrong".tr().show();
+      loading.dismiss();
+      return;
+    }
     loading.dismiss();
   }
 
-  Future<void> retryBuyProduct(LocalTransactionModel txManager) async {
-    final txDataJson = jsonDecode(txManager.transactionData);
-    final ProductDetails productDetails = ProductDetails(
-        id: txDataJson['id'].toString(),
-        title: txDataJson['title'].toString(),
-        description: txDataJson['description'].toString(),
-        price: txDataJson['price'].toString(),
-        rawPrice: double.parse(txDataJson['rawPrice'].toString()),
-        currencyCode: txDataJson['currencyCode'].toString());
-    final loading = Loading()..showLoading();
-    await repository.buyProduct(productDetails);
-    await deleteFailure(id: txManager.id!);
-    loading.dismiss();
-  }
 
   Future<void> retryAppleInAppCoinsRequest(LocalTransactionModel txManager) async {
     final txDataJson = jsonDecode(txManager.transactionData);
     final AppleInAppPurchaseModel request = AppleInAppPurchaseModel.fromJson(txDataJson as Map<String, dynamic>);
     final loading = Loading()..showLoading();
-    await repository.sendAppleInAppPurchaseCoinsRequest(request);
+    final response = await repository.sendAppleInAppPurchaseCoinsRequest(request);
+    if (response.isLeft()){
+      "something_wrong".tr().show();
+      loading.dismiss();
+      return;
+    }
+    await deleteFailure(id: txManager.id!);
     GetIt.I.get<HomeProvider>().buildAssetsList();
     "purchase_successful".tr().show();
     loading.dismiss();
@@ -108,9 +109,15 @@ class FailureManagerViewModel extends ChangeNotifier {
     final loading = Loading()..showLoading();
     final txDataJson = jsonDecode(txManager.transactionData);
     final GoogleInAppPurchaseModel request = GoogleInAppPurchaseModel.fromJson(txDataJson as Map<String, dynamic>);
-    await repository.sendGoogleInAppPurchaseCoinsRequest(request);
+    final response = await repository.sendGoogleInAppPurchaseCoinsRequest(request);
+    if (response.isLeft()){
+      "something_wrong".tr().show();
+      loading.dismiss();
+      return;
+    }
     await deleteFailure(id: txManager.id!);
     GetIt.I.get<HomeProvider>().buildAssetsList();
+    "purchase_successful".tr().show();
     loading.dismiss();
   }
 }

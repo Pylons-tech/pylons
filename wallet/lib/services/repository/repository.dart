@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:alan/alan.dart' as alan;
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -25,7 +24,6 @@ import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pbgrpc.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
-import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
@@ -771,6 +769,8 @@ class RepositoryImp implements Repository {
       transactionTypeEnum: TransactionTypeEnum.GeneratePaymentReceipt,
       transactionData: jsonEncode(req.toJson()),
       transactionDescription: 'Generate Payment Receipt',
+      transactionPrice: '',
+      transactionCurrency: '',
     );
 
     if (!await networkInfo.isConnected) {
@@ -1597,41 +1597,58 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(AppleInAppPurchaseModel appleInAppPurchaseModel) async {
-    final localTxModel = createInitialLocalTransactionModel(
-      transactionTypeEnum: TransactionTypeEnum.AppleInAppCoinsRequest,
-      transactionData: jsonEncode(appleInAppPurchaseModel.toJson()),
-      transactionDescription: 'buying_pylon_points'.tr(),
-    );
+    final price = getInAppPrice(appleInAppPurchaseModel.productID);
+
+    final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
+        transactionTypeEnum: TransactionTypeEnum.AppleInAppCoinsRequest,
+        transactionData: jsonEncode(appleInAppPurchaseModel.toJson()),
+        transactionDescription: 'buying_pylon_points'.tr(),
+        transactionCurrency: 'USD',
+        transactionPrice: price);
 
     if (!await networkInfo.isConnected) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
     try {
       final result = await remoteDataStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTxModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(result);
     } on Failure catch (_) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       "something_wrong".tr().show();
       return Left(_);
     } on String catch (_) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(InAppPurchaseFailure(message: _));
     } on Exception catch (_) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTxModel);
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       recordErrorInCrashlytics(_);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
   }
 
+  String getInAppPrice(String productId) {
+    final baseEnv = getBaseEnv();
+    for (final value in baseEnv.skus) {
+      if (value.id == productId) {
+        return value.subtitle;
+      }
+    }
+    return "";
+  }
+
   @override
   Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(GoogleInAppPurchaseModel msgGoogleInAPPPurchase) async {
+    final price = getInAppPrice(msgGoogleInAPPPurchase.productID);
+
     final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
       transactionTypeEnum: TransactionTypeEnum.GoogleInAppCoinsRequest,
       transactionData: jsonEncode(msgGoogleInAPPPurchase.toJsonLocalRetry()),
       transactionDescription: 'buying_pylon_points'.tr(),
+      transactionCurrency: 'USD',
+      transactionPrice: price,
     );
 
     if (!await networkInfo.isConnected) {
@@ -1661,13 +1678,18 @@ class RepositoryImp implements Repository {
     required TransactionTypeEnum transactionTypeEnum,
     required String transactionData,
     required String transactionDescription,
+    required String transactionCurrency,
+    required String transactionPrice,
   }) {
     final LocalTransactionModel txManager = LocalTransactionModel(
-        transactionType: transactionTypeEnum.name,
-        transactionData: transactionData,
-        transactionDescription: transactionDescription,
-        dateTime: DateTime.now().millisecondsSinceEpoch,
-        status: TransactionStatus.Undefined.name);
+      transactionType: transactionTypeEnum.name,
+      transactionData: transactionData,
+      transactionDescription: transactionDescription,
+      dateTime: DateTime.now().millisecondsSinceEpoch,
+      status: TransactionStatus.Undefined.name,
+      transactionCurrency: transactionCurrency,
+      transactionPrice: transactionPrice,
+    );
     return txManager;
   }
 
@@ -1699,6 +1721,8 @@ class RepositoryImp implements Repository {
       transactionData: jsonEncode(data),
       transactionDescription: 'buying_pylon_points'.tr(),
       transactionTypeEnum: TransactionTypeEnum.BuyProduct,
+      transactionCurrency: productDetails.currencyCode,
+      transactionPrice: productDetails.price,
     );
 
     if (!await networkInfo.isConnected) {
@@ -1725,11 +1749,6 @@ class RepositoryImp implements Repository {
   Future<void> saveTransactionRecord({required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
     final txLocalModelWithStatus = LocalTransactionModel.fromStatus(status: transactionStatus, transactionModel: txLocalModel);
     await saveLocalTransaction(txLocalModelWithStatus);
-    getMeToTheTransactionsScreen();
-  }
-
-  void getMeToTheTransactionsScreen() {
-    navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_LOCAL_TRX_DETAILS);
   }
 
   void createJsonFormOfProductDetails(Map<String, dynamic> data, ProductDetails productDetails) {

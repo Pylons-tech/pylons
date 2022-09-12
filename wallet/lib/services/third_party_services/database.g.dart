@@ -82,7 +82,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `LocalTransactionModel` (`id` INTEGER, `transactionType` TEXT NOT NULL, `transactionData` TEXT NOT NULL, `transactionDescription` TEXT NOT NULL, `status` TEXT NOT NULL, `dateTime` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `LocalTransactionModel` (`id` INTEGER, `transactionCurrency` TEXT NOT NULL, `transactionPrice` TEXT NOT NULL, `transactionType` TEXT NOT NULL, `transactionData` TEXT NOT NULL, `transactionDescription` TEXT NOT NULL, `status` TEXT NOT NULL, `dateTime` INTEGER NOT NULL, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -104,6 +104,8 @@ class _$TxManagerDao extends TxManagerDao {
             'LocalTransactionModel',
             (LocalTransactionModel item) => <String, Object?>{
                   'id': item.id,
+                  'transactionCurrency': item.transactionCurrency,
+                  'transactionPrice': item.transactionPrice,
                   'transactionType': item.transactionType,
                   'transactionData': item.transactionData,
                   'transactionDescription': item.transactionDescription,
@@ -126,6 +128,8 @@ class _$TxManagerDao extends TxManagerDao {
         'SELECT * FROM LocalTransactionModel ORDER BY dateTime DESC',
         mapper: (Map<String, Object?> row) => LocalTransactionModel(
             id: row['id'] as int?,
+            transactionCurrency: row['transactionCurrency'] as String,
+            transactionPrice: row['transactionPrice'] as String,
             transactionType: row['transactionType'] as String,
             transactionData: row['transactionData'] as String,
             transactionDescription: row['transactionDescription'] as String,

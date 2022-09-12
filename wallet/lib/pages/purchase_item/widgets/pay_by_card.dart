@@ -14,6 +14,7 @@ import 'package:pylons_wallet/model/stripe_create_payment_intent_request.dart';
 import 'package:pylons_wallet/model/stripe_create_payment_intent_response.dart';
 import 'package:pylons_wallet/model/stripe_generate_payment_receipt_request.dart';
 import 'package:pylons_wallet/model/stripe_generate_payment_receipt_response.dart';
+import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
@@ -214,6 +215,9 @@ class PayByCardWidget extends StatelessWidget {
           "cookbookID": "",
           "recipeID": "",
           "coinInputsIndex": 0,
+          "nftName": "",
+          "nftPrice": "",
+          "nftCurrency": "",
           "paymentInfos": []
         }
         ''';
@@ -221,6 +225,9 @@ class PayByCardWidget extends StatelessWidget {
         final jsonMap = jsonDecode(jsonExecuteRecipe) as Map;
         jsonMap["cookbookID"] = recipe.cookbookID;
         jsonMap["recipeID"] = recipe.recipeID;
+        jsonMap[kNftName] = nft.name;
+        jsonMap[kNftPrice] = nft.ibcCoins.getCoinWithProperDenomination(nft.price);
+        jsonMap[kNftCurrency] = nft.ibcCoins.getAbbrev();
 
         final paymentInfos = jsonMap["paymentInfos"] as List<dynamic>;
         paymentInfos.add(receipt.toJson());
@@ -253,7 +260,10 @@ class PayByCardWidget extends StatelessWidget {
         if (recipe.denom.UdenomToDenom().toLowerCase() == constants.kUSDCoinName) {
           stripePaymentForRecipe(context, recipe);
         } else {
-          context.read<PurchaseItemViewModel>().paymentForRecipe();
+          final response = await context.read<PurchaseItemViewModel>().paymentForRecipe();
+          if (response == null) {
+            Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
+          }
         }
         break;
       case NftType.TYPE_ITEM:

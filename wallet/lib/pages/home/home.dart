@@ -135,9 +135,6 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               top: 0.04.sh,
               left: 0.86.sw,
               child: GestureDetector(
-                onLongPress: () {
-                  Navigator.of(context).pushNamed(RouteUtil.ROUTE_FAILURE);
-                },
                 onTap: () async {
                   Navigator.of(context).pushNamed(RouteUtil.ROUTE_MESSAGE);
                 },
@@ -271,27 +268,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 ),
               ),
             ),
-            Positioned(
-              top: 0.062.sh,
-              right: 0.25.sw,
-              child: InkResponse(
-                onTap: () async {
-                  Navigator.of(context).pushNamed(RouteUtil.ROUTE_FAILURE);
-                },
-                child: Stack(
-                  children: [
-                    SvgPicture.asset(
-                      SVGUtil.MESSAGE_ENVELOPE,
-                      height: 20.h,
-                      width: 20.w,
-                      fit: BoxFit.fill,
-                      color: provider.isBannerDark() ? Colors.white : Colors.black,
-                    ),
-                    if (provider.showBadge) Positioned(right: 0.w, top: 0.h, child: buildBadge()),
-                  ],
-                ),
-              ),
-            ),
+
             Positioned(
               top: 0.06.sh,
               left: 0.09.sw,

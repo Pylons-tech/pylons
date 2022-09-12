@@ -7,6 +7,8 @@ import 'package:pylons_wallet/utils/enums.dart';
 class LocalTransactionModel extends Equatable {
   @primaryKey
   final int? id;
+  final String transactionCurrency;
+  final String transactionPrice;
   final String transactionType;
   final String transactionData;
   final String transactionDescription;
@@ -15,6 +17,8 @@ class LocalTransactionModel extends Equatable {
 
   const LocalTransactionModel({
     this.id,
+    required this.transactionCurrency,
+    required this.transactionPrice,
     required this.transactionType,
     required this.transactionData,
     required this.transactionDescription,
@@ -24,6 +28,8 @@ class LocalTransactionModel extends Equatable {
 
   factory LocalTransactionModel.fromStatus({required TransactionStatus status, required LocalTransactionModel transactionModel}) {
     return LocalTransactionModel(
+      transactionCurrency: transactionModel.transactionCurrency,
+      transactionPrice: transactionModel.transactionPrice,
       transactionType: transactionModel.transactionType,
       transactionData: transactionModel.transactionData,
       transactionDescription: transactionModel.transactionDescription,

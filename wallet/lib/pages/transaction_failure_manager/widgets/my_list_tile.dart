@@ -30,8 +30,8 @@ class MyListTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(flex: 2, child: leadingWidget(context)),
-            Flexible(flex: 5, child: titleWidget(context)),
-            Flexible(flex: 2, child: trailingWidget(context)),
+            Flexible(flex: 6, child: titleWidget(context)),
+            Flexible(flex: 3, child: trailingWidget(context)),
           ],
         ),
       ),

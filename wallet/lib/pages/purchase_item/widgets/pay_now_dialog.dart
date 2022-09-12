@@ -27,6 +27,7 @@ import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/enums.dart';
+import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
@@ -299,8 +300,11 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
   Future paymentByCoins() async {
     final executionResponse = await widget.purchaseItemViewModel.paymentForRecipe();
-
     Navigator.pop(navigatorKey.currentState!.overlay!.context);
+    if (executionResponse == null) {
+      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
+      return;
+    }
 
     if (!executionResponse.success) {
       if (executionResponse.error.contains(kLOW_LOW_BALANCE_CONSTANT)) {
@@ -358,13 +362,19 @@ class _PayNowWidgetState extends State<PayNowWidget> {
           "cookbook_id": "",
           "recipe_id": "",
           "coin_inputs_index": 0,
+          "nftName": "",
+          "nftPrice": "",
+          "nftCurrency": "",
           "payment_infos": []
         }
         ''';
 
       final jsonMap = jsonDecode(jsonExecuteRecipe) as Map;
       jsonMap[kCookbookIdKey] = nft.cookbookID;
-      jsonMap["recipe_id"] = nft.recipeID;
+      jsonMap[kRecipeIdKey] = nft.recipeID;
+      jsonMap[kNftName] = nft.name;
+      jsonMap[kNftPrice] = nft.ibcCoins.getCoinWithProperDenomination(nft.price);
+      jsonMap[kNftCurrency] = nft.ibcCoins.getAbbrev();
 
       final paymentInfos = jsonMap["payment_infos"] as List<dynamic>;
       paymentInfos.add(receipt.toJson());
