@@ -60,7 +60,6 @@ dependencies:
 
   internet_connection_checker: ^0.0.1+4
 
-
   flutter_screenutil: 5.1.0
 
   bottom_drawer: ^0.0.3

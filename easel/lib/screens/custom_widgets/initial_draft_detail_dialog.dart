@@ -33,11 +33,12 @@ class DraftDetailDialog {
   Future<void> show() async {
     if (dialogAlreadyShown(easelProvider)) return;
     await showDialog<String>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) => _DraftDetailDialog(
-              onClose: onClose,
-            ));
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) => _DraftDetailDialog(
+        onClose: onClose,
+      ),
+    );
   }
 
   dialogAlreadyShown(EaselProvider provider) => provider.nft.isDialogShown;
@@ -54,29 +55,13 @@ class _DraftDetailDialog extends StatefulWidget {
 
 class _DraftDetailDialogState extends State<_DraftDetailDialog> {
   Widget previewWidget = const SizedBox();
-  LoadingStatus status = LoadingStatus.loading;
-  int count = 0;
+
+  ValueNotifier<LoadingStatus> statusNotifier = ValueNotifier(LoadingStatus.loading);
 
   @override
   void initState() {
     super.initState();
     selectPreviewWidgetBasedOnType();
-  }
-
-  @override
-  void didChangeDependencies() {
-    EaselProvider easelProvider = context.read<EaselProvider>();
-
-    if (easelProvider.nft.assetType != k3dText) {
-      setState(() {
-        status = LoadingStatus.loading;
-      });
-      return;
-    }
-    setState(() {
-      status = LoadingStatus.success;
-    });
-    super.didChangeDependencies();
   }
 
   void selectPreviewWidgetBasedOnType() {
@@ -88,17 +73,32 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
         autoRotate: false,
         cameraControls: false,
       );
+
+      scheduleMicrotask(() {
+        statusNotifier.value = LoadingStatus.success;
+      });
       return;
     }
+
+
+
     previewWidget = CachedNetworkImage(
       fit: BoxFit.contain,
       imageUrl: getImageUrl(easelProvider),
+      imageBuilder: (context, imageProvider) {
+        scheduleMicrotask(() {
+          statusNotifier.value = LoadingStatus.success;
+        });
+
+        return Image(
+          image: imageProvider,
+        );
+      },
       errorWidget: (a, b, c) {
         scheduleMicrotask(() {
-          setState(() {
-            status = LoadingStatus.error;
-          });
+          statusNotifier.value = LoadingStatus.error;
         });
+
         return const Center(
           child: Icon(
             Icons.error_outline,
@@ -107,8 +107,6 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
         );
       },
       progressIndicatorBuilder: (context, _, DownloadProgress loadingStatus) {
-        getProgressStatus(loadingStatus);
-
         return Shimmer(
           color: EaselAppTheme.cardBackground,
           child: SizedBox(
@@ -118,23 +116,6 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
         );
       },
     );
-  }
-
-  void getProgressStatus(DownloadProgress loadingStatus) {
-    if (loadingStatus.progress == null) {
-      scheduleMicrotask(() {
-        setState(() {
-          count++;
-        });
-      });
-    }
-    if (count == one) {
-      scheduleMicrotask(() {
-        setState(() {
-          status = LoadingStatus.success;
-        });
-      });
-    }
   }
 
   @override
@@ -214,11 +195,15 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
                     SizedBox(
                       height: 5.h,
                     ),
-                    buildRow(
-                      title: "status".tr(),
-                      subtitle: "status_value".tr(args: [getStatus()]),
-                      color: getColor(),
-                    ),
+                    ValueListenableBuilder<LoadingStatus>(
+                        valueListenable: statusNotifier,
+                        builder: (context, value, child) {
+                          return buildRow(
+                            title: "status".tr(),
+                            subtitle: "status_value".tr(args: [getStatus(loadingStatus: value)]),
+                            color: getColor(loadingStatus: value),
+                          );
+                        }),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -269,21 +254,22 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
     );
   }
 
-  Color getColor() {
-    if (status == LoadingStatus.success) {
+  Color getColor({required LoadingStatus loadingStatus}) {
+    if (loadingStatus == LoadingStatus.success) {
       return EaselAppTheme.kDarkGreen;
     }
-    if (status == LoadingStatus.loading) {
+
+    if (loadingStatus == LoadingStatus.loading) {
       return EaselAppTheme.kLightYellow;
     }
     return EaselAppTheme.kRed;
   }
 
-  String getStatus() {
-    if (status == LoadingStatus.success) {
+  String getStatus({required LoadingStatus loadingStatus}) {
+    if (loadingStatus == LoadingStatus.success) {
       return "success".tr();
     }
-    if (status == LoadingStatus.loading) {
+    if (loadingStatus == LoadingStatus.loading) {
       return "in_progress".tr();
     }
     return "failed".tr();
