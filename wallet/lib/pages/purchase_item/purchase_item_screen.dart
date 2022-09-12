@@ -302,6 +302,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             clipper: BuyClipper(),
                             child: InkWell(
                               onTap: () async {
+                                if (viewModel.walletsStore.getWallets().value.isEmpty) {
+                                  "create_an_account_first".tr().show();
+                                  Navigator.of(context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
+                                  return;
+                                }
                                 final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
                                   selectedDenom: viewModel.nft.denom,
                                   requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,

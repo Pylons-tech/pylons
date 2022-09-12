@@ -252,7 +252,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
   bool isUrlLoaded = false;
 
-
   Future<void> nftDataInit({required String recipeId, required String cookBookId, required String itemId}) async {
     String walletAddress = '';
     if (walletsStore.getWallets().value.isNotEmpty) {
