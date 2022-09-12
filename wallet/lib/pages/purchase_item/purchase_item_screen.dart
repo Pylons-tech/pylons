@@ -17,6 +17,7 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dar
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_image_asset.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
+import 'package:pylons_wallet/pages/gestures_for_detail_screen.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart' show PurchaseItemViewModel;
@@ -144,13 +145,11 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
 
     return Scaffold(
         backgroundColor: kBlack,
-        body: GestureDetector(
-          onTapUp: (TapUpDetails details) => onTapUp(context, details),
-          onLongPressStart: _onLongPressStart,
-          onLongPressEnd: _onLongPressEnd,
-          onVerticalDragStart: _onVerticalDragStart,
-          onVerticalDragEnd: _onVerticalDragEnd,
-          onVerticalDragUpdate: _onVerticalDragUpdate,
+        body: GesturesForDetailsScreen(
+          nft: widget.viewModel.nft,
+          viewModel: viewModel,
+          screen: DetailScreen.purchaseScreen,
+          tapUp: (context) => onTapUp,
           child: Stack(
             children: [
               getTypeWidget(viewModel),
@@ -194,7 +193,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
         ));
   }
 
-  //detect card's outside tap
+//detect card's outside tap
   void onTapUp(BuildContext context, TapUpDetails details) {
     if (key.currentContext != null) {
       // This should generally not be null, but it could be null in test cases, conceivably, so let's not crash
@@ -208,77 +207,6 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
         }
       }
     }
-  }
-
-  void _onVerticalDragStart(DragStartDetails details) {
-    _initialSwipeOffset = details.globalPosition;
-  }
-
-  void _onLongPressStart(LongPressStartDetails details) {
-    if (widget.viewModel.collapsed == true) {
-      if (details.globalPosition.dy < 745) {
-        widget.viewModel.isViewingFullNft = true;
-      }
-      return;
-    }
-    if (details.globalPosition.dy < 575) {
-      widget.viewModel.isViewingFullNft = true;
-    }
-    if (details.globalPosition.dx > 210 && details.globalPosition.dx < 320) {
-      widget.viewModel.isViewingFullNft = true;
-    }
-  }
-
-  void _onLongPressEnd(LongPressEndDetails details) {
-    widget.viewModel.isViewingFullNft = false;
-  }
-
-  void _onVerticalDragUpdate(DragUpdateDetails details) {
-    _finalSwipeOffset = details.globalPosition;
-
-    if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
-      return;
-    }
-
-    final initialOffset = _initialSwipeOffset;
-    final finalOffset = _finalSwipeOffset;
-
-    if (initialOffset != null && finalOffset != null) {
-      final offsetDifference = initialOffset.dy - finalOffset.dy;
-
-      if (offsetDifference.abs() > swipeConfig.verticalThreshold) {
-        _initialSwipeOffset = swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singular ? null : _finalSwipeOffset;
-
-        final direction = offsetDifference > 0 ? SwipeDirection.up : SwipeDirection.down;
-
-        if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.continuous || _previousDirection == null || direction != _previousDirection) {
-          _previousDirection = direction;
-        }
-      }
-    }
-  }
-
-  void _onVerticalDragEnd(DragEndDetails details) {
-    if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
-      final initialOffset = _initialSwipeOffset;
-      final finalOffset = _finalSwipeOffset;
-
-      if (initialOffset != null && finalOffset != null) {
-        final offsetDifference = initialOffset.dy - finalOffset.dy;
-
-        if (offsetDifference.abs() > swipeConfig.verticalThreshold) {
-          final direction = offsetDifference > 0 ? SwipeDirection.up : SwipeDirection.down;
-          if (direction == SwipeDirection.up) {
-            widget.viewModel.collapsed = false;
-            return;
-          }
-          widget.viewModel.collapsed = true;
-        }
-      }
-    }
-
-    _initialSwipeOffset = null;
-    _previousDirection = null;
   }
 }
 

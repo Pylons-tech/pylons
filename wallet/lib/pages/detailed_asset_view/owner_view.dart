@@ -18,6 +18,7 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_play
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_progress_widget.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
+import 'package:pylons_wallet/pages/gestures_for_detail_screen.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
@@ -26,7 +27,6 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
@@ -118,15 +118,10 @@ class _OwnerViewState extends State<OwnerView> {
 
             return Scaffold(
               backgroundColor: kBlack,
-              body: GestureDetector(
-                onLongPressStart: _onLongPressStart,
-                onLongPressEnd: _onLongPressEnd,
-                onVerticalDragStart: _onVerticalDragStart,
-                onVerticalDragEnd: _onVerticalDragEnd,
-                onVerticalDragUpdate: _onVerticalDragUpdate,
-                onHorizontalDragStart: _onHorizontalDragStart,
-                onHorizontalDragEnd: _onHorizontalDragEnd,
-                onHorizontalDragUpdate: _onHorizontalDragUpdate,
+              body: GesturesForDetailsScreen(
+                screen: DetailScreen.ownerScreen,
+                viewModel: viewModel,
+                nft: widget.nft,
                 child: Stack(
                   children: [
                     getTypeWidget(widget.ownerViewViewModel),
@@ -175,195 +170,6 @@ class _OwnerViewState extends State<OwnerView> {
             );
           }),
     );
-  }
-
-  void _onVerticalDragStart(DragStartDetails details) {
-    _initialSwipeOffset = details.globalPosition;
-  }
-
-  void _onLongPressStart(LongPressStartDetails details) {
-    if (widget.ownerViewViewModel.collapsed == true) {
-      if (details.globalPosition.dy < 745) {
-        widget.ownerViewViewModel.isViewingFullNft = true;
-      }
-      return;
-    }
-    if (details.globalPosition.dy < 575) {
-      widget.ownerViewViewModel.isViewingFullNft = true;
-    }
-    if (details.globalPosition.dx > 210 && details.globalPosition.dx < 320) {
-      widget.ownerViewViewModel.isViewingFullNft = true;
-    }
-  }
-
-  void _onLongPressEnd(LongPressEndDetails details) {
-    widget.ownerViewViewModel.isViewingFullNft = false;
-  }
-
-  void _onVerticalDragUpdate(DragUpdateDetails details) {
-    _finalSwipeOffset = details.globalPosition;
-
-    if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
-      return;
-    }
-
-    final initialOffset = _initialSwipeOffset;
-    final finalOffset = _finalSwipeOffset;
-
-    if (initialOffset != null && finalOffset != null) {
-      final offsetDifference = initialOffset.dy - finalOffset.dy;
-
-      if (offsetDifference.abs() > swipeConfig.verticalThreshold) {
-        _initialSwipeOffset = swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singular ? null : _finalSwipeOffset;
-
-        final direction = offsetDifference > 0 ? SwipeDirection.up : SwipeDirection.down;
-
-        if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.continuous || _previousDirection == null || direction != _previousDirection) {
-          _previousDirection = direction;
-        }
-      }
-    }
-  }
-
-  void _onVerticalDragEnd(DragEndDetails details) {
-    if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
-      final initialOffset = _initialSwipeOffset;
-      final finalOffset = _finalSwipeOffset;
-
-      if (initialOffset != null && finalOffset != null) {
-        final offsetDifference = initialOffset.dy - finalOffset.dy;
-
-        if (offsetDifference.abs() > swipeConfig.verticalThreshold) {
-          final direction = offsetDifference > 0 ? SwipeDirection.up : SwipeDirection.down;
-          if (direction == SwipeDirection.up) {
-            widget.ownerViewViewModel.collapsed = false;
-            return;
-          }
-          widget.ownerViewViewModel.collapsed = true;
-        }
-      }
-    }
-
-    _initialSwipeOffset = null;
-    _previousDirection = null;
-  }
-
-  void _onHorizontalDragStart(DragStartDetails details) {
-    _initialSwipeOffset = details.globalPosition;
-  }
-
-  void _onHorizontalDragUpdate(DragUpdateDetails details) {
-    _finalSwipeOffset = details.globalPosition;
-
-    if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
-      return;
-    }
-
-    final initialOffset = _initialSwipeOffset;
-    final finalOffset = _finalSwipeOffset;
-
-    if (initialOffset != null && finalOffset != null) {
-      final offsetDifference = initialOffset.dx - finalOffset.dx;
-
-      if (offsetDifference.abs() > swipeConfig.horizontalThreshold) {
-        _initialSwipeOffset = swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singular ? null : _finalSwipeOffset;
-
-        final direction = offsetDifference > 0 ? SwipeDirection.left : SwipeDirection.right;
-
-        if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.continuous || _previousDirection == null || direction != _previousDirection) {
-          _previousDirection = direction;
-        }
-      }
-    }
-  }
-
-  void _onHorizontalDragEnd(DragEndDetails details) {
-    if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
-      final initialOffset = _initialSwipeOffset;
-      final finalOffset = _finalSwipeOffset;
-
-      if (initialOffset != null && finalOffset != null) {
-        final offsetDifference = initialOffset.dx - finalOffset.dx;
-
-        if (offsetDifference.abs() > swipeConfig.horizontalThreshold) {
-          final direction = offsetDifference > 0 ? SwipeDirection.left : SwipeDirection.right;
-          if (direction == SwipeDirection.left) {
-            navigateToNextNft();
-            return;
-          }
-          navigateToPreviousNft();
-        }
-      }
-    }
-
-    _initialSwipeOffset = null;
-    _previousDirection = null;
-  }
-
-  void navigateToNextNft() {
-    if (widget.nft.type == NftType.TYPE_RECIPE) {
-      int index = collectionViewModel.creations.indexOf(widget.nft);
-
-      if (collectionViewModel.creations.length - 1 == index) return;
-      index = index + 1;
-      final NFT nft = collectionViewModel.creations.elementAt(index);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => OwnerView(
-            nft: nft,
-            ownerViewViewModel: sl(),
-          ),
-        ),
-      );
-    }
-    if (widget.nft.type == NftType.TYPE_ITEM) {
-      int index = collectionViewModel.purchases.indexOf(widget.nft);
-
-      if (collectionViewModel.purchases.length - 1 == index) return;
-      index = index + 1;
-      final NFT nft = collectionViewModel.purchases.elementAt(index);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => OwnerView(
-            nft: nft,
-            ownerViewViewModel: sl(),
-          ),
-        ),
-      );
-    }
-  }
-
-  void navigateToPreviousNft() {
-    if (widget.nft.type == NftType.TYPE_RECIPE) {
-      int index = collectionViewModel.creations.indexOf(widget.nft);
-
-      if (index == 0) return;
-      index = index - 1;
-      final NFT nft = collectionViewModel.creations.elementAt(index);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => OwnerView(
-            nft: nft,
-            ownerViewViewModel: sl(),
-          ),
-        ),
-      );
-    }
-    if (widget.nft.type == NftType.TYPE_ITEM) {
-      int index = collectionViewModel.purchases.indexOf(widget.nft);
-
-      if (index == 0) return;
-      index = index - 1;
-      final NFT nft = collectionViewModel.purchases.elementAt(index);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => OwnerView(
-            nft: nft,
-            ownerViewViewModel: sl(),
-          ),
-        ),
-      );
-    }
   }
 }
 
