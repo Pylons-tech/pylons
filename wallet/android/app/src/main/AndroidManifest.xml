@@ -132,6 +132,19 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
+        <receiver android:name="tech.pylons.flutter_wallet.PylonsWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/pylons_widget_provider_info" />
+        </receiver>
+
+        <service android:name="tech.pylons.flutter_wallet.PylonsWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="false" />
+
 
         <meta-data  android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="pylons_channel" />
