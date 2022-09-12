@@ -27,7 +27,9 @@ class GridRemoteViewsFactory(
     private lateinit var widgetItems: List<Pigeon.NFTMessage>
 
     override fun onCreate() {
-        widgetItems = collectionsApi.getCollection()
+       collectionsApi.getCollection(){
+           result -> widgetItems=result
+       }
 
     }
 
