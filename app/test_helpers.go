@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
@@ -142,7 +143,9 @@ func genesisStateWithValSet(app *PylonsApp, genesisState GenesisState,
 
 	}
 	// set validators and delegations
-	stakingGenesis := stakingtypes.NewGenesisState(stakingtypes.DefaultParams(), validators, delegations)
+	stakingparams := stakingtypes.DefaultParams()
+	stakingparams.BondDenom = types.StakingCoinDenom
+	stakingGenesis := stakingtypes.NewGenesisState(stakingparams, validators, delegations)
 	genesisState[stakingtypes.ModuleName] = app.AppCodec().MustMarshalJSON(stakingGenesis)
 
 	totalSupply := sdk.NewCoins()
@@ -153,13 +156,13 @@ func genesisStateWithValSet(app *PylonsApp, genesisState GenesisState,
 
 	for range delegations {
 		// add delegated tokens to total supply
-		totalSupply = totalSupply.Add(sdk.NewCoin(sdk.DefaultBondDenom, bondAmt))
+		totalSupply = totalSupply.Add(sdk.NewCoin(types.StakingCoinDenom, bondAmt))
 	}
 
 	// add bonded amount to bonded pool module account
 	balances = append(balances, banktypes.Balance{
 		Address: authtypes.NewModuleAddress(stakingtypes.BondedPoolName).String(),
-		Coins:   sdk.Coins{sdk.NewCoin(sdk.DefaultBondDenom, bondAmt)},
+		Coins:   sdk.Coins{sdk.NewCoin(types.StakingCoinDenom, bondAmt)},
 	})
 
 	// update total supply

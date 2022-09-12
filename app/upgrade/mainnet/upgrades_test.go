@@ -36,9 +36,15 @@ func (suite *UpgradeTestSuite) TestBurnUbedrock() {
 	// Get balances in test account
 	balances := suite.App.BankKeeper.GetBalance(suite.Ctx, suite.TestAccs[0], stakingCoinDenom)
 	suite.Require().Equal(balances.Amount, math.NewInt(10000000))
+	// Get delegation
+	delegations := suite.App.StakingKeeper.GetAllDelegations(suite.Ctx)
+	suite.Require().Equal(1, len(delegations))
+
+	bondedAmount := suite.App.StakingKeeper.GetDelegatorBonded(suite.Ctx, sdk.MustAccAddressFromBech32(delegations[0].DelegatorAddress))
+	suite.Require().Equal(bondedAmount, math.NewInt(1000000))
 	// Get ubedrock total supply
 	totalAmount := suite.App.BankKeeper.GetSupply(suite.Ctx, stakingCoinDenom)
-	suite.Require().Equal(totalAmount.Amount, math.NewInt(30000000))
+	suite.Require().Equal(totalAmount.Amount, math.NewInt(31000000))
 	// Burn ubedrock
 	bankBaseKeeper, _ := suite.App.BankKeeper.(bankkeeper.BaseKeeper)
 	mainnet.BurnUbedrock(suite.Ctx, &bankBaseKeeper)
