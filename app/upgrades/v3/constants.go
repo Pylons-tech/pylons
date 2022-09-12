@@ -1,4 +1,4 @@
-package v1
+package v3
 
 import (
 	"github.com/Pylons-tech/pylons/app/upgrades"

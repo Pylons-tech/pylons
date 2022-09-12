@@ -1,10 +1,12 @@
-package v046
+package v4
 
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
+
+// TODO: update logic
 
 func migrateParamsStore(ctx sdk.Context, paramstore paramtypes.Subspace) {
 	if paramstore.HasKeyTable() {
@@ -15,7 +17,7 @@ func migrateParamsStore(ctx sdk.Context, paramstore paramtypes.Subspace) {
 	}
 }
 
-// MigrateStore performs in-place store migrations from v0.43 to v0.46. The
+// MigrateStore performs in-place store migrations from v0.46 to mainnet. The
 // migration includes:
 //
 // - Migrate proposals to be Msg-based.
