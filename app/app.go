@@ -10,7 +10,7 @@ import (
 	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
 
 	"github.com/Pylons-tech/pylons/app/upgrades"
-	upgradev46 "github.com/Pylons-tech/pylons/app/upgrades/v1"
+	v1 "github.com/Pylons-tech/pylons/app/upgrades/v1"
 	v2 "github.com/Pylons-tech/pylons/app/upgrades/v2"
 
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
@@ -141,8 +141,8 @@ var (
 	Bech32PrefixConsAddr = AccountAddressPrefix + sdk.PrefixValidator + sdk.PrefixConsensus
 	// Bech32PrefixConsPub defines the Bech32 prefix of a consensus node public key.
 	Bech32PrefixConsPub = AccountAddressPrefix + sdk.PrefixValidator + sdk.PrefixConsensus + sdk.PrefixPublic
-	//List upgrades
-	Upgrades = []upgrades.Upgrade{upgradev46.Upgrade, v2.Upgrade}
+	// List upgrades
+	Upgrades = []upgrades.Upgrade{v1.Upgrade, v2.Upgrade}
 )
 
 func init() {
@@ -799,10 +799,10 @@ func (app *PylonsApp) RegisterTendermintService(clientCtx client.Context) {
 
 // setupUpgradeHandlers setup upgrade handlers
 func (app *PylonsApp) setupUpgradeHandlers() {
-	// upgradev46 upgrade handler
+	// v1 upgrade handler
 	app.UpgradeKeeper.SetUpgradeHandler(
-		upgradev46.UpgradeName,
-		upgradev46.CreateUpgradeHandler(app.mm, app.configurator, &app.StakingKeeper, app.keys[pylonsmoduletypes.StoreKey], app.appCodec))
+		v1.UpgradeName,
+		v1.CreateUpgradeHandler(app.mm, app.configurator, &app.StakingKeeper, app.keys[pylonsmoduletypes.StoreKey], app.appCodec))
 	// v2 mainnet upgrade handler
 	app.UpgradeKeeper.SetUpgradeHandler(
 		v2.UpgradeName,

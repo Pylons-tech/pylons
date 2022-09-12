@@ -12,6 +12,7 @@ const (
 )
 
 // TODO: Update StoreUpgrades
+
 var Upgrade = upgrades.Upgrade{
 	UpgradeName: UpgradeName,
 	StoreUpgrades: storetypes.StoreUpgrades{
