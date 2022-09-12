@@ -60,6 +60,7 @@ dependencies:
 
   internet_connection_checker: ^0.0.1+4
 
+  flutter_secure_storage: ^6.0.0
 
   flutter_screenutil: 5.1.0
 
@@ -122,7 +123,7 @@ dependencies:
   qr_flutter: 4.0.0
   image: 3.2.0
   mocktail: ^0.3.0
-  flutter_secure_storage: ^5.1.2
+
 
 
 
