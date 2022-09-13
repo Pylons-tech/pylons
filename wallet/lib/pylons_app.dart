@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
-
 //import for AppStoreProductDetails
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -54,12 +53,14 @@ class PylonsApp extends StatefulWidget {
   State<PylonsApp> createState() => _PylonsAppState();
 }
 
-class _PylonsAppState extends State<PylonsApp> {
+class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
+  AppLifecycleState _appState = AppLifecycleState.resumed;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     GetIt.I.get<Repository>().setApplicationDirectory();
-
     checkInternetConnectivity();
     setUpNotifications();
     InAppPurchase.instance.purchaseStream.listen(onEvent);
@@ -68,71 +69,58 @@ class _PylonsAppState extends State<PylonsApp> {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        minTextAdapt: true,
-        builder: () => ChangeNotifierProvider.value(
-            value: sl<UserInfoProvider>(),
-            builder: (context, value) {
-              return MaterialApp(
-                // key: UniqueKey(),
-                navigatorKey: navigatorKey,
-                debugShowCheckedModeBanner: false,
-                localizationsDelegates: context.localizationDelegates,
-                supportedLocales: context.supportedLocales,
-                locale: context.locale,
-                title: "Pylons Wallet",
-                theme: PylonsAppTheme().buildAppTheme(),
-                initialRoute: '/',
-                routes: {
-                  '/': (context) => const RoutingPage(),
-                  RouteUtil.ROUTE_HOME: (context) => const HomeScreen(),
-                  RouteUtil.ROUTE_APP_UPDATE: (context) => const UpdateApp(),
-                  RouteUtil.ROUTE_SETTINGS: (context) => const SettingScreen(),
-                  RouteUtil.ROUTE_LEGAL: (context) => const LegalScreen(),
-                  RouteUtil.ROUTE_RECOVERY: (context) => const RecoveryScreen(),
-                  RouteUtil.ROUTE_GENERAL: (context) => const GeneralScreen(),
-                  RouteUtil.ROUTE_SECURITY: (context) => const SecurityScreen(),
-                  RouteUtil.ROUTE_PAYMENT: (context) => const PaymentScreen(),
-                  RouteUtil.ROUTE_PRACTICE_TEST: (context) => const PracticeTest(),
-                  RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE: (context) => const ViewRecoveryScreen(),
-                  RouteUtil.ROUTE_TRANSACTION_HISTORY: (context) => const TransactionHistoryScreen(),
-                  RouteUtil.ROUTE_ONBOARDING: (context) => const PresentingOnboardPage(),
-                  RouteUtil.ROUTE_CREATE_WALLET: (context) => const CreateWalletScreen(),
-                  RouteUtil.ROUTE_RESTORE_WALLET: (context) => const RestoreWalletScreen(),
-                  RouteUtil.ROUTE_ADD_PYLON: (context) => const AddPylonScreen(),
-                  RouteUtil.ROUTE_TRANSACTION_DETAIL: (context) => const TransactionDetailsScreen(),
-                  RouteUtil.ROUTE_MESSAGE: (context) => const MessagesScreen(),
-                  RouteUtil.ROUTE_PDF_FULL_SCREEN: (context) => const PdfViewerFullScreen(),
-                },
-                builder: (context, widget) {
-                  ScreenUtil.setContext(context);
+      minTextAdapt: true,
+      builder: () => ChangeNotifierProvider.value(
+          value: sl<UserInfoProvider>(),
+          builder: (context, value) {
+            return MaterialApp(
+              // key: UniqueKey(),
+              navigatorKey: navigatorKey,
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              title: "Pylons Wallet",
+              theme: PylonsAppTheme().buildAppTheme(),
+              initialRoute: '/',
+              routes: {
+                '/': (context) => const RoutingPage(),
+                RouteUtil.ROUTE_HOME: (context) => const HomeScreen(),
+                RouteUtil.ROUTE_APP_UPDATE: (context) => const UpdateApp(),
+                RouteUtil.ROUTE_SETTINGS: (context) => const SettingScreen(),
+                RouteUtil.ROUTE_LEGAL: (context) => const LegalScreen(),
+                RouteUtil.ROUTE_RECOVERY: (context) => const RecoveryScreen(),
+                RouteUtil.ROUTE_GENERAL: (context) => const GeneralScreen(),
+                RouteUtil.ROUTE_SECURITY: (context) => const SecurityScreen(),
+                RouteUtil.ROUTE_PAYMENT: (context) => const PaymentScreen(),
+                RouteUtil.ROUTE_PRACTICE_TEST: (context) => const PracticeTest(),
+                RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE: (context) => const ViewRecoveryScreen(),
+                RouteUtil.ROUTE_TRANSACTION_HISTORY: (context) => const TransactionHistoryScreen(),
+                RouteUtil.ROUTE_ONBOARDING: (context) => const PresentingOnboardPage(),
+                RouteUtil.ROUTE_CREATE_WALLET: (context) => const CreateWalletScreen(),
+                RouteUtil.ROUTE_RESTORE_WALLET: (context) => const RestoreWalletScreen(),
+                RouteUtil.ROUTE_ADD_PYLON: (context) => const AddPylonScreen(),
+                RouteUtil.ROUTE_TRANSACTION_DETAIL: (context) => const TransactionDetailsScreen(),
+                RouteUtil.ROUTE_MESSAGE: (context) => const MessagesScreen(),
+                RouteUtil.ROUTE_PDF_FULL_SCREEN: (context) => const PdfViewerFullScreen(),
+              },
+              builder: (context, widget) {
+                ScreenUtil.setContext(context);
 
-                  return MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                    child: widget ?? Container(),
-                  );
-                },
-              );
-            }),
+                return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                  child: widget ?? Container(),
+                );
+              },
+            );
+          }),
     );
   }
 
-  Future<void> checkInternetConnectivity() async {
-    final repository = GetIt.I.get<Repository>();
-
-    if (!await repository.isInternetConnected()) {
-      noInternet.showNoInternet();
-    }
-
-    repository.getInternetStatus().listen((event) {
-      if (event == InternetConnectionStatus.connected && noInternet.isShowing) {
-        noInternet.dismiss();
-      }
-
-      if (event == InternetConnectionStatus.disconnected) {
-        if (!noInternet.isShowing) {
-          noInternet.showNoInternet();
-        }
-      }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() {
+      _appState = state;
     });
   }
 
@@ -231,5 +219,26 @@ class _PylonsAppState extends State<PylonsApp> {
     await remoteNotificationService.getNotificationsPermission();
 
     remoteNotificationService.listenToForegroundNotification();
+  }
+
+  Future<void> checkInternetConnectivity() async {
+    final repository = GetIt.I.get<Repository>();
+
+    if (!await repository.isInternetConnected()) {
+      noInternet.showNoInternet();
+    }
+
+    repository.getInternetStatus().listen((event) {
+      if (_appState != AppLifecycleState.resumed) return;
+      if (event == InternetConnectionStatus.connected && noInternet.isShowing) {
+        noInternet.dismiss();
+      }
+
+      if (event == InternetConnectionStatus.disconnected) {
+        if (!noInternet.isShowing) {
+          noInternet.showNoInternet();
+        }
+      }
+    });
   }
 }
