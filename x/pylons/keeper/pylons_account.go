@@ -16,8 +16,8 @@ func (k Keeper) SetPylonsAccount(ctx sdk.Context, accountAddr types.AccountAddr,
 	usernamePrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
 	accountPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AccountKey))
 
-	usernamePrefixStore.Set(types.KeyPrefix(username.Value), binaryUsername)
-	accountPrefixStore.Set(types.KeyPrefix(accountAddr.Value), binaryAddr)
+	usernamePrefixStore.Set(types.KeyPrefix(username.Value), binaryAddr)
+	accountPrefixStore.Set(types.KeyPrefix(accountAddr.Value), binaryUsername)
 }
 
 func (k Keeper) SetPylonsReferral(ctx sdk.Context, address, username, referral string) {
@@ -55,10 +55,48 @@ func (k Keeper) GetPylonsReferral(ctx sdk.Context, addr string) (val types.Refer
 	return val, true
 }
 
-func (k Keeper) SetPylonsKYC(ctx sdk.Context, kycaddress types.KYCAddress, username types.Username) {
-	binaryKYC := k.cdc.MustMarshal(&kycaddress)
-	kycPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.KYCAddressKey))
-	kycPrefixStore.Set(types.KeyPrefix(kycaddress.Value), binaryKYC)
+func (k Keeper) SetPylonsKYC(ctx sdk.Context, kycaddress types.KYCAddress, kycusername types.KYCUsername) {
+	binaryKYCAddr := k.cdc.MustMarshal(&kycaddress)
+	binaryKYCUser := k.cdc.MustMarshal(&kycusername)
+	kycaddrPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.KYCAddressKey))
+	kycuserPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.KYCUsernameKey))
+
+	kycaddrPrefixStore.Set(types.KeyPrefix(kycaddress.Value), binaryKYCUser)
+	kycuserPrefixStore.Set(types.KeyPrefix(kycusername.Value), binaryKYCAddr)
+}
+
+func (k Keeper) HasPylonsKYC(ctx sdk.Context, kycaddress types.KYCAddress) bool {
+	kycaddrPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.KYCAddressKey))
+
+	has := kycaddrPrefixStore.Has(types.KeyPrefix(kycaddress.Value))
+
+	return has
+}
+
+// GetAddressByUsername returns an address corresponding to its username
+func (k Keeper) GetKYCAddressByUsername(ctx sdk.Context, kycusername string) (val types.KYCAddress, found bool) {
+	kycuserPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.KYCUsernameKey))
+
+	b := kycuserPrefixStore.Get(types.KeyPrefix(kycusername))
+	if b == nil {
+		return val, false
+	}
+
+	k.cdc.MustUnmarshal(b, &val)
+	return val, true
+}
+
+// GetUsernameByAddress returns a username corresponding to its address
+func (k Keeper) GetKYCUsernameByAddress(ctx sdk.Context, kycaddress string) (val types.KYCUsername, found bool) {
+	kycaddrPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.KYCAddressKey))
+
+	b := kycaddrPrefixStore.Get(types.KeyPrefix(kycaddress))
+	if b == nil {
+		return val, false
+	}
+
+	k.cdc.MustUnmarshal(b, &val)
+	return val, true
 }
 
 func (k Keeper) GetPylonsKYC(ctx sdk.Context, addr string) (val types.KYCAddress, found bool) {

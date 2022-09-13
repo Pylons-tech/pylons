@@ -22,10 +22,10 @@ func (k msgServer) RegisterKYCAddress(goCtx context.Context, msg *types.MsgRegis
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "account not created")
 	}
 
-	username := types.Username{Value: msg.Username}
+	username := types.KYCUsername{Value: msg.Username}
 	kycAddr := types.KYCAddress{Value: msg.Creator}
 
-	_, found := k.GetPylonsKYC(ctx, kycAddr.Value)
+	found := k.HasPylonsKYC(ctx, kycAddr)
 
 	if found == true {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "kyc account has been registered")
