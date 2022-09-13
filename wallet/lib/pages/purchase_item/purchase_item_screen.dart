@@ -198,7 +198,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   bool liked = false;
   bool collapsed = true;
   bool isExpanded = false;
-  bool balancesFetchResult = true;
 
   @override
   void initState() {
@@ -299,6 +298,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             clipper: BuyClipper(),
                             child: InkWell(
                               onTap: () async {
+                                bool balancesFetchResult = true;
+
                                 if (viewModel.nft.price != kZeroInt) {
                                   final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
                                     selectedDenom: viewModel.nft.denom,

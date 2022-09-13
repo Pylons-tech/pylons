@@ -369,7 +369,7 @@ class IPCEngine {
 
   bool _isNFTTradeUniLink(String link) {
     final queryParam = Uri.parse(link).queryParameters;
-    return  queryParam.containsKey(kTradeIdKey);
+    return queryParam.containsKey(kTradeIdKey);
   }
 
   Future<String> checkAndUnWrapFirebaseLink(String link) async {
