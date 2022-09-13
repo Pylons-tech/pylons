@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"fmt"
+
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
@@ -105,12 +107,16 @@ func (k Keeper) getCookbooksByCreatorPaginated(ctx sdk.Context, creator sdk.AccA
 	pageRes, err := query.Paginate(store, pagination, func(_, value []byte) error {
 		id := string(value)
 		val, _ := k.GetCookbook(ctx, id)
+		fmt.Println(val)
 		cookbooks = append(cookbooks, val)
+		fmt.Println(cookbooks)
 		return nil
 	})
 	if err != nil {
 		return nil, nil, err
 	}
+
+	fmt.Println(cookbooks)
 
 	return cookbooks, pageRes, nil
 }

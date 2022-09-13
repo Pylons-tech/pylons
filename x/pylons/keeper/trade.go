@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"encoding/binary"
+	"fmt"
 	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
@@ -140,11 +141,12 @@ func (k Keeper) GetTradesByCreatorPaginated(ctx sdk.Context, creator sdk.AccAddr
 		id := binary.BigEndian.Uint64(value)
 		trade := k.GetTrade(ctx, id)
 		trades = append(trades, trade)
+		fmt.Println(trades)
 		return nil
 	})
 	if err != nil {
 		return nil, nil, err
 	}
-
+	// fmt.Println(trades)
 	return trades, pageRes, nil
 }

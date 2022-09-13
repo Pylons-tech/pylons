@@ -515,18 +515,6 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, String>> createDynamicLinkForItemNftShare({required String address, required String itemId, required String cookbookId}) {
-    // TODO: implement createDynamicLinkForItemNftShare
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, String>> createDynamicLinkForTradeNftShare({required String address, required String tradeId}) {
-    // TODO: implement createDynamicLinkForTradeNftShare
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) {
     throw UnimplementedError();
   }

@@ -175,7 +175,7 @@ class LocalDataSourceImp implements LocalDataSource {
   final FlutterSecureStorage flutterSecureStorage;
 
   static const iosOptions =
-      IOSOptions(accessibility: IOSAccessibility.passcode);
+      IOSOptions(accessibility: KeychainAccessibility.passcode);
   static const androidOptions =
       AndroidOptions(encryptedSharedPreferences: true);
 

@@ -52,10 +52,11 @@ func TestCmdListTradesByCreator(t *testing.T) {
 				require.True(t, ok)
 				require.ErrorIs(t, stat.Err(), tc.err)
 			} else if tc.shouldFound {
-				require.NoError(t, err)
+				// fmt.Println(out)
 				var resp types.QueryListTradesByCreatorResponse
 				require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, tc.id, resp.Trades[0].Id)
+				require.NoError(t, err)
 			} else {
 
 			}

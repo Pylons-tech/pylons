@@ -17,13 +17,17 @@ func settingExecutionObject(t *testing.T) (*network.Network, *types.Execution, *
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
 	execution := types.Execution{
-		Id: "1",
+		CookbookId: "testCookbookId",
+		RecipeId:   "testRecipeId",
+		Id:         "1",
 	}
 	state.ExecutionList = append(state.ExecutionList, execution)
 	state.ExecutionCount = 1
 
 	pendingExecution := types.Execution{
-		Id: "2",
+		CookbookId: "testCookbookId",
+		RecipeId:   "testRecipeId",
+		Id:         "2",
 	}
 	state.PendingExecutionList = append(state.PendingExecutionList, pendingExecution)
 	state.PendingExecutionCount = 1

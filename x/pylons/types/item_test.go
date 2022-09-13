@@ -100,7 +100,7 @@ func TestFindValidPaymentsPermutation(t *testing.T) {
 			err:     errors.New("invalid balance provided"),
 		},
 		{
-			desc: "Invalid item",
+			desc:    "Invalid item",
 			balance: sdk.Coins{sdk.NewCoin("coin0", sdk.NewInt(10)), sdk.NewCoin("coin1", sdk.NewInt(10)), sdk.NewCoin("coin4", sdk.NewInt(10))},
 			noitems: true,
 			err:     errors.New("invalid set of Items provided"),
