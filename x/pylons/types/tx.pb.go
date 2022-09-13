@@ -8,7 +8,7 @@ import (
 	fmt "fmt"
 	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
 	types "github.com/cosmos/cosmos-sdk/types"
-	_ "github.com/gogo/protobuf/gogoproto"
+	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	grpc "google.golang.org/grpc"
@@ -1318,7 +1318,8 @@ func (m *MsgExecuteRecipe) GetPaymentInfos() []PaymentInfo {
 }
 
 type MsgExecuteRecipeResponse struct {
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id     string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	TxTime int64  `protobuf:"varint,2,opt,name=tx_time,json=txTime,proto3" json:"tx_time,omitempty"`
 }
 
 func (m *MsgExecuteRecipeResponse) Reset()         { *m = MsgExecuteRecipeResponse{} }
@@ -1359,6 +1360,13 @@ func (m *MsgExecuteRecipeResponse) GetId() string {
 		return m.Id
 	}
 	return ""
+}
+
+func (m *MsgExecuteRecipeResponse) GetTxTime() int64 {
+	if m != nil {
+		return m.TxTime
+	}
+	return 0
 }
 
 type MsgSetItemString struct {
@@ -4072,6 +4080,11 @@ func (m *MsgExecuteRecipeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error
 	_ = i
 	var l int
 	_ = l
+	if m.TxTime != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.TxTime))
+		i--
+		dAtA[i] = 0x10
+	}
 	if len(m.Id) > 0 {
 		i -= len(m.Id)
 		copy(dAtA[i:], m.Id)
@@ -5225,6 +5238,9 @@ func (m *MsgExecuteRecipeResponse) Size() (n int) {
 	l = len(m.Id)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.TxTime != 0 {
+		n += 1 + sovTx(uint64(m.TxTime))
 	}
 	return n
 }
@@ -8348,6 +8364,25 @@ func (m *MsgExecuteRecipeResponse) Unmarshal(dAtA []byte) error {
 			}
 			m.Id = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TxTime", wireType)
+			}
+			m.TxTime = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TxTime |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])

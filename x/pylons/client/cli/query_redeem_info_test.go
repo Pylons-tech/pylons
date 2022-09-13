@@ -34,7 +34,6 @@ func TestListRedeemInfo(t *testing.T) {
 		},
 	} {
 		t.Run(tc.desc, func(t *testing.T) {
-
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdListRedeemInfo(), tc.args)
 			require.NoError(t, err)
 			var resp types.QueryAllRedeemInfoResponse

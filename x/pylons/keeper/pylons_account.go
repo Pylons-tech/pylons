@@ -15,7 +15,6 @@ func (k Keeper) SetPylonsAccount(ctx sdk.Context, accountAddr types.AccountAddr,
 	binaryUsername := k.cdc.MustMarshal(&username)
 	usernamePrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
 	accountPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AccountKey))
-
 	usernamePrefixStore.Set(types.KeyPrefix(username.Value), binaryAddr)
 	accountPrefixStore.Set(types.KeyPrefix(accountAddr.Value), binaryUsername)
 }
