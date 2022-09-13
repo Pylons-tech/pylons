@@ -15,8 +15,9 @@ func settingItemObject(t *testing.T) (*network.Network, *types.Item) {
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
-
+	address := types.GenTestBech32FromString("testAddress")
 	item := types.Item{
+		Owner:      address,
 		CookbookId: "testCookbookId",
 		Id:         "testId",
 	}

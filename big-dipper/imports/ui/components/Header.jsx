@@ -210,7 +210,6 @@ export default class Header extends Component {
           <span className='d-none d-xl-inline-block'>
             <T>navbar.siteName</T>&nbsp;
           </span>
-          <Badge color='secondary'>{this.state.version}</Badge>{' '}
         </NavbarBrand>
         <UncontrolledDropdown className='d-inline text-nowrap'>
           <DropdownToggle

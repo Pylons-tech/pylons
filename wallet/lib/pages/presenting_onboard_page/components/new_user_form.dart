@@ -8,10 +8,10 @@ import 'package:pylons_wallet/components/buttons/pylons_get_started_button.dart'
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
-import 'package:pylons_wallet/pages/home/home.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
+import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -136,7 +136,7 @@ class NewUserFormState extends State<NewUserForm> {
 
   String? validateUsername(String? username) {
     if (username == null || username.isEmpty) {
-      return 'User name is Empty';
+      return 'user_name_empty'.tr();
     }
 
     return null;
@@ -149,7 +149,7 @@ class NewUserFormState extends State<NewUserForm> {
   }
 
   /// Create the new wallet and associate the chosen username with it.
-  Future _registerNewUser(String userName) async {
+  Future<void> _registerNewUser(String userName) async {
     isLoadingNotifier.value = true;
     final navigator = Navigator.of(context);
 
@@ -169,7 +169,7 @@ class NewUserFormState extends State<NewUserForm> {
       failure.message.show();
       navigator.pop();
     }, (walletInfo) async {
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => true);
+      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => false);
     });
   }
 }

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cosmos_ui_components/cosmos_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -69,8 +68,7 @@ class _PylonsAppState extends State<PylonsApp> {
 
   @override
   Widget build(BuildContext context) {
-    return CosmosTheme(
-      child: ScreenUtilInit(
+    return ScreenUtilInit(
         minTextAdapt: true,
         builder: () => ChangeNotifierProvider.value(
             value: sl<UserInfoProvider>(),
@@ -118,7 +116,6 @@ class _PylonsAppState extends State<PylonsApp> {
                 },
               );
             }),
-      ),
     );
   }
 
