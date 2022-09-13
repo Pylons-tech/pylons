@@ -42,6 +42,8 @@ func NewAnteHandler(
 		// ante.NewSigVerificationDecorator(ak, signModeHandler),
 		NewCustomSigVerificationDecorator(ak, signModeHandler),
 		ante.NewIncrementSequenceDecorator(ak),
+		NewRestrictUbedrockAnteDecorator(pk),
+		ante.NewSetUpContextDecorator(),
 	)
 }
 
