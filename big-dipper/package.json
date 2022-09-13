@@ -62,7 +62,7 @@
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "chai": "^4.3.4",
-    "eslint": "^8.23.0",
+    "eslint": "^8.23.1",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-import-resolver-meteor": "^0.4.0",
     "eslint-plugin-import": "^2.23.3",
