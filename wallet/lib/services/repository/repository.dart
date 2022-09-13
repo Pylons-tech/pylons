@@ -1604,7 +1604,7 @@ class RepositoryImp implements Repository {
         transactionTypeEnum: TransactionTypeEnum.AppleInAppCoinsRequest,
         transactionData: jsonEncode(appleInAppPurchaseModel.toJson()),
         transactionDescription: 'buying_pylon_points'.tr(),
-        transactionCurrency: 'USD',
+        transactionCurrency: kStripeUSD_ABR,
         transactionPrice: price);
 
     if (!await networkInfo.isConnected) {
@@ -1648,7 +1648,7 @@ class RepositoryImp implements Repository {
       transactionTypeEnum: TransactionTypeEnum.GoogleInAppCoinsRequest,
       transactionData: jsonEncode(msgGoogleInAPPPurchase.toJsonLocalRetry()),
       transactionDescription: 'buying_pylon_points'.tr(),
-      transactionCurrency: 'USD',
+      transactionCurrency: kStripeUSD_ABR,
       transactionPrice: price,
     );
 
