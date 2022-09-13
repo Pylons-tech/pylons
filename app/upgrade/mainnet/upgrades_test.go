@@ -47,7 +47,7 @@ func (suite *UpgradeTestSuite) TestBurnUbedrock() {
 	suite.Require().Equal(totalAmount.Amount, math.NewInt(31000000))
 	// Burn ubedrock
 	bankBaseKeeper, _ := suite.App.BankKeeper.(bankkeeper.BaseKeeper)
-	mainnet.BurnUbedrock(suite.Ctx, &bankBaseKeeper)
+	mainnet.BurnUbedrock(suite.Ctx, &suite.App.AccountKeeper, &bankBaseKeeper, &suite.App.StakingKeeper)
 	// Check ubedrock total supply (should equal 0)
 	totalAmount = suite.App.BankKeeper.GetSupply(suite.Ctx, stakingCoinDenom)
 	suite.Require().Equal(totalAmount.Amount, math.ZeroInt())
@@ -58,7 +58,7 @@ func (suite *UpgradeTestSuite) TestMintUbedrockForInitialAccount() {
 
 	// Burn ubedrock
 	bankBaseKeeper, _ := suite.App.BankKeeper.(bankkeeper.BaseKeeper)
-	mainnet.BurnUbedrock(suite.Ctx, &bankBaseKeeper)
+	mainnet.BurnUbedrock(suite.Ctx, &suite.App.AccountKeeper, &bankBaseKeeper, &suite.App.StakingKeeper)
 	totalAmount := suite.App.BankKeeper.GetSupply(suite.Ctx, stakingCoinDenom)
 	suite.Require().Equal(totalAmount.Amount, math.ZeroInt())
 

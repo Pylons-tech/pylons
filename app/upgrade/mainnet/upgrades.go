@@ -4,7 +4,10 @@ import (
 	"cosmossdk.io/math"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 )
 
 const (
@@ -58,7 +61,17 @@ var (
 )
 
 // Burn ubedrock
-func BurnUbedrock(ctx sdk.Context, bank *bankkeeper.BaseKeeper) {
+func BurnUbedrock(ctx sdk.Context, accKeeper *authkeeper.AccountKeeper, bank *bankkeeper.BaseKeeper, staking *stakingkeeper.Keeper) {
+	// Get coin back from validator
+	accounts := accKeeper.GetAllAccounts(ctx)
+	for _, acc := range accounts {
+		_, ok := acc.(*authtypes.ModuleAccount)
+		if !ok {
+			GetbackCoinFromVal(ctx, acc.GetAddress(), staking)
+		}
+
+	}
+
 	// Get all account balances
 	accs := bank.GetAccountsBalances(ctx)
 	for _, acc := range accs {
@@ -96,6 +109,58 @@ func MintUbedrockForInitialAccount(ctx sdk.Context, bank *bankkeeper.BaseKeeper)
 			sdk.MustAccAddressFromBech32(acc),
 			sdk.NewCoins(sdk.NewCoin(types.StakingCoinDenom, UbedrockDistribute[acc])),
 		)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func GetbackCoinFromVal(ctx sdk.Context, accAddr sdk.AccAddress, staking *stakingkeeper.Keeper) {
+	now := ctx.BlockHeader().Time
+
+	// this loop will complete all delegator's active redelegations
+	for _, activeRedelegation := range staking.GetRedelegations(ctx, accAddr, 65535) {
+		// src/dest validator addresses of this redelegation
+		redelegationSrc, _ := sdk.ValAddressFromBech32(activeRedelegation.ValidatorSrcAddress)
+		redelegationDst, _ := sdk.ValAddressFromBech32(activeRedelegation.ValidatorDstAddress)
+
+		// set all entry completionTime to now so we can complete redelegation
+		for i := range activeRedelegation.Entries {
+			activeRedelegation.Entries[i].CompletionTime = now
+		}
+
+		staking.SetRedelegation(ctx, activeRedelegation)
+		_, err := staking.CompleteRedelegation(ctx, accAddr, redelegationSrc, redelegationDst)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	// this loop will turn all delegator's delegations into unbonding delegations
+	for _, delegation := range staking.GetAllDelegatorDelegations(ctx, accAddr) {
+		validatorValAddr := delegation.GetValidatorAddr()
+		_, found := staking.GetValidator(ctx, validatorValAddr)
+		if !found {
+			continue
+		}
+		_, err := staking.Undelegate(ctx, accAddr, validatorValAddr, delegation.GetShares()) //nolint:errcheck // nolint because otherwise we'd have a time and nothing to do with it.
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	// this loop will complete all delegator's unbonding delegations
+	for _, unbondingDelegation := range staking.GetAllUnbondingDelegations(ctx, accAddr) {
+		// validator address of this unbonding delegation
+		validatorStringAddr := unbondingDelegation.ValidatorAddress
+		validatorValAddr, _ := sdk.ValAddressFromBech32(validatorStringAddr)
+
+		// set all entry completionTime to now so we can complete unbonding delegation
+		for i := range unbondingDelegation.Entries {
+			unbondingDelegation.Entries[i].CompletionTime = now
+		}
+		staking.SetUnbondingDelegation(ctx, unbondingDelegation)
+		_, err := staking.CompleteUnbonding(ctx, accAddr, validatorValAddr)
 		if err != nil {
 			panic(err)
 		}
