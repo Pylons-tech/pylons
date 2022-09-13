@@ -44,6 +44,10 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 			request: &types.MsgCreateAccount{Creator: addr[1], Username: "testUser1", ReferralAddress: "testReferralAddr"},
 			err:     types.ErrReferralUserNotFound,
 		},
+		{
+			desc:    "Valid 2",
+			request: &types.MsgCreateAccount{Creator: addr[1], Username: "testUser1", ReferralAddress: addr[0]},
+		},
 	} {
 		tc := tc
 		suite.Run(tc.desc, func() {
