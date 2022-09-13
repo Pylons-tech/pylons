@@ -298,7 +298,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             clipper: BuyClipper(),
                             child: InkWell(
                               onTap: () async {
-                                bool balancesFetchResult = false;
+                                bool balancesFetchResult = true;
                                 if (viewModel.nft.price != kZeroInt) {
                                   final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
                                     selectedDenom: viewModel.nft.denom,
