@@ -10,7 +10,7 @@ import tech.pylons.wallet.R
 
 class PylonsWidgetService : RemoteViewsService() {
     
-    private lateinit var collectionsApi: Pigeon.CollectionsApi
+    private var collectionsApi: Pigeon.CollectionsApi = MainActivity().collectionsApi
 
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
         return GridRemoteViewsFactory(this.applicationContext, intent, collectionsApi)

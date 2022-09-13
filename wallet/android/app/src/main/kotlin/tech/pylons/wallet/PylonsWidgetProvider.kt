@@ -18,7 +18,6 @@ class PylonsWidgetProvider : AppWidgetProvider() {
     ) {
         appWidgetIds.forEach { appWidgetId ->
 
-
             val intent = Intent(context, PylonsWidgetService::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                 data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
