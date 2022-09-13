@@ -66,21 +66,8 @@ const (
 	//------------------- FAKE ADDRESS -------------------//
 )
 
-// AnteDecorator
-func (ad AnteRestrictUbedrockDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
-	sigTx, ok := tx.(authsigning.SigVerifiableTx)
-	if !ok {
-		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
-	}
-
-	messages := sigTx.GetMsgs()
-	fmt.Printf("[LOG] AnteRestrictUbedrockDecorator - messages : %v\n", messages)
-
-	msgSend, ok := messages[0].(*banktypes.MsgSend)
-	sendAddr := msgSend.FromAddress
-	toAddr := msgSend.ToAddress
-
-	Accounts := []string{
+var (
+	Accounts = []string{
 		Address1,
 		Address2,
 		Address3,
@@ -90,18 +77,36 @@ func (ad AnteRestrictUbedrockDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, s
 		Address7,
 		Address8,
 	}
+)
 
-	if ctx.IsCheckTx() && len(messages) == 1 && ok {
-		for _, coin := range msgSend.Amount {
-			if coin.Denom == "ubedrock" {
-				for _, acc := range Accounts {
-					if sendAddr != acc || toAddr != acc {
-						panic("'ubedrock'should only be transfered among allowed address")
+// AnteDecorator
+func (ad AnteRestrictUbedrockDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
+	if (ctx.IsCheckTx() || ctx.IsReCheckTx()) && !simulate {
+		sigTx, ok := tx.(authsigning.SigVerifiableTx)
+		if !ok {
+			return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
+		}
+
+		messages := sigTx.GetMsgs()
+		fmt.Printf("[LOG] AnteRestrictUbedrockDecorator - messages : %v\n", messages)
+		for _, message := range messages {
+			msgSend, ok := message.(*banktypes.MsgSend)
+
+			sendAddr := msgSend.FromAddress
+			toAddr := msgSend.ToAddress
+
+			if ok {
+				for _, coin := range msgSend.Amount {
+					if coin.Denom == "ubedrock" {
+						for _, acc := range Accounts {
+							if sendAddr != acc || toAddr != acc {
+								panic("'ubedrock'should only be transfered among allowed address")
+							}
+						}
 					}
 				}
 			}
 		}
 	}
-
 	return next(ctx, tx, simulate)
 }
