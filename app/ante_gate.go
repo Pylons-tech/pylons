@@ -3,10 +3,10 @@ package app
 import (
 	"fmt"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
 type AnteSpamMigitationDecorator struct {
@@ -31,14 +31,12 @@ func NewRestrictUbedrockAnteDecorator(pylonsmodulekeeper PylonsKeeper) AnteRestr
 
 // AnteDecorator
 func (ad AnteSpamMigitationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
-	fmt.Printf("[LOG] AnteSpamMigitationDecorator - AnteHandle - LINE 23\n")
 	if (ctx.IsCheckTx() || ctx.IsReCheckTx()) && !simulate {
-		fmt.Printf("[LOG] AnteSpamMigitationDecorator - AnteHandle - LINE 25\n")
 		sigTx, ok := tx.(authsigning.SigVerifiableTx)
 		if !ok {
 			return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
 		}
-		// ad.pk.GetParams(ctx)
+
 		// get max txs in a block, default is 20
 		params := ad.pk.GetParams(ctx)
 		maxTxs := params.MaxTxsInBlock
@@ -55,41 +53,55 @@ func (ad AnteSpamMigitationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, sim
 	return next(ctx, tx, simulate)
 }
 
+const (
+	//------------------- FAKE ADDRESS -------------------//
+	Address1 = "pylo1sv27mzddvum3kr7yrvptt8smyurwezzkr7psaj"
+	Address2 = "pylo1qfy4qtkgshcuzlds5z8l4mxqxc5ytdcdgr0sq7"
+	Address3 = "pylo1r84qxl40smy5tkzjhx0w6xe758qkhtgs44u5ft"
+	Address4 = "pylo1yhd2wvh4nfg4e3htzvhsq09d8wyg6eme6nte7p"
+	Address5 = "pylo1c5j57tx5m340kfn6sn99y694c5n3swjddn2rax"
+	Address6 = "pylo1hr0k73dxc53fmexxmg84qvjeva5674hkrpcs7h"
+	Address7 = "pylo12ul2m8k52clrah6r09zcrvvu0wtwkwuatmufgd"
+	Address8 = "pylo1edtuu739j3q794uwgffddehx84yhhyxd7wsjly"
+	//------------------- FAKE ADDRESS -------------------//
+)
+
 // AnteDecorator
 func (ad AnteRestrictUbedrockDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
-	fmt.Printf("[LOG] AnteRestrictUbedrockDecorator - AnteHandle - LINE 59\n")
-	fmt.Printf("[LOG] AnteRestrictUbedrockDecorator - AnteHandle - LINE 62\n")
 	sigTx, ok := tx.(authsigning.SigVerifiableTx)
 	if !ok {
 		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
 	}
-	sigTxSignatures, err := sigTx.GetSignaturesV2()
-	if err != nil {
-		return ctx, sdkerrors.Wrap(err, "getting signatures of tx is failed")
-	}
 
 	messages := sigTx.GetMsgs()
-	fmt.Printf("[LOG] AnteRestrictUbedrockDecorator - AnteHandle - messages : %v\n", messages)
+	fmt.Printf("[LOG] AnteRestrictUbedrockDecorator - messages : %v\n", messages)
 
-	msgCreateAccount, ok := messages[0].(*types.MsgCreateAccount)
+	msgSend, ok := messages[0].(*banktypes.MsgSend)
+	sendAddr := msgSend.FromAddress
+	toAddr := msgSend.ToAddress
 
-	if len(messages) == 1 && ok {
-		pubkey := sigTxSignatures[0].PubKey
-		address := sdk.AccAddress(pubkey.Address().Bytes())
+	Accounts := []string{
+		Address1,
+		Address2,
+		Address3,
+		Address4,
+		Address5,
+		Address6,
+		Address7,
+		Address8,
+	}
 
-		if address.String() != msgCreateAccount.Creator {
-			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "mismatch between signature pubkey and requester address")
-		}
-		if msgCreateAccount.Token == "ubedrock" {
-			fmt.Printf("[LOG] AnteRestrictUbedrockDecorator - AnteHandle - messages : %v\n", msgCreateAccount.Token)
-			fmt.Printf("[LOG] AnteRestrictUbedrockDecorator - AnteHandle - Do limit ubedrock account")
+	if ctx.IsCheckTx() && len(messages) == 1 && ok {
+		for _, coin := range msgSend.Amount {
+			if coin.Denom == "ubedrock" {
+				for _, acc := range Accounts {
+					if sendAddr != acc || toAddr != acc {
+						panic("'ubedrock'should only be transfered among allowed address")
+					}
+				}
+			}
 		}
 	}
-	// sigTxSignatures, err := sigTx.GetSignaturesV2()
-	// if err != nil {
-	// 	return ctx, sdkerrors.Wrap(err, "getting signatures of tx is failed")
-	// }
 
-	// msgCreateAccount, ok := messages[0].(*types.MsgCreateAccount)
 	return next(ctx, tx, simulate)
 }
