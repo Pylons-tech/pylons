@@ -13,8 +13,12 @@ import (
 
 var (
 	stakingCoinDenom string    = "ubedrock"
+	stripeCoinDenom  string    = "ustripeusd"
 	defaultAcctFunds sdk.Coins = sdk.NewCoins(
 		sdk.NewCoin(stakingCoinDenom, sdk.NewInt(10000000)),
+	)
+	defaultAcctFundsStripeCoin sdk.Coins = sdk.NewCoins(
+		sdk.NewCoin(stripeCoinDenom, sdk.NewInt(10000000)),
 	)
 )
 
@@ -27,15 +31,12 @@ func TestUpgradeTestSuite(t *testing.T) {
 	suite.Run(t, s)
 }
 
-func (suite *UpgradeTestSuite) TestBurnUbedrock() {
+func (suite *UpgradeTestSuite) TestBurnToken_Ubedrock() {
 	suite.Setup()
 	// Fund ubedrock to test account
 	for _, acc := range suite.TestAccs {
 		suite.FundAcc(acc, defaultAcctFunds)
 	}
-	// Get balances in test account
-	balances := suite.App.BankKeeper.GetBalance(suite.Ctx, suite.TestAccs[0], stakingCoinDenom)
-	suite.Require().Equal(balances.Amount, math.NewInt(10000000))
 	// Get delegation
 	delegations := suite.App.StakingKeeper.GetAllDelegations(suite.Ctx)
 	suite.Require().Equal(1, len(delegations))
@@ -47,9 +48,26 @@ func (suite *UpgradeTestSuite) TestBurnUbedrock() {
 	suite.Require().Equal(totalAmount.Amount, math.NewInt(31000000))
 	// Burn ubedrock
 	bankBaseKeeper, _ := suite.App.BankKeeper.(bankkeeper.BaseKeeper)
-	mainnet.BurnUbedrock(suite.Ctx, &suite.App.AccountKeeper, &bankBaseKeeper, &suite.App.StakingKeeper)
+	mainnet.BurnToken(suite.Ctx, stakingCoinDenom, &suite.App.AccountKeeper, &bankBaseKeeper, &suite.App.StakingKeeper)
 	// Check ubedrock total supply (should equal 0)
 	totalAmount = suite.App.BankKeeper.GetSupply(suite.Ctx, stakingCoinDenom)
+	suite.Require().Equal(totalAmount.Amount, math.ZeroInt())
+}
+
+func (suite *UpgradeTestSuite) TestBurnToken_Ustripeusd() {
+	suite.Setup()
+	// Fund ubedrock to test account
+	for _, acc := range suite.TestAccs {
+		suite.FundAcc(acc, defaultAcctFundsStripeCoin)
+	}
+	// Get ubedrock total supply
+	totalAmount := suite.App.BankKeeper.GetSupply(suite.Ctx, stripeCoinDenom)
+	suite.Require().Equal(totalAmount.Amount, math.NewInt(30000000))
+	// Burn ubedrock
+	bankBaseKeeper, _ := suite.App.BankKeeper.(bankkeeper.BaseKeeper)
+	mainnet.BurnToken(suite.Ctx, stripeCoinDenom, &suite.App.AccountKeeper, &bankBaseKeeper, &suite.App.StakingKeeper)
+	// Check ubedrock total supply (should equal 0)
+	totalAmount = suite.App.BankKeeper.GetSupply(suite.Ctx, stripeCoinDenom)
 	suite.Require().Equal(totalAmount.Amount, math.ZeroInt())
 }
 
@@ -58,7 +76,7 @@ func (suite *UpgradeTestSuite) TestMintUbedrockForInitialAccount() {
 
 	// Burn ubedrock
 	bankBaseKeeper, _ := suite.App.BankKeeper.(bankkeeper.BaseKeeper)
-	mainnet.BurnUbedrock(suite.Ctx, &suite.App.AccountKeeper, &bankBaseKeeper, &suite.App.StakingKeeper)
+	mainnet.BurnToken(suite.Ctx, stakingCoinDenom, &suite.App.AccountKeeper, &bankBaseKeeper, &suite.App.StakingKeeper)
 	totalAmount := suite.App.BankKeeper.GetSupply(suite.Ctx, stakingCoinDenom)
 	suite.Require().Equal(totalAmount.Amount, math.ZeroInt())
 

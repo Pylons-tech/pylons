@@ -61,24 +61,25 @@ var (
 )
 
 // Burn ubedrock
-func BurnUbedrock(ctx sdk.Context, accKeeper *authkeeper.AccountKeeper, bank *bankkeeper.BaseKeeper, staking *stakingkeeper.Keeper) {
-	// Get coin back from validator
-	accounts := accKeeper.GetAllAccounts(ctx)
-	for _, acc := range accounts {
-		_, ok := acc.(*authtypes.ModuleAccount)
-		if !ok {
-			GetbackCoinFromVal(ctx, acc.GetAddress(), staking)
+func BurnToken(ctx sdk.Context, denom string, accKeeper *authkeeper.AccountKeeper, bank *bankkeeper.BaseKeeper, staking *stakingkeeper.Keeper) {
+	if denom == types.StakingCoinDenom {
+		// Get coin back from validator
+		accounts := accKeeper.GetAllAccounts(ctx)
+		for _, acc := range accounts {
+			_, ok := acc.(*authtypes.ModuleAccount)
+			if !ok {
+				GetbackCoinFromVal(ctx, acc.GetAddress(), staking)
+			}
 		}
-
 	}
 
 	// Get all account balances
 	accs := bank.GetAccountsBalances(ctx)
 	for _, acc := range accs {
-		balanceUbedrock := acc.Coins.AmountOf(types.StakingCoinDenom)
+		balance := acc.Coins.AmountOf(denom)
 		// Check if ubedrock amount GT 0
-		if balanceUbedrock.GT(math.ZeroInt()) {
-			amount := sdk.NewCoin(types.StakingCoinDenom, balanceUbedrock)
+		if balance.GT(math.ZeroInt()) {
+			amount := sdk.NewCoin(denom, balance)
 			// Send ubedrock to module
 			err := bank.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(acc.Address), types.PaymentsProcessorName, sdk.NewCoins(amount))
 			if err != nil {
