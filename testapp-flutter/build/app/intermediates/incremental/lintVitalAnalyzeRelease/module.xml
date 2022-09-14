@@ -1,0 +1,18 @@
+<lint-module
+    format="1"
+    dir="D:\contracting\pylons\testapp-flutter\android\app"
+    name=":app"
+    type="APP"
+    maven="android:app:"
+    gradle="7.1.2"
+    buildFolder="D:\contracting\pylons\testapp-flutter\build\app"
+    bootClassPath="D:\android_sdk\platforms\android-31\android.jar;D:\android_sdk\build-tools\30.0.3\core-lambda-stubs.jar"
+    javaSourceLevel="1.8"
+    compileTarget="android-31">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>
