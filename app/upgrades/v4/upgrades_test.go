@@ -38,9 +38,11 @@ func (suite *UpgradeTestSuite) TestBurnToken_Ubedrock() {
 	for _, acc := range suite.TestAccs {
 		suite.FundAcc(acc, defaultAcctFunds)
 	}
-	// Get delegation
+	// Check genesis delegation
 	delegations := suite.App.StakingKeeper.GetAllDelegations(suite.Ctx)
 	suite.Require().Equal(1, len(delegations))
+	bondedAmount := suite.App.StakingKeeper.GetDelegatorBonded(suite.Ctx, sdk.MustAccAddressFromBech32(delegations[0].DelegatorAddress))
+	suite.Require().Equal(bondedAmount, math.NewInt(1000000))
 	// Create new delegation
 	valAddress, err := sdk.ValAddressFromBech32(delegations[0].ValidatorAddress)
 	val, found := suite.App.StakingKeeper.GetValidator(suite.Ctx, valAddress)
@@ -55,8 +57,9 @@ func (suite *UpgradeTestSuite) TestBurnToken_Ubedrock() {
 		true,
 	)
 	suite.Require().NoError(err)
-	bondedAmount := suite.App.StakingKeeper.GetDelegatorBonded(suite.Ctx, sdk.MustAccAddressFromBech32(delegations[0].DelegatorAddress))
-	suite.Require().Equal(bondedAmount, math.NewInt(1000000))
+	// Check all delegation
+	delegations = suite.App.StakingKeeper.GetAllDelegations(suite.Ctx)
+	suite.Require().Equal(2, len(delegations))
 	bondedModuleAddress := suite.App.AccountKeeper.GetModuleAddress(stakingtypes.BondedPoolName)
 	bondedModuleAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, bondedModuleAddress, stakingCoinDenom)
 	suite.Require().Equal(bondedModuleAmount.Amount, math.NewInt(2000000))
