@@ -8,6 +8,7 @@ import (
 	v4 "github.com/Pylons-tech/pylons/app/upgrades/v4"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -41,9 +42,24 @@ func (suite *UpgradeTestSuite) TestBurnToken_Ubedrock() {
 	delegations := suite.App.StakingKeeper.GetAllDelegations(suite.Ctx)
 	suite.Require().Equal(1, len(delegations))
 	// Create new delegation
-
+	valAddress, err := sdk.ValAddressFromBech32(delegations[0].ValidatorAddress)
+	val, found := suite.App.StakingKeeper.GetValidator(suite.Ctx, valAddress)
+	suite.Require().True(found)
+	suite.Require().NoError(err)
+	_, err = suite.App.StakingKeeper.Delegate(
+		suite.Ctx,
+		suite.TestAccs[0],
+		math.NewInt(1000000),
+		stakingtypes.Unbonded,
+		val,
+		true,
+	)
+	suite.Require().NoError(err)
 	bondedAmount := suite.App.StakingKeeper.GetDelegatorBonded(suite.Ctx, sdk.MustAccAddressFromBech32(delegations[0].DelegatorAddress))
 	suite.Require().Equal(bondedAmount, math.NewInt(1000000))
+	bondedModuleAddress := suite.App.AccountKeeper.GetModuleAddress(stakingtypes.BondedPoolName)
+	bondedModuleAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, bondedModuleAddress, stakingCoinDenom)
+	suite.Require().Equal(bondedModuleAmount.Amount, math.NewInt(2000000))
 	// Get ubedrock total supply
 	totalAmount := suite.App.BankKeeper.GetSupply(suite.Ctx, stakingCoinDenom)
 	suite.Require().Equal(totalAmount.Amount, math.NewInt(31000000))
