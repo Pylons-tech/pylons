@@ -18,8 +18,8 @@ class Denom {
   }
 
   static List<Denom> get availableDenoms => [
-        Denom(name: kUSDText, symbol: kUsdSymbol, icon: kIconDenomUsd),
-        Denom(name: kPylonText, symbol: kPylonSymbol, icon: kIconDenomPylon),
+        Denom(name: kUSDText, symbol: kUsdSymbol, icon: PngUtils.kIconDenomUsd),
+        Denom(name: kPylonText, symbol: kPylonSymbol, icon: PngUtils.kIconDenomPylon),
       ];
 
   TextInputFormatter getFormatter() {
