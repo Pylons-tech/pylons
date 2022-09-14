@@ -806,7 +806,7 @@ func (app *PylonsApp) setupUpgradeHandlers() {
 	// v4 mainnet upgrade handler
 	app.UpgradeKeeper.SetUpgradeHandler(
 		v4.UpgradeName,
-		v4.CreateUpgradeHandler(app.mm, app.configurator, app.BankKeeper),
+		v4.CreateUpgradeHandler(app.mm, app.configurator, app.BankKeeper, &app.AccountKeeper, &app.StakingKeeper),
 	)
 }
 
