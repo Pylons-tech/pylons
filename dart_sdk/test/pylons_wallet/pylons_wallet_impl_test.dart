@@ -406,6 +406,9 @@ void mockChannelHandler() {
   var linuxChannel =
       const MethodChannel('plugins.flutter.io/url_launcher_linux');
 
+  var macOSChannel =
+      const MethodChannel('plugins.flutter.io/url_launcher_macos');
+
   // Register the mock handler.
   channel.setMockMethodCallHandler((MethodCall methodCall) async {
     if (methodCall.method == 'canLaunch') {
@@ -415,6 +418,13 @@ void mockChannelHandler() {
   });
 
   linuxChannel.setMockMethodCallHandler((MethodCall methodCall) async {
+    if (methodCall.method == 'canLaunch') {
+      return true;
+    }
+    return null;
+  });
+
+  macOSChannel.setMockMethodCallHandler((MethodCall methodCall) async {
     if (methodCall.method == 'canLaunch') {
       return true;
     }
@@ -489,7 +499,7 @@ void createCookBookTest() {
       final sdkResponse = SDKIPCResponse(
           success: true,
           error: '',
-          data: '',
+          data: cookBook,
           errorCode: '',
           action: Strings.TX_CREATE_COOKBOOK);
       responseCompleters[Strings.TX_CREATE_COOKBOOK]!.complete(sdkResponse);
@@ -499,6 +509,7 @@ void createCookBookTest() {
 
     expect(true, response.success);
     expect(response.action, Strings.TX_CREATE_COOKBOOK);
+    expect(response.data.id, cookBook.id);
   });
 
   test('should create cookbook in the wallet without redirecting back',
@@ -517,7 +528,8 @@ void createCookBookTest() {
         await pylonsWallet.txCreateCookbook(cookBook, requestResponse: false);
 
     expect(true, response.success);
-    expect(response.data, Strings.ACTION_DONE);
+    expect(response.action, Strings.TX_CREATE_COOKBOOK);
+    expect(response.data.id, cookBook.id);
   });
 }
 
