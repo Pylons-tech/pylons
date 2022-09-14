@@ -101,11 +101,26 @@ func (suite *UpgradeTestSuite) TestMintUbedrockForInitialAccount() {
 	suite.Require().Equal(totalAmount.Amount, math.ZeroInt())
 
 	// Mint ubedrock for initial account
-	v4.MintUbedrockForInitialAccount(suite.Ctx, &bankBaseKeeper)
+	v4.MintUbedrockForInitialAccount(suite.Ctx, &bankBaseKeeper, &suite.App.StakingKeeper)
 	totalAmount = suite.App.BankKeeper.GetSupply(suite.Ctx, stakingCoinDenom)
 	suite.Require().Equal(totalAmount.Amount, math.NewIntFromUint64(1_000_000_000))
+	vals := suite.App.StakingKeeper.GetAllValidators(suite.Ctx)
+	for _, val := range vals {
+		token := val.GetTokens()
+		suite.Require().Equal(math.OneInt(), token)
+	}
+	totalDelegation := len(vals)
 	for _, acc := range v4.Accounts {
+		if acc == v4.EngineHotWal {
+			accAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, sdk.MustAccAddressFromBech32(acc), stakingCoinDenom)
+			amount := v4.UbedrockDistribute[acc].SubRaw(int64(totalDelegation))
+			suite.Require().Equal(accAmount.Amount, amount)
+			continue
+		}
 		accAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, sdk.MustAccAddressFromBech32(acc), stakingCoinDenom)
 		suite.Require().Equal(accAmount.Amount, v4.UbedrockDistribute[acc])
 	}
+	bondedModuleAddress := suite.App.AccountKeeper.GetModuleAddress(stakingtypes.BondedPoolName)
+	bondedModuleAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, bondedModuleAddress, stakingCoinDenom)
+	suite.Require().Equal(bondedModuleAmount.Amount, math.NewIntFromUint64(uint64(totalDelegation)))
 }

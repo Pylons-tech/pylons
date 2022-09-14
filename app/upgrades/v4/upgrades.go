@@ -9,6 +9,7 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 )
 
@@ -77,7 +78,7 @@ func CreateUpgradeHandler(
 			bankBaseKeeper, _ := bankKeeper.(bankkeeper.BaseKeeper)
 			BurnToken(ctx, types.StakingCoinDenom, accKeeper, &bankBaseKeeper, staking)
 			BurnToken(ctx, types.StripeCoinDenom, accKeeper, &bankBaseKeeper, staking)
-			MintUbedrockForInitialAccount(ctx, &bankBaseKeeper)
+			MintUbedrockForInitialAccount(ctx, &bankBaseKeeper, staking)
 		}
 		return mm.RunMigrations(ctx, configurator, fromVM)
 	}
@@ -119,7 +120,7 @@ func BurnToken(ctx sdk.Context, denom string, accKeeper *authkeeper.AccountKeepe
 }
 
 // Mint ubedrock for 8 security account
-func MintUbedrockForInitialAccount(ctx sdk.Context, bank *bankkeeper.BaseKeeper) {
+func MintUbedrockForInitialAccount(ctx sdk.Context, bank *bankkeeper.BaseKeeper, staking *stakingkeeper.Keeper) {
 	// Mint coin for module
 	err := bank.MintCoins(ctx, types.PaymentsProcessorName, sdk.NewCoins(sdk.NewCoin(types.StakingCoinDenom, TotalUbedrock)))
 	if err != nil {
@@ -133,6 +134,22 @@ func MintUbedrockForInitialAccount(ctx sdk.Context, bank *bankkeeper.BaseKeeper)
 			types.PaymentsProcessorName,
 			sdk.MustAccAddressFromBech32(acc),
 			sdk.NewCoins(sdk.NewCoin(types.StakingCoinDenom, UbedrockDistribute[acc])),
+		)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	// Send 1 ubedrock to each validator
+	vals := staking.GetAllValidators(ctx)
+	for _, val := range vals {
+		_, err = staking.Delegate(
+			ctx,
+			sdk.MustAccAddressFromBech32(EngineHotWal),
+			math.OneInt(),
+			stakingtypes.Unbonded,
+			val,
+			true,
 		)
 		if err != nil {
 			panic(err)
