@@ -34,7 +34,7 @@ func (k msgServer) RegisterKYCAddress(goCtx context.Context, msg *types.MsgRegis
 	if k.HasAccountAddr(ctx, types.AccountAddr{Value: msg.Creator}) {
 		k.SetPylonsKYC(ctx, kycAcc)
 	} else {
-		return nil, types.ErrReferralUserNotFound
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "kyc account address not found")
 	}
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventRegisterKYCAccount{
