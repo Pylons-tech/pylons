@@ -142,7 +142,7 @@ class _ZoomableWidgetState extends State<ZoomableWidget> {
       if (widget.enableRotate) _rotation = (_previousRotation + details.rotation).clamp(-pi, pi);
       if (widget.enableZoom && details.scale != 1.0) {
         _zoom = (_previousZoom * details.scale).clamp(widget.minScale, widget.maxScale);
-        if (widget.onZoomChanged != null) widget.onZoomChanged!(_zoom);
+        widget.onZoomChanged?.call(_zoom);
       }
     });
 
@@ -224,7 +224,7 @@ class _ZoomableWidgetState extends State<ZoomableWidget> {
 
     setState(() {
       _zoom = _tmpZoom;
-      if (widget.onZoomChanged != null) widget.onZoomChanged!(_zoom);
+      widget.onZoomChanged?.call(_zoom);
       _pan = Offset.zero;
       _rotation = 0.0;
       _previousZoom = _tmpZoom;
@@ -268,7 +268,7 @@ class _ZoomableWidgetState extends State<ZoomableWidget> {
             onScaleEnd: widget.bounceBackBoundary ? _onScaleEnd : null,
             onDoubleTap: _handleDoubleTap,
             onTap: widget.onTap,
-            child: Container(color: const Color(0x00000000)),
+            child: const ColoredBox(color: Color(0x00000000)),
           ),
         ),
       ],
