@@ -143,9 +143,9 @@ func genesisStateWithValSet(app *PylonsApp, genesisState GenesisState,
 
 	}
 	// set validators and delegations
-	stakingparams := stakingtypes.DefaultParams()
-	stakingparams.BondDenom = types.StakingCoinDenom
-	stakingGenesis := stakingtypes.NewGenesisState(stakingparams, validators, delegations)
+	stakingParams := stakingtypes.DefaultParams()
+	stakingParams.BondDenom = types.StakingCoinDenom
+	stakingGenesis := stakingtypes.NewGenesisState(stakingParams, validators, delegations)
 	genesisState[stakingtypes.ModuleName] = app.AppCodec().MustMarshalJSON(stakingGenesis)
 
 	totalSupply := sdk.NewCoins()
