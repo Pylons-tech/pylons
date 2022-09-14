@@ -1,4 +1,5 @@
 import 'package:fixnum/fixnum.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_update_account_request.dart';
 import 'package:pylons_wallet/model/transaction.dart';
@@ -246,3 +247,13 @@ Map EXECUTE_RECIPE_JSON = {"creator": "", "cookbookId": DUMMY_COOKBOOK_ID, "reci
 const String DUMMY_COOKBOOK_ID = "Easel_CookBook_auto_cookbook_2022_08_31_152836_312";
 const String DUMMY_RECIPE_ID = "Easel_Recipe_auto_recipe_2022_08_31_155921_714";
 const String DUMMY_RESPONSE_AFTER_EXECUTION = "4E13B9E815BB387F72120AD1D868A09EBBE189BD71FAF938A3421F5EFCF947F3";
+const String DUMMY_ITEM_ID = "pylons_10";
+
+ProductDetails DUMMY_PRODUCT_DETAILS = ProductDetails(
+    id: "pylons_10",
+    title: "Buy 10 points (Pylons)",
+    description: "Pylons points can be used to purchase digital items priced in Pylons points. They have no cash value and cannot be redeemed. This package is for 10 Pylons Points.",
+    price: "Rs 220.00",
+    rawPrice: 220.0,
+    currencyCode: "PKR",
+    currencySymbol: "PKR");

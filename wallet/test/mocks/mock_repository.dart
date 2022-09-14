@@ -448,20 +448,17 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> buyProduct(ProductDetails productDetails) {
-    // TODO: implement buyProduct
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> buyProduct(ProductDetails productDetails) async {
+    return const Right(true);
   }
 
   @override
-  Future<Either<Failure, bool>> isInAppPurchaseAvailable() {
-    // TODO: implement isInAppPurchaseAvailable
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> isInAppPurchaseAvailable() async {
+    return const Right(true);
   }
 
   @override
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory(
-      {required String itemId, required String cookBookId}) {
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String itemId, required String cookBookId}) {
     // TODO: implement getNftOwnershipHistory
     throw UnimplementedError();
   }
