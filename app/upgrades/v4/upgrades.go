@@ -66,19 +66,25 @@ func CreateUpgradeHandler(
 	mm *module.Manager,
 	configurator module.Configurator,
 	bankKeeper bankkeeper.Keeper,
+	accKeeper *authkeeper.AccountKeeper,
+	staking *stakingkeeper.Keeper,
 ) upgradetypes.UpgradeHandler {
 	return func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 		// logger := ctx.Logger()
 
-		// if types.IsMainnet(ctx.ChainID()) {
-		// TODO: Logic upgadeHandler
-		// }
+		if types.IsMainnet(ctx.ChainID()) {
+			// TODO: Logic upgadeHandler
+			bankBaseKeeper, _ := bankKeeper.(bankkeeper.BaseKeeper)
+			BurnToken(ctx, types.StakingCoinDenom, accKeeper, &bankBaseKeeper, staking)
+			BurnToken(ctx, types.StripeCoinDenom, accKeeper, &bankBaseKeeper, staking)
+			MintUbedrockForInitialAccount(ctx, &bankBaseKeeper)
+		}
 		return mm.RunMigrations(ctx, configurator, fromVM)
 	}
 }
 
 // TODO: Function helper for upgradeHandler
-// Burn ubedrock
+// Burn denom token
 func BurnToken(ctx sdk.Context, denom string, accKeeper *authkeeper.AccountKeeper, bank *bankkeeper.BaseKeeper, staking *stakingkeeper.Keeper) {
 	if denom == types.StakingCoinDenom {
 		// Get coin back from validator
