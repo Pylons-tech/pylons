@@ -107,7 +107,6 @@ Future<void> init() async {
   sl.registerLazySingleton<FirebaseDynamicLinks>(() => FirebaseDynamicLinks.instance);
   sl.registerLazySingleton<CollectionReference>(() => FirebaseFirestore.instance.collection(kFeedbacks));
   sl.registerLazySingleton<FirebaseAnalytics>(() => FirebaseAnalytics.instance);
-  sl.registerLazySingleton<FirestoreHelper>(() => FirestoreHelperImp(mainFeedbacksCollection: sl()));
   sl.registerSingletonAsync<AppDatabase>(() => $FloorAppDatabase.databaseBuilder('app_database.db').build());
 
   sl.registerLazySingleton<FlutterSecureStorageDataStore>(() => FlutterSecureStorageDataStore(storage: sl()));
