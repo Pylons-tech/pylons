@@ -241,3 +241,4 @@ BaseEnv MOCK_BASE_ENV = BaseEnv()
       skus: '[]');
 
 IBCTraceModel MOCK_IBC_TRACE_MODEL = IBCTraceModel(denomTrace: DenomTrace(baseDenom: IBCCoins.ujunox, path: ''), ibcHash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E');
+Map EXECUTE_RECIPE_JSON = {"creator": MOCK_ADDRESS, "cookbookId": MOCK_COOKBOOK_ID, "recipeId": MOCK_RECIPE_ID, "coinInputsIndex": 0};
