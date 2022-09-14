@@ -79,7 +79,7 @@ var (
 	}
 )
 
-// AnteDecorator
+// AnteDecorator for restrict ubedrock denom used by unallowed address
 func (ad AnteRestrictUbedrockDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
 	if (ctx.IsCheckTx() || ctx.IsReCheckTx()) && !simulate {
 		sigTx, ok := tx.(authsigning.SigVerifiableTx)
@@ -88,19 +88,19 @@ func (ad AnteRestrictUbedrockDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, s
 		}
 
 		messages := sigTx.GetMsgs()
-		fmt.Printf("[LOG] AnteRestrictUbedrockDecorator - messages : %v\n", messages)
-		for _, message := range messages {
-			msgSend, ok := message.(*banktypes.MsgSend)
+		if len(messages) > 0 {
+			for _, message := range messages {
+				msgSend, ok := message.(*banktypes.MsgSend)
+				if ok {
+					sendAddr := msgSend.FromAddress
+					toAddr := msgSend.ToAddress
+					_, sendAddr_found := ad.pk.GetPylonsKYC(ctx, sendAddr)
+					_, toAddr_found := ad.pk.GetPylonsKYC(ctx, toAddr)
 
-			sendAddr := msgSend.FromAddress
-			toAddr := msgSend.ToAddress
-
-			if ok {
-				for _, coin := range msgSend.Amount {
-					if coin.Denom == "ubedrock" {
+					if ok, _ = msgSend.Amount.Find("ubedrock"); ok {
 						for _, acc := range Accounts {
-							if sendAddr != acc || toAddr != acc {
-								panic("'ubedrock'should only be transfered among allowed address")
+							if (sendAddr != acc || toAddr != acc) && (sendAddr_found == false || toAddr_found == false) {
+								panic("'ubedrock' should only be transfer among allowed address")
 							}
 						}
 					}

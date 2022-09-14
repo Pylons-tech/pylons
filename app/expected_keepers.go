@@ -8,4 +8,5 @@ import (
 // FeegrantKeeper defines the expected feegrant keeper.
 type PylonsKeeper interface {
 	GetParams(ctx sdk.Context) (params types.Params)
+	GetPylonsKYC(ctx sdk.Context, kycaddr string) (val types.KYCAccount, found bool)
 }

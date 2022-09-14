@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -22,23 +21,26 @@ func (k msgServer) RegisterKYCAddress(goCtx context.Context, msg *types.MsgRegis
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "account not created")
 	}
 
-	username := types.KYCUsername{Value: msg.Username}
-	kycAddr := types.KYCAddress{Value: msg.Creator}
+	kycAcc := types.KYCAccount{
+		AccountAddr: msg.Creator,
+		Username:    msg.Username,
+	}
 
-	found := k.HasPylonsKYC(ctx, kycAddr)
-
+	_, found := k.GetPylonsKYC(ctx, kycAcc.AccountAddr)
 	if found == true {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "kyc account has been registered")
 	}
 
-	k.SetPylonsKYC(ctx, kycAddr, username)
+	if k.HasAccountAddr(ctx, types.AccountAddr{Value: msg.Creator}) {
+		k.SetPylonsKYC(ctx, kycAcc)
+	} else {
+		return nil, types.ErrReferralUserNotFound
+	}
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventRegisterKYCAccount{
 		Address:  msg.Creator,
 		Username: msg.Username,
 	})
-
-	telemetry.IncrCounter(1, "kycaddress", "register")
 
 	return &types.MsgRegisterKYCAddressResponse{}, err
 }
