@@ -22,6 +22,7 @@ void main() {
 
   test("this is test case for buy nft", () async {
     final response = await walletsStoreImp.executeRecipe(EXECUTE_RECIPE_JSON);
-    expect(response.success, true);
+    expect(true, response.success);
+    expect(DUMMY_RESPONSE_AFTER_EXECUTION, response.data);
   });
 }

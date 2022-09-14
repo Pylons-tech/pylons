@@ -67,7 +67,7 @@ class MockWalletStore implements WalletsStore {
 
   @override
   Future<SdkIpcResponse> executeRecipe(Map json) async {
-    return SdkIpcResponse.success(data: json, sender: '', transaction: '');
+    return SdkIpcResponse.success(data: DUMMY_RESPONSE_AFTER_EXECUTION, sender: '', transaction: '');
   }
 
   @override

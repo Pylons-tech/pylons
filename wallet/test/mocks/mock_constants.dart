@@ -241,4 +241,8 @@ BaseEnv MOCK_BASE_ENV = BaseEnv()
       skus: '[]');
 
 IBCTraceModel MOCK_IBC_TRACE_MODEL = IBCTraceModel(denomTrace: DenomTrace(baseDenom: IBCCoins.ujunox, path: ''), ibcHash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E');
-Map EXECUTE_RECIPE_JSON = {"creator": MOCK_ADDRESS, "cookbookId": MOCK_COOKBOOK_ID, "recipeId": MOCK_RECIPE_ID, "coinInputsIndex": 0};
+Map EXECUTE_RECIPE_JSON = {"creator": "", "cookbookId": DUMMY_COOKBOOK_ID, "recipeId": DUMMY_RECIPE_ID, "coinInputsIndex": 0};
+
+const String DUMMY_COOKBOOK_ID = "Easel_CookBook_auto_cookbook_2022_08_31_152836_312";
+const String DUMMY_RECIPE_ID = "Easel_Recipe_auto_recipe_2022_08_31_155921_714";
+const String DUMMY_RESPONSE_AFTER_EXECUTION = "4E13B9E815BB387F72120AD1D868A09EBBE189BD71FAF938A3421F5EFCF947F3";

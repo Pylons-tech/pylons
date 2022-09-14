@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -150,7 +151,11 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
     final showLoader = Loading()..showLoading();
 
+    log("THIS IS MY JSON EXECUTION $jsonMap");
+
     final response = await walletsStore.executeRecipe(jsonMap);
+
+    log("THIS IS MY RESPONSE ${response.data}");
 
     showLoader.dismiss();
 
