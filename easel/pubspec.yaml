@@ -120,13 +120,12 @@ dependencies:
 
 
 
-  media_info:
-    git:
-      url: https://github.com/ened/flutter_plugin_media_info.git
+  media_info: ^0.11.0
+
+
 
   advance_pdf_viewer:
-    git:
-      url: https://github.com/lohanidamodar/pdf_viewer.git
+    path: ../wallet/pkgs/pdf_viewer-master
 
 
     #  For Firebase
@@ -175,7 +174,8 @@ flutter:
     - assets/images/svg/
     - i18n/en-US.json
     - i18n/ru-RU.json
-
+    - i18n/de.json
+    - i18n/es.json
 
   fonts:
     - family: UniversalSans

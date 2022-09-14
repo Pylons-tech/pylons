@@ -44,7 +44,7 @@ class DeleteDialog {
                     ),
                     Align(
                       child: SvgPicture.asset(
-                        kAlertIcon,
+                        PngUtils.kAlertIcon,
                         height: 40.h,
                         fit: BoxFit.cover,
                       ),

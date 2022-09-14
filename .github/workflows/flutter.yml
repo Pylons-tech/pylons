@@ -26,6 +26,9 @@ jobs:
           cd transaction_signing_gateway
           flutter pub get
           cd ..
+          cd pdf_viewer-master
+          flutter pub get
+          cd ..
           cd ..
           flutter pub get
           flutter analyze
