@@ -16,7 +16,6 @@ enum Orientation {
 enum TransactionTypeEnum {
   GeneratePaymentReceipt,
   BuyNFT,
-  // StripePayout,
   AppleInAppCoinsRequest,
   GoogleInAppCoinsRequest,
   BuyProduct,

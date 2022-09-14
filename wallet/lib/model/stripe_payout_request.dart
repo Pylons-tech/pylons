@@ -1,4 +1,5 @@
 import 'package:fixnum/fixnum.dart';
+import 'package:pylons_wallet/utils/constants.dart';
 
 class StripePayoutRequest {
   final String address;
@@ -9,10 +10,10 @@ class StripePayoutRequest {
   StripePayoutRequest({this.address = '', this.token = '', this.signature = '', this.amount = Int64.ZERO});
 
   StripePayoutRequest.fromJson(Map<String, dynamic> json)
-      : address = json['address'] as String,
-        token = json['token'] as String,
-        signature = json['signature'] as String,
-        amount = json['amount'] as Int64;
+      : address = json[kAddressKey] as String,
+        token = json[kTokenKey] as String,
+        signature = json[kSignature] as String,
+        amount = json[kAmount] as Int64;
 
-  Map<String, dynamic> toJson() => {'address': address, 'token': token, 'signature': signature, 'amount': amount.toInt()};
+  Map<String, dynamic> toJson() => {kAddressKey: address, kTokenKey: token, kSignature: signature, kAmount: amount.toInt()};
 }

@@ -372,6 +372,7 @@ const String kPurchaseIdKey = "purchase_id";
 const String kProcessorNameKey = "processor_name";
 const String kPayerAddrKey = "payer_addr";
 const String kProductIdKey = "product_id";
+const String kTokenKey = "token";
 
 //Notification keys
 const String kResultKey = "results";
@@ -414,3 +415,5 @@ Map<String, Color> denomColors = {'upylon': const Color(0xFF5252d5), 'ustripeusd
 const String kNftName= "nftName";
 const String kNftPrice= "nftPrice";
 const String kNftCurrency= "nftCurrency";
+const String kPaymentIntentId= "payment_intent_id";
+const String kClientSecret= "clientSecret";

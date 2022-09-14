@@ -38,7 +38,7 @@ import 'package:pylons_wallet/pages/settings/screens/recovery_screen/screens/vie
 import 'package:pylons_wallet/pages/settings/settings_screen.dart';
 import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
 import 'package:pylons_wallet/pages/transaction_failure_manager/local_transaction_detail_screen.dart';
-import 'package:pylons_wallet/pages/transaction_failure_manager/local_transaction_list_screen.dart';
+import 'package:pylons_wallet/pages/transaction_failure_manager/local_transactions_screen.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
@@ -103,7 +103,7 @@ class _PylonsAppState extends State<PylonsApp> {
                   RouteUtil.ROUTE_TRANSACTION_DETAIL: (context) => const TransactionDetailsScreen(),
                   RouteUtil.ROUTE_MESSAGE: (context) => const MessagesScreen(),
                   RouteUtil.ROUTE_PDF_FULL_SCREEN: (context) => const PdfViewerFullScreen(),
-                  RouteUtil.ROUTE_FAILURE: (context) => const FailureListScreen(),
+                  RouteUtil.ROUTE_FAILURE: (context) => const LocalTransactionsScreen(),
                   RouteUtil.ROUTE_LOCAL_TRX_DETAILS: (context) => const LocalTransactionDetailScreen(),
                 },
                 builder: (context, widget) {

@@ -879,34 +879,6 @@ class RepositoryImp implements Repository {
     }
   }
 
-  // /// Stripe Backend API to Payout Request
-  // /// Input: [StripePayoutRequest] {address:String, token:String, signature:String, amount:int}
-  // /// return [StripePayoutResponse] {transfer_id:String}
-  // @override
-  // Future<Either<Failure, StripePayoutResponse>> Payout(StripePayoutRequest req) async {
-  //   if (!await networkInfo.isConnected) {
-  //     final LocalTransactionModel txManager = LocalTransactionModel(
-  //         transactionType: 'FailureTypeEnum.StripePayout',
-  //         transactionData: jsonEncode(req.toJson()),
-  //         transactionDescription: 'Error while stripe payout',
-  //         dateTime: DateTime.now().millisecondsSinceEpoch);
-  //
-  //     saveLocalTransaction(txManager);
-  //     return Left(NoInternetFailure("no_internet".tr()));
-  //   }
-  //   try {
-  //     final baseEnv = getBaseEnv();
-  //     final result = await queryHelper.queryPost("${baseEnv.baseStripeUrl}/payout", req.toJson());
-  //     if (!result.isSuccessful) {
-  //       return Left(StripeFailure(result.error ?? PAYOUT_FAILED));
-  //     }
-  //     return Right(StripePayoutResponse.from(result));
-  //   } on Exception catch (_) {
-  //     crashlyticsHelper.recordFatalError(error: _.toString());
-  //     return const Left(StripeFailure(PAYOUT_FAILED));
-  //   }
-  // }
-
   /// Stripe Backend API to Register Stripe connected account
   /// Input: [StripeRegisterAccountRequest]
   /// return [StripeRegisterAccountResponse]

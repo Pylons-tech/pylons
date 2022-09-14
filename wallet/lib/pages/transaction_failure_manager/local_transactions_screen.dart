@@ -13,14 +13,14 @@ import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-class FailureListScreen extends StatefulWidget {
-  const FailureListScreen({Key? key}) : super(key: key);
+class LocalTransactionsScreen extends StatefulWidget {
+  const LocalTransactionsScreen({Key? key}) : super(key: key);
 
   @override
-  State<FailureListScreen> createState() => _FailureListScreenState();
+  State<LocalTransactionsScreen> createState() => _LocalTransactionsScreenState();
 }
 
-class _FailureListScreenState extends State<FailureListScreen> {
+class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
   FailureManagerViewModel get failureManagerViewModel => sl();
 
   @override
@@ -132,38 +132,37 @@ class _FailureListScreenState extends State<FailureListScreen> {
               SizedBox(width: 40.w),
             ],
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.w),
-            child: ChangeNotifierProvider<FailureManagerViewModel>.value(
-              value: failureManagerViewModel,
-              builder: (context, child) {
-                return Consumer(
-                  builder: (context, FailureManagerViewModel failureVM, child) {
-                    if (failureVM.localTransactionsList.isEmpty) {
-                      return getEmptyListWidget();
-                    }
-                    return ListView.separated(
-                        separatorBuilder: (context, index) {
-                          return const Divider();
-                        },
-                        shrinkWrap: true,
-                        itemCount: failureVM.localTransactionsList.length,
-                        itemBuilder: (context, int index) {
-                          final LocalTransactionModel txManager = failureVM.localTransactionsList[index];
-                          return MyListTile(
-                            leadingWidget: (context) => getMyDateStamp(txTime: txManager.dateTime),
-                            titleWidget: (context) => getTransactionTitle(txModel: txManager),
-                            trailingWidget: (context) => getTransactionTrailings(txModel: txManager),
-                            txModel: txManager,
-                          );
-                        });
-                  },
-                );
-              },
-            ),
-          ),
+          Padding(padding: EdgeInsets.symmetric(horizontal: 10.w), child: buildScreenContent(value: failureManagerViewModel)),
         ],
       ),
     ));
+  }
+
+  Widget buildScreenContent({required FailureManagerViewModel value}) {
+    return ChangeNotifierProvider<FailureManagerViewModel>.value(
+      value: value,
+      builder: (context, child) {
+        return Consumer(
+          builder: (context, FailureManagerViewModel failureVM, child) {
+            if (failureVM.localTransactionsList.isEmpty) {
+              return getEmptyListWidget();
+            }
+            return ListView.separated(
+                separatorBuilder: (context, index) => const Divider(),
+                shrinkWrap: true,
+                itemCount: failureVM.localTransactionsList.length,
+                itemBuilder: (context, int index) {
+                  final LocalTransactionModel txManager = failureVM.localTransactionsList[index];
+                  return MyListTile(
+                    leadingWidget: (context) => getMyDateStamp(txTime: txManager.dateTime),
+                    titleWidget: (context) => getTransactionTitle(txModel: txManager),
+                    trailingWidget: (context) => getTransactionTrailings(txModel: txManager),
+                    txModel: txManager,
+                  );
+                });
+          },
+        );
+      },
+    );
   }
 }

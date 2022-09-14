@@ -1,3 +1,5 @@
+import 'package:pylons_wallet/utils/constants.dart';
+
 class StripeGeneratePaymentReceiptRequest {
   final String paymentIntentID;
   final String clientSecret;
@@ -5,8 +7,8 @@ class StripeGeneratePaymentReceiptRequest {
   StripeGeneratePaymentReceiptRequest({required this.paymentIntentID, required this.clientSecret});
 
   StripeGeneratePaymentReceiptRequest.fromJson(Map<String, dynamic> json)
-      : paymentIntentID = json['payment_intent_id'] as String,
-        clientSecret = json['clientSecret'] as String;
+      : paymentIntentID = json[kPaymentIntentId] as String,
+        clientSecret = json[kClientSecret] as String;
 
-  Map<String, dynamic> toJson() => {'payment_intent_id': paymentIntentID, 'client_secret': clientSecret};
+  Map<String, dynamic> toJson() => {kPaymentIntentId: paymentIntentID, kClientSecret: clientSecret};
 }
