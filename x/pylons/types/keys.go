@@ -83,8 +83,7 @@ const (
 	// StripeRefundKey used to store stripe refund records
 	StripeRefundKey = "StripeRefund-value-"
 	// AccountKey is a string used as prefix to the KVStore
-	KYCAddressKey  = "PylonsAccount-KYCAddress-value-"
-	KYCUsernameKey = "KYCUsername-value-"
+	KYCAccountKey = "PylonsAccount-KYCAddress-value-"
 )
 
 const (
