@@ -434,8 +434,7 @@ export default class EaselBuy extends Component {
                             />
                           </p>
                         </div>
-                        {/* Can Be Use For Later Version */}
-                        {/* {nftType?.toLowerCase() === "audio" ? (
+                        {nftType?.toLowerCase() === "audio" ? (
                           <>
                             <audio
                               controls
@@ -454,7 +453,7 @@ export default class EaselBuy extends Component {
                           </>
                         ) : (
                           <></>
-                        )} */}
+                        )}
                         {/*For later Use*/}
                         {/* <div className="views">
                           <img
