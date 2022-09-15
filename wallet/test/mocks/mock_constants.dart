@@ -201,6 +201,8 @@ const String SIGNATURE = 'signature';
 const String MOCK_ACCOUNT_LINK = 'mock_account_link';
 const String MOCK_ACCOUNT = 'mock_account';
 const bool MOCK_STRIPE_ACCOUNT_EXISTS = true;
+const bool MOCK_PRODUCT_PURCHASED = true;
+const bool MOCK_IAP_AVAILABLE = true;
 
 StripeUpdateAccountRequest MOCK_STRIPE_UPDATE_ACCOUNT_REQUEST = StripeUpdateAccountRequest(Address: MOCK_ADDRESS, Token: MOCK_TOKEN, Signature: SIGNATURE);
 StripeGetLoginBasedOnAddressRequest MOCK_STRIPE_LOGIN_BASED_ADDRESS_REQUEST = StripeGetLoginBasedOnAddressRequest(MOCK_ADDRESS);
