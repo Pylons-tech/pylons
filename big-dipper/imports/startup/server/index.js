@@ -20,8 +20,8 @@ const IMAGE_HEIGHT = 800;
   
 const defaultImage = '/img/buy_icon.png'; 
 const defaultMetaTags = `
-<meta property="og:title"       content="${"Big-Dipper"}" />
-<meta property="og:description" content="${"Wallet deep link"}" />
+<meta property="og:title"       content="${"Big Dipper | Built on Pylons"}" />
+<meta property="og:description" content="Blockchain Development Tools For Digital Items & NFTs" />
 <meta property="og:image"       content="${defaultImage}" />
 <meta property="og:url"         content="" />
 `;
