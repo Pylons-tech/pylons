@@ -59,6 +59,64 @@ public class Pigeon {
       return pigeonResult;
     }
   }
+  private static class MessageUtilCodec extends StandardMessageCodec {
+    public static final MessageUtilCodec INSTANCE = new MessageUtilCodec();
+    private MessageUtilCodec() {}
+    @Override
+    protected Object readValueOfType(byte type, ByteBuffer buffer) {
+      switch (type) {
+        case (byte)128:         
+          return NFTMessage.fromMap((Map<String, Object>) readValue(buffer));
+        
+        default:        
+          return super.readValueOfType(type, buffer);
+        
+      }
+    }
+    @Override
+    protected void writeValue(ByteArrayOutputStream stream, Object value)     {
+      if (value instanceof NFTMessage) {
+        stream.write(128);
+        writeValue(stream, ((NFTMessage) value).toMap());
+      } else 
+{
+        super.writeValue(stream, value);
+      }
+    }
+  }
+
+  /** Generated interface from Pigeon that represents a handler of messages from Flutter.*/
+  public interface MessageUtil {
+    @NonNull List<NFTMessage> getCollection();
+
+    /** The codec used by MessageUtil. */
+    static MessageCodec<Object> getCodec() {
+      return MessageUtilCodec.INSTANCE;
+    }
+
+    /** Sets up an instance of `MessageUtil` to handle messages through the `binaryMessenger`. */
+    static void setup(BinaryMessenger binaryMessenger, MessageUtil api) {
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MessageUtil.getCollection", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              List<NFTMessage> output = api.getCollection();
+              wrapped.put("result", output);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+    }
+  }
   private static class CollectionsApiCodec extends StandardMessageCodec {
     public static final CollectionsApiCodec INSTANCE = new CollectionsApiCodec();
     private CollectionsApiCodec() {}

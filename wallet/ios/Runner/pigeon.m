@@ -57,6 +57,79 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 }
 @end
 
+@interface MessageUtilCodecReader : FlutterStandardReader
+@end
+@implementation MessageUtilCodecReader
+- (nullable id)readValueOfType:(UInt8)type 
+{
+  switch (type) {
+    case 128:     
+      return [NFTMessage fromMap:[self readValue]];
+    
+    default:    
+      return [super readValueOfType:type];
+    
+  }
+}
+@end
+
+@interface MessageUtilCodecWriter : FlutterStandardWriter
+@end
+@implementation MessageUtilCodecWriter
+- (void)writeValue:(id)value 
+{
+  if ([value isKindOfClass:[NFTMessage class]]) {
+    [self writeByte:128];
+    [self writeValue:[value toMap]];
+  } else 
+{
+    [super writeValue:value];
+  }
+}
+@end
+
+@interface MessageUtilCodecReaderWriter : FlutterStandardReaderWriter
+@end
+@implementation MessageUtilCodecReaderWriter
+- (FlutterStandardWriter *)writerWithData:(NSMutableData *)data {
+  return [[MessageUtilCodecWriter alloc] initWithData:data];
+}
+- (FlutterStandardReader *)readerWithData:(NSData *)data {
+  return [[MessageUtilCodecReader alloc] initWithData:data];
+}
+@end
+
+NSObject<FlutterMessageCodec> *MessageUtilGetCodec() {
+  static dispatch_once_t sPred = 0;
+  static FlutterStandardMessageCodec *sSharedObject = nil;
+  dispatch_once(&sPred, ^{
+    MessageUtilCodecReaderWriter *readerWriter = [[MessageUtilCodecReaderWriter alloc] init];
+    sSharedObject = [FlutterStandardMessageCodec codecWithReaderWriter:readerWriter];
+  });
+  return sSharedObject;
+}
+
+
+void MessageUtilSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<MessageUtil> *api) {
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.MessageUtil.getCollection"
+        binaryMessenger:binaryMessenger
+        codec:MessageUtilGetCodec()        ];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getCollectionWithError:)], @"MessageUtil api (%@) doesn't respond to @selector(getCollectionWithError:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FlutterError *error;
+        NSArray<NFTMessage *> *output = [api getCollectionWithError:&error];
+        callback(wrapResult(output, error));
+      }];
+    }
+    else {
+      [channel setMessageHandler:nil];
+    }
+  }
+}
 @interface CollectionsApiCodecReader : FlutterStandardReader
 @end
 @implementation CollectionsApiCodecReader

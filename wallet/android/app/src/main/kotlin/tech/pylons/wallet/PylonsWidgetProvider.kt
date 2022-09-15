@@ -1,11 +1,13 @@
 package tech.pylons.wallet
 
+//import android.R
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.widget.RemoteViews
-import android.content.Intent
-import android.appwidget.AppWidgetProvider
 import tech.pylons.wallet.R
 
 
@@ -16,6 +18,9 @@ class PylonsWidgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
+//        for (appWidgetId in appWidgetIds) {
+//            updateAppWidget(context, appWidgetManager, appWidgetId)
+//        }
         appWidgetIds.forEach { appWidgetId ->
 
             val intent = Intent(context, PylonsWidgetService::class.java).apply {
@@ -34,5 +39,16 @@ class PylonsWidgetProvider : AppWidgetProvider() {
 
         super.onUpdate(context, appWidgetManager, appWidgetIds)
     }
+
+//    private fun updateAppWidget(
+//        context: Context, appWidgetManager: AppWidgetManager,
+//        appWidgetId: Int
+//    ) {
+//
+//        //val views = RemoteViews(context.packageName, R.layout.pylons_widget_layout)
+//
+//        appWidgetManager.updateAppWidget(appWidgetId, views)
+//    }
+
 }
 

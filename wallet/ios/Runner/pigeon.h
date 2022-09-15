@@ -17,6 +17,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString * imageUrl;
 @end
 
+/// The codec used by MessageUtil.
+NSObject<FlutterMessageCodec> *MessageUtilGetCodec(void);
+
+@protocol MessageUtil
+/// @return `nil` only when `error != nil`.
+- (nullable NSArray<NFTMessage *> *)getCollectionWithError:(FlutterError *_Nullable *_Nonnull)error;
+@end
+
+extern void MessageUtilSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<MessageUtil> *_Nullable api);
+
 /// The codec used by CollectionsApi.
 NSObject<FlutterMessageCodec> *CollectionsApiGetCodec(void);
 

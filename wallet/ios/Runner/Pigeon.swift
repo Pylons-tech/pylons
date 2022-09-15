@@ -23,6 +23,64 @@ struct NFTMessage {
     ]
   }
 }
+private class MessageUtilCodecReader: FlutterStandardReader {
+  override func readValue(ofType type: UInt8) -> Any? {
+    switch type {
+      case 128:
+        return NFTMessage.fromMap(self.readValue() as! [String: Any])      
+      default:
+        return super.readValue(ofType: type)
+      
+    }
+  }
+}
+private class MessageUtilCodecWriter: FlutterStandardWriter {
+  override func writeValue(_ value: Any) {
+    if let value = value as? NFTMessage {
+      super.writeByte(128)
+      super.writeValue(value.toMap())
+    } else {
+      super.writeValue(value)
+    }
+  }
+}
+
+private class MessageUtilCodecReaderWriter: FlutterStandardReaderWriter {
+  override func reader(with data: Data) -> FlutterStandardReader {
+    return MessageUtilCodecReader(data: data)
+  }
+
+  override func writer(with data: NSMutableData) -> FlutterStandardWriter {
+    return MessageUtilCodecWriter(data: data)
+  }
+}
+
+class MessageUtilCodec: FlutterStandardMessageCodec {
+  static let shared = MessageUtilCodec(readerWriter: MessageUtilCodecReaderWriter())
+}
+
+/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
+protocol MessageUtil {
+  func getCollection() -> [NFTMessage]
+}
+
+/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
+class MessageUtilSetup {
+  /// The codec used by MessageUtil.
+  static var codec: FlutterStandardMessageCodec { MessageUtilCodec.shared }
+  /// Sets up an instance of `MessageUtil` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: MessageUtil?) {
+    let getCollectionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.MessageUtil.getCollection", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getCollectionChannel.setMessageHandler { _, reply in
+        let result = api.getCollection()
+        reply(wrapResult(result))
+      }
+    } else {
+      getCollectionChannel.setMessageHandler(nil)
+    }
+  }
+}
 private class CollectionsApiCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
