@@ -1,7 +1,7 @@
 name: pylons_wallet
 description: Pylons Wallet
 publish_to: "none"
-version: 1.0.1+142
+version: 1.0.1+144
 
 
 environment:
@@ -60,7 +60,7 @@ dependencies:
 
   internet_connection_checker: ^0.0.1+4
 
-  flutter_secure_storage: 5.0.2
+  flutter_secure_storage: ^6.0.0
 
   flutter_screenutil: 5.1.0
 
@@ -76,8 +76,8 @@ dependencies:
     path: pkgs/transaction_signing_gateway
 
   advance_pdf_viewer:
-    git:
-      url: https://github.com/lohanidamodar/pdf_viewer.git
+    path: pkgs/pdf_viewer-master
+
 
   cupertino_icons: ^1.0.3
   decimal: 1.5.0

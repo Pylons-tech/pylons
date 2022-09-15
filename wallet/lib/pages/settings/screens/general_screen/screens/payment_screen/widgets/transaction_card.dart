@@ -39,14 +39,14 @@ class TransactionCard extends StatelessWidget {
 
   Widget getDateStamp({required DateTime date}) {
     if (isDateSame) {
-      return SizedBox(width: 22.w);
+      return SizedBox(width: 30.w);
     }
 
     final formattedDate =
         formatDate(date, DateFormatEnum.shortUIDateDay).split(" ");
 
     return SizedBox(
-      width: 22.w,
+      width: 30.w,
       child: Column(
         children: [
           Text(
@@ -69,7 +69,7 @@ class TransactionCard extends StatelessWidget {
       child: Row(
         children: [
           getDateStamp(date: date),
-          SizedBox(width: 10.w),
+          SizedBox(width: 5.w),
           LeadingBuilder(
             onSendReceive: (context) =>
                 SvgPicture.asset(SVGUtil.PAYMENT_SEND_RECEIVE),

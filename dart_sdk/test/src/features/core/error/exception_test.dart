@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pylons_sdk/pylons_sdk.dart';
+import 'package:pylons_sdk/src/core/error/exceptions.dart';
+
 
 import '../../../../mocks/mock_constants.dart';
 
