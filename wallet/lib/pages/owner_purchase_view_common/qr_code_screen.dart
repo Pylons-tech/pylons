@@ -44,8 +44,8 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
         break;
 
       case NftType.TYPE_ITEM:
-        link = widget.nft.itemID.createPurchaseNFT(
-            cookBookId: widget.nft.cookbookID, address: address);
+        link = widget.nft.recipeID.createDynamicLink(
+            cookbookId: widget.nft.cookbookID, address: address);
         break;
 
       case NftType.TYPE_RECIPE:
