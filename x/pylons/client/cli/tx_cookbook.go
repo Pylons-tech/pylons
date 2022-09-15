@@ -81,7 +81,7 @@ pylonsd tx pylons create-cookbook "loud123456" "Legend of the Undead Dragon" "Co
 
 func CmdUpdateCookbook() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-cookbook [id] [name] [description] [developer] [version] [support-email] [cost-per-block] [enabled]",
+		Use:   "update-cookbook [id] [name] [description] [developer] [version] [support-email] [enabled]",
 		Short: "update cookbook",
 		Args:  cobra.ExactArgs(7),
 		RunE: func(cmd *cobra.Command, args []string) error {
