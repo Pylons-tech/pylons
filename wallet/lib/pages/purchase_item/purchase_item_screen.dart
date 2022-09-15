@@ -318,7 +318,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                     nft: viewModel.nft,
                                     purchaseItemViewModel: viewModel,
                                     onPurchaseDone: (txId) {
-                                      showTransactionCompleteDialog(txId);
+                                      showTransactionCompleteDialog(txId: txId, txTimeStamp: '', );
                                     },
                                     shouldBuy: balancesFetchResult);
                                 payNowDialog.show();
@@ -740,8 +740,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     );
   }
 
-  void showTransactionCompleteDialog(String txId) {
+  void showTransactionCompleteDialog({required String txId, required String txTimeStamp}) {
     final formatter = DateFormat('MMM dd yyyy HH:mm');
+    final DateTime dateTime = DateTime.fromMicrosecondsSinceEpoch(int.parse(txTimeStamp));
     final viewModel = context.read<PurchaseItemViewModel>();
 
     var price = double.parse(viewModel.nft.price);
@@ -755,7 +756,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         createdBy: viewModel.nft.creator,
         currency: viewModel.nft.ibcCoins.getAbbrev(),
         soldBy: viewModel.nft.owner.isEmpty ? viewModel.nft.creator : viewModel.nft.owner,
-        transactionTime: "${formatter.format(DateTime.now().toUtc())} UTC",
+        transactionTime: "${formatter.format(dateTime.toUtc())} UTC",
         total: viewModel.nft.ibcCoins.getCoinWithDenominationAndSymbol(viewModel.nft.price, showDecimal: true),
         nftName: viewModel.nft.name,
         transactionId: txId);

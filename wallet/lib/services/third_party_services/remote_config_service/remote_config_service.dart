@@ -56,6 +56,24 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
   BaseEnv getBaseEnv() {
     return BaseEnv()
       ..setEnv(
+        lcdUrl: dotenv.env['TEST_LCD_URL'].toString(),
+        grpcUrl: dotenv.env['TEST_GRPC_URL'].toString(),
+        lcdPort: dotenv.env['TEST_LCD_PORT'].toString(),
+        mongoUrl: dotenv.env['TEST_MONGO_URL'].toString(),
+        grpcPort: dotenv.env['TEST_GRPC_PORT'].toString(),
+        ethUrl: dotenv.env['TEST_ETH_URL'].toString(),
+        faucetUrl: dotenv.env['TEST_FAUCET_URL'].toString(),
+        stripeUrl: dotenv.env['TEST_STRIPE_SERVER'].toString(),
+        stripePubKey: dotenv.env['TEST_STRIPE_PUB_KEY'].toString(),
+        stripeTestEnv: dotenv.env['TEST_STRIPE_TEST_ENV'] == 'true',
+        stripeCallbackUrl: dotenv.env['TEST_STRIPE_CALLBACK_URL'] ?? "",
+        stripeCallbackRefreshUrl:
+        dotenv.env['TEST_STRIPE_CALLBACK_REFRESH_URL'] ?? "",
+        chainId: dotenv.env['TEST_CHAIN_ID'].toString(),
+        ibcTraceUrl: dotenv.env['TEST_IBC_TRACE'].toString(), skus: defaultPylonsSKUs,
+      );
+    return BaseEnv()
+      ..setEnv(
         lcdUrl: firebaseRemoteConfig.getString(lcdUrl),
         grpcUrl: firebaseRemoteConfig.getString(grpcUrl),
         lcdPort: firebaseRemoteConfig.getString(lcdPort),
@@ -124,22 +142,22 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
   @override
   Future init() async {
     await firebaseRemoteConfig.setDefaults({
-      lcdUrl: dotenv.env['LCD_URL'],
-      grpcUrl: dotenv.env['GRPC_URL'],
-      lcdPort: dotenv.env['LCD_PORT'],
-      grpcPort: dotenv.env['GRPC_PORT'],
-      ethUrl: dotenv.env['ETH_URL'],
-      tendermintPort: dotenv.env['TENDERMINT_PORT'],
-      faucetUrl: dotenv.env['FAUCET_URL'],
-      wsUrl: dotenv.env['WS_URL'],
-      stripeUrl: dotenv.env['STRIPE_SERVER'],
-      stripePubKey: dotenv.env['STRIPE_PUB_KEY'],
-      stripeTestEnv: dotenv.env['STRIPE_TEST_ENV'] == 'true',
-      stripeCallbackUrl: dotenv.env['STRIPE_CALLBACK_URL'] ?? "",
-      stripeCallbackRefreshUrl: dotenv.env['STRIPE_CALLBACK_REFRESH_URL'] ?? "",
+      lcdUrl: dotenv.env['TEST_LCD_URL'],
+      grpcUrl: dotenv.env['TEST_GRPC_URL'],
+      lcdPort: dotenv.env['TEST_LCD_PORT'],
+      grpcPort: dotenv.env['TEST_GRPC_PORT'],
+      ethUrl: dotenv.env['TEST_ETH_URL'],
+      tendermintPort: dotenv.env['TEST_TENDERMINT_PORT'],
+      faucetUrl: dotenv.env['TEST_FAUCET_URL'],
+      wsUrl: dotenv.env['TEST_WS_URL'],
+      stripeUrl: dotenv.env['TEST_STRIPE_SERVER'],
+      stripePubKey: dotenv.env['TEST_STRIPE_PUB_KEY'],
+      stripeTestEnv: dotenv.env['TEST_STRIPE_TEST_ENV'] == 'true',
+      stripeCallbackUrl: dotenv.env['TEST_STRIPE_CALLBACK_URL'] ?? "",
+      stripeCallbackRefreshUrl: dotenv.env['TEST_STRIPE_CALLBACK_REFRESH_URL'] ?? "",
       iosVERSION: IOS_VERSION,
       androidVersion: ANDROID_VERSION,
-      chainId: dotenv.env['CHAIN_ID'],
+      chainId: dotenv.env['TEST_CHAIN_ID'],
       skus: defaultPylonsSKUs,
       mongoUrl: dotenv.env[mongoUrl] ?? "",
 
