@@ -7,24 +7,29 @@ List kTutorialItems = [
 ];
 
 /// ```PNG assets
-const kShareIcon = 'assets/images/share_ic.png';
-const kSaveIcon = 'assets/images/save_ic.png';
-const kTooltipBalloon = 'assets/images/tooltip_balloon.png';
-const kIconDenomUsd = 'assets/images/denom_usd.png';
-const kIconDenomPylon = 'assets/images/denom_pylon.png';
-const kIconDenomAtom = 'assets/images/denom_atom.png';
-const kIconDenomEmoney = 'assets/images/denom_emoney.png';
-const kIconDenomAgoric = 'assets/images/denom_agoric.png';
-const kIconDenomJuno = 'assets/images/denom_juno.png';
-const kIconDenomETH = 'assets/images/denom_eth.png';
-const kTextFieldSingleLine = 'assets/images/text_field_single_line.png';
-const kTextFieldMultiLine = 'assets/images/text_field_multi_line.png';
-const kTextFieldButton = 'assets/images/text_field_button.png';
-const kPreviewGradient = 'assets/images/preview_gradient.png';
-const kUploadThumbnail = 'assets/images/svg/upload_thumbnail.svg';
-const kVideoThumbnailRectangle = 'assets/images/video_thumbnail_rectangle.png';
-const kFullScreenIcon = 'assets/images/svg/full_screen_icon.svg';
-const kAlertIcon = 'assets/images/svg/i_icon.svg';
+class PngUtils {
+  static const kShareIcon = 'assets/images/share_ic.png';
+  static const kSaveIcon = 'assets/images/save_ic.png';
+  static const  kTooltipBalloon = 'assets/images/tooltip_balloon.png';
+  static const kIconDenomUsd = 'assets/images/denom_usd.png';
+  static const kIconDenomPylon = 'assets/images/denom_pylon.png';
+  static const kIconDenomAtom = 'assets/images/denom_atom.png';
+  static const kIconDenomEmoney = 'assets/images/denom_emoney.png';
+  static const kIconDenomAgoric = 'assets/images/denom_agoric.png';
+  static const kIconDenomJuno = 'assets/images/denom_juno.png';
+  static const kIconDenomETH = 'assets/images/denom_eth.png';
+  static const kTextFieldSingleLine = 'assets/images/text_field_single_line.png';
+  static const kTextFieldMultiLine = 'assets/images/text_field_multi_line.png';
+  static const kTextFieldButton = 'assets/images/text_field_button.png';
+  static const kPreviewGradient = 'assets/images/preview_gradient.png';
+  static const kUploadThumbnail = 'assets/images/svg/upload_thumbnail.svg';
+  static const kVideoThumbnailRectangle = 'assets/images/video_thumbnail_rectangle.png';
+  static const kFullScreenIcon = 'assets/images/svg/full_screen_icon.svg';
+  static const kAlertIcon = 'assets/images/svg/i_icon.svg';
+}
+
+
+
 
 /// ```SVG assets
 const kSvgSplash = 'assets/images/svg/splash.svg';
@@ -121,107 +126,31 @@ const kAgoricText = 'Agoric';
 const kJunoText = 'Juno';
 const kEthereum = "Ethereum";
 const kNone = 'None';
-const kPleaseWait = 'Please Wait';
 const kBack = 'Back';
 const String kUniversalFontFamily = "UniversalSans";
 
 /// ```Text constants
-const kPreviewNoticeText = 'The resolution & orientation of your NFT will remain fixed as seen in the grid.';
-const kPriceNoticeText = 'You can remove an active listing or revise the price of your NFT in your Pylons wallet';
-const kNameAsArtistText = 'Your name as the artist';
-const kGiveNFTNameText = 'Give your NFT a name';
-const kEnterArtistNameText = 'Enter artist name';
-const kEnterNFTNameText = 'Enter NFT name';
-const kNameShouldHaveText = 'NFT name should have';
-const kCharactersOrMoreText = 'characters or more';
-const kDescribeYourNftText = 'Describe your NFT';
-const kEnterNFTDescriptionText = 'Enter NFT description';
-const kPriceText = 'Price';
-const kEnterPriceText = 'Enter price';
-const kEnterEditionText = 'Enter number of editions';
-const kNoOfEditionText = 'Number of editions';
-const kEnterRoyaltyText = 'Enter royalty in percentage';
-const kRoyaltiesText = 'Royalties';
-const kRoyaltyHintText = '5%';
-const kRoyaltyNoteText = 'Percentage of all secondary market sales automatically distributed to the NFT creator';
-const kRoyaltyRangeText = 'Allowed royalty is between';
-const kMinIsText = 'Minimum is';
-const kMaxIsTextText = 'Maximum is';
-const kCharacterLimitText = 'character limit';
-const kEnterMoreThanText = 'Enter more than';
-const kCharactersText = 'characters';
-const kMaxText = 'maximum';
-const kOkText = 'Ok';
-const kPylonsAppNotInstalledText = 'Pylons app is not installed on this device. Please install Pylons app to continue';
-const kClickToInstallText = 'Click here to install';
-const kClickToLogInText = 'Click here to log into Pylons';
-const kWelcomeToEaselText = 'Welcome to Easel,';
-const kEaselDescriptionText =
-    'Easel is a NFT minter that allows you to create NFTs from any mobile device!\n\nOnce you successfully upload an audio, video or image file, enter the required information and press “Publish”, your file is transformed into a NFT that is stored on the Pylons blockchain indefinitely!\n\nYou’ll be able to view your new NFT in the Easel folder located in your Pylons Wallet.';
-const kCreatedByText = 'Created by';
-const kNftDetailsText = 'NFT Details';
-const kDescribeText = 'Describe';
-const kSizeText = 'Size';
-const kDurationText = 'Duration';
-const kDateText = 'Date';
-const kRoyaltyText = 'Royalty';
-const kPreview3dModelText = 'Click here to preview\nyour selected 3D Model';
-const kMintMoreText = 'Mint More';
-const kGoToWalletText = 'Go to Wallet';
-const kChooseNFTFormatText = 'Choose your NFT format';
-const kUploadNFTText = 'Upload NFT file';
-const kEditNFTText = 'Edit your NFT Details';
-const kPreviewYourNFTText = 'Preview your NFT file';
-const kListNftText = 'List NFT';
-const kPublishNftText = 'Publish NFT';
 
-const kSelectNFTText = 'Select NFT file';
-const kDetailNftText = 'NFT Details';
-const kPriceNftText = 'NFT Pricing';
-const kUploadText = 'Upload';
-const kEditText = 'Edit';
-const kPreviewText = 'Preview';
-const kListText = 'List';
+
+
+const kRoyaltyHintText = '5%';
+
 const kImageText = 'Image';
 const kVideoText = 'Video';
 const kAudioText = 'Audio';
 const k3dText = '3D';
 const kPdfText = 'Pdf';
 const String kThreeDText = "ThreeD";
-const kGetStarted = 'Get Started';
-const kContinue = 'Continue';
 const kWhyAppNeeded = 'Why the app is\nneeded?        \u21E9';
-const kWhyAppNeededDesc1 = 'Your Pylons app is your gateway to the Pylons ecosystem';
-const kWhyAppNeededDescSummary1 = 'Discover new NFTs, apps & adventures';
-const kWhyAppNeededDesc2 = 'It makes managing your crypto easy';
-const kWhyAppNeededDescSummary2 = 'No frills. No complexities. One wallet  address for all your crypto';
-const kWhyAppNeededDesc3 = 'You can always delete it if you’d like';
-const kWhyAppNeededDescSummary3 = 'No subscriptions. We don’t sell your information. We only charge a fee when you purchase a NFT';
-const kPylonsAlreadyInstalled = 'Pylons already installed.';
-const kTapToSelect = 'Tap to Select';
-const kCloseText = 'Close';
-const kUploadHint2 = '• Image, Video, 3D or Audio';
-const kUploadHint3 = '• One file per upload';
-const kUploadHintAll = 'GB Limit.\nOne file per upload.';
 
-const kRecipeCreated = 'Recipe created';
+
+
+const kUploadHint2 = '• Image, Video, 3D or Audio';
+
+
 const kErrProfileNotExist = 'profileDoesNotExist';
-const kErrProfileFetch = 'Error occurred while fetching wallet profile';
-const kErrPickFileFetch = 'Error occurred while uploading the file, please try again';
-const kErrUpload = 'Upload error occurred';
-const kErrFileNotPicked = 'Pick a file';
-const kErrUnsupportedFormat = 'Unsupported format';
-const kErrFileMetaParse = 'Error occurred while parsing the chosen media file:';
+
 const kErrRecipe = 'Recipe error :';
-const kErrNoStripeAccount = 'Kindly register Stripe account in wallet';
-const kTryAgain = "Try again";
-const kPleaseTryAgain = "Something went wrong.\n Please try again.";
-const kCancel = "Cancel";
-const String videoPlayerNetworkError = 'Unable to play the video right now. Please check your internet connection and try again.';
-const kChooseFifteenSecondsOfAudio = "Choose 15s highlight of your audio for preview";
-const kUploadingThumbnailMessage = "Uploading Thumbnail";
-const videoPlayerError = "Some Error Occurred while playing the video. Please try again later.";
-const kCannotLaunchThisUrl = "Cannot launch this URL";
 
 //NFT STRINGS KEYS
 const kResidual = "Residual";
@@ -246,11 +175,6 @@ const kFileSize = "fileSize";
 
 const kThumbnailFileName = "temp.jpg";
 
-//Loader Messages
-const kCompressingMessage = "Compressing Thumbnail";
-const kUploadingMessage = "Uploading";
-const kLoadingMessage = "Loading...";
-
 final List<String> stepLabels = ["upload", "detail", "price   "];
 
 final List<String> imageAllowedExts = ["png", "jpg", "jpeg", "svg", "heif", "gif"];
@@ -268,15 +192,10 @@ const String kAppTypeKey = "App_Type";
 const String kWidthKey = "Width";
 const String kHeightKey = "Height";
 const String kQuantityKey = "Quantity";
-const String kHashtagKey = "Hashtags";
 
 const String kDescriptionTutorial = "description";
 const String kHeaderTutorial = "header";
 const String kImageTutorial = "image";
-
-const String kNoInternet = 'No internet';
-const String kRecipeNotFound = 'Recipe not found';
-const String kCookBookNotFound = 'Cookbook not found';
 
 const String kNftFormat = "NFT_Format";
 
@@ -295,8 +214,6 @@ const String kDefault = 'Default';
 const String kMyEaselNFT = 'My Easel NFT';
 const String fromKey = 'from';
 const String nftKey = 'nft';
-const String kErrAddAudioThumbnail = 'Error while uploading thumbnail';
-const String uploadYourThumbnail = 'Kindly upload thumbnail';
 
 /// Supported Formats
 
@@ -327,4 +244,4 @@ const kLinkKey = "link";
 
 const kTwelve = 12;
 
-const one =1;
+const one = 1;
