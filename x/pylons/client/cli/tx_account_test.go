@@ -1,7 +1,6 @@
 package cli_test
 
 import (
-	"fmt"
 	"testing"
 
 	util "github.com/Pylons-tech/pylons/testutil/cli"
@@ -19,8 +18,6 @@ func TestCmdCreateAccount(t *testing.T) {
 	ctx := net.Validators[0].ClientCtx
 
 	acc := util.GenerateAddressesInKeyring(ctx.Keyring, 2)
-
-	fmt.Println(acc)
 
 	types.UpdateAppCheckFlagTest(types.FlagTrue)
 
@@ -85,6 +82,14 @@ func TestCmdCreateAccount(t *testing.T) {
 			username:        "testUsername2",
 			token:           "",
 			referralAddress: types.GenTestBech32FromString("RefferalAddress"),
+			common:          util.CommonArgs(acc[1].String(), net),
+			shouldErr:       true,
+		},
+		{
+			desc:            "Valid 2",
+			username:        "testUsername2",
+			token:           "",
+			referralAddress: acc[0].String(),
 			common:          util.CommonArgs(acc[1].String(), net),
 			shouldErr:       true,
 		},
