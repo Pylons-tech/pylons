@@ -223,13 +223,13 @@ class PayByCardWidget extends StatelessWidget {
         ''';
 
         final jsonMap = jsonDecode(jsonExecuteRecipe) as Map;
-        jsonMap["cookbookID"] = recipe.cookbookID;
-        jsonMap["recipeID"] = recipe.recipeID;
+        jsonMap[kCookbookID] = recipe.cookbookID;
+        jsonMap[kRecipeID] = recipe.recipeID;
         jsonMap[kNftName] = nft.name;
         jsonMap[kNftPrice] = nft.ibcCoins.getCoinWithProperDenomination(nft.price);
         jsonMap[kNftCurrency] = nft.ibcCoins.getAbbrev();
 
-        final paymentInfos = jsonMap["paymentInfos"] as List<dynamic>;
+        final paymentInfos = jsonMap[kPaymentInfosMap] as List<dynamic>;
         paymentInfos.add(receipt.toJson());
 
         showLoading(navigatorKey.currentState!.overlay!.context);

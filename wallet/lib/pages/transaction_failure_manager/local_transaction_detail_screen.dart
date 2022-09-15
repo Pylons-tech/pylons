@@ -72,7 +72,7 @@ class LocalTransactionDetailScreen extends StatelessWidget {
             const Spacer(),
             Expanded(
               child: Text(
-                " ${args.transactionPrice}",
+                " ${args.transactionPrice} ${args.transactionCurrency} ",
                 style: TextStyle(
                     color: getTxTypeFlag(txType: args.status.toTransactionStatusEnum()) ? kDarkGreen : kDarkRed, fontFamily: kUniversalFontFamily, fontSize: 15.sp, fontWeight: FontWeight.bold),
               ),

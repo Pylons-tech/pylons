@@ -209,6 +209,8 @@ class _PylonsAppState extends State<PylonsApp> {
 
         if (googleInAppPurchase.isLeft()) {
           googleInAppPurchase.swap().toOption().toNullable()!.message.show();
+          Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
+
           return;
         }
 

@@ -421,7 +421,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
       jsonMap[kNftPrice] = nft.ibcCoins.getCoinWithProperDenomination(nft.price);
       jsonMap[kNftCurrency] = nft.ibcCoins.getAbbrev();
 
-      final paymentInfos = jsonMap["payment_infos"] as List<dynamic>;
+      final paymentInfos = jsonMap[kPaymentInfos] as List<dynamic>;
       paymentInfos.add(receipt.toJson());
 
       final loader = Loading()..showLoading();
@@ -433,6 +433,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
       if (executionEither.isLeft()) {
         "something_wrong".tr().show();
+        Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
         return;
       }
       final execution = executionEither.toOption().toNullable();

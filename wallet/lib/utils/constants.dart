@@ -417,3 +417,9 @@ const String kNftPrice= "nftPrice";
 const String kNftCurrency= "nftCurrency";
 const String kPaymentIntentId= "payment_intent_id";
 const String kClientSecret= "clientSecret";
+const String kPaymentInfos= "payment_infos";
+
+
+const String kRecipeID= "recipeID";
+const String kCookbookID= "cookbookID";
+const String kPaymentInfosMap= "paymentInfos";
