@@ -1651,3 +1651,10 @@ model-viewer {
     width: 100% !important;
   }
 }
+.img-audio {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 90vh;
+}
