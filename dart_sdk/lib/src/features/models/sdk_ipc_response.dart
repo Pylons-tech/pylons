@@ -26,9 +26,9 @@ class SDKIPCResponse<T> {
         success: jsonMap['success']);
   }
 
-  factory SDKIPCResponse.success(T data) {
+  factory SDKIPCResponse.success(T data, {String action = ''}) {
     return SDKIPCResponse(
-        error: '', errorCode: '', action: '', data: data, success: true);
+        error: '', errorCode: '', action: action, data: data, success: true);
   }
 
   String toBas64Hash() => base64Url.encode(utf8.encode(toJson()));

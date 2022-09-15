@@ -45,7 +45,7 @@ class _HashtagInputFieldState extends State<EaselHashtagInputField> {
           SizedBox(height: 4.h),
           Stack(children: [
             Image.asset(
-              kTextFieldSingleLine,
+              PngUtils.kTextFieldSingleLine,
               height: isTablet ? 32.h : 40.h,
               width: 1.sw,
               fit: BoxFit.fill,

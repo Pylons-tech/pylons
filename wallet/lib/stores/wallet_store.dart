@@ -35,7 +35,7 @@ abstract class WalletsStore {
   /// This method creates the cookbook
   /// Input : [Map] containing the info related to the creation of cookbook
   /// Output : [String] response
-  Future<SdkIpcResponse> createCookbook(Map json);
+  Future<SdkIpcResponse<String>> createCookbook(Map json);
 
   /// This method is for create recipe
   /// MsgCreateRecipe proto
