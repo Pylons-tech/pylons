@@ -27,8 +27,6 @@ import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.d
 import 'package:pylons_wallet/services/third_party_services/network_info.dart';
 import 'package:pylons_wallet/stores/models/transaction_response.dart';
 import 'package:pylons_wallet/utils/backup/common/backup_model.dart';
-import 'package:pylons_wallet/utils/backup/google_drive_helper.dart';
-import 'package:pylons_wallet/utils/backup/icloud_driver_helper.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
@@ -36,6 +34,8 @@ import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:pylons_wallet/utils/local_auth_helper.dart';
 import 'package:pylons_wallet/utils/query_helper.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
+
+import '../../utils/backup/common/i_driver_client.dart';
 
 abstract class Repository {
   /// This method returns the recipe based on cookbook id and recipe Id
@@ -312,8 +312,7 @@ abstract class Repository {
   /// This method will get the nft history
   /// Input: [itemId] and [cookBookId] of the nft
   /// Output: returns [List][NftOwnershipHistory] if success else this will give [Failure]
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory(
-      {required String itemId, required String cookBookId});
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String itemId, required String cookBookId});
 
   /// This method will get the transaction history from the chain
   /// Input: [address] of the user
@@ -449,20 +448,15 @@ abstract class Repository {
   /// Output: [String] return the generated dynamic link else will return [Failure]
   Future<Either<Failure, String>> createDynamicLinkForRecipeNftShare({required String address, required NFT nft});
 
-
-
   /// This method will create User account based on account public info
   /// Input: [publicInfo] contains info related to user chain address, [walletCreationModel] contains user entered data
   /// Output: if successful will give [TransactionResponse] else will  return [Failure]
   Future<Either<Failure, TransactionResponse>> createAccount({required AccountPublicInfo publicInfo, required WalletCreationModel walletCreationModel});
 
-
   /// This method will set user app level identifier in the analytics
   /// Input: [address] the address of the user
   /// Output: [bool] tells whether the operation is successful or else will return [Failure]
   Future<Either<Failure, bool>> setUserIdentifierInAnalytics({required String address});
-
-
 }
 
 class RepositoryImp implements Repository {
@@ -476,9 +470,9 @@ class RepositoryImp implements Repository {
 
   final LocalAuthHelper localAuthHelper;
 
-  final GoogleDriveApiImpl googleDriveApi;
+  final IDriverApi googleDriveApi;
 
-  final ICloudDriverApiImpl iCloudDriverApi;
+  final IDriverApi iCloudDriverApi;
 
   final CrashlyticsHelper crashlyticsHelper;
 
@@ -1700,15 +1694,13 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory(
-      {required String itemId, required String cookBookId}) async {
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String itemId, required String cookBookId}) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
     try {
-      final result = await remoteDataStore.getNftOwnershipHistory(
-          itemId: itemId, cookBookId: cookBookId);
+      final result = await remoteDataStore.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
 
       return Right(result);
     } on String catch (_) {
@@ -1807,9 +1799,6 @@ class RepositoryImp implements Repository {
     }
   }
 
-
-
-
   @override
   Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) async {
     if (!await networkInfo.isConnected) {
@@ -1833,10 +1822,8 @@ class RepositoryImp implements Repository {
     try {
       return Right(await remoteDataStore.setUpUserIdentifierInAnalytics(address: address));
     } on Exception catch (e) {
-    recordErrorInCrashlytics(e);
-    return Left(ServerFailure(e.toString()));
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
     }
   }
-
-
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,23 +21,32 @@ class RequestResult<T> extends Equatable {
 }
 
 /// Allows to easily query the current chain state.
-class QueryHelper {
-  final http.Client _httpClient;
-
-  QueryHelper({required http.Client httpClient}) : _httpClient = httpClient;
-
+abstract class QueryHelper {
   /// GET Queries the chain at the given [url].
   /// params [url]
   /// return [RequestResult<Map<String, dynamic>>]
+  Future<RequestResult<Map<String, dynamic>>> queryGet(String url);
+
+  /// POST Queries the chain at the given [url].
+  /// params [url, json]
+  /// return [RequestResult<Map<String, dynamic>>]
+  Future<RequestResult<Map<String, dynamic>>> queryPost(String url, Map json);
+}
+
+class QueryHelperImp implements QueryHelper {
+  final http.Client httpClient;
+
+  QueryHelperImp({required this.httpClient});
+
+  @override
   Future<RequestResult<Map<String, dynamic>>> queryGet(
     String url,
   ) async {
-    final data = await _httpClient.get(Uri.parse(url));
+    final data = await httpClient.get(Uri.parse(url));
 
     if (data.statusCode != HttpStatus.ok) {
       return RequestResult(
-        error:
-            'Call to $url returned status code: ${data.statusCode} msg: ${data.body}',
+        error: 'Call to $url returned status code: ${data.statusCode} msg: ${data.body}',
       );
     }
 
@@ -45,17 +55,12 @@ class QueryHelper {
     );
   }
 
-  /// POST Queries the chain at the given [url].
-  /// params [url, json]
-  /// return [RequestResult<Map<String, dynamic>>]
-  Future<RequestResult<Map<String, dynamic>>> queryPost(
-      String url, Map json) async {
-    final data = await _httpClient.post(Uri.parse(url),
-        headers: {"Content-type": "application/json"}, body: jsonEncode(json));
+  @override
+  Future<RequestResult<Map<String, dynamic>>> queryPost(String url, Map json) async {
+    final data = await httpClient.post(Uri.parse(url), headers: {"Content-type": "application/json"}, body: jsonEncode(json));
     if (data.statusCode != HttpStatus.ok) {
       return RequestResult(
-        error:
-            'Call to $url returned status code: ${data.statusCode} msg:${data.body}',
+        error: 'Call to $url returned status code: ${data.statusCode} msg:${data.body}',
       );
     }
 

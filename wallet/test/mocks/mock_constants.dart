@@ -1,5 +1,6 @@
 import 'package:fixnum/fixnum.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_update_account_request.dart';
 import 'package:pylons_wallet/model/transaction.dart';
@@ -201,6 +202,8 @@ const String SIGNATURE = 'signature';
 const String MOCK_ACCOUNT_LINK = 'mock_account_link';
 const String MOCK_ACCOUNT = 'mock_account';
 const bool MOCK_STRIPE_ACCOUNT_EXISTS = true;
+const bool MOCK_PRODUCT_PURCHASED = true;
+const bool MOCK_IAP_AVAILABLE = true;
 
 StripeUpdateAccountRequest MOCK_STRIPE_UPDATE_ACCOUNT_REQUEST = StripeUpdateAccountRequest(Address: MOCK_ADDRESS, Token: MOCK_TOKEN, Signature: SIGNATURE);
 StripeGetLoginBasedOnAddressRequest MOCK_STRIPE_LOGIN_BASED_ADDRESS_REQUEST = StripeGetLoginBasedOnAddressRequest(MOCK_ADDRESS);
@@ -257,3 +260,8 @@ ProductDetails DUMMY_PRODUCT_DETAILS = ProductDetails(
     rawPrice: 220.0,
     currencyCode: "PKR",
     currencySymbol: "PKR");
+
+const String MOCK_IP = '172.168.1.1';
+const InternetConnectionStatus INTERNET_CONNECTIVITY_STATUS_CONNECTED = InternetConnectionStatus.connected;
+const InternetConnectionStatus INTERNET_CONNECTIVITY_STATUS_DISCONNECTED = InternetConnectionStatus.disconnected;
+const String MOCK_BASE_URL = 'https://dev-api.pylons.com/';

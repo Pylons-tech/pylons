@@ -449,12 +449,12 @@ class MockRepository extends Repository {
 
   @override
   Future<Either<Failure, bool>> buyProduct(ProductDetails productDetails) async {
-    return const Right(true);
+    return const Right(MOCK_PRODUCT_PURCHASED);
   }
 
   @override
   Future<Either<Failure, bool>> isInAppPurchaseAvailable() async {
-    return const Right(true);
+    return const Right(MOCK_IAP_AVAILABLE);
   }
 
   @override

@@ -171,7 +171,7 @@ Future<void> init() async {
 
   sl.registerLazySingleton<StorePaymentService>(() => StorePaymentServiceImpl());
 
-  sl.registerLazySingleton<QueryHelper>(() => QueryHelper(httpClient: sl()));
+  sl.registerLazySingleton<QueryHelper>(() => QueryHelperImp(httpClient: sl()));
 
   /// Repository
   sl.registerLazySingleton<Repository>(() =>
