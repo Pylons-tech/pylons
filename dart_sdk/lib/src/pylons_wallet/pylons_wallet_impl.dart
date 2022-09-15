@@ -175,12 +175,23 @@ class PylonsWalletImpl implements PylonsWallet {
   }
 
   @override
-  Future<SDKIPCResponse> txCreateCookbook(Cookbook cookbook,
+  Future<SDKIPCResponse<Cookbook>> txCreateCookbook(Cookbook cookbook,
       {bool requestResponse = true}) {
     return Future.sync(() async {
-      return await _dispatch(
+      final response = await _dispatch(
           Strings.TX_CREATE_COOKBOOK, jsonEncode(cookbook.toProto3Json()),
           requestResponse: requestResponse);
+
+
+      if (response is SDKIPCResponse<Cookbook>) {
+        return response;
+      }
+
+      if (response is SDKIPCResponse<String> && !requestResponse) {
+        return SDKIPCResponse.success(cookbook, action: Strings.TX_CREATE_COOKBOOK);
+      }
+
+      throw Exception('Response malformed');
     });
   }
 

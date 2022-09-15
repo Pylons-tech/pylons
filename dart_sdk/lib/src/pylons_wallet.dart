@@ -298,7 +298,7 @@ abstract class PylonsWallet {
   ///
   /// If the operation fails due to an exception thrown by this library, that
   /// exception will be passed directly.
-  Future<SDKIPCResponse> txCreateCookbook(Cookbook cookbook,
+  Future<SDKIPCResponse<Cookbook>> txCreateCookbook(Cookbook cookbook,
       {bool requestResponse = true});
 
   /// Async: Creates a transaction to create the provided [Recipe] on the Pylons
