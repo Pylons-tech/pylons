@@ -17,7 +17,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../widgets/clippers/bottom_sheet_clipper.dart';
-import '../creator_hub_view_model.dart';
 
 TextStyle titleStyle = TextStyle(
     fontSize: isTablet ? 13.sp : 16.sp,
@@ -100,9 +99,10 @@ class DraftsMoreBottomSheet extends StatelessWidget {
                 viewCid: (context) {
                   return moreOptionTile(
                     onPressed: () async {
+                      final state = ScaffoldMessenger.of(context);
                       Navigator.of(context).pop();
                       await Clipboard.setData(ClipboardData(text: nft.cid));
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      state..hideCurrentSnackBar()..showSnackBar(
                         SnackBar(content: Text("copied_to_clipboard".tr())),
                       );
                     },

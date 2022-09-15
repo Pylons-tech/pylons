@@ -11,10 +11,10 @@ class VideoProgressWidget extends StatefulWidget {
   const VideoProgressWidget({Key? key, required this.url}) : super(key: key);
 
   @override
-  _VideoProgressWidgetState createState() => _VideoProgressWidgetState();
+  VideoProgressWidgetState createState() => VideoProgressWidgetState();
 }
 
-class _VideoProgressWidgetState extends State<VideoProgressWidget> {
+class VideoProgressWidgetState extends State<VideoProgressWidget> {
   String _getDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     final String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));

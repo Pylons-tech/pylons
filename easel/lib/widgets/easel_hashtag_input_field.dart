@@ -45,7 +45,7 @@ class _HashtagInputFieldState extends State<EaselHashtagInputField> {
           SizedBox(height: 4.h),
           Stack(children: [
             Image.asset(
-              kTextFieldSingleLine,
+              PngUtils.kTextFieldSingleLine,
               height: isTablet ? 32.h : 40.h,
               width: 1.sw,
               fit: BoxFit.fill,
@@ -117,7 +117,7 @@ class _HashtagInputFieldState extends State<EaselHashtagInputField> {
                   children: _hashtagsNotifier.value
                       .map((hashtag) => Row(
                             children: [
-                              Text('#' + hashtag,
+                              Text('#$hashtag',
                                   style: TextStyle(
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w400,

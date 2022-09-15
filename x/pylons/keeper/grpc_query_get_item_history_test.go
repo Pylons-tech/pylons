@@ -64,5 +64,4 @@ func (suite *IntegrationTestSuite) TestItemHistory() {
 			}
 		})
 	}
-
 }

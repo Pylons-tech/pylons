@@ -20,8 +20,8 @@ extension SetScreenSize on WidgetTester {
           designSize: const Size(480, 965),
           builder: () {
             return MaterialApp(
-              home: Builder(builder: (_context) {
-                ScreenUtil.setContext(_context);
+              home: Builder(builder: (context) {
+                ScreenUtil.setContext(context);
                 return child;
               }),
             );

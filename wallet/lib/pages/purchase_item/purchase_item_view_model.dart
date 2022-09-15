@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,6 @@ import 'package:pylons_wallet/services/third_party_services/video_player_helper.
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
-import 'package:pylons_wallet/utils/extension.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
@@ -34,11 +34,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
   final Repository repository;
   ShareHelper shareHelper;
 
-  PurchaseItemViewModel(this.walletsStore,
-      {required this.audioPlayerHelper,
-      required this.videoPlayerHelper,
-      required this.repository,
-      required this.shareHelper});
+  PurchaseItemViewModel(this.walletsStore, {required this.audioPlayerHelper, required this.videoPlayerHelper, required this.repository, required this.shareHelper});
 
   late StreamSubscription playerStateSubscription;
   late StreamSubscription positionStreamSubscription;
@@ -74,7 +70,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _isLiking = false;
+  bool _isLiking = true;
 
   bool get isLiking => _isLiking;
 
@@ -115,9 +111,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     this.nft = nft;
     final walletsList = walletsStore.getWallets().value;
     accountPublicInfo = walletsList.last;
-    final isCurrentUserNotOwner = walletsList
-        .where((element) => element.publicAddress == nft.ownerAddress)
-        .isEmpty;
+    final isCurrentUserNotOwner = walletsList.where((element) => element.publicAddress == nft.ownerAddress).isEmpty;
 
     final isMaxNFtNotMinted = nft.quantity - nft.amountMinted > 0;
 
@@ -135,7 +129,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
   }
 
   void initializeData({required NFT nft}) {
-    nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID);
+    nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);
     initializePlayers(nft);
     toHashtagList();
   }
@@ -251,12 +245,10 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
   bool isUrlLoaded = false;
 
-  Future<void> nftDataInit(
-      {required String recipeId, required String cookBookId}) async {
+  Future<void> nftDataInit({required String recipeId, required String cookBookId, required String itemId}) async {
     final walletAddress = walletsStore.getWallets().value.last.publicAddress;
     if (nft.type != NftType.TYPE_RECIPE) {
-      final nftOwnershipHistory = await repository.getNftOwnershipHistory(
-          recipeID: recipeId, cookBookId: cookBookId);
+      final nftOwnershipHistory = await repository.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
       if (nftOwnershipHistory.isLeft()) {
         "something_wrong".tr().show();
         return;
@@ -264,6 +256,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
       nftOwnershipHistoryList = nftOwnershipHistory.getOrElse(() => []);
     }
+
     final likesCountEither = await repository.getLikesCount(
       cookBookID: cookBookId,
       recipeId: recipeId,
@@ -296,7 +289,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
     );
 
     if (countViewEither.isLeft()) {
-      "something_wrong".tr().show();
       return;
     }
 
@@ -306,15 +298,14 @@ class PurchaseItemViewModel extends ChangeNotifier {
     );
 
     if (viewsCountEither.isLeft()) {
-      "something_wrong".tr().show();
       return;
     }
+    isLiking = false;
 
     viewsCount = viewsCountEither.getOrElse(() => 0);
   }
 
-  Future<void> updateLikeStatus(
-      {required String recipeId, required String cookBookID}) async {
+  Future<void> updateLikeStatus({required String recipeId, required String cookBookID}) async {
     isLiking = true;
     final bool temp = likedByMe;
 
@@ -351,8 +342,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     isUrlLoaded = await audioPlayerHelper.setUrl(url: nft.url);
 
     if (isUrlLoaded) {
-      playerStateSubscription =
-          audioPlayerHelper.playerStateStream().listen((playerState) {
+      playerStateSubscription = audioPlayerHelper.playerStateStream().listen((playerState) {
         final isPlaying = playerState.playing;
         final processingState = playerState.processingState;
 
@@ -376,8 +366,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
         }
       });
 
-      positionStreamSubscription =
-          audioPlayerHelper.positionStream().listen((position) {
+      positionStreamSubscription = audioPlayerHelper.positionStream().listen((position) {
         final oldState = progressNotifier.value;
         progressNotifier.value = ProgressBarState(
           current: position,
@@ -386,8 +375,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
         );
       });
 
-      bufferPositionSubscription =
-          audioPlayerHelper.bufferedPositionStream().listen((bufferedPosition) {
+      bufferPositionSubscription = audioPlayerHelper.bufferedPositionStream().listen((bufferedPosition) {
         final oldState = progressNotifier.value;
         progressNotifier.value = ProgressBarState(
           current: oldState.current,
@@ -396,8 +384,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
         );
       });
 
-      durationStreamSubscription =
-          audioPlayerHelper.durationStream().listen((totalDuration) {
+      durationStreamSubscription = audioPlayerHelper.durationStream().listen((totalDuration) {
         final oldState = progressNotifier.value;
         progressNotifier.value = ProgressBarState(
           current: oldState.current,
@@ -439,26 +426,29 @@ class PurchaseItemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void shareNFT(Size size) {
-    final String address = accountPublicInfo?.publicAddress ?? "";
-    var msg = "";
-    switch (nft.type) {
-      case NftType.TYPE_TRADE:
-        msg = nft.tradeID.createTradeLink(address: address);
-        break;
+  void shareNFTLink(Size size, String link) {
+    shareHelper.shareText(text: link, size: size);
+  }
 
-      case NftType.TYPE_ITEM:
-        msg = nft.itemID
-            .createPurchaseNFT(cookBookId: nft.cookbookID, address: address);
-        break;
+  Future<Either<String, bool>> getBalanceOfSelectedCurrency({required String selectedDenom, required double requiredAmount}) async {
+    final accountPublicInfo = walletsStore.getWallets().value.last;
+    final balancesEither = await repository.getBalance(accountPublicInfo.publicAddress);
 
-      case NftType.TYPE_RECIPE:
-        msg = nft.recipeID
-            .createDynamicLink(cookbookId: nft.cookbookID, address: address);
-        break;
+    if (balancesEither.isLeft()) {
+      return Left("something_wrong".tr());
     }
 
-    shareHelper.shareText(text: msg, size: size);
+    final mappedBalances = balancesEither.getOrElse(() => []).where((element) => element.denom == selectedDenom).toList();
+    if (mappedBalances.isEmpty) {
+      return const Right(false);
+    }
+
+    final unWrappedBalanceAmountForSelectedCoin = double.parse(mappedBalances.first.amount.toString()) / kBigIntBase;
+
+    if (unWrappedBalanceAmountForSelectedCoin < requiredAmount) {
+      return const Right(false);
+    }
+    return const Right(true);
   }
 }
 

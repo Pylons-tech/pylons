@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,6 @@ import 'package:pylons_wallet/model/stripe_generate_payment_receipt_request.dart
 import 'package:pylons_wallet/model/stripe_generate_payment_receipt_response.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
-import 'package:pylons_wallet/pages/purchase_item/widgets/insufficient_balance_dialog.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/pay_with_swipe.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
@@ -27,55 +26,54 @@ import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/enums.dart';
+import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:provider/provider.dart';
 
 TextStyle _titleTextStyle = TextStyle(color: Colors.white, fontSize: 16.sp);
 TextStyle _subtitleTextStyle = TextStyle(color: Colors.white, fontSize: 12.sp);
-TextStyle _rowTitleTextStyle = TextStyle(
-    color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.sp);
-TextStyle _rowSubtitleTextStyle =
-    TextStyle(color: Colors.white, fontSize: 14.sp);
+TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.sp);
+TextStyle _rowSubtitleTextStyle = TextStyle(color: Colors.white, fontSize: 14.sp);
 
 class PayNowDialog {
   final NFT nft;
   final PurchaseItemViewModel purchaseItemViewModel;
   final ValueChanged<String> onPurchaseDone;
+  final bool shouldBuy;
 
   BuildContext buildContext;
 
-  PayNowDialog(
-      {required this.buildContext,
-      required this.nft,
-      required this.purchaseItemViewModel,
-      required this.onPurchaseDone});
+  PayNowDialog({required this.buildContext, required this.nft, required this.purchaseItemViewModel, required this.onPurchaseDone, required this.shouldBuy});
 
   void show() {
     showDialog(
-        context: buildContext,
-        builder: (context) {
-          return Dialog(
-              backgroundColor: Colors.transparent,
-              child: PayNowWidget(
+      context: buildContext,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: ChangeNotifierProvider<PurchaseItemViewModel>.value(
+            value: purchaseItemViewModel,
+            builder: (context, snapshot) {
+              return PayNowWidget(
                 nft: nft,
-                purchaseItemViewModel: purchaseItemViewModel,
                 onPurchaseDone: onPurchaseDone,
-              ));
-        });
+                shouldBuy: shouldBuy,
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 }
 
 class PayNowWidget extends StatefulWidget {
   final NFT nft;
-  final PurchaseItemViewModel purchaseItemViewModel;
   final ValueChanged<String> onPurchaseDone;
+  final bool shouldBuy;
 
-  const PayNowWidget(
-      {Key? key,
-      required this.nft,
-      required this.purchaseItemViewModel,
-      required this.onPurchaseDone})
-      : super(key: key);
+  const PayNowWidget({Key? key, required this.nft, required this.onPurchaseDone, required this.shouldBuy}) : super(key: key);
 
   @override
   State<PayNowWidget> createState() => _PayNowWidgetState();
@@ -90,8 +88,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
     return Container(
       color: Colors.black.withOpacity(0.7),
       height: isTablet ? 290.h : 340.h,
-      margin:
-          isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
+      margin: isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
       child: Stack(
         children: [
           Positioned(
@@ -101,9 +98,8 @@ class _PayNowWidgetState extends State<PayNowWidget> {
               height: 60,
               width: 80,
               child: ClipPath(
-                clipper: RightTriangleClipper(
-                    orientation: enums.Orientation.Orientation_NW),
-                child: Container(
+                clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NW),
+                child: const ColoredBox(
                   color: kDarkRed,
                 ),
               ),
@@ -116,9 +112,8 @@ class _PayNowWidgetState extends State<PayNowWidget> {
               height: 60,
               width: 80,
               child: ClipPath(
-                clipper: RightTriangleClipper(
-                    orientation: enums.Orientation.Orientation_SE),
-                child: Container(
+                clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SE),
+                child: const ColoredBox(
                   color: kDarkRed,
                 ),
               ),
@@ -185,44 +180,50 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   height: 3.h,
                 ),
                 buildRow(
-                  subtitle: widget.nft.ibcCoins
-                      .getCoinWithDenominationAndSymbol(price.toString(),
-                          showDecimal: true),
+                  subtitle: widget.nft.ibcCoins.getCoinWithDenominationAndSymbol(price.toString(), showDecimal: true),
                   title: "price".tr(),
                 ),
                 SizedBox(
                   height: 3.h,
                 ),
                 buildPylonsFeeRow(
-                  subtitle: widget.nft.ibcCoins
-                      .getCoinWithDenominationAndSymbol(fee.toString(),
-                          showDecimal: true),
+                  subtitle: widget.nft.ibcCoins.getCoinWithDenominationAndSymbol(fee.toString(), showDecimal: true),
                   title: "pylons_fee".tr(),
                 ),
                 SizedBox(
                   height: 3.h,
                 ),
                 buildRow(
-                  subtitle: widget.nft.ibcCoins
-                      .getCoinWithDenominationAndSymbol(widget.nft.price,
-                          showDecimal: true),
+                  subtitle: widget.nft.ibcCoins.getCoinWithDenominationAndSymbol(widget.nft.price, showDecimal: true),
                   title: "total".tr(),
                 ),
                 SizedBox(
                   height: 30.h,
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 30.w),
-                  child: PylonsPayWithSwipe(
-                    activeColor: kDarkRed,
-                    inactiveColor: kPayNowBackgroundGrey,
-                    height: 40.h,
-                    initialWidth: 40.w,
-                    onSwipeComplete: () {
-                      executeRecipe(context);
-                    },
+                if (!widget.shouldBuy)
+                  Center(
+                    child: buildButton(
+                        title: "add_pylons".tr(),
+                        bgColor: kDarkRed,
+                        onPressed: () async {
+                          final navigator = Navigator.of(context);
+                          navigator.pop();
+                          navigator.pushNamed(RouteUtil.ROUTE_ADD_PYLON);
+                        }),
                   ),
-                )
+                if (widget.shouldBuy)
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 30.w),
+                    child: PylonsPayWithSwipe(
+                      activeColor: kDarkRed,
+                      inactiveColor: kPayNowBackgroundGrey,
+                      height: 40.h,
+                      initialWidth: 40.w,
+                      onSwipeComplete: () {
+                        executeRecipe(context);
+                      },
+                    ),
+                  )
               ],
             ),
           )
@@ -276,8 +277,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                           behavior: SnackBarBehavior.floating,
                         ))
                         .closed
-                        .then((value) =>
-                            ScaffoldMessenger.of(context).clearSnackBars());
+                        .then((value) => ScaffoldMessenger.of(context).clearSnackBars());
                   },
                   child: SvgPicture.asset(
                     SVGUtil.i_icon,
@@ -296,9 +296,35 @@ class _PayNowWidgetState extends State<PayNowWidget> {
     );
   }
 
+  Widget buildButton({required String title, required Color bgColor, required Function onPressed}) {
+    return SizedBox(
+      height: 40.h,
+      child: InkWell(
+        onTap: () => onPressed(),
+        child: CustomPaint(
+          painter: BoxShadowPainter(cuttingHeight: 18.h),
+          child: ClipPath(
+            clipper: MnemonicClipper(cuttingHeight: 18.h),
+            child: Container(
+              color: bgColor,
+              height: 40.h,
+              width: 200.w,
+              child: Center(
+                  child: Text(
+                title,
+                style: TextStyle(color: kWhite, fontSize: isTablet ? 14.sp : 16.sp, fontWeight: FontWeight.w700),
+                textAlign: TextAlign.center,
+              )),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> executeRecipe(BuildContext context) async {
-    final ibcEnumCoins =
-        widget.purchaseItemViewModel.nft.denom.toIBCCoinsEnum();
+    final provider = context.read<PurchaseItemViewModel>();
+    final ibcEnumCoins = provider.nft.denom.toIBCCoinsEnum();
     switch (widget.nft.type) {
       case NftType.TYPE_RECIPE:
         if (ibcEnumCoins == IBCCoins.ustripeusd) {
@@ -313,25 +339,19 @@ class _PayNowWidgetState extends State<PayNowWidget> {
         if (ibcEnumCoins == IBCCoins.ustripeusd) {
           stripePaymentForTrade(context, widget.nft);
         } else {
-          widget.purchaseItemViewModel.paymentForTrade();
+          provider.paymentForTrade();
         }
         break;
     }
   }
 
   Future paymentByCoins() async {
-    final executionResponse =
-        await widget.purchaseItemViewModel.paymentForRecipe();
+    final provider = context.read<PurchaseItemViewModel>();
+    final executionResponse = await provider.paymentForRecipe();
 
     Navigator.pop(navigatorKey.currentState!.overlay!.context);
 
     if (!executionResponse.success) {
-      if (executionResponse.error.contains(kLOW_LOW_BALANCE_CONSTANT)) {
-        final InsufficientBalanceDialog insufficientBalanceDialog =
-            InsufficientBalanceDialog(
-                navigatorKey.currentState!.overlay!.context);
-        return insufficientBalanceDialog.show();
-      }
       executionResponse.error.show();
       return;
     }
@@ -346,25 +366,20 @@ class _PayNowWidgetState extends State<PayNowWidget> {
     showLoading(context);
 
     final response = await repository.CreatePaymentIntent(
-        StripeCreatePaymentIntentRequest(
-            productID: "recipe/${nft.cookbookID}/${nft.recipeID}",
-            coinInputIndex: 0,
-            address: walletsStore.getWallets().value.last.publicAddress));
+        StripeCreatePaymentIntentRequest(productID: "recipe/${nft.cookbookID}/${nft.recipeID}", coinInputIndex: 0, address: walletsStore.getWallets().value.last.publicAddress));
 
     if (response.isLeft()) {
       response.swap().toOption().toNullable()?.message.show();
       return;
     }
 
-    final pi_info =
-        response.getOrElse(() => StripeCreatePaymentIntentResponse());
+    final pi_info = response.getOrElse(() => StripeCreatePaymentIntentResponse());
 
     if (pi_info.clientsecret.isEmpty) {
       return;
     }
     try {
-      final pi =
-          await Stripe.instance.retrievePaymentIntent(pi_info.clientsecret);
+      final pi = await Stripe.instance.retrievePaymentIntent(pi_info.clientsecret);
 
       await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
@@ -378,12 +393,9 @@ class _PayNowWidgetState extends State<PayNowWidget> {
       Navigator.pop(navigatorKey.currentState!.overlay!.context);
       await Stripe.instance.presentPaymentSheet();
 
-      final receipt_response = await repository.GeneratePaymentReceipt(
-          StripeGeneratePaymentReceiptRequest(
-              paymentIntentID: pi.id, clientSecret: pi.clientSecret));
+      final receipt_response = await repository.GeneratePaymentReceipt(StripeGeneratePaymentReceiptRequest(paymentIntentID: pi.id, clientSecret: pi.clientSecret));
 
-      final receipt = receipt_response
-          .getOrElse(() => StripeGeneratePaymentReceiptResponse());
+      final receipt = receipt_response.getOrElse(() => StripeGeneratePaymentReceiptResponse());
 
       const jsonExecuteRecipe = '''
         {
@@ -425,17 +437,12 @@ class _PayNowWidgetState extends State<PayNowWidget> {
     final repository = GetIt.I.get<Repository>();
     final baseEnv = GetIt.I.get<BaseEnv>();
     showLoading(context);
-    final response = await repository.CreatePaymentIntent(
-        StripeCreatePaymentIntentRequest(
-            productID: "trade/${nft.tradeID}",
-            coinInputIndex: 0,
-            address: walletsStore.getWallets().value.last.publicAddress));
-    final pi_info =
-        response.getOrElse(() => StripeCreatePaymentIntentResponse());
+    final response =
+        await repository.CreatePaymentIntent(StripeCreatePaymentIntentRequest(productID: "trade/${nft.tradeID}", coinInputIndex: 0, address: walletsStore.getWallets().value.last.publicAddress));
+    final pi_info = response.getOrElse(() => StripeCreatePaymentIntentResponse());
     if (pi_info.clientsecret != "") {
       try {
-        final pi =
-            await Stripe.instance.retrievePaymentIntent(pi_info.clientsecret);
+        final pi = await Stripe.instance.retrievePaymentIntent(pi_info.clientsecret);
 
         await Stripe.instance.initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
@@ -450,12 +457,9 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
         await Stripe.instance.presentPaymentSheet();
 
-        final receipt_response = await repository.GeneratePaymentReceipt(
-            StripeGeneratePaymentReceiptRequest(
-                paymentIntentID: pi.id, clientSecret: pi.clientSecret));
+        final receipt_response = await repository.GeneratePaymentReceipt(StripeGeneratePaymentReceiptRequest(paymentIntentID: pi.id, clientSecret: pi.clientSecret));
 
-        final receipt = receipt_response
-            .getOrElse(() => StripeGeneratePaymentReceiptResponse());
+        final receipt = receipt_response.getOrElse(() => StripeGeneratePaymentReceiptResponse());
 
         showLoading(navigatorKey.currentState!.overlay!.context);
         const json = '''
@@ -474,9 +478,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
         Navigator.pop(navigatorKey.currentState!.overlay!.context);
 
-        tradeResponse.success
-            ? "purchase_nft_success".tr()
-            : tradeResponse.error.show();
+        tradeResponse.success ? "purchase_nft_success".tr() : tradeResponse.error.show();
       } catch (error) {
         Navigator.pop(navigatorKey.currentState!.overlay!.context);
       }

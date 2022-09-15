@@ -5,16 +5,8 @@ import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-TextStyle kLegalOptionsText = TextStyle(
-    fontSize: 18.sp,
-    fontFamily: kUniversalFontFamily,
-    color: Colors.black,
-    fontWeight: FontWeight.w600);
-TextStyle kLegalHeadlineText = TextStyle(
-    fontSize: 28.sp,
-    fontFamily: kUniversalFontFamily,
-    color: Colors.black,
-    fontWeight: FontWeight.w800);
+TextStyle kLegalOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
+TextStyle kLegalHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
 
 class LegalScreen extends StatefulWidget {
   const LegalScreen({Key? key}) : super(key: key);
@@ -82,9 +74,7 @@ class LegalForwardItem extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
 
-  const LegalForwardItem(
-      {required this.title, Key? key, required this.onPressed})
-      : super(key: key);
+  const LegalForwardItem({required this.title, Key? key, required this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -8,32 +8,29 @@
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
-
 @$core.Deprecated('Use redeemInfoDescriptor instead')
-const RedeemInfo$json = {
+const RedeemInfo$json = const {
   '1': 'RedeemInfo',
-  '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    {'1': 'processor_name', '3': 2, '4': 1, '5': 9, '10': 'processorName'},
-    {'1': 'address', '3': 3, '4': 1, '5': 9, '10': 'address'},
-    {'1': 'amount', '3': 4, '4': 1, '5': 9, '8': {}, '10': 'amount'},
-    {'1': 'signature', '3': 5, '4': 1, '5': 9, '10': 'signature'},
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'processor_name', '3': 2, '4': 1, '5': 9, '10': 'processorName'},
+    const {'1': 'address', '3': 3, '4': 1, '5': 9, '10': 'address'},
+    const {'1': 'amount', '3': 4, '4': 1, '5': 9, '8': const {}, '10': 'amount'},
+    const {'1': 'signature', '3': 5, '4': 1, '5': 9, '10': 'signature'},
   ],
 };
 
 /// Descriptor for `RedeemInfo`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List redeemInfoDescriptor = $convert.base64Decode(
-    'CgpSZWRlZW1JbmZvEg4KAmlkGAEgASgJUgJpZBIlCg5wcm9jZXNzb3JfbmFtZRgCIAEoCVINcHJvY2Vzc29yTmFtZRIYCgdhZGRyZXNzGAMgASgJUgdhZGRyZXNzEkYKBmFtb3VudBgEIAEoCUIuyN4fANreHyZnaXRodWIuY29tL2Nvc21vcy9jb3Ntb3Mtc2RrL3R5cGVzLkludFIGYW1vdW50EhwKCXNpZ25hdHVyZRgFIAEoCVIJc2lnbmF0dXJl');
+final $typed_data.Uint8List redeemInfoDescriptor = $convert.base64Decode('CgpSZWRlZW1JbmZvEg4KAmlkGAEgASgJUgJpZBIlCg5wcm9jZXNzb3JfbmFtZRgCIAEoCVINcHJvY2Vzc29yTmFtZRIYCgdhZGRyZXNzGAMgASgJUgdhZGRyZXNzEkYKBmFtb3VudBgEIAEoCUIuyN4fANreHyZnaXRodWIuY29tL2Nvc21vcy9jb3Ntb3Mtc2RrL3R5cGVzLkludFIGYW1vdW50EhwKCXNpZ25hdHVyZRgFIAEoCVIJc2lnbmF0dXJl');
 @$core.Deprecated('Use createPaymentAccountDescriptor instead')
-const CreatePaymentAccount$json = {
+const CreatePaymentAccount$json = const {
   '1': 'CreatePaymentAccount',
-  '2': [
-    {'1': 'address', '3': 1, '4': 1, '5': 9, '10': 'address'},
-    {'1': 'token', '3': 2, '4': 1, '5': 9, '10': 'token'},
-    {'1': 'signature', '3': 3, '4': 1, '5': 9, '10': 'signature'},
+  '2': const [
+    const {'1': 'address', '3': 1, '4': 1, '5': 9, '10': 'address'},
+    const {'1': 'token', '3': 2, '4': 1, '5': 9, '10': 'token'},
+    const {'1': 'signature', '3': 3, '4': 1, '5': 9, '10': 'signature'},
   ],
 };
 
 /// Descriptor for `CreatePaymentAccount`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createPaymentAccountDescriptor = $convert.base64Decode(
-    'ChRDcmVhdGVQYXltZW50QWNjb3VudBIYCgdhZGRyZXNzGAEgASgJUgdhZGRyZXNzEhQKBXRva2VuGAIgASgJUgV0b2tlbhIcCglzaWduYXR1cmUYAyABKAlSCXNpZ25hdHVyZQ==');
+final $typed_data.Uint8List createPaymentAccountDescriptor = $convert.base64Decode('ChRDcmVhdGVQYXltZW50QWNjb3VudBIYCgdhZGRyZXNzGAEgASgJUgdhZGRyZXNzEhQKBXRva2VuGAIgASgJUgV0b2tlbhIcCglzaWduYXR1cmUYAyABKAlSCXNpZ25hdHVyZQ==');

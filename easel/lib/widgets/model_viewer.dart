@@ -10,10 +10,10 @@ class Model3dViewer extends StatefulWidget {
       : super(key: key);
 
   @override
-  _Model3dViewerState createState() => _Model3dViewerState();
+  Model3dViewerState createState() => Model3dViewerState();
 }
 
-class _Model3dViewerState extends State<Model3dViewer> {
+class Model3dViewerState extends State<Model3dViewer> {
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -9,14 +9,7 @@ class PylonsPayWithSwipe extends StatefulWidget {
   final double initialWidth;
   final VoidCallback onSwipeComplete;
 
-  const PylonsPayWithSwipe(
-      {Key? key,
-      required this.activeColor,
-      required this.inactiveColor,
-      required this.height,
-      required this.initialWidth,
-      required this.onSwipeComplete})
-      : super(key: key);
+  const PylonsPayWithSwipe({Key? key, required this.activeColor, required this.inactiveColor, required this.height, required this.initialWidth, required this.onSwipeComplete}) : super(key: key);
 
   @override
   State<PylonsPayWithSwipe> createState() => _PylonsPayWithSwipeState();
@@ -44,17 +37,13 @@ class _PylonsPayWithSwipeState extends State<PylonsPayWithSwipe> {
                   child: GestureDetector(
                     onHorizontalDragUpdate: (details) {
                       setState(() {
-                        if (details.globalPosition.dx > widget.initialWidth &&
-                            ((left + widget.initialWidth) <
-                                constraint.maxWidth)) {
-                          left =
-                              details.globalPosition.dx - widget.initialWidth;
+                        if (details.globalPosition.dx > widget.initialWidth && ((left + widget.initialWidth) < constraint.maxWidth)) {
+                          left = details.globalPosition.dx - widget.initialWidth;
                         }
                       });
                     },
                     onHorizontalDragEnd: (details) {
-                      if ((left + widget.initialWidth) >=
-                          constraint.maxWidth * 0.9) {
+                      if ((left + widget.initialWidth) >= constraint.maxWidth * 0.9) {
                         widget.onSwipeComplete();
                       }
                     },

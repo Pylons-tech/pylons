@@ -8,7 +8,7 @@ import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/svg_util.dart';
-import 'package:url_launcher/url_launcher.dart' as url_launcher;
+import 'package:url_launcher/url_launcher_string.dart' as url_launcher;
 
 TextStyle _rowTitleTextStyle = TextStyle(
     color: Colors.white,
@@ -73,7 +73,7 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
               child: ClipPath(
                 clipper: RightTriangleClipper(
                     orientation: enums.Orientation.Orientation_NW),
-                child: Container(
+                child: const ColoredBox(
                   color: kDarkRed,
                 ),
               ),
@@ -88,7 +88,7 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
               child: ClipPath(
                 clipper: RightTriangleClipper(
                     orientation: enums.Orientation.Orientation_SE),
-                child: Container(
+                child: const ColoredBox(
                   color: kDarkRed,
                 ),
               ),
@@ -280,7 +280,7 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
   }
 
   Future openTransactionInBigDipper({required String txId}) async {
-    url_launcher.launch("$kBigDipperTransactionViewingUrl$txId");
+    url_launcher.launchUrlString("$kBigDipperTransactionViewingUrl$txId");
   }
 }
 

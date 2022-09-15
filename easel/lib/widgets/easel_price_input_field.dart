@@ -28,7 +28,7 @@ class EaselPriceInputField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          kPriceText,
+          "price".tr(),
           textAlign: TextAlign.start,
           style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
         ),
@@ -36,7 +36,7 @@ class EaselPriceInputField extends StatelessWidget {
         Stack(
           children: [
             Positioned(
-              child: Image.asset(kTextFieldSingleLine,
+              child: Image.asset(PngUtils.kTextFieldSingleLine,
                   width: 1.sw,
                   height: isTablet ? 32.h : 40.h,
                   fit: BoxFit.fill),
@@ -92,7 +92,7 @@ class _CurrencyDropDown extends StatelessWidget {
                     top: 0,
                     bottom: 0,
                     right: 0,
-                    child: Image.asset(kTextFieldButton,
+                    child: Image.asset(PngUtils.kTextFieldButton,
                         height: isTablet ? 32.h : 40.h, fit: BoxFit.fill)),
                 Container(
                     padding: EdgeInsets.only(left: 5.w),
@@ -127,12 +127,13 @@ class _CurrencyDropDown extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   value.getIconWidget(),
-                                  SizedBox(width: isTablet ? 10.w : 15.w),
+                                  SizedBox(width: isTablet ? 10.w : 10.w),
                                   Text(
                                     value.name,
                                     style: TextStyle(
                                         fontSize: isTablet ? 16.sp : 18.sp),
-                                  )
+                                  ),
+                                  SizedBox(width: isTablet ? 0.w : 5.w),
                                 ]),
                           );
                         }).toList(),

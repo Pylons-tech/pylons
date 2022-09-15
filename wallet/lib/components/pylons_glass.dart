@@ -26,7 +26,7 @@ class GlassMorphism extends StatelessWidget {
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: blurLevel, sigmaY: blurLevel),
-        child: Container(
+        child: DecoratedBox(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:pylons_wallet/utils/constants.dart';
 
 class CustomPaintButton extends StatelessWidget {
@@ -9,13 +8,7 @@ class CustomPaintButton extends StatelessWidget {
   final Color bgColor;
   final double width;
 
-  CustomPaintButton(
-      {Key? key,
-      required this.onPressed,
-      required this.title,
-      required this.bgColor,
-      required this.width})
-      : super(key: key);
+  const CustomPaintButton({Key? key, required this.onPressed, required this.title, required this.bgColor, required this.width}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +27,7 @@ class CustomPaintButton extends StatelessWidget {
             child: Center(
                 child: Text(
               title,
-              style: TextStyle(
-                  color: bgColor == kButtonColor ? kBlue : kWhite,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600),
+              style: TextStyle(color: bgColor == kButtonColor ? kBlue : kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             )),
           ),
@@ -49,7 +39,9 @@ class CustomPaintButton extends StatelessWidget {
 
 class MnemonicClipper extends CustomClipper<Path> {
   final double cuttingHeight;
+
   MnemonicClipper({required this.cuttingHeight});
+
   @override
   Path getClip(Size size) {
     final path = Path();
@@ -71,7 +63,9 @@ class MnemonicClipper extends CustomClipper<Path> {
 
 class BoxShadowPainter extends CustomPainter {
   final double cuttingHeight;
+
   BoxShadowPainter({required this.cuttingHeight});
+
   @override
   void paint(Canvas canvas, Size size) {
     final Path path = Path();

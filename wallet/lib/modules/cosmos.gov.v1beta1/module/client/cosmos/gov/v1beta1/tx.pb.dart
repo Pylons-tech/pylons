@@ -14,7 +14,7 @@ import '../../../google/protobuf/any.pb.dart' as $3;
 import '../../base/v1beta1/coin.pb.dart' as $2;
 import 'gov.pb.dart' as $6;
 
-import 'gov.pbenum.dart' as $6;
+
 
 class MsgSubmitProposal extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(

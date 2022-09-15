@@ -2,9 +2,9 @@
 // in pylons_wallet/test/mocks/mock_wallet_store.dart.
 // Do not manually edit this file.
 
-import 'package:mockito/mockito.dart' as _i1;
+import 'package:mockito/mockito.dart' as i1;
 import 'package:transaction_signing_gateway/model/account_public_info.dart'
-    as _i2;
+    as i2;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -13,16 +13,17 @@ import 'package:transaction_signing_gateway/model/account_public_info.dart'
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: unnecessary_parenthesis
-
-class _FakeWalletPublicInfo_0 extends _i1.Fake
-    implements _i2.AccountPublicInfo {}
+// ignore_for_file: camel_case_types
+// ignore_for_file: avoid_implementing_value_types
+// ignore_for_file: must_be_immutable
+class _FakeWalletPublicInfo_0 extends i1.Fake implements i2.AccountPublicInfo {}
 
 /// A class which mocks [WalletPublicInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAccountPublicInfo extends _i1.Mock implements _i2.AccountPublicInfo {
+class MockAccountPublicInfo extends i1.Mock implements i2.AccountPublicInfo {
   MockAccountPublicInfo() {
-    _i1.throwOnMissingStub(this);
+    i1.throwOnMissingStub(this);
   }
 
   @override
@@ -45,7 +46,7 @@ class MockAccountPublicInfo extends _i1.Mock implements _i2.AccountPublicInfo {
       (super.noSuchMethod(Invocation.getter(#props), returnValue: <Object?>[])
           as List<Object?>);
   @override
-  _i2.AccountPublicInfo copyWith(
+  i2.AccountPublicInfo copyWith(
           {String? name,
           String? publicAddress,
           String? accountId,
@@ -59,5 +60,5 @@ class MockAccountPublicInfo extends _i1.Mock implements _i2.AccountPublicInfo {
             #chainId: chainId,
             #additionalData: additionalData
           }),
-          returnValue: _FakeWalletPublicInfo_0()) as _i2.AccountPublicInfo);
+          returnValue: _FakeWalletPublicInfo_0()) as i2.AccountPublicInfo);
 }

@@ -1,8 +1,6 @@
 import 'dart:io';
-
-import 'package:cosmos_ui_components/cosmos_ui_components.dart';
 import 'package:cosmos_utils/app_info_extractor.dart';
-import 'package:easy_localization/easy_localization.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/loading.dart';
@@ -10,7 +8,7 @@ import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/services/third_party_services/remote_config_service.dart';
+import 'package:pylons_wallet/services/third_party_services/remote_config_service/remote_config_service.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
@@ -24,7 +22,9 @@ class RoutingPage extends StatefulWidget {
 
 class _RoutingPageState extends State<RoutingPage> {
   WalletsStore get walletsStore => GetIt.I.get();
+
   RemoteConfigService get remoteConfigService => GetIt.I.get();
+
   UserInfoProvider get userInfoProvider => GetIt.I.get();
 
   @override
@@ -41,8 +41,7 @@ class _RoutingPageState extends State<RoutingPage> {
 
     if (walletsStore.getWallets().value.isEmpty) {
       //Loads the last used wallet.
-      Navigator.of(navigatorKey.currentState!.overlay!.context)
-          .pushNamed(RouteUtil.ROUTE_ONBOARDING);
+      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
     } else {
       final repository = GetIt.I.get<Repository>();
 
@@ -69,30 +68,20 @@ class _RoutingPageState extends State<RoutingPage> {
   }
 
   void moveToHome() {
-    Navigator.of(navigatorKey.currentState!.overlay!.context)
-        .pushNamed(RouteUtil.ROUTE_HOME);
+    Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_HOME);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ContentStateSwitcher(
-        isLoading: walletsStore.getAreWalletsLoading().value,
-        isError: walletsStore.getLoadWalletsFailure().value != null,
-        errorChild: CosmosErrorView(
-          title: "something_wrong".tr(),
-          message: "wallet_retrieving_err_msg".tr(),
-        ),
-        contentChild: const SizedBox(),
-      ),
+    return const Scaffold(
+      body: SizedBox(),
     );
   }
 
   Future<bool> checkAppLatestOrNot() async {
     final getAppInfoResult = await getAppInfo();
 
-    final appVersion =
-        "${getAppInfoResult.version}+${getAppInfoResult.buildNumber}";
+    final appVersion = "${getAppInfoResult.version}+${getAppInfoResult.buildNumber}";
 
     String remoteConfigVersion;
     if (Platform.isAndroid) {
@@ -108,8 +97,7 @@ class _RoutingPageState extends State<RoutingPage> {
 
     await walletsStore.loadWallets();
 
-    Navigator.of(navigatorKey.currentState!.overlay!.context)
-        .pushNamed(RouteUtil.ROUTE_APP_UPDATE, arguments: remoteConfigVersion);
+    Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_APP_UPDATE, arguments: remoteConfigVersion);
 
     return false;
   }

@@ -275,7 +275,7 @@ Meteor.startup(async function() {
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = 1;
         import DEFAULTSETTINGSJSON from '../settings.json'
         Object.keys(DEFAULTSETTINGSJSON).forEach((key) => {
-            if (Meteor.settings[key] == undefined) {
+            if(Meteor.settings[key] == undefined) {
                 console.warn(`CHECK SETTINGS JSON: ${key} is missing from settings`)
                 Meteor.settings[key] = {};
             }

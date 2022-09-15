@@ -4,8 +4,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 enum TrimMode {
-  Length,
-  Line,
+  length,
+  line,
 }
 
 class ReadMoreText extends StatefulWidget {
@@ -17,7 +17,7 @@ class ReadMoreText extends StatefulWidget {
     this.colorClickableText,
     this.trimLength = 240,
     this.trimLines = 2,
-    this.trimMode = TrimMode.Line,
+    this.trimMode = TrimMode.line,
     this.style,
     this.textAlign,
     this.textDirection,
@@ -99,26 +99,26 @@ class ReadMoreTextState extends State<ReadMoreText> {
     final locale = widget.locale ?? Localizations.maybeLocaleOf(context);
 
     final colorClickableText =
-        widget.colorClickableText ?? Theme.of(context).accentColor;
-    final _defaultLessStyle = widget.lessStyle ??
+        widget.colorClickableText ?? Theme.of(context).colorScheme.secondary;
+    final defaultLessStyle = widget.lessStyle ??
         effectiveTextStyle?.copyWith(color: colorClickableText);
-    final _defaultMoreStyle = widget.moreStyle ??
+    final defaultMoreStyle = widget.moreStyle ??
         effectiveTextStyle?.copyWith(color: colorClickableText);
-    final _defaultDelimiterStyle = widget.delimiterStyle ?? effectiveTextStyle;
+    final defaultDelimiterStyle = widget.delimiterStyle ?? effectiveTextStyle;
 
     final TextSpan link = TextSpan(
       text: _readMore ? widget.trimCollapsedText : widget.trimExpandedText,
-      style: _readMore ? _defaultMoreStyle : _defaultLessStyle,
+      style: _readMore ? defaultMoreStyle : defaultLessStyle,
       recognizer: TapGestureRecognizer()..onTap = _onTapLink,
     );
 
-    final TextSpan _delimiter = TextSpan(
+    final TextSpan delimiter = TextSpan(
       text: _readMore
           ? widget.trimCollapsedText.isNotEmpty
               ? widget.delimiter
               : ''
           : '',
-      style: _defaultDelimiterStyle,
+      style: defaultDelimiterStyle,
       recognizer: TapGestureRecognizer()..onTap = _onTapLink,
     );
 
@@ -147,7 +147,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
         final linkSize = textPainter.size;
 
         // Layout and measure delimiter
-        textPainter.text = _delimiter;
+        textPainter.text = delimiter;
         textPainter.layout(maxWidth: maxWidth);
         final delimiterSize = textPainter.size;
 
@@ -179,14 +179,14 @@ class ReadMoreTextState extends State<ReadMoreText> {
 
         TextSpan textSpan;
         switch (widget.trimMode) {
-          case TrimMode.Length:
+          case TrimMode.length:
             if (widget.trimLength < widget.data.length) {
               textSpan = TextSpan(
                 style: effectiveTextStyle,
                 text: _readMore
                     ? widget.data.substring(0, widget.trimLength)
                     : widget.data,
-                children: <TextSpan>[_delimiter, link],
+                children: <TextSpan>[delimiter, link],
               );
             } else {
               textSpan = TextSpan(
@@ -195,7 +195,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
               );
             }
             break;
-          case TrimMode.Line:
+          case TrimMode.line:
             if (textPainter.didExceedMaxLines) {
               textSpan = TextSpan(
                 style: effectiveTextStyle,
@@ -203,7 +203,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
                     ? widget.data.substring(0, endIndex) +
                         (linkLongerThanLine ? _kLineSeparator : '')
                     : widget.data,
-                children: <TextSpan>[_delimiter, link],
+                children: <TextSpan>[delimiter, link],
               );
             } else {
               textSpan = TextSpan(

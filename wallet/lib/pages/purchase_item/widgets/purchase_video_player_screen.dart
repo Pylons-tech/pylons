@@ -32,7 +32,7 @@ class _PurchaseVideoPlayerScreenState extends State<PurchaseVideoPlayerScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, PurchaseItemViewModel viewModel, child) {
-      return Container(
+      return ColoredBox(
         color: kBlack,
         child: viewModel.isVideoLoading
             ? const Center(

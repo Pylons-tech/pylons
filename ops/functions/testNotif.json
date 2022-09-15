@@ -1,0 +1,22 @@
+{
+    "version": "1.0",
+    "subject": "string, description of the new or reopened error group.",
+    "group_info": {
+      "project_id": "string, project that owns the error group.",
+      "detail_link": "string, link to the Error Reporting Details page for the error group."
+    },
+    "exception_info": {
+      "type": "string, type of the exception logged in the event.",
+      "message": "string, exception message for the event."
+    },
+    "event_info": {
+      "log_message": "string",
+      "request_method": "string",
+      "request_url": "string",
+      "referrer": "string",
+      "user_agent": "string",
+      "service": "string",
+      "version": "string",
+      "response_status": "string"
+    }
+  }

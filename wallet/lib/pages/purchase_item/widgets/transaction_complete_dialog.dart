@@ -70,7 +70,7 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
               child: ClipPath(
                 clipper: RightTriangleClipper(
                     orientation: enums.Orientation.Orientation_NW),
-                child: Container(
+                child: const ColoredBox(
                   color: kDarkRed,
                 ),
               ),
@@ -85,7 +85,7 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
               child: ClipPath(
                 clipper: RightTriangleClipper(
                     orientation: enums.Orientation.Orientation_SE),
-                child: Container(
+                child: const ColoredBox(
                   color: kDarkRed,
                 ),
               ),

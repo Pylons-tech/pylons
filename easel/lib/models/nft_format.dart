@@ -10,11 +10,7 @@ class NftFormat {
   final String badge;
   final Color color;
 
-  NftFormat(
-      {required this.format,
-      required this.extensions,
-      required this.badge,
-      required this.color});
+  NftFormat({required this.format, required this.extensions, required this.badge, required this.color});
 
   String getExtensionsList() {
     var ret = '';
@@ -28,41 +24,16 @@ class NftFormat {
   }
 
   static List<NftFormat> get supportedFormats => [
-        NftFormat(
-            format: NFTTypes.image,
-            extensions: ['jpg', 'png', 'svg', 'heif', 'jpeg'],
-            badge: kSvgNftFormatImage,
-            color: EaselAppTheme.kBlue),
-        NftFormat(
-            format: NFTTypes.video,
-            extensions: ['mp4', 'mov', 'm4v', 'avi', 'hevc'],
-            badge: kSvgNftFormatVideo,
-            color: EaselAppTheme.kDarkGreen),
+        NftFormat(format: NFTTypes.image, extensions: ['jpg', 'png', 'svg', 'heif', 'jpeg', 'gif'], badge: kSvgNftFormatImage, color: EaselAppTheme.kBlue),
+        NftFormat(format: NFTTypes.video, extensions: ['mp4', 'mov', 'm4v', 'avi', 'hevc'], badge: kSvgNftFormatVideo, color: EaselAppTheme.kDarkGreen),
         NftFormat(
           format: NFTTypes.threeD,
           extensions: ['gltf', 'glb'],
           badge: kSvgNftFormat3d,
           color: EaselAppTheme.kYellow,
         ),
-        NftFormat(
-            format: NFTTypes.audio,
-            extensions: [
-              'wav',
-              'aiff',
-              'alac',
-              'flac',
-              'mp3',
-              'aac',
-              'wma',
-              'ogg'
-            ],
-            badge: kSvgNftFormatAudio,
-            color: EaselAppTheme.kLightRed),
-        NftFormat(
-            format: NFTTypes.pdf,
-            extensions: ['pdf'],
-            badge: kSvgNftFormatAudio,
-            color: EaselAppTheme.kpurpleButtonColor),
+        NftFormat(format: NFTTypes.audio, extensions: ['wav', 'aiff', 'alac', 'flac', 'mp3', 'aac', 'wma', 'ogg'], badge: kSvgNftFormatAudio, color: EaselAppTheme.kLightRed),
+        NftFormat(format: NFTTypes.pdf, extensions: ['pdf'], badge: kSvgNftFormatAudio, color: EaselAppTheme.kpurpleButtonColor),
       ];
 
   static List<String> getAllSupportedExts() {

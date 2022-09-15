@@ -17,14 +17,7 @@ class TabField extends StatefulWidget {
   final List<NftOwnershipHistory> NftOwnershipHistoryList;
   final String owner;
 
-  const TabField(
-      {Key? key,
-      required this.name,
-      required this.icon,
-      required this.nft,
-      required this.owner,
-      required this.NftOwnershipHistoryList})
-      : super(key: key);
+  const TabField({Key? key, required this.name, required this.icon, required this.nft, required this.owner, required this.NftOwnershipHistoryList}) : super(key: key);
 
   @override
   State<TabField> createState() => _TabFieldState();
@@ -38,8 +31,7 @@ class _TabFieldState extends State<TabField> {
       case NftType.TYPE_RECIPE:
         return {
           "owned_by".tr(): widget.owner,
-          "edition".tr():
-              '${widget.nft.amountMinted} of ${widget.nft.quantity}',
+          "edition".tr(): '${widget.nft.amountMinted} of ${widget.nft.quantity}',
           "royalty_text".tr(): widget.nft.tradePercentage,
           "size".tr(): widget.nft.getAssetSize(),
           "creation".tr(): widget.nft.createdAt,
@@ -58,26 +50,14 @@ class _TabFieldState extends State<TabField> {
   Map<String, String> getNFTDetailsMap() {
     switch (widget.nft.type) {
       case NftType.TYPE_RECIPE:
-        return {
-          kRecipeId: widget.nft.recipeID,
-          'Blockchain': 'Pylons',
-          'Permission': 'Exclusive'
-        };
+        return {"recipe_id".tr(): widget.nft.recipeID, 'blockchain'.tr(): 'pylons'.tr(), 'permission'.tr(): 'exclusive'.tr()};
       case NftType.TYPE_ITEM:
-        return {
-          kRecipeId: widget.nft.recipeID,
-          'Blockchain': 'Pylons',
-          'Permission': 'Exclusive'
-        };
+        return {"recipe_id".tr(): widget.nft.recipeID, 'blockchain'.tr(): 'pylons'.tr(), 'permission'.tr(): 'exclusive'.tr()};
       case NftType.TYPE_TRADE:
         break;
     }
 
-    return {
-      kRecipeId: widget.nft.recipeID,
-      'Blockchain': 'Pylons',
-      'Permission': 'Exclusive'
-    };
+    return {"recipe_id".tr(): widget.nft.recipeID, 'blockchain'.tr(): 'pylons'.tr(), 'permission'.tr(): 'exclusive'.tr()};
   }
 
   @override
@@ -86,17 +66,10 @@ class _TabFieldState extends State<TabField> {
 
     final nftDetail = getNFTDetailsMap();
 
-    final listOwnership = ownership.entries
-        .map((element) => _tabDetails(field: element.key, value: element.value))
-        .toList();
+    final listOwnership = ownership.entries.map((element) => _tabDetails(field: element.key, value: element.value)).toList();
 
     final listDetails = nftDetail.entries
-        .map((element) => _tabDetails(
-            field: element.key,
-            value: element.value,
-            customWidget: element.key == kRecipeId && element.value.isNotEmpty
-                ? _tabDetailsWithIcon(value: element.value)
-                : null))
+        .map((element) => _tabDetails(field: element.key, value: element.value, customWidget: element.key == kRecipeId && element.value.isNotEmpty ? _tabDetailsWithIcon(value: element.value) : null))
         .toList();
 
     return AnimatedContainer(
@@ -150,12 +123,9 @@ class _TabFieldState extends State<TabField> {
                   Container(
                     width: 100.w,
                     height: 10.h,
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(color: Colors.white, width: 2))),
+                    decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white, width: 2))),
                   ),
-                  CustomPaint(
-                      size: Size(10.w, 10.h), painter: DiagonalLinePainter()),
+                  CustomPaint(size: Size(10.w, 10.h), painter: DiagonalLinePainter()),
                 ],
               ),
               SizedBox(
@@ -174,8 +144,7 @@ class _TabFieldState extends State<TabField> {
     );
   }
 
-  Widget _listHistory(
-      List<NftOwnershipHistory> nftOwnershipHistoryList, BuildContext context) {
+  Widget _listHistory(List<NftOwnershipHistory> nftOwnershipHistoryList, BuildContext context) {
     return nftOwnershipHistoryList.isNotEmpty
         ? ListView.builder(
             padding: EdgeInsets.zero,
@@ -185,16 +154,11 @@ class _TabFieldState extends State<TabField> {
             itemBuilder: (context, i) {
               final nftOwnershipHistory = nftOwnershipHistoryList[i];
 
-              final DateTime date = DateTime.fromMillisecondsSinceEpoch(
-                  nftOwnershipHistory.createdAt * kNumberOfSeconds);
+              final DateTime date = DateTime.fromMillisecondsSinceEpoch(nftOwnershipHistory.createdAt * kNumberOfSeconds);
               final createdDate = date.toLocal();
-              final formattedDate =
-                  DateFormat(kDateWithTimeFormat).format(createdDate);
+              final formattedDate = DateFormat(kDateWithTimeFormat).format(createdDate);
               if (i < kMaxItemToShow) {
-                return _tabDetails(
-                    field: formattedDate,
-                    value: nftOwnershipHistory.senderName,
-                    customColor: kPurple);
+                return _tabDetails(field: formattedDate, value: nftOwnershipHistory.senderName, customColor: kPurple);
               }
               return const SizedBox();
             })
@@ -240,11 +204,7 @@ class _TabFieldState extends State<TabField> {
     );
   }
 
-  Widget _tabDetails(
-      {required String field,
-      required String value,
-      Widget? customWidget,
-      Color? customColor}) {
+  Widget _tabDetails({required String field, required String value, Widget? customWidget, Color? customColor}) {
     return Row(
       children: [
         Expanded(
@@ -261,8 +221,7 @@ class _TabFieldState extends State<TabField> {
             flex: 45,
             child: Text(
               value,
-              style: TextStyle(
-                  color: customColor != null ? kPurple : Colors.white),
+              style: TextStyle(color: customColor != null ? kPurple : Colors.white),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

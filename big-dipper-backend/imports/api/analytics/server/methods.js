@@ -50,7 +50,9 @@ if (Meteor.isServer) {
             coin: coinDenom,
             from: receiver,
             to: spender,
-            time: txns[i]?.tx_response?.timestamp
+            time: txns[i]?.tx_response?.timestamp,
+            amountMinted: recipe?.entries?.item_outputs[0]?.amount_minted,
+            quantity: recipe?.entries?.item_outputs[0]?.quantity
           }
 
           // inserting the extracted information in nft-analytics collection

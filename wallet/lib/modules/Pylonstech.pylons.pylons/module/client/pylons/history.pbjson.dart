@@ -8,20 +8,19 @@
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
-
 @$core.Deprecated('Use historyDescriptor instead')
-const History$json = {
+const History$json = const {
   '1': 'History',
-  '2': [
-    {'1': 'address', '3': 1, '4': 1, '5': 9, '10': 'address'},
-    {'1': 'amount', '3': 2, '4': 1, '5': 9, '10': 'amount'},
-    {'1': 'cookbook_id', '3': 3, '4': 1, '5': 9, '10': 'cookbookId'},
-    {'1': 'recipe_id', '3': 4, '4': 1, '5': 9, '10': 'recipeId'},
-    {'1': 'created_at', '3': 5, '4': 1, '5': 3, '10': 'createdAt'},
-    {'1': 'type', '3': 6, '4': 1, '5': 9, '10': 'type'},
+  '2': const [
+    const {'1': 'address', '3': 1, '4': 1, '5': 9, '10': 'address'},
+    const {'1': 'amount', '3': 2, '4': 1, '5': 9, '10': 'amount'},
+    const {'1': 'cookbook_id', '3': 3, '4': 1, '5': 9, '10': 'cookbookId'},
+    const {'1': 'recipe_id', '3': 4, '4': 1, '5': 9, '10': 'recipeId'},
+    const {'1': 'created_at', '3': 5, '4': 1, '5': 3, '10': 'createdAt'},
+    const {'1': 'type', '3': 6, '4': 1, '5': 9, '10': 'type'},
+    const {'1': 'tx_id', '3': 7, '4': 1, '5': 9, '10': 'txId'},
   ],
 };
 
 /// Descriptor for `History`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List historyDescriptor = $convert.base64Decode(
-    'CgdIaXN0b3J5EhgKB2FkZHJlc3MYASABKAlSB2FkZHJlc3MSFgoGYW1vdW50GAIgASgJUgZhbW91bnQSHwoLY29va2Jvb2tfaWQYAyABKAlSCmNvb2tib29rSWQSGwoJcmVjaXBlX2lkGAQgASgJUghyZWNpcGVJZBIdCgpjcmVhdGVkX2F0GAUgASgDUgljcmVhdGVkQXQSEgoEdHlwZRgGIAEoCVIEdHlwZQ==');
+final $typed_data.Uint8List historyDescriptor = $convert.base64Decode('CgdIaXN0b3J5EhgKB2FkZHJlc3MYASABKAlSB2FkZHJlc3MSFgoGYW1vdW50GAIgASgJUgZhbW91bnQSHwoLY29va2Jvb2tfaWQYAyABKAlSCmNvb2tib29rSWQSGwoJcmVjaXBlX2lkGAQgASgJUghyZWNpcGVJZBIdCgpjcmVhdGVkX2F0GAUgASgDUgljcmVhdGVkQXQSEgoEdHlwZRgGIAEoCVIEdHlwZRITCgV0eF9pZBgHIAEoCVIEdHhJZA==');

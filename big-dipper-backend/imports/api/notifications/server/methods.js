@@ -1,32 +1,27 @@
 import { Meteor } from 'meteor/meteor'
-import { WebApp } from 'meteor/webapp'
 import { Notifications } from '../notifications.js'
 import { FCMToken } from '../../fcmtoken/fcmtoken.js'
-import { isNumber, isString } from 'lodash'
 import { sanitizeUrl } from '@braintree/sanitize-url'
 import { HTTP } from 'meteor/http'
 import { admin } from '../../admin.js'
-import connectRoute from 'connect-route'
 
-const StatusOk = 200
-const StatusInvalidInput = 400
-const Success = 'Success'
-const BadRequest = 'Bad Request'
-const InvalidID = 'Invalid Notification ID'
-const AppCheckFailed = 'App Check Failed'
+import { Res } from '../../res.js'
 
-const Api = new Restivus({
-  useDefaultAuth: true,
-  prettyJson: true
-})
+import { Utils } from '../../utils.js'
 
-Api.addRoute(
+import { Codec } from '../../codec.js'
+
+import { API } from '../../api.js'
+
+API.addRoute(
   'notifications/getAllNotifications/:address/:limit/:offset',
-  { authRequired: false },
+  {
+    authRequired: false
+  },
   {
     get: function () {
       if (
-        Valid(this.urlParams.address) &&
+        Utils.ValidateAddress(this.urlParams.address) &&
         this.urlParams.limit &&
         this.urlParams.offset
       ) {
@@ -36,206 +31,145 @@ Api.addRoute(
             this.urlParams.limit,
             this.urlParams.offset
           )
-          return {
-            Code: StatusOk,
-            Message: Success,
-            Data: { results: res }
-          }
+
+          return Res.Success({
+            results: res
+          })
         } catch (e) {
-          return {
-            Code: StatusInvalidInput,
-            Message: BadRequest,
-            Data: null
-          }
+          return Res.InValidInput(Codec.BadRequestMessage, null)
         }
       }
-      return {
-        Code: StatusInvalidInput,
-        Message: BadRequest,
-        Data: "requires params /:address/:limit/:offset"
-      }
+
+      return Res.InValidInput(
+        Codec.BadRequestMessage,
+        'requires params /:address/:limit/:offset'
+      )
     }
   }
 )
 
-WebApp.connectHandlers.use(
-  connectRoute(function (router) {
-    router.post('notifications/markread', async function (req, res) {
-      const h = req.headers
-      const notificationIDs = req.body.notificationIDs
-
-      if (!h['x-firebase-appcheck']) {
-        res.writeHead(StatusOk, {
-          'Content-Type': 'text/html'
-        })
-
-        res.end(
-          JSON.stringify({
-            Code: StatusInvalidInput,
-            Message: AppCheckFailed,
-            Data: 'x-firebase-appcheck header missing'
-          })
-        )
-      } else {
-        if (notificationIDs && notificationIDs.length > 0) {
-          // performing app check
-          const appCheckClaims = await verifyAppCheckToken(
-            h['x-firebase-appcheck']
-          )
-
-          // app check failed
-          if (!appCheckClaims) {
-            res.writeHead(StatusOk, {
-              'Content-Type': 'text/html'
-            })
-
-            res.end(
-              JSON.stringify({
-                Code: StatusInvalidInput,
-                Message: AppCheckFailed,
-                Data: 'invalid x-firebase-appcheck header'
-              })
-            )
-          }
-
-          // app check passed
-          if (notificationIDs && notificationIDs.length > 0) {
-            for (let index = 0; index < notificationIDs.length; index++) {
-              const id = notificationIDs[index]
-
-              // mark as Read
-              const result = markRead(id)
-              if (result !== 1) {
-                res.writeHead(StatusOk, {
-                  'Content-Type': 'text/html'
-                })
-
-                res.end(
-                  JSON.stringify({
-                    Code: StatusInvalidInput,
-                    Message: InvalidID,
-                    Data: `notificationID ${id} is invalid`
-                  })
-                )
-              }
-            }
-
-            // Success
-            res.writeHead(StatusOk, {
-              'Content-Type': 'text/html'
-            })
-
-            res.end(
-              JSON.stringify({
-                Code: StatusOk,
-                Message: Success,
-                Data: 'notifications marked as Read'
-              })
+API.addRoute(
+  'notifications/markread',
+  {
+    authRequired: false
+  },
+  {
+    post: function () {
+      const notificationIDs = this.bodyParams.notificationIDs
+      if (notificationIDs && notificationIDs.length > 0) {
+        for (let index = 0; index < notificationIDs.length; index++) {
+          const id = notificationIDs[index]
+          // mark as Read
+          const result = markRead(id)
+          if (result !== 1) {
+            return Res.InValidInput(
+              Codec.InvalidIDMessage,
+              `notificationID ${id} is invalid`
             )
           }
         }
-
-        // invalid request
-        res.writeHead(StatusOk, {
-          'Content-Type': 'text/html'
-        })
-
-        res.end(
-          JSON.stringify({
-            Code: StatusInvalidInput,
-            Message: BadRequest,
-            Data: 'notificationIDs list is missing or corrupt'
-          })
-        )
+        return Res.Success('notifications marked as Read')
       }
-    })
-  })
+      return Res.InValidInput(
+        Codec.InvalidIDMessage,
+        'notificationIDs list is missing or corrupt'
+      )
+    }
+  }
 )
 
 Meteor.methods({
   //send un settled notifications
-  "Notifications.sendPushNotifications": function () {
-    this.unblock();
+  'Notifications.sendPushNotifications': function () {
+    this.unblock()
 
     const unSettled = Notifications.find({ settled: false })
- 
-    unSettled
-      .forEach((sale) => {
-        var sellerAddress = sale.from;
-        var saleID = sale._id;
-        var token;      
-        //get Firebase token for specified user address
-        try{
-          token = FCMToken.findOne({ address: sellerAddress }).token
-        }catch(e){
-          return e
-        } 
-        
-        const buyerUserName = getUserNameInfo(sale.to).username.value;
-        const message = {
-          notification: {
-            title: "NFT Sold",
-            body: `Your NFT ${sale.item_name} has been sold to ${buyerUserName}`,
-          },
-          data : {
-            type : "NFT Sold"
-          }
 
-        };
-        
-        const options = {
-          priority: "high",
-          timeToLive: 86400,
-        };
-        
-      
-        if (Meteor.settings.params.sendNotifications === 1) {
-          admin
-            .messaging()
-            .sendToDevice(token, message, options)
-            .then((n) => {
-              markSent(saleID)
-              console.log(n)
-            })
-            .catch((e) => {
-              console.log('Notification not sent to ', token)
-              console.log(e)
-            })
+    unSettled.forEach((sale) => {
+      var sellerAddress = sale.from
+      var saleID = sale._id
+      var token
+      //get Firebase token for specified user address
+      try {
+        token = FCMToken.findOne({ address: sellerAddress }).token
+      } catch (e) {
+        return e
+      }
+
+      const buyerUserName = getUserNameInfo(sale.to).username.value
+      const message = {
+        notification: {
+          title: 'NFT Sold',
+          body: `Your NFT ${sale.item_name} has been sold to ${buyerUserName}`
+        },
+        data: {
+          type: 'NFT Sold'
         }
+      }
+      quantity = parseInt(sale?.quantity, 10)
+      amountMinted = parseInt(sale?.amountMinted, 10)
+      totalSale = sale?.amount * amountMinted
+      let coins = Meteor.settings.public.coins
+      let totalProceeds = '0 USD'
+      coin = coins.find(
+        (coin) => coin?.denom?.toLowerCase() === sale?.coin?.toLowerCase()
+      )
+      if (coin) {
+        totalProceeds = totalSale / coin?.fraction + ' ' + coin?.displayName
+      }
+      if (quantity > 0 && amountMinted === quantity) {
+        // All editions for [NFT Title] have been sold. Your total proceeds are [$XYZ USD]
+        message.notification.body = `All editions for ${sale.item_name} have been sold. Your total proceeds are ${totalProceeds}}`
+      } else if (
+        quantity > 0 &&
+        (amountMinted * 2 === quantity || amountMinted * 2 === quantity + 1)
+      ) {
+        message.notification.body = `Half of the editions for ${sale.item_name} have been sold. Your total proceeds are ${totalProceeds}}`;
+      } else {
+        message.notification.body = `Your NFT ${sale.item_name} have been sold. Your total proceeds are ${totalProceeds}}`;
+      }
+      const options = {
+        priority: 'high',
+        timeToLive: 86400
+      }
+
+      if (Meteor.settings.params.sendNotifications === 1) {
+        admin
+          .messaging()
+          .sendToDevice(token, message, options)
+          .then((n) => {
+            markSent(saleID)
+            console.log(n)
+          })
+          .catch((e) => {
+            console.log('Notification not sent to ', token)
+            console.log(e)
+          })
+      }
     })
   }
 })
 
-function Valid (parameter) {
-  if (!isString(parameter)) {
-    return false
-  }
-  if (parameter.length === 0) {
-    return false
-  }
-  return true
-}
-
-function markRead (id) {
+function markRead(id) {
   return Notifications.update({ _id: id }, { $set: { read: true } })
 }
 
-function markSent (id) {
+function markSent(id) {
   Notifications.update({ _id: id }, { $set: { settled: true } })
   return Notifications.update({ _id: id }, { $set: { settled: true } })
 }
-function getNotifications (address, limit, offset) {
+function getNotifications(address, limit, offset) {
   return Notifications.find(
     { from: address },
     {
-      sort:{created_at:-1},
+      sort: { created_at: -1 },
       limit: parseInt(limit),
       skip: parseInt(offset)
     }
   ).fetch()
 }
 
-function getUserNameInfo (address) {
+function getUserNameInfo(address) {
   let result
   const url = sanitizeUrl(
     `${Meteor.settings.remote.api}/pylons/account/address/${address}`
@@ -247,16 +181,4 @@ function getUserNameInfo (address) {
     console.log('error getting userNameInfo: ', e)
   }
   return result
-}
-
-async function verifyAppCheckToken (appCheckToken) {
-  if (!appCheckToken) {
-    return null
-  }
-  try {
-    const res = await admin.appCheck().verifyToken(appCheckToken)
-    return res
-  } catch (err) {
-    return null
-  }
 }

@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path/path.dart' as path;
 import 'package:pylons_sdk/pylons_sdk.dart';
 
-import 'constants.dart';
 
 extension ScaffoldHelper on BuildContext? {
   void show({required String message}) {
@@ -29,6 +28,37 @@ extension ScaffoldHelper on BuildContext? {
         ),
         duration: const Duration(seconds: 2),
       ));
+  }
+}
+
+extension ScaffoldStateHelper on ScaffoldMessengerState {
+  void show({required String message}) {
+    this
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: Text(
+          message,
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontSize: 14.sp,
+          ),
+        ),
+        duration: const Duration(seconds: 2),
+      ));
+  }
+}
+
+extension ScaffoldMessengerKeyHelper on GlobalKey<NavigatorState> {
+  ScaffoldMessengerState? getState() {
+    if (navigatorKey.currentState == null) {
+      return null;
+    }
+
+    if (navigatorKey.currentState!.overlay == null) {
+      return null;
+    }
+
+    return ScaffoldMessenger.maybeOf(navigatorKey.currentState!.overlay!.context);
   }
 }
 
@@ -77,16 +107,13 @@ extension AssetTypePar on String {
       value = kThreeDText;
     }
 
-    return AssetType.values.firstWhere(
-        (e) => e.toString() == 'AssetType.$value',
-        orElse: () => AssetType.Image);
+    return AssetType.values.firstWhere((e) => e.toString() == 'AssetType.$value', orElse: () => AssetType.Image);
   }
 }
 
 extension FreeDropEnum on String {
   FreeDrop toFreeDropEnum() {
-    return FreeDrop.values.firstWhere((e) => e.toString() == 'FreeDrop.$this',
-        orElse: () => FreeDrop.unselected);
+    return FreeDrop.values.firstWhere((e) => e.toString() == 'FreeDrop.$this', orElse: () => FreeDrop.unselected);
   }
 }
 
@@ -121,8 +148,7 @@ extension NFTValue on NFT {
 
 extension MyStringSnackBar on String {
   void show({BuildContext? context}) {
-    ScaffoldMessenger.of(context ?? navigatorKey.currentState!.overlay!.context)
-        .showSnackBar(
+    ScaffoldMessenger.of(context ?? navigatorKey.currentState!.overlay!.context).showSnackBar(
       SnackBar(
         content: Text(
           this,
@@ -165,17 +191,16 @@ extension GenerateEaselLinkToOpenPylons on String {
       "apn": "tech.pylons.wallet",
       "ibi": "xyz.pylons.wallet",
       "imv": "1",
-      "link":
-          "https://wallet.pylons.tech/?action=purchase_nft&recipe_id=$this&cookbook_id=$cookbookId&nft_amount=1"
+      "link": "https://wallet.pylons.tech/?action=purchase_nft&recipe_id=$this&cookbook_id=$cookbookId&nft_amount=1"
     }).toString();
   }
 }
 
 extension IsSvgExtension on String {
   bool isSvg() {
-    String _extension = "";
-    _extension = path.extension(this);
-    return _extension == ".svg";
+    String extension = "";
+    extension = path.extension(this);
+    return extension == ".svg";
   }
 }
 

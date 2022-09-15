@@ -9,21 +9,9 @@ import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
-TextStyle kSecurityLabelText = TextStyle(
-    fontSize: 28.sp,
-    fontFamily: kUniversalFontFamily,
-    color: Colors.black,
-    fontWeight: FontWeight.w800);
-TextStyle kSecurityBiometricIdText = TextStyle(
-    fontSize: 20.sp,
-    fontFamily: kUniversalFontFamily,
-    color: Colors.black,
-    fontWeight: FontWeight.w500);
-TextStyle kSecurityNoBiometricText = TextStyle(
-    fontSize: 15.sp,
-    fontFamily: kUniversalFontFamily,
-    color: kDarkRed,
-    fontWeight: FontWeight.w500);
+TextStyle kSecurityLabelText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
+TextStyle kSecurityBiometricIdText = TextStyle(fontSize: 17.sp, color: Colors.black, fontWeight: FontWeight.w500);
+TextStyle kSecurityNoBiometricText = TextStyle(fontSize: 15.sp, color: kDarkRed, fontWeight: FontWeight.w500);
 
 class SecurityScreen extends StatefulWidget {
   const SecurityScreen({Key? key}) : super(key: key);
@@ -121,10 +109,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
             SizedBox(
               height: 20.h,
             ),
-            if (mainBiometricAvailable) ...[
-              Container(padding: defaultPadding, child: buildLogin()),
-              Container(padding: defaultPadding, child: buildTransactions())
-            ]
+            if (mainBiometricAvailable) ...[Container(padding: defaultPadding, child: buildLogin()), Container(padding: defaultPadding, child: buildTransactions())]
           ],
           if (!isBiometricAvailable)
             Container(
@@ -149,11 +134,9 @@ class _SecurityScreenState extends State<SecurityScreen> {
 
         if (value.isRight() && value.getOrElse(() => false)) {
           setState(() {
-            mainBiometricAvailable =
-                value.isRight() && value.getOrElse(() => false);
+            mainBiometricAvailable = value.isRight() && value.getOrElse(() => false);
           });
-          repository.saveDefaultSecurityBiometric(
-              biometricEnabled: mainBiometricAvailable);
+          repository.saveDefaultSecurityBiometric(biometricEnabled: mainBiometricAvailable);
         }
       });
     } else {
@@ -187,9 +170,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              biometricType == BiometricType.fingerprint
-                  ? "fingerprint".tr()
-                  : "face_id".tr(),
+              biometricType == BiometricType.fingerprint ? "fingerprint".tr() : "face_id".tr(),
               style: kSecurityBiometricIdText,
             ),
             CupertinoSwitch(
@@ -220,11 +201,9 @@ class _SecurityScreenState extends State<SecurityScreen> {
 
         if (value.isRight() && value.getOrElse(() => false)) {
           setState(() {
-            loginBiometricAvailable =
-                value.isRight() && value.getOrElse(() => false);
+            loginBiometricAvailable = value.isRight() && value.getOrElse(() => false);
           });
-          repository.saveBiometricLogin(
-              biometricEnabled: loginBiometricAvailable);
+          repository.saveBiometricLogin(biometricEnabled: loginBiometricAvailable);
         }
       });
     } else {
@@ -254,9 +233,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              biometricType == BiometricType.fingerprint
-                  ? "fingerprint".tr()
-                  : "face_id".tr(),
+              biometricType == BiometricType.fingerprint ? "fingerprint".tr() : "face_id".tr(),
               style: kSecurityBiometricIdText,
             ),
             CupertinoSwitch(
@@ -288,11 +265,9 @@ class _SecurityScreenState extends State<SecurityScreen> {
 
         if (value.isRight() && value.getOrElse(() => false)) {
           setState(() {
-            transactionBiometricAvailable =
-                value.isRight() && value.getOrElse(() => false);
+            transactionBiometricAvailable = value.isRight() && value.getOrElse(() => false);
           });
-          repository.saveBiometricTransaction(
-              biometricEnabled: transactionBiometricAvailable);
+          repository.saveBiometricTransaction(biometricEnabled: transactionBiometricAvailable);
         }
       });
     } else {
@@ -312,8 +287,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
       return;
     }
     isBiometricAvailable = true;
-    biometricType =
-        biometricAvailableResponse.getOrElse(() => BiometricType.fingerprint);
+    biometricType = biometricAvailableResponse.getOrElse(() => BiometricType.fingerprint);
 
     final securityBiometricResponse = repository.getSecurityBiometric();
 
@@ -340,8 +314,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
       return;
     }
 
-    transactionBiometricAvailable =
-        transactionBiometricResponse.getOrElse(() => false);
+    transactionBiometricAvailable = transactionBiometricResponse.getOrElse(() => false);
 
     setState(() {});
   }

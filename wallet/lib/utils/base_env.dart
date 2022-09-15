@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:alan/alan.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:grpc/grpc.dart';
+import 'package:pylons_wallet/services/third_party_services/remote_config_service/models/sku_model.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
 class BaseEnv {
@@ -17,6 +20,7 @@ class BaseEnv {
   late String _ibcTraceUrl;
   late String _faucetUrl;
   late String _baseMongoUrl;
+  late List<SKUModel> _skus;
 
   void setEnv(
       {required String lcdUrl,
@@ -28,6 +32,7 @@ class BaseEnv {
       required String faucetUrl,
       required String ibcTraceUrl,
       required String mongoUrl,
+        required String skus,
       String? stripeUrl,
       String? stripePubKey,
       bool? stripeTestEnv,
@@ -57,6 +62,11 @@ class BaseEnv {
     _chainId = chainId;
     _ibcTraceUrl = ibcTraceUrl;
     _faucetUrl = faucetUrl;
+
+
+    final List jsonSkuList = jsonDecode(skus) as List;
+    _skus = jsonSkuList.map(( e) => SKUModel.fromJson(e as Map )).toList();
+
   }
 
   NetworkInfo get networkInfo => _networkInfo;
@@ -83,8 +93,13 @@ class BaseEnv {
 
   String get faucetUrl => _faucetUrl;
 
+
+  List<SKUModel> get skus => _skus;
+
   @override
   String toString() {
     return 'BaseEnv{_networkInfo: $_networkInfo, _baseApiUrl: $_baseApiUrl, _baseEthUrl: $_baseEthUrl,  _stripeUrl: $_stripeUrl, _stripePubKey: $_stripePubKey, _stripeTestEnv: $_stripeTestEnv, _stripeCallbackUrl: $_stripeCallbackUrl, _stripeCallbackRefreshUrl: $_stripeCallbackRefreshUrl, _chainId: $_chainId, _ibcTraceUrl: $_ibcTraceUrl, _faucetUrl: $_faucetUrl}';
   }
+
+
 }

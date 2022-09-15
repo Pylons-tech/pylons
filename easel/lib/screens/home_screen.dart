@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/repository/repository.dart';
@@ -18,12 +17,12 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenState createState() {
-    return _HomeScreenState();
+  HomeScreenState createState() {
+    return HomeScreenState();
   }
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   late EaselProvider easelProvider;
   var repository = GetIt.I.get<Repository>();
 

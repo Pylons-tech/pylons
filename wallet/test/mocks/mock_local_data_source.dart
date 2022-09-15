@@ -78,7 +78,7 @@ class MockLocalDataSource extends LocalDataSource {
   }
 
   @override
-  Future<bool> saveIsBannerDark(bool isBannerDark) {
+  Future<bool> saveIsBannerDark({required bool isBannerDark}) {
     throw UnimplementedError();
   }
 

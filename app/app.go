@@ -91,6 +91,9 @@ import (
 	tmjson "github.com/tendermint/tendermint/libs/json"
 
 	"github.com/Pylons-tech/pylons/docs"
+	epochsmodule "github.com/Pylons-tech/pylons/x/epochs"
+	epochsmodulekeeper "github.com/Pylons-tech/pylons/x/epochs/keeper"
+	epochsmoduletypes "github.com/Pylons-tech/pylons/x/epochs/types"
 
 	appparams "github.com/Pylons-tech/pylons/app/params"
 	pylonsmodule "github.com/Pylons-tech/pylons/x/pylons"
@@ -180,6 +183,7 @@ var (
 		evidence.AppModuleBasic{},
 		transfer.AppModuleBasic{},
 		vesting.AppModuleBasic{},
+		epochsmodule.AppModuleBasic{},
 		pylonsmodule.AppModuleBasic{},
 	)
 
@@ -249,9 +253,9 @@ type PylonsApp struct {
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
 	ScopedICAHostKeeper  capabilitykeeper.ScopedKeeper
-
-	PylonsKeeper  pylonsmodulekeeper.Keeper
-	ICAHostKeeper icahostkeeper.Keeper
+	EpochsKeeper         epochsmodulekeeper.Keeper
+	PylonsKeeper         pylonsmodulekeeper.Keeper
+	ICAHostKeeper        icahostkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -302,6 +306,7 @@ func New(
 		icahosttypes.StoreKey,
 		capabilitytypes.StoreKey,
 		pylonsmoduletypes.StoreKey,
+		epochsmoduletypes.StoreKey,
 	)
 
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -439,7 +444,6 @@ func New(
 	)
 	// If evidence needs to be handled for the app, set routes in router here and seal
 	app.EvidenceKeeper = *evidenceKeeper
-
 	app.PylonsKeeper = pylonsmodulekeeper.NewKeeper(
 		appCodec,
 		keys[pylonsmoduletypes.StoreKey],
@@ -451,6 +455,21 @@ func New(
 	)
 	// upgrade handlers
 	cfg := module.NewConfigurator(appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
+
+	epochsKeeper := epochsmodulekeeper.NewKeeper(
+		appCodec,
+		keys[epochsmoduletypes.StoreKey],
+		keys[epochsmoduletypes.MemStoreKey],
+	)
+
+	app.EpochsKeeper = *epochsKeeper.SetHooks(
+		epochsmoduletypes.NewMultiEpochHooks(
+			// insert epoch hook receivers here
+			app.PylonsKeeper.Hooks(app.StakingKeeper),
+		),
+	)
+
+	epochsModule := epochsmodule.NewAppModule(appCodec, app.EpochsKeeper)
 
 	pylonsModule := pylonsmodule.NewAppModule(appCodec, app.PylonsKeeper, app.BankKeeper)
 
@@ -489,6 +508,7 @@ func New(
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
 		icaModule,
+		epochsModule,
 		pylonsModule,
 	)
 
@@ -498,6 +518,7 @@ func New(
 	// NOTE: staking module is required if HistoricalEntries param > 0
 	app.mm.SetOrderBeginBlockers(
 		// Note: epochs' begin should be "real" start of epochs, we keep epochs beginblock at the beginning
+		epochsmoduletypes.ModuleName,
 		upgradetypes.ModuleName,
 		capabilitytypes.ModuleName,
 		minttypes.ModuleName,
@@ -540,6 +561,7 @@ func New(
 		icatypes.ModuleName,
 		ibchost.ModuleName,
 		pylonsmoduletypes.ModuleName,
+		epochsmoduletypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -566,6 +588,7 @@ func New(
 		icatypes.ModuleName,
 		ibchost.ModuleName,
 		vestingtypes.ModuleName,
+		epochsmoduletypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
@@ -589,6 +612,7 @@ func New(
 		params.NewAppModule(app.ParamsKeeper),
 		evidence.NewAppModule(app.EvidenceKeeper),
 		ibc.NewAppModule(app.IBCKeeper),
+		epochsmodule.NewAppModule(appCodec, app.EpochsKeeper),
 
 		transferModule,
 		pylonsModule,
@@ -821,6 +845,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
 	paramsKeeper.Subspace(pylonsmoduletypes.ModuleName)
+	paramsKeeper.Subspace(epochsmoduletypes.ModuleName)
 
 	return paramsKeeper
 }

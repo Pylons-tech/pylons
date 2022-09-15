@@ -47,8 +47,8 @@ func (msg *MsgCreateCookbook) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
-	if !ValidatedDenom(msg.Id) {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid ID: Only letters, numbers and underscore (should not be the first character) are allowed")
+	if err = ValidateID(msg.Id); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	// check length of the name and description fields
@@ -57,10 +57,6 @@ func (msg *MsgCreateCookbook) ValidateBasic() error {
 	}
 
 	if err = ValidateFieldLength(msg.Description, DefaultMinFieldLength, DefaultMaxFieldLength); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	if err = ValidateID(msg.Id); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
@@ -116,8 +112,8 @@ func (msg *MsgUpdateCookbook) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
-	if !ValidatedDenom(msg.Id) {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid cookbook denom can only contain a-z A-Z 0-9 '-' and '_'")
+	if err = ValidateID(msg.Id); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	// check length of the name and description fields
@@ -126,10 +122,6 @@ func (msg *MsgUpdateCookbook) ValidateBasic() error {
 	}
 
 	if err = ValidateFieldLength(msg.Description, DefaultMinFieldLength, DefaultMaxFieldLength); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	if err = ValidateID(msg.Id); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 

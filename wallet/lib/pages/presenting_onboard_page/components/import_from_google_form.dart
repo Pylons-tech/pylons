@@ -20,8 +20,7 @@ import 'package:pylons_wallet/utils/svg_util.dart';
 class ImportFromGoogleForm extends StatefulWidget {
   final WalletsStore walletStore;
 
-  const ImportFromGoogleForm({Key? key, required this.walletStore})
-      : super(key: key);
+  const ImportFromGoogleForm({Key? key, required this.walletStore}) : super(key: key);
 
   @override
   ImportFromGoogleFormState createState() {
@@ -32,7 +31,6 @@ class ImportFromGoogleForm extends StatefulWidget {
 class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
   final _formKey = GlobalKey<FormState>();
 
-  final usernameController = TextEditingController();
   final mnemonicController = TextEditingController();
 
   final isLoadingNotifier = ValueNotifier(false);
@@ -53,8 +51,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
           const VerticalSpace(30),
           if (Platform.isAndroid)
             PylonsRoundedButton(
-                glyph: svg.Svg(SVGUtil.GOOGLE_DRIVE_ICON,
-                    size: const Size(30, 30)),
+                glyph: svg.Svg(SVGUtil.GOOGLE_DRIVE_ICON, size: const Size(30, 30)),
                 text: "import_from_google_cloud".tr(),
                 textColor: Colors.white,
                 onTap: () async {
@@ -87,22 +84,6 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "username".tr(),
-                style: TextStyle(
-                  color: kBlack,
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            )
-          ]),
-          PylonsTextInput(
-              controller: usernameController, label: "user_name".tr()),
-          VerticalSpace(10.h),
-          Row(children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
                 "enter_mnemonic".tr(),
                 style: TextStyle(
                   color: kBlack,
@@ -112,16 +93,13 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
               ),
             )
           ]),
-          PylonsTextInput(
-              controller: mnemonicController, label: "enter_mnemonic".tr()),
+          PylonsTextInput(controller: mnemonicController, label: "enter_mnemonic".tr()),
           VerticalSpace(140.h),
           Align(
             alignment: Alignment.bottomRight,
             child: PylonsGetStartedButton(
               onTap: () {
-                _loginExistingUser(
-                    mnemonic: mnemonicController.text,
-                    userName: usernameController.text.trim());
+                _loginExistingUser(mnemonic: mnemonicController.text);
               },
               text: "continue".tr(),
               loader: isLoadingNotifier,
@@ -133,20 +111,17 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
   }
 
   /// Create the new wallet and associate the chosen username with it.
-  Future _loginExistingUser(
-      {required String userName, required String mnemonic}) async {
+  Future _loginExistingUser({required String mnemonic}) async {
     isLoadingNotifier.value = true;
 
-    final result = await widget.walletStore
-        .importPylonsAccount(mnemonic: mnemonic, username: userName);
+    final result = await widget.walletStore.importPylonsAccount(mnemonic: mnemonic);
 
     isLoadingNotifier.value = false;
 
     result.fold((failure) {
       failure.message.show();
     }, (walletInfo) {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
+      Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
     });
   }
 
@@ -166,8 +141,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
 
     final data = response.toOption().toNullable()!;
 
-    final result = await widget.walletStore
-        .importPylonsAccount(mnemonic: data.mnemonic, username: data.username);
+    final result = await widget.walletStore.importPylonsAccount(mnemonic: data.mnemonic);
 
     result.fold((failure) {
       loading.dismiss();
@@ -175,8 +149,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
 
       failure.message.show();
     }, (walletInfo) {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
+      Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
     });
   }
 
@@ -195,8 +168,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
 
     final data = response.toOption().toNullable()!;
 
-    final result = await widget.walletStore
-        .importPylonsAccount(mnemonic: data.mnemonic, username: data.username);
+    final result = await widget.walletStore.importPylonsAccount(mnemonic: data.mnemonic);
 
     result.fold((failure) {
       loading.dismiss();
@@ -204,8 +176,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
 
       failure.message.show();
     }, (walletInfo) {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
+      Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
     });
   }
 }

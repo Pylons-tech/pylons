@@ -93,7 +93,7 @@ class VideoPlaceHolder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ColoredBox(
         color: kWhite,
         child: thumbnailUrl.isNotEmpty
             ? getVideoThumbnailFromUrl()

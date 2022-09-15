@@ -112,7 +112,7 @@ abstract class LocalDataSource {
 }
 
 class LocalDataSourceImpl implements LocalDataSource {
-  static const String ONBOARDING_COMPLETE = "";
+  static const String onboardingComplete = "";
 
   final SharedPreferences sharedPreferences;
 
@@ -164,12 +164,12 @@ class LocalDataSourceImpl implements LocalDataSource {
 
   @override
   bool getOnBoardingComplete() {
-    return sharedPreferences.getBool(ONBOARDING_COMPLETE) ?? false;
+    return sharedPreferences.getBool(onboardingComplete) ?? false;
   }
 
   @override
   Future<bool> saveOnBoardingComplete() async {
-    return await sharedPreferences.setBool(ONBOARDING_COMPLETE, true);
+    return await sharedPreferences.setBool(onboardingComplete, true);
   }
 
   @override
