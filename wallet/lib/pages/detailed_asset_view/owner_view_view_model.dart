@@ -129,10 +129,12 @@ class OwnerViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initializeData({required NFT nft}) {
-    nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);
+  void initializeData({required NFT nftData}) {
+    nft = nftData;
+    nftDataInit(recipeId: nftData.recipeID, cookBookId: nftData.cookbookID, itemId: nftData.itemID);
     initOwnerName();
-    initializePlayers(nft);
+    initializePlayers(nftData);
+    notifyListeners();
     toHashtagList();
   }
 

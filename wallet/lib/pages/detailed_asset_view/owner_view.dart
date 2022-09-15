@@ -42,8 +42,7 @@ class _OwnerViewState extends State<OwnerView> {
   @override
   void initState() {
     super.initState();
-    widget.ownerViewViewModel.nft = widget.nft;
-    widget.ownerViewViewModel.initializeData(nft: widget.nft);
+    widget.ownerViewViewModel.initializeData(nftData: widget.nft);
   }
 
   Widget getAudioWidget({required String thumbnailUrl, required OwnerViewViewModel viewModel}) {
@@ -107,6 +106,7 @@ class _OwnerViewState extends State<OwnerView> {
             return Scaffold(
               backgroundColor: kBlack,
               body: GesturesForDetailsScreen(
+                key: const ValueKey(kOwnerViewKeyValue),
                 screen: DetailScreen.ownerScreen,
                 viewModel: viewModel,
                 nft: widget.nft,
@@ -114,6 +114,7 @@ class _OwnerViewState extends State<OwnerView> {
                   children: [
                     getTypeWidget(widget.ownerViewViewModel),
                     Visibility(
+                      key: const ValueKey(kOwnerViewHeaderKeyValue),
                       visible: !viewModel.isViewingFullNft,
                       child: Padding(
                         padding: EdgeInsets.only(left: 8, right: 8, bottom: 8, top: MediaQuery.of(context).viewPadding.top),
@@ -300,6 +301,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             )
           ] else ...[
             Stack(
+              key: const ValueKey(kOwnerViewBottomSheetKeyValue),
               children: [
                 Align(
                   alignment: Alignment.topRight,

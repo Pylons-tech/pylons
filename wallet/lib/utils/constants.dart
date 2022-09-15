@@ -193,17 +193,6 @@ const String kEthereumAbr = "ETH";
 const String kEthereumSymbol = "weth-wei";
 const String kDefault = 'Default';
 
-
-
-
-
-
-
-
-
-
-
-
 /// General screen
 const String kSaveText = "Save";
 const String kBioText = "Bio";
@@ -250,8 +239,6 @@ const String kTimeStampKey = 'timestamp';
 
 const String kSoldOut = 'Sold Out';
 
-
-
 /// Trade Receipt Screen
 const String kTransactionCompleteText = "View Receipt";
 const String kBigDipperTransactionViewingUrl = "https://wallet.pylons.tech/transactions/";
@@ -282,7 +269,6 @@ const String kCollapse = "  Collapse";
 const String kNftUrlKey = "NFT_URL";
 const String kAppTypeKey = "App_Type";
 
-
 const int kNumberOfSeconds = 1000;
 const int kSixtySeconds = 60;
 const int kTimeStampInt = 1000;
@@ -294,7 +280,6 @@ const kHashtags = "Hashtags";
 const kLOW_LOW_BALANCE_CONSTANT = "Tx error:5";
 
 //NFT STRINGS KEYS
-
 
 const kWidth = "Width";
 const kHeight = "Height";
@@ -401,3 +386,7 @@ final defaultPylonsSKUs = jsonEncode([
 ]);
 
 const kMaxDescription = 256;
+
+const kOwnerViewKeyValue = "owner_view_key";
+const kOwnerViewHeaderKeyValue = "ownerview_header";
+const kOwnerViewBottomSheetKeyValue = "bottom_sheet";
