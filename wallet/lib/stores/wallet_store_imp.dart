@@ -273,8 +273,18 @@ class WalletsStoreImp implements WalletsStore {
   Future<SdkIpcResponse> createRecipe(Map json) async {
     final msgObj = pylons.MsgCreateRecipe.create()..mergeFromProto3Json(json);
     msgObj.creator = wallets.value.last.publicAddress;
-    final response = await _signAndBroadcast(msgObj);
-    return response;
+    final sdkResponse = await _signAndBroadcast(msgObj);
+    if (!sdkResponse.success) {
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    final recipeResponseEither = await repository.getRecipe(recipeId: json["id"].toString(), cookBookId: json["cookbookId"].toString());
+
+    if (recipeResponseEither.isLeft()) {
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    return SdkIpcResponse.success(data: jsonEncode(recipeResponseEither.toOption().toNullable()!.toProto3Json()), sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
   }
 
   @override

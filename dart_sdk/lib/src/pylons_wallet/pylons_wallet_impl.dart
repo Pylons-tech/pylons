@@ -30,7 +30,6 @@ import 'package:pylons_sdk/src/pylons_wallet.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
 
-
 import '../core/constants/strings.dart';
 
 /// The Pylons class is the main endpoint developers use for structured,
@@ -182,13 +181,13 @@ class PylonsWalletImpl implements PylonsWallet {
           Strings.TX_CREATE_COOKBOOK, jsonEncode(cookbook.toProto3Json()),
           requestResponse: requestResponse);
 
-
       if (response is SDKIPCResponse<Cookbook>) {
         return response;
       }
 
       if (response is SDKIPCResponse<String> && !requestResponse) {
-        return SDKIPCResponse.success(cookbook, action: Strings.TX_CREATE_COOKBOOK);
+        return SDKIPCResponse.success(cookbook,
+            action: Strings.TX_CREATE_COOKBOOK);
       }
 
       throw Exception('Response malformed');
@@ -196,13 +195,24 @@ class PylonsWalletImpl implements PylonsWallet {
   }
 
   @override
-  Future<SDKIPCResponse> txCreateRecipe(Recipe recipe,
+  Future<SDKIPCResponse<Recipe>> txCreateRecipe(Recipe recipe,
       {bool requestResponse = true}) async {
     ValidateRecipe.validate(recipe);
+
     return Future.sync(() async {
-      return await _dispatch(
+      final response = await _dispatch(
           Strings.TX_CREATE_RECIPE, jsonEncode(recipe.toProto3Json()),
           requestResponse: requestResponse);
+
+      if (response is SDKIPCResponse<Recipe>) {
+        return response;
+      }
+
+      if (response is SDKIPCResponse<String> && !requestResponse) {
+        return SDKIPCResponse.success(recipe, action: Strings.TX_CREATE_RECIPE);
+      }
+
+      throw Exception('Response malformed');
     });
   }
 
