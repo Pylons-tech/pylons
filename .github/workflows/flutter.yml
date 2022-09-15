@@ -56,5 +56,25 @@ jobs:
           flutter pub get
           flutter analyze
           flutter build appbundle
+          flutter test
 
+  
+  dart_sdk:
+    name: SDK
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
 
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable" # or: 'beta', 'dev' or 'master'
+      - run: |
+          flutter --version
+          cd dart_sdk
+          flutter pub get
+          flutter analyze
+          flutter test
