@@ -40,30 +40,10 @@ class NftGridViewItem extends StatelessWidget {
                 buildBottomSheet(context: context);
               },
               child: NftTypeBuilder(
-                onImage: (context) => CachedNetworkImage(
-                  errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
-                  placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
-                  imageUrl: nft.url.changeDomain(),
-                  fit: BoxFit.fitHeight,
-                ),
-                onVideo: (context) => CachedNetworkImage(
-                  fit: BoxFit.fitHeight,
-                  imageUrl: nft.thumbnailUrl.changeDomain(),
-                  errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
-                  placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
-                ),
-                onAudio: (context) => CachedNetworkImage(
-                  fit: BoxFit.fitHeight,
-                  imageUrl: nft.thumbnailUrl.changeDomain(),
-                  errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
-                  placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
-                ),
-                onPdf: (context) => CachedNetworkImage(
-                  fit: BoxFit.fitHeight,
-                  imageUrl: nft.thumbnailUrl.changeDomain(),
-                  errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
-                  placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
-                ),
+                onImage: (context) => buildNFTPreview(url: nft.url.changeDomain()),
+                onVideo: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
+                onAudio: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
+                onPdf: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
                 on3D: (context) => ModelViewer(
                   src: nft.url.changeDomain(),
                   ar: false,
@@ -76,6 +56,15 @@ class NftGridViewItem extends StatelessWidget {
             )),
       ],
     );
+  }
+
+  CachedNetworkImage buildNFTPreview({required String url}) {
+    return CachedNetworkImage(
+                fit: BoxFit.fitHeight,
+                imageUrl: url,
+                errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
+                placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
+              );
   }
 
   void buildBottomSheet({required BuildContext context}) {
