@@ -34,8 +34,9 @@ import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
-import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+
+import '../../utils/route_util.dart';
 
 class PurchaseItemScreen extends StatefulWidget {
   final NFT nft;
@@ -302,6 +303,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             clipper: BuyClipper(),
                             child: InkWell(
                               onTap: () async {
+                                if (viewModel.walletsStore.getWallets().value.isEmpty) {
+                                  "create_an_account_first".tr().show();
+                                  Navigator.of(context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
+                                  return;
+                                }
                                 final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
                                   selectedDenom: viewModel.nft.denom,
                                   requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
@@ -427,6 +433,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           padding: const EdgeInsets.only(top: 16.0),
           child: GestureDetector(
               onTap: () async {
+                if (!isAccountExists()) {
+                  return;
+                }
                 await viewModel.updateLikeStatus(recipeId: viewModel.nft.recipeID, cookBookID: viewModel.nft.cookbookID);
               },
               child: viewModel.isLiking ? getLikingLoader() : getLikeIcon(likedByMe: viewModel.likedByMe)),
@@ -629,6 +638,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 children: [
                                   GestureDetector(
                                     onTap: () async {
+                                      if (!isAccountExists()) {
+                                        return;
+                                      }
                                       await viewModel.updateLikeStatus(recipeId: viewModel.nft.recipeID, cookBookID: viewModel.nft.cookbookID);
                                     },
                                     child: viewModel.isLiking ? getLikingLoader() : getLikeIcon(likedByMe: viewModel.likedByMe),
@@ -645,19 +657,22 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               SizedBox(
                                 height: 20.h,
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (_) => QRCodeScreen(
-                                            nft: viewModel.nft,
-                                          ));
-                                },
-                                child: SvgPicture.asset(
-                                  SVGUtil.QR_ICON,
-                                  height: 20.h,
-                                ),
-                              ),
+                              if (isAccountExists())
+                                GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (_) => QRCodeScreen(
+                                              nft: viewModel.nft,
+                                            ));
+                                  },
+                                  child: SvgPicture.asset(
+                                    SVGUtil.QR_ICON,
+                                    height: 20.h,
+                                  ),
+                                )
+                              else
+                                const SizedBox(),
                               SizedBox(
                                 height: 20.h,
                               ),
