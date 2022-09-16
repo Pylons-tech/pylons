@@ -32,6 +32,9 @@ message EventUpdateAccount {
 message EventRegisterKYCAccount {
   string address = 1;
   string username = 2;
+  uint64 level = 3;
+  string provider = 4;
+  string provider_id = 5;
 }
 
 message EventCreateCookbook {

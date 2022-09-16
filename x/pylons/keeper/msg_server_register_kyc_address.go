@@ -24,6 +24,9 @@ func (k msgServer) RegisterKYCAddress(goCtx context.Context, msg *types.MsgRegis
 	kycAcc := types.KYCAccount{
 		AccountAddr: msg.Creator,
 		Username:    msg.Username,
+		Level:       msg.Level,
+		Provider:    msg.Provider,
+		ProviderId:  msg.ProviderId,
 	}
 
 	_, found := k.GetPylonsKYC(ctx, kycAcc.AccountAddr)
@@ -38,8 +41,11 @@ func (k msgServer) RegisterKYCAddress(goCtx context.Context, msg *types.MsgRegis
 	}
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventRegisterKYCAccount{
-		Address:  msg.Creator,
-		Username: msg.Username,
+		Address:    msg.Creator,
+		Username:   msg.Username,
+		Level:      msg.Level,
+		Provider:   msg.Provider,
+		ProviderId: msg.ProviderId,
 	})
 
 	return &types.MsgRegisterKYCAddressResponse{}, err

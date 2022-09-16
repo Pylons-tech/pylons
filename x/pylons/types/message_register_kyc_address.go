@@ -7,10 +7,13 @@ import (
 
 var _ sdk.Msg = &MsgRegisterKYCAddress{}
 
-func NewsgRegisterKYCAddress(creator string, username string) *MsgRegisterKYCAddress {
+func NewsgRegisterKYCAddress(creator, username, provider, providerID string, level uint64) *MsgRegisterKYCAddress {
 	return &MsgRegisterKYCAddress{
-		Creator:  creator,
-		Username: username,
+		Creator:    creator,
+		Username:   username,
+		Level:      level,
+		Provider:   provider,
+		ProviderId: providerID,
 	}
 }
 
@@ -45,5 +48,10 @@ func (msg *MsgRegisterKYCAddress) ValidateBasic() error {
 	if err = ValidateUsername(msg.Username); err != nil {
 		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
 	}
+
+	if err = ValidateUsername(msg.Provider); err != nil {
+		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
+	}
+
 	return nil
 }
