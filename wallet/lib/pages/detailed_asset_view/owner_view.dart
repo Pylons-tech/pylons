@@ -22,7 +22,6 @@ import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.da
 import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
