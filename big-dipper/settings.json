@@ -2,7 +2,7 @@
   "public": {
     "chainName": "Pylons",
     "chainId": "pylons-testnet-3",
-    "gtm": "{Add your Google Tag Manager ID here}",
+    "gtm": "G-PP2HYF5XVV",
     "slashingWindow": 10000,
     "uptimeWindow": 250,
     "initialPageSize": 30,
