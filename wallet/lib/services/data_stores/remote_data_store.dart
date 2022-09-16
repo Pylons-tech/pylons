@@ -120,10 +120,10 @@ abstract class RemoteDataStore {
   Future<int> getLikesCount({required String recipeId, required String cookBookID});
 
   /// This method is used to get history of nft owners
-  /// Input: [recipeId] and [cookBookID] of the NFT
+  /// Input: [itemId] and [cookBookID] of the NFT
   /// Output : [List][NftOwnershipHistory] will contain the list of NftOwnershipHistory data if success
   /// else will throw error
-  Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String recipeId, required String cookBookId});
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String itemId, required String cookBookId});
 
   /// This method is used to get views count of NFT
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
@@ -275,7 +275,6 @@ abstract class RemoteDataStore {
   /// Input: [address] the address of the user
   /// Output: [bool] return true if successful
   Future<bool> setUpUserIdentifierInAnalytics({required String address});
-
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -665,10 +664,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String recipeId, required String cookBookId}) async {
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String itemId, required String cookBookId}) async {
     final baseApiUrl = getBaseEnv().baseApiUrl;
-
-    final uri = Uri.parse("$baseApiUrl/pylons/get_recipe_history/$cookBookId/$recipeId");
+    final uri = Uri.parse("$baseApiUrl/pylons/item_history/$cookBookId/$itemId");
     final List<NftOwnershipHistory> historyList = [];
 
     final historyResponse = await httpClient.get(uri);
@@ -1017,7 +1015,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
       link: Uri.parse("https://wallet.pylons.tech/invite/$address"),
       uriPrefix: "https://pylons.page.link/",
       androidParameters: const AndroidParameters(packageName: "tech.pylons.wallet"),
-      iosParameters: const IOSParameters(bundleId: "xyz.pylons.wallet"),
+      iosParameters: const IOSParameters(
+        bundleId: "xyz.pylons.wallet",
+      ),
     );
 
     final link = await dynamicLinksGenerator.buildLink(dynamicLinkParams);
@@ -1031,6 +1031,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       uriPrefix: kDeepLink,
       androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
       iosParameters: IOSParameters(bundleId: bundleId, fallbackUrl: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
+      navigationInfoParameters: const NavigationInfoParameters(forcedRedirectEnabled: true),
     );
 
     final link = await dynamicLinksGenerator.buildShortLink(

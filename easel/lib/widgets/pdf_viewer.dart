@@ -153,7 +153,7 @@ class _PdfViewerState extends State<PdfViewer> {
               child: RotationTransition(
                 turns: const AlwaysStoppedAnimation(0.25),
                 child: SvgPicture.asset(
-                  kFullScreenIcon,
+                  PngUtils.kFullScreenIcon,
                   fit: BoxFit.fill,
                   width: 8.w,
                   height: 8.w,
@@ -197,7 +197,7 @@ class _PdfViewerState extends State<PdfViewer> {
                           fit: BoxFit.cover,
                         )),
                   )
-                : SvgPicture.asset(kUploadThumbnail),
+                : SvgPicture.asset(PngUtils.kUploadThumbnail),
           ),
         ),
       ),

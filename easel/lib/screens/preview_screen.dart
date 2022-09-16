@@ -77,13 +77,17 @@ class _PreviewScreenState extends State<PreviewScreen> {
           child: Stack(
             children: [
               if (provider.file != null) buildPreviewWidget(provider),
-              Image.asset(kPreviewGradient, width: 1.sw, fit: BoxFit.fill),
+              Image.asset(PngUtils.kPreviewGradient, width: 1.sw, fit: BoxFit.fill),
               Column(children: [
                 SizedBox(height: MediaQuery.of(context).viewPadding.top + 20.h),
                 Align(
                   alignment: Alignment.center,
-                  child: Text(kPreviewNoticeText,
-                      textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: EaselAppTheme.kLightPurple, fontSize: 15.sp, fontWeight: FontWeight.w600)),
+                  child: Text("nft_preview_header".tr(),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                          color: EaselAppTheme.kLightPurple,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w600)),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -164,7 +168,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
         break;
       case NFTTypes.video:
         if (provider.videoThumbnail == null) {
-          context.show(message: uploadYourThumbnail);
+          context.show(message: "kindly_upload_thumbnail".tr());
           return false;
         }
         result = await saveToUpload();
@@ -172,7 +176,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
         break;
       case NFTTypes.audio:
         if (provider.audioThumbnail == null) {
-          context.show(message: uploadYourThumbnail);
+          context.show(message: "kindly_upload_thumbnail".tr());
           return false;
         }
         result = await saveToUpload();
@@ -182,7 +186,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
         break;
       case NFTTypes.pdf:
         if (provider.pdfThumbnail == null) {
-          context.show(message: uploadYourThumbnail);
+          context.show(message: "kindly_upload_thumbnail".tr());
           return false;
         }
         result = await saveToUpload();

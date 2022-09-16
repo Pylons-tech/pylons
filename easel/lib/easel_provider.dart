@@ -40,13 +40,14 @@ class EaselProvider extends ChangeNotifier {
   final Repository repository;
   final MediaInfo mediaInfo;
 
-  EaselProvider(
-      {required this.videoPlayerHelper,
-      required this.audioPlayerHelperForFile,
-      required this.audioPlayerHelperForUrl,
-      required this.fileUtilsHelper,
-      required this.repository,
-      required this.mediaInfo});
+  EaselProvider({
+    required this.videoPlayerHelper,
+    required this.audioPlayerHelperForFile,
+    required this.audioPlayerHelperForUrl,
+    required this.fileUtilsHelper,
+    required this.repository,
+    required this.mediaInfo
+  });
 
   File? _file;
   NftFormat _nftFormat = NftFormat.supportedFormats[0];
@@ -72,9 +73,11 @@ class EaselProvider extends ChangeNotifier {
 
   bool collapsed = false;
 
-  final StreamController<UploadProgress> _uploadProgressController = StreamController.broadcast();
+  final StreamController<UploadProgress> _uploadProgressController =
+      StreamController.broadcast();
 
-  Stream<UploadProgress> get uploadProgressStream => _uploadProgressController.stream;
+  Stream<UploadProgress> get uploadProgressStream =>
+      _uploadProgressController.stream;
 
   void setPublishedNFTClicked(NFT nft) {
     _publishedNFTClicked = nft;
@@ -713,7 +716,7 @@ class EaselProvider extends ChangeNotifier {
       scaffoldMessengerState?.show(message: "$kErrRecipe ${response.error}");
       return false;
     }
-    scaffoldMessengerState?.show(message: kRecipeCreated);
+    scaffoldMessengerState?.show(message: "recipe_created");
     deleteNft(nft.id);
     return true;
   }
@@ -898,10 +901,12 @@ class EaselProvider extends ChangeNotifier {
 
     int id = 0;
     if (!_file!.existsSync()) {
-      navigatorKey.currentState!.overlay!.context.show(message: kErrPickFileFetch);
+      navigatorKey.currentState!.overlay!.context
+          .show(message: "err_pick_file".tr());
       return false;
     }
-    final loading = LoadingProgress()..showLoadingWithProgress(message: kUploadingMessage);
+    final loading = LoadingProgress()
+      ..showLoadingWithProgress(message: "uploading".tr());
 
     initializeTextEditingControllerWithEmptyValues();
     if (isThumbnailPresent()) {
@@ -914,7 +919,8 @@ class EaselProvider extends ChangeNotifier {
       uploadThumbnailResponse = uploadResponse.getOrElse(() => uploadThumbnailResponse);
       if (uploadThumbnailResponse.status == Status.error) {
         loading.dismiss();
-        scaffoldMessengerOptionalState?.show(message: uploadThumbnailResponse.errorMessage ?? kErrUpload);
+        scaffoldMessengerOptionalState
+            ?.show(message: uploadThumbnailResponse.errorMessage ?? "upload_error_occurred".tr());
         return false;
       }
     }
@@ -932,7 +938,8 @@ class EaselProvider extends ChangeNotifier {
     final fileUploadResponse = response.getOrElse(() => uploadUrlResponse);
     loading.dismiss();
     if (fileUploadResponse.status == Status.error) {
-      scaffoldMessengerOptionalState?.show(message: fileUploadResponse.errorMessage ?? kErrUpload);
+      scaffoldMessengerOptionalState
+          ?.show(message: fileUploadResponse.errorMessage ?? "upload_error_occurred".tr());
       return false;
     }
 
