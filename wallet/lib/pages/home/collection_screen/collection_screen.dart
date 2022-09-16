@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
 import 'package:pylons_wallet/model/nft.dart';
-import 'package:pylons_wallet/pages/detailed_asset_view/owner_view.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_placeholder.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/video_placeholder.dart';
@@ -22,9 +21,9 @@ import 'package:pylons_wallet/pages/home/easel_section/no_easel_art_work.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
+import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
@@ -112,12 +111,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
     if (asset.type == NftType.TYPE_RECIPE) {
       onRecipeClicked(asset);
     } else {
-      Navigator.of(context)
-          .push(MaterialPageRoute(
-              builder: (_) => OwnerView(
-                    nft: asset,
-                    ownerViewViewModel: sl(),
-                  )))
+      Navigator.of(context).pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: asset)
           .then((_) => {walletsStore.setStateUpdatedFlag(flag: true)});
     }
   }
@@ -129,12 +123,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
     await asset.getOwnerAddress();
 
     loader.dismiss();
-    Navigator.of(navigatorKey.currentState!.overlay!.context)
-        .push(MaterialPageRoute(
-            builder: (_) => OwnerView(
-                  nft: asset,
-                  ownerViewViewModel: sl(),
-                )))
+    Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: asset)
         .then((_) => {walletsStore.setStateUpdatedFlag(flag: true)});
   }
 }
