@@ -55,6 +55,6 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   @override
   Future<List<Recipe>> getRecipesByCookbookID(String cookBookID) async {
     var sdkResponse = await PylonsWallet.instance.getRecipes(cookBookID);
-    return sdkResponse.data;
+    return sdkResponse.data!;
   }
 }

@@ -6,8 +6,6 @@ import 'package:pylons_sdk/src/features/ipc/responseCompleters.dart';
 
 import '../../../../mocks/mock_constants.dart';
 
-
-
 void main() {
   test('should complete the get trades future', () {
     initResponseCompleter(Strings.GET_TRADES);
