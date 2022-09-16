@@ -102,15 +102,15 @@ func BurnToken(ctx sdk.Context, denom string, accKeeper *authkeeper.AccountKeepe
 	accs := bank.GetAccountsBalances(ctx)
 	for _, acc := range accs {
 		balance := acc.Coins.AmountOf(denom)
-		// Check if ubedrock amount GT 0
+		// Check if denom token amount GT 0
 		if balance.GT(math.ZeroInt()) {
 			amount := sdk.NewCoin(denom, balance)
-			// Send ubedrock to module
+			// Send denom token to module
 			err := bank.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(acc.Address), types.PaymentsProcessorName, sdk.NewCoins(amount))
 			if err != nil {
 				panic(err)
 			}
-			// Burn ubedrock in module
+			// Burn denom token in module
 			err = bank.BurnCoins(ctx, types.PaymentsProcessorName, sdk.NewCoins(amount))
 			if err != nil {
 				panic(err)
