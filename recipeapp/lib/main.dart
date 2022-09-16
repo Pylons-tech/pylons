@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pylons_sdk/pylons_sdk.dart';
+
+import 'config.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,18 +51,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  Config? _config;
 
   @override
   Widget build(BuildContext context) {
@@ -99,17 +91,93 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              'tst',
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {},
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+}
+
+class ItemDetailPane extends StatelessWidget {
+  final Item item;
+
+  const ItemDetailPane({required this.item, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+}
+
+class InventoryPane extends StatelessWidget {
+  final List<Item> items;
+  const InventoryPane({required this.items, Key? key}) : super(key: key);
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+
+}
+
+class RecipeInputPane extends StatelessWidget {
+  final Recipe? recipe;
+  final List<Item> items;
+  const RecipeInputPane({required this.recipe, required this.items, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+
+}
+
+class RecipeOutputPane extends StatelessWidget {
+  final Recipe? recipe;
+  final List<Item> items;
+  const RecipeOutputPane({required this.recipe, required this.items, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+
+}
+
+class RecipeSelectPane extends StatelessWidget {
+  final List<Recipe> recipes;
+  const RecipeSelectPane({required this.recipes, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+
+}
+
+class RecipeSelectRecipeCard extends StatelessWidget {
+  final Recipe recipe;
+
+  const RecipeSelectRecipeCard({required this.recipe, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
   }
 }
