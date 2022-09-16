@@ -1,29 +1,31 @@
+import 'dart:convert';
+
 import 'package:pylons_sdk/src/core/constants/strings.dart';
 import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
 import 'package:pylons_sdk/src/features/ipc/responseCompleters.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:pylons_sdk/src/generated/pylons/recipe.pb.dart';
 
-class GetRecipesHandler implements IPCHandler {
+class CreateRecipeHandler implements IPCHandler {
   @override
   void handler(SDKIPCResponse<dynamic> response) {
-    final defaultResponse = SDKIPCResponse<List<Recipe>>(
+    print(response);
+    final defaultResponse = SDKIPCResponse<Recipe>(
         success: response.success,
         action: response.action,
-        data: [],
+        data: Recipe()..createEmptyInstance(),
         error: response.error,
         errorCode: response.errorCode);
     try {
       if (response.success) {
-        defaultResponse.data = List.from(response.data).map((e) {
-          return Recipe.create()..mergeFromProto3Json(e);
-        }).toList();
+        defaultResponse.data = Recipe.create()
+          ..mergeFromProto3Json(jsonDecode(response.data));
       }
-    } on Exception catch (_) {
-      defaultResponse.error = 'Recipe parsing failed';
-      defaultResponse.errorCode = Strings.ERR_MALFORMED_RECIPES;
+    } on FormatException catch (_) {
+      defaultResponse.error = _.message;
+      defaultResponse.errorCode = Strings.ERR_MALFORMED_RECIPE;
       defaultResponse.success = false;
     }
-    responseCompleters[Strings.GET_RECIPES]!.complete(defaultResponse);
+    responseCompleters[Strings.TX_CREATE_RECIPE]!.complete(defaultResponse);
   }
 }
