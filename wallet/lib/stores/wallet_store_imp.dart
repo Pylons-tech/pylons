@@ -275,9 +275,6 @@ class WalletsStoreImp implements WalletsStore {
 
   @override
   Future<SdkIpcResponse> executeRecipe(Map json) async {
-    if (wallets.value.isEmpty) {
-      return SdkIpcResponse.failure(sender: '', error: 'create_profile_before_using'.tr(), errorCode: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
-    }
     final msgObj = pylons.MsgExecuteRecipe.create()..mergeFromProto3Json(json);
     msgObj.creator = wallets.value.last.publicAddress;
     final response = await _signAndBroadcast(msgObj);
