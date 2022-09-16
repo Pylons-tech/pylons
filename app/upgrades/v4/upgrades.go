@@ -46,17 +46,17 @@ var (
 		EngineHotWal,
 	}
 
-	TotalUbedrock = math.NewIntFromUint64(1_000_000_000)
+	TotalUbedrock = math.NewIntFromUint64(1_000_000_000_000_000) // 1 bedrock = 1_000_000 ubedrock
 
 	UbedrockDistribute = map[string]math.Int{
-		Accounts[0]: math.NewIntFromUint64(150_000_000),
-		Accounts[1]: math.NewIntFromUint64(150_000_000),
+		Accounts[0]: math.NewIntFromUint64(150_000_000_000_000),
+		Accounts[1]: math.NewIntFromUint64(150_000_000_000_000),
 		Accounts[2]: math.ZeroInt(),
-		Accounts[3]: math.NewIntFromUint64(20_000_000),
-		Accounts[4]: math.NewIntFromUint64(40_000_000),
-		Accounts[5]: math.NewIntFromUint64(20_000_000),
-		Accounts[6]: math.NewIntFromUint64(619_999_000),
-		Accounts[7]: math.NewIntFromUint64(1000),
+		Accounts[3]: math.NewIntFromUint64(20_000_000_000_000),
+		Accounts[4]: math.NewIntFromUint64(40_000_000_000_000),
+		Accounts[5]: math.NewIntFromUint64(20_000_000_000_000),
+		Accounts[6]: math.NewIntFromUint64(619_999_000_000_000),
+		Accounts[7]: math.NewIntFromUint64(1_000_000_000),
 	}
 	_ = Accounts
 	_ = TotalUbedrock
@@ -140,13 +140,13 @@ func MintUbedrockForInitialAccount(ctx sdk.Context, bank *bankkeeper.BaseKeeper,
 		}
 	}
 
-	// Send 1 ubedrock to each validator
+	// Send 1 bedrock to each validator = 1_000_000 ubedrock
 	vals := staking.GetAllValidators(ctx)
 	for _, val := range vals {
 		_, err = staking.Delegate(
 			ctx,
 			sdk.MustAccAddressFromBech32(EngineHotWal),
-			math.OneInt(),
+			math.NewIntFromUint64(1_000_000),
 			stakingtypes.Unbonded,
 			val,
 			true,
