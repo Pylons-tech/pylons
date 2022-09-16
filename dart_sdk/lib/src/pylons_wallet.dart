@@ -343,7 +343,8 @@ abstract class PylonsWallet {
   ///
   /// If the operation fails due to an exception thrown by this library, that
   /// exception will be passed directly.
-  Future<SDKIPCResponse> txCreateRecipe(Recipe recipe, {bool requestResponse});
+  Future<SDKIPCResponse<Recipe>> txCreateRecipe(Recipe recipe,
+      {bool requestResponse});
 
   /// Async: Creates a transaction to execute the recipe with coordinates
   /// [cookbookId] : [recipeName] against the current profile.
