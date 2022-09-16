@@ -14,7 +14,7 @@ import 'payment_info.pb.dart' as $7;
 import 'redeem_info.pb.dart' as $5;
 import 'trade.pb.dart' as $8;
 import 'recipe.pb.dart' as $4;
-import '../cosmos/base/v1beta1/coin.pb.dart' as $2;
+import '../../cosmos/base/v1beta1/coin.pb.dart' as $2;
 
 class MsgAppleIap extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgAppleIap', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
@@ -1426,16 +1426,21 @@ class MsgExecuteRecipe extends $pb.GeneratedMessage {
 class MsgExecuteRecipeResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgExecuteRecipeResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'txTime')
     ..hasRequiredFields = false
   ;
 
   MsgExecuteRecipeResponse._() : super();
   factory MsgExecuteRecipeResponse({
     $core.String? id,
+    $fixnum.Int64? txTime,
   }) {
     final _result = create();
     if (id != null) {
       _result.id = id;
+    }
+    if (txTime != null) {
+      _result.txTime = txTime;
     }
     return _result;
   }
@@ -1468,6 +1473,15 @@ class MsgExecuteRecipeResponse extends $pb.GeneratedMessage {
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get txTime => $_getI64(1);
+  @$pb.TagNumber(2)
+  set txTime($fixnum.Int64 v) { $_setInt64(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasTxTime() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTxTime() => clearField(2);
 }
 
 class MsgSetItemString extends $pb.GeneratedMessage {
@@ -2437,3 +2451,4 @@ class MsgUpdateCookbookResponse extends $pb.GeneratedMessage {
   static MsgUpdateCookbookResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MsgUpdateCookbookResponse>(create);
   static MsgUpdateCookbookResponse? _defaultInstance;
 }
+

@@ -111,3 +111,4 @@ class GoogleInAppPurchaseOrder extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   void clearSignature() => clearField(5);
 }
+
