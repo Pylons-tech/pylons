@@ -248,7 +248,7 @@ class WalletsStoreDummyInventory extends WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> createCookbook(Map json) {
+  Future<SdkIpcResponse<String>> createCookbook(Map json) {
     return _baseInstance.createCookbook(json);
   }
 

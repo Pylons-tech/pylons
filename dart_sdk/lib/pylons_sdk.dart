@@ -13,4 +13,5 @@ export 'src/generated/pylons/cookbook.pb.dart';
 export 'src/generated/pylons/recipe.pb.dart';
 export 'src/generated/pylons/trade.pb.dart';
 export 'src/features/helper/dec_string.dart';
+export 'src/features/models/sdk_ipc_response.dart';
 export 'src/generated/cosmos/base/v1beta1/coin.pb.dart' show Coin;
