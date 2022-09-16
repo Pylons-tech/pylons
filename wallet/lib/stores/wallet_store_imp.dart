@@ -237,10 +237,21 @@ class WalletsStoreImp implements WalletsStore {
   /// Input : [Map] containing the info related to the creation of cookbook
   /// Output : [TransactionHash] hash of the transaction
   @override
-  Future<SdkIpcResponse> createCookbook(Map json) async {
+  Future<SdkIpcResponse<String>> createCookbook(Map json) async {
     final msgObj = pylons.MsgCreateCookbook.create()..mergeFromProto3Json(json);
     msgObj.creator = wallets.value.last.publicAddress;
-    return _signAndBroadcast(msgObj);
+    final sdkResponse = await _signAndBroadcast(msgObj);
+    if (!sdkResponse.success) {
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    final cookBookResponseEither = await repository.getCookbookBasedOnId(cookBookId: json["id"].toString());
+
+    if (cookBookResponseEither.isLeft()) {
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    return SdkIpcResponse.success(data: jsonEncode(cookBookResponseEither.toOption().toNullable()!.toProto3Json()), sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
   }
 
   @override
@@ -262,8 +273,18 @@ class WalletsStoreImp implements WalletsStore {
   Future<SdkIpcResponse> createRecipe(Map json) async {
     final msgObj = pylons.MsgCreateRecipe.create()..mergeFromProto3Json(json);
     msgObj.creator = wallets.value.last.publicAddress;
-    final response = await _signAndBroadcast(msgObj);
-    return response;
+    final sdkResponse = await _signAndBroadcast(msgObj);
+    if (!sdkResponse.success) {
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    final recipeResponseEither = await repository.getRecipe(recipeId: json["id"].toString(), cookBookId: json["cookbookId"].toString());
+
+    if (recipeResponseEither.isLeft()) {
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    return SdkIpcResponse.success(data: jsonEncode(recipeResponseEither.toOption().toNullable()!.toProto3Json()), sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
   }
 
   @override
@@ -576,8 +597,6 @@ class WalletsStoreImp implements WalletsStore {
     }
 
     final userName = getUsernameBasedOnAddress.getOrElse(() => '');
-
-
 
     final creds = AlanPrivateAccountCredentials(
       publicInfo: AccountPublicInfo(
