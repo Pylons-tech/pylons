@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/model/nft.dart';
-import 'package:pylons_wallet/pages/detailed_asset_view/owner_view.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
-import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/enums.dart';
+import 'package:pylons_wallet/utils/route_util.dart';
 
 class GesturesForDetailsScreen extends StatefulWidget {
   final Widget child;
@@ -190,14 +189,9 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
       if (collectionViewModel.creations.length - 1 == index) return;
       index = index + 1;
       final NFT nft = collectionViewModel.creations.elementAt(index);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => OwnerView(
-            nft: nft,
-            ownerViewViewModel: sl(),
-          ),
-        ),
-      );
+
+
+      Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
     }
     if (widget.nft.type == NftType.TYPE_ITEM) {
       int index = collectionViewModel.purchases.indexOf(widget.nft);
@@ -205,14 +199,7 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
       if (collectionViewModel.purchases.length - 1 == index) return;
       index = index + 1;
       final NFT nft = collectionViewModel.purchases.elementAt(index);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => OwnerView(
-            nft: nft,
-            ownerViewViewModel: sl(),
-          ),
-        ),
-      );
+      Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
     }
   }
 
@@ -224,14 +211,7 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
       if (index == 0) return;
       index = index - 1;
       final NFT nft = collectionViewModel.creations.elementAt(index);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => OwnerView(
-            nft: nft,
-            ownerViewViewModel: sl(),
-          ),
-        ),
-      );
+      Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
     }
     if (widget.nft.type == NftType.TYPE_ITEM) {
       int index = collectionViewModel.purchases.indexOf(widget.nft);
@@ -239,14 +219,7 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
       if (index == 0) return;
       index = index - 1;
       final NFT nft = collectionViewModel.purchases.elementAt(index);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => OwnerView(
-            nft: nft,
-            ownerViewViewModel: sl(),
-          ),
-        ),
-      );
+      Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
     }
   }
 }

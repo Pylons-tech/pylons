@@ -406,7 +406,7 @@ class MockRepository extends Repository {
 
   @override
   Future<Either<Failure, int>> getLikesCount({required String recipeId, required String cookBookID}) {
-    return Future.value(Right(4));
+    return Future.value(const Right(4));
   }
 
   @override

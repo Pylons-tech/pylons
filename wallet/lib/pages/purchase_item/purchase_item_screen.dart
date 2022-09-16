@@ -67,17 +67,16 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
             widget.purchaseItemViewModel.destroyPlayers(widget.nft);
             return true;
           },
-          child: PurchaseItemContent(
-            viewModel: widget.purchaseItemViewModel,
+          child: const PurchaseItemContent(
           )),
     );
   }
 }
 
 class PurchaseItemContent extends StatefulWidget {
-  final PurchaseItemViewModel viewModel;
 
-  const PurchaseItemContent({Key? key, required this.viewModel}) : super(key: key);
+
+  const PurchaseItemContent({Key? key,}) : super(key: key);
 
   @override
   _PurchaseItemContentState createState() => _PurchaseItemContentState();
@@ -142,7 +141,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
     return Scaffold(
         backgroundColor: kBlack,
         body: GesturesForDetailsScreen(
-          nft: widget.viewModel.nft,
+          nft: viewModel.nft,
           viewModel: viewModel,
           screen: DetailScreen.purchaseScreen,
           tapUp: (context) => onTapUp,
@@ -168,11 +167,6 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
                         ),
                       ),
                       trailing: const SizedBox(),
-                      title: Text(
-                        "my_nft".tr(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
-                      ),
                     ),
                   ),
                 ),

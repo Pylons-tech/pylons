@@ -129,12 +129,11 @@ class OwnerViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initializeData({required NFT nftData}) {
-    nft = nftData;
-    nftDataInit(recipeId: nftData.recipeID, cookBookId: nftData.cookbookID, itemId: nftData.itemID);
+  void initializeData() {
+
+    nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);
     initOwnerName();
-    initializePlayers(nftData);
-    notifyListeners();
+    initializePlayers();
     toHashtagList();
   }
 
@@ -222,7 +221,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     }
   }
 
-  void initializePlayers(NFT nft) {
+  void initializePlayers() {
     switch (nft.assetType) {
       case AssetType.Audio:
         initializeAudioPlayer();
@@ -238,7 +237,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     }
   }
 
-  void destroyPlayers(NFT nft) {
+  void destroyPlayers() {
     switch (nft.assetType) {
       case AssetType.Audio:
         disposeAudioController();

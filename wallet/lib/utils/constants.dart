@@ -388,5 +388,5 @@ final defaultPylonsSKUs = jsonEncode([
 const kMaxDescription = 256;
 
 const kOwnerViewKeyValue = "owner_view_key";
-const kOwnerViewHeaderKeyValue = "ownerview_header";
+const kOwnerViewDrawerKeyValue = "ownerview_header";
 const kOwnerViewBottomSheetKeyValue = "bottom_sheet";
