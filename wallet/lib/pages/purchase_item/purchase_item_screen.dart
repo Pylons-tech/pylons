@@ -317,17 +317,20 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             clipper: BuyClipper(),
                             child: InkWell(
                               onTap: () async {
-                                final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
-                                  selectedDenom: viewModel.nft.denom,
-                                  requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
-                                );
+                                bool balancesFetchResult = true;
+                                if (viewModel.nft.price != kZeroInt) {
+                                  final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
+                                    selectedDenom: viewModel.nft.denom,
+                                    requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
+                                  );
 
-                                if (balancesEither.isLeft()) {
-                                  balancesEither.swap().getOrElse(() => '').show();
-                                  return;
+                                  if (balancesEither.isLeft()) {
+                                    balancesEither.swap().getOrElse(() => '').show();
+                                    return;
+                                  }
+
+                                  balancesFetchResult = balancesEither.getOrElse(() => false);
                                 }
-
-                                final balancesFetchResult = balancesEither.getOrElse(() => false);
 
                                 final PayNowDialog payNowDialog = PayNowDialog(
                                     buildContext: context,
