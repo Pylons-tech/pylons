@@ -44,12 +44,14 @@ class NftGridViewItem extends StatelessWidget {
                 onVideo: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
                 onAudio: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
                 onPdf: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
-                on3D: (context) => ModelViewer(
-                  src: nft.url.changeDomain(),
-                  ar: false,
-                  autoRotate: false,
-                  backgroundColor: EaselAppTheme.kWhite,
-                  cameraControls: false,
+                on3D: (context) => IgnorePointer(
+                  child: ModelViewer(
+                    src: nft.url.changeDomain(),
+                    ar: false,
+                    autoRotate: false,
+                    backgroundColor: EaselAppTheme.kWhite,
+                    cameraControls: false,
+                  ),
                 ),
                 assetType: nft.assetType.toAssetTypeEnum(),
               ),
