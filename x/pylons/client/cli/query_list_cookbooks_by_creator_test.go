@@ -62,12 +62,9 @@ func TestCmdListCookbooksByCreator(t *testing.T) {
 				require.Error(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
 			} else {
 				var resp types.QueryListCookbooksByCreatorResponse
-				// fmt.Println("=======", tc.desc)
-				// fmt.Println(out)
 				require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
 				require.NotNil(t, resp.Cookbooks)
 				require.Equal(t, resp.Cookbooks[0].Id, tc.Id)
-				require.Error(t, err)
 			}
 		})
 	}

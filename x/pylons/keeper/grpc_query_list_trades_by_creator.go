@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
@@ -24,7 +23,6 @@ func (k Keeper) ListTradesByCreator(goCtx context.Context, req *types.QueryListT
 	}
 
 	trades, pageRes, err := k.GetTradesByCreatorPaginated(ctx, addr, req.Pagination)
-	fmt.Println(trades)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
 	}

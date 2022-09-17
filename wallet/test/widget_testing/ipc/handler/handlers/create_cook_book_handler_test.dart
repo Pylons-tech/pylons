@@ -28,6 +28,6 @@ void main() {
 
     final handler = CreateCookbookHandler(sdkipcMessage);
     final response = await handler.handle();
-    expect(MOCK_TRANSACTION.hash, response.data);
+    expect(MOCK_COOKBOOK, response.data);
   });
 }
