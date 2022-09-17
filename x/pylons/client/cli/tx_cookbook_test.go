@@ -85,7 +85,7 @@ func TestCmdCreateCookbook(t *testing.T) {
 			shouldFail: true,
 		},
 		{
-			testDesc:   "Name is to short",
+			testDesc:   "Name is too short",
 			id:         "Identity",
 			name:       "aa",
 			desc:       desc,
@@ -96,7 +96,7 @@ func TestCmdCreateCookbook(t *testing.T) {
 			shouldFail: true,
 		},
 		{
-			testDesc:   "Description is to short",
+			testDesc:   "Description is too short",
 			id:         id,
 			name:       name,
 			desc:       "aa",
@@ -253,7 +253,7 @@ func TestCmdUpdateCookbook(t *testing.T) {
 			shouldFail: true,
 		},
 		{
-			testDesc:   "Name is to short",
+			testDesc:   "Name is too short",
 			id:         id,
 			name:       "aa",
 			desc:       desc,
@@ -265,7 +265,7 @@ func TestCmdUpdateCookbook(t *testing.T) {
 			shouldFail: true,
 		},
 		{
-			testDesc:   "Description is to short",
+			testDesc:   "Description is too short",
 			id:         id,
 			name:       name,
 			desc:       "aa",
