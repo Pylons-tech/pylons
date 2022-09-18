@@ -24,6 +24,14 @@ import 'package:video_player/video_player.dart';
 class PurchaseItemViewModel extends ChangeNotifier {
   NFT nft = NFT(ibcCoins: IBCCoins.upylon);
   bool darkMode = false;
+  bool _isViewingFullNft = false;
+
+  bool get isViewingFullNft => _isViewingFullNft;
+
+  set isViewingFullNft(bool value) {
+    _isViewingFullNft = value;
+    notifyListeners();
+  }
 
   WalletsStore walletsStore;
 
@@ -100,7 +108,14 @@ class PurchaseItemViewModel extends ChangeNotifier {
   late ValueNotifier<ProgressBarState> progressNotifier;
   late ValueNotifier<ButtonState> buttonNotifier;
 
-  late bool collapsed = true;
+  late bool _collapsed = true;
+
+  bool get collapsed => _collapsed;
+
+  set collapsed(bool value) {
+    _collapsed = value;
+    notifyListeners();
+  }
 
   List<String> hashtagList = [];
   List<NftOwnershipHistory> nftOwnershipHistoryList = [];
