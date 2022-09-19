@@ -1447,3 +1447,4 @@ class EventApplePurchase extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   void clearReceiptDataBase64() => clearField(4);
 }
+
