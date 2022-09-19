@@ -51,7 +51,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Config? _config;
+  static Config? _config;
+
+  static int _getNumFilters () {
+    if (_config == null) {
+      return 0;
+    } else {
+      return _config!.doubleFilters.length + _config!.longFilters.length + _config!.stringFilters.length;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,46 +70,27 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              'tst',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+        child: GridView(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+          ),
+          children: [
+            InventoryPane(items: [
+              Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
+              Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
+              Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
+              Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
+              Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
+            ]),
+            RecipeInputPane(recipe: Recipe.create(), items: const []),
+            RecipeOutputPane(recipe: Recipe.create(), items: const []),
+            RecipeSelectPane(recipes: const [])
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        )
+      )
     );
   }
 }
@@ -118,6 +107,26 @@ class ItemDetailPane extends StatelessWidget {
   }
 }
 
+class InventoryItemPane extends StatelessWidget {
+  final Item item;
+
+  const InventoryItemPane({required this.item, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(item.id, style: const TextStyle(color: Colors.white),),
+          Text("${item.cookbookId}:${item.recipeId}", style: const TextStyle(color: Colors.white))
+        ]
+      ),
+    );
+  }
+}
+
 class InventoryPane extends StatelessWidget {
   final List<Item> items;
   const InventoryPane({required this.items, Key? key}) : super(key: key);
@@ -126,8 +135,46 @@ class InventoryPane extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    var numTabs = _MyHomePageState._getNumFilters();
+    final anyFilters = numTabs != 0;
+    if (!anyFilters) numTabs = 1; // there has to be at least one tab, even if it's a placeholder
+
+    final List<Widget> tabs = [];
+
+    // generate tabs
+
+    if (anyFilters) {
+      _MyHomePageState._config?.doubleFilters.forEach((key, value) {
+        tabs.add(Tab(text: "$key:$value"));
+      });
+      _MyHomePageState._config?.longFilters.forEach((key, value) {
+        tabs.add(Tab(text: "$key:$value"));
+      });
+      _MyHomePageState._config?.stringFilters.forEach((key, value) {
+        tabs.add(Tab(text: "$key:$value"));
+      });
+    } else {
+      tabs.add(
+        const Tab(text: "Items")
+      );
+    }
+    
+    final List<Widget> itemPanes = [];
+    
+    for (var element in items) {
+      itemPanes.add(InventoryItemPane(item: element));
+    }
+
+    return DefaultTabController(length: numTabs, child: Scaffold(
+      appBar: TabBar(
+        indicatorColor: Colors.orange,
+        tabs: tabs,
+      ),
+      body: GridView(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
+        children: itemPanes,
+      ),
+    ));
   }
 
 }
