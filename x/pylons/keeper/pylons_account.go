@@ -55,6 +55,27 @@ func (k Keeper) GetPylonsReferral(ctx sdk.Context, addr string) (val types.Refer
 	return val, true
 }
 
+// SetPylonsKYC set the kyc pylons account in the store from its index
+func (k Keeper) SetPylonsKYC(ctx sdk.Context, kycaccount types.KYCAccount) {
+	binaryKYCAcc := k.cdc.MustMarshal(&kycaccount)
+	kycaccPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.KYCAccountKey))
+
+	kycaccPrefixStore.Set(types.KeyPrefix(kycaccount.AccountAddr), binaryKYCAcc)
+}
+
+// GetPylonsKYC returns an types.KYCAccount corresponding to its AccountAddr
+func (k Keeper) GetPylonsKYC(ctx sdk.Context, kycaddr string) (val types.KYCAccount, found bool) {
+	kycaccPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.KYCAccountKey))
+
+	b := kycaccPrefixStore.Get(types.KeyPrefix(kycaddr))
+	if b == nil {
+		return val, false
+	}
+
+	k.cdc.MustUnmarshal(b, &val)
+	return val, true
+}
+
 // HasUsername checks if the username exists in the store
 func (k Keeper) HasUsername(ctx sdk.Context, username types.Username) bool {
 	usernamePrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
