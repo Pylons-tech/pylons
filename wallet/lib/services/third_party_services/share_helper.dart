@@ -17,8 +17,7 @@ abstract class ShareHelper {
 class ShareHelperImpl implements ShareHelper {
   @override
   void shareFiles({required List<String> filePath}) {
-    final box = navigatorKey.currentState!.overlay!.context.findRenderObject()
-        as RenderBox?;
+    final box = navigatorKey.currentState!.overlay!.context.findRenderObject() as RenderBox?;
 
     Share.shareFiles(
       filePath,

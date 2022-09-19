@@ -434,6 +434,7 @@ export default class EaselBuy extends Component {
                             />
                           </p>
                         </div>
+<<<<<<< HEAD
                         {/* Can Be Use For Later Version */}
                         {/* {nftType?.toLowerCase() === "audio" ? (
                           <>
@@ -464,6 +465,8 @@ export default class EaselBuy extends Component {
                           />
                           <p>{this.state.nftViews} views</p>
                         </div> */}
+=======
+>>>>>>> 235f6efc61c498e2601d4450ac5297648e10c63d
                       </div>
                       {this.state.description?.length > 35 ? (
                         <>
