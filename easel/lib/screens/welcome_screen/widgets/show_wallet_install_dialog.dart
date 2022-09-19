@@ -3,6 +3,7 @@ import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/screen_responsive.dart';
 import 'package:easel_flutter/widgets/pylons_button.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -49,7 +50,7 @@ class ShowWalletInstallDialog {
           children: [
             SizedBox(height: 30.h),
             SvgPicture.asset(
-              kAlertIcon,
+              PngUtils.kAlertIcon,
               height: 30.h,
             ),
             SizedBox(height: 30.h),
@@ -82,7 +83,7 @@ class ShowWalletInstallDialog {
                   children: [
                     Center(
                       child: Text(
-                        kCancel,
+                        "cancel".tr(),
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             fontSize: 14.sp,
                             color: EaselAppTheme.kWhite,
@@ -117,7 +118,7 @@ class ShowWalletInstallDialog {
             children: [
               SizedBox(height: 30.h),
               SvgPicture.asset(
-                kAlertIcon,
+                PngUtils.kAlertIcon,
                 height: 30.h,
               ),
               SizedBox(height: 30.h),
@@ -153,7 +154,7 @@ class ShowWalletInstallDialog {
                     children: [
                       Center(
                         child: Text(
-                          kCancel,
+                          "cancel".tr(),
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1!

@@ -134,9 +134,9 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> createCookbook(Map json) async {
-    return SdkIpcResponse.success(
-        data: MOCK_TRANSACTION.hash, sender: '', transaction: '');
+  Future<SdkIpcResponse<String>> createCookbook(Map json) async {
+    return SdkIpcResponse<String>.success(
+        data: MOCK_COOKBOOK, sender: '', transaction: MOCK_TRANSACTION.hash);
   }
 
   @override

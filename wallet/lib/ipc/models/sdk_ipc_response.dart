@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-class SdkIpcResponse {
+class SdkIpcResponse<T>{
   bool success;
   String errorCode;
   String error;
-  dynamic data;
+  T? data;
   String sender;
   String action;
 
@@ -17,7 +17,7 @@ class SdkIpcResponse {
       required this.action});
 
   factory SdkIpcResponse.success(
-      {required dynamic data,
+      {required T data,
       required String sender,
       required String transaction}) {
     return SdkIpcResponse(
@@ -35,7 +35,7 @@ class SdkIpcResponse {
       required String errorCode}) {
     return SdkIpcResponse(
         sender: sender,
-        data: '',
+        data: null,
         success: false,
         error: error,
         errorCode: errorCode,
