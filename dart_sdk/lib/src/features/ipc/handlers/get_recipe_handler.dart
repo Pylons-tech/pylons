@@ -6,8 +6,6 @@ import 'package:pylons_sdk/src/features/ipc/responseCompleters.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:pylons_sdk/src/generated/pylons/recipe.pb.dart';
 
-
-
 class GetRecipeHandler implements IPCHandler {
   @override
   void handler(SDKIPCResponse<dynamic> response) {
