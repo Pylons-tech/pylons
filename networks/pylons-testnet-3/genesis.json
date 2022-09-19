@@ -389,6 +389,10 @@
           {
             "denom": "ustripeusd",
             "enabled": false
+          },
+          {
+            "denom": "upylon",
+            "enabled": false
           }
         ],
         "default_send_enabled": true
