@@ -1,17 +1,12 @@
 package tech.pylons.wallet
 
+
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
-import androidx.core.net.toUri
-import android.content.SharedPreferences
-import tech.pylons.wallet.AndroidPreferences
-
-
-import tech.pylons.wallet.R
-import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.plugin.common.BinaryMessenger
+import android.os.Bundle
 
 
 class PylonsWidgetService : RemoteViewsService() {
@@ -38,10 +33,13 @@ class PylonsWidgetService : RemoteViewsService() {
 class GridRemoteViewsFactory(
     private val context: Context,
     intent: Intent,
+    //mAppWidgetId: Int,
    // private val collectionsApi: Pigeon.CollectionsApi
 ) : RemoteViewsService.RemoteViewsFactory {
+    private var mContext = context
+    private var mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+        AppWidgetManager.INVALID_APPWIDGET_ID)
     private var count: Int = 6
-
     private lateinit var widgetItems: List<Int>
 
     override fun onCreate() {
@@ -63,10 +61,47 @@ class GridRemoteViewsFactory(
 
     override fun getViewAt(position: Int): RemoteViews {
 
-        return RemoteViews(context.packageName, R.layout.nft_image).apply {
+//        return RemoteViews(context.packageName, R.layout.nft_image).apply {
             //setImageViewUri(R.id.nft, widgetItems[position].toUri())
-            setImageViewResource(R.id.nft, widgetItems[position])
+//            setImageViewResource(R.id.nft, widgetItems[position])
+//        }
+
+        // position will always range from 0 to getCount() - 1.
+        // We construct a remote views item based on our widget item xml file, and set the
+        // text based on the position.
+        // position will always range from 0 to getCount() - 1.
+        // We construct a remote views item based on our widget item xml file, and set the
+        // text based on the position.
+        val rv = RemoteViews(mContext.packageName, R.layout.nft_image)
+        //rv.setTextViewText(R.id.widget_item, mWidgetItems.get(position).text)
+        rv.setImageViewResource(R.id.nft, widgetItems[position])
+        // Next, we set a fill-intent which will be used to fill-in the pending intent template
+        // which is set on the collection view in StackWidgetProvider.
+        // Next, we set a fill-intent which will be used to fill-in the pending intent template
+        // which is set on the collection view in StackWidgetProvider.
+//        val extras = Bundle()
+//        extras.putInt(PylonsWidgetProvider., position)
+//        val fillInIntent = Intent()
+//        fillInIntent.putExtras(extras)
+//        rv.setOnClickFillInIntent(R.id.nft, fillInIntent)
+        // You can do heaving lifting in here, synchronously. For example, if you need to
+        // process an image, fetch something from the network, etc., it is ok to do it here,
+        // synchronously. A loading view will show up in lieu of the actual contents in the
+        // interim.
+        // You can do heaving lifting in here, synchronously. For example, if you need to
+        // process an image, fetch something from the network, etc., it is ok to do it here,
+        // synchronously. A loading view will show up in lieu of the actual contents in the
+        // interim.
+        try {
+            System.out.println("Loading view $position")
+            Thread.sleep(500)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
         }
+        // Return the remote views object.
+        // Return the remote views object.
+        return rv
+
     }
 
     override fun getLoadingView(): RemoteViews? {
