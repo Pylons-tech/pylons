@@ -287,10 +287,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         GestureDetector(
                           onTap: () async {
                             final Size size = MediaQuery.of(context).size;
+                            context.read<PurchaseItemViewModel>().shareNFTLink(size: size);
 
-                            final String? link = await generateLink(viewModel);
-                            if (link == null) return;
-                            viewModel.shareNFTLink(size, link);
                           },
                           child: Container(
                             padding: EdgeInsets.only(bottom: 12.h),
@@ -674,10 +672,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               GestureDetector(
                                 onTap: () async {
                                   final Size size = MediaQuery.of(context).size;
+                                  context.read<PurchaseItemViewModel>().shareNFTLink(size: size);
 
-                                  final String? link = await generateLink(viewModel);
-                                  if (link == null) return;
-                                  viewModel.shareNFTLink(size, link);
                                 },
                                 child: SvgPicture.asset(
                                   SVGUtil.OWNER_SHARE,
