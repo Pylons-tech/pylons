@@ -510,3 +510,4 @@ class ItemHistory extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   void clearCreatedAt() => clearField(6);
 }
+
