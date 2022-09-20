@@ -38,6 +38,12 @@ func CmdListCookbooksByCreator() *cobra.Command {
 				Creator: reqCreator,
 			}
 
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+			params.Pagination = pageReq
+
 			res, err := queryClient.ListCookbooksByCreator(cmd.Context(), params)
 			if err != nil {
 				return err
