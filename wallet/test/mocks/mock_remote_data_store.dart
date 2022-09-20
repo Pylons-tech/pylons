@@ -20,10 +20,13 @@ import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pyl
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/trade.pb.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/stores/models/transaction_response.dart';
 import 'package:transaction_signing_gateway/model/account_public_info.dart';
+
+import 'mock_constants.dart';
 
 class MockRemoteDataStore extends RemoteDataStore {
   @override
@@ -51,8 +54,7 @@ class MockRemoteDataStore extends RemoteDataStore {
 
   @override
   Future<String> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) {
-    // TODO: implement createDynamicLinkForRecipeNftShare
-    throw UnimplementedError();
+    return Future.value(MOCK_DYNAMIC_LINK);
   }
 
   @override
@@ -93,8 +95,7 @@ class MockRemoteDataStore extends RemoteDataStore {
 
   @override
   Future<String> getAddressBasedOnUsername(String username) {
-    // TODO: implement getAddressBasedOnUsername
-    throw UnimplementedError();
+    return Future.value(MOCK_ADDRESS);
   }
 
   @override
@@ -111,14 +112,12 @@ class MockRemoteDataStore extends RemoteDataStore {
 
   @override
   Future<List<Balance>> getBalance(String walletAddress) {
-    // TODO: implement getBalance
-    throw UnimplementedError();
+    return Future.value(MOCK_BALANCE);
   }
 
   @override
   Future<Cookbook> getCookbookBasedOnId({required String cookBookId}) {
-    // TODO: implement getCookbookBasedOnId
-    throw UnimplementedError();
+    return Future.value(MOCK_COOKBOOK_MODEL);
   }
 
   @override
@@ -129,14 +128,12 @@ class MockRemoteDataStore extends RemoteDataStore {
 
   @override
   Future<Execution> getExecutionBasedOnId({required String id}) {
-    // TODO: implement getExecutionBasedOnId
-    throw UnimplementedError();
+    return Future.value(MOCK_EXECUTION);
   }
 
   @override
   Future<ExecutionListByRecipeResponse> getExecutionsByRecipeId({required String cookBookId, required String recipeId}) {
-    // TODO: implement getExecutionsByRecipeId
-    throw UnimplementedError();
+    return Future.value(MOCK_EXECUTION_LIST_BY_RECIPE_RESPONSE);
   }
 
   @override
@@ -147,8 +144,7 @@ class MockRemoteDataStore extends RemoteDataStore {
 
   @override
   Future<Item> getItem({required String cookBookId, required String itemId}) {
-    // TODO: implement getItem
-    throw UnimplementedError();
+    return Future.value(MOCK_ITEM);
   }
 
   @override
@@ -159,8 +155,7 @@ class MockRemoteDataStore extends RemoteDataStore {
 
   @override
   Future<List<Item>> getListItemByOwner({required String owner}) {
-    // TODO: implement getListItemByOwner
-    throw UnimplementedError();
+    return Future.value([MOCK_ITEM]);
   }
 
   @override
@@ -182,9 +177,8 @@ class MockRemoteDataStore extends RemoteDataStore {
   }
 
   @override
-  Future<Recipe> getRecipe({required String cookBookId, required String recipeId}) {
-    // TODO: implement getRecipe
-    throw UnimplementedError();
+  Future<pylons.Recipe> getRecipe({required String cookBookId, required String recipeId}) {
+    return Future.value(MOCK_RECIPE_MODEL);
   }
 
   @override
@@ -201,8 +195,7 @@ class MockRemoteDataStore extends RemoteDataStore {
 
   @override
   Future<List<Trade>> getTradesBasedOnCreator({required String creator}) {
-    // TODO: implement getTradesBasedOnCreator
-    throw UnimplementedError();
+    return Future.value([MOCK_TRADE]);
   }
 
   @override
@@ -213,8 +206,7 @@ class MockRemoteDataStore extends RemoteDataStore {
 
   @override
   Future<String> getUsername({required String address}) {
-    // TODO: implement getUsername
-    throw UnimplementedError();
+    return Future.value(MOCK_USERNAME);
   }
 
   @override

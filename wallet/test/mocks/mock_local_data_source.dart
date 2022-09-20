@@ -1,6 +1,8 @@
 import 'package:pylons_wallet/model/pick_image_model.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 
+import 'mock_constants.dart';
+
 class MockLocalDataSource extends LocalDataSource {
   @override
   Future<void> clearDataOnIosUnInstall() {
@@ -29,7 +31,7 @@ class MockLocalDataSource extends LocalDataSource {
 
   @override
   bool getStripeExistsOrNot() {
-    throw UnimplementedError();
+    return MOCK_STRIPE_ACCOUNT_EXISTS;
   }
 
   @override
@@ -167,8 +169,7 @@ class MockLocalDataSource extends LocalDataSource {
   }
 
   @override
-  Future<bool> saveNetworkEnvironmentPreference(
-      {required String networkEnvironment}) {
+  Future<bool> saveNetworkEnvironmentPreference({required String networkEnvironment}) {
     // TODO: implement saveNetworkEnvironmentPreference
     throw UnimplementedError();
   }

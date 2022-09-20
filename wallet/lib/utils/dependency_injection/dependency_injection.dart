@@ -63,6 +63,8 @@ import 'package:transaction_signing_gateway/storage/flutter_secure_storage_data_
 import 'package:transaction_signing_gateway/storage/shared_prefs_plain_data_store.dart';
 import 'package:video_player/video_player.dart';
 
+import '../backup/common/i_driver_client.dart';
+
 final sl = GetIt.instance;
 
 /// This method is used for initializing the dependencies
@@ -87,8 +89,8 @@ Future<void> init() async {
   sl.registerLazySingleton<ImagePicker>(() => ImagePicker());
   sl.registerLazySingleton<LocalAuthentication>(() => LocalAuthentication());
   sl.registerSingletonAsync<SharedPreferences>(() => SharedPreferences.getInstance());
-  sl.registerLazySingleton<GoogleDriveApiImpl>(() => GoogleDriveApiImpl());
-  sl.registerLazySingleton<ICloudDriverApiImpl>(() => ICloudDriverApiImpl());
+  sl.registerLazySingleton<IDriverApi>(() => GoogleDriveApiImpl(), instanceName: "google_drive");
+  sl.registerLazySingleton<IDriverApi>(() => ICloudDriverApiImpl(), instanceName: "i_cloud");
   sl.registerLazySingleton(() => FirebaseRemoteConfig.instance);
   sl.registerLazySingleton(() => const FlutterSecureStorage());
   sl.registerFactory<AudioPlayer>(() => AudioPlayer());
@@ -174,8 +176,15 @@ Future<void> init() async {
   sl.registerLazySingleton<QueryHelper>(() => QueryHelperImp(httpClient: sl()));
 
   /// Repository
-  sl.registerLazySingleton<Repository>(() =>
-      RepositoryImp(networkInfo: sl(), queryHelper: sl(), remoteDataStore: sl(), localDataSource: sl(), localAuthHelper: sl(), googleDriveApi: sl(), iCloudDriverApi: sl(), crashlyticsHelper: sl()));
+  sl.registerLazySingleton<Repository>(() => RepositoryImp(
+      networkInfo: sl(),
+      queryHelper: sl(),
+      remoteDataStore: sl(),
+      localDataSource: sl(),
+      localAuthHelper: sl(),
+      googleDriveApi: sl(instanceName: "google_drive"),
+      iCloudDriverApi: sl(instanceName: "i_cloud"),
+      crashlyticsHelper: sl()));
 
   /// ViewModels
   sl.registerLazySingleton<WalletsStore>(() => WalletsStoreImp(

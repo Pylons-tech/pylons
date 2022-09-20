@@ -1,6 +1,10 @@
 import 'package:fixnum/fixnum.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:pylons_wallet/model/amount.dart';
+import 'package:pylons_wallet/model/balance.dart';
+import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
+import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_update_account_request.dart';
 import 'package:pylons_wallet/model/transaction.dart';
@@ -13,6 +17,7 @@ import 'package:transaction_signing_gateway/model/transaction_hash.dart';
 TransactionHash MOCK_TRANSACTION = const TransactionHash(hash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E');
 
 String MOCK_USERNAME = "Jawad";
+String MOCK_ID = "Jawad123Jawad";
 String SENDER_APP = 'Sending app';
 
 List<TransactionHistory> MOCK_TRANSACTIONS_HISTORY = [
@@ -63,125 +68,7 @@ String MOCK_COOKBOOK = """
 }""";
 
 String MOCK_RECIPE = """
-{
-  "cookbookID": "$MOCK_COOKBOOK_ID",
-  "ID": "$MOCK_RECIPE_ID",
-  "name": "Test NFT v3",
-  "description": " A simple test recipe to be executed",
-  "version": "v1.0.0",
-  "coinInputs": [
-    {
-      "coins": [
-        {
-          "denom": "upylon",
-          "amount": "350"
-        }
-      ]
-    }
-  ],
-  "itemInputs": [],
-  "entries": {
-    "coinOutputs": [],
-    "itemOutputs": [
-      {
-        "ID": "How_do_you_do_turn_this_on",
-        "doubles": [
-          {
-            "key": "Residual",
-            "weightRanges": [
-              {
-                "lower": "2000000000000000000",
-                "upper": "2000000000000000000",
-                "weight": 1
-              }
-            ]
-          }
-        ],
-        "longs": [
-          {
-            "key": "Quantity",
-            "weightRanges": [
-              {
-                "lower": 34,
-                "upper": 34,
-                "weight": 1
-              }
-            ]
-          },
-          {
-            "key": "Width",
-            "weightRanges": [
-              {
-                "lower": 960,
-                "upper": 960,
-                "weight": 1
-              }
-            ]
-          },
-          {
-            "key": "Height",
-            "weightRanges": [
-              {
-                "lower": 1280,
-                "upper": 1280,
-                "weight": 1
-              }
-            ]
-          }
-        ],
-        "strings": [
-          {
-            "key": "Name",
-            "value": "How do you do turn this on"
-          },
-          {
-            "key": "App_Type",
-            "value": "Avatar"
-          },
-          {
-            "key": "Description",
-            "value": "This is NFT Description for Test "
-          },
-          {
-            "key": "NFT_URL",
-            "value": "https://i.imgur.com/QechbvX.jpg"
-          },
-          {
-            "key": "Currency",
-            "value": "upylon"
-          },
-          {
-            "key": "Price",
-            "value": "450"
-          },
-          {
-            "key": "Creator",
-            "value": "NFT Studio"
-          }
-        ],
-        "mutableStrings": [],
-        "transferFee": [{"denom": "upylon",
-          "amount": "10"
-        }],
-        "tradePercentage": "100000000000000000",
-        "amountMinted": 0,
-        "quantity": 30,
-        "tradeable": true
-      }
-    ],
-    "itemModifyOutputs": []
-  },
-  "outputs": [
-    {
-      "entryIDs": [
-        "How_do_you_do_turn_this_on"
-      ],
-      "weight": 1
-    }
-  ],
-  "blockInterval": 1,
-  "enabled": true
-}""";
+{"cookbookId":"Easel_CookBook_auto_cookbook_2022_09_19_162837_418","id":"Easel_Recipe_auto_recipe_2022_09_19_162944_483","name":"Cugcugcugcugcgugufgu","description":"Fhchchgcjgcjgjgccjgcjgggjcgucgucgu","version":"v0.1.0","coinInputs":[{"coins":[{"denom":"upylon","amount":"33000000"}]}],"entries":{"itemOutputs":[{"id":"Easel_NFT","doubles":[{"key":"Residual","weightRanges":[{"lower":"60000000000000000","upper":"60000000000000000","weight":"1"}]}],"longs":[{"key":"Quantity","weightRanges":[{"lower":"3","upper":"3","weight":"1"}]},{"key":"Width","weightRanges":[{"lower":"314","upper":"314","weight":"1"}]},{"key":"Height","weightRanges":[{"lower":"400","upper":"400","weight":"1"}]},{"key":"Duration","weightRanges":[{"weight":"1"}]}],"strings":[{"key":"Name","value":"Cugcugcugcugcgugufgu"},{"key":"App_Type","value":"Easel"},{"key":"Description","value":"Fhchchgcjgcjgjgccjgcjgggjcgucgucgu"},{"key":"Hashtags"},{"key":"NFT_Format","value":"Image"},{"key":"NFT_URL","value":"https://ipfs.io/ipfs/bafybeieo7sugncdug6aaxf5evpvinmowyci4b7heekyehag6s245c2zu7q"},{"key":"Thumbnail_URL"},{"key":"Creator","value":"Vgvvggvgvgvggv"},{"key":"cid","value":"bafybeieo7sugncdug6aaxf5evpvinmowyci4b7heekyehag6s245c2zu7q"},{"key":"fileSize","value":"263.55KB"}],"transferFee":[{"denom":"upylon","amount":"1"}],"tradePercentage":"60000000000000000","quantity":"3","amountMinted":"2","tradeable":true}]},"outputs":[{"entryIds":["Easel_NFT"],"weight":"1"}],"costPerBlock":{"denom":"upylon","amount":"0"},"enabled":true,"extraInfo":"extraInfo","createdAt":"1663586983","updatedAt":"1663586983"}""";
 
 const String MOCK_COOKBOOK_ID = 'cookbookLOUD';
 
@@ -193,6 +80,7 @@ const String MOCK_ITEM_ID = 'itemId';
 const String MOCK_EXECUTION_ID = 'executionId';
 const String MOCK_ERROR = 'SOMETHING_WENT_WRONG';
 const String MOCK_RECIPE_VERSION = 'recipe version';
+const String MOCK_COOKBOOK_VERSION = 'cookbook version';
 const String MOCK_NODE_VERSION = 'node version';
 const String MOCK_MNEMONIC = "laundry number match ring spatial surround gadget rally teach second cover crucial";
 
@@ -234,7 +122,7 @@ BaseEnv MOCK_BASE_ENV = BaseEnv()
       grpcPort: '9090',
       ethUrl: '',
       faucetUrl: '',
-      stripeUrl: '',
+      stripeUrl: 'https://dev-api.pylons.com/',
       stripePubKey: '',
       stripeTestEnv: false,
       stripeCallbackUrl: '',
@@ -265,3 +153,108 @@ const String MOCK_IP = '172.168.1.1';
 const InternetConnectionStatus INTERNET_CONNECTIVITY_STATUS_CONNECTED = InternetConnectionStatus.connected;
 const InternetConnectionStatus INTERNET_CONNECTIVITY_STATUS_DISCONNECTED = InternetConnectionStatus.disconnected;
 const String MOCK_BASE_URL = 'https://dev-api.pylons.com/';
+const String MOCK_SOMETHING_WENT_WRONG = 'Something went wrong';
+
+List<Balance> MOCK_BALANCE = [
+  Balance(
+    denom: "upylon",
+    amount: Amount.fromString("34500"),
+  )
+];
+
+ExecutionListByRecipeResponse MOCK_EXECUTION_LIST_BY_RECIPE_RESPONSE = ExecutionListByRecipeResponse(completedExecutions: [
+  Execution(
+    recipeId: MOCK_RECIPE_ID,
+    creator: MOCK_USERNAME,
+    cookbookId: MOCK_COOKBOOK_ID,
+    id: MOCK_ID,
+    blockHeight: Int64(2),
+    coinInputs: [
+      Coin(amount: "3545", denom: "upylon"),
+    ],
+    coinOutputs: [
+      Coin(amount: "123", denom: "upylon"),
+    ],
+    itemInputs: [
+      ItemRecord(
+        id: MOCK_ITEM_ID,
+        doubles: [
+          DoubleKeyValue(
+            key: "price",
+            value: "10",
+          )
+        ],
+      )
+    ],
+  ),
+], pendingExecutions: [
+  Execution(
+    recipeId: MOCK_RECIPE_ID,
+    creator: MOCK_USERNAME,
+    cookbookId: MOCK_COOKBOOK_ID,
+    id: MOCK_ID,
+    blockHeight: Int64(2),
+    coinInputs: [
+      Coin(amount: "3545", denom: "upylon"),
+    ],
+    coinOutputs: [
+      Coin(amount: "123", denom: "upylon"),
+    ],
+    itemInputs: [
+      ItemRecord(
+        id: MOCK_ITEM_ID,
+        doubles: [
+          DoubleKeyValue(
+            key: "price",
+            value: "10",
+          )
+        ],
+      )
+    ],
+  ),
+]);
+
+const String MOCK_DYNAMIC_LINK = "https://we.tl/t-kEvBGXDG19";
+
+NFT MOCK_NFT = NFT(
+  name: "This is my Image NFT",
+  height: "2400",
+  description: "Please Buy my Image NFT",
+  width: "1080",
+  url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
+  recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
+  duration: "0:0",
+  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+  appType: "easel",
+  creator: "Ahmad",
+  fileSize: "90.12KB",
+  itemID: "DtnxAS8L4pf",
+  owner: "abd",
+  ibcCoins: IBCCoins.upylon,
+);
+const int MOCK_FAUCET_COIN = 10;
+
+Trade MOCK_TRADE = Trade(id: Int64(2), creator: MOCK_USERNAME);
+const String MOCK_IMAGE_SOURCE = "file://my_image.png";
+
+Recipe MOCK_RECIPE_MODEL = Recipe(
+  id: MOCK_ID,
+  name: MOCK_USERNAME,
+  version: MOCK_RECIPE_VERSION,
+  coinInputs: [],
+  itemInputs: [],
+  outputs: [],
+  nodeVersion: Int64(1),
+  cookbookId: MOCK_COOKBOOK_ID,
+);
+
+Cookbook MOCK_COOKBOOK_MODEL = Cookbook(
+  nodeVersion: Int64(1),
+  version: MOCK_COOKBOOK_VERSION,
+  name: MOCK_USERNAME,
+  id: MOCK_ID,
+  creator: MOCK_USERNAME,
+  description: "Cookbook for running pylons recreation of LOUD",
+  developer: "Pylons Inc",
+  supportEmail: "alex@shmeeload.xyz",
+);

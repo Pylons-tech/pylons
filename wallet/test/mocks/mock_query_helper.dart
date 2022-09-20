@@ -8,11 +8,14 @@ class MockQueryHelper extends QueryHelper {
 
   @override
   Future<RequestResult<Map<String, dynamic>>> queryGet(String url) {
-    return Future.value(RequestResult(error: "", value: {}));
+    return Future.value(const RequestResult(
+      error: "",
+      value: {},
+    ));
   }
 
   @override
   Future<RequestResult<Map<String, dynamic>>> queryPost(String url, Map json) {
-    return Future.value(RequestResult(error: "", value: {}));
+    return Future.value(const RequestResult(error: "", value: {}));
   }
 }

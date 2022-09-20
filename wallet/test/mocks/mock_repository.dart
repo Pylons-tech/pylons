@@ -111,8 +111,7 @@ class MockRepository extends Repository {
 
   @override
   Future<Either<Failure, int>> getFaucetCoin({required String address, String? denom}) {
-    // TODO: implement getFaucetCoin
-    throw UnimplementedError();
+    return Future.value(const Right(MOCK_FAUCET_COIN));
   }
 
   @override
