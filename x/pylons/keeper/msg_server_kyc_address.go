@@ -50,3 +50,42 @@ func (k msgServer) RegisterKYCAddress(goCtx context.Context, msg *types.MsgRegis
 
 	return &types.MsgRegisterKYCAddressResponse{}, err
 }
+
+func (k msgServer) RemoveKYCAddress(goCtx context.Context, msg *types.MsgRemoveKYCAddress) (*types.MsgRemoveKYCAddressResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	addr, err := sdk.AccAddressFromBech32(msg.AccountAddr)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unable to derive address from bech32 string")
+	}
+
+	acc := k.accountKeeper.GetAccount(ctx, addr)
+	if acc == nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "account not created")
+	}
+
+	kycAcc := types.KYCAccount{
+		AccountAddr: msg.AccountAddr,
+		Username:    msg.Username,
+		Level:       msg.Level,
+		Provider:    msg.Provider,
+		ProviderId:  msg.ProviderId,
+	}
+
+	_, found := k.GetPylonsKYC(ctx, kycAcc.AccountAddr)
+	if !found {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "kyc account not found")
+	}
+
+	k.DeletePylonsKYC(ctx, kycAcc)
+
+	err = ctx.EventManager().EmitTypedEvent(&types.EventRemoveKYCAccount{
+		Address:    msg.AccountAddr,
+		Username:   msg.Username,
+		Level:      msg.Level,
+		Provider:   msg.Provider,
+		ProviderId: msg.ProviderId,
+	})
+
+	return &types.MsgRemoveKYCAddressResponse{}, err
+}

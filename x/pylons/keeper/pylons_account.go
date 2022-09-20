@@ -76,6 +76,12 @@ func (k Keeper) GetPylonsKYC(ctx sdk.Context, kycaddr string) (val types.KYCAcco
 	return val, true
 }
 
+// DeletePylonsKYC delete the kyc pylons account in the store from its index
+func (k Keeper) DeletePylonsKYC(ctx sdk.Context, kycaccount types.KYCAccount) {
+	kycaccPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.KYCAccountKey))
+	kycaccPrefixStore.Delete(types.KeyPrefix(kycaccount.AccountAddr))
+}
+
 // HasUsername checks if the username exists in the store
 func (k Keeper) HasUsername(ctx sdk.Context, username types.Username) bool {
 	usernamePrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))

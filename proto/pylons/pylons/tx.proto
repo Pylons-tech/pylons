@@ -36,6 +36,7 @@ service Msg {
   rpc CreateCookbook(MsgCreateCookbook) returns (MsgCreateCookbookResponse);
   rpc UpdateCookbook(MsgUpdateCookbook) returns (MsgUpdateCookbookResponse);
   rpc RegisterKYCAddress(MsgRegisterKYCAddress) returns (MsgRegisterKYCAddressResponse);
+  rpc RemoveKYCAddress(MsgRemoveKYCAddress) returns (MsgRemoveKYCAddressResponse);
 }
 
 message MsgAppleIap {
@@ -254,4 +255,15 @@ message MsgRegisterKYCAddress {
 }
 
 message MsgRegisterKYCAddressResponse {
+}
+
+message MsgRemoveKYCAddress {
+  string account_addr = 1;
+  string username = 2;
+  uint64 level = 3;
+  string provider = 4;
+  string provider_id = 5;
+}
+
+message MsgRemoveKYCAddressResponse {
 }
