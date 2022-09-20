@@ -35,7 +35,7 @@ class NftImageWidget extends StatelessWidget {
                   BlendMode.srcOver,
                 ),
                 image: imageProvider,
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.fitWidth,
               ),
             ),
           );
