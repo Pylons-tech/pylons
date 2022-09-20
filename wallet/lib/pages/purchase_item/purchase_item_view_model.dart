@@ -5,7 +5,6 @@ import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
@@ -443,7 +442,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
   }
 
   Future<void> shareNFTLink({required Size size}) async {
-    final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
+    final address = walletsStore.getWallets().value.last.publicAddress;
 
     final link = await repository.createDynamicLinkForRecipeNftShare(address: address, nft: nft);
     return link.fold((l) {
