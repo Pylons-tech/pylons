@@ -70,7 +70,6 @@ const int stringTrimConstantMax = 25;
 const int stringTrimConstantMid = 20;
 const int stringTrimConstantMin = 15;
 const double pyLonToUsdConstant = 0.01;
-const double kPrecision = 100000000000000000;
 const double kRoyaltyPrecision = 10000000000000000;
 const String kPylonDenom = "upylon";
 
@@ -168,7 +167,7 @@ const String kDollar = "U.S. Dollar";
 const String kAtom = "ATOM";
 const String kEthereum = "Ethereum";
 
-const ANDROID_VERSION = '1.0.0+94';
+const ANDROID_VERSION = '1.0.1+143';
 const IOS_VERSION = '1.0.8+1';
 
 const kCurrencyDecimalLength = 2;
@@ -194,28 +193,8 @@ const String kEthereumAbr = "ETH";
 const String kEthereumSymbol = "weth-wei";
 const String kDefault = 'Default';
 
-/// Legal Screen
-const String kLegalText = 'Legal';
-const String kTermsOfServiceText = 'Terms of service';
-const String kPrivacyPolicyText = 'Privacy policy';
-
-/// Recovery Screen
-const String kRecoveryText = 'Recovery';
-const String kRecoveryPhraseText = 'Recovery Phrase';
-const String kViewRecoveryPhraseText = 'View recovery phrase';
-const String kPracticeTestText = 'Practice test';
-const String kRecoveryMigration = 'Migrate Account';
-
-/// Settings screen
-const String kSettingsEmailAddress = "Email Address (optional)";
-const String kCopy = "Copy";
-const String kAlertDialogText = "Are you sure you want to delete your Pylons wallet from this device?";
-const String kYes = "Yes";
-const String kNo = "No";
-
 /// General screen
 const String kSaveText = "Save";
-const String kWalletAddressText = "Wallet Address";
 const String kBioText = "Bio";
 const String kBioHintText = "Media Artist (3D, Motiongraphics) \nCreating & Collecting NFTs";
 const String kStakeDigitalClaim = "Stake your digital claim";
@@ -260,15 +239,6 @@ const String kTimeStampKey = 'timestamp';
 
 const String kSoldOut = 'Sold Out';
 
-/// Repository
-const String NO_PROFILE_FOUND = 'No profile found in wallet';
-const String SOMETHING_WRONG_SIGNING_TRANSACTION = 'Something went wrong while signing transaction';
-const String VIDEO_PLAYER_NETWORK_ERROR = 'Unable to play the video right now. Please check your internet connection and try again.';
-
-/// Trade Receipt Screen
-const String kCloseText = "Close";
-const String kCancelText = "Cancel";
-
 /// Trade Receipt Screen
 const String kTransactionCompleteText = "View Receipt";
 const String kBigDipperTransactionViewingUrl = "https://wallet.pylons.tech/transactions/";
@@ -278,7 +248,7 @@ List<Map<String, dynamic>> languagesSupported = [
   {"name": "english", "flag": "🇬🇧", 'selected': false, "abbreviation": "(U.S.)", 'languageCode': 'en'},
   {"name": "russian", "flag": "🇷🇺", 'selected': false, "abbreviation": "(RU)", 'languageCode': 'ru'},
   {"name": "indonesian", "flag": "🇮🇩", 'selected': false, "abbreviation": "(IN)", 'languageCode': 'id'},
-  {"name": "german", "flag": "🇩🇪", 'selected': false, "abbreviation": "(DU)", 'languageCode': 'de'},
+  {"name": "german", "flag": "🇩🇪", 'selected': false, "abbreviation": "(DE)", 'languageCode': 'de'},
   {"name": "korean", "flag": "🇰🇷", 'selected': false, "abbreviation": "(KO)", 'languageCode': 'ko'},
   {"name": "japanese", "flag": "🇯🇵", 'selected': false, "abbreviation": "(JA)", 'languageCode': 'ja'},
   {"name": "spanish", "flag": "🇪🇸", 'selected': false, "abbreviation": "(ES)", 'languageCode': 'es'},
@@ -298,8 +268,6 @@ const String kCollapse = "  Collapse";
 /// Nft viewmodel key values
 const String kNftUrlKey = "NFT_URL";
 const String kAppTypeKey = "App_Type";
-const String kWidthKey = "Width";
-const String kHeightKey = "Height";
 
 const int kNumberOfSeconds = 1000;
 const int kSixtySeconds = 60;
@@ -312,8 +280,7 @@ const kHashtags = "Hashtags";
 const kLOW_LOW_BALANCE_CONSTANT = "Tx error:5";
 
 //NFT STRINGS KEYS
-const kResidual = "Residual";
-const kQuantity = "Quantity";
+
 const kWidth = "Width";
 const kHeight = "Height";
 const kName = "Name";
@@ -419,3 +386,7 @@ final defaultPylonsSKUs = jsonEncode([
 ]);
 
 const kMaxDescription = 256;
+
+const kOwnerViewKeyValue = "owner_view_key";
+const kOwnerViewDrawerKeyValue = "ownerview_header";
+const kOwnerViewBottomSheetKeyValue = "bottom_sheet";

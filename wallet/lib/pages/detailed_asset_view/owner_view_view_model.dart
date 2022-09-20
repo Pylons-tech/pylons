@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
@@ -84,7 +85,14 @@ class OwnerViewViewModel extends ChangeNotifier {
 
   List<NftOwnershipHistory> nftOwnershipHistoryList = [];
 
-  late bool collapsed = true;
+  late bool _collapsed = true;
+
+  bool get collapsed => _collapsed;
+
+  set collapsed(bool value) {
+    _collapsed = value;
+    notifyListeners();
+  }
 
   AccountPublicInfo? accountPublicInfo;
 
@@ -95,6 +103,15 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   bool _isLiking = true;
+
+  bool _isViewingFullNft = false;
+
+  bool get isViewingFullNft => _isViewingFullNft;
+
+  set isViewingFullNft(bool value) {
+    _isViewingFullNft = value;
+    notifyListeners();
+  }
 
   bool get isLiking => _isLiking;
 
@@ -112,10 +129,11 @@ class OwnerViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initializeData({required NFT nft}) {
+  void initializeData() {
+
     nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);
     initOwnerName();
-    initializePlayers(nft);
+    initializePlayers();
     toHashtagList();
   }
 
@@ -129,7 +147,6 @@ class OwnerViewViewModel extends ChangeNotifier {
       }
       nftOwnershipHistoryList = nftOwnershipHistory.getOrElse(() => []);
     }
-
 
     final likesCountEither = await repository.getLikesCount(
       cookBookID: cookBookId,
@@ -156,7 +173,6 @@ class OwnerViewViewModel extends ChangeNotifier {
 
     likedByMe = likedByMeEither.getOrElse(() => false);
 
-
     final countViewEither = await repository.countAView(
       recipeId: recipeId,
       walletAddress: walletAddress,
@@ -176,7 +192,7 @@ class OwnerViewViewModel extends ChangeNotifier {
       return;
     }
 
-    isLiking= false;
+    isLiking = false;
 
     viewsCount = viewsCountEither.getOrElse(() => 0);
   }
@@ -205,7 +221,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     }
   }
 
-  void initializePlayers(NFT nft) {
+  void initializePlayers() {
     switch (nft.assetType) {
       case AssetType.Audio:
         initializeAudioPlayer();
@@ -221,7 +237,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     }
   }
 
-  void destroyPlayers(NFT nft) {
+  void destroyPlayers() {
     switch (nft.assetType) {
       case AssetType.Audio:
         disposeAudioController();
@@ -373,12 +389,21 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   void toChangeCollapse() {
-    collapsed = !collapsed;
+    _collapsed = !_collapsed;
     notifyListeners();
   }
 
-  void shareNFTLink(Size size, String link) {
-    shareHelper.shareText(text: link, size: size);
+  Future<void> shareNFTLink({required Size size}) async {
+    final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
+
+    final link = await repository.createDynamicLinkForRecipeNftShare(address: address, nft: nft);
+    return link.fold((l) {
+      "something_wrong".tr().show();
+      return null;
+    }, (r) {
+      shareHelper.shareText(text: r, size: size);
+      return null;
+    });
   }
 }
 

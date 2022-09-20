@@ -216,7 +216,7 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
             onTap: () {
               audioThumbnailPicker();
             },
-            child: SvgPicture.asset(kUploadThumbnail),
+            child: SvgPicture.asset(PngUtils.kUploadThumbnail),
           ),
         ),
       ),

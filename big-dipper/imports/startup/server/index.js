@@ -182,7 +182,7 @@ Meteor.startup(() => {
                 }
                 else if(botType != SLACK_BOT){
                     description = price !== "No Price" ? description + "\nPrice: " + price : description;
-                } else {
+                }else {
                    description = description + "\n" + price;
                 }
                 

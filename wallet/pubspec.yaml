@@ -1,7 +1,7 @@
 name: pylons_wallet
 description: Pylons Wallet
 publish_to: "none"
-version: 1.0.1+142
+version: 1.0.1+144
 
 
 environment:
@@ -60,7 +60,8 @@ dependencies:
 
   internet_connection_checker: ^0.0.1+4
 
-  flutter_secure_storage: 5.0.2
+  flutter_secure_storage: 6.0.0
+
 
   flutter_screenutil: 5.1.0
 
@@ -69,27 +70,15 @@ dependencies:
   # For dependency injection
   get_it: ^7.2.0
 
-  cosmos_ui_components:
-    git:
-      url: https://github.com/tendermint/flutter.git
-      path: packages/cosmos_ui_components
-      ref: main
 
-  cosmos_utils:
-    git:
-      url: https://github.com/tendermint/flutter.git
-      path: packages/cosmos_utils
-      ref: main
+
 
   transaction_signing_gateway:
-    git:
-      url: https://github.com/tendermint/flutter.git
-      path: packages/transaction_signing_gateway
-      ref: main
+    path: pkgs/transaction_signing_gateway
 
   advance_pdf_viewer:
-    git:
-      url: https://github.com/lohanidamodar/pdf_viewer.git
+    path: pkgs/pdf_viewer-master
+
 
   cupertino_icons: ^1.0.3
   decimal: 1.5.0
@@ -136,6 +125,7 @@ dependencies:
   image: 3.2.0
 
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -143,6 +133,7 @@ dev_dependencies:
   lints: ^1.0.1
   mockito: ^5.0.15
   build_runner: 2.2.0
+  pigeon: ^3.2.6
 
 flutter:
   uses-material-design: true
