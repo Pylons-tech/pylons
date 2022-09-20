@@ -31,7 +31,7 @@ class NftImageWidget extends StatelessWidget {
               image: DecorationImage(
                 alignment: FractionalOffset.center,
                 image: imageProvider,
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.fitWidth,
               ),
             ),
           );
