@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pylons_sdk/pylons_sdk.dart';
 import 'package:pylons_sdk/src/core/constants/strings.dart';
 import 'package:pylons_sdk/src/features/ipc/handlers/get_recipe_handler.dart';
 import 'package:pylons_sdk/src/features/ipc/responseCompleters.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
+import 'package:pylons_sdk/src/generated/pylons/recipe.pb.dart';
 
 import '../../../../mocks/mock_constants.dart';
 
