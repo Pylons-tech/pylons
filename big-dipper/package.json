@@ -22,7 +22,7 @@
     "bech32": "^2.0.0",
     "bootstrap": "^5.2.1",
     "bootstrap-less": "^3.3.8",
-    "bootswatch": "^5.2.0",
+    "bootswatch": "^5.2.1",
     "chart.js": "^3.9.1",
     "cheerio": "^1.0.0-rc.6",
     "connect-route": "^0.1.5",
