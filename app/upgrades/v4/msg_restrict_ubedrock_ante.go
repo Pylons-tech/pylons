@@ -1,21 +1,15 @@
 package v4
 
 import (
-	pylonstypes "github.com/Pylons-tech/pylons/x/pylons/types"
+	pylonskeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
-// FeegrantKeeper defines the expected feegrant keeper.
-type PylonsKeeper interface {
-	GetParams(ctx sdk.Context) (params pylonstypes.Params)
-	GetPylonsKYC(ctx sdk.Context, kycaddr string) (val pylonstypes.KYCAccount, found bool)
-}
-
 type MsgRestrictUbedrockDecorator struct {
-	pk PylonsKeeper
+	pk pylonskeeper.Keeper
 }
 
 // AnteDecorator for restrict ubedrock denom used by unallowed address
