@@ -5,6 +5,7 @@ import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/drafts_more_bottomsheet.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/nfts_list_tile.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/published_nfts_bottom_sheet.dart';
+import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class NftGridViewItem extends StatelessWidget {
             height: 200.h,
             width: 150.w,
             child: InkWell(
+              key: const Key(kGridViewTileNFTKey),
               onTap: () {
                 if (context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft) {
                   final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
@@ -44,12 +46,14 @@ class NftGridViewItem extends StatelessWidget {
                 onVideo: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
                 onAudio: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
                 onPdf: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
-                on3D: (context) => ModelViewer(
-                  src: nft.url.changeDomain(),
-                  ar: false,
-                  autoRotate: false,
-                  backgroundColor: EaselAppTheme.kWhite,
-                  cameraControls: false,
+                on3D: (context) => IgnorePointer(
+                  child: ModelViewer(
+                    src: nft.url.changeDomain(),
+                    ar: false,
+                    autoRotate: false,
+                    backgroundColor: EaselAppTheme.kWhite,
+                    cameraControls: false,
+                  ),
                 ),
                 assetType: nft.assetType.toAssetTypeEnum(),
               ),
@@ -60,11 +64,11 @@ class NftGridViewItem extends StatelessWidget {
 
   CachedNetworkImage buildNFTPreview({required String url}) {
     return CachedNetworkImage(
-                fit: BoxFit.fitHeight,
-                imageUrl: url,
-                errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
-                placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
-              );
+      fit: BoxFit.fitHeight,
+      imageUrl: url,
+      errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
+      placeholder: (context, url) => Shimmer(color: EaselAppTheme.cardBackground, child: const SizedBox.expand()),
+    );
   }
 
   void buildBottomSheet({required BuildContext context}) {
