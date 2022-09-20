@@ -366,14 +366,6 @@ export default class ItemShare extends Component {
                         ) : (
                           <></>
                         )}
-                        {/* <div className="views">
-                          <img
-                            alt="views"
-                            src="/img/eye.svg"
-                            style={{ width: "34px", height: "20px" }}
-                          />
-                          <p>{this.state.nftViews} views</p>
-                        </div> */}
                       </div>
                       {this.state.description?.length > 35 ? (
                         <>
@@ -695,15 +687,6 @@ export default class ItemShare extends Component {
                         ) : (
                           <></>
                         )}
-                        {/* <div className="views">
-                          {" "}
-                          <img
-                            alt="views"
-                            src="/img/eye.svg"
-                            style={{ width: "34px", height: "20px" }}
-                          />
-                          <p>{this.state.nftViews} views</p>
-                        </div> */}
                       </div>
                       {showHideDetails ? (
                         <>
