@@ -18,7 +18,6 @@ analyzer:
     import_of_legacy_library_into_null_safe: error
     avoid_single_cascade_in_expression_statements: ignore
     null_aware_in_logical_operator: error
-#    lowercase_with_underscores: ignore
     missing_required_param: error
 #    implicit_dynamic_map_literal: ignore
     prefer_single_quotes: ignore
@@ -43,6 +42,7 @@ analyzer:
     parameter_assignments: error
     constant_identifier_names: ignore
     unawaited_futures: error
+    prefer_expression_function_bodies: error
     non_constant_identifier_names: ignore
     only_throw_errors: error
     exhaustive_cases: error

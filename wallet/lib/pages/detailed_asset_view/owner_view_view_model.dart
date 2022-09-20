@@ -85,7 +85,14 @@ class OwnerViewViewModel extends ChangeNotifier {
 
   List<NftOwnershipHistory> nftOwnershipHistoryList = [];
 
-  late bool collapsed = true;
+  late bool _collapsed = true;
+
+  bool get collapsed => _collapsed;
+
+  set collapsed(bool value) {
+    _collapsed = value;
+    notifyListeners();
+  }
 
   AccountPublicInfo? accountPublicInfo;
 
@@ -96,6 +103,15 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   bool _isLiking = true;
+
+  bool _isViewingFullNft = false;
+
+  bool get isViewingFullNft => _isViewingFullNft;
+
+  set isViewingFullNft(bool value) {
+    _isViewingFullNft = value;
+    notifyListeners();
+  }
 
   bool get isLiking => _isLiking;
 
@@ -113,10 +129,11 @@ class OwnerViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initializeData({required NFT nft}) {
+  void initializeData() {
+
     nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);
     initOwnerName();
-    initializePlayers(nft);
+    initializePlayers();
     toHashtagList();
   }
 
@@ -204,7 +221,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     }
   }
 
-  void initializePlayers(NFT nft) {
+  void initializePlayers() {
     switch (nft.assetType) {
       case AssetType.Audio:
         initializeAudioPlayer();
@@ -220,7 +237,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     }
   }
 
-  void destroyPlayers(NFT nft) {
+  void destroyPlayers() {
     switch (nft.assetType) {
       case AssetType.Audio:
         disposeAudioController();
@@ -372,7 +389,7 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   void toChangeCollapse() {
-    collapsed = !collapsed;
+    _collapsed = !_collapsed;
     notifyListeners();
   }
 
