@@ -25,8 +25,8 @@ class NftImageWidget extends StatelessWidget {
         )),
         imageBuilder: (context, imageProvider) {
           return Container(
-            width: screenSize.width(),
-            height: screenSize.height(),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
               image: DecorationImage(
                 alignment: FractionalOffset.center,
