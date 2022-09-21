@@ -1,4 +1,11 @@
 import 'package:fixnum/fixnum.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:pylons_wallet/model/amount.dart';
+import 'package:pylons_wallet/model/balance.dart';
+import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
+import 'package:pylons_wallet/model/nft.dart';
+import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_update_account_request.dart';
 import 'package:pylons_wallet/model/transaction.dart';
@@ -371,22 +378,6 @@ Cookbook MOCK_COOKBOOK_MODEL = Cookbook(
   supportEmail: "alex@shmeeload.xyz",
 );
 
-NFT MOCK_NFT = NFT(
-  name: "This is my Image NFT",
-  height: "2400",
-  description: "Please Buy my Image NFT",
-  width: "1080",
-  url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
-  recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
-  duration: "0:0",
-  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
-  appType: "easel",
-  creator: "Ahmad",
-  fileSize: "90.12KB",
-  itemID: "DtnxAS8L4pf",
-  owner: "abd",
-  ibcCoins: IBCCoins.upylon,
-);
 NftOwnershipHistory MOCK_NFT_OWNERSHIP_HISTORY = NftOwnershipHistory(
   itemID: "ahmad123axd",
   cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
