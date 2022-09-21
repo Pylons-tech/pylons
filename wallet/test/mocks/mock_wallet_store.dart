@@ -33,11 +33,18 @@ class MockWalletStore implements WalletsStore {
 
   @override
   Observable<List<AccountPublicInfo>> getWallets() {
-    return Observable([const AccountPublicInfo(name: 'test', publicAddress: 'pylo1e5s74e92q3gunldrpqdnrlc8jg9l3xw6s7hea9', chainId: 'pylons-devtestnet', accountId: '0')]);
+    return Observable([
+      const AccountPublicInfo(
+          name: 'test',
+          publicAddress: 'pylo1e5s74e92q3gunldrpqdnrlc8jg9l3xw6s7hea9',
+          chainId: 'pylons-devtestnet',
+          accountId: '0')
+    ]);
   }
 
   @override
-  Future<Either<Failure, AccountPublicInfo>> importAlanWallet(String mnemonic, String userName) {
+  Future<Either<Failure, AccountPublicInfo>> importAlanWallet(
+      String mnemonic, String userName) {
     // TODO: implement importAlanWallet
     throw UnimplementedError();
   }
@@ -124,8 +131,9 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> createCookbook(Map json) async {
-    return SdkIpcResponse.success(data: MOCK_TRANSACTION.hash, sender: '', transaction: '');
+  Future<SdkIpcResponse<String>> createCookbook(Map json) async {
+    return SdkIpcResponse<String>.success(
+        data: MOCK_COOKBOOK, sender: '', transaction: MOCK_TRANSACTION.hash);
   }
 
   @override

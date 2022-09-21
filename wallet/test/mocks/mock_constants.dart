@@ -1,10 +1,4 @@
 import 'package:fixnum/fixnum.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:pylons_wallet/model/amount.dart';
-import 'package:pylons_wallet/model/balance.dart';
-import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
-import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_update_account_request.dart';
 import 'package:pylons_wallet/model/transaction.dart';
@@ -68,7 +62,125 @@ String MOCK_COOKBOOK = """
 }""";
 
 String MOCK_RECIPE = """
-{"cookbookId":"Easel_CookBook_auto_cookbook_2022_09_19_162837_418","id":"Easel_Recipe_auto_recipe_2022_09_19_162944_483","name":"Cugcugcugcugcgugufgu","description":"Fhchchgcjgcjgjgccjgcjgggjcgucgucgu","version":"v0.1.0","coinInputs":[{"coins":[{"denom":"upylon","amount":"33000000"}]}],"entries":{"itemOutputs":[{"id":"Easel_NFT","doubles":[{"key":"Residual","weightRanges":[{"lower":"60000000000000000","upper":"60000000000000000","weight":"1"}]}],"longs":[{"key":"Quantity","weightRanges":[{"lower":"3","upper":"3","weight":"1"}]},{"key":"Width","weightRanges":[{"lower":"314","upper":"314","weight":"1"}]},{"key":"Height","weightRanges":[{"lower":"400","upper":"400","weight":"1"}]},{"key":"Duration","weightRanges":[{"weight":"1"}]}],"strings":[{"key":"Name","value":"Cugcugcugcugcgugufgu"},{"key":"App_Type","value":"Easel"},{"key":"Description","value":"Fhchchgcjgcjgjgccjgcjgggjcgucgucgu"},{"key":"Hashtags"},{"key":"NFT_Format","value":"Image"},{"key":"NFT_URL","value":"https://ipfs.io/ipfs/bafybeieo7sugncdug6aaxf5evpvinmowyci4b7heekyehag6s245c2zu7q"},{"key":"Thumbnail_URL"},{"key":"Creator","value":"Vgvvggvgvgvggv"},{"key":"cid","value":"bafybeieo7sugncdug6aaxf5evpvinmowyci4b7heekyehag6s245c2zu7q"},{"key":"fileSize","value":"263.55KB"}],"transferFee":[{"denom":"upylon","amount":"1"}],"tradePercentage":"60000000000000000","quantity":"3","amountMinted":"2","tradeable":true}]},"outputs":[{"entryIds":["Easel_NFT"],"weight":"1"}],"costPerBlock":{"denom":"upylon","amount":"0"},"enabled":true,"extraInfo":"extraInfo","createdAt":"1663586983","updatedAt":"1663586983"}""";
+{
+  "cookbookID": "$MOCK_COOKBOOK_ID",
+  "ID": "$MOCK_RECIPE_ID",
+  "name": "Test NFT v3",
+  "description": " A simple test recipe to be executed",
+  "version": "v1.0.0",
+  "coinInputs": [
+    {
+      "coins": [
+        {
+          "denom": "upylon",
+          "amount": "350"
+        }
+      ]
+    }
+  ],
+  "itemInputs": [],
+  "entries": {
+    "coinOutputs": [],
+    "itemOutputs": [
+      {
+        "ID": "How_do_you_do_turn_this_on",
+        "doubles": [
+          {
+            "key": "Residual",
+            "weightRanges": [
+              {
+                "lower": "2000000000000000000",
+                "upper": "2000000000000000000",
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "longs": [
+          {
+            "key": "Quantity",
+            "weightRanges": [
+              {
+                "lower": 34,
+                "upper": 34,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "key": "Width",
+            "weightRanges": [
+              {
+                "lower": 960,
+                "upper": 960,
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "key": "Height",
+            "weightRanges": [
+              {
+                "lower": 1280,
+                "upper": 1280,
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "strings": [
+          {
+            "key": "Name",
+            "value": "How do you do turn this on"
+          },
+          {
+            "key": "App_Type",
+            "value": "Avatar"
+          },
+          {
+            "key": "Description",
+            "value": "This is NFT Description for Test "
+          },
+          {
+            "key": "NFT_URL",
+            "value": "https://i.imgur.com/QechbvX.jpg"
+          },
+          {
+            "key": "Currency",
+            "value": "upylon"
+          },
+          {
+            "key": "Price",
+            "value": "450"
+          },
+          {
+            "key": "Creator",
+            "value": "NFT Studio"
+          }
+        ],
+        "mutableStrings": [],
+        "transferFee": [{"denom": "upylon",
+          "amount": "10"
+        }],
+        "tradePercentage": "100000000000000000",
+        "amountMinted": 0,
+        "quantity": 30,
+        "tradeable": true
+      }
+    ],
+    "itemModifyOutputs": []
+  },
+  "outputs": [
+    {
+      "entryIDs": [
+        "How_do_you_do_turn_this_on"
+      ],
+      "weight": 1
+    }
+  ],
+  "blockInterval": 1,
+  "enabled": true
+}""";
 
 const String MOCK_COOKBOOK_ID = 'cookbookLOUD';
 
@@ -257,4 +369,28 @@ Cookbook MOCK_COOKBOOK_MODEL = Cookbook(
   description: "Cookbook for running pylons recreation of LOUD",
   developer: "Pylons Inc",
   supportEmail: "alex@shmeeload.xyz",
+);
+
+NFT MOCK_NFT = NFT(
+  name: "This is my Image NFT",
+  height: "2400",
+  description: "Please Buy my Image NFT",
+  width: "1080",
+  url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
+  recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
+  duration: "0:0",
+  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+  appType: "easel",
+  creator: "Ahmad",
+  fileSize: "90.12KB",
+  itemID: "DtnxAS8L4pf",
+  owner: "abd",
+  ibcCoins: IBCCoins.upylon,
+);
+NftOwnershipHistory MOCK_NFT_OWNERSHIP_HISTORY = NftOwnershipHistory(
+  itemID: "ahmad123axd",
+  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+  createdAt: 0,
+  receiver: "xyz",
+  senderName: "abcxyz",
 );

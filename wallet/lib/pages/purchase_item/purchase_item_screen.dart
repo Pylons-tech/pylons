@@ -17,6 +17,7 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dar
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_image_asset.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
+import 'package:pylons_wallet/pages/gestures_for_detail_screen.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart' show PurchaseItemViewModel;
@@ -87,9 +88,9 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
   Widget getTypeWidget(PurchaseItemViewModel viewModel) {
     switch (viewModel.nft.assetType) {
       case AssetType.Audio:
-        return getAudioWidget(thumbnailUrl: viewModel.nft.thumbnailUrl);
+        return getAudioWidget(thumbnailUrl: viewModel.nft.thumbnailUrl, viewModel: viewModel);
       case AssetType.Image:
-        return NftImageWidget(url: viewModel.nft.url, opacity: 0.4);
+        return NftImageWidget(url: viewModel.nft.url, opacity: viewModel.isViewingFullNft ? 0.0 : 0.4);
       case AssetType.Video:
         return PurchaseVideoPlayerScreen(nft: viewModel.nft);
       case AssetType.Pdf:
@@ -111,11 +112,11 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
         );
 
       default:
-        return NftImageWidget(url: viewModel.nft.url, opacity: 0.4);
+        return NftImageWidget(url: viewModel.nft.url, opacity: viewModel.isViewingFullNft ? 0.0 : 0.4);
     }
   }
 
-  Widget getAudioWidget({required String thumbnailUrl}) {
+  Widget getAudioWidget({required String thumbnailUrl, required PurchaseItemViewModel viewModel}) {
     if (thumbnailUrl.isEmpty) {
       return Image.asset(
         ImageUtil.AUDIO_BACKGROUND,
@@ -126,7 +127,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
 
     return NftImageWidget(
       url: thumbnailUrl,
-      opacity: 0.4,
+      opacity: viewModel.isViewingFullNft ? 0.0 : 0.4,
     );
   }
 
@@ -136,41 +137,50 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
 
     return Scaffold(
         backgroundColor: kBlack,
-        body: GestureDetector(
-          onTapUp: (TapUpDetails details) => onTapUp(context, details),
+        body: GesturesForDetailsScreen(
+          nft: viewModel.nft,
+          viewModel: viewModel,
+          screen: DetailScreen.purchaseScreen,
+          tapUp: (context) => onTapUp,
           child: Stack(
             children: [
               getTypeWidget(viewModel),
-              Padding(
-                padding: EdgeInsets.only(left: 8, right: 8, bottom: 8, top: MediaQuery.of(context).viewPadding.top),
-                child: SizedBox(
-                  height: 100.h,
-                  width: double.infinity,
-                  child: ListTile(
-                    leading: GestureDetector(
-                      onTap: () {
-                        viewModel.destroyPlayers(viewModel.nft);
-                        Navigator.pop(context);
-                      },
-                      child: SvgPicture.asset(
-                        SVGUtil.OWNER_BACK_ICON,
-                        height: 25.h,
+              Visibility(
+                visible: !viewModel.isViewingFullNft,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 8, right: 8, bottom: 8, top: MediaQuery.of(context).viewPadding.top),
+                  child: SizedBox(
+                    height: 100.h,
+                    width: double.infinity,
+                    child: ListTile(
+                      leading: GestureDetector(
+                        onTap: () {
+                          viewModel.destroyPlayers(viewModel.nft);
+                          Navigator.pop(context);
+                        },
+                        child: SvgPicture.asset(
+                          SVGUtil.OWNER_BACK_ICON,
+                          height: 25.h,
+                        ),
                       ),
+                      trailing: const SizedBox(),
                     ),
-                    trailing: const SizedBox(),
                   ),
                 ),
               ),
-              const Align(
-                alignment: Alignment.bottomCenter,
-                child: OwnerBottomDrawer(),
+              Visibility(
+                visible: !viewModel.isViewingFullNft,
+                child: const Align(
+                  alignment: Alignment.bottomCenter,
+                  child: OwnerBottomDrawer(),
+                ),
               )
             ],
           ),
         ));
   }
 
-  //detect card's outside tap
+//detect card's outside tap
   void onTapUp(BuildContext context, TapUpDetails details) {
     if (key.currentContext != null) {
       // This should generally not be null, but it could be null in test cases, conceivably, so let's not crash
@@ -299,7 +309,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             child: InkWell(
                               onTap: () async {
                                 bool balancesFetchResult = true;
-
                                 if (viewModel.nft.price != kZeroInt) {
                                   final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
                                     selectedDenom: viewModel.nft.denom,
