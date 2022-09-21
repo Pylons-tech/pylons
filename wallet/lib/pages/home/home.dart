@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -20,6 +21,10 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/screen_responsive.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:home_widget/home_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -57,6 +62,51 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   _checkForWidgetLaunch();
+  //   HomeWidget.widgetClicked.listen((Uri? uri) => _launchedFromWidget(uri));
+  // }
+  //
+  // void _checkForWidgetLaunch() {
+  //   HomeWidget.initiallyLaunchedFromHomeWidget().then((Uri? uri) => _launchedFromWidget(uri));
+  // }
+  //
+  // void _launchedFromWidget(Uri? uri) {
+  //   if (uri!=null) {
+  //     Navigator.of(context).pushNamed(RouteUtil.ROUTE_WIDGET);
+  //   }
+  // }
+
+  Future<void> _updateWidget() async {
+    try {
+      HomeWidget.updateWidget(name: 'HomeWidgetExampleProvider', iOSName: 'HomeWidgetExample');
+    } on PlatformException catch (exception) {
+      debugPrint('Error Updating Widget. $exception');
+    }
+  }
+
+
+  Future<void> image_picker() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+    if (result!=null) {
+      File file = File(result.files.single.path ?? "");
+      final newImagePath = await saveImage(file: file);
+      await HomeWidget.saveWidgetData<String>('image', newImagePath);
+      _updateWidget();
+    }
+  }
+
+  Future<String> saveImage({required File file}) async {
+    final Directory temp = await getTemporaryDirectory();
+    final newImagePath = '${temp.path}/${file.path.split("/").last}';
+    file.copy(newImagePath);
+    return newImagePath;
+
+
   }
 
   @override
@@ -335,6 +385,11 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
           ],
         ),
         SizedBox(height: 5.h),
+        FloatingActionButton(
+          onPressed: () => image_picker(),
+          tooltip: 'Pick Image',
+          child: const Icon(Icons.add, size: 15),
+        ),
       ],
     );
   }
