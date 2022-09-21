@@ -248,7 +248,7 @@ class WalletsStoreDummyInventory extends WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> createCookbook(Map json) {
+  Future<SdkIpcResponse<String>> createCookbook(Map json) {
     return _baseInstance.createCookbook(json);
   }
 
@@ -450,9 +450,9 @@ class WalletsStoreDummyInventory extends WalletsStore {
 
   @override
   Future<Either<Failure, AccountPublicInfo>> importPylonsAccount(
-      {required String mnemonic, required String username}) {
+      {required String mnemonic}) {
     return _baseInstance.importPylonsAccount(
-        mnemonic: mnemonic, username: username);
+        mnemonic: mnemonic);
   }
 
   @override

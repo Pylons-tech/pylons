@@ -52,3 +52,40 @@ func (suite *IntegrationTestSuite) TestItemQuerySingle() {
 		})
 	}
 }
+
+func (suite *IntegrationTestSuite) TestGetItemOwnershipHistory() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
+	wctx := sdk.WrapSDKContext(ctx)
+	items := make([]types.ItemHistory, 1)
+
+	for _, tc := range []struct {
+		desc    string
+		request *types.QueryGetItemHistoryRequest
+		err     error
+	}{
+		{
+			desc: "Complete",
+			request: &types.QueryGetItemHistoryRequest{
+				CookbookId: items[0].CookbookId,
+				ItemId:     items[0].Id,
+			},
+		},
+		{
+			desc: "Invalid request",
+			err:  status.Error(codes.InvalidArgument, "invalid request"),
+		},
+	} {
+		tc := tc
+		suite.Run(tc.desc, func() {
+			_, err := k.GetItemOwnershipHistory(wctx, tc.request)
+			if tc.err != nil {
+				require.ErrorIs(err, tc.err)
+			} else {
+				require.NoError(err)
+			}
+		})
+	}
+}

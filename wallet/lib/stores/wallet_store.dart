@@ -35,7 +35,7 @@ abstract class WalletsStore {
   /// This method creates the cookbook
   /// Input : [Map] containing the info related to the creation of cookbook
   /// Output : [String] response
-  Future<SdkIpcResponse> createCookbook(Map json);
+  Future<SdkIpcResponse<String>> createCookbook(Map json);
 
   /// This method is for create recipe
   /// MsgCreateRecipe proto
@@ -137,12 +137,12 @@ abstract class WalletsStore {
 
   Observable<CredentialsStorageFailure?> getLoadWalletsFailure();
 
-  /// This method imports the pylons wallet based on mnemonic and username
-  /// Input : [username] the username associated with the account. [mnemonic] the mnemonic associated with the account
+  /// This method imports the pylons wallet based on mnemonic
+  /// Input : [mnemonic] the mnemonic associated with the account
   /// Output: [WalletPublicInfo] returns the wallet public info about the account
   /// else returns failure
   Future<Either<Failure, AccountPublicInfo>> importPylonsAccount(
-      {required String mnemonic, required String username});
+      {required String mnemonic});
 
   /// This method updates the cookbook in the block chain
   /// Input : [Map] containing the info related to the updation of cookbook

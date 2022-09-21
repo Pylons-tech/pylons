@@ -107,6 +107,7 @@ class WalletsStoreImp implements WalletsStore {
     await repository.saveMnemonic(mnemonic);
     final String token = await getRemoteNotificationServiceToken();
     await repository.updateFcmToken(address: creds.publicInfo.publicAddress, fcmToken: token);
+    await repository.setUserIdentifierInAnalytics(address: creds.publicInfo.publicAddress);
     crashlyticsHelper.setUserIdentifier(identifier: creds.publicInfo.publicAddress);
     return Right(creds.publicInfo);
   }
@@ -236,10 +237,21 @@ class WalletsStoreImp implements WalletsStore {
   /// Input : [Map] containing the info related to the creation of cookbook
   /// Output : [TransactionHash] hash of the transaction
   @override
-  Future<SdkIpcResponse> createCookbook(Map json) async {
+  Future<SdkIpcResponse<String>> createCookbook(Map json) async {
     final msgObj = pylons.MsgCreateCookbook.create()..mergeFromProto3Json(json);
     msgObj.creator = wallets.value.last.publicAddress;
-    return _signAndBroadcast(msgObj);
+    final sdkResponse = await _signAndBroadcast(msgObj);
+    if (!sdkResponse.success) {
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    final cookBookResponseEither = await repository.getCookbookBasedOnId(cookBookId: json["id"].toString());
+
+    if (cookBookResponseEither.isLeft()) {
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    return SdkIpcResponse.success(data: jsonEncode(cookBookResponseEither.toOption().toNullable()!.toProto3Json()), sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
   }
 
   @override
@@ -261,8 +273,18 @@ class WalletsStoreImp implements WalletsStore {
   Future<SdkIpcResponse> createRecipe(Map json) async {
     final msgObj = pylons.MsgCreateRecipe.create()..mergeFromProto3Json(json);
     msgObj.creator = wallets.value.last.publicAddress;
-    final response = await _signAndBroadcast(msgObj);
-    return response;
+    final sdkResponse = await _signAndBroadcast(msgObj);
+    if (!sdkResponse.success) {
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    final recipeResponseEither = await repository.getRecipe(recipeId: json["id"].toString(), cookBookId: json["cookbookId"].toString());
+
+    if (recipeResponseEither.isLeft()) {
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    return SdkIpcResponse.success(data: jsonEncode(recipeResponseEither.toOption().toNullable()!.toProto3Json()), sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
   }
 
   @override
@@ -276,8 +298,24 @@ class WalletsStoreImp implements WalletsStore {
   Future<SdkIpcResponse> executeRecipe(Map json) async {
     final msgObj = pylons.MsgExecuteRecipe.create()..mergeFromProto3Json(json);
     msgObj.creator = wallets.value.last.publicAddress;
-    final response = await _signAndBroadcast(msgObj);
-    return response;
+
+    final sdkResponse = await _signAndBroadcast(msgObj);
+    if (!sdkResponse.success) {
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    final executionEither = await repository.getExecutionsByRecipeId(recipeId: json["recipeId"].toString(), cookBookId: json["cookbookId"].toString());
+
+    if (executionEither.isLeft()) {
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    if (executionEither.toOption().toNullable()!.completedExecutions.isEmpty) {
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    return SdkIpcResponse.success(
+        data: jsonEncode(executionEither.toOption().toNullable()!.completedExecutions.last.toProto3Json()), sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
   }
 
   @override
@@ -562,47 +600,45 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   @override
-  Future<Either<Failure, AccountPublicInfo>> importPylonsAccount({required String mnemonic, required String username}) async {
+  Future<Either<Failure, AccountPublicInfo>> importPylonsAccount({required String mnemonic}) async {
+    final baseEnv = getBaseEnv();
     final transactionSigningGateway = getTransactionSigningGateway();
-    final privateCredentialsEither = await repository.getPrivateCredentials(mnemonic: mnemonic, username: username);
 
-    if (privateCredentialsEither.isLeft()) {
-      return Left(privateCredentialsEither.swap().toOption().toNullable()!);
+    final wallet = alan.Wallet.derive(mnemonic.split(" "), baseEnv.networkInfo);
+
+    final getUsernameBasedOnAddress = await repository.getUsername(address: wallet.bech32Address);
+
+    if (getUsernameBasedOnAddress.isLeft()) {
+      return Left(getUsernameBasedOnAddress.swap().toOption().toNullable()!);
     }
 
-    final credentials = privateCredentialsEither.toOption().toNullable()!;
+    final userName = getUsernameBasedOnAddress.getOrElse(() => '');
 
-    final getAddressBasedOnUserNameEither = await repository.getAddressBasedOnUsername(username);
-
-    if (getAddressBasedOnUserNameEither.isLeft()) {
-      return Left(getAddressBasedOnUserNameEither.swap().toOption().toNullable()!);
-    }
-
-    final userNameAddress = getAddressBasedOnUserNameEither.getOrElse(() => '');
-
-    if (userNameAddress.isEmpty) {
-      return Left(UsernameAddressFoundFailure('user_name_invalid'.tr()));
-    }
-
-    if (userNameAddress != credentials.publicInfo.publicAddress) {
-      return Left(InvalidInputFailure('invalid_input'.tr()));
-    }
+    final creds = AlanPrivateAccountCredentials(
+      publicInfo: AccountPublicInfo(
+        chainId: baseEnv.chainId,
+        name: userName,
+        publicAddress: wallet.bech32Address,
+        accountId: userName,
+      ),
+      mnemonic: mnemonic,
+    );
 
     await transactionSigningGateway.storeAccountCredentials(
-      credentials: credentials,
+      credentials: creds,
       password: '',
     );
 
-    wallets.value.add(credentials.publicInfo);
+    wallets.value.add(creds.publicInfo);
     final String fcmToken = await getRemoteNotificationServiceToken();
-    await repository.updateFcmToken(address: credentials.publicInfo.publicAddress, fcmToken: fcmToken);
-
-    crashlyticsHelper.setUserIdentifier(identifier: credentials.publicInfo.publicAddress);
+    await repository.updateFcmToken(address: creds.publicInfo.publicAddress, fcmToken: fcmToken);
+    await repository.setUserIdentifierInAnalytics(address: creds.publicInfo.publicAddress);
+    crashlyticsHelper.setUserIdentifier(identifier: creds.publicInfo.publicAddress);
 
     await repository.saveMnemonic(mnemonic);
-    await repository.doesStripeAccountExistsFromServer(address: credentials.publicInfo.publicAddress);
+    await repository.doesStripeAccountExistsFromServer(address: creds.publicInfo.publicAddress);
 
-    return Right(credentials.publicInfo);
+    return Right(creds.publicInfo);
   }
 
   @override

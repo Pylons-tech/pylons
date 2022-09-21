@@ -70,7 +70,6 @@ const int stringTrimConstantMax = 25;
 const int stringTrimConstantMid = 20;
 const int stringTrimConstantMin = 15;
 const double pyLonToUsdConstant = 0.01;
-const double kPrecision = 100000000000000000;
 const double kRoyaltyPrecision = 10000000000000000;
 const String kPylonDenom = "upylon";
 
@@ -109,6 +108,10 @@ const String kIOSEaselLink = "pylons-easel://open";
 
 const String kPrivacyPolicyLink = "https://www.pylons.tech/p/";
 const String kUnilinkUrl = "https://wallet.pylons.tech";
+const String kDeepLink = "https://pylons.page.link";
+const String bigDipperBaseLink = "https://wallet.pylons.tech/";
+const String packageName = "tech.pylons.wallet";
+const String bundleId = "xyz.pylons.wallet";
 const String kUnilinkUrl3 = "pylons://";
 const String kUnilinkSender = "wallet";
 
@@ -135,7 +138,7 @@ const String GET_LOGINLINK_FAILED = 'Stripe Get Connected Account LOGIN Link Fai
 const String PAYOUT_FAILED = 'Stripe Payout Request Failed';
 const String REGISTERACCOUNT_FAILED = 'Stripe Register Connected Account Failed';
 const String UPDATEACCOUNT_FAILED = 'Stripe Update Account Failed';
-const String IBC_HASH_UPDATE_FAILED = 'IBC hash info getting Failed';
+const String IBC_HASH_UPDATE_FAILED = 'IBC Hash Info failed';
 const String PLATFORM_FAILED = 'Platform exception occured';
 const String CACHE_FAILED = 'No data saved';
 const String NETWORK_ERROR = 'Network Error';
@@ -164,7 +167,7 @@ const String kDollar = "U.S. Dollar";
 const String kAtom = "ATOM";
 const String kEthereum = "Ethereum";
 
-const ANDROID_VERSION = '1.0.0+94';
+const ANDROID_VERSION = '1.0.1+143';
 const IOS_VERSION = '1.0.8+1';
 
 const kCurrencyDecimalLength = 2;
@@ -190,28 +193,8 @@ const String kEthereumAbr = "ETH";
 const String kEthereumSymbol = "weth-wei";
 const String kDefault = 'Default';
 
-/// Legal Screen
-const String kLegalText = 'Legal';
-const String kTermsOfServiceText = 'Terms of service';
-const String kPrivacyPolicyText = 'Privacy policy';
-
-/// Recovery Screen
-const String kRecoveryText = 'Recovery';
-const String kRecoveryPhraseText = 'Recovery Phrase';
-const String kViewRecoveryPhraseText = 'View recovery phrase';
-const String kPracticeTestText = 'Practice test';
-const String kRecoveryMigration = 'Migrate Account';
-
-/// Settings screen
-const String kSettingsEmailAddress = "Email Address (optional)";
-const String kCopy = "Copy";
-const String kAlertDialogText = "Are you sure you want to delete your Pylons wallet from this device?";
-const String kYes = "Yes";
-const String kNo = "No";
-
 /// General screen
 const String kSaveText = "Save";
-const String kWalletAddressText = "Wallet Address";
 const String kBioText = "Bio";
 const String kBioHintText = "Media Artist (3D, Motiongraphics) \nCreating & Collecting NFTs";
 const String kStakeDigitalClaim = "Stake your digital claim";
@@ -242,22 +225,19 @@ const String kIOSAppLink = 'https://apps.apple.com/gb/app/cashero/id1598732789?i
 
 const String kRecipeId = 'Recipe ID';
 const String kRecipes = 'recipes';
+const String kFeedbacks = 'UserFeedbacks';
 const String kLikes = 'likes';
 const String kAddress = 'address';
 const String kViews = 'views';
 const String kView = 'view';
 const String kYou = 'you';
 
+//feedback Ids
+const String kSubjectKey = 'subject';
+const String kFeedbackKey = 'feedback';
+const String kTimeStampKey = 'timestamp';
+
 const String kSoldOut = 'Sold Out';
-
-/// Repository
-const String NO_PROFILE_FOUND = 'No profile found in wallet';
-const String SOMETHING_WRONG_SIGNING_TRANSACTION = 'Something went wrong while signing transaction';
-const String VIDEO_PLAYER_NETWORK_ERROR = 'Unable to play the video right now. Please check your internet connection and try again.';
-
-/// Trade Receipt Screen
-const String kCloseText = "Close";
-const String kCancelText = "Cancel";
 
 /// Trade Receipt Screen
 const String kTransactionCompleteText = "View Receipt";
@@ -268,11 +248,11 @@ List<Map<String, dynamic>> languagesSupported = [
   {"name": "english", "flag": "🇬🇧", 'selected': false, "abbreviation": "(U.S.)", 'languageCode': 'en'},
   {"name": "russian", "flag": "🇷🇺", 'selected': false, "abbreviation": "(RU)", 'languageCode': 'ru'},
   {"name": "indonesian", "flag": "🇮🇩", 'selected': false, "abbreviation": "(IN)", 'languageCode': 'id'},
-  {"name": "german", "flag": "🇩🇪", 'selected': false, "abbreviation": "(DU)", 'languageCode': 'de'},
+  {"name": "german", "flag": "🇩🇪", 'selected': false, "abbreviation": "(DE)", 'languageCode': 'de'},
   {"name": "korean", "flag": "🇰🇷", 'selected': false, "abbreviation": "(KO)", 'languageCode': 'ko'},
   {"name": "japanese", "flag": "🇯🇵", 'selected': false, "abbreviation": "(JA)", 'languageCode': 'ja'},
   {"name": "spanish", "flag": "🇪🇸", 'selected': false, "abbreviation": "(ES)", 'languageCode': 'es'},
-  {"name": "vietnamese", "flag": "🇻🇳", 'selected': false, "abbreviation": "(VIE)", 'languageCode': 'vie'},
+  {"name": "vietnamese", "flag": "🇻🇳", 'selected': false, "abbreviation": "(VIE)", 'languageCode': 'vi'},
 ];
 
 ///review your nft
@@ -288,8 +268,6 @@ const String kCollapse = "  Collapse";
 /// Nft viewmodel key values
 const String kNftUrlKey = "NFT_URL";
 const String kAppTypeKey = "App_Type";
-const String kWidthKey = "Width";
-const String kHeightKey = "Height";
 
 const int kNumberOfSeconds = 1000;
 const int kSixtySeconds = 60;
@@ -302,8 +280,7 @@ const kHashtags = "Hashtags";
 const kLOW_LOW_BALANCE_CONSTANT = "Tx error:5";
 
 //NFT STRINGS KEYS
-const kResidual = "Residual";
-const kQuantity = "Quantity";
+
 const kWidth = "Width";
 const kHeight = "Height";
 const kName = "Name";
@@ -319,12 +296,8 @@ const kEaselNFT = "Easel_NFT";
 const kUpylon = "upylon";
 const kExtraInfo = "extraInfo";
 
-const kItemId = "item_id";
+const kItemId = "id";
 const kCookbookId = "cookbook_id";
-const kRecipe_id = "recipe_id";
-const kSender = "sender";
-const kSenderName = "sender_name";
-const kReceiver = "receiver";
 const kAmount = "amount";
 const kCreatedAt = "created_at";
 
@@ -360,7 +333,7 @@ const String kMessageKey = "Message";
 const String kSuccessKey = "Success";
 
 //ipc engine keys
-const String kActionKey = "action";
+
 const String kNftPurchaseKey = "purchase_nft";
 const String kNftTradeKey = "purchase_trade";
 const String kNftViewKey = "nft_view";
@@ -404,8 +377,16 @@ const String kZeroInt = "0";
 const ipfsDomain = 'https://ipfs.io/ipfs';
 const proxyIpfsDomain = 'https://proxy.pylons.tech/ipfs';
 
+const hintTextEmail = 'x@pylons.tech';
+
 final defaultPylonsSKUs = jsonEncode([
   {"id": "pylons_10", "bonus": "", "subtitle": "\$1.00", "pylons": "10 PYLN"},
   {"id": "pylons_35", "bonus": "(+5 Bonus)", "subtitle": "\$3.00", "pylons": "35 PYLN"},
   {"id": "pylons_60", "bonus": "(+10 Bonus)", "subtitle": "\$5.00", "pylons": "50 PYLN"}
 ]);
+
+const kMaxDescription = 256;
+
+const kOwnerViewKeyValue = "owner_view_key";
+const kOwnerViewDrawerKeyValue = "ownerview_header";
+const kOwnerViewBottomSheetKeyValue = "bottom_sheet";

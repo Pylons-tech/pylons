@@ -9,6 +9,7 @@ import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_localization_view_model.dart';
+import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
 import 'package:pylons_wallet/pages/settings/widgets/delete_dialog.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
@@ -17,7 +18,7 @@ import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
 TextStyle kHeadlineTextStyle = TextStyle(fontSize: 16.sp, fontFamily: kUniversalFontFamily, color: Colors.black);
-TextStyle kSettingsOptionsTextStyle = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
+TextStyle kSettingsOptionsTextStyle = TextStyle(fontSize: 20.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
 TextStyle kSettingsUserEnteredTextStyle = TextStyle(
   fontSize: 14.sp,
   fontFamily: kUniversalFontFamily,
@@ -186,6 +187,10 @@ class _SettingScreenState extends State<SettingScreen> {
                             controller: emailController,
                             style: kSettingsUserEnteredTextStyle,
                             decoration: InputDecoration(
+                                hintText: hintTextEmail,
+                                hintStyle: const TextStyle(
+                                  color: kUserInputTextColor,
+                                ),
                                 suffix: ColoredBox(
                                   color: kCopyColor,
                                   child: TextButton.icon(
@@ -227,6 +232,9 @@ class _SettingScreenState extends State<SettingScreen> {
                         height: 20.h,
                       ),
                       buildLowerBottomOptions(),
+                      SizedBox(
+                        height: 20.h,
+                      ),
                     ],
                   ),
                 );
@@ -268,6 +276,17 @@ class _SettingScreenState extends State<SettingScreen> {
               Navigator.of(context).pushNamed(RouteUtil.ROUTE_LEGAL);
             },
           ),
+          const SettingsDivider(),
+          SettingListItem(
+            title: "submit_feedback".tr(),
+            imagePath: SVGUtil.OWNER_REPORT,
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              final SubmitFeedback submitFeedbackDialog = SubmitFeedback(context: context);
+              submitFeedbackDialog.show();
+            },
+          ),
+
           const SettingsDivider(),
           SettingListItem(
             title: "delete_wallet".tr(),
@@ -351,6 +370,7 @@ class _SettingListItemState extends State<SettingListItem> {
               width: 20.h,
               child: SvgPicture.asset(
                 widget.imagePath,
+                color: kBlack,
                 height: 20.h,
                 width: 20.h,
                 fit: BoxFit.fill,
@@ -361,7 +381,7 @@ class _SettingListItemState extends State<SettingListItem> {
             ),
             Text(
               widget.title,
-              style: kSettingsOptionsTextStyle,
+              style: TextStyle(fontSize: 20.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500),
             )
           ],
         ),

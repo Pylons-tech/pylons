@@ -149,7 +149,7 @@ func TestGadgets(t *testing.T) {
 
 	t.Run("pylons.gadgets file must start with a gadget header", func(t *testing.T) {
 		testutil.WriteFixtureAtTestRuntime(gadgetsFilename, pylonsGadgetsLiteral_noHeader)
-		assert.PanicsWithError(t, errNoHeader, func() { LoadGadgetsForPath("") })
+		assert.PanicsWithError(t, fmt.Sprintf(errNoHeader, "pylons.gadgets"), func() { LoadGadgetsForPath("") })
 		os.Remove(gadgetsFilename)
 	})
 
