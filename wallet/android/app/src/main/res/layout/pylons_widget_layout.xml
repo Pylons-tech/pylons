@@ -1,26 +1,36 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <GridView
-        android:id="@+id/grid_view"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:numColumns = "3"
-        android:columnWidth = "80dp" />
-    <TextView
-        android:id="@+id/empty_view"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    android:orientation="vertical"
+    android:background="@drawable/widget_background"
+    android:padding="8dp"
+    android:id="@+id/widget_container">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:background="@android:color/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Widget Empty"
-        android:textColor="#ffffff"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-<!--    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--        android:id="@+id/nft"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:scaleType="centerCrop"-->
-<!--        android:src="@drawable/waves"-->
-<!--        />-->
-</FrameLayout>
+
+        tools:src="@tools:sample/avatars" />
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/widget_title"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:textSize="36sp"-->
+    <!--        android:textStyle="bold"-->
+    <!--        tools:text="Title" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/widget_message"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:textSize="18sp"-->
+    <!--        tools:text="Message" />-->
+</LinearLayout>
