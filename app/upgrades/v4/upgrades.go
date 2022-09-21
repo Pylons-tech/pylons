@@ -215,7 +215,7 @@ func GetbackCoinFromVal(ctx sdk.Context, accAddr sdk.AccAddress, staking *stakin
 	}
 }
 
-func CleanUplyons(ctx sdk.Context, bank *bankkeeper.BaseKeeper, pylons *pylonskeeper.Keeper) error {
+func CleanUplyons(ctx sdk.Context, bank *bankkeeper.BaseKeeper, pylons *pylonskeeper.Keeper) {
 	accs := bank.GetAccountsBalances(ctx)
 	for _, acc := range accs {
 		balance := acc.Coins.AmountOf(types.PylonsCoinDenom)
@@ -239,7 +239,6 @@ func CleanUplyons(ctx sdk.Context, bank *bankkeeper.BaseKeeper, pylons *pylonske
 	if err != nil {
 		panic(fmt.Errorf("mint valid upylons fail: %w", err))
 	}
-	return nil
 }
 
 // Mint uplyons for address with valid (with IAP))
