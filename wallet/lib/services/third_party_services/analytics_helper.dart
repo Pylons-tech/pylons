@@ -8,6 +8,15 @@ abstract class AnalyticsHelper {
   /// This method will log the purchase item in the analytics
   /// Input: [recipeId] the id of the NFT, [author] the author of the NFT, [purchasePrice] the price of the NFT, [recipeName] the name of the recipe
   Future<void> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice});
+
+
+  Future<void> logAddToCart({
+    required String recipeId,
+    required String recipeName,
+    required String author,
+    required double purchasePrice,
+    required String currency,
+  });
 }
 
 class AnalyticsHelperImpl implements AnalyticsHelper {
@@ -20,7 +29,12 @@ class AnalyticsHelperImpl implements AnalyticsHelper {
   }
 
   @override
-  Future<void> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice}) async {
+  Future<void> logPurchaseItem({
+    required String recipeId,
+    required String recipeName,
+    required String author,
+    required double purchasePrice,
+  }) async {
     final item = AnalyticsEventItem(
       itemId: recipeId,
       itemName: recipeName,
@@ -31,6 +45,30 @@ class AnalyticsHelperImpl implements AnalyticsHelper {
 
     await FirebaseAnalytics.instance.logSelectItem(
       items: [item],
+    );
+  }
+
+
+  @override
+  Future<void> logAddToCart({
+    required String recipeId,
+    required String recipeName,
+    required String author,
+    required double purchasePrice,
+    required String currency,
+  }) async {
+    final itemWithQuantity = AnalyticsEventItem(
+      itemId: recipeId,
+      itemName: recipeName,
+      itemCategory: "NFT",
+      itemBrand: author,
+      price: purchasePrice,
+      quantity: 1,
+    );
+    await FirebaseAnalytics.instance.logAddToCart(
+      currency: currency,
+      value: purchasePrice,
+      items: [itemWithQuantity],
     );
   }
 }

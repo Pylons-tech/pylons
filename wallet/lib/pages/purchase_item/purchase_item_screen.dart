@@ -65,16 +65,15 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
             widget.purchaseItemViewModel.destroyPlayers();
             return true;
           },
-          child: const PurchaseItemContent(
-          )),
+          child: const PurchaseItemContent()),
     );
   }
 }
 
 class PurchaseItemContent extends StatefulWidget {
-
-
-  const PurchaseItemContent({Key? key,}) : super(key: key);
+  const PurchaseItemContent({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _PurchaseItemContentState createState() => _PurchaseItemContentState();
@@ -323,6 +322,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
 
                                   balancesFetchResult = balancesEither.getOrElse(() => false);
                                 }
+
+                                viewModel.addLogForCart();
 
                                 final PayNowDialog payNowDialog = PayNowDialog(
                                     buildContext: context,

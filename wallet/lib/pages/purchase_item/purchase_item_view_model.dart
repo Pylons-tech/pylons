@@ -432,6 +432,12 @@ class PurchaseItemViewModel extends ChangeNotifier {
     return const Right(true);
   }
 
+
+  void addLogForCart() {
+
+    repository.logAddToCart(recipeId: nft.recipeID, recipeName: nft.name, author: nft.creator, purchasePrice: double.parse(nft.price) / kBigIntBase, currency: nft.ibcCoins.name, );
+  }
+
   NFT get nft => _nft;
 
   final ValueNotifier<bool> shouldShowBuyNow = ValueNotifier(false);
@@ -458,6 +464,8 @@ class PurchaseItemViewModel extends ChangeNotifier {
   List<NftOwnershipHistory> nftOwnershipHistoryList = [];
   bool _isVideoLoading = true;
   bool _likedByMe = false;
+
+
 }
 
 class ProgressBarState {

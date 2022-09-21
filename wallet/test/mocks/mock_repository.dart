@@ -527,4 +527,10 @@ class MockRepository extends Repository {
     // TODO: implement logPurchaseItem
     throw UnimplementedError();
   }
+
+  @override
+  Future<Either<Failure, bool>> logAddToCart({required String recipeId, required String recipeName, required String author, required double purchasePrice, required String currency}) {
+    // TODO: implement logAddToCart
+    throw UnimplementedError();
+  }
 }
