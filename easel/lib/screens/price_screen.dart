@@ -342,6 +342,7 @@ class _PriceScreenState extends State<PriceScreen> {
                       VerticalSpace(10.h),
                       Center(
                         child: InkWell(
+                          key: const Key(kSaveAsDraftPriceKey),
                           onTap: () {
                             if (provider.isFreeDrop == FreeDrop.unselected) {
                               Navigator.pop(context);

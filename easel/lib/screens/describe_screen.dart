@@ -260,6 +260,7 @@ class _DescribeScreenState extends State<DescribeScreen> {
                       VerticalSpace(10.h),
                       Center(
                         child: InkWell(
+                          key: const Key(kSaveAsDraftDescKey),
                           onTap: () {
                             validateAndUpdateDescription(false);
                           },
@@ -294,6 +295,5 @@ class _DescribeScreenState extends State<DescribeScreen> {
     context.read<EaselProvider>().updateNftFromDescription(provider.nft.id!);
     context.read<EaselProvider>().saveArtistName(provider.artistNameController.text.trim());
     moveNextPage ? context.read<HomeViewModel>().nextPage() : Navigator.pop(context);
-
   }
 }

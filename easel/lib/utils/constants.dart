@@ -10,7 +10,7 @@ List kTutorialItems = [
 class PngUtils {
   static const kShareIcon = 'assets/images/share_ic.png';
   static const kSaveIcon = 'assets/images/save_ic.png';
-  static const  kTooltipBalloon = 'assets/images/tooltip_balloon.png';
+  static const kTooltipBalloon = 'assets/images/tooltip_balloon.png';
   static const kIconDenomUsd = 'assets/images/denom_usd.png';
   static const kIconDenomPylon = 'assets/images/denom_pylon.png';
   static const kIconDenomAtom = 'assets/images/denom_atom.png';
@@ -27,9 +27,6 @@ class PngUtils {
   static const kFullScreenIcon = 'assets/images/svg/full_screen_icon.svg';
   static const kAlertIcon = 'assets/images/svg/i_icon.svg';
 }
-
-
-
 
 /// ```SVG assets
 const kSvgSplash = 'assets/images/svg/splash.svg';
@@ -131,8 +128,6 @@ const String kUniversalFontFamily = "UniversalSans";
 
 /// ```Text constants
 
-
-
 const kRoyaltyHintText = '5%';
 
 const kImageText = 'Image';
@@ -143,10 +138,7 @@ const kPdfText = 'Pdf';
 const String kThreeDText = "ThreeD";
 const kWhyAppNeeded = 'Why the app is\nneeded?        \u21E9';
 
-
-
 const kUploadHint2 = '• Image, Video, 3D or Audio';
-
 
 const kErrProfileNotExist = 'profileDoesNotExist';
 
@@ -245,3 +237,7 @@ const kLinkKey = "link";
 const kTwelve = 12;
 
 const one = 1;
+
+const kSaveAsDraftDescKey = "Save_as_draft_decs_key";
+const kSaveAsDraftPriceKey = "Save_as_draft_price_key";
+const kSaveAsDraftPublishKey = "Save_as_draft_publish_key";

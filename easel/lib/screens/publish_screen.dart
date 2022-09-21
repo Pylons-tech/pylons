@@ -391,6 +391,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               height: 10.h,
                             ),
                             ClippedButton(
+                              key: const Key(kSaveAsDraftPublishKey),
                               title: "save_as_draft".tr(),
                               bgColor: Colors.white.withOpacity(0.2),
                               textColor: EaselAppTheme.kWhite,
