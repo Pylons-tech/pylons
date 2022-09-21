@@ -75,6 +75,12 @@ void main() async {
     response.fold((l) => throw MOCK_SOMETHING_WENT_WRONG, (r) => expect(MOCK_BALANCE, r));
   });
 
+  test("test for createDynamicLinkForRecipeNftShare", () async {
+    final response = await repository.createDynamicLinkForRecipeNftShare(address: MOCK_ADDRESS, nft: MOCK_NFT);
+    expect(true, response.isRight());
+    response.fold((l) => throw MOCK_SOMETHING_WENT_WRONG, (r) => expect(MOCK_DYNAMIC_LINK, r));
+  });
+
   test("test for get executions for recipe", () async {
     final response = await repository.getExecutionsByRecipeId(cookBookId: MOCK_COOKBOOK_ID, recipeId: MOCK_RECIPE_ID);
     expect(true, response.isRight());
