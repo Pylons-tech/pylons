@@ -1,94 +1,122 @@
+
 package tech.pylons.wallet
 
-//import android.R
 import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProvider
 import android.content.Context
-import android.content.Intent
+import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.widget.RemoteViews
+import androidx.core.content.FileProvider
+import es.antonborri.home_widget.HomeWidgetBackgroundIntent
+import es.antonborri.home_widget.HomeWidgetLaunchIntent
+import es.antonborri.home_widget.HomeWidgetProvider
+import java.io.File
 
-
-class PylonsWidgetProvider : AppWidgetProvider() {
-
-//    fun updateAppWidget(
-//        context: Context, appWidgetManager: AppWidgetManager,
-//        appWidgetId: Int
+class PylonsWidgetProvider : HomeWidgetProvider() {
+//    override fun onUpdate(
+//        context: Context,
+//        appWidgetManager: AppWidgetManager,
+//        appWidgetIds: IntArray,
+//        widgetData: SharedPreferences
 //    ) {
+//        appWidgetIds.forEach { widgetId ->
+//            try {
+//                val views = RemoteViews(context.packageName, R.layout.example_layout).apply {
+//                    val file = File(widgetData.getString("image", "").toString());
+//                    val bitmap: Bitmap = BitmapFactory.decodeFile(file.path)
+//                    setImageViewBitmap(R.id.imageView, bitmap)
+//                }
+//                appWidgetManager.updateAppWidget(widgetId, views)
 //
-//        val views = RemoteViews(context.packageName, R.layout.pylons_widget_layout)
-//
-//        appWidgetManager.updateAppWidget(appWidgetId, views)
-//    }
-
-
-    override fun onReceive(context: Context?, intent: Intent) {
-        val mgr = AppWidgetManager.getInstance(context)
-//        if (intent.action == TOAST_ACTION) {
-//            val appWidgetId = intent.getIntExtra(
-//                AppWidgetManager.EXTRA_APPWIDGET_ID,
-//                AppWidgetManager.INVALID_APPWIDGET_ID
-//            )
-//            val viewIndex = intent.getIntExtra(EXTRA_ITEM, 0)
+//            } catch (e: Exception){
+//                println(e)
+//            }
 //        }
-        super.onReceive(context, intent)
-    }
+//    }
 
 
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
+        appWidgetIds: IntArray,
+        widgetData: SharedPreferences
     ) {
-//        for (appWidgetId in appWidgetIds) {
-//            updateAppWidget(context, appWidgetManager, appWidgetId)
-//        }
-//        appWidgetIds.forEach { appWidgetId ->
-//
-//            val intent = Intent(context, PylonsWidgetService::class.java).apply {
-//                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-//                data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
-//            }
-//            val views = RemoteViews(context.packageName, R.layout.pylons_widget_layout).apply {
-//                setRemoteAdapter(R.id.grid_view, intent)
-//
-//                setEmptyView(R.id.grid_view, R.id.empty_view)
-//            }
-//
-//            appWidgetManager.updateAppWidget(appWidgetId, views)
-//
-//        }
-//
-//        super.onUpdate(context, appWidgetManager, appWidgetIds)
-//    }
-        for (i in appWidgetIds) {
-            // Here we setup the intent which points to the StackViewService which will
-            // provide the views for this collection.
-            val intent = Intent(context, PylonsWidgetService::class.java)
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i])
-            // When intents are compared, the extras are ignored, so we need to embed the extras
-            // into the data so that the extras will not be ignored.
-            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)))
-            val rv = RemoteViews(context.packageName, R.layout.pylons_widget_layout)
-            rv.setRemoteAdapter(R.id.grid_view, intent)
-            // The empty view is displayed when the collection has no items. It should be a sibling
-            // of the collection view.
-            rv.setEmptyView(R.id.grid_view, R.id.empty_view);
-            // Here we setup the a pending intent template. Individuals items of a collection
-            // cannot setup their own pending intents, instead, the collection as a whole can
-            // setup a pending intent template, and the individual items can set a fillInIntent
-            // to create unique before on an item to item basis.
+        appWidgetIds.forEach { widgetId ->
 
-            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 
-            appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
+            try {
+                val views = RemoteViews(context.packageName, R.layout.pylons_widget_layout).apply {
+
+                    println("Widget data got")
+                    println(widgetData.getString("image", ""))
+
+
+
+
+                    println("Jawad ${Uri.parse(widgetData.getString("image", ""))}")
+
+
+//                val imageLayout = RemoteViews(context.packageName, R.layout.image_layout);
+//                imageLayout.setImageViewUri(R.id.imageView, Uri.parse(widgetData.getString("image", "")))
+
+
+//                addView(R.id.widget_container, imageLayout)
+
+                    val file = File(widgetData.getString("image", "").toString());
+
+//                    val uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", file)
+
+
+                    val bitmap: Bitmap = BitmapFactory.decodeFile(file.path)
+//                    setImageViewResource(R.id.imageView, R.drawable.test_image)
+
+
+                    println(file.exists())
+
+                    setImageViewBitmap(R.id.imageView, bitmap)
+
+//                    setImageViewUri(R.id.imageView, uri)
+
+//                    setImageViewUri(R.id.imageView, Uri.parse(widgetData.getString("image", "")))
+
+
+//                // Open App on Widget Click
+                    val pendingIntent = HomeWidgetLaunchIntent.getActivity(
+                        context,
+                        MainActivity::class.java
+                    )
+                    setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+//
+//                // Swap Title Text by calling Dart Code in the Background
+//                setTextViewText(R.id.widget_title, widgetData.getString("title", null)
+//                        ?: "No Title Set")
+                    val backgroundIntent = HomeWidgetBackgroundIntent.getBroadcast(
+                        context,
+                        Uri.parse("homeWidgetExample://titleClicked")
+                    )
+                    setOnClickPendingIntent(R.id.imageView, backgroundIntent)
+//
+//                val message = widgetData.getString("message", null)
+//                setTextViewText(R.id.widget_message, message
+//                        ?: "No Message Set")
+//                // Detect App opened via Click inside Flutter
+//                val pendingIntentWithData = HomeWidgetLaunchIntent.getActivity(
+//                        context,
+//                        MainActivity::class.java,
+//                        Uri.parse("homeWidgetExample://message?message=$message"))
+//                setOnClickPendingIntent(R.id.widget_message, pendingIntentWithData)
+                }
+
+                appWidgetManager.updateAppWidget(widgetId, views)
+
+            } catch (e: Exception) {
+                println(e)
+            }
         }
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
 
-
-
 }
-
 
