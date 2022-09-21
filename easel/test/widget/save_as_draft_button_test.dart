@@ -18,7 +18,7 @@ import '../mock/mock_audio_imp.dart';
 import '../mock/mock_constants.dart';
 import '../mock/mock_file_utils.dart';
 import '../mock/mock_repository.dart';
-import '../mock/mock_video_playerock/media_info.mocks.dart';
+import '../mock/mock_video_player.dart';
 
 void main() {
   final repository = MockRepositoryImp();
