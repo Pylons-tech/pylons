@@ -13,6 +13,7 @@ import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 //import for AppStoreProductDetails
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/no_internet.dart';
@@ -44,6 +45,10 @@ import 'package:pylons_wallet/services/third_party_services/remote_notifications
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
+import 'package:pylons_wallet/pages/widget_screen/widget_screen.dart';
+
+
+
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
@@ -65,6 +70,8 @@ class _PylonsAppState extends State<PylonsApp> {
     InAppPurchase.instance.purchaseStream.listen(onEvent);
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -85,6 +92,7 @@ class _PylonsAppState extends State<PylonsApp> {
                 routes: {
                   '/': (context) => const RoutingPage(),
                   RouteUtil.ROUTE_HOME: (context) => const HomeScreen(),
+                  RouteUtil.ROUTE_WIDGET: (context) => const WidgetNFTPickerScreen(),
                   RouteUtil.ROUTE_APP_UPDATE: (context) => const UpdateApp(),
                   RouteUtil.ROUTE_SETTINGS: (context) => const SettingScreen(),
                   RouteUtil.ROUTE_LEGAL: (context) => const LegalScreen(),
@@ -115,6 +123,8 @@ class _PylonsAppState extends State<PylonsApp> {
             }),
     );
   }
+
+
 
   Future<void> checkInternetConnectivity() async {
     final repository = GetIt.I.get<Repository>();
