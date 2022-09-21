@@ -16,6 +16,9 @@ import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/no_internet.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
+import 'package:pylons_wallet/model/nft.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/owner_view.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer_full_screen.dart';
 import 'package:pylons_wallet/pages/home/home.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
@@ -69,53 +72,71 @@ class _PylonsAppState extends State<PylonsApp> {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        minTextAdapt: true,
-        builder: () => ChangeNotifierProvider.value(
-            value: sl<UserInfoProvider>(),
-            builder: (context, value) {
-              return MaterialApp(
-                // key: UniqueKey(),
-                navigatorKey: navigatorKey,
-                debugShowCheckedModeBanner: false,
-                localizationsDelegates: context.localizationDelegates,
-                supportedLocales: context.supportedLocales,
-                locale: context.locale,
-                title: "Pylons Wallet",
-                theme: PylonsAppTheme().buildAppTheme(),
-                initialRoute: '/',
-                routes: {
-                  '/': (context) => const RoutingPage(),
-                  RouteUtil.ROUTE_HOME: (context) => const HomeScreen(),
-                  RouteUtil.ROUTE_APP_UPDATE: (context) => const UpdateApp(),
-                  RouteUtil.ROUTE_SETTINGS: (context) => const SettingScreen(),
-                  RouteUtil.ROUTE_LEGAL: (context) => const LegalScreen(),
-                  RouteUtil.ROUTE_RECOVERY: (context) => const RecoveryScreen(),
-                  RouteUtil.ROUTE_GENERAL: (context) => const GeneralScreen(),
-                  RouteUtil.ROUTE_SECURITY: (context) => const SecurityScreen(),
-                  RouteUtil.ROUTE_PAYMENT: (context) => const PaymentScreen(),
-                  RouteUtil.ROUTE_PRACTICE_TEST: (context) => const PracticeTest(),
-                  RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE: (context) => const ViewRecoveryScreen(),
-                  RouteUtil.ROUTE_TRANSACTION_HISTORY: (context) => const TransactionHistoryScreen(),
-                  RouteUtil.ROUTE_ONBOARDING: (context) => const PresentingOnboardPage(),
-                  RouteUtil.ROUTE_CREATE_WALLET: (context) => const CreateWalletScreen(),
-                  RouteUtil.ROUTE_RESTORE_WALLET: (context) => const RestoreWalletScreen(),
-                  RouteUtil.ROUTE_ADD_PYLON: (context) => const AddPylonScreen(),
-                  RouteUtil.ROUTE_TRANSACTION_DETAIL: (context) => const TransactionDetailsScreen(),
-                  RouteUtil.ROUTE_MESSAGE: (context) => const MessagesScreen(),
-                  RouteUtil.ROUTE_PDF_FULL_SCREEN: (context) => const PdfViewerFullScreen(),
-                  RouteUtil.ROUTE_FAILURE: (context) => const LocalTransactionsScreen(),
-                  RouteUtil.ROUTE_LOCAL_TRX_DETAILS: (context) => const LocalTransactionDetailScreen(),
-                },
-                builder: (context, widget) {
-                  ScreenUtil.setContext(context);
+      minTextAdapt: true,
+      builder: () => ChangeNotifierProvider.value(
+          value: sl<UserInfoProvider>(),
+          builder: (context, value) {
+            return MaterialApp(
+              // key: UniqueKey(),
+              navigatorKey: navigatorKey,
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              title: "Pylons Wallet",
+              theme: PylonsAppTheme().buildAppTheme(),
+              initialRoute: '/',
+              routes: {
+                '/': (context) => const RoutingPage(),
+                RouteUtil.ROUTE_HOME: (context) => const HomeScreen(),
+                RouteUtil.ROUTE_APP_UPDATE: (context) => const UpdateApp(),
+                RouteUtil.ROUTE_SETTINGS: (context) => const SettingScreen(),
+                RouteUtil.ROUTE_LEGAL: (context) => const LegalScreen(),
+                RouteUtil.ROUTE_RECOVERY: (context) => const RecoveryScreen(),
+                RouteUtil.ROUTE_GENERAL: (context) => const GeneralScreen(),
+                RouteUtil.ROUTE_SECURITY: (context) => const SecurityScreen(),
+                RouteUtil.ROUTE_PAYMENT: (context) => const PaymentScreen(),
+                RouteUtil.ROUTE_PRACTICE_TEST: (context) => const PracticeTest(),
+                RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE: (context) => const ViewRecoveryScreen(),
+                RouteUtil.ROUTE_TRANSACTION_HISTORY: (context) => const TransactionHistoryScreen(),
+                RouteUtil.ROUTE_ONBOARDING: (context) => const PresentingOnboardPage(),
+                RouteUtil.ROUTE_CREATE_WALLET: (context) => const CreateWalletScreen(),
+                RouteUtil.ROUTE_RESTORE_WALLET: (context) => const RestoreWalletScreen(),
+                RouteUtil.ROUTE_ADD_PYLON: (context) => const AddPylonScreen(),
+                RouteUtil.ROUTE_TRANSACTION_DETAIL: (context) => const TransactionDetailsScreen(),
+                RouteUtil.ROUTE_MESSAGE: (context) => const MessagesScreen(),
+                RouteUtil.ROUTE_PDF_FULL_SCREEN: (context) => const PdfViewerFullScreen(),
+                RouteUtil.ROUTE_FAILURE: (context) => const LocalTransactionsScreen(),
+                RouteUtil.ROUTE_LOCAL_TRX_DETAILS: (context) => const LocalTransactionDetailScreen(),
+                RouteUtil.ROUTE_OWNER_VIEW: (context) {
+                  if (ModalRoute.of(context) == null) {
+                    return const SizedBox();
+                  }
 
-                  return MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                    child: widget ?? Container(),
-                  );
-                },
-              );
-            }),
+                  if (ModalRoute.of(context)?.settings.arguments == null) {
+                    return const SizedBox();
+                  }
+
+                  if (ModalRoute.of(context)?.settings.arguments is NFT) {
+                    final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
+                    final viewModel = sl<OwnerViewViewModel>();
+                    viewModel.nft = nft;
+                    return  OwnerView(ownerViewViewModel: viewModel,);
+                  }
+
+                  return const SizedBox();
+                }
+              },
+              builder: (context, widget) {
+                ScreenUtil.setContext(context);
+
+                return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                  child: widget ?? Container(),
+                );
+              },
+            );
+          }),
     );
   }
 

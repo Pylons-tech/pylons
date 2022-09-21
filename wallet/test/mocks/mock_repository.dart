@@ -397,26 +397,22 @@ class MockRepository extends Repository {
 
   @override
   Future<Either<Failure, void>> countAView({required String recipeId, required String cookBookID, required String walletAddress}) {
-    // TODO: implement countAView
-    throw UnimplementedError();
+    return Future.value(const Right(null));
   }
 
   @override
   Future<Either<Failure, int>> getLikesCount({required String recipeId, required String cookBookID}) {
-    // TODO: implement getLikesCount
-    throw UnimplementedError();
+    return Future.value(const Right(4));
   }
 
   @override
   Future<Either<Failure, int>> getViewsCount({required String recipeId, required String cookBookID}) {
-    // TODO: implement getViewsCount
-    throw UnimplementedError();
+    return Future.value(const Right(6));
   }
 
   @override
   Future<Either<Failure, bool>> ifLikedByMe({required String recipeId, required String cookBookID, required String walletAddress}) {
-    // TODO: implement ifLikedByMe
-    throw UnimplementedError();
+    return Future.value(const Right(true));
   }
 
   @override
@@ -456,10 +452,12 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory(
-      {required String itemId, required String cookBookId}) {
-    // TODO: implement getNftOwnershipHistory
-    throw UnimplementedError();
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String itemId, required String cookBookId}) {
+    return Future.value(
+      Right(
+        [MOCK_NFT_OWNERSHIP_HISTORY],
+      ),
+    );
   }
 
   @override

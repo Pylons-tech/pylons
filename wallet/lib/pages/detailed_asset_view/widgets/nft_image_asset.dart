@@ -30,12 +30,8 @@ class NftImageWidget extends StatelessWidget {
             decoration: BoxDecoration(
               image: DecorationImage(
                 alignment: FractionalOffset.center,
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(opacity),
-                  BlendMode.srcOver,
-                ),
                 image: imageProvider,
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.fitWidth,
               ),
             ),
           );
