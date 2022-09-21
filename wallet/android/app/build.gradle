@@ -36,6 +36,7 @@ android {
         targetSdkVersion 32
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled = false
     }
 
     signingConfigs {
@@ -87,3 +88,4 @@ android {
 flutter {
     source '../..'
 }
+
