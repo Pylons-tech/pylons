@@ -12,8 +12,6 @@ class NftImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = ScreenSizeUtil(context);
-
     return Padding(
       padding: EdgeInsets.zero,
       child: CachedNetworkImage(
