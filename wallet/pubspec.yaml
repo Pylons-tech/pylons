@@ -123,6 +123,8 @@ dependencies:
   qr_flutter: 4.0.0
   image: 3.2.0
   mocktail: ^0.3.0
+  home_widget: ^0.1.6
+  file_picker: ^4.6.1
 
 
 
