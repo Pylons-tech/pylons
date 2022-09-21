@@ -1,5 +1,6 @@
 package tech.pylons.wallet
 
+import android.content.IntentFilter
 import io.flutter.embedding.android.FlutterActivity
 //import io.flutter.embedding.android.FlutterView
 //import io.flutter.embedding.engine.FlutterEngine
@@ -17,6 +18,12 @@ import io.flutter.embedding.android.FlutterActivity
 
 
 class MainActivity: FlutterActivity() {
+
+    //override fun onCreate() {
+//        val receiver = PylonsWidgetProvider()
+//        val filter = IntentFilter("android.appwidget.action.APPWIDGET_UPDATE")
+//        registerReceiver(receiver, filter)
+    //}
 
 //    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
 //        super.configureFlutterEngine(flutterEngine)
