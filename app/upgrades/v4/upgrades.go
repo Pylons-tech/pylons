@@ -1,9 +1,13 @@
 package v4
 
 import (
+	"fmt"
+
 	"cosmossdk.io/math"
+	pylonskeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -69,6 +73,7 @@ func CreateUpgradeHandler(
 	bankKeeper bankkeeper.Keeper,
 	accKeeper *authkeeper.AccountKeeper,
 	staking *stakingkeeper.Keeper,
+	pylons *pylonskeeper.Keeper,
 ) upgradetypes.UpgradeHandler {
 	return func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 		// logger := ctx.Logger()
@@ -79,6 +84,7 @@ func CreateUpgradeHandler(
 			BurnToken(ctx, types.StakingCoinDenom, accKeeper, &bankBaseKeeper, staking)
 			BurnToken(ctx, types.StripeCoinDenom, accKeeper, &bankBaseKeeper, staking)
 			MintUbedrockForInitialAccount(ctx, &bankBaseKeeper, staking)
+			CleanUplyons(ctx, &bankBaseKeeper, pylons)
 		}
 		return mm.RunMigrations(ctx, configurator, fromVM)
 	}
@@ -207,4 +213,60 @@ func GetbackCoinFromVal(ctx sdk.Context, accAddr sdk.AccAddress, staking *stakin
 			panic(err)
 		}
 	}
+}
+
+func CleanUplyons(ctx sdk.Context, bank *bankkeeper.BaseKeeper, pylons *pylonskeeper.Keeper) error {
+	accs := bank.GetAccountsBalances(ctx)
+	for _, acc := range accs {
+		balance := acc.Coins.AmountOf(types.PylonsCoinDenom)
+		// Check if upylons token amount GT 0
+		if balance.GT(math.ZeroInt()) {
+			amount := sdk.NewCoin(types.PylonsCoinDenom, balance)
+			// Send upylons token to module
+			err := bank.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(acc.Address), types.PaymentsProcessorName, sdk.NewCoins(amount))
+			if err != nil {
+				panic(err)
+			}
+			// Burn upylons token in module
+			err = bank.BurnCoins(ctx, types.PaymentsProcessorName, sdk.NewCoins(amount))
+			if err != nil {
+				panic(err)
+			}
+		}
+	}
+	// Mint valid upylons
+	err := MintValidUpylons(ctx, pylons)
+	if err != nil {
+		panic(fmt.Errorf("mint valid upylons fail: %w", err))
+	}
+	return nil
+}
+
+// Mint uplyons for address with valid (with IAP))
+func MintValidUpylons(ctx sdk.Context, pylons *pylonskeeper.Keeper) error {
+	for _, googleIAPOder := range pylons.GetAllGoogleIAPOrder(ctx) {
+		amountUpylons := GetAmountOfUpylonsMintedByProductID(ctx, googleIAPOder)
+		addr, _ := sdk.AccAddressFromBech32(googleIAPOder.Creator)
+
+		amt := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amountUpylons))
+		err := pylons.MintCoinsToAddr(ctx, addr, amt)
+		if err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+	}
+	return nil
+}
+
+// Get amount of upylons was minted by product id
+func GetAmountOfUpylonsMintedByProductID(ctx sdk.Context, googleIAPOder types.GoogleInAppPurchaseOrder) math.Int {
+	// Looping defaultCoinIssuers to get amount upylons by product id
+	for _, ci := range types.DefaultCoinIssuers {
+		for _, p := range ci.Packages {
+			if p.ProductId == googleIAPOder.ProductId && ci.CoinDenom == types.PylonsCoinDenom {
+				amount := p.Amount
+				return amount
+			}
+		}
+	}
+	return math.ZeroInt()
 }
