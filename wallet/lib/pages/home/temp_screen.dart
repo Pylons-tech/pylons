@@ -72,9 +72,10 @@ class TempScreen extends StatelessWidget {
   // And for each voucher you generate it's {event_name: event, ticket_level:, voucher_type_count}, modify: incrmement voucher count, output: voucher_type}
   // Does that make sense?
 
-  Future<bool> createMyRecipeForSubEvents({required String cookbookId, required Item inputItem}) async {
+  Future<bool> createMyRecipeForSubEvents({required Item inputItem}) async {
     final loading = Loading()..showLoading();
 
+    final cookbookId = await createMyCookbook();
     final stringsInputs = inputItem.strings.map((e) => StringInputParam(key: e.key, value: e.value));
     log("stringsInputs: $stringsInputs");
     final recipeId = await autoGenerateEaselId();
@@ -104,7 +105,7 @@ class TempScreen extends StatelessWidget {
         enabled: true,
         extraInfo: kExtraInfo);
 
-    log("json: ${recipe.toProto3Json()}");
+    log("json createMyRecipeForSubEvents: ${recipe.toProto3Json()}");
 
     final walletStore = GetIt.I.get<WalletsStore>();
 
@@ -215,8 +216,8 @@ class TempScreen extends StatelessWidget {
 
     //TODO: PASTE THE COOKBOOK AND RECIPE ID OF THE CREATED RECIPE HERE
 
-    const cookBookId = "Easel_CookBook_auto_cookbook_2022_09_05_143014_526";
-    const recipeId = "Easel_Recipe_auto_recipe_2022_09_05_143022_179";
+    const cookBookId = "Easel_CookBook_auto_cookbook_2022_09_14_225118_332";
+    const recipeId = "Easel_Recipe_auto_recipe_2022_09_14_225137_883";
     const creator = "newCreator";
 
     final jsonExecuteRecipe = {
@@ -239,7 +240,7 @@ class TempScreen extends StatelessWidget {
     final items = await walletStore.getItemsByOwner(walletStore.getWallets().value.last.publicAddress);
 
     loading.dismiss();
-    return createMyRecipeForSubEvents(cookbookId: cookBookId, inputItem: items.first);
+    return createMyRecipeForSubEvents(inputItem: items.first);
   }
 
   @override

@@ -270,6 +270,27 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               ),
             ),
             Positioned(
+              top: 0.062.sh,
+              right: 0.22.sw,
+              child: InkResponse(
+                onTap: () async {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const TempScreen()));
+                },
+                child: Stack(
+                  children: [
+                    SvgPicture.asset(
+                      SVGUtil.MESSAGE_ENVELOPE,
+                      height: 20.h,
+                      width: 20.w,
+                      fit: BoxFit.fill,
+                      color: provider.isBannerDark() ? Colors.white : Colors.black,
+                    ),
+                    if (provider.showBadge) Positioned(right: 0.w, top: 0.h, child: buildBadge()),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
               top: 0.06.sh,
               left: 0.09.sw,
               child: InkResponse(
