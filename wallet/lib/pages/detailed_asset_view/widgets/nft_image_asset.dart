@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
-import 'package:pylons_wallet/utils/screen_size_utils.dart';
 
 class NftImageWidget extends StatelessWidget {
   final String url;
