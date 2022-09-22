@@ -36,6 +36,24 @@ class PylonsWidgetProvider : HomeWidgetProvider() {
 //        }
 //    }
 
+    override fun onEnabled(context: Context?) {
+        super.onEnabled(context)
+
+        print("enabled");
+        val views = RemoteViews(context?.packageName ?: null, R.layout.pylons_widget_layout);
+
+        val pendingIntent = context?.let {
+            print("pending intent called");
+            HomeWidgetLaunchIntent.getActivity(
+                it,
+                MainActivity::class.java
+            )
+        }
+        views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
+        print("ran correctly");
+
+    }
+
 
     override fun onUpdate(
         context: Context,

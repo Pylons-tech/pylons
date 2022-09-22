@@ -161,7 +161,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
-        <receiver android:name="tech.pylons.wallet.MainActivity$PylonsWidgetProvider"
+        <receiver android:name="PylonsWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

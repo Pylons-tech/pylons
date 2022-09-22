@@ -55,6 +55,14 @@ android {
             signingConfig signingConfigs.debug
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            multiDexEnabled false
+            minifyEnabled true
+        }
+        debug {
+            multiDexEnabled false
+        }
+        profile {
+            multiDexEnabled false
         }
     }
 
@@ -63,11 +71,13 @@ android {
     productFlavors {
         prod {
             dimension "default"
+            multiDexEnabled false
         }
 
         development {
             dimension "default"
             applicationIdSuffix ".develop"
+            multiDexEnabled false
 
         }
     }
