@@ -28,6 +28,7 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 		Version:      msg.Version,
 		SupportEmail: msg.SupportEmail,
 		Enabled:      msg.Enabled,
+		RecipeLimit:  make(map[string]*types.Limit),
 	}
 
 	k.SetCookbook(

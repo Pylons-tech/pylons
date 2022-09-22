@@ -366,12 +366,14 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 					Name:                 "TestPayment",
 				})
 			} else if tc.updateEntriesRecipe {
-				tc.recipe.Entries.ItemOutputs = []types.ItemOutput{
-					{
-						Quantity:     10,
-						AmountMinted: 10,
-					},
-				}
+				// tc.recipe.Entries.ItemOutputs = []types.ItemOutput{
+				// 	{
+				// 		Quantity:     10,
+				// 		AmountMinted: 10,
+				// 	},
+				// }
+				tc.recipe.AmountMinted = 10
+				tc.recipe.Quantity = 10
 			} else {
 				tc.recipe.Entries.ItemOutputs = nil
 			}

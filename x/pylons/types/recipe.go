@@ -1,12 +1,9 @@
 package types
 
 import (
-	"errors"
-
-	"github.com/rogpeppe/go-internal/semver"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/rogpeppe/go-internal/semver"
 )
 
 // RecipeModified checks if any field of recipe except creator (transfer of ownership is always allowed)
@@ -46,7 +43,6 @@ func RecipeModified(original, updated Recipe) (bool, error) {
 	if !ItemInputsEqual(original.ItemInputs, updated.ItemInputs) {
 		modified = true
 	}
-
 	equal, err := EntriesListEqual(original.Entries, updated.Entries)
 	if err != nil {
 		return modified, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
@@ -147,20 +143,6 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 			updatedItem := updated.ItemOutputs[i]
 
 			if originalItem.Id != updatedItem.Id {
-				return false, nil
-			}
-
-			// if AmountMinted is modified, return error as this is
-			if originalItem.AmountMinted != updatedItem.AmountMinted {
-				return false, errors.New("cannot modify AmountMinted field of a recipe")
-			}
-
-			if originalItem.Quantity != updatedItem.Quantity {
-				// User may modify quantity unless updatedItem.Quantity < updatedItem.AmountMinted
-				// return error if true
-				if updatedItem.Quantity < updatedItem.AmountMinted {
-					return false, errors.New("cannot set Quantity to be less than AmountMinted")
-				}
 				return false, nil
 			}
 
@@ -295,20 +277,6 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 			updatedItem := updated.ItemModifyOutputs[i]
 
 			if originalItem.Id != updatedItem.Id {
-				return false, nil
-			}
-
-			// if AmountMinted is modified, return error as this is
-			if originalItem.AmountMinted != updatedItem.AmountMinted {
-				return false, errors.New("cannot modify AmountMinted field of a recipe")
-			}
-
-			if originalItem.Quantity != updatedItem.Quantity {
-				// User may modify quantity unless updatedItem.Quantity < updatedItem.AmountMinted
-				// return error if true
-				if updatedItem.Quantity < updatedItem.AmountMinted {
-					return false, errors.New("cannot set Quantity to be less than AmountMinted")
-				}
 				return false, nil
 			}
 

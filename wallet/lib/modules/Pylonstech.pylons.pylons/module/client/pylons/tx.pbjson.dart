@@ -266,11 +266,12 @@ const MsgExecuteRecipeResponse$json = const {
   '1': 'MsgExecuteRecipeResponse',
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'tx_time', '3': 2, '4': 1, '5': 3, '10': 'txTime'},
   ],
 };
 
 /// Descriptor for `MsgExecuteRecipeResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List msgExecuteRecipeResponseDescriptor = $convert.base64Decode('ChhNc2dFeGVjdXRlUmVjaXBlUmVzcG9uc2USDgoCaWQYASABKAlSAmlk');
+final $typed_data.Uint8List msgExecuteRecipeResponseDescriptor = $convert.base64Decode('ChhNc2dFeGVjdXRlUmVjaXBlUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhcKB3R4X3RpbWUYAiABKANSBnR4VGltZQ==');
 @$core.Deprecated('Use msgSetItemStringDescriptor instead')
 const MsgSetItemString$json = const {
   '1': 'MsgSetItemString',
@@ -310,11 +311,13 @@ const MsgCreateRecipe$json = const {
     const {'1': 'cost_per_block', '3': 12, '4': 1, '5': 11, '6': '.cosmos.base.v1beta1.Coin', '8': const {}, '10': 'costPerBlock'},
     const {'1': 'enabled', '3': 13, '4': 1, '5': 8, '10': 'enabled'},
     const {'1': 'extra_info', '3': 14, '4': 1, '5': 9, '10': 'extraInfo'},
+    const {'1': 'quantity', '3': 15, '4': 1, '5': 4, '8': const {}, '10': 'quantity'},
+    const {'1': 'amount_minted', '3': 16, '4': 1, '5': 4, '8': const {}, '10': 'amountMinted'},
   ],
 };
 
 /// Descriptor for `MsgCreateRecipe`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List msgCreateRecipeDescriptor = $convert.base64Decode('Cg9Nc2dDcmVhdGVSZWNpcGUSGAoHY3JlYXRvchgBIAEoCVIHY3JlYXRvchIfCgtjb29rYm9va19pZBgCIAEoCVIKY29va2Jvb2tJZBIOCgJpZBgDIAEoCVICaWQSEgoEbmFtZRgEIAEoCVIEbmFtZRIgCgtkZXNjcmlwdGlvbhgFIAEoCVILZGVzY3JpcHRpb24SGAoHdmVyc2lvbhgGIAEoCVIHdmVyc2lvbhI/Cgtjb2luX2lucHV0cxgHIAMoCzIYLnB5bG9ucy5weWxvbnMuQ29pbklucHV0QgTI3h8AUgpjb2luSW5wdXRzEj8KC2l0ZW1faW5wdXRzGAggAygLMhgucHlsb25zLnB5bG9ucy5JdGVtSW5wdXRCBMjeHwBSCml0ZW1JbnB1dHMSOgoHZW50cmllcxgJIAEoCzIaLnB5bG9ucy5weWxvbnMuRW50cmllc0xpc3RCBMjeHwBSB2VudHJpZXMSPgoHb3V0cHV0cxgKIAMoCzIeLnB5bG9ucy5weWxvbnMuV2VpZ2h0ZWRPdXRwdXRzQgTI3h8AUgdvdXRwdXRzEiUKDmJsb2NrX2ludGVydmFsGAsgASgDUg1ibG9ja0ludGVydmFsEkUKDmNvc3RfcGVyX2Jsb2NrGAwgASgLMhkuY29zbW9zLmJhc2UudjFiZXRhMS5Db2luQgTI3h8AUgxjb3N0UGVyQmxvY2sSGAoHZW5hYmxlZBgNIAEoCFIHZW5hYmxlZBIdCgpleHRyYV9pbmZvGA4gASgJUglleHRyYUluZm8=');
+final $typed_data.Uint8List msgCreateRecipeDescriptor = $convert.base64Decode('Cg9Nc2dDcmVhdGVSZWNpcGUSGAoHY3JlYXRvchgBIAEoCVIHY3JlYXRvchIfCgtjb29rYm9va19pZBgCIAEoCVIKY29va2Jvb2tJZBIOCgJpZBgDIAEoCVICaWQSEgoEbmFtZRgEIAEoCVIEbmFtZRIgCgtkZXNjcmlwdGlvbhgFIAEoCVILZGVzY3JpcHRpb24SGAoHdmVyc2lvbhgGIAEoCVIHdmVyc2lvbhI/Cgtjb2luX2lucHV0cxgHIAMoCzIYLnB5bG9ucy5weWxvbnMuQ29pbklucHV0QgTI3h8AUgpjb2luSW5wdXRzEj8KC2l0ZW1faW5wdXRzGAggAygLMhgucHlsb25zLnB5bG9ucy5JdGVtSW5wdXRCBMjeHwBSCml0ZW1JbnB1dHMSOgoHZW50cmllcxgJIAEoCzIaLnB5bG9ucy5weWxvbnMuRW50cmllc0xpc3RCBMjeHwBSB2VudHJpZXMSPgoHb3V0cHV0cxgKIAMoCzIeLnB5bG9ucy5weWxvbnMuV2VpZ2h0ZWRPdXRwdXRzQgTI3h8AUgdvdXRwdXRzEiUKDmJsb2NrX2ludGVydmFsGAsgASgDUg1ibG9ja0ludGVydmFsEkUKDmNvc3RfcGVyX2Jsb2NrGAwgASgLMhkuY29zbW9zLmJhc2UudjFiZXRhMS5Db2luQgTI3h8AUgxjb3N0UGVyQmxvY2sSGAoHZW5hYmxlZBgNIAEoCFIHZW5hYmxlZBIdCgpleHRyYV9pbmZvGA4gASgJUglleHRyYUluZm8SOQoIcXVhbnRpdHkYDyABKARCHereHxlxdWFudGl0eSxvbWl0ZW1wdHksc3RyaW5nUghxdWFudGl0eRJHCg1hbW91bnRfbWludGVkGBAgASgEQiLq3h8eYW1vdW50X21pbnRlZCxvbWl0ZW1wdHksc3RyaW5nUgxhbW91bnRNaW50ZWQ=');
 @$core.Deprecated('Use msgCreateRecipeResponseDescriptor instead')
 const MsgCreateRecipeResponse$json = const {
   '1': 'MsgCreateRecipeResponse',
@@ -340,11 +343,13 @@ const MsgUpdateRecipe$json = const {
     const {'1': 'cost_per_block', '3': 12, '4': 1, '5': 11, '6': '.cosmos.base.v1beta1.Coin', '8': const {}, '10': 'costPerBlock'},
     const {'1': 'enabled', '3': 13, '4': 1, '5': 8, '10': 'enabled'},
     const {'1': 'extra_info', '3': 14, '4': 1, '5': 9, '10': 'extraInfo'},
+    const {'1': 'quantity', '3': 15, '4': 1, '5': 4, '8': const {}, '10': 'quantity'},
+    const {'1': 'amount_minted', '3': 16, '4': 1, '5': 4, '8': const {}, '10': 'amountMinted'},
   ],
 };
 
 /// Descriptor for `MsgUpdateRecipe`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List msgUpdateRecipeDescriptor = $convert.base64Decode('Cg9Nc2dVcGRhdGVSZWNpcGUSGAoHY3JlYXRvchgBIAEoCVIHY3JlYXRvchIfCgtjb29rYm9va19pZBgCIAEoCVIKY29va2Jvb2tJZBIOCgJpZBgDIAEoCVICaWQSEgoEbmFtZRgEIAEoCVIEbmFtZRIgCgtkZXNjcmlwdGlvbhgFIAEoCVILZGVzY3JpcHRpb24SGAoHdmVyc2lvbhgGIAEoCVIHdmVyc2lvbhI/Cgtjb2luX2lucHV0cxgHIAMoCzIYLnB5bG9ucy5weWxvbnMuQ29pbklucHV0QgTI3h8AUgpjb2luSW5wdXRzEj8KC2l0ZW1faW5wdXRzGAggAygLMhgucHlsb25zLnB5bG9ucy5JdGVtSW5wdXRCBMjeHwBSCml0ZW1JbnB1dHMSOgoHZW50cmllcxgJIAEoCzIaLnB5bG9ucy5weWxvbnMuRW50cmllc0xpc3RCBMjeHwBSB2VudHJpZXMSPgoHb3V0cHV0cxgKIAMoCzIeLnB5bG9ucy5weWxvbnMuV2VpZ2h0ZWRPdXRwdXRzQgTI3h8AUgdvdXRwdXRzEiUKDmJsb2NrX2ludGVydmFsGAsgASgDUg1ibG9ja0ludGVydmFsEkUKDmNvc3RfcGVyX2Jsb2NrGAwgASgLMhkuY29zbW9zLmJhc2UudjFiZXRhMS5Db2luQgTI3h8AUgxjb3N0UGVyQmxvY2sSGAoHZW5hYmxlZBgNIAEoCFIHZW5hYmxlZBIdCgpleHRyYV9pbmZvGA4gASgJUglleHRyYUluZm8=');
+final $typed_data.Uint8List msgUpdateRecipeDescriptor = $convert.base64Decode('Cg9Nc2dVcGRhdGVSZWNpcGUSGAoHY3JlYXRvchgBIAEoCVIHY3JlYXRvchIfCgtjb29rYm9va19pZBgCIAEoCVIKY29va2Jvb2tJZBIOCgJpZBgDIAEoCVICaWQSEgoEbmFtZRgEIAEoCVIEbmFtZRIgCgtkZXNjcmlwdGlvbhgFIAEoCVILZGVzY3JpcHRpb24SGAoHdmVyc2lvbhgGIAEoCVIHdmVyc2lvbhI/Cgtjb2luX2lucHV0cxgHIAMoCzIYLnB5bG9ucy5weWxvbnMuQ29pbklucHV0QgTI3h8AUgpjb2luSW5wdXRzEj8KC2l0ZW1faW5wdXRzGAggAygLMhgucHlsb25zLnB5bG9ucy5JdGVtSW5wdXRCBMjeHwBSCml0ZW1JbnB1dHMSOgoHZW50cmllcxgJIAEoCzIaLnB5bG9ucy5weWxvbnMuRW50cmllc0xpc3RCBMjeHwBSB2VudHJpZXMSPgoHb3V0cHV0cxgKIAMoCzIeLnB5bG9ucy5weWxvbnMuV2VpZ2h0ZWRPdXRwdXRzQgTI3h8AUgdvdXRwdXRzEiUKDmJsb2NrX2ludGVydmFsGAsgASgDUg1ibG9ja0ludGVydmFsEkUKDmNvc3RfcGVyX2Jsb2NrGAwgASgLMhkuY29zbW9zLmJhc2UudjFiZXRhMS5Db2luQgTI3h8AUgxjb3N0UGVyQmxvY2sSGAoHZW5hYmxlZBgNIAEoCFIHZW5hYmxlZBIdCgpleHRyYV9pbmZvGA4gASgJUglleHRyYUluZm8SOQoIcXVhbnRpdHkYDyABKARCHereHxlxdWFudGl0eSxvbWl0ZW1wdHksc3RyaW5nUghxdWFudGl0eRJHCg1hbW91bnRfbWludGVkGBAgASgEQiLq3h8eYW1vdW50X21pbnRlZCxvbWl0ZW1wdHksc3RyaW5nUgxhbW91bnRNaW50ZWQ=');
 @$core.Deprecated('Use msgUpdateRecipeResponseDescriptor instead')
 const MsgUpdateRecipeResponse$json = const {
   '1': 'MsgUpdateRecipeResponse',

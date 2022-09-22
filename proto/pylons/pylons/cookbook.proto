@@ -16,4 +16,10 @@ message Cookbook {
   string version = 7; 
   string support_email = 8;
   bool enabled = 9;
+  map<string, limit> recipe_limit = 10;
+}
+message limit{
+  uint64 quantity = 1 [(gogoproto.jsontag) = "quantity,omitempty,string"];
+  uint64 amount_minted = 2 [(gogoproto.jsontag) = "amount_minted,omitempty,string"];
+
 }

@@ -10,8 +10,8 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/cosmos/base/v1beta1/coin.pb.dart' as $2;
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/item.pb.dart' as $3;
+import '../../cosmos/base/v1beta1/coin.pb.dart' as $2;
+import 'item.pb.dart' as $3;
 
 class DoubleInputParam extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DoubleInputParam', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
@@ -744,8 +744,6 @@ class ItemOutput extends $pb.GeneratedMessage {
     ..pc<$3.StringKeyValue>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mutableStrings', $pb.PbFieldType.PM, subBuilder: $3.StringKeyValue.create)
     ..pc<$2.Coin>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'transferFee', $pb.PbFieldType.PM, subBuilder: $2.Coin.create)
     ..aOS(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'tradePercentage')
-    ..a<$fixnum.Int64>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'quantity', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..a<$fixnum.Int64>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'amountMinted', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..aOB(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'tradeable')
     ..hasRequiredFields = false
   ;
@@ -759,8 +757,6 @@ class ItemOutput extends $pb.GeneratedMessage {
     $core.Iterable<$3.StringKeyValue>? mutableStrings,
     $core.Iterable<$2.Coin>? transferFee,
     $core.String? tradePercentage,
-    $fixnum.Int64? quantity,
-    $fixnum.Int64? amountMinted,
     $core.bool? tradeable,
   }) {
     final _result = create();
@@ -784,12 +780,6 @@ class ItemOutput extends $pb.GeneratedMessage {
     }
     if (tradePercentage != null) {
       _result.tradePercentage = tradePercentage;
-    }
-    if (quantity != null) {
-      _result.quantity = quantity;
-    }
-    if (amountMinted != null) {
-      _result.amountMinted = amountMinted;
     }
     if (tradeable != null) {
       _result.tradeable = tradeable;
@@ -850,30 +840,12 @@ class ItemOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   void clearTradePercentage() => clearField(7);
 
-  @$pb.TagNumber(8)
-  $fixnum.Int64 get quantity => $_getI64(7);
-  @$pb.TagNumber(8)
-  set quantity($fixnum.Int64 v) { $_setInt64(7, v); }
-  @$pb.TagNumber(8)
-  $core.bool hasQuantity() => $_has(7);
-  @$pb.TagNumber(8)
-  void clearQuantity() => clearField(8);
-
-  @$pb.TagNumber(9)
-  $fixnum.Int64 get amountMinted => $_getI64(8);
-  @$pb.TagNumber(9)
-  set amountMinted($fixnum.Int64 v) { $_setInt64(8, v); }
-  @$pb.TagNumber(9)
-  $core.bool hasAmountMinted() => $_has(8);
-  @$pb.TagNumber(9)
-  void clearAmountMinted() => clearField(9);
-
   @$pb.TagNumber(10)
-  $core.bool get tradeable => $_getBF(9);
+  $core.bool get tradeable => $_getBF(7);
   @$pb.TagNumber(10)
-  set tradeable($core.bool v) { $_setBool(9, v); }
+  set tradeable($core.bool v) { $_setBool(7, v); }
   @$pb.TagNumber(10)
-  $core.bool hasTradeable() => $_has(9);
+  $core.bool hasTradeable() => $_has(7);
   @$pb.TagNumber(10)
   void clearTradeable() => clearField(10);
 }
@@ -888,8 +860,6 @@ class ItemModifyOutput extends $pb.GeneratedMessage {
     ..pc<$3.StringKeyValue>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mutableStrings', $pb.PbFieldType.PM, subBuilder: $3.StringKeyValue.create)
     ..pc<$2.Coin>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'transferFee', $pb.PbFieldType.PM, subBuilder: $2.Coin.create)
     ..aOS(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'tradePercentage')
-    ..a<$fixnum.Int64>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'quantity', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..a<$fixnum.Int64>(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'amountMinted', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..aOB(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'tradeable')
     ..hasRequiredFields = false
   ;
@@ -904,8 +874,6 @@ class ItemModifyOutput extends $pb.GeneratedMessage {
     $core.Iterable<$3.StringKeyValue>? mutableStrings,
     $core.Iterable<$2.Coin>? transferFee,
     $core.String? tradePercentage,
-    $fixnum.Int64? quantity,
-    $fixnum.Int64? amountMinted,
     $core.bool? tradeable,
   }) {
     final _result = create();
@@ -932,12 +900,6 @@ class ItemModifyOutput extends $pb.GeneratedMessage {
     }
     if (tradePercentage != null) {
       _result.tradePercentage = tradePercentage;
-    }
-    if (quantity != null) {
-      _result.quantity = quantity;
-    }
-    if (amountMinted != null) {
-      _result.amountMinted = amountMinted;
     }
     if (tradeable != null) {
       _result.tradeable = tradeable;
@@ -1007,30 +969,12 @@ class ItemModifyOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   void clearTradePercentage() => clearField(8);
 
-  @$pb.TagNumber(9)
-  $fixnum.Int64 get quantity => $_getI64(8);
-  @$pb.TagNumber(9)
-  set quantity($fixnum.Int64 v) { $_setInt64(8, v); }
-  @$pb.TagNumber(9)
-  $core.bool hasQuantity() => $_has(8);
-  @$pb.TagNumber(9)
-  void clearQuantity() => clearField(9);
-
-  @$pb.TagNumber(10)
-  $fixnum.Int64 get amountMinted => $_getI64(9);
-  @$pb.TagNumber(10)
-  set amountMinted($fixnum.Int64 v) { $_setInt64(9, v); }
-  @$pb.TagNumber(10)
-  $core.bool hasAmountMinted() => $_has(9);
-  @$pb.TagNumber(10)
-  void clearAmountMinted() => clearField(10);
-
   @$pb.TagNumber(11)
-  $core.bool get tradeable => $_getBF(10);
+  $core.bool get tradeable => $_getBF(8);
   @$pb.TagNumber(11)
-  set tradeable($core.bool v) { $_setBool(10, v); }
+  set tradeable($core.bool v) { $_setBool(8, v); }
   @$pb.TagNumber(11)
-  $core.bool hasTradeable() => $_has(10);
+  $core.bool hasTradeable() => $_has(8);
   @$pb.TagNumber(11)
   void clearTradeable() => clearField(11);
 }
@@ -1206,6 +1150,8 @@ class Recipe extends $pb.GeneratedMessage {
     ..aOS(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'extraInfo')
     ..aInt64(15, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt')
     ..aInt64(16, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt')
+    ..a<$fixnum.Int64>(17, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'quantity', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..a<$fixnum.Int64>(18, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'amountMinted', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..hasRequiredFields = false
   ;
 
@@ -1227,6 +1173,8 @@ class Recipe extends $pb.GeneratedMessage {
     $core.String? extraInfo,
     $fixnum.Int64? createdAt,
     $fixnum.Int64? updatedAt,
+    $fixnum.Int64? quantity,
+    $fixnum.Int64? amountMinted,
   }) {
     final _result = create();
     if (cookbookId != null) {
@@ -1276,6 +1224,12 @@ class Recipe extends $pb.GeneratedMessage {
     }
     if (updatedAt != null) {
       _result.updatedAt = updatedAt;
+    }
+    if (quantity != null) {
+      _result.quantity = quantity;
+    }
+    if (amountMinted != null) {
+      _result.amountMinted = amountMinted;
     }
     return _result;
   }
@@ -1429,4 +1383,23 @@ class Recipe extends $pb.GeneratedMessage {
   $core.bool hasUpdatedAt() => $_has(15);
   @$pb.TagNumber(16)
   void clearUpdatedAt() => clearField(16);
+
+  @$pb.TagNumber(17)
+  $fixnum.Int64 get quantity => $_getI64(16);
+  @$pb.TagNumber(17)
+  set quantity($fixnum.Int64 v) { $_setInt64(16, v); }
+  @$pb.TagNumber(17)
+  $core.bool hasQuantity() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearQuantity() => clearField(17);
+
+  @$pb.TagNumber(18)
+  $fixnum.Int64 get amountMinted => $_getI64(17);
+  @$pb.TagNumber(18)
+  set amountMinted($fixnum.Int64 v) { $_setInt64(17, v); }
+  @$pb.TagNumber(18)
+  $core.bool hasAmountMinted() => $_has(17);
+  @$pb.TagNumber(18)
+  void clearAmountMinted() => clearField(18);
 }
+

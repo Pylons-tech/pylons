@@ -14,7 +14,7 @@ import 'payment_info.pb.dart' as $7;
 import 'redeem_info.pb.dart' as $5;
 import 'trade.pb.dart' as $8;
 import 'recipe.pb.dart' as $4;
-import '../cosmos/base/v1beta1/coin.pb.dart' as $2;
+import '../../cosmos/base/v1beta1/coin.pb.dart' as $2;
 
 class MsgAppleIap extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgAppleIap', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
@@ -1426,16 +1426,21 @@ class MsgExecuteRecipe extends $pb.GeneratedMessage {
 class MsgExecuteRecipeResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgExecuteRecipeResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'txTime')
     ..hasRequiredFields = false
   ;
 
   MsgExecuteRecipeResponse._() : super();
   factory MsgExecuteRecipeResponse({
     $core.String? id,
+    $fixnum.Int64? txTime,
   }) {
     final _result = create();
     if (id != null) {
       _result.id = id;
+    }
+    if (txTime != null) {
+      _result.txTime = txTime;
     }
     return _result;
   }
@@ -1468,6 +1473,15 @@ class MsgExecuteRecipeResponse extends $pb.GeneratedMessage {
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get txTime => $_getI64(1);
+  @$pb.TagNumber(2)
+  set txTime($fixnum.Int64 v) { $_setInt64(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasTxTime() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTxTime() => clearField(2);
 }
 
 class MsgSetItemString extends $pb.GeneratedMessage {
@@ -1618,6 +1632,8 @@ class MsgCreateRecipe extends $pb.GeneratedMessage {
     ..aOM<$2.Coin>(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'costPerBlock', subBuilder: $2.Coin.create)
     ..aOB(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'enabled')
     ..aOS(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'extraInfo')
+    ..a<$fixnum.Int64>(15, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'quantity', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..a<$fixnum.Int64>(16, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'amountMinted', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..hasRequiredFields = false
   ;
 
@@ -1637,6 +1653,8 @@ class MsgCreateRecipe extends $pb.GeneratedMessage {
     $2.Coin? costPerBlock,
     $core.bool? enabled,
     $core.String? extraInfo,
+    $fixnum.Int64? quantity,
+    $fixnum.Int64? amountMinted,
   }) {
     final _result = create();
     if (creator != null) {
@@ -1680,6 +1698,12 @@ class MsgCreateRecipe extends $pb.GeneratedMessage {
     }
     if (extraInfo != null) {
       _result.extraInfo = extraInfo;
+    }
+    if (quantity != null) {
+      _result.quantity = quantity;
+    }
+    if (amountMinted != null) {
+      _result.amountMinted = amountMinted;
     }
     return _result;
   }
@@ -1815,6 +1839,24 @@ class MsgCreateRecipe extends $pb.GeneratedMessage {
   $core.bool hasExtraInfo() => $_has(13);
   @$pb.TagNumber(14)
   void clearExtraInfo() => clearField(14);
+
+  @$pb.TagNumber(15)
+  $fixnum.Int64 get quantity => $_getI64(14);
+  @$pb.TagNumber(15)
+  set quantity($fixnum.Int64 v) { $_setInt64(14, v); }
+  @$pb.TagNumber(15)
+  $core.bool hasQuantity() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearQuantity() => clearField(15);
+
+  @$pb.TagNumber(16)
+  $fixnum.Int64 get amountMinted => $_getI64(15);
+  @$pb.TagNumber(16)
+  set amountMinted($fixnum.Int64 v) { $_setInt64(15, v); }
+  @$pb.TagNumber(16)
+  $core.bool hasAmountMinted() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearAmountMinted() => clearField(16);
 }
 
 class MsgCreateRecipeResponse extends $pb.GeneratedMessage {
@@ -1862,6 +1904,8 @@ class MsgUpdateRecipe extends $pb.GeneratedMessage {
     ..aOM<$2.Coin>(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'costPerBlock', subBuilder: $2.Coin.create)
     ..aOB(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'enabled')
     ..aOS(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'extraInfo')
+    ..a<$fixnum.Int64>(15, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'quantity', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..a<$fixnum.Int64>(16, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'amountMinted', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..hasRequiredFields = false
   ;
 
@@ -1881,6 +1925,8 @@ class MsgUpdateRecipe extends $pb.GeneratedMessage {
     $2.Coin? costPerBlock,
     $core.bool? enabled,
     $core.String? extraInfo,
+    $fixnum.Int64? quantity,
+    $fixnum.Int64? amountMinted,
   }) {
     final _result = create();
     if (creator != null) {
@@ -1924,6 +1970,12 @@ class MsgUpdateRecipe extends $pb.GeneratedMessage {
     }
     if (extraInfo != null) {
       _result.extraInfo = extraInfo;
+    }
+    if (quantity != null) {
+      _result.quantity = quantity;
+    }
+    if (amountMinted != null) {
+      _result.amountMinted = amountMinted;
     }
     return _result;
   }
@@ -2059,6 +2111,24 @@ class MsgUpdateRecipe extends $pb.GeneratedMessage {
   $core.bool hasExtraInfo() => $_has(13);
   @$pb.TagNumber(14)
   void clearExtraInfo() => clearField(14);
+
+  @$pb.TagNumber(15)
+  $fixnum.Int64 get quantity => $_getI64(14);
+  @$pb.TagNumber(15)
+  set quantity($fixnum.Int64 v) { $_setInt64(14, v); }
+  @$pb.TagNumber(15)
+  $core.bool hasQuantity() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearQuantity() => clearField(15);
+
+  @$pb.TagNumber(16)
+  $fixnum.Int64 get amountMinted => $_getI64(15);
+  @$pb.TagNumber(16)
+  set amountMinted($fixnum.Int64 v) { $_setInt64(15, v); }
+  @$pb.TagNumber(16)
+  $core.bool hasAmountMinted() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearAmountMinted() => clearField(16);
 }
 
 class MsgUpdateRecipeResponse extends $pb.GeneratedMessage {
@@ -2437,3 +2507,4 @@ class MsgUpdateCookbookResponse extends $pb.GeneratedMessage {
   static MsgUpdateCookbookResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MsgUpdateCookbookResponse>(create);
   static MsgUpdateCookbookResponse? _defaultInstance;
 }
+

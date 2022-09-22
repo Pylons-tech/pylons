@@ -279,3 +279,4 @@ class RefereeSignup extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   void clearAddress() => clearField(2);
 }
+

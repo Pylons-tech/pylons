@@ -69,3 +69,4 @@ class StandardError extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   void clearMessage() => clearField(2);
 }
+

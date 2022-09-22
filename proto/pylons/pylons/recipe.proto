@@ -96,9 +96,7 @@ message ItemOutput {
   repeated cosmos.base.v1beta1.Coin transfer_fee = 6 [(gogoproto.nullable) = false];
   // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
   string trade_percentage = 7 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
-  // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
-  uint64 quantity = 8 [(gogoproto.jsontag) = "quantity,omitempty,string"];
-  uint64 amount_minted = 9 [(gogoproto.jsontag) = "amount_minted,omitempty,string"];
+ 
   bool tradeable = 10;
 }
 
@@ -114,9 +112,7 @@ message ItemModifyOutput {
   repeated cosmos.base.v1beta1.Coin transfer_fee = 7 [(gogoproto.nullable) = false];
   // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
   string trade_percentage = 8 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
-  // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
-  uint64 quantity = 9 [(gogoproto.jsontag) = "quantity,omitempty,string"];
-  uint64 amount_minted = 10 [(gogoproto.jsontag) = "amount_minted,omitempty,string"];
+
   bool tradeable = 11;
 }
 
@@ -154,5 +150,8 @@ message Recipe {
   string extra_info = 14;
   int64 created_at = 15;
   int64 updated_at = 16;
+  // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
+  uint64 quantity = 17 [(gogoproto.jsontag) = "quantity,omitempty,string"];
+  uint64 amount_minted = 18 [(gogoproto.jsontag) = "amount_minted,omitempty,string"];
 }
 

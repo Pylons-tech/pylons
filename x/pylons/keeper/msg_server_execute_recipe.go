@@ -111,12 +111,12 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 
 	// calling helper function check item quantity
 	// case: no more available return err
-	for _, item := range recipe.Entries.ItemOutputs {
-		if item.Quantity != 0 && item.Quantity <= item.AmountMinted {
-			// returning error not found in case recipe is no more available
-			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Amount minted reached maximum limit")
-		}
+	// for _, item := range recipe.Entries.ItemOutputs {
+	if cookbook.RecipeLimit[recipe.Id].Quantity != 0 && cookbook.RecipeLimit[recipe.Id].Quantity <= cookbook.RecipeLimit[recipe.Id].AmountMinted {
+		// returning error not found in case recipe is no more available
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Amount minted reached maximum limit")
 	}
+	// }
 
 	if len(msg.PaymentInfos) != 0 {
 		// client is providing payments receipts

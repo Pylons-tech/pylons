@@ -11,7 +11,7 @@ import (
 )
 
 // GenerateExecutionResult generates actual coins and items to be finalized in the store
-func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, entryIds []string, recipe *types.Recipe, ec types.CelEnvCollection, matchedItems []types.ItemRecord) (sdk.Coins, []types.Item, []types.Item, error) {
+func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, entryIds []string, recipe *types.Recipe, ec types.CelEnvCollection, matchedItems []types.ItemRecord, cookbook *types.Cookbook) (sdk.Coins, []types.Item, []types.Item, error) {
 	coinOutputs, itemOutputs, itemModifyOutputs, err := types.EntryListsByIDs(entryIds, *recipe)
 	if err != nil {
 		return nil, nil, nil, err
@@ -36,11 +36,12 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 	}
 
 	mintedItems := make([]types.Item, 0)
-	for idx, itemOutput := range itemOutputs {
-		if itemOutput.Quantity != 0 && itemOutput.Quantity <= recipe.Entries.ItemOutputs[idx].AmountMinted {
-			return nil, nil, nil, sdkerrors.Wrapf(types.ErrItemQuantityExceeded, "quantity: %d, already minted: %d", itemOutput.Quantity, itemOutput.AmountMinted)
+	for _, itemOutput := range itemOutputs {
+		if cookbook.RecipeLimit[recipe.Id].Quantity != 0 && cookbook.RecipeLimit[recipe.Id].Quantity <= cookbook.RecipeLimit[recipe.Id].AmountMinted {
+			return nil, nil, nil, sdkerrors.Wrapf(types.ErrItemQuantityExceeded, "quantity: %d, already minted: %d", cookbook.RecipeLimit[recipe.Id].Quantity, cookbook.RecipeLimit[recipe.Id].AmountMinted)
 		}
-		recipe.Entries.ItemOutputs[idx].AmountMinted++
+		cookbook.RecipeLimit[recipe.Id].AmountMinted++
+		// recipe.Entries.ItemOutputs[idx].AmountMinted++
 		item, err := itemOutput.Actualize(ctx, recipe.CookbookId, recipe.Id, addr, ec, k.EngineVersion(ctx))
 		if err != nil {
 			return nil, nil, nil, err
@@ -50,8 +51,8 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 
 	modifiedItems := make([]types.Item, len(itemModifyOutputs))
 	for idx, itemModifyOutput := range itemModifyOutputs {
-		if itemModifyOutput.Quantity != 0 && itemModifyOutput.Quantity <= recipe.Entries.ItemOutputs[idx].AmountMinted {
-			return nil, nil, nil, sdkerrors.Wrapf(types.ErrItemQuantityExceeded, "quantity: %d, already minted: %d", itemModifyOutput.Quantity, itemModifyOutput.AmountMinted)
+		if cookbook.RecipeLimit[recipe.Id].Quantity != 0 && cookbook.RecipeLimit[recipe.Id].Quantity <= cookbook.RecipeLimit[recipe.Id].AmountMinted {
+			return nil, nil, nil, sdkerrors.Wrapf(types.ErrItemQuantityExceeded, "quantity: %d, already minted: %d", cookbook.RecipeLimit[recipe.Id].Quantity, cookbook.RecipeLimit[recipe.Id].AmountMinted)
 		}
 		itemInputIdx := 0
 		for i, itemInput := range recipe.ItemInputs {
@@ -98,8 +99,11 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 	if err != nil {
 		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}
-
-	coins, mintItems, modifyItems, err := k.GenerateExecutionResult(ctx, creator, outputs, &recipe, celEnv, pendingExecution.ItemInputs)
+	cookbook, found := k.GetCookbook(ctx, recipe.CookbookId)
+	if !found {
+		return types.Execution{}, types.EventCompleteExecution{}, false, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "main cookbook not found")
+	}
+	coins, mintItems, modifyItems, err := k.GenerateExecutionResult(ctx, creator, outputs, &recipe, celEnv, pendingExecution.ItemInputs, &cookbook)
 	if err != nil {
 		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}
@@ -132,7 +136,7 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 		itemModifyOutputIds[i] = item.Id
 	}
 	// update recipe in keeper to keep track of mintedAmounts
-	k.SetRecipe(ctx, recipe)
+	k.SetCookbook(ctx, cookbook)
 
 	// unlock the locked coins and perform payment(s)
 	// separate cookbook coins so they can be burned

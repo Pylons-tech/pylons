@@ -29,6 +29,13 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 	if cookbook.Creator != msg.Creator {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
+	if cookbook.RecipeLimit==nil{
+		cookbook.RecipeLimit=make(map[string]*types.Limit)
+	}
+	cookbook.RecipeLimit[msg.Id] = &types.Limit{
+		Quantity:     msg.Quantity,
+		AmountMinted: 0,
+	}
 
 	recipe := types.Recipe{
 		Id:            msg.Id,
@@ -52,6 +59,10 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 	k.SetRecipe(
 		ctx,
 		recipe,
+	)
+	k.SetCookbook(
+		ctx,
+		cookbook,
 	)
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateRecipe{

@@ -191,6 +191,9 @@ message MsgCreateRecipe {
   cosmos.base.v1beta1.Coin cost_per_block = 12 [(gogoproto.nullable) = false];
   bool enabled = 13;
   string extra_info = 14;
+  uint64 quantity = 15 [(gogoproto.jsontag) = "quantity,omitempty,string"];
+  uint64 amount_minted = 16 [(gogoproto.jsontag) = "amount_minted,omitempty,string"];
+
 }
 
 message MsgCreateRecipeResponse {
@@ -211,6 +214,10 @@ message MsgUpdateRecipe {
   cosmos.base.v1beta1.Coin cost_per_block = 12 [(gogoproto.nullable) = false];
   bool enabled = 13;
   string extra_info = 14;
+  uint64 quantity = 15 [(gogoproto.jsontag) = "quantity,omitempty,string"];
+  uint64 amount_minted = 16 [(gogoproto.jsontag) = "amount_minted,omitempty,string"];
+
+
 }
 
 message MsgUpdateRecipeResponse {

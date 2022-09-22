@@ -21,6 +21,7 @@ class Cookbook extends $pb.GeneratedMessage {
     ..aOS(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'version')
     ..aOS(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'supportEmail')
     ..aOB(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'enabled')
+    ..m<$core.String, limit>(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'recipeLimit', entryClassName: 'Cookbook.RecipeLimitEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OM, valueCreator: limit.create, packageName: const $pb.PackageName('pylons.pylons'))
     ..hasRequiredFields = false
   ;
 
@@ -35,6 +36,7 @@ class Cookbook extends $pb.GeneratedMessage {
     $core.String? version,
     $core.String? supportEmail,
     $core.bool? enabled,
+    $core.Map<$core.String, limit>? recipeLimit,
   }) {
     final _result = create();
     if (creator != null) {
@@ -63,6 +65,9 @@ class Cookbook extends $pb.GeneratedMessage {
     }
     if (enabled != null) {
       _result.enabled = enabled;
+    }
+    if (recipeLimit != null) {
+      _result.recipeLimit.addAll(recipeLimit);
     }
     return _result;
   }
@@ -167,4 +172,69 @@ class Cookbook extends $pb.GeneratedMessage {
   $core.bool hasEnabled() => $_has(8);
   @$pb.TagNumber(9)
   void clearEnabled() => clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.Map<$core.String, limit> get recipeLimit => $_getMap(9);
 }
+
+class limit extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'limit', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
+    ..a<$fixnum.Int64>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'quantity', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..a<$fixnum.Int64>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'amountMinted', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..hasRequiredFields = false
+  ;
+
+  limit._() : super();
+  factory limit({
+    $fixnum.Int64? quantity,
+    $fixnum.Int64? amountMinted,
+  }) {
+    final _result = create();
+    if (quantity != null) {
+      _result.quantity = quantity;
+    }
+    if (amountMinted != null) {
+      _result.amountMinted = amountMinted;
+    }
+    return _result;
+  }
+  factory limit.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory limit.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  limit clone() => limit()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  limit copyWith(void Function(limit) updates) => super.copyWith((message) => updates(message as limit)) as limit; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static limit create() => limit._();
+  limit createEmptyInstance() => create();
+  static $pb.PbList<limit> createRepeated() => $pb.PbList<limit>();
+  @$core.pragma('dart2js:noInline')
+  static limit getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<limit>(create);
+  static limit? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $fixnum.Int64 get quantity => $_getI64(0);
+  @$pb.TagNumber(1)
+  set quantity($fixnum.Int64 v) { $_setInt64(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasQuantity() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearQuantity() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get amountMinted => $_getI64(1);
+  @$pb.TagNumber(2)
+  set amountMinted($fixnum.Int64 v) { $_setInt64(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasAmountMinted() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAmountMinted() => clearField(2);
+}
+

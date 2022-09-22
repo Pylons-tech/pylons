@@ -12,7 +12,7 @@ var (
 	_ sdk.Msg = &MsgUpdateRecipe{}
 )
 
-func NewMsgCreateRecipe(creator, cookbookID, id, name, description, version string, coinInput []CoinInput, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, costPerBlock sdk.Coin, enabled bool, extraInfo string) *MsgCreateRecipe {
+func NewMsgCreateRecipe(creator, cookbookID, id, name, description, version string, quantity uint64, coinInput []CoinInput, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, costPerBlock sdk.Coin, enabled bool, extraInfo string) *MsgCreateRecipe {
 	return &MsgCreateRecipe{
 		Creator:       creator,
 		CookbookId:    cookbookID,
@@ -20,6 +20,7 @@ func NewMsgCreateRecipe(creator, cookbookID, id, name, description, version stri
 		Name:          name,
 		Description:   description,
 		Version:       version,
+		Quantity:      quantity,
 		CoinInputs:    coinInput,
 		ItemInputs:    itemInput,
 		Entries:       entries,
@@ -158,7 +159,7 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 	return nil
 }
 
-func NewMsgUpdateRecipe(creator, cookbookID, id, name, description, version string, coinInput []CoinInput, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, costPerBlock sdk.Coin, enabled bool, extraInfo string) *MsgUpdateRecipe {
+func NewMsgUpdateRecipe(creator, cookbookID, id, name, description, version string, quantity uint64, coinInput []CoinInput, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, costPerBlock sdk.Coin, enabled bool, extraInfo string) *MsgUpdateRecipe {
 	return &MsgUpdateRecipe{
 		Creator:       creator,
 		CookbookId:    cookbookID,
@@ -166,6 +167,7 @@ func NewMsgUpdateRecipe(creator, cookbookID, id, name, description, version stri
 		Name:          name,
 		Description:   description,
 		Version:       version,
+		Quantity:      quantity,
 		CoinInputs:    coinInput,
 		ItemInputs:    itemInput,
 		Entries:       entries,

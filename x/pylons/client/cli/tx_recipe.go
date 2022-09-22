@@ -2,6 +2,7 @@ package cli
 
 import (
 	"encoding/json"
+	"strconv"
 
 	"github.com/spf13/cobra"
 
@@ -17,7 +18,7 @@ import (
 
 func CmdCreateRecipe() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-recipe [cookbook-id] [id] [name] [description] [version] [coin-inputs] [item-inputs] [entries] [outputs] [block-interval] [cost-per-block] [enabled] [extra-info]",
+		Use:   "create-recipe [cookbook-id] [id] [name] [description] [version] [quantity] [coin-inputs] [item-inputs] [entries] [outputs] [block-interval] [cost-per-block] [enabled] [extra-info]",
 		Short: "create new recipe",
 		Long: `
 The core of developing experiences on Pylons is the recipe. The structure of a recipe is complex and to have a more detailed
@@ -55,55 +56,56 @@ All the recipe fields are mandatory:
   --from pylo1tqqp6wmctv0ykatyaefsqy6stj92lnt800lkee                          
 
 `,
-		Args: cobra.ExactArgs(13),
+		Args: cobra.ExactArgs(14),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsCookbookID := args[0]
 			id := args[1]
 			argsName := args[2]
 			argsDescription := args[3]
 			argsVersion := args[4]
+			argsQuantity, _ := strconv.ParseUint(args[5], 10, 64)
 
-			argsCoinInputs := args[5]
+			argsCoinInputs := args[6]
 			jsonArgsCoinInputs, err := types.ParseCoinInputsCLI(argsCoinInputs)
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			argsItemInputs := args[6]
+			argsItemInputs := args[7]
 			jsonArgsItemInputs := make([]types.ItemInput, 0)
 			err = json.Unmarshal([]byte(argsItemInputs), &jsonArgsItemInputs)
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			argsEntries := args[7]
+			argsEntries := args[8]
 			jsonArgsEntries := types.EntriesList{}
 			err = json.Unmarshal([]byte(argsEntries), &jsonArgsEntries)
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			argsOutputs := args[8]
+			argsOutputs := args[9]
 			jsonArgsOutputs := make([]types.WeightedOutputs, 0)
 			err = json.Unmarshal([]byte(argsOutputs), &jsonArgsOutputs)
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			argsBlockInterval, err := cast.ToInt64E(args[9])
+			argsBlockInterval, err := cast.ToInt64E(args[10])
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			argsCostPerBlock := args[10]
+			argsCostPerBlock := args[11]
 			jsonArgsCostPerBlock, err := types.ParseCoinCLI(argsCostPerBlock)
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			argsEnabled, err := cast.ToBoolE(args[11])
+			argsEnabled, err := cast.ToBoolE(args[12])
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			argsExtraInfo := args[12]
+			argsExtraInfo := args[13]
 
 			var clientCtx client.Context
 
@@ -122,7 +124,7 @@ All the recipe fields are mandatory:
 				clientCtx = c
 			}
 
-			msg := types.NewMsgCreateRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, id, argsName, argsDescription, argsVersion, jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsEntries, jsonArgsOutputs, argsBlockInterval, jsonArgsCostPerBlock, argsEnabled, argsExtraInfo)
+			msg := types.NewMsgCreateRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, id, argsName, argsDescription, argsVersion, argsQuantity, jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsEntries, jsonArgsOutputs, argsBlockInterval, jsonArgsCostPerBlock, argsEnabled, argsExtraInfo)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -137,64 +139,66 @@ All the recipe fields are mandatory:
 
 func CmdUpdateRecipe() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-recipe [cookbook-id] [id] [name] [description] [version] [coinInputs] [itemInputs] [entries] [outputs] [blockInterval] [cost-per-block] [enabled] [extraInfo]",
+		Use:   "update-recipe [cookbook-id] [id] [name] [description] [version] [quantity] [coinInputs] [itemInputs] [entries] [outputs] [blockInterval] [cost-per-block] [enabled] [extraInfo]",
 		Short: "update recipe",
-		Args:  cobra.ExactArgs(13),
+		Args:  cobra.ExactArgs(14),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsCookbookID := args[0]
 			id := args[1]
 			argsName := args[2]
 			argsDescription := args[3]
 			argsVersion := args[4]
+			argsQuantity, _ := strconv.ParseUint(args[5], 10, 64)
+			
 
-			argsCoinInputs := args[5]
+			argsCoinInputs := args[6]
 			jsonArgsCoinInputs, err := types.ParseCoinInputsCLI(argsCoinInputs)
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			argsItemInputs := args[6]
+			argsItemInputs := args[7]
 			jsonArgsItemInputs := make([]types.ItemInput, 0)
 			err = json.Unmarshal([]byte(argsItemInputs), &jsonArgsItemInputs)
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			argsEntries := args[7]
+			argsEntries := args[8]
 			jsonArgsEntries := types.EntriesList{}
 			err = json.Unmarshal([]byte(argsEntries), &jsonArgsEntries)
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			argsOutputs := args[8]
+			argsOutputs := args[9]
 			jsonArgsOutputs := make([]types.WeightedOutputs, 0)
 			err = json.Unmarshal([]byte(argsOutputs), &jsonArgsOutputs)
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			argsBlockInterval, err := cast.ToInt64E(args[9])
+			argsBlockInterval, err := cast.ToInt64E(args[10])
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			argsCostPerBlock := args[10]
+			argsCostPerBlock := args[11]
 			jsonArgsCostPerBlock, err := types.ParseCoinCLI(argsCostPerBlock)
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			argsEnabled, err := cast.ToBoolE(args[11])
+			argsEnabled, err := cast.ToBoolE(args[12])
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			argsExtraInfo := args[12]
+			argsExtraInfo := args[13]
 
 			clientCtx, err := HandleAlternativeContextForCommand(cmd)
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgUpdateRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, id, argsName, argsDescription, argsVersion, jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsEntries, jsonArgsOutputs, argsBlockInterval, jsonArgsCostPerBlock, argsEnabled, argsExtraInfo)
+			msg := types.NewMsgUpdateRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, id, argsName, argsDescription, argsVersion,argsQuantity, jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsEntries, jsonArgsOutputs, argsBlockInterval, jsonArgsCostPerBlock, argsEnabled, argsExtraInfo)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
