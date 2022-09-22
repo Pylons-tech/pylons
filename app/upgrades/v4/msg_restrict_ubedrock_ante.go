@@ -12,6 +12,12 @@ type MsgRestrictUbedrockDecorator struct {
 	pk pylonskeeper.Keeper
 }
 
+func NewMsgRestrictUbedrockDecorator(pk pylonskeeper.Keeper) MsgRestrictUbedrockDecorator {
+	return MsgRestrictUbedrockDecorator{
+		pk: pk,
+	}
+}
+
 // AnteDecorator for restrict ubedrock denom used by unallowed address
 func (ad MsgRestrictUbedrockDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
 	if (ctx.IsCheckTx() || ctx.IsReCheckTx()) && !simulate {
@@ -28,7 +34,7 @@ func (ad MsgRestrictUbedrockDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, si
 		if msgSend, ok := messages[0].(*banktypes.MsgSend); ok {
 			if ok, _ = msgSend.Amount.Find("ubedrock"); ok {
 				if _, kycAcc_found := ad.pk.GetPylonsKYC(ctx, msgSend.ToAddress); kycAcc_found == false {
-					panic("'ubedrock' should only be transfer among allowed address")
+					return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "'ubedrock' should only be transfer among allowed address")
 				}
 			}
 		}
