@@ -1,4 +1,3 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -19,12 +18,11 @@ import '../../../mocks/mock_wallet_store.dart';
 
 void main() async {
   late http.Client client;
-  dotenv.testLoad(fileInput: '''ENV=true''');
   final mockWalletStore = MockWalletStore();
   final localdataSource = MockLocalDataSource();
   client = MockClient();
-  GetIt.I.registerSingleton(MOCK_BASE_ENV);
-  GetIt.I.registerSingleton<WalletsStore>(mockWalletStore);
+  GetIt.I.registerLazySingleton(() => MOCK_BASE_ENV);
+  GetIt.I.registerLazySingleton<WalletsStore>(() => mockWalletStore);
 
   final repository = RepositoryImp(
     networkInfo: MockNetworkInfoOnline(),

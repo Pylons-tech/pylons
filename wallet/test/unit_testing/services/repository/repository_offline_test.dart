@@ -1,5 +1,4 @@
 import 'package:fixnum/fixnum.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -37,16 +36,14 @@ import '../../../mocks/mock_remote_data_store.dart';
 import '../../../mocks/mock_wallet_store.dart';
 
 void main() async {
-  dotenv.testLoad(fileInput: '''ENV=true''');
   late http.Client client;
   final mockWalletStore = MockWalletStore();
   final localdataSource = MockLocalDataSource();
   client = MockClient();
-  GetIt.I.registerSingleton(MOCK_BASE_ENV);
-  GetIt.I.registerSingleton<WalletsStore>(mockWalletStore);
-  GetIt.I.registerLazySingleton<MockClient>(() => MockClient());
+  GetIt.I.registerLazySingleton(() => MOCK_BASE_ENV);
+  GetIt.I.registerLazySingleton<WalletsStore>(() => mockWalletStore);
+  GetIt.I.registerLazySingleton<http.Client>(() => client);
   GetIt.I.registerLazySingleton<IDriverApi>(() => MockGoogleDriveHelper());
-  GetIt.I.registerLazySingleton<MockClient>(() => MockClient());
   final repository = RepositoryImp(
     networkInfo: MockNetworkInfoOffline(),
     queryHelper: MockQueryHelper(httpClient: client),
@@ -69,7 +66,8 @@ void main() async {
   test('test CreatePaymentIntent', () async {
     final req = StripeCreatePaymentIntentRequest(address: MOCK_ADDRESS, coinInputIndex: 0, productID: 'recipe/cookbook_for_test_stripe_5/cookbook_for_test_stripe_5');
     final response = await repository.CreatePaymentIntent(req);
-    expect(true, response.getOrElse(() => StripeCreatePaymentIntentResponse()).success);
+    expect(true, response.isLeft());
+    expect(false, response.getOrElse(() => StripeCreatePaymentIntentResponse()).success);
   });
 
   test('test GeneratePaymentReceipt', () async {
