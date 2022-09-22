@@ -52,6 +52,13 @@ class LocalTransactionDetailScreen extends StatelessWidget {
     }
   }
 
+  String getFormattedPrice (LocalTransactionModel txModel) {
+    if (txModel.transactionPrice == "0") {
+      return "free".tr();
+    }
+    return "${txModel.transactionPrice}  ${txModel.transactionCurrency}";
+  }
+
   Widget buildNFTDetailHeader({required LocalTransactionModel args}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 20.h),
@@ -72,7 +79,7 @@ class LocalTransactionDetailScreen extends StatelessWidget {
             const Spacer(),
             Expanded(
               child: Text(
-                " ${args.transactionPrice} ${args.transactionCurrency} ",
+                getFormattedPrice(args),
                 style: TextStyle(
                     color: getTxTypeFlag(txType: args.status.toTransactionStatusEnum()) ? kDarkGreen : kDarkRed, fontFamily: kUniversalFontFamily, fontSize: 15.sp, fontWeight: FontWeight.bold),
               ),
@@ -84,7 +91,6 @@ class LocalTransactionDetailScreen extends StatelessWidget {
   }
 
   Map<String, String> transactionDetailBodyMap({required LocalTransactionModel txArgs}) {
-
     return {
       "transaction_id".tr(): txArgs.id.toString(),
       "transaction_date".tr(): DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime)),
@@ -99,7 +105,6 @@ class LocalTransactionDetailScreen extends StatelessWidget {
     final detailList = txDetailMap.entries.map((element) => buildRow(key: element.key, value: element.value)).toList();
     return Padding(padding: EdgeInsets.symmetric(horizontal: 30.h), child: Column(children: detailList));
   }
-
 
   Row buildRow({required String key, required String value}) {
     return Row(
@@ -177,44 +182,41 @@ class LocalTransactionDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments! as LocalTransactionModel;
-
     return Scaffold(
-      body: Container(
-        height: 1.sh,
-        width: 1.sw,
-        color: kWhite,
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                SizedBox(height: 60.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: Icon(
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              SizedBox(height: 60.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkResponse(
+                      onTap: () => Navigator.pop(context),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 8.w),
+                        child: Icon(
                           Icons.arrow_back_ios_sharp,
                           size: 25.r,
-                        )),
-                    Text(
-                      'details'.tr(),
-                      style: _titleTextStyle,
-                    ),
-                    SizedBox(
-                      width: 40.w,
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                buildErrorHeader(status: args.status.toTransactionStatusEnum()),
-                buildNFTDetailHeader(args: args),
-                buildTxDetailBody(txArgs: args),
-              ],
-            ),
-            buildPageFooterButtons(txModel: args),
-          ],
-        ),
+                        ),
+                      )),
+                  Text(
+                    'details'.tr(),
+                    style: _titleTextStyle,
+                  ),
+                  SizedBox(
+                    width: 40.w,
+                  ),
+                ],
+              ),
+              SizedBox(height: 20.h),
+              buildErrorHeader(status: args.status.toTransactionStatusEnum()),
+              buildNFTDetailHeader(args: args),
+              buildTxDetailBody(txArgs: args),
+            ],
+          ),
+          buildPageFooterButtons(txModel: args),
+        ],
       ),
     );
   }

@@ -74,7 +74,7 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<Either<Failure, SdkIpcResponse>> executeRecipe(Map json) {
+  Future<SdkIpcResponse> executeRecipe(Map json) {
     // TODO: implement executeRecipe
     throw UnimplementedError();
   }

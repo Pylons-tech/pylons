@@ -347,5 +347,7 @@
   "recipe_id": "Rezept ID",
   "exclusive": "Exklusiv",
   "pylons": "Pylons",
-  "vietnamese": "Vietnamesisch"
+  "vietnamese": "Vietnamesisch",
+  "free": "Frei"
+
 }

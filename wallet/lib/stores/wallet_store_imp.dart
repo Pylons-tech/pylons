@@ -323,61 +323,48 @@ class WalletsStoreImp implements WalletsStore {
 
   @override
   Future<SdkIpcResponse> executeRecipe(Map json) async {
+    final networkInfo = GetIt.I.get<NetworkInfo>();
+
+    final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
+      transactionTypeEnum: TransactionTypeEnum.BuyNFT,
+      transactionData: jsonEncode(json),
+      transactionDescription: "${'bought_nft'.tr()}  ${json[kNftName] ?? ""}",
+      transactionCurrency: "${json[kNftCurrency] ?? ""}",
+      transactionPrice: "${json[kNftPrice] ?? ""}",
+    );
+
+    if (!await networkInfo.isConnected) {
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      return SdkIpcResponse.failure(sender: '', error: "no_internet".tr(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
+    }
+
+    json.remove(kNftName);
+    json.remove(kNftCurrency);
+    json.remove(kNftPrice);
     final msgObj = pylons.MsgExecuteRecipe.create()..mergeFromProto3Json(json);
     msgObj.creator = wallets.value.last.publicAddress;
-
     final sdkResponse = await _signAndBroadcast(msgObj);
     if (!sdkResponse.success) {
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
     }
 
     final executionEither = await repository.getExecutionsByRecipeId(recipeId: json["recipeId"].toString(), cookBookId: json["cookbookId"].toString());
 
     if (executionEither.isLeft()) {
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
     }
 
     if (executionEither.toOption().toNullable()!.completedExecutions.isEmpty) {
+      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
     }
 
+    await saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
     return SdkIpcResponse.success(
         data: jsonEncode(executionEither.toOption().toNullable()!.completedExecutions.last.toProto3Json()), sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
   }
-
-  //  @override
-  //   Future<Either<Failure, SdkIpcResponse>> executeRecipe(Map json) async {
-  //     final networkInfo = GetIt.I.get<NetworkInfo>();
-  //
-  //     final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
-  //       transactionTypeEnum: TransactionTypeEnum.BuyNFT,
-  //       transactionData: jsonEncode(json),
-  //       transactionDescription: "${'bought_nft'.tr()}  ${json[kNftName] ?? ""}",
-  //       transactionCurrency: "${json[kNftCurrency] ?? ""}",
-  //       transactionPrice: "${json[kNftPrice] ?? ""}",
-  //     );
-  //
-  //     if (!await networkInfo.isConnected) {
-  //       await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
-  //       return Left(NoInternetFailure("no_internet".tr()));
-  //     }
-  //     try {
-  //       json.remove(kNftName);
-  //       json.remove(kNftCurrency);
-  //       json.remove(kNftPrice);
-  //       final msgObj = pylons.MsgExecuteRecipe.create()..mergeFromProto3Json(json);
-  //       msgObj.creator = wallets.value.last.publicAddress;
-  //       final response = await _signAndBroadcast(msgObj);
-  //       await saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
-  //       return Right(response);
-  //     } on Failure catch (e) {
-  //       await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
-  //       return Left(e);
-  //     } on Exception catch (e) {
-  //       await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
-  //       return Left(ServerFailure(e.toString()));
-  //     }
-  //   }
 
   @override
   Future<SdkIpcResponse> fulfillTrade(Map json) async {

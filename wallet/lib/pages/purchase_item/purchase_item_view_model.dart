@@ -149,7 +149,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     toHashtagList();
   }
 
-  Future<SdkIpcResponse?> paymentForRecipe() async {
+  Future<SdkIpcResponse> paymentForRecipe() async {
     const jsonExecuteRecipe = '''
       {
         "creator": "",
@@ -171,16 +171,13 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
     final showLoader = Loading()..showLoading();
 
-    final responseEither = await walletsStore.executeRecipe(jsonMap);
+    final response = await walletsStore.executeRecipe(jsonMap);
     showLoader.dismiss();
 
-    if (responseEither.isLeft()) {
+    if (!response.success) {
       "something_wrong".tr().show();
-      return null;
     }
-
-    final response = responseEither.toOption().toNullable();
-    return response!;
+    return response;
   }
 
   Future<void> paymentForTrade() async {

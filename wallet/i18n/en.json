@@ -354,5 +354,6 @@
   "network_error_description": "A network error occurred while processing your transaction. Please try again to update your account. You won’t be charged twice for retrying.",
   "transaction_id": "Transaction ID",
   "transaction_date": "Transaction Date",
-  "bought_nft": "Bought"
+  "bought_nft": "Bought",
+  "free": "Free"
 }

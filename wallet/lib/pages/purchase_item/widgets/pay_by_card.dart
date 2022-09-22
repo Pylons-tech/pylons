@@ -234,18 +234,16 @@ class PayByCardWidget extends StatelessWidget {
 
         showLoading(navigatorKey.currentState!.overlay!.context);
 
-        final executionEither = await walletsStore.executeRecipe(jsonMap);
+        final executionResponse = await walletsStore.executeRecipe(jsonMap);
 
         Navigator.pop(navigatorKey.currentState!.overlay!.context);
 
-        if (executionEither.isLeft()) {
+        if (!executionResponse.success) {
           "something_wrong".tr().show();
           return;
         }
 
-        final execution = executionEither.toOption().toNullable();
-
-        (execution!.success ? "purchase_nft_success".tr() : execution.error).show();
+        (executionResponse.success ? "purchase_nft_success".tr() : executionResponse.error).show();
 
         Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_HOME);
       } catch (error) {
@@ -261,7 +259,7 @@ class PayByCardWidget extends StatelessWidget {
           stripePaymentForRecipe(context, recipe);
         } else {
           final response = await context.read<PurchaseItemViewModel>().paymentForRecipe();
-          if (response == null) {
+          if (!response.success) {
             Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
           }
         }

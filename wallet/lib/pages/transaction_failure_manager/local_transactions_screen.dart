@@ -89,16 +89,23 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
     );
   }
 
+  String getFormattedPrice (LocalTransactionModel txModel) {
+    if (txModel.transactionPrice == "0") {
+      return "free".tr();
+    }
+    return "${txModel.transactionPrice}  ${txModel.transactionCurrency}";
+  }
+
   Widget getTransactionTrailings({required LocalTransactionModel txModel}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Text("${txModel.transactionPrice}  ${txModel.transactionCurrency}",
+        Text(getFormattedPrice(txModel),
             style: TextStyle(
               color: kBlack,
               fontFamily: kUniversalFontFamily,
               fontWeight: FontWeight.w800,
-              fontSize: 11.sp,
+              fontSize: txModel.transactionPrice == "0" ?  13.sp : 11.sp,
             )),
         Icon(Icons.keyboard_arrow_right_rounded, size: 20.r)
       ],
