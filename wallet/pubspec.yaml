@@ -43,7 +43,7 @@ dependencies:
   flutter_dotenv: 5.0.2
   permission_handler: 8.3.0
   googleapis: 8.1.0
-  google_sign_in: 5.3.0
+  google_sign_in: ^5.4.1
   icloud_storage: 1.0.0
 
   # Used for getting applications document directory
