@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/pages/home/wallet_screen/widgets/latest_transactions.dart';
 import 'package:pylons_wallet/pages/transaction_failure_manager/failure_manager_view_model.dart';
 import 'package:pylons_wallet/pages/transaction_failure_manager/widgets/my_list_tile.dart';
+import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
-import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
 class LocalTransactionsScreen extends StatefulWidget {
@@ -40,16 +41,7 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
           ],
         );
       case TransactionStatus.Failed:
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            InkWell(
-              onTap: () => failureManagerViewModel.handleRetry(txManager: txManager),
-              child: SvgPicture.asset(SVGUtil.TRANSACTION_RETRY, height: 12.h),
-            ),
-            SvgPicture.asset(SVGUtil.TRANSACTION_FAILED, height: 15.h),
-          ],
-        );
+        return SvgPicture.asset(SVGUtil.TRANSACTION_FAILED, height: 15.h);
       case TransactionStatus.Undefined:
         return const Icon(Icons.error_outline, color: Colors.redAccent);
     }
@@ -71,25 +63,37 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 6.w),
-          child: Text(
-            txModel.transactionDescription.trimStringMedium(stringTrimConstantMid),
-            style: TextStyle(
-              color: kBlack,
-              fontFamily: kUniversalFontFamily,
-              fontWeight: FontWeight.w800,
-              fontSize: 12.sp,
+        Expanded(
+          flex: isTablet ? 5 : 0,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 6.w),
+            child: Text(
+              isTablet ? txModel.transactionDescription : txModel.transactionDescription.trimStringMedium(stringTrimConstantMid),
+              style: TextStyle(
+                color: kBlack,
+                fontFamily: kUniversalFontFamily,
+                fontWeight: FontWeight.w800,
+                fontSize: 12.sp,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ),
+        SizedBox(
+          width: 3.0.w,
+        ),
+        if (txModel.status.toTransactionStatusEnum() == TransactionStatus.Failed)
+          InkWell(
+            onTap: () => failureManagerViewModel.handleRetry(txManager: txModel),
+            child: SvgPicture.asset(SVGUtil.TRANSACTION_RETRY, height: 12.h),
+          ),
         const Spacer(),
-        SizedBox(width: 40.w, child: getTransactionStatusButton(txManager: txModel)),
+        SizedBox(width: isTablet ? null : 40.w, child: getTransactionStatusButton(txManager: txModel)),
       ],
     );
   }
 
-  String getFormattedPrice (LocalTransactionModel txModel) {
+  String getFormattedPrice(LocalTransactionModel txModel) {
     if (txModel.transactionPrice == "0") {
       return "free".tr();
     }
@@ -105,7 +109,7 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
               color: kBlack,
               fontFamily: kUniversalFontFamily,
               fontWeight: FontWeight.w800,
-              fontSize: txModel.transactionPrice == "0" ?  13.sp : 11.sp,
+              fontSize: txModel.transactionPrice == "0" ? 13.sp : 11.sp,
             )),
         Icon(Icons.keyboard_arrow_right_rounded, size: 20.r)
       ],

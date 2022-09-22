@@ -1,8 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/pages/home/wallet_screen/widgets/view_in_collection_button.dart';
 import 'package:pylons_wallet/pages/transaction_failure_manager/failure_manager_view_model.dart';
@@ -11,7 +14,6 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 TextStyle _titleTextStyle = TextStyle(color: kBlack, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.bold, fontSize: 20.sp);
 
@@ -42,7 +44,7 @@ class LocalTransactionDetailScreen extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 15.w),
               child: Center(
-                child: Text("network_error_description".tr(), textAlign: TextAlign.justify, style: _titleTextStyle.copyWith(color: kWhite, fontSize: 13.sp)),
+                child: AutoSizeText("network_error_description".tr(), maxLines: 3, textAlign: TextAlign.justify, style: _titleTextStyle.copyWith(color: kWhite, fontSize: 13.sp)),
               ),
             ),
           ),
@@ -52,7 +54,7 @@ class LocalTransactionDetailScreen extends StatelessWidget {
     }
   }
 
-  String getFormattedPrice (LocalTransactionModel txModel) {
+  String getFormattedPrice(LocalTransactionModel txModel) {
     if (txModel.transactionPrice == "0") {
       return "free".tr();
     }
@@ -68,13 +70,29 @@ class LocalTransactionDetailScreen extends StatelessWidget {
           children: [
             SizedBox(height: 70.h, width: 70.h, child: SvgPicture.asset(SVGUtil.PYLONS_POINTS_ICON)),
             SizedBox(width: 10.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("purchased".tr(), style: _titleTextStyle.copyWith(fontSize: 15.sp)),
-                Text(args.transactionDescription, style: _titleTextStyle.copyWith(fontSize: 11.sp)),
-              ],
+            Expanded(
+              flex: isTablet ? 7 : 5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("purchased".tr(), style: _titleTextStyle.copyWith(fontSize: 15.sp)),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: AutoSizeText(
+                          args.transactionDescription,
+                          style: _titleTextStyle.copyWith(
+                            fontSize: 11.sp,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             const Spacer(),
             Expanded(
