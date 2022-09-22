@@ -1,11 +1,13 @@
 package v4_test
 
 import (
+	"strconv"
 	"testing"
 
 	"cosmossdk.io/math"
 	"github.com/Pylons-tech/pylons/app/apptesting"
 	v4 "github.com/Pylons-tech/pylons/app/upgrades/v4"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -127,4 +129,72 @@ func (suite *UpgradeTestSuite) TestMintUbedrockForInitialAccount() {
 	bondedModuleAddress := suite.App.AccountKeeper.GetModuleAddress(stakingtypes.BondedPoolName)
 	bondedModuleAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, bondedModuleAddress, stakingCoinDenom)
 	suite.Require().Equal(bondedModuleAmount.Amount, totalDelegateAmount)
+}
+
+func (suite *UpgradeTestSuite) TestCleanUplyons() {
+	suite.Setup()
+
+	productID := "pylons_10"
+	amountValid := 10_000_000
+	//create Google IAP order
+	items := suite.setUpGoogleIAPOder(suite.Ctx, 2, productID)
+	testAcc := types.GenTestBech32FromString("test")
+	testAddr, err := sdk.AccAddressFromBech32(testAcc)
+	suite.Require().NoError(err)
+
+	for _, tc := range []struct {
+		desc   string
+		amount int
+	}{
+		{
+			desc:   "Balance of account with valid's uplyons is smaller than amount of valid uplyons issued",
+			amount: amountValid - 5_000_000,
+		},
+		{
+			desc:   "Balance of account with valid's uplyons is equal to amount of valid uplyons issued",
+			amount: amountValid,
+		},
+		{
+			desc:   "Balance of account with valid's uplyons is greater than amount of valid uplyons issued",
+			amount: amountValid + 5_000_000,
+		},
+	} {
+		tc := tc
+		suite.Run(tc.desc, func() {
+			//mint coin to test account
+			amountsTest := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10000)))
+			err = suite.App.PylonsKeeper.MintCoinsToAddr(suite.Ctx, testAddr, amountsTest)
+			suite.Require().NoError(err)
+
+			for _, item := range items {
+				addr, _ := sdk.AccAddressFromBech32(item.Creator)
+				amt := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(tc.amount))))
+				err := suite.App.PylonsKeeper.MintCoinsToAddr(suite.Ctx, addr, amt)
+				suite.Require().NoError(err)
+			}
+			bankBaseKeeper, _ := suite.App.BankKeeper.(bankkeeper.BaseKeeper)
+			v4.CleanUplyons(suite.Ctx, &bankBaseKeeper, &suite.App.PylonsKeeper)
+
+			accAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, testAddr, types.PylonsCoinDenom)
+			suite.Require().Equal(accAmount.Amount, sdk.ZeroInt())
+
+			for _, item := range items {
+				addr, _ := sdk.AccAddressFromBech32(item.Creator)
+				accAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, addr, types.PylonsCoinDenom)
+				suite.Require().Equal(accAmount.Amount, sdk.NewInt(int64(amountValid)))
+			}
+		})
+	}
+}
+
+func (suite *UpgradeTestSuite) setUpGoogleIAPOder(ctx sdk.Context, n int, productID string) []types.GoogleInAppPurchaseOrder {
+	items := make([]types.GoogleInAppPurchaseOrder, n)
+	creators := types.GenTestBech32List(n)
+	for i := range items {
+		items[i].Creator = creators[i]
+		items[i].PurchaseToken = strconv.Itoa(i)
+		items[i].ProductId = productID
+		suite.App.PylonsKeeper.AppendGoogleIAPOrder(ctx, items[i])
+	}
+	return items
 }
