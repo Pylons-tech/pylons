@@ -40,7 +40,7 @@ func DevCreate() *cobra.Command {
 				if err != nil {
 					panic(err)
 				}
-			}, func(path string, rcp types.Recipe) {
+			}, func(path string, rcp types.MsgCreateRecipe) {
 				c := cli.CmdCreateRecipe()
 				coinInputJSON, err := json.Marshal(rcp.CoinInputs)
 				if err != nil {

@@ -1150,8 +1150,6 @@ class Recipe extends $pb.GeneratedMessage {
     ..aOS(14, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'extraInfo')
     ..aInt64(15, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt')
     ..aInt64(16, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'updatedAt')
-    ..a<$fixnum.Int64>(17, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'quantity', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..a<$fixnum.Int64>(18, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'amountMinted', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..hasRequiredFields = false
   ;
 
@@ -1173,8 +1171,6 @@ class Recipe extends $pb.GeneratedMessage {
     $core.String? extraInfo,
     $fixnum.Int64? createdAt,
     $fixnum.Int64? updatedAt,
-    $fixnum.Int64? quantity,
-    $fixnum.Int64? amountMinted,
   }) {
     final _result = create();
     if (cookbookId != null) {
@@ -1224,12 +1220,6 @@ class Recipe extends $pb.GeneratedMessage {
     }
     if (updatedAt != null) {
       _result.updatedAt = updatedAt;
-    }
-    if (quantity != null) {
-      _result.quantity = quantity;
-    }
-    if (amountMinted != null) {
-      _result.amountMinted = amountMinted;
     }
     return _result;
   }
@@ -1383,23 +1373,5 @@ class Recipe extends $pb.GeneratedMessage {
   $core.bool hasUpdatedAt() => $_has(15);
   @$pb.TagNumber(16)
   void clearUpdatedAt() => clearField(16);
-
-  @$pb.TagNumber(17)
-  $fixnum.Int64 get quantity => $_getI64(16);
-  @$pb.TagNumber(17)
-  set quantity($fixnum.Int64 v) { $_setInt64(16, v); }
-  @$pb.TagNumber(17)
-  $core.bool hasQuantity() => $_has(16);
-  @$pb.TagNumber(17)
-  void clearQuantity() => clearField(17);
-
-  @$pb.TagNumber(18)
-  $fixnum.Int64 get amountMinted => $_getI64(17);
-  @$pb.TagNumber(18)
-  set amountMinted($fixnum.Int64 v) { $_setInt64(17, v); }
-  @$pb.TagNumber(18)
-  $core.bool hasAmountMinted() => $_has(17);
-  @$pb.TagNumber(18)
-  void clearAmountMinted() => clearField(18);
 }
 

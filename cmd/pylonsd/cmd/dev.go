@@ -29,7 +29,7 @@ const (
 	includeDirective  = "#include "
 )
 
-func forFile(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.Recipe)) {
+func forFile(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.MsgCreateRecipe)) {
 	gadgets, err := LoadGadgetsForPath(path)
 	if err != nil {
 		panic(err)
@@ -54,7 +54,7 @@ func forFile(path string, perCookbook func(path string, cookbook types.Cookbook)
 // Calls the provided callbacks on each cookbook file or recipe file found in the provided path.
 // Path is walked using filepath.Walk, so note that this can potentially take a very, very long time
 // if you give it too much to do.
-func ForFiles(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.Recipe)) {
+func ForFiles(path string, perCookbook func(path string, cookbook types.Cookbook), perRecipe func(path string, recipe types.MsgCreateRecipe)) {
 	file, err := os.Stat(path)
 	if errors.Is(err, os.ErrNotExist) {
 		fmt.Fprintln(Out, "Path ", path, " not found")
@@ -120,10 +120,10 @@ func loadCookbookFromPath(path string, gadgets *[]Gadget) (types.Cookbook, strin
 	return cb, json, err
 }
 
-func loadRecipeFromPath(path string, gadgets *[]Gadget) (types.Recipe, string, error) {
+func loadRecipeFromPath(path string, gadgets *[]Gadget) (types.MsgCreateRecipe, string, error) {
 	bytes, _ := os.ReadFile(path)
 	info, _ := os.Stat(path)
-	var rcp types.Recipe
+	var rcp types.MsgCreateRecipe
 
 	json := loadModulesInline(bytes, path, info, gadgets)
 	err := jsonpb.UnmarshalString(json, &rcp)

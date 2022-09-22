@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 
 	"github.com/spf13/cobra"
@@ -42,7 +43,7 @@ func DevUpdate() *cobra.Command {
 				if err != nil {
 					panic(err)
 				}
-			}, func(path string, rcp types.Recipe) {
+			}, func(path string, rcp types.MsgCreateRecipe) {
 				c := cli.CmdUpdateRecipe()
 				coinInputJSON, err := json.Marshal(rcp.CoinInputs)
 				if err != nil {
@@ -64,7 +65,7 @@ func DevUpdate() *cobra.Command {
 					panic(err)
 				}
 				c.SetArgs([]string{
-					rcp.CookbookId, rcp.Id, rcp.Name, rcp.Description, rcp.Version,
+					rcp.CookbookId, rcp.Id, rcp.Name, rcp.Description, rcp.Version,fmt.Sprintf("%v",rcp.Quantity),
 					string(coinInputJSON), string(itemInputJSON), string(entryJSON), string(outputJSON), strconv.FormatInt(rcp.BlockInterval, 10),
 					rcp.CostPerBlock.String(), strconv.FormatBool(rcp.Enabled), rcp.ExtraInfo,
 				})

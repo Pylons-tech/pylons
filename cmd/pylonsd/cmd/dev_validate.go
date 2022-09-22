@@ -25,6 +25,6 @@ func perCookbook(path string, _ types.Cookbook) {
 	fmt.Fprintln(Out, path, "is a valid cookbook")
 }
 
-func perRecipe(path string, _ types.Recipe) {
+func perRecipe(path string, _ types.MsgCreateRecipe) {
 	fmt.Fprintln(Out, path, "is a valid recipe")
 }

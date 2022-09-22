@@ -29,8 +29,8 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 	if cookbook.Creator != msg.Creator {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
-	if cookbook.RecipeLimit==nil{
-		cookbook.RecipeLimit=make(map[string]*types.Limit)
+	if cookbook.RecipeLimit == nil {
+		cookbook.RecipeLimit = make(map[string]*types.Limit)
 	}
 	cookbook.RecipeLimit[msg.Id] = &types.Limit{
 		Quantity:     msg.Quantity,
@@ -96,6 +96,16 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 	}
 	if cookbook.Creator != msg.Creator {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "user does not own the cookbook")
+	}
+	if cookbook.RecipeLimit == nil {
+		cookbook.RecipeLimit = make(map[string]*types.Limit)
+	}
+	if cookbook.RecipeLimit[msg.Id].Quantity < msg.Quantity {
+		cookbook.RecipeLimit[msg.Id] = &types.Limit{
+			Quantity:     msg.Quantity,
+			AmountMinted: cookbook.RecipeLimit[msg.Id].AmountMinted,
+		}
+		k.SetCookbook(ctx, cookbook)
 	}
 
 	updatedRecipe := types.Recipe{
