@@ -62,7 +62,7 @@ func DevCreate() *cobra.Command {
 					panic(err)
 				}
 				c.SetArgs([]string{
-					rcp.CookbookId, rcp.Id, rcp.Name, rcp.Description, rcp.Version, fmt.Sprintf("%v",rcp.Quantity),
+					rcp.CookbookId, rcp.Id, rcp.Name, rcp.Description, rcp.Version, fmt.Sprintf("%v",rcp.Quantity), 
 					string(coinInputJSON), string(itemInputJSON), string(entryJSON), string(outputJSON), strconv.FormatInt(rcp.BlockInterval, 10),
 					rcp.CostPerBlock.String(), strconv.FormatBool(rcp.Enabled), rcp.ExtraInfo,
 				})
