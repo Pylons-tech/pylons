@@ -96,10 +96,11 @@ class LocalTransactionDetailScreen extends StatelessWidget {
             ),
             const Spacer(),
             Expanded(
-              child: Text(
+              child: AutoSizeText(
                 getFormattedPrice(args),
                 style: TextStyle(
                     color: getTxTypeFlag(txType: args.status.toTransactionStatusEnum()) ? kDarkGreen : kDarkRed, fontFamily: kUniversalFontFamily, fontSize: 15.sp, fontWeight: FontWeight.bold),
+                maxLines: 1,
               ),
             )
           ],

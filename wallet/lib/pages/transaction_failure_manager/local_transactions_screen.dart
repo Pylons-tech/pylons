@@ -79,16 +79,13 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
             ),
           ),
         ),
-        SizedBox(
-          width: 3.0.w,
-        ),
         if (txModel.status.toTransactionStatusEnum() == TransactionStatus.Failed)
           InkWell(
             onTap: () => failureManagerViewModel.handleRetry(txManager: txModel),
             child: SvgPicture.asset(SVGUtil.TRANSACTION_RETRY, height: 12.h),
           ),
         const Spacer(),
-        SizedBox(width: isTablet ? null : 40.w, child: getTransactionStatusButton(txManager: txModel)),
+        SizedBox(width: isTablet ? null : 35.w, child: getTransactionStatusButton(txManager: txModel)),
       ],
     );
   }
