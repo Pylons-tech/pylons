@@ -135,7 +135,15 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back_ios_sharp, size: 25.r)),
+              InkResponse(
+                  onTap: () => Navigator.pop(context),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 8.w),
+                    child: Icon(
+                      Icons.arrow_back_ios_sharp,
+                      size: 25.r,
+                    ),
+                  )),
               Text(
                 'all_transactions'.tr(),
                 style: TextStyle(color: kBlack, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.bold, fontSize: 20.sp),

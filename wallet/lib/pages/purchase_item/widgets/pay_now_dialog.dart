@@ -428,7 +428,6 @@ class _PayNowWidgetState extends State<PayNowWidget> {
       Navigator.of(navigatorKey.currentState!.overlay!.context).pop();
 
       if (!executionResponse.success) {
-        executionResponse.error.show();
         Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
         return;
       }

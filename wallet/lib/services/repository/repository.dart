@@ -775,7 +775,7 @@ class RepositoryImp implements Repository {
     );
 
     if (!await networkInfo.isConnected) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
@@ -783,14 +783,14 @@ class RepositoryImp implements Repository {
       final baseEnv = getBaseEnv();
       final result = await queryHelper.queryPost("${baseEnv.baseStripeUrl}/generate-payment-receipt", req.toJson());
       if (!result.isSuccessful) {
-        await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+        await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
         return Left(StripeFailure(result.error ?? GEN_PAYMENTRECEIPT_FAILED));
       }
 
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(StripeGeneratePaymentReceiptResponse.from(result));
     } on Exception catch (_) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       crashlyticsHelper.recordFatalError(error: _.toString());
       return const Left(StripeFailure(GEN_PAYMENTRECEIPT_FAILED));
     }
@@ -1580,23 +1580,23 @@ class RepositoryImp implements Repository {
         transactionPrice: price);
 
     if (!await networkInfo.isConnected) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
     try {
       final result = await remoteDataStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: result , transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(result);
     } on Failure catch (_) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       "something_wrong".tr().show();
       return Left(_);
     } on String catch (_) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(InAppPurchaseFailure(message: _));
     } on Exception catch (_) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       recordErrorInCrashlytics(_);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
@@ -1625,23 +1625,23 @@ class RepositoryImp implements Repository {
     );
 
     if (!await networkInfo.isConnected) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
     try {
       final result = await remoteDataStore.sendGoogleInAppPurchaseCoinsRequest(msgGoogleInAPPPurchase);
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: result, transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(result);
     } on Failure catch (_) {
       "something_wrong".tr().show();
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(_);
     } on String catch (_) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(InAppPurchaseFailure(message: _));
     } on Exception catch (_) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       recordErrorInCrashlytics(_);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
@@ -1661,6 +1661,7 @@ class RepositoryImp implements Repository {
       dateTime: DateTime.now().millisecondsSinceEpoch,
       status: TransactionStatus.Undefined.name,
       transactionCurrency: transactionCurrency,
+      transactionHash: "",
       transactionPrice: transactionPrice,
     );
     return txManager;
@@ -1690,16 +1691,8 @@ class RepositoryImp implements Repository {
     final Map<String, dynamic> data = {};
     createJsonFormOfProductDetails(data, productDetails);
 
-    final LocalTransactionModel txLocalModel = createInitialLocalTransactionModel(
-      transactionData: jsonEncode(data),
-      transactionDescription: 'buying_pylon_points'.tr(),
-      transactionTypeEnum: TransactionTypeEnum.BuyProduct,
-      transactionCurrency: productDetails.currencyCode,
-      transactionPrice: productDetails.price,
-    );
 
     if (!await networkInfo.isConnected) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: txLocalModel);
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
@@ -1707,20 +1700,17 @@ class RepositoryImp implements Repository {
       final result = await remoteDataStore.buyProduct(productDetails);
       return Right(result);
     } on Failure catch (_) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: txLocalModel);
       return Left(_);
     } on String catch (_) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: txLocalModel);
       return Left(InAppPurchaseFailure(message: _));
     } on Exception catch (_) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: txLocalModel);
       recordErrorInCrashlytics(_);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
   }
 
-  Future<void> saveTransactionRecord({required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
-    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(status: transactionStatus, transactionModel: txLocalModel);
+  Future<void> saveTransactionRecord({required String transactionHash, required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
+    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(transactionHash: transactionHash, status: transactionStatus, transactionModel: txLocalModel);
     await saveLocalTransaction(txLocalModelWithStatus);
   }
 

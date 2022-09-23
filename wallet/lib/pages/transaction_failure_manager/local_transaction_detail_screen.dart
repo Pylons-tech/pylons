@@ -109,8 +109,17 @@ class LocalTransactionDetailScreen extends StatelessWidget {
   }
 
   Map<String, String> transactionDetailBodyMap({required LocalTransactionModel txArgs}) {
+    if (txArgs.status.toTransactionStatusEnum() == TransactionStatus.Success) {
+      return {
+        "txId".tr(): txArgs.transactionHash,
+        "transaction_date".tr(): DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime)),
+        "transaction_time".tr(): "${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime).toUtc())} UTC",
+        "currency".tr(): txArgs.transactionCurrency,
+        "price".tr(): txArgs.transactionPrice,
+      };
+    }
+
     return {
-      "transaction_id".tr(): txArgs.id.toString(),
       "transaction_date".tr(): DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime)),
       "transaction_time".tr(): "${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime).toUtc())} UTC",
       "currency".tr(): txArgs.transactionCurrency,

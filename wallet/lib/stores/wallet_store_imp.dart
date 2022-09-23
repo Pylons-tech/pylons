@@ -304,6 +304,7 @@ class WalletsStoreImp implements WalletsStore {
         transactionCurrency: transactionCurrency,
         transactionPrice: transactionPrice,
         transactionDescription: transactionDescription,
+        transactionHash: "",
         dateTime: DateTime.now().millisecondsSinceEpoch,
         status: TransactionStatus.Undefined.name);
     return txManager;
@@ -316,8 +317,8 @@ class WalletsStoreImp implements WalletsStore {
     return _signAndBroadcast(msgObj);
   }
 
-  Future<void> saveTransactionRecord({required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
-    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(status: transactionStatus, transactionModel: txLocalModel);
+  Future<void> saveTransactionRecord({required String transactionHash, required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
+    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(transactionHash: transactionHash, status: transactionStatus, transactionModel: txLocalModel);
     repository.saveLocalTransaction(txLocalModelWithStatus);
   }
 
@@ -334,7 +335,7 @@ class WalletsStoreImp implements WalletsStore {
     );
 
     if (!await networkInfo.isConnected) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "" , transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(sender: '', error: "no_internet".tr(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
     }
 
@@ -345,23 +346,23 @@ class WalletsStoreImp implements WalletsStore {
     msgObj.creator = wallets.value.last.publicAddress;
     final sdkResponse = await _signAndBroadcast(msgObj);
     if (!sdkResponse.success) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
     }
 
     final executionEither = await repository.getExecutionsByRecipeId(recipeId: json["recipeId"].toString(), cookBookId: json["cookbookId"].toString());
 
     if (executionEither.isLeft()) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
     }
 
     if (executionEither.toOption().toNullable()!.completedExecutions.isEmpty) {
-      await saveTransactionRecord(transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
     }
 
-    await saveTransactionRecord(transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
+    await saveTransactionRecord(transactionHash: sdkResponse.data.toString(), transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
     return SdkIpcResponse.success(
         data: jsonEncode(executionEither.toOption().toNullable()!.completedExecutions.last.toProto3Json()), sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
   }

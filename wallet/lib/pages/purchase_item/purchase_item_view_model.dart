@@ -173,10 +173,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
     final response = await walletsStore.executeRecipe(jsonMap);
     showLoader.dismiss();
-
-    if (!response.success) {
-      "something_wrong".tr().show();
-    }
     return response;
   }
 
