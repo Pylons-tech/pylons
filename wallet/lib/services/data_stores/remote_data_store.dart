@@ -866,7 +866,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
   Future<bool> updateFcmToken({required String address, required String fcmToken, required String appCheckToken}) async {
     final baseApiUrl = getBaseEnv().baseMongoUrl;
 
-    final uri = Uri.parse("$baseApiUrl/fcmtoken/update/$address/$fcmToken");
+    final uri = Uri.parse("$baseApiUrl/api/fcmtoken/update/$address/$fcmToken");
 
     final response = await httpClient.post(uri, headers: {FIREBASE_APP_CHECK_HEADER: appCheckToken});
 
