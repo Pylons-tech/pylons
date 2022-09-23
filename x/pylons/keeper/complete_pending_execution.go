@@ -135,7 +135,7 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 		k.UnlockItemForExecution(ctx, item, pendingExecution.Creator)
 		itemModifyOutputIds[i] = item.Id
 	}
-	// update recipe in keeper to keep track of mintedAmounts
+	// update cookbook in keeper to keep track of mintedAmounts
 	k.SetCookbook(ctx, cookbook)
 
 	// unlock the locked coins and perform payment(s)
