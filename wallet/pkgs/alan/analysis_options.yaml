@@ -1,0 +1,22 @@
+include: package:pedantic/analysis_options.1.9.0.yaml
+
+analyzer:
+  exclude:
+    - build/**
+    - lib/proto/**
+    - lib/**/*.g.dart
+    - lib/**/*.reflectable.dart
+
+    - test/**/*.g.dart
+    - test/**/*.reflectable.dart
+
+    - tool/**/*.g.dart
+  strong-mode:
+    implicit-casts: false
+
+  # enable-experiment:
+  #  - non-nullable
+
+linter:
+  rules:
+    - camel_case_types

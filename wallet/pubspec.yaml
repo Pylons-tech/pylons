@@ -17,7 +17,8 @@ dependencies:
   mobx: ^2.0.3
   flutter_mobx: ^2.0.1
 
-  alan: 0.40.2+1
+  alan:
+    path: pkgs/alan
   backdrop: ^0.7.1
   http: ^0.13.4
   shared_preferences: ^2.0.12
