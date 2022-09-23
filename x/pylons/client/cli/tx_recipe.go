@@ -149,7 +149,6 @@ func CmdUpdateRecipe() *cobra.Command {
 			argsDescription := args[3]
 			argsVersion := args[4]
 			argsQuantity, _ := strconv.ParseUint(args[5], 10, 64)
-			
 
 			argsCoinInputs := args[6]
 			jsonArgsCoinInputs, err := types.ParseCoinInputsCLI(argsCoinInputs)
@@ -198,7 +197,7 @@ func CmdUpdateRecipe() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgUpdateRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, id, argsName, argsDescription, argsVersion,argsQuantity, jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsEntries, jsonArgsOutputs, argsBlockInterval, jsonArgsCostPerBlock, argsEnabled, argsExtraInfo)
+			msg := types.NewMsgUpdateRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, id, argsName, argsDescription, argsVersion, argsQuantity, jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsEntries, jsonArgsOutputs, argsBlockInterval, jsonArgsCostPerBlock, argsEnabled, argsExtraInfo)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
