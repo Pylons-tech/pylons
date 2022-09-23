@@ -27,11 +27,9 @@ class TransactionCard extends StatelessWidget {
   bool isOutGoing() {
     switch (transactionTypeEnum) {
       case WalletHistoryTransactionType.SEND:
-        return false;
-      case WalletHistoryTransactionType.RECEIVE:
-        return true;
       case WalletHistoryTransactionType.NFTBUY:
         return false;
+      case WalletHistoryTransactionType.RECEIVE:
       case WalletHistoryTransactionType.NFTSELL:
         return true;
     }
@@ -124,11 +122,9 @@ class LeadingBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (transactionType) {
       case WalletHistoryTransactionType.SEND:
-        return onSendReceive(context);
       case WalletHistoryTransactionType.RECEIVE:
         return onSendReceive(context);
       case WalletHistoryTransactionType.NFTBUY:
-        return onBuySell(context);
       case WalletHistoryTransactionType.NFTSELL:
         return onBuySell(context);
     }
