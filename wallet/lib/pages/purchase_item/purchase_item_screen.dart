@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
@@ -27,8 +26,6 @@ import 'package:pylons_wallet/pages/purchase_item/widgets/purchase_video_player_
 import 'package:pylons_wallet/pages/purchase_item/widgets/purchase_video_progress_widget.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/trade_receipt_dialog.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/transaction_complete_dialog.dart';
-import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
@@ -287,10 +284,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         GestureDetector(
                           onTap: () async {
                             final Size size = MediaQuery.of(context).size;
+                            context.read<PurchaseItemViewModel>().shareNFTLink(size: size);
 
-                            final String? link = await generateLink(viewModel);
-                            if (link == null) return;
-                            viewModel.shareNFTLink(size, link);
                           },
                           child: Container(
                             padding: EdgeInsets.only(bottom: 12.h),
@@ -384,19 +379,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         ],
       ),
     );
-  }
-
-  Future<String?> generateLink(PurchaseItemViewModel viewModel) async {
-    final repo = GetIt.instance.get<Repository>();
-    final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
-
-    final link = await repo.createDynamicLinkForRecipeNftShare(address: address, nft: viewModel.nft);
-    return link.fold((l) {
-      "something_wrong".tr().show();
-      return null;
-    }, (r) async {
-      return r;
-    });
   }
 
   Widget soldOutButton(PurchaseItemViewModel viewModel) {
@@ -674,10 +656,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               GestureDetector(
                                 onTap: () async {
                                   final Size size = MediaQuery.of(context).size;
+                                  context.read<PurchaseItemViewModel>().shareNFTLink(size: size);
 
-                                  final String? link = await generateLink(viewModel);
-                                  if (link == null) return;
-                                  viewModel.shareNFTLink(size, link);
                                 },
                                 child: SvgPicture.asset(
                                   SVGUtil.OWNER_SHARE,

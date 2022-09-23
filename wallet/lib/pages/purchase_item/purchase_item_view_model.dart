@@ -441,8 +441,17 @@ class PurchaseItemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void shareNFTLink(Size size, String link) {
-    shareHelper.shareText(text: link, size: size);
+  Future<void> shareNFTLink({required Size size}) async {
+    final address = walletsStore.getWallets().value.last.publicAddress;
+
+    final link = await repository.createDynamicLinkForRecipeNftShare(address: address, nft: nft);
+    return link.fold((l) {
+      "something_wrong".tr().show();
+      return null;
+    }, (r) {
+      shareHelper.shareText(text: r, size: size);
+      return null;
+    });
   }
 
   Future<Either<String, bool>> getBalanceOfSelectedCurrency({required String selectedDenom, required double requiredAmount}) async {
