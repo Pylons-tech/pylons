@@ -22,7 +22,7 @@ dependencies:
   backdrop: ^0.7.1
   http: ^0.13.4
   shared_preferences: ^2.0.12
-  share_plus: 4.0.3
+  share_plus: ^4.4.0
   detectable_text_field: ^2.0.3
   auto_size_text: ^3.0.0
 
@@ -101,7 +101,7 @@ dependencies:
   firebase_core: ^1.20.0
   firebase_dynamic_links: ^4.3.8
   cloud_firestore: 3.4.0
-  firebase_messaging: 11.4.4
+  firebase_messaging: ^13.0.3
   firebase_remote_config: 2.0.9
   firebase_analytics: ^9.3.3
 
