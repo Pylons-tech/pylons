@@ -275,6 +275,20 @@ abstract class RemoteDataStore {
   /// Input: [address] the address of the user
   /// Output: [bool] return true if successful
   Future<bool> setUpUserIdentifierInAnalytics({required String address});
+
+  /// This method will log the purchase item in the analytics
+  /// Input: [recipeId] the id of the NFT, [author] the author of the NFT, [purchasePrice] the price of the NFT, [recipeName] the name of the recipe
+  /// Output: [bool] return true if successful
+  Future<bool> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice});
+
+
+  Future<bool> logAddToCart({
+    required String recipeId,
+    required String recipeName,
+    required String author,
+    required double purchasePrice,
+    required String currency,
+  });
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -1106,6 +1120,30 @@ class RemoteDataStoreImp implements RemoteDataStore {
   @override
   Future<bool> setUpUserIdentifierInAnalytics({required String address}) async {
     await analyticsHelper.setUserId(address: address);
+    return true;
+  }
+
+  @override
+  Future<bool> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice}) async {
+    await analyticsHelper.logPurchaseItem(recipeId: recipeId, recipeName: recipeName, author: author, purchasePrice: purchasePrice);
+    return true;
+  }
+
+  @override
+  Future<bool> logAddToCart({
+    required String recipeId,
+    required String recipeName,
+    required String author,
+    required double purchasePrice,
+    required String currency,
+  }) async {
+    await analyticsHelper.logAddToCart(
+      recipeId: recipeId,
+      recipeName: recipeName,
+      author: author,
+      purchasePrice: purchasePrice,
+      currency: currency,
+    );
     return true;
   }
 }
