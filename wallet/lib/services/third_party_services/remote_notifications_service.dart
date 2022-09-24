@@ -23,8 +23,7 @@ abstract class RemoteNotificationsService {
 class RemoteNotificationsServiceImp implements RemoteNotificationsService {
   static const String CHANNEL_ID = 'pylons_channel';
   static const String CHANNEL_NAME = 'Pylons related notifications';
-  static const String CHANNEL_DESCRIPTION =
-      'This channel is used for important notifications.';
+  static const String CHANNEL_DESCRIPTION = 'This channel is used for important notifications.';
 
   final FirebaseMessaging firebaseMessaging;
 
@@ -52,18 +51,21 @@ class RemoteNotificationsServiceImp implements RemoteNotificationsService {
       sound: true,
     );
 
-    const initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/launcher_icon');
-    final initializationSettingsIOS = IOSInitializationSettings(
-        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
-    const initializationSettingsMacOS = MacOSInitializationSettings();
-    final initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid,
-        iOS: initializationSettingsIOS,
-        macOS: initializationSettingsMacOS);
+    const initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/launcher_icon');
 
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: selectNotification);
+    final DarwinInitializationSettings initializationSettingsDarwin = DarwinInitializationSettings(
+      onDidReceiveLocalNotification: onDidReceiveLocalNotification,
+    );
+
+    final initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsDarwin,
+    );
+
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveBackgroundNotificationResponse: onDidReceiveBackgroundNotificationResponse,
+    );
 
     const channel = AndroidNotificationChannel(
       CHANNEL_ID,
@@ -72,10 +74,7 @@ class RemoteNotificationsServiceImp implements RemoteNotificationsService {
       importance: Importance.max,
     );
 
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
+    await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
 
     return false;
   }
@@ -88,8 +87,7 @@ class RemoteNotificationsServiceImp implements RemoteNotificationsService {
         print('Message data: ${message.data}');
         print(message);
         if (message.notification != null) {
-          print(
-              'Message also contained a notification: ${message.notification}');
+          print('Message also contained a notification: ${message.notification}');
         }
       }
 
@@ -102,18 +100,14 @@ class RemoteNotificationsServiceImp implements RemoteNotificationsService {
             notification.title,
             notification.body,
             NotificationDetails(
-              android: AndroidNotificationDetails(CHANNEL_ID, CHANNEL_NAME,
-                  channelDescription: CHANNEL_DESCRIPTION,
-                  icon: android.smallIcon,
-                  importance: Importance.max),
+              android: AndroidNotificationDetails(CHANNEL_ID, CHANNEL_NAME, channelDescription: CHANNEL_DESCRIPTION, icon: android.smallIcon, importance: Importance.max),
             ));
       }
       onReceiveNotificationHandler(message.data, notification!);
     });
   }
 
-  void onReceiveNotificationHandler(
-      Map<String, dynamic> data, RemoteNotification notification) {
+  void onReceiveNotificationHandler(Map<String, dynamic> data, RemoteNotification notification) {
     if (kNftSold == data[kType]) {
       final NftSoldDialog nftSoldDialog = NftSoldDialog(
         notification: notification,
@@ -123,8 +117,9 @@ class RemoteNotificationsServiceImp implements RemoteNotificationsService {
     }
   }
 
-  void onDidReceiveLocalNotification(
-      int id, String? title, String? body, String? payload) {}
-
   void selectNotification(String? payload) {}
+
+  void onDidReceiveBackgroundNotificationResponse(NotificationResponse details) {}
+
+  void onDidReceiveLocalNotification(int id, String? title, String? body, String? payload) {}
 }
