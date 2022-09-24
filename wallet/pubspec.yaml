@@ -99,13 +99,13 @@ dependencies:
 
   # Firebase dependencies
   firebase_core: ^1.20.0
-  firebase_dynamic_links: 4.3.6
+  firebase_dynamic_links: ^4.3.8
   cloud_firestore: 3.4.0
   firebase_messaging: 11.4.4
   firebase_remote_config: 2.0.9
   firebase_analytics: ^9.3.3
 
-  flutter_local_notifications: 9.2.0
+  flutter_local_notifications: ^11.0.1
 
   dotted_border: ^2.0.0+2
   just_audio: 0.9.24
