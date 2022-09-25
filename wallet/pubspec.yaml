@@ -64,7 +64,7 @@ dependencies:
   flutter_secure_storage: 6.0.0
 
 
-  flutter_screenutil: 5.1.0
+  flutter_screenutil: ^5.5.4
 
   bottom_drawer: ^0.0.3
 
@@ -101,11 +101,11 @@ dependencies:
   firebase_core: ^1.20.0
   firebase_dynamic_links: ^4.3.8
   cloud_firestore: 3.4.0
-  firebase_messaging: 11.4.4
+  firebase_messaging: ^13.0.3
   firebase_remote_config: 2.0.9
   firebase_analytics: ^9.3.3
 
-  flutter_local_notifications: 9.2.0
+  flutter_local_notifications: ^11.0.1
 
   dotted_border: ^2.0.0+2
   just_audio: 0.9.24
