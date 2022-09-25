@@ -42,7 +42,7 @@ dependencies:
   cached_network_image: ^3.1.0
   flutter_dotenv: 5.0.2
   permission_handler: 8.3.0
-  googleapis: 8.1.0
+  googleapis: ^9.2.0
   google_sign_in: 5.3.0
   icloud_storage: 1.0.0
 
@@ -105,7 +105,7 @@ dependencies:
   firebase_remote_config: 2.0.9
   firebase_analytics: ^9.3.3
 
-  flutter_local_notifications: 9.2.0
+  flutter_local_notifications: ^11.0.1
 
   dotted_border: ^2.0.0+2
   just_audio: 0.9.24
