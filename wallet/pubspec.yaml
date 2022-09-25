@@ -100,7 +100,7 @@ dependencies:
   # Firebase dependencies
   firebase_core: ^1.20.0
   firebase_dynamic_links: ^4.3.8
-  cloud_firestore: 3.4.0
+  cloud_firestore: ^3.4.9
   firebase_messaging: ^13.0.3
   firebase_remote_config: 2.0.9
   firebase_analytics: ^9.3.3
