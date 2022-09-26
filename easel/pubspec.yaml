@@ -145,7 +145,8 @@ dev_dependencies:
     sdk: flutter
 
   floor_generator: ^1.3.0
-  build_runner: ^2.2.0
+  build_runner: 2.2.1
+  mockito: 5.3.1
 
 
 
