@@ -285,4 +285,16 @@ class MockRemoteDataStore extends RemoteDataStore {
     // TODO: implement updateStripeAccount
     throw UnimplementedError();
   }
+
+  @override
+  Future<bool> logAddToCart({required String recipeId, required String recipeName, required String author, required double purchasePrice, required String currency}) {
+    // TODO: implement logAddToCart
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice}) {
+    // TODO: implement logPurchaseItem
+    throw UnimplementedError();
+  }
 }
