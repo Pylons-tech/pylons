@@ -82,7 +82,7 @@ dependencies:
 
   internet_connection_checker: ^0.0.1+4
 
-  detectable_text_field: 2.0.3
+  detectable_text_field: ^2.0.4
 
 
 
