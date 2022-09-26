@@ -298,7 +298,7 @@ abstract class PylonsWallet {
   ///
   /// If the operation fails due to an exception thrown by this library, that
   /// exception will be passed directly.
-  Future<SDKIPCResponse> txCreateCookbook(Cookbook cookbook,
+  Future<SDKIPCResponse<Cookbook>> txCreateCookbook(Cookbook cookbook,
       {bool requestResponse = true});
 
   /// Async: Creates a transaction to create the provided [Recipe] on the Pylons
@@ -343,7 +343,8 @@ abstract class PylonsWallet {
   ///
   /// If the operation fails due to an exception thrown by this library, that
   /// exception will be passed directly.
-  Future<SDKIPCResponse> txCreateRecipe(Recipe recipe, {bool requestResponse});
+  Future<SDKIPCResponse<Recipe>> txCreateRecipe(Recipe recipe,
+      {bool requestResponse});
 
   /// Async: Creates a transaction to execute the recipe with coordinates
   /// [cookbookId] : [recipeName] against the current profile.
@@ -375,7 +376,7 @@ abstract class PylonsWallet {
   ///
   /// If the operation fails due to an exception thrown by this library, that
   /// exception will be passed directly.
-  Future<SDKIPCResponse> txExecuteRecipe(
+  Future<SDKIPCResponse<Execution>> txExecuteRecipe(
       {required String cookbookId,
       required String recipeName,
       required List<String> itemIds,
