@@ -12,20 +12,21 @@ result=""
 start=$(date +%s%3N)
 
 getTime() {
-	time="$(($(date +%s%3N) - $start))"
+
+    time="$(($(date +%s%3N) - $start))"
     sec=$(($time/1000))
-	nanoSec=$(($time-($sec*1000)))
+    nanoSec=$(($time-($sec*1000)))
     case $nanoSec in
-		[1-9])
-		nanoSec=00$nanoSec
-		;;
-		[1-9][0-9])
-		nanoSec=0$nanoSec
-		;;
-		*)
-		;;
-	esac
-	timeSec=$(date -u -d "@$sec" +%H:%M:%S)
+        [1-9])
+        nanoSec=00$nanoSec
+        ;;
+        [1-9][0-9])
+        nanoSec=0$nanoSec
+        ;;
+        *)
+        ;;
+    esac
+    timeSec=$(date -u -d "@$sec" +%H:%M:%S)
     result=$timeSec","$nanoSec
 }
 
