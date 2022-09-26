@@ -84,7 +84,7 @@ dependencies:
 
   cupertino_icons: ^1.0.3
   decimal: 1.5.0
-  uuid: 3.0.5
+  uuid: ^3.0.6
   fixnum: ^1.0.0
   intl: ^0.17.0
   flutter_stripe: 3.3.0
