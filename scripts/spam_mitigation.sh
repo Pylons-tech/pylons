@@ -8,6 +8,26 @@ KEYALGO="secp256k1"
 LOGLEVEL="info"
 TEST_ACCOUNT_1="test_account_1"
 TEST_ACCOUNT_2="test_account_2"
+result=""
+start=$(date +%s%3N)
+
+getTime() {
+	time="$(($(date +%s%3N) - $start))"
+    sec=$(($time/1000))
+	nanoSec=$(($time-($sec*1000)))
+    case $nanoSec in
+		[1-9])
+		nanoSec=00$nanoSec
+		;;
+		[1-9][0-9])
+		nanoSec=0$nanoSec
+		;;
+		*)
+		;;
+	esac
+	timeSec=$(date -u -d "@$sec" +%H:%M:%S)
+    result=$timeSec","$nanoSec
+}
 
 # Create testing account address
 echo "===> Create testing env"
@@ -29,10 +49,11 @@ counter=1
 while [ $counter -le 50 ]
 do
     echo "=================$counter================="
-    RES=$(pylonsd tx bank send $MY_TESTING_ACCOUNT_1 $MY_TESTING_ACCOUNT_2 1000000upylon --keyring-backend $KEYRING --yes)
+    getTime
+    echo "Time:" $result
+    res=$(pylonsd tx bank send $MY_TESTING_ACCOUNT_1 $MY_TESTING_ACCOUNT_2 1000000upylon --keyring-backend $KEYRING --yes)
     # get the return code
-    RES_ARRAY=(${RES[@]})
-    echo "${RES_ARRAY[0]} ${RES_ARRAY[1]}"
+    resArr=(${res[@]})
+    echo "${resArr[0]} ${resArr[1]}"
     ((counter++))
 done
-

@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	errCode     = uint32(19)
+	errCode     = uint32(19) // spam prevent respone code
 	successCode = uint32(0)
 )
 
