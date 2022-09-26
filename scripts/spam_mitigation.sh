@@ -42,11 +42,12 @@ MY_TESTING_ACCOUNT_2=$(pylonsd keys show $TEST_ACCOUNT_2 -a --keyring-backend $K
 VALIDATOR=$(pylonsd keys show $KEY -a --keyring-backend $KEYRING)
 pylonsd tx bank send $VALIDATOR $MY_TESTING_ACCOUNT_1 1000000000upylon --keyring-backend $KEYRING --yes
 echo "===> Wait for setting up env"
-sleep 5
+sleep 10
 #spam tx
 echo "===> Begin test spam tx"
 
 counter=1
+start=$(date +%s%3N)
 while [ $counter -le 50 ]
 do
     echo "=================$counter================="
