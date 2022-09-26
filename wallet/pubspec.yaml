@@ -109,7 +109,7 @@ dependencies:
 
   dotted_border: ^2.0.0+2
 
-  just_audio: 0.9.24
+
   video_player: ^2.4.7
   just_audio: ^0.9.29
 
