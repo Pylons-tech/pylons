@@ -74,7 +74,7 @@ class _PylonsAppState extends State<PylonsApp> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       minTextAdapt: true,
-      builder: () => ChangeNotifierProvider.value(
+      builder: (_, __) => ChangeNotifierProvider.value(
           value: sl<UserInfoProvider>(),
           builder: (context, value) {
             return MaterialApp(
@@ -149,7 +149,6 @@ class _PylonsAppState extends State<PylonsApp> {
                 },
               },
               builder: (context, widget) {
-                ScreenUtil.setContext(context);
 
                 return MediaQuery(
                   data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),

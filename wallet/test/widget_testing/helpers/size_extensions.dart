@@ -18,10 +18,9 @@ extension SetScreenSize on WidgetTester {
     return pumpWidget(Builder(builder: (context) {
       return ScreenUtilInit(
           designSize: const Size(480, 965),
-          builder: () {
+          builder: (_, __) {
             return MaterialApp(
               home: Builder(builder: (context) {
-                ScreenUtil.setContext(context);
                 return child;
               }),
             );
