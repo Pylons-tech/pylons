@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:video_player/video_player.dart';
 
 /// Abstract Class for providing Video player
@@ -44,14 +45,12 @@ class VideoPlayerHelperImp implements VideoPlayerHelper {
 
   @override
   void initializeVideoPlayerWithFile({required File file}) async {
-    videoPlayerController = VideoPlayerController.file(file)
-      ..initialize().then((value) => {});
+    videoPlayerController = VideoPlayerController.file(file)..initialize().then((value) => {});
   }
 
   @override
   void initializeVideoPlayerWithUrl({required String videoUrl}) async {
-    videoPlayerController = VideoPlayerController.network(videoUrl)
-      ..initialize().then((value) => {});
+    videoPlayerController = VideoPlayerController.network(videoUrl)..initialize().then((value) => {});
   }
 
   @override
