@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
-import 'package:pylons_wallet/utils/screen_size_utils.dart';
 
 class NftImageWidget extends StatelessWidget {
   final String url;
@@ -12,8 +11,6 @@ class NftImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = ScreenSizeUtil(context);
-
     return Padding(
       padding: EdgeInsets.zero,
       child: CachedNetworkImage(
@@ -25,8 +22,8 @@ class NftImageWidget extends StatelessWidget {
         )),
         imageBuilder: (context, imageProvider) {
           return Container(
-            width: screenSize.width(),
-            height: screenSize.height(),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
               image: DecorationImage(
                 alignment: FractionalOffset.center,
