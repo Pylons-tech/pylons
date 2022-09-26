@@ -35,10 +35,9 @@ import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
 class PurchaseItemScreen extends StatefulWidget {
-  final NFT nft;
   final PurchaseItemViewModel purchaseItemViewModel;
 
-  const PurchaseItemScreen({Key? key, required this.nft, required this.purchaseItemViewModel}) : super(key: key);
+  const PurchaseItemScreen({Key? key, required this.purchaseItemViewModel}) : super(key: key);
 
   @override
   State<PurchaseItemScreen> createState() => _PurchaseItemScreenState();
@@ -50,8 +49,7 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
     super.initState();
 
     scheduleMicrotask(() {
-      widget.purchaseItemViewModel.setNFT(widget.nft);
-      widget.purchaseItemViewModel.initializeData(nft: widget.nft);
+      widget.purchaseItemViewModel.initializeData();
     });
   }
 
@@ -61,19 +59,18 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
       value: widget.purchaseItemViewModel,
       child: WillPopScope(
           onWillPop: () async {
-            widget.purchaseItemViewModel.destroyPlayers(widget.nft);
+            widget.purchaseItemViewModel.destroyPlayers();
             return true;
           },
-          child: const PurchaseItemContent(
-          )),
+          child: const PurchaseItemContent()),
     );
   }
 }
 
 class PurchaseItemContent extends StatefulWidget {
-
-
-  const PurchaseItemContent({Key? key,}) : super(key: key);
+  const PurchaseItemContent({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _PurchaseItemContentState createState() => _PurchaseItemContentState();
@@ -155,7 +152,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
                     child: ListTile(
                       leading: GestureDetector(
                         onTap: () {
-                          viewModel.destroyPlayers(viewModel.nft);
+                          viewModel.destroyPlayers();
                           Navigator.pop(context);
                         },
                         child: SvgPicture.asset(
@@ -320,6 +317,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
 
                                   balancesFetchResult = balancesEither.getOrElse(() => false);
                                 }
+
+                                viewModel.addLogForCart();
 
                                 final PayNowDialog payNowDialog = PayNowDialog(
                                     buildContext: context,
