@@ -26,6 +26,11 @@ new FlowRouterTitle(FlowRouter);
 
 const T = i18n.createComponent();
 
+const milli_seconds_to_minute = 60000;
+const milli_value = 1000;
+const single_digit = 10;
+
+
 export default class EaselBuy extends Component {
   constructor(props) {
     super(props);
@@ -50,6 +55,7 @@ export default class EaselBuy extends Component {
     };
     this.hideComponent = this.hideComponent.bind(this);
     // this.hideComponentDesc = this.hideComponent.bind(this);
+
   }
 
   hideComponent(name) {
@@ -180,7 +186,7 @@ export default class EaselBuy extends Component {
           (val) => val.key.toLowerCase() === "creator"
         )?.value;
 
-        const dimentions = this.getNFTDimentions(nftType, itemOutputs);
+        const dimentions = this.getNFTDimensions(nftType, itemOutputs);
         (edition = `${itemOutputs.amount_minted} of ${itemOutputs.quantity}`),
           this.setState({
             createdBy: creator,
@@ -205,24 +211,31 @@ export default class EaselBuy extends Component {
       });
   };
 
-  getNFTDimentions = (nftType, data) => {
-    if (
-      nftType?.toLowerCase() === "image" ||
-      nftType?.toLowerCase() === "video"
-    ) {
+  getNFTDimensions = (nftType, data) => {
+    if (nftType?.toLowerCase() === "image") {
       return (
         data.longs[1].weightRanges[0].lower +
         " x " +
         data.longs[2].weightRanges[0].lower
       );
-    } else if (nftType?.toLowerCase() === "audio") {
+    } else if (
+      nftType?.toLowerCase() === "audio" ||
+      nftType?.toLowerCase() === "video"
+    ) {
       const millisecondsDuration = data.longs[3].weightRanges[0].lower;
-      var minutes = Math.floor(millisecondsDuration / 60000);
-      var seconds = ((millisecondsDuration % 60000) / 1000).toFixed(0);
-      return minutes + ":" + (seconds < 10 ? "0" : "") + seconds + " min";
-    } else if (nftType?.toLowerCase() === "3d") {
-      return data.strings.find((val) => val.key.toLowerCase() === "size")
-        ?.value;
+      var minutes = Math.floor(millisecondsDuration / milli_seconds_to_minute);
+      var seconds = (
+        (millisecondsDuration % milli_seconds_to_minute) /
+        milli_value
+      ).toFixed(0);
+      return (
+        minutes + ":" + (seconds < single_digit ? "0" : "") + seconds + " min"
+      );
+    } else if (
+      nftType?.toLowerCase() === "3d" ||
+      nftType?.toLowerCase() === "pdf"
+    ) {
+      return data.strings.find((val) => val.key === "fileSize")?.value;
     } else {
     }
   };
@@ -423,6 +436,7 @@ export default class EaselBuy extends Component {
                         ) : (
                           <></>
                         )}
+                        {/*For later Use*/}
                         {/* <div className="views">
                           <img
                             alt="views"
@@ -666,6 +680,7 @@ export default class EaselBuy extends Component {
                           </ul>
                         </div>
                         <div className="right-side">
+                          {/*For later Use*/}
                           {/* <div className="likes">
                             <img
                               alt="expand"
@@ -767,6 +782,7 @@ export default class EaselBuy extends Component {
                         ) : (
                           <></>
                         )}
+                        {/*For later Use*/}
                         {/* <div className="views">
                           {" "}
                           <img
@@ -1013,6 +1029,7 @@ export default class EaselBuy extends Component {
                               </ul>
                             </div>
                             <div className="right-side">
+                              {/*For later Use*/}
                               {/* <div className="likes">
                                 <img
                                   alt="expand"

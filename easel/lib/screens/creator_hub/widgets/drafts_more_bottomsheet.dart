@@ -17,7 +17,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../widgets/clippers/bottom_sheet_clipper.dart';
-import '../creator_hub_view_model.dart';
 
 TextStyle titleStyle = TextStyle(
     fontSize: isTablet ? 13.sp : 16.sp,

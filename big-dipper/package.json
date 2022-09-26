@@ -13,9 +13,9 @@
     "genversion": "./scripts/genversion.sh"
   },
   "dependencies": {
-    "@babel/runtime": "^7.13.17",
+    "@babel/runtime": "^7.19.0",
     "@braintree/sanitize-url": "^6.0.0",
-    "@google-cloud/storage": "^6.3.0",
+    "@google-cloud/storage": "^6.4.2",
     "@google/model-viewer": "^1.12.0",
     "axios": "^0.27.2",
     "babel-polyfill": "^6.26.0",
@@ -29,7 +29,7 @@
     "crypto-js": "^4.1.1",
     "d3": "^7.6.1",
     "doc-head-extract": "^1.0.4",
-    "jquery": "^3.6.0",
+    "jquery": "^3.6.1",
     "js-sha256": "^0.9.0",
     "lodash": "^4.17.21",
     "meteor-node-stubs": "^1.2.5",
@@ -45,13 +45,13 @@
     "react-helmet": "^6.1.0",
     "react-jazzicon": "^1.0.0",
     "react-json-view": "^1.21.3",
-    "react-responsive-pagination": "^1.5.0",
-    "react-router-dom": "^5.0.0",
+    "react-responsive-pagination": "^1.7.0",
+    "react-router-dom": "^6.3.0",
     "react-showdown": "^2.3.1",
     "react-sidebar": "^3.0.2",
     "react-toastify": "^9.0.7",
     "reactstrap": "^9.1.2",
-    "rollup": "^2.78.1",
+    "rollup": "^2.79.0",
     "secp256k1": "^4.0.3",
     "simpl-schema": "^1.12.3",
     "styled-components": "^5.3.5",
@@ -62,12 +62,12 @@
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "chai": "^4.3.4",
-    "eslint": "^5.16.0",
+    "eslint": "^8.23.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-import-resolver-meteor": "^0.4.0",
     "eslint-plugin-import": "^2.23.3",
     "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-meteor": "^7.3.0",
-    "eslint-plugin-react": "^7.23.2"
+    "eslint-plugin-react": "^7.31.7"
   }
 }

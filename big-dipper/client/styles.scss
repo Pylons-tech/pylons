@@ -1642,3 +1642,12 @@ model-viewer {
   height: 100% !important;
   width: 100% !important;
 }
+
+@media (min-width: 600px) {
+  model-viewer {
+    align-items: center;
+    display: flex;
+    height: 500px !important;
+    width: 100% !important;
+  }
+}

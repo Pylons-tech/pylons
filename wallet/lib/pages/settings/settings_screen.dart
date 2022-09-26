@@ -9,6 +9,7 @@ import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_localization_view_model.dart';
+import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
 import 'package:pylons_wallet/pages/settings/widgets/delete_dialog.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
@@ -277,6 +278,17 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
           const SettingsDivider(),
           SettingListItem(
+            title: "submit_feedback".tr(),
+            imagePath: SVGUtil.OWNER_REPORT,
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              final SubmitFeedback submitFeedbackDialog = SubmitFeedback(context: context);
+              submitFeedbackDialog.show();
+            },
+          ),
+
+          const SettingsDivider(),
+          SettingListItem(
             title: "delete_wallet".tr(),
             imagePath: SVGUtil.SETTINGS_DELETE,
             onPressed: () {
@@ -358,6 +370,7 @@ class _SettingListItemState extends State<SettingListItem> {
               width: 20.h,
               child: SvgPicture.asset(
                 widget.imagePath,
+                color: kBlack,
                 height: 20.h,
                 width: 20.h,
                 fit: BoxFit.fill,

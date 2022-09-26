@@ -38,7 +38,7 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 	type fields struct {
 		CoinDenom            string
 		PubKey               string
-		ProcessorPercentange sdk.Dec
+		ProcessorPercentage  sdk.Dec
 		ValidatorsPercentage sdk.Dec
 		Name                 string
 	}
@@ -56,7 +56,7 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 			fields: fields{
 				CoinDenom:            "ustripeusd",
 				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-				ProcessorPercentange: DefaultProcessorPercentage,
+				ProcessorPercentage:  DefaultProcessorPercentage,
 				ValidatorsPercentage: DefaultValidatorsPercentage,
 				Name:                 "Pylons_Inc",
 			},
@@ -73,11 +73,32 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 			wantErr: false,
 		},
 		{
+			name: "InvalidPubkey",
+			fields: fields{
+				CoinDenom:            "ustripeusd",
+				PubKey:               "INVALID_PUBKEY",
+				ProcessorPercentage:  DefaultProcessorPercentage,
+				ValidatorsPercentage: DefaultValidatorsPercentage,
+				Name:                 "Pylons_Inc",
+			},
+			args: args{
+				pi: PaymentInfo{
+					PurchaseId:    "testPurchaseId",
+					ProcessorName: "Pylons_Inc",
+					PayerAddr:     GenTestBech32FromString("test"),
+					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
+					ProductId:     "testProductId",
+					Signature:     genTestPaymentInfoSignature("testPurchaseId", GenTestBech32FromString("test"), "testProductId", types.NewInt(1_000_000_000), privKey),
+				},
+			},
+			wantErr: true,
+		},
+		{
 			name: "InvalidSignature",
 			fields: fields{
 				CoinDenom:            "ustripeusd",
 				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-				ProcessorPercentange: DefaultProcessorPercentage,
+				ProcessorPercentage:  DefaultProcessorPercentage,
 				ValidatorsPercentage: DefaultValidatorsPercentage,
 				Name:                 "Pylons_Inc",
 			},
@@ -93,13 +114,34 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 			},
 			wantErr: true,
 		},
+		{
+			name: "InvalidName",
+			fields: fields{
+				CoinDenom:            "ustripeusd",
+				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
+				ProcessorPercentage:  DefaultProcessorPercentage,
+				ValidatorsPercentage: DefaultValidatorsPercentage,
+				Name:                 "testName",
+			},
+			args: args{
+				pi: PaymentInfo{
+					PurchaseId:    "testPurchaseId",
+					ProcessorName: "Pylons_Inc",
+					PayerAddr:     GenTestBech32FromString("test"),
+					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
+					ProductId:     "testProductId",
+					Signature:     genTestPaymentInfoSignature("testName", GenTestBech32FromString("test"), "testProductId", types.NewInt(1_000_000_000), privKey),
+				},
+			},
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			pp := PaymentProcessor{
 				CoinDenom:            tt.fields.CoinDenom,
 				PubKey:               tt.fields.PubKey,
-				ProcessorPercentage:  tt.fields.ProcessorPercentange,
+				ProcessorPercentage:  tt.fields.ProcessorPercentage,
 				ValidatorsPercentage: tt.fields.ValidatorsPercentage,
 				Name:                 tt.fields.Name,
 			}
@@ -115,7 +157,7 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 	type fields struct {
 		CoinDenom            string
 		PubKey               string
-		ProcessorPercentange sdk.Dec
+		ProcessorPercentage  sdk.Dec
 		ValidatorsPercentage sdk.Dec
 		Name                 string
 	}
@@ -133,7 +175,7 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 			fields: fields{
 				CoinDenom:            "ustripeusd",
 				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-				ProcessorPercentange: DefaultProcessorPercentage,
+				ProcessorPercentage:  DefaultProcessorPercentage,
 				ValidatorsPercentage: DefaultValidatorsPercentage,
 				Name:                 "Pylons_Inc",
 			},
@@ -149,11 +191,31 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 			wantErr: false,
 		},
 		{
+			name: "InvalidPubkey",
+			fields: fields{
+				CoinDenom:            "ustripeusd",
+				PubKey:               "INVALID_PUBKEY",
+				ProcessorPercentage:  DefaultProcessorPercentage,
+				ValidatorsPercentage: DefaultValidatorsPercentage,
+				Name:                 "Pylons_Inc",
+			},
+			args: args{
+				ri: RedeemInfo{
+					Id:            "testRedeemID",
+					ProcessorName: "Pylons_Inc",
+					Address:       GenTestBech32FromString("test"),
+					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
+					Signature:     genTestRedeemInfoSignature("testRedeemID", GenTestBech32FromString("test"), types.NewInt(1_000_000_000), privKey),
+				},
+			},
+			wantErr: true,
+		},
+		{
 			name: "InvalidSignature",
 			fields: fields{
 				CoinDenom:            "ustripeusd",
 				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-				ProcessorPercentange: DefaultProcessorPercentage,
+				ProcessorPercentage:  DefaultProcessorPercentage,
 				ValidatorsPercentage: DefaultValidatorsPercentage,
 				Name:                 "Pylons_Inc",
 			},
@@ -168,13 +230,33 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 			},
 			wantErr: true,
 		},
+		{
+			name: "InvalidName",
+			fields: fields{
+				CoinDenom:            "ustripeusd",
+				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
+				ProcessorPercentage:  DefaultProcessorPercentage,
+				ValidatorsPercentage: DefaultValidatorsPercentage,
+				Name:                 "testName",
+			},
+			args: args{
+				ri: RedeemInfo{
+					Id:            "testRedeemID",
+					ProcessorName: "Pylons_Inc",
+					Address:       GenTestBech32FromString("test"),
+					Amount:        types.NewInt(1_000_000_000), // 1000stripeusd
+					Signature:     genTestRedeemInfoSignature("testName", GenTestBech32FromString("test"), types.NewInt(1_000_000_000), privKey),
+				},
+			},
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			pp := PaymentProcessor{
 				CoinDenom:            tt.fields.CoinDenom,
 				PubKey:               tt.fields.PubKey,
-				ProcessorPercentage:  tt.fields.ProcessorPercentange,
+				ProcessorPercentage:  tt.fields.ProcessorPercentage,
 				ValidatorsPercentage: tt.fields.ValidatorsPercentage,
 				Name:                 tt.fields.Name,
 			}
