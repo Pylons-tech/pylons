@@ -64,7 +64,7 @@ dependencies:
   flutter_secure_storage: 6.0.0
 
 
-  flutter_screenutil: 5.1.0
+  flutter_screenutil: ^5.5.4
 
   bottom_drawer: ^0.0.3
 
@@ -86,7 +86,7 @@ dependencies:
   uuid: 3.0.5
   fixnum: ^1.0.0
   intl: ^0.17.0
-  flutter_stripe: 3.3.0
+  flutter_stripe: ^5.1.0
   webview_flutter: ^3.0.4
   flutter_svg: ^1.0.3
   sprintf: ^6.0.0
@@ -125,7 +125,7 @@ dependencies:
   in_app_purchase: ^3.0.7
 
   firebase_crashlytics: 2.8.2
-  firebase_app_check: 0.0.6+14
+  firebase_app_check: ^0.0.7+2
 
   focus_detector: 2.0.1
 
