@@ -33,7 +33,7 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 		cookbook.RecipeLimit = make(map[string]*types.Limit)
 	}
 
-	// Setting recipe quantity in cookbook object 
+	// Setting recipe quantity in cookbook object
 	cookbook.RecipeLimit[msg.Id] = &types.Limit{
 		Quantity:     msg.Quantity,
 		AmountMinted: 0,
@@ -103,8 +103,8 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 	if cookbook.RecipeLimit == nil {
 		cookbook.RecipeLimit = make(map[string]*types.Limit)
 	}
-	
-	// Updating recipe quantity in cookbook object 
+
+	// Updating recipe quantity in cookbook object
 	if cookbook.RecipeLimit[msg.Id].Quantity < msg.Quantity {
 		cookbook.RecipeLimit[msg.Id] = &types.Limit{
 			Quantity:     msg.Quantity,
