@@ -347,7 +347,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   }
 
   Widget getButtonContent(PurchaseItemViewModel viewModel) {
-    if (viewModel.nft.price == "0") {
+    if (double.parse(viewModel.nft.price) == 0 ) {
       return Container(
         height: 60.h,
         color: kDarkRed.withOpacity(0.8),
