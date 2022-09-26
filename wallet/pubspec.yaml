@@ -64,7 +64,7 @@ dependencies:
   flutter_secure_storage: 6.0.0
 
 
-  flutter_screenutil: 5.1.0
+  flutter_screenutil: ^5.5.4
 
   bottom_drawer: ^0.0.3
 
