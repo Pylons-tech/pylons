@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
@@ -27,8 +26,6 @@ import 'package:pylons_wallet/pages/purchase_item/widgets/purchase_video_player_
 import 'package:pylons_wallet/pages/purchase_item/widgets/purchase_video_progress_widget.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/trade_receipt_dialog.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/transaction_complete_dialog.dart';
-import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
@@ -38,10 +35,9 @@ import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
 class PurchaseItemScreen extends StatefulWidget {
-  final NFT nft;
   final PurchaseItemViewModel purchaseItemViewModel;
 
-  const PurchaseItemScreen({Key? key, required this.nft, required this.purchaseItemViewModel}) : super(key: key);
+  const PurchaseItemScreen({Key? key, required this.purchaseItemViewModel}) : super(key: key);
 
   @override
   State<PurchaseItemScreen> createState() => _PurchaseItemScreenState();
@@ -53,8 +49,7 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
     super.initState();
 
     scheduleMicrotask(() {
-      widget.purchaseItemViewModel.setNFT(widget.nft);
-      widget.purchaseItemViewModel.initializeData(nft: widget.nft);
+      widget.purchaseItemViewModel.initializeData();
     });
   }
 
@@ -64,7 +59,7 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
       value: widget.purchaseItemViewModel,
       child: WillPopScope(
           onWillPop: () async {
-            widget.purchaseItemViewModel.destroyPlayers(widget.nft);
+            widget.purchaseItemViewModel.destroyPlayers();
             return true;
           },
           child: const PurchaseItemContent()),
@@ -73,7 +68,9 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
 }
 
 class PurchaseItemContent extends StatefulWidget {
-  const PurchaseItemContent({Key? key}) : super(key: key);
+  const PurchaseItemContent({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _PurchaseItemContentState createState() => _PurchaseItemContentState();
@@ -155,7 +152,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
                     child: ListTile(
                       leading: GestureDetector(
                         onTap: () {
-                          viewModel.destroyPlayers(viewModel.nft);
+                          viewModel.destroyPlayers();
                           Navigator.pop(context);
                         },
                         child: SvgPicture.asset(
@@ -284,10 +281,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         GestureDetector(
                           onTap: () async {
                             final Size size = MediaQuery.of(context).size;
+                            context.read<PurchaseItemViewModel>().shareNFTLink(size: size);
 
-                            final String? link = await generateLink(viewModel);
-                            if (link == null) return;
-                            viewModel.shareNFTLink(size, link);
                           },
                           child: Container(
                             padding: EdgeInsets.only(bottom: 12.h),
@@ -322,6 +317,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
 
                                   balancesFetchResult = balancesEither.getOrElse(() => false);
                                 }
+
+                                viewModel.addLogForCart();
 
                                 final PayNowDialog payNowDialog = PayNowDialog(
                                     buildContext: context,
@@ -381,19 +378,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         ],
       ),
     );
-  }
-
-  Future<String?> generateLink(PurchaseItemViewModel viewModel) async {
-    final repo = GetIt.instance.get<Repository>();
-    final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
-
-    final link = await repo.createDynamicLinkForRecipeNftShare(address: address, nft: viewModel.nft);
-    return link.fold((l) {
-      "something_wrong".tr().show();
-      return null;
-    }, (r) async {
-      return r;
-    });
   }
 
   Widget soldOutButton(PurchaseItemViewModel viewModel) {
@@ -671,10 +655,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               GestureDetector(
                                 onTap: () async {
                                   final Size size = MediaQuery.of(context).size;
+                                  context.read<PurchaseItemViewModel>().shareNFTLink(size: size);
 
-                                  final String? link = await generateLink(viewModel);
-                                  if (link == null) return;
-                                  viewModel.shareNFTLink(size, link);
                                 },
                                 child: SvgPicture.asset(
                                   SVGUtil.OWNER_SHARE,

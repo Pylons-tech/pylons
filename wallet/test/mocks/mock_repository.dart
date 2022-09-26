@@ -518,4 +518,16 @@ class MockRepository extends Repository {
   Future<Either<Failure, bool>> setUserIdentifierInAnalytics({required String address}) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<Either<Failure, bool>> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice}) {
+    // TODO: implement logPurchaseItem
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> logAddToCart({required String recipeId, required String recipeName, required String author, required double purchasePrice, required String currency}) {
+    // TODO: implement logAddToCart
+    throw UnimplementedError();
+  }
 }
