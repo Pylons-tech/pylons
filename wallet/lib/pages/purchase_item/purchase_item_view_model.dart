@@ -22,9 +22,7 @@ import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
 class PurchaseItemViewModel extends ChangeNotifier {
-  NFT nft = NFT(ibcCoins: IBCCoins.upylon);
-  bool darkMode = false;
-  bool _isViewingFullNft = false;
+  PurchaseItemViewModel(this.walletsStore, {required this.audioPlayerHelper, required this.videoPlayerHelper, required this.repository, required this.shareHelper});
 
   bool get isViewingFullNft => _isViewingFullNft;
 
@@ -33,25 +31,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  WalletsStore walletsStore;
 
-  ValueNotifier<bool> shouldShowBuyNow = ValueNotifier(false);
-  final AudioPlayerHelper audioPlayerHelper;
-  final VideoPlayerHelper videoPlayerHelper;
-
-  final Repository repository;
-  ShareHelper shareHelper;
-
-  PurchaseItemViewModel(this.walletsStore, {required this.audioPlayerHelper, required this.videoPlayerHelper, required this.repository, required this.shareHelper});
-
-  late StreamSubscription playerStateSubscription;
-  late StreamSubscription positionStreamSubscription;
-  late StreamSubscription bufferPositionSubscription;
-  late StreamSubscription durationStreamSubscription;
-
-  late VideoPlayerController videoPlayerController;
-
-  bool _isVideoLoading = true;
 
   bool get isVideoLoading => _isVideoLoading;
 
@@ -60,8 +40,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  int _likesCount = 0;
-
   int get likesCount => _likesCount;
 
   set likesCount(int value) {
@@ -69,7 +47,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _likedByMe = false;
+
 
   bool get likedByMe => _likedByMe;
 
@@ -87,8 +65,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  int _viewsCount = 0;
-
   int get viewsCount => _viewsCount;
 
   set viewsCount(int value) {
@@ -96,17 +72,12 @@ class PurchaseItemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  String _videoLoadingError = "";
-
   String get videoLoadingError => _videoLoadingError;
 
   set videoLoadingError(String value) {
     _videoLoadingError = value;
     notifyListeners();
   }
-
-  late ValueNotifier<ProgressBarState> progressNotifier;
-  late ValueNotifier<ButtonState> buttonNotifier;
 
   late bool _collapsed = true;
 
@@ -117,13 +88,9 @@ class PurchaseItemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> hashtagList = [];
-  List<NftOwnershipHistory> nftOwnershipHistoryList = [];
-
-  AccountPublicInfo? accountPublicInfo;
 
   void setNFT(NFT nft) {
-    this.nft = nft;
+    _nft = nft;
     final walletsList = walletsStore.getWallets().value;
     accountPublicInfo = walletsList.last;
     final isCurrentUserNotOwner = walletsList.where((element) => element.publicAddress == nft.ownerAddress).isEmpty;
@@ -140,10 +107,10 @@ class PurchaseItemViewModel extends ChangeNotifier {
         break;
     }
 
-    notifyListeners();
+    repository.logPurchaseItem(recipeId: nft.recipeID, recipeName: nft.name, author: nft.creator, purchasePrice: double.parse(nft.price) / kBigIntBase);
   }
 
-  void initializeData({required NFT nft}) {
+  void initializeData() {
     nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);
     initializePlayers(nft);
     toHashtagList();
@@ -206,7 +173,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     }
   }
 
-  void destroyPlayers(NFT nft) {
+  void destroyPlayers() {
     switch (nft.assetType) {
       case AssetType.Audio:
         disposeAudioController();
@@ -216,7 +183,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
       case AssetType.Video:
         disposeVideoController();
         break;
-
       default:
         break;
     }
@@ -474,6 +440,41 @@ class PurchaseItemViewModel extends ChangeNotifier {
     }
     return const Right(true);
   }
+
+
+  void addLogForCart() {
+
+    repository.logAddToCart(recipeId: nft.recipeID, recipeName: nft.name, author: nft.creator, purchasePrice: double.parse(nft.price) / kBigIntBase, currency: nft.ibcCoins.name, );
+  }
+
+  NFT get nft => _nft;
+
+  final ValueNotifier<bool> shouldShowBuyNow = ValueNotifier(false);
+  final AudioPlayerHelper audioPlayerHelper;
+  final VideoPlayerHelper videoPlayerHelper;
+  final Repository repository;
+  final ShareHelper shareHelper;
+  NFT _nft = NFT(ibcCoins: IBCCoins.upylon);
+  bool darkMode = false;
+  bool _isViewingFullNft = false;
+  AccountPublicInfo? accountPublicInfo;
+  late StreamSubscription playerStateSubscription;
+  late StreamSubscription positionStreamSubscription;
+  late StreamSubscription bufferPositionSubscription;
+  late StreamSubscription durationStreamSubscription;
+  late VideoPlayerController videoPlayerController;
+  late ValueNotifier<ProgressBarState> progressNotifier;
+  late ValueNotifier<ButtonState> buttonNotifier;
+  WalletsStore walletsStore;
+  String _videoLoadingError = "";
+  int _viewsCount = 0;
+  int _likesCount = 0;
+  List<String> hashtagList = [];
+  List<NftOwnershipHistory> nftOwnershipHistoryList = [];
+  bool _isVideoLoading = true;
+  bool _likedByMe = false;
+
+
 }
 
 class ProgressBarState {

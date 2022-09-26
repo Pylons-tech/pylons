@@ -19,4 +19,5 @@ class RouteUtil {
   static String ROUTE_MESSAGE = "/message_screen";
   static String ROUTE_PDF_FULL_SCREEN = "/pdf_full_screen";
   static String ROUTE_OWNER_VIEW = "/owner_view";
+  static String ROUTE_PURCHASE_VIEW = "/purchase_view";
 }
