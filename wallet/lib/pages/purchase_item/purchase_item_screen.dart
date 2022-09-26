@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_image_asset.dart';
@@ -348,7 +349,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   Widget getButtonContent(PurchaseItemViewModel viewModel) {
     if (viewModel.nft.price == "0") {
       return Container(
-        width: 200.w,
         height: 60.h,
         color: kDarkRed.withOpacity(0.8),
         child: Padding(
@@ -361,9 +361,13 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  AutoSizeText("before_too_late".tr(), style: TextStyle(color: kWhite, fontSize: 12.sp, fontFamily: kUniversalFontFamily)),
+                  AutoSizeText("before_too_late".tr(), maxLines: 1, style: TextStyle(color: kWhite, fontSize: 12.sp, fontFamily: kUniversalFontFamily)),
                   SizedBox(width: 8.w),
-                  viewModel.nft.ibcCoins.getAssets(),
+                  SizedBox(
+                    height: 20.h,
+                    width: 20.h,
+                    child: viewModel.nft.ibcCoins.getAssets(),
+                  ),
                 ],
               ),
             ],
@@ -372,8 +376,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
       );
     }
     return Container(
-      width: 200.w,
       height: 60.h,
+      width: isTablet ? 160.w : 200.w,
       color: kDarkRed.withOpacity(0.8),
       child: Row(
         children: [
@@ -387,19 +391,22 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             ),
           ),
           const Spacer(),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "${"buy_for".tr()} ${viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price)}",
-                style: TextStyle(color: Colors.white, fontSize: 16.sp),
-              ),
-              SizedBox(
-                width: 8.w,
-              ),
-              viewModel.nft.ibcCoins.getAssets(),
-            ],
+          Expanded(
+            flex: 4,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "${"buy_for".tr()} ${viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price)}",
+                  style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                ),
+                SizedBox(
+                  width: 8.w,
+                ),
+                viewModel.nft.ibcCoins.getAssets(),
+              ],
+            ),
           ),
           const Spacer(),
         ],
