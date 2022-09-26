@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -229,8 +230,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<PurchaseItemViewModel>();
-
-    final ibcEnumCoins = viewModel.nft.ibcCoins;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 100),
       decoration: const BoxDecoration(color: Colors.transparent),
@@ -282,7 +281,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           onTap: () async {
                             final Size size = MediaQuery.of(context).size;
                             context.read<PurchaseItemViewModel>().shareNFTLink(size: size);
-
                           },
                           child: Container(
                             padding: EdgeInsets.only(bottom: 12.h),
@@ -330,40 +328,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                     shouldBuy: balancesFetchResult);
                                 payNowDialog.show();
                               },
-                              child: Container(
-                                width: 200.w,
-                                height: 60.h,
-                                color: kDarkRed.withOpacity(0.8),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.only(left: 20.w),
-                                      alignment: Alignment.center,
-                                      child: Container(
-                                        height: 10.w,
-                                        width: 10.w,
-                                        decoration: const BoxDecoration(shape: BoxShape.circle, color: kButtonBuyNowColor),
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "${"buy_for".tr()} ${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)}",
-                                          style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                                        ),
-                                        SizedBox(
-                                          width: 8.w,
-                                        ),
-                                        ibcEnumCoins.getAssets(),
-                                      ],
-                                    ),
-                                    const Spacer(),
-                                  ],
-                                ),
-                              ),
+                              child: getButtonContent(viewModel),
                             ),
                           )
                       ],
@@ -375,6 +340,68 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           ] else ...[
             buildOpenedSheet(context, viewModel)
           ]
+        ],
+      ),
+    );
+  }
+
+  Widget getButtonContent(PurchaseItemViewModel viewModel) {
+    if (viewModel.nft.price == "0") {
+      return Container(
+        width: 200.w,
+        height: 60.h,
+        color: kDarkRed.withOpacity(0.8),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AutoSizeText("claim_free_nft".tr(), maxLines: 1, style: TextStyle(color: kWhite, fontSize: 16.sp, fontFamily: kUniversalFontFamily)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  AutoSizeText("before_too_late".tr(), style: TextStyle(color: kWhite, fontSize: 12.sp, fontFamily: kUniversalFontFamily)),
+                  SizedBox(width: 8.w),
+                  viewModel.nft.ibcCoins.getAssets(),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    return Container(
+      width: 200.w,
+      height: 60.h,
+      color: kDarkRed.withOpacity(0.8),
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.only(left: 20.w),
+            alignment: Alignment.center,
+            child: Container(
+              height: 10.w,
+              width: 10.w,
+              decoration: const BoxDecoration(shape: BoxShape.circle, color: kButtonBuyNowColor),
+            ),
+          ),
+          const Spacer(),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "${"buy_for".tr()} ${viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price)}",
+                style: TextStyle(color: Colors.white, fontSize: 16.sp),
+              ),
+              SizedBox(
+                width: 8.w,
+              ),
+              viewModel.nft.ibcCoins.getAssets(),
+            ],
+          ),
+          const Spacer(),
         ],
       ),
     );
@@ -656,7 +683,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 onTap: () async {
                                   final Size size = MediaQuery.of(context).size;
                                   context.read<PurchaseItemViewModel>().shareNFTLink(size: size);
-
                                 },
                                 child: SvgPicture.asset(
                                   SVGUtil.OWNER_SHARE,

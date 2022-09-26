@@ -347,5 +347,7 @@
   "recipe_id": "レシピID",
   "exclusive": "エクスクルーシブ",
   "pylons": "Pylons",
-  "vietnamese": "ベトナム語"
+  "vietnamese": "ベトナム語",
+  "claim_free_nft": "無料の NFT を請求する",
+  "before_too_late": "手遅れになる前に"
 }
