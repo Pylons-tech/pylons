@@ -19,7 +19,7 @@ dependencies:
 
   alan:
     path: pkgs/alan
-  backdrop: ^0.7.1
+  backdrop: ^0.8.1
   http: ^0.13.4
   shared_preferences: ^2.0.12
   share_plus: ^4.4.0
@@ -36,7 +36,7 @@ dependencies:
   expandable: 5.0.1
 
   easy_localization: 3.0.1
-  image_picker: 0.8.4+4
+  image_picker: ^0.8.5+3
   image_cropper: 1.4.1
   popup_menu: ^1.0.5
   cached_network_image: ^3.1.0
@@ -64,7 +64,7 @@ dependencies:
   flutter_secure_storage: 6.0.0
 
 
-  flutter_screenutil: 5.1.0
+  flutter_screenutil: ^5.5.4
 
   bottom_drawer: ^0.0.3
 
@@ -125,7 +125,7 @@ dependencies:
   in_app_purchase: ^3.0.7
 
   firebase_crashlytics: 2.8.2
-  firebase_app_check: 0.0.6+14
+  firebase_app_check: ^0.0.7+2
 
   focus_detector: 2.0.1
 
