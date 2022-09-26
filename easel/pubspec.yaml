@@ -135,6 +135,7 @@ dependencies:
 
 
   collection: ^1.16.0
+  firebase_analytics: ^9.3.6
 
 
 
