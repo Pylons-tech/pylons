@@ -241,3 +241,5 @@ const one = 1;
 const kSaveAsDraftDescKey = "Save_as_draft_decs_key";
 const kSaveAsDraftPriceKey = "Save_as_draft_price_key";
 const kSaveAsDraftPublishKey = "Save_as_draft_publish_key";
+const kGridViewTileNFTKey = "GridViewTileNFTKey";
+const kPublishTextKey = "publish";

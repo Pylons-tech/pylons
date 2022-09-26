@@ -445,11 +445,13 @@ void executeRecipeTest() {
         .thenAnswer((realInvocation) => Stream<String?>.value('Jawad'));
     var pylonsWallet = PylonsWalletImpl(host: MOCK_HOST, uniLink: uniLink);
 
+
+
     Future.delayed(Duration(seconds: 1), () {
       final sdkResponse = SDKIPCResponse(
           success: true,
           error: '',
-          data: '',
+          data: MOCK_EXECUTION,
           errorCode: '',
           action: Strings.TX_EXECUTE_RECIPE);
       responseCompleters[Strings.TX_EXECUTE_RECIPE]!.complete(sdkResponse);
@@ -464,6 +466,7 @@ void executeRecipeTest() {
 
     expect(true, response.success);
     expect(response.action, Strings.TX_EXECUTE_RECIPE);
+    expect(response.data, MOCK_EXECUTION);
   });
 
   test('should execute recipe in the wallet without redirecting', () async {
@@ -483,7 +486,8 @@ void executeRecipeTest() {
         requestResponse: false);
 
     expect(true, response.success);
-    expect(response.data, Strings.ACTION_DONE);
+    expect(response.action, Strings.TX_EXECUTE_RECIPE);
+
   });
 }
 
