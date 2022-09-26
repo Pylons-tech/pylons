@@ -47,7 +47,7 @@ dependencies:
   icloud_storage: 1.0.0
 
   # Used for getting applications document directory
-  path_provider: 2.0.9
+  path_provider: ^2.0.11
 
   uni_links: ^0.5.1
 
