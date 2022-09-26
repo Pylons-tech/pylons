@@ -95,7 +95,7 @@ dependencies:
 
   provider: ^6.0.3
 
-  local_auth: 1.1.11
+  local_auth: ^2.1.2
 
   # Firebase dependencies
   firebase_core: ^1.20.0
