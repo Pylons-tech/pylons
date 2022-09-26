@@ -19,7 +19,7 @@ dependencies:
 
   alan:
     path: pkgs/alan
-  backdrop: ^0.7.1
+  backdrop: ^0.8.1
   http: ^0.13.4
   shared_preferences: ^2.0.12
   share_plus: ^4.4.0
