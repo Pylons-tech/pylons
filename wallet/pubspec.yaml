@@ -93,7 +93,10 @@ dependencies:
 
   shimmer_animation: ^2.1.0+1
 
-  provider: 6.0.2
+
+  provider: ^6.0.3
+
+
   local_auth: ^2.1.2
 
 
