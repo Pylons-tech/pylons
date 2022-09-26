@@ -276,6 +276,19 @@ abstract class RemoteDataStore {
   /// Output: [bool] return true if successful
   Future<bool> setUpUserIdentifierInAnalytics({required String address});
 
+  /// This method will log the purchase item in the analytics
+  /// Input: [recipeId] the id of the NFT, [author] the author of the NFT, [purchasePrice] the price of the NFT, [recipeName] the name of the recipe
+  /// Output: [bool] return true if successful
+  Future<bool> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice});
+
+
+  Future<bool> logAddToCart({
+    required String recipeId,
+    required String recipeName,
+    required String author,
+    required double purchasePrice,
+    required String currency,
+  });
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -867,7 +880,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
   Future<bool> updateFcmToken({required String address, required String fcmToken, required String appCheckToken}) async {
     final baseApiUrl = getBaseEnv().baseMongoUrl;
 
-    final uri = Uri.parse("$baseApiUrl/fcmtoken/update/$address/$fcmToken");
+    final uri = Uri.parse("$baseApiUrl/api/fcmtoken/update/$address/$fcmToken");
 
     final response = await httpClient.post(uri, headers: {FIREBASE_APP_CHECK_HEADER: appCheckToken});
 
@@ -1016,7 +1029,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
       link: Uri.parse("https://wallet.pylons.tech/invite/$address"),
       uriPrefix: "https://pylons.page.link/",
       androidParameters: const AndroidParameters(packageName: "tech.pylons.wallet"),
-      iosParameters: const IOSParameters(bundleId: "xyz.pylons.wallet"),
+      iosParameters: const IOSParameters(
+        bundleId: "xyz.pylons.wallet",
+      ),
     );
 
     final link = await dynamicLinksGenerator.buildLink(dynamicLinkParams);
@@ -1030,6 +1045,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       uriPrefix: kDeepLink,
       androidParameters: AndroidParameters(packageName: packageName, fallbackUrl: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
       iosParameters: IOSParameters(bundleId: bundleId, fallbackUrl: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
+      navigationInfoParameters: const NavigationInfoParameters(forcedRedirectEnabled: true),
     );
 
     final link = await dynamicLinksGenerator.buildShortLink(
@@ -1104,6 +1120,30 @@ class RemoteDataStoreImp implements RemoteDataStore {
   @override
   Future<bool> setUpUserIdentifierInAnalytics({required String address}) async {
     await analyticsHelper.setUserId(address: address);
+    return true;
+  }
+
+  @override
+  Future<bool> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice}) async {
+    await analyticsHelper.logPurchaseItem(recipeId: recipeId, recipeName: recipeName, author: author, purchasePrice: purchasePrice);
+    return true;
+  }
+
+  @override
+  Future<bool> logAddToCart({
+    required String recipeId,
+    required String recipeName,
+    required String author,
+    required double purchasePrice,
+    required String currency,
+  }) async {
+    await analyticsHelper.logAddToCart(
+      recipeId: recipeId,
+      recipeName: recipeName,
+      author: author,
+      purchasePrice: purchasePrice,
+      currency: currency,
+    );
     return true;
   }
 }

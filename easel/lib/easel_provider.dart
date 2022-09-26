@@ -762,7 +762,7 @@ class EaselProvider extends ChangeNotifier {
           ?.show(message: "$kErrRecipe ${response.error}");
       return false;
     }
-    scaffoldMessengerState?.show(message: kRecipeCreated);
+    scaffoldMessengerState?.show(message: "recipe_created");
     deleteNft(nft.id);
     return true;
   }
@@ -829,12 +829,12 @@ class EaselProvider extends ChangeNotifier {
     var sdkResponse = await PylonsWallet.instance.getProfile();
 
     if (sdkResponse.success) {
-      currentUsername = sdkResponse.data.username;
-      stripeAccountExists = sdkResponse.data.stripeExists;
+      currentUsername = sdkResponse.data!.username;
+      stripeAccountExists = sdkResponse.data!.stripeExists;
 
       supportedDenomList = Denom.availableDenoms
           .where(
-              (Denom e) => sdkResponse.data.supportedCoins.contains(e.symbol))
+              (Denom e) => sdkResponse.data!.supportedCoins.contains(e.symbol))
           .toList();
 
       if (supportedDenomList.isNotEmpty && selectedDenom.symbol.isEmpty) {
@@ -972,11 +972,11 @@ class EaselProvider extends ChangeNotifier {
     int id = 0;
     if (!_file!.existsSync()) {
       navigatorKey.currentState!.overlay!.context
-          .show(message: kErrPickFileFetch);
+          .show(message: "err_pick_file".tr());
       return false;
     }
     final loading = LoadingProgress()
-      ..showLoadingWithProgress(message: kUploadingMessage);
+      ..showLoadingWithProgress(message: "uploading".tr());
 
     initializeTextEditingControllerWithEmptyValues();
     if (isThumbnailPresent()) {
@@ -993,7 +993,7 @@ class EaselProvider extends ChangeNotifier {
       if (uploadThumbnailResponse.status == Status.error) {
         loading.dismiss();
         scaffoldMessengerOptionalState
-            ?.show(message: uploadThumbnailResponse.errorMessage ?? kErrUpload);
+            ?.show(message: uploadThumbnailResponse.errorMessage ?? "upload_error_occurred".tr());
         return false;
       }
     }
@@ -1012,7 +1012,7 @@ class EaselProvider extends ChangeNotifier {
     loading.dismiss();
     if (fileUploadResponse.status == Status.error) {
       scaffoldMessengerOptionalState
-          ?.show(message: fileUploadResponse.errorMessage ?? kErrUpload);
+          ?.show(message: fileUploadResponse.errorMessage ?? "upload_error_occurred".tr());
       return false;
     }
 

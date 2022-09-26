@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cosmos_ui_components/cosmos_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +17,9 @@ import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/no_internet.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
+import 'package:pylons_wallet/model/nft.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/owner_view.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer_full_screen.dart';
 import 'package:pylons_wallet/pages/home/home.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
@@ -27,6 +29,8 @@ import 'package:pylons_wallet/pages/home/wallet_screen/widgets/transaction_detai
 import 'package:pylons_wallet/pages/presenting_onboard_page/presenting_onboard_page.dart';
 import 'package:pylons_wallet/pages/presenting_onboard_page/screens/create_wallet_screen.dart';
 import 'package:pylons_wallet/pages/presenting_onboard_page/screens/restore_wallet_screen.dart';
+import 'package:pylons_wallet/pages/purchase_item/purchase_item_screen.dart';
+import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
 import 'package:pylons_wallet/pages/routing_page/routing_page.dart';
 import 'package:pylons_wallet/pages/routing_page/update_app.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen.dart';
@@ -68,54 +72,92 @@ class _PylonsAppState extends State<PylonsApp> {
 
   @override
   Widget build(BuildContext context) {
-    return CosmosTheme(
-      child: ScreenUtilInit(
-        minTextAdapt: true,
-        builder: () => ChangeNotifierProvider.value(
-            value: sl<UserInfoProvider>(),
-            builder: (context, value) {
-              return MaterialApp(
-                // key: UniqueKey(),
-                navigatorKey: navigatorKey,
-                debugShowCheckedModeBanner: false,
-                localizationsDelegates: context.localizationDelegates,
-                supportedLocales: context.supportedLocales,
-                locale: context.locale,
-                title: "Pylons Wallet",
-                theme: PylonsAppTheme().buildAppTheme(),
-                initialRoute: '/',
-                routes: {
-                  '/': (context) => const RoutingPage(),
-                  RouteUtil.ROUTE_HOME: (context) => const HomeScreen(),
-                  RouteUtil.ROUTE_APP_UPDATE: (context) => const UpdateApp(),
-                  RouteUtil.ROUTE_SETTINGS: (context) => const SettingScreen(),
-                  RouteUtil.ROUTE_LEGAL: (context) => const LegalScreen(),
-                  RouteUtil.ROUTE_RECOVERY: (context) => const RecoveryScreen(),
-                  RouteUtil.ROUTE_GENERAL: (context) => const GeneralScreen(),
-                  RouteUtil.ROUTE_SECURITY: (context) => const SecurityScreen(),
-                  RouteUtil.ROUTE_PAYMENT: (context) => const PaymentScreen(),
-                  RouteUtil.ROUTE_PRACTICE_TEST: (context) => const PracticeTest(),
-                  RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE: (context) => const ViewRecoveryScreen(),
-                  RouteUtil.ROUTE_TRANSACTION_HISTORY: (context) => const TransactionHistoryScreen(),
-                  RouteUtil.ROUTE_ONBOARDING: (context) => const PresentingOnboardPage(),
-                  RouteUtil.ROUTE_CREATE_WALLET: (context) => const CreateWalletScreen(),
-                  RouteUtil.ROUTE_RESTORE_WALLET: (context) => const RestoreWalletScreen(),
-                  RouteUtil.ROUTE_ADD_PYLON: (context) => const AddPylonScreen(),
-                  RouteUtil.ROUTE_TRANSACTION_DETAIL: (context) => const TransactionDetailsScreen(),
-                  RouteUtil.ROUTE_MESSAGE: (context) => const MessagesScreen(),
-                  RouteUtil.ROUTE_PDF_FULL_SCREEN: (context) => const PdfViewerFullScreen(),
-                },
-                builder: (context, widget) {
-                  ScreenUtil.setContext(context);
+    return ScreenUtilInit(
+      minTextAdapt: true,
+      builder: () => ChangeNotifierProvider.value(
+          value: sl<UserInfoProvider>(),
+          builder: (context, value) {
+            return MaterialApp(
+              // key: UniqueKey(),
+              navigatorKey: navigatorKey,
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              title: "Pylons Wallet",
+              theme: PylonsAppTheme().buildAppTheme(),
+              initialRoute: '/',
+              routes: {
+                '/': (context) => const RoutingPage(),
+                RouteUtil.ROUTE_HOME: (context) => const HomeScreen(),
+                RouteUtil.ROUTE_APP_UPDATE: (context) => const UpdateApp(),
+                RouteUtil.ROUTE_SETTINGS: (context) => const SettingScreen(),
+                RouteUtil.ROUTE_LEGAL: (context) => const LegalScreen(),
+                RouteUtil.ROUTE_RECOVERY: (context) => const RecoveryScreen(),
+                RouteUtil.ROUTE_GENERAL: (context) => const GeneralScreen(),
+                RouteUtil.ROUTE_SECURITY: (context) => const SecurityScreen(),
+                RouteUtil.ROUTE_PAYMENT: (context) => const PaymentScreen(),
+                RouteUtil.ROUTE_PRACTICE_TEST: (context) => const PracticeTest(),
+                RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE: (context) => const ViewRecoveryScreen(),
+                RouteUtil.ROUTE_TRANSACTION_HISTORY: (context) => const TransactionHistoryScreen(),
+                RouteUtil.ROUTE_ONBOARDING: (context) => const PresentingOnboardPage(),
+                RouteUtil.ROUTE_CREATE_WALLET: (context) => const CreateWalletScreen(),
+                RouteUtil.ROUTE_RESTORE_WALLET: (context) => const RestoreWalletScreen(),
+                RouteUtil.ROUTE_ADD_PYLON: (context) => const AddPylonScreen(),
+                RouteUtil.ROUTE_TRANSACTION_DETAIL: (context) => const TransactionDetailsScreen(),
+                RouteUtil.ROUTE_MESSAGE: (context) => const MessagesScreen(),
+                RouteUtil.ROUTE_PDF_FULL_SCREEN: (context) => const PdfViewerFullScreen(),
+                RouteUtil.ROUTE_OWNER_VIEW: (context) {
+                  if (ModalRoute.of(context) == null) {
+                    return const SizedBox();
+                  }
 
-                  return MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                    child: widget ?? Container(),
-                  );
+                  if (ModalRoute.of(context)?.settings.arguments == null) {
+                    return const SizedBox();
+                  }
+
+                  if (ModalRoute.of(context)?.settings.arguments is NFT) {
+                    final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
+                    final viewModel = sl<OwnerViewViewModel>();
+                    viewModel.nft = nft;
+                    return OwnerView(
+                      ownerViewViewModel: viewModel,
+                    );
+                  }
+
+                  return const SizedBox();
                 },
-              );
-            }),
-      ),
+                RouteUtil.ROUTE_PURCHASE_VIEW: (context) {
+                  if (ModalRoute.of(context) == null) {
+                    return const SizedBox();
+                  }
+
+                  if (ModalRoute.of(context)?.settings.arguments == null) {
+                    return const SizedBox();
+                  }
+
+                  if (ModalRoute.of(context)?.settings.arguments is NFT) {
+                    final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
+                    final viewModel = sl<PurchaseItemViewModel>();
+                    viewModel.setNFT(nft);
+                    return PurchaseItemScreen(
+                      purchaseItemViewModel: viewModel,
+                    );
+                  }
+
+                  return const SizedBox();
+                },
+              },
+              builder: (context, widget) {
+                ScreenUtil.setContext(context);
+
+                return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                  child: widget ?? Container(),
+                );
+              },
+            );
+          }),
     );
   }
 

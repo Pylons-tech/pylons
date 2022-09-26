@@ -1,9 +1,9 @@
-import 'package:cosmos_ui_components/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/utils/constants.dart';
+import 'package:pylons_wallet/utils/date_utils.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
 class TransactionCard extends StatelessWidget {
@@ -39,14 +39,14 @@ class TransactionCard extends StatelessWidget {
 
   Widget getDateStamp({required DateTime date}) {
     if (isDateSame) {
-      return SizedBox(width: 22.w);
+      return SizedBox(width: 30.w);
     }
 
     final formattedDate =
         formatDate(date, DateFormatEnum.shortUIDateDay).split(" ");
 
     return SizedBox(
-      width: 22.w,
+      width: 30.w,
       child: Column(
         children: [
           Text(
@@ -69,7 +69,7 @@ class TransactionCard extends StatelessWidget {
       child: Row(
         children: [
           getDateStamp(date: date),
-          SizedBox(width: 10.w),
+          SizedBox(width: 5.w),
           LeadingBuilder(
             onSendReceive: (context) =>
                 SvgPicture.asset(SVGUtil.PAYMENT_SEND_RECEIVE),

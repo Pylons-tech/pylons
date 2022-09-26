@@ -12,7 +12,6 @@ import 'package:easel_flutter/services/datasources/local_datasource.dart';
 import 'package:easel_flutter/services/datasources/remote_datasource.dart';
 import 'package:easel_flutter/services/third_party_services/crashlytics_helper.dart';
 import 'package:easel_flutter/services/third_party_services/network_info.dart';
-import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:easel_flutter/utils/failure/failure.dart';
 import 'package:easel_flutter/utils/file_utils_helper.dart';
@@ -24,8 +23,7 @@ abstract class Repository {
   /// Input : [cookBookId] id of the cookbook
   /// Output: if successful the output will be the list of [pylons.Recipe]
   /// will return error in the form of failure
-  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId(
-      {required String cookBookId});
+  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId});
 
   /// This method will return the saved String if exists
   /// Input: [key] the key of the value
@@ -93,8 +91,7 @@ abstract class Repository {
   /// This method will update draft in the local database from description Page
   /// Input:[SaveNft] this model data contains bring [id],[nftName],[nftDescription],[creatorName],[step]
   /// Output: [bool] returns whether the operation is successful or not
-  Future<Either<Failure, bool>> updateNftFromDescription(
-      {required SaveNft saveNft});
+  Future<Either<Failure, bool>> updateNftFromDescription({required SaveNft saveNft});
 
   /// This method will update the draft of the NFT
   /// Input: [id] of the draft that will be updated
@@ -109,9 +106,7 @@ abstract class Repository {
   /// This method is used uploading provided file to the server using [httpClient]
   /// Input : [file] which needs to be uploaded , [onUploadProgressCallback] a callback method which needs to be call on each progress
   /// Output : [ApiResponse] the ApiResponse which can contain [success] or [error] response
-  Future<Either<Failure, ApiResponse>> uploadFile(
-      {required File file,
-      required OnUploadProgressCallback onUploadProgressCallback});
+  Future<Either<Failure, ApiResponse>> uploadFile({required File file, required OnUploadProgressCallback onUploadProgressCallback});
 
   /// This method will get the drafts List from the local database
   /// Output: [List] returns that contains a number of [NFT]
@@ -150,8 +145,7 @@ abstract class Repository {
   /// This function is used to generate the NFT link to be shared with others after publishing
   /// Input: [recipeId] and [cookbookId] used in the link generation as query parameters
   /// Output: [String] returns the generated NFTs link to be shared with others
-  String generateEaselLinkForShare(
-      {required String recipeId, required String cookbookId});
+  String generateEaselLinkForShare({required String recipeId, required String cookbookId});
 
   /// This function is used to launch the link generated and open the link in external source platform
   /// Input: [url] is the link to be launched by the launcher
@@ -173,29 +167,22 @@ class RepositoryImp implements Repository {
   final FileUtilsHelper fileUtilsHelper;
   final CrashlyticsHelper crashlyticsHelper;
 
-  RepositoryImp(
-      {required this.networkInfo,
-      required this.remoteDataSource,
-      required this.localDataSource,
-      required this.fileUtilsHelper,
-      required this.crashlyticsHelper});
+  RepositoryImp({required this.networkInfo, required this.remoteDataSource, required this.localDataSource, required this.fileUtilsHelper, required this.crashlyticsHelper});
 
   @override
-  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId(
-      {required String cookBookId}) async {
+  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId}) async {
     if (!await networkInfo.isConnected) {
-      return const Left(NoInternetFailure(kNoInternet));
+      return Left(NoInternetFailure("no_internet".tr()));
     }
 
     try {
-      var sdkResponse =
-          await remoteDataSource.getRecipesByCookbookID(cookBookId);
+      var sdkResponse = await remoteDataSource.getRecipesByCookbookID(cookBookId);
       log(sdkResponse.toString(), name: 'pylons_sdk');
 
       return Right(sdkResponse);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return const Left(CookBookNotFoundFailure(kCookBookNotFound));
+      return Left(CookBookNotFoundFailure("cookbook_not_found".tr()));
     }
   }
 
@@ -276,8 +263,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> updateNftFromDescription(
-      {required SaveNft saveNft}) async {
+  Future<Either<Failure, bool>> updateNftFromDescription({required SaveNft saveNft}) async {
     try {
       bool result = await localDataSource.updateNftFromDescription(saveNft);
 
@@ -307,8 +293,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> updateNftFromPrice(
-      {required SaveNft saveNft}) async {
+  Future<Either<Failure, bool>> updateNftFromPrice({required SaveNft saveNft}) async {
     try {
       bool result = await localDataSource.updateNftFromPrice(saveNft);
 
@@ -320,12 +305,9 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, ApiResponse>> uploadFile(
-      {required File file,
-      required OnUploadProgressCallback onUploadProgressCallback}) async {
+  Future<Either<Failure, ApiResponse>> uploadFile({required File file, required OnUploadProgressCallback onUploadProgressCallback}) async {
     try {
-      ApiResponse apiResponse = await remoteDataSource.uploadFile(
-          file: file, uploadProgressCallback: onUploadProgressCallback);
+      ApiResponse apiResponse = await remoteDataSource.uploadFile(file: file, uploadProgressCallback: onUploadProgressCallback);
 
       return Right(apiResponse);
     } on Exception catch (_) {
@@ -399,8 +381,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  String generateEaselLinkForShare(
-      {required String recipeId, required String cookbookId}) {
+  String generateEaselLinkForShare({required String recipeId, required String cookbookId}) {
     return recipeId.generateEaselLinkToShare(cookbookId: cookbookId);
   }
 
@@ -423,5 +404,186 @@ class RepositoryImp implements Repository {
   @override
   bool getOnBoardingComplete() {
     return localDataSource.getOnBoardingComplete();
+  }
+}
+
+class MockRepositoryImp implements Repository {
+  @override
+  Future<String> autoGenerateCookbookId() {
+    // TODO: implement autoGenerateCookbookId
+    throw UnimplementedError();
+  }
+
+  @override
+  String autoGenerateEaselId() {
+    // TODO: implement autoGenerateEaselId
+    throw UnimplementedError();
+  }
+
+  @override
+  deleteCacheDynamic({required String key}) {
+    // TODO: implement deleteCacheDynamic
+    throw UnimplementedError();
+  }
+
+  @override
+  String deleteCacheString({required String key}) {
+    // TODO: implement deleteCacheString
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteNft(int id) {
+    // TODO: implement deleteNft
+    throw UnimplementedError();
+  }
+
+  @override
+  String generateEaselLinkForShare({required String recipeId, required String cookbookId}) {
+    // TODO: implement generateEaselLinkForShare
+    throw UnimplementedError();
+  }
+
+  @override
+  String getArtistName() {
+    // TODO: implement getArtistName
+    throw UnimplementedError();
+  }
+
+  @override
+  getCacheDynamicType({required String key}) {
+    // TODO: implement getCacheDynamicType
+    throw UnimplementedError();
+  }
+
+  @override
+  String getCacheString({required String key}) {
+    // TODO: implement getCacheString
+    throw UnimplementedError();
+  }
+
+  @override
+  String getCookBookGeneratorUsername() {
+    // TODO: implement getCookBookGeneratorUsername
+    throw UnimplementedError();
+  }
+
+  @override
+  String? getCookbookId() {
+    // TODO: implement getCookbookId
+    throw UnimplementedError();
+  }
+
+  @override
+  String getExtension(String fileName) {
+    // TODO: implement getExtension
+    throw UnimplementedError();
+  }
+
+  @override
+  double getFileSizeInGB(int fileLength) {
+    // TODO: implement getFileSizeInGB
+    throw UnimplementedError();
+  }
+
+  @override
+  String getFileSizeString({required int fileLength, int precision = 2}) {
+    // TODO: implement getFileSizeString
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, NFT>> getNft(int id) {
+    // TODO: implement getNft
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, List<NFT>>> getNfts() {
+    // TODO: implement getNfts
+    throw UnimplementedError();
+  }
+
+  @override
+  bool getOnBoardingComplete() {
+    // TODO: implement getOnBoardingComplete
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId}) {
+    // TODO: implement getRecipesBasedOnCookBookId
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> launchMyUrl({required String url}) {
+    // TODO: implement launchMyUrl
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, PickedFileModel>> pickFile(NftFormat format) {
+    // TODO: implement pickFile
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> saveArtistName(String name) {
+    // TODO: implement saveArtistName
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> saveCookBookGeneratorUsername(String username) {
+    // TODO: implement saveCookBookGeneratorUsername
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, int>> saveNft(NFT nft) {
+    // TODO: implement saveNft
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> saveOnBoardingComplete() {
+    // TODO: implement saveOnBoardingComplete
+    throw UnimplementedError();
+  }
+
+  @override
+  bool setCacheDynamicType({required String key, required value}) {
+    // TODO: implement setCacheDynamicType
+    throw UnimplementedError();
+  }
+
+  @override
+  void setCacheString({required String key, required String value}) {
+    // TODO: implement setCacheString
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateNFTDialogShown({required int id}) {
+    // TODO: implement updateNFTDialogShown
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateNftFromDescription({required SaveNft saveNft}) {
+    // TODO: implement updateNftFromDescription
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateNftFromPrice({required SaveNft saveNft}) {
+    // TODO: implement updateNftFromPrice
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, ApiResponse>> uploadFile({required File file, required OnUploadProgressCallback onUploadProgressCallback}) {
+    // TODO: implement uploadFile
+    throw UnimplementedError();
   }
 }
