@@ -7,6 +7,7 @@ import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart' as clipper;
 import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart';
+import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/enums.dart';
@@ -390,10 +391,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               height: 10.h,
                             ),
                             ClippedButton(
+                              key: const Key(kSaveAsDraftPublishKey),
                               title: "save_as_draft".tr(),
                               bgColor: Colors.white.withOpacity(0.2),
                               textColor: EaselAppTheme.kWhite,
                               onPressed: () async {
+                                GetIt.I.get<CreatorHubViewModel>().changeSelectedCollection(CollectionType.draft);
                                 Navigator.of(context).popUntil(ModalRoute.withName(RouteUtil.kRouteCreatorHub));
                               },
                               cuttingHeight: 15.h,
