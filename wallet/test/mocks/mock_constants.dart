@@ -271,6 +271,7 @@ NftOwnershipHistory MOCK_NFT_OWNERSHIP_HISTORY = NftOwnershipHistory(
 );
 
 
+
 NFT MOCK_NFT_PREMIUM = NFT(
   name: "I AM A PREMIUM NFT",
   height: "2400",
@@ -288,3 +289,7 @@ NFT MOCK_NFT_PREMIUM = NFT(
   ibcCoins: IBCCoins.upylon,
   price: "12"
 );
+
+int MOCK_NFT_QUANTITY = 50;
+int MOCK_NFT_MINTED = 10;
+

@@ -248,6 +248,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       children: [
                         Expanded(child: _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner)),
                         IconButton(
+                          key: const Key(kKeyboardUpButtonKeyValue),
                           icon: Icon(
                             Icons.keyboard_arrow_up,
                             size: 32.h,
@@ -629,6 +630,73 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       ],
                     ),
                   ),
+                  if (viewModel.nft.amountMinted < viewModel.nft.quantity)
+                    ClipPath(
+                      key: const Key(kExpandedBuyButtonKeyValue),
+                      clipper: BuyClipper(),
+                      child: InkWell(
+                        onTap: () async {
+                          bool balancesFetchResult = true;
+                          if (viewModel.nft.price != kZeroInt) {
+                            final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
+                              selectedDenom: viewModel.nft.denom,
+                              requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
+                            );
+
+                            if (balancesEither.isLeft()) {
+                              balancesEither.swap().getOrElse(() => '').show();
+                              return;
+                            }
+
+                            balancesFetchResult = balancesEither.getOrElse(() => false);
+                          }
+
+                          final PayNowDialog payNowDialog = PayNowDialog(
+                              buildContext: context,
+                              nft: viewModel.nft,
+                              purchaseItemViewModel: viewModel,
+                              onPurchaseDone: (txId) {
+                                showTransactionCompleteDialog(txId);
+                              },
+                              shouldBuy: balancesFetchResult);
+                          payNowDialog.show();
+                        },
+                        child: Container(
+                          width: 200.w,
+                          height: 60.h,
+                          color: kDarkRed.withOpacity(0.8),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(left: 20.w),
+                                alignment: Alignment.center,
+                                child: Container(
+                                  height: 10.w,
+                                  width: 10.w,
+                                  decoration: const BoxDecoration(shape: BoxShape.circle, color: kButtonBuyNowColor),
+                                ),
+                              ),
+                              const Spacer(),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "${"buy_for".tr()} ${viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price)}",
+                                    style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                                  ),
+                                  SizedBox(
+                                    width: 8.w,
+                                  ),
+                                  viewModel.nft.ibcCoins.getAssets(),
+                                ],
+                              ),
+                              const Spacer(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
                 ],
               ),
             ),
