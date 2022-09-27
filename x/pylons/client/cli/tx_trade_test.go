@@ -105,6 +105,11 @@ func TestCmdCreateTrade(t *testing.T) {
 				var resp sdk.TxResponse
 				require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, 0, int(resp.Code))
+
+				out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowTrade(), []string{"0"})
+				var queryResp types.QueryGetTradeResponse
+				require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &queryResp))
+				require.Equal(t, acc[0].String(), queryResp.Trade.Creator)
 			}
 		})
 	}
@@ -188,6 +193,9 @@ func TestCmdCancelTrade(t *testing.T) {
 				var resp sdk.TxResponse
 				require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, 0, int(resp.Code))
+
+				out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowTrade(), []string{"0"})
+				require.Error(t, err)
 			}
 		})
 	}
