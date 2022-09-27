@@ -26,10 +26,10 @@ class NetworkInfoImpl implements NetworkInfo {
 
   @override
   String getIP() {
-    if (connectionChecker.addresses.isEmpty) {
+    if (connectionChecker.addresses.isEmpty || connectionChecker.addresses.last.address == null) {
       throw 'No IP Found';
     }
-    return connectionChecker.addresses.last.address.address;
+    return connectionChecker.addresses.last.address!.address;
   }
 
   @override

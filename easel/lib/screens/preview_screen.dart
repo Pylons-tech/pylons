@@ -34,7 +34,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: EaselAppTheme.kWhite,
+      backgroundColor: Colors.black,
       body: Consumer<EaselProvider>(
         builder: (_, provider, __) => WillPopScope(
           onWillPop: () {
