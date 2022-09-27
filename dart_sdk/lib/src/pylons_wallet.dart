@@ -30,7 +30,7 @@ abstract class PylonsWallet {
 
   static PylonsWallet get instance {
     if (_instance == null) {
-      throw WalletInitializationNotDone('Sdk not initialized');
+      throw WalletInitializationNotDone('SDK not initialized');
     }
 
     return _instance!;
