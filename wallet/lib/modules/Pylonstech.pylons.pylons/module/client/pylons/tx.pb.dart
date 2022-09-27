@@ -411,25 +411,20 @@ class MsgUpdateAccountResponse extends $pb.GeneratedMessage {
 class MsgCreateAccount extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgCreateAccount', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'creator')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'username')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'token')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'referralAddress')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'token')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'referralAddress')
     ..hasRequiredFields = false
   ;
 
   MsgCreateAccount._() : super();
   factory MsgCreateAccount({
     $core.String? creator,
-    $core.String? username,
     $core.String? token,
     $core.String? referralAddress,
   }) {
     final _result = create();
     if (creator != null) {
       _result.creator = creator;
-    }
-    if (username != null) {
-      _result.username = username;
     }
     if (token != null) {
       _result.token = token;
@@ -470,6 +465,76 @@ class MsgCreateAccount extends $pb.GeneratedMessage {
   void clearCreator() => clearField(1);
 
   @$pb.TagNumber(2)
+  $core.String get token => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set token($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasToken() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearToken() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get referralAddress => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set referralAddress($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasReferralAddress() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearReferralAddress() => clearField(3);
+}
+
+class MsgSetUsername extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgSetUsername', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'creator')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'username')
+    ..hasRequiredFields = false
+  ;
+
+  MsgSetUsername._() : super();
+  factory MsgSetUsername({
+    $core.String? creator,
+    $core.String? username,
+  }) {
+    final _result = create();
+    if (creator != null) {
+      _result.creator = creator;
+    }
+    if (username != null) {
+      _result.username = username;
+    }
+    return _result;
+  }
+  factory MsgSetUsername.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MsgSetUsername.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  MsgSetUsername clone() => MsgSetUsername()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  MsgSetUsername copyWith(void Function(MsgSetUsername) updates) => super.copyWith((message) => updates(message as MsgSetUsername)) as MsgSetUsername; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static MsgSetUsername create() => MsgSetUsername._();
+  MsgSetUsername createEmptyInstance() => create();
+  static $pb.PbList<MsgSetUsername> createRepeated() => $pb.PbList<MsgSetUsername>();
+  @$core.pragma('dart2js:noInline')
+  static MsgSetUsername getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MsgSetUsername>(create);
+  static MsgSetUsername? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get creator => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set creator($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasCreator() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearCreator() => clearField(1);
+
+  @$pb.TagNumber(2)
   $core.String get username => $_getSZ(1);
   @$pb.TagNumber(2)
   set username($core.String v) { $_setString(1, v); }
@@ -477,24 +542,35 @@ class MsgCreateAccount extends $pb.GeneratedMessage {
   $core.bool hasUsername() => $_has(1);
   @$pb.TagNumber(2)
   void clearUsername() => clearField(2);
+}
 
-  @$pb.TagNumber(3)
-  $core.String get token => $_getSZ(2);
-  @$pb.TagNumber(3)
-  set token($core.String v) { $_setString(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasToken() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearToken() => clearField(3);
+class MsgSetUsernameResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgSetUsernameResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
 
-  @$pb.TagNumber(4)
-  $core.String get referralAddress => $_getSZ(3);
-  @$pb.TagNumber(4)
-  set referralAddress($core.String v) { $_setString(3, v); }
-  @$pb.TagNumber(4)
-  $core.bool hasReferralAddress() => $_has(3);
-  @$pb.TagNumber(4)
-  void clearReferralAddress() => clearField(4);
+  MsgSetUsernameResponse._() : super();
+  factory MsgSetUsernameResponse() => create();
+  factory MsgSetUsernameResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MsgSetUsernameResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  MsgSetUsernameResponse clone() => MsgSetUsernameResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  MsgSetUsernameResponse copyWith(void Function(MsgSetUsernameResponse) updates) => super.copyWith((message) => updates(message as MsgSetUsernameResponse)) as MsgSetUsernameResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static MsgSetUsernameResponse create() => MsgSetUsernameResponse._();
+  MsgSetUsernameResponse createEmptyInstance() => create();
+  static $pb.PbList<MsgSetUsernameResponse> createRepeated() => $pb.PbList<MsgSetUsernameResponse>();
+  @$core.pragma('dart2js:noInline')
+  static MsgSetUsernameResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MsgSetUsernameResponse>(create);
+  static MsgSetUsernameResponse? _defaultInstance;
 }
 
 class MsgCreateAccountResponse extends $pb.GeneratedMessage {

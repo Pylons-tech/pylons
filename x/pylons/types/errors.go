@@ -16,4 +16,5 @@ var (
 	ErrItemLocked              = sdkerrors.Register(ModuleName, 1105, "item locked")
 	ErrReceiptAlreadyUsed      = sdkerrors.Register(ModuleName, 1106, "receipt already used")
 	ErrReferralUserNotFound    = sdkerrors.Register(ModuleName, 1107, "referral user not found")
+	ErrAccountNotFound         = sdkerrors.Register(ModuleName, 1108, "account not created")
 )

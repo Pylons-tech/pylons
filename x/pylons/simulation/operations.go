@@ -143,11 +143,9 @@ func SimulateCreateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 			ItemIDs:     make([]string, 0),
 		}
 
-		username := generateRandomUsername(r)
-
 		msg := types.NewMsgCreateAccount(
 			simAccount.Address.String(),
-			username, "", "")
+			"", "")
 
 		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
 	}
@@ -168,11 +166,9 @@ func SimulateUpdateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 				types.ModuleName, msgType, "Account has no balance"), nil, nil
 		}
 
-		username := generateRandomUsername(r)
-
 		msg := types.NewMsgCreateAccount(
 			simAccount.Address.String(),
-			username, "", "")
+			"", "")
 
 		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
 	}

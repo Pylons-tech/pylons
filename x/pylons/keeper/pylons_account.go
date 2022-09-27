@@ -11,6 +11,12 @@ import (
 // this function sets two symmetric KVStores with address -> username
 // and username -> address mappings
 func (k Keeper) SetPylonsAccount(ctx sdk.Context, accountAddr types.AccountAddr, username types.Username) {
+	binaryUsername := k.cdc.MustMarshal(&username)
+	accountPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AccountKey))
+	accountPrefixStore.Set(types.KeyPrefix(accountAddr.Value), binaryUsername)
+}
+
+func (k Keeper) UpdatePylonsAccount(ctx sdk.Context, accountAddr types.AccountAddr, username types.Username) {
 	binaryAddr := k.cdc.MustMarshal(&accountAddr)
 	binaryUsername := k.cdc.MustMarshal(&username)
 	usernamePrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
