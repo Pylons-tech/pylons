@@ -177,6 +177,18 @@ func TestCmdCreateCookbook(t *testing.T) {
 				var resp sdk.TxResponse
 				require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, 0, int(resp.Code))
+
+				out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowCookbook(), []string{tc.id})
+				require.NoError(t, err)
+
+				var queryResp types.QueryGetCookbookResponse
+				require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &queryResp))
+				require.Equal(t, tc.name, queryResp.Cookbook.Name)
+				require.Equal(t, tc.desc, queryResp.Cookbook.Description)
+				require.Equal(t, tc.developer, queryResp.Cookbook.Developer)
+				require.Equal(t, tc.version, queryResp.Cookbook.Version)
+				require.Equal(t, tc.email, queryResp.Cookbook.SupportEmail)
+				require.Equal(t, tc.enabled, strconv.FormatBool(queryResp.Cookbook.Enabled))
 			}
 		})
 	}
@@ -376,6 +388,18 @@ func TestCmdUpdateCookbook(t *testing.T) {
 				var resp sdk.TxResponse
 				require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, 0, int(resp.Code))
+
+				out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowCookbook(), []string{tc.id})
+				require.NoError(t, err)
+
+				var queryResp types.QueryGetCookbookResponse
+				require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &queryResp))
+				require.Equal(t, tc.name, queryResp.Cookbook.Name)
+				require.Equal(t, tc.desc, queryResp.Cookbook.Description)
+				require.Equal(t, tc.developer, queryResp.Cookbook.Developer)
+				require.Equal(t, tc.version, queryResp.Cookbook.Version)
+				require.Equal(t, tc.email, queryResp.Cookbook.SupportEmail)
+				require.Equal(t, tc.enabled, strconv.FormatBool(queryResp.Cookbook.Enabled))
 			}
 		})
 	}
