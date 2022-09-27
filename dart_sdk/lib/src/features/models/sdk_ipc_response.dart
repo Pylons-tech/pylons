@@ -4,7 +4,7 @@ class SDKIPCResponse<T> {
   bool success;
   String errorCode;
   String error;
-  T data;
+  T? data;
   String action;
 
   SDKIPCResponse(

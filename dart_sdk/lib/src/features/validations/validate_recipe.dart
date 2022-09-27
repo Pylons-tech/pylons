@@ -4,8 +4,6 @@ import 'package:pylons_sdk/src/core/constants/strings.dart';
 import 'package:pylons_sdk/src/core/error/exceptions.dart';
 import 'package:pylons_sdk/src/generated/pylons/recipe.pb.dart';
 
-
-
 class ValidateRecipe {
   /// Verifies that all of a recipe's outputs are accessible, and that it
   /// doesn't refer to any outputs that are not present.

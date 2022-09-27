@@ -829,12 +829,12 @@ class EaselProvider extends ChangeNotifier {
     var sdkResponse = await PylonsWallet.instance.getProfile();
 
     if (sdkResponse.success) {
-      currentUsername = sdkResponse.data.username;
-      stripeAccountExists = sdkResponse.data.stripeExists;
+      currentUsername = sdkResponse.data!.username;
+      stripeAccountExists = sdkResponse.data!.stripeExists;
 
       supportedDenomList = Denom.availableDenoms
           .where(
-              (Denom e) => sdkResponse.data.supportedCoins.contains(e.symbol))
+              (Denom e) => sdkResponse.data!.supportedCoins.contains(e.symbol))
           .toList();
 
       if (supportedDenomList.isNotEmpty && selectedDenom.symbol.isEmpty) {

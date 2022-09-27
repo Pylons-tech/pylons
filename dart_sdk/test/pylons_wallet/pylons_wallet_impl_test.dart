@@ -213,7 +213,7 @@ void getItemsByOwnerTest() {
 
     var response = await pylonsWallet.getItemListByOwner(owner: MOCK_OWNER);
 
-    expect(response.data.length, 1);
+    expect(response.data!.length, 1);
     expect(response.action, Strings.GET_ITEMS_BY_OWNER);
   });
 }
@@ -267,8 +267,8 @@ void getRecipeTest() {
     var response =
         await pylonsWallet.getRecipe(MOCK_COOKBOOK_ID, MOCK_RECIPE_ID);
 
-    expect(response.data.id, MOCK_RECIPE_ID);
-    expect(response.data.cookbookId, MOCK_COOKBOOK_ID);
+    expect(response.data!.id, MOCK_RECIPE_ID);
+    expect(response.data!.cookbookId, MOCK_COOKBOOK_ID);
     expect(response.action, Strings.GET_RECIPE);
   });
 }
@@ -286,7 +286,7 @@ void createRecipeTest() {
       final sdkResponse = SDKIPCResponse(
           success: true,
           error: '',
-          data: '',
+          data: MOCK_RECIPE,
           errorCode: '',
           action: Strings.TX_CREATE_RECIPE);
       responseCompleters[Strings.TX_CREATE_RECIPE]!.complete(sdkResponse);
@@ -310,7 +310,8 @@ void createRecipeTest() {
         await pylonsWallet.txCreateRecipe(MOCK_RECIPE, requestResponse: false);
 
     expect(true, response.success);
-    expect(response.data, Strings.ACTION_DONE);
+    expect(response.action, Strings.TX_CREATE_RECIPE);
+    expect(response.data, MOCK_RECIPE);
   });
 }
 
@@ -444,11 +445,13 @@ void executeRecipeTest() {
         .thenAnswer((realInvocation) => Stream<String?>.value('Jawad'));
     var pylonsWallet = PylonsWalletImpl(host: MOCK_HOST, uniLink: uniLink);
 
+
+
     Future.delayed(Duration(seconds: 1), () {
       final sdkResponse = SDKIPCResponse(
           success: true,
           error: '',
-          data: '',
+          data: MOCK_EXECUTION,
           errorCode: '',
           action: Strings.TX_EXECUTE_RECIPE);
       responseCompleters[Strings.TX_EXECUTE_RECIPE]!.complete(sdkResponse);
@@ -463,6 +466,7 @@ void executeRecipeTest() {
 
     expect(true, response.success);
     expect(response.action, Strings.TX_EXECUTE_RECIPE);
+    expect(response.data, MOCK_EXECUTION);
   });
 
   test('should execute recipe in the wallet without redirecting', () async {
@@ -482,7 +486,8 @@ void executeRecipeTest() {
         requestResponse: false);
 
     expect(true, response.success);
-    expect(response.data, Strings.ACTION_DONE);
+    expect(response.action, Strings.TX_EXECUTE_RECIPE);
+
   });
 }
 
@@ -512,7 +517,7 @@ void createCookBookTest() {
 
     expect(true, response.success);
     expect(response.action, Strings.TX_CREATE_COOKBOOK);
-    expect(response.data.id, cookBook.id);
+    expect(response.data!.id, cookBook.id);
   });
 
   test('should create cookbook in the wallet without redirecting back',
@@ -532,7 +537,7 @@ void createCookBookTest() {
 
     expect(true, response.success);
     expect(response.action, Strings.TX_CREATE_COOKBOOK);
-    expect(response.data.id, cookBook.id);
+    expect(response.data!.id, cookBook.id);
   });
 }
 
@@ -560,7 +565,7 @@ void getRecipesTest() {
 
     var response = await pylonsWallet.getRecipes(MOCK_COOKBOOK_ID);
 
-    expect(response.data.length, 2);
+    expect(response.data!.length, 2);
     expect(response.action, Strings.GET_RECIPES);
   });
 }
@@ -586,9 +591,9 @@ void getProfileTest() {
 
     var response = await pylonsWallet.getProfile();
 
-    expect(response.data.username, MOCK_USERNAME);
-    expect(response.data.stripeExists, MOCK_STRIPE_EXISTS);
-    expect(response.data.address, MOCK_OWNER);
+    expect(response.data!.username, MOCK_USERNAME);
+    expect(response.data!.stripeExists, MOCK_STRIPE_EXISTS);
+    expect(response.data!.address, MOCK_OWNER);
     expect(response.action, Strings.GET_PROFILE);
   });
 }
@@ -617,7 +622,7 @@ void getCookBookTest() {
 
     var response = await pylonsWallet.getCookbook(MOCK_COOKBOOK_ID);
 
-    expect(response.data.id, MOCK_COOKBOOK_ID);
+    expect(response.data!.id, MOCK_COOKBOOK_ID);
   });
 }
 
