@@ -250,6 +250,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       children: [
                         Expanded(child: _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner)),
                         IconButton(
+                          key: const Key(kKeyboardUpButtonKeyValue),
                           icon: Icon(
                             Icons.keyboard_arrow_up,
                             size: 32.h,
@@ -669,6 +670,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   ),
                   if (viewModel.nft.amountMinted < viewModel.nft.quantity)
                     ClipPath(
+                      key: const Key(kExpandedBuyButtonKeyValue),
                       clipper: BuyClipper(),
                       child: InkWell(
                         onTap: () async {

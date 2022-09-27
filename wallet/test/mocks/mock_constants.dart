@@ -267,3 +267,6 @@ NftOwnershipHistory MOCK_NFT_OWNERSHIP_HISTORY = NftOwnershipHistory(
   receiver: "xyz",
   senderName: "abcxyz",
 );
+
+int MOCK_NFT_QUANTITY = 50;
+int MOCK_NFT_MINTED = 10;
