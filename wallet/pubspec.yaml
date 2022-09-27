@@ -58,7 +58,7 @@ dependencies:
 
   equatable: ^2.0.3
 
-  internet_connection_checker: 1.0.0+1
+  internet_connection_checker: ^1.0.0+1
 
   flutter_secure_storage: ^6.0.0
 
