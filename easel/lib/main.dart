@@ -14,6 +14,7 @@ import 'package:easel_flutter/utils/route_util.dart';
 import 'package:easel_flutter/widgets/pdf_viewer_full_screen.dart';
 import 'package:easel_flutter/widgets/video_widget_full_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
   di.init();
   final firebaseCrashlytics = GetIt.I.get<FirebaseCrashlytics>();
-
+  GetIt.I.get<FirebaseAnalytics>();
   runZonedGuarded(() async {
     await GetIt.I.isReady<AppDatabase>();
     await EasyLocalization.ensureInitialized();
@@ -47,8 +48,8 @@ Future<void> main() async {
         supportedLocales: const [
           Locale('en', 'US'),
           Locale('ru', 'RU'),
-          Locale('es', 'ES'),
-          Locale('de', 'DE'),
+          Locale('es'),
+          Locale('de'),
         ],
         path: 'i18n',
         fallbackLocale: const Locale('en', 'US'),

@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
@@ -17,6 +16,7 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dar
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_image_asset.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
+import 'package:pylons_wallet/pages/gestures_for_detail_screen.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart' show PurchaseItemViewModel;
@@ -26,8 +26,6 @@ import 'package:pylons_wallet/pages/purchase_item/widgets/purchase_video_player_
 import 'package:pylons_wallet/pages/purchase_item/widgets/purchase_video_progress_widget.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/trade_receipt_dialog.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/transaction_complete_dialog.dart';
-import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
@@ -37,10 +35,9 @@ import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
 class PurchaseItemScreen extends StatefulWidget {
-  final NFT nft;
   final PurchaseItemViewModel purchaseItemViewModel;
 
-  const PurchaseItemScreen({Key? key, required this.nft, required this.purchaseItemViewModel}) : super(key: key);
+  const PurchaseItemScreen({Key? key, required this.purchaseItemViewModel}) : super(key: key);
 
   @override
   State<PurchaseItemScreen> createState() => _PurchaseItemScreenState();
@@ -52,8 +49,7 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
     super.initState();
 
     scheduleMicrotask(() {
-      widget.purchaseItemViewModel.setNFT(widget.nft);
-      widget.purchaseItemViewModel.initializeData(nft: widget.nft);
+      widget.purchaseItemViewModel.initializeData();
     });
   }
 
@@ -63,7 +59,7 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
       value: widget.purchaseItemViewModel,
       child: WillPopScope(
           onWillPop: () async {
-            widget.purchaseItemViewModel.destroyPlayers(widget.nft);
+            widget.purchaseItemViewModel.destroyPlayers();
             return true;
           },
           child: const PurchaseItemContent()),
@@ -72,7 +68,9 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
 }
 
 class PurchaseItemContent extends StatefulWidget {
-  const PurchaseItemContent({Key? key}) : super(key: key);
+  const PurchaseItemContent({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _PurchaseItemContentState createState() => _PurchaseItemContentState();
@@ -87,9 +85,9 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
   Widget getTypeWidget(PurchaseItemViewModel viewModel) {
     switch (viewModel.nft.assetType) {
       case AssetType.Audio:
-        return getAudioWidget(thumbnailUrl: viewModel.nft.thumbnailUrl);
+        return getAudioWidget(thumbnailUrl: viewModel.nft.thumbnailUrl, viewModel: viewModel);
       case AssetType.Image:
-        return NftImageWidget(url: viewModel.nft.url, opacity: 0.4);
+        return NftImageWidget(url: viewModel.nft.url, opacity: viewModel.isViewingFullNft ? 0.0 : 0.4);
       case AssetType.Video:
         return PurchaseVideoPlayerScreen(nft: viewModel.nft);
       case AssetType.Pdf:
@@ -111,11 +109,11 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
         );
 
       default:
-        return NftImageWidget(url: viewModel.nft.url, opacity: 0.4);
+        return NftImageWidget(url: viewModel.nft.url, opacity: viewModel.isViewingFullNft ? 0.0 : 0.4);
     }
   }
 
-  Widget getAudioWidget({required String thumbnailUrl}) {
+  Widget getAudioWidget({required String thumbnailUrl, required PurchaseItemViewModel viewModel}) {
     if (thumbnailUrl.isEmpty) {
       return Image.asset(
         ImageUtil.AUDIO_BACKGROUND,
@@ -126,7 +124,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
 
     return NftImageWidget(
       url: thumbnailUrl,
-      opacity: 0.4,
+      opacity: viewModel.isViewingFullNft ? 0.0 : 0.4,
     );
   }
 
@@ -136,41 +134,50 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
 
     return Scaffold(
         backgroundColor: kBlack,
-        body: GestureDetector(
-          onTapUp: (TapUpDetails details) => onTapUp(context, details),
+        body: GesturesForDetailsScreen(
+          nft: viewModel.nft,
+          viewModel: viewModel,
+          screen: DetailScreen.purchaseScreen,
+          tapUp: (context) => onTapUp,
           child: Stack(
             children: [
               getTypeWidget(viewModel),
-              Padding(
-                padding: EdgeInsets.only(left: 8, right: 8, bottom: 8, top: MediaQuery.of(context).viewPadding.top),
-                child: SizedBox(
-                  height: 100.h,
-                  width: double.infinity,
-                  child: ListTile(
-                    leading: GestureDetector(
-                      onTap: () {
-                        viewModel.destroyPlayers(viewModel.nft);
-                        Navigator.pop(context);
-                      },
-                      child: SvgPicture.asset(
-                        SVGUtil.OWNER_BACK_ICON,
-                        height: 25.h,
+              Visibility(
+                visible: !viewModel.isViewingFullNft,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 8, right: 8, bottom: 8, top: MediaQuery.of(context).viewPadding.top),
+                  child: SizedBox(
+                    height: 100.h,
+                    width: double.infinity,
+                    child: ListTile(
+                      leading: GestureDetector(
+                        onTap: () {
+                          viewModel.destroyPlayers();
+                          Navigator.pop(context);
+                        },
+                        child: SvgPicture.asset(
+                          SVGUtil.OWNER_BACK_ICON,
+                          height: 25.h,
+                        ),
                       ),
+                      trailing: const SizedBox(),
                     ),
-                    trailing: const SizedBox(),
                   ),
                 ),
               ),
-              const Align(
-                alignment: Alignment.bottomCenter,
-                child: OwnerBottomDrawer(),
+              Visibility(
+                visible: !viewModel.isViewingFullNft,
+                child: const Align(
+                  alignment: Alignment.bottomCenter,
+                  child: OwnerBottomDrawer(),
+                ),
               )
             ],
           ),
         ));
   }
 
-  //detect card's outside tap
+//detect card's outside tap
   void onTapUp(BuildContext context, TapUpDetails details) {
     if (key.currentContext != null) {
       // This should generally not be null, but it could be null in test cases, conceivably, so let's not crash
@@ -274,10 +281,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         GestureDetector(
                           onTap: () async {
                             final Size size = MediaQuery.of(context).size;
+                            context.read<PurchaseItemViewModel>().shareNFTLink(size: size);
 
-                            final String? link = await generateLink(viewModel);
-                            if (link == null) return;
-                            viewModel.shareNFTLink(size, link);
                           },
                           child: Container(
                             padding: EdgeInsets.only(bottom: 12.h),
@@ -298,17 +303,22 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             clipper: BuyClipper(),
                             child: InkWell(
                               onTap: () async {
-                                final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
-                                  selectedDenom: viewModel.nft.denom,
-                                  requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
-                                );
+                                bool balancesFetchResult = true;
+                                if (viewModel.nft.price != kZeroInt) {
+                                  final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
+                                    selectedDenom: viewModel.nft.denom,
+                                    requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
+                                  );
 
-                                if (balancesEither.isLeft()) {
-                                  balancesEither.swap().getOrElse(() => '').show();
-                                  return;
+                                  if (balancesEither.isLeft()) {
+                                    balancesEither.swap().getOrElse(() => '').show();
+                                    return;
+                                  }
+
+                                  balancesFetchResult = balancesEither.getOrElse(() => false);
                                 }
 
-                                final balancesFetchResult = balancesEither.getOrElse(() => false);
+                                viewModel.addLogForCart();
 
                                 final PayNowDialog payNowDialog = PayNowDialog(
                                     buildContext: context,
@@ -368,19 +378,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         ],
       ),
     );
-  }
-
-  Future<String?> generateLink(PurchaseItemViewModel viewModel) async {
-    final repo = GetIt.instance.get<Repository>();
-    final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
-
-    final link = await repo.createDynamicLinkForRecipeNftShare(address: address, nft: viewModel.nft);
-    return link.fold((l) {
-      "something_wrong".tr().show();
-      return null;
-    }, (r) async {
-      return r;
-    });
   }
 
   Widget soldOutButton(PurchaseItemViewModel viewModel) {
@@ -658,10 +655,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               GestureDetector(
                                 onTap: () async {
                                   final Size size = MediaQuery.of(context).size;
+                                  context.read<PurchaseItemViewModel>().shareNFTLink(size: size);
 
-                                  final String? link = await generateLink(viewModel);
-                                  if (link == null) return;
-                                  viewModel.shareNFTLink(size, link);
                                 },
                                 child: SvgPicture.asset(
                                   SVGUtil.OWNER_SHARE,
