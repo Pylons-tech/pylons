@@ -81,6 +81,12 @@ class MsgClient extends $grpc.Client {
           ($1.MsgCreateAccount value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $1.MsgCreateAccountResponse.fromBuffer(value));
+  static final _$setUsername =
+      $grpc.ClientMethod<$1.MsgSetUsername, $1.MsgSetUsernameResponse>(
+          '/pylons.pylons.Msg/SetUsername',
+          ($1.MsgSetUsername value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $1.MsgSetUsernameResponse.fromBuffer(value));
   static final _$sendItems =
       $grpc.ClientMethod<$1.MsgSendItems, $1.MsgSendItemsResponse>(
           '/pylons.pylons.Msg/SendItems',
@@ -194,6 +200,12 @@ class MsgClient extends $grpc.Client {
       $1.MsgCreateAccount request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createAccount, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$1.MsgSetUsernameResponse> setUsername(
+      $1.MsgSetUsername request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$setUsername, request, options: options);
   }
 
   $grpc.ResponseFuture<$1.MsgSendItemsResponse> sendItems(
@@ -341,6 +353,15 @@ abstract class MsgServiceBase extends $grpc.Service {
             ($core.List<$core.int> value) =>
                 $1.MsgCreateAccount.fromBuffer(value),
             ($1.MsgCreateAccountResponse value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$1.MsgSetUsername, $1.MsgSetUsernameResponse>(
+            'SetUsername',
+            setUsername_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $1.MsgSetUsername.fromBuffer(value),
+            ($1.MsgSetUsernameResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$1.MsgSendItems, $1.MsgSendItemsResponse>(
         'SendItems',
         sendItems_Pre,
@@ -466,6 +487,11 @@ abstract class MsgServiceBase extends $grpc.Service {
     return createAccount(call, await request);
   }
 
+  $async.Future<$1.MsgSetUsernameResponse> setUsername_Pre(
+      $grpc.ServiceCall call, $async.Future<$1.MsgSetUsername> request) async {
+    return setUsername(call, await request);
+  }
+
   $async.Future<$1.MsgSendItemsResponse> sendItems_Pre(
       $grpc.ServiceCall call, $async.Future<$1.MsgSendItems> request) async {
     return sendItems(call, await request);
@@ -528,6 +554,8 @@ abstract class MsgServiceBase extends $grpc.Service {
           $grpc.ServiceCall call, $1.MsgGoogleInAppPurchaseGetCoins request);
   $async.Future<$1.MsgCreateAccountResponse> createAccount(
       $grpc.ServiceCall call, $1.MsgCreateAccount request);
+  $async.Future<$1.MsgSetUsernameResponse> setUsername(
+      $grpc.ServiceCall call, $1.MsgSetUsername request);
   $async.Future<$1.MsgSendItemsResponse> sendItems(
       $grpc.ServiceCall call, $1.MsgSendItems request);
   $async.Future<$1.MsgExecuteRecipeResponse> executeRecipe(
