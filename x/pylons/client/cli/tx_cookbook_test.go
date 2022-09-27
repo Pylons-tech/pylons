@@ -8,29 +8,10 @@ import (
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/cosmos/cosmos-sdk/client"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
-
-func createAccountInKeyring(ctx client.Context, t *testing.T, net *network.Network, n int) []sdk.AccAddress {
-	acc := util.GenerateAddressesInKeyring(ctx.Keyring, 2)
-
-	for i := 0; i < n; i++ {
-		common := util.CommonArgs(acc[0].String(), net)
-		args := []string{}
-		args = append(args, "testUsername"+strconv.Itoa(i))
-		args = append(args, "")
-		args = append(args, "")
-		args = append(args, common...)
-
-		_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
-		require.NoError(t, err)
-	}
-
-	return acc
-}
 
 func TestCmdCreateCookbook(t *testing.T) {
 	net := network.New(t)
