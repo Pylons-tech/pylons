@@ -36,8 +36,13 @@ dependencies:
   expandable: 5.0.1
 
   easy_localization: 3.0.1
+
+
+  image_cropper: ^3.0.0
+
   image_picker: ^0.8.5+3
-  image_cropper: 1.4.1
+
+
   popup_menu: ^1.0.5
   cached_network_image: ^3.1.0
   flutter_dotenv: 5.0.2
