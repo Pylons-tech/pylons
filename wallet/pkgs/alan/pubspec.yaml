@@ -6,7 +6,7 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  analyzer: ^3.4.1
+  analyzer: ^5.1.0
   asn1lib: ^1.0.0
   bech32: ^0.2.0
   bip39: ^1.0.6
@@ -23,8 +23,8 @@ dependencies:
   protobuf: ^2.0.0
 
 dev_dependencies:
-  build_runner: ^2.1.11
-  mockito: ^5.0.3
+  build_runner: ^2.2.1
+  mockito: ^5.3.2
   mock_web_server: ^5.0.0-nullsafety.1
   pedantic: ^1.11.0
   test: ^1.16.8
