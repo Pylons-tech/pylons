@@ -26,7 +26,6 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 
 	_, err := srv.CreateAccount(wctx, &types.MsgCreateAccount{
 		Creator:  types.TestCreator,
-		Username: "test",
 	})
 	require.NoError(err)
 

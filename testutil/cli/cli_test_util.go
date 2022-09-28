@@ -59,12 +59,11 @@ func GenerateAddressWithAccount(ctx client.Context, t *testing.T, net *network.N
 	accs := GenerateAddressesInKeyring(ctx.Keyring, 1)
 	common := CommonArgs(accs[0].String(), net)
 
-	username := "user"
 	usernameToken := "usernameToken"
 	types.UpdateAppCheckFlagTest(types.FlagTrue)
 
 	// create account
-	args := []string{username, usernameToken, ""}
+	args := []string{usernameToken, ""}
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
 	if err != nil {

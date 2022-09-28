@@ -111,7 +111,7 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 		return nil, types.ErrDuplicateUsername
 	}
 
-	k.SetPylonsAccount(ctx, accountAddr, username)
+	k.UpdatePylonsAccount(ctx, accountAddr, username)
 
 	// perform payment after update
 	updateFee := k.Keeper.UpdateUsernameFee(ctx)

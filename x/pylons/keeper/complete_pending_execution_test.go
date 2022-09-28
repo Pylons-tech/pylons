@@ -26,7 +26,6 @@ func (suite *IntegrationTestSuite) TestCompletePendingExecution() {
 
 	srv.CreateAccount(wctx, &types.MsgCreateAccount{
 		Creator:  executor,
-		Username: "Executor",
 	})
 
 	types.UpdateAppCheckFlagTest(types.FlagFalse)
