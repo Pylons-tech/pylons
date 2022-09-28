@@ -166,6 +166,7 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
             return ListView.separated(
                 separatorBuilder: (context, index) => const Divider(),
                 shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: failureVM.localTransactionsList.length,
                 itemBuilder: (context, int index) {
                   final LocalTransactionModel txManager = failureVM.localTransactionsList[index];

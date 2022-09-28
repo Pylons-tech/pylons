@@ -116,7 +116,7 @@ extension NftSize on NFT {
 extension NoInternetConnectionHelper on Failure {
   void checkAndTakeAction({required ValueChanged<String>? onError}) {
     if (this is NoInternetFailure) {
-      "no_internet".show();
+      "no_internet".tr().show();
     }
   }
 }

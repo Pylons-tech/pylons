@@ -177,7 +177,7 @@ class _PylonsAppState extends State<PylonsApp> {
 
       if (event == InternetConnectionStatus.disconnected) {
         if (!noInternet.isShowing) {
-          noInternet.showNoInternet();
+          // noInternet.showNoInternet();
         }
       }
     });
@@ -187,10 +187,6 @@ class _PylonsAppState extends State<PylonsApp> {
     if (event.isEmpty) {
       return;
     }
-
-    final loading = Loading();
-
-    loading.showLoading();
 
     for (final purchaseDetails in event) {
       switch (purchaseDetails.status) {
@@ -209,11 +205,13 @@ class _PylonsAppState extends State<PylonsApp> {
       }
     }
 
-    loading.dismiss();
   }
 
   Future handlerPurchaseEvent(PurchaseDetails purchaseDetails) async {
     try {
+      final loading = Loading();
+      loading.showLoading();
+
       final walletStore = GetIt.I.get<WalletsStore>();
       if (Platform.isIOS) {
         if (purchaseDetails.pendingCompletePurchase) {
@@ -252,11 +250,14 @@ class _PylonsAppState extends State<PylonsApp> {
         final googleInAppPurchase = await walletStore.sendGoogleInAppPurchaseCoinsRequest(googleInAppPurchaseModel);
 
         if (googleInAppPurchase.isLeft()) {
+          loading.dismiss(); 
           googleInAppPurchase.swap().toOption().toNullable()!.message.show();
+          await Future.delayed(const Duration(seconds: 2));
           Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
-
           return;
         }
+
+        loading.dismiss();
 
         GetIt.I.get<HomeProvider>().buildAssetsList();
         "purchase_successful".tr().show();

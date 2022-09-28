@@ -800,7 +800,6 @@ class RepositoryImp implements Repository {
         await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
         return Left(StripeFailure(result.error ?? GEN_PAYMENTRECEIPT_FAILED));
       }
-
       await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(StripeGeneratePaymentReceiptResponse.from(result));
     } on Exception catch (_) {
