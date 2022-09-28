@@ -1,6 +1,7 @@
 class RouteUtil {
   RouteUtil();
   static String ROUTE_HOME = "/home";
+  static String ROUTE_WIDGET = "/widget_screen";
   static String ROUTE_APP_UPDATE = "/app_update";
   static String ROUTE_SETTINGS = "/settings";
   static String ROUTE_LEGAL = "/legal";
