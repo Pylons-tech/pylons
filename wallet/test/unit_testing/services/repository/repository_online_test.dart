@@ -1,6 +1,26 @@
+import 'dart:convert';
+
+import 'package:fixnum/fixnum.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:mockito/mockito.dart';
+import 'package:pylons_wallet/model/stripe_account_link_request.dart';
+import 'package:pylons_wallet/model/stripe_account_link_response.dart';
+import 'package:pylons_wallet/model/stripe_create_payment_intent_request.dart';
+import 'package:pylons_wallet/model/stripe_create_payment_intent_response.dart';
+import 'package:pylons_wallet/model/stripe_generate_payment_receipt_request.dart';
+import 'package:pylons_wallet/model/stripe_generate_payment_receipt_response.dart';
+import 'package:pylons_wallet/model/stripe_generate_payout_token_request.dart';
+import 'package:pylons_wallet/model/stripe_generate_payout_token_response.dart';
+import 'package:pylons_wallet/model/stripe_generate_update_token_response.dart';
+import 'package:pylons_wallet/model/stripe_payout_request.dart';
+import 'package:pylons_wallet/model/stripe_payout_response.dart';
+import 'package:pylons_wallet/model/stripe_register_account_response.dart';
+import 'package:pylons_wallet/model/stripe_register_acount_request.dart';
+import 'package:pylons_wallet/model/stripe_update_account_request.dart';
+import 'package:pylons_wallet/model/stripe_update_account_response.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 
@@ -17,6 +37,7 @@ import '../../../mocks/mock_remote_data_store.dart';
 import '../../../mocks/mock_wallet_store.dart';
 
 void main() async {
+  dotenv.testLoad(fileInput: '''ENV=true''');
   late http.Client client;
   final mockWalletStore = MockWalletStore();
   final localdataSource = MockLocalDataSource();
@@ -74,7 +95,7 @@ void main() async {
   });
 
   test("test for createDynamicLinkForRecipeNftShare", () async {
-    final response = await repository.createDynamicLinkForRecipeNftShare(address: MOCK_ADDRESS, nft: MOCK_NFT);
+    final response = await repository.createDynamicLinkForRecipeNftShare(address: MOCK_ADDRESS, nft: MOCK_NFT_FREE);
     expect(true, response.isRight());
     response.fold((l) => throw MOCK_SOMETHING_WENT_WRONG, (r) => expect(MOCK_DYNAMIC_LINK, r));
   });
@@ -120,100 +141,116 @@ void main() async {
     response.fold((l) => throw MOCK_SOMETHING_WENT_WRONG, (r) => expect(MOCK_STRIPE_ACCOUNT_EXISTS, r));
   });
 
-  //TODO: HAVE TO REFACTOR THESE CASES LATER
-  //
-  // test('test CreatePaymentIntent', () async {
-  //   final req = StripeCreatePaymentIntentRequest(address: MOCK_ADDRESS, coinInputIndex: 0, productID: 'recipe/cookbook_for_test_stripe_5/cookbook_for_test_stripe_5');
-  //
-  //   // when(client.post(Uri.parse("$MOCK_BASE_URL/create-payment-intent"), body: jsonEncode(req))).thenAnswer(
-  //   //   (realInvocation) async => http.Response(
-  //   //     jsonEncode({
-  //   //       'result': true,
-  //   //       'message': 'Create payment intent',
-  //   //       'data': {"success": true}
-  //   //     }),
-  //   //     200,
-  //   //   ),
-  //   // );
-  //   final response = await repository.CreatePaymentIntent(req);
-  //   expect(true, response.getOrElse(() => StripeCreatePaymentIntentResponse()).success);
-  // });
-  //
-  // test('test GeneratePaymentReceipt', () async {
-  //   final req = StripeGeneratePaymentReceiptRequest(clientSecret: '', paymentIntentID: '');
-  //   final response = await repository.GeneratePaymentReceipt(req);
-  //   expect(true, response.getOrElse(() => StripeGeneratePaymentReceiptResponse()).success);
-  // });
-  //
-  // test('test GenerateRegistrationToken', () async {
-  //   const address = MOCK_ADDRESS;
-  //
-  //   final response = await repository.GenerateRegistrationToken(address);
-  //   expect(true, response.getOrElse(() => StripeGenerateRegistrationTokenResponse()).success);
-  // });
-  //
-  // test('test RegisterAccount', () async {
-  //   // when(client.post(Uri.parse("$MOCK_BASE_URL/register-account"), body: jsonEncode(req))).thenAnswer(
-  //   //   (realInvocation) async => http.Response(
-  //   //     jsonEncode({
-  //   //       'result': true,
-  //   //       'message': 'Create payment intent',
-  //   //       'data': {"accountlink": "https://connect.stripe.com/setup/e/acct_1LjyYMQbO6Fk1HCk/8dhWlWts0BbN", "account": "acct_1LjyYMQbO6Fk1HCk"}
-  //   //     }),
-  //   //     200,
-  //   //   ),
-  //   // );
-  //   final req = StripeRegisterAccountRequest(Signature: '', Address: MOCK_ADDRESS, Token: '');
-  //   final response = await repository.RegisterAccount(req);
-  //   expect(true, response.getOrElse(() => StripeRegisterAccountResponse()).success);
-  // });
-  //
-  // test('test GenerateUpdateToken', () async {
-  //   final response = await repository.GenerateUpdateToken(MOCK_ADDRESS);
-  //   expect(true, response.getOrElse(() => StripeGenerateUpdateTokenResponse()).success);
-  // });
-  //
-  // test('test UpdateAccount', () async {
-  //   final req = StripeUpdateAccountRequest(Signature: '', Address: MOCK_ADDRESS, Token: '');
-  //   final response = await repository.UpdateAccount(req);
-  //   expect(true, response.getOrElse(() => StripeUpdateAccountResponse()).success);
-  // });
-  //
-  // test('test GeneratePayoutToken', () async {
-  //   final req = StripeGeneratePayoutTokenRequest(address: '', amount: Int64.ONE);
-  //   final response = await repository.GeneratePayoutToken(req);
-  //   expect(true, response.getOrElse(() => StripeGeneratePayoutTokenResponse()).success);
-  // });
-  //
-  // test('test Payout', () async {
-  //   final req = StripePayoutRequest(
-  //     amount: Int64.ONE,
-  //   );
-  //   final response = await repository.Payout(req);
-  //   expect(true, response.getOrElse(() => StripePayoutResponse()).success);
-  // });
-  //
-  // test('test GetAccountLink', () async {
-  //   final req = StripeAccountLinkRequest(Signature: '', Account: '');
-  //   final response = await repository.GetAccountLink(req);
-  //   expect(true, response.getOrElse(() => StripeAccountLinkResponse()).success);
-  // });
-  //
-  // test('should get account link and account on  getAccountLinkBasedOnUpdateToken', () async {
-  //   final response = await repository.getAccountLinkBasedOnUpdateToken(MOCK_STRIPE_UPDATE_ACCOUNT_REQUEST);
-  //
-  //   expect(true, response.isRight());
-  //   expect(true, response.toOption().toNullable()!.success);
-  //   expect(MOCK_ACCOUNT_LINK, response.toOption().toNullable()!.accountlink);
-  //   expect(MOCK_ACCOUNT, response.toOption().toNullable()!.account);
-  // });
-  //
-  // test('should get account link and account on  getLoginLinkBasedOnAddress', () async {
-  //   final response = await repository.getLoginLinkBasedOnAddress(MOCK_STRIPE_LOGIN_BASED_ADDRESS_REQUEST);
-  //
-  //   expect(true, response.isRight());
-  //   expect(true, response.toOption().toNullable()!.success);
-  //   expect(MOCK_ACCOUNT_LINK, response.toOption().toNullable()!.accountlink);
-  //   expect(MOCK_ACCOUNT, response.toOption().toNullable()!.account);
-  // });
+  test('test GenerateRegistrationToken', () async {
+    const address = MOCK_ADDRESS;
+    final response = await repository.GenerateRegistrationToken(address);
+    expect(true, response.isRight());
+    response.fold((l) => throw MOCK_SOMETHING_WENT_WRONG, (r) => expect(true, r.success));
+  });
+
+  test('should get account link and account on  getLoginLinkBasedOnAddress', () async {
+    final response = await repository.getLoginLinkBasedOnAddress(MOCK_STRIPE_LOGIN_BASED_ADDRESS_REQUEST);
+
+    expect(true, response.isRight());
+    expect(false, response.toOption().toNullable()!.success);
+    expect(MOCK_ACCOUNT_LINK, response.toOption().toNullable()!.accountlink);
+    expect(MOCK_ACCOUNT, response.toOption().toNullable()!.account);
+  });
+
+  test('should get account link and account on  getAccountLinkBasedOnUpdateToken', () async {
+    final response = await repository.getAccountLinkBasedOnUpdateToken(MOCK_STRIPE_UPDATE_ACCOUNT_REQUEST);
+    expect(true, response.isRight());
+    expect(false, response.toOption().toNullable()!.success);
+    expect(MOCK_ACCOUNT_LINK, response.toOption().toNullable()!.accountlink);
+    expect(MOCK_ACCOUNT, response.toOption().toNullable()!.account);
+  });
+
+  test('test UpdateAccount', () async {
+    final req = StripeUpdateAccountRequest(Signature: '', Address: MOCK_ADDRESS, Token: '');
+    final response = await repository.UpdateAccount(req);
+    expect(false, response.getOrElse(() => StripeUpdateAccountResponse()).success);
+    expect(MOCK_ACCOUNT, response.getOrElse(() => StripeUpdateAccountResponse()).account);
+    expect(MOCK_ACCOUNT_LINK, response.getOrElse(() => StripeUpdateAccountResponse()).accountlink);
+  });
+
+  test('test GenerateUpdateToken', () async {
+    final response = await repository.GenerateUpdateToken(MOCK_ADDRESS);
+    expect(true, response.getOrElse(() => StripeGenerateUpdateTokenResponse()).success);
+    expect(MOCK_TOKEN, response.getOrElse(() => StripeGenerateUpdateTokenResponse()).token);
+  });
+
+  test('test RegisterAccount', () async {
+    final req = StripeRegisterAccountRequest(Signature: '', Address: MOCK_ADDRESS, Token: '');
+    final response = await repository.RegisterAccount(req);
+    expect(true, response.getOrElse(() => StripeRegisterAccountResponse()).success);
+    expect(MOCK_ACCOUNT_LINK, response.getOrElse(() => StripeRegisterAccountResponse()).accountlink);
+    expect(MOCK_ACCOUNT, response.getOrElse(() => StripeRegisterAccountResponse()).account);
+  });
+
+  test('test CreatePaymentIntent', () async {
+    final req = StripeCreatePaymentIntentRequest(address: MOCK_ADDRESS, coinInputIndex: 0, productID: MOCK_PRODUCT_ID);
+    when(client.post(Uri.parse("$MOCK_BASE_URL/create-payment-intent"), body: jsonEncode(req), headers: {"Content-type": "application/json"})).thenAnswer(
+      (realInvocation) async => http.Response(
+        jsonEncode({"clientSecret": MOCK_CLIENT_SECRET}),
+        200,
+      ),
+    );
+    final response = await repository.CreatePaymentIntent(req);
+    expect(MOCK_CLIENT_SECRET, response.getOrElse(() => StripeCreatePaymentIntentResponse()).clientsecret);
+  });
+
+  test('test GeneratePaymentReceipt', () async {
+    final req = StripeGeneratePaymentReceiptRequest(clientSecret: MOCK_CLIENT_SECRET, paymentIntentID: MOCK_PAYMENT_INTENT_ID);
+    when(client.post(Uri.parse("$MOCK_BASE_URL/generate-payment-receipt"), body: jsonEncode(req), headers: {"Content-type": "application/json"})).thenAnswer(
+      (realInvocation) async => http.Response(
+        jsonEncode(
+            {"purchaseID": MOCK_PURCHASE_ID, "processorName": MOCK_PROCESSOR_NAME, "payerAddr": MOCK_PAYER_ADDR, "amount": MOCK_AMOUNT, "productID": MOCK_PRODUCT_ID, "signature": MOCK_SIGNATURE}),
+        200,
+      ),
+    );
+    final response = await repository.GeneratePaymentReceipt(req);
+    expect(true, response.getOrElse(() => StripeGeneratePaymentReceiptResponse()).success);
+    expect(MOCK_PURCHASE_ID, response.getOrElse(() => StripeGeneratePaymentReceiptResponse()).purchaseID);
+  });
+
+  test('test GeneratePayoutToken', () async {
+    final req = StripeGeneratePayoutTokenRequest(address: MOCK_ADDRESS, amount: Int64.ONE);
+    when(client.get(Uri.parse("$MOCK_BASE_URL/generate-payout-token?address=${req.address}&amount=${req.amount}"), headers: {"Content-type": "application/json"})).thenAnswer(
+      (realInvocation) async => http.Response(
+        jsonEncode({"token": MOCK_TOKEN}),
+        200,
+      ),
+    );
+    final response = await repository.GeneratePayoutToken(req);
+    expect(true, response.getOrElse(() => StripeGeneratePayoutTokenResponse()).success);
+  });
+
+  test('test Payout', () async {
+    final req = StripePayoutRequest(
+      amount: Int64.ONE,
+    );
+    when(client.post(Uri.parse("$MOCK_BASE_URL/payout"), body: jsonEncode(req), headers: {"Content-type": "application/json"})).thenAnswer(
+      (realInvocation) async => http.Response(
+        jsonEncode({"transfer_id": MOCK_TRANSFER}),
+        200,
+      ),
+    );
+    final response = await repository.Payout(req);
+    expect(true, response.getOrElse(() => StripePayoutResponse()).success);
+    expect(MOCK_TRANSFER, response.getOrElse(() => StripePayoutResponse()).transfer_id);
+  });
+
+  test('test GetAccountLink', () async {
+    final req = StripeAccountLinkRequest(Signature: MOCK_SIGNATURE, Account: MOCK_ACCOUNT);
+    when(client.post(Uri.parse("$MOCK_BASE_URL/accountlink"), body: jsonEncode(req), headers: {"Content-type": "application/json"})).thenAnswer(
+      (realInvocation) async => http.Response(
+        jsonEncode({"accountlink": MOCK_ACCOUNT_LINK, "account": MOCK_ACCOUNT}),
+        200,
+      ),
+    );
+    final response = await repository.GetAccountLink(req);
+    expect(true, response.getOrElse(() => StripeAccountLinkResponse()).success);
+    expect(MOCK_ACCOUNT, response.getOrElse(() => StripeAccountLinkResponse()).account);
+    expect(MOCK_ACCOUNT_LINK, response.getOrElse(() => StripeAccountLinkResponse()).accountlink);
+  });
 }

@@ -139,4 +139,64 @@ void main() async {
     expect(true, response.isLeft());
     expect(false, response.getOrElse(() => StripeGetLoginBasedOnAddressResponse()).success);
   });
+
+  test('test GenerateRegistrationToken', () async {
+    const address = MOCK_ADDRESS;
+    final response = await repository.GenerateRegistrationToken(address);
+    expect(true, response.isLeft());
+    expect(false, response.getOrElse(() => StripeGenerateRegistrationTokenResponse()).success);
+  });
+
+  test('should get account link and account on  getLoginLinkBasedOnAddress', () async {
+    final response = await repository.getLoginLinkBasedOnAddress(MOCK_STRIPE_LOGIN_BASED_ADDRESS_REQUEST);
+    expect(true, response.isLeft());
+  });
+
+  test('should get account link and account on  getAccountLinkBasedOnUpdateToken', () async {
+    final response = await repository.getAccountLinkBasedOnUpdateToken(MOCK_STRIPE_UPDATE_ACCOUNT_REQUEST);
+    expect(true, response.isLeft());
+  });
+
+  test('test UpdateAccount', () async {
+    final req = StripeUpdateAccountRequest(Signature: '', Address: MOCK_ADDRESS, Token: '');
+    final response = await repository.UpdateAccount(req);
+    expect(true, response.isLeft());
+  });
+
+  test('test GenerateUpdateToken', () async {
+    final response = await repository.GenerateUpdateToken(MOCK_ADDRESS);
+    expect(true, response.isLeft());
+  });
+
+  test('test RegisterAccount', () async {
+    final req = StripeRegisterAccountRequest(Signature: '', Address: MOCK_ADDRESS, Token: '');
+    final response = await repository.RegisterAccount(req);
+    expect(true, response.isLeft());
+  });
+
+  test('test CreatePaymentIntent', () async {
+    final req = StripeCreatePaymentIntentRequest(address: MOCK_ADDRESS, coinInputIndex: 0, productID: MOCK_PRODUCT_ID);
+    final response = await repository.CreatePaymentIntent(req);
+    expect(true, response.isLeft());
+  });
+  test('test GeneratePaymentReceipt', () async {
+    final req = StripeGeneratePaymentReceiptRequest(clientSecret: MOCK_CLIENT_SECRET, paymentIntentID: MOCK_PAYMENT_INTENT_ID);
+    final response = await repository.GeneratePaymentReceipt(req);
+    expect(true, response.isLeft());
+  });
+  test('test GeneratePayoutToken', () async {
+    final req = StripeGeneratePayoutTokenRequest(address: MOCK_ADDRESS, amount: Int64.ONE);
+    final response = await repository.GeneratePayoutToken(req);
+    expect(true, response.isLeft());
+  });
+  test('test Payout', () async {
+    final req = StripePayoutRequest(amount: Int64.ONE);
+    final response = await repository.Payout(req);
+    expect(true, response.isLeft());
+  });
+  test('test GetAccountLink', () async {
+    final req = StripeAccountLinkRequest(Signature: MOCK_SIGNATURE, Account: MOCK_ACCOUNT);
+    final response = await repository.GetAccountLink(req);
+    expect(true, response.isLeft());
+  });
 }

@@ -193,7 +193,8 @@ const String MOCK_COOKBOOK_ID = 'cookbookLOUD';
 
 const String MOCK_STRIPEURL = '';
 const String MOCK_STRIPEPUBKEY = '';
-const String MOCK_ADDRESS = 'pylo18238123823kjhgda7w1';
+const String MOCK_ADDRESS = 'pylo14s5hgx0nkns98s5kd3sf5atqm0632jm0jp4tlw';
+const String MOCK_PRODUCT_ID = 'recipe/Easel_CookBook_auto_cookbook_2022_09_28_123741_410/Easel_Recipe_auto_recipe_2022_09_28_123746_837';
 const String MOCK_RECIPE_ID = 'recipeid';
 const String MOCK_ITEM_ID = 'itemId';
 const String MOCK_EXECUTION_ID = 'executionId';
@@ -241,7 +242,7 @@ BaseEnv MOCK_BASE_ENV = BaseEnv()
       grpcPort: '9090',
       ethUrl: '',
       faucetUrl: '',
-      stripeUrl: 'https://dev-api.pylons.com/',
+      stripeUrl: 'https://stripe-server-jhv3rfpllq-uc.a.run.app',
       stripePubKey: '',
       stripeTestEnv: false,
       stripeCallbackUrl: '',
@@ -271,7 +272,7 @@ ProductDetails DUMMY_PRODUCT_DETAILS = ProductDetails(
 const String MOCK_IP = '172.168.1.1';
 const InternetConnectionStatus INTERNET_CONNECTIVITY_STATUS_CONNECTED = InternetConnectionStatus.connected;
 const InternetConnectionStatus INTERNET_CONNECTIVITY_STATUS_DISCONNECTED = InternetConnectionStatus.disconnected;
-const String MOCK_BASE_URL = 'https://dev-api.pylons.com/';
+const String MOCK_BASE_URL = 'https://stripe-server-jhv3rfpllq-uc.a.run.app';
 const String MOCK_SOMETHING_WENT_WRONG = 'Something went wrong';
 
 List<Balance> MOCK_BALANCE = [
@@ -386,25 +387,30 @@ NftOwnershipHistory MOCK_NFT_OWNERSHIP_HISTORY = NftOwnershipHistory(
   senderName: "abcxyz",
 );
 
-
-
 NFT MOCK_NFT_PREMIUM = NFT(
-  name: "I AM A PREMIUM NFT",
-  height: "2400",
-  description: "A PREMIUM NFT",
-  width: "1080",
-  url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
-  recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
-  duration: "0:0",
-  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
-  appType: "easel",
-  creator: "MR X",
-  fileSize: "90.12KB",
-  itemID: "DtnxAS8L4pf",
-  owner: "MR X",
-  ibcCoins: IBCCoins.upylon,
-  price: "12"
-);
+    name: "I AM A PREMIUM NFT",
+    height: "2400",
+    description: "A PREMIUM NFT",
+    width: "1080",
+    url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
+    recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
+    duration: "0:0",
+    cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+    appType: "easel",
+    creator: "MR X",
+    fileSize: "90.12KB",
+    itemID: "DtnxAS8L4pf",
+    owner: "MR X",
+    ibcCoins: IBCCoins.upylon,
+    price: "12");
 
 int MOCK_NFT_QUANTITY = 50;
 int MOCK_NFT_MINTED = 10;
+String MOCK_CLIENT_SECRET = "pi_3Lmwo2HiFjr5VjxW0upEUf8Z_secret_bbBB7Y2RrePX1zHaLrm24kQSE";
+String MOCK_PAYMENT_INTENT_ID = "pi_3LmxqEHiFjr5VjxW07l5JfHZ";
+String MOCK_PROCESSOR_NAME = "Pylons_Inc";
+String MOCK_AMOUNT = "1003009";
+String MOCK_SIGNATURE = "osFHdVx+cDcF6ZL4UBW/w7HV2rhysUdSeBQjFDCcclBMxx1m9HDyoFCNMrjNCEo7r2ugD9n91RltLl55c/8xCA==";
+String MOCK_PAYER_ADDR = "pylo14s5hgx0nkns98s5kd3sf5atqm0632jm0jp4tlw";
+String MOCK_PURCHASE_ID = "pi_3LmxqEHiFjr5VjxW07l5JfHZ";
+String MOCK_TRANSFER = "transfer1231";

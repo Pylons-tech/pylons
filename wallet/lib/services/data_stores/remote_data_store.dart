@@ -281,7 +281,6 @@ abstract class RemoteDataStore {
   /// Output: [bool] return true if successful
   Future<bool> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice});
 
-
   Future<bool> logAddToCart({
     required String recipeId,
     required String recipeName,

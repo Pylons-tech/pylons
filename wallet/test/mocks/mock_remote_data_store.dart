@@ -77,20 +77,17 @@ class MockRemoteDataStore extends RemoteDataStore {
 
   @override
   Future<StripeGenerateRegistrationTokenResponse> generateStripeRegistrationToken({required String address}) {
-    // TODO: implement generateStripeRegistrationToken
-    throw UnimplementedError();
+    return Future.value(StripeGenerateRegistrationTokenResponse(success: true));
   }
 
   @override
   Future<StripeGenerateUpdateTokenResponse> generateUpdateToken({required String address}) {
-    // TODO: implement generateUpdateToken
-    throw UnimplementedError();
+    return Future.value(StripeGenerateUpdateTokenResponse(token: MOCK_TOKEN, success: true));
   }
 
   @override
   Future<StripeUpdateAccountResponse> getAccountLinkBasedOnUpdateToken({required StripeUpdateAccountRequest req}) {
-    // TODO: implement getAccountLinkBasedOnUpdateToken
-    throw UnimplementedError();
+    return Future.value(StripeUpdateAccountResponse(accountlink: MOCK_ACCOUNT_LINK, account: MOCK_ACCOUNT));
   }
 
   @override
@@ -160,8 +157,7 @@ class MockRemoteDataStore extends RemoteDataStore {
 
   @override
   Future<StripeGetLoginBasedOnAddressResponse> getLoginLinkBasedOnAddress({required StripeGetLoginBasedOnAddressRequest req}) {
-    // TODO: implement getLoginLinkBasedOnAddress
-    throw UnimplementedError();
+    return Future.value(StripeGetLoginBasedOnAddressResponse(accountlink: MOCK_ACCOUNT_LINK, account: MOCK_ACCOUNT));
   }
 
   @override
@@ -234,8 +230,7 @@ class MockRemoteDataStore extends RemoteDataStore {
 
   @override
   Future<StripeRegisterAccountResponse> registerAccount({required StripeRegisterAccountRequest req}) {
-    // TODO: implement registerAccount
-    throw UnimplementedError();
+    return Future.value(StripeRegisterAccountResponse(accountlink: MOCK_ACCOUNT_LINK, success: true, account: MOCK_ACCOUNT));
   }
 
   @override
@@ -282,8 +277,7 @@ class MockRemoteDataStore extends RemoteDataStore {
 
   @override
   Future<StripeUpdateAccountResponse> updateStripeAccount({required StripeUpdateAccountRequest req}) {
-    // TODO: implement updateStripeAccount
-    throw UnimplementedError();
+    return Future.value(StripeUpdateAccountResponse(account: MOCK_ACCOUNT, accountlink: MOCK_ACCOUNT_LINK));
   }
 
   @override
