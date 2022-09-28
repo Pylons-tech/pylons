@@ -74,7 +74,7 @@ var (
 	DefaultDistrEpochIdentifier         = "day"
 	DefaultEngineVersion                = uint64(0)
 	DefaultMaxTxsInBlock                = uint64(20)
-	DefaultNoAppCheckConfig             = true
+	DefaultNoAppCheckConfig             = false
 )
 
 func UpdateAppCheckFlagTest(flag bool) {
