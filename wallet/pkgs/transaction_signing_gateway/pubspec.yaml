@@ -9,27 +9,26 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  equatable: ^2.0.3
-  flutter_secure_storage: 6.0.0
+  equatable: ^2.0.5
+  flutter_secure_storage: ^6.0.0
   biometric_storage: ^4.1.3
   encrypt: ^5.0.1
   alan:
     path: ../alan
   uuid: ^3.0.6
-  decimal: ^1.5.0
+  decimal: ^2.3.0
   shared_preferences: ^2.0.12
   cosmos_utils:
-    git:
-      url: https://github.com/tendermint/flutter.git
-      path: packages/cosmos_utils
-      ref: main
+    path: ../cosmos_utils
 
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   lint: ^1.5.3
   lints: ^2.0.0
-  very_good_analysis: 2.4.0
+#  flutter_test:
+#    sdk: flutter
+#  lint: ^1.5.3
+#  lints: ^2.0.0
+#  very_good_analysis: 3.1.0
 #  mocktail: 0.3.0
 
