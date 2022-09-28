@@ -35,11 +35,10 @@ func (suite *IntegrationTestSuite) TestListSignUpByReferee() {
 
 	req := &types.MsgCreateAccount{
 		Creator:         items[0].Creator,
-		Username:        "test",
 		ReferralAddress: items[0].Creator,
 	}
 
-	k.SetPylonsReferral(ctx, req.Creator, req.Username, req.ReferralAddress)
+	k.SetPylonsReferral(ctx, req.Creator, "", req.ReferralAddress)
 	require.NoError(err)
 
 	for _, tc := range []struct {
