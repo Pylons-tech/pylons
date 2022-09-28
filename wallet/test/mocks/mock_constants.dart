@@ -335,7 +335,7 @@ ExecutionListByRecipeResponse MOCK_EXECUTION_LIST_BY_RECIPE_RESPONSE = Execution
 
 const String MOCK_DYNAMIC_LINK = "https://we.tl/t-kEvBGXDG19";
 
-NFT MOCK_NFT = NFT(
+NFT MOCK_NFT_FREE = NFT(
   name: "This is my Image NFT",
   height: "2400",
   description: "Please Buy my Image NFT",
@@ -384,6 +384,26 @@ NftOwnershipHistory MOCK_NFT_OWNERSHIP_HISTORY = NftOwnershipHistory(
   createdAt: 0,
   receiver: "xyz",
   senderName: "abcxyz",
+);
+
+
+
+NFT MOCK_NFT_PREMIUM = NFT(
+  name: "I AM A PREMIUM NFT",
+  height: "2400",
+  description: "A PREMIUM NFT",
+  width: "1080",
+  url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
+  recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
+  duration: "0:0",
+  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+  appType: "easel",
+  creator: "MR X",
+  fileSize: "90.12KB",
+  itemID: "DtnxAS8L4pf",
+  owner: "MR X",
+  ibcCoins: IBCCoins.upylon,
+  price: "12"
 );
 
 int MOCK_NFT_QUANTITY = 50;
