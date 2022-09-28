@@ -347,6 +347,8 @@
   "recipe_id": "Рецепт ID",
   "exclusive": "Эксклюзивный",
   "pylons": "Pylons",
+  "free": "Свободно",
   "vietnamese": "вьетнамский",
-  "free": "Свободно"
+  "claim_free_nft": "Получите свой бесплатный NFT",
+  "before_too_late": "Пока не поздно!"
 }

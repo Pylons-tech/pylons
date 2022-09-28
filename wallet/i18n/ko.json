@@ -347,5 +347,7 @@
   "recipe_id": "레시피 ID",
   "exclusive": "독점적인",
   "pylons": "Pylons",
-  "free": "무료"
+  "free": "무료",
+  "claim_free_nft": "무료 NFT 신청",
+  "before_too_late": "너무 늦기 전에!"
 }

@@ -348,5 +348,7 @@
   "enter_description_text" : "Introduce la descripción",
   "enter_subject_text": "Introduce el asunto",
   "thank_you_for_feedback": "Gracias por tus comentarios.",
-  "free": "Tasuta"
+  "free": "Tasuta",
+  "claim_free_nft": "Nõudke oma tasuta NFT-d",
+  "before_too_late": "Enne kui on liiga hilja!"
 }

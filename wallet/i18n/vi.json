@@ -347,7 +347,9 @@
   "character_limit" :"{} giới hạn ký tự",
   "enter_description_text" : "Nhập mô tả",
   "enter_subject_text": "Nhập chủ đề",
+  "free": "Tự do",
   "thank_you_for_feedback": "Cảm ơn phản hôi của bạn.",
-  "free": "Tự do"
+  "claim_free_nft": "Yêu cầu NFT miễn phí của bạn",
+  "before_too_late": "Trước khi quá muộn!"
 
 }

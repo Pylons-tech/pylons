@@ -383,11 +383,12 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
       await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
-              applePay: true,
-              googlePay: true,
+              googlePay: PaymentSheetGooglePay(
+                merchantCountryCode: kStripeMerchantCountry,
+                testEnv: baseEnv.baseStripeTestEnv,
+              ),
+              applePay: const PaymentSheetApplePay(merchantCountryCode: kStripeMerchantCountry),
               style: ThemeMode.system,
-              testEnv: baseEnv.baseStripeTestEnv,
-              merchantCountryCode: kStripeMerchantCountry,
               merchantDisplayName: kStripeMerchantDisplayName,
               paymentIntentClientSecret: pi_info.clientsecret));
       Navigator.pop(navigatorKey.currentState!.overlay!.context);
@@ -452,11 +453,12 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
         await Stripe.instance.initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
-                applePay: true,
-                googlePay: true,
                 style: ThemeMode.system,
-                testEnv: baseEnv.baseStripeTestEnv,
-                merchantCountryCode: kStripeMerchantCountry,
+                googlePay: PaymentSheetGooglePay(
+                  merchantCountryCode: kStripeMerchantCountry,
+                  testEnv: baseEnv.baseStripeTestEnv,
+                ),
+                applePay: const PaymentSheetApplePay(merchantCountryCode: kStripeMerchantCountry),
                 merchantDisplayName: kStripeMerchantDisplayName,
                 paymentIntentClientSecret: pi_info.clientsecret));
         Navigator.pop(navigatorKey.currentState!.overlay!.context);

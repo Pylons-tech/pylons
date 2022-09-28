@@ -396,6 +396,8 @@ const kMaxDescription = 256;
 const kOwnerViewKeyValue = "owner_view_key";
 const kOwnerViewDrawerKeyValue = "ownerview_header";
 const kOwnerViewBottomSheetKeyValue = "bottom_sheet";
+const kKeyboardUpButtonKeyValue = "keyboard_up_button";
+const kExpandedBuyButtonKeyValue = "expanded_buy_button";
 
 Map<String, Color> denomColors = {'upylon': const Color(0xFF5252d5), 'ustripeusd': const Color(0xFF85bb65), 'uusd': const Color(0xFF85bb65)};
 

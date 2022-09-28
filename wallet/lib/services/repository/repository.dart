@@ -476,6 +476,20 @@ abstract class Repository {
   Future<Either<Failure, bool>> setUserIdentifierInAnalytics({required String address});
 
 
+
+  /// Output: [bool] tells whether the operation is successful or else will return [Failure]
+  Future<Either<Failure, bool>> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice});
+
+
+  /// Output: [bool] tells whether the operation is successful or else will return [Failure]
+  Future<Either<Failure, bool>> logAddToCart({
+    required String recipeId,
+    required String recipeName,
+    required String author,
+    required double purchasePrice,
+    required String currency,
+  });
+
 }
 
 class RepositoryImp implements Repository {
@@ -1924,6 +1938,41 @@ class RepositoryImp implements Repository {
     return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice}) async {
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure("no_internet".tr()));
+    }
+    try {
+      return Right(await remoteDataStore.logPurchaseItem(recipeId: recipeId, recipeName: recipeName, author: author, purchasePrice: purchasePrice));
+    } on Exception catch (e) {
+    recordErrorInCrashlytics(e);
+    return Left(ServerFailure(e.toString()));
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, bool>> logAddToCart({
+    required String recipeId,
+    required String recipeName,
+    required String author,
+    required double purchasePrice,
+    required String currency,
+  }) async {
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure("no_internet".tr()));
+    }
+    try {
+      return Right(await remoteDataStore.logAddToCart(recipeId: recipeId, recipeName: recipeName, author: author, purchasePrice: purchasePrice, currency: currency));
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+
 
 
 
