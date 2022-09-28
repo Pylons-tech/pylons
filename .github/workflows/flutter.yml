@@ -25,6 +25,8 @@ jobs:
           chmod +x ./borg.sh
           ./borg.sh boot
           flutter analyze
+          flutter test
+          
 
 
   easel:
