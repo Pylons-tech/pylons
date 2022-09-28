@@ -20,6 +20,7 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/screen_responsive.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+import 'package:home_widget/home_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -58,6 +59,45 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     _tabController.dispose();
     super.dispose();
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _checkForWidgetLaunch();
+    HomeWidget.widgetClicked.listen((Uri? uri) => _launchedFromWidget(uri));
+  }
+
+  void _checkForWidgetLaunch() {
+    HomeWidget.initiallyLaunchedFromHomeWidget().then((Uri? uri) => _launchedFromWidget(uri));
+  }
+
+  void _launchedFromWidget(Uri? uri) {
+    if (uri!=null) {
+      Navigator.of(context).pushNamed(RouteUtil.ROUTE_WIDGET);
+    }
+  }
+
+
+
+
+  // Future<void> image_picker() async {
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+  //   if (result!=null) {
+  //     File file = File(result.files.single.path ?? "");
+  //     final newImagePath = await saveImage(file: file);
+  //     await HomeWidget.saveWidgetData<String>('image', newImagePath);
+  //     _updateWidget();
+  //   }
+  // }
+  //
+  // Future<String> saveImage({required File file}) async {
+  //   final Directory temp = await getTemporaryDirectory();
+  //   final newImagePath = '${temp.path}/${file.path.split("/").last}';
+  //   file.copy(newImagePath);
+  //   return newImagePath;
+  //
+  //
+  // }
 
   @override
   Widget build(BuildContext context) {
