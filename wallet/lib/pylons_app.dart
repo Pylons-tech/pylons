@@ -49,6 +49,7 @@ import 'package:pylons_wallet/services/third_party_services/remote_notifications
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
+import 'package:pylons_wallet/pages/home/collection_screen/home_widget.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
@@ -90,6 +91,7 @@ class _PylonsAppState extends State<PylonsApp> {
               routes: {
                 '/': (context) => const RoutingPage(),
                 RouteUtil.ROUTE_HOME: (context) => const HomeScreen(),
+                RouteUtil.ROUTE_WIDGET: (context) => const WidgetNFTPickerScreen(),
                 RouteUtil.ROUTE_APP_UPDATE: (context) => const UpdateApp(),
                 RouteUtil.ROUTE_SETTINGS: (context) => const SettingScreen(),
                 RouteUtil.ROUTE_LEGAL: (context) => const LegalScreen(),
