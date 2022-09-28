@@ -39,7 +39,7 @@ void main() {
   );
   testWidgets('test case for gestures', (tester) async {
     await tester.setScreenSize();
-    viewModel.nft = MOCK_NFT;
+    viewModel.nft = MOCK_NFT_FREE;
     await tester.testAppForWidgetTesting(OwnerView(
       ownerViewViewModel: viewModel,
     ));
