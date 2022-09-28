@@ -428,6 +428,11 @@ class PurchaseItemViewModel extends ChangeNotifier {
       return Left("something_wrong".tr());
     }
 
+
+    if(selectedDenom == IBCCoins.ustripeusd.name){
+      return const Right(true);
+    }
+
     final mappedBalances = balancesEither.getOrElse(() => []).where((element) => element.denom == selectedDenom).toList();
     if (mappedBalances.isEmpty) {
       return const Right(false);
