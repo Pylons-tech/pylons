@@ -88,7 +88,7 @@ dependencies:
 
 
   cupertino_icons: ^1.0.3
-  decimal: 1.5.0
+  decimal: ^1.5.0
   uuid: ^3.0.6
   fixnum: ^1.0.0
   intl: ^0.17.0
@@ -146,7 +146,7 @@ dev_dependencies:
   lint: ^1.5.3
   lints: ^2.0.0
   mockito: ^5.0.15
-  build_runner: 2.2.0
+  build_runner: ^2.2.0
   pigeon: ^3.2.6
 
 flutter:
@@ -194,5 +194,3 @@ flutter:
 
 
 
-dependency_overrides:
-  biometric_storage: ^4.1.3
