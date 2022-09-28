@@ -8,7 +8,6 @@
     android:padding="8dp"
     android:id="@+id/widget_container">
 
-
     <ImageView
         android:id="@+id/imageView"
         android:background="@android:color/black"
@@ -17,18 +16,4 @@
 
         tools:src="@tools:sample/avatars" />
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/widget_title"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:textSize="36sp"-->
-    <!--        android:textStyle="bold"-->
-    <!--        tools:text="Title" />-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/widget_message"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:textSize="18sp"-->
-    <!--        tools:text="Message" />-->
 </LinearLayout>

@@ -19,7 +19,6 @@ import '../../detailed_asset_view/widgets/nft_3d_asset.dart';
 import '../../detailed_asset_view/widgets/pdf_placeholder.dart';
 import '../../detailed_asset_view/widgets/video_placeholder.dart';
 import 'collection_view_model.dart';
-import 'collection_screen.dart';
 
 import 'preview_nft_grid.dart';
 
@@ -42,9 +41,6 @@ class _WidgetNFTPickerScreenState extends State<WidgetNFTPickerScreen> {
   void initState() {
     super.initState();
 
-    // scheduleMicrotask(() {
-    //   context.read<CollectionViewModel>().init();
-    // });
   }
 
   Widget getAudioThumbnailFromUrl({required String thumbnailUrl}) {
@@ -89,7 +85,6 @@ class _WidgetNFTPickerScreenState extends State<WidgetNFTPickerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //final viewModel = context.watch<CollectionViewModel>();
     final collectionViewModel = GetIt.I.get<CollectionViewModel>();
     return ChangeNotifierProvider.value(
         value: collectionViewModel,
@@ -116,10 +111,6 @@ class _WidgetNFTPickerScreenState extends State<WidgetNFTPickerScreen> {
                               final nft = viewModel.purchases[index];
                               return GestureDetector(
                                 onTap: () async {
-                                  //onNFTSelected(nft);
-                                  print("url ${nft.url}");
-                                  //ByteData imageBytes = await rootBundle.load(nft.url);
-                                  //List<int> values = imageBytes.buffer.asUint8List();
                                   await HomeWidget.saveWidgetData<String>('image', nft.url);
                                        _updateWidget();
                                 },
