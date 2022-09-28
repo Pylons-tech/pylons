@@ -6,9 +6,6 @@ abstract class NetworkInfo {
   /// This method tells whether the system is connected with the internet or not
   Future<bool> get isConnected;
 
-  /// This method returns the IP with which the user is connected
-  String getIP();
-
   Stream<InternetConnectionStatus> onStatusChange();
 }
 
@@ -23,14 +20,6 @@ class NetworkInfoImpl implements NetworkInfo {
   /// Output: [bool] tells whether connected to internet or not
   @override
   Future<bool> get isConnected => connectionChecker.hasConnection;
-
-  @override
-  String getIP() {
-    if (connectionChecker.addresses.isEmpty) {
-      throw 'No IP Found';
-    }
-    return connectionChecker.addresses.last.address.address;
-  }
 
   @override
   Stream<InternetConnectionStatus> onStatusChange() {

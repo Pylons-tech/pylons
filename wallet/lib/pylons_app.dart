@@ -60,12 +60,14 @@ class PylonsApp extends StatefulWidget {
   State<PylonsApp> createState() => _PylonsAppState();
 }
 
-class _PylonsAppState extends State<PylonsApp> {
+class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
+  AppLifecycleState _appState = AppLifecycleState.resumed;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     GetIt.I.get<Repository>().setApplicationDirectory();
-
     checkInternetConnectivity();
     setUpNotifications();
     InAppPurchase.instance.purchaseStream.listen(onEvent);
@@ -75,7 +77,7 @@ class _PylonsAppState extends State<PylonsApp> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       minTextAdapt: true,
-      builder: () => ChangeNotifierProvider.value(
+      builder: (_, __) => ChangeNotifierProvider.value(
           value: sl<UserInfoProvider>(),
           builder: (context, value) {
             return MaterialApp(
@@ -151,7 +153,6 @@ class _PylonsAppState extends State<PylonsApp> {
                 },
               },
               builder: (context, widget) {
-                ScreenUtil.setContext(context);
 
                 return MediaQuery(
                   data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
@@ -163,23 +164,10 @@ class _PylonsAppState extends State<PylonsApp> {
     );
   }
 
-  Future<void> checkInternetConnectivity() async {
-    final repository = GetIt.I.get<Repository>();
-
-    if (!await repository.isInternetConnected()) {
-      noInternet.showNoInternet();
-    }
-
-    repository.getInternetStatus().listen((event) {
-      if (event == InternetConnectionStatus.connected && noInternet.isShowing) {
-        noInternet.dismiss();
-      }
-
-      if (event == InternetConnectionStatus.disconnected) {
-        if (!noInternet.isShowing) {
-          noInternet.showNoInternet();
-        }
-      }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() {
+      _appState = state;
     });
   }
 
@@ -278,5 +266,26 @@ class _PylonsAppState extends State<PylonsApp> {
     await remoteNotificationService.getNotificationsPermission();
 
     remoteNotificationService.listenToForegroundNotification();
+  }
+
+  Future<void> checkInternetConnectivity() async {
+    final repository = GetIt.I.get<Repository>();
+
+    if (!await repository.isInternetConnected()) {
+      noInternet.showNoInternet();
+    }
+
+    repository.getInternetStatus().listen((event) {
+      if (_appState != AppLifecycleState.resumed) return;
+      if (event == InternetConnectionStatus.connected && noInternet.isShowing) {
+        noInternet.dismiss();
+      }
+
+      if (event == InternetConnectionStatus.disconnected) {
+        if (!noInternet.isShowing) {
+          noInternet.showNoInternet();
+        }
+      }
+    });
   }
 }
