@@ -174,17 +174,17 @@ Meteor.startup(() => {
                     botType = BROWSER_BOT;
                 }
 
-                if(botType == TWITTER_BOT){
-                    description = description + "<h4>" + price + "</h4>";
-                }
-                else if(botType == FACEBOOK_BOT){
-                    siteName = siteName + "<h4>" + price + "</h4>";
-                }
-                else if(botType != SLACK_BOT){
-                    description = price !== "No Price" ? description + "\nPrice: " + price : description;
-                }else {
-                   description = description + "\n" + price;
-                }
+              if (botType == TWITTER_BOT) {
+                description = description + "<h4>" + price + "</h4>";
+              }
+              else if (botType == FACEBOOK_BOT) {
+                siteName = siteName + "\n " + price;
+              }
+              else if (botType != SLACK_BOT) {
+                description = price !== "No Price" ? description + "\nPrice: " + price : description;
+              } else {
+                description = description + "\n " + price;
+              }
                 
                 var MetaTags;
                 if (nftType?.toLowerCase() === "video") {
