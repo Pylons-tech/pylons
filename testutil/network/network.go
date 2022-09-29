@@ -67,11 +67,11 @@ func New(t *testing.T, configs ...network.Config) *network.Network {
 
 		args := []string{"testtoken", ""}
 		args = append(args, flags...)
-		args1 := []string{fmt.Sprintf("val%v",i)}
+		args1 := []string{fmt.Sprintf("val%v", i)}
 		args1 = append(args1, flags...)
 		_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
 		require.NoError(t, err)
-		_, err = clitestutil.ExecTestCLICmd(ctx,cli.CmdSetUsername(),args1)
+		_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdSetUsername(), args1)
 		require.NoError(t, err)
 		// var resp sdk.TxResponse
 		// require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))

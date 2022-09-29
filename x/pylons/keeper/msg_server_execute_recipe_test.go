@@ -25,7 +25,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 	types.UpdateAppCheckFlagTest(types.FlagTrue)
 
 	_, err := srv.CreateAccount(wctx, &types.MsgCreateAccount{
-		Creator:  types.TestCreator,
+		Creator: types.TestCreator,
 	})
 	require.NoError(err)
 
