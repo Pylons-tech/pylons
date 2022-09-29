@@ -175,7 +175,7 @@ Meteor.startup(() => {
                 }
 
               if (botType == TWITTER_BOT) {
-                description = description + "<h4>" + price + "</h4>";
+                description = description + "\n " + price;
               }
               else if (botType == FACEBOOK_BOT) {
                 siteName = siteName + "\n " + price;
