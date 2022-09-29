@@ -54,7 +54,7 @@ func TestCmdListReferralsByAddress(t *testing.T) {
 	net := network.New(t)
 	ctx := net.Validators[0].ClientCtx
 
-	address,_, referral := settingPylonsAccount(ctx, t, net)
+	address, _, referral := settingPylonsAccount(ctx, t, net)
 
 	for _, tc := range []struct {
 		desc      string

@@ -27,21 +27,21 @@ func TestMsgCreateAccountValidateBasic(t *testing.T) {
 		{
 			desc: "Invalid creator address 1",
 			req: &MsgCreateAccount{
-				Creator:  "",
+				Creator: "",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		},
 		{
 			desc: "Invalid creator address 2",
 			req: &MsgCreateAccount{
-				Creator:  invalidAddr,
+				Creator: invalidAddr,
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		},
 		{
 			desc: "Invalid creator address 3",
 			req: &MsgCreateAccount{
-				Creator:  "test",
+				Creator: "test",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		},
@@ -131,7 +131,7 @@ func TestMsgSetUsername(t *testing.T) {
 		{
 			desc: "Valid",
 			req: &MsgSetUsername{
-				Creator:         correctCreatorAddr,
+				Creator:  correctCreatorAddr,
 				Username: "Username",
 			},
 			err: nil,
@@ -139,21 +139,21 @@ func TestMsgSetUsername(t *testing.T) {
 		{
 			desc: "Invalid creator address 1",
 			req: &MsgSetUsername{
-				Creator:  "",
+				Creator: "",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		},
 		{
 			desc: "Invalid creator address 2",
 			req: &MsgSetUsername{
-				Creator:  invalidAddr,
+				Creator: invalidAddr,
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		},
 		{
 			desc: "Invalid creator address 3",
 			req: &MsgSetUsername{
-				Creator:  "test",
+				Creator: "test",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		},

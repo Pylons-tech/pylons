@@ -27,7 +27,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 		username := types.Username{Value: elem.Username}
 		accountAddr := types.AccountAddr{Value: elem.AccountAddr}
 		k.SetPylonsAccount(ctx, accountAddr, username)
-		k.UpdatePylonsAccount(ctx,accountAddr,username)
+		k.UpdatePylonsAccount(ctx, accountAddr, username)
 	}
 
 	// Set all the trade
