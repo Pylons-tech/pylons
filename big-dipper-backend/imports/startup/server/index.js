@@ -17,8 +17,8 @@ import { Helmet } from 'react-helmet';
 const IMAGE_WIDTH = 1200;
 const IMAGE_HEIGHT = 800;
 
-var siteName = 'Big-Dipper';
-var description = 'Wallet deep link';
+var siteName =  'Big Dipper | Built on Pylons';
+var description = "Blockchain Development Tools For Digital Items & NFTs";
 var price = "No Price"
 var picWidth = IMAGE_WIDTH;
 var picHeight = IMAGE_HEIGHT;   

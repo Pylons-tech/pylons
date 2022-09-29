@@ -77,6 +77,7 @@ class PylonsWalletImpl implements PylonsWallet {
       sdkipcResponse = SDKIPCResponse.fromIPCMessage(getMessage);
       IPCHandlerFactory.getHandler(sdkipcResponse);
     } catch (e) {
+      print(e);
       print('Something went wrong in parsing');
       return;
     }
@@ -217,7 +218,7 @@ class PylonsWalletImpl implements PylonsWallet {
   }
 
   @override
-  Future<SDKIPCResponse> txExecuteRecipe(
+  Future<SDKIPCResponse<Execution>> txExecuteRecipe(
       {required String cookbookId,
       required String recipeName,
       required List<String> itemIds,
@@ -225,17 +226,30 @@ class PylonsWalletImpl implements PylonsWallet {
       required List<PaymentInfo> paymentInfo,
       bool requestResponse = true}) async {
     return Future.sync(() async {
-      return await _dispatch(
-          Strings.TX_EXECUTE_RECIPE,
-          jsonEncode(MsgExecuteRecipe(
-                  creator: '',
-                  cookbookId: cookbookId,
-                  recipeId: recipeName,
-                  coinInputsIndex: fixnum.Int64(coinInputIndex),
-                  itemIds: itemIds,
-                  paymentInfos: paymentInfo)
-              .toProto3Json()),
-          requestResponse: requestResponse);
+      return Future.sync(() async {
+        final response = await _dispatch(
+            Strings.TX_EXECUTE_RECIPE,
+            jsonEncode(MsgExecuteRecipe(
+                    creator: '',
+                    cookbookId: cookbookId,
+                    recipeId: recipeName,
+                    coinInputsIndex: fixnum.Int64(coinInputIndex),
+                    itemIds: itemIds,
+                    paymentInfos: paymentInfo)
+                .toProto3Json()),
+            requestResponse: requestResponse);
+
+        if (response is SDKIPCResponse<Execution>) {
+          return response;
+        }
+
+        if (response is SDKIPCResponse<String> && !requestResponse) {
+          return SDKIPCResponse.success(Execution.create(),
+              action: Strings.TX_EXECUTE_RECIPE);
+        }
+
+        throw Exception('Response malformed');
+      });
     });
   }
 
