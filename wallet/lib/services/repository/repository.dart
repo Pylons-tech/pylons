@@ -36,6 +36,7 @@ import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/enums.dart';
+import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:pylons_wallet/utils/local_auth_helper.dart';
 import 'package:pylons_wallet/utils/query_helper.dart';
@@ -1646,10 +1647,14 @@ class RepositoryImp implements Repository {
       final result = await remoteDataStore.sendGoogleInAppPurchaseCoinsRequest(msgGoogleInAPPPurchase);
       await saveTransactionRecord(transactionHash: result, transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(result);
-    } on Failure catch (_) {
+    } on Failure catch (e) {
+      if (e.message.ifDuplicateReceipt()) {
+        await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
+        return const Right("");
+      }
       "something_wrong".tr().show();
       await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
-      return Left(_);
+      return Left(e);
     } on String catch (_) {
       await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(InAppPurchaseFailure(message: _));

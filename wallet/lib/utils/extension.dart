@@ -216,3 +216,10 @@ extension ChangeDomain on String {
     return replaceAll(ipfsDomain, proxyIpfsDomain);
   }
 }
+
+
+extension VerifyErrorCode on String {
+  bool ifDuplicateReceipt() {
+    return contains(kDuplicateIapReceiptCode);
+  }
+}

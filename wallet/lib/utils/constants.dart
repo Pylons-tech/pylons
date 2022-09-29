@@ -127,6 +127,7 @@ const String kStripeSignoutJS =
     "const hidebutton = ()=>{  var ret=false; [...document.querySelectorAll('button')].filter(e=>e.innerHTML.toUpperCase().indexOf('SIGN OUT') > -1).forEach(button=>{button.style.display='none'; ret=true;});  setTimeout(hidebutton, 500);}; hidebutton();";
 
 const String SOMETHING_WENT_WRONG = 'Something went wrong';
+const String kDuplicateIapReceiptCode = 'error:1106';
 
 //STRIPE ERROR STRING
 const String CREATE_PAYMENTINTENT_FAILED = 'Stripe PaymentIntent Creation Failed';

@@ -110,7 +110,7 @@ class LocalTransactionDetailScreen extends StatelessWidget {
   }
 
   Map<String, String> transactionDetailBodyMap({required LocalTransactionModel txArgs}) {
-    if (txArgs.status.toTransactionStatusEnum() == TransactionStatus.Success) {
+    if (txArgs.status.toTransactionStatusEnum() == TransactionStatus.Success && txArgs.transactionHash.isNotEmpty) {
       return {
         "txId".tr(): txArgs.transactionHash,
         "transaction_date".tr(): DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime)),
