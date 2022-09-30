@@ -424,12 +424,21 @@ class PurchaseItemViewModel extends ChangeNotifier {
     });
   }
 
-  Future<Either<String, bool>> getBalanceOfSelectedCurrency({required String selectedDenom, required double requiredAmount}) async {
+  Future<Either<String, bool>> shouldShowSwipeToBuy({required String selectedDenom, required double requiredAmount}) async {
     final accountPublicInfo = walletsStore.getWallets().value.last;
     final balancesEither = await repository.getBalance(accountPublicInfo.publicAddress);
 
     if (balancesEither.isLeft()) {
       return Left("something_wrong".tr());
+    }
+
+    if(balancesEither.getOrElse(() => []).isEmpty){
+      return  const Right(false);
+    }
+
+
+    if(selectedDenom == IBCCoins.ustripeusd.name){
+      return const Right(true);
     }
 
     final mappedBalances = balancesEither.getOrElse(() => []).where((element) => element.denom == selectedDenom).toList();

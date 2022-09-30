@@ -70,7 +70,7 @@ final sl = GetIt.instance;
 /// This method is used for initializing the dependencies
 Future<void> init() async {
   /// Services
-  sl.registerLazySingleton<InternetConnectionChecker>(() => InternetConnectionChecker());
+  sl.registerLazySingleton<InternetConnectionChecker>(() => InternetConnectionChecker.createInstance(checkTimeout: const Duration(seconds: 20)));
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   sl.registerLazySingleton<IPCEngine>(() => IPCEngine(repository: sl(), walletsStore: sl()));
   sl.registerFactory<AudioPlayerHelper>(() => AudioPlayerHelperImpl(sl()));
