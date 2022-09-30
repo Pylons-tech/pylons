@@ -48,8 +48,13 @@ import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
+import 'package:pylons_wallet/utils/base_env.dart';
+import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
+import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
+
+import 'model/transaction_failure_model.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
@@ -152,7 +157,6 @@ class _PylonsAppState extends State<PylonsApp> {
                 },
               },
               builder: (context, widget) {
-
                 return MediaQuery(
                   data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                   child: widget ?? Container(),
@@ -196,7 +200,15 @@ class _PylonsAppState extends State<PylonsApp> {
           await handlerPurchaseEvent(purchaseDetails);
           break;
         case PurchaseStatus.error:
+          if (purchaseDetails.error!.message.contains(kItemAlreadyOwned)) {
+            "please_try_again_later".tr().show();
+            return;
+          }
+          registerFailure(purchaseDetails);
           purchaseDetails.error?.message.show();
+          await Future.delayed(const Duration(seconds: 2));
+          Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
+
           break;
         case PurchaseStatus.restored:
           break;
@@ -204,7 +216,66 @@ class _PylonsAppState extends State<PylonsApp> {
           break;
       }
     }
+  }
 
+  Future<void> saveTransactionRecord({required String transactionHash, required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
+    final repository = GetIt.I.get<Repository>();
+    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(transactionHash: transactionHash, status: transactionStatus, transactionModel: txLocalModel);
+    await repository.saveLocalTransaction(txLocalModelWithStatus);
+  }
+
+  Future<void> registerFailure(PurchaseDetails purchaseDetails) async {
+    final walletStore = GetIt.I.get<WalletsStore>();
+
+    if (purchaseDetails is GooglePlayPurchaseDetails) {
+      final price = getInAppPrice(purchaseDetails.productID);
+      final creator = walletStore.getWallets().value.last.publicAddress;
+
+      final GoogleInAppPurchaseModel googleInAppPurchaseModel = GoogleInAppPurchaseModel(
+          productID: purchaseDetails.productID,
+          purchaseToken: purchaseDetails.verificationData.serverVerificationData,
+          receiptData: jsonDecode(purchaseDetails.verificationData.localVerificationData) as Map,
+          signature: purchaseDetails.billingClientPurchase.signature,
+          creator: creator);
+
+      final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
+        transactionTypeEnum: TransactionTypeEnum.GoogleInAppCoinsRequest,
+        transactionData: jsonEncode(googleInAppPurchaseModel.toJsonLocalRetry()),
+        transactionDescription: 'buying_pylon_points'.tr(),
+        transactionCurrency: kStripeUSD_ABR,
+        transactionPrice: price ?? "",
+      );
+      saveTransactionRecord(transactionHash: '', transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+    }
+  }
+
+  String getInAppPrice(String productId) {
+    final baseEnv = GetIt.I.get<BaseEnv>();
+    for (final value in baseEnv.skus) {
+      if (value.id == productId) {
+        return value.subtitle;
+      }
+    }
+    return "";
+  }
+
+  LocalTransactionModel createInitialLocalTransactionModel({
+    required TransactionTypeEnum transactionTypeEnum,
+    required String transactionData,
+    required String transactionCurrency,
+    required String transactionPrice,
+    required String transactionDescription,
+  }) {
+    final LocalTransactionModel txManager = LocalTransactionModel(
+        transactionType: transactionTypeEnum.name,
+        transactionData: transactionData,
+        transactionCurrency: transactionCurrency,
+        transactionPrice: transactionPrice,
+        transactionDescription: transactionDescription,
+        transactionHash: "",
+        dateTime: DateTime.now().millisecondsSinceEpoch,
+        status: TransactionStatus.Undefined.name);
+    return txManager;
   }
 
   Future handlerPurchaseEvent(PurchaseDetails purchaseDetails) async {
@@ -250,7 +321,7 @@ class _PylonsAppState extends State<PylonsApp> {
         final googleInAppPurchase = await walletStore.sendGoogleInAppPurchaseCoinsRequest(googleInAppPurchaseModel);
 
         if (googleInAppPurchase.isLeft()) {
-          loading.dismiss(); 
+          loading.dismiss();
           googleInAppPurchase.swap().toOption().toNullable()!.message.show();
           await Future.delayed(const Duration(seconds: 2));
           Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);

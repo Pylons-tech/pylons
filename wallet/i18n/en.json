@@ -357,5 +357,6 @@
   "transaction_id": "Transaction ID",
   "transaction_date": "Transaction Date",
   "bought_nft": "Bought",
-  "free": "Free"
+  "free": "Free",
+  "please_try_again_later": "Please Try again later"
 }
