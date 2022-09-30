@@ -28,7 +28,7 @@ func (ad MsgRestrictUbedrockDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, si
 		}
 
 		messages := sigTx.GetMsgs()
-		if len(messages) <= 0 {
+		if len(messages) == 0 {
 			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid messages")
 		}
 		for _, message := range messages {
@@ -42,7 +42,7 @@ func (ad MsgRestrictUbedrockDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, si
 				continue
 			}
 
-			if _, kycAcc_found := ad.pk.GetPylonsKYC(ctx, msgSend.ToAddress); !kycAcc_found {
+			if _, kycAccFound := ad.pk.GetPylonsKYC(ctx, msgSend.ToAddress); !kycAccFound {
 				return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "'ubedrock' should only be transferred among allowed address")
 			}
 		}

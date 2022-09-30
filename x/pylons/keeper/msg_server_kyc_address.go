@@ -30,7 +30,7 @@ func (k msgServer) RegisterKYCAddress(goCtx context.Context, msg *types.MsgRegis
 	}
 
 	_, found := k.GetPylonsKYC(ctx, kycAcc.AccountAddr)
-	if found == true {
+	if found {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "kyc account has been registered")
 	}
 
