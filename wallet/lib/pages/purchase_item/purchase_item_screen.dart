@@ -67,16 +67,15 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
             widget.purchaseItemViewModel.destroyPlayers(widget.nft);
             return true;
           },
-          child: const PurchaseItemContent(
-          )),
+          child: const PurchaseItemContent()),
     );
   }
 }
 
 class PurchaseItemContent extends StatefulWidget {
-
-
-  const PurchaseItemContent({Key? key,}) : super(key: key);
+  const PurchaseItemContent({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _PurchaseItemContentState createState() => _PurchaseItemContentState();
@@ -330,8 +329,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                     buildContext: context,
                                     nft: viewModel.nft,
                                     purchaseItemViewModel: viewModel,
-                                    onPurchaseDone: (txId) {
-                                      showTransactionCompleteDialog(txId: txId, txTimeStamp: '', );
+                                    onPurchaseDone: (txData) {
+                                      showTransactionCompleteDialog(txData: txData);
                                     },
                                     shouldBuy: balancesFetchResult);
                                 payNowDialog.show();
@@ -753,14 +752,27 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     );
   }
 
-  void showTransactionCompleteDialog({required String txId, required String txTimeStamp}) {
+  String getTransactionTimeStamp(Map txData) {
     final formatter = DateFormat('MMM dd yyyy HH:mm');
-    final DateTime dateTime = DateTime.fromMicrosecondsSinceEpoch(int.parse(txTimeStamp));
+    if (!txData.containsKey(kTxTime)) {
+      return "${formatter.format(DateTime.now().toUtc())} $kUTC";
+    }
+
+    final int timeStamp = int.parse(txData[kTxTime].toString()) * kDateConverterConstant;
+    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timeStamp , isUtc: true );
+    return "${formatter.format(dateTime)} $kUTC";
+  }
+
+  void showTransactionCompleteDialog({required Map txData}) {
     final viewModel = context.read<PurchaseItemViewModel>();
 
     var price = double.parse(viewModel.nft.price);
     final fee = double.parse(viewModel.nft.price) * 0.1;
     price = price - fee;
+
+    final txId = txData.containsKey(kTxnId) ? txData[kTxnId].toString() : "";
+
+    final txTime = getTransactionTimeStamp(txData);
 
     final model = TradeReceiptModel(
         tradeId: viewModel.nft.tradeID,
@@ -769,10 +781,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         createdBy: viewModel.nft.creator,
         currency: viewModel.nft.ibcCoins.getAbbrev(),
         soldBy: viewModel.nft.owner.isEmpty ? viewModel.nft.creator : viewModel.nft.owner,
-        transactionTime: "${formatter.format(dateTime.toUtc())} UTC",
+        transactionTime: txTime,
         total: viewModel.nft.ibcCoins.getCoinWithDenominationAndSymbol(viewModel.nft.price, showDecimal: true),
         nftName: viewModel.nft.name,
-        transactionId: txId);
+        transactionID: txId);
 
     final TradeCompleteDialog tradeCompleteDialog = TradeCompleteDialog(
         model: model,

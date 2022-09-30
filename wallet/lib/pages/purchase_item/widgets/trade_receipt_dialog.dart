@@ -106,7 +106,7 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
                 buildRowWithBlueSubtitle(subtitle: widget.model.soldBy, title: "sold_by".tr()),
                 SizedBox(height: 20.h),
                 buildRowWithElipses(
-                  subtitle: widget.model.transactionId,
+                  subtitle: widget.model.transactionID,
                   title: "tx_id".tr(),
                 ),
                 SizedBox(height: 3.h),
@@ -275,7 +275,7 @@ class TradeReceiptModel {
   String pylonsFee;
   String total;
   String nftName;
-  String transactionId;
+  String transactionID;
 
   TradeReceiptModel(
       {required this.createdBy,
@@ -286,7 +286,7 @@ class TradeReceiptModel {
       required this.price,
       required this.pylonsFee,
       required this.total,
-      required this.transactionId,
+      required this.transactionID,
       required this.nftName});
 }
 

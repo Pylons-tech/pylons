@@ -39,7 +39,7 @@ TextStyle _rowSubtitleTextStyle = TextStyle(color: Colors.white, fontSize: 14.sp
 class PayNowDialog {
   final NFT nft;
   final PurchaseItemViewModel purchaseItemViewModel;
-  final ValueChanged<String> onPurchaseDone;
+  final ValueChanged<Map> onPurchaseDone;
   final bool shouldBuy;
 
   BuildContext buildContext;
@@ -70,7 +70,7 @@ class PayNowDialog {
 
 class PayNowWidget extends StatefulWidget {
   final NFT nft;
-  final ValueChanged<String> onPurchaseDone;
+  final ValueChanged<Map> onPurchaseDone;
   final bool shouldBuy;
 
   const PayNowWidget({Key? key, required this.nft, required this.onPurchaseDone, required this.shouldBuy}) : super(key: key);
@@ -356,7 +356,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
       return;
     }
 
-    widget.onPurchaseDone(executionResponse.data.toString());
+    widget.onPurchaseDone(jsonDecode(executionResponse.data.toString()) as Map);
   }
 
   Future<void> stripePaymentForRecipe(BuildContext context, NFT nft) async {
@@ -426,7 +426,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
         return;
       }
 
-      widget.onPurchaseDone(execution.data.toString());
+      widget.onPurchaseDone(jsonDecode(execution.data.toString()) as Map);
     } catch (error) {
       Navigator.pop(navigatorKey.currentState!.overlay!.context);
     }

@@ -98,6 +98,7 @@ class Execution extends $pb.GeneratedMessage {
     ..pc<$2.Coin>(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'coinOutputs', $pb.PbFieldType.PM, subBuilder: $2.Coin.create)
     ..pPS(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'itemOutputIds')
     ..pPS(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'itemModifyOutputIds')
+    ..aInt64(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'txTime')
     ..hasRequiredFields = false
   ;
 
@@ -115,6 +116,7 @@ class Execution extends $pb.GeneratedMessage {
     $core.Iterable<$2.Coin>? coinOutputs,
     $core.Iterable<$core.String>? itemOutputIds,
     $core.Iterable<$core.String>? itemModifyOutputIds,
+    $fixnum.Int64? txTime,
   }) {
     final _result = create();
     if (creator != null) {
@@ -152,6 +154,9 @@ class Execution extends $pb.GeneratedMessage {
     }
     if (itemModifyOutputIds != null) {
       _result.itemModifyOutputIds.addAll(itemModifyOutputIds);
+    }
+    if (txTime != null) {
+      _result.txTime = txTime;
     }
     return _result;
   }
@@ -253,5 +258,14 @@ class Execution extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(12)
   $core.List<$core.String> get itemModifyOutputIds => $_getList(11);
+
+  @$pb.TagNumber(13)
+  $fixnum.Int64 get txTime => $_getI64(12);
+  @$pb.TagNumber(13)
+  set txTime($fixnum.Int64 v) { $_setInt64(12, v); }
+  @$pb.TagNumber(13)
+  $core.bool hasTxTime() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearTxTime() => clearField(13);
 }
 
