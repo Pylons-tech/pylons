@@ -393,3 +393,5 @@ const kMaxDescription = 256;
 const kOwnerViewKeyValue = "owner_view_key";
 const kOwnerViewDrawerKeyValue = "ownerview_header";
 const kOwnerViewBottomSheetKeyValue = "bottom_sheet";
+const kKeyboardUpButtonKeyValue = "keyboard_up_button";
+const kExpandedBuyButtonKeyValue = "expanded_buy_button";

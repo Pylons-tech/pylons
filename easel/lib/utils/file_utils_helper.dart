@@ -81,8 +81,7 @@ class FileUtilsHelperImpl implements FileUtilsHelper {
         break;
     }
 
-    FilePickerResult? result = await filePicker.pickFiles(
-        type: type, allowedExtensions: allowedExtensions);
+    FilePickerResult? result = await filePicker.pickFiles(type: type, allowedExtensions: allowedExtensions);
 
     if (result == null) {
       return PickedFileModel(

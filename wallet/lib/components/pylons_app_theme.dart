@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
 class PylonsAppTheme  {
@@ -15,21 +14,6 @@ class PylonsAppTheme  {
 
   static Color cardBackgroundSelected = const Color(0xFF1212C4).withOpacity(0.2);
 
-  /// Retrieves the correct [StaggeredTile] for provided tile index [index], for the Pylons app theme.
-  ///
-  /// The following diagram provides the expected size for each tile provided an index between 0 and 8,
-  /// from left to right and top to bottom.
-  ///
-  /// ------------------------------------------------------------
-  ///
-  /// `1x1 2x2 2x2`
-  ///
-  /// `1x1 2x2 2x2`
-  ///
-  /// `1x1 1x1 1x1`
-  static StaggeredTile getStaggeredTile(int index) {
-    return StaggeredTile.count((index == 1 || index == 6) ? 2 : 1, (index == 1 || index == 6) ? 2 : 1);
-  }
 
   ThemeData buildAppTheme() {
     return ThemeData(
