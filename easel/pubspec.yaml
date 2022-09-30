@@ -93,7 +93,7 @@ dependencies:
 
   dio: ^4.0.1
 
-  url_launcher: 6.1.5
+  url_launcher: ^6.1.6
 
   focus_detector: ^2.0.1
 
