@@ -25,6 +25,6 @@ extension IntAmount on int {
 
 extension AmountValue on Amount {
   Decimal toHumanReadable() {
-    return value / Decimal.fromInt(1000000);
+    return (value / Decimal.fromInt(1000000)).toDecimal();
   }
 }

@@ -301,7 +301,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             onTapped: () async {
                               bool balancesFetchResult = true;
                               if (viewModel.nft.price != kZeroInt) {
-                                final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
+                                final balancesEither = await viewModel.shouldShowSwipeToBuy(
                                   selectedDenom: viewModel.nft.denom,
                                   requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
                                 );
@@ -638,7 +638,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         onTap: () async {
                           bool balancesFetchResult = true;
                           if (viewModel.nft.price != kZeroInt) {
-                            final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
+                            final balancesEither = await viewModel.shouldShowSwipeToBuy(
                               selectedDenom: viewModel.nft.denom,
                               requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
                             );
