@@ -22,16 +22,11 @@ jobs:
           flutter --version
           cd wallet
           mkdir env
-          cd pkgs
-          cd transaction_signing_gateway
-          flutter pub get
-          cd ..
-          cd pdf_viewer-master
-          flutter pub get
-          cd ..
-          cd ..
-          flutter pub get
+          chmod +x ./borg.sh
+          ./borg.sh boot
           flutter analyze
+          flutter test
+          
 
 
   easel:
