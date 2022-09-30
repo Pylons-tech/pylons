@@ -29,6 +29,8 @@ import 'package:pylons_wallet/pages/home/wallet_screen/widgets/transaction_detai
 import 'package:pylons_wallet/pages/presenting_onboard_page/presenting_onboard_page.dart';
 import 'package:pylons_wallet/pages/presenting_onboard_page/screens/create_wallet_screen.dart';
 import 'package:pylons_wallet/pages/presenting_onboard_page/screens/restore_wallet_screen.dart';
+import 'package:pylons_wallet/pages/purchase_item/purchase_item_screen.dart';
+import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
 import 'package:pylons_wallet/pages/routing_page/routing_page.dart';
 import 'package:pylons_wallet/pages/routing_page/update_app.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen.dart';
@@ -57,12 +59,14 @@ class PylonsApp extends StatefulWidget {
   State<PylonsApp> createState() => _PylonsAppState();
 }
 
-class _PylonsAppState extends State<PylonsApp> {
+class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
+  AppLifecycleState _appState = AppLifecycleState.resumed;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     GetIt.I.get<Repository>().setApplicationDirectory();
-
     checkInternetConnectivity();
     setUpNotifications();
     InAppPurchase.instance.purchaseStream.listen(onEvent);
@@ -72,7 +76,7 @@ class _PylonsAppState extends State<PylonsApp> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       minTextAdapt: true,
-      builder: () => ChangeNotifierProvider.value(
+      builder: (_, __) => ChangeNotifierProvider.value(
           value: sl<UserInfoProvider>(),
           builder: (context, value) {
             return MaterialApp(
@@ -118,14 +122,35 @@ class _PylonsAppState extends State<PylonsApp> {
                     final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
                     final viewModel = sl<OwnerViewViewModel>();
                     viewModel.nft = nft;
-                    return  OwnerView(ownerViewViewModel: viewModel,);
+                    return OwnerView(
+                      ownerViewViewModel: viewModel,
+                    );
                   }
 
                   return const SizedBox();
-                }
+                },
+                RouteUtil.ROUTE_PURCHASE_VIEW: (context) {
+                  if (ModalRoute.of(context) == null) {
+                    return const SizedBox();
+                  }
+
+                  if (ModalRoute.of(context)?.settings.arguments == null) {
+                    return const SizedBox();
+                  }
+
+                  if (ModalRoute.of(context)?.settings.arguments is NFT) {
+                    final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
+                    final viewModel = sl<PurchaseItemViewModel>();
+                    viewModel.setNFT(nft);
+                    return PurchaseItemScreen(
+                      purchaseItemViewModel: viewModel,
+                    );
+                  }
+
+                  return const SizedBox();
+                },
               },
               builder: (context, widget) {
-                ScreenUtil.setContext(context);
 
                 return MediaQuery(
                   data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
@@ -137,23 +162,10 @@ class _PylonsAppState extends State<PylonsApp> {
     );
   }
 
-  Future<void> checkInternetConnectivity() async {
-    final repository = GetIt.I.get<Repository>();
-
-    if (!await repository.isInternetConnected()) {
-      noInternet.showNoInternet();
-    }
-
-    repository.getInternetStatus().listen((event) {
-      if (event == InternetConnectionStatus.connected && noInternet.isShowing) {
-        noInternet.dismiss();
-      }
-
-      if (event == InternetConnectionStatus.disconnected) {
-        if (!noInternet.isShowing) {
-          noInternet.showNoInternet();
-        }
-      }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() {
+      _appState = state;
     });
   }
 
@@ -252,5 +264,26 @@ class _PylonsAppState extends State<PylonsApp> {
     await remoteNotificationService.getNotificationsPermission();
 
     remoteNotificationService.listenToForegroundNotification();
+  }
+
+  Future<void> checkInternetConnectivity() async {
+    final repository = GetIt.I.get<Repository>();
+
+    if (!await repository.isInternetConnected()) {
+      noInternet.showNoInternet();
+    }
+
+    repository.getInternetStatus().listen((event) {
+      if (_appState != AppLifecycleState.resumed) return;
+      if (event == InternetConnectionStatus.connected && noInternet.isShowing) {
+        noInternet.dismiss();
+      }
+
+      if (event == InternetConnectionStatus.disconnected) {
+        if (!noInternet.isShowing) {
+          noInternet.showNoInternet();
+        }
+      }
+    });
   }
 }

@@ -16,6 +16,7 @@ class NoEaselArtWork extends StatelessWidget {
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+
       children: [
         SizedBox(
           height: 40.h,
@@ -51,6 +52,8 @@ class NoEaselArtWork extends StatelessWidget {
                 launchUrlString(easelAppInstallLink);
               }
             }),
+
+        const Spacer(),
       ],
     );
   }

@@ -18,15 +18,14 @@ class ImageWidget extends StatelessWidget {
             file!.readAsBytesSync(),
             width: 1.sw,
             height: 1.sh,
-            fit: BoxFit.fitHeight,
+            fit: BoxFit.fitWidth,
           )
         : SizedBox(
             height: double.infinity,
             child: CachedNetworkImage(
-              fit: BoxFit.fitHeight,
+              fit: BoxFit.fitWidth,
               imageUrl: filePath!,
-              errorWidget: (a, b, c) =>
-                  const Center(child: Icon(Icons.error_outline)),
+              errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
               placeholder: (context, url) => Center(
                 child: SizedBox(
                   height: 50.0.h,

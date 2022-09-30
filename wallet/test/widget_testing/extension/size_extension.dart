@@ -27,7 +27,7 @@ extension SetScreenSize on WidgetTester {
         useOnlyLangCode: true,
         child: ScreenUtilInit(
           minTextAdapt: true,
-          builder: () => MaterialApp(
+          builder: (_, __) => MaterialApp(
             // key: UniqueKey(),
             navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
