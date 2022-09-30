@@ -349,5 +349,7 @@
   "pylons": "Pylons",
   "vietnamese": "Vietnamese",
   "claim_free_nft": "Claim your Free NFT",
-  "before_too_late": "Before it's too late!"
+  "before_too_late": "Before it's too late!",
+  "pick_nft": "Pick an NFT to display",
+  "update_widget": "Update Widget"
 }
