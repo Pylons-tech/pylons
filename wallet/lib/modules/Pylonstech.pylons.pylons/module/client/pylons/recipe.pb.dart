@@ -1430,4 +1430,3 @@ class Recipe extends $pb.GeneratedMessage {
   @$pb.TagNumber(16)
   void clearUpdatedAt() => clearField(16);
 }
-

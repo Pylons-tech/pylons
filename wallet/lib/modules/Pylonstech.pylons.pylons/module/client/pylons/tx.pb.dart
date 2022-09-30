@@ -2437,4 +2437,3 @@ class MsgUpdateCookbookResponse extends $pb.GeneratedMessage {
   static MsgUpdateCookbookResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MsgUpdateCookbookResponse>(create);
   static MsgUpdateCookbookResponse? _defaultInstance;
 }
-

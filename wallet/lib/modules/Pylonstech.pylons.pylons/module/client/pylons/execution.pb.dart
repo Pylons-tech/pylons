@@ -268,4 +268,3 @@ class Execution extends $pb.GeneratedMessage {
   @$pb.TagNumber(13)
   void clearTxTime() => clearField(13);
 }
-
