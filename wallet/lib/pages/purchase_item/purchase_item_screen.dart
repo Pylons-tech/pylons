@@ -320,8 +320,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                   buildContext: context,
                                   nft: viewModel.nft,
                                   purchaseItemViewModel: viewModel,
-                                  onPurchaseDone: (txId) {
-                                    showTransactionCompleteDialog(txId);
+                                  onPurchaseDone: (txData) {
+                                    showTransactionCompleteDialog(txData: txData);
                                   },
                                   shouldBuy: balancesFetchResult);
                               payNowDialog.show();
@@ -655,8 +655,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               buildContext: context,
                               nft: viewModel.nft,
                               purchaseItemViewModel: viewModel,
-                              onPurchaseDone: (txId) {
-                                showTransactionCompleteDialog(txId);
+                              onPurchaseDone: (txData) {
+                                showTransactionCompleteDialog(txData: txData);
                               },
                               shouldBuy: balancesFetchResult);
                           payNowDialog.show();
@@ -772,7 +772,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   }
 
   void showTransactionCompleteDialog({required Map txData}) {
-    final formatter = DateFormat('MMM dd yyyy HH:mm');
     final viewModel = context.read<PurchaseItemViewModel>();
 
     var price = double.parse(viewModel.nft.price);
