@@ -17,6 +17,7 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
+// ignore_for_file: invalid_override
 
 class _FakeFirebaseApp_0 extends _i1.Fake implements _i2.FirebaseApp {}
 
