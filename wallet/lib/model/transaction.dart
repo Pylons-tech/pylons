@@ -11,7 +11,7 @@ class TransactionHistory {
   final String transactionType;
   final IBCCoins ibcCoin;
 
-  final TransactionType transactionTypeEnum;
+  final WalletHistoryTransactionType transactionTypeEnum;
 
   TransactionHistory({
     required this.txID,
@@ -41,7 +41,7 @@ class TransactionHistory {
           createdAt: json[kCreatedAtKey] as int,
           transactionType: json[kTypeKey] as String,
           transactionTypeEnum:
-              TransactionType.values.byName(json[kTypeKey] as String),
+              WalletHistoryTransactionType.values.byName(json[kTypeKey] as String),
           ibcCoin: json[kAmountKey].toString() != "0"
               ? splitNumberAndAlpha(json[kAmountKey] as String)[1]
                   .toIBCCoinsEnum()
@@ -57,4 +57,4 @@ class TransactionHistory {
       ];
 }
 
-enum TransactionType { SEND, RECEIVE, NFTBUY, NFTSELL }
+enum WalletHistoryTransactionType { SEND, RECEIVE, NFTBUY, NFTSELL }

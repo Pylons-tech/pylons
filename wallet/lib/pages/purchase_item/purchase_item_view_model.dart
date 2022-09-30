@@ -122,6 +122,9 @@ class PurchaseItemViewModel extends ChangeNotifier {
         "creator": "",
         "cookbookId": "",
         "recipeId": "",
+        "nftName": "",
+        "nftPrice": "",
+        "nftCurrency": "",
         "coinInputsIndex": 0
         }
         ''';
@@ -129,13 +132,14 @@ class PurchaseItemViewModel extends ChangeNotifier {
     final jsonMap = jsonDecode(jsonExecuteRecipe) as Map;
     jsonMap[kCookbookIdMap] = nft.cookbookID;
     jsonMap[kRecipeIdMap] = nft.recipeID;
+    jsonMap[kNftName] = nft.name;
+    jsonMap[kNftPrice] = nft.ibcCoins.getCoinWithProperDenomination(nft.price);
+    jsonMap[kNftCurrency] = nft.ibcCoins.getAbbrev();
 
     final showLoader = Loading()..showLoading();
 
     final response = await walletsStore.executeRecipe(jsonMap);
-
     showLoader.dismiss();
-
     return response;
   }
 

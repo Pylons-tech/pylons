@@ -17,8 +17,8 @@ import '../../../mocks/mock_crashlytics_helper.dart';
 import '../../../mocks/mock_firebase_appcheck.dart';
 import '../../../mocks/mock_firebase_dynamic_link.dart';
 import '../../../mocks/mock_store_payment_service.dart';
-import '../../../mocks/mock_analytics_helper.dart';
 import '../../../mocks/mock_firestore_helper.dart';
+import '../../../mocks/mock_analytics_helper.dart';
 
 void main() {
   test('should get account link and account id on getAccountLinkBasedOnUpdateToken', () async {
@@ -31,6 +31,7 @@ void main() {
     final FirestoreHelper firestoreHelper = MockFirestoreHelper();
 
     GetIt.I.registerSingleton(MOCK_BASE_ENV);
+
 
     final client = MockClient(requestHandler);
     final remoteDataStore = RemoteDataStoreImp(

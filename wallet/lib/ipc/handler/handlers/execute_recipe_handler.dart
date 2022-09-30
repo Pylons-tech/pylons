@@ -15,11 +15,8 @@ class ExecuteRecipeHandler implements BaseHandler {
   @override
   Future<SdkIpcResponse> handle() async {
     final jsonMap = jsonDecode(sdkIpcMessage.json) as Map;
-
     jsonMap.remove('nodeVersion');
-
     final walletsStore = GetIt.I.get<WalletsStore>();
-
     final response = await walletsStore.executeRecipe(jsonMap);
     response.sender = sdkIpcMessage.sender;
     response.action = sdkIpcMessage.action;

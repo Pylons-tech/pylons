@@ -1357,7 +1357,6 @@ class MockRepository extends _i1.Mock implements _i15.Repository {
             )),
           ) as _i8.Future<
               _i2.Either<_i9.Failure, _i17.StripeGeneratePayoutTokenResponse>>);
-  @override
   _i8.Future<_i2.Either<_i9.Failure, _i17.StripePayoutResponse>> Payout(
           _i17.StripePayoutRequest? req) =>
       (super.noSuchMethod(

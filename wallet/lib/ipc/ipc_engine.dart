@@ -303,6 +303,7 @@ class IPCEngine {
   /// Input: [SdkIpcMessage] the transaction that the user approves.
   Future<void> onUserApproval(SdkIpcMessage sdkIPCMessage) async {
     final handlerMessage = await GetIt.I.get<HandlerFactory>().getHandler(sdkIPCMessage).handle();
+    if  (handlerMessage == null) return;
     await checkAndDispatchUniLinkIfNeeded(handlerMessage: handlerMessage, responseSendingNeeded: sdkIPCMessage.requestResponse);
   }
 
