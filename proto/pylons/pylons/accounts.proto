@@ -27,3 +27,11 @@ message RefereeSignup {
   string username = 1;
   string address = 2;
 }
+
+message KYCAccount {
+  string account_addr = 1;
+  string username = 2;
+  uint64 level = 3;
+  string provider = 4;
+  string provider_id = 5;
+}
