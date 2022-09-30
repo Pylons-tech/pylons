@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+
 //import for AppStoreProductDetails
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -243,8 +244,29 @@ class _PylonsAppState extends State<PylonsApp> {
         transactionData: jsonEncode(googleInAppPurchaseModel.toJsonLocalRetry()),
         transactionDescription: 'buying_pylon_points'.tr(),
         transactionCurrency: kStripeUSD_ABR,
-        transactionPrice: price ?? "",
+        transactionPrice: price,
       );
+      saveTransactionRecord(transactionHash: '', transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+    }
+
+    if (purchaseDetails is AppStorePurchaseDetails) {
+      final price = getInAppPrice(purchaseDetails.productID);
+      final creator = walletStore.getWallets().value.last.publicAddress;
+
+      final AppleInAppPurchaseModel appleInAppPurchaseModel = AppleInAppPurchaseModel(
+        productID: purchaseDetails.productID,
+        purchaseID: purchaseDetails.purchaseID ?? '',
+        receiptData: purchaseDetails.verificationData.localVerificationData,
+        creator: creator,
+      );
+
+      final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
+          transactionTypeEnum: TransactionTypeEnum.AppleInAppCoinsRequest,
+          transactionData: jsonEncode(appleInAppPurchaseModel.toJson()),
+          transactionDescription: 'buying_pylon_points'.tr(),
+          transactionCurrency: kStripeUSD_ABR,
+          transactionPrice: price);
+
       saveTransactionRecord(transactionHash: '', transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
     }
   }
@@ -292,7 +314,11 @@ class _PylonsAppState extends State<PylonsApp> {
           final creator = walletStore.getWallets().value.last.publicAddress;
 
           final AppleInAppPurchaseModel appleInAppPurchaseModel = AppleInAppPurchaseModel(
-              productID: purchaseDetails.productID, purchaseID: purchaseDetails.purchaseID ?? '', receiptData: purchaseDetails.verificationData.localVerificationData, creator: creator);
+            productID: purchaseDetails.productID,
+            purchaseID: purchaseDetails.purchaseID ?? '',
+            receiptData: purchaseDetails.verificationData.localVerificationData,
+            creator: creator,
+          );
 
           final appleInAppPurchaseResponse = await walletStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
 
