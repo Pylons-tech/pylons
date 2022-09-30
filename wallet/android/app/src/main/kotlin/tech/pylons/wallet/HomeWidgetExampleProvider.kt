@@ -23,16 +23,18 @@ class HomeWidgetExampleProvider : HomeWidgetProvider() {
                             MainActivity::class.java)
                     setOnClickPendingIntent(R.id.widget_container, pendingIntent)
 
-                    try {
-                        val bitmap: Bitmap = Glide.with(context)
-                            .asBitmap()
-                            .load(widgetData.getString("image", "")?.toUri())
-                            .submit(512, 512)
-                            .get()
-                        setImageViewBitmap(R.id.imageView, bitmap)
-                    } catch (e: java.lang.Exception) {
-                        e.printStackTrace()
-                    }
+
+                        try {
+                            val bitmap: Bitmap = Glide.with(context)
+                                .asBitmap()
+                                .load(widgetData.getString("image", "")?.toUri())
+                                .submit(512, 512)
+                                .get()
+                            setImageViewBitmap(R.id.imageView, bitmap)
+                        } catch (e: java.lang.Exception) {
+                            e.printStackTrace()
+                        }
+
 
                 }
 
