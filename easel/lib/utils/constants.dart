@@ -164,6 +164,7 @@ const kUpylon = "upylon";
 const kExtraInfo = "extraInfo";
 const kDuration = "Duration";
 const kFileSize = "fileSize";
+const kIosStripePaymentAllowed = "iosStripePaymentAllowed";
 
 const kThumbnailFileName = "temp.jpg";
 

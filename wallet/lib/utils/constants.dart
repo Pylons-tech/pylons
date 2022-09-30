@@ -276,8 +276,9 @@ const int kSixtySeconds = 60;
 const int kTimeStampInt = 1000;
 
 const int kDateConverterConstant = 1000;
-
 const kHashtags = "Hashtags";
+const kIosStripePaymentAllowed = "iosStripePaymentAllowed";
+
 
 const kLOW_LOW_BALANCE_CONSTANT = "Tx error:5";
 
