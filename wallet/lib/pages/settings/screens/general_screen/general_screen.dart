@@ -85,6 +85,11 @@ class _GeneralScreenState extends State<GeneralScreen> {
               onPressed: () {
                 Navigator.of(context).pushNamed(RouteUtil.ROUTE_SECURITY);
               },
+            ),   GeneralForwardItem(
+              title: "transactions".tr(),
+              onPressed: () {
+                Navigator.of(context).pushNamed(RouteUtil.ROUTE_FAILURE);
+              },
             ),
             GeneralForwardItem(
               title: "language".tr(),
