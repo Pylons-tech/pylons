@@ -59,6 +59,7 @@ import 'package:transaction_signing_gateway/transaction_signing_gateway.dart'
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
+// ignore_for_file: must_be_immutable
 
 class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
   _FakeEither_0(

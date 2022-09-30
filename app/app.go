@@ -70,6 +70,9 @@ import (
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	paramproposal "github.com/cosmos/cosmos-sdk/x/params/types/proposal"
+	ibcfee "github.com/cosmos/ibc-go/v5/modules/apps/29-fee"
+	ibcfeekeeper "github.com/cosmos/ibc-go/v5/modules/apps/29-fee/keeper"
+	ibcfeetypes "github.com/cosmos/ibc-go/v5/modules/apps/29-fee/types"
 	"github.com/cosmos/ibc-go/v5/modules/apps/transfer"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v5/modules/apps/transfer/keeper"
 	ibctransfertypes "github.com/cosmos/ibc-go/v5/modules/apps/transfer/types"
@@ -77,6 +80,7 @@ import (
 	ibcporttypes "github.com/cosmos/ibc-go/v5/modules/core/05-port/types"
 	ibchost "github.com/cosmos/ibc-go/v5/modules/core/24-host"
 	ibckeeper "github.com/cosmos/ibc-go/v5/modules/core/keeper"
+	ibcmock "github.com/cosmos/ibc-go/v5/testing/mock"
 
 	"github.com/cosmos/cosmos-sdk/x/slashing"
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
@@ -112,7 +116,8 @@ const (
 	// AccountAddressPrefix is the prefix used for bech32 addresses ex: "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
 	AccountAddressPrefix = "pylo"
 	// Name is the name of the app, here "pylons"
-	Name = "pylons"
+	Name               = "pylons"
+	MockFeePort string = ibcmock.ModuleName + ibcfeetypes.ModuleName
 )
 
 // flag Upgrade Handler
@@ -179,12 +184,14 @@ var (
 		slashing.AppModuleBasic{},
 		ibc.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
+		ibcmock.AppModuleBasic{},
 		ica.AppModuleBasic{},
 		evidence.AppModuleBasic{},
 		transfer.AppModuleBasic{},
 		vesting.AppModuleBasic{},
 		epochsmodule.AppModuleBasic{},
 		pylonsmodule.AppModuleBasic{},
+		ibcfee.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -196,6 +203,7 @@ var (
 		stakingtypes.NotBondedPoolName:          {authtypes.Burner, authtypes.Staking},
 		govtypes.ModuleName:                     {authtypes.Burner},
 		ibctransfertypes.ModuleName:             {authtypes.Minter, authtypes.Burner},
+		ibcfeetypes.ModuleName:                  nil,
 		icatypes.ModuleName:                     nil,
 		pylonsmoduletypes.FeeCollectorName:      nil,
 		pylonsmoduletypes.TradesLockerName:      nil,
@@ -246,16 +254,24 @@ type PylonsApp struct {
 	UpgradeKeeper  upgradekeeper.Keeper
 	ParamsKeeper   paramskeeper.Keeper
 	IBCKeeper      *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
+	IBCFeeKeeper   ibcfeekeeper.Keeper
 	EvidenceKeeper evidencekeeper.Keeper
 	TransferKeeper ibctransferkeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
+	ScopedIBCFeeKeeper   capabilitykeeper.ScopedKeeper
+	ScopedFeeMockKeeper  capabilitykeeper.ScopedKeeper
 	ScopedICAHostKeeper  capabilitykeeper.ScopedKeeper
 	EpochsKeeper         epochsmodulekeeper.Keeper
 	PylonsKeeper         pylonsmodulekeeper.Keeper
 	ICAHostKeeper        icahostkeeper.Keeper
+
+	// make IBC modules public for test purposes
+	// these modules are never directly routed to by the IBC Router
+	ICAAuthModule ibcmock.IBCModule
+	FeeMockModule ibcmock.IBCModule
 
 	// the module manager
 	mm *module.Manager
@@ -265,9 +281,6 @@ type PylonsApp struct {
 
 	// module migration manager
 	configurator module.Configurator
-
-	// upgrade height
-	// upgradeHeight int64
 }
 
 // New returns a reference to an initialized Pylons.
@@ -293,7 +306,9 @@ func New(
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	keys := sdk.NewKVStoreKeys(
-		authtypes.StoreKey, banktypes.StoreKey, stakingtypes.StoreKey,
+		authtypes.StoreKey,
+		banktypes.StoreKey,
+		stakingtypes.StoreKey,
 		minttypes.StoreKey,
 		// distrtypes.StoreKey,
 		slashingtypes.StoreKey,
@@ -307,6 +322,7 @@ func New(
 		capabilitytypes.StoreKey,
 		pylonsmoduletypes.StoreKey,
 		epochsmoduletypes.StoreKey,
+		ibcfeetypes.StoreKey,
 	)
 
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -378,17 +394,20 @@ func New(
 	app.IBCKeeper = ibckeeper.NewKeeper(
 		appCodec, keys[ibchost.StoreKey], app.GetSubspace(ibchost.ModuleName), app.StakingKeeper, app.UpgradeKeeper, scopedIBCKeeper,
 	)
-
-	// ... other modules keepers
-	app.ICAHostKeeper = icahostkeeper.NewKeeper(
-		appCodec,
-		keys[icahosttypes.StoreKey],
-		app.GetSubspace(icahosttypes.SubModuleName),
+	// IBC Fee Module keeper
+	app.IBCFeeKeeper = ibcfeekeeper.NewKeeper(
+		appCodec, keys[ibcfeetypes.StoreKey], app.GetSubspace(ibcfeetypes.ModuleName),
+		app.IBCKeeper.ChannelKeeper, // may be replaced with IBC middleware
 		app.IBCKeeper.ChannelKeeper,
-		&app.IBCKeeper.PortKeeper,
-		app.AccountKeeper,
-		scopedICAHostKeeper,
-		app.MsgServiceRouter(),
+		&app.IBCKeeper.PortKeeper, app.AccountKeeper, app.BankKeeper,
+	)
+
+	// ICA Host keeper
+	app.ICAHostKeeper = icahostkeeper.NewKeeper(
+		appCodec, keys[icahosttypes.StoreKey], app.GetSubspace(icahosttypes.SubModuleName),
+		app.IBCFeeKeeper, // use ics29 fee as ics4Wrapper in middleware stack
+		app.IBCKeeper.ChannelKeeper, &app.IBCKeeper.PortKeeper,
+		app.AccountKeeper, scopedICAHostKeeper, app.MsgServiceRouter(),
 	)
 
 	icaModule := ica.NewAppModule(nil, &app.ICAHostKeeper)
