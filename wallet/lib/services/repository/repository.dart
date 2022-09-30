@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:alan/alan.dart' as alan;
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -312,8 +313,7 @@ abstract class Repository {
   /// This method will get the nft history
   /// Input: [itemId] and [cookBookId] of the nft
   /// Output: returns [List][NftOwnershipHistory] if success else this will give [Failure]
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory(
-      {required String itemId, required String cookBookId});
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String itemId, required String cookBookId});
 
   /// This method will get the transaction history from the chain
   /// Input: [address] of the user
@@ -449,8 +449,6 @@ abstract class Repository {
   /// Output: [String] return the generated dynamic link else will return [Failure]
   Future<Either<Failure, String>> createDynamicLinkForRecipeNftShare({required String address, required NFT nft});
 
-
-
   /// This method will create User account based on account public info
   /// Input: [publicInfo] contains info related to user chain address, [walletCreationModel] contains user entered data
   /// Output: if successful will give [TransactionResponse] else will  return [Failure]
@@ -470,17 +468,13 @@ abstract class Repository {
   /// Output: [bool] status of the process is successful or not
   Future<Either<Failure, bool>> deleteTransactionFailureRecord(int id);
 
-
   /// This method will set user app level identifier in the analytics
   /// Input: [address] the address of the user
   /// Output: [bool] tells whether the operation is successful or else will return [Failure]
   Future<Either<Failure, bool>> setUserIdentifierInAnalytics({required String address});
 
-
-
   /// Output: [bool] tells whether the operation is successful or else will return [Failure]
   Future<Either<Failure, bool>> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice});
-
 
   /// Output: [bool] tells whether the operation is successful or else will return [Failure]
   Future<Either<Failure, bool>> logAddToCart({
@@ -490,7 +484,6 @@ abstract class Repository {
     required double purchasePrice,
     required String currency,
   });
-
 }
 
 class RepositoryImp implements Repository {
@@ -801,7 +794,7 @@ class RepositoryImp implements Repository {
         await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
         return Left(StripeFailure(result.error ?? GEN_PAYMENTRECEIPT_FAILED));
       }
-      await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(StripeGeneratePaymentReceiptResponse.from(result));
     } on Exception catch (_) {
       await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
@@ -1600,17 +1593,17 @@ class RepositoryImp implements Repository {
 
     try {
       final result = await remoteDataStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
-      await saveTransactionRecord(transactionHash: result , transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: result, transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(result);
     } on Failure catch (_) {
       await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       "something_wrong".tr().show();
       return Left(_);
     } on String catch (_) {
-      await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(InAppPurchaseFailure(message: _));
     } on Exception catch (_) {
-      await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       recordErrorInCrashlytics(_);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
@@ -1649,17 +1642,17 @@ class RepositoryImp implements Repository {
       return Right(result);
     } on Failure catch (e) {
       if (e.message.ifDuplicateReceipt()) {
-        await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
+        await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
         return const Right("");
       }
       "something_wrong".tr().show();
-      await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(e);
     } on String catch (_) {
-      await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(InAppPurchaseFailure(message: _));
     } on Exception catch (_) {
-      await saveTransactionRecord(transactionHash: "",transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       recordErrorInCrashlytics(_);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
@@ -1708,7 +1701,6 @@ class RepositoryImp implements Repository {
   Future<Either<Failure, bool>> buyProduct(ProductDetails productDetails) async {
     final Map<String, dynamic> data = {};
     createJsonFormOfProductDetails(data, productDetails);
-
 
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure("no_internet".tr()));
@@ -1805,15 +1797,13 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory(
-      {required String itemId, required String cookBookId}) async {
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String itemId, required String cookBookId}) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure("no_internet".tr()));
     }
 
     try {
-      final result = await remoteDataStore.getNftOwnershipHistory(
-          itemId: itemId, cookBookId: cookBookId);
+      final result = await remoteDataStore.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
 
       return Right(result);
     } on String catch (_) {
@@ -1912,9 +1902,6 @@ class RepositoryImp implements Repository {
     }
   }
 
-
-
-
   @override
   Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) async {
     if (!await networkInfo.isConnected) {
@@ -1938,8 +1925,8 @@ class RepositoryImp implements Repository {
     try {
       return Right(await remoteDataStore.setUpUserIdentifierInAnalytics(address: address));
     } on Exception catch (e) {
-    recordErrorInCrashlytics(e);
-    return Left(ServerFailure(e.toString()));
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
     }
   }
 
@@ -1951,11 +1938,10 @@ class RepositoryImp implements Repository {
     try {
       return Right(await remoteDataStore.logPurchaseItem(recipeId: recipeId, recipeName: recipeName, author: author, purchasePrice: purchasePrice));
     } on Exception catch (e) {
-    recordErrorInCrashlytics(e);
-    return Left(ServerFailure(e.toString()));
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
     }
   }
-
 
   @override
   Future<Either<Failure, bool>> logAddToCart({
@@ -1975,10 +1961,6 @@ class RepositoryImp implements Repository {
       return Left(ServerFailure(e.toString()));
     }
   }
-
-
-
-
 
   @override
   Future<Either<Failure, bool>> deleteTransactionFailureRecord(int id) async {

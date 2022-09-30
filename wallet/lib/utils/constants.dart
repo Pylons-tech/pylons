@@ -402,16 +402,14 @@ const kExpandedBuyButtonKeyValue = "expanded_buy_button";
 
 Map<String, Color> denomColors = {'upylon': const Color(0xFF5252d5), 'ustripeusd': const Color(0xFF85bb65), 'uusd': const Color(0xFF85bb65)};
 
+const String kNftName = "nftName";
+const String kNftPrice = "nftPrice";
+const String kNftCurrency = "nftCurrency";
+const String kPaymentIntentId = "payment_intent_id";
+const String kClientSecret = "clientSecret";
+const String kPaymentInfos = "payment_infos";
 
-
-const String kNftName= "nftName";
-const String kNftPrice= "nftPrice";
-const String kNftCurrency= "nftCurrency";
-const String kPaymentIntentId= "payment_intent_id";
-const String kClientSecret= "clientSecret";
-const String kPaymentInfos= "payment_infos";
-
-
-const String kRecipeID= "recipeID";
-const String kCookbookID= "cookbookID";
-const String kPaymentInfosMap= "paymentInfos";
+const String kRecipeID = "recipeID";
+const String kCookbookID = "cookbookID";
+const String kPaymentInfosMap = "paymentInfos";
+const String kItemAlreadyOwned = "itemAlreadyOwned";
