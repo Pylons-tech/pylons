@@ -20,8 +20,8 @@ const IMAGE_HEIGHT = 800;
   
 const defaultImage = '/img/buy_icon.png'; 
 const defaultMetaTags = `
-<meta property="og:title"       content="${"Big-Dipper"}" />
-<meta property="og:description" content="${"Wallet deep link"}" />
+<meta property="og:title"       content="${"Big Dipper | Built on Pylons"}" />
+<meta property="og:description" content="Blockchain Development Tools For Digital Items & NFTs" />
 <meta property="og:image"       content="${defaultImage}" />
 <meta property="og:url"         content="" />
 `;
@@ -182,6 +182,8 @@ Meteor.startup(() => {
                 }
                 else if(botType != SLACK_BOT){
                     description = price !== "No Price" ? description + "\nPrice: " + price : description;
+                }else {
+                   description = description + "\n" + price;
                 }
                 
                 var MetaTags;

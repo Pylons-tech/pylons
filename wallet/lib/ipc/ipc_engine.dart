@@ -15,14 +15,12 @@ import 'package:pylons_wallet/ipc/models/sdk_ipc_message.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/ipc/widgets/sdk_approval_dialog.dart';
 import 'package:pylons_wallet/model/nft.dart';
-import 'package:pylons_wallet/pages/detailed_asset_view/owner_view.dart';
-import 'package:pylons_wallet/pages/purchase_item/purchase_item_screen.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
+import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:transaction_signing_gateway/model/account_public_info.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -154,23 +152,9 @@ class IPCEngine {
     }
 
     if (isOwnerIsViewing(nullableNFT, currentWallets)) {
-      await navigatorKey.currentState!.push(
-        MaterialPageRoute(
-          builder: (_) => OwnerView(
-            nft: nullableNFT,
-            ownerViewViewModel: sl(),
-          ),
-        ),
-      );
+      await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nullableNFT);
     } else {
-      await navigatorKey.currentState!.push(
-        MaterialPageRoute(
-          builder: (_) => PurchaseItemScreen(
-            nft: nullableNFT,
-            purchaseItemViewModel: sl(),
-          ),
-        ),
-      );
+      await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: nullableNFT);
     }
 
     walletsStore.setStateUpdatedFlag(flag: true);
@@ -205,14 +189,7 @@ class IPCEngine {
     await item.getOwnerAddress();
     showLoader.dismiss();
 
-    await navigatorKey.currentState!.push(
-      MaterialPageRoute(
-        builder: (_) => PurchaseItemScreen(
-          nft: item,
-          purchaseItemViewModel: sl(),
-        ),
-      ),
-    );
+    await  navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: item);
     walletsStore.setStateUpdatedFlag(flag: true);
   }
 
@@ -235,14 +212,8 @@ class IPCEngine {
       );
     } else {
       final item = await NFT.fromItem(recipeResult);
-      await navigatorKey.currentState!.push(
-        MaterialPageRoute(
-          builder: (_) => OwnerView(
-            nft: item,
-            ownerViewViewModel: sl(),
-          ),
-        ),
-      );
+      await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: item);
+
       walletsStore.setStateUpdatedFlag(flag: true);
     }
   }
@@ -369,7 +340,7 @@ class IPCEngine {
 
   bool _isNFTTradeUniLink(String link) {
     final queryParam = Uri.parse(link).queryParameters;
-    return  queryParam.containsKey(kTradeIdKey);
+    return queryParam.containsKey(kTradeIdKey);
   }
 
   Future<String> checkAndUnWrapFirebaseLink(String link) async {

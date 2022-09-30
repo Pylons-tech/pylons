@@ -30,7 +30,6 @@ import 'package:pylons_sdk/src/pylons_wallet.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
 
-
 import '../core/constants/strings.dart';
 
 /// The Pylons class is the main endpoint developers use for structured,
@@ -78,6 +77,7 @@ class PylonsWalletImpl implements PylonsWallet {
       sdkipcResponse = SDKIPCResponse.fromIPCMessage(getMessage);
       IPCHandlerFactory.getHandler(sdkipcResponse);
     } catch (e) {
+      print(e);
       print('Something went wrong in parsing');
       return;
     }
@@ -182,13 +182,13 @@ class PylonsWalletImpl implements PylonsWallet {
           Strings.TX_CREATE_COOKBOOK, jsonEncode(cookbook.toProto3Json()),
           requestResponse: requestResponse);
 
-
       if (response is SDKIPCResponse<Cookbook>) {
         return response;
       }
 
       if (response is SDKIPCResponse<String> && !requestResponse) {
-        return SDKIPCResponse.success(cookbook, action: Strings.TX_CREATE_COOKBOOK);
+        return SDKIPCResponse.success(cookbook,
+            action: Strings.TX_CREATE_COOKBOOK);
       }
 
       throw Exception('Response malformed');
@@ -196,18 +196,29 @@ class PylonsWalletImpl implements PylonsWallet {
   }
 
   @override
-  Future<SDKIPCResponse> txCreateRecipe(Recipe recipe,
+  Future<SDKIPCResponse<Recipe>> txCreateRecipe(Recipe recipe,
       {bool requestResponse = true}) async {
     ValidateRecipe.validate(recipe);
+
     return Future.sync(() async {
-      return await _dispatch(
+      final response = await _dispatch(
           Strings.TX_CREATE_RECIPE, jsonEncode(recipe.toProto3Json()),
           requestResponse: requestResponse);
+
+      if (response is SDKIPCResponse<Recipe>) {
+        return response;
+      }
+
+      if (response is SDKIPCResponse<String> && !requestResponse) {
+        return SDKIPCResponse.success(recipe, action: Strings.TX_CREATE_RECIPE);
+      }
+
+      throw Exception('Response malformed');
     });
   }
 
   @override
-  Future<SDKIPCResponse> txExecuteRecipe(
+  Future<SDKIPCResponse<Execution>> txExecuteRecipe(
       {required String cookbookId,
       required String recipeName,
       required List<String> itemIds,
@@ -215,17 +226,30 @@ class PylonsWalletImpl implements PylonsWallet {
       required List<PaymentInfo> paymentInfo,
       bool requestResponse = true}) async {
     return Future.sync(() async {
-      return await _dispatch(
-          Strings.TX_EXECUTE_RECIPE,
-          jsonEncode(MsgExecuteRecipe(
-                  creator: '',
-                  cookbookId: cookbookId,
-                  recipeId: recipeName,
-                  coinInputsIndex: fixnum.Int64(coinInputIndex),
-                  itemIds: itemIds,
-                  paymentInfos: paymentInfo)
-              .toProto3Json()),
-          requestResponse: requestResponse);
+      return Future.sync(() async {
+        final response = await _dispatch(
+            Strings.TX_EXECUTE_RECIPE,
+            jsonEncode(MsgExecuteRecipe(
+                    creator: '',
+                    cookbookId: cookbookId,
+                    recipeId: recipeName,
+                    coinInputsIndex: fixnum.Int64(coinInputIndex),
+                    itemIds: itemIds,
+                    paymentInfos: paymentInfo)
+                .toProto3Json()),
+            requestResponse: requestResponse);
+
+        if (response is SDKIPCResponse<Execution>) {
+          return response;
+        }
+
+        if (response is SDKIPCResponse<String> && !requestResponse) {
+          return SDKIPCResponse.success(Execution.create(),
+              action: Strings.TX_EXECUTE_RECIPE);
+        }
+
+        throw Exception('Response malformed');
+      });
     });
   }
 
