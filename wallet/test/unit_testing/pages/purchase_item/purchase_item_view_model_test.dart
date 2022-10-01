@@ -203,7 +203,7 @@ void main() {
           when(nft.quantity).thenAnswer((realInvocation) => 5);
           when(nft.price).thenAnswer((realInvocation) => "5");
           when(nft.ibcCoins).thenAnswer((realInvocation) => IBCCoins.ustripeusd);
-          when(nft.iosStripePaymentAllowed).thenAnswer((realInvocation) => false);
+          when(nft.realWorld).thenAnswer((realInvocation) => false);
           when(
             repository.logPurchaseItem(recipeId: kRecipeID, recipeName: kNftName, author: "", purchasePrice: 5 / kBigIntBase),
           ).thenAnswer((realInvocation) async => const Right(true));
@@ -221,12 +221,12 @@ void main() {
     });
   });
 
-  group('isIOSStripePaymentAllowed', () {
+  group('isRealWorldPaymentAllowed', () {
     setUp(() {});
 
     group('when user is on android ', () {
       test('then it returns true', () {
-        expect(purchaseItemViewModel.isIOSStripePaymentAllowed(isPlatformAndroid: true), true);
+        expect(purchaseItemViewModel.isRealWorldPaymentAllowed(isPlatformAndroid: true), true);
       });
     });
 
@@ -248,15 +248,15 @@ void main() {
       });
 
       test('then it returns true if iosStripePaymentAllowed is allowed', () {
-        when(nft.iosStripePaymentAllowed).thenAnswer((realInvocation) => true);
+        when(nft.realWorld).thenAnswer((realInvocation) => true);
 
-        expect(purchaseItemViewModel.isIOSStripePaymentAllowed(isPlatformAndroid: false), true);
+        expect(purchaseItemViewModel.isRealWorldPaymentAllowed(isPlatformAndroid: false), true);
       });
 
       test('then it returns false if iosStripePaymentAllowed is not allowed', () {
-        when(nft.iosStripePaymentAllowed).thenAnswer((realInvocation) => false);
+        when(nft.realWorld).thenAnswer((realInvocation) => false);
 
-        expect(purchaseItemViewModel.isIOSStripePaymentAllowed(isPlatformAndroid: false), false);
+        expect(purchaseItemViewModel.isRealWorldPaymentAllowed(isPlatformAndroid: false), false);
       });
     });
   });

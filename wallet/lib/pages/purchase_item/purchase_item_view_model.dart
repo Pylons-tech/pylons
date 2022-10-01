@@ -446,11 +446,11 @@ class PurchaseItemViewModel extends ChangeNotifier {
   }
 
   @visibleForTesting
-  bool isIOSStripePaymentAllowed({required bool isPlatformAndroid}) {
+  bool isRealWorldPaymentAllowed({required bool isPlatformAndroid}) {
     if (isPlatformAndroid) {
       return true;
     } else {
-      return nft.iosStripePaymentAllowed;
+      return nft.realWorld;
     }
   }
 
@@ -472,12 +472,11 @@ class PurchaseItemViewModel extends ChangeNotifier {
       return true;
     }
 
-    return isIOSStripePaymentAllowed(isPlatformAndroid: isPlatformAndroid);
+    return isRealWorldPaymentAllowed(isPlatformAndroid: isPlatformAndroid);
   }
 
   NFT get nft => _nft;
 
-  // final ValueNotifier<bool> shouldShowBuyNow = ValueNotifier(false);
   final AudioPlayerHelper audioPlayerHelper;
   final VideoPlayerHelper videoPlayerHelper;
   final Repository repository;

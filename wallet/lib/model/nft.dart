@@ -43,7 +43,7 @@ class NFT extends Equatable {
   String fileSize = "";
   String hashtags = "";
   String createdAt = "";
-  bool iosStripePaymentAllowed = false;
+  bool realWorld = false;
 
   NFT({
     this.url = "",
@@ -71,7 +71,7 @@ class NFT extends Equatable {
     this.fileSize = "",
     this.hashtags = "",
     this.createdAt = "",
-    this.iosStripePaymentAllowed = false,
+    this.realWorld = false,
   });
 
   Future<String> getOwnerAddress() async {
@@ -108,8 +108,8 @@ class NFT extends Equatable {
       assetType: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kNftFormat).value.toAssetTypeEnum(),
       duration: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kDuration, orElse: () => LongKeyValue(key: kDuration, value: Int64())).value.toInt().toSeconds(),
       hashtags: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kHashtags, orElse: () => StringKeyValue(key: kHashtags, value: "")).value,
-      iosStripePaymentAllowed:
-          item.strings.firstWhere((strKeyValue) => strKeyValue.key == kIosStripePaymentAllowed, orElse: () => StringKeyValue(key: kIosStripePaymentAllowed, value: "false")).value == "true",
+      realWorld:
+          item.strings.firstWhere((strKeyValue) => strKeyValue.key == kRealWorld, orElse: () => StringKeyValue(key: kRealWorld, value: "false")).value == "true",
     );
   }
 
@@ -145,8 +145,8 @@ class NFT extends Equatable {
       assetType: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kNftFormat).value.toAssetTypeEnum(),
       duration: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kDuration, orElse: () => LongKeyValue(key: kDuration, value: Int64())).value.toInt().toSeconds(),
       hashtags: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kHashtags, orElse: () => StringKeyValue(key: kHashtags, value: "")).value,
-      iosStripePaymentAllowed:
-          item.strings.firstWhere((strKeyValue) => strKeyValue.key == kIosStripePaymentAllowed, orElse: () => StringKeyValue(key: kIosStripePaymentAllowed, value: "false")).value == "true",
+      realWorld:
+          item.strings.firstWhere((strKeyValue) => strKeyValue.key == kRealWorld, orElse: () => StringKeyValue(key: kRealWorld, value: "false")).value == "true",
     );
   }
 
@@ -179,8 +179,8 @@ class NFT extends Equatable {
               "0",
       createdAt: createdAt,
       hashtags: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kHashtags, orElse: () => StringParam()).value ?? "",
-      iosStripePaymentAllowed: recipe.entries.itemOutputs.firstOrNull?.strings
-              .firstWhere((strKeyValue) => strKeyValue.key == kIosStripePaymentAllowed, orElse: () => StringParam(key: kIosStripePaymentAllowed, value: "false"))
+      realWorld: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kRealWorld, orElse: () => StringParam(key: kRealWorld, value: "false"))
               .value ==
           "true",
     );

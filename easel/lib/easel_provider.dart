@@ -683,7 +683,7 @@ class EaselProvider extends ChangeNotifier {
               StringParam(key: kCreator, value: nft.creator.trim()),
               StringParam(key: kCID, value: nft.cid),
               StringParam(key: kFileSize, value: nft.fileSize),
-              StringParam(key: kIosStripePaymentAllowed, value: "false"),
+              StringParam(key: kRealWorld, value: "false"),
             ],
             mutableStrings: [],
             transferFee: [Coin(denom: kPylonSymbol, amount: transferFeeAmount)],
