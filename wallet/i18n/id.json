@@ -344,9 +344,12 @@
   "vietnamese": "Orang Vietnam",
   "submit_feedback": "Berikan umpan balik",
   "subject": "Subjek",
-  "character_limit" :"{} batas karakter",
-  "enter_description_text" : "Masukkan deskripsi",
+  "character_limit": "{} batas karakter",
+  "enter_description_text": "Masukkan deskripsi",
   "enter_subject_text": "Masukkan subjek",
-  "thank_you_for_feedback": "Terima kasih atas tanggapan Anda."
-
+  "free": "Gratis",
+  "thank_you_for_feedback": "Terima kasih atas tanggapan Anda.",
+  "claim_free_nft": "Klaim NFT Gratis Anda",
+  "before_too_late": "Sebelum terlambat!",
+  "please_try_again_later": "Silakan Coba lagi nanti"
 }

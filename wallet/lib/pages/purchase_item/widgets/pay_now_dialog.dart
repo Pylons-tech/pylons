@@ -350,9 +350,9 @@ class _PayNowWidgetState extends State<PayNowWidget> {
     final executionResponse = await provider.paymentForRecipe();
 
     Navigator.pop(navigatorKey.currentState!.overlay!.context);
-
     if (!executionResponse.success) {
       executionResponse.error.show();
+      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
       return;
     }
 
@@ -383,11 +383,12 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
       await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
-              applePay: true,
-              googlePay: true,
+              googlePay: PaymentSheetGooglePay(
+                merchantCountryCode: kStripeMerchantCountry,
+                testEnv: baseEnv.baseStripeTestEnv,
+              ),
+              applePay: const PaymentSheetApplePay(merchantCountryCode: kStripeMerchantCountry),
               style: ThemeMode.system,
-              testEnv: baseEnv.baseStripeTestEnv,
-              merchantCountryCode: kStripeMerchantCountry,
               merchantDisplayName: kStripeMerchantDisplayName,
               paymentIntentClientSecret: pi_info.clientsecret));
       Navigator.pop(navigatorKey.currentState!.overlay!.context);
@@ -403,30 +404,36 @@ class _PayNowWidgetState extends State<PayNowWidget> {
           "cookbook_id": "",
           "recipe_id": "",
           "coin_inputs_index": 0,
+          "nftName": "",
+          "nftPrice": "",
+          "nftCurrency": "",
           "payment_infos": []
         }
         ''';
 
       final jsonMap = jsonDecode(jsonExecuteRecipe) as Map;
       jsonMap[kCookbookIdKey] = nft.cookbookID;
-      jsonMap["recipe_id"] = nft.recipeID;
+      jsonMap[kRecipeIdKey] = nft.recipeID;
+      jsonMap[kNftName] = nft.name;
+      jsonMap[kNftPrice] = nft.ibcCoins.getCoinWithProperDenomination(nft.price);
+      jsonMap[kNftCurrency] = nft.ibcCoins.getAbbrev();
 
-      final paymentInfos = jsonMap["payment_infos"] as List<dynamic>;
+      final paymentInfos = jsonMap[kPaymentInfos] as List<dynamic>;
       paymentInfos.add(receipt.toJson());
 
       final loader = Loading()..showLoading();
 
-      final execution = await walletsStore.executeRecipe(jsonMap);
+      final executionResponse = await walletsStore.executeRecipe(jsonMap);
       loader.dismiss();
 
       Navigator.of(navigatorKey.currentState!.overlay!.context).pop();
 
-      if (!execution.success) {
-        execution.error.show();
+      if (!executionResponse.success) {
+        Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
         return;
       }
 
-      widget.onPurchaseDone(execution.data.toString());
+      widget.onPurchaseDone(executionResponse.data.toString());
     } catch (error) {
       Navigator.pop(navigatorKey.currentState!.overlay!.context);
     }
@@ -446,11 +453,12 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
         await Stripe.instance.initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
-                applePay: true,
-                googlePay: true,
                 style: ThemeMode.system,
-                testEnv: baseEnv.baseStripeTestEnv,
-                merchantCountryCode: kStripeMerchantCountry,
+                googlePay: PaymentSheetGooglePay(
+                  merchantCountryCode: kStripeMerchantCountry,
+                  testEnv: baseEnv.baseStripeTestEnv,
+                ),
+                applePay: const PaymentSheetApplePay(merchantCountryCode: kStripeMerchantCountry),
                 merchantDisplayName: kStripeMerchantDisplayName,
                 paymentIntentClientSecret: pi_info.clientsecret));
         Navigator.pop(navigatorKey.currentState!.overlay!.context);
