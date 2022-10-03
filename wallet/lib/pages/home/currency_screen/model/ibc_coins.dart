@@ -63,7 +63,7 @@ extension IBCCoinsDePar on IBCCoins {
 
       case IBCCoins.ustripeusd:
         return SizedBox(
-            width: 30.w,
+            width: 28.w,
             height: 30.w,
             child: Image.asset(ImageUtil.WALLET_USD));
       case IBCCoins.eeur:

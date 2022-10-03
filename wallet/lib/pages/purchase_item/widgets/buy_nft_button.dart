@@ -10,13 +10,13 @@ import 'package:pylons_wallet/utils/constants.dart';
 
 class BuyNFTButton extends StatelessWidget {
   final VoidCallback onTapped;
-  final NFT  nft;
+  final NFT nft;
 
-  const BuyNFTButton({Key? key, required this.onTapped, required this.nft}) : super(key: key);
-
+  const BuyNFTButton({Key? key, required this.onTapped, required this.nft})
+      : super(key: key);
 
   Widget getButtonContent(NFT nft) {
-    if (double.parse(nft.price) == 0 ) {
+    if (double.parse(nft.price) == 0) {
       return Container(
         height: 60.h,
         color: kDarkRed.withOpacity(0.8),
@@ -26,11 +26,21 @@ class BuyNFTButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AutoSizeText("claim_free_nft".tr(), maxLines: 1, style: TextStyle(color: kWhite, fontSize: 16.sp, fontFamily: kUniversalFontFamily)),
+              AutoSizeText("claim_free_nft".tr(),
+                  maxLines: 1,
+                  style: TextStyle(
+                      color: kWhite,
+                      fontSize: 16.sp,
+                      fontFamily: kUniversalFontFamily)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  AutoSizeText("before_too_late".tr(), maxLines: 1, style: TextStyle(color: kWhite, fontSize: 12.sp, fontFamily: kUniversalFontFamily)),
+                  AutoSizeText("before_too_late".tr(),
+                      maxLines: 1,
+                      style: TextStyle(
+                          color: kWhite,
+                          fontSize: 12.sp,
+                          fontFamily: kUniversalFontFamily)),
                   SizedBox(width: 8.w),
                   SizedBox(
                     height: 20.h,
@@ -56,7 +66,8 @@ class BuyNFTButton extends StatelessWidget {
             child: Container(
               height: 10.w,
               width: 10.w,
-              decoration: const BoxDecoration(shape: BoxShape.circle, color: kButtonBuyNowColor),
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle, color: kButtonBuyNowColor),
             ),
           ),
           const Spacer(),
@@ -66,9 +77,12 @@ class BuyNFTButton extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "${"buy_for".tr()} ${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}",
-                  style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                Expanded(
+                  child: AutoSizeText(
+                    "${"buy_for".tr()} ${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}",
+                    style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                    maxLines: 1,
+                  ),
                 ),
                 SizedBox(
                   width: 8.w,
@@ -82,7 +96,6 @@ class BuyNFTButton extends StatelessWidget {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
