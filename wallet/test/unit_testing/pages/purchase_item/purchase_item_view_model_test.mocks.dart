@@ -825,6 +825,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
 /// A class which mocks [AccountPublicInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
+// ignore: must_be_immutable
 class MockAccountPublicInfo extends _i1.Mock implements _i6.AccountPublicInfo {
   MockAccountPublicInfo() {
     _i1.throwOnMissingStub(this);
@@ -2748,6 +2749,7 @@ class MockRepository extends _i1.Mock implements _i15.Repository {
 /// A class which mocks [NFT].
 ///
 /// See the documentation for Mockito's code generation for more information.
+// ignore: must_be_immutable
 class MockNFT extends _i1.Mock implements _i30.NFT {
   MockNFT() {
     _i1.throwOnMissingStub(this);
