@@ -164,6 +164,7 @@ const kUpylon = "upylon";
 const kExtraInfo = "extraInfo";
 const kDuration = "Duration";
 const kFileSize = "fileSize";
+const kRealWorld = "real_world";
 
 const kThumbnailFileName = "temp.jpg";
 
