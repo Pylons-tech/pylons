@@ -77,28 +77,6 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     }
   }
 
-
-
-
-  // Future<void> image_picker() async {
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
-  //   if (result!=null) {
-  //     File file = File(result.files.single.path ?? "");
-  //     final newImagePath = await saveImage(file: file);
-  //     await HomeWidget.saveWidgetData<String>('image', newImagePath);
-  //     _updateWidget();
-  //   }
-  // }
-  //
-  // Future<String> saveImage({required File file}) async {
-  //   final Directory temp = await getTemporaryDirectory();
-  //   final newImagePath = '${temp.path}/${file.path.split("/").last}';
-  //   file.copy(newImagePath);
-  //   return newImagePath;
-  //
-  //
-  // }
-
   @override
   Widget build(BuildContext context) {
     late final int tabLen;
