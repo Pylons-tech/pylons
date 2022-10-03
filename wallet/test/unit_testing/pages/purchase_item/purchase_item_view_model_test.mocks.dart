@@ -28,6 +28,7 @@ import 'package:pylons_wallet/model/stripe_get_login_based_address.dart'
 import 'package:pylons_wallet/model/stripe_loginlink_request.dart' as _i19;
 import 'package:pylons_wallet/model/stripe_loginlink_response.dart' as _i18;
 import 'package:pylons_wallet/model/transaction.dart' as _i25;
+import 'package:pylons_wallet/model/transaction_failure_model.dart' as _i33;
 import 'package:pylons_wallet/model/wallet_creation_model.dart' as _i32;
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart'
     as _i4;
@@ -821,6 +822,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
 /// A class which mocks [AccountPublicInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
+// ignore: must_be_immutable
 class MockAccountPublicInfo extends _i1.Mock implements _i6.AccountPublicInfo {
   MockAccountPublicInfo() {
     _i1.throwOnMissingStub(this);
@@ -1356,24 +1358,6 @@ class MockRepository extends _i1.Mock implements _i15.Repository {
             )),
           ) as _i8.Future<
               _i2.Either<_i9.Failure, _i17.StripeGeneratePayoutTokenResponse>>);
-  @override
-  _i8.Future<_i2.Either<_i9.Failure, _i17.StripePayoutResponse>> Payout(
-          _i17.StripePayoutRequest? req) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #Payout,
-          [req],
-        ),
-        returnValue: _i8.Future<
-                _i2.Either<_i9.Failure, _i17.StripePayoutResponse>>.value(
-            _FakeEither_0<_i9.Failure, _i17.StripePayoutResponse>(
-          this,
-          Invocation.method(
-            #Payout,
-            [req],
-          ),
-        )),
-      ) as _i8.Future<_i2.Either<_i9.Failure, _i17.StripePayoutResponse>>);
   @override
   _i8.Future<
       _i2.Either<_i9.Failure, _i17.StripeAccountLinkResponse>> GetAccountLink(
@@ -2616,6 +2600,59 @@ class MockRepository extends _i1.Mock implements _i15.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>>);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, int>> saveLocalTransaction(
+          _i33.LocalTransactionModel? txManager) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveLocalTransaction,
+          [txManager],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, int>>.value(
+            _FakeEither_0<_i9.Failure, int>(
+          this,
+          Invocation.method(
+            #saveLocalTransaction,
+            [txManager],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, int>>);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, List<_i33.LocalTransactionModel>>>
+      getAllTransactionFailures() => (super.noSuchMethod(
+            Invocation.method(
+              #getAllTransactionFailures,
+              [],
+            ),
+            returnValue: _i8.Future<
+                    _i2.Either<_i9.Failure,
+                        List<_i33.LocalTransactionModel>>>.value(
+                _FakeEither_0<_i9.Failure, List<_i33.LocalTransactionModel>>(
+              this,
+              Invocation.method(
+                #getAllTransactionFailures,
+                [],
+              ),
+            )),
+          ) as _i8.Future<
+              _i2.Either<_i9.Failure, List<_i33.LocalTransactionModel>>>);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, bool>> deleteTransactionFailureRecord(
+          int? id) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteTransactionFailureRecord,
+          [id],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
+            _FakeEither_0<_i9.Failure, bool>(
+          this,
+          Invocation.method(
+            #deleteTransactionFailureRecord,
+            [id],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
   @override
   _i8.Future<_i2.Either<_i9.Failure, bool>> setUserIdentifierInAnalytics(
           {required String? address}) =>

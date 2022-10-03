@@ -28,5 +28,6 @@ message Execution {
   repeated cosmos.base.v1beta1.Coin coin_outputs = 10 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
   repeated string item_output_ids = 11 [(gogoproto.nullable) = false];
   repeated string item_modify_output_ids = 12 [(gogoproto.nullable) = false];
+  int64 tx_time =13;
   }
 

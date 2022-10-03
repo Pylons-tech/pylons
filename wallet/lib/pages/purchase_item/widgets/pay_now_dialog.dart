@@ -15,6 +15,7 @@ import 'package:pylons_wallet/model/stripe_create_payment_intent_request.dart';
 import 'package:pylons_wallet/model/stripe_create_payment_intent_response.dart';
 import 'package:pylons_wallet/model/stripe_generate_payment_receipt_request.dart';
 import 'package:pylons_wallet/model/stripe_generate_payment_receipt_response.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/pay_with_swipe.dart';
@@ -39,7 +40,7 @@ TextStyle _rowSubtitleTextStyle = TextStyle(color: Colors.white, fontSize: 14.sp
 class PayNowDialog {
   final NFT nft;
   final PurchaseItemViewModel purchaseItemViewModel;
-  final ValueChanged<Map> onPurchaseDone;
+  final ValueChanged<Execution> onPurchaseDone;
   final bool shouldBuy;
 
   BuildContext buildContext;
@@ -70,7 +71,7 @@ class PayNowDialog {
 
 class PayNowWidget extends StatefulWidget {
   final NFT nft;
-  final ValueChanged<Map> onPurchaseDone;
+  final ValueChanged<Execution> onPurchaseDone;
   final bool shouldBuy;
 
   const PayNowWidget({Key? key, required this.nft, required this.onPurchaseDone, required this.shouldBuy}) : super(key: key);
@@ -345,18 +346,18 @@ class _PayNowWidgetState extends State<PayNowWidget> {
     }
   }
 
-  Future paymentByCoins() async {
+  Future<void> paymentByCoins() async {
     final provider = context.read<PurchaseItemViewModel>();
     final executionResponse = await provider.paymentForRecipe();
 
     Navigator.pop(navigatorKey.currentState!.overlay!.context);
-
     if (!executionResponse.success) {
       executionResponse.error.show();
+      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
       return;
     }
 
-    widget.onPurchaseDone(jsonDecode(executionResponse.data.toString()) as Map);
+    widget.onPurchaseDone(executionResponse.data!);
   }
 
   Future<void> stripePaymentForRecipe(BuildContext context, NFT nft) async {
@@ -404,30 +405,36 @@ class _PayNowWidgetState extends State<PayNowWidget> {
           "cookbook_id": "",
           "recipe_id": "",
           "coin_inputs_index": 0,
+          "nftName": "",
+          "nftPrice": "",
+          "nftCurrency": "",
           "payment_infos": []
         }
         ''';
 
       final jsonMap = jsonDecode(jsonExecuteRecipe) as Map;
       jsonMap[kCookbookIdKey] = nft.cookbookID;
-      jsonMap["recipe_id"] = nft.recipeID;
+      jsonMap[kRecipeIdKey] = nft.recipeID;
+      jsonMap[kNftName] = nft.name;
+      jsonMap[kNftPrice] = nft.ibcCoins.getCoinWithProperDenomination(nft.price);
+      jsonMap[kNftCurrency] = nft.ibcCoins.getAbbrev();
 
-      final paymentInfos = jsonMap["payment_infos"] as List<dynamic>;
+      final paymentInfos = jsonMap[kPaymentInfos] as List<dynamic>;
       paymentInfos.add(receipt.toJson());
 
       final loader = Loading()..showLoading();
 
-      final execution = await walletsStore.executeRecipe(jsonMap);
+      final executionResponse = await walletsStore.executeRecipe(jsonMap);
       loader.dismiss();
 
       Navigator.of(navigatorKey.currentState!.overlay!.context).pop();
 
-      if (!execution.success) {
-        execution.error.show();
+      if (!executionResponse.success) {
+        Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
         return;
       }
 
-      widget.onPurchaseDone(jsonDecode(execution.data.toString()) as Map);
+      widget.onPurchaseDone(executionResponse.data!);
     } catch (error) {
       Navigator.pop(navigatorKey.currentState!.overlay!.context);
     }

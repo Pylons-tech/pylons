@@ -10,6 +10,7 @@ import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
@@ -116,12 +117,15 @@ class PurchaseItemViewModel extends ChangeNotifier {
     toHashtagList();
   }
 
-  Future<SdkIpcResponse> paymentForRecipe() async {
+  Future<SdkIpcResponse<Execution>> paymentForRecipe() async {
     const jsonExecuteRecipe = '''
       {
         "creator": "",
         "cookbookId": "",
         "recipeId": "",
+        "nftName": "",
+        "nftPrice": "",
+        "nftCurrency": "",
         "coinInputsIndex": 0
         }
         ''';
@@ -129,13 +133,14 @@ class PurchaseItemViewModel extends ChangeNotifier {
     final jsonMap = jsonDecode(jsonExecuteRecipe) as Map;
     jsonMap[kCookbookIdMap] = nft.cookbookID;
     jsonMap[kRecipeIdMap] = nft.recipeID;
+    jsonMap[kNftName] = nft.name;
+    jsonMap[kNftPrice] = nft.ibcCoins.getCoinWithProperDenomination(nft.price);
+    jsonMap[kNftCurrency] = nft.ibcCoins.getAbbrev();
 
     final showLoader = Loading()..showLoading();
 
     final response = await walletsStore.executeRecipe(jsonMap);
-
     showLoader.dismiss();
-
     return response;
   }
 

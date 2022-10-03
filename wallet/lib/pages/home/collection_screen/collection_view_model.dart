@@ -71,10 +71,6 @@ class CollectionViewModel extends ChangeNotifier {
     });
   }
 
-  Future<String?> generateVideoThumbnailIfRequired(String nftUrl, String nftName) async {
-    return thumbnailHelper.generateVideoThumbnailIfRequired(nftUrl, nftName, thumbnailsPath);
-  }
-
   Future loadPurchasesAndCreationsData() async {
     thumbnailsPath = (await getTemporaryDirectory()).path;
     try {
