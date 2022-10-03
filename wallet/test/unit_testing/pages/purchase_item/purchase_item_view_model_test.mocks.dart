@@ -55,7 +55,6 @@ import 'package:transaction_signing_gateway/transaction_signing_gateway.dart'
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
-// ignore_for_file: must_be_immutable
 
 class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
   _FakeEither_0(
@@ -203,22 +202,22 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
   @override
-  _i8.Future<_i3.SdkIpcResponse<dynamic>> executeRecipe(
+  _i8.Future<_i3.SdkIpcResponse<_i11.Execution>> executeRecipe(
           Map<dynamic, dynamic>? json) =>
       (super.noSuchMethod(
         Invocation.method(
           #executeRecipe,
           [json],
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<_i11.Execution>>.value(
+            _FakeSdkIpcResponse_1<_i11.Execution>(
           this,
           Invocation.method(
             #executeRecipe,
             [json],
           ),
         )),
-      ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+      ) as _i8.Future<_i3.SdkIpcResponse<_i11.Execution>>);
   @override
   _i8.Future<_i3.SdkIpcResponse<dynamic>> createTrade(
           Map<dynamic, dynamic>? json) =>

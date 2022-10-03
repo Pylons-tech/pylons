@@ -1,6 +1,7 @@
 import 'dart:convert';
+import 'package:protobuf/protobuf.dart' as $pb;
 
-class SdkIpcResponse<T>{
+class SdkIpcResponse<T> {
   bool success;
   String errorCode;
   String error;
@@ -17,9 +18,7 @@ class SdkIpcResponse<T>{
       required this.action});
 
   factory SdkIpcResponse.success(
-      {required T data,
-      required String sender,
-      required String transaction}) {
+      {required T data, required String sender, required String transaction}) {
     return SdkIpcResponse(
         sender: sender,
         data: data,
@@ -62,5 +61,20 @@ class SdkIpcResponse<T>{
   @override
   String toString() {
     return 'SdkIpcResponse{success: $success, errorCode: $errorCode, error: $error, data: $data, sender: $sender, action: $action}';
+  }
+}
+
+extension Converter<T extends $pb.GeneratedMessage> on SdkIpcResponse<T> {
+  SdkIpcResponse<String> finalizeTheSDKResponse(
+      {required String sender, required String action}) {
+    return SdkIpcResponse(
+      success: success,
+      error: error,
+      // ignore: noop_primitive_operations
+      data: data != null ? jsonEncode(data!.toProto3Json()).toString() : null,
+      sender: sender,
+      errorCode: errorCode,
+      action: action,
+    );
   }
 }

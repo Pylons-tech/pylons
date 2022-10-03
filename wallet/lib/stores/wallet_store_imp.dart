@@ -295,7 +295,7 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> executeRecipe(Map json) async {
+  Future<SdkIpcResponse<Execution>> executeRecipe(Map json) async {
     final msgObj = pylons.MsgExecuteRecipe.create()..mergeFromProto3Json(json);
     msgObj.creator = wallets.value.last.publicAddress;
 
@@ -315,7 +315,7 @@ class WalletsStoreImp implements WalletsStore {
     }
 
     return SdkIpcResponse.success(
-        data: jsonEncode(executionEither.toOption().toNullable()!.completedExecutions.last.toProto3Json()), sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
+        data: executionEither.toOption().toNullable()!.completedExecutions.last, sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
   }
 
   @override
