@@ -122,6 +122,9 @@ class PurchaseItemViewModel extends ChangeNotifier {
         "creator": "",
         "cookbookId": "",
         "recipeId": "",
+        "nftName": "",
+        "nftPrice": "",
+        "nftCurrency": "",
         "coinInputsIndex": 0
         }
         ''';
@@ -129,13 +132,14 @@ class PurchaseItemViewModel extends ChangeNotifier {
     final jsonMap = jsonDecode(jsonExecuteRecipe) as Map;
     jsonMap[kCookbookIdMap] = nft.cookbookID;
     jsonMap[kRecipeIdMap] = nft.recipeID;
+    jsonMap[kNftName] = nft.name;
+    jsonMap[kNftPrice] = nft.ibcCoins.getCoinWithProperDenomination(nft.price);
+    jsonMap[kNftCurrency] = nft.ibcCoins.getAbbrev();
 
     final showLoader = Loading()..showLoading();
 
     final response = await walletsStore.executeRecipe(jsonMap);
-
     showLoader.dismiss();
-
     return response;
   }
 
@@ -420,12 +424,21 @@ class PurchaseItemViewModel extends ChangeNotifier {
     });
   }
 
-  Future<Either<String, bool>> getBalanceOfSelectedCurrency({required String selectedDenom, required double requiredAmount}) async {
+  Future<Either<String, bool>> shouldShowSwipeToBuy({required String selectedDenom, required double requiredAmount}) async {
     final accountPublicInfo = walletsStore.getWallets().value.last;
     final balancesEither = await repository.getBalance(accountPublicInfo.publicAddress);
 
     if (balancesEither.isLeft()) {
       return Left("something_wrong".tr());
+    }
+
+    if(balancesEither.getOrElse(() => []).isEmpty){
+      return  const Right(false);
+    }
+
+
+    if(selectedDenom == IBCCoins.ustripeusd.name){
+      return const Right(true);
     }
 
     final mappedBalances = balancesEither.getOrElse(() => []).where((element) => element.denom == selectedDenom).toList();

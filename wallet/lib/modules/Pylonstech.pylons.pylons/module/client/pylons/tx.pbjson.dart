@@ -266,12 +266,11 @@ const MsgExecuteRecipeResponse$json = const {
   '1': 'MsgExecuteRecipeResponse',
   '2': const [
     const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
-    const {'1': 'tx_time', '3': 2, '4': 1, '5': 3, '10': 'txTime'},
   ],
 };
 
 /// Descriptor for `MsgExecuteRecipeResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List msgExecuteRecipeResponseDescriptor = $convert.base64Decode('ChhNc2dFeGVjdXRlUmVjaXBlUmVzcG9uc2USDgoCaWQYASABKAlSAmlkEhcKB3R4X3RpbWUYAiABKANSBnR4VGltZQ==');
+final $typed_data.Uint8List msgExecuteRecipeResponseDescriptor = $convert.base64Decode('ChhNc2dFeGVjdXRlUmVjaXBlUmVzcG9uc2USDgoCaWQYASABKAlSAmlk');
 @$core.Deprecated('Use msgSetItemStringDescriptor instead')
 const MsgSetItemString$json = const {
   '1': 'MsgSetItemString',
