@@ -76,6 +76,6 @@
     "eslint-plugin-import": "^2.23.3",
     "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-meteor": "^7.3.0",
-    "eslint-plugin-react": "^7.23.2"
+    "eslint-plugin-react": "^7.31.8"
   }
 }
