@@ -39,7 +39,6 @@ func NewAnteHandler(
 		ante.NewValidateSigCountDecorator(ak),
 		// ante.NewDeductFeeDecorator(ak, bankKeeper),
 		// ante.NewSigGasConsumeDecorator(ak, sigGasConsumer),
-		// ante.NewSigVerificationDecorator(ak, signModeHandler),
 		NewCustomSigVerificationDecorator(ak, signModeHandler),
 		ante.NewIncrementSequenceDecorator(ak),
 	)
@@ -201,6 +200,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 			ChainID:       chainID,
 			AccountNumber: accNum,
 			Sequence:      acc.GetSequence(),
+			Address:       acc.GetAddress().String(),
 		}
 
 		messages := sigTx.GetMsgs()
@@ -231,11 +231,11 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 				if OnlyLegacyAminoSigners(sig.Data) {
 					// If all signers are using SIGN_MODE_LEGACY_AMINO, we rely on VerifySignature to check account sequence number,
 					// and therefore communicate sequence number as a potential cause of error.
-					errMsg = fmt.Sprintf("signature verification failed; please verify account number (%d), sequence (%d) and chain-id (%s)", accNum, acc.GetSequence(), chainID)
+					errMsg = fmt.Sprintf("signature aaaaa verification failed; please verify account number (%d), sequence (%d) and chain-id (%s)", accNum, acc.GetSequence(), chainID)
 				} else {
-					errMsg = fmt.Sprintf("signature verification failed; please verify account number (%d) and chain-id (%s)", accNum, chainID)
+					errMsg = fmt.Sprintf("signature bbbbb verification failed; please verify account number (%d) and chain-id (%s)", accNum, chainID)
 				}
-				return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, errMsg)
+				return ctx, sdkerrors.Wrap(err, errMsg)
 			}
 		}
 	}
