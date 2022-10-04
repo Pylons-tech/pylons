@@ -22,6 +22,7 @@ import 'package:easel_flutter/widgets/clipped_button.dart';
 import 'package:easel_flutter/widgets/image_widget.dart';
 import 'package:easel_flutter/widgets/model_viewer.dart';
 import 'package:easel_flutter/widgets/pdf_viewer.dart';
+import 'package:easel_flutter/widgets/publish_button.dart';
 import 'package:easel_flutter/widgets/video_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -363,11 +364,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               type: widget.nft.assetType,
                             ),
                             SizedBox(height: 40.h),
-                            ClippedButton(
-                              title: "publish".tr(),
-                              bgColor: EaselAppTheme.kLightRed,
-                              textColor: EaselAppTheme.kWhite,
-                              onPressed: () async {
+                            PublishButton(
+                              onPress: () async {
                                 final navigator = Navigator.of(context);
                                 if (viewModel.nft.assetType == kAudioText) {
                                   viewModel.disposeAudioController();
@@ -379,10 +377,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 GetIt.I.get<CreatorHubViewModel>().changeSelectedCollection(CollectionType.published);
                                 navigator.pushNamedAndRemoveUntil(RouteUtil.kRouteCreatorHub, (route) => false);
                               },
-                              cuttingHeight: 15.h,
-                              clipperType: ClipperType.bottomLeftTopRight,
-                              isShadow: false,
-                              fontWeight: FontWeight.w700,
                             ),
                             SizedBox(
                               height: 10.h,
