@@ -16,6 +16,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../../../components/pylons_app_theme.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/route_util.dart';
 import '../../detailed_asset_view/widgets/nft_3d_asset.dart';
 import '../../detailed_asset_view/widgets/pdf_placeholder.dart';
 import '../../detailed_asset_view/widgets/video_placeholder.dart';
@@ -240,6 +241,7 @@ class _WidgetNFTPickerScreenState extends State<WidgetNFTPickerScreen> {
                     clipper: PylonButtonClipper(),
                     child: InkWell(
                       onTap: () async {
+                        Navigator.of(context).pushNamed(RouteUtil.ROUTE_HOME);
                         await HomeWidget.saveWidgetData<String>('image', imagePicked);
                         _updateWidget();
                       },
