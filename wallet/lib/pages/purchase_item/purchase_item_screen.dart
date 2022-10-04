@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -18,6 +19,7 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart'
 import 'package:pylons_wallet/pages/gestures_for_detail_screen.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
+import 'package:pylons_wallet/pages/purchase_item/clipper/buy_now_clipper.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart' show PurchaseItemViewModel;
 import 'package:pylons_wallet/pages/purchase_item/widgets/buy_nft_button.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/pay_now_dialog.dart';
@@ -298,7 +300,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         const Spacer(),
 
                         /// BUY NFT BUTTON
-                        if (viewModel.nft.amountMinted < viewModel.nft.quantity)
+                        if (viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid))
                           BuyNFTButton(
                             onTapped: () async {
                               bool balancesFetchResult = true;
@@ -809,26 +811,5 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   void showReceiptDialog(TradeReceiptModel model) {
     final TradeReceiptDialog tradeReceiptDialog = TradeReceiptDialog(context: context, model: model);
     tradeReceiptDialog.show();
-  }
-}
-
-class BuyClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-
-    path.lineTo(0, size.height - 18);
-    path.lineTo(18, size.height);
-    path.lineTo(size.width, size.height);
-    path.lineTo(size.width, 18);
-    path.lineTo(size.width - 18, 0);
-    path.lineTo(0, 0);
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    return false;
   }
 }

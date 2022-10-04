@@ -34,6 +34,8 @@ import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/bas
     as _i4;
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart'
     as _i11;
+import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart'
+    as _i34;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart'
     as _i21;
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart'
@@ -42,6 +44,7 @@ import 'package:pylons_wallet/services/repository/repository.dart' as _i15;
 import 'package:pylons_wallet/stores/models/transaction_response.dart' as _i31;
 import 'package:pylons_wallet/stores/wallet_store.dart' as _i7;
 import 'package:pylons_wallet/utils/backup/common/backup_model.dart' as _i26;
+import 'package:pylons_wallet/utils/enums.dart' as _i35;
 import 'package:pylons_wallet/utils/failure/failure.dart' as _i9;
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart'
     as _i6;
@@ -2741,4 +2744,379 @@ class MockRepository extends _i1.Mock implements _i15.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+}
+
+/// A class which mocks [NFT].
+///
+/// See the documentation for Mockito's code generation for more information.
+// ignore: must_be_immutable
+class MockNFT extends _i1.Mock implements _i30.NFT {
+  MockNFT() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  String get url => (super.noSuchMethod(
+        Invocation.getter(#url),
+        returnValue: '',
+      ) as String);
+  @override
+  set url(String? _url) => super.noSuchMethod(
+        Invocation.setter(
+          #url,
+          _url,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get thumbnailUrl => (super.noSuchMethod(
+        Invocation.getter(#thumbnailUrl),
+        returnValue: '',
+      ) as String);
+  @override
+  set thumbnailUrl(String? _thumbnailUrl) => super.noSuchMethod(
+        Invocation.setter(
+          #thumbnailUrl,
+          _thumbnailUrl,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get name => (super.noSuchMethod(
+        Invocation.getter(#name),
+        returnValue: '',
+      ) as String);
+  @override
+  set name(String? _name) => super.noSuchMethod(
+        Invocation.setter(
+          #name,
+          _name,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get description => (super.noSuchMethod(
+        Invocation.getter(#description),
+        returnValue: '',
+      ) as String);
+  @override
+  set description(String? _description) => super.noSuchMethod(
+        Invocation.setter(
+          #description,
+          _description,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get denom => (super.noSuchMethod(
+        Invocation.getter(#denom),
+        returnValue: '',
+      ) as String);
+  @override
+  set denom(String? _denom) => super.noSuchMethod(
+        Invocation.setter(
+          #denom,
+          _denom,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get price => (super.noSuchMethod(
+        Invocation.getter(#price),
+        returnValue: '',
+      ) as String);
+  @override
+  set price(String? _price) => super.noSuchMethod(
+        Invocation.setter(
+          #price,
+          _price,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get creator => (super.noSuchMethod(
+        Invocation.getter(#creator),
+        returnValue: '',
+      ) as String);
+  @override
+  set creator(String? _creator) => super.noSuchMethod(
+        Invocation.setter(
+          #creator,
+          _creator,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get owner => (super.noSuchMethod(
+        Invocation.getter(#owner),
+        returnValue: '',
+      ) as String);
+  @override
+  set owner(String? _owner) => super.noSuchMethod(
+        Invocation.setter(
+          #owner,
+          _owner,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  int get amountMinted => (super.noSuchMethod(
+        Invocation.getter(#amountMinted),
+        returnValue: 0,
+      ) as int);
+  @override
+  set amountMinted(int? _amountMinted) => super.noSuchMethod(
+        Invocation.setter(
+          #amountMinted,
+          _amountMinted,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  int get quantity => (super.noSuchMethod(
+        Invocation.getter(#quantity),
+        returnValue: 0,
+      ) as int);
+  @override
+  set quantity(int? _quantity) => super.noSuchMethod(
+        Invocation.setter(
+          #quantity,
+          _quantity,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get tradePercentage => (super.noSuchMethod(
+        Invocation.getter(#tradePercentage),
+        returnValue: '',
+      ) as String);
+  @override
+  set tradePercentage(String? _tradePercentage) => super.noSuchMethod(
+        Invocation.setter(
+          #tradePercentage,
+          _tradePercentage,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get cookbookID => (super.noSuchMethod(
+        Invocation.getter(#cookbookID),
+        returnValue: '',
+      ) as String);
+  @override
+  set cookbookID(String? _cookbookID) => super.noSuchMethod(
+        Invocation.setter(
+          #cookbookID,
+          _cookbookID,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get recipeID => (super.noSuchMethod(
+        Invocation.getter(#recipeID),
+        returnValue: '',
+      ) as String);
+  @override
+  set recipeID(String? _recipeID) => super.noSuchMethod(
+        Invocation.setter(
+          #recipeID,
+          _recipeID,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get itemID => (super.noSuchMethod(
+        Invocation.getter(#itemID),
+        returnValue: '',
+      ) as String);
+  @override
+  set itemID(String? _itemID) => super.noSuchMethod(
+        Invocation.setter(
+          #itemID,
+          _itemID,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get width => (super.noSuchMethod(
+        Invocation.getter(#width),
+        returnValue: '',
+      ) as String);
+  @override
+  set width(String? _width) => super.noSuchMethod(
+        Invocation.setter(
+          #width,
+          _width,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get height => (super.noSuchMethod(
+        Invocation.getter(#height),
+        returnValue: '',
+      ) as String);
+  @override
+  set height(String? _height) => super.noSuchMethod(
+        Invocation.setter(
+          #height,
+          _height,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get appType => (super.noSuchMethod(
+        Invocation.getter(#appType),
+        returnValue: '',
+      ) as String);
+  @override
+  set appType(String? _appType) => super.noSuchMethod(
+        Invocation.setter(
+          #appType,
+          _appType,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get tradeID => (super.noSuchMethod(
+        Invocation.getter(#tradeID),
+        returnValue: '',
+      ) as String);
+  @override
+  set tradeID(String? _tradeID) => super.noSuchMethod(
+        Invocation.setter(
+          #tradeID,
+          _tradeID,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get ownerAddress => (super.noSuchMethod(
+        Invocation.getter(#ownerAddress),
+        returnValue: '',
+      ) as String);
+  @override
+  set ownerAddress(String? _ownerAddress) => super.noSuchMethod(
+        Invocation.setter(
+          #ownerAddress,
+          _ownerAddress,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i34.IBCCoins get ibcCoins => (super.noSuchMethod(
+        Invocation.getter(#ibcCoins),
+        returnValue: _i34.IBCCoins.urun,
+      ) as _i34.IBCCoins);
+  @override
+  set ibcCoins(_i34.IBCCoins? _ibcCoins) => super.noSuchMethod(
+        Invocation.setter(
+          #ibcCoins,
+          _ibcCoins,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i35.NftType get type => (super.noSuchMethod(
+        Invocation.getter(#type),
+        returnValue: _i35.NftType.TYPE_RECIPE,
+      ) as _i35.NftType);
+  @override
+  set type(_i35.NftType? _type) => super.noSuchMethod(
+        Invocation.setter(
+          #type,
+          _type,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i35.AssetType get assetType => (super.noSuchMethod(
+        Invocation.getter(#assetType),
+        returnValue: _i35.AssetType.Audio,
+      ) as _i35.AssetType);
+  @override
+  set assetType(_i35.AssetType? _assetType) => super.noSuchMethod(
+        Invocation.setter(
+          #assetType,
+          _assetType,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get duration => (super.noSuchMethod(
+        Invocation.getter(#duration),
+        returnValue: '',
+      ) as String);
+  @override
+  set duration(String? _duration) => super.noSuchMethod(
+        Invocation.setter(
+          #duration,
+          _duration,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get fileSize => (super.noSuchMethod(
+        Invocation.getter(#fileSize),
+        returnValue: '',
+      ) as String);
+  @override
+  set fileSize(String? _fileSize) => super.noSuchMethod(
+        Invocation.setter(
+          #fileSize,
+          _fileSize,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get hashtags => (super.noSuchMethod(
+        Invocation.getter(#hashtags),
+        returnValue: '',
+      ) as String);
+  @override
+  set hashtags(String? _hashtags) => super.noSuchMethod(
+        Invocation.setter(
+          #hashtags,
+          _hashtags,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get createdAt => (super.noSuchMethod(
+        Invocation.getter(#createdAt),
+        returnValue: '',
+      ) as String);
+  @override
+  set createdAt(String? _createdAt) => super.noSuchMethod(
+        Invocation.setter(
+          #createdAt,
+          _createdAt,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  bool get realWorld => (super.noSuchMethod(
+        Invocation.getter(#realWorld),
+        returnValue: false,
+      ) as bool);
+  @override
+  set realWorld(bool? _realWorld) => super.noSuchMethod(
+        Invocation.setter(
+          #realWorld,
+          _realWorld,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  List<Object?> get props => (super.noSuchMethod(
+        Invocation.getter(#props),
+        returnValue: <Object?>[],
+      ) as List<Object?>);
+  @override
+  _i8.Future<String> getOwnerAddress() => (super.noSuchMethod(
+        Invocation.method(
+          #getOwnerAddress,
+          [],
+        ),
+        returnValue: _i8.Future<String>.value(''),
+      ) as _i8.Future<String>);
 }
