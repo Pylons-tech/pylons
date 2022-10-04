@@ -23,7 +23,7 @@ import { getCryptoCurrencyIcon } from '@utils'
 const descriptionLength = 50
 
 const handleLoginConfirmed = (): void => {
-  const { apn, ibi, isi, oflIOS, oflPlay } = settings.public.dynamicLink
+  const { apn, ibi, isi, oflIOS, oflPlay } = settings?.public?.dynamicLink
   const isMacLike = /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)
   let ofl = oflPlay
   if (isMacLike) {
@@ -144,14 +144,13 @@ export const EaselBuyWebView: FC<EaselWebMobViewTypes> = ({
               <Typography
                 sx={{
                   fontSize: '25px',
-                  color: '#8F8FCE',
+                  color: 'common.lightPurple',
                   paddingRight: '5px'
                 }}
               >
                 {createdBy}
               </Typography>
               <Image
-                // layout="fill"
                 src="/images/check.svg"
                 height="16px"
                 width="16px"
@@ -173,7 +172,7 @@ export const EaselBuyWebView: FC<EaselWebMobViewTypes> = ({
                 <Typography
                   sx={{
                     fontSize: '25px',
-                    color: '#8F8FCE',
+                    color: 'common.lightPurple',
                     paddingRight: '5px'
                   }}
                   onClick={() => setShowMore((val) => !val)}
@@ -195,6 +194,7 @@ export const EaselBuyWebView: FC<EaselWebMobViewTypes> = ({
               <Accordion
                 expanded={expanded === 'panel1'}
                 onChange={handleChange('panel1')}
+                data-testid="easelBuyWebViewAccordion1-organism"
                 sx={{
                   background: 'transparent',
                   padding: '0px !important'
@@ -203,7 +203,7 @@ export const EaselBuyWebView: FC<EaselWebMobViewTypes> = ({
                 <WebOwnershipAccordionSummary
                   expanded={expanded}
                   accordionId="panel1"
-                  title="OwnerShip"
+                  title="Ownership"
                   icon="trophy"
                 />
                 <AccordionDetails>
@@ -218,7 +218,7 @@ export const EaselBuyWebView: FC<EaselWebMobViewTypes> = ({
                     dimensions={dimensions}
                     createdAt={
                       createdAt
-                        ? moment.unix(+createdAt).format('DD/MM/YYYY hh:mm:ss')
+                        ? moment.unix(+createdAt).format('MM/DD/YYYY hh:mm:ss')
                         : ''
                     }
                   />
@@ -228,6 +228,7 @@ export const EaselBuyWebView: FC<EaselWebMobViewTypes> = ({
               <Accordion
                 expanded={expanded === 'panel2'}
                 onChange={handleChange('panel2')}
+                data-testid="easelBuyWebViewAccordion2-organism"
                 sx={{
                   background: 'transparent'
                 }}
@@ -246,6 +247,7 @@ export const EaselBuyWebView: FC<EaselWebMobViewTypes> = ({
               <Accordion
                 expanded={expanded === 'panel3'}
                 onChange={handleChange('panel3')}
+                data-testid="easelBuyWebViewAccordion3-organism"
                 sx={{
                   background: 'transparent'
                 }}
@@ -280,7 +282,11 @@ export const EaselBuyWebView: FC<EaselWebMobViewTypes> = ({
                     />
                   ) : null}
                 </div>
-                <div className="value-icon" onClick={handleLoginConfirmed}>
+                <div
+                  className="value-icon"
+                  onClick={handleLoginConfirmed}
+                  data-testid="easelBuyWebViewButtonBuy-organism"
+                >
                   <div className="values">
                     <p>
                       Buy for{' '}

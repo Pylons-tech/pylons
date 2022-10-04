@@ -21,6 +21,7 @@ interface MetaTagsTypes {
 }
 export const MetaTags: FC<MetaTagsTypes> = ({
   name,
+  thumbnail,
   description,
   price,
   media
@@ -48,8 +49,8 @@ export const MetaTags: FC<MetaTagsTypes> = ({
         }`}
           data-rh="true"
         />
-        <meta property="og:url" content={media} />
-        <meta property="og:image" content={media} />
+        <meta property="og:url" content={thumbnail ?? media} />
+        <meta property="og:image" content={thumbnail ?? media} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="852.2222222222222" />
         <meta name="twitter:card" content="summary_large_image" />

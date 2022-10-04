@@ -18,6 +18,8 @@
     "@mui/material": "^5.10.3",
     "@reduxjs/toolkit": "^1.8.5",
     "axios": "^0.27.2",
+    "cross-env": "^7.0.3",
+    "eslint-plugin-testing-library": "^5.7.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "next": "latest",

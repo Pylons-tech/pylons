@@ -1,4 +1,3 @@
-import React from 'react'
 import { Card, CardMedia, CardActionArea } from '@mui/material'
 import { Props } from './tabs.types'
 
@@ -9,11 +8,11 @@ export const Tabs = ({
   height = '100%',
   width = '100%',
   maxWidth = 150
-}: Props) => {
+}: Props): JSX.Element => {
   return (
     <Card style={{ width: maxWidth }} data-testid="tabs-atom">
       <CardActionArea>
-        {type == 'image' ? (
+        {type === 'image' ? (
           <CardMedia
             component="img"
             image={src}

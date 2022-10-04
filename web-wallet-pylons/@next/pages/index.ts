@@ -1,1 +1,1 @@
-export * from "./esal-buy";
+export * from './esal-buy'

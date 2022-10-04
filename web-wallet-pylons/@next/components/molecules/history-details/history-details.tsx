@@ -16,7 +16,7 @@ export const HistoryDetails: FC<HistoryDetailsTypes> = ({ history }) => {
       <div className="tab-panel" data-testid="historyDetails-molecule">
         {history?.map((val, i) => (
           <div className="item" key={i}>
-            <p>{moment(val.createdAt).format('DD/MM/YYYY hh:mm:ss')}</p>
+            <p>{moment(val.createdAt).format('MM/DD/YYYY hh:mm:ss')}</p>
             <p>{val.sender_name}</p>
           </div>
         ))}

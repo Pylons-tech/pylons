@@ -1,4 +1,4 @@
-import { cleanup, CustomRender, screen } from 'test-utils'
+import { cleanup, CustomRender } from 'test-utils'
 import { MainLayout } from './main-layout'
 
 const props = {

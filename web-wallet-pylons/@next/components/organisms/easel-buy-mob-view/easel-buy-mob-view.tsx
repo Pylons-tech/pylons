@@ -172,7 +172,7 @@ export const EaselBuyMobView: FC<EaselBuyMobViewTypes> = ({
               <Typography
                 sx={{
                   fontSize: '25px',
-                  color: '#8F8FCE',
+                  color: 'common.lightPurple',
                   paddingRight: '5px'
                 }}
               >
@@ -210,7 +210,7 @@ export const EaselBuyMobView: FC<EaselBuyMobViewTypes> = ({
                   <Typography
                     sx={{
                       fontSize: '25px',
-                      color: '#8F8FCE',
+                      color: 'common.lightPurple',
                       paddingRight: '5px'
                     }}
                     onClick={() => setShowMore((val) => !val)}
@@ -241,7 +241,7 @@ export const EaselBuyMobView: FC<EaselBuyMobViewTypes> = ({
                   <MobOwnershipAccordionSummary
                     expanded={expanded}
                     accordionId="panel1"
-                    title="OwnerShip"
+                    title="Ownership"
                     icon="trophy"
                   />
                   <AccordionDetails
@@ -262,7 +262,7 @@ export const EaselBuyMobView: FC<EaselBuyMobViewTypes> = ({
                         createdAt
                           ? moment
                               .unix(+createdAt)
-                              .format('DD/MM/YYYY hh:mm:ss')
+                              .format('MM/DD/YYYY hh:mm:ss')
                           : ''
                       }
                     />
@@ -335,7 +335,11 @@ export const EaselBuyMobView: FC<EaselBuyMobViewTypes> = ({
                   />
                 ) : null}
               </div>
-              <div className="value-icon" onClick={handleLoginConfirmed}>
+              <div
+                className="value-icon"
+                onClick={handleLoginConfirmed}
+                data-testid="easelBuyMobViewButtonBuy-organism"
+              >
                 <div className="values">
                   <p>
                     Buy for{' '}

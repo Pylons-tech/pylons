@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-// import { useRouter } from 'next/router'
 import { MainLoader } from '@molecules'
+import { MUITheme } from '@styles'
+import { ThemeProvider } from '@mui/material/styles'
 
 export const MainLayout = ({
   children
@@ -8,21 +9,9 @@ export const MainLayout = ({
   children: React.ReactNode
 }): JSX.Element => {
   const [loading] = useState(false)
-  // const router = useRouter()
-
-  // const token = localStorage.getItem("token");
-  // useEffect(() => {
-  //   if (router?.asPath.startsWith("/app") && !token) {
-  //     router?.push("/");
-  //   } else if (!router?.asPath.startsWith("/app") && token) {
-  //     router?.push("/app");
-  //   } else {
-  //     setLoading(false);
-  //   }
-  // }, [router, token]);
 
   if (loading) {
     return <MainLoader />
   }
-  return <>{children}</>
+  return <ThemeProvider theme={MUITheme}>{children}</ThemeProvider>
 }

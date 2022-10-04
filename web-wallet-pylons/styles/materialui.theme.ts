@@ -22,25 +22,7 @@ declare module '@mui/material/styles' {
 
 declare module '@mui/material/styles/createPalette' {
   interface CommonColors {
-    darkBlack: string
-    orange: string
-    darkBlue: string
-    lightOrange: string
-    darkOrange: string
-    oceanBlue: string
-    purple: string
-    red: string
-    green: string
-    black: string
-    white: string
-    icon: string
-    lightBlue: string
-    gradient: string
-    dottedBorder: string
-    searchFieldColor: string
-    assetStatusRed: string
-    lightBlack: string
-    label: String
+    lightPurple: string
   }
 }
 declare module '@mui/material/styles/createTheme' {
@@ -74,24 +56,7 @@ export const MUITheme = createTheme({
       dark: '#0292CC'
     },
     common: {
-      lightBlue: '#F6F9FA',
-      darkBlack: '#000',
-      orange: '#FAB817',
-      darkBlue: '#3E519E',
-      lightOrange: '#FFEBB9',
-      oceanBlue: '#00D1FF',
-      darkOrange: '#F18621',
-      purple: '#8674F5',
-      red: '#FF4950',
-      green: '#17D85C',
-      black: '#181C25',
-      white: '#FFF',
-      icon: '#979797',
-      dottedBorder: '#E4ECF7',
-      searchFieldColor: '#EDF2F7',
-      assetStatusRed: '#D1373F',
-      lightBlack: '#425466',
-      label: '#898A8D'
+      lightPurple: '#8F8FCE'
     },
     success: {
       main: '#17D85C'

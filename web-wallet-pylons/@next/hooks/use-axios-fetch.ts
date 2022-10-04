@@ -3,37 +3,29 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable indent */
 import { useState } from 'react'
-import {} from '@store'
 import { authActions } from '@store'
-import { useAppSelector, useAppDispatch } from '@hooks'
+import { useAppDispatch } from '@hooks'
 import { useRouter } from 'next/router'
 import { AxiosResponse } from 'axios'
 
-interface mainProps {
-  (
-    setSnackbarProps?: (
-      message: string,
-      show: boolean,
-      type: 'success' | 'error' | 'warning' | 'info' | undefined
-    ) => void
-  ): any
-}
-interface fetchDataProps {
-  (
-    url: (...props: any) => Promise<AxiosResponse<unknown, any>>,
-    handleErrorResponse?: () => void,
-    shouldHandleError?: boolean
-  ): any | void
-}
-let tokenId: any
+type SetSnackbarProps = (
+  message: string,
+  show: boolean,
+  type: 'success' | 'error' | 'warning' | 'info' | undefined
+) => void
 
-export const useAxiosFetch: mainProps = (setSnackbarProps) => {
+type fetchDataProps = (
+  url: (...props: any) => Promise<AxiosResponse<unknown, any>>,
+  handleErrorResponse?: () => void,
+  shouldHandleError?: boolean
+) => any
+export const useAxiosFetch = (setSnackbarProps?: SetSnackbarProps): any => {
   const [isLoading, setIsLoading] = useState(false)
   const [fetchError, setFetchError] = useState<any>(null)
   const [data, setData] = useState<any>()
   const dispatch = useAppDispatch()
   const router = useRouter()
-  // eslint-disable-next-line consistent-return
+
   const fetchData: fetchDataProps = async (
     url,
     handleErrorResponse,
@@ -55,30 +47,29 @@ export const useAxiosFetch: mainProps = (setSnackbarProps) => {
         case 1003:
         case 1002:
           dispatch(authActions.logout())
-          router.push('/')
+          void router.push('/')
           break
         case 1001:
-          setSnackbarProps
-            ? setSnackbarProps('Invalid input', true, 'warning')
-            : null
+          if (setSnackbarProps) {
+            setSnackbarProps('Invalid input', true, 'warning')
+          }
+          break
         default:
           setData(null)
           setFetchError(res?.data)
-          handleErrorResponse ? handleErrorResponse() : null
-          //   setSnackbarProps
-          //     ? setSnackbarProps(getErrorMessages(statusCode), true, "warning")
-          //     : null;
+          if (handleErrorResponse) {
+            handleErrorResponse()
+          }
           break
       }
     } catch (err: any) {
       setFetchError(err.message)
       setData(null)
-      if (err?.response.status == 400) {
-        setSnackbarProps
-          ? setSnackbarProps('Invalid input', true, 'warning')
-          : null
+      if (err?.response.status === 400) {
+        if (setSnackbarProps) {
+          setSnackbarProps('Invalid input', true, 'warning')
+        }
       }
-      // dispatch(authActions.setNetworkError(true))
     } finally {
       setIsLoading(false)
     }

@@ -6,15 +6,15 @@ import _ from 'lodash'
 
 import { EaselBuyWebView, EaselBuyMobView } from '@organisms'
 import settings from './../../../settings.json'
-import { getRecipeDetails, getRecipeHistory } from '@ApiReq'
+import { getRecipeHistory } from '@ApiReq'
 import { useRouter } from 'next/router'
-import { getNFTDimensions } from '@utils'
+import { AUDIO, getNFTDimensions, NFTURL, PDF, THUMBNAILURL } from '@utils'
 
 interface ObjectGenericType {
   [key: string]: any
 }
 
-export const EaselBuy: FC = () => {
+export const EaselBuy: FC<any> = ({ recipeDetails }) => {
   const matches = useMediaQuery('(min-width:600px)')
   const router: any = useRouter()
 
@@ -36,122 +36,140 @@ export const EaselBuy: FC = () => {
   const [recipeId, setRecipeId] = useState<string>('')
   const [src, setSrc] = useState<string>('')
   useEffect(() => {
-    if (!router.isReady) return
-    handleFetchhistory()
-    handleFetchData()
+    if (router.isReady) {
+      handleFetchhistory()
+    }
   }, [router.isReady, cookbook_id, recipe_id])
+  useEffect(() => {
+    handleFetchData()
+  }, [recipeDetails])
 
   const handleFetchData = (): void => {
-    getRecipeDetails(cookbook_id, recipe_id)
-      .then((response: any) => {
-        let media
-        let coin: any
-        let price
-        let denom
-        let src
-        let thumbnailNFT
-        const tradePercent = 100
-        const res = _.cloneDeep(response)
-        const selectedRecipe = _.cloneDeep(res.data.recipe)
-        const itemOutputs = _.cloneDeep(
-          selectedRecipe?.entries?.item_outputs[0]
-        )
-        const strings = _.cloneDeep(itemOutputs?.strings)
-        const coinInputs = [...selectedRecipe?.coin_inputs]
+    let media
+    let coin: any
+    let price
+    let denom
+    let src
+    let thumbnailNFT
+    const tradePercent = 100
+    const res = _.cloneDeep(recipeDetails)
+    const selectedRecipe = _.cloneDeep(res?.recipe)
+    const itemOutputs = _.cloneDeep(selectedRecipe?.entries?.item_outputs[0])
+    const strings = _.cloneDeep(itemOutputs?.strings)
+    const coinInputs = [...selectedRecipe?.coin_inputs]
 
-        if (coinInputs.length > 0) {
-          const resCoins: any = coinInputs[0]?.coins[0]
-          denom = resCoins.denom
-          if (resCoins?.denom === 'USD') {
-            price = `${Math.floor(resCoins.amount / 100)}.${
-              resCoins.amount % 100
-            } USD`
-          } else {
-            const coins: any[] = settings.public.coins
-            coin = coins.length
-              ? coins.find(
-                  (coin) =>
-                    coin?.denom?.toLowerCase() ===
-                    resCoins?.denom?.toLowerCase()
-                )
-              : null
-            if (coin) {
-              const displayName: string = coin?.displayName ?? ''
-              price = `${resCoins.amount / coin.fraction} ${displayName}`
-            } else {
-              const amount: string = resCoins?.amount
-              const denom: string = resCoins?.denom
-              price = `${amount} ${denom}`
-            }
-          }
-        }
-        const entries = _.cloneDeep(selectedRecipe.entries)
-        const nftType = strings.find(
-          (val: ObjectGenericType) => val.key.toLowerCase() === 'nft_format'
-        )?.value
-        if (entries != null) {
-          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-          thumbnailNFT = strings.find(
-            (val: ObjectGenericType) => val.key === 'Thumbnail_URL'
-          ).value
-          if (nftType.toLowerCase() === 'audio') {
-            const mediaUrl = strings.find(
-              (val: ObjectGenericType) => val.key === 'Thumbnail_URL'
+    /* istanbul ignore next */
+    if (coinInputs?.length > 0) {
+      const resCoins: any = coinInputs[0]?.coins[0]
+      denom = resCoins.denom
+      if (resCoins?.denom === 'USD') {
+        price = `${Math.floor(resCoins.amount / 100)}.${
+          resCoins.amount % 100
+        } USD`
+      } else {
+        const coins: any[] = settings.public.coins
+        coin = coins.length
+          ? coins.find(
+              (coin) =>
+                coin?.denom?.toLowerCase() === resCoins?.denom?.toLowerCase()
             )
-            media = mediaUrl ? mediaUrl.value : ''
-            const srcUrl = strings.find(
-              (val: ObjectGenericType) => val.key === 'NFT_URL'
-            )
-            src = srcUrl ? srcUrl.value : ''
-            setSrc(src)
-          } else if (nftType.toLowerCase() === 'pdf') {
-            const mediaUrl = strings.find(
-              (val: ObjectGenericType) => val.key === 'Thumbnail_URL'
-            )
-            media = mediaUrl ? mediaUrl.value : ''
-          } else {
-            const mediaUrl = strings.find(
-              (val: ObjectGenericType) => val.key === 'NFT_URL'
-            )
-            media = mediaUrl ? mediaUrl.value : ''
-          }
-        }
-
-        const creator = strings.find(
-          (val: any) => val.key.toLowerCase() === 'creator'
-        )?.value
-
-        const dimentions = getNFTDimensions(nftType, itemOutputs)
-        const amountMinted: string = itemOutputs.amount_minted
-        const quantity: string = itemOutputs.Quantity
-        const edition = `${amountMinted} of ${quantity}`
-        if (thumbnailNFT) {
-          setThumbnail(thumbnailNFT)
+          : null
+        if (coin) {
+          const displayName: string = coin?.displayName ?? ''
+          price = `${resCoins.amount / coin.fraction} ${displayName}`
         } else {
-          setThumbnail(media)
+          const amount: string = resCoins?.amount
+          const denom: string = resCoins?.denom
+          price = `${amount} ${denom}`
         }
-        setCreatedBy(creator)
-        setName(selectedRecipe.name)
-        setDescription(selectedRecipe.description)
-        setPrice(price ?? '')
-        setDenom(denom)
-        setNftType(nftType)
-        setDimensions(dimentions)
-        // setDisplayName(coin?.displayName)
-        setRoyalty((+itemOutputs.trade_percentage * tradePercent)?.toString())
-        setEdition(edition)
-        setMedia(media)
-        setCreatedAt(selectedRecipe.created_at)
-        setRecipeId(selectedRecipe.id)
+      }
+    }
+
+    /* istanbul ignore next */
+    const entries = _.cloneDeep(selectedRecipe.entries)
+    /* istanbul ignore next */
+    const nftType = strings.find(
+      (val: ObjectGenericType) => val?.key.toLowerCase() === 'nft_format'
+    )?.value
+    /* istanbul ignore next */
+    if (entries != null) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      thumbnailNFT = strings.find(
+        (val: ObjectGenericType) => val?.key === THUMBNAILURL
+      ).value
+      if (nftType.toLowerCase() === AUDIO) {
+        const mediaUrl = strings.find(
+          (val: ObjectGenericType) => val?.key === THUMBNAILURL
+        )
+        media = mediaUrl ? mediaUrl?.value : ''
+        const srcUrl = strings.find(
+          (val: ObjectGenericType) => val?.key === NFTURL
+        )
+        src = srcUrl ? srcUrl.value : ''
         setSrc(src)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+      } else if (nftType.toLowerCase() === PDF) {
+        const mediaUrl = strings.find(
+          (val: ObjectGenericType) => val?.key === THUMBNAILURL
+        )
+        media = mediaUrl ? mediaUrl?.value : ''
+      } else {
+        const mediaUrl = strings.find(
+          (val: ObjectGenericType) => val?.key === NFTURL
+        )
+        media = mediaUrl ? mediaUrl?.value : ''
+      }
+    }
+
+    /* istanbul ignore next */
+    const creator = strings.find(
+      (val: any) => val?.key.toLowerCase() === 'creator'
+    )?.value
+
+    /* istanbul ignore next */
+    const dimentions = getNFTDimensions(nftType, itemOutputs)
+    /* istanbul ignore next */
+    const amountMinted: string = itemOutputs?.amount_minted
+    /* istanbul ignore next */
+    const quantity: string = itemOutputs?.Quantity
+    /* istanbul ignore next */
+    const edition = `${amountMinted} of ${quantity}`
+    /* istanbul ignore next */
+    if (thumbnailNFT) {
+      setThumbnail(thumbnailNFT)
+    } else {
+      setThumbnail(media)
+    }
+    /* istanbul ignore next */
+    setCreatedBy(creator)
+    /* istanbul ignore next */
+    setName(selectedRecipe?.name)
+    /* istanbul ignore next */
+    setDescription(selectedRecipe?.description)
+    /* istanbul ignore next */
+    setPrice(price ?? '')
+    /* istanbul ignore next */
+    setDenom(denom)
+    /* istanbul ignore next */
+    setNftType(nftType)
+    /* istanbul ignore next */
+    setDimensions(dimentions)
+    // setDisplayName(coin?.displayName)
+    /* istanbul ignore next */
+    setRoyalty((+itemOutputs?.trade_percentage * tradePercent)?.toString())
+    /* istanbul ignore next */
+    setEdition(edition)
+    /* istanbul ignore next */
+    setMedia(media)
+    /* istanbul ignore next */
+    setCreatedAt(selectedRecipe?.created_at)
+    /* istanbul ignore next */
+    setRecipeId(selectedRecipe?.id)
+    /* istanbul ignore next */
+    setSrc(src)
   }
   const handleFetchhistory = (): void => {
     void getRecipeHistory(cookbook_id, recipe_id).then((res: any) => {
-      setHistory(res.data.history)
+      setHistory(res?.data?.history)
     })
   }
   const data = {

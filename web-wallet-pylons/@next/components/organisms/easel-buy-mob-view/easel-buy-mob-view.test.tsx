@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import { cleanup, CustomRender, screen, fireEvent } from 'test-utils'
 import { EaselBuyMobView } from './easel-buy-mob-view'
 
@@ -27,7 +26,10 @@ const setup = (): any => {
   const easelBuyMobViewButton2 = screen.getByTestId(
     'easelBuyMobViewButton2-molecule'
   )
-  return { easelBuyMobView, easelBuyMobViewButton2 }
+  const easelBuyMobViewButtonBuy = screen.getByTestId(
+    'easelBuyMobViewButtonBuy-organism'
+  )
+  return { easelBuyMobView, easelBuyMobViewButton2, easelBuyMobViewButtonBuy }
 }
 
 describe('<EaselBuyMobView />', () => {
@@ -36,8 +38,13 @@ describe('<EaselBuyMobView />', () => {
     expect(easelBuyMobView).toBeInTheDocument()
   })
 
-  it('Should Click on Button', async () => {
+  it('Should Click on view more Button', async () => {
     const { easelBuyMobViewButton2 } = setup()
     fireEvent.click(easelBuyMobViewButton2)
+  })
+
+  it('Should Click on Buy Button', async () => {
+    const { easelBuyMobViewButtonBuy } = setup()
+    fireEvent.click(easelBuyMobViewButtonBuy)
   })
 })

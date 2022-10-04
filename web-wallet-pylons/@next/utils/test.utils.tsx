@@ -6,9 +6,7 @@ import {
 } from '@testing-library/react'
 import { ReactElement } from 'react'
 import { Provider } from 'react-redux'
-import { ThemeProvider } from '@mui/material/styles'
 import { createStore } from '@store'
-import { MUITheme } from '@styles'
 /**
  * customRender
  *
@@ -30,14 +28,11 @@ const CustomRender = (
   }
 ): RenderResult & { store: ReturnType<any> } => {
   const store = createStore
-
   // For example testing the user panel the user must be loggedIn. Hence this option will let us add the user beforehand.
 
   const getLayout = ui.getLayout ?? ((page) => page)
   const renderResult = render(
-    <Provider {...{ store }}>
-      <ThemeProvider theme={MUITheme}>{getLayout(ui)}</ThemeProvider>
-    </Provider>,
+    <Provider {...{ store }}>{getLayout(ui)}</Provider>,
     {
       queries: { ...queries },
       ...options

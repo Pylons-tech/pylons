@@ -22,7 +22,9 @@ const MyApp: FC<Props> = ({ Component, pageProps }) => {
   return (
     <Provider {...{ store }}>
       <PersistGate loading={null} persistor={persistor}>
-        <MainLayout>{getLayout(<Component {...pageProps} />)}</MainLayout>
+        {() => (
+          <MainLayout>{getLayout(<Component {...pageProps} />)}</MainLayout>
+        )}
       </PersistGate>
     </Provider>
   )

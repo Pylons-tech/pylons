@@ -2,6 +2,7 @@
 import { ModelViewerElement } from '@google/model-viewer'
 import Image from 'next/image'
 import { FC } from 'react'
+import { PDF, AUDIO, THREED, IMAGE } from '@utils'
 interface PropsTypes {
   nftType: string
   source: string
@@ -18,14 +19,13 @@ declare global {
 }
 export const MediaSet: FC<PropsTypes> = ({ nftType, source, src }) => {
   const handleClick = (e: any): void => {
-    if (e.type === 'click') {
-    } else if (e.type === 'contextmenu') {
+    if (e.type === 'contextmenu') {
       e.preventDefault()
     }
   }
   const getMedia = (): any => {
     if (!nftType) return null
-    else if (nftType.toLowerCase() === 'image') {
+    else if (nftType.toLowerCase() === IMAGE) {
       return (
         <div className="img-inner">
           <Image
@@ -39,7 +39,7 @@ export const MediaSet: FC<PropsTypes> = ({ nftType, source, src }) => {
           />
         </div>
       )
-    } else if (nftType.toLowerCase() === 'audio') {
+    } else if (nftType.toLowerCase() === AUDIO) {
       return (
         <div className="img-audio">
           <Image
@@ -69,7 +69,7 @@ export const MediaSet: FC<PropsTypes> = ({ nftType, source, src }) => {
           </audio>
         </div>
       )
-    } else if (nftType.toLowerCase() === 'pdf') {
+    } else if (nftType.toLowerCase() === PDF) {
       return (
         <div className="img-inner">
           <Image
@@ -83,7 +83,7 @@ export const MediaSet: FC<PropsTypes> = ({ nftType, source, src }) => {
           />
         </div>
       )
-    } else if (nftType.toLowerCase() === '3d') {
+    } else if (nftType.toLowerCase() === THREED) {
       return (
         <model-viewer
           data-testid="mediaSet3d-molecule"
