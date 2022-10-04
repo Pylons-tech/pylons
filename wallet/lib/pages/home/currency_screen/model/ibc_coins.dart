@@ -133,23 +133,23 @@ extension IBCCoinsDePar on IBCCoins {
   Color getColor() {
     switch (this) {
       case IBCCoins.urun:
-        return kAgoricColor;
+        return AppColors.kAgoricColor;
       case IBCCoins.ujunox:
-        return kForwardIconColor;
+        return AppColors.kForwardIconColor;
       case IBCCoins.none:
         return Colors.blueGrey;
       case IBCCoins.ujuno:
-        return kForwardIconColor;
+        return AppColors.kForwardIconColor;
       case IBCCoins.upylon:
-        return constants.kAtomColor;
+        return constants.AppColors.kAtomColor;
       case IBCCoins.ustripeusd:
-        return kUSDColor;
+        return AppColors.kUSDColor;
       case IBCCoins.eeur:
-        return constants.kEmoneyColor;
+        return constants.AppColors.kEmoneyColor;
       case IBCCoins.uatom:
-        return constants.kAtomColor;
+        return constants.AppColors.kAtomColor;
       case IBCCoins.weth_wei:
-        return constants.kEthereumColor;
+        return constants.AppColors.kEthereumColor;
     }
   }
 

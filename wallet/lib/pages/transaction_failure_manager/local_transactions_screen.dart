@@ -8,6 +8,7 @@ import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/pages/home/wallet_screen/widgets/latest_transactions.dart';
 import 'package:pylons_wallet/pages/transaction_failure_manager/failure_manager_view_model.dart';
 import 'package:pylons_wallet/pages/transaction_failure_manager/widgets/my_list_tile.dart';
+import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/enums.dart';
@@ -23,11 +24,13 @@ class LocalTransactionsScreen extends StatefulWidget {
 
 class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
   FailureManagerViewModel get failureManagerViewModel => sl();
+  Repository get repository => sl();
 
   @override
   void initState() {
     failureManagerViewModel.getAllFailuresFromDB();
     super.initState();
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.localTransactionHistory);
   }
 
   Widget getTransactionStatusButton({required LocalTransactionModel txManager}) {
@@ -53,7 +56,7 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
       padding: EdgeInsets.all(5.h),
       child: Text("${monthStrMap[date.month]!} ${date.day.toString()}",
           style: TextStyle(
-            color: kDarkGrey,
+            color: AppColors.kDarkGrey,
             fontSize: 12.sp,
           )),
     );
@@ -70,7 +73,7 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
             child: Text(
               isTablet ? txModel.transactionDescription : txModel.transactionDescription.trimStringMedium(stringTrimConstantMid),
               style: TextStyle(
-                color: kBlack,
+                color: AppColors.kBlack,
                 fontFamily: kUniversalFontFamily,
                 fontWeight: FontWeight.w800,
                 fontSize: 12.sp,
@@ -103,7 +106,7 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
       children: [
         Text(getFormattedPrice(txModel),
             style: TextStyle(
-              color: kBlack,
+              color: AppColors.kBlack,
               fontFamily: kUniversalFontFamily,
               fontWeight: FontWeight.w800,
               fontSize: txModel.transactionPrice == "0" ? 13.sp : 11.sp,
@@ -143,7 +146,7 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
                   )),
               Text(
                 'all_transactions'.tr(),
-                style: TextStyle(color: kBlack, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.bold, fontSize: 20.sp),
+                style: TextStyle(color: AppColors.kBlack, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.bold, fontSize: 20.sp),
               ),
               SizedBox(width: 40.w),
             ],

@@ -58,7 +58,7 @@ class NewUserFormState extends State<NewUserForm> {
               child: Text(
                 "pylon_username".tr(),
                 style: TextStyle(
-                  color: kBlack,
+                  color: AppColors.kBlack,
                   fontSize: 15.sp,
                   fontWeight: FontWeight.w500,
                 ),
@@ -71,7 +71,7 @@ class NewUserFormState extends State<NewUserForm> {
             value: _ackChecked1,
             title: Text('acknowledge_username_never_changed'.tr(),
                 style: TextStyle(
-                  color: kBlack,
+                  color: AppColors.kBlack,
                   fontSize: 12.sp,
                 )),
             onChanged: (value) {
@@ -80,26 +80,26 @@ class NewUserFormState extends State<NewUserForm> {
               });
             },
             selected: _ackChecked1,
-            activeColor: kPurple,
+            activeColor: AppColors.kPurple,
             controlAffinity: ListTileControlAffinity.leading,
           ),
           CheckboxListTile(
             value: _ackChecked2,
             title: RichText(
               text: TextSpan(
-                style: TextStyle(color: kBlack, fontSize: 12.sp),
+                style: TextStyle(color: AppColors.kBlack, fontSize: 12.sp),
                 children: <TextSpan>[
                   TextSpan(
                       text: 'acknowledge_i_agree'.tr(),
                       style: TextStyle(
-                        color: kBlack,
+                        color: AppColors.kBlack,
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w500,
                       )),
                   TextSpan(
                       text: 'acknowledge_privacy_policy'.tr(),
                       style: TextStyle(
-                        color: kBlue,
+                        color: AppColors.kBlue,
                         fontSize: 12.sp,
                       ),
                       recognizer: TapGestureRecognizer()
@@ -115,7 +115,7 @@ class NewUserFormState extends State<NewUserForm> {
               });
             },
             selected: _ackChecked2,
-            activeColor: kPurple,
+            activeColor: AppColors.kPurple,
             controlAffinity: ListTileControlAffinity.leading,
           ),
           VerticalSpace(210.h),

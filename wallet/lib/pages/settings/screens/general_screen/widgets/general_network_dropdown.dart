@@ -28,8 +28,7 @@ class GeneralForwardNetworkItem extends StatelessWidget {
     return ChangeNotifierProvider<GeneralScreenViewModel>.value(
         value: _generalScreenProvider,
         builder: (context, child) {
-          return Consumer<GeneralScreenViewModel>(
-              builder: (context, viewModel, child) {
+          return Consumer<GeneralScreenViewModel>(builder: (context, viewModel, child) {
             return Column(
               children: [
                 SizedBox(
@@ -69,31 +68,24 @@ class GeneralForwardNetworkItem extends StatelessWidget {
                 child: ClipPath(
                     clipper: PylonsLongRightBottomClipper(),
                     child: Container(
-                      color: kBackgroundColor,
-                      margin:
-                          EdgeInsets.only(left: 2.w, right: 2.w, bottom: 2.h),
+                      color: AppColors.kBackgroundColor,
+                      margin: EdgeInsets.only(left: 2.w, right: 2.w, bottom: 2.h),
                       width: 140.w,
                       height: 52.h,
                       child: Padding(
                         padding: EdgeInsets.only(left: 10.w, bottom: 10.h),
-                        child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              SvgPicture.asset(
-                                SVGUtil.DEV_NET,
-                                height: 15.h,
-                                color: viewModel.selectedValue == kTestNet
-                                    ? kEthereumColor
-                                    : kGreenBackground,
-                              ),
-                              SizedBox(width: 15.w),
-                              Text(
-                                viewModel.selectedValue == kTestNet
-                                    ? kDevNet
-                                    : kTestNet,
-                                style: kDropdownText,
-                              )
-                            ]),
+                        child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                          SvgPicture.asset(
+                            SVGUtil.DEV_NET,
+                            height: 15.h,
+                            color: viewModel.selectedValue == kTestNet ? AppColors.kEthereumColor : AppColors.kGreenBackground,
+                          ),
+                          SizedBox(width: 15.w),
+                          Text(
+                            viewModel.selectedValue == kTestNet ? kDevNet : kTestNet,
+                            style: kDropdownText,
+                          )
+                        ]),
                       ),
                     )),
               ),
@@ -109,7 +101,7 @@ class GeneralForwardNetworkItem extends StatelessWidget {
                   viewModel.changeDropdownVisibility();
                 },
                 child: Container(
-                  color: kBackgroundColor,
+                  color: AppColors.kBackgroundColor,
                   margin: EdgeInsets.only(left: 2.w, right: 2.w, bottom: 2.h),
                   width: 140.w,
                   height: 40.h,
@@ -118,11 +110,7 @@ class GeneralForwardNetworkItem extends StatelessWidget {
                       horizontal: 10.w,
                     ),
                     child: Row(children: [
-                      SvgPicture.asset(SVGUtil.DEV_NET,
-                          height: 15.h,
-                          color: viewModel.selectedValue == kDevNet
-                              ? kEthereumColor
-                              : kGreenBackground),
+                      SvgPicture.asset(SVGUtil.DEV_NET, height: 15.h, color: viewModel.selectedValue == kDevNet ? AppColors.kEthereumColor : AppColors.kGreenBackground),
                       SizedBox(width: 15.w),
                       Expanded(
                         child: Text(
@@ -132,7 +120,7 @@ class GeneralForwardNetworkItem extends StatelessWidget {
                       ),
                       Icon(
                         Icons.keyboard_arrow_down_outlined,
-                        color: kForwardIconColor,
+                        color: AppColors.kForwardIconColor,
                         size: 25.h,
                       ),
                     ]),

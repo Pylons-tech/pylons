@@ -536,7 +536,6 @@ class MockRepository extends Repository {
     throw UnimplementedError();
   }
 
-
   @override
   Future<Either<Failure, bool>> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice}) {
     // TODO: implement logPurchaseItem
@@ -547,5 +546,10 @@ class MockRepository extends Repository {
   Future<Either<Failure, bool>> logAddToCart({required String recipeId, required String recipeName, required String author, required double purchasePrice, required String currency}) {
     // TODO: implement logAddToCart
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> logUserJourney({required String screenName}) async {
+    return const Right(null);
   }
 }
