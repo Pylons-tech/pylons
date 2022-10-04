@@ -36,6 +36,8 @@ import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
+import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
+
 class PurchaseItemScreen extends StatefulWidget {
   final PurchaseItemViewModel purchaseItemViewModel;
 
@@ -322,8 +324,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                   buildContext: context,
                                   nft: viewModel.nft,
                                   purchaseItemViewModel: viewModel,
-                                  onPurchaseDone: (txId) {
-                                    showTransactionCompleteDialog(txId);
+                                  onPurchaseDone: (txData) {
+                                  
+                                    showTransactionCompleteDialog(execution: txData);
                                   },
                                   shouldBuy: balancesFetchResult);
                               payNowDialog.show();
@@ -657,8 +660,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               buildContext: context,
                               nft: viewModel.nft,
                               purchaseItemViewModel: viewModel,
-                              onPurchaseDone: (txId) {
-                                showTransactionCompleteDialog(txId);
+                              onPurchaseDone: (txData) {
+                                showTransactionCompleteDialog(execution: txData);
                               },
                               shouldBuy: balancesFetchResult);
                           payNowDialog.show();
@@ -762,13 +765,27 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     );
   }
 
-  void showTransactionCompleteDialog(String txId) {
+  String getTransactionTimeStamp(int? time) {
     final formatter = DateFormat('MMM dd yyyy HH:mm');
+    if (time == null) {
+      return "${formatter.format(DateTime.now().toUtc())} $kUTC";
+    }
+
+    final int timeStamp = time * kDateConverterConstant;
+    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timeStamp , isUtc: true );
+    return "${formatter.format(dateTime)} $kUTC";
+  }
+
+  void showTransactionCompleteDialog({required Execution execution}) {
     final viewModel = context.read<PurchaseItemViewModel>();
 
     var price = double.parse(viewModel.nft.price);
     final fee = double.parse(viewModel.nft.price) * 0.1;
     price = price - fee;
+
+    final txId = execution.hasId() ? execution.id : "";
+
+    final txTime = getTransactionTimeStamp(execution.hasTxTime() ? execution.txTime.toInt() : null);
 
     final model = TradeReceiptModel(
         tradeId: viewModel.nft.tradeID,
@@ -777,10 +794,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         createdBy: viewModel.nft.creator,
         currency: viewModel.nft.ibcCoins.getAbbrev(),
         soldBy: viewModel.nft.owner.isEmpty ? viewModel.nft.creator : viewModel.nft.owner,
-        transactionTime: "${formatter.format(DateTime.now().toUtc())} UTC",
+        transactionTime: txTime,
         total: viewModel.nft.ibcCoins.getCoinWithDenominationAndSymbol(viewModel.nft.price, showDecimal: true),
         nftName: viewModel.nft.name,
-        transactionId: txId);
+        transactionID: txId,);
 
     final TradeCompleteDialog tradeCompleteDialog = TradeCompleteDialog(
         model: model,

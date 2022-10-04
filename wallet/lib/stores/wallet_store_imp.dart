@@ -323,7 +323,8 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> executeRecipe(Map json) async {
+  Future<SdkIpcResponse<Execution>> executeRecipe(Map json) async {
+  
     final networkInfo = GetIt.I.get<NetworkInfo>();
 
     final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
@@ -342,6 +343,7 @@ class WalletsStoreImp implements WalletsStore {
     json.remove(kNftName);
     json.remove(kNftCurrency);
     json.remove(kNftPrice);
+    
     final msgObj = pylons.MsgExecuteRecipe.create()..mergeFromProto3Json(json);
     msgObj.creator = wallets.value.last.publicAddress;
     final sdkResponse = await _signAndBroadcast(msgObj);
@@ -364,7 +366,7 @@ class WalletsStoreImp implements WalletsStore {
 
     await saveTransactionRecord(transactionHash: sdkResponse.data.toString(), transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
     return SdkIpcResponse.success(
-        data: jsonEncode(executionEither.toOption().toNullable()!.completedExecutions.last.toProto3Json()), sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
+        data: executionEither.toOption().toNullable()!.completedExecutions.last, sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
   }
 
   @override
