@@ -244,3 +244,4 @@ const kSaveAsDraftPriceKey = "Save_as_draft_price_key";
 const kSaveAsDraftPublishKey = "Save_as_draft_publish_key";
 const kGridViewTileNFTKey = "GridViewTileNFTKey";
 const kPublishTextKey = "publish";
+const kPublishButtonKey = "publish_button_key";
