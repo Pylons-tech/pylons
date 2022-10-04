@@ -18,8 +18,6 @@ abstract class AnalyticsHelper {
   });
 
   Future<void> logUserJourney({required String screenName});
-
-  static String mainLoginScreen = "MainLoginScreen";
 }
 
 class AnalyticsHelperImpl implements AnalyticsHelper {
