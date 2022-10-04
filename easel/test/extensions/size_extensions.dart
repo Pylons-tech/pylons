@@ -27,12 +27,22 @@ extension SetScreenSize on WidgetTester {
         useOnlyLangCode: true,
         child: ScreenUtilInit(
           minTextAdapt: true,
-          builder: (context, _) => MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: kEasel,
-            theme: EaselAppTheme.theme(context),
-            home: child,
-          ),
+          splitScreenMode: true,
+          builder: (context, _) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: kEasel,
+              theme: EaselAppTheme.theme(context),
+              builder: (context, widget) {
+                ScreenUtil.init(context);
+                return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                  child: widget!,
+                );
+              },
+              home: child,
+            );
+          },
         ),
       );
     }), duration);
