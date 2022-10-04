@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
-
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -19,7 +19,9 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart'
 import 'package:pylons_wallet/pages/gestures_for_detail_screen.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
+import 'package:pylons_wallet/pages/purchase_item/clipper/buy_now_clipper.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart' show PurchaseItemViewModel;
+import 'package:pylons_wallet/pages/purchase_item/widgets/buy_nft_button.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/pay_now_dialog.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/purchase_audio_widget.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/purchase_video_player_screen.dart';
@@ -33,6 +35,8 @@ import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+
+import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
 
 class PurchaseItemScreen extends StatefulWidget {
   final PurchaseItemViewModel purchaseItemViewModel;
@@ -229,8 +233,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<PurchaseItemViewModel>();
-
-    final ibcEnumCoins = viewModel.nft.ibcCoins;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 100),
       decoration: const BoxDecoration(color: Colors.transparent),
@@ -250,6 +252,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       children: [
                         Expanded(child: _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner)),
                         IconButton(
+                          key: const Key(kKeyboardUpButtonKeyValue),
                           icon: Icon(
                             Icons.keyboard_arrow_up,
                             size: 32.h,
@@ -282,7 +285,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           onTap: () async {
                             final Size size = MediaQuery.of(context).size;
                             context.read<PurchaseItemViewModel>().shareNFTLink(size: size);
-
                           },
                           child: Container(
                             padding: EdgeInsets.only(bottom: 12.h),
@@ -298,74 +300,39 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         const Spacer(),
 
                         /// BUY NFT BUTTON
-                        if (viewModel.nft.amountMinted < viewModel.nft.quantity)
-                          ClipPath(
-                            clipper: BuyClipper(),
-                            child: InkWell(
-                              onTap: () async {
-                                bool balancesFetchResult = true;
-                                if (viewModel.nft.price != kZeroInt) {
-                                  final balancesEither = await viewModel.getBalanceOfSelectedCurrency(
-                                    selectedDenom: viewModel.nft.denom,
-                                    requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
-                                  );
+                        if (viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid))
+                          BuyNFTButton(
+                            onTapped: () async {
+                              bool balancesFetchResult = true;
+                              if (viewModel.nft.price != kZeroInt) {
+                                final balancesEither = await viewModel.shouldShowSwipeToBuy(
+                                  selectedDenom: viewModel.nft.denom,
+                                  requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
+                                );
 
-                                  if (balancesEither.isLeft()) {
-                                    balancesEither.swap().getOrElse(() => '').show();
-                                    return;
-                                  }
-
-                                  balancesFetchResult = balancesEither.getOrElse(() => false);
+                                if (balancesEither.isLeft()) {
+                                  balancesEither.swap().getOrElse(() => '').show();
+                                  return;
                                 }
 
-                                viewModel.addLogForCart();
+                                balancesFetchResult = balancesEither.getOrElse(() => false);
+                              }
 
-                                final PayNowDialog payNowDialog = PayNowDialog(
-                                    buildContext: context,
-                                    nft: viewModel.nft,
-                                    purchaseItemViewModel: viewModel,
-                                    onPurchaseDone: (txId) {
-                                      showTransactionCompleteDialog(txId);
-                                    },
-                                    shouldBuy: balancesFetchResult);
-                                payNowDialog.show();
-                              },
-                              child: Container(
-                                width: 200.w,
-                                height: 60.h,
-                                color: kDarkRed.withOpacity(0.8),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.only(left: 20.w),
-                                      alignment: Alignment.center,
-                                      child: Container(
-                                        height: 10.w,
-                                        width: 10.w,
-                                        decoration: const BoxDecoration(shape: BoxShape.circle, color: kButtonBuyNowColor),
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "${"buy_for".tr()} ${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)}",
-                                          style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                                        ),
-                                        SizedBox(
-                                          width: 8.w,
-                                        ),
-                                        ibcEnumCoins.getAssets(),
-                                      ],
-                                    ),
-                                    const Spacer(),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
+                              viewModel.addLogForCart();
+
+                              final PayNowDialog payNowDialog = PayNowDialog(
+                                  buildContext: context,
+                                  nft: viewModel.nft,
+                                  purchaseItemViewModel: viewModel,
+                                  onPurchaseDone: (txData) {
+                                  
+                                    showTransactionCompleteDialog(execution: txData);
+                                  },
+                                  shouldBuy: balancesFetchResult);
+                              payNowDialog.show();
+                            },
+                            nft: viewModel.nft,
+                          ),
                       ],
                     ),
                   )
@@ -656,7 +623,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 onTap: () async {
                                   final Size size = MediaQuery.of(context).size;
                                   context.read<PurchaseItemViewModel>().shareNFTLink(size: size);
-
                                 },
                                 child: SvgPicture.asset(
                                   SVGUtil.OWNER_SHARE,
@@ -669,6 +635,73 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       ],
                     ),
                   ),
+                  if (viewModel.nft.amountMinted < viewModel.nft.quantity)
+                    ClipPath(
+                      key: const Key(kExpandedBuyButtonKeyValue),
+                      clipper: BuyClipper(),
+                      child: InkWell(
+                        onTap: () async {
+                          bool balancesFetchResult = true;
+                          if (viewModel.nft.price != kZeroInt) {
+                            final balancesEither = await viewModel.shouldShowSwipeToBuy(
+                              selectedDenom: viewModel.nft.denom,
+                              requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
+                            );
+
+                            if (balancesEither.isLeft()) {
+                              balancesEither.swap().getOrElse(() => '').show();
+                              return;
+                            }
+
+                            balancesFetchResult = balancesEither.getOrElse(() => false);
+                          }
+
+                          final PayNowDialog payNowDialog = PayNowDialog(
+                              buildContext: context,
+                              nft: viewModel.nft,
+                              purchaseItemViewModel: viewModel,
+                              onPurchaseDone: (txData) {
+                                showTransactionCompleteDialog(execution: txData);
+                              },
+                              shouldBuy: balancesFetchResult);
+                          payNowDialog.show();
+                        },
+                        child: Container(
+                          width: 200.w,
+                          height: 60.h,
+                          color: kDarkRed.withOpacity(0.8),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(left: 20.w),
+                                alignment: Alignment.center,
+                                child: Container(
+                                  height: 10.w,
+                                  width: 10.w,
+                                  decoration: const BoxDecoration(shape: BoxShape.circle, color: kButtonBuyNowColor),
+                                ),
+                              ),
+                              const Spacer(),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "${"buy_for".tr()} ${viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price)}",
+                                    style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                                  ),
+                                  SizedBox(
+                                    width: 8.w,
+                                  ),
+                                  viewModel.nft.ibcCoins.getAssets(),
+                                ],
+                              ),
+                              const Spacer(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
                 ],
               ),
             ),
@@ -732,13 +765,27 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     );
   }
 
-  void showTransactionCompleteDialog(String txId) {
+  String getTransactionTimeStamp(int? time) {
     final formatter = DateFormat('MMM dd yyyy HH:mm');
+    if (time == null) {
+      return "${formatter.format(DateTime.now().toUtc())} $kUTC";
+    }
+
+    final int timeStamp = time * kDateConverterConstant;
+    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timeStamp , isUtc: true );
+    return "${formatter.format(dateTime)} $kUTC";
+  }
+
+  void showTransactionCompleteDialog({required Execution execution}) {
     final viewModel = context.read<PurchaseItemViewModel>();
 
     var price = double.parse(viewModel.nft.price);
     final fee = double.parse(viewModel.nft.price) * 0.1;
     price = price - fee;
+
+    final txId = execution.hasId() ? execution.id : "";
+
+    final txTime = getTransactionTimeStamp(execution.hasTxTime() ? execution.txTime.toInt() : null);
 
     final model = TradeReceiptModel(
         tradeId: viewModel.nft.tradeID,
@@ -747,10 +794,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         createdBy: viewModel.nft.creator,
         currency: viewModel.nft.ibcCoins.getAbbrev(),
         soldBy: viewModel.nft.owner.isEmpty ? viewModel.nft.creator : viewModel.nft.owner,
-        transactionTime: "${formatter.format(DateTime.now().toUtc())} UTC",
+        transactionTime: txTime,
         total: viewModel.nft.ibcCoins.getCoinWithDenominationAndSymbol(viewModel.nft.price, showDecimal: true),
         nftName: viewModel.nft.name,
-        transactionId: txId);
+        transactionID: txId,);
 
     final TradeCompleteDialog tradeCompleteDialog = TradeCompleteDialog(
         model: model,
@@ -764,26 +811,5 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   void showReceiptDialog(TradeReceiptModel model) {
     final TradeReceiptDialog tradeReceiptDialog = TradeReceiptDialog(context: context, model: model);
     tradeReceiptDialog.show();
-  }
-}
-
-class BuyClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-
-    path.lineTo(0, size.height - 18);
-    path.lineTo(18, size.height);
-    path.lineTo(size.width, size.height);
-    path.lineTo(size.width, 18);
-    path.lineTo(size.width - 18, 0);
-    path.lineTo(0, 0);
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    return false;
   }
 }

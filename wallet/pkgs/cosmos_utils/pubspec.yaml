@@ -1,0 +1,27 @@
+name: cosmos_utils
+description: Common utils package
+version: 0.0.1
+homepage: starport.com
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  bech32: ^0.2.1
+  bip39: ^1.0.6
+  dartz: ^0.10.1
+  equatable: ^2.0.5
+  hex: ^0.2.0
+  intl: ^0.17.0
+  package_info: 2.0.2
+
+#dev_dependencies:
+#  lint: ^1.5.3
+#  lints: ^2.0.0
+#  flutter_test:
+#    sdk: flutter
+
+
+flutter:

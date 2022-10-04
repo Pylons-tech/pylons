@@ -61,6 +61,7 @@ const Color kSubtitleColor = Color(0xff767676);
 const Color kTransactionGreen = Color.fromRGBO(81, 161, 144, 1);
 const Color kTransactionRed = Color.fromRGBO(239, 68, 33, 1);
 Color k3DBackgroundColor = Colors.grey.shade200;
+Color kGreyColor = const Color.fromRGBO(141, 140, 140, 1);
 
 const double kIconSize = 24.0;
 const double kSmallIconSize = 18.0;
@@ -126,6 +127,7 @@ const String kStripeSignoutJS =
     "const hidebutton = ()=>{  var ret=false; [...document.querySelectorAll('button')].filter(e=>e.innerHTML.toUpperCase().indexOf('SIGN OUT') > -1).forEach(button=>{button.style.display='none'; ret=true;});  setTimeout(hidebutton, 500);}; hidebutton();";
 
 const String SOMETHING_WENT_WRONG = 'Something went wrong';
+const String kDuplicateIapReceiptCode = 'error:1106';
 
 //STRIPE ERROR STRING
 const String CREATE_PAYMENTINTENT_FAILED = 'Stripe PaymentIntent Creation Failed';
@@ -274,8 +276,9 @@ const int kSixtySeconds = 60;
 const int kTimeStampInt = 1000;
 
 const int kDateConverterConstant = 1000;
-
 const kHashtags = "Hashtags";
+const kRealWorld = "real_world";
+
 
 const kLOW_LOW_BALANCE_CONSTANT = "Tx error:5";
 
@@ -295,11 +298,17 @@ const kEasel = "Easel";
 const kEaselNFT = "Easel_NFT";
 const kUpylon = "upylon";
 const kExtraInfo = "extraInfo";
+const kTxTime = "txTime";
+const kTxnId = "id";
+const kUTC = "UTC";
 
 const kItemId = "id";
 const kCookbookId = "cookbook_id";
 const kAmount = "amount";
 const kCreatedAt = "created_at";
+
+const cookbookIdKey = "cookbookId";
+const recipeIdKey = "recipeId";
 
 /// Assets
 
@@ -314,6 +323,7 @@ const String kThreeDText = "ThreeD";
 
 const String kRecipeIdMap = "recipeId";
 const String kCookbookIdMap = "cookbookId";
+const String kWalletAddressIdMap = "walletAddress";
 const String FIREBASE_APP_CHECK_HEADER = "x-firebase-appcheck";
 
 const String kDateWithTimeFormat = "MM/dd/yyyy HH:mm";
@@ -352,6 +362,7 @@ const String kPurchaseIdKey = "purchase_id";
 const String kProcessorNameKey = "processor_name";
 const String kPayerAddrKey = "payer_addr";
 const String kProductIdKey = "product_id";
+const String kTokenKey = "token";
 
 //Notification keys
 const String kResultKey = "results";
@@ -390,3 +401,19 @@ const kMaxDescription = 256;
 const kOwnerViewKeyValue = "owner_view_key";
 const kOwnerViewDrawerKeyValue = "ownerview_header";
 const kOwnerViewBottomSheetKeyValue = "bottom_sheet";
+const kKeyboardUpButtonKeyValue = "keyboard_up_button";
+const kExpandedBuyButtonKeyValue = "expanded_buy_button";
+
+Map<String, Color> denomColors = {'upylon': const Color(0xFF5252d5), 'ustripeusd': const Color(0xFF85bb65), 'uusd': const Color(0xFF85bb65)};
+
+const String kNftName = "nftName";
+const String kNftPrice = "nftPrice";
+const String kNftCurrency = "nftCurrency";
+const String kPaymentIntentId = "payment_intent_id";
+const String kClientSecret = "clientSecret";
+const String kPaymentInfos = "payment_infos";
+
+const String kRecipeID = "recipeID";
+const String kCookbookID = "cookbookID";
+const String kPaymentInfosMap = "paymentInfos";
+const String kItemAlreadyOwned = "itemAlreadyOwned";

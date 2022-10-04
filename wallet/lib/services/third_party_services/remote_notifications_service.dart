@@ -55,15 +55,14 @@ class RemoteNotificationsServiceImp implements RemoteNotificationsService {
     const initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/launcher_icon');
 
-    const initializationSettingsIOS = DarwinInitializationSettings();
-
-
-    const initializationSettings = InitializationSettings(
+    final initializationSettingsIOS = DarwinInitializationSettings(
+        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    final initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS
-    );
+        iOS: initializationSettingsIOS,);
 
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings,);
+
 
     const channel = AndroidNotificationChannel(
       CHANNEL_ID,
@@ -123,6 +122,8 @@ class RemoteNotificationsServiceImp implements RemoteNotificationsService {
     }
   }
 
+  void onDidReceiveLocalNotification(
+      int id, String? title, String? body, String? payload) {}
 
-  void selectNotification(String? payload) {}
+
 }

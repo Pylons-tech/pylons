@@ -9,8 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
-
-//import for AppStoreProductDetails
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
@@ -43,12 +41,19 @@ import 'package:pylons_wallet/pages/settings/screens/recovery_screen/screens/pra
 import 'package:pylons_wallet/pages/settings/screens/recovery_screen/screens/view_recovery_phrase.dart';
 import 'package:pylons_wallet/pages/settings/settings_screen.dart';
 import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
+import 'package:pylons_wallet/pages/transaction_failure_manager/local_transaction_detail_screen.dart';
+import 'package:pylons_wallet/pages/transaction_failure_manager/local_transactions_screen.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
+import 'package:pylons_wallet/utils/base_env.dart';
+import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
+import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
+
+import 'model/transaction_failure_model.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
@@ -59,12 +64,14 @@ class PylonsApp extends StatefulWidget {
   State<PylonsApp> createState() => _PylonsAppState();
 }
 
-class _PylonsAppState extends State<PylonsApp> {
+class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
+  AppLifecycleState _appState = AppLifecycleState.resumed;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     GetIt.I.get<Repository>().setApplicationDirectory();
-
     checkInternetConnectivity();
     setUpNotifications();
     InAppPurchase.instance.purchaseStream.listen(onEvent);
@@ -74,7 +81,7 @@ class _PylonsAppState extends State<PylonsApp> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       minTextAdapt: true,
-      builder: () => ChangeNotifierProvider.value(
+      builder: (_, __) => ChangeNotifierProvider.value(
           value: sl<UserInfoProvider>(),
           builder: (context, value) {
             return MaterialApp(
@@ -107,6 +114,8 @@ class _PylonsAppState extends State<PylonsApp> {
                 RouteUtil.ROUTE_TRANSACTION_DETAIL: (context) => const TransactionDetailsScreen(),
                 RouteUtil.ROUTE_MESSAGE: (context) => const MessagesScreen(),
                 RouteUtil.ROUTE_PDF_FULL_SCREEN: (context) => const PdfViewerFullScreen(),
+                RouteUtil.ROUTE_FAILURE: (context) => const LocalTransactionsScreen(),
+                RouteUtil.ROUTE_LOCAL_TRX_DETAILS: (context) => const LocalTransactionDetailScreen(),
                 RouteUtil.ROUTE_OWNER_VIEW: (context) {
                   if (ModalRoute.of(context) == null) {
                     return const SizedBox();
@@ -149,8 +158,6 @@ class _PylonsAppState extends State<PylonsApp> {
                 },
               },
               builder: (context, widget) {
-                ScreenUtil.setContext(context);
-
                 return MediaQuery(
                   data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                   child: widget ?? Container(),
@@ -161,23 +168,10 @@ class _PylonsAppState extends State<PylonsApp> {
     );
   }
 
-  Future<void> checkInternetConnectivity() async {
-    final repository = GetIt.I.get<Repository>();
-
-    if (!await repository.isInternetConnected()) {
-      noInternet.showNoInternet();
-    }
-
-    repository.getInternetStatus().listen((event) {
-      if (event == InternetConnectionStatus.connected && noInternet.isShowing) {
-        noInternet.dismiss();
-      }
-
-      if (event == InternetConnectionStatus.disconnected) {
-        if (!noInternet.isShowing) {
-          noInternet.showNoInternet();
-        }
-      }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() {
+      _appState = state;
     });
   }
 
@@ -185,10 +179,6 @@ class _PylonsAppState extends State<PylonsApp> {
     if (event.isEmpty) {
       return;
     }
-
-    final loading = Loading();
-
-    loading.showLoading();
 
     for (final purchaseDetails in event) {
       switch (purchaseDetails.status) {
@@ -198,7 +188,15 @@ class _PylonsAppState extends State<PylonsApp> {
           await handlerPurchaseEvent(purchaseDetails);
           break;
         case PurchaseStatus.error:
+          if (purchaseDetails.error!.message.contains(kItemAlreadyOwned)) {
+            "please_try_again_later".tr().show();
+            return;
+          }
+          registerFailure(purchaseDetails);
           purchaseDetails.error?.message.show();
+          await Future.delayed(const Duration(seconds: 2));
+          Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
+
           break;
         case PurchaseStatus.restored:
           break;
@@ -206,18 +204,96 @@ class _PylonsAppState extends State<PylonsApp> {
           break;
       }
     }
+  }
 
-    loading.dismiss();
+  Future<void> saveTransactionRecord({required String transactionHash, required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
+    final repository = GetIt.I.get<Repository>();
+    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(transactionHash: transactionHash, status: transactionStatus, transactionModel: txLocalModel);
+    await repository.saveLocalTransaction(txLocalModelWithStatus);
+  }
+
+  Future<void> registerFailure(PurchaseDetails purchaseDetails) async {
+    final walletStore = GetIt.I.get<WalletsStore>();
+
+    if (purchaseDetails is GooglePlayPurchaseDetails) {
+      final price = getInAppPrice(purchaseDetails.productID);
+      final creator = walletStore.getWallets().value.last.publicAddress;
+
+      final GoogleInAppPurchaseModel googleInAppPurchaseModel = GoogleInAppPurchaseModel(
+          productID: purchaseDetails.productID,
+          purchaseToken: purchaseDetails.verificationData.serverVerificationData,
+          receiptData: jsonDecode(purchaseDetails.verificationData.localVerificationData) as Map,
+          signature: purchaseDetails.billingClientPurchase.signature,
+          creator: creator);
+
+      final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
+        transactionTypeEnum: TransactionTypeEnum.GoogleInAppCoinsRequest,
+        transactionData: jsonEncode(googleInAppPurchaseModel.toJsonLocalRetry()),
+        transactionDescription: 'buying_pylon_points'.tr(),
+        transactionCurrency: kStripeUSD_ABR,
+        transactionPrice: price,
+      );
+      saveTransactionRecord(transactionHash: '', transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+    }
+
+    if (purchaseDetails is AppStorePurchaseDetails) {
+      final price = getInAppPrice(purchaseDetails.productID);
+      final creator = walletStore.getWallets().value.last.publicAddress;
+
+      final AppleInAppPurchaseModel appleInAppPurchaseModel = AppleInAppPurchaseModel(
+        productID: purchaseDetails.productID,
+        purchaseID: purchaseDetails.purchaseID ?? '',
+        receiptData: purchaseDetails.verificationData.localVerificationData,
+        creator: creator,
+      );
+
+      final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
+          transactionTypeEnum: TransactionTypeEnum.AppleInAppCoinsRequest,
+          transactionData: jsonEncode(appleInAppPurchaseModel.toJson()),
+          transactionDescription: 'buying_pylon_points'.tr(),
+          transactionCurrency: kStripeUSD_ABR,
+          transactionPrice: price);
+
+      saveTransactionRecord(transactionHash: '', transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+    }
+  }
+
+  String getInAppPrice(String productId) {
+    final baseEnv = GetIt.I.get<BaseEnv>();
+    for (final value in baseEnv.skus) {
+      if (value.id == productId) {
+        return value.subtitle;
+      }
+    }
+    return "";
+  }
+
+  LocalTransactionModel createInitialLocalTransactionModel({
+    required TransactionTypeEnum transactionTypeEnum,
+    required String transactionData,
+    required String transactionCurrency,
+    required String transactionPrice,
+    required String transactionDescription,
+  }) {
+    final LocalTransactionModel txManager = LocalTransactionModel(
+        transactionType: transactionTypeEnum.name,
+        transactionData: transactionData,
+        transactionCurrency: transactionCurrency,
+        transactionPrice: transactionPrice,
+        transactionDescription: transactionDescription,
+        transactionHash: "",
+        dateTime: DateTime.now().millisecondsSinceEpoch,
+        status: TransactionStatus.Undefined.name);
+    return txManager;
   }
 
   Future handlerPurchaseEvent(PurchaseDetails purchaseDetails) async {
     try {
+      final loading = Loading();
+      loading.showLoading();
+
       final walletStore = GetIt.I.get<WalletsStore>();
       if (Platform.isIOS) {
-        if (purchaseDetails.pendingCompletePurchase) {
-          await InAppPurchase.instance.completePurchase(purchaseDetails);
-        }
-
         if (purchaseDetails.pendingCompletePurchase) {
           await InAppPurchase.instance.completePurchase(purchaseDetails);
         }
@@ -225,7 +301,11 @@ class _PylonsAppState extends State<PylonsApp> {
           final creator = walletStore.getWallets().value.last.publicAddress;
 
           final AppleInAppPurchaseModel appleInAppPurchaseModel = AppleInAppPurchaseModel(
-              productID: purchaseDetails.productID, purchaseID: purchaseDetails.purchaseID ?? '', receiptData: purchaseDetails.verificationData.localVerificationData, creator: creator);
+            productID: purchaseDetails.productID,
+            purchaseID: purchaseDetails.purchaseID ?? '',
+            receiptData: purchaseDetails.verificationData.localVerificationData,
+            creator: creator,
+          );
 
           final appleInAppPurchaseResponse = await walletStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
 
@@ -254,9 +334,14 @@ class _PylonsAppState extends State<PylonsApp> {
         final googleInAppPurchase = await walletStore.sendGoogleInAppPurchaseCoinsRequest(googleInAppPurchaseModel);
 
         if (googleInAppPurchase.isLeft()) {
+          loading.dismiss();
           googleInAppPurchase.swap().toOption().toNullable()!.message.show();
+          await Future.delayed(const Duration(seconds: 2));
+          Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
           return;
         }
+
+        loading.dismiss();
 
         GetIt.I.get<HomeProvider>().buildAssetsList();
         "purchase_successful".tr().show();
@@ -276,5 +361,26 @@ class _PylonsAppState extends State<PylonsApp> {
     await remoteNotificationService.getNotificationsPermission();
 
     remoteNotificationService.listenToForegroundNotification();
+  }
+
+  Future<void> checkInternetConnectivity() async {
+    final repository = GetIt.I.get<Repository>();
+
+    if (!await repository.isInternetConnected()) {
+      noInternet.showNoInternet();
+    }
+
+    repository.getInternetStatus().listen((event) {
+      if (_appState != AppLifecycleState.resumed) return;
+      if (event == InternetConnectionStatus.connected && noInternet.isShowing) {
+        noInternet.dismiss();
+      }
+
+      if (event == InternetConnectionStatus.disconnected) {
+        if (!noInternet.isShowing) {
+          noInternet.showNoInternet();
+        }
+      }
+    });
   }
 }

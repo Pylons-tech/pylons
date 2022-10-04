@@ -164,6 +164,7 @@ const kUpylon = "upylon";
 const kExtraInfo = "extraInfo";
 const kDuration = "Duration";
 const kFileSize = "fileSize";
+const kRealWorld = "real_world";
 
 const kThumbnailFileName = "temp.jpg";
 
@@ -238,5 +239,8 @@ const kTwelve = 12;
 
 const one = 1;
 
+const kSaveAsDraftDescKey = "Save_as_draft_decs_key";
+const kSaveAsDraftPriceKey = "Save_as_draft_price_key";
+const kSaveAsDraftPublishKey = "Save_as_draft_publish_key";
 const kGridViewTileNFTKey = "GridViewTileNFTKey";
 const kPublishTextKey = "publish";
