@@ -206,22 +206,22 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
   @override
-  _i8.Future<_i3.SdkIpcResponse<dynamic>> executeRecipe(
+  _i8.Future<_i3.SdkIpcResponse<_i11.Execution>> executeRecipe(
           Map<dynamic, dynamic>? json) =>
       (super.noSuchMethod(
         Invocation.method(
           #executeRecipe,
           [json],
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<_i11.Execution>>.value(
+            _FakeSdkIpcResponse_1<_i11.Execution>(
           this,
           Invocation.method(
             #executeRecipe,
             [json],
           ),
         )),
-      ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+      ) as _i8.Future<_i3.SdkIpcResponse<_i11.Execution>>);
   @override
   _i8.Future<_i3.SdkIpcResponse<dynamic>> createTrade(
           Map<dynamic, dynamic>? json) =>
