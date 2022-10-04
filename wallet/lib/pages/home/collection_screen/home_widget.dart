@@ -139,6 +139,7 @@ class _WidgetNFTPickerScreenState extends State<WidgetNFTPickerScreen> {
                           },
 
                           child: DecoratedBox(
+                            position: DecorationPosition.foreground,
                             decoration: BoxDecoration(
                               border: Border.all(
                                   width: 5.r),
