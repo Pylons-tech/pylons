@@ -36,7 +36,7 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 	// Setting recipe quantity in cookbook object
 	cookbook.RecipeLimit[msg.Id] = &types.Limit{
 		Quantity:     msg.Quantity,
-		AmountMinted: 0,
+		AmountMinted: msg.AmountMinted,
 	}
 
 	recipe := types.Recipe{

@@ -69,6 +69,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 		execution             types.MsgExecuteRecipe
 		changeExcutionCreator bool
 		valid                 bool
+		amount                bool
 	}{
 		{
 			decs:                "Main cookbook not found",
@@ -231,6 +232,7 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			},
 			changeExcutionCreator: false,
 			valid:                 false,
+			amount:                true,
 		},
 		{
 			decs:                "Process PaymentInfo error",
@@ -372,8 +374,8 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 				// 		AmountMinted: 10,
 				// 	},
 				// }
-				tc.recipe.AmountMinted = 10
-				tc.recipe.Quantity = 10
+				// tc.recipe.AmountMinted = 10
+				// tc.recipe.Quantity = 10
 			} else {
 				tc.recipe.Entries.ItemOutputs = nil
 			}
@@ -381,6 +383,11 @@ func (suite *IntegrationTestSuite) TestExecuteRecipe2() {
 			// check change Execution Creator of execution
 			if tc.changeExcutionCreator {
 				tc.execution.Creator = creator
+			}
+
+			if tc.amount {
+				tc.recipe.Quantity = 1
+				tc.recipe.AmountMinted = 1
 			}
 			// End check/config params
 
