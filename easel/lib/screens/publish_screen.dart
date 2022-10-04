@@ -202,9 +202,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    SizedBox(height: 20.h),
                     ProgressBarBuilder(
                       audioProgressBar: (context) {
                         return SizedBox(
@@ -213,9 +211,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(
-                                    right: 8.w,
-                                  ),
+                                  padding: EdgeInsets.fromLTRB(0, 0, 10.w, 10.h),
                                   child: ValueListenableBuilder<ButtonState>(
                                     valueListenable: viewModel.buttonNotifier,
                                     builder: (_, value, __) {
@@ -254,12 +250,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                     valueListenable: viewModel.audioProgressNotifier,
                                     builder: (_, value, __) {
                                       return Padding(
-                                        padding: EdgeInsets.only(bottom: 3.h, right: 20.w),
+                                        padding: EdgeInsets.only(right: 10.w, bottom: 3.h, top: 0, left: 5.w),
                                         child: ProgressBar(
                                           progressBarColor: EaselAppTheme.kWhite,
                                           thumbColor: EaselAppTheme.kWhite,
                                           progress: value.current,
-                                          baseBarColor: EaselAppTheme.kBlack,
+                                          baseBarColor: EaselAppTheme.kDarkGrey02,
                                           bufferedBarColor: EaselAppTheme.kLightGrey,
                                           buffered: value.buffered,
                                           total: value.total,
@@ -380,6 +376,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 if (!isRecipeCreated) {
                                   return;
                                 }
+                                GetIt.I.get<CreatorHubViewModel>().changeSelectedCollection(CollectionType.published);
                                 navigator.pushNamedAndRemoveUntil(RouteUtil.kRouteCreatorHub, (route) => false);
                               },
                               cuttingHeight: 15.h,
@@ -521,7 +518,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           child: Icon(
                             Icons.pause,
                             color: EaselAppTheme.kWhite,
-                            size: 25.h,
+                            size: 30.h,
                           ),
                         );
                     }
@@ -538,7 +535,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         progressBarColor: EaselAppTheme.kWhite,
                         thumbColor: EaselAppTheme.kWhite,
                         progress: value.current,
-                        baseBarColor: EaselAppTheme.kBlack,
+                        baseBarColor: EaselAppTheme.kDarkGrey02,
                         bufferedBarColor: EaselAppTheme.kLightGrey,
                         buffered: value.buffered,
                         total: value.total,
