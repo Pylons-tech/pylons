@@ -204,5 +204,5 @@ flutter:
 
 
 
-dependency_overrides:
-  analyzer: 4.1.0
+#dependency_overrides:
+#  analyzer: 4.1.0

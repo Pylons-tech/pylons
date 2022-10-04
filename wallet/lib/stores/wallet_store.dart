@@ -48,8 +48,8 @@ abstract class WalletsStore {
   /// MsgExecuteRecipe proto
   /// request fields: {String creator, String cookbookID, String recipeID, List<String> itemIDs}
   /// Input : [Map] containing the info related to the execution of recipe
-  /// Output : [TransactionHash] hash of the transaction
-  Future<SdkIpcResponse> executeRecipe(Map json);
+  /// Output : [Execution] of the recipe
+  Future<SdkIpcResponse<Execution>> executeRecipe(Map json);
 
   /// This method is for create Trade
   /// MsgCreateTrade proto

@@ -276,8 +276,9 @@ const int kSixtySeconds = 60;
 const int kTimeStampInt = 1000;
 
 const int kDateConverterConstant = 1000;
-
 const kHashtags = "Hashtags";
+const kRealWorld = "real_world";
+
 
 const kLOW_LOW_BALANCE_CONSTANT = "Tx error:5";
 
@@ -297,6 +298,9 @@ const kEasel = "Easel";
 const kEaselNFT = "Easel_NFT";
 const kUpylon = "upylon";
 const kExtraInfo = "extraInfo";
+const kTxTime = "txTime";
+const kTxnId = "id";
+const kUTC = "UTC";
 
 const kItemId = "id";
 const kCookbookId = "cookbook_id";
