@@ -4,6 +4,7 @@
 //
 // @dart = 2.12
 // ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
+// ignore_for_file: eol_at_end_of_file
 
 import 'dart:core' as $core;
 
@@ -11,7 +12,7 @@ import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'recipe.pb.dart' as $4;
-import '../../cosmos/base/v1beta1/coin.pb.dart' as $2;
+import '../cosmos/base/v1beta1/coin.pb.dart' as $2;
 
 class ItemRef extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ItemRef', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
