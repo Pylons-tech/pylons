@@ -397,6 +397,10 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
       final receipt_response = await repository.GeneratePaymentReceipt(StripeGeneratePaymentReceiptRequest(paymentIntentID: pi.id, clientSecret: pi.clientSecret));
 
+      if (receipt_response.isLeft()) {
+        throw receipt_response.swap().toOption().toNullable()!;
+      }
+
       final receipt = receipt_response.getOrElse(() => StripeGeneratePaymentReceiptResponse());
 
       const jsonExecuteRecipe = '''
