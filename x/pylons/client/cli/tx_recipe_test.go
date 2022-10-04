@@ -1,6 +1,7 @@
 package cli_test
 
 import (
+	"fmt"
 	"testing"
 
 	util "github.com/Pylons-tech/pylons/testutil/cli"
@@ -46,6 +47,7 @@ func TestCmdCreateRecipe(t *testing.T) {
 	name := "name"
 	desc := "desc"
 	version := "v0.0.1"
+	quantity := uint64(10)
 	coinInputs := "[]"
 	itemInputs := "[]"
 	entries := "{}"
@@ -70,6 +72,7 @@ func TestCmdCreateRecipe(t *testing.T) {
 		costPerBlock  string
 		enabled       string
 		extraInfo     string
+		quantity      uint64
 		common        []string
 		shouldFail    bool
 	}{
@@ -350,6 +353,7 @@ func TestCmdCreateRecipe(t *testing.T) {
 			name:          name,
 			desc:          desc,
 			version:       version,
+			quantity:      quantity,
 			coinInputs:    coinInputs,
 			itemInputs:    itemInputs,
 			entries:       entries,
@@ -388,6 +392,7 @@ func TestCmdCreateRecipe(t *testing.T) {
 			args = append(args, tc.name)
 			args = append(args, tc.desc)
 			args = append(args, tc.version)
+			args = append(args, fmt.Sprintf("%v", tc.quantity))
 			args = append(args, tc.coinInputs)
 			args = append(args, tc.itemInputs)
 			args = append(args, tc.entries)
@@ -453,6 +458,7 @@ func TestCmdUpdateRecipe(t *testing.T) {
 	name := "name"
 	desc := "desc"
 	version := "v0.0.1"
+	quantity := uint64(10)
 	coinInputs := "[]"
 	itemInputs := "[]"
 	entries := "{}"
@@ -469,6 +475,7 @@ func TestCmdUpdateRecipe(t *testing.T) {
 	args = append(args, name)
 	args = append(args, desc)
 	args = append(args, version)
+	args = append(args, fmt.Sprintf("%v", quantity))
 	args = append(args, coinInputs)
 	args = append(args, itemInputs)
 	args = append(args, entries)
@@ -489,6 +496,7 @@ func TestCmdUpdateRecipe(t *testing.T) {
 		name          string
 		desc          string
 		version       string
+		quantity      uint64
 		coinInputs    string
 		itemInputs    string
 		entries       string
@@ -813,6 +821,7 @@ func TestCmdUpdateRecipe(t *testing.T) {
 			name:          name,
 			desc:          desc,
 			version:       newVersion,
+			quantity:      quantity,
 			coinInputs:    coinInputs,
 			itemInputs:    itemInputs,
 			entries:       entries,
@@ -833,6 +842,7 @@ func TestCmdUpdateRecipe(t *testing.T) {
 			args = append(args, tc.name)
 			args = append(args, tc.desc)
 			args = append(args, tc.version)
+			args = append(args, fmt.Sprintf("%v", tc.quantity))
 			args = append(args, tc.coinInputs)
 			args = append(args, tc.itemInputs)
 			args = append(args, tc.entries)
