@@ -5,18 +5,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
-import 'package:pylons_wallet/pages/purchase_item/purchase_item_screen.dart';
+import 'package:pylons_wallet/pages/purchase_item/clipper/buy_now_clipper.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
 class BuyNFTButton extends StatelessWidget {
   final VoidCallback onTapped;
-  final NFT  nft;
+  final NFT nft;
 
   const BuyNFTButton({Key? key, required this.onTapped, required this.nft}) : super(key: key);
 
-
   Widget getButtonContent(NFT nft) {
-    if (double.parse(nft.price) == 0 ) {
+    if (double.parse(nft.price) == 0) {
       return Container(
         height: 60.h,
         color: kDarkRed.withOpacity(0.8),
@@ -66,9 +65,12 @@ class BuyNFTButton extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "${"buy_for".tr()} ${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}",
-                  style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                Expanded(
+                  child: AutoSizeText(
+                    "${"buy_for".tr()} ${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}",
+                    style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                    maxLines: 1,
+                  ),
                 ),
                 SizedBox(
                   width: 8.w,
@@ -82,7 +84,6 @@ class BuyNFTButton extends StatelessWidget {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
