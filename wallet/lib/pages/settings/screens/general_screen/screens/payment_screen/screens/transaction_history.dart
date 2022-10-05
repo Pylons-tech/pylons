@@ -20,6 +20,7 @@ class TransactionHistoryScreen extends StatefulWidget {
 
 class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
   List<TransactionHistory> transactionsHistoryList = [];
+  Repository get repository => GetIt.I.get();
 
   @override
   void initState() {
@@ -27,7 +28,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
 
     final walletInfo = GetIt.I.get<WalletsStore>().getWallets().value.last;
 
-    GetIt.I.get<Repository>().getTransactionHistory(address: walletInfo.publicAddress).then((value) {
+    repository.getTransactionHistory(address: walletInfo.publicAddress).then((value) {
       if (value.isRight()) {
         transactionsHistoryList = value.getOrElse(() => []);
         transactionsHistoryList.sort((a, b) => a.createdAt.compareTo(b.createdAt));
@@ -35,12 +36,14 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
 
       setState(() {});
     });
+
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.transactionHistory);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.kBackgroundColor,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 25.w),
         child: Column(
@@ -56,9 +59,9 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Icon(
+                  child: Icon(
                     Icons.arrow_back_ios,
-                    color: kUserInputTextColor,
+                    color: AppColors.kUserInputTextColor,
                   )),
             ),
             SizedBox(

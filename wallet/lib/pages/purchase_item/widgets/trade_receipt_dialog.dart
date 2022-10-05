@@ -12,7 +12,7 @@ import 'package:url_launcher/url_launcher_string.dart' as url_launcher;
 
 TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: isTablet ? 10.sp : 14.sp);
 TextStyle _rowSubtitleTextStyle = TextStyle(color: Colors.white, fontSize: isTablet ? 9.sp : 13.sp, fontWeight: FontWeight.w800);
-TextStyle _rowBlueTextStyle = TextStyle(color: kTradeReceiptTextColor, fontSize: isTablet ? 9.sp : 13.sp, fontWeight: FontWeight.w400);
+TextStyle _rowBlueTextStyle = TextStyle(color: AppColors.kTradeReceiptTextColor, fontSize: isTablet ? 9.sp : 13.sp, fontWeight: FontWeight.w400);
 
 class TradeReceiptDialog {
   final TradeReceiptModel _model;
@@ -61,8 +61,8 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
               width: 80,
               child: ClipPath(
                 clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NW),
-                child: const ColoredBox(
-                  color: kDarkRed,
+                child: ColoredBox(
+                  color: AppColors.kDarkRed,
                 ),
               ),
             ),
@@ -75,8 +75,8 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
               width: 80,
               child: ClipPath(
                 clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SE),
-                child: const ColoredBox(
-                  color: kDarkRed,
+                child: ColoredBox(
+                  color: AppColors.kDarkRed,
                 ),
               ),
             ),
@@ -144,7 +144,7 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
                       child: Container(
                         width: 180.r,
                         height: 40.h,
-                        color: kPayNowBackgroundGrey.withOpacity(0.2),
+                        color: AppColors.kPayNowBackgroundGrey.withOpacity(0.2),
                         child: Center(
                           child: Text(
                             "close".tr(),

@@ -113,8 +113,7 @@ abstract class WalletsStore {
   /// Output : [String] return wallet address from account name
   Future<String> getAccountAddressByName(String username);
 
-  Future<List<Execution>> getRecipeExecutions(
-      String cookbookID, String recipeID);
+  Future<List<Execution>> getRecipeExecutions(String cookbookID, String recipeID);
 
   /// This method is used for giving faucet token to the user based on the current wallet address
   /// Input : [denom] coin denomination
@@ -141,8 +140,7 @@ abstract class WalletsStore {
   /// Input : [mnemonic] the mnemonic associated with the account
   /// Output: [WalletPublicInfo] returns the wallet public info about the account
   /// else returns failure
-  Future<Either<Failure, AccountPublicInfo>> importPylonsAccount(
-      {required String mnemonic});
+  Future<Either<Failure, AccountPublicInfo>> importPylonsAccount({required String mnemonic});
 
   /// This method updates the cookbook in the block chain
   /// Input : [Map] containing the info related to the updation of cookbook
@@ -163,8 +161,7 @@ abstract class WalletsStore {
   /// This method returns the recipes based on cookbook
   /// Input : [cookbookId] id of the cookbook
   /// Output : [SdkIpcResponse] returns the recipes
-  Future<SdkIpcResponse> getAllRecipesByCookbookId(
-      {required String cookbookId});
+  Future<SdkIpcResponse> getAllRecipesByCookbookId({required String cookbookId});
 
   /// This method returns the recipes based on cookbook
   /// Input : [cookbookId] id of the cookbook
@@ -178,20 +175,17 @@ abstract class WalletsStore {
   /// This method returns the recipes based on cookbook
   /// Input: [cookbookId] the id of the cookbook that contains recipe, [recipeId] the id of the recipe whose list of execution you want
   /// Output : [SdkIpcResponse] returns the cookbook
-  Future<SdkIpcResponse> getExecutionByRecipeId(
-      {required String cookbookId, required String recipeId});
+  Future<SdkIpcResponse> getExecutionByRecipeId({required String cookbookId, required String recipeId});
 
   /// This method returns the recipes based on cookbook
   /// Input : [cookbookId] the id of the cookbook which contains the recipe, [recipeId] the id of the recipe
   /// Output : [SdkIpcResponse] returns the recipe with the specified id
-  Future<SdkIpcResponse> getRecipeByIdForSDK(
-      {required String cookbookId, required String recipeId});
+  Future<SdkIpcResponse> getRecipeByIdForSDK({required String cookbookId, required String recipeId});
 
   /// This method returns the Item based on id
   /// Input : [cookBookId] the id of the cookbook which contains the cookbook, [itemId] the id of the item
   /// Output: [SdkIpcResponse] returns the item
-  Future<SdkIpcResponse> getItemByIdForSDK(
-      {required String cookBookId, required String itemId});
+  Future<SdkIpcResponse> getItemByIdForSDK({required String cookBookId, required String itemId});
 
   /// This method returns the list of item based on it
   /// Input : [owner] the id of the owner
@@ -224,13 +218,12 @@ abstract class WalletsStore {
   /// Input: [GoogleInAppPurchaseModel] contains the input data for the api.
   /// Output: if successful will return the [String] hash of the transaction
   /// else will give failure
-  Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(
-      GoogleInAppPurchaseModel googleInAppPurchaseModel);
+  Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(GoogleInAppPurchaseModel googleInAppPurchaseModel);
 
   /// This method will send apple in app purchase request to the chain
   /// Input: [AppleInAppPurchaseModel] contains the input data for the api.
   /// Output: if successful will return the [String] hash of the transaction
   /// else will give failure
-  Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(
-      AppleInAppPurchaseModel appleInAppPurchaseModel);
+  Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(AppleInAppPurchaseModel appleInAppPurchaseModel);
+
 }

@@ -48,7 +48,7 @@ class TransactionCard extends StatelessWidget {
         children: [
           Text(
             formattedDate[0],
-            style: kTransactionTitle.copyWith(fontSize: 13.sp, color: kGray),
+            style: kTransactionTitle.copyWith(fontSize: 13.sp, color: AppColors.kGray),
           ),
           Text(
             formattedDate[1],
@@ -85,11 +85,11 @@ class TransactionCard extends StatelessWidget {
             children: [
               Text(
                 '${!isOutGoing() ? '-' : '+'}${amountText.toUpperCase()}',
-                style: kTransactionTitle.copyWith(color: !isOutGoing() ? kTransactionRed : kTransactionGreen, fontSize: 16.sp),
+                style: kTransactionTitle.copyWith(color: !isOutGoing() ? AppColors.kTransactionRed : AppColors.kTransactionGreen, fontSize: 16.sp),
               ),
               Text(
                 denomText.toUpperCase(),
-                style: kTransactionTitle.copyWith(color: !isOutGoing() ? kTransactionRed : kTransactionGreen, fontSize: 12.sp),
+                style: kTransactionTitle.copyWith(color: !isOutGoing() ? AppColors.kTransactionRed : AppColors.kTransactionGreen, fontSize: 12.sp),
               )
             ],
           ),

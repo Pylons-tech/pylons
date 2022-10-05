@@ -13,11 +13,11 @@ class NextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: onTap,
-      icon: const ImageIcon(
-        AssetImage('assets/images/icons/more.png'),
+      icon: ImageIcon(
+        const AssetImage('assets/images/icons/more.png'),
         size: kIconSize,
-        color: kSelectedIcon,
-        key: ValueKey("NextButton"),
+        color: AppColors.kSelectedIcon,
+        key: const ValueKey("NextButton"),
       ),
     );
   }

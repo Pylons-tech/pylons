@@ -4,64 +4,66 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 TextStyle kCurrencyStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16.sp);
-TextStyle kDropdownText = TextStyle(color: kBlack, fontSize: 13.sp, fontWeight: FontWeight.w600);
-TextStyle kTransactionTitle = TextStyle(color: kBlack, fontSize: 20.sp, fontWeight: FontWeight.w700, fontFamily: 'UniversalSans');
+TextStyle kDropdownText = TextStyle(color: AppColors.kBlack, fontSize: 13.sp, fontWeight: FontWeight.w600);
+TextStyle kTransactionTitle = TextStyle(color: AppColors.kBlack, fontSize: 20.sp, fontWeight: FontWeight.w700, fontFamily: 'UniversalSans');
 
-const Color kMainBG = Color(0xFFF2EFEA);
-const Color kSelectedIcon = Color(0xFF616161);
-const Color kUnselectedIcon = Color(0xFFC4C4C4);
-const Color kTextColor = Color(0xFF201D1D);
-const Color kButtonBuyNowColor = Color(0xFF00FF85);
+class AppColors {
+  static Color kMainBG = const Color(0xFFF2EFEA);
+  static Color kSelectedIcon = const Color(0xFF616161);
+  static Color kUnselectedIcon = const Color(0xFFC4C4C4);
+  static Color kTextColor = const Color(0xFF201D1D);
+  static Color kButtonBuyNowColor = const Color(0xFF00FF85);
 
-const Color kTextBlackColor = Color(0xFF080830);
-const Color kBlue = Color(0xFF1212C4);
+  static Color kTextBlackColor = const Color(0xFF080830);
+  static Color kBlue = const Color(0xFF1212C4);
 
-const Color kPeach = Color(0xFFFFB094);
-const Color kPeachDark = Color(0xFFED8864);
-const Color kGray = Color(0xFF7B7979);
-const Color kLightGray = Color(0xFFB3B3B3);
-const Color kWhite = Color(0xFFFFFFFF);
-const Color kYellow = Color(0xffFED564);
-const Color kDarkPurple = Color(0xff0A004A);
-const Color kDarkRed = Color(0xffEF4421);
-const Color kDarkGreen = Color(0xFF3A8977);
-const Color kWhite01 = Color(0xFFFBFBFB);
-const Color kButtonColor = Color(0xFFFFFFFF);
+  static Color kPeach = const Color(0xFFFFB094);
+  static Color kPeachDark = const Color(0xFFED8864);
+  static Color kGray = const Color(0xFF7B7979);
+  static Color kLightGray = const Color(0xFFB3B3B3);
+  static Color kWhite = const Color(0xFFFFFFFF);
+  static Color kYellow = const Color(0xffFED564);
+  static Color kDarkPurple = const Color(0xff0A004A);
+  static Color kDarkRed = const Color(0xffEF4421);
+  static Color kDarkGreen = const Color(0xFF3A8977);
+  static Color kWhite01 = const Color(0xFFFBFBFB);
+  static Color kButtonColor = const Color(0xFFFFFFFF);
 
-const Color kUSDColor = kDarkGreen;
-const Color kPylonsColor = kDarkRed;
-const Color kAgoricColor = Color(0xFFF3BA2F);
-const Color kEthereumColor = Color(0xFF2F1BC8);
-const Color kEmoneyColor = Color(0xFF4838CF);
-const Color kAtomColor = kDarkPurple;
+  static Color kUSDColor = kDarkGreen;
+  static Color kPylonsColor = kDarkRed;
+  static Color kAgoricColor = const Color(0xFFF3BA2F);
+  static Color kEthereumColor = const Color(0xFF2F1BC8);
+  static Color kEmoneyColor = const Color(0xFF4838CF);
+  static Color kAtomColor = kDarkPurple;
 
-const Color kDarkGrey = Color(0xFF333333);
-const Color kGreyLight = Color.fromRGBO(219, 217, 215, 1);
-const Color kCreateWalletButtonColorDark = Color.fromRGBO(8, 8, 48, 1);
-const Color textFieldGreyColor = Color.fromRGBO(219, 217, 215, 1);
+  static Color kDarkGrey = const Color(0xFF333333);
+  static Color kGreyLight = const Color.fromRGBO(219, 217, 215, 1);
+  static Color kCreateWalletButtonColorDark = const Color.fromRGBO(8, 8, 48, 1);
+  static Color textFieldGreyColor = const Color.fromRGBO(219, 217, 215, 1);
 
-const Color kBackgroundColor = Color(0xffF2EFEA);
-const Color kCopyColor = Color(0xffB6B6E8);
-const Color kDarkDividerColor = Color(0xffE5E5E5);
-const Color kTradeReceiptTextColor = Color(0xff8F8FCE);
-const Color kHashtagColor = Color(0xFFB6B6E8);
+  static Color kBackgroundColor = const Color(0xffF2EFEA);
+  static Color kCopyColor = const Color(0xffB6B6E8);
+  static Color kDarkDividerColor = const Color(0xffE5E5E5);
+  static Color kTradeReceiptTextColor = const Color(0xff8F8FCE);
+  static Color kHashtagColor = const Color(0xFFB6B6E8);
 
-const Color kUserInputTextColor = Color(0xff8D8C8C);
-const Color kSettingsUserNameColor = kBlue;
-const Color kForwardIconColor = Color(0x331212C4);
-const Color kSwitchActiveColor = kDarkGreen;
-const Color kSwitchInactiveColor = Color(0xffC4C4C4);
-const Color kBlack = Color(0xff000000);
-const Color kGreenBackground = Color(0xFF3B8978);
-const Color kPurple = Color(0xFFBF8FCE);
-const Color kPriceTagColor = Color(0xff3A8977);
-const Color kPayNowBackgroundGrey = Color(0xffE5E5E5);
-const Color kSubtitleColor = Color(0xff767676);
+  static Color kUserInputTextColor = const Color(0xff8D8C8C);
+  static Color kSettingsUserNameColor = kBlue;
+  static Color kForwardIconColor = const Color(0x331212C4);
+  static Color kSwitchActiveColor = kDarkGreen;
+  static Color kSwitchInactiveColor = const Color(0xffC4C4C4);
+  static Color kBlack = const Color(0xff000000);
+  static Color kGreenBackground = const Color(0xFF3B8978);
+  static Color kPurple = const Color(0xFFBF8FCE);
+  static Color kPriceTagColor = const Color(0xff3A8977);
+  static Color kPayNowBackgroundGrey = const Color(0xffE5E5E5);
+  static Color kSubtitleColor = const Color(0xff767676);
 
-const Color kTransactionGreen = Color.fromRGBO(81, 161, 144, 1);
-const Color kTransactionRed = Color.fromRGBO(239, 68, 33, 1);
-Color k3DBackgroundColor = Colors.grey.shade200;
-Color kGreyColor = const Color.fromRGBO(141, 140, 140, 1);
+  static Color kTransactionGreen = const Color.fromRGBO(81, 161, 144, 1);
+  static Color kTransactionRed = const Color.fromRGBO(239, 68, 33, 1);
+  static Color k3DBackgroundColor = Colors.grey.shade200;
+  static Color kGreyColor = const Color.fromRGBO(141, 140, 140, 1);
+}
 
 const double kIconSize = 24.0;
 const double kSmallIconSize = 18.0;
@@ -174,13 +176,13 @@ const IOS_VERSION = '1.0.8+1';
 
 const kCurrencyDecimalLength = 2;
 
-const List<Color> colorList = [kYellow, kBlue, kDarkPurple, kDarkRed, kDarkGreen];
-const List<Color> colorListForPracticeTest = [
-  kYellow,
-  kDarkPurple,
-  kDarkGreen,
-  kBlue,
-  kDarkRed,
+List<Color> colorList = [AppColors.kYellow, AppColors.kBlue, AppColors.kDarkPurple, AppColors.kDarkRed, AppColors.kDarkGreen];
+List<Color> colorListForPracticeTest = [
+  AppColors.kYellow,
+  AppColors.kDarkPurple,
+  AppColors.kDarkGreen,
+  AppColors.kBlue,
+  AppColors.kDarkRed,
 ];
 
 /// Currency ABRR
@@ -278,7 +280,6 @@ const int kTimeStampInt = 1000;
 const int kDateConverterConstant = 1000;
 const kHashtags = "Hashtags";
 const kRealWorld = "real_world";
-
 
 const kLOW_LOW_BALANCE_CONSTANT = "Tx error:5";
 
@@ -417,3 +418,29 @@ const String kRecipeID = "recipeID";
 const String kCookbookID = "cookbookID";
 const String kPaymentInfosMap = "paymentInfos";
 const String kItemAlreadyOwned = "itemAlreadyOwned";
+
+class AnalyticsScreenEvents {
+  static String mainLanding = "MainLandingScreen";
+  static String createKey = "CreateKeyScreen";
+  static String importAccount = "ImportAccountScreen";
+  static String updateApp = "UpdateScreen";
+  static String home = "HomeScreen";
+  static String settings = "SettingsScreen";
+  static String legal = "LegalScreen";
+  static String recovery = "RecoveryScreen";
+  static String general = "GeneralScreen";
+  static String security = "SecurityScreen";
+  static String payment = "PaymentScreen";
+  static String practice = "PracticeScreen";
+  static String recoveryPhrase = "ViewReoveryPhraseScreen";
+  static String transactionHistory = "TransactionHistoryScreen";
+  static String addPylon = "AddPylonsScreen";
+  static String transactionDetails = "TransactionDetailsScreen";
+  static String messageScreen = "MessageScreen";
+  static String pdfScreen = "PdfViewScreen";
+  static String localTransactionHistory = "LocalTransactionHistoryScreen";
+  static String localTransactionHistoryDetail = "LocalTransactionHistoryDetailScreen";
+  static String ownerView = "OwnerViewScreen";
+  static String purchaseView = "PurchaseViewScreen";
+  static String unknown = "UnknownScreen";
+}

@@ -24,7 +24,7 @@ class PylonsTextInput extends StatelessWidget {
     return ClipPath(
       clipper: PylonsLongRightBottomClipper(),
       child: Container(
-        color: textFieldGreyColor,
+        color: AppColors.textFieldGreyColor,
         height: 35.h,
         child: Center(
           child: TextFormField(

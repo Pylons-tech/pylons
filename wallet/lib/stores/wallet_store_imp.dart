@@ -738,4 +738,6 @@ class WalletsStoreImp implements WalletsStore {
   Future<String> getRemoteNotificationServiceToken() {
     return sl.get<RemoteNotificationsService>().getToken();
   }
+  
+
 }

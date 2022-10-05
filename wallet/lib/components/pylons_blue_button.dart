@@ -18,7 +18,10 @@ class PylonsBlueButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
-          side: const BorderSide(width: 2.0, color: kBlue), disabledForegroundColor: fulfilled ? kBlue : kWhite.withOpacity(0.38), disabledBackgroundColor: fulfilled ? kBlue : kWhite.withOpacity(0.12)),
+        side: BorderSide(width: 2.0, color: AppColors.kBlue),
+        disabledForegroundColor: fulfilled ? AppColors.kBlue : AppColors.kWhite.withOpacity(0.38),
+        disabledBackgroundColor: fulfilled ? AppColors.kBlue : AppColors.kWhite.withOpacity(0.12),
+      ),
       child: SizedBox(
         // height: 43,
         child: Row(
@@ -26,7 +29,7 @@ class PylonsBlueButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
-              child: Text(text, textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Inter', fontSize: 13, fontWeight: FontWeight.w600, color: fulfilled ? kWhite : kBlue)),
+              child: Text(text, textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Inter', fontSize: 13, fontWeight: FontWeight.w600, color: fulfilled ? AppColors.kWhite : AppColors.kBlue)),
             ),
           ],
         ),

@@ -158,7 +158,7 @@ class _TabFieldState extends State<TabField> {
               final createdDate = date.toLocal();
               final formattedDate = DateFormat(kDateWithTimeFormat).format(createdDate);
               if (i < kMaxItemToShow) {
-                return _tabDetails(field: formattedDate, value: nftOwnershipHistory.senderName, customColor: kPurple);
+                return _tabDetails(field: formattedDate, value: nftOwnershipHistory.senderName, customColor: AppColors.kPurple);
               }
               return const SizedBox();
             })
@@ -174,15 +174,15 @@ class _TabFieldState extends State<TabField> {
         children: [
           Text(
             value.substring(0, 6),
-            style: const TextStyle(color: kWhite),
+            style:  TextStyle(color: AppColors.kWhite),
           ),
-          const Text(
+           Text(
             "...",
-            style: TextStyle(color: kWhite),
+            style: TextStyle(color: AppColors.kWhite),
           ),
           Text(
             value.substring(value.length - 5, value.length),
-            style: const TextStyle(color: kWhite),
+            style:  TextStyle(color: AppColors.kWhite),
           ),
           if (value.isNotEmpty)
             InkWell(
@@ -195,7 +195,7 @@ class _TabFieldState extends State<TabField> {
               },
               child: Icon(
                 Icons.copy_outlined,
-                color: kWhite,
+                color: AppColors.kWhite,
                 size: 15.h,
               ),
             )
@@ -221,7 +221,7 @@ class _TabFieldState extends State<TabField> {
             flex: 45,
             child: Text(
               value,
-              style: TextStyle(color: customColor != null ? kPurple : Colors.white),
+              style: TextStyle(color: customColor != null ? AppColors.kPurple : Colors.white),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

@@ -158,6 +158,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
                 },
               },
               builder: (context, widget) {
+                GetIt.I.get<Repository>().logUserJourney(screenName: AnalyticsScreenEvents.unknown);
                 return MediaQuery(
                   data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                   child: widget ?? Container(),

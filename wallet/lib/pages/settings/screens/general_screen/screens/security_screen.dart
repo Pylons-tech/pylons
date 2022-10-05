@@ -11,7 +11,7 @@ import 'package:pylons_wallet/utils/constants.dart';
 
 TextStyle kSecurityLabelText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
 TextStyle kSecurityBiometricIdText = TextStyle(fontSize: 17.sp, color: Colors.black, fontWeight: FontWeight.w500);
-TextStyle kSecurityNoBiometricText = TextStyle(fontSize: 15.sp, color: kDarkRed, fontWeight: FontWeight.w500);
+TextStyle kSecurityNoBiometricText = TextStyle(fontSize: 15.sp, color: AppColors.kDarkRed, fontWeight: FontWeight.w500);
 
 class SecurityScreen extends StatefulWidget {
   const SecurityScreen({Key? key}) : super(key: key);
@@ -28,9 +28,12 @@ class _SecurityScreenState extends State<SecurityScreen> {
   bool loginBiometricAvailable = false;
   bool transactionBiometricAvailable = false;
 
+  Repository get repository => GetIt.I.get();
+
   @override
   void initState() {
     super.initState();
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.security);
 
     getBiometricData();
   }
@@ -40,7 +43,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
     final defaultPadding = EdgeInsets.symmetric(horizontal: 37.w);
 
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.kBackgroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -58,9 +61,9 @@ class _SecurityScreenState extends State<SecurityScreen> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Icon(
+                  child: Icon(
                     Icons.arrow_back_ios,
-                    color: kUserInputTextColor,
+                    color: AppColors.kUserInputTextColor,
                   )),
             ),
           ),
@@ -92,19 +95,19 @@ class _SecurityScreenState extends State<SecurityScreen> {
                     ),
                   ),
                   CupertinoSwitch(
-                    trackColor: kSwitchInactiveColor,
+                    trackColor: AppColors.kSwitchInactiveColor,
                     value: mainBiometricAvailable,
                     onChanged: (allowBiometric) {
                       onMainBiometricEnabled(allowBiometric: allowBiometric);
                     },
-                    activeColor: kSwitchActiveColor,
+                    activeColor: AppColors.kSwitchActiveColor,
                   )
                 ],
               ),
             ),
             Container(
               height: 4,
-              color: kDarkDividerColor,
+              color: AppColors.kDarkDividerColor,
             ),
             SizedBox(
               height: 20.h,
@@ -174,12 +177,12 @@ class _SecurityScreenState extends State<SecurityScreen> {
               style: kSecurityBiometricIdText,
             ),
             CupertinoSwitch(
-              trackColor: kSwitchInactiveColor,
+              trackColor: AppColors.kSwitchInactiveColor,
               value: loginBiometricAvailable,
               onChanged: (allowLogin) {
                 processLoginBiometric(allowLogin: allowLogin);
               },
-              activeColor: kSwitchActiveColor,
+              activeColor: AppColors.kSwitchActiveColor,
             )
           ],
         ),
@@ -237,12 +240,12 @@ class _SecurityScreenState extends State<SecurityScreen> {
               style: kSecurityBiometricIdText,
             ),
             CupertinoSwitch(
-              trackColor: kSwitchInactiveColor,
+              trackColor: AppColors.kSwitchInactiveColor,
               value: transactionBiometricAvailable,
               onChanged: (allowTransaction) {
                 processTransactionBiometric(allowTransaction: allowTransaction);
               },
-              activeColor: kSwitchActiveColor,
+              activeColor: AppColors.kSwitchActiveColor,
             )
           ],
         ),

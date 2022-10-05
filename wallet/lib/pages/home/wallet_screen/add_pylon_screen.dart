@@ -11,9 +11,9 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
-TextStyle kPylonLabelText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: kTextBlackColor, fontWeight: FontWeight.w800);
-TextStyle kTitleText = TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: kBlack, fontWeight: FontWeight.w700);
-TextStyle kSubTitleText = TextStyle(fontSize: 13.sp, fontFamily: kUniversalFontFamily, color: kPriceTagColor, fontWeight: FontWeight.w700);
+TextStyle kPylonLabelText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: AppColors.kTextBlackColor, fontWeight: FontWeight.w800);
+TextStyle kTitleText = TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlack, fontWeight: FontWeight.w700);
+TextStyle kSubTitleText = TextStyle(fontSize: 13.sp, fontFamily: kUniversalFontFamily, color: AppColors.kPriceTagColor, fontWeight: FontWeight.w700);
 
 class AddPylonScreen extends StatefulWidget {
   const AddPylonScreen({Key? key}) : super(key: key);
@@ -28,9 +28,15 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
   BaseEnv get baseEnv => GetIt.I.get();
 
   @override
+  void initState() {
+    super.initState();
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.addPylon);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.kBackgroundColor,
       body: Padding(
         padding: EdgeInsets.only(
           top: MediaQuery.of(context).viewPadding.top + 30.h,
@@ -52,9 +58,9 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Icon(
+                  child: Icon(
                     Icons.arrow_back_ios,
-                    color: kUserInputTextColor,
+                    color: AppColors.kUserInputTextColor,
                   )),
             ),
             Column(
@@ -111,7 +117,7 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
           ),
           Text(
             subtitle,
-            style: kSubTitleText.copyWith(color: kSubtitleColor),
+            style: kSubTitleText.copyWith(color: AppColors.kSubtitleColor),
           ),
         ]),
       ),
@@ -122,13 +128,13 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
           child: ClipPath(
             clipper: MnemonicClipper(cuttingHeight: 13.h),
             child: Container(
-              color: kDarkRed,
+              color: AppColors.kDarkRed,
               height: 30.h,
               width: 100.w,
               child: Center(
                   child: Text(
                 "buy".tr(),
-                style: kTitleText.copyWith(color: kWhite),
+                style: kTitleText.copyWith(color: AppColors.kWhite),
                 textAlign: TextAlign.center,
               )),
             ),
