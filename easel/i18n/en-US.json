@@ -143,5 +143,6 @@
   "nft_remaining_characters": "NFT name should have {} characters or more",
   "app_needed_desc_three": "You can always delete it if you’d like",
   "why_app_needed_summary_three" : "No subscriptions. We don’t sell your information. We only charge a fee when you purchase a NFT",
-  "upload_hint_three" : "• One file per upload"
+  "upload_hint_three" : "• One file per upload",
+  "analytics_failure" : "Analytics failure"
 }

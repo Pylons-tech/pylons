@@ -245,3 +245,14 @@ const kSaveAsDraftPublishKey = "Save_as_draft_publish_key";
 const kGridViewTileNFTKey = "GridViewTileNFTKey";
 const kPublishTextKey = "publish";
 const kPublishButtonKey = "publish_button_key";
+
+class AnalyticsScreenEvents {
+  static String tutorialScreen = "TutorialScreen";
+  static String publishScreen = "PublishScreen";
+  static String priceScreen = "PriceScreen";
+  static String previewScreen = "PreviewScreen";
+  static String createrHubScreen = "CreaterHubScreen";
+  static String describeScreen = "DescribeScreen";
+  static String chooseFormatScreen = "ChooseFormatScreen";
+
+}

@@ -64,14 +64,22 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
 
   void showErrorDialog({NFTTypes? type}) {
     showDialog(
-        context: context,
-        builder: (context) => _ErrorMessageWidget(
-              errorMessage: errorText.value,
-              nftTypes: type,
-              onClose: () {
-                Navigator.of(context).pop();
-              },
-            ));
+      context: context,
+      builder: (context) => _ErrorMessageWidget(
+        errorMessage: errorText.value,
+        nftTypes: type,
+        onClose: () {
+          Navigator.of(context).pop();
+        },
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    EaselProvider provider = context.read();
+    provider.setLog(screenName: AnalyticsScreenEvents.chooseFormatScreen);
   }
 
   @override

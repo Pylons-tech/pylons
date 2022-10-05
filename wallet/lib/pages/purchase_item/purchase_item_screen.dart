@@ -635,73 +635,41 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       ],
                     ),
                   ),
-                  if (viewModel.nft.amountMinted < viewModel.nft.quantity)
-                    ClipPath(
-                      key: const Key(kExpandedBuyButtonKeyValue),
-                      clipper: BuyClipper(),
-                      child: InkWell(
-                        onTap: () async {
-                          bool balancesFetchResult = true;
-                          if (viewModel.nft.price != kZeroInt) {
-                            final balancesEither = await viewModel.shouldShowSwipeToBuy(
-                              selectedDenom: viewModel.nft.denom,
-                              requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
-                            );
 
-                            if (balancesEither.isLeft()) {
-                              balancesEither.swap().getOrElse(() => '').show();
-                              return;
-                            }
+                    /// BUY NFT BUTTON
+                        if (viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid))
+                          BuyNFTButton(
+                            onTapped: () async {
+                              bool balancesFetchResult = true;
+                              if (viewModel.nft.price != kZeroInt) {
+                                final balancesEither = await viewModel.shouldShowSwipeToBuy(
+                                  selectedDenom: viewModel.nft.denom,
+                                  requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
+                                );
 
-                            balancesFetchResult = balancesEither.getOrElse(() => false);
-                          }
+                                if (balancesEither.isLeft()) {
+                                  balancesEither.swap().getOrElse(() => '').show();
+                                  return;
+                                }
 
-                          final PayNowDialog payNowDialog = PayNowDialog(
-                              buildContext: context,
-                              nft: viewModel.nft,
-                              purchaseItemViewModel: viewModel,
-                              onPurchaseDone: (txData) {
-                                showTransactionCompleteDialog(execution: txData);
-                              },
-                              shouldBuy: balancesFetchResult);
-                          payNowDialog.show();
-                        },
-                        child: Container(
-                          width: 200.w,
-                          height: 60.h,
-                          color: AppColors.kDarkRed.withOpacity(0.8),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.only(left: 20.w),
-                                alignment: Alignment.center,
-                                child: Container(
-                                  height: 10.w,
-                                  width: 10.w,
-                                  decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.kButtonBuyNowColor),
-                                ),
-                              ),
-                              const Spacer(),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "${"buy_for".tr()} ${viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price)}",
-                                    style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                                  ),
-                                  SizedBox(
-                                    width: 8.w,
-                                  ),
-                                  viewModel.nft.ibcCoins.getAssets(),
-                                ],
-                              ),
-                              const Spacer(),
-                            ],
+                                balancesFetchResult = balancesEither.getOrElse(() => false);
+                              }
+
+                              viewModel.addLogForCart();
+
+                              final PayNowDialog payNowDialog = PayNowDialog(
+                                  buildContext: context,
+                                  nft: viewModel.nft,
+                                  purchaseItemViewModel: viewModel,
+                                  onPurchaseDone: (txData) {
+                                    showTransactionCompleteDialog(execution: txData);
+                                  },
+                                  shouldBuy: balancesFetchResult);
+                              payNowDialog.show();
+                            },
+                            nft: viewModel.nft,
                           ),
-                        ),
-                      ),
-                    )
+
                 ],
               ),
             ),

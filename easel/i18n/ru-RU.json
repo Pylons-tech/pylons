@@ -143,5 +143,6 @@
   "nft_remaining_characters": "Имя NFT должно содержать {} символов или более",
   "app_needed_desc_three": "Вы всегда можете удалить его, если хотите",
   "why_app_needed_summary_three" : "Никаких подписок. Мы не продаем вашу информацию. Мы взимаем комиссию только при покупке NFT",
-  "upload_hint_three" : "• Один файл на загрузку"
+  "upload_hint_three" : "• Один файл на загрузку",
+  "analytics_failure" : "Analytics failure"
 }

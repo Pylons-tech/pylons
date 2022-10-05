@@ -1076,6 +1076,10 @@ class EaselProvider extends ChangeNotifier {
     }
   }
 
+  void setLog({required String screenName}) {
+    repository.logUserJourney(screenName: screenName);
+  }
+
   late NFT nft;
   bool isUrlLoaded = false;
 }

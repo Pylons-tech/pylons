@@ -143,10 +143,10 @@
   "nft_remaining_characters": "El nombre de NFT debe tener {} caracteres o más",
   "app_needed_desc_three": "Siempre puedes borrarlo si quieres",
   "why_app_needed_summary_three" : "Sin suscripciones. No vendemos su información. Solo cobramos una tarifa cuando compra un NFT",
-  "upload_hint_three" : "• Un archivo por carga"
+  "upload_hint_three" : "• Un archivo por carga",
 
 
-
+  "analytics_failure" : "Analytics failure"
 
 
 }

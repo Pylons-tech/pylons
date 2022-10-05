@@ -184,4 +184,10 @@ class MockRepositoryImp implements Repository {
     // TODO: implement uploadFile
     throw UnimplementedError();
   }
+  
+  @override
+  Future<Either<Failure, bool>> logUserJourney({required String screenName}) {
+    // TODO: implement logUserJourney
+    throw UnimplementedError();
+  }
 }
