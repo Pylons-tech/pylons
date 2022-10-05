@@ -14,6 +14,7 @@ import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_request.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_response.dart';
 import 'package:pylons_wallet/model/transaction.dart';
+import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/cookbook.pb.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
@@ -63,11 +64,6 @@ class MockRepository extends Repository {
   @override
   Future<Either<Failure, StripeAccountLinkResponse>> GetAccountLink(StripeAccountLinkRequest req) async {
     return Right(StripeAccountLinkResponse(success: true));
-  }
-
-  @override
-  Future<Either<Failure, StripePayoutResponse>> Payout(StripePayoutRequest req) async {
-    return Right(StripePayoutResponse(success: true));
   }
 
   @override
@@ -518,6 +514,25 @@ class MockRepository extends Repository {
   Future<Either<Failure, bool>> setUserIdentifierInAnalytics({required String address}) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<Either<Failure, bool>> deleteTransactionFailureRecord(int id) {
+    // TODO: implement deleteTransactionFailureRecord
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, List<LocalTransactionModel>>> getAllTransactionFailures() {
+    // TODO: implement getAllTransactionFailures
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, int>> saveLocalTransaction(LocalTransactionModel txManager) {
+    // TODO: implement saveTransactionFailure
+    throw UnimplementedError();
+  }
+
 
   @override
   Future<Either<Failure, bool>> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice}) {

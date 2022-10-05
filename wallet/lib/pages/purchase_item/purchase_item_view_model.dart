@@ -10,6 +10,7 @@ import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
@@ -31,8 +32,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
   bool get isVideoLoading => _isVideoLoading;
 
   set isVideoLoading(bool value) {
@@ -46,8 +45,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
     _likesCount = value;
     notifyListeners();
   }
-
-
 
   bool get likedByMe => _likedByMe;
 
@@ -88,24 +85,10 @@ class PurchaseItemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
   void setNFT(NFT nft) {
     _nft = nft;
     final walletsList = walletsStore.getWallets().value;
     accountPublicInfo = walletsList.last;
-    final isCurrentUserNotOwner = walletsList.where((element) => element.publicAddress == nft.ownerAddress).isEmpty;
-
-    final isMaxNFtNotMinted = nft.quantity - nft.amountMinted > 0;
-
-    switch (nft.type) {
-      case NftType.TYPE_RECIPE:
-        shouldShowBuyNow.value = isMaxNFtNotMinted && isCurrentUserNotOwner;
-        break;
-      case NftType.TYPE_ITEM:
-      case NftType.TYPE_TRADE:
-        shouldShowBuyNow.value = isCurrentUserNotOwner;
-        break;
-    }
 
     repository.logPurchaseItem(recipeId: nft.recipeID, recipeName: nft.name, author: nft.creator, purchasePrice: double.parse(nft.price) / kBigIntBase);
   }
@@ -116,12 +99,15 @@ class PurchaseItemViewModel extends ChangeNotifier {
     toHashtagList();
   }
 
-  Future<SdkIpcResponse> paymentForRecipe() async {
+  Future<SdkIpcResponse<Execution>> paymentForRecipe() async {
     const jsonExecuteRecipe = '''
       {
         "creator": "",
         "cookbookId": "",
         "recipeId": "",
+        "nftName": "",
+        "nftPrice": "",
+        "nftCurrency": "",
         "coinInputsIndex": 0
         }
         ''';
@@ -129,13 +115,14 @@ class PurchaseItemViewModel extends ChangeNotifier {
     final jsonMap = jsonDecode(jsonExecuteRecipe) as Map;
     jsonMap[kCookbookIdMap] = nft.cookbookID;
     jsonMap[kRecipeIdMap] = nft.recipeID;
+    jsonMap[kNftName] = nft.name;
+    jsonMap[kNftPrice] = nft.ibcCoins.getCoinWithProperDenomination(nft.price);
+    jsonMap[kNftCurrency] = nft.ibcCoins.getAbbrev();
 
     final showLoader = Loading()..showLoading();
 
     final response = await walletsStore.executeRecipe(jsonMap);
-
     showLoader.dismiss();
-
     return response;
   }
 
@@ -420,12 +407,20 @@ class PurchaseItemViewModel extends ChangeNotifier {
     });
   }
 
-  Future<Either<String, bool>> getBalanceOfSelectedCurrency({required String selectedDenom, required double requiredAmount}) async {
+  Future<Either<String, bool>> shouldShowSwipeToBuy({required String selectedDenom, required double requiredAmount}) async {
     final accountPublicInfo = walletsStore.getWallets().value.last;
     final balancesEither = await repository.getBalance(accountPublicInfo.publicAddress);
 
     if (balancesEither.isLeft()) {
       return Left("something_wrong".tr());
+    }
+
+    if (balancesEither.getOrElse(() => []).isEmpty) {
+      return const Right(false);
+    }
+
+    if (selectedDenom == IBCCoins.ustripeusd.name) {
+      return const Right(true);
     }
 
     final mappedBalances = balancesEither.getOrElse(() => []).where((element) => element.denom == selectedDenom).toList();
@@ -441,15 +436,48 @@ class PurchaseItemViewModel extends ChangeNotifier {
     return const Right(true);
   }
 
-
   void addLogForCart() {
+    repository.logAddToCart(
+      recipeId: nft.recipeID,
+      recipeName: nft.name,
+      author: nft.creator,
+      purchasePrice: double.parse(nft.price) / kBigIntBase,
+      currency: nft.ibcCoins.name,
+    );
+  }
 
-    repository.logAddToCart(recipeId: nft.recipeID, recipeName: nft.name, author: nft.creator, purchasePrice: double.parse(nft.price) / kBigIntBase, currency: nft.ibcCoins.name, );
+  @visibleForTesting
+  bool isRealWorldPaymentAllowed({required bool isPlatformAndroid}) {
+    if (isPlatformAndroid) {
+      return true;
+    } else {
+      return nft.realWorld;
+    }
+  }
+
+  /// Conditions
+  /// If item is available for buying
+  /// If nft is free drop show the button
+  /// If any currency other than stripe usd show button
+  /// If stripe payment is allowed or nft
+  bool showBuyNowButton({required bool isPlatformAndroid}) {
+    if (!(nft.amountMinted < nft.quantity)) {
+      return false;
+    }
+
+    if (double.parse(nft.price) == 0) {
+      return true;
+    }
+
+    if (nft.ibcCoins != IBCCoins.ustripeusd) {
+      return true;
+    }
+
+    return isRealWorldPaymentAllowed(isPlatformAndroid: isPlatformAndroid);
   }
 
   NFT get nft => _nft;
 
-  final ValueNotifier<bool> shouldShowBuyNow = ValueNotifier(false);
   final AudioPlayerHelper audioPlayerHelper;
   final VideoPlayerHelper videoPlayerHelper;
   final Repository repository;
@@ -473,8 +501,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
   List<NftOwnershipHistory> nftOwnershipHistoryList = [];
   bool _isVideoLoading = true;
   bool _likedByMe = false;
-
-
 }
 
 class ProgressBarState {

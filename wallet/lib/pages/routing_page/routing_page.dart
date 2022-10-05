@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:cosmos_utils/app_info_extractor.dart';
 
+import 'package:cosmos_utils/app_info_extractor.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/loading.dart';

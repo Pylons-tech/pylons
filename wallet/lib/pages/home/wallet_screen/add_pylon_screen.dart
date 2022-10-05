@@ -145,6 +145,7 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
       final inAppPurchaseResponse = await repository.isInAppPurchaseAvailable();
 
       if (inAppPurchaseResponse.isLeft()) {
+        loading.dismiss();
         inAppPurchaseResponse.swap().toOption().toNullable()!.message.show();
         return;
       }

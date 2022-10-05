@@ -1,7 +1,6 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
@@ -23,7 +22,6 @@ abstract class RemoteConfigService {
 
 class RemoteConfigServiceImpl implements RemoteConfigService {
   FirebaseRemoteConfig firebaseRemoteConfig;
-  LocalDataSource localDataSource;
   CrashlyticsHelper crashlyticsHelper;
 
   static String grpcUrl = "GRPC_URL";
@@ -49,7 +47,6 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
 
   RemoteConfigServiceImpl(
       {required this.firebaseRemoteConfig,
-      required this.localDataSource,
       required this.crashlyticsHelper});
 
   @override
@@ -73,52 +70,6 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
         ibcTraceUrl: firebaseRemoteConfig.getString(ibcTrace),
         skus: firebaseRemoteConfig.getString(skus),
       );
-
-    // if (localDataSource.getNetworkEnvironmentPreference() == kDevNet) {
-    //   return BaseEnv()
-    //     ..setEnv(
-    //       lcdUrl: dotenv.env['TEST_LCD_URL'].toString(),
-    //       grpcUrl: dotenv.env['TEST_GRPC_URL'].toString(),
-    //       lcdPort: dotenv.env['TEST_LCD_PORT'].toString(),
-    //       mongoUrl: dotenv.env['TEST_MONGO_URL'].toString(),
-    //       grpcPort: dotenv.env['TEST_GRPC_PORT'].toString(),
-    //       ethUrl: dotenv.env['TEST_ETH_URL'].toString(),
-    //       faucetUrl: dotenv.env['TEST_FAUCET_URL'].toString(),
-    //       stripeUrl: dotenv.env['TEST_STRIPE_SERVER'].toString(),
-    //       stripePubKey: dotenv.env['TEST_STRIPE_PUB_KEY'].toString(),
-    //       stripeTestEnv: dotenv.env['TEST_STRIPE_TEST_ENV'] == 'true',
-    //       stripeCallbackUrl: dotenv.env['TEST_STRIPE_CALLBACK_URL'] ?? "",
-    //       stripeCallbackRefreshUrl:
-    //           dotenv.env['TEST_STRIPE_CALLBACK_REFRESH_URL'] ?? "",
-    //       chainId: dotenv.env['TEST_CHAIN_ID'].toString(),
-    //       ibcTraceUrl: dotenv.env['TEST_IBC_TRACE'].toString(),
-    //     );
-    // }
-    //
-    // return BaseEnv()
-    //   ..setEnv(
-    //     lcdUrl: firebaseRemoteConfig.getString(lcdUrl),
-    //     grpcUrl: firebaseRemoteConfig.getString(grpcUrl),
-    //     lcdPort: firebaseRemoteConfig.getString(lcdPort),
-    //
-    //     // TODO: WE NEED TO ADD KEYS FOR MONGO BASE URL TO FIREBASE REMOTE CONFIG ; WILL BE REPLACED HERE
-    //     mongoUrl: dotenv.env['TEST_MONGO_URL'].toString(),
-    //     // mongoUrl: firebaseRemoteConfig.getString(mongoUrl),
-    //     // mongoPort: firebaseRemoteConfig.getString(mongoPort),
-    //     grpcPort: firebaseRemoteConfig.getString(grpcPort),
-    //     ethUrl: firebaseRemoteConfig.getString(ethUrl),
-    //
-    //     faucetUrl: firebaseRemoteConfig.getString(faucetUrl),
-    //
-    //     stripeUrl: firebaseRemoteConfig.getString(stripeUrl),
-    //     stripePubKey: firebaseRemoteConfig.getString(stripePubKey),
-    //     stripeTestEnv: firebaseRemoteConfig.getString(stripeTestEnv) == 'true',
-    //     stripeCallbackUrl: firebaseRemoteConfig.getString(stripeCallbackUrl),
-    //     stripeCallbackRefreshUrl:
-    //         firebaseRemoteConfig.getString(stripeCallbackRefreshUrl),
-    //     chainId: firebaseRemoteConfig.getString(chainId),
-    //     ibcTraceUrl: firebaseRemoteConfig.getString(ibcTrace),
-    //   );
   }
 
   @override
@@ -142,8 +93,6 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
       chainId: dotenv.env['CHAIN_ID'],
       skus: defaultPylonsSKUs,
       mongoUrl: dotenv.env[mongoUrl] ?? "",
-
-
     });
 
     firebaseRemoteConfig.setConfigSettings(RemoteConfigSettings(
