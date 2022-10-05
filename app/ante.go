@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	pylons "github.com/Pylons-tech/pylons/x/pylons/types"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -22,8 +21,7 @@ import (
 type HandlerOptions struct {
 	ante.HandlerOptions
 
-	IBCKeeper           *keeper.Keeper
-	PylonsAccountKeeper pylons.AccountKeeper
+	IBCKeeper *keeper.Keeper
 }
 
 // NewAnteHandler creates a new ante handler
