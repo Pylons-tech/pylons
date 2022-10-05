@@ -665,13 +665,14 @@ func New(
 	anteHandler, err := NewAnteHandler(
 		HandlerOptions{
 			HandlerOptions: ante.HandlerOptions{
-				AccountKeeper:   app.AccountKeeper,
 				BankKeeper:      app.BankKeeper,
 				SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
 				FeegrantKeeper:  app.FeeGrantKeeper,
 				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 			},
-			IBCKeeper: app.IBCKeeper,
+			AccountKeeper: app.AccountKeeper,
+			PylonsKeeper:  app.PylonsKeeper,
+			IBCKeeper:     app.IBCKeeper,
 		},
 	)
 	if err != nil {
