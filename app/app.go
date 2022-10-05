@@ -16,6 +16,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec/types"
+	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	"github.com/ignite/cli/ignite/pkg/openapiconsole"
 	"github.com/spf13/cast"
@@ -54,6 +55,8 @@ import (
 	// distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	"github.com/cosmos/cosmos-sdk/x/evidence"
 	evidencetypes "github.com/cosmos/cosmos-sdk/x/evidence/types"
+	"github.com/cosmos/cosmos-sdk/x/feegrant"
+	feegrantkeeper "github.com/cosmos/cosmos-sdk/x/feegrant/keeper"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	"github.com/cosmos/cosmos-sdk/x/gov"
@@ -252,21 +255,27 @@ type PylonsApp struct {
 	GovKeeper      govkeeper.Keeper
 	CrisisKeeper   crisiskeeper.Keeper
 	UpgradeKeeper  upgradekeeper.Keeper
+	EpochsKeeper   epochsmodulekeeper.Keeper
 	ParamsKeeper   paramskeeper.Keeper
 	IBCKeeper      *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
+	ICAHostKeeper  icahostkeeper.Keeper
 	IBCFeeKeeper   ibcfeekeeper.Keeper
 	EvidenceKeeper evidencekeeper.Keeper
 	TransferKeeper ibctransferkeeper.Keeper
+	FeeGrantKeeper feegrantkeeper.Keeper
+
+	// pylons keeper
+	PylonsKeeper pylonsmodulekeeper.Keeper
 
 	// make scoped keepers public for test purposes
-	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
-	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
-	ScopedIBCFeeKeeper   capabilitykeeper.ScopedKeeper
-	ScopedFeeMockKeeper  capabilitykeeper.ScopedKeeper
-	ScopedICAHostKeeper  capabilitykeeper.ScopedKeeper
-	EpochsKeeper         epochsmodulekeeper.Keeper
-	PylonsKeeper         pylonsmodulekeeper.Keeper
-	ICAHostKeeper        icahostkeeper.Keeper
+	ScopedIBCKeeper           capabilitykeeper.ScopedKeeper
+	ScopedTransferKeeper      capabilitykeeper.ScopedKeeper
+	ScopedIBCFeeKeeper        capabilitykeeper.ScopedKeeper
+	ScopedFeeMockKeeper       capabilitykeeper.ScopedKeeper
+	ScopedICAControllerKeeper capabilitykeeper.ScopedKeeper
+	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
+	ScopedIBCMockKeeper       capabilitykeeper.ScopedKeeper
+	ScopedICAMockKeeper       capabilitykeeper.ScopedKeeper
 
 	// make IBC modules public for test purposes
 	// these modules are never directly routed to by the IBC Router
@@ -379,6 +388,7 @@ func New(
 	app.CrisisKeeper = crisiskeeper.NewKeeper(
 		app.GetSubspace(crisistypes.ModuleName), invCheckPeriod, app.BankKeeper, authtypes.FeeCollectorName,
 	)
+	app.FeeGrantKeeper = feegrantkeeper.NewKeeper(appCodec, keys[feegrant.StoreKey], app.AccountKeeper)
 	app.UpgradeKeeper = upgradekeeper.NewKeeper(skipUpgradeHeights, keys[upgradetypes.StoreKey], appCodec, homePath, app.BaseApp, authtypes.NewModuleAddress(govtypes.ModuleName).String())
 
 	// register the staking hooks
@@ -652,13 +662,24 @@ func New(
 	// initialize BaseApp
 	app.SetInitChainer(app.InitChainer)
 	app.SetBeginBlocker(app.BeginBlocker)
-	app.SetAnteHandler(
-		// ante.NewAnteHandler(
-		//	app.AccountKeeper, app.BankKeeper, ante.DefaultSigVerificationGasConsumer,
-		//	encodingConfig.TxConfig.SignModeHandler(),
-		// ),
-		NewAnteHandler(app.AccountKeeper, encodingConfig.TxConfig.SignModeHandler(), app.PylonsKeeper),
+	anteHandler, err := NewAnteHandler(
+		HandlerOptions{
+			HandlerOptions: ante.HandlerOptions{
+				BankKeeper:      app.BankKeeper,
+				SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
+				FeegrantKeeper:  app.FeeGrantKeeper,
+				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
+			},
+			AccountKeeper: app.AccountKeeper,
+			PylonsKeeper:  app.PylonsKeeper,
+			IBCKeeper:     app.IBCKeeper,
+		},
 	)
+	if err != nil {
+		panic(err)
+	}
+
+	app.SetAnteHandler(anteHandler)
 	app.SetEndBlocker(app.EndBlocker)
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {

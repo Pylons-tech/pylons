@@ -9,7 +9,6 @@ abstract class AnalyticsHelper {
   /// Input: [recipeId] the id of the NFT, [author] the author of the NFT, [purchasePrice] the price of the NFT, [recipeName] the name of the recipe
   Future<void> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice});
 
-
   Future<void> logAddToCart({
     required String recipeId,
     required String recipeName,
@@ -17,6 +16,8 @@ abstract class AnalyticsHelper {
     required double purchasePrice,
     required String currency,
   });
+
+  Future<void> logUserJourney({required String screenName});
 }
 
 class AnalyticsHelperImpl implements AnalyticsHelper {
@@ -48,7 +49,6 @@ class AnalyticsHelperImpl implements AnalyticsHelper {
     );
   }
 
-
   @override
   Future<void> logAddToCart({
     required String recipeId,
@@ -70,5 +70,10 @@ class AnalyticsHelperImpl implements AnalyticsHelper {
       value: purchasePrice,
       items: [itemWithQuantity],
     );
+  }
+
+  @override
+  Future<void> logUserJourney({required String screenName}) async {
+    await FirebaseAnalytics.instance.logEvent(name: screenName);
   }
 }

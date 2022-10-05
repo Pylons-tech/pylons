@@ -13,10 +13,10 @@ class FavoriteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: onTap,
-      icon: const Icon(
+      icon: Icon(
         Icons.favorite_outline,
         size: 20,
-        color: kSelectedIcon,
+        color: AppColors.kSelectedIcon,
       ),
     );
   }
