@@ -4109,9 +4109,9 @@ react-textarea-autosize@^8.3.2:
     use-composed-ref "^1.3.0"
     use-latest "^1.2.1"
 
-react-toastify@^9.0.7:
-  version "9.0.7"
-  resolved "https://registry.npmjs.org/react-toastify/-/react-toastify-9.0.7.tgz"
+react-toastify@^9.0.8:
+  version "9.0.8"
+  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-9.0.8.tgz#3876c89fc6211a29027b3075010b5ec39ebe4f7e"
   dependencies:
     clsx "^1.1.1"
 
