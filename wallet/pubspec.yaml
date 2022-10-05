@@ -114,7 +114,7 @@ dependencies:
   firebase_remote_config: ^2.0.18
   firebase_analytics: ^9.3.3
 
-  flutter_local_notifications: ^11.0.1
+  flutter_local_notifications: ^12.0.0
 
   dotted_border: ^2.0.0+2
 
