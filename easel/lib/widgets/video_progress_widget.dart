@@ -89,7 +89,7 @@ class VideoProgressWidget extends StatelessWidget {
                             colors: VideoProgressColors(
                               backgroundColor: darkMode
                                   ? EaselAppTheme.kWhite
-                                  : EaselAppTheme.kBlack,
+                                  : EaselAppTheme.kGrey,
                               playedColor: EaselAppTheme.kLightRed,
                               bufferedColor: darkMode
                                   ? EaselAppTheme.kBlack.withOpacity(0.7)
