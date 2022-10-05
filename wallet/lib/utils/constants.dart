@@ -298,6 +298,9 @@ const kEasel = "Easel";
 const kEaselNFT = "Easel_NFT";
 const kUpylon = "upylon";
 const kExtraInfo = "extraInfo";
+const kTxTime = "txTime";
+const kTxnId = "id";
+const kUTC = "UTC";
 
 const kItemId = "id";
 const kCookbookId = "cookbook_id";

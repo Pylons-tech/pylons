@@ -10,6 +10,7 @@ import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
@@ -98,7 +99,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     toHashtagList();
   }
 
-  Future<SdkIpcResponse> paymentForRecipe() async {
+  Future<SdkIpcResponse<Execution>> paymentForRecipe() async {
     const jsonExecuteRecipe = '''
       {
         "creator": "",
