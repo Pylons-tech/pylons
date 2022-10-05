@@ -95,7 +95,7 @@ dependencies:
   flutter_stripe: ^5.1.0
   webview_flutter: ^3.0.4
   flutter_svg: ^1.0.3
-  sprintf: ^6.0.0
+  sprintf: ^7.0.0
 
   shimmer_animation: ^2.1.0+1
 
