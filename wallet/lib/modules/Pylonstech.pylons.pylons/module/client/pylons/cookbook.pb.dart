@@ -237,4 +237,3 @@ class limit extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   void clearAmountMinted() => clearField(2);
 }
-

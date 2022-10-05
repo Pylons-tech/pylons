@@ -10,7 +10,7 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../cosmos/base/v1beta1/coin.pb.dart' as $2;
+import '../cosmos/base/v1beta1/coin.pb.dart' as $2;
 
 class GoogleInAppPurchasePackage extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GoogleInAppPurchasePackage', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
@@ -451,4 +451,3 @@ class Params extends $pb.GeneratedMessage {
   @$pb.TagNumber(11)
   void clearMaxTxsInBlock() => clearField(11);
 }
-
