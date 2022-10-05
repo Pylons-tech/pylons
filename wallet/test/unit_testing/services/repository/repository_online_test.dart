@@ -15,8 +15,6 @@ import 'package:pylons_wallet/model/stripe_generate_payment_receipt_response.dar
 import 'package:pylons_wallet/model/stripe_generate_payout_token_request.dart';
 import 'package:pylons_wallet/model/stripe_generate_payout_token_response.dart';
 import 'package:pylons_wallet/model/stripe_generate_update_token_response.dart';
-import 'package:pylons_wallet/model/stripe_payout_request.dart';
-import 'package:pylons_wallet/model/stripe_payout_response.dart';
 import 'package:pylons_wallet/model/stripe_register_account_response.dart';
 import 'package:pylons_wallet/model/stripe_register_acount_request.dart';
 import 'package:pylons_wallet/model/stripe_update_account_request.dart';
@@ -223,21 +221,6 @@ void main() async {
     );
     final response = await repository.GeneratePayoutToken(req);
     expect(true, response.getOrElse(() => StripeGeneratePayoutTokenResponse()).success);
-  });
-
-  test('test Payout', () async {
-    final req = StripePayoutRequest(
-      amount: Int64.ONE,
-    );
-    when(client.post(Uri.parse("$MOCK_BASE_URL/payout"), body: jsonEncode(req), headers: {"Content-type": "application/json"})).thenAnswer(
-      (realInvocation) async => http.Response(
-        jsonEncode({"transfer_id": MOCK_TRANSFER}),
-        200,
-      ),
-    );
-    final response = await repository.Payout(req);
-    expect(true, response.getOrElse(() => StripePayoutResponse()).success);
-    expect(MOCK_TRANSFER, response.getOrElse(() => StripePayoutResponse()).transfer_id);
   });
 
   test('test GetAccountLink', () async {

@@ -13,8 +13,6 @@ import 'package:pylons_wallet/model/stripe_generate_payout_token_response.dart';
 import 'package:pylons_wallet/model/stripe_generate_registration_token_response.dart';
 import 'package:pylons_wallet/model/stripe_generate_update_token_response.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
-import 'package:pylons_wallet/model/stripe_payout_request.dart';
-import 'package:pylons_wallet/model/stripe_payout_response.dart';
 import 'package:pylons_wallet/model/stripe_register_account_response.dart';
 import 'package:pylons_wallet/model/stripe_register_acount_request.dart';
 import 'package:pylons_wallet/model/stripe_update_account_request.dart';
@@ -112,15 +110,6 @@ void main() async {
     expect(false, response.getOrElse(() => StripeGeneratePayoutTokenResponse()).success);
   });
 
-  test('test Payout', () async {
-    final req = StripePayoutRequest(
-      amount: Int64.ONE,
-    );
-    final response = await repository.Payout(req);
-    expect(true, response.isLeft());
-    expect(false, response.getOrElse(() => StripePayoutResponse()).success);
-  });
-
   test('test GetAccountLink', () async {
     final req = StripeAccountLinkRequest(Signature: '', Account: '');
     final response = await repository.GetAccountLink(req);
@@ -189,11 +178,7 @@ void main() async {
     final response = await repository.GeneratePayoutToken(req);
     expect(true, response.isLeft());
   });
-  test('test Payout', () async {
-    final req = StripePayoutRequest(amount: Int64.ONE);
-    final response = await repository.Payout(req);
-    expect(true, response.isLeft());
-  });
+
   test('test GetAccountLink', () async {
     final req = StripeAccountLinkRequest(Signature: MOCK_SIGNATURE, Account: MOCK_ACCOUNT);
     final response = await repository.GetAccountLink(req);

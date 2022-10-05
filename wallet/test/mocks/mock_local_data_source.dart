@@ -201,7 +201,6 @@ class MockLocalDataSource extends LocalDataSource {
 
   @override
   Future<int> saveTransactionFailure(LocalTransactionModel txManager) {
-    // TODO: implement saveTransactionFailure
-    throw UnimplementedError();
+    return Future.value(0);
   }
 }

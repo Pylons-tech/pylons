@@ -5,11 +5,6 @@ import 'mock_constants.dart';
 
 class MockNetworkInfoOnline extends NetworkInfo {
   @override
-  String getIP() {
-    return MOCK_IP;
-  }
-
-  @override
   Future<bool> get isConnected => Future.value(true);
 
   @override

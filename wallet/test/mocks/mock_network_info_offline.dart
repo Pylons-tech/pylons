@@ -4,7 +4,6 @@ import 'package:pylons_wallet/services/third_party_services/network_info.dart';
 import 'mock_constants.dart';
 
 class MockNetworkInfoOffline extends NetworkInfo {
-  @override
   String getIP() {
     return MOCK_IP;
   }
