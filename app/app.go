@@ -671,7 +671,8 @@ func New(
 				FeegrantKeeper:  app.FeeGrantKeeper,
 				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 			},
-			IBCKeeper: app.IBCKeeper,
+			IBCKeeper:           app.IBCKeeper,
+			PylonsAccountKeeper: app.AccountKeeper,
 		},
 	)
 	if err != nil {
