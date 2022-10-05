@@ -25,7 +25,7 @@ class PylonsAppTheme  {
         fontFamily: kUniversalFontFamily,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: kBlue,
+            disabledForegroundColor: kBlue.withOpacity(0.38), disabledBackgroundColor: kBlue.withOpacity(0.12),
           ),
         ),
         inputDecorationTheme: const InputDecorationTheme(

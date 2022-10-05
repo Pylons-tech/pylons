@@ -15,6 +15,7 @@ import 'package:pylons_wallet/model/stripe_create_payment_intent_request.dart';
 import 'package:pylons_wallet/model/stripe_create_payment_intent_response.dart';
 import 'package:pylons_wallet/model/stripe_generate_payment_receipt_request.dart';
 import 'package:pylons_wallet/model/stripe_generate_payment_receipt_response.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/pay_with_swipe.dart';
@@ -39,7 +40,7 @@ TextStyle _rowSubtitleTextStyle = TextStyle(color: Colors.white, fontSize: 14.sp
 class PayNowDialog {
   final NFT nft;
   final PurchaseItemViewModel purchaseItemViewModel;
-  final ValueChanged<String> onPurchaseDone;
+  final ValueChanged<Execution> onPurchaseDone;
   final bool shouldBuy;
 
   BuildContext buildContext;
@@ -70,7 +71,7 @@ class PayNowDialog {
 
 class PayNowWidget extends StatefulWidget {
   final NFT nft;
-  final ValueChanged<String> onPurchaseDone;
+  final ValueChanged<Execution> onPurchaseDone;
   final bool shouldBuy;
 
   const PayNowWidget({Key? key, required this.nft, required this.onPurchaseDone, required this.shouldBuy}) : super(key: key);
@@ -345,7 +346,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
     }
   }
 
-  Future paymentByCoins() async {
+  Future<void> paymentByCoins() async {
     final provider = context.read<PurchaseItemViewModel>();
     final executionResponse = await provider.paymentForRecipe();
 
@@ -356,7 +357,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
       return;
     }
 
-    widget.onPurchaseDone(executionResponse.data.toString());
+    widget.onPurchaseDone(executionResponse.data!);
   }
 
   Future<void> stripePaymentForRecipe(BuildContext context, NFT nft) async {
@@ -396,6 +397,10 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
       final receipt_response = await repository.GeneratePaymentReceipt(StripeGeneratePaymentReceiptRequest(paymentIntentID: pi.id, clientSecret: pi.clientSecret));
 
+      if (receipt_response.isLeft()) {
+        throw receipt_response.swap().toOption().toNullable()!;
+      }
+
       final receipt = receipt_response.getOrElse(() => StripeGeneratePaymentReceiptResponse());
 
       const jsonExecuteRecipe = '''
@@ -433,7 +438,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
         return;
       }
 
-      widget.onPurchaseDone(executionResponse.data.toString());
+      widget.onPurchaseDone(executionResponse.data!);
     } catch (error) {
       Navigator.pop(navigatorKey.currentState!.overlay!.context);
     }
