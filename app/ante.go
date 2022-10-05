@@ -12,36 +12,50 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+
+	ibcante "github.com/cosmos/ibc-go/v5/modules/core/ante"
+	"github.com/cosmos/ibc-go/v5/modules/core/keeper"
 )
 
-// NewAnteHandler returns an AnteHandler that checks and increments sequence
-// numbers, checks signatures & account numbers, and doesn't deduct fees.
-func NewAnteHandler(
-	ak types.AccountKeeper,
-	// bankKeeper types.BankKeeper,
-	// sigGasConsumer authsigning.SignatureVerificationGasConsumer,
-	signModeHandler authsigning.SignModeHandler,
-	pk PylonsKeeper,
-) sdk.AnteHandler {
-	return sdk.ChainAnteDecorators(
-		NewSpamMigitationAnteDecorator(pk),
+// HandlerOptions extend the SDK's AnteHandler options by requiring the IBC keeper.
+type HandlerOptions struct {
+	ante.HandlerOptions
+
+	PylonsKeeper PylonsKeeper
+	IBCKeeper    *keeper.Keeper
+}
+
+// NewAnteHandler creates a new ante handler
+func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
+	if options.AccountKeeper == nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrLogic, "account keeper is required for AnteHandler")
+	}
+	if options.BankKeeper == nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrLogic, "bank keeper is required for AnteHandler")
+	}
+	if options.SignModeHandler == nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrLogic, "sign mode handler is required for AnteHandler")
+	}
+
+	anteDecorators := []sdk.AnteDecorator{
 		ante.NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
-		//		ante.NewExtensionOptionsDecorator(),
-		// ante.NewMempoolFeeDecorator(),
+		NewSpamMigitationAnteDecorator(options.PylonsKeeper),
+		ante.NewExtensionOptionsDecorator(options.ExtensionOptionChecker),
 		ante.NewValidateBasicDecorator(),
-		ante.TxTimeoutHeightDecorator{},
-		ante.NewValidateMemoDecorator(ak),
-		// ante.NewConsumeGasForTxSizeDecorator(ak),
-		// ante.NewRejectFeeGranterDecorator(),
-		// we create the account locally before there is any access for it
-		NewAccountCreationDecorator(ak),
-		ante.NewSetPubKeyDecorator(ak), // SetPubKeyDecorator must be called before all signature verification decorators
-		ante.NewValidateSigCountDecorator(ak),
-		// ante.NewDeductFeeDecorator(ak, bankKeeper),
-		// ante.NewSigGasConsumeDecorator(ak, sigGasConsumer),
-		NewCustomSigVerificationDecorator(ak, signModeHandler),
-		ante.NewIncrementSequenceDecorator(ak),
-	)
+		ante.NewTxTimeoutHeightDecorator(),
+		ante.NewValidateMemoDecorator(options.AccountKeeper),
+		NewAccountCreationDecorator(options.AccountKeeper),
+		ante.NewConsumeGasForTxSizeDecorator(options.AccountKeeper),
+		ante.NewDeductFeeDecorator(options.AccountKeeper, options.BankKeeper, options.FeegrantKeeper, options.TxFeeChecker),
+		ante.NewSetPubKeyDecorator(options.AccountKeeper), // SetPubKeyDecorator must be called before all signature verification decorators
+		ante.NewValidateSigCountDecorator(options.AccountKeeper),
+		ante.NewSigGasConsumeDecorator(options.AccountKeeper, options.SigGasConsumer),
+		ante.NewSigVerificationDecorator(options.AccountKeeper, options.SignModeHandler),
+		ante.NewIncrementSequenceDecorator(options.AccountKeeper),
+		ibcante.NewRedundantRelayDecorator(options.IBCKeeper),
+	}
+
+	return sdk.ChainAnteDecorators(anteDecorators...), nil
 }
 
 // AccountCreationDecorator create an account if it does not exist

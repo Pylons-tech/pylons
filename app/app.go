@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 
 	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
+	"github.com/evmos/ethermint/app/ante"
 
 	upgradev46 "github.com/Pylons-tech/pylons/app/upgrade"
 
@@ -652,13 +653,22 @@ func New(
 	// initialize BaseApp
 	app.SetInitChainer(app.InitChainer)
 	app.SetBeginBlocker(app.BeginBlocker)
-	app.SetAnteHandler(
-		// ante.NewAnteHandler(
-		//	app.AccountKeeper, app.BankKeeper, ante.DefaultSigVerificationGasConsumer,
-		//	encodingConfig.TxConfig.SignModeHandler(),
-		// ),
-		NewAnteHandler(app.AccountKeeper, encodingConfig.TxConfig.SignModeHandler(), app.PylonsKeeper),
+	anteHandler, err := NewAnteHandler(
+		HandlerOptions{
+			HandlerOptions: HandlerOptions{
+				BankKeeper:     app.BankKeeper,
+				FeegrantKeeper: app.FeeGrantKeeper,
+				SigGasConsumer: ante.DefaultSigVerificationGasConsumer,
+				PylonsKeeper:   app.PylonsKeeper,
+			},
+			IBCKeeper: app.IBCKeeper,
+		},
 	)
+	if err != nil {
+		panic(err)
+	}
+
+	app.SetAnteHandler(anteHandler)
 	app.SetEndBlocker(app.EndBlocker)
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
