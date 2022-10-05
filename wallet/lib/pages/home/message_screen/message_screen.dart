@@ -17,11 +17,7 @@ class MessagesScreen extends StatefulWidget {
 }
 
 class _MessagesScreenState extends State<MessagesScreen> {
-  TextStyle kHeadingText = TextStyle(
-      fontSize: 18.sp,
-      fontFamily: kUniversalFontFamily,
-      color: kTextBlackColor,
-      fontWeight: FontWeight.w800);
+  TextStyle kHeadingText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: AppColors.kTextBlackColor, fontWeight: FontWeight.w800);
 
   ScrollController scrollController = ScrollController();
 
@@ -41,14 +37,17 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   String no_messages = "";
 
+  Repository get repository => GetIt.I.get();
+
   @override
   void initState() {
-    // markNotificationAsRead();
+    markNotificationAsRead();
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       scrollController.addListener(pagination);
       getNotifications();
     });
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.messageScreen);
   }
 
   @override
@@ -60,7 +59,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: kBackgroundColor,
+        backgroundColor: AppColors.kBackgroundColor,
         body: Padding(
           padding: EdgeInsets.only(
             top: MediaQuery.of(context).viewPadding.top + 30.h,
@@ -78,13 +77,14 @@ class _MessagesScreenState extends State<MessagesScreen> {
             Align(
               alignment: Alignment.topLeft,
               child: InkResponse(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    color: kUserInputTextColor,
-                  )),
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: AppColors.kUserInputTextColor,
+                ),
+              ),
             ),
             if (msgList.isNotEmpty)
               Column(children: [
@@ -118,8 +118,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   Future getNotifications() async {
     final loader = Loading()..showLoading();
 
-    walletAddress =
-        GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
+    walletAddress = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
 
     msgList = await callGetNotificationApi();
     loader.dismiss();
@@ -132,8 +131,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   }
 
   Future getMoreNotifications() async {
-    final List<NotificationMessage> updatedMsgList =
-        await callGetNotificationApi();
+    final List<NotificationMessage> updatedMsgList = await callGetNotificationApi();
     msgList.addAll(updatedMsgList);
     isLoadMoreLoading = false;
     setState(() {});
@@ -143,10 +141,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   }
 
   Future<List<NotificationMessage>> callGetNotificationApi() async {
-    final response = await GetIt.I
-        .get<Repository>()
-        .getAllNotificationsMessages(
-            walletAddress: walletAddress, limit: _limit, offset: _offset);
+    final response = await GetIt.I.get<Repository>().getAllNotificationsMessages(walletAddress: walletAddress, limit: _limit, offset: _offset);
     if (response.isLeft()) {
       "something_wrong".tr().show();
       return [];
@@ -164,10 +159,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   }
 
   void pagination() {
-    if ((scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent) &&
-        isLoadMoreLoading == false &&
-        (msgList.length == _maxListLength)) {
+    if ((scrollController.position.pixels == scrollController.position.maxScrollExtent) && isLoadMoreLoading == false && (msgList.length == _maxListLength)) {
       setState(() {
         isLoadMoreLoading = true;
         _offset += 10;
@@ -178,9 +170,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   }
 
   Future markNotificationAsRead() async {
-    final response = await GetIt.I
-        .get<Repository>()
-        .markNotificationAsRead(idsList: msgIdsList);
+    final response = await GetIt.I.get<Repository>().markNotificationAsRead(idsList: msgIdsList);
     if (response.isLeft()) {
       "something_wrong".tr().show();
     }

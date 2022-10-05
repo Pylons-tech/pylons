@@ -12,37 +12,52 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+
+	pylonskeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
+	ibcante "github.com/cosmos/ibc-go/v5/modules/core/ante"
+	"github.com/cosmos/ibc-go/v5/modules/core/keeper"
 )
 
-// NewAnteHandler returns an AnteHandler that checks and increments sequence
-// numbers, checks signatures & account numbers, and doesn't deduct fees.
-func NewAnteHandler(
-	ak types.AccountKeeper,
-	// bankKeeper types.BankKeeper,
-	// sigGasConsumer authsigning.SignatureVerificationGasConsumer,
-	signModeHandler authsigning.SignModeHandler,
-	pk PylonsKeeper,
-) sdk.AnteHandler {
-	return sdk.ChainAnteDecorators(
-		NewSpamMigitationAnteDecorator(pk),
+// HandlerOptions extend the SDK's AnteHandler options by requiring the IBC keeper.
+type HandlerOptions struct {
+	ante.HandlerOptions
+
+	AccountKeeper types.AccountKeeper
+	PylonsKeeper  pylonskeeper.Keeper
+	IBCKeeper     *keeper.Keeper
+}
+
+// NewAnteHandler creates a new ante handler
+func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
+	if options.AccountKeeper == nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrLogic, "account keeper is required for AnteHandler")
+	}
+	if options.BankKeeper == nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrLogic, "bank keeper is required for AnteHandler")
+	}
+	if options.SignModeHandler == nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrLogic, "sign mode handler is required for AnteHandler")
+	}
+
+	anteDecorators := []sdk.AnteDecorator{
 		ante.NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
-		//		ante.NewExtensionOptionsDecorator(),
-		// ante.NewMempoolFeeDecorator(),
+		NewSpamMigitationAnteDecorator(options.PylonsKeeper),
+		ante.NewExtensionOptionsDecorator(options.ExtensionOptionChecker),
 		ante.NewValidateBasicDecorator(),
-		ante.TxTimeoutHeightDecorator{},
-		ante.NewValidateMemoDecorator(ak),
-		// ante.NewConsumeGasForTxSizeDecorator(ak),
-		// ante.NewRejectFeeGranterDecorator(),
-		// we create the account locally before there is any access for it
-		NewAccountCreationDecorator(ak),
-		ante.NewSetPubKeyDecorator(ak), // SetPubKeyDecorator must be called before all signature verification decorators
-		ante.NewValidateSigCountDecorator(ak),
-		// ante.NewDeductFeeDecorator(ak, bankKeeper),
-		// ante.NewSigGasConsumeDecorator(ak, sigGasConsumer),
-		// ante.NewSigVerificationDecorator(ak, signModeHandler),
-		NewCustomSigVerificationDecorator(ak, signModeHandler),
-		ante.NewIncrementSequenceDecorator(ak),
-	)
+		ante.NewTxTimeoutHeightDecorator(),
+		ante.NewValidateMemoDecorator(options.AccountKeeper),
+		NewAccountCreationDecorator(options.AccountKeeper),
+		// ante.NewConsumeGasForTxSizeDecorator(options.AccountKeeper),
+		// ante.NewDeductFeeDecorator(options.AccountKeeper, options.BankKeeper, options.FeegrantKeeper, options.TxFeeChecker),
+		ante.NewSetPubKeyDecorator(options.AccountKeeper), // SetPubKeyDecorator must be called before all signature verification decorators
+		ante.NewValidateSigCountDecorator(options.AccountKeeper),
+		// ante.NewSigGasConsumeDecorator(options.AccountKeeper, options.SigGasConsumer),
+		NewCustomSigVerificationDecorator(options.AccountKeeper, options.SignModeHandler),
+		ante.NewIncrementSequenceDecorator(options.AccountKeeper),
+		ibcante.NewRedundantRelayDecorator(options.IBCKeeper),
+	}
+
+	return sdk.ChainAnteDecorators(anteDecorators...), nil
 }
 
 // AccountCreationDecorator create an account if it does not exist
@@ -201,6 +216,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 			ChainID:       chainID,
 			AccountNumber: accNum,
 			Sequence:      acc.GetSequence(),
+			Address:       acc.GetAddress().String(),
 		}
 
 		messages := sigTx.GetMsgs()
@@ -235,7 +251,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 				} else {
 					errMsg = fmt.Sprintf("signature verification failed; please verify account number (%d) and chain-id (%s)", accNum, chainID)
 				}
-				return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, errMsg)
+				return ctx, sdkerrors.Wrap(err, errMsg)
 			}
 		}
 	}

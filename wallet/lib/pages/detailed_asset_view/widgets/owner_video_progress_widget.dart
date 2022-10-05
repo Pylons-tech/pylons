@@ -8,12 +8,10 @@ import 'package:video_player/video_player.dart';
 class OwnerVideoProgressWidget extends StatefulWidget {
   final String url;
 
-  const OwnerVideoProgressWidget({Key? key, required this.url})
-      : super(key: key);
+  const OwnerVideoProgressWidget({Key? key, required this.url}) : super(key: key);
 
   @override
-  _OwnerVideoProgressWidgetState createState() =>
-      _OwnerVideoProgressWidgetState();
+  _OwnerVideoProgressWidgetState createState() => _OwnerVideoProgressWidgetState();
 }
 
 class _OwnerVideoProgressWidgetState extends State<OwnerVideoProgressWidget> {
@@ -49,16 +47,16 @@ class _OwnerVideoProgressWidgetState extends State<OwnerVideoProgressWidget> {
                 children: [
                   if (viewModel.isVideoLoading)
                     SizedBox(
-                        height: 22.h,
-                        width: 22.h,
-                        child: CircularProgressIndicator(
-                            strokeWidth: 2.w, color: kWhite))
+                      height: 22.h,
+                      width: 22.h,
+                      child: CircularProgressIndicator(strokeWidth: 2.w, color: AppColors.kWhite),
+                    )
                   else if (viewModel.videoPlayerController.value.isPlaying)
                     InkWell(
                       onTap: viewModel.pauseVideo,
                       child: Icon(
                         Icons.pause,
-                        color: kWhite,
+                        color: AppColors.kWhite,
                         size: 20.h,
                       ),
                     )
@@ -67,7 +65,7 @@ class _OwnerVideoProgressWidgetState extends State<OwnerVideoProgressWidget> {
                       onTap: viewModel.playVideo,
                       child: Icon(
                         Icons.play_arrow_outlined,
-                        color: kWhite,
+                        color: AppColors.kWhite,
                         size: 20.h,
                       ),
                     ),
@@ -77,9 +75,9 @@ class _OwnerVideoProgressWidgetState extends State<OwnerVideoProgressWidget> {
                       viewModel.videoPlayerController,
                       allowScrubbing: true,
                       colors: VideoProgressColors(
-                        backgroundColor: kGray,
-                        playedColor: kWhite,
-                        bufferedColor: kWhite.withOpacity(0.7),
+                        backgroundColor: AppColors.kGray,
+                        playedColor: AppColors.kWhite,
+                        bufferedColor: AppColors.kWhite.withOpacity(0.7),
                       ),
                     ),
                   ),
@@ -96,29 +94,25 @@ class _OwnerVideoProgressWidgetState extends State<OwnerVideoProgressWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       StreamBuilder<Duration?>(
-                          stream: viewModel.videoPlayerController.position
-                              .asStream(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<Duration?> snapshot) {
+                          stream: viewModel.videoPlayerController.position.asStream(),
+                          builder: (BuildContext context, AsyncSnapshot<Duration?> snapshot) {
                             if (snapshot.hasData) {
-                              final String duration =
-                                  _getDuration(snapshot.data!);
+                              final String duration = _getDuration(snapshot.data!);
                               return Text(
                                 duration,
-                                style: TextStyle(color: kWhite, fontSize: 9.sp),
+                                style: TextStyle(color: AppColors.kWhite, fontSize: 9.sp),
                               );
                             } else {
                               return SizedBox(
-                                  height: 22.h,
-                                  width: 18.w,
-                                  child: CircularProgressIndicator(
-                                      strokeWidth: 2.w, color: kWhite));
+                                height: 22.h,
+                                width: 18.w,
+                                child: CircularProgressIndicator(strokeWidth: 2.w, color: AppColors.kWhite),
+                              );
                             }
                           }),
                       Text(
-                        formatDuration(viewModel
-                            .videoPlayerController.value.duration.inSeconds),
-                        style: TextStyle(color: kWhite, fontSize: 9.sp),
+                        formatDuration(viewModel.videoPlayerController.value.duration.inSeconds),
+                        style: TextStyle(color: AppColors.kWhite, fontSize: 9.sp),
                       ),
                     ],
                   ),

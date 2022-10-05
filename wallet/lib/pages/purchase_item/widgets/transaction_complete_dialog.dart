@@ -70,8 +70,8 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
               child: ClipPath(
                 clipper: RightTriangleClipper(
                     orientation: enums.Orientation.Orientation_NW),
-                child: const ColoredBox(
-                  color: kDarkRed,
+                child:  ColoredBox(
+                  color: AppColors.kDarkRed,
                 ),
               ),
             ),
@@ -85,8 +85,8 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
               child: ClipPath(
                 clipper: RightTriangleClipper(
                     orientation: enums.Orientation.Orientation_SE),
-                child: const ColoredBox(
-                  color: kDarkRed,
+                child: ColoredBox(
+                  color: AppColors.kDarkRed,
                 ),
               ),
             ),
@@ -134,7 +134,7 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
                       child: Container(
                         width: 180.r,
                         height: 40.h,
-                        color: kPayNowBackgroundGrey.withOpacity(0.2),
+                        color: AppColors.kPayNowBackgroundGrey.withOpacity(0.2),
                         child: Center(
                           child: Text(
                             "view_receipt".tr(),

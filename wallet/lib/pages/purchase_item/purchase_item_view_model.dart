@@ -501,6 +501,10 @@ class PurchaseItemViewModel extends ChangeNotifier {
   List<NftOwnershipHistory> nftOwnershipHistoryList = [];
   bool _isVideoLoading = true;
   bool _likedByMe = false;
+
+  void logEvent() {
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.purchaseView);
+  }
 }
 
 class ProgressBarState {

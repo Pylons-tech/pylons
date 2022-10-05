@@ -72,7 +72,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
               child: Text(
                 "or".tr(),
                 style: TextStyle(
-                  color: kBlack,
+                  color: AppColors.kBlack,
                   fontSize: 15.sp,
                   fontWeight: FontWeight.w500,
                 ),
@@ -86,7 +86,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
               child: Text(
                 "enter_mnemonic".tr(),
                 style: TextStyle(
-                  color: kBlack,
+                  color: AppColors.kBlack,
                   fontSize: 15.sp,
                   fontWeight: FontWeight.w500,
                 ),
