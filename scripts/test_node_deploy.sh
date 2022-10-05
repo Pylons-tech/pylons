@@ -114,4 +114,4 @@ pylonsd collect-gentxs
 pylonsd validate-genesis
 
 # Start the node (remove the --pruning=nothing flag if historical queries are not needed)
-pylonsd start --pruning=nothing  --minimum-gas-prices=0.0001upylon --rpc.laddr tcp://0.0.0.0:5557 --p2p.laddr tcp://0.0.0.0:26640 --grpc.address 0.0.0.0:26240 --grpc-web.address 0.0.0.0:26248
+pylonsd start --pruning=nothing --log_level $LOGLEVEL --minimum-gas-prices=0.0001upylon --rpc.laddr tcp://0.0.0.0:26657
