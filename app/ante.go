@@ -13,6 +13,7 @@ import (
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
+	pylonskeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
 	ibcante "github.com/cosmos/ibc-go/v5/modules/core/ante"
 	"github.com/cosmos/ibc-go/v5/modules/core/keeper"
 )
@@ -21,7 +22,9 @@ import (
 type HandlerOptions struct {
 	ante.HandlerOptions
 
-	IBCKeeper *keeper.Keeper
+	AccountKeeper types.AccountKeeper
+	PylonsKeeper  pylonskeeper.Keeper
+	IBCKeeper     *keeper.Keeper
 }
 
 // NewAnteHandler creates a new ante handler
@@ -44,12 +47,12 @@ func NewAnteHandler(options HandlerOptions) (sdk.AnteHandler, error) {
 		ante.NewTxTimeoutHeightDecorator(),
 		ante.NewValidateMemoDecorator(options.AccountKeeper),
 		NewAccountCreationDecorator(options.AccountKeeper),
-		ante.NewConsumeGasForTxSizeDecorator(options.AccountKeeper),
-		ante.NewDeductFeeDecorator(options.AccountKeeper, options.BankKeeper, options.FeegrantKeeper, options.TxFeeChecker),
+		// ante.NewConsumeGasForTxSizeDecorator(options.AccountKeeper),
+		// ante.NewDeductFeeDecorator(options.AccountKeeper, options.BankKeeper, options.FeegrantKeeper, options.TxFeeChecker),
 		ante.NewSetPubKeyDecorator(options.AccountKeeper), // SetPubKeyDecorator must be called before all signature verification decorators
 		ante.NewValidateSigCountDecorator(options.AccountKeeper),
-		ante.NewSigGasConsumeDecorator(options.AccountKeeper, options.SigGasConsumer),
-		ante.NewSigVerificationDecorator(options.AccountKeeper, options.SignModeHandler),
+		// ante.NewSigGasConsumeDecorator(options.AccountKeeper, options.SigGasConsumer),
+		NewCustomSigVerificationDecorator(options.AccountKeeper, options.SignModeHandler),
 		ante.NewIncrementSequenceDecorator(options.AccountKeeper),
 		ibcante.NewRedundantRelayDecorator(options.IBCKeeper),
 	}
