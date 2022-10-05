@@ -21,8 +21,7 @@ import (
 type HandlerOptions struct {
 	ante.HandlerOptions
 
-	PylonsKeeper PylonsKeeper
-	IBCKeeper    *keeper.Keeper
+	IBCKeeper *keeper.Keeper
 }
 
 // NewAnteHandler creates a new ante handler
