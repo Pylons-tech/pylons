@@ -39,7 +39,7 @@ Future<CroppedFile?> cropImage(String path) async {
     uiSettings: [
       AndroidUiSettings(
         toolbarTitle: kStripeMerchantDisplayName,
-        toolbarColor: kBlue,
+        toolbarColor: AppColors.kBlue,
         toolbarWidgetColor: Colors.white,
         initAspectRatio: CropAspectRatioPreset.original,
         lockAspectRatio: false,

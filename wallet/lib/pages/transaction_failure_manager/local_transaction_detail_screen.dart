@@ -10,15 +10,30 @@ import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/pages/home/wallet_screen/widgets/view_in_collection_button.dart';
 import 'package:pylons_wallet/pages/transaction_failure_manager/failure_manager_view_model.dart';
 import 'package:pylons_wallet/pylons_app.dart';
+import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-TextStyle _titleTextStyle = TextStyle(color: kBlack, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.bold, fontSize: 20.sp);
+TextStyle _titleTextStyle = TextStyle(color: AppColors.kBlack, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.bold, fontSize: 20.sp);
 
-class LocalTransactionDetailScreen extends StatelessWidget {
+class LocalTransactionDetailScreen extends StatefulWidget {
   const LocalTransactionDetailScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LocalTransactionDetailScreen> createState() => _LocalTransactionDetailScreenState();
+}
+
+class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScreen> {
+  Repository get repository => GetIt.I.get();
+
+  @override
+  void initState() {
+    super.initState();
+
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.localTransactionHistoryDetail);
+  }
 
   bool getTxTypeFlag({required TransactionStatus txType}) {
     switch (txType) {
@@ -40,11 +55,11 @@ class LocalTransactionDetailScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Container(
             height: 90.h,
-            color: kDarkRed,
+            color: AppColors.kDarkRed,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 15.w),
               child: Center(
-                child: AutoSizeText("network_error_description".tr(), maxLines: 3, textAlign: TextAlign.justify, style: _titleTextStyle.copyWith(color: kWhite, fontSize: 13.sp)),
+                child: AutoSizeText("network_error_description".tr(), maxLines: 3, textAlign: TextAlign.justify, style: _titleTextStyle.copyWith(color: AppColors.kWhite, fontSize: 13.sp)),
               ),
             ),
           ),
@@ -99,7 +114,10 @@ class LocalTransactionDetailScreen extends StatelessWidget {
               child: AutoSizeText(
                 getFormattedPrice(args),
                 style: TextStyle(
-                    color: getTxTypeFlag(txType: args.status.toTransactionStatusEnum()) ? kDarkGreen : kDarkRed, fontFamily: kUniversalFontFamily, fontSize: 15.sp, fontWeight: FontWeight.bold),
+                    color: getTxTypeFlag(txType: args.status.toTransactionStatusEnum()) ? AppColors.kDarkGreen : AppColors.kDarkRed,
+                    fontFamily: kUniversalFontFamily,
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.bold),
                 maxLines: 1,
               ),
             )
@@ -140,7 +158,7 @@ class LocalTransactionDetailScreen extends StatelessWidget {
       children: [
         Text(key, style: _titleTextStyle.copyWith(fontSize: 13.sp, fontWeight: FontWeight.w600)),
         SizedBox(height: 20.h),
-        Text(value.trimString(stringTrimConstantMax), style: _titleTextStyle.copyWith(fontSize: 13.sp, fontWeight: FontWeight.bold, color: kBlack)),
+        Text(value.trimString(stringTrimConstantMax), style: _titleTextStyle.copyWith(fontSize: 13.sp, fontWeight: FontWeight.bold, color: AppColors.kBlack)),
       ],
     );
   }
@@ -158,7 +176,7 @@ class LocalTransactionDetailScreen extends StatelessWidget {
               onPressed: () => Navigator.pop(navigatorKey.currentState!.overlay!.context),
               child: Text(
                 "close".tr(),
-                style: _titleTextStyle.copyWith(fontSize: 15.sp, color: kGreyColor),
+                style: _titleTextStyle.copyWith(fontSize: 15.sp, color: AppColors.kGreyColor),
               )),
         );
       case TransactionStatus.Failed:
@@ -186,7 +204,7 @@ class LocalTransactionDetailScreen extends StatelessWidget {
                 onPressed: () => Navigator.pop(navigatorKey.currentState!.overlay!.context),
                 child: Text(
                   "close".tr(),
-                  style: _titleTextStyle.copyWith(fontSize: 15.sp, color: kGreyColor),
+                  style: _titleTextStyle.copyWith(fontSize: 15.sp, color: AppColors.kGreyColor),
                 ),
               ),
             ),
@@ -201,7 +219,7 @@ class LocalTransactionDetailScreen extends StatelessWidget {
               onPressed: () => Navigator.pop(navigatorKey.currentState!.overlay!.context),
               child: Text(
                 "close".tr(),
-                style: _titleTextStyle.copyWith(fontSize: 15.sp, color: kGreyColor),
+                style: _titleTextStyle.copyWith(fontSize: 15.sp, color: AppColors.kGreyColor),
               )),
         );
     }

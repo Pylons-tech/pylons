@@ -14,8 +14,8 @@ import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-var _headingTextStyle = TextStyle(color: kWhite, fontWeight: FontWeight.w600, fontSize: 11.sp);
-var _subtitleTextStyle = TextStyle(color: kWhite, fontWeight: FontWeight.w600, fontSize: 9.sp); //7
+var _headingTextStyle = TextStyle(color: AppColors.kWhite, fontWeight: FontWeight.w600, fontSize: 11.sp);
+var _subtitleTextStyle = TextStyle(color: AppColors.kWhite, fontWeight: FontWeight.w600, fontSize: 9.sp); //7
 
 Map<int, String> monthStrMap = {
   1: 'jan'.tr(),
@@ -83,12 +83,12 @@ class LatestTransactions extends StatelessWidget {
       children: [
         Text(
           "${getPrefix(txHistory) ? "" : "-"}${defaultCurrency.convertFromU(txHistory)} ${denomAbbr[defaultCurrency]}",
-          style: _headingTextStyle.copyWith(color: kDarkRed),
+          style: _headingTextStyle.copyWith(color: AppColors.kDarkRed),
         ),
         if (defaultCurrency != kUSD)
           Text(
             "${getPrefixForUSD(txHistory) ? "" : "-"}${defaultCurrency.convertToUSD(txHistory)} $kStripeUSD_ABR",
-            style: _subtitleTextStyle.copyWith(color: kDarkRed),
+            style: _subtitleTextStyle.copyWith(color: AppColors.kDarkRed),
           ),
       ],
     );
@@ -242,7 +242,7 @@ class LatestTransactions extends StatelessWidget {
           Icon(
             Icons.arrow_forward_ios,
             size: 10.r,
-            color: kUnselectedIcon,
+            color: AppColors.kUnselectedIcon,
           ),
         ],
       ),

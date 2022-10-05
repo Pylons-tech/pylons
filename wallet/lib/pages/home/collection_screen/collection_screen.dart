@@ -146,12 +146,12 @@ class PurchasesCollection extends StatelessWidget {
           child: Container(
             width: 35.w,
             height: 35.h,
-            decoration: BoxDecoration(color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
+            decoration: BoxDecoration(color: AppColors.kWhite.withOpacity(0.5), shape: BoxShape.circle),
             child: Image.asset(
               ImageUtil.AUDIO_ICON,
               width: 35.w,
               height: 35.h,
-              color: kBlack.withOpacity(0.7),
+              color: AppColors.kBlack.withOpacity(0.7),
             ),
           ),
         ),
@@ -168,8 +168,8 @@ class PurchasesCollection extends StatelessWidget {
     final viewModel = context.watch<CollectionViewModel>();
     final isSelected = viewModel.collectionsType == CollectionsType.purchases;
     return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: kMainBG,
+      decoration:  BoxDecoration(
+        color: AppColors.kMainBG,
       ),
       child: Column(
         children: [
@@ -195,7 +195,7 @@ class PurchasesCollection extends StatelessWidget {
                                 spreadRadius: 3,
                                 color: Colors.grey.withOpacity(0.1),
                               ),
-                              const BoxShadow(color: kMainBG, offset: Offset(0, 30)),
+                              BoxShadow(color: AppColors.kMainBG, offset: const Offset(0, 30)),
                             ],
                           ),
                         )),
@@ -265,13 +265,13 @@ class PurchasesCollection extends StatelessWidget {
                     child: PreviewNFTGrid(
                       assetType: nft.assetType,
                       on3dNFT: (BuildContext context) => Container(
-                        color: k3DBackgroundColor,
+                        color: AppColors.k3DBackgroundColor,
                         height: double.infinity,
                         child: IgnorePointer(
                           child: Nft3dWidget(
                             url: nft.url,
                             cameraControls: false,
-                            backgroundColor: k3DBackgroundColor,
+                            backgroundColor: AppColors.k3DBackgroundColor,
                           ),
                         ),
                       ),
@@ -312,11 +312,11 @@ class CreationsCollection extends StatelessWidget {
           child: Container(
             width: 35.w,
             height: 35.h,
-            decoration: BoxDecoration(color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
+            decoration: BoxDecoration(color: AppColors.kWhite.withOpacity(0.5), shape: BoxShape.circle),
             padding: EdgeInsets.all(5.h),
             child: Image.asset(
               ImageUtil.AUDIO_ICON,
-              color: kBlack,
+              color: AppColors.kBlack,
             ),
           ),
         ),
@@ -334,8 +334,8 @@ class CreationsCollection extends StatelessWidget {
 
     final isSelected = viewModel.collectionsType == CollectionsType.creations;
     return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: kMainBG,
+      decoration: BoxDecoration(
+        color: AppColors.kMainBG,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -362,7 +362,7 @@ class CreationsCollection extends StatelessWidget {
                                 spreadRadius: 3,
                                 color: Colors.grey.withOpacity(0.1),
                               ),
-                              const BoxShadow(color: kMainBG, offset: Offset(0, 30)),
+                              BoxShadow(color: AppColors.kMainBG, offset: const Offset(0, 30)),
                             ],
                           ),
                         )),
@@ -433,7 +433,7 @@ class CreationsCollection extends StatelessWidget {
                             child: GestureDetector(
                               onTap: () => onNFTSelected(nft),
                               child: Banner(
-                                color: kPriceTagColor,
+                                color: AppColors.kPriceTagColor,
                                 location: BannerLocation.topStart,
                                 message: "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}  ${nft.ibcCoins.getAbbrev()}",
                                 child: PreviewNFTGrid(
@@ -445,7 +445,7 @@ class CreationsCollection extends StatelessWidget {
                                       child: Nft3dWidget(
                                         url: nft.url,
                                         cameraControls: false,
-                                        backgroundColor: k3DBackgroundColor,
+                                        backgroundColor: AppColors.k3DBackgroundColor,
                                       ),
                                     ),
                                   ),

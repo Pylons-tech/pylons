@@ -22,9 +22,9 @@ TextStyle kSettingsOptionsTextStyle = TextStyle(fontSize: 20.sp, fontFamily: kUn
 TextStyle kSettingsUserEnteredTextStyle = TextStyle(
   fontSize: 14.sp,
   fontFamily: kUniversalFontFamily,
-  color: kUserInputTextColor,
+  color: AppColors.kUserInputTextColor,
 );
-TextStyle kSettingsUserNameTextStyle = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: kSettingsUserNameColor, fontWeight: FontWeight.w500);
+TextStyle kSettingsUserNameTextStyle = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: AppColors.kSettingsUserNameColor, fontWeight: FontWeight.w500);
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -59,7 +59,7 @@ class _SettingScreenState extends State<SettingScreen> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
-        backgroundColor: kBackgroundColor,
+        backgroundColor: AppColors.kBackgroundColor,
         body: SingleChildScrollView(
           child: ChangeNotifierProvider.value(
               value: _languageViewModel,
@@ -152,7 +152,9 @@ class _SettingScreenState extends State<SettingScreen> {
                                 ),
                                 TextButton.icon(
                                     style: ButtonStyle(
-                                        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(0))), backgroundColor: MaterialStateProperty.all(kCopyColor)),
+                                      shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(0))),
+                                      backgroundColor: MaterialStateProperty.all(AppColors.kCopyColor),
+                                    ),
                                     onPressed: () {
                                       Clipboard.setData(ClipboardData(text: address)).then((_) {
                                         "wallet_copied".tr().show(context: context);
@@ -188,14 +190,16 @@ class _SettingScreenState extends State<SettingScreen> {
                             style: kSettingsUserEnteredTextStyle,
                             decoration: InputDecoration(
                                 hintText: hintTextEmail,
-                                hintStyle: const TextStyle(
-                                  color: kUserInputTextColor,
+                                hintStyle: TextStyle(
+                                  color: AppColors.kUserInputTextColor,
                                 ),
                                 suffix: ColoredBox(
-                                  color: kCopyColor,
+                                  color: AppColors.kCopyColor,
                                   child: TextButton.icon(
                                       style: ButtonStyle(
-                                          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(0))), backgroundColor: MaterialStateProperty.all(kCopyColor)),
+                                        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(0))),
+                                        backgroundColor: MaterialStateProperty.all(AppColors.kCopyColor),
+                                      ),
                                       onPressed: () async {
                                         if (emailController.text.isNotEmpty) {
                                           if (RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(emailController.text)) {
@@ -286,7 +290,6 @@ class _SettingScreenState extends State<SettingScreen> {
               submitFeedbackDialog.show();
             },
           ),
-
           const SettingsDivider(),
           SettingListItem(
             title: "delete_wallet".tr(),
@@ -370,7 +373,7 @@ class _SettingListItemState extends State<SettingListItem> {
               width: 20.h,
               child: SvgPicture.asset(
                 widget.imagePath,
-                color: kBlack,
+                color: AppColors.kBlack,
                 height: 20.h,
                 width: 20.h,
                 fit: BoxFit.fill,

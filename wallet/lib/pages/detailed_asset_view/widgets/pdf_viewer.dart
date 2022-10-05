@@ -85,7 +85,7 @@ class _PdfViewerState extends State<PdfViewer> {
             width: 30.w,
             height: 30.w,
             alignment: Alignment.bottomLeft,
-            color: kTransactionRed,
+            color: AppColors.kTransactionRed,
             child: Padding(
               padding: EdgeInsets.all(5.w),
               child: RotationTransition(
