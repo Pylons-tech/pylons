@@ -30,6 +30,7 @@ import 'package:pylons_wallet/pages/purchase_item/widgets/trade_receipt_dialog.d
 import 'package:pylons_wallet/pages/purchase_item/widgets/transaction_complete_dialog.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
+import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
@@ -38,33 +39,38 @@ import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
 
+/// Sending NFT instead of viewmodel because the share plugin tends to rebuild this screen
+/// Which creates two instance of view model
 class PurchaseItemScreen extends StatefulWidget {
-  final PurchaseItemViewModel purchaseItemViewModel;
+  final NFT nft;
 
-  const PurchaseItemScreen({Key? key, required this.purchaseItemViewModel}) : super(key: key);
+  const PurchaseItemScreen({Key? key, required this.nft}) : super(key: key);
 
   @override
   State<PurchaseItemScreen> createState() => _PurchaseItemScreenState();
 }
 
 class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
+  final viewModel = sl<PurchaseItemViewModel>();
+
   @override
   void initState() {
     super.initState();
-    widget.purchaseItemViewModel.logEvent();
+    viewModel.setNFT(widget.nft);
+    viewModel.logEvent();
 
     scheduleMicrotask(() {
-      widget.purchaseItemViewModel.initializeData();
+      viewModel.initializeData();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
-      value: widget.purchaseItemViewModel,
+      value: viewModel,
       child: WillPopScope(
           onWillPop: () async {
-            widget.purchaseItemViewModel.destroyPlayers();
+            viewModel.destroyPlayers();
             return true;
           },
           child: const PurchaseItemContent()),
@@ -636,40 +642,39 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                     ),
                   ),
 
-                    /// BUY NFT BUTTON
-                        if (viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid))
-                          BuyNFTButton(
-                            onTapped: () async {
-                              bool balancesFetchResult = true;
-                              if (viewModel.nft.price != kZeroInt) {
-                                final balancesEither = await viewModel.shouldShowSwipeToBuy(
-                                  selectedDenom: viewModel.nft.denom,
-                                  requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
-                                );
+                  /// BUY NFT BUTTON
+                  if (viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid))
+                    BuyNFTButton(
+                      onTapped: () async {
+                        bool balancesFetchResult = true;
+                        if (viewModel.nft.price != kZeroInt) {
+                          final balancesEither = await viewModel.shouldShowSwipeToBuy(
+                            selectedDenom: viewModel.nft.denom,
+                            requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
+                          );
 
-                                if (balancesEither.isLeft()) {
-                                  balancesEither.swap().getOrElse(() => '').show();
-                                  return;
-                                }
+                          if (balancesEither.isLeft()) {
+                            balancesEither.swap().getOrElse(() => '').show();
+                            return;
+                          }
 
-                                balancesFetchResult = balancesEither.getOrElse(() => false);
-                              }
+                          balancesFetchResult = balancesEither.getOrElse(() => false);
+                        }
 
-                              viewModel.addLogForCart();
+                        viewModel.addLogForCart();
 
-                              final PayNowDialog payNowDialog = PayNowDialog(
-                                  buildContext: context,
-                                  nft: viewModel.nft,
-                                  purchaseItemViewModel: viewModel,
-                                  onPurchaseDone: (txData) {
-                                    showTransactionCompleteDialog(execution: txData);
-                                  },
-                                  shouldBuy: balancesFetchResult);
-                              payNowDialog.show();
-                            },
+                        final PayNowDialog payNowDialog = PayNowDialog(
+                            buildContext: context,
                             nft: viewModel.nft,
-                          ),
-
+                            purchaseItemViewModel: viewModel,
+                            onPurchaseDone: (txData) {
+                              showTransactionCompleteDialog(execution: txData);
+                            },
+                            shouldBuy: balancesFetchResult);
+                        payNowDialog.show();
+                      },
+                      nft: viewModel.nft,
+                    ),
                 ],
               ),
             ),
