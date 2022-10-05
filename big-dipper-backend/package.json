@@ -18,7 +18,7 @@
     "@google-cloud/storage": "^6.5.2",
     "@google/model-viewer": "^2.0.2",
     "@ledgerhq/hw-transport-web-ble": "^6.27.6",
-    "@ledgerhq/hw-transport-webusb": "^6.27.4",
+    "@ledgerhq/hw-transport-webusb": "^6.27.6",
     "axios": "^0.27.2",
     "babel-polyfill": "^6.26.0",
     "bech32": "^2.0.0",
