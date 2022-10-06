@@ -541,9 +541,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                           height: 20.h,
                                         ),
                                       ),
+                                      SizedBox(height: 10.h),
                                       if (viewModel.nft.assetType == AssetType.Image)
                                       GestureDetector(
                                         onTap: () async {
+                                          print("was tapped");
                                           try {
                                             await Wallpaper.lockScreen();
                                           } catch (e, s) {
