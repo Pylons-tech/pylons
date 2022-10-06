@@ -29,6 +29,7 @@ import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+import 'package:wallpaper/wallpaper.dart';
 
 import '../../generated/locale_keys.g.dart';
 
@@ -225,6 +226,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
       color: likedByMe ? AppColors.kDarkRed : Colors.white,
     );
   }
+
+  // void _showWhatIsPylonDialog(BuildContext context) {
+  //   final WhatIsPylonDialog whatIsPylonDialog =
+  //   WhatIsPylonDialog(context: context, onBackPressed: () {});
+  //   whatIsPylonDialog.show();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -529,6 +536,22 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                           final Size size = MediaQuery.of(context).size;
                                           viewModel.shareNFTLink(size: size);
                                         },
+                                        child: SvgPicture.asset(
+                                          SVGUtil.OWNER_SHARE,
+                                          height: 20.h,
+                                        ),
+                                      ),
+                                      if (viewModel.nft.assetType == AssetType.Image)
+                                      GestureDetector(
+                                        onTap: () async {
+                                          try {
+                                            await Wallpaper.lockScreen();
+                                          } catch (e, s) {
+                                            print('Exception details:\n $e');
+                                            print('Stack trace:\n $s');
+                                            //_showWhatIsPylonDialog(context);
+                                          }
+                                            },
                                         child: SvgPicture.asset(
                                           SVGUtil.OWNER_SHARE,
                                           height: 20.h,
