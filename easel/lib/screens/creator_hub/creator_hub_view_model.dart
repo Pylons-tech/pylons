@@ -20,7 +20,6 @@ class CreatorHubViewModel extends ChangeNotifier {
 
   ViewType viewType = ViewType.viewGrid;
 
-  int forSaleCount = 0;
 
   int get publishedRecipesLength => nftPublishedList.length;
 
@@ -86,13 +85,11 @@ class CreatorHubViewModel extends ChangeNotifier {
   }
 
   void getTotalForSale() {
-    forSaleCount = 0;
-    nftForSaleList = [];
+    _nftForSaleList = [];
 
     for (NFT nft in nftPublishedList) {
       if (nft.isEnabled && nft.amountMinted < int.parse(nft.quantity)) {
-        forSaleCount++;
-        nftForSaleList.add(nft);
+        _nftForSaleList.add(nft);
       }
     }
 
@@ -193,7 +190,8 @@ class CreatorHubViewModel extends ChangeNotifier {
   }
 
   void updatePublishedNFTList({required NFT nft}) {
-    nftPublishedList.add(nft);
+    _nftPublishedList.add(nft);
+    _nftForSaleList.add(nft);
     notifyListeners();
   }
 }

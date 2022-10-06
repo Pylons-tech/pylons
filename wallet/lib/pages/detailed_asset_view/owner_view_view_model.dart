@@ -18,6 +18,8 @@ import 'package:pylons_wallet/utils/enums.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
+import '../owner_purchase_view_common/button_state.dart';
+
 class OwnerViewViewModel extends ChangeNotifier {
   late NFT nft;
   final Repository repository;
@@ -40,10 +42,10 @@ class OwnerViewViewModel extends ChangeNotifier {
 
   bool get toggled => _toggled;
 
-  late VideoPlayerController videoPlayerController;
+  VideoPlayerController? videoPlayerController;
 
   late ValueNotifier<ProgressBarState> audioProgressNotifier;
-  late ValueNotifier<ButtonState> buttonNotifier;
+  
 
   late StreamSubscription playerStateSubscription;
 
@@ -259,9 +261,10 @@ class OwnerViewViewModel extends ChangeNotifier {
     delayLoading();
     notifyListeners();
 
-    videoPlayerController.addListener(() {
-      if (videoPlayerController.value.hasError) {
-        videoLoadingError = videoPlayerController.value.errorDescription!;
+// TODO :Solve this listener bug
+    videoPlayerController?.addListener(() {
+      if (videoPlayerController!.value.hasError) {
+        videoLoadingError = videoPlayerController!.value.errorDescription!;
       }
       notifyListeners();
     });
@@ -285,7 +288,7 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   void disposeVideoController() {
-    videoPlayerController.removeListener(() {});
+    videoPlayerController?.removeListener(() {});
     videoPlayerHelper.destroyVideoPlayer();
   }
 
@@ -409,6 +412,11 @@ class OwnerViewViewModel extends ChangeNotifier {
   void logEvent() {
     repository.logUserJourney(screenName: AnalyticsScreenEvents.ownerView);
   }
+
+
+
+
+  ValueNotifier<ButtonState> buttonNotifier = ValueNotifier(ButtonState.loading);
 }
 
 class ProgressBarState {
@@ -423,4 +431,3 @@ class ProgressBarState {
   final Duration total;
 }
 
-enum ButtonState { paused, playing, loading }

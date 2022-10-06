@@ -22,6 +22,8 @@ import 'package:pylons_wallet/utils/enums.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
+import '../owner_purchase_view_common/button_state.dart';
+
 class PurchaseItemViewModel extends ChangeNotifier {
   PurchaseItemViewModel(this.walletsStore, {required this.audioPlayerHelper, required this.videoPlayerHelper, required this.repository, required this.shareHelper});
 
@@ -525,4 +527,3 @@ class ProgressBarState {
   final Duration total;
 }
 
-enum ButtonState { paused, playing, loading }
