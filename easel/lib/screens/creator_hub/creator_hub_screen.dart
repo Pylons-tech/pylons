@@ -212,35 +212,38 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: NFTsViewBuilder(
-                        onGridSelected: (context) => BuildNFTsContent(
-                            onDraftList: (context) => BuildGridView(
-                                  nftsList: viewModel.nftDraftList,
-                                  onEmptyList: (context) => getEmptyDraftListWidget(),
-                                ),
-                            onForSaleList: (context) => BuildGridView(
-                                  nftsList: viewModel.nftForSaleList,
-                                  onEmptyList: (context) => getEmptyWidgetForSale(),
-                                ),
-                            onPublishedList: (context) => BuildGridView(
-                                  nftsList: viewModel.nftPublishedList,
-                                  onEmptyList: (context) => getEmptyPublishedWidget(),
-                                ),
-                            collectionType: viewModel.selectedCollectionType),
-                        onListSelected: (context) => BuildNFTsContent(
-                            onDraftList: (context) => BuildListView(
-                                  nftsList: viewModel.nftDraftList,
-                                  onEmptyList: (context) => getEmptyDraftListWidget(),
-                                ),
-                            onForSaleList: (context) => BuildListView(
-                                  nftsList: viewModel.nftForSaleList,
-                                  onEmptyList: (context) => getEmptyWidgetForSale(),
-                                ),
-                            onPublishedList: (context) => BuildListView(
-                                  nftsList: viewModel.nftPublishedList,
-                                  onEmptyList: (context) => getEmptyPublishedWidget(),
-                                ),
-                            collectionType: viewModel.selectedCollectionType),
-                        viewType: viewModel.viewType),
+                      onGridSelected: (context) => BuildNFTsContent(
+                          onDraftList: (context) => BuildGridView(
+                                nftsList: viewModel.nftDraftList,
+                                onEmptyList: (context) => getEmptyDraftListWidget(),
+                              ),
+                          onForSaleList: (context) => BuildGridView(
+                                nftsList: viewModel.nftForSaleList,
+                                onEmptyList: (context) => getEmptyWidgetForSale(),
+                              ),
+                          onPublishedList: (context) => BuildGridView(
+                                nftsList: viewModel.nftPublishedList,
+                                onEmptyList: (context) => getEmptyPublishedWidget(),
+                              ),
+                          collectionType: viewModel.selectedCollectionType),
+                      onListSelected: (context) => BuildNFTsContent(
+                          onDraftList: (context) => BuildListView(
+                                nftsList: viewModel.nftDraftList,
+                                onEmptyList: (context) => getEmptyDraftListWidget(),
+                              ),
+                          onForSaleList: (context) => BuildListView(
+                                nftsList: viewModel.nftForSaleList,
+                                onEmptyList: (context) => getEmptyWidgetForSale(),
+                              ),
+                          onPublishedList: (context) => BuildListView(
+                                key: ValueKey(viewModel.nftPublishedList.length),
+                                nftsList: viewModel.nftPublishedList,
+                                onEmptyList: (context) => getEmptyPublishedWidget(),
+                              ),
+                          collectionType: viewModel.selectedCollectionType),
+                      viewType: viewModel.viewType,
+                    ),
+
                   ),
                 ),
               ],

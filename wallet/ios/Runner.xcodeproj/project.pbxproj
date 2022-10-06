@@ -409,7 +409,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = QV67PMQ8H3;
 				ENABLE_BITCODE = NO;
 				GOOGLE_SERVICE_PATH = "";
@@ -547,7 +547,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = QV67PMQ8H3;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
@@ -580,7 +580,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = QV67PMQ8H3;
 				ENABLE_BITCODE = NO;
 				GOOGLE_SERVICE_PATH = "";
@@ -666,7 +666,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = QV67PMQ8H3;
 				ENABLE_BITCODE = NO;
 				GOOGLE_SERVICE_PATH = "${SRCROOT}/Runner/Firebase/prod/GoogleService-Info.plist";
@@ -750,7 +750,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = QV67PMQ8H3;
 				ENABLE_BITCODE = NO;
 				GOOGLE_SERVICE_PATH = "${SRCROOT}/Runner/Firebase/prod/GoogleService-Info.plist";
@@ -836,7 +836,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = QV67PMQ8H3;
 				ENABLE_BITCODE = NO;
 				GOOGLE_SERVICE_PATH = "${SRCROOT}/Runner/Firebase/development/GoogleService-Info.plist";
@@ -920,7 +920,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = QV67PMQ8H3;
 				ENABLE_BITCODE = NO;
 				GOOGLE_SERVICE_PATH = "${SRCROOT}/Runner/Firebase/development/GoogleService-Info.plist";
