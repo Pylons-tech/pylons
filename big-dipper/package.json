@@ -45,7 +45,7 @@
     "react-helmet": "^6.1.0",
     "react-jazzicon": "^1.0.0",
     "react-json-view": "^1.21.3",
-    "react-responsive-pagination": "^1.7.0",
+    "react-responsive-pagination": "^1.8.0",
     "react-router-dom": "^6.4.1",
     "react-showdown": "^2.3.1",
     "react-sidebar": "^3.0.2",
