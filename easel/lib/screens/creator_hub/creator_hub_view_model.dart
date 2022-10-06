@@ -20,25 +20,9 @@ class CreatorHubViewModel extends ChangeNotifier {
 
   ViewType viewType = ViewType.viewGrid;
 
-  int _publishedRecipesLength = 0;
   int forSaleCount = 0;
 
-  NFT? _recentNFT;
-
-  NFT? get recentNFT => _recentNFT;
-
-  set recentNFT(NFT? nft) {
-    _recentNFT = nft;
-    notifyListeners();
-  }
-
-  get publishedRecipesLength => _publishedRecipesLength;
-
-  set publishedRecipeLength(int value) {
-    _publishedRecipesLength = value;
-
-    notifyListeners();
-  }
+  int get publishedRecipesLength => nftPublishedList.length;
 
   changeSelectedCollection(CollectionType collectionType) {
     switch (collectionType) {
@@ -104,12 +88,14 @@ class CreatorHubViewModel extends ChangeNotifier {
   void getTotalForSale() {
     forSaleCount = 0;
     nftForSaleList = [];
-    for (int i = 0; i < nftPublishedList.length; i++) {
-      if (nftPublishedList[i].isEnabled && nftPublishedList[i].amountMinted < int.parse(nftPublishedList[i].quantity)) {
+
+    for (NFT nft in nftPublishedList) {
+      if (nft.isEnabled && nft.amountMinted < int.parse(nft.quantity)) {
         forSaleCount++;
-        nftForSaleList.add(nftPublishedList[i]);
+        nftForSaleList.add(nft);
       }
     }
+
     notifyListeners();
   }
 
@@ -146,13 +132,6 @@ class CreatorHubViewModel extends ChangeNotifier {
       final nft = NFT.fromRecipe(recipe);
       _nftPublishedList.add(nft);
     }
-
-    if (_recentNFT != null) {
-      _nftPublishedList.add(_recentNFT!);
-      recentNFT = null;
-    }
-
-    publishedRecipeLength = nftPublishedList.length;
   }
 
   void addToRecentNFT(NFT nft) {
@@ -210,6 +189,11 @@ class CreatorHubViewModel extends ChangeNotifier {
 
   void updateViewType(ViewType selectedViewType) {
     viewType = selectedViewType;
+    notifyListeners();
+  }
+
+  void updatePublishedNFTList({required NFT nft}) {
+    nftPublishedList.add(nft);
     notifyListeners();
   }
 }

@@ -710,13 +710,16 @@ class EaselProvider extends ChangeNotifier {
     }
     scaffoldMessengerState?.show(message: "recipe_created".tr());
     final nftFromRecipe = NFT.fromRecipe(recipe);
-    GetIt.I.get<CreatorHubViewModel>().recentNFT = nftFromRecipe;
+    GetIt.I.get<CreatorHubViewModel>().updatePublishedNFTList(nft: nftFromRecipe);
     deleteNft(nft.id);
     return true;
   }
 
-  IntWeightRange buildIntWeightRange({required String upperRange, required String lowerRange}) =>
-      IntWeightRange(lower: Int64(int.parse(lowerRange)), upper: Int64(int.parse(lowerRange)), weight: Int64(1));
+  IntWeightRange buildIntWeightRange({required String upperRange, required String lowerRange}) => IntWeightRange(
+        lower: Int64(int.parse(lowerRange)),
+        upper: Int64(int.parse(lowerRange)),
+        weight: Int64(1),
+      );
 
   bool isDifferentUserName(String savedUserName) => (currentUsername.isNotEmpty && savedUserName != currentUsername);
 
@@ -1058,6 +1061,7 @@ class EaselProvider extends ChangeNotifier {
   }
 
   Future<void> deleteNft(int? id) async {
+    if (id == null) return;
     await repository.deleteNft(id!);
   }
 
