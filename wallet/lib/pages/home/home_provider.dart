@@ -22,10 +22,7 @@ class HomeProvider extends ChangeNotifier {
 
   HomeProvider({required this.repository, required this.walletStore});
 
-  final List<Widget> pages = <Widget>[
-    const CollectionScreen(),
-    const WalletScreen()
-  ];
+  final List<Widget> pages = <Widget>[const CollectionScreen(), const WalletScreen()];
   final tabs = ['collection', 'wallet'];
 
   int _selectedIndex = 0;
@@ -46,8 +43,7 @@ class HomeProvider extends ChangeNotifier {
 
   List<TransactionHistory> _transactionHistoryList = [];
 
-  List<TransactionHistory> get transactionHistoryList =>
-      _transactionHistoryList;
+  List<TransactionHistory> get transactionHistoryList => _transactionHistoryList;
 
   set transactionHistoryList(List<TransactionHistory> txList) {
     _transactionHistoryList = txList;
@@ -103,32 +99,21 @@ class HomeProvider extends ChangeNotifier {
       showBadge = false;
       return;
     }
-    showBadge = !notificationsList
-        .firstWhere((element) => !element.read,
-            orElse: () => notificationMessageObject)
-        .read;
+    showBadge = !notificationsList.firstWhere((element) => !element.read, orElse: () => notificationMessageObject).read;
   }
 
   Future<void> getTransactionHistoryList() async {
     final walletInfo = walletStore.getWallets().value.last;
 
-    GetIt.I
-        .get<Repository>()
-        .getTransactionHistory(address: walletInfo.publicAddress)
-        .then((value) {
+    GetIt.I.get<Repository>().getTransactionHistory(address: walletInfo.publicAddress).then((value) {
       if (value.isRight()) {
         transactionHistoryList = value.getOrElse(() => []);
       }
     });
   }
 
-  List<TransactionHistory> getDenomSpecificTxList(
-      {required String defaultCurrency}) {
-    return transactionHistoryList
-        .where((element) => element.amount.contains(defaultCurrency))
-        .toList()
-        .take(3)
-        .toList();
+  List<TransactionHistory> getDenomSpecificTxList({required String defaultCurrency}) {
+    return transactionHistoryList.where((element) => element.amount.contains(defaultCurrency)).toList().take(3).toList();
   }
 
   void changeTabs(int index) {
@@ -161,9 +146,7 @@ class HomeProvider extends ChangeNotifier {
 
       switch (coinModel.denom.toIBCCoinsEnum()) {
         case IBCCoins.upylon:
-          amount = (double.parse(amount) / kBigIntBase)
-              .toString()
-              .truncateAfterDecimal(2);
+          amount = (double.parse(amount) / kBigIntBase).toString().truncateAfterDecimal(2);
           break;
         case IBCCoins.urun:
         case IBCCoins.ujunox:
@@ -172,12 +155,10 @@ class HomeProvider extends ChangeNotifier {
         case IBCCoins.ustripeusd:
         case IBCCoins.eeur:
         case IBCCoins.uatom:
-          amount = (double.parse(coinModel.amount.toString()) / kBigIntBase)
-              .toString();
+          amount = (double.parse(coinModel.amount.toString()) / kBigIntBase).toString();
           break;
         case IBCCoins.weth_wei:
-          amount = (double.parse(coinModel.amount.toString()) / kEthIntBase)
-              .toString();
+          amount = (double.parse(coinModel.amount.toString()) / kEthIntBase).toString();
           break;
       }
 
@@ -211,8 +192,7 @@ class HomeProvider extends ChangeNotifier {
     balances.clear();
     final currentWallet = getWalletStore().getWallets().value.last;
 
-    final response =
-        await getRepository().getBalance(currentWallet.publicAddress);
+    final response = await getRepository().getBalance(currentWallet.publicAddress);
 
     if (response.isLeft()) {
       handleError(response);
@@ -231,6 +211,10 @@ class HomeProvider extends ChangeNotifier {
     either.fold((l) {
       l.checkAndTakeAction(onError: (error) {});
     }, (r) => null);
+  }
+
+  void logAnalyticsEvent() {
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.home);
   }
 
   WalletsStore getWalletStore() {

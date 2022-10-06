@@ -58,7 +58,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: kBlack,
+      color: AppColors.kBlack,
       child: Stack(
         children: [
           getTypeWidget(widget.nft),
@@ -76,7 +76,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
             ),
           ),
           ColoredBox(
-            color: kBlack.withOpacity(0.5),
+            color: AppColors.kBlack.withOpacity(0.5),
             child: Align(
               child: RepaintBoundary(
                 key: renderObjectKey,
@@ -84,7 +84,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
                   padding: EdgeInsets.zero,
                   data: link,
                   size: 200,
-                  foregroundColor: kWhite,
+                  foregroundColor: AppColors.kWhite,
                 ),
               ),
             ),
@@ -101,7 +101,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
               padding: EdgeInsets.only(bottom: 30.h),
               child: CustomPaintButton(
                   title: "done".tr(),
-                  bgColor: kWhite.withOpacity(0.3),
+                  bgColor: AppColors.kWhite.withOpacity(0.3),
                   width: 280.w,
                   onPressed: () {
                     Navigator.pop(context);
@@ -139,7 +139,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
         return Nft3dWidget(
           url: nft.url,
           cameraControls: false,
-          backgroundColor: kBlack.withOpacity(0.5),
+          backgroundColor: AppColors.kBlack.withOpacity(0.5),
         );
     }
   }
