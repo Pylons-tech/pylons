@@ -1062,7 +1062,7 @@ class EaselProvider extends ChangeNotifier {
 
   Future<void> deleteNft(int? id) async {
     if (id == null) return;
-    await repository.deleteNft(id!);
+    await repository.deleteNft(id);
   }
 
   void toHashtagList(String hashtag) {

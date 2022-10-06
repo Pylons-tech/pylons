@@ -19,6 +19,7 @@ import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
 import '../owner_purchase_view_common/button_state.dart';
+import '../owner_purchase_view_common/progress_bar_state.dart';
 
 class OwnerViewViewModel extends ChangeNotifier {
   late NFT nft;
@@ -44,7 +45,6 @@ class OwnerViewViewModel extends ChangeNotifier {
 
   VideoPlayerController? videoPlayerController;
 
-  late ValueNotifier<ProgressBarState> audioProgressNotifier;
   
 
   late StreamSubscription playerStateSubscription;
@@ -415,19 +415,13 @@ class OwnerViewViewModel extends ChangeNotifier {
 
 
 
+  ValueNotifier<ProgressBarState> audioProgressNotifier  = ValueNotifier<ProgressBarState>(
+    ProgressBarState(
+      current: Duration.zero,
+      buffered: Duration.zero,
+      total: Duration.zero,
+    ),
+  );
 
   ValueNotifier<ButtonState> buttonNotifier = ValueNotifier(ButtonState.loading);
 }
-
-class ProgressBarState {
-  ProgressBarState({
-    required this.current,
-    required this.buffered,
-    required this.total,
-  });
-
-  final Duration current;
-  final Duration buffered;
-  final Duration total;
-}
-

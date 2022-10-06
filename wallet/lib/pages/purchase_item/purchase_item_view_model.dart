@@ -23,6 +23,7 @@ import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
 import '../owner_purchase_view_common/button_state.dart';
+import '../owner_purchase_view_common/progress_bar_state.dart';
 
 class PurchaseItemViewModel extends ChangeNotifier {
   PurchaseItemViewModel(this.walletsStore, {required this.audioPlayerHelper, required this.videoPlayerHelper, required this.repository, required this.shareHelper});
@@ -514,16 +515,3 @@ class PurchaseItemViewModel extends ChangeNotifier {
     repository.logUserJourney(screenName: AnalyticsScreenEvents.purchaseView);
   }
 }
-
-class ProgressBarState {
-  ProgressBarState({
-    required this.current,
-    required this.buffered,
-    required this.total,
-  });
-
-  final Duration current;
-  final Duration buffered;
-  final Duration total;
-}
-

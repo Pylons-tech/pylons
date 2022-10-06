@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -6,6 +7,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
@@ -28,32 +30,39 @@ import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-class OwnerView extends StatefulWidget {
-  final OwnerViewViewModel ownerViewViewModel;
 
-  const OwnerView({required this.ownerViewViewModel});
+class OwnerView extends StatefulWidget {
+  final NFT nft;
+  const OwnerView({required this.nft, Key? key}) : super(key: key);
 
   @override
   State<OwnerView> createState() => _OwnerViewState();
 }
 
 class _OwnerViewState extends State<OwnerView> {
+  OwnerViewViewModel ownerViewViewModel = GetIt.I.get();
+
   @override
   void initState() {
     super.initState();
-    widget.ownerViewViewModel.initializeData();
-    widget.ownerViewViewModel.logEvent();
+
+    ownerViewViewModel.nft = widget.nft;
+
+    ownerViewViewModel.logEvent();
+    scheduleMicrotask(() {
+      ownerViewViewModel.initializeData();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        widget.ownerViewViewModel.destroyPlayers();
+        ownerViewViewModel.destroyPlayers();
         return true;
       },
       child: ChangeNotifierProvider.value(
-        value: widget.ownerViewViewModel,
+        value: ownerViewViewModel,
         builder: (_, __) => Scaffold(
           backgroundColor: AppColors.kBlack,
           body: const OwnerViewContent(),
