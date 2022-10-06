@@ -181,9 +181,9 @@ class PurchaseItemViewModel extends ChangeNotifier {
     delayLoading();
     notifyListeners();
 
-    videoPlayerController.addListener(() {
-      if (videoPlayerController.value.hasError) {
-        videoLoadingError = videoPlayerController.value.errorDescription!;
+    videoPlayerController?.addListener(() {
+      if (videoPlayerController!.value.hasError) {
+        videoLoadingError = videoPlayerController!.value.errorDescription!;
       }
       notifyListeners();
     });
@@ -207,7 +207,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
   }
 
   void disposeVideoController() {
-    videoPlayerController.removeListener(() {});
+    videoPlayerController?.removeListener(() {});
     videoPlayerHelper.destroyVideoPlayer();
   }
 
@@ -490,9 +490,15 @@ class PurchaseItemViewModel extends ChangeNotifier {
   late StreamSubscription positionStreamSubscription;
   late StreamSubscription bufferPositionSubscription;
   late StreamSubscription durationStreamSubscription;
-  late VideoPlayerController videoPlayerController;
-  late ValueNotifier<ProgressBarState> progressNotifier;
-  late ValueNotifier<ButtonState> buttonNotifier;
+  VideoPlayerController? videoPlayerController;
+  ValueNotifier<ProgressBarState> progressNotifier = ValueNotifier<ProgressBarState>(
+    ProgressBarState(
+      current: Duration.zero,
+      buffered: Duration.zero,
+      total: Duration.zero,
+    ),
+  );
+  ValueNotifier<ButtonState> buttonNotifier = ValueNotifier(ButtonState.loading);
   WalletsStore walletsStore;
   String _videoLoadingError = "";
   int _viewsCount = 0;

@@ -54,6 +54,7 @@ class _PublishScreenState extends State<PublishScreen> {
   initState() {
     easelProvider.nft = repository.getCacheDynamicType(key: nftKey);
     easelProvider.collapsed = false;
+    easelProvider.setLog(screenName: AnalyticsScreenEvents.publishScreen);
     super.initState();
   }
 

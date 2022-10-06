@@ -108,8 +108,7 @@ class NFT extends Equatable {
       assetType: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kNftFormat).value.toAssetTypeEnum(),
       duration: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kDuration, orElse: () => LongKeyValue(key: kDuration, value: Int64())).value.toInt().toSeconds(),
       hashtags: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kHashtags, orElse: () => StringKeyValue(key: kHashtags, value: "")).value,
-      realWorld:
-          item.strings.firstWhere((strKeyValue) => strKeyValue.key == kRealWorld, orElse: () => StringKeyValue(key: kRealWorld, value: "false")).value == "true",
+      realWorld: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kRealWorld, orElse: () => StringKeyValue(key: kRealWorld, value: "false")).value == "true",
     );
   }
 
@@ -145,8 +144,7 @@ class NFT extends Equatable {
       assetType: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kNftFormat).value.toAssetTypeEnum(),
       duration: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kDuration, orElse: () => LongKeyValue(key: kDuration, value: Int64())).value.toInt().toSeconds(),
       hashtags: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kHashtags, orElse: () => StringKeyValue(key: kHashtags, value: "")).value,
-      realWorld:
-          item.strings.firstWhere((strKeyValue) => strKeyValue.key == kRealWorld, orElse: () => StringKeyValue(key: kRealWorld, value: "false")).value == "true",
+      realWorld: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kRealWorld, orElse: () => StringKeyValue(key: kRealWorld, value: "false")).value == "true",
     );
   }
 
@@ -179,10 +177,7 @@ class NFT extends Equatable {
               "0",
       createdAt: createdAt,
       hashtags: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kHashtags, orElse: () => StringParam()).value ?? "",
-      realWorld: recipe.entries.itemOutputs.firstOrNull?.strings
-              .firstWhere((strKeyValue) => strKeyValue.key == kRealWorld, orElse: () => StringParam(key: kRealWorld, value: "false"))
-              .value ==
-          "true",
+      realWorld: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kRealWorld, orElse: () => StringParam(key: kRealWorld, value: "false")).value == "true",
     );
   }
 
@@ -212,13 +207,31 @@ class NFT extends Equatable {
   @override
   List<Object?> get props => [
         url,
+        thumbnailUrl,
         name,
         description,
         denom,
         price,
-        type,
         creator,
-        itemID,
         owner,
+        amountMinted,
+        quantity,
+        tradePercentage,
+        cookbookID,
+        recipeID,
+        itemID,
+        width,
+        height,
+        appType,
+        tradeID,
+        ownerAddress,
+        ibcCoins,
+        type,
+        assetType,
+        duration,
+        fileSize,
+        hashtags,
+        createdAt,
+        realWorld,
       ];
 }

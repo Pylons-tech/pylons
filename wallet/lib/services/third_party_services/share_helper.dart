@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -19,8 +20,8 @@ class ShareHelperImpl implements ShareHelper {
   void shareFiles({required List<String> filePath}) {
     final box = navigatorKey.currentState!.overlay!.context.findRenderObject() as RenderBox?;
 
-    Share.shareFiles(
-      filePath,
+    Share.shareXFiles(
+      filePath.map((filePath) => XFile(filePath)).toList(),
       text: '',
       sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
     );
