@@ -46,6 +46,7 @@ class _PriceScreenState extends State<PriceScreen> {
   @override
   void initState() {
     nft = repository.getCacheDynamicType(key: nftKey);
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.priceScreen);
     super.initState();
   }
 
