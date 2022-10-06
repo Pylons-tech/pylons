@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/utils/constants.dart';
@@ -24,6 +22,15 @@ class CreatorHubViewModel extends ChangeNotifier {
 
   int _publishedRecipesLength = 0;
   int forSaleCount = 0;
+
+  NFT? _recentNFT;
+
+  NFT? get recentNFT => _recentNFT;
+
+  set recentNFT(NFT? nft) {
+    _recentNFT = nft;
+    notifyListeners();
+  }
 
   get publishedRecipesLength => _publishedRecipesLength;
 
@@ -98,9 +105,7 @@ class CreatorHubViewModel extends ChangeNotifier {
     forSaleCount = 0;
     nftForSaleList = [];
     for (int i = 0; i < nftPublishedList.length; i++) {
-      if (nftPublishedList[i].isEnabled &&
-          nftPublishedList[i].amountMinted <
-              int.parse(nftPublishedList[i].quantity)) {
+      if (nftPublishedList[i].isEnabled && nftPublishedList[i].amountMinted < int.parse(nftPublishedList[i].quantity)) {
         forSaleCount++;
         nftForSaleList.add(nftPublishedList[i]);
       }
@@ -110,7 +115,6 @@ class CreatorHubViewModel extends ChangeNotifier {
 
   Future<void> getPublishAndDraftData() async {
     await getRecipesList();
-
     getTotalForSale();
     notifyListeners();
   }
@@ -127,15 +131,13 @@ class CreatorHubViewModel extends ChangeNotifier {
       return;
     }
 
-    final recipesListEither =
-        await repository.getRecipesBasedOnCookBookId(cookBookId: cookBookId);
+    final recipesListEither = await repository.getRecipesBasedOnCookBookId(cookBookId: cookBookId);
 
     if (recipesListEither.isLeft()) {
       return;
     }
 
     final recipesList = recipesListEither.getOrElse(() => []);
-    log("recipeList: ${recipesList.length}");
     _nftPublishedList.clear();
     if (recipesList.isEmpty) {
       return;
@@ -145,7 +147,17 @@ class CreatorHubViewModel extends ChangeNotifier {
       _nftPublishedList.add(nft);
     }
 
+    if (_recentNFT != null) {
+      _nftPublishedList.add(_recentNFT!);
+      recentNFT = null;
+    }
+
     publishedRecipeLength = nftPublishedList.length;
+  }
+
+  void addToRecentNFT(NFT nft) {
+    _nftPublishedList.add(nft);
+    notifyListeners();
   }
 
   Future<void> getDraftsList() async {
@@ -155,9 +167,7 @@ class CreatorHubViewModel extends ChangeNotifier {
 
     if (getNftResponse.isLeft()) {
       loading.dismiss();
-
       "something_wrong".tr().show();
-
       return;
     }
 
