@@ -289,6 +289,9 @@ abstract class RemoteDataStore {
     required double purchasePrice,
     required String currency,
   });
+
+
+  Future<void> logUserJourney({required String screenName});
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -1145,6 +1148,11 @@ class RemoteDataStoreImp implements RemoteDataStore {
       currency: currency,
     );
     return true;
+  }
+  
+  @override
+  Future<void> logUserJourney({required String screenName}) async {
+    await analyticsHelper.logUserJourney(screenName: screenName);
   }
 }
 

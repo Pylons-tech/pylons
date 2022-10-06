@@ -24,12 +24,16 @@ class RecoveryScreen extends StatefulWidget {
 class _RecoveryScreenState extends State<RecoveryScreen> {
   bool shouldShowTestNetRecovery = false;
 
+  Repository get repository => GetIt.I.get();
+
   ValueNotifier<String> mnemonicsNotifier =
       ValueNotifier('focus broom energy drift gravity plastic rigid busy iron collect metal squirrel ankle cousin cheap erupt media output merge couch window share ignore exclude');
 
   @override
   void initState() {
     super.initState();
+
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.recovery);
 
     final account = GetIt.I.get<WalletsStore>().getWallets().value.last;
 
@@ -50,7 +54,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.kBackgroundColor,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 37.w),
         child: Column(
@@ -68,9 +72,9 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Icon(
+                  child: Icon(
                     Icons.arrow_back_ios,
-                    color: kUserInputTextColor,
+                    color: AppColors.kUserInputTextColor,
                   )),
             ),
             SizedBox(
@@ -167,9 +171,9 @@ class RecoveryForwardItem extends StatelessWidget {
                   title,
                   style: kRecoveryOptionsText,
                 ),
-                const Icon(
+                Icon(
                   Icons.arrow_forward_ios_sharp,
-                  color: kForwardIconColor,
+                  color: AppColors.kForwardIconColor,
                 )
               ],
             ),

@@ -17,4 +17,10 @@ class MockAnalyticsHelper implements AnalyticsHelper {
     // TODO: implement logAddToCart
     throw UnimplementedError();
   }
+  
+  @override
+  Future<void> logUserJourney({required String screenName}) {
+    // TODO: implement logUserJourney
+    throw UnimplementedError();
+  }
 }

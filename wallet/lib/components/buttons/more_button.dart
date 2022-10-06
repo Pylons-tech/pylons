@@ -23,10 +23,10 @@ class MoreButton extends StatelessWidget {
               )
             else
               const SizedBox.shrink(),
-            const Icon(
+             Icon(
               Icons.keyboard_arrow_right_rounded,
               size: kIconSize,
-              color: kSelectedIcon,
+              color: AppColors.kSelectedIcon,
             ),
           ],
         ));

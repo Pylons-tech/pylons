@@ -19,14 +19,14 @@ class BlueClippedButton extends StatelessWidget {
       child: ClipPath(
         clipper: MnemonicClipper(cuttingHeight: 18.h),
         child: Container(
-          color: enabled ? kDarkPurple : kGray.withOpacity(0.3),
+          color: enabled ? AppColors.kDarkPurple : AppColors.kGray.withOpacity(0.3),
           height: 45.h,
           width: 200.w,
           child: Center(
               child: Text(
             text,
             style: TextStyle(
-                color: enabled ? kWhite : kDarkGrey.withOpacity(0.5),
+                color: enabled ? AppColors.kWhite : AppColors.kDarkGrey.withOpacity(0.5),
                 fontSize: 16.sp),
             textAlign: TextAlign.center,
           )),
