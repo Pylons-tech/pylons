@@ -1,9 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+import '../../../services/repository/repository.dart';
 
 TextStyle kLegalOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
 TextStyle kLegalHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
@@ -16,10 +19,18 @@ class LegalScreen extends StatefulWidget {
 }
 
 class _LegalScreenState extends State<LegalScreen> {
+  Repository get repository => GetIt.I.get();
+
+  @override
+  void initState() {
+    super.initState();
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.legal);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.kBackgroundColor,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 37.w),
         child: Column(
@@ -35,13 +46,14 @@ class _LegalScreenState extends State<LegalScreen> {
             Align(
               alignment: Alignment.centerLeft,
               child: InkResponse(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    color: kUserInputTextColor,
-                  )),
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: AppColors.kUserInputTextColor,
+                ),
+              ),
             ),
             SizedBox(
               height: 33.h,
@@ -94,9 +106,9 @@ class LegalForwardItem extends StatelessWidget {
                   title.tr(),
                   style: kLegalOptionsText,
                 ),
-                const Icon(
+                Icon(
                   Icons.arrow_forward_ios_sharp,
-                  color: kForwardIconColor,
+                  color: AppColors.kForwardIconColor,
                 )
               ],
             ),

@@ -33,12 +33,12 @@ class _PurchaseVideoPlayerScreenState extends State<PurchaseVideoPlayerScreen> {
   Widget build(BuildContext context) {
     return Consumer(builder: (context, PurchaseItemViewModel viewModel, child) {
       return ColoredBox(
-        color: kBlack,
+        color: AppColors.kBlack,
         child: viewModel.isVideoLoading
-            ? const Center(
+            ?  Center(
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(kWhite),
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.kWhite),
                 ),
               )
             : viewModel.videoLoadingError.isNotEmpty
@@ -47,7 +47,7 @@ class _PurchaseVideoPlayerScreenState extends State<PurchaseVideoPlayerScreen> {
                     padding: const EdgeInsets.all(10),
                     child: Text(
                       "video_player_network_error".tr(),
-                      style: TextStyle(fontSize: 18.sp, color: kWhite),
+                      style: TextStyle(fontSize: 18.sp, color: AppColors.kWhite),
                     ),
                   ))
                 : Center(
@@ -57,10 +57,10 @@ class _PurchaseVideoPlayerScreenState extends State<PurchaseVideoPlayerScreen> {
                                 .videoPlayerController.value.aspectRatio,
                             child: VideoPlayer(viewModel.videoPlayerController),
                           )
-                        : const Center(
+                        : Center(
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(kWhite),
+                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.kWhite),
                             ),
                           ),
                   ),

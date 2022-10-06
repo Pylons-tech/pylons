@@ -32,12 +32,12 @@ class _OwnerVideoPlayerScreenState extends State<OwnerVideoPlayerScreen> {
     return Consumer(
       builder: (context, OwnerViewViewModel viewModel, child) {
         return ColoredBox(
-          color: kBlack,
+          color: AppColors.kBlack,
           child: viewModel.isVideoLoading
-              ? const Center(
+              ? Center(
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(kWhite),
+                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.kWhite),
                   ),
                 )
               : viewModel.videoLoadingError.isNotEmpty
@@ -46,7 +46,7 @@ class _OwnerVideoPlayerScreenState extends State<OwnerVideoPlayerScreen> {
                       padding: const EdgeInsets.all(10),
                       child: Text(
                         "video_player_network_error".tr(),
-                        style: TextStyle(fontSize: 18.sp, color: kWhite),
+                        style: TextStyle(fontSize: 18.sp, color: AppColors.kWhite),
                       ),
                     ))
                   : Center(
@@ -57,11 +57,11 @@ class _OwnerVideoPlayerScreenState extends State<OwnerVideoPlayerScreen> {
                               child:
                                   VideoPlayer(viewModel.videoPlayerController),
                             )
-                          : const Center(
+                          : Center(
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
                                 valueColor:
-                                    AlwaysStoppedAnimation<Color>(kWhite),
+                                    AlwaysStoppedAnimation<Color>(AppColors.kWhite),
                               ),
                             ),
                     ),

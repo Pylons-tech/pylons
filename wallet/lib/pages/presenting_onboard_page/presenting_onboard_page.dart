@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
+import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
@@ -18,21 +18,24 @@ class PresentingOnboardPage extends StatefulWidget {
   State<PresentingOnboardPage> createState() => __PresentingOnboardPageState();
 }
 
-TextStyle kSubHeadlineTextStyle = TextStyle(
-    fontSize: 30.sp,
-    fontFamily: kUniversalFontFamily,
-    color: kBlack,
-    fontWeight: FontWeight.w600);
+TextStyle kSubHeadlineTextStyle = TextStyle(fontSize: 30.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlack, fontWeight: FontWeight.w600);
 
 class __PresentingOnboardPageState extends State<PresentingOnboardPage> {
-  WalletsStore get walletsStore => GetIt.I.get();
+  Repository get repository => GetIt.I.get();
+
+  @override
+  void initState() {
+    super.initState();
+
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.mainLanding);
+  }
 
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
-        backgroundColor: kWhite,
+        backgroundColor: AppColors.kWhite,
         body: Stack(
           children: [
             Positioned(
@@ -74,27 +77,21 @@ class __PresentingOnboardPageState extends State<PresentingOnboardPage> {
                     VerticalSpace(5.h),
                     Text(
                       "stake_your_digital_claim".tr(),
-                      style: TextStyle(
-                          fontSize: 26.sp,
-                          fontFamily: kUniversalFontFamily,
-                          color: kBlack,
-                          fontWeight: FontWeight.w700),
+                      style: TextStyle(fontSize: 26.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlack, fontWeight: FontWeight.w700),
                     ),
                     VerticalSpace(100.h),
                     buildBackupButton(
                         title: "create_wallet".tr(),
-                        bgColor: kCreateWalletButtonColorDark,
+                        bgColor: AppColors.kCreateWalletButtonColorDark,
                         onPressed: () {
-                          Navigator.of(context)
-                              .pushNamed(RouteUtil.ROUTE_CREATE_WALLET);
+                          Navigator.of(context).pushNamed(RouteUtil.ROUTE_CREATE_WALLET);
                         }),
                     VerticalSpace(25.h),
                     buildBackupButton(
                         title: "restore_wallet".tr(),
-                        bgColor: kButtonColor,
+                        bgColor: AppColors.kButtonColor,
                         onPressed: () {
-                          Navigator.of(context)
-                              .pushNamed(RouteUtil.ROUTE_RESTORE_WALLET);
+                          Navigator.of(context).pushNamed(RouteUtil.ROUTE_RESTORE_WALLET);
                         }),
                     VerticalSpace(25.h),
                   ],
@@ -107,10 +104,7 @@ class __PresentingOnboardPageState extends State<PresentingOnboardPage> {
     );
   }
 
-  Widget buildBackupButton(
-      {required String title,
-      required Color bgColor,
-      required VoidCallback onPressed}) {
+  Widget buildBackupButton({required String title, required Color bgColor, required VoidCallback onPressed}) {
     return InkWell(
       onTap: () {
         onPressed.call();
@@ -126,10 +120,7 @@ class __PresentingOnboardPageState extends State<PresentingOnboardPage> {
             child: Center(
                 child: Text(
               title,
-              style: TextStyle(
-                  color: bgColor == kButtonColor ? kBlue : kWhite,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600),
+              style: TextStyle(color: bgColor == AppColors.kButtonColor ? AppColors.kBlue : AppColors.kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             )),
           ),

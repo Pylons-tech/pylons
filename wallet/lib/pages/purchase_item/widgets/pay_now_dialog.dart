@@ -100,8 +100,8 @@ class _PayNowWidgetState extends State<PayNowWidget> {
               width: 80,
               child: ClipPath(
                 clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NW),
-                child: const ColoredBox(
-                  color: kDarkRed,
+                child: ColoredBox(
+                  color: AppColors.kDarkRed,
                 ),
               ),
             ),
@@ -114,8 +114,8 @@ class _PayNowWidgetState extends State<PayNowWidget> {
               width: 80,
               child: ClipPath(
                 clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SE),
-                child: const ColoredBox(
-                  color: kDarkRed,
+                child: ColoredBox(
+                  color: AppColors.kDarkRed,
                 ),
               ),
             ),
@@ -205,7 +205,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   Center(
                     child: buildButton(
                         title: "add_pylons".tr(),
-                        bgColor: kDarkRed,
+                        bgColor: AppColors.kDarkRed,
                         onPressed: () async {
                           final navigator = Navigator.of(context);
                           navigator.pop();
@@ -216,8 +216,8 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 30.w),
                     child: PylonsPayWithSwipe(
-                      activeColor: kDarkRed,
-                      inactiveColor: kPayNowBackgroundGrey,
+                      activeColor: AppColors.kDarkRed,
+                      inactiveColor: AppColors.kPayNowBackgroundGrey,
                       height: 40.h,
                       initialWidth: 40.w,
                       onSwipeComplete: () {
@@ -282,7 +282,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   },
                   child: SvgPicture.asset(
                     SVGUtil.i_icon,
-                    color: kWhite,
+                    color: AppColors.kWhite,
                     fit: BoxFit.cover,
                   )),
             ],
@@ -313,7 +313,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
               child: Center(
                   child: Text(
                 title,
-                style: TextStyle(color: kWhite, fontSize: isTablet ? 14.sp : 16.sp, fontWeight: FontWeight.w700),
+                style: TextStyle(color: AppColors.kWhite, fontSize: isTablet ? 14.sp : 16.sp, fontWeight: FontWeight.w700),
                 textAlign: TextAlign.center,
               )),
             ),

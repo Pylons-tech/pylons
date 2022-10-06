@@ -13,6 +13,7 @@ import 'package:pylons_wallet/services/third_party_services/audio_player_helper.
 import 'package:pylons_wallet/services/third_party_services/share_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/video_player_helper.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
+import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
@@ -130,7 +131,6 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   void initializeData() {
-
     nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);
     initOwnerName();
     initializePlayers();
@@ -404,6 +404,10 @@ class OwnerViewViewModel extends ChangeNotifier {
       shareHelper.shareText(text: r, size: size);
       return null;
     });
+  }
+
+  void logEvent() {
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.ownerView);
   }
 }
 

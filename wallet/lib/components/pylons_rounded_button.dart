@@ -25,7 +25,7 @@ class PylonsRoundedButton extends StatelessWidget {
       child: ClipPath(
         clipper: MnemonicClipper(cuttingHeight: 18.h),
         child: Container(
-          color: kDarkRed,
+          color: AppColors.kDarkRed,
           height: 45.h,
           width: 300.w,
           child: Padding(

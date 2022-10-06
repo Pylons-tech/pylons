@@ -27,7 +27,7 @@ class NoEaselArtWork extends StatelessWidget {
           ),
           child: Text(
             "creation_list_empty_text".tr(),
-            style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700, color: kBlue),
+            style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700, color: AppColors.kBlue),
             textAlign: TextAlign.center,
           ),
         ),
@@ -36,7 +36,7 @@ class NoEaselArtWork extends StatelessWidget {
         ),
         CustomPaintButton(
             title: "open_easel".tr(),
-            bgColor: kBlue,
+            bgColor: AppColors.kBlue,
             width: 200.w,
             onPressed: () async {
               final isAndroidDevice = Theme.of(context).platform == TargetPlatform.android;

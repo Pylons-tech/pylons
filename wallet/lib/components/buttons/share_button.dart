@@ -13,10 +13,10 @@ class ShareButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: onTap,
-      icon: const Icon(
+      icon: Icon(
         Icons.share_outlined,
         size: 20,
-        color: kSelectedIcon,
+        color: AppColors.kSelectedIcon,
       ),
     );
   }

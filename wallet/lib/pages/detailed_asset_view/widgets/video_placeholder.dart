@@ -36,10 +36,10 @@ class VideoPlaceHolder extends StatelessWidget {
             width: 35.w,
             height: 35.h,
             decoration: BoxDecoration(
-                color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
+                color: AppColors.kWhite.withOpacity(0.5), shape: BoxShape.circle),
             child: Image.asset(
               ImageUtil.VIDEO_ICON,
-              color: kBlack,
+              color: AppColors.kBlack,
             ),
           ),
         ),
@@ -55,7 +55,7 @@ class VideoPlaceHolder extends StatelessWidget {
               height: 35.h,
               child: CircularProgressIndicator(
                 strokeWidth: 2.w,
-                color: kBlack,
+                color: AppColors.kBlack,
               ))),
     ]);
   }
@@ -66,10 +66,10 @@ class VideoPlaceHolder extends StatelessWidget {
         width: 35.w,
         height: 35.h,
         decoration: BoxDecoration(
-            color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
+            color:AppColors.kWhite.withOpacity(0.5), shape: BoxShape.circle),
         child: Image.asset(
           ImageUtil.VIDEO_ICON,
-          color: kBlack.withOpacity(0.7),
+          color: AppColors.kBlack.withOpacity(0.7),
         ),
       ),
     );
@@ -85,16 +85,16 @@ class VideoPlaceHolder extends StatelessWidget {
               width: 35.w,
               height: 35.h,
               decoration: BoxDecoration(
-                  color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
+                  color: AppColors.kWhite.withOpacity(0.5), shape: BoxShape.circle),
               child: Image.asset(ImageUtil.VIDEO_ICON,
-                  color: kBlack.withOpacity(0.7))))
+                  color: AppColors.kBlack.withOpacity(0.7))))
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-        color: kWhite,
+        color: AppColors.kWhite,
         child: thumbnailUrl.isNotEmpty
             ? getVideoThumbnailFromUrl()
             : getVideoPlaceHolder());

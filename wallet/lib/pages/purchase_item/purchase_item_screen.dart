@@ -51,6 +51,7 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
   @override
   void initState() {
     super.initState();
+    widget.purchaseItemViewModel.logEvent();
 
     scheduleMicrotask(() {
       widget.purchaseItemViewModel.initializeData();
@@ -108,7 +109,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
           child: Nft3dWidget(
             url: viewModel.nft.url,
             cameraControls: true,
-            backgroundColor: kBlack,
+            backgroundColor: AppColors.kBlack,
           ),
         );
 
@@ -137,7 +138,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
     final viewModel = context.watch<PurchaseItemViewModel>();
 
     return Scaffold(
-        backgroundColor: kBlack,
+        backgroundColor: AppColors.kBlack,
         body: GesturesForDetailsScreen(
           nft: viewModel.nft,
           viewModel: viewModel,
@@ -325,7 +326,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                   nft: viewModel.nft,
                                   purchaseItemViewModel: viewModel,
                                   onPurchaseDone: (txData) {
-                                  
                                     showTransactionCompleteDialog(execution: txData);
                                   },
                                   shouldBuy: balancesFetchResult);
@@ -353,7 +353,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
       child: Container(
         width: 200.w,
         height: 60.h,
-        color: kDarkRed.withOpacity(0.5),
+        color: AppColors.kDarkRed.withOpacity(0.5),
         child: Row(
           children: [
             const Spacer(),
@@ -404,9 +404,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     return SizedBox(
       height: 15.h,
       width: 15.h,
-      child: const CircularProgressIndicator(
+      child: CircularProgressIndicator(
         strokeWidth: 2,
-        valueColor: AlwaysStoppedAnimation<Color>(kWhite),
+        valueColor: AlwaysStoppedAnimation<Color>(AppColors.kWhite),
       ),
     );
   }
@@ -418,7 +418,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
       child: Image.asset(
         'assets/images/icons/${likedByMe ? 'like_full' : 'like'}.png',
         fit: BoxFit.fill,
-        color: likedByMe ? kDarkRed : Colors.white,
+        color: likedByMe ? AppColors.kDarkRed : Colors.white,
       ),
     );
   }
@@ -431,7 +431,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           child: ClipPath(
             clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SW),
             child: Container(
-              color: kDarkRed,
+              color: AppColors.kDarkRed,
               height: 50,
               width: 50,
               child: Center(
@@ -457,7 +457,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             child: ClipPath(
               clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NE),
               child: Container(
-                color: kDarkRed,
+                color: AppColors.kDarkRed,
                 height: 30.h,
                 width: 30.w,
               ),
@@ -497,7 +497,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   if (viewModel.nft.assetType == AssetType.Audio) ...[
                     Container(
                       width: 250.w,
-                      color: kWhite.withOpacity(0.2),
+                      color: AppColors.kWhite.withOpacity(0.2),
                       child: PurchaseAudioWidget(url: viewModel.nft.url),
                     ),
                     SizedBox(
@@ -507,7 +507,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   if (viewModel.nft.assetType == AssetType.Video) ...[
                     Container(
                       width: 250.w,
-                      color: kWhite.withOpacity(0.2),
+                      color: AppColors.kWhite.withOpacity(0.2),
                       child: PurchaseVideoProgressWidget(url: viewModel.nft.url),
                     ),
                     SizedBox(
@@ -525,7 +525,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                     detectionRegExp: detectionRegExp()!,
                                     detectedStyle: TextStyle(
                                       fontSize: 12.sp,
-                                      color: kCopyColor,
+                                      color: AppColors.kCopyColor,
                                     ),
                                     basicStyle: TextStyle(
                                       fontSize: 20.sp,
@@ -540,8 +540,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                     viewModel.nft.description,
                     trimExpandedText: "collapse".tr(),
                     trimCollapsedText: "read_more".tr(),
-                    moreStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: kCopyColor),
-                    lessStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: kCopyColor),
+                    moreStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.kCopyColor),
+                    lessStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.kCopyColor),
                   ),
                   SizedBox(
                     height: 20.h,
@@ -669,7 +669,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         child: Container(
                           width: 200.w,
                           height: 60.h,
-                          color: kDarkRed.withOpacity(0.8),
+                          color: AppColors.kDarkRed.withOpacity(0.8),
                           child: Row(
                             children: [
                               Container(
@@ -678,7 +678,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 child: Container(
                                   height: 10.w,
                                   width: 10.w,
-                                  decoration: const BoxDecoration(shape: BoxShape.circle, color: kButtonBuyNowColor),
+                                  decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.kButtonBuyNowColor),
                                 ),
                               ),
                               const Spacer(),
@@ -772,7 +772,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     }
 
     final int timeStamp = time * kDateConverterConstant;
-    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timeStamp , isUtc: true );
+    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timeStamp, isUtc: true);
     return "${formatter.format(dateTime)} $kUTC";
   }
 
@@ -788,16 +788,17 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     final txTime = getTransactionTimeStamp(execution.hasTxTime() ? execution.txTime.toInt() : null);
 
     final model = TradeReceiptModel(
-        tradeId: viewModel.nft.tradeID,
-        pylonsFee: viewModel.nft.ibcCoins.getCoinWithDenominationAndSymbol(fee.toString(), showDecimal: true),
-        price: viewModel.nft.ibcCoins.getCoinWithDenominationAndSymbol(price.toString()),
-        createdBy: viewModel.nft.creator,
-        currency: viewModel.nft.ibcCoins.getAbbrev(),
-        soldBy: viewModel.nft.owner.isEmpty ? viewModel.nft.creator : viewModel.nft.owner,
-        transactionTime: txTime,
-        total: viewModel.nft.ibcCoins.getCoinWithDenominationAndSymbol(viewModel.nft.price, showDecimal: true),
-        nftName: viewModel.nft.name,
-        transactionID: txId,);
+      tradeId: viewModel.nft.tradeID,
+      pylonsFee: viewModel.nft.ibcCoins.getCoinWithDenominationAndSymbol(fee.toString(), showDecimal: true),
+      price: viewModel.nft.ibcCoins.getCoinWithDenominationAndSymbol(price.toString()),
+      createdBy: viewModel.nft.creator,
+      currency: viewModel.nft.ibcCoins.getAbbrev(),
+      soldBy: viewModel.nft.owner.isEmpty ? viewModel.nft.creator : viewModel.nft.owner,
+      transactionTime: txTime,
+      total: viewModel.nft.ibcCoins.getCoinWithDenominationAndSymbol(viewModel.nft.price, showDecimal: true),
+      nftName: viewModel.nft.name,
+      transactionID: txId,
+    );
 
     final TradeCompleteDialog tradeCompleteDialog = TradeCompleteDialog(
         model: model,
