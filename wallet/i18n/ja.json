@@ -351,5 +351,6 @@
   "free": "無料",
   "claim_free_nft": "無料の NFT を請求する",
   "before_too_late": "手遅れになる前に",
-  "please_try_again_later": "後でもう一度やり直してください"
+  "please_try_again_later": "後でもう一度やり直してください",
+  "resolution": "解像度"
 }

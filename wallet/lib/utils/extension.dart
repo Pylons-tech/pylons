@@ -78,6 +78,26 @@ extension GetDynamicLink on String {
   }
 }
 
+extension ConvertPylonsToUSD on String {
+  String convertPylonsToUSD(String amount) {
+    switch (this) {
+      case kPylonDenom:
+        return (double.parse(convertFromUCoin(amount)) * pyLonToUsdConstant).toString().truncateAfterDecimal(2);
+    }
+    return '';
+  }
+}
+
+extension ConvertFromUCoin on String {
+  String convertFromUCoin(String amount) {
+    switch (this) {
+      case kPylonDenom:
+        return (double.parse(amount) / kBigIntBase).toString();
+    }
+    return '';
+  }
+}
+
 extension StringExtension on String {
   String truncateAfterDecimal(int maxLength) {
     if (!contains(".")) {
@@ -216,7 +236,6 @@ extension ChangeDomain on String {
     return replaceAll(ipfsDomain, proxyIpfsDomain);
   }
 }
-
 
 extension VerifyErrorCode on String {
   bool ifDuplicateReceipt() {

@@ -6,17 +6,7 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-enum IBCCoins {
-  urun,
-  ujunox,
-  none,
-  ujuno,
-  upylon,
-  ustripeusd,
-  eeur,
-  uatom,
-  weth_wei
-}
+enum IBCCoins { urun, ujunox, none, ujuno, upylon, ustripeusd, eeur, uatom, weth_wei }
 
 extension IBCCoinsPar on String {
   IBCCoins toIBCCoinsEnum() {
@@ -34,25 +24,13 @@ extension IBCCoinsDePar on IBCCoins {
   Widget getAssets() {
     switch (this) {
       case IBCCoins.urun:
-        return SizedBox(
-            width: 30.w,
-            height: 30.w,
-            child: SvgPicture.asset(SVGUtil.WALLET_AGORIC));
+        return SizedBox(width: 30.w, height: 30.w, child: SvgPicture.asset(SVGUtil.WALLET_AGORIC));
       case IBCCoins.ujunox:
-        return SizedBox(
-            width: 30.w,
-            height: 30.w,
-            child: SvgPicture.asset(SVGUtil.WALLET_JUNO));
+        return SizedBox(width: 30.w, height: 30.w, child: SvgPicture.asset(SVGUtil.WALLET_JUNO));
       case IBCCoins.none:
-        return SizedBox(
-            width: 30.w,
-            height: 30.w,
-            child: SvgPicture.asset(SVGUtil.WALLET_AGORIC));
+        return SizedBox(width: 30.w, height: 30.w, child: SvgPicture.asset(SVGUtil.WALLET_AGORIC));
       case IBCCoins.ujuno:
-        return SizedBox(
-            width: 30.w,
-            height: 30.w,
-            child: SvgPicture.asset(SVGUtil.WALLET_JUNO));
+        return SizedBox(width: 30.w, height: 30.w, child: SvgPicture.asset(SVGUtil.WALLET_JUNO));
       case IBCCoins.upylon:
         return SizedBox(
             width: 30.w,
@@ -62,25 +40,13 @@ extension IBCCoinsDePar on IBCCoins {
             ));
 
       case IBCCoins.ustripeusd:
-        return SizedBox(
-            width: 28.w,
-            height: 30.w,
-            child: Image.asset(ImageUtil.WALLET_USD));
+        return SizedBox(width: 28.w, height: 30.w, child: Image.asset(ImageUtil.WALLET_USD));
       case IBCCoins.eeur:
-        return SizedBox(
-            width: 30.w,
-            height: 30.w,
-            child: SvgPicture.asset(SVGUtil.WALLET_EEUR));
+        return SizedBox(width: 30.w, height: 30.w, child: SvgPicture.asset(SVGUtil.WALLET_EEUR));
       case IBCCoins.uatom:
-        return SizedBox(
-            width: 30.w,
-            height: 30.w,
-            child: SvgPicture.asset(SVGUtil.WALLET_ATOM));
+        return SizedBox(width: 30.w, height: 30.w, child: SvgPicture.asset(SVGUtil.WALLET_ATOM));
       case IBCCoins.weth_wei:
-        return SizedBox(
-            width: 30.w,
-            height: 30.w,
-            child: SvgPicture.asset(SVGUtil.WALLET_ETH));
+        return SizedBox(width: 30.w, height: 30.w, child: SvgPicture.asset(SVGUtil.WALLET_ETH));
     }
   }
 
@@ -130,6 +96,22 @@ extension IBCCoinsDePar on IBCCoins {
     }
   }
 
+  String getTrailingAbbrev() {
+    switch (this) {
+      case IBCCoins.urun:
+      case IBCCoins.ujunox:
+      case IBCCoins.none:
+      case IBCCoins.ujuno:
+      case IBCCoins.eeur:
+      case IBCCoins.uatom:
+      case IBCCoins.weth_wei:
+      case IBCCoins.upylon:
+        return constants.kPoints;
+      case IBCCoins.ustripeusd:
+        return constants.kStripeUSD_ABR;
+    }
+  }
+
   Color getColor() {
     switch (this) {
       case IBCCoins.urun:
@@ -170,8 +152,7 @@ extension IBCCoinsDePar on IBCCoins {
     }
   }
 
-  String getCoinWithDenominationAndSymbol(String amount,
-      {bool showDecimal = false}) {
+  String getCoinWithDenominationAndSymbol(String amount, {bool showDecimal = false}) {
     switch (this) {
       case IBCCoins.urun:
       case IBCCoins.ujunox:
