@@ -15,11 +15,11 @@ class AddFriendButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: onTap,
-      icon: const ImageIcon(
-        AssetImage('assets/images/icons/add_friend.png'),
+      icon: ImageIcon(
+        const AssetImage('assets/images/icons/add_friend.png'),
         size: kIconSize,
-        color: kSelectedIcon,
-        key: ValueKey("Add-Friend-Button"),
+        color: AppColors.kSelectedIcon,
+        key: const ValueKey("Add-Friend-Button"),
       ),
     );
   }

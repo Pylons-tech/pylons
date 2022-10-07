@@ -13,9 +13,13 @@ import 'package:pylons_wallet/services/third_party_services/audio_player_helper.
 import 'package:pylons_wallet/services/third_party_services/share_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/video_player_helper.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
+import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
+
+import '../owner_purchase_view_common/button_state.dart';
+import '../owner_purchase_view_common/progress_bar_state.dart';
 
 class OwnerViewViewModel extends ChangeNotifier {
   late NFT nft;
@@ -39,10 +43,9 @@ class OwnerViewViewModel extends ChangeNotifier {
 
   bool get toggled => _toggled;
 
-  late VideoPlayerController videoPlayerController;
+  VideoPlayerController? videoPlayerController;
 
-  late ValueNotifier<ProgressBarState> audioProgressNotifier;
-  late ValueNotifier<ButtonState> buttonNotifier;
+  
 
   late StreamSubscription playerStateSubscription;
 
@@ -130,7 +133,6 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   void initializeData() {
-
     nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);
     initOwnerName();
     initializePlayers();
@@ -259,9 +261,10 @@ class OwnerViewViewModel extends ChangeNotifier {
     delayLoading();
     notifyListeners();
 
-    videoPlayerController.addListener(() {
-      if (videoPlayerController.value.hasError) {
-        videoLoadingError = videoPlayerController.value.errorDescription!;
+// TODO :Solve this listener bug
+    videoPlayerController?.addListener(() {
+      if (videoPlayerController!.value.hasError) {
+        videoLoadingError = videoPlayerController!.value.errorDescription!;
       }
       notifyListeners();
     });
@@ -285,7 +288,7 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   void disposeVideoController() {
-    videoPlayerController.removeListener(() {});
+    videoPlayerController?.removeListener(() {});
     videoPlayerHelper.destroyVideoPlayer();
   }
 
@@ -405,18 +408,20 @@ class OwnerViewViewModel extends ChangeNotifier {
       return null;
     });
   }
+
+  void logEvent() {
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.ownerView);
+  }
+
+
+
+  ValueNotifier<ProgressBarState> audioProgressNotifier  = ValueNotifier<ProgressBarState>(
+    ProgressBarState(
+      current: Duration.zero,
+      buffered: Duration.zero,
+      total: Duration.zero,
+    ),
+  );
+
+  ValueNotifier<ButtonState> buttonNotifier = ValueNotifier(ButtonState.loading);
 }
-
-class ProgressBarState {
-  ProgressBarState({
-    required this.current,
-    required this.buffered,
-    required this.total,
-  });
-
-  final Duration current;
-  final Duration buffered;
-  final Duration total;
-}
-
-enum ButtonState { paused, playing, loading }

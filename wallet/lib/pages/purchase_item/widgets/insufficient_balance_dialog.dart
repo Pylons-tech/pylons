@@ -12,13 +12,13 @@ import 'package:pylons_wallet/utils/svg_util.dart';
 TextStyle kHeadingTextStyle = TextStyle(
     fontSize: isTablet ? 23.sp : 27.sp,
     fontFamily: 'UniversalSans',
-    color: kWhite,
+    color: AppColors.kWhite,
     fontWeight: FontWeight.w700);
 
 TextStyle kMsgTextStyle = TextStyle(
     fontSize: isTablet ? 12.sp : 14.sp,
     fontFamily: 'UniversalSans',
-    color: kWhite,
+    color: AppColors.kWhite,
     fontWeight: FontWeight.w700);
 
 class InsufficientBalanceDialog {
@@ -40,7 +40,7 @@ class InsufficientBalanceDialog {
             child: ClipPath(
               clipper: DialogClipper(),
               child: Container(
-                color: kDarkRed.withOpacity(0.8),
+                color: AppColors.kDarkRed.withOpacity(0.8),
                 padding:
                     EdgeInsets.symmetric(horizontal: isTablet ? 32.w : 36.w),
                 child: Column(
@@ -88,7 +88,7 @@ class InsufficientBalanceDialog {
                           Expanded(
                               child: buildButton(
                                   title: "add_pylons".tr(),
-                                  bgColor: kTextBlackColor,
+                                  bgColor: AppColors.kTextBlackColor,
                                   onPressed: () async {
                                     Navigator.of(context)
                                         .pushNamed(RouteUtil.ROUTE_ADD_PYLON);
@@ -99,7 +99,7 @@ class InsufficientBalanceDialog {
                                 child: Text(
                                   "cancel".tr(),
                                   style: TextStyle(
-                                      color: kWhite,
+                                      color: AppColors.kWhite,
                                       fontSize: 15.sp,
                                       fontWeight: FontWeight.w300),
                                   textAlign: TextAlign.center,
@@ -139,7 +139,7 @@ class InsufficientBalanceDialog {
                 child: Text(
               title,
               style: TextStyle(
-                  color: kWhite,
+                  color: AppColors.kWhite,
                   fontSize: isTablet ? 14.sp : 16.sp,
                   fontWeight: FontWeight.w700),
               textAlign: TextAlign.center,

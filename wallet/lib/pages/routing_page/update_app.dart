@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
+import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_config_service/remote_config_service.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
@@ -18,8 +19,7 @@ import 'package:pylons_wallet/utils/screen_responsive.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-TextStyle kUpdateAppSkipText =
-    const TextStyle(fontWeight: FontWeight.w500, color: Colors.black54);
+TextStyle kUpdateAppSkipText = const TextStyle(fontWeight: FontWeight.w500, color: Colors.black54);
 
 class UpdateApp extends StatefulWidget {
   const UpdateApp({Key? key}) : super(key: key);
@@ -32,12 +32,15 @@ class _UpdateAppState extends State<UpdateApp> {
   RemoteConfigService get remoteConfigService => GetIt.I.get();
 
   WalletsStore get walletsStore => GetIt.I.get();
+  Repository get repository => GetIt.I.get();
 
   ValueNotifier<String> versionInfoNotifier = ValueNotifier('');
 
   @override
   void initState() {
     super.initState();
+
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.updateApp);
 
     String remoteConfigVersion;
     if (Platform.isAndroid) {
@@ -54,7 +57,7 @@ class _UpdateAppState extends State<UpdateApp> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
-          backgroundColor: kWhite01,
+          backgroundColor: AppColors.kWhite01,
           body: ScreenResponsive(
             tabletScreen: (BuildContext context) => buildTabletScreen(context),
             mobileScreen: (BuildContext context) => buildMobileScreen(context),
@@ -69,13 +72,7 @@ class _UpdateAppState extends State<UpdateApp> {
             child: ColoredBox(
           color: Colors.white,
         )),
-        Positioned(
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-            child: SvgPicture.asset(SVGUtil.UPDATE_NOW_IPAD_BACKGROUND,
-                fit: BoxFit.fill)),
+        Positioned(left: 0, right: 0, top: 0, bottom: 0, child: SvgPicture.asset(SVGUtil.UPDATE_NOW_IPAD_BACKGROUND, fit: BoxFit.fill)),
         Positioned(
             child: Container(
           padding: EdgeInsets.symmetric(horizontal: 25.w),
@@ -181,8 +178,7 @@ class _UpdateAppState extends State<UpdateApp> {
           right: 0,
           top: 0,
           bottom: 0,
-          child: SvgPicture.asset(SVGUtil.UPDATE_NOW_BACKGROUND,
-              fit: BoxFit.cover),
+          child: SvgPicture.asset(SVGUtil.UPDATE_NOW_BACKGROUND, fit: BoxFit.cover),
         ),
         Positioned(
             child: Container(
@@ -290,12 +286,10 @@ class _UpdateAppState extends State<UpdateApp> {
 
     if (walletsStore.getWallets().value.isEmpty) {
       //Loads the last used wallet.
-      Navigator.of(navigatorKey.currentState!.overlay!.context)
-          .pushNamed(RouteUtil.ROUTE_ONBOARDING);
+      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
     } else {
       // Assigning the latest wallet to the app.
-      Navigator.of(navigatorKey.currentState!.overlay!.context)
-          .pushNamed(RouteUtil.ROUTE_HOME);
+      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_HOME);
     }
   }
 
@@ -307,7 +301,5 @@ class _UpdateAppState extends State<UpdateApp> {
     _launchURL(kIOSAppLink);
   }
 
-  Future _launchURL(String url) async => await canLaunchUrlString(url)
-      ? await launchUrlString(url)
-      : throw '${"could_not_launch".tr()} $url';
+  Future _launchURL(String url) async => await canLaunchUrlString(url) ? await launchUrlString(url) : throw '${"could_not_launch".tr()} $url';
 }

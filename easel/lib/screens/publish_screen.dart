@@ -54,6 +54,7 @@ class _PublishScreenState extends State<PublishScreen> {
   initState() {
     easelProvider.nft = repository.getCacheDynamicType(key: nftKey);
     easelProvider.collapsed = false;
+    easelProvider.setLog(screenName: AnalyticsScreenEvents.publishScreen);
     super.initState();
   }
 
@@ -375,7 +376,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                   return;
                                 }
                                 GetIt.I.get<CreatorHubViewModel>().changeSelectedCollection(CollectionType.published);
-                                navigator.pushNamedAndRemoveUntil(RouteUtil.kRouteCreatorHub, (route) => false);
+                                navigator.popUntil((route) {
+                                  return route.settings.name == RouteUtil.kRouteCreatorHub;
+                                });
                               },
                             ),
                             SizedBox(

@@ -484,6 +484,8 @@ abstract class Repository {
     required double purchasePrice,
     required String currency,
   });
+
+  Future<Either<Failure, void>> logUserJourney({required String screenName});
 }
 
 class RepositoryImp implements Repository {
@@ -1989,6 +1991,19 @@ class RepositoryImp implements Repository {
       return Right(result);
     } on Exception catch (_) {
       return Left(CacheFailure("something_wrong".tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> logUserJourney({required String screenName}) async {
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure("no_internet".tr()));
+    }
+    try {
+      return Right(await remoteDataStore.logUserJourney(screenName: screenName));
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
     }
   }
 }

@@ -17,7 +17,6 @@ import 'package:pylons_wallet/components/no_internet.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view.dart';
-import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer_full_screen.dart';
 import 'package:pylons_wallet/pages/home/home.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
@@ -28,7 +27,6 @@ import 'package:pylons_wallet/pages/presenting_onboard_page/presenting_onboard_p
 import 'package:pylons_wallet/pages/presenting_onboard_page/screens/create_wallet_screen.dart';
 import 'package:pylons_wallet/pages/presenting_onboard_page/screens/restore_wallet_screen.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_screen.dart';
-import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
 import 'package:pylons_wallet/pages/routing_page/routing_page.dart';
 import 'package:pylons_wallet/pages/routing_page/update_app.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen.dart';
@@ -129,10 +127,11 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
 
                   if (ModalRoute.of(context)?.settings.arguments is NFT) {
                     final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
-                    final viewModel = sl<OwnerViewViewModel>();
-                    viewModel.nft = nft;
+                    
+                    
                     return OwnerView(
-                      ownerViewViewModel: viewModel,
+                      key: ValueKey(nft),
+                      nft: nft,
                     );
                   }
 
@@ -149,10 +148,10 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
 
                   if (ModalRoute.of(context)?.settings.arguments is NFT) {
                     final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
-                    final viewModel = sl<PurchaseItemViewModel>();
-                    viewModel.setNFT(nft);
+                    
                     return PurchaseItemScreen(
-                      purchaseItemViewModel: viewModel,
+                      key: ValueKey(nft),
+                      nft: nft,
                     );
                   }
 
@@ -160,6 +159,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
                 },
               },
               builder: (context, widget) {
+                GetIt.I.get<Repository>().logUserJourney(screenName: AnalyticsScreenEvents.unknown);
                 return MediaQuery(
                   data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                   child: widget ?? Container(),

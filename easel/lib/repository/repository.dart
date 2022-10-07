@@ -158,6 +158,8 @@ abstract class Repository {
   /// This method will get the on boarding status
   /// Output: [bool] returns whether the operation is successful or not
   bool getOnBoardingComplete();
+
+  Future<Either<Failure, bool>> logUserJourney({required String screenName});
 }
 
 class RepositoryImp implements Repository {
@@ -405,5 +407,13 @@ class RepositoryImp implements Repository {
   bool getOnBoardingComplete() {
     return localDataSource.getOnBoardingComplete();
   }
-}
 
+  @override
+  Future<Either<Failure, bool>> logUserJourney({required String screenName}) async {
+    try {
+      return Right(await remoteDataSource.logUserJourney(screenName: screenName));
+    } catch (e) {
+      return Left(AnalyticsFailure(message: "analytics_failure".tr()));
+    }
+  }
+}

@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
         body: ScreenResponsive(
       mobileScreen: (context) => buildMobileScreen(context),
       tabletScreen: (BuildContext context) => buildTabletScreen(context),
-    ));
+    ),);
   }
 
   Widget buildMobileScreen(BuildContext context) {
