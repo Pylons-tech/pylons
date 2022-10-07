@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
+
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -116,6 +117,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
             url: viewModel.nft.url,
             cameraControls: true,
             backgroundColor: AppColors.kBlack,
+            showLoader: true,
           ),
         );
 
