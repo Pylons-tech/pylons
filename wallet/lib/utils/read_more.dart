@@ -1,7 +1,10 @@
 library readmore;
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
+import 'constants.dart';
 
 enum TrimMode {
   Length,
@@ -204,11 +207,13 @@ class ReadMoreTextState extends State<ReadMoreText> {
             throw Exception('TrimMode type: ${widget.trimMode} is not supported');
         }
 
-        return RichText(
+        return AutoSizeText.rich(
+          textSpan,
           textAlign: textAlign,
           textDirection: textDirection,
-          textScaleFactor: textScaleFactor,
-          text: textSpan,
+          style: TextStyle(color: AppColors.kWhite),
+          maxLines: 4,
+          minFontSize: 10,
         );
       },
     );
