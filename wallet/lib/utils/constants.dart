@@ -444,3 +444,7 @@ class AnalyticsScreenEvents {
   static String purchaseView = "PurchaseViewScreen";
   static String unknown = "UnknownScreen";
 }
+
+const String kLoadKey = "Load";
+const String kErrorKey = "Error";
+const String kProgressKey = "Progress";

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
+import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -31,10 +32,10 @@ class _Nft3dWidgetState extends State<Nft3dWidget> {
           cameraControls: widget.cameraControls,
           relatedJs: "",
           javascriptChannel: {
-            JavascriptChannel(name: 'Load', onMessageReceived: (JavascriptMessage message) {}),
-            JavascriptChannel(name: 'Error', onMessageReceived: (JavascriptMessage message) {}),
+            JavascriptChannel(name: kLoadKey, onMessageReceived: (JavascriptMessage message) {}),
+            JavascriptChannel(name: kErrorKey, onMessageReceived: (JavascriptMessage message) {}),
             JavascriptChannel(
-                name: 'Progress',
+                name: kProgressKey,
                 onMessageReceived: (JavascriptMessage progress) {
                   if (double.parse(progress.message) == 1) {
                     setState(() {
