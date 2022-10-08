@@ -415,16 +415,12 @@ abstract class HTMLBuilder {
       html.writeln('<script>');
       html.write(relatedJs);
       html.writeln("""
-            document.getElementById('modelViewer').addEventListener('load', (event) => { 
-              Load.postMessage('Loaded');
-            });
             document.getElementById('modelViewer').addEventListener('error', (event) => { 
               Error.postMessage(event.detail.type);
             });
             document.getElementById('modelViewer').addEventListener('progress', (event) => { 
               Progress.postMessage(event.detail.totalProgress);
             });
-  
             """);
       html.writeln('</script>');
     }

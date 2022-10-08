@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import 'html_builder.dart';
-
-import 'shim/dart_ui_fake.dart' if (dart.library.html) 'dart:ui' as ui;
-import 'shim/dart_html_fake.dart' if (dart.library.html) 'dart:html';
-
 import 'model_viewer_plus.dart';
+import 'shim/dart_html_fake.dart' if (dart.library.html) 'dart:html';
+import 'shim/dart_ui_fake.dart' if (dart.library.html) 'dart:ui' as ui;
 
 class ModelViewerState extends State<ModelViewer> {
   bool _isLoading = true;
@@ -22,26 +20,11 @@ class ModelViewerState extends State<ModelViewer> {
 
   /// To generate the HTML code for using the model viewer.
   void generateModelViewerHtml() async {
-    final htmlTemplate = await rootBundle
-        .loadString('packages/model_viewer_plus/assets/template.html');
-    // allow to use elements
+    final htmlTemplate = await rootBundle.loadString('packages/model_viewer_plus/assets/template.html');
     final NodeValidator _validator = NodeValidatorBuilder.common()
-      ..allowElement('meta',
-          attributes: ['name', 'content'], uriPolicy: _AllowUriPolicy())
+      ..allowElement('meta', attributes: ['name', 'content'], uriPolicy: _AllowUriPolicy())
       ..allowElement('style')
-      ..allowElement('script',
-          attributes: [
-            'src',
-            'type',
-            'defer',
-            'async',
-            'crossorigin',
-            'integrity',
-            'nomodule',
-            'nonce',
-            'referrerpolicy'
-          ],
-          uriPolicy: _AllowUriPolicy())
+      ..allowElement('script', attributes: ['src', 'type', 'defer', 'async', 'crossorigin', 'integrity', 'nomodule', 'nonce', 'referrerpolicy'], uriPolicy: _AllowUriPolicy())
       ..allowCustomElement('model-viewer',
           attributes: [
             'style',
@@ -151,9 +134,7 @@ class ModelViewerState extends State<ModelViewer> {
     }
 
     return HTMLBuilder.build(
-      htmlTemplate: htmlTemplate.replaceFirst(
-          '<script type="module" src="model-viewer.min.js" defer></script>',
-          ''),
+      htmlTemplate: htmlTemplate.replaceFirst('<script type="module" src="model-viewer.min.js" defer></script>', ''),
       // Attributes
       src: widget.src,
       alt: widget.alt,

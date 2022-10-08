@@ -78,10 +78,10 @@ class ModelViewer extends StatefulWidget {
       this.relatedCss,
       this.relatedJs,
       this.id,
-      required this.javascriptChannel})
+      this.onProgress,
+      this.onError,
+      this.onWebResourceError})
       : super(key: key);
-
-  // Loading Attributes
 
   /// The URL or path to the 3D model. This parameter is required.
   /// Only glTF/GLB models are supported.
@@ -217,8 +217,6 @@ class ModelViewer extends StatefulWidget {
   ///
   /// https://modelviewer.dev/docs/#entrydocs-augmentedreality-attributes-iosSrc
   final bool? xrEnvironment;
-
-  // Staing & Cameras Attributes
 
   /// Enables controls via mouse/touch. This attribute should nearly always be
   /// specified, unless all model motion is being controlled by JavaScript functions.
@@ -441,8 +439,6 @@ class ModelViewer extends StatefulWidget {
   /// `<model-viewer>` offical document: https://modelviewer.dev/docs/#entrydocs-stagingandcameras-attributes-interpolationDecay
   final num? interpolationDecay;
 
-  // Lighting & Env Attributes
-
   /// Sets the background image of the scene. Takes a URL to an [equirectangular
   /// projection image](https://en.wikipedia.org/wiki/Equirectangular_projection) that's used for the skybox, as well as applied as an
   /// environment map on the model. Supports png, jpg and hdr (recommended) images.
@@ -482,8 +478,6 @@ class ModelViewer extends StatefulWidget {
   /// `<model-viewer>` offical document: https://modelviewer.dev/docs/#entrydocs-lightingandenv-attributes-shadowSoftness
   final num? shadowSoftness;
 
-  // Animation Attributes
-
   /// Selects an animation to play by name. This animation will play when the `.play()`
   /// method is invoked, or when the <model-viewer> is configured to autoplay.
   /// If no animation-name is specified, <model-viewer> always picks the first
@@ -508,8 +502,6 @@ class ModelViewer extends StatefulWidget {
   /// `<model-viewer>` offical document: https://modelviewer.dev/docs/#entrydocs-animation-attributes-autoplay
   final bool? autoPlay;
 
-  // Scene Graph Attributes
-
   /// Selects a model variant by name.
   ///
   /// `<model-viewer>` offical document: https://modelviewer.dev/docs/#entrydocs-scenegraph-attributes-variantName
@@ -533,13 +525,9 @@ class ModelViewer extends StatefulWidget {
   /// `<model-viewer>` offical document: https://modelviewer.dev/docs/#entrydocs-scenegraph-attributes-scale
   final String? scale;
 
-  // CSS Styles
-
   /// The backgroundColor of the [ModelViewer]'s WebView.
   /// Defaults to [Colors.transparent].
   final Color backgroundColor;
-
-  // Loading CSS
 
   /// Sets the background-color of the poster . You may wish to set this to
   /// transparent if you are using a seamless poster with transparency
@@ -547,8 +535,6 @@ class ModelViewer extends StatefulWidget {
   ///
   /// `<model-viewer>` offical document: https://modelviewer.dev/docs/#entrydocs-loading-css-posterColor
   final Color? posterColor;
-
-  // Annotations CSS
 
   /// Sets the opacity of hidden hotspots.
   ///
@@ -560,7 +546,6 @@ class ModelViewer extends StatefulWidget {
   /// `<model-viewer>` offical document: https://modelviewer.dev/docs/#entrydocs-annotations-css-maxHotspotOpacity
   final num? maxHotspotOpacity;
 
-  // Others
   /// HTML inside <model-viewer> Tag.
   final String? innerModelViewerHtml;
 
@@ -574,8 +559,18 @@ class ModelViewer extends StatefulWidget {
   final String? id;
 
   ///This callback will used for getting the progress of 3D asset
-  /// Output: return [100] when 3D asset loads completely
-  final Set<JavascriptChannel> javascriptChannel;
+  ///This will listen to the callback from the Javascript code
+  ///Output: return [JavascriptMessage] which contain is 3d model loads successfully
+  ///Output: return [1] if model successfully loads
+  final Set<JavascriptChannel>? onProgress;
+
+  ///This callback will used for getting the Error when 3D model fails to load
+  ///This will listen to the callback from the Javascript code
+  ///Output: return [JavascriptMessage] which contain the error occurs
+  final Set<JavascriptChannel>? onError;
+
+  ///Invoked when a web resource has failed to load
+  final Function(WebResourceError)? onWebResourceError;
 
   @override
   State<ModelViewer> createState() => ModelViewerState();

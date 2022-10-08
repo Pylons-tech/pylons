@@ -37,6 +37,7 @@ import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
 
@@ -90,7 +91,7 @@ class PurchaseItemContent extends StatefulWidget {
 
 class _PurchaseItemContentState extends State<PurchaseItemContent> {
   bool _showPay = false;
-
+  bool showLoader = true;
   final GlobalKey key = GlobalKey();
   final myBottomDrawerController = BottomDrawerController();
 
@@ -114,11 +115,25 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
           color: Colors.grey.shade200,
           height: double.infinity,
           child: Nft3dWidget(
-            url: viewModel.nft.url,
-            cameraControls: true,
-            backgroundColor: AppColors.kBlack,
-            showLoader: true,
-          ),
+              url: viewModel.nft.url,
+              cameraControls: true,
+              backgroundColor: AppColors.kBlack,
+              showLoader: showLoader,
+              onProgress: {
+                JavascriptChannel(
+                    name: kProgressKey,
+                    onMessageReceived: (JavascriptMessage progress) {
+                      if (double.parse(progress.message) == 1) {
+                        setState(() {
+                          showLoader = false;
+                        });
+                        return;
+                      }
+                    }),
+              },
+              onError: (error) {
+                error.show();
+              }),
         );
 
       default:

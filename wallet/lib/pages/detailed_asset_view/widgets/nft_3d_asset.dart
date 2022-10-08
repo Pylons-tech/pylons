@@ -5,53 +5,43 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class Nft3dWidget extends StatefulWidget {
+class Nft3dWidget extends StatelessWidget {
   final String url;
   final bool cameraControls;
   final Color backgroundColor;
   final bool showLoader;
+  final Set<JavascriptChannel>? onProgress;
+  final Function(String)? onError;
 
-  const Nft3dWidget({Key? key, required this.backgroundColor, required this.url, required this.cameraControls, this.showLoader = false}) : super(key: key);
-
-  @override
-  _Nft3dWidgetState createState() => _Nft3dWidgetState();
-}
-
-class _Nft3dWidgetState extends State<Nft3dWidget> {
-  bool loading = true;
+  const Nft3dWidget({Key? key, required this.backgroundColor, required this.url, required this.cameraControls, this.showLoader = false, this.onProgress, this.onError}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         ModelViewer(
-          backgroundColor: widget.backgroundColor,
-          src: widget.url,
+          backgroundColor: backgroundColor,
+          src: url,
           ar: false,
           autoRotate: false,
-          cameraControls: widget.cameraControls,
+          cameraControls: cameraControls,
           relatedJs: "",
-          javascriptChannel: {
-            JavascriptChannel(name: kLoadKey, onMessageReceived: (JavascriptMessage message) {}),
-            JavascriptChannel(name: kErrorKey, onMessageReceived: (JavascriptMessage message) {}),
+          onProgress: onProgress,
+          onError: {
             JavascriptChannel(
-                name: kProgressKey,
-                onMessageReceived: (JavascriptMessage progress) {
-                  if (double.parse(progress.message) == 1) {
-                    setState(() {
-                      loading = false;
-                    });
-                    return;
-                  }
+                name: kErrorKey,
+                onMessageReceived: (JavascriptMessage message) {
+                  onError!(message.message);
                 }),
           },
         ),
-        if (loading && widget.showLoader)
+        if (showLoader)
           Center(
             child: SizedBox(
               height: 100.0.h,
               child: Image.asset(
                 ImageUtil.LOADING_GIF,
+                key: const Key(kImageAssetKey),
               ),
             ),
           )

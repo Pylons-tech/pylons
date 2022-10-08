@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
@@ -29,6 +30,7 @@ import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class OwnerView extends StatefulWidget {
   final NFT nft;
@@ -80,6 +82,8 @@ class OwnerViewContent extends StatefulWidget {
 }
 
 class _OwnerViewContentState extends State<OwnerViewContent> {
+  bool showLoader = true;
+
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<OwnerViewViewModel>();
@@ -159,11 +163,25 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
           color: Colors.grey.shade200,
           height: double.infinity,
           child: Nft3dWidget(
-            url: viewModel.nft.url,
-            cameraControls: true,
-            backgroundColor: AppColors.kBlack,
-            showLoader: true,
-          ),
+              url: viewModel.nft.url,
+              cameraControls: true,
+              backgroundColor: AppColors.kBlack,
+              showLoader: showLoader,
+              onProgress: {
+                JavascriptChannel(
+                    name: kProgressKey,
+                    onMessageReceived: (JavascriptMessage progress) {
+                      if (double.parse(progress.message) == 1) {
+                        setState(() {
+                          showLoader = false;
+                        });
+                        return;
+                      }
+                    }),
+              },
+              onError: (error) {
+                error.show();
+              }),
         );
 
       default:
