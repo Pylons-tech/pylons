@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:model_viewer_plus/src/utils/constants.dart';
 import 'package:path/path.dart' as p;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -104,7 +105,22 @@ class ModelViewerState extends State<ModelViewer> {
         },
         onPageStarted: (final String url) {},
         onWebResourceError: widget.onWebResourceError,
-        javascriptChannels: widget.onProgress,
+        javascriptChannels: {
+          JavascriptChannel(
+            name: kProgressKey,
+            onMessageReceived: (JavascriptMessage progress) {
+              widget.onProgress!(double.parse(progress.message));
+            },
+          ),
+          JavascriptChannel(
+            name: kErrorKey,
+            onMessageReceived: (JavascriptMessage message) {
+              if (message.message.isNotEmpty) {
+                widget.onError!(message.message);
+              }
+            },
+          ),
+        },
       );
     }
   }

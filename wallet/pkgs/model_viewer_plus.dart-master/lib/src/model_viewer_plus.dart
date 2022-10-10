@@ -560,14 +560,14 @@ class ModelViewer extends StatefulWidget {
 
   ///This callback will used for getting the progress of 3D asset
   ///This will listen to the callback from the Javascript code
-  ///Output: return [JavascriptMessage] which contain is 3d model loads successfully
+  ///Output: return [double] which contain how much 3d model loads successfully
   ///Output: return [1] if model successfully loads
-  final Set<JavascriptChannel>? onProgress;
+  final Function(double)? onProgress;
 
   ///This callback will used for getting the Error when 3D model fails to load
   ///This will listen to the callback from the Javascript code
-  ///Output: return [JavascriptMessage] which contain the error occurs
-  final Set<JavascriptChannel>? onError;
+  ///Output: return [String] which contain the error
+  final Function(String)? onError;
 
   ///Invoked when a web resource has failed to load
   final Function(WebResourceError)? onWebResourceError;

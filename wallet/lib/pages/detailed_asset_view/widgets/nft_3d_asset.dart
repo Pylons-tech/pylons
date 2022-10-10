@@ -1,19 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
+import 'package:provider/provider.dart';
+import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/provider/nft_3d_asset_provider.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class Nft3dWidget extends StatelessWidget {
   final String url;
   final bool cameraControls;
   final Color backgroundColor;
   final bool showLoader;
-  final Set<JavascriptChannel>? onProgress;
-  final Function(String)? onError;
 
-  const Nft3dWidget({Key? key, required this.backgroundColor, required this.url, required this.cameraControls, this.showLoader = false, this.onProgress, this.onError}) : super(key: key);
+  const Nft3dWidget({Key? key, required this.backgroundColor, required this.url, required this.cameraControls, this.showLoader = false}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => Nft3DAssetProvider(),
+      builder: (context, widget) {
+        return Consumer<Nft3DAssetProvider>(builder: (context, viewModel, __) {
+          return Nft3DWidgetContent(
+            backgroundColor: backgroundColor,
+            url: url,
+            cameraControls: cameraControls,
+            viewModel: viewModel,
+            showLoader: showLoader,
+          );
+        });
+      },
+    );
+  }
+}
+
+class Nft3DWidgetContent extends StatelessWidget {
+  const Nft3DWidgetContent({
+    Key? key,
+    required this.backgroundColor,
+    required this.url,
+    required this.cameraControls,
+    required this.viewModel,
+    this.showLoader = false,
+  }) : super(key: key);
+
+  final Color backgroundColor;
+  final String url;
+  final bool cameraControls;
+  final Nft3DAssetProvider viewModel;
+  final bool showLoader;
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +61,16 @@ class Nft3dWidget extends StatelessWidget {
           autoRotate: false,
           cameraControls: cameraControls,
           relatedJs: "",
-          onProgress: onProgress,
-          onError: {
-            JavascriptChannel(
-                name: kErrorKey,
-                onMessageReceived: (JavascriptMessage message) {
-                  onError!(message.message);
-                }),
+          onProgress: (status) {
+            if (status == 1) {
+              viewModel.toggleLoader();
+            }
+          },
+          onError: (error) {
+            error.show();
           },
         ),
-        if (showLoader)
+        if (viewModel.showLoader.value && showLoader)
           Center(
             child: SizedBox(
               height: 100.0.h,
