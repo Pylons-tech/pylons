@@ -41,7 +41,7 @@ class _RoutingPageState extends State<RoutingPage> {
 
     if (walletsStore.getWallets().value.isEmpty) {
       //Loads the last used wallet.
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
+      Navigator.of(navigatorKey.currentState!.overlay!.context).pushReplacementNamed(RouteUtil.ROUTE_ONBOARDING);
     } else {
       final repository = GetIt.I.get<Repository>();
 
