@@ -1,4 +1,5 @@
 import 'package:fixnum/fixnum.dart';
+import 'package:flutter/material.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
@@ -261,7 +262,6 @@ NFT MOCK_NFT_FREE = NFT(
   ibcCoins: IBCCoins.upylon,
 );
 
-
 NftOwnershipHistory MOCK_NFT_OWNERSHIP_HISTORY = NftOwnershipHistory(
   itemID: "ahmad123axd",
   cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
@@ -270,25 +270,29 @@ NftOwnershipHistory MOCK_NFT_OWNERSHIP_HISTORY = NftOwnershipHistory(
   senderName: "abcxyz",
 );
 
-
-
 NFT MOCK_NFT_PREMIUM = NFT(
-  name: "I AM A PREMIUM NFT",
-  height: "2400",
-  description: "A PREMIUM NFT",
-  width: "1080",
-  url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
-  recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
-  duration: "0:0",
-  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
-  appType: "easel",
-  creator: "MR X",
-  fileSize: "90.12KB",
-  itemID: "DtnxAS8L4pf",
-  owner: "MR X",
-  ibcCoins: IBCCoins.upylon,
-  price: "12"
-);
+    name: "I AM A PREMIUM NFT",
+    height: "2400",
+    description: "A PREMIUM NFT",
+    width: "1080",
+    url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
+    recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
+    duration: "0:0",
+    cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+    appType: "easel",
+    creator: "MR X",
+    fileSize: "90.12KB",
+    itemID: "DtnxAS8L4pf",
+    owner: "MR X",
+    ibcCoins: IBCCoins.upylon,
+    price: "12");
 
 int MOCK_NFT_QUANTITY = 50;
 int MOCK_NFT_MINTED = 10;
+
+String MOCK_URL =
+    "https://wallet.pylons.tech/?recipe_id=Easel_Recipe_auto_recipe_2022_10_07_122320_187&cookbook_id=Easel_CookBook_auto_cookbook_2022_10_07_095856_238&address=pylo1qmdtqfj9ahasqf0srcfnfnfapy2gewj9w89dwehttps://wallet.pylons.tech/?recipe_id=Easel_Recipe_auto_recipe_2022_10_07_122320_187&cookbook_id=Easel_CookBook_auto_cookbook_2022_10_07_095856_238&address=pylo1qmdtqfj9ahasqf0srcfnfnfapy2gewj9w89dwe";
+Color MOCK_COLOR = Colors.white;
+bool MOCK_CAMERA_CONTROLS = false;
+bool MOCK_SHOW_LOADER_TRUE = true;
+bool MOCK_SHOW_LOADER_FALSE = false;
