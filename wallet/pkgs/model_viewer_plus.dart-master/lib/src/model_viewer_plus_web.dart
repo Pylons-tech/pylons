@@ -46,7 +46,7 @@ class ModelViewerState extends State<ModelViewer> {
             'ios-src',
             'xr-environment',
 
-            // Staing & Cameras Attributes
+            // Staging & Cameras Attributes
             'camera-controls',
             'enable-pan',
             'touch-action',

@@ -10,7 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:model_viewer_plus/src/utils/constants.dart';
-import 'package:path/path.dart' as p;
+import 'package:path/path.dart' as path;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -86,7 +86,7 @@ class ModelViewerState extends State<ModelViewer> {
             if (['http', 'https'].contains(Uri.parse(widget.src).scheme)) {
               fileURL = widget.src;
             } else {
-              fileURL = p.joinAll([_proxyURL, 'model']);
+              fileURL = path.joinAll([_proxyURL, 'model']);
             }
             final intent = android_content.AndroidIntent(
               action: "android.intent.action.VIEW",
@@ -142,7 +142,7 @@ class ModelViewerState extends State<ModelViewer> {
       arPlacement: widget.arPlacement,
       iosSrc: widget.iosSrc,
       xrEnvironment: widget.xrEnvironment,
-      // Staing & Cameras Attributes
+      // Staging & Cameras Attributes
       cameraControls: widget.cameraControls,
       enablePan: widget.enablePan,
       touchAction: widget.touchAction,
@@ -264,7 +264,7 @@ class ModelViewerState extends State<ModelViewer> {
             // Some gltf models need other resources from the origin
             var pathSegments = [...url.pathSegments];
             pathSegments.removeLast();
-            var tryDestination = p.joinAll([url.origin, ...pathSegments, request.uri.path.replaceFirst('/', '')]);
+            var tryDestination = path.joinAll([url.origin, ...pathSegments, request.uri.path.replaceFirst('/', '')]);
             debugPrint("Try: ${tryDestination}");
             await response.redirect(Uri.parse(tryDestination));
           } else {
