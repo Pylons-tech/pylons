@@ -5,6 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
+import '../../owner_purchase_view_common/button_state.dart';
+import '../../owner_purchase_view_common/progress_bar_state.dart';
+
 class OwnerAudioWidget extends StatefulWidget {
   final String url;
 
@@ -35,13 +38,13 @@ class _OwnerAudioWidgetState extends State<OwnerAudioWidget> {
                         height: 22.h,
                         width: 22.h,
                         child: CircularProgressIndicator(
-                            strokeWidth: 2.w, color: kWhite));
+                            strokeWidth: 2.w, color: AppColors.kWhite));
                   case ButtonState.paused:
                     return InkWell(
                       onTap: viewModel.playAudio,
                       child: Icon(
                         Icons.play_arrow_outlined,
-                        color: kWhite,
+                        color: AppColors.kWhite,
                         size: 22.h,
                       ),
                     );
@@ -51,7 +54,7 @@ class _OwnerAudioWidgetState extends State<OwnerAudioWidget> {
                       onTap: viewModel.pauseAudio,
                       child: Icon(
                         Icons.pause,
-                        color: kWhite,
+                        color: AppColors.kWhite,
                         size: 22.h,
                       ),
                     );
@@ -67,18 +70,18 @@ class _OwnerAudioWidgetState extends State<OwnerAudioWidget> {
                   padding: EdgeInsets.only(
                       bottom: viewModel.collapsed ? 0 : 3.h, right: 10.w),
                   child: ProgressBar(
-                    progressBarColor: kWhite,
-                    thumbColor: kWhite,
+                    progressBarColor: AppColors.kWhite,
+                    thumbColor: AppColors.kWhite,
                     progress: value.current,
-                    baseBarColor: kGray,
-                    bufferedBarColor: kWhite,
+                    baseBarColor: AppColors.kGray,
+                    bufferedBarColor: AppColors.kWhite,
                     buffered: value.buffered,
                     total: value.total,
                     timeLabelLocation: viewModel.collapsed
                         ? TimeLabelLocation.none
                         : TimeLabelLocation.below,
                     timeLabelTextStyle: TextStyle(
-                        color: kWhite,
+                        color: AppColors.kWhite,
                         fontWeight: FontWeight.w800,
                         fontSize: 9.sp),
                     thumbRadius: 6.h,

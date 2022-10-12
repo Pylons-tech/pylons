@@ -75,3 +75,11 @@ class UrlLaunchingFileFailure extends Failure {
   @override
   List<Object?> get props => [message];
 }
+
+
+class AnalyticsFailure extends Failure {
+  const AnalyticsFailure({required String message}) : super(message);
+
+  @override
+  List<Object?> get props => [message];
+}

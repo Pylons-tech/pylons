@@ -7,12 +7,14 @@ import 'package:cosmos_utils/credentials_storage_failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:fixnum/fixnum.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:protobuf/protobuf.dart';
 import 'package:pylons_wallet/ipc/handler/handler_factory.dart';
 import 'package:pylons_wallet/ipc/handler/handlers/get_profile_handler.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/model/balance.dart';
+import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
@@ -21,6 +23,7 @@ import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
+import 'package:pylons_wallet/services/third_party_services/network_info.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
 import 'package:pylons_wallet/stores/models/transaction_response.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
@@ -28,6 +31,7 @@ import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/custom_transaction_signing_gateaway/custom_transaction_signing_gateway.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
+import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:pylons_wallet/utils/token_sender.dart';
 import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
@@ -287,6 +291,25 @@ class WalletsStoreImp implements WalletsStore {
     return SdkIpcResponse.success(data: jsonEncode(recipeResponseEither.toOption().toNullable()!.toProto3Json()), sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
   }
 
+  LocalTransactionModel createInitialLocalTransactionModel({
+    required TransactionTypeEnum transactionTypeEnum,
+    required String transactionData,
+    required String transactionCurrency,
+    required String transactionPrice,
+    required String transactionDescription,
+  }) {
+    final LocalTransactionModel txManager = LocalTransactionModel(
+        transactionType: transactionTypeEnum.name,
+        transactionData: transactionData,
+        transactionCurrency: transactionCurrency,
+        transactionPrice: transactionPrice,
+        transactionDescription: transactionDescription,
+        transactionHash: "",
+        dateTime: DateTime.now().millisecondsSinceEpoch,
+        status: TransactionStatus.Undefined.name);
+    return txManager;
+  }
+
   @override
   Future<SdkIpcResponse> createTrade(Map json) async {
     final msgObj = pylons.MsgCreateTrade.create()..mergeFromProto3Json(json);
@@ -294,28 +317,56 @@ class WalletsStoreImp implements WalletsStore {
     return _signAndBroadcast(msgObj);
   }
 
+  Future<void> saveTransactionRecord({required String transactionHash, required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
+    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(transactionHash: transactionHash, status: transactionStatus, transactionModel: txLocalModel);
+    repository.saveLocalTransaction(txLocalModelWithStatus);
+  }
+
   @override
-  Future<SdkIpcResponse> executeRecipe(Map json) async {
+  Future<SdkIpcResponse<Execution>> executeRecipe(Map json) async {
+  
+    final networkInfo = GetIt.I.get<NetworkInfo>();
+
+    final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
+      transactionTypeEnum: TransactionTypeEnum.BuyNFT,
+      transactionData: jsonEncode(json),
+      transactionDescription: "${'bought_nft'.tr()}  ${json[kNftName] ?? ""}",
+      transactionCurrency: "${json[kNftCurrency] ?? ""}",
+      transactionPrice: "${json[kNftPrice] ?? ""}",
+    );
+
+    if (!await networkInfo.isConnected) {
+      await saveTransactionRecord(transactionHash: "" , transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      return SdkIpcResponse.failure(sender: '', error: "no_internet".tr(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
+    }
+
+    json.remove(kNftName);
+    json.remove(kNftCurrency);
+    json.remove(kNftPrice);
+    
     final msgObj = pylons.MsgExecuteRecipe.create()..mergeFromProto3Json(json);
     msgObj.creator = wallets.value.last.publicAddress;
-
     final sdkResponse = await _signAndBroadcast(msgObj);
     if (!sdkResponse.success) {
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
     }
 
     final executionEither = await repository.getExecutionsByRecipeId(recipeId: json["recipeId"].toString(), cookBookId: json["cookbookId"].toString());
 
     if (executionEither.isLeft()) {
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
     }
 
     if (executionEither.toOption().toNullable()!.completedExecutions.isEmpty) {
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
     }
 
+    await saveTransactionRecord(transactionHash: sdkResponse.data.toString(), transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
     return SdkIpcResponse.success(
-        data: jsonEncode(executionEither.toOption().toNullable()!.completedExecutions.last.toProto3Json()), sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
+        data: executionEither.toOption().toNullable()!.completedExecutions.last, sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
   }
 
   @override
@@ -687,4 +738,6 @@ class WalletsStoreImp implements WalletsStore {
   Future<String> getRemoteNotificationServiceToken() {
     return sl.get<RemoteNotificationsService>().getToken();
   }
+  
+
 }

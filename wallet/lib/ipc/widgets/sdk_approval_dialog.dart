@@ -13,11 +13,7 @@ class SDKApprovalDialog {
   final VoidCallback onApproved;
   final VoidCallback onCancel;
 
-  SDKApprovalDialog(
-      {required this.context,
-      required this.sdkipcMessage,
-      required this.onApproved,
-      required this.onCancel});
+  SDKApprovalDialog({required this.context, required this.sdkipcMessage, required this.onApproved, required this.onCancel});
 
   Future show() {
     return showDialog(
@@ -38,8 +34,7 @@ class SDKApprovalDialog {
                       filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
                       child: Container(
                         margin: const EdgeInsets.all(10),
-                        decoration:
-                            BoxDecoration(color: Colors.white.withOpacity(0.0)),
+                        decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
                       ),
                     ),
                   ),
@@ -49,14 +44,13 @@ class SDKApprovalDialog {
                     width: screenSize.width(),
                     margin: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: kWhite.withOpacity(0.6),
+                      color: AppColors.kWhite.withOpacity(0.6),
                     ),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: kBlue.withOpacity(0.4),
+                        color: AppColors.kBlue.withOpacity(0.4),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 30, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.min,
@@ -64,12 +58,11 @@ class SDKApprovalDialog {
                           Text(
                             '"${sdkipcMessage.sender}" ${'would_like_to'.tr()} ${sdkipcMessage.action}?',
                             textAlign: TextAlign.center,
-                            style:
-                                Theme.of(context).textTheme.headline6!.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                            style: Theme.of(context).textTheme.headline6!.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
                           ),
                           const VerticalSpace(30),
                           Row(
@@ -82,20 +75,15 @@ class SDKApprovalDialog {
                                 },
                                 child: Text(
                                   'dont_allow'.tr(),
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      color: kWhite,
-                                      fontWeight: FontWeight.w300),
+                                  style: TextStyle(fontSize: 16, color: AppColors.kWhite, fontWeight: FontWeight.w300),
                                 ),
                               ),
                               const HorizontalSpace(30),
                               ElevatedButton(
                                 style: TextButton.styleFrom(
-                                  backgroundColor: kWhite.withOpacity(0.7),
-                                  side: BorderSide(
-                                      color: kWhite.withOpacity(0.5)),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 50, vertical: 6),
+                                  backgroundColor: AppColors.kWhite.withOpacity(0.7),
+                                  side: BorderSide(color: AppColors.kWhite.withOpacity(0.5)),
+                                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 6),
                                 ),
                                 onPressed: () async {
                                   Navigator.of(_).pop();
@@ -103,10 +91,11 @@ class SDKApprovalDialog {
                                 },
                                 child: Text(
                                   'ok'.tr(),
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: kWhite),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.kWhite,
+                                  ),
                                 ),
                               ),
                             ],

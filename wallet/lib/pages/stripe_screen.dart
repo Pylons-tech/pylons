@@ -129,9 +129,9 @@ class _StripeScreenState extends State<StripeScreen> {
                     Navigator.of(context).pop();
                     await backHistory(context);
                   },
-                  child: const Icon(
+                  child: Icon(
                     Icons.arrow_back_ios,
-                    color: kDarkGrey,
+                    color: AppColors.kDarkGrey,
                   )),
             ),
             Positioned(
