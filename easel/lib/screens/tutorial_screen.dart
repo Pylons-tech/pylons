@@ -1,5 +1,6 @@
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:easel_flutter/main.dart';
+import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:easel_flutter/utils/route_util.dart';
@@ -28,15 +29,16 @@ class TutorialScreenState extends State<TutorialScreen> {
   late List<Widget> slides;
 
   List<Widget> indicator() => List<Widget>.generate(
-      slides.length,
-      (index) => Container(
-            margin: EdgeInsets.symmetric(horizontal: 4.w),
-            height: currentPage.round() == index ? 16.w : 12.h,
-            width: currentPage.round() == index ? 18.w : 12.h,
-            decoration: BoxDecoration(
-              color: currentPage.round() == index ? getColorPerPage(index) : EaselAppTheme.kLightGrey,
-            ),
-          ));
+        slides.length,
+        (index) => Container(
+          margin: EdgeInsets.symmetric(horizontal: 4.w),
+          height: currentPage.round() == index ? 16.w : 12.h,
+          width: currentPage.round() == index ? 18.w : 12.h,
+          decoration: BoxDecoration(
+            color: currentPage.round() == index ? getColorPerPage(index) : EaselAppTheme.kLightGrey,
+          ),
+        ),
+      );
 
   double currentPage = 0.0;
   final _pageViewController = PageController();
@@ -57,6 +59,9 @@ class TutorialScreenState extends State<TutorialScreen> {
   @override
   void initState() {
     super.initState();
+
+    tutorialProvider.setLog();
+    
     myBottomDrawerController = BottomDrawerController();
     slides = kTutorialItems
         .map((item) => Column(
@@ -279,9 +284,15 @@ class TutorialScreenState extends State<TutorialScreen> {
 
 class TutorialScreenViewModel extends ChangeNotifier {
   bool isForwarding = false;
+  final Repository repository;
+  TutorialScreenViewModel({required this.repository});
 
   void forwarding() {
     isForwarding = !isForwarding;
     notifyListeners();
+  }
+
+  void setLog() {
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.tutorialScreen);
   }
 }

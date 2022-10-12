@@ -12,3 +12,18 @@ enum Orientation {
   Orientation_NW,
   Orientation_SW,
 }
+
+enum TransactionTypeEnum {
+  GeneratePaymentReceipt,
+  BuyNFT,
+  AppleInAppCoinsRequest,
+  GoogleInAppCoinsRequest,
+  BuyProduct,
+  Unknown
+}
+
+enum TransactionStatus {
+  Success,
+  Failed,
+  Undefined
+}

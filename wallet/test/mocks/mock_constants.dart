@@ -23,7 +23,7 @@ List<TransactionHistory> MOCK_TRANSACTIONS_HISTORY = [
       cookbookId: "cookbookLOUD1",
       createdAt: 1654508506,
       transactionType: "NFTSELL",
-      transactionTypeEnum: TransactionType.values.byName("NFTSELL"),
+      transactionTypeEnum: WalletHistoryTransactionType.values.byName("NFTSELL"),
       ibcCoin: IBCCoins.upylon,
       txID: "txID"),
   TransactionHistory(
@@ -33,7 +33,7 @@ List<TransactionHistory> MOCK_TRANSACTIONS_HISTORY = [
       amount: "1000ubedrock",
       createdAt: 1655890906,
       transactionType: "RECEIVE",
-      transactionTypeEnum: TransactionType.values.byName("RECEIVE"),
+      transactionTypeEnum: WalletHistoryTransactionType.values.byName("RECEIVE"),
       ibcCoin: IBCCoins.uatom,
       txID: "txID"),
   TransactionHistory(
@@ -43,7 +43,7 @@ List<TransactionHistory> MOCK_TRANSACTIONS_HISTORY = [
       amount: "10upylon",
       createdAt: 1654508506,
       transactionType: "SEND",
-      transactionTypeEnum: TransactionType.values.byName("SEND"),
+      transactionTypeEnum: WalletHistoryTransactionType.values.byName("SEND"),
       ibcCoin: IBCCoins.upylon,
       txID: "txID"),
 ];
@@ -244,7 +244,7 @@ BaseEnv MOCK_BASE_ENV = BaseEnv()
 
 IBCTraceModel MOCK_IBC_TRACE_MODEL = IBCTraceModel(denomTrace: DenomTrace(baseDenom: IBCCoins.ujunox, path: ''), ibcHash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E');
 
-NFT MOCK_NFT = NFT(
+NFT MOCK_NFT_FREE = NFT(
   name: "This is my Image NFT",
   height: "2400",
   description: "Please Buy my Image NFT",
@@ -260,6 +260,8 @@ NFT MOCK_NFT = NFT(
   owner: "abd",
   ibcCoins: IBCCoins.upylon,
 );
+
+
 NftOwnershipHistory MOCK_NFT_OWNERSHIP_HISTORY = NftOwnershipHistory(
   itemID: "ahmad123axd",
   cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
@@ -267,3 +269,26 @@ NftOwnershipHistory MOCK_NFT_OWNERSHIP_HISTORY = NftOwnershipHistory(
   receiver: "xyz",
   senderName: "abcxyz",
 );
+
+
+
+NFT MOCK_NFT_PREMIUM = NFT(
+  name: "I AM A PREMIUM NFT",
+  height: "2400",
+  description: "A PREMIUM NFT",
+  width: "1080",
+  url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
+  recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
+  duration: "0:0",
+  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+  appType: "easel",
+  creator: "MR X",
+  fileSize: "90.12KB",
+  itemID: "DtnxAS8L4pf",
+  owner: "MR X",
+  ibcCoins: IBCCoins.upylon,
+  price: "12"
+);
+
+int MOCK_NFT_QUANTITY = 50;
+int MOCK_NFT_MINTED = 10;

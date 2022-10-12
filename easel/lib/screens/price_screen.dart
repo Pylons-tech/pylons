@@ -1,6 +1,7 @@
 import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/repository/repository.dart';
+import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/custom_widgets/step_labels.dart';
 import 'package:easel_flutter/screens/custom_widgets/steps_indicator.dart';
 import 'package:easel_flutter/utils/amount_formatter.dart';
@@ -45,6 +46,7 @@ class _PriceScreenState extends State<PriceScreen> {
   @override
   void initState() {
     nft = repository.getCacheDynamicType(key: nftKey);
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.priceScreen);
     super.initState();
   }
 
@@ -341,6 +343,7 @@ class _PriceScreenState extends State<PriceScreen> {
                       VerticalSpace(10.h),
                       Center(
                         child: InkWell(
+                          key: const Key(kSaveAsDraftPriceKey),
                           onTap: () {
                             if (provider.isFreeDrop == FreeDrop.unselected) {
                               Navigator.pop(context);
@@ -374,6 +377,8 @@ class _PriceScreenState extends State<PriceScreen> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
+    GetIt.I.get<CreatorHubViewModel>().changeSelectedCollection(CollectionType.draft);
+
     if (context.read<EaselProvider>().isFreeDrop == FreeDrop.yes) {
       if (_royaltiesFieldError.value.isNotEmpty || _noOfEditionsFieldError.value.isNotEmpty) return;
       await context.read<EaselProvider>().updateNftFromPrice(nft!.id!);
