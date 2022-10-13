@@ -18,6 +18,7 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_play
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_progress_widget.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/wallpaper_set_screen.dart';
 import 'package:pylons_wallet/pages/gestures_for_detail_screen.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
@@ -30,6 +31,9 @@ import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:wallpaper/wallpaper.dart';
+import 'package:get_it/get_it.dart';
+
+import '../../services/repository/repository.dart';
 
 import '../../generated/locale_keys.g.dart';
 
@@ -192,6 +196,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   bool collapsed = true;
   bool isExpanded = false;
 
+
+
   Widget getProgressWidget() {
     final viewModel = context.read<OwnerViewViewModel>();
     switch (viewModel.nft.assetType) {
@@ -232,11 +238,59 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   //   WhatIsPylonDialog(context: context, onBackPressed: () {});
   //   whatIsPylonDialog.show();
   // }
+  // Future<void> setWallpaperFromAssetWithCrop() async {
+  //   setState(() {
+  //     _wallpaperAssetWithCrop = "Loading";
+  //   });
+  //   String result;
+  //   String assetPath = "assets/tmp1.jpg";
+  //   // Platform messages may fail, so we use a try/catch PlatformException.
+  //   try {
+  //     result = await WallpaperManager.setWallpaperFromAssetWithCrop(
+  //         assetPath, WallpaperManager.HOME_SCREEN, 0, 0, 800, 800);
+  //   } on PlatformException {
+  //     result = 'Failed to get wallpaper.';
+  //   }
+  //
+  //   // If the widget was removed from the tree while the asynchronous platform
+  //   // message was in flight, we want to discard the reply rather than calling
+  //   // setState to update our non-existent appearance.
+  //   if (!mounted) return;
+  //
+  //   setState(() {
+  //     _wallpaperAssetWithCrop = result;
+  //   });
+  // }
+
+
+
+
+  // Widget imageDownloadDialog() {
+  //   return Container(
+  //     height: 120.0,
+  //     width: 200.0,
+  //     child: Card(
+  //       color: Colors.black,
+  //       child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: <Widget>[
+  //           CircularProgressIndicator(),
+  //           SizedBox(height: 20.0),
+  //           // Text(
+  //           //   "Downloading File : $res",
+  //           //   style: TextStyle(color: Colors.white),
+  //           // )
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<OwnerViewViewModel>();
     final ibcEnumCoins = viewModel.nft.ibcCoins;
+    final repository = GetIt.I.get<Repository>();
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 100),
@@ -509,7 +563,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         ],
                                       ),
                                       SizedBox(
-                                        height: 20.h,
+                                        height: 5.h,//20
                                       ),
                                       GestureDetector(
                                         onTap: () {
@@ -526,11 +580,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         ),
                                       ),
                                       SizedBox(
-                                        height: 20.h,
+                                        height: 5.h,
                                       ),
-                                      SizedBox(
-                                        height: 20.h,
-                                      ),
+                                      // SizedBox(
+                                      //   height: 20.h,
+                                      // ),
                                       GestureDetector(
                                         onTap: () async {
                                           final Size size = MediaQuery.of(context).size;
@@ -541,18 +595,89 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                           height: 20.h,
                                         ),
                                       ),
-                                      SizedBox(height: 10.h),
+                                      SizedBox(height: 5.h),
                                       if (viewModel.nft.assetType == AssetType.Image)
+                                      //   downloading
+                                      //       ? imageDownloadDialog()
+                                      //       : Image.network(
+                                      //     images[nextImageID],
+                                      //     fit: BoxFit.fitWidth,
+                                      //   ),
+                                      //   GestureDetector(
+                                      //     onTap: () async {
+                                      //       setState(() {
+                                      //         images = [viewModel.nft.url];
+                                      //         _isDisable = true;
+                                      //       });
+                                      //       print("Task Done");
+                                      //
+                                      //     },
+                                      //     child: SvgPicture.asset(
+                                      //       SVGUtil.OWNER_SHARE,
+                                      //       height: 20.h,
+                                      //     ),
+                                      //   ),
+                                      // GestureDetector(
+                                      //   onTap: () async {
+                                      //     return await dowloadImage(context);
+                                      //   },
+                                      //   child: SvgPicture.asset(
+                                      //     SVGUtil.OWNER_SHARE,
+                                      //     height: 20.h,
+                                      //   ),
+                                      // ),
+                                      // GestureDetector(
+                                      //   onTap: _isDisable
+                                      //       ? null
+                                      //       : () async {
+                                      //       lock = await Wallpaper.lockScreen();
+                                      //       setState(() {
+                                      //         downloading = false;
+                                      //         lock = lock;
+                                      //       });
+                                      //       print("Task Done");
+                                      //
+                                      //     // try {
+                                      //     //   //repository.saveImageInLocalDirectory(viewModel.nft.url);
+                                      //     //   images = [viewModel.nft.url];
+                                      //     //   dowloadImage(context);
+                                      //     //   await Wallpaper.lockScreen();
+                                      //     // } catch (e, s) {
+                                      //     //   print('Exception details:\n $e');
+                                      //     //   print('Stack trace:\n $s');
+                                      //     //   //_showWhatIsPylonDialog(context);
+                                      //     // }
+                                      //       },
+                                      //   child: SvgPicture.asset(
+                                      //     SVGUtil.OWNER_SHARE,
+                                      //     height: 20.h,
+                                      //   ),
+                                      // ),
                                       GestureDetector(
-                                        onTap: () async {
-                                          print("was tapped");
-                                          try {
-                                            await Wallpaper.lockScreen();
-                                          } catch (e, s) {
-                                            print('Exception details:\n $e');
-                                            print('Stack trace:\n $s');
-                                            //_showWhatIsPylonDialog(context);
-                                          }
+                                        onTap: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (_) => WallpaperScreen(
+                                                nft: viewModel.nft.url,
+                                              ));
+                                            // images = [viewModel.nft.url];
+                                            // dowloadImage(context);
+                                            // //downloading ? imageDownloadDialog() : null;
+                                            // Wallpaper.lockScreen();
+                                            // //wallPaperSet();
+                                            // print("Task Done");
+
+
+                                          // try {
+                                          //   //repository.saveImageInLocalDirectory(viewModel.nft.url);
+                                          //   images = [viewModel.nft.url];
+                                          //   dowloadImage(context);
+                                          //   await Wallpaper.lockScreen();
+                                          // } catch (e, s) {
+                                          //   print('Exception details:\n $e');
+                                          //   print('Stack trace:\n $s');
+                                          //   //_showWhatIsPylonDialog(context);
+                                          // }
                                             },
                                         child: SvgPicture.asset(
                                           SVGUtil.OWNER_SHARE,
