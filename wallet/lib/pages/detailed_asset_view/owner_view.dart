@@ -506,7 +506,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         ],
                                       ),
                                       SizedBox(
-                                        height: 5.h,//20
+                                        height: 12.h,
                                       ),
                                       GestureDetector(
                                         onTap: () {
@@ -523,11 +523,23 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         ),
                                       ),
                                       SizedBox(
-                                        height: 5.h,
+                                        height: 12.h,
                                       ),
-                                      // SizedBox(
-                                      //   height: 20.h,
-                                      // ),
+                                      if (viewModel.nft.assetType == AssetType.Image)
+                                        GestureDetector(
+                                          onTap: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (_) => WallpaperScreen(nft: viewModel.nft.url)
+                                            );
+                                          },
+                                          child: SvgPicture.asset(
+                                            SVGUtil.MY_CREATIONS,
+                                            height: 20.h,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      SizedBox(height: 12.h),
                                       GestureDetector(
                                         onTap: () async {
                                           final Size size = MediaQuery.of(context).size;
@@ -536,24 +548,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         child: SvgPicture.asset(
                                           SVGUtil.OWNER_SHARE,
                                           height: 20.h,
-                                        ),
-                                      ),
-                                      SizedBox(height: 5.h),
-                                      if (viewModel.nft.assetType == AssetType.Image)
-
-                                      GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (_) => WallpaperScreen(
-                                                nft: viewModel.nft.url,
-                                              ));
-
-                                            },
-                                        child: SvgPicture.asset(
-                                          SVGUtil.MY_CREATIONS,
-                                          height: 20.h,
-                                          color: Colors.white,
                                         ),
                                       ),
                                     ],
