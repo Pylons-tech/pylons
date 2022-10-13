@@ -12,8 +12,6 @@ class WallpaperScreen extends StatefulWidget {
   const WallpaperScreen({Key? key, required this.nft}) : super(key: key);
   final String nft;
 
-
-
   @override
   State<WallpaperScreen> createState() => _WallpaperScreenState();
 }
@@ -26,7 +24,6 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
     super.initState();
 
   }
-
 
   Future<void> downloadAndSetImage(BuildContext context) async {
     final Stream<String> progressString = Wallpaper.imageDownloadProgress(widget.nft);
@@ -46,7 +43,6 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
       });
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -71,17 +67,17 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
               ),
             ),
           ),
-
-      Align(
-        child: SizedBox(
-          height: 100.h,
-          width: 100.h,
-          child: CircularProgressIndicator(
-            value: downloading? null : 0,
-            strokeWidth: 6.r,
-            color: AppColors.kWhite,
-          ),
-          )),
+          Align(
+            child: SizedBox(
+              height: 100.h,
+              width: 100.h,
+              child: CircularProgressIndicator(
+                  value: downloading? null : 0,
+                  strokeWidth: 6.r,
+                  color: AppColors.kWhite,
+                ),
+              ),
+            ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -94,8 +90,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
                     return downloadAndSetImage(context);
                   }),
             ),
-          )
-
+          ),
         ],
       ),
     );
