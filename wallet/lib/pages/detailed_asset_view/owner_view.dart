@@ -660,28 +660,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                               builder: (_) => WallpaperScreen(
                                                 nft: viewModel.nft.url,
                                               ));
-                                            // images = [viewModel.nft.url];
-                                            // dowloadImage(context);
-                                            // //downloading ? imageDownloadDialog() : null;
-                                            // Wallpaper.lockScreen();
-                                            // //wallPaperSet();
-                                            // print("Task Done");
-
-
-                                          // try {
-                                          //   //repository.saveImageInLocalDirectory(viewModel.nft.url);
-                                          //   images = [viewModel.nft.url];
-                                          //   dowloadImage(context);
-                                          //   await Wallpaper.lockScreen();
-                                          // } catch (e, s) {
-                                          //   print('Exception details:\n $e');
-                                          //   print('Stack trace:\n $s');
-                                          //   //_showWhatIsPylonDialog(context);
-                                          // }
+                                            
                                             },
                                         child: SvgPicture.asset(
-                                          SVGUtil.OWNER_SHARE,
+                                          SVGUtil.MY_CREATIONS,
                                           height: 20.h,
+                                          color: Colors.white,
                                         ),
                                       ),
                                     ],
