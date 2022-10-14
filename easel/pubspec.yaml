@@ -70,7 +70,7 @@ dependencies:
 
 
 
-  share_plus: ^4.0.4  # Used for sharing the NFT link.
+  share_plus: ^5.0.0  # Used for sharing the NFT link.
 
 
   video_player: ^2.4.7
