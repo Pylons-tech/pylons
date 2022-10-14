@@ -35,11 +35,12 @@ class _CreatorHubScreenState extends State<CreatorHubScreen> {
 
   @override
   void initState() {
+    super.initState();
+
     scheduleMicrotask(() {
       easelProvider.populateUserName();
       creatorHubViewModel.getPublishAndDraftData();
     });
-    super.initState();
 
     easelProvider.setLog(screenName: AnalyticsScreenEvents.createrHubScreen);
   }
@@ -54,11 +55,12 @@ class _CreatorHubScreenState extends State<CreatorHubScreen> {
           body: ChangeNotifierProvider.value(
             value: creatorHubViewModel,
             child: FocusDetector(
-                onFocusGained: () {
-                  GetIt.I.get<CreatorHubViewModel>().getDraftsList();
-                  GetIt.I.get<CreatorHubViewModel>().getTotalForSale();
-                },
-                child: const CreatorHubContent()),
+              onFocusGained: () {
+                GetIt.I.get<CreatorHubViewModel>().getDraftsList();
+                GetIt.I.get<CreatorHubViewModel>().getTotalForSale();
+              },
+              child: const CreatorHubContent(),
+            ),
           ),
         ),
       ),
@@ -129,9 +131,9 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
   Widget build(BuildContext context) {
     final viewModel = context.watch<CreatorHubViewModel>();
     return Container(
-        color: EaselAppTheme.kWhite,
-        child: SafeArea(
-            child: Scaffold(
+      color: EaselAppTheme.kWhite,
+      child: SafeArea(
+        child: Scaffold(
           backgroundColor: EaselAppTheme.kBgWhite,
           body: Padding(
             padding: EdgeInsets.only(top: 20.h),
@@ -198,11 +200,11 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                       SizedBox(width: 16.w),
                       InkWell(
                           onTap: () => viewModel.updateViewType(ViewType.viewGrid),
-                          child: SvgPicture.asset(kGridIcon, height: 15.h, color: viewModel.viewType == ViewType.viewGrid ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon)),
+                          child: SvgPicture.asset(SVGUtils.kGridIcon, height: 15.h, color: viewModel.viewType == ViewType.viewGrid ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon)),
                       SizedBox(width: 14.w),
                       InkWell(
                         onTap: () => viewModel.updateViewType(ViewType.viewList),
-                        child: SvgPicture.asset(kListIcon, height: 15.h, color: viewModel.viewType == ViewType.viewList ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon),
+                        child: SvgPicture.asset(SVGUtils.kListIcon, height: 15.h, color: viewModel.viewType == ViewType.viewList ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon),
                       ),
                     ],
                   ),
@@ -243,13 +245,14 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                           collectionType: viewModel.selectedCollectionType),
                       viewType: viewModel.viewType,
                     ),
-
                   ),
                 ),
               ],
             ),
           ),
-        )));
+        ),
+      ),
+    );
   }
 
   Widget getEmptyWidgetForSale() {

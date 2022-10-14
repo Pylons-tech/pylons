@@ -67,7 +67,7 @@ class DraftsMoreBottomSheet extends StatelessWidget {
           children: [
             moreOptionTile(
                 title: "publish",
-                image: kSvgPublish,
+                image: SVGUtils.kSvgPublish,
                 onPressed: () {
                   viewModel.saveNFT(nft: nft);
                   Navigator.of(context).pop();
@@ -78,7 +78,7 @@ class DraftsMoreBottomSheet extends StatelessWidget {
             ),
             moreOptionTile(
                 title: "delete",
-                image: kSvgDelete,
+                image: SVGUtils.kSvgDelete,
                 onPressed: () {
                   Navigator.of(context).pop();
 
@@ -103,7 +103,7 @@ class DraftsMoreBottomSheet extends StatelessWidget {
                         );
                     },
                     title: "copy_cid".tr(),
-                    image: kSvgIpfsLogo,
+                    image: PngUtils.kSvgIpfsLogo,
                     isSvg: false,
                   );
                 },
@@ -114,7 +114,7 @@ class DraftsMoreBottomSheet extends StatelessWidget {
                       onViewOnIPFSPressed(nft: nft, context: context);
                     },
                     title: "view".tr(),
-                    image: kSvgIpfsLogo,
+                    image: PngUtils.kSvgIpfsLogo,
                     isSvg: false,
                   );
                 },
