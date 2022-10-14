@@ -22,7 +22,7 @@ dependencies:
   backdrop: ^0.8.1
   http: ^0.13.4
   shared_preferences: ^2.0.12
-  share_plus: ^4.4.0
+  share_plus: ^5.0.0
   detectable_text_field: ^2.0.3
   auto_size_text: ^3.0.0
 
