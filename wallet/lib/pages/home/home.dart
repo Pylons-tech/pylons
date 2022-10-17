@@ -22,7 +22,7 @@ import 'package:pylons_wallet/utils/screen_responsive.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:home_widget/home_widget.dart';
 
-import 'collection_screen/home_widget.dart';
+import '../home_widget/home_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

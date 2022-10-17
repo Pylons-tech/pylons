@@ -10,19 +10,20 @@ import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
+import 'package:pylons_wallet/pages/home/wallet_screen/widgets/what_is_pylon_dialog.dart';
+
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 
 
-import '../../../components/pylons_app_theme.dart';
-import '../../../utils/constants.dart';
-import '../../../utils/route_util.dart';
-import '../../detailed_asset_view/widgets/nft_3d_asset.dart';
-import '../../detailed_asset_view/widgets/pdf_placeholder.dart';
-import '../../detailed_asset_view/widgets/video_placeholder.dart';
-import 'collection_view_model.dart';
+import '../../components/pylons_app_theme.dart';
+import '../../utils/constants.dart';
+import '../detailed_asset_view/widgets/nft_3d_asset.dart';
+import '../detailed_asset_view/widgets/pdf_placeholder.dart';
+import '../detailed_asset_view/widgets/video_placeholder.dart';
+import '../home/collection_screen/collection_view_model.dart';
 
-import 'preview_nft_grid.dart';
+import '../home/collection_screen/preview_nft_grid.dart';
 
 
 
@@ -239,7 +240,7 @@ class _WidgetNFTPickerScreenState extends State<WidgetNFTPickerScreen> {
                 SizedBox(height: 20.h),
                 Center(
                   child: ClipPath(
-                    clipper: PylonButtonClipper(),
+                    clipper: WhatIsPylonButtonClipper(),
                     child: InkWell(
                       onTap: () async {
                         Navigator.of(context).pop();
@@ -270,26 +271,5 @@ class _WidgetNFTPickerScreenState extends State<WidgetNFTPickerScreen> {
     ),
     ),
     );
-  }
-}
-
-class PylonButtonClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-
-    path.lineTo(0, size.height);
-    path.lineTo(size.width - 18, size.height);
-    path.lineTo(size.width, size.height - 18);
-    path.lineTo(size.width, 0);
-    path.lineTo(18, 0);
-    path.lineTo(0, 18);
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    return false;
   }
 }
