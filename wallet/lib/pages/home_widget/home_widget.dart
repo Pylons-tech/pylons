@@ -59,12 +59,12 @@ class _WidgetNFTPickerScreenState extends State<WidgetNFTPickerScreen> {
           child: Container(
             width: 35.w,
             height: 35.h,
-            decoration: BoxDecoration(color: kWhite.withOpacity(0.5), shape: BoxShape.circle),
+            decoration: BoxDecoration(color: AppColors.kWhite.withOpacity(0.5), shape: BoxShape.circle),
             child: Image.asset(
               ImageUtil.AUDIO_ICON,
               width: 35.w,
               height: 35.h,
-              color: kBlack.withOpacity(0.7),
+              color: AppColors.kBlack.withOpacity(0.7),
             ),
           ),
         ),
@@ -90,7 +90,7 @@ class _WidgetNFTPickerScreenState extends State<WidgetNFTPickerScreen> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
-        backgroundColor: kMainBG,
+        backgroundColor: AppColors.kMainBG,
         body: ChangeNotifierProvider.value(
         value: collectionViewModel,
         builder: (context, child) {
@@ -140,13 +140,13 @@ class _WidgetNFTPickerScreenState extends State<WidgetNFTPickerScreen> {
                                   assetType: nft.assetType,
                                   on3dNFT: (BuildContext context) =>
                                       Container(
-                                        color: k3DBackgroundColor,
+                                        color: AppColors.k3DBackgroundColor,
                                         height: double.infinity,
                                         child: IgnorePointer(
                                           child: Nft3dWidget(
                                             url: nft.url,
                                             cameraControls: false,
-                                            backgroundColor: k3DBackgroundColor,
+                                            backgroundColor: AppColors.k3DBackgroundColor,
                                           ),
                                         ),
                                       ),
@@ -185,13 +185,13 @@ class _WidgetNFTPickerScreenState extends State<WidgetNFTPickerScreen> {
                                   assetType: nft.assetType,
                                   on3dNFT: (BuildContext context) =>
                                       Container(
-                                        color: k3DBackgroundColor,
+                                        color: AppColors.k3DBackgroundColor,
                                         height: double.infinity,
                                         child: IgnorePointer(
                                           child: Nft3dWidget(
                                             url: nft.url,
                                             cameraControls: false,
-                                            backgroundColor: k3DBackgroundColor,
+                                            backgroundColor: AppColors.k3DBackgroundColor,
                                           ),
                                         ),
                                       ),
@@ -234,12 +234,12 @@ class _WidgetNFTPickerScreenState extends State<WidgetNFTPickerScreen> {
                         child: Container(
                           width: 180.w,
                           height: 40.h,
-                          color: kDarkRed,
+                          color: AppColors.kDarkRed,
                           child: Center(
                             child: Text(
                               "update_widget".tr(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(color: kWhite, fontSize: 14.sp),
+                              style: TextStyle(color: AppColors.kWhite, fontSize: 14.sp),
                             ),
                           ),
                         ),
