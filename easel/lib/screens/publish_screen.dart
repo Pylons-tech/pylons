@@ -465,7 +465,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   child: SvgPicture.asset(
-                    kOwnerVerifiedIcon,
+                    SVGUtils.kOwnerVerifiedIcon,
                     height: 15.h,
                   ),
                 ),
