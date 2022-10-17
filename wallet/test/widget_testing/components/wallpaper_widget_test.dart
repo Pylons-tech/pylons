@@ -1,12 +1,7 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/wallpaper_set_screen.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
-import 'package:pylons_wallet/utils/constants.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-
 
 import '../../mocks/mock_constants.dart';
 import '../extension/size_extension.dart';
