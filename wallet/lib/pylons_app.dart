@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:get_it/get_it.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
@@ -126,8 +127,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
 
                   if (ModalRoute.of(context)?.settings.arguments is NFT) {
                     final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
-                    
-                    
+
                     return OwnerView(
                       key: ValueKey(nft),
                       nft: nft,
@@ -147,7 +147,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
 
                   if (ModalRoute.of(context)?.settings.arguments is NFT) {
                     final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
-                    
+
                     return PurchaseItemScreen(
                       key: ValueKey(nft),
                       nft: nft,
@@ -158,7 +158,6 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
                 },
               },
               builder: (context, widget) {
-                GetIt.I.get<Repository>().logUserJourney(screenName: AnalyticsScreenEvents.unknown);
                 return MediaQuery(
                   data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                   child: widget ?? Container(),
