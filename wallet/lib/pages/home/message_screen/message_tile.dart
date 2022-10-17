@@ -9,8 +9,7 @@ import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:pylons_wallet/utils/time_ago.dart' as time_ago;
 
 class MessageTile extends StatefulWidget {
-  const MessageTile({Key? key, required this.notificationMessage})
-      : super(key: key);
+  const MessageTile({Key? key, required this.notificationMessage}) : super(key: key);
 
   final NotificationMessage notificationMessage;
 
@@ -21,11 +20,7 @@ class MessageTile extends StatefulWidget {
 class _MessageTileState extends State<MessageTile> {
   @override
   Widget build(BuildContext context) {
-    final TextStyle kMessageTextStyle = TextStyle(
-        fontSize: 13.sp,
-        fontFamily: kUniversalFontFamily,
-        color: kGray,
-        fontWeight: FontWeight.w800);
+    final TextStyle kMessageTextStyle = TextStyle(fontSize: 13.sp, fontFamily: kUniversalFontFamily, color: AppColors.kGray, fontWeight: FontWeight.w800);
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 4.h),
@@ -61,7 +56,9 @@ class _MessageTileState extends State<MessageTile> {
               Text(
                 getTimeFromInt(widget.notificationMessage.createdAt),
                 style: kMessageTextStyle.copyWith(
-                    fontSize: 10.sp, color: kLightGray),
+                  fontSize: 10.sp,
+                  color: AppColors.kLightGray,
+                ),
               )
             ],
           ),
@@ -77,16 +74,14 @@ class _MessageTileState extends State<MessageTile> {
   String getMessageBasedOnType(NotificationMessage message) {
     switch (message.type) {
       case kSaleType:
-        return "your_nft_sold_msg".tr(
-            args: [message.itemName.trimStringShort(stringTrimConstantMin)]);
+        return "your_nft_sold_msg".tr(args: [message.itemName.trimStringShort(stringTrimConstantMin)]);
       default:
         return "";
     }
   }
 
   String getTimeFromInt(int createdAt) {
-    final createdDate =
-        DateTime.fromMillisecondsSinceEpoch(createdAt * kTimeStampInt);
+    final createdDate = DateTime.fromMillisecondsSinceEpoch(createdAt * kTimeStampInt);
     final Duration createdDuration = DateTime.now().difference(createdDate);
     final difference = DateTime.now().subtract(createdDuration);
     return time_ago.format(difference);

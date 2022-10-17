@@ -48,6 +48,7 @@ class _DescribeScreenState extends State<DescribeScreen> {
     super.initState();
 
     provider.nft = repository.getCacheDynamicType(key: nftKey);
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.describeScreen);
     String from = "";
     from = context.read<HomeViewModel>().from!;
 

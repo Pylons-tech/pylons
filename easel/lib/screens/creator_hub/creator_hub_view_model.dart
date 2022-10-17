@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/utils/constants.dart';
@@ -22,16 +20,8 @@ class CreatorHubViewModel extends ChangeNotifier {
 
   ViewType viewType = ViewType.viewGrid;
 
-  int _publishedRecipesLength = 0;
-  int forSaleCount = 0;
 
-  get publishedRecipesLength => _publishedRecipesLength;
-
-  set publishedRecipeLength(int value) {
-    _publishedRecipesLength = value;
-
-    notifyListeners();
-  }
+  int get publishedRecipesLength => nftPublishedList.length;
 
   changeSelectedCollection(CollectionType collectionType) {
     switch (collectionType) {
@@ -95,22 +85,19 @@ class CreatorHubViewModel extends ChangeNotifier {
   }
 
   void getTotalForSale() {
-    forSaleCount = 0;
-    nftForSaleList = [];
-    for (int i = 0; i < nftPublishedList.length; i++) {
-      if (nftPublishedList[i].isEnabled &&
-          nftPublishedList[i].amountMinted <
-              int.parse(nftPublishedList[i].quantity)) {
-        forSaleCount++;
-        nftForSaleList.add(nftPublishedList[i]);
+    _nftForSaleList = [];
+
+    for (NFT nft in nftPublishedList) {
+      if (nft.isEnabled && nft.amountMinted < int.parse(nft.quantity)) {
+        _nftForSaleList.add(nft);
       }
     }
+
     notifyListeners();
   }
 
   Future<void> getPublishAndDraftData() async {
     await getRecipesList();
-
     getTotalForSale();
     notifyListeners();
   }
@@ -127,15 +114,13 @@ class CreatorHubViewModel extends ChangeNotifier {
       return;
     }
 
-    final recipesListEither =
-        await repository.getRecipesBasedOnCookBookId(cookBookId: cookBookId);
+    final recipesListEither = await repository.getRecipesBasedOnCookBookId(cookBookId: cookBookId);
 
     if (recipesListEither.isLeft()) {
       return;
     }
 
     final recipesList = recipesListEither.getOrElse(() => []);
-    log("recipeList: ${recipesList.length}");
     _nftPublishedList.clear();
     if (recipesList.isEmpty) {
       return;
@@ -144,8 +129,11 @@ class CreatorHubViewModel extends ChangeNotifier {
       final nft = NFT.fromRecipe(recipe);
       _nftPublishedList.add(nft);
     }
+  }
 
-    publishedRecipeLength = nftPublishedList.length;
+  void addToRecentNFT(NFT nft) {
+    _nftPublishedList.add(nft);
+    notifyListeners();
   }
 
   Future<void> getDraftsList() async {
@@ -155,9 +143,7 @@ class CreatorHubViewModel extends ChangeNotifier {
 
     if (getNftResponse.isLeft()) {
       loading.dismiss();
-
       "something_wrong".tr().show();
-
       return;
     }
 
@@ -200,6 +186,12 @@ class CreatorHubViewModel extends ChangeNotifier {
 
   void updateViewType(ViewType selectedViewType) {
     viewType = selectedViewType;
+    notifyListeners();
+  }
+
+  void updatePublishedNFTList({required NFT nft}) {
+    _nftPublishedList.add(nft);
+    _nftForSaleList.add(nft);
     notifyListeners();
   }
 }

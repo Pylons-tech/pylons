@@ -43,6 +43,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   @override
   void initState() {
     super.initState();
+    homeProvider.logAnalyticsEvent();
     _tabController = TabController(vsync: this, length: homeProvider.pages.length);
     getInitialLink();
   }
@@ -109,13 +110,13 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             child: RotatedBox(
               quarterTurns: 0,
               child: ColoredBox(
-                color: kMainBG,
+                color: AppColors.kMainBG,
                 child: WillPopScope(
                   onWillPop: () async => false,
                   child: DefaultTabController(
                     length: tabLen,
                     child: Scaffold(
-                      backgroundColor: kMainBG,
+                      backgroundColor: AppColors.kMainBG,
                       appBar: buildAppBar(context, provider),
                       body: provider.pages[provider.selectedIndex],
                     ),
@@ -194,7 +195,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               top: 0.2.sh - 30.r,
               left: 0.5.sw - 30.r,
               child: CircleAvatar(
-                backgroundColor: kMainBG,
+                backgroundColor: AppColors.kMainBG,
                 radius: 34.r,
                 child: UserAvatarWidget(radius: 30.r),
               ),
@@ -248,9 +249,9 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     return Container(
       height: isTablet ? 6.w : 8.w,
       width: isTablet ? 6.w : 8.w,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: kDarkRed,
+        color: AppColors.kDarkRed,
       ),
     );
   }
@@ -290,7 +291,6 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 ),
               ),
             ),
-
             Positioned(
               top: 0.06.sh,
               left: 0.09.sw,
@@ -309,7 +309,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               top: 0.2.sh - 30.r,
               left: 0.5.sw - 30.r,
               child: CircleAvatar(
-                backgroundColor: kMainBG,
+                backgroundColor: AppColors.kMainBG,
                 radius: 34.r,
                 child: UserAvatarWidget(radius: 30.r),
               ),
@@ -369,7 +369,7 @@ class DiagonalLinePainter extends CustomPainter {
     const pointMode = ui.PointMode.polygon;
     final points = [const Offset(0, 10), const Offset(100, 10), const Offset(110, -2)];
     final paint = Paint()
-      ..color = kDarkRed
+      ..color = AppColors.kDarkRed
       ..strokeWidth = 3;
     canvas.drawPoints(pointMode, points, paint);
   }
@@ -403,7 +403,7 @@ class WalletTab extends StatelessWidget {
                 child: Text(
                   tabName.tr(),
                   style: TextStyle(
-                    color: index == homeProvider.selectedIndex ? kDarkRed : kBlack,
+                    color: index == homeProvider.selectedIndex ? AppColors.kDarkRed : AppColors.kBlack,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
