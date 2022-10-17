@@ -51,7 +51,6 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/pages/home_widget/home_widget.dart';
 
 import 'model/transaction_failure_model.dart';
 
