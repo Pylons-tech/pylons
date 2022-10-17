@@ -242,7 +242,7 @@ class _WidgetNFTPickerScreenState extends State<WidgetNFTPickerScreen> {
                     clipper: PylonButtonClipper(),
                     child: InkWell(
                       onTap: () async {
-                        Navigator.of(context).pushNamed(RouteUtil.ROUTE_HOME);
+                        Navigator.of(context).pop();
                         await HomeWidget.saveWidgetData<String>('image', imagePicked);
                         _updateWidget();
                       },

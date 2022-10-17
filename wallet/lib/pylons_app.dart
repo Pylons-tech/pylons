@@ -98,7 +98,6 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
               routes: {
                 '/': (context) => const RoutingPage(),
                 RouteUtil.ROUTE_HOME: (context) => const HomeScreen(),
-                RouteUtil.ROUTE_WIDGET: (context) => const WidgetNFTPickerScreen(),
                 RouteUtil.ROUTE_APP_UPDATE: (context) => const UpdateApp(),
                 RouteUtil.ROUTE_SETTINGS: (context) => const SettingScreen(),
                 RouteUtil.ROUTE_LEGAL: (context) => const LegalScreen(),
