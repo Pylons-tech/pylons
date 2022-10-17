@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -83,7 +84,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
             child: Padding(
               padding: EdgeInsets.only(bottom: 30.h),
               child: CustomPaintButton(
-                  title: "set as lockscreen",
+                  title: "set_lockscreen".tr(),
                   bgColor: AppColors.kWhite.withOpacity(0.3),
                   width: 280.w,
                   onPressed: () async {
