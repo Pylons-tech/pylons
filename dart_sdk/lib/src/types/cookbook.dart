@@ -1,5 +1,6 @@
 import 'package:fixnum/fixnum.dart';
 
+import '../../pylons_sdk.dart';
 import '../generated/pylons/cookbook.pb.dart' as generated;
 
 class Cookbook {
@@ -10,8 +11,29 @@ class Cookbook {
   static Cookbook? _current;
   static Cookbook? get current => _current;
 
-  static void load (String id) async {
-    throw UnimplementedError();
+  static Future<Cookbook> load (String id) async {
+    final lowLevel = await PylonsWallet.instance.getCookbook(id);
+    if (lowLevel.success) {
+      return _current = Cookbook(lowLevel.data!);
+    } else {
+      return Future.error(lowLevel.error);
+    }
+  }
+
+  static Future<List<Recipe>> recipes () async {
+    if (current == null) {
+      throw Exception();
+    }
+    final lowLevel = await PylonsWallet.instance.getRecipes(current!._native.id);
+    if (lowLevel.success) {
+      final ls = <Recipe>[];
+      lowLevel.data?.forEach((element) {
+        ls.add(Recipe(element))
+      });
+      return ls;
+    } else {
+      return Future.error(lowLevel.error);
+    }
   }
 
   String getCreator() {

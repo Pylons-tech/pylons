@@ -78,16 +78,16 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisCount: 3,
           ),
           children: [
-            InventoryPane(items: [
-              Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
-              Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
-              Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
-              Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
-              Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
-            ]),
-            RecipeInputPane(recipe: Recipe.create(), items: const []),
-            RecipeOutputPane(recipe: Recipe.create(), items: const []),
-            RecipeSelectPane(recipes: const [])
+            //InventoryPane(items: [
+            //   Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
+            //   Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
+            //   Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
+            //   Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
+            //   Item.create()..id = "item1"..cookbookId = "cb1"..recipeId = "rcp1",
+            // ]),
+            // RecipeInputPane(recipe: Recipe.create(), items: const []),
+            // RecipeOutputPane(recipe: Recipe.create(), items: const []),
+            // RecipeSelectPane(recipes: const [])
           ],
         )
       )
@@ -119,8 +119,8 @@ class InventoryItemPane extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(item.id, style: const TextStyle(color: Colors.white),),
-          Text("${item.cookbookId}:${item.recipeId}", style: const TextStyle(color: Colors.white))
+          // Text(item.id, style: const TextStyle(color: Colors.white),),
+          // Text("${item.cookbookId}:${item.recipeId}", style: const TextStyle(color: Colors.white))
         ]
       ),
     );
