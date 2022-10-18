@@ -5,6 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
+import '../../owner_purchase_view_common/button_state.dart';
+import '../../owner_purchase_view_common/progress_bar_state.dart';
+
 class PurchaseAudioWidget extends StatefulWidget {
   final String url;
 

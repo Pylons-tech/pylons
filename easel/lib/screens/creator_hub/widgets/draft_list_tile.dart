@@ -47,59 +47,60 @@ class _DraftListTileState extends State<DraftListTile> {
 
   Widget getPlaceHolder() {
     return Container(
-        margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 3.w),
-        decoration: BoxDecoration(color: EaselAppTheme.kDarkGrey02, boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            offset: const Offset(0.0, 1.0),
-            blurRadius: 4.0,
-          ),
-        ]),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-          child: Row(
-            children: [
-              Container(
-                width: 50.0.w,
-                height: 50.0.w,
-                decoration: const BoxDecoration(
-                  color: EaselAppTheme.kLightGrey03,
-                ),
+      margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 3.w),
+      decoration: BoxDecoration(color: EaselAppTheme.kDarkGrey02, boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.3),
+          offset: const Offset(0.0, 1.0),
+          blurRadius: 4.0,
+        ),
+      ]),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+        child: Row(
+          children: [
+            Container(
+              width: 50.0.w,
+              height: 50.0.w,
+              decoration: const BoxDecoration(
+                color: EaselAppTheme.kLightGrey03,
               ),
-              SizedBox(
-                width: 10.w,
+            ),
+            SizedBox(
+              width: 10.w,
+            ),
+            Expanded(
+              child: ListView.separated(
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Container(
+                    width: 30.0.w,
+                    height: 9.0.h,
+                    color: EaselAppTheme.kLightGrey03,
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return SizedBox(
+                    height: 8.0.h,
+                  );
+                },
+                itemCount: 3,
               ),
-              Expanded(
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      width: 30.0.w,
-                      height: 9.0.h,
-                      color: EaselAppTheme.kLightGrey03,
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return SizedBox(
-                      height: 8.0.h,
-                    );
-                  },
-                  itemCount: 3,
-                ),
+            ),
+            SizedBox(
+              width: 10.w,
+            ),
+            Padding(
+              padding: EdgeInsets.all(4.0.w),
+              child: SvgPicture.asset(
+                SVGUtils.kSvgMoreOption,
+                color: EaselAppTheme.kLightGrey03,
               ),
-              SizedBox(
-                width: 10.w,
-              ),
-              Padding(
-                padding: EdgeInsets.all(4.0.w),
-                child: SvgPicture.asset(
-                  kSvgMoreOption,
-                  color: EaselAppTheme.kLightGrey03,
-                ),
-              )
-            ],
-          ),
-        ));
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -119,14 +120,14 @@ class _DraftListTileState extends State<DraftListTile> {
                   final DeleteDialog deleteDialog = DeleteDialog(contextt: context, nft: widget.nft);
                   deleteDialog.show();
                 },
-                icon: kSvgDelete,
+                icon: SVGUtils.kSvgDelete,
               ),
               buildSlidableAction(
                 context,
                 callback: () {
                   onViewOnIPFSPressed(nft: widget.nft, context: context);
                 },
-                icon: kSvgIpfsLogo,
+                icon: PngUtils.kSvgIpfsLogo,
                 isSvg: false,
               ),
             ],
@@ -188,7 +189,7 @@ class _DraftListTileState extends State<DraftListTile> {
                         },
                         child: Padding(
                           padding: EdgeInsets.all(4.0.w),
-                          child: SvgPicture.asset(kSvgMoreOption),
+                          child: SvgPicture.asset(SVGUtils.kSvgMoreOption),
                         ))
                   ],
                 ),
