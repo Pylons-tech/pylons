@@ -50,7 +50,7 @@ dependencies:
   permission_handler: ^10.0.1
 
   googleapis: ^9.2.0
-  icloud_storage: ^1.0.0
+  icloud_storage: ^2.0.0
 
   # Used for getting applications document directory
   path_provider: ^2.0.11
