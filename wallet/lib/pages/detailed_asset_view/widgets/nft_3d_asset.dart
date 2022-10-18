@@ -63,7 +63,9 @@ class Nft3DWidgetContent extends StatelessWidget {
           relatedJs: "",
           onProgress: (status) {
             if (status == 1) {
-              viewModel.toggleLoader();
+              Future.delayed(const Duration(seconds: 1),(){
+                viewModel.toggleLoader();
+              });
             }
           },
           onError: (error) {
@@ -71,12 +73,16 @@ class Nft3DWidgetContent extends StatelessWidget {
           },
         ),
         if (viewModel.showLoader.value && showLoader)
-          Center(
-            child: SizedBox(
-              height: 100.0.h,
-              child: Image.asset(
-                ImageUtil.LOADING_GIF,
-                key: const Key(kImageAssetKey),
+          Container(
+            color: Colors.black,
+            height: double.infinity,width: double.infinity,
+            child: Center(
+              child: SizedBox(
+                height: 100.0.h,
+                child: Image.asset(
+                  ImageUtil.LOADING_GIF,
+                  key: const Key(kImageAssetKey),
+                ),
               ),
             ),
           )
