@@ -15,7 +15,7 @@
   "dependencies": {
     "@babel/runtime": "^7.19.0",
     "@braintree/sanitize-url": "^6.0.0",
-    "@google-cloud/storage": "^6.5.2",
+    "@google-cloud/storage": "^6.5.3",
     "@google/model-viewer": "^2.0.2",
     "axios": "^0.27.2",
     "babel-polyfill": "^6.26.0",
