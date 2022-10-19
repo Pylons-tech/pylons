@@ -192,8 +192,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   bool collapsed = true;
   bool isExpanded = false;
 
-
-
   Widget getProgressWidget() {
     final viewModel = context.read<OwnerViewViewModel>();
     switch (viewModel.nft.assetType) {
@@ -228,7 +226,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
       color: likedByMe ? AppColors.kDarkRed : Colors.white,
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
