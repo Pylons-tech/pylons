@@ -38,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Widget buildMobileScreen(BuildContext context) {
-    return SvgPicture.asset(kSvgSplash, fit: BoxFit.cover);
+    return SvgPicture.asset(SVGUtils.kSvgSplash, fit: BoxFit.cover);
   }
 
   Stack buildTabletScreen(BuildContext context) {
@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
             right: 0,
             top: 0,
             bottom: 0,
-            child: SvgPicture.asset(kSvgTabSplash, fit: BoxFit.fill)),
+            child: SvgPicture.asset(SVGUtils.kSvgTabSplash, fit: BoxFit.fill)),
         Positioned(
           top: 0.26.sh,
           left: 0.2.sw,
@@ -63,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 Align(
                     alignment: Alignment.centerLeft,
-                    child: SvgPicture.asset(kSplashTabEasel)),
+                    child: SvgPicture.asset(SVGUtils.kSplashTabEasel)),
                 SizedBox(height: 10.h),
                 Text(
                   "nft_manager".tr(),
