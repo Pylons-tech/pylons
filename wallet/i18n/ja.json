@@ -340,8 +340,8 @@
   "your_nft_sold_msg_to": "あなたのNFT \"{}\"は販売されました ",
   "submit_feedback": "フィードバックを送信",
   "subject": "主題",
-  "character_limit" :"{} 文字数制限",
-  "enter_description_text" : "説明を入力",
+  "character_limit": "{} 文字数制限",
+  "enter_description_text": "説明を入力",
   "enter_subject_text": "件名を入力してください",
   "thank_you_for_feedback": "ご意見ありがとうございます",
   "recipe_id": "レシピID",
@@ -355,5 +355,6 @@
   "buying_pylon_points": "パイロンポイントを購入",
   "transaction_date": "取引日",
   "retry": "リトライ",
-  "bought_nft": "買った"
+  "bought_nft": "買った",
+  "set_lockscreen": "ロック画面に設定"
 }

@@ -354,5 +354,6 @@
   "buying_pylon_points": "파일론 포인트 구매",
   "transaction_date": "거래 날짜",
   "retry": "다시 해 보다",
-  "bought_nft": "구입했다"
+  "bought_nft": "구입했다",
+  "set_lockscreen": "잠금 화면으로 설정"
 }

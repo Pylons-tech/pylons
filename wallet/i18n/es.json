@@ -352,8 +352,12 @@
   "claim_free_nft": "Nõudke oma tasuta NFT-d",
   "before_too_late": "Enne kui on liiga hilja!",
   "please_try_again_later": "Por favor, inténtelo de nuevo más tarde",
+
   "buying_pylon_points": "Puntos Pylons Comprados",
   "transaction_date": "Fecha de Transacción",
   "retry": "Rever",
-  "bought_nft": "Comprado"
+  "bought_nft": "Comprado",
+
+  "set_lockscreen": "Establecer como pantalla de bloqueo"
+
 }
