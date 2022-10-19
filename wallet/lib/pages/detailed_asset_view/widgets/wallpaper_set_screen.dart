@@ -20,11 +20,6 @@ class WallpaperScreen extends StatefulWidget {
 class _WallpaperScreenState extends State<WallpaperScreen> {
   bool downloading = false;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   Future<void> downloadAndSetImage(BuildContext context) async {
     final Stream<String> progressString = Wallpaper.imageDownloadProgress(widget.nft);
     progressString.listen((data) {
