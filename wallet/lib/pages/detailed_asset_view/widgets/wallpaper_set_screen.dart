@@ -84,7 +84,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
                   width: 280.w,
                   onPressed: () async {
                     return downloadAndSetImage(context);
-                  }
+                  },
                 ),
               ),
           ),
