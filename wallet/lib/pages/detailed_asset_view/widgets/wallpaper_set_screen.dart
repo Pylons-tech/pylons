@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,8 +13,6 @@ class WallpaperScreen extends StatefulWidget {
   const WallpaperScreen({Key? key, required this.nft}) : super(key: key);
   final String nft;
 
-
-
   @override
   State<WallpaperScreen> createState() => _WallpaperScreenState();
 }
@@ -24,9 +23,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
   @override
   void initState() {
     super.initState();
-
   }
-
 
   Future<void> downloadAndSetImage(BuildContext context) async {
     final Stream<String> progressString = Wallpaper.imageDownloadProgress(widget.nft);
@@ -71,31 +68,31 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
               ),
             ),
           ),
-
-      Align(
-        child: SizedBox(
-          height: 100.h,
-          width: 100.h,
-          child: CircularProgressIndicator(
-            value: downloading? null : 0,
-            strokeWidth: 6.r,
-            color: AppColors.kWhite,
+          Align(
+            child: SizedBox(
+              height: 100.h,
+              width: 100.h,
+              child: CircularProgressIndicator(
+                value: downloading? null : 0,
+                strokeWidth: 6.r,
+                color: AppColors.kWhite,
+              ),
+            ),
           ),
-          )),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: EdgeInsets.only(bottom: 30.h),
               child: CustomPaintButton(
-                  title: "set as lockscreen",
+                  title: "set_lockscreen".tr(),
                   bgColor: AppColors.kWhite.withOpacity(0.3),
                   width: 280.w,
                   onPressed: () async {
                     return downloadAndSetImage(context);
-                  }),
-            ),
-          )
-
+                  }
+                ),
+              ),
+          ),
         ],
       ),
     );
