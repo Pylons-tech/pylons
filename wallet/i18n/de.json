@@ -351,5 +351,7 @@
   "free": "Frei",
   "claim_free_nft": "Fordern Sie Ihr kostenloses NFT an",
   "before_too_late": "Bevor es zu spät ist!",
-  "please_try_again_later": "Bitte versuchen Sie es später erneut"
+  "please_try_again_later": "Bitte versuchen Sie es später erneut",
+  "checkout": "Kasse",
+  "artist": "Künstler"
 }

@@ -351,5 +351,7 @@
   "free": "Tasuta",
   "claim_free_nft": "Nõudke oma tasuta NFT-d",
   "before_too_late": "Enne kui on liiga hilja!",
-  "please_try_again_later": "Por favor, inténtelo de nuevo más tarde"
+  "please_try_again_later": "Por favor, inténtelo de nuevo más tarde",
+  "checkout": "Verificar",
+  "artist": "Artista"
 }
