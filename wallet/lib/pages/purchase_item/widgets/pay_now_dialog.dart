@@ -142,10 +142,19 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   height: 3.h,
                 ),
                 buildRow(
-                  subtitle: widget.nft.type == NftType.TYPE_RECIPE ? widget.nft.creator : widget.nft.owner,
+                  subtitle: widget.nft.creator,
                   subtitleTextColor: AppColors.kTradeReceiptTextColor,
                   title: "artist".tr(),
                 ),
+                SizedBox(
+                  height: 3.h,
+                ),
+                if(widget.nft.owner.isNotEmpty)
+                  buildRow(
+                    subtitle: widget.nft.owner,
+                    subtitleTextColor: AppColors.kTradeReceiptTextColor,
+                    title: "sold_by".tr(),
+                  ),
                 SizedBox(
                   height: 30.h,
                 ),
