@@ -52,43 +52,47 @@ class Nft3DWidgetContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        ModelViewer(
-          backgroundColor: backgroundColor,
-          src: url,
-          ar: false,
-          autoRotate: false,
-          cameraControls: cameraControls,
-          relatedJs: "",
-          onProgress: (status) {
-            if (status == 1) {
-              Future.delayed(const Duration(seconds: 1),(){
-                viewModel.toggleLoader();
-              });
-            }
-          },
-          onError: (error) {
-            error.show();
-          },
-        ),
-        if (viewModel.showLoader.value && showLoader)
-          Container(
-            color: Colors.black,
-            height: double.infinity,width: double.infinity,
-            child: Center(
-              child: SizedBox(
-                height: 100.0.h,
-                child: Image.asset(
-                  ImageUtil.LOADING_GIF,
-                  key: const Key(kImageAssetKey),
+    return ColoredBox(
+      color: backgroundColor,
+      child: Stack(
+        children: [
+          ModelViewer(
+            backgroundColor: backgroundColor,
+            src: url,
+            ar: false,
+            autoRotate: false,
+            cameraControls: cameraControls,
+            relatedJs: "",
+            onProgress: (status) {
+              if (status == 1) {
+                Future.delayed(const Duration(seconds: 1), () {
+                  viewModel.toggleLoader();
+                });
+              }
+            },
+            onError: (error) {
+              error.show();
+            },
+          ),
+          if (viewModel.showLoader.value && showLoader)
+            Container(
+              color: Colors.black,
+              height: double.infinity,
+              width: double.infinity,
+              child: Center(
+                child: SizedBox(
+                  height: 100.0.h,
+                  child: Image.asset(
+                    ImageUtil.LOADING_GIF,
+                    key: const Key(kImageAssetKey),
+                  ),
                 ),
               ),
-            ),
-          )
-        else
-          const SizedBox()
-      ],
+            )
+          else
+            const SizedBox()
+        ],
+      ),
     );
   }
 }
