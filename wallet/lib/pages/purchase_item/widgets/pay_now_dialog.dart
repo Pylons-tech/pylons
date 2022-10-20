@@ -82,7 +82,6 @@ class _PayNowWidgetState extends State<PayNowWidget> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black.withOpacity(0.7),
-      // height: isTablet ? 390.h : 390.h,
       height: 390.h,
       margin: isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
       child: Stack(
