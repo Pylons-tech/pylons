@@ -255,7 +255,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(
-                    height: 60.h,
+                    height: 75.h,
                     child: Row(
                       children: [
                         Expanded(child: _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner)),
