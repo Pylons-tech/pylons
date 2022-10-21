@@ -36,6 +36,13 @@ extension ConvertToUSD on String {
     }
     return '';
   }
+  String convertPylonsToUSD(String amount) {
+    switch (this) {
+      case kPylonDenom:
+        return (double.parse(convertFromUCoin(amount)) * pyLonToUsdConstant).toString().truncateAfterDecimal(2);
+    }
+    return '';
+  }
 }
 
 extension ConvertFromU on String {
@@ -43,6 +50,13 @@ extension ConvertFromU on String {
     switch (this) {
       case kPylonCoinName:
         return (double.parse(item.amount.substring(0, item.amount.length - (length + 1))) / kBigIntBase).toString().truncateAfterDecimal(2);
+    }
+    return '';
+  }
+  String convertFromUCoin(String amount) {
+    switch (this) {
+      case kPylonDenom:
+        return (double.parse(amount) / kBigIntBase).toString();
     }
     return '';
   }

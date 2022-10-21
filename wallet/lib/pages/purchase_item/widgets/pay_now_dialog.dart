@@ -4,7 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/main_prod.dart';
@@ -25,14 +24,13 @@ import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/enums.dart';
+import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 TextStyle _titleTextStyle = TextStyle(color: Colors.white, fontSize: 30.sp, fontWeight: FontWeight.w700);
 TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 13.sp);
-TextStyle _rowSubtitleTextStyle = TextStyle(color: Colors.white, fontSize: 14.sp);
 
 class PayNowDialog {
   final NFT nft;
@@ -83,6 +81,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
     return Container(
       color: Colors.black.withOpacity(0.7),
       height: 390.h,
+      width: isTablet ? 200.w : 270.w,
       margin: isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
       child: Stack(
         children: [
@@ -99,10 +98,9 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   alignment: Alignment.topRight,
                   child: GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: SizedBox(
-                        height: isTablet ?  25.h : 40.h,
-                        width: isTablet ? 25.w : 40.w,
-                        child: const Icon(Icons.cancel_sharp, color: Colors.white,)
+                    child: Container(
+                        padding: EdgeInsets.only(right: isTablet ? 2.w : 5.w, top: 5.h),
+                        child: Image(image: const AssetImage("assets/images/icons/close_white.png"), height: isTablet ? 15.h : 18.h, width: isTablet ? 15.w : 18.h,),
                     ),
                   ),
                 ),
@@ -121,9 +119,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                 SizedBox(
                   height: 60.h,
                 ),
-                Padding(
-                    padding: EdgeInsets.only(left: 20.w),
-                    child: Text("checkout".tr(), style: _titleTextStyle)),
+                Text("checkout".tr(), textAlign: TextAlign.center, style: _titleTextStyle),
                 SizedBox(
                   height: 30.h,
                 ),
@@ -135,7 +131,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   height: 3.h,
                 ),
                 buildRow(
-                  subtitle: "#${widget.nft.amountMinted} of ${widget.nft.quantity}",
+                  subtitle: "#${widget.nft.amountMinted + 1} of ${widget.nft.quantity}",
                   title: "edition".tr(),
                 ),
                 SizedBox(
@@ -211,56 +207,13 @@ class _PayNowWidgetState extends State<PayNowWidget> {
           ),
         )),
         Expanded(
+          flex: 2,
             child: Text(
           subtitle,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(color: subtitleTextColor, fontSize: 14.sp),
         ),),
-      ],
-    );
-  }
-
-  Row buildPylonsFeeRow({required String title, required String subtitle}) {
-    return Row(
-      children: [
-        Expanded(
-            child: Padding(
-          padding: EdgeInsets.only(left: 20.w),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: _rowTitleTextStyle,
-              ),
-              SizedBox(
-                width: 5.w,
-              ),
-              InkWell(
-                  onTap: () {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(
-                          content: Text("pylons_fee_msg".tr()),
-                          margin: const EdgeInsets.all(10),
-                          behavior: SnackBarBehavior.floating,
-                        ))
-                        .closed
-                        .then((value) => ScaffoldMessenger.of(context).clearSnackBars());
-                  },
-                  child: SvgPicture.asset(
-                    SVGUtil.i_icon,
-                    color: AppColors.kWhite,
-                    fit: BoxFit.cover,
-                  )),
-            ],
-          ),
-        )),
-        Expanded(
-            child: Text(
-          subtitle,
-          style: _rowSubtitleTextStyle,
-        ))
       ],
     );
   }
@@ -277,7 +230,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
             child: Container(
               color: bgColor,
               height: 40.h,
-              width: 200.w,
+              width: isTablet ? 150.w : 200.w,
               child: Center(
                   child: Text(
                 title,
@@ -307,7 +260,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                     height: 15.w,
                     child: widget.nft.ibcCoins.getAssets()),
                 SizedBox(width: 3.w),
-                Text(widget.nft.ibcCoins.getAbbrev(),  style: TextStyle(fontSize: 10.sp, color: Colors.white),),
+                Text(widget.nft.ibcCoins.getName(),  style: TextStyle(fontSize: 10.sp, color: Colors.white),),
               ],
             ),
           ),
@@ -315,9 +268,19 @@ class _PayNowWidgetState extends State<PayNowWidget> {
           Expanded(flex: 3, child: Container(
             height: 40.h,
             color: AppColors.kGreyColor, child: Center(
-            child: AutoSizeText(widget.nft.ibcCoins.getCoinWithProperDenomination(widget.nft.price),
-              maxLines: 1,
-              style: TextStyle(fontSize: 18.sp, color: Colors.white, fontWeight: FontWeight.w700),),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AutoSizeText(widget.nft.ibcCoins.getCoinWithProperDenomination(widget.nft.price),
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 15.sp, color: Colors.white, fontWeight: FontWeight.w700),),
+                if (widget.nft.ibcCoins.name == kPylonDenom) SizedBox(width: 2.w) else Container(),
+                if(widget.nft.ibcCoins.name == kPylonDenom)
+                   AutoSizeText("(\$${widget.nft.ibcCoins.name.convertPylonsToUSD(widget.nft.price)} $kStripeUSD_ABR)",
+                     maxLines: 1,
+                     style: TextStyle(fontSize: 12.sp, color: Colors.white, fontWeight: FontWeight.w400),),
+              ],
+            ),
           ),
          ),
         ),
