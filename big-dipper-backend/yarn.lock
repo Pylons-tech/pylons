@@ -977,9 +977,9 @@ bootstrap-less@^3.3.8:
   version "3.3.8"
   resolved "https://registry.npmjs.org/bootstrap-less/-/bootstrap-less-3.3.8.tgz"
 
-bootstrap@^5.2.1:
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.2.1.tgz#45f97ff05cbe828bad807b014d8425f3aeb8ec3a"
+bootstrap@^5.2.2:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.2.2.tgz#834e053eed584a65e244d8aa112a6959f56e27a0"
 
 bootswatch@^5.2.0:
   version "5.2.0"
@@ -3435,9 +3435,9 @@ mkdirp@^0.5.1:
   dependencies:
     minimist "^1.2.6"
 
-moment-timezone@^0.5.35:
-  version "0.5.35"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.35.tgz#6fa2631bdbe8ff04f6b8753f7199516be6dc9839"
+moment-timezone@^0.5.38:
+  version "0.5.38"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.38.tgz#9674a5397b8be7c13de820fd387d8afa0f725aad"
   dependencies:
     moment ">= 2.9.0"
 

@@ -113,11 +113,12 @@ class NFTsListTile extends StatelessWidget {
                     width: 10.w,
                   ),
                   InkWell(
-                      onTap: () => buildBottomSheet(context: context),
-                      child: Padding(
-                        padding: EdgeInsets.all(4.0.w),
-                        child: SvgPicture.asset(kSvgMoreOption),
-                      ))
+                    onTap: () => buildBottomSheet(context: context),
+                    child: Padding(
+                      padding: EdgeInsets.all(4.0.w),
+                      child: SvgPicture.asset(SVGUtils.kSvgMoreOption),
+                    ),
+                  )
                 ],
               ),
             )),
@@ -133,61 +134,63 @@ class NFTsListTile extends StatelessWidget {
                     colorBlendMode: BlendMode.clear,
                     placeholder: (context, _) {
                       return Container(
-                          margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 3.w),
-                          decoration: BoxDecoration(color: EaselAppTheme.kDarkGrey02, boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              offset: const Offset(0.0, 1.0),
-                              blurRadius: 4.0,
-                            ),
-                          ]),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 50.0.w,
-                                  height: 50.0.w,
-                                  decoration: const BoxDecoration(
+                        margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 3.w),
+                        decoration: BoxDecoration(color: EaselAppTheme.kDarkGrey02, boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            offset: const Offset(0.0, 1.0),
+                            blurRadius: 4.0,
+                          ),
+                        ]),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 50.0.w,
+                                height: 50.0.w,
+                                decoration: const BoxDecoration(
+                                  color: EaselAppTheme.kLightGrey03,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10.w,
+                              ),
+                              Expanded(
+                                child: ListView.separated(
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      width: 30.0.w,
+                                      height: 9.0.h,
+                                      color: EaselAppTheme.kLightGrey03,
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return SizedBox(
+                                      height: 8.0.h,
+                                    );
+                                  },
+                                  itemCount: 3,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10.w,
+                              ),
+                              InkWell(
+                                onTap: () {},
+                                child: Padding(
+                                  padding: EdgeInsets.all(4.0.w),
+                                  child: SvgPicture.asset(
+                                    SVGUtils.kSvgMoreOption,
                                     color: EaselAppTheme.kLightGrey03,
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 10.w,
-                                ),
-                                Expanded(
-                                  child: ListView.separated(
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index) {
-                                      return Container(
-                                        width: 30.0.w,
-                                        height: 9.0.h,
-                                        color: EaselAppTheme.kLightGrey03,
-                                      );
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return SizedBox(
-                                        height: 8.0.h,
-                                      );
-                                    },
-                                    itemCount: 3,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10.w,
-                                ),
-                                InkWell(
-                                    onTap: () {},
-                                    child: Padding(
-                                      padding: EdgeInsets.all(4.0.w),
-                                      child: SvgPicture.asset(
-                                        kSvgMoreOption,
-                                        color: EaselAppTheme.kLightGrey03,
-                                      ),
-                                    ))
-                              ],
-                            ),
-                          ));
+                              )
+                            ],
+                          ),
+                        ),
+                      );
                     },
                     errorWidget: (context, _, __) {
                       return const IgnorePointer(child: SizedBox());
