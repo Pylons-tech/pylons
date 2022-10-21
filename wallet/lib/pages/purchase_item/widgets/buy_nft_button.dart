@@ -55,6 +55,7 @@ class BuyNFTButton extends StatelessWidget {
       );
     }
     return Container(
+      height: 60.h,
       width: isTablet ? 160.w : 200.w,
       color: AppColors.kDarkRed.withOpacity(0.8),
       child: Column(
