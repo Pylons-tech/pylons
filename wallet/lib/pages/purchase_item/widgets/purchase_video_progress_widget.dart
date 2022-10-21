@@ -39,18 +39,18 @@ class _PurchaseVideoProgressWidgetState extends State<PurchaseVideoProgressWidge
       child: Consumer<PurchaseItemViewModel>(builder: (context, viewModel, _) {
         return Column(
           children: [
-            if (viewModel.videoLoadingError.isNotEmpty)
+            if (viewModel.videoLoadingError.isNotEmpty || viewModel.videoPlayerController == null)
               const SizedBox()
             else
               Row(
                 children: [
-                  if (viewModel.isVideoLoading)
+                  if ( viewModel.isVideoLoading)
                     SizedBox(
                       height: 22.h,
                       width: 22.h,
                       child: CircularProgressIndicator(strokeWidth: 2.w, color: AppColors.kWhite),
                     )
-                  else if (viewModel.videoPlayerController.value.isPlaying)
+                  else if (viewModel.videoPlayerController!.value.isPlaying)
                     InkWell(
                       onTap: viewModel.pauseVideo,
                       child: Icon(
@@ -71,7 +71,7 @@ class _PurchaseVideoProgressWidgetState extends State<PurchaseVideoProgressWidge
                   SizedBox(width: 15.w),
                   Expanded(
                     child: VideoProgressIndicator(
-                      viewModel.videoPlayerController,
+                      viewModel.videoPlayerController!,
                       allowScrubbing: true,
                       colors: VideoProgressColors(
                         backgroundColor: AppColors.kGray,
@@ -82,7 +82,7 @@ class _PurchaseVideoProgressWidgetState extends State<PurchaseVideoProgressWidge
                   ),
                 ],
               ),
-            if (viewModel.videoLoadingError.isNotEmpty)
+            if (viewModel.videoLoadingError.isNotEmpty || viewModel.videoPlayerController == null)
               const SizedBox()
             else
               SizedBox(
@@ -91,7 +91,7 @@ class _PurchaseVideoProgressWidgetState extends State<PurchaseVideoProgressWidge
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     StreamBuilder<Duration?>(
-                        stream: viewModel.videoPlayerController.position.asStream(),
+                        stream: viewModel.videoPlayerController!.position.asStream(),
                         builder: (BuildContext context, AsyncSnapshot<Duration?> snapshot) {
                           if (snapshot.hasData) {
                             final String duration = _getDuration(snapshot.data!);
@@ -104,7 +104,7 @@ class _PurchaseVideoProgressWidgetState extends State<PurchaseVideoProgressWidge
                           }
                         }),
                     Text(
-                      formatDuration(viewModel.videoPlayerController.value.duration.inSeconds),
+                      formatDuration(viewModel.videoPlayerController!.value.duration.inSeconds),
                       style:  TextStyle(color: AppColors.kWhite),
                     ),
                   ],

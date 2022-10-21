@@ -54,13 +54,14 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
     return Stack(
       children: [
         Positioned.fill(
-            child: CachedNetworkImage(
-                placeholder: (context, url) => Shimmer(
-                      color: PylonsAppTheme.cardBackground,
-                      child: const SizedBox.expand(),
-                    ),
-                imageUrl: thumbnailUrl,
-                fit: BoxFit.cover)),
+          child: CachedNetworkImage(
+              placeholder: (context, url) => Shimmer(
+                    color: PylonsAppTheme.cardBackground,
+                    child: const SizedBox.expand(),
+                  ),
+              imageUrl: thumbnailUrl,
+              fit: BoxFit.cover),
+        ),
         Align(
           child: Container(
             width: 35.w,

@@ -33,14 +33,14 @@ class _OwnerVideoPlayerScreenState extends State<OwnerVideoPlayerScreen> {
       builder: (context, OwnerViewViewModel viewModel, child) {
         return ColoredBox(
           color: AppColors.kBlack,
-          child: viewModel.isVideoLoading
+          child: viewModel.isVideoLoading || viewModel.videoPlayerController == null
               ? Center(
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
                     valueColor: AlwaysStoppedAnimation<Color>(AppColors.kWhite),
                   ),
                 )
-              : viewModel.videoLoadingError.isNotEmpty
+              : viewModel.videoLoadingError.isNotEmpty 
                   ? Center(
                       child: Padding(
                       padding: const EdgeInsets.all(10),
@@ -50,12 +50,12 @@ class _OwnerVideoPlayerScreenState extends State<OwnerVideoPlayerScreen> {
                       ),
                     ))
                   : Center(
-                      child: viewModel.videoPlayerController.value.isInitialized
+                      child: viewModel.videoPlayerController!.value.isInitialized
                           ? AspectRatio(
                               aspectRatio: viewModel
-                                  .videoPlayerController.value.aspectRatio,
+                                  .videoPlayerController!.value.aspectRatio,
                               child:
-                                  VideoPlayer(viewModel.videoPlayerController),
+                                  VideoPlayer(viewModel.videoPlayerController!),
                             )
                           : Center(
                               child: CircularProgressIndicator(
