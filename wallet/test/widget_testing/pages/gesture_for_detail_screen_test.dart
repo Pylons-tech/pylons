@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
@@ -19,29 +20,35 @@ import '../extension/size_extension.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  late Repository repositry;
-  late WalletsStore walletStore;
-  late AudioPlayerHelper audioPlayerHelper;
-  late VideoPlayerHelper videoPlayerHelper;
-  late ShareHelper shareHelper;
 
-  audioPlayerHelper = MockAudioPlayerImpl();
-  videoPlayerHelper = MockVideoPlayerimpl();
-  repositry = MockRepository();
-  walletStore = MockWalletStore();
-  shareHelper = MockShareHelperImpl();
-  final OwnerViewViewModel viewModel = OwnerViewViewModel(
-    repository: repositry,
-    walletsStore: walletStore,
-    audioPlayerHelper: audioPlayerHelper,
-    videoPlayerHelper: videoPlayerHelper,
-    shareHelper: shareHelper,
-  );
+  setUp(() {
+    late Repository repositry;
+    late WalletsStore walletStore;
+    late AudioPlayerHelper audioPlayerHelper;
+    late VideoPlayerHelper videoPlayerHelper;
+    late ShareHelper shareHelper;
+
+    audioPlayerHelper = MockAudioPlayerImpl();
+    videoPlayerHelper = MockVideoPlayerimpl();
+    repositry = MockRepository();
+    walletStore = MockWalletStore();
+    shareHelper = MockShareHelperImpl();
+    final OwnerViewViewModel viewModel = OwnerViewViewModel(
+      repository: repositry,
+      walletsStore: walletStore,
+      audioPlayerHelper: audioPlayerHelper,
+      videoPlayerHelper: videoPlayerHelper,
+      shareHelper: shareHelper,
+    );
+
+    GetIt.I.registerSingleton(viewModel);
+  
+  });
+
   testWidgets('test case for gestures', (tester) async {
     await tester.setScreenSize();
-    viewModel.nft = MOCK_NFT_FREE;
     await tester.testAppForWidgetTesting(OwnerView(
-      ownerViewViewModel: viewModel,
+      nft: MOCK_NFT_FREE,
     ));
     await tester.pumpAndSettle();
     final gestureDetectorOwnerScreen = find.byKey(const ValueKey(kOwnerViewKeyValue));

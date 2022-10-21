@@ -9,13 +9,7 @@ class PylonsGetStartedButton extends StatelessWidget {
   final ValueNotifier<bool> loader;
   final bool enabled;
 
-  const PylonsGetStartedButton(
-      {Key? key,
-      required this.onTap,
-      this.text = "",
-      required this.loader,
-      this.enabled = true})
-      : super(key: key);
+  const PylonsGetStartedButton({Key? key, required this.onTap, this.text = "", required this.loader, this.enabled = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +21,7 @@ class PylonsGetStartedButton extends StatelessWidget {
             child: ClipPath(
               clipper: MnemonicClipper(cuttingHeight: 18.h),
               child: Container(
-                color: isUserAllowedToTap(loading: loading)
-                    ? kDarkRed
-                    : kGray.withOpacity(0.3),
+                color: isUserAllowedToTap(loading: loading) ? AppColors.kDarkRed : AppColors.kGray.withOpacity(0.3),
                 height: 45.h,
                 width: 200.w,
                 child: Center(
@@ -37,17 +29,14 @@ class PylonsGetStartedButton extends StatelessWidget {
                         ? SizedBox(
                             width: 25.h,
                             height: 25.h,
-                            child: const CircularProgressIndicator(
-                                strokeWidth: 2.0,
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(kDarkRed)),
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.0,
+                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.kDarkRed),
+                            ),
                           )
                         : Text(
                             text,
-                            style: TextStyle(
-                                color: kWhite,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w600),
+                            style: TextStyle(color: AppColors.kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
                             textAlign: TextAlign.center,
                           )),
               ),

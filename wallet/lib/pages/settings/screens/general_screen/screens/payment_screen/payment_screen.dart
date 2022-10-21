@@ -6,6 +6,7 @@ import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/pages/stripe_screen.dart';
 import 'package:pylons_wallet/pylons_app.dart';
+import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/stripe_handler.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
@@ -21,10 +22,19 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
+  Repository get repository => GetIt.I.get();
+
+  @override
+  void initState() {
+    super.initState();
+
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.payment);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.kBackgroundColor,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 37.w),
         child: Column(
@@ -42,9 +52,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Icon(
+                  child: Icon(
                     Icons.arrow_back_ios,
-                    color: kUserInputTextColor,
+                    color: AppColors.kUserInputTextColor,
                   )),
             ),
             SizedBox(
@@ -122,9 +132,9 @@ class PaymentForwardItem extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const Icon(
+                Icon(
                   Icons.arrow_forward_ios_sharp,
-                  color: kForwardIconColor,
+                  color: AppColors.kForwardIconColor,
                 )
               ],
             ),

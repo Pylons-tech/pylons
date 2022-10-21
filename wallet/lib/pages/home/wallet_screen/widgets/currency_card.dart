@@ -50,11 +50,11 @@ class CurrencyBackgroundCard extends StatelessWidget {
               height: double.infinity,
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
-                kMainBG,
-                kMainBG,
-                kMainBG,
-                kMainBG,
-                kMainBG,
+                AppColors.kMainBG,
+                AppColors.kMainBG,
+                AppColors.kMainBG,
+                AppColors.kMainBG,
+                AppColors.kMainBG,
                 Colors.grey.withOpacity(0.1),
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
             ),
@@ -89,7 +89,7 @@ class CurrencyCard extends StatelessWidget {
             child: Text(
               "what_is_pylon".tr(),
               style: TextStyle(
-                  color: kBlue, fontWeight: FontWeight.w500, fontSize: 12.sp),
+                  color: AppColors.kBlue, fontWeight: FontWeight.w500, fontSize: 12.sp),
             ),
           ),
           tailLength: 10,
@@ -229,7 +229,7 @@ class CurrencyCard extends StatelessWidget {
                                       child: Text(
                                         "default".tr(),
                                         style: TextStyle(
-                                            color: kBlue.withOpacity(0.5),
+                                            color: AppColors.kBlue.withOpacity(0.5),
                                             fontWeight: FontWeight.bold,
                                             fontSize: 8.sp),
                                       ),

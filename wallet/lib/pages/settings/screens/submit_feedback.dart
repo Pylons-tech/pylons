@@ -69,7 +69,7 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        color: kDarkDividerColor,
+        color: AppColors.kDarkDividerColor,
         height: isTablet ? 520.h : 480.h,
         child: Stack(
           children: [
@@ -83,7 +83,7 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
                   clipper: RightTriangleClipper(
                     orientation: clipper.Orientation.Orientation_NW,
                   ),
-                  child: const ColoredBox(color: kTransactionRed),
+                  child: ColoredBox(color: AppColors.kTransactionRed),
                 ),
               ),
             ),
@@ -95,7 +95,7 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
                 width: 60.h,
                 child: ClipPath(
                   clipper: RightTriangleClipper(orientation: clipper.Orientation.Orientation_SE),
-                  child: const ColoredBox(color: kTransactionRed),
+                  child: ColoredBox(color: AppColors.kTransactionRed),
                 ),
               ),
             ),
@@ -113,7 +113,7 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
                     Text(
                       "submit_feedback".tr(),
                       style: TextStyle(
-                        color: kBlack,
+                        color: AppColors.kBlack,
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                       ),
@@ -201,7 +201,7 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
                                     children: [
                                       Text(
                                         "character_limit".tr(args: [(kMaxDescription - controller.text.length).toString()]),
-                                        style: TextStyle(color: kCopyColor, fontSize: 14.sp, fontWeight: FontWeight.w800),
+                                        style: TextStyle(color: AppColors.kCopyColor, fontSize: 14.sp, fontWeight: FontWeight.w800),
                                       ),
                                     ],
                                   ),
@@ -215,7 +215,7 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
                     ),
                     CustomPaintButton(
                         title: "submit".tr(),
-                        bgColor: kBlue,
+                        bgColor: AppColors.kBlue,
                         width: 200.w,
                         onPressed: () {
                           FocusScope.of(context).unfocus();
