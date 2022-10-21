@@ -51,11 +51,11 @@ class _PurchaseVideoPlayerScreenState extends State<PurchaseVideoPlayerScreen> {
                     ),
                   ))
                 : Center(
-                    child: viewModel.videoPlayerController.value.isInitialized
+                    child: viewModel.videoPlayerController != null && viewModel.videoPlayerController!.value.isInitialized
                         ? AspectRatio(
                             aspectRatio: viewModel
-                                .videoPlayerController.value.aspectRatio,
-                            child: VideoPlayer(viewModel.videoPlayerController),
+                                .videoPlayerController!.value.aspectRatio,
+                            child: VideoPlayer(viewModel.videoPlayerController!),
                           )
                         : Center(
                             child: CircularProgressIndicator(

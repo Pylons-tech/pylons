@@ -41,7 +41,7 @@ class VideoPlaceHolder extends StatelessWidget {
                   color: EaselAppTheme.kWhite.withOpacity(0.5),
                   shape: BoxShape.circle),
               child: Image.asset(
-                kVideoIcon,
+                PngUtils.kVideoIcon,
                 color: EaselAppTheme.kBlack,
               ),
             ),
