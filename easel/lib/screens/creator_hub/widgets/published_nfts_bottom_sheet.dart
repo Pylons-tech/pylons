@@ -17,14 +17,9 @@ class BuildPublishedNFTsBottomSheet {
   final NFT nft;
   final EaselProvider easelProvider;
 
-  BuildPublishedNFTsBottomSheet(
-      {required this.context, required this.nft, required this.easelProvider});
+  BuildPublishedNFTsBottomSheet({required this.context, required this.nft, required this.easelProvider});
 
-  Widget moreOptionTile(
-      {required String title,
-      required String image,
-      required VoidCallback onPressed,
-      final bool isSvg = true}) {
+  Widget moreOptionTile({required String title, required String image, required VoidCallback onPressed, final bool isSvg = true}) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: InkWell(
@@ -50,8 +45,7 @@ class BuildPublishedNFTsBottomSheet {
   }
 
   void onViewOnPylonsPressed({required NFT nft}) async {
-    String url = nft.recipeID
-        .generateEaselLinkForOpeningInPylonsApp(cookbookId: nft.cookbookID);
+    String url = nft.recipeID.generateEaselLinkForOpeningInPylonsApp(cookbookId: nft.cookbookID);
 
     await easelProvider.repository.launchMyUrl(url: url);
   }
@@ -69,37 +63,41 @@ class BuildPublishedNFTsBottomSheet {
               child: Wrap(
                 children: [
                   moreOptionTile(
-                      onPressed: () {
-                        onViewOnPylonsPressed(nft: nft);
-                      },
-                      title: "view_on_pylons".tr(),
-                      image: kSvgPylonsLogo),
+                    onPressed: () {
+                      onViewOnPylonsPressed(nft: nft);
+                    },
+                    title: "view_on_pylons".tr(),
+                    image: SVGUtils.kSvgPylonsLogo,
+                  ),
                   Divider(thickness: 1.h),
                   CidOrIpfs(
                     viewCid: (context) {
                       return moreOptionTile(
                         onPressed: () async {
-                          final scaffoldState  = ScaffoldMessenger.of(context);
+                          final scaffoldState = ScaffoldMessenger.of(context);
                           Navigator.of(context).pop();
                           await Clipboard.setData(ClipboardData(text: nft.cid));
-                          scaffoldState..hideCurrentSnackBar()..showSnackBar(
-                            SnackBar(content: Text("copied_to_clipboard".tr())),
-                          );
+                          scaffoldState
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(
+                              SnackBar(content: Text("copied_to_clipboard".tr())),
+                            );
                         },
                         title: "copy_cid".tr(),
-                        image: kSvgIpfsLogo,
+                        image: PngUtils.kSvgIpfsLogo,
                         isSvg: false,
                       );
                     },
                     viewIpfs: (context) {
                       return moreOptionTile(
-                          onPressed: () async {
-                            Navigator.of(context).pop();
-                            onViewOnIPFSPressed(nft: nft);
-                          },
-                          title: "view".tr(),
-                          image: kSvgIpfsLogo,
-                          isSvg: false);
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          onViewOnIPFSPressed(nft: nft);
+                        },
+                        title: "view".tr(),
+                        image: PngUtils.kSvgIpfsLogo,
+                        isSvg: false,
+                      );
                     },
                     type: nft.assetType,
                   )

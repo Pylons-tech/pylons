@@ -64,14 +64,22 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
 
   void showErrorDialog({NFTTypes? type}) {
     showDialog(
-        context: context,
-        builder: (context) => _ErrorMessageWidget(
-              errorMessage: errorText.value,
-              nftTypes: type,
-              onClose: () {
-                Navigator.of(context).pop();
-              },
-            ));
+      context: context,
+      builder: (context) => _ErrorMessageWidget(
+        errorMessage: errorText.value,
+        nftTypes: type,
+        onClose: () {
+          Navigator.of(context).pop();
+        },
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    EaselProvider provider = context.read();
+    provider.setLog(screenName: AnalyticsScreenEvents.chooseFormatScreen);
   }
 
   @override
@@ -207,60 +215,61 @@ class _CardWidget extends StatelessWidget {
                   onFilePicked(result);
                 },
                 child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 0.02.sw, vertical: 4.5.h),
-                    decoration: BoxDecoration(color: NftFormat.supportedFormats[typeIdx].color),
-                    child: Stack(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 10.0.w,
-                            ),
-                            SvgPicture.asset(
-                              NftFormat.supportedFormats[typeIdx].badge,
-                            ),
-                            SizedBox(
-                              width: 10.0.w,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    NftFormat.supportedFormats[typeIdx].format.getTitle(),
-                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: textIconColor, fontSize: 45.sp, fontWeight: FontWeight.bold),
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: 0.02.sw, vertical: 4.5.h),
+                  decoration: BoxDecoration(color: NftFormat.supportedFormats[typeIdx].color),
+                  child: Stack(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 10.0.w,
+                          ),
+                          SvgPicture.asset(
+                            NftFormat.supportedFormats[typeIdx].badge,
+                          ),
+                          SizedBox(
+                            width: 10.0.w,
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  NftFormat.supportedFormats[typeIdx].format.getTitle().toUpperCase(),
+                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(color: textIconColor, fontSize: 45.sp, fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(height: 3.h),
+                                RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(
+                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: textIconColor, fontSize: 12.sp, fontWeight: FontWeight.w600),
+                                    text: NftFormat.supportedFormats[typeIdx].getExtensionsList(),
                                   ),
-                                  SizedBox(height: 3.h),
-                                  RichText(
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    text: TextSpan(
-                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(color: textIconColor, fontSize: 12.sp, fontWeight: FontWeight.w600),
-                                      text: NftFormat.supportedFormats[typeIdx].getExtensionsList(),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0.w, vertical: 5.0.h),
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: SizedBox(
-                              child: SvgPicture.asset(
-                                kSvgForwardArrowIcon,
-                                color: textIconColor,
-                              ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0.w, vertical: 5.0.h),
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: SizedBox(
+                            child: SvgPicture.asset(
+                              SVGUtils.kSvgForwardArrowIcon,
+                              color: textIconColor,
                             ),
                           ),
                         ),
-                      ],
-                    )),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -289,13 +298,13 @@ class _ErrorMessageWidget extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 0.17.sw),
       child: Container(
-        decoration: const BoxDecoration(image: DecorationImage(image: svg_provider.Svg(kSvgUploadErrorBG))),
+        decoration: const BoxDecoration(image: DecorationImage(image: svg_provider.Svg(SVGUtils.kSvgUploadErrorBG))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             SvgPicture.asset(
-              kSvgCloseIcon,
+              SVGUtils.kSvgCloseIcon,
               height: 30.h,
             ),
             SizedBox(height: 30.h),
@@ -320,7 +329,7 @@ class _ErrorMessageWidget extends StatelessWidget {
                 height: 0.09.sw,
                 child: Stack(
                   children: [
-                    Positioned.fill(child: SvgPicture.asset(kSvgCloseButton, fit: BoxFit.cover)),
+                    Positioned.fill(child: SvgPicture.asset(SVGUtils.kSvgCloseButton, fit: BoxFit.cover)),
                     Center(
                       child: Text(
                         "close".tr(),
@@ -344,14 +353,14 @@ class _ErrorMessageWidget extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 0.10.sw),
       child: Container(
-        decoration: const BoxDecoration(image: DecorationImage(image: svg_provider.Svg(kSvgUploadErrorBG))),
+        decoration: const BoxDecoration(image: DecorationImage(image: svg_provider.Svg(SVGUtils.kSvgUploadErrorBG))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(height: 10.h),
             SvgPicture.asset(
-              kSvgCloseIcon,
+              SVGUtils.kSvgCloseIcon,
               height: 30.h,
             ),
             SizedBox(height: 30.h),
@@ -376,11 +385,15 @@ class _ErrorMessageWidget extends StatelessWidget {
                 height: 0.09.sw,
                 child: Stack(
                   children: [
-                    Positioned.fill(child: SvgPicture.asset(kSvgCloseButton, fit: BoxFit.cover)),
+                    Positioned.fill(child: SvgPicture.asset(SVGUtils.kSvgCloseButton, fit: BoxFit.cover)),
                     Center(
                       child: Text(
                         "close".tr(),
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              fontSize: 16.sp,
+                              color: EaselAppTheme.kWhite,
+                              fontWeight: FontWeight.w300,
+                            ),
                       ),
                     ),
                   ],

@@ -10,10 +10,11 @@ abstract class ShareHelper {
 
 /// [ShareHelperImpl] implementation of [AudioPlayerHelper]
 class ShareHelperImpl implements ShareHelper {
+
   @override
   void shareText({required String text, required Size size}) {
     Share.share(
-      text,
+      "\n$text",
       sharePositionOrigin: Rect.fromLTWH(0, 0, size.width, size.height / 2),
     );
   }
