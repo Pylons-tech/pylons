@@ -309,14 +309,18 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                 SizedBox(width: 3.w),
                 Text(widget.nft.ibcCoins.getAbbrev(),  style: TextStyle(fontSize: 10.sp, color: Colors.white),),
               ],
-            ),),),
+            ),
+          ),
+         ),
           Expanded(flex: 3, child: Container(
             height: 40.h,
             color: AppColors.kGreyColor, child: Center(
             child: AutoSizeText(widget.nft.ibcCoins.getCoinWithProperDenomination(widget.nft.price),
               maxLines: 1,
               style: TextStyle(fontSize: 18.sp, color: Colors.white, fontWeight: FontWeight.w700),),
-          ),),),
+          ),
+         ),
+        ),
         ],
       ),
     );
