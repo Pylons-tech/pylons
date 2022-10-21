@@ -13,7 +13,5 @@ class Config {
     _cookbook = await Cookbook.load(cookbook);
   }
 
-  Future<List<Recipe>> getRecipes() async {
-    // get recipes in cookbook
-  }
+
 }

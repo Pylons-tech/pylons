@@ -28,7 +28,7 @@ class Cookbook {
     if (lowLevel.success) {
       final ls = <Recipe>[];
       lowLevel.data?.forEach((element) {
-        ls.add(Recipe(element))
+        ls.add(Recipe(element));
       });
       return ls;
     } else {
