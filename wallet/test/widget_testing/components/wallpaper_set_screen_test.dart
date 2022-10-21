@@ -23,7 +23,6 @@ void main() {
 
   testWidgets('test case for set wallpaper button press', (tester) async {
     tester.runAsync(() async {
-      //await tester.setScreenSize();
       await tester.testAppForWidgetTesting(WallpaperScreen(
         nft: MOCK_NFT_FREE.url,
       ));
