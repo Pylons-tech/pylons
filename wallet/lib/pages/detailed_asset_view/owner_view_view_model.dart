@@ -45,7 +45,7 @@ class OwnerViewViewModel extends ChangeNotifier {
 
   VideoPlayerController? videoPlayerController;
 
-  
+
 
   late StreamSubscription playerStateSubscription;
 
@@ -396,7 +396,21 @@ class OwnerViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void pauseMedia() {
+    switch (nft.assetType) {
+      case AssetType.Audio:
+        pauseAudio();
+        break;
+      case AssetType.Video:
+        pauseVideo();
+        break;
+      default:
+        break;
+    }
+  }
+
   Future<void> shareNFTLink({required Size size}) async {
+    pauseMedia();
     final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
 
     final link = await repository.createDynamicLinkForRecipeNftShare(address: address, nft: nft);
