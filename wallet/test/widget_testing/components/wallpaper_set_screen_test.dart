@@ -22,16 +22,21 @@ void main() {
   });
 
   testWidgets('test case for set wallpaper button press', (tester) async {
-    await tester.setScreenSize();
-    await tester.testAppForWidgetTesting(WallpaperScreen(
-      nft: MOCK_NFT_FREE.url,
-    ));
-    await tester.pumpAndSettle();
-    final gestureDetectorWallpaperScreen = find.byType(CustomPaintButton);
-    await tester.ensureVisible(gestureDetectorWallpaperScreen);
-    await tester.tap(gestureDetectorWallpaperScreen);
-    await tester.pumpAndSettle(const Duration(seconds: 20));
-    expect(gestureDetectorWallpaperScreen, findsOneWidget);
+    tester.runAsync(() async {
+      //await tester.setScreenSize();
+      await tester.testAppForWidgetTesting(WallpaperScreen(
+        nft: MOCK_NFT_FREE.url,
+      ));
+      await tester.pumpAndSettle();
+      final gestureDetectorWallpaperScreen = find.byType(CustomPaintButton);
+      await tester.ensureVisible(gestureDetectorWallpaperScreen);
+      await tester.tap(gestureDetectorWallpaperScreen);
+
+      await tester.pumpAndSettle(const Duration(seconds: 20));
+      expect(gestureDetectorWallpaperScreen, findsOneWidget);
+
+
+    });
   });
 
 }
