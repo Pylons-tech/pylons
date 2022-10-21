@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
+
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -89,7 +90,6 @@ class PurchaseItemContent extends StatefulWidget {
 
 class _PurchaseItemContentState extends State<PurchaseItemContent> {
   bool _showPay = false;
-
   final GlobalKey key = GlobalKey();
   final myBottomDrawerController = BottomDrawerController();
 
@@ -116,6 +116,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
             url: viewModel.nft.url,
             cameraControls: true,
             backgroundColor: AppColors.kBlack,
+            showLoader: true,
           ),
         );
 
@@ -254,7 +255,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(
-                    height: 60.h,
+                    height: 75.h,
                     child: Row(
                       children: [
                         Expanded(child: _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner)),

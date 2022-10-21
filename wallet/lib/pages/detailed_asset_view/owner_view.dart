@@ -30,9 +30,9 @@ import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-
 class OwnerView extends StatefulWidget {
   final NFT nft;
+
   const OwnerView({required this.nft, Key? key}) : super(key: key);
 
   @override
@@ -162,6 +162,7 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
             url: viewModel.nft.url,
             cameraControls: true,
             backgroundColor: AppColors.kBlack,
+            showLoader: true,
           ),
         );
 

@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+
+# Visual Studio Code
+.vscode/
+
+# Editor backup files
+*~
+
+# Dart artifacts
+.dart_tool/
+.packages
+build/
+pubspec.lock
+.flutter-plugins
+.flutter-plugins-dependencies
