@@ -30,7 +30,7 @@ void main() {
     final gestureDetectorWallpaperScreen = find.byType(CustomPaintButton);
     await tester.ensureVisible(gestureDetectorWallpaperScreen);
     await tester.tap(gestureDetectorWallpaperScreen);
-    await tester.pumpAndSettle(const Duration(seconds: 10));
+    await tester.pumpAndSettle(const Duration(seconds: 20));
     expect(gestureDetectorWallpaperScreen, findsOneWidget);
   });
 
