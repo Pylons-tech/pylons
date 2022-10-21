@@ -670,6 +670,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   ),
                   if (viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid))
                     BuyNFTButton(
+                      key: const Key(kExpandedBuyButtonKeyValue),
                       onTapped: () async {
                         bool balancesFetchResult = true;
                         if (viewModel.nft.price != kZeroInt) {
@@ -699,6 +700,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         payNowDialog.show();
                       },
                       nft: viewModel.nft,
+                      viewModel: viewModel,
                     ),
                 ],
               ),
