@@ -22,6 +22,9 @@ import 'package:pylons_wallet/utils/enums.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
+import '../owner_purchase_view_common/button_state.dart';
+import '../owner_purchase_view_common/progress_bar_state.dart';
+
 class PurchaseItemViewModel extends ChangeNotifier {
   PurchaseItemViewModel(this.walletsStore, {required this.audioPlayerHelper, required this.videoPlayerHelper, required this.repository, required this.shareHelper});
 
@@ -181,9 +184,9 @@ class PurchaseItemViewModel extends ChangeNotifier {
     delayLoading();
     notifyListeners();
 
-    videoPlayerController.addListener(() {
-      if (videoPlayerController.value.hasError) {
-        videoLoadingError = videoPlayerController.value.errorDescription!;
+    videoPlayerController?.addListener(() {
+      if (videoPlayerController!.value.hasError) {
+        videoLoadingError = videoPlayerController!.value.errorDescription!;
       }
       notifyListeners();
     });
@@ -207,7 +210,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
   }
 
   void disposeVideoController() {
-    videoPlayerController.removeListener(() {});
+    videoPlayerController?.removeListener(() {});
     videoPlayerHelper.destroyVideoPlayer();
   }
 
@@ -490,9 +493,15 @@ class PurchaseItemViewModel extends ChangeNotifier {
   late StreamSubscription positionStreamSubscription;
   late StreamSubscription bufferPositionSubscription;
   late StreamSubscription durationStreamSubscription;
-  late VideoPlayerController videoPlayerController;
-  late ValueNotifier<ProgressBarState> progressNotifier;
-  late ValueNotifier<ButtonState> buttonNotifier;
+  VideoPlayerController? videoPlayerController;
+  ValueNotifier<ProgressBarState> progressNotifier = ValueNotifier<ProgressBarState>(
+    ProgressBarState(
+      current: Duration.zero,
+      buffered: Duration.zero,
+      total: Duration.zero,
+    ),
+  );
+  ValueNotifier<ButtonState> buttonNotifier = ValueNotifier(ButtonState.loading);
   WalletsStore walletsStore;
   String _videoLoadingError = "";
   int _viewsCount = 0;
@@ -506,17 +515,3 @@ class PurchaseItemViewModel extends ChangeNotifier {
     repository.logUserJourney(screenName: AnalyticsScreenEvents.purchaseView);
   }
 }
-
-class ProgressBarState {
-  ProgressBarState({
-    required this.current,
-    required this.buffered,
-    required this.total,
-  });
-
-  final Duration current;
-  final Duration buffered;
-  final Duration total;
-}
-
-enum ButtonState { paused, playing, loading }
