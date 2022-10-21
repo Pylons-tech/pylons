@@ -32,6 +32,8 @@ import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:provider/provider.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 TextStyle _titleTextStyle = TextStyle(color: Colors.white, fontSize: 16.sp);
 TextStyle _subtitleTextStyle = TextStyle(color: Colors.white, fontSize: 12.sp);
 TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.sp);
@@ -137,10 +139,11 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                       imageUrl: widget.nft.url,
                       width: 1.sw,
                       errorWidget: (a, b, c) => Center(
-                          child: Text(
-                        "unable_to_fetch_nft_item".tr(),
-                        style: Theme.of(context).textTheme.bodyText1,
-                      )),
+                        child: Text(
+                          LocaleKeys.unable_to_fetch_nft_item.tr(),
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                      ),
                       height: 1.sh,
                       fit: BoxFit.fitHeight,
                       placeholder: (context, _) => Shimmer(
@@ -175,28 +178,28 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                 ),
                 buildRow(
                   subtitle: widget.nft.ibcCoins.getAbbrev(),
-                  title: "currency".tr(),
+                  title: LocaleKeys.currency.tr(),
                 ),
                 SizedBox(
                   height: 3.h,
                 ),
                 buildRow(
                   subtitle: widget.nft.ibcCoins.getCoinWithDenominationAndSymbol(price.toString(), showDecimal: true),
-                  title: "price".tr(),
+                  title: LocaleKeys.price.tr(),
                 ),
                 SizedBox(
                   height: 3.h,
                 ),
                 buildPylonsFeeRow(
                   subtitle: widget.nft.ibcCoins.getCoinWithDenominationAndSymbol(fee.toString(), showDecimal: true),
-                  title: "pylons_fee".tr(),
+                  title: LocaleKeys.pylons_fee.tr(),
                 ),
                 SizedBox(
                   height: 3.h,
                 ),
                 buildRow(
                   subtitle: widget.nft.ibcCoins.getCoinWithDenominationAndSymbol(widget.nft.price, showDecimal: true),
-                  title: "total".tr(),
+                  title: LocaleKeys.total.tr(),
                 ),
                 SizedBox(
                   height: 30.h,
@@ -204,7 +207,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                 if (!widget.shouldBuy)
                   Center(
                     child: buildButton(
-                        title: "add_pylons".tr(),
+                        title: LocaleKeys.add_pylons.tr(),
                         bgColor: AppColors.kDarkRed,
                         onPressed: () async {
                           final navigator = Navigator.of(context);
@@ -273,7 +276,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   onTap: () {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(SnackBar(
-                          content: Text("pylons_fee_msg".tr()),
+                          content: Text(LocaleKeys.pylons_fee_msg.tr()),
                           margin: const EdgeInsets.all(10),
                           behavior: SnackBarBehavior.floating,
                         ))
@@ -289,10 +292,11 @@ class _PayNowWidgetState extends State<PayNowWidget> {
           ),
         )),
         Expanded(
-            child: Text(
-          subtitle,
-          style: _rowSubtitleTextStyle,
-        ))
+          child: Text(
+            subtitle,
+            style: _rowSubtitleTextStyle,
+          ),
+        )
       ],
     );
   }
@@ -491,7 +495,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
         Navigator.pop(navigatorKey.currentState!.overlay!.context);
 
-        tradeResponse.success ? "purchase_nft_success".tr() : tradeResponse.error.show();
+        tradeResponse.success ? LocaleKeys.purchase_nft_success.tr() : tradeResponse.error.show();
       } catch (error) {
         Navigator.pop(navigatorKey.currentState!.overlay!.context);
       }

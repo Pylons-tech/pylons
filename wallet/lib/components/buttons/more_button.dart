@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 class MoreButton extends StatelessWidget {
   final VoidCallback onTap;
   final bool showText;
@@ -18,7 +20,7 @@ class MoreButton extends StatelessWidget {
           children: [
             if (showText)
               Text(
-                'more'.tr(),
+                LocaleKeys.more.tr(),
                 style: const TextStyle(fontWeight: FontWeight.w400),
               )
             else

@@ -14,22 +14,24 @@ import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
+import '../../../../generated/locale_keys.g.dart';
+
 var _headingTextStyle = TextStyle(color: AppColors.kWhite, fontWeight: FontWeight.w600, fontSize: 11.sp);
 var _subtitleTextStyle = TextStyle(color: AppColors.kWhite, fontWeight: FontWeight.w600, fontSize: 9.sp); //7
 
 Map<int, String> monthStrMap = {
-  1: 'jan'.tr(),
-  2: 'feb'.tr(),
-  3: 'mar'.tr(),
-  4: 'apr'.tr(),
-  5: 'may'.tr(),
-  6: 'jun'.tr(),
-  7: 'jul'.tr(),
-  8: 'aug'.tr(),
-  9: 'sept'.tr(),
-  10: 'oct'.tr(),
-  11: 'nov'.tr(),
-  12: 'dec'.tr()
+  1: LocaleKeys.jan.tr(),
+  2: LocaleKeys.feb.tr(),
+  3: LocaleKeys.mar.tr(),
+  4: LocaleKeys.apr.tr(),
+  5: LocaleKeys.may.tr(),
+  6: LocaleKeys.jun.tr(),
+  7: LocaleKeys.jul.tr(),
+  8: LocaleKeys.aug.tr(),
+  9: LocaleKeys.sept.tr(),
+  10: LocaleKeys.oct.tr(),
+  11: LocaleKeys.nov.tr(),
+  12: LocaleKeys.dec.tr()
 };
 Map<String, String> denomAbbr = {kPylonCoinName: kPYLN_ABBREVATION, kUSD: kStripeUSD_ABR};
 
@@ -103,7 +105,7 @@ class LatestTransactions extends StatelessWidget {
           minVerticalPadding: 0,
           leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(SVGUtil.WALLET_NFT_PURCHASE)),
           title: Text(
-            "nft_purchase".tr(),
+            LocaleKeys.nft_purchase.tr(),
             softWrap: false,
             style: _headingTextStyle,
           ),
@@ -126,7 +128,7 @@ class LatestTransactions extends StatelessWidget {
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
           leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(SVGUtil.WALLET_NFT_SELL)),
           title: Text(
-            "nft_sold".tr(),
+            LocaleKeys.nft_sold.tr(),
             softWrap: false,
             style: _headingTextStyle,
           ),
@@ -148,7 +150,7 @@ class LatestTransactions extends StatelessWidget {
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
           leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(SVGUtil.WALLET_CURRENCY_RECEIVE)),
           title: Text(
-            "pylons_purchase".tr(),
+            LocaleKeys.pylons_purchase.tr(),
             softWrap: false,
             style: _headingTextStyle,
           ),
@@ -160,7 +162,7 @@ class LatestTransactions extends StatelessWidget {
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
           leading: SizedBox(width: 25.w, height: 25.h, child: SvgPicture.asset(SVGUtil.WALLET_CURRENCY_SENT)),
           title: Text(
-            "pylons_sent".tr(),
+            LocaleKeys.pylons_sent.tr(),
             softWrap: false,
             style: _headingTextStyle,
           ),
@@ -194,7 +196,7 @@ class LatestTransactions extends StatelessWidget {
       final creator = await walletsStore.getAccountNameByAddress(txHistory.address);
       showLoader.dismiss();
       if (recipeResult.isLeft()) {
-        "nft_does_not_exists".tr().show();
+        LocaleKeys.nft_does_not_exists.tr().show();
         return;
       }
       final recipe = recipeResult.toOption().toNullable()!;
@@ -203,21 +205,23 @@ class LatestTransactions extends StatelessWidget {
       final String nftUrl = recipe.entries.itemOutputs.first.strings.firstWhere((strKeyValue) => strKeyValue.key == kNFTURL, orElse: () => StringParam()).value;
       final String thumbnailUrl = recipe.entries.itemOutputs.first.strings.firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl, orElse: () => StringParam()).value;
 
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_TRANSACTION_DETAIL,
-          arguments: TxDetailArguments(
-            recipe: recipe,
-            creator: creator,
-            seller: seller,
-            buyer: buyer,
-            txID: txHistory.txID,
-            transactionTime: DateFormat("MMM dd yyyy HH:mm").format(DateTime.fromMillisecondsSinceEpoch(txHistory.createdAt * kDateConverterConstant)),
-            currency: (denomAbbr[defaultCurrency])!,
-            price: "${defaultCurrency.convertFromU(txHistory)} ${denomAbbr[defaultCurrency]}",
-            transactionEnum: txHistory.transactionTypeEnum,
-            nftType: nftType,
-            nftThumbnailUrl: thumbnailUrl,
-            nftUrl: nftUrl,
-          ));
+      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(
+        RouteUtil.ROUTE_TRANSACTION_DETAIL,
+        arguments: TxDetailArguments(
+          recipe: recipe,
+          creator: creator,
+          seller: seller,
+          buyer: buyer,
+          txID: txHistory.txID,
+          transactionTime: DateFormat("MMM dd yyyy HH:mm").format(DateTime.fromMillisecondsSinceEpoch(txHistory.createdAt * kDateConverterConstant)),
+          currency: (denomAbbr[defaultCurrency])!,
+          price: "${defaultCurrency.convertFromU(txHistory)} ${denomAbbr[defaultCurrency]}",
+          transactionEnum: txHistory.transactionTypeEnum,
+          nftType: nftType,
+          nftThumbnailUrl: thumbnailUrl,
+          nftUrl: nftUrl,
+        ),
+      );
     }
   }
 

@@ -17,6 +17,8 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 class ImportFromGoogleForm extends StatefulWidget {
   final WalletsStore walletStore;
 
@@ -52,7 +54,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
           if (Platform.isAndroid)
             PylonsRoundedButton(
                 glyph: svg.Svg(SVGUtil.GOOGLE_DRIVE_ICON, size: const Size(30, 30)),
-                text: "import_from_google_cloud".tr(),
+                text: LocaleKeys.import_from_google_cloud.tr(),
                 textColor: Colors.white,
                 onTap: () async {
                   _loginWithGoogleDrive();
@@ -60,7 +62,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
           if (Platform.isIOS)
             PylonsRoundedButton(
                 glyph: svg.Svg(SVGUtil.ICLOUD_ICON, size: const Size(30, 30)),
-                text: "import_from_i_cloud".tr(),
+                text: LocaleKeys.import_from_i_cloud.tr(),
                 textColor: Colors.white,
                 onTap: () async {
                   _loginWithICloudDrive();
@@ -70,7 +72,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "or".tr(),
+                LocaleKeys.or.tr(),
                 style: TextStyle(
                   color: AppColors.kBlack,
                   fontSize: 15.sp,
@@ -84,7 +86,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "enter_mnemonic".tr(),
+                LocaleKeys.enter_mnemonic.tr(),
                 style: TextStyle(
                   color: AppColors.kBlack,
                   fontSize: 15.sp,
@@ -93,7 +95,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
               ),
             )
           ]),
-          PylonsTextInput(controller: mnemonicController, label: "enter_mnemonic".tr()),
+          PylonsTextInput(controller: mnemonicController, label: LocaleKeys.enter_mnemonic.tr()),
           VerticalSpace(140.h),
           Align(
             alignment: Alignment.bottomRight,

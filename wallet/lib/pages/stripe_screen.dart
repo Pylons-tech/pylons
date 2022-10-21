@@ -13,6 +13,8 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../generated/locale_keys.g.dart';
+
 class StripeScreen extends StatefulWidget {
   final String url;
   final VoidCallback onBack;
@@ -108,7 +110,7 @@ class _StripeScreenState extends State<StripeScreen> {
                     ScaffoldMessenger.of(context)
                       ..hideCurrentSnackBar()
                       ..showSnackBar(SnackBar(
-                        content: Text("blob_type_not_supported".tr()),
+                        content: Text(LocaleKeys.blob_type_not_supported.tr()),
                       ));
                     return NavigationDecision.prevent;
                   }

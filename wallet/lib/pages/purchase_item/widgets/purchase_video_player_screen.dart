@@ -7,15 +7,15 @@ import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart'
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 class PurchaseVideoPlayerScreen extends StatefulWidget {
   final NFT nft;
 
-  const PurchaseVideoPlayerScreen({Key? key, required this.nft})
-      : super(key: key);
+  const PurchaseVideoPlayerScreen({Key? key, required this.nft}) : super(key: key);
 
   @override
-  State<PurchaseVideoPlayerScreen> createState() =>
-      _PurchaseVideoPlayerScreenState();
+  State<PurchaseVideoPlayerScreen> createState() => _PurchaseVideoPlayerScreenState();
 }
 
 class _PurchaseVideoPlayerScreenState extends State<PurchaseVideoPlayerScreen> {
@@ -35,7 +35,7 @@ class _PurchaseVideoPlayerScreenState extends State<PurchaseVideoPlayerScreen> {
       return ColoredBox(
         color: AppColors.kBlack,
         child: viewModel.isVideoLoading
-            ?  Center(
+            ? Center(
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(AppColors.kWhite),
@@ -44,17 +44,17 @@ class _PurchaseVideoPlayerScreenState extends State<PurchaseVideoPlayerScreen> {
             : viewModel.videoLoadingError.isNotEmpty
                 ? Center(
                     child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      "video_player_network_error".tr(),
-                      style: TextStyle(fontSize: 18.sp, color: AppColors.kWhite),
+                      padding: const EdgeInsets.all(10),
+                      child: Text(
+                        LocaleKeys.video_player_network_error.tr(),
+                        style: TextStyle(fontSize: 18.sp, color: AppColors.kWhite),
+                      ),
                     ),
-                  ))
+                  )
                 : Center(
                     child: viewModel.videoPlayerController != null && viewModel.videoPlayerController!.value.isInitialized
                         ? AspectRatio(
-                            aspectRatio: viewModel
-                                .videoPlayerController!.value.aspectRatio,
+                            aspectRatio: viewModel.videoPlayerController!.value.aspectRatio,
                             child: VideoPlayer(viewModel.videoPlayerController!),
                           )
                         : Center(
