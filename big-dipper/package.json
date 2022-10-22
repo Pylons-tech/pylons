@@ -34,7 +34,7 @@
     "lodash": "^4.17.21",
     "meteor-node-stubs": "^1.2.5",
     "moment": "^2.29.4",
-    "moment-timezone": "^0.5.33",
+    "moment-timezone": "^0.5.38",
     "numbro": "^2.3.2",
     "plottable": "^3.9.0",
     "prop-types": "^15.7.2",
