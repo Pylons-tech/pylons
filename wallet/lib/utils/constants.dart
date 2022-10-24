@@ -72,7 +72,7 @@ const double kAppBarNormalSize = 60.0;
 const int stringTrimConstantMax = 25;
 const int stringTrimConstantMid = 20;
 const int stringTrimConstantMin = 15;
-const double pyLonToUsdConstant = 0.10;
+const double pyLonToUsdConstant = 0.01;
 const double kRoyaltyPrecision = 10000000000000000;
 const String kPylonDenom = "upylon";
 

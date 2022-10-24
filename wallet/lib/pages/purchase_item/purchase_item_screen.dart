@@ -219,11 +219,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   bool liked = false;
   bool collapsed = true;
 
-  TabFields? selectedField;
-  bool isOwnershipExpanded = false;
-  bool isHistoryExpanded = false;
-  bool isDetailsExpanded = false;
-
   @override
   void initState() {
     super.initState();
@@ -284,7 +279,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   ),
                   getProgressWidget(viewModel),
                   SizedBox(
-                    height: 60.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -576,8 +570,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 nft: viewModel.nft,
                                 owner: viewModel.nft.owner,
                                 NftOwnershipHistoryList: const [],
-                                isExpanded: isOwnershipExpanded,
-                                onChangeTab: onChangeTab,
+                                isExpanded: viewModel.isOwnershipExpanded,
+                                onChangeTab: viewModel.onChangeTab,
                               ),
                               SizedBox(height: 10.h),
                               TabField(
@@ -586,8 +580,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 nft: viewModel.nft,
                                 owner: viewModel.nft.owner,
                                 NftOwnershipHistoryList: const [],
-                                isExpanded: isDetailsExpanded,
-                                onChangeTab: onChangeTab,
+                                isExpanded: viewModel.isDetailsExpanded,
+                                onChangeTab: viewModel.onChangeTab,
                               ),
                               SizedBox(height: 10.h),
                               if (viewModel.nft.type != NftType.TYPE_RECIPE)
@@ -597,8 +591,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                   nft: viewModel.nft,
                                   owner: viewModel.nft.owner,
                                   NftOwnershipHistoryList: viewModel.nftOwnershipHistoryList,
-                                  isExpanded: isHistoryExpanded,
-                                  onChangeTab: onChangeTab,
+                                  isExpanded: viewModel.isHistoryExpanded,
+                                  onChangeTab: viewModel.onChangeTab,
                                 ),
                               SizedBox(height: 50.h),
                               if (viewModel.nft.amountMinted >= viewModel.nft.quantity) soldOutButton(viewModel)
@@ -634,10 +628,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 GestureDetector(
                                   onTap: () {
                                     showDialog(
-                                        context: context,
-                                        builder: (_) => QRCodeScreen(
-                                              nft: viewModel.nft,
-                                            ));
+                                      context: context,
+                                      builder: (_) => QRCodeScreen(
+                                        nft: viewModel.nft,
+                                      ),
+                                    );
                                   },
                                   child: SvgPicture.asset(
                                     SVGUtil.QR_ICON,
@@ -710,54 +705,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
       ],
     );
   }
-
-  void getWhichTabIsExpanded() {
-    setState(() {
-      isDetailsExpanded = false;
-      isHistoryExpanded = false;
-      isOwnershipExpanded = false;
-    });
-    switch (selectedField) {
-      case TabFields.Ownership:
-        setState(() {
-          isOwnershipExpanded = true;
-        });
-        break;
-      case TabFields.History:
-        setState(() {
-          isHistoryExpanded = true;
-        });
-        break;
-      case TabFields.Details:
-        setState(() {
-          isDetailsExpanded = true;
-        });
-        break;
-      default:
-        return;
-    }
-  }
-
-  void closeExpansion() {
-    setState(() {
-      isDetailsExpanded = false;
-      isHistoryExpanded = false;
-      isOwnershipExpanded = false;
-    });
-  }
-
-  void onChangeTab(TabFields tab) {
-    if (tab == selectedField && isExpansionOpen()) {
-      closeExpansion();
-      return;
-    }
-    setState(() {
-      selectedField = tab;
-    });
-    getWhichTabIsExpanded();
-  }
-
-  bool isExpansionOpen() => isDetailsExpanded || isHistoryExpanded || isOwnershipExpanded;
 
   Widget _title({required NFT nft, required String owner}) {
     return Column(

@@ -24,29 +24,23 @@ extension IBCCoinsDePar on IBCCoins {
   Widget getAssets() {
     switch (this) {
       case IBCCoins.urun:
-        return SizedBox(width: 30.w, height: 30.w, child: SvgPicture.asset(SVGUtil.WALLET_AGORIC));
+        return getIconFromSvg(SVGUtil.WALLET_AGORIC);
       case IBCCoins.ujunox:
-        return SizedBox(width: 30.w, height: 30.w, child: SvgPicture.asset(SVGUtil.WALLET_JUNO));
+        return getIconFromSvg(SVGUtil.WALLET_JUNO);
       case IBCCoins.none:
-        return SizedBox(width: 30.w, height: 30.w, child: SvgPicture.asset(SVGUtil.WALLET_AGORIC));
+        return getIconFromSvg(SVGUtil.WALLET_AGORIC);
       case IBCCoins.ujuno:
-        return SizedBox(width: 30.w, height: 30.w, child: SvgPicture.asset(SVGUtil.WALLET_JUNO));
+        return getIconFromSvg(SVGUtil.WALLET_JUNO);
       case IBCCoins.upylon:
-        return SizedBox(
-            width: 30.w,
-            height: 30.w,
-            child: Image.asset(
-              ImageUtil.PYLONS_CURRENCY,
-            ));
-
+        return getIconFromSvg(SVGUtil.PYLONS_CURRENCY);
       case IBCCoins.ustripeusd:
-        return SizedBox(width: 28.w, height: 30.w, child: Image.asset(ImageUtil.WALLET_USD));
+        return getIconFromAsset(ImageUtil.WALLET_USD);
       case IBCCoins.eeur:
-        return SizedBox(width: 30.w, height: 30.w, child: SvgPicture.asset(SVGUtil.WALLET_EEUR));
+        return getIconFromSvg(SVGUtil.WALLET_EEUR);
       case IBCCoins.uatom:
-        return SizedBox(width: 30.w, height: 30.w, child: SvgPicture.asset(SVGUtil.WALLET_ATOM));
+        return getIconFromSvg(SVGUtil.WALLET_ATOM);
       case IBCCoins.weth_wei:
-        return SizedBox(width: 30.w, height: 30.w, child: SvgPicture.asset(SVGUtil.WALLET_ETH));
+        return getIconFromSvg(SVGUtil.WALLET_ETH);
     }
   }
 
@@ -171,3 +165,20 @@ extension IBCCoinsDePar on IBCCoins {
     }
   }
 }
+
+SizedBox getIconFromAsset(String ibcCoinIcon) => SizedBox(
+      width: 24.w,
+      height: 24.w,
+      child: Image.asset(
+        ibcCoinIcon,
+        fit: BoxFit.fill,
+      ),
+    );
+
+SizedBox getIconFromSvg(String ibcCoinIcon) => SizedBox(
+      width: 24.w,
+      height: 24.w,
+      child: SvgPicture.asset(
+        ibcCoinIcon,
+      ),
+    );

@@ -8,6 +8,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/share_helper.dart';
@@ -37,6 +38,11 @@ class OwnerViewViewModel extends ChangeNotifier {
     required this.videoPlayerHelper,
   });
 
+  TabFields? selectedField;
+  bool isOwnershipExpanded = false;
+  bool isHistoryExpanded = false;
+  bool isDetailsExpanded = false;
+
   String owner = '';
 
   bool _toggled = true;
@@ -44,8 +50,6 @@ class OwnerViewViewModel extends ChangeNotifier {
   bool get toggled => _toggled;
 
   VideoPlayerController? videoPlayerController;
-
-  
 
   late StreamSubscription playerStateSubscription;
 
@@ -138,6 +142,48 @@ class OwnerViewViewModel extends ChangeNotifier {
     initializePlayers();
     toHashtagList();
   }
+
+  void getWhichTabIsExpanded() {
+    isDetailsExpanded = false;
+    isHistoryExpanded = false;
+    isOwnershipExpanded = false;
+
+    switch (selectedField) {
+      case TabFields.ownership:
+        isOwnershipExpanded = true;
+        notifyListeners();
+        break;
+      case TabFields.history:
+        isHistoryExpanded = true;
+        notifyListeners();
+        break;
+      case TabFields.details:
+        isDetailsExpanded = true;
+        notifyListeners();
+        break;
+      default:
+        return;
+    }
+  }
+
+  void closeExpansion() {
+    isDetailsExpanded = false;
+    isHistoryExpanded = false;
+    isOwnershipExpanded = false;
+    notifyListeners();
+  }
+
+  void onChangeTab(TabFields tab) {
+    if (tab == selectedField && isExpansionOpen()) {
+      closeExpansion();
+      return;
+    }
+
+    selectedField = tab;
+    getWhichTabIsExpanded();
+  }
+
+  bool isExpansionOpen() => isDetailsExpanded || isHistoryExpanded || isOwnershipExpanded;
 
   Future<void> nftDataInit({required String recipeId, required String cookBookId, required String itemId}) async {
     final walletAddress = walletsStore.getWallets().value.last.publicAddress;
@@ -413,9 +459,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     repository.logUserJourney(screenName: AnalyticsScreenEvents.ownerView);
   }
 
-
-
-  ValueNotifier<ProgressBarState> audioProgressNotifier  = ValueNotifier<ProgressBarState>(
+  ValueNotifier<ProgressBarState> audioProgressNotifier = ValueNotifier<ProgressBarState>(
     ProgressBarState(
       current: Duration.zero,
       buffered: Duration.zero,

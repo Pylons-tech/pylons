@@ -55,7 +55,7 @@ class BuyNFTButton extends StatelessWidget {
       );
     }
     return Container(
-      height: isTablet ? 75.h : 60.h,
+      height: isTablet ? 65.h : 55.h,
       width: isTablet ? 160.w : 200.w,
       color: AppColors.kDarkRed.withOpacity(0.8),
       child: Column(
@@ -83,7 +83,7 @@ class BuyNFTButton extends StatelessWidget {
           else
             const SizedBox(),
           SizedBox(
-            height: 5.0.h,
+            height: 2.0.h,
           )
         ],
       ),

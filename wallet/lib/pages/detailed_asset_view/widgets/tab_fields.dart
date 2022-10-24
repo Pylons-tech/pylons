@@ -10,7 +10,7 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 
-enum TabFields { Ownership, Details, History }
+enum TabFields { ownership, details, history }
 
 // ignore: must_be_immutable
 class TabField extends StatefulWidget {
@@ -117,11 +117,11 @@ class _TabFieldState extends State<TabField> {
                     onTap: () {
                       TabFields? _field;
                       if (widget.name == "ownership".tr()) {
-                        _field = TabFields.Ownership;
+                        _field = TabFields.ownership;
                       } else if (widget.name == "nft_detail".tr()) {
-                        _field = TabFields.Details;
+                        _field = TabFields.details;
                       } else {
-                        _field = TabFields.History;
+                        _field = TabFields.history;
                       }
 
                       widget.onChangeTab(_field);
@@ -262,6 +262,7 @@ class _TabFieldState extends State<TabField> {
 
   @override
   void initState() {
+    super.initState();
     if (widget.isExpanded == false) {
       if (mounted) {
         setState(() {
@@ -269,7 +270,6 @@ class _TabFieldState extends State<TabField> {
         });
       }
     }
-    super.initState();
   }
 }
 
