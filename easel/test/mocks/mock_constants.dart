@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:easel_flutter/models/nft.dart';
+import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/utils/enums.dart';
 
 NFT MOCK_NFT = NFT(
@@ -21,3 +22,5 @@ NFT MOCK_NFT = NFT(
   assetType: AssetType.Image.name,
   step: UploadStep.assetUploaded.name,
 );
+
+CollectionType MOCK_COLLECTION_TYPE = CollectionType.draft;

@@ -8,16 +8,21 @@ import 'package:easel_flutter/screens/creator_hub/widgets/published_nfts_bottom_
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
+import '../../../main.dart';
+
 class NftGridViewItem extends StatelessWidget {
-  const NftGridViewItem({Key? key, required this.nft}) : super(key: key);
+  const NftGridViewItem({Key? key, required this.nft,required this.collectionType}) : super(key: key);
   final NFT nft;
+  final CollectionType collectionType;
 
   EaselProvider get _easelProvider => GetIt.I.get();
 
@@ -58,6 +63,47 @@ class NftGridViewItem extends StatelessWidget {
                 assetType: nft.assetType.toAssetTypeEnum(),
               ),
             )),
+        Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(colors: [Colors.black87,Colors.black54,Colors.black45,Colors.black38,
+              Colors.black26,Colors.black12,Colors.transparent],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(1.h),
+                  color: collectionType == CollectionType.draft ?EaselAppTheme.kLightRed:
+                  nft.isEnabled && nft.amountMinted < int.parse(nft.quantity)?EaselAppTheme.kBlue:EaselAppTheme.kDarkGreen,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 6.h),
+                child: Text(
+                  collectionType == CollectionType.draft ?"draft".tr():
+                  nft.isEnabled && nft.amountMinted < int.parse(nft.quantity)?"for_sale".tr():"publish".tr(),
+                  style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
+                ),
+              ),
+              const Spacer(),
+              InkWell(
+                  onTap: () {
+                    final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
+                      buildContext: context,
+                      nft: nft,
+                    );
+                    draftsBottomSheet.show();
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(4.0.w),
+                    child: SvgPicture.asset(SVGUtils.kSvgMoreOption,color: Colors.white),
+                  )),
+              const SizedBox(width: 5,)
+            ],
+          ),
+        )
       ],
     );
   }

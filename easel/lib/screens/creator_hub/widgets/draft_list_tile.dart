@@ -164,7 +164,7 @@ class _DraftListTileState extends State<DraftListTile> {
                           ),
                           Container(
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(3.h),
+                              borderRadius: BorderRadius.circular(1.h),
                               color: EaselAppTheme.kLightRed,
                             ),
                             padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
