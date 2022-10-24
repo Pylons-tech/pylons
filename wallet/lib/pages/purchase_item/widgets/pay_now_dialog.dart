@@ -30,7 +30,7 @@ import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 TextStyle _titleTextStyle = TextStyle(color: Colors.white, fontSize: 30.sp, fontWeight: FontWeight.w700);
-TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 13.sp);
+TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15.sp);
 
 class PayNowDialog {
   final NFT nft;
@@ -80,7 +80,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black.withOpacity(0.7),
-      height: 390.h,
+      height: 400.h,
       width: isTablet ? 200.w : 270.w,
       margin: isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
       child: Stack(
@@ -98,10 +98,9 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   alignment: Alignment.topRight,
                   child: GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: Container(
+                    child: Padding(
                         padding: EdgeInsets.only(right: isTablet ? 2.w : 5.w, top: 5.h),
-                        child: Image(image: const AssetImage("assets/images/icons/close_white.png"), height: isTablet ? 15.h : 18.h, width: isTablet ? 15.w : 18.h,),
-                    ),
+                        child: Icon(Icons.close, color: Colors.white, size: 20.h)),
                   ),
                 ),
               ),
@@ -117,7 +116,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(
-                  height: 60.h,
+                  height: 30.h,
                 ),
                 Text("checkout".tr(), textAlign: TextAlign.center, style: _titleTextStyle),
                 SizedBox(
@@ -177,7 +176,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   ),
                 if (widget.shouldBuy)
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 30.w),
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: PylonsPayWithSwipe(
                       activeColor: AppColors.kDarkRed,
                       inactiveColor: AppColors.kPayNowBackgroundGrey,
@@ -187,7 +186,10 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                         executeRecipe(context);
                       },
                     ),
-                  )
+                  ),
+                SizedBox(
+                  height: 30.h,
+                ),
               ],
             ),
           )
@@ -212,7 +214,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
           subtitle,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(color: subtitleTextColor, fontSize: 14.sp),
+          style: TextStyle(color: subtitleTextColor, fontSize: 15.sp, fontWeight: FontWeight.w600),
         ),),
       ],
     );
@@ -221,22 +223,24 @@ class _PayNowWidgetState extends State<PayNowWidget> {
   Widget buildButton({required String title, required Color bgColor, required Function onPressed}) {
     return SizedBox(
       height: 40.h,
-      child: InkWell(
-        onTap: () => onPressed(),
-        child: CustomPaint(
-          painter: BoxShadowPainter(cuttingHeight: 18.h),
-          child: ClipPath(
-            clipper: MnemonicClipper(cuttingHeight: 18.h),
-            child: Container(
-              color: bgColor,
-              height: 40.h,
-              width: isTablet ? 150.w : 200.w,
-              child: Center(
-                  child: Text(
-                title,
-                style: TextStyle(color: AppColors.kWhite, fontSize: isTablet ? 14.sp : 16.sp, fontWeight: FontWeight.w700),
-                textAlign: TextAlign.center,
-              )),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: InkWell(
+          onTap: () => onPressed(),
+          child: CustomPaint(
+            painter: BoxShadowPainter(cuttingHeight: 18.h),
+            child: ClipPath(
+              clipper: MnemonicClipper(cuttingHeight: 18.h),
+              child: Container(
+                color: bgColor,
+                height: 40.h,
+                child: Center(
+                    child: Text(
+                  title,
+                  style: TextStyle(color: AppColors.kWhite, fontSize: isTablet ? 14.sp : 16.sp, fontWeight: FontWeight.w700),
+                  textAlign: TextAlign.center,
+                )),
+              ),
             ),
           ),
         ),
@@ -246,7 +250,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
   Widget _buildPriceView() {
     return Padding(
-      padding: EdgeInsets.only(left: 20.w, right: 20.w),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Row(
         children: [
           Expanded(flex: 2, child: Container(
@@ -256,9 +260,9 @@ class _PayNowWidgetState extends State<PayNowWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                    width: 15.w,
-                    height: 15.w,
-                    child: widget.nft.ibcCoins.getAssets()),
+                    width: 12.w,
+                    height: 12.w,
+                    child: widget.nft.ibcCoins.getSecondaryAssets()),
                 SizedBox(width: 3.w),
                 Text(widget.nft.ibcCoins.getName(),  style: TextStyle(fontSize: 10.sp, color: Colors.white),),
               ],

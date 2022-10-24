@@ -84,6 +84,20 @@ extension IBCCoinsDePar on IBCCoins {
     }
   }
 
+  Widget getSecondaryAssets() {
+    switch(this) {
+      case IBCCoins.upylon:
+        return SizedBox(
+            width: 30.w,
+            height: 30.w,
+            child: Image.asset(
+              ImageUtil.PYLONS_CURRENCY_TRANSPARENT,
+            ));
+      default:
+        return getAssets();
+    }
+  }
+
   String getName() {
     switch (this) {
       case IBCCoins.urun:
