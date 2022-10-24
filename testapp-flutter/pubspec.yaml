@@ -29,7 +29,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  pylons_sdk: ^0.1.2
+  pylons_sdk:
+    path: ../dart_sdk
 
 
   # The following adds the Cupertino Icons font to your application.

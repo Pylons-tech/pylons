@@ -89,31 +89,32 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _checkCharacter() async {
     _displayText("Checking character...", false);
 
-    var sdkResponse = await PylonsWallet.instance.getProfile();
-    _pylons = sdkResponse.data.coins.firstWhere((element) => element.denom == "upylon").amount.value.toBigInt().toInt();
-    _username = sdkResponse.data.username;
-    _address = sdkResponse.data.address;
+    // todo: api2 profile
+    //var prf = Profile.current();
+    //var pylons = prf.coin("upylon");
+    // item patterns...
 
     if (_character == null) {
-      Item? chr;
-      int lu = -1;
-      for (var item in sdkResponse.data.items) {
-        if (item.strings.any((element) => element.key == "entityType" && element.value == "character") &&
-            item.longs.any((element) => element.key == "currentHp" && element.value != 0)) {
-          var v = item.lastUpdate.toInt();
-          if (v > lu) {
-            lu = v;
-            chr = item;
-          }
-        }
-      }
-      _character = chr;
+      // var chr = prf.items.firstWhere(// bleh);
+      // Item? chr;
+      // int lu = -1;
+      // for (var item in sdkResponse.data.items) {
+      //   if (item.strings.any((element) => element.key == "entityType" && element.value == "character") &&
+      //       item.longs.any((element) => element.key == "currentHp" && element.value != 0)) {
+      //     var v = item.lastUpdate.toInt();
+      //     if (v > lu) {
+      //       lu = v;
+      //       chr = item;
+      //     }
+      //   }
+      // }
+      // _character = chr;
     }
 
-    _swordLv = _character?.longs.firstWhere((element) => element.key == "swordLevel").value.toInt() ?? 0;
-    _coins = _character?.longs.firstWhere((element) => element.key == "coins").value.toInt() ?? 0;
-    _shards = _character?.longs.firstWhere((element) => element.key == "shards").value.toInt() ?? 0;
-    _curHp = _character?.longs.firstWhere((element) => element.key == "currentHp").value.toInt() ?? 0;
+    //_swordLv = chr?.getLong("swordLevel") ?? 0;
+    //_coins = _character?.longs.firstWhere((element) => element.key == "coins").value.toInt() ?? 0;
+    //_shards = _character?.longs.firstWhere((element) => element.key == "shards").value.toInt() ?? 0;
+    //_curHp = _character?.longs.firstWhere((element) => element.key == "currentHp").value.toInt() ?? 0;
   }
 
   Future<void> _generateCharacter() async {
@@ -131,21 +132,21 @@ class _MyHomePageState extends State<MyHomePage> {
     // grab the tx somehow?
     // then grab the character id out of it
     var itemId = "NOPE";
-    sdkResponse = await PylonsWallet.instance.getItemById(cookbookId: "appTestCookbook", itemId: itemId);
+    //sdkResponse = await PylonsWallet.instance.getItemById(cookbookId: "appTestCookbook", itemId: itemId);
     _character = sdkResponse.data as Item;
   }
 
   Future<void> _fightGoblin() async {
     _displayText("Fighting a goblin...", false);
-    var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-        cookbookId: "appTestCookbook",
-        recipeName: "RecipeTestAppFightGoblin",
-        itemIds: [_character!.id],
-        coinInputIndex: 0,
-        paymentInfo: []);
-    if (!sdkResponse.success) {
-      throw Exception("combat tx should not fail");
-    }
+    // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
+    //     cookbookId: "appTestCookbook",
+    //     recipeName: "RecipeTestAppFightGoblin",
+    //     itemIds: [_character!.id],
+    //     coinInputIndex: 0,
+    //     paymentInfo: []);
+    // if (!sdkResponse.success) {
+    //   throw Exception("combat tx should not fail");
+    // }
     _displayText("Victory!", false);
     var lastHp = _curHp;
     var lastCoins = _coins;
@@ -161,15 +162,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _fightTroll() async {
     _displayText("Fighting a troll...", false);
     if (_swordLv < 1) {
-      var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-          cookbookId: "appTestCookbook",
-          recipeName: "RecipeTestAppFightTrollUnarmed",
-          itemIds: [_character!.id],
-          coinInputIndex: 0,
-          paymentInfo: []);
-      if (!sdkResponse.success) {
-        throw Exception("combat tx should not fail");
-      }
+      // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
+      //     cookbookId: "appTestCookbook",
+      //     recipeName: "RecipeTestAppFightTrollUnarmed",
+      //     itemIds: [_character!.id],
+      //     coinInputIndex: 0,
+      //     paymentInfo: []);
+      // if (!sdkResponse.success) {
+      //   throw Exception("combat tx should not fail");
+      // }
       _displayText("Defeat...", false);
       var lastHp = _curHp;
       await _checkCharacter();
@@ -177,15 +178,15 @@ class _MyHomePageState extends State<MyHomePage> {
         _displayText("Took ${lastHp - _curHp} damage!", false);
       }
     } else {
-      var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-          cookbookId: "appTestCookbook",
-          recipeName: "RecipeTestAppFightTrollArmed",
-          itemIds: [_character!.id],
-          coinInputIndex: 0,
-          paymentInfo: []);
-      if (!sdkResponse.success) {
-        throw Exception("combat tx should not fail");
-      }
+      // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
+      //     cookbookId: "appTestCookbook",
+      //     recipeName: "RecipeTestAppFightTrollArmed",
+      //     itemIds: [_character!.id],
+      //     coinInputIndex: 0,
+      //     paymentInfo: []);
+      // if (!sdkResponse.success) {
+      //   throw Exception("combat tx should not fail");
+      // }
       _displayText("Victory!", false);
       var lastHp = _curHp;
       var lastShards = _shards;
@@ -202,15 +203,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _fightDragon() async {
     _displayText("Fighting a dragon...", false);
     if (_swordLv < 2) {
-      var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-          cookbookId: "appTestCookbook",
-          recipeName: "RecipeTestAppFightDragonUnarmed",
-          itemIds: [_character!.id],
-          coinInputIndex: 0,
-          paymentInfo: []);
-      if (!sdkResponse.success) {
-        throw Exception("combat tx should not fail");
-      }
+      // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
+      //     cookbookId: "appTestCookbook",
+      //     recipeName: "RecipeTestAppFightDragonUnarmed",
+      //     itemIds: [_character!.id],
+      //     coinInputIndex: 0,
+      //     paymentInfo: []);
+      // if (!sdkResponse.success) {
+      //   throw Exception("combat tx should not fail");
+      // }
       _displayText("Defeat...", false);
       var lastHp = _curHp;
       await _checkCharacter();
@@ -218,15 +219,15 @@ class _MyHomePageState extends State<MyHomePage> {
         _displayText("Took ${lastHp - _curHp} damage!", false);
       }
     } else {
-      var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-          cookbookId: "appTestCookbook",
-          recipeName: "RecipeTestAppFightDragonArmed",
-          itemIds: [_character!.id],
-          coinInputIndex: 0,
-          paymentInfo: []);
-      if (!sdkResponse.success) {
-        throw Exception("combat tx should not fail");
-      }
+      // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
+      //     cookbookId: "appTestCookbook",
+      //     recipeName: "RecipeTestAppFightDragonArmed",
+      //     itemIds: [_character!.id],
+      //     coinInputIndex: 0,
+      //     paymentInfo: []);
+      // if (!sdkResponse.success) {
+      //   throw Exception("combat tx should not fail");
+      // }
       _displayText("Victory!", false);
       var lastHp = _curHp;
       await _checkCharacter();
@@ -242,15 +243,15 @@ class _MyHomePageState extends State<MyHomePage> {
     } else if (_coins < 50 ) {
       _displayText("You need 50 coins to buy a sword", false);
     } else {
-      var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-          cookbookId: "appTestCookbook",
-          recipeName: "RecipeTestAppBuySword",
-          itemIds: [_character!.id],
-          coinInputIndex: 0,
-          paymentInfo: []);
-      if (!sdkResponse.success) {
-        throw Exception("purchase tx should not fail");
-      }
+      // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
+      //     cookbookId: "appTestCookbook",
+      //     recipeName: "RecipeTestAppBuySword",
+      //     itemIds: [_character!.id],
+      //     coinInputIndex: 0,
+      //     paymentInfo: []);
+      // if (!sdkResponse.success) {
+      //   throw Exception("purchase tx should not fail");
+      // }
       _displayText("Bought a sword!", false);
       var lastCoins = _coins;
       await _checkCharacter();
@@ -266,15 +267,15 @@ class _MyHomePageState extends State<MyHomePage> {
     } else if (_shards < 5) {
       _displayText("You need 5 shards to upgrade your sword", false);
     } else {
-      var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-          cookbookId: "appTestCookbook",
-          recipeName: "RecipeTestAppUpgradeSword",
-          itemIds: [_character!.id],
-          coinInputIndex: 0,
-          paymentInfo: []);
-      if (!sdkResponse.success) {
-        throw Exception("purchase tx should not fail");
-      }
+      // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
+      //     cookbookId: "appTestCookbook",
+      //     recipeName: "RecipeTestAppUpgradeSword",
+      //     itemIds: [_character!.id],
+      //     coinInputIndex: 0,
+      //     paymentInfo: []);
+      // if (!sdkResponse.success) {
+      //   throw Exception("purchase tx should not fail");
+      // }
       _displayText("Upgraded your sword!", false);
       var lastShards = _shards;
       await _checkCharacter();
@@ -286,20 +287,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _rest1() async {
     _displayText("Resting...", false);
-    var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-        cookbookId: "appTestCookbook",
-        recipeName: "RecipeTestAppRest25",
-        itemIds: [_character!.id],
-        coinInputIndex: 0,
-        paymentInfo: []);
-    if (!sdkResponse.success) {
-      throw Exception("rest tx should not fail");
-    }
+    // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
+    //     cookbookId: "appTestCookbook",
+    //     recipeName: "RecipeTestAppRest25",
+    //     itemIds: [_character!.id],
+    //     coinInputIndex: 0,
+    //     paymentInfo: []);
+    // if (!sdkResponse.success) {
+    //   throw Exception("rest tx should not fail");
+    // }
     //dunno how to get exec either...
     var exec = "TODO";
     while (true) {
       _displayText("...", false);
-      sdkResponse = await PylonsWallet.instance.getExecutionBasedOnId(id: exec);
+      //sdkResponse = await PylonsWallet.instance.getExecutionBasedOnId(id: exec);
       // if completed break
     }
     _displayText("Done!", false);
@@ -312,20 +313,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _rest2() async {
     _displayText("Resting...", false);
-    var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-        cookbookId: "appTestCookbook",
-        recipeName: "RecipeTestAppRest50",
-        itemIds: [_character!.id],
-        coinInputIndex: 0,
-        paymentInfo: []);
-    if (!sdkResponse.success) {
-      throw Exception("rest tx should not fail");
-    }
+    // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
+    //     cookbookId: "appTestCookbook",
+    //     recipeName: "RecipeTestAppRest50",
+    //     itemIds: [_character!.id],
+    //     coinInputIndex: 0,
+    //     paymentInfo: []);
+    // if (!sdkResponse.success) {
+    //   throw Exception("rest tx should not fail");
+    // }
     //dunno how to get exec either...
     var exec = "TODO";
     while (true) {
       _displayText("...", false);
-      sdkResponse = await PylonsWallet.instance.getExecutionBasedOnId(id: exec);
+      //sdkResponse = await PylonsWallet.instance.getExecutionBasedOnId(id: exec);
       // if completed break
     }
     _displayText("Done!", false);
@@ -338,20 +339,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _rest3() async {
     _displayText("Resting...", false);
-    var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-        cookbookId: "appTestCookbook",
-        recipeName: "RecipeTestAppRest100",
-        itemIds: [_character!.id],
-        coinInputIndex: 0,
-        paymentInfo: []);
-    if (!sdkResponse.success) {
-      throw Exception("rest tx should not fail");
-    }
+    // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
+    //     cookbookId: "appTestCookbook",
+    //     recipeName: "RecipeTestAppRest100",
+    //     itemIds: [_character!.id],
+    //     coinInputIndex: 0,
+    //     paymentInfo: []);
+    // if (!sdkResponse.success) {
+    //   throw Exception("rest tx should not fail");
+    // }
     //dunno how to get exec either...
     var exec = "TODO";
     while (true) {
       _displayText("...", false);
-      sdkResponse = await PylonsWallet.instance.getExecutionBasedOnId(id: exec);
+      //sdkResponse = await PylonsWallet.instance.getExecutionBasedOnId(id: exec);
       // if completed break
     }
     _displayText("Done!", false);
@@ -368,15 +369,15 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
     _displayText("Resting...", false);
-    var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-        cookbookId: "appTestCookbook",
-        recipeName: "RecipeTestAppRest100Premium",
-        itemIds: [_character!.id],
-        coinInputIndex: 0,
-        paymentInfo: []);
-    if (!sdkResponse.success) {
-      throw Exception("rest tx should not fail");
-    }
+    // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
+    //     cookbookId: "appTestCookbook",
+    //     recipeName: "RecipeTestAppRest100Premium",
+    //     itemIds: [_character!.id],
+    //     coinInputIndex: 0,
+    //     paymentInfo: []);
+    // if (!sdkResponse.success) {
+    //   throw Exception("rest tx should not fail");
+    // }
     _displayText("Done!", false);
     var lastHp = _curHp;
     await _checkCharacter();
