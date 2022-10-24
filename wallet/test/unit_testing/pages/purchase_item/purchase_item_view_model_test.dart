@@ -13,9 +13,11 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
+import '../../../mocks/audio_Player.mocks.dart';
 import '../../../mocks/mock_audio_player.dart';
 import '../../../mocks/mock_share_helper.dart';
 import '../../../mocks/mock_video_player.dart';
+import '../../../mocks/video_player.mocks.dart';
 import 'purchase_item_view_model_test.mocks.dart';
 
 @GenerateMocks([WalletsStore, AccountPublicInfo, Repository, NFT])
@@ -24,8 +26,8 @@ void main() {
   late Repository repository;
 
   setUp(() {
-    final audioPlayerMock = MockAudioPlayerImpl();
-    final videoPlayerMock = MockVideoPlayerimpl();
+    final audioPlayerMock = MockAudioPlayerImpl(MockAudioPlayer());
+    final videoPlayerMock = MockVideoPlayerImpl(MockVideoPlayerController());
     repository = MockRepository();
     final mockWalletStore = MockWalletsStore();
     final shareHelper = MockShareHelperImpl();

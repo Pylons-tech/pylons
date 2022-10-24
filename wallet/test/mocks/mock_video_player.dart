@@ -3,46 +3,43 @@ import 'dart:async';
 import 'package:pylons_wallet/services/third_party_services/video_player_helper.dart';
 import 'package:video_player/video_player.dart';
 
-class MockVideoPlayerimpl implements VideoPlayerHelper{
+class MockVideoPlayerImpl implements VideoPlayerHelper {
+  late VideoPlayerController videoPlayerController;
+
+  MockVideoPlayerImpl(this.videoPlayerController);
+
   @override
   void destroyVideoPlayer() {
-    // TODO: implement destroyVideoPlayer
+    videoPlayerController.dispose();
   }
 
   @override
   VideoPlayerController getVideoPlayerController() {
-    // TODO: implement getVideoPlayerController
-    throw UnimplementedError();
+    return videoPlayerController;
   }
 
   @override
-  Future initializeVideoPlayer({required String url}) {
-    // TODO: implement initializeVideoPlayer
-    throw UnimplementedError();
+  Future initializeVideoPlayer({required String url}) async {
+    videoPlayerController = VideoPlayerController.network(url)..initialize().then((value) {});
   }
 
   @override
-  Future<void> pauseVideo() {
-    // TODO: implement pauseVideo
-    throw UnimplementedError();
+  Future<void> pauseVideo() async {
+    await videoPlayerController.pause();
   }
 
   @override
-  Future<void> playVideo() {
-    // TODO: implement playVideo
-    throw UnimplementedError();
+  Future<void> playVideo() async {
+    await videoPlayerController.play();
   }
 
   @override
   StreamSubscription<Duration?> positionStream() {
-    // TODO: implement positionStream
-    throw UnimplementedError();
+    return Stream.fromFuture(videoPlayerController.position).listen((event) {});
   }
 
   @override
-  Future<void> seekToVideo({required Duration position}) {
-    // TODO: implement seekToVideo
-    throw UnimplementedError();
+  Future<void> seekToVideo({required Duration position}) async {
+    await videoPlayerController.seekTo(position);
   }
-
 }

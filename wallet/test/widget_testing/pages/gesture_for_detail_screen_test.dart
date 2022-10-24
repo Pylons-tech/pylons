@@ -9,13 +9,14 @@ import 'package:pylons_wallet/services/third_party_services/share_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/video_player_helper.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-
+import '../../mocks/audio_Player.mocks.dart';
 import '../../mocks/mock_constants.dart';
 import '../../mocks/mock_repository.dart';
 import '../../mocks/mock_share_helper.dart';
 import '../../mocks/mock_wallet_store.dart';
 import '../../mocks/mock_video_player.dart';
 import '../../mocks/mock_audio_player.dart';
+import '../../mocks/video_player.mocks.dart';
 import '../extension/size_extension.dart';
 
 void main() {
@@ -27,9 +28,10 @@ void main() {
     late AudioPlayerHelper audioPlayerHelper;
     late VideoPlayerHelper videoPlayerHelper;
     late ShareHelper shareHelper;
-
-    audioPlayerHelper = MockAudioPlayerImpl();
-    videoPlayerHelper = MockVideoPlayerimpl();
+    final mockAudioPlayer = MockAudioPlayer();
+    final mockVideoPlayerController = MockVideoPlayerController();
+    audioPlayerHelper = MockAudioPlayerImpl(mockAudioPlayer);
+    videoPlayerHelper = MockVideoPlayerImpl(mockVideoPlayerController);
     repositry = MockRepository();
     walletStore = MockWalletStore();
     shareHelper = MockShareHelperImpl();
@@ -42,13 +44,12 @@ void main() {
     );
 
     GetIt.I.registerSingleton(viewModel);
-  
   });
 
   testWidgets('test case for gestures', (tester) async {
     await tester.setScreenSize();
     await tester.testAppForWidgetTesting(OwnerView(
-      nft: MOCK_NFT_FREE,
+      nft: MOCK_NFT_FREE_IMAGE,
     ));
     await tester.pumpAndSettle();
     final gestureDetectorOwnerScreen = find.byKey(const ValueKey(kOwnerViewKeyValue));

@@ -448,3 +448,5 @@ class AnalyticsScreenEvents {
 const String kErrorKey = "Error";
 const String kProgressKey = "Progress";
 const String kImageAssetKey = "image_asset_key";
+const String kShareNftButtonCollapsedKey = "share_nfy_collapsed";
+const String kShareNftButtonExpandedKey = "share_nft_expanded";

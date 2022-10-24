@@ -1,11 +1,14 @@
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
 
-class MockAudioPlayerImpl implements AudioPlayerHelper{
+class MockAudioPlayerImpl implements AudioPlayerHelper {
+  final AudioPlayer audioPlayer;
+
+  MockAudioPlayerImpl(this.audioPlayer);
+
   @override
   Stream<Duration> bufferedPositionStream() {
-    // TODO: implement bufferedPositionStream
-    throw UnimplementedError();
+    return audioPlayer.bufferedPositionStream;
   }
 
   @override
@@ -15,44 +18,37 @@ class MockAudioPlayerImpl implements AudioPlayerHelper{
 
   @override
   Stream<Duration?> durationStream() {
-    // TODO: implement durationStream
-    throw UnimplementedError();
+    return audioPlayer.durationStream;
   }
 
   @override
-  Future<void> pauseAudio() {
-    // TODO: implement pauseAudio
-    throw UnimplementedError();
+  Future<void> pauseAudio() async {
+    await audioPlayer.pause();
   }
 
   @override
-  Future<void> playAudio() {
-    // TODO: implement playAudio
-    throw UnimplementedError();
+  Future<void> playAudio() async {
+    await audioPlayer.play();
   }
 
   @override
   Stream<PlayerState> playerStateStream() {
-    // TODO: implement playerStateStream
-    throw UnimplementedError();
+    return audioPlayer.playerStateStream;
   }
 
   @override
   Stream<Duration> positionStream() {
-    // TODO: implement positionStream
-    throw UnimplementedError();
+    return audioPlayer.positionStream;
   }
 
   @override
   Future<void> seekAudio({required Duration position}) {
-    // TODO: implement seekAudio
-    throw UnimplementedError();
+    return audioPlayer.seek(position);
   }
 
   @override
-  Future<bool> setUrl({required String url}) {
-    // TODO: implement setUrl
-    throw UnimplementedError();
+  Future<bool> setUrl({required String url}) async {
+    await audioPlayer.setUrl(url);
+    return true;
   }
-
 }

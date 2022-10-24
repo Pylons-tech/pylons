@@ -19,7 +19,7 @@ void main() {
         onTapped: () {
           isTapped = true;
         },
-        nft: MOCK_NFT_FREE,
+        nft: MOCK_NFT_FREE_IMAGE,
       ),
     ));
 

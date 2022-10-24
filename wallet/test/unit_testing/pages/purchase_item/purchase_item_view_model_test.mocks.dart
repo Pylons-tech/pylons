@@ -2,7 +2,7 @@
 // in pylons_wallet/test/unit_testing/pages/purchase_item/purchase_item_view_model_test.dart.
 // Do not manually edit this file.
 
-// ignore_for_file: no_leading_underscores_for_library_prefixes
+// ignore_for_file: no_leading_underscores_for_library_prefixes, must_be_immutable
 import 'dart:async' as _i8;
 
 import 'package:cosmos_utils/credentials_storage_failure.dart' as _i13;
@@ -825,7 +825,6 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
 /// A class which mocks [AccountPublicInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-// ignore: must_be_immutable
 class MockAccountPublicInfo extends _i1.Mock implements _i6.AccountPublicInfo {
   MockAccountPublicInfo() {
     _i1.throwOnMissingStub(this);
@@ -2744,12 +2743,30 @@ class MockRepository extends _i1.Mock implements _i15.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, void>> logUserJourney(
+          {required String? screenName}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #logUserJourney,
+          [],
+          {#screenName: screenName},
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, void>>.value(
+            _FakeEither_0<_i9.Failure, void>(
+          this,
+          Invocation.method(
+            #logUserJourney,
+            [],
+            {#screenName: screenName},
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, void>>);
 }
 
 /// A class which mocks [NFT].
 ///
 /// See the documentation for Mockito's code generation for more information.
-// ignore: must_be_immutable
 class MockNFT extends _i1.Mock implements _i30.NFT {
   MockNFT() {
     _i1.throwOnMissingStub(this);
