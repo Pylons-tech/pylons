@@ -26,7 +26,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
       downloading.value = true;
     }, onDone: () async {
       downloading.value = false;
-      Wallpaper.lockScreen();
+      Wallpaper.lockScreen(options: RequestSizeOptions.RESIZE_FIT);
       Navigator.pop(context);
     }, onError: (error) {
       downloading.value = false;
@@ -79,7 +79,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
               padding: EdgeInsets.only(bottom: 30.h),
               child: CustomPaintButton(
                   title: "set_lockscreen".tr(),
-                  bgColor: AppColors.kWhite.withOpacity(0.3),
+                  bgColor: AppColors.kDarkGrey,
                   width: 280.w,
                   onPressed: () async {
                     return downloadAndSetImage(context);
