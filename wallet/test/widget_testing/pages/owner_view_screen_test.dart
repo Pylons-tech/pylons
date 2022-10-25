@@ -1,63 +1,35 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/button_state.dart';
-import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
-import 'package:pylons_wallet/services/third_party_services/share_helper.dart';
-import 'package:pylons_wallet/services/third_party_services/video_player_helper.dart';
+import 'package:pylons_wallet/pages/owner_purchase_view_common/progress_bar_state.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import '../../mocks/audio_Player.mocks.dart';
-import '../../mocks/mock_audio_player.dart';
 import '../../mocks/mock_constants.dart';
-import '../../mocks/mock_repository.dart';
-import '../../mocks/mock_share_helper.dart';
-import '../../mocks/mock_video_player.dart';
 import '../../mocks/mock_wallet_store.dart';
-import '../../mocks/video_player.mocks.dart';
+import '../../mocks/owner_view_view_model.mocks.dart';
 import '../extension/size_extension.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late OwnerViewViewModel viewModel;
-  late MockVideoPlayerController videoPlayerController;
-  late AudioPlayer audioPlayer;
-  late Repository repository;
   late WalletsStore walletStore;
-  late AudioPlayerHelper audioPlayerHelper;
-  late ShareHelper shareHelper;
-  late VideoPlayerHelper videoPlayerHelper;
-
-  audioPlayer = MockAudioPlayer();
-  videoPlayerController = MockVideoPlayerController();
-  repository = MockRepository();
   walletStore = MockWalletStore();
-  audioPlayerHelper = MockAudioPlayerImpl(audioPlayer);
-  shareHelper = MockShareHelperImpl();
-  videoPlayerHelper = MockVideoPlayerImpl(videoPlayerController);
   GetIt.I.registerLazySingleton<WalletsStore>(() => walletStore);
-  viewModel = OwnerViewViewModel(
-    repository: repository,
-    walletsStore: walletStore,
-    audioPlayerHelper: audioPlayerHelper,
-    shareHelper: shareHelper,
-    videoPlayerHelper: videoPlayerHelper,
-  );
+  viewModel = MockOwnerViewViewModel();
   GetIt.I.registerLazySingleton(() => viewModel);
 
-  ///Defines Stub for audio player & video player
-
-  registerStubs(audioPlayerHelper, viewModel, videoPlayerController);
+  registerStubs(viewModel);
 
   testWidgets(
-    "Audio stops while sharing NFT",
+    "Audio should stops when sharing nft",
     (tester) async {
+      when(viewModel.nft).thenAnswer((realInvocation) => viewModel.nft = MOCK_NFT_FREE_AUDIO);
+
       await tester.testAppForWidgetTesting(
         OwnerView(
           nft: MOCK_NFT_FREE_AUDIO,
@@ -66,15 +38,17 @@ void main() {
       final shareNftButton = find.byKey(const Key(kShareNftButtonCollapsedKey));
       await tester.ensureVisible(shareNftButton);
       await tester.pump();
-      viewModel.playAudio();
       await tester.tap(shareNftButton);
+      await tester.pump();
       expect(viewModel.buttonNotifier.value, ButtonState.paused);
     },
   );
 
   testWidgets(
-    "Video stops while sharing NFT",
+    "Video should stops when sharing nft",
     (tester) async {
+      when(viewModel.nft).thenAnswer((realInvocation) => viewModel.nft = MOCK_NFT_FREE_VIDEO);
+
       await tester.testAppForWidgetTesting(
         OwnerView(
           nft: MOCK_NFT_FREE_VIDEO,
@@ -84,37 +58,53 @@ void main() {
       await tester.ensureVisible(shareNftButton);
       await tester.pump(const Duration(seconds: 4));
       await tester.tap(shareNftButton);
+      await tester.pump();
       expect(viewModel.videoPlayerController!.value.isPlaying, false);
     },
   );
 }
 
-void registerStubs(AudioPlayerHelper audioPlayerHelper, OwnerViewViewModel viewModel, MockVideoPlayerController videoPlayerController) {
-  when(audioPlayerHelper.playerStateStream()).thenAnswer((realInvocation) async* {
-    yield PlayerState(true, ProcessingState.ready);
+void registerStubs(OwnerViewViewModel viewModel) {
+  ///Defines Stub for audio player
+  when(viewModel.buttonNotifier).thenAnswer((realInvocation) => ValueNotifier(ButtonState.paused));
+  when(viewModel.audioProgressNotifier).thenAnswer(
+    (realInvocation) => ValueNotifier(
+      ProgressBarState(
+        current: const Duration(
+          seconds: 50,
+        ),
+        buffered: const Duration(
+          seconds: 10,
+        ),
+        total: const Duration(minutes: 2),
+      ),
+    ),
+  );
+  when(viewModel.collapsed).thenAnswer((realInvocation) {
+    return true;
   });
-  when(audioPlayerHelper.pauseAudio()).thenAnswer((realInvocation) async {
+  when(viewModel.pauseAudio()).thenAnswer((realInvocation) async {
     viewModel.buttonNotifier.value = ButtonState.paused;
   });
 
-  when(videoPlayerController.initialize()).thenAnswer(
-    (realInvocation) async {
-      viewModel.videoPlayerController!.value = VideoPlayerValue(
-        duration: const Duration(
-          minutes: 2,
-        ),
-        isPlaying: true,
-      );
-    },
-  );
+  ///Defines Stub for video player
 
-  when(videoPlayerController.pause()).thenAnswer(
-    (realInvocation) async {
-      viewModel.videoPlayerController!.value = VideoPlayerValue(
-        duration: const Duration(
-          minutes: 2,
-        ),
-      );
-    },
-  );
+  when(viewModel.videoPlayerController).thenAnswer((realInvocation) {
+    final VideoPlayerController controller;
+    controller = VideoPlayerController.network(MOCK_URL);
+    controller.value = VideoPlayerValue(
+      duration: const Duration(
+        minutes: 2,
+      ),
+    );
+    return controller;
+  });
+  when(viewModel.collapsed).thenAnswer((realInvocation) => true);
+  when(viewModel.shareNFTLink(size: const Size(10, 10))).thenAnswer((realInvocation) async {
+    viewModel.videoPlayerController!.value = VideoPlayerValue(
+      duration: const Duration(
+        minutes: 2,
+      ),
+    );
+  });
 }
