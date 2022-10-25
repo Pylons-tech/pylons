@@ -50,11 +50,7 @@ extension ConvertFromU on String {
     return '';
   }
   String convertFromUCoin(String amount) {
-    switch (this) {
-      case kPylonDenom:
-        return (double.parse(amount) / kBigIntBase).toString();
-    }
-    return '';
+    return (double.parse(amount) / kBigIntBase).toString();
   }
 }
 
