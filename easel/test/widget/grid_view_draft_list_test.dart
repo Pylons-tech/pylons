@@ -25,7 +25,6 @@ void main() {
               builder: (context, _) {
                 return NftGridViewItem(
                   nft: MOCK_NFT,
-                  collectionType: MOCK_COLLECTION_TYPE,
                 );
               }),
         ),

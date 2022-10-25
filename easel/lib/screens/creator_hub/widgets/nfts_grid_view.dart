@@ -20,9 +20,8 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 import '../../../main.dart';
 
 class NftGridViewItem extends StatelessWidget {
-  const NftGridViewItem({Key? key, required this.nft,required this.collectionType}) : super(key: key);
+  const NftGridViewItem({Key? key, required this.nft,}) : super(key: key);
   final NFT nft;
-  final CollectionType collectionType;
 
   EaselProvider get _easelProvider => GetIt.I.get();
 
@@ -76,13 +75,13 @@ class NftGridViewItem extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(1.h),
-                  color: collectionType == CollectionType.draft ?EaselAppTheme.kLightRed:
+                  color: context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft ?EaselAppTheme.kLightRed:
                   nft.isEnabled && nft.amountMinted < int.parse(nft.quantity)?EaselAppTheme.kBlue:EaselAppTheme.kDarkGreen,
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
                 margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 6.h),
                 child: Text(
-                  collectionType == CollectionType.draft ?"draft".tr():
+                  context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft ?"draft".tr():
                   nft.isEnabled && nft.amountMinted < int.parse(nft.quantity)?"for_sale".tr():"publish".tr(),
                   style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
                 ),

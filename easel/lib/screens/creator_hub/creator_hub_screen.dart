@@ -371,7 +371,7 @@ class BuildGridView extends StatelessWidget {
         ),
         itemBuilder: (context, index) {
           final nft = nftsList[index];
-          return NftGridViewItem(nft: nft, collectionType: collectionType);
+          return NftGridViewItem(nft: nft,);
         });
   }
 }
