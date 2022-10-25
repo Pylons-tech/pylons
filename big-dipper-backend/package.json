@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.19.0",
-    "@braintree/sanitize-url": "^6.0.0",
+    "@braintree/sanitize-url": "^6.0.1",
     "@google-cloud/storage": "^6.5.4",
     "@google/model-viewer": "^2.0.2",
     "@ledgerhq/hw-transport-web-ble": "^6.27.6",

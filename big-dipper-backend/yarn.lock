@@ -110,9 +110,9 @@
     "@babel/helper-validator-identifier" "^7.18.6"
     to-fast-properties "^2.0.0"
 
-"@braintree/sanitize-url@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.npmjs.org/@braintree/sanitize-url/-/sanitize-url-6.0.0.tgz"
+"@braintree/sanitize-url@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-6.0.1.tgz#45ff061b9ded1c6e4474b33b336ebb1b986b825a"
 
 "@emotion/is-prop-valid@^0.7.3":
   version "0.7.3"
