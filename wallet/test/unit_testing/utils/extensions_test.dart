@@ -1,4 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
+import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 
 void main() {
@@ -41,5 +43,19 @@ void main() {
         tradeId.createPurchaseNFT(cookBookId: cookbookId, address: address);
 
     expect(expectedDynamicLink, dynamicLink);
+  });
+
+  test('should convert pylon to usd', () {
+      final String pylonCurrencyName = IBCCoins.upylon.name;
+      const String priceInPylon = "700000000";
+
+      final String expectedValue = (double.parse(priceInPylon) / kBigIntBase).toString();
+
+      expect(expectedValue, pylonCurrencyName.convertFromUCoin(priceInPylon));
+
+      final String expectedPriceInUsd = (double.parse(expectedValue) * pyLonToUsdConstant).toString().truncateAfterDecimal(2);
+
+      expect(expectedPriceInUsd, pylonCurrencyName.convertPylonsToUSD(priceInPylon));
+
   });
 }
