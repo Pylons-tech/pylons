@@ -8,27 +8,19 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
-TextStyle kTransactionHistoryLabelText = TextStyle(
-    fontSize: 20.sp,
-    fontFamily: kUniversalFontFamily,
-    color: Colors.black,
-    fontWeight: FontWeight.w800);
-TextStyle kTransactionHistoryOptionsText = TextStyle(
-    fontSize: 18.sp,
-    fontFamily: kUniversalFontFamily,
-    color: Colors.black,
-    fontWeight: FontWeight.w600);
+TextStyle kTransactionHistoryLabelText = TextStyle(fontSize: 20.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
+TextStyle kTransactionHistoryOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w600);
 
 class TransactionHistoryScreen extends StatefulWidget {
   const TransactionHistoryScreen({Key? key}) : super(key: key);
 
   @override
-  State<TransactionHistoryScreen> createState() =>
-      _TransactionHistoryScreenState();
+  State<TransactionHistoryScreen> createState() => _TransactionHistoryScreenState();
 }
 
 class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
   List<TransactionHistory> transactionsHistoryList = [];
+  Repository get repository => GetIt.I.get();
 
   @override
   void initState() {
@@ -36,24 +28,22 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
 
     final walletInfo = GetIt.I.get<WalletsStore>().getWallets().value.last;
 
-    GetIt.I
-        .get<Repository>()
-        .getTransactionHistory(address: walletInfo.publicAddress)
-        .then((value) {
+    repository.getTransactionHistory(address: walletInfo.publicAddress).then((value) {
       if (value.isRight()) {
         transactionsHistoryList = value.getOrElse(() => []);
-        transactionsHistoryList
-            .sort((a, b) => a.createdAt.compareTo(b.createdAt));
+        transactionsHistoryList.sort((a, b) => a.createdAt.compareTo(b.createdAt));
       }
 
       setState(() {});
     });
+
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.transactionHistory);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.kBackgroundColor,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 25.w),
         child: Column(
@@ -69,9 +59,9 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Icon(
+                  child: Icon(
                     Icons.arrow_back_ios,
-                    color: kUserInputTextColor,
+                    color: AppColors.kUserInputTextColor,
                   )),
             ),
             SizedBox(
@@ -84,9 +74,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
             SizedBox(
               height: 20.h,
             ),
-            Expanded(
-                child: TransactionsListView(
-                    transactionsHistoryList: transactionsHistoryList)),
+            Expanded(child: TransactionsListView(transactionsHistoryList: transactionsHistoryList)),
           ],
         ),
       ),

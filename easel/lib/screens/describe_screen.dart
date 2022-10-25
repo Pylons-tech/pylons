@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/repository/repository.dart';
+import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/custom_widgets/initial_draft_detail_dialog.dart';
 import 'package:easel_flutter/screens/custom_widgets/step_labels.dart';
 import 'package:easel_flutter/screens/custom_widgets/steps_indicator.dart';
@@ -47,6 +48,7 @@ class _DescribeScreenState extends State<DescribeScreen> {
     super.initState();
 
     provider.nft = repository.getCacheDynamicType(key: nftKey);
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.describeScreen);
     String from = "";
     from = context.read<HomeViewModel>().from!;
 
@@ -259,6 +261,7 @@ class _DescribeScreenState extends State<DescribeScreen> {
                       VerticalSpace(10.h),
                       Center(
                         child: InkWell(
+                          key: const Key(kSaveAsDraftDescKey),
                           onTap: () {
                             validateAndUpdateDescription(false);
                           },
@@ -288,6 +291,8 @@ class _DescribeScreenState extends State<DescribeScreen> {
     if ((_artNameFieldError.value.isNotEmpty || _artistNameFieldError.value.isNotEmpty || _descriptionFieldError.value.isNotEmpty)) {
       return;
     }
+    GetIt.I.get<CreatorHubViewModel>().changeSelectedCollection(CollectionType.draft);
+
     context.read<EaselProvider>().updateNftFromDescription(provider.nft.id!);
     context.read<EaselProvider>().saveArtistName(provider.artistNameController.text.trim());
     moveNextPage ? context.read<HomeViewModel>().nextPage() : Navigator.pop(context);

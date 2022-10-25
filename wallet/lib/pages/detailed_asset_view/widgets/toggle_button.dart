@@ -20,8 +20,8 @@ class _ToggleButtonState extends State<ToggleButton> {
         height: 50,
         width: 100,
         color: assetProvider.toggled
-            ? kGreenBackground.withOpacity(.7)
-            : kDarkRed.withOpacity(.7),
+            ? AppColors.kGreenBackground.withOpacity(.7)
+            : AppColors.kDarkRed.withOpacity(.7),
         padding: const EdgeInsets.all(6.0),
         child: assetProvider.toggled
             ? enabledRow(assetProvider)
@@ -42,8 +42,8 @@ class _ToggleButtonState extends State<ToggleButton> {
               alignment: Alignment.center,
               child: Container(
                 height: 10,
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle, color: kButtonBuyNowColor),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle, color: AppColors.kButtonBuyNowColor),
               ),
             ),
           ),
@@ -93,8 +93,8 @@ class _ToggleButtonState extends State<ToggleButton> {
                 alignment: Alignment.center,
                 child: Container(
                   height: 10,
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle, color: kDarkRed),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle, color: AppColors.kDarkRed),
                 ),
               ),
             ),

@@ -332,8 +332,8 @@
   "no_notifications_yet": "Noch keine Benachrichtigungen",
   "submit_feedback": "Feedback senden",
   "subject": "Thema",
-  "character_limit" :"{} Zeichenbegrenzung",
-  "enter_description_text" : "Beschreibung eingeben",
+  "character_limit": "{} Zeichenbegrenzung",
+  "enter_description_text": "Beschreibung eingeben",
   "enter_subject_text": "Betreff eingeben",
   "thank_you_for_feedback": "Danke für deine Rückmeldung.",
   "wallet_address_arg": "Wallet Adresse: {}",
@@ -347,5 +347,9 @@
   "recipe_id": "Rezept ID",
   "exclusive": "Exklusiv",
   "pylons": "Pylons",
-  "vietnamese": "Vietnamesisch"
+  "vietnamese": "Vietnamesisch",
+  "free": "Frei",
+  "claim_free_nft": "Fordern Sie Ihr kostenloses NFT an",
+  "before_too_late": "Bevor es zu spät ist!",
+  "please_try_again_later": "Bitte versuchen Sie es später erneut"
 }

@@ -24,8 +24,8 @@ import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/third_party_services/analytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
@@ -275,6 +275,23 @@ abstract class RemoteDataStore {
   /// Input: [address] the address of the user
   /// Output: [bool] return true if successful
   Future<bool> setUpUserIdentifierInAnalytics({required String address});
+
+  /// This method will log the purchase item in the analytics
+  /// Input: [recipeId] the id of the NFT, [author] the author of the NFT, [purchasePrice] the price of the NFT, [recipeName] the name of the recipe
+  /// Output: [bool] return true if successful
+  Future<bool> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice});
+
+
+  Future<bool> logAddToCart({
+    required String recipeId,
+    required String recipeName,
+    required String author,
+    required double purchasePrice,
+    required String currency,
+  });
+
+
+  Future<void> logUserJourney({required String screenName});
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -1108,6 +1125,35 @@ class RemoteDataStoreImp implements RemoteDataStore {
     await analyticsHelper.setUserId(address: address);
     return true;
   }
+
+  @override
+  Future<bool> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice}) async {
+    await analyticsHelper.logPurchaseItem(recipeId: recipeId, recipeName: recipeName, author: author, purchasePrice: purchasePrice);
+    return true;
+  }
+
+  @override
+  Future<bool> logAddToCart({
+    required String recipeId,
+    required String recipeName,
+    required String author,
+    required double purchasePrice,
+    required String currency,
+  }) async {
+    await analyticsHelper.logAddToCart(
+      recipeId: recipeId,
+      recipeName: recipeName,
+      author: author,
+      purchasePrice: purchasePrice,
+      currency: currency,
+    );
+    return true;
+  }
+  
+  @override
+  Future<void> logUserJourney({required String screenName}) async {
+    await analyticsHelper.logUserJourney(screenName: screenName);
+  }
 }
 
 class AppleInAppPurchaseModel {
@@ -1117,6 +1163,12 @@ class AppleInAppPurchaseModel {
   String creator;
 
   AppleInAppPurchaseModel({required this.productID, required this.purchaseID, required this.receiptData, required this.creator});
+
+  AppleInAppPurchaseModel.fromJson(Map<String, dynamic> json)
+      : productID = json['productId'] as String,
+        purchaseID = json['purchaseId'] as String,
+        receiptData = json['receiptDataBase64'] as String,
+        creator = json['creator'] as String;
 
   Map<String, String> toJson() => {"productId": productID, "purchaseId": purchaseID, "receiptDataBase64": receiptData, "creator": creator};
 }
@@ -1130,7 +1182,16 @@ class GoogleInAppPurchaseModel {
 
   GoogleInAppPurchaseModel({required this.productID, required this.purchaseToken, required this.receiptData, required this.signature, required this.creator});
 
+  GoogleInAppPurchaseModel.fromJson(Map<String, dynamic> json)
+      : productID = json['product_id'] as String,
+        purchaseToken = json['purchase_token'] as String,
+        receiptData = json['receipt_data_base64'] as Map,
+        signature = json['signature'] as String,
+        creator = json['creator'] as String;
+
   Map<String, String> toJson() => {"product_id": productID, "purchase_token": purchaseToken, "receipt_data_base64": getReceiptDataInBase64(), "signature": signature, "creator": creator};
+
+  Map<String, dynamic> toJsonLocalRetry() => {"product_id": productID, "purchase_token": purchaseToken, "receipt_data_base64": receiptData, "signature": signature, "creator": creator};
 
   String getReceiptDataInBase64() {
     return base64Url.encode(utf8.encode(jsonEncode(receiptData)));

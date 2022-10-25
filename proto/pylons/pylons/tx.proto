@@ -164,7 +164,6 @@ message MsgExecuteRecipe {
 
 message MsgExecuteRecipeResponse {
   string id = 1;
-  int64 tx_time =2;
 }
 
 message MsgSetItemString {

@@ -1,5 +1,6 @@
 class RouteUtil {
   RouteUtil();
+
   static String ROUTE_HOME = "/home";
   static String ROUTE_APP_UPDATE = "/app_update";
   static String ROUTE_SETTINGS = "/settings";
@@ -17,6 +18,9 @@ class RouteUtil {
   static String ROUTE_ADD_PYLON = "/add_pylon";
   static String ROUTE_TRANSACTION_DETAIL = "/transaction_detail";
   static String ROUTE_MESSAGE = "/message_screen";
+  static String ROUTE_FAILURE = "/failure_screen";
+  static String ROUTE_LOCAL_TRX_DETAILS = "/local_transaction_details_screen";
   static String ROUTE_PDF_FULL_SCREEN = "/pdf_full_screen";
   static String ROUTE_OWNER_VIEW = "/owner_view";
+  static String ROUTE_PURCHASE_VIEW = "/purchase_view";
 }

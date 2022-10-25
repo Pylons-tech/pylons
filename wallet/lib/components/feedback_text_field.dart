@@ -35,7 +35,7 @@ class FeedBackTextField extends StatelessWidget {
         Text(
           label,
           textAlign: TextAlign.start,
-          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: kBlack),
+          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: AppColors.kBlack),
         ),
         SizedBox(height: 4.h),
         Stack(
@@ -68,7 +68,7 @@ class FeedBackTextField extends StatelessWidget {
       height: isOneLine() ? 40.h : 120.h,
       child: Align(
         child: TextFormField(
-          style: TextStyle(fontSize: isOneLine() ? 18.sp : 15.sp, fontWeight: FontWeight.w400, color: kTextBlackColor),
+          style: TextStyle(fontSize: isOneLine() ? 18.sp : 15.sp, fontWeight: FontWeight.w400, color: AppColors.kTextBlackColor),
           controller: controller,
           validator: validator,
           minLines: noOfLines,
@@ -78,7 +78,7 @@ class FeedBackTextField extends StatelessWidget {
           inputFormatters: inputFormatters,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, color: kUserInputTextColor),
+            hintStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, color: AppColors.kUserInputTextColor),
             border: const OutlineInputBorder(borderSide: BorderSide.none),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),
@@ -93,7 +93,7 @@ class FeedBackTextField extends StatelessWidget {
       height: isOneLine() ? 32.h : 110.h,
       child: Align(
         child: TextFormField(
-          style: TextStyle(fontSize: isOneLine() ? 16.sp : 14.sp, fontWeight: FontWeight.w400, color: kTextBlackColor),
+          style: TextStyle(fontSize: isOneLine() ? 16.sp : 14.sp, fontWeight: FontWeight.w400, color: AppColors.kTextBlackColor),
           controller: controller,
           validator: validator,
           minLines: noOfLines,
@@ -103,7 +103,7 @@ class FeedBackTextField extends StatelessWidget {
           inputFormatters: inputFormatters,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(fontSize: isOneLine() ? 16.sp : 14.sp, color: kUserInputTextColor),
+            hintStyle: TextStyle(fontSize: isOneLine() ? 16.sp : 14.sp, color: AppColors.kUserInputTextColor),
             border: const OutlineInputBorder(borderSide: BorderSide.none),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),

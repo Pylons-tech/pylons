@@ -7,6 +7,7 @@ import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart' as clipper;
 import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart';
+import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/enums.dart';
@@ -21,6 +22,7 @@ import 'package:easel_flutter/widgets/clipped_button.dart';
 import 'package:easel_flutter/widgets/image_widget.dart';
 import 'package:easel_flutter/widgets/model_viewer.dart';
 import 'package:easel_flutter/widgets/pdf_viewer.dart';
+import 'package:easel_flutter/widgets/publish_button.dart';
 import 'package:easel_flutter/widgets/video_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +54,7 @@ class _PublishScreenState extends State<PublishScreen> {
   initState() {
     easelProvider.nft = repository.getCacheDynamicType(key: nftKey);
     easelProvider.collapsed = false;
+    easelProvider.setLog(screenName: AnalyticsScreenEvents.publishScreen);
     super.initState();
   }
 
@@ -201,9 +204,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    SizedBox(height: 20.h),
                     ProgressBarBuilder(
                       audioProgressBar: (context) {
                         return SizedBox(
@@ -212,9 +213,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(
-                                    right: 8.w,
-                                  ),
+                                  padding: EdgeInsets.fromLTRB(0, 0, 10.w, 10.h),
                                   child: ValueListenableBuilder<ButtonState>(
                                     valueListenable: viewModel.buttonNotifier,
                                     builder: (_, value, __) {
@@ -253,12 +252,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                     valueListenable: viewModel.audioProgressNotifier,
                                     builder: (_, value, __) {
                                       return Padding(
-                                        padding: EdgeInsets.only(bottom: 3.h, right: 20.w),
+                                        padding: EdgeInsets.only(right: 10.w, bottom: 3.h, top: 0, left: 5.w),
                                         child: ProgressBar(
                                           progressBarColor: EaselAppTheme.kWhite,
                                           thumbColor: EaselAppTheme.kWhite,
                                           progress: value.current,
-                                          baseBarColor: EaselAppTheme.kBlack,
+                                          baseBarColor: EaselAppTheme.kDarkGrey02,
                                           bufferedBarColor: EaselAppTheme.kLightGrey,
                                           buffered: value.buffered,
                                           total: value.total,
@@ -366,11 +365,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               type: widget.nft.assetType,
                             ),
                             SizedBox(height: 40.h),
-                            ClippedButton(
-                              title: "publish".tr(),
-                              bgColor: EaselAppTheme.kLightRed,
-                              textColor: EaselAppTheme.kWhite,
-                              onPressed: () async {
+                            PublishButton(
+                              onPress: () async {
                                 final navigator = Navigator.of(context);
                                 if (viewModel.nft.assetType == kAudioText) {
                                   viewModel.disposeAudioController();
@@ -379,21 +375,22 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 if (!isRecipeCreated) {
                                   return;
                                 }
-                                navigator.pushNamedAndRemoveUntil(RouteUtil.kRouteCreatorHub, (route) => false);
+                                GetIt.I.get<CreatorHubViewModel>().changeSelectedCollection(CollectionType.published);
+                                navigator.popUntil((route) {
+                                  return route.settings.name == RouteUtil.kRouteCreatorHub;
+                                });
                               },
-                              cuttingHeight: 15.h,
-                              clipperType: ClipperType.bottomLeftTopRight,
-                              isShadow: false,
-                              fontWeight: FontWeight.w700,
                             ),
                             SizedBox(
                               height: 10.h,
                             ),
                             ClippedButton(
+                              key: const Key(kSaveAsDraftPublishKey),
                               title: "save_as_draft".tr(),
                               bgColor: Colors.white.withOpacity(0.2),
                               textColor: EaselAppTheme.kWhite,
                               onPressed: () async {
+                                GetIt.I.get<CreatorHubViewModel>().changeSelectedCollection(CollectionType.draft);
                                 Navigator.of(context).popUntil(ModalRoute.withName(RouteUtil.kRouteCreatorHub));
                               },
                               cuttingHeight: 15.h,
@@ -468,7 +465,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   child: SvgPicture.asset(
-                    kOwnerVerifiedIcon,
+                    SVGUtils.kOwnerVerifiedIcon,
                     height: 15.h,
                   ),
                 ),
@@ -518,7 +515,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           child: Icon(
                             Icons.pause,
                             color: EaselAppTheme.kWhite,
-                            size: 25.h,
+                            size: 30.h,
                           ),
                         );
                     }
@@ -535,7 +532,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         progressBarColor: EaselAppTheme.kWhite,
                         thumbColor: EaselAppTheme.kWhite,
                         progress: value.current,
-                        baseBarColor: EaselAppTheme.kBlack,
+                        baseBarColor: EaselAppTheme.kDarkGrey02,
                         bufferedBarColor: EaselAppTheme.kLightGrey,
                         buffered: value.buffered,
                         total: value.total,

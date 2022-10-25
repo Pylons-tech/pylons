@@ -21,9 +21,7 @@ class AudioWidget extends StatefulWidget {
   final String? filePath;
   final bool previewFlag;
 
-  const AudioWidget(
-      {Key? key, this.file, required this.previewFlag, this.filePath})
-      : super(key: key);
+  const AudioWidget({Key? key, this.file, required this.previewFlag, this.filePath}) : super(key: key);
 
   @override
   AudioWidgetState createState() => AudioWidgetState();
@@ -47,24 +45,14 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
     }
   }
 
-  BoxDecoration getAudioBackgroundDecoration(
-      {required EaselProvider viewModel}) {
+  BoxDecoration getAudioBackgroundDecoration({required EaselProvider viewModel}) {
     if (widget.previewFlag && viewModel.audioThumbnail == null) {
       return const BoxDecoration();
     }
     if (widget.previewFlag && viewModel.audioThumbnail != null) {
-      return BoxDecoration(
-          image: DecorationImage(
-              image: FileImage(viewModel.audioThumbnail!),
-              fit: BoxFit.fitHeight));
+      return BoxDecoration(image: DecorationImage(image: FileImage(viewModel.audioThumbnail!), fit: BoxFit.fitHeight));
     }
-    return BoxDecoration(
-        image: viewModel.nft.thumbnailUrl.isNotEmpty
-            ? DecorationImage(
-                image: CachedNetworkImageProvider(
-                    viewModel.nft.thumbnailUrl.changeDomain()),
-                fit: BoxFit.fitHeight)
-            : null);
+    return BoxDecoration(image: viewModel.nft.thumbnailUrl.isNotEmpty ? DecorationImage(image: CachedNetworkImageProvider(viewModel.nft.thumbnailUrl.changeDomain()), fit: BoxFit.fitHeight) : null);
   }
 
   @override
@@ -98,27 +86,17 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(
-                                      right: 10.w,
-                                      bottom: 10.h,
-                                      top: 10.h,
-                                      left: 5.w),
+                                  padding: EdgeInsets.only(right: 10.w, bottom: 10.h, top: 10.h, left: 5.w),
                                   child: ValueListenableBuilder<ButtonState>(
                                     valueListenable: viewModel.buttonNotifier,
                                     builder: (_, value, __) {
                                       switch (value) {
                                         case ButtonState.loading:
-                                          return SizedBox(
-                                              height: 22.h,
-                                              width: 22.h,
-                                              child: CircularProgressIndicator(
-                                                  strokeWidth: 2.w,
-                                                  color: Colors.black));
+                                          return SizedBox(height: 22.h, width: 22.h, child: CircularProgressIndicator(strokeWidth: 2.w, color: Colors.black));
                                         case ButtonState.paused:
                                           return InkWell(
                                             onTap: () {
-                                              viewModel.playAudio(
-                                                  widget.file != null);
+                                              viewModel.playAudio(widget.file != null);
                                             },
                                             child: Icon(
                                               Icons.play_arrow,
@@ -130,8 +108,7 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
                                         case ButtonState.playing:
                                           return InkWell(
                                             onTap: () {
-                                              viewModel.pauseAudio(
-                                                  widget.file != null);
+                                              viewModel.pauseAudio(widget.file != null);
                                             },
                                             child: Icon(
                                               Icons.pause,
@@ -144,33 +121,24 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
                                   ),
                                 ),
                                 Expanded(
-                                  child:
-                                      ValueListenableBuilder<ProgressBarState>(
-                                    valueListenable:
-                                        viewModel.audioProgressNotifier,
+                                  child: ValueListenableBuilder<ProgressBarState>(
+                                    valueListenable: viewModel.audioProgressNotifier,
                                     builder: (_, value, __) {
                                       return Padding(
-                                        padding: EdgeInsets.only(
-                                            bottom: 3.h, right: 20.w),
+                                        padding: EdgeInsets.only(bottom: 3.h, right: 20.w),
                                         child: ProgressBar(
-                                          progressBarColor:
-                                              EaselAppTheme.kDarkBlue,
+                                          progressBarColor: EaselAppTheme.kDarkBlue,
                                           thumbColor: EaselAppTheme.kDarkBlue,
                                           progress: value.current,
-                                          baseBarColor: EaselAppTheme.kBlack,
-                                          bufferedBarColor:
-                                              EaselAppTheme.kLightGrey,
+                                          baseBarColor: EaselAppTheme.kGrey,
+                                          bufferedBarColor: EaselAppTheme.kLightGrey,
                                           buffered: value.buffered,
                                           total: value.total,
-                                          timeLabelTextStyle: TextStyle(
-                                              color: EaselAppTheme.kDartGrey,
-                                              fontWeight: FontWeight.w800,
-                                              fontSize: 9.sp),
+                                          timeLabelTextStyle: TextStyle(color: EaselAppTheme.kGrey, fontWeight: FontWeight.w800, fontSize: 9.sp),
                                           thumbRadius: 10.h,
                                           timeLabelPadding: 3.h,
                                           onSeek: (position) {
-                                            viewModel.seekAudio(
-                                                position, widget.file != null);
+                                            viewModel.seekAudio(position, widget.file != null);
                                           },
                                         ),
                                       );
@@ -184,9 +152,7 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
                   SizedBox(
                     height: 40.0.h,
                   ),
-                  shouldShowThumbnailButtonOrStepsOrNot()
-                      ? _buildThumbnailButton()
-                      : const SizedBox(),
+                  shouldShowThumbnailButtonOrStepsOrNot() ? _buildThumbnailButton() : const SizedBox(),
                 ],
               ),
             ),
@@ -226,8 +192,7 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
   void audioThumbnailPicker() async {
     easelProvider.pauseAudio(true);
     final pickedFile = await repository.pickFile(NftFormat.supportedFormats[0]);
-    final result = pickedFile.getOrElse(
-        () => PickedFileModel(path: "", fileName: "", extension: ""));
+    final result = pickedFile.getOrElse(() => PickedFileModel(path: "", fileName: "", extension: ""));
     if (result.path.isEmpty) {
       return;
     }

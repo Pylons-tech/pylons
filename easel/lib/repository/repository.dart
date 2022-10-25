@@ -158,6 +158,8 @@ abstract class Repository {
   /// This method will get the on boarding status
   /// Output: [bool] returns whether the operation is successful or not
   bool getOnBoardingComplete();
+
+  Future<Either<Failure, bool>> logUserJourney({required String screenName});
 }
 
 class RepositoryImp implements Repository {
@@ -405,185 +407,13 @@ class RepositoryImp implements Repository {
   bool getOnBoardingComplete() {
     return localDataSource.getOnBoardingComplete();
   }
-}
-
-class MockRepositoryImp implements Repository {
-  @override
-  Future<String> autoGenerateCookbookId() {
-    // TODO: implement autoGenerateCookbookId
-    throw UnimplementedError();
-  }
 
   @override
-  String autoGenerateEaselId() {
-    // TODO: implement autoGenerateEaselId
-    throw UnimplementedError();
-  }
-
-  @override
-  deleteCacheDynamic({required String key}) {
-    // TODO: implement deleteCacheDynamic
-    throw UnimplementedError();
-  }
-
-  @override
-  String deleteCacheString({required String key}) {
-    // TODO: implement deleteCacheString
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, bool>> deleteNft(int id) {
-    // TODO: implement deleteNft
-    throw UnimplementedError();
-  }
-
-  @override
-  String generateEaselLinkForShare({required String recipeId, required String cookbookId}) {
-    // TODO: implement generateEaselLinkForShare
-    throw UnimplementedError();
-  }
-
-  @override
-  String getArtistName() {
-    // TODO: implement getArtistName
-    throw UnimplementedError();
-  }
-
-  @override
-  getCacheDynamicType({required String key}) {
-    // TODO: implement getCacheDynamicType
-    throw UnimplementedError();
-  }
-
-  @override
-  String getCacheString({required String key}) {
-    // TODO: implement getCacheString
-    throw UnimplementedError();
-  }
-
-  @override
-  String getCookBookGeneratorUsername() {
-    // TODO: implement getCookBookGeneratorUsername
-    throw UnimplementedError();
-  }
-
-  @override
-  String? getCookbookId() {
-    // TODO: implement getCookbookId
-    throw UnimplementedError();
-  }
-
-  @override
-  String getExtension(String fileName) {
-    // TODO: implement getExtension
-    throw UnimplementedError();
-  }
-
-  @override
-  double getFileSizeInGB(int fileLength) {
-    // TODO: implement getFileSizeInGB
-    throw UnimplementedError();
-  }
-
-  @override
-  String getFileSizeString({required int fileLength, int precision = 2}) {
-    // TODO: implement getFileSizeString
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, NFT>> getNft(int id) {
-    // TODO: implement getNft
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, List<NFT>>> getNfts() {
-    // TODO: implement getNfts
-    throw UnimplementedError();
-  }
-
-  @override
-  bool getOnBoardingComplete() {
-    // TODO: implement getOnBoardingComplete
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId}) {
-    // TODO: implement getRecipesBasedOnCookBookId
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, void>> launchMyUrl({required String url}) {
-    // TODO: implement launchMyUrl
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, PickedFileModel>> pickFile(NftFormat format) {
-    // TODO: implement pickFile
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<bool> saveArtistName(String name) {
-    // TODO: implement saveArtistName
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<bool> saveCookBookGeneratorUsername(String username) {
-    // TODO: implement saveCookBookGeneratorUsername
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, int>> saveNft(NFT nft) {
-    // TODO: implement saveNft
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<bool> saveOnBoardingComplete() {
-    // TODO: implement saveOnBoardingComplete
-    throw UnimplementedError();
-  }
-
-  @override
-  bool setCacheDynamicType({required String key, required value}) {
-    // TODO: implement setCacheDynamicType
-    throw UnimplementedError();
-  }
-
-  @override
-  void setCacheString({required String key, required String value}) {
-    // TODO: implement setCacheString
-  }
-
-  @override
-  Future<Either<Failure, bool>> updateNFTDialogShown({required int id}) {
-    // TODO: implement updateNFTDialogShown
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, bool>> updateNftFromDescription({required SaveNft saveNft}) {
-    // TODO: implement updateNftFromDescription
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, bool>> updateNftFromPrice({required SaveNft saveNft}) {
-    // TODO: implement updateNftFromPrice
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, ApiResponse>> uploadFile({required File file, required OnUploadProgressCallback onUploadProgressCallback}) {
-    // TODO: implement uploadFile
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> logUserJourney({required String screenName}) async {
+    try {
+      return Right(await remoteDataSource.logUserJourney(screenName: screenName));
+    } catch (e) {
+      return Left(AnalyticsFailure(message: "analytics_failure".tr()));
+    }
   }
 }

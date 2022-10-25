@@ -79,4 +79,9 @@ class GeneralScreenLocalizationViewModel extends ChangeNotifier {
 
     return name;
   }
+
+
+  void logScreenEvent(){
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.settings);
+  }
 }
