@@ -37,11 +37,7 @@ extension ConvertToUSD on String {
     return '';
   }
   String convertPylonsToUSD(String amount) {
-    switch (this) {
-      case kPylonDenom:
-        return (double.parse(convertFromUCoin(amount)) * pyLonToUsdConstant).toString().truncateAfterDecimal(2);
-    }
-    return '';
+    return (double.parse(convertFromUCoin(amount)) * pyLonToUsdConstant).toString().truncateAfterDecimal(2);
   }
 }
 

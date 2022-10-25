@@ -29,7 +29,7 @@ import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-TextStyle _titleTextStyle = TextStyle(color: Colors.white, fontSize: 30.sp, fontWeight: FontWeight.w700);
+TextStyle _titleTextStyle = TextStyle(color: Colors.white, fontSize: 25.sp, fontWeight: FontWeight.w700);
 TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15.sp);
 
 class PayNowDialog {
@@ -142,12 +142,11 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                 SizedBox(
                   height: 3.h,
                 ),
-                if (widget.nft.owner.isNotEmpty)
-                  buildRow(
-                    subtitle: widget.nft.owner,
-                    subtitleTextColor: AppColors.kTradeReceiptTextColor,
-                    title: "sold_by".tr(),
-                  ),
+                buildRow(
+                  subtitle: widget.nft.owner,
+                  subtitleTextColor: AppColors.kTradeReceiptTextColor,
+                  title: "sold_by".tr(),
+                ),
                 SizedBox(
                   height: 30.h,
                 ),
