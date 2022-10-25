@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
-import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 
 void main() {
@@ -49,11 +48,11 @@ void main() {
       final String pylonCurrencyName = IBCCoins.upylon.name;
       const String priceInPylon = "700000000";
 
-      final String expectedValue = (double.parse(priceInPylon) / kBigIntBase).toString();
+      const String expectedValue = "700.0";
 
       expect(expectedValue, pylonCurrencyName.convertFromUCoin(priceInPylon));
 
-      final String expectedPriceInUsd = (double.parse(expectedValue) * pyLonToUsdConstant).toString().truncateAfterDecimal(2);
+      const String expectedPriceInUsd = "7.0";
 
       expect(expectedPriceInUsd, pylonCurrencyName.convertPylonsToUSD(priceInPylon));
 
