@@ -45,7 +45,7 @@ Two files `draft_metadata.json` `draft_proposal.json` will be generated.
 
 Upload the `draft_metadata.json` on IPFS, copy the CID value and replace it in the metadata field in `draft_proposal.json`.
 
-![IPFS](/docs/static/ipfs.png)
+![IPFS](./ipfs.png)
 
 ```
 {
