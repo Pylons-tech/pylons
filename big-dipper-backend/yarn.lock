@@ -224,9 +224,9 @@
   version "3.0.0"
   resolved "https://registry.npmjs.org/@google-cloud/promisify/-/promisify-3.0.0.tgz"
 
-"@google-cloud/storage@^6.1.0", "@google-cloud/storage@^6.5.4":
-  version "6.5.4"
-  resolved "https://registry.yarnpkg.com/@google-cloud/storage/-/storage-6.5.4.tgz#c43742ac12787df39c07725f131f199bb80e0b58"
+"@google-cloud/storage@^6.1.0", "@google-cloud/storage@^6.6.0":
+  version "6.6.0"
+  resolved "https://registry.yarnpkg.com/@google-cloud/storage/-/storage-6.6.0.tgz#01f64bf706acc98dc2787e490afe878ad9f64250"
   dependencies:
     "@google-cloud/paginator" "^3.0.7"
     "@google-cloud/projectify" "^3.0.0"
