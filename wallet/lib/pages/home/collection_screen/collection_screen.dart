@@ -248,7 +248,7 @@ class PurchasesCollection extends StatelessWidget {
             Expanded(
               child: GridView.custom(
                 padding: EdgeInsets.only(
-                  bottom: 16.w,
+                  bottom: 16.h,
                   left: 16.w,
                   right: 16.w,
                 ),
@@ -418,7 +418,7 @@ class CreationsCollection extends StatelessWidget {
                 child: viewModel.creations.isNotEmpty
                     ? GridView.custom(
                         padding: EdgeInsets.only(
-                          bottom: 16.w,
+                          bottom: 16.h,
                           left: 16.w,
                           right: 16.w,
                         ),
