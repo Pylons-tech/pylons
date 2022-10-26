@@ -19,6 +19,8 @@ import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
+import '../../../../generated/locale_keys.g.dart';
+
 TextStyle _titleTextStyle = TextStyle(color: AppColors.kBlack, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.bold, fontSize: 20.sp);
 
 class TransactionDetailsScreen extends StatefulWidget {
@@ -149,14 +151,14 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
 
   Map<String, String> transactionDetailBodyMap({required TxDetailArguments txArgs}) {
     return {
-      "nft_title".tr(): txArgs.recipe.name,
-      "creator".tr(): txArgs.creator,
-      "seller".tr(): txArgs.seller,
-      "buyer".tr(): txArgs.buyer,
-      "txId".tr(): txArgs.txID,
-      "transaction_time".tr(): txArgs.transactionTime,
-      "currency".tr(): txArgs.currency,
-      "price".tr(): txArgs.price,
+      LocaleKeys.nft_title.tr(): txArgs.recipe.name,
+      LocaleKeys.creator.tr(): txArgs.creator,
+      LocaleKeys.seller.tr(): txArgs.seller,
+      LocaleKeys.buyer.tr(): txArgs.buyer,
+      LocaleKeys.txId.tr(): txArgs.txID,
+      LocaleKeys.transaction_time.tr(): txArgs.transactionTime,
+      LocaleKeys.currency.tr(): txArgs.currency,
+      LocaleKeys.price.tr(): txArgs.price,
     };
   }
 
@@ -172,7 +174,7 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
   }
 
   Color getColor(String key) {
-    if (key == "creator".tr() || key == "seller".tr() || key == "buyer".tr()) {
+    if (key == LocaleKeys.creator.tr() || key == LocaleKeys.seller.tr() || key == LocaleKeys.buyer.tr()) {
       return AppColors.kTradeReceiptTextColor;
     }
     return AppColors.kBlack;
@@ -217,7 +219,7 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                           size: 25.r,
                         )),
                     Text(
-                      'details'.tr(),
+                      LocaleKeys.details.tr(),
                       style: _titleTextStyle,
                     ),
                     SizedBox(
@@ -243,7 +245,7 @@ class _TransactionDetailsScreenState extends State<TransactionDetailsScreen> {
                   GetIt.I.get<HomeProvider>().changeTabs(0);
                   Navigator.pop(context);
                 },
-                text: "view_in_collection".tr(),
+                text: LocaleKeys.view_in_collection.tr(),
               ),
             ),
           ],

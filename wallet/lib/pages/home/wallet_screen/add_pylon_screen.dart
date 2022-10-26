@@ -11,6 +11,8 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 TextStyle kPylonLabelText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: AppColors.kTextBlackColor, fontWeight: FontWeight.w800);
 TextStyle kTitleText = TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlack, fontWeight: FontWeight.w700);
 TextStyle kSubTitleText = TextStyle(fontSize: 13.sp, fontFamily: kUniversalFontFamily, color: AppColors.kPriceTagColor, fontWeight: FontWeight.w700);
@@ -48,7 +50,7 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
             Align(
               alignment: Alignment.topCenter,
               child: Text(
-                "add_pylons".tr(),
+                LocaleKeys.add_pylons.tr(),
                 style: kPylonLabelText,
               ),
             ),
@@ -133,7 +135,7 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
               width: 100.w,
               child: Center(
                   child: Text(
-                "buy".tr(),
+                LocaleKeys.buy.tr(),
                 style: kTitleText.copyWith(color: AppColors.kWhite),
                 textAlign: TextAlign.center,
               )),

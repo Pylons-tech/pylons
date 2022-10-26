@@ -75,33 +75,34 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => GetIt.I.get<EaselProvider>()),
       ],
       child: ScreenUtilInit(
-          minTextAdapt: true,
-          builder: (BuildContext context, child) => MaterialApp(
-                builder: (context, widget) {
-                  ScreenUtil.init(context);
-                  return MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                    child: widget!,
-                  );
-                },
-                localizationsDelegates: context.localizationDelegates,
-                supportedLocales: context.supportedLocales,
-                locale: context.locale,
-                title: 'Easel',
-                navigatorKey: navigatorKey,
-                theme: EaselAppTheme.theme(context),
-                initialRoute: '/',
-                routes: {
-                  '/': (context) => const SplashScreen(),
-                  RouteUtil.kRouteTutorial: (context) => const TutorialScreen(),
-                  RouteUtil.kRouteCreatorHub: (context) => const CreatorHubScreen(),
-                  RouteUtil.kRoutePreviewNFTFullScreen: (context) => const PreviewNFTFullScreen(),
-                  RouteUtil.kRouteHome: (context) => const HomeScreen(),
-                  RouteUtil.kVideoFullScreen: (context) => const VideoWidgetFullScreen(),
-                  RouteUtil.kPdfFullScreen: (context) => const PdfViewerFullScreen(),
-                  RouteUtil.kRouteWelcomeEasel: (context) => const WelcomeEasel(),
-                },
-              )),
+        minTextAdapt: true,
+        builder: (BuildContext context, child) => MaterialApp(
+          builder: (context, widget) {
+            ScreenUtil.init(context);
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: widget!,
+            );
+          },
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+          title: 'Easel',
+          navigatorKey: navigatorKey,
+          theme: EaselAppTheme.theme(context),
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const SplashScreen(),
+            RouteUtil.kRouteTutorial: (context) => const TutorialScreen(),
+            RouteUtil.kRouteCreatorHub: (context) => const CreatorHubScreen(),
+            RouteUtil.kRoutePreviewNFTFullScreen: (context) => const PreviewNFTFullScreen(),
+            RouteUtil.kRouteHome: (context) => const HomeScreen(),
+            RouteUtil.kVideoFullScreen: (context) => const VideoWidgetFullScreen(),
+            RouteUtil.kPdfFullScreen: (context) => const PdfViewerFullScreen(),
+            RouteUtil.kRouteWelcomeEasel: (context) => const WelcomeEasel(),
+          },
+        ),
+      ),
     );
   }
 }

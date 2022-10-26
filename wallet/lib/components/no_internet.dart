@@ -10,6 +10,8 @@ import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../generated/locale_keys.g.dart';
+
 class NoInternetDialog {
   bool _isShowing = false;
 
@@ -75,7 +77,7 @@ class NoInternetDialog {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: "no_internet_connection".tr(),
+                        text: LocaleKeys.no_internet_connection.tr(),
                         style: Theme.of(navigatorKey.currentState!.context).textTheme.bodyText2!.copyWith(
                               color: Colors.white,
                               fontSize: 12.sp,
@@ -104,7 +106,7 @@ class NoInternetDialog {
                     height: 0.09.sw,
                     child: Center(
                       child: Text(
-                        "cancel".tr(),
+                        LocaleKeys.cancel.tr(),
                         style: Theme.of(navigatorKey.currentState!.context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: AppColors.kWhite, fontWeight: FontWeight.w300),
                       ),
                     ),

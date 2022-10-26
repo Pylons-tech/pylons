@@ -75,7 +75,7 @@
   "congratulations": "Xin chúc mừng!",
   "successfully_bought_the_item": "Mua hàng thành công",
   "product_name": "tên sản phẩm",
-  "continue": "Tiếp tục",
+  "_continue": "Tiếp tục",
   "wallet_creation": "Tạo Ví",
   "create_new_wallet": "Tạo Ví mới",
   "proceed": "Tiếp tục",
@@ -274,7 +274,7 @@
   "trade_not_found": "Giao dịch không tìm thấy",
   "pylon_username": "Tên người dùng Pylons",
   "get_started": "Bắt đầu",
-  "default": "Mặc định",
+  "_default": "Mặc định",
   "recovery_migration": "Di chuyển tài khoản",
   "no_biometric": "Thiết bị của bạn không hỗ trợ sinh trắc học.",
   "collapse": " Sụp đổ",
@@ -353,5 +353,9 @@
   "before_too_late": "Trước khi quá muộn!",
   "please_try_again_later": "Vui lòng thử lại sau",
   "checkout": "Thủ tục thanh toán",
-  "artist": "Họa sĩ"
+  "artist": "Họa sĩ",
+  "buying_pylon_points": "Đã mua điểm giá treo",
+  "transaction_date": "Ngày Giao dịch",
+  "retry": "Thử lại",
+  "bought_nft": "Đã mua"
 }

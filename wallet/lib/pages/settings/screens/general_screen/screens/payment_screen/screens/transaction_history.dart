@@ -8,6 +8,8 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
+import '../../../../../../../generated/locale_keys.g.dart';
+
 TextStyle kTransactionHistoryLabelText = TextStyle(fontSize: 20.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
 TextStyle kTransactionHistoryOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w600);
 
@@ -68,7 +70,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
               height: 25.h,
             ),
             Text(
-              "transaction_history".tr(),
+              LocaleKeys.transaction_history.tr(),
               style: kTransactionHistoryLabelText.copyWith(fontSize: 20.sp),
             ),
             SizedBox(
