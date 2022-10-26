@@ -92,7 +92,7 @@ dependencies:
   uuid: ^3.0.6
   fixnum: ^1.0.0
   intl: ^0.17.0
-  flutter_stripe: ^5.1.0
+  flutter_stripe: ^6.0.0
   webview_flutter: ^3.0.4
   flutter_svg: ^1.0.3
   sprintf: ^7.0.0
