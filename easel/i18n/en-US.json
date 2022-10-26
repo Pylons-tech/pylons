@@ -5,7 +5,6 @@
   "publish_total": "Published ({})",
   "draft_total": "Draft ({})",
   "draft": "Draft",
-  "publish": "Publish",
   "delete": "Delete",
   "view": "View On IPFS",
   "delete_error": "Failed to delete draft",

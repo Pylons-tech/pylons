@@ -28,83 +28,108 @@ class NFTsListTile extends StatelessWidget {
     bottomSheet.show();
   }
 
+  Widget getPublishedCard({required BuildContext context}) {
+    return Container(
+        decoration: BoxDecoration(color: EaselAppTheme.kWhite, boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            offset: const Offset(0.0, 1.0),
+            blurRadius: 4.0,
+          ),
+        ]),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+          child: Row(
+            children: [
+              SizedBox(
+                  height: 45.h,
+                  width: 45.h,
+                  child: NftTypeBuilder(
+                    onImage: (context) => buildCachedNetworkImage(publishedNFT.url.changeDomain()),
+                    onVideo: (context) => buildCachedNetworkImage(publishedNFT.thumbnailUrl.changeDomain()),
+                    onPdf: (context) => buildCachedNetworkImage(publishedNFT.thumbnailUrl.changeDomain()),
+                    onAudio: (context) => buildCachedNetworkImage(publishedNFT.thumbnailUrl.changeDomain()),
+                    on3D: (context) => ModelViewer(
+                      src: publishedNFT.url.changeDomain(),
+                      backgroundColor: EaselAppTheme.kWhite,
+                      ar: false,
+                      autoRotate: false,
+                      cameraControls: false,
+                    ),
+                    assetType: publishedNFT.assetType.toAssetTypeEnum(),
+                  )),
+              SizedBox(
+                width: 10.w,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      publishedNFT.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: EaselAppTheme.titleStyle.copyWith(fontSize: isTablet ? 13.sp : 18.sp),
+                    ),
+                    SizedBox(
+                      height: 6.h,
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(1.h),
+                        color: EaselAppTheme.kDarkGreen,
+                      ),
+                      child: Text(
+                        "published".tr(),
+                        style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 10.w,
+              ),
+              InkWell(
+                onTap: () => buildBottomSheet(context: context),
+                child: Padding(
+                  padding: EdgeInsets.all(4.0.w),
+                  child: SvgPicture.asset(SVGUtils.kSvgMoreOption),
+                ),
+              ),
+              SizedBox(
+                width: 10.w,
+              ),
+            ],
+          ),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
-            margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 3.w),
-            decoration: BoxDecoration(color: EaselAppTheme.kWhite, boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                offset: const Offset(0.0, 1.0),
-                blurRadius: 4.0,
-              ),
-            ]),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-              child: Row(
-                children: [
-                  SizedBox(
-                      height: 45.h,
-                      width: 45.h,
-                      child: NftTypeBuilder(
-                        onImage: (context) => buildCachedNetworkImage(publishedNFT.url.changeDomain()),
-                        onVideo: (context) => buildCachedNetworkImage(publishedNFT.thumbnailUrl.changeDomain()),
-                        onPdf: (context) => buildCachedNetworkImage(publishedNFT.thumbnailUrl.changeDomain()),
-                        onAudio: (context) => buildCachedNetworkImage(publishedNFT.thumbnailUrl.changeDomain()),
-                        on3D: (context) => ModelViewer(
-                          src: publishedNFT.url.changeDomain(),
-                          backgroundColor: EaselAppTheme.kWhite,
-                          ar: false,
-                          autoRotate: false,
-                          cameraControls: false,
-                        ),
-                        assetType: publishedNFT.assetType.toAssetTypeEnum(),
-                      )),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          publishedNFT.name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: EaselAppTheme.titleStyle.copyWith(fontSize: isTablet ? 13.sp : 18.sp),
-                        ),
-                        SizedBox(
-                          height: 6.h,
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(3.h),
-                            color: (publishedNFT.isEnabled && publishedNFT.amountMinted < int.parse(publishedNFT.quantity))?EaselAppTheme.kBlue:EaselAppTheme.kDarkGreen,
-                          ),
-                          child: Text(
-                            (publishedNFT.isEnabled && publishedNFT.amountMinted < int.parse(publishedNFT.quantity))?"for_sale".tr():"publish".tr(),
-                            style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
-                          ),
-                        )
-                      ],
+        (publishedNFT.price.isNotEmpty && publishedNFT.price != "0")
+            ? Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Card(
+                  elevation: 5,
+                  margin: EdgeInsets.zero,
+                  child: ClipRRect(
+                    child: Banner(
+                      color: EaselAppTheme.kDarkGreen,
+                      location: BannerLocation.topEnd,
+                      message: "\$ ${publishedNFT.price}",
+                      child: getPublishedCard(context: context),
                     ),
                   ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  InkWell(
-                    onTap: () => buildBottomSheet(context: context),
-                    child: Padding(
-                      padding: EdgeInsets.all(4.0.w),
-                      child: SvgPicture.asset(SVGUtils.kSvgMoreOption),
-                    ),
-                  )
-                ],
+                ),
+              )
+            : Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: getPublishedCard(context: context),
               ),
-            )),
         (publishedNFT.assetType.toAssetTypeEnum() != AssetType.ThreeD)
             ? IgnorePointer(
                 child: SizedBox(

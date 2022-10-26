@@ -98,7 +98,6 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
 
   EaselProvider get easelProvider => sl();
 
-
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<CreatorHubViewModel>();
@@ -131,18 +130,16 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: RichText(
                     textAlign: TextAlign.start,
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "hello".tr(),
-                          style: titleStyle.copyWith(color: EaselAppTheme.kTextGrey, fontSize: isTablet ? 16.sp : 18.sp),
-                        ),
-                        TextSpan(
-                          text:easelProvider.currentUsername,
-                          style: titleStyle,
-                        )
-                      ]
-                    ),
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: "hello".tr(),
+                        style: titleStyle.copyWith(color: EaselAppTheme.kTextGrey, fontSize: isTablet ? 16.sp : 18.sp),
+                      ),
+                      TextSpan(
+                        text: easelProvider.currentUsername,
+                        style: titleStyle,
+                      )
+                    ]),
                   ),
                 ),
                 SizedBox(height: 12.h),
@@ -152,7 +149,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                     "welcome_msg".tr(),
                     textAlign: TextAlign.start,
                     maxLines: 4,
-                    style: titleStyle.copyWith(color: EaselAppTheme.kTextGrey, fontSize: isTablet ? 9.sp : 12.sp),
+                    style: titleStyle.copyWith(fontSize: isTablet ? 9.sp : 12.sp),
                   ),
                 ),
                 SizedBox(height: 32.h),
@@ -160,11 +157,10 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Row(
                     children: [
-                     buildOutlinedBox(title: "draft".tr(), viewModel: viewModel, collectionType: CollectionType.draft),
+                      buildOutlinedBox(title: "draft".tr(), viewModel: viewModel, collectionType: CollectionType.draft),
                       SizedBox(width: 14.w),
                       buildOutlinedBox(title: "published".tr(), viewModel: viewModel, collectionType: CollectionType.published),
-                      SizedBox(width: 14.w),
-                      buildOutlinedBox(title: "for_sale".tr(), viewModel: viewModel, collectionType: CollectionType.forSale),
+                      const Expanded(child: SizedBox()),
                       SizedBox(width: 16.w),
                       InkWell(
                           onTap: () => viewModel.updateViewType(ViewType.viewGrid),
@@ -182,48 +178,34 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                   child: NFTsViewBuilder(
                     onGridSelected: (context) => BuildNFTsContent(
                         onDraftList: (context) => BuildGridView(
-                              nftsList: viewModel.nftDraftList,
-                              onEmptyList: (context) => Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                                child: getEmptyDraftListWidget(),
-                              ),
-                              collectionType: viewModel.selectedCollectionType
-                            ),
-                        onForSaleList: (context) => BuildGridView(
-                              nftsList: viewModel.nftForSaleList,
-                              onEmptyList: (context) => Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                                child: getEmptyWidgetForSale(),
-                              ),
-                              collectionType: viewModel.selectedCollectionType
-                            ),
+                            nftsList: viewModel.nftDraftList,
+                            onEmptyList: (context) => Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                  child: getEmptyDraftListWidget(),
+                                ),
+                            collectionType: viewModel.selectedCollectionType),
                         onPublishedList: (context) => BuildGridView(
-                              nftsList: viewModel.nftPublishedList,
-                              onEmptyList: (context) => Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                                child: getEmptyPublishedWidget(),
-                              ),
-                              collectionType: viewModel.selectedCollectionType
-                            ),
+                            nftsList: viewModel.nftPublishedList,
+                            onEmptyList: (context) => Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                  child: getEmptyPublishedWidget(),
+                                ),
+                            collectionType: viewModel.selectedCollectionType),
                         collectionType: viewModel.selectedCollectionType),
-                    onListSelected: (context) => Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: BuildNFTsContent(
-                          onDraftList: (context) => BuildListView(
+                    onListSelected: (context) => BuildNFTsContent(
+                        onDraftList: (context) => Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: BuildListView(
                                 nftsList: viewModel.nftDraftList,
                                 onEmptyList: (context) => getEmptyDraftListWidget(),
                               ),
-                          onForSaleList: (context) => BuildListView(
-                                nftsList: viewModel.nftForSaleList,
-                                onEmptyList: (context) => getEmptyWidgetForSale(),
-                              ),
-                          onPublishedList: (context) => BuildListView(
-                                key: ValueKey(viewModel.nftPublishedList.length),
-                                nftsList: viewModel.nftPublishedList,
-                                onEmptyList: (context) => getEmptyPublishedWidget(),
-                              ),
-                          collectionType: viewModel.selectedCollectionType),
-                    ),
+                            ),
+                        onPublishedList: (context) => BuildListView(
+                              key: ValueKey(viewModel.nftPublishedList.length),
+                              nftsList: viewModel.nftPublishedList,
+                              onEmptyList: (context) => getEmptyPublishedWidget(),
+                            ),
+                        collectionType: viewModel.selectedCollectionType),
                     viewType: viewModel.viewType,
                   ),
                 ),
@@ -288,26 +270,23 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 5.h),
             child: Center(
-              child: Text(title, style: subTextStyle.copyWith(color: EaselAppTheme.kBlack,fontWeight: FontWeight.w900)),
+              child: Text(title, style: subTextStyle.copyWith(color: EaselAppTheme.kBlack, fontWeight: FontWeight.w900)),
             ),
           ),
         ),
       ),
     );
   }
-
 }
 
 class BuildNFTsContent extends StatelessWidget {
   final WidgetBuilder onDraftList;
   final WidgetBuilder onPublishedList;
-  final WidgetBuilder onForSaleList;
   final CollectionType collectionType;
 
   const BuildNFTsContent({
     Key? key,
     required this.onDraftList,
-    required this.onForSaleList,
     required this.onPublishedList,
     required this.collectionType,
   }) : super(key: key);
@@ -320,9 +299,6 @@ class BuildNFTsContent extends StatelessWidget {
 
       case CollectionType.published:
         return onPublishedList(context);
-
-      case CollectionType.forSale:
-        return onForSaleList(context);
     }
   }
 }
@@ -354,7 +330,8 @@ class BuildGridView extends StatelessWidget {
   final List<NFT> nftsList;
   final WidgetBuilder onEmptyList;
   final CollectionType collectionType;
-  const BuildGridView({Key? key, required this.nftsList, required this.onEmptyList,required this.collectionType}) : super(key: key);
+
+  const BuildGridView({Key? key, required this.nftsList, required this.onEmptyList, required this.collectionType}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -371,7 +348,19 @@ class BuildGridView extends StatelessWidget {
         ),
         itemBuilder: (context, index) {
           final nft = nftsList[index];
-          return NftGridViewItem(nft: nft, collectionType: collectionType);
+          return (nft.price.isNotEmpty && nft.price != "0")
+              ? ClipRRect(
+                  child: Banner(
+                      color: EaselAppTheme.kDarkGreen,
+                      location: BannerLocation.topEnd,
+                      message: "\$ ${nft.price}",
+                      child: NftGridViewItem(
+                        nft: nft,
+                      )),
+                )
+              : NftGridViewItem(
+                  nft: nft,
+                );
         });
   }
 }
