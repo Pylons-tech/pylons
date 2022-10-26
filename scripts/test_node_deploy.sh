@@ -46,7 +46,7 @@ fi
 if [ $WILL_CONTINUE -eq 1 ];
 then
     # Start the node (remove the --pruning=nothing flag if historical queries are not needed)
-    pylonsd start --pruning=nothing --log_level $LOGLEVEL --minimum-gas-prices=0.0001upylon
+    pylonsd start --pruning=nothing --log_level $LOGLEVEL --minimum-gas-prices=0.0001ubedrock
     exit 1;
 fi
 
@@ -88,11 +88,16 @@ echo >&1 "\n"
 # init chain
 pylonsd init $MONIKER --chain-id $CHAINID
 
-# Change parameter token denominations to upylon
-cat $HOME/.pylons/config/genesis.json | jq '.app_state["staking"]["params"]["bond_denom"]="upylon"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
-cat $HOME/.pylons/config/genesis.json | jq '.app_state["crisis"]["constant_fee"]["denom"]="upylon"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
-cat $HOME/.pylons/config/genesis.json | jq '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]="upylon"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
-cat $HOME/.pylons/config/genesis.json | jq '.app_state["mint"]["params"]["mint_denom"]="upylon"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
+# Change parameter token denominations to ubedrock
+cat $HOME/.pylons/config/genesis.json | jq '.app_state["staking"]["params"]["bond_denom"]="ubedrock"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
+cat $HOME/.pylons/config/genesis.json | jq '.app_state["crisis"]["constant_fee"]["denom"]="ubedrock"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
+cat $HOME/.pylons/config/genesis.json | jq '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]="ubedrock"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
+cat $HOME/.pylons/config/genesis.json | jq '.app_state["mint"]["params"]["mint_denom"]="ubedrock"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
+cat $HOME/.pylonsd/config/genesis.json | jq '.app_state["gov"]["voting_params"]["voting_period"]="1200s"' > $HOME/.pylonsd/config/tmp_genesis.json && mv $HOME/.pylonsd/config/tmp_genesis.json $HOME/.pylonsd/config/genesis.json
+
+cat $HOME/.pylons/config/genesis.json | jq '.app_state["gov"]["deposit_params"]["min_deposit"][0]["amount"]="100"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
+cat $HOME/.pylons/config/genesis.json | jq '.app_state["gov"]["deposit_params"]["max_deposit_period"]="120s"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
+cat $HOME/.pylons/config/genesis.json | jq '.app_state["gov"]["voting_params"]["voting_period"]="120s"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
 
 # Set gas limit in genesis
 # cat $HOME/.pylons/config/genesis.json | jq '.consensus_params["block"]["max_gas"]="10000000"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
@@ -102,16 +107,23 @@ toml set --toml-path $HOME/.pylons/config/app.toml api.swagger true
 toml set --toml-path $HOME/.pylons/config/app.toml api.enable true
 
 # Allocate genesis accounts (cosmos formatted addresses)
-pylonsd add-genesis-account $KEY 1000000000000upylon --keyring-backend $KEYRING
+pylonsd add-genesis-account $KEY 1000000000000ubedrock --keyring-backend $KEYRING
+
 
 # Sign genesis transaction
-pylonsd gentx $KEY 1000000upylon --keyring-backend $KEYRING --chain-id $CHAINID
+pylonsd gentx $KEY 1000000ubedrock --keyring-backend $KEYRING --chain-id $CHAINID
 
 # Collect genesis tx
 pylonsd collect-gentxs
+
+cat $HOME/.pylonsd/config/genesis.json | jq '.app_state["gov"]["voting_params"]["voting_period"]="120s"' > $HOME/.pylonsd/config/tmp_genesis.json && mv $HOME/.pylonsd/config/tmp_genesis.json $HOME/.pylonsd/config/genesis.json
 
 # Run this to ensure everything worked and that the genesis file is setup correctly
 pylonsd validate-genesis
 
 # Start the node (remove the --pruning=nothing flag if historical queries are not needed)
-pylonsd start --pruning=nothing --log_level $LOGLEVEL --minimum-gas-prices=0.0001upylon --rpc.laddr tcp://0.0.0.0:26657
+pylonsd start --pruning=nothing --log_level $LOGLEVEL --minimum-gas-prices=0.0001ubedrock --rpc.laddr tcp://0.0.0.0:26657
+
+
+#verb poet trouble alcohol claw cheese perfect flag ecology idea story milk
+#envelope maid blossom animal canyon humble code oyster direct throw giraffe swarm

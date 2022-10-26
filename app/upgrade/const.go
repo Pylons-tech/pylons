@@ -1,3 +1,3 @@
 package upgrade
 
-const UpgradeName = "sdk-46"
+const UpgradeName = "v1.0.0-rc6"

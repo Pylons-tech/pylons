@@ -1,0 +1,1 @@
+pylonsd tx staking create-validator --amount=1000upylon   --pubkey=$(pylonsd tendermint show-validator)   --moniker=localtestnet   --chain-id="pylons-testnet-1"   --commission-rate="0.10"   --commission-max-rate="0.20"   --commission-max-change-rate="0.01"   --min-self-delegation="100"   --gas="auto"   --gas-prices="0.0025upylon"   --from=validator

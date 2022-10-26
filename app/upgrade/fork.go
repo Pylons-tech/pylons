@@ -1,6 +1,10 @@
 package upgrade
 
 import (
+	"fmt"
+
+	"cosmossdk.io/math"
+	apps "github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/cosmos/cosmos-sdk/codec"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -18,8 +22,12 @@ import (
 )
 
 // CreateUpgradeHandler make upgrade handler
-func CreateUpgradeHandler(mm *module.Manager, configurator module.Configurator, staking *stakingkeeper.Keeper, pylonStoreKey storetypes.StoreKey, cdc codec.Codec) upgradetypes.UpgradeHandler {
+func CreateUpgradeHandler(mm *module.Manager, configurator module.Configurator, staking *stakingkeeper.Keeper, pylonStoreKey storetypes.StoreKey, cdc codec.Codec, app *apps.Keeper) upgradetypes.UpgradeHandler {
 	return func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
+		fmt.Println("HELLO WORLD")
+		amt := sdk.NewCoins(sdk.NewCoin("ubedrock", math.NewInt(1000)))
+		addr, _ := sdk.AccAddressFromBech32("pylo1zzttt85uvt43sgzsgms7pax7f5dleynncv5rvm")
+		app.MintCoinsToAddr(ctx, addr, amt)
 		vm[icatypes.ModuleName] = mm.Modules[icatypes.ModuleName].ConsensusVersion()
 
 		// create ICS27 Controller submodule params, controller module not enabled.

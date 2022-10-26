@@ -1,0 +1,17 @@
+{
+ "messages": [
+  {
+   "@type": "/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade",
+   "authority": "pylo10d07y265gmmuvt4z0w9aw880jnsr700jrcygjh",
+   "plan": {
+    "name": "v1.0.0-rc6",
+    "time": "0001-01-01T00:00:00Z",
+    "height": "120",
+    "info": "v1.0.0-rc6",
+    "upgraded_client_state": null
+   }
+  }
+ ],
+ "metadata": "ipfs://QmRTcEXwGttdUnJkVxmgFK8iTKjnfPjwDYEwjXfnxEHKfc",
+ "deposit": "100ubedrock"
+}
