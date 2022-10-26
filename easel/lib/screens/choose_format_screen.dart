@@ -16,6 +16,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 import 'package:provider/provider.dart';
 
+import '../generated/locale_keys.g.dart';
+
 class ChooseFormatScreen extends StatefulWidget {
   const ChooseFormatScreen({Key? key}) : super(key: key);
 
@@ -24,7 +26,7 @@ class ChooseFormatScreen extends StatefulWidget {
 }
 
 class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
-  ValueNotifier<String> errorText = ValueNotifier('err_pic_file'.tr());
+  ValueNotifier<String> errorText = ValueNotifier(LocaleKeys.err_pic_file.tr());
 
   void proceedToNext({required PickedFileModel result, required EaselProvider easelProvider}) async {
     EaselProvider provider = context.read();
@@ -35,7 +37,7 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
     }
 
     if (!provider.nftFormat.extensions.contains(result.extension)) {
-      errorText.value = "un_supported_format".tr();
+      errorText.value = LocaleKeys.un_supported_format.tr();
       showErrorDialog();
       return;
     }
@@ -47,7 +49,7 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
     }
 
     if (easelProvider.repository.getFileSizeInGB(File(result.path).lengthSync()) > kFileSizeLimitForAudiVideoInGB) {
-      errorText.value = 'size_error'.tr();
+      errorText.value = LocaleKeys.size_error.tr();
       showErrorDialog(type: nftFormat.format);
       return;
     }
@@ -319,7 +321,7 @@ class _ErrorMessageWidget extends StatelessWidget {
                 Text((nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio) ? "• ${(kFileSizeLimitForAudiVideoInGB * 1000).toStringAsFixed(0)}MB Limit" : "• ${kFileSizeLimitInGB}GB Limit",
                     style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
                 Text(kUploadHint2, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
-                Text("upload_hint_three".tr(), style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
+                Text(LocaleKeys.upload_hint_three.tr(), style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
               ],
             ),
             SizedBox(height: 30.h),
@@ -332,7 +334,7 @@ class _ErrorMessageWidget extends StatelessWidget {
                     Positioned.fill(child: SvgPicture.asset(SVGUtils.kSvgCloseButton, fit: BoxFit.cover)),
                     Center(
                       child: Text(
-                        "close".tr(),
+                          LocaleKeys.close.tr(),
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
                       ),
                     ),
@@ -375,7 +377,7 @@ class _ErrorMessageWidget extends StatelessWidget {
                 Text((nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio) ? "• ${(kFileSizeLimitForAudiVideoInGB * 1000).toStringAsFixed(0)}MB Limit" : "• ${kFileSizeLimitInGB}GB Limit",
                     style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
                 Text(kUploadHint2, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
-                Text("upload_hint_three".tr(), style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
+                Text(LocaleKeys.upload_hint_three.tr(), style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
               ],
             ),
             SizedBox(height: 30.h),
@@ -388,7 +390,7 @@ class _ErrorMessageWidget extends StatelessWidget {
                     Positioned.fill(child: SvgPicture.asset(SVGUtils.kSvgCloseButton, fit: BoxFit.cover)),
                     Center(
                       child: Text(
-                        "close".tr(),
+                          LocaleKeys.close.tr(),
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 16.sp,
                               color: EaselAppTheme.kWhite,
