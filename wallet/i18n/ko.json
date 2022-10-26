@@ -75,7 +75,7 @@
   "congratulations": "축하합니다!",
   "successfully_bought_the_item": "항목을 성공적으로 구입했습니다.\\n항목이 수집 중입니다.",
   "product_name": "상품명",
-  "continue": "계속하다",
+  "_continue": "계속하다",
   "wallet_creation": "지갑 생성",
   "create_new_wallet": "새 지갑 만들기",
   "proceed": "진행하다",
@@ -275,7 +275,7 @@
   "trade_not_found": "거래를 찾을 수 없음",
   "pylon_username": "Pylons 사용자 이름",
   "get_started": "시작하다",
-  "default": "기본",
+  "_default": "기본",
   "recovery_migration": "계정 이전",
   "no_biometric": "기기가 생체 인식을 지원하지 않습니다.",
   "collapse": " 무너지다",
@@ -350,5 +350,9 @@
   "free": "무료",
   "claim_free_nft": "무료 NFT 신청",
   "before_too_late": "너무 늦기 전에!",
-  "please_try_again_later": "나중에 다시 시도 해주십시오"
+  "please_try_again_later": "나중에 다시 시도 해주십시오",
+  "buying_pylon_points": "파일론 포인트 구매",
+  "transaction_date": "거래 날짜",
+  "retry": "다시 해 보다",
+  "bought_nft": "구입했다"
 }

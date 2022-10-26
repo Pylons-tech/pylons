@@ -7,6 +7,8 @@ import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.da
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 class OwnerVideoPlayerScreen extends StatefulWidget {
   final NFT nft;
 
@@ -40,28 +42,26 @@ class _OwnerVideoPlayerScreenState extends State<OwnerVideoPlayerScreen> {
                     valueColor: AlwaysStoppedAnimation<Color>(AppColors.kWhite),
                   ),
                 )
-              : viewModel.videoLoadingError.isNotEmpty 
+              : viewModel.videoLoadingError.isNotEmpty
                   ? Center(
                       child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Text(
-                        "video_player_network_error".tr(),
-                        style: TextStyle(fontSize: 18.sp, color: AppColors.kWhite),
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          LocaleKeys.video_player_network_error.tr(),
+                          style: TextStyle(fontSize: 18.sp, color: AppColors.kWhite),
+                        ),
                       ),
-                    ))
+                    )
                   : Center(
                       child: viewModel.videoPlayerController!.value.isInitialized
                           ? AspectRatio(
-                              aspectRatio: viewModel
-                                  .videoPlayerController!.value.aspectRatio,
-                              child:
-                                  VideoPlayer(viewModel.videoPlayerController!),
+                              aspectRatio: viewModel.videoPlayerController!.value.aspectRatio,
+                              child: VideoPlayer(viewModel.videoPlayerController!),
                             )
                           : Center(
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(AppColors.kWhite),
+                                valueColor: AlwaysStoppedAnimation<Color>(AppColors.kWhite),
                               ),
                             ),
                     ),

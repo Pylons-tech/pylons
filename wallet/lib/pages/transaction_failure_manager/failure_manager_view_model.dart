@@ -12,6 +12,8 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 class FailureManagerViewModel extends ChangeNotifier {
   final Repository repository;
 
@@ -22,7 +24,7 @@ class FailureManagerViewModel extends ChangeNotifier {
     if (failureEither.isLeft()) {
       localTransactionsList = [];
       notifyListeners();
-      'something_wrong'.tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
 
@@ -50,7 +52,7 @@ class FailureManagerViewModel extends ChangeNotifier {
       case TransactionTypeEnum.BuyProduct:
         break;
       case TransactionTypeEnum.Unknown:
-        'something_wrong'.tr().show();
+        LocaleKeys.something_wrong.tr().show();
         break;
     }
   }
@@ -66,12 +68,12 @@ class FailureManagerViewModel extends ChangeNotifier {
     final walletStore = GetIt.I.get<WalletsStore>();
     final response = await walletStore.executeRecipe(txDataJson as Map<dynamic, dynamic>);
     if (!response.success){
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       loading.dismiss();
       return;
     }
     loading.dismiss();
-    "purchase_successful".tr().show();
+    LocaleKeys.purchase_successful.tr().show();
     await deleteFailure(id: txManager.id!);
   }
 
@@ -81,7 +83,7 @@ class FailureManagerViewModel extends ChangeNotifier {
     final loading = Loading()..showLoading();
     final response = await repository.GeneratePaymentReceipt(request);
     if (response.isLeft()){
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       loading.dismiss();
       return;
     }
@@ -95,13 +97,13 @@ class FailureManagerViewModel extends ChangeNotifier {
     final loading = Loading()..showLoading();
     final response = await repository.sendAppleInAppPurchaseCoinsRequest(request);
     if (response.isLeft()){
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       loading.dismiss();
       return;
     }
     await deleteFailure(id: txManager.id!);
     GetIt.I.get<HomeProvider>().buildAssetsList();
-    "purchase_successful".tr().show();
+    LocaleKeys.purchase_successful.tr().show();
     loading.dismiss();
   }
 
@@ -111,13 +113,13 @@ class FailureManagerViewModel extends ChangeNotifier {
     final GoogleInAppPurchaseModel request = GoogleInAppPurchaseModel.fromJson(txDataJson as Map<String, dynamic>);
     final response = await repository.sendGoogleInAppPurchaseCoinsRequest(request);
     if (response.isLeft()){
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       loading.dismiss();
       return;
     }
     await deleteFailure(id: txManager.id!);
     GetIt.I.get<HomeProvider>().buildAssetsList();
-    "purchase_successful".tr().show();
+    LocaleKeys.purchase_successful.tr().show();
     loading.dismiss();
   }
 }
