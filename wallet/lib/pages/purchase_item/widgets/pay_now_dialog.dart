@@ -151,11 +151,12 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   height: 30.h,
                 ),
                 Padding(
-                    padding: EdgeInsets.only(left: 20.w),
-                    child: Text(
-                      'price'.tr(),
-                      style: _rowTitleTextStyle,
-                    )),
+                  padding: EdgeInsets.only(left: 20.w),
+                  child: Text(
+                    'price'.tr(),
+                    style: _rowTitleTextStyle,
+                  ),
+                ),
                 SizedBox(
                   height: 3.h,
                 ),
@@ -237,11 +238,12 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                 color: bgColor,
                 height: 40.h,
                 child: Center(
-                    child: Text(
-                  title,
-                  style: TextStyle(color: AppColors.kWhite, fontSize: isTablet ? 14.sp : 16.sp, fontWeight: FontWeight.w700),
-                  textAlign: TextAlign.center,
-                )),
+                  child: Text(
+                    title,
+                    style: TextStyle(color: AppColors.kWhite, fontSize: isTablet ? 14.sp : 16.sp, fontWeight: FontWeight.w700),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
             ),
           ),
@@ -287,12 +289,14 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                       maxLines: 1,
                       style: TextStyle(fontSize: 15.sp, color: Colors.white, fontWeight: FontWeight.w700),
                     ),
-                    if (widget.nft.ibcCoins.name == kPylonDenom) SizedBox(width: 2.w) else Container(),
                     if (widget.nft.ibcCoins.name == kPylonDenom)
-                      AutoSizeText(
-                        "(\$${widget.nft.ibcCoins.name.convertPylonsToUSD(widget.nft.price)} $kStripeUSD_ABR)",
-                        maxLines: 1,
-                        style: TextStyle(fontSize: 12.sp, color: Colors.white, fontWeight: FontWeight.w400),
+                      Padding(
+                        padding: EdgeInsets.only(top: 2.w),
+                        child: AutoSizeText(
+                          "(\$${widget.nft.ibcCoins.name.convertPylonsToUSD(widget.nft.price)} $kStripeUSD_ABR)",
+                          maxLines: 1,
+                          style: TextStyle(fontSize: 12.sp, color: Colors.white, fontWeight: FontWeight.w400),
+                        ),
                       ),
                   ],
                 ),

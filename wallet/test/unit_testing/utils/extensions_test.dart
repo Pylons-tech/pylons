@@ -47,14 +47,11 @@ void main() {
   test('should convert pylon to usd', () {
       final String pylonCurrencyName = IBCCoins.upylon.name;
       const String priceInPylon = "700000000";
-
       const String expectedValue = "700.0";
+      const String expectedPriceInUsd = "7.0";
 
       expect(expectedValue, pylonCurrencyName.convertFromUCoin(priceInPylon));
 
-      const String expectedPriceInUsd = "7.0";
-
       expect(expectedPriceInUsd, pylonCurrencyName.convertPylonsToUSD(priceInPylon));
-
   });
 }
