@@ -23,6 +23,8 @@ Future<void> main() async {
 
   await FirebaseAppCheck.instance.activate(
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
+    androidProvider: AndroidProvider.safetyNet,
+
   );
   await dotenv.load(fileName: "env/.prod_env");
 
