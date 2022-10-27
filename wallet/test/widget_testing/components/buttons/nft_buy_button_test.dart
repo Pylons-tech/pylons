@@ -78,7 +78,6 @@ void main() {
           isTapped = true;
         },
         nft: MOCK_NFT_FREE,
-        viewModel: viewModel,
       ),
     ));
 
@@ -90,15 +89,22 @@ void main() {
 
   testWidgets('should show the NFT Buy Button and make sure user is able to tap', (tester) async {
     final buyButtonFinder = find.text("${"buy_for".tr()} ${viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${viewModel.nft.ibcCoins.getTrailingAbbrev()} ");
+    int counter = 0;
     await tester.setScreenSize();
     await tester.testAppForWidgetTesting(Material(
       child: BuyNFTButton(
-        onTapped: () {},
+        key: const Key(MOCK_BUY_BUTTON_KEY_VALUE),
+        onTapped: () {
+          counter++;
+        },
         nft: MOCK_NFT_PREMIUM,
-        viewModel: viewModel,
       ),
     ));
-
+    final buyButton = find.byKey(const Key(MOCK_BUY_BUTTON_KEY_VALUE));
+    expect(counter, 0);
+    await tester.tap(buyButton);
+    await tester.pump();
     expect(buyButtonFinder, findsOneWidget);
+    expect(counter, 1);
   });
 }

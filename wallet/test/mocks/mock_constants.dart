@@ -296,3 +296,4 @@ Color MOCK_COLOR = Colors.white;
 bool MOCK_CAMERA_CONTROLS = false;
 bool MOCK_SHOW_LOADER_TRUE = true;
 bool MOCK_SHOW_LOADER_FALSE = false;
+const MOCK_BUY_BUTTON_KEY_VALUE = "buy_button_key";

@@ -80,9 +80,8 @@ extension GetDynamicLink on String {
 
 extension ConvertPylonsToUSD on String {
   String convertPylonsToUSD(String amount) {
-    switch (this) {
-      case kPylonDenom:
-        return (double.parse(convertFromUCoin(amount)) * pyLonToUsdConstant).toString().truncateAfterDecimal(2);
+    if (this == kPylonDenom) {
+      return (double.parse(convertFromUCoin(amount)) * pyLonToUsdConstant).toString().truncateAfterDecimal(2);
     }
     return '';
   }
@@ -90,9 +89,8 @@ extension ConvertPylonsToUSD on String {
 
 extension ConvertFromUCoin on String {
   String convertFromUCoin(String amount) {
-    switch (this) {
-      case kPylonDenom:
-        return (double.parse(amount) / kBigIntBase).toString();
+    if (this == kPylonDenom) {
+      return (double.parse(amount) / kBigIntBase).toString();
     }
     return '';
   }

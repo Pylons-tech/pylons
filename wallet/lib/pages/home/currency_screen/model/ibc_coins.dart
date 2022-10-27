@@ -91,19 +91,10 @@ extension IBCCoinsDePar on IBCCoins {
   }
 
   String getTrailingAbbrev() {
-    switch (this) {
-      case IBCCoins.urun:
-      case IBCCoins.ujunox:
-      case IBCCoins.none:
-      case IBCCoins.ujuno:
-      case IBCCoins.eeur:
-      case IBCCoins.uatom:
-      case IBCCoins.weth_wei:
-      case IBCCoins.upylon:
-        return constants.kPoints;
-      case IBCCoins.ustripeusd:
-        return constants.kStripeUSD_ABR;
+    if (this == IBCCoins.ustripeusd) {
+      return constants.kStripeUSD_ABR;
     }
+    return constants.kPoints;
   }
 
   Color getColor() {

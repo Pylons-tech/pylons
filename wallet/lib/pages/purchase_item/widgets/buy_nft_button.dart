@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
@@ -13,11 +14,10 @@ import 'package:pylons_wallet/utils/extension.dart';
 class BuyNFTButton extends StatelessWidget {
   final VoidCallback onTapped;
   final NFT nft;
-  final PurchaseItemViewModel viewModel;
 
-  const BuyNFTButton({Key? key, required this.onTapped, required this.nft, required this.viewModel}) : super(key: key);
+  const BuyNFTButton({Key? key, required this.onTapped, required this.nft}) : super(key: key);
 
-  Widget getButtonContent(NFT nft) {
+  Widget getButtonContent(NFT nft, PurchaseItemViewModel viewModel) {
     if (double.parse(nft.price) == 0) {
       return Container(
         height: 60.h,
@@ -92,11 +92,12 @@ class BuyNFTButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.read<PurchaseItemViewModel>();
     return ClipPath(
       clipper: BuyClipper(),
       child: InkWell(
         onTap: onTapped,
-        child: getButtonContent(nft),
+        child: getButtonContent(nft, viewModel),
       ),
     );
   }

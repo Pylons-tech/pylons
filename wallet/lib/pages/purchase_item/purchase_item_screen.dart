@@ -310,36 +310,36 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         /// BUY NFT BUTTON
                         if (viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid))
                           BuyNFTButton(
-                              onTapped: () async {
-                                bool balancesFetchResult = true;
-                                if (viewModel.nft.price != kZeroInt) {
-                                  final balancesEither = await viewModel.shouldShowSwipeToBuy(
-                                    selectedDenom: viewModel.nft.denom,
-                                    requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
-                                  );
+                            onTapped: () async {
+                              bool balancesFetchResult = true;
+                              if (viewModel.nft.price != kZeroInt) {
+                                final balancesEither = await viewModel.shouldShowSwipeToBuy(
+                                  selectedDenom: viewModel.nft.denom,
+                                  requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
+                                );
 
-                                  if (balancesEither.isLeft()) {
-                                    balancesEither.swap().getOrElse(() => '').show();
-                                    return;
-                                  }
-
-                                  balancesFetchResult = balancesEither.getOrElse(() => false);
+                                if (balancesEither.isLeft()) {
+                                  balancesEither.swap().getOrElse(() => '').show();
+                                  return;
                                 }
 
-                                viewModel.addLogForCart();
+                                balancesFetchResult = balancesEither.getOrElse(() => false);
+                              }
 
-                                final PayNowDialog payNowDialog = PayNowDialog(
-                                    buildContext: context,
-                                    nft: viewModel.nft,
-                                    purchaseItemViewModel: viewModel,
-                                    onPurchaseDone: (txData) {
-                                      showTransactionCompleteDialog(execution: txData);
-                                    },
-                                    shouldBuy: balancesFetchResult);
-                                payNowDialog.show();
-                              },
-                              nft: viewModel.nft,
-                              viewModel: viewModel),
+                              viewModel.addLogForCart();
+
+                              final PayNowDialog payNowDialog = PayNowDialog(
+                                  buildContext: context,
+                                  nft: viewModel.nft,
+                                  purchaseItemViewModel: viewModel,
+                                  onPurchaseDone: (txData) {
+                                    showTransactionCompleteDialog(execution: txData);
+                                  },
+                                  shouldBuy: balancesFetchResult);
+                              payNowDialog.show();
+                            },
+                            nft: viewModel.nft,
+                          ),
                       ],
                     ),
                   )
@@ -695,7 +695,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         payNowDialog.show();
                       },
                       nft: viewModel.nft,
-                      viewModel: viewModel,
                     ),
                 ],
               ),
