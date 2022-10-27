@@ -344,8 +344,8 @@
   "vietnamese": "vietnamita",
   "submit_feedback": "Enviar comentarios",
   "subject": "Sujeta",
-  "character_limit" :"{} límite de caracteres",
-  "enter_description_text" : "Introduce la descripción",
+  "character_limit": "{} límite de caracteres",
+  "enter_description_text": "Introduce la descripción",
   "enter_subject_text": "Introduce el asunto",
   "thank_you_for_feedback": "Gracias por tus comentarios.",
   "free": "Tasuta",
@@ -355,6 +355,6 @@
   "buying_pylon_points": "Puntos Pylons Comprados",
   "transaction_date": "Fecha de Transacción",
   "retry": "Rever",
-  "bought_nft": "Comprado"
+  "bought_nft": "Comprado",
   "resolution": "resolución"
 }

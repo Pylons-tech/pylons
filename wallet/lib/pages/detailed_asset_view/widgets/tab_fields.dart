@@ -65,14 +65,14 @@ class _TabFieldState extends State<TabField> {
   Map<String, String> getNFTDetailsMap() {
     switch (widget.nft.type) {
       case NftType.TYPE_RECIPE:
-        return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID, "resolution".tr(): widget.nft.getAssetSize(), kIpfsCid: widget.nft.cid};
+        return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID, LocaleKeys.resolution.tr(): widget.nft.getAssetSize(), kIpfsCid: widget.nft.cid};
       case NftType.TYPE_ITEM:
-        return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID, "resolution".tr(): widget.nft.getAssetSize(), kIpfsCid: widget.nft.cid};
+        return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID, LocaleKeys.resolution.tr(): widget.nft.getAssetSize(), kIpfsCid: widget.nft.cid};
       case NftType.TYPE_TRADE:
         break;
     }
 
-    return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID, "resolution".tr(): widget.nft.getAssetSize(), kIpfsCid: widget.nft.cid};
+    return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID, LocaleKeys.resolution.tr(): widget.nft.getAssetSize(), kIpfsCid: widget.nft.cid};
   }
 
   @override
@@ -118,9 +118,9 @@ class _TabFieldState extends State<TabField> {
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
                       TabFields? _field;
-                      if (widget.name == "ownership".tr()) {
+                      if (widget.name == LocaleKeys.ownership.tr()) {
                         _field = TabFields.ownership;
-                      } else if (widget.name == "nft_detail".tr()) {
+                      } else if (widget.name == LocaleKeys.nft_detail.tr()) {
                         _field = TabFields.details;
                       } else {
                         _field = TabFields.history;
@@ -207,13 +207,13 @@ class _TabFieldState extends State<TabField> {
             value.substring(0, 6),
             style: TextStyle(color: AppColors.kWhite),
           ),
-           Text(
+          Text(
             "...",
             style: TextStyle(color: AppColors.kWhite),
           ),
           Text(
             value.substring(value.length - 5, value.length),
-            style:  TextStyle(color: AppColors.kWhite),
+            style: TextStyle(color: AppColors.kWhite),
           ),
           if (value.isNotEmpty)
             InkWell(

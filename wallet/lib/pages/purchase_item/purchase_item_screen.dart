@@ -39,6 +39,7 @@ import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
+import '../../generated/locale_keys.g.dart';
 import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
 
 /// Sending NFT instead of viewmodel because the share plugin tends to rebuild this screen
@@ -586,7 +587,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               SizedBox(height: 10.h),
                               if (viewModel.nft.type != NftType.TYPE_RECIPE)
                                 TabField(
-                                  name:  LocaleKeys.history.tr(),,
+                                  name:  LocaleKeys.history.tr(),
                                   icon: 'history',
                                   nft: viewModel.nft,
                                   owner: viewModel.nft.owner,

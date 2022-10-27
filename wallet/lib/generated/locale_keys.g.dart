@@ -358,5 +358,6 @@ abstract class  LocaleKeys {
   static const transaction_date = 'transaction_date';
   static const retry = 'retry';
   static const bought_nft = 'bought_nft';
+  static const resolution = 'resolution';
 
 }
