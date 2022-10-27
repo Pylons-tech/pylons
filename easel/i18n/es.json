@@ -51,7 +51,7 @@
   "assetUri": "URI de activo",
   "copiedToClipboard": "Copiado al Portapapeles",
   "save": "Guardar",
-  "_continue": "Continuar",
+  "continueKey": "Continuar",
   "readMore": "Para leer más",
   "collapse": " Colapsar",
   "downloadPylonsApp": "Descarga la aplicación Pylons",

@@ -327,7 +327,7 @@ class _PriceScreenState extends State<PriceScreen> {
                         ),
                       VerticalSpace(20.h),
                       ClippedButton(
-                        title: "_continue".tr(),
+                        title: LocaleKeys.continueKey.tr(),
                         bgColor: provider.isFreeDrop != FreeDrop.unselected ? EaselAppTheme.kBlue : EaselAppTheme.kPurple03,
                         textColor: EaselAppTheme.kWhite,
                         onPressed: () async {

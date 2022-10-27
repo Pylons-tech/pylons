@@ -51,7 +51,7 @@
   "assetUri": "Asset URI",
   "copiedToClipboard": "Copied to Clipboard",
   "save": "Save",
-  "_continue": "Continue",
+  "continueKey": "Continue",
   "readMore": "read more",
   "collapse": " Collapse",
   "downloadPylonsApp": "Download Pylons app",
