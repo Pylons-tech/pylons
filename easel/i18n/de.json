@@ -5,7 +5,6 @@
   "publish_total": "Veröffentlicht ({})",
   "draft_total": "Entwurf ({})",
   "draft": "Entwurf",
-  "publish": "Veröffentlichen",
   "delete": "Löschen",
   "view": "Auf IPFS anzeigen",
   "delete_error": "Entwurf konnte nicht gelöscht werden",

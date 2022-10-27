@@ -5,7 +5,6 @@
   "publish_total": "Publicado({})",
   "draft_total": "Plan Preliminar({})",
   "draft": "Reclutar",
-  "publish": "Publicar",
   "delete": "Borrar",
   "view": "Ver en IPFS",
   "delete_error": "No se pudo eliminar el Plan Preliminar",

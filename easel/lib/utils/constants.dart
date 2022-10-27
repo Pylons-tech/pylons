@@ -59,6 +59,7 @@ class SVGUtils {
   static const kGridIcon = 'assets/images/svg/grid.svg';
   static const kListIcon = 'assets/images/svg/list.svg';
   static const kOwnerVerifiedIcon = 'assets/images/svg/verified.svg';
+  static const kFileTypeImageIcon = 'assets/images/svg/file_type_image.svg';
 }
 
 const String kLoadingGif = 'assets/images/gifs/loading.gif';

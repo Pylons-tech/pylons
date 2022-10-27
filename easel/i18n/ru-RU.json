@@ -5,7 +5,6 @@
   "publish_total": "изданный ({})",
   "draft_total": "проект ({})",
   "draft": "проект",
-  "publish": "издавать",
   "delete": "удалять",
   "view": "Вид на IFPS",
   "delete_error": "Не удалось удалить черновик",
