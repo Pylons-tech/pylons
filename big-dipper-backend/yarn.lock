@@ -74,9 +74,9 @@
     core-js-pure "^3.20.2"
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@>=7.0.0-beta.56", "@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.18.9", "@babel/runtime@^7.19.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
-  version "7.19.0"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.19.0.tgz#22b11c037b094d27a8a2504ea4dcff00f50e2259"
+"@babel/runtime@>=7.0.0-beta.56", "@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.18.9", "@babel/runtime@^7.19.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
+  version "7.19.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.19.4.tgz#a42f814502ee467d55b38dd1c256f53a7b885c78"
   dependencies:
     regenerator-runtime "^0.13.4"
 
@@ -224,9 +224,9 @@
   version "3.0.0"
   resolved "https://registry.npmjs.org/@google-cloud/promisify/-/promisify-3.0.0.tgz"
 
-"@google-cloud/storage@^6.1.0", "@google-cloud/storage@^6.5.4":
-  version "6.5.4"
-  resolved "https://registry.yarnpkg.com/@google-cloud/storage/-/storage-6.5.4.tgz#c43742ac12787df39c07725f131f199bb80e0b58"
+"@google-cloud/storage@^6.1.0", "@google-cloud/storage@^6.6.0":
+  version "6.6.0"
+  resolved "https://registry.yarnpkg.com/@google-cloud/storage/-/storage-6.6.0.tgz#01f64bf706acc98dc2787e490afe878ad9f64250"
   dependencies:
     "@google-cloud/paginator" "^3.0.7"
     "@google-cloud/projectify" "^3.0.0"
@@ -2202,9 +2202,9 @@ eslint-plugin-meteor@^7.3.0:
   dependencies:
     invariant "2.2.4"
 
-eslint-plugin-react@^7.31.8:
-  version "7.31.8"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.31.8.tgz#3a4f80c10be1bcbc8197be9e8b641b2a3ef219bf"
+eslint-plugin-react@^7.31.10:
+  version "7.31.10"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.31.10.tgz#6782c2c7fe91c09e715d536067644bbb9491419a"
   dependencies:
     array-includes "^3.1.5"
     array.prototype.flatmap "^1.3.0"
