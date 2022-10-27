@@ -27,6 +27,8 @@ import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 typedef OnNFTSelected = void Function(NFT asset);
 
 TextStyle kWalletTitle = TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
@@ -168,7 +170,7 @@ class PurchasesCollection extends StatelessWidget {
     final viewModel = context.watch<CollectionViewModel>();
     final isSelected = viewModel.collectionsType == CollectionsType.purchases;
     return DecoratedBox(
-      decoration:  BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.kMainBG,
       ),
       child: Column(
@@ -224,11 +226,12 @@ class PurchasesCollection extends StatelessWidget {
                               height: 25.h,
                             )),
                         Expanded(
-                            flex: 8,
-                            child: Text(
-                              "my_purchase".tr(),
-                              style: kWalletTitle,
-                            ))
+                          flex: 8,
+                          child: Text(
+                            LocaleKeys.my_purchase.tr(),
+                            style: kWalletTitle,
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -260,7 +263,7 @@ class PurchasesCollection extends StatelessWidget {
               childrenDelegate: SliverChildBuilderDelegate((context, index) {
                 final nft = viewModel.purchases[index];
                 return GestureDetector(
-                  onTap: () =>  onNFTSelected(nft),
+                  onTap: () => onNFTSelected(nft),
                   child: ClipRRect(
                     child: PreviewNFTGrid(
                       assetType: nft.assetType,
@@ -391,11 +394,12 @@ class CreationsCollection extends StatelessWidget {
                               height: 20.h,
                             )),
                         Expanded(
-                            flex: 8,
-                            child: Text(
-                              'my_creations'.tr(),
-                              style: kWalletTitle,
-                            ))
+                          flex: 8,
+                          child: Text(
+                            LocaleKeys.my_creations.tr(),
+                            style: kWalletTitle,
+                          ),
+                        )
                       ],
                     ),
                   ),

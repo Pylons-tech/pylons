@@ -11,6 +11,8 @@ import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart'
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 class BuyNFTButton extends StatelessWidget {
   final VoidCallback onTapped;
   final NFT nft;
@@ -29,7 +31,7 @@ class BuyNFTButton extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AutoSizeText(
-                "claim_free_nft".tr(),
+                LocaleKeys.claim_free_nft.tr(),
                 maxLines: 1,
                 style: TextStyle(color: AppColors.kWhite, fontSize: 16.sp, fontFamily: kUniversalFontFamily),
               ),
@@ -37,7 +39,7 @@ class BuyNFTButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   AutoSizeText(
-                    "before_too_late".tr(),
+                    LocaleKeys.before_too_late.tr(),
                     maxLines: 1,
                     style: TextStyle(color: AppColors.kWhite, fontSize: 12.sp, fontFamily: kUniversalFontFamily),
                   ),

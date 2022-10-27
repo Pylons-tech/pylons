@@ -19,6 +19,7 @@ import 'package:pylons_wallet/utils/enums.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../generated/locale_keys.g.dart';
 import '../owner_purchase_view_common/button_state.dart';
 import '../owner_purchase_view_common/progress_bar_state.dart';
 
@@ -190,7 +191,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     if (nft.type != NftType.TYPE_RECIPE) {
       final nftOwnershipHistory = await repository.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
       if (nftOwnershipHistory.isLeft()) {
-        "something_wrong".tr().show();
+        LocaleKeys.something_wrong.tr().show();
         return;
       }
       nftOwnershipHistoryList = nftOwnershipHistory.getOrElse(() => []);
@@ -202,7 +203,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     );
 
     if (likesCountEither.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
 
@@ -215,7 +216,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     );
 
     if (likedByMeEither.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
 
@@ -257,7 +258,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     );
 
     if (updateLikeStatusEither.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
     likedByMe = !likedByMe;
@@ -447,7 +448,7 @@ class OwnerViewViewModel extends ChangeNotifier {
 
     final link = await repository.createDynamicLinkForRecipeNftShare(address: address, nft: nft);
     return link.fold((l) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return null;
     }, (r) {
       shareHelper.shareText(text: r, size: size);

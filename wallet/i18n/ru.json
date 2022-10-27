@@ -75,7 +75,7 @@
   "congratulations": "Поздравляю!",
   "successfully_bought_the_item": "Вы успешно купили товар.\\nВаш товар находится в коллекции",
   "product_name": "Название продукта",
-  "continue": "Продолжить",
+  "_continue": "Продолжить",
   "wallet_creation": "Создание Wallet",
   "create_new_wallet": "Создать новый Wallet",
   "proceed": "Продолжить",
@@ -274,7 +274,7 @@
   "trade_not_found": "Торговля не найдена",
   "pylon_username": "Pylons Имя пользователя",
   "get_started": "Начать",
-  "default": "По умолчанию",
+  "_default": "По умолчанию",
   "recovery_migration": "Мигрировать Счет",
   "no_biometric": "Ваше устройство не поддерживает биометрию.",
   "collapse": "Крах",
@@ -352,5 +352,9 @@
   "claim_free_nft": "Получите свой бесплатный NFT",
   "before_too_late": "Пока не поздно!",
   "please_try_again_later": "Пожалуйста, попробуйте позже",
+  "buying_pylon_points": "Купленные очки пилонов",
+  "transaction_date": "Дата сделки",
+  "retry": "Повторить попытку",
+  "bought_nft": "Купленный"
   "resolution": "разрешающая способность"
 }

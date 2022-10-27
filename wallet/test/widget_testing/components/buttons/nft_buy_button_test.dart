@@ -68,7 +68,7 @@ void main() {
   });
 
   testWidgets('should show the Free Drop NFT Buy Button and make sure user is able to tap', (tester) async {
-    final buyButtonFinder = find.text("claim_free_nft".tr());
+    final buyButtonFinder = find.text(LocaleKeys.claim_free_nft.tr());
     var isTapped = false;
 
     await tester.setScreenSize();
@@ -88,8 +88,8 @@ void main() {
   });
 
   testWidgets('should show the NFT Buy Button and make sure user is able to tap', (tester) async {
-    final buyButtonFinder = find.text("${"buy_for".tr()} ${viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${viewModel.nft.ibcCoins.getTrailingAbbrev()} ");
     int counter = 0;
+    final buyButtonFinder = find.text("${LocaleKeys.buy_for.tr()} ${MOCK_NFT_PREMIUM.ibcCoins.getCoinWithProperDenomination(MOCK_NFT_PREMIUM.price)}");
     await tester.setScreenSize();
     await tester.testAppForWidgetTesting(Material(
       child: BuyNFTButton(

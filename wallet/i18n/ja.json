@@ -75,7 +75,7 @@
   "congratulations": "おめでとう!",
   "successfully_bought_the_item": "アイテムの購入に成功しました。\\nアイテムはコレクションに含まれています",
   "product_name": "商品名",
-  "continue": "継続する",
+  "_continue": "継続する",
   "wallet_creation": "ウォレットの作成",
   "create_new_wallet": "新しいウォレットを作成する",
   "proceed": "続行",
@@ -274,7 +274,7 @@
   "trade_not_found": "取引が見つかりません",
   "pylon_username": "Pylons ユーザー名",
   "get_started": "はじめに",
-  "default": "デフォルト",
+  "_default": "デフォルト",
   "recovery_migration": "アカウントの移行",
   "no_biometric": "お使いのデバイスは生体認証をサポートしていません。",
   "collapse": "崩壊",
@@ -352,5 +352,9 @@
   "claim_free_nft": "無料の NFT を請求する",
   "before_too_late": "手遅れになる前に",
   "please_try_again_later": "後でもう一度やり直してください",
+  "buying_pylon_points": "パイロンポイントを購入",
+  "transaction_date": "取引日",
+  "retry": "リトライ",
+  "bought_nft": "買った"
   "resolution": "解像度"
 }

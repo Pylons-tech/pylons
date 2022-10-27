@@ -9,6 +9,8 @@ import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
+import '../../../../../generated/locale_keys.g.dart';
+
 TextStyle kSecurityLabelText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
 TextStyle kSecurityBiometricIdText = TextStyle(fontSize: 17.sp, color: Colors.black, fontWeight: FontWeight.w500);
 TextStyle kSecurityNoBiometricText = TextStyle(fontSize: 15.sp, color: AppColors.kDarkRed, fontWeight: FontWeight.w500);
@@ -73,7 +75,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
           Container(
             padding: defaultPadding,
             child: Text(
-              "security".tr(),
+              LocaleKeys.security.tr(),
               style: kSecurityLabelText,
             ),
           ),
@@ -89,7 +91,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
                 children: [
                   Expanded(
                     child: Text(
-                      "biometric_id".tr(),
+                      LocaleKeys.biometric_id.tr(),
                       style: kSecurityBiometricIdText,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -118,7 +120,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
             Container(
               padding: defaultPadding,
               child: Text(
-                "no_biometric".tr(),
+                LocaleKeys.no_biometric.tr(),
                 style: kSecurityNoBiometricText,
               ),
             )
@@ -163,7 +165,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
           height: 20.h,
         ),
         Text(
-          "login".tr(),
+          LocaleKeys.login.tr(),
           style: kSecurityLabelText.copyWith(fontSize: 22.sp),
         ),
         SizedBox(
@@ -173,7 +175,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              biometricType == BiometricType.fingerprint ? "fingerprint".tr() : "face_id".tr(),
+              biometricType == BiometricType.fingerprint ? LocaleKeys.fingerprint.tr() : LocaleKeys.face_id.tr(),
               style: kSecurityBiometricIdText,
             ),
             CupertinoSwitch(
@@ -226,7 +228,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
           height: 20.h,
         ),
         Text(
-          "transactions".tr(),
+          LocaleKeys.transactions.tr(),
           style: kSecurityLabelText.copyWith(fontSize: 22.sp),
         ),
         SizedBox(
@@ -236,7 +238,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              biometricType == BiometricType.fingerprint ? "fingerprint".tr() : "face_id".tr(),
+              biometricType == BiometricType.fingerprint ? LocaleKeys.fingerprint.tr() : LocaleKeys.face_id.tr(),
               style: kSecurityBiometricIdText,
             ),
             CupertinoSwitch(
