@@ -8,6 +8,8 @@ import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/purchase_item/clipper/buy_now_clipper.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 class BuyNFTButton extends StatelessWidget {
   final VoidCallback onTapped;
   final NFT nft;
@@ -26,7 +28,7 @@ class BuyNFTButton extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AutoSizeText(
-                "claim_free_nft".tr(),
+                LocaleKeys.claim_free_nft.tr(),
                 maxLines: 1,
                 style: TextStyle(color: AppColors.kWhite, fontSize: 16.sp, fontFamily: kUniversalFontFamily),
               ),
@@ -34,7 +36,7 @@ class BuyNFTButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   AutoSizeText(
-                    "before_too_late".tr(),
+                    LocaleKeys.before_too_late.tr(),
                     maxLines: 1,
                     style: TextStyle(color: AppColors.kWhite, fontSize: 12.sp, fontFamily: kUniversalFontFamily),
                   ),
@@ -75,7 +77,7 @@ class BuyNFTButton extends StatelessWidget {
               children: [
                 Expanded(
                   child: AutoSizeText(
-                    "${"buy_for".tr()} ${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}",
+                    "${LocaleKeys.buy_for.tr()} ${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}",
                     style: TextStyle(color: Colors.white, fontSize: 16.sp),
                     maxLines: 1,
                   ),

@@ -29,8 +29,10 @@ import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 TextStyle _titleTextStyle = TextStyle(color: Colors.white, fontSize: 25.sp, fontWeight: FontWeight.w700);
-TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15.sp);
+TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.sp);
 
 class PayNowDialog {
   final NFT nft;
@@ -116,7 +118,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                 SizedBox(
                   height: 30.h,
                 ),
-                Text("checkout".tr(), textAlign: TextAlign.center, style: _titleTextStyle),
+                Text(LocaleKeys.checkout.tr(), textAlign: TextAlign.center, style: _titleTextStyle),
                 SizedBox(
                   height: 30.h,
                 ),
@@ -129,7 +131,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                 ),
                 buildRow(
                   subtitle: "#${widget.nft.amountMinted + 1} of ${widget.nft.quantity}",
-                  title: "edition".tr(),
+                  title: LocaleKeys.edition.tr(),
                 ),
                 SizedBox(
                   height: 3.h,
@@ -137,7 +139,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                 buildRow(
                   subtitle: widget.nft.creator,
                   subtitleTextColor: AppColors.kTradeReceiptTextColor,
-                  title: "artist".tr(),
+                  title: LocaleKeys.artist.tr(),
                 ),
                 SizedBox(
                   height: 3.h,
@@ -146,7 +148,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   buildRow(
                     subtitle: widget.nft.owner,
                     subtitleTextColor: AppColors.kTradeReceiptTextColor,
-                    title: "sold_by".tr(),
+                    title: LocaleKeys.sold_by.tr(),
                   ),
                 SizedBox(
                   height: 30.h,
@@ -168,7 +170,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                 if (!widget.shouldBuy)
                   Center(
                     child: buildButton(
-                        title: "add_pylons".tr(),
+                        title: LocaleKeys.add_pylons.tr(),
                         bgColor: AppColors.kDarkRed,
                         onPressed: () async {
                           final navigator = Navigator.of(context);
@@ -477,7 +479,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
         Navigator.pop(navigatorKey.currentState!.overlay!.context);
 
-        tradeResponse.success ? "purchase_nft_success".tr() : tradeResponse.error.show();
+        tradeResponse.success ? LocaleKeys.purchase_nft_success.tr() : tradeResponse.error.show();
       } catch (error) {
         Navigator.pop(navigatorKey.currentState!.overlay!.context);
       }

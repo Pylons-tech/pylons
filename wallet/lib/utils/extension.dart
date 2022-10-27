@@ -9,6 +9,8 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 
+import '../generated/locale_keys.g.dart';
+
 extension ScaffoldHelper on BuildContext? {
   void show({required String message}) {
     if (this == null) {
@@ -122,7 +124,7 @@ extension NftSize on NFT {
 extension NoInternetConnectionHelper on Failure {
   void checkAndTakeAction({required ValueChanged<String>? onError}) {
     if (this is NoInternetFailure) {
-      "no_internet".tr().show();
+      LocaleKeys.no_internet.tr().show();
     }
   }
 }
