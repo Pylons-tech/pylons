@@ -356,5 +356,6 @@
   "transaction_date": "Transaktionsdatum",
   "retry": "Wiederholen",
   "bought_nft": "Gekauft",
-  "set_lockscreen": "Instellen als vergrendelscherm"
+  "set_lockscreen": "Instellen als vergrendelscherm",
+  "network_error_description": "A network error occurred while processing your transaction. Please try again to update your account. You won’t be charged twice for retrying."
 }

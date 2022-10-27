@@ -352,11 +352,10 @@
   "claim_free_nft": "Klaim NFT Gratis Anda",
   "before_too_late": "Sebelum terlambat!",
   "please_try_again_later": "Silakan Coba lagi nanti",
-
   "buying_pylon_points": "Membeli Pylon Points",
   "transaction_date": "Tanggal Transaksi",
   "retry": "Mencoba Kembali",
   "bought_nft": "Dibeli",
-  "set_lockscreen": "Tetapkan sebagai layar kunci"
-
+  "set_lockscreen": "Tetapkan sebagai layar kunci",
+  "network_error_description": "A network error occurred while processing your transaction. Please try again to update your account. You won’t be charged twice for retrying."
 }

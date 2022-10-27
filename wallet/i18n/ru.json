@@ -356,5 +356,6 @@
   "transaction_date": "Дата сделки",
   "retry": "Повторить попытку",
   "bought_nft": "Купленный",
-  "set_lockscreen": "Установить как экран блокировки"
+  "set_lockscreen": "Установить как экран блокировки",
+  "network_error_description": "A network error occurred while processing your transaction. Please try again to update your account. You won’t be charged twice for retrying."
 }

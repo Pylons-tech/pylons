@@ -355,5 +355,6 @@
   "transaction_date": "거래 날짜",
   "retry": "다시 해 보다",
   "bought_nft": "구입했다",
-  "set_lockscreen": "잠금 화면으로 설정"
+  "set_lockscreen": "잠금 화면으로 설정",
+  "network_error_description": "A network error occurred while processing your transaction. Please try again to update your account. You won’t be charged twice for retrying."
 }

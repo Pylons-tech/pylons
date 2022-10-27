@@ -162,12 +162,12 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "${"created_by".tr()} ${widget.nft.creator}",
+                        "${LocaleKeys.created_by.tr()} ${widget.nft.creator}",
                         style: _subtitleTextStyle,
                       ),
                       if (widget.nft.owner.isNotEmpty)
                         Text(
-                          "${"sold_by".tr()} ${widget.nft.owner}",
+                          "${LocaleKeys.sold_by.tr()} ${widget.nft.owner}",
                           style: _subtitleTextStyle,
                         ),
                     ],
