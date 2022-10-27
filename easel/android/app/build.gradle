@@ -55,12 +55,12 @@ android {
     }
 
     signingConfigs {
-//        debug  {
-//            storeFile file('keystore.jks')
-//            storePassword 'tech.pylons'
-//            keyAlias 'key_tech_pylon'
-//            keyPassword 'tech.pylons'
-//        }
+       release  {
+           storeFile file('keystore.jks')
+           storePassword 'tech.pylons'
+           keyAlias 'key_tech_pylon'
+           keyPassword 'tech.pylons'
+       }
     }
 
     buildTypes {
@@ -71,7 +71,7 @@ android {
             shrinkResources false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
 
         }
     }
