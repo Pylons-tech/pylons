@@ -30,6 +30,8 @@ import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 class OwnerView extends StatefulWidget {
   final NFT nft;
 
@@ -249,7 +251,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         Expanded(
                           child: _title(
                             nft: viewModel.nft,
-                            owner: viewModel.nft.type == NftType.TYPE_RECIPE ? "you".tr() : viewModel.nft.creator,
+                            owner: viewModel.nft.type == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator,
                           ),
                         ),
                         IconButton(
@@ -278,8 +280,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       Column(
                         children: [
                           if (viewModel.nft.type != NftType.TYPE_ITEM)
-                            Text("${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
-                                style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold))
+                            Text(
+                              "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
+                              style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
+                            )
                         ],
                       ),
                       const Spacer(),
@@ -362,7 +366,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? "you".tr() : viewModel.nft.creator),
+                          _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator),
                           SizedBox(
                             height: 10.h,
                           ),
@@ -373,7 +377,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 width: 10.w,
                               ),
                               Text(
-                                viewModel.viewsCount == 1 ? "${viewModel.viewsCount.toString()} ${'view'.tr()}" : "${viewModel.viewsCount.toString()} ${'views'.tr()}",
+                                viewModel.viewsCount == 1 ? "${viewModel.viewsCount.toString()} ${LocaleKeys.view.tr()}" : "${viewModel.viewsCount.toString()} ${LocaleKeys.views.tr()}",
                                 style: TextStyle(color: Colors.white, fontSize: 12.sp),
                               )
                             ],
@@ -427,8 +431,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           ),
                           ReadMoreText(
                             viewModel.nft.description,
-                            trimExpandedText: "collapse".tr(),
-                            trimCollapsedText: "read_more".tr(),
+                            trimExpandedText: LocaleKeys.collapse.tr(),
+                            trimCollapsedText: LocaleKeys.read_more.tr(),
                             moreStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.kCopyColor),
                             lessStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.kCopyColor),
                           ),
@@ -445,7 +449,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                   child: Column(
                                     children: [
                                       TabField(
-                                        name: "ownership".tr(),
+                                        name: LocaleKeys.ownership.tr(),
                                         icon: 'trophy',
                                         nft: viewModel.nft,
                                         owner: viewModel.owner,
@@ -453,7 +457,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       ),
                                       SizedBox(height: 10.h),
                                       TabField(
-                                        name: "nft_detail".tr(),
+                                        name: LocaleKeys.nft_detail.tr(),
                                         icon: 'detail',
                                         nft: viewModel.nft,
                                         owner: viewModel.owner,
@@ -461,7 +465,13 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       ),
                                       SizedBox(height: 10.h),
                                       if (viewModel.nft.type != NftType.TYPE_RECIPE)
-                                        TabField(name: "history".tr(), icon: 'history', nft: viewModel.nft, owner: viewModel.nft.owner, NftOwnershipHistoryList: viewModel.nftOwnershipHistoryList),
+                                        TabField(
+                                          name: LocaleKeys.history.tr(),
+                                          icon: 'history',
+                                          nft: viewModel.nft,
+                                          owner: viewModel.nft.owner,
+                                          NftOwnershipHistoryList: viewModel.nftOwnershipHistoryList,
+                                        ),
                                       SizedBox(height: 30.h),
                                     ],
                                   ),
@@ -497,10 +507,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       GestureDetector(
                                         onTap: () {
                                           showDialog(
-                                              context: context,
-                                              builder: (_) => QRCodeScreen(
-                                                    nft: viewModel.nft,
-                                                  ));
+                                            context: context,
+                                            builder: (_) => QRCodeScreen(
+                                              nft: viewModel.nft,
+                                            ),
+                                          );
                                         },
                                         child: SvgPicture.asset(
                                           SVGUtil.QR_ICON,
@@ -537,8 +548,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               Column(
                                 children: [
                                   if (viewModel.nft.type != NftType.TYPE_ITEM)
-                                    Text("${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
-                                        style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold))
+                                    Text(
+                                      "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
+                                      style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
+                                    )
                                 ],
                               ),
                             ],
@@ -591,7 +604,7 @@ Widget _title({required NFT nft, required String owner}) {
         text: TextSpan(
           children: [
             TextSpan(
-              text: "created_by".tr(),
+              text: LocaleKeys.created_by.tr(),
               style: TextStyle(color: Colors.white, fontSize: 18.sp),
             ),
             TextSpan(text: owner, style: TextStyle(color: AppColors.kCopyColor, fontSize: 18.sp)),

@@ -11,6 +11,8 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 class PresentingOnboardPage extends StatefulWidget {
   const PresentingOnboardPage({Key? key}) : super(key: key);
 
@@ -76,19 +78,19 @@ class __PresentingOnboardPageState extends State<PresentingOnboardPage> {
                     ),
                     VerticalSpace(5.h),
                     Text(
-                      "stake_your_digital_claim".tr(),
+                      LocaleKeys.stake_your_digital_claim.tr(),
                       style: TextStyle(fontSize: 26.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlack, fontWeight: FontWeight.w700),
                     ),
                     VerticalSpace(100.h),
                     buildBackupButton(
-                        title: "create_wallet".tr(),
+                        title: LocaleKeys.create_wallet.tr(),
                         bgColor: AppColors.kCreateWalletButtonColorDark,
                         onPressed: () {
                           Navigator.of(context).pushNamed(RouteUtil.ROUTE_CREATE_WALLET);
                         }),
                     VerticalSpace(25.h),
                     buildBackupButton(
-                        title: "restore_wallet".tr(),
+                        title: LocaleKeys.restore_wallet.tr(),
                         bgColor: AppColors.kButtonColor,
                         onPressed: () {
                           Navigator.of(context).pushNamed(RouteUtil.ROUTE_RESTORE_WALLET);

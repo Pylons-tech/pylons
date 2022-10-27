@@ -13,6 +13,8 @@ import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as clipper;
 
+import '../../../generated/locale_keys.g.dart';
+
 class SubmitFeedback {
   final BuildContext context;
 
@@ -58,11 +60,11 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
     final responseEither = await repository.saveUserFeedback(walletAddress: walletAddress, subject: subjectController.text, feedback: descController.text);
     if (responseEither.isLeft()) {
       loader.dismiss();
-      return "something_wrong".tr().show();
+      return LocaleKeys.something_wrong.tr().show();
     }
     loader.dismiss();
 
-    return "thank_you_for_feedback".tr().show();
+    return LocaleKeys.thank_you_for_feedback.tr().show();
   }
 
   @override
@@ -111,7 +113,7 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "submit_feedback".tr(),
+                      LocaleKeys.submit_feedback.tr(),
                       style: TextStyle(
                         color: AppColors.kBlack,
                         fontSize: 18.sp,
@@ -127,7 +129,7 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           FeedBackTextField(
-                            label: "subject".tr(),
+                            label: LocaleKeys.subject.tr(),
                             controller: subjectController,
                             textCapitalization: TextCapitalization.sentences,
                             validator: (value) {
@@ -160,7 +162,7 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
                             height: 10.h,
                           ),
                           FeedBackTextField(
-                            label: "description".tr(),
+                            label: LocaleKeys.description.tr(),
                             noOfLines: 5,
                             controller: descController,
                             textCapitalization: TextCapitalization.sentences,
@@ -200,7 +202,7 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
-                                        "character_limit".tr(args: [(kMaxDescription - controller.text.length).toString()]),
+                                        LocaleKeys.character_limit.tr(args: [(kMaxDescription - controller.text.length).toString()]),
                                         style: TextStyle(color: AppColors.kCopyColor, fontSize: 14.sp, fontWeight: FontWeight.w800),
                                       ),
                                     ],
@@ -214,20 +216,21 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
                       ),
                     ),
                     CustomPaintButton(
-                        title: "submit".tr(),
-                        bgColor: AppColors.kBlue,
-                        width: 200.w,
-                        onPressed: () {
-                          FocusScope.of(context).unfocus();
-                          if (!_formKey.currentState!.validate()) {
-                            return;
-                          }
-                          if (_subjectFieldError.value.isNotEmpty || _descriptionFieldError.value.isNotEmpty) {
-                            return;
-                          }
+                      title: LocaleKeys.submit.tr(),
+                      bgColor: AppColors.kBlue,
+                      width: 200.w,
+                      onPressed: () {
+                        FocusScope.of(context).unfocus();
+                        if (!_formKey.currentState!.validate()) {
+                          return;
+                        }
+                        if (_subjectFieldError.value.isNotEmpty || _descriptionFieldError.value.isNotEmpty) {
+                          return;
+                        }
 
-                          onSubmitButtonPressed();
-                        }),
+                        onSubmitButtonPressed();
+                      },
+                    ),
                   ],
                 ),
               ),

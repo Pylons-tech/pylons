@@ -8,6 +8,8 @@ import 'package:pylons_wallet/pages/home/collection_screen/collection_screen.dar
 import 'package:pylons_wallet/services/third_party_services/thumbnail_helper.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 class CollectionViewModel extends ChangeNotifier {
   WalletsStore walletsStore;
 
@@ -46,7 +48,7 @@ class CollectionViewModel extends ChangeNotifier {
   String get colType => _colType;
 
   List<Collection> collectionType = [
-    Collection(title: "art".tr(), icon: "art", type: 'cookbook'),
+    Collection(title: LocaleKeys.art.tr(), icon: "art", type: 'cookbook'),
     Collection(title: "Easel", icon: "easel", type: 'app', app_name: "easel"),
   ];
 

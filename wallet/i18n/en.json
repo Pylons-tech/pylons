@@ -75,7 +75,7 @@
   "congratulations": "Congratulations!",
   "successfully_bought_the_item": "You have successfully bought the item.\\nYour item is in your Collection.",
   "product_name": "Product Name",
-  "continue": "Continue",
+  "_continue": "Continue",
   "wallet_creation": "Wallet Creation",
   "create_new_wallet": "Create new Wallet",
   "proceed": "Proceed",
@@ -274,7 +274,7 @@
   "trade_not_found": "Trade not found",
   "pylon_username": "Pylons Username",
   "get_started": "Get Started",
-  "default": "Default",
+  "_default": "Default",
   "recovery_migration": "Migrate Account",
   "no_biometric": "Your device doesn't support biometrics.",
   "collapse": "Collapse",
@@ -358,5 +358,5 @@
   "transaction_date": "Transaction Date",
   "bought_nft": "Bought",
   "free": "Free",
-  "please_try_again_later": "Please Try again later"
+  "please_try_again_later": "Bought Pylons Points"
 }

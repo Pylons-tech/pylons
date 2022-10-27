@@ -12,6 +12,8 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
+import '../../../../../generated/locale_keys.g.dart';
+
 TextStyle kPracticeTestHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
 TextStyle kPracticeTestSubtitleText = TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlue, fontWeight: FontWeight.w800);
 
@@ -75,14 +77,14 @@ class _PracticeTestState extends State<PracticeTest> {
                   height: 33.h,
                 ),
                 Text(
-                  "practice_test".tr(),
+                  LocaleKeys.practice_test.tr(),
                   style: kPracticeTestHeadlineText,
                 ),
                 SizedBox(
                   height: 30.h,
                 ),
                 Text(
-                  "place_your_recovery_phrase_in_correct_order".tr(),
+                  LocaleKeys.place_your_recovery_phrase_in_correct_order.tr(),
                   style: kPracticeTestSubtitleText,
                 ),
                 SizedBox(
@@ -138,7 +140,7 @@ class _PracticeTestState extends State<PracticeTest> {
                     viewModel.initializeData();
                   },
                   child: Text(
-                    "reset".tr(),
+                    LocaleKeys.reset.tr(),
                     style: kPracticeTestSubtitleText.copyWith(fontSize: 16.sp),
                     textAlign: TextAlign.center,
                   ),
@@ -166,16 +168,18 @@ class _PracticeTestState extends State<PracticeTest> {
             color: enable ? AppColors.kBlue : AppColors.kBlue.withOpacity(0.5),
           ),
           Positioned(
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0,
-              child: Center(
-                  child: Text(
-                "submit".tr(),
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: Center(
+              child: Text(
+                LocaleKeys.submit.tr(),
                 style: TextStyle(color: Colors.white, fontSize: 16.sp),
                 textAlign: TextAlign.center,
-              )))
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -187,10 +191,10 @@ class _PracticeTestState extends State<PracticeTest> {
         final String mnemonicString = value.getOrElse(() => '');
         final bool mnemonicsMatch = viewModel.acceptedList.map((e) => e.title).join(" ") == mnemonicString;
         if (!mnemonicsMatch) {
-          "practice_test_submission_failed".tr().show();
+          LocaleKeys.practice_test_submission_failed.tr().show();
           return;
         }
-        "practice_test_submission_successful".tr().show();
+        LocaleKeys.practice_test_submission_successful.tr().show();
       }
     });
   }

@@ -21,6 +21,8 @@ import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/screen_responsive.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -202,7 +204,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               final publicAddress = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
 
               await Clipboard.setData(ClipboardData(text: publicAddress));
-              "copied_to_clipboard".tr().show();
+              LocaleKeys.copied_to_clipboard.tr().show();
             },
             child: SvgPicture.asset(SVGUtil.WALLET_COPY, height: 10.h, width: 10.w, fit: BoxFit.scaleDown),
           ),
@@ -307,7 +309,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         SizedBox(height: 5.h),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
-            "wallet_address_arg".tr(args: [walletsStore.getWallets().value.last.publicAddress]),
+            LocaleKeys.wallet_address_arg.tr(args: [walletsStore.getWallets().value.last.publicAddress]),
             style: TextStyle(color: Colors.black, fontSize: 9.sp),
             textAlign: TextAlign.center,
           ),
@@ -316,7 +318,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             onTap: () async {
               final publicAddress = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
               await Clipboard.setData(ClipboardData(text: publicAddress));
-              "copied_to_clipboard".tr().show();
+              LocaleKeys.copied_to_clipboard.tr().show();
             },
             child: SvgPicture.asset(SVGUtil.WALLET_COPY, height: 15.h, width: 15.w, fit: BoxFit.scaleDown),
           ),
