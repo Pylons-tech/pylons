@@ -142,11 +142,12 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                 SizedBox(
                   height: 3.h,
                 ),
-                buildRow(
-                  subtitle: widget.nft.owner,
-                  subtitleTextColor: AppColors.kTradeReceiptTextColor,
-                  title: "sold_by".tr(),
-                ),
+                if (widget.nft.owner.isNotEmpty)
+                  buildRow(
+                    subtitle: widget.nft.owner,
+                    subtitleTextColor: AppColors.kTradeReceiptTextColor,
+                    title: "sold_by".tr(),
+                  ),
                 SizedBox(
                   height: 30.h,
                 ),
@@ -265,7 +266,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(width: 12.w, height: 12.w, child: widget.nft.ibcCoins.getSecondaryAssets()),
+                  SizedBox(width: 12.r, height: 12.r, child: widget.nft.ibcCoins.getSecondaryAssets()),
                   SizedBox(width: 3.w),
                   Text(
                     widget.nft.ibcCoins.getName(),
