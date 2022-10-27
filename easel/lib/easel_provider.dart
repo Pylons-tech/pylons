@@ -554,8 +554,8 @@ class EaselProvider extends ChangeNotifier {
     if (!isPylonsExist) {
       ShowWalletInstallDialog showWalletInstallDialog = ShowWalletInstallDialog(
           context: navigatorKey.currentState!.overlay!.context,
-          errorMessage: LocaleKeys.download_pylons_description.tr(),
-          buttonMessage: LocaleKeys.download_pylons_app.tr(),
+          errorMessage: LocaleKeys.downloadPylonsDescription.tr(),
+          buttonMessage: LocaleKeys.downloadPylonsApp.tr(),
           onButtonPressed: () {
             PylonsWallet.instance.goToInstall();
           },
@@ -573,8 +573,8 @@ class EaselProvider extends ChangeNotifier {
     if (response.errorCode == kErrProfileNotExist) {
       ShowWalletInstallDialog showWalletInstallDialog = ShowWalletInstallDialog(
           context: navigatorKey.currentState!.overlay!.context,
-          errorMessage: LocaleKeys.create_username_description.tr(),
-          buttonMessage: LocaleKeys.open_pylons_app.tr(),
+          errorMessage: LocaleKeys.createUsernameDescription.tr(),
+          buttonMessage: LocaleKeys.openPylonsApp.tr(),
           onButtonPressed: () {
             PylonsWallet.instance.goToPylons();
           },
@@ -589,7 +589,7 @@ class EaselProvider extends ChangeNotifier {
     if (showStripeDialog()) {
       ShowWalletInstallDialog showWalletInstallDialog = ShowWalletInstallDialog(
           context: navigatorKey.currentState!.overlay!.context,
-          errorMessage: LocaleKeys.create_stripe_description.tr(),
+          errorMessage: LocaleKeys.createStripeDescription.tr(),
           buttonMessage: LocaleKeys.start.tr(),
           onButtonPressed: () async {
             Navigator.pop(navigatorKey.currentState!.overlay!.context);
@@ -710,7 +710,7 @@ class EaselProvider extends ChangeNotifier {
       scaffoldMessengerState?.show(message: "$kErrRecipe ${response.error}");
       return false;
     }
-    scaffoldMessengerState?.show(message: LocaleKeys.recipe_created.tr());
+    scaffoldMessengerState?.show(message: LocaleKeys.recipeCreated.tr());
     final nftFromRecipe = NFT.fromRecipe(recipe);
     GetIt.I.get<CreatorHubViewModel>().updatePublishedNFTList(nft: nftFromRecipe);
     deleteNft(nft.id);
@@ -810,7 +810,7 @@ class EaselProvider extends ChangeNotifier {
 
     buttonNotifier = ValueNotifier<ButtonState>(ButtonState.loading);
     if (_file == null) {
-      LocaleKeys.error_playing_audio.tr().show();
+      LocaleKeys.errorPlayingAudio.tr().show();
       return;
     }
     setIsInitialized = await audioPlayerHelperForFile.setFile(file: _file!.path);
@@ -901,7 +901,7 @@ class EaselProvider extends ChangeNotifier {
 
     int id = 0;
     if (!_file!.existsSync()) {
-      navigatorKey.currentState!.overlay!.context.show(message: LocaleKeys.err_pick_file.tr());
+      navigatorKey.currentState!.overlay!.context.show(message: LocaleKeys.errPickFile.tr());
       return false;
     }
     final loading = LoadingProgress()..showLoadingWithProgress(message: LocaleKeys.uploading.tr());
@@ -911,13 +911,13 @@ class EaselProvider extends ChangeNotifier {
       final uploadResponse = await repository.uploadFile(file: getThumbnailType(nftFormat.format), onUploadProgressCallback: (value) {});
       if (uploadResponse.isLeft()) {
         loading.dismiss();
-        LocaleKeys.something_wrong_while_uploading.tr().show();
+        LocaleKeys.somethingWrongWhileUploading.tr().show();
         return false;
       }
       uploadThumbnailResponse = uploadResponse.getOrElse(() => uploadThumbnailResponse);
       if (uploadThumbnailResponse.status == Status.error) {
         loading.dismiss();
-        scaffoldMessengerOptionalState?.show(message: uploadThumbnailResponse.errorMessage ?? LocaleKeys.upload_error_occurred.tr());
+        scaffoldMessengerOptionalState?.show(message: uploadThumbnailResponse.errorMessage ?? LocaleKeys.uploadErrorOccurred.tr());
         return false;
       }
     }
@@ -929,13 +929,13 @@ class EaselProvider extends ChangeNotifier {
         });
     if (response.isLeft()) {
       loading.dismiss();
-      LocaleKeys.something_wrong_while_uploading.tr().show();
+      LocaleKeys.somethingWrongWhileUploading.tr().show();
       return false;
     }
     final fileUploadResponse = response.getOrElse(() => uploadUrlResponse);
     loading.dismiss();
     if (fileUploadResponse.status == Status.error) {
-      scaffoldMessengerOptionalState?.show(message: fileUploadResponse.errorMessage ?? LocaleKeys.upload_error_occurred.tr());
+      scaffoldMessengerOptionalState?.show(message: fileUploadResponse.errorMessage ?? LocaleKeys.uploadErrorOccurred.tr());
       return false;
     }
 
@@ -967,7 +967,7 @@ class EaselProvider extends ChangeNotifier {
     final saveNftResponse = await repository.saveNft(nft);
 
     if (saveNftResponse.isLeft()) {
-      scaffoldMessengerOptionalState?.show(message: LocaleKeys.save_error.tr());
+      scaffoldMessengerOptionalState?.show(message: LocaleKeys.saveError.tr());
 
       return false;
     }
@@ -997,7 +997,7 @@ class EaselProvider extends ChangeNotifier {
     );
 
     if (id < 1) {
-      LocaleKeys.save_error.tr().show();
+      LocaleKeys.saveError.tr().show();
       return false;
     }
     repository.setCacheDynamicType(key: nftKey, value: newNFT);
@@ -1029,7 +1029,7 @@ class EaselProvider extends ChangeNotifier {
     final dataFromLocal = nftResult.getOrElse(() => nft);
     repository.setCacheDynamicType(key: nftKey, value: dataFromLocal);
     if (saveNftResponse.isLeft()) {
-      scaffoldMessengerState?.show(message: LocaleKeys.save_error.tr());
+      scaffoldMessengerState?.show(message: LocaleKeys.saveError.tr());
 
       return false;
     }
@@ -1056,7 +1056,7 @@ class EaselProvider extends ChangeNotifier {
     final dataFromLocal = nftResult.getOrElse(() => nft);
     repository.setCacheDynamicType(key: nftKey, value: dataFromLocal);
     if (saveNftResponse.isLeft()) {
-      navigatorState?.show(message: LocaleKeys.save_error.tr());
+      navigatorState?.show(message: LocaleKeys.saveError.tr());
       return false;
     }
     return saveNftResponse.getOrElse(() => false);

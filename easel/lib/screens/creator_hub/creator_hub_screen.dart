@@ -168,7 +168,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                   child: Align(
                     alignment: Alignment.center,
                     child: Text(
-                      LocaleKeys.creator_hub.tr(),
+                      LocaleKeys.creatorHub.tr(),
                       style: headingStyle,
                     ),
                   ),
@@ -177,7 +177,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: AutoSizeText(
-                    LocaleKeys.welcome_msg.tr(),
+                    LocaleKeys.welcomeMsg.tr(),
                     textAlign: TextAlign.center,
                     maxLines: 4,
                     style: titleStyle.copyWith(color: EaselAppTheme.kTextGrey, fontSize: isTablet ? 12.sp : 15.sp),
@@ -197,8 +197,8 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                           : buildOutlinedBox(title: LocaleKeys.published.tr(), viewModel: viewModel, collectionType: CollectionType.published),
                       SizedBox(width: 14.w),
                       viewModel.selectedCollectionType == CollectionType.forSale
-                          ? buildSelectedBox(title: LocaleKeys.for_sale.tr(), viewModel: viewModel, color: EaselAppTheme.kBlue, collectionType: CollectionType.forSale)
-                          : buildOutlinedBox(title: LocaleKeys.for_sale.tr(), viewModel: viewModel, collectionType: CollectionType.forSale),
+                          ? buildSelectedBox(title: LocaleKeys.forSale.tr(), viewModel: viewModel, color: EaselAppTheme.kBlue, collectionType: CollectionType.forSale)
+                          : buildOutlinedBox(title: LocaleKeys.forSale.tr(), viewModel: viewModel, collectionType: CollectionType.forSale),
                       SizedBox(width: 16.w),
                       InkWell(
                           onTap: () => viewModel.updateViewType(ViewType.viewGrid),
@@ -259,14 +259,14 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
 
   Widget getEmptyWidgetForSale() {
     return Text(
-      LocaleKeys.no_for_sale_nft.tr(),
+      LocaleKeys.noForSaleNft.tr(),
       style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
     );
   }
 
   Widget getEmptyPublishedWidget() {
     return Text(
-      LocaleKeys.no_published_nft.tr(),
+      LocaleKeys.noPublishedNft.tr(),
       style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
     );
   }
@@ -277,13 +277,13 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          LocaleKeys.no_nft_created.tr(),
+          LocaleKeys.noNftCreated.tr(),
           style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
         ),
         Padding(
           padding: EdgeInsets.only(bottom: 20.h),
           child: ClippedButton(
-            title: LocaleKeys.create_draft.tr(),
+            title: LocaleKeys.createDraft.tr(),
             bgColor: EaselAppTheme.kBlue,
             textColor: EaselAppTheme.kWhite,
             onPressed: () {

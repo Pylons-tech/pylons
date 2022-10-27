@@ -102,7 +102,7 @@ class NFTsListTile extends StatelessWidget {
                                   color: EaselAppTheme.kBlue,
                                 ),
                                 child: Text(
-                                  LocaleKeys.for_sale.tr(),
+                                  LocaleKeys.forSale.tr(),
                                   style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
                                 ),
                               )

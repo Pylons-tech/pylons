@@ -123,17 +123,17 @@ class _DescribeScreenState extends State<DescribeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       EaselTextField(
-                        label: LocaleKeys.give_nft_a_name.tr(),
-                        hint: LocaleKeys.nft_name_hint.tr(),
+                        label: LocaleKeys.giveNftAName.tr(),
+                        hint: LocaleKeys.nftNameHint.tr(),
                         controller: provider.artNameController,
                         textCapitalization: TextCapitalization.sentences,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            _artNameFieldError.value = LocaleKeys.enter_nft_name.tr();
+                            _artNameFieldError.value = LocaleKeys.enterNftName.tr();
                             return;
                           }
                           if (value.length <= kMinNFTName) {
-                            _artNameFieldError.value = LocaleKeys.nft_remaining_characters.tr(args: [kMinNFTName.toString()]);
+                            _artNameFieldError.value = LocaleKeys.nftRemainingCharacters.tr(args: [kMinNFTName.toString()]);
                             return;
                           }
                           _artNameFieldError.value = '';
@@ -160,13 +160,13 @@ class _DescribeScreenState extends State<DescribeScreen> {
                       ),
                       VerticalSpace(20.h),
                       EaselTextField(
-                        label: LocaleKeys.your_name_as_the_artist.tr(),
-                        hint: LocaleKeys.artist_hint.tr(),
+                        label: LocaleKeys.yourNameAsTheArtist.tr(),
+                        hint: LocaleKeys.artistHint.tr(),
                         controller: provider.artistNameController,
                         textCapitalization: TextCapitalization.sentences,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            _artistNameFieldError.value = LocaleKeys.enter_artist_name.tr();
+                            _artistNameFieldError.value = LocaleKeys.giveArtistName.tr();
                           } else {
                             _artistNameFieldError.value = '';
                           }
@@ -193,19 +193,19 @@ class _DescribeScreenState extends State<DescribeScreen> {
                       ),
                       VerticalSpace(20.h),
                       EaselTextField(
-                        label: LocaleKeys.describe_your_nft.tr(),
-                        hint: LocaleKeys.desc_nft_hint.tr(),
+                        label: LocaleKeys.describeYourNft.tr(),
+                        hint: LocaleKeys.descNftHint.tr(),
                         noOfLines: 5,
                         controller: provider.descriptionController,
                         textCapitalization: TextCapitalization.sentences,
                         inputFormatters: [LengthLimitingTextInputFormatter(kMaxDescription)],
                         validator: (value) {
                           if (value!.isEmpty) {
-                            _descriptionFieldError.value = LocaleKeys.enter_nft_description.tr();
+                            _descriptionFieldError.value = LocaleKeys.enterNftDescription.tr();
                             return;
                           }
                           if (value.length <= kMinDescription) {
-                            _descriptionFieldError.value = "${LocaleKeys.enter_more_than.tr()} $kMinDescription ${LocaleKeys.characters.tr()}";
+                            _descriptionFieldError.value = "${LocaleKeys.enterMoreThan.tr()} $kMinDescription ${LocaleKeys.characters.tr()}";
                             return;
                           }
                           _descriptionFieldError.value = '';
@@ -238,7 +238,7 @@ class _DescribeScreenState extends State<DescribeScreen> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text(
-                                    "${kMaxDescription - controller.text.length} ${LocaleKeys.character_limit.tr()}",
+                                    "${kMaxDescription - controller.text.length} ${LocaleKeys.characterLimit.tr()}",
                                     style: TextStyle(color: EaselAppTheme.kLightPurple, fontSize: 14.sp, fontWeight: FontWeight.w800),
                                   ),
                                 ],
@@ -268,7 +268,7 @@ class _DescribeScreenState extends State<DescribeScreen> {
                             validateAndUpdateDescription(false);
                           },
                           child: Text(
-                            LocaleKeys.save_as_draft.tr(),
+                            LocaleKeys.saveAsDraft.tr(),
                             style: TextStyle(color: EaselAppTheme.kLightGreyText, fontSize: 14.sp, fontWeight: FontWeight.w700),
                           ),
                         ),

@@ -18,6 +18,8 @@ import 'package:easel_flutter/utils/file_utils_helper.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
+import '../generated/locale_keys.g.dart';
+
 abstract class Repository {
   /// This method returns the recipe list
   /// Input : [cookBookId] id of the cookbook
@@ -174,7 +176,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.noInternet.tr()));
     }
 
     try {
@@ -184,7 +186,7 @@ class RepositoryImp implements Repository {
       return Right(sdkResponse);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CookBookNotFoundFailure("cookbook_not_found".tr()));
+      return Left(CookBookNotFoundFailure(LocaleKeys.cookbookNotFound.tr()));
     }
   }
 
@@ -260,7 +262,7 @@ class RepositoryImp implements Repository {
       return Right(id);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("save_error".tr()));
+      return Left(CacheFailure(LocaleKeys.saveError.tr()));
     }
   }
 
@@ -270,12 +272,12 @@ class RepositoryImp implements Repository {
       bool result = await localDataSource.updateNftFromDescription(saveNft);
 
       if (!result) {
-        return Left(CacheFailure("upload_error".tr()));
+        return Left(CacheFailure(LocaleKeys.uploadError.tr()));
       }
       return Right(result);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("upload_error".tr()));
+      return Left(CacheFailure(LocaleKeys.uploadError.tr()));
     }
   }
 
@@ -285,12 +287,12 @@ class RepositoryImp implements Repository {
       bool result = await localDataSource.updateNFTDialogShown(id);
 
       if (!result) {
-        return Left(CacheFailure("upload_error".tr()));
+        return Left(CacheFailure(LocaleKeys.uploadError.tr()));
       }
       return Right(result);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("upload_error".tr()));
+      return Left(CacheFailure(LocaleKeys.uploadError.tr()));
     }
   }
 
@@ -302,7 +304,7 @@ class RepositoryImp implements Repository {
       return Right(result);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("upload_error".tr()));
+      return Left(CacheFailure(LocaleKeys.uploadError.tr()));
     }
   }
 
@@ -314,7 +316,7 @@ class RepositoryImp implements Repository {
       return Right(apiResponse);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("update_failed".tr()));
+      return Left(CacheFailure(LocaleKeys.updateFailed.tr()));
     }
   }
 
@@ -326,7 +328,7 @@ class RepositoryImp implements Repository {
       return Right(response);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("something_wrong".tr()));
+      return Left(CacheFailure(LocaleKeys.somethingWrong.tr()));
     }
   }
 
@@ -337,7 +339,7 @@ class RepositoryImp implements Repository {
       return Right(result);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("something_wrong".tr()));
+      return Left(CacheFailure(LocaleKeys.somethingWrong.tr()));
     }
   }
 
@@ -346,12 +348,12 @@ class RepositoryImp implements Repository {
     try {
       NFT? data = await localDataSource.getNft(id);
       if (data == null) {
-        return Left(CacheFailure("something_wrong".tr()));
+        return Left(CacheFailure(LocaleKeys.somethingWrong.tr()));
       }
       return Right(data);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("something_wrong".tr()));
+      return Left(CacheFailure(LocaleKeys.somethingWrong.tr()));
     }
   }
 
@@ -363,7 +365,7 @@ class RepositoryImp implements Repository {
       return Right(pickedFileModel);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(PickingFileFailure(message: "picking_file_error".tr()));
+      return Left(PickingFileFailure(message: LocaleKeys.pickingFileError.tr()));
     }
   }
 
@@ -394,7 +396,7 @@ class RepositoryImp implements Repository {
       return Right(file);
     } catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(UrlLaunchingFileFailure(message: "url_launching_error".tr()));
+      return Left(UrlLaunchingFileFailure(message: LocaleKeys.urlLaunchingError.tr()));
     }
   }
 
@@ -413,7 +415,7 @@ class RepositoryImp implements Repository {
     try {
       return Right(await remoteDataSource.logUserJourney(screenName: screenName));
     } catch (e) {
-      return Left(AnalyticsFailure(message: "analytics_failure".tr()));
+      return Left(AnalyticsFailure(message: LocaleKeys.analyticsFailure.tr()));
     }
   }
 }

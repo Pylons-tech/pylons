@@ -55,7 +55,7 @@ class DeleteDialog {
                       height: 35.h,
                     ),
                     Text(
-                      LocaleKeys.are_you_sure_you_want_to_delete.tr(),
+                      LocaleKeys.areYouSureYouWantToDelete.tr(),
                       textAlign: TextAlign.center,
                       style: EaselAppTheme.kDeleteHeaderTextStyle,
                     ),

@@ -34,7 +34,7 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
               height: 80.h,
             ),
             Text(
-              LocaleKeys.welcome_to_easel.tr(),
+              LocaleKeys.welcomeToEasel.tr(),
               style: TextStyle(
                   color: EaselAppTheme.kBlack,
                   fontSize: 20.sp,
@@ -45,7 +45,7 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
               height: 50.h,
             ),
             Text(
-              LocaleKeys.easel_is_tool.tr(),
+              LocaleKeys.easelIsTool.tr(),
               style: TextStyle(
                 color: EaselAppTheme.kBlack,
                 fontSize: 14.sp,
@@ -55,7 +55,7 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
               height: 30.h,
             ),
             Text(
-              LocaleKeys.after_you_successfully.tr(),
+              LocaleKeys.afterYouSuccessfully.tr(),
               style: TextStyle(
                 color: EaselAppTheme.kBlack,
                 fontSize: 14.sp,
@@ -65,7 +65,7 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
               height: 30.h,
             ),
             Text(
-              LocaleKeys.once_you_press.tr(),
+              LocaleKeys.onceYouPress.tr(),
               style: TextStyle(
                 color: EaselAppTheme.kBlack,
                 fontSize: 14.sp,

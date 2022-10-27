@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../../../utils/constants.dart';
 
 class ShowSomethingWentWrongDialog {
@@ -72,7 +73,7 @@ class ShowSomethingWentWrongDialog {
                     ),
                     Center(
                       child: Text(
-                        "close".tr(),
+                        LocaleKeys.close.tr(),
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
                       ),
                     ),
@@ -130,7 +131,7 @@ class ShowSomethingWentWrongDialog {
                       Positioned(left: 0, right: 0, top: 0, bottom: 0, child: Center(child: SizedBox(width: 130.w, child: SvgPicture.asset(SVGUtils.kSvgCloseButton, fit: BoxFit.cover)))),
                       Center(
                         child: Text(
-                          "close".tr(),
+                          LocaleKeys.close.tr(),
                           style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
                         ),
                       ),
@@ -156,7 +157,7 @@ class ShowSomethingWentWrongDialog {
     if (!appAlreadyInstalled) {
       PylonsWallet.instance.goToInstall();
     } else {
-      scaffoldMessenger.show(message: "pylons_already_installed".tr());
+      scaffoldMessenger.show(message: LocaleKeys.pylonsAlreadyInstalled.tr());
     }
   }
 }

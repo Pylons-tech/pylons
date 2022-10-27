@@ -20,6 +20,8 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
+import '../generated/locale_keys.g.dart';
+
 class VideoWidget extends StatefulWidget {
   final File? file;
   final String? filePath;
@@ -160,7 +162,7 @@ class VideoWidgetState extends State<VideoWidget> {
                             child: Padding(
                               padding: const EdgeInsets.all(10),
                               child: Text(
-                                "video_player_error".tr(),
+                                LocaleKeys.videoPlayerError.tr(),
                                 style: TextStyle(
                                     fontSize: 18.sp,
                                     color: EaselAppTheme.kWhite),
@@ -191,7 +193,7 @@ class VideoWidgetState extends State<VideoWidget> {
                                 child: Padding(
                               padding: const EdgeInsets.all(10),
                               child: Text(
-                                "video_player_error".tr(),
+                                LocaleKeys.videoPlayerError.tr(),
                                 style: TextStyle(
                                     fontSize: 18.sp,
                                     color: EaselAppTheme.kBlack),

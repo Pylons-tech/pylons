@@ -68,7 +68,7 @@ class BuildPublishedNFTsBottomSheet {
                     onPressed: () {
                       onViewOnPylonsPressed(nft: nft);
                     },
-                    title: LocaleKeys.view_on_pylons.tr(),
+                    title: LocaleKeys.viewOnPylons.tr(),
                     image: SVGUtils.kSvgPylonsLogo,
                   ),
                   Divider(thickness: 1.h),
@@ -82,10 +82,10 @@ class BuildPublishedNFTsBottomSheet {
                           scaffoldState
                             ..hideCurrentSnackBar()
                             ..showSnackBar(
-                              SnackBar(content: Text(LocaleKeys.copied_to_clipboard.tr())),
+                              SnackBar(content: Text(LocaleKeys.copiedToClipboard.tr())),
                             );
                         },
-                        title: LocaleKeys.copy_cid.tr(),
+                        title: LocaleKeys.copyCid.tr(),
                         image: PngUtils.kSvgIpfsLogo,
                         isSvg: false,
                       );

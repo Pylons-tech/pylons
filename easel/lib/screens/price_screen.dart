@@ -110,7 +110,7 @@ class _PriceScreenState extends State<PriceScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        LocaleKeys.is_this_free.tr(),
+                        LocaleKeys.isThisFree.tr(),
                         style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
                       ),
                       SizedBox(
@@ -178,11 +178,11 @@ class _PriceScreenState extends State<PriceScreen> {
                                     controller: provider.priceController,
                                     validator: (value) {
                                       if (value!.isEmpty) {
-                                        _priceFieldError.value = LocaleKeys.enter_price.tr();
+                                        _priceFieldError.value = LocaleKeys.enterPrice.tr();
                                         return;
                                       }
                                       if (double.parse(value.replaceAll(",", "")) < kMinValue) {
-                                        _priceFieldError.value = "${LocaleKeys.minimum_is.tr()} $kMinValue";
+                                        _priceFieldError.value = "${LocaleKeys.minimumIs.tr()} $kMinValue";
                                         return;
                                       }
                                       _priceFieldError.value = '';
@@ -207,7 +207,7 @@ class _PriceScreenState extends State<PriceScreen> {
                                         );
                                       }),
                                   Text(
-                                    LocaleKeys.network_fee_10.tr(),
+                                    LocaleKeys.networkFee10.tr(),
                                     style: TextStyle(color: EaselAppTheme.kLightPurple, fontSize: 14.sp, fontWeight: FontWeight.w800),
                                   ),
                                 ],
@@ -227,11 +227,11 @@ class _PriceScreenState extends State<PriceScreen> {
                               controller: provider.royaltyController,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  _royaltiesFieldError.value = LocaleKeys.enter_royalty_in_percentage.tr();
+                                  _royaltiesFieldError.value = LocaleKeys.enterRoyaltyInPercentage.tr();
                                   return;
                                 }
                                 if (int.parse(value) > kMaxRoyalty) {
-                                  _royaltiesFieldError.value = "${LocaleKeys.allowed_royalty_is_between.tr()} $kMinRoyalty-$kMaxRoyalty %";
+                                  _royaltiesFieldError.value = "${LocaleKeys.allowedRoyaltyIsBetween.tr()} $kMinRoyalty-$kMaxRoyalty %";
                                   return;
                                 }
                                 _royaltiesFieldError.value = '';
@@ -257,14 +257,14 @@ class _PriceScreenState extends State<PriceScreen> {
                               },
                             ),
                             Text(
-                              "${LocaleKeys.royalty_note.tr()} “$kMinRoyalty”.",
+                              "${LocaleKeys.royaltyNote.tr()} “$kMinRoyalty”.",
                               style: TextStyle(color: EaselAppTheme.kLightPurple, fontWeight: FontWeight.w800, fontSize: 14.sp),
                             ),
                             VerticalSpace(20.h),
                             EaselTextField(
                               key: ValueKey(provider.selectedDenom.name),
                               label: LocaleKeys.editions.tr(),
-                              hint: LocaleKeys.how_many_copies.tr(),
+                              hint: LocaleKeys.howManyCopies.tr(),
                               keyboardType: TextInputType.number,
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly,
@@ -276,15 +276,15 @@ class _PriceScreenState extends State<PriceScreen> {
                               controller: provider.noOfEditionController,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  _noOfEditionsFieldError.value = LocaleKeys.enter_number_editions.tr();
+                                  _noOfEditionsFieldError.value = LocaleKeys.enterNumberEditions.tr();
                                   return;
                                 }
                                 if (int.parse(value.replaceAll(",", "")) < kMinEditionValue) {
-                                  _noOfEditionsFieldError.value = "${LocaleKeys.minimum_is.tr()} $kMinEditionValue";
+                                  _noOfEditionsFieldError.value = "${LocaleKeys.minimumIs.tr()} $kMinEditionValue";
                                   return;
                                 }
                                 if (int.parse(value.replaceAll(",", "")) > kMaxEdition) {
-                                  _noOfEditionsFieldError.value = "${LocaleKeys.maximum_is.tr()} $kMaxEdition";
+                                  _noOfEditionsFieldError.value = "${LocaleKeys.maximumIs.tr()} $kMaxEdition";
                                   return;
                                 }
                                 _noOfEditionsFieldError.value = '';
@@ -354,7 +354,7 @@ class _PriceScreenState extends State<PriceScreen> {
                             validateAndUpdatePrice(false);
                           },
                           child: Text(
-                            LocaleKeys.save_as_draft.tr(),
+                            LocaleKeys.saveAsDraft.tr(),
                             style: TextStyle(color: EaselAppTheme.kLightGreyText, fontSize: 14.sp, fontWeight: FontWeight.w700),
                           ),
                         ),

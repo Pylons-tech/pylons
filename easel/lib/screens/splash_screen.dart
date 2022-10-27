@@ -67,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     child: SvgPicture.asset(SVGUtils.kSplashTabEasel)),
                 SizedBox(height: 10.h),
                 Text(
-                  LocaleKeys.nft_manager.tr(),
+                  LocaleKeys.nftManager.tr(),
                   style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w600,

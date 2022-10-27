@@ -156,7 +156,7 @@ class _DraftListTileState extends State<DraftListTile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "nft_name".tr(args: [widget.nft.name.isNotEmpty ? widget.nft.name : 'Nft Name']),
+                            "nftName".tr(args: [widget.nft.name.isNotEmpty ? widget.nft.name : 'Nft Name']),
                             style: titleStyle.copyWith(fontSize: isTablet ? 13.sp : 18.sp),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -269,7 +269,7 @@ class _DraftListTileState extends State<DraftListTile> {
         if (mounted) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(LocaleKeys.copied_to_clipboard.tr())));
+            ..showSnackBar(SnackBar(content: Text(LocaleKeys.copiedToClipboard.tr())));
         }
         break;
       default:

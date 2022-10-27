@@ -145,7 +145,7 @@ class CreatorHubViewModel extends ChangeNotifier {
 
     if (getNftResponse.isLeft()) {
       loading.dismiss();
-      LocaleKeys.something_wrong.tr().show();
+      LocaleKeys.somethingWrong.tr().show();
       return;
     }
 
@@ -160,7 +160,7 @@ class CreatorHubViewModel extends ChangeNotifier {
     final getNftResponse = await repository.getNfts();
 
     if (getNftResponse.isLeft()) {
-      LocaleKeys.something_wrong.tr().show();
+      LocaleKeys.somethingWrong.tr().show();
 
       return;
     }
@@ -174,7 +174,7 @@ class CreatorHubViewModel extends ChangeNotifier {
     final deleteNftResponse = await repository.deleteNft(id!);
 
     if (deleteNftResponse.isLeft()) {
-      LocaleKeys.delete_error.tr().show();
+      LocaleKeys.deleteError.tr().show();
       return;
     }
     nftDraftList.removeWhere((element) => element.id == id);

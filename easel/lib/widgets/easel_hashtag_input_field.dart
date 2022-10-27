@@ -9,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../easel_provider.dart';
+import '../generated/locale_keys.g.dart';
 
 class EaselHashtagInputField extends StatefulWidget {
   const EaselHashtagInputField({Key? key}) : super(key: key);
@@ -37,7 +38,7 @@ class _HashtagInputFieldState extends State<EaselHashtagInputField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "hashtags".tr(),
+            LocaleKeys.hashtags.tr(),
             textAlign: TextAlign.start,
             style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
           ),
@@ -69,7 +70,7 @@ class _HashtagInputFieldState extends State<EaselHashtagInputField> {
                             keyboardType: TextInputType.text,
                             textCapitalization: TextCapitalization.none,
                             decoration: InputDecoration(
-                              hintText: "hashtag_hint".tr(),
+                              hintText: LocaleKeys.hashtagHint.tr(),
                               hintStyle: TextStyle(fontSize: isTablet ? 16.sp : 15.sp, color: EaselAppTheme.kGrey),
                               border: const OutlineInputBorder(borderSide: BorderSide.none),
                               floatingLabelBehavior: FloatingLabelBehavior.always,

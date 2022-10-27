@@ -133,7 +133,7 @@ class FileUtilsHelperImpl implements FileUtilsHelper {
     if (canLaunch) {
       launchUrlString(url, mode: LaunchMode.externalApplication);
     } else {
-      throw (LocaleKeys.cannot_launch_url.tr());
+      throw (LocaleKeys.cannotLaunchUrl.tr());
     }
   }
 

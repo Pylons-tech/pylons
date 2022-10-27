@@ -325,7 +325,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       ReadMoreText(
                         widget.nft.description,
                         trimExpandedText: LocaleKeys.collapse.tr(),
-                        trimCollapsedText: LocaleKeys.read_more.tr(),
+                        trimCollapsedText: LocaleKeys.readMore.tr(),
                         moreStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w300, color: EaselAppTheme.kLightPurple),
                         lessStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w300, color: EaselAppTheme.kLightPurple),
                       ),
@@ -354,14 +354,14 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               subtitle: "${widget.nft.tradePercentage}%",
                             ),
                             SizedBox(height: 5.h),
-                            buildRow(title: LocaleKeys.content_identifier.tr(), subtitle: widget.nft.cid, canCopy: true),
+                            buildRow(title: LocaleKeys.contentIdentifier.tr(), subtitle: widget.nft.cid, canCopy: true),
                             SizedBox(height: 5.h),
                             CidOrIpfs(
                               viewCid: (context) {
                                 return const SizedBox.shrink();
                               },
                               viewIpfs: (context) {
-                                return buildRow(title: LocaleKeys.asset_uri.tr(), subtitle: LocaleKeys.view.tr(), viewIPFS: true);
+                                return buildRow(title: LocaleKeys.assetUri.tr(), subtitle: LocaleKeys.view.tr(), viewIPFS: true);
                               },
                               type: widget.nft.assetType,
                             ),
@@ -387,7 +387,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             ),
                             ClippedButton(
                               key: const Key(kSaveAsDraftPublishKey),
-                              title: LocaleKeys.save_as_draft.tr(),
+                              title: LocaleKeys.saveAsDraft.tr(),
                               bgColor: Colors.white.withOpacity(0.2),
                               textColor: EaselAppTheme.kWhite,
                               onPressed: () async {
@@ -458,7 +458,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           text: TextSpan(
             children: [
               TextSpan(
-                text: LocaleKeys.created_by.tr(),
+                text: LocaleKeys.createdBy.tr(),
                 style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w500),
               ),
               TextSpan(text: owner, style: TextStyle(color: EaselAppTheme.kLightPurple, fontSize: 18.sp, fontWeight: FontWeight.w500)),
@@ -605,7 +605,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   await Clipboard.setData(ClipboardData(text: subtitle));
                   if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(LocaleKeys.copied_to_clipboard.tr())),
+                    SnackBar(content: Text(LocaleKeys.copiedToClipboard.tr())),
                   );
                 },
                 child: Icon(

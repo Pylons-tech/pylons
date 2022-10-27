@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 class NFTVideoPlayerScreen extends StatelessWidget {
   const NFTVideoPlayerScreen({Key? key}) : super(key: key);
 
@@ -33,7 +35,7 @@ class NFTVideoPlayerScreen extends StatelessWidget {
                           child: Padding(
                         padding: const EdgeInsets.all(10),
                         child: Text(
-                          "video_player_error".tr(),
+                          LocaleKeys.videoPlayerError.tr(),
                           style: TextStyle(
                               fontSize: 18.sp, color: EaselAppTheme.kWhite),
                         ),

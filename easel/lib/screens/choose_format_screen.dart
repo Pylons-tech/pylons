@@ -26,7 +26,7 @@ class ChooseFormatScreen extends StatefulWidget {
 }
 
 class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
-  ValueNotifier<String> errorText = ValueNotifier(LocaleKeys.err_pic_file.tr());
+  ValueNotifier<String> errorText = ValueNotifier(LocaleKeys.errPicFile.tr());
 
   void proceedToNext({required PickedFileModel result, required EaselProvider easelProvider}) async {
     EaselProvider provider = context.read();
@@ -37,7 +37,7 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
     }
 
     if (!provider.nftFormat.extensions.contains(result.extension)) {
-      errorText.value = LocaleKeys.un_supported_format.tr();
+      errorText.value = LocaleKeys.unSupportedFormat.tr();
       showErrorDialog();
       return;
     }
@@ -49,7 +49,7 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
     }
 
     if (easelProvider.repository.getFileSizeInGB(File(result.path).lengthSync()) > kFileSizeLimitForAudiVideoInGB) {
-      errorText.value = LocaleKeys.size_error.tr();
+      errorText.value = LocaleKeys.sizeError.tr();
       showErrorDialog(type: nftFormat.format);
       return;
     }
@@ -321,7 +321,7 @@ class _ErrorMessageWidget extends StatelessWidget {
                 Text((nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio) ? "• ${(kFileSizeLimitForAudiVideoInGB * 1000).toStringAsFixed(0)}MB Limit" : "• ${kFileSizeLimitInGB}GB Limit",
                     style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
                 Text(kUploadHint2, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
-                Text(LocaleKeys.upload_hint_three.tr(), style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
+                Text(LocaleKeys.uploadHintThree.tr(), style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
               ],
             ),
             SizedBox(height: 30.h),
@@ -377,7 +377,7 @@ class _ErrorMessageWidget extends StatelessWidget {
                 Text((nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio) ? "• ${(kFileSizeLimitForAudiVideoInGB * 1000).toStringAsFixed(0)}MB Limit" : "• ${kFileSizeLimitInGB}GB Limit",
                     style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
                 Text(kUploadHint2, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
-                Text(LocaleKeys.upload_hint_three.tr(), style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
+                Text(LocaleKeys.uploadHintThree.tr(), style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
               ],
             ),
             SizedBox(height: 30.h),

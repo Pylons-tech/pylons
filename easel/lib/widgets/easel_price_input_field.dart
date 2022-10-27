@@ -1,3 +1,4 @@
+import 'package:easel_flutter/generated/locale_keys.g.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -28,7 +29,7 @@ class EaselPriceInputField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "price".tr(),
+          LocaleKeys.price.tr(),
           textAlign: TextAlign.start,
           style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
         ),
@@ -58,7 +59,7 @@ class EaselPriceInputField extends StatelessWidget {
                         textCapitalization: TextCapitalization.none,
                         inputFormatters: inputFormatters,
                         decoration: InputDecoration(
-                            hintText: "price_hint".tr(),
+                            hintText: LocaleKeys.priceHint.tr(),
                             hintStyle: TextStyle(
                                 fontSize: 15.sp,
                                 fontWeight: FontWeight.w400,

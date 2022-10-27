@@ -100,10 +100,10 @@ class DraftsMoreBottomSheet extends StatelessWidget {
                       state
                         ..hideCurrentSnackBar()
                         ..showSnackBar(
-                          SnackBar(content: Text(LocaleKeys.copied_to_clipboard.tr())),
+                          SnackBar(content: Text(LocaleKeys.copiedToClipboard.tr())),
                         );
                     },
-                    title: LocaleKeys.copy_cid.tr(),
+                    title: LocaleKeys.copyCid.tr(),
                     image: PngUtils.kSvgIpfsLogo,
                     isSvg: false,
                   );

@@ -57,7 +57,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                 SizedBox(height: MediaQuery.of(context).viewPadding.top + 20.h),
                 Align(
                   alignment: Alignment.center,
-                  child: Text(LocaleKeys.nft_preview_header.tr(),
+                  child: Text(LocaleKeys.nftPreviewHeader.tr(),
                       textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: EaselAppTheme.kLightPurple, fontSize: 15.sp, fontWeight: FontWeight.w600)),
                 ),
                 Align(
@@ -136,7 +136,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
         break;
       case NFTTypes.video:
         if (provider.videoThumbnail == null) {
-          context.show(message: LocaleKeys.kindly_upload_thumbnail.tr());
+          context.show(message: LocaleKeys.kindlyUploadThumbnail.tr());
           return false;
         }
         result = await saveToUpload();
@@ -144,7 +144,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
         break;
       case NFTTypes.audio:
         if (provider.audioThumbnail == null) {
-          context.show(message: LocaleKeys.kindly_upload_thumbnail.tr());
+          context.show(message: LocaleKeys.kindlyUploadThumbnail.tr());
           return false;
         }
         result = await saveToUpload();
@@ -154,7 +154,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
         break;
       case NFTTypes.pdf:
         if (provider.pdfThumbnail == null) {
-          context.show(message: LocaleKeys.kindly_upload_thumbnail.tr());
+          context.show(message: LocaleKeys.kindlyUploadThumbnail.tr());
           return false;
         }
         result = await saveToUpload();
@@ -166,7 +166,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
   Future<bool> saveToUpload() async {
     final provider = context.read<EaselProvider>();
     if (!await provider.saveNftLocally(UploadStep.assetUploaded)) {
-      LocaleKeys.something_wrong.tr().show();
+      LocaleKeys.somethingWrong.tr().show();
       return false;
     }
     return true;
