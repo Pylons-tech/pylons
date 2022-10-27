@@ -354,6 +354,8 @@ abstract class  LocaleKeys {
   static const claim_free_nft = 'claim_free_nft';
   static const before_too_late = 'before_too_late';
   static const please_try_again_later = 'please_try_again_later';
+  static const checkout = 'checkout';
+  static const artist = 'artist';
   static const buying_pylon_points = 'buying_pylon_points';
   static const transaction_date = 'transaction_date';
   static const retry = 'retry';
