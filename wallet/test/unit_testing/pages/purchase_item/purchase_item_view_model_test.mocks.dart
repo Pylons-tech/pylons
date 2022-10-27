@@ -2744,6 +2744,25 @@ class MockRepository extends _i1.Mock implements _i15.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, void>> logUserJourney(
+          {required String? screenName}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #logUserJourney,
+          [],
+          {#screenName: screenName},
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, void>>.value(
+            _FakeEither_0<_i9.Failure, void>(
+          this,
+          Invocation.method(
+            #logUserJourney,
+            [],
+            {#screenName: screenName},
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, void>>);
 }
 
 /// A class which mocks [NFT].
