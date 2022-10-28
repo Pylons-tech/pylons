@@ -24,6 +24,11 @@ service Query {
 		option (google.api.http).get = "/pylons/trades/{creator}";
 	}
 
+	// Queries a list of Reward Distribution items.
+	rpc ListRewardDistributionByAddress(QueryListRewardDistributionRequest) returns (RewardHistory) {
+		option (google.api.http).get = "/pylons/audit/reward_distribution/{address}";
+	}
+
 	// Queries a list of Signup by Referee Address items.
 	rpc ListSignUpByReferee(QueryListSignUpByReferee) returns (QueryListSignUpByRefereeResponse) {
 		option (google.api.http).get = "/pylons/trades/{creator}";
@@ -147,6 +152,10 @@ message QueryListTradesByCreatorRequest {
   string creator = 1;
 	cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
+message QueryListRewardDistributionRequest {
+  string address = 1;
+	cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
 
 message QueryListTradesByCreatorResponse {
 	option (gogoproto.equal)           = false;
@@ -176,7 +185,12 @@ message QueryGetRecipeHistoryRequest {
 message QueryGetRecipeHistoryResponse {
 	repeated RecipeHistory history = 1;
 }
-
+message RewardHistory{
+	string sender=1;
+	string receiver=2;
+	string amount =3;
+	string created_at=4;
+}
 message RecipeHistory {
 	string item_id = 1;
 	string cookbook_id = 2;

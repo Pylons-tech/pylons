@@ -93,7 +93,8 @@ cat $HOME/.pylons/config/genesis.json | jq '.app_state["staking"]["params"]["bon
 cat $HOME/.pylons/config/genesis.json | jq '.app_state["crisis"]["constant_fee"]["denom"]="upylon"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
 cat $HOME/.pylons/config/genesis.json | jq '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]="upylon"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
 cat $HOME/.pylons/config/genesis.json | jq '.app_state["mint"]["params"]["mint_denom"]="upylon"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
-
+cat $HOME/.pylons/config/genesis.json | jq '.epochs["epochs"]["identifier"]="day"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
+cat $HOME/.pylons/config/genesis.json | jq '.epochs["epochs"]["duration"]="30s"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
 # Set gas limit in genesis
 # cat $HOME/.pylons/config/genesis.json | jq '.consensus_params["block"]["max_gas"]="10000000"' > $HOME/.pylons/config/tmp_genesis.json && mv $HOME/.pylons/config/tmp_genesis.json $HOME/.pylons/config/genesis.json
 

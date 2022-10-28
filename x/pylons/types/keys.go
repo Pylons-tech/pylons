@@ -82,6 +82,8 @@ const (
 	CreateExecutionKey = "create_execution"
 	// StripeRefundKey used to store stripe refund records
 	StripeRefundKey = "StripeRefund-value-"
+	// Reward Distribution Used to store reward distribution
+	RewardEventKey = "reward-distribution-"
 )
 
 const (
@@ -106,6 +108,7 @@ const (
 	TransferRecipientEvent  = "transfer.recipient="
 	CreateItemReceiverEvent = "create_item.receiver="
 	CreateItemSenderEvent   = "create_item.sender="
+	RewardReceiverEvent     = "reward_distribution.receiver="
 
 	TransferEventKey = "transfer"
 

@@ -39,6 +39,17 @@ const QueryListTradesByCreatorRequest$json = const {
 
 /// Descriptor for `QueryListTradesByCreatorRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List queryListTradesByCreatorRequestDescriptor = $convert.base64Decode('Ch9RdWVyeUxpc3RUcmFkZXNCeUNyZWF0b3JSZXF1ZXN0EhgKB2NyZWF0b3IYASABKAlSB2NyZWF0b3ISRgoKcGFnaW5hdGlvbhgCIAEoCzImLmNvc21vcy5iYXNlLnF1ZXJ5LnYxYmV0YTEuUGFnZVJlcXVlc3RSCnBhZ2luYXRpb24=');
+@$core.Deprecated('Use queryListRewardDistributionRequestDescriptor instead')
+const QueryListRewardDistributionRequest$json = const {
+  '1': 'QueryListRewardDistributionRequest',
+  '2': const [
+    const {'1': 'address', '3': 1, '4': 1, '5': 9, '10': 'address'},
+    const {'1': 'pagination', '3': 2, '4': 1, '5': 11, '6': '.cosmos.base.query.v1beta1.PageRequest', '10': 'pagination'},
+  ],
+};
+
+/// Descriptor for `QueryListRewardDistributionRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List queryListRewardDistributionRequestDescriptor = $convert.base64Decode('CiJRdWVyeUxpc3RSZXdhcmREaXN0cmlidXRpb25SZXF1ZXN0EhgKB2FkZHJlc3MYASABKAlSB2FkZHJlc3MSRgoKcGFnaW5hdGlvbhgCIAEoCzImLmNvc21vcy5iYXNlLnF1ZXJ5LnYxYmV0YTEuUGFnZVJlcXVlc3RSCnBhZ2luYXRpb24=');
 @$core.Deprecated('Use queryListTradesByCreatorResponseDescriptor instead')
 const QueryListTradesByCreatorResponse$json = const {
   '1': 'QueryListTradesByCreatorResponse',
@@ -94,6 +105,19 @@ const QueryGetRecipeHistoryResponse$json = const {
 
 /// Descriptor for `QueryGetRecipeHistoryResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List queryGetRecipeHistoryResponseDescriptor = $convert.base64Decode('Ch1RdWVyeUdldFJlY2lwZUhpc3RvcnlSZXNwb25zZRI2CgdoaXN0b3J5GAEgAygLMhwucHlsb25zLnB5bG9ucy5SZWNpcGVIaXN0b3J5UgdoaXN0b3J5');
+@$core.Deprecated('Use rewardHistoryDescriptor instead')
+const RewardHistory$json = const {
+  '1': 'RewardHistory',
+  '2': const [
+    const {'1': 'sender', '3': 1, '4': 1, '5': 9, '10': 'sender'},
+    const {'1': 'receiver', '3': 2, '4': 1, '5': 9, '10': 'receiver'},
+    const {'1': 'amount', '3': 3, '4': 1, '5': 9, '10': 'amount'},
+    const {'1': 'created_at', '3': 4, '4': 1, '5': 9, '10': 'createdAt'},
+  ],
+};
+
+/// Descriptor for `RewardHistory`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List rewardHistoryDescriptor = $convert.base64Decode('Cg1SZXdhcmRIaXN0b3J5EhYKBnNlbmRlchgBIAEoCVIGc2VuZGVyEhoKCHJlY2VpdmVyGAIgASgJUghyZWNlaXZlchIWCgZhbW91bnQYAyABKAlSBmFtb3VudBIdCgpjcmVhdGVkX2F0GAQgASgJUgljcmVhdGVkQXQ=');
 @$core.Deprecated('Use recipeHistoryDescriptor instead')
 const RecipeHistory$json = const {
   '1': 'RecipeHistory',

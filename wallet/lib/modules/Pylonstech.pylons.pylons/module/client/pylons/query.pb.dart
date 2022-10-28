@@ -11,7 +11,7 @@ import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'accounts.pb.dart' as $12;
-import '../cosmos/base/query/v1beta1/pagination.pb.dart' as $13;
+import '../../cosmos/base/query/v1beta1/pagination.pb.dart' as $13;
 import 'trade.pb.dart' as $8;
 import 'item.pb.dart' as $3;
 import 'stripe_refund.pb.dart' as $14;
@@ -168,6 +168,69 @@ class QueryListTradesByCreatorRequest extends $pb.GeneratedMessage {
   $core.bool hasCreator() => $_has(0);
   @$pb.TagNumber(1)
   void clearCreator() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $13.PageRequest get pagination => $_getN(1);
+  @$pb.TagNumber(2)
+  set pagination($13.PageRequest v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasPagination() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPagination() => clearField(2);
+  @$pb.TagNumber(2)
+  $13.PageRequest ensurePagination() => $_ensure(1);
+}
+
+class QueryListRewardDistributionRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'QueryListRewardDistributionRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'address')
+    ..aOM<$13.PageRequest>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'pagination', subBuilder: $13.PageRequest.create)
+    ..hasRequiredFields = false
+  ;
+
+  QueryListRewardDistributionRequest._() : super();
+  factory QueryListRewardDistributionRequest({
+    $core.String? address,
+    $13.PageRequest? pagination,
+  }) {
+    final _result = create();
+    if (address != null) {
+      _result.address = address;
+    }
+    if (pagination != null) {
+      _result.pagination = pagination;
+    }
+    return _result;
+  }
+  factory QueryListRewardDistributionRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory QueryListRewardDistributionRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  QueryListRewardDistributionRequest clone() => QueryListRewardDistributionRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  QueryListRewardDistributionRequest copyWith(void Function(QueryListRewardDistributionRequest) updates) => super.copyWith((message) => updates(message as QueryListRewardDistributionRequest)) as QueryListRewardDistributionRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static QueryListRewardDistributionRequest create() => QueryListRewardDistributionRequest._();
+  QueryListRewardDistributionRequest createEmptyInstance() => create();
+  static $pb.PbList<QueryListRewardDistributionRequest> createRepeated() => $pb.PbList<QueryListRewardDistributionRequest>();
+  @$core.pragma('dart2js:noInline')
+  static QueryListRewardDistributionRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<QueryListRewardDistributionRequest>(create);
+  static QueryListRewardDistributionRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get address => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set address($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasAddress() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAddress() => clearField(1);
 
   @$pb.TagNumber(2)
   $13.PageRequest get pagination => $_getN(1);
@@ -454,6 +517,95 @@ class QueryGetRecipeHistoryResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<RecipeHistory> get history => $_getList(0);
+}
+
+class RewardHistory extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'RewardHistory', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sender')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'receiver')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'amount')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt')
+    ..hasRequiredFields = false
+  ;
+
+  RewardHistory._() : super();
+  factory RewardHistory({
+    $core.String? sender,
+    $core.String? receiver,
+    $core.String? amount,
+    $core.String? createdAt,
+  }) {
+    final _result = create();
+    if (sender != null) {
+      _result.sender = sender;
+    }
+    if (receiver != null) {
+      _result.receiver = receiver;
+    }
+    if (amount != null) {
+      _result.amount = amount;
+    }
+    if (createdAt != null) {
+      _result.createdAt = createdAt;
+    }
+    return _result;
+  }
+  factory RewardHistory.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RewardHistory.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  RewardHistory clone() => RewardHistory()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  RewardHistory copyWith(void Function(RewardHistory) updates) => super.copyWith((message) => updates(message as RewardHistory)) as RewardHistory; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static RewardHistory create() => RewardHistory._();
+  RewardHistory createEmptyInstance() => create();
+  static $pb.PbList<RewardHistory> createRepeated() => $pb.PbList<RewardHistory>();
+  @$core.pragma('dart2js:noInline')
+  static RewardHistory getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RewardHistory>(create);
+  static RewardHistory? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get sender => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set sender($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasSender() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSender() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get receiver => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set receiver($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasReceiver() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearReceiver() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get amount => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set amount($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasAmount() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearAmount() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get createdAt => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set createdAt($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasCreatedAt() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearCreatedAt() => clearField(4);
 }
 
 class RecipeHistory extends $pb.GeneratedMessage {
@@ -2528,3 +2680,4 @@ class QueryGetCookbookResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $6.Cookbook ensureCookbook() => $_ensure(0);
 }
+

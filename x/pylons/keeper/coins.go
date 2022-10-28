@@ -11,7 +11,18 @@ func (k Keeper) SendRewardsFromFeeCollector(ctx sdk.Context, addr sdk.AccAddress
 
 	// send coins
 	err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, feeCollector, addr, amounts)
-
+	if err == nil {
+		senderAddr := k.accountKeeper.GetModuleAddress(feeCollector)
+		toaddr := addr.String()
+		fromaddr := senderAddr.String()
+		data := &types.RewardHistory{
+			Receiver:  toaddr,
+			Sender:    fromaddr,
+			Amount:    amounts.String(),
+			CreatedAt: ctx.BlockTime().String(),
+		}
+		k.SetRewardDistribution(ctx, *data)
+	}
 	return err
 }
 
