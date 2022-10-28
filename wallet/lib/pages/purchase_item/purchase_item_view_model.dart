@@ -229,6 +229,8 @@ class PurchaseItemViewModel extends ChangeNotifier {
     }
   }
 
+  bool isOwner() => nft.ownerAddress == walletsStore.getWallets().value.last.publicAddress;
+
   Future<void> initializeVideoPlayer() async {
     videoPlayerHelper.initializeVideoPlayer(url: nft.url);
     videoPlayerController = videoPlayerHelper.getVideoPlayerController();

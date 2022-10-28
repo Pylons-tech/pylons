@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
@@ -29,7 +28,6 @@ import 'package:pylons_wallet/pages/purchase_item/widgets/purchase_video_player_
 import 'package:pylons_wallet/pages/purchase_item/widgets/purchase_video_progress_widget.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/trade_receipt_dialog.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/transaction_complete_dialog.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
@@ -432,8 +430,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   }
 
   Stack buildOpenedSheet(BuildContext context, PurchaseItemViewModel viewModel) {
-    final walletStore = GetIt.I.get<WalletsStore>();
-
     return Stack(
       children: [
         Align(
@@ -587,7 +583,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               SizedBox(height: 10.h),
                               if (viewModel.nft.type != NftType.TYPE_RECIPE)
                                 TabField(
-                                  name:  LocaleKeys.history.tr(),
+                                  name: LocaleKeys.history.tr(),
                                   icon: 'history',
                                   nft: viewModel.nft,
                                   owner: viewModel.nft.owner,
@@ -625,7 +621,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               SizedBox(
                                 height: 20.h,
                               ),
-                              if (viewModel.nft.ownerAddress == walletStore.getWallets().value.last.publicAddress)
+                              if (viewModel.isOwner())
                                 GestureDetector(
                                   onTap: () {
                                     showDialog(
@@ -642,7 +638,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 )
                               else
                                 const SizedBox(),
-                              if (viewModel.nft.ownerAddress == walletStore.getWallets().value.last.publicAddress)
+                              if (viewModel.isOwner())
                                 SizedBox(
                                   height: 20.h,
                                 )
