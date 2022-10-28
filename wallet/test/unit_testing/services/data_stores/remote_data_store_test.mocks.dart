@@ -6,8 +6,6 @@
 import 'dart:async' as _i4;
 
 import 'package:firebase_app_check/firebase_app_check.dart' as _i3;
-import 'package:firebase_app_check_platform_interface/firebase_app_check_platform_interface.dart'
-    as _i5;
 import 'package:firebase_core/firebase_core.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -69,7 +67,7 @@ class MockFirebaseAppCheck extends _i1.Mock implements _i3.FirebaseAppCheck {
   @override
   _i4.Future<void> activate({
     String? webRecaptchaSiteKey,
-    _i5.AndroidProvider? androidProvider = _i5.AndroidProvider.playIntegrity,
+    bool? androidDebugProvider = false,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -77,7 +75,7 @@ class MockFirebaseAppCheck extends _i1.Mock implements _i3.FirebaseAppCheck {
           [],
           {
             #webRecaptchaSiteKey: webRecaptchaSiteKey,
-            #androidProvider: androidProvider,
+            #androidDebugProvider: androidDebugProvider,
           },
         ),
         returnValue: _i4.Future<void>.value(),

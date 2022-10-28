@@ -38,6 +38,7 @@ extension ConvertToUSD on String {
     }
     return '';
   }
+
   String convertPylonsToUSD(String amount) {
     return (double.parse(convertFromUCoin(amount)) * pyLonToUsdConstant).toString().truncateAfterDecimal(2);
   }
@@ -51,6 +52,7 @@ extension ConvertFromU on String {
     }
     return '';
   }
+
   String convertFromUCoin(String amount) {
     return (double.parse(amount) / kBigIntBase).toString();
   }
@@ -83,24 +85,6 @@ extension GetDynamicLink on String {
 
   String createPurchaseNFT({required String cookBookId, required String address}) {
     return "$kUnilinkUrl/?cookbook_id=$cookBookId&item_id=$this&address=$address";
-  }
-}
-
-extension ConvertPylonsToUSD on String {
-  String convertPylonsToUSD(String amount) {
-    if (this == kPylonDenom) {
-      return (double.parse(convertFromUCoin(amount)) * pyLonToUsdConstant).toString().truncateAfterDecimal(2);
-    }
-    return '';
-  }
-}
-
-extension ConvertFromUCoin on String {
-  String convertFromUCoin(String amount) {
-    if (this == kPylonDenom) {
-      return (double.parse(amount) / kBigIntBase).toString();
-    }
-    return '';
   }
 }
 
