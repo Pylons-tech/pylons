@@ -22,6 +22,7 @@ import 'package:pylons_wallet/utils/enums.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../generated/locale_keys.g.dart';
 import '../owner_purchase_view_common/button_state.dart';
 import '../owner_purchase_view_common/progress_bar_state.dart';
 
@@ -142,7 +143,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
     showLoader.dismiss();
 
-    (response.success ? "purchase_nft_success".tr() : response.error).show();
+    (response.success ? LocaleKeys.purchase_nft_success.tr() : response.error).show();
 
     showLoader.dismiss();
   }
@@ -234,7 +235,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     if (nft.type != NftType.TYPE_RECIPE) {
       final nftOwnershipHistory = await repository.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
       if (nftOwnershipHistory.isLeft()) {
-        "something_wrong".tr().show();
+        LocaleKeys.something_wrong.tr().show();
         return;
       }
 
@@ -247,7 +248,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     );
 
     if (likesCountEither.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
 
@@ -260,7 +261,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     );
 
     if (likedByMeEither.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
 
@@ -301,7 +302,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     );
 
     if (updateLikeStatusEither.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
     likedByMe = !likedByMe;
@@ -415,7 +416,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     pauseMedia();
     final link = await repository.createDynamicLinkForRecipeNftShare(address: address, nft: nft);
     return link.fold((l) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return null;
     }, (r) {
       shareHelper.shareText(text: r, size: size);
@@ -428,7 +429,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     final balancesEither = await repository.getBalance(accountPublicInfo.publicAddress);
 
     if (balancesEither.isLeft()) {
-      return Left("something_wrong".tr());
+      return Left(LocaleKeys.something_wrong.tr());
     }
 
     if (balancesEither.getOrElse(() => []).isEmpty) {

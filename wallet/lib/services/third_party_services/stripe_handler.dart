@@ -11,6 +11,8 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 class StripeHandler {
   Repository repository;
   WalletsStore walletsStore;
@@ -41,13 +43,13 @@ class StripeHandler {
               Account: accountlink,
               Signature: await walletsStore.signPureMessage(token)));
       if (accountlink_response.isLeft()) {
-        return left(StripeFailure("stripe_account_link_failed".tr()));
+        return left(StripeFailure(LocaleKeys.stripe_account_link_failed.tr()));
       }
 
       final accountlink_info =
           accountlink_response.getOrElse(() => StripeLoginLinkResponse());
       if (accountlink_info.accountlink == "") {
-        return left(StripeFailure("stripe_account_link_failed".tr()));
+        return left(StripeFailure(LocaleKeys.stripe_account_link_failed.tr()));
       }
       accountlink = accountlink_info.accountlink;
 
@@ -67,7 +69,7 @@ class StripeHandler {
         response.getOrElse(() => StripeGenerateRegistrationTokenResponse());
 
     if (token_info.token == "") {
-      return left(StripeFailure("stripe_registration_token_failed".tr()));
+      return left(StripeFailure(LocaleKeys.stripe_registration_token_failed.tr()));
     }
 
     localDataSource.saveStripeToken(token: token_info.token);
@@ -87,7 +89,7 @@ class StripeHandler {
         register_response.getOrElse(() => StripeRegisterAccountResponse());
 
     if (register_info.accountlink == "" || register_info.account == "") {
-      return left(StripeFailure("stripe_register_account_failed".tr()));
+      return left(StripeFailure(LocaleKeys.stripe_register_account_failed.tr()));
     }
 
     localDataSource.saveStripeAccountId(accountId: register_info.account);
@@ -106,7 +108,7 @@ class StripeHandler {
     if (failure is AccountAlreadyExistsFailure) {
       return getLinkBasedOnAddress();
     } else {
-      return left(StripeFailure("stripe_registration_token_failed".tr()));
+      return left(StripeFailure(LocaleKeys.stripe_registration_token_failed.tr()));
     }
   }
 
@@ -117,7 +119,7 @@ class StripeHandler {
         StripeGetLoginBasedOnAddressRequest(address));
 
     if (getAccountLinkEither.isLeft()) {
-      return left(StripeFailure("stripe_registration_token_failed".tr()));
+      return left(StripeFailure(LocaleKeys.stripe_registration_token_failed.tr()));
     }
 
     localDataSource.saveStripeAccountId(

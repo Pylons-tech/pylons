@@ -171,7 +171,7 @@ const String kDollar = "U.S. Dollar";
 const String kAtom = "ATOM";
 const String kEthereum = "Ethereum";
 
-const ANDROID_VERSION = '1.0.1+143';
+const ANDROID_VERSION = '1.0.1+145';
 const IOS_VERSION = '1.0.8+1';
 
 const kCurrencyDecimalLength = 2;

@@ -16,6 +16,8 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 class HomeProvider extends ChangeNotifier {
   final Repository repository;
   final WalletsStore walletStore;
@@ -69,7 +71,7 @@ class HomeProvider extends ChangeNotifier {
       offset: _offset,
     );
     if (response.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return [];
     }
     return response.getOrElse(() => []);
