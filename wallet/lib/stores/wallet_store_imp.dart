@@ -326,7 +326,7 @@ class WalletsStoreImp implements WalletsStore {
 
   @override
   Future<SdkIpcResponse<Execution>> executeRecipe(Map json) async {
-  
+
     final networkInfo = GetIt.I.get<NetworkInfo>();
 
     final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
@@ -338,14 +338,14 @@ class WalletsStoreImp implements WalletsStore {
     );
 
     if (!await networkInfo.isConnected) {
-      await saveTransactionRecord(transactionHash: "" , transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(sender: '', error: LocaleKeys.no_internet.tr(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
     }
 
     json.remove(kNftName);
     json.remove(kNftCurrency);
     json.remove(kNftPrice);
-    
+
     final msgObj = pylons.MsgExecuteRecipe.create()..mergeFromProto3Json(json);
     msgObj.creator = wallets.value.last.publicAddress;
     final sdkResponse = await _signAndBroadcast(msgObj);
@@ -354,8 +354,7 @@ class WalletsStoreImp implements WalletsStore {
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
     }
 
-    final executionEither = await repository.getExecutionsByRecipeId(recipeId: json["recipeId"].toString(), cookBookId: json["cookbookId"].toString());
-
+    final executionEither = await repository.getExecutionsByRecipeId(recipeId: json[kRecipeIdMap].toString(), cookBookId: json[kCookbookIdMap].toString());
     if (executionEither.isLeft()) {
       await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
@@ -367,8 +366,7 @@ class WalletsStoreImp implements WalletsStore {
     }
 
     await saveTransactionRecord(transactionHash: sdkResponse.data.toString(), transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
-    return SdkIpcResponse.success(
-        data: executionEither.toOption().toNullable()!.completedExecutions.last, sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
+    return SdkIpcResponse.success(data: executionEither.toOption().toNullable()!.completedExecutions.last, sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
   }
 
   @override
@@ -740,6 +738,4 @@ class WalletsStoreImp implements WalletsStore {
   Future<String> getRemoteNotificationServiceToken() {
     return sl.get<RemoteNotificationsService>().getToken();
   }
-  
-
 }
