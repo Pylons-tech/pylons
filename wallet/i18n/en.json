@@ -358,6 +358,8 @@
   "transaction_date": "Transaction Date",
   "bought_nft": "Bought",
   "free": "Free",
-  "please_try_again_later": "Bought Pylons Points",
-  "resolution": "Resolution"
+  "resolution": "Resolution",
+  "please_try_again_later": "Please Try again later",
+  "checkout": "Checkout",
+  "artist": "Artist"
 }

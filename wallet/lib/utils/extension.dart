@@ -38,6 +38,9 @@ extension ConvertToUSD on String {
     }
     return '';
   }
+  String convertPylonsToUSD(String amount) {
+    return (double.parse(convertFromUCoin(amount)) * pyLonToUsdConstant).toString().truncateAfterDecimal(2);
+  }
 }
 
 extension ConvertFromU on String {
@@ -47,6 +50,9 @@ extension ConvertFromU on String {
         return (double.parse(item.amount.substring(0, item.amount.length - (length + 1))) / kBigIntBase).toString().truncateAfterDecimal(2);
     }
     return '';
+  }
+  String convertFromUCoin(String amount) {
+    return (double.parse(amount) / kBigIntBase).toString();
   }
 }
 
