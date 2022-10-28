@@ -19,6 +19,7 @@ class WallpaperScreen extends StatefulWidget {
 
 class _WallpaperScreenState extends State<WallpaperScreen> {
   ValueNotifier<bool> downloading = ValueNotifier<bool>(false);
+  ValueNotifier<bool> done = ValueNotifier<bool>(false);
 
   Future<void> downloadAndSetImage(BuildContext context) async {
     final Stream<String> progressString = Wallpaper.imageDownloadProgress(widget.nft);
@@ -27,7 +28,8 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
     }, onDone: () async {
       downloading.value = false;
       Wallpaper.lockScreen(options: RequestSizeOptions.RESIZE_FIT);
-      Navigator.pop(context);
+      done.value = true;
+      //Navigator.pop(context);
     }, onError: (error) {
       downloading.value = false;
     });
@@ -69,6 +71,18 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
                     strokeWidth: 6.r,
                     color: AppColors.kWhite,
                   );
+                },
+              ),
+            ),
+          ),
+          Align(
+            child: SizedBox(
+              height: 100.h,
+              width: 100.h,
+              child: ValueListenableBuilder(
+                valueListenable: done,
+                builder: (BuildContext context, bool downloadingState, Widget? child) {
+                  return ;
                 },
               ),
             ),
