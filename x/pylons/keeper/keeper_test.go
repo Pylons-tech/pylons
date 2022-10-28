@@ -213,6 +213,17 @@ func createNAppleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.Apple
 
 	return items
 }
+func createRewardDistributionOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.RewardHistory {
+	items := make([]types.RewardHistory, n)
+	creators := types.GenTestBech32List(n)
+	for i := range items {
+		items[i].Amount = creators[i]
+		items[i].Sender = strconv.Itoa(i)
+		items[i].Receiver = strconv.Itoa(i)
+		k.SetRewardDistribution(ctx, items[i])
+	}
+	return items
+}
 
 func createNPaymentInfo(k keeper.Keeper, ctx sdk.Context, n int) []types.PaymentInfo {
 	items := make([]types.PaymentInfo, n)
