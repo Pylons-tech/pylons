@@ -23,6 +23,9 @@ Future<void> main() async {
 
   await FirebaseAppCheck.instance.activate(
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
+    // ignore: deprecated_member_use
+    androidProvider: AndroidProvider.safetyNet,
+
   );
   await dotenv.load(fileName: "env/.prod_env");
 
@@ -36,7 +39,16 @@ Future<void> main() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     runApp(
       EasyLocalization(
-        supportedLocales: const [Locale('en'), Locale('ru'), Locale('id'), Locale('de'), Locale('ko'), Locale('ja'), Locale('es'), Locale('vi')],
+        supportedLocales: const [
+          Locale('en'),
+          Locale('ru'),
+          Locale('id'),
+          Locale('de'),
+          Locale('ko'),
+          Locale('ja'),
+          Locale('es'),
+          Locale('vi'),
+        ],
         path: 'i18n',
         fallbackLocale: const Locale('en'),
         useOnlyLangCode: true,
