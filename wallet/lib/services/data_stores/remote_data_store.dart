@@ -41,6 +41,7 @@ import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
+import '../../generated/locale_keys.g.dart';
 import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
 
 abstract class RemoteDataStore {
@@ -281,7 +282,6 @@ abstract class RemoteDataStore {
   /// Output: [bool] return true if successful
   Future<bool> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice});
 
-
   Future<bool> logAddToCart({
     required String recipeId,
     required String recipeName,
@@ -289,7 +289,6 @@ abstract class RemoteDataStore {
     required double purchasePrice,
     required String currency,
   });
-
 
   Future<void> logUserJourney({required String screenName});
 }
@@ -721,7 +720,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final accountsList = walletsResultEither.getOrElse(() => []);
     if (accountsList.isEmpty) {
-      throw TransactionSigningFailure(message: "no_profile_found".tr(), type: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
+      throw TransactionSigningFailure(message: LocaleKeys.no_profile_found.tr(), type: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
     }
     final info = accountsList.last;
     final walletLookupKey = createWalletLookUp(info);
@@ -730,7 +729,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     if (signedTransaction.isLeft()) {
       crashlyticsHelper.recordFatalError(error: signedTransaction.swap().toOption().toNullable()!.toString());
-      throw TransactionSigningFailure(message: "something_wrong_signing_transaction".tr(), type: HandlerFactory.ERR_SIG_TRANSACTION);
+      throw TransactionSigningFailure(
+        message: LocaleKeys.something_wrong_signing_transaction.tr(),
+        type: HandlerFactory.ERR_SIG_TRANSACTION,
+      );
     }
 
     final response = await customTransactionSigningGateway.broadcastTransaction(
@@ -773,7 +775,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.recipe;
     }
 
-    throw RecipeNotFoundFailure("recipe_not_found".tr());
+    throw RecipeNotFoundFailure(LocaleKeys.recipe_not_found.tr());
   }
 
   @override
@@ -787,7 +789,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     if (response.hasUsername()) {
       return response.username.value;
     }
-    throw RecipeNotFoundFailure("username_not_found".tr());
+    throw RecipeNotFoundFailure(LocaleKeys.username_not_found.tr());
   }
 
   @override
@@ -810,7 +812,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.cookbook;
     }
 
-    throw CookBookNotFoundFailure("cookbook_not_found".tr());
+    throw CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr());
   }
 
   @override
@@ -825,7 +827,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.address.value;
     }
 
-    throw RecipeNotFoundFailure("username_not_found".tr());
+    throw RecipeNotFoundFailure(LocaleKeys.username_not_found.tr());
   }
 
   @override
@@ -852,7 +854,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.item;
     }
 
-    throw ItemNotFoundFailure("item_not_found".tr());
+    throw ItemNotFoundFailure(LocaleKeys.item_not_found.tr());
   }
 
   @override
@@ -876,7 +878,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.execution;
     }
 
-    throw ItemNotFoundFailure("execution_not_found".tr());
+    throw ItemNotFoundFailure(LocaleKeys.execution_not_found.tr());
   }
 
   @override
@@ -924,7 +926,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.trades;
     }
 
-    throw TradeNotFoundFailure("trade_not_found".tr());
+    throw TradeNotFoundFailure(LocaleKeys.trade_not_found.tr());
   }
 
   @override
@@ -962,7 +964,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.trade;
     }
 
-    throw TradeNotFoundFailure("trade_not_found".tr());
+    throw TradeNotFoundFailure(LocaleKeys.trade_not_found.tr());
   }
 
   bank.QueryClient getBankQueryClient() {
@@ -995,7 +997,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final accountsList = walletsResultEither.getOrElse(() => []);
     if (accountsList.isEmpty) {
-      throw TransactionSigningFailure(message: "no_profile_found".tr(), type: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
+      throw TransactionSigningFailure(
+        message: LocaleKeys.no_profile_found.tr(),
+        type: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST,
+      );
     }
     final info = accountsList.last;
 
@@ -1149,7 +1154,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     );
     return true;
   }
-  
+
   @override
   Future<void> logUserJourney({required String screenName}) async {
     await analyticsHelper.logUserJourney(screenName: screenName);

@@ -14,6 +14,8 @@ import 'package:pylons_wallet/utils/backup/common/i_driver_client.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 class GoogleDriveApiImpl extends IDriverApi {
   final googleSignIn = GoogleSignIn.standard(scopes: [
     drive.DriveApi.driveAppdataScope,
@@ -81,7 +83,7 @@ class GoogleDriveApiImpl extends IDriverApi {
     );
 
     if (files.files == null || files.files!.isEmpty) {
-      throw "no_mnemonic_found".tr();
+      throw LocaleKeys.no_mnemonic_found.tr();
     }
     final drive.Media response = await driveApi.files.get(
         files.files?.first.id ?? '',

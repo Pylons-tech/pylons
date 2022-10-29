@@ -16,6 +16,8 @@ import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 TextStyle _titleTextStyle = TextStyle(color: AppColors.kBlack, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.bold, fontSize: 20.sp);
 
 class LocalTransactionDetailScreen extends StatefulWidget {
@@ -71,7 +73,7 @@ class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScr
 
   String getFormattedPrice(LocalTransactionModel txModel) {
     if (txModel.transactionPrice == "0") {
-      return "free".tr();
+      return LocaleKeys.free.tr();
     }
     return "${txModel.transactionPrice}  ${txModel.transactionCurrency}";
   }
@@ -91,7 +93,7 @@ class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScr
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("purchased".tr(), style: _titleTextStyle.copyWith(fontSize: 15.sp)),
+                  Text(LocaleKeys.purchased.tr(), style: _titleTextStyle.copyWith(fontSize: 15.sp)),
                   Row(
                     children: [
                       Expanded(
@@ -131,18 +133,18 @@ class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScr
     if (txArgs.status.toTransactionStatusEnum() == TransactionStatus.Success && txArgs.transactionHash.isNotEmpty) {
       return {
         "txId".tr(): txArgs.transactionHash,
-        "transaction_date".tr(): DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime)),
-        "transaction_time".tr(): "${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime).toUtc())} UTC",
-        "currency".tr(): txArgs.transactionCurrency,
-        "price".tr(): txArgs.transactionPrice,
+        LocaleKeys.transaction_date.tr(): DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime)),
+        LocaleKeys.transaction_time.tr(): "${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime).toUtc())} UTC",
+        LocaleKeys.currency.tr(): txArgs.transactionCurrency,
+        LocaleKeys.price.tr(): txArgs.transactionPrice,
       };
     }
 
     return {
-      "transaction_date".tr(): DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime)),
-      "transaction_time".tr(): "${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime).toUtc())} UTC",
-      "currency".tr(): txArgs.transactionCurrency,
-      "price".tr(): txArgs.transactionPrice,
+      LocaleKeys.transaction_date.tr(): DateFormat('MMM dd, yyyy').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime)),
+      LocaleKeys.transaction_time.tr(): "${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(txArgs.dateTime).toUtc())} UTC",
+      LocaleKeys.currency.tr(): txArgs.transactionCurrency,
+      LocaleKeys.price.tr(): txArgs.transactionPrice,
     };
   }
 
@@ -173,11 +175,12 @@ class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScr
           left: 20.w,
           right: 20.w,
           child: TextButton(
-              onPressed: () => Navigator.pop(navigatorKey.currentState!.overlay!.context),
-              child: Text(
-                "close".tr(),
-                style: _titleTextStyle.copyWith(fontSize: 15.sp, color: AppColors.kGreyColor),
-              )),
+            onPressed: () => Navigator.pop(navigatorKey.currentState!.overlay!.context),
+            child: Text(
+              LocaleKeys.close.tr(),
+              style: _titleTextStyle.copyWith(fontSize: 15.sp, color: AppColors.kGreyColor),
+            ),
+          ),
         );
       case TransactionStatus.Failed:
         return Stack(
@@ -193,7 +196,7 @@ class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScr
                   await failureManagerViewModel.handleRetry(txManager: txModel);
                   showLoading.dismiss();
                 },
-                text: "retry".tr(),
+                text: LocaleKeys.retry.tr(),
               ),
             ),
             Positioned(
@@ -203,7 +206,7 @@ class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScr
               child: TextButton(
                 onPressed: () => Navigator.pop(navigatorKey.currentState!.overlay!.context),
                 child: Text(
-                  "close".tr(),
+                  LocaleKeys.close.tr(),
                   style: _titleTextStyle.copyWith(fontSize: 15.sp, color: AppColors.kGreyColor),
                 ),
               ),
@@ -216,11 +219,12 @@ class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScr
           left: 20.w,
           right: 20.w,
           child: TextButton(
-              onPressed: () => Navigator.pop(navigatorKey.currentState!.overlay!.context),
-              child: Text(
-                "close".tr(),
-                style: _titleTextStyle.copyWith(fontSize: 15.sp, color: AppColors.kGreyColor),
-              )),
+            onPressed: () => Navigator.pop(navigatorKey.currentState!.overlay!.context),
+            child: Text(
+              LocaleKeys.close.tr(),
+              style: _titleTextStyle.copyWith(fontSize: 15.sp, color: AppColors.kGreyColor),
+            ),
+          ),
         );
     }
   }
@@ -247,7 +251,7 @@ class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScr
                         ),
                       )),
                   Text(
-                    'details'.tr(),
+                    LocaleKeys.details.tr(),
                     style: _titleTextStyle,
                   ),
                   SizedBox(

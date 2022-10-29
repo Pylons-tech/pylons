@@ -11,6 +11,8 @@ import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/third_party_services/stripe_handler.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 class CreateStripeAccountHandler implements BaseHandler {
   @override
   SdkIpcMessage sdkIpcMessage;
@@ -23,7 +25,7 @@ class CreateStripeAccountHandler implements BaseHandler {
 
     if (walletsStore.getWallets().value.isEmpty) {
       final SdkIpcResponse sdkIpcResponse = SdkIpcResponse.failure(
-          error: 'create_profile_before_using'.tr(),
+          error: LocaleKeys.create_profile_before_using.tr(),
           sender: sdkIpcMessage.sender,
           errorCode: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
       return sdkIpcResponse;
