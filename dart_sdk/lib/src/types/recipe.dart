@@ -26,9 +26,9 @@ class Recipe {
     var lowLevel = await PylonsWallet.instance.txExecuteRecipe(
         cookbookId: _native.cookbookId,
         recipeName: _native.name,
-        itemIds: ids,
+        itemIds: List.unmodifiable(ids),
         coinInputIndex: 0,
-        paymentInfo: infos);
+        paymentInfo: List.unmodifiable(infos));
     if (lowLevel.success) {
       return Execution(lowLevel.data!);
     } else {
@@ -84,13 +84,13 @@ class Recipe {
         map[coin.denom] = Int64.parseInt(coin.amount);
       }
     });
-    return map;
+    return Map.unmodifiable(map);
   }
 
   List<ItemInput> getItemInputs() {
     var ls = <ItemInput>[];
     _native.itemInputs.forEach((element) {ls.add(ItemInput(element));});
-    return ls;
+    return List.unmodifiable(ls);
   }
 
   OutputSet getOutput() {
@@ -121,20 +121,20 @@ class OutputSet {
   List<WeightedOutput> getWeightedOutputs() {
     var ls = <WeightedOutput>[];
     _nativeOutputs.forEach((element) {ls.add(WeightedOutput(element));});
-    return ls;
+    return List.unmodifiable(ls);
   }
 
   List<ItemOutput> getItemOutputs() {
     var ls = <ItemOutput>[];
     _nativeEntries.itemOutputs.forEach((element) {ls.add(ItemOutput.fromItemOutput(element));});
     _nativeEntries.itemModifyOutputs.forEach((element) {ls.add(ItemOutput.fromItemModifyOutput(element));});
-    return ls;
+    return List.unmodifiable(ls);
   }
 
   List<CoinOutput> getCoinOutputs() {
     var ls = <CoinOutput>[];
     _nativeEntries.coinOutputs.forEach((element) {ls.add(CoinOutput(element));});
-    return ls;
+    return List.unmodifiable(ls);
   }
 }
 
@@ -213,7 +213,7 @@ class ItemOutput {
     } else {
       _native!.transferFee.forEach((element) {map[element.denom] = Int64.parseInt(element.amount); });
     }
-    return map;
+    return Map.unmodifiable(map);
   }
 
   DoubleOutput? getDouble(String name) {
@@ -235,7 +235,7 @@ class ItemOutput {
     } else {
       _native!.doubles.forEach((element) {ls.add(DoubleOutput(element));});
     }
-    return ls;
+    return List.unmodifiable(ls);
   }
 
   LongOutput? getLong(String name) {
@@ -257,7 +257,7 @@ class ItemOutput {
     } else {
       _native!.longs.forEach((element) {ls.add(LongOutput(element));});
     }
-    return ls;
+    return List.unmodifiable(ls);
   }
 
   StringOutput? getString(String name) {
@@ -289,7 +289,7 @@ class ItemOutput {
       _native!.strings.forEach((element) {ls.add(StringOutput.fromParam(element));});
       _native!.mutableStrings.forEach((element) {ls.add(StringOutput.fromKV(element));});
     }
-    return ls;
+    return List.unmodifiable(ls);
   }
 
   String getItemInputRef() {
@@ -321,7 +321,7 @@ class ItemInput {
   List<DoubleInput> getDoubles() {
     var ls = <DoubleInput>[];
     _native.doubles.forEach((element) {ls.add(DoubleInput(element));});
-    return ls;
+    return List.unmodifiable(ls);
   }
 
   LongInput? getLong(String name) {
@@ -335,7 +335,7 @@ class ItemInput {
   List<LongInput> getLongs() {
     var ls = <LongInput>[];
     _native.longs.forEach((element) {ls.add(LongInput(element));});
-    return ls;
+    return List.unmodifiable(ls);
   }
 
   StringInput? getString(String name) {
@@ -349,7 +349,7 @@ class ItemInput {
   List<StringInput> getStrings() {
     var ls = <StringInput>[];
     _native.strings.forEach((element) {ls.add(StringInput(element));});
-    return ls;
+    return List.unmodifiable(ls);
   }
 }
 
@@ -389,7 +389,7 @@ class DoubleOutput {
     _native.weightRanges.forEach((element) {
       ls.add(DoubleWeightRange(element));
     });
-    return ls;
+    return List.unmodifiable(ls);
   }
 }
 
@@ -447,7 +447,7 @@ class LongOutput {
     _native.weightRanges.forEach((element) {
       ls.add(LongWeightRange(element));
     });
-    return ls;
+    return List.unmodifiable(ls);
   }
 }
 
