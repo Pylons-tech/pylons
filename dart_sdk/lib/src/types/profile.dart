@@ -21,7 +21,7 @@ class Profile {
       });
       final i = <Item>[];
       ll.data!.items.forEach((element) {
-        i.add(Item(element));
+        i.add(Item.fromItem(element));
       });
       return Profile(ll.data!.address, ll.data!.username, Map.unmodifiable(b), List.unmodifiable(i), ll.data!.stripeExists);
     } else {
