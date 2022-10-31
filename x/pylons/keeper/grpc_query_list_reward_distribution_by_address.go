@@ -10,18 +10,12 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) ListRewardDistributionByAddress(goCtx context.Context, req *types.QueryListRewardDistributionRequest) (*types.RewardHistory, error) {
+func (k Keeper) ListRewardDistributionByAddress(goCtx context.Context, req *types.QueryListRewardDistributionRequest) (*types.QueryGetRewardHistoryResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	data := k.GetRewardDistribution(ctx, req.Address)
-	return &types.RewardHistory{
-			Receiver:  data.Receiver,
-			Sender:    data.Sender,
-			Amount:    data.Amount,
-			CreatedAt: data.CreatedAt,
-		},
-		nil
+	data := k.GetAllRewardDistribution(ctx, req.Address)
+	return &types.QueryGetRewardHistoryResponse{History: data}, nil
 }

@@ -25,7 +25,7 @@ service Query {
 	}
 
 	// Queries a list of Reward Distribution items.
-	rpc ListRewardDistributionByAddress(QueryListRewardDistributionRequest) returns (RewardHistory) {
+	rpc ListRewardDistributionByAddress(QueryListRewardDistributionRequest) returns (QueryGetRewardHistoryResponse) {
 		option (google.api.http).get = "/pylons/audit/reward_distribution/{address}";
 	}
 
@@ -185,11 +185,14 @@ message QueryGetRecipeHistoryRequest {
 message QueryGetRecipeHistoryResponse {
 	repeated RecipeHistory history = 1;
 }
+message QueryGetRewardHistoryResponse {
+	repeated RewardHistory history = 1;
+}
 message RewardHistory{
 	string sender=1;
 	string receiver=2;
 	string amount =3;
-	string created_at=4;
+	int64 created_at=4;
 }
 message RecipeHistory {
 	string item_id = 1;

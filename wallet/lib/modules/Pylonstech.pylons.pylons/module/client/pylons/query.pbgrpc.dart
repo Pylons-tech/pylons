@@ -22,10 +22,12 @@ class QueryClient extends $grpc.Client {
       ($core.List<$core.int> value) =>
           $0.QueryListTradesByCreatorResponse.fromBuffer(value));
   static final _$listRewardDistributionByAddress = $grpc.ClientMethod<
-          $0.QueryListRewardDistributionRequest, $0.RewardHistory>(
+          $0.QueryListRewardDistributionRequest,
+          $0.QueryGetRewardHistoryResponse>(
       '/pylons.pylons.Query/ListRewardDistributionByAddress',
       ($0.QueryListRewardDistributionRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.RewardHistory.fromBuffer(value));
+      ($core.List<$core.int> value) =>
+          $0.QueryGetRewardHistoryResponse.fromBuffer(value));
   static final _$listSignUpByReferee = $grpc.ClientMethod<
           $0.QueryListSignUpByReferee, $0.QueryListSignUpByRefereeResponse>(
       '/pylons.pylons.Query/ListSignUpByReferee',
@@ -172,9 +174,10 @@ class QueryClient extends $grpc.Client {
     return $createUnaryCall(_$listTradesByCreator, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.RewardHistory> listRewardDistributionByAddress(
-      $0.QueryListRewardDistributionRequest request,
-      {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.QueryGetRewardHistoryResponse>
+      listRewardDistributionByAddress(
+          $0.QueryListRewardDistributionRequest request,
+          {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$listRewardDistributionByAddress, request,
         options: options);
   }
@@ -325,14 +328,14 @@ abstract class QueryServiceBase extends $grpc.Service {
             $0.QueryListTradesByCreatorRequest.fromBuffer(value),
         ($0.QueryListTradesByCreatorResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.QueryListRewardDistributionRequest,
-            $0.RewardHistory>(
+            $0.QueryGetRewardHistoryResponse>(
         'ListRewardDistributionByAddress',
         listRewardDistributionByAddress_Pre,
         false,
         false,
         ($core.List<$core.int> value) =>
             $0.QueryListRewardDistributionRequest.fromBuffer(value),
-        ($0.RewardHistory value) => value.writeToBuffer()));
+        ($0.QueryGetRewardHistoryResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.QueryListSignUpByReferee,
             $0.QueryListSignUpByRefereeResponse>(
         'ListSignUpByReferee',
@@ -534,9 +537,9 @@ abstract class QueryServiceBase extends $grpc.Service {
     return listTradesByCreator(call, await request);
   }
 
-  $async.Future<$0.RewardHistory> listRewardDistributionByAddress_Pre(
-      $grpc.ServiceCall call,
-      $async.Future<$0.QueryListRewardDistributionRequest> request) async {
+  $async.Future<$0.QueryGetRewardHistoryResponse>
+      listRewardDistributionByAddress_Pre($grpc.ServiceCall call,
+          $async.Future<$0.QueryListRewardDistributionRequest> request) async {
     return listRewardDistributionByAddress(call, await request);
   }
 
@@ -667,8 +670,9 @@ abstract class QueryServiceBase extends $grpc.Service {
 
   $async.Future<$0.QueryListTradesByCreatorResponse> listTradesByCreator(
       $grpc.ServiceCall call, $0.QueryListTradesByCreatorRequest request);
-  $async.Future<$0.RewardHistory> listRewardDistributionByAddress(
-      $grpc.ServiceCall call, $0.QueryListRewardDistributionRequest request);
+  $async.Future<$0.QueryGetRewardHistoryResponse>
+      listRewardDistributionByAddress($grpc.ServiceCall call,
+          $0.QueryListRewardDistributionRequest request);
   $async.Future<$0.QueryListSignUpByRefereeResponse> listSignUpByReferee(
       $grpc.ServiceCall call, $0.QueryListSignUpByReferee request);
   $async.Future<$0.QueryGetRecipeHistoryResponse> getRecipeHistory(

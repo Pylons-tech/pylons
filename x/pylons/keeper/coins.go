@@ -19,7 +19,7 @@ func (k Keeper) SendRewardsFromFeeCollector(ctx sdk.Context, addr sdk.AccAddress
 			Receiver:  toaddr,
 			Sender:    fromaddr,
 			Amount:    amounts.String(),
-			CreatedAt: ctx.BlockTime().String(),
+			CreatedAt: ctx.BlockTime().Unix(),
 		}
 		k.SetRewardDistribution(ctx, *data)
 	}

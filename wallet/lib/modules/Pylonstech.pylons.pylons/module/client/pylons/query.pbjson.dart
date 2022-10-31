@@ -105,6 +105,16 @@ const QueryGetRecipeHistoryResponse$json = const {
 
 /// Descriptor for `QueryGetRecipeHistoryResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List queryGetRecipeHistoryResponseDescriptor = $convert.base64Decode('Ch1RdWVyeUdldFJlY2lwZUhpc3RvcnlSZXNwb25zZRI2CgdoaXN0b3J5GAEgAygLMhwucHlsb25zLnB5bG9ucy5SZWNpcGVIaXN0b3J5UgdoaXN0b3J5');
+@$core.Deprecated('Use queryGetRewardHistoryResponseDescriptor instead')
+const QueryGetRewardHistoryResponse$json = const {
+  '1': 'QueryGetRewardHistoryResponse',
+  '2': const [
+    const {'1': 'history', '3': 1, '4': 3, '5': 11, '6': '.pylons.pylons.RewardHistory', '10': 'history'},
+  ],
+};
+
+/// Descriptor for `QueryGetRewardHistoryResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List queryGetRewardHistoryResponseDescriptor = $convert.base64Decode('Ch1RdWVyeUdldFJld2FyZEhpc3RvcnlSZXNwb25zZRI2CgdoaXN0b3J5GAEgAygLMhwucHlsb25zLnB5bG9ucy5SZXdhcmRIaXN0b3J5UgdoaXN0b3J5');
 @$core.Deprecated('Use rewardHistoryDescriptor instead')
 const RewardHistory$json = const {
   '1': 'RewardHistory',
@@ -112,12 +122,12 @@ const RewardHistory$json = const {
     const {'1': 'sender', '3': 1, '4': 1, '5': 9, '10': 'sender'},
     const {'1': 'receiver', '3': 2, '4': 1, '5': 9, '10': 'receiver'},
     const {'1': 'amount', '3': 3, '4': 1, '5': 9, '10': 'amount'},
-    const {'1': 'created_at', '3': 4, '4': 1, '5': 9, '10': 'createdAt'},
+    const {'1': 'created_at', '3': 4, '4': 1, '5': 3, '10': 'createdAt'},
   ],
 };
 
 /// Descriptor for `RewardHistory`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List rewardHistoryDescriptor = $convert.base64Decode('Cg1SZXdhcmRIaXN0b3J5EhYKBnNlbmRlchgBIAEoCVIGc2VuZGVyEhoKCHJlY2VpdmVyGAIgASgJUghyZWNlaXZlchIWCgZhbW91bnQYAyABKAlSBmFtb3VudBIdCgpjcmVhdGVkX2F0GAQgASgJUgljcmVhdGVkQXQ=');
+final $typed_data.Uint8List rewardHistoryDescriptor = $convert.base64Decode('Cg1SZXdhcmRIaXN0b3J5EhYKBnNlbmRlchgBIAEoCVIGc2VuZGVyEhoKCHJlY2VpdmVyGAIgASgJUghyZWNlaXZlchIWCgZhbW91bnQYAyABKAlSBmFtb3VudBIdCgpjcmVhdGVkX2F0GAQgASgDUgljcmVhdGVkQXQ=');
 @$core.Deprecated('Use recipeHistoryDescriptor instead')
 const RecipeHistory$json = const {
   '1': 'RecipeHistory',

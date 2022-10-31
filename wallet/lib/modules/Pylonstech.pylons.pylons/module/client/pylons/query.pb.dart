@@ -519,12 +519,53 @@ class QueryGetRecipeHistoryResponse extends $pb.GeneratedMessage {
   $core.List<RecipeHistory> get history => $_getList(0);
 }
 
+class QueryGetRewardHistoryResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'QueryGetRewardHistoryResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
+    ..pc<RewardHistory>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'history', $pb.PbFieldType.PM, subBuilder: RewardHistory.create)
+    ..hasRequiredFields = false
+  ;
+
+  QueryGetRewardHistoryResponse._() : super();
+  factory QueryGetRewardHistoryResponse({
+    $core.Iterable<RewardHistory>? history,
+  }) {
+    final _result = create();
+    if (history != null) {
+      _result.history.addAll(history);
+    }
+    return _result;
+  }
+  factory QueryGetRewardHistoryResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory QueryGetRewardHistoryResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  QueryGetRewardHistoryResponse clone() => QueryGetRewardHistoryResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  QueryGetRewardHistoryResponse copyWith(void Function(QueryGetRewardHistoryResponse) updates) => super.copyWith((message) => updates(message as QueryGetRewardHistoryResponse)) as QueryGetRewardHistoryResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static QueryGetRewardHistoryResponse create() => QueryGetRewardHistoryResponse._();
+  QueryGetRewardHistoryResponse createEmptyInstance() => create();
+  static $pb.PbList<QueryGetRewardHistoryResponse> createRepeated() => $pb.PbList<QueryGetRewardHistoryResponse>();
+  @$core.pragma('dart2js:noInline')
+  static QueryGetRewardHistoryResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<QueryGetRewardHistoryResponse>(create);
+  static QueryGetRewardHistoryResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<RewardHistory> get history => $_getList(0);
+}
+
 class RewardHistory extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'RewardHistory', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sender')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'receiver')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'amount')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt')
+    ..aInt64(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt')
     ..hasRequiredFields = false
   ;
 
@@ -533,7 +574,7 @@ class RewardHistory extends $pb.GeneratedMessage {
     $core.String? sender,
     $core.String? receiver,
     $core.String? amount,
-    $core.String? createdAt,
+    $fixnum.Int64? createdAt,
   }) {
     final _result = create();
     if (sender != null) {
@@ -599,9 +640,9 @@ class RewardHistory extends $pb.GeneratedMessage {
   void clearAmount() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get createdAt => $_getSZ(3);
+  $fixnum.Int64 get createdAt => $_getI64(3);
   @$pb.TagNumber(4)
-  set createdAt($core.String v) { $_setString(3, v); }
+  set createdAt($fixnum.Int64 v) { $_setInt64(3, v); }
   @$pb.TagNumber(4)
   $core.bool hasCreatedAt() => $_has(3);
   @$pb.TagNumber(4)
