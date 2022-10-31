@@ -62,7 +62,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
           Align(
             child: SizedBox(
               height: 100.h,
-              width: 100.h,
+              width: 100.w,
               child: ValueListenableBuilder(
                 valueListenable: downloading,
                 builder: (BuildContext context, bool downloadingState, Widget? child) {
@@ -78,11 +78,21 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
           Align(
             child: SizedBox(
               height: 100.h,
-              width: 100.h,
+              width: 100.w,
               child: ValueListenableBuilder(
                 valueListenable: done,
-                builder: (BuildContext context, bool downloadingState, Widget? child) {
-                  return ;
+                builder: (BuildContext context, bool doneState, Widget? child) {
+                  if (doneState) {
+                    return SvgPicture.asset(
+                      SVGUtil.TRANSACTION_SUCCESS,
+                      height: 100.h,
+                      width: 100.w,
+                      fit: BoxFit.fill,
+                    );
+                  }
+                  else {
+                    return const SizedBox();
+                  }
                 },
               ),
             ),
@@ -91,15 +101,25 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: EdgeInsets.only(bottom: 30.h),
-              child: CustomPaintButton(
-                  title: "set_lockscreen".tr(),
-                  bgColor: AppColors.kDarkGrey,
-                  width: 280.w,
-                  onPressed: () async {
-                    return downloadAndSetImage(context);
-                  },
-                ),
+              child: ValueListenableBuilder(
+                valueListenable: done,
+                builder: (BuildContext context, bool doneState, Widget? child) {
+                  if (!doneState) {
+                    return CustomPaintButton(
+                      title: "set_lockscreen".tr(),
+                      bgColor: AppColors.kDarkGrey,
+                      width: 280.w,
+                      onPressed: () async {
+                        return downloadAndSetImage(context);
+                      },
+                    );
+                  }
+                  else {
+                    return const SizedBox();
+                  }
+                },
               ),
+            ),
           ),
         ],
       ),
