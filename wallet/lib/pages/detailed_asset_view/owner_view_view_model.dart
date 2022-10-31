@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
@@ -36,6 +34,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     required this.audioPlayerHelper,
     required this.shareHelper,
     required this.videoPlayerHelper,
+    required this.accountPublicInfo, 
   });
 
   String owner = '';
@@ -98,11 +97,10 @@ class OwnerViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  AccountPublicInfo? accountPublicInfo;
+  AccountPublicInfo accountPublicInfo;
 
   Future initOwnerName() async {
-    accountPublicInfo = walletsStore.getWallets().value.last;
-    owner = accountPublicInfo?.name ?? "";
+    owner = accountPublicInfo.name;
     notifyListeners();
   }
 
@@ -141,7 +139,7 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   Future<void> nftDataInit({required String recipeId, required String cookBookId, required String itemId}) async {
-    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
+    final walletAddress = accountPublicInfo.publicAddress;
     if (nft.type != NftType.TYPE_RECIPE) {
       final nftOwnershipHistory = await repository.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
       if (nftOwnershipHistory.isLeft()) {
@@ -204,7 +202,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     isLiking = true;
     final bool temp = likedByMe;
 
-    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
+    final walletAddress = accountPublicInfo.publicAddress;
     final updateLikeStatusEither = await repository.updateLikeStatus(
       recipeId: recipeId,
       cookBookID: cookBookID,
@@ -412,7 +410,7 @@ class OwnerViewViewModel extends ChangeNotifier {
 
   Future<void> shareNFTLink({required Size size}) async {
     pauseMedia();
-    final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
+    final address = accountPublicInfo.publicAddress;
 
     final link = await repository.createDynamicLinkForRecipeNftShare(address: address, nft: nft);
     return link.fold((l) {
