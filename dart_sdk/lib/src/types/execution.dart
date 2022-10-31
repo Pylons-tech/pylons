@@ -42,27 +42,37 @@ class Execution {
   }
 
   List<Item> getItemInputs () {
-    // todo: itemrecord to item wrapper
-    throw UnimplementedError();
+    var ls = <Item>[];
+    _native.itemInputs.forEach((element) {
+      ls.add(Item.fromRecord(element));
+    });
+    return List.unmodifiable(ls);
   }
 
   Map<String, Int64> getCoinInputs() {
-    // todo: List<Coin> to map
-    throw UnimplementedError();
+    var map = <String, Int64>{};
+    _native.coinInputs.forEach((element) {
+      map[element.denom] = Int64.parseInt(element.amount);
+    });
+    return Map.unmodifiable(map);
   }
 
-  List<Item> getItemOutputs () {
-    // todo: get item wrappers for this - do we want to fetch those asap or implement some sort of lazy-fetch?
-    throw UnimplementedError();
+  List<String> getItemOutputIds () {
+    // it'd be very nice to have some sort of clever lazy-item thing going on, down the road
+    // we can't just fetch each of these individually, so
+    return List.unmodifiable(_native.itemOutputIds);
   }
 
-  List<Item> getModifiedItems () {
-    // todo: some sort of nice before/after report?
-    throw UnimplementedError();
+  List<String> getModifiedItemIds () {
+    // todo: some sort of nice before/after report? but idek what that looks like
+    return List.unmodifiable(_native.itemModifyOutputIds);
   }
 
   Map<String, Int64> getCoinOutputs() {
-    // todo: List<Coin> to map
-    throw UnimplementedError();
+    var map = <String, Int64>{};
+    _native.coinOutputs.forEach((element) {
+      map[element.denom] = Int64.parseInt(element.amount);
+    });
+    return Map.unmodifiable(map);
   }
 }
