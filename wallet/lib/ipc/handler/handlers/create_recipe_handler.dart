@@ -14,6 +14,7 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 
+import '../../../generated/locale_keys.g.dart';
 import '../../../model/nft.dart';
 
 class CreateRecipeHandler implements BaseHandler {
@@ -24,7 +25,7 @@ class CreateRecipeHandler implements BaseHandler {
     final jsonMap = jsonDecode(sdkIpcMessage.json) as Map;
 
     jsonMap.remove('nodeVersion');
-    final loading = Loading()..showLoading(message: "${'creating_recipe'.tr()}...");
+    final loading = Loading()..showLoading(message: "${LocaleKeys.creating_recipe.tr()}...");
 
     final walletsStore = GetIt.I.get<WalletsStore>();
 

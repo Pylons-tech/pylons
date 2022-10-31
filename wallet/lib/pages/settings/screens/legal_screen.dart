@@ -6,6 +6,7 @@ import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../../../services/repository/repository.dart';
 
 TextStyle kLegalOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
@@ -59,9 +60,9 @@ class _LegalScreenState extends State<LegalScreen> {
               height: 33.h,
             ),
             Text(
-              "legal",
+              LocaleKeys.legal.tr(),
               style: kLegalHeadlineText,
-            ).tr(),
+            ),
             SizedBox(
               height: 20.h,
             ),

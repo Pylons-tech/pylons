@@ -9,6 +9,8 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 class MessagesScreen extends StatefulWidget {
   const MessagesScreen({Key? key}) : super(key: key);
 
@@ -70,7 +72,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
             Align(
               alignment: Alignment.topCenter,
               child: Text(
-                "messages".tr(),
+                LocaleKeys.messages.tr(),
                 style: kHeadingText,
               ),
             ),
@@ -127,7 +129,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
       markNotificationAsRead();
       return;
     }
-    no_messages = "no_notifications_yet".tr();
+    no_messages = LocaleKeys.no_notifications_yet.tr();
   }
 
   Future getMoreNotifications() async {
@@ -143,7 +145,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   Future<List<NotificationMessage>> callGetNotificationApi() async {
     final response = await GetIt.I.get<Repository>().getAllNotificationsMessages(walletAddress: walletAddress, limit: _limit, offset: _offset);
     if (response.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return [];
     }
     final notificationMessageList = response.getOrElse(() => []);
@@ -172,7 +174,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   Future markNotificationAsRead() async {
     final response = await GetIt.I.get<Repository>().markNotificationAsRead(idsList: msgIdsList);
     if (response.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
     }
   }
 }

@@ -11,6 +11,8 @@ class ImageUtil {
   static String CURRENCY_BACKGROUND = "assets/images/currency_background.png";
   static String PYLONS_CURRENCY =
       "assets/images/icons/pylons_engagement_token.png";
+  static String PYLONS_CURRENCY_TRANSPARENT =
+      "assets/images/icons/pylons_engagement_token_transparent.png";
   static String PYLONS_STRIPE_BANNER = "assets/images/icons/stripeusd.png";
 
   static String STRIPE_BACK = "assets/images/icons/stripe_back.png";

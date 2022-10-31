@@ -11,6 +11,8 @@ import 'package:pylons_wallet/services/third_party_services/stripe_handler.dart'
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
+import '../../../../../../generated/locale_keys.g.dart';
+
 TextStyle kPaymentLabelText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
 TextStyle kPaymentOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
 
@@ -61,20 +63,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
               height: 33.h,
             ),
             Text(
-              "payment".tr(),
+              LocaleKeys.payment.tr(),
               style: kPaymentLabelText,
             ),
             SizedBox(
               height: 20.h,
             ),
             PaymentForwardItem(
-              title: "connect_stripe_to_get_paid".tr(),
+              title: LocaleKeys.connect_stripe_to_get_paid.tr(),
               onPressed: () {
                 handleStripeAccountLink();
               },
             ),
             PaymentForwardItem(
-              title: "transaction_history".tr(),
+              title: LocaleKeys.transaction_history.tr(),
               onPressed: () {
                 Navigator.of(context).pushNamed(RouteUtil.ROUTE_TRANSACTION_HISTORY);
               },
