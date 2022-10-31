@@ -53,7 +53,7 @@ abstract class  LocaleKeys {
   static const asset_uri = 'asset_uri';
   static const copied_to_clipboard = 'copied_to_clipboard';
   static const save = 'save';
-  static const _continue = '_continue';
+  static const continue_key = 'continue_key';
   static const read_more = 'read_more';
   static const collapse = 'collapse';
   static const download_pylons_app = 'download_pylons_app';

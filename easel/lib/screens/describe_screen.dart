@@ -249,7 +249,7 @@ class _DescribeScreenState extends State<DescribeScreen> {
                       const EaselHashtagInputField(),
                       VerticalSpace(20.h),
                       ClippedButton(
-                        title: "_continue".tr(),
+                        title: LocaleKeys.continue_key.tr(),
                         bgColor: EaselAppTheme.kBlue,
                         textColor: EaselAppTheme.kWhite,
                         onPressed: () {
