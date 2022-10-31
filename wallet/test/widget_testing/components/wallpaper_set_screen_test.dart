@@ -12,7 +12,7 @@ void main() {
   testWidgets('test case for nft visibility', (tester) async {
     await tester.setScreenSize();
     await tester.testAppForWidgetTesting(WallpaperScreen(
-      nft: MOCK_NFT_FREE.url,
+      nft: MOCK_NFT_FREE_IMAGE.url,
     ));
     await tester.pumpAndSettle();
     final gestureDetectorWallpaperScreen = find.byType(NftImageWidget);
@@ -24,7 +24,7 @@ void main() {
   testWidgets('test case for set wallpaper button press', (tester) async {
     tester.runAsync(() async {
       await tester.testAppForWidgetTesting(WallpaperScreen(
-        nft: MOCK_NFT_FREE.url,
+        nft: MOCK_NFT_FREE_IMAGE.url,
       ));
       await tester.pumpAndSettle();
       final gestureDetectorWallpaperScreen = find.byType(CustomPaintButton);
