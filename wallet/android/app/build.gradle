@@ -100,4 +100,7 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.firebase:firebase-appcheck-debug:16.1.0'
+    constraints { implementation('com.stripe:stripe-android') { version { strictly '20.11.0' } } }
+    constraints { implementation('com.stripe:financial-connections') { version { strictly '20.11.0' } } }
+
 }
