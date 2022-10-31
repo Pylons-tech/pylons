@@ -782,7 +782,7 @@ class RepositoryImp implements Repository {
     final localTransactionModel = createInitialLocalTransactionModel(
       transactionTypeEnum: TransactionTypeEnum.GeneratePaymentReceipt,
       transactionData: jsonEncode(req.toJson()),
-      transactionDescription: 'Generate Payment Receipt',
+      transactionDescription: 'Generate Stripe Payment Receipt',
       transactionPrice: '',
       transactionCurrency: '',
     );
