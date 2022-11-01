@@ -15,10 +15,10 @@ class Item {
   Item.fromItem(generated.Item n) : _native = n, _nativeRecord = null, _complete = true;
   Item.fromRecord(generated.ItemRecord n) : _native = null, _nativeRecord = n, _complete = false;
 
-  static Future<Item> fetch (String id, String? cookbook) async {
+  static Future<Item> get (String id, {String? cookbook}) async {
     if (cookbook == null) {
       if (Cookbook.current == null) {
-        throw Exception('Load a cookbook before calling Item.fetch');
+        throw Exception('Load a cookbook before calling Item.geth');
       }
       cookbook = Cookbook.current!.getId();
     }
@@ -34,7 +34,7 @@ class Item {
     if (_complete) {
       return _native!.cookbookId;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.fetch() with the provided ID if needed');
+      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -50,7 +50,7 @@ class Item {
     if (_complete) {
       return _native!.recipeId;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.fetch() with the provided ID if needed');
+      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -58,7 +58,7 @@ class Item {
     if (_complete) {
       return _native!.owner;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.fetch() with the provided ID if needed');
+      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -66,7 +66,7 @@ class Item {
     if (_complete) {
       return _native!.tradeable;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.fetch() with the provided ID if needed');
+      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -75,7 +75,7 @@ class Item {
       // TODO: check if this is right
       return double.parse(_native!.tradePercentage);
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.fetch() with the provided ID if needed');
+      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -88,7 +88,7 @@ class Item {
       // somehow...
       return _native!.lastUpdate;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.fetch() with the provided ID if needed');
+      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -96,7 +96,7 @@ class Item {
     if (_complete) {
       return _native!.createdAt;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.fetch() with the provided ID if needed');
+      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -104,7 +104,7 @@ class Item {
     if (_complete) {
       return _native!.updatedAt;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.fetch() with the provided ID if needed');
+      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -112,7 +112,7 @@ class Item {
     if (_complete) {
       return _native!.nodeVersion;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.fetch() with the provided ID if needed');
+      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
