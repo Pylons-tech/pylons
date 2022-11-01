@@ -31,7 +31,6 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
       downloading.value = false;
       Wallpaper.lockScreen(options: RequestSizeOptions.RESIZE_FIT);
       done.value = true;
-      //Navigator.pop(context);
     }, onError: (error) {
       downloading.value = false;
     });
