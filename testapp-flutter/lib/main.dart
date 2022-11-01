@@ -111,27 +111,12 @@ class _MyHomePageState extends State<MyHomePage> {
     _displayText("Generating character...", false);
     final recipe = await Recipe.get("RecipeTestAppGetCharacter");
     if (recipe == null) throw Exception("todo: handle this");
-
     final exec = await recipe.executeWith([]).
     onError((error, stackTrace) {
       throw Exception("character generation tx should not fail");
     });
-
-    var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-        cookbookId: "appTestCookbook",
-        recipeName: "RecipeTestAppGetCharacter",
-        itemIds: [],
-        coinInputIndex: 0,
-        paymentInfo: []);
-    if (!sdkResponse.success) {
-      throw Exception("character generation tx should not fail");
-    }
-    var txhash = "TODO"; // this is obv. wrong
-    // grab the tx somehow?
-    // then grab the character id out of it
-    var itemId = "NOPE";
-    //sdkResponse = await PylonsWallet.instance.getItemById(cookbookId: "appTestCookbook", itemId: itemId);
-    _character = sdkResponse.data as Item;
+    final itemId = exec.getItemOutputIds().first;
+    _character = await Item.fetch(itemId);
   }
 
   Future<void> _fightGoblin() async {
