@@ -8,10 +8,6 @@ class Execution {
 
   Execution(this._native);
 
-  Function(Execution)? onSuccess;
-  Function(Execution)? onFailure;
-  Function(Execution)? onError;
-
   String getCreator() {
     return _native.creator;
   }
