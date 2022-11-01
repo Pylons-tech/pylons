@@ -18,7 +18,7 @@ class Item {
   static Future<Item> get (String id, {String? cookbook}) async {
     if (cookbook == null) {
       if (Cookbook.current == null) {
-        throw Exception('Load a cookbook before calling Item.geth');
+        throw Exception('Load a cookbook before calling Item.get');
       }
       cookbook = Cookbook.current!.getId();
     }
