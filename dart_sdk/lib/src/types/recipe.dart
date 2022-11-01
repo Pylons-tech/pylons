@@ -1,9 +1,9 @@
 import 'package:fixnum/fixnum.dart';
 
+import '../../pylons_sdk.dart';
 import '../generated/pylons/item.pb.dart' as generated;
 import '../generated/pylons/payment_info.pb.dart' as generated;
 import '../generated/pylons/recipe.pb.dart' as generated;
-import '../pylons_wallet.dart';
 import 'item.dart';
 import 'execution.dart';
 
@@ -13,6 +13,24 @@ class Recipe {
   final generated.Recipe _native;
 
   Recipe(this._native);
+
+  static Future<Recipe?> get (String id, String? cookbook) async {
+    final String cb;
+    if (Cookbook.current == null && cookbook == null) {
+      throw Exception('Must set cookbook before trying to fetch a recipe');
+    }
+    if (cookbook != null) {
+      cb = cookbook;
+    } else {
+      cb = Cookbook.current!.getId();
+    }
+    final ll = await PylonsWallet.instance.getRecipe(cb, id);
+    if (ll.success) {
+      return Recipe(ll.data!);
+    } else {
+      return null;
+    }
+  }
 
   Future<Execution> executeWith (List<Item> inputs, {int CoinInputIndex = 0, List<generated.PaymentInfo>Function()? paymentInfoGen} ) async {
     var ids = <String>[];
