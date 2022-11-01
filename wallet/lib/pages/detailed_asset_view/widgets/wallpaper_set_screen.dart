@@ -8,6 +8,8 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:wallpaper/wallpaper.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 
 class WallpaperScreen extends StatefulWidget {
   const WallpaperScreen({Key? key, required this.nft}) : super(key: key);
@@ -106,7 +108,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
                 builder: (BuildContext context, bool doneState, Widget? child) {
                   if (!doneState) {
                     return CustomPaintButton(
-                      title: "set_lockscreen".tr(),
+                      title: LocaleKeys.set_lockscreen.tr(),
                       bgColor: AppColors.kDarkGrey,
                       width: 280.w,
                       onPressed: () async {
