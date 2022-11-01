@@ -171,7 +171,7 @@ const String kDollar = "U.S. Dollar";
 const String kAtom = "ATOM";
 const String kEthereum = "Ethereum";
 
-const ANDROID_VERSION = '1.0.1+143';
+const ANDROID_VERSION = '1.0.1+145';
 const IOS_VERSION = '1.0.8+1';
 
 const kCurrencyDecimalLength = 2;
@@ -448,3 +448,5 @@ class AnalyticsScreenEvents {
 const String kErrorKey = "Error";
 const String kProgressKey = "Progress";
 const String kImageAssetKey = "image_asset_key";
+const String kShareNftButtonCollapsedKey = "share_nft_collapsed";
+const String kShareNftButtonExpandedKey = "share_nft_expanded";
