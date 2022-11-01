@@ -89,32 +89,22 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _checkCharacter() async {
     _displayText("Checking character...", false);
 
-    // todo: api2 profile
-    //var prf = Profile.current();
-    //var pylons = prf.coin("upylon");
-    // item patterns...
+    final prf = await Profile.get();
+    if (prf == null) throw Exception("HANDLE THIS");
+    _pylons = prf.getBalances["upylon"]?.toInt() ?? 0;
 
-    if (_character == null) {
-      // var chr = prf.items.firstWhere(// bleh);
-      // Item? chr;
-      // int lu = -1;
-      // for (var item in sdkResponse.data.items) {
-      //   if (item.strings.any((element) => element.key == "entityType" && element.value == "character") &&
-      //       item.longs.any((element) => element.key == "currentHp" && element.value != 0)) {
-      //     var v = item.lastUpdate.toInt();
-      //     if (v > lu) {
-      //       lu = v;
-      //       chr = item;
-      //     }
-      //   }
-      // }
-      // _character = chr;
-    }
+    // todo: make the use-latest stuff work again
+    _character ??= prf.items.firstWhere((element) {
+        var v = element.getLastUpdate();
+        // second condition gets ?? true b/c we wind up flipping the fallback too
+        return element.getString("entityType") == "character" &&
+            !(element.getInt("currentHp")?.isZero ?? true);
+      });
 
-    //_swordLv = chr?.getLong("swordLevel") ?? 0;
-    //_coins = _character?.longs.firstWhere((element) => element.key == "coins").value.toInt() ?? 0;
-    //_shards = _character?.longs.firstWhere((element) => element.key == "shards").value.toInt() ?? 0;
-    //_curHp = _character?.longs.firstWhere((element) => element.key == "currentHp").value.toInt() ?? 0;
+    _swordLv = _character?.getInt("swordLevel")?.toInt() ?? 0;
+    _coins = _character?.getInt("coins")?.toInt() ?? 0;
+    _shards = _character?.getInt("shards")?.toInt() ?? 0;
+    _curHp = _character?.getInt("currentHp")?.toInt() ?? 0;
   }
 
   Future<void> _generateCharacter() async {
@@ -138,6 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _fightGoblin() async {
     _displayText("Fighting a goblin...", false);
+
     // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
     //     cookbookId: "appTestCookbook",
     //     recipeName: "RecipeTestAppFightGoblin",
