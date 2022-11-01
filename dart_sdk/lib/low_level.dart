@@ -6,3 +6,5 @@ export 'src/generated/pylons/item.pb.dart';
 export 'src/generated/pylons/execution.pb.dart';
 export 'src/generated/pylons/trade.pb.dart';
 export 'src/generated/pylons/tx.pb.dart';
+export 'src/features/models/sdk_ipc_response.dart';
+export 'src/features/data/models/profile.dart' show Profile;
