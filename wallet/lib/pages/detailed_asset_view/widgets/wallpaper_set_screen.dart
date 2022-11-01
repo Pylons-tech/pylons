@@ -23,11 +23,11 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
   ValueNotifier<bool> downloading = ValueNotifier<bool>(false);
   ValueNotifier<bool> done = ValueNotifier<bool>(false);
 
-  Future<void> downloadAndSetImage(BuildContext context) async {
+  void downloadAndSetImage(BuildContext context) {
     final Stream<String> progressString = Wallpaper.imageDownloadProgress(widget.nft);
     progressString.listen((data) {
       downloading.value = true;
-    }, onDone: () async {
+    }, onDone: () {
       downloading.value = false;
       Wallpaper.lockScreen(options: RequestSizeOptions.RESIZE_FIT);
       done.value = true;
@@ -39,7 +39,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
+    return Material(
       color: AppColors.kBlack,
       child: Stack(
         children: [
