@@ -39,7 +39,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return ColoredBox(
       color: AppColors.kBlack,
       child: Stack(
         children: [
