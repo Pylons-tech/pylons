@@ -9,6 +9,8 @@ import 'package:easel_flutter/services/third_party_services/analytics_helper.dar
 import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 abstract class RemoteDataSource {
   /// This method is used uploading provided file to the server using [httpClient]
   /// Input : [file] which needs to be uploaded , [onUploadProgressCallback] a callback method which needs to be call on each progress
@@ -50,7 +52,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       return ApiResponse<StorageResponseModel>.success(data: data);
     }
     return ApiResponse<StorageResponseModel>.error(
-      errorMessage: response.data["error"]["message"] ?? "update_failed".tr(),
+      errorMessage: response.data["error"]["message"] ?? LocaleKeys.update_failed.tr(),
     );
   }
 

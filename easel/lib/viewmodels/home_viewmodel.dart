@@ -5,6 +5,8 @@ import 'package:easel_flutter/utils/enums.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../generated/locale_keys.g.dart';
+
 class HomeViewModel extends ChangeNotifier {
   final Repository repository;
 
@@ -18,9 +20,9 @@ class HomeViewModel extends ChangeNotifier {
   NFT? nft;
   String? from;
   final List pageTitles = [
-    "upload".tr(),
-    "nft_detail_text".tr(),
-    "nft_pricing".tr(),
+    LocaleKeys.upload.tr(),
+    LocaleKeys.nft_detail_text.tr(),
+    LocaleKeys.nft_pricing.tr(),
     ''
   ];
 
