@@ -71,6 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     PylonsWallet.instance.exists().then((value) {
       _foundWallet = value;
+      Cookbook.load("appTestCookbook");
     });
   }
 
@@ -111,26 +112,20 @@ class _MyHomePageState extends State<MyHomePage> {
     _displayText("Generating character...", false);
     final recipe = await Recipe.get("RecipeTestAppGetCharacter");
     if (recipe == null) throw Exception("todo: handle this");
-    final exec = await recipe.executeWith([]).
-    onError((error, stackTrace) {
+    final exec = await recipe.executeWith([]).onError((error, stackTrace) {
       throw Exception("character generation tx should not fail");
     });
     final itemId = exec.getItemOutputIds().first;
-    _character = await Item.fetch(itemId);
+    _character = await Item.get(itemId);
   }
 
   Future<void> _fightGoblin() async {
     _displayText("Fighting a goblin...", false);
-
-    // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-    //     cookbookId: "appTestCookbook",
-    //     recipeName: "RecipeTestAppFightGoblin",
-    //     itemIds: [_character!.id],
-    //     coinInputIndex: 0,
-    //     paymentInfo: []);
-    // if (!sdkResponse.success) {
-    //   throw Exception("combat tx should not fail");
-    // }
+    final recipe = await Recipe.get("RecipeTestAppFightGoblin");
+    if (recipe == null) throw Exception("todo: handle this");
+    await recipe.executeWith([_character!]).onError((error, stackTrace) {
+      throw Exception("combat tx should not fail");
+    });
     _displayText("Victory!", false);
     var lastHp = _curHp;
     var lastCoins = _coins;
@@ -146,15 +141,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _fightTroll() async {
     _displayText("Fighting a troll...", false);
     if (_swordLv < 1) {
-      // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-      //     cookbookId: "appTestCookbook",
-      //     recipeName: "RecipeTestAppFightTrollUnarmed",
-      //     itemIds: [_character!.id],
-      //     coinInputIndex: 0,
-      //     paymentInfo: []);
-      // if (!sdkResponse.success) {
-      //   throw Exception("combat tx should not fail");
-      // }
+      final recipe = await Recipe.get("RecipeTestAppFightTrollUnarmed");
+      if (recipe == null) throw Exception("todo: handle this");
+      await recipe.executeWith([_character!]).onError((error, stackTrace) {
+        throw Exception("combat tx should not fail");
+      });
       _displayText("Defeat...", false);
       var lastHp = _curHp;
       await _checkCharacter();
@@ -162,15 +153,11 @@ class _MyHomePageState extends State<MyHomePage> {
         _displayText("Took ${lastHp - _curHp} damage!", false);
       }
     } else {
-      // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-      //     cookbookId: "appTestCookbook",
-      //     recipeName: "RecipeTestAppFightTrollArmed",
-      //     itemIds: [_character!.id],
-      //     coinInputIndex: 0,
-      //     paymentInfo: []);
-      // if (!sdkResponse.success) {
-      //   throw Exception("combat tx should not fail");
-      // }
+      final recipe = await Recipe.get("RecipeTestAppFightTrollArmed");
+      if (recipe == null) throw Exception("todo: handle this");
+      await recipe.executeWith([_character!]).onError((error, stackTrace) {
+        throw Exception("combat tx should not fail");
+      });
       _displayText("Victory!", false);
       var lastHp = _curHp;
       var lastShards = _shards;
@@ -187,15 +174,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _fightDragon() async {
     _displayText("Fighting a dragon...", false);
     if (_swordLv < 2) {
-      // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-      //     cookbookId: "appTestCookbook",
-      //     recipeName: "RecipeTestAppFightDragonUnarmed",
-      //     itemIds: [_character!.id],
-      //     coinInputIndex: 0,
-      //     paymentInfo: []);
-      // if (!sdkResponse.success) {
-      //   throw Exception("combat tx should not fail");
-      // }
+      final recipe = await Recipe.get("RecipeTestAppFightDragonUnarmed");
+      if (recipe == null) throw Exception("todo: handle this");
+      await recipe.executeWith([_character!]).onError((error, stackTrace) {
+        throw Exception("combat tx should not fail");
+      });
       _displayText("Defeat...", false);
       var lastHp = _curHp;
       await _checkCharacter();
@@ -203,15 +186,11 @@ class _MyHomePageState extends State<MyHomePage> {
         _displayText("Took ${lastHp - _curHp} damage!", false);
       }
     } else {
-      // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-      //     cookbookId: "appTestCookbook",
-      //     recipeName: "RecipeTestAppFightDragonArmed",
-      //     itemIds: [_character!.id],
-      //     coinInputIndex: 0,
-      //     paymentInfo: []);
-      // if (!sdkResponse.success) {
-      //   throw Exception("combat tx should not fail");
-      // }
+      final recipe = await Recipe.get("RecipeTestAppFightDragonArmed");
+      if (recipe == null) throw Exception("todo: handle this");
+      await recipe.executeWith([_character!]).onError((error, stackTrace) {
+        throw Exception("combat tx should not fail");
+      });
       _displayText("Victory!", false);
       var lastHp = _curHp;
       await _checkCharacter();
@@ -227,15 +206,11 @@ class _MyHomePageState extends State<MyHomePage> {
     } else if (_coins < 50 ) {
       _displayText("You need 50 coins to buy a sword", false);
     } else {
-      // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-      //     cookbookId: "appTestCookbook",
-      //     recipeName: "RecipeTestAppBuySword",
-      //     itemIds: [_character!.id],
-      //     coinInputIndex: 0,
-      //     paymentInfo: []);
-      // if (!sdkResponse.success) {
-      //   throw Exception("purchase tx should not fail");
-      // }
+      final recipe = await Recipe.get("RecipeTestAppBuySword");
+      if (recipe == null) throw Exception("todo: handle this");
+      await recipe.executeWith([_character!]).onError((error, stackTrace) {
+        throw Exception("purchase tx should not fail");
+      });
       _displayText("Bought a sword!", false);
       var lastCoins = _coins;
       await _checkCharacter();
@@ -251,15 +226,11 @@ class _MyHomePageState extends State<MyHomePage> {
     } else if (_shards < 5) {
       _displayText("You need 5 shards to upgrade your sword", false);
     } else {
-      // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-      //     cookbookId: "appTestCookbook",
-      //     recipeName: "RecipeTestAppUpgradeSword",
-      //     itemIds: [_character!.id],
-      //     coinInputIndex: 0,
-      //     paymentInfo: []);
-      // if (!sdkResponse.success) {
-      //   throw Exception("purchase tx should not fail");
-      // }
+      final recipe = await Recipe.get("RecipeTestAppPurchaseUpgradeSword");
+      if (recipe == null) throw Exception("todo: handle this");
+      await recipe.executeWith([_character!]).onError((error, stackTrace) {
+        throw Exception("purchase tx should not fail");
+      });
       _displayText("Upgraded your sword!", false);
       var lastShards = _shards;
       await _checkCharacter();
