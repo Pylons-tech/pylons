@@ -9,17 +9,30 @@ import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:wallpaper/wallpaper.dart';
 
 import '../../../generated/locale_keys.g.dart';
+import '../../../main_prod.dart';
 
+class WallpaperScreen {
+  const WallpaperScreen({required this.nft, required this.context});
+  final String nft;
+  final BuildContext context;
 
-class WallpaperScreen extends StatefulWidget {
-  const WallpaperScreen({Key? key, required this.nft}) : super(key: key);
+  Future<void> show() async {
+    await showGeneralDialog<String>(
+        context: context,
+        pageBuilder: (BuildContext context, _, __) =>
+            Dialog(backgroundColor: Colors.transparent, insetPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0), child: _WallpaperScreen(nft: nft)));
+  }
+}
+
+class _WallpaperScreen extends StatefulWidget {
+  const _WallpaperScreen({Key? key, required this.nft}) : super(key: key);
   final String nft;
 
   @override
-  State<WallpaperScreen> createState() => _WallpaperScreenState();
+  State<_WallpaperScreen> createState() => _WallpaperScreenState();
 }
 
-class _WallpaperScreenState extends State<WallpaperScreen> {
+class _WallpaperScreenState extends State<_WallpaperScreen> {
   ValueNotifier<bool> downloading = ValueNotifier<bool>(false);
   ValueNotifier<bool> done = ValueNotifier<bool>(false);
 

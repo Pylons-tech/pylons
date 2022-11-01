@@ -527,10 +527,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       if (viewModel.nft.assetType == AssetType.Image && Platform.isAndroid)
                                         GestureDetector(
                                           onTap: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (_) => WallpaperScreen(nft: viewModel.nft.url)
-                                            );
+                                            final WallpaperScreen wallpaperScreen = WallpaperScreen(nft: viewModel.nft.url, context: context);
+                                            wallpaperScreen.show();
+                                            // showDialog(
+                                            //     context: context,
+                                            //     builder: (_) => WallpaperScreen(nft: viewModel.nft.url)
+                                            // );
                                           },
                                           child: SvgPicture.asset(
                                             SVGUtil.MY_CREATIONS,
