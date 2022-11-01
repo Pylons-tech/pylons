@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
+import 'dart:io' show Platform;
 
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -523,7 +524,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       SizedBox(
                                         height: 12.h,
                                       ),
-                                      if (viewModel.nft.assetType == AssetType.Image)
+                                      if (viewModel.nft.assetType == AssetType.Image && Platform.isAndroid)
                                         GestureDetector(
                                           onTap: () {
                                             showDialog(
