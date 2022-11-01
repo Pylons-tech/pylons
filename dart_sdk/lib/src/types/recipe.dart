@@ -14,7 +14,7 @@ class Recipe {
 
   Recipe(this._native);
 
-  static Future<Recipe?> get (String id, String? cookbook) async {
+  static Future<Recipe?> get (String id, String? cookbook = null) async {
     final String cb;
     if (Cookbook.current == null && cookbook == null) {
       throw Exception('Must set cookbook before trying to fetch a recipe');
