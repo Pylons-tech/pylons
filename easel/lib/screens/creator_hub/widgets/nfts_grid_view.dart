@@ -33,38 +33,39 @@ class NftGridViewItem extends StatelessWidget {
     return Stack(
       children: [
         SizedBox(
-            height: 200.h,
-            width: 150.w,
-            child: InkWell(
-              key: const Key(kGridViewTileNFTKey),
-              onTap: () {
-                if (context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft) {
-                  final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
-                    buildContext: context,
-                    nft: nft,
-                  );
-                  draftsBottomSheet.show();
-                  return;
-                }
-                buildBottomSheet(context: context);
-              },
-              child: NftTypeBuilder(
-                onImage: (context) => buildNFTPreview(url: nft.url.changeDomain()),
-                onVideo: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
-                onAudio: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
-                onPdf: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
-                on3D: (context) => IgnorePointer(
-                  child: ModelViewer(
-                    src: nft.url.changeDomain(),
-                    ar: false,
-                    autoRotate: false,
-                    backgroundColor: EaselAppTheme.kWhite,
-                    cameraControls: false,
-                  ),
+          height: 200.h,
+          width: 150.w,
+          child: InkWell(
+            key: const Key(kGridViewTileNFTKey),
+            onTap: () {
+              if (context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft) {
+                final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
+                  buildContext: context,
+                  nft: nft,
+                );
+                draftsBottomSheet.show();
+                return;
+              }
+              buildBottomSheet(context: context);
+            },
+            child: NftTypeBuilder(
+              onImage: (context) => buildNFTPreview(url: nft.url.changeDomain()),
+              onVideo: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
+              onAudio: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
+              onPdf: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
+              on3D: (context) => IgnorePointer(
+                child: ModelViewer(
+                  src: nft.url.changeDomain(),
+                  ar: false,
+                  autoRotate: false,
+                  backgroundColor: EaselAppTheme.kWhite,
+                  cameraControls: false,
                 ),
-                assetType: nft.assetType.toAssetTypeEnum(),
               ),
-            )),
+              assetType: nft.assetType.toAssetTypeEnum(),
+            ),
+          ),
+        ),
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -112,17 +113,18 @@ class NftGridViewItem extends StatelessWidget {
                   ),
                   const Spacer(),
                   InkWell(
-                      onTap: () {
-                        final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
-                          buildContext: context,
-                          nft: nft,
-                        );
-                        draftsBottomSheet.show();
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(4.0.w),
-                        child: SvgPicture.asset(SVGUtils.kSvgMoreOption, color: Colors.white),
-                      )),
+                    onTap: () {
+                      final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
+                        buildContext: context,
+                        nft: nft,
+                      );
+                      draftsBottomSheet.show();
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(4.0.w),
+                      child: SvgPicture.asset(SVGUtils.kSvgMoreOption, color: Colors.white),
+                    ),
+                  ),
                   const SizedBox(
                     width: 5,
                   )

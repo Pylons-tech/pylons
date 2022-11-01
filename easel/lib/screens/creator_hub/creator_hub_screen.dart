@@ -98,6 +98,35 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
 
   EaselProvider get easelProvider => sl();
 
+  void onRefreshPressed() async {
+    GetIt.I.get<CreatorHubViewModel>().getDraftsList();
+    GetIt.I.get<CreatorHubViewModel>().getRecipesList();
+    GetIt.I.get<CreatorHubViewModel>().getTotalForSale();
+  }
+
+  Widget getRefreshButton(viewModel) {
+    if (easelProvider.isPylonsInstalled) {
+      switch (viewModel.selectedCollectionType) {
+        case CollectionType.published:
+          return Padding(
+            padding: EdgeInsets.only(right: 15.w),
+            child: InkWell(
+              onTap: () => scheduleMicrotask(() => onRefreshPressed()),
+              child: Icon(
+                Icons.refresh,
+                color: EaselAppTheme.kBlack,
+                size: 22.sp,
+              ),
+            ),
+          );
+
+        case CollectionType.draft:
+          return const SizedBox();
+      }
+    }
+    return const SizedBox.shrink();
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<CreatorHubViewModel>();
@@ -114,13 +143,21 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                 Container(
                   alignment: Alignment.centerRight,
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: InkWell(
-                    onTap: () => Navigator.of(context).pushNamed(RouteUtil.kRouteHome),
-                    child: Container(
-                      decoration:
-                          BoxDecoration(color: EaselAppTheme.kpurpleDark, boxShadow: [BoxShadow(color: EaselAppTheme.kpurpleDark.withOpacity(0.6), offset: const Offset(0, 0), blurRadius: 8.0)]),
-                      child: Icon(Icons.add, size: 27.h, color: EaselAppTheme.kWhite),
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      getRefreshButton(viewModel),
+                      InkWell(
+                        onTap: () => Navigator.of(context).pushNamed(RouteUtil.kRouteHome),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: EaselAppTheme.kpurpleDark,
+                            boxShadow: [BoxShadow(color: EaselAppTheme.kpurpleDark.withOpacity(0.6), offset: const Offset(0, 0), blurRadius: 8.0)],
+                          ),
+                          child: Icon(Icons.add, size: 27.h, color: EaselAppTheme.kWhite),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(
@@ -130,16 +167,18 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: RichText(
                     textAlign: TextAlign.start,
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: "hello".tr(),
-                        style: titleStyle.copyWith(color: EaselAppTheme.kTextGrey, fontSize: isTablet ? 16.sp : 18.sp),
-                      ),
-                      TextSpan(
-                        text: easelProvider.currentUsername,
-                        style: titleStyle,
-                      )
-                    ]),
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "hello".tr(),
+                          style: titleStyle.copyWith(color: EaselAppTheme.kTextGrey, fontSize: isTablet ? 16.sp : 18.sp),
+                        ),
+                        TextSpan(
+                          text: easelProvider.currentUsername,
+                          style: titleStyle,
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: 12.h),
@@ -163,8 +202,9 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                       const Expanded(child: SizedBox()),
                       SizedBox(width: 16.w),
                       InkWell(
-                          onTap: () => viewModel.updateViewType(ViewType.viewGrid),
-                          child: SvgPicture.asset(SVGUtils.kGridIcon, height: 15.h, color: viewModel.viewType == ViewType.viewGrid ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon)),
+                        onTap: () => viewModel.updateViewType(ViewType.viewGrid),
+                        child: SvgPicture.asset(SVGUtils.kGridIcon, height: 15.h, color: viewModel.viewType == ViewType.viewGrid ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon),
+                      ),
                       SizedBox(width: 14.w),
                       InkWell(
                         onTap: () => viewModel.updateViewType(ViewType.viewList),
@@ -339,29 +379,32 @@ class BuildGridView extends StatelessWidget {
       return onEmptyList(context);
     }
     return GridView.builder(
-        itemCount: nftsList.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 0.5,
-          crossAxisSpacing: 15.w,
-          mainAxisSpacing: 15.h,
-          crossAxisCount: 3,
-        ),
-        itemBuilder: (context, index) {
-          final nft = nftsList[index];
-          return (nft.price.isNotEmpty && nft.price != "0")
-              ? ClipRRect(
-                  child: Banner(
-                      color: EaselAppTheme.kDarkGreen,
-                      location: BannerLocation.topEnd,
-                      message: "\$ ${nft.price}",
-                      child: NftGridViewItem(
-                        nft: nft,
-                      )),
-                )
-              : NftGridViewItem(
-                  nft: nft,
-                );
-        });
+      itemCount: nftsList.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        childAspectRatio: 0.5,
+        crossAxisSpacing: 15.w,
+        mainAxisSpacing: 15.h,
+        crossAxisCount: 3,
+      ),
+      itemBuilder: (context, index) {
+        final nft = nftsList[index];
+        return (nft.price.isNotEmpty && double.parse(nft.price) > 0)
+            ? ClipRRect(
+                child: Banner(
+                  key: const Key(kPriceBannerKey),
+                  color: EaselAppTheme.kDarkGreen,
+                  location: BannerLocation.topEnd,
+                  message: "\$ ${nft.price}",
+                  child: NftGridViewItem(
+                    nft: nft,
+                  ),
+                ),
+              )
+            : NftGridViewItem(
+                nft: nft,
+              );
+      },
+    );
   }
 }
 
@@ -379,11 +422,12 @@ class BuildListView extends StatelessWidget {
       return onEmptyList(context);
     }
     return ListView.builder(
-        shrinkWrap: true,
-        itemCount: nftsList.length,
-        itemBuilder: (context, index) {
-          final nft = nftsList[index];
-          return viewModel.selectedCollectionType == CollectionType.draft ? DraftListTile(nft: nft, viewModel: viewModel) : NFTsListTile(publishedNFT: nft);
-        });
+      shrinkWrap: true,
+      itemCount: nftsList.length,
+      itemBuilder: (context, index) {
+        final nft = nftsList[index];
+        return viewModel.selectedCollectionType == CollectionType.draft ? DraftListTile(nft: nft, viewModel: viewModel) : NFTsListTile(publishedNFT: nft);
+      },
+    );
   }
 }

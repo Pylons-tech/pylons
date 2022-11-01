@@ -52,59 +52,61 @@ class BuildPublishedNFTsBottomSheet {
 
   Future show() {
     return showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        context: context,
-        builder: (BuildContext context) {
-          return ClipPath(
-            clipper: BottomSheetClipper(),
-            child: Container(
-              color: EaselAppTheme.kBgColor,
-              padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 30.h),
-              child: Wrap(
-                children: [
-                  moreOptionTile(
-                    onPressed: () {
-                      onViewOnPylonsPressed(nft: nft);
-                    },
-                    title: "view_on_pylons".tr(),
-                    image: SVGUtils.kSvgPylonsLogo,
-                  ),
-                  Divider(thickness: 1.h),
-                  CidOrIpfs(
-                    viewCid: (context) {
-                      return moreOptionTile(
-                        onPressed: () async {
-                          final scaffoldState = ScaffoldMessenger.of(context);
-                          Navigator.of(context).pop();
-                          await Clipboard.setData(ClipboardData(text: nft.cid));
-                          scaffoldState
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(
-                              SnackBar(content: Text("copied_to_clipboard".tr())),
-                            );
-                        },
-                        title: "copy_cid".tr(),
-                        image: PngUtils.kSvgIpfsLogo,
-                        isSvg: false,
-                      );
-                    },
-                    viewIpfs: (context) {
-                      return moreOptionTile(
-                        onPressed: () async {
-                          Navigator.of(context).pop();
-                          onViewOnIPFSPressed(nft: nft);
-                        },
-                        title: "view".tr(),
-                        image: PngUtils.kSvgIpfsLogo,
-                        isSvg: false,
-                      );
-                    },
-                    type: nft.assetType,
-                  )
-                ],
-              ),
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (BuildContext context) {
+        return ClipPath(
+          key: const Key(kNFTMoreOptionBottomSheetKey),
+          clipper: BottomSheetClipper(),
+          child: Container(
+            color: EaselAppTheme.kBgColor,
+            padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 30.h),
+            child: Wrap(
+              children: [
+                moreOptionTile(
+                  onPressed: () {
+                    onViewOnPylonsPressed(nft: nft);
+                  },
+                  title: "view_on_pylons".tr(),
+                  image: SVGUtils.kSvgPylonsLogo,
+                ),
+                Divider(thickness: 1.h),
+                CidOrIpfs(
+                  viewCid: (context) {
+                    return moreOptionTile(
+                      onPressed: () async {
+                        final scaffoldState = ScaffoldMessenger.of(context);
+                        Navigator.of(context).pop();
+                        await Clipboard.setData(ClipboardData(text: nft.cid));
+                        scaffoldState
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(
+                            SnackBar(content: Text("copied_to_clipboard".tr())),
+                          );
+                      },
+                      title: "copy_cid".tr(),
+                      image: PngUtils.kSvgIpfsLogo,
+                      isSvg: false,
+                    );
+                  },
+                  viewIpfs: (context) {
+                    return moreOptionTile(
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        onViewOnIPFSPressed(nft: nft);
+                      },
+                      title: "view".tr(),
+                      image: PngUtils.kSvgIpfsLogo,
+                      isSvg: false,
+                    );
+                  },
+                  type: nft.assetType,
+                )
+              ],
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }

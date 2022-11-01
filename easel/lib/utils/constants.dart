@@ -247,6 +247,9 @@ const kSaveAsDraftPublishKey = "Save_as_draft_publish_key";
 const kGridViewTileNFTKey = "GridViewTileNFTKey";
 const kPublishTextKey = "publish";
 const kPublishButtonKey = "publish_button_key";
+const kPriceBannerKey = "price_banner_key";
+const kNFTMoreOptionButtonKey = "NFT_more_option_key";
+const kNFTMoreOptionBottomSheetKey = "NFT_more_option_bottomsheet_key";
 
 class AnalyticsScreenEvents {
   static String tutorialScreen = "TutorialScreen";
