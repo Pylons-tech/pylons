@@ -67,7 +67,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
               width: 100.w,
               child: ValueListenableBuilder(
                 valueListenable: downloading,
-                builder: (BuildContext context, bool downloadingState, Widget? child) {
+                builder: (BuildContext context, bool downloadingState, _) {
                   return CircularProgressIndicator(
                     value: downloadingState ? null : 0,
                     strokeWidth: 6.r,
@@ -83,7 +83,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
               width: 100.w,
               child: ValueListenableBuilder(
                 valueListenable: done,
-                builder: (BuildContext context, bool doneState, Widget? child) {
+                builder: (BuildContext context, bool doneState, _) {
                   if (doneState) {
                     return SvgPicture.asset(
                       SVGUtil.TRANSACTION_SUCCESS,
@@ -105,7 +105,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
               padding: EdgeInsets.only(bottom: 30.h),
               child: ValueListenableBuilder(
                 valueListenable: done,
-                builder: (BuildContext context, bool doneState, Widget? child) {
+                builder: (BuildContext context, bool doneState, _) {
                   if (!doneState) {
                     return CustomPaintButton(
                       title: LocaleKeys.set_lockscreen.tr(),
