@@ -109,6 +109,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _generateCharacter() async {
     _displayText("Generating character...", false);
+    final recipe = await Recipe.get("RecipeTestAppGetCharacter");
+    if (recipe == null) throw Exception("todo: handle this");
+
+    final exec = await recipe.executeWith([]).
+    onError((error, stackTrace) {
+      throw Exception("character generation tx should not fail");
+    });
+
     var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
         cookbookId: "appTestCookbook",
         recipeName: "RecipeTestAppGetCharacter",
