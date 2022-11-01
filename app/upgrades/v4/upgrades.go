@@ -65,6 +65,8 @@ var (
 	_ = Accounts
 	_ = TotalUbedrock
 	_ = UbedrockDistribute
+
+	minStake = sdk.NewDec(2_000_000)
 )
 
 func CreateUpgradeHandler(
@@ -149,16 +151,20 @@ func MintUbedrockForInitialAccount(ctx sdk.Context, bank *bankkeeper.BaseKeeper,
 	// Send 1 bedrock to each validator = 1_000_000 ubedrock
 	vals := staking.GetAllValidators(ctx)
 	for _, val := range vals {
-		_, err = staking.Delegate(
-			ctx,
-			sdk.MustAccAddressFromBech32(EngineHotWal),
-			math.NewIntFromUint64(1_000_000),
-			stakingtypes.Unbonded,
-			val,
-			true,
-		)
-		if err != nil {
-			panic(err)
+		if val.Tokens.LT(minStake.RoundInt()) {
+			stakeVal := minStake.RoundInt().Sub(val.Tokens)
+			_, err = staking.Delegate(
+				ctx,
+				sdk.MustAccAddressFromBech32(EngineHotWal),
+				stakeVal,
+				stakingtypes.Unbonded,
+				val,
+				true,
+			)
+			if err != nil {
+				panic(err)
+			}
+
 		}
 	}
 }
@@ -191,9 +197,13 @@ func GetbackCoinFromVal(ctx sdk.Context, accAddr sdk.AccAddress, staking *stakin
 		if !found {
 			continue
 		}
-		_, err := staking.Undelegate(ctx, accAddr, validatorValAddr, delegation.GetShares()) //nolint:errcheck // nolint because otherwise we'd have a time and nothing to do with it.
-		if err != nil {
-			panic(err)
+		unStake := delegation.Shares.Sub(minStake)
+		if unStake.GT(minStake) {
+			_, err := staking.Undelegate(ctx, accAddr, validatorValAddr, unStake) //nolint:errcheck // nolint because otherwise we'd have a time and nothing to do with it.
+			if err != nil {
+				panic(err)
+			}
+
 		}
 	}
 
@@ -241,10 +251,22 @@ func CleanUplyons(ctx sdk.Context, bank *bankkeeper.BaseKeeper, pylons *pylonske
 	}
 }
 
-// Mint uplyons for address with valid (with IAP))
 func MintValidUpylons(ctx sdk.Context, pylons *pylonskeeper.Keeper) error {
+	err := MintValidUpylonsGoogleIAP(ctx, pylons)
+	if err != nil {
+		return err
+	}
+	err = MintValidUpylonsAppleIAP(ctx, pylons)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Mint uplyons for address with valid (with IAP))
+func MintValidUpylonsGoogleIAP(ctx sdk.Context, pylons *pylonskeeper.Keeper) error {
 	for _, googleIAPOder := range pylons.GetAllGoogleIAPOrder(ctx) {
-		amountUpylons := GetAmountOfUpylonsMintedByProductID(ctx, googleIAPOder)
+		amountUpylons := GetAmountOfUpylonsMintedByProductID(ctx, googleIAPOder.ProductId)
 		addr, _ := sdk.AccAddressFromBech32(googleIAPOder.Creator)
 
 		amt := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amountUpylons))
@@ -256,12 +278,27 @@ func MintValidUpylons(ctx sdk.Context, pylons *pylonskeeper.Keeper) error {
 	return nil
 }
 
+// Mint uplyons for address with valid (with IAP))
+func MintValidUpylonsAppleIAP(ctx sdk.Context, pylons *pylonskeeper.Keeper) error {
+	for _, appleIAPOder := range pylons.GetAllAppleIAPOrder(ctx) {
+		amountUpylons := GetAmountOfUpylonsMintedByProductID(ctx, appleIAPOder.ProductId)
+		addr, _ := sdk.AccAddressFromBech32(appleIAPOder.Creator)
+
+		amt := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amountUpylons))
+		err := pylons.MintCoinsToAddr(ctx, addr, amt)
+		if err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+	}
+	return nil
+}
+
 // Get amount of upylons was minted by product id
-func GetAmountOfUpylonsMintedByProductID(ctx sdk.Context, googleIAPOder types.GoogleInAppPurchaseOrder) math.Int {
+func GetAmountOfUpylonsMintedByProductID(ctx sdk.Context, productID string) math.Int {
 	// Looping defaultCoinIssuers to get amount upylons by product id
 	for _, ci := range types.DefaultCoinIssuers {
 		for _, p := range ci.Packages {
-			if p.ProductId == googleIAPOder.ProductId && ci.CoinDenom == types.PylonsCoinDenom {
+			if p.ProductId == productID && ci.CoinDenom == types.PylonsCoinDenom {
 				amount := p.Amount
 				return amount
 			}
