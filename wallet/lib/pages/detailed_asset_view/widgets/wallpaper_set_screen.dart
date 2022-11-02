@@ -22,6 +22,10 @@ class WallpaperScreen {
         pageBuilder: (BuildContext context, _, __) =>
             Dialog(backgroundColor: Colors.transparent, insetPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0), child: _WallpaperScreen(nft: nft)));
   }
+
+  _WallpaperScreen test() {
+    return _WallpaperScreen(nft: nft);
+  }
 }
 
 class _WallpaperScreen extends StatefulWidget {
