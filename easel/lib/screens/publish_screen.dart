@@ -32,6 +32,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import '../generated/locale_keys.g.dart';
 import '../widgets/video_progress_widget.dart';
 
 TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: isTablet ? 11.sp : 13.sp);
@@ -323,8 +324,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       ],
                       ReadMoreText(
                         widget.nft.description,
-                        trimExpandedText: "collapse".tr(),
-                        trimCollapsedText: "read_more".tr(),
+                        trimExpandedText: LocaleKeys.collapse.tr(),
+                        trimCollapsedText: LocaleKeys.read_more.tr(),
                         moreStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w300, color: EaselAppTheme.kLightPurple),
                         lessStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w300, color: EaselAppTheme.kLightPurple),
                       ),
@@ -337,30 +338,30 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         child: Column(
                           children: [
                             buildRow(
-                              title: "currency".tr(),
+                              title: LocaleKeys.currency.tr(),
                               subtitle: widget.nft.isFreeDrop == FreeDrop.yes.name ? kPylonText : getCurrency(),
                             ),
                             SizedBox(height: 5.h),
-                            buildRow(title: "price".tr(), subtitle: getPriceSubtitle()),
+                            buildRow(title: LocaleKeys.price.tr(), subtitle: getPriceSubtitle()),
                             SizedBox(height: 5.h),
                             buildRow(
-                              title: "editions".tr(),
+                              title: LocaleKeys.editions.tr(),
                               subtitle: widget.nft.quantity.toString(),
                             ),
                             SizedBox(height: 5.h),
                             buildRow(
-                              title: "royalty".tr(),
+                              title: LocaleKeys.royalty.tr(),
                               subtitle: "${widget.nft.tradePercentage}%",
                             ),
                             SizedBox(height: 5.h),
-                            buildRow(title: "content_identifier".tr(), subtitle: widget.nft.cid, canCopy: true),
+                            buildRow(title: LocaleKeys.content_identifier.tr(), subtitle: widget.nft.cid, canCopy: true),
                             SizedBox(height: 5.h),
                             CidOrIpfs(
                               viewCid: (context) {
                                 return const SizedBox.shrink();
                               },
                               viewIpfs: (context) {
-                                return buildRow(title: "asset_uri".tr(), subtitle: "view".tr(), viewIPFS: true);
+                                return buildRow(title: LocaleKeys.asset_uri.tr(), subtitle: LocaleKeys.view.tr(), viewIPFS: true);
                               },
                               type: widget.nft.assetType,
                             ),
@@ -386,7 +387,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             ),
                             ClippedButton(
                               key: const Key(kSaveAsDraftPublishKey),
-                              title: "save_as_draft".tr(),
+                              title: LocaleKeys.save_as_draft.tr(),
                               bgColor: Colors.white.withOpacity(0.2),
                               textColor: EaselAppTheme.kWhite,
                               onPressed: () async {
@@ -457,7 +458,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           text: TextSpan(
             children: [
               TextSpan(
-                text: "created_by".tr(),
+                text: LocaleKeys.created_by.tr(),
                 style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w500),
               ),
               TextSpan(text: owner, style: TextStyle(color: EaselAppTheme.kLightPurple, fontSize: 18.sp, fontWeight: FontWeight.w500)),
@@ -604,7 +605,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   await Clipboard.setData(ClipboardData(text: subtitle));
                   if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("copied_to_clipboard".tr())),
+                    SnackBar(content: Text(LocaleKeys.copied_to_clipboard.tr())),
                   );
                 },
                 child: Icon(

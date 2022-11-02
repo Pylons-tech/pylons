@@ -15,6 +15,8 @@ import 'package:get_it/get_it.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 class NFTsListTile extends StatelessWidget {
   final NFT publishedNFT;
 
@@ -87,7 +89,7 @@ class NFTsListTile extends StatelessWidget {
                               ),
                               padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
                               child: Text(
-                                "publish".tr(),
+                                LocaleKeys.publish.tr(),
                                 style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
                               ),
                             ),
@@ -100,7 +102,7 @@ class NFTsListTile extends StatelessWidget {
                                   color: EaselAppTheme.kBlue,
                                 ),
                                 child: Text(
-                                  "for_sale".tr(),
+                                  LocaleKeys.for_sale.tr(),
                                   style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
                                 ),
                               )
