@@ -218,18 +218,18 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                   child: NFTsViewBuilder(
                     onGridSelected: (context) => BuildNFTsContent(
                         onDraftList: (context) => BuildGridView(
-                            nftsList: viewModel.nftDraftList,
-                            onEmptyList: (context) => Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                                  child: getEmptyDraftListWidget(),
-                                ),
+                              nftsList: viewModel.nftDraftList,
+                              onEmptyList: (context) => Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                child: getEmptyDraftListWidget(),
+                              ),
                             ),
                         onPublishedList: (context) => BuildGridView(
-                            nftsList: viewModel.nftPublishedList,
-                            onEmptyList: (context) => Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                                  child: getEmptyPublishedWidget(),
-                                ),
+                              nftsList: viewModel.nftPublishedList,
+                              onEmptyList: (context) => Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                child: getEmptyPublishedWidget(),
+                              ),
                             ),
                         collectionType: viewModel.selectedCollectionType),
                     onListSelected: (context) => BuildNFTsContent(
