@@ -5,9 +5,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
@@ -21,12 +24,8 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
 
-  await FirebaseAppCheck.instance.activate(
-    webRecaptchaSiteKey: 'recaptcha-v3-site-key',
-    // ignore: deprecated_member_use
-    androidProvider: AndroidProvider.safetyNet,
+  await initializeAppCheck();
 
-  );
   await dotenv.load(fileName: "env/.prod_env");
 
   await di.init();
@@ -56,6 +55,23 @@ Future<void> main() async {
       ),
     );
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
+}
+
+Future<void> initializeAppCheck() async {
+  await FirebaseAppCheck.instance.activate(
+    webRecaptchaSiteKey: 'recaptcha-v3-site-key',
+  );
+  // FirebaseAppCheck when enforced would block incoming requests from Android emulator and iOS simulator too in debug mode.
+  // This kDebugMode check gets a debug token from FirebaseAppCheck which can then be added on the Firebase console
+  // So that the emulator and simulator can be allowed to access to Firebase AppCheck token.
+  if (kDebugMode) {
+    try {
+      const MethodChannel methodChannel = MethodChannel("method-channel");
+      await methodChannel.invokeMethod("getFirebaseAppCheckDebugToken");
+    } catch (e) {
+      e.toString().show();
+    }
+  }
 }
 
 class MyHttpOverrides extends HttpOverrides {
