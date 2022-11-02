@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:pylons_wallet/services/third_party_services/video_player_helper.dart';
 import 'package:video_player/video_player.dart';
 
-class MockVideoPlayerimpl implements VideoPlayerHelper{
+class MockVideoPlayerImpl implements VideoPlayerHelper {
   @override
   void destroyVideoPlayer() {
     // TODO: implement destroyVideoPlayer
@@ -44,5 +44,4 @@ class MockVideoPlayerimpl implements VideoPlayerHelper{
     // TODO: implement seekToVideo
     throw UnimplementedError();
   }
-
 }

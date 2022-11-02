@@ -38,6 +38,8 @@ import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
 import 'package:transaction_signing_gateway/model/transaction_hash.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
+import '../generated/locale_keys.g.dart';
+
 class WalletsStoreImp implements WalletsStore {
   final Repository repository;
   final CrashlyticsHelper crashlyticsHelper;
@@ -104,7 +106,7 @@ class WalletsStoreImp implements WalletsStore {
 
     if (!response.success) {
       crashlyticsHelper.recordFatalError(error: response.error);
-      return Left(WalletCreationFailure("wallet_creation_failed".tr()));
+      return Left(WalletCreationFailure(LocaleKeys.wallet_creation_failed.tr()));
     }
 
     wallets.value.add(creds.publicInfo);
@@ -145,7 +147,7 @@ class WalletsStoreImp implements WalletsStore {
       log(error.toString());
       crashlyticsHelper.recordFatalError(error: error.toString());
     }
-    return SdkIpcResponse.failure(sender: '', error: "account_creation_failed".tr(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
+    return SdkIpcResponse.failure(sender: '', error: LocaleKeys.account_creation_failed.tr(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
   }
 
   Future<Either<CredentialsStorageFailure, Unit>> deleteAccountCredentials(CustomTransactionSigningGateway customTransactionSigningGateway, AccountPublicInfo info) {
@@ -204,7 +206,7 @@ class WalletsStoreImp implements WalletsStore {
 
     final accountsList = walletsResultEither.getOrElse(() => []);
     if (accountsList.isEmpty) {
-      return SdkIpcResponse.failure(sender: '', error: "no_profile_found".tr(), errorCode: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
+      return SdkIpcResponse.failure(sender: '', error: LocaleKeys.no_profile_found.tr(), errorCode: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
     }
     final info = accountsList.last;
     final walletLookupKey = createWalletLookUp(info);
@@ -213,7 +215,7 @@ class WalletsStoreImp implements WalletsStore {
 
     if (signedTransaction.isLeft()) {
       crashlyticsHelper.recordFatalError(error: signedTransaction.swap().toOption().toNullable()!.toString());
-      return SdkIpcResponse.failure(sender: '', error: 'something_wrong_signing_transaction'.tr(), errorCode: HandlerFactory.ERR_SIG_TRANSACTION);
+      return SdkIpcResponse.failure(sender: '', error: LocaleKeys.something_wrong_signing_transaction.tr(), errorCode: HandlerFactory.ERR_SIG_TRANSACTION);
     }
 
     final response = await customTransactionSigningGateway.broadcastTransaction(
@@ -330,14 +332,14 @@ class WalletsStoreImp implements WalletsStore {
     final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
       transactionTypeEnum: TransactionTypeEnum.BuyNFT,
       transactionData: jsonEncode(json),
-      transactionDescription: "${'bought_nft'.tr()}  ${json[kNftName] ?? ""}",
+      transactionDescription: "${LocaleKeys.bought_nft.tr()}  ${json[kNftName] ?? ""}",
       transactionCurrency: "${json[kNftCurrency] ?? ""}",
       transactionPrice: "${json[kNftPrice] ?? ""}",
     );
 
     if (!await networkInfo.isConnected) {
       await saveTransactionRecord(transactionHash: "" , transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
-      return SdkIpcResponse.failure(sender: '', error: "no_internet".tr(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
+      return SdkIpcResponse.failure(sender: '', error: LocaleKeys.no_internet.tr(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
     }
 
     json.remove(kNftName);
@@ -479,7 +481,7 @@ class WalletsStoreImp implements WalletsStore {
   @override
   Future<SdkIpcResponse> getProfile() async {
     if (wallets.value.isEmpty) {
-      return SdkIpcResponse.failure(sender: '', error: 'create_profile_before_using'.tr(), errorCode: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
+      return SdkIpcResponse.failure(sender: '', error: LocaleKeys.create_profile_before_using.tr(), errorCode: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
     }
 
     final publicAddress = wallets.value.last.publicAddress;

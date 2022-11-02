@@ -25,6 +25,8 @@ import 'package:transaction_signing_gateway/model/account_public_info.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../generated/locale_keys.g.dart';
+
 /// Terminology
 /// Signal : Incoming request from a 3rd party app
 /// Key : The key is the process against which the 3rd part app has sent the signal
@@ -139,7 +141,7 @@ class IPCEngine {
     final address = (queryParameters.containsKey(kAddress)) ? queryParameters[kAddress] ?? "" : "";
 
     if (currentWallets.isEmpty) {
-      "create_an_account_first".tr().show();
+      LocaleKeys.create_an_account_first.tr().show();
       repository.saveInviteeAddressFromDynamicLink(dynamicLink: address);
       walletsStore.saveInitialLink(initialLink: link);
       return;
@@ -168,7 +170,7 @@ class IPCEngine {
     final address = queryParameters.containsKey(kAddress) ? queryParameters[kAddress] ?? "" : "";
     final currentWallets = walletsStore.getWallets().value;
     if (currentWallets.isEmpty) {
-      "create_an_account_first".tr().show();
+      LocaleKeys.create_an_account_first.tr().show();
       repository.saveInviteeAddressFromDynamicLink(dynamicLink: address);
       walletsStore.saveInitialLink(initialLink: link);
       return;
@@ -179,7 +181,7 @@ class IPCEngine {
     final recipeResult = await walletsStore.getTradeByID(Int64.parseInt(tradeId));
 
     if (recipeResult == null) {
-      "nft_does_not_exists".tr().show();
+      LocaleKeys.account_already_exists.tr().show();
       showLoader.dismiss();
       return;
     }
@@ -207,7 +209,7 @@ class IPCEngine {
     if (recipeResult == null) {
       ScaffoldMessenger.of(navigatorKey.currentState!.overlay!.context).showSnackBar(
         SnackBar(
-          content: Text("nft_does_not_exists".tr()),
+          content: Text(LocaleKeys.nft_does_not_exists.tr()),
         ),
       );
     } else {
@@ -295,7 +297,7 @@ class IPCEngine {
   /// This method is called when the user cancels the transaction
   /// Input: [sdkIPCMessage] the transaction that the user cancels
   Future<void> onUserCancelled(SdkIpcMessage sdkIPCMessage) async {
-    final cancelledResponse = SdkIpcResponse.failure(sender: sdkIPCMessage.sender, error: 'user_declined_request'.tr(), errorCode: HandlerFactory.ERR_USER_DECLINED);
+    final cancelledResponse = SdkIpcResponse.failure(sender: sdkIPCMessage.sender, error: LocaleKeys.user_declined_request.tr(), errorCode: HandlerFactory.ERR_USER_DECLINED);
     await checkAndDispatchUniLinkIfNeeded(handlerMessage: cancelledResponse, responseSendingNeeded: true);
   }
 
@@ -373,7 +375,7 @@ class IPCEngine {
     showLoader.dismiss();
 
     if (recipeResult.isLeft()) {
-      "nft_does_not_exists".tr().show();
+      LocaleKeys.nft_does_not_exists.tr().show();
       return null;
     }
 

@@ -11,6 +11,8 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
+import '../../../../generated/locale_keys.g.dart';
+
 TextStyle kRecoveryOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
 TextStyle kRecoveryHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
 
@@ -81,27 +83,27 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
               height: 33.h,
             ),
             Text(
-              "recovery".tr(),
+              LocaleKeys.recovery.tr(),
               style: kRecoveryHeadlineText,
             ),
             SizedBox(
               height: 20.h,
             ),
             RecoveryForwardItem(
-              title: "view_recovery_phrase".tr(),
+              title: LocaleKeys.view_recovery_phrase.tr(),
               onPressed: () {
                 Navigator.of(context).pushNamed(RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE);
               },
             ),
             RecoveryForwardItem(
-              title: "practice_test".tr(),
+              title: LocaleKeys.practice_test.tr(),
               onPressed: () {
                 Navigator.of(context).pushNamed(RouteUtil.ROUTE_PRACTICE_TEST);
               },
             ),
             if (shouldShowTestNetRecovery)
               RecoveryForwardItem(
-                title: "recovery_migration".tr(),
+                title: LocaleKeys.recovery_migration.tr(),
                 onPressed: () async {
                   onRecoveryMigrationPressed();
                 },
@@ -124,7 +126,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
     final accountExists = await walletStore.isAccountExists(name);
 
     if (accountExists) {
-      "account_already_exists".tr().show();
+      LocaleKeys.account_already_exists.tr().show();
       diag.dismiss();
       return;
     }
@@ -139,7 +141,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
 
     diag.dismiss();
 
-    "account_migrated_successfully".tr().show();
+    LocaleKeys.account_migrated_successfully.tr().show();
 
     setState(() {
       shouldShowTestNetRecovery = false;

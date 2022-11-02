@@ -52,7 +52,7 @@
   "asset_uri": "актив URI ",
   "copied_to_clipboard": "Скопировано в буфер обмена",
   "save": "сберечь",
-  "continue": "Продолжать",
+  "continue_key": "Продолжать",
   "download_pylons_app": "Скачать приложение Пилоны",
   "open_pylons_app": "Откройте приложение пилонов",
   "start": "Начинать",

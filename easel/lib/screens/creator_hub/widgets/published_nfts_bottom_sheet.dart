@@ -12,6 +12,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 class BuildPublishedNFTsBottomSheet {
   final BuildContext context;
   final NFT nft;
@@ -29,7 +31,7 @@ class BuildPublishedNFTsBottomSheet {
             isSvg ? SvgPicture.asset(image) : Image.asset(image),
             SizedBox(width: 30.w),
             Text(
-              title.tr(),
+              title,
               style: EaselAppTheme.titleStyle.copyWith(
                 fontSize: isTablet ? 13.sp : 16.sp,
               ),
@@ -67,7 +69,7 @@ class BuildPublishedNFTsBottomSheet {
                   onPressed: () {
                     onViewOnPylonsPressed(nft: nft);
                   },
-                  title: "view_on_pylons".tr(),
+                  title: LocaleKeys.view_on_pylons.tr(),
                   image: SVGUtils.kSvgPylonsLogo,
                 ),
                 Divider(thickness: 1.h),
@@ -81,10 +83,10 @@ class BuildPublishedNFTsBottomSheet {
                         scaffoldState
                           ..hideCurrentSnackBar()
                           ..showSnackBar(
-                            SnackBar(content: Text("copied_to_clipboard".tr())),
+                            SnackBar(content: Text(LocaleKeys.copied_to_clipboard.tr())),
                           );
                       },
-                      title: "copy_cid".tr(),
+                      title: LocaleKeys.copy_cid.tr(),
                       image: PngUtils.kSvgIpfsLogo,
                       isSvg: false,
                     );
@@ -95,7 +97,7 @@ class BuildPublishedNFTsBottomSheet {
                         Navigator.of(context).pop();
                         onViewOnIPFSPressed(nft: nft);
                       },
-                      title: "view".tr(),
+                      title: LocaleKeys.view.tr(),
                       image: PngUtils.kSvgIpfsLogo,
                       isSvg: false,
                     );

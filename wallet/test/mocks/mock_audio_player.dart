@@ -1,7 +1,7 @@
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
 
-class MockAudioPlayerImpl implements AudioPlayerHelper{
+class MockAudioPlayerImpl implements AudioPlayerHelper {
   @override
   Stream<Duration> bufferedPositionStream() {
     // TODO: implement bufferedPositionStream
@@ -54,5 +54,4 @@ class MockAudioPlayerImpl implements AudioPlayerHelper{
     // TODO: implement setUrl
     throw UnimplementedError();
   }
-
 }

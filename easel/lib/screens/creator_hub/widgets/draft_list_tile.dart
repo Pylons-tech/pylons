@@ -20,6 +20,8 @@ import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 class DraftListTile extends StatefulWidget {
   final NFT nft;
   final CreatorHubViewModel viewModel;
@@ -146,7 +148,7 @@ class _DraftListTileState extends State<DraftListTile> {
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
                     child: Text(
-                      "draft".tr(),
+                      LocaleKeys.draft.tr(),
                       style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
                     ),
                   ),
@@ -299,7 +301,7 @@ class _DraftListTileState extends State<DraftListTile> {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
-                content: Text("copied_to_clipboard".tr()),
+                content: Text(LocaleKeys.copied_to_clipboard.tr()),
               ),
             );
         }

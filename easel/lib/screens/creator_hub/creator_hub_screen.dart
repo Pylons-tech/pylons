@@ -21,6 +21,8 @@ import 'package:focus_detector/focus_detector.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 class CreatorHubScreen extends StatefulWidget {
   const CreatorHubScreen({Key? key}) : super(key: key);
 
@@ -170,7 +172,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: "hello".tr(),
+                          text: LocaleKeys.hello.tr(),
                           style: titleStyle.copyWith(color: EaselAppTheme.kTextGrey, fontSize: isTablet ? 16.sp : 18.sp),
                         ),
                         TextSpan(
@@ -185,7 +187,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: AutoSizeText(
-                    "welcome_msg".tr(),
+                    LocaleKeys.welcome_msg.tr(),
                     textAlign: TextAlign.start,
                     maxLines: 4,
                     style: titleStyle.copyWith(fontSize: isTablet ? 9.sp : 12.sp),
@@ -196,9 +198,9 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Row(
                     children: [
-                      buildOutlinedBox(title: "draft".tr(), viewModel: viewModel, collectionType: CollectionType.draft),
+                      buildOutlinedBox(title: LocaleKeys.draft.tr(), viewModel: viewModel, collectionType: CollectionType.draft),
                       SizedBox(width: 14.w),
-                      buildOutlinedBox(title: "published".tr(), viewModel: viewModel, collectionType: CollectionType.published),
+                      buildOutlinedBox(title: LocaleKeys.published.tr(), viewModel: viewModel, collectionType: CollectionType.published),
                       const Expanded(child: SizedBox()),
                       SizedBox(width: 16.w),
                       InkWell(
@@ -259,14 +261,14 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
 
   Widget getEmptyWidgetForSale() {
     return Text(
-      "no_for_sale_nft".tr(),
+      LocaleKeys.no_for_sale_nft.tr(),
       style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
     );
   }
 
   Widget getEmptyPublishedWidget() {
     return Text(
-      "no_published_nft".tr(),
+      LocaleKeys.no_published_nft.tr(),
       style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
     );
   }
@@ -277,13 +279,13 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "no_nft_created".tr(),
+          LocaleKeys.no_nft_created.tr(),
           style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
         ),
         Padding(
           padding: EdgeInsets.only(bottom: 20.h),
           child: ClippedButton(
-            title: "create_draft".tr(),
+            title: LocaleKeys.create_draft.tr(),
             bgColor: EaselAppTheme.kBlue,
             textColor: EaselAppTheme.kWhite,
             onPressed: () {

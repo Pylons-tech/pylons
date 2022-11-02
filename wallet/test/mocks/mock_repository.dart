@@ -498,8 +498,7 @@ class MockRepository extends Repository {
 
   @override
   Future<Either<Failure, String>> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) {
-    // TODO: implement createDynamicLinkForUserInvite
-    throw UnimplementedError();
+    return Future.value(Right(MOCK_DYNAMIC_LINK));
   }
 
   @override

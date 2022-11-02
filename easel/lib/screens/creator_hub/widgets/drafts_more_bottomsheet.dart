@@ -16,6 +16,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../../../widgets/clippers/bottom_sheet_clipper.dart';
 
 TextStyle titleStyle = TextStyle(fontSize: isTablet ? 13.sp : 16.sp, fontWeight: FontWeight.w800, fontFamily: kUniversalFontFamily, color: EaselAppTheme.kBlack);
@@ -101,10 +102,10 @@ class DraftsMoreBottomSheet extends StatelessWidget {
                       state
                         ..hideCurrentSnackBar()
                         ..showSnackBar(
-                          SnackBar(content: Text("copied_to_clipboard".tr())),
+                          SnackBar(content: Text(LocaleKeys.copied_to_clipboard.tr())),
                         );
                     },
-                    title: "copy_cid".tr(),
+                    title: LocaleKeys.copy_cid.tr(),
                     image: PngUtils.kSvgIpfsLogo,
                     isSvg: false,
                   );
@@ -115,7 +116,7 @@ class DraftsMoreBottomSheet extends StatelessWidget {
                       Navigator.of(context).pop();
                       onViewOnIPFSPressed(nft: nft, context: context);
                     },
-                    title: "view".tr(),
+                    title: LocaleKeys.view.tr(),
                     image: PngUtils.kSvgIpfsLogo,
                     isSvg: false,
                   );
@@ -148,7 +149,7 @@ Widget moreOptionTile({required String title, required String image, required Vo
             width: 30.w,
           ),
           Text(
-            title.tr(),
+            title,
             style: titleStyle.copyWith(fontSize: 16.sp),
           )
         ],
