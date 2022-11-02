@@ -30,7 +30,7 @@ class Cookbook {
       lowLevel.data?.forEach((element) {
         ls.add(Recipe(element));
       });
-      return ls;
+      return List.unmodifiable(ls);
     } else {
       return Future.error(lowLevel.error);
     }
