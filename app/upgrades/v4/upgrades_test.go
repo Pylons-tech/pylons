@@ -111,7 +111,7 @@ func (suite *UpgradeTestSuite) TestMintUbedrockForInitialAccount() {
 	vals := suite.App.StakingKeeper.GetAllValidators(suite.Ctx)
 	for _, val := range vals {
 		token := val.GetTokens()
-		suite.Require().Equal(math.NewIntFromUint64(1_000_000), token)
+		suite.Require().Equal(math.NewIntFromUint64(2_000_000), token)
 	}
 	// Check token in all initial account
 	totalDelegation := len(vals)
