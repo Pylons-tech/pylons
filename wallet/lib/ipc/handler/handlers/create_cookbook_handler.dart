@@ -8,6 +8,8 @@ import 'package:pylons_wallet/ipc/models/sdk_ipc_message.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 /// This handler handles the create cookbook transaction request from third-party apps
 class CreateCookbookHandler implements BaseHandler {
   CreateCookbookHandler(this.sdkIpcMessage);
@@ -18,7 +20,7 @@ class CreateCookbookHandler implements BaseHandler {
 
     jsonMap.remove('nodeVersion');
     final loading = Loading()
-      ..showLoading(message: "${'creating_cookbook'.tr()}...");
+      ..showLoading(message: "${LocaleKeys.creating_cookbook.tr()}...");
 
     final walletsStore = GetIt.I.get<WalletsStore>();
 

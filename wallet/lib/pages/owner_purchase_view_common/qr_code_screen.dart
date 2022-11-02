@@ -14,6 +14,8 @@ import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 class QRCodeScreen extends StatefulWidget {
   const QRCodeScreen({Key? key, required this.nft}) : super(key: key);
 
@@ -35,8 +37,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
   }
 
   void createLink() {
-    final address =
-        GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
+    final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
 
     switch (widget.nft.type) {
       case NftType.TYPE_TRADE:
@@ -44,13 +45,11 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
         break;
 
       case NftType.TYPE_ITEM:
-        link = widget.nft.recipeID.createDynamicLink(
-            cookbookId: widget.nft.cookbookID, address: address);
+        link = widget.nft.recipeID.createDynamicLink(cookbookId: widget.nft.cookbookID, address: address);
         break;
 
       case NftType.TYPE_RECIPE:
-        link = widget.nft.recipeID.createDynamicLink(
-            cookbookId: widget.nft.cookbookID, address: address);
+        link = widget.nft.recipeID.createDynamicLink(cookbookId: widget.nft.cookbookID, address: address);
         break;
     }
   }
@@ -63,8 +62,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
         children: [
           getTypeWidget(widget.nft),
           Padding(
-            padding: EdgeInsets.only(
-                left: 23.w, top: MediaQuery.of(context).viewPadding.top + 13.h),
+            padding: EdgeInsets.only(left: 23.w, top: MediaQuery.of(context).viewPadding.top + 13.h),
             child: GestureDetector(
               onTap: () async {
                 Navigator.pop(context);
@@ -100,12 +98,13 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
             child: Padding(
               padding: EdgeInsets.only(bottom: 30.h),
               child: CustomPaintButton(
-                  title: "done".tr(),
-                  bgColor: AppColors.kWhite.withOpacity(0.3),
-                  width: 280.w,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
+                title: LocaleKeys.done.tr(),
+                bgColor: AppColors.kWhite.withOpacity(0.3),
+                width: 280.w,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
           )
         ],

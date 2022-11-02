@@ -13,6 +13,8 @@ import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:pylons_wallet/utils/permission_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 abstract class LocalDataSource {
   /// This method save stripe token in the local storage
   /// Input: [token]  the stripe token that we need to save
@@ -277,7 +279,7 @@ class LocalDataSourceImp implements LocalDataSource {
       return image?.path ?? '';
     }
 
-    throw 'permission_cant_get'.tr();
+    throw LocaleKeys.permission_cant_get.tr();
   }
 
   @override
@@ -368,7 +370,7 @@ class LocalDataSourceImp implements LocalDataSource {
   Future<String> getMnemonics() async {
     final mnemonic = await flutterSecureStorage.read(key: MNEMONIC, aOptions: androidOptions, iOptions: iosOptions);
     if (mnemonic == null) {
-      throw CacheFailure("no_data_saved".tr());
+      throw CacheFailure(LocaleKeys.no_data_saved.tr());
     }
     return mnemonic;
   }

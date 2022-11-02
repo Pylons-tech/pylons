@@ -13,6 +13,8 @@ import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
+import '../../../../generated/locale_keys.g.dart';
+
 class RowComponents extends StatelessWidget {
   final VoidCallback onRefresh;
 
@@ -57,7 +59,7 @@ class RowComponents extends StatelessWidget {
               Clipboard.setData(ClipboardData(text: publicAddress)).then(
                 (_) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text("copied_to_clipboard").tr()));
+                      content: const Text(LocaleKeys.copied_to_clipboard).tr()));
                 },
               );
             },

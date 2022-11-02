@@ -38,6 +38,7 @@ import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
+import '../../generated/locale_keys.g.dart';
 import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
 
 /// Sending NFT instead of viewmodel because the share plugin tends to rebuild this screen
@@ -545,8 +546,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   ),
                   ReadMoreText(
                     viewModel.nft.description,
-                    trimExpandedText: "collapse".tr(),
-                    trimCollapsedText: "read_more".tr(),
+                    trimExpandedText: LocaleKeys.collapse.tr(),
+                    trimCollapsedText: LocaleKeys.read_more.tr(),
                     moreStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.kCopyColor),
                     lessStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.kCopyColor),
                   ),
@@ -563,7 +564,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           child: Column(
                             children: [
                               TabField(
-                                name: 'ownership'.tr(),
+                                name: LocaleKeys.ownership.tr(),
                                 icon: 'trophy',
                                 nft: viewModel.nft,
                                 owner: viewModel.nft.owner,
@@ -571,7 +572,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               ),
                               SizedBox(height: 10.h),
                               TabField(
-                                name: "nft_detail".tr(),
+                                name: LocaleKeys.nft_detail.tr(),
                                 icon: 'detail',
                                 nft: viewModel.nft,
                                 owner: viewModel.nft.owner,
@@ -579,7 +580,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               ),
                               SizedBox(height: 10.h),
                               if (viewModel.nft.type != NftType.TYPE_RECIPE)
-                                TabField(name: "history".tr(), icon: 'history', nft: viewModel.nft, owner: viewModel.nft.owner, NftOwnershipHistoryList: viewModel.nftOwnershipHistoryList),
+                                TabField(name: LocaleKeys.history.tr(), icon: 'history', nft: viewModel.nft, owner: viewModel.nft.owner, NftOwnershipHistoryList: viewModel.nftOwnershipHistoryList),
                               SizedBox(height: 50.h),
                               if (viewModel.nft.amountMinted >= viewModel.nft.quantity) soldOutButton(viewModel)
                             ],
@@ -719,7 +720,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           text: TextSpan(
             children: [
               TextSpan(
-                text: "created_by".tr(),
+                text: LocaleKeys.created_by.tr(),
                 style: TextStyle(color: Colors.white, fontSize: 18.sp),
               ),
               TextSpan(text: owner, style: TextStyle(color: const Color(0xFFB6B6E8), fontSize: 18.sp)),

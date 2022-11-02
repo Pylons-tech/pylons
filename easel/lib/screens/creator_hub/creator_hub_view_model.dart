@@ -7,6 +7,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 enum ViewType { viewGrid, viewList }
 
 enum CollectionType { draft, published, forSale }
@@ -137,13 +139,13 @@ class CreatorHubViewModel extends ChangeNotifier {
   }
 
   Future<void> getDraftsList() async {
-    final loading = Loading()..showLoading(message: "loading".tr());
+    final loading = Loading()..showLoading(message: LocaleKeys.loading.tr());
 
     final getNftResponse = await repository.getNfts();
 
     if (getNftResponse.isLeft()) {
       loading.dismiss();
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
 
@@ -158,7 +160,7 @@ class CreatorHubViewModel extends ChangeNotifier {
     final getNftResponse = await repository.getNfts();
 
     if (getNftResponse.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
 
       return;
     }
@@ -172,7 +174,7 @@ class CreatorHubViewModel extends ChangeNotifier {
     final deleteNftResponse = await repository.deleteNft(id!);
 
     if (deleteNftResponse.isLeft()) {
-      "delete_error".tr().show();
+      LocaleKeys.delete_error.tr().show();
       return;
     }
     nftDraftList.removeWhere((element) => element.id == id);

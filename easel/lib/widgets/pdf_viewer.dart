@@ -19,6 +19,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import '../generated/locale_keys.g.dart';
+
 class PdfViewer extends StatefulWidget {
   final File? file;
   final String? fileUrl;
@@ -50,7 +52,7 @@ class _PdfViewerState extends State<PdfViewer> {
 
   Future initializeDoc() async {
     if (widget.file == null && widget.fileUrl == null) {
-      errorMsg = "no_pdf_file".tr();
+      errorMsg = LocaleKeys.no_pdf_file.tr();
       _isLoading = false;
       setState(() {});
       return;
@@ -73,7 +75,7 @@ class _PdfViewerState extends State<PdfViewer> {
           pdfViewerFullScreen: (context) {
             return errorMsg.isNotEmpty
                 ? Text(
-                    errorMsg.tr(),
+                    errorMsg,
                     style: const TextStyle(color: EaselAppTheme.kWhite),
                   )
                 : Padding(
@@ -102,7 +104,7 @@ class _PdfViewerState extends State<PdfViewer> {
                       child: errorMsg.isNotEmpty
                           ? Center(
                               child: Text(
-                                errorMsg.tr(),
+                                errorMsg,
                               ),
                             )
                           : Stack(
@@ -183,7 +185,7 @@ class _PdfViewerState extends State<PdfViewer> {
           child: InkWell(
             onTap: () {
               if (errorMsg.isNotEmpty) {
-                'first_pick_pdf'.tr().show();
+                  LocaleKeys.first_pick_pdf.tr().show();
                 return;
               }
               easelProvider.onPdfThumbnailPicked();

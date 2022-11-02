@@ -13,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
+import '../generated/locale_keys.g.dart';
 import '../utils/constants.dart';
 
 class TutorialScreen extends StatefulWidget {
@@ -172,9 +173,9 @@ class TutorialScreenState extends State<TutorialScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("pylons_app_desc_1".tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)),
+                      Text(LocaleKeys.pylons_app_desc_1.tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)),
                       SizedBox(height: 8.h),
-                      Text("discover_new_apps_adventures".tr(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))
+                      Text(LocaleKeys.discover_new_apps_adventures.tr(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))
                     ],
                   ),
                 )
@@ -197,9 +198,9 @@ class TutorialScreenState extends State<TutorialScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("app_desc_2".tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)),
+                      Text(LocaleKeys.app_desc_2.tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)),
                       SizedBox(height: 8.h),
-                      Text("app_needed_desc_two".tr(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))
+                      Text(LocaleKeys.app_needed_desc_two.tr(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))
                     ],
                   ),
                 )
@@ -222,9 +223,9 @@ class TutorialScreenState extends State<TutorialScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("app_needed_desc_three".tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)),
+                      Text(LocaleKeys.app_needed_desc_three.tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)),
                       SizedBox(height: 8.h),
-                      Text("why_app_needed_summary_three".tr(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))
+                      Text(LocaleKeys.why_app_needed_summary_three.tr(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))
                     ],
                   ),
                 )
@@ -238,7 +239,7 @@ class TutorialScreenState extends State<TutorialScreen> {
                   onPressed: () async {
                     await onDownloadNowPressed(context);
                   },
-                  btnText: 'download_pylons_app'.tr(),
+                  btnText: LocaleKeys.download_pylons_app.tr(),
                   color: EaselAppTheme.kBlue,
                 ),
               ),
@@ -249,7 +250,7 @@ class TutorialScreenState extends State<TutorialScreen> {
                     onPressed: () async {
                       await onDownloadNowPressed(context);
                     },
-                    btnText: 'download_pylons_app'.tr(),
+                    btnText: LocaleKeys.download_pylons_app.tr(),
                     color: EaselAppTheme.kBlue,
                   ),
                 ),
@@ -271,7 +272,7 @@ class TutorialScreenState extends State<TutorialScreen> {
     if (!appAlreadyInstalled) {
       PylonsWallet.instance.goToInstall();
     } else {
-      scaffoldState.show(message: "pylons_already_installed".tr());
+      scaffoldState.show(message: LocaleKeys.pylons_already_installed.tr());
     }
   }
 

@@ -11,6 +11,8 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 TextStyle kDeleteHeaderTextStyle = TextStyle(fontSize: 14.sp, fontFamily: 'UniversalSans', color: AppColors.kWhite, fontWeight: FontWeight.w500);
 
 class DeleteDialog {
@@ -54,10 +56,10 @@ class DeleteDialog {
                     ),
 
                     Text(
-                      "are_you_sure_you_want_to_delete_your_wallet",
+                      LocaleKeys.are_you_sure_you_want_to_delete_your_wallet.tr(),
                       textAlign: TextAlign.center,
                       style: kDeleteHeaderTextStyle,
-                    ).tr(),
+                    ),
 
                     SizedBox(
                       height: 30.h,
