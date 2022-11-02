@@ -223,14 +223,14 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                                   child: getEmptyDraftListWidget(),
                                 ),
-                            collectionType: viewModel.selectedCollectionType),
+                            ),
                         onPublishedList: (context) => BuildGridView(
                             nftsList: viewModel.nftPublishedList,
                             onEmptyList: (context) => Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                                   child: getEmptyPublishedWidget(),
                                 ),
-                            collectionType: viewModel.selectedCollectionType),
+                            ),
                         collectionType: viewModel.selectedCollectionType),
                     onListSelected: (context) => BuildNFTsContent(
                         onDraftList: (context) => Padding(
@@ -369,9 +369,8 @@ class NFTsViewBuilder extends StatelessWidget {
 class BuildGridView extends StatelessWidget {
   final List<NFT> nftsList;
   final WidgetBuilder onEmptyList;
-  final CollectionType collectionType;
 
-  const BuildGridView({Key? key, required this.nftsList, required this.onEmptyList, required this.collectionType}) : super(key: key);
+  const BuildGridView({Key? key, required this.nftsList, required this.onEmptyList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
