@@ -39,13 +39,13 @@ class _WallpaperScreenState extends State<_WallpaperScreen> {
   ValueNotifier<bool> downloading = ValueNotifier<bool>(false);
   ValueNotifier<bool> done = ValueNotifier<bool>(false);
 
-  void downloadAndSetImage(BuildContext context) {
+  Future<void> downloadAndSetImage(BuildContext context) async {
     final Stream<String> progressString = Wallpaper.imageDownloadProgress(widget.nft);
     progressString.listen((data) {
       downloading.value = true;
-    }, onDone: () {
+    }, onDone: () async {
       downloading.value = false;
-      Wallpaper.lockScreen(options: RequestSizeOptions.RESIZE_FIT);
+      await Wallpaper.lockScreen(options: RequestSizeOptions.RESIZE_FIT);
       done.value = true;
     }, onError: (error) {
       downloading.value = false;
