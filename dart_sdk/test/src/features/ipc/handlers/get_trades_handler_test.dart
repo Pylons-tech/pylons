@@ -10,7 +10,7 @@ import '../../../../mocks/mock_constants.dart';
 void main() {
   test('should complete the get trades future', () {
     initResponseCompleter(Strings.GET_TRADES);
-    var sdkResponse = SDKIPCResponse(
+    var sdkResponse = ll.SDKIPCResponse(
         success: false, error: '', data: '', errorCode: '', action: '');
     var handler = GetTradesHandler();
     handler.handler(sdkResponse);
@@ -19,7 +19,7 @@ void main() {
 
   test('should complete the get trades future with data ', () async {
     initResponseCompleter(Strings.GET_TRADES);
-    var sdkResponse = SDKIPCResponse(
+    var sdkResponse = ll.SDKIPCResponse(
         success: true,
         error: '',
         data: [MOCK_TRADE.toProto3Json()],
@@ -40,7 +40,7 @@ void main() {
 
   test('should complete the get trades future with error ', () async {
     initResponseCompleter(Strings.GET_TRADES);
-    var sdkResponse = SDKIPCResponse(
+    var sdkResponse = ll.SDKIPCResponse(
         success: true,
         error: '',
         data: [
