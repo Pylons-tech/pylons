@@ -11,6 +11,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../generated/locale_keys.g.dart';
 import 'constants.dart';
 
 abstract class FileUtilsHelper {
@@ -132,7 +133,7 @@ class FileUtilsHelperImpl implements FileUtilsHelper {
     if (canLaunch) {
       launchUrlString(url, mode: LaunchMode.externalApplication);
     } else {
-      throw ("cannot_launch_url".tr());
+      throw (LocaleKeys.cannot_launch_url.tr());
     }
   }
 

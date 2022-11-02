@@ -179,6 +179,19 @@ class PurchaseItemViewModel extends ChangeNotifier {
     }
   }
 
+  void pauseMedia() {
+    switch (nft.assetType) {
+      case AssetType.Audio:
+        pauseAudio();
+        break;
+      case AssetType.Video:
+        pauseVideo();
+        break;
+      default:
+        break;
+    }
+  }
+
   Future<void> initializeVideoPlayer() async {
     videoPlayerHelper.initializeVideoPlayer(url: nft.url);
     videoPlayerController = videoPlayerHelper.getVideoPlayerController();
@@ -400,7 +413,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
   Future<void> shareNFTLink({required Size size}) async {
     final address = walletsStore.getWallets().value.last.publicAddress;
-
+    pauseMedia();
     final link = await repository.createDynamicLinkForRecipeNftShare(address: address, nft: nft);
     return link.fold((l) {
       LocaleKeys.something_wrong.tr().show();
