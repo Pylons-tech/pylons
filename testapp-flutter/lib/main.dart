@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
 const menu = "1) Fight a goblin!\n2) Fight a troll!\n3) Fight a dragon!\n4) Buy a sword!\n"
-    "5) Upgrade your sword!\n6) Rest for a moment\n7) Rest for a bit\n8) Rest for a while\n"
-    "9) Power nap (9 PYL)\n10) Quit";
+    "5) Upgrade your sword!\n6) (!) Rest for a moment\n7) (!) Rest for a bit\n8) (!) Rest for a while\n"
+    "9) (!) Power nap (9 PYL)\n10) Quit";
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -240,106 +240,109 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<void> _rest1() async {
-    _displayText("Resting...", false);
-    // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-    //     cookbookId: "appTestCookbook",
-    //     recipeName: "RecipeTestAppRest25",
-    //     itemIds: [_character!.id],
-    //     coinInputIndex: 0,
-    //     paymentInfo: []);
-    // if (!sdkResponse.success) {
-    //   throw Exception("rest tx should not fail");
-    // }
-    //dunno how to get exec either...
-    var exec = "TODO";
-    while (true) {
-      _displayText("...", false);
-      //sdkResponse = await PylonsWallet.instance.getExecutionBasedOnId(id: exec);
-      // if completed break
-    }
-    _displayText("Done!", false);
-    var lastHp = _curHp;
-    await _checkCharacter();
-    if (lastHp != _curHp) {
-      _displayText("Recovered ${_curHp - lastHp} HP!", false);
-    }
-  }
+  // todo: retool rest functionality once delayed execs work
+  // alternatively rework the rest mechanic to not use a delay? idk
 
-  Future<void> _rest2() async {
-    _displayText("Resting...", false);
-    // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-    //     cookbookId: "appTestCookbook",
-    //     recipeName: "RecipeTestAppRest50",
-    //     itemIds: [_character!.id],
-    //     coinInputIndex: 0,
-    //     paymentInfo: []);
-    // if (!sdkResponse.success) {
-    //   throw Exception("rest tx should not fail");
-    // }
-    //dunno how to get exec either...
-    var exec = "TODO";
-    while (true) {
-      _displayText("...", false);
-      //sdkResponse = await PylonsWallet.instance.getExecutionBasedOnId(id: exec);
-      // if completed break
-    }
-    _displayText("Done!", false);
-    var lastHp = _curHp;
-    await _checkCharacter();
-    if (lastHp != _curHp) {
-      _displayText("Recovered ${_curHp - lastHp} HP!", false);
-    }
-  }
-
-  Future<void> _rest3() async {
-    _displayText("Resting...", false);
-    // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-    //     cookbookId: "appTestCookbook",
-    //     recipeName: "RecipeTestAppRest100",
-    //     itemIds: [_character!.id],
-    //     coinInputIndex: 0,
-    //     paymentInfo: []);
-    // if (!sdkResponse.success) {
-    //   throw Exception("rest tx should not fail");
-    // }
-    //dunno how to get exec either...
-    var exec = "TODO";
-    while (true) {
-      _displayText("...", false);
-      //sdkResponse = await PylonsWallet.instance.getExecutionBasedOnId(id: exec);
-      // if completed break
-    }
-    _displayText("Done!", false);
-    var lastHp = _curHp;
-    await _checkCharacter();
-    if (lastHp != _curHp) {
-      _displayText("Recovered ${_curHp - lastHp} HP!", false);
-    }
-  }
-
-  Future<void> _rest4() async {
-    if (_pylons < 9) {
-      _displayText("You need 9 Pylons Points to take a power nap!", false);
-      return;
-    }
-    _displayText("Resting...", false);
-    // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
-    //     cookbookId: "appTestCookbook",
-    //     recipeName: "RecipeTestAppRest100Premium",
-    //     itemIds: [_character!.id],
-    //     coinInputIndex: 0,
-    //     paymentInfo: []);
-    // if (!sdkResponse.success) {
-    //   throw Exception("rest tx should not fail");
-    // }
-    _displayText("Done!", false);
-    var lastHp = _curHp;
-    await _checkCharacter();
-    if (lastHp != _curHp) {
-      _displayText("Recovered ${_curHp - lastHp} HP!", false);
-    }
-  }
+  // Future<void> _rest1() async {
+  //   _displayText("Resting...", false);
+  //   // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
+  //   //     cookbookId: "appTestCookbook",
+  //   //     recipeName: "RecipeTestAppRest25",
+  //   //     itemIds: [_character!.id],
+  //   //     coinInputIndex: 0,
+  //   //     paymentInfo: []);
+  //   // if (!sdkResponse.success) {
+  //   //   throw Exception("rest tx should not fail");
+  //   // }
+  //   //dunno how to get exec either...
+  //   var exec = "TODO";
+  //   while (true) {
+  //     _displayText("...", false);
+  //     //sdkResponse = await PylonsWallet.instance.getExecutionBasedOnId(id: exec);
+  //     // if completed break
+  //   }
+  //   _displayText("Done!", false);
+  //   var lastHp = _curHp;
+  //   await _checkCharacter();
+  //   if (lastHp != _curHp) {
+  //     _displayText("Recovered ${_curHp - lastHp} HP!", false);
+  //   }
+  // }
+  //
+  // Future<void> _rest2() async {
+  //   _displayText("Resting...", false);
+  //   // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
+  //   //     cookbookId: "appTestCookbook",
+  //   //     recipeName: "RecipeTestAppRest50",
+  //   //     itemIds: [_character!.id],
+  //   //     coinInputIndex: 0,
+  //   //     paymentInfo: []);
+  //   // if (!sdkResponse.success) {
+  //   //   throw Exception("rest tx should not fail");
+  //   // }
+  //   //dunno how to get exec either...
+  //   var exec = "TODO";
+  //   while (true) {
+  //     _displayText("...", false);
+  //     //sdkResponse = await PylonsWallet.instance.getExecutionBasedOnId(id: exec);
+  //     // if completed break
+  //   }
+  //   _displayText("Done!", false);
+  //   var lastHp = _curHp;
+  //   await _checkCharacter();
+  //   if (lastHp != _curHp) {
+  //     _displayText("Recovered ${_curHp - lastHp} HP!", false);
+  //   }
+  // }
+  //
+  // Future<void> _rest3() async {
+  //   _displayText("Resting...", false);
+  //   // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
+  //   //     cookbookId: "appTestCookbook",
+  //   //     recipeName: "RecipeTestAppRest100",
+  //   //     itemIds: [_character!.id],
+  //   //     coinInputIndex: 0,
+  //   //     paymentInfo: []);
+  //   // if (!sdkResponse.success) {
+  //   //   throw Exception("rest tx should not fail");
+  //   // }
+  //   //dunno how to get exec either...
+  //   var exec = "TODO";
+  //   while (true) {
+  //     _displayText("...", false);
+  //     //sdkResponse = await PylonsWallet.instance.getExecutionBasedOnId(id: exec);
+  //     // if completed break
+  //   }
+  //   _displayText("Done!", false);
+  //   var lastHp = _curHp;
+  //   await _checkCharacter();
+  //   if (lastHp != _curHp) {
+  //     _displayText("Recovered ${_curHp - lastHp} HP!", false);
+  //   }
+  // }
+  //
+  // Future<void> _rest4() async {
+  //   if (_pylons < 9) {
+  //     _displayText("You need 9 Pylons Points to take a power nap!", false);
+  //     return;
+  //   }
+  //   _displayText("Resting...", false);
+  //   // var sdkResponse = await PylonsWallet.instance.txExecuteRecipe(
+  //   //     cookbookId: "appTestCookbook",
+  //   //     recipeName: "RecipeTestAppRest100Premium",
+  //   //     itemIds: [_character!.id],
+  //   //     coinInputIndex: 0,
+  //   //     paymentInfo: []);
+  //   // if (!sdkResponse.success) {
+  //   //   throw Exception("rest tx should not fail");
+  //   // }
+  //   _displayText("Done!", false);
+  //   var lastHp = _curHp;
+  //   await _checkCharacter();
+  //   if (lastHp != _curHp) {
+  //     _displayText("Recovered ${_curHp - lastHp} HP!", false);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -398,10 +401,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           TextButton(onPressed: () => {_fightDragon()}, child: const Text("2")),
                           TextButton(onPressed: () => {_buySword()}, child: const Text("3")),
                           TextButton(onPressed: () => {_upgradeSword()}, child: const Text("4")),
-                          TextButton(onPressed: () => {_rest1()}, child: const Text("5")),
-                          TextButton(onPressed: () => {_rest2()}, child: const Text("6")),
-                          TextButton(onPressed: () => {_rest3()}, child: const Text("7")),
-                          TextButton(onPressed: () => {_rest4()}, child: const Text("9"))
+                          TextButton(onPressed: () => {}, child: const Text("5")), //rest1
+                          TextButton(onPressed: () => {}, child: const Text("6")), //rest2
+                          TextButton(onPressed: () => {}, child: const Text("7")), //rest3
+                          TextButton(onPressed: () => {}, child: const Text("9")) //rest4
                         ],
                       ) : TextButton(onPressed: () => {_displayText(menu, true)}, child: const Text("OK")),
                     )),
