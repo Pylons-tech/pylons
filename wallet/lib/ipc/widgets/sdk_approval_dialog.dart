@@ -7,6 +7,8 @@ import 'package:pylons_wallet/ipc/models/sdk_ipc_message.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/screen_size_utils.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 class SDKApprovalDialog {
   final BuildContext context;
   final SdkIpcMessage sdkipcMessage;
@@ -56,7 +58,7 @@ class SDKApprovalDialog {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            '"${sdkipcMessage.sender}" ${'would_like_to'.tr()} ${sdkipcMessage.action}?',
+                            '"${sdkipcMessage.sender}" ${LocaleKeys.would_like_to.tr()} ${sdkipcMessage.action}?',
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.headline6!.copyWith(
                                   color: Colors.white,
@@ -74,7 +76,7 @@ class SDKApprovalDialog {
                                   onCancel.call();
                                 },
                                 child: Text(
-                                  'dont_allow'.tr(),
+                                  LocaleKeys.dont_allow.tr(),
                                   style: TextStyle(fontSize: 16, color: AppColors.kWhite, fontWeight: FontWeight.w300),
                                 ),
                               ),
@@ -90,7 +92,7 @@ class SDKApprovalDialog {
                                   onApproved.call();
                                 },
                                 child: Text(
-                                  'ok'.tr(),
+                                  LocaleKeys.ok.tr(),
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,

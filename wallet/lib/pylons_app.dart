@@ -52,6 +52,7 @@ import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.da
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
+import 'generated/locale_keys.g.dart';
 import 'model/transaction_failure_model.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey();
@@ -188,7 +189,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
           break;
         case PurchaseStatus.error:
           if (purchaseDetails.error!.message.contains(kItemAlreadyOwned)) {
-            "please_try_again_later".tr().show();
+            LocaleKeys.please_try_again_later.tr().show();
             return;
           }
           registerFailure(purchaseDetails);
@@ -228,7 +229,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
       final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
         transactionTypeEnum: TransactionTypeEnum.GoogleInAppCoinsRequest,
         transactionData: jsonEncode(googleInAppPurchaseModel.toJsonLocalRetry()),
-        transactionDescription: 'buying_pylon_points'.tr(),
+        transactionDescription: LocaleKeys.buying_pylon_points.tr(),
         transactionCurrency: kStripeUSD_ABR,
         transactionPrice: price,
       );
@@ -249,7 +250,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
       final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
           transactionTypeEnum: TransactionTypeEnum.AppleInAppCoinsRequest,
           transactionData: jsonEncode(appleInAppPurchaseModel.toJson()),
-          transactionDescription: 'buying_pylon_points'.tr(),
+          transactionDescription: LocaleKeys.buying_pylon_points.tr(),
           transactionCurrency: kStripeUSD_ABR,
           transactionPrice: price);
 
@@ -314,7 +315,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
           }
 
           GetIt.I.get<HomeProvider>().buildAssetsList();
-          "purchase_successful".tr().show();
+          LocaleKeys.purchase_successful.tr().show();
         }
 
         return;
@@ -343,7 +344,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
         loading.dismiss();
 
         GetIt.I.get<HomeProvider>().buildAssetsList();
-        "purchase_successful".tr().show();
+        LocaleKeys.purchase_successful.tr().show();
       }
 
       if (purchaseDetails.pendingCompletePurchase) {

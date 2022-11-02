@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+
 class StepLabels extends StatelessWidget {
   final ValueNotifier<int> currentStep;
   final ValueNotifier<int> currentPage;
@@ -28,7 +29,7 @@ class StepLabels extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    stepLabels[index].toString().tr(),
+                    stepLabels[index].tr(),
                     style: Theme.of(context).textTheme.bodyText2!.copyWith(
                           fontSize: 8.sp,
                           fontFamily: 'Inter',

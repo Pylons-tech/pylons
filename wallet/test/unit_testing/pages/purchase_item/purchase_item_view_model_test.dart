@@ -12,7 +12,6 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
-
 import '../../../mocks/mock_audio_player.dart';
 import '../../../mocks/mock_share_helper.dart';
 import '../../../mocks/mock_video_player.dart';
@@ -25,7 +24,7 @@ void main() {
 
   setUp(() {
     final audioPlayerMock = MockAudioPlayerImpl();
-    final videoPlayerMock = MockVideoPlayerimpl();
+    final videoPlayerMock = MockVideoPlayerImpl();
     repository = MockRepository();
     final mockWalletStore = MockWalletsStore();
     final shareHelper = MockShareHelperImpl();
