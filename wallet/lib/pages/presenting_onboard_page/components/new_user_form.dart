@@ -15,6 +15,8 @@ import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 class NewUserForm extends StatefulWidget {
   final WalletsStore walletsStore;
 
@@ -35,11 +37,6 @@ class NewUserFormState extends State<NewUserForm> {
   final bool _ackChecked3 = true;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
@@ -56,7 +53,7 @@ class NewUserFormState extends State<NewUserForm> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "pylon_username".tr(),
+                LocaleKeys.pylon_username.tr(),
                 style: TextStyle(
                   color: AppColors.kBlack,
                   fontSize: 15.sp,
@@ -65,11 +62,11 @@ class NewUserFormState extends State<NewUserForm> {
               ),
             )
           ]),
-          PylonsTextInput(controller: usernameController, label: "user_name".tr(), errorText: validateUsername),
+          PylonsTextInput(controller: usernameController, label: LocaleKeys.user_name.tr(), errorText: validateUsername),
           VerticalSpace(30.h),
           CheckboxListTile(
             value: _ackChecked1,
-            title: Text('acknowledge_username_never_changed'.tr(),
+            title: Text(LocaleKeys.acknowledge_username_never_changed.tr(),
                 style: TextStyle(
                   color: AppColors.kBlack,
                   fontSize: 12.sp,
@@ -90,14 +87,14 @@ class NewUserFormState extends State<NewUserForm> {
                 style: TextStyle(color: AppColors.kBlack, fontSize: 12.sp),
                 children: <TextSpan>[
                   TextSpan(
-                      text: 'acknowledge_i_agree'.tr(),
+                      text: LocaleKeys.acknowledge_i_agree.tr(),
                       style: TextStyle(
                         color: AppColors.kBlack,
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w500,
                       )),
                   TextSpan(
-                      text: 'acknowledge_privacy_policy'.tr(),
+                      text: LocaleKeys.acknowledge_privacy_policy.tr(),
                       style: TextStyle(
                         color: AppColors.kBlue,
                         fontSize: 12.sp,
@@ -125,7 +122,7 @@ class NewUserFormState extends State<NewUserForm> {
               key: ValueKey(_ackChecked3 && _ackChecked2 && _ackChecked2),
               enabled: _ackChecked3 && _ackChecked2 && _ackChecked2,
               onTap: onStartPylonsPressed,
-              text: "get_started".tr(),
+              text: LocaleKeys.get_started.tr(),
               loader: isLoadingNotifier,
             ),
           ),
@@ -136,7 +133,7 @@ class NewUserFormState extends State<NewUserForm> {
 
   String? validateUsername(String? username) {
     if (username == null || username.isEmpty) {
-      return 'user_name_empty'.tr();
+      return LocaleKeys.user_name_empty.tr();
     }
 
     return null;
@@ -157,7 +154,7 @@ class NewUserFormState extends State<NewUserForm> {
 
     if (isAccountExists) {
       isLoadingNotifier.value = false;
-      "${'user_name_already_exists'.tr()}!".show();
+      "${LocaleKeys.user_name_already_exists.tr()}!".show();
       navigator.pop();
       return;
     }

@@ -6,6 +6,7 @@ import 'package:easel_flutter/utils/failure/failure.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../generated/locale_keys.g.dart';
 import '../../models/save_nft.dart';
 import 'cache_manager.dart';
 
@@ -189,7 +190,7 @@ class LocalDataSourceImpl implements LocalDataSource {
       final result = await database.nftDao.insertNft(draft);
       return result;
     } catch (e) {
-      throw "save_error".tr();
+      throw LocaleKeys.save_error.tr();
     }
   }
 
@@ -224,7 +225,7 @@ class LocalDataSourceImpl implements LocalDataSource {
           saveNft.dateTime!);
       return true;
     } catch (e) {
-      return throw "upload_error".tr();
+      return throw LocaleKeys.upload_error.tr();
     }
   }
 
@@ -243,7 +244,7 @@ class LocalDataSourceImpl implements LocalDataSource {
           saveNft.dateTime!);
       return true;
     } catch (e) {
-      throw CacheFailure("upload_error".tr());
+      throw CacheFailure(LocaleKeys.upload_error.tr());
     }
   }
 
@@ -253,7 +254,7 @@ class LocalDataSourceImpl implements LocalDataSource {
       await database.nftDao.updateNFTDialogShown(id);
       return true;
     } catch (e) {
-      throw CacheFailure("upload_error".tr());
+      throw CacheFailure(LocaleKeys.upload_error.tr());
     }
   }
 
@@ -268,7 +269,7 @@ class LocalDataSourceImpl implements LocalDataSource {
       await database.nftDao.delete(id);
       return true;
     } catch (e) {
-      throw CacheFailure("delete_error".tr());
+      throw CacheFailure(LocaleKeys.delete_error.tr());
     }
   }
 
@@ -307,7 +308,7 @@ class LocalDataSourceImpl implements LocalDataSource {
     try {
       return await database.nftDao.findNftById(id);
     } catch (e) {
-      throw CacheFailure("get_error".tr());
+      throw CacheFailure(LocaleKeys.get_error.tr());
     }
   }
 }

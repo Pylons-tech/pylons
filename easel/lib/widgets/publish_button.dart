@@ -5,6 +5,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../generated/locale_keys.g.dart';
+
 class PublishButton extends StatelessWidget {
   final VoidCallback onPress;
 
@@ -14,7 +16,7 @@ class PublishButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClippedButton(
       key: const Key(kPublishButtonKey),
-      title: "publish".tr(),
+      title: LocaleKeys.publish.tr(),
       bgColor: EaselAppTheme.kLightRed,
       textColor: EaselAppTheme.kWhite,
       onPressed: onPress,
