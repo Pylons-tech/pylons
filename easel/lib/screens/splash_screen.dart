@@ -10,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import '../generated/locale_keys.g.dart';
 import '../utils/constants.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -66,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     child: SvgPicture.asset(SVGUtils.kSplashTabEasel)),
                 SizedBox(height: 10.h),
                 Text(
-                  "nft_manager".tr(),
+                  LocaleKeys.nft_manager.tr(),
                   style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w600,

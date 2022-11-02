@@ -10,6 +10,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import '../generated/locale_keys.g.dart';
+
 class WelcomeEasel extends StatefulWidget {
   const WelcomeEasel({Key? key}) : super(key: key);
 
@@ -32,7 +34,7 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
               height: 80.h,
             ),
             Text(
-              "welcome_to_easel".tr(),
+              LocaleKeys.welcome_to_easel.tr(),
               style: TextStyle(
                   color: EaselAppTheme.kBlack,
                   fontSize: 20.sp,
@@ -43,7 +45,7 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
               height: 50.h,
             ),
             Text(
-              "easel_is_tool".tr(),
+              LocaleKeys.easel_is_tool.tr(),
               style: TextStyle(
                 color: EaselAppTheme.kBlack,
                 fontSize: 14.sp,
@@ -53,7 +55,7 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
               height: 30.h,
             ),
             Text(
-              "after_you_successfully".tr(),
+              LocaleKeys.after_you_successfully.tr(),
               style: TextStyle(
                 color: EaselAppTheme.kBlack,
                 fontSize: 14.sp,
@@ -63,7 +65,7 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
               height: 30.h,
             ),
             Text(
-              "once_you_press".tr(),
+              LocaleKeys.once_you_press.tr(),
               style: TextStyle(
                 color: EaselAppTheme.kBlack,
                 fontSize: 14.sp,
@@ -73,7 +75,7 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
               height: 180.h,
             ),
             ClippedButton(
-              title: "start".tr(),
+              title: LocaleKeys.start.tr(),
               bgColor: EaselAppTheme.kBlue,
               textColor: EaselAppTheme.kWhite,
               onPressed: () {
