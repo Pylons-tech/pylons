@@ -9,7 +9,6 @@ import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:wallpaper/wallpaper.dart';
 
 import '../../../generated/locale_keys.g.dart';
-import '../../../main_prod.dart';
 
 class WallpaperScreen {
   const WallpaperScreen({required this.nft, required this.context});
