@@ -19,7 +19,7 @@ class WallpaperScreen {
     await showGeneralDialog<String>(
         context: context,
         pageBuilder: (BuildContext context, _, __) =>
-            Dialog(backgroundColor: Colors.transparent, insetPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0), child: _WallpaperScreen(nft: nft)));
+            Dialog(backgroundColor: Colors.transparent, insetPadding: EdgeInsets.zero, child: _WallpaperScreen(nft: nft)));
   }
 
   _WallpaperScreen test() {
