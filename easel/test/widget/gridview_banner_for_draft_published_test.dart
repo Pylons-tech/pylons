@@ -39,7 +39,6 @@ void main() {
                         style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
                       );
                     },
-                    collectionType: MOCK_COLLECTION_TYPE,
                   );
                 },
               ),
