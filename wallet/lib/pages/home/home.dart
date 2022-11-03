@@ -116,7 +116,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                             alignment: Alignment.center,
                             child: ColoredBox(
                               color: Colors.blue,
-                              child: Text("message"),
+                              child: Text(LocaleKeys.maintenance_mode_message.tr()),
                             ),
                           ),
                           ),
@@ -321,7 +321,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   right: 0.12.sw,
                   child: ColoredBox(
                     color: Colors.blue,
-                    child: Text("message"),
+                    child: Text(LocaleKeys.maintenance_mode_header.tr()),
                   )
               ),
             Positioned(

@@ -361,5 +361,6 @@ abstract class  LocaleKeys {
   static const retry = 'retry';
   static const bought_nft = 'bought_nft';
   static const maintenance_mode_message = 'maintenance_mode_message';
+  static const maintenance_mode_header = 'maintenance_mode_header';
 
 }
