@@ -26,22 +26,22 @@ import 'package:easy_localization/easy_localization.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  late Repository repositry;
+  late Repository repository;
   late WalletsStore walletStore;
   late AudioPlayerHelper audioPlayerHelper;
   late VideoPlayerHelper videoPlayerHelper;
   late ShareHelper shareHelper;
 
   audioPlayerHelper = MockAudioPlayerImpl();
-  videoPlayerHelper = MockVideoPlayerimpl();
-  repositry = MockRepository();
+  videoPlayerHelper = MockVideoPlayerImpl();
+  repository = MockRepository();
   walletStore = MockWalletStore();
   shareHelper = MockShareHelperImpl();
   final PurchaseItemViewModel viewModel = PurchaseItemViewModel(
     walletStore,
     audioPlayerHelper: audioPlayerHelper,
     videoPlayerHelper: videoPlayerHelper,
-    repository: repositry,
+    repository: repository,
     shareHelper: shareHelper,
   );
 
@@ -81,7 +81,7 @@ void main() {
               onTapped: () {
                 isTapped = true;
               },
-              nft: MOCK_NFT_FREE,
+              nft: MOCK_NFT_FREE_IMAGE,
             ),
           );
         }));
