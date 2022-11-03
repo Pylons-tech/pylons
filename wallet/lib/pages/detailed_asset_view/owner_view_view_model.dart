@@ -63,7 +63,7 @@ class OwnerViewViewModel extends ChangeNotifier {
 
   TextEditingController priceController = TextEditingController(text: "0.00");
 
-  double _right = 73.w;
+  double _right = 73;
 
   double get right => _right;
 

@@ -284,6 +284,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         height: 15.5.h,
                       ),
                       GestureDetector(
+                        key: const Key(kShareNftButtonCollapsedKey),
                         onTap: () async {
                           final Size size = MediaQuery.of(context).size;
                           viewModel.shareNFTLink(size: size);
@@ -524,6 +525,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                             height: 15.5.h,
                                           ),
                                           GestureDetector(
+                                            key: const Key(kShareNftButtonCollapsedKey),
                                             onTap: () async {
                                               final Size size = MediaQuery.of(context).size;
                                               viewModel.shareNFTLink(size: size);
