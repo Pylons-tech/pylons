@@ -179,7 +179,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             ),
             Positioned(
               top: 0.035.sh,
-              left: 0.025.sw,
+              left: 0.86.sw,
               child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushNamed(RouteUtil.ROUTE_SETTINGS);
@@ -192,6 +192,15 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                     width: 20.w,
                   )),
             ),
+            if (maintenance_mode)
+              Positioned(
+                top: 0.035.sh,
+                left: 0.025.sw,
+                child: ColoredBox(
+                  color: Colors.blue,
+                  child: Text("message"),
+                )
+              ),
             Positioned(
               top: 0.2.sh - 30.r,
               left: 0.5.sw - 30.r,
@@ -306,6 +315,15 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                     width: 20.w,
                   )),
             ),
+            if (maintenance_mode)
+              Positioned(
+                  top: 0.1.sh,
+                  right: 0.12.sw,
+                  child: ColoredBox(
+                    color: Colors.blue,
+                    child: Text("message"),
+                  )
+              ),
             Positioned(
               top: 0.2.sh - 30.r,
               left: 0.5.sw - 30.r,
