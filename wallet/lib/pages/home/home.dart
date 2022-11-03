@@ -101,6 +101,25 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                       backgroundColor: AppColors.kMainBG,
                       appBar: buildAppBar(context, provider),
                       body: provider.pages[provider.selectedIndex],
+                      // floatingActionButton: FloatingActionButton(
+                      //   child: Container(child: Text("message"),),
+                      //   backgroundColor: Colors.blue,
+                      //   onPressed: () => {},
+                      // ),
+                      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+                      bottomSheet:
+                        Container(
+                          width: 1.sw,
+                          height: 40.h,
+                          color: AppColors.kMainBG,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: ColoredBox(
+                              color: Colors.blue,
+                              child: Text("message"),
+                            ),
+                          ),
+                          ),
                     ),
                   ),
                 ),

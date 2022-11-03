@@ -55,6 +55,7 @@ class CollectionScreen extends StatefulWidget {
 }
 
 class _CollectionScreenState extends State<CollectionScreen> {
+  bool maintenance_mode = true;
   @override
   void dispose() {
     super.dispose();
@@ -105,6 +106,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
               child: viewModel.collectionsType == CollectionsType.purchases ? purchasesCollection : creationsCollection,
             ),
           ),
+          //MaintenanceMode(context: context).show()
         ],
       );
     });
