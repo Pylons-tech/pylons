@@ -7,7 +7,7 @@ import 'package:easel_flutter/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path/path.dart' as path;
-import 'package:pylons_sdk/pylons_sdk.dart';
+import 'package:pylons_sdk/low_level.dart';
 
 
 extension ScaffoldHelper on BuildContext? {
