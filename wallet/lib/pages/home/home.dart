@@ -110,16 +110,23 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                       bottomSheet:
                         Container(
                           width: 1.sw,
-                          height: 40.h,
+                          height: 110.h,
                           color: AppColors.kMainBG,
                           child: Align(
                             alignment: Alignment.center,
-                            child: ColoredBox(
-                              color: Colors.blue,
-                              child: Text(LocaleKeys.maintenance_mode_message.tr()),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 40.w),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+                                color: Colors.blue,
+                                child: Text(
+                                    LocaleKeys.maintenance_mode_message.tr(),
+                                    style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w500),
+                                ),
+                              ),
                             ),
                           ),
-                          ),
+                        ),
                     ),
                   ),
                 ),
