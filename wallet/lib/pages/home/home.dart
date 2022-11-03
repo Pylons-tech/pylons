@@ -39,6 +39,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
   CollectionViewModel get collectionViewModel => GetIt.I.get();
 
+  bool maintenance_mode = true;
+
   @override
   void initState() {
     super.initState();
