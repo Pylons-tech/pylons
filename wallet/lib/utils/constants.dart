@@ -450,3 +450,6 @@ const String kProgressKey = "Progress";
 const String kImageAssetKey = "image_asset_key";
 const String kShareNftButtonCollapsedKey = "share_nft_collapsed";
 const String kShareNftButtonExpandedKey = "share_nft_expanded";
+
+const String kGetFirebaseAppCheckTokenMethodChannelKey = "getFirebaseAppCheckTokenMethodChannel";
+const String kGetFirebaseAppCheckDebugTokenKey = "getFirebaseAppCheckDebugToken";

@@ -61,13 +61,14 @@ Future<void> initializeAppCheck() async {
   await FirebaseAppCheck.instance.activate(
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
   );
-  // FirebaseAppCheck when enforced would block incoming requests from Android emulator and iOS simulator too in debug mode.
-  // This kDebugMode check gets a debug token from FirebaseAppCheck which can then be added on the Firebase console
-  // So that the emulator and simulator can be allowed to access to Firebase AppCheck token.
-  if (kDebugMode) {
+  // FirebaseAppCheck when enforced would block incoming requests from Android and iOS in debug mode.
+  // This kDebugMode check gets a android debug token from FirebaseAppCheck which can then be added on the Firebase console
+  // iOS debug token from FirebaseAppCheck automatically get without method channel when run on debug mode which can then be added on the Firebase console
+  // So that the application can be allowed to access to Firebase AppCheck token in debug mode.
+  if (kDebugMode && Platform.isAndroid) {
     try {
-      const MethodChannel methodChannel = MethodChannel("method-channel");
-      await methodChannel.invokeMethod("getFirebaseAppCheckDebugToken");
+      const MethodChannel methodChannel = MethodChannel(kGetFirebaseAppCheckTokenMethodChannelKey);
+      await methodChannel.invokeMethod(kGetFirebaseAppCheckDebugTokenKey);
     } catch (e) {
       e.toString().show();
     }

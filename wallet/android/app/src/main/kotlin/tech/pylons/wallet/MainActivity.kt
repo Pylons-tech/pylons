@@ -13,13 +13,15 @@ class MainActivity : FlutterFragmentActivity() {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            "method-channel"
-        ).setMethodCallHandler { call, _ ->
+            "getFirebaseAppCheckTokenMethodChannel"
+        ).setMethodCallHandler { call, result ->
             if (call.method == "getFirebaseAppCheckDebugToken") {
                 FirebaseApp.initializeApp(this)
                 val firebaseAppCheck = FirebaseAppCheck.getInstance()
                 firebaseAppCheck.installAppCheckProviderFactory(DebugAppCheckProviderFactory.getInstance())
+                result.success(true)
             }
         }
     }
 }
+
