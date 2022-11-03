@@ -1,7 +1,9 @@
-import '../generated/pylons/trade.pb.dart' as generated;
+// todo: write this
 
-class Trade {
-  final generated.Trade _native;
-
-  Trade(this._native);
-}
+// import '../generated/pylons/trade.pb.dart' as generated;
+//
+// class Trade {
+//   final generated.Trade _native;
+//
+//   Trade(this._native);
+// }
