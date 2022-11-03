@@ -357,5 +357,12 @@
   "buying_pylon_points": "パイロンポイントを購入",
   "transaction_date": "取引日",
   "retry": "リトライ",
-  "bought_nft": "買った"
+  "bought_nft": "買った",
+  "for_sale": "販売中",
+  "not_for_sale": "非売品",
+  "input_valid_price": "リストする有効な価格を入力してください",
+  "network_fee": "オンチェーンで発生するすべてのトランザクションには、表示価格の 10% のネットワーク料金が必要です",
+  "list_for": "のリスト",
+  "pylon_points":"パイロンポイント",
+  "nft_listing": "NFT上場"
 }

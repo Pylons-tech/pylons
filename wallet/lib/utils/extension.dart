@@ -231,3 +231,13 @@ extension VerifyErrorCode on String {
     return contains(kDuplicateIapReceiptCode);
   }
 }
+
+extension UpdateRecipeVersion on String {
+  String incrementRecipeVersion() {
+    final arr = split('.');
+    int intVersion = int.parse(arr.last);
+    intVersion = intVersion + 1;
+    final str = '${arr[0]}.${arr[1]}.';
+    return str + intVersion.toString();
+  }
+}

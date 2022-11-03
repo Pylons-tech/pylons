@@ -77,10 +77,14 @@ const double kRoyaltyPrecision = 10000000000000000;
 const String kPylonDenom = "upylon";
 
 const String kUniversalFontFamily = "UniversalSans";
+const String kUniversalSans400FontFamily = "UniversalSans-400";
+const String kUniversalSans500FontFamily = "UniversalSans-500";
+const String kUniversalSans750FontFamily = "UniversalSans-750";
 const String kENV = 'ENV';
 const String kLocal = 'local';
 const String kPylo = 'pylo';
 
+const String kDenomPylon = "Pylon";
 const String kPylonCoinName = "pylon";
 const String kUSDDenom = "ustripeusd";
 const String kUSD = "stripeusd";
@@ -276,6 +280,7 @@ const String kAppTypeKey = "App_Type";
 const int kNumberOfSeconds = 1000;
 const int kSixtySeconds = 60;
 const int kTimeStampInt = 1000;
+const kMaxPriceLength = 14;
 
 const int kDateConverterConstant = 1000;
 const kHashtags = "Hashtags";
@@ -307,6 +312,7 @@ const kItemId = "id";
 const kCookbookId = "cookbook_id";
 const kAmount = "amount";
 const kCreatedAt = "created_at";
+const kCreatedAtCamelCase = "createdAt";
 
 const cookbookIdKey = "cookbookId";
 const recipeIdKey = "recipeId";
@@ -381,6 +387,7 @@ const String kSettled = "settled";
 const String kTo = "to";
 const String kType = "type";
 const String kUpdatedAt = "updated_at";
+const String kUpdatedAtCamelCase = "updatedAt";
 const String kNotificationsIds = "notificationIDs";
 
 const String kZeroDouble = "0.0";
@@ -450,3 +457,6 @@ const String kProgressKey = "Progress";
 const String kImageAssetKey = "image_asset_key";
 const String kShareNftButtonCollapsedKey = "share_nft_collapsed";
 const String kShareNftButtonExpandedKey = "share_nft_expanded";
+const String kForSaleToggleWidgetKey = "for_sale_toggle_key";
+const String kNotForSaleToggleWidgetKey = "not_for_sale_toggle_key";
+const String kSaleStatusToggleButtonKey = "sale_status_toggle_button_key";

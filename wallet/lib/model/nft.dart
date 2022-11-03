@@ -44,6 +44,7 @@ class NFT extends Equatable {
   String hashtags = "";
   String createdAt = "";
   bool realWorld = false;
+  bool isEnabled = true;
 
   NFT({
     this.url = "",
@@ -72,6 +73,7 @@ class NFT extends Equatable {
     this.hashtags = "",
     this.createdAt = "",
     this.realWorld = false,
+    this.isEnabled = true,
   });
 
   Future<String> getOwnerAddress() async {
@@ -178,6 +180,7 @@ class NFT extends Equatable {
       createdAt: createdAt,
       hashtags: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kHashtags, orElse: () => StringParam()).value ?? "",
       realWorld: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kRealWorld, orElse: () => StringParam(key: kRealWorld, value: "false")).value == "true",
+      isEnabled: recipe.enabled,
     );
   }
 

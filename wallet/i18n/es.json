@@ -357,5 +357,12 @@
   "buying_pylon_points": "Puntos Pylons Comprados",
   "transaction_date": "Fecha de Transacción",
   "retry": "Rever",
-  "bought_nft": "Comprado"
+  "bought_nft": "Comprado",
+  "for_sale": "En venta",
+  "not_for_sale": "No para la venta",
+  "input_valid_price": "Ingrese un precio válido para listar",
+  "network_fee": "Se requiere una tarifa de red del 10% del precio indicado para todas las transacciones que ocurren en la cadena",
+  "list_for": "Lista por",
+  "pylon_points":"Puntos de pilón",
+  "nft_listing": "Listado NFT"
 }

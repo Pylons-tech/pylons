@@ -26,9 +26,10 @@ import 'package:pylons_wallet/model/stripe_loginlink_request.dart' as _i19;
 import 'package:pylons_wallet/model/stripe_loginlink_response.dart' as _i18;
 import 'package:pylons_wallet/model/transaction.dart' as _i25;
 import 'package:pylons_wallet/model/transaction_failure_model.dart' as _i33;
+import 'package:pylons_wallet/model/update_recipe.dart' as _i36;
 import 'package:pylons_wallet/model/wallet_creation_model.dart' as _i32;
-import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart' as _i4;
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as _i11;
+import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart' as _i4;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart' as _i34;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart' as _i21;
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart' as _i14;
@@ -1838,18 +1839,18 @@ class MockRepository extends _i1.Mock implements _i15.Repository {
       ) as _i8.Future<_i2.Either<_i9.Failure, List<_i25.TransactionHistory>>>);
 
   @override
-  _i8.Future<_i2.Either<_i9.Failure, String>> updateRecipe({required _i11.MsgUpdateRecipe? msgUpdateRecipe}) => (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, String>> updateRecipe({required _i36.UpdateRecipeModel? updateRecipeModel}) => (super.noSuchMethod(
         Invocation.method(
           #updateRecipe,
           [],
-          {#msgUpdateRecipe: msgUpdateRecipe},
+          {#updateRecipeModel: updateRecipeModel},
         ),
         returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(_FakeEither_0<_i9.Failure, String>(
           this,
           Invocation.method(
             #updateRecipe,
             [],
-            {#msgUpdateRecipe: msgUpdateRecipe},
+            {#updateRecipeModel: updateRecipeModel},
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, String>>);

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mockito/mockito.dart';
@@ -7,8 +8,8 @@ import 'package:pylons_wallet/pages/owner_purchase_view_common/button_state.dart
 import 'package:pylons_wallet/pages/owner_purchase_view_common/progress_bar_state.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+
 import '../../mocks/mock_constants.dart';
 import '../../mocks/mock_wallet_store.dart';
 import '../../mocks/owner_view_view_model.mocks.dart';
@@ -62,6 +63,29 @@ void main() {
       expect(viewModel.videoPlayerController!.value.isPlaying, false);
     },
   );
+
+  group("Sale Status Test", () {
+    testWidgets("Checking Status Not For Sale", (widgetTester) async {
+      when(viewModel.nft).thenAnswer((realInvocation) => viewModel.nft = MOCK_PRICED_NFT_NOT_FOR_SALE);
+      await widgetTester.testAppForWidgetTesting(
+        OwnerView(nft: MOCK_PRICED_NFT_NOT_FOR_SALE),
+      );
+
+      final forSaleToggle = find.byKey(const Key(kNotForSaleToggleWidgetKey));
+      expect(forSaleToggle, findsOneWidget);
+    });
+
+    testWidgets("Checking Status For Sale", (widgetTester) async {
+      when(viewModel.nft).thenAnswer((realInvocation) => viewModel.nft = MOCK_PRICED_NFT_FOR_SALE);
+      await widgetTester.testAppForWidgetTesting(
+        OwnerView(nft: MOCK_PRICED_NFT_FOR_SALE),
+      );
+
+      final forSaleToggle = find.byKey(const Key(kForSaleToggleWidgetKey));
+      expect(forSaleToggle, findsOneWidget);
+    });
+    
+  });
 }
 
 void registerStubs(OwnerViewViewModel viewModel) {

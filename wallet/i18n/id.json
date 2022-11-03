@@ -357,5 +357,12 @@
   "buying_pylon_points": "Membeli Pylon Points",
   "transaction_date": "Tanggal Transaksi",
   "retry": "Mencoba Kembali",
-  "bought_nft": "Dibeli"
+  "bought_nft": "Dibeli",
+  "for_sale": "Dijual",
+  "not_for_sale": "Tidak untuk dijual",
+  "input_valid_price": "Masukkan harga yang valid untuk dicantumkan",
+  "network_fee": "Biaya jaringan sebesar 10% dari harga yang tercantum diperlukan untuk semua transaksi yang terjadi secara on-chain",
+  "list_for": "Daftar untuk",
+  "pylon_points":"Poin tiang",
+  "nft_listing": "Daftar NFT"
 }

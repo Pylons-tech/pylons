@@ -356,5 +356,12 @@
   "buying_pylon_points": "파일론 포인트 구매",
   "transaction_date": "거래 날짜",
   "retry": "다시 해 보다",
-  "bought_nft": "구입했다"
+  "bought_nft": "구입했다",
+  "for_sale": "판매용",
+  "not_for_sale": "비매품",
+  "input_valid_price": "나열할 유효한 가격을 입력하세요.",
+  "network_fee": "온체인에서 발생하는 모든 거래에 대해 나열된 가격의 10% 네트워크 수수료가 필요합니다.",
+  "list_for": "목록",
+  "pylon_points":"철탑 포인트",
+  "nft_listing": "NFT 상장"
 }
