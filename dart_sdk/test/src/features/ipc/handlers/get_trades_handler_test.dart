@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pylons_sdk/pylons_sdk.dart';
 import 'package:pylons_sdk/low_level.dart' as ll;
 import 'package:pylons_sdk/src/core/constants/strings.dart';
 import 'package:pylons_sdk/src/features/ipc/handlers/get_trades_handler.dart';
@@ -34,8 +33,8 @@ void main() {
 
     var response = await responseCompleters[Strings.GET_TRADES]!.future;
     expect(true, response.success);
-    expect(true, response.data is List<Trade>);
-    expect(1, List<Trade>.from(response.data).length);
+    expect(true, response.data is List<ll.Trade>);
+    expect(1, List<ll.Trade>.from(response.data).length);
   });
 
   test('should complete the get trades future with error ', () async {
