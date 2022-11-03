@@ -357,5 +357,12 @@
   "buying_pylon_points": "Pylons Points gekauft",
   "transaction_date": "Transaktionsdatum",
   "retry": "Wiederholen",
-  "bought_nft": "Gekauft"
+  "bought_nft": "Gekauft",
+  "for_sale": "Zu verkaufen",
+  "not_for_sale": "Nicht zu verkaufen",
+  "input_valid_price": "Geben Sie einen gültigen Preis für die Liste ein",
+  "network_fee": "Für alle Transaktionen, die in der Kette stattfinden, wird eine Netzwerkgebühr von 10 % des Listenpreises erhoben",
+  "list_for": "Liste für",
+  "pylon_points":"Pylonenpunkte",
+  "nft_listing": "NFT-Auflistung"
 }

@@ -90,4 +90,11 @@ class SVGUtil {
   static String TRANSACTION_SUCCESS = "assets/images/svg/transaction_success.svg";
   static String TRANSACTION_RETRY = "assets/images/svg/transaction_retry.svg";
   static String PYLONS_POINTS_ICON = "assets/images/svg/pylons_points_icon.svg";
+  static String FOR_SALE_BORDER = "assets/images/svg/for_sale_border.svg";
+  static String NOT_FOR_SALE_BORDER = "assets/images/svg/not_for_sale_border.svg";
+  static String GREEN_BOTTOM_LEFT_CURVED_CONTAINER = "assets/images/svg/green_bottom_left_curved_container.svg";
+  static String RED_BOTTOM_RIGHT_CURVED_CONTAINER = "assets/images/svg/red_bottom_right_curved_container.svg";
+  static String RED_BG = "assets/images/svg/red_bg.svg";
+  static String GREY_COLOR_BG = "assets/images/svg/grey_color_bg.svg";
+  static String USD_ICON = "assets/images/icons/usd.svg";
 }

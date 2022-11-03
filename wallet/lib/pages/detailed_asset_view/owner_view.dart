@@ -11,6 +11,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/change_sale_status_dialog.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_image_asset.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_audio_widget.dart';
@@ -19,9 +20,7 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_prog
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
 import 'package:pylons_wallet/pages/gestures_for_detail_screen.dart';
-import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
-import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
@@ -107,17 +106,8 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
                     },
                     child: SvgPicture.asset(
                       SVGUtil.OWNER_BACK_ICON,
-                      height: 25.h,
-                    ),
-                  ),
-                  trailing: GestureDetector(
-                    onTap: () {
-                      final SubmitFeedback submitFeedbackDialog = SubmitFeedback(context: context);
-                      submitFeedbackDialog.show();
-                    },
-                    child: SvgPicture.asset(
-                      SVGUtil.OWNER_REPORT,
-                      height: 25.h,
+                      height: 17.h,
+                      width: 8.w,
                     ),
                   ),
                 ),
@@ -221,7 +211,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   Widget getLikeIcon({required bool likedByMe}) {
     return Image.asset(
       'assets/images/icons/${likedByMe ? 'like_full' : 'like'}.png',
-      height: 20.h,
+      height: 17.h,
+      width: 17.w,
       color: likedByMe ? AppColors.kDarkRed : Colors.white,
     );
   }
@@ -229,7 +220,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<OwnerViewViewModel>();
-    final ibcEnumCoins = viewModel.nft.ibcCoins;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 100),
@@ -241,74 +231,100 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           if (viewModel.collapsed) ...[
             Padding(
               padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w, top: 8.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  SizedBox(
-                    height: 60.h,
-                    child: Row(
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Expanded(
-                          child: _title(
-                            nft: viewModel.nft,
-                            owner: viewModel.nft.type == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator,
-                          ),
+                        _title(
+                          viewModel: viewModel,
+                          context: context,
                         ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.keyboard_arrow_up,
-                            size: 32.h,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            viewModel.toChangeCollapse();
-                          },
-                        )
+                        getSaleToggle(viewModel: viewModel, context: context),
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  getProgressWidget(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Column(
                     children: [
-                      const SizedBox(
-                        width: 10,
+                      SvgPicture.asset(
+                        SVGUtil.OWNER_VIEWS,
+                        width: 20.w,
+                        height: 15.w,
                       ),
-                      Column(
-                        children: [
-                          if (viewModel.nft.type != NftType.TYPE_ITEM)
-                            Text(
-                              "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
-                              style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
-                            )
-                        ],
-                      ),
-                      const Spacer(),
                       SizedBox(
-                        width: 40.w,
+                        width: 4.5.w,
                       ),
-                      Column(
-                        children: [
-                          GestureDetector(
-                            key: const Key(kShareNftButtonCollapsedKey),
-                            onTap: () {
-                              final Size size = MediaQuery.of(context).size;
-
-                              context.read<OwnerViewViewModel>().shareNFTLink(size: size);
-                            },
-                            child: SvgPicture.asset(
-                              SVGUtil.OWNER_SHARE,
-                              height: 20.h,
+                      Text(
+                        viewModel.viewsCount.toString(),
+                        style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalSans750FontFamily),
+                      ),
+                      SizedBox(
+                        height: 15.5.h,
+                      ),
+                      IgnorePointer(
+                        ignoring: viewModel.isLiking,
+                        child: GestureDetector(
+                          onTap: () async {
+                            await viewModel.updateLikeStatus(cookBookID: viewModel.nft.cookbookID, recipeId: viewModel.nft.recipeID);
+                          },
+                          child: viewModel.isLiking ? getLikingLoader() : getLikeIcon(likedByMe: viewModel.likedByMe),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.8.h,
+                      ),
+                      Text(
+                        viewModel.likesCount.toString(),
+                        style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalSans750FontFamily),
+                      ),
+                      SizedBox(
+                        height: 15.5.h,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          final Size size = MediaQuery.of(context).size;
+                          viewModel.shareNFTLink(size: size);
+                        },
+                        child: SvgPicture.asset(
+                          SVGUtil.OWNER_SHARE,
+                          height: 15.h,
+                          width: 15.w,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15.5.h,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (_) => QRCodeScreen(
+                              nft: viewModel.nft,
                             ),
-                          ),
-                          SizedBox(
-                            height: 7.h,
-                          )
-                        ],
+                          );
+                        },
+                        child: SvgPicture.asset(
+                          SVGUtil.QR_ICON,
+                          height: 15.h,
+                          width: 15.w,
+                        ),
                       ),
+                      SizedBox(
+                        height: 26.h,
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.keyboard_arrow_up,
+                          size: 28.h,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          viewModel.toChangeCollapse();
+                        },
+                      )
                     ],
                   )
                 ],
@@ -327,19 +343,20 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       height: 50,
                       width: 50,
                       child: Center(
-                          child: IconButton(
-                        alignment: Alignment.topRight,
-                        padding: const EdgeInsets.only(
-                          bottom: 8,
-                          left: 8,
+                        child: IconButton(
+                          alignment: Alignment.topRight,
+                          padding: const EdgeInsets.only(
+                            bottom: 8,
+                            left: 8,
+                          ),
+                          icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                          onPressed: () {
+                            viewModel.toChangeCollapse();
+                          },
+                          iconSize: 32,
+                          color: Colors.white,
                         ),
-                        icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                        onPressed: () {
-                          viewModel.toChangeCollapse();
-                        },
-                        iconSize: 32,
-                        color: Colors.white,
-                      )),
+                      ),
                     ),
                   ),
                 ),
@@ -367,21 +384,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator),
+                          _title(viewModel: viewModel, context: context),
                           SizedBox(
                             height: 10.h,
-                          ),
-                          Row(
-                            children: [
-                              SvgPicture.asset(SVGUtil.OWNER_VIEWS),
-                              SizedBox(
-                                width: 10.w,
-                              ),
-                              Text(
-                                viewModel.viewsCount == 1 ? "${viewModel.viewsCount.toString()} ${LocaleKeys.view.tr()}" : "${viewModel.viewsCount.toString()} ${LocaleKeys.views.tr()}",
-                                style: TextStyle(color: Colors.white, fontSize: 12.sp),
-                              )
-                            ],
                           ),
                           SizedBox(
                             height: 20.h,
@@ -484,6 +489,21 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                     children: [
                                       Column(
                                         children: [
+                                          SvgPicture.asset(
+                                            SVGUtil.OWNER_VIEWS,
+                                            width: 20.w,
+                                            height: 15.w,
+                                          ),
+                                          SizedBox(
+                                            width: 4.5.w,
+                                          ),
+                                          Text(
+                                            viewModel.viewsCount.toString(),
+                                            style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalSans750FontFamily),
+                                          ),
+                                          SizedBox(
+                                            height: 15.5.h,
+                                          ),
                                           IgnorePointer(
                                             ignoring: viewModel.isLiking,
                                             child: GestureDetector(
@@ -494,47 +514,48 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                             ),
                                           ),
                                           SizedBox(
-                                            height: 5.h,
+                                            height: 2.8.h,
                                           ),
                                           Text(
                                             viewModel.likesCount.toString(),
-                                            style: const TextStyle(color: Colors.white, fontSize: 12),
+                                            style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalSans750FontFamily),
+                                          ),
+                                          SizedBox(
+                                            height: 15.5.h,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              final Size size = MediaQuery.of(context).size;
+                                              viewModel.shareNFTLink(size: size);
+                                            },
+                                            child: SvgPicture.asset(
+                                              SVGUtil.OWNER_SHARE,
+                                              height: 15.h,
+                                              width: 15.w,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 15.5.h,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (_) => QRCodeScreen(
+                                                  nft: viewModel.nft,
+                                                ),
+                                              );
+                                            },
+                                            child: SvgPicture.asset(
+                                              SVGUtil.QR_ICON,
+                                              height: 15.h,
+                                              width: 15.w,
+                                            ),
                                           ),
                                         ],
                                       ),
                                       SizedBox(
                                         height: 20.h,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (_) => QRCodeScreen(
-                                              nft: viewModel.nft,
-                                            ),
-                                          );
-                                        },
-                                        child: SvgPicture.asset(
-                                          SVGUtil.QR_ICON,
-                                          height: 20.h,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20.h,
-                                      ),
-                                      SizedBox(
-                                        height: 20.h,
-                                      ),
-                                      GestureDetector(
-                                        key: const Key(kShareNftButtonExpandedKey),
-                                        onTap: () async {
-                                          final Size size = MediaQuery.of(context).size;
-                                          viewModel.shareNFTLink(size: size);
-                                        },
-                                        child: SvgPicture.asset(
-                                          SVGUtil.OWNER_SHARE,
-                                          height: 20.h,
-                                        ),
                                       ),
                                     ],
                                   ),
@@ -542,22 +563,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               ],
                             ),
                           ),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 10.w,
-                              ),
-                              Column(
-                                children: [
-                                  if (viewModel.nft.type != NftType.TYPE_ITEM)
-                                    Text(
-                                      "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
-                                      style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
-                                    )
-                                ],
-                              ),
-                            ],
-                          )
+                          getSaleToggle(viewModel: viewModel, context: context),
                         ],
                       ),
                     ),
@@ -572,7 +578,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   }
 }
 
-Widget _title({required NFT nft, required String owner}) {
+Widget _title({required OwnerViewViewModel viewModel, required BuildContext context}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -581,47 +587,132 @@ Widget _title({required NFT nft, required String owner}) {
         children: [
           Flexible(
             child: Text(
-              nft.name,
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25.sp),
+              viewModel.nft.type == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator,
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18.sp, fontFamily: kUniversalSans750FontFamily),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          if (nft.type == NftType.TYPE_RECIPE)
+          if (viewModel.nft.type == NftType.TYPE_RECIPE)
             Padding(
               padding: EdgeInsets.only(
                 bottom: 2.h,
               ),
               child: Text(
-                ' (${nft.amountMinted} of ${nft.quantity})',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12.sp),
+                '  #${viewModel.nft.amountMinted}',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 10.sp),
               ),
             ),
         ],
       ),
       SizedBox(
-        height: 5.h,
+        height: 8.h,
       ),
       RichText(
         text: TextSpan(
           children: [
             TextSpan(
               text: LocaleKeys.created_by.tr(),
-              style: TextStyle(color: Colors.white, fontSize: 18.sp),
+              style: TextStyle(color: Colors.white, fontSize: 12.sp, fontFamily: kUniversalSans400FontFamily),
             ),
-            TextSpan(text: owner, style: TextStyle(color: AppColors.kCopyColor, fontSize: 18.sp)),
+            TextSpan(text: viewModel.nft.creator, style: TextStyle(color: AppColors.kCopyColor, fontSize: 12.sp, fontFamily: kUniversalSans500FontFamily)),
             WidgetSpan(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: SvgPicture.asset(
                   SVGUtil.OWNER_VERIFIED_ICON,
-                  height: 15.h,
+                  height: 10.h,
+                  width: 13.w,
                 ),
               ),
             ),
           ],
         ),
       ),
+      SizedBox(
+        height: 15.h,
+      ),
     ],
   );
+}
+
+Widget getSaleToggle({required OwnerViewViewModel viewModel, required BuildContext context}) {
+  return (viewModel.nft.type == NftType.TYPE_RECIPE)
+      ? GestureDetector(
+          key: const Key(kSaleStatusToggleButtonKey),
+          onTap: () {
+            if (viewModel.nft.isEnabled) {
+              viewModel.updateRecipeIsEnabled(context: context, viewModel: viewModel);
+            } else {
+              ChangeSaleStatusDialog(
+                ownerViewViewModel: viewModel,
+                buildContext: context,
+              ).show();
+            }
+          },
+          child: SizedBox(
+            height: 22.h,
+            width: 55.w,
+            child: Stack(
+              children: [
+                SvgPicture.asset((viewModel.nft.isEnabled) ? SVGUtil.NOT_FOR_SALE_BORDER : SVGUtil.FOR_SALE_BORDER),
+                if (viewModel.nft.isEnabled)
+                  Row(
+                    key: const Key(kNotForSaleToggleWidgetKey),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: SizedBox(
+                          height: 22.h,
+                          width: 15.w,
+                          child: SvgPicture.asset(
+                            SVGUtil.RED_BOTTOM_RIGHT_CURVED_CONTAINER,
+                            alignment: Alignment.centerLeft,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                          child: Text(
+                            "not_for_sale".tr(),
+                            textAlign: TextAlign.start,
+                            style: TextStyle(color: Colors.white, fontSize: 4.5.sp, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                else
+                  Row(
+                    key: const Key(kForSaleToggleWidgetKey),
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                          child: Text(
+                            "for_sale".tr(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white, fontSize: 4.5.sp, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5.0),
+                        child: SizedBox(
+                          height: 22.h,
+                          width: 15.w,
+                          child: SvgPicture.asset(
+                            SVGUtil.GREEN_BOTTOM_LEFT_CURVED_CONTAINER,
+                            alignment: Alignment.centerRight,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+              ],
+            ),
+          ),
+        )
+      : const SizedBox();
 }

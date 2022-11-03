@@ -22,7 +22,6 @@ import 'package:pylons_wallet/model/stripe_loginlink_response.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pbgrpc.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
@@ -44,6 +43,8 @@ import 'package:pylons_wallet/utils/query_helper.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
 import '../../generated/locale_keys.g.dart';
+
+import '../../model/update_recipe.dart';
 
 abstract class Repository {
   /// This method returns the recipe based on cookbook id and recipe Id
@@ -323,9 +324,9 @@ abstract class Repository {
   Future<Either<Failure, List<TransactionHistory>>> getTransactionHistory({required String address});
 
   /// This method will update the recipe in the chain
-  /// Input: [MsgUpdateRecipe] contains the info regarding the recipe update
+  /// Input: [updateRecipeModel] contains the info regarding the recipe update
   /// Output: if successful will return [String] the hash of the transaction else this will give [Failure]
-  Future<Either<Failure, String>> updateRecipe({required MsgUpdateRecipe msgUpdateRecipe});
+  Future<Either<Failure, String>> updateRecipe({required UpdateRecipeModel updateRecipeModel});
 
   /// This method will upload the mnemonic on the google drive
   /// Input: [mnemonic] the mnemonic of the user, [username] the username of the user
@@ -1358,13 +1359,13 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, String>> updateRecipe({required MsgUpdateRecipe msgUpdateRecipe}) async {
+  Future<Either<Failure, String>> updateRecipe({required UpdateRecipeModel updateRecipeModel}) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
-      final result = await remoteDataStore.updateRecipe(msgUpdateRecipe: msgUpdateRecipe);
+      final result = await remoteDataStore.updateRecipe(updateRecipeModel:updateRecipeModel );
 
       return Right(result);
     } on Failure catch (_) {

@@ -357,5 +357,12 @@
   "buying_pylon_points": "Đã mua điểm giá treo",
   "transaction_date": "Ngày Giao dịch",
   "retry": "Thử lại",
-  "bought_nft": "Đã mua"
+  "bought_nft": "Đã mua",
+  "for_sale": "Rao bán",
+  "not_for_sale": "Không phải để bán",
+  "input_valid_price": "Nhập giá hợp lệ để niêm yết",
+  "network_fee": "Phí mạng 10% so với giá niêm yết là bắt buộc đối với tất cả các giao dịch xảy ra trên chuỗi",
+  "list_for": "danh sách cho",
+  "pylon_points":"Điểm Pylon",
+  "nft_listing": "Danh sách NFT"
 }

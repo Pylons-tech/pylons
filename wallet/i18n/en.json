@@ -360,6 +360,12 @@
   "free": "Free",
   "please_try_again_later": "Please Try again later",
   "checkout": "Checkout",
-  "artist": "Artist"
-
+  "artist": "Artist",
+  "for_sale": "For sale",
+  "not_for_sale": "Not For Sale",
+  "input_valid_price": "Input a valid price to list",
+  "network_fee": "A network fee of 10% the listed price is required for all transactions that occur on-chain",
+  "list_for": "List for",
+  "pylon_points":"Pylon Points",
+  "nft_listing": "NFT Listing"
 }

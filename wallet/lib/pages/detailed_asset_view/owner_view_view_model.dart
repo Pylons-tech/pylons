@@ -1,13 +1,14 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
+import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/share_helper.dart';
@@ -19,6 +20,8 @@ import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../generated/locale_keys.g.dart';
+import '../../model/denom.dart';
+import '../../model/update_recipe.dart';
 import '../owner_purchase_view_common/button_state.dart';
 import '../owner_purchase_view_common/progress_bar_state.dart';
 
@@ -46,8 +49,6 @@ class OwnerViewViewModel extends ChangeNotifier {
 
   VideoPlayerController? videoPlayerController;
 
-
-
   late StreamSubscription playerStateSubscription;
 
   late StreamSubscription positionStreamSubscription;
@@ -55,6 +56,21 @@ class OwnerViewViewModel extends ChangeNotifier {
   late StreamSubscription bufferPositionSubscription;
 
   late StreamSubscription durationStreamSubscription;
+
+  List<Denom> supportedDenomList = Denom.availableDenoms;
+
+  Denom selectedDenom = Denom.availableDenoms.first;
+
+  TextEditingController priceController = TextEditingController(text: "0.00");
+
+  double _right = 73.w;
+
+  double get right => _right;
+
+  set right(double value) {
+    _right = value;
+    notifyListeners();
+  }
 
   bool _isVideoLoading = true;
 
@@ -428,9 +444,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     repository.logUserJourney(screenName: AnalyticsScreenEvents.ownerView);
   }
 
-
-
-  ValueNotifier<ProgressBarState> audioProgressNotifier  = ValueNotifier<ProgressBarState>(
+  ValueNotifier<ProgressBarState> audioProgressNotifier = ValueNotifier<ProgressBarState>(
     ProgressBarState(
       current: Duration.zero,
       buffered: Duration.zero,
@@ -439,4 +453,78 @@ class OwnerViewViewModel extends ChangeNotifier {
   );
 
   ValueNotifier<ButtonState> buttonNotifier = ValueNotifier(ButtonState.loading);
+
+  void onPriceChanged(String? updatedText) {
+    notifyListeners();
+  }
+
+  void setSelectedDenom(Denom value) {
+    selectedDenom = value;
+    notifyListeners();
+  }
+
+  Future<void> updateRecipeIsEnabled({required BuildContext context, required OwnerViewViewModel viewModel}) async {
+    final navigator = Navigator.of(context);
+    final loading = Loading()..showLoading();
+    final publicAddress = walletsStore.getWallets().value.last.publicAddress;
+    final recipeEither = await repository.getRecipe(cookBookId: viewModel.nft.cookbookID, recipeId: viewModel.nft.recipeID);
+    if (recipeEither.isLeft()) {
+      "something_wrong".tr().show();
+      loading.dismiss();
+      return;
+    }
+
+    if (nft.isEnabled) {
+      final updateRecipeModel = UpdateRecipeModel(
+        recipe: recipeEither.toOption().toNullable()!,
+        publicAddress: publicAddress,
+        enabledStatus: !nft.isEnabled,
+        nftPrice: nft.price,
+        denom: nft.denom,
+      );
+      final response = await repository.updateRecipe(updateRecipeModel: updateRecipeModel);
+      loading.dismiss();
+      if (response.isLeft()) {
+        response.toOption().getOrElse(() => "").show();
+        loading.dismiss();
+        return;
+      }
+      updateRecipeInLocalVm(nftPrice: nft.ibcCoins.getCoinWithProperDenomination(nft.price), nftEnabledStatus: false, denom: nft.denom);
+      navigator.pop();
+      return;
+    }
+
+    final updateRecipeModel = UpdateRecipeModel(
+      recipe: recipeEither.toOption().toNullable()!,
+      publicAddress: publicAddress,
+      enabledStatus: !nft.isEnabled,
+      nftPrice: (double.parse(priceController.text.replaceAll(",", "").trim()) * kBigIntBase).toStringAsFixed(0),
+      denom: selectedDenom.symbol,
+    );
+
+    final response = await repository.updateRecipe(updateRecipeModel: updateRecipeModel);
+    if (response.isLeft()) {
+      response.toOption().getOrElse(() => "").show();
+      loading.dismiss();
+      return;
+    }
+    loading.dismiss();
+    updateRecipeInLocalVm(nftPrice: priceController.text.replaceAll(",", "").trim(), nftEnabledStatus: true, denom: selectedDenom.symbol);
+    navigator.pop();
+    navigator.pop();
+  }
+
+  void updateRecipeInLocalVm({required bool nftEnabledStatus, required String nftPrice, required String denom}) {
+    if (nftEnabledStatus) {
+      right = 73.w;
+    } else {
+      right = 0.0;
+    }
+
+    final formattedPrice = (double.parse(nftPrice.replaceAll(",", "").trim()) * kBigIntBase).toStringAsFixed(0);
+    nft.isEnabled = nftEnabledStatus;
+    nft.price = formattedPrice;
+    nft.denom = denom;
+    notifyListeners();
+  }
 }
