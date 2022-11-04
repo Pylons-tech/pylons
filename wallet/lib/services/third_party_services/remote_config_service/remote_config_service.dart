@@ -45,6 +45,8 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
   static String mongoUrl = "MONGO_URL";
   static String skus = "skus";
 
+  static String maintenanceMode = "MAINTENANCE_MODE";
+
   RemoteConfigServiceImpl(
       {required this.firebaseRemoteConfig,
       required this.crashlyticsHelper});
@@ -93,6 +95,7 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
       chainId: dotenv.env['CHAIN_ID'],
       skus: defaultPylonsSKUs,
       mongoUrl: dotenv.env[mongoUrl] ?? "",
+      maintenanceMode: false,
     });
 
     firebaseRemoteConfig.setConfigSettings(RemoteConfigSettings(
