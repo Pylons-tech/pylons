@@ -39,7 +39,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
   CollectionViewModel get collectionViewModel => GetIt.I.get();
 
-  bool maintenanceMode = true;
+  bool maintenanceMode = false;
 
   @override
   void initState() {
