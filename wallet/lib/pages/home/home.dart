@@ -326,9 +326,13 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               Positioned(
                   top: 0.1.sh,
                   right: 0.12.sw,
-                  child: ColoredBox(
+                  child: Container(
                     color: Colors.blue,
-                    child: Text(LocaleKeys.maintenance_mode_header.tr()),
+                    padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 3.w),
+                    child: Text(
+                        LocaleKeys.maintenance_mode_header.tr(),
+                        style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w700),
+                    ),
                   )
               ),
             Positioned(
