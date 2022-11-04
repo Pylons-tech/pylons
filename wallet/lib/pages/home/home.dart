@@ -201,12 +201,16 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             ),
             if (maintenance_mode)
               Positioned(
-                top: 0.035.sh,
-                left: 0.025.sw,
-                child: ColoredBox(
-                  color: Colors.blue,
-                  child: Text("message"),
-                )
+                  top: 0.16.sh,
+                  right: 0,
+                  child: Container(
+                    color: AppColors.kDarkPurple,
+                    padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 3.w),
+                    child: Text(
+                      LocaleKeys.maintenance_mode_header.tr(),
+                      style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w700),
+                    ),
+                  ),
               ),
             Positioned(
               top: 0.2.sh - 30.r,
@@ -333,7 +337,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                         LocaleKeys.maintenance_mode_header.tr(),
                         style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w700),
                     ),
-                  )
+                  ),
               ),
             Positioned(
               top: 0.2.sh - 30.r,
