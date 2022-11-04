@@ -324,8 +324,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             ),
             if (maintenance_mode)
               Positioned(
-                  top: 0.1.sh,
-                  right: 0.12.sw,
+                  top: 0.175.sh,
+                  right: 0,
                   child: Container(
                     color: Colors.blue,
                     padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 3.w),
