@@ -23,5 +23,6 @@ class ImageUtil {
   static String PYLONS_LOGO_QR = "assets/images/icons/pylons_logo.jpeg";
   static String TextFieldSingleLine = "assets/images/text_field_single_line.png";
   static String TextFieldMultiLine = "assets/images/text_field_multi_line.png";
+  static String SPLASH_SCREEN_BG = "assets/images/splash/splash_screen.png";
 
 }

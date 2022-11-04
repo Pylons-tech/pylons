@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:io';
-
 import 'package:cosmos_utils/app_info_extractor.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -10,28 +10,34 @@ import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_config_service/remote_config_service.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
+import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
+import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
-class RoutingPage extends StatefulWidget {
-  const RoutingPage({Key? key}) : super(key: key);
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  _RoutingPageState createState() => _RoutingPageState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _RoutingPageState extends State<RoutingPage> {
+class _SplashScreenState extends State<SplashScreen> {
   WalletsStore get walletsStore => GetIt.I.get();
 
   RemoteConfigService get remoteConfigService => GetIt.I.get();
 
   UserInfoProvider get userInfoProvider => GetIt.I.get();
 
+  Repository get repository => GetIt.I.get();
+
   @override
   void initState() {
     super.initState();
-    checkAppLatestOrNot().then((value) {
-      userInfoProvider.initIPC();
+    Timer(const Duration(seconds: 3), () {
+      checkAppLatestOrNot().then((value) {
+        userInfoProvider.initIPC();
+      });
     });
   }
 
@@ -73,8 +79,17 @@ class _RoutingPageState extends State<RoutingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SizedBox(),
+    return Scaffold(
+      body: Container(
+        height: double.infinity,
+        decoration: BoxDecoration(
+          color: AppColors.kSplashScreenBgColor,
+          image: DecorationImage(
+            image: AssetImage(ImageUtil.SPLASH_SCREEN_BG),
+            fit: BoxFit.fill,
+          ),
+        ),
+      ),
     );
   }
 
