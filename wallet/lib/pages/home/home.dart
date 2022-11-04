@@ -39,7 +39,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
   CollectionViewModel get collectionViewModel => GetIt.I.get();
 
-  bool maintenance_mode = true;
+  bool maintenanceMode = true;
 
   @override
   void initState() {
@@ -101,19 +101,12 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                       backgroundColor: AppColors.kMainBG,
                       appBar: buildAppBar(context, provider),
                       body: provider.pages[provider.selectedIndex],
-                      // floatingActionButton: FloatingActionButton(
-                      //   child: Container(child: Text("message"),),
-                      //   backgroundColor: Colors.blue,
-                      //   onPressed: () => {},
-                      // ),
-                      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
                       bottomSheet:
-                        maintenance_mode? Container(
+                        maintenanceMode? Container(
                           width: 1.sw,
                           height: 110.h,
                           color: AppColors.kMainBG,
                           child: Align(
-                            alignment: Alignment.center,
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 40.w),
                               child: Container(
@@ -199,7 +192,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                     width: 20.w,
                   )),
             ),
-            if (maintenance_mode)
+            if (maintenanceMode)
               Positioned(
                   top: 0.16.sh,
                   right: 0,
@@ -326,7 +319,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                     width: 20.w,
                   )),
             ),
-            if (maintenance_mode)
+            if (maintenanceMode)
               Positioned(
                   top: 0.16.sh,
                   right: 0,
