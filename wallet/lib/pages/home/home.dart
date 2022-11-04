@@ -108,7 +108,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                       // ),
                       // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
                       bottomSheet:
-                        Container(
+                        maintenance_mode? Container(
                           width: 1.sw,
                           height: 110.h,
                           color: AppColors.kMainBG,
@@ -126,7 +126,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                               ),
                             ),
                           ),
-                        ),
+                        ) : null,
                     ),
                   ),
                 ),
