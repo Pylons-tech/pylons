@@ -29,8 +29,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   UserInfoProvider get userInfoProvider => GetIt.I.get();
 
-  Repository get repository => GetIt.I.get();
-
   @override
   void initState() {
     super.initState();
