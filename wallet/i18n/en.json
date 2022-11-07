@@ -360,6 +360,9 @@
   "free": "Free",
   "please_try_again_later": "Please Try again later",
   "checkout": "Checkout",
-  "artist": "Artist"
-
+  "artist": "Artist",
+  "resolution": "Resolution",
+  "ipfs_cid": "IPFS CID",
+  "available": "available",
+  "ea": "ea"
 }

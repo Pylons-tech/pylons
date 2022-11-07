@@ -1,11 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pylons_wallet/generated/locale_keys.g.dart';
+import 'package:pylons_wallet/pages/purchase_item/widgets/buy_nft_button.dart';
+
 import '../../../mocks/mock_constants.dart';
 import '../../extension/size_extension.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
-import 'package:pylons_wallet/pages/purchase_item/widgets/buy_nft_button.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +31,7 @@ void main() {
   });
 
   testWidgets('should show the NFT Buy Button and make sure user is able to tap', (tester) async {
-    final buyButtonFinder = find.text("${LocaleKeys.buy_for.tr()} ${MOCK_NFT_PREMIUM.ibcCoins.getCoinWithProperDenomination(MOCK_NFT_PREMIUM.price)}");
+    final buyButtonFinder = find.text(LocaleKeys.buy_now.tr());
     await tester.setScreenSize();
     await tester.testAppForWidgetTesting(Material(
       child: BuyNFTButton(

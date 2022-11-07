@@ -357,5 +357,9 @@
   "buying_pylon_points": "パイロンポイントを購入",
   "transaction_date": "取引日",
   "retry": "リトライ",
-  "bought_nft": "買った"
+  "bought_nft": "買った",
+  "resolution": "解像度",
+  "ipfs_cid": "IPFS CID",
+  "available": "利用可能",
+  "ea": "えー"
 }

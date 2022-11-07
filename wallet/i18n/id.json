@@ -357,5 +357,9 @@
   "buying_pylon_points": "Membeli Pylon Points",
   "transaction_date": "Tanggal Transaksi",
   "retry": "Mencoba Kembali",
-  "bought_nft": "Dibeli"
+  "bought_nft": "Dibeli",
+  "resolution": "Resolusi",
+  "ipfs_cid": "ID Pelanggan IPFS",
+  "available": "tersedia",
+  "ea": "ea"
 }

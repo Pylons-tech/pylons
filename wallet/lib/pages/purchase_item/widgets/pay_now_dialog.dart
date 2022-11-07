@@ -1,10 +1,12 @@
 import 'dart:convert';
-import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
+import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/model/nft.dart';
@@ -24,15 +26,12 @@ import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/enums.dart';
-import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:provider/provider.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 import '../../../generated/locale_keys.g.dart';
 
-TextStyle _titleTextStyle = TextStyle(color: Colors.white, fontSize: 25.sp, fontWeight: FontWeight.w700);
-TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.sp);
+TextStyle _titleTextStyle = TextStyle(color: AppColors.kWhite, fontSize: 19.sp, fontFamily: kUniversalSans750FontFamily, fontWeight: FontWeight.bold);
+TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.normal, fontSize: 12.sp, fontFamily: kUniversalSans750FontFamily);
 
 class PayNowDialog {
   final NFT nft;
@@ -82,7 +81,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black.withOpacity(0.7),
-      height: 400.h,
+      height: 300.h,
       width: isTablet ? 200.w : 270.w,
       margin: isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
       child: Stack(
@@ -112,15 +111,17 @@ class _PayNowWidgetState extends State<PayNowWidget> {
             top: 0,
             bottom: 0,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: 30.h,
+                  height: 35.h,
                 ),
-                Text(LocaleKeys.checkout.tr(), textAlign: TextAlign.center, style: _titleTextStyle),
+                Padding(
+                  padding: EdgeInsets.only(left: 20.w),
+                  child: Text(LocaleKeys.checkout.tr(), textAlign: TextAlign.center, style: _titleTextStyle),
+                ),
                 SizedBox(
-                  height: 30.h,
+                  height: 20.h,
                 ),
                 buildRow(
                   subtitle: widget.nft.name,
@@ -153,30 +154,24 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                 SizedBox(
                   height: 30.h,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(left: 20.w),
-                  child: Text(
-                    'price'.tr(),
-                    style: _rowTitleTextStyle,
-                  ),
+                buildRow(
+                  subtitle: "\$${widget.nft.ibcCoins.getCoinWithProperDenomination(widget.nft.price)}",
+                  title: LocaleKeys.price.tr(),
                 ),
                 SizedBox(
-                  height: 3.h,
-                ),
-                _buildPriceView(),
-                SizedBox(
-                  height: 60.h,
+                  height: 30.h,
                 ),
                 if (!widget.shouldBuy)
                   Center(
                     child: buildButton(
-                        title: LocaleKeys.add_pylons.tr(),
-                        bgColor: AppColors.kDarkRed,
-                        onPressed: () async {
-                          final navigator = Navigator.of(context);
-                          navigator.pop();
-                          navigator.pushNamed(RouteUtil.ROUTE_ADD_PYLON);
-                        }),
+                      title: LocaleKeys.add_pylons.tr(),
+                      bgColor: AppColors.kDarkRed,
+                      onPressed: () async {
+                        final navigator = Navigator.of(context);
+                        navigator.pop();
+                        navigator.pushNamed(RouteUtil.ROUTE_ADD_PYLON);
+                      },
+                    ),
                   ),
                 if (widget.shouldBuy)
                   Container(
@@ -206,20 +201,21 @@ class _PayNowWidgetState extends State<PayNowWidget> {
     return Row(
       children: [
         Expanded(
-            child: Padding(
-          padding: EdgeInsets.only(left: 20.w),
-          child: Text(
-            title,
-            style: _rowTitleTextStyle,
+          child: Padding(
+            padding: EdgeInsets.only(left: 20.w),
+            child: Text(
+              title,
+              style: _rowTitleTextStyle,
+            ),
           ),
-        )),
+        ),
         Expanded(
           flex: 2,
           child: Text(
             subtitle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: subtitleTextColor, fontSize: 15.sp, fontWeight: FontWeight.w600),
+            style: TextStyle(color: subtitleTextColor, fontSize: 13.sp, fontWeight: FontWeight.normal, fontFamily: kUniversalSans750FontFamily),
           ),
         ),
       ],
@@ -251,62 +247,6 @@ class _PayNowWidgetState extends State<PayNowWidget> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildPriceView() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Container(
-              height: 40.h,
-              color: AppColors.kDarkRed,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(width: 12.r, height: 12.r, child: widget.nft.ibcCoins.getSecondaryAssets()),
-                  SizedBox(width: 3.w),
-                  Text(
-                    widget.nft.ibcCoins.getName(),
-                    style: TextStyle(fontSize: 10.sp, color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Container(
-              height: 40.h,
-              color: AppColors.kGreyColor,
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AutoSizeText(
-                      widget.nft.ibcCoins.getCoinWithProperDenomination(widget.nft.price),
-                      maxLines: 1,
-                      style: TextStyle(fontSize: 15.sp, color: Colors.white, fontWeight: FontWeight.w700),
-                    ),
-                    if (widget.nft.ibcCoins.name == kPylonDenom)
-                      Padding(
-                        padding: EdgeInsets.only(top: 2.w),
-                        child: AutoSizeText(
-                          "(\$${widget.nft.ibcCoins.name.convertPylonsToUSD(widget.nft.price)} $kStripeUSD_ABR)",
-                          maxLines: 1,
-                          style: TextStyle(fontSize: 12.sp, color: Colors.white, fontWeight: FontWeight.w400),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -371,15 +311,16 @@ class _PayNowWidgetState extends State<PayNowWidget> {
       final pi = await Stripe.instance.retrievePaymentIntent(pi_info.clientsecret);
 
       await Stripe.instance.initPaymentSheet(
-          paymentSheetParameters: SetupPaymentSheetParameters(
-              googlePay: PaymentSheetGooglePay(
-                merchantCountryCode: kStripeMerchantCountry,
-                testEnv: baseEnv.baseStripeTestEnv,
-              ),
-              applePay: const PaymentSheetApplePay(merchantCountryCode: kStripeMerchantCountry),
-              style: ThemeMode.system,
-              merchantDisplayName: kStripeMerchantDisplayName,
-              paymentIntentClientSecret: pi_info.clientsecret));
+        paymentSheetParameters: SetupPaymentSheetParameters(
+            googlePay: PaymentSheetGooglePay(
+              merchantCountryCode: kStripeMerchantCountry,
+              testEnv: baseEnv.baseStripeTestEnv,
+            ),
+            applePay: const PaymentSheetApplePay(merchantCountryCode: kStripeMerchantCountry),
+            style: ThemeMode.system,
+            merchantDisplayName: kStripeMerchantDisplayName,
+            paymentIntentClientSecret: pi_info.clientsecret),
+      );
       Navigator.pop(navigatorKey.currentState!.overlay!.context);
       await Stripe.instance.presentPaymentSheet();
 
@@ -445,15 +386,16 @@ class _PayNowWidgetState extends State<PayNowWidget> {
         final pi = await Stripe.instance.retrievePaymentIntent(pi_info.clientsecret);
 
         await Stripe.instance.initPaymentSheet(
-            paymentSheetParameters: SetupPaymentSheetParameters(
-                style: ThemeMode.system,
-                googlePay: PaymentSheetGooglePay(
-                  merchantCountryCode: kStripeMerchantCountry,
-                  testEnv: baseEnv.baseStripeTestEnv,
-                ),
-                applePay: const PaymentSheetApplePay(merchantCountryCode: kStripeMerchantCountry),
-                merchantDisplayName: kStripeMerchantDisplayName,
-                paymentIntentClientSecret: pi_info.clientsecret));
+          paymentSheetParameters: SetupPaymentSheetParameters(
+              style: ThemeMode.system,
+              googlePay: PaymentSheetGooglePay(
+                merchantCountryCode: kStripeMerchantCountry,
+                testEnv: baseEnv.baseStripeTestEnv,
+              ),
+              applePay: const PaymentSheetApplePay(merchantCountryCode: kStripeMerchantCountry),
+              merchantDisplayName: kStripeMerchantDisplayName,
+              paymentIntentClientSecret: pi_info.clientsecret),
+        );
         Navigator.pop(navigatorKey.currentState!.overlay!.context);
 
         await Stripe.instance.presentPaymentSheet();

@@ -77,10 +77,12 @@ const double kRoyaltyPrecision = 10000000000000000;
 const String kPylonDenom = "upylon";
 
 const String kUniversalFontFamily = "UniversalSans";
+const String kUniversalSans750FontFamily = "UniversalSans750";
 const String kENV = 'ENV';
 const String kLocal = 'local';
 const String kPylo = 'pylo';
 
+const kCID = "cid";
 const String kPylonCoinName = "pylon";
 const String kUSDDenom = "ustripeusd";
 const String kUSD = "stripeusd";
@@ -227,7 +229,6 @@ const String kVietnameseText = "vietnamese";
 const String kAndroidAppLink = 'https://play.google.com/store/apps/details?id=tech.pylons.wallet';
 const String kIOSAppLink = 'https://apps.apple.com/gb/app/cashero/id1598732789?ign-mpt=uo%3D2';
 
-const String kRecipeId = 'Recipe ID';
 const String kRecipes = 'recipes';
 const String kFeedbacks = 'UserFeedbacks';
 const String kLikes = 'likes';

@@ -357,5 +357,9 @@
   "buying_pylon_points": "Pylons Points gekauft",
   "transaction_date": "Transaktionsdatum",
   "retry": "Wiederholen",
-  "bought_nft": "Gekauft"
+  "bought_nft": "Gekauft",
+  "resolution": "Auflösung",
+  "ipfs_cid": "IPFS-CID",
+  "available": "verfügbar",
+  "ea": "ea"
 }

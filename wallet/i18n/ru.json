@@ -357,5 +357,9 @@
   "buying_pylon_points": "Купленные очки пилонов",
   "transaction_date": "Дата сделки",
   "retry": "Повторить попытку",
-  "bought_nft": "Купленный"
+  "bought_nft": "Купленный",
+  "resolution": "Разрешение",
+  "ipfs_cid": "CID ИПФС",
+  "available": "доступный",
+  "ea": "шт."
 }
