@@ -18,6 +18,9 @@ abstract class RemoteConfigService {
 
   /// This method returns the ios app version in the remote config
   String getIOSAppVersion();
+
+  /// This method returns whether the app is in maintenance mode or not
+  bool getMaintenanceMode();
 }
 
 class RemoteConfigServiceImpl implements RemoteConfigService {
@@ -121,5 +124,9 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
   @override
   String getIOSAppVersion() {
     return firebaseRemoteConfig.getString(iosVERSION);
+  }
+
+  bool getMaintenanceMode() {
+    return firebaseRemoteConfig.getBool(maintenanceMode);
   }
 }
