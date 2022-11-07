@@ -22,6 +22,7 @@ import 'package:pylons_wallet/utils/screen_responsive.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../generated/locale_keys.g.dart';
+import '../../services/third_party_services/remote_config_service/remote_config_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -39,7 +40,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
   CollectionViewModel get collectionViewModel => GetIt.I.get();
 
-  bool maintenanceMode = false;
+  RemoteConfigService get remoteConfigService => GetIt.I.get();
 
   @override
   void initState() {
@@ -102,7 +103,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                       appBar: buildAppBar(context, provider),
                       body: provider.pages[provider.selectedIndex],
                       bottomSheet:
-                        maintenanceMode? Container(
+                        remoteConfigService.getMaintenanceMode() ? Container(
                           width: 1.sw,
                           height: 110.h,
                           color: AppColors.kMainBG,
@@ -192,7 +193,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                     width: 20.w,
                   )),
             ),
-            if (maintenanceMode)
+            if (remoteConfigService.getMaintenanceMode())
               Positioned(
                   top: 0.16.sh,
                   right: 0,
@@ -319,7 +320,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                     width: 20.w,
                   )),
             ),
-            if (maintenanceMode)
+            if (remoteConfigService.getMaintenanceMode())
               Positioned(
                   top: 0.16.sh,
                   right: 0,
