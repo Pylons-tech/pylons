@@ -126,6 +126,7 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
     return firebaseRemoteConfig.getString(iosVERSION);
   }
 
+  @override
   bool getMaintenanceMode() {
     return firebaseRemoteConfig.getBool(maintenanceMode);
   }
