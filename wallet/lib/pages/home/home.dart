@@ -11,6 +11,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
+import 'package:pylons_wallet/components/maintenance_mode_widgets.dart';
 import 'package:pylons_wallet/ipc/ipc_engine.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
@@ -103,24 +104,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                       appBar: buildAppBar(context, provider),
                       body: provider.pages[provider.selectedIndex],
                       bottomSheet:
-                        remoteConfigService.getMaintenanceMode() ? Container(
-                          width: 1.sw,
-                          height: 110.h,
-                          color: AppColors.kMainBG,
-                          child: Align(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 40.w),
-                              child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
-                                color: AppColors.kDarkPurple,
-                                child: Text(
-                                    LocaleKeys.maintenance_mode_message.tr(),
-                                    style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ) : null,
+                        remoteConfigService.getMaintenanceMode() ? const MaintenanceModeMessageWidget() : null,
                     ),
                   ),
                 ),
@@ -197,14 +181,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               Positioned(
                   top: 0.16.sh,
                   right: 0,
-                  child: Container(
-                    color: AppColors.kDarkPurple,
-                    padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 3.w),
-                    child: Text(
-                      LocaleKeys.maintenance_mode_header.tr(),
-                      style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w700),
-                    ),
-                  ),
+                  child: const MaintenanceModeBannerWidget(),
               ),
             Positioned(
               top: 0.2.sh - 30.r,
@@ -324,14 +301,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               Positioned(
                   top: 0.16.sh,
                   right: 0,
-                  child: Container(
-                    color: AppColors.kDarkPurple,
-                    padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 3.w),
-                    child: Text(
-                        LocaleKeys.maintenance_mode_header.tr(),
-                        style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w700),
-                    ),
-                  ),
+                  child: const MaintenanceModeBannerWidget(),
               ),
             Positioned(
               top: 0.2.sh - 30.r,
