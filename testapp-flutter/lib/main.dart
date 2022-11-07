@@ -3,7 +3,7 @@ import 'package:pylons_sdk/pylons_sdk.dart';
 
 const menu = "1) Fight a goblin!\n2) Fight a troll!\n3) Fight a dragon!\n4) Buy a sword!\n"
     "5) Upgrade your sword!\n6) (!) Rest for a moment\n7) (!) Rest for a bit\n8) (!) Rest for a while\n"
-    "9) (!) Power nap (9 PYL)\n10) Quit";
+    "9) (!) Power nap (9 PYL)";
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,7 +71,11 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     PylonsWallet.instance.exists().then((value) {
       _foundWallet = value;
-      Cookbook.load("appTestCookbook");
+      if (_foundWallet) {
+        Cookbook.load("appTestCookbook");
+      } else {
+        throw Exception("handle this - get wallet install etc.");
+      }
     });
   }
 
@@ -387,28 +391,29 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Padding(padding: const EdgeInsets.all(32),
                           child: Text(_text, style: const TextStyle(color: Colors.white, fontSize: 16)))
                   )),
-              SizedBox.fromSize(
+              _foundWallet ? SizedBox.fromSize(
                 size: const Size.fromHeight(120),
-                child:             Expanded(
+                child: Expanded(
                     flex: 1,
                     child: Container(
                       decoration: BoxDecoration(color: Colors.black, border: Border.all(color: Colors.white)),
                       padding: EdgeInsets.zero,
                       child: _displayMenuButtons ? Row(
                         children: [
-                          TextButton(onPressed: () => {_fightGoblin()}, child: const Text("0")),
-                          TextButton(onPressed: () => {_fightTroll()}, child: const Text("1")),
-                          TextButton(onPressed: () => {_fightDragon()}, child: const Text("2")),
-                          TextButton(onPressed: () => {_buySword()}, child: const Text("3")),
-                          TextButton(onPressed: () => {_upgradeSword()}, child: const Text("4")),
-                          TextButton(onPressed: () => {}, child: const Text("5")), //rest1
-                          TextButton(onPressed: () => {}, child: const Text("6")), //rest2
-                          TextButton(onPressed: () => {}, child: const Text("7")), //rest3
-                          TextButton(onPressed: () => {}, child: const Text("9")) //rest4
+                          Expanded(child: TextButton(onPressed: () => {_fightGoblin()}, child: const Text("0"))),
+                          Expanded(child: TextButton(onPressed: () => {_fightTroll()}, child: const Text("1"))),
+                          Expanded(child: TextButton(onPressed: () => {_fightDragon()}, child: const Text("2"))),
+                          Expanded(child: TextButton(onPressed: () => {_buySword()}, child: const Text("3"))),
+                          Expanded(child: TextButton(onPressed: () => {_upgradeSword()}, child: const Text("4"))),
+                          Expanded(child: TextButton(onPressed: () => {}, child: const Text("5"))), //rest1
+                          Expanded(child: TextButton(onPressed: () => {}, child: const Text("6"))), //rest2
+                          Expanded(child: TextButton(onPressed: () => {}, child: const Text("7"))), //rest3
+                          Expanded(child: TextButton(onPressed: () => {}, child: const Text("9"))) //rest4
                         ],
                       ) : TextButton(onPressed: () => {_displayText(menu, true)}, child: const Text("OK")),
-                    )),
-              )
+                    )
+                )
+              ) : Container()
             ],
           ),
         )
