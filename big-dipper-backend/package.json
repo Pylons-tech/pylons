@@ -13,7 +13,10 @@
     "genversion": "./scripts/genversion.sh"
   },
   "dependencies": {
-    "@babel/runtime": "^7.19.4",
+
+    "@babel/runtime": "^7.19.0",
+    "@braintree/sanitize-url": "^6.0.1",
+    "@babel/runtime": "^7.20.1",
     "@braintree/sanitize-url": "^6.0.0",
     "@google-cloud/storage": "^6.6.0",
     "@google/model-viewer": "^2.0.2",
@@ -54,12 +57,12 @@
     "react-loadingg": "^1.7.2",
     "react-pose": "^4.0.10",
     "react-responsive-pagination": "^1.8.0",
-    "react-router-dom": "^6.4.2",
+    "react-router-dom": "^6.4.3",
     "react-showdown": "^2.3.1",
     "react-sidebar": "^3.0.2",
     "react-toastify": "^9.0.8",
-    "reactstrap": "^9.1.4",
-    "rollup": "^3.2.3",
+    "reactstrap": "^9.1.5",
+    "rollup": "^3.2.5",
     "secp256k1": "^4.0.3",
     "simpl-schema": "^3.0.1",
     "styled-components": "^4.4.1",
