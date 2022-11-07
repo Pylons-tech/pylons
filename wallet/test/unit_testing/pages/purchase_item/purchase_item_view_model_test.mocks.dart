@@ -2,7 +2,7 @@
 // in pylons_wallet/test/unit_testing/pages/purchase_item/purchase_item_view_model_test.dart.
 // Do not manually edit this file.
 
-// ignore_for_file: no_leading_underscores_for_library_prefixes
+// ignore_for_file: no_leading_underscores_for_library_prefixes, must_be_immutable
 import 'dart:async' as _i8;
 
 import 'package:cosmos_utils/credentials_storage_failure.dart' as _i13;
@@ -788,7 +788,6 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
 /// A class which mocks [AccountPublicInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-// ignore: must_be_immutable
 class MockAccountPublicInfo extends _i1.Mock implements _i6.AccountPublicInfo {
   MockAccountPublicInfo() {
     _i1.throwOnMissingStub(this);
@@ -2568,7 +2567,6 @@ class MockRepository extends _i1.Mock implements _i15.Repository {
 /// A class which mocks [NFT].
 ///
 /// See the documentation for Mockito's code generation for more information.
-// ignore: must_be_immutable
 class MockNFT extends _i1.Mock implements _i30.NFT {
   MockNFT() {
     _i1.throwOnMissingStub(this);
@@ -2954,6 +2952,7 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         Invocation.getter(#cid),
         returnValue: '',
       ) as String);
+
   @override
   set cid(String? _cid) => super.noSuchMethod(
         Invocation.setter(
@@ -2962,6 +2961,7 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get createdAt => (super.noSuchMethod(
         Invocation.getter(#createdAt),

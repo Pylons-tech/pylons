@@ -6,7 +6,8 @@
 import 'dart:async' as _i4;
 
 import 'package:firebase_app_check/firebase_app_check.dart' as _i3;
-import 'package:firebase_app_check_platform_interface/firebase_app_check_platform_interface.dart' as _i5;
+import 'package:firebase_app_check_platform_interface/firebase_app_check_platform_interface.dart'
+    as _i5;
 import 'package:firebase_core/firebase_core.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -47,7 +48,6 @@ class MockFirebaseAppCheck extends _i1.Mock implements _i3.FirebaseAppCheck {
           Invocation.getter(#app),
         ),
       ) as _i2.FirebaseApp);
-
   @override
   set app(_i2.FirebaseApp? _app) => super.noSuchMethod(
         Invocation.setter(
@@ -56,19 +56,16 @@ class MockFirebaseAppCheck extends _i1.Mock implements _i3.FirebaseAppCheck {
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   _i4.Stream<String?> get onTokenChange => (super.noSuchMethod(
         Invocation.getter(#onTokenChange),
         returnValue: _i4.Stream<String?>.empty(),
       ) as _i4.Stream<String?>);
-
   @override
   Map<dynamic, dynamic> get pluginConstants => (super.noSuchMethod(
         Invocation.getter(#pluginConstants),
         returnValue: <dynamic, dynamic>{},
       ) as Map<dynamic, dynamic>);
-
   @override
   _i4.Future<void> activate({
     String? webRecaptchaSiteKey,
@@ -86,7 +83,6 @@ class MockFirebaseAppCheck extends _i1.Mock implements _i3.FirebaseAppCheck {
         returnValue: _i4.Future<void>.value(),
         returnValueForMissingStub: _i4.Future<void>.value(),
       ) as _i4.Future<void>);
-
   @override
   _i4.Future<String?> getToken([bool? forceRefresh]) => (super.noSuchMethod(
         Invocation.method(
@@ -95,9 +91,10 @@ class MockFirebaseAppCheck extends _i1.Mock implements _i3.FirebaseAppCheck {
         ),
         returnValue: _i4.Future<String?>.value(),
       ) as _i4.Future<String?>);
-
   @override
-  _i4.Future<void> setTokenAutoRefreshEnabled(bool? isTokenAutoRefreshEnabled) => (super.noSuchMethod(
+  _i4.Future<void> setTokenAutoRefreshEnabled(
+          bool? isTokenAutoRefreshEnabled) =>
+      (super.noSuchMethod(
         Invocation.method(
           #setTokenAutoRefreshEnabled,
           [isTokenAutoRefreshEnabled],

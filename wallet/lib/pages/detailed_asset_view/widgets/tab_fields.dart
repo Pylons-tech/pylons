@@ -261,18 +261,6 @@ class _TabFieldState extends State<TabField> {
       ],
     );
   }
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.isExpanded == false) {
-      if (mounted) {
-        setState(() {
-          collapsed = true;
-        });
-      }
-    }
-  }
 }
 
 class DiagonalLinePainter extends CustomPainter {
