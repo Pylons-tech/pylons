@@ -61,7 +61,12 @@ class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScr
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 15.w),
               child: Center(
-                child: AutoSizeText("network_error_description".tr(), maxLines: 3, textAlign: TextAlign.justify, style: _titleTextStyle.copyWith(color: AppColors.kWhite, fontSize: 13.sp)),
+                child: AutoSizeText(
+                  LocaleKeys.network_error_description.tr(),
+                  maxLines: 3,
+                  textAlign: TextAlign.justify,
+                  style: _titleTextStyle.copyWith(color: AppColors.kWhite, fontSize: 13.sp),
+                ),
               ),
             ),
           ),
