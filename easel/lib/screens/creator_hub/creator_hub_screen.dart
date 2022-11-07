@@ -395,7 +395,7 @@ class BuildGridView extends StatelessWidget {
                   key: const Key(kPriceBannerKey),
                   color: EaselAppTheme.kDarkGreen,
                   location: BannerLocation.topEnd,
-                  message: "\$ ${nft.price}",
+                  message: "${getCoinWithProperDenomination(nft.ibcCoins, nft.price)}  ${getAbbrev(ibcCoin: nft.ibcCoins)}",
                   child: NftGridViewItem(
                     nft: nft,
                   ),
@@ -406,6 +406,35 @@ class BuildGridView extends StatelessWidget {
               );
       },
     );
+  }
+
+  String getCoinWithProperDenomination(String ibcCoin, String amount) {
+    if (ibcCoin == "weth_wei") {
+      return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
+    } else if (ibcCoin == "upylon") {
+      return (double.parse(amount) / kBigIntBase).toStringAsFixed(0);
+    } else {
+      return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
+    }
+  }
+
+  String getAbbrev({required String ibcCoin}) {
+    switch (ibcCoin) {
+      case "urun":
+        return kAgoricAbr;
+      case "upylon":
+        return kPYLNAbbrevation;
+      case "ustripeusd":
+        return kStripeUSDABR;
+      case "eeur":
+        return kEmoneyAbb;
+      case "uatom":
+        return kAtomAbr;
+      case "weth_wei":
+        return kEthereumAbr;
+      default:
+        return kPYLNAbbrevation;
+    }
   }
 }
 
