@@ -3,16 +3,13 @@ class ImageUtil {
   static String UPDATE_APP_ICON = 'assets/images/icons/update_app_icon.jpg';
   static String DUMMY_USER = 'assets/images/dummy_user.png';
   static String LOADING_GIF = 'assets/images/gifs/loading.gif';
-  static String DEFAULT_BANNER =
-      'assets/images/sample_content/futuristic_city.png';
+  static String DEFAULT_BANNER = 'assets/images/sample_content/futuristic_city.png';
 
   static String WALLET_USD = "assets/images/icons/ico_usd.png";
 
   static String CURRENCY_BACKGROUND = "assets/images/currency_background.png";
-  static String PYLONS_CURRENCY =
-      "assets/images/icons/pylons_engagement_token.png";
-  static String PYLONS_CURRENCY_TRANSPARENT =
-      "assets/images/icons/pylons_engagement_token_transparent.png";
+  static String PYLONS_CURRENCY = "assets/images/icons/pylons_engagement_token.png";
+  static String PYLONS_CURRENCY_TRANSPARENT = "assets/images/icons/pylons_engagement_token_transparent.png";
   static String PYLONS_STRIPE_BANNER = "assets/images/icons/stripeusd.png";
 
   static String STRIPE_BACK = "assets/images/icons/stripe_back.png";
@@ -25,4 +22,12 @@ class ImageUtil {
   static String TextFieldMultiLine = "assets/images/text_field_multi_line.png";
   static String SPLASH_SCREEN_BG = "assets/images/splash/splash_screen.png";
 
+  static List<String> BG_IMAGES = [
+    "assets/images/bg/bg-1.png",
+    "assets/images/bg/bg-2.png",
+    "assets/images/bg/bg-3.png",
+    "assets/images/bg/bg-4.png",
+    "assets/images/bg/bg-5.png",
+    "assets/images/bg/bg-6.png"
+  ];
 }

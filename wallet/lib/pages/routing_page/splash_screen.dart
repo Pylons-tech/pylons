@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:cosmos_utils/app_info_extractor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
@@ -23,20 +24,37 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  late final Timer timer;
+
   WalletsStore get walletsStore => GetIt.I.get();
 
   RemoteConfigService get remoteConfigService => GetIt.I.get();
 
   UserInfoProvider get userInfoProvider => GetIt.I.get();
 
+  int index = 0;
+
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
-      checkAppLatestOrNot().then((value) {
-        userInfoProvider.initIPC();
-      });
-    });
+    initTimer();
+  }
+
+  void initTimer() {
+    timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        if (index > 4) {
+          checkAppLatestOrNot().then((value) {
+            userInfoProvider.initIPC();
+          });
+          return;
+        }
+        setState(() {
+          index++;
+        });
+      },
+    );
   }
 
   Future<void> _loadWallets() async {
@@ -78,16 +96,29 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        decoration: BoxDecoration(
-          color: AppColors.kSplashScreenBgColor,
-          image: DecorationImage(
-            image: AssetImage(ImageUtil.SPLASH_SCREEN_BG),
-            fit: BoxFit.fill,
+      backgroundColor: AppColors.kSplashScreenBgColor,
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8.0.w),
+          child: AnimatedSwitcher(
+            duration: const Duration(seconds: 1),
+            child: Image.asset(
+              ImageUtil.BG_IMAGES[index],
+              key: UniqueKey(),
+            ),
           ),
         ),
       ),
+      // body: Container(
+      //   height: double.infinity,
+      //   decoration: BoxDecoration(
+      //     color: AppColors.kSplashScreenBgColor,
+      //     image: DecorationImage(
+      //       image: AssetImage(ImageUtil.SPLASH_SCREEN_BG),
+      //       fit: BoxFit.fill,
+      //     ),
+      //   ),
+      // ),
     );
   }
 
@@ -113,5 +144,11 @@ class _SplashScreenState extends State<SplashScreen> {
     Navigator.of(navigatorKey.currentState!.overlay!.context).pushReplacementNamed(RouteUtil.ROUTE_APP_UPDATE, arguments: remoteConfigVersion);
 
     return false;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
   }
 }
