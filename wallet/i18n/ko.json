@@ -10,6 +10,7 @@
   "recommended": "추천",
   "following": "수행원",
   "select_a_date": "날짜 선택",
+  "network_error_description": "거래를 처리하는 동안 네트워크 오류가 발생했습니다. 계정 업데이트를 다시 시도하십시오. 재시도에 대해 두 번 청구되지 않습니다.",
   "what_is_new": "새로운 소식",
   "trending": "트렌드",
   "price": "가격",
