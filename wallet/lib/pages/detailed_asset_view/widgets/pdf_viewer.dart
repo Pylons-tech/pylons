@@ -83,8 +83,6 @@ class _PdfViewerState extends State<PdfViewer> with WidgetsBindingObserver {
             PDFView(
               filePath: doc,
               swipeHorizontal: true,
-              autoSpacing: false,
-              pageFling: false,
               onRender: (_pages) {
                 setState(() {
                   pages = _pages;

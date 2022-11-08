@@ -45,8 +45,6 @@ class _PdfViewerFullScreenState extends State<PdfViewerFullScreen> with WidgetsB
                 : PDFView(
                     filePath: pdfDocument,
                     swipeHorizontal: true,
-                    autoSpacing: false,
-                    pageFling: false,
                     onRender: (_pages) {
                       setState(() {
                         pages = _pages;
@@ -56,6 +54,7 @@ class _PdfViewerFullScreenState extends State<PdfViewerFullScreen> with WidgetsB
                     onViewCreated: (PDFViewController pdfViewController) {
                       _controller.complete(pdfViewController);
                     },
+                    fitPolicy: FitPolicy.WIDTH,
                   ),
         ),
       ),
