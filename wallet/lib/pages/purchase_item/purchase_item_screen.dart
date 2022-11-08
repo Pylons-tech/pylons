@@ -84,27 +84,14 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
     if (viewModel.getUserAcceptPolicies()) {
       return;
     }
-    await showModalBottomSheet(
-        context: context,
-        isScrollControlled: false,
-        enableDrag: false,
-        barrierColor: Colors.transparent,
-        isDismissible: false,
-        backgroundColor: Colors.transparent,
-        builder: (context) {
-          return WillPopScope(
-            onWillPop: () async {
-              return false;
-            },
-            child: AcceptPoliciesBottomSheet(
-              key: const Key(kAcceptBottomSheetKey),
-              onGetStarted: () {
-                viewModel.setUserAcceptPolicies();
-                Navigator.of(context).pop();
-              },
-            ),
-          );
-        });
+    final acceptPolicyBottomSheet = AcceptPolicyBottomSheet(
+      onGetStarted: () {
+        viewModel.setUserAcceptPolicies();
+        Navigator.of(context).pop();
+      },
+      context: context,
+    );
+    acceptPolicyBottomSheet.show();
   }
 }
 

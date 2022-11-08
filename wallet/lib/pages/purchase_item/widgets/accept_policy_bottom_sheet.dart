@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
@@ -9,11 +10,41 @@ import 'package:pylons_wallet/pages/purchase_item/viewmodel/accept_policy_viewmo
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
-class AcceptPoliciesBottomSheet extends StatelessWidget {
+class AcceptPolicyBottomSheet {
+  final VoidCallback onGetStarted;
+  final BuildContext context;
+
+  AcceptPolicyBottomSheet({required this.onGetStarted, required this.context});
+
+  void show() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      enableDrag: false,
+      barrierColor: Colors.transparent,
+      isDismissible: false,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return WillPopScope(
+          onWillPop: () async {
+            return false;
+          },
+          child: AcceptPoliciesWidget(
+            key: const Key(kAcceptBottomSheetKey),
+            onGetStarted: onGetStarted,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class AcceptPoliciesWidget extends StatelessWidget {
   final VoidCallback onGetStarted;
 
-  const AcceptPoliciesBottomSheet({Key? key, required this.onGetStarted}) : super(key: key);
+  const AcceptPoliciesWidget({Key? key, required this.onGetStarted}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +77,10 @@ class AcceptPoliciesBottomSheet extends StatelessWidget {
                             onChange: (value) {
                               viewModel.toggleCheckTermServices(value!);
                             },
+                            onLinkTap: () {
+                              /// TO DO
+                              /// Don't have url of term & services
+                            },
                           ),
                           SizedBox(
                             height: 15.0.h,
@@ -56,6 +91,7 @@ class AcceptPoliciesBottomSheet extends StatelessWidget {
                             onChange: (value) {
                               viewModel.toggleCheckPrivacyPolicy(value!);
                             },
+                            onLinkTap: () => launchUrlString(kPrivacyPolicyLink),
                           ),
                           SizedBox(
                             height: 25.0.h,
@@ -91,11 +127,13 @@ class MyCheckBox extends StatelessWidget {
   final String policy;
   final bool isSelected;
   final ValueChanged<bool?>? onChange;
+  final VoidCallback onLinkTap;
 
   const MyCheckBox(
     this.policy, {
     required this.isSelected,
     required this.onChange,
+    required this.onLinkTap,
     Key? key,
   }) : super(key: key);
 
@@ -141,12 +179,12 @@ class MyCheckBox extends StatelessWidget {
                       fontSize: 15.sp,
                     )),
                 TextSpan(
-                  text: policy,
-                  style: TextStyle(
-                    color: AppColors.kBlue,
-                    fontSize: 15.sp,
-                  ),
-                ),
+                    text: policy,
+                    style: TextStyle(
+                      color: AppColors.kBlue,
+                      fontSize: 15.sp,
+                    ),
+                    recognizer: TapGestureRecognizer()..onTap = onLinkTap),
               ],
             ),
           ),
