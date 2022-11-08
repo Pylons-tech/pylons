@@ -27,8 +27,8 @@ import 'package:pylons_wallet/pages/home/wallet_screen/widgets/transaction_detai
 import 'package:pylons_wallet/pages/presenting_onboard_page/presenting_onboard_page.dart';
 import 'package:pylons_wallet/pages/presenting_onboard_page/screens/create_wallet_screen.dart';
 import 'package:pylons_wallet/pages/presenting_onboard_page/screens/restore_wallet_screen.dart';
-import 'package:pylons_wallet/pages/purchase_item/purchase_item_screen.dart';
 import 'package:pylons_wallet/pages/routing_page/routing_page.dart';
+import 'package:pylons_wallet/pages/purchase_item/purchase_item_screen.dart';
 import 'package:pylons_wallet/pages/routing_page/update_app.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/screens/payment_screen/payment_screen.dart';

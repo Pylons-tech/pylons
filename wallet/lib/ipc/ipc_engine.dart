@@ -191,7 +191,7 @@ class IPCEngine {
     await item.getOwnerAddress();
     showLoader.dismiss();
 
-    await  navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: item);
+    await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: item);
     walletsStore.setStateUpdatedFlag(flag: true);
   }
 
@@ -305,7 +305,7 @@ class IPCEngine {
   /// Input: [SdkIpcMessage] the transaction that the user approves.
   Future<void> onUserApproval(SdkIpcMessage sdkIPCMessage) async {
     final handlerMessage = await GetIt.I.get<HandlerFactory>().getHandler(sdkIPCMessage).handle();
-    if  (handlerMessage == null) return;
+    if (handlerMessage == null) return;
     await checkAndDispatchUniLinkIfNeeded(handlerMessage: handlerMessage, responseSendingNeeded: sdkIPCMessage.requestResponse);
   }
 

@@ -20,6 +20,7 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart'
 import 'package:pylons_wallet/pages/gestures_for_detail_screen.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
+import 'package:pylons_wallet/pages/purchase_item/widgets/accept_policy_bottom_sheet.dart';
 import 'package:pylons_wallet/pages/purchase_item/clipper/buy_now_clipper.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart' show PurchaseItemViewModel;
 import 'package:pylons_wallet/pages/purchase_item/widgets/buy_nft_button.dart';
@@ -60,9 +61,9 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
     super.initState();
     viewModel.setNFT(widget.nft);
     viewModel.logEvent();
-
     scheduleMicrotask(() {
       viewModel.initializeData();
+      _showPolicyBottomSheet();
     });
   }
 
@@ -77,6 +78,32 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
           },
           child: const PurchaseItemContent()),
     );
+  }
+
+  Future<void> _showPolicyBottomSheet() async {
+    if (viewModel.getUserAcceptPolicies()) {
+      return;
+    }
+    await showModalBottomSheet(
+        context: context,
+        isScrollControlled: false,
+        enableDrag: false,
+        barrierColor: Colors.transparent,
+        isDismissible: false,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return WillPopScope(
+            onWillPop: () async {
+              return false;
+            },
+            child: AcceptPoliciesBottomSheet(
+              onGetStarted: () {
+                viewModel.setUserAcceptPolicies();
+                Navigator.of(context).pop();
+              },
+            ),
+          );
+        });
   }
 }
 
@@ -144,7 +171,6 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<PurchaseItemViewModel>();
-
     return Scaffold(
         backgroundColor: AppColors.kBlack,
         body: GesturesForDetailsScreen(

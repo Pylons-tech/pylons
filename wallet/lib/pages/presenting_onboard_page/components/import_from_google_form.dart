@@ -105,6 +105,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
               },
               text: "continue".tr(),
               loader: isLoadingNotifier,
+              btnUnselectBGColor: AppColors.kGray.withOpacity(0.3),
             ),
           ),
         ],

@@ -20,6 +20,7 @@ import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.da
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
+import 'package:pylons_wallet/pages/purchase_item/viewmodel/accept_policy_viewmodel.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_localization_view_model.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_viewmodel.dart';
 import 'package:pylons_wallet/pages/settings/screens/recovery_screen/screens/practice_test.dart';
@@ -209,6 +210,7 @@ Future<void> init() async {
         shareHelper: sl(),
       ));
   sl.registerLazySingleton(() => UserBannerViewModel());
+  sl.registerLazySingleton(() => AcceptPolicyViewModel());
 
   /// Configurations
   sl.registerLazySingleton<BaseEnv>(() => remoteConfigService.getBaseEnv());

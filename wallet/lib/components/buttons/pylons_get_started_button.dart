@@ -8,8 +8,26 @@ class PylonsGetStartedButton extends StatelessWidget {
   final String text;
   final ValueNotifier<bool> loader;
   final bool enabled;
+  final Color textColor;
+  final Color btnUnselectBGColor;
+  final FontWeight fontWeight;
+  final double btnHeight;
+  final double btnWidth;
+  final double fontSize;
 
-  const PylonsGetStartedButton({Key? key, required this.onTap, this.text = "", required this.loader, this.enabled = true}) : super(key: key);
+  const PylonsGetStartedButton({
+    Key? key,
+    required this.onTap,
+    this.text = "",
+    required this.loader,
+    this.enabled = true,
+    this.textColor = const Color(0xFFFFFFFF),
+    this.fontWeight = FontWeight.w600,
+    this.btnUnselectBGColor = const Color(0xFF7B7979),
+    this.btnHeight = 45,
+    this.btnWidth = 200,
+    this.fontSize = 16,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,24 +39,25 @@ class PylonsGetStartedButton extends StatelessWidget {
             child: ClipPath(
               clipper: MnemonicClipper(cuttingHeight: 18.h),
               child: Container(
-                color: isUserAllowedToTap(loading: loading) ? AppColors.kDarkRed : AppColors.kGray.withOpacity(0.3),
-                height: 45.h,
-                width: 200.w,
+                color: isUserAllowedToTap(loading: loading) ? AppColors.kDarkRed : btnUnselectBGColor,
+                height: btnHeight.h,
+                width: btnWidth.w,
                 child: Center(
-                    child: loading
-                        ? SizedBox(
-                            width: 25.h,
-                            height: 25.h,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.0,
-                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.kDarkRed),
-                            ),
-                          )
-                        : Text(
-                            text,
-                            style: TextStyle(color: AppColors.kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
-                            textAlign: TextAlign.center,
-                          )),
+                  child: loading
+                      ? SizedBox(
+                          width: 25.h,
+                          height: 25.h,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.0,
+                            valueColor: AlwaysStoppedAnimation<Color>(AppColors.kDarkRed),
+                          ),
+                        )
+                      : Text(
+                          text,
+                          style: TextStyle(color: textColor, fontSize: fontSize.sp, fontWeight: fontWeight),
+                          textAlign: TextAlign.center,
+                        ),
+                ),
               ),
             ),
           );

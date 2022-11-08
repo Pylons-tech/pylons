@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:io';
-
 import 'package:cosmos_utils/app_info_extractor.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -17,7 +17,7 @@ class RoutingPage extends StatefulWidget {
   const RoutingPage({Key? key}) : super(key: key);
 
   @override
-  _RoutingPageState createState() => _RoutingPageState();
+  State<RoutingPage> createState() => _RoutingPageState();
 }
 
 class _RoutingPageState extends State<RoutingPage> {

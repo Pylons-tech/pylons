@@ -37,6 +37,7 @@ class AppColors {
   static Color kAtomColor = kDarkPurple;
 
   static Color kDarkGrey = const Color(0xFF333333);
+  static Color kLightGrey = const Color(0xFFDBD9D7);
   static Color kGreyLight = const Color.fromRGBO(219, 217, 215, 1);
   static Color kCreateWalletButtonColorDark = const Color.fromRGBO(8, 8, 48, 1);
   static Color textFieldGreyColor = const Color.fromRGBO(219, 217, 215, 1);
@@ -46,7 +47,7 @@ class AppColors {
   static Color kDarkDividerColor = const Color(0xffE5E5E5);
   static Color kTradeReceiptTextColor = const Color(0xff8F8FCE);
   static Color kHashtagColor = const Color(0xFFB6B6E8);
-
+  static Color kCheckboxActiveColor = const Color(0xFFCBC8F3);
   static Color kUserInputTextColor = const Color(0xff8D8C8C);
   static Color kSettingsUserNameColor = kBlue;
   static Color kForwardIconColor = const Color(0x331212C4);
@@ -58,6 +59,7 @@ class AppColors {
   static Color kPriceTagColor = const Color(0xff3A8977);
   static Color kPayNowBackgroundGrey = const Color(0xffE5E5E5);
   static Color kSubtitleColor = const Color(0xff767676);
+  static Color kSplashScreenBgColor = const Color(0xFFF15838);
 
   static Color kTransactionGreen = const Color.fromRGBO(81, 161, 144, 1);
   static Color kTransactionRed = const Color.fromRGBO(239, 68, 33, 1);
@@ -411,7 +413,7 @@ const String kNftName = "nftName";
 const String kNftPrice = "nftPrice";
 const String kNftCurrency = "nftCurrency";
 const String kPaymentIntentId = "payment_intent_id";
-const String kClientSecret = "clientSecret";
+const String kClientSecret = "client_secret";
 const String kPaymentInfos = "payment_infos";
 
 const String kRecipeID = "recipeID";
