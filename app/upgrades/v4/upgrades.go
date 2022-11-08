@@ -18,21 +18,21 @@ import (
 const (
 	//----------- FAKE ADDRESS---------------//
 	// StakeholderDistribution wallet address
-	StakeholderDistribution = "pylo1csclcc6rzs7z3eyjqvzrrgrfh79hng2gp0y9aq"
+	StakeholderDistribution = "pylo1vnwhaymaazugzz9ln2sznddveyed6shz3x8xwl"
 	// Incentive Pools wallet address
-	IncentivePools = "pylo1m8dczugvz5sa8qe6h0ehcd92uqr9hpm55ulp55"
+	IncentivePools = "pylo1vnwhaymaazugzz9ln2sznddveyed6shz3x8xwl"
 	// Foundation Discretionary wallet address
-	FoundationDiscretionary = "pylo1d4u3yf6x382medzspuwtnv6jl6q73j0hshjmsr"
+	FoundationDiscretionary = "pylo1vnwhaymaazugzz9ln2sznddveyed6shz3x8xwl"
 	// Token Presale wallet address
-	TkPreSale = "pylo1wukgguc6z3fxw8zcdzfwkzpqc67xkhul9mra7f"
+	TkPreSale = "pylo1vnwhaymaazugzz9ln2sznddveyed6shz3x8xwl"
 	// Token CF Sale wallet address
-	TkCFSale = "pylo1pu0h7cyx8waj3c6rqmagv3ll5qvygyxvtnzyvv"
+	TkCFSale = "pylo1vnwhaymaazugzz9ln2sznddveyed6shz3x8xwl"
 	// Token Reg D+S Sale wallet address
-	TkRegDSSale = "pylo1qufsv679033gm7x372hdwc00gzs32f7r4hjjmu"
+	TkRegDSSale = "pylo1vnwhaymaazugzz9ln2sznddveyed6shz3x8xwl"
 	// Company Revenue wallet address
-	CompanyRevenue = "pylo1hpgtmcvtcnnzt5k8zaxgrzd7dtg76575grpcnv"
+	CompanyRevenue = "pylo1vnwhaymaazugzz9ln2sznddveyed6shz3x8xwl"
 	// Engineering Hot Wallet wallet address
-	EngineHotWal = "pylo1zag5vc7nfwa0scyrzfdsjj000xexfeyd956pqh"
+	EngineHotWal = "pylo1vnwhaymaazugzz9ln2sznddveyed6shz3x8xwl"
 	//----------- FAKE ADDRESS---------------//
 )
 
