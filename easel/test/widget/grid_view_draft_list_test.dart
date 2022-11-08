@@ -21,12 +21,13 @@ void main() {
       await tester.testAppForWidgetTesting(
         Scaffold(
           body: ChangeNotifierProvider(
-              create: (ctx) => GetIt.I.get<CreatorHubViewModel>(),
-              builder: (context, _) {
-                return NftGridViewItem(
-                  nft: MOCK_NFT,
-                );
-              }),
+            create: (ctx) => GetIt.I.get<CreatorHubViewModel>(),
+            builder: (context, _) {
+              return NftGridViewItem(
+                nft: MOCK_NFT,
+              );
+            },
+          ),
         ),
       );
 

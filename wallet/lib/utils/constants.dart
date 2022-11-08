@@ -59,7 +59,6 @@ class AppColors {
   static Color kPriceTagColor = const Color(0xff3A8977);
   static Color kPayNowBackgroundGrey = const Color(0xffE5E5E5);
   static Color kSubtitleColor = const Color(0xff767676);
-  static Color kSplashScreenBgColor = const Color(0xFFF15838);
 
   static Color kTransactionGreen = const Color.fromRGBO(81, 161, 144, 1);
   static Color kTransactionRed = const Color.fromRGBO(239, 68, 33, 1);
@@ -454,3 +453,6 @@ const String kShareNftButtonCollapsedKey = "share_nft_collapsed";
 const String kShareNftButtonExpandedKey = "share_nft_expanded";
 const String kAcceptBottomSheetKey = "accept_bottom_sheet";
 const String kAcceptBottomSheetBtnKey = "accept_bottom_sheet_btn";
+
+const String kGetFirebaseAppCheckTokenMethodChannelKey = "getFirebaseAppCheckTokenMethodChannel";
+const String kGetFirebaseAppCheckDebugTokenKey = "getFirebaseAppCheckDebugToken";
