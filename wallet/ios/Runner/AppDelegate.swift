@@ -8,6 +8,7 @@ import Firebase
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
+    // Uncomment while using ios simulator 
 //     let providerFactory = AppCheckDebugProviderFactory()
 //     AppCheck.setAppCheckProviderFactory(providerFactory)
       GeneratedPluginRegistrant.register(with: self)

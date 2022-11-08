@@ -99,7 +99,6 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
             ),
           ],
           child: MaterialApp(
-            // key: UniqueKey(),
             navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             localizationsDelegates: context.localizationDelegates,
