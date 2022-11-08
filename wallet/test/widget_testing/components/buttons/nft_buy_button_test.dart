@@ -19,10 +19,8 @@ import 'package:easy_localization/easy_localization.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  late WalletsStore walletStore;
-  late PurchaseItemViewModel viewModel;
-  walletStore = MockWalletStore();
-  viewModel = MockPurchaseItemViewModel();
+  final WalletsStore walletStore = MockWalletStore();
+  final PurchaseItemViewModel viewModel = MockPurchaseItemViewModel();
 
   testWidgets("check buy button is in expanded view or not", (tester) async {
     GetIt.I.registerLazySingleton<WalletsStore>(() => walletStore);
