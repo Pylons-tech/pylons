@@ -17,7 +17,7 @@ class RoutingPage extends StatefulWidget {
   const RoutingPage({Key? key}) : super(key: key);
 
   @override
-  State<RoutingPage> createState() => _RoutingPageState();
+  _RoutingPageState createState() => _RoutingPageState();
 }
 
 class _RoutingPageState extends State<RoutingPage> {
