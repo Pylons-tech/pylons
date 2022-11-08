@@ -7,6 +7,8 @@ import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 /// This class will act as a view model for the notifications
 abstract class RemoteNotificationsService {
   /// This method gives token for remote notifications
@@ -39,7 +41,7 @@ class RemoteNotificationsServiceImp implements RemoteNotificationsService {
   Future<String> getToken() async {
     final token = await firebaseMessaging.getToken();
     if (token == null || token.isEmpty) {
-      throw FcmTokenRetrievalError("something_went_wrong".tr());
+      throw FcmTokenRetrievalError(LocaleKeys.something_wrong.tr());
     }
     return token;
   }

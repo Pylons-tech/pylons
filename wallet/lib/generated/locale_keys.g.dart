@@ -361,5 +361,7 @@ abstract class  LocaleKeys {
   static const retry = 'retry';
   static const bought_nft = 'bought_nft';
   static const resolution = 'resolution';
+  static const set_lockscreen = 'set_lockscreen';
+  static const network_error_description = 'network_error_description';
 
 }

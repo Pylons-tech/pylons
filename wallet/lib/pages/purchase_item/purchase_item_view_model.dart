@@ -113,8 +113,8 @@ class PurchaseItemViewModel extends ChangeNotifier {
     const jsonExecuteRecipe = '''
       {
         "creator": "",
-        "cookbookId": "",
-        "recipeId": "",
+        "cookbook_id": "",
+        "recipe_id": "",
         "nftName": "",
         "nftPrice": "",
         "nftCurrency": "",
@@ -123,8 +123,8 @@ class PurchaseItemViewModel extends ChangeNotifier {
         ''';
 
     final jsonMap = jsonDecode(jsonExecuteRecipe) as Map;
-    jsonMap[kCookbookIdMap] = nft.cookbookID;
-    jsonMap[kRecipeIdMap] = nft.recipeID;
+    jsonMap[kCookbookIdKey] = nft.cookbookID;
+    jsonMap[kRecipeIdKey] = nft.recipeID;
     jsonMap[kNftName] = nft.name;
     jsonMap[kNftPrice] = nft.ibcCoins.getCoinWithProperDenomination(nft.price);
     jsonMap[kNftCurrency] = nft.ibcCoins.getAbbrev();

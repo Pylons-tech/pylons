@@ -358,5 +358,6 @@
   "transaction_date": "Transaktionsdatum",
   "retry": "Wiederholen",
   "bought_nft": "Gekauft",
-  "resolution": "Auflösung"
+  "resolution": "Auflösung",
+  "set_lockscreen": "Instellen als vergrendelscherm"
 }

@@ -413,7 +413,7 @@ const String kNftName = "nftName";
 const String kNftPrice = "nftPrice";
 const String kNftCurrency = "nftCurrency";
 const String kPaymentIntentId = "payment_intent_id";
-const String kClientSecret = "clientSecret";
+const String kClientSecret = "client_secret";
 const String kPaymentInfos = "payment_infos";
 
 const String kRecipeID = "recipeID";
@@ -452,3 +452,6 @@ const String kProgressKey = "Progress";
 const String kImageAssetKey = "image_asset_key";
 const String kShareNftButtonCollapsedKey = "share_nft_collapsed";
 const String kShareNftButtonExpandedKey = "share_nft_expanded";
+
+const String kGetFirebaseAppCheckTokenMethodChannelKey = "getFirebaseAppCheckTokenMethodChannel";
+const String kGetFirebaseAppCheckDebugTokenKey = "getFirebaseAppCheckDebugToken";

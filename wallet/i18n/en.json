@@ -359,7 +359,8 @@
   "bought_nft": "Bought",
   "free": "Free",
   "resolution": "Resolution",
-  "please_try_again_later": "Please Try again later",
+  "please_try_again_later": "Please try again later",
   "checkout": "Checkout",
-  "artist": "Artist"
+  "artist": "Artist",
+  "set_lockscreen": "Set as lockscreen"
 }

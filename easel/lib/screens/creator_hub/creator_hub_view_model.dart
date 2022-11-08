@@ -11,7 +11,7 @@ import '../../generated/locale_keys.g.dart';
 
 enum ViewType { viewGrid, viewList }
 
-enum CollectionType { draft, published, forSale }
+enum CollectionType { draft, published }
 
 class CreatorHubViewModel extends ChangeNotifier {
   final Repository repository;
@@ -21,7 +21,6 @@ class CreatorHubViewModel extends ChangeNotifier {
   CollectionType selectedCollectionType = CollectionType.draft;
 
   ViewType viewType = ViewType.viewGrid;
-
 
   int get publishedRecipesLength => nftPublishedList.length;
 
@@ -33,10 +32,6 @@ class CreatorHubViewModel extends ChangeNotifier {
         break;
       case CollectionType.published:
         selectedCollectionType = CollectionType.published;
-        notifyListeners();
-        break;
-      case CollectionType.forSale:
-        selectedCollectionType = CollectionType.forSale;
         notifyListeners();
         break;
     }
