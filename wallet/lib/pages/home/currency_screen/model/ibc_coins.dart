@@ -172,8 +172,8 @@ extension IBCCoinsDePar on IBCCoins {
 }
 
 SizedBox getIconFromAsset(String ibcCoinIcon) => SizedBox(
-      width: 24.w,
-      height: 24.w,
+      width: 24.r,
+      height: 24.r,
       child: Image.asset(
         ibcCoinIcon,
         fit: BoxFit.fill,
@@ -181,8 +181,8 @@ SizedBox getIconFromAsset(String ibcCoinIcon) => SizedBox(
     );
 
 SizedBox getIconFromSvg(String ibcCoinIcon) => SizedBox(
-      width: 24.w,
-      height: 24.w,
+      width: 24.r,
+      height: 24.r,
       child: SvgPicture.asset(
         ibcCoinIcon,
       ),
