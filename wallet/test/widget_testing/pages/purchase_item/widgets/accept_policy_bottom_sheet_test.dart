@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_screen.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
@@ -8,9 +9,10 @@ import 'package:pylons_wallet/pages/purchase_item/viewmodel/accept_policy_viewmo
 import 'package:pylons_wallet/utils/constants.dart';
 import '../../../../mocks/accept_policy_viewmodel.mocks.dart';
 import '../../../../mocks/mock_constants.dart';
-import '../../../../mocks/purchase_item_view_model.mocks.dart';
+import '../../../../mocks/purchase_item_viewmodel.mocks.dart';
 import '../../../extension/size_extension.dart';
 
+@GenerateNiceMocks([MockSpec<PurchaseItemViewModel>()])
 void main() {
   final purchaseItemViewModel = MockPurchaseItemViewModel();
   final acceptPolicyViewModel = MockAcceptPolicyViewModel();
