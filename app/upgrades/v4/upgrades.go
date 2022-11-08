@@ -242,7 +242,10 @@ func CleanUplyons(ctx sdk.Context, bank *bankkeeper.BaseKeeper, pylons *pylonske
 			}
 		}
 	}
-
+	err := MintValidUpylons(ctx, pylons)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func MintValidUpylons(ctx sdk.Context, pylons *pylonskeeper.Keeper) error {
