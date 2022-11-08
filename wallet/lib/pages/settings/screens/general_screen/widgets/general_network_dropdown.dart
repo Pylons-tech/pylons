@@ -59,7 +59,7 @@ class GeneralForwardNetworkItem extends StatelessWidget {
           child: GestureDetector(
             onTap: () async {
               viewModel.changeSelectedValue();
-              await viewModel.changeAppEnvConfiguration();
+              // await viewModel.changeAppEnvConfiguration();
             },
             child: Padding(
               padding: EdgeInsets.only(top: 26.h),

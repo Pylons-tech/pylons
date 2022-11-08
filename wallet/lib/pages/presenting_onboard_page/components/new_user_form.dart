@@ -10,7 +10,6 @@ import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/providers/accounts_provider.dart';
-import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
@@ -167,14 +166,12 @@ class NewUserFormState extends State<NewUserForm> {
     final mnemonic = await generateMnemonic(strength: kMnemonicStrength);
     final result = await widget.walletsStore.importAlanWallet(mnemonic, userName);
 
-    firebaseRemoteNotificationsProvider.updateFCMToken(address: accountProvider.accountPublicInfo!.publicAddress);
-
     isLoadingNotifier.value = false;
     result.fold((failure) {
       failure.message.show();
-      navigator.pop();
     }, (walletInfo) async {
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => false);
+      firebaseRemoteNotificationsProvider.updateFCMToken(address: accountProvider.accountPublicInfo!.publicAddress);
+      navigator.pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => false);
     });
   }
 }

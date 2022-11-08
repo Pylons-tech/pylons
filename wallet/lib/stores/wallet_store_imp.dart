@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:alan/alan.dart' as alan;
 import 'package:cosmos_utils/credentials_storage_failure.dart';
@@ -53,15 +52,12 @@ class WalletsStoreImp implements WalletsStore {
     required this.remoteNotificationProvider,
   });
 
-
   final Observable<bool> isBalancesLoading = Observable(false);
   final Observable<bool> isError = Observable(false);
 
   final Observable<bool> isStateUpdated = Observable(false);
 
   final Observable<List<Balance>> balancesList = Observable([]);
-
-  final Observable<CredentialsStorageFailure?> loadWalletsFailureObservable = Observable(null);
 
   final Observable<bool> areWalletsLoadingObservable = Observable(false);
 
@@ -100,7 +96,7 @@ class WalletsStoreImp implements WalletsStore {
 
     accountProvider.accountPublicInfo = creds.publicInfo;
     await repository.saveMnemonic(mnemonic);
-    
+
     await repository.setUserIdentifierInAnalytics(address: creds.publicInfo.publicAddress);
     crashlyticsHelper.setUserIdentifier(identifier: creds.publicInfo.publicAddress);
     return Right(creds.publicInfo);
@@ -132,7 +128,6 @@ class WalletsStoreImp implements WalletsStore {
       return SdkIpcResponse.success(sender: '', data: result.getOrElse(() => TransactionResponse.initial()).hash, transaction: '');
     } catch (error) {
       await deleteAccountCredentials(customTransactionSigningGateway, walletCreationModel.creds.publicInfo);
-      log(error.toString());
       crashlyticsHelper.recordFatalError(error: error.toString());
     }
     return SdkIpcResponse.failure(sender: '', error: LocaleKeys.account_creation_failed.tr(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
@@ -600,45 +595,47 @@ class WalletsStoreImp implements WalletsStore {
 
   @override
   Future<Either<Failure, AccountPublicInfo>> importPylonsAccount({required String mnemonic}) async {
-    final baseEnv = getBaseEnv();
-    final transactionSigningGateway = getTransactionSigningGateway();
+    try {
+      final baseEnv = getBaseEnv();
+      final transactionSigningGateway = getTransactionSigningGateway();
 
-    final wallet = alan.Wallet.derive(mnemonic.split(" "), baseEnv.networkInfo);
+      final wallet = alan.Wallet.derive(mnemonic.split(" "), baseEnv.networkInfo);
 
-    final getUsernameBasedOnAddress = await repository.getUsername(address: wallet.bech32Address);
+      final getUsernameBasedOnAddress = await repository.getUsername(address: wallet.bech32Address);
 
-    if (getUsernameBasedOnAddress.isLeft()) {
-      return Left(getUsernameBasedOnAddress.swap().toOption().toNullable()!);
+      if (getUsernameBasedOnAddress.isLeft()) {
+        return Left(getUsernameBasedOnAddress.swap().toOption().toNullable()!);
+      }
+
+      final userName = getUsernameBasedOnAddress.getOrElse(() => '');
+
+      final creds = AlanPrivateAccountCredentials(
+        publicInfo: AccountPublicInfo(
+          chainId: baseEnv.chainId,
+          name: userName,
+          publicAddress: wallet.bech32Address,
+          accountId: userName,
+        ),
+        mnemonic: mnemonic,
+      );
+
+      await transactionSigningGateway.storeAccountCredentials(
+        credentials: creds,
+        password: '',
+      );
+
+      accountProvider.accountPublicInfo = creds.publicInfo;
+
+      await repository.setUserIdentifierInAnalytics(address: creds.publicInfo.publicAddress);
+      crashlyticsHelper.setUserIdentifier(identifier: creds.publicInfo.publicAddress);
+
+      await repository.saveMnemonic(mnemonic);
+      await repository.doesStripeAccountExistsFromServer(address: creds.publicInfo.publicAddress);
+
+      return Right(creds.publicInfo);
+    } catch (e) {
+      return Left(WalletCreationFailure(LocaleKeys.wallet_creation_failed.tr()));
     }
-
-    final userName = getUsernameBasedOnAddress.getOrElse(() => '');
-
-    final creds = AlanPrivateAccountCredentials(
-      publicInfo: AccountPublicInfo(
-        chainId: baseEnv.chainId,
-        name: userName,
-        publicAddress: wallet.bech32Address,
-        accountId: userName,
-      ),
-      mnemonic: mnemonic,
-    );
-
-    await transactionSigningGateway.storeAccountCredentials(
-      credentials: creds,
-      password: '',
-    );
-
-    accountProvider.accountPublicInfo = creds.publicInfo;
-
-    
-    
-    await repository.setUserIdentifierInAnalytics(address: creds.publicInfo.publicAddress);
-    crashlyticsHelper.setUserIdentifier(identifier: creds.publicInfo.publicAddress);
-
-    await repository.saveMnemonic(mnemonic);
-    await repository.doesStripeAccountExistsFromServer(address: creds.publicInfo.publicAddress);
-
-    return Right(creds.publicInfo);
   }
 
   @override
