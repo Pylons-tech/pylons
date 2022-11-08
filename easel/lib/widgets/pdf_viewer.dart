@@ -13,10 +13,13 @@ import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:easel_flutter/utils/route_util.dart';
 import 'package:easel_flutter/widgets/pdf_viewer_full_half_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../generated/locale_keys.g.dart';
@@ -37,8 +40,13 @@ class PdfViewer extends StatefulWidget {
 class _PdfViewerState extends State<PdfViewer> {
   EaselProvider get easelProvider => GetIt.I.get();
 
-  late PDFDocument doc;
+  late String doc;
   bool _isLoading = true;
+
+  final Completer<PDFViewController> _controller =
+  Completer<PDFViewController>();
+  int? pages = 0;
+  bool isReady = false;
 
   String errorMsg = "";
   @override
@@ -58,12 +66,32 @@ class _PdfViewerState extends State<PdfViewer> {
       return;
     }
     if (widget.file != null) {
-      doc = await PDFDocument.fromFile(widget.file!);
+      doc = widget.file!.path;
+      _isLoading = false;
+      setState(() {});
     } else {
-      doc = await PDFDocument.fromURL(widget.fileUrl!);
+      final Completer<File> completer = Completer();
+      try {
+          final url = widget.fileUrl!;
+          final filename = url.substring(url.lastIndexOf("/") + 1);
+          final request = await HttpClient().getUrl(Uri.parse(url));
+          final response = await request.close();
+          final bytes = await consolidateHttpClientResponseBytes(response);
+          final dir = await getApplicationDocumentsDirectory();
+          final File file = File("${dir.path}/$filename");
+
+          await file.writeAsBytes(bytes, flush: true);
+          completer.complete(file);
+        } catch (e) {
+          throw Exception('Error parsing asset file!');
+        }
+
+        final File file = await completer.future;
+        doc = file.path;
+        _isLoading = false;
+        setState(() {});
     }
-    _isLoading = false;
-    setState(() {});
+
   }
 
   @override
@@ -80,16 +108,30 @@ class _PdfViewerState extends State<PdfViewer> {
                   )
                 : Padding(
                     padding: EdgeInsets.only(top: 100.h, bottom: 145.h),
-                    child: PDFViewer(
-                      document: doc,
-                      showNavigation: false,
-                      showPicker: false,
-                      progressIndicator: SizedBox(
-                        height: 50.0.h,
-                        child: Image.asset(
-                          kLoadingGif,
-                        ),
-                      ),
+                    child:
+                    // PDFViewer(
+                    //   document: doc,
+                    //   showNavigation: false,
+                    //   showPicker: false,
+                    //   progressIndicator: SizedBox(
+                    //     height: 50.0.h,
+                    //     child: Image.asset(
+                    //       kLoadingGif,
+                    //     ),
+                    //   ),
+                    // ),
+                    PDFView(
+                      filePath: doc,
+                      swipeHorizontal: true,
+                      onRender: (_pages) {
+                        setState(() {
+                          pages = _pages;
+                          isReady = true;
+                        });
+                      },
+                      onViewCreated: (PDFViewController pdfViewController) {
+                        _controller.complete(pdfViewController);
+                      },
                     ),
                   );
           },
@@ -109,17 +151,31 @@ class _PdfViewerState extends State<PdfViewer> {
                             )
                           : Stack(
                               children: [
-                                PDFViewer(
-                                  document: doc,
-                                  showNavigation: false,
-                                  showPicker: false,
-                                  progressIndicator: SizedBox(
-                                    height: 50.0.h,
-                                    child: Image.asset(
-                                      kLoadingGif,
-                                    ),
-                                  ),
+                                // PDFViewer(
+                                //   document: doc,
+                                //   showNavigation: false,
+                                //   showPicker: false,
+                                //   progressIndicator: SizedBox(
+                                //     height: 50.0.h,
+                                //     child: Image.asset(
+                                //       kLoadingGif,
+                                //     ),
+                                //   ),
+                                // ),
+                                PDFView(
+                                  filePath: doc,
+                                  swipeHorizontal: true,
+                                  onRender: (_pages) {
+                                    setState(() {
+                                      pages = _pages;
+                                      isReady = true;
+                                    });
+                                  },
+                                  onViewCreated: (PDFViewController pdfViewController) {
+                                    _controller.complete(pdfViewController);
+                                  },
                                 ),
+
                                 _buildPdfFullScreenIcon()
                               ],
                             )),
