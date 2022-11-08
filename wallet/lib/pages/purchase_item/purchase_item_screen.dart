@@ -97,6 +97,7 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
               return false;
             },
             child: AcceptPoliciesBottomSheet(
+              key: const Key(kAcceptBottomSheetKey),
               onGetStarted: () {
                 viewModel.setUserAcceptPolicies();
                 Navigator.of(context).pop();

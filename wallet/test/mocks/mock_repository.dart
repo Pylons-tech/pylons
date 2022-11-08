@@ -551,4 +551,14 @@ class MockRepository extends Repository {
   Future<Either<Failure, void>> logUserJourney({required String screenName}) async {
     return const Right(null);
   }
+
+  @override
+  Either<Failure, bool> getUserAcceptPolicies() {
+    return const Right(true);
+  }
+
+  @override
+  Future<Either<Failure, bool>> saveUserAcceptPolicies() {
+    return Future.value(const Right(true));
+  }
 }

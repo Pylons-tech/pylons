@@ -61,7 +61,7 @@ class AcceptPoliciesBottomSheet extends StatelessWidget {
                             height: 25.0.h,
                           ),
                           PylonsGetStartedButton(
-                            key: ValueKey(viewModel.isCheckTermServices && viewModel.isCheckPrivacyPolicy),
+                            key: const Key(kAcceptBottomSheetBtnKey),
                             enabled: viewModel.isCheckTermServices && viewModel.isCheckPrivacyPolicy,
                             onTap: onGetStarted,
                             text: LocaleKeys.get_started.tr(),

@@ -452,3 +452,5 @@ const String kProgressKey = "Progress";
 const String kImageAssetKey = "image_asset_key";
 const String kShareNftButtonCollapsedKey = "share_nft_collapsed";
 const String kShareNftButtonExpandedKey = "share_nft_expanded";
+const String kAcceptBottomSheetKey = "accept_bottom_sheet";
+const String kAcceptBottomSheetBtnKey = "accept_bottom_sheet_btn";

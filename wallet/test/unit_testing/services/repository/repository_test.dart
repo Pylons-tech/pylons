@@ -20,68 +20,46 @@ void main() {
   GetIt.I.registerSingleton<LocalDataSource>(localdataSource);
 
   test('test CreatePaymentIntent', () async {
-    final req = StripeCreatePaymentIntentRequest(
-        address: MOCK_ADDRESS,
-        coinInputIndex: 0,
-        productID:
-            'recipe/cookbook_for_test_stripe_5/cookbook_for_test_stripe_5');
+    final req = StripeCreatePaymentIntentRequest(address: MOCK_ADDRESS, coinInputIndex: 0, productID: 'recipe/cookbook_for_test_stripe_5/cookbook_for_test_stripe_5');
     final response = await mockRepository.CreatePaymentIntent(req);
-    expect(true,
-        response.getOrElse(() => StripeCreatePaymentIntentResponse()).success);
+    expect(true, response.getOrElse(() => StripeCreatePaymentIntentResponse()).success);
   });
 
   test('test GeneratePaymentReceipt', () async {
-    final req = StripeGeneratePaymentReceiptRequest(
-        clientSecret: '', paymentIntentID: '');
+    final req = StripeGeneratePaymentReceiptRequest(clientSecret: '', paymentIntentID: '');
     final response = await mockRepository.GeneratePaymentReceipt(req);
-    expect(
-        true,
-        response
-            .getOrElse(() => StripeGeneratePaymentReceiptResponse())
-            .success);
+    expect(true, response.getOrElse(() => StripeGeneratePaymentReceiptResponse()).success);
   });
 
   test('test GenerateRegistrationToken', () async {
     const address = MOCK_ADDRESS;
 
     final response = await mockRepository.GenerateRegistrationToken(address);
-    expect(
-        true,
-        response
-            .getOrElse(() => StripeGenerateRegistrationTokenResponse())
-            .success);
+    expect(true, response.getOrElse(() => StripeGenerateRegistrationTokenResponse()).success);
   });
 
   test('test RegisterAccount', () async {
-    final req = StripeRegisterAccountRequest(
-        Signature: '', Address: MOCK_ADDRESS, Token: '');
+    final req = StripeRegisterAccountRequest(Signature: '', Address: MOCK_ADDRESS, Token: '');
     final response = await mockRepository.RegisterAccount(req);
-    expect(true,
-        response.getOrElse(() => StripeRegisterAccountResponse()).success);
+    expect(true, response.getOrElse(() => StripeRegisterAccountResponse()).success);
   });
 
   test('test GenerateUpdateToken', () async {
     final response = await mockRepository.GenerateUpdateToken(MOCK_ADDRESS);
-    expect(true,
-        response.getOrElse(() => StripeGenerateUpdateTokenResponse()).success);
+    expect(true, response.getOrElse(() => StripeGenerateUpdateTokenResponse()).success);
   });
 
   test('test UpdateAccount', () async {
-    final req = StripeUpdateAccountRequest(
-        Signature: '', Address: MOCK_ADDRESS, Token: '');
+    final req = StripeUpdateAccountRequest(Signature: '', Address: MOCK_ADDRESS, Token: '');
     final response = await mockRepository.UpdateAccount(req);
-    expect(
-        true, response.getOrElse(() => StripeUpdateAccountResponse()).success);
+    expect(true, response.getOrElse(() => StripeUpdateAccountResponse()).success);
   });
 
   test('test GeneratePayoutToken', () async {
-    final req =
-        StripeGeneratePayoutTokenRequest(address: '', amount: Int64.ONE);
+    final req = StripeGeneratePayoutTokenRequest(address: '', amount: Int64.ONE);
     final response = await mockRepository.GeneratePayoutToken(req);
-    expect(true,
-        response.getOrElse(() => StripeGeneratePayoutTokenResponse()).success);
+    expect(true, response.getOrElse(() => StripeGeneratePayoutTokenResponse()).success);
   });
-
 
   test('test GetAccountLink', () async {
     final req = StripeAccountLinkRequest(Signature: '', Account: '');
@@ -89,11 +67,8 @@ void main() {
     expect(true, response.getOrElse(() => StripeAccountLinkResponse()).success);
   });
 
-  test(
-      'should get account link and account on  getAccountLinkBasedOnUpdateToken',
-      () async {
-    final response = await mockRepository
-        .getAccountLinkBasedOnUpdateToken(MOCK_STRIPE_UPDATE_ACCOUNT_REQUEST);
+  test('should get account link and account on  getAccountLinkBasedOnUpdateToken', () async {
+    final response = await mockRepository.getAccountLinkBasedOnUpdateToken(MOCK_STRIPE_UPDATE_ACCOUNT_REQUEST);
 
     expect(true, response.isRight());
     expect(true, response.toOption().toNullable()!.success);
@@ -101,14 +76,26 @@ void main() {
     expect(MOCK_ACCOUNT, response.toOption().toNullable()!.account);
   });
 
-  test('should get account link and account on  getLoginLinkBasedOnAddress',
-      () async {
-    final response = await mockRepository
-        .getLoginLinkBasedOnAddress(MOCK_STRIPE_LOGIN_BASED_ADDRESS_REQUEST);
+  test('should get account link and account on  getLoginLinkBasedOnAddress', () async {
+    final response = await mockRepository.getLoginLinkBasedOnAddress(MOCK_STRIPE_LOGIN_BASED_ADDRESS_REQUEST);
 
     expect(true, response.isRight());
     expect(true, response.toOption().toNullable()!.success);
     expect(MOCK_ACCOUNT_LINK, response.toOption().toNullable()!.accountlink);
     expect(MOCK_ACCOUNT, response.toOption().toNullable()!.account);
+  });
+
+  test('should get weather user getting do i accept policy or not', () {
+    final response = mockRepository.getUserAcceptPolicies();
+
+    expect(true, response.isRight());
+    expect(true, response.getOrElse(() => false));
+  });
+
+  test('should system save that user accepted policies or not', () async {
+    final response = await mockRepository.saveUserAcceptPolicies();
+
+    expect(true, response.isRight());
+    expect(true, response.getOrElse(() => false));
   });
 }
