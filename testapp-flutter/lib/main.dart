@@ -1,7 +1,10 @@
 import 'dart:developer';
+import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 import 'package:fixnum/fixnum.dart';
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,13 +25,13 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    PylonsWallet.instance.exists().then((exists) {
-      if (!exists) {
-        PylonsWallet.instance.goToInstall();
-      } else {
-        Cookbook.load("appTestCookbook");
-      }
-    });
+    () async {
+      PylonsWallet.instance.exists().then((exists) async {
+        if (!exists) {
+          PylonsWallet.instance.goToInstall();
+        }
+      });
+    };
   }
 
   @override
@@ -57,6 +60,32 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool showTopLevelMenu = true;
   String flavorText = "";
+  Item? character;
+  int swordLv = 0;
+  int coins = 0;
+  int shards = 0;
+  int curHp = 0;
+
+  @override
+  void initState () {
+    super.initState();
+    if (kDebugMode) {
+      print ("initState");
+    }
+    Cookbook.load("appTestCookbook").then((value) {
+      _checkCharacter().then((value) async {
+        if (kDebugMode) {
+          print ("character exiss: ${character != null}");
+        }
+        if (character == null) {
+          await _generateCharacter();
+          if (kDebugMode) {
+            print ("after generate - character exiss: ${character != null}");
+          }
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +95,14 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: SingleChildScrollView(
-        child: showTopLevelMenu ? topLevelMenu() : Container(),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text("HP: $curHp/20 | Sword level $swordLv | $coins coins | $shards shards", style: const TextStyle(fontSize: 18),),
+              const Divider(),
+              showTopLevelMenu ? topLevelMenu() : Container(),
+        ])
       ),
     );
   }
@@ -76,11 +112,10 @@ class _MyHomePageState extends State<MyHomePage> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text("HP: 20/20 | Sword level 0 | 99 gold | 99 shards", style: TextStyle(fontSize: 18),),
-        const Divider(),
+
         ElevatedButton(
           onPressed: () async {
-
+            Cookbook.recipes();
           },
           child: const Text('Fight a goblin!'),
         ),
@@ -118,4 +153,49 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Future<void> _checkCharacter() async {
+    flavorText = ("Checking character...");
+
+    if (kDebugMode) {
+      print("getting profile");
+    }
+    final prf = await Profile.get();
+    if (kDebugMode) {
+      print ("got profile");
+    }
+    if (prf == null) throw Exception("HANDLE THIS");
+    if (kDebugMode) {
+      print ("(ok!)");
+    }
+    var lastUpdate = Int64.MIN_VALUE;
+    for (var item in prf.items) {
+      if (item.getString("entityType") == "character" &&
+          !(item.getInt("currentHp")?.isZero ?? true)) {
+        if (item.getLastUpdate() > lastUpdate) {
+          character = item;
+          lastUpdate = item.getLastUpdate();
+        }
+      }
+    }
+
+    if (kDebugMode) {
+      print ("got character!");
+    }
+
+    swordLv = character?.getInt("swordLevel")?.toInt() ?? 0;
+    coins = character?.getInt("coins")?.toInt() ?? 0;
+    shards = character?.getInt("shards")?.toInt() ?? 0;
+    curHp = character?.getInt("currentHp")?.toInt() ?? 0;
+  }
+
+  Future<void> _generateCharacter() async {
+    flavorText = "Generating character...";
+    final recipe = await Recipe.get("RecipeTestAppGetCharacter");
+    if (recipe == null) throw Exception("todo: handle this");
+    final exec = await recipe.executeWith([]).onError((error, stackTrace) {
+      throw Exception("character generation tx should not fail");
+    });
+    final itemId = exec.getItemOutputIds().first;
+    character = await Item.get(itemId);
+  }
 }

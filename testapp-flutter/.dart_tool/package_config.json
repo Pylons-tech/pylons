@@ -134,6 +134,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "mutex",
+      "rootUri": "file:///D:/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/mutex-3.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "path",
       "rootUri": "file:///D:/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.2",
       "packageUri": "lib/",
@@ -290,7 +296,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2022-11-09T17:46:19.493264Z",
+  "generated": "2022-11-09T18:29:17.447186Z",
   "generator": "pub",
   "generatorVersion": "2.18.2"
 }
