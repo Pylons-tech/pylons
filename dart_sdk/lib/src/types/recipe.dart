@@ -42,7 +42,8 @@ class Recipe {
         recipeName: _native.name,
         itemIds: List.unmodifiable(ids),
         coinInputIndex: 0,
-        paymentInfo: List.unmodifiable(infos));
+        paymentInfo: List.unmodifiable(infos),
+        requestResponse: true);
     if (lowLevel.success) {
       return Execution(lowLevel.data!);
     } else {
