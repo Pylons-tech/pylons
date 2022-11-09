@@ -84,7 +84,7 @@ func CreateUpgradeHandler(
 			BurnToken(ctx, types.StakingCoinDenom, accKeeper, &bankBaseKeeper, staking)
 			BurnToken(ctx, types.StripeCoinDenom, accKeeper, &bankBaseKeeper, staking)
 			MintUbedrockForInitialAccount(ctx, &bankBaseKeeper, staking)
-			CleanUplyons(ctx, &bankBaseKeeper, pylons)
+			CleanUpylons(ctx, &bankBaseKeeper, pylons)
 		}
 		return mm.RunMigrations(ctx, configurator, fromVM)
 	}
@@ -223,7 +223,7 @@ func GetbackCoinFromVal(ctx sdk.Context, accAddr sdk.AccAddress, staking *stakin
 	}
 }
 
-func CleanUplyons(ctx sdk.Context, bank *bankkeeper.BaseKeeper, pylons *pylonskeeper.Keeper) {
+func CleanUpylons(ctx sdk.Context, bank *bankkeeper.BaseKeeper, pylons *pylonskeeper.Keeper) {
 	accs := bank.GetAccountsBalances(ctx)
 	for _, acc := range accs {
 		balance := acc.Coins.AmountOf(types.PylonsCoinDenom)
@@ -260,7 +260,7 @@ func MintValidUpylons(ctx sdk.Context, pylons *pylonskeeper.Keeper) error {
 	return nil
 }
 
-// Mint uplyons for address with valid (with IAP))
+// Mint upylons for address with valid (with IAP))
 func MintValidUpylonsGoogleIAP(ctx sdk.Context, pylons *pylonskeeper.Keeper) error {
 	for _, googleIAPOder := range pylons.GetAllGoogleIAPOrder(ctx) {
 		amountUpylons := GetAmountOfUpylonsMintedByProductID(ctx, googleIAPOder.ProductId)
@@ -275,7 +275,7 @@ func MintValidUpylonsGoogleIAP(ctx sdk.Context, pylons *pylonskeeper.Keeper) err
 	return nil
 }
 
-// Mint uplyons for address with valid (with IAP))
+// Mint upylons for address with valid (with IAP))
 func MintValidUpylonsAppleIAP(ctx sdk.Context, pylons *pylonskeeper.Keeper) error {
 	for _, appleIAPOder := range pylons.GetAllAppleIAPOrder(ctx) {
 		amountUpylons := GetAmountOfUpylonsMintedByProductID(ctx, appleIAPOder.ProductId)

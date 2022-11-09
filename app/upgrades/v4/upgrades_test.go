@@ -132,7 +132,7 @@ func (suite *UpgradeTestSuite) TestMintUbedrockForInitialAccount() {
 	suite.Require().Equal(bondedModuleAmount.Amount, totalDelegateAmount)
 }
 
-func (suite *UpgradeTestSuite) TestCleanUplyons() {
+func (suite *UpgradeTestSuite) TestCleanUpylons() {
 	suite.Setup()
 
 	productID := "pylons_10"
@@ -140,7 +140,7 @@ func (suite *UpgradeTestSuite) TestCleanUplyons() {
 	amountOfCoinsTest := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10_000_000)))
 
 	//create Google IAP order and test addresses
-	items := suite.setUpGoogleIAPOder(suite.Ctx, 2, productID)
+	items := suite.setUpGoogleIAPOrder(suite.Ctx, 2, productID)
 	testAddrs := suite.setUpTestAddrs(5)
 
 	for _, tc := range []struct {
@@ -148,15 +148,15 @@ func (suite *UpgradeTestSuite) TestCleanUplyons() {
 		amount int
 	}{
 		{
-			desc:   "Balance of account with valid's uplyons is smaller than amount of valid uplyons issued",
+			desc:   "Balance of account with valid's upylons is smaller than amount of valid upylons issued",
 			amount: amountValid - 5_000_000,
 		},
 		{
-			desc:   "Balance of account with valid's uplyons is equal to amount of valid uplyons issued",
+			desc:   "Balance of account with valid's upylons is equal to amount of valid upylons issued",
 			amount: amountValid,
 		},
 		{
-			desc:   "Balance of account with valid's uplyons is greater than amount of valid uplyons issued",
+			desc:   "Balance of account with valid's upylons is greater than amount of valid upylons issued",
 			amount: amountValid + 5_000_000,
 		},
 	} {
@@ -175,13 +175,13 @@ func (suite *UpgradeTestSuite) TestCleanUplyons() {
 				suite.Require().NoError(err)
 			}
 			bankBaseKeeper, _ := suite.App.BankKeeper.(bankkeeper.BaseKeeper)
-			v4.CleanUplyons(suite.Ctx, &bankBaseKeeper, &suite.App.PylonsKeeper)
-			// check balances of test addreses after clean upylons
+			v4.CleanUpylons(suite.Ctx, &bankBaseKeeper, &suite.App.PylonsKeeper)
+			// check balances of test addresses after clean upylons
 			for _, addr := range testAddrs {
 				check := suite.App.BankKeeper.GetBalance(suite.Ctx, addr, types.PylonsCoinDenom)
 				suite.Require().Equal(check.Amount, sdk.ZeroInt())
 			}
-			// check balances of valid addreses after clean upylons
+			// check balances of valid addresses after clean upylons
 			for _, item := range items {
 				addr, _ := sdk.AccAddressFromBech32(item.Creator)
 				accAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, addr, types.PylonsCoinDenom)
@@ -192,7 +192,7 @@ func (suite *UpgradeTestSuite) TestCleanUplyons() {
 }
 
 // set up googleIAPOder
-func (suite *UpgradeTestSuite) setUpGoogleIAPOder(ctx sdk.Context, n int, productID string) []types.GoogleInAppPurchaseOrder {
+func (suite *UpgradeTestSuite) setUpGoogleIAPOrder(ctx sdk.Context, n int, productID string) []types.GoogleInAppPurchaseOrder {
 	items := make([]types.GoogleInAppPurchaseOrder, n)
 	creators := types.GenTestBech32List(n)
 	for i := range items {
@@ -204,7 +204,7 @@ func (suite *UpgradeTestSuite) setUpGoogleIAPOder(ctx sdk.Context, n int, produc
 	return items
 }
 
-// set up test addreses
+// set up test addresses
 func (suite *UpgradeTestSuite) setUpTestAddrs(n int) []sdk.AccAddress {
 	testAddrs := make([]sdk.AccAddress, n)
 	for id := range testAddrs {
