@@ -310,13 +310,16 @@ func GetAmountOfUpylonsMintedByProductID(ctx sdk.Context, productID string) math
 func RefundLuxFloralis(ctx sdk.Context, pylons *pylonskeeper.Keeper) {
 	// Get all execute recipe history by cookbookid and recipe id
 	histories := pylons.GetAllExecuteRecipeHis(ctx, LuxFloralisCookBookID, LuxFloralisRecipeID)
-
-	// Looping execute recipe history to get sender address
+	coinSlice := sdk.Coins{}
+	address := histories[0].Receiver
+	// Looping execute recipe history to get amount
 	for _, history := range histories {
 		amount, _ := sdk.ParseCoinsNormalized(history.Amount)
-		err := pylons.MintCoinsToAddr(ctx, sdk.AccAddress(history.Sender), amount)
-		if err != nil {
-			panic(err)
-		}
+		coinSlice = append(coinSlice, amount...)
 	}
+	err := pylons.MintCoinsToAddr(ctx, sdk.AccAddress(address), coinSlice)
+	if err != nil {
+		panic(err)
+	}
+
 }
