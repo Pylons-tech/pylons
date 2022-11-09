@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart'
     as clipper;
@@ -108,19 +107,7 @@ class _PdfViewerState extends State<PdfViewer> with WidgetsBindingObserver {
                   )
                 : Padding(
                     padding: EdgeInsets.only(top: 100.h, bottom: 145.h),
-                    child:
-                    // PDFViewer(
-                    //   document: doc,
-                    //   showNavigation: false,
-                    //   showPicker: false,
-                    //   progressIndicator: SizedBox(
-                    //     height: 50.0.h,
-                    //     child: Image.asset(
-                    //       kLoadingGif,
-                    //     ),
-                    //   ),
-                    // ),
-                    PDFView(
+                    child: PDFView(
                       filePath: doc,
                       swipeHorizontal: true,
                       onRender: (pgs) {
@@ -151,17 +138,6 @@ class _PdfViewerState extends State<PdfViewer> with WidgetsBindingObserver {
                             )
                           : Stack(
                               children: [
-                                // PDFViewer(
-                                //   document: doc,
-                                //   showNavigation: false,
-                                //   showPicker: false,
-                                //   progressIndicator: SizedBox(
-                                //     height: 50.0.h,
-                                //     child: Image.asset(
-                                //       kLoadingGif,
-                                //     ),
-                                //   ),
-                                // ),
                                 PDFView(
                                   filePath: doc,
                                   swipeHorizontal: true,
