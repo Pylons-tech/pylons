@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -148,12 +147,6 @@ class _MyHomePageState extends State<MyHomePage> {
             await _upgradeSword();
           },
           child: const Text('Upgrade your sword!'),
-        ),
-        ElevatedButton(
-          onPressed: () async {
-
-          },
-          child: const Text('Rest and recover!'),
         ),
         ElevatedButton(
           onPressed: () async {
