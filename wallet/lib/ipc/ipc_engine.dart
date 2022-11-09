@@ -156,11 +156,17 @@ class IPCEngine {
     if (isOwnerIsViewing(nullableNFT, currentWallets)) {
       await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nullableNFT);
     } else {
+      if (!getUserAcceptPolicies()) {
+        await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_ACCEPT_POLICY, arguments: nullableNFT);
+        return;
+      }
       await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: nullableNFT);
     }
 
     walletsStore.setStateUpdatedFlag(flag: true);
   }
+
+  bool getUserAcceptPolicies() => repository.getUserAcceptPolicies().getOrElse(() => false);
 
   bool isOwnerIsViewing(NFT nullableNFT, List<AccountPublicInfo> currentWallets) => nullableNFT.ownerAddress == currentWallets.last.publicAddress;
 
@@ -215,7 +221,6 @@ class IPCEngine {
     } else {
       final item = await NFT.fromItem(recipeResult);
       await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: item);
-
       walletsStore.setStateUpdatedFlag(flag: true);
     }
   }

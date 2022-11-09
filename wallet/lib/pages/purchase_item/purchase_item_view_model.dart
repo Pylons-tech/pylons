@@ -97,13 +97,8 @@ class PurchaseItemViewModel extends ChangeNotifier {
     repository.logPurchaseItem(recipeId: nft.recipeID, recipeName: nft.name, author: nft.creator, purchasePrice: double.parse(nft.price) / kBigIntBase);
   }
 
-  void setUserAcceptPolicies() {
-    repository.saveUserAcceptPolicies();
-  }
 
-  bool getUserAcceptPolicies() {
-    return repository.getUserAcceptPolicies().getOrElse(() => false);
-  }
+
 
   void initializeData() {
     nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
-
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -20,7 +19,6 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart'
 import 'package:pylons_wallet/pages/gestures_for_detail_screen.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
-import 'package:pylons_wallet/pages/purchase_item/widgets/accept_policy_bottom_sheet.dart';
 import 'package:pylons_wallet/pages/purchase_item/clipper/buy_now_clipper.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart' show PurchaseItemViewModel;
 import 'package:pylons_wallet/pages/purchase_item/widgets/buy_nft_button.dart';
@@ -63,7 +61,6 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
     viewModel.logEvent();
     scheduleMicrotask(() {
       viewModel.initializeData();
-      _showPolicyBottomSheet();
     });
   }
 
@@ -78,20 +75,6 @@ class _PurchaseItemScreenState extends State<PurchaseItemScreen> {
           },
           child: const PurchaseItemContent()),
     );
-  }
-
-  Future<void> _showPolicyBottomSheet() async {
-    if (viewModel.getUserAcceptPolicies()) {
-      return;
-    }
-    final acceptPolicyBottomSheet = AcceptPolicyBottomSheet(
-      onGetStarted: () {
-        viewModel.setUserAcceptPolicies();
-        Navigator.of(context).pop();
-      },
-      context: context,
-    );
-    acceptPolicyBottomSheet.show();
   }
 }
 

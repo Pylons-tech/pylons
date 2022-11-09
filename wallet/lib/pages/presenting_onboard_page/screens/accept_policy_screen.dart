@@ -1,0 +1,248 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
+import 'package:pylons_wallet/components/buttons/pylons_get_started_button.dart';
+import 'package:pylons_wallet/components/pylons_app_theme.dart';
+import 'package:pylons_wallet/generated/locale_keys.g.dart';
+import 'package:pylons_wallet/model/nft.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
+import 'package:pylons_wallet/pages/presenting_onboard_page/viewmodel/accept_policy_viewmodel.dart';
+import 'package:pylons_wallet/pylons_app.dart';
+import 'package:pylons_wallet/utils/clipper_utils.dart';
+import 'package:pylons_wallet/utils/constants.dart';
+import 'package:pylons_wallet/utils/enums.dart';
+import 'package:pylons_wallet/utils/image_util.dart';
+import 'package:pylons_wallet/utils/route_util.dart';
+import 'package:pylons_wallet/utils/svg_util.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+class AcceptPolicyScreen extends StatefulWidget {
+  final NFT nft;
+
+  const AcceptPolicyScreen({Key? key, required this.nft}) : super(key: key);
+
+  @override
+  State<AcceptPolicyScreen> createState() => _AcceptPolicyScreenState();
+}
+
+class _AcceptPolicyScreenState extends State<AcceptPolicyScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          SizedBox.expand(
+            child: getTypeWidget(
+              widget.nft,
+            ),
+          ),
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            color: Colors.grey.withOpacity(0.3),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 8, right: 8, bottom: 8, top: MediaQuery.of(context).viewPadding.top),
+            child: SizedBox(
+              height: 100.h,
+              width: double.infinity,
+              child: ListTile(
+                leading: SvgPicture.asset(
+                  SVGUtil.OWNER_BACK_ICON,
+                  height: 25.h,
+                ),
+                trailing: SvgPicture.asset(
+                  SVGUtil.OWNER_REPORT,
+                  height: 25.h,
+                ),
+              ),
+            ),
+          ),
+          ChangeNotifierProvider.value(
+            value: GetIt.I.get<AcceptPolicyViewModel>(),
+            builder: (context, child) {
+              return Consumer<AcceptPolicyViewModel>(
+                builder: (context, viewModel, child) {
+                  return Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ClipPath(
+                      clipper: LeftRightTopClipper(),
+                      child: Container(
+                        height: 0.33.sh,
+                        width: double.infinity,
+                        color: AppColors.kMainBG,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 60.h,
+                              child: Image.asset(
+                                ImageUtil.PYLONS_LOGO,
+                              ),
+                            ),
+                            MyCheckBox(
+                              LocaleKeys.acknowledge_terms_service.tr(),
+                              isSelected: viewModel.isCheckTermServices,
+                              onChange: (value) {
+                                viewModel.toggleCheckTermServices(value!);
+                              },
+                              onLinkTap: () {
+                                /// TO DO
+                                /// Don't have url of term & services
+                              },
+                            ),
+                            SizedBox(
+                              height: 15.0.h,
+                            ),
+                            MyCheckBox(
+                              LocaleKeys.acknowledge_privacy_policy.tr(),
+                              isSelected: viewModel.isCheckPrivacyPolicy,
+                              onChange: (value) {
+                                viewModel.toggleCheckPrivacyPolicy(value!);
+                              },
+                              onLinkTap: () => launchUrlString(kPrivacyPolicyLink),
+                            ),
+                            SizedBox(
+                              height: 25.0.h,
+                            ),
+                            PylonsGetStartedButton(
+                              key: const Key(kAcceptBottomSheetBtnKey),
+                              enabled: viewModel.isCheckTermServices && viewModel.isCheckPrivacyPolicy,
+                              onTap: () async {
+                                viewModel.setUserAcceptPolicies();
+                                await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: widget.nft);
+                              },
+                              text: LocaleKeys.get_started.tr(),
+                              loader: ValueNotifier(false),
+                              fontWeight: FontWeight.normal,
+                              btnHeight: 40,
+                              btnWidth: 260,
+                              btnUnselectBGColor: AppColors.kDarkDividerColor,
+                              fontSize: 14,
+                              textColor: !(viewModel.isCheckTermServices && viewModel.isCheckPrivacyPolicy) ? AppColors.kUserInputTextColor : AppColors.kWhite,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget getTypeWidget(NFT nft) {
+    switch (nft.assetType) {
+      case AssetType.Image:
+        return imageWidget(nft.url);
+      case AssetType.Audio:
+      case AssetType.Video:
+      case AssetType.Pdf:
+        return imageWidget(nft.thumbnailUrl);
+      case AssetType.ThreeD:
+        return Container(
+          color: Colors.grey.shade200,
+          height: double.infinity,
+          child: Nft3dWidget(
+            url: nft.url,
+            cameraControls: false,
+            backgroundColor: AppColors.kBlack,
+            showLoader: true,
+          ),
+        );
+
+      default:
+        return imageWidget(nft.url);
+    }
+  }
+
+  CachedNetworkImage imageWidget(String url) {
+    return CachedNetworkImage(
+      placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()),
+      imageUrl: url,
+      fit: BoxFit.fill,
+    );
+  }
+}
+
+class MyCheckBox extends StatelessWidget {
+  final String policy;
+  final bool isSelected;
+  final ValueChanged<bool?>? onChange;
+  final VoidCallback onLinkTap;
+
+  const MyCheckBox(
+    this.policy, {
+    required this.isSelected,
+    required this.onChange,
+    required this.onLinkTap,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: Checkbox.width,
+          height: Checkbox.width,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: AppColors.kLightGrey,
+            ),
+            child: Theme(
+              data: ThemeData(
+                unselectedWidgetColor: Colors.transparent,
+              ),
+              child: Checkbox(
+                value: isSelected,
+                onChanged: onChange,
+                activeColor: AppColors.kCheckboxActiveColor,
+                checkColor: Colors.black,
+                materialTapTargetSize: MaterialTapTargetSize.padded,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 15.0.w,
+        ),
+        SizedBox(
+          width: 230.0.w,
+          child: RichText(
+            text: TextSpan(
+              style: TextStyle(color: AppColors.kBlack, fontSize: 12.sp),
+              children: <TextSpan>[
+                TextSpan(
+                  text: LocaleKeys.acknowledge_i_agree_to.tr(),
+                  style: TextStyle(
+                    color: AppColors.kBlack,
+                    fontSize: 15.sp,
+                  ),
+                ),
+                TextSpan(
+                  text: policy,
+                  style: TextStyle(
+                    color: AppColors.kBlue,
+                    fontSize: 15.sp,
+                  ),
+                  recognizer: TapGestureRecognizer()..onTap = onLinkTap,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

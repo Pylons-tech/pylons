@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const app_title = 'app_title';
   static const something_wrong = 'something_wrong';
   static const wallet_retrieving_err_msg = 'wallet_retrieving_err_msg';
@@ -14,6 +14,7 @@ abstract class  LocaleKeys {
   static const select_a_date = 'select_a_date';
   static const what_is_new = 'what_is_new';
   static const trending = 'trending';
+  static const acknowledge_i_agree_to = 'acknowledge_i_agree_to';
   static const price = 'price';
   static const low_to_high = 'low_to_high';
   static const high_to_low = 'high_to_low';
@@ -362,5 +363,4 @@ abstract class  LocaleKeys {
   static const bought_nft = 'bought_nft';
   static const set_lockscreen = 'set_lockscreen';
   static const network_error_description = 'network_error_description';
-
 }

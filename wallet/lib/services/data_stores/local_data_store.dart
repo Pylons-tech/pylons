@@ -183,11 +183,11 @@ abstract class LocalDataSource {
   /// Output: [bool] status of the process is successful or not
   Future<bool> deleteTransactionFailureRecord(int id);
 
-  /// This method will save that user accepts [Terms of Services] & [Privacy Policy]
+  /// This method will save that user accepts Terms of Services & Privacy Policy
   /// Output: [bool] status of operation is successful or not
   Future<bool> saveUserAcceptPolicies();
 
-  /// This method will return that user accepts [Terms of Services] & [Privacy Policy] or not
+  /// This method will return that user accepts Terms of Services & Privacy Policy or not
   /// Output: [bool] user already accept policies ot not
   bool getUserAcceptPolicies();
 }
