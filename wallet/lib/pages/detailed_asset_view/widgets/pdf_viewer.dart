@@ -29,9 +29,7 @@ class _PdfViewerState extends State<PdfViewer> with WidgetsBindingObserver {
   final Completer<PDFViewController> _controller =
   Completer<PDFViewController>();
   int? pages = 0;
-  int? currentPage = 0;
   bool isReady = false;
-  String errorMessage = '';
 
   @override
   void initState() {
