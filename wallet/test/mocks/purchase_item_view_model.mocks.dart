@@ -281,7 +281,7 @@ class MockPurchaseItemViewModel extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-  @override
+  
   set accountPublicInfo(_i14.AccountPublicInfo? _accountPublicInfo) =>
       super.noSuchMethod(
         Invocation.setter(

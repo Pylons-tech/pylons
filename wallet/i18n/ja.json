@@ -358,5 +358,6 @@
   "transaction_date": "取引日",
   "retry": "リトライ",
   "bought_nft": "買った",
-  "resolution": "解像度"
+  "resolution": "解像度",
+  "set_lockscreen": "ロック画面に設定"
 }

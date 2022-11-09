@@ -95,7 +95,7 @@ extension StringExtension on String {
     }
 
     if (length - indexOf(".") > maxLength) {
-      return substring(0, indexOf(".") + maxLength);
+      return substring(0, indexOf(".") + maxLength + 1);
     }
 
     return this;

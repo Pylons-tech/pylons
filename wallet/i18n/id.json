@@ -358,5 +358,6 @@
   "transaction_date": "Tanggal Transaksi",
   "retry": "Mencoba Kembali",
   "bought_nft": "Dibeli",
-  "resolution": "resolusi"
+  "resolution": "resolusi",
+  "set_lockscreen": "Tetapkan sebagai layar kunci"
 }

@@ -358,5 +358,6 @@
   "transaction_date": "Fecha de Transacción",
   "retry": "Rever",
   "bought_nft": "Comprado",
-  "resolution": "resolución"
+  "resolution": "resolución",
+  "set_lockscreen": "Establecer como pantalla de bloqueo"
 }

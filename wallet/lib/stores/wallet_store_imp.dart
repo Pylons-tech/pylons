@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:alan/alan.dart' as alan;
 import 'package:cosmos_utils/credentials_storage_failure.dart';
@@ -20,6 +19,7 @@ import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dar
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
@@ -33,7 +33,6 @@ import 'package:pylons_wallet/utils/custom_transaction_signing_gateaway/custom_t
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
-import 'package:pylons_wallet/utils/token_sender.dart';
 import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
 import 'package:transaction_signing_gateway/model/transaction_hash.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
@@ -43,11 +42,16 @@ import '../generated/locale_keys.g.dart';
 class WalletsStoreImp implements WalletsStore {
   final Repository repository;
   final CrashlyticsHelper crashlyticsHelper;
+  final AccountProvider accountProvider;
+  final RemoteNotificationsProvider remoteNotificationProvider;
 
-  WalletsStoreImp({required this.repository, required this.crashlyticsHelper});
+  WalletsStoreImp({
+    required this.repository,
+    required this.crashlyticsHelper,
+    required this.accountProvider,
+    required this.remoteNotificationProvider,
+  });
 
-  final Observable<bool> isSendMoneyLoading = Observable(false);
-  final Observable<bool> isSendMoneyError = Observable(false);
   final Observable<bool> isBalancesLoading = Observable(false);
   final Observable<bool> isError = Observable(false);
 
@@ -55,26 +59,7 @@ class WalletsStoreImp implements WalletsStore {
 
   final Observable<List<Balance>> balancesList = Observable([]);
 
-  final Observable<CredentialsStorageFailure?> loadWalletsFailureObservable = Observable(null);
-
-  Observable<List<AccountPublicInfo>> wallets = Observable([]);
-
   final Observable<bool> areWalletsLoadingObservable = Observable(false);
-
-  /// This method loads the user stored wallets.
-  @override
-  Future<void> loadWallets() async {
-    final transactionSigningGateway = getTransactionSigningGateway();
-
-    areWalletsLoadingObservable.value = true;
-    final walletsResultEither = await transactionSigningGateway.getAccountsList();
-    walletsResultEither.fold(
-      (fail) => loadWalletsFailureObservable.value = fail,
-      (newWallets) => wallets.value = newWallets,
-    );
-
-    areWalletsLoadingObservable.value = false;
-  }
 
   /// This method creates user wallet and broadcast it in the blockchain
   /// Input: [mnemonic] mnemonic for creating user account, [userName] is the user entered nick name
@@ -109,10 +94,9 @@ class WalletsStoreImp implements WalletsStore {
       return Left(WalletCreationFailure(LocaleKeys.wallet_creation_failed.tr()));
     }
 
-    wallets.value.add(creds.publicInfo);
+    accountProvider.accountPublicInfo = creds.publicInfo;
     await repository.saveMnemonic(mnemonic);
-    final String token = await getRemoteNotificationServiceToken();
-    await repository.updateFcmToken(address: creds.publicInfo.publicAddress, fcmToken: token);
+
     await repository.setUserIdentifierInAnalytics(address: creds.publicInfo.publicAddress);
     crashlyticsHelper.setUserIdentifier(identifier: creds.publicInfo.publicAddress);
     return Right(creds.publicInfo);
@@ -144,7 +128,6 @@ class WalletsStoreImp implements WalletsStore {
       return SdkIpcResponse.success(sender: '', data: result.getOrElse(() => TransactionResponse.initial()).hash, transaction: '');
     } catch (error) {
       await deleteAccountCredentials(customTransactionSigningGateway, walletCreationModel.creds.publicInfo);
-      log(error.toString());
       crashlyticsHelper.recordFatalError(error: error.toString());
     }
     return SdkIpcResponse.failure(sender: '', error: LocaleKeys.account_creation_failed.tr(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
@@ -154,30 +137,6 @@ class WalletsStoreImp implements WalletsStore {
     return customTransactionSigningGateway.deleteAccountCredentials(
       info: info,
     );
-  }
-
-  /// This method sends the money from one address to another
-  /// Input : [WalletPublicInfo] contains the info regarding the current network
-  /// [balance] the amount that we want to send
-  /// [toAddress] the address to which we want to send
-  @override
-  Future<void> sendCosmosMoney(
-    Balance balance,
-    String toAddress,
-  ) async {
-    isSendMoneyLoading.value = true;
-    isSendMoneyError.value = false;
-    final transactionSigningGateway = getTransactionSigningGateway();
-    try {
-      await TokenSender(transactionSigningGateway).sendCosmosMoney(
-        wallets.value.last,
-        balance,
-        toAddress,
-      );
-    } catch (ex) {
-      isError.value = true;
-    }
-    isSendMoneyLoading.value = false;
   }
 
   @override
@@ -245,7 +204,7 @@ class WalletsStoreImp implements WalletsStore {
   @override
   Future<SdkIpcResponse<String>> createCookbook(Map json) async {
     final msgObj = pylons.MsgCreateCookbook.create()..mergeFromProto3Json(json);
-    msgObj.creator = wallets.value.last.publicAddress;
+    msgObj.creator = accountProvider.accountPublicInfo!.publicAddress;
     final sdkResponse = await _signAndBroadcast(msgObj);
     if (!sdkResponse.success) {
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
@@ -261,24 +220,9 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   @override
-  Observable<List<AccountPublicInfo>> getWallets() {
-    return wallets;
-  }
-
-  @override
-  Observable<bool> getAreWalletsLoading() {
-    return areWalletsLoadingObservable;
-  }
-
-  @override
-  Observable<CredentialsStorageFailure?> getLoadWalletsFailure() {
-    return loadWalletsFailureObservable;
-  }
-
-  @override
   Future<SdkIpcResponse> createRecipe(Map json) async {
     final msgObj = pylons.MsgCreateRecipe.create()..mergeFromProto3Json(json);
-    msgObj.creator = wallets.value.last.publicAddress;
+    msgObj.creator = accountProvider.accountPublicInfo!.publicAddress;
     final sdkResponse = await _signAndBroadcast(msgObj);
     if (!sdkResponse.success) {
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
@@ -315,7 +259,7 @@ class WalletsStoreImp implements WalletsStore {
   @override
   Future<SdkIpcResponse> createTrade(Map json) async {
     final msgObj = pylons.MsgCreateTrade.create()..mergeFromProto3Json(json);
-    msgObj.creator = wallets.value.last.publicAddress;
+    msgObj.creator = accountProvider.accountPublicInfo!.publicAddress;
     return _signAndBroadcast(msgObj);
   }
 
@@ -326,7 +270,6 @@ class WalletsStoreImp implements WalletsStore {
 
   @override
   Future<SdkIpcResponse<Execution>> executeRecipe(Map json) async {
-  
     final networkInfo = GetIt.I.get<NetworkInfo>();
 
     final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
@@ -338,24 +281,23 @@ class WalletsStoreImp implements WalletsStore {
     );
 
     if (!await networkInfo.isConnected) {
-      await saveTransactionRecord(transactionHash: "" , transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(sender: '', error: LocaleKeys.no_internet.tr(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
     }
 
     json.remove(kNftName);
     json.remove(kNftCurrency);
     json.remove(kNftPrice);
-    
+
     final msgObj = pylons.MsgExecuteRecipe.create()..mergeFromProto3Json(json);
-    msgObj.creator = wallets.value.last.publicAddress;
+    msgObj.creator = accountProvider.accountPublicInfo!.publicAddress;
     final sdkResponse = await _signAndBroadcast(msgObj);
     if (!sdkResponse.success) {
       await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
     }
 
-    final executionEither = await repository.getExecutionsByRecipeId(recipeId: json["recipeId"].toString(), cookBookId: json["cookbookId"].toString());
-
+    final executionEither = await repository.getExecutionsByRecipeId(recipeId: json[kRecipeIdKey].toString(), cookBookId: json[kCookbookIdKey].toString());
     if (executionEither.isLeft()) {
       await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
@@ -367,14 +309,13 @@ class WalletsStoreImp implements WalletsStore {
     }
 
     await saveTransactionRecord(transactionHash: sdkResponse.data.toString(), transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
-    return SdkIpcResponse.success(
-        data: executionEither.toOption().toNullable()!.completedExecutions.last, sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
+    return SdkIpcResponse.success(data: executionEither.toOption().toNullable()!.completedExecutions.last, sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
   }
 
   @override
   Future<SdkIpcResponse> fulfillTrade(Map json) async {
     final msgObj = pylons.MsgFulfillTrade.create()..mergeFromProto3Json(json);
-    msgObj.creator = wallets.value.last.publicAddress;
+    msgObj.creator = accountProvider.accountPublicInfo!.publicAddress;
     final response = await _signAndBroadcast(msgObj);
     return response;
   }
@@ -446,7 +387,7 @@ class WalletsStoreImp implements WalletsStore {
 
   @override
   Future<Either<Failure, int>> getFaucetCoin({String? denom}) async {
-    return repository.getFaucetCoin(address: wallets.value.last.publicAddress, denom: denom);
+    return repository.getFaucetCoin(address: accountProvider.accountPublicInfo!.publicAddress, denom: denom);
   }
 
   @override
@@ -474,17 +415,17 @@ class WalletsStoreImp implements WalletsStore {
   @override
   Future<SdkIpcResponse> updateRecipe(Map jsonMap) async {
     final msgObj = pylons.MsgUpdateRecipe.create()..mergeFromProto3Json(jsonMap);
-    msgObj.creator = wallets.value.last.publicAddress;
+    msgObj.creator = accountProvider.accountPublicInfo!.publicAddress;
     return _signAndBroadcast(msgObj);
   }
 
   @override
   Future<SdkIpcResponse> getProfile() async {
-    if (wallets.value.isEmpty) {
+    if (accountProvider.accountPublicInfo == null) {
       return SdkIpcResponse.failure(sender: '', error: LocaleKeys.create_profile_before_using.tr(), errorCode: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
     }
 
-    final publicAddress = wallets.value.last.publicAddress;
+    final publicAddress = accountProvider.accountPublicInfo!.publicAddress;
 
     final userNameEither = await repository.getUsername(address: publicAddress);
 
@@ -551,7 +492,7 @@ class WalletsStoreImp implements WalletsStore {
   @override
   Future<SdkIpcResponse> updateCookbook(Map<dynamic, dynamic> jsonMap) async {
     final msgObj = pylons.MsgUpdateCookbook.create()..mergeFromProto3Json(jsonMap);
-    msgObj.creator = wallets.value.last.publicAddress;
+    msgObj.creator = accountProvider.accountPublicInfo!.publicAddress;
     return _signAndBroadcast(msgObj);
   }
 
@@ -654,44 +595,47 @@ class WalletsStoreImp implements WalletsStore {
 
   @override
   Future<Either<Failure, AccountPublicInfo>> importPylonsAccount({required String mnemonic}) async {
-    final baseEnv = getBaseEnv();
-    final transactionSigningGateway = getTransactionSigningGateway();
+    try {
+      final baseEnv = getBaseEnv();
+      final transactionSigningGateway = getTransactionSigningGateway();
 
-    final wallet = alan.Wallet.derive(mnemonic.split(" "), baseEnv.networkInfo);
+      final wallet = alan.Wallet.derive(mnemonic.split(" "), baseEnv.networkInfo);
 
-    final getUsernameBasedOnAddress = await repository.getUsername(address: wallet.bech32Address);
+      final getUsernameBasedOnAddress = await repository.getUsername(address: wallet.bech32Address);
 
-    if (getUsernameBasedOnAddress.isLeft()) {
-      return Left(getUsernameBasedOnAddress.swap().toOption().toNullable()!);
+      if (getUsernameBasedOnAddress.isLeft()) {
+        return Left(getUsernameBasedOnAddress.swap().toOption().toNullable()!);
+      }
+
+      final userName = getUsernameBasedOnAddress.getOrElse(() => '');
+
+      final creds = AlanPrivateAccountCredentials(
+        publicInfo: AccountPublicInfo(
+          chainId: baseEnv.chainId,
+          name: userName,
+          publicAddress: wallet.bech32Address,
+          accountId: userName,
+        ),
+        mnemonic: mnemonic,
+      );
+
+      await transactionSigningGateway.storeAccountCredentials(
+        credentials: creds,
+        password: '',
+      );
+
+      accountProvider.accountPublicInfo = creds.publicInfo;
+
+      await repository.setUserIdentifierInAnalytics(address: creds.publicInfo.publicAddress);
+      crashlyticsHelper.setUserIdentifier(identifier: creds.publicInfo.publicAddress);
+
+      await repository.saveMnemonic(mnemonic);
+      await repository.doesStripeAccountExistsFromServer(address: creds.publicInfo.publicAddress);
+
+      return Right(creds.publicInfo);
+    } catch (e) {
+      return Left(WalletCreationFailure(LocaleKeys.wallet_creation_failed.tr()));
     }
-
-    final userName = getUsernameBasedOnAddress.getOrElse(() => '');
-
-    final creds = AlanPrivateAccountCredentials(
-      publicInfo: AccountPublicInfo(
-        chainId: baseEnv.chainId,
-        name: userName,
-        publicAddress: wallet.bech32Address,
-        accountId: userName,
-      ),
-      mnemonic: mnemonic,
-    );
-
-    await transactionSigningGateway.storeAccountCredentials(
-      credentials: creds,
-      password: '',
-    );
-
-    wallets.value.add(creds.publicInfo);
-    final String fcmToken = await getRemoteNotificationServiceToken();
-    await repository.updateFcmToken(address: creds.publicInfo.publicAddress, fcmToken: fcmToken);
-    await repository.setUserIdentifierInAnalytics(address: creds.publicInfo.publicAddress);
-    crashlyticsHelper.setUserIdentifier(identifier: creds.publicInfo.publicAddress);
-
-    await repository.saveMnemonic(mnemonic);
-    await repository.doesStripeAccountExistsFromServer(address: creds.publicInfo.publicAddress);
-
-    return Right(creds.publicInfo);
   }
 
   @override
@@ -738,8 +682,6 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   Future<String> getRemoteNotificationServiceToken() {
-    return sl.get<RemoteNotificationsService>().getToken();
+    return sl.get<RemoteNotificationsProvider>().getToken();
   }
-  
-
 }
