@@ -37,7 +37,7 @@ class PdfViewer extends StatefulWidget {
   State<PdfViewer> createState() => _PdfViewerState();
 }
 
-class _PdfViewerState extends State<PdfViewer> {
+class _PdfViewerState extends State<PdfViewer> with WidgetsBindingObserver {
   EaselProvider get easelProvider => GetIt.I.get();
 
   late String doc;
@@ -123,9 +123,9 @@ class _PdfViewerState extends State<PdfViewer> {
                     PDFView(
                       filePath: doc,
                       swipeHorizontal: true,
-                      onRender: (_pages) {
+                      onRender: (pgs) {
                         setState(() {
-                          pages = _pages;
+                          pages = pgs;
                           isReady = true;
                         });
                       },
@@ -165,9 +165,9 @@ class _PdfViewerState extends State<PdfViewer> {
                                 PDFView(
                                   filePath: doc,
                                   swipeHorizontal: true,
-                                  onRender: (_pages) {
+                                  onRender: (pgs) {
                                     setState(() {
-                                      pages = _pages;
+                                      pages = pgs;
                                       isReady = true;
                                     });
                                   },
