@@ -36,7 +36,7 @@ class PdfViewer extends StatefulWidget {
   State<PdfViewer> createState() => _PdfViewerState();
 }
 
-class _PdfViewerState extends State<PdfViewer> with WidgetsBindingObserver {
+class _PdfViewerState extends State<PdfViewer>  with WidgetsBindingObserver {
   EaselProvider get easelProvider => GetIt.I.get();
 
   late String doc;

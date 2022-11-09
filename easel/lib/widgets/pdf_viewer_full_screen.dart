@@ -12,7 +12,7 @@ class PdfViewerFullScreen extends StatefulWidget {
   State<PdfViewerFullScreen> createState() => _PdfViewerFullScreenState();
 }
 
-class _PdfViewerFullScreenState extends State<PdfViewerFullScreen> with WidgetsBindingObserver {
+class _PdfViewerFullScreenState extends State<PdfViewerFullScreen>  with WidgetsBindingObserver {
 
   final Completer<PDFViewController> _controller =
   Completer<PDFViewController>();
