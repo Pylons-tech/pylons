@@ -6,7 +6,7 @@ import 'package:fixnum/fixnum.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  PylonsWallet.setup(mode: PylonsMode.prod, host: 'example');
+  PylonsWallet.setup(mode: PylonsMode.prod, host: 'testapp-flutter');
 
   runApp(const MyApp());
 }

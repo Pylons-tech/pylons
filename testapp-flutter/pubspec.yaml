@@ -1,4 +1,4 @@
-name: example
+name: testapp-flutter
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -37,7 +37,7 @@ dependencies:
 
 
   pylons_sdk:
-    path: ../
+    path: ../dart_sdk
 
 dev_dependencies:
   flutter_test:
