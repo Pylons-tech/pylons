@@ -313,8 +313,8 @@ func RefundLuxFloralis(ctx sdk.Context, pylons *pylonskeeper.Keeper) {
 
 	// Looping execute recipe history to get sender address
 	for _, history := range histories {
-		amt := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(30000000)))
-		err := pylons.MintCoinsToAddr(ctx, sdk.AccAddress(history.Sender), amt)
+		amount, _ := sdk.ParseCoinsNormalized(history.Amount)
+		err := pylons.MintCoinsToAddr(ctx, sdk.AccAddress(history.Sender), amount)
 		if err != nil {
 			panic(err)
 		}
