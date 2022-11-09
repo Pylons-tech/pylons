@@ -34,6 +34,8 @@ const (
 	// Engineering Hot Wallet wallet address
 	EngineHotWal = "pylo1vnwhaymaazugzz9ln2sznddveyed6shz3x8xwl"
 	//----------- FAKE ADDRESS---------------//
+	LuxFloralisCookBookId = "Easel_CookBook_auto_cookbook_2022_08_31_183723_014"
+	LuxFloralisRecipeId   = "Easel_Recipe_auto_recipe_2022_08_31_183729_838"
 )
 
 var (
@@ -85,7 +87,7 @@ func CreateUpgradeHandler(
 			BurnToken(ctx, types.StripeCoinDenom, accKeeper, &bankBaseKeeper, staking)
 			MintUbedrockForInitialAccount(ctx, &bankBaseKeeper, staking)
 			CleanUpylons(ctx, &bankBaseKeeper, pylons)
-			RefundLuxFloralis(ctx, pylons) 
+			RefundLuxFloralis(ctx, pylons)
 		}
 		return mm.RunMigrations(ctx, configurator, fromVM)
 	}
@@ -304,14 +306,14 @@ func GetAmountOfUpylonsMintedByProductID(ctx sdk.Context, productID string) math
 	}
 	return math.ZeroInt()
 }
-func RefundLuxFloralis(ctx sdk.Context, pylons *pylonskeeper.Keeper){
-	// Get all execute recipe history by cookbookid and recipe id  
-	history := pylons.GetAllExecuteRecipeHis(ctx, "Easel_CookBook_auto_cookbook_2022_08_31_183723_014", "Easel_Recipe_auto_recipe_2022_08_31_183729_838")
+func RefundLuxFloralis(ctx sdk.Context, pylons *pylonskeeper.Keeper) {
+	// Get all execute recipe history by cookbookid and recipe id
+	histories := pylons.GetAllExecuteRecipeHis(ctx, LuxFloralisCookBookId, LuxFloralisRecipeId)
 
 	// Looping execute recipe history to get sender address
-	for _, hi := range history {
+	for _, history := range histories {
 		amt := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(30000000)))
-		err := pylons.MintCoinsToAddr(ctx, sdk.AccAddress(hi.Sender), amt)
+		err := pylons.MintCoinsToAddr(ctx, sdk.AccAddress(history.Sender), amt)
 		if err != nil {
 			panic(err)
 		}
