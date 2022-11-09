@@ -357,5 +357,6 @@
   "buying_pylon_points": "Puntos Pylons Comprados",
   "transaction_date": "Fecha de Transacción",
   "retry": "Rever",
-  "bought_nft": "Comprado"
+  "bought_nft": "Comprado",
+  "set_lockscreen": "Establecer como pantalla de bloqueo"
 }
