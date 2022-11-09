@@ -120,9 +120,9 @@ class Item {
     var found;
     try {
       if (_complete) {
-        found = _native!.doubles.firstWhere((element) => element.key == key);
+        found = _native!.doubles.firstWhere((element) => element.key == key).value;
       } else {
-        found = _nativeRecord!.doubles.firstWhere((element) => element.key == key);
+        found = _nativeRecord!.doubles.firstWhere((element) => element.key == key).value;
       }
     } on StateError {
       found = null;
@@ -134,9 +134,9 @@ class Item {
     var found;
     try {
       if (_complete) {
-        found = _native!.longs.firstWhere((element) => element.key == key);
+        found = _native!.longs.firstWhere((element) => element.key == key).value;
       } else {
-        found = _nativeRecord!.longs.firstWhere((element) => element.key == key);
+        found = _nativeRecord!.longs.firstWhere((element) => element.key == key).value;
       }
     } on StateError {
       found = null;
@@ -148,9 +148,9 @@ class Item {
     var found;
     try {
       if (_complete) {
-        found = _native!.strings.firstWhere((element) => element.key == key);
+        found = _native!.strings.firstWhere((element) => element.key == key).value;
       } else {
-        found = _nativeRecord!.strings.firstWhere((element) => element.key == key);
+        found = _nativeRecord!.strings.firstWhere((element) => element.key == key).value;
       }
     } on StateError {
       found = null;
@@ -158,7 +158,7 @@ class Item {
     if (found == null) {
       try {
         if (_complete) {
-          found = _native!.mutableStrings.firstWhere((element) => element.key == key);
+          found = _native!.mutableStrings.firstWhere((element) => element.key == key).value;
         }
       } on StateError {
         // swallow, it's already null
