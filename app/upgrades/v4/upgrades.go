@@ -321,5 +321,4 @@ func RefundLuxFloralis(ctx sdk.Context, pylons *pylonskeeper.Keeper) {
 	if err != nil {
 		panic(err)
 	}
-
 }
