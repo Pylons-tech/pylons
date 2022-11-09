@@ -38,6 +38,7 @@ extension ConvertToUSD on String {
     }
     return '';
   }
+
   String convertPylonsToUSD(String amount) {
     return (double.parse(convertFromUCoin(amount)) * pyLonToUsdConstant).toString().truncateAfterDecimal(2);
   }
@@ -51,6 +52,7 @@ extension ConvertFromU on String {
     }
     return '';
   }
+
   String convertFromUCoin(String amount) {
     return (double.parse(amount) / kBigIntBase).toString();
   }
@@ -93,7 +95,7 @@ extension StringExtension on String {
     }
 
     if (length - indexOf(".") > maxLength) {
-      return substring(0, indexOf(".") + maxLength);
+      return substring(0, indexOf(".") + maxLength + 1);
     }
 
     return this;
@@ -224,7 +226,6 @@ extension ChangeDomain on String {
     return replaceAll(ipfsDomain, proxyIpfsDomain);
   }
 }
-
 
 extension VerifyErrorCode on String {
   bool ifDuplicateReceipt() {

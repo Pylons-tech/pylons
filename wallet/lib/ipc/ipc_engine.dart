@@ -15,6 +15,7 @@ import 'package:pylons_wallet/ipc/models/sdk_ipc_message.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/ipc/widgets/sdk_approval_dialog.dart';
 import 'package:pylons_wallet/model/nft.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
@@ -32,12 +33,17 @@ import '../generated/locale_keys.g.dart';
 /// Key : The key is the process against which the 3rd part app has sent the signal
 class IPCEngine {
   late StreamSubscription _sub;
+  AccountProvider accountProvider;
   WalletsStore walletsStore;
   Repository repository;
 
   bool systemHandlingASignal = false;
 
-  IPCEngine({required this.walletsStore, required this.repository});
+  IPCEngine({
+    required this.accountProvider,
+    required this.repository,
+    required this.walletsStore,
+  });
 
   /// This method initiate the IPC Engine
   Future<bool> init() async {
@@ -137,10 +143,10 @@ class IPCEngine {
 
     final recipeId = (queryParameters.containsKey(kRecipeIdKey)) ? queryParameters[kRecipeIdKey] ?? '' : "";
     final cookbookId = (queryParameters.containsKey(kCookbookIdKey)) ? queryParameters[kCookbookIdKey] ?? "" : "";
-    final currentWallets = walletsStore.getWallets().value;
+    final currentWallet = accountProvider.accountPublicInfo;
     final address = (queryParameters.containsKey(kAddress)) ? queryParameters[kAddress] ?? "" : "";
 
-    if (currentWallets.isEmpty) {
+    if (currentWallet == null) {
       LocaleKeys.create_an_account_first.tr().show();
       repository.saveInviteeAddressFromDynamicLink(dynamicLink: address);
       walletsStore.saveInitialLink(initialLink: link);
@@ -153,7 +159,7 @@ class IPCEngine {
       return;
     }
 
-    if (isOwnerIsViewing(nullableNFT, currentWallets)) {
+    if (isOwnerIsViewing(nullableNFT, currentWallet)) {
       await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nullableNFT);
     } else {
       await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: nullableNFT);
@@ -162,14 +168,15 @@ class IPCEngine {
     walletsStore.setStateUpdatedFlag(flag: true);
   }
 
-  bool isOwnerIsViewing(NFT nullableNFT, List<AccountPublicInfo> currentWallets) => nullableNFT.ownerAddress == currentWallets.last.publicAddress;
+  bool isOwnerIsViewing(NFT nullableNFT, AccountPublicInfo currentWallet) => nullableNFT.ownerAddress == currentWallet.publicAddress;
 
   Future<void> _handleNFTTradeLink(String link) async {
     final queryParameters = Uri.parse(link).queryParameters;
     final tradeId = queryParameters.containsKey(kTradeIdKey) ? queryParameters[kTradeIdKey] ?? "" : "0";
     final address = queryParameters.containsKey(kAddress) ? queryParameters[kAddress] ?? "" : "";
-    final currentWallets = walletsStore.getWallets().value;
-    if (currentWallets.isEmpty) {
+    final currentWallet = accountProvider.accountPublicInfo;
+
+    if (currentWallet == null) {
       LocaleKeys.create_an_account_first.tr().show();
       repository.saveInviteeAddressFromDynamicLink(dynamicLink: address);
       walletsStore.saveInitialLink(initialLink: link);
@@ -191,7 +198,7 @@ class IPCEngine {
     await item.getOwnerAddress();
     showLoader.dismiss();
 
-    await  navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: item);
+    await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: item);
     walletsStore.setStateUpdatedFlag(flag: true);
   }
 
@@ -305,7 +312,7 @@ class IPCEngine {
   /// Input: [SdkIpcMessage] the transaction that the user approves.
   Future<void> onUserApproval(SdkIpcMessage sdkIPCMessage) async {
     final handlerMessage = await GetIt.I.get<HandlerFactory>().getHandler(sdkIPCMessage).handle();
-    if  (handlerMessage == null) return;
+    if (handlerMessage == null) return;
     await checkAndDispatchUniLinkIfNeeded(handlerMessage: handlerMessage, responseSendingNeeded: sdkIPCMessage.requestResponse);
   }
 

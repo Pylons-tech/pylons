@@ -13,7 +13,6 @@ analyzer:
 #  strong-mode:
 #    implicit-dynamic: true
   errors:
-    sort_pub_dependencies: ignore
     avoid_setters_without_getters: ignore
     import_of_legacy_library_into_null_safe: error
     avoid_single_cascade_in_expression_statements: ignore
@@ -52,6 +51,7 @@ analyzer:
     avoid_dynamic_calls: ignore
     depend_on_referenced_packages: ignore
     implementation_imports: ignore
+    sort_pub_dependencies: error
 
 linter:
   rules:
