@@ -270,6 +270,7 @@ class WalletsStoreImp implements WalletsStore {
 
   @override
   Future<SdkIpcResponse<Execution>> executeRecipe(Map json) async {
+    
     final networkInfo = GetIt.I.get<NetworkInfo>();
 
     final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(

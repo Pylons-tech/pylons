@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 import 'package:fixnum/fixnum.dart';
 
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -69,20 +68,20 @@ class _MyHomePageState extends State<MyHomePage> {
   int curHp = 0;
 
   @override
-  void initState () {
+  void initState() {
     super.initState();
     if (kDebugMode) {
-      print ("initState");
+      print("initState");
     }
     Cookbook.load("appTestCookbook").then((value) {
       _checkCharacter().then((value) async {
         if (kDebugMode) {
-          print ("character exists: ${character != null}");
+          print("character exists: ${character != null}");
         }
         if (character == null) {
           await _generateCharacter();
           if (kDebugMode) {
-            print ("after generate - character exists: ${character != null}");
+            print("after generate - character exists: ${character != null}");
           }
         }
       });
@@ -97,17 +96,13 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: SingleChildScrollView(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text("HP: $curHp/20 | Sword level $swordLv | $coins coins | $shards shards", style: const TextStyle(fontSize: 18)),
-              const Divider(),
-              Text(flavorText,  style: const TextStyle(fontSize: 18)),
-              const Divider(),
-              showTopLevelMenu ? topLevelMenu() : Container(),
-        ])
-      ),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Text("HP: $curHp/20 | Sword level $swordLv | $coins coins | $shards shards", style: const TextStyle(fontSize: 18)),
+        const Divider(),
+        Text(flavorText, style: const TextStyle(fontSize: 18)),
+        const Divider(),
+        showTopLevelMenu ? topLevelMenu() : Container(),
+      ])),
     );
   }
 
@@ -126,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: const Text('Fight a goblin!'),
         ),
         ElevatedButton(
-          onPressed: ()  {
+          onPressed: () {
             _fightTroll();
           },
           child: const Text('Fight a troll!'),
@@ -180,19 +175,18 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     final prf = await Profile.get();
     if (kDebugMode) {
-      print ("got profile");
+      print("got profile");
     }
     if (prf == null) throw Exception("HANDLE THIS");
     setState(() {
       profile = prf;
     });
     if (kDebugMode) {
-      print ("(ok!)");
+      print("(ok!)");
     }
     var lastUpdate = Int64.MIN_VALUE;
     for (var item in prf.items) {
-      if (item.getString("entityType") == "character" &&
-          !(item.getInt("currentHp")?.isZero  ?? true) || !(item.getInt("currentHp")?.isNegative  ?? true)) {
+      if (item.getString("entityType") == "character" && !(item.getInt("currentHp")?.isZero ?? true) || !(item.getInt("currentHp")?.isNegative ?? true)) {
         if (item.getLastUpdate() > lastUpdate) {
           setState(() {
             character = item;
@@ -202,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     }
     if (kDebugMode) {
-      print ("got character!");
+      print("got character!");
     }
     setState(() {
       swordLv = character?.getInt("swordLevel")?.toInt() ?? 0;
@@ -243,7 +237,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     final recipe = await Recipe.get("RecipeTestAppFightGoblin");
     if (recipe == null) throw Exception("todo: handle this");
-    await recipe.executeWith(profile!,[character!]).onError((error, stackTrace) {
+    await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
       throw Exception("combat tx should not fail");
     });
     buffer.writeln("Victory!");
@@ -274,7 +268,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (swordLv < 1) {
       final recipe = await Recipe.get("RecipeTestAppFightTrollUnarmed");
       if (recipe == null) throw Exception("todo: handle this");
-      await recipe.executeWith(profile!,[character!]).onError((error, stackTrace) {
+      await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
         throw Exception("combat tx should not fail");
       });
       buffer.writeln("Defeat...");
@@ -293,7 +287,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       final recipe = await Recipe.get("RecipeTestAppFightTrollArmed");
       if (recipe == null) throw Exception("todo: handle this");
-      await recipe.executeWith(profile!,[character!]).onError((error, stackTrace) {
+      await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
         throw Exception("combat tx should not fail");
       });
       buffer.writeln("Victory!");
@@ -325,7 +319,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (swordLv < 2) {
       final recipe = await Recipe.get("RecipeTestAppFightDragonUnarmed");
       if (recipe == null) throw Exception("todo: handle this");
-      await recipe.executeWith(profile!,[character!]).onError((error, stackTrace) {
+      await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
         throw Exception("combat tx should not fail");
       });
       buffer.writeln("Defeat...");
@@ -344,7 +338,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       final recipe = await Recipe.get("RecipeTestAppFightDragonArmed");
       if (recipe == null) throw Exception("todo: handle this");
-      await recipe.executeWith(profile!,[character!]).onError((error, stackTrace) {
+      await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
         throw Exception("combat tx should not fail");
       });
       buffer.writeln("Victory!");
@@ -371,14 +365,14 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         flavorText = "You already have a sword";
       });
-    } else if (coins < 50 ) {
+    } else if (coins < 50) {
       setState(() {
         flavorText = "You need 50 coins to buy a sword";
       });
     } else {
       final recipe = await Recipe.get("RecipeTestAppBuySword");
       if (recipe == null) throw Exception("todo: handle this");
-      await recipe.executeWith(profile!,[character!]).onError((error, stackTrace) {
+      await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
         throw Exception("purchase tx should not fail");
       });
       var buffer = StringBuffer("Bought a sword!");
