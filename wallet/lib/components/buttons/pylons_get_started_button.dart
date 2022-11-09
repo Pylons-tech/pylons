@@ -45,8 +45,8 @@ class PylonsGetStartedButton extends StatelessWidget {
                 child: Center(
                   child: loading
                       ? SizedBox(
-                          width: 25.h,
-                          height: 25.h,
+                          width: 25.r,
+                          height: 25.r,
                           child: CircularProgressIndicator(
                             strokeWidth: 2.0,
                             valueColor: AlwaysStoppedAnimation<Color>(AppColors.kDarkRed),
