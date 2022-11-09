@@ -198,7 +198,7 @@
   "practice_test_submission_successful": "Penyerahan benar",
   "tx_id": "TxID",
   "permission_cant_get": "Aktifkan izin dari pengaturan",
-  "creation_list_empty_text": "Anda belum memiliki kreasi apa pun.\nDaftar NFT pertama Anda dengan Easel sekarang!",
+  "creation_list_empty_text": "Anda belum memiliki kreasi.",
   "open_easel": "Buka Kuda-kuda",
   "see_profile": "Lihat profil Anda",
   "filesize_err": "File harus di bawah ",
@@ -230,8 +230,8 @@
   "legal": "Hukum",
   "delete_wallet": "Hapus Dompet",
   "wallet": "Dompet",
-  "my_creations": "kreasi saya",
-  "my_purchase": "Pembelian Saya",
+  "my_creations": "Kreasi",
+  "my_purchase": "Pembelian",
   "biometric_id": "ID biometrik",
   "connect_stripe_to_get_paid": "Hubungkan Stripe untuk mendapatkan bayaran",
   "transaction_history": "sejarah transaksi",
@@ -357,5 +357,8 @@
   "buying_pylon_points": "Membeli Pylon Points",
   "transaction_date": "Tanggal Transaksi",
   "retry": "Mencoba Kembali",
-  "bought_nft": "Dibeli"
+  "bought_nft": "Dibeli",
+  "favorites": "Favorit",
+  "download_easel": "Unduh Kuda-kuda",
+  "create_easel_free_nft": "Kuda-kuda memungkinkan Anda membuat NFT gratis!"
 }

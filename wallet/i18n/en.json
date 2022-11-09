@@ -198,7 +198,7 @@
   "practice_test_submission_successful": "Submission is correct",
   "tx_id": "TxID",
   "permission_cant_get": "Enable permission from the settings",
-  "creation_list_empty_text": "You don't have any creations yet. \nList your first NFT with Easel now!",
+  "creation_list_empty_text": "You have no creations yet.",
   "open_easel": "Open Easel",
   "see_profile": "See your profile",
   "filesize_err": "File must be under ",
@@ -230,8 +230,8 @@
   "legal": "Legal",
   "delete_wallet": "Delete Wallet",
   "wallet": "Wallet",
-  "my_creations": "My Creations",
-  "my_purchase": "My Purchases",
+  "my_creations": "Creations",
+  "my_purchase": "Purchases",
   "biometric_id": "Biometric ID",
   "connect_stripe_to_get_paid": "Connect Stripe to get paid",
   "transaction_history": "Transaction History",
@@ -360,6 +360,9 @@
   "free": "Free",
   "please_try_again_later": "Please Try again later",
   "checkout": "Checkout",
-  "artist": "Artist"
+  "artist": "Artist",
+  "favorites": "Favorites",
+  "download_easel": "Download Easel",
+  "create_easel_free_nft": "Easel let’s you create NFTs for free!"
 
 }

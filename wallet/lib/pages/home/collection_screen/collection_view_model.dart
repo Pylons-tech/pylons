@@ -24,6 +24,7 @@ class CollectionViewModel extends ChangeNotifier {
 
   List<NFT> creations = [];
   List<NFT> purchases = [];
+  List<NFT> favorites = [];
 
   String _colType = "art";
 
@@ -124,4 +125,4 @@ class CollectionViewModel extends ChangeNotifier {
   }
 }
 
-enum CollectionsType { purchases, creations }
+enum CollectionsType { purchases, creations, favorites }

@@ -24,6 +24,7 @@ class SVGUtil {
   static String SORT = "assets/images/icons/sort.svg";
   static String IMAGE_PICKER = "assets/images/icons/image_picker.svg";
   static String BANNER_IMAGE_EDIT = "assets/images/icons/banner_image_edit.svg";
+  static String DOWNLOAD_EASEL_TOOLTIP_BG = "assets/images/svg/download_easel_tooltip_bg.svg";
 
   static String WALLET_AGORIC = "assets/images/icons/ico_agoric.svg";
   static String WALLET_JUNO = "assets/images/svg/juno.svg";
@@ -43,6 +44,7 @@ class SVGUtil {
   /// NFT Screen
   static String MY_CREATIONS = 'assets/images/svg/creations.svg';
   static String MY_PURCHASES = 'assets/images/svg/purchases.svg';
+  static String MY_FAVORITES = 'assets/images/svg/my_favorites.svg';
   static String COLLECTION_BACKGROUND = "assets/images/svg/collections_background.svg";
 
   /// Trade Receipt Dialog

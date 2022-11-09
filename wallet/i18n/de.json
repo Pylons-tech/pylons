@@ -198,7 +198,7 @@
   "practice_test_submission_successful": "Die Abgabe ist korrekt",
   "tx_id": "TxID",
   "permission_cant_get": "Aktivieren Sie die Berechtigung in den Einstellungen",
-  "creation_list_empty_text": "Sie haben noch keine Kreationen.\nListen Sie jetzt Ihr erstes NFT mit Easel auf!",
+  "creation_list_empty_text": "Sie haben noch keine Kreationen.",
   "open_easel": "Staffelei öffnen",
   "see_profile": "Siehe Ihr Profil",
   "filesize_err": "Datei muss unter sein",
@@ -230,8 +230,8 @@
   "legal": "Gesetzlich",
   "delete_wallet": "Geldbörse löschen",
   "wallet": "Geldbörse",
-  "my_creations": "Meine schöpfungen",
-  "my_purchase": "Meine Einkäufe",
+  "my_creations": "Kreationen",
+  "my_purchase": "Einkäufe",
   "biometric_id": "Biometrische ID",
   "connect_stripe_to_get_paid": "Verbinden Sie Stripe, um bezahlt zu werden",
   "transaction_history": "Verlauf der Transaktionen",
@@ -357,5 +357,8 @@
   "buying_pylon_points": "Pylons Points gekauft",
   "transaction_date": "Transaktionsdatum",
   "retry": "Wiederholen",
-  "bought_nft": "Gekauft"
+  "bought_nft": "Gekauft",
+  "favorites": "Favoriten",
+  "download_easel": "Staffelei herunterladen",
+  "create_easel_free_nft": "Mit Easel können Sie NFTs kostenlos erstellen!"
 }

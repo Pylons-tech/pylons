@@ -360,5 +360,8 @@ abstract class  LocaleKeys {
   static const transaction_date = 'transaction_date';
   static const retry = 'retry';
   static const bought_nft = 'bought_nft';
+  static const favorites = 'favorites';
+  static const download_easel = 'download_easel';
+  static const create_easel_free_nft = 'create_easel_free_nft';
 
 }

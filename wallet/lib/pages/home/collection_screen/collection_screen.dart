@@ -82,6 +82,12 @@ class _CollectionScreenState extends State<CollectionScreen> {
       },
     );
 
+    final favoritesCollection = FavoritesCollection(
+      onNFTSelected: (NFT asset) {
+        shouldShowOwnerViewOrPurchaseViewForNFT(asset);
+      },
+    );
+
     return Consumer<CollectionViewModel>(builder: (context, viewModel, child) {
       return Stack(
         children: [
@@ -92,7 +98,11 @@ class _CollectionScreenState extends State<CollectionScreen> {
             top: 0.h,
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 450),
-              child: viewModel.collectionsType == CollectionsType.purchases ? creationsCollection : purchasesCollection,
+              child: viewModel.collectionsType == CollectionsType.purchases
+                  ? creationsCollection
+                  : viewModel.collectionsType == CollectionsType.creations
+                      ? favoritesCollection
+                      : purchasesCollection,
             ),
           ),
           Positioned(
@@ -102,7 +112,25 @@ class _CollectionScreenState extends State<CollectionScreen> {
             top: 50.h,
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 450),
-              child: viewModel.collectionsType == CollectionsType.purchases ? purchasesCollection : creationsCollection,
+              child: viewModel.collectionsType == CollectionsType.purchases
+                  ? favoritesCollection
+                  : viewModel.collectionsType == CollectionsType.creations
+                      ? purchasesCollection
+                      : creationsCollection,
+            ),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            top: 100.h,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 450),
+              child: viewModel.collectionsType == CollectionsType.purchases
+                  ? purchasesCollection
+                  : viewModel.collectionsType == CollectionsType.creations
+                      ? creationsCollection
+                      : favoritesCollection,
             ),
           ),
         ],
@@ -135,49 +163,17 @@ class PurchasesCollection extends StatelessWidget {
 
   const PurchasesCollection({Key? key, required this.onNFTSelected}) : super(key: key);
 
-  Widget getAudioThumbnailFromUrl({required String thumbnailUrl}) {
-    return Stack(
-      children: [
-        Positioned.fill(
-            child: CachedNetworkImage(
-                placeholder: (context, url) => Shimmer(
-                      color: PylonsAppTheme.cardBackground,
-                      child: const SizedBox.expand(),
-                    ),
-                imageUrl: thumbnailUrl,
-                fit: BoxFit.cover)),
-        Align(
-          child: Container(
-            width: 35.w,
-            height: 35.h,
-            decoration: BoxDecoration(color: AppColors.kWhite.withOpacity(0.5), shape: BoxShape.circle),
-            child: Image.asset(
-              ImageUtil.AUDIO_ICON,
-              width: 35.w,
-              height: 35.h,
-              color: AppColors.kBlack.withOpacity(0.7),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget getAudioPlaceHolder({required String thumbnailUrl}) {
-    return thumbnailUrl.isEmpty ? Image.asset(ImageUtil.AUDIO_BACKGROUND, fit: BoxFit.cover) : getAudioThumbnailFromUrl(thumbnailUrl: thumbnailUrl);
-  }
-
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<CollectionViewModel>();
-    final isSelected = viewModel.collectionsType == CollectionsType.purchases;
     return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppColors.kMainBG,
+      decoration: const BoxDecoration(
+        color: Colors.transparent,
       ),
       child: Column(
         children: [
           InkWell(
+            key: const Key(kPurchasesTabButtonKey),
             onTap: () {
               viewModel.collectionsType = CollectionsType.purchases;
             },
@@ -185,56 +181,57 @@ class PurchasesCollection extends StatelessWidget {
               height: 40.h,
               child: Stack(
                 children: [
-                  if (isSelected)
-                    Positioned(
-                        top: 0,
-                        bottom: 0,
-                        left: 0.w,
-                        right: 0.w,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 3,
-                                spreadRadius: 3,
-                                color: Colors.grey.withOpacity(0.1),
-                              ),
-                              BoxShadow(color: AppColors.kMainBG, offset: const Offset(0, 30)),
-                            ],
-                          ),
-                        )),
-                  if (isSelected)
-                    Positioned(
-                      left: 0,
+                  Positioned(
                       top: 0,
-                      right: 0,
                       bottom: 0,
-                      child: SvgPicture.asset(
-                        SVGUtil.COLLECTION_BACKGROUND,
-                        fit: BoxFit.fill,
-                      ),
+                      left: 0.w,
+                      right: 0.w,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 3,
+                              spreadRadius: 3,
+                              color: Colors.grey.withOpacity(0.1),
+                            ),
+                            BoxShadow(color: AppColors.kMainBG, offset: const Offset(0, 30)),
+                          ],
+                        ),
+                      )),
+                  Positioned(
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: SvgPicture.asset(
+                      SVGUtil.COLLECTION_BACKGROUND,
+                      fit: BoxFit.fill,
                     ),
+                  ),
                   Positioned(
                     left: 0,
                     right: 0,
                     top: 0,
                     bottom: 0,
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: SvgPicture.asset(
-                              SVGUtil.MY_PURCHASES,
-                              height: 25.h,
-                            )),
-                        Expanded(
-                          flex: 8,
-                          child: Text(
-                            LocaleKeys.my_purchase.tr(),
-                            style: kWalletTitle,
-                          ),
-                        )
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.only(top:18.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              flex: 2,
+                              child: SvgPicture.asset(
+                                SVGUtil.MY_PURCHASES,
+                                height: 25.h,
+                              )),
+                          Expanded(
+                            flex: 8,
+                            child: Text(
+                              LocaleKeys.my_purchase.tr(),
+                              style: kWalletTitle,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -246,52 +243,58 @@ class PurchasesCollection extends StatelessWidget {
           ),
           if (viewModel.collectionsType == CollectionsType.purchases)
             Expanded(
-              child: GridView.custom(
-                padding: EdgeInsets.only(
-                  bottom: 16.h,
-                  left: 16.w,
-                  right: 16.w,
-                ),
-                gridDelegate: SliverQuiltedGridDelegate(
-                  crossAxisCount: 6,
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                  repeatPattern: QuiltedGridRepeatPattern.inverted,
-                  pattern: const [
-                    QuiltedGridTile(4, 4),
-                    QuiltedGridTile(2, 2),
-                    QuiltedGridTile(2, 2),
-                  ],
-                ),
-                childrenDelegate: SliverChildBuilderDelegate((context, index) {
-                  final nft = viewModel.purchases[index];
-                  return GestureDetector(
-                    onTap: () => onNFTSelected(nft),
-                    child: ClipRRect(
-                      child: PreviewNFTGrid(
-                        assetType: nft.assetType,
-                        on3dNFT: (BuildContext context) => Container(
-                          color: AppColors.k3DBackgroundColor,
-                          height: double.infinity,
-                          child: IgnorePointer(
-                            child: Nft3dWidget(
-                              url: nft.url,
-                              cameraControls: false,
-                              backgroundColor: AppColors.k3DBackgroundColor,
+              key: const Key(kPurchasesTabGridViewKey),
+              child: ColoredBox(
+                color: AppColors.kMainBG,
+                child: GridView.custom(
+                  padding: EdgeInsets.only(
+                    bottom: 16.h,
+                    left: 16.w,
+                    right: 16.w,
+                  ),
+                  gridDelegate: SliverQuiltedGridDelegate(
+                    crossAxisCount: 6,
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
+                    repeatPattern: QuiltedGridRepeatPattern.inverted,
+                    pattern: const [
+                      QuiltedGridTile(4, 4),
+                      QuiltedGridTile(2, 2),
+                      QuiltedGridTile(2, 2),
+                    ],
+                  ),
+                  childrenDelegate: SliverChildBuilderDelegate((context, index) {
+                    final nft = viewModel.purchases[index];
+                    return GestureDetector(
+                      onTap: () => onNFTSelected(nft),
+                      child: ClipRRect(
+                        child: PreviewNFTGrid(
+                          assetType: nft.assetType,
+                          on3dNFT: (BuildContext context) => Container(
+                            color: AppColors.k3DBackgroundColor,
+                            height: double.infinity,
+                            child: IgnorePointer(
+                              child: Nft3dWidget(
+                                url: nft.url,
+                                cameraControls: false,
+                                backgroundColor: AppColors.k3DBackgroundColor,
+                              ),
                             ),
                           ),
+                          onPdfNFT: (BuildContext context) => PdfPlaceHolder(nftUrl: nft.url, nftName: nft.name, thumbnailUrl: nft.thumbnailUrl),
+                          onVideoNFT: (BuildContext context) => VideoPlaceHolder(nftUrl: nft.url, nftName: nft.name, thumbnailUrl: nft.thumbnailUrl),
+                          onImageNFT: (BuildContext context) =>
+                              CachedNetworkImage(placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()), imageUrl: nft.url, fit: BoxFit.cover),
+                          onAudioNFT: (BuildContext context) => getAudioPlaceHolder(thumbnailUrl: nft.thumbnailUrl),
                         ),
-                        onPdfNFT: (BuildContext context) => PdfPlaceHolder(nftUrl: nft.url, nftName: nft.name, thumbnailUrl: nft.thumbnailUrl),
-                        onVideoNFT: (BuildContext context) => VideoPlaceHolder(nftUrl: nft.url, nftName: nft.name, thumbnailUrl: nft.thumbnailUrl),
-                        onImageNFT: (BuildContext context) =>
-                            CachedNetworkImage(placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()), imageUrl: nft.url, fit: BoxFit.cover),
-                        onAudioNFT: (BuildContext context) => getAudioPlaceHolder(thumbnailUrl: nft.thumbnailUrl),
                       ),
-                    ),
-                  );
-                }, childCount: viewModel.purchases.length),
+                    );
+                  }, childCount: viewModel.purchases.length),
+                ),
               ),
             )
+          else
+            Expanded(child: ColoredBox(color: AppColors.kMainBG,))
         ],
       ),
     );
@@ -303,50 +306,19 @@ class CreationsCollection extends StatelessWidget {
 
   const CreationsCollection({Key? key, required this.onNFTSelected}) : super(key: key);
 
-  Widget getAudioThumbnailFromUrl({required String thumbnailUrl}) {
-    return Stack(
-      children: [
-        Positioned.fill(
-            child: CachedNetworkImage(
-                placeholder: (context, url) => Shimmer(
-                      color: PylonsAppTheme.cardBackground,
-                      child: const SizedBox.expand(),
-                    ),
-                imageUrl: thumbnailUrl,
-                fit: BoxFit.cover)),
-        Align(
-          child: Container(
-            width: 35.w,
-            height: 35.h,
-            decoration: BoxDecoration(color: AppColors.kWhite.withOpacity(0.5), shape: BoxShape.circle),
-            padding: EdgeInsets.all(5.h),
-            child: Image.asset(
-              ImageUtil.AUDIO_ICON,
-              color: AppColors.kBlack,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget getAudioPlaceHolder({required String thumbnailUrl}) {
-    return thumbnailUrl.isEmpty ? Image.asset(ImageUtil.AUDIO_BACKGROUND, fit: BoxFit.cover) : getAudioThumbnailFromUrl(thumbnailUrl: thumbnailUrl);
-  }
-
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<CollectionViewModel>();
 
-    final isSelected = viewModel.collectionsType == CollectionsType.creations;
     return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppColors.kMainBG,
+      decoration:  const BoxDecoration(
+        color: Colors.transparent,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           InkWell(
+            key: const Key(kCreationTabButtonKey),
             onTap: () {
               viewModel.collectionsType = CollectionsType.creations;
             },
@@ -354,56 +326,57 @@ class CreationsCollection extends StatelessWidget {
               height: 40.h,
               child: Stack(
                 children: [
-                  if (isSelected)
-                    Positioned(
-                        top: 0,
-                        bottom: 0,
-                        left: 0.w,
-                        right: 0.w,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 3,
-                                spreadRadius: 3,
-                                color: Colors.grey.withOpacity(0.1),
-                              ),
-                              BoxShadow(color: AppColors.kMainBG, offset: const Offset(0, 30)),
-                            ],
-                          ),
-                        )),
-                  if (isSelected)
-                    Positioned(
-                      left: 0,
+                  Positioned(
                       top: 0,
-                      right: 0,
                       bottom: 0,
-                      child: SvgPicture.asset(
-                        SVGUtil.COLLECTION_BACKGROUND,
-                        fit: BoxFit.fill,
-                      ),
+                      left: 0.w,
+                      right: 0.w,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 3,
+                              spreadRadius: 3,
+                              color: Colors.grey.withOpacity(0.1),
+                            ),
+                            BoxShadow(color: AppColors.kMainBG, offset: const Offset(0, 30)),
+                          ],
+                        ),
+                      )),
+                  Positioned(
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: SvgPicture.asset(
+                      SVGUtil.COLLECTION_BACKGROUND,
+                      fit: BoxFit.fill,
                     ),
+                  ),
                   Positioned(
                     left: 0,
                     right: 0,
                     top: 0,
                     bottom: 0,
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: SvgPicture.asset(
-                              SVGUtil.MY_CREATIONS,
-                              height: 20.h,
-                            )),
-                        Expanded(
-                          flex: 8,
-                          child: Text(
-                            LocaleKeys.my_creations.tr(),
-                            style: kWalletTitle,
-                          ),
-                        )
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.only(top:18.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              flex: 2,
+                              child: SvgPicture.asset(
+                                SVGUtil.MY_CREATIONS,
+                                height: 20.h,
+                              )),
+                          Expanded(
+                            flex: 8,
+                            child: Text(
+                              LocaleKeys.my_creations.tr(),
+                              style: kWalletTitle,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -415,74 +388,276 @@ class CreationsCollection extends StatelessWidget {
           ),
           if (viewModel.collectionsType == CollectionsType.creations)
             Expanded(
+              key: const Key(kCreationTabGridViewKey),
                 child: viewModel.creations.isNotEmpty
-                    ? GridView.custom(
-                        padding: EdgeInsets.only(
-                          bottom: 16.h,
-                          left: 16.w,
-                          right: 16.w,
-                        ),
-                        gridDelegate: SliverQuiltedGridDelegate(
-                          crossAxisCount: 6,
-                          mainAxisSpacing: 8,
-                          crossAxisSpacing: 8,
-                          repeatPattern: QuiltedGridRepeatPattern.inverted,
-                          pattern: const [
-                            QuiltedGridTile(4, 4),
-                            QuiltedGridTile(2, 2),
-                            QuiltedGridTile(2, 2),
-                          ],
-                        ),
-                        childrenDelegate: SliverChildBuilderDelegate(
+                    ? ColoredBox(
+                  color: AppColors.kMainBG,
+                  child: GridView.custom(
+                  padding: EdgeInsets.only(
+                      bottom: 16.h,
+                      left: 16.w,
+                      right: 16.w,
+                  ),
+                  gridDelegate: SliverQuiltedGridDelegate(
+                      crossAxisCount: 6,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                      repeatPattern: QuiltedGridRepeatPattern.inverted,
+                      pattern: const [
+                        QuiltedGridTile(4, 4),
+                        QuiltedGridTile(2, 2),
+                        QuiltedGridTile(2, 2),
+                      ],
+                  ),
+                  childrenDelegate: SliverChildBuilderDelegate(
                           (context, index) {
-                            final nft = viewModel.creations[index];
-                            return ClipRRect(
-                              child: GestureDetector(
-                                onTap: () => onNFTSelected(nft),
-                                child: Banner(
-                                  color: AppColors.kPriceTagColor,
-                                  location: BannerLocation.topStart,
-                                  message: "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}  ${nft.ibcCoins.getAbbrev()}",
-                                  child: PreviewNFTGrid(
-                                    assetType: nft.assetType,
-                                    on3dNFT: (BuildContext context) => Container(
-                                      color: Colors.grey.shade200,
-                                      height: double.infinity,
-                                      child: IgnorePointer(
-                                        child: Nft3dWidget(
-                                          url: nft.url,
-                                          cameraControls: false,
-                                          backgroundColor: AppColors.k3DBackgroundColor,
-                                        ),
-                                      ),
+                        final nft = viewModel.creations[index];
+                        return ClipRRect(
+                          child: GestureDetector(
+                            onTap: () => onNFTSelected(nft),
+                            child: Banner(
+                              color: AppColors.kPriceTagColor,
+                              location: BannerLocation.topStart,
+                              message: "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}  ${nft.ibcCoins.getAbbrev()}",
+                              child: PreviewNFTGrid(
+                                assetType: nft.assetType,
+                                on3dNFT: (BuildContext context) => Container(
+                                  color: Colors.grey.shade200,
+                                  height: double.infinity,
+                                  child: IgnorePointer(
+                                    child: Nft3dWidget(
+                                      url: nft.url,
+                                      cameraControls: false,
+                                      backgroundColor: AppColors.k3DBackgroundColor,
                                     ),
-                                    onPdfNFT: (BuildContext context) => PdfPlaceHolder(
-                                      nftUrl: nft.url,
-                                      nftName: nft.name,
-                                      thumbnailUrl: nft.thumbnailUrl,
-                                    ),
-                                    onVideoNFT: (BuildContext context) => VideoPlaceHolder(
-                                      nftUrl: nft.url,
-                                      nftName: nft.name,
-                                      thumbnailUrl: nft.thumbnailUrl,
-                                    ),
-                                    onImageNFT: (BuildContext context) => CachedNetworkImage(
-                                      placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()),
-                                      imageUrl: nft.url,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    onAudioNFT: (BuildContext context) => getAudioPlaceHolder(thumbnailUrl: nft.thumbnailUrl),
                                   ),
                                 ),
+                                onPdfNFT: (BuildContext context) => PdfPlaceHolder(
+                                  nftUrl: nft.url,
+                                  nftName: nft.name,
+                                  thumbnailUrl: nft.thumbnailUrl,
+                                ),
+                                onVideoNFT: (BuildContext context) => VideoPlaceHolder(
+                                  nftUrl: nft.url,
+                                  nftName: nft.name,
+                                  thumbnailUrl: nft.thumbnailUrl,
+                                ),
+                                onImageNFT: (BuildContext context) => CachedNetworkImage(
+                                  placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()),
+                                  imageUrl: nft.url,
+                                  fit: BoxFit.cover,
+                                ),
+                                onAudioNFT: (BuildContext context) => getAudioPlaceHolder(thumbnailUrl: nft.thumbnailUrl),
                               ),
-                            );
-                          },
-                          childCount: viewModel.creations.length,
-                        ),
-                      )
-                    : const Center(child: NoEaselArtWork()))
+                            ),
+                          ),
+                        );
+                      },
+                      childCount: viewModel.creations.length,
+                  ),
+                ),
+                    )
+                    : const NoEaselArtWork(),)
         ],
       ),
     );
   }
+}
+
+class FavoritesCollection extends StatelessWidget {
+  final OnNFTSelected onNFTSelected;
+
+  const FavoritesCollection({Key? key, required this.onNFTSelected}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = context.watch<CollectionViewModel>();
+
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        color: Colors.transparent,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          InkWell(
+            key: const Key(kFavoritesTabButtonKey),
+            onTap: () {
+              viewModel.collectionsType = CollectionsType.favorites;
+            },
+            child: SizedBox(
+              height: 40.h,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 0,
+                    bottom: 0,
+                    left: 0.w,
+                    right: 0.w,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 3,
+                            spreadRadius: 3,
+                            color: Colors.grey.withOpacity(0.1),
+                          ),
+                          BoxShadow(color: AppColors.kMainBG, offset: const Offset(0, 30)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: SvgPicture.asset(
+                      SVGUtil.COLLECTION_BACKGROUND,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top:18.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              flex: 2,
+                              child: SvgPicture.asset(
+                                SVGUtil.MY_FAVORITES,
+                                height: 20.h,
+                              )),
+                          Expanded(
+                            flex: 8,
+                            child: Text(
+                              LocaleKeys.favorites.tr(),
+                              style: kWalletTitle,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 15.h,
+          ),
+          if (viewModel.collectionsType == CollectionsType.favorites)
+            Expanded(
+              key: const Key(kFavoritesTabGridViewKey),
+              child: ColoredBox(
+                color: AppColors.kMainBG,
+                child: GridView.custom(
+                  padding: EdgeInsets.only(
+                    bottom: 16.h,
+                    left: 16.w,
+                    right: 16.w,
+                  ),
+                  gridDelegate: SliverQuiltedGridDelegate(
+                    crossAxisCount: 6,
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
+                    repeatPattern: QuiltedGridRepeatPattern.inverted,
+                    pattern: const [
+                      QuiltedGridTile(4, 4),
+                      QuiltedGridTile(2, 2),
+                      QuiltedGridTile(2, 2),
+                    ],
+                  ),
+                  childrenDelegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final nft = viewModel.favorites[index];
+                      return ClipRRect(
+                        child: GestureDetector(
+                          onTap: () => onNFTSelected(nft),
+                          child: Banner(
+                            color: AppColors.kPriceTagColor,
+                            location: BannerLocation.topStart,
+                            message: "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}  ${nft.ibcCoins.getAbbrev()}",
+                            child: PreviewNFTGrid(
+                              assetType: nft.assetType,
+                              on3dNFT: (BuildContext context) => Container(
+                                color: Colors.grey.shade200,
+                                height: double.infinity,
+                                child: IgnorePointer(
+                                  child: Nft3dWidget(
+                                    url: nft.url,
+                                    cameraControls: false,
+                                    backgroundColor: AppColors.k3DBackgroundColor,
+                                  ),
+                                ),
+                              ),
+                              onPdfNFT: (BuildContext context) => PdfPlaceHolder(
+                                nftUrl: nft.url,
+                                nftName: nft.name,
+                                thumbnailUrl: nft.thumbnailUrl,
+                              ),
+                              onVideoNFT: (BuildContext context) => VideoPlaceHolder(
+                                nftUrl: nft.url,
+                                nftName: nft.name,
+                                thumbnailUrl: nft.thumbnailUrl,
+                              ),
+                              onImageNFT: (BuildContext context) => CachedNetworkImage(
+                                placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()),
+                                imageUrl: nft.url,
+                                fit: BoxFit.cover,
+                              ),
+                              onAudioNFT: (BuildContext context) => getAudioPlaceHolder(thumbnailUrl: nft.thumbnailUrl),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: viewModel.favorites.length,
+                  ),
+                ),
+              ),
+            )
+          else 
+            Expanded(
+                // key: const Key(kFavoritesTabGridViewKey),
+                child: ColoredBox(color: AppColors.kMainBG,),)
+        ],
+      ),
+    );
+  }
+}
+
+Widget getAudioThumbnailFromUrl({required String thumbnailUrl}) {
+  return Stack(
+    children: [
+      Positioned.fill(
+          child: CachedNetworkImage(
+              placeholder: (context, url) => Shimmer(
+                    color: PylonsAppTheme.cardBackground,
+                    child: const SizedBox.expand(),
+                  ),
+              imageUrl: thumbnailUrl,
+              fit: BoxFit.cover)),
+      Align(
+        child: Container(
+          width: 35.w,
+          height: 35.h,
+          decoration: BoxDecoration(color: AppColors.kWhite.withOpacity(0.5), shape: BoxShape.circle),
+          padding: EdgeInsets.all(5.h),
+          child: Image.asset(
+            ImageUtil.AUDIO_ICON,
+            color: AppColors.kBlack,
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+Widget getAudioPlaceHolder({required String thumbnailUrl}) {
+  return thumbnailUrl.isEmpty ? Image.asset(ImageUtil.AUDIO_BACKGROUND, fit: BoxFit.cover) : getAudioThumbnailFromUrl(thumbnailUrl: thumbnailUrl);
 }

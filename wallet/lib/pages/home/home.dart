@@ -9,7 +9,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/ipc/ipc_engine.dart';
 import 'package:pylons_wallet/main_prod.dart';
@@ -17,11 +16,11 @@ import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model
 import 'package:pylons_wallet/pages/home/home_provider.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
+import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/screen_responsive.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-import '../../generated/locale_keys.g.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -86,17 +85,17 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         ],
         child: Consumer<HomeProvider>(builder: (context, provider, _) {
           return AnnotatedRegion<SystemUiOverlayStyle>(
-            value: provider.isBannerDark() ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+            value: SystemUiOverlayStyle.dark,
             child: RotatedBox(
               quarterTurns: 0,
               child: ColoredBox(
-                color: AppColors.kMainBG,
+                color: AppColors.kHomeScreenBGColor,
                 child: WillPopScope(
                   onWillPop: () async => false,
                   child: DefaultTabController(
                     length: tabLen,
                     child: Scaffold(
-                      backgroundColor: AppColors.kMainBG,
+                      backgroundColor: AppColors.kHomeScreenBGColor,
                       appBar: buildAppBar(context, provider),
                       body: provider.pages[provider.selectedIndex],
                     ),
@@ -112,7 +111,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
   PreferredSize buildAppBar(BuildContext context, HomeProvider provider) {
     return PreferredSize(
-      preferredSize: Size.fromHeight(isTablet ? 0.4.sh : 0.2.sh + 115.h),
+      preferredSize: Size.fromHeight(isTablet ? 0.3.sh : 0.2.sh + 40.h),
       child: ScreenResponsive(
         mobileScreen: (BuildContext context) => buildMobileAppBar(provider),
         tabletScreen: (BuildContext context) => buildTabletAppBar(provider),
@@ -120,41 +119,13 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     );
   }
 
-  Column buildTabletAppBar(HomeProvider provider) {
+  Widget buildTabletAppBar(HomeProvider provider) {
     return Column(
       children: [
         Stack(
           children: [
             Container(
               height: 0.2.sh + 35.h,
-            ),
-            UserBannerWidget(height: 0.2.sh),
-            Positioned(
-              top: 0.035.sh,
-              left: 0.93.sw,
-              child: UserBannerPickerWidget(),
-            ),
-            Positioned(
-              top: 0.04.sh,
-              left: 0.86.sw,
-              child: GestureDetector(
-                onTap: () async {
-                  Navigator.of(context).pushNamed(RouteUtil.ROUTE_MESSAGE);
-                },
-                behavior: HitTestBehavior.translucent,
-                child: Stack(
-                  children: [
-                    SvgPicture.asset(
-                      SVGUtil.MESSAGE_ENVELOPE,
-                      height: 15.h,
-                      width: 15.w,
-                      fit: BoxFit.fill,
-                      color: provider.isBannerDark() ? Colors.white : Colors.black,
-                    ),
-                    if (provider.showBadge) Positioned(right: 0.w, top: 0.h, child: buildBadge()),
-                  ],
-                ),
-              ),
             ),
             Positioned(
               top: 0.035.sh,
@@ -166,60 +137,57 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   behavior: HitTestBehavior.translucent,
                   child: SvgPicture.asset(
                     SVGUtil.SORT,
-                    color: provider.isBannerDark() ? Colors.white : Colors.black,
+                    color: Colors.black,
                     height: 20.h,
                     width: 20.w,
                   )),
             ),
             Positioned(
-              top: 0.2.sh - 30.r,
+              top: 0.2.sh - 40.r,
               left: 0.5.sw - 30.r,
               child: CircleAvatar(
                 backgroundColor: AppColors.kMainBG,
                 radius: 34.r,
-                child: UserAvatarWidget(radius: 30.r),
+                child: UserAvatarWidget(radius: 32.r),
               ),
             ),
             Positioned(
-              top: 0.2.sh + 20.r,
-              left: 0.5.sw + 20.r,
-              child: const UserAvatarPickerWidget(),
+              top: 0.06.sh,
+              left: 0.86.sw,
+              child: GestureDetector(
+                onTap: () async {
+                  Navigator.of(context).pushNamed(RouteUtil.ROUTE_MESSAGE);
+                },
+                behavior: HitTestBehavior.translucent,
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      ImageUtil.BELL_ACTIVE,
+                      height: 20.h,
+                      width: 20.w,
+                      fit: BoxFit.fill,
+                      color:Colors.black,
+                    ),
+                    if (provider.showBadge) Positioned(right: 0.w, top: 0.h, child: buildBadge()),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            WalletTab(
+              tabName: provider.tabs[0],
+              index: 0,
+            ),
+            WalletTab(
+              tabName: provider.tabs[1],
+              index: 1,
             )
           ],
         ),
-        Text(
-          walletsStore.getWallets().value.last.name,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20.sp),
-          textAlign: TextAlign.center,
-        ),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(
-            "wallet_address_arg".tr(args: [walletsStore.getWallets().value.last.publicAddress]),
-            style: TextStyle(color: Colors.black, fontSize: 9.sp),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(width: 5.w),
-          GestureDetector(
-            onTap: () async {
-              final publicAddress = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
-
-              await Clipboard.setData(ClipboardData(text: publicAddress));
-              LocaleKeys.copied_to_clipboard.tr().show();
-            },
-            child: SvgPicture.asset(SVGUtil.WALLET_COPY, height: 10.h, width: 10.w, fit: BoxFit.scaleDown),
-          ),
-        ]),
-        SizedBox(height: 20.h),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          WalletTab(
-            tabName: provider.tabs[0],
-            index: 0,
-          ),
-          WalletTab(
-            tabName: provider.tabs[1],
-            index: 1,
-          )
-        ]),
         SizedBox(height: 5.h),
       ],
     );
@@ -242,34 +210,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
         Stack(
           children: [
             Container(
-              height: 0.2.sh + 35.h,
-            ),
-            UserBannerWidget(height: 0.2.sh),
-            Positioned(
-              top: 0.06.sh,
-              right: 0.02.sw,
-              child: UserBannerPickerWidget(),
-            ),
-            Positioned(
-              top: 0.062.sh,
-              right: 0.12.sw,
-              child: InkResponse(
-                onTap: () async {
-                  Navigator.of(context).pushNamed(RouteUtil.ROUTE_MESSAGE);
-                },
-                child: Stack(
-                  children: [
-                    SvgPicture.asset(
-                      SVGUtil.MESSAGE_ENVELOPE,
-                      height: 20.h,
-                      width: 20.w,
-                      fit: BoxFit.fill,
-                      color: provider.isBannerDark() ? Colors.white : Colors.black,
-                    ),
-                    if (provider.showBadge) Positioned(right: 0.w, top: 0.h, child: buildBadge()),
-                  ],
-                ),
-              ),
+              height: 0.2.sh + 5.h,
             ),
             Positioned(
               top: 0.06.sh,
@@ -280,50 +221,43 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   },
                   child: SvgPicture.asset(
                     SVGUtil.SORT,
-                    color: provider.isBannerDark() ? Colors.white : Colors.black,
-                    height: 20.h,
-                    width: 20.w,
+                    color: Colors.black,
+                    height: 15.h,
+                    width: 15.w,
                   )),
             ),
             Positioned(
-              top: 0.2.sh - 30.r,
+              top: 0.2.sh - 70.r,
               left: 0.5.sw - 30.r,
               child: CircleAvatar(
                 backgroundColor: AppColors.kMainBG,
                 radius: 34.r,
-                child: UserAvatarWidget(radius: 30.r),
+                child: UserAvatarWidget(radius: 32.r),
               ),
             ),
             Positioned(
-              top: 0.2.sh + 20.r,
-              left: 0.5.sw + 20.r,
-              child: const UserAvatarPickerWidget(),
-            )
+              top: 0.06.sh,
+              left: 0.86.sw,
+              child: GestureDetector(
+                onTap: () async {
+                  Navigator.of(context).pushNamed(RouteUtil.ROUTE_MESSAGE);
+                },
+                behavior: HitTestBehavior.translucent,
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      ImageUtil.BELL_ACTIVE,
+                      height: 20.h,
+                      width: 20.w,
+                      fit: BoxFit.fill,
+                    ),
+                    if (provider.showBadge) Positioned(right: 0.w, top: 0.h, child: buildBadge()),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
-        Text(
-          walletsStore.getWallets().value.last.name,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20.sp),
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 5.h),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(
-            LocaleKeys.wallet_address_arg.tr(args: [walletsStore.getWallets().value.last.publicAddress]),
-            style: TextStyle(color: Colors.black, fontSize: 9.sp),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(width: 5.w),
-          GestureDetector(
-            onTap: () async {
-              final publicAddress = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
-              await Clipboard.setData(ClipboardData(text: publicAddress));
-              LocaleKeys.copied_to_clipboard.tr().show();
-            },
-            child: SvgPicture.asset(SVGUtil.WALLET_COPY, height: 15.h, width: 15.w, fit: BoxFit.scaleDown),
-          ),
-        ]),
-        SizedBox(height: 20.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
