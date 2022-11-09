@@ -1,4 +1,4 @@
-package com.example.pylons.example
+package tech.pylons.testapp_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 
