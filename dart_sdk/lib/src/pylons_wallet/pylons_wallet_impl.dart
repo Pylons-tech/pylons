@@ -224,13 +224,14 @@ class PylonsWalletImpl implements PylonsWallet {
       required List<String> itemIds,
       required int coinInputIndex,
       required List<PaymentInfo> paymentInfo,
+      required String sender,
       bool requestResponse = true}) async {
     return Future.sync(() async {
       return Future.sync(() async {
         final response = await _dispatch(
             Strings.TX_EXECUTE_RECIPE,
             jsonEncode(MsgExecuteRecipe(
-                    creator: '',
+                    creator: sender,
                     cookbookId: cookbookId,
                     recipeId: recipeName,
                     coinInputsIndex: fixnum.Int64(coinInputIndex),
