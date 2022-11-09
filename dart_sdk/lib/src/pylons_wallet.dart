@@ -382,6 +382,7 @@ abstract class PylonsWallet {
       required List<String> itemIds,
       required int coinInputIndex,
       required List<PaymentInfo> paymentInfo,
+      required String sender,
       bool requestResponse});
 
   /// Async: Creates a transaction to post a trade of the provided [Item] for a

@@ -461,6 +461,7 @@ void executeRecipeTest() {
         paymentInfo: [],
         recipeName: MOCK_RECIPE_ID,
         cookbookId: MOCK_COOKBOOK_ID,
+        sender: MOCK_CREATOR,
         itemIds: [],
         coinInputIndex: 0);
 
@@ -481,6 +482,7 @@ void executeRecipeTest() {
         paymentInfo: [],
         recipeName: MOCK_RECIPE_ID,
         cookbookId: MOCK_COOKBOOK_ID,
+        sender: MOCK_CREATOR,
         itemIds: [],
         coinInputIndex: 0,
         requestResponse: false);

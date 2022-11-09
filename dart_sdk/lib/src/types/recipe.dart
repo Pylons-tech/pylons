@@ -28,7 +28,7 @@ class Recipe {
     }
   }
 
-  Future<Execution> executeWith (List<Item> inputs, {int CoinInputIndex = 0, List<generated.PaymentInfo>Function()? paymentInfoGen} ) async {
+  Future<Execution> executeWith (Profile prf, List<Item> inputs, {int CoinInputIndex = 0, List<generated.PaymentInfo>Function()? paymentInfoGen} ) async {
     var ids = <String>[];
     var infos = <generated.PaymentInfo>[];
     if (paymentInfoGen != null) infos = paymentInfoGen();
@@ -43,6 +43,7 @@ class Recipe {
         itemIds: List.unmodifiable(ids),
         coinInputIndex: 0,
         paymentInfo: List.unmodifiable(infos),
+        sender: prf.address,
         requestResponse: true);
     if (lowLevel.success) {
       return Execution(lowLevel.data!);
