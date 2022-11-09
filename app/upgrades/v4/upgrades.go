@@ -304,7 +304,7 @@ func GetAmountOfUpylonsMintedByProductID(ctx sdk.Context, productID string) math
 	}
 	return math.ZeroInt()
 }
-func RefundLuxFloralis(ctx sdk.Context, pylons *pylonskeeper.Keeper) error {
+func RefundLuxFloralis(ctx sdk.Context, pylons *pylonskeeper.Keeper){
 	// Get all execute recipe history by cookbookid and recipe id  
 	history := pylons.GetAllExecuteRecipeHis(ctx, "Easel_CookBook_auto_cookbook_2022_08_31_183723_014", "Easel_Recipe_auto_recipe_2022_08_31_183729_838")
 
@@ -313,8 +313,7 @@ func RefundLuxFloralis(ctx sdk.Context, pylons *pylonskeeper.Keeper) error {
 		amt := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(30000000)))
 		err := pylons.MintCoinsToAddr(ctx, sdk.AccAddress(hi.Sender), amt)
 		if err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			panic(err)
 		}
 	}
-	return nil
 }
