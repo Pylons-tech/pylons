@@ -54,7 +54,6 @@ class _PdfViewerFullScreenState extends State<PdfViewerFullScreen> with WidgetsB
                     onViewCreated: (PDFViewController pdfViewController) {
                       _controller.complete(pdfViewController);
                     },
-                    fitPolicy: FitPolicy.WIDTH,
                   ),
         ),
       ),
