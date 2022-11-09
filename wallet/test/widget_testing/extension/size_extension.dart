@@ -28,7 +28,6 @@ extension SetScreenSize on WidgetTester {
         child: ScreenUtilInit(
           minTextAdapt: true,
           builder: (_, __) => MaterialApp(
-            // key: UniqueKey(),
             navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             title: "Pylons Wallet",

@@ -2,12 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_image_asset.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
@@ -37,19 +37,23 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
   }
 
   void createLink() {
-    final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
+    final wallet = context.read<AccountProvider>().accountPublicInfo;
+
+    if (wallet == null) {
+      return;
+    }
 
     switch (widget.nft.type) {
       case NftType.TYPE_TRADE:
-        link = widget.nft.tradeID.createTradeLink(address: address);
+        link = widget.nft.tradeID.createTradeLink(address: wallet.publicAddress);
         break;
 
       case NftType.TYPE_ITEM:
-        link = widget.nft.recipeID.createDynamicLink(cookbookId: widget.nft.cookbookID, address: address);
+        link = widget.nft.recipeID.createDynamicLink(cookbookId: widget.nft.cookbookID, address: wallet.publicAddress);
         break;
 
       case NftType.TYPE_RECIPE:
-        link = widget.nft.recipeID.createDynamicLink(cookbookId: widget.nft.cookbookID, address: address);
+        link = widget.nft.recipeID.createDynamicLink(cookbookId: widget.nft.cookbookID, address: wallet.publicAddress);
         break;
     }
   }
