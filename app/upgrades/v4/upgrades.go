@@ -34,8 +34,8 @@ const (
 	// Engineering Hot Wallet wallet address
 	EngineHotWal = "pylo1vnwhaymaazugzz9ln2sznddveyed6shz3x8xwl"
 	//----------- FAKE ADDRESS---------------//
-	LuxFloralisCookBookId = "Easel_CookBook_auto_cookbook_2022_08_31_183723_014"
-	LuxFloralisRecipeId   = "Easel_Recipe_auto_recipe_2022_08_31_183729_838"
+	LuxFloralisCookBookID = "Easel_CookBook_auto_cookbook_2022_08_31_183723_014"
+	LuxFloralisRecipeID   = "Easel_Recipe_auto_recipe_2022_08_31_183729_838"
 )
 
 var (
@@ -306,9 +306,10 @@ func GetAmountOfUpylonsMintedByProductID(ctx sdk.Context, productID string) math
 	}
 	return math.ZeroInt()
 }
+
 func RefundLuxFloralis(ctx sdk.Context, pylons *pylonskeeper.Keeper) {
 	// Get all execute recipe history by cookbookid and recipe id
-	histories := pylons.GetAllExecuteRecipeHis(ctx, LuxFloralisCookBookId, LuxFloralisRecipeId)
+	histories := pylons.GetAllExecuteRecipeHis(ctx, LuxFloralisCookBookID, LuxFloralisRecipeID)
 
 	// Looping execute recipe history to get sender address
 	for _, history := range histories {
