@@ -5,8 +5,6 @@ import '../generated/pylons/item.pb.dart' as generated;
 import '../generated/pylons/payment_info.pb.dart' as generated;
 import '../generated/pylons/recipe.pb.dart' as generated;
 
-const _PRECISION = 10;
-
 class Recipe {
   final generated.Recipe _native;
 
@@ -200,9 +198,9 @@ class ItemOutput {
 
   double getTradePercentage() {
     if (modify) {
-      return double.parse(_nativeModify!.tradePercentage) * _PRECISION;
+      return DecString.doubleFromDecString(_nativeModify!.tradePercentage);
     } else {
-      return double.parse(_native!.tradePercentage) * _PRECISION;
+      return DecString.doubleFromDecString(_native!.tradePercentage);
     }
   }
 
@@ -379,11 +377,11 @@ class DoubleInput {
   }
 
   double getMin () {
-    return double.parse(_native.minValue) / _PRECISION;
+    return DecString.doubleFromDecString(_native.minValue);
   }
 
   double getMax () {
-    return double.parse(_native.minValue) / _PRECISION;
+    return DecString.doubleFromDecString(_native.maxValue);
   }
 }
 
@@ -419,11 +417,11 @@ class DoubleWeightRange {
   }
 
   double getMin () {
-    return double.parse(_native.lower) / _PRECISION;
+    return DecString.doubleFromDecString(_native.lower);
   }
 
   double getMax () {
-    return double.parse(_native.upper) / _PRECISION;
+    return DecString.doubleFromDecString(_native.upper);
   }
 }
 
