@@ -19,7 +19,7 @@ class TabField extends StatefulWidget {
   final String name;
   final String icon;
   final NFT nft;
-  final List<NftOwnershipHistory> NftOwnershipHistoryList;
+  final List<NftOwnershipHistory> nftOwnershipHistoryList;
   final String owner;
   bool isExpanded;
   final Function(TabFields) onChangeTab;
@@ -30,7 +30,7 @@ class TabField extends StatefulWidget {
     required this.icon,
     required this.nft,
     required this.owner,
-    required this.NftOwnershipHistoryList,
+    required this.nftOwnershipHistoryList,
     required this.isExpanded,
     required this.onChangeTab,
   }) : super(key: key);
@@ -161,7 +161,7 @@ class _TabFieldState extends State<TabField> {
           else if (widget.name == LocaleKeys.nft_detail.tr() && widget.isExpanded)
             ...listDetails
           else if (widget.name == LocaleKeys.history.tr() && widget.isExpanded)
-            _listHistory(widget.NftOwnershipHistoryList, context)
+            _listHistory(widget.nftOwnershipHistoryList, context)
         ],
       ),
     );

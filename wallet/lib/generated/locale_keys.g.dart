@@ -12,6 +12,7 @@ abstract class  LocaleKeys {
   static const recommended = 'recommended';
   static const following = 'following';
   static const select_a_date = 'select_a_date';
+  static const network_error_description = 'network_error_description';
   static const what_is_new = 'what_is_new';
   static const trending = 'trending';
   static const price = 'price';
@@ -363,4 +364,7 @@ abstract class  LocaleKeys {
   static const resolution = 'resolution';
   static const set_lockscreen = 'set_lockscreen';
   static const network_error_description = 'network_error_description';
+  static const resolution = 'resolution';
+  static const bought_nft = 'bought_nft';
+  static const set_lockscreen = 'set_lockscreen';
 }
