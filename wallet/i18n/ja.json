@@ -10,6 +10,7 @@
   "recommended": "おすすめされた",
   "following": "続く",
   "select_a_date": "日付を選択",
+  "network_error_description":"トランザクションの処理中にネットワーク エラーが発生しました。アカウントの更新をもう一度お試しください。再試行しても 2 回請求されることはありません。",
   "what_is_new": "新着情報",
   "trending": "トレンド",
   "price": "価格",
@@ -357,5 +358,7 @@
   "buying_pylon_points": "パイロンポイントを購入",
   "transaction_date": "取引日",
   "retry": "リトライ",
-  "bought_nft": "買った"
+  "resolution": "解像度",
+  "bought_nft": "買った",
+  "set_lockscreen": "ロック画面に設定"
 }

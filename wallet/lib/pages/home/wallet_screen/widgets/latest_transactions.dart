@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
@@ -173,8 +175,13 @@ class LatestTransactions extends StatelessWidget {
     }
   }
 
-  Future<void> onTxTapped({required TransactionHistory txHistory}) async {
+  Future<void> onTxTapped({required TransactionHistory txHistory, required BuildContext context}) async {
     final walletsStore = GetIt.I.get<WalletsStore>();
+    final wallet = context.read<AccountProvider>().accountPublicInfo;
+
+    if (wallet == null) {
+      return;
+    }
 
     String seller = "";
     String buyer = "";
@@ -183,13 +190,13 @@ class LatestTransactions extends StatelessWidget {
       final showLoader = Loading()..showLoading();
 
       if (txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTSELL) {
-        seller = await walletsStore.getAccountNameByAddress(walletsStore.getWallets().value.first.publicAddress);
+        seller = await walletsStore.getAccountNameByAddress(wallet.publicAddress);
         buyer = await walletsStore.getAccountNameByAddress(txHistory.address);
       }
 
       if (txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTBUY) {
         seller = await walletsStore.getAccountNameByAddress(txHistory.address);
-        buyer = await walletsStore.getAccountNameByAddress(walletsStore.getWallets().value.first.publicAddress);
+        buyer = await walletsStore.getAccountNameByAddress(wallet.publicAddress);
       }
 
       final recipeResult = await walletsStore.getRecipe(txHistory.cookbookId, txHistory.recipeId);
@@ -225,31 +232,35 @@ class LatestTransactions extends StatelessWidget {
     }
   }
 
-  InkWell buildRow({required TransactionHistory txHistory}) {
+  Builder buildRow({required TransactionHistory txHistory}) {
     final DateTime date = DateTime.fromMillisecondsSinceEpoch(txHistory.createdAt * kDateConverterConstant, isUtc: true);
-    return InkWell(
-      onTap: () => onTxTapped(txHistory: txHistory),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Builder(
+      builder: (context) {
+        return InkWell(
+          onTap: () => onTxTapped(txHistory: txHistory, context: context),
+          child: Row(
             children: [
-              Text(monthStrMap[date.month]!, style: _subtitleTextStyle),
-              Text(date.day.toString(), style: _headingTextStyle),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(monthStrMap[date.month]!, style: _subtitleTextStyle),
+                  Text(date.day.toString(), style: _headingTextStyle),
+                ],
+              ),
+              Expanded(child: buildTransactionListTile(txHistory: txHistory)),
+              getAmountColumn(txHistory: txHistory),
+              SizedBox(
+                width: 10.w,
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 10.r,
+                color: AppColors.kUnselectedIcon,
+              ),
             ],
           ),
-          Expanded(child: buildTransactionListTile(txHistory: txHistory)),
-          getAmountColumn(txHistory: txHistory),
-          SizedBox(
-            width: 10.w,
-          ),
-          Icon(
-            Icons.arrow_forward_ios,
-            size: 10.r,
-            color: AppColors.kUnselectedIcon,
-          ),
-        ],
-      ),
+        );
+      }
     );
   }
 }

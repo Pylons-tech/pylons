@@ -80,7 +80,8 @@ const String kUniversalFontFamily = "UniversalSans";
 const String kENV = 'ENV';
 const String kLocal = 'local';
 const String kPylo = 'pylo';
-
+const kCID = "cid";
+const kIpfsCid = "IPFS CID";
 const String kPylonCoinName = "pylon";
 const String kUSDDenom = "ustripeusd";
 const String kUSD = "stripeusd";
@@ -168,6 +169,7 @@ const String kNone = "None";
 const String kEmoney = "eMoney Euro";
 const String kPylons = "Pylons";
 const String kDollar = "U.S. Dollar";
+const String kPoints = "Points";
 const String kAtom = "ATOM";
 const String kEthereum = "Ethereum";
 
@@ -411,7 +413,7 @@ const String kNftName = "nftName";
 const String kNftPrice = "nftPrice";
 const String kNftCurrency = "nftCurrency";
 const String kPaymentIntentId = "payment_intent_id";
-const String kClientSecret = "clientSecret";
+const String kClientSecret = "client_secret";
 const String kPaymentInfos = "payment_infos";
 
 const String kRecipeID = "recipeID";
@@ -450,3 +452,6 @@ const String kProgressKey = "Progress";
 const String kImageAssetKey = "image_asset_key";
 const String kShareNftButtonCollapsedKey = "share_nft_collapsed";
 const String kShareNftButtonExpandedKey = "share_nft_expanded";
+
+const String kGetFirebaseAppCheckTokenMethodChannelKey = "getFirebaseAppCheckTokenMethodChannel";
+const String kGetFirebaseAppCheckDebugTokenKey = "getFirebaseAppCheckDebugToken";

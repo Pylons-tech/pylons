@@ -9,6 +9,7 @@ import 'package:pylons_wallet/services/third_party_services/share_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/video_player_helper.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
+import 'package:transaction_signing_gateway/model/account_public_info.dart';
 import '../../mocks/mock_constants.dart';
 import '../../mocks/mock_repository.dart';
 import '../../mocks/mock_share_helper.dart';
@@ -16,6 +17,9 @@ import '../../mocks/mock_wallet_store.dart';
 import '../../mocks/mock_video_player.dart';
 import '../../mocks/mock_audio_player.dart';
 import '../extension/size_extension.dart';
+
+
+/// TODO: Add test for the account public info shown
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -32,12 +36,17 @@ void main() {
     walletStore = MockWalletStore();
     shareHelper = MockShareHelperImpl();
     final OwnerViewViewModel viewModel = OwnerViewViewModel(
-      repository: repositry,
-      walletsStore: walletStore,
-      audioPlayerHelper: audioPlayerHelper,
-      videoPlayerHelper: videoPlayerHelper,
-      shareHelper: shareHelper,
-    );
+        repository: repositry,
+        walletsStore: walletStore,
+        audioPlayerHelper: audioPlayerHelper,
+        videoPlayerHelper: videoPlayerHelper,
+        shareHelper: shareHelper,
+        accountPublicInfo: const AccountPublicInfo(
+          accountId: '',
+          chainId: '',
+          name: '',
+          publicAddress: '',
+        ));
 
     GetIt.I.registerSingleton(viewModel);
   });

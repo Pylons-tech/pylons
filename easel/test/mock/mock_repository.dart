@@ -16,37 +16,31 @@ import 'mock_constants.dart';
 class MockRepositoryImp implements Repository {
   @override
   Future<String> autoGenerateCookbookId() {
-    // TODO: implement autoGenerateCookbookId
     throw UnimplementedError();
   }
 
   @override
   String autoGenerateEaselId() {
-    // TODO: implement autoGenerateEaselId
     throw UnimplementedError();
   }
 
   @override
   deleteCacheDynamic({required String key}) {
-    // TODO: implement deleteCacheDynamic
     throw UnimplementedError();
   }
 
   @override
   String deleteCacheString({required String key}) {
-    // TODO: implement deleteCacheString
     throw UnimplementedError();
   }
 
   @override
   Future<Either<Failure, bool>> deleteNft(int id) {
-    // TODO: implement deleteNft
     throw UnimplementedError();
   }
 
   @override
   String generateEaselLinkForShare({required String recipeId, required String cookbookId}) {
-    // TODO: implement generateEaselLinkForShare
     throw UnimplementedError();
   }
 
@@ -62,37 +56,31 @@ class MockRepositoryImp implements Repository {
 
   @override
   String getCacheString({required String key}) {
-    // TODO: implement getCacheString
     throw UnimplementedError();
   }
 
   @override
   String getCookBookGeneratorUsername() {
-    // TODO: implement getCookBookGeneratorUsername
     throw UnimplementedError();
   }
 
   @override
   String? getCookbookId() {
-    // TODO: implement getCookbookId
     throw UnimplementedError();
   }
 
   @override
   String getExtension(String fileName) {
-    // TODO: implement getExtension
     throw UnimplementedError();
   }
 
   @override
   double getFileSizeInGB(int fileLength) {
-    // TODO: implement getFileSizeInGB
     throw UnimplementedError();
   }
 
   @override
   String getFileSizeString({required int fileLength, int precision = 2}) {
-    // TODO: implement getFileSizeString
     throw UnimplementedError();
   }
 
@@ -108,25 +96,21 @@ class MockRepositoryImp implements Repository {
 
   @override
   bool getOnBoardingComplete() {
-    // TODO: implement getOnBoardingComplete
     throw UnimplementedError();
   }
 
   @override
   Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId}) {
-    // TODO: implement getRecipesBasedOnCookBookId
     throw UnimplementedError();
   }
 
   @override
   Future<Either<Failure, void>> launchMyUrl({required String url}) {
-    // TODO: implement launchMyUrl
     throw UnimplementedError();
   }
 
   @override
   Future<Either<Failure, PickedFileModel>> pickFile(NftFormat format) {
-    // TODO: implement pickFile
     throw UnimplementedError();
   }
 
@@ -137,19 +121,17 @@ class MockRepositoryImp implements Repository {
 
   @override
   Future<bool> saveCookBookGeneratorUsername(String username) {
-    // TODO: implement saveCookBookGeneratorUsername
     throw UnimplementedError();
   }
 
   @override
   Future<Either<Failure, int>> saveNft(NFT nft) {
-    // TODO: implement saveNft
     throw UnimplementedError();
   }
 
   @override
   Future<bool> saveOnBoardingComplete() {
-    // TODO: implement saveOnBoardingComplete
+    
     throw UnimplementedError();
   }
 
@@ -160,12 +142,12 @@ class MockRepositoryImp implements Repository {
 
   @override
   void setCacheString({required String key, required String value}) {
-    // TODO: implement setCacheString
+    
   }
 
   @override
   Future<Either<Failure, bool>> updateNFTDialogShown({required int id}) {
-    // TODO: implement updateNFTDialogShown
+    
     throw UnimplementedError();
   }
 
@@ -181,7 +163,6 @@ class MockRepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, ApiResponse>> uploadFile({required File file, required OnUploadProgressCallback onUploadProgressCallback}) {
-    // TODO: implement uploadFile
     throw UnimplementedError();
   }
 

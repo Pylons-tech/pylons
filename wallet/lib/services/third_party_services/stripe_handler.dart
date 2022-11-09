@@ -5,6 +5,7 @@ import 'package:pylons_wallet/model/export.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_request.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_response.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
@@ -17,12 +18,14 @@ class StripeHandler {
   Repository repository;
   WalletsStore walletsStore;
   LocalDataSource localDataSource;
+  AccountProvider accountProvider;
 
-  StripeHandler(
-      {required this.repository,
-      required this.walletsStore,
-      required this.localDataSource});
-
+  StripeHandler({
+    required this.repository,
+    required this.walletsStore,
+    required this.localDataSource,
+    required this.accountProvider,
+  });
 
   /// handleStripeAccountLink
   /// @param
@@ -38,16 +41,12 @@ class StripeHandler {
     if (accountlink != "") {
       token = localDataSource.getStripeToken();
 
-      final accountlink_response = await repository.stripeGetLoginLink(
-          StripeLoginLinkRequest(
-              Account: accountlink,
-              Signature: await walletsStore.signPureMessage(token)));
+      final accountlink_response = await repository.stripeGetLoginLink(StripeLoginLinkRequest(Account: accountlink, Signature: await walletsStore.signPureMessage(token)));
       if (accountlink_response.isLeft()) {
         return left(StripeFailure(LocaleKeys.stripe_account_link_failed.tr()));
       }
 
-      final accountlink_info =
-          accountlink_response.getOrElse(() => StripeLoginLinkResponse());
+      final accountlink_info = accountlink_response.getOrElse(() => StripeLoginLinkResponse());
       if (accountlink_info.accountlink == "") {
         return left(StripeFailure(LocaleKeys.stripe_account_link_failed.tr()));
       }
@@ -58,15 +57,13 @@ class StripeHandler {
       return right(accountlink);
     }
 
-    final response = await repository.GenerateRegistrationToken(
-        walletsStore.getWallets().value.last.publicAddress);
+    final response = await repository.GenerateRegistrationToken(accountProvider.accountPublicInfo!.publicAddress);
 
     if (response.isLeft()) {
       return handleError(response);
     }
 
-    final token_info =
-        response.getOrElse(() => StripeGenerateRegistrationTokenResponse());
+    final token_info = response.getOrElse(() => StripeGenerateRegistrationTokenResponse());
 
     if (token_info.token == "") {
       return left(StripeFailure(LocaleKeys.stripe_registration_token_failed.tr()));
@@ -76,17 +73,16 @@ class StripeHandler {
 
     token = token_info.token;
 
-    final register_response = await repository.RegisterAccount(
-        StripeRegisterAccountRequest(
-            Token: token,
-            Signature: await walletsStore.signPureMessage(token),
-            Address: walletsStore.getWallets().value.last.publicAddress));
+    final register_response = await repository.RegisterAccount(StripeRegisterAccountRequest(
+      Token: token,
+      Signature: await walletsStore.signPureMessage(token),
+      Address: accountProvider.accountPublicInfo!.publicAddress,
+    ));
     if (register_response.isLeft()) {
       return handleError(register_response);
     }
 
-    final register_info =
-        register_response.getOrElse(() => StripeRegisterAccountResponse());
+    final register_info = register_response.getOrElse(() => StripeRegisterAccountResponse());
 
     if (register_info.accountlink == "" || register_info.account == "") {
       return left(StripeFailure(LocaleKeys.stripe_register_account_failed.tr()));
@@ -101,8 +97,7 @@ class StripeHandler {
   }
 
   /// This method will unparse the error and will check if it is related with user already exists it will update the account link
-  Future<Either<Failure, String>> handleError(
-      Either<Failure, dynamic> response) async {
+  Future<Either<Failure, String>> handleError(Either<Failure, dynamic> response) async {
     final failure = response.swap().toOption().toNullable()!;
 
     if (failure is AccountAlreadyExistsFailure) {
@@ -113,17 +108,15 @@ class StripeHandler {
   }
 
   Future<Either<Failure, String>> getLinkBasedOnAddress() async {
-    final address = walletsStore.getWallets().value.last.publicAddress;
+    final address = accountProvider.accountPublicInfo!.publicAddress;
 
-    final getAccountLinkEither = await repository.getLoginLinkBasedOnAddress(
-        StripeGetLoginBasedOnAddressRequest(address));
+    final getAccountLinkEither = await repository.getLoginLinkBasedOnAddress(StripeGetLoginBasedOnAddressRequest(address));
 
     if (getAccountLinkEither.isLeft()) {
       return left(StripeFailure(LocaleKeys.stripe_registration_token_failed.tr()));
     }
 
-    localDataSource.saveStripeAccountId(
-        accountId: getAccountLinkEither.toOption().toNullable()!.account);
+    localDataSource.saveStripeAccountId(accountId: getAccountLinkEither.toOption().toNullable()!.account);
 
     return Right(getAccountLinkEither.toOption().toNullable()!.accountlink);
   }
