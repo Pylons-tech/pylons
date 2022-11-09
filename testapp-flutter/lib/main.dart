@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:pylons_sdk/low_level.dart';
+import 'package:pylons_sdk/pylons_sdk.dart';
 import 'package:fixnum/fixnum.dart';
 
 void main() {
@@ -25,6 +25,8 @@ class _MyAppState extends State<MyApp> {
     PylonsWallet.instance.exists().then((exists) {
       if (!exists) {
         PylonsWallet.instance.goToInstall();
+      } else {
+        Cookbook.load("appTestCookbook");
       }
     });
   }
