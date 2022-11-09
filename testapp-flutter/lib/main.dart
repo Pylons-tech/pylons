@@ -112,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget topLevelMenu() {
-    if (curHp == 0) {
+    if (curHp <= 0) {
       return quitButton();
     }
     return Column(
@@ -192,7 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var lastUpdate = Int64.MIN_VALUE;
     for (var item in prf.items) {
       if (item.getString("entityType") == "character" &&
-          !(item.getInt("currentHp")?.isZero ?? true)) {
+          !(item.getInt("currentHp")?.isZero  ?? true) || !(item.getInt("currentHp")?.isNegative  ?? true)) {
         if (item.getLastUpdate() > lastUpdate) {
           setState(() {
             character = item;
