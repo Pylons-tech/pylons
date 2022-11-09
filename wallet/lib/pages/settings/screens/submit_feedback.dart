@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
 import 'package:pylons_wallet/components/feedback_text_field.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/main_prod.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as clipper;
@@ -53,11 +54,21 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
   }
 
   Future<void> onSubmitButtonPressed() async {
+    final account = context.read<AccountProvider>().accountPublicInfo;
+
     Navigator.pop(context);
+
+    if (account == null) {
+      return;
+    }
     final loader = Loading()..showLoading();
     final repository = GetIt.I.get<Repository>();
-    final walletAddress = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
-    final responseEither = await repository.saveUserFeedback(walletAddress: walletAddress, subject: subjectController.text, feedback: descController.text);
+    final walletAddress = account.publicAddress;
+    final responseEither = await repository.saveUserFeedback(
+      walletAddress: walletAddress,
+      subject: subjectController.text,
+      feedback: descController.text,
+    );
     if (responseEither.isLeft()) {
       loader.dismiss();
       return LocaleKeys.something_wrong.tr().show();

@@ -44,18 +44,19 @@ class _RestoreWalletScreenState extends State<RestoreWalletScreen> {
             ),
           ),
           Positioned(
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.w),
-                  child: ImportFromGoogleForm(
-                    walletStore: walletsStore,
-                  ),
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25.w),
+                child: ImportFromGoogleForm(
+                  walletStore: walletsStore,
                 ),
-              )),
+              ),
+            ),
+          ),
         ],
       ),
     );
