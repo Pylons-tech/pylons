@@ -85,7 +85,7 @@ void main() {
     expect(MOCK_ACCOUNT, response.toOption().toNullable()!.account);
   });
 
-  test('should get weather user getting do i accept policy or not', () {
+  test('should get whether user getting do i accept policy or not', () {
     final response = mockRepository.getUserAcceptPolicies();
 
     expect(true, response.isRight());

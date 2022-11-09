@@ -70,6 +70,7 @@ class _AcceptPolicyScreenState extends State<AcceptPolicyScreen> {
               return Consumer<AcceptPolicyViewModel>(
                 builder: (context, viewModel, child) {
                   return Align(
+                    key: const Key(kAcceptPolicyPortionKey),
                     alignment: Alignment.bottomCenter,
                     child: ClipPath(
                       clipper: LeftRightTopClipper(),
