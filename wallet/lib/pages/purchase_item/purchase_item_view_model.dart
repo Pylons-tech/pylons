@@ -11,6 +11,7 @@ import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
@@ -37,6 +38,11 @@ class PurchaseItemViewModel extends ChangeNotifier {
   });
 
   bool get isViewingFullNft => _isViewingFullNft;
+
+  TabFields? selectedField;
+  bool isOwnershipExpanded = false;
+  bool isHistoryExpanded = false;
+  bool isDetailsExpanded = false;
 
   set isViewingFullNft(bool value) {
     _isViewingFullNft = value;
@@ -158,6 +164,50 @@ class PurchaseItemViewModel extends ChangeNotifier {
     showLoader.dismiss();
   }
 
+
+  void getWhichTabIsExpanded() {
+    isDetailsExpanded = false;
+    isHistoryExpanded = false;
+    isOwnershipExpanded = false;
+
+    switch (selectedField) {
+      case TabFields.ownership:
+        isOwnershipExpanded = true;
+        notifyListeners();
+        break;
+      case TabFields.history:
+        isHistoryExpanded = true;
+        notifyListeners();
+        break;
+      case TabFields.details:
+        isDetailsExpanded = true;
+        notifyListeners();
+        break;
+      default:
+        return;
+    }
+  }
+
+  void closeExpansion() {
+    isDetailsExpanded = false;
+    isHistoryExpanded = false;
+    isOwnershipExpanded = false;
+    notifyListeners();
+  }
+
+  void onChangeTab(TabFields tab) {
+    if (tab == selectedField && isExpansionOpen()) {
+      closeExpansion();
+      return;
+    }
+
+    selectedField = tab;
+    getWhichTabIsExpanded();
+  }
+
+  bool isExpansionOpen() => isDetailsExpanded || isHistoryExpanded || isOwnershipExpanded;
+
+
   void initializePlayers(NFT nft) {
     switch (nft.assetType) {
       case AssetType.Audio:
@@ -201,6 +251,8 @@ class PurchaseItemViewModel extends ChangeNotifier {
         break;
     }
   }
+
+  bool isOwner() => nft.ownerAddress == accountPublicInfo.publicAddress;
 
   Future<void> initializeVideoPlayer() async {
     videoPlayerHelper.initializeVideoPlayer(url: nft.url);

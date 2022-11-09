@@ -334,3 +334,4 @@ bool MOCK_CAMERA_CONTROLS = false;
 bool MOCK_SHOW_LOADER_TRUE = true;
 bool MOCK_SHOW_LOADER_FALSE = false;
 String MOCK_DYNAMIC_LINK = "https://pylons.page.link/i89m9Qxw7fYjW2RS8";
+const MOCK_BUY_BUTTON_KEY_VALUE = "buy_button_key";

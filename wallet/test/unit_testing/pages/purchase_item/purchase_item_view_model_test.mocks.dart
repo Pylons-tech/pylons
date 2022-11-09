@@ -3030,6 +3030,19 @@ class MockNFT extends _i1.Mock implements _i29.NFT {
         returnValueForMissingStub: null,
       );
   @override
+  String get cid => (super.noSuchMethod(
+        Invocation.getter(#cid),
+        returnValue: '',
+      ) as String);
+  @override
+  set cid(String? _cid) => super.noSuchMethod(
+        Invocation.setter(
+          #cid,
+          _cid,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
   String get createdAt => (super.noSuchMethod(
         Invocation.getter(#createdAt),
         returnValue: '',
