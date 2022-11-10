@@ -81,24 +81,8 @@ class NftGridViewItem extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(left: 8.w, top: 10.0.h),
                 child: SvgPicture.asset(
-                  nft.assetType == kImageText
-                      ? SVGUtils.kFileTypeImageIcon
-                      : nft.assetType == kVideoText
-                          ? SVGUtils.kSvgNftFormatVideo
-                          : nft.assetType == k3dText
-                              ? SVGUtils.kSvgNftFormat3d
-                              : nft.assetType == kPdfText
-                                  ? SVGUtils.kSvgNftFormatPDF
-                                  : SVGUtils.kSvgNftFormatAudio,
-                  key: Key(nft.assetType == kImageText
-                      ? kNFTTypeImageIconKey
-                      : nft.assetType == kVideoText
-                          ? kNFTTypeVideoIconKey
-                          : nft.assetType == k3dText
-                              ? kNFTType3dModelIconKey
-                              : nft.assetType == kPdfText
-                                  ? kNFTTypePdfIconKey
-                                  : kNFTTypeAudioIconKey),
+                  getNFTIcon(),
+                  key: Key(getNFTIconKey()),
                   color: Colors.white,
                   width: 14,
                   height: 14,
@@ -130,6 +114,7 @@ class NftGridViewItem extends StatelessWidget {
                   ),
                   const Spacer(),
                   InkWell(
+                    key: const Key(kGridViewTileMoreOptionKey),
                     onTap: () {
                       if (context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft) {
                         final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
@@ -171,5 +156,35 @@ class NftGridViewItem extends StatelessWidget {
     final bottomSheet = BuildPublishedNFTsBottomSheet(context: context, nft: nft, easelProvider: _easelProvider);
 
     bottomSheet.show();
+  }
+
+  String getNFTIcon() {
+    switch(nft.assetType){
+      case kVideoText:
+        return SVGUtils.kSvgNftFormatVideo;
+      case kAudioText:
+        return SVGUtils.kSvgNftFormatAudio;
+      case kPdfText:
+        return SVGUtils.kSvgNftFormatPDF;
+      case k3dText:
+        return SVGUtils.kSvgNftFormat3d;
+      default:
+        return SVGUtils.kFileTypeImageIcon;
+    }
+  }
+
+  String getNFTIconKey() {
+    switch(nft.assetType){
+      case kVideoText:
+        return kNFTTypeVideoIconKey;
+      case kAudioText:
+        return kNFTTypeAudioIconKey;
+      case kPdfText:
+        return kNFTTypePdfIconKey;
+      case k3dText:
+        return kNFTType3dModelIconKey;
+      default:
+        return kNFTTypeImageIconKey;
+    }
   }
 }

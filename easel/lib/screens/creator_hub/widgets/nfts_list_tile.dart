@@ -218,8 +218,8 @@ class NFTsListTile extends StatelessWidget {
                   ),
                 ),
               )
-            : const IgnorePointer(
-                child: SizedBox(),
+            : IgnorePointer(
+                child: SizedBox(height: 85.h,),
               ),
       ],
     );
