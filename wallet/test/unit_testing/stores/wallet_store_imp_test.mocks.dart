@@ -3,14 +3,15 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i6;
 
 import 'package:firebase_messaging/firebase_messaging.dart' as _i2;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as _i3;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:pylons_wallet/services/repository/repository.dart' as _i4;
 import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart'
-    as _i4;
+    as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -45,11 +46,21 @@ class _FakeFlutterLocalNotificationsPlugin_1 extends _i1.SmartFake
         );
 }
 
+class _FakeRepository_2 extends _i1.SmartFake implements _i4.Repository {
+  _FakeRepository_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [RemoteNotificationsProvider].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockRemoteNotificationsProvider extends _i1.Mock
-    implements _i4.RemoteNotificationsProvider {
+    implements _i5.RemoteNotificationsProvider {
   MockRemoteNotificationsProvider() {
     _i1.throwOnMissingStub(this);
   }
@@ -72,21 +83,29 @@ class MockRemoteNotificationsProvider extends _i1.Mock
         ),
       ) as _i3.FlutterLocalNotificationsPlugin);
   @override
-  _i5.Future<String> getToken() => (super.noSuchMethod(
+  _i4.Repository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeRepository_2(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i4.Repository);
+  @override
+  _i6.Future<String> getToken() => (super.noSuchMethod(
         Invocation.method(
           #getToken,
           [],
         ),
-        returnValue: _i5.Future<String>.value(''),
-      ) as _i5.Future<String>);
+        returnValue: _i6.Future<String>.value(''),
+      ) as _i6.Future<String>);
   @override
-  _i5.Future<dynamic> getNotificationsPermission() => (super.noSuchMethod(
+  _i6.Future<dynamic> getNotificationsPermission() => (super.noSuchMethod(
         Invocation.method(
           #getNotificationsPermission,
           [],
         ),
-        returnValue: _i5.Future<dynamic>.value(),
-      ) as _i5.Future<dynamic>);
+        returnValue: _i6.Future<dynamic>.value(),
+      ) as _i6.Future<dynamic>);
   @override
   void listenToForegroundNotification() => super.noSuchMethod(
         Invocation.method(
@@ -129,4 +148,14 @@ class MockRemoteNotificationsProvider extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
+  @override
+  _i6.Future<dynamic> updateFCMToken({required String? address}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateFCMToken,
+          [],
+          {#address: address},
+        ),
+        returnValue: _i6.Future<dynamic>.value(),
+      ) as _i6.Future<dynamic>);
 }

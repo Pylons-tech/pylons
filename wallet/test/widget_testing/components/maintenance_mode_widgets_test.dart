@@ -7,17 +7,16 @@ import 'package:pylons_wallet/components/maintenance_mode_widgets.dart';
 import 'package:pylons_wallet/pages/home/home.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_config_service/remote_config_service.dart';
 import '../extension/size_extension.dart';
+//import '../../mocks/maintenance_mode_widgets_test.mocks.dart';
 
-// class MockRemoteConfigService extends Mock implements RemoteConfigService {
-//   @override
-//   bool getMaintenanceMode() {
-//     return true;
-//   }
-// }
+class MockRemoteConfigService extends Mock implements RemoteConfigService {
+  @override
+  bool getMaintenanceMode() {
+    return true;
+  }
+}
 
-class MockRemoteConfigService extends Mock implements RemoteConfigService {}
-
-@GenerateMocks([MockRemoteConfigService])
+@GenerateMocks([RemoteConfigService])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
