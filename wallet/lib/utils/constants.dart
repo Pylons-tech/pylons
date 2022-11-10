@@ -81,8 +81,8 @@ const String kUniversalSans750FontFamily = "UniversalSans750";
 const String kENV = 'ENV';
 const String kLocal = 'local';
 const String kPylo = 'pylo';
-
 const kCID = "cid";
+const kIpfsCid = "IPFS CID";
 const String kPylonCoinName = "pylon";
 const String kUSDDenom = "ustripeusd";
 const String kUSD = "stripeusd";
@@ -170,6 +170,7 @@ const String kNone = "None";
 const String kEmoney = "eMoney Euro";
 const String kPylons = "Pylons";
 const String kDollar = "U.S. Dollar";
+const String kPoints = "Points";
 const String kAtom = "ATOM";
 const String kEthereum = "Ethereum";
 
@@ -229,6 +230,7 @@ const String kVietnameseText = "vietnamese";
 const String kAndroidAppLink = 'https://play.google.com/store/apps/details?id=tech.pylons.wallet';
 const String kIOSAppLink = 'https://apps.apple.com/gb/app/cashero/id1598732789?ign-mpt=uo%3D2';
 
+const String kRecipeId = 'Recipe ID';
 const String kRecipes = 'recipes';
 const String kFeedbacks = 'UserFeedbacks';
 const String kLikes = 'likes';
@@ -453,3 +455,6 @@ const String kProgressKey = "Progress";
 const String kImageAssetKey = "image_asset_key";
 const String kShareNftButtonCollapsedKey = "share_nft_collapsed";
 const String kShareNftButtonExpandedKey = "share_nft_expanded";
+
+const String kGetFirebaseAppCheckTokenMethodChannelKey = "getFirebaseAppCheckTokenMethodChannel";
+const String kGetFirebaseAppCheckDebugTokenKey = "getFirebaseAppCheckDebugToken";

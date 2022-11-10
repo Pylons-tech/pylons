@@ -2,10 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/screens/payment_screen/widgets/transactions_list_view.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
 import '../../../../../../../generated/locale_keys.g.dart';
@@ -28,7 +29,11 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
   void initState() {
     super.initState();
 
-    final walletInfo = GetIt.I.get<WalletsStore>().getWallets().value.last;
+    final walletInfo = context.read<AccountProvider>().accountPublicInfo;
+
+    if (walletInfo == null) {
+      return;
+    }
 
     repository.getTransactionHistory(address: walletInfo.publicAddress).then((value) {
       if (value.isRight()) {

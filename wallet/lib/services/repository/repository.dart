@@ -525,7 +525,6 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, pylons.Recipe>> getRecipe({required String cookBookId, required String recipeId}) async {
     if (!await networkInfo.isConnected) {
-      
       return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 

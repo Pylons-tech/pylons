@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
+import 'dart:io' show Platform;
 
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -18,6 +19,7 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_play
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_progress_widget.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/wallpaper_set_screen.dart';
 import 'package:pylons_wallet/pages/gestures_for_detail_screen.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
@@ -188,8 +190,6 @@ class OwnerBottomDrawer extends StatefulWidget {
 
 class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   bool liked = false;
-  bool collapsed = true;
-  bool isExpanded = false;
 
   Widget getProgressWidget() {
     final viewModel = context.read<OwnerViewViewModel>();
@@ -454,7 +454,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         icon: 'trophy',
                                         nft: viewModel.nft,
                                         owner: viewModel.owner,
-                                        NftOwnershipHistoryList: const [],
+                                        nftOwnershipHistoryList: const [],
+                                        isExpanded: viewModel.isOwnershipExpanded,
+                                        onChangeTab: viewModel.onChangeTab,
                                       ),
                                       SizedBox(height: 10.h),
                                       TabField(
@@ -462,7 +464,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         icon: 'detail',
                                         nft: viewModel.nft,
                                         owner: viewModel.owner,
-                                        NftOwnershipHistoryList: const [],
+                                        nftOwnershipHistoryList: const [],
+                                        isExpanded: viewModel.isDetailsExpanded,
+                                        onChangeTab: viewModel.onChangeTab,
                                       ),
                                       SizedBox(height: 10.h),
                                       if (viewModel.nft.type != NftType.TYPE_RECIPE)
@@ -471,7 +475,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                           icon: 'history',
                                           nft: viewModel.nft,
                                           owner: viewModel.nft.owner,
-                                          NftOwnershipHistoryList: viewModel.nftOwnershipHistoryList,
+                                          nftOwnershipHistoryList: viewModel.nftOwnershipHistoryList,
+                                          isExpanded: viewModel.isHistoryExpanded,
+                                          onChangeTab: viewModel.onChangeTab,
                                         ),
                                       SizedBox(height: 30.h),
                                     ],
@@ -503,7 +509,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         ],
                                       ),
                                       SizedBox(
-                                        height: 20.h,
+                                        height: 12.h,
                                       ),
                                       GestureDetector(
                                         onTap: () {
@@ -520,11 +526,21 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         ),
                                       ),
                                       SizedBox(
-                                        height: 20.h,
+                                        height: 12.h,
                                       ),
-                                      SizedBox(
-                                        height: 20.h,
-                                      ),
+                                      if (viewModel.nft.assetType == AssetType.Image && Platform.isAndroid)
+                                        GestureDetector(
+                                          onTap: () {
+                                            final WallpaperScreen wallpaperScreen = WallpaperScreen(nft: viewModel.nft.url, context: context);
+                                            wallpaperScreen.show();
+                                          },
+                                          child: SvgPicture.asset(
+                                            SVGUtil.MY_CREATIONS,
+                                            height: 20.h,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      SizedBox(height: 12.h),
                                       GestureDetector(
                                         key: const Key(kShareNftButtonExpandedKey),
                                         onTap: () async {
