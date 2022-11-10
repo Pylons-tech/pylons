@@ -16,6 +16,7 @@ import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pyl
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/pay_with_swipe.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
@@ -352,10 +353,18 @@ class _PayNowWidgetState extends State<PayNowWidget> {
     final walletsStore = GetIt.I.get<WalletsStore>();
     final repository = GetIt.I.get<Repository>();
     final baseEnv = GetIt.I.get<BaseEnv>();
+    final wallet = context.read<AccountProvider>().accountPublicInfo;
+
+    if (wallet == null) {
+      return;
+    }
     showLoading(context);
 
-    final response = await repository.CreatePaymentIntent(
-        StripeCreatePaymentIntentRequest(productID: "recipe/${nft.cookbookID}/${nft.recipeID}", coinInputIndex: 0, address: walletsStore.getWallets().value.last.publicAddress));
+    final response = await repository.CreatePaymentIntent(StripeCreatePaymentIntentRequest(
+      productID: "recipe/${nft.cookbookID}/${nft.recipeID}",
+      coinInputIndex: 0,
+      address: wallet.publicAddress,
+    ));
 
     if (response.isLeft()) {
       response.swap().toOption().toNullable()?.message.show();
@@ -436,9 +445,21 @@ class _PayNowWidgetState extends State<PayNowWidget> {
     final walletsStore = GetIt.I.get<WalletsStore>();
     final repository = GetIt.I.get<Repository>();
     final baseEnv = GetIt.I.get<BaseEnv>();
+
+    final wallet = context.read<AccountProvider>().accountPublicInfo;
+
+    if (wallet == null) {
+      return;
+    }
+
     showLoading(context);
-    final response =
-        await repository.CreatePaymentIntent(StripeCreatePaymentIntentRequest(productID: "trade/${nft.tradeID}", coinInputIndex: 0, address: walletsStore.getWallets().value.last.publicAddress));
+    final response = await repository.CreatePaymentIntent(
+      StripeCreatePaymentIntentRequest(
+        productID: "trade/${nft.tradeID}",
+        coinInputIndex: 0,
+        address: wallet.publicAddress,
+      ),
+    );
     final pi_info = response.getOrElse(() => StripeCreatePaymentIntentResponse());
     if (pi_info.clientsecret != "") {
       try {

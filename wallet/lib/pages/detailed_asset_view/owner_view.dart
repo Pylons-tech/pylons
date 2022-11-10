@@ -190,8 +190,6 @@ class OwnerBottomDrawer extends StatefulWidget {
 
 class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   bool liked = false;
-  bool collapsed = true;
-  bool isExpanded = false;
 
   Widget getProgressWidget() {
     final viewModel = context.read<OwnerViewViewModel>();
@@ -456,7 +454,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         icon: 'trophy',
                                         nft: viewModel.nft,
                                         owner: viewModel.owner,
-                                        NftOwnershipHistoryList: const [],
+                                        nftOwnershipHistoryList: const [],
+                                        isExpanded: viewModel.isOwnershipExpanded,
+                                        onChangeTab: viewModel.onChangeTab,
                                       ),
                                       SizedBox(height: 10.h),
                                       TabField(
@@ -464,7 +464,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         icon: 'detail',
                                         nft: viewModel.nft,
                                         owner: viewModel.owner,
-                                        NftOwnershipHistoryList: const [],
+                                        nftOwnershipHistoryList: const [],
+                                        isExpanded: viewModel.isDetailsExpanded,
+                                        onChangeTab: viewModel.onChangeTab,
                                       ),
                                       SizedBox(height: 10.h),
                                       if (viewModel.nft.type != NftType.TYPE_RECIPE)
@@ -473,7 +475,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                           icon: 'history',
                                           nft: viewModel.nft,
                                           owner: viewModel.nft.owner,
-                                          NftOwnershipHistoryList: viewModel.nftOwnershipHistoryList,
+                                          nftOwnershipHistoryList: viewModel.nftOwnershipHistoryList,
+                                          isExpanded: viewModel.isHistoryExpanded,
+                                          onChangeTab: viewModel.onChangeTab,
                                         ),
                                       SizedBox(height: 30.h),
                                     ],

@@ -188,22 +188,21 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
           ],
         ),
         Text(
-          walletsStore.getWallets().value.last.name,
+          homeProvider.accountPublicInfo.name,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20.sp),
           textAlign: TextAlign.center,
         ),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
-            "wallet_address_arg".tr(args: [walletsStore.getWallets().value.last.publicAddress]),
+            "wallet_address_arg".tr(args: [homeProvider.accountPublicInfo.publicAddress]),
             style: TextStyle(color: Colors.black, fontSize: 9.sp),
             textAlign: TextAlign.center,
           ),
           SizedBox(width: 5.w),
           GestureDetector(
             onTap: () async {
-              final publicAddress = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
 
-              await Clipboard.setData(ClipboardData(text: publicAddress));
+              await Clipboard.setData(ClipboardData(text: homeProvider.accountPublicInfo.publicAddress));
               LocaleKeys.copied_to_clipboard.tr().show();
             },
             child: SvgPicture.asset(SVGUtil.WALLET_COPY, height: 10.h, width: 10.w, fit: BoxFit.scaleDown),
@@ -302,21 +301,21 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
           ],
         ),
         Text(
-          walletsStore.getWallets().value.last.name,
+          homeProvider.accountPublicInfo.name,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20.sp),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 5.h),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
-            LocaleKeys.wallet_address_arg.tr(args: [walletsStore.getWallets().value.last.publicAddress]),
+            LocaleKeys.wallet_address_arg.tr(args: [homeProvider.accountPublicInfo.publicAddress]),
             style: TextStyle(color: Colors.black, fontSize: 9.sp),
             textAlign: TextAlign.center,
           ),
           SizedBox(width: 5.w),
           GestureDetector(
             onTap: () async {
-              final publicAddress = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
+              final publicAddress = homeProvider.accountPublicInfo.publicAddress;
               await Clipboard.setData(ClipboardData(text: publicAddress));
               LocaleKeys.copied_to_clipboard.tr().show();
             },

@@ -10,19 +10,21 @@ import 'package:pylons_wallet/pages/home/collection_screen/collection_screen.dar
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/home/wallet_screen/model/currency.dart';
 import 'package:pylons_wallet/pages/home/wallet_screen/wallet_screen.dart';
+
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
+import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
 import '../../generated/locale_keys.g.dart';
 
 class HomeProvider extends ChangeNotifier {
   final Repository repository;
-  final WalletsStore walletStore;
+  
+  final AccountPublicInfo accountPublicInfo;
 
-  HomeProvider({required this.repository, required this.walletStore});
+  HomeProvider({required this.repository, required this.accountPublicInfo});
 
   final List<Widget> pages = <Widget>[const CollectionScreen(), const WalletScreen()];
   final tabs = ['collection', 'wallet'];
@@ -66,7 +68,7 @@ class HomeProvider extends ChangeNotifier {
 
   Future<List<NotificationMessage>> callGetNotificationApi() async {
     final response = await repository.getAllNotificationsMessages(
-      walletAddress: getWalletStore().getWallets().value.last.publicAddress,
+      walletAddress: accountPublicInfo.publicAddress,
       limit: _limit,
       offset: _offset,
     );
@@ -105,9 +107,8 @@ class HomeProvider extends ChangeNotifier {
   }
 
   Future<void> getTransactionHistoryList() async {
-    final walletInfo = walletStore.getWallets().value.last;
 
-    GetIt.I.get<Repository>().getTransactionHistory(address: walletInfo.publicAddress).then((value) {
+    GetIt.I.get<Repository>().getTransactionHistory(address: accountPublicInfo.publicAddress).then((value) {
       if (value.isRight()) {
         transactionHistoryList = value.getOrElse(() => []);
       }
@@ -192,9 +193,8 @@ class HomeProvider extends ChangeNotifier {
 
   Future<void> buildAssetsList() async {
     balances.clear();
-    final currentWallet = getWalletStore().getWallets().value.last;
 
-    final response = await getRepository().getBalance(currentWallet.publicAddress);
+    final response = await getRepository().getBalance(accountPublicInfo.publicAddress);
 
     if (response.isLeft()) {
       handleError(response);
@@ -219,9 +219,7 @@ class HomeProvider extends ChangeNotifier {
     repository.logUserJourney(screenName: AnalyticsScreenEvents.home);
   }
 
-  WalletsStore getWalletStore() {
-    return walletStore;
-  }
+
 
   Repository getRepository() {
     return repository;
