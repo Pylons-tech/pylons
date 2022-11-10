@@ -1,16 +1,24 @@
 import 'package:fixnum/fixnum.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
+/// Wrapper object for the user's profile and associated state.
 class Profile {
+  /// The DateTime this profile was retrieved. Use it to make decisions about when to retrieve the profile again.
   final DateTime asOf = DateTime.now();
+  /// The user's address.
   final String address;
+  /// The user's human-readable username.
   final String username;
-  final Map<String, Int64> getBalances;
+  /// Map containing all of the user's coins.
+  final Map<String, Int64> coins;
+  /// List containing all of the user's items.
   final List<Item> items;
+  /// Does the user have Stripe enabled?
   final bool hasStripe;
 
-  Profile(this.address, this.username, this.getBalances, this.items, this.hasStripe);
+  Profile(this.address, this.username, this.coins, this.items, this.hasStripe);
 
+  /// Retrieves the current state of the profile on chain, or null if no profile exists.
   static Future<Profile?> get () async {
     var ll = await PylonsWallet.instance.getProfile();
     if (ll.success) {
