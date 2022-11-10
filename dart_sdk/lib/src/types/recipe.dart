@@ -6,9 +6,13 @@ import '../generated/pylons/payment_info.pb.dart' as generated;
 import '../generated/pylons/recipe.pb.dart' as generated;
 
 class Recipe {
-  final generated.Recipe _native;
+  final generated.Recipe? _native;
+  final String? _forcedId;
 
-  Recipe(this._native);
+  Recipe(this._native, this._forcedId);
+
+  Recipe.fromId(String n) : _native = null, _forcedId = n;
+  Recipe.fromRecipe(generated.Recipe n) : _native = n, _forcedId = null;
 
   static Future<Recipe?> get (String id, {String? cookbook}) async {
     final String cb;
@@ -22,10 +26,17 @@ class Recipe {
     }
     final ll = await PylonsWallet.instance.getRecipe(cb, id);
     if (ll.success) {
-      return Recipe(ll.data!);
+      return Recipe.fromRecipe(ll.data!);
     } else {
       return null;
     }
+  }
+
+  static Recipe let (String id) {
+    if (Cookbook.current == null) {
+      throw Exception('Must set cookbook before trying to fetch a recipe');
+    }
+    return Recipe.fromId(id);
   }
 
   Future<Execution> executeWith (Profile prf, List<Item> inputs, {int CoinInputIndex = 0, List<generated.PaymentInfo>Function()? paymentInfoGen} ) async {
@@ -37,15 +48,24 @@ class Recipe {
       ids.add(item.getId());
     });
     // Pass this through to the low-level API
+    String cb;
+    String name;
+    if (_native != null) {
+      cb = _native!.cookbookId;
+      name = _native!.name;
+    } else {
+      cb = Cookbook.current!.getId();
+      name = _forcedId!;
+    }
     var lowLevel = await PylonsWallet.instance.txExecuteRecipe(
-        cookbookId: _native.cookbookId,
-        recipeName: _native.name,
+        cookbookId: cb,
+        recipeName: name,
         itemIds: List.unmodifiable(ids),
         coinInputIndex: 0,
         paymentInfo: List.unmodifiable(infos),
         sender: prf.address,
         requestResponse: true);
-    if (lowLevel.error == "") {
+    if (lowLevel.error == '') {
       return Execution(lowLevel.data!);
     } else {
       print(lowLevel.error);
@@ -54,47 +74,80 @@ class Recipe {
   }
 
   String getCookbookId() {
-    return _native.cookbookId;
+    if (_native == null) {
+      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+    }
+    return _native!.cookbookId;
   }
 
   String getId() {
-    return _native.id;
+    if (_native == null) {
+      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+    }
+    return _native!.id;
   }
 
   Int64 getNodeVersion() {
-    return _native.nodeVersion;
+    if (_native == null) {
+      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+    }
+    return _native!.nodeVersion;
   }
 
   String getName() {
-    return _native.name;
+    if (_native == null) {
+      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+    }
+    return _native!.name;
   }
 
   String getDescription() {
-    return _native.name;
+    if (_native == null) {
+      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+    }
+    return _native!.description;
   }
 
   String getVersion() {
-    return _native.version;
+    if (_native == null) {
+      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+    }
+    return _native!.version;
   }
 
   String getExtraInfo() {
-    return _native.extraInfo;
+    if (_native == null) {
+      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+    }
+    return _native!.extraInfo;
   }
 
   bool isEnabled() {
-    return _native.enabled;
+    if (_native == null) {
+      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+    }
+    return _native!.enabled;
   }
 
   Int64 getCreatedAt() {
-    return _native.createdAt;
+    if (_native == null) {
+      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+    }
+    return _native!.createdAt;
   }
 
   Int64 getUpdatedAt() {
-    return _native.updatedAt;
+    if (_native == null) {
+      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+    }
+    return _native!.updatedAt;
   }
 
   Map<String, Int64> getCoinInputs() {
-    final ll = _native.coinInputs;
+    if (_native == null) {
+      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+    }
+    final ll = _native!.coinInputs;
     final map = <String, Int64>{};
     ll.forEach((element) {
       for (var coin in element.coins) {
@@ -105,13 +158,19 @@ class Recipe {
   }
 
   List<ItemInput> getItemInputs() {
+    if (_native == null) {
+      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+    }
     var ls = <ItemInput>[];
-    _native.itemInputs.forEach((element) {ls.add(ItemInput(element));});
+    _native!.itemInputs.forEach((element) {ls.add(ItemInput(element));});
     return List.unmodifiable(ls);
   }
 
   OutputSet getOutput() {
-    return OutputSet(_native.entries, _native.outputs);
+    if (_native == null) {
+      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+    }
+    return OutputSet(_native!.entries, _native!.outputs);
   }
 }
 
