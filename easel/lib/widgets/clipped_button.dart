@@ -35,51 +35,38 @@ class ClippedButton extends StatelessWidget {
       },
       child: isShadow!
           ? CustomPaint(
-              painter: clipperType == ClipperType.bottomLeftTopRight
-                  ? BoxShadowPainterBottomLeftTopRight(
-                      cuttingHeight: cuttingHeight)
-                  : BoxShadowPainterTopLeftBottomRight(
-                      cuttingHeight: cuttingHeight),
+              painter:
+                  clipperType == ClipperType.bottomLeftTopRight ? BoxShadowPainterBottomLeftTopRight(cuttingHeight: cuttingHeight) : BoxShadowPainterTopLeftBottomRight(cuttingHeight: cuttingHeight),
               child: ClipPath(
-                clipper: clipperType == ClipperType.bottomLeftTopRight
-                    ? ButtonClipperBottomLeftTopRight(
-                        cuttingHeight: cuttingHeight)
-                    : ButtonClipperTopLeftBottomRight(
-                        cuttingHeight: cuttingHeight),
+                clipper: clipperType == ClipperType.bottomLeftTopRight ? ButtonClipperBottomLeftTopRight(cuttingHeight: cuttingHeight) : ButtonClipperTopLeftBottomRight(cuttingHeight: cuttingHeight),
                 child: Container(
                   color: bgColor,
                   height: 40.h,
                   child: Center(
                       child: Text(
                     title,
-                    style: TextStyle(
-                        color: textColor,
-                        fontSize: 16.sp,
-                        fontWeight: fontWeight),
+                    style: TextStyle(color: textColor, fontSize: 16.sp, fontWeight: fontWeight),
                     textAlign: TextAlign.center,
                   )),
                 ),
               ),
             )
           : ClipPath(
-              clipper: clipperType == ClipperType.bottomLeftTopRight
-                  ? ButtonClipperBottomLeftTopRight(
-                      cuttingHeight: cuttingHeight)
-                  : ButtonClipperTopLeftBottomRight(
-                      cuttingHeight: cuttingHeight),
+              clipper: clipperType == ClipperType.bottomLeftTopRight ? ButtonClipperBottomLeftTopRight(cuttingHeight: cuttingHeight) : ButtonClipperTopLeftBottomRight(cuttingHeight: cuttingHeight),
               child: Container(
                 color: bgColor,
                 height: 40.h,
                 child: Center(
-                    child: Text(
-                  title,
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: 16.sp,
-                    fontWeight: fontWeight,
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 16.sp,
+                      fontWeight: fontWeight,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                )),
+                ),
               ),
             ),
     );

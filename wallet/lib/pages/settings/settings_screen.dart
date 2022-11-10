@@ -11,8 +11,8 @@ import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_localization_view_model.dart';
 import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
 import 'package:pylons_wallet/pages/settings/widgets/delete_dialog.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
@@ -48,8 +48,8 @@ class _SettingScreenState extends State<SettingScreen> {
   void initState() {
     super.initState();
 
-    final currentWallet = GetIt.I.get<WalletsStore>().getWallets().value.last;
-    name = currentWallet.name;
+    final currentWallet = context.read<AccountProvider>().accountPublicInfo;
+    name = currentWallet!.name;
     address = currentWallet.publicAddress;
 
     getEmail();
