@@ -76,7 +76,9 @@ var (
 	_ = TotalUbedrock
 	_ = UbedrockDistribute
 
-	minStake = sdk.NewDec(2_000_000)
+	minStake     = sdk.NewDec(2_000_000)
+	IAPAddress   = map[string]bool{}
+	Aug8DateUnix = 1665169251
 )
 
 func CreateUpgradeHandler(
@@ -97,7 +99,8 @@ func CreateUpgradeHandler(
 			BurnToken(ctx, types.StripeCoinDenom, accKeeper, &bankBaseKeeper, staking)
 			MintUbedrockForInitialAccount(ctx, &bankBaseKeeper, staking)
 			CleanUpylons(ctx, &bankBaseKeeper, pylons)
-			RefundLuxFloralis(ctx, pylons)
+			// RefundLuxFloralis(ctx, pylons)
+			RefundIAPNFTBUY(ctx, pylons, accKeeper, &bankBaseKeeper)
 		}
 		return mm.RunMigrations(ctx, configurator, fromVM)
 	}
@@ -284,6 +287,8 @@ func MintValidUpylonsGoogleIAP(ctx sdk.Context, pylons *pylonskeeper.Keeper) err
 		if err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
+		// To maintain records for IAP addresses
+		IAPAddress[googleIAPOder.Creator] = true
 	}
 	return nil
 }
@@ -299,6 +304,8 @@ func MintValidUpylonsAppleIAP(ctx sdk.Context, pylons *pylonskeeper.Keeper) erro
 		if err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
+		// To maintain records for IAP addresses
+		IAPAddress[appleIAPOder.Creator] = true
 	}
 	return nil
 }
@@ -317,18 +324,49 @@ func GetAmountOfUpylonsMintedByProductID(ctx sdk.Context, productID string) math
 	return math.ZeroInt()
 }
 
-func RefundLuxFloralis(ctx sdk.Context, pylons *pylonskeeper.Keeper) {
-	// Get all execute recipe history by cookbookid and recipe id
-	histories := pylons.GetAllExecuteRecipeHis(ctx, LuxFloralisCookBookID, LuxFloralisRecipeID)
-	coinSlice := sdk.Coins{}
-	address := histories[0].Receiver
-	// Looping execute recipe history to get amount
-	for _, history := range histories {
-		amount, _ := sdk.ParseCoinsNormalized(history.Amount)
-		coinSlice = append(coinSlice, amount...)
-	}
-	err := pylons.MintCoinsToAddr(ctx, sdk.AccAddress(address), coinSlice)
-	if err != nil {
-		panic(err)
+func RefundIAPNFTBUY(ctx sdk.Context, pylons *pylonskeeper.Keeper, accKeeper *authkeeper.AccountKeeper, bank *bankkeeper.BaseKeeper) {
+	// Query All cookbooks on chain
+	cookbooks := pylons.GetAllCookbook(ctx)
+	date := int64(Aug8DateUnix)
+	for _, cookbook := range cookbooks {
+		// Query All recipes made with cookbook on chain
+		recipes := pylons.GetAllRecipesByCookbook(ctx, cookbook.Id)
+		for _, recipe := range recipes {
+			// Check If Recipe is executed atleast once
+			if recipe.Entries.ItemOutputs[0].AmountMinted > 0 {
+				// Query All Execution Record of the Recipe
+				executions := pylons.GetAllExecuteRecipeHis(ctx, cookbook.Id, recipe.Id)
+				for _, execution := range executions {
+					if execution.CreatedAt >= date {
+						if IAPAddress[execution.Sender] {
+							// If recipe is executed after 8th August
+							// If executor has purchased form IAP
+							// If amount is in upylons
+							amount, _ := sdk.ParseCoinNormalized(execution.Amount)
+							if amount.Denom == types.PylonsCoinDenom {
+								err := bank.SendCoinsFromAccountToModule(
+									ctx,
+									sdk.MustAccAddressFromBech32(execution.Sender),
+									types.PaymentsProcessorName,
+									sdk.NewCoins(amount),
+								)
+								if err != nil {
+									panic(err)
+								}
+								err = bank.SendCoinsFromModuleToAccount(
+									ctx,
+									types.PaymentsProcessorName,
+									sdk.MustAccAddressFromBech32(cookbook.Creator),
+									sdk.NewCoins(amount),
+								)
+								if err != nil {
+									panic(err)
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
