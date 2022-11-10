@@ -45,9 +45,10 @@ class Recipe {
         paymentInfo: List.unmodifiable(infos),
         sender: prf.address,
         requestResponse: true);
-    if (lowLevel.success) {
+    if (lowLevel.error == "") {
       return Execution(lowLevel.data!);
     } else {
+      print(lowLevel.error);
       return Future.error(lowLevel.error);
     }
   }

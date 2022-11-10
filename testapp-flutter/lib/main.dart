@@ -66,6 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int coins = 0;
   int shards = 0;
   int curHp = 0;
+  Int64 pylons = Int64.ZERO;
 
   @override
   void initState() {
@@ -107,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget topLevelMenu() {
-    if (curHp <= 0) {
+    if (curHp < 1) {
       return quitButton();
     }
     return Column(
@@ -148,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
             _rest1();
           },
-          child: const Text('Rest and recover!'),
+          child: const Text('Rest and recover! (Cost: \$0.0000009)'),
         ),
         quitButton(),
       ],
@@ -180,23 +181,25 @@ class _MyHomePageState extends State<MyHomePage> {
     if (prf == null) throw Exception("HANDLE THIS");
     setState(() {
       profile = prf;
+      pylons = profile!.getBalances["upylon"] ?? Int64.ZERO;
     });
     if (kDebugMode) {
       print("(ok!)");
     }
     var lastUpdate = Int64.MIN_VALUE;
-    for (var item in prf.items) {
-      if (item.getString("entityType") == "character" && !(item.getInt("currentHp")?.isZero ?? true) || !(item.getInt("currentHp")?.isNegative ?? true)) {
-        if (item.getLastUpdate() > lastUpdate) {
-          setState(() {
-            character = item;
-          });
-          lastUpdate = item.getLastUpdate();
+    if (character == null || curHp < 1) {
+      for (var item in prf.items) {
+        if (item.getString("entityType") == "character" && !(item.getInt("currentHp")?.isZero ?? true) || !(item.getInt("currentHp")?.isNegative ?? true)) {
+          if (item.getLastUpdate() > lastUpdate) {
+            setState(() {
+              character = item;
+            });
+            lastUpdate = item.getLastUpdate();
+          }
         }
       }
-    }
-    if (kDebugMode) {
-      print("got character!");
+    } else {
+      character = await Item.get(character!.getId());
     }
     setState(() {
       swordLv = character?.getInt("swordLevel")?.toInt() ?? 0;
@@ -279,7 +282,7 @@ class _MyHomePageState extends State<MyHomePage> {
       await _checkCharacter();
       if (lastHp != curHp) {
         buffer.writeln("Took ${lastHp - curHp} damage!");
-        if (curHp == 0) buffer.writeln(("You are dead."));
+        if (curHp < 1) buffer.writeln(("You are dead."));
       }
       setState(() {
         flavorText = buffer.toString();
@@ -330,7 +333,7 @@ class _MyHomePageState extends State<MyHomePage> {
       await _checkCharacter();
       if (lastHp != curHp) {
         buffer.writeln("Took ${lastHp - curHp} damage!");
-        if (curHp == 0) buffer.writeln(("You are dead."));
+        if (curHp < 1) buffer.writeln(("You are dead."));
       }
       setState(() {
         flavorText = buffer.toString();
@@ -433,24 +436,23 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       showTopLevelMenu = false;
     });
+    if (pylons < 9) {
+      var buffer = StringBuffer("Pretend you were sent to go spend some money pls");
+      setState(() {
+        flavorText = buffer.toString();
+        showTopLevelMenu = true;
+      });
+      return;
+    }
     var buffer = StringBuffer("Resting...!");
     setState(() {
       flavorText = buffer.toString();
     });
-    final recipe = await Recipe.get("RecipeTestAppRest25");
+    final recipe = await Recipe.get("RecipeTestAppRest100Premium");
     if (recipe == null) throw Exception("todo: handle this");
     await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
       throw Exception("rest tx should not fail");
     });
-    buffer.writeln('');
-    // hack: we should just use real methods for handling delayed txs;
-    for (int i = 0; i < 15; i++) {
-      await Future.delayed(const Duration(seconds: 1));
-      buffer.write('.');
-      setState(() {
-        flavorText = buffer.toString();
-      });
-    }
     buffer.writeln("Done!");
     setState(() {
       flavorText = buffer.toString();
