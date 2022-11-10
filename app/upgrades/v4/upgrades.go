@@ -350,7 +350,8 @@ func RefundIAPNFTBUY(ctx sdk.Context, pylons *pylonskeeper.Keeper, accKeeper *au
 									sdk.NewCoins(amount),
 								)
 								if err != nil {
-									panic(err)
+									// case: user do not have enough IAP tokens
+									continue
 								}
 								err = bank.SendCoinsFromModuleToAccount(
 									ctx,
