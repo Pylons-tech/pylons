@@ -108,7 +108,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
             theme: PylonsAppTheme().buildAppTheme(),
             initialRoute: '/',
             routes: {
-              '/': (context) => const RoutingPage(),
+              '/': (context) => const SplashScreen(),
               RouteUtil.ROUTE_HOME: (context) => const HomeScreen(),
               RouteUtil.ROUTE_APP_UPDATE: (context) => const UpdateApp(),
               RouteUtil.ROUTE_SETTINGS: (context) => const SettingScreen(),

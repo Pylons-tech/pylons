@@ -7,19 +7,17 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_image_asset.
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:wallpaper/wallpaper.dart';
-
 import '../../../generated/locale_keys.g.dart';
 
 class WallpaperScreen {
   const WallpaperScreen({required this.nft, required this.context});
+
   final String nft;
   final BuildContext context;
 
   Future<void> show() async {
     await showGeneralDialog<String>(
-        context: context,
-        pageBuilder: (BuildContext context, _, __) =>
-            Dialog(backgroundColor: Colors.transparent, insetPadding: EdgeInsets.zero, child: _WallpaperScreen(nft: nft)));
+        context: context, pageBuilder: (BuildContext context, _, __) => Dialog(backgroundColor: Colors.transparent, insetPadding: EdgeInsets.zero, child: _WallpaperScreen(nft: nft)));
   }
 
   _WallpaperScreen test() {
@@ -52,7 +50,6 @@ class _WallpaperScreenState extends State<_WallpaperScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -64,8 +61,7 @@ class _WallpaperScreenState extends State<_WallpaperScreen> {
             opacity: 0.5,
           ),
           Padding(
-            padding: EdgeInsets.only(
-                left: 23.w, top: MediaQuery.of(context).viewPadding.top + 13.h),
+            padding: EdgeInsets.only(left: 23.w, top: MediaQuery.of(context).viewPadding.top + 13.h),
             child: GestureDetector(
               onTap: () async {
                 Navigator.pop(context);
@@ -106,8 +102,7 @@ class _WallpaperScreenState extends State<_WallpaperScreen> {
                       width: 100.w,
                       fit: BoxFit.fill,
                     );
-                  }
-                  else {
+                  } else {
                     return const SizedBox();
                   }
                 },
@@ -130,8 +125,7 @@ class _WallpaperScreenState extends State<_WallpaperScreen> {
                         return downloadAndSetImage(context);
                       },
                     );
-                  }
-                  else {
+                  } else {
                     return const SizedBox();
                   }
                 },
@@ -142,5 +136,4 @@ class _WallpaperScreenState extends State<_WallpaperScreen> {
       ),
     );
   }
-
 }

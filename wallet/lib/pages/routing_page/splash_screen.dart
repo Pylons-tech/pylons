@@ -27,7 +27,6 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   late final Timer timer;
 
-  WalletsStore get walletsStore => GetIt.I.get();
   late AccountProvider accountProvider;
 
   RemoteConfigService get remoteConfigService => GetIt.I.get();
