@@ -57,7 +57,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _isLiking = true;
+  bool _isLiking = false;
 
   bool get isLiking => _isLiking;
 
@@ -92,13 +92,12 @@ class PurchaseItemViewModel extends ChangeNotifier {
   void setNFT(NFT nft) {
     _nft = nft;
     final walletsList = walletsStore.getWallets().value;
-    accountPublicInfo = walletsList.last;
+    if (walletsList.isNotEmpty) {
+      accountPublicInfo = walletsList.last;
+    }
 
     repository.logPurchaseItem(recipeId: nft.recipeID, recipeName: nft.name, author: nft.creator, purchasePrice: double.parse(nft.price) / kBigIntBase);
   }
-
-
-
 
   void initializeData() {
     nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);
@@ -234,7 +233,13 @@ class PurchaseItemViewModel extends ChangeNotifier {
   bool isUrlLoaded = false;
 
   Future<void> nftDataInit({required String recipeId, required String cookBookId, required String itemId}) async {
-    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
+    String walletAddress = "";
+
+    if (walletsStore.getWallets().value.isNotEmpty) {
+      isLiking = true;
+      walletAddress = walletsStore.getWallets().value.last.publicAddress;
+    }
+
     if (nft.type != NftType.TYPE_RECIPE) {
       final nftOwnershipHistory = await repository.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
       if (nftOwnershipHistory.isLeft()) {

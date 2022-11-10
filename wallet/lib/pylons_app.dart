@@ -171,6 +171,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
 
                     return AcceptPolicyScreen(
                       nft: nft,
+                      viewModel: sl(),
                     );
                   }
 
