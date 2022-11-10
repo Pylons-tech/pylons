@@ -81,7 +81,24 @@ class NftGridViewItem extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(left: 8.w, top: 10.0.h),
                 child: SvgPicture.asset(
-                  SVGUtils.kFileTypeImageIcon,
+                  nft.assetType == kImageText
+                      ? SVGUtils.kFileTypeImageIcon
+                      : nft.assetType == kVideoText
+                          ? SVGUtils.kSvgNftFormatVideo
+                          : nft.assetType == k3dText
+                              ? SVGUtils.kSvgNftFormat3d
+                              : nft.assetType == kPdfText
+                                  ? SVGUtils.kSvgNftFormatPDF
+                                  : SVGUtils.kSvgNftFormatAudio,
+                  key: Key(nft.assetType == kImageText
+                      ? kNFTTypeImageIconKey
+                      : nft.assetType == kVideoText
+                          ? kNFTTypeVideoIconKey
+                          : nft.assetType == k3dText
+                              ? kNFTType3dModelIconKey
+                              : nft.assetType == kPdfText
+                                  ? kNFTTypePdfIconKey
+                                  : kNFTTypeAudioIconKey),
                   color: Colors.white,
                   width: 14,
                   height: 14,
@@ -114,11 +131,15 @@ class NftGridViewItem extends StatelessWidget {
                   const Spacer(),
                   InkWell(
                     onTap: () {
-                      final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
-                        buildContext: context,
-                        nft: nft,
-                      );
-                      draftsBottomSheet.show();
+                      if (context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft) {
+                        final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
+                          buildContext: context,
+                          nft: nft,
+                        );
+                        draftsBottomSheet.show();
+                        return;
+                      }
+                      buildBottomSheet(context: context);
                     },
                     child: Padding(
                       padding: EdgeInsets.all(4.0.w),
