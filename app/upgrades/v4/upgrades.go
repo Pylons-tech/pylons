@@ -93,13 +93,12 @@ func CreateUpgradeHandler(
 		// logger := ctx.Logger()
 
 		if types.IsMainnet(ctx.ChainID()) {
-			// TODO: Logic upgadeHandler
+
 			bankBaseKeeper, _ := bankKeeper.(bankkeeper.BaseKeeper)
 			BurnToken(ctx, types.StakingCoinDenom, accKeeper, &bankBaseKeeper, staking)
 			BurnToken(ctx, types.StripeCoinDenom, accKeeper, &bankBaseKeeper, staking)
 			MintUbedrockForInitialAccount(ctx, &bankBaseKeeper, staking)
 			CleanUpylons(ctx, &bankBaseKeeper, pylons)
-			// RefundLuxFloralis(ctx, pylons)
 			RefundIAPNFTBUY(ctx, pylons, accKeeper, &bankBaseKeeper)
 		}
 		return mm.RunMigrations(ctx, configurator, fromVM)
