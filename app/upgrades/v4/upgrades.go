@@ -78,7 +78,7 @@ var (
 
 	minStake     = sdk.NewDec(2_000_000)
 	IAPAddress   = map[string]bool{}
-	Aug8DateUnix = 1665169251
+	Aug8DateUnix = int64(1659916800)
 )
 
 func CreateUpgradeHandler(
@@ -327,7 +327,6 @@ func GetAmountOfUpylonsMintedByProductID(ctx sdk.Context, productID string) math
 func RefundIAPNFTBUY(ctx sdk.Context, pylons *pylonskeeper.Keeper, accKeeper *authkeeper.AccountKeeper, bank *bankkeeper.BaseKeeper) {
 	// Query All cookbooks on chain
 	cookbooks := pylons.GetAllCookbook(ctx)
-	date := int64(Aug8DateUnix)
 	for _, cookbook := range cookbooks {
 		// Query All recipes made with cookbook on chain
 		recipes := pylons.GetAllRecipesByCookbook(ctx, cookbook.Id)
@@ -337,9 +336,9 @@ func RefundIAPNFTBUY(ctx sdk.Context, pylons *pylonskeeper.Keeper, accKeeper *au
 				// Query All Execution Record of the Recipe
 				executions := pylons.GetAllExecuteRecipeHis(ctx, cookbook.Id, recipe.Id)
 				for _, execution := range executions {
-					if execution.CreatedAt >= date {
+					if execution.CreatedAt >= Aug8DateUnix {
 						if IAPAddress[execution.Sender] {
-							// If recipe is executed after 8th August
+							// If recipe is executed after 8th August, i.e. first IAP purchase
 							// If executor has purchased form IAP
 							// If amount is in upylons
 							amount, _ := sdk.ParseCoinNormalized(execution.Amount)
