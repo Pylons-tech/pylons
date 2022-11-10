@@ -6,11 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_config_service/remote_config_service.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
@@ -32,8 +33,8 @@ class UpdateApp extends StatefulWidget {
 
 class _UpdateAppState extends State<UpdateApp> {
   RemoteConfigService get remoteConfigService => GetIt.I.get();
+  late AccountProvider accountProvider;
 
-  WalletsStore get walletsStore => GetIt.I.get();
   Repository get repository => GetIt.I.get();
 
   ValueNotifier<String> versionInfoNotifier = ValueNotifier('');
@@ -41,6 +42,8 @@ class _UpdateAppState extends State<UpdateApp> {
   @override
   void initState() {
     super.initState();
+
+    accountProvider = context.read<AccountProvider>();
 
     repository.logUserJourney(screenName: AnalyticsScreenEvents.updateApp);
 
@@ -287,9 +290,9 @@ class _UpdateAppState extends State<UpdateApp> {
 
   Future<void> _loadWallets() async {
     await sl<LocalDataSource>().clearDataOnIosUnInstall();
-    await walletsStore.loadWallets();
+    await accountProvider.loadWallets();
 
-    if (walletsStore.getWallets().value.isEmpty) {
+    if (accountProvider.accountPublicInfo == null) {
       //Loads the last used wallet.
       Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
     } else {

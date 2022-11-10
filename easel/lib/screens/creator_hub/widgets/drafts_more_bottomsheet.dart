@@ -31,16 +31,18 @@ class DraftsBottomSheet {
 
   Future<void> show() async {
     return showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        context: buildContext,
-        builder: (_) {
-          return ChangeNotifierProvider.value(
-            value: creatorHubViewModel,
-            child: DraftsMoreBottomSheet(
-              nft: nft,
-            ),
-          );
-        });
+      backgroundColor: Colors.transparent,
+      context: buildContext,
+      builder: (_) {
+        return ChangeNotifierProvider.value(
+          value: creatorHubViewModel,
+          child: DraftsMoreBottomSheet(
+            key: const Key(kNFTMoreOptionBottomSheetKey),
+            nft: nft,
+          ),
+        );
+      },
+    );
   }
 }
 

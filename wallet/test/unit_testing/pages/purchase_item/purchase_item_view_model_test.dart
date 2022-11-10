@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobx/mobx.dart' show Observable;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pylons_wallet/model/amount.dart';
@@ -35,9 +34,9 @@ void main() {
       videoPlayerHelper: videoPlayerMock,
       repository: repository,
       shareHelper: shareHelper,
+      accountPublicInfo: mockAccountPublicInfo,
     );
 
-    when(mockWalletStore.getWallets()).thenAnswer((realInvocation) => Observable([mockAccountPublicInfo]));
     when(mockAccountPublicInfo.publicAddress).thenAnswer((realInvocation) => kAddress);
   });
 

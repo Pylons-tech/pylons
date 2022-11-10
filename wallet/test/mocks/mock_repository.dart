@@ -537,8 +537,7 @@ class MockRepository extends Repository {
 
   @override
   Future<Either<Failure, bool>> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice}) {
-    // TODO: implement logPurchaseItem
-    throw UnimplementedError();
+    return Future.value(const Right(true));
   }
 
   @override

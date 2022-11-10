@@ -5,13 +5,14 @@ import 'package:cosmos_utils/app_info_extractor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_config_service/remote_config_service.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
@@ -27,6 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   late final Timer timer;
 
   WalletsStore get walletsStore => GetIt.I.get();
+  late AccountProvider accountProvider;
 
   RemoteConfigService get remoteConfigService => GetIt.I.get();
 
@@ -37,6 +39,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    accountProvider = context.read<AccountProvider>();
+
     initTimer();
   }
 
@@ -59,9 +63,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _loadWallets() async {
     await sl<LocalDataSource>().clearDataOnIosUnInstall();
-    await walletsStore.loadWallets();
 
-    if (walletsStore.getWallets().value.isEmpty) {
+    await accountProvider.loadWallets();
+
+    if (accountProvider.accountPublicInfo == null) {
       //Loads the last used wallet.
       Navigator.of(navigatorKey.currentState!.overlay!.context).pushReplacementNamed(RouteUtil.ROUTE_ONBOARDING);
     } else {
@@ -175,7 +180,7 @@ class _SplashScreenState extends State<SplashScreen> {
       return true;
     }
 
-    await walletsStore.loadWallets();
+    await accountProvider.loadWallets();
 
     Navigator.of(navigatorKey.currentState!.overlay!.context).pushReplacementNamed(RouteUtil.ROUTE_APP_UPDATE, arguments: remoteConfigVersion);
 
