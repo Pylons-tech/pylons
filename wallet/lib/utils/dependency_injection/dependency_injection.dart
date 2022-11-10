@@ -32,7 +32,6 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/analytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
-import 'package:pylons_wallet/services/third_party_services/database.dart';
 import 'package:pylons_wallet/services/third_party_services/firestore_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/network_info.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_config_service/remote_config_service.dart';
@@ -65,6 +64,8 @@ import 'package:transaction_signing_gateway/storage/cosmos_key_info_storage.dart
 import 'package:transaction_signing_gateway/storage/flutter_secure_storage_data_store.dart';
 import 'package:transaction_signing_gateway/storage/shared_prefs_plain_data_store.dart';
 import 'package:video_player/video_player.dart';
+
+import '../../services/third_party_services/database/database.dart';
 
 final sl = GetIt.instance;
 
