@@ -116,16 +116,11 @@ func (suite *UpgradeTestSuite) TestMintUbedrockForInitialAccount() {
 	// Check token in all initial account
 	totalDelegation := len(vals)
 	totalDelegateAmount := math.NewIntFromUint64(1_000_000).MulRaw(int64(totalDelegation))
-	for _, acc := range v4.Accounts {
-		if acc == v4.EngineHotWal {
-			accAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, sdk.MustAccAddressFromBech32(acc), stakingCoinDenom)
-			amount := v4.UbedrockDistribute[acc].Sub(totalDelegateAmount)
-			suite.Require().Equal(accAmount.Amount, amount)
-			continue
-		}
-		accAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, sdk.MustAccAddressFromBech32(acc), stakingCoinDenom)
-		suite.Require().Equal(accAmount.Amount, v4.UbedrockDistribute[acc])
-	}
+	addr := v4.Accounts[0]
+	totalAmounts := v4.UbedrockDistribute[addr].Mul(math.NewInt(int64(len(v4.Accounts))))
+	totalAmounts = totalAmounts.Sub(totalDelegateAmount)
+	accAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, sdk.MustAccAddressFromBech32(addr), stakingCoinDenom)
+	suite.Require().Equal(accAmount.Amount, totalAmounts)
 	// Check token in bonded pool module, should equal total delegate amount
 	bondedModuleAddress := suite.App.AccountKeeper.GetModuleAddress(stakingtypes.BondedPoolName)
 	bondedModuleAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, bondedModuleAddress, stakingCoinDenom)
