@@ -99,6 +99,7 @@ func CreateUpgradeHandler(
 			BurnToken(ctx, types.StripeCoinDenom, accKeeper, &bankBaseKeeper, staking)
 			MintUbedrockForInitialAccount(ctx, &bankBaseKeeper, staking)
 			CleanUpylons(ctx, &bankBaseKeeper, pylons)
+			RefundLuxFloralis(ctx, pylons)
 			RefundIAPNFTBUY(ctx, pylons, accKeeper, &bankBaseKeeper)
 		}
 		return mm.RunMigrations(ctx, configurator, fromVM)
@@ -367,5 +368,20 @@ func RefundIAPNFTBUY(ctx sdk.Context, pylons *pylonskeeper.Keeper, accKeeper *au
 				}
 			}
 		}
+	}
+}
+func RefundLuxFloralis(ctx sdk.Context, pylons *pylonskeeper.Keeper) {
+	// Get all execute recipe history by cookbookid and recipe id
+	histories := pylons.GetAllExecuteRecipeHis(ctx, LuxFloralisCookBookID, LuxFloralisRecipeID)
+	coinSlice := sdk.Coins{}
+	address := histories[0].Receiver
+	// Looping execute recipe history to get amount
+	for _, history := range histories {
+		amount, _ := sdk.ParseCoinsNormalized(history.Amount)
+		coinSlice = append(coinSlice, amount...)
+	}
+	err := pylons.MintCoinsToAddr(ctx, sdk.AccAddress(address), coinSlice)
+	if err != nil {
+		panic(err)
 	}
 }
