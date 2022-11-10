@@ -24,6 +24,7 @@ void main() {
       await tester.testAppForWidgetTesting(
         AcceptPolicyScreen(
           nft: MOCK_NFT_FREE_IMAGE,
+          viewModel: GetIt.I.get<AcceptPolicyViewModel>(),
         ),
       );
       await tester.pump();
@@ -33,7 +34,47 @@ void main() {
   );
 
   testWidgets(
-    "can user tap on get started button to accept policies",
+    "When the terms and conditions are not accepted then user cannot go to next screen.",
+    (tester) async {
+      when(acceptPolicyViewModel.isCheckPrivacyPolicy).thenAnswer((realInvocation) => true);
+      when(acceptPolicyViewModel.isCheckTermServices).thenAnswer((realInvocation) => false);
+      when(purchaseItemViewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_FREE_IMAGE);
+      await tester.testAppForWidgetTesting(
+        AcceptPolicyScreen(
+          nft: MOCK_NFT_FREE_IMAGE,
+          viewModel: GetIt.I.get<AcceptPolicyViewModel>(),
+        ),
+      );
+      await tester.pump();
+      final kBottomSheetBtnKey = find.byKey(const Key(kAcceptBottomSheetBtnKey));
+      await tester.tap(kBottomSheetBtnKey);
+      await tester.pump();
+      expect(find.byType(PurchaseItemScreen), findsNothing);
+    },
+  );
+
+  testWidgets(
+    "When the privacy policy is not accepted then user cannot go to next screen.",
+    (tester) async {
+      when(acceptPolicyViewModel.isCheckPrivacyPolicy).thenAnswer((realInvocation) => false);
+      when(acceptPolicyViewModel.isCheckTermServices).thenAnswer((realInvocation) => true);
+      when(purchaseItemViewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_FREE_IMAGE);
+      await tester.testAppForWidgetTesting(
+        AcceptPolicyScreen(
+          nft: MOCK_NFT_FREE_IMAGE,
+          viewModel: GetIt.I.get<AcceptPolicyViewModel>(),
+        ),
+      );
+      await tester.pump();
+      final kBottomSheetBtnKey = find.byKey(const Key(kAcceptBottomSheetBtnKey));
+      await tester.tap(kBottomSheetBtnKey);
+      await tester.pump();
+      expect(find.byType(PurchaseItemScreen), findsNothing);
+    },
+  );
+
+  testWidgets(
+    "When both are accepted then user can go to next screen.",
     (tester) async {
       when(acceptPolicyViewModel.isCheckPrivacyPolicy).thenAnswer((realInvocation) => true);
       when(acceptPolicyViewModel.isCheckTermServices).thenAnswer((realInvocation) => true);
@@ -41,6 +82,7 @@ void main() {
       await tester.testAppForWidgetTesting(
         AcceptPolicyScreen(
           nft: MOCK_NFT_FREE_IMAGE,
+          viewModel: GetIt.I.get<AcceptPolicyViewModel>(),
         ),
       );
       await tester.pump();
