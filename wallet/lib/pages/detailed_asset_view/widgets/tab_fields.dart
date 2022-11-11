@@ -12,14 +12,28 @@ import 'package:pylons_wallet/utils/extension.dart';
 
 import '../../../generated/locale_keys.g.dart';
 
+enum TabFields { ownership, details, history }
+
+// ignore: must_be_immutable
 class TabField extends StatefulWidget {
   final String name;
   final String icon;
   final NFT nft;
-  final List<NftOwnershipHistory> NftOwnershipHistoryList;
+  final List<NftOwnershipHistory> nftOwnershipHistoryList;
   final String owner;
+  bool isExpanded;
+  final Function(TabFields) onChangeTab;
 
-  const TabField({Key? key, required this.name, required this.icon, required this.nft, required this.owner, required this.NftOwnershipHistoryList}) : super(key: key);
+  TabField({
+    Key? key,
+    required this.name,
+    required this.icon,
+    required this.nft,
+    required this.owner,
+    required this.nftOwnershipHistoryList,
+    required this.isExpanded,
+    required this.onChangeTab,
+  }) : super(key: key);
 
   @override
   State<TabField> createState() => _TabFieldState();
@@ -33,9 +47,8 @@ class _TabFieldState extends State<TabField> {
       case NftType.TYPE_RECIPE:
         return {
           LocaleKeys.owned_by.tr(): widget.owner,
-          LocaleKeys.edition.tr(): '${widget.nft.amountMinted} of ${widget.nft.quantity}',
+          LocaleKeys.edition.tr(): '#${widget.nft.amountMinted} of ${widget.nft.quantity}',
           LocaleKeys.royalty_text.tr(): widget.nft.tradePercentage,
-          LocaleKeys.size.tr(): widget.nft.getAssetSize(),
           LocaleKeys.creation.tr(): widget.nft.createdAt,
         };
       case NftType.TYPE_ITEM:
@@ -52,26 +65,14 @@ class _TabFieldState extends State<TabField> {
   Map<String, String> getNFTDetailsMap() {
     switch (widget.nft.type) {
       case NftType.TYPE_RECIPE:
-        return {
-          LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
-          LocaleKeys.blockchain.tr(): LocaleKeys.pylons.tr(),
-          LocaleKeys.permission.tr(): LocaleKeys.exclusive.tr(),
-        };
+        return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID, LocaleKeys.resolution.tr(): widget.nft.getAssetSize(), kIpfsCid: widget.nft.cid};
       case NftType.TYPE_ITEM:
-        return {
-          LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
-          LocaleKeys.blockchain.tr(): LocaleKeys.pylons.tr(),
-          LocaleKeys.permission.tr(): LocaleKeys.exclusive.tr(),
-        };
+        return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID, LocaleKeys.resolution.tr(): widget.nft.getAssetSize(), kIpfsCid: widget.nft.cid};
       case NftType.TYPE_TRADE:
         break;
     }
 
-    return {
-      LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
-      LocaleKeys.blockchain.tr(): LocaleKeys.pylons.tr(),
-      LocaleKeys.permission.tr(): LocaleKeys.exclusive.tr(),
-    };
+    return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID, LocaleKeys.resolution.tr(): widget.nft.getAssetSize(), kIpfsCid: widget.nft.cid};
   }
 
   @override
@@ -82,9 +83,7 @@ class _TabFieldState extends State<TabField> {
 
     final listOwnership = ownership.entries.map((element) => _tabDetails(field: element.key, value: element.value)).toList();
 
-    final listDetails = nftDetail.entries
-        .map((element) => _tabDetails(field: element.key, value: element.value, customWidget: element.key == kRecipeId && element.value.isNotEmpty ? _tabDetailsWithIcon(value: element.value) : null))
-        .toList();
+    final listDetails = nftDetail.entries.map((element) => _tabDetails(field: element.key, value: element.value, customWidget: customWidget(element))).toList();
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 100),
@@ -118,15 +117,25 @@ class _TabFieldState extends State<TabField> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
+                      TabFields? _field;
+                      if (widget.name == LocaleKeys.ownership.tr()) {
+                        _field = TabFields.ownership;
+                      } else if (widget.name == LocaleKeys.nft_detail.tr()) {
+                        _field = TabFields.details;
+                      } else {
+                        _field = TabFields.history;
+                      }
+
+                      widget.onChangeTab(_field);
                       setState(() {
-                        collapsed = !collapsed;
+                        widget.isExpanded = !widget.isExpanded;
                       });
                     },
                     child: SizedBox(
                       height: 20.h,
                       width: 20.w,
                       child: SvgPicture.asset(
-                        'assets/images/icons/${collapsed ? 'add' : 'minus'}.svg',
+                        'assets/images/icons/${!widget.isExpanded ? 'add' : 'minus'}.svg',
                       ),
                     ),
                   )
@@ -147,15 +156,23 @@ class _TabFieldState extends State<TabField> {
               ),
             ],
           ),
-          if (!collapsed && widget.name == LocaleKeys.ownership.tr())
+          if (widget.name == LocaleKeys.ownership.tr() && widget.isExpanded)
             ...listOwnership
-          else if (!collapsed && widget.name == LocaleKeys.nft_detail.tr())
+          else if (widget.name == LocaleKeys.nft_detail.tr() && widget.isExpanded)
             ...listDetails
-          else if (!collapsed && widget.name == LocaleKeys.history.tr())
-            _listHistory(widget.NftOwnershipHistoryList, context)
+          else if (widget.name == LocaleKeys.history.tr() && widget.isExpanded)
+            _listHistory(widget.nftOwnershipHistoryList, context)
         ],
       ),
     );
+  }
+
+  Widget? customWidget(MapEntry<String, String> element) {
+    return element.key == kRecipeId && element.value.isNotEmpty
+        ? _tabDetailsWithIcon(value: element.value)
+        : element.key == kIpfsCid && element.value.isNotEmpty
+            ? _tabDetailsWithIcon(value: element.value)
+            : null;
   }
 
   Widget _listHistory(List<NftOwnershipHistory> nftOwnershipHistoryList, BuildContext context) {

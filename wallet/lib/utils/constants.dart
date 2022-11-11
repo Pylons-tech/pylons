@@ -81,7 +81,8 @@ const String kUniversalFontFamily = "UniversalSans";
 const String kENV = 'ENV';
 const String kLocal = 'local';
 const String kPylo = 'pylo';
-
+const kCID = "cid";
+const kIpfsCid = "IPFS CID";
 const String kPylonCoinName = "pylon";
 const String kUSDDenom = "ustripeusd";
 const String kUSD = "stripeusd";
@@ -169,6 +170,7 @@ const String kNone = "None";
 const String kEmoney = "eMoney Euro";
 const String kPylons = "Pylons";
 const String kDollar = "U.S. Dollar";
+const String kPoints = "Points";
 const String kAtom = "ATOM";
 const String kEthereum = "Ethereum";
 

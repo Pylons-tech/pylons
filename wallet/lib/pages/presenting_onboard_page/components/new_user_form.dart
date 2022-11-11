@@ -4,11 +4,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/buttons/pylons_get_started_button.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
-import 'package:pylons_wallet/pylons_app.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
@@ -148,6 +150,9 @@ class NewUserFormState extends State<NewUserForm> {
 
   /// Create the new wallet and associate the chosen username with it.
   Future<void> _registerNewUser(String userName) async {
+    final RemoteNotificationsProvider firebaseRemoteNotificationsProvider = context.read<RemoteNotificationsProvider>();
+    final AccountProvider accountProvider = context.read<AccountProvider>();
+
     isLoadingNotifier.value = true;
     final navigator = Navigator.of(context);
 
@@ -165,9 +170,9 @@ class NewUserFormState extends State<NewUserForm> {
     isLoadingNotifier.value = false;
     result.fold((failure) {
       failure.message.show();
-      navigator.pop();
     }, (walletInfo) async {
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => false);
+      firebaseRemoteNotificationsProvider.updateFCMToken(address: accountProvider.accountPublicInfo!.publicAddress);
+      navigator.pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => false);
     });
   }
 }

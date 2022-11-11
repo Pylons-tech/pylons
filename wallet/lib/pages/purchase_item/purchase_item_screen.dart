@@ -215,7 +215,6 @@ class OwnerBottomDrawer extends StatefulWidget {
 class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   bool liked = false;
   bool collapsed = true;
-  bool isExpanded = false;
 
   @override
   void initState() {
@@ -277,7 +276,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   ),
                   getProgressWidget(viewModel),
                   SizedBox(
-                    height: 60.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -573,7 +571,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 icon: 'trophy',
                                 nft: viewModel.nft,
                                 owner: viewModel.nft.owner,
-                                NftOwnershipHistoryList: const [],
+                                nftOwnershipHistoryList: const [],
+                                isExpanded: viewModel.isOwnershipExpanded,
+                                onChangeTab: viewModel.onChangeTab,
                               ),
                               SizedBox(height: 10.h),
                               TabField(
@@ -581,11 +581,21 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 icon: 'detail',
                                 nft: viewModel.nft,
                                 owner: viewModel.nft.owner,
-                                NftOwnershipHistoryList: const [],
+                                nftOwnershipHistoryList: const [],
+                                isExpanded: viewModel.isDetailsExpanded,
+                                onChangeTab: viewModel.onChangeTab,
                               ),
                               SizedBox(height: 10.h),
                               if (viewModel.nft.type != NftType.TYPE_RECIPE)
-                                TabField(name: LocaleKeys.history.tr(), icon: 'history', nft: viewModel.nft, owner: viewModel.nft.owner, NftOwnershipHistoryList: viewModel.nftOwnershipHistoryList),
+                                TabField(
+                                  name: LocaleKeys.history.tr(),
+                                  icon: 'history',
+                                  nft: viewModel.nft,
+                                  owner: viewModel.nft.owner,
+                                  nftOwnershipHistoryList: viewModel.nftOwnershipHistoryList,
+                                  isExpanded: viewModel.isHistoryExpanded,
+                                  onChangeTab: viewModel.onChangeTab,
+                                ),
                               SizedBox(height: 50.h),
                               if (viewModel.nft.amountMinted >= viewModel.nft.quantity) soldOutButton(viewModel)
                             ],
@@ -617,23 +627,29 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               SizedBox(
                                 height: 20.h,
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  if (viewModel.accountPublicInfo == null) return;
-                                  showDialog(
+                              if (viewModel.isOwner())
+                                GestureDetector(
+                                  onTap: () {
+                                    showDialog(
                                       context: context,
                                       builder: (_) => QRCodeScreen(
-                                            nft: viewModel.nft,
-                                          ));
-                                },
-                                child: SvgPicture.asset(
-                                  SVGUtil.QR_ICON,
+                                        nft: viewModel.nft,
+                                      ),
+                                    );
+                                  },
+                                  child: SvgPicture.asset(
+                                    SVGUtil.QR_ICON,
+                                    height: 20.h,
+                                  ),
+                                )
+                              else
+                                const SizedBox(),
+                              if (viewModel.isOwner())
+                                SizedBox(
                                   height: 20.h,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20.h,
-                              ),
+                                )
+                              else
+                                const SizedBox(),
                               GestureDetector(
                                 onTap: () async {
                                   if (viewModel.accountPublicInfo == null) return;
@@ -655,6 +671,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   /// BUY NFT BUTTON
                   if (viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid))
                     BuyNFTButton(
+                      key: const Key(kExpandedBuyButtonKeyValue),
                       onTapped: () async {
                         if (viewModel.accountPublicInfo == null) {
                           "create_an_account_first".tr().show();
@@ -727,7 +744,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           ],
         ),
         SizedBox(
-          height: 5.h,
+          height: 3.h,
         ),
         RichText(
           text: TextSpan(

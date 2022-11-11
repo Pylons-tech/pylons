@@ -6,12 +6,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg;
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/buttons/pylons_get_started_button.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/pylons_rounded_button.dart';
 import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
+import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
@@ -115,6 +117,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
 
   /// Create the new wallet and associate the chosen username with it.
   Future _loginExistingUser({required String mnemonic}) async {
+    final remoteNotificationsProvider = context.read<RemoteNotificationsProvider>();
     isLoadingNotifier.value = true;
 
     final result = await widget.walletStore.importPylonsAccount(mnemonic: mnemonic);
@@ -124,12 +127,14 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
     result.fold((failure) {
       failure.message.show();
     }, (walletInfo) {
+      remoteNotificationsProvider.updateFCMToken(address: walletInfo.publicAddress);
       Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
     });
   }
 
   /// Create the new wallet and associate the chosen username with it.
   Future _loginWithGoogleDrive() async {
+    final remoteNotificationsProvider = context.read<RemoteNotificationsProvider>();
     final navigator = Navigator.of(context);
     final Loading loading = Loading()..showLoading();
 
@@ -152,11 +157,14 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
 
       failure.message.show();
     }, (walletInfo) {
+      remoteNotificationsProvider.updateFCMToken(address: walletInfo.publicAddress);
       Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
     });
   }
 
   Future _loginWithICloudDrive() async {
+    final remoteNotificationsProvider = context.read<RemoteNotificationsProvider>();
+
     final navigator = Navigator.of(context);
     final Loading loading = Loading()..showLoading();
 
@@ -179,6 +187,8 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
 
       failure.message.show();
     }, (walletInfo) {
+      remoteNotificationsProvider.updateFCMToken(address: walletInfo.publicAddress);
+
       Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
     });
   }
