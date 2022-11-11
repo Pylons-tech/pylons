@@ -30,7 +30,6 @@ class Model3dViewerState extends State<Model3dViewer> {
     modelViewer = ModelViewer(
       src: widget.isFile ? 'file://${widget.path!}' : widget.path!,
       autoRotate: false,
-      cameraControls: true,
       backgroundColor: EaselAppTheme.kBlack,
     );
   }

@@ -29,7 +29,7 @@ class BottomSheetClipper extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-    Path path0 = Path();
+    final Path path0 = Path();
     path0.moveTo(0, size.height);
     path0.lineTo(0, size.height * 0.1241250);
     path0.lineTo(size.width * 0.0753750, 0);

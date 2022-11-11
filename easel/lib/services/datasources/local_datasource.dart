@@ -137,7 +137,7 @@ class LocalDataSourceImpl implements LocalDataSource {
   /// returns cookbookId
   @override
   Future<String> autoGenerateCookbookId() async {
-    String cookbookId = "Easel_CookBook_auto_cookbook_${getFullDateTime()}";
+    final String cookbookId = "Easel_CookBook_auto_cookbook_${getFullDateTime()}";
 
     await sharedPreferences.setString(kCookbookId, cookbookId);
 
@@ -148,7 +148,7 @@ class LocalDataSourceImpl implements LocalDataSource {
   /// returns easelId
   @override
   String autoGenerateEaselId() {
-    String cookbookId = "Easel_Recipe_auto_recipe_${getFullDateTime()}";
+    final String cookbookId = "Easel_Recipe_auto_recipe_${getFullDateTime()}";
     return cookbookId;
   }
 
@@ -170,7 +170,7 @@ class LocalDataSourceImpl implements LocalDataSource {
 
   @override
   Future<bool> saveOnBoardingComplete() async {
-    return await sharedPreferences.setBool(onboardingComplete, true);
+    return sharedPreferences.setBool(onboardingComplete, true);
   }
 
   @override
@@ -260,7 +260,7 @@ class LocalDataSourceImpl implements LocalDataSource {
 
   @override
   Future<List<NFT>> getNfts() async {
-    return await database.nftDao.findAllNft();
+    return database.nftDao.findAllNft();
   }
 
   @override
@@ -289,7 +289,7 @@ class LocalDataSourceImpl implements LocalDataSource {
   }
 
   @override
-  bool setCacheDynamicType({required String key, required value}) {
+  bool setCacheDynamicType({required String key, required dynamic value}) {
     return cacheManager.setDynamicType(key: key, value: value);
   }
 
@@ -299,7 +299,7 @@ class LocalDataSourceImpl implements LocalDataSource {
   }
 
   @override
-  deleteCacheDynamic({required String key}) {
+  void deleteCacheDynamic({required String key}) {
     cacheManager.deleteCacheDynamic(key: key);
   }
 

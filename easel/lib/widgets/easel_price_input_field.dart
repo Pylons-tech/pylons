@@ -54,9 +54,7 @@ class EaselPriceInputField extends StatelessWidget {
                         controller: controller,
                         validator: validator,
                         minLines: 1,
-                        maxLines: 1,
                         keyboardType: TextInputType.number,
-                        textCapitalization: TextCapitalization.none,
                         inputFormatters: inputFormatters,
                         decoration: InputDecoration(
                             hintText: LocaleKeys.price_hint.tr(),
@@ -99,7 +97,6 @@ class _CurrencyDropDown extends StatelessWidget {
                     padding: EdgeInsets.only(left: 5.w),
                     height: isTablet ? 32.h : 40.h,
                     child: Align(
-                      alignment: Alignment.center,
                       child: DropdownButton<String>(
                         onTap: () {
                           FocusManager.instance.primaryFocus?.unfocus();
@@ -125,7 +122,6 @@ class _CurrencyDropDown extends StatelessWidget {
                           return DropdownMenuItem<String>(
                             value: value.symbol,
                             child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   value.getIconWidget(),
                                   SizedBox(width: isTablet ? 10.w : 10.w),
