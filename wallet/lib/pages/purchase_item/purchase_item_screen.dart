@@ -575,7 +575,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 NftOwnershipHistoryList: const [],
                               ),
                               SizedBox(height: 10.h),
-                              if (viewModel.nft.type != NftType.TYPE_RECIPE)
+                              if (viewModel.nft.type == NftType.TYPE_RECIPE && viewModel.nftOwnershipHistoryList.isNotEmpty)
                                 TabField(name: LocaleKeys.history.tr(), icon: 'history', nft: viewModel.nft, owner: viewModel.nft.owner, NftOwnershipHistoryList: viewModel.nftOwnershipHistoryList),
                               SizedBox(height: 50.h),
                               if (viewModel.nft.amountMinted >= viewModel.nft.quantity) soldOutButton(viewModel)

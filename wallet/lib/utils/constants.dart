@@ -308,6 +308,8 @@ const kItemId = "id";
 const kCookbookId = "cookbook_id";
 const kAmount = "amount";
 const kCreatedAt = "created_at";
+const kSenderName = "sender_name";
+const kReceiver = "receiver";
 
 const cookbookIdKey = "cookbookId";
 const recipeIdKey = "recipeId";
