@@ -147,7 +147,6 @@ class IPCEngine {
     final address = (queryParameters.containsKey(kAddress)) ? queryParameters[kAddress] ?? "" : "";
 
     if (currentWallet == null) {
-      LocaleKeys.create_an_account_first.tr().show();
       repository.saveInviteeAddressFromDynamicLink(dynamicLink: address);
       walletsStore.saveInitialLink(initialLink: link);
     }
@@ -171,7 +170,12 @@ class IPCEngine {
     walletsStore.setStateUpdatedFlag(flag: true);
   }
 
-  bool isOwnerIsViewing(NFT nullableNFT, AccountPublicInfo currentWallet) => nullableNFT.ownerAddress == currentWallet.publicAddress;
+  bool isOwnerIsViewing(NFT nullableNFT, AccountPublicInfo? currentWallet) {
+    if (currentWallet == null) return false;
+    return nullableNFT.ownerAddress == currentWallet.publicAddress;
+  }
+
+  bool getUserAcceptPolicies() => repository.getUserAcceptPolicies().getOrElse(() => false);
 
   Future<void> _handleNFTTradeLink(String link) async {
     final queryParameters = Uri.parse(link).queryParameters;

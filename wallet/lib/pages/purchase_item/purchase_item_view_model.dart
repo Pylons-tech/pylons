@@ -34,7 +34,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     required this.videoPlayerHelper,
     required this.repository,
     required this.shareHelper,
-    required this.accountPublicInfo,
+    this.accountPublicInfo,
   });
 
   bool get isViewingFullNft => _isViewingFullNft;
@@ -164,7 +164,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
     showLoader.dismiss();
   }
 
-
   void getWhichTabIsExpanded() {
     isDetailsExpanded = false;
     isHistoryExpanded = false;
@@ -206,7 +205,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
   }
 
   bool isExpansionOpen() => isDetailsExpanded || isHistoryExpanded || isOwnershipExpanded;
-
 
   void initializePlayers(NFT nft) {
     switch (nft.assetType) {
@@ -252,7 +250,10 @@ class PurchaseItemViewModel extends ChangeNotifier {
     }
   }
 
-  bool isOwner() => nft.ownerAddress == accountPublicInfo.publicAddress;
+  bool isOwner() {
+    if (accountPublicInfo == null) return false;
+    return nft.ownerAddress == accountPublicInfo!.publicAddress;
+  }
 
   Future<void> initializeVideoPlayer() async {
     videoPlayerHelper.initializeVideoPlayer(url: nft.url);
@@ -293,7 +294,13 @@ class PurchaseItemViewModel extends ChangeNotifier {
   bool isUrlLoaded = false;
 
   Future<void> nftDataInit({required String recipeId, required String cookBookId, required String itemId}) async {
-    final walletAddress = accountPublicInfo.publicAddress;
+    String walletAddress = "";
+
+    if (accountPublicInfo != null) {
+      isLiking = true;
+      walletAddress = accountPublicInfo!.publicAddress;
+    }
+
     if (nft.type != NftType.TYPE_RECIPE) {
       final nftOwnershipHistory = await repository.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
       if (nftOwnershipHistory.isLeft()) {
@@ -356,7 +363,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     isLiking = true;
     final bool temp = likedByMe;
 
-    final walletAddress = accountPublicInfo.publicAddress;
+    final walletAddress = accountPublicInfo!.publicAddress;
     final updateLikeStatusEither = await repository.updateLikeStatus(
       recipeId: recipeId,
       cookBookID: cookBookID,
@@ -474,7 +481,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
   }
 
   Future<void> shareNFTLink({required Size size}) async {
-    final walletAddress = accountPublicInfo.publicAddress;
+    final walletAddress = accountPublicInfo!.publicAddress;
     pauseMedia();
     final link = await repository.createDynamicLinkForRecipeNftShare(address: walletAddress, nft: nft);
     return link.fold((l) {
@@ -487,7 +494,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
   }
 
   Future<Either<String, bool>> shouldShowSwipeToBuy({required String selectedDenom, required double requiredAmount}) async {
-    final walletAddress = accountPublicInfo.publicAddress;
+    final walletAddress = accountPublicInfo!.publicAddress;
     final balancesEither = await repository.getBalance(walletAddress);
 
     if (balancesEither.isLeft()) {
@@ -585,7 +592,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
   List<NftOwnershipHistory> nftOwnershipHistoryList = [];
   bool _isVideoLoading = true;
   bool _likedByMe = false;
-  final AccountPublicInfo accountPublicInfo;
+  final AccountPublicInfo? accountPublicInfo;
 
   void logEvent() {
     repository.logUserJourney(screenName: AnalyticsScreenEvents.purchaseView);
