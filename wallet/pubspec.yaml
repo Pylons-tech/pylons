@@ -148,6 +148,7 @@ dependencies:
   home_widget: ^0.1.6
   wallpaper: ^1.1.0
   flutter_pdfview: ^1.2.5
+  syncfusion_flutter_pdfviewer: ^20.3.56
 
 
 dev_dependencies:
