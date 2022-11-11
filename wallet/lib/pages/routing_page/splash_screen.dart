@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   UserInfoProvider get userInfoProvider => GetIt.I.get();
 
-  int index = 0;
+  ValueNotifier<int> getImageIndex = ValueNotifier(0);
 
   @override
   void initState() {
@@ -47,15 +47,13 @@ class _SplashScreenState extends State<SplashScreen> {
     timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
-        if (index > 4) {
+        if (getImageIndex.value > 4) {
           checkAppLatestOrNot().then((value) {
             userInfoProvider.initIPC();
           });
           return;
         }
-        setState(() {
-          index++;
-        });
+        getImageIndex.value++;
       },
     );
   }
@@ -118,31 +116,36 @@ class _SplashScreenState extends State<SplashScreen> {
                 SizedBox(
                   height: 250.0.h,
                 ),
-                AnimatedSwitcher(
-                  duration: const Duration(seconds: 1),
-                  child: Stack(
-                    key: UniqueKey(),
-                    children: [
-                      Opacity(
-                        opacity: 0.2,
-                        child: Image.asset(
-                          ImageUtil.BG_IMAGES[index],
-                          color: Colors.black,
-                        ),
+                ValueListenableBuilder(
+                  valueListenable: getImageIndex,
+                  builder: (context, int value, child) {
+                    return AnimatedSwitcher(
+                      duration: const Duration(seconds: 1),
+                      child: Stack(
+                        key: UniqueKey(),
+                        children: [
+                          Opacity(
+                            opacity: 0.2,
+                            child: Image.asset(
+                              ImageUtil.BG_IMAGES[value],
+                              color: Colors.black,
+                            ),
+                          ),
+                          ClipRect(
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(
+                                sigmaX: 40.0,
+                                sigmaY: 30.0,
+                              ),
+                              child: Image.asset(
+                                ImageUtil.BG_IMAGES[value],
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                      ClipRect(
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(
-                            sigmaX: 40.0,
-                            sigmaY: 30.0,
-                          ),
-                          child: Image.asset(
-                            ImageUtil.BG_IMAGES[index],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                    );
+                  },
                 ),
                 const Spacer(),
                 SizedBox(
