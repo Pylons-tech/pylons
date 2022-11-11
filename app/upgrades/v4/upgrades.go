@@ -322,42 +322,46 @@ func RefundIAPNFTBUY(ctx sdk.Context, pylons *pylonskeeper.Keeper, accKeeper *au
 		// Query All recipes made with cookbook on chain
 		recipes := pylons.GetAllRecipesByCookbook(ctx, cookbook.Id)
 		for _, recipe := range recipes {
-			// Check If Recipe is executed atleast once
-			if recipe.Entries.ItemOutputs[0].AmountMinted > 0 {
-				// Query All Execution Record of the Recipe
-				executions := pylons.GetAllExecuteRecipeHis(ctx, cookbook.Id, recipe.Id)
-				for _, execution := range executions {
-					if execution.CreatedAt >= Aug8DateUnix {
-						if IAPAddress[execution.Sender] {
-							// If recipe is executed after 8th August, i.e. first IAP purchase
-							// If executor has purchased form IAP
-							// If amount is in upylons
-							amount, _ := sdk.ParseCoinNormalized(execution.Amount)
-							if amount.Denom == types.PylonsCoinDenom {
-								err := bank.SendCoinsFromAccountToModule(
-									ctx,
-									sdk.MustAccAddressFromBech32(execution.Sender),
-									types.PaymentsProcessorName,
-									sdk.NewCoins(amount),
-								)
-								if err != nil {
-									// case: user do not have enough IAP tokens
-									continue
-								}
-								err = bank.SendCoinsFromModuleToAccount(
-									ctx,
-									types.PaymentsProcessorName,
-									sdk.MustAccAddressFromBech32(cookbook.Creator),
-									sdk.NewCoins(amount),
-								)
-								if err != nil {
-									panic(err)
+
+			if len(recipe.Entries.ItemOutputs) > 0 {
+				// Check If Recipe is executed atleast once
+				if recipe.Entries.ItemOutputs[0].AmountMinted > 0 {
+					// Query All Execution Record of the Recipe
+					executions := pylons.GetAllExecuteRecipeHis(ctx, cookbook.Id, recipe.Id)
+					for _, execution := range executions {
+						if execution.CreatedAt >= Aug8DateUnix {
+							if IAPAddress[execution.Sender] {
+								// If recipe is executed after 8th August, i.e. first IAP purchase
+								// If executor has purchased form IAP
+								// If amount is in upylons
+								amount, _ := sdk.ParseCoinNormalized(execution.Amount)
+								if amount.Denom == types.PylonsCoinDenom {
+									err := bank.SendCoinsFromAccountToModule(
+										ctx,
+										sdk.MustAccAddressFromBech32(execution.Sender),
+										types.PaymentsProcessorName,
+										sdk.NewCoins(amount),
+									)
+									if err != nil {
+										// case: user do not have enough IAP tokens
+										continue
+									}
+									err = bank.SendCoinsFromModuleToAccount(
+										ctx,
+										types.PaymentsProcessorName,
+										sdk.MustAccAddressFromBech32(cookbook.Creator),
+										sdk.NewCoins(amount),
+									)
+									if err != nil {
+										panic(err)
+									}
 								}
 							}
 						}
 					}
 				}
 			}
+
 		}
 	}
 }
