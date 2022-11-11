@@ -94,8 +94,7 @@ class Item {
     }
   }
 
-  /// How much of the cost of this item is transferred to the owner of the
-  /// original recipe, when it is sold?
+  /// To be documented; not generally significant to client applications.
   ///
   /// Not available on partial items.
   double getTradePercentage() {
