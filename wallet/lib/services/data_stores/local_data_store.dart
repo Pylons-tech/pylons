@@ -8,12 +8,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pylons_wallet/model/pick_image_model.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
-import 'package:pylons_wallet/services/third_party_services/database.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:pylons_wallet/utils/permission_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../generated/locale_keys.g.dart';
+import '../third_party_services/database/database.dart';
 
 abstract class LocalDataSource {
   /// This method save stripe token in the local storage
