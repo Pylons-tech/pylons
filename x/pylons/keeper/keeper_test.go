@@ -47,6 +47,20 @@ func createNPylonsAccount(k keeper.Keeper, ctx sdk.Context, n int) []types.UserM
 	return items
 }
 
+func createNPylonsKYCAccount(k keeper.Keeper, ctx sdk.Context, n int) []types.KYCAccount {
+	items := make([]types.KYCAccount, n)
+	creators := types.GenTestBech32List(n)
+	for i := range items {
+		items[i].AccountAddr = creators[i]
+		items[i].Username = "user" + strconv.Itoa(i)
+		items[i].Level = uint64(i)
+		items[i].Provider = "provider" + strconv.Itoa(i)
+		items[i].ProviderId = "providerID" + strconv.Itoa(i)
+		k.SetPylonsKYC(ctx, items[i])
+	}
+	return items
+}
+
 func createNCookbookForSingleOwner(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	items := make([]types.Cookbook, n)
 	creator := types.GenTestBech32FromString("any")

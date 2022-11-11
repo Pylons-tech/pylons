@@ -4,10 +4,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
@@ -24,7 +22,7 @@ class RecoveryScreen extends StatefulWidget {
 }
 
 class _RecoveryScreenState extends State<RecoveryScreen> {
-  bool shouldShowTestNetRecovery = false;
+  
 
   Repository get repository => GetIt.I.get();
 
@@ -37,7 +35,6 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
 
     repository.logUserJourney(screenName: AnalyticsScreenEvents.recovery);
 
-    final account = GetIt.I.get<WalletsStore>().getWallets().value.last;
 
     scheduleMicrotask(() {
       GetIt.I.get<Repository>().getMnemonic().then((value) {
@@ -45,7 +42,6 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
           final mnemonicString = value.getOrElse(() => '');
           if (mnemonicString.isNotEmpty) {
             mnemonicsNotifier.value = mnemonicString;
-            shouldShowTestNetRecovery = account.chainId == "pylons-testnet";
             setState(() {});
           }
         }
@@ -101,51 +97,10 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
                 Navigator.of(context).pushNamed(RouteUtil.ROUTE_PRACTICE_TEST);
               },
             ),
-            if (shouldShowTestNetRecovery)
-              RecoveryForwardItem(
-                title: LocaleKeys.recovery_migration.tr(),
-                onPressed: () async {
-                  onRecoveryMigrationPressed();
-                },
-              ),
           ],
         ),
       ),
     );
-  }
-
-  Future onRecoveryMigrationPressed() async {
-    final diag = Loading()..showLoading();
-
-    final walletStore = GetIt.I.get<WalletsStore>();
-
-    final account = walletStore.getWallets().value.last;
-
-    final name = account.name;
-
-    final accountExists = await walletStore.isAccountExists(name);
-
-    if (accountExists) {
-      LocaleKeys.account_already_exists.tr().show();
-      diag.dismiss();
-      return;
-    }
-
-    final response = await walletStore.importAlanWallet(mnemonicsNotifier.value, name);
-
-    if (response.isLeft()) {
-      response.swap().toOption().toNullable()?.message.show();
-      diag.dismiss();
-      return;
-    }
-
-    diag.dismiss();
-
-    LocaleKeys.account_migrated_successfully.tr().show();
-
-    setState(() {
-      shouldShowTestNetRecovery = false;
-    });
   }
 }
 

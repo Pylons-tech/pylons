@@ -358,8 +358,12 @@
   "transaction_date": "Transaction Date",
   "bought_nft": "Bought",
   "free": "Free",
+  "resolution": "Resolution",
   "please_try_again_later": "Please try again later",
   "checkout": "Checkout",
   "artist": "Artist",
-  "set_lockscreen": "Set as lockscreen"
+  "set_lockscreen": "Set as lockscreen",
+  "maintenance_mode_message": "We are experiencing technical issues and have temporarily initiated maintenance mode for troubleshooting. Don't worry, your collection is safe. However, you cannot initiate on-chain transactions until we've resolved the problem and restored normal functionality.",
+  "maintenance_mode_header": "Maintenance Mode"
+
 }

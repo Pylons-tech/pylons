@@ -7,10 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
@@ -234,10 +235,18 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
   }
 
   Future onPressedUploadGoogleDrive() async {
+    final wallet = context.read<AccountProvider>().accountPublicInfo;
+
+    if (wallet == null) {
+      return;
+    }
     final Loading loading = Loading();
     loading.showLoading();
-    final wallets = GetIt.I.get<WalletsStore>().getWallets();
-    final response = await GetIt.I.get<Repository>().uploadMnemonicGoogleDrive(mnemonic: mnemonicsNotifier.value.join(" "), username: wallets.value.last.name);
+
+    final response = await GetIt.I.get<Repository>().uploadMnemonicGoogleDrive(
+          mnemonic: mnemonicsNotifier.value.join(" "),
+          username: wallet.name,
+        );
 
     loading.dismiss();
     if (response.isRight()) {
@@ -249,10 +258,17 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
   }
 
   Future onPressedUploadICloudDrive() async {
+    final wallet = context.read<AccountProvider>().accountPublicInfo;
+
+    if (wallet == null) {
+      return;
+    }
     final Loading loading = Loading();
     loading.showLoading();
-    final wallets = GetIt.I.get<WalletsStore>().getWallets();
-    final response = await GetIt.I.get<Repository>().uploadMnemonicICloud(mnemonic: mnemonicsNotifier.value.join(" "), username: wallets.value.last.name);
+    final response = await GetIt.I.get<Repository>().uploadMnemonicICloud(
+          mnemonic: mnemonicsNotifier.value.join(" "),
+          username: wallet.name,
+        );
 
     loading.dismiss();
     if (response.isRight()) {

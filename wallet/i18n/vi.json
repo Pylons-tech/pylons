@@ -10,6 +10,7 @@
   "recommended": "Khuyến nghị",
   "following": "Tiếp theo",
   "select_a_date": "Chọn một ngày",
+  "network_error_description": "Đã xảy ra lỗi mạng khi xử lý giao dịch của bạn. Vui lòng thử lại để cập nhật tài khoản của bạn. Bạn sẽ không bị tính phí hai lần khi thử lại.",
   "what_is_new": "Có gì mới",
   "trending": "Xu hướng",
   "price": "Giá bán",
@@ -357,6 +358,10 @@
   "buying_pylon_points": "Đã mua điểm giá treo",
   "transaction_date": "Ngày Giao dịch",
   "retry": "Thử lại",
+  "resolution": "nghị quyết",
   "bought_nft": "Đã mua",
-  "set_lockscreen": "Đặt làm màn hình khóa"
+  "set_lockscreen": "Đặt làm màn hình khóa",
+  "maintenance_mode_message": "Chúng tôi đang gặp sự cố kỹ thuật và đã tạm thời bắt đầu chế độ bảo trì để khắc phục sự cố. Đừng lo lắng, bộ sưu tập của bạn vẫn an toàn. Tuy nhiên, bạn không thể bắt đầu các giao dịch trên chuỗi cho đến khi chúng tôi giải quyết xong sự cố và khôi phục chức năng bình thường.",
+  "maintenance_mode_header": "Chế độ bảo trì"
+
 }

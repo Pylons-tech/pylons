@@ -28,7 +28,11 @@ class LocalTransactionModel extends Equatable {
     required this.status,
   });
 
-  factory LocalTransactionModel.fromStatus({required String transactionHash ,required TransactionStatus status, required LocalTransactionModel transactionModel}) {
+  factory LocalTransactionModel.fromStatus({
+    required String transactionHash,
+    required TransactionStatus status,
+    required LocalTransactionModel transactionModel,
+  }) {
     return LocalTransactionModel(
       transactionHash: transactionHash,
       transactionCurrency: transactionModel.transactionCurrency,

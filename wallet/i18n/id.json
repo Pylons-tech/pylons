@@ -7,6 +7,7 @@
   "market_place": "pasar",
   "gallery": "Galeri",
   "my_activity": "Aktivitas Saya",
+  "network_error_description": "Terjadi kesalahan jaringan saat memproses transaksi Anda. Harap coba lagi untuk memperbarui akun Anda. Anda tidak akan dikenakan biaya dua kali untuk mencoba lagi.",
   "recommended": "Direkomendasikan",
   "following": "Mengikuti",
   "select_a_date": "Pilih tanggal",
@@ -358,5 +359,9 @@
   "transaction_date": "Tanggal Transaksi",
   "retry": "Mencoba Kembali",
   "bought_nft": "Dibeli",
-  "set_lockscreen": "Tetapkan sebagai layar kunci"
+  "resolution": "resolusi",
+  "set_lockscreen": "Tetapkan sebagai layar kunci",
+  "maintenance_mode_message": "Kami mengalami masalah teknis dan untuk sementara memulai mode pemeliharaan untuk pemecahan masalah. Jangan khawatir, koleksi Anda aman. Namun, Anda tidak dapat memulai transaksi on-chain sampai kami menyelesaikan masalah dan memulihkan fungsionalitas normal.",
+  "maintenance_mode_header": "Mode Pemeliharaan"
+
 }
