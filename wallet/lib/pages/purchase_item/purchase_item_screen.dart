@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
-
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -218,7 +217,6 @@ class OwnerBottomDrawer extends StatefulWidget {
 class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   bool liked = false;
   bool collapsed = true;
-  bool isExpanded = false;
 
   @override
   void initState() {
@@ -564,7 +562,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 icon: 'trophy',
                                 nft: viewModel.nft,
                                 owner: viewModel.nft.owner,
-                                NftOwnershipHistoryList: const [],
+                                nftOwnershipHistoryList: const [],
+                                isExpanded: viewModel.isOwnershipExpanded,
+                                onChangeTab: viewModel.onChangeTab,
                               ),
                               SizedBox(height: 10.h),
                               TabField(
@@ -572,11 +572,21 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 icon: 'detail',
                                 nft: viewModel.nft,
                                 owner: viewModel.nft.owner,
-                                NftOwnershipHistoryList: const [],
+                                nftOwnershipHistoryList: const [],
+                                isExpanded: viewModel.isDetailsExpanded,
+                                onChangeTab: viewModel.onChangeTab,
                               ),
                               SizedBox(height: 10.h),
                               if (viewModel.nft.type == NftType.TYPE_RECIPE && viewModel.nftOwnershipHistoryList.isNotEmpty)
-                                TabField(name: LocaleKeys.history.tr(), icon: 'history', nft: viewModel.nft, owner: viewModel.nft.owner, NftOwnershipHistoryList: viewModel.nftOwnershipHistoryList),
+                                TabField(
+                                  name: LocaleKeys.history.tr(),
+                                  icon: 'history',
+                                  nft: viewModel.nft,
+                                  owner: viewModel.nft.owner,
+                                  nftOwnershipHistoryList: viewModel.nftOwnershipHistoryList,
+                                  isExpanded: viewModel.isHistoryExpanded,
+                                  onChangeTab: viewModel.onChangeTab,
+                                ),
                               SizedBox(height: 50.h),
                               if (viewModel.nft.amountMinted >= viewModel.nft.quantity) soldOutButton(viewModel)
                             ],
@@ -637,6 +647,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   /// BUY NFT BUTTON
                   if (viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid))
                     BuyNFTButton(
+                      key: const Key(kExpandedBuyButtonKeyValue),
                       onTapped: () async {
                         bool balancesFetchResult = true;
                         if (viewModel.nft.price != kZeroInt) {
@@ -694,7 +705,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           ],
         ),
         SizedBox(
-          height: 5.h,
+          height: 3.h,
         ),
         RichText(
           text: TextSpan(

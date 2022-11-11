@@ -7,6 +7,7 @@
   "market_place": "pasar",
   "gallery": "Galeri",
   "my_activity": "Aktivitas Saya",
+  "network_error_description": "Terjadi kesalahan jaringan saat memproses transaksi Anda. Harap coba lagi untuk memperbarui akun Anda. Anda tidak akan dikenakan biaya dua kali untuk mencoba lagi.",
   "recommended": "Direkomendasikan",
   "following": "Mengikuti",
   "select_a_date": "Pilih tanggal",
@@ -358,7 +359,8 @@
   "transaction_date": "Tanggal Transaksi",
   "retry": "Mencoba Kembali",
   "bought_nft": "Dibeli",
-  "resolution": "Resolusi",
+  "resolution": "resolusi",
+  "set_lockscreen": "Tetapkan sebagai layar kunci",
   "ipfs_cid": "ID Pelanggan IPFS",
   "available": "tersedia",
   "ea": "ea"
