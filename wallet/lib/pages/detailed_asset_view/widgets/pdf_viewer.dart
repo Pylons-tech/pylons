@@ -12,6 +12,7 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class PdfViewer extends StatefulWidget {
   final String? fileUrl;
@@ -23,8 +24,10 @@ class PdfViewer extends StatefulWidget {
 }
 
 class _PdfViewerState extends State<PdfViewer> with WidgetsBindingObserver {
-  late String doc;
+  late String doc = widget.fileUrl!;
   bool _isLoading = true;
+
+  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
 
   final Completer<PDFViewController> _controller =
   Completer<PDFViewController>();
@@ -33,7 +36,7 @@ class _PdfViewerState extends State<PdfViewer> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    createFileOfPdfUrl();
+    //createFileOfPdfUrl();
     super.initState();
   }
 
@@ -78,18 +81,26 @@ class _PdfViewerState extends State<PdfViewer> with WidgetsBindingObserver {
       child: Center(
         child: Stack(
           children: [
-            PDFView(
-              filePath: doc,
-              swipeHorizontal: true,
-              onRender: (_pages) {
-                setState(() {
-                  pages = _pages;
-                  isReady = true;
-                });
-              },
-              onViewCreated: (PDFViewController pdfViewController) {
-                _controller.complete(pdfViewController);
-              },
+            // PDFView(
+            //   filePath: doc,
+            //   swipeHorizontal: true,
+            //   onRender: (_pages) {
+            //     setState(() {
+            //       pages = _pages;
+            //       isReady = true;
+            //     });
+            //   },
+            //   onViewCreated: (PDFViewController pdfViewController) {
+            //     _controller.complete(pdfViewController);
+            //   },
+            // ),
+            SfPdfViewer.network(
+              doc,
+              onDocumentLoaded: (_) {
+                _isLoading = false;
+                setState(() {});
+                },
+              //key: _pdfViewerKey,
             ),
             _buildPdfFullScreenIcon()
           ],
