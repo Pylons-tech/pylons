@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class PdfViewerFullScreen extends StatefulWidget {
   const PdfViewerFullScreen({
@@ -19,6 +20,8 @@ class _PdfViewerFullScreenState extends State<PdfViewerFullScreen> with WidgetsB
   String? pdfDocument;
 
   Repository get repository => GetIt.I.get();
+
+  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
 
   final Completer<PDFViewController> _controller =
   Completer<PDFViewController>();
@@ -42,19 +45,23 @@ class _PdfViewerFullScreenState extends State<PdfViewerFullScreen> with WidgetsB
         body: Center(
             child: (pdfDocument == null)
                 ? const SizedBox()
-                : PDFView(
-                    filePath: pdfDocument,
-                    swipeHorizontal: true,
-                    onRender: (_pages) {
-                      setState(() {
-                        pages = _pages;
-                        isReady = true;
-                      });
-                    },
-                    onViewCreated: (PDFViewController pdfViewController) {
-                      _controller.complete(pdfViewController);
-                    },
-                  ),
+                : SfPdfViewer.network(
+                  pdfDocument!,
+                  //key: _pdfViewerKey,
+                ),
+            // PDFView(
+            //         filePath: pdfDocument,
+            //         swipeHorizontal: true,
+            //         onRender: (_pages) {
+            //           setState(() {
+            //             pages = _pages;
+            //             isReady = true;
+            //           });
+            //         },
+            //         onViewCreated: (PDFViewController pdfViewController) {
+            //           _controller.complete(pdfViewController);
+            //         },
+            //       ),
         ),
       ),
     );
