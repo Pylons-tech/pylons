@@ -181,7 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (prf == null) throw Exception("HANDLE THIS");
     setState(() {
       profile = prf;
-      pylons = profile!.getBalances["upylon"] ?? Int64.ZERO;
+      pylons = profile!.coins["upylon"] ?? Int64.ZERO;
     });
     if (kDebugMode) {
       print("(ok!)");
