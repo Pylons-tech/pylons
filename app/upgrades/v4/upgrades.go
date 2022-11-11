@@ -374,14 +374,16 @@ func RefundIAPNFTBUY(ctx sdk.Context, pylons *pylonskeeper.Keeper, accKeeper *au
 func RefundLuxFloralis(ctx sdk.Context, pylons *pylonskeeper.Keeper) {
 	// Get all execute recipe history by cookbookid and recipe id
 	histories := pylons.GetAllExecuteRecipeHis(ctx, LuxFloralisCookBookID, LuxFloralisRecipeID)
-	coinSlice := sdk.Coins{}
-	address := histories[0].Receiver
+	coins, _ := sdk.ParseCoinNormalized(histories[0].Amount)
 	// Looping execute recipe history to get amount
-	for _, history := range histories {
-		amount, _ := sdk.ParseCoinsNormalized(history.Amount)
-		coinSlice = append(coinSlice, amount...)
+	for i := 1; i < len(histories); i++ {
+		amount, _ := sdk.ParseCoinNormalized(histories[i].Amount)
+		coins = coins.Add(amount)
 	}
-	err := pylons.MintCoinsToAddr(ctx, sdk.AccAddress(address), coinSlice)
+
+	addr, _ := sdk.AccAddressFromBech32(histories[0].Receiver)
+
+	err := pylons.MintCoinsToAddr(ctx, addr, sdk.NewCoins(coins))
 	if err != nil {
 		panic(err)
 	}

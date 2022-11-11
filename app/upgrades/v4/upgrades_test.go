@@ -212,16 +212,12 @@ func (suite *UpgradeTestSuite) setUpTestAddrs(n int) []sdk.AccAddress {
 }
 
 func (suite *UpgradeTestSuite) TestRefundIAPNFTBUY() {
-	// save a cookbook - done
-	// save a recipe - done
-	// save iap - done
-	// save history - done
 	// run iap nft buy refund
 	suite.Setup()
 	productID := "pylons_10"
 	amountValid := 10_000_000
 	amountOfCoinsTest := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10_000_000)))
-	//create Google IAP order and test addresses
+	// create Google IAP order and test addresses
 	items := suite.setUpGoogleIAPOrder(suite.Ctx, 2, productID)
 	testAddrs := suite.setUpTestAddrs(5)
 
@@ -357,4 +353,46 @@ func (suite *UpgradeTestSuite) TestRefundIAPNFTBUY() {
 			suite.Require().Equal(accAmount.Amount, sdk.ZeroInt())
 		}
 	}
+}
+
+func (suite *UpgradeTestSuite) TestRefundLuxFloralis() {
+	suite.Setup()
+	// Make recipe executions records
+	testAddrs := suite.setUpTestAddrs(5)
+	creator := testAddrs[0]
+	amountValid := int64(10_000_000)
+
+	histories := []types.RecipeHistory{}
+	histories = append(
+		histories,
+		types.RecipeHistory{
+			ItemId:     fmt.Sprintf("item-%v", 1),
+			CookbookId: v4.LuxFloralisCookBookID,
+			RecipeId:   v4.LuxFloralisRecipeID,
+			Sender:     testAddrs[1].String(),
+			SenderName: fmt.Sprintf("testSender%v", 1),
+			Receiver:   creator.String(),
+			Amount:     sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(amountValid)).String(),
+			CreatedAt:  v4.Aug8DateUnix + 7200,
+		},
+		types.RecipeHistory{
+			ItemId:     fmt.Sprintf("item-%v", 2),
+			CookbookId: v4.LuxFloralisCookBookID,
+			RecipeId:   v4.LuxFloralisRecipeID,
+			Sender:     testAddrs[0].String(),
+			SenderName: fmt.Sprintf("testSender%v", 2),
+			Receiver:   creator.String(),
+			Amount:     sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(amountValid)).String(),
+			CreatedAt:  v4.Aug8DateUnix + 7200,
+		},
+	)
+
+	// saving test history
+	suite.App.PylonsKeeper.SetExecuteRecipeHis(suite.Ctx, histories[0])
+	suite.App.PylonsKeeper.SetExecuteRecipeHis(suite.Ctx, histories[1])
+
+	v4.RefundLuxFloralis(suite.Ctx, &suite.App.PylonsKeeper)
+
+	accAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, creator, types.PylonsCoinDenom)
+	suite.Require().Equal(accAmount.Amount, sdk.NewInt(int64((amountValid * 2))))
 }
