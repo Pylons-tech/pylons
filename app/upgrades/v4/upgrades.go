@@ -50,28 +50,19 @@ var (
 		EngineHotWal,
 	}
 
-	TotalUbedrock = math.NewIntFromUint64(1e+15) // 1 bedrock = 1_000_000 ubedrock
+	TotalUbedrock = math.NewIntFromUint64(1_000_000_000_000_000) // 1 bedrock = 1_000_000 ubedrock
 
-	// UbedrockDistribute = map[string]math.Int{
-	// 	Accounts[0]: math.NewIntFromUint64(150_000_000_000_000),
-	// 	Accounts[1]: math.NewIntFromUint64(150_000_000_000_000),
-	// 	Accounts[2]: math.ZeroInt(),
-	// 	Accounts[3]: math.NewIntFromUint64(20_000_000_000_000),
-	// 	Accounts[4]: math.NewIntFromUint64(40_000_000_000_000),
-	// 	Accounts[5]: math.NewIntFromUint64(20_000_000_000_000),
-	// 	Accounts[6]: math.NewIntFromUint64(619_999_000_000_000),
-	// 	Accounts[7]: math.NewIntFromUint64(1_000_000_000),
-	// }
 	UbedrockDistribute = map[string]math.Int{
-		Accounts[0]: math.NewIntFromUint64(1_000_000_000_000_00),
-		Accounts[1]: math.NewIntFromUint64(1_000_000_000_000_00),
+		Accounts[0]: math.NewIntFromUint64(150_000_000_000_000),
+		Accounts[1]: math.NewIntFromUint64(150_000_000_000_000),
 		Accounts[2]: math.ZeroInt(),
-		Accounts[3]: math.NewIntFromUint64(1_000_000_000_000_00),
-		Accounts[4]: math.NewIntFromUint64(1_000_000_000_000_00),
-		Accounts[5]: math.NewIntFromUint64(1_000_000_000_000_00),
-		Accounts[6]: math.NewIntFromUint64(1_000_000_000_000_00),
-		Accounts[7]: math.NewIntFromUint64(1_000_000_000_000_00),
+		Accounts[3]: math.NewIntFromUint64(20_000_000_000_000),
+		Accounts[4]: math.NewIntFromUint64(40_000_000_000_000),
+		Accounts[5]: math.NewIntFromUint64(20_000_000_000_000),
+		Accounts[6]: math.NewIntFromUint64(619_999_000_000_000),
+		Accounts[7]: math.NewIntFromUint64(1_000_000_000),
 	}
+
 	_ = Accounts
 	_ = TotalUbedrock
 	_ = UbedrockDistribute
