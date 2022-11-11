@@ -210,3 +210,151 @@ func (suite *UpgradeTestSuite) setUpTestAddrs(n int) []sdk.AccAddress {
 	}
 	return testAddrs
 }
+
+func (suite *UpgradeTestSuite) TestRefundIAPNFTBUY() {
+	// save a cookbook - done
+	// save a recipe - done
+	// save iap - done
+	// save history - done
+	// run iap nft buy refund
+	suite.Setup()
+	productID := "pylons_10"
+	amountValid := 10_000_000
+	amountOfCoinsTest := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10_000_000)))
+	//create Google IAP order and test addresses
+	items := suite.setUpGoogleIAPOrder(suite.Ctx, 2, productID)
+	testAddrs := suite.setUpTestAddrs(5)
+
+	// create a cookbook
+	creator := testAddrs[0]
+	// test cookbook
+	cookbook := types.Cookbook{
+		Creator:      creator.String(),
+		Id:           "cookbook",
+		NodeVersion:  1,
+		Name:         "Test Cookbook",
+		Description:  "Test Cookbook for testing purposes",
+		Developer:    "test",
+		Version:      "v0.1",
+		SupportEmail: "email@g.com",
+		Enabled:      true,
+	}
+	suite.App.PylonsKeeper.SetCookbook(suite.Ctx, cookbook)
+	// test recipe
+	recipe := types.Recipe{
+		CookbookId:  cookbook.Id,
+		Id:          "recipe",
+		NodeVersion: 1,
+		Name:        "Test Recipe",
+		Description: "Test Recipe for testing purposes",
+		Version:     "v0.1",
+		CoinInputs: []types.CoinInput{
+			{
+				Coins: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(amountValid)))),
+			},
+		},
+		ItemInputs: nil,
+		Entries: types.EntriesList{
+			CoinOutputs: nil,
+			ItemOutputs: []types.ItemOutput{
+				{
+					Id:             "Test Item",
+					Doubles:        nil,
+					Longs:          nil,
+					Strings:        nil,
+					MutableStrings: nil,
+					TransferFee: []sdk.Coin{
+						sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(amountValid))),
+					},
+					TradePercentage: sdk.NewDec(25),
+					Quantity:        10,
+					AmountMinted:    5,
+					Tradeable:       true,
+				},
+			},
+		},
+		Outputs: []types.WeightedOutputs{
+			{
+				EntryIds: []string{"character"},
+				Weight:   uint64(1),
+			},
+		},
+		BlockInterval: 0,
+		CostPerBlock:  sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(amountValid))),
+		Enabled:       true,
+		ExtraInfo:     "extraInfo",
+		CreatedAt:     v4.Aug8DateUnix + 3600,
+		UpdatedAt:     v4.Aug8DateUnix + 3600,
+	}
+	// adding sample test execute history for recipe
+	suite.App.PylonsKeeper.SetRecipe(suite.Ctx, recipe)
+	histories := []types.RecipeHistory{}
+	histories = append(
+		histories,
+		types.RecipeHistory{
+			ItemId:     fmt.Sprintf("item-%v", 1),
+			CookbookId: recipe.CookbookId,
+			RecipeId:   recipe.Id,
+			Sender:     testAddrs[1].String(),
+			SenderName: fmt.Sprintf("testSender%v", 1),
+			Receiver:   cookbook.Creator,
+			Amount:     sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(amountValid))).String(),
+			CreatedAt:  v4.Aug8DateUnix + 7200,
+		},
+		types.RecipeHistory{
+			ItemId:     fmt.Sprintf("item-%v", 2),
+			CookbookId: recipe.CookbookId,
+			RecipeId:   recipe.Id,
+			Sender:     items[0].Creator,
+			SenderName: fmt.Sprintf("testSender%v", 2),
+			Receiver:   cookbook.Creator,
+			Amount:     sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(amountValid))).String(),
+			CreatedAt:  v4.Aug8DateUnix + 7200,
+		},
+	)
+	// saving test history
+	suite.App.PylonsKeeper.SetExecuteRecipeHis(suite.Ctx, histories[0])
+	suite.App.PylonsKeeper.SetExecuteRecipeHis(suite.Ctx, histories[1])
+
+	// setting IAP addresses as valid for IAP based refund
+	v4.IAPAddress[items[0].Creator] = true
+	v4.IAPAddress[items[1].Creator] = true
+	//mint coin to test account
+	for _, addr := range testAddrs {
+		err := suite.App.PylonsKeeper.MintCoinsToAddr(suite.Ctx, addr, amountOfCoinsTest)
+		suite.Require().NoError(err)
+	}
+	//mint valid coin
+	for _, item := range items {
+		addr, _ := sdk.AccAddressFromBech32(item.Creator)
+		amt := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(amountValid))))
+		err := suite.App.PylonsKeeper.MintCoinsToAddr(suite.Ctx, addr, amt)
+		suite.Require().NoError(err)
+	}
+	// cleaning all the upylons from addresses
+	bankBaseKeeper, _ := suite.App.BankKeeper.(bankkeeper.BaseKeeper)
+	v4.CleanUpylons(suite.Ctx, &bankBaseKeeper, &suite.App.PylonsKeeper)
+
+	// making IAP based refund for recipe creators
+	v4.RefundIAPNFTBUY(suite.Ctx, &suite.App.PylonsKeeper, &suite.App.AccountKeeper, &bankBaseKeeper)
+
+	// check balances of valid addresses after clean refund to owners of recipe creators
+	for i, item := range items {
+		addr, _ := sdk.AccAddressFromBech32(item.Creator)
+		accAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, addr, types.PylonsCoinDenom)
+		if i == 0 {
+			suite.Require().Equal(accAmount.Amount, sdk.ZeroInt())
+		} else {
+			suite.Require().Equal(accAmount.Amount, sdk.NewInt(int64(amountValid)))
+		}
+	}
+
+	for i, addr := range testAddrs {
+		accAmount := suite.App.BankKeeper.GetBalance(suite.Ctx, addr, types.PylonsCoinDenom)
+		if i == 0 {
+			suite.Require().Equal(accAmount.Amount, sdk.NewInt(int64((amountValid))))
+		} else {
+			suite.Require().Equal(accAmount.Amount, sdk.ZeroInt())
+		}
+	}
+}
