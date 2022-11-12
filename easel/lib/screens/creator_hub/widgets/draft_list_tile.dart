@@ -243,8 +243,10 @@ class _DraftListTileState extends State<DraftListTile> {
                   ),
                 ),
               )
-            : const IgnorePointer(
-                child: SizedBox(),
+            : IgnorePointer(
+                child: SizedBox(
+                  height: 85.h,
+                ),
               ),
       ],
     );

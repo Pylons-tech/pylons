@@ -81,7 +81,8 @@ class NftGridViewItem extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(left: 8.w, top: 10.0.h),
                 child: SvgPicture.asset(
-                  SVGUtils.kFileTypeImageIcon,
+                  getNFTIcon(),
+                  key: Key(getNFTIconKey()),
                   color: Colors.white,
                   width: 14,
                   height: 14,
@@ -113,12 +114,17 @@ class NftGridViewItem extends StatelessWidget {
                   ),
                   const Spacer(),
                   InkWell(
+                    key: const Key(kGridViewTileMoreOptionKey),
                     onTap: () {
-                      final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
-                        buildContext: context,
-                        nft: nft,
-                      );
-                      draftsBottomSheet.show();
+                      if (context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft) {
+                        final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
+                          buildContext: context,
+                          nft: nft,
+                        );
+                        draftsBottomSheet.show();
+                        return;
+                      }
+                      buildBottomSheet(context: context);
                     },
                     child: Padding(
                       padding: EdgeInsets.all(4.0.w),
@@ -150,5 +156,35 @@ class NftGridViewItem extends StatelessWidget {
     final bottomSheet = BuildPublishedNFTsBottomSheet(context: context, nft: nft, easelProvider: _easelProvider);
 
     bottomSheet.show();
+  }
+
+  String getNFTIcon() {
+    switch(nft.assetType){
+      case kVideoText:
+        return SVGUtils.kSvgNftFormatVideo;
+      case kAudioText:
+        return SVGUtils.kSvgNftFormatAudio;
+      case kPdfText:
+        return SVGUtils.kSvgNftFormatPDF;
+      case k3dText:
+        return SVGUtils.kSvgNftFormat3d;
+      default:
+        return SVGUtils.kFileTypeImageIcon;
+    }
+  }
+
+  String getNFTIconKey() {
+    switch(nft.assetType){
+      case kVideoText:
+        return kNFTTypeVideoIconKey;
+      case kAudioText:
+        return kNFTTypeAudioIconKey;
+      case kPdfText:
+        return kNFTTypePdfIconKey;
+      case k3dText:
+        return kNFTType3dModelIconKey;
+      default:
+        return kNFTTypeImageIconKey;
+    }
   }
 }
