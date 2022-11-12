@@ -7,6 +7,7 @@
   "market_place": "pasar",
   "gallery": "Galeri",
   "my_activity": "Aktivitas Saya",
+  "network_error_description": "Terjadi kesalahan jaringan saat memproses transaksi Anda. Harap coba lagi untuk memperbarui akun Anda. Anda tidak akan dikenakan biaya dua kali untuk mencoba lagi.",
   "recommended": "Direkomendasikan",
   "following": "Mengikuti",
   "select_a_date": "Pilih tanggal",
@@ -360,5 +361,7 @@
   "bought_nft": "Dibeli",
   "favorites": "Favorit",
   "download_easel": "Unduh Kuda-kuda",
-  "create_easel_free_nft": "Kuda-kuda memungkinkan Anda membuat NFT gratis!"
+  "create_easel_free_nft": "Kuda-kuda memungkinkan Anda membuat NFT gratis!",
+  "resolution": "resolusi",
+  "set_lockscreen": "Tetapkan sebagai layar kunci"
 }

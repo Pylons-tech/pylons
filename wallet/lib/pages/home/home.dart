@@ -119,7 +119,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     );
   }
 
-  Widget buildTabletAppBar(HomeProvider provider) {
+  Column buildTabletAppBar(HomeProvider provider) {
     return Column(
       children: [
         Stack(

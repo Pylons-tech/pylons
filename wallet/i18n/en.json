@@ -358,11 +358,12 @@
   "transaction_date": "Transaction Date",
   "bought_nft": "Bought",
   "free": "Free",
-  "please_try_again_later": "Please Try again later",
+  "resolution": "Resolution",
+  "please_try_again_later": "Please try again later",
   "checkout": "Checkout",
   "artist": "Artist",
   "favorites": "Favorites",
   "download_easel": "Download Easel",
-  "create_easel_free_nft": "Easel let’s you create NFTs for free!"
-
+  "create_easel_free_nft": "Easel let’s you create NFTs for free!",
+  "set_lockscreen": "Set as lockscreen"
 }

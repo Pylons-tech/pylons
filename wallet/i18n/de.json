@@ -4,6 +4,7 @@
   "wallet_retrieving_err_msg": "Wir hatten Probleme beim Abrufen von Wallets aus einem sicheren Speicher.",
   "home": "Heim",
   "discover": "Entdecken",
+  "network_error_description": "Bei der Verarbeitung Ihrer Transaktion ist ein Netzwerkfehler aufgetreten. Bitte versuchen Sie erneut, Ihr Konto zu aktualisieren. Für einen erneuten Versuch werden Ihnen keine doppelten Kosten in Rechnung gestellt.",
   "market_place": "Marktplatz",
   "gallery": "Galerie",
   "my_activity": "Meine Aktivität",
@@ -360,5 +361,7 @@
   "bought_nft": "Gekauft",
   "favorites": "Favoriten",
   "download_easel": "Staffelei herunterladen",
-  "create_easel_free_nft": "Mit Easel können Sie NFTs kostenlos erstellen!"
+  "create_easel_free_nft": "Mit Easel können Sie NFTs kostenlos erstellen!",
+  "resolution": "Auflösung",
+  "set_lockscreen": "Instellen als vergrendelscherm"
 }

@@ -10,6 +10,7 @@
   "recommended": "Khuyến nghị",
   "following": "Tiếp theo",
   "select_a_date": "Chọn một ngày",
+  "network_error_description": "Đã xảy ra lỗi mạng khi xử lý giao dịch của bạn. Vui lòng thử lại để cập nhật tài khoản của bạn. Bạn sẽ không bị tính phí hai lần khi thử lại.",
   "what_is_new": "Có gì mới",
   "trending": "Xu hướng",
   "price": "Giá bán",
@@ -360,5 +361,7 @@
   "bought_nft": "Đã mua",
   "favorites": "Yêu thích",
   "download_easel": "Tải xuống giá vẽ",
-  "create_easel_free_nft": "Dễ dàng cho phép bạn tạo NFT miễn phí!"
+  "create_easel_free_nft": "Dễ dàng cho phép bạn tạo NFT miễn phí!",
+  "resolution": "nghị quyết",
+  "set_lockscreen": "Đặt làm màn hình khóa"
 }
