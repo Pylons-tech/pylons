@@ -2506,9 +2506,9 @@ find-up@^4.0.0:
     locate-path "^5.0.0"
     path-exists "^4.0.0"
 
-firebase-admin@^11.2.0:
-  version "11.2.0"
-  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-11.2.0.tgz#eeabeddcca03cb50cc04564e8d6f0db4d25878cf"
+firebase-admin@^11.2.1:
+  version "11.2.1"
+  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-11.2.1.tgz#8f7cb1a208011a0e96cddc209246522b7dde2c1e"
   dependencies:
     "@fastify/busboy" "^1.1.0"
     "@firebase/database-compat" "^0.2.6"
