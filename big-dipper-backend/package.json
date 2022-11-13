@@ -19,7 +19,7 @@
     "@babel/runtime": "^7.20.1",
     "@braintree/sanitize-url": "^6.0.0",
     "@google-cloud/storage": "^6.6.0",
-    "@google/model-viewer": "^2.0.2",
+    "@google/model-viewer": "^2.1.0",
     "@ledgerhq/hw-transport-web-ble": "^6.27.6",
     "@ledgerhq/hw-transport-webusb": "^6.27.6",
     "axios": "^1.1.3",
