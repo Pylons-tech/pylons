@@ -216,8 +216,7 @@ class _MyHomePageState extends State<MyHomePage> {
       showTopLevelMenu = false;
       flavorText = "Generating character...";
     });
-    final recipe = await Recipe.get("RecipeTestAppGetCharacter");
-    if (recipe == null) throw Exception("todo: handle this");
+    final recipe = Recipe.let("RecipeTestAppGetCharacter");
     final exec = await recipe.executeWith(profile!, []).onError((error, stackTrace) {
       throw Exception("character generation tx should not fail");
     });
@@ -238,8 +237,7 @@ class _MyHomePageState extends State<MyHomePage> {
       showTopLevelMenu = false;
       flavorText = buffer.toString();
     });
-    final recipe = await Recipe.get("RecipeTestAppFightGoblin");
-    if (recipe == null) throw Exception("todo: handle this");
+    final recipe = Recipe.let("RecipeTestAppFightGoblin");
     await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
       throw Exception("combat tx should not fail");
     });
@@ -269,8 +267,7 @@ class _MyHomePageState extends State<MyHomePage> {
       flavorText = buffer.toString();
     });
     if (swordLv < 1) {
-      final recipe = await Recipe.get("RecipeTestAppFightTrollUnarmed");
-      if (recipe == null) throw Exception("todo: handle this");
+      final recipe = Recipe.let("RecipeTestAppFightTrollUnarmed");
       await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
         throw Exception("combat tx should not fail");
       });
@@ -288,8 +285,7 @@ class _MyHomePageState extends State<MyHomePage> {
         flavorText = buffer.toString();
       });
     } else {
-      final recipe = await Recipe.get("RecipeTestAppFightTrollArmed");
-      if (recipe == null) throw Exception("todo: handle this");
+      final recipe = Recipe.let("RecipeTestAppFightTrollArmed");
       await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
         throw Exception("combat tx should not fail");
       });
@@ -320,8 +316,7 @@ class _MyHomePageState extends State<MyHomePage> {
       flavorText = buffer.toString();
     });
     if (swordLv < 2) {
-      final recipe = await Recipe.get("RecipeTestAppFightDragonUnarmed");
-      if (recipe == null) throw Exception("todo: handle this");
+      final recipe = Recipe.let("RecipeTestAppFightDragonUnarmed");
       await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
         throw Exception("combat tx should not fail");
       });
@@ -339,8 +334,7 @@ class _MyHomePageState extends State<MyHomePage> {
         flavorText = buffer.toString();
       });
     } else {
-      final recipe = await Recipe.get("RecipeTestAppFightDragonArmed");
-      if (recipe == null) throw Exception("todo: handle this");
+      final recipe = Recipe.let("RecipeTestAppFightDragonArmed");
       await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
         throw Exception("combat tx should not fail");
       });
@@ -373,8 +367,7 @@ class _MyHomePageState extends State<MyHomePage> {
         flavorText = "You need 50 coins to buy a sword";
       });
     } else {
-      final recipe = await Recipe.get("RecipeTestAppBuySword");
-      if (recipe == null) throw Exception("todo: handle this");
+      final recipe = Recipe.let("RecipeTestAppBuySword");
       await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
         throw Exception("purchase tx should not fail");
       });
@@ -409,8 +402,7 @@ class _MyHomePageState extends State<MyHomePage> {
         flavorText = "You need 5 shards to upgrade your sword";
       });
     } else {
-      final recipe = await Recipe.get("RecipeTestAppPurchaseUpgradeSword");
-      if (recipe == null) throw Exception("todo: handle this");
+      final recipe = Recipe.let("RecipeTestAppPurchaseUpgradeSword");
       await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
         throw Exception("purchase tx should not fail");
       });
