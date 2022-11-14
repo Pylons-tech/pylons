@@ -66,7 +66,7 @@ class _AcceptPolicyScreenState extends State<AcceptPolicyScreen> {
           ),
           ChangeNotifierProvider.value(
             value: widget.viewModel,
-            builder: (context, child) {
+            builder: (_, __) {
               return AcceptPolicyScreenContent(nft: widget.nft);
             },
           ),
@@ -168,7 +168,7 @@ class AcceptPolicyScreenContent extends StatelessWidget {
                     enabled: viewModel.isCheckTermServices && viewModel.isCheckPrivacyPolicy,
                     onTap: () async {
                       viewModel.setUserAcceptPolicies();
-                      await navigatorKey.currentState!.pushReplacementNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: nft);
+                      navigatorKey.currentState!.pushReplacementNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: nft);
                     },
                     text: LocaleKeys.get_started.tr(),
                     loader: ValueNotifier(false),

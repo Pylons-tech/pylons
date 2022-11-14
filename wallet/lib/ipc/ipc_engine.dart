@@ -158,13 +158,13 @@ class IPCEngine {
     }
 
     if (isOwnerIsViewing(nullableNFT, currentWallet)) {
-      await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nullableNFT);
+      navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nullableNFT);
     } else {
       if (!getUserAcceptPolicies()) {
-        await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_ACCEPT_POLICY, arguments: nullableNFT);
+        navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_ACCEPT_POLICY, arguments: nullableNFT);
         return;
       }
-      await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: nullableNFT);
+      navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: nullableNFT);
     }
 
     walletsStore.setStateUpdatedFlag(flag: true);

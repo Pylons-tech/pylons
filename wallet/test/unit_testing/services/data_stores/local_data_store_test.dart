@@ -7,7 +7,7 @@ void main() {
   final localDataSource = MockLocalDataSource();
   GetIt.I.registerSingleton<LocalDataSource>(localDataSource);
 
-  test('should get whether user getting do i accept policy or not', () {
+  test('should get whether user can get do i accept policy or not', () {
     final response = localDataSource.getUserAcceptPolicies();
     expect(true, response);
   });

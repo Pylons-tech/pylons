@@ -19,15 +19,15 @@ class AppColors {
 
   static Color kPeach = const Color(0xFFFFB094);
   static Color kPeachDark = const Color(0xFFED8864);
-  static Color kGray = const Color(0xFF7B7979);
+  static const Color kGray = Color(0xFF7B7979);
   static Color kLightGray = const Color(0xFFB3B3B3);
-  static Color kWhite = const Color(0xFFFFFFFF);
+  static Color kWhite = Color(0xFFFFFFFF);
   static Color kYellow = const Color(0xffFED564);
   static Color kDarkPurple = const Color(0xff0A004A);
   static Color kDarkRed = const Color(0xffEF4421);
   static Color kDarkGreen = const Color(0xFF3A8977);
   static Color kWhite01 = const Color(0xFFFBFBFB);
-  static Color kButtonColor = const Color(0xFFFFFFFF);
+  static const Color kButtonColor = Color(0xFFFFFFFF);
 
   static Color kUSDColor = kDarkGreen;
   static Color kPylonsColor = kDarkRed;
