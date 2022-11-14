@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const app_title = 'app_title';
   static const something_wrong = 'something_wrong';
   static const wallet_retrieving_err_msg = 'wallet_retrieving_err_msg';
@@ -364,4 +364,7 @@ abstract class LocaleKeys {
   static const resolution = 'resolution';
   static const bought_nft = 'bought_nft';
   static const set_lockscreen = 'set_lockscreen';
+  static const maintenance_mode_message = 'maintenance_mode_message';
+  static const maintenance_mode_header = 'maintenance_mode_header';
+
 }
