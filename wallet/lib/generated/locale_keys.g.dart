@@ -366,5 +366,7 @@ abstract class  LocaleKeys {
   static const ipfs_cid = 'ipfs_cid';
   static const available = 'available';
   static const ea = 'ea';
+  static const maintenance_mode_message = 'maintenance_mode_message';
+  static const maintenance_mode_header = 'maintenance_mode_header';
 
 }
