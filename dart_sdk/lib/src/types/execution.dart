@@ -12,6 +12,16 @@ class Execution {
 
   Execution(this._native);
 
+  /// TODO
+  Future<Execution?> refresh() async {
+    final ll = await PylonsWallet.instance.getExecutionBasedOnId(id: _native.id);
+    if (ll.data != null) {
+      return Execution(ll.data!);
+    } else {
+      return null;
+    }
+  }
+
   /// Retrieves the address of the party that executed the recipe.
   /// In most typical cases, this is the current user of your application.
   String getCreator() {

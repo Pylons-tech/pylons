@@ -440,11 +440,56 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       flavorText = buffer.toString();
     });
-    final recipe = await Recipe.get("RecipeTestAppRest100Premium");
-    if (recipe == null) throw Exception("todo: handle this");
+    final recipe = Recipe.let("RecipeTestAppRest100Premium");
     await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
       throw Exception("rest tx should not fail");
     });
+    buffer.writeln("Done!");
+    setState(() {
+      flavorText = buffer.toString();
+    });
+    final lastHp = curHp;
+    await _checkCharacter();
+    if (lastHp != curHp) {
+      buffer.writeln("Recovered ${curHp - lastHp} HP!");
+    }
+    setState(() {
+      flavorText = buffer.toString();
+      showTopLevelMenu = true;
+    });
+  }
+
+  Future<void> _rest2() async {
+    setState(() {
+      showTopLevelMenu = false;
+    });
+    if (pylons < 9) {
+      var buffer = StringBuffer("Pretend you were sent to go spend some money pls");
+      setState(() {
+        flavorText = buffer.toString();
+        showTopLevelMenu = true;
+      });
+      return;
+    }
+    var buffer = StringBuffer("Resting...!");
+    setState(() {
+      flavorText = buffer.toString();
+    });
+    final recipe = Recipe.let("RecipeTestAppRest100");
+    final exec = await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
+      throw Exception("rest tx should not fail");
+    });
+    while (true) {
+      setState(() {
+        buffer.writeln("...");
+        flavorText = buffer.toString();
+      });
+      final r = await exec.refresh();
+      if (r != null) {
+        break;
+      }
+    }
+
     buffer.writeln("Done!");
     setState(() {
       flavorText = buffer.toString();
