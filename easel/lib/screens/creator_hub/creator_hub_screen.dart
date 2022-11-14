@@ -49,7 +49,7 @@ class _CreatorHubScreenState extends State<CreatorHubScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ColoredBox(
       color: EaselAppTheme.kBgWhite,
       child: SafeArea(
         child: Scaffold(
@@ -100,13 +100,13 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
 
   EaselProvider get easelProvider => sl();
 
-  void onRefreshPressed() async {
+  Future<void> onRefreshPressed() async {
     GetIt.I.get<CreatorHubViewModel>().getDraftsList();
     GetIt.I.get<CreatorHubViewModel>().getRecipesList();
     GetIt.I.get<CreatorHubViewModel>().getTotalForSale();
   }
 
-  Widget getRefreshButton(viewModel) {
+  Widget getRefreshButton(CreatorHubViewModel viewModel) {
     if (easelProvider.isPylonsInstalled) {
       switch (viewModel.selectedCollectionType) {
         case CollectionType.published:
@@ -132,7 +132,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<CreatorHubViewModel>();
-    return Container(
+    return ColoredBox(
       color: EaselAppTheme.kWhite,
       child: SafeArea(
         child: Scaffold(
@@ -151,10 +151,10 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                       getRefreshButton(viewModel),
                       InkWell(
                         onTap: () => Navigator.of(context).pushNamed(RouteUtil.kRouteHome),
-                        child: Container(
+                        child: DecoratedBox(
                           decoration: BoxDecoration(
                             color: EaselAppTheme.kpurpleDark,
-                            boxShadow: [BoxShadow(color: EaselAppTheme.kpurpleDark.withOpacity(0.6), offset: const Offset(0, 0), blurRadius: 8.0)],
+                            boxShadow: [BoxShadow(color: EaselAppTheme.kpurpleDark.withOpacity(0.6), blurRadius: 8.0)],
                           ),
                           child: Icon(Icons.add, size: 27.h, color: EaselAppTheme.kWhite),
                         ),
@@ -168,7 +168,6 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: RichText(
-                    textAlign: TextAlign.start,
                     text: TextSpan(
                       children: [
                         TextSpan(
@@ -305,7 +304,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
     return Expanded(
       child: InkWell(
         onTap: () => viewModel.changeSelectedCollection(collectionType),
-        child: Container(
+        child: DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(width: 1.7.sp),
           ),
