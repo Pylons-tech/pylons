@@ -10,14 +10,12 @@ part of 'database.dart';
 class $FloorAppDatabase {
   /// Creates a database builder for a persistent database.
   /// Once a database is built, you should keep a reference to it and re-use it.
-  static _$AppDatabaseBuilder databaseBuilder(String name) =>
-      _$AppDatabaseBuilder(name);
+  static _$AppDatabaseBuilder databaseBuilder(String name) => _$AppDatabaseBuilder(name);
 
   /// Creates a database builder for an in memory database.
   /// Information stored in an in memory database disappears when the process is killed.
   /// Once a database is built, you should keep a reference to it and re-use it.
-  static _$AppDatabaseBuilder inMemoryDatabaseBuilder() =>
-      _$AppDatabaseBuilder(null);
+  static _$AppDatabaseBuilder inMemoryDatabaseBuilder() => _$AppDatabaseBuilder(null);
 }
 
 class _$AppDatabaseBuilder {
@@ -43,9 +41,7 @@ class _$AppDatabaseBuilder {
 
   /// Creates the database and initializes it.
   Future<AppDatabase> build() async {
-    final path = name != null
-        ? await sqfliteDatabaseFactory.getDatabasePath(name!)
-        : ':memory:';
+    final path = name != null ? await sqfliteDatabaseFactory.getDatabasePath(name!) : ':memory:';
     final database = _$AppDatabase();
     database.database = await database.open(
       path,
@@ -63,6 +59,8 @@ class _$AppDatabase extends AppDatabase {
 
   TxManagerDao? _txManagerDaoInstance;
 
+  FavoritesDao? _favoritesDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -78,16 +76,15 @@ class _$AppDatabase extends AppDatabase {
         await callback?.onOpen?.call(database);
       },
       onUpgrade: (database, startVersion, endVersion) async {
-        await MigrationAdapter.runMigrations(
-            database, startVersion, endVersion, migrations);
+        await MigrationAdapter.runMigrations(database, startVersion, endVersion, migrations);
 
         await callback?.onUpgrade?.call(database, startVersion, endVersion);
       },
       onCreate: (database, version) async {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `LocalTransactionModel` (`id` INTEGER, `transactionHash` TEXT NOT NULL, `transactionCurrency` TEXT NOT NULL, `transactionPrice` TEXT NOT NULL, `transactionType` TEXT NOT NULL, `transactionData` TEXT NOT NULL, `transactionDescription` TEXT NOT NULL, `status` TEXT NOT NULL, `dateTime` INTEGER NOT NULL, PRIMARY KEY (`id`))');
-        await database.execute(
-            'CREATE TABLE IF NOT EXISTS `FavoritesModel` (`dateTime` INTEGER NOT NULL, `id` TEXT NOT NULL, `cookbookId` TEXT NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY (`dateTime`))');
+        await database
+            .execute('CREATE TABLE IF NOT EXISTS `FavoritesModel` (`dateTime` INTEGER NOT NULL, `id` TEXT NOT NULL, `cookbookId` TEXT NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY (`dateTime`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -98,6 +95,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   TxManagerDao get txManagerDao {
     return _txManagerDaoInstance ??= _$TxManagerDao(database, changeListener);
+  }
+
+  @override
+  FavoritesDao get favoritesDao {
+    return _favoritesDaoInstance ??= _$FavoritesDao(database, changeListener);
   }
 }
 
@@ -127,13 +129,11 @@ class _$TxManagerDao extends TxManagerDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<LocalTransactionModel>
-      _localTransactionModelInsertionAdapter;
+  final InsertionAdapter<LocalTransactionModel> _localTransactionModelInsertionAdapter;
 
   @override
   Future<List<LocalTransactionModel>> getAllFailuresEntries() async {
-    return _queryAdapter.queryList(
-        'SELECT * FROM LocalTransactionModel ORDER BY dateTime DESC',
+    return _queryAdapter.queryList('SELECT * FROM LocalTransactionModel ORDER BY dateTime DESC',
         mapper: (Map<String, Object?> row) => LocalTransactionModel(
             id: row['id'] as int?,
             transactionHash: row['transactionHash'] as String,
@@ -148,14 +148,49 @@ class _$TxManagerDao extends TxManagerDao {
 
   @override
   Future<void> delete(int id) async {
-    await _queryAdapter.queryNoReturn(
-        'DELETE FROM LocalTransactionModel WHERE id = ?1',
-        arguments: [id]);
+    await _queryAdapter.queryNoReturn('DELETE FROM LocalTransactionModel WHERE id = ?1', arguments: [id]);
   }
 
   @override
   Future<int> insertTransactionFailure(LocalTransactionModel txManager) {
-    return _localTransactionModelInsertionAdapter.insertAndReturnId(
-        txManager, OnConflictStrategy.abort);
+    return _localTransactionModelInsertionAdapter.insertAndReturnId(txManager, OnConflictStrategy.abort);
+  }
+}
+
+class _$FavoritesDao extends FavoritesDao {
+  _$FavoritesDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _favoritesModelInsertionAdapter =
+            InsertionAdapter(database, 'FavoritesModel', (FavoritesModel item) => <String, Object?>{'dateTime': item.dateTime, 'id': item.id, 'cookbookId': item.cookbookId, 'type': item.type});
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<FavoritesModel> _favoritesModelInsertionAdapter;
+
+  @override
+  Future<List<FavoritesModel>> getAll() async {
+    return _queryAdapter.queryList('SELECT * FROM FavoritesModel ORDER BY dateTime DESC',
+        mapper: (Map<String, Object?> row) => FavoritesModel(id: row['id'] as String, cookbookId: row['cookbookId'] as String, type: row['type'] as String, dateTime: row['dateTime'] as int));
+  }
+
+  @override
+  Future<void> delete(String id) async {
+    await _queryAdapter.queryNoReturn('DELETE FROM FavoritesModel WHERE id = ?1', arguments: [id]);
+  }
+
+  @override
+  Future<void> deleteAll() async {
+    await _queryAdapter.queryNoReturn('DELETE * FROM FavoritesModel');
+  }
+
+  @override
+  Future<int> insertFavorites(FavoritesModel favoritesModel) {
+    return _favoritesModelInsertionAdapter.insertAndReturnId(favoritesModel, OnConflictStrategy.abort);
   }
 }

@@ -3,18 +3,21 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i7;
-import 'dart:ui' as _i8;
+import 'dart:async' as _i9;
+import 'dart:ui' as _i10;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:pylons_wallet/model/nft.dart' as _i5;
+import 'package:pylons_wallet/model/nft.dart' as _i7;
 import 'package:pylons_wallet/pages/home/collection_screen/collection_screen.dart'
-    as _i6;
+    as _i8;
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart'
-    as _i4;
+    as _i6;
+import 'package:pylons_wallet/services/repository/repository.dart' as _i5;
 import 'package:pylons_wallet/services/third_party_services/thumbnail_helper.dart'
     as _i3;
 import 'package:pylons_wallet/stores/wallet_store.dart' as _i2;
+import 'package:transaction_signing_gateway/transaction_signing_gateway.dart'
+    as _i4;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -48,11 +51,32 @@ class _FakeThumbnailHelper_1 extends _i1.SmartFake
         );
 }
 
+class _FakeAccountPublicInfo_2 extends _i1.SmartFake
+    implements _i4.AccountPublicInfo {
+  _FakeAccountPublicInfo_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeRepository_3 extends _i1.SmartFake implements _i5.Repository {
+  _FakeRepository_3(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [CollectionViewModel].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockCollectionViewModel extends _i1.Mock
-    implements _i4.CollectionViewModel {
+    implements _i6.CollectionViewModel {
   MockCollectionViewModel() {
     _i1.throwOnMissingStub(this);
   }
@@ -91,12 +115,45 @@ class MockCollectionViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  List<_i5.NFT> get assets => (super.noSuchMethod(
-        Invocation.getter(#assets),
-        returnValue: <_i5.NFT>[],
-      ) as List<_i5.NFT>);
+  _i4.AccountPublicInfo get accountPublicInfoInfo => (super.noSuchMethod(
+        Invocation.getter(#accountPublicInfoInfo),
+        returnValue: _FakeAccountPublicInfo_2(
+          this,
+          Invocation.getter(#accountPublicInfoInfo),
+        ),
+      ) as _i4.AccountPublicInfo);
   @override
-  set assets(List<_i5.NFT>? _assets) => super.noSuchMethod(
+  set accountPublicInfoInfo(_i4.AccountPublicInfo? _accountPublicInfoInfo) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #accountPublicInfoInfo,
+          _accountPublicInfoInfo,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i5.Repository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeRepository_3(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i5.Repository);
+  @override
+  set repository(_i5.Repository? _repository) => super.noSuchMethod(
+        Invocation.setter(
+          #repository,
+          _repository,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  List<_i7.NFT> get assets => (super.noSuchMethod(
+        Invocation.getter(#assets),
+        returnValue: <_i7.NFT>[],
+      ) as List<_i7.NFT>);
+  @override
+  set assets(List<_i7.NFT>? _assets) => super.noSuchMethod(
         Invocation.setter(
           #assets,
           _assets,
@@ -104,12 +161,12 @@ class MockCollectionViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  List<_i5.NFT> get recipes => (super.noSuchMethod(
+  List<_i7.NFT> get recipes => (super.noSuchMethod(
         Invocation.getter(#recipes),
-        returnValue: <_i5.NFT>[],
-      ) as List<_i5.NFT>);
+        returnValue: <_i7.NFT>[],
+      ) as List<_i7.NFT>);
   @override
-  set recipes(List<_i5.NFT>? _recipes) => super.noSuchMethod(
+  set recipes(List<_i7.NFT>? _recipes) => super.noSuchMethod(
         Invocation.setter(
           #recipes,
           _recipes,
@@ -117,12 +174,12 @@ class MockCollectionViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  List<_i5.NFT> get creations => (super.noSuchMethod(
+  List<_i7.NFT> get creations => (super.noSuchMethod(
         Invocation.getter(#creations),
-        returnValue: <_i5.NFT>[],
-      ) as List<_i5.NFT>);
+        returnValue: <_i7.NFT>[],
+      ) as List<_i7.NFT>);
   @override
-  set creations(List<_i5.NFT>? _creations) => super.noSuchMethod(
+  set creations(List<_i7.NFT>? _creations) => super.noSuchMethod(
         Invocation.setter(
           #creations,
           _creations,
@@ -130,12 +187,12 @@ class MockCollectionViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  List<_i5.NFT> get purchases => (super.noSuchMethod(
+  List<_i7.NFT> get purchases => (super.noSuchMethod(
         Invocation.getter(#purchases),
-        returnValue: <_i5.NFT>[],
-      ) as List<_i5.NFT>);
+        returnValue: <_i7.NFT>[],
+      ) as List<_i7.NFT>);
   @override
-  set purchases(List<_i5.NFT>? _purchases) => super.noSuchMethod(
+  set purchases(List<_i7.NFT>? _purchases) => super.noSuchMethod(
         Invocation.setter(
           #purchases,
           _purchases,
@@ -143,12 +200,12 @@ class MockCollectionViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  List<_i5.NFT> get favorites => (super.noSuchMethod(
+  List<_i7.NFT> get favorites => (super.noSuchMethod(
         Invocation.getter(#favorites),
-        returnValue: <_i5.NFT>[],
-      ) as List<_i5.NFT>);
+        returnValue: <_i7.NFT>[],
+      ) as List<_i7.NFT>);
   @override
-  set favorites(List<_i5.NFT>? _favorites) => super.noSuchMethod(
+  set favorites(List<_i7.NFT>? _favorites) => super.noSuchMethod(
         Invocation.setter(
           #favorites,
           _favorites,
@@ -169,12 +226,12 @@ class MockCollectionViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  List<_i6.Collection> get collectionType => (super.noSuchMethod(
+  List<_i8.Collection> get collectionType => (super.noSuchMethod(
         Invocation.getter(#collectionType),
-        returnValue: <_i6.Collection>[],
-      ) as List<_i6.Collection>);
+        returnValue: <_i8.Collection>[],
+      ) as List<_i8.Collection>);
   @override
-  set collectionType(List<_i6.Collection>? _collectionType) =>
+  set collectionType(List<_i8.Collection>? _collectionType) =>
       super.noSuchMethod(
         Invocation.setter(
           #collectionType,
@@ -183,12 +240,12 @@ class MockCollectionViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  _i4.CollectionsType get collectionsType => (super.noSuchMethod(
+  _i6.CollectionsType get collectionsType => (super.noSuchMethod(
         Invocation.getter(#collectionsType),
-        returnValue: _i4.CollectionsType.purchases,
-      ) as _i4.CollectionsType);
+        returnValue: _i6.CollectionsType.purchases,
+      ) as _i6.CollectionsType);
   @override
-  set collectionsType(_i4.CollectionsType? value) => super.noSuchMethod(
+  set collectionsType(_i6.CollectionsType? value) => super.noSuchMethod(
         Invocation.setter(
           #collectionsType,
           value,
@@ -222,13 +279,21 @@ class MockCollectionViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  _i7.Future<dynamic> loadPurchasesAndCreationsData() => (super.noSuchMethod(
+  _i9.Future<dynamic> loadPurchasesAndCreationsData() => (super.noSuchMethod(
         Invocation.method(
           #loadPurchasesAndCreationsData,
           [],
         ),
-        returnValue: _i7.Future<dynamic>.value(),
-      ) as _i7.Future<dynamic>);
+        returnValue: _i9.Future<dynamic>.value(),
+      ) as _i9.Future<dynamic>);
+  @override
+  _i9.Future<dynamic> loadFavoritesData() => (super.noSuchMethod(
+        Invocation.method(
+          #loadFavoritesData,
+          [],
+        ),
+        returnValue: _i9.Future<dynamic>.value(),
+      ) as _i9.Future<dynamic>);
   @override
   void refreshScreen() => super.noSuchMethod(
         Invocation.method(
@@ -238,7 +303,7 @@ class MockCollectionViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  void addListener(_i8.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i10.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -246,7 +311,7 @@ class MockCollectionViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  void removeListener(_i8.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i10.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -295,7 +360,7 @@ class MockThumbnailHelper extends _i1.Mock implements _i3.ThumbnailHelper {
         returnValue: '',
       ) as String);
   @override
-  _i7.Future<String?> generateVideoThumbnailIfRequired(
+  _i9.Future<String?> generateVideoThumbnailIfRequired(
     String? nftUrl,
     String? nftName,
     String? thumbnailsPath,
@@ -309,6 +374,6 @@ class MockThumbnailHelper extends _i1.Mock implements _i3.ThumbnailHelper {
             thumbnailsPath,
           ],
         ),
-        returnValue: _i7.Future<String?>.value(),
-      ) as _i7.Future<String?>);
+        returnValue: _i9.Future<String?>.value(),
+      ) as _i9.Future<String?>);
 }

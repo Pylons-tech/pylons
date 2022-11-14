@@ -11,8 +11,8 @@ abstract class FavoritesDao {
   Future<int> insertFavorites(FavoritesModel favoritesModel);
 
   @Query('DELETE FROM FavoritesModel WHERE id = :id')
-  Future<void> delete(int id);
+  Future<void> delete(String id);
 
   @Query('DELETE * FROM FavoritesModel')
-  Future<void> deleteAll(int id);
+  Future<void> deleteAll();
 }

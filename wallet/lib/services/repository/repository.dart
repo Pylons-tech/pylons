@@ -44,6 +44,7 @@ import 'package:pylons_wallet/utils/query_helper.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
 import '../../generated/locale_keys.g.dart';
+import '../../model/favorites.dart';
 
 abstract class Repository {
   /// This method returns the recipe based on cookbook id and recipe Id
@@ -488,6 +489,25 @@ abstract class Repository {
   });
 
   Future<Either<Failure, void>> logUserJourney({required String screenName});
+
+  /// This method will get you all the favorites from the DB
+  /// Output: This method will return the List of [FavoritesModel]
+  Future<Either<Failure, List<FavoritesModel>>> getAllFavorites();
+
+  /// This method will add NFT in favorite
+  /// Input: [FavoritesModel] This method will take favoritesModel as input and add it in the database
+  /// Output: This method will return the [int] if successfully added in the database
+  Future<Either<Failure, int>> insertNFTInFavorites(FavoritesModel favoritesModel);
+
+  /// This method will remove NFT from favorite
+  /// Input: [String] This method will take favoritesId as input and remove it from the database
+  /// Output: This method will return [bool] true if NFT has been removed
+  Future<Either<Failure, bool>> deleteNFTFromFavorites(String favoritesId);
+
+  /// This method will remove all the NFTs from favorites
+  /// Input: This method will take no argument
+  /// Output: This method will return [bool] true if NFTs has been removed successfully
+  Future<Either<Failure, bool>> deleteAllNFTFromFavorites();
 }
 
 class RepositoryImp implements Repository {
@@ -2006,6 +2026,46 @@ class RepositoryImp implements Repository {
     } on Exception catch (e) {
       recordErrorInCrashlytics(e);
       return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<FavoritesModel>>> getAllFavorites()async {
+    try {
+      final result = await localDataSource.getAllFavorites();
+      return Right(result);
+    } on Exception catch (_) {
+      return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> insertNFTInFavorites(FavoritesModel favoritesModel) async{
+    try {
+      final result = await localDataSource.insertNFTInFavorites(favoritesModel);
+      return Right(result);
+    } on Exception catch (_) {
+      return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteAllNFTFromFavorites() async{
+    try {
+      await localDataSource.deleteAllNFTFromFavorites();
+      return const Right(true);
+    } on Exception catch (_) {
+      return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteNFTFromFavorites(String favoritesId) async{
+    try {
+      await localDataSource.deleteNFTFromFavorites(favoritesId);
+      return const Right(true);
+    } on Exception catch (_) {
+      return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
     }
   }
 }

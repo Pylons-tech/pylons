@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:pylons_wallet/model/favorites.dart';
 import 'package:pylons_wallet/model/pick_image_model.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
@@ -182,6 +183,25 @@ abstract class LocalDataSource {
   /// Input: [id] This method will take id of the transaction record to be removed
   /// Output: [bool] status of the process is successful or not
   Future<bool> deleteTransactionFailureRecord(int id);
+
+  /// This method will get you all the favorites from the DB
+  /// Output: This method will return the List of [FavoritesModel]
+  Future<List<FavoritesModel>> getAllFavorites();
+
+  /// This method will add NFT in favorite
+  /// Input: [FavoritesModel] This method will take favoritesModel as input and add it in the database
+  /// Output: This method will return the [int] if successfully added in the database
+  Future<int> insertNFTInFavorites(FavoritesModel favoritesModel);
+
+  /// This method will remove NFT from favorite
+  /// Input: [String] This method will take favoritesId as input and remove it from the database
+  /// Output: This method will return [bool] true if NFT has been removed
+  Future<bool> deleteNFTFromFavorites(String favoritesId);
+
+  /// This method will remove all the NFTs from favorites
+  /// Input: This method will take no argument
+  /// Output: This method will return [bool] true if NFTs has been removed successfully
+  Future<bool> deleteAllNFTFromFavorites();
 }
 
 class LocalDataSourceImp implements LocalDataSource {
@@ -465,6 +485,45 @@ class LocalDataSourceImp implements LocalDataSource {
       return result;
     } catch (e) {
       throw "save_error".tr();
+    }
+  }
+
+  @override
+  Future<List<FavoritesModel>> getAllFavorites() async{
+    try {
+      final result = await database.favoritesDao.getAll();
+      return result;
+    } catch (e) {
+      throw CacheFailure("get_error".tr());
+    }
+  }
+
+  @override
+  Future<int> insertNFTInFavorites(FavoritesModel favoritesModel) async{
+    try {
+      return await database.favoritesDao.insertFavorites(favoritesModel);
+    } catch (e) {
+      throw "save_error".tr();
+    }
+  }
+
+  @override
+  Future<bool> deleteAllNFTFromFavorites() async{
+    try {
+      await database.favoritesDao.deleteAll();
+      return true;
+    } catch (e) {
+      throw CacheFailure("delete_error".tr());
+    }
+  }
+
+  @override
+  Future<bool> deleteNFTFromFavorites(String favoritesId) async{
+    try {
+      await database.favoritesDao.delete(favoritesId);
+      return true;
+    } catch (e) {
+      throw CacheFailure("delete_error".tr());
     }
   }
 }

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
+import 'package:pylons_wallet/model/favorites.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
@@ -371,8 +372,10 @@ class PurchaseItemViewModel extends ChangeNotifier {
     isLiking = false;
     if (temp && likesCount > 0) {
       likesCount = likesCount - 1;
+      repository.deleteNFTFromFavorites(recipeId);
     } else {
       likesCount = likesCount + 1;
+      repository.insertNFTInFavorites(FavoritesModel(id: recipeId, cookbookId: cookBookID, type:NftType.TYPE_RECIPE.name, dateTime: DateTime.now().millisecondsSinceEpoch));
     }
   }
 

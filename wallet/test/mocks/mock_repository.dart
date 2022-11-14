@@ -6,6 +6,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
 import 'package:pylons_wallet/model/export.dart';
+import 'package:pylons_wallet/model/favorites.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
@@ -549,5 +550,29 @@ class MockRepository extends Repository {
   @override
   Future<Either<Failure, void>> logUserJourney({required String screenName}) async {
     return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteAllNFTFromFavorites() {
+    // TODO: implement deleteAllNFTFromFavorites
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteNFTFromFavorites(String favoritesId) {
+    // TODO: implement deleteNFTFromFavorites
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, List<FavoritesModel>>> getAllFavorites() {
+    // TODO: implement getAllFavorites
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, int>> insertNFTInFavorites(FavoritesModel favoritesModel) {
+    // TODO: implement insertNFTInFavorites
+    throw UnimplementedError();
   }
 }
