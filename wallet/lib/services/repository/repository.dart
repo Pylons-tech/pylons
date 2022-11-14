@@ -1859,7 +1859,7 @@ class RepositoryImp implements Repository {
     } on Failure catch (_) {
       return Left(_);
     } on Exception catch (_) {
-      recordErrorInCrashlytics(_);
+      // recordErrorInCrashlytics(_);
       return Left(FetchAllNotificationFailure(message: LocaleKeys.something_wrong.tr()));
     }
   }
