@@ -137,10 +137,16 @@ func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sd
 func (am AppModule) RegisterServices(cfg module.Configurator) {
 	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
 
-	m := keeper.NewMigrator(am.keeper)
-	err := cfg.RegisterMigration(types.ModuleName, 2, m.Migrate2to3)
-	if err != nil {
-		panic(err)
+	migrator := keeper.NewMigrator(am.keeper)
+
+	// register v2 -> v3 migration
+	if err := cfg.RegisterMigration(types.ModuleName, 2, migrator.Migrate2to3); err != nil {
+		panic(fmt.Errorf("failed to migrate %s to v3: %w", types.ModuleName, err))
+	}
+
+	// register v3 -> v4 migration
+	if err := cfg.RegisterMigration(types.ModuleName, 3, migrator.Migrate3to4); err != nil {
+		panic(fmt.Errorf("failed to migrate %s to v4: %w", types.ModuleName, err))
 	}
 }
 
@@ -215,7 +221,7 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 3 }
+func (AppModule) ConsensusVersion() uint64 { return 4 }
 
 // ____________________________________________________________________________
 

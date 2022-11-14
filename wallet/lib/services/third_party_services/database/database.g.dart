@@ -63,8 +63,11 @@ class _$AppDatabase extends AppDatabase {
 
   TxManagerDao? _txManagerDaoInstance;
 
-  Future<sqflite.Database> open(String path, List<Migration> migrations,
-      [Callback? callback]) async {
+  Future<sqflite.Database> open(
+    String path,
+    List<Migration> migrations, [
+    Callback? callback,
+  ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
       version: 2,
       onConfigure: (database) async {
@@ -83,6 +86,8 @@ class _$AppDatabase extends AppDatabase {
       onCreate: (database, version) async {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `LocalTransactionModel` (`id` INTEGER, `transactionHash` TEXT NOT NULL, `transactionCurrency` TEXT NOT NULL, `transactionPrice` TEXT NOT NULL, `transactionType` TEXT NOT NULL, `transactionData` TEXT NOT NULL, `transactionDescription` TEXT NOT NULL, `status` TEXT NOT NULL, `dateTime` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `FavoritesModel` (`dateTime` INTEGER NOT NULL, `id` TEXT NOT NULL, `cookbookId` TEXT NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY (`dateTime`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -97,8 +102,10 @@ class _$AppDatabase extends AppDatabase {
 }
 
 class _$TxManagerDao extends TxManagerDao {
-  _$TxManagerDao(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database),
+  _$TxManagerDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
         _localTransactionModelInsertionAdapter = InsertionAdapter(
             database,
             'LocalTransactionModel',
