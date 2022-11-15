@@ -77,7 +77,6 @@ const double kRoyaltyPrecision = 10000000000000000;
 const String kPylonDenom = "upylon";
 
 const String kUniversalFontFamily = "UniversalSans";
-const String kUniversalSans750FontFamily = "UniversalSans750";
 const String kENV = 'ENV';
 const String kLocal = 'local';
 const String kPylo = 'pylo';
@@ -409,6 +408,9 @@ const kOwnerViewDrawerKeyValue = "ownerview_header";
 const kOwnerViewBottomSheetKeyValue = "bottom_sheet";
 const kKeyboardUpButtonKeyValue = "keyboard_up_button";
 const kExpandedBuyButtonKeyValue = "expanded_buy_button";
+const kCheckoutDialogKey = "checkout_dialog_key";
+const kPurchaseItemBottomSheetKey = "purchase_item_bottom_sheet";
+const kCloseBottomSheetKey = "close_bottom_sheet_key";
 
 Map<String, Color> denomColors = {'upylon': const Color(0xFF5252d5), 'ustripeusd': const Color(0xFF85bb65), 'uusd': const Color(0xFF85bb65)};
 

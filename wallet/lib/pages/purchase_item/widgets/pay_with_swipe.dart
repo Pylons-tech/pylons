@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pylons_wallet/utils/constants.dart';
 
 import '../../../generated/locale_keys.g.dart';
 
@@ -78,7 +79,7 @@ class _PylonsPayWithSwipeState extends State<PylonsPayWithSwipe> {
                       child: Text(
                         LocaleKeys.swipe_right_to_pay.tr(),
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                        style: TextStyle(color: Colors.white, fontSize: 14.sp,fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
                       ),
                     ),
                   ),

@@ -88,4 +88,25 @@ void main() {
     expect(buyButtonFinder, findsOneWidget);
     expect(counter, 1);
   });
+
+  testWidgets("Checkout Dialog should show on Buy Now Button Click", (tester) async {
+    when(viewModel.collapsed).thenAnswer((realInvocation) => false);
+    when(viewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_FREE_VIDEO);
+    when(viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid)).thenAnswer((realInvocation) => true);
+    await tester.testAppForWidgetTesting(
+      ChangeNotifierProvider<PurchaseItemViewModel>.value(
+        value: viewModel,
+        child: PurchaseItemScreen(
+          nft: viewModel.nft,
+        ),
+      ),
+    );
+    await tester.pump();
+    final buyNFTButton = find.byKey(const Key(kExpandedBuyButtonKeyValue));
+    expect(buyNFTButton, findsOneWidget);
+    await tester.tap(buyNFTButton);
+    await tester.pump();
+    final checkoutDialog = find.byKey(const Key(kCheckoutDialogKey));
+    expect(checkoutDialog, findsOneWidget);
+  });
 }

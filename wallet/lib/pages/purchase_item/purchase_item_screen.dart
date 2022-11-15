@@ -311,7 +311,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       ),
                       Text(
                         viewModel.viewsCount.toString(),
-                        style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalSans750FontFamily),
+                        style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
                       ),
                       SizedBox(
                         height: 5.w,
@@ -408,7 +408,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         ),
         Text(
           viewModel.likesCount.toString(),
-          style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalSans750FontFamily),
+          style: TextStyle(color: Colors.white, fontSize: 10.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
         ),
       ],
     );
@@ -439,6 +439,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
 
   Stack buildOpenedSheet(BuildContext context, PurchaseItemViewModel viewModel) {
     return Stack(
+      key: const Key(kPurchaseItemBottomSheetKey),
       children: [
         Align(
           alignment: Alignment.topRight,
@@ -450,6 +451,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
               width: 50,
               child: Center(
                 child: IconButton(
+                  key: const Key(kCloseBottomSheetKey),
                   alignment: Alignment.topRight,
                   padding: const EdgeInsets.only(
                     bottom: 8,
@@ -606,7 +608,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               ),
                               Text(
                                 viewModel.viewsCount.toString(),
-                                style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalSans750FontFamily),
+                                style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
                               ),
                               SizedBox(
                                 height: 18.h,
@@ -697,7 +699,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             Flexible(
               child: Text(
                 nft.name,
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.sp, fontFamily: kUniversalSans750FontFamily),
+                style: TextStyle(color: Colors.white, fontSize: 18.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -712,7 +714,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             children: [
               TextSpan(
                 text: LocaleKeys.created_by.tr(),
-                style: TextStyle(color: Colors.white, fontSize: 13.sp),
+                style: TextStyle(color: Colors.white, fontSize: 11.sp),
               ),
               TextSpan(text: owner, style: TextStyle(color: AppColors.kCopyColor, fontSize: 13.sp)),
               WidgetSpan(

@@ -127,7 +127,7 @@ abstract class RemoteDataStore {
   Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String itemId, required String cookBookId});
 
   /// This method is used to get history of nft owners
-  /// Input: [cookBookID] and [recipeId] of the NFT
+  /// Input: [cookBookId] and [recipeId] of the NFT
   /// Output : [List][NftOwnershipHistory] will contain the list of NftOwnershipHistory data if success
   /// else will throw error
   Future<List<NftOwnershipHistory>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId});

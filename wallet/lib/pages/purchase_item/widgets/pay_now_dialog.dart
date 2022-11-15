@@ -31,8 +31,8 @@ import 'package:pylons_wallet/utils/route_util.dart';
 
 import '../../../generated/locale_keys.g.dart';
 
-TextStyle _titleTextStyle = TextStyle(color: AppColors.kWhite, fontSize: 19.sp, fontFamily: kUniversalSans750FontFamily, fontWeight: FontWeight.bold);
-TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.normal, fontSize: 12.sp, fontFamily: kUniversalSans750FontFamily);
+TextStyle _titleTextStyle = TextStyle(color: AppColors.kWhite, fontSize: 19.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700);
+TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontSize: 12.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700);
 
 class PayNowDialog {
   final NFT nft;
@@ -49,6 +49,7 @@ class PayNowDialog {
       context: buildContext,
       builder: (context) {
         return Dialog(
+          key: const Key(kCheckoutDialogKey),
           backgroundColor: Colors.transparent,
           child: ChangeNotifierProvider<PurchaseItemViewModel>.value(
             value: purchaseItemViewModel,
@@ -216,7 +217,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
             subtitle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: subtitleTextColor, fontSize: 13.sp, fontWeight: FontWeight.normal, fontFamily: kUniversalSans750FontFamily),
+            style: TextStyle(color: subtitleTextColor, fontSize: 13.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
           ),
         ),
       ],
