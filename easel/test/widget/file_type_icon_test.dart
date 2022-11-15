@@ -15,9 +15,9 @@ void main() {
   final repository = MockRepositoryImp();
   GetIt.I.registerLazySingleton(() => CreatorHubViewModel(repository));
 
-  group("Test NFT File Type Icons", () {
+  group("NFT File Type Icons Test Cases", () {
     testWidgets(
-      "Image Type NFT Icon Test",
+      "Testing Icon of Image NFT",
       (widgetTester) async {
         await widgetTester.testAppForWidgetTesting(
           Scaffold(
@@ -38,7 +38,7 @@ void main() {
     );
 
     testWidgets(
-      "Video Type NFT Icon Test",
+      "Testing Icon of Video NFT",
       (widgetTester) async {
         await widgetTester.testAppForWidgetTesting(
           Scaffold(
@@ -59,7 +59,7 @@ void main() {
     );
 
     testWidgets(
-      "Audio Type NFT Icon Test",
+      "Testing Icon of Audio NFT",
       (widgetTester) async {
         await widgetTester.testAppForWidgetTesting(
           Scaffold(
@@ -80,7 +80,7 @@ void main() {
     );
 
     testWidgets(
-      "PDF Type NFT Icon Test",
+      "Testing Icon of PDF NFT",
       (widgetTester) async {
         await widgetTester.testAppForWidgetTesting(
           Scaffold(
@@ -101,7 +101,7 @@ void main() {
     );
 
     testWidgets(
-      "3D Model Type NFT Icon Test",
+      "Testing Icon of 3d Model NFT",
       (widgetTester) async {
         await widgetTester.testAppForWidgetTesting(
           Scaffold(

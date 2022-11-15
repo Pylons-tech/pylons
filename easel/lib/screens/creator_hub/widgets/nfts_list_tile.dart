@@ -48,7 +48,7 @@ class NFTsListTile extends StatelessWidget {
           children: [
             SizedBox(
               height: 45.h,
-              width: 45.h,
+              width: 45.w,
               child: NftTypeBuilder(
                 onImage: (context) => buildCachedNetworkImage(publishedNFT.url.changeDomain()),
                 onVideo: (context) => buildCachedNetworkImage(publishedNFT.thumbnailUrl.changeDomain()),
@@ -169,7 +169,7 @@ class NFTsListTile extends StatelessWidget {
                         children: [
                           Container(
                             width: 50.0.w,
-                            height: 50.0.w,
+                            height: 50.0.h,
                             decoration: const BoxDecoration(
                               color: EaselAppTheme.kLightGrey03,
                             ),
