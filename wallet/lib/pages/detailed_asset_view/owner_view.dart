@@ -19,6 +19,7 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_play
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_progress_widget.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/toggle_button.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/wallpaper_set_screen.dart';
 import 'package:pylons_wallet/pages/gestures_for_detail_screen.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
@@ -254,63 +255,67 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             owner: viewModel.nft.type == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator,
                           ),
                         ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.keyboard_arrow_up,
-                            size: 32.h,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            viewModel.toChangeCollapse();
-                          },
-                        )
+
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: 10.h,
                   ),
                   getProgressWidget(),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    //mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        children: [
-                          if (viewModel.nft.type != NftType.TYPE_ITEM)
-                            Text(
-                              "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
-                              style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
-                            )
-                        ],
-                      ),
+                      // const SizedBox(
+                      //   width: 10,
+                      // ),
+                      // Column(
+                      //   children: [
+                      //     if (viewModel.nft.type != NftType.TYPE_ITEM)
+                      //       Text(
+                      //         "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
+                      //         style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
+                      //       )
+                      //   ],
+                      // ),
+                      // const Spacer(),
+                      // SizedBox(
+                      //   width: 40.w,
+                      // ),
+                      // Column(
+                      //   children: [
+                      //     GestureDetector(
+                      //       key: const Key(kShareNftButtonCollapsedKey),
+                      //       onTap: () {
+                      //         final Size size = MediaQuery.of(context).size;
+                      //
+                      //         context.read<OwnerViewViewModel>().shareNFTLink(size: size);
+                      //       },
+                      //       child: SvgPicture.asset(
+                      //         SVGUtil.OWNER_SHARE,
+                      //         height: 20.h,
+                      //       ),
+                      //     ),
+                      //     SizedBox(
+                      //       height: 7.h,
+                      //     )
+                      //   ],
+                      // ),
+                      const ToggleButton(),
                       const Spacer(),
-                      SizedBox(
-                        width: 40.w,
-                      ),
-                      Column(
-                        children: [
-                          GestureDetector(
-                            key: const Key(kShareNftButtonCollapsedKey),
-                            onTap: () {
-                              final Size size = MediaQuery.of(context).size;
-
-                              context.read<OwnerViewViewModel>().shareNFTLink(size: size);
-                            },
-                            child: SvgPicture.asset(
-                              SVGUtil.OWNER_SHARE,
-                              height: 20.h,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 7.h,
-                          )
-                        ],
-                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.keyboard_arrow_up,
+                          size: 32.h,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          viewModel.toChangeCollapse();
+                        },
+                      )
                     ],
-                  )
+                  ),
+                  SizedBox(height: 20.h),
                 ],
               ),
             )
