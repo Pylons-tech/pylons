@@ -1,15 +1,15 @@
-import 'package:fixnum/fixnum.dart';
-
-import '../../pylons_sdk.dart';
-import '../generated/pylons/execution.pb.dart' as generated;
+// import 'package:fixnum/fixnum.dart';
+//
+// import '../../pylons_sdk.dart';
+// import '../generated/pylons/execution.pb.dart' as generated;
 
 /// Wrapper object for a recipe execution.
 /// The underlying functionality this object wraps is
 /// not currently operational, so it's just a stub object.
 class Execution {
-  final generated.Execution _native;
+//  final generated.Execution _native;
 
-  Execution(this._native);
+//  Execution(this._native);
 
   // /// TODO
   // Future<Execution?> refresh() async {
