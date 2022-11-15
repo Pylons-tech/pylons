@@ -31,7 +31,7 @@ class _PreviewNFTFullScreenState extends State<PreviewNFTFullScreen> {
     super.initState();
   }
 
-  onBackPressed({required BuildContext context}) {
+  void onBackPressed({required BuildContext context}) {
     if (easelProvider.publishedNFTClicked.assetType == AssetType.Video.name &&
         easelProvider.videoPlayerController.value.isInitialized) {
       if (easelProvider.videoPlayerController.value.isPlaying) {
@@ -64,10 +64,9 @@ class _PreviewNFTFullScreenState extends State<PreviewNFTFullScreen> {
                 assetType: easelProvider.publishedNFTClicked.assetType
                     .toAssetTypeEnum()),
             Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 ClipRect(
-                  child: Container(
+                  child: ColoredBox(
                     color: Colors.black.withOpacity(0.3),
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(20.w, 30.h, 0, 10.h),

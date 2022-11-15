@@ -28,8 +28,8 @@ class ChooseFormatScreen extends StatefulWidget {
 class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
   ValueNotifier<String> errorText = ValueNotifier(LocaleKeys.err_pic_file.tr());
 
-  void proceedToNext({required PickedFileModel result, required EaselProvider easelProvider}) async {
-    EaselProvider provider = context.read();
+  Future<void> proceedToNext({required PickedFileModel result, required EaselProvider easelProvider}) async {
+    final EaselProvider provider = context.read();
     final navigator = Navigator.of(context);
 
     if (result.path.isEmpty) {
@@ -42,7 +42,7 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
       return;
     }
 
-    NftFormat? nftFormat = await provider.resolveNftFormat(context, result.extension);
+    final NftFormat? nftFormat = await provider.resolveNftFormat(context, result.extension);
 
     if (nftFormat == null) {
       return;
@@ -80,7 +80,7 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
   @override
   void initState() {
     super.initState();
-    EaselProvider provider = context.read();
+    final EaselProvider provider = context.read();
     provider.setLog(screenName: AnalyticsScreenEvents.chooseFormatScreen);
   }
 
@@ -88,7 +88,7 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
   Widget build(BuildContext context) {
     final homeViewModel = context.watch<HomeViewModel>();
 
-    EaselProvider provider = context.read();
+    final EaselProvider provider = context.read();
     return Scaffold(
       body: Column(
         children: [
@@ -200,7 +200,7 @@ class _CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ColoredBox(
       color: EaselAppTheme.kBlack,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -210,7 +210,7 @@ class _CardWidget extends StatelessWidget {
               padding: EdgeInsets.only(top: topPadding, bottom: bottomPadding),
               child: GestureDetector(
                 onTap: () async {
-                  EaselProvider provider = context.read();
+                  final EaselProvider provider = context.read();
                   provider.setFormat(context, NftFormat.supportedFormats[typeIdx]);
                   final pickedFile = await provider.repository.pickFile(provider.nftFormat);
                   final result = pickedFile.getOrElse(() => PickedFileModel(path: "", fileName: "", extension: ""));
@@ -223,7 +223,6 @@ class _CardWidget extends StatelessWidget {
                   child: Stack(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SizedBox(
                             width: 10.0.w,
@@ -299,7 +298,7 @@ class _ErrorMessageWidget extends StatelessWidget {
   Padding buildTablet(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 0.17.sw),
-      child: Container(
+      child: DecoratedBox(
         decoration: const BoxDecoration(image: DecorationImage(image: svg_provider.Svg(SVGUtils.kSvgUploadErrorBG))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -354,7 +353,7 @@ class _ErrorMessageWidget extends StatelessWidget {
   Padding buildMobile(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 0.10.sw),
-      child: Container(
+      child: DecoratedBox(
         decoration: const BoxDecoration(image: DecorationImage(image: svg_provider.Svg(SVGUtils.kSvgUploadErrorBG))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

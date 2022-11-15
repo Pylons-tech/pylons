@@ -22,6 +22,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../generated/locale_keys.g.dart';
+import '../models/nft.dart';
 
 class DescribeScreen extends StatefulWidget {
   const DescribeScreen({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class DescribeScreen extends StatefulWidget {
 }
 
 class _DescribeScreenState extends State<DescribeScreen> {
-  var repository = GetIt.I.get<Repository>();
+  Repository repository = GetIt.I.get<Repository>();
   EaselProvider provider = GetIt.I.get<EaselProvider>();
   final _formKey = GlobalKey<FormState>();
 
@@ -49,7 +50,7 @@ class _DescribeScreenState extends State<DescribeScreen> {
   void initState() {
     super.initState();
 
-    provider.nft = repository.getCacheDynamicType(key: nftKey);
+    provider.nft = repository.getCacheDynamicType(key: nftKey) as NFT;
     repository.logUserJourney(screenName: AnalyticsScreenEvents.describeScreen);
     String from = "";
     from = context.read<HomeViewModel>().from!;
@@ -253,7 +254,7 @@ class _DescribeScreenState extends State<DescribeScreen> {
                         bgColor: EaselAppTheme.kBlue,
                         textColor: EaselAppTheme.kWhite,
                         onPressed: () {
-                          validateAndUpdateDescription(true);
+                          validateAndUpdateDescription(moveNextPage: true);
                         },
                         cuttingHeight: 15.h,
                         clipperType: ClipperType.bottomLeftTopRight,
@@ -265,7 +266,7 @@ class _DescribeScreenState extends State<DescribeScreen> {
                         child: InkWell(
                           key: const Key(kSaveAsDraftDescKey),
                           onTap: () {
-                            validateAndUpdateDescription(false);
+                            validateAndUpdateDescription(moveNextPage: false);
                           },
                           child: Text(
                             LocaleKeys.save_as_draft.tr(),
@@ -285,12 +286,12 @@ class _DescribeScreenState extends State<DescribeScreen> {
     );
   }
 
-  void validateAndUpdateDescription(moveNextPage) {
+  void validateAndUpdateDescription({required bool moveNextPage}) {
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    if ((_artNameFieldError.value.isNotEmpty || _artistNameFieldError.value.isNotEmpty || _descriptionFieldError.value.isNotEmpty)) {
+    if (_artNameFieldError.value.isNotEmpty || _artistNameFieldError.value.isNotEmpty || _descriptionFieldError.value.isNotEmpty) {
       return;
     }
     GetIt.I.get<CreatorHubViewModel>().changeSelectedCollection(CollectionType.draft);

@@ -173,7 +173,7 @@ extension FileSizeInGB on int {
 
 extension FileSizeString on int {
   String getFileSizeString({required int precision}) {
-    var i = (log(this) / log(1024)).floor();
+    final i = (log(this) / log(1024)).floor();
     return ((this / pow(1024, i)).toStringAsFixed(precision)) + suffixes[i];
   }
 }

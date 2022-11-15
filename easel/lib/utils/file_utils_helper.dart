@@ -82,7 +82,7 @@ class FileUtilsHelperImpl implements FileUtilsHelper {
         break;
     }
 
-    FilePickerResult? result = await filePicker.pickFiles(type: type, allowedExtensions: allowedExtensions);
+    final FilePickerResult? result = await filePicker.pickFiles(type: type, allowedExtensions: allowedExtensions);
 
     if (result == null) {
       return PickedFileModel(
@@ -118,7 +118,7 @@ class FileUtilsHelperImpl implements FileUtilsHelper {
 
   @override
   String getFileSizeString({required int fileLength, required int precision}) {
-    var i = (log(fileLength) / log(1024)).floor();
+    final i = (log(fileLength) / log(1024)).floor();
     return ((fileLength / pow(1024, i)).toStringAsFixed(precision)) + suffixes[i];
   }
 
@@ -133,13 +133,13 @@ class FileUtilsHelperImpl implements FileUtilsHelper {
     if (canLaunch) {
       launchUrlString(url, mode: LaunchMode.externalApplication);
     } else {
-      throw (LocaleKeys.cannot_launch_url.tr());
+      throw LocaleKeys.cannot_launch_url.tr();
     }
   }
 
   Future<String> cropImage({required String filePath}) async {
     try {
-      CroppedFile? croppedFile = await imageCropper.cropImage(
+      final CroppedFile? croppedFile = await imageCropper.cropImage(
         sourcePath: filePath,
         aspectRatioPresets: [CropAspectRatioPreset.square, CropAspectRatioPreset.ratio3x2, CropAspectRatioPreset.original, CropAspectRatioPreset.ratio4x3, CropAspectRatioPreset.ratio16x9],
         uiSettings: [

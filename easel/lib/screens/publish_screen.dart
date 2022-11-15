@@ -47,13 +47,13 @@ class PublishScreen extends StatefulWidget {
 }
 
 class _PublishScreenState extends State<PublishScreen> {
-  var repository = GetIt.I.get<Repository>();
-  var easelProvider = GetIt.I.get<EaselProvider>();
-  var homeViewModel = GetIt.I.get<HomeViewModel>();
+  Repository repository = GetIt.I.get<Repository>();
+  EaselProvider easelProvider = GetIt.I.get<EaselProvider>();
+  HomeViewModel homeViewModel = GetIt.I.get<HomeViewModel>();
 
   @override
-  initState() {
-    easelProvider.nft = repository.getCacheDynamicType(key: nftKey);
+  void initState() {
+    easelProvider.nft = repository.getCacheDynamicType(key: nftKey) as NFT;
     easelProvider.collapsed = false;
     easelProvider.setLog(screenName: AnalyticsScreenEvents.publishScreen);
     super.initState();
@@ -174,7 +174,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         children: [
           BuildPublishBottomSheet(
             collapseStatus: viewModel.collapsed,
-            onCollapsed: (context) => Container(
+            onCollapsed: (context) => DecoratedBox(
               decoration: const BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [EaselAppTheme.kTransparent, EaselAppTheme.kBlack])),
               child: Padding(
                 padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 8.h, bottom: 16.h),
@@ -224,7 +224,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         case ButtonState.paused:
                                           return InkWell(
                                             onTap: () {
-                                              viewModel.playAudio(false);
+                                              viewModel.playAudio(forFile: false);
                                             },
                                             child: Icon(
                                               Icons.play_arrow_outlined,
@@ -236,7 +236,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         case ButtonState.playing:
                                           return InkWell(
                                             onTap: () {
-                                              viewModel.pauseAudio(false);
+                                              viewModel.pauseAudio(forFile: false);
                                             },
                                             child: Icon(
                                               Icons.pause,
@@ -253,7 +253,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                     valueListenable: viewModel.audioProgressNotifier,
                                     builder: (_, value, __) {
                                       return Padding(
-                                        padding: EdgeInsets.only(right: 10.w, bottom: 3.h, top: 0, left: 5.w),
+                                        padding: EdgeInsets.only(right: 10.w, bottom: 3.h, left: 5.w),
                                         child: ProgressBar(
                                           progressBarColor: EaselAppTheme.kWhite,
                                           thumbColor: EaselAppTheme.kWhite,
@@ -266,7 +266,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                           thumbRadius: 10.h,
                                           timeLabelPadding: 3.h,
                                           onSeek: (position) {
-                                            viewModel.seekAudio(position, false);
+                                            viewModel.seekAudio(position, forFile: false);
                                           },
                                         ),
                                       );
@@ -346,7 +346,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             SizedBox(height: 5.h),
                             buildRow(
                               title: LocaleKeys.editions.tr(),
-                              subtitle: widget.nft.quantity.toString(),
+                              subtitle: widget.nft.quantity,
                             ),
                             SizedBox(height: 5.h),
                             buildRow(
@@ -372,7 +372,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 if (viewModel.nft.assetType == kAudioText) {
                                   viewModel.disposeAudioController();
                                 }
-                                bool isRecipeCreated = await viewModel.verifyPylonsAndMint(nft: viewModel.nft);
+                                final bool isRecipeCreated = await viewModel.verifyPylonsAndMint(nft: viewModel.nft);
                                 if (!isRecipeCreated) {
                                   return;
                                 }
@@ -499,7 +499,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       case ButtonState.paused:
                         return InkWell(
                           onTap: () {
-                            viewModel.playAudio(false);
+                            viewModel.playAudio(forFile: false);
                           },
                           child: Icon(
                             Icons.play_arrow_outlined,
@@ -511,7 +511,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       case ButtonState.playing:
                         return InkWell(
                           onTap: () {
-                            viewModel.pauseAudio(false);
+                            viewModel.pauseAudio(forFile: false);
                           },
                           child: Icon(
                             Icons.pause,
@@ -541,7 +541,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         thumbRadius: 6.h,
                         timeLabelPadding: 2.h,
                         onSeek: (position) {
-                          viewModel.seekAudio(position, false);
+                          viewModel.seekAudio(position, forFile: false);
                         },
                       ),
                     );
@@ -568,11 +568,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     );
   }
 
-  void onViewOnIPFSPressed({required EaselProvider provider}) async {
+  Future<void> onViewOnIPFSPressed({required EaselProvider provider}) async {
     await provider.repository.launchMyUrl(url: provider.nft.url.changeDomain());
   }
 
-  Widget buildRow({required String title, required String subtitle, final viewIPFS = false, final bool canCopy = false}) {
+  Widget buildRow({required String title, required String subtitle, bool viewIPFS = false, bool canCopy = false}) {
     final viewModel = context.watch<EaselProvider>();
 
     return Row(
@@ -586,9 +586,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             InkWell(
-              onTap: () {
+              onTap: () async {
                 if (viewIPFS) {
-                  return onViewOnIPFSPressed(provider: viewModel);
+                  await onViewOnIPFSPressed(provider: viewModel);
                 }
               },
               child: Text(

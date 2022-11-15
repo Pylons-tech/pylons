@@ -81,14 +81,14 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  void populateCoinsAndMoveForward() async {
+  Future<void> populateCoinsAndMoveForward() async {
     context.read<EaselProvider>().populateCoinsIfPylonsNotExists();
 
     navigatorKey.currentState!.pushReplacementNamed(RouteUtil.kRouteCreatorHub);
   }
 
   void onGetStarted() {
-    var onBoardingComplete = GetIt.I.get<Repository>().getOnBoardingComplete();
+    final onBoardingComplete = GetIt.I.get<Repository>().getOnBoardingComplete();
     if (!onBoardingComplete) {
       Navigator.of(context).pushNamed(RouteUtil.kRouteTutorial);
       return;

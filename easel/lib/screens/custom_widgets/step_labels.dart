@@ -22,7 +22,7 @@ class StepLabels extends StatelessWidget {
       child: Row(
         children: List.generate(stepLabels.length, (index) {
           return SizedBox(
-            width: (0.8.sw / stepLabels.length),
+            width: 0.8.sw / stepLabels.length,
             child: ValueListenableBuilder(
               valueListenable: currentPage,
               builder: (_, int currentPage, __) => Row(

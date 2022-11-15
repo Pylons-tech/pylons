@@ -31,7 +31,7 @@ class NFTsListTile extends StatelessWidget {
   }
 
   Widget getPublishedCard({required BuildContext context}) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: EaselAppTheme.kWhite,
         boxShadow: [
@@ -118,8 +118,7 @@ class NFTsListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        (publishedNFT.price.isNotEmpty && double.parse(publishedNFT.price) > 0)
-            ? Padding(
+        if (publishedNFT.price.isNotEmpty && double.parse(publishedNFT.price) > 0) Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Card(
                   elevation: 5,
@@ -134,13 +133,11 @@ class NFTsListTile extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
-            : Padding(
+              ) else Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: getPublishedCard(context: context),
               ),
-        (publishedNFT.assetType.toAssetTypeEnum() != AssetType.ThreeD)
-            ? IgnorePointer(
+        if (publishedNFT.assetType.toAssetTypeEnum() != AssetType.ThreeD) IgnorePointer(
                 child: SizedBox(
                   height: 85.0.h,
                   width: double.infinity,
@@ -217,8 +214,7 @@ class NFTsListTile extends StatelessWidget {
                     },
                   ),
                 ),
-              )
-            : IgnorePointer(
+              ) else const IgnorePointer(
                 child: SizedBox(
                   height: 85.h,
                 ),

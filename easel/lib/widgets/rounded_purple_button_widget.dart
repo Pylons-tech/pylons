@@ -20,7 +20,6 @@ class RoundedPurpleButtonWidget extends StatelessWidget {
           boxShadow: [
             BoxShadow(
                 color: EaselAppTheme.kBlue.withOpacity(0.6),
-                offset: const Offset(0, 0),
                 blurRadius: 10.0)
           ],
           gradient: const LinearGradient(

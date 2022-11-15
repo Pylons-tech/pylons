@@ -44,12 +44,12 @@ class VideoPlayerHelperImp implements VideoPlayerHelper {
   VideoPlayerHelperImp(this.videoPlayerController);
 
   @override
-  void initializeVideoPlayerWithFile({required File file}) async {
+  Future<void> initializeVideoPlayerWithFile({required File file}) async {
     videoPlayerController = VideoPlayerController.file(file)..initialize().then((value) => {});
   }
 
   @override
-  void initializeVideoPlayerWithUrl({required String videoUrl}) async {
+  Future<void> initializeVideoPlayerWithUrl({required String videoUrl}) async {
     videoPlayerController = VideoPlayerController.network(videoUrl)..initialize().then((value) => {});
   }
 
