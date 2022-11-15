@@ -3,11 +3,12 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:ui' as _i4;
+import 'dart:ui' as _i5;
 
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:pylons_wallet/model/nft.dart' as _i4;
 import 'package:pylons_wallet/pages/presenting_onboard_page/viewmodel/accept_policy_viewmodel.dart'
-    as _i3;
+as _i3;
 import 'package:pylons_wallet/services/repository/repository.dart' as _i2;
 
 // ignore_for_file: type=lint
@@ -23,12 +24,12 @@ import 'package:pylons_wallet/services/repository/repository.dart' as _i2;
 
 class _FakeRepository_0 extends _i1.SmartFake implements _i2.Repository {
   _FakeRepository_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+      Object parent,
+      Invocation parentInvocation,
+      ) : super(
+    parent,
+    parentInvocation,
+  );
 }
 
 /// A class which mocks [AcceptPolicyViewModel].
@@ -38,113 +39,121 @@ class MockAcceptPolicyViewModel extends _i1.Mock
     implements _i3.AcceptPolicyViewModel {
   @override
   _i2.Repository get repository => (super.noSuchMethod(
-        Invocation.getter(#repository),
-        returnValue: _FakeRepository_0(
-          this,
-          Invocation.getter(#repository),
-        ),
-        returnValueForMissingStub: _FakeRepository_0(
-          this,
-          Invocation.getter(#repository),
-        ),
-      ) as _i2.Repository);
+    Invocation.getter(#repository),
+    returnValue: _FakeRepository_0(
+      this,
+      Invocation.getter(#repository),
+    ),
+    returnValueForMissingStub: _FakeRepository_0(
+      this,
+      Invocation.getter(#repository),
+    ),
+  ) as _i2.Repository);
   @override
   bool get isCheckTermServices => (super.noSuchMethod(
-        Invocation.getter(#isCheckTermServices),
-        returnValue: false,
-        returnValueForMissingStub: false,
-      ) as bool);
+    Invocation.getter(#isCheckTermServices),
+    returnValue: false,
+    returnValueForMissingStub: false,
+  ) as bool);
   @override
   set isCheckTermServices(bool? _isCheckTermServices) => super.noSuchMethod(
-        Invocation.setter(
-          #isCheckTermServices,
-          _isCheckTermServices,
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.setter(
+      #isCheckTermServices,
+      _isCheckTermServices,
+    ),
+    returnValueForMissingStub: null,
+  );
   @override
   bool get isCheckPrivacyPolicy => (super.noSuchMethod(
-        Invocation.getter(#isCheckPrivacyPolicy),
-        returnValue: false,
-        returnValueForMissingStub: false,
-      ) as bool);
+    Invocation.getter(#isCheckPrivacyPolicy),
+    returnValue: false,
+    returnValueForMissingStub: false,
+  ) as bool);
   @override
   set isCheckPrivacyPolicy(bool? _isCheckPrivacyPolicy) => super.noSuchMethod(
-        Invocation.setter(
-          #isCheckPrivacyPolicy,
-          _isCheckPrivacyPolicy,
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.setter(
+      #isCheckPrivacyPolicy,
+      _isCheckPrivacyPolicy,
+    ),
+    returnValueForMissingStub: null,
+  );
   @override
   bool get hasListeners => (super.noSuchMethod(
-        Invocation.getter(#hasListeners),
-        returnValue: false,
-        returnValueForMissingStub: false,
-      ) as bool);
+    Invocation.getter(#hasListeners),
+    returnValue: false,
+    returnValueForMissingStub: false,
+  ) as bool);
   @override
   void toggleCheckTermServices(bool? value) => super.noSuchMethod(
-        Invocation.method(
-          #toggleCheckTermServices,
-          [value],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #toggleCheckTermServices,
+      [value],
+    ),
+    returnValueForMissingStub: null,
+  );
   @override
   void toggleCheckPrivacyPolicy(bool? value) => super.noSuchMethod(
-        Invocation.method(
-          #toggleCheckPrivacyPolicy,
-          [value],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #toggleCheckPrivacyPolicy,
+      [value],
+    ),
+    returnValueForMissingStub: null,
+  );
   @override
   void setUserAcceptPolicies() => super.noSuchMethod(
-        Invocation.method(
-          #setUserAcceptPolicies,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #setUserAcceptPolicies,
+      [],
+    ),
+    returnValueForMissingStub: null,
+  );
+  @override
+  void onTapGetStartedButton(_i4.NFT? nft) => super.noSuchMethod(
+    Invocation.method(
+      #onTapGetStartedButton,
+      [nft],
+    ),
+    returnValueForMissingStub: null,
+  );
   @override
   bool getUserAcceptPolicies() => (super.noSuchMethod(
-        Invocation.method(
-          #getUserAcceptPolicies,
-          [],
-        ),
-        returnValue: false,
-        returnValueForMissingStub: false,
-      ) as bool);
+    Invocation.method(
+      #getUserAcceptPolicies,
+      [],
+    ),
+    returnValue: false,
+    returnValueForMissingStub: false,
+  ) as bool);
   @override
-  void addListener(_i4.VoidCallback? listener) => super.noSuchMethod(
-        Invocation.method(
-          #addListener,
-          [listener],
-        ),
-        returnValueForMissingStub: null,
-      );
+  void addListener(_i5.VoidCallback? listener) => super.noSuchMethod(
+    Invocation.method(
+      #addListener,
+      [listener],
+    ),
+    returnValueForMissingStub: null,
+  );
   @override
-  void removeListener(_i4.VoidCallback? listener) => super.noSuchMethod(
-        Invocation.method(
-          #removeListener,
-          [listener],
-        ),
-        returnValueForMissingStub: null,
-      );
+  void removeListener(_i5.VoidCallback? listener) => super.noSuchMethod(
+    Invocation.method(
+      #removeListener,
+      [listener],
+    ),
+    returnValueForMissingStub: null,
+  );
   @override
   void dispose() => super.noSuchMethod(
-        Invocation.method(
-          #dispose,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #dispose,
+      [],
+    ),
+    returnValueForMissingStub: null,
+  );
   @override
   void notifyListeners() => super.noSuchMethod(
-        Invocation.method(
-          #notifyListeners,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(
+      #notifyListeners,
+      [],
+    ),
+    returnValueForMissingStub: null,
+  );
 }

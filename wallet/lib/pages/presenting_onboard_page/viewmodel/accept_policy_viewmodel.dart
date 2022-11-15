@@ -1,7 +1,10 @@
 // ignore_for_file: avoid_positional_boolean_parameters
 
 import 'package:flutter/material.dart';
+import 'package:pylons_wallet/model/nft.dart';
+import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
+import 'package:pylons_wallet/utils/route_util.dart';
 
 class AcceptPolicyViewModel extends ChangeNotifier {
   final Repository repository;
@@ -23,6 +26,11 @@ class AcceptPolicyViewModel extends ChangeNotifier {
 
   void setUserAcceptPolicies() {
     repository.saveUserAcceptPolicies();
+  }
+
+  void onTapGetStartedButton(NFT nft) {
+    setUserAcceptPolicies();
+    navigatorKey.currentState!.pushReplacementNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: nft);
   }
 
   bool getUserAcceptPolicies() {

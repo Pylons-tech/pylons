@@ -228,7 +228,7 @@ class IPCEngine {
       );
     } else {
       final item = await NFT.fromItem(recipeResult);
-      await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: item);
+      navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: item);
       walletsStore.setStateUpdatedFlag(flag: true);
     }
   }

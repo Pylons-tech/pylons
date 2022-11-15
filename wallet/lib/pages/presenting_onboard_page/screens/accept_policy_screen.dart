@@ -11,12 +11,10 @@ import 'package:pylons_wallet/generated/locale_keys.g.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
 import 'package:pylons_wallet/pages/presenting_onboard_page/viewmodel/accept_policy_viewmodel.dart';
-import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
-import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -167,8 +165,7 @@ class AcceptPolicyScreenContent extends StatelessWidget {
                     key: const Key(kAcceptBottomSheetBtnKey),
                     enabled: viewModel.isCheckTermServices && viewModel.isCheckPrivacyPolicy,
                     onTap: () async {
-                      viewModel.setUserAcceptPolicies();
-                      navigatorKey.currentState!.pushReplacementNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: nft);
+                      viewModel.onTapGetStartedButton(nft);
                     },
                     text: LocaleKeys.get_started.tr(),
                     loader: ValueNotifier(false),
