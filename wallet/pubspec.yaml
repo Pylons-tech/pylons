@@ -148,6 +148,10 @@ flutter:
       fonts:
         - asset: assets/fonts/UniversalSans-600.ttf
           weight: 600
+    - family: UniversalSans750
+      fonts:
+        - asset: assets/fonts/UniversalSans-750.ttf
+          weight: 700
 
 
 

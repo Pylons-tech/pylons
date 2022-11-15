@@ -37,11 +37,13 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/custom_transaction_signing_gateaway/custom_transaction_signing_gateway.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/enums.dart';
+import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
 import '../../generated/locale_keys.g.dart';
+import '../../model/update_recipe_model.dart';
 import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
 
 abstract class RemoteDataStore {
@@ -110,10 +112,10 @@ abstract class RemoteDataStore {
   Future<List<NotificationMessage>> getAllNotificationMessages({required String walletAddress, required int limit, required int offset});
 
   /// This method will update the recipe in the chain
-  /// Input: [MsgUpdateRecipe] contains the info regarding the recipe update
+  /// Input: [updateRecipeModel] contains the info regarding the recipe update
   /// Output: if successful will return [String] the hash of the transaction
   /// else will through error
-  Future<String> updateRecipe({required MsgUpdateRecipe msgUpdateRecipe});
+  Future<String> updateRecipe({required UpdateRecipeModel updateRecipeModel});
 
   /// This method is used to get likes count of NFT
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
@@ -758,7 +760,18 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<String> updateRecipe({required MsgUpdateRecipe msgUpdateRecipe}) {
+  Future<String> updateRecipe({required UpdateRecipeModel updateRecipeModel}) {
+    final recipeProto3Json = updateRecipeModel.recipe.toProto3Json()! as Map;
+    recipeProto3Json.remove(kCreatedAtCamelCase);
+    recipeProto3Json.remove(kUpdatedAtCamelCase);
+
+    final msgUpdateRecipe = pylons.MsgUpdateRecipe.create()..mergeFromProto3Json(recipeProto3Json);
+    msgUpdateRecipe.enabled = updateRecipeModel.enabledStatus;
+    msgUpdateRecipe.creator = updateRecipeModel.publicAddress;
+    // msgUpdateRecipe.coinInputs.first.coins.first.amount = updateRecipeModel.nftPrice;
+    // msgUpdateRecipe.coinInputs.first.coins.first.denom = updateRecipeModel.denom;
+    msgUpdateRecipe.version = msgUpdateRecipe.version.incrementRecipeVersion();
+
     return _signAndBroadcast(msgUpdateRecipe);
   }
 

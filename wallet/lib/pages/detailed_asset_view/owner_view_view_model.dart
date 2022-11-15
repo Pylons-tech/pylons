@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
+import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/share_helper.dart';
@@ -18,8 +20,10 @@ import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../generated/locale_keys.g.dart';
+import '../../model/update_recipe_model.dart';
 import '../owner_purchase_view_common/button_state.dart';
 import '../owner_purchase_view_common/progress_bar_state.dart';
+import 'package:pylons_wallet/utils/svg_util.dart';
 
 class OwnerViewViewModel extends ChangeNotifier {
   late NFT nft;
@@ -42,6 +46,7 @@ class OwnerViewViewModel extends ChangeNotifier {
   bool isOwnershipExpanded = false;
   bool isHistoryExpanded = false;
   bool isDetailsExpanded = false;
+  bool isNFTToggleIntermediateState = false;
 
   String owner = '';
 
@@ -483,4 +488,107 @@ class OwnerViewViewModel extends ChangeNotifier {
   );
 
   ValueNotifier<ButtonState> buttonNotifier = ValueNotifier(ButtonState.loading);
+
+  String getNFTToggleIcon(){
+    if(isNFTToggleIntermediateState) {
+      return SVGUtil.NFT_TOGGLE_INTERMEDIATE_STATE;
+    }else if(nft.isEnabled) {
+      return SVGUtil.NOT_FOR_SALE_BORDER;
+    }else {
+      return SVGUtil.FOR_SALE_BORDER;
+    }
+  }
+
+  void onChangeStatusNotForSale(){
+    isNFTToggleIntermediateState = true;
+    notifyListeners();
+  }
+
+  // void onPriceChanged(String? updatedText) {
+  //   notifyListeners();
+  // }
+  //
+  // void setSelectedDenom(Denom value) {
+  //   selectedDenom = value;
+  //   notifyListeners();
+  // }
+
+  Future<void> updateRecipeIsEnabled({required BuildContext context, required OwnerViewViewModel viewModel}) async {
+    final navigator = Navigator.of(context);
+    final loading = Loading()..showLoading();
+    final publicAddress = accountPublicInfo.publicAddress;
+    final recipeEither = await repository.getRecipe(cookBookId: viewModel.nft.cookbookID, recipeId: viewModel.nft.recipeID);
+    if (recipeEither.isLeft()) {
+      LocaleKeys.something_wrong.tr().show();
+      loading.dismiss();
+      return;
+    }
+
+    if (nft.isEnabled) {
+      final updateRecipeModel = UpdateRecipeModel(
+        recipe: recipeEither.toOption().toNullable()!,
+        publicAddress: publicAddress,
+        enabledStatus: !nft.isEnabled,
+        nftPrice: nft.price,
+        denom: nft.denom,
+      );
+      final response = await repository.updateRecipe(updateRecipeModel: updateRecipeModel);
+      loading.dismiss();
+      if (response.isLeft()) {
+        response.toOption().getOrElse(() => LocaleKeys.something_wrong.tr()).show();
+        loading.dismiss();
+        return;
+      }
+      updateRecipeInLocalVm(nftPrice: nft.ibcCoins.getCoinWithProperDenomination(nft.price), nftEnabledStatus: false, denom: nft.denom);
+      navigator.pop();
+      return;
+    }
+
+    final updateRecipeModel = UpdateRecipeModel(
+      recipe: recipeEither.toOption().toNullable()!,
+      publicAddress: publicAddress,
+      enabledStatus: !nft.isEnabled,
+
+
+
+      nftPrice: "5.55",
+      denom: "uPylons"
+
+
+
+
+      // nftPrice: (double.parse(priceController.text.replaceAll(",", "").trim()) * kBigIntBase).toStringAsFixed(0),
+      // denom: selectedDenom.symbol,
+    );
+    //
+    final response = await repository.updateRecipe(updateRecipeModel: updateRecipeModel);
+    if (response.isLeft()) {
+      response.toOption().getOrElse(() => "").show();
+      loading.dismiss();
+      return;
+    }
+    loading.dismiss();
+    updateRecipeInLocalVm(
+      nftEnabledStatus: true,
+
+
+      denom: "uPylons",
+      nftPrice: "5.55"
+
+
+      // denom: selectedDenom.symbol,
+      // nftPrice: priceController.text.replaceAll(",", "").trim(),
+
+    );
+    navigator.pop();
+    navigator.pop();
+  }
+
+  void updateRecipeInLocalVm({required bool nftEnabledStatus, required String nftPrice, required String denom}) {
+    final formattedPrice = (double.parse(nftPrice.replaceAll(",", "").trim()) * kBigIntBase).toStringAsFixed(0);
+    nft.isEnabled = nftEnabledStatus;
+    nft.price = formattedPrice;
+    nft.denom = denom;
+    notifyListeners();
+  }
 }
