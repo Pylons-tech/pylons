@@ -83,7 +83,7 @@ class BuyNFTButton extends StatelessWidget {
                   child: AutoSizeText(
                     LocaleKeys.buy_now.tr(),
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 14.sp, fontFamily: kUniversalSans750FontFamily),
+                    style: TextStyle(color: Colors.white, fontSize: 12.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
                     maxLines: 1,
                   ),
                 ),
@@ -98,11 +98,11 @@ class BuyNFTButton extends StatelessWidget {
                 RichText(
                   text: TextSpan(
                       text: "\$${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}",
-                      style: TextStyle(color: AppColors.kWhite, fontSize: 12.sp, fontWeight: FontWeight.w500, fontFamily: kUniversalSans750FontFamily),
+                      style: TextStyle(color: AppColors.kWhite, fontSize: 10.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
                       children: [
                         TextSpan(
                           text: " ${LocaleKeys.ea.tr()}.",
-                          style: TextStyle(color: AppColors.kWhite, fontSize: 10.sp, fontWeight: FontWeight.normal, fontFamily: kUniversalSans750FontFamily),
+                          style: TextStyle(color: AppColors.kWhite, fontSize: 10.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
                         )
                       ]),
                 ),

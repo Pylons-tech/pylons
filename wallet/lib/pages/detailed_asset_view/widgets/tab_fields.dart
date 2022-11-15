@@ -216,7 +216,15 @@ class _TabFieldState extends State<TabField> {
       child: Row(
         children: [
           Text(
-            value.substring(value.length - 10, value.length),
+            value.substring(0, 6),
+            style: TextStyle(color: AppColors.kGreyColor, fontSize: 9.sp),
+          ),
+          Text(
+            "...",
+            style: TextStyle(color: AppColors.kGreyColor, fontSize: 9.sp),
+          ),
+          Text(
+            value.substring(value.length - 5, value.length),
             style: TextStyle(color: AppColors.kGreyColor, fontSize: 9.sp),
           ),
           if (value.isNotEmpty)
