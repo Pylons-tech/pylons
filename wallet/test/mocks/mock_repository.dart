@@ -550,4 +550,10 @@ class MockRepository extends Repository {
   Future<Either<Failure, void>> logUserJourney({required String screenName}) async {
     return const Right(null);
   }
+
+  @override
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId}) {
+    // TODO: implement getNftOwnershipHistoryByCookbookIdAndRecipeId
+    throw UnimplementedError();
+  }
 }
