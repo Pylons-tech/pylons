@@ -14,7 +14,7 @@ that each upgrade implements. These then get included in the application
 
 Upgrade defines a struct containing necessary fields that a `SoftwareUpgradeProposal`
 must have written, in order for the state migration to go smoothly.
-An upgrade must implement this struct, and then set it in the `app.go`.
+An upgrade must implement this `upgrade struct`, and then set it in the `app.go`.
 The `app.go` will then define the `upgrade handler`.
 
 ```go
