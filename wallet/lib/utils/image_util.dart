@@ -25,11 +25,11 @@ class ImageUtil {
   static String SPLASH_SCREEN_BG = "assets/images/splash/Splash_Screen.jpg";
 
   static List<String> BG_IMAGES = [
-    "assets/images/bg/bg-1.png",
-    "assets/images/bg/bg-2.png",
-    "assets/images/bg/bg-3.png",
-    "assets/images/bg/bg-4.png",
-    "assets/images/bg/bg-5.png",
-    "assets/images/bg/bg-6.png"
+    "assets/images/splash/bg-1.png",
+    "assets/images/splash/bg-2.png",
+    "assets/images/splash/bg-3.png",
+    "assets/images/splash/bg-4.png",
+    "assets/images/splash/bg-5.png",
+    "assets/images/splash/bg-6.png"
   ];
 }
