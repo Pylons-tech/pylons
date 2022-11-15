@@ -18,7 +18,7 @@ void main() {
   group("Test NFT File Type Icons", () {
     testWidgets(
       "Image Type NFT Icon Test",
-          (widgetTester) async {
+      (widgetTester) async {
         await widgetTester.testAppForWidgetTesting(
           Scaffold(
             body: ChangeNotifierProvider.value(
@@ -39,7 +39,7 @@ void main() {
 
     testWidgets(
       "Video Type NFT Icon Test",
-          (widgetTester) async {
+      (widgetTester) async {
         await widgetTester.testAppForWidgetTesting(
           Scaffold(
             body: ChangeNotifierProvider.value(
@@ -60,7 +60,7 @@ void main() {
 
     testWidgets(
       "Audio Type NFT Icon Test",
-          (widgetTester) async {
+      (widgetTester) async {
         await widgetTester.testAppForWidgetTesting(
           Scaffold(
             body: ChangeNotifierProvider.value(
@@ -81,7 +81,7 @@ void main() {
 
     testWidgets(
       "PDF Type NFT Icon Test",
-          (widgetTester) async {
+      (widgetTester) async {
         await widgetTester.testAppForWidgetTesting(
           Scaffold(
             body: ChangeNotifierProvider.value(
@@ -102,7 +102,7 @@ void main() {
 
     testWidgets(
       "3D Model Type NFT Icon Test",
-          (widgetTester) async {
+      (widgetTester) async {
         await widgetTester.testAppForWidgetTesting(
           Scaffold(
             body: ChangeNotifierProvider.value(

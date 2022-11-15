@@ -159,7 +159,7 @@ class NftGridViewItem extends StatelessWidget {
   }
 
   String getNFTIcon() {
-    switch(nft.assetType){
+    switch (nft.assetType) {
       case kVideoText:
         return SVGUtils.kSvgNftFormatVideo;
       case kAudioText:
@@ -174,7 +174,7 @@ class NftGridViewItem extends StatelessWidget {
   }
 
   String getNFTIconKey() {
-    switch(nft.assetType){
+    switch (nft.assetType) {
       case kVideoText:
         return kNFTTypeVideoIconKey;
       case kAudioText:
