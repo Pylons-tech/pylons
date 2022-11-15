@@ -157,7 +157,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
             Visibility(
               visible: !viewModel.isViewingFullNft,
               child: Padding(
-                padding: EdgeInsets.only(left: 8, right: 8, bottom: 8, top: MediaQuery.of(context).viewPadding.top),
+                padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 8.h, top: MediaQuery.of(context).viewPadding.top.h),
                 child: SizedBox(
                   height: 100.h,
                   width: double.infinity,
@@ -304,7 +304,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       SvgPicture.asset(
                         SVGUtil.OWNER_VIEWS,
                         width: 20.w,
-                        height: 15.w,
+                        height: 15.h,
                       ),
                       SizedBox(
                         width: 4.5.w,
@@ -314,11 +314,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
                       ),
                       SizedBox(
-                        height: 5.w,
+                        height: 5.h,
                       ),
                       buildLikeColumn(viewModel: viewModel),
                       SizedBox(
-                        height: 18.w,
+                        height: 18.h,
                       ),
                       GestureDetector(
                         onTap: () async {
@@ -417,7 +417,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   Widget getLikingLoader() {
     return SizedBox(
       height: 15.h,
-      width: 15.h,
+      width: 15.w,
       child: CircularProgressIndicator(
         strokeWidth: 2,
         valueColor: AlwaysStoppedAnimation<Color>(AppColors.kWhite),
@@ -428,7 +428,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   Widget getLikeIcon({required bool likedByMe}) {
     return SizedBox(
       height: 15.h,
-      width: 15.h,
+      width: 15.w,
       child: Image.asset(
         'assets/images/icons/${likedByMe ? 'like_full' : 'like'}.png',
         fit: BoxFit.fill,
@@ -447,21 +447,21 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SW),
             child: Container(
               color: AppColors.kDarkRed,
-              height: 50,
-              width: 50,
+              height: 50.h,
+              width: 50.w,
               child: Center(
                 child: IconButton(
                   key: const Key(kCloseBottomSheetKey),
                   alignment: Alignment.topRight,
-                  padding: const EdgeInsets.only(
-                    bottom: 8,
-                    left: 8,
+                  padding: EdgeInsets.only(
+                    bottom: 8.h,
+                    left: 8.w,
                   ),
                   icon: const Icon(Icons.keyboard_arrow_down_outlined),
                   onPressed: () {
                     viewModel.toChangeCollapse();
                   },
-                  iconSize: 32,
+                  iconSize: 32.h,
                   color: Colors.white,
                 ),
               ),
