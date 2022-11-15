@@ -10,9 +10,9 @@ import (
 	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
 
 	"github.com/Pylons-tech/pylons/app/upgrades"
-	v110 "github.com/Pylons-tech/pylons/app/upgrades/v110"
 	v3 "github.com/Pylons-tech/pylons/app/upgrades/v3"
 	v4 "github.com/Pylons-tech/pylons/app/upgrades/v4"
+	v5 "github.com/Pylons-tech/pylons/app/upgrades/v5"
 
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	"github.com/cosmos/cosmos-sdk/version"
@@ -824,8 +824,8 @@ func (app *PylonsApp) setupUpgradeHandlers() {
 	)
 	// v1.1.0 mainnet upgrade handler
 	app.UpgradeKeeper.SetUpgradeHandler(
-		v110.UpgradeName,
-		v110.CreateUpgradeHandler(app.mm, app.configurator, app.BankKeeper, &app.AccountKeeper, &app.StakingKeeper),
+		v5.UpgradeName,
+		v5.CreateUpgradeHandler(app.mm, app.configurator, app.BankKeeper, &app.AccountKeeper, &app.StakingKeeper),
 	)
 }
 
