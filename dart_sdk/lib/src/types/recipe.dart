@@ -56,6 +56,11 @@ class Recipe {
   // todo: document the optional parameters
   /// Executes the provided recipe using the provided profile and item inputs, and returns an execution.
   /// If the execution fails, returns an error instead.
+  /// Because executions are currently not working, all you really get out of this is "the transaction
+  /// didn't fail." If you need specific outputs after executing a recipe, you'll have to retrieve those
+  /// from the user profile manually.
+  ///
+  /// This is obviously not an ideal state of affairs, and will be fixed ASAP.
   Future<Execution> executeWith (Profile prf, List<Item> inputs, {int CoinInputIndex = 0, List<generated.PaymentInfo>Function()? paymentInfoGen} ) async {
     var ids = <String>[];
     var infos = <generated.PaymentInfo>[];

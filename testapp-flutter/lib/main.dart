@@ -217,14 +217,14 @@ class _MyHomePageState extends State<MyHomePage> {
       flavorText = "Generating character...";
     });
     final recipe = Recipe.let("RecipeTestAppGetCharacter");
-    final exec = await recipe.executeWith(profile!, []).onError((error, stackTrace) {
+    await recipe.executeWith(profile!, []).onError((error, stackTrace) {
       throw Exception("character generation tx should not fail");
     });
-    final itemId = exec.getItemOutputIds().first;
-    final chr = await Item.get(itemId);
-    setState(() {
-      character = chr;
-    });
+    //final itemId = exec.getItemOutputIds().first;
+    //final chr = await Item.get(itemId);
+    //setState(() {
+      //character = chr;
+    //});
     await _checkCharacter();
     setState(() {
       showTopLevelMenu = true;
@@ -459,6 +459,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  // todo: delayed execs don't actually work at all, so
   Future<void> _rest2() async {
     setState(() {
       showTopLevelMenu = false;
@@ -484,10 +485,11 @@ class _MyHomePageState extends State<MyHomePage> {
         buffer.writeln("...");
         flavorText = buffer.toString();
       });
-      final r = await exec.refresh();
-      if (r != null) {
-        break;
-      }
+      // lol. lmao.
+      // final r = await exec.refresh();
+      // if (r != null) {
+      //   break;
+      // }
     }
 
     buffer.writeln("Done!");
