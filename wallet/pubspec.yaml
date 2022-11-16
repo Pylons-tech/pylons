@@ -49,7 +49,7 @@ dependencies:
   flutter_secure_storage: ^6.1.0-beta.1
   flutter_staggered_grid_view: ^0.6.2
   flutter_sticky_header: ^0.6.0
-  flutter_stripe: ^6.0.0
+  flutter_stripe: ^7.0.0
   flutter_svg: ^1.0.3
   flutter_svg_provider: ^1.0.3
   focus_detector: ^2.0.1
