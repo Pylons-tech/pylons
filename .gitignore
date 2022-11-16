@@ -32,3 +32,4 @@ big-dipper/settings.json
 debug
 
 *.env
+wallet/android/app/google-services.json
