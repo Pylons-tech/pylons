@@ -122,7 +122,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
       recognizer: TapGestureRecognizer()..onTap = _onTapLink,
     );
 
-    Widget result = LayoutBuilder(
+    final Widget result = LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         assert(constraints.hasBoundedWidth);
         final double maxWidth = constraints.maxWidth;

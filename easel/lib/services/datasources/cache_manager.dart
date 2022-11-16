@@ -35,7 +35,7 @@ class CacheManagerImp extends CacheManager {
   @override
   String deleteString({required String key}) {
     if (cache.containsKey(key)) {
-      return cache.remove(key);
+      return cache.remove(key) as String;
     }
     return '';
   }
@@ -59,13 +59,13 @@ class CacheManagerImp extends CacheManager {
   @override
   String getString({required String key}) {
     if (cache.containsKey(key)) {
-      return cache[key];
+      return cache[key] as String;
     }
     return '';
   }
 
   @override
-  bool setDynamicType({required String key, required value}) {
+  bool setDynamicType({required String key, required dynamic value}) {
     cache[key] = value;
     return true;
   }

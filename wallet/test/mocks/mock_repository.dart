@@ -552,6 +552,12 @@ class MockRepository extends Repository {
   }
 
   @override
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId}) {
+    // TODO: implement getNftOwnershipHistoryByCookbookIdAndRecipeId
+    throw UnimplementedError();
+  }
+
+  @override
   Either<Failure, bool> getUserAcceptPolicies() {
     return const Right(true);
   }

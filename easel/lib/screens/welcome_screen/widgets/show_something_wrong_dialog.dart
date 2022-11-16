@@ -95,7 +95,7 @@ class ShowSomethingWentWrongDialog {
       padding: EdgeInsets.symmetric(horizontal: 0.1.sw),
       child: ClipPath(
         clipper: DialogClipper(),
-        child: Container(
+        child: ColoredBox(
           color: EaselAppTheme.kLightRed,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

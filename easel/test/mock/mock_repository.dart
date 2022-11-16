@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:easel_flutter/easel_provider.dart';
-import 'package:easel_flutter/models/api_response.dart';
 import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/models/nft_format.dart';
 import 'package:easel_flutter/models/picked_file_model.dart';
 import 'package:easel_flutter/models/save_nft.dart';
+import 'package:easel_flutter/models/storage_response_model.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/utils/failure/failure.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
@@ -25,7 +25,7 @@ class MockRepositoryImp implements Repository {
   }
 
   @override
-  deleteCacheDynamic({required String key}) {
+  void deleteCacheDynamic({required String key}) {
     throw UnimplementedError();
   }
 
@@ -50,7 +50,7 @@ class MockRepositoryImp implements Repository {
   }
 
   @override
-  getCacheDynamicType({required String key}) {
+  NFT getCacheDynamicType({required String key}) {
     return MOCK_NFT;
   }
 
@@ -136,7 +136,7 @@ class MockRepositoryImp implements Repository {
   }
 
   @override
-  bool setCacheDynamicType({required String key, required value}) {
+  bool setCacheDynamicType({required String key, required dynamic value}) {
     return true;
   }
 
@@ -162,7 +162,7 @@ class MockRepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, ApiResponse>> uploadFile({required File file, required OnUploadProgressCallback onUploadProgressCallback}) {
+  Future<Either<Failure, StorageResponseModel>> uploadFile({required File file, required OnUploadProgressCallback onUploadProgressCallback}) {
     throw UnimplementedError();
   }
 

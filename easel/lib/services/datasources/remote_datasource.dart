@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:easel_flutter/easel_provider.dart';
-import 'package:easel_flutter/models/api_response.dart';
 import 'package:easel_flutter/models/storage_response_model.dart';
 import 'package:easel_flutter/models/upload_progress.dart';
 import 'package:easel_flutter/services/third_party_services/analytics_helper.dart';
@@ -15,13 +14,18 @@ abstract class RemoteDataSource {
   /// This method is used uploading provided file to the server using [httpClient]
   /// Input : [file] which needs to be uploaded , [onUploadProgressCallback] a callback method which needs to be call on each progress
   /// Output : [Future<ApiResponse<StorageResponseModel>>] the ApiResponse which can contain [success] or [error] response
-  Future<ApiResponse<StorageResponseModel>> uploadFile({required OnUploadProgressCallback uploadProgressCallback, required File file});
+  Future<StorageResponseModel> uploadFile({required OnUploadProgressCallback uploadProgressCallback, required File file});
 
   /// This method is used to getRecipesList based on CookbookID
   /// Input : [cookBookID] against which recipes needs to be fetched
   /// Output : [Future<List<Recipe>>] which will be a Future list of Recipes against the given [cookbookID]
   Future<List<Recipe>> getRecipesByCookbookID(String cookBookID);
 
+
+
+  /// This method is used to log user journey in the easel app.
+  /// Input: [screenName] the screen name in the easel.
+  /// Output: [bool] tells whether the user journey is recorded or not
   Future<bool> logUserJourney({required String screenName});
 }
 
@@ -32,7 +36,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   RemoteDataSourceImpl({required this.httpClient, required this.analyticsHelper});
 
   @override
-  Future<ApiResponse<StorageResponseModel>> uploadFile({required OnUploadProgressCallback uploadProgressCallback, required File file}) async {
+  Future<StorageResponseModel> uploadFile({required OnUploadProgressCallback uploadProgressCallback, required File file}) async {
     final response = await httpClient.post(
       "/upload",
       data: Stream.fromIterable(file.readAsBytesSync().map((e) => [e])),
@@ -40,7 +44,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
         'Content-Length': file.lengthSync().toString(),
       }),
       onSendProgress: (uploaded, total) {
-        double uploadedPercentage = uploaded / total;
+        final double uploadedPercentage = uploaded / total;
         uploadProgressCallback(
           UploadProgress(totalSize: total, sendSize: uploaded, uploadedProgressData: uploadedPercentage),
         );
@@ -48,17 +52,16 @@ class RemoteDataSourceImpl implements RemoteDataSource {
     );
 
     if (response.statusCode == HttpStatus.ok) {
-      final data = StorageResponseModel.fromJson(response.data);
-      return ApiResponse<StorageResponseModel>.success(data: data);
+      final data = StorageResponseModel.fromJson(response.data as Map<String, dynamic>);
+      return data;
     }
-    return ApiResponse<StorageResponseModel>.error(
-      errorMessage: response.data["error"]["message"] ?? LocaleKeys.update_failed.tr(),
-    );
+
+    throw response.data["error"]["message"] as String? ?? LocaleKeys.update_failed.tr();
   }
 
   @override
   Future<List<Recipe>> getRecipesByCookbookID(String cookBookID) async {
-    var sdkResponse = await PylonsWallet.instance.getRecipes(cookBookID);
+    final sdkResponse = await PylonsWallet.instance.getRecipes(cookBookID);
     return sdkResponse.data!;
   }
 

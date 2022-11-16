@@ -90,4 +90,6 @@ class SVGUtil {
   static String TRANSACTION_SUCCESS = "assets/images/svg/transaction_success.svg";
   static String TRANSACTION_RETRY = "assets/images/svg/transaction_retry.svg";
   static String PYLONS_POINTS_ICON = "assets/images/svg/pylons_points_icon.svg";
+  static String BOTTOM_RIGHT_CURVED_GREY_BG = "assets/images/svg/bottom_right_curved_grey_bg.svg";
+  static String CURVED_CORNER_RED_BG = "assets/images/svg/curved_corner_red_bg.svg";
 }

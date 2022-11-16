@@ -19,7 +19,7 @@ class VideoPlaceHolder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ColoredBox(
       color: EaselAppTheme.kWhite,
       child: Stack(
         children: [
@@ -30,7 +30,7 @@ class VideoPlaceHolder extends StatelessWidget {
                         child: const SizedBox.expand(),
                       ),
                   errorWidget: (context, url, error) =>
-                      Align(child: Container(color: EaselAppTheme.kWhite)),
+                      const Align(child: ColoredBox(color: EaselAppTheme.kWhite)),
                   imageUrl: thumbnailUrl,
                   fit: BoxFit.cover)),
           Align(
