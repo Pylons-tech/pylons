@@ -6,6 +6,7 @@ import 'package:easel_flutter/utils/failure/failure.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../generated/locale_keys.g.dart';
 import '../../models/save_nft.dart';
 import 'cache_manager.dart';
 
@@ -136,7 +137,7 @@ class LocalDataSourceImpl implements LocalDataSource {
   /// returns cookbookId
   @override
   Future<String> autoGenerateCookbookId() async {
-    String cookbookId = "Easel_CookBook_auto_cookbook_${getFullDateTime()}";
+    final String cookbookId = "Easel_CookBook_auto_cookbook_${getFullDateTime()}";
 
     await sharedPreferences.setString(kCookbookId, cookbookId);
 
@@ -147,7 +148,7 @@ class LocalDataSourceImpl implements LocalDataSource {
   /// returns easelId
   @override
   String autoGenerateEaselId() {
-    String cookbookId = "Easel_Recipe_auto_recipe_${getFullDateTime()}";
+    final String cookbookId = "Easel_Recipe_auto_recipe_${getFullDateTime()}";
     return cookbookId;
   }
 
@@ -169,7 +170,7 @@ class LocalDataSourceImpl implements LocalDataSource {
 
   @override
   Future<bool> saveOnBoardingComplete() async {
-    return await sharedPreferences.setBool(onboardingComplete, true);
+    return sharedPreferences.setBool(onboardingComplete, true);
   }
 
   @override
@@ -189,7 +190,7 @@ class LocalDataSourceImpl implements LocalDataSource {
       final result = await database.nftDao.insertNft(draft);
       return result;
     } catch (e) {
-      throw "save_error".tr();
+      throw LocaleKeys.save_error.tr();
     }
   }
 
@@ -224,7 +225,7 @@ class LocalDataSourceImpl implements LocalDataSource {
           saveNft.dateTime!);
       return true;
     } catch (e) {
-      return throw "upload_error".tr();
+      return throw LocaleKeys.upload_error.tr();
     }
   }
 
@@ -243,7 +244,7 @@ class LocalDataSourceImpl implements LocalDataSource {
           saveNft.dateTime!);
       return true;
     } catch (e) {
-      throw CacheFailure("upload_error".tr());
+      throw CacheFailure(LocaleKeys.upload_error.tr());
     }
   }
 
@@ -253,13 +254,13 @@ class LocalDataSourceImpl implements LocalDataSource {
       await database.nftDao.updateNFTDialogShown(id);
       return true;
     } catch (e) {
-      throw CacheFailure("upload_error".tr());
+      throw CacheFailure(LocaleKeys.upload_error.tr());
     }
   }
 
   @override
   Future<List<NFT>> getNfts() async {
-    return await database.nftDao.findAllNft();
+    return database.nftDao.findAllNft();
   }
 
   @override
@@ -268,7 +269,7 @@ class LocalDataSourceImpl implements LocalDataSource {
       await database.nftDao.delete(id);
       return true;
     } catch (e) {
-      throw CacheFailure("delete_error".tr());
+      throw CacheFailure(LocaleKeys.delete_error.tr());
     }
   }
 
@@ -288,7 +289,7 @@ class LocalDataSourceImpl implements LocalDataSource {
   }
 
   @override
-  bool setCacheDynamicType({required String key, required value}) {
+  bool setCacheDynamicType({required String key, required dynamic value}) {
     return cacheManager.setDynamicType(key: key, value: value);
   }
 
@@ -298,7 +299,7 @@ class LocalDataSourceImpl implements LocalDataSource {
   }
 
   @override
-  deleteCacheDynamic({required String key}) {
+  void deleteCacheDynamic({required String key}) {
     cacheManager.deleteCacheDynamic(key: key);
   }
 
@@ -307,7 +308,7 @@ class LocalDataSourceImpl implements LocalDataSource {
     try {
       return await database.nftDao.findNftById(id);
     } catch (e) {
-      throw CacheFailure("get_error".tr());
+      throw CacheFailure(LocaleKeys.get_error.tr());
     }
   }
 }

@@ -9,13 +9,16 @@ import (
 
 	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
 
-	upgradev46 "github.com/Pylons-tech/pylons/app/upgrade"
+	"github.com/Pylons-tech/pylons/app/upgrades"
+	v3 "github.com/Pylons-tech/pylons/app/upgrades/v3"
+	v4 "github.com/Pylons-tech/pylons/app/upgrades/v4"
 
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	"github.com/cosmos/cosmos-sdk/version"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec/types"
+	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	"github.com/ignite/cli/ignite/pkg/openapiconsole"
 	"github.com/spf13/cast"
@@ -54,6 +57,8 @@ import (
 	// distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	"github.com/cosmos/cosmos-sdk/x/evidence"
 	evidencetypes "github.com/cosmos/cosmos-sdk/x/evidence/types"
+	"github.com/cosmos/cosmos-sdk/x/feegrant"
+	feegrantkeeper "github.com/cosmos/cosmos-sdk/x/feegrant/keeper"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	"github.com/cosmos/cosmos-sdk/x/gov"
@@ -91,6 +96,9 @@ import (
 	tmjson "github.com/tendermint/tendermint/libs/json"
 
 	"github.com/Pylons-tech/pylons/docs"
+	epochsmodule "github.com/Pylons-tech/pylons/x/epochs"
+	epochsmodulekeeper "github.com/Pylons-tech/pylons/x/epochs/keeper"
+	epochsmoduletypes "github.com/Pylons-tech/pylons/x/epochs/types"
 
 	appparams "github.com/Pylons-tech/pylons/app/params"
 	pylonsmodule "github.com/Pylons-tech/pylons/x/pylons"
@@ -136,6 +144,8 @@ var (
 	Bech32PrefixConsAddr = AccountAddressPrefix + sdk.PrefixValidator + sdk.PrefixConsensus
 	// Bech32PrefixConsPub defines the Bech32 prefix of a consensus node public key.
 	Bech32PrefixConsPub = AccountAddressPrefix + sdk.PrefixValidator + sdk.PrefixConsensus + sdk.PrefixPublic
+	// List upgrades
+	Upgrades = []upgrades.Upgrade{v3.Upgrade, v4.Upgrade}
 )
 
 func init() {
@@ -180,6 +190,7 @@ var (
 		evidence.AppModuleBasic{},
 		transfer.AppModuleBasic{},
 		vesting.AppModuleBasic{},
+		epochsmodule.AppModuleBasic{},
 		pylonsmodule.AppModuleBasic{},
 	)
 
@@ -240,18 +251,21 @@ type PylonsApp struct {
 	GovKeeper      govkeeper.Keeper
 	CrisisKeeper   crisiskeeper.Keeper
 	UpgradeKeeper  upgradekeeper.Keeper
+	EpochsKeeper   epochsmodulekeeper.Keeper
 	ParamsKeeper   paramskeeper.Keeper
 	IBCKeeper      *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
+	ICAHostKeeper  icahostkeeper.Keeper
 	EvidenceKeeper evidencekeeper.Keeper
 	TransferKeeper ibctransferkeeper.Keeper
+	FeeGrantKeeper feegrantkeeper.Keeper
+
+	// pylons keeper
+	PylonsKeeper pylonsmodulekeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
 	ScopedICAHostKeeper  capabilitykeeper.ScopedKeeper
-
-	PylonsKeeper  pylonsmodulekeeper.Keeper
-	ICAHostKeeper icahostkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -261,9 +275,6 @@ type PylonsApp struct {
 
 	// module migration manager
 	configurator module.Configurator
-
-	// upgrade height
-	// upgradeHeight int64
 }
 
 // New returns a reference to an initialized Pylons.
@@ -289,7 +300,9 @@ func New(
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	keys := sdk.NewKVStoreKeys(
-		authtypes.StoreKey, banktypes.StoreKey, stakingtypes.StoreKey,
+		authtypes.StoreKey,
+		banktypes.StoreKey,
+		stakingtypes.StoreKey,
 		minttypes.StoreKey,
 		// distrtypes.StoreKey,
 		slashingtypes.StoreKey,
@@ -302,6 +315,7 @@ func New(
 		icahosttypes.StoreKey,
 		capabilitytypes.StoreKey,
 		pylonsmoduletypes.StoreKey,
+		epochsmoduletypes.StoreKey,
 	)
 
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -358,6 +372,7 @@ func New(
 	app.CrisisKeeper = crisiskeeper.NewKeeper(
 		app.GetSubspace(crisistypes.ModuleName), invCheckPeriod, app.BankKeeper, authtypes.FeeCollectorName,
 	)
+	app.FeeGrantKeeper = feegrantkeeper.NewKeeper(appCodec, keys[feegrant.StoreKey], app.AccountKeeper)
 	app.UpgradeKeeper = upgradekeeper.NewKeeper(skipUpgradeHeights, keys[upgradetypes.StoreKey], appCodec, homePath, app.BaseApp, authtypes.NewModuleAddress(govtypes.ModuleName).String())
 
 	// register the staking hooks
@@ -374,16 +389,12 @@ func New(
 		appCodec, keys[ibchost.StoreKey], app.GetSubspace(ibchost.ModuleName), app.StakingKeeper, app.UpgradeKeeper, scopedIBCKeeper,
 	)
 
-	// ... other modules keepers
+	// ICA Host keeper
 	app.ICAHostKeeper = icahostkeeper.NewKeeper(
-		appCodec,
-		keys[icahosttypes.StoreKey],
-		app.GetSubspace(icahosttypes.SubModuleName),
+		appCodec, keys[icahosttypes.StoreKey], app.GetSubspace(icahosttypes.SubModuleName),
 		app.IBCKeeper.ChannelKeeper,
-		&app.IBCKeeper.PortKeeper,
-		app.AccountKeeper,
-		scopedICAHostKeeper,
-		app.MsgServiceRouter(),
+		app.IBCKeeper.ChannelKeeper, &app.IBCKeeper.PortKeeper,
+		app.AccountKeeper, scopedICAHostKeeper, app.MsgServiceRouter(),
 	)
 
 	icaModule := ica.NewAppModule(nil, &app.ICAHostKeeper)
@@ -439,7 +450,6 @@ func New(
 	)
 	// If evidence needs to be handled for the app, set routes in router here and seal
 	app.EvidenceKeeper = *evidenceKeeper
-
 	app.PylonsKeeper = pylonsmodulekeeper.NewKeeper(
 		appCodec,
 		keys[pylonsmoduletypes.StoreKey],
@@ -449,8 +459,21 @@ func New(
 		app.TransferKeeper,
 		app.GetSubspace(pylonsmoduletypes.ModuleName),
 	)
-	// upgrade handlers
-	cfg := module.NewConfigurator(appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
+
+	epochsKeeper := epochsmodulekeeper.NewKeeper(
+		appCodec,
+		keys[epochsmoduletypes.StoreKey],
+		keys[epochsmoduletypes.MemStoreKey],
+	)
+
+	app.EpochsKeeper = *epochsKeeper.SetHooks(
+		epochsmoduletypes.NewMultiEpochHooks(
+			// insert epoch hook receivers here
+			app.PylonsKeeper.Hooks(app.StakingKeeper),
+		),
+	)
+
+	epochsModule := epochsmodule.NewAppModule(appCodec, app.EpochsKeeper)
 
 	pylonsModule := pylonsmodule.NewAppModule(appCodec, app.PylonsKeeper, app.BankKeeper)
 
@@ -489,6 +512,7 @@ func New(
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
 		icaModule,
+		epochsModule,
 		pylonsModule,
 	)
 
@@ -498,6 +522,7 @@ func New(
 	// NOTE: staking module is required if HistoricalEntries param > 0
 	app.mm.SetOrderBeginBlockers(
 		// Note: epochs' begin should be "real" start of epochs, we keep epochs beginblock at the beginning
+		epochsmoduletypes.ModuleName,
 		upgradetypes.ModuleName,
 		capabilitytypes.ModuleName,
 		minttypes.ModuleName,
@@ -540,6 +565,7 @@ func New(
 		icatypes.ModuleName,
 		ibchost.ModuleName,
 		pylonsmoduletypes.ModuleName,
+		epochsmoduletypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -566,6 +592,7 @@ func New(
 		icatypes.ModuleName,
 		ibchost.ModuleName,
 		vestingtypes.ModuleName,
+		epochsmoduletypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
@@ -589,6 +616,7 @@ func New(
 		params.NewAppModule(app.ParamsKeeper),
 		evidence.NewAppModule(app.EvidenceKeeper),
 		ibc.NewAppModule(app.IBCKeeper),
+		epochsmodule.NewAppModule(appCodec, app.EpochsKeeper),
 
 		transferModule,
 		pylonsModule,
@@ -598,7 +626,7 @@ func New(
 
 	// register upgrade
 	// if isUpgrade {
-	app.RegisterUpgradeHandlers(cfg)
+	app.setupUpgradeHandlers()
 	// }
 
 	// initialize stores
@@ -609,13 +637,24 @@ func New(
 	// initialize BaseApp
 	app.SetInitChainer(app.InitChainer)
 	app.SetBeginBlocker(app.BeginBlocker)
-	app.SetAnteHandler(
-		// ante.NewAnteHandler(
-		//	app.AccountKeeper, app.BankKeeper, ante.DefaultSigVerificationGasConsumer,
-		//	encodingConfig.TxConfig.SignModeHandler(),
-		// ),
-		NewAnteHandler(app.AccountKeeper, encodingConfig.TxConfig.SignModeHandler(), app.PylonsKeeper),
+	anteHandler, err := NewAnteHandler(
+		HandlerOptions{
+			HandlerOptions: ante.HandlerOptions{
+				BankKeeper:      app.BankKeeper,
+				SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
+				FeegrantKeeper:  app.FeeGrantKeeper,
+				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
+			},
+			AccountKeeper: app.AccountKeeper,
+			PylonsKeeper:  app.PylonsKeeper,
+			IBCKeeper:     app.IBCKeeper,
+		},
 	)
+	if err != nil {
+		panic(err)
+	}
+
+	app.SetAnteHandler(anteHandler)
 	app.SetEndBlocker(app.EndBlocker)
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
@@ -771,26 +810,36 @@ func (app *PylonsApp) RegisterTendermintService(clientCtx client.Context) {
 	)
 }
 
-// RegisterUpgradeHandlers returns upgrade handlers
-func (app *PylonsApp) RegisterUpgradeHandlers(cfg module.Configurator) {
-	app.UpgradeKeeper.SetUpgradeHandler(upgradev46.UpgradeName, upgradev46.CreateUpgradeHandler(app.mm, app.configurator, &app.StakingKeeper, app.keys[pylonsmoduletypes.StoreKey], app.appCodec))
+// setupUpgradeHandlers setup upgrade handlers
+func (app *PylonsApp) setupUpgradeHandlers() {
+	// v3 upgrade handler
+	app.UpgradeKeeper.SetUpgradeHandler(
+		v3.UpgradeName,
+		v3.CreateUpgradeHandler(app.mm, app.configurator, &app.StakingKeeper, app.keys[pylonsmoduletypes.StoreKey], app.appCodec))
+	// v4 mainnet upgrade handler
+	app.UpgradeKeeper.SetUpgradeHandler(
+		v4.UpgradeName,
+		v4.CreateUpgradeHandler(app.mm, app.configurator, app.BankKeeper, &app.AccountKeeper, &app.StakingKeeper, &app.PylonsKeeper),
+	)
 }
 
 func (app *PylonsApp) setupUpgradeStoreLoaders() {
+	// When a planned update height is reached, the old binary will panic
+	// writing on disk the height and name of the update that triggered it
+	// This will read that value, and execute the preparations for the upgrade.
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
 	if err != nil {
-		panic(fmt.Sprintf("failed to read upgrade info from disk %s", err))
+		panic(fmt.Errorf("failed to read upgrade info from disk: %w", err))
 	}
 
-	// TODO: add module name.
-	if upgradeInfo.Name == upgradev46.UpgradeName && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
-		storeUpgrades := storetypes.StoreUpgrades{
-			Added:   []string{icacontrollertypes.StoreKey, icahosttypes.StoreKey},
-			Deleted: []string{"epoch"},
-		}
+	if app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		return
+	}
 
-		// configure store loader that checks if version == upgradeHeight and applies store upgrades
-		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))
+	for _, upgrade := range Upgrades {
+		if upgradeInfo.Name == upgrade.UpgradeName {
+			app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &upgrade.StoreUpgrades))
+		}
 	}
 }
 
@@ -821,6 +870,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
 	paramsKeeper.Subspace(pylonsmoduletypes.ModuleName)
+	paramsKeeper.Subspace(epochsmoduletypes.ModuleName)
 
 	return paramsKeeper
 }

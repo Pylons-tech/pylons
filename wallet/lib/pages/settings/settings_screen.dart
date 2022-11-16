@@ -11,20 +11,22 @@ import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_localization_view_model.dart';
 import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
 import 'package:pylons_wallet/pages/settings/widgets/delete_dialog.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+
+import '../../generated/locale_keys.g.dart';
 
 TextStyle kHeadlineTextStyle = TextStyle(fontSize: 16.sp, fontFamily: kUniversalFontFamily, color: Colors.black);
 TextStyle kSettingsOptionsTextStyle = TextStyle(fontSize: 20.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
 TextStyle kSettingsUserEnteredTextStyle = TextStyle(
   fontSize: 14.sp,
   fontFamily: kUniversalFontFamily,
-  color: kUserInputTextColor,
+  color: AppColors.kUserInputTextColor,
 );
-TextStyle kSettingsUserNameTextStyle = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: kSettingsUserNameColor, fontWeight: FontWeight.w500);
+TextStyle kSettingsUserNameTextStyle = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: AppColors.kSettingsUserNameColor, fontWeight: FontWeight.w500);
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -46,8 +48,8 @@ class _SettingScreenState extends State<SettingScreen> {
   void initState() {
     super.initState();
 
-    final currentWallet = GetIt.I.get<WalletsStore>().getWallets().value.last;
-    name = currentWallet.name;
+    final currentWallet = context.read<AccountProvider>().accountPublicInfo;
+    name = currentWallet!.name;
     address = currentWallet.publicAddress;
 
     getEmail();
@@ -59,7 +61,7 @@ class _SettingScreenState extends State<SettingScreen> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
-        backgroundColor: kBackgroundColor,
+        backgroundColor: AppColors.kBackgroundColor,
         body: SingleChildScrollView(
           child: ChangeNotifierProvider.value(
               value: _languageViewModel,
@@ -97,7 +99,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         ],
                       ),
                       Text(
-                        "bio".tr(),
+                        LocaleKeys.bio.tr(),
                         style: kHeadlineTextStyle,
                       ),
                       ClipPath(
@@ -115,7 +117,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               GetIt.I.get<Repository>().saveDescription(description: value);
                             },
                             decoration: InputDecoration(
-                                hintText: "bio_text".tr(),
+                                hintText: LocaleKeys.bio_text.tr(),
                                 contentPadding: EdgeInsets.only(left: 10.w),
                                 isDense: true,
                                 isCollapsed: true,
@@ -132,7 +134,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         height: 30.h,
                       ),
                       Text(
-                        "wallet_address".tr(),
+                        LocaleKeys.wallet_address.tr(),
                         style: kHeadlineTextStyle,
                       ),
                       ClipPath(
@@ -151,23 +153,26 @@ class _SettingScreenState extends State<SettingScreen> {
                                   ),
                                 ),
                                 TextButton.icon(
-                                    style: ButtonStyle(
-                                        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(0))), backgroundColor: MaterialStateProperty.all(kCopyColor)),
-                                    onPressed: () {
-                                      Clipboard.setData(ClipboardData(text: address)).then((_) {
-                                        "wallet_copied".tr().show(context: context);
-                                      });
-                                    },
-                                    icon: const Icon(
-                                      Icons.copy,
-                                      color: Colors.white,
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(0))),
+                                    backgroundColor: MaterialStateProperty.all(AppColors.kCopyColor),
+                                  ),
+                                  onPressed: () {
+                                    Clipboard.setData(ClipboardData(text: address)).then((_) {
+                                      LocaleKeys.wallet_copied.tr().show(context: context);
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.copy,
+                                    color: Colors.white,
+                                  ),
+                                  label: FittedBox(
+                                    child: Text(
+                                      LocaleKeys.copy.tr(),
+                                      style: const TextStyle(color: Colors.white),
                                     ),
-                                    label: FittedBox(
-                                      child: Text(
-                                        "copy".tr(),
-                                        style: const TextStyle(color: Colors.white),
-                                      ),
-                                    ))
+                                  ),
+                                )
                               ],
                             )),
                       ),
@@ -175,7 +180,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         height: 30.h,
                       ),
                       Text(
-                        "email_address_optional".tr(),
+                        LocaleKeys.email_address_optional.tr(),
                         style: kHeadlineTextStyle,
                       ),
                       ClipPath(
@@ -188,35 +193,38 @@ class _SettingScreenState extends State<SettingScreen> {
                             style: kSettingsUserEnteredTextStyle,
                             decoration: InputDecoration(
                                 hintText: hintTextEmail,
-                                hintStyle: const TextStyle(
-                                  color: kUserInputTextColor,
+                                hintStyle: TextStyle(
+                                  color: AppColors.kUserInputTextColor,
                                 ),
                                 suffix: ColoredBox(
-                                  color: kCopyColor,
+                                  color: AppColors.kCopyColor,
                                   child: TextButton.icon(
-                                      style: ButtonStyle(
-                                          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(0))), backgroundColor: MaterialStateProperty.all(kCopyColor)),
-                                      onPressed: () async {
-                                        if (emailController.text.isNotEmpty) {
-                                          if (RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(emailController.text)) {
-                                            GetIt.I.get<Repository>().saveEmail(value: emailController.text);
-                                            "email_saved".tr().show(context: context);
-                                            return;
-                                          }
-
-                                          "email_format_incorrect".tr().show(context: context);
+                                    style: ButtonStyle(
+                                      shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(0))),
+                                      backgroundColor: MaterialStateProperty.all(AppColors.kCopyColor),
+                                    ),
+                                    onPressed: () async {
+                                      if (emailController.text.isNotEmpty) {
+                                        if (RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(emailController.text)) {
+                                          GetIt.I.get<Repository>().saveEmail(value: emailController.text);
+                                          LocaleKeys.email_saved.tr().show(context: context);
                                           return;
                                         }
-                                        "email_empty".tr().show(context: context);
-                                      },
-                                      icon: const Icon(
-                                        Icons.save,
-                                        color: Colors.white,
-                                      ),
-                                      label: Text(
-                                        "save".tr(),
-                                        style: const TextStyle(color: Colors.white),
-                                      )),
+
+                                        LocaleKeys.email_format_incorrect.tr().show(context: context);
+                                        return;
+                                      }
+                                      LocaleKeys.email_empty.tr().show(context: context);
+                                    },
+                                    icon: const Icon(
+                                      Icons.save,
+                                      color: Colors.white,
+                                    ),
+                                    label: Text(
+                                      LocaleKeys.save.tr(),
+                                      style: const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
                                 ),
                                 contentPadding: EdgeInsets.only(left: 10.w),
                                 isDense: true,
@@ -251,7 +259,7 @@ class _SettingScreenState extends State<SettingScreen> {
       child: Column(
         children: [
           SettingListItem(
-            title: "general".tr(),
+            title: LocaleKeys.general.tr(),
             imagePath: SVGUtil.SETTINGS_GENERAL,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -260,7 +268,7 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
           const SettingsDivider(),
           SettingListItem(
-            title: "recovery".tr(),
+            title: LocaleKeys.recovery.tr(),
             imagePath: SVGUtil.SETTINGS_RECOVERY,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -269,7 +277,7 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
           const SettingsDivider(),
           SettingListItem(
-            title: "legal".tr(),
+            title: LocaleKeys.legal.tr(),
             imagePath: SVGUtil.SETTINGS_LEGAL,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -278,7 +286,7 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
           const SettingsDivider(),
           SettingListItem(
-            title: "submit_feedback".tr(),
+            title: LocaleKeys.submit_feedback.tr(),
             imagePath: SVGUtil.OWNER_REPORT,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -286,10 +294,9 @@ class _SettingScreenState extends State<SettingScreen> {
               submitFeedbackDialog.show();
             },
           ),
-
           const SettingsDivider(),
           SettingListItem(
-            title: "delete_wallet".tr(),
+            title: LocaleKeys.delete_wallet.tr(),
             imagePath: SVGUtil.SETTINGS_DELETE,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -370,7 +377,7 @@ class _SettingListItemState extends State<SettingListItem> {
               width: 20.h,
               child: SvgPicture.asset(
                 widget.imagePath,
-                color: kBlack,
+                color: AppColors.kBlack,
                 height: 20.h,
                 width: 20.h,
                 fit: BoxFit.fill,

@@ -6,6 +6,8 @@ import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/utils/formatter.dart';
 
+import '../../../../generated/locale_keys.g.dart';
+
 class StripePayoutWidget {
   BuildContext context;
   String amount;
@@ -60,9 +62,9 @@ class StripePayoutFormState extends State<StripePayoutForm> {
               child: Column(
                 children: [
                   const VerticalSpace(30),
-                  Text("request_payout".tr(), style: const TextStyle(color: Colors.black, fontSize: 16)),
+                  Text(LocaleKeys.request_payout.tr(), style: const TextStyle(color: Colors.black, fontSize: 16)),
                   const VerticalSpace(30),
-                  Text("${"available_amount".tr()} ${widget.maxAmount.UvalToVal()} USD", textAlign: TextAlign.start),
+                  Text("${LocaleKeys.available_amount.tr()} ${widget.maxAmount.UvalToVal()} USD", textAlign: TextAlign.start),
                   const VerticalSpace(30),
                   PylonsTextInput(
                     controller: amountController,
@@ -70,17 +72,17 @@ class StripePayoutFormState extends State<StripePayoutForm> {
                     inputType: TextInputType.number,
                     errorText: (textValue) {
                       if (textValue == null || textValue.isEmpty) {
-                        return "empty_amount".tr();
+                        return LocaleKeys.empty_amount.tr();
                       } else {
                         if (Decimal.parse(textValue) > Decimal.parse(widget.maxAmount.UvalToVal())) {
-                          return "exceed_amount".tr();
+                          return LocaleKeys.exceed_amount.tr();
                         }
                       }
                       return null;
                     },
                   ),
                   const VerticalSpace(50),
-                  PylonsBlueButton(onTap: onPayoutPressed, text: "payout".tr()),
+                  PylonsBlueButton(onTap: onPayoutPressed, text: LocaleKeys.payout.tr()),
                   const VerticalSpace(30)
                 ],
               )) // Add TextFormFields and ElevatedButton here.

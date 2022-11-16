@@ -9,6 +9,8 @@ import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/item.pb.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 class GetProfileHandler implements BaseHandler {
   @override
   SdkIpcMessage sdkIpcMessage;
@@ -20,7 +22,7 @@ class GetProfileHandler implements BaseHandler {
     final walletsStore = GetIt.I.get<WalletsStore>();
 
     final loading = Loading()
-      ..showLoading(message: "${'getting_profile'.tr()}...");
+      ..showLoading(message: "${LocaleKeys.getting_profile.tr()}...");
 
     final response = await walletsStore.getProfile();
     loading.dismiss();

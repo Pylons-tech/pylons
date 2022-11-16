@@ -156,6 +156,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		CookbookId:    recipe.CookbookId,
 		RecipeVersion: recipe.Version,
 		CoinInputs:    coinInputs,
+		TxTime:        ctx.BlockTime().Unix(),
 	}
 
 	id := k.AppendPendingExecution(ctx, execution, recipe.BlockInterval)

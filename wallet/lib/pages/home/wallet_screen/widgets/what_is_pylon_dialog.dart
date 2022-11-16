@@ -8,9 +8,11 @@ import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 
-TextStyle _rowTitleTextStyle = TextStyle(color: kWhite, fontWeight: FontWeight.w800, fontSize: isTablet ? 14.sp : 12.sp);
+import '../../../../generated/locale_keys.g.dart';
+
+TextStyle _rowTitleTextStyle = TextStyle(color: AppColors.kWhite, fontWeight: FontWeight.w800, fontSize: isTablet ? 14.sp : 12.sp);
 TextStyle _rowSubtitleTextStyle = TextStyle(
-  color: kWhite,
+  color: AppColors.kWhite,
   fontSize: isTablet ? 12.sp : 10.sp,
 );
 
@@ -59,8 +61,8 @@ class _WhatIsPylonWidgetState extends State<WhatIsPylonWidget> {
                   width: 80,
                   child: ClipPath(
                     clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NW),
-                    child: const ColoredBox(
-                      color: kDarkRed,
+                    child: ColoredBox(
+                      color: AppColors.kDarkRed,
                     ),
                   ),
                 ),
@@ -73,8 +75,8 @@ class _WhatIsPylonWidgetState extends State<WhatIsPylonWidget> {
                   width: 80,
                   child: ClipPath(
                     clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SE),
-                    child: const ColoredBox(
-                      color: kDarkRed,
+                    child: ColoredBox(
+                      color: AppColors.kDarkRed,
                     ),
                   ),
                 ),
@@ -94,7 +96,7 @@ class _WhatIsPylonWidgetState extends State<WhatIsPylonWidget> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: isTablet ? 20.w : 30.w),
                       child: Text(
-                        "what_is_pylon".tr(),
+                        LocaleKeys.what_is_pylon.tr(),
                         style: _rowTitleTextStyle,
                         textAlign: TextAlign.left,
                       ),
@@ -105,7 +107,7 @@ class _WhatIsPylonWidgetState extends State<WhatIsPylonWidget> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: isTablet ? 20.w : 30.w),
                       child: Text(
-                        "what_is_pylon_info".tr(),
+                        LocaleKeys.what_is_pylon_info.tr(),
                         style: _rowSubtitleTextStyle,
                         textAlign: TextAlign.left,
                       ),
@@ -123,12 +125,12 @@ class _WhatIsPylonWidgetState extends State<WhatIsPylonWidget> {
                           child: Container(
                             width: 120.r,
                             height: 30.h,
-                            color: kPayNowBackgroundGrey.withOpacity(0.2),
+                            color: AppColors.kPayNowBackgroundGrey.withOpacity(0.2),
                             child: Center(
                               child: Text(
-                                "close".tr(),
+                                LocaleKeys.close.tr(),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(color: kUnselectedIcon, fontSize: 14.sp),
+                                style: TextStyle(color: AppColors.kUnselectedIcon, fontSize: 14.sp),
                               ),
                             ),
                           ),

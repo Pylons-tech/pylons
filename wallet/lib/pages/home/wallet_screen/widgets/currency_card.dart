@@ -15,6 +15,8 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
+import '../../../../generated/locale_keys.g.dart';
+
 class CurrencyBackgroundCard extends StatelessWidget {
   final bool isDefault;
 
@@ -50,11 +52,11 @@ class CurrencyBackgroundCard extends StatelessWidget {
               height: double.infinity,
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
-                kMainBG,
-                kMainBG,
-                kMainBG,
-                kMainBG,
-                kMainBG,
+                AppColors.kMainBG,
+                AppColors.kMainBG,
+                AppColors.kMainBG,
+                AppColors.kMainBG,
+                AppColors.kMainBG,
                 Colors.grey.withOpacity(0.1),
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
             ),
@@ -71,13 +73,7 @@ class CurrencyCard extends StatelessWidget {
   final Currency currencyModel;
   final VoidCallback onFaucetPressed;
 
-  const CurrencyCard(
-      {Key? key,
-      required this.currencyModel,
-      this.color,
-      required this.isDefault,
-      required this.onFaucetPressed})
-      : super(key: key);
+  const CurrencyCard({Key? key, required this.currencyModel, this.color, required this.isDefault, required this.onFaucetPressed}) : super(key: key);
 
   Widget getHelpIcon(BuildContext context) {
     if (currencyModel.ibcCoins.getName() == kPylons) {
@@ -87,9 +83,8 @@ class CurrencyCard extends StatelessWidget {
           content: Container(
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
             child: Text(
-              "what_is_pylon".tr(),
-              style: TextStyle(
-                  color: kBlue, fontWeight: FontWeight.w500, fontSize: 12.sp),
+              LocaleKeys.what_is_pylon.tr(),
+              style: TextStyle(color: AppColors.kBlue, fontWeight: FontWeight.w500, fontSize: 12.sp),
             ),
           ),
           tailLength: 10,
@@ -115,9 +110,9 @@ class CurrencyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     List<TransactionHistory> denomSpecificTxList = [];
     if (isDefault) {
-      denomSpecificTxList = context
-          .read<HomeProvider>()
-          .getDenomSpecificTxList(defaultCurrency: currencyModel.currency);
+      denomSpecificTxList = context.read<HomeProvider>().getDenomSpecificTxList(
+            defaultCurrency: currencyModel.currency,
+          );
     }
     return Material(
       color: Colors.transparent,
@@ -163,8 +158,7 @@ class CurrencyCard extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16.w, vertical: 8.0.h),
+                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.0.h),
                           child: Center(
                             child: Row(
                               children: [
@@ -180,8 +174,7 @@ class CurrencyCard extends StatelessWidget {
                                   style: kCurrencyStyle,
                                 ),
                                 SizedBox(width: 10.w),
-                                Text(currencyModel.ibcCoins.getAbbrev(),
-                                    style: kCurrencyStyle),
+                                Text(currencyModel.ibcCoins.getAbbrev(), style: kCurrencyStyle),
                               ],
                             ),
                           ),
@@ -189,8 +182,7 @@ class CurrencyCard extends StatelessWidget {
                       ],
                       if (isDefault)
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16.w, vertical: 0.h), //20
+                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 0.h), //20
                           child: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -210,8 +202,7 @@ class CurrencyCard extends StatelessWidget {
                                       style: kCurrencyStyle,
                                     ),
                                     SizedBox(width: 10.w),
-                                    Text(currencyModel.ibcCoins.getAbbrev(),
-                                        style: kCurrencyStyle),
+                                    Text(currencyModel.ibcCoins.getAbbrev(), style: kCurrencyStyle),
                                   ],
                                 ),
                                 Align(
@@ -219,29 +210,19 @@ class CurrencyCard extends StatelessWidget {
                                   child: Container(
                                     height: isTablet ? 20.h : 15.h,
                                     width: 50.w,
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 4.h, horizontal: 8.0.w),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(4.0.r)),
+                                    padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.0.w),
+                                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4.0.r)),
                                     child: Center(
                                       child: Text(
                                         "default".tr(),
-                                        style: TextStyle(
-                                            color: kBlue.withOpacity(0.5),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 8.sp),
+                                        style: TextStyle(color: AppColors.kBlue.withOpacity(0.5), fontWeight: FontWeight.bold, fontSize: 8.sp),
                                       ),
                                     ),
                                     //)
                                   ),
                                 ),
                                 SizedBox(height: 10.h),
-                                if (denomSpecificTxList.isNotEmpty)
-                                  LatestTransactions(
-                                      denomSpecificTxList: denomSpecificTxList,
-                                      defaultCurrency: currencyModel.currency),
+                                if (denomSpecificTxList.isNotEmpty) LatestTransactions(denomSpecificTxList: denomSpecificTxList, defaultCurrency: currencyModel.currency),
                               ],
                             ),
                           ),
@@ -258,8 +239,7 @@ class CurrencyCard extends StatelessWidget {
   }
 
   void _showWhatIsPylonDialog(BuildContext context) {
-    final WhatIsPylonDialog whatIsPylonDialog =
-        WhatIsPylonDialog(context: context, onBackPressed: () {});
+    final WhatIsPylonDialog whatIsPylonDialog = WhatIsPylonDialog(context: context, onBackPressed: () {});
     whatIsPylonDialog.show();
   }
 }

@@ -2,6 +2,7 @@ import 'package:easel_flutter/screens/welcome_screen/widgets/common/dialog_clipp
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:easel_flutter/utils/screen_responsive.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -44,7 +45,7 @@ class ShowSomethingWentWrongDialog {
           children: [
             SizedBox(height: 30.h),
             SvgPicture.asset(
-              kAlertIcon,
+              PngUtils.kAlertIcon,
               height: 30.h,
             ),
             SizedBox(height: 30.h),
@@ -60,10 +61,18 @@ class ShowSomethingWentWrongDialog {
                 height: 0.09.sw,
                 child: Stack(
                   children: [
-                    Positioned(left: 0, right: 0, top: 0, bottom: 0, child: Center(child: SizedBox(width: 130.w, child: SvgPicture.asset(kSvgCloseButton, fit: BoxFit.cover)))),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                      child: Center(
+                        child: SizedBox(width: 130.w, child: SvgPicture.asset(SVGUtils.kSvgCloseButton, fit: BoxFit.cover)),
+                      ),
+                    ),
                     Center(
                       child: Text(
-                        kCloseText,
+                        "close".tr(),
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
                       ),
                     ),
@@ -86,7 +95,7 @@ class ShowSomethingWentWrongDialog {
       padding: EdgeInsets.symmetric(horizontal: 0.1.sw),
       child: ClipPath(
         clipper: DialogClipper(),
-        child: Container(
+        child: ColoredBox(
           color: EaselAppTheme.kLightRed,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -95,7 +104,7 @@ class ShowSomethingWentWrongDialog {
             children: [
               SizedBox(height: 30.h),
               SvgPicture.asset(
-                kAlertIcon,
+                PngUtils.kAlertIcon,
                 height: 30.h,
               ),
               SizedBox(height: 30.h),
@@ -118,10 +127,10 @@ class ShowSomethingWentWrongDialog {
                   height: 0.09.sw,
                   child: Stack(
                     children: [
-                      Positioned(left: 0, right: 0, top: 0, bottom: 0, child: Center(child: SizedBox(width: 130.w, child: SvgPicture.asset(kSvgCloseButton, fit: BoxFit.cover)))),
+                      Positioned(left: 0, right: 0, top: 0, bottom: 0, child: Center(child: SizedBox(width: 130.w, child: SvgPicture.asset(SVGUtils.kSvgCloseButton, fit: BoxFit.cover)))),
                       Center(
                         child: Text(
-                          kCloseText,
+                          "close".tr(),
                           style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
                         ),
                       ),
@@ -147,7 +156,7 @@ class ShowSomethingWentWrongDialog {
     if (!appAlreadyInstalled) {
       PylonsWallet.instance.goToInstall();
     } else {
-      scaffoldMessenger.show( message: kPylonsAlreadyInstalled);
+      scaffoldMessenger.show(message: "pylons_already_installed".tr());
     }
   }
 }

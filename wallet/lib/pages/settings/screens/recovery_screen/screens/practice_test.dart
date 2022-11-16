@@ -12,16 +12,10 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-TextStyle kPracticeTestHeadlineText = TextStyle(
-    fontSize: 28.sp,
-    fontFamily: kUniversalFontFamily,
-    color: Colors.black,
-    fontWeight: FontWeight.w800);
-TextStyle kPracticeTestSubtitleText = TextStyle(
-    fontSize: 15.sp,
-    fontFamily: kUniversalFontFamily,
-    color: kBlue,
-    fontWeight: FontWeight.w800);
+import '../../../../../generated/locale_keys.g.dart';
+
+TextStyle kPracticeTestHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
+TextStyle kPracticeTestSubtitleText = TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlue, fontWeight: FontWeight.w800);
 
 class PracticeTest extends StatefulWidget {
   const PracticeTest({Key? key}) : super(key: key);
@@ -53,7 +47,7 @@ class _PracticeTestState extends State<PracticeTest> {
     return Provider.value(
       value: viewModel,
       child: Scaffold(
-        backgroundColor: kBackgroundColor,
+        backgroundColor: AppColors.kBackgroundColor,
         body: SingleChildScrollView(
           key: _listViewKey,
           controller: _scroller,
@@ -74,23 +68,23 @@ class _PracticeTestState extends State<PracticeTest> {
                       onTap: () {
                         Navigator.of(context).pop();
                       },
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_back_ios,
-                        color: kUserInputTextColor,
+                        color: AppColors.kUserInputTextColor,
                       )),
                 ),
                 SizedBox(
                   height: 33.h,
                 ),
                 Text(
-                  "practice_test".tr(),
+                  LocaleKeys.practice_test.tr(),
                   style: kPracticeTestHeadlineText,
                 ),
                 SizedBox(
                   height: 30.h,
                 ),
                 Text(
-                  "place_your_recovery_phrase_in_correct_order".tr(),
+                  LocaleKeys.place_your_recovery_phrase_in_correct_order.tr(),
                   style: kPracticeTestSubtitleText,
                 ),
                 SizedBox(
@@ -116,15 +110,9 @@ class _PracticeTestState extends State<PracticeTest> {
                       return MnemonicList(
                         scroller: _scroller,
                         onAcceptF: (int fromIndex, int index) {
-                          final givenList =
-                              viewModel.givenListNotifier.value.toList();
-                          final Mnemonic mnemonic =
-                              viewModel.acceptedList[fromIndex];
-                          viewModel.acceptedList[fromIndex] = Mnemonic(
-                              title: "",
-                              cardColor: Colors.grey,
-                              successDrop: false,
-                              sequenceNo: 0);
+                          final givenList = viewModel.givenListNotifier.value.toList();
+                          final Mnemonic mnemonic = viewModel.acceptedList[fromIndex];
+                          viewModel.acceptedList[fromIndex] = Mnemonic(title: "", cardColor: Colors.grey, successDrop: false, sequenceNo: 0);
                           mnemonic.successDrop = false;
                           givenList[index] = mnemonic;
                           viewModel.givenListNotifier.value = givenList;
@@ -137,14 +125,10 @@ class _PracticeTestState extends State<PracticeTest> {
                 ValueListenableBuilder<List<Mnemonic>>(
                     valueListenable: viewModel.givenListNotifier,
                     builder: (context, value, child) {
-                      final bool isAnyUnplacedItemExists = viewModel
-                          .acceptedList
-                          .where((element) => element.sequenceNo == 0)
-                          .isNotEmpty;
+                      final bool isAnyUnplacedItemExists = viewModel.acceptedList.where((element) => element.sequenceNo == 0).isNotEmpty;
 
                       return InkWell(
-                        onTap:
-                            isAnyUnplacedItemExists ? null : () => onSubmit(),
+                        onTap: isAnyUnplacedItemExists ? null : () => onSubmit(),
                         child: button(enable: !isAnyUnplacedItemExists),
                       );
                     }),
@@ -156,7 +140,7 @@ class _PracticeTestState extends State<PracticeTest> {
                     viewModel.initializeData();
                   },
                   child: Text(
-                    "reset".tr(),
+                    LocaleKeys.reset.tr(),
                     style: kPracticeTestSubtitleText.copyWith(fontSize: 16.sp),
                     textAlign: TextAlign.center,
                   ),
@@ -181,19 +165,21 @@ class _PracticeTestState extends State<PracticeTest> {
         children: [
           SvgPicture.asset(
             SVGUtil.BUTTON_BACKGROUND,
-            color: enable ? kBlue : kBlue.withOpacity(0.5),
+            color: enable ? AppColors.kBlue : AppColors.kBlue.withOpacity(0.5),
           ),
           Positioned(
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0,
-              child: Center(
-                  child: Text(
-                "submit".tr(),
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: Center(
+              child: Text(
+                LocaleKeys.submit.tr(),
                 style: TextStyle(color: Colors.white, fontSize: 16.sp),
                 textAlign: TextAlign.center,
-              )))
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -203,14 +189,12 @@ class _PracticeTestState extends State<PracticeTest> {
     GetIt.I.get<Repository>().getMnemonic().then((value) {
       if (value.isRight()) {
         final String mnemonicString = value.getOrElse(() => '');
-        final bool mnemonicsMatch =
-            viewModel.acceptedList.map((e) => e.title).join(" ") ==
-                mnemonicString;
+        final bool mnemonicsMatch = viewModel.acceptedList.map((e) => e.title).join(" ") == mnemonicString;
         if (!mnemonicsMatch) {
-          "practice_test_submission_failed".tr().show();
+          LocaleKeys.practice_test_submission_failed.tr().show();
           return;
         }
-        "practice_test_submission_successful".tr().show();
+        LocaleKeys.practice_test_submission_successful.tr().show();
       }
     });
   }
@@ -283,11 +267,7 @@ class _PracticeTestState extends State<PracticeTest> {
             final newList = viewModel.givenListNotifier.value.toList();
             final Mnemonic mnemonic = viewModel.acceptedList[fromIndex];
             viewModel.acceptedList[acceptNo] = mnemonic;
-            viewModel.acceptedList[fromIndex] = Mnemonic(
-                title: "",
-                cardColor: Colors.grey,
-                successDrop: false,
-                sequenceNo: 0);
+            viewModel.acceptedList[fromIndex] = Mnemonic(title: "", cardColor: Colors.grey, successDrop: false, sequenceNo: 0);
             viewModel.givenListNotifier.value = newList;
           }
         },
@@ -308,23 +288,17 @@ class _PracticeTestState extends State<PracticeTest> {
     );
   }
 
-  Widget buildDashedContainerRow(
-      {required int leftSequenceNo, required int rightSequenceNo}) {
+  Widget buildDashedContainerRow({required int leftSequenceNo, required int rightSequenceNo}) {
     return Container(
       height: 40.h,
       margin: EdgeInsets.only(bottom: 8.h),
       child: Row(
         children: [
           Expanded(
-            child: buildTarget(context, acceptNo: leftSequenceNo - 1,
-                onAcceptF: (int fromIndex) {
+            child: buildTarget(context, acceptNo: leftSequenceNo - 1, onAcceptF: (int fromIndex) {
               final givenList = viewModel.givenListNotifier.value.toList();
               final Mnemonic mnemonic = givenList[fromIndex];
-              givenList[fromIndex] = Mnemonic(
-                  title: "",
-                  cardColor: Colors.grey,
-                  successDrop: true,
-                  sequenceNo: 0);
+              givenList[fromIndex] = Mnemonic(title: "", cardColor: Colors.grey, successDrop: true, sequenceNo: 0);
               mnemonic.successDrop = true;
               viewModel.acceptedList[leftSequenceNo - 1] = mnemonic;
               viewModel.givenListNotifier.value = givenList;
@@ -334,15 +308,10 @@ class _PracticeTestState extends State<PracticeTest> {
             width: 15.w,
           ),
           Expanded(
-            child: buildTarget(context, acceptNo: rightSequenceNo - 1,
-                onAcceptF: (int fromIndex) {
+            child: buildTarget(context, acceptNo: rightSequenceNo - 1, onAcceptF: (int fromIndex) {
               final givenList = viewModel.givenListNotifier.value.toList();
               final Mnemonic mnemonic = givenList[fromIndex];
-              givenList[fromIndex] = Mnemonic(
-                  title: "",
-                  cardColor: Colors.grey,
-                  successDrop: true,
-                  sequenceNo: 0);
+              givenList[fromIndex] = Mnemonic(title: "", cardColor: Colors.grey, successDrop: true, sequenceNo: 0);
               mnemonic.successDrop = true;
               viewModel.acceptedList[rightSequenceNo - 1] = mnemonic;
               viewModel.givenListNotifier.value = givenList;
@@ -364,16 +333,11 @@ class MnemonicList extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final List<Mnemonic> givenListNotifier =
-        context.read<PracticeTestViewModel>().givenListNotifier.value;
+    final List<Mnemonic> givenListNotifier = context.read<PracticeTestViewModel>().givenListNotifier.value;
     final gridView = GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 10.w,
-            crossAxisSpacing: 5.w,
-            childAspectRatio: 2.3),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 10.w, crossAxisSpacing: 5.w, childAspectRatio: 2.3),
         itemCount: givenListNotifier.length,
         itemBuilder: (BuildContext context, int index) {
           return LayoutBuilder(builder: (context, constraints) {
@@ -390,18 +354,10 @@ class MnemonicList extends StatelessWidget {
                       ),
                       feedback: Material(
                           color: Colors.transparent,
-                          child: SizedBox(
-                              width: constraints.maxWidth,
-                              height: constraints.maxHeight,
-                              child: PracticeTestMnemonic(
-                                  mnemonic: givenListNotifier[index],
-                                  index: 0,
-                                  showSequenceNo: false))),
+                          child:
+                              SizedBox(width: constraints.maxWidth, height: constraints.maxHeight, child: PracticeTestMnemonic(mnemonic: givenListNotifier[index], index: 0, showSequenceNo: false))),
                       child: givenListNotifier[index].successDrop == false
-                          ? PracticeTestMnemonic(
-                              mnemonic: givenListNotifier[index],
-                              index: 0,
-                              showSequenceNo: false)
+                          ? PracticeTestMnemonic(mnemonic: givenListNotifier[index], index: 0, showSequenceNo: false)
                           : DottedBorder(
                               dashPattern: const [1, 3],
                               color: Colors.grey,
@@ -458,12 +414,7 @@ class PracticeTestMnemonic extends StatelessWidget {
   final bool showSequenceNo;
   final Mnemonic mnemonic;
   final int index;
-  const PracticeTestMnemonic(
-      {Key? key,
-      required this.showSequenceNo,
-      required this.mnemonic,
-      required this.index})
-      : super(key: key);
+  const PracticeTestMnemonic({Key? key, required this.showSequenceNo, required this.mnemonic, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -536,25 +487,21 @@ class PracticeTestViewModel {
         int i = 0;
         final List<Mnemonic> list = [];
         for (int index = 0; index < mnemonicStringList.length; index++) {
-          list.add(Mnemonic(
-              title: mnemonicStringList[index],
-              cardColor: colorListForPracticeTest[i % 5],
-              successDrop: false,
-              sequenceNo: index + 1));
+          list.add(Mnemonic(title: mnemonicStringList[index], cardColor: colorListForPracticeTest[i % 5], successDrop: false, sequenceNo: index + 1));
           i++;
           if (shouldRepeatColorForSecondColumn(index)) {
             i = 3;
           }
-          acceptedList.add(Mnemonic(
-              title: "",
-              cardColor: Colors.grey,
-              successDrop: false,
-              sequenceNo: 0));
+          acceptedList.add(Mnemonic(title: "", cardColor: Colors.grey, successDrop: false, sequenceNo: 0));
         }
         list.shuffle();
         givenListNotifier.value = list;
       }
     });
+  }
+
+  void logScreenEvent() {
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.practice);
   }
 
   bool shouldRepeatColorForSecondColumn(int index) => index == 11;

@@ -28,7 +28,7 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -55,12 +55,12 @@ android {
     }
 
     signingConfigs {
-//        debug  {
-//            storeFile file('keystore.jks')
-//            storePassword 'tech.pylons'
-//            keyAlias 'key_tech_pylon'
-//            keyPassword 'tech.pylons'
-//        }
+       release  {
+           storeFile file('keystore.jks')
+           storePassword 'tech.pylons'
+           keyAlias 'key_tech_pylon'
+           keyPassword 'tech.pylons'
+       }
     }
 
     buildTypes {
@@ -68,10 +68,10 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
 
-            shrinkResources true
-            minifyEnabled true
+            shrinkResources false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
 
         }
     }

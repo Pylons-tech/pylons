@@ -43,13 +43,13 @@ class EaselTextField extends StatelessWidget {
           children: [
             ScreenResponsive(
               mobileScreen: (context) => Image.asset(
-                noOfLines == 1 ? kTextFieldSingleLine : kTextFieldMultiLine,
+                noOfLines == 1 ? PngUtils.kTextFieldSingleLine : PngUtils.kTextFieldMultiLine,
                 height: noOfLines == 1 ? 40.h : 120.h,
                 width: 1.sw,
                 fit: BoxFit.fill,
               ),
               tabletScreen: (context) => Image.asset(
-                noOfLines == 1 ? kTextFieldSingleLine : kTextFieldMultiLine,
+                noOfLines == 1 ? PngUtils.kTextFieldSingleLine : PngUtils.kTextFieldMultiLine,
                 height: noOfLines == 1 ? 32.h : 110.h,
                 width: 1.sw,
                 fit: BoxFit.fill,
@@ -68,7 +68,6 @@ class EaselTextField extends StatelessWidget {
     return SizedBox(
       height: noOfLines == 1 ? 40.h : 120.h,
       child: Align(
-        alignment: Alignment.center,
         child: TextFormField(
           style: TextStyle(
               fontSize: noOfLines == 1 ? 18.sp : 15.sp,
@@ -100,7 +99,6 @@ class EaselTextField extends StatelessWidget {
     return SizedBox(
       height: noOfLines == 1 ? 32.h : 110.h,
       child: Align(
-        alignment: Alignment.center,
         child: TextFormField(
           style: TextStyle(
               fontSize: noOfLines == 1 ? 16.sp : 14.sp,

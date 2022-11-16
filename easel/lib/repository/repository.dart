@@ -8,24 +8,25 @@ import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/models/nft_format.dart';
 import 'package:easel_flutter/models/picked_file_model.dart';
 import 'package:easel_flutter/models/save_nft.dart';
+import 'package:easel_flutter/models/storage_response_model.dart';
 import 'package:easel_flutter/services/datasources/local_datasource.dart';
 import 'package:easel_flutter/services/datasources/remote_datasource.dart';
 import 'package:easel_flutter/services/third_party_services/crashlytics_helper.dart';
 import 'package:easel_flutter/services/third_party_services/network_info.dart';
-import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:easel_flutter/utils/failure/failure.dart';
 import 'package:easel_flutter/utils/file_utils_helper.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
+import '../generated/locale_keys.g.dart';
+
 abstract class Repository {
   /// This method returns the recipe list
   /// Input : [cookBookId] id of the cookbook
   /// Output: if successful the output will be the list of [pylons.Recipe]
   /// will return error in the form of failure
-  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId(
-      {required String cookBookId});
+  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId});
 
   /// This method will return the saved String if exists
   /// Input: [key] the key of the value
@@ -93,8 +94,7 @@ abstract class Repository {
   /// This method will update draft in the local database from description Page
   /// Input:[SaveNft] this model data contains bring [id],[nftName],[nftDescription],[creatorName],[step]
   /// Output: [bool] returns whether the operation is successful or not
-  Future<Either<Failure, bool>> updateNftFromDescription(
-      {required SaveNft saveNft});
+  Future<Either<Failure, bool>> updateNftFromDescription({required SaveNft saveNft});
 
   /// This method will update the draft of the NFT
   /// Input: [id] of the draft that will be updated
@@ -109,9 +109,7 @@ abstract class Repository {
   /// This method is used uploading provided file to the server using [httpClient]
   /// Input : [file] which needs to be uploaded , [onUploadProgressCallback] a callback method which needs to be call on each progress
   /// Output : [ApiResponse] the ApiResponse which can contain [success] or [error] response
-  Future<Either<Failure, ApiResponse>> uploadFile(
-      {required File file,
-      required OnUploadProgressCallback onUploadProgressCallback});
+  Future<Either<Failure, StorageResponseModel>> uploadFile({required File file, required OnUploadProgressCallback onUploadProgressCallback});
 
   /// This method will get the drafts List from the local database
   /// Output: [List] returns that contains a number of [NFT]
@@ -150,8 +148,7 @@ abstract class Repository {
   /// This function is used to generate the NFT link to be shared with others after publishing
   /// Input: [recipeId] and [cookbookId] used in the link generation as query parameters
   /// Output: [String] returns the generated NFTs link to be shared with others
-  String generateEaselLinkForShare(
-      {required String recipeId, required String cookbookId});
+  String generateEaselLinkForShare({required String recipeId, required String cookbookId});
 
   /// This function is used to launch the link generated and open the link in external source platform
   /// Input: [url] is the link to be launched by the launcher
@@ -164,6 +161,8 @@ abstract class Repository {
   /// This method will get the on boarding status
   /// Output: [bool] returns whether the operation is successful or not
   bool getOnBoardingComplete();
+
+  Future<Either<Failure, bool>> logUserJourney({required String screenName});
 }
 
 class RepositoryImp implements Repository {
@@ -173,29 +172,22 @@ class RepositoryImp implements Repository {
   final FileUtilsHelper fileUtilsHelper;
   final CrashlyticsHelper crashlyticsHelper;
 
-  RepositoryImp(
-      {required this.networkInfo,
-      required this.remoteDataSource,
-      required this.localDataSource,
-      required this.fileUtilsHelper,
-      required this.crashlyticsHelper});
+  RepositoryImp({required this.networkInfo, required this.remoteDataSource, required this.localDataSource, required this.fileUtilsHelper, required this.crashlyticsHelper});
 
   @override
-  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId(
-      {required String cookBookId}) async {
+  Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId}) async {
     if (!await networkInfo.isConnected) {
-      return const Left(NoInternetFailure(kNoInternet));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
-      var sdkResponse =
-          await remoteDataSource.getRecipesByCookbookID(cookBookId);
+      final sdkResponse = await remoteDataSource.getRecipesByCookbookID(cookBookId);
       log(sdkResponse.toString(), name: 'pylons_sdk');
 
       return Right(sdkResponse);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return const Left(CookBookNotFoundFailure(kCookBookNotFound));
+      return Left(CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr()));
     }
   }
 
@@ -220,7 +212,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  bool setCacheDynamicType({required String key, required value}) {
+  bool setCacheDynamicType({required String key, required dynamic value}) {
     return localDataSource.setCacheDynamicType(key: key, value: value);
   }
 
@@ -231,7 +223,7 @@ class RepositoryImp implements Repository {
 
   @override
   Future<String> autoGenerateCookbookId() async {
-    return await localDataSource.autoGenerateCookbookId();
+    return localDataSource.autoGenerateCookbookId();
   }
 
   @override
@@ -267,70 +259,69 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, int>> saveNft(NFT nft) async {
     try {
-      int id = await localDataSource.saveNft(nft);
+      final int id = await localDataSource.saveNft(nft);
       return Right(id);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("save_error".tr()));
+      return Left(CacheFailure(LocaleKeys.save_error.tr()));
     }
   }
 
   @override
-  Future<Either<Failure, bool>> updateNftFromDescription(
-      {required SaveNft saveNft}) async {
+  Future<Either<Failure, bool>> updateNftFromDescription({required SaveNft saveNft}) async {
     try {
-      bool result = await localDataSource.updateNftFromDescription(saveNft);
+      final bool result = await localDataSource.updateNftFromDescription(saveNft);
 
       if (!result) {
-        return Left(CacheFailure("upload_error".tr()));
+        return Left(CacheFailure(LocaleKeys.upload_error.tr()));
       }
       return Right(result);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("upload_error".tr()));
+      return Left(CacheFailure(LocaleKeys.upload_error.tr()));
     }
   }
 
   @override
   Future<Either<Failure, bool>> updateNFTDialogShown({required int id}) async {
     try {
-      bool result = await localDataSource.updateNFTDialogShown(id);
+      final bool result = await localDataSource.updateNFTDialogShown(id);
 
       if (!result) {
-        return Left(CacheFailure("upload_error".tr()));
+        return Left(CacheFailure(LocaleKeys.upload_error.tr()));
       }
       return Right(result);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("upload_error".tr()));
+      return Left(CacheFailure(LocaleKeys.upload_error.tr()));
     }
   }
 
   @override
-  Future<Either<Failure, bool>> updateNftFromPrice(
-      {required SaveNft saveNft}) async {
+  Future<Either<Failure, bool>> updateNftFromPrice({required SaveNft saveNft}) async {
     try {
-      bool result = await localDataSource.updateNftFromPrice(saveNft);
+      final bool result = await localDataSource.updateNftFromPrice(saveNft);
 
       return Right(result);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("upload_error".tr()));
+      return Left(CacheFailure(LocaleKeys.upload_error.tr()));
     }
   }
 
   @override
-  Future<Either<Failure, ApiResponse>> uploadFile(
-      {required File file,
-      required OnUploadProgressCallback onUploadProgressCallback}) async {
-    try {
-      ApiResponse apiResponse = await remoteDataSource.uploadFile(
-          file: file, uploadProgressCallback: onUploadProgressCallback);
+  Future<Either<Failure, StorageResponseModel>> uploadFile({required File file, required OnUploadProgressCallback onUploadProgressCallback}) async {
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
+    }
 
-      return Right(apiResponse);
+    try {
+      final storageResponseModel = await remoteDataSource.uploadFile(file: file, uploadProgressCallback: onUploadProgressCallback);
+
+      return Right(storageResponseModel);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("update_failed".tr()));
+      return Left(CacheFailure(LocaleKeys.update_failed.tr()));
     }
   }
 
@@ -342,44 +333,44 @@ class RepositoryImp implements Repository {
       return Right(response);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("something_wrong".tr()));
+      return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
     }
   }
 
   @override
   Future<Either<Failure, bool>> deleteNft(int id) async {
     try {
-      bool result = await localDataSource.deleteNft(id);
+      final bool result = await localDataSource.deleteNft(id);
       return Right(result);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("something_wrong".tr()));
+      return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
     }
   }
 
   @override
   Future<Either<Failure, NFT>> getNft(int id) async {
     try {
-      NFT? data = await localDataSource.getNft(id);
+      final NFT? data = await localDataSource.getNft(id);
       if (data == null) {
-        return Left(CacheFailure("something_wrong".tr()));
+        return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
       }
       return Right(data);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CacheFailure("something_wrong".tr()));
+      return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
     }
   }
 
   @override
   Future<Either<Failure, PickedFileModel>> pickFile(NftFormat format) async {
     try {
-      PickedFileModel pickedFileModel = await fileUtilsHelper.pickFile(format);
+      final PickedFileModel pickedFileModel = await fileUtilsHelper.pickFile(format);
 
       return Right(pickedFileModel);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(PickingFileFailure(message: "picking_file_error".tr()));
+      return Left(PickingFileFailure(message: LocaleKeys.picking_file_error.tr()));
     }
   }
 
@@ -399,8 +390,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  String generateEaselLinkForShare(
-      {required String recipeId, required String cookbookId}) {
+  String generateEaselLinkForShare({required String recipeId, required String cookbookId}) {
     return recipeId.generateEaselLinkToShare(cookbookId: cookbookId);
   }
 
@@ -411,7 +401,7 @@ class RepositoryImp implements Repository {
       return Right(file);
     } catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(UrlLaunchingFileFailure(message: "url_launching_error".tr()));
+      return Left(UrlLaunchingFileFailure(message: LocaleKeys.url_launching_error.tr()));
     }
   }
 
@@ -423,5 +413,14 @@ class RepositoryImp implements Repository {
   @override
   bool getOnBoardingComplete() {
     return localDataSource.getOnBoardingComplete();
+  }
+
+  @override
+  Future<Either<Failure, bool>> logUserJourney({required String screenName}) async {
+    try {
+      return Right(await remoteDataSource.logUserJourney(screenName: screenName));
+    } catch (e) {
+      return Left(AnalyticsFailure(message: LocaleKeys.analytics_failure.tr()));
+    }
   }
 }

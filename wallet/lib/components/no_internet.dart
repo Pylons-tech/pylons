@@ -10,6 +10,8 @@ import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../generated/locale_keys.g.dart';
+
 class NoInternetDialog {
   bool _isShowing = false;
 
@@ -53,7 +55,7 @@ class NoInternetDialog {
       child: Container(
         width: 400.w,
         height: 300.w,
-        color: kDarkRed.withOpacity(0.9),
+        color: AppColors.kDarkRed.withOpacity(0.9),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -75,7 +77,7 @@ class NoInternetDialog {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: "no_internet_connection".tr(),
+                        text: LocaleKeys.no_internet_connection.tr(),
                         style: Theme.of(navigatorKey.currentState!.context).textTheme.bodyText2!.copyWith(
                               color: Colors.white,
                               fontSize: 12.sp,
@@ -104,8 +106,8 @@ class NoInternetDialog {
                     height: 0.09.sw,
                     child: Center(
                       child: Text(
-                        kCancelText,
-                        style: Theme.of(navigatorKey.currentState!.context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: kWhite, fontWeight: FontWeight.w300),
+                        LocaleKeys.cancel.tr(),
+                        style: Theme.of(navigatorKey.currentState!.context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: AppColors.kWhite, fontWeight: FontWeight.w300),
                       ),
                     ),
                   ),
@@ -139,7 +141,7 @@ class NoInternetDialog {
             child: Center(
                 child: Text(
               title,
-              style: TextStyle(color: bgColor == kButtonColor ? kBlue : kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
+              style: TextStyle(color: bgColor == AppColors.kButtonColor ? AppColors.kBlue : AppColors.kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             )),
           ),

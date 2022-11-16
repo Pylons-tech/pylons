@@ -6,6 +6,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
 import 'package:pylons_wallet/model/export.dart';
+import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/pick_image_model.dart';
@@ -13,6 +14,7 @@ import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_request.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_response.dart';
 import 'package:pylons_wallet/model/transaction.dart';
+import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/cookbook.pb.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
@@ -65,11 +67,6 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, StripePayoutResponse>> Payout(StripePayoutRequest req) async {
-    return Right(StripePayoutResponse(success: true));
-  }
-
-  @override
   Future<Either<Failure, StripeRegisterAccountResponse>> RegisterAccount(StripeRegisterAccountRequest req) async {
     return Right(StripeRegisterAccountResponse(success: true));
   }
@@ -81,7 +78,6 @@ class MockRepository extends Repository {
 
   @override
   Future<Either<Failure, String>> getAddressBasedOnUsername(String username) {
-    // TODO: implement getAddressBasedOnUsername
     throw UnimplementedError();
   }
 
@@ -401,26 +397,22 @@ class MockRepository extends Repository {
 
   @override
   Future<Either<Failure, void>> countAView({required String recipeId, required String cookBookID, required String walletAddress}) {
-    // TODO: implement countAView
-    throw UnimplementedError();
+    return Future.value(const Right(null));
   }
 
   @override
   Future<Either<Failure, int>> getLikesCount({required String recipeId, required String cookBookID}) {
-    // TODO: implement getLikesCount
-    throw UnimplementedError();
+    return Future.value(const Right(4));
   }
 
   @override
   Future<Either<Failure, int>> getViewsCount({required String recipeId, required String cookBookID}) {
-    // TODO: implement getViewsCount
-    throw UnimplementedError();
+    return Future.value(const Right(6));
   }
 
   @override
   Future<Either<Failure, bool>> ifLikedByMe({required String recipeId, required String cookBookID, required String walletAddress}) {
-    // TODO: implement ifLikedByMe
-    throw UnimplementedError();
+    return Future.value(const Right(true));
   }
 
   @override
@@ -460,9 +452,12 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String recipeID, required String cookBookId}) {
-    // TODO: implement getNftOwnershipHistory
-    throw UnimplementedError();
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String itemId, required String cookBookId}) {
+    return Future.value(
+      Right(
+        [MOCK_NFT_OWNERSHIP_HISTORY],
+      ),
+    );
   }
 
   @override
@@ -502,6 +497,11 @@ class MockRepository extends Repository {
   }
 
   @override
+  Future<Either<Failure, String>> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) {
+    return Future.value(Right(MOCK_DYNAMIC_LINK));
+  }
+
+  @override
   Future<Either<Failure, bool>> markNotificationAsRead({required List<String> idsList}) {
     // TODO: implement markNotificationAsRead
     throw UnimplementedError();
@@ -509,7 +509,51 @@ class MockRepository extends Repository {
 
   @override
   Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) {
-    // TODO: implement saveUserFeedback
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> setUserIdentifierInAnalytics({required String address}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteTransactionFailureRecord(int id) {
+    // TODO: implement deleteTransactionFailureRecord
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, List<LocalTransactionModel>>> getAllTransactionFailures() {
+    // TODO: implement getAllTransactionFailures
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, int>> saveLocalTransaction(LocalTransactionModel txManager) {
+    // TODO: implement saveTransactionFailure
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, bool>> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice}) {
+    return Future.value(const Right(true));
+  }
+
+  @override
+  Future<Either<Failure, bool>> logAddToCart({required String recipeId, required String recipeName, required String author, required double purchasePrice, required String currency}) {
+    // TODO: implement logAddToCart
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> logUserJourney({required String screenName}) async {
+    return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId}) {
+    // TODO: implement getNftOwnershipHistoryByCookbookIdAndRecipeId
     throw UnimplementedError();
   }
 }

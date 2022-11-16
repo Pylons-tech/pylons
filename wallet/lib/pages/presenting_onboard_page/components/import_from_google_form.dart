@@ -6,16 +6,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg;
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/buttons/pylons_get_started_button.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/pylons_rounded_button.dart';
 import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
+import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+
+import '../../../generated/locale_keys.g.dart';
 
 class ImportFromGoogleForm extends StatefulWidget {
   final WalletsStore walletStore;
@@ -52,7 +56,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
           if (Platform.isAndroid)
             PylonsRoundedButton(
                 glyph: svg.Svg(SVGUtil.GOOGLE_DRIVE_ICON, size: const Size(30, 30)),
-                text: "import_from_google_cloud".tr(),
+                text: LocaleKeys.import_from_google_cloud.tr(),
                 textColor: Colors.white,
                 onTap: () async {
                   _loginWithGoogleDrive();
@@ -60,7 +64,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
           if (Platform.isIOS)
             PylonsRoundedButton(
                 glyph: svg.Svg(SVGUtil.ICLOUD_ICON, size: const Size(30, 30)),
-                text: "import_from_i_cloud".tr(),
+                text: LocaleKeys.import_from_i_cloud.tr(),
                 textColor: Colors.white,
                 onTap: () async {
                   _loginWithICloudDrive();
@@ -70,9 +74,9 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "or".tr(),
+                LocaleKeys.or.tr(),
                 style: TextStyle(
-                  color: kBlack,
+                  color: AppColors.kBlack,
                   fontSize: 15.sp,
                   fontWeight: FontWeight.w500,
                 ),
@@ -84,16 +88,16 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "enter_mnemonic".tr(),
+                LocaleKeys.enter_mnemonic.tr(),
                 style: TextStyle(
-                  color: kBlack,
+                  color: AppColors.kBlack,
                   fontSize: 15.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
             )
           ]),
-          PylonsTextInput(controller: mnemonicController, label: "enter_mnemonic".tr()),
+          PylonsTextInput(controller: mnemonicController, label: LocaleKeys.enter_mnemonic.tr()),
           VerticalSpace(140.h),
           Align(
             alignment: Alignment.bottomRight,
@@ -112,6 +116,7 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
 
   /// Create the new wallet and associate the chosen username with it.
   Future _loginExistingUser({required String mnemonic}) async {
+    final remoteNotificationsProvider = context.read<RemoteNotificationsProvider>();
     isLoadingNotifier.value = true;
 
     final result = await widget.walletStore.importPylonsAccount(mnemonic: mnemonic);
@@ -121,12 +126,14 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
     result.fold((failure) {
       failure.message.show();
     }, (walletInfo) {
+      remoteNotificationsProvider.updateFCMToken(address: walletInfo.publicAddress);
       Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
     });
   }
 
   /// Create the new wallet and associate the chosen username with it.
   Future _loginWithGoogleDrive() async {
+    final remoteNotificationsProvider = context.read<RemoteNotificationsProvider>();
     final navigator = Navigator.of(context);
     final Loading loading = Loading()..showLoading();
 
@@ -149,11 +156,14 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
 
       failure.message.show();
     }, (walletInfo) {
+      remoteNotificationsProvider.updateFCMToken(address: walletInfo.publicAddress);
       Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
     });
   }
 
   Future _loginWithICloudDrive() async {
+    final remoteNotificationsProvider = context.read<RemoteNotificationsProvider>();
+
     final navigator = Navigator.of(context);
     final Loading loading = Loading()..showLoading();
 
@@ -176,6 +186,8 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
 
       failure.message.show();
     }, (walletInfo) {
+      remoteNotificationsProvider.updateFCMToken(address: walletInfo.publicAddress);
+
       Navigator.of(context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => true);
     });
   }

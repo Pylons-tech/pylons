@@ -8,16 +8,31 @@ import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
-import 'package:pylons_wallet/utils/extension.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
+enum TabFields { ownership, details, history }
+
+// ignore: must_be_immutable
 class TabField extends StatefulWidget {
   final String name;
   final String icon;
   final NFT nft;
-  final List<NftOwnershipHistory> NftOwnershipHistoryList;
+  final List<NftOwnershipHistory> nftOwnershipHistoryList;
   final String owner;
+  bool isExpanded;
+  final Function(TabFields) onChangeTab;
 
-  const TabField({Key? key, required this.name, required this.icon, required this.nft, required this.owner, required this.NftOwnershipHistoryList}) : super(key: key);
+  TabField({
+    Key? key,
+    required this.name,
+    required this.icon,
+    required this.nft,
+    required this.owner,
+    required this.nftOwnershipHistoryList,
+    required this.isExpanded,
+    required this.onChangeTab,
+  }) : super(key: key);
 
   @override
   State<TabField> createState() => _TabFieldState();
@@ -30,17 +45,13 @@ class _TabFieldState extends State<TabField> {
     switch (widget.nft.type) {
       case NftType.TYPE_RECIPE:
         return {
-          "owned_by".tr(): widget.owner,
-          "edition".tr(): '${widget.nft.amountMinted} of ${widget.nft.quantity}',
-          "royalty_text".tr(): widget.nft.tradePercentage,
-          "size".tr(): widget.nft.getAssetSize(),
-          "creation".tr(): widget.nft.createdAt,
+          LocaleKeys.owner.tr(): widget.owner,
+          "${LocaleKeys.edition.tr()}#": '#${widget.nft.amountMinted} of ${widget.nft.quantity}',
+          LocaleKeys.royalty_text.tr(): widget.nft.tradePercentage,
         };
       case NftType.TYPE_ITEM:
         return {
-          "owned_by".tr(): widget.owner,
-          "size".tr(): widget.nft.getAssetSize(),
-          "creation".tr(): widget.nft.createdAt,
+          LocaleKeys.owner.tr(): widget.owner,
         };
       case NftType.TYPE_TRADE:
         return {};
@@ -50,14 +61,23 @@ class _TabFieldState extends State<TabField> {
   Map<String, String> getNFTDetailsMap() {
     switch (widget.nft.type) {
       case NftType.TYPE_RECIPE:
-        return {"recipe_id".tr(): widget.nft.recipeID, 'blockchain'.tr(): 'pylons'.tr(), 'permission'.tr(): 'exclusive'.tr()};
+        return {
+          LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
+          LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}",
+          LocaleKeys.ipfs_cid.tr(): widget.nft.cid
+        };
       case NftType.TYPE_ITEM:
-        return {"recipe_id".tr(): widget.nft.recipeID, 'blockchain'.tr(): 'pylons'.tr(), 'permission'.tr(): 'exclusive'.tr()};
+        return {
+          LocaleKeys.recipe_id.tr(): widget.nft.recipeID
+        };
       case NftType.TYPE_TRADE:
         break;
     }
 
-    return {"recipe_id".tr(): widget.nft.recipeID, 'blockchain'.tr(): 'pylons'.tr(), 'permission'.tr(): 'exclusive'.tr()};
+    return {
+      LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
+      LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}",
+      LocaleKeys.ipfs_cid.tr(): widget.nft.cid};
   }
 
   @override
@@ -66,10 +86,15 @@ class _TabFieldState extends State<TabField> {
 
     final nftDetail = getNFTDetailsMap();
 
-    final listOwnership = ownership.entries.map((element) => _tabDetails(field: element.key, value: element.value)).toList();
+    final listOwnership = ownership.entries.map((element) => _tabDetails(field: element.key, value: element.value, customColor: element.key == LocaleKeys.owner.tr() ? Colors.red : null)).toList();
 
     final listDetails = nftDetail.entries
-        .map((element) => _tabDetails(field: element.key, value: element.value, customWidget: element.key == kRecipeId && element.value.isNotEmpty ? _tabDetailsWithIcon(value: element.value) : null))
+        .map(
+            (element) => _tabDetails(
+                field: element.key,
+                value: element.value,
+                customWidget: (element.key == LocaleKeys.recipe_id.tr() || element.key == LocaleKeys.ipfs_cid.tr()) && element.value.isNotEmpty ? _tabDetailsWithIcon(value: element.value) : null),
+        )
         .toList();
 
     return AnimatedContainer(
@@ -104,15 +129,25 @@ class _TabFieldState extends State<TabField> {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
+                      TabFields? _field;
+                      if (widget.name == LocaleKeys.ownership.tr()) {
+                        _field = TabFields.ownership;
+                      } else if (widget.name == LocaleKeys.nft_detail.tr()) {
+                        _field = TabFields.details;
+                      } else {
+                        _field = TabFields.history;
+                      }
+
+                      widget.onChangeTab(_field);
                       setState(() {
-                        collapsed = !collapsed;
+                        widget.isExpanded = !widget.isExpanded;
                       });
                     },
                     child: SizedBox(
                       height: 20.h,
                       width: 20.w,
                       child: SvgPicture.asset(
-                        'assets/images/icons/${collapsed ? 'add' : 'minus'}.svg',
+                        'assets/images/icons/${!widget.isExpanded ? 'add' : 'minus'}.svg',
                       ),
                     ),
                   )
@@ -133,15 +168,23 @@ class _TabFieldState extends State<TabField> {
               ),
             ],
           ),
-          if (!collapsed && widget.name == "ownership".tr())
+          if (widget.name == LocaleKeys.ownership.tr() && widget.isExpanded)
             ...listOwnership
-          else if (!collapsed && widget.name == "nft_detail".tr())
+          else if (widget.name == LocaleKeys.nft_detail.tr() && widget.isExpanded)
             ...listDetails
-          else if (!collapsed && widget.name == "history".tr())
-            _listHistory(widget.NftOwnershipHistoryList, context)
+          else if (widget.name == LocaleKeys.history.tr() && widget.isExpanded)
+            _listHistory(widget.nftOwnershipHistoryList, context)
         ],
       ),
     );
+  }
+
+  Widget? customWidget(MapEntry<String, String> element) {
+    return element.key == kRecipeId && element.value.isNotEmpty
+        ? _tabDetailsWithIcon(value: element.value)
+        : element.key == kIpfsCid && element.value.isNotEmpty
+            ? _tabDetailsWithIcon(value: element.value)
+            : null;
   }
 
   Widget _listHistory(List<NftOwnershipHistory> nftOwnershipHistoryList, BuildContext context) {
@@ -158,7 +201,7 @@ class _TabFieldState extends State<TabField> {
               final createdDate = date.toLocal();
               final formattedDate = DateFormat(kDateWithTimeFormat).format(createdDate);
               if (i < kMaxItemToShow) {
-                return _tabDetails(field: formattedDate, value: nftOwnershipHistory.senderName, customColor: kPurple);
+                return _tabDetails(field: formattedDate, value: nftOwnershipHistory.senderName, customColor: AppColors.kPurple);
               }
               return const SizedBox();
             })
@@ -174,15 +217,15 @@ class _TabFieldState extends State<TabField> {
         children: [
           Text(
             value.substring(0, 6),
-            style: const TextStyle(color: kWhite),
+            style: TextStyle(color: AppColors.kGreyColor, fontSize: 9.sp),
           ),
-          const Text(
+          Text(
             "...",
-            style: TextStyle(color: kWhite),
+            style: TextStyle(color: AppColors.kGreyColor, fontSize: 9.sp),
           ),
           Text(
             value.substring(value.length - 5, value.length),
-            style: const TextStyle(color: kWhite),
+            style: TextStyle(color: AppColors.kGreyColor, fontSize: 9.sp),
           ),
           if (value.isNotEmpty)
             InkWell(
@@ -190,13 +233,13 @@ class _TabFieldState extends State<TabField> {
                 await Clipboard.setData(ClipboardData(text: value));
                 if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("copied_to_clipboard".tr())),
+                  SnackBar(content: Text(LocaleKeys.copied_to_clipboard.tr())),
                 );
               },
               child: Icon(
                 Icons.copy_outlined,
-                color: kWhite,
-                size: 15.h,
+                color: AppColors.kGreyColor,
+                size: 11.h,
               ),
             )
         ],
@@ -211,7 +254,7 @@ class _TabFieldState extends State<TabField> {
           flex: 50,
           child: Text(
             field,
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: AppColors.kGreyColor, fontSize: 9.sp),
           ),
         ),
         if (customWidget != null) ...[
@@ -221,7 +264,7 @@ class _TabFieldState extends State<TabField> {
             flex: 45,
             child: Text(
               value,
-              style: TextStyle(color: customColor != null ? kPurple : Colors.white),
+              style: TextStyle(color: customColor != null ? AppColors.kPurple : AppColors.kGreyColor, fontSize: 9.sp),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

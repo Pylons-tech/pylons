@@ -7,45 +7,24 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-TextStyle kRecoveryOptionsText = TextStyle(
-    fontSize: 20.sp,
-    fontFamily: kUniversalFontFamily,
-    color: Colors.black,
-    fontWeight: FontWeight.w600);
-TextStyle kViewRecoveryHeadlineText = TextStyle(
-    fontSize: 28.sp,
-    fontFamily: kUniversalFontFamily,
-    color: Colors.black,
-    fontWeight: FontWeight.w800);
+import '../../../../../generated/locale_keys.g.dart';
 
-TextStyle kRecoveryBiometricIdText = TextStyle(
-    fontSize: 20.sp,
-    fontFamily: kUniversalFontFamily,
-    color: Colors.black,
-    fontWeight: FontWeight.w500);
-TextStyle kRecoveryInfoText = TextStyle(
-    fontSize: 13.sp,
-    fontFamily: kUniversalFontFamily,
-    color: kBlue,
-    fontWeight: FontWeight.w500);
-TextStyle kRecoveryMnemonicText = TextStyle(
-    fontSize: 18.sp,
-    fontFamily: kUniversalFontFamily,
-    color: Colors.white,
-    fontWeight: FontWeight.w800);
-TextStyle kRecoveryMnemonicIndexText = TextStyle(
-    fontSize: 10.sp,
-    fontFamily: kUniversalFontFamily,
-    color: Colors.white,
-    fontWeight: FontWeight.w800);
+TextStyle kRecoveryOptionsText = TextStyle(fontSize: 20.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w600);
+TextStyle kViewRecoveryHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
+
+TextStyle kRecoveryBiometricIdText = TextStyle(fontSize: 20.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
+TextStyle kRecoveryInfoText = TextStyle(fontSize: 13.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlue, fontWeight: FontWeight.w500);
+TextStyle kRecoveryMnemonicText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.white, fontWeight: FontWeight.w800);
+TextStyle kRecoveryMnemonicIndexText = TextStyle(fontSize: 10.sp, fontFamily: kUniversalFontFamily, color: Colors.white, fontWeight: FontWeight.w800);
 
 class ViewRecoveryScreen extends StatefulWidget {
   const ViewRecoveryScreen({Key? key}) : super(key: key);
@@ -61,18 +40,20 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
 
   bool isBiometricAvailable = false;
 
+  Repository get repository => GetIt.I.get();
+
   @override
   void initState() {
     super.initState();
 
-    GetIt.I.get<Repository>().getMnemonic().then((value) {
+    repository.getMnemonic().then((value) {
       if (value.isRight()) {
         final mnemonicString = value.getOrElse(() => '');
         mnemonicsNotifier.value = mnemonicString.split(" ");
       }
     });
 
-    GetIt.I.get<Repository>().isBiometricAvailable().then((value) {
+    repository.isBiometricAvailable().then((value) {
       if (value.isLeft()) {
         shouldShowMnemonic = true;
       } else {
@@ -80,12 +61,14 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
       }
       setState(() {});
     });
+
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.recoveryPhrase);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.kBackgroundColor,
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 37.w),
@@ -99,14 +82,14 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.arrow_back_ios,
-                      color: kUserInputTextColor,
+                      color: AppColors.kUserInputTextColor,
                     )),
               ),
               SizedBox(height: 33.h),
               Text(
-                "recovery_phrase".tr(),
+                LocaleKeys.recovery_phrase.tr(),
                 style: kViewRecoveryHeadlineText,
               ),
               SizedBox(height: 20.h),
@@ -117,46 +100,37 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "biometric_id".tr(),
+                        LocaleKeys.biometric_id.tr(),
                         style: kRecoveryBiometricIdText,
                       ),
                       CupertinoSwitch(
-                        trackColor: kSwitchInactiveColor,
+                        trackColor: AppColors.kSwitchInactiveColor,
                         value: shouldShowMnemonic,
                         onChanged: (value) {
                           if (shouldShowMnemonic) {
                             return;
                           }
 
-                          GetIt.I
-                              .get<Repository>()
-                              .authenticate()
-                              .then((value) {
+                          GetIt.I.get<Repository>().authenticate().then((value) {
                             if (value.isLeft()) {
-                              value
-                                  .swap()
-                                  .toOption()
-                                  .toNullable()!
-                                  .message
-                                  .show();
+                              value.swap().toOption().toNullable()!.message.show();
                             }
 
-                            if (value.isRight() &&
-                                value.getOrElse(() => false)) {
+                            if (value.isRight() && value.getOrElse(() => false)) {
                               setState(() {
                                 shouldShowMnemonic = true;
                               });
                             }
                           });
                         },
-                        activeColor: kSwitchActiveColor,
+                        activeColor: AppColors.kSwitchActiveColor,
                       )
                     ],
                   ),
                 ),
                 SizedBox(height: 10.h),
                 Text(
-                  "biometric_reveal_phrase".tr(),
+                  LocaleKeys.biometric_reveal_phrase.tr(),
                   style: kRecoveryInfoText,
                 ),
                 SizedBox(height: 20.h),
@@ -167,19 +141,17 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
                 Row(
                   children: [
                     Text(
-                      "your_recovery_phrase".tr(),
+                      LocaleKeys.your_recovery_phrase.tr(),
                       style: kRecoveryOptionsText,
                     ),
                     IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.copy,
-                        color: kCopyColor,
+                        color: AppColors.kCopyColor,
                       ),
                       onPressed: () {
-                        Clipboard.setData(ClipboardData(
-                                text: mnemonicsNotifier.value.join(" ")))
-                            .then((_) {
-                          "copied_to_clipboard".tr().show();
+                        Clipboard.setData(ClipboardData(text: mnemonicsNotifier.value.join(" "))).then((_) {
+                          LocaleKeys.copied_to_clipboard.tr().show();
                         });
                       },
                     ),
@@ -203,23 +175,21 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
                       onTap: () async {
                         onPressedUploadGoogleDrive();
                       },
-                      child: buildBackupButton(
-                          title: "back_up_to_google_drive".tr())),
+                      child: buildBackupButton(title: LocaleKeys.back_up_to_google_drive.tr())),
                 if (Platform.isIOS)
                   InkWell(
                     onTap: () {
                       onPressedUploadICloudDrive();
                     },
-                    child: buildBackupButton(title: "back_up_to_icloud".tr()),
+                    child: buildBackupButton(title: LocaleKeys.back_up_to_icloud.tr()),
                   ),
                 SizedBox(height: 30.h),
                 InkWell(
                   onTap: () {
-                    Navigator.of(context)
-                        .pushNamed(RouteUtil.ROUTE_PRACTICE_TEST);
+                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_PRACTICE_TEST);
                   },
                   child: Text(
-                    "practice_test".tr(),
+                    LocaleKeys.practice_test.tr(),
                     style: kRecoveryInfoText.copyWith(fontSize: 16.sp),
                     textAlign: TextAlign.center,
                   ),
@@ -243,19 +213,21 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
           children: [
             SvgPicture.asset(
               SVGUtil.BUTTON_BACKGROUND,
-              color: kBlue,
+              color: AppColors.kBlue,
             ),
             Positioned(
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0,
-                child: Center(
-                    child: Text(
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              child: Center(
+                child: Text(
                   title,
                   style: const TextStyle(color: Colors.white),
                   textAlign: TextAlign.center,
-                )))
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -263,36 +235,47 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
   }
 
   Future onPressedUploadGoogleDrive() async {
+    final wallet = context.read<AccountProvider>().accountPublicInfo;
+
+    if (wallet == null) {
+      return;
+    }
     final Loading loading = Loading();
     loading.showLoading();
-    final wallets = GetIt.I.get<WalletsStore>().getWallets();
+
     final response = await GetIt.I.get<Repository>().uploadMnemonicGoogleDrive(
-        mnemonic: mnemonicsNotifier.value.join(" "),
-        username: wallets.value.last.name);
+          mnemonic: mnemonicsNotifier.value.join(" "),
+          username: wallet.name,
+        );
 
     loading.dismiss();
     if (response.isRight()) {
-      "uploaded_successful".tr().show();
+      LocaleKeys.uploaded_successful.tr().show();
       return;
     } else {
-      "upload_failed".tr().show();
+      LocaleKeys.upload_failed.tr().show();
     }
   }
 
   Future onPressedUploadICloudDrive() async {
+    final wallet = context.read<AccountProvider>().accountPublicInfo;
+
+    if (wallet == null) {
+      return;
+    }
     final Loading loading = Loading();
     loading.showLoading();
-    final wallets = GetIt.I.get<WalletsStore>().getWallets();
     final response = await GetIt.I.get<Repository>().uploadMnemonicICloud(
-        mnemonic: mnemonicsNotifier.value.join(" "),
-        username: wallets.value.last.name);
+          mnemonic: mnemonicsNotifier.value.join(" "),
+          username: wallet.name,
+        );
 
     loading.dismiss();
     if (response.isRight()) {
-      "uploaded_successful".tr().show();
+      LocaleKeys.uploaded_successful.tr().show();
       return;
     } else {
-      "upload_failed".tr().show();
+      LocaleKeys.upload_failed.tr().show();
     }
   }
 }
@@ -301,9 +284,7 @@ class RecoveryForwardItem extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
 
-  const RecoveryForwardItem(
-      {required this.title, Key? key, required this.onPressed})
-      : super(key: key);
+  const RecoveryForwardItem({required this.title, Key? key, required this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -323,9 +304,9 @@ class RecoveryForwardItem extends StatelessWidget {
                   title,
                   style: kRecoveryOptionsText,
                 ),
-                const Icon(
+                Icon(
                   Icons.arrow_forward_ios_sharp,
-                  color: kForwardIconColor,
+                  color: AppColors.kForwardIconColor,
                 )
               ],
             ),
@@ -416,27 +397,18 @@ class MnemonicList extends StatelessWidget {
     );
   }
 
-  Widget buildMnemonicRow(
-      {required int leftIndex,
-      required int rightIndex,
-      required List<String> mnemonic,
-      required Color leftColor,
-      required Color rightColor}) {
+  Widget buildMnemonicRow({required int leftIndex, required int rightIndex, required List<String> mnemonic, required Color leftColor, required Color rightColor}) {
     return Container(
       height: 40.h,
       margin: EdgeInsets.only(bottom: 8.h),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-              child: buildMnemonicCard(
-                  mnemonic[leftIndex - 1], leftIndex, leftColor)),
+          Expanded(child: buildMnemonicCard(mnemonic[leftIndex - 1], leftIndex, leftColor)),
           SizedBox(
             width: 10.w,
           ),
-          Expanded(
-              child: buildMnemonicCard(
-                  mnemonic[rightIndex - 1], rightIndex, rightColor)),
+          Expanded(child: buildMnemonicCard(mnemonic[rightIndex - 1], rightIndex, rightColor)),
         ],
       ),
     );

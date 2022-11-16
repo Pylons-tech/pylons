@@ -27,7 +27,7 @@ class CustomPaintButton extends StatelessWidget {
             child: Center(
                 child: Text(
               title,
-              style: TextStyle(color: bgColor == kButtonColor ? kBlue : kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
+              style: TextStyle(color: bgColor == AppColors.kButtonColor ? AppColors.kBlue : AppColors.kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             )),
           ),

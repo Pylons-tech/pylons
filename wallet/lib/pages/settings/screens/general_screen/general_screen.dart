@@ -13,6 +13,8 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
+import '../../../../generated/locale_keys.g.dart';
+
 TextStyle kGeneralLabelText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
 TextStyle kGeneralOptionsText = TextStyle(fontSize: 18.sp, color: Colors.black, fontWeight: FontWeight.w500);
 
@@ -30,15 +32,19 @@ class _GeneralScreenState extends State<GeneralScreen> {
 
   CollectionViewModel get _collectionProvider => GetIt.I.get();
 
+  Repository get repository => GetIt.I.get();
+
   @override
   void initState() {
     super.initState();
+
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.general);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.kBackgroundColor,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 37.w),
         child: Column(
@@ -56,38 +62,44 @@ class _GeneralScreenState extends State<GeneralScreen> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Icon(
+                  child: Icon(
                     Icons.arrow_back_ios,
-                    color: kUserInputTextColor,
+                    color: AppColors.kUserInputTextColor,
                   )),
             ),
             SizedBox(
               height: 33.h,
             ),
             Text(
-              "general".tr(),
+              LocaleKeys.general.tr(),
               style: kGeneralLabelText,
             ),
             SizedBox(
               height: 20.h,
             ),
             NotificationsListItem(
-              title: "notifications".tr(),
+              title: LocaleKeys.notifications.tr(),
             ),
             GeneralForwardItem(
-              title: "payment".tr(),
+              title: LocaleKeys.payment.tr(),
               onPressed: () {
                 Navigator.of(context).pushNamed(RouteUtil.ROUTE_PAYMENT);
               },
             ),
             GeneralForwardItem(
-              title: "security".tr(),
+              title: LocaleKeys.security.tr(),
               onPressed: () {
                 Navigator.of(context).pushNamed(RouteUtil.ROUTE_SECURITY);
               },
             ),
             GeneralForwardItem(
-              title: "language".tr(),
+              title: LocaleKeys.transactions.tr(),
+              onPressed: () {
+                Navigator.of(context).pushNamed(RouteUtil.ROUTE_FAILURE);
+              },
+            ),
+            GeneralForwardItem(
+              title: LocaleKeys.language.tr(),
               onPressed: () {
                 _languageViewModel.setCurrentLanguage(context);
                 _modalBottomSheetMenu(_languageViewModel);
@@ -124,8 +136,8 @@ class _GeneralScreenState extends State<GeneralScreen> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0.w),
                         child: Text(
-                          "select_language".tr(),
-                          style: TextStyle(color: kTextBlackColor, fontSize: 19.0.sp, fontWeight: FontWeight.bold),
+                          LocaleKeys.select_language.tr(),
+                          style: TextStyle(color: AppColors.kTextBlackColor, fontSize: 19.0.sp, fontWeight: FontWeight.bold),
                         ),
                       ),
                       SizedBox(
@@ -143,9 +155,9 @@ class _GeneralScreenState extends State<GeneralScreen> {
                                 style: TextStyle(fontSize: 16.sp),
                               ).tr(),
                               trailing: languagesSupported[index]['selected']! as bool
-                                  ? const Icon(
+                                  ? Icon(
                                       Icons.check,
-                                      color: kDarkGreen,
+                                      color: AppColors.kDarkGreen,
                                     )
                                   : const SizedBox(),
                               onTap: () {
@@ -172,14 +184,14 @@ class _GeneralScreenState extends State<GeneralScreen> {
                             child: ClipPath(
                               clipper: button.MnemonicClipper(cuttingHeight: 10.h),
                               child: Container(
-                                color: kBlue,
+                                color: AppColors.kBlue,
                                 height: 40.h,
                                 width: 250.0.w,
                                 padding: EdgeInsets.symmetric(horizontal: 20.0.w),
                                 child: Center(
                                     child: Text(
-                                  "apply".tr(),
-                                  style: TextStyle(color: kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
+                                  LocaleKeys.apply.tr(),
+                                  style: TextStyle(color: AppColors.kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -225,20 +237,21 @@ class GeneralForwardItem extends StatelessWidget {
                   title,
                   style: kGeneralOptionsText,
                 ),
-                if (title == "language".tr())
+                if (title == LocaleKeys.language.tr())
                   ChangeNotifierProvider.value(
                       value: _languageViewModel,
                       builder: (context, child) {
                         return Consumer<GeneralScreenLocalizationViewModel>(builder: (context, model, child) {
-                          return Text(model.getLanguageName(context), style: TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: kUserInputTextColor, fontWeight: FontWeight.w500));
+                          return Text(model.getLanguageName(context),
+                              style: TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: AppColors.kUserInputTextColor, fontWeight: FontWeight.w500));
                         });
                       })
-                else if (title == "invite_others".tr())
+                else if (title == LocaleKeys.invite_others.tr())
                   const SizedBox()
                 else
-                  const Icon(
+                  Icon(
                     Icons.arrow_forward_ios_sharp,
-                    color: kForwardIconColor,
+                    color: AppColors.kForwardIconColor,
                   )
               ],
             ),
@@ -291,7 +304,7 @@ class _NotificationsListItemState extends State<NotificationsListItem> {
                 style: kGeneralOptionsText,
               ),
               CupertinoSwitch(
-                trackColor: kSwitchInactiveColor,
+                trackColor: AppColors.kSwitchInactiveColor,
                 value: isNotificationEnabled,
                 onChanged: (value) {
                   GetIt.I.get<Repository>().saveNotificationsPreference(notificationStatus: value);
@@ -299,7 +312,7 @@ class _NotificationsListItemState extends State<NotificationsListItem> {
                     isNotificationEnabled = value;
                   });
                 },
-                activeColor: kSwitchActiveColor,
+                activeColor: AppColors.kSwitchActiveColor,
               )
             ],
           ),

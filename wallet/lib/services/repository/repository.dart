@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:alan/alan.dart' as alan;
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -6,9 +8,11 @@ import 'package:flutter/services.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
 import 'package:pylons_wallet/model/export.dart';
+import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/pick_image_model.dart';
@@ -16,6 +20,7 @@ import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_request.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_response.dart';
 import 'package:pylons_wallet/model/transaction.dart';
+import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pbgrpc.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
@@ -31,10 +36,14 @@ import 'package:pylons_wallet/utils/backup/icloud_driver_helper.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
+import 'package:pylons_wallet/utils/enums.dart';
+import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:pylons_wallet/utils/local_auth_helper.dart';
 import 'package:pylons_wallet/utils/query_helper.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
+
+import '../../generated/locale_keys.g.dart';
 
 abstract class Repository {
   /// This method returns the recipe based on cookbook id and recipe Id
@@ -147,11 +156,6 @@ abstract class Repository {
   /// Input: [StripeGeneratePayoutTokenRequest]
   /// return [StripeGeneratePayoutTokenResponse]
   Future<Either<Failure, StripeGeneratePayoutTokenResponse>> GeneratePayoutToken(StripeGeneratePayoutTokenRequest req);
-
-  /// Stripe Backend API to Payout request
-  /// Input: [StripePayoutRequest]
-  /// return [StripePayoutResponse]
-  Future<Either<Failure, StripePayoutResponse>> Payout(StripePayoutRequest req);
 
   /// Stripe Backend API to Get Connected Account Link matched to the wallet address
   /// Input: [StripeAccountLinkRequest] wallet account
@@ -309,9 +313,14 @@ abstract class Repository {
   Either<Failure, bool> getBiometricTransaction();
 
   /// This method will get the nft history
-  /// Input: [recipeID] and [cookBookId] of the nft
+  /// Input: [itemId] and [cookBookId] of the nft
   /// Output: returns [List][NftOwnershipHistory] if success else this will give [Failure]
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String recipeID, required String cookBookId});
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String itemId, required String cookBookId});
+
+  /// This method will get the nft history
+  /// Input: [cookBookId] and [recipeId] of the nft
+  /// Output: returns [List][NftOwnershipHistory] if success else this will give [Failure]
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId});
 
   /// This method will get the transaction history from the chain
   /// Input: [address] of the user
@@ -442,10 +451,48 @@ abstract class Repository {
   /// Output: [String] return the generated dynamic link else will return [Failure]
   Future<Either<Failure, String>> createDynamicLinkForUserInvite({required String address});
 
+  /// This method will create dynamic link for the nft share recipe
+  /// Input : [address] the address against which the invite link to be generated, [nft] the nft whose link to be created
+  /// Output: [String] return the generated dynamic link else will return [Failure]
+  Future<Either<Failure, String>> createDynamicLinkForRecipeNftShare({required String address, required NFT nft});
+
   /// This method will create User account based on account public info
   /// Input: [publicInfo] contains info related to user chain address, [walletCreationModel] contains user entered data
   /// Output: if successful will give [TransactionResponse] else will  return [Failure]
   Future<Either<Failure, TransactionResponse>> createAccount({required AccountPublicInfo publicInfo, required WalletCreationModel walletCreationModel});
+
+  /// This method will save the Transaction Failure data to local DB
+  /// Input: [LocalTransactionModel] the Transaction Input needs to retry the retry the transaction
+  /// Output: [int] returns id of the inserted document
+  Future<Either<Failure, int>> saveLocalTransaction(LocalTransactionModel txManager);
+
+  /// This method will get you all the transactionFailures from the DB
+  /// Output: This method will return the List of [LocalTransactionModel] failures
+  Future<Either<Failure, List<LocalTransactionModel>>> getAllTransactionFailures();
+
+  /// This method will remove the Transaction failure record from the DB
+  /// Input: [id] This method will take id of the transaction record to be removed
+  /// Output: [bool] status of the process is successful or not
+  Future<Either<Failure, bool>> deleteTransactionFailureRecord(int id);
+
+  /// This method will set user app level identifier in the analytics
+  /// Input: [address] the address of the user
+  /// Output: [bool] tells whether the operation is successful or else will return [Failure]
+  Future<Either<Failure, bool>> setUserIdentifierInAnalytics({required String address});
+
+  /// Output: [bool] tells whether the operation is successful or else will return [Failure]
+  Future<Either<Failure, bool>> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice});
+
+  /// Output: [bool] tells whether the operation is successful or else will return [Failure]
+  Future<Either<Failure, bool>> logAddToCart({
+    required String recipeId,
+    required String recipeName,
+    required String author,
+    required double purchasePrice,
+    required String currency,
+  });
+
+  Future<Either<Failure, void>> logUserJourney({required String screenName});
 }
 
 class RepositoryImp implements Repository {
@@ -478,7 +525,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, pylons.Recipe>> getRecipe({required String cookBookId, required String recipeId}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -487,14 +534,14 @@ class RepositoryImp implements Repository {
       return Left(e);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(RecipeNotFoundFailure("recipe_not_found".tr()));
+      return Left(RecipeNotFoundFailure(LocaleKeys.recipe_not_found.tr()));
     }
   }
 
   @override
   Future<Either<Failure, String>> getUsername({required String address}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -503,14 +550,14 @@ class RepositoryImp implements Repository {
       return Left(e);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(RecipeNotFoundFailure("username_not_found".tr()));
+      return Left(RecipeNotFoundFailure(LocaleKeys.username_not_found.tr()));
     }
   }
 
   @override
   Future<Either<Failure, List<pylons.Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -520,14 +567,14 @@ class RepositoryImp implements Repository {
       return Left(e);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CookBookNotFoundFailure("cookbook_not_found".tr()));
+      return Left(CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr()));
     }
   }
 
   @override
   Future<Either<Failure, pylons.Cookbook>> getCookbookBasedOnId({required String cookBookId}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -536,14 +583,14 @@ class RepositoryImp implements Repository {
       return Left(e);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CookBookNotFoundFailure("cookbook_not_found".tr()));
+      return Left(CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr()));
     }
   }
 
   @override
   Future<Either<Failure, String>> getAddressBasedOnUsername(String username) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -551,14 +598,14 @@ class RepositoryImp implements Repository {
     } on Failure catch (e) {
       return Left(e);
     } on Exception catch (_) {
-      return Left(RecipeNotFoundFailure("username_not_found".tr()));
+      return Left(RecipeNotFoundFailure(LocaleKeys.username_not_found.tr()));
     }
   }
 
   @override
   Future<Either<Failure, List<Balance>>> getBalance(String walletAddress) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -568,14 +615,14 @@ class RepositoryImp implements Repository {
       return Left(e);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(StripeFailure("get_balance_failed".tr()));
+      return Left(StripeFailure(LocaleKeys.get_balance_failed.tr()));
     }
   }
 
   @override
   Future<Either<Failure, ExecutionListByRecipeResponse>> getExecutionsByRecipeId({required String cookBookId, required String recipeId}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -591,7 +638,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, int>> getFaucetCoin({required String address, String? denom}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     // final faucetUrl = "${baseEnv.faucetUrl}/coins?address=$address";
@@ -613,7 +660,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, pylons.Item>> getItem({required String cookBookId, required String itemId}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -622,14 +669,14 @@ class RepositoryImp implements Repository {
       return Left(e);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(ItemNotFoundFailure("item_not_found".tr()));
+      return Left(ItemNotFoundFailure(LocaleKeys.item_not_found.tr()));
     }
   }
 
   @override
   Future<Either<Failure, List<pylons.Item>>> getListItemByOwner({required String owner}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -638,14 +685,14 @@ class RepositoryImp implements Repository {
       return Left(e);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(ItemNotFoundFailure("item_not_found".tr()));
+      return Left(ItemNotFoundFailure(LocaleKeys.item_not_found.tr()));
     }
   }
 
   @override
   Future<Either<Failure, pylons.Execution>> getExecutionBasedOnId({required String id}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -655,14 +702,14 @@ class RepositoryImp implements Repository {
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
 
-      return Left(ItemNotFoundFailure("execution_not_found".tr()));
+      return Left(ItemNotFoundFailure(LocaleKeys.execution_not_found.tr()));
     }
   }
 
   @override
   Future<Either<Failure, List<pylons.Trade>>> getTradesBasedOnCreator({required String creator}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -671,14 +718,14 @@ class RepositoryImp implements Repository {
       return Left(e);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(TradeNotFoundFailure("trade_not_found".tr()));
+      return Left(TradeNotFoundFailure(LocaleKeys.trade_not_found.tr()));
     }
   }
 
   @override
   Future<Either<Failure, PrivateAccountCredentials>> getPrivateCredentials({required String mnemonic, required String username}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -697,7 +744,7 @@ class RepositoryImp implements Repository {
       return Right(creds);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(TradeNotFoundFailure("trade_not_found".tr()));
+      return Left(TradeNotFoundFailure(LocaleKeys.trade_not_found.tr()));
     }
   }
 
@@ -707,7 +754,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, StripeCreatePaymentIntentResponse>> CreatePaymentIntent(StripeCreatePaymentIntentRequest req) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -736,18 +783,30 @@ class RepositoryImp implements Repository {
   /// }
   @override
   Future<Either<Failure, StripeGeneratePaymentReceiptResponse>> GeneratePaymentReceipt(StripeGeneratePaymentReceiptRequest req) async {
+    final localTransactionModel = createInitialLocalTransactionModel(
+      transactionTypeEnum: TransactionTypeEnum.GeneratePaymentReceipt,
+      transactionData: jsonEncode(req.toJson()),
+      transactionDescription: 'Generate Stripe Payment Receipt',
+      transactionPrice: '',
+      transactionCurrency: '',
+    );
+
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
       final baseEnv = getBaseEnv();
       final result = await queryHelper.queryPost("${baseEnv.baseStripeUrl}/generate-payment-receipt", req.toJson());
       if (!result.isSuccessful) {
+        await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
         return Left(StripeFailure(result.error ?? GEN_PAYMENTRECEIPT_FAILED));
       }
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(StripeGeneratePaymentReceiptResponse.from(result));
     } on Exception catch (_) {
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       crashlyticsHelper.recordFatalError(error: _.toString());
       return const Left(StripeFailure(GEN_PAYMENTRECEIPT_FAILED));
     }
@@ -759,7 +818,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, StripeGeneratePayoutTokenResponse>> GeneratePayoutToken(StripeGeneratePayoutTokenRequest req) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -781,7 +840,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, StripeGenerateRegistrationTokenResponse>> GenerateRegistrationToken(String address) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -801,7 +860,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, StripeGenerateUpdateTokenResponse>> GenerateUpdateToken(String address) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -821,7 +880,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, StripeAccountLinkResponse>> GetAccountLink(StripeAccountLinkRequest req) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
       final baseEnv = getBaseEnv();
@@ -836,34 +895,13 @@ class RepositoryImp implements Repository {
     }
   }
 
-  /// Stripe Backend API to Payout Request
-  /// Input: [StripePayoutRequest] {address:String, token:String, signature:String, amount:int}
-  /// return [StripePayoutResponse] {transfer_id:String}
-  @override
-  Future<Either<Failure, StripePayoutResponse>> Payout(StripePayoutRequest req) async {
-    if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
-    }
-    try {
-      final baseEnv = getBaseEnv();
-      final result = await queryHelper.queryPost("${baseEnv.baseStripeUrl}/payout", req.toJson());
-      if (!result.isSuccessful) {
-        return Left(StripeFailure(result.error ?? PAYOUT_FAILED));
-      }
-      return Right(StripePayoutResponse.from(result));
-    } on Exception catch (_) {
-      crashlyticsHelper.recordFatalError(error: _.toString());
-      return const Left(StripeFailure(PAYOUT_FAILED));
-    }
-  }
-
   /// Stripe Backend API to Register Stripe connected account
   /// Input: [StripeRegisterAccountRequest]
   /// return [StripeRegisterAccountResponse]
   @override
   Future<Either<Failure, StripeRegisterAccountResponse>> RegisterAccount(StripeRegisterAccountRequest req) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -885,7 +923,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, StripeUpdateAccountResponse>> UpdateAccount(StripeUpdateAccountRequest req) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -905,7 +943,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, StripeLoginLinkResponse>> stripeGetLoginLink(StripeLoginLinkRequest req) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
       final baseEnv = getBaseEnv();
@@ -925,7 +963,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, StripeUpdateAccountResponse>> getAccountLinkBasedOnUpdateToken(StripeUpdateAccountRequest req) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -945,7 +983,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, StripeGetLoginBasedOnAddressResponse>> getLoginLinkBasedOnAddress(StripeGetLoginBasedOnAddressRequest req) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -965,7 +1003,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, IBCTraceModel>> getIBCHashTrace({required String ibcHash}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -982,7 +1020,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, bool>> doesStripeAccountExistsFromServer({required String address}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -1056,7 +1094,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, bool>> saveIsBannerDark({required bool isBannerDark}) async {
     try {
-      return Right(await localDataSource.saveIsBannerDark( isBannerDark: isBannerDark));
+      return Right(await localDataSource.saveIsBannerDark(isBannerDark: isBannerDark));
     } on Exception catch (_) {
       return const Left(CacheFailure(PLATFORM_FAILED));
     }
@@ -1306,7 +1344,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, List<TransactionHistory>>> getTransactionHistory({required String address}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -1326,7 +1364,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, String>> updateRecipe({required MsgUpdateRecipe msgUpdateRecipe}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -1346,7 +1384,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, bool>> uploadMnemonicGoogleDrive({required String mnemonic, required String username}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -1366,7 +1404,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, BackupData>> getGoogleDriveMnemonic() async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -1385,7 +1423,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, bool>> uploadMnemonicICloud({required String mnemonic, required String username}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -1405,7 +1443,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, BackupData>> getICloudMnemonic() async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -1424,7 +1462,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, List<pylons.Cookbook>>> getCookbooksByCreator({required String creator}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -1433,14 +1471,14 @@ class RepositoryImp implements Repository {
       return Left(e);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(CookBookNotFoundFailure("cookbook_not_found".tr()));
+      return Left(CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr()));
     }
   }
 
   @override
   Future<Either<Failure, pylons.Trade>> getTradeByID(Int64 id) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -1449,7 +1487,7 @@ class RepositoryImp implements Repository {
       return Left(e);
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(TradeNotFoundFailure("trade_not_found".tr()));
+      return Left(TradeNotFoundFailure(LocaleKeys.trade_not_found.tr()));
     }
   }
 
@@ -1470,7 +1508,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, void>> countAView({required String recipeId, required String cookBookID, required String walletAddress}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
       return Right(await remoteDataStore.countAView(recipeId: recipeId, cookBookID: cookBookID, walletAddress: walletAddress));
@@ -1489,7 +1527,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, int>> getLikesCount({required String recipeId, required String cookBookID}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
       return Right(await remoteDataStore.getLikesCount(recipeId: recipeId, cookBookID: cookBookID));
@@ -1504,7 +1542,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, int>> getViewsCount({required String recipeId, required String cookBookID}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
       return Right(await remoteDataStore.getViewsCount(recipeId: recipeId, cookBookID: cookBookID));
@@ -1519,7 +1557,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, bool>> ifLikedByMe({required String recipeId, required String cookBookID, required String walletAddress}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
       return Right(await remoteDataStore.ifLikedByMe(recipeId: recipeId, cookBookID: cookBookID, walletAddress: walletAddress));
@@ -1534,7 +1572,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, void>> updateLikeStatus({required String recipeId, required String cookBookID, required String walletAddress}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
       return Right(await remoteDataStore.updateLikeStatus(recipeId: recipeId, cookBookID: cookBookID, walletAddress: walletAddress));
@@ -1548,46 +1586,111 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(AppleInAppPurchaseModel appleInAppPurchaseModel) async {
+    final price = getInAppPrice(appleInAppPurchaseModel.productID);
+
+    final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
+        transactionTypeEnum: TransactionTypeEnum.AppleInAppCoinsRequest,
+        transactionData: jsonEncode(appleInAppPurchaseModel.toJson()),
+        transactionDescription: LocaleKeys.buying_pylon_points.tr(),
+        transactionCurrency: kStripeUSD_ABR,
+        transactionPrice: price);
+
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
       final result = await remoteDataStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
+      await saveTransactionRecord(transactionHash: result, transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(result);
     } on Failure catch (_) {
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      LocaleKeys.something_wrong.tr().show();
       return Left(_);
     } on String catch (_) {
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(InAppPurchaseFailure(message: _));
     } on Exception catch (_) {
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       recordErrorInCrashlytics(_);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
   }
 
+  String getInAppPrice(String productId) {
+    final baseEnv = getBaseEnv();
+    for (final value in baseEnv.skus) {
+      if (value.id == productId) {
+        return value.subtitle;
+      }
+    }
+    return "";
+  }
+
   @override
   Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(GoogleInAppPurchaseModel msgGoogleInAPPPurchase) async {
+    final price = getInAppPrice(msgGoogleInAPPPurchase.productID);
+
+    final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
+      transactionTypeEnum: TransactionTypeEnum.GoogleInAppCoinsRequest,
+      transactionData: jsonEncode(msgGoogleInAPPPurchase.toJsonLocalRetry()),
+      transactionDescription: LocaleKeys.buying_pylon_points.tr(),
+      transactionCurrency: kStripeUSD_ABR,
+      transactionPrice: price,
+    );
+
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
       final result = await remoteDataStore.sendGoogleInAppPurchaseCoinsRequest(msgGoogleInAPPPurchase);
+      await saveTransactionRecord(transactionHash: result, transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
       return Right(result);
-    } on Failure catch (_) {
-      return Left(_);
+    } on Failure catch (e) {
+      if (e.message.ifDuplicateReceipt()) {
+        await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
+        return const Right("");
+      }
+      LocaleKeys.something_wrong.tr().show();
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      return Left(e);
     } on String catch (_) {
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return Left(InAppPurchaseFailure(message: _));
     } on Exception catch (_) {
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       recordErrorInCrashlytics(_);
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
+  }
+
+  LocalTransactionModel createInitialLocalTransactionModel({
+    required TransactionTypeEnum transactionTypeEnum,
+    required String transactionData,
+    required String transactionDescription,
+    required String transactionCurrency,
+    required String transactionPrice,
+  }) {
+    final LocalTransactionModel txManager = LocalTransactionModel(
+      transactionType: transactionTypeEnum.name,
+      transactionData: transactionData,
+      transactionDescription: transactionDescription,
+      dateTime: DateTime.now().millisecondsSinceEpoch,
+      status: TransactionStatus.Undefined.name,
+      transactionCurrency: transactionCurrency,
+      transactionHash: "",
+      transactionPrice: transactionPrice,
+    );
+    return txManager;
   }
 
   @override
   Future<Either<Failure, ProductDetails>> getProductsForSale({required String itemId}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -1605,8 +1708,11 @@ class RepositoryImp implements Repository {
 
   @override
   Future<Either<Failure, bool>> buyProduct(ProductDetails productDetails) async {
+    final Map<String, dynamic> data = {};
+    createJsonFormOfProductDetails(data, productDetails);
+
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -1622,10 +1728,27 @@ class RepositoryImp implements Repository {
     }
   }
 
+  Future<void> saveTransactionRecord({required String transactionHash, required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
+    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(transactionHash: transactionHash, status: transactionStatus, transactionModel: txLocalModel);
+    await saveLocalTransaction(txLocalModelWithStatus);
+  }
+
+  void createJsonFormOfProductDetails(Map<String, dynamic> data, ProductDetails productDetails) {
+    data.addAll({
+      'id': productDetails.id,
+      'title': productDetails.title,
+      'description': productDetails.description,
+      'price': productDetails.price,
+      'rawPrice': productDetails.rawPrice,
+      'currencyCode': productDetails.currencyCode,
+      'currencySymbol': productDetails.currencySymbol
+    });
+  }
+
   @override
   Future<Either<Failure, bool>> isInAppPurchaseAvailable() async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -1644,7 +1767,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, bool>> updateFcmToken({required String address, required String fcmToken}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
@@ -1666,7 +1789,7 @@ class RepositoryImp implements Repository {
     required List<String> idsList,
   }) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
       final token = await remoteDataStore.getAppCheckToken();
@@ -1675,68 +1798,88 @@ class RepositoryImp implements Repository {
     } on Failure catch (_) {
       return Left(_);
     } on String catch (_) {
-      return Left(MarkReadNotificationFailure(message: 'something_wrong'.tr()));
+      return Left(MarkReadNotificationFailure(message: LocaleKeys.something_wrong.tr()));
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
-      return Left(MarkReadNotificationFailure(message: 'something_wrong'.tr()));
+      return Left(MarkReadNotificationFailure(message: LocaleKeys.something_wrong.tr()));
     }
   }
 
   @override
-  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String recipeID, required String cookBookId}) async {
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String itemId, required String cookBookId}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
-      final result = await remoteDataStore.getNftOwnershipHistory(recipeId: recipeID, cookBookId: cookBookId);
+      final result = await remoteDataStore.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
 
       return Right(result);
     } on String catch (_) {
-      return Left(FetchNftOwnershipHistoryFailure(message: "something_wrong".tr()));
+      return Left(FetchNftOwnershipHistoryFailure(message: LocaleKeys.something_wrong.tr()));
     } on Failure catch (_) {
       return Left(_);
     } on Exception catch (_) {
       recordErrorInCrashlytics(_);
-      return Left(FetchNftOwnershipHistoryFailure(message: "something_wrong".tr()));
+      return Left(FetchNftOwnershipHistoryFailure(message: LocaleKeys.something_wrong.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId}) async{
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
+    }
+
+    try {
+      final result = await remoteDataStore.getNftOwnershipHistoryByCookbookIdAndRecipeId(cookBookId: cookBookId,recipeId: recipeId);
+
+      return Right(result);
+    } on String catch (_) {
+      return Left(FetchNftOwnershipHistoryFailure(message: LocaleKeys.something_wrong.tr()));
+    } on Failure catch (_) {
+      return Left(_);
+    } on Exception catch (_) {
+      recordErrorInCrashlytics(_);
+      return Left(FetchNftOwnershipHistoryFailure(message: LocaleKeys.something_wrong.tr()));
     }
   }
 
   @override
   Future<Either<Failure, List<NotificationMessage>>> getAllNotificationsMessages({required String walletAddress, required int limit, required int offset}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
       final result = await remoteDataStore.getAllNotificationMessages(walletAddress: walletAddress, limit: limit, offset: offset);
 
       return Right(result);
     } on String catch (_) {
-      return Left(FetchAllNotificationFailure(message: 'something_wrong'.tr()));
+      return Left(FetchAllNotificationFailure(message: LocaleKeys.something_wrong.tr()));
     } on Failure catch (_) {
       return Left(_);
     } on Exception catch (_) {
       recordErrorInCrashlytics(_);
-      return Left(FetchAllNotificationFailure(message: 'something_wrong'.tr()));
+      return Left(FetchAllNotificationFailure(message: LocaleKeys.something_wrong.tr()));
     }
   }
 
   @override
   Future<Either<Failure, String>> getAppCheckToken() async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
       final result = await remoteDataStore.getAppCheckToken();
 
       return Right(result);
     } on String catch (_) {
-      return Left(AppCheckTokenCreationFailure(message: 'something_wrong'.tr()));
+      return Left(AppCheckTokenCreationFailure(message: LocaleKeys.something_wrong.tr()));
     } on Failure catch (_) {
       return Left(_);
     } on Exception catch (_) {
       recordErrorInCrashlytics(_);
-      return Left(AppCheckTokenCreationFailure(message: 'something_wrong'.tr()));
+      return Left(AppCheckTokenCreationFailure(message: LocaleKeys.something_wrong.tr()));
     }
   }
 
@@ -1752,7 +1895,7 @@ class RepositoryImp implements Repository {
   @override
   Future<Either<Failure, TransactionResponse>> createAccount({required AccountPublicInfo publicInfo, required WalletCreationModel walletCreationModel}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
       final String appCheckToken = await remoteDataStore.getAppCheckToken();
@@ -1766,7 +1909,7 @@ class RepositoryImp implements Repository {
       return Left(_);
     } on Exception catch (_) {
       recordErrorInCrashlytics(_);
-      return Left(AccountCreationFailure('something_wrong'.tr()));
+      return Left(AccountCreationFailure(LocaleKeys.something_wrong.tr()));
     }
   }
 
@@ -1775,19 +1918,116 @@ class RepositoryImp implements Repository {
     try {
       return Right(await remoteDataStore.createDynamicLinkForUserInvite(address: address));
     } on Exception catch (_) {
-      return Left(FirebaseDynamicLinkFailure("dynamic_link_failure".tr()));
+      return Left(FirebaseDynamicLinkFailure(LocaleKeys.dynamic_link_failure.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) async {
+    try {
+      return Right(await remoteDataStore.createDynamicLinkForRecipeNftShare(address: address, nft: nft));
+    } on Exception catch (_) {
+      return Left(FirebaseDynamicLinkFailure(LocaleKeys.dynamic_link_failure.tr()));
     }
   }
 
   @override
   Future<Either<Failure, bool>> saveUserFeedback({required String walletAddress, required String subject, required String feedback}) async {
     if (!await networkInfo.isConnected) {
-      return Left(NoInternetFailure("no_internet".tr()));
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
       return Right(await remoteDataStore.saveUserFeedback(walletAddress: walletAddress, subject: subject, feedback: feedback));
     } on Failure catch (e) {
       return Left(e);
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> setUserIdentifierInAnalytics({required String address}) async {
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
+    }
+    try {
+      return Right(await remoteDataStore.setUpUserIdentifierInAnalytics(address: address));
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice}) async {
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
+    }
+    try {
+      return Right(await remoteDataStore.logPurchaseItem(recipeId: recipeId, recipeName: recipeName, author: author, purchasePrice: purchasePrice));
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> logAddToCart({
+    required String recipeId,
+    required String recipeName,
+    required String author,
+    required double purchasePrice,
+    required String currency,
+  }) async {
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
+    }
+    try {
+      return Right(await remoteDataStore.logAddToCart(recipeId: recipeId, recipeName: recipeName, author: author, purchasePrice: purchasePrice, currency: currency));
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteTransactionFailureRecord(int id) async {
+    try {
+      final result = await localDataSource.deleteTransactionFailureRecord(id);
+      return Right(result);
+    } on Exception catch (_) {
+      return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<LocalTransactionModel>>> getAllTransactionFailures() async {
+    try {
+      final result = await localDataSource.getAllTransactionFailures();
+      return Right(result);
+    } on Exception catch (_) {
+      return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> saveLocalTransaction(LocalTransactionModel txManager) async {
+    try {
+      final result = await localDataSource.saveTransactionFailure(txManager);
+      return Right(result);
+    } on Exception catch (_) {
+      return Left(CacheFailure(LocaleKeys.something_wrong.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> logUserJourney({required String screenName}) async {
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
+    }
+    try {
+      return Right(await remoteDataStore.logUserJourney(screenName: screenName));
     } on Exception catch (e) {
       recordErrorInCrashlytics(e);
       return Left(ServerFailure(e.toString()));

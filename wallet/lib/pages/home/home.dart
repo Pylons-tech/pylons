@@ -11,6 +11,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
+import 'package:pylons_wallet/components/maintenance_mode_widgets.dart';
 import 'package:pylons_wallet/ipc/ipc_engine.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
@@ -20,6 +21,9 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/screen_responsive.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+
+import '../../generated/locale_keys.g.dart';
+import '../../services/third_party_services/remote_config_service/remote_config_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -37,9 +41,12 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
   CollectionViewModel get collectionViewModel => GetIt.I.get();
 
+  RemoteConfigService get remoteConfigService => GetIt.I.get();
+
   @override
   void initState() {
     super.initState();
+    homeProvider.logAnalyticsEvent();
     _tabController = TabController(vsync: this, length: homeProvider.pages.length);
     getInitialLink();
   }
@@ -87,15 +94,17 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             child: RotatedBox(
               quarterTurns: 0,
               child: ColoredBox(
-                color: kMainBG,
+                color: AppColors.kMainBG,
                 child: WillPopScope(
                   onWillPop: () async => false,
                   child: DefaultTabController(
                     length: tabLen,
                     child: Scaffold(
-                      backgroundColor: kMainBG,
+                      backgroundColor: AppColors.kMainBG,
                       appBar: buildAppBar(context, provider),
                       body: provider.pages[provider.selectedIndex],
+                      bottomSheet:
+                        remoteConfigService.getMaintenanceMode() ? const MaintenanceModeMessageWidget() : null,
                     ),
                   ),
                 ),
@@ -155,7 +164,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             ),
             Positioned(
               top: 0.035.sh,
-              left: 0.025.sw,
+              left: 0.86.sw,
               child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushNamed(RouteUtil.ROUTE_SETTINGS);
@@ -168,11 +177,17 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                     width: 20.w,
                   )),
             ),
+            if (remoteConfigService.getMaintenanceMode())
+              Positioned(
+                  top: 0.16.sh,
+                  right: 0,
+                  child: const MaintenanceModeBannerWidget(),
+              ),
             Positioned(
               top: 0.2.sh - 30.r,
               left: 0.5.sw - 30.r,
               child: CircleAvatar(
-                backgroundColor: kMainBG,
+                backgroundColor: AppColors.kMainBG,
                 radius: 34.r,
                 child: UserAvatarWidget(radius: 30.r),
               ),
@@ -185,23 +200,22 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
           ],
         ),
         Text(
-          walletsStore.getWallets().value.last.name,
+          homeProvider.accountPublicInfo.name,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20.sp),
           textAlign: TextAlign.center,
         ),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
-            "wallet_address_arg".tr(args: [walletsStore.getWallets().value.last.publicAddress]),
+            "wallet_address_arg".tr(args: [homeProvider.accountPublicInfo.publicAddress]),
             style: TextStyle(color: Colors.black, fontSize: 9.sp),
             textAlign: TextAlign.center,
           ),
           SizedBox(width: 5.w),
           GestureDetector(
             onTap: () async {
-              final publicAddress = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
 
-              await Clipboard.setData(ClipboardData(text: publicAddress));
-              "copied_to_clipboard".tr().show();
+              await Clipboard.setData(ClipboardData(text: homeProvider.accountPublicInfo.publicAddress));
+              LocaleKeys.copied_to_clipboard.tr().show();
             },
             child: SvgPicture.asset(SVGUtil.WALLET_COPY, height: 10.h, width: 10.w, fit: BoxFit.scaleDown),
           ),
@@ -226,9 +240,9 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     return Container(
       height: isTablet ? 6.w : 8.w,
       width: isTablet ? 6.w : 8.w,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: kDarkRed,
+        color: AppColors.kDarkRed,
       ),
     );
   }
@@ -282,11 +296,17 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                     width: 20.w,
                   )),
             ),
+            if (remoteConfigService.getMaintenanceMode())
+              Positioned(
+                  top: 0.16.sh,
+                  right: 0,
+                  child: const MaintenanceModeBannerWidget(),
+              ),
             Positioned(
               top: 0.2.sh - 30.r,
               left: 0.5.sw - 30.r,
               child: CircleAvatar(
-                backgroundColor: kMainBG,
+                backgroundColor: AppColors.kMainBG,
                 radius: 34.r,
                 child: UserAvatarWidget(radius: 30.r),
               ),
@@ -299,23 +319,23 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
           ],
         ),
         Text(
-          walletsStore.getWallets().value.last.name,
+          homeProvider.accountPublicInfo.name,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20.sp),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 5.h),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
-            "wallet_address_arg".tr(args: [walletsStore.getWallets().value.last.publicAddress]),
+            LocaleKeys.wallet_address_arg.tr(args: [homeProvider.accountPublicInfo.publicAddress]),
             style: TextStyle(color: Colors.black, fontSize: 9.sp),
             textAlign: TextAlign.center,
           ),
           SizedBox(width: 5.w),
           GestureDetector(
             onTap: () async {
-              final publicAddress = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
+              final publicAddress = homeProvider.accountPublicInfo.publicAddress;
               await Clipboard.setData(ClipboardData(text: publicAddress));
-              "copied_to_clipboard".tr().show();
+              LocaleKeys.copied_to_clipboard.tr().show();
             },
             child: SvgPicture.asset(SVGUtil.WALLET_COPY, height: 15.h, width: 15.w, fit: BoxFit.scaleDown),
           ),
@@ -346,7 +366,7 @@ class DiagonalLinePainter extends CustomPainter {
     const pointMode = ui.PointMode.polygon;
     final points = [const Offset(0, 10), const Offset(100, 10), const Offset(110, -2)];
     final paint = Paint()
-      ..color = kDarkRed
+      ..color = AppColors.kDarkRed
       ..strokeWidth = 3;
     canvas.drawPoints(pointMode, points, paint);
   }
@@ -380,7 +400,7 @@ class WalletTab extends StatelessWidget {
                 child: Text(
                   tabName.tr(),
                   style: TextStyle(
-                    color: index == homeProvider.selectedIndex ? kDarkRed : kBlack,
+                    color: index == homeProvider.selectedIndex ? AppColors.kDarkRed : AppColors.kBlack,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

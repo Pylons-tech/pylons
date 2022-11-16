@@ -20,11 +20,11 @@ CURRENTUSERPUBKEY = 'ledgerUserPubKey';
 BLELEDGERCONNECTION = 'ledgerBLEConnection'
 ADDRESSINDEX = 'addressIndex'
 
-const siteName = 'Big-Dipper';
+const siteName = "Big Dipper | Built on Pylons";
 const defaultImage = '/img/buy_icon.png';
 const defaultMetaTags = `
 <meta property="og:title"       content="${siteName}" />
-<meta property="og:description" content="Wallet deep link" />
+<meta property="og:description" content="Blockchain Development Tools For Digital Items & NFTs" />
 <meta property="og:image"       content="${defaultImage}" />`;
 
 async function  getRecipeData(recipe_id){

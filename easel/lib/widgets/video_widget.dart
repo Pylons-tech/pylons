@@ -12,6 +12,7 @@ import 'package:easel_flutter/utils/route_util.dart';
 import 'package:easel_flutter/utils/space_utils.dart';
 import 'package:easel_flutter/widgets/video_builder.dart';
 import 'package:easel_flutter/widgets/video_progress_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -76,7 +77,7 @@ class VideoWidgetState extends State<VideoWidget> {
               child: RotationTransition(
                 turns: const AlwaysStoppedAnimation(0.25),
                 child: SvgPicture.asset(
-                  kFullScreenIcon,
+                  PngUtils.kFullScreenIcon,
                   fit: BoxFit.fill,
                   width: 8.w,
                   height: 8.w,
@@ -117,7 +118,7 @@ class VideoWidgetState extends State<VideoWidget> {
                           fit: BoxFit.cover,
                         )),
                   )
-                : SvgPicture.asset(kUploadThumbnail),
+                : SvgPicture.asset(PngUtils.kUploadThumbnail),
           ),
         ),
       ),
@@ -142,9 +143,7 @@ class VideoWidgetState extends State<VideoWidget> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                shouldShowThumbnailButton()
-                    ? VerticalSpace(80.h)
-                    : const SizedBox(),
+                if (shouldShowThumbnailButton()) VerticalSpace(80.h) else const SizedBox(),
                 if (!shouldShowThumbnailButton()) ...[
                   VideoBuilder(
                       onVideoLoading: (BuildContext context) => Center(
@@ -159,7 +158,7 @@ class VideoWidgetState extends State<VideoWidget> {
                             child: Padding(
                               padding: const EdgeInsets.all(10),
                               child: Text(
-                                videoPlayerError,
+                                "video_player_error".tr(),
                                 style: TextStyle(
                                     fontSize: 18.sp,
                                     color: EaselAppTheme.kWhite),
@@ -190,7 +189,7 @@ class VideoWidgetState extends State<VideoWidget> {
                                 child: Padding(
                               padding: const EdgeInsets.all(10),
                               child: Text(
-                                videoPlayerError,
+                                "video_player_error".tr(),
                                 style: TextStyle(
                                     fontSize: 18.sp,
                                     color: EaselAppTheme.kBlack),
@@ -225,9 +224,7 @@ class VideoWidgetState extends State<VideoWidget> {
                 SizedBox(
                   height: 10.w,
                 ),
-                shouldShowThumbnailButton()
-                    ? _buildThumbnailButton()
-                    : const SizedBox(),
+                if (shouldShowThumbnailButton()) _buildThumbnailButton() else const SizedBox(),
               ],
             ),
           ),

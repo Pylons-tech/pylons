@@ -9,6 +9,8 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 
+import '../generated/locale_keys.g.dart';
+
 extension ScaffoldHelper on BuildContext? {
   void show({required String message}) {
     if (this == null) {
@@ -32,11 +34,13 @@ extension ConvertToUSD on String {
   String convertToUSD(TransactionHistory item) {
     switch (this) {
       case kPylonCoinName:
-        return (double.parse(convertFromU(item)) * pyLonToUsdConstant)
-            .toInt()
-            .toString();
+        return (double.parse(convertFromU(item)) * pyLonToUsdConstant).toInt().toString();
     }
     return '';
+  }
+
+  String convertPylonsToUSD(String amount) {
+    return (double.parse(convertFromUCoin(amount)) * pyLonToUsdConstant).toString().truncateAfterDecimal(2);
   }
 }
 
@@ -44,28 +48,34 @@ extension ConvertFromU on String {
   String convertFromU(TransactionHistory item) {
     switch (this) {
       case kPylonCoinName:
-        return (double.parse(item.amount
-                    .substring(0, item.amount.length - (length + 1))) /
-                kBigIntBase)
-            .toString()
-            .truncateAfterDecimal(2);
+        return (double.parse(item.amount.substring(0, item.amount.length - (length + 1))) / kBigIntBase).toString().truncateAfterDecimal(2);
     }
     return '';
+  }
+
+  String convertFromUCoin(String amount) {
+    return (double.parse(amount) / kBigIntBase).toString();
+  }
+}
+
+extension TransactionTypeEnumExt on String {
+  TransactionTypeEnum toTransactionTypeEnum() {
+    return TransactionTypeEnum.values.firstWhere((e) => e.toString() == "TransactionTypeEnum.${this}", orElse: () => TransactionTypeEnum.Unknown);
+  }
+}
+
+extension TransactionStatusEnumExt on String {
+  TransactionStatus toTransactionStatusEnum() {
+    return TransactionStatus.values.firstWhere((e) => e.toString() == "TransactionStatus.${this}", orElse: () => TransactionStatus.Undefined);
   }
 }
 
 extension SplitNumAlpha on String {
-  List<String> splitNumberAndAlpha() => <String>[
-        ...RegExp(r'\d+|\D+')
-            .allMatches(this)
-            .map((match) => match[0]!)
-            .map((string) => string)
-      ];
+  List<String> splitNumberAndAlpha() => <String>[...RegExp(r'\d+|\D+').allMatches(this).map((match) => match[0]!).map((string) => string)];
 }
 
 extension GetDynamicLink on String {
-  String createDynamicLink(
-      {required String cookbookId, required String address}) {
+  String createDynamicLink({required String cookbookId, required String address}) {
     return "$kUnilinkUrl/?recipe_id=$this&cookbook_id=$cookbookId&address=$address";
   }
 
@@ -73,8 +83,7 @@ extension GetDynamicLink on String {
     return "$kUnilinkUrl/?trade_id=$this&address=$address";
   }
 
-  String createPurchaseNFT(
-      {required String cookBookId, required String address}) {
+  String createPurchaseNFT({required String cookBookId, required String address}) {
     return "$kUnilinkUrl/?cookbook_id=$cookBookId&item_id=$this&address=$address";
   }
 }
@@ -86,7 +95,7 @@ extension StringExtension on String {
     }
 
     if (length - indexOf(".") > maxLength) {
-      return substring(0, indexOf(".") + maxLength);
+      return substring(0, indexOf(".") + maxLength + 1);
     }
 
     return this;
@@ -117,7 +126,7 @@ extension NftSize on NFT {
 extension NoInternetConnectionHelper on Failure {
   void checkAndTakeAction({required ValueChanged<String>? onError}) {
     if (this is NoInternetFailure) {
-      "no_internet".show();
+      LocaleKeys.no_internet.tr().show();
     }
   }
 }
@@ -174,13 +183,18 @@ extension TrimStringShort on String {
     }
     return this;
   }
+
+  String trimStringMedium(int minThreshold) {
+    if (length > minThreshold) {
+      return "${substring(0, 12)}...${substring(length - 4, length)}";
+    }
+    return this;
+  }
 }
 
-extension TransactionTypePar on dynamic {
-  TransactionType toTransactionTypeEnum() {
-    return TransactionType.values.firstWhere(
-        (e) => e.toString() == 'AssetType.$this',
-        orElse: () => TransactionType.RECEIVE);
+extension WalletHistroyTypePar on dynamic {
+  WalletHistoryTransactionType toTransactionTypeEnum() {
+    return WalletHistoryTransactionType.values.firstWhere((e) => e.toString() == 'AssetType.$this', orElse: () => WalletHistoryTransactionType.RECEIVE);
   }
 }
 
@@ -191,9 +205,7 @@ extension AssetTypePar on String {
       value = kThreeDText;
     }
 
-    return AssetType.values.firstWhere(
-        (e) => e.toString() == 'AssetType.$value',
-        orElse: () => AssetType.Image);
+    return AssetType.values.firstWhere((e) => e.toString() == 'AssetType.$value', orElse: () => AssetType.Image);
   }
 }
 
@@ -212,5 +224,11 @@ extension ChangeDomain on String {
       return this;
     }
     return replaceAll(ipfsDomain, proxyIpfsDomain);
+  }
+}
+
+extension VerifyErrorCode on String {
+  bool ifDuplicateReceipt() {
+    return contains(kDuplicateIapReceiptCode);
   }
 }

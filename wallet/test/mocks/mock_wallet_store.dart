@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cosmos_utils/credentials_storage_failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
-import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart';
@@ -20,46 +18,12 @@ import 'mock_wallet_public_info.dart';
 
 class MockWalletStore implements WalletsStore {
   @override
-  Observable<bool> getAreWalletsLoading() {
-    // TODO: implement getAreWalletsLoading
-    throw UnimplementedError();
-  }
-
-  @override
-  Observable<CredentialsStorageFailure?> getLoadWalletsFailure() {
-    // TODO: implement getLoadWalletsFailure
-    throw UnimplementedError();
-  }
-
-  @override
-  Observable<List<AccountPublicInfo>> getWallets() {
-    return Observable([
-      const AccountPublicInfo(
-          name: 'test',
-          publicAddress: 'pylo1e5s74e92q3gunldrpqdnrlc8jg9l3xw6s7hea9',
-          chainId: 'pylons-devtestnet',
-          accountId: '0')
-    ]);
-  }
-
-  @override
   Future<Either<Failure, AccountPublicInfo>> importAlanWallet(
       String mnemonic, String userName) {
     // TODO: implement importAlanWallet
     throw UnimplementedError();
   }
 
-  @override
-  Future<void> loadWallets() {
-    // TODO: implement loadWallets
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> sendCosmosMoney(Balance balance, String toAddress) {
-    // TODO: implement sendCosmosMoney
-    throw UnimplementedError();
-  }
 
   @override
   Future<SdkIpcResponse> createRecipe(Map json) async {
@@ -74,7 +38,7 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> executeRecipe(Map json) {
+  Future<SdkIpcResponse<Execution>> executeRecipe(Map json) {
     // TODO: implement executeRecipe
     throw UnimplementedError();
   }
@@ -134,9 +98,9 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> createCookbook(Map json) async {
-    return SdkIpcResponse.success(
-        data: MOCK_TRANSACTION.hash, sender: '', transaction: '');
+  Future<SdkIpcResponse<String>> createCookbook(Map json) async {
+    return SdkIpcResponse<String>.success(
+        data: MOCK_COOKBOOK, sender: '', transaction: MOCK_TRANSACTION.hash);
   }
 
   @override

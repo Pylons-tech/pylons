@@ -8,7 +8,7 @@ import (
 	fmt "fmt"
 	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
 	types "github.com/cosmos/cosmos-sdk/types"
-	_ "github.com/gogo/protobuf/gogoproto"
+	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	grpc "google.golang.org/grpc"
@@ -2113,6 +2113,230 @@ func (m *MsgUpdateCookbookResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateCookbookResponse proto.InternalMessageInfo
 
+type MsgRegisterKYCAddress struct {
+	AccountAddr string `protobuf:"bytes,1,opt,name=account_addr,json=accountAddr,proto3" json:"account_addr,omitempty"`
+	Username    string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Level       uint64 `protobuf:"varint,3,opt,name=level,proto3" json:"level,omitempty"`
+	Provider    string `protobuf:"bytes,4,opt,name=provider,proto3" json:"provider,omitempty"`
+	ProviderId  string `protobuf:"bytes,5,opt,name=provider_id,json=providerId,proto3" json:"provider_id,omitempty"`
+}
+
+func (m *MsgRegisterKYCAddress) Reset()         { *m = MsgRegisterKYCAddress{} }
+func (m *MsgRegisterKYCAddress) String() string { return proto.CompactTextString(m) }
+func (*MsgRegisterKYCAddress) ProtoMessage()    {}
+func (*MsgRegisterKYCAddress) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2c35d96b13ec9475, []int{36}
+}
+func (m *MsgRegisterKYCAddress) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgRegisterKYCAddress) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgRegisterKYCAddress.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgRegisterKYCAddress) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRegisterKYCAddress.Merge(m, src)
+}
+func (m *MsgRegisterKYCAddress) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgRegisterKYCAddress) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRegisterKYCAddress.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgRegisterKYCAddress proto.InternalMessageInfo
+
+func (m *MsgRegisterKYCAddress) GetAccountAddr() string {
+	if m != nil {
+		return m.AccountAddr
+	}
+	return ""
+}
+
+func (m *MsgRegisterKYCAddress) GetUsername() string {
+	if m != nil {
+		return m.Username
+	}
+	return ""
+}
+
+func (m *MsgRegisterKYCAddress) GetLevel() uint64 {
+	if m != nil {
+		return m.Level
+	}
+	return 0
+}
+
+func (m *MsgRegisterKYCAddress) GetProvider() string {
+	if m != nil {
+		return m.Provider
+	}
+	return ""
+}
+
+func (m *MsgRegisterKYCAddress) GetProviderId() string {
+	if m != nil {
+		return m.ProviderId
+	}
+	return ""
+}
+
+type MsgRegisterKYCAddressResponse struct {
+}
+
+func (m *MsgRegisterKYCAddressResponse) Reset()         { *m = MsgRegisterKYCAddressResponse{} }
+func (m *MsgRegisterKYCAddressResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgRegisterKYCAddressResponse) ProtoMessage()    {}
+func (*MsgRegisterKYCAddressResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2c35d96b13ec9475, []int{37}
+}
+func (m *MsgRegisterKYCAddressResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgRegisterKYCAddressResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgRegisterKYCAddressResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgRegisterKYCAddressResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRegisterKYCAddressResponse.Merge(m, src)
+}
+func (m *MsgRegisterKYCAddressResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgRegisterKYCAddressResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRegisterKYCAddressResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgRegisterKYCAddressResponse proto.InternalMessageInfo
+
+type MsgRemoveKYCAddress struct {
+	AccountAddr string `protobuf:"bytes,1,opt,name=account_addr,json=accountAddr,proto3" json:"account_addr,omitempty"`
+	Username    string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Level       uint64 `protobuf:"varint,3,opt,name=level,proto3" json:"level,omitempty"`
+	Provider    string `protobuf:"bytes,4,opt,name=provider,proto3" json:"provider,omitempty"`
+	ProviderId  string `protobuf:"bytes,5,opt,name=provider_id,json=providerId,proto3" json:"provider_id,omitempty"`
+}
+
+func (m *MsgRemoveKYCAddress) Reset()         { *m = MsgRemoveKYCAddress{} }
+func (m *MsgRemoveKYCAddress) String() string { return proto.CompactTextString(m) }
+func (*MsgRemoveKYCAddress) ProtoMessage()    {}
+func (*MsgRemoveKYCAddress) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2c35d96b13ec9475, []int{38}
+}
+func (m *MsgRemoveKYCAddress) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgRemoveKYCAddress) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgRemoveKYCAddress.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgRemoveKYCAddress) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRemoveKYCAddress.Merge(m, src)
+}
+func (m *MsgRemoveKYCAddress) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgRemoveKYCAddress) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRemoveKYCAddress.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgRemoveKYCAddress proto.InternalMessageInfo
+
+func (m *MsgRemoveKYCAddress) GetAccountAddr() string {
+	if m != nil {
+		return m.AccountAddr
+	}
+	return ""
+}
+
+func (m *MsgRemoveKYCAddress) GetUsername() string {
+	if m != nil {
+		return m.Username
+	}
+	return ""
+}
+
+func (m *MsgRemoveKYCAddress) GetLevel() uint64 {
+	if m != nil {
+		return m.Level
+	}
+	return 0
+}
+
+func (m *MsgRemoveKYCAddress) GetProvider() string {
+	if m != nil {
+		return m.Provider
+	}
+	return ""
+}
+
+func (m *MsgRemoveKYCAddress) GetProviderId() string {
+	if m != nil {
+		return m.ProviderId
+	}
+	return ""
+}
+
+type MsgRemoveKYCAddressResponse struct {
+}
+
+func (m *MsgRemoveKYCAddressResponse) Reset()         { *m = MsgRemoveKYCAddressResponse{} }
+func (m *MsgRemoveKYCAddressResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgRemoveKYCAddressResponse) ProtoMessage()    {}
+func (*MsgRemoveKYCAddressResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2c35d96b13ec9475, []int{39}
+}
+func (m *MsgRemoveKYCAddressResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgRemoveKYCAddressResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgRemoveKYCAddressResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgRemoveKYCAddressResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRemoveKYCAddressResponse.Merge(m, src)
+}
+func (m *MsgRemoveKYCAddressResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgRemoveKYCAddressResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRemoveKYCAddressResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgRemoveKYCAddressResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*MsgAppleIap)(nil), "pylons.pylons.MsgAppleIap")
 	proto.RegisterType((*MsgAppleIapResponse)(nil), "pylons.pylons.MsgAppleIapResponse")
@@ -2150,6 +2374,10 @@ func init() {
 	proto.RegisterType((*MsgCreateCookbookResponse)(nil), "pylons.pylons.MsgCreateCookbookResponse")
 	proto.RegisterType((*MsgUpdateCookbook)(nil), "pylons.pylons.MsgUpdateCookbook")
 	proto.RegisterType((*MsgUpdateCookbookResponse)(nil), "pylons.pylons.MsgUpdateCookbookResponse")
+	proto.RegisterType((*MsgRegisterKYCAddress)(nil), "pylons.pylons.MsgRegisterKYCAddress")
+	proto.RegisterType((*MsgRegisterKYCAddressResponse)(nil), "pylons.pylons.MsgRegisterKYCAddressResponse")
+	proto.RegisterType((*MsgRemoveKYCAddress)(nil), "pylons.pylons.MsgRemoveKYCAddress")
+	proto.RegisterType((*MsgRemoveKYCAddressResponse)(nil), "pylons.pylons.MsgRemoveKYCAddressResponse")
 }
 
 func init() { proto.RegisterFile("pylons/pylons/tx.proto", fileDescriptor_2c35d96b13ec9475) }
@@ -2293,6 +2521,8 @@ type MsgClient interface {
 	UpdateRecipe(ctx context.Context, in *MsgUpdateRecipe, opts ...grpc.CallOption) (*MsgUpdateRecipeResponse, error)
 	CreateCookbook(ctx context.Context, in *MsgCreateCookbook, opts ...grpc.CallOption) (*MsgCreateCookbookResponse, error)
 	UpdateCookbook(ctx context.Context, in *MsgUpdateCookbook, opts ...grpc.CallOption) (*MsgUpdateCookbookResponse, error)
+	RegisterKYCAddress(ctx context.Context, in *MsgRegisterKYCAddress, opts ...grpc.CallOption) (*MsgRegisterKYCAddressResponse, error)
+	RemoveKYCAddress(ctx context.Context, in *MsgRemoveKYCAddress, opts ...grpc.CallOption) (*MsgRemoveKYCAddressResponse, error)
 }
 
 type msgClient struct {
@@ -2465,6 +2695,24 @@ func (c *msgClient) UpdateCookbook(ctx context.Context, in *MsgUpdateCookbook, o
 	return out, nil
 }
 
+func (c *msgClient) RegisterKYCAddress(ctx context.Context, in *MsgRegisterKYCAddress, opts ...grpc.CallOption) (*MsgRegisterKYCAddressResponse, error) {
+	out := new(MsgRegisterKYCAddressResponse)
+	err := c.cc.Invoke(ctx, "/pylons.pylons.Msg/RegisterKYCAddress", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) RemoveKYCAddress(ctx context.Context, in *MsgRemoveKYCAddress, opts ...grpc.CallOption) (*MsgRemoveKYCAddressResponse, error) {
+	out := new(MsgRemoveKYCAddressResponse)
+	err := c.cc.Invoke(ctx, "/pylons.pylons.Msg/RemoveKYCAddress", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	AppleIap(context.Context, *MsgAppleIap) (*MsgAppleIapResponse, error)
@@ -2486,6 +2734,8 @@ type MsgServer interface {
 	UpdateRecipe(context.Context, *MsgUpdateRecipe) (*MsgUpdateRecipeResponse, error)
 	CreateCookbook(context.Context, *MsgCreateCookbook) (*MsgCreateCookbookResponse, error)
 	UpdateCookbook(context.Context, *MsgUpdateCookbook) (*MsgUpdateCookbookResponse, error)
+	RegisterKYCAddress(context.Context, *MsgRegisterKYCAddress) (*MsgRegisterKYCAddressResponse, error)
+	RemoveKYCAddress(context.Context, *MsgRemoveKYCAddress) (*MsgRemoveKYCAddressResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -2545,6 +2795,12 @@ func (*UnimplementedMsgServer) CreateCookbook(ctx context.Context, req *MsgCreat
 }
 func (*UnimplementedMsgServer) UpdateCookbook(ctx context.Context, req *MsgUpdateCookbook) (*MsgUpdateCookbookResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateCookbook not implemented")
+}
+func (*UnimplementedMsgServer) RegisterKYCAddress(ctx context.Context, req *MsgRegisterKYCAddress) (*MsgRegisterKYCAddressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterKYCAddress not implemented")
+}
+func (*UnimplementedMsgServer) RemoveKYCAddress(ctx context.Context, req *MsgRemoveKYCAddress) (*MsgRemoveKYCAddressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveKYCAddress not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -2875,6 +3131,42 @@ func _Msg_UpdateCookbook_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_RegisterKYCAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRegisterKYCAddress)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RegisterKYCAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pylons.pylons.Msg/RegisterKYCAddress",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RegisterKYCAddress(ctx, req.(*MsgRegisterKYCAddress))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_RemoveKYCAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRemoveKYCAddress)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RemoveKYCAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pylons.pylons.Msg/RemoveKYCAddress",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RemoveKYCAddress(ctx, req.(*MsgRemoveKYCAddress))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "pylons.pylons.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -2950,6 +3242,14 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateCookbook",
 			Handler:    _Msg_UpdateCookbook_Handler,
+		},
+		{
+			MethodName: "RegisterKYCAddress",
+			Handler:    _Msg_RegisterKYCAddress_Handler,
+		},
+		{
+			MethodName: "RemoveKYCAddress",
+			Handler:    _Msg_RemoveKYCAddress_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -4588,6 +4888,164 @@ func (m *MsgUpdateCookbookResponse) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgRegisterKYCAddress) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgRegisterKYCAddress) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgRegisterKYCAddress) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ProviderId) > 0 {
+		i -= len(m.ProviderId)
+		copy(dAtA[i:], m.ProviderId)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ProviderId)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Provider) > 0 {
+		i -= len(m.Provider)
+		copy(dAtA[i:], m.Provider)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Provider)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Level != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Level))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Username) > 0 {
+		i -= len(m.Username)
+		copy(dAtA[i:], m.Username)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Username)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.AccountAddr) > 0 {
+		i -= len(m.AccountAddr)
+		copy(dAtA[i:], m.AccountAddr)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.AccountAddr)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgRegisterKYCAddressResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgRegisterKYCAddressResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgRegisterKYCAddressResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgRemoveKYCAddress) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgRemoveKYCAddress) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgRemoveKYCAddress) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ProviderId) > 0 {
+		i -= len(m.ProviderId)
+		copy(dAtA[i:], m.ProviderId)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ProviderId)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Provider) > 0 {
+		i -= len(m.Provider)
+		copy(dAtA[i:], m.Provider)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Provider)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Level != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Level))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Username) > 0 {
+		i -= len(m.Username)
+		copy(dAtA[i:], m.Username)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Username)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.AccountAddr) > 0 {
+		i -= len(m.AccountAddr)
+		copy(dAtA[i:], m.AccountAddr)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.AccountAddr)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgRemoveKYCAddressResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgRemoveKYCAddressResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgRemoveKYCAddressResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTx(v)
 	base := offset
@@ -5316,6 +5774,80 @@ func (m *MsgUpdateCookbook) Size() (n int) {
 }
 
 func (m *MsgUpdateCookbookResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgRegisterKYCAddress) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.AccountAddr)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Username)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.Level != 0 {
+		n += 1 + sovTx(uint64(m.Level))
+	}
+	l = len(m.Provider)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.ProviderId)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgRegisterKYCAddressResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgRemoveKYCAddress) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.AccountAddr)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Username)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.Level != 0 {
+		n += 1 + sovTx(uint64(m.Level))
+	}
+	l = len(m.Provider)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.ProviderId)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgRemoveKYCAddressResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -10141,6 +10673,500 @@ func (m *MsgUpdateCookbookResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgUpdateCookbookResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgRegisterKYCAddress) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgRegisterKYCAddress: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgRegisterKYCAddress: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AccountAddr", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AccountAddr = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Username", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Username = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Level", wireType)
+			}
+			m.Level = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Level |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Provider", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Provider = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProviderId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ProviderId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgRegisterKYCAddressResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgRegisterKYCAddressResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgRegisterKYCAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgRemoveKYCAddress) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgRemoveKYCAddress: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgRemoveKYCAddress: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AccountAddr", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AccountAddr = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Username", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Username = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Level", wireType)
+			}
+			m.Level = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Level |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Provider", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Provider = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProviderId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ProviderId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgRemoveKYCAddressResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgRemoveKYCAddressResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgRemoveKYCAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

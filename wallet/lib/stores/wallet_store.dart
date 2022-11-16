@@ -1,9 +1,8 @@
-import 'package:cosmos_utils/credentials_storage_failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
-import 'package:pylons_wallet/model/balance.dart';
+
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
@@ -12,8 +11,7 @@ import 'package:transaction_signing_gateway/model/transaction_hash.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
 abstract class WalletsStore {
-  /// This method loads the user stored wallets.
-  Future<void> loadWallets();
+
 
   /// This method creates uer wallet and broadcast it in the blockchain
   /// Input: [mnemonic] mnemonic for creating user account, [userName] is the user entered nick name
@@ -23,19 +21,10 @@ abstract class WalletsStore {
     String userName,
   );
 
-  /// This method sends the money from one address to another
-  /// Input : [WalletPublicInfo] contains the info regarding the current network
-  /// [balance] the amount that we want to send
-  /// [toAddress] the address to which we want to send
-  Future<void> sendCosmosMoney(
-    Balance balance,
-    String toAddress,
-  );
-
   /// This method creates the cookbook
   /// Input : [Map] containing the info related to the creation of cookbook
   /// Output : [String] response
-  Future<SdkIpcResponse> createCookbook(Map json);
+  Future<SdkIpcResponse<String>> createCookbook(Map json);
 
   /// This method is for create recipe
   /// MsgCreateRecipe proto
@@ -48,8 +37,8 @@ abstract class WalletsStore {
   /// MsgExecuteRecipe proto
   /// request fields: {String creator, String cookbookID, String recipeID, List<String> itemIDs}
   /// Input : [Map] containing the info related to the execution of recipe
-  /// Output : [TransactionHash] hash of the transaction
-  Future<SdkIpcResponse> executeRecipe(Map json);
+  /// Output : [Execution] of the recipe
+  Future<SdkIpcResponse<Execution>> executeRecipe(Map json);
 
   /// This method is for create Trade
   /// MsgCreateTrade proto
@@ -113,8 +102,7 @@ abstract class WalletsStore {
   /// Output : [String] return wallet address from account name
   Future<String> getAccountAddressByName(String username);
 
-  Future<List<Execution>> getRecipeExecutions(
-      String cookbookID, String recipeID);
+  Future<List<Execution>> getRecipeExecutions(String cookbookID, String recipeID);
 
   /// This method is used for giving faucet token to the user based on the current wallet address
   /// Input : [denom] coin denomination
@@ -131,18 +119,13 @@ abstract class WalletsStore {
   /// Output : [SdkIpcResponse] response
   Future<SdkIpcResponse> updateRecipe(Map<dynamic, dynamic> jsonMap);
 
-  Observable<List<AccountPublicInfo>> getWallets();
 
-  Observable<bool> getAreWalletsLoading();
-
-  Observable<CredentialsStorageFailure?> getLoadWalletsFailure();
 
   /// This method imports the pylons wallet based on mnemonic
   /// Input : [mnemonic] the mnemonic associated with the account
   /// Output: [WalletPublicInfo] returns the wallet public info about the account
   /// else returns failure
-  Future<Either<Failure, AccountPublicInfo>> importPylonsAccount(
-      {required String mnemonic});
+  Future<Either<Failure, AccountPublicInfo>> importPylonsAccount({required String mnemonic});
 
   /// This method updates the cookbook in the block chain
   /// Input : [Map] containing the info related to the updation of cookbook
@@ -163,8 +146,7 @@ abstract class WalletsStore {
   /// This method returns the recipes based on cookbook
   /// Input : [cookbookId] id of the cookbook
   /// Output : [SdkIpcResponse] returns the recipes
-  Future<SdkIpcResponse> getAllRecipesByCookbookId(
-      {required String cookbookId});
+  Future<SdkIpcResponse> getAllRecipesByCookbookId({required String cookbookId});
 
   /// This method returns the recipes based on cookbook
   /// Input : [cookbookId] id of the cookbook
@@ -178,20 +160,17 @@ abstract class WalletsStore {
   /// This method returns the recipes based on cookbook
   /// Input: [cookbookId] the id of the cookbook that contains recipe, [recipeId] the id of the recipe whose list of execution you want
   /// Output : [SdkIpcResponse] returns the cookbook
-  Future<SdkIpcResponse> getExecutionByRecipeId(
-      {required String cookbookId, required String recipeId});
+  Future<SdkIpcResponse> getExecutionByRecipeId({required String cookbookId, required String recipeId});
 
   /// This method returns the recipes based on cookbook
   /// Input : [cookbookId] the id of the cookbook which contains the recipe, [recipeId] the id of the recipe
   /// Output : [SdkIpcResponse] returns the recipe with the specified id
-  Future<SdkIpcResponse> getRecipeByIdForSDK(
-      {required String cookbookId, required String recipeId});
+  Future<SdkIpcResponse> getRecipeByIdForSDK({required String cookbookId, required String recipeId});
 
   /// This method returns the Item based on id
   /// Input : [cookBookId] the id of the cookbook which contains the cookbook, [itemId] the id of the item
   /// Output: [SdkIpcResponse] returns the item
-  Future<SdkIpcResponse> getItemByIdForSDK(
-      {required String cookBookId, required String itemId});
+  Future<SdkIpcResponse> getItemByIdForSDK({required String cookBookId, required String itemId});
 
   /// This method returns the list of item based on it
   /// Input : [owner] the id of the owner
@@ -224,13 +203,12 @@ abstract class WalletsStore {
   /// Input: [GoogleInAppPurchaseModel] contains the input data for the api.
   /// Output: if successful will return the [String] hash of the transaction
   /// else will give failure
-  Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(
-      GoogleInAppPurchaseModel googleInAppPurchaseModel);
+  Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(GoogleInAppPurchaseModel googleInAppPurchaseModel);
 
   /// This method will send apple in app purchase request to the chain
   /// Input: [AppleInAppPurchaseModel] contains the input data for the api.
   /// Output: if successful will return the [String] hash of the transaction
   /// else will give failure
-  Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(
-      AppleInAppPurchaseModel appleInAppPurchaseModel);
+  Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(AppleInAppPurchaseModel appleInAppPurchaseModel);
+
 }

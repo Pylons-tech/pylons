@@ -11,7 +11,9 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
-TextStyle kDeleteHeaderTextStyle = TextStyle(fontSize: 14.sp, fontFamily: 'UniversalSans', color: kWhite, fontWeight: FontWeight.w500);
+import '../../../generated/locale_keys.g.dart';
+
+TextStyle kDeleteHeaderTextStyle = TextStyle(fontSize: 14.sp, fontFamily: 'UniversalSans', color: AppColors.kWhite, fontWeight: FontWeight.w500);
 
 class DeleteDialog {
   final BuildContext context;
@@ -31,7 +33,7 @@ class DeleteDialog {
             child: ClipPath(
               clipper: DialogClipper(),
               child: Container(
-                color: kDarkRed,
+                color: AppColors.kDarkRed,
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -54,10 +56,10 @@ class DeleteDialog {
                     ),
 
                     Text(
-                      "are_you_sure_you_want_to_delete_your_wallet",
+                      LocaleKeys.are_you_sure_you_want_to_delete_your_wallet.tr(),
                       textAlign: TextAlign.center,
                       style: kDeleteHeaderTextStyle,
-                    ).tr(),
+                    ),
 
                     SizedBox(
                       height: 30.h,
@@ -71,7 +73,7 @@ class DeleteDialog {
                           Expanded(
                               child: buildButton(
                                   title: "yes",
-                                  bgColor: kBlue,
+                                  bgColor: AppColors.kBlue,
                                   onPressed: () async {
                                     final navigator = Navigator.of(context);
 
@@ -95,7 +97,9 @@ class DeleteDialog {
                           SizedBox(
                             width: 15.w,
                           ),
-                          Expanded(child: buildButton(title: "no", bgColor: kWhite.withOpacity(0.3), onPressed: Navigator.of(context).pop)),
+                          Expanded(
+                            child: buildButton(title: "no", bgColor: AppColors.kWhite.withOpacity(0.3), onPressed: Navigator.of(context).pop),
+                          ),
                         ],
                       ),
                     ),
@@ -128,7 +132,7 @@ class DeleteDialog {
             child: Center(
                 child: Text(
               title.tr(),
-              style: TextStyle(color: bgColor == kButtonColor ? kBlue : kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
+              style: TextStyle(color: bgColor == AppColors.kButtonColor ? AppColors.kBlue : AppColors.kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             )),
           ),

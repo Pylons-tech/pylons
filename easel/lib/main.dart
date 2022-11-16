@@ -8,13 +8,13 @@ import 'package:easel_flutter/screens/splash_screen.dart';
 import 'package:easel_flutter/screens/tutorial_screen.dart';
 import 'package:easel_flutter/screens/welcome_easel.dart';
 import 'package:easel_flutter/utils/constants.dart';
-import 'package:easel_flutter/utils/dependency_injection/dependency_injection_container.dart'
-    as di;
+import 'package:easel_flutter/utils/dependency_injection/dependency_injection_container.dart' as di;
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/route_util.dart';
 import 'package:easel_flutter/widgets/pdf_viewer_full_screen.dart';
 import 'package:easel_flutter/widgets/video_widget_full_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -32,23 +32,25 @@ Future<void> main() async {
   await Firebase.initializeApp();
   di.init();
   final firebaseCrashlytics = GetIt.I.get<FirebaseCrashlytics>();
-
+  GetIt.I.get<FirebaseAnalytics>();
   runZonedGuarded(() async {
     await GetIt.I.isReady<AppDatabase>();
     await EasyLocalization.ensureInitialized();
 
     PylonsWallet.setup(mode: PylonsMode.prod, host: 'easel');
 
-    isTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window)
-            .size
-            .shortestSide >=
-        tabletMinWidth;
+    isTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide >= tabletMinWidth;
 
     FlutterError.onError = firebaseCrashlytics.recordFlutterError;
 
     runApp(
       EasyLocalization(
-        supportedLocales: const [Locale('en', 'US'), Locale('ru', 'RU')],
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('ru', 'RU'),
+          Locale('es'),
+          Locale('de'),
+        ],
         path: 'i18n',
         fallbackLocale: const Locale('en', 'US'),
         saveLocale: false,
@@ -73,38 +75,34 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => GetIt.I.get<EaselProvider>()),
       ],
       child: ScreenUtilInit(
-          minTextAdapt: true,
-          builder: (BuildContext context, child) => MaterialApp(
-                builder: (context, widget) {
-                  ScreenUtil.init(context);
-                  return MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                    child: widget!,
-                  );
-                },
-                localizationsDelegates: context.localizationDelegates,
-                supportedLocales: context.supportedLocales,
-                locale: context.locale,
-                title: 'Easel',
-                navigatorKey: navigatorKey,
-                theme: EaselAppTheme.theme(context),
-                initialRoute: '/',
-                routes: {
-                  '/': (context) => const SplashScreen(),
-                  RouteUtil.kRouteTutorial: (context) => const TutorialScreen(),
-                  RouteUtil.kRouteCreatorHub: (context) =>
-                      const CreatorHubScreen(),
-                  RouteUtil.kRoutePreviewNFTFullScreen: (context) =>
-                      const PreviewNFTFullScreen(),
-                  RouteUtil.kRouteHome: (context) => const HomeScreen(),
-                  RouteUtil.kVideoFullScreen: (context) =>
-                      const VideoWidgetFullScreen(),
-                  RouteUtil.kPdfFullScreen: (context) =>
-                      const PdfViewerFullScreen(),
-                  RouteUtil.kRouteWelcomeEasel: (context) =>
-                      const WelcomeEasel(),
-                },
-              )),
+        minTextAdapt: true,
+        builder: (BuildContext context, child) => MaterialApp(
+          builder: (context, widget) {
+            ScreenUtil.init(context);
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: widget!,
+            );
+          },
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+          title: 'Easel',
+          navigatorKey: navigatorKey,
+          theme: EaselAppTheme.theme(context),
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const SplashScreen(),
+            RouteUtil.kRouteTutorial: (context) => const TutorialScreen(),
+            RouteUtil.kRouteCreatorHub: (context) => const CreatorHubScreen(),
+            RouteUtil.kRoutePreviewNFTFullScreen: (context) => const PreviewNFTFullScreen(),
+            RouteUtil.kRouteHome: (context) => const HomeScreen(),
+            RouteUtil.kVideoFullScreen: (context) => const VideoWidgetFullScreen(),
+            RouteUtil.kPdfFullScreen: (context) => const PdfViewerFullScreen(),
+            RouteUtil.kRouteWelcomeEasel: (context) => const WelcomeEasel(),
+          },
+        ),
+      ),
     );
   }
 }

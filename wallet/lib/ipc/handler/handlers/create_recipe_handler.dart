@@ -12,6 +12,10 @@ import 'package:pylons_wallet/pages/home/home_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
+
+import '../../../generated/locale_keys.g.dart';
+import '../../../model/nft.dart';
 
 class CreateRecipeHandler implements BaseHandler {
   CreateRecipeHandler(this.sdkIpcMessage);
@@ -21,8 +25,7 @@ class CreateRecipeHandler implements BaseHandler {
     final jsonMap = jsonDecode(sdkIpcMessage.json) as Map;
 
     jsonMap.remove('nodeVersion');
-    final loading = Loading()
-      ..showLoading(message: "${'creating_recipe'.tr()}...");
+    final loading = Loading()..showLoading(message: "${LocaleKeys.creating_recipe.tr()}...");
 
     final walletsStore = GetIt.I.get<WalletsStore>();
 
@@ -33,11 +36,16 @@ class CreateRecipeHandler implements BaseHandler {
 
     if (response.success) {
       if (shouldShowNFTPreview()) {
+        final msgObj = pylons.MsgCreateRecipe.create()..mergeFromProto3Json(jsonMap);
+
+        final nft = await NFT.fromRecipeId(msgObj.cookbookId, msgObj.id);
+
+        if (nft != null) {
+          await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
+        }
+
         GetIt.I.get<HomeProvider>().changeTabs(0);
-        navigatorKey.currentState!
-            .pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (_) => false);
-        GetIt.I.get<CollectionViewModel>().collectionsType =
-            CollectionsType.creations;
+        GetIt.I.get<CollectionViewModel>().collectionsType = CollectionsType.creations;
         GetIt.I.get<CollectionViewModel>().loadPurchasesAndCreationsData();
       } else {
         "Recipe ${jsonMap['name']} Created".show();

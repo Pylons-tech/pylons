@@ -1,4 +1,7 @@
 import 'package:fixnum/fixnum.dart';
+import 'package:flutter/material.dart';
+import 'package:pylons_wallet/model/nft.dart';
+import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_update_account_request.dart';
 import 'package:pylons_wallet/model/transaction.dart';
@@ -6,6 +9,7 @@ import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dar
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
+import 'package:pylons_wallet/utils/enums.dart';
 import 'package:transaction_signing_gateway/model/transaction_hash.dart';
 
 TransactionHash MOCK_TRANSACTION = const TransactionHash(hash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E');
@@ -21,7 +25,7 @@ List<TransactionHistory> MOCK_TRANSACTIONS_HISTORY = [
       cookbookId: "cookbookLOUD1",
       createdAt: 1654508506,
       transactionType: "NFTSELL",
-      transactionTypeEnum: TransactionType.values.byName("NFTSELL"),
+      transactionTypeEnum: WalletHistoryTransactionType.values.byName("NFTSELL"),
       ibcCoin: IBCCoins.upylon,
       txID: "txID"),
   TransactionHistory(
@@ -31,7 +35,7 @@ List<TransactionHistory> MOCK_TRANSACTIONS_HISTORY = [
       amount: "1000ubedrock",
       createdAt: 1655890906,
       transactionType: "RECEIVE",
-      transactionTypeEnum: TransactionType.values.byName("RECEIVE"),
+      transactionTypeEnum: WalletHistoryTransactionType.values.byName("RECEIVE"),
       ibcCoin: IBCCoins.uatom,
       txID: "txID"),
   TransactionHistory(
@@ -41,7 +45,7 @@ List<TransactionHistory> MOCK_TRANSACTIONS_HISTORY = [
       amount: "10upylon",
       createdAt: 1654508506,
       transactionType: "SEND",
-      transactionTypeEnum: TransactionType.values.byName("SEND"),
+      transactionTypeEnum: WalletHistoryTransactionType.values.byName("SEND"),
       ibcCoin: IBCCoins.upylon,
       txID: "txID"),
 ];
@@ -241,3 +245,93 @@ BaseEnv MOCK_BASE_ENV = BaseEnv()
       skus: '[]');
 
 IBCTraceModel MOCK_IBC_TRACE_MODEL = IBCTraceModel(denomTrace: DenomTrace(baseDenom: IBCCoins.ujunox, path: ''), ibcHash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E');
+
+NFT MOCK_NFT_FREE_IMAGE = NFT(
+  name: "This is my Image NFT",
+  height: "2400",
+  description: "Please Buy my Image NFT",
+  width: "1080",
+  url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
+  recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
+  duration: "0:0",
+  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+  appType: "easel",
+  creator: "Ahmad",
+  fileSize: "90.12KB",
+  itemID: "DtnxAS8L4pf",
+  owner: "abd",
+  ibcCoins: IBCCoins.upylon,
+);
+
+NFT MOCK_NFT_FREE_VIDEO = NFT(
+  name: "This is my Image NFT",
+  height: "2400",
+  description: "Please Buy my Image NFT",
+  width: "1080",
+  url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
+  recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
+  duration: "0:0",
+  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+  appType: "easel",
+  creator: "Ahmad",
+  fileSize: "90.12KB",
+  itemID: "DtnxAS8L4pf",
+  owner: "abd",
+  ibcCoins: IBCCoins.upylon,
+  assetType: AssetType.Video,
+);
+
+NFT MOCK_NFT_FREE_AUDIO = NFT(
+  name: "This is my Image NFT",
+  height: "2400",
+  description: "Please Buy my Image NFT",
+  width: "1080",
+  url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
+  recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
+  duration: "0:0",
+  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+  appType: "easel",
+  creator: "Ahmad",
+  fileSize: "90.12KB",
+  itemID: "DtnxAS8L4pf",
+  owner: "abd",
+  ibcCoins: IBCCoins.upylon,
+  assetType: AssetType.Audio,
+);
+
+NftOwnershipHistory MOCK_NFT_OWNERSHIP_HISTORY = NftOwnershipHistory(
+  itemID: "ahmad123axd",
+  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+  createdAt: 0,
+  receiverID: "xyz",
+  senderName: "abcxyz",
+);
+
+NFT MOCK_NFT_PREMIUM = NFT(
+    name: "I AM A PREMIUM NFT",
+    height: "2400",
+    description: "A PREMIUM NFT",
+    width: "1080",
+    url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
+    recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
+    duration: "0:0",
+    cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+    appType: "easel",
+    creator: "MR X",
+    fileSize: "90.12KB",
+    itemID: "DtnxAS8L4pf",
+    owner: "MR X",
+    ibcCoins: IBCCoins.upylon,
+    price: "12");
+
+int MOCK_NFT_QUANTITY = 50;
+int MOCK_NFT_MINTED = 10;
+
+String MOCK_URL =
+    "https://wallet.pylons.tech/?recipe_id=Easel_Recipe_auto_recipe_2022_10_07_122320_187&cookbook_id=Easel_CookBook_auto_cookbook_2022_10_07_095856_238&address=pylo1qmdtqfj9ahasqf0srcfnfnfapy2gewj9w89dwehttps://wallet.pylons.tech/?recipe_id=Easel_Recipe_auto_recipe_2022_10_07_122320_187&cookbook_id=Easel_CookBook_auto_cookbook_2022_10_07_095856_238&address=pylo1qmdtqfj9ahasqf0srcfnfnfapy2gewj9w89dwe";
+Color MOCK_COLOR = Colors.white;
+bool MOCK_CAMERA_CONTROLS = false;
+bool MOCK_SHOW_LOADER_TRUE = true;
+bool MOCK_SHOW_LOADER_FALSE = false;
+String MOCK_DYNAMIC_LINK = "https://pylons.page.link/i89m9Qxw7fYjW2RS8";
+const MOCK_BUY_BUTTON_KEY_VALUE = "buy_button_key";

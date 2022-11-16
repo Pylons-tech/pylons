@@ -4,14 +4,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pages/stripe_screen.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/third_party_services/stripe_handler.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+
+import '../../../../generated/locale_keys.g.dart';
 
 class RowComponents extends StatelessWidget {
   final VoidCallback onRefresh;
@@ -38,8 +41,7 @@ class RowComponents extends StatelessWidget {
             width: 20.w,
           ),
           GestureDetector(
-            onTap: () => Navigator.of(context)
-                .pushNamed(RouteUtil.ROUTE_TRANSACTION_HISTORY),
+            onTap: () => Navigator.of(context).pushNamed(RouteUtil.ROUTE_TRANSACTION_HISTORY),
             child: SvgPicture.asset(SVGUtil.WALLET_TRANSACTION_HISTORY),
           ),
           SizedBox(
@@ -47,17 +49,14 @@ class RowComponents extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              final publicAddress = GetIt.I
-                  .get<WalletsStore>()
-                  .getWallets()
-                  .value
-                  .last
-                  .publicAddress;
+              final wallet = context.read<AccountProvider>().accountPublicInfo;
+              if (wallet == null) {
+                return;
+              }
 
-              Clipboard.setData(ClipboardData(text: publicAddress)).then(
+              Clipboard.setData(ClipboardData(text: wallet.publicAddress)).then(
                 (_) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text("copied_to_clipboard").tr()));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: const Text(LocaleKeys.copied_to_clipboard).tr()));
                 },
               );
             },
@@ -74,20 +73,21 @@ class RowComponents extends StatelessWidget {
   Future<void> handleStripeAccountLink(BuildContext context) async {
     final loading = Loading()..showLoading();
 
-    final account_response =
-        await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
+    final account_response = await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
     loading.dismiss();
     account_response.fold((fail) => {fail.message.show()}, (accountlink) {
       showDialog(
-          useSafeArea: false,
-          context: context,
-          builder: (BuildContext context) {
-            return StripeScreen(
-                url: accountlink,
-                onBack: () {
-                  navigatorKey.currentState!.pop();
-                });
-          });
+        useSafeArea: false,
+        context: context,
+        builder: (BuildContext context) {
+          return StripeScreen(
+            url: accountlink,
+            onBack: () {
+              navigatorKey.currentState!.pop();
+            },
+          );
+        },
+      );
     });
   }
 }

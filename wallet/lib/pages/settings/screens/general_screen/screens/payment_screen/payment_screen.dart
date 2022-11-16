@@ -6,9 +6,12 @@ import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/pages/stripe_screen.dart';
 import 'package:pylons_wallet/pylons_app.dart';
+import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/stripe_handler.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
+
+import '../../../../../../generated/locale_keys.g.dart';
 
 TextStyle kPaymentLabelText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
 TextStyle kPaymentOptionsText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w500);
@@ -21,10 +24,19 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
+  Repository get repository => GetIt.I.get();
+
+  @override
+  void initState() {
+    super.initState();
+
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.payment);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.kBackgroundColor,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 37.w),
         child: Column(
@@ -42,29 +54,29 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Icon(
+                  child: Icon(
                     Icons.arrow_back_ios,
-                    color: kUserInputTextColor,
+                    color: AppColors.kUserInputTextColor,
                   )),
             ),
             SizedBox(
               height: 33.h,
             ),
             Text(
-              "payment".tr(),
+              LocaleKeys.payment.tr(),
               style: kPaymentLabelText,
             ),
             SizedBox(
               height: 20.h,
             ),
             PaymentForwardItem(
-              title: "connect_stripe_to_get_paid".tr(),
+              title: LocaleKeys.connect_stripe_to_get_paid.tr(),
               onPressed: () {
                 handleStripeAccountLink();
               },
             ),
             PaymentForwardItem(
-              title: "transaction_history".tr(),
+              title: LocaleKeys.transaction_history.tr(),
               onPressed: () {
                 Navigator.of(context).pushNamed(RouteUtil.ROUTE_TRANSACTION_HISTORY);
               },
@@ -122,9 +134,9 @@ class PaymentForwardItem extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const Icon(
+                Icon(
                   Icons.arrow_forward_ios_sharp,
-                  color: kForwardIconColor,
+                  color: AppColors.kForwardIconColor,
                 )
               ],
             ),

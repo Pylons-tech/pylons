@@ -10,25 +10,17 @@ import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:url_launcher/url_launcher_string.dart' as url_launcher;
 
-TextStyle _rowTitleTextStyle = TextStyle(
-    color: Colors.white,
-    fontWeight: FontWeight.w800,
-    fontSize: isTablet ? 10.sp : 14.sp);
-TextStyle _rowSubtitleTextStyle = TextStyle(
-    color: Colors.white,
-    fontSize: isTablet ? 9.sp : 13.sp,
-    fontWeight: FontWeight.w800);
-TextStyle _rowBlueTextStyle = TextStyle(
-    color: kTradeReceiptTextColor,
-    fontSize: isTablet ? 9.sp : 13.sp,
-    fontWeight: FontWeight.w400);
+import '../../../generated/locale_keys.g.dart';
+
+TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: isTablet ? 10.sp : 14.sp);
+TextStyle _rowSubtitleTextStyle = TextStyle(color: Colors.white, fontSize: isTablet ? 9.sp : 13.sp, fontWeight: FontWeight.w800);
+TextStyle _rowBlueTextStyle = TextStyle(color: AppColors.kTradeReceiptTextColor, fontSize: isTablet ? 9.sp : 13.sp, fontWeight: FontWeight.w400);
 
 class TradeReceiptDialog {
   final TradeReceiptModel _model;
   final BuildContext _buildContext;
 
-  TradeReceiptDialog(
-      {required TradeReceiptModel model, required BuildContext context})
+  TradeReceiptDialog({required TradeReceiptModel model, required BuildContext context})
       : _model = model,
         _buildContext = context;
 
@@ -59,9 +51,8 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black.withOpacity(0.7),
-      height: isTablet ? 400.h : 420.h,
-      margin:
-          isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
+      height: isTablet ? 410.h : 430.h,
+      margin: isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
       child: Stack(
         children: [
           Positioned(
@@ -71,10 +62,9 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
               height: 60,
               width: 80,
               child: ClipPath(
-                clipper: RightTriangleClipper(
-                    orientation: enums.Orientation.Orientation_NW),
-                child: const ColoredBox(
-                  color: kDarkRed,
+                clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NW),
+                child: ColoredBox(
+                  color: AppColors.kDarkRed,
                 ),
               ),
             ),
@@ -86,10 +76,9 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
               height: 60,
               width: 80,
               child: ClipPath(
-                clipper: RightTriangleClipper(
-                    orientation: enums.Orientation.Orientation_SE),
-                child: const ColoredBox(
-                  color: kDarkRed,
+                clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SE),
+                child: ColoredBox(
+                  color: AppColors.kDarkRed,
                 ),
               ),
             ),
@@ -114,39 +103,37 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
                   height: 20.h,
                 ),
                 SizedBox(height: 20.h),
-                buildRowWithBlueSubtitle(
-                    subtitle: widget.model.createdBy, title: "created_by".tr()),
+                buildRowWithBlueSubtitle(subtitle: widget.model.createdBy, title: LocaleKeys.created_by.tr()),
                 SizedBox(height: 3.h),
-                buildRowWithBlueSubtitle(
-                    subtitle: widget.model.soldBy, title: "sold_by".tr()),
+                buildRowWithBlueSubtitle(subtitle: widget.model.soldBy, title: LocaleKeys.sold_by.tr()),
                 SizedBox(height: 20.h),
                 buildRowWithElipses(
-                  subtitle: widget.model.transactionId,
-                  title: "tx_id".tr(),
+                  subtitle: widget.model.transactionID,
+                  title: LocaleKeys.tx_id.tr(),
                 ),
                 SizedBox(height: 3.h),
                 buildRow(
                   subtitle: widget.model.transactionTime,
-                  title: "transaction_time".tr(),
+                  title: LocaleKeys.transaction_time.tr(),
                 ),
                 SizedBox(height: 30.h),
                 buildRow(
                   subtitle: widget.model.currency,
-                  title: "currency".tr(),
+                  title: LocaleKeys.currency.tr(),
                 ),
                 buildRow(
                   subtitle: widget.model.price,
-                  title: "price".tr(),
+                  title: LocaleKeys.price.tr(),
                 ),
                 SizedBox(height: 3.h),
                 buildRow(
                   subtitle: widget.model.pylonsFee,
-                  title: "pylons_fee".tr(),
+                  title: LocaleKeys.pylons_fee.tr(),
                 ),
                 SizedBox(height: 3.h),
                 buildRow(
                   subtitle: widget.model.total,
-                  title: "total".tr(),
+                  title: LocaleKeys.total.tr(),
                 ),
                 SizedBox(height: 30.h),
                 Center(
@@ -159,13 +146,12 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
                       child: Container(
                         width: 180.r,
                         height: 40.h,
-                        color: kPayNowBackgroundGrey.withOpacity(0.2),
+                        color: AppColors.kPayNowBackgroundGrey.withOpacity(0.2),
                         child: Center(
                           child: Text(
-                            "close".tr(),
+                            LocaleKeys.close.tr(),
                             textAlign: TextAlign.center,
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 14.sp),
+                            style: TextStyle(color: Colors.white, fontSize: 14.sp),
                           ),
                         ),
                       ),
@@ -207,8 +193,7 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
     );
   }
 
-  InkWell buildRowWithElipses(
-      {required String title, required String subtitle}) {
+  InkWell buildRowWithElipses({required String title, required String subtitle}) {
     return InkWell(
       onTap: () {
         openTransactionInBigDipper(txId: subtitle);
@@ -240,8 +225,7 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
                       style: _rowSubtitleTextStyle,
                     ),
                     Text(
-                      subtitle.substring(
-                          subtitle.length - 4, subtitle.length - 1),
+                      subtitle.substring(subtitle.length - 4, subtitle.length - 1),
                       style: _rowSubtitleTextStyle,
                     ),
                   ],
@@ -252,8 +236,7 @@ class _TradeReceiptWidgetState extends State<TradeReceiptWidget> {
     );
   }
 
-  Row buildRowWithBlueSubtitle(
-      {required String title, required String subtitle}) {
+  Row buildRowWithBlueSubtitle({required String title, required String subtitle}) {
     return Row(
       children: [
         Expanded(
@@ -294,7 +277,7 @@ class TradeReceiptModel {
   String pylonsFee;
   String total;
   String nftName;
-  String transactionId;
+  String transactionID;
 
   TradeReceiptModel(
       {required this.createdBy,
@@ -305,7 +288,7 @@ class TradeReceiptModel {
       required this.price,
       required this.pylonsFee,
       required this.total,
-      required this.transactionId,
+      required this.transactionID,
       required this.nftName});
 }
 

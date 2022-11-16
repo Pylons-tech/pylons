@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/utils/constants.dart';
@@ -9,9 +7,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 enum ViewType { viewGrid, viewList }
 
-enum CollectionType { draft, published, forSale }
+enum CollectionType { draft, published }
 
 class CreatorHubViewModel extends ChangeNotifier {
   final Repository repository;
@@ -22,18 +22,9 @@ class CreatorHubViewModel extends ChangeNotifier {
 
   ViewType viewType = ViewType.viewGrid;
 
-  int _publishedRecipesLength = 0;
-  int forSaleCount = 0;
+  int get publishedRecipesLength => nftPublishedList.length;
 
-  get publishedRecipesLength => _publishedRecipesLength;
-
-  set publishedRecipeLength(int value) {
-    _publishedRecipesLength = value;
-
-    notifyListeners();
-  }
-
-  changeSelectedCollection(CollectionType collectionType) {
+  void changeSelectedCollection(CollectionType collectionType) {
     switch (collectionType) {
       case CollectionType.draft:
         selectedCollectionType = CollectionType.draft;
@@ -41,10 +32,6 @@ class CreatorHubViewModel extends ChangeNotifier {
         break;
       case CollectionType.published:
         selectedCollectionType = CollectionType.published;
-        notifyListeners();
-        break;
-      case CollectionType.forSale:
-        selectedCollectionType = CollectionType.forSale;
         notifyListeners();
         break;
     }
@@ -95,22 +82,19 @@ class CreatorHubViewModel extends ChangeNotifier {
   }
 
   void getTotalForSale() {
-    forSaleCount = 0;
-    nftForSaleList = [];
-    for (int i = 0; i < nftPublishedList.length; i++) {
-      if (nftPublishedList[i].isEnabled &&
-          nftPublishedList[i].amountMinted <
-              int.parse(nftPublishedList[i].quantity)) {
-        forSaleCount++;
-        nftForSaleList.add(nftPublishedList[i]);
+    _nftForSaleList = [];
+
+    for (final NFT nft in nftPublishedList) {
+      if (nft.isEnabled && nft.amountMinted < int.parse(nft.quantity)) {
+        _nftForSaleList.add(nft);
       }
     }
+
     notifyListeners();
   }
 
   Future<void> getPublishAndDraftData() async {
     await getRecipesList();
-
     getTotalForSale();
     notifyListeners();
   }
@@ -127,15 +111,13 @@ class CreatorHubViewModel extends ChangeNotifier {
       return;
     }
 
-    final recipesListEither =
-        await repository.getRecipesBasedOnCookBookId(cookBookId: cookBookId);
+    final recipesListEither = await repository.getRecipesBasedOnCookBookId(cookBookId: cookBookId);
 
     if (recipesListEither.isLeft()) {
       return;
     }
 
     final recipesList = recipesListEither.getOrElse(() => []);
-    log("recipeList: ${recipesList.length}");
     _nftPublishedList.clear();
     if (recipesList.isEmpty) {
       return;
@@ -144,20 +126,21 @@ class CreatorHubViewModel extends ChangeNotifier {
       final nft = NFT.fromRecipe(recipe);
       _nftPublishedList.add(nft);
     }
+  }
 
-    publishedRecipeLength = nftPublishedList.length;
+  void addToRecentNFT(NFT nft) {
+    _nftPublishedList.add(nft);
+    notifyListeners();
   }
 
   Future<void> getDraftsList() async {
-    final loading = Loading()..showLoading(message: "loading".tr());
+    final loading = Loading()..showLoading(message: LocaleKeys.loading.tr());
 
     final getNftResponse = await repository.getNfts();
 
     if (getNftResponse.isLeft()) {
       loading.dismiss();
-
-      "something_wrong".tr().show();
-
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
 
@@ -172,7 +155,7 @@ class CreatorHubViewModel extends ChangeNotifier {
     final getNftResponse = await repository.getNfts();
 
     if (getNftResponse.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
 
       return;
     }
@@ -186,7 +169,7 @@ class CreatorHubViewModel extends ChangeNotifier {
     final deleteNftResponse = await repository.deleteNft(id!);
 
     if (deleteNftResponse.isLeft()) {
-      "delete_error".tr().show();
+      LocaleKeys.delete_error.tr().show();
       return;
     }
     nftDraftList.removeWhere((element) => element.id == id);
@@ -200,6 +183,12 @@ class CreatorHubViewModel extends ChangeNotifier {
 
   void updateViewType(ViewType selectedViewType) {
     viewType = selectedViewType;
+    notifyListeners();
+  }
+
+  void updatePublishedNFTList({required NFT nft}) {
+    _nftPublishedList.add(nft);
+    _nftForSaleList.add(nft);
     notifyListeners();
   }
 }

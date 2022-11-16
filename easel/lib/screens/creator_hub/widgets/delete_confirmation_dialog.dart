@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 class DeleteDialog {
   final BuildContext contextt;
   final NFT nft;
@@ -44,7 +46,7 @@ class DeleteDialog {
                     ),
                     Align(
                       child: SvgPicture.asset(
-                        kAlertIcon,
+                        PngUtils.kAlertIcon,
                         height: 40.h,
                         fit: BoxFit.cover,
                       ),
@@ -53,10 +55,10 @@ class DeleteDialog {
                       height: 35.h,
                     ),
                     Text(
-                      "are_you_sure_you_want_to_delete",
+                      LocaleKeys.are_you_sure_you_want_to_delete.tr(),
                       textAlign: TextAlign.center,
                       style: EaselAppTheme.kDeleteHeaderTextStyle,
-                    ).tr(),
+                    ),
                     SizedBox(
                       height: 30.h,
                     ),
@@ -68,7 +70,7 @@ class DeleteDialog {
                         children: [
                           Expanded(
                             child: ClippedButton(
-                              title: "yes".tr(),
+                              title: LocaleKeys.yes.tr(),
                               bgColor: EaselAppTheme.kPurple,
                               textColor: EaselAppTheme.kWhite,
                               fontWeight: FontWeight.w300,
@@ -85,7 +87,7 @@ class DeleteDialog {
                           ),
                           Expanded(
                             child: ClippedButton(
-                              title: "no".tr(),
+                              title: LocaleKeys.no.tr(),
                               bgColor: EaselAppTheme.kWhite.withOpacity(0.3),
                               textColor: EaselAppTheme.kWhite,
                               onPressed: () {

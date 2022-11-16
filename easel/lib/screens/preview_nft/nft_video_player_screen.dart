@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:easel_flutter/easel_provider.dart';
-import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/widgets/video_builder.dart';
 import 'package:easel_flutter/widgets/video_progress_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -33,7 +33,7 @@ class NFTVideoPlayerScreen extends StatelessWidget {
                           child: Padding(
                         padding: const EdgeInsets.all(10),
                         child: Text(
-                          videoPlayerError,
+                          "video_player_error".tr(),
                           style: TextStyle(
                               fontSize: 18.sp, color: EaselAppTheme.kWhite),
                         ),
@@ -55,7 +55,7 @@ class NFTVideoPlayerScreen extends StatelessWidget {
                         sigmaX: 5.0,
                         sigmaY: 5.0,
                       ),
-                      child: Container(
+                      child: ColoredBox(
                         color: Colors.black.withOpacity(0.3),
                         child: Padding(
                           padding: EdgeInsets.only(bottom: 30.h),

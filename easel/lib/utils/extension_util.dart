@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path/path.dart' as path;
 import 'package:pylons_sdk/pylons_sdk.dart';
 
-import 'constants.dart';
 
 extension ScaffoldHelper on BuildContext? {
   void show({required String message}) {
@@ -174,7 +173,7 @@ extension FileSizeInGB on int {
 
 extension FileSizeString on int {
   String getFileSizeString({required int precision}) {
-    var i = (log(this) / log(1024)).floor();
+    final i = (log(this) / log(1024)).floor();
     return ((this / pow(1024, i)).toStringAsFixed(precision)) + suffixes[i];
   }
 }

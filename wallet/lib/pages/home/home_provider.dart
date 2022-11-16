@@ -10,22 +10,23 @@ import 'package:pylons_wallet/pages/home/collection_screen/collection_screen.dar
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/home/wallet_screen/model/currency.dart';
 import 'package:pylons_wallet/pages/home/wallet_screen/wallet_screen.dart';
+
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
+import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
+
+import '../../generated/locale_keys.g.dart';
 
 class HomeProvider extends ChangeNotifier {
   final Repository repository;
-  final WalletsStore walletStore;
+  
+  final AccountPublicInfo accountPublicInfo;
 
-  HomeProvider({required this.repository, required this.walletStore});
+  HomeProvider({required this.repository, required this.accountPublicInfo});
 
-  final List<Widget> pages = <Widget>[
-    const CollectionScreen(),
-    const WalletScreen()
-  ];
+  final List<Widget> pages = <Widget>[const CollectionScreen(), const WalletScreen()];
   final tabs = ['collection', 'wallet'];
 
   int _selectedIndex = 0;
@@ -46,8 +47,7 @@ class HomeProvider extends ChangeNotifier {
 
   List<TransactionHistory> _transactionHistoryList = [];
 
-  List<TransactionHistory> get transactionHistoryList =>
-      _transactionHistoryList;
+  List<TransactionHistory> get transactionHistoryList => _transactionHistoryList;
 
   set transactionHistoryList(List<TransactionHistory> txList) {
     _transactionHistoryList = txList;
@@ -68,12 +68,12 @@ class HomeProvider extends ChangeNotifier {
 
   Future<List<NotificationMessage>> callGetNotificationApi() async {
     final response = await repository.getAllNotificationsMessages(
-      walletAddress: getWalletStore().getWallets().value.last.publicAddress,
+      walletAddress: accountPublicInfo.publicAddress,
       limit: _limit,
       offset: _offset,
     );
     if (response.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return [];
     }
     return response.getOrElse(() => []);
@@ -103,32 +103,20 @@ class HomeProvider extends ChangeNotifier {
       showBadge = false;
       return;
     }
-    showBadge = !notificationsList
-        .firstWhere((element) => !element.read,
-            orElse: () => notificationMessageObject)
-        .read;
+    showBadge = !notificationsList.firstWhere((element) => !element.read, orElse: () => notificationMessageObject).read;
   }
 
   Future<void> getTransactionHistoryList() async {
-    final walletInfo = walletStore.getWallets().value.last;
 
-    GetIt.I
-        .get<Repository>()
-        .getTransactionHistory(address: walletInfo.publicAddress)
-        .then((value) {
+    GetIt.I.get<Repository>().getTransactionHistory(address: accountPublicInfo.publicAddress).then((value) {
       if (value.isRight()) {
         transactionHistoryList = value.getOrElse(() => []);
       }
     });
   }
 
-  List<TransactionHistory> getDenomSpecificTxList(
-      {required String defaultCurrency}) {
-    return transactionHistoryList
-        .where((element) => element.amount.contains(defaultCurrency))
-        .toList()
-        .take(3)
-        .toList();
+  List<TransactionHistory> getDenomSpecificTxList({required String defaultCurrency}) {
+    return transactionHistoryList.where((element) => element.amount.contains(defaultCurrency)).toList().take(3).toList();
   }
 
   void changeTabs(int index) {
@@ -161,9 +149,7 @@ class HomeProvider extends ChangeNotifier {
 
       switch (coinModel.denom.toIBCCoinsEnum()) {
         case IBCCoins.upylon:
-          amount = (double.parse(amount) / kBigIntBase)
-              .toString()
-              .truncateAfterDecimal(2);
+          amount = (double.parse(amount) / kBigIntBase).toString().truncateAfterDecimal(2);
           break;
         case IBCCoins.urun:
         case IBCCoins.ujunox:
@@ -172,12 +158,10 @@ class HomeProvider extends ChangeNotifier {
         case IBCCoins.ustripeusd:
         case IBCCoins.eeur:
         case IBCCoins.uatom:
-          amount = (double.parse(coinModel.amount.toString()) / kBigIntBase)
-              .toString();
+          amount = (double.parse(coinModel.amount.toString()) / kBigIntBase).toString();
           break;
         case IBCCoins.weth_wei:
-          amount = (double.parse(coinModel.amount.toString()) / kEthIntBase)
-              .toString();
+          amount = (double.parse(coinModel.amount.toString()) / kEthIntBase).toString();
           break;
       }
 
@@ -209,10 +193,8 @@ class HomeProvider extends ChangeNotifier {
 
   Future<void> buildAssetsList() async {
     balances.clear();
-    final currentWallet = getWalletStore().getWallets().value.last;
 
-    final response =
-        await getRepository().getBalance(currentWallet.publicAddress);
+    final response = await getRepository().getBalance(accountPublicInfo.publicAddress);
 
     if (response.isLeft()) {
       handleError(response);
@@ -233,9 +215,11 @@ class HomeProvider extends ChangeNotifier {
     }, (r) => null);
   }
 
-  WalletsStore getWalletStore() {
-    return walletStore;
+  void logAnalyticsEvent() {
+    repository.logUserJourney(screenName: AnalyticsScreenEvents.home);
   }
+
+
 
   Repository getRepository() {
     return repository;
