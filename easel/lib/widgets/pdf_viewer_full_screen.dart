@@ -15,6 +15,7 @@ class PdfViewerFullScreen extends StatefulWidget {
 class _PdfViewerFullScreenState extends State<PdfViewerFullScreen> {
   @override
   Widget build(BuildContext context) {
+    // ignore: cast_nullable_to_non_nullable
     final doc = ModalRoute.of(context)!.settings.arguments as List<PDFDocument>;
     return SafeArea(
       child: Scaffold(

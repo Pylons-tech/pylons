@@ -13,7 +13,6 @@ analyzer:
 #  strong-mode:
 #    implicit-dynamic: true
   errors:
-    sort_pub_dependencies: ignore
     avoid_setters_without_getters: ignore
     import_of_legacy_library_into_null_safe: error
     avoid_single_cascade_in_expression_statements: ignore
@@ -31,7 +30,7 @@ analyzer:
     always_declare_return_types: error
     override_on_non_overriding_member: error
     annotate_overrides: error
-#    avoid_relative_lib_imports: error
+    avoid_relative_lib_imports: error
     avoid_empty_else: error
     avoid_returning_null_for_future: error
     empty_statements: error
@@ -52,11 +51,12 @@ analyzer:
     avoid_dynamic_calls: ignore
     depend_on_referenced_packages: ignore
     implementation_imports: ignore
+    sort_pub_dependencies: error
 
 linter:
   rules:
-#    - annotate_overrides
-#    - await_only_futures
+   - annotate_overrides
+   - await_only_futures
 #    - camel_case_types
 #    - cancel_subscriptions
 #    - close_sinks
@@ -65,7 +65,7 @@ linter:
 #    - empty_statements
 #    - always_declare_return_types
 #    - avoid_empty_else
-##    - avoid_relative_lib_imports
+   - avoid_relative_lib_imports
 #    - avoid_returning_null_for_future
 #    - always_put_control_body_on_new_line
 #    - always_require_non_null_named_parameters

@@ -7,6 +7,8 @@ import (
 
 var _ sdk.Msg = &MsgSendItems{}
 
+const sendItems = "SendItems"
+
 func NewMsgSendItems(sender, receiver string, items []ItemRef) *MsgSendItems {
 	return &MsgSendItems{
 		Creator:  sender,
@@ -20,7 +22,7 @@ func (msg *MsgSendItems) Route() string {
 }
 
 func (msg *MsgSendItems) Type() string {
-	return "SendItems"
+	return sendItems
 }
 
 func (msg *MsgSendItems) GetSigners() []sdk.AccAddress {

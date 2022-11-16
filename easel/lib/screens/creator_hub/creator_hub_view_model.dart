@@ -11,7 +11,7 @@ import '../../generated/locale_keys.g.dart';
 
 enum ViewType { viewGrid, viewList }
 
-enum CollectionType { draft, published, forSale }
+enum CollectionType { draft, published }
 
 class CreatorHubViewModel extends ChangeNotifier {
   final Repository repository;
@@ -22,10 +22,9 @@ class CreatorHubViewModel extends ChangeNotifier {
 
   ViewType viewType = ViewType.viewGrid;
 
-
   int get publishedRecipesLength => nftPublishedList.length;
 
-  changeSelectedCollection(CollectionType collectionType) {
+  void changeSelectedCollection(CollectionType collectionType) {
     switch (collectionType) {
       case CollectionType.draft:
         selectedCollectionType = CollectionType.draft;
@@ -33,10 +32,6 @@ class CreatorHubViewModel extends ChangeNotifier {
         break;
       case CollectionType.published:
         selectedCollectionType = CollectionType.published;
-        notifyListeners();
-        break;
-      case CollectionType.forSale:
-        selectedCollectionType = CollectionType.forSale;
         notifyListeners();
         break;
     }
@@ -89,7 +84,7 @@ class CreatorHubViewModel extends ChangeNotifier {
   void getTotalForSale() {
     _nftForSaleList = [];
 
-    for (NFT nft in nftPublishedList) {
+    for (final NFT nft in nftPublishedList) {
       if (nft.isEnabled && nft.amountMinted < int.parse(nft.quantity)) {
         _nftForSaleList.add(nft);
       }

@@ -4,6 +4,7 @@
   "wallet_retrieving_err_msg": "Wir hatten Probleme beim Abrufen von Wallets aus einem sicheren Speicher.",
   "home": "Heim",
   "discover": "Entdecken",
+  "network_error_description": "Bei der Verarbeitung Ihrer Transaktion ist ein Netzwerkfehler aufgetreten. Bitte versuchen Sie erneut, Ihr Konto zu aktualisieren. Für einen erneuten Versuch werden Ihnen keine doppelten Kosten in Rechnung gestellt.",
   "market_place": "Marktplatz",
   "gallery": "Galerie",
   "my_activity": "Meine Aktivität",
@@ -357,5 +358,12 @@
   "buying_pylon_points": "Pylons Points gekauft",
   "transaction_date": "Transaktionsdatum",
   "retry": "Wiederholen",
-  "bought_nft": "Gekauft"
+  "bought_nft": "Gekauft",
+  "resolution": "Auflösung",
+  "set_lockscreen": "Instellen als vergrendelscherm",
+  "ipfs_cid": "IPFS-CID",
+  "available": "verfügbar",
+  "ea": "ea",
+  "maintenance_mode_message": "We ondervinden technische problemen en hebben tijdelijk de onderhoudsmodus gestart voor het oplossen van problemen. Maak je geen zorgen, je collectie is veilig. U kunt echter geen on-chain-transacties starten totdat we het probleem hebben opgelost en de normale functionaliteit hebben hersteld.",
+  "maintenance_mode_header": "onderhoudsstand"
 }

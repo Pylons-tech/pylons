@@ -126,6 +126,12 @@ abstract class RemoteDataStore {
   /// else will throw error
   Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String itemId, required String cookBookId});
 
+  /// This method is used to get history of nft owners
+  /// Input: [cookBookId] and [recipeId] of the NFT
+  /// Output : [List][NftOwnershipHistory] will contain the list of NftOwnershipHistory data if success
+  /// else will throw error
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId});
+
   /// This method is used to get views count of NFT
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
   /// Output : [int] will contain the views count of the NFT
@@ -702,6 +708,32 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final reverseOrder = historyList.reversed.toList();
 
+    return reverseOrder.toList();
+  }
+
+  @override
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId}) async{
+    final baseApiUrl = getBaseEnv().baseApiUrl;
+    final uri = Uri.parse("$baseApiUrl/pylons/get_recipe_history/$cookBookId/$recipeId");
+
+    final List<NftOwnershipHistory> historyList = [];
+
+    final historyResponse = await httpClient.get(uri);
+
+    if (historyResponse.statusCode != API_SUCCESS_CODE) {
+      throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
+    }
+    final historyMap = jsonDecode(historyResponse.body);
+
+    if (historyMap == null) {
+      throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
+    }
+    historyMap[kHistory].map((e) {
+      final nft = NftOwnershipHistory.fromCookBookAndRecipeJson(e as Map<String, dynamic>);
+      historyList.add(nft);
+    }).toList();
+
+    final reverseOrder = historyList.reversed.toList();
     return reverseOrder.toList();
   }
 

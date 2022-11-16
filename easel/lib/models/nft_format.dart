@@ -13,14 +13,14 @@ class NftFormat {
   NftFormat({required this.format, required this.extensions, required this.badge, required this.color});
 
   String getExtensionsList() {
-    var ret = '';
+    final buffer = StringBuffer();
     for (var i = 0; i < extensions.length; i++) {
-      if (ret.isNotEmpty) {
-        ret += ', ';
+      if (buffer.isNotEmpty) {
+        buffer.write(", ");
       }
-      ret += extensions[i].toUpperCase();
+      buffer.write(extensions[i].toUpperCase());
     }
-    return ret;
+    return buffer.toString();
   }
 
   static List<NftFormat> get supportedFormats => [
@@ -51,14 +51,14 @@ class NftFormat {
         NftFormat(
           format: NFTTypes.pdf,
           extensions: ['pdf'],
-          badge:SVGUtils.kSvgNftFormatPDF,
+          badge: SVGUtils.kSvgNftFormatPDF,
           color: EaselAppTheme.kDarkPurple,
         ),
       ];
 
   static List<String> getAllSupportedExts() {
     List<String> allExts = [];
-    for (var format in supportedFormats) {
+    for (final format in supportedFormats) {
       allExts += format.extensions;
     }
     return allExts;

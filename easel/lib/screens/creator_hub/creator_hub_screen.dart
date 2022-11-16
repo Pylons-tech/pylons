@@ -49,7 +49,7 @@ class _CreatorHubScreenState extends State<CreatorHubScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ColoredBox(
       color: EaselAppTheme.kBgWhite,
       child: SafeArea(
         child: Scaffold(
@@ -100,26 +100,26 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
 
   EaselProvider get easelProvider => sl();
 
-  void onRefreshPressed() async {
+  Future<void> onRefreshPressed() async {
     GetIt.I.get<CreatorHubViewModel>().getDraftsList();
     GetIt.I.get<CreatorHubViewModel>().getRecipesList();
     GetIt.I.get<CreatorHubViewModel>().getTotalForSale();
   }
 
-  Widget getRefreshButton(viewModel) {
+  Widget getRefreshButton(CreatorHubViewModel viewModel) {
     if (easelProvider.isPylonsInstalled) {
       switch (viewModel.selectedCollectionType) {
-        case CollectionType.forSale:
         case CollectionType.published:
           return Padding(
             padding: EdgeInsets.only(right: 15.w),
             child: InkWell(
-                onTap: () => scheduleMicrotask(() => onRefreshPressed()),
-                child: Icon(
-                  Icons.refresh,
-                  color: EaselAppTheme.kBlack,
-                  size: 22.sp,
-                )),
+              onTap: () => scheduleMicrotask(() => onRefreshPressed()),
+              child: Icon(
+                Icons.refresh,
+                color: EaselAppTheme.kBlack,
+                size: 22.sp,
+              ),
+            ),
           );
 
         case CollectionType.draft:
@@ -132,7 +132,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<CreatorHubViewModel>();
-    return Container(
+    return ColoredBox(
       color: EaselAppTheme.kWhite,
       child: SafeArea(
         child: Scaffold(
@@ -142,18 +142,20 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
+                Container(
+                  alignment: Alignment.centerRight,
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       getRefreshButton(viewModel),
                       InkWell(
                         onTap: () => Navigator.of(context).pushNamed(RouteUtil.kRouteHome),
-                        child: Container(
-                          decoration:
-                              BoxDecoration(color: EaselAppTheme.kpurpleDark, boxShadow: [BoxShadow(color: EaselAppTheme.kpurpleDark.withOpacity(0.6), offset: const Offset(0, 0), blurRadius: 8.0)]),
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: EaselAppTheme.kpurpleDark,
+                            boxShadow: [BoxShadow(color: EaselAppTheme.kpurpleDark.withOpacity(0.6), blurRadius: 8.0)],
+                          ),
                           child: Icon(Icons.add, size: 27.h, color: EaselAppTheme.kWhite),
                         ),
                       ),
@@ -165,44 +167,45 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      LocaleKeys.creator_hub.tr(),
-                      style: headingStyle,
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: LocaleKeys.hello.tr(),
+                          style: titleStyle.copyWith(color: EaselAppTheme.kTextGrey, fontSize: isTablet ? 16.sp : 18.sp),
+                        ),
+                        TextSpan(
+                          text: easelProvider.currentUsername,
+                          style: titleStyle,
+                        )
+                      ],
                     ),
                   ),
                 ),
-                SizedBox(height: 15.h),
+                SizedBox(height: 12.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: AutoSizeText(
                     LocaleKeys.welcome_msg.tr(),
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.start,
                     maxLines: 4,
-                    style: titleStyle.copyWith(color: EaselAppTheme.kTextGrey, fontSize: isTablet ? 12.sp : 15.sp),
+                    style: titleStyle.copyWith(fontSize: isTablet ? 9.sp : 12.sp),
                   ),
                 ),
-                SizedBox(height: 25.h),
+                SizedBox(height: 32.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Row(
                     children: [
-                      viewModel.selectedCollectionType == CollectionType.draft
-                          ? buildSelectedBox(title: LocaleKeys.draft.tr(), viewModel: viewModel, color: EaselAppTheme.kLightRed, collectionType: CollectionType.draft)
-                          : buildOutlinedBox(title: LocaleKeys.draft.tr(), viewModel: viewModel, collectionType: CollectionType.draft),
+                      buildOutlinedBox(title: LocaleKeys.draft.tr(), viewModel: viewModel, collectionType: CollectionType.draft),
                       SizedBox(width: 14.w),
-                      viewModel.selectedCollectionType == CollectionType.published
-                          ? buildSelectedBox(title: LocaleKeys.published.tr(), viewModel: viewModel, color: EaselAppTheme.kDarkGreen, collectionType: CollectionType.published)
-                          : buildOutlinedBox(title: LocaleKeys.published.tr(), viewModel: viewModel, collectionType: CollectionType.published),
-                      SizedBox(width: 14.w),
-                      viewModel.selectedCollectionType == CollectionType.forSale
-                          ? buildSelectedBox(title: LocaleKeys.for_sale.tr(), viewModel: viewModel, color: EaselAppTheme.kBlue, collectionType: CollectionType.forSale)
-                          : buildOutlinedBox(title: LocaleKeys.for_sale.tr(), viewModel: viewModel, collectionType: CollectionType.forSale),
+                      buildOutlinedBox(title: LocaleKeys.published.tr(), viewModel: viewModel, collectionType: CollectionType.published),
+                      const Expanded(child: SizedBox()),
                       SizedBox(width: 16.w),
                       InkWell(
-                          onTap: () => viewModel.updateViewType(ViewType.viewGrid),
-                          child: SvgPicture.asset(SVGUtils.kGridIcon, height: 15.h, color: viewModel.viewType == ViewType.viewGrid ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon)),
+                        onTap: () => viewModel.updateViewType(ViewType.viewGrid),
+                        child: SvgPicture.asset(SVGUtils.kGridIcon, height: 15.h, color: viewModel.viewType == ViewType.viewGrid ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon),
+                      ),
                       SizedBox(width: 14.w),
                       InkWell(
                         onTap: () => viewModel.updateViewType(ViewType.viewList),
@@ -211,42 +214,40 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                     ],
                   ),
                 ),
-                SizedBox(height: 30.h),
+                SizedBox(height: 32.h),
                 Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: NFTsViewBuilder(
-                      onGridSelected: (context) => BuildNFTsContent(
-                          onDraftList: (context) => BuildGridView(
+                  child: NFTsViewBuilder(
+                    onGridSelected: (context) => BuildNFTsContent(
+                        onDraftList: (context) => BuildGridView(
+                              nftsList: viewModel.nftDraftList,
+                              onEmptyList: (context) => Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                child: getEmptyDraftListWidget(),
+                              ),
+                            ),
+                        onPublishedList: (context) => BuildGridView(
+                              nftsList: viewModel.nftPublishedList,
+                              onEmptyList: (context) => Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                child: getEmptyPublishedWidget(),
+                              ),
+                            ),
+                        collectionType: viewModel.selectedCollectionType),
+                    onListSelected: (context) => BuildNFTsContent(
+                        onDraftList: (context) => Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: BuildListView(
                                 nftsList: viewModel.nftDraftList,
                                 onEmptyList: (context) => getEmptyDraftListWidget(),
                               ),
-                          onForSaleList: (context) => BuildGridView(
-                                nftsList: viewModel.nftForSaleList,
-                                onEmptyList: (context) => getEmptyWidgetForSale(),
-                              ),
-                          onPublishedList: (context) => BuildGridView(
-                                nftsList: viewModel.nftPublishedList,
-                                onEmptyList: (context) => getEmptyPublishedWidget(),
-                              ),
-                          collectionType: viewModel.selectedCollectionType),
-                      onListSelected: (context) => BuildNFTsContent(
-                          onDraftList: (context) => BuildListView(
-                                nftsList: viewModel.nftDraftList,
-                                onEmptyList: (context) => getEmptyDraftListWidget(),
-                              ),
-                          onForSaleList: (context) => BuildListView(
-                                nftsList: viewModel.nftForSaleList,
-                                onEmptyList: (context) => getEmptyWidgetForSale(),
-                              ),
-                          onPublishedList: (context) => BuildListView(
-                                key: ValueKey(viewModel.nftPublishedList.length),
-                                nftsList: viewModel.nftPublishedList,
-                                onEmptyList: (context) => getEmptyPublishedWidget(),
-                              ),
-                          collectionType: viewModel.selectedCollectionType),
-                      viewType: viewModel.viewType,
-                    ),
+                            ),
+                        onPublishedList: (context) => BuildListView(
+                              key: ValueKey(viewModel.nftPublishedList.length),
+                              nftsList: viewModel.nftPublishedList,
+                              onEmptyList: (context) => getEmptyPublishedWidget(),
+                            ),
+                        collectionType: viewModel.selectedCollectionType),
+                    viewType: viewModel.viewType,
                   ),
                 ),
               ],
@@ -303,31 +304,14 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
     return Expanded(
       child: InkWell(
         onTap: () => viewModel.changeSelectedCollection(collectionType),
-        child: Container(
+        child: DecoratedBox(
           decoration: BoxDecoration(
-            border: Border.all(width: 1.sp),
+            border: Border.all(width: 1.7.sp),
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 5.h),
             child: Center(
-              child: Text(title, style: subTextStyle.copyWith(color: EaselAppTheme.kBlack)),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildSelectedBox({required String title, required CreatorHubViewModel viewModel, required Color color, required CollectionType collectionType}) {
-    return Expanded(
-      child: InkWell(
-        onTap: () => viewModel.changeSelectedCollection(collectionType),
-        child: Container(
-          decoration: BoxDecoration(border: Border.all(width: 2.sp, color: color), color: color),
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.h),
-            child: Center(
-              child: Text(title, style: subTextStyle.copyWith(color: EaselAppTheme.kWhite)),
+              child: Text(title, style: subTextStyle.copyWith(color: EaselAppTheme.kBlack, fontWeight: FontWeight.w900)),
             ),
           ),
         ),
@@ -339,13 +323,11 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
 class BuildNFTsContent extends StatelessWidget {
   final WidgetBuilder onDraftList;
   final WidgetBuilder onPublishedList;
-  final WidgetBuilder onForSaleList;
   final CollectionType collectionType;
 
   const BuildNFTsContent({
     Key? key,
     required this.onDraftList,
-    required this.onForSaleList,
     required this.onPublishedList,
     required this.collectionType,
   }) : super(key: key);
@@ -358,9 +340,6 @@ class BuildNFTsContent extends StatelessWidget {
 
       case CollectionType.published:
         return onPublishedList(context);
-
-      case CollectionType.forSale:
-        return onForSaleList(context);
     }
   }
 }
@@ -400,17 +379,61 @@ class BuildGridView extends StatelessWidget {
       return onEmptyList(context);
     }
     return GridView.builder(
-        itemCount: nftsList.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 0.5,
-          crossAxisSpacing: 15.w,
-          mainAxisSpacing: 15.h,
-          crossAxisCount: 3,
-        ),
-        itemBuilder: (context, index) {
-          final nft = nftsList[index];
-          return NftGridViewItem(nft: nft);
-        });
+      itemCount: nftsList.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        childAspectRatio: 0.5,
+        crossAxisSpacing: 15.w,
+        mainAxisSpacing: 15.h,
+        crossAxisCount: 3,
+      ),
+      itemBuilder: (context, index) {
+        final nft = nftsList[index];
+        return (nft.price.isNotEmpty && double.parse(nft.price) > 0)
+            ? ClipRRect(
+                child: Banner(
+                  key: const Key(kPriceBannerKey),
+                  color: EaselAppTheme.kDarkGreen,
+                  location: BannerLocation.topEnd,
+                  message: "${getCoinWithProperDenomination(nft.ibcCoins, nft.price)}  ${getAbbrev(ibcCoin: nft.ibcCoins)}",
+                  child: NftGridViewItem(
+                    nft: nft,
+                  ),
+                ),
+              )
+            : NftGridViewItem(
+                nft: nft,
+              );
+      },
+    );
+  }
+
+  String getCoinWithProperDenomination(String ibcCoin, String amount) {
+    if (ibcCoin == "weth_wei") {
+      return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
+    } else if (ibcCoin == "upylon") {
+      return (double.parse(amount) / kBigIntBase).toStringAsFixed(0);
+    } else {
+      return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
+    }
+  }
+
+  String getAbbrev({required String ibcCoin}) {
+    switch (ibcCoin) {
+      case "urun":
+        return kAgoricAbr;
+      case "upylon":
+        return kPYLNAbbrevation;
+      case "ustripeusd":
+        return kStripeUSDABR;
+      case "eeur":
+        return kEmoneyAbb;
+      case "uatom":
+        return kAtomAbr;
+      case "weth_wei":
+        return kEthereumAbr;
+      default:
+        return kPYLNAbbrevation;
+    }
   }
 }
 
@@ -428,11 +451,12 @@ class BuildListView extends StatelessWidget {
       return onEmptyList(context);
     }
     return ListView.builder(
-        shrinkWrap: true,
-        itemCount: nftsList.length,
-        itemBuilder: (context, index) {
-          final nft = nftsList[index];
-          return viewModel.selectedCollectionType == CollectionType.draft ? DraftListTile(nft: nft, viewModel: viewModel) : NFTsListTile(publishedNFT: nft);
-        });
+      shrinkWrap: true,
+      itemCount: nftsList.length,
+      itemBuilder: (context, index) {
+        final nft = nftsList[index];
+        return viewModel.selectedCollectionType == CollectionType.draft ? DraftListTile(nft: nft, viewModel: viewModel) : NFTsListTile(publishedNFT: nft);
+      },
+    );
   }
 }
