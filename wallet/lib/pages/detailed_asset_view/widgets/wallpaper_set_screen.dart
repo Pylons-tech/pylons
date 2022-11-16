@@ -17,7 +17,13 @@ class WallpaperScreen {
 
   Future<void> show() async {
     await showGeneralDialog<String>(
-        context: context, pageBuilder: (BuildContext context, _, __) => Dialog(backgroundColor: Colors.transparent, insetPadding: EdgeInsets.zero, child: _WallpaperScreen(nft: nft)));
+      context: context,
+      pageBuilder: (BuildContext context, _, __) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: EdgeInsets.zero,
+        child: _WallpaperScreen(nft: nft),
+      ),
+    );
   }
 
   _WallpaperScreen test() {

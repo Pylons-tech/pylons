@@ -5,6 +5,7 @@ import 'package:cosmos_utils/app_info_extractor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:googleapis/firestore/v1.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
@@ -66,7 +67,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (accountProvider.accountPublicInfo == null) {
       //Loads the last used wallet.
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushReplacementNamed(RouteUtil.ROUTE_ONBOARDING);
+      Navigator.of(
+        navigatorKey.currentState!.overlay!.context,
+      ).pushReplacementNamed(RouteUtil.ROUTE_ONBOARDING);
     } else {
       final repository = GetIt.I.get<Repository>();
 
@@ -93,7 +96,9 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void moveToHome() {
-    Navigator.of(navigatorKey.currentState!.overlay!.context).pushReplacementNamed(RouteUtil.ROUTE_HOME);
+    Navigator.of(
+      navigatorKey.currentState!.overlay!.context,
+    ).pushReplacementNamed(RouteUtil.ROUTE_HOME);
   }
 
   @override
@@ -121,9 +126,12 @@ class _SplashScreenState extends State<SplashScreen> {
                   valueListenable: getImageIndex,
                   builder: (context, int value, child) {
                     return AnimatedSwitcher(
-                      duration: const Duration(seconds: 1),
+                      key: ValueKey(ImageUtil.BG_IMAGES[value]),
+                      duration: const Duration(milliseconds: 450),
+                      transitionBuilder: (Widget child, Animation<double> animation) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
                       child: Stack(
-                        key: UniqueKey(),
                         children: [
                           Opacity(
                             opacity: 0.2,
@@ -192,7 +200,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void dispose() {
-    super.dispose();
     timer.cancel();
+    super.dispose();
   }
 }
