@@ -72,7 +72,7 @@ class NoEaselArtWork extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
+                  padding: EdgeInsets.only(bottom: 8.0.h),
                   child: Text(
                     LocaleKeys.create_easel_free_nft.tr(),
                     style: TextStyle(color: AppColors.kBlue , fontSize: 12.sp, fontWeight: FontWeight.w600),

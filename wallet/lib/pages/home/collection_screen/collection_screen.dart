@@ -63,64 +63,83 @@ class _CollectionScreenState extends State<CollectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const purchasesCollection = PurchasesCollection();
-    const creationsCollection = CreationsCollection();
-    const favoritesCollection = FavoritesCollection();
 
     return Consumer<CollectionViewModel>(builder: (context, viewModel, child) {
       return Stack(
         children: [
           Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
+            left: 0.w,
+            right: 0.w,
+            bottom: 0.h,
             top: 0.h,
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 450),
-              child: viewModel.collectionsType == CollectionsType.purchases
-                  ? creationsCollection
-                  : viewModel.collectionsType == CollectionsType.creations
-                      ? favoritesCollection
-                      : purchasesCollection,
+              child: getFirstTabTitleWidget(collectionViewModel: viewModel),
             ),
           ),
           Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
+            left: 0.w,
+            right: 0.w,
+            bottom: 0.h,
             top: 50.h,
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 450),
-              child: viewModel.collectionsType == CollectionsType.purchases
-                  ? favoritesCollection
-                  : viewModel.collectionsType == CollectionsType.creations
-                      ? purchasesCollection
-                      : creationsCollection,
+              child: getSecondTabTitleWidget(collectionViewModel: viewModel),
             ),
           ),
           Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
+            left: 0.w,
+            right: 0.w,
+            bottom: 0.h,
             top: 100.h,
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 450),
-              child: viewModel.collectionsType == CollectionsType.purchases
-                  ? purchasesCollection
-                  : viewModel.collectionsType == CollectionsType.creations
-                      ? creationsCollection
-                      : favoritesCollection,
+              child: getThirdTabTitleWidget(collectionViewModel: viewModel),
             ),
           ),
         ],
       );
     });
   }
+
+  Widget getFirstTabTitleWidget({required CollectionViewModel collectionViewModel}){
+    switch(collectionViewModel.collectionsType){
+      case CollectionsType.purchases:
+        return const CreationsCollection();
+      case CollectionsType.creations:
+        return const FavoritesCollection();
+      default:
+        return const PurchasesCollection();
+    }
+  }
+
+  Widget getSecondTabTitleWidget({required CollectionViewModel collectionViewModel}){
+    switch(collectionViewModel.collectionsType){
+      case CollectionsType.purchases:
+        return const FavoritesCollection();
+      case CollectionsType.creations:
+        return const PurchasesCollection();
+      default:
+        return const CreationsCollection();
+    }
+  }
+
+  Widget getThirdTabTitleWidget({required CollectionViewModel collectionViewModel}){
+    switch(collectionViewModel.collectionsType){
+      case CollectionsType.purchases:
+        return const PurchasesCollection();
+      case CollectionsType.creations:
+        return const CreationsCollection();
+      default:
+        return const FavoritesCollection();
+    }
+  }
 }
 
 class PurchasesCollection extends StatelessWidget {
-
-  const PurchasesCollection({Key? key,}) : super(key: key);
+  const PurchasesCollection({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -159,22 +178,22 @@ class PurchasesCollection extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    left: 0,
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
+                    left: 0.w,
+                    top: 0.h,
+                    right: 0.w,
+                    bottom: 0.h,
                     child: SvgPicture.asset(
                       SVGUtil.COLLECTION_BACKGROUND,
                       fit: BoxFit.fill,
                     ),
                   ),
                   Positioned(
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
+                    left: 0.w,
+                    right: 0.w,
+                    top: 0.h,
+                    bottom: 0.h,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 18.0),
+                      padding: EdgeInsets.only(top: 18.0.h),
                       child: Row(
                         children: [
                           Expanded(
@@ -220,8 +239,9 @@ class PurchasesCollection extends StatelessWidget {
 }
 
 class CreationsCollection extends StatelessWidget {
-
-  const CreationsCollection({Key? key,}) : super(key: key);
+  const CreationsCollection({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -244,8 +264,8 @@ class CreationsCollection extends StatelessWidget {
               child: Stack(
                 children: [
                   Positioned(
-                    top: 0,
-                    bottom: 0,
+                    top: 0.h,
+                    bottom: 0.h,
                     left: 0.w,
                     right: 0.w,
                     child: DecoratedBox(
@@ -262,20 +282,20 @@ class CreationsCollection extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    left: 0,
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
+                    left: 0.w,
+                    top: 0.h,
+                    right: 0.w,
+                    bottom: 0.h,
                     child: SvgPicture.asset(
                       SVGUtil.COLLECTION_BACKGROUND,
                       fit: BoxFit.fill,
                     ),
                   ),
                   Positioned(
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
+                    left: 0.w,
+                    right: 0.w,
+                    top: 0.h,
+                    bottom: 0.h,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 18.0),
                       child: Row(
@@ -308,9 +328,7 @@ class CreationsCollection extends StatelessWidget {
           if (viewModel.collectionsType == CollectionsType.creations)
             Expanded(
               key: const Key(kCreationTabGridViewKey),
-              child: viewModel.creations.isNotEmpty
-                  ? getNFTsCollectionWidget(collectionViewModel: viewModel,nftList: viewModel.creations)
-                  : const NoEaselArtWork(),
+              child: viewModel.creations.isNotEmpty ? getNFTsCollectionWidget(collectionViewModel: viewModel, nftList: viewModel.creations) : const NoEaselArtWork(),
             )
         ],
       ),
@@ -319,8 +337,9 @@ class CreationsCollection extends StatelessWidget {
 }
 
 class FavoritesCollection extends StatelessWidget {
-
-  const FavoritesCollection({Key? key,}) : super(key: key);
+  const FavoritesCollection({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -343,8 +362,8 @@ class FavoritesCollection extends StatelessWidget {
               child: Stack(
                 children: [
                   Positioned(
-                    top: 0,
-                    bottom: 0,
+                    top: 0.h,
+                    bottom: 0.h,
                     left: 0.w,
                     right: 0.w,
                     child: DecoratedBox(
@@ -361,22 +380,22 @@ class FavoritesCollection extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    left: 0,
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
+                    left: 0.w,
+                    top: 0.h,
+                    right: 0.w,
+                    bottom: 0.h,
                     child: SvgPicture.asset(
                       SVGUtil.COLLECTION_BACKGROUND,
                       fit: BoxFit.fill,
                     ),
                   ),
                   Positioned(
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
+                    left: 0.w,
+                    right: 0.w,
+                    top: 0.h,
+                    bottom: 0.h,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 18.0),
+                      padding: EdgeInsets.only(top: 18.0.h),
                       child: Row(
                         children: [
                           Expanded(
@@ -407,7 +426,7 @@ class FavoritesCollection extends StatelessWidget {
           if (viewModel.collectionsType == CollectionsType.favorites)
             Expanded(
               key: const Key(kFavoritesTabGridViewKey),
-              child: getNFTsCollectionWidget(collectionViewModel: viewModel,nftList: viewModel.favorites,isListFavorite: true),
+              child: getNFTsCollectionWidget(collectionViewModel: viewModel, nftList: viewModel.favorites, isListFavorite: true),
             )
           else
             Expanded(
@@ -419,10 +438,9 @@ class FavoritesCollection extends StatelessWidget {
       ),
     );
   }
-
 }
 
-Widget getNFTsCollectionWidget({required CollectionViewModel collectionViewModel,required List<NFT> nftList, bool isListFavorite = false}) {
+Widget getNFTsCollectionWidget({required CollectionViewModel collectionViewModel, required List<NFT> nftList, bool isListFavorite = false}) {
   return ColoredBox(
     color: AppColors.kMainBG,
     child: GridView.custom(
@@ -441,7 +459,7 @@ Widget getNFTsCollectionWidget({required CollectionViewModel collectionViewModel
           fit: StackFit.expand,
           children: [
             GestureDetector(
-              onTap: () => collectionViewModel.shouldShowOwnerViewOrPurchaseViewForNFT(asset: nftList[index],context: context),
+              onTap: () => collectionViewModel.shouldShowOwnerViewOrPurchaseViewForNFT(asset: nftList[index], context: context),
               child: PreviewNFTGrid(
                 assetType: nftList[index].assetType,
                 on3dNFT: (BuildContext context) => Container(
@@ -502,12 +520,12 @@ Widget getNFTsCollectionWidget({required CollectionViewModel collectionViewModel
                   alignment: Alignment.topLeft,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Colors.transparent,Colors.black12,Colors.black26,Colors.black38,Colors.black45 ],
+                      colors: [Colors.transparent, Colors.black12, Colors.black26, Colors.black38, Colors.black45],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                     ),
                   ),
-                  padding: EdgeInsets.only(left:5.w,right: 5.w,bottom:5.h),
+                  padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 5.h),
                   width: double.maxFinite,
                   // height: 17.h,
                   child: Row(
@@ -518,7 +536,7 @@ Widget getNFTsCollectionWidget({required CollectionViewModel collectionViewModel
                           visible: !isListFavorite,
                           child: Text(
                             "${nftList[index].name}  #${nftList[index].amountMinted}",
-                            style: TextStyle(fontSize: 7.sp,color: AppColors.kWhite),
+                            style: TextStyle(fontSize: 7.sp, color: AppColors.kWhite),
                           ),
                         ),
                       ),
