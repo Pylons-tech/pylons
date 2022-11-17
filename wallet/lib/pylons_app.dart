@@ -333,7 +333,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
           );
 
           final appleInAppPurchaseResponse = await walletStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
-
+          loading.dismiss();
           if (appleInAppPurchaseResponse.isLeft()) {
             appleInAppPurchaseResponse.swap().toOption().toNullable()!.message.show();
             return;
