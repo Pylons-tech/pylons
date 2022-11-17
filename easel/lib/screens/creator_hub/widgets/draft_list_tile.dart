@@ -226,24 +226,29 @@ class _DraftListTileState extends State<DraftListTile> {
                 )
               : getDraftCard(),
         ),
-        if (widget.nft.assetType.toAssetTypeEnum() != AssetType.ThreeD) IgnorePointer(
-                child: SizedBox(
-                  height: 85.0.h,
-                  width: double.infinity,
-                  child: CachedNetworkImage(
-                    imageUrl: getThumbnailUrl(),
-                    fit: BoxFit.fill,
-                    color: Colors.transparent,
-                    colorBlendMode: BlendMode.clear,
-                    placeholder: (context, _) => getPlaceHolder(),
-                    errorWidget: (context, _, __) {
-                      return const IgnorePointer(child: SizedBox());
-                    },
-                  ),
-                ),
-              ) else const IgnorePointer(
-                child: SizedBox(),
+        if (widget.nft.assetType.toAssetTypeEnum() != AssetType.ThreeD)
+          IgnorePointer(
+            child: SizedBox(
+              height: 85.0.h,
+              width: double.infinity,
+              child: CachedNetworkImage(
+                imageUrl: getThumbnailUrl(),
+                fit: BoxFit.fill,
+                color: Colors.transparent,
+                colorBlendMode: BlendMode.clear,
+                placeholder: (context, _) => getPlaceHolder(),
+                errorWidget: (context, _, __) {
+                  return const IgnorePointer(child: SizedBox());
+                },
               ),
+            ),
+          )
+        else
+          IgnorePointer(
+            child: SizedBox(
+              height: 85.h,
+            ),
+          ),
       ],
     );
   }
