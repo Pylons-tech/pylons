@@ -4,8 +4,9 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i9;
-import 'dart:ui' as _i10;
+import 'dart:ui' as _i12;
 
+import 'package:flutter/cupertino.dart' as _i10;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:pylons_wallet/model/nft.dart' as _i7;
 import 'package:pylons_wallet/pages/home/collection_screen/collection_screen.dart'
@@ -16,6 +17,7 @@ import 'package:pylons_wallet/services/repository/repository.dart' as _i5;
 import 'package:pylons_wallet/services/third_party_services/thumbnail_helper.dart'
     as _i3;
 import 'package:pylons_wallet/stores/wallet_store.dart' as _i2;
+import 'package:pylons_wallet/utils/enums.dart' as _i11;
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart'
     as _i4;
 
@@ -295,6 +297,39 @@ class MockCollectionViewModel extends _i1.Mock
         returnValue: _i9.Future<dynamic>.value(),
       ) as _i9.Future<dynamic>);
   @override
+  void shouldShowOwnerViewOrPurchaseViewForNFT({
+    required _i7.NFT? asset,
+    required _i10.BuildContext? context,
+  }) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #shouldShowOwnerViewOrPurchaseViewForNFT,
+          [],
+          {
+            #asset: asset,
+            #context: context,
+          },
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i9.Future<void> onRecipeClicked(_i7.NFT? asset) => (super.noSuchMethod(
+        Invocation.method(
+          #onRecipeClicked,
+          [asset],
+        ),
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
+  @override
+  String getNFTIcon(_i11.AssetType? assetType) => (super.noSuchMethod(
+        Invocation.method(
+          #getNFTIcon,
+          [assetType],
+        ),
+        returnValue: '',
+      ) as String);
+  @override
   void refreshScreen() => super.noSuchMethod(
         Invocation.method(
           #refreshScreen,
@@ -303,7 +338,7 @@ class MockCollectionViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  void addListener(_i10.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i12.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -311,7 +346,7 @@ class MockCollectionViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  void removeListener(_i10.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i12.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],

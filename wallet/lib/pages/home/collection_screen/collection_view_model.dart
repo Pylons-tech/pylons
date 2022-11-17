@@ -10,9 +10,13 @@ import 'package:pylons_wallet/services/third_party_services/thumbnail_helper.dar
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
+import 'package:pylons_wallet/utils/svg_util.dart';
 
+import '../../../components/loading.dart';
 import '../../../generated/locale_keys.g.dart';
+import '../../../pylons_app.dart';
 import '../../../services/repository/repository.dart';
+import '../../../utils/route_util.dart';
 
 class CollectionViewModel extends ChangeNotifier {
   WalletsStore walletsStore;
@@ -78,10 +82,10 @@ class CollectionViewModel extends ChangeNotifier {
     Timer(const Duration(milliseconds: 300), () async {
       loadPurchasesAndCreationsData();
     });
-    loadFavoritesData();
   }
 
   Future loadPurchasesAndCreationsData() async {
+    loadFavoritesData();
     thumbnailsPath = (await getTemporaryDirectory()).path;
     try {
       final assets = <NFT>[];
@@ -129,6 +133,7 @@ class CollectionViewModel extends ChangeNotifier {
 
     if(response.isRight()){
       final List<FavoritesModel> favModels = response.getOrElse(() => []);
+      favorites.clear();
       for(final FavoritesModel favoritesModel in favModels){
         if(favoritesModel.type == NftType.TYPE_ITEM.name){
           final item = await repository.getItem(cookBookId: favoritesModel.cookbookId,itemId: favoritesModel.id);
@@ -142,6 +147,38 @@ class CollectionViewModel extends ChangeNotifier {
           }
         }
       }
+    }
+  }
+
+  void shouldShowOwnerViewOrPurchaseViewForNFT({required NFT asset,required BuildContext context}) {
+    if (asset.type == NftType.TYPE_RECIPE) {
+      onRecipeClicked(asset);
+    } else {
+      Navigator.of(context).pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: asset).then((_) => {walletsStore.setStateUpdatedFlag(flag: true)});
+    }
+  }
+
+  Future<void> onRecipeClicked(NFT asset) async {
+    final loader = Loading()..showLoading();
+
+    await asset.getOwnerAddress();
+
+    loader.dismiss();
+    Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: asset).then((_) => {walletsStore.setStateUpdatedFlag(flag: true)});
+  }
+
+  String getNFTIcon(AssetType assetType) {
+    switch (assetType) {
+      case AssetType.Video:
+        return SVGUtil.kSvgNftFormatVideo;
+      case AssetType.Audio:
+        return SVGUtil.kSvgNftFormatAudio;
+      case AssetType.Pdf:
+        return SVGUtil.kSvgNftFormatPDF;
+      case AssetType.ThreeD:
+        return SVGUtil.kSvgNftFormat3d;
+      default:
+        return SVGUtil.kSvgNftFormatImage;
     }
   }
 

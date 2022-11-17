@@ -92,4 +92,9 @@ class SVGUtil {
   static String TRANSACTION_SUCCESS = "assets/images/svg/transaction_success.svg";
   static String TRANSACTION_RETRY = "assets/images/svg/transaction_retry.svg";
   static String PYLONS_POINTS_ICON = "assets/images/svg/pylons_points_icon.svg";
+  static const kSvgNftFormatVideo = 'assets/images/svg/nft_format_video.svg';
+  static const kSvgNftFormatImage = 'assets/images/svg/nft_format_image.svg';
+  static const kSvgNftFormat3d = 'assets/images/svg/nft_format_3d.svg';
+  static const kSvgNftFormatAudio = 'assets/images/svg/nft_format_audio.svg';
+  static const kSvgNftFormatPDF = 'assets/images/svg/nft_format_pdf.svg';
 }

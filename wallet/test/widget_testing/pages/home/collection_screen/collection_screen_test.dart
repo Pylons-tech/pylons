@@ -9,6 +9,8 @@ import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model
 import 'package:pylons_wallet/services/third_party_services/thumbnail_helper.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
+import 'package:pylons_wallet/utils/enums.dart';
+import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../../../mocks/mock_constants.dart';
 import '../../../../mocks/mock_wallet_store.dart';
@@ -34,7 +36,7 @@ void main() {
         Material(child: ChangeNotifierProvider.value(
           value: GetIt.I.get<CollectionViewModel>(),
           builder: (context,widget) {
-            return CreationsCollection(onNFTSelected: (nft){});
+            return const CreationsCollection();
           }
         )),
       );
@@ -49,7 +51,7 @@ void main() {
         Material(child: ChangeNotifierProvider.value(
             value: GetIt.I.get<CollectionViewModel>(),
             builder: (context,widget) {
-              return PurchasesCollection(onNFTSelected: (nft){});
+              return const PurchasesCollection();
             }
         )),
       );
@@ -64,7 +66,7 @@ void main() {
         Material(child: ChangeNotifierProvider.value(
             value: GetIt.I.get<CollectionViewModel>(),
             builder: (context,widget) {
-              return FavoritesCollection(onNFTSelected: (nft){});
+              return const FavoritesCollection();
             }
         )),
       );
@@ -79,6 +81,7 @@ void main() {
 void registerStubs(CollectionViewModel viewModel) {
 
   when(viewModel.collectionsType).thenAnswer((newValue)=>CollectionsType.creations);
+  when(viewModel.getNFTIcon(AssetType.Image)).thenAnswer((newValue)=>SVGUtil.kSvgNftFormatImage);
 
   when(viewModel.creations).thenAnswer((newValue)=>[MOCK_NFT_FREE_IMAGE]);
   when(viewModel.purchases).thenAnswer((newValue)=>[MOCK_NFT_FREE_IMAGE]);

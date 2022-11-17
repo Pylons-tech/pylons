@@ -4,11 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
@@ -16,14 +13,9 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_placeholder.
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/video_placeholder.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/preview_nft_grid.dart';
-import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/home/easel_section/no_easel_art_work.dart';
-import 'package:pylons_wallet/pylons_app.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
-import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
@@ -71,22 +63,9 @@ class _CollectionScreenState extends State<CollectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final purchasesCollection = PurchasesCollection(
-      onNFTSelected: (NFT asset) {
-        shouldShowOwnerViewOrPurchaseViewForNFT(asset);
-      },
-    );
-    final creationsCollection = CreationsCollection(
-      onNFTSelected: (NFT asset) {
-        shouldShowOwnerViewOrPurchaseViewForNFT(asset);
-      },
-    );
-
-    final favoritesCollection = FavoritesCollection(
-      onNFTSelected: (NFT asset) {
-        shouldShowOwnerViewOrPurchaseViewForNFT(asset);
-      },
-    );
+    const purchasesCollection = PurchasesCollection();
+    const creationsCollection = CreationsCollection();
+    const favoritesCollection = FavoritesCollection();
 
     return Consumer<CollectionViewModel>(builder: (context, viewModel, child) {
       return Stack(
@@ -137,31 +116,11 @@ class _CollectionScreenState extends State<CollectionScreen> {
       );
     });
   }
-
-  void shouldShowOwnerViewOrPurchaseViewForNFT(NFT asset) {
-    final walletsStore = GetIt.I.get<WalletsStore>();
-    if (asset.type == NftType.TYPE_RECIPE) {
-      onRecipeClicked(asset);
-    } else {
-      Navigator.of(context).pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: asset).then((_) => {walletsStore.setStateUpdatedFlag(flag: true)});
-    }
-  }
-
-  Future<void> onRecipeClicked(NFT asset) async {
-    final walletsStore = GetIt.I.get<WalletsStore>();
-    final loader = Loading()..showLoading();
-
-    await asset.getOwnerAddress();
-
-    loader.dismiss();
-    Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: asset).then((_) => {walletsStore.setStateUpdatedFlag(flag: true)});
-  }
 }
 
 class PurchasesCollection extends StatelessWidget {
-  final OnNFTSelected onNFTSelected;
 
-  const PurchasesCollection({Key? key, required this.onNFTSelected}) : super(key: key);
+  const PurchasesCollection({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -246,54 +205,7 @@ class PurchasesCollection extends StatelessWidget {
           if (viewModel.collectionsType == CollectionsType.purchases)
             Expanded(
               key: const Key(kPurchasesTabGridViewKey),
-              child: ColoredBox(
-                color: AppColors.kMainBG,
-                child: GridView.custom(
-                  padding: EdgeInsets.only(
-                    bottom: 16.h,
-                    left: 16.w,
-                    right: 16.w,
-                  ),
-                  gridDelegate: SliverQuiltedGridDelegate(
-                    crossAxisCount: 6,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
-                    repeatPattern: QuiltedGridRepeatPattern.inverted,
-                    pattern: const [
-                      QuiltedGridTile(4, 4),
-                      QuiltedGridTile(2, 2),
-                      QuiltedGridTile(2, 2),
-                    ],
-                  ),
-                  childrenDelegate: SliverChildBuilderDelegate((context, index) {
-                    final nft = viewModel.purchases[index];
-                    return GestureDetector(
-                      onTap: () => onNFTSelected(nft),
-                      child: ClipRRect(
-                        child: PreviewNFTGrid(
-                          assetType: nft.assetType,
-                          on3dNFT: (BuildContext context) => Container(
-                            color: AppColors.k3DBackgroundColor,
-                            height: double.infinity,
-                            child: IgnorePointer(
-                              child: Nft3dWidget(
-                                url: nft.url,
-                                cameraControls: false,
-                                backgroundColor: AppColors.k3DBackgroundColor,
-                              ),
-                            ),
-                          ),
-                          onPdfNFT: (BuildContext context) => PdfPlaceHolder(nftUrl: nft.url, nftName: nft.name, thumbnailUrl: nft.thumbnailUrl),
-                          onVideoNFT: (BuildContext context) => VideoPlaceHolder(nftUrl: nft.url, nftName: nft.name, thumbnailUrl: nft.thumbnailUrl),
-                          onImageNFT: (BuildContext context) =>
-                              CachedNetworkImage(placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()), imageUrl: nft.url, fit: BoxFit.cover),
-                          onAudioNFT: (BuildContext context) => getAudioPlaceHolder(thumbnailUrl: nft.thumbnailUrl),
-                        ),
-                      ),
-                    );
-                  }, childCount: viewModel.purchases.length),
-                ),
-              ),
+              child: getNFTsCollectionWidget(collectionViewModel: viewModel, nftList: viewModel.purchases),
             )
           else
             Expanded(
@@ -308,9 +220,8 @@ class PurchasesCollection extends StatelessWidget {
 }
 
 class CreationsCollection extends StatelessWidget {
-  final OnNFTSelected onNFTSelected;
 
-  const CreationsCollection({Key? key, required this.onNFTSelected}) : super(key: key);
+  const CreationsCollection({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -398,73 +309,7 @@ class CreationsCollection extends StatelessWidget {
             Expanded(
               key: const Key(kCreationTabGridViewKey),
               child: viewModel.creations.isNotEmpty
-                  ? ColoredBox(
-                      color: AppColors.kMainBG,
-                      child: GridView.custom(
-                        padding: EdgeInsets.only(
-                          bottom: 16.h,
-                          left: 16.w,
-                          right: 16.w,
-                        ),
-                        gridDelegate: SliverQuiltedGridDelegate(
-                          crossAxisCount: 6,
-                          mainAxisSpacing: 8,
-                          crossAxisSpacing: 8,
-                          repeatPattern: QuiltedGridRepeatPattern.inverted,
-                          pattern: const [
-                            QuiltedGridTile(4, 4),
-                            QuiltedGridTile(2, 2),
-                            QuiltedGridTile(2, 2),
-                          ],
-                        ),
-                        childrenDelegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final nft = viewModel.creations[index];
-                            return ClipRRect(
-                              child: GestureDetector(
-                                onTap: () => onNFTSelected(nft),
-                                child: Banner(
-                                  color: AppColors.kPriceTagColor,
-                                  location: BannerLocation.topStart,
-                                  message: "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}  ${nft.ibcCoins.getAbbrev()}",
-                                  child: PreviewNFTGrid(
-                                    assetType: nft.assetType,
-                                    on3dNFT: (BuildContext context) => Container(
-                                      color: Colors.grey.shade200,
-                                      height: double.infinity,
-                                      child: IgnorePointer(
-                                        child: Nft3dWidget(
-                                          url: nft.url,
-                                          cameraControls: false,
-                                          backgroundColor: AppColors.k3DBackgroundColor,
-                                        ),
-                                      ),
-                                    ),
-                                    onPdfNFT: (BuildContext context) => PdfPlaceHolder(
-                                      nftUrl: nft.url,
-                                      nftName: nft.name,
-                                      thumbnailUrl: nft.thumbnailUrl,
-                                    ),
-                                    onVideoNFT: (BuildContext context) => VideoPlaceHolder(
-                                      nftUrl: nft.url,
-                                      nftName: nft.name,
-                                      thumbnailUrl: nft.thumbnailUrl,
-                                    ),
-                                    onImageNFT: (BuildContext context) => CachedNetworkImage(
-                                      placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()),
-                                      imageUrl: nft.url,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    onAudioNFT: (BuildContext context) => getAudioPlaceHolder(thumbnailUrl: nft.thumbnailUrl),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                          childCount: viewModel.creations.length,
-                        ),
-                      ),
-                    )
+                  ? getNFTsCollectionWidget(collectionViewModel: viewModel,nftList: viewModel.creations)
                   : const NoEaselArtWork(),
             )
         ],
@@ -474,9 +319,8 @@ class CreationsCollection extends StatelessWidget {
 }
 
 class FavoritesCollection extends StatelessWidget {
-  final OnNFTSelected onNFTSelected;
 
-  const FavoritesCollection({Key? key, required this.onNFTSelected}) : super(key: key);
+  const FavoritesCollection({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -563,46 +407,7 @@ class FavoritesCollection extends StatelessWidget {
           if (viewModel.collectionsType == CollectionsType.favorites)
             Expanded(
               key: const Key(kFavoritesTabGridViewKey),
-              child: ColoredBox(
-                color: AppColors.kMainBG,
-                child: GridView.custom(
-                  padding: EdgeInsets.only(
-                    bottom: 16.h,
-                    left: 16.w,
-                    right: 16.w,
-                  ),
-                  gridDelegate: SliverQuiltedGridDelegate(
-                    crossAxisCount: 6,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
-                    repeatPattern: QuiltedGridRepeatPattern.inverted,
-                    pattern: const [
-                      QuiltedGridTile(4, 4),
-                      QuiltedGridTile(2, 2),
-                      QuiltedGridTile(2, 2),
-                    ],
-                  ),
-                  childrenDelegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final nft = viewModel.favorites[index];
-                      return (nft.price.isNotEmpty && double.parse(nft.price) > 0)
-                          ? ClipRRect(
-                              child: GestureDetector(
-                                onTap: () => onNFTSelected(nft),
-                                child: Banner(
-                                  color: AppColors.kPriceTagColor,
-                                  location: BannerLocation.topStart,
-                                  message: "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}  ${nft.ibcCoins.getAbbrev()}",
-                                  child: getNFTWidget(nft: nft),
-                                ),
-                              ),
-                            )
-                          : getNFTWidget(nft: nft);
-                    },
-                    childCount: viewModel.favorites.length,
-                  ),
-                ),
-              ),
+              child: getNFTsCollectionWidget(collectionViewModel: viewModel,nftList: viewModel.favorites,isListFavorite: true),
             )
           else
             Expanded(
@@ -615,38 +420,126 @@ class FavoritesCollection extends StatelessWidget {
     );
   }
 
-  Widget getNFTWidget({required NFT nft}) {
-    return PreviewNFTGrid(
-      assetType: nft.assetType,
-      on3dNFT: (BuildContext context) => Container(
-        color: Colors.grey.shade200,
-        height: double.infinity,
-        child: IgnorePointer(
-          child: Nft3dWidget(
-            url: nft.url,
-            cameraControls: false,
-            backgroundColor: AppColors.k3DBackgroundColor,
-          ),
-        ),
+}
+
+Widget getNFTsCollectionWidget({required CollectionViewModel collectionViewModel,required List<NFT> nftList, bool isListFavorite = false}) {
+  return ColoredBox(
+    color: AppColors.kMainBG,
+    child: GridView.custom(
+      padding: EdgeInsets.only(
+        bottom: 16.h,
+        left: 16.w,
+        right: 16.w,
       ),
-      onPdfNFT: (BuildContext context) => PdfPlaceHolder(
-        nftUrl: nft.url,
-        nftName: nft.name,
-        thumbnailUrl: nft.thumbnailUrl,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
       ),
-      onVideoNFT: (BuildContext context) => VideoPlaceHolder(
-        nftUrl: nft.url,
-        nftName: nft.name,
-        thumbnailUrl: nft.thumbnailUrl,
-      ),
-      onImageNFT: (BuildContext context) => CachedNetworkImage(
-        placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()),
-        imageUrl: nft.url,
-        fit: BoxFit.cover,
-      ),
-      onAudioNFT: (BuildContext context) => getAudioPlaceHolder(thumbnailUrl: nft.thumbnailUrl),
-    );
-  }
+      childrenDelegate: SliverChildBuilderDelegate((context, index) {
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            GestureDetector(
+              onTap: () => collectionViewModel.shouldShowOwnerViewOrPurchaseViewForNFT(asset: nftList[index],context: context),
+              child: PreviewNFTGrid(
+                assetType: nftList[index].assetType,
+                on3dNFT: (BuildContext context) => Container(
+                  color: AppColors.k3DBackgroundColor,
+                  height: double.infinity,
+                  child: IgnorePointer(
+                    child: Nft3dWidget(
+                      url: nftList[index].url,
+                      cameraControls: false,
+                      backgroundColor: AppColors.k3DBackgroundColor,
+                    ),
+                  ),
+                ),
+                onPdfNFT: (BuildContext context) => PdfPlaceHolder(
+                  nftUrl: nftList[index].url,
+                  nftName: nftList[index].name,
+                  thumbnailUrl: nftList[index].thumbnailUrl,
+                ),
+                onVideoNFT: (BuildContext context) => VideoPlaceHolder(
+                  nftUrl: nftList[index].url,
+                  nftName: nftList[index].name,
+                  thumbnailUrl: nftList[index].thumbnailUrl,
+                ),
+                onImageNFT: (BuildContext context) => CachedNetworkImage(
+                  placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()),
+                  imageUrl: nftList[index].url,
+                  fit: BoxFit.cover,
+                ),
+                onAudioNFT: (BuildContext context) => getAudioPlaceHolder(thumbnailUrl: nftList[index].thumbnailUrl),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  margin: EdgeInsets.zero,
+                  alignment: Alignment.topLeft,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.black45, Colors.black38, Colors.black26, Colors.black12, Colors.transparent],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                  padding: EdgeInsets.only(left: 5.w, top: 5.h),
+                  width: double.maxFinite,
+                  // height: 17.h,
+                  child: SvgPicture.asset(
+                    collectionViewModel.getNFTIcon(nftList[index].assetType),
+                    color: Colors.white,
+                    width: 14.w,
+                    height: 14.h,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.zero,
+                  alignment: Alignment.topLeft,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.transparent,Colors.black12,Colors.black26,Colors.black38,Colors.black45 ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                  padding: EdgeInsets.only(left:5.w,right: 5.w,bottom:5.h),
+                  width: double.maxFinite,
+                  // height: 17.h,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Visibility(
+                          visible: !isListFavorite,
+                          child: Text(
+                            "${nftList[index].name}  #${nftList[index].amountMinted}",
+                            style: TextStyle(fontSize: 7.sp,color: AppColors.kWhite),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: isListFavorite,
+                        child: Image.asset(
+                          'assets/images/icons/like_full.png',
+                          height: 10.h,
+                          color: AppColors.kDarkRed,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
+        );
+      }, childCount: nftList.length),
+    ),
+  );
 }
 
 Widget getAudioThumbnailFromUrl({required String thumbnailUrl}) {
