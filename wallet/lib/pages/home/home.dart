@@ -23,7 +23,6 @@ import 'package:pylons_wallet/utils/screen_responsive.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
 
-import '../../generated/locale_keys.g.dart';
 import '../../services/third_party_services/remote_config_service/remote_config_service.dart';
 
 class HomeScreen extends StatefulWidget {
