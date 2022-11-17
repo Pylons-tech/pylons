@@ -33,11 +33,11 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
   Repository get repository => GetIt.I.get<Repository>();
 
   @override
-  initState() {
+ void initState() {
     super.initState();
 
     if (!widget.previewFlag) {
-      easelProvider.initializeAudioPlayer(publishedNFTUrl: widget.filePath);
+      easelProvider.initializeAudioPlayer(publishedNFTUrl: widget.filePath ?? "");
       return;
     } else {
       easelProvider.initializeAudioPlayerForFile(file: widget.file!);
@@ -76,6 +76,7 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
                   SizedBox(
                     height: 0.4.sh,
                   ),
+                  // ignore: prefer_if_elements_to_conditional_expressions
                   (shouldShowThumbnailButtonOrStepsOrNot())
                       ? SizedBox(
                           height: 100.h,
@@ -96,7 +97,7 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
                                         case ButtonState.paused:
                                           return InkWell(
                                             onTap: () {
-                                              viewModel.playAudio(widget.file != null);
+                                              viewModel.playAudio(forFile: widget.file != null);
                                             },
                                             child: Icon(
                                               Icons.play_arrow,
@@ -108,7 +109,7 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
                                         case ButtonState.playing:
                                           return InkWell(
                                             onTap: () {
-                                              viewModel.pauseAudio(widget.file != null);
+                                              viewModel.pauseAudio(forFile: widget.file != null);
                                             },
                                             child: Icon(
                                               Icons.pause,
@@ -138,7 +139,7 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
                                           thumbRadius: 10.h,
                                           timeLabelPadding: 3.h,
                                           onSeek: (position) {
-                                            viewModel.seekAudio(position, widget.file != null);
+                                            viewModel.seekAudio(position, forFile: widget.file != null);
                                           },
                                         ),
                                       );
@@ -152,7 +153,7 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
                   SizedBox(
                     height: 40.0.h,
                   ),
-                  shouldShowThumbnailButtonOrStepsOrNot() ? _buildThumbnailButton() : const SizedBox(),
+                  if (shouldShowThumbnailButtonOrStepsOrNot()) _buildThumbnailButton() else const SizedBox(),
                 ],
               ),
             ),
@@ -189,8 +190,8 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
     );
   }
 
-  void audioThumbnailPicker() async {
-    easelProvider.pauseAudio(true);
+  Future<void> audioThumbnailPicker() async {
+    easelProvider.pauseAudio(forFile: true);
     final pickedFile = await repository.pickFile(NftFormat.supportedFormats[0]);
     final result = pickedFile.getOrElse(() => PickedFileModel(path: "", fileName: "", extension: ""));
     if (result.path.isEmpty) {

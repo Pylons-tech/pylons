@@ -2,16 +2,17 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
-import 'package:pylons_wallet/pages/purchase_item/clipper/buy_now_clipper.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:pylons_wallet/utils/extension.dart';
+import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../../generated/locale_keys.g.dart';
+import '../clipper/top_left_bottom_right_clipper.dart';
 
 class BuyNFTButton extends StatelessWidget {
   final VoidCallback onTapped;
@@ -20,6 +21,8 @@ class BuyNFTButton extends StatelessWidget {
   const BuyNFTButton({Key? key, required this.onTapped, required this.nft}) : super(key: key);
 
   Widget getButtonContent(NFT nft, PurchaseItemViewModel viewModel) {
+    final double btnHeight = 35.h;
+    final double btnWidth = isTablet ? 160.w : 200.w;
     if (double.parse(nft.price) == 0) {
       return Container(
         height: 60.h,
@@ -57,36 +60,59 @@ class BuyNFTButton extends StatelessWidget {
       );
     }
     return Container(
-      height: isTablet ? 65.h : 55.h,
-      width: isTablet ? 160.w : 200.w,
-      color: AppColors.kDarkRed.withOpacity(0.8),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
+      height: btnHeight,
+      width: btnWidth,
+      decoration: BoxDecoration(
+        color: AppColors.kGreyLight.withOpacity(0.5),
+      ),
+      child: Row(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              viewModel.nft.ibcCoins.getAssets(),
-              Text(
-                "${"buy_for".tr()} ${viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${viewModel.nft.ibcCoins.getTrailingAbbrev()} ",
-                style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold),
-              ),
-            ],
+          Expanded(
+            flex: 4,
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: SvgPicture.asset(
+                    SVGUtil.CURVED_CORNER_RED_BG,
+                    height: btnHeight,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                Center(
+                  child: AutoSizeText(
+                    LocaleKeys.buy_now.tr(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white, fontSize: 12.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
+                    maxLines: 1,
+                  ),
+                ),
+              ],
+            ),
           ),
-          if (viewModel.nft.ibcCoins.name == kPylonDenom)
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 18.0.w),
-              child: Text(
-                "(\$${viewModel.nft.ibcCoins.name.convertPylonsToUSD(viewModel.nft.price)} $kStripeUSD_ABR)",
-                style: TextStyle(color: Colors.white, fontSize: 13.sp),
-              ),
-            )
-          else
-            const SizedBox(),
-          SizedBox(
-            height: 2.0.h,
-          )
+          Expanded(
+            flex: 3,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RichText(
+                  text: TextSpan(
+                      text: "\$${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}",
+                      style: TextStyle(color: AppColors.kWhite, fontSize: 10.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
+                      children: [
+                        TextSpan(
+                          text: " ${LocaleKeys.ea.tr()}.",
+                          style: TextStyle(color: AppColors.kWhite, fontSize: 10.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
+                        )
+                      ]),
+                ),
+                Text(
+                  "${nft.quantity - nft.amountMinted} ${LocaleKeys.available.tr()}",
+                  style: TextStyle(color: AppColors.kGreyLight, fontSize: 9.sp, fontWeight: FontWeight.normal, fontFamily: kUniversalFontFamily),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -96,7 +122,7 @@ class BuyNFTButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = context.read<PurchaseItemViewModel>();
     return ClipPath(
-      clipper: BuyClipper(),
+      clipper: TopLeftBottomRightClipper(),
       child: InkWell(
         onTap: onTapped,
         child: getButtonContent(nft, viewModel),

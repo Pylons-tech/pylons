@@ -573,6 +573,10 @@ class MockRepository extends Repository {
   @override
   Future<Either<Failure, int>> insertNFTInFavorites(FavoritesModel favoritesModel) {
     // TODO: implement insertNFTInFavorites
+
+  @override
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId}) {
+    // TODO: implement getNftOwnershipHistoryByCookbookIdAndRecipeId
     throw UnimplementedError();
   }
 }

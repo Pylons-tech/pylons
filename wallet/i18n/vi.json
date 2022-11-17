@@ -126,7 +126,7 @@
   "mnemonic_is_empty": "Mnemonic là trống",
   "user_name_doesnt_exists": "Tên người dùng không tồn tại",
   "user_name_invalid": "Tên người dùng không hợp lệ",
-  "invalid_input": "đâu vao không hợp lệ",
+  "invalid_input": "đâu vao không hợp lệ",
   "purchase_nft_success": "Đã mua thành công NFT này.",
   "payout_request_success": "Yêu cầu thanh toán thành công. %S",
   "trade_create_success": "Giao dịch trên NFT này đã được tạo thành công.",
@@ -349,7 +349,7 @@
   "enter_description_text": "Nhập mô tả",
   "enter_subject_text": "Nhập chủ đề",
   "free": "Tự do",
-  "thank_you_for_feedback": "Cảm ơn phản hôi của bạn.",
+  "thank_you_for_feedback": "Cảm ơn phản hôi của bạn.",
   "claim_free_nft": "Yêu cầu NFT miễn phí của bạn",
   "before_too_late": "Trước khi quá muộn!",
   "please_try_again_later": "Vui lòng thử lại sau",
@@ -363,5 +363,10 @@
   "download_easel": "Tải xuống giá vẽ",
   "create_easel_free_nft": "Dễ dàng cho phép bạn tạo NFT miễn phí!",
   "resolution": "nghị quyết",
-  "set_lockscreen": "Đặt làm màn hình khóa"
+  "set_lockscreen": "Đặt làm màn hình khóa",
+  "ipfs_cid": "IPFS CID",
+  "available": "có sẵn",
+  "ea": "ea",
+  "maintenance_mode_message": "Chúng tôi đang gặp sự cố kỹ thuật và đã tạm thời bắt đầu chế độ bảo trì để khắc phục sự cố. Đừng lo lắng, bộ sưu tập của bạn vẫn an toàn. Tuy nhiên, bạn không thể bắt đầu các giao dịch trên chuỗi cho đến khi chúng tôi giải quyết xong sự cố và khôi phục chức năng bình thường.",
+  "maintenance_mode_header": "Chế độ bảo trì"
 }

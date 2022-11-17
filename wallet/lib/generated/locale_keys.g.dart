@@ -366,5 +366,10 @@ abstract class  LocaleKeys {
   static const favorites = 'favorites';
   static const download_easel = 'download_easel';
   static const create_easel_free_nft = 'create_easel_free_nft';
+  static const ipfs_cid = 'ipfs_cid';
+  static const available = 'available';
+  static const ea = 'ea';
+  static const maintenance_mode_message = 'maintenance_mode_message';
+  static const maintenance_mode_header = 'maintenance_mode_header';
 
 }

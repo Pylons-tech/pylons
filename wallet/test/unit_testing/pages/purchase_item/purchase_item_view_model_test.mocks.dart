@@ -59,6 +59,7 @@ import 'package:transaction_signing_gateway/transaction_signing_gateway.dart'
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
+// ignore_for_file: must_be_immutable
 
 class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
   _FakeEither_0(
@@ -756,7 +757,6 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
 /// A class which mocks [AccountPublicInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-// ignore: must_be_immutable
 class MockAccountPublicInfo extends _i1.Mock implements _i6.AccountPublicInfo {
   MockAccountPublicInfo() {
     _i1.throwOnMissingStub(this);
@@ -2766,7 +2766,6 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
 /// A class which mocks [NFT].
 ///
 /// See the documentation for Mockito's code generation for more information.
-/// ignore: must_be_immutable
 class MockNFT extends _i1.Mock implements _i29.NFT {
   MockNFT() {
     _i1.throwOnMissingStub(this);

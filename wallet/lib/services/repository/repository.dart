@@ -318,6 +318,11 @@ abstract class Repository {
   /// Output: returns [List][NftOwnershipHistory] if success else this will give [Failure]
   Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String itemId, required String cookBookId});
 
+  /// This method will get the nft history
+  /// Input: [cookBookId] and [recipeId] of the nft
+  /// Output: returns [List][NftOwnershipHistory] if success else this will give [Failure]
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId});
+
   /// This method will get the transaction history from the chain
   /// Input: [address] of the user
   /// Output: returns [List][TransactionHistory] if success else this will give [Failure]
@@ -1828,6 +1833,26 @@ class RepositoryImp implements Repository {
 
     try {
       final result = await remoteDataStore.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
+
+      return Right(result);
+    } on String catch (_) {
+      return Left(FetchNftOwnershipHistoryFailure(message: LocaleKeys.something_wrong.tr()));
+    } on Failure catch (_) {
+      return Left(_);
+    } on Exception catch (_) {
+      recordErrorInCrashlytics(_);
+      return Left(FetchNftOwnershipHistoryFailure(message: LocaleKeys.something_wrong.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId}) async{
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
+    }
+
+    try {
+      final result = await remoteDataStore.getNftOwnershipHistoryByCookbookIdAndRecipeId(cookBookId: cookBookId,recipeId: recipeId);
 
       return Right(result);
     } on String catch (_) {
