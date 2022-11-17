@@ -160,8 +160,8 @@ class PurchasesCollection extends StatelessWidget {
               child: Stack(
                 children: [
                   Positioned(
-                    top: 0,
-                    bottom: 0,
+                    top: 0.h,
+                    bottom: 0.h,
                     left: 0.w,
                     right: 0.w,
                     child: DecoratedBox(
@@ -297,7 +297,7 @@ class CreationsCollection extends StatelessWidget {
                     top: 0.h,
                     bottom: 0.h,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 18.0),
+                      padding: EdgeInsets.only(top: 18.0.h),
                       child: Row(
                         children: [
                           Expanded(
