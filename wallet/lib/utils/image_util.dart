@@ -20,7 +20,7 @@ class ImageUtil {
   static String VIDEO_ICON = "assets/images/icons/video_icon.png";
   static String AUDIO_ICON = "assets/images/icons/audio_icon.png";
   static String PYLONS_LOGO_QR = "assets/images/icons/pylons_logo.jpeg";
-  static String PYLONS_LOGO = "assets/images/icons/pylons_logo_dark.png";
+  static String PYLONS_LOGO_DARK = "assets/images/icons/pylons_logo_dark.png";
   static String TextFieldSingleLine = "assets/images/text_field_single_line.png";
   static String TextFieldMultiLine = "assets/images/text_field_multi_line.png";
   static String SPLASH_SCREEN_BG = "assets/images/splash/Splash_Screen.jpg";

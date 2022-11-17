@@ -3,7 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/buttons/pylons_get_started_button.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
@@ -15,7 +14,6 @@ import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -44,23 +42,6 @@ class _AcceptPolicyScreenState extends State<AcceptPolicyScreen> {
             height: double.infinity,
             width: double.infinity,
             color: Colors.grey.withOpacity(0.3),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 8, right: 8, bottom: 8, top: MediaQuery.of(context).viewPadding.top),
-            child: SizedBox(
-              height: 100.h,
-              width: double.infinity,
-              child: ListTile(
-                leading: SvgPicture.asset(
-                  SVGUtil.OWNER_BACK_ICON,
-                  height: 25.h,
-                ),
-                trailing: SvgPicture.asset(
-                  SVGUtil.OWNER_REPORT,
-                  height: 25.h,
-                ),
-              ),
-            ),
           ),
           ChangeNotifierProvider.value(
             value: widget.viewModel,
