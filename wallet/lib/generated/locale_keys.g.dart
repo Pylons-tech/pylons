@@ -363,6 +363,9 @@ abstract class  LocaleKeys {
   static const resolution = 'resolution';
   static const bought_nft = 'bought_nft';
   static const set_lockscreen = 'set_lockscreen';
+  static const favorites = 'favorites';
+  static const download_easel = 'download_easel';
+  static const create_easel_free_nft = 'create_easel_free_nft';
   static const ipfs_cid = 'ipfs_cid';
   static const available = 'available';
   static const ea = 'ea';

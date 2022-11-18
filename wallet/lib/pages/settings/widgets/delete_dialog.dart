@@ -22,98 +22,105 @@ class DeleteDialog {
 
   Future show() {
     return showDialog(
-        barrierColor: Colors.black38,
-        barrierDismissible: false,
-        context: context,
-        builder: (_) {
-          return Dialog(
-            elevation: 0,
-            insetPadding: EdgeInsets.symmetric(horizontal: isTablet ? 45.w : 15.w),
-            backgroundColor: Colors.transparent,
-            child: ClipPath(
-              clipper: DialogClipper(),
-              child: Container(
-                color: AppColors.kDarkRed,
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(
-                      height: 20.h,
-                    ),
+      barrierColor: Colors.black38,
+      barrierDismissible: false,
+      context: context,
+      builder: (_) {
+        return Dialog(
+          elevation: 0,
+          insetPadding: EdgeInsets.symmetric(horizontal: isTablet ? 45.w : 15.w),
+          backgroundColor: Colors.transparent,
+          child: ClipPath(
+            clipper: DialogClipper(),
+            child: Container(
+              color: AppColors.kDarkRed,
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    height: 20.h,
+                  ),
 
-                    Align(
-                      child: SvgPicture.asset(
-                        SVGUtil.ALERTDIALOG,
-                        height: 40.h,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: 35.h,
-                    ),
-
-                    Text(
-                      LocaleKeys.are_you_sure_you_want_to_delete_your_wallet.tr(),
-                      textAlign: TextAlign.center,
-                      style: kDeleteHeaderTextStyle,
-                    ),
-
-                    SizedBox(
-                      height: 30.h,
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20.w),
+                  Align(
+                    child: SvgPicture.asset(
+                      SVGUtil.ALERTDIALOG,
                       height: 40.h,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Expanded(
-                              child: buildButton(
-                                  title: "yes",
-                                  bgColor: AppColors.kBlue,
-                                  onPressed: () async {
-                                    final navigator = Navigator.of(context);
-
-                                    final selectedEnvResponse = GetIt.I.get<Repository>().getNetworkEnvironmentPreference();
-
-                                    if (selectedEnvResponse.isLeft()) {
-                                      navigator.pop();
-                                      return;
-                                    }
-
-                                    final deleteResponse = await GetIt.I.get<WalletsStore>().deleteAccounts();
-
-                                    if (isDeletionNotSuccessful(deleteResponse: deleteResponse)) {
-                                      navigator.pop();
-                                      return;
-                                    }
-
-                                    await GetIt.I.get<Repository>().saveNetworkEnvironmentPreference(networkEnvironment: selectedEnvResponse.getOrElse(() => ''));
-                                    navigator.pushNamedAndRemoveUntil(RouteUtil.ROUTE_ONBOARDING, (route) => false);
-                                  })),
-                          SizedBox(
-                            width: 15.w,
-                          ),
-                          Expanded(
-                            child: buildButton(title: "no", bgColor: AppColors.kWhite.withOpacity(0.3), onPressed: Navigator.of(context).pop),
-                          ),
-                        ],
-                      ),
+                      fit: BoxFit.cover,
                     ),
+                  ),
 
-                    SizedBox(
-                      height: 30.h,
+                  SizedBox(
+                    height: 35.h,
+                  ),
+
+                  Text(
+                    LocaleKeys.are_you_sure_you_want_to_delete_your_wallet.tr(),
+                    textAlign: TextAlign.center,
+                    style: kDeleteHeaderTextStyle,
+                  ),
+
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20.w),
+                    height: 40.h,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: buildButton(
+                            title: "yes",
+                            bgColor: AppColors.kBlue,
+                            onPressed: () async {
+                              final navigator = Navigator.of(context);
+
+                              final selectedEnvResponse = GetIt.I.get<Repository>().getNetworkEnvironmentPreference();
+
+                              if (selectedEnvResponse.isLeft()) {
+                                navigator.pop();
+                                return;
+                              }
+                              final deleteAllFavorites = await GetIt.I.get<Repository>().deleteAllNFTFromFavorites();
+                              if (deleteAllFavorites.isLeft()) {
+                                navigator.pop();
+                                return;
+                              }
+
+                              final deleteResponse = await GetIt.I.get<WalletsStore>().deleteAccounts();
+
+                              if (isDeletionNotSuccessful(deleteResponse: deleteResponse)) {
+                                navigator.pop();
+                                return;
+                              }
+
+                              await GetIt.I.get<Repository>().saveNetworkEnvironmentPreference(networkEnvironment: selectedEnvResponse.getOrElse(() => ''));
+                              navigator.pushNamedAndRemoveUntil(RouteUtil.ROUTE_ONBOARDING, (route) => false);
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 15.w,
+                        ),
+                        Expanded(
+                          child: buildButton(title: "no", bgColor: AppColors.kWhite.withOpacity(0.3), onPressed: Navigator.of(context).pop),
+                        ),
+                      ],
                     ),
-                    //   const Spacer(),
-                  ],
-                ),
+                  ),
+
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                ],
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   bool isDeletionNotSuccessful({required bool deleteResponse}) => !deleteResponse;
@@ -130,11 +137,12 @@ class DeleteDialog {
             height: 45.h,
             width: 200.w,
             child: Center(
-                child: Text(
-              title.tr(),
-              style: TextStyle(color: bgColor == AppColors.kButtonColor ? AppColors.kBlue : AppColors.kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
-              textAlign: TextAlign.center,
-            )),
+              child: Text(
+                title.tr(),
+                style: TextStyle(color: bgColor == AppColors.kButtonColor ? AppColors.kBlue : AppColors.kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
         ),
       ),
