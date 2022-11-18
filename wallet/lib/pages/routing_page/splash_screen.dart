@@ -124,29 +124,38 @@ class _SplashScreenState extends State<SplashScreen> {
                 ValueListenableBuilder(
                   valueListenable: getImageIndex,
                   builder: (context, int value, child) {
-                    return AnimatedSwitcher(
-                      key: ValueKey(ImageUtil.BG_IMAGES[value]),
-                      duration: const Duration(milliseconds: 450),
-                      transitionBuilder: (Widget child, Animation<double> animation) {
-                        return FadeTransition(opacity: animation, child: child);
-                      },
+                    return SizedBox(
+                      height: 0.5.sh,
                       child: Stack(
                         children: [
-                          Opacity(
-                            opacity: 0.2,
-                            child: Image.asset(
-                              ImageUtil.BG_IMAGES[value],
-                              color: AppColors.kBlack,
+                          Positioned(
+                            left: 18,
+                            child: SizedBox(
+                              width: 0.9.sw,
+                              child: Opacity(
+                                opacity: 0.2,
+                                child: Image.asset(
+                                  ImageUtil.BG_IMAGES[value],
+                                  color: AppColors.kBlack,
+                                ),
+                              ),
                             ),
                           ),
                           ClipRect(
                             child: BackdropFilter(
                               filter: ImageFilter.blur(
-                                sigmaX: 40.0,
-                                sigmaY: 30.0,
+                                sigmaX: 10.0,
+                                sigmaY: 10.0,
                               ),
-                              child: Image.asset(
-                                ImageUtil.BG_IMAGES[value],
+                              child: AnimatedSwitcher(
+                                transitionBuilder: (Widget child, Animation<double> animation) {
+                                  return FadeTransition(opacity: animation, child: child);
+                                },
+                                duration: const Duration(seconds: 1),
+                                child: Image.asset(
+                                  ImageUtil.BG_IMAGES[value],
+                                  key: UniqueKey(),
+                                ),
                               ),
                             ),
                           )
