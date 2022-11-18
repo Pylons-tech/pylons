@@ -129,7 +129,7 @@ class NFTsListTile extends StatelessWidget {
                   key: const Key(kPriceBannerKey),
                   color: EaselAppTheme.kDarkGreen,
                   location: BannerLocation.topEnd,
-                  message: "\$ ${publishedNFT.price}",
+                  message: "${publishedNFT.ibcCoins.getCoinWithProperDenomination(publishedNFT.price)} ${publishedNFT.ibcCoins.getAbbrev()}",
                   child: getPublishedCard(context: context),
                 ),
               ),
