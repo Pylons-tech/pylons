@@ -652,9 +652,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final transactionMap = jsonDecode(transactionResponse.body);
 
-    if (transactionMap == null) return transactionList;
+    if (transactionMap == null || transactionResponse.body.length == 2) return transactionList;
 
-    transactionList.addAll((transactionMap as List<dynamic>).map((e) => TransactionHistory.fromJson(e as Map<String, dynamic>)));
+    transactionList.addAll((transactionMap as List<dynamic>).map((e) => TransactionHistory.fromJson(e as Map<String, dynamic>)).toList());
 
     return transactionList;
   }
