@@ -17,7 +17,7 @@ class _ToggleButtonState extends State<ToggleButton> {
     final assetProvider = context.watch<OwnerViewViewModel>();
     return Container(
         height: 35.h,
-        width: 110.w,
+        width: 100.w,
         decoration: BoxDecoration(
         border: Border.all(
         color: assetProvider.toggled
@@ -56,7 +56,7 @@ class _ToggleButtonState extends State<ToggleButton> {
               child: Container(
                 color: AppColors.kDarkGreen,
                 height: double.infinity,
-                width: 32.w,
+                width: 29.w,
               ),
             ),
           ),
@@ -76,7 +76,7 @@ class _ToggleButtonState extends State<ToggleButton> {
               child: Container(
                 color: AppColors.kDarkRed,
                 height: double.infinity,
-                width: 32.w,
+                width: 29.w,
               ),
             ),
           ),
