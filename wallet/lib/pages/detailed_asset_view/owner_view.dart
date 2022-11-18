@@ -18,6 +18,7 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_audio_widg
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_player_screen.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_progress_widget.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/price_widget.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/toggle_button.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/wallpaper_set_screen.dart';
@@ -401,10 +402,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       // Column(
                       //   children: [
                       //     if (viewModel.nft.type != NftType.TYPE_ITEM)
-                      //       Text(
-                      //         "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
-                      //         style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
-                      //       )
+                        /*    Text(
+                              "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
+                              style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
+                            )*/
                       //   ],
                       // ),
                       // const Spacer(),
@@ -431,6 +432,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       //   ],
                       // ),
                       const ToggleButton(),
+                      PriceWidget(price: ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price), priceAbbr: ibcEnumCoins.getAbbrev(), amount: viewModel.nft.quantity.toString()),
                       const Spacer(),
                       IconButton(
                         icon: Icon(
