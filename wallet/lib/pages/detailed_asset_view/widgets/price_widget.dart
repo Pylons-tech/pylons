@@ -16,14 +16,33 @@ class PriceWidget extends StatelessWidget {
     return ClipPath(
       clipper: PriceClipper(),
       child: Container(
-        color: AppColors.kDarkGrey,
+        color: AppColors.kGray.withOpacity(0.5),
         height: 35.h,
-        width: 110.w,
-        child: ListTile(
-          title: Text('$price $priceAbbr'),
-          subtitle: Text(amount),
+        width: 100.w,
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '$price $priceAbbr',
+                    style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    ' ea.',
+                    style: TextStyle(color: Colors.white, fontSize: 9.sp, fontWeight: FontWeight.w300),
+                  )
+                ],
+              ),
+              //SizedBox(height: 1.h),
+              Text(
+                '$amount available',
+                style: TextStyle(color: AppColors.kLightGray, fontSize: 9.sp, fontWeight: FontWeight.w300),
+              ),
+            ],
+          ),
         ),
-      ),
     );
   }
 }
@@ -34,8 +53,8 @@ class PriceClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     final path = Path();
     path.lineTo(0, size.height);
-    path.lineTo(size.width - 5.w, size.height);
-    path.lineTo(size.width, size.height - 5.h);
+    path.lineTo(size.width - 12.w, size.height);
+    path.lineTo(size.width, size.height - 12.h);
     path.lineTo(size.width, 0);
     path.lineTo(0, 0);
 
