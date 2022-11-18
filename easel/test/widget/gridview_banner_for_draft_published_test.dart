@@ -53,7 +53,7 @@ void main() {
 
       testWidgets(
         "Testing Bottom Sheet Options For Published NFT",
-            (tester) async {
+        (tester) async {
           await tester.setScreenSize();
           await tester.testAppForWidgetTesting(
             Scaffold(
@@ -72,7 +72,7 @@ void main() {
           final gridViewTile = find.byKey(const Key(kGridViewTileMoreOptionKey));
           final publishBottomSheetText = find.text(kPublishTextKey);
           await tester.ensureVisible(gridViewTile);
-          expect(publishBottomSheetText,findsNothing);
+          expect(publishBottomSheetText, findsNothing);
           await tester.tap(gridViewTile);
           await tester.pump();
           expect(publishBottomSheetText, findsOneWidget);
