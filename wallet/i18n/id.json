@@ -361,7 +361,9 @@
   "bought_nft": "Dibeli",
   "resolution": "resolusi",
   "set_lockscreen": "Tetapkan sebagai layar kunci",
+  "ipfs_cid": "ID Pelanggan IPFS",
+  "available": "tersedia",
+  "ea": "ea",
   "maintenance_mode_message": "Kami mengalami masalah teknis dan untuk sementara memulai mode pemeliharaan untuk pemecahan masalah. Jangan khawatir, koleksi Anda aman. Namun, Anda tidak dapat memulai transaksi on-chain sampai kami menyelesaikan masalah dan memulihkan fungsionalitas normal.",
   "maintenance_mode_header": "Mode Pemeliharaan"
-
 }

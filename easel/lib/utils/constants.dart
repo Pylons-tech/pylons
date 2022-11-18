@@ -247,11 +247,17 @@ const kSaveAsDraftDescKey = "Save_as_draft_decs_key";
 const kSaveAsDraftPriceKey = "Save_as_draft_price_key";
 const kSaveAsDraftPublishKey = "Save_as_draft_publish_key";
 const kGridViewTileNFTKey = "GridViewTileNFTKey";
+const kGridViewTileMoreOptionKey = "gridview_tile_more_option_key";
 const kPublishTextKey = "publish";
 const kPublishButtonKey = "publish_button_key";
 const kPriceBannerKey = "price_banner_key";
 const kNFTMoreOptionButtonKey = "NFT_more_option_key";
 const kNFTMoreOptionBottomSheetKey = "NFT_more_option_bottomsheet_key";
+const kNFTTypeImageIconKey = "NFT_type_image_icon_key";
+const kNFTTypeVideoIconKey = "NFT_type_video_icon_key";
+const kNFTTypeAudioIconKey = "NFT_type_audio_icon_key";
+const kNFTTypePdfIconKey = "NFT_type_pdf_icon_key";
+const kNFTType3dModelIconKey = "NFT_type_3d_icon_key";
 
 class AnalyticsScreenEvents {
   static String tutorialScreen = "TutorialScreen";

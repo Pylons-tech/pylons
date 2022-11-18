@@ -361,7 +361,9 @@
   "bought_nft": "Gekauft",
   "resolution": "Auflösung",
   "set_lockscreen": "Instellen als vergrendelscherm",
+  "ipfs_cid": "IPFS-CID",
+  "available": "verfügbar",
+  "ea": "ea",
   "maintenance_mode_message": "We ondervinden technische problemen en hebben tijdelijk de onderhoudsmodus gestart voor het oplossen van problemen. Maak je geen zorgen, je collectie is veilig. U kunt echter geen on-chain-transacties starten totdat we het probleem hebben opgelost en de normale functionaliteit hebben hersteld.",
   "maintenance_mode_header": "onderhoudsstand"
-
 }
