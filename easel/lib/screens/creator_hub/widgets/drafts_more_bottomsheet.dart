@@ -60,7 +60,6 @@ class DraftsMoreBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<CreatorHubViewModel>();
     return ClipPath(
       clipper: BottomSheetClipper(),
       child: Container(
@@ -69,18 +68,7 @@ class DraftsMoreBottomSheet extends StatelessWidget {
         child: Wrap(
           children: [
             moreOptionTile(
-                title: "publish",
-                image: SVGUtils.kSvgPublish,
-                onPressed: () {
-                  viewModel.saveNFT(nft: nft);
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pushNamed(RouteUtil.kRouteHome);
-                }),
-            const Divider(
-              color: EaselAppTheme.kGrey,
-            ),
-            moreOptionTile(
-                title: "delete",
+                title: LocaleKeys.delete.tr(),
                 image: SVGUtils.kSvgDelete,
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -135,7 +123,7 @@ class DraftsMoreBottomSheet extends StatelessWidget {
   }
 }
 
-Widget moreOptionTile({required String title, required String image, required VoidCallback onPressed,  bool isSvg = true}) {
+Widget moreOptionTile({required String title, required String image, required VoidCallback onPressed, bool isSvg = true}) {
   final TextStyle titleStyle = TextStyle(fontSize: isTablet ? 13.sp : 16.sp, fontWeight: FontWeight.w800, fontFamily: kUniversalFontFamily, color: EaselAppTheme.kBlack);
 
   return Padding(

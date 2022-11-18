@@ -8,6 +8,7 @@ import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/draft_list_tile.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/nfts_grid_view.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/nfts_list_tile.dart';
+import 'package:easel_flutter/screens/creator_hub/widgets/viewmodel/nft_gridview_viewmodel.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/dependency_injection/dependency_injection_container.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
@@ -378,33 +379,37 @@ class BuildGridView extends StatelessWidget {
     if (nftsList.isEmpty) {
       return onEmptyList(context);
     }
-    return GridView.builder(
-      itemCount: nftsList.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        childAspectRatio: 0.5,
-        crossAxisSpacing: 15.w,
-        mainAxisSpacing: 15.h,
-        crossAxisCount: 3,
-      ),
-      itemBuilder: (context, index) {
-        final nft = nftsList[index];
-        return (nft.price.isNotEmpty && double.parse(nft.price) > 0)
-            ? ClipRRect(
-                child: Banner(
-                  key: const Key(kPriceBannerKey),
-                  color: EaselAppTheme.kDarkGreen,
-                  location: BannerLocation.topEnd,
-                  message: "${getCoinWithProperDenomination(nft.ibcCoins, nft.price)}  ${getAbbrev(ibcCoin: nft.ibcCoins)}",
-                  child: NftGridViewItem(
-                    nft: nft,
-                  ),
-                ),
-              )
-            : NftGridViewItem(
-                nft: nft,
-              );
-      },
-    );
+    return ChangeNotifierProvider.value(
+        value: GetIt.I.get<NftGridviewViewModel>(),
+        builder: (context, _) {
+          return GridView.builder(
+            itemCount: nftsList.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 0.5,
+              crossAxisSpacing: 15.w,
+              mainAxisSpacing: 15.h,
+              crossAxisCount: 3,
+            ),
+            itemBuilder: (context, index) {
+              final nft = nftsList[index];
+              return (nft.price.isNotEmpty && double.parse(nft.price) > 0)
+                  ? ClipRRect(
+                      child: Banner(
+                        key: const Key(kPriceBannerKey),
+                        color: EaselAppTheme.kDarkGreen,
+                        location: BannerLocation.topEnd,
+                        message: "${getCoinWithProperDenomination(nft.ibcCoins, nft.price)}  ${getAbbrev(ibcCoin: nft.ibcCoins)}",
+                        child: NftGridViewItem(
+                          nft: nft,
+                        ),
+                      ),
+                    )
+                  : NftGridViewItem(
+                      nft: nft,
+                    );
+            },
+          );
+        });
   }
 
   String getCoinWithProperDenomination(String ibcCoin, String amount) {

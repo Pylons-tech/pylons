@@ -5,9 +5,11 @@ import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/drafts_more_bottomsheet.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/nfts_list_tile.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/published_nfts_bottom_sheet.dart';
+import 'package:easel_flutter/screens/creator_hub/widgets/viewmodel/nft_gridview_viewmodel.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
+import 'package:easel_flutter/utils/route_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,14 +21,29 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 
 import '../../../main.dart';
 
-class NftGridViewItem extends StatelessWidget {
+class NftGridViewItem extends StatefulWidget {
   const NftGridViewItem({
     Key? key,
     required this.nft,
   }) : super(key: key);
   final NFT nft;
 
+  @override
+  State<NftGridViewItem> createState() => _NftGridViewItemState();
+}
+
+class _NftGridViewItemState extends State<NftGridViewItem> {
   EaselProvider get _easelProvider => GetIt.I.get();
+
+  void startPublishingFlowAgainPressed() {
+    context.read<CreatorHubViewModel>().saveNFT(nft: widget.nft);
+    Navigator.of(context).pushNamed(RouteUtil.kRouteHome);
+  }
+
+  Future<void> onViewOnPylonsPressed() async {
+    final String url = widget.nft.recipeID.generateEaselLinkForOpeningInPylonsApp(cookbookId: widget.nft.cookbookID);
+    await _easelProvider.repository.launchMyUrl(url: url);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,32 +54,28 @@ class NftGridViewItem extends StatelessWidget {
           width: 150.w,
           child: InkWell(
             key: const Key(kGridViewTileNFTKey),
-            onTap: () {
+            onTap: () async {
               if (context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft) {
-                final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
-                  buildContext: context,
-                  nft: nft,
-                );
-                draftsBottomSheet.show();
+                context.read<NftGridviewViewModel>().startPublishingFlowAgain(startPublishingFlowAgainPressed: startPublishingFlowAgainPressed);
                 return;
               }
-              buildBottomSheet(context: context);
+              context.read<NftGridviewViewModel>().onViewOnPylons(onViewOnPylonsPressed: onViewOnPylonsPressed);
             },
             child: NftTypeBuilder(
-              onImage: (context) => buildNFTPreview(url: nft.url.changeDomain()),
-              onVideo: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
-              onAudio: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
-              onPdf: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
+              onImage: (context) => buildNFTPreview(url: widget.nft.url.changeDomain()),
+              onVideo: (context) => buildNFTPreview(url: widget.nft.thumbnailUrl.changeDomain()),
+              onAudio: (context) => buildNFTPreview(url: widget.nft.thumbnailUrl.changeDomain()),
+              onPdf: (context) => buildNFTPreview(url: widget.nft.thumbnailUrl.changeDomain()),
               on3D: (context) => IgnorePointer(
                 child: ModelViewer(
-                  src: nft.url.changeDomain(),
+                  src: widget.nft.url.changeDomain(),
                   ar: false,
                   autoRotate: false,
                   backgroundColor: EaselAppTheme.kWhite,
                   cameraControls: false,
                 ),
               ),
-              assetType: nft.assetType.toAssetTypeEnum(),
+              assetType: widget.nft.assetType.toAssetTypeEnum(),
             ),
           ),
         ),
@@ -119,7 +132,7 @@ class NftGridViewItem extends StatelessWidget {
                       if (context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft) {
                         final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
                           buildContext: context,
-                          nft: nft,
+                          nft: widget.nft,
                         );
                         draftsBottomSheet.show();
                         return;
@@ -153,13 +166,13 @@ class NftGridViewItem extends StatelessWidget {
   }
 
   void buildBottomSheet({required BuildContext context}) {
-    final bottomSheet = BuildPublishedNFTsBottomSheet(context: context, nft: nft, easelProvider: _easelProvider);
+    final bottomSheet = BuildPublishedNFTsBottomSheet(context: context, nft: widget.nft, easelProvider: _easelProvider);
 
     bottomSheet.show();
   }
 
   String getNFTIcon() {
-    switch (nft.assetType) {
+    switch (widget.nft.assetType) {
       case kVideoText:
         return SVGUtils.kSvgNftFormatVideo;
       case kAudioText:
@@ -174,7 +187,7 @@ class NftGridViewItem extends StatelessWidget {
   }
 
   String getNFTIconKey() {
-    switch (nft.assetType) {
+    switch (widget.nft.assetType) {
       case kVideoText:
         return kNFTTypeVideoIconKey;
       case kAudioText:
