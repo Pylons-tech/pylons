@@ -39,6 +39,7 @@ class NFTsListTile extends StatelessWidget {
 
   Widget getPublishedCard({required BuildContext context}) {
     return InkWell(
+      key: const Key(kNftTileKey),
       onTap: () {
         context.read<NftListViewModel>().onViewOnPylons(onViewOnPylonsPressed: onViewOnPylonsPressed);
       },

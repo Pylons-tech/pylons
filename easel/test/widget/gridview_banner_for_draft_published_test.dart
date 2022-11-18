@@ -3,6 +3,7 @@ import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_screen.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/nfts_grid_view.dart';
+import 'package:easel_flutter/screens/creator_hub/widgets/viewmodel/nft_gridview_viewmodel.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -14,10 +15,13 @@ import 'package:provider/provider.dart';
 
 import '../extensions/size_extension.dart';
 import '../mock/mock_repository.dart';
+import '../mocks/list_tile.mocks.dart';
 import '../mocks/mock_constants.dart';
 
 void main() {
+  final NftGridviewViewModel viewModel = MockNftGridviewViewModel();
   GetIt.I.registerLazySingleton<Repository>(() => MockRepositoryImp());
+  GetIt.I.registerLazySingleton<NftGridviewViewModel>(() => viewModel);
   GetIt.I.registerLazySingleton(() => CreatorHubViewModel(GetIt.I.get<Repository>()));
 
   group(
@@ -53,7 +57,7 @@ void main() {
 
       testWidgets(
         "Testing Bottom Sheet Options For Published NFT",
-            (tester) async {
+        (tester) async {
           await tester.setScreenSize();
           await tester.testAppForWidgetTesting(
             Scaffold(
@@ -70,9 +74,9 @@ void main() {
 
           await tester.pump();
           final gridViewTile = find.byKey(const Key(kGridViewTileMoreOptionKey));
-          final publishBottomSheetText = find.text(kPublishTextKey);
+          final publishBottomSheetText = find.text(kDeleteTextKey);
           await tester.ensureVisible(gridViewTile);
-          expect(publishBottomSheetText,findsNothing);
+          expect(publishBottomSheetText, findsNothing);
           await tester.tap(gridViewTile);
           await tester.pump();
           expect(publishBottomSheetText, findsOneWidget);
