@@ -64,6 +64,15 @@ class _ToggleButtonState extends State<ToggleButton> {
     );
   }
 
+  Widget middleRow(OwnerViewViewModel assetProvider) {
+    return Container(
+          alignment: Alignment.center,
+          color: AppColors.kAgoricColor,
+          height: double.infinity,
+          width: 29.w,
+        );
+  }
+
   Widget disableRow(OwnerViewViewModel assetProvider) {
     return Row(
       children: [
