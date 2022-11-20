@@ -15,22 +15,34 @@ class _ToggleButtonState extends State<ToggleButton> {
   @override
   Widget build(BuildContext context) {
     final assetProvider = context.watch<OwnerViewViewModel>();
+    late Color toggleColor;
+    late Widget toggleChild;
+    switch (assetProvider.toggled) {
+      case Toggle.enabled:
+        toggleColor = AppColors.kDarkGreen;
+        toggleChild = enabledRow(assetProvider);
+        break;
+      case Toggle.disabled:
+        toggleColor = AppColors.kDarkRed;
+        toggleChild = disableRow(assetProvider);
+        break;
+      case Toggle.mid:
+        toggleColor = AppColors.kAgoricColor;
+        toggleChild = middleRow(assetProvider);
+        break;
+    }
     return Container(
         height: 35.h,
         width: 100.w,
         decoration: BoxDecoration(
         border: Border.all(
-        color: assetProvider.toggled
-            ? AppColors.kDarkGreen
-            : AppColors.kDarkRed, //color of border
+        color: toggleColor, //color of border
         width: 3.w, //width of border
     ),
         ),
 
         padding: EdgeInsets.all(3.r),
-        child: assetProvider.toggled
-            ? enabledRow(assetProvider)
-            : disableRow(assetProvider),
+        child: toggleChild,
       );
   }
 
@@ -40,7 +52,7 @@ class _ToggleButtonState extends State<ToggleButton> {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              assetProvider.setToggle(toggle: false);
+              assetProvider.setToggle(toggle: Toggle.mid);
             },
             child: Align(
               child: Text("For sale", style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w500)),
@@ -49,7 +61,7 @@ class _ToggleButtonState extends State<ToggleButton> {
         ),
         GestureDetector(
             onTap: () {
-              assetProvider.setToggle(toggle: false);
+              assetProvider.setToggle(toggle: Toggle.mid);
             },
             child: ClipPath(
               clipper: ToggleClipperEnable(),
@@ -78,7 +90,7 @@ class _ToggleButtonState extends State<ToggleButton> {
       children: [
         GestureDetector(
             onTap: () {
-              assetProvider.setToggle(toggle: true);
+              assetProvider.setToggle(toggle: Toggle.mid);
             },
             child: ClipPath(
               clipper: ToggleClipperDisable(),
@@ -92,7 +104,7 @@ class _ToggleButtonState extends State<ToggleButton> {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              assetProvider.setToggle(toggle: true);
+              assetProvider.setToggle(toggle: Toggle.mid);
             },
             child: SizedBox.expand(
               child: Align(
