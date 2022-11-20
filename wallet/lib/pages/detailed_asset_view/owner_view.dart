@@ -432,8 +432,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       //   ],
                       // ),
                       const ToggleButton(),
-                      SizedBox(width: 15.w),
-                      PriceWidget(price: ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price), priceAbbr: ibcEnumCoins.getAbbrev(), amount: viewModel.nft.quantity.toString()),
+                      if (viewModel.toggled==Toggle.enabled) ...[
+                        SizedBox(width: 15.w),
+                        PriceWidget(price: ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price), priceAbbr: ibcEnumCoins.getAbbrev(), amount: viewModel.nft.quantity.toString()),
+                      ],
                       const Spacer(),
                       IconButton(
                         icon: Icon(
