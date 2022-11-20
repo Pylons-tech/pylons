@@ -21,6 +21,8 @@ import '../../generated/locale_keys.g.dart';
 import '../owner_purchase_view_common/button_state.dart';
 import '../owner_purchase_view_common/progress_bar_state.dart';
 
+enum Toggle {enabled, disabled, mid}
+
 class OwnerViewViewModel extends ChangeNotifier {
   late NFT nft;
   final Repository repository;
@@ -45,9 +47,9 @@ class OwnerViewViewModel extends ChangeNotifier {
 
   String owner = '';
 
-  bool _toggled = true;
+  Toggle _toggled = Toggle.disabled;
 
-  bool get toggled => _toggled;
+  Toggle get toggled => _toggled;
 
   VideoPlayerController? videoPlayerController;
 
@@ -429,7 +431,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     audioPlayerHelper.destroyAudioPlayer();
   }
 
-  void setToggle({required bool toggle}) {
+  void setToggle({required Toggle toggle}) {
     _toggled = toggle;
     notifyListeners();
   }
