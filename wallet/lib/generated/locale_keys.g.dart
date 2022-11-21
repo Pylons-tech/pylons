@@ -368,5 +368,7 @@ abstract class  LocaleKeys {
   static const ea = 'ea';
   static const maintenance_mode_message = 'maintenance_mode_message';
   static const maintenance_mode_header = 'maintenance_mode_header';
+  static const for_sale = 'for_sale';
+  static const not_for_sale = 'not_for_sale';
 
 }
