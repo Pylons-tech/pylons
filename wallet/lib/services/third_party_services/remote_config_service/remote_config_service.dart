@@ -50,12 +50,15 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
 
   static String maintenanceMode = "MAINTENANCE_MODE";
 
-  RemoteConfigServiceImpl(
-      {required this.firebaseRemoteConfig,
-      required this.crashlyticsHelper});
+  RemoteConfigServiceImpl({
+    required this.firebaseRemoteConfig,
+    required this.crashlyticsHelper,
+  });
 
   @override
   BaseEnv getBaseEnv() {
+
+    if(dotenv.env["env"] == "prod"){
     return BaseEnv()
       ..setEnv(
         lcdUrl: firebaseRemoteConfig.getString(lcdUrl),
@@ -69,12 +72,31 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
         stripePubKey: firebaseRemoteConfig.getString(stripePubKey),
         stripeTestEnv: firebaseRemoteConfig.getString(stripeTestEnv) == 'true',
         stripeCallbackUrl: firebaseRemoteConfig.getString(stripeCallbackUrl),
-        stripeCallbackRefreshUrl:
-            firebaseRemoteConfig.getString(stripeCallbackRefreshUrl),
+        stripeCallbackRefreshUrl: firebaseRemoteConfig.getString(stripeCallbackRefreshUrl),
         chainId: firebaseRemoteConfig.getString(chainId),
         ibcTraceUrl: firebaseRemoteConfig.getString(ibcTrace),
         skus: firebaseRemoteConfig.getString(skus),
       );
+    } else {
+      return BaseEnv()
+      ..setEnv(
+        lcdUrl: dotenv.env['LCD_URL'].toString(),
+        grpcUrl: dotenv.env['GRPC_URL'].toString(),
+        lcdPort: dotenv.env['LCD_PORT'].toString(),
+        mongoUrl: dotenv.env[mongoUrl].toString(),
+        grpcPort: dotenv.env['GRPC_PORT'].toString(),
+        ethUrl: dotenv.env['ETH_URL'].toString(),
+        faucetUrl: dotenv.env['FAUCET_URL'].toString(),
+        stripeUrl: dotenv.env['STRIPE_SERVER'].toString(),
+        stripePubKey: dotenv.env['STRIPE_PUB_KEY'].toString(),
+        stripeTestEnv: dotenv.env['STRIPE_TEST_ENV'] == 'true',
+        stripeCallbackUrl: dotenv.env['STRIPE_CALLBACK_URL'] ?? "",
+        stripeCallbackRefreshUrl:  dotenv.env['STRIPE_CALLBACK_REFRESH_URL'].toString(),
+        chainId: dotenv.env['CHAIN_ID'].toString(),
+        ibcTraceUrl: dotenv.env[ibcTrace].toString(),
+        skus: defaultPylonsSKUs,
+      );
+    }
   }
 
   @override
@@ -111,7 +133,7 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
     } on FormatException catch (_) {
       /// Happens when there is no internet on first launch.
       crashlyticsHelper.recordFatalError(error: _.message);
-    } on FirebaseException catch(_){
+    } on FirebaseException catch (_) {
       crashlyticsHelper.recordFatalError(error: _.message ?? "");
     }
   }
