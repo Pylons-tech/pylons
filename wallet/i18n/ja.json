@@ -364,6 +364,14 @@
   "maintenance_mode_message": "技術的な問題が発生しており、トラブルシューティングのために一時的にメンテナンス モードを開始しました。心配はいりません。あなたのコレクションは安全です。ただし、問題が解決され、通常の機能が回復するまで、オンチェーン トランザクションを開始することはできません。",
   "maintenance_mode_header": "メンテナンスモード",
   "for_sale": "販売中",
-  "not_for_sale": "非売品"
+  "not_for_sale": "非売品",
+  "confirmation": "確認",
+  "delist_confirmation_msg": "NFT のリストを削除してもよろしいですか？",
+  "sell_your_nft": "NFTを売る",
+  "payment_type": "払いの種類",
+  "credits": "クレジット",
+  "cash": "現金",
+  "no_of_editions": "版数",
+  "price_per_edition":"エディションあたりの価格"
 
 }

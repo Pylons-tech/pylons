@@ -206,14 +206,17 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GeneralScreenLocalizationViewModel(shareHelper: sl(), repository: sl(), walletStore: sl()));
   sl.registerLazySingleton(() => PracticeTestViewModel(sl()));
   sl.registerLazySingleton(() => FailureManagerViewModel(repository: sl()));
-  sl.registerFactory(() => OwnerViewViewModel(
-        repository: sl(),
-        walletsStore: sl(),
-        audioPlayerHelper: sl(),
-        videoPlayerHelper: sl(),
-        shareHelper: sl(),
-        accountPublicInfo: sl<AccountProvider>().accountPublicInfo!,
-      ));
+  sl.registerFactory(
+    () => OwnerViewViewModel(
+      repository: sl(),
+      walletsStore: sl(),
+      audioPlayerHelper: sl(),
+      videoPlayerHelper: sl(),
+      shareHelper: sl(),
+      accountPublicInfo: sl<AccountProvider>().accountPublicInfo!,
+      permissionService: sl(),
+    ),
+  );
   sl.registerLazySingleton(() => UserBannerViewModel());
 
   /// Configurations

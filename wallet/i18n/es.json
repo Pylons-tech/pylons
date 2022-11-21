@@ -364,6 +364,14 @@
   "maintenance_mode_message": "Estamos experimentando problemas técnicos y hemos iniciado temporalmente el modo de mantenimiento para solucionar problemas. No te preocupes, tu colección está segura. Sin embargo, no puede iniciar transacciones en cadena hasta que hayamos resuelto el problema y restablecido la funcionalidad normal.",
   "maintenance_mode_header": "Modo de mantenimiento",
   "for_sale": "En venta",
-  "not_for_sale": "No para la venta"
+  "not_for_sale": "No para la venta",
+  "confirmation": "Confirmación",
+  "delist_confirmation_msg": "¿Estás segura de que quieres eliminar tu NFT?",
+  "sell_your_nft": "Vende tu NFT",
+  "payment_type": "Tipo de pago",
+  "credits": "Créditos",
+  "cash": "Dinero",
+  "no_of_editions": "Número de ediciones",
+  "price_per_edition":"Precio por edición"
 
 }

@@ -366,5 +366,14 @@
   "maintenance_mode_message": "We are experiencing technical issues and have temporarily initiated maintenance mode for troubleshooting. Don't worry, your collection is safe. However, you cannot initiate on-chain transactions until we've resolved the problem and restored normal functionality.",
   "maintenance_mode_header": "Maintenance Mode",
   "for_sale": "For sale",
-  "not_for_sale": "Not For Sale"
+  "not_for_sale": "Not For Sale",
+  "confirmation": "Confirmation",
+  "delist_confirmation_msg": "Are you sure you want to delist your NFT?",
+  "sell_your_nft": "Sell your NFT",
+  "payment_type": "Payment type",
+  "credits": "Credits",
+  "cash": "Cash",
+  "no_of_editions": "Number of editions",
+  "price_per_edition":"Price per edition",
+  "editions_are_sold_sequentially": "",
 }

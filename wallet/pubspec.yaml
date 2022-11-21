@@ -94,6 +94,7 @@ dependencies:
   video_thumbnail: ^0.5.3
   wallpaper: ^1.1.0
   webview_flutter: ^3.0.4
+  dio: ^4.0.6
   
 
 dev_dependencies:

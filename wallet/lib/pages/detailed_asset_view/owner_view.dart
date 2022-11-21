@@ -11,8 +11,10 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/for_sale_bottom_sheet.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_image_asset.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_not_for_sale_dialog.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_audio_widget.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_player_screen.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/owner_video_progress_widget.dart';
@@ -29,6 +31,7 @@ import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../generated/locale_keys.g.dart';
+import '../purchase_item/widgets/pay_now_dialog.dart';
 
 class OwnerView extends StatefulWidget {
   final NFT nft;
@@ -273,7 +276,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       ),
                       Text(
                         viewModel.viewsCount.toString(),
-                        style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalSans750FontFamily),
+                        style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
                       ),
                       SizedBox(
                         height: 5.w,
@@ -301,8 +304,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          // final Size size = MediaQuery.of(context).size;
-                          // context.read<OwnerViewViewModel>().shareNFTLink(size: size);
+                          viewModel.onDownloadButtonPressed();
                         },
                         child: Container(
                           padding: EdgeInsets.only(bottom: 12.h),
@@ -500,7 +502,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       ),
                                       Text(
                                         viewModel.viewsCount.toString(),
-                                        style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalSans750FontFamily),
+                                        style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
                                       ),
                                       SizedBox(
                                         height: 18.h,
@@ -567,7 +569,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         ),
         Text(
           viewModel.likesCount.toString(),
-          style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalSans750FontFamily),
+          style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
         ),
       ],
     );
@@ -583,7 +585,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             Flexible(
               child: Text(
                 nft.name,
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.sp, fontFamily: kUniversalSans750FontFamily),
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 20.sp, fontFamily: kUniversalFontFamily,),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -631,18 +633,23 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     return GestureDetector(
       key: const Key(kSaleStatusToggleButtonKey),
       onTap: () {
-        viewModel.nft.isEnabled = false;
-        viewModel.updateRecipeIsEnabled(context: context, viewModel: viewModel);
+        print("00000000000 >>>><<<<<<< onTap 1232() : ${viewModel.nft.isEnabled}");
 
-        // if (viewModel.nft.isEnabled) {
-        //   viewModel.onChangeStatusNotForSale();
+        // viewModel.nft.isEnabled = false;
         // viewModel.updateRecipeIsEnabled(context: context, viewModel: viewModel);
-        // } else {
-        // ChangeSaleStatusDialog(
-        //   ownerViewViewModel: viewModel,
-        //   buildContext: context,
-        // ).show();
-        // }
+
+        if (viewModel.nft.isEnabled) {
+          viewModel.onChangeStatusNotForSale();
+          ForSaleBottomSheet(context: context, amount: 'as').show();
+        // viewModel.updateRecipeIsEnabled(context: context, viewModel: viewModel);
+        } else {
+          viewModel.onChangeStatusNotForSale();
+          final dialog = NFTNotForSaleDialog(
+              buildContext: context, ownerViewViewModel: viewModel,
+            
+          );
+          dialog.show();
+        }
       },
       child: SizedBox(
         height: 22.h,

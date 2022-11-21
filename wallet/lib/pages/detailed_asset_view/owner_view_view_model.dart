@@ -16,7 +16,10 @@ import 'package:pylons_wallet/services/third_party_services/video_player_helper.
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
+import 'package:pylons_wallet/utils/permission_service.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../generated/locale_keys.g.dart';
@@ -32,6 +35,7 @@ class OwnerViewViewModel extends ChangeNotifier {
   final AudioPlayerHelper audioPlayerHelper;
   final VideoPlayerHelper videoPlayerHelper;
   final ShareHelper shareHelper;
+  final PermissionService permissionService;
 
   OwnerViewViewModel({
     required this.repository,
@@ -39,7 +43,8 @@ class OwnerViewViewModel extends ChangeNotifier {
     required this.audioPlayerHelper,
     required this.shareHelper,
     required this.videoPlayerHelper,
-    required this.accountPublicInfo, 
+    required this.accountPublicInfo,
+    required this.permissionService
   });
 
   TabFields? selectedField;
@@ -510,8 +515,18 @@ class OwnerViewViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> onDownloadButtonPressed()async{
+    final parsedUrl = Uri.parse("$kDownloadNFTPreLink${nft.url}");
+    print("000>><<< : ${parsedUrl.toString()}");
+    if(await canLaunchUrl(parsedUrl)){
+      launchUrl(parsedUrl,mode: LaunchMode.externalApplication,);
+    }else{
+      LocaleKeys.something_wrong.tr().show();
+    }
+  }
+
   void onChangeStatusNotForSale(){
-    isNFTToggleIntermediateState = true;
+    isNFTToggleIntermediateState = !isNFTToggleIntermediateState;
     notifyListeners();
   }
 
@@ -573,8 +588,11 @@ class OwnerViewViewModel extends ChangeNotifier {
     );
     //
     final response = await repository.updateRecipe(updateRecipeModel: updateRecipeModel);
+    print("0000000 >>>><<<<< response : ${response}");
     if (response.isLeft()) {
       response.toOption().getOrElse(() => "").show();
+      print("0000000 >>>><<<<< response option : ${response.toOption().getOrElse(() => "").show()}");
+
       loading.dismiss();
       return;
     }
@@ -591,8 +609,9 @@ class OwnerViewViewModel extends ChangeNotifier {
       // nftPrice: priceController.text.replaceAll(",", "").trim(),
 
     );
+    onChangeStatusNotForSale();
     navigator.pop();
-    navigator.pop();
+    // navigator.pop();
   }
 
   void updateRecipeInLocalVm({required bool nftEnabledStatus, required String nftPrice, required String denom}) {

@@ -140,7 +140,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
 
                 if (ModalRoute.of(context)?.settings.arguments is NFT) {
                   final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
-
+                  nft.isEnabled = false;
                   return OwnerView(
                     key: ValueKey(nft),
                     nft: nft,
