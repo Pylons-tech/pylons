@@ -160,7 +160,7 @@ class IPCEngine {
     if (isOwnerIsViewing(nullableNFT, currentWallet)) {
       navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nullableNFT);
     } else {
-      if (!getUserAcceptPolicies()) {
+      if (!getUserAcceptPolicies() && shouldShowAcceptPolicyScreen) {
         navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_ACCEPT_POLICY, arguments: nullableNFT);
         return;
       }

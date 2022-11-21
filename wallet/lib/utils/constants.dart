@@ -464,3 +464,5 @@ const String kAcceptBottomSheetBtnKey = "accept_bottom_sheet_btn";
 
 const String kGetFirebaseAppCheckTokenMethodChannelKey = "getFirebaseAppCheckTokenMethodChannel";
 const String kGetFirebaseAppCheckDebugTokenKey = "getFirebaseAppCheckDebugToken";
+
+const bool shouldShowAcceptPolicyScreen = false;
