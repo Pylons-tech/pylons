@@ -17,6 +17,8 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart' as di;
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 
+//ignore_for_file: deprecated_member_use
+
 bool isTablet = false;
 
 Future<void> main() async {
