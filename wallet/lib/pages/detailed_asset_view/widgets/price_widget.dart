@@ -36,7 +36,6 @@ class PriceWidget extends StatelessWidget {
                   )
                 ],
               ),
-              //SizedBox(height: 1.h),
               Text(
                 '$amount ${LocaleKeys.available.tr()}',
                 style: TextStyle(color: AppColors.kLightGray, fontSize: 9.sp, fontWeight: FontWeight.w300),
