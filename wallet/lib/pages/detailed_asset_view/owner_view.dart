@@ -127,25 +127,12 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
                 ),
               ),
             ),
-          // if (isUserNotViewingFullNft(viewModel))
-          //   Align(
-          //     alignment: Alignment.centerRight,
-          //     child: OwnerSideBar(),
-          //   ),
           if (isUserNotViewingFullNft(viewModel))
-          //const Align(key: ValueKey(kOwnerViewDrawerKeyValue), alignment: Alignment.bottomCenter, child: OwnerBottomDrawer()),
-
             Align(
               alignment: Alignment.bottomCenter,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Row(
-                  //   children: [
-                  //     Spacer(),
-                  //     OwnerSideBar(),
-                  //   ]
-                  // )
                   if (viewModel.collapsed)
                     Container(
                       alignment: Alignment.centerRight,
@@ -235,12 +222,7 @@ class OwnerSideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.read<OwnerViewViewModel>();
-    return
-      // Expanded(
-      // flex: 15,
-      // child:
-      Column(
-        //crossAxisAlignment: CrossAxisAlignment.end,
+    return Column(
         children: [
           Column(
             children: [
@@ -308,7 +290,6 @@ class OwnerSideBar extends StatelessWidget {
           ),
         ],
       );
-    // );
   }
 }
 
@@ -320,7 +301,6 @@ class OwnerBottomDrawer extends StatefulWidget {
 }
 
 class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
-  // bool liked = false;
 
   Widget getProgressWidget() {
     final viewModel = context.read<OwnerViewViewModel>();
@@ -337,25 +317,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     }
     return const SizedBox.shrink();
   }
-
-  // Widget getLikingLoader() {
-  //   return SizedBox(
-  //     height: 20.h,
-  //     width: 20.h,
-  //     child: CircularProgressIndicator(
-  //       strokeWidth: 2,
-  //       valueColor: AlwaysStoppedAnimation<Color>(AppColors.kWhite),
-  //     ),
-  //   );
-  // }
-  //
-  // Widget getLikeIcon({required bool likedByMe}) {
-  //   return Image.asset(
-  //     'assets/images/icons/${likedByMe ? 'like_full' : 'like'}.png',
-  //     height: 20.h,
-  //     color: likedByMe ? AppColors.kDarkRed : Colors.white,
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -385,7 +346,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             owner: viewModel.nft.type == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator,
                           ),
                         ),
-
                       ],
                     ),
                   ),
@@ -394,43 +354,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   ),
                   getProgressWidget(),
                   Row(
-                    //mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // const SizedBox(
-                      //   width: 10,
-                      // ),
-                      // Column(
-                      //   children: [
-                      //     if (viewModel.nft.type != NftType.TYPE_ITEM)
-                        /*    Text(
-                              "${ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.getAbbrev()}",
-                              style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
-                            )*/
-                      //   ],
-                      // ),
-                      // const Spacer(),
-                      // SizedBox(
-                      //   width: 40.w,
-                      // ),
-                      // Column(
-                      //   children: [
-                      //     GestureDetector(
-                      //       key: const Key(kShareNftButtonCollapsedKey),
-                      //       onTap: () {
-                      //         final Size size = MediaQuery.of(context).size;
-                      //
-                      //         context.read<OwnerViewViewModel>().shareNFTLink(size: size);
-                      //       },
-                      //       child: SvgPicture.asset(
-                      //         SVGUtil.OWNER_SHARE,
-                      //         height: 20.h,
-                      //       ),
-                      //     ),
-                      //     SizedBox(
-                      //       height: 7.h,
-                      //     )
-                      //   ],
-                      // ),
                       const ToggleButton(),
                       if (viewModel.toggled==Toggle.enabled) ...[
                         SizedBox(width: 15.w),
@@ -623,78 +547,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                   ),
                                 ),
                                 OwnerSideBar(),
-                                // Expanded(
-                                //   flex: 15,
-                                //   child: Column(
-                                //     crossAxisAlignment: CrossAxisAlignment.end,
-                                //     children: [
-                                //       Column(
-                                //         children: [
-                                //           IgnorePointer(
-                                //             ignoring: viewModel.isLiking,
-                                //             child: GestureDetector(
-                                //               onTap: () async {
-                                //                 await viewModel.updateLikeStatus(cookBookID: viewModel.nft.cookbookID, recipeId: viewModel.nft.recipeID);
-                                //               },
-                                //               child: viewModel.isLiking ? getLikingLoader() : getLikeIcon(likedByMe: viewModel.likedByMe),
-                                //             ),
-                                //           ),
-                                //           SizedBox(
-                                //             height: 5.h,
-                                //           ),
-                                //           Text(
-                                //             viewModel.likesCount.toString(),
-                                //             style: const TextStyle(color: Colors.white, fontSize: 12),
-                                //           ),
-                                //         ],
-                                //       ),
-                                //       SizedBox(
-                                //         height: 12.h,
-                                //       ),
-                                //       GestureDetector(
-                                //         onTap: () {
-                                //           showDialog(
-                                //             context: context,
-                                //             builder: (_) => QRCodeScreen(
-                                //               nft: viewModel.nft,
-                                //             ),
-                                //           );
-                                //         },
-                                //         child: SvgPicture.asset(
-                                //           SVGUtil.QR_ICON,
-                                //           height: 20.h,
-                                //         ),
-                                //       ),
-                                //       SizedBox(
-                                //         height: 12.h,
-                                //       ),
-                                //       if (viewModel.nft.assetType == AssetType.Image && Platform.isAndroid)
-                                //         GestureDetector(
-                                //           onTap: () {
-                                //             final WallpaperScreen wallpaperScreen = WallpaperScreen(nft: viewModel.nft.url, context: context);
-                                //             wallpaperScreen.show();
-                                //           },
-                                //           child: SvgPicture.asset(
-                                //             SVGUtil.MY_CREATIONS,
-                                //             height: 20.h,
-                                //             color: Colors.white,
-                                //           ),
-                                //         ),
-                                //       SizedBox(height: 12.h),
-                                //       GestureDetector(
-                                //         key: const Key(kShareNftButtonExpandedKey),
-                                //         onTap: () async {
-                                //           final Size size = MediaQuery.of(context).size;
-                                //           viewModel.shareNFTLink(size: size);
-                                //         },
-                                //         child: SvgPicture.asset(
-                                //           SVGUtil.OWNER_SHARE,
-                                //           height: 20.h,
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // )
                               ],
                             ),
                           ),
