@@ -11,6 +11,7 @@ import 'package:easel_flutter/screens/creator_hub/widgets/nfts_list_tile.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/dependency_injection/dependency_injection_container.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
+import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:easel_flutter/utils/route_util.dart';
 import 'package:easel_flutter/widgets/clipped_button.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -49,7 +50,7 @@ class _CreatorHubScreenState extends State<CreatorHubScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ColoredBox(
       color: EaselAppTheme.kBgWhite,
       child: SafeArea(
         child: Scaffold(
@@ -100,13 +101,13 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
 
   EaselProvider get easelProvider => sl();
 
-  void onRefreshPressed() async {
+  Future<void> onRefreshPressed() async {
     GetIt.I.get<CreatorHubViewModel>().getDraftsList();
     GetIt.I.get<CreatorHubViewModel>().getRecipesList();
     GetIt.I.get<CreatorHubViewModel>().getTotalForSale();
   }
 
-  Widget getRefreshButton(viewModel) {
+  Widget getRefreshButton(CreatorHubViewModel viewModel) {
     if (easelProvider.isPylonsInstalled) {
       switch (viewModel.selectedCollectionType) {
         case CollectionType.published:
@@ -132,7 +133,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<CreatorHubViewModel>();
-    return Container(
+    return ColoredBox(
       color: EaselAppTheme.kWhite,
       child: SafeArea(
         child: Scaffold(
@@ -151,10 +152,10 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                       getRefreshButton(viewModel),
                       InkWell(
                         onTap: () => Navigator.of(context).pushNamed(RouteUtil.kRouteHome),
-                        child: Container(
+                        child: DecoratedBox(
                           decoration: BoxDecoration(
                             color: EaselAppTheme.kpurpleDark,
-                            boxShadow: [BoxShadow(color: EaselAppTheme.kpurpleDark.withOpacity(0.6), offset: const Offset(0, 0), blurRadius: 8.0)],
+                            boxShadow: [BoxShadow(color: EaselAppTheme.kpurpleDark.withOpacity(0.6), blurRadius: 8.0)],
                           ),
                           child: Icon(Icons.add, size: 27.h, color: EaselAppTheme.kWhite),
                         ),
@@ -168,7 +169,6 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: RichText(
-                    textAlign: TextAlign.start,
                     text: TextSpan(
                       children: [
                         TextSpan(
@@ -305,7 +305,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
     return Expanded(
       child: InkWell(
         onTap: () => viewModel.changeSelectedCollection(collectionType),
-        child: Container(
+        child: DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(width: 1.7.sp),
           ),
@@ -395,7 +395,7 @@ class BuildGridView extends StatelessWidget {
                   key: const Key(kPriceBannerKey),
                   color: EaselAppTheme.kDarkGreen,
                   location: BannerLocation.topEnd,
-                  message: "${getCoinWithProperDenomination(nft.ibcCoins, nft.price)}  ${getAbbrev(ibcCoin: nft.ibcCoins)}",
+                  message: "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)} ${nft.ibcCoins.getAbbrev()}",
                   child: NftGridViewItem(
                     nft: nft,
                   ),
@@ -406,35 +406,6 @@ class BuildGridView extends StatelessWidget {
               );
       },
     );
-  }
-
-  String getCoinWithProperDenomination(String ibcCoin, String amount) {
-    if (ibcCoin == "weth_wei") {
-      return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
-    } else if (ibcCoin == "upylon") {
-      return (double.parse(amount) / kBigIntBase).toStringAsFixed(0);
-    } else {
-      return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
-    }
-  }
-
-  String getAbbrev({required String ibcCoin}) {
-    switch (ibcCoin) {
-      case "urun":
-        return kAgoricAbr;
-      case "upylon":
-        return kPYLNAbbrevation;
-      case "ustripeusd":
-        return kStripeUSDABR;
-      case "eeur":
-        return kEmoneyAbb;
-      case "uatom":
-        return kAtomAbr;
-      case "weth_wei":
-        return kEthereumAbr;
-      default:
-        return kPYLNAbbrevation;
-    }
   }
 }
 

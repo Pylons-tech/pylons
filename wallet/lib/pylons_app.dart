@@ -28,8 +28,8 @@ import 'package:pylons_wallet/pages/home/wallet_screen/widgets/transaction_detai
 import 'package:pylons_wallet/pages/presenting_onboard_page/presenting_onboard_page.dart';
 import 'package:pylons_wallet/pages/presenting_onboard_page/screens/create_wallet_screen.dart';
 import 'package:pylons_wallet/pages/presenting_onboard_page/screens/restore_wallet_screen.dart';
+import 'package:pylons_wallet/pages/routing_page/splash_screen.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_screen.dart';
-import 'package:pylons_wallet/pages/routing_page/routing_page.dart';
 import 'package:pylons_wallet/pages/routing_page/update_app.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/screens/payment_screen/payment_screen.dart';
@@ -108,7 +108,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
             theme: PylonsAppTheme().buildAppTheme(),
             initialRoute: '/',
             routes: {
-              '/': (context) => const RoutingPage(),
+              '/': (context) => const SplashScreen(),
               RouteUtil.ROUTE_HOME: (context) => const HomeScreen(),
               RouteUtil.ROUTE_APP_UPDATE: (context) => const UpdateApp(),
               RouteUtil.ROUTE_SETTINGS: (context) => const SettingScreen(),
@@ -171,9 +171,11 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
               },
             },
             builder: (context, widget) {
-              return MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                child: widget ?? Container(),
+              return Material(
+                child: MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                  child: widget ?? Container(),
+                ),
               );
             },
           ),
@@ -333,7 +335,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
           );
 
           final appleInAppPurchaseResponse = await walletStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
-
+          loading.dismiss();
           if (appleInAppPurchaseResponse.isLeft()) {
             appleInAppPurchaseResponse.swap().toOption().toNullable()!.message.show();
             return;

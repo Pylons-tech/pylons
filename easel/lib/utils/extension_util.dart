@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path/path.dart' as path;
 import 'package:pylons_sdk/pylons_sdk.dart';
 
-
 extension ScaffoldHelper on BuildContext? {
   void show({required String message}) {
     if (this == null) {
@@ -173,7 +172,7 @@ extension FileSizeInGB on int {
 
 extension FileSizeString on int {
   String getFileSizeString({required int precision}) {
-    var i = (log(this) / log(1024)).floor();
+    final i = (log(this) / log(1024)).floor();
     return ((this / pow(1024, i)).toStringAsFixed(precision)) + suffixes[i];
   }
 }
@@ -219,5 +218,38 @@ extension TrimString on String {
       return "${substring(0, 8)}...${substring(length - 4, length)}";
     }
     return this;
+  }
+}
+
+extension GetCoinWithProperDenomination on String {
+  String getCoinWithProperDenomination(String amount) {
+    if (this == kUsdSymbol) {
+      return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
+    } else if (this == kPylonSymbol) {
+      return (double.parse(amount) / kBigIntBase).toStringAsFixed(0);
+    } else {
+      return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
+    }
+  }
+}
+
+extension GetAbbrev on String {
+  String getAbbrev() {
+    switch (this) {
+      case kAgoricSymbol:
+        return kAgoricAbr;
+      case kPylonSymbol:
+        return kPYLNAbbrevation;
+      case kUsdSymbol:
+        return kStripeUSDABR;
+      case kEuroSymbol:
+        return kEmoneyAbb;
+      case kAtomSymbol:
+        return kAtomAbr;
+      case kEthereumSymbol:
+        return kEthereumAbr;
+      default:
+        return kPYLNAbbrevation;
+    }
   }
 }

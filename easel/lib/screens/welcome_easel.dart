@@ -92,7 +92,7 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
     );
   }
 
-  void populateCoinsAndMoveForward() async {
+  Future<void> populateCoinsAndMoveForward() async {
     GetIt.I.get<Repository>().saveOnBoardingComplete();
     context.read<EaselProvider>().populateCoinsIfPylonsNotExists();
 
