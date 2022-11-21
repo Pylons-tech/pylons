@@ -1,6 +1,8 @@
 package apptesting
 
 import (
+	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -18,6 +20,7 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/Pylons-tech/pylons/app"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 type KeeperTestHelper struct {
@@ -113,5 +116,30 @@ func CreateRandomAccounts(numAccts int) []sdk.AccAddress {
 		testAddrs[i] = sdk.AccAddress(pk.Address())
 	}
 
+	return testAddrs
+}
+
+// set up googleIAPOder
+func (s *KeeperTestHelper) SetUpGoogleIAPOrder(ctx sdk.Context, n int, productID string) []types.GoogleInAppPurchaseOrder {
+	items := make([]types.GoogleInAppPurchaseOrder, n)
+	creators := types.GenTestBech32List(n)
+	for i := range items {
+		items[i].Creator = creators[i]
+		items[i].PurchaseToken = strconv.Itoa(i)
+		items[i].ProductId = productID
+		s.App.PylonsKeeper.AppendGoogleIAPOrder(ctx, items[i])
+	}
+	return items
+}
+
+// set up test addresses
+func (s *KeeperTestHelper) SetUpTestAddrs(n int) []sdk.AccAddress {
+	testAddrs := make([]sdk.AccAddress, n)
+	for id := range testAddrs {
+		testAcc := types.GenTestBech32FromString(fmt.Sprint(id))
+		testAddr, err := sdk.AccAddressFromBech32(testAcc)
+		s.Require().NoError(err)
+		testAddrs[id] = testAddr
+	}
 	return testAddrs
 }
