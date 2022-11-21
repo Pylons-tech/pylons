@@ -63,6 +63,7 @@ class AppColors {
   static Color kTransactionRed = const Color.fromRGBO(239, 68, 33, 1);
   static Color k3DBackgroundColor = Colors.grey.shade200;
   static Color kGreyColor = const Color.fromRGBO(141, 140, 140, 1);
+  static Color kTransparentColor = Colors.transparent;
 }
 
 const double kIconSize = 24.0;

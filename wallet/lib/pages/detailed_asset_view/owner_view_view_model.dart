@@ -272,6 +272,17 @@ class OwnerViewViewModel extends ChangeNotifier {
       likesCount = likesCount - 1;
     } else {
       likesCount = likesCount + 1;
+<<<<<<< Updated upstream
+=======
+      repository.insertNFTInFavorites(
+        FavoritesModel(
+          id: recipeId,
+          cookbookId: cookBookID,
+          type: NftType.TYPE_RECIPE.name,
+          dateTime: DateTime.now().millisecondsSinceEpoch,
+        ),
+      );
+>>>>>>> Stashed changes
     }
   }
 
