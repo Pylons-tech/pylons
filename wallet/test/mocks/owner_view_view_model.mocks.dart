@@ -40,6 +40,7 @@ import 'package:video_player/video_player.dart' as _i13;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
+// ignore_for_file: must_be_immutable
 
 class _FakeNFT_0 extends _i1.SmartFake implements _i2.NFT {
   _FakeNFT_0(
