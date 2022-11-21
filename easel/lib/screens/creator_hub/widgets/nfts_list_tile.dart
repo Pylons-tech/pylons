@@ -31,7 +31,7 @@ class NFTsListTile extends StatelessWidget {
   }
 
   Widget getPublishedCard({required BuildContext context}) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: EaselAppTheme.kWhite,
         boxShadow: [
@@ -48,7 +48,7 @@ class NFTsListTile extends StatelessWidget {
           children: [
             SizedBox(
               height: 45.h,
-              width: 45.h,
+              width: 45.w,
               child: NftTypeBuilder(
                 onImage: (context) => buildCachedNetworkImage(publishedNFT.url.changeDomain()),
                 onVideo: (context) => buildCachedNetworkImage(publishedNFT.thumbnailUrl.changeDomain()),
@@ -118,109 +118,54 @@ class NFTsListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        (publishedNFT.price.isNotEmpty && double.parse(publishedNFT.price) > 0)
-            ? Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: Card(
-                  elevation: 5,
-                  margin: EdgeInsets.zero,
-                  child: ClipRRect(
-                    child: Banner(
-                      key: const Key(kPriceBannerKey),
-                      color: EaselAppTheme.kDarkGreen,
-                      location: BannerLocation.topEnd,
-                      message: "\$ ${publishedNFT.price}",
-                      child: getPublishedCard(context: context),
-                    ),
-                  ),
+        if (publishedNFT.price.isNotEmpty && double.parse(publishedNFT.price) > 0)
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Card(
+              elevation: 5,
+              margin: EdgeInsets.zero,
+              child: ClipRRect(
+                child: Banner(
+                  key: Key("${publishedNFT.ibcCoins.getCoinWithProperDenomination(publishedNFT.price)} ${publishedNFT.ibcCoins.getAbbrev()}"),
+                  color: EaselAppTheme.kDarkGreen,
+                  location: BannerLocation.topEnd,
+                  message: "${publishedNFT.ibcCoins.getCoinWithProperDenomination(publishedNFT.price)} ${publishedNFT.ibcCoins.getAbbrev()}",
+                  child: getPublishedCard(context: context),
                 ),
-              )
-            : Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: getPublishedCard(context: context),
               ),
-        (publishedNFT.assetType.toAssetTypeEnum() != AssetType.ThreeD)
-            ? IgnorePointer(
-                child: SizedBox(
-                  height: 85.0.h,
-                  width: double.infinity,
-                  child: CachedNetworkImage(
-                    imageUrl: publishedNFT.assetType.toAssetTypeEnum() == AssetType.Image ? publishedNFT.url.changeDomain() : publishedNFT.thumbnailUrl.changeDomain(),
-                    fit: BoxFit.fill,
-                    color: Colors.transparent,
-                    colorBlendMode: BlendMode.clear,
-                    placeholder: (context, _) {
-                      return Container(
-                        margin: EdgeInsets.symmetric(vertical: 5.h, horizontal: 3.w),
-                        decoration: BoxDecoration(
-                          color: EaselAppTheme.kDarkGrey02,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              offset: const Offset(0.0, 1.0),
-                              blurRadius: 4.0,
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 50.0.w,
-                                height: 50.0.w,
-                                decoration: const BoxDecoration(
-                                  color: EaselAppTheme.kLightGrey03,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10.w,
-                              ),
-                              Expanded(
-                                child: ListView.separated(
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    return Container(
-                                      width: 30.0.w,
-                                      height: 9.0.h,
-                                      color: EaselAppTheme.kLightGrey03,
-                                    );
-                                  },
-                                  separatorBuilder: (context, index) {
-                                    return SizedBox(
-                                      height: 8.0.h,
-                                    );
-                                  },
-                                  itemCount: 3,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10.w,
-                              ),
-                              InkWell(
-                                onTap: () {},
-                                child: Padding(
-                                  padding: EdgeInsets.all(4.0.w),
-                                  child: SvgPicture.asset(
-                                    SVGUtils.kSvgMoreOption,
-                                    color: EaselAppTheme.kLightGrey03,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                    errorWidget: (context, _, __) {
-                      return const IgnorePointer(child: SizedBox());
-                    },
-                  ),
+            ),
+          )
+        else
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: getPublishedCard(context: context),
+          ),
+        if (publishedNFT.assetType.toAssetTypeEnum() != AssetType.ThreeD)
+          IgnorePointer(
+            child: SizedBox(
+              height: 85.0.h,
+              width: double.infinity,
+              child: CachedNetworkImage(
+                imageUrl: publishedNFT.assetType.toAssetTypeEnum() == AssetType.Image ? publishedNFT.url.changeDomain() : publishedNFT.thumbnailUrl.changeDomain(),
+                fit: BoxFit.fill,
+                color: Colors.transparent,
+                colorBlendMode: BlendMode.clear,
+                placeholder: (context, url) => Shimmer(
+                  color: EaselAppTheme.cardBackground,
+                  child: const SizedBox.expand(),
                 ),
-              )
-            : const IgnorePointer(
-                child: SizedBox(),
+                errorWidget: (context, _, __) {
+                  return const IgnorePointer(child: SizedBox());
+                },
               ),
+            ),
+          )
+        else
+          IgnorePointer(
+            child: SizedBox(
+              height: 85.h,
+            ),
+          ),
       ],
     );
   }

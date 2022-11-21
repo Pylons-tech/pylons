@@ -29,7 +29,7 @@ class PreviewScreen extends StatefulWidget {
 }
 
 class _PreviewScreenState extends State<PreviewScreen> {
-  var repository = GetIt.I.get<Repository>();
+  Repository repository = GetIt.I.get<Repository>();
   @override
   void initState() {
     super.initState();
@@ -56,7 +56,6 @@ class _PreviewScreenState extends State<PreviewScreen> {
               Column(children: [
                 SizedBox(height: MediaQuery.of(context).viewPadding.top + 20.h),
                 Align(
-                  alignment: Alignment.center,
                   child: Text(LocaleKeys.nft_preview_header.tr(),
                       textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: EaselAppTheme.kLightPurple, fontSize: 15.sp, fontWeight: FontWeight.w600)),
                 ),
@@ -106,21 +105,21 @@ class _PreviewScreenState extends State<PreviewScreen> {
   Widget buildPreviewWidget(EaselProvider provider) {
     switch (provider.nftFormat.format) {
       case NFTTypes.image:
-        return ImageWidget(file: provider.file!);
+        return ImageWidget(file: provider.file);
       case NFTTypes.video:
         return VideoWidget(
-          file: provider.file!,
+          file: provider.file,
           previewFlag: false,
           isForFile: true,
           isDarkMode: false,
         );
       case NFTTypes.audio:
-        return AudioWidget(file: provider.file!, previewFlag: true);
+        return AudioWidget(file: provider.file, previewFlag: true);
       case NFTTypes.threeD:
-        return Model3dViewer(path: provider.file!.path, isFile: true);
+        return Model3dViewer(path: provider.file?.path, isFile: true);
       case NFTTypes.pdf:
         return PdfViewer(
-          file: provider.file!,
+          file: provider.file,
           previewFlag: true,
         );
     }

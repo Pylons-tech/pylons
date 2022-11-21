@@ -50,7 +50,6 @@ class _HashtagInputFieldState extends State<EaselHashtagInputField> {
               fit: BoxFit.fill,
             ),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
                   padding: EdgeInsets.only(left: 10.0.w),
@@ -60,14 +59,11 @@ class _HashtagInputFieldState extends State<EaselHashtagInputField> {
                     child: SizedBox(
                         height: isTablet ? 32.h : 40.h,
                         child: Align(
-                          alignment: Alignment.center,
                           child: TextFormField(
                             style: TextStyle(fontSize: isTablet ? 16.sp : 18.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kDarkText),
                             controller: _inputController,
                             minLines: 1,
-                            maxLines: 1,
                             keyboardType: TextInputType.text,
-                            textCapitalization: TextCapitalization.none,
                             decoration: InputDecoration(
                               hintText: "hashtag_hint".tr(),
                               hintStyle: TextStyle(fontSize: isTablet ? 16.sp : 15.sp, color: EaselAppTheme.kGrey),
@@ -76,7 +72,7 @@ class _HashtagInputFieldState extends State<EaselHashtagInputField> {
                               contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),
                             ),
                             inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+                              FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]')),
                             ],
                           ),
                         ))),

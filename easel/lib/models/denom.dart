@@ -24,7 +24,7 @@ class Denom {
 
   TextInputFormatter getFormatter() {
     if (symbol == kPylonSymbol) {
-      return AmountFormatter(maxDigits: kMaxPriceLength, isDecimal: false);
+      return AmountFormatter(maxDigits: kMaxPriceLength);
     }
     return AmountFormatter(maxDigits: kMaxPriceLength, isDecimal: true);
   }

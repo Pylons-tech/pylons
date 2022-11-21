@@ -58,6 +58,7 @@ class AppColors {
   static Color kPriceTagColor = const Color(0xff3A8977);
   static Color kPayNowBackgroundGrey = const Color(0xffE5E5E5);
   static Color kSubtitleColor = const Color(0xff767676);
+  static Color kSplashScreenBgColor = const Color(0xFFF15838);
 
   static Color kTransactionGreen = const Color.fromRGBO(81, 161, 144, 1);
   static Color kTransactionRed = const Color.fromRGBO(239, 68, 33, 1);
@@ -309,6 +310,8 @@ const kItemId = "id";
 const kCookbookId = "cookbook_id";
 const kAmount = "amount";
 const kCreatedAt = "created_at";
+const kSenderName = "sender_name";
+const kReceiver = "receiver";
 
 const cookbookIdKey = "cookbookId";
 const recipeIdKey = "recipeId";
@@ -406,6 +409,9 @@ const kOwnerViewDrawerKeyValue = "ownerview_header";
 const kOwnerViewBottomSheetKeyValue = "bottom_sheet";
 const kKeyboardUpButtonKeyValue = "keyboard_up_button";
 const kExpandedBuyButtonKeyValue = "expanded_buy_button";
+const kCheckoutDialogKey = "checkout_dialog_key";
+const kPurchaseItemBottomSheetKey = "purchase_item_bottom_sheet";
+const kCloseBottomSheetKey = "close_bottom_sheet_key";
 
 Map<String, Color> denomColors = {'upylon': const Color(0xFF5252d5), 'ustripeusd': const Color(0xFF85bb65), 'uusd': const Color(0xFF85bb65)};
 

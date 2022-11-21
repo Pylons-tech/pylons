@@ -21,14 +21,14 @@ class BuildPublishedNFTsBottomSheet {
 
   BuildPublishedNFTsBottomSheet({required this.context, required this.nft, required this.easelProvider});
 
-  Widget moreOptionTile({required String title, required String image, required VoidCallback onPressed, final bool isSvg = true}) {
+  Widget moreOptionTile({required String title, required String image, required VoidCallback onPressed, bool isSvg = true}) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: InkWell(
         onTap: () => onPressed(),
         child: Row(
           children: [
-            isSvg ? SvgPicture.asset(image) : Image.asset(image),
+            if (isSvg) SvgPicture.asset(image) else Image.asset(image),
             SizedBox(width: 30.w),
             Text(
               title,
@@ -42,12 +42,12 @@ class BuildPublishedNFTsBottomSheet {
     );
   }
 
-  void onViewOnIPFSPressed({required NFT nft}) async {
+  Future<void> onViewOnIPFSPressed({required NFT nft}) async {
     await easelProvider.repository.launchMyUrl(url: nft.url.changeDomain());
   }
 
-  void onViewOnPylonsPressed({required NFT nft}) async {
-    String url = nft.recipeID.generateEaselLinkForOpeningInPylonsApp(cookbookId: nft.cookbookID);
+  Future<void> onViewOnPylonsPressed({required NFT nft}) async {
+    final String url = nft.recipeID.generateEaselLinkForOpeningInPylonsApp(cookbookId: nft.cookbookID);
 
     await easelProvider.repository.launchMyUrl(url: url);
   }

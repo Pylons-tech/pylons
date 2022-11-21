@@ -113,7 +113,6 @@ class NFT extends Equatable {
   factory NFT.fromRecipe(Recipe recipe) {
     final royalties = recipe.entries.itemOutputs.firstOrNull?.tradePercentage.fromBigInt().toInt().toString();
     return NFT(
-      id: null,
       type: NftType.TYPE_RECIPE.name,
       recipeID: recipe.id,
       cookbookID: recipe.cookbookId,

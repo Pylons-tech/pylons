@@ -24,7 +24,7 @@ class CreatorHubViewModel extends ChangeNotifier {
 
   int get publishedRecipesLength => nftPublishedList.length;
 
-  changeSelectedCollection(CollectionType collectionType) {
+  void changeSelectedCollection(CollectionType collectionType) {
     switch (collectionType) {
       case CollectionType.draft:
         selectedCollectionType = CollectionType.draft;
@@ -84,7 +84,7 @@ class CreatorHubViewModel extends ChangeNotifier {
   void getTotalForSale() {
     _nftForSaleList = [];
 
-    for (NFT nft in nftPublishedList) {
+    for (final NFT nft in nftPublishedList) {
       if (nft.isEnabled && nft.amountMinted < int.parse(nft.quantity)) {
         _nftForSaleList.add(nft);
       }

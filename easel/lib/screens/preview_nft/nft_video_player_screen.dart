@@ -55,7 +55,7 @@ class NFTVideoPlayerScreen extends StatelessWidget {
                         sigmaX: 5.0,
                         sigmaY: 5.0,
                       ),
-                      child: Container(
+                      child: ColoredBox(
                         color: Colors.black.withOpacity(0.3),
                         child: Padding(
                           padding: EdgeInsets.only(bottom: 30.h),

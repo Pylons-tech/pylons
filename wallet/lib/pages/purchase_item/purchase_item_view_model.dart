@@ -294,8 +294,8 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
   Future<void> nftDataInit({required String recipeId, required String cookBookId, required String itemId}) async {
     final walletAddress = accountPublicInfo.publicAddress;
-    if (nft.type != NftType.TYPE_RECIPE) {
-      final nftOwnershipHistory = await repository.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
+    if (nft.type == NftType.TYPE_RECIPE) {
+      final nftOwnershipHistory = await repository.getNftOwnershipHistoryByCookbookIdAndRecipeId(cookBookId: cookBookId,recipeId: recipeId);
       if (nftOwnershipHistory.isLeft()) {
         LocaleKeys.something_wrong.tr().show();
         return;
