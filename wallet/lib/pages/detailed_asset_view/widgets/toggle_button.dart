@@ -35,12 +35,11 @@ class _ToggleButtonState extends State<ToggleButton> {
         height: 35.h,
         width: 100.w,
         decoration: BoxDecoration(
-        border: Border.all(
-        color: toggleColor, //color of border
-        width: 3.w, //width of border
-    ),
+          border: Border.all(
+            color: toggleColor, //color of border
+            width: 3.w, //width of border
+          ),
         ),
-
         padding: EdgeInsets.all(3.r),
         child: toggleChild,
       );
