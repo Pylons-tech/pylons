@@ -3,6 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/utils/constants.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import '../../../generated/locale_keys.g.dart';
 
 class ToggleButton extends StatefulWidget {
   const ToggleButton({Key? key}) : super(key: key);
@@ -54,7 +57,7 @@ class _ToggleButtonState extends State<ToggleButton> {
               assetProvider.setToggle(toggle: Toggle.mid);
             },
             child: Align(
-              child: Text("For sale", style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w500)),
+              child: Text(LocaleKeys.for_sale.tr(), style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w500)),
             ),
           ),
         ),
@@ -111,7 +114,7 @@ class _ToggleButtonState extends State<ToggleButton> {
             },
             child: SizedBox.expand(
               child: Align(
-                child: Text("Not for sale", style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w500)),
+                child: Text(LocaleKeys.not_for_sale.tr(), style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w500)),
               ),
             ),
           ),
