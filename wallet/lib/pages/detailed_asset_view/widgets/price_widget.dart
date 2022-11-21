@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
-import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/utils/constants.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import '../../../generated/locale_keys.g.dart';
 
 class PriceWidget extends StatelessWidget {
   final String price;
@@ -26,18 +27,18 @@ class PriceWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '$price $priceAbbr',
+                    '$price $priceAbbr ',
                     style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    ' ea.',
+                    LocaleKeys.ea.tr(),
                     style: TextStyle(color: Colors.white, fontSize: 9.sp, fontWeight: FontWeight.w300),
                   )
                 ],
               ),
               //SizedBox(height: 1.h),
               Text(
-                '$amount available',
+                '$amount ${LocaleKeys.available.tr()}',
                 style: TextStyle(color: AppColors.kLightGray, fontSize: 9.sp, fontWeight: FontWeight.w300),
               ),
             ],
