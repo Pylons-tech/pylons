@@ -20,14 +20,18 @@ class Recipe {
 
   Recipe(this._native, this._forcedId);
 
-  Recipe.fromId(String n) : _native = null, _forcedId = n;
-  Recipe.fromRecipe(generated.Recipe n) : _native = n, _forcedId = null;
+  Recipe.fromId(String n)
+      : _native = null,
+        _forcedId = n;
+  Recipe.fromRecipe(generated.Recipe n)
+      : _native = n,
+        _forcedId = null;
 
   /// Retrieves the current state of a recipe from the chain.
   /// If cookbook is specified manually, you can override the loaded cookbook
   /// or query a recipe before loading a cookbook; otherwise, the recipe
   /// will be retrieved for the loaded cookbook.
-  static Future<Recipe?> get (String id, {String? cookbook}) async {
+  static Future<Recipe?> get(String id, {String? cookbook}) async {
     final String cb;
     if (Cookbook.current == null && cookbook == null) {
       throw Exception('Must set cookbook before trying to fetch a recipe');
@@ -46,7 +50,7 @@ class Recipe {
   }
 
   /// Produces a partial recipe for the provided ID and the current cookbook.
-  static Recipe let (String id) {
+  static Recipe let(String id) {
     if (Cookbook.current == null) {
       throw Exception('Must set cookbook before trying to fetch a recipe');
     }
@@ -61,7 +65,9 @@ class Recipe {
   /// from the user profile manually.
   ///
   /// This is obviously not an ideal state of affairs, and will be fixed ASAP.
-  Future<Execution> executeWith (Profile prf, List<Item> inputs, {int CoinInputIndex = 0, List<generated.PaymentInfo>Function()? paymentInfoGen} ) async {
+  Future<Execution> executeWith(Profile prf, List<Item> inputs,
+      {int CoinInputIndex = 0,
+      List<generated.PaymentInfo> Function()? paymentInfoGen}) async {
     var ids = <String>[];
     var infos = <generated.PaymentInfo>[];
     if (paymentInfoGen != null) infos = paymentInfoGen();
@@ -100,7 +106,8 @@ class Recipe {
   /// Not available on partial recipes.
   String getCookbookId() {
     if (_native == null) {
-      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+      throw UnsupportedError(
+          'Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
     }
     return _native!.cookbookId;
   }
@@ -110,7 +117,8 @@ class Recipe {
   /// Not available on partial recipes.
   String getId() {
     if (_native == null) {
-      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+      throw UnsupportedError(
+          'Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
     }
     return _native!.id;
   }
@@ -123,7 +131,8 @@ class Recipe {
   /// Not available on partial recipes.
   Int64 getNodeVersion() {
     if (_native == null) {
-      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+      throw UnsupportedError(
+          'Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
     }
     return _native!.nodeVersion;
   }
@@ -133,7 +142,8 @@ class Recipe {
   /// Not available on partial recipes.
   String getName() {
     if (_native == null) {
-      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+      throw UnsupportedError(
+          'Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
     }
     return _native!.name;
   }
@@ -143,7 +153,8 @@ class Recipe {
   /// Not available on partial recipes.
   String getDescription() {
     if (_native == null) {
-      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+      throw UnsupportedError(
+          'Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
     }
     return _native!.description;
   }
@@ -154,7 +165,8 @@ class Recipe {
   /// Not available on partial recipes.
   String getVersion() {
     if (_native == null) {
-      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+      throw UnsupportedError(
+          'Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
     }
     return _native!.version;
   }
@@ -166,7 +178,8 @@ class Recipe {
   /// Not available on partial recipes.
   String getExtraInfo() {
     if (_native == null) {
-      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+      throw UnsupportedError(
+          'Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
     }
     return _native!.extraInfo;
   }
@@ -176,7 +189,8 @@ class Recipe {
   /// Not available on partial recipes.
   bool isEnabled() {
     if (_native == null) {
-      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+      throw UnsupportedError(
+          'Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
     }
     return _native!.enabled;
   }
@@ -186,7 +200,8 @@ class Recipe {
   /// Not available on partial recipes.
   Int64 getCreatedAt() {
     if (_native == null) {
-      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+      throw UnsupportedError(
+          'Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
     }
     return _native!.createdAt;
   }
@@ -196,7 +211,8 @@ class Recipe {
   /// Not available on partial recipes.
   Int64 getUpdatedAt() {
     if (_native == null) {
-      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+      throw UnsupportedError(
+          'Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
     }
     return _native!.updatedAt;
   }
@@ -208,7 +224,8 @@ class Recipe {
   /// Not available on partial recipes.
   Map<String, Int64> getCoinInputs() {
     if (_native == null) {
-      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+      throw UnsupportedError(
+          'Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
     }
     final ll = _native!.coinInputs;
     final map = <String, Int64>{};
@@ -227,10 +244,13 @@ class Recipe {
   /// Not available on partial recipes.
   List<ItemInput> getItemInputs() {
     if (_native == null) {
-      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+      throw UnsupportedError(
+          'Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
     }
     var ls = <ItemInput>[];
-    _native!.itemInputs.forEach((element) {ls.add(ItemInput(element));});
+    _native!.itemInputs.forEach((element) {
+      ls.add(ItemInput(element));
+    });
     return List.unmodifiable(ls);
   }
 
@@ -240,7 +260,8 @@ class Recipe {
   /// Not available on partial recipes.
   OutputSet getOutput() {
     if (_native == null) {
-      throw UnsupportedError('Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
+      throw UnsupportedError(
+          'Cannot get recipe fields from a partial recipe - use Recipe.get() if you need that data');
     }
     return OutputSet(_native!.entries, _native!.outputs);
   }
@@ -289,22 +310,30 @@ class OutputSet {
   /// Retrieves the output lists.
   List<WeightedOutput> getWeightedOutputs() {
     var ls = <WeightedOutput>[];
-    _nativeOutputs.forEach((element) {ls.add(WeightedOutput(element));});
+    _nativeOutputs.forEach((element) {
+      ls.add(WeightedOutput(element));
+    });
     return List.unmodifiable(ls);
   }
 
   /// Retrieves all possible item outputs.
   List<ItemOutput> getItemOutputs() {
     var ls = <ItemOutput>[];
-    _nativeEntries.itemOutputs.forEach((element) {ls.add(ItemOutput.fromItemOutput(element));});
-    _nativeEntries.itemModifyOutputs.forEach((element) {ls.add(ItemOutput.fromItemModifyOutput(element));});
+    _nativeEntries.itemOutputs.forEach((element) {
+      ls.add(ItemOutput.fromItemOutput(element));
+    });
+    _nativeEntries.itemModifyOutputs.forEach((element) {
+      ls.add(ItemOutput.fromItemModifyOutput(element));
+    });
     return List.unmodifiable(ls);
   }
 
   /// Retrieves all possible coin outputs.
   List<CoinOutput> getCoinOutputs() {
     var ls = <CoinOutput>[];
-    _nativeEntries.coinOutputs.forEach((element) {ls.add(CoinOutput(element));});
+    _nativeEntries.coinOutputs.forEach((element) {
+      ls.add(CoinOutput(element));
+    });
     return List.unmodifiable(ls);
   }
 }
@@ -340,14 +369,21 @@ class CoinOutput {
 class ItemOutput {
   final generated.ItemOutput? _native;
   final generated.ItemModifyOutput? _nativeModify;
+
   /// If true, this output applies a transformation to a specified input item, as opposed
   /// to generating a new item.
   final bool modify;
 
   ItemOutput(this._native, this._nativeModify, this.modify);
 
-  ItemOutput.fromItemOutput (generated.ItemOutput n) : _native = n, _nativeModify = null, modify = false;
-  ItemOutput.fromItemModifyOutput (generated.ItemModifyOutput n) : _native = null, _nativeModify = n, modify = true;
+  ItemOutput.fromItemOutput(generated.ItemOutput n)
+      : _native = n,
+        _nativeModify = null,
+        modify = false;
+  ItemOutput.fromItemModifyOutput(generated.ItemModifyOutput n)
+      : _native = null,
+        _nativeModify = n,
+        modify = true;
 
   /// The ID of this item output, as used in the weighted output lists.
   String getId() {
@@ -403,9 +439,13 @@ class ItemOutput {
   Map<String, Int64> getTransferFee() {
     var map = <String, Int64>{};
     if (modify) {
-      _nativeModify!.transferFee.forEach((element) {map[element.denom] = Int64.parseInt(element.amount); });
+      _nativeModify!.transferFee.forEach((element) {
+        map[element.denom] = Int64.parseInt(element.amount);
+      });
     } else {
-      _native!.transferFee.forEach((element) {map[element.denom] = Int64.parseInt(element.amount); });
+      _native!.transferFee.forEach((element) {
+        map[element.denom] = Int64.parseInt(element.amount);
+      });
     }
     return Map.unmodifiable(map);
   }
@@ -414,9 +454,11 @@ class ItemOutput {
   DoubleOutput? getDouble(String name) {
     try {
       if (modify) {
-        return DoubleOutput(_nativeModify!.doubles.firstWhere((element) => element.key == name));
+        return DoubleOutput(_nativeModify!.doubles
+            .firstWhere((element) => element.key == name));
       } else {
-        return DoubleOutput(_native!.doubles.firstWhere((element) => element.key == name));
+        return DoubleOutput(
+            _native!.doubles.firstWhere((element) => element.key == name));
       }
     } on StateError {
       return null;
@@ -427,9 +469,13 @@ class ItemOutput {
   List<DoubleOutput> getDoubles() {
     var ls = <DoubleOutput>[];
     if (modify) {
-      _nativeModify!.doubles.forEach((element) {ls.add(DoubleOutput(element));});
+      _nativeModify!.doubles.forEach((element) {
+        ls.add(DoubleOutput(element));
+      });
     } else {
-      _native!.doubles.forEach((element) {ls.add(DoubleOutput(element));});
+      _native!.doubles.forEach((element) {
+        ls.add(DoubleOutput(element));
+      });
     }
     return List.unmodifiable(ls);
   }
@@ -438,9 +484,11 @@ class ItemOutput {
   LongOutput? getLong(String name) {
     try {
       if (modify) {
-        return LongOutput(_nativeModify!.longs.firstWhere((element) => element.key == name));
+        return LongOutput(
+            _nativeModify!.longs.firstWhere((element) => element.key == name));
       } else {
-        return LongOutput(_native!.longs.firstWhere((element) => element.key == name));
+        return LongOutput(
+            _native!.longs.firstWhere((element) => element.key == name));
       }
     } on StateError {
       return null;
@@ -451,9 +499,13 @@ class ItemOutput {
   List<LongOutput> getLongs() {
     var ls = <LongOutput>[];
     if (modify) {
-      _nativeModify!.longs.forEach((element) {ls.add(LongOutput(element));});
+      _nativeModify!.longs.forEach((element) {
+        ls.add(LongOutput(element));
+      });
     } else {
-      _native!.longs.forEach((element) {ls.add(LongOutput(element));});
+      _native!.longs.forEach((element) {
+        ls.add(LongOutput(element));
+      });
     }
     return List.unmodifiable(ls);
   }
@@ -462,16 +514,20 @@ class ItemOutput {
   StringOutput? getString(String name) {
     try {
       if (modify) {
-        return StringOutput.fromParam(_nativeModify!.strings.firstWhere((element) => element.key == name));
+        return StringOutput.fromParam(_nativeModify!.strings
+            .firstWhere((element) => element.key == name));
       } else {
-        return StringOutput.fromParam(_native!.strings.firstWhere((element) => element.key == name));
+        return StringOutput.fromParam(
+            _native!.strings.firstWhere((element) => element.key == name));
       }
     } on StateError {
       try {
         if (modify) {
-          return StringOutput.fromKV(_nativeModify!.mutableStrings.firstWhere((element) => element.key == name));
+          return StringOutput.fromKV(_nativeModify!.mutableStrings
+              .firstWhere((element) => element.key == name));
         } else {
-          return StringOutput.fromKV(_native!.mutableStrings.firstWhere((element) => element.key == name));
+          return StringOutput.fromKV(_native!.mutableStrings
+              .firstWhere((element) => element.key == name));
         }
       } on StateError {
         return null;
@@ -483,11 +539,19 @@ class ItemOutput {
   List<StringOutput> getStrings() {
     var ls = <StringOutput>[];
     if (modify) {
-      _nativeModify!.strings.forEach((element) {ls.add(StringOutput.fromParam(element));});
-      _nativeModify!.mutableStrings.forEach((element) {ls.add(StringOutput.fromKV(element));});
+      _nativeModify!.strings.forEach((element) {
+        ls.add(StringOutput.fromParam(element));
+      });
+      _nativeModify!.mutableStrings.forEach((element) {
+        ls.add(StringOutput.fromKV(element));
+      });
     } else {
-      _native!.strings.forEach((element) {ls.add(StringOutput.fromParam(element));});
-      _native!.mutableStrings.forEach((element) {ls.add(StringOutput.fromKV(element));});
+      _native!.strings.forEach((element) {
+        ls.add(StringOutput.fromParam(element));
+      });
+      _native!.mutableStrings.forEach((element) {
+        ls.add(StringOutput.fromKV(element));
+      });
     }
     return List.unmodifiable(ls);
   }
@@ -516,7 +580,8 @@ class ItemInput {
   /// Retrieves the double parameter input pattern with the provided key.
   DoubleInput? getDouble(String name) {
     try {
-      return DoubleInput(_native.doubles.firstWhere((element) => element.key == name));
+      return DoubleInput(
+          _native.doubles.firstWhere((element) => element.key == name));
     } on StateError {
       return null;
     }
@@ -525,14 +590,17 @@ class ItemInput {
   /// Retrieves all double parameter input patterns.
   List<DoubleInput> getDoubles() {
     var ls = <DoubleInput>[];
-    _native.doubles.forEach((element) {ls.add(DoubleInput(element));});
+    _native.doubles.forEach((element) {
+      ls.add(DoubleInput(element));
+    });
     return List.unmodifiable(ls);
   }
 
   /// Retrieves the Int64 parameter input pattern with the provided key.
   LongInput? getLong(String name) {
     try {
-      return LongInput(_native.longs.firstWhere((element) => element.key == name));
+      return LongInput(
+          _native.longs.firstWhere((element) => element.key == name));
     } on StateError {
       return null;
     }
@@ -541,14 +609,17 @@ class ItemInput {
   /// Retrieves all Int64 parameter input patterns.
   List<LongInput> getLongs() {
     var ls = <LongInput>[];
-    _native.longs.forEach((element) {ls.add(LongInput(element));});
+    _native.longs.forEach((element) {
+      ls.add(LongInput(element));
+    });
     return List.unmodifiable(ls);
   }
 
   /// Retrieves the string parameter input pattern with the provided key.
   StringInput? getString(String name) {
     try {
-      return StringInput(_native.strings.firstWhere((element) => element.key == name));
+      return StringInput(
+          _native.strings.firstWhere((element) => element.key == name));
     } on StateError {
       return null;
     }
@@ -557,7 +628,9 @@ class ItemInput {
   /// Retrieves all string parameter input patterns.
   List<StringInput> getStrings() {
     var ls = <StringInput>[];
-    _native.strings.forEach((element) {ls.add(StringInput(element));});
+    _native.strings.forEach((element) {
+      ls.add(StringInput(element));
+    });
     return List.unmodifiable(ls);
   }
 }
@@ -575,12 +648,12 @@ class DoubleInput {
   }
 
   /// Minimum value of the parameter to match.
-  double getMin () {
+  double getMin() {
     return DecString.doubleFromDecString(_native.minValue);
   }
 
   /// Maximum value of the parameter to match.
-  double getMax () {
+  double getMax() {
     return DecString.doubleFromDecString(_native.maxValue);
   }
 }
@@ -629,12 +702,12 @@ class DoubleWeightRange {
   }
 
   /// Minimum value of the parameter.
-  double getMin () {
+  double getMin() {
     return DecString.doubleFromDecString(_native.lower);
   }
 
   /// Maximum value of the parameter.
-  double getMax () {
+  double getMax() {
     return DecString.doubleFromDecString(_native.upper);
   }
 }
@@ -652,12 +725,12 @@ class LongInput {
   }
 
   /// Minimum value of the parameter to match.
-  Int64 getMin () {
+  Int64 getMin() {
     return _native.minValue;
   }
 
   /// Maximum value of the parameter to match.
-  Int64 getMax () {
+  Int64 getMax() {
     return _native.maxValue;
   }
 }
@@ -705,12 +778,12 @@ class LongWeightRange {
   }
 
   /// Minimum value of the parameter to match.
-  Int64 getMin () {
+  Int64 getMin() {
     return _native.lower;
   }
 
   /// Maximum value of the parameter to match.
-  Int64 getMax () {
+  Int64 getMax() {
     return _native.upper;
   }
 }
@@ -728,7 +801,7 @@ class StringInput {
   }
 
   /// Exact value of the parameter to match.
-  String getValue () {
+  String getValue() {
     return _native.value;
   }
 }
@@ -742,8 +815,14 @@ class StringOutput {
 
   StringOutput(this._native, this._nativeMutable, this.mutable);
 
-  StringOutput.fromParam (generated.StringParam n) : _native = n, _nativeMutable = null, mutable = false;
-  StringOutput.fromKV (generated.StringKeyValue n) : _native = null, _nativeMutable = n, mutable = true;
+  StringOutput.fromParam(generated.StringParam n)
+      : _native = n,
+        _nativeMutable = null,
+        mutable = false;
+  StringOutput.fromKV(generated.StringKeyValue n)
+      : _native = null,
+        _nativeMutable = n,
+        mutable = true;
 
   /// The name of the parameter.
   String getKey() {
@@ -765,7 +844,7 @@ class StringOutput {
   }
 
   /// Exact value of the parameter, if no program.
-  String getValue () {
+  String getValue() {
     if (mutable) {
       return _nativeMutable!.value;
     } else {

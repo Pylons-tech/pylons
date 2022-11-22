@@ -270,7 +270,6 @@ class WalletsStoreImp implements WalletsStore {
 
   @override
   Future<SdkIpcResponse<Execution>> executeRecipe(Map json) async {
-    
     final networkInfo = GetIt.I.get<NetworkInfo>();
 
     final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
@@ -298,7 +297,10 @@ class WalletsStoreImp implements WalletsStore {
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
     }
 
-    final executionEither = await repository.getExecutionsByRecipeId(recipeId: json[kRecipeIdKey].toString(), cookBookId: json[kCookbookIdKey].toString());
+    final executionEither = await repository.getExecutionsByRecipeId(
+      recipeId: json.containsKey(kRecipeIdKey) ? json[kRecipeIdKey].toString() : json[kRecipeIdMap].toString(),
+      cookBookId: json.containsKey(kCookbookIdKey) ? json[kCookbookIdKey].toString() : json[kCookbookIdMap].toString(),
+    );
     if (executionEither.isLeft()) {
       await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
       return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);

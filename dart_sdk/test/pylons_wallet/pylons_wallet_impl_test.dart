@@ -445,8 +445,6 @@ void executeRecipeTest() {
         .thenAnswer((realInvocation) => Stream<String?>.value('Jawad'));
     var pylonsWallet = PylonsWalletImpl(host: MOCK_HOST, uniLink: uniLink);
 
-
-
     Future.delayed(Duration(seconds: 1), () {
       final sdkResponse = SDKIPCResponse(
           success: true,
@@ -489,7 +487,6 @@ void executeRecipeTest() {
 
     expect(true, response.success);
     expect(response.action, Strings.TX_EXECUTE_RECIPE);
-
   });
 }
 

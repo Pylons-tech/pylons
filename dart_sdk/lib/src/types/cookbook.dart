@@ -14,12 +14,13 @@ class Cookbook {
   Cookbook(this._native);
 
   static Cookbook? _current;
+
   /// Retrieve the current loaded cookbook, or null if none has been loaded.
   static Cookbook? get current => _current;
 
   /// Async: Retrieve the cookbook with the provided ID from the chain, and then
   /// returns it. Returns an error if the cookbook cannot be loaded.
-  static Future<Cookbook> load (String id) async {
+  static Future<Cookbook> load(String id) async {
     final lowLevel = await PylonsWallet.instance.getCookbook(id);
     if (lowLevel.success) {
       return _current = Cookbook(lowLevel.data!);
@@ -29,11 +30,12 @@ class Cookbook {
   }
 
   /// Async: Retrieves a list of all recipes in this cookbook.
-  static Future<List<Recipe>> recipes () async {
+  static Future<List<Recipe>> recipes() async {
     if (current == null) {
       throw Exception();
     }
-    final lowLevel = await PylonsWallet.instance.getRecipes(current!._native.id);
+    final lowLevel =
+        await PylonsWallet.instance.getRecipes(current!._native.id);
     if (lowLevel.success) {
       final ls = <Recipe>[];
       lowLevel.data?.forEach((element) {

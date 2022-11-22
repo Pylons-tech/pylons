@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-
 import 'package:pylons_sdk/low_level.dart' as ll;
 
 import '../mocks/mockedWallet.dart';

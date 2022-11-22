@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-        () async {
+    () async {
       PylonsWallet.instance.exists().then((exists) async {
         if (!exists) {
           PylonsWallet.instance.goToInstall();
@@ -98,19 +98,19 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            Text("HP: $curHp/20 | Sword level $swordLv | $coins coins | $shards shards", style: const TextStyle(fontSize: 18)),
-            const Divider(),
-            Text(flavorText, style: const TextStyle(fontSize: 18)),
-            const Divider(),
-            showTopLevelMenu ? topLevelMenu() : Container(),
-          ])),
+        Text("HP: $curHp/20 | Sword level $swordLv | $coins coins | $shards shards", style: const TextStyle(fontSize: 18)),
+        const Divider(),
+        Text(flavorText, style: const TextStyle(fontSize: 18)),
+        const Divider(),
+        showTopLevelMenu ? topLevelMenu() : Container(),
+      ])),
     );
   }
 
   Widget topLevelMenu() {
-    if (curHp < 1) {
-      return quitButton();
-    }
+    // if (curHp < 1) {
+    //   return quitButton();
+    // }
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -223,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //final itemId = exec.getItemOutputIds().first;
     //final chr = await Item.get(itemId);
     //setState(() {
-      //character = chr;
+    //character = chr;
     //});
     await _checkCharacter();
     setState(() {

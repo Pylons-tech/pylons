@@ -14,26 +14,34 @@ class Item {
   // if from itemrecord: missing a bunch of fields, keep that in mind
   final generated.ItemRecord? _nativeRecord;
   final bool _complete;
+
   /// Is this a partial item?
-  bool get partial=> !_complete;
+  bool get partial => !_complete;
 
   Item(this._native, this._nativeRecord, this._complete);
 
-  Item.fromItem(generated.Item n) : _native = n, _nativeRecord = null, _complete = true;
-  Item.fromRecord(generated.ItemRecord n) : _native = null, _nativeRecord = n, _complete = false;
+  Item.fromItem(generated.Item n)
+      : _native = n,
+        _nativeRecord = null,
+        _complete = true;
+  Item.fromRecord(generated.ItemRecord n)
+      : _native = null,
+        _nativeRecord = n,
+        _complete = false;
 
   /// Retrieves the item with the provided ID from the chain.
   /// If cookbook is specified manually, you can override the loaded cookbook
   /// or query an item before loading a cookbook; otherwise, the item
   /// will be retrieved for the loaded cookbook.
-  static Future<Item> get (String id, {String? cookbook}) async {
+  static Future<Item> get(String id, {String? cookbook}) async {
     if (cookbook == null) {
       if (Cookbook.current == null) {
         throw Exception('Load a cookbook before calling Item.get');
       }
       cookbook = Cookbook.current!.getId();
     }
-    var ll = await PylonsWallet.instance.getItemById(cookbookId: cookbook, itemId: id);
+    var ll = await PylonsWallet.instance
+        .getItemById(cookbookId: cookbook, itemId: id);
     if (ll.success) {
       return Item.fromItem(ll.data!);
     } else {
@@ -48,7 +56,8 @@ class Item {
     if (_complete) {
       return _native!.cookbookId;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
+      throw UnsupportedError(
+          'Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -68,7 +77,8 @@ class Item {
     if (_complete) {
       return _native!.recipeId;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
+      throw UnsupportedError(
+          'Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -79,7 +89,8 @@ class Item {
     if (_complete) {
       return _native!.owner;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
+      throw UnsupportedError(
+          'Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -90,7 +101,8 @@ class Item {
     if (_complete) {
       return _native!.tradeable;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
+      throw UnsupportedError(
+          'Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -102,7 +114,8 @@ class Item {
       // TODO: check if this is right
       return double.parse(_native!.tradePercentage);
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
+      throw UnsupportedError(
+          'Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -118,7 +131,8 @@ class Item {
       // somehow...
       return _native!.lastUpdate;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
+      throw UnsupportedError(
+          'Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -129,7 +143,8 @@ class Item {
     if (_complete) {
       return _native!.createdAt;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
+      throw UnsupportedError(
+          'Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -138,7 +153,8 @@ class Item {
     if (_complete) {
       return _native!.updatedAt;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
+      throw UnsupportedError(
+          'Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -152,7 +168,8 @@ class Item {
     if (_complete) {
       return _native!.nodeVersion;
     } else {
-      throw UnsupportedError('Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
+      throw UnsupportedError(
+          'Cannot retrieve this field from ItemRecord - call Item.get() with the provided ID if needed');
     }
   }
 
@@ -162,9 +179,12 @@ class Item {
     var found;
     try {
       if (_complete) {
-        found = _native!.doubles.firstWhere((element) => element.key == key).value;
+        found =
+            _native!.doubles.firstWhere((element) => element.key == key).value;
       } else {
-        found = _nativeRecord!.doubles.firstWhere((element) => element.key == key).value;
+        found = _nativeRecord!.doubles
+            .firstWhere((element) => element.key == key)
+            .value;
       }
     } on StateError {
       found = null;
@@ -178,9 +198,12 @@ class Item {
     var found;
     try {
       if (_complete) {
-        found = _native!.longs.firstWhere((element) => element.key == key).value;
+        found =
+            _native!.longs.firstWhere((element) => element.key == key).value;
       } else {
-        found = _nativeRecord!.longs.firstWhere((element) => element.key == key).value;
+        found = _nativeRecord!.longs
+            .firstWhere((element) => element.key == key)
+            .value;
       }
     } on StateError {
       found = null;
@@ -194,9 +217,12 @@ class Item {
     var found;
     try {
       if (_complete) {
-        found = _native!.strings.firstWhere((element) => element.key == key).value;
+        found =
+            _native!.strings.firstWhere((element) => element.key == key).value;
       } else {
-        found = _nativeRecord!.strings.firstWhere((element) => element.key == key).value;
+        found = _nativeRecord!.strings
+            .firstWhere((element) => element.key == key)
+            .value;
       }
     } on StateError {
       found = null;
@@ -204,7 +230,9 @@ class Item {
     if (found == null) {
       try {
         if (_complete) {
-          found = _native!.mutableStrings.firstWhere((element) => element.key == key).value;
+          found = _native!.mutableStrings
+              .firstWhere((element) => element.key == key)
+              .value;
         }
       } on StateError {
         // swallow, it's already null
