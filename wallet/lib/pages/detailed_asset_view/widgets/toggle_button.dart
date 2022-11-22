@@ -8,7 +8,8 @@ import 'package:easy_localization/easy_localization.dart';
 import '../../../generated/locale_keys.g.dart';
 
 class ToggleButton extends StatefulWidget {
-  const ToggleButton({Key? key}) : super(key: key);
+  final OwnerViewViewModel assetProvider;
+  const ToggleButton({required this.assetProvider, Key? key}) : super(key: key);
 
   @override
   State<ToggleButton> createState() => _ToggleButtonState();
@@ -17,21 +18,21 @@ class ToggleButton extends StatefulWidget {
 class _ToggleButtonState extends State<ToggleButton> {
   @override
   Widget build(BuildContext context) {
-    final assetProvider = context.watch<OwnerViewViewModel>();
+    //final assetProvider = context.watch<OwnerViewViewModel>();
     late Color toggleColor;
     late Widget toggleChild;
-    switch (assetProvider.toggled) {
+    switch (widget.assetProvider.toggled) {
       case Toggle.enabled:
         toggleColor = AppColors.kDarkGreen;
-        toggleChild = enabledRow(assetProvider);
+        toggleChild = enabledRow(widget.assetProvider);
         break;
       case Toggle.disabled:
         toggleColor = AppColors.kDarkRed;
-        toggleChild = disableRow(assetProvider);
+        toggleChild = disableRow(widget.assetProvider);
         break;
       case Toggle.mid:
         toggleColor = AppColors.kAgoricColor;
-        toggleChild = middleRow(assetProvider);
+        toggleChild = middleRow(widget.assetProvider);
         break;
     }
     return Container(
