@@ -375,5 +375,12 @@
   "cash": "Cash",
   "no_of_editions": "Number of editions",
   "price_per_edition":"Price per edition",
-  "editions_are_sold_sequentially": "",
+  "editions_are_sold_sequentially": "Editions are sold sequentially (i.e. #1, #2, #3)",
+  "enter_whole_dollar_amount": "Enter a whole dollar amount",
+  "swipe_right_to_sell": "Swipe right to sell",
+  "network_fee_required": "A network fee is required for all on-chain transactions that will be deducted from the seller’s proceeds.",
+  "learn_more": "Learn more",
+  "available": "available",
+  "ea": "ea",
+  "downloading_started": "Downloading Started"
 }

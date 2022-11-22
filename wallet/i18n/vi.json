@@ -372,6 +372,14 @@
   "credits": "Tín dụng",
   "cash": "Tiền mặt",
   "no_of_editions": "Số ấn bản",
-  "price_per_edition":"Giá mỗi phiên bản"
+  "price_per_edition":"Giá mỗi phiên bản",
+  "editions_are_sold_sequentially": "Các ấn bản được bán tuần tự (tức là #1, #2, #3)",
+  "enter_whole_dollar_amount": "Nhập số tiền nguyên đô la",
+  "swipe_right_to_sell": "Vuốt sang phải để bán",
+  "network_fee_required":"Phí mạng là bắt buộc đối với tất cả các giao dịch trên chuỗi sẽ được khấu trừ vào số tiền thu được của người bán.",
+  "learn_more": "Tìm hiểu thêm",
+  "available": "có sẵn",
+  "ea": "ea",
+  "downloading_started": "Đã bắt đầu tải xuống"
 
 }

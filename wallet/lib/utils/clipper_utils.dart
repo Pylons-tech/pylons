@@ -102,4 +102,3 @@ class BottomLeftCurvedCorner extends CustomClipper<Path> {
     return true;
   }
 }
-

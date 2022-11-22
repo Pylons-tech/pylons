@@ -372,6 +372,13 @@
   "credits": "Kredit",
   "cash": "Uang tunai",
   "no_of_editions": "Jumlah edisi",
-  "price_per_edition":"Harga per edisi"
-
+  "price_per_edition":"Harga per edisi",
+  "editions_are_sold_sequentially": "Edisi dijual secara berurutan (mis. #1, #2, #3)",
+  "enter_whole_dollar_amount": "Masukkan jumlah dolar utuh",
+  "swipe_right_to_sell": "Geser ke kanan untuk menjual",
+  "network_fee_required":"Biaya jaringan diperlukan untuk semua transaksi on-chain yang akan dipotong dari hasil penjualan penjual.",
+  "learn_more": "Belajarlah lagi",
+  "available": "tersedia",
+  "ea": "ea",
+  "downloading_started": "Pengunduhan Dimulai"
 }

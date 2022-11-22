@@ -24,7 +24,6 @@ import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/third_party_services/analytics_helper.dart';
@@ -44,7 +43,6 @@ import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
 import '../../generated/locale_keys.g.dart';
 import '../../model/update_recipe_model.dart';
-import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
 
 abstract class RemoteDataStore {
   /// This method is used to generate the stripe registration token
@@ -764,14 +762,12 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final recipeProto3Json = updateRecipeModel.recipe.toProto3Json()! as Map;
     recipeProto3Json.remove(kCreatedAtCamelCase);
     recipeProto3Json.remove(kUpdatedAtCamelCase);
-
     final msgUpdateRecipe = pylons.MsgUpdateRecipe.create()..mergeFromProto3Json(recipeProto3Json);
     msgUpdateRecipe.enabled = updateRecipeModel.enabledStatus;
     msgUpdateRecipe.creator = updateRecipeModel.publicAddress;
-    // msgUpdateRecipe.coinInputs.first.coins.first.amount = updateRecipeModel.nftPrice;
-    // msgUpdateRecipe.coinInputs.first.coins.first.denom = updateRecipeModel.denom;
+    msgUpdateRecipe.coinInputs.first.coins.first.amount = updateRecipeModel.nftPrice;
+    msgUpdateRecipe.coinInputs.first.coins.first.denom = updateRecipeModel.denom;
     msgUpdateRecipe.version = msgUpdateRecipe.version.incrementRecipeVersion();
-
     return _signAndBroadcast(msgUpdateRecipe);
   }
 

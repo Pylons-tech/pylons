@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mockito/mockito.dart';
@@ -65,6 +67,12 @@ void main() {
 }
 
 void registerStubs(OwnerViewViewModel viewModel) {
+  const MethodChannel channel = MethodChannel('vn.hunghd/downloader');
+  channel.setMockMethodCallHandler((MethodCall methodCall) async {
+    return "initialize";
+  });
+  FlutterDownloader.initialize();
+
   ///Defines Stub for audio player
   when(viewModel.buttonNotifier).thenAnswer((realInvocation) => ValueNotifier(ButtonState.paused));
   when(viewModel.audioProgressNotifier).thenAnswer(

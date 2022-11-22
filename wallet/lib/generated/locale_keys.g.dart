@@ -373,5 +373,15 @@ abstract class  LocaleKeys {
   static const payment_type = 'payment_type';
   static const credits = 'credits';
   static const cash = 'cash';
+  static const no_of_editions = 'no_of_editions';
+  static const price_per_edition = 'price_per_edition';
+  static const editions_are_sold_sequentially = 'editions_are_sold_sequentially';
+  static const enter_whole_dollar_amount = 'enter_whole_dollar_amount';
+  static const swipe_right_to_sell = 'swipe_right_to_sell';
+  static const network_fee_required = 'network_fee_required';
+  static const learn_more = 'learn_more';
+  static const available = 'available';
+  static const ea = 'ea';
+  static const downloading_started = 'downloading_started';
 
 }

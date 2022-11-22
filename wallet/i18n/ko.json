@@ -371,6 +371,14 @@
   "credits": "학점",
   "cash": "현금",
   "no_of_editions": "에디션 수",
-  "price_per_edition":"에디션당 가격"
+  "price_per_edition":"에디션당 가격",
+  "editions_are_sold_sequentially": "에디션은 순차적으로 판매됩니다(예: #1, #2, #3).",
+  "enter_whole_dollar_amount": "전체 금액을 달러로 입력하세요.",
+  "swipe_right_to_sell": "오른쪽으로 스와이프하여 판매",
+  "network_fee_required":"판매자의 수익금에서 차감되는 모든 온체인 거래에는 네트워크 수수료가 필요합니다.",
+  "learn_more": "더 알아보기",
+  "available": "사용 가능",
+  "ea": "에아",
+  "downloading_started": "다운로드 시작"
 
 }

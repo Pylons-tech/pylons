@@ -5,8 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 import '../../../generated/locale_keys.g.dart';
 import '../../../main_prod.dart';
-import '../../../model/nft.dart';
-import '../../../modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
 import '../../../utils/clipper_utils.dart';
 import '../../../utils/constants.dart';
 import '../../purchase_item/widgets/pay_with_swipe.dart';
@@ -115,7 +113,7 @@ class _NFTForSaleConfirmationWidgetState extends State<NFTForSaleConfirmationWid
                         height: 40.h,
                         initialWidth: 40.w,
                         onSwipeComplete: () {
-                          widget.ownerViewViewModel.updateRecipeIsEnabled(context: context, viewModel: widget.ownerViewViewModel);
+                          widget.ownerViewViewModel.updateRecipeIsEnabled(context: context,);
                         },
                       ),
                     ),
@@ -132,4 +130,3 @@ class _NFTForSaleConfirmationWidgetState extends State<NFTForSaleConfirmationWid
     );
   }
 }
-

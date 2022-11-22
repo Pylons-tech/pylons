@@ -178,6 +178,7 @@ const ANDROID_VERSION = '1.0.1+145';
 const IOS_VERSION = '1.0.8+1';
 
 const kCurrencyDecimalLength = 2;
+const kMaxPriceLength = 14;
 
 List<Color> colorList = [AppColors.kYellow, AppColors.kBlue, AppColors.kDarkPurple, AppColors.kDarkRed, AppColors.kDarkGreen];
 List<Color> colorListForPracticeTest = [
@@ -229,7 +230,6 @@ const String kVietnameseText = "vietnamese";
 /// Update screen
 const String kAndroidAppLink = 'https://play.google.com/store/apps/details?id=tech.pylons.wallet';
 const String kIOSAppLink = 'https://apps.apple.com/gb/app/cashero/id1598732789?ign-mpt=uo%3D2';
-const String kDownloadNFTPreLink = "https://adresults.com/wp-content/plugins/adresults-tools/tools/download/download-script.php?url=";
 
 const String kRecipeId = 'Recipe ID';
 const String kRecipes = 'recipes';
@@ -462,3 +462,5 @@ const String kSaleStatusToggleButtonKey = "sale_status_toggle_button_key";
 
 const String kGetFirebaseAppCheckTokenMethodChannelKey = "getFirebaseAppCheckTokenMethodChannel";
 const String kGetFirebaseAppCheckDebugTokenKey = "getFirebaseAppCheckDebugToken";
+
+const String kFAQsURL = "https://www.pylons.tech/faq/";

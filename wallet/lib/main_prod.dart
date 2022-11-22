@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pylons_app.dart';
@@ -21,6 +22,9 @@ bool isTablet = false;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(
+      ignoreSsl: true
+  );
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
 

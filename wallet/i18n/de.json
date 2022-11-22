@@ -372,5 +372,13 @@
   "credits": "Kredite",
   "cash": "Kasse",
   "no_of_editions": "Anzahl der Ausgaben",
-  "price_per_edition":"Preis pro Ausgabe"
+  "price_per_edition":"Preis pro Ausgabe",
+  "editions_are_sold_sequentially": "Editionen werden nacheinander verkauft (z. B. Nr. 1, Nr. 2, Nr. 3)",
+  "enter_whole_dollar_amount": "Geben Sie einen ganzen Dollarbetrag ein",
+  "swipe_right_to_sell": "Zum Verkaufen nach rechts wischen",
+  "network_fee_required":"Für alle On-Chain-Transaktionen wird eine Netzwerkgebühr erhoben, die vom Erlös des Verkäufers abgezogen wird.",
+  "learn_more": "Mehr erfahren",
+  "available": "verfügbar",
+  "ea": "ea",
+  "downloading_started": "Download gestartet"
 }

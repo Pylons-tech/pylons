@@ -28,6 +28,7 @@ dependencies:
   easy_localization: ^3.0.1
   equatable: ^2.0.5
   expandable: ^5.0.1
+  external_path: ^1.0.3
   firebase_analytics: ^10.0.2
   firebase_app_check: ^0.1.1+1
   firebase_core: ^2.1.0
@@ -41,6 +42,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.0.2
+  flutter_downloader: ^1.9.1
   flutter_local_notifications: ^12.0.0
   flutter_localizations:
     sdk: flutter
@@ -94,7 +96,6 @@ dependencies:
   video_thumbnail: ^0.5.3
   wallpaper: ^1.1.0
   webview_flutter: ^3.0.4
-  dio: ^4.0.6
   
 
 dev_dependencies:

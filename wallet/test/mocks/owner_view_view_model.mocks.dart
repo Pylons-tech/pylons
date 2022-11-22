@@ -339,6 +339,20 @@ class MockOwnerViewViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
+  bool get isNFTToggleIntermediateState => (super.noSuchMethod(
+        Invocation.getter(#isNFTToggleIntermediateState),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  set isNFTToggleIntermediateState(bool? isNFTToggleIntermediateState) => super.noSuchMethod(
+        Invocation.setter(
+          #isNFTToggleIntermediateState,
+          isNFTToggleIntermediateState,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
   List<String> get hashtagList => (super.noSuchMethod(
         Invocation.getter(#hashtagList),
         returnValue: <String>[],
