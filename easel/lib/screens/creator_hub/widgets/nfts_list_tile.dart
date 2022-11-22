@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/main.dart';
 import 'package:easel_flutter/models/nft.dart';
+import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/published_nfts_bottom_sheet.dart';
-import 'package:easel_flutter/screens/creator_hub/widgets/viewmodel/nft_list_tile_viewmodel.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/enums.dart';
@@ -14,15 +14,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
-import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 import '../../../generated/locale_keys.g.dart';
 
 class NFTsListTile extends StatelessWidget {
   final NFT publishedNFT;
+  final CreatorHubViewModel viewModel;
 
-  const NFTsListTile({Key? key, required this.publishedNFT}) : super(key: key);
+  const NFTsListTile({Key? key, required this.publishedNFT, required this.viewModel}) : super(key: key);
 
   EaselProvider get _easelProvider => GetIt.I.get();
 
@@ -41,7 +41,7 @@ class NFTsListTile extends StatelessWidget {
     return InkWell(
       key: const Key(kNftTileKey),
       onTap: () {
-        context.read<NftListViewModel>().onViewOnPylons(onViewOnPylonsPressed: onViewOnPylonsPressed);
+        viewModel.onViewOnPylons(onViewOnPylonsPressed: onViewOnPylonsPressed);
       },
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -129,62 +129,57 @@ class NFTsListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: GetIt.I.get<NftListViewModel>(),
-      builder: (context, _) {
-        return Stack(
-          children: [
-            if (publishedNFT.price.isNotEmpty && double.parse(publishedNFT.price) > 0)
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: Card(
-                  elevation: 5,
-                  margin: EdgeInsets.zero,
-                  child: ClipRRect(
-                    child: Banner(
-                      key: const Key(kPriceBannerKey),
-                      color: EaselAppTheme.kDarkGreen,
-                      location: BannerLocation.topEnd,
-                      message: "\$ ${publishedNFT.price}",
-                      child: getPublishedCard(context: context),
-                    ),
-                  ),
-                ),
-              )
-            else
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: getPublishedCard(context: context),
-              ),
-            if (publishedNFT.assetType.toAssetTypeEnum() != AssetType.ThreeD)
-              IgnorePointer(
-                child: SizedBox(
-                  height: 85.0.h,
-                  width: double.infinity,
-                  child: CachedNetworkImage(
-                    imageUrl: publishedNFT.assetType.toAssetTypeEnum() == AssetType.Image ? publishedNFT.url.changeDomain() : publishedNFT.thumbnailUrl.changeDomain(),
-                    fit: BoxFit.fill,
-                    color: Colors.transparent,
-                    colorBlendMode: BlendMode.clear,
-                    placeholder: (context, url) => Shimmer(
-                      color: EaselAppTheme.cardBackground,
-                      child: const SizedBox.expand(),
-                    ),
-                    errorWidget: (context, _, __) {
-                      return const IgnorePointer(child: SizedBox());
-                    },
-                  ),
-                ),
-              )
-            else
-              IgnorePointer(
-                child: SizedBox(
-                  height: 85.h,
+    return Stack(
+      children: [
+        if (publishedNFT.price.isNotEmpty && double.parse(publishedNFT.price) > 0)
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Card(
+              elevation: 5,
+              margin: EdgeInsets.zero,
+              child: ClipRRect(
+                child: Banner(
+                  key: const Key(kPriceBannerKey),
+                  color: EaselAppTheme.kDarkGreen,
+                  location: BannerLocation.topEnd,
+                  message: "\$ ${publishedNFT.price}",
+                  child: getPublishedCard(context: context),
                 ),
               ),
-          ],
-        );
-      },
+            ),
+          )
+        else
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: getPublishedCard(context: context),
+          ),
+        if (publishedNFT.assetType.toAssetTypeEnum() != AssetType.ThreeD)
+          IgnorePointer(
+            child: SizedBox(
+              height: 85.0.h,
+              width: double.infinity,
+              child: CachedNetworkImage(
+                imageUrl: publishedNFT.assetType.toAssetTypeEnum() == AssetType.Image ? publishedNFT.url.changeDomain() : publishedNFT.thumbnailUrl.changeDomain(),
+                fit: BoxFit.fill,
+                color: Colors.transparent,
+                colorBlendMode: BlendMode.clear,
+                placeholder: (context, url) => Shimmer(
+                  color: EaselAppTheme.cardBackground,
+                  child: const SizedBox.expand(),
+                ),
+                errorWidget: (context, _, __) {
+                  return const IgnorePointer(child: SizedBox());
+                },
+              ),
+            ),
+          )
+        else
+          IgnorePointer(
+            child: SizedBox(
+              height: 85.h,
+            ),
+          ),
+      ],
     );
   }
 

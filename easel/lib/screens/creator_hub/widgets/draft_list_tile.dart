@@ -6,7 +6,6 @@ import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/delete_confirmation_dialog.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/drafts_more_bottomsheet.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/nfts_list_tile.dart';
-import 'package:easel_flutter/screens/creator_hub/widgets/viewmodel/draft_list_tile_viewmodel.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/enums.dart';
@@ -18,7 +17,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get_it/get_it.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
@@ -120,7 +118,7 @@ class _DraftListTileState extends State<DraftListTile> {
     return InkWell(
       key: const Key(kDraftTileKey),
       onTap: () {
-        context.read<DraftListViewModel>().startPublishingFlowAgain(startPublishingFlowAgainPressed: startPublishingFlowAgainPressed);
+        widget.viewModel.startPublishingFlowAgain(startPublishingFlowAgainPressed: startPublishingFlowAgainPressed);
       },
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -197,78 +195,74 @@ class _DraftListTileState extends State<DraftListTile> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-        value: GetIt.I.get<DraftListViewModel>(),
-        builder: (context, _) {
-          return Stack(
+    return Stack(
+      children: [
+        Slidable(
+          key: ValueKey(widget.nft.id),
+          closeOnScroll: false,
+          endActionPane: ActionPane(
+            extentRatio: 0.3,
+            motion: const ScrollMotion(),
             children: [
-              Slidable(
-                key: ValueKey(widget.nft.id),
-                closeOnScroll: false,
-                endActionPane: ActionPane(
-                  extentRatio: 0.3,
-                  motion: const ScrollMotion(),
-                  children: [
-                    buildSlidableAction(
-                      context,
-                      callback: () {
-                        final DeleteDialog deleteDialog = DeleteDialog(contextt: context, nft: widget.nft);
-                        deleteDialog.show();
-                      },
-                      icon: SVGUtils.kSvgDelete,
-                    ),
-                    buildSlidableAction(
-                      context,
-                      callback: () {
-                        onViewOnIPFSPressed(nft: widget.nft, context: context);
-                      },
-                      icon: PngUtils.kSvgIpfsLogo,
-                      isSvg: false,
-                    ),
-                  ],
-                ),
-                child: (widget.nft.price.isNotEmpty && double.parse(widget.nft.price) > 0)
-                    ? Card(
-                        elevation: 5,
-                        margin: EdgeInsets.zero,
-                        child: ClipRRect(
-                          child: Banner(
-                            key: const Key(kPriceBannerKey),
-                            color: EaselAppTheme.kDarkGreen,
-                            location: BannerLocation.topEnd,
-                            message: "\$ ${widget.nft.price}",
-                            child: getDraftCard(context),
-                          ),
-                        ),
-                      )
-                    : getDraftCard(context),
+              buildSlidableAction(
+                context,
+                callback: () {
+                  final DeleteDialog deleteDialog = DeleteDialog(contextt: context, nft: widget.nft);
+                  deleteDialog.show();
+                },
+                icon: SVGUtils.kSvgDelete,
               ),
-              if (widget.nft.assetType.toAssetTypeEnum() != AssetType.ThreeD)
-                IgnorePointer(
-                  child: SizedBox(
-                    height: 85.0.h,
-                    width: double.infinity,
-                    child: CachedNetworkImage(
-                      imageUrl: getThumbnailUrl(),
-                      fit: BoxFit.fill,
-                      color: Colors.transparent,
-                      colorBlendMode: BlendMode.clear,
-                      placeholder: (context, _) => getPlaceHolder(),
-                      errorWidget: (context, _, __) {
-                        return const IgnorePointer(child: SizedBox());
-                      },
+              buildSlidableAction(
+                context,
+                callback: () {
+                  onViewOnIPFSPressed(nft: widget.nft, context: context);
+                },
+                icon: PngUtils.kSvgIpfsLogo,
+                isSvg: false,
+              ),
+            ],
+          ),
+          child: (widget.nft.price.isNotEmpty && double.parse(widget.nft.price) > 0)
+              ? Card(
+                  elevation: 5,
+                  margin: EdgeInsets.zero,
+                  child: ClipRRect(
+                    child: Banner(
+                      key: const Key(kPriceBannerKey),
+                      color: EaselAppTheme.kDarkGreen,
+                      location: BannerLocation.topEnd,
+                      message: "\$ ${widget.nft.price}",
+                      child: getDraftCard(context),
                     ),
                   ),
                 )
-              else
-                IgnorePointer(
-                  child: SizedBox(
-                    height: 85.h,
-                  ),
-                ),
-            ],
-          );
-        });
+              : getDraftCard(context),
+        ),
+        if (widget.nft.assetType.toAssetTypeEnum() != AssetType.ThreeD)
+          IgnorePointer(
+            child: SizedBox(
+              height: 85.0.h,
+              width: double.infinity,
+              child: CachedNetworkImage(
+                imageUrl: getThumbnailUrl(),
+                fit: BoxFit.fill,
+                color: Colors.transparent,
+                colorBlendMode: BlendMode.clear,
+                placeholder: (context, _) => getPlaceHolder(),
+                errorWidget: (context, _, __) {
+                  return const IgnorePointer(child: SizedBox());
+                },
+              ),
+            ),
+          )
+        else
+          IgnorePointer(
+            child: SizedBox(
+              height: 85.h,
+            ),
+          ),
+      ],
+    );
   }
 
   Widget buildSlidableAction(BuildContext context, {required VoidCallback callback, required String icon, bool isSvg = true}) {

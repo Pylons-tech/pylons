@@ -5,7 +5,6 @@ import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/drafts_more_bottomsheet.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/nfts_list_tile.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/published_nfts_bottom_sheet.dart';
-import 'package:easel_flutter/screens/creator_hub/widgets/viewmodel/nft_gridview_viewmodel.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
@@ -56,10 +55,10 @@ class _NftGridViewItemState extends State<NftGridViewItem> {
             key: const Key(kGridViewTileNFTKey),
             onTap: () async {
               if (context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft) {
-                context.read<NftGridviewViewModel>().startPublishingFlowAgain(startPublishingFlowAgainPressed: startPublishingFlowAgainPressed);
+                context.read<CreatorHubViewModel>().startPublishingFlowAgain(startPublishingFlowAgainPressed: startPublishingFlowAgainPressed);
                 return;
               }
-              context.read<NftGridviewViewModel>().onViewOnPylons(onViewOnPylonsPressed: onViewOnPylonsPressed);
+              context.read<CreatorHubViewModel>().onViewOnPylons(onViewOnPylonsPressed: onViewOnPylonsPressed);
             },
             child: NftTypeBuilder(
               onImage: (context) => buildNFTPreview(url: widget.nft.url.changeDomain()),

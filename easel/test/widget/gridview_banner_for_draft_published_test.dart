@@ -1,9 +1,9 @@
+import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/main.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_screen.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/nfts_grid_view.dart';
-import 'package:easel_flutter/screens/creator_hub/widgets/viewmodel/nft_gridview_viewmodel.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -11,18 +11,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-
 import '../extensions/size_extension.dart';
+import '../mock/creator_hub_viewmodel.mocks.dart';
 import '../mock/mock_repository.dart';
-import '../mocks/list_tile.mocks.dart';
 import '../mocks/mock_constants.dart';
+import '../mock/easel_provider.mocks.dart';
 
 void main() {
-  final NftGridviewViewModel viewModel = MockNftGridviewViewModel();
+  final viewModel = MockCreatorHubViewModel();
   GetIt.I.registerLazySingleton<Repository>(() => MockRepositoryImp());
-  GetIt.I.registerLazySingleton<NftGridviewViewModel>(() => viewModel);
-  GetIt.I.registerLazySingleton(() => CreatorHubViewModel(GetIt.I.get<Repository>()));
+  GetIt.I.registerLazySingleton<CreatorHubViewModel>(() => viewModel);
+  GetIt.I.registerLazySingleton<EaselProvider>(() => MockEaselProvider());
 
   group(
     "NFTs GridView Price Banner Test",
@@ -30,6 +31,7 @@ void main() {
       testWidgets(
         "Testing Price Banner for NFT having price",
         (tester) async {
+          when(viewModel.selectedCollectionType).thenAnswer((realInvocation) => CollectionType.draft);
           await tester.setScreenSize();
           await tester.testAppForWidgetTesting(
             Scaffold(
@@ -58,6 +60,7 @@ void main() {
       testWidgets(
         "Testing Bottom Sheet Options For Published NFT",
         (tester) async {
+          when(viewModel.selectedCollectionType).thenAnswer((realInvocation) => CollectionType.published);
           await tester.setScreenSize();
           await tester.testAppForWidgetTesting(
             Scaffold(
@@ -74,7 +77,7 @@ void main() {
 
           await tester.pump();
           final gridViewTile = find.byKey(const Key(kGridViewTileMoreOptionKey));
-          final publishBottomSheetText = find.text(kDeleteTextKey);
+          final publishBottomSheetText = find.text(kViewOnPylonsTextKey);
           await tester.ensureVisible(gridViewTile);
           expect(publishBottomSheetText, findsNothing);
           await tester.tap(gridViewTile);

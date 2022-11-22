@@ -19,7 +19,8 @@ import '../mock/mock_constants.dart';
 import '../mock/mock_file_utils.dart';
 import '../mock/mock_repository.dart';
 import '../mock/mock_video_player.dart';
-
+import 'package:mockito/annotations.dart';
+@GenerateMocks([EaselProvider])
 void main() {
   final repository = MockRepositoryImp();
   final fileUtils = MockFileUtilsHelperImp();

@@ -250,6 +250,7 @@ const kGridViewTileNFTKey = "GridViewTileNFTKey";
 const kGridViewTileMoreOptionKey = "gridview_tile_more_option_key";
 const kPublishTextKey = "publish";
 const kDeleteTextKey = "delete";
+const kViewOnPylonsTextKey = "view_on_pylons";
 const kPublishButtonKey = "publish_button_key";
 const kPriceBannerKey = "price_banner_key";
 const kNFTMoreOptionButtonKey = "NFT_more_option_key";

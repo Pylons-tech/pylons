@@ -1,24 +1,21 @@
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/draft_list_tile.dart';
-import 'package:easel_flutter/screens/creator_hub/widgets/viewmodel/draft_list_tile_viewmodel.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-
 import '../extensions/size_extension.dart';
+import '../mock/creator_hub_viewmodel.mocks.dart';
 import '../mock/mock_repository.dart';
-import '../mocks/list_tile.mocks.dart';
 import '../mocks/mock_constants.dart';
 
 void main() {
-  final DraftListViewModel draftListViewModel = MockDraftListViewModel();
+  final viewModel = MockCreatorHubViewModel();
   GetIt.I.registerLazySingleton<Repository>(() => MockRepositoryImp());
-  GetIt.I.registerLazySingleton(() => CreatorHubViewModel(GetIt.I.get<Repository>()));
-  GetIt.I.registerLazySingleton<DraftListViewModel>(() => draftListViewModel);
+  GetIt.I.registerLazySingleton<CreatorHubViewModel>(() => viewModel);
 
   group(
     "Draft List Tile Test",
@@ -102,9 +99,10 @@ void main() {
         "can user tap on whole draft tile",
         (tester) async {
           bool clicked = false;
-          when(draftListViewModel.startPublishingFlowAgain(startPublishingFlowAgainPressed: () {
+          when(viewModel.startPublishingFlowAgain(startPublishingFlowAgainPressed: anyNamed("startPublishingFlowAgainPressed"))).thenAnswer((realInvocation) {
             clicked = true;
-          })).thenAnswer((realInvocation) {});
+          });
+
           await tester.setScreenSize();
           await tester.testAppForWidgetTesting(
             Scaffold(
@@ -125,6 +123,7 @@ void main() {
           final draftTile = find.byKey(const Key(kDraftTileKey));
           await tester.tap(draftTile);
           await tester.pump();
+          expect(clicked, true);
         },
       );
     },
