@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -18,7 +17,6 @@ class ToggleButton extends StatefulWidget {
 class _ToggleButtonState extends State<ToggleButton> {
   @override
   Widget build(BuildContext context) {
-    //final assetProvider = context.watch<OwnerViewViewModel>();
     late Color toggleColor;
     late Widget toggleChild;
     switch (widget.assetProvider.toggled) {
