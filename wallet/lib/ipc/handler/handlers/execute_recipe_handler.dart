@@ -17,13 +17,13 @@ class ExecuteRecipeHandler implements BaseHandler {
     final jsonMap = jsonDecode(sdkIpcMessage.json) as Map;
     jsonMap.remove('nodeVersion');
     final walletsStore = GetIt.I.get<WalletsStore>();
-    final response = await walletsStore.executeRecipe_Internal(jsonMap);
+    final response = await walletsStore.executeRecipe(jsonMap);
 
-    final concereteTypeToStringTypeResponse = response.finalizeTheSDKResponse(
+    final concreteTypeToStringTypeResponse = response.finalizeTheSDKResponse(
       action: sdkIpcMessage.action,
       sender: sdkIpcMessage.sender,
     );
 
-    return SynchronousFuture(concereteTypeToStringTypeResponse);
+    return SynchronousFuture(concreteTypeToStringTypeResponse);
   }
 }
