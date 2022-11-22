@@ -367,7 +367,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
       final loader = Loading()..showLoading();
 
-      final executionResponse = await walletsStore.executeRecipe(jsonMap);
+      final executionResponse = await walletsStore.executeRecipe_Internal(jsonMap);
       loader.dismiss();
 
       Navigator.of(navigatorKey.currentState!.overlay!.context).pop();

@@ -365,5 +365,6 @@
   "available": "disponible",
   "ea": "cada uno",
   "maintenance_mode_message": "Estamos experimentando problemas técnicos y hemos iniciado temporalmente el modo de mantenimiento para solucionar problemas. No te preocupes, tu colección está segura. Sin embargo, no puede iniciar transacciones en cadena hasta que hayamos resuelto el problema y restablecido la funcionalidad normal.",
-  "maintenance_mode_header": "Modo de mantenimiento"
+  "maintenance_mode_header": "Modo de mantenimiento",
+  "tx_not_found": "TODO: localize this"
 }

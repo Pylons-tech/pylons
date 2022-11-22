@@ -66,7 +66,7 @@ class FailureManagerViewModel extends ChangeNotifier {
     final txDataJson = jsonDecode(txManager.transactionData);
     final loading = Loading()..showLoading();
     final walletStore = GetIt.I.get<WalletsStore>();
-    final response = await walletStore.executeRecipe(txDataJson as Map<dynamic, dynamic>);
+    final response = await walletStore.executeRecipe_Internal(txDataJson as Map<dynamic, dynamic>);
     if (!response.success){
       LocaleKeys.something_wrong.tr().show();
       loading.dismiss();

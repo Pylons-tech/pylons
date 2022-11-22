@@ -141,7 +141,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
     final showLoader = Loading()..showLoading();
 
-    final response = await walletsStore.executeRecipe(jsonMap);
+    final response = await walletsStore.executeRecipe_Internal(jsonMap);
     showLoader.dismiss();
     return response;
   }

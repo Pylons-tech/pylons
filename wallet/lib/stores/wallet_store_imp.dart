@@ -269,7 +269,51 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse<Execution>> executeRecipe(Map json) async {
+  Future<SdkIpcResponse<TxResponse>> executeRecipe(Map json) async {
+    final networkInfo = GetIt.I.get<NetworkInfo>();
+
+    final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
+      transactionTypeEnum: TransactionTypeEnum.BuyNFT,
+      transactionData: jsonEncode(json),
+      transactionDescription: "${LocaleKeys.bought_nft.tr()}  ${json[kNftName] ?? ""}",
+      transactionCurrency: "${json[kNftCurrency] ?? ""}",
+      transactionPrice: "${json[kNftPrice] ?? ""}",
+    );
+
+    if (!await networkInfo.isConnected) {
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      return SdkIpcResponse.failure(sender: '', error: LocaleKeys.no_internet.tr(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
+    }
+
+    json.remove(kNftName);
+    json.remove(kNftCurrency);
+    json.remove(kNftPrice);
+
+    final msgObj = pylons.MsgExecuteRecipe.create()..mergeFromProto3Json(json);
+    msgObj.creator = accountProvider.accountPublicInfo!.publicAddress;
+    final sdkResponse = await _signAndBroadcast(msgObj);
+    if (!sdkResponse.success) {
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    final txEither = await repository.getTx(hash: (sdkResponse.data as TransactionResponse).hash);
+    if (txEither.isLeft()) {
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    if (txEither.toOption().toNullable()?.value2 == null) {
+      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+    }
+
+    await saveTransactionRecord(transactionHash: sdkResponse.data.toString(), transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
+    return SdkIpcResponse.success(data: txEither.toOption().toNullable()!.value2!, sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
+  }
+
+  @override
+  Future<SdkIpcResponse<Execution>> executeRecipe_Internal(Map json) async {
     
     final networkInfo = GetIt.I.get<NetworkInfo>();
 

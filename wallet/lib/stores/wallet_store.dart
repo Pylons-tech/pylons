@@ -33,12 +33,31 @@ abstract class WalletsStore {
   /// Output : [TransactionHash] hash of the transaction
   Future<SdkIpcResponse> createRecipe(Map json);
 
+  /// Note for anyone viewing this - executeRecipe_Internal always waits for the execution to finish
+  /// and returns the Execution object. executeRecipe just returns the raw TX response and
+  /// allows the high-level API to take responsibility for what to do with it.
+  ///
+  /// This method is for execute recipe
+  /// MsgExecuteRecipe proto
+  /// request fields: {String creator, String cookbookID, String recipeID, List<String> itemIDs}
+  /// Input : [Map] containing the info related to the execution of recipe
+  /// Output : [TxResponse] of the transaction
+  Future<SdkIpcResponse<TxResponse>> executeRecipe(Map json);
+
+  /// TODO: we should obviously not have parallel paths. This method exists to prevent us from seeing
+  /// unexpected regressions during an API revision, but the wallet should be refactored ASAP so's
+  /// to not consume this, and it should be deleted.
+  ///
+  /// Note for anyone viewing this - executeRecipe_Internal always waits for the execution to finish
+  /// and returns the Execution object. executeRecipe just returns the raw TX response and
+  /// allows the high-level API to take responsibility for what to do with it.
+  ///
   /// This method is for execute recipe
   /// MsgExecuteRecipe proto
   /// request fields: {String creator, String cookbookID, String recipeID, List<String> itemIDs}
   /// Input : [Map] containing the info related to the execution of recipe
   /// Output : [Execution] of the recipe
-  Future<SdkIpcResponse<Execution>> executeRecipe(Map json);
+  Future<SdkIpcResponse<Execution>> executeRecipe_Internal(Map json);
 
   /// This method is for create Trade
   /// MsgCreateTrade proto
