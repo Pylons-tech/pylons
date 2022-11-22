@@ -139,7 +139,7 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
                       padding: EdgeInsets.symmetric(horizontal: 28.w),
                       child: OwnerSideBar(),
                     ),
-                  const OwnerBottomDrawer(),
+                  const OwnerBottomDrawer(key: ValueKey(kOwnerViewDrawerKeyValue)),
                 ],
               ),
             ),
