@@ -53,7 +53,7 @@ class DraftsMoreBottomSheet extends StatelessWidget {
 
   EaselProvider get easelProvider => sl();
 
-  void onViewOnIPFSPressed({required BuildContext context, required NFT nft}) async {
+  Future<void> onViewOnIPFSPressed({required BuildContext context, required NFT nft}) async {
     final easelProvider = Provider.of<EaselProvider>(context, listen: false);
     await easelProvider.repository.launchMyUrl(url: nft.url.changeDomain());
   }
@@ -135,8 +135,8 @@ class DraftsMoreBottomSheet extends StatelessWidget {
   }
 }
 
-Widget moreOptionTile({required String title, required String image, required VoidCallback onPressed, final bool isSvg = true}) {
-  TextStyle titleStyle = TextStyle(fontSize: isTablet ? 13.sp : 16.sp, fontWeight: FontWeight.w800, fontFamily: kUniversalFontFamily, color: EaselAppTheme.kBlack);
+Widget moreOptionTile({required String title, required String image, required VoidCallback onPressed,  bool isSvg = true}) {
+  final TextStyle titleStyle = TextStyle(fontSize: isTablet ? 13.sp : 16.sp, fontWeight: FontWeight.w800, fontFamily: kUniversalFontFamily, color: EaselAppTheme.kBlack);
 
   return Padding(
     padding: EdgeInsets.symmetric(vertical: 8.h),
@@ -144,7 +144,7 @@ Widget moreOptionTile({required String title, required String image, required Vo
       onTap: onPressed,
       child: Row(
         children: [
-          isSvg ? SvgPicture.asset(image) : Image.asset(image),
+          if (isSvg) SvgPicture.asset(image) else Image.asset(image),
           SizedBox(
             width: 30.w,
           ),

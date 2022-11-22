@@ -8,7 +8,6 @@ import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
-import 'package:pylons_wallet/utils/extension.dart';
 
 import '../../../generated/locale_keys.g.dart';
 
@@ -46,16 +45,13 @@ class _TabFieldState extends State<TabField> {
     switch (widget.nft.type) {
       case NftType.TYPE_RECIPE:
         return {
-          LocaleKeys.owned_by.tr(): widget.owner,
-          LocaleKeys.edition.tr(): '#${widget.nft.amountMinted} of ${widget.nft.quantity}',
+          LocaleKeys.owner.tr(): widget.owner,
+          "${LocaleKeys.edition.tr()}#": '#${widget.nft.amountMinted} of ${widget.nft.quantity}',
           LocaleKeys.royalty_text.tr(): widget.nft.tradePercentage,
-          LocaleKeys.creation.tr(): widget.nft.createdAt,
         };
       case NftType.TYPE_ITEM:
         return {
-          LocaleKeys.owned_by.tr(): widget.owner,
-          LocaleKeys.size.tr(): widget.nft.getAssetSize(),
-          LocaleKeys.creation.tr(): widget.nft.createdAt,
+          LocaleKeys.owner.tr(): widget.owner,
         };
       case NftType.TYPE_TRADE:
         return {};
@@ -65,14 +61,23 @@ class _TabFieldState extends State<TabField> {
   Map<String, String> getNFTDetailsMap() {
     switch (widget.nft.type) {
       case NftType.TYPE_RECIPE:
-        return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID, LocaleKeys.resolution.tr(): widget.nft.getAssetSize(), kIpfsCid: widget.nft.cid};
+        return {
+          LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
+          LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}",
+          LocaleKeys.ipfs_cid.tr(): widget.nft.cid
+        };
       case NftType.TYPE_ITEM:
-        return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID, LocaleKeys.resolution.tr(): widget.nft.getAssetSize(), kIpfsCid: widget.nft.cid};
+        return {
+          LocaleKeys.recipe_id.tr(): widget.nft.recipeID
+        };
       case NftType.TYPE_TRADE:
         break;
     }
 
-    return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID, LocaleKeys.resolution.tr(): widget.nft.getAssetSize(), kIpfsCid: widget.nft.cid};
+    return {
+      LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
+      LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}",
+      LocaleKeys.ipfs_cid.tr(): widget.nft.cid};
   }
 
   @override
@@ -81,9 +86,16 @@ class _TabFieldState extends State<TabField> {
 
     final nftDetail = getNFTDetailsMap();
 
-    final listOwnership = ownership.entries.map((element) => _tabDetails(field: element.key, value: element.value)).toList();
+    final listOwnership = ownership.entries.map((element) => _tabDetails(field: element.key, value: element.value, customColor: element.key == LocaleKeys.owner.tr() ? Colors.red : null)).toList();
 
-    final listDetails = nftDetail.entries.map((element) => _tabDetails(field: element.key, value: element.value, customWidget: customWidget(element))).toList();
+    final listDetails = nftDetail.entries
+        .map(
+            (element) => _tabDetails(
+                field: element.key,
+                value: element.value,
+                customWidget: (element.key == LocaleKeys.recipe_id.tr() || element.key == LocaleKeys.ipfs_cid.tr()) && element.value.isNotEmpty ? _tabDetailsWithIcon(value: element.value) : null),
+        )
+        .toList();
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 100),
@@ -205,15 +217,15 @@ class _TabFieldState extends State<TabField> {
         children: [
           Text(
             value.substring(0, 6),
-            style: TextStyle(color: AppColors.kWhite),
+            style: TextStyle(color: AppColors.kGreyColor, fontSize: 9.sp),
           ),
           Text(
             "...",
-            style: TextStyle(color: AppColors.kWhite),
+            style: TextStyle(color: AppColors.kGreyColor, fontSize: 9.sp),
           ),
           Text(
             value.substring(value.length - 5, value.length),
-            style: TextStyle(color: AppColors.kWhite),
+            style: TextStyle(color: AppColors.kGreyColor, fontSize: 9.sp),
           ),
           if (value.isNotEmpty)
             InkWell(
@@ -226,8 +238,8 @@ class _TabFieldState extends State<TabField> {
               },
               child: Icon(
                 Icons.copy_outlined,
-                color: AppColors.kWhite,
-                size: 15.h,
+                color: AppColors.kGreyColor,
+                size: 11.h,
               ),
             )
         ],
@@ -242,7 +254,7 @@ class _TabFieldState extends State<TabField> {
           flex: 50,
           child: Text(
             field,
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: AppColors.kGreyColor, fontSize: 9.sp),
           ),
         ),
         if (customWidget != null) ...[
@@ -252,7 +264,7 @@ class _TabFieldState extends State<TabField> {
             flex: 45,
             child: Text(
               value,
-              style: TextStyle(color: customColor != null ? AppColors.kPurple : Colors.white),
+              style: TextStyle(color: customColor != null ? AppColors.kPurple : AppColors.kGreyColor, fontSize: 9.sp),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

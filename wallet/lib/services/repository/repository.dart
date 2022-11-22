@@ -24,6 +24,7 @@ import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pbgrpc.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
+import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/export.dart' as cosmos_tx;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
@@ -57,6 +58,12 @@ abstract class Repository {
   /// Output: if successful the output will be [String] username of the user
   /// will return error in the form of failure
   Future<Either<Failure, String>> getUsername({required String address});
+
+  /// Get a tuple of the native Cosmos TX struct and (if it exists) the TxResponse struct.
+  /// Input: [hash] hash of the transaction to query.
+  /// Output: [Tuple2] of the [cosmos_tx.Tx] and (if it exists) the [cosmos_tx.TxResponse], if successful.
+  /// Will return a [Failure] in the event of an error.
+  Future<Either<Failure, Tuple2<cosmos_tx.Tx, cosmos_tx.TxResponse?>>> getTx({required String hash});
 
   /// This method returns the recipe list
   /// Input : [cookBookId] id of the cookbook
@@ -317,6 +324,11 @@ abstract class Repository {
   /// Output: returns [List][NftOwnershipHistory] if success else this will give [Failure]
   Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistory({required String itemId, required String cookBookId});
 
+  /// This method will get the nft history
+  /// Input: [cookBookId] and [recipeId] of the nft
+  /// Output: returns [List][NftOwnershipHistory] if success else this will give [Failure]
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId});
+
   /// This method will get the transaction history from the chain
   /// Input: [address] of the user
   /// Output: returns [List][TransactionHistory] if success else this will give [Failure]
@@ -546,6 +558,22 @@ class RepositoryImp implements Repository {
     } on Exception catch (_) {
       crashlyticsHelper.recordFatalError(error: _.toString());
       return Left(RecipeNotFoundFailure(LocaleKeys.username_not_found.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Tuple2<cosmos_tx.Tx, cosmos_tx.TxResponse?>>> getTx({required String hash}) async {
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
+    }
+
+    try {
+      return Right(await remoteDataStore.getTx(hash: hash));
+    } on Failure catch (e) {
+      return Left(e);
+    } on Exception catch (_) {
+      crashlyticsHelper.recordFatalError(error: _.toString());
+      return Left(TxNotFoundFailure(LocaleKeys.tx_not_found.tr()));
     }
   }
 
@@ -1821,6 +1849,26 @@ class RepositoryImp implements Repository {
   }
 
   @override
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId}) async{
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
+    }
+
+    try {
+      final result = await remoteDataStore.getNftOwnershipHistoryByCookbookIdAndRecipeId(cookBookId: cookBookId,recipeId: recipeId);
+
+      return Right(result);
+    } on String catch (_) {
+      return Left(FetchNftOwnershipHistoryFailure(message: LocaleKeys.something_wrong.tr()));
+    } on Failure catch (_) {
+      return Left(_);
+    } on Exception catch (_) {
+      recordErrorInCrashlytics(_);
+      return Left(FetchNftOwnershipHistoryFailure(message: LocaleKeys.something_wrong.tr()));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<NotificationMessage>>> getAllNotificationsMessages({required String walletAddress, required int limit, required int offset}) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
@@ -1834,7 +1882,7 @@ class RepositoryImp implements Repository {
     } on Failure catch (_) {
       return Left(_);
     } on Exception catch (_) {
-      recordErrorInCrashlytics(_);
+      // recordErrorInCrashlytics(_);
       return Left(FetchAllNotificationFailure(message: LocaleKeys.something_wrong.tr()));
     }
   }

@@ -65,9 +65,8 @@ class Recipe {
   /// from the user profile manually.
   ///
   /// This is obviously not an ideal state of affairs, and will be fixed ASAP.
-  Future<Execution> executeWith(Profile prf, List<Item> inputs,
-      {int CoinInputIndex = 0,
-      List<generated.PaymentInfo> Function()? paymentInfoGen}) async {
+
+  Future<String> executeWith (Profile prf, List<Item> inputs, {int CoinInputIndex = 0, List<generated.PaymentInfo>Function()? paymentInfoGen} ) async {
     var ids = <String>[];
     var infos = <generated.PaymentInfo>[];
     if (paymentInfoGen != null) infos = paymentInfoGen();
@@ -85,6 +84,7 @@ class Recipe {
       cb = Cookbook.current!.getId();
       name = _forcedId!;
     }
+    print("fooo");
     var lowLevel = await PylonsWallet.instance.txExecuteRecipe(
         cookbookId: cb,
         recipeName: name,
@@ -93,10 +93,9 @@ class Recipe {
         paymentInfo: List.unmodifiable(infos),
         sender: prf.address,
         requestResponse: true);
-    if (lowLevel.error == '') {
-      return Execution(lowLevel.data!);
+    if (lowLevel.success) {
+      return lowLevel.data!;
     } else {
-      print(lowLevel.error);
       return Future.error(lowLevel.error);
     }
   }

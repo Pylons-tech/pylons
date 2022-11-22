@@ -11,8 +11,6 @@ import 'package:transaction_signing_gateway/model/transaction_hash.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
 abstract class WalletsStore {
-
-
   /// This method creates uer wallet and broadcast it in the blockchain
   /// Input: [mnemonic] mnemonic for creating user account, [userName] is the user entered nick name
   /// Output: [WalletPublicInfo] contains the address of the wallet
@@ -33,12 +31,9 @@ abstract class WalletsStore {
   /// Output : [TransactionHash] hash of the transaction
   Future<SdkIpcResponse> createRecipe(Map json);
 
-  /// This method is for execute recipe
-  /// MsgExecuteRecipe proto
-  /// request fields: {String creator, String cookbookID, String recipeID, List<String> itemIDs}
   /// Input : [Map] containing the info related to the execution of recipe
-  /// Output : [Execution] of the recipe
-  Future<SdkIpcResponse<Execution>> executeRecipe(Map json);
+  /// Output : [TxResponse] of the transaction (data field - idk that this is - this is a mess)
+  Future<SdkIpcResponse<String>> executeRecipe(Map json);
 
   /// This method is for create Trade
   /// MsgCreateTrade proto
@@ -118,8 +113,6 @@ abstract class WalletsStore {
   /// Input : [Map] containing the info related to the updation of recipe
   /// Output : [SdkIpcResponse] response
   Future<SdkIpcResponse> updateRecipe(Map<dynamic, dynamic> jsonMap);
-
-
 
   /// This method imports the pylons wallet based on mnemonic
   /// Input : [mnemonic] the mnemonic associated with the account
@@ -210,5 +203,4 @@ abstract class WalletsStore {
   /// Output: if successful will return the [String] hash of the transaction
   /// else will give failure
   Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(AppleInAppPurchaseModel appleInAppPurchaseModel);
-
 }

@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:alan/proto/cosmos/bank/v1beta1/export.dart' as bank;
 import 'package:cosmos_utils/cosmos_utils.dart';
+import 'package:dartz/dartz.dart';
 import 'package:decimal/decimal.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -26,6 +27,7 @@ import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
+import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/export.dart' as cosmos_tx;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/third_party_services/analytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
@@ -125,6 +127,12 @@ abstract class RemoteDataStore {
   /// Output : [List][NftOwnershipHistory] will contain the list of NftOwnershipHistory data if success
   /// else will throw error
   Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String itemId, required String cookBookId});
+
+  /// This method is used to get history of nft owners
+  /// Input: [cookBookId] and [recipeId] of the NFT
+  /// Output : [List][NftOwnershipHistory] will contain the list of NftOwnershipHistory data if success
+  /// else will throw error
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId});
 
   /// This method is used to get views count of NFT
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
@@ -281,6 +289,11 @@ abstract class RemoteDataStore {
   /// Input: [recipeId] the id of the NFT, [author] the author of the NFT, [purchasePrice] the price of the NFT, [recipeName] the name of the recipe
   /// Output: [bool] return true if successful
   Future<bool> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice});
+
+  /// Get a tuple of the native Cosmos TX struct and (if it exists) the TxResponse struct.
+  /// Input: [hash] hash of the transaction to query.
+  /// Output: [Tuple2] of the [cosmos_tx.Tx] and (if it exists) the [cosmos_tx.TxResponse].
+  Future<Tuple2<cosmos_tx.Tx, cosmos_tx.TxResponse?>> getTx({required String hash});
 
   Future<bool> logAddToCart({
     required String recipeId,
@@ -646,9 +659,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final transactionMap = jsonDecode(transactionResponse.body);
 
-    if (transactionMap == null) return transactionList;
+    if (transactionMap == null || transactionResponse.body.length == 2) return transactionList;
 
-    transactionList.addAll((transactionMap as List<dynamic>).map((e) => TransactionHistory.fromJson(e as Map<String, dynamic>)));
+    transactionList.addAll((transactionMap as List<dynamic>).map((e) => TransactionHistory.fromJson(e as Map<String, dynamic>)).toList());
 
     return transactionList;
   }
@@ -702,6 +715,32 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final reverseOrder = historyList.reversed.toList();
 
+    return reverseOrder.toList();
+  }
+
+  @override
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId}) async{
+    final baseApiUrl = getBaseEnv().baseApiUrl;
+    final uri = Uri.parse("$baseApiUrl/pylons/get_recipe_history/$cookBookId/$recipeId");
+
+    final List<NftOwnershipHistory> historyList = [];
+
+    final historyResponse = await httpClient.get(uri);
+
+    if (historyResponse.statusCode != API_SUCCESS_CODE) {
+      throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
+    }
+    final historyMap = jsonDecode(historyResponse.body);
+
+    if (historyMap == null) {
+      throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
+    }
+    historyMap[kHistory].map((e) {
+      final nft = NftOwnershipHistory.fromCookBookAndRecipeJson(e as Map<String, dynamic>);
+      historyList.add(nft);
+    }).toList();
+
+    final reverseOrder = historyList.reversed.toList();
     return reverseOrder.toList();
   }
 
@@ -790,6 +829,23 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.username.value;
     }
     throw RecipeNotFoundFailure(LocaleKeys.username_not_found.tr());
+  }
+
+  @override
+  Future<Tuple2<cosmos_tx.Tx, cosmos_tx.TxResponse?>> getTx({required String hash}) async {
+    final cosmos_tx.ServiceClient serviceClient = cosmos_tx.ServiceClient(sl.get<BaseEnv>().networkInfo.gRPCChannel);
+    final request = cosmos_tx.GetTxRequest.create()..hash = hash;
+    final response = await serviceClient.getTx(request);
+
+    if (response.hasTx()) {
+      if (response.hasTxResponse()) {
+        return Tuple2(response.tx, response.txResponse);
+      } else {
+        return Tuple2(response.tx, null);
+      }
+    }
+
+    throw TxNotFoundFailure(LocaleKeys.tx_not_found.tr());
   }
 
   @override

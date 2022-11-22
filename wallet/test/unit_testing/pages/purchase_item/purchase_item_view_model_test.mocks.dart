@@ -162,7 +162,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
   @override
-  _i8.Future<_i3.SdkIpcResponse<_i10.Execution>> executeRecipe(Map<dynamic, dynamic>? json) => (super.noSuchMethod(
+  _i8.Future<_i3.SdkIpcResponse<_i10.Execution>> executeRecipe_Internal(Map<dynamic, dynamic>? json) => (super.noSuchMethod(
         Invocation.method(
           #executeRecipe,
           [json],

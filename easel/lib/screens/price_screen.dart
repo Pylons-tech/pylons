@@ -31,7 +31,7 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   final _formKey = GlobalKey<FormState>();
-  var repository = GetIt.I.get<Repository>();
+  Repository repository = GetIt.I.get<Repository>();
   NFT? nft;
 
   final ValueNotifier<String> _royaltiesFieldError = ValueNotifier("");
@@ -46,7 +46,7 @@ class _PriceScreenState extends State<PriceScreen> {
 
   @override
   void initState() {
-    nft = repository.getCacheDynamicType(key: nftKey);
+    nft = repository.getCacheDynamicType(key: nftKey) as NFT;
     repository.logUserJourney(screenName: AnalyticsScreenEvents.priceScreen);
     super.initState();
   }
@@ -333,7 +333,7 @@ class _PriceScreenState extends State<PriceScreen> {
                         onPressed: () async {
                           if (provider.isFreeDrop != FreeDrop.unselected) {
                             FocusScope.of(context).unfocus();
-                            validateAndUpdatePrice(true);
+                            validateAndUpdatePrice(moveNextPage: true);
                           }
                         },
                         cuttingHeight: 15.h,
@@ -351,7 +351,7 @@ class _PriceScreenState extends State<PriceScreen> {
                               return;
                             }
                             FocusScope.of(context).unfocus();
-                            validateAndUpdatePrice(false);
+                            validateAndUpdatePrice(moveNextPage: false);
                           },
                           child: Text(
                             LocaleKeys.save_as_draft.tr(),
@@ -371,7 +371,7 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 
-  void validateAndUpdatePrice(bool moveNextPage) async {
+  Future<void> validateAndUpdatePrice({required bool moveNextPage}) async {
     final navigator = Navigator.of(context);
     final HomeViewModel homeViewModel = context.read<HomeViewModel>();
 

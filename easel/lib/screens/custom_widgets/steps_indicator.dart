@@ -1,4 +1,3 @@
-
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,11 +7,8 @@ class MyStepsIndicator extends StatelessWidget {
   final ValueNotifier<int> currentStep;
 
   const MyStepsIndicator({
-    Key? key,
     required this.currentStep,
-  }) : super(key: key);
-
-  final int _numSteps = 3;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +17,8 @@ class MyStepsIndicator extends StatelessWidget {
         builder: (_, int value, __) {
           return StepsIndicator(
             selectedStep: currentStep.value,
-            nbSteps: _numSteps,
-            lineLength: 0.68.sw / _numSteps,
+            nbSteps: 3,
+            lineLength: 0.68.sw / 3,
             doneLineColor: EaselAppTheme.kBlue,
             undoneLineColor: EaselAppTheme.kLightGrey,
             doneLineThickness: 1.5,
@@ -35,19 +31,9 @@ class MyStepsIndicator extends StatelessWidget {
             enableLineAnimation: true,
             enableStepAnimation: true,
             lineLengthCustomStep: const [],
-            doneStepWidget: Container(
-                width: 10.w,
-                height: 10.h,
-                decoration: const BoxDecoration(color: EaselAppTheme.kBlue)),
-            unselectedStepWidget: Container(
-                width: 10.w,
-                height: 10.h,
-                decoration:
-                    const BoxDecoration(color: EaselAppTheme.kLightGrey)),
-            selectedStepWidget: Container(
-                width: 15.w,
-                height: 15.h,
-                decoration: const BoxDecoration(color: EaselAppTheme.kBlue)),
+            doneStepWidget: Container(width: 10.w, height: 10.h, decoration: const BoxDecoration(color: EaselAppTheme.kBlue)),
+            unselectedStepWidget: Container(width: 10.w, height: 10.h, decoration: const BoxDecoration(color: EaselAppTheme.kLightGrey)),
+            selectedStepWidget: Container(width: 15.w, height: 15.h, decoration: const BoxDecoration(color: EaselAppTheme.kBlue)),
           );
         });
   }

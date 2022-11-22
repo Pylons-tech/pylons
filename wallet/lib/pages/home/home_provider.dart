@@ -1,8 +1,6 @@
 import 'package:dartz/dartz.dart' as dz;
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/transaction.dart';
@@ -17,11 +15,10 @@ import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
-import '../../generated/locale_keys.g.dart';
 
 class HomeProvider extends ChangeNotifier {
   final Repository repository;
-  
+
   final AccountPublicInfo accountPublicInfo;
 
   HomeProvider({required this.repository, required this.accountPublicInfo});
@@ -73,7 +70,7 @@ class HomeProvider extends ChangeNotifier {
       offset: _offset,
     );
     if (response.isLeft()) {
-      LocaleKeys.something_wrong.tr().show();
+      // LocaleKeys.something_wrong.tr().show();
       return [];
     }
     return response.getOrElse(() => []);
@@ -107,7 +104,6 @@ class HomeProvider extends ChangeNotifier {
   }
 
   Future<void> getTransactionHistoryList() async {
-
     GetIt.I.get<Repository>().getTransactionHistory(address: accountPublicInfo.publicAddress).then((value) {
       if (value.isRight()) {
         transactionHistoryList = value.getOrElse(() => []);
@@ -218,8 +214,6 @@ class HomeProvider extends ChangeNotifier {
   void logAnalyticsEvent() {
     repository.logUserJourney(screenName: AnalyticsScreenEvents.home);
   }
-
-
 
   Repository getRepository() {
     return repository;
