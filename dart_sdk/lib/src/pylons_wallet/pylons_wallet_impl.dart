@@ -76,8 +76,9 @@ class PylonsWalletImpl implements PylonsWallet {
     try {
       sdkipcResponse = SDKIPCResponse.fromIPCMessage(getMessage);
       IPCHandlerFactory.getHandler(sdkipcResponse);
-    } catch (e) {
+    } catch (e, trace) {
       print(e);
+      print(trace);
       print('Something went wrong in parsing');
       return;
     }
@@ -218,7 +219,7 @@ class PylonsWalletImpl implements PylonsWallet {
   }
 
   @override
-  Future<SDKIPCResponse<Execution>> txExecuteRecipe(
+  Future<SDKIPCResponse<String>> txExecuteRecipe(
       {required String cookbookId,
       required String recipeName,
       required List<String> itemIds,
@@ -240,13 +241,8 @@ class PylonsWalletImpl implements PylonsWallet {
                 .toProto3Json()),
             requestResponse: requestResponse);
 
-        if (response is SDKIPCResponse<Execution>) {
+        if (response is SDKIPCResponse<String>) {
           return response;
-        }
-
-        if (response is SDKIPCResponse<String> && !requestResponse) {
-          return SDKIPCResponse.success(Execution.create(),
-              action: Strings.TX_EXECUTE_RECIPE);
         }
 
         throw Exception('Response malformed');

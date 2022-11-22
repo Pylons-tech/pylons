@@ -19,11 +19,9 @@ class ExecuteRecipeHandler implements BaseHandler {
     final walletsStore = GetIt.I.get<WalletsStore>();
     final response = await walletsStore.executeRecipe(jsonMap);
 
-    final concreteTypeToStringTypeResponse = response.finalizeTheSDKResponse(
-      action: sdkIpcMessage.action,
-      sender: sdkIpcMessage.sender,
-    );
+    response.action = sdkIpcMessage.action;
+    response.sender = sdkIpcMessage.sender;
 
-    return SynchronousFuture(concreteTypeToStringTypeResponse);
+    return SynchronousFuture(response);
   }
 }

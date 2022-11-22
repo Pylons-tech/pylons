@@ -75,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
       print("initState");
     }
     Cookbook.load("appTestCookbook").then((value) {
+      print("go to check init");
       _checkCharacter().then((value) async {
         if (kDebugMode) {
           print("character exists: ${character != null}");
@@ -174,15 +175,14 @@ class _MyHomePageState extends State<MyHomePage> {
     if (kDebugMode) {
       print("getting profile");
     }
+
     final prf = await Profile.get();
     if (kDebugMode) {
       print("got profile");
     }
     if (prf == null) throw Exception("HANDLE THIS");
-    setState(() {
-      profile = prf;
-      pylons = profile!.coins["upylon"] ?? Int64.ZERO;
-    });
+    profile = prf;
+    pylons = profile!.coins["upylon"] ?? Int64.ZERO;
     if (kDebugMode) {
       print("(ok!)");
     }

@@ -376,7 +376,7 @@ abstract class PylonsWallet {
   ///
   /// If the operation fails due to an exception thrown by this library, that
   /// exception will be passed directly.
-  Future<SDKIPCResponse<Execution>> txExecuteRecipe(
+  Future<SDKIPCResponse<String>> txExecuteRecipe(
       {required String cookbookId,
       required String recipeName,
       required List<String> itemIds,

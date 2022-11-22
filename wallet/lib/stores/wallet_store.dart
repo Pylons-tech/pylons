@@ -41,8 +41,8 @@ abstract class WalletsStore {
   /// MsgExecuteRecipe proto
   /// request fields: {String creator, String cookbookID, String recipeID, List<String> itemIDs}
   /// Input : [Map] containing the info related to the execution of recipe
-  /// Output : [TxResponse] of the transaction
-  Future<SdkIpcResponse<TxResponse>> executeRecipe(Map json);
+  /// Output : [TxResponse] of the transaction (data field - idk that this is - this is a mess)
+  Future<SdkIpcResponse<String>> executeRecipe(Map json);
 
   /// TODO: we should obviously not have parallel paths. This method exists to prevent us from seeing
   /// unexpected regressions during an API revision, but the wallet should be refactored ASAP so's
