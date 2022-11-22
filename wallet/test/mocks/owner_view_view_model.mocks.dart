@@ -40,7 +40,6 @@ import 'package:video_player/video_player.dart' as _i13;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
-// ignore_for_file: must_be_immutable
 
 class _FakeNFT_0 extends _i1.SmartFake implements _i2.NFT {
   _FakeNFT_0(
@@ -142,14 +141,14 @@ class _FakeValueNotifier_8<T> extends _i1.SmartFake
 /// See the documentation for Mockito's code generation for more information.
 class MockOwnerViewViewModel extends _i1.Mock
     implements _i11.OwnerViewViewModel {
-  MockOwnerViewViewModel() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i2.NFT get nft => (super.noSuchMethod(
         Invocation.getter(#nft),
         returnValue: _FakeNFT_0(
+          this,
+          Invocation.getter(#nft),
+        ),
+        returnValueForMissingStub: _FakeNFT_0(
           this,
           Invocation.getter(#nft),
         ),
@@ -169,11 +168,19 @@ class MockOwnerViewViewModel extends _i1.Mock
           this,
           Invocation.getter(#repository),
         ),
+        returnValueForMissingStub: _FakeRepository_1(
+          this,
+          Invocation.getter(#repository),
+        ),
       ) as _i3.Repository);
   @override
   _i4.WalletsStore get walletsStore => (super.noSuchMethod(
         Invocation.getter(#walletsStore),
         returnValue: _FakeWalletsStore_2(
+          this,
+          Invocation.getter(#walletsStore),
+        ),
+        returnValueForMissingStub: _FakeWalletsStore_2(
           this,
           Invocation.getter(#walletsStore),
         ),
@@ -185,6 +192,10 @@ class MockOwnerViewViewModel extends _i1.Mock
           this,
           Invocation.getter(#audioPlayerHelper),
         ),
+        returnValueForMissingStub: _FakeAudioPlayerHelper_3(
+          this,
+          Invocation.getter(#audioPlayerHelper),
+        ),
       ) as _i5.AudioPlayerHelper);
   @override
   _i6.VideoPlayerHelper get videoPlayerHelper => (super.noSuchMethod(
@@ -193,11 +204,19 @@ class MockOwnerViewViewModel extends _i1.Mock
           this,
           Invocation.getter(#videoPlayerHelper),
         ),
+        returnValueForMissingStub: _FakeVideoPlayerHelper_4(
+          this,
+          Invocation.getter(#videoPlayerHelper),
+        ),
       ) as _i6.VideoPlayerHelper);
   @override
   _i7.ShareHelper get shareHelper => (super.noSuchMethod(
         Invocation.getter(#shareHelper),
         returnValue: _FakeShareHelper_5(
+          this,
+          Invocation.getter(#shareHelper),
+        ),
+        returnValueForMissingStub: _FakeShareHelper_5(
           this,
           Invocation.getter(#shareHelper),
         ),
@@ -214,6 +233,7 @@ class MockOwnerViewViewModel extends _i1.Mock
   bool get isOwnershipExpanded => (super.noSuchMethod(
         Invocation.getter(#isOwnershipExpanded),
         returnValue: false,
+        returnValueForMissingStub: false,
       ) as bool);
   @override
   set isOwnershipExpanded(bool? _isOwnershipExpanded) => super.noSuchMethod(
@@ -227,6 +247,7 @@ class MockOwnerViewViewModel extends _i1.Mock
   bool get isHistoryExpanded => (super.noSuchMethod(
         Invocation.getter(#isHistoryExpanded),
         returnValue: false,
+        returnValueForMissingStub: false,
       ) as bool);
   @override
   set isHistoryExpanded(bool? _isHistoryExpanded) => super.noSuchMethod(
@@ -240,6 +261,7 @@ class MockOwnerViewViewModel extends _i1.Mock
   bool get isDetailsExpanded => (super.noSuchMethod(
         Invocation.getter(#isDetailsExpanded),
         returnValue: false,
+        returnValueForMissingStub: false,
       ) as bool);
   @override
   set isDetailsExpanded(bool? _isDetailsExpanded) => super.noSuchMethod(
@@ -253,6 +275,7 @@ class MockOwnerViewViewModel extends _i1.Mock
   String get owner => (super.noSuchMethod(
         Invocation.getter(#owner),
         returnValue: '',
+        returnValueForMissingStub: '',
       ) as String);
   @override
   set owner(String? _owner) => super.noSuchMethod(
@@ -280,6 +303,10 @@ class MockOwnerViewViewModel extends _i1.Mock
           this,
           Invocation.getter(#playerStateSubscription),
         ),
+        returnValueForMissingStub: _FakeStreamSubscription_6<dynamic>(
+          this,
+          Invocation.getter(#playerStateSubscription),
+        ),
       ) as _i8.StreamSubscription<dynamic>);
   @override
   set playerStateSubscription(
@@ -296,6 +323,10 @@ class MockOwnerViewViewModel extends _i1.Mock
       (super.noSuchMethod(
         Invocation.getter(#positionStreamSubscription),
         returnValue: _FakeStreamSubscription_6<dynamic>(
+          this,
+          Invocation.getter(#positionStreamSubscription),
+        ),
+        returnValueForMissingStub: _FakeStreamSubscription_6<dynamic>(
           this,
           Invocation.getter(#positionStreamSubscription),
         ),
@@ -318,6 +349,10 @@ class MockOwnerViewViewModel extends _i1.Mock
           this,
           Invocation.getter(#bufferPositionSubscription),
         ),
+        returnValueForMissingStub: _FakeStreamSubscription_6<dynamic>(
+          this,
+          Invocation.getter(#bufferPositionSubscription),
+        ),
       ) as _i8.StreamSubscription<dynamic>);
   @override
   set bufferPositionSubscription(
@@ -337,6 +372,10 @@ class MockOwnerViewViewModel extends _i1.Mock
           this,
           Invocation.getter(#durationStreamSubscription),
         ),
+        returnValueForMissingStub: _FakeStreamSubscription_6<dynamic>(
+          this,
+          Invocation.getter(#durationStreamSubscription),
+        ),
       ) as _i8.StreamSubscription<dynamic>);
   @override
   set durationStreamSubscription(
@@ -352,6 +391,7 @@ class MockOwnerViewViewModel extends _i1.Mock
   bool get likedByMe => (super.noSuchMethod(
         Invocation.getter(#likedByMe),
         returnValue: false,
+        returnValueForMissingStub: false,
       ) as bool);
   @override
   set likedByMe(bool? _likedByMe) => super.noSuchMethod(
@@ -365,6 +405,7 @@ class MockOwnerViewViewModel extends _i1.Mock
   List<String> get hashtagList => (super.noSuchMethod(
         Invocation.getter(#hashtagList),
         returnValue: <String>[],
+        returnValueForMissingStub: <String>[],
       ) as List<String>);
   @override
   set hashtagList(List<String>? _hashtagList) => super.noSuchMethod(
@@ -379,6 +420,7 @@ class MockOwnerViewViewModel extends _i1.Mock
       (super.noSuchMethod(
         Invocation.getter(#nftOwnershipHistoryList),
         returnValue: <_i14.NftOwnershipHistory>[],
+        returnValueForMissingStub: <_i14.NftOwnershipHistory>[],
       ) as List<_i14.NftOwnershipHistory>);
   @override
   set nftOwnershipHistoryList(
@@ -397,6 +439,10 @@ class MockOwnerViewViewModel extends _i1.Mock
           this,
           Invocation.getter(#accountPublicInfo),
         ),
+        returnValueForMissingStub: _FakeAccountPublicInfo_7(
+          this,
+          Invocation.getter(#accountPublicInfo),
+        ),
       ) as _i9.AccountPublicInfo);
   @override
   set accountPublicInfo(_i9.AccountPublicInfo? _accountPublicInfo) =>
@@ -411,6 +457,7 @@ class MockOwnerViewViewModel extends _i1.Mock
   bool get isUrlLoaded => (super.noSuchMethod(
         Invocation.getter(#isUrlLoaded),
         returnValue: false,
+        returnValueForMissingStub: false,
       ) as bool);
   @override
   set isUrlLoaded(bool? _isUrlLoaded) => super.noSuchMethod(
@@ -425,6 +472,10 @@ class MockOwnerViewViewModel extends _i1.Mock
       (super.noSuchMethod(
         Invocation.getter(#audioProgressNotifier),
         returnValue: _FakeValueNotifier_8<_i15.ProgressBarState>(
+          this,
+          Invocation.getter(#audioProgressNotifier),
+        ),
+        returnValueForMissingStub: _FakeValueNotifier_8<_i15.ProgressBarState>(
           this,
           Invocation.getter(#audioProgressNotifier),
         ),
@@ -447,6 +498,10 @@ class MockOwnerViewViewModel extends _i1.Mock
           this,
           Invocation.getter(#buttonNotifier),
         ),
+        returnValueForMissingStub: _FakeValueNotifier_8<_i16.ButtonState>(
+          this,
+          Invocation.getter(#buttonNotifier),
+        ),
       ) as _i10.ValueNotifier<_i16.ButtonState>);
   @override
   set buttonNotifier(_i10.ValueNotifier<_i16.ButtonState>? _buttonNotifier) =>
@@ -461,11 +516,13 @@ class MockOwnerViewViewModel extends _i1.Mock
   _i11.Toggle get toggled => (super.noSuchMethod(
         Invocation.getter(#toggled),
         returnValue: _i11.Toggle.enabled,
+        returnValueForMissingStub: _i11.Toggle.enabled,
       ) as _i11.Toggle);
   @override
   bool get isVideoLoading => (super.noSuchMethod(
         Invocation.getter(#isVideoLoading),
         returnValue: false,
+        returnValueForMissingStub: false,
       ) as bool);
   @override
   set isVideoLoading(bool? value) => super.noSuchMethod(
@@ -479,6 +536,7 @@ class MockOwnerViewViewModel extends _i1.Mock
   int get likesCount => (super.noSuchMethod(
         Invocation.getter(#likesCount),
         returnValue: 0,
+        returnValueForMissingStub: 0,
       ) as int);
   @override
   set likesCount(int? value) => super.noSuchMethod(
@@ -492,6 +550,7 @@ class MockOwnerViewViewModel extends _i1.Mock
   String get videoLoadingError => (super.noSuchMethod(
         Invocation.getter(#videoLoadingError),
         returnValue: '',
+        returnValueForMissingStub: '',
       ) as String);
   @override
   set videoLoadingError(String? value) => super.noSuchMethod(
@@ -505,6 +564,7 @@ class MockOwnerViewViewModel extends _i1.Mock
   bool get collapsed => (super.noSuchMethod(
         Invocation.getter(#collapsed),
         returnValue: false,
+        returnValueForMissingStub: false,
       ) as bool);
   @override
   set collapsed(bool? value) => super.noSuchMethod(
@@ -518,6 +578,7 @@ class MockOwnerViewViewModel extends _i1.Mock
   bool get isViewingFullNft => (super.noSuchMethod(
         Invocation.getter(#isViewingFullNft),
         returnValue: false,
+        returnValueForMissingStub: false,
       ) as bool);
   @override
   set isViewingFullNft(bool? value) => super.noSuchMethod(
@@ -531,6 +592,7 @@ class MockOwnerViewViewModel extends _i1.Mock
   bool get isLiking => (super.noSuchMethod(
         Invocation.getter(#isLiking),
         returnValue: false,
+        returnValueForMissingStub: false,
       ) as bool);
   @override
   set isLiking(bool? value) => super.noSuchMethod(
@@ -544,6 +606,7 @@ class MockOwnerViewViewModel extends _i1.Mock
   int get viewsCount => (super.noSuchMethod(
         Invocation.getter(#viewsCount),
         returnValue: 0,
+        returnValueForMissingStub: 0,
       ) as int);
   @override
   set viewsCount(int? value) => super.noSuchMethod(
@@ -557,6 +620,7 @@ class MockOwnerViewViewModel extends _i1.Mock
   bool get hasListeners => (super.noSuchMethod(
         Invocation.getter(#hasListeners),
         returnValue: false,
+        returnValueForMissingStub: false,
       ) as bool);
   @override
   _i8.Future<dynamic> initOwnerName() => (super.noSuchMethod(
@@ -565,6 +629,7 @@ class MockOwnerViewViewModel extends _i1.Mock
           [],
         ),
         returnValue: _i8.Future<dynamic>.value(),
+        returnValueForMissingStub: _i8.Future<dynamic>.value(),
       ) as _i8.Future<dynamic>);
   @override
   void initializeData() => super.noSuchMethod(
@@ -605,6 +670,7 @@ class MockOwnerViewViewModel extends _i1.Mock
           [],
         ),
         returnValue: false,
+        returnValueForMissingStub: false,
       ) as bool);
   @override
   _i8.Future<void> nftDataInit({

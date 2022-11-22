@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/button_state.dart';
@@ -14,6 +15,7 @@ import '../../mocks/mock_wallet_store.dart';
 import '../../mocks/owner_view_view_model.mocks.dart';
 import '../extension/size_extension.dart';
 
+@GenerateNiceMocks([MockSpec<OwnerViewViewModel>()])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late OwnerViewViewModel viewModel;
@@ -35,7 +37,7 @@ void main() {
           nft: MOCK_NFT_FREE_AUDIO,
         ),
       );
-      final shareNftButton = find.byKey(const Key(kShareNftButtonCollapsedKey));
+      final shareNftButton = find.byKey(const Key(kShareNftButtonExpandedKey));
       await tester.ensureVisible(shareNftButton);
       await tester.pump();
       await tester.tap(shareNftButton);
@@ -54,7 +56,7 @@ void main() {
           nft: MOCK_NFT_FREE_VIDEO,
         ),
       );
-      final shareNftButton = find.byKey(const Key(kShareNftButtonCollapsedKey));
+      final shareNftButton = find.byKey(const Key(kShareNftButtonExpandedKey));
       await tester.ensureVisible(shareNftButton);
       await tester.pump(const Duration(seconds: 4));
       await tester.tap(shareNftButton);
