@@ -252,8 +252,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void executeRecipe() async {
     var response = await PylonsWallet.instance.txExecuteRecipe(
-        cookbookId: "appTestCookbook",
-        recipeName: "RecipeTestAppGetCharacter",
+        cookbookId: cookBookId,
+        recipeName: recipeId,
         coinInputIndex: 0,
         sender: "pylo1v97v5qj2kvph2d02fzxxlh44wzpfmuc63vpphj",
         itemIds: [],

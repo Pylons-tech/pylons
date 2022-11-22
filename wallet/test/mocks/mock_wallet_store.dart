@@ -38,16 +38,11 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse<TxResponse>> executeRecipe(Map json) {
+  Future<SdkIpcResponse<Execution>> executeRecipe(Map json) {
     // TODO: implement executeRecipe
     throw UnimplementedError();
   }
 
-  @override
-  Future<SdkIpcResponse<Execution>> executeRecipe_Internal(Map json) {
-    // TODO: implement executeRecipe
-    throw UnimplementedError();
-  }
 
   @override
   Future<SdkIpcResponse> fulfillTrade(Map json) {
