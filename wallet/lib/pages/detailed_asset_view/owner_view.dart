@@ -355,7 +355,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   getProgressWidget(),
                   Row(
                     children: [
-                      const ToggleButton(),
+                      ToggleButton(assetProvider: viewModel),
                       if (viewModel.toggled==Toggle.enabled) ...[
                         SizedBox(width: 15.w),
                         PriceWidget(price: ibcEnumCoins.getCoinWithProperDenomination(viewModel.nft.price), priceAbbr: ibcEnumCoins.getAbbrev(), amount: viewModel.nft.quantity.toString()),
