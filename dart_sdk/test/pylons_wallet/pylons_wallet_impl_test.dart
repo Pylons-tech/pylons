@@ -62,7 +62,7 @@ void goToLoginTest() {
     when(uniLink.linkStream)
         .thenAnswer((realInvocation) => Stream<String?>.value('Corey'));
     var pylonsWallet = PylonsWalletImpl(host: MOCK_HOST, uniLink: uniLink);
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(seconds : 2), () {
       final sdkResponse = SDKIPCResponse(
           success: true,
           error: '',
@@ -97,7 +97,7 @@ void placeForSaleTest() {
     when(uniLink.linkStream)
         .thenAnswer((realInvocation) => Stream<String?>.value('Corey'));
     var pylonsWallet = PylonsWalletImpl(host: MOCK_HOST, uniLink: uniLink);
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(seconds : 2), () {
       final sdkResponse = SDKIPCResponse(
           success: true,
           error: '',
@@ -121,7 +121,7 @@ void getTradesTest() {
         .thenAnswer((realInvocation) => Stream<String?>.value('Corey'));
     var pylonsWallet = PylonsWalletImpl(host: MOCK_HOST, uniLink: uniLink);
 
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(seconds : 2), () {
       final sdkResponse = SDKIPCResponse<List<Trade>>(
           success: true,
           error: '',
@@ -282,7 +282,7 @@ void createRecipeTest() {
         .thenAnswer((realInvocation) => Stream<String?>.value('Jawad'));
     var pylonsWallet = PylonsWalletImpl(host: MOCK_HOST, uniLink: uniLink);
 
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(seconds : 2), () {
       final sdkResponse = SDKIPCResponse(
           success: true,
           error: '',
@@ -327,7 +327,7 @@ void updateCookBookTest() {
     var cookBook = Cookbook.create()
       ..mergeFromProto3Json(jsonDecode(MOCK_COOKBOOK));
 
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(seconds : 2), () {
       final sdkResponse = SDKIPCResponse(
           success: true,
           error: '',
@@ -371,7 +371,7 @@ void updateRecipeTest() {
         .thenAnswer((realInvocation) => Stream<String?>.value('Jawad'));
     var pylonsWallet = PylonsWalletImpl(host: MOCK_HOST, uniLink: uniLink);
 
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(seconds : 2), () {
       final sdkResponse = SDKIPCResponse(
           success: true,
           error: '',
@@ -445,7 +445,7 @@ void executeRecipeTest() {
         .thenAnswer((realInvocation) => Stream<String?>.value('Jawad'));
     var pylonsWallet = PylonsWalletImpl(host: MOCK_HOST, uniLink: uniLink);
 
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(seconds : 2), () {
       final sdkResponse = SDKIPCResponse(
           success: true,
           error: '',
@@ -502,7 +502,7 @@ void createCookBookTest() {
     var cookBook = Cookbook.create()
       ..mergeFromProto3Json(jsonDecode(MOCK_COOKBOOK));
 
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(seconds : 2), () {
       final sdkResponse = SDKIPCResponse(
           success: true,
           error: '',
@@ -609,7 +609,7 @@ void getCookBookTest() {
     var cookBook = Cookbook.create()
       ..mergeFromProto3Json(jsonDecode(MOCK_COOKBOOK));
 
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(seconds : 2), () {
       final sdkResponse = SDKIPCResponse<Cookbook>(
           success: true,
           error: '',
