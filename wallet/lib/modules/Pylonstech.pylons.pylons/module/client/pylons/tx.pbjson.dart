@@ -417,3 +417,45 @@ const MsgUpdateCookbookResponse$json = const {
 
 /// Descriptor for `MsgUpdateCookbookResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List msgUpdateCookbookResponseDescriptor = $convert.base64Decode('ChlNc2dVcGRhdGVDb29rYm9va1Jlc3BvbnNl');
+@$core.Deprecated('Use msgRegisterKYCAddressDescriptor instead')
+const MsgRegisterKYCAddress$json = const {
+  '1': 'MsgRegisterKYCAddress',
+  '2': const [
+    const {'1': 'account_addr', '3': 1, '4': 1, '5': 9, '10': 'accountAddr'},
+    const {'1': 'username', '3': 2, '4': 1, '5': 9, '10': 'username'},
+    const {'1': 'level', '3': 3, '4': 1, '5': 4, '10': 'level'},
+    const {'1': 'provider', '3': 4, '4': 1, '5': 9, '10': 'provider'},
+    const {'1': 'provider_id', '3': 5, '4': 1, '5': 9, '10': 'providerId'},
+  ],
+};
+
+/// Descriptor for `MsgRegisterKYCAddress`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgRegisterKYCAddressDescriptor = $convert.base64Decode('ChVNc2dSZWdpc3RlcktZQ0FkZHJlc3MSIQoMYWNjb3VudF9hZGRyGAEgASgJUgthY2NvdW50QWRkchIaCgh1c2VybmFtZRgCIAEoCVIIdXNlcm5hbWUSFAoFbGV2ZWwYAyABKARSBWxldmVsEhoKCHByb3ZpZGVyGAQgASgJUghwcm92aWRlchIfCgtwcm92aWRlcl9pZBgFIAEoCVIKcHJvdmlkZXJJZA==');
+@$core.Deprecated('Use msgRegisterKYCAddressResponseDescriptor instead')
+const MsgRegisterKYCAddressResponse$json = const {
+  '1': 'MsgRegisterKYCAddressResponse',
+};
+
+/// Descriptor for `MsgRegisterKYCAddressResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgRegisterKYCAddressResponseDescriptor = $convert.base64Decode('Ch1Nc2dSZWdpc3RlcktZQ0FkZHJlc3NSZXNwb25zZQ==');
+@$core.Deprecated('Use msgRemoveKYCAddressDescriptor instead')
+const MsgRemoveKYCAddress$json = const {
+  '1': 'MsgRemoveKYCAddress',
+  '2': const [
+    const {'1': 'account_addr', '3': 1, '4': 1, '5': 9, '10': 'accountAddr'},
+    const {'1': 'username', '3': 2, '4': 1, '5': 9, '10': 'username'},
+    const {'1': 'level', '3': 3, '4': 1, '5': 4, '10': 'level'},
+    const {'1': 'provider', '3': 4, '4': 1, '5': 9, '10': 'provider'},
+    const {'1': 'provider_id', '3': 5, '4': 1, '5': 9, '10': 'providerId'},
+  ],
+};
+
+/// Descriptor for `MsgRemoveKYCAddress`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgRemoveKYCAddressDescriptor = $convert.base64Decode('ChNNc2dSZW1vdmVLWUNBZGRyZXNzEiEKDGFjY291bnRfYWRkchgBIAEoCVILYWNjb3VudEFkZHISGgoIdXNlcm5hbWUYAiABKAlSCHVzZXJuYW1lEhQKBWxldmVsGAMgASgEUgVsZXZlbBIaCghwcm92aWRlchgEIAEoCVIIcHJvdmlkZXISHwoLcHJvdmlkZXJfaWQYBSABKAlSCnByb3ZpZGVySWQ=');
+@$core.Deprecated('Use msgRemoveKYCAddressResponseDescriptor instead')
+const MsgRemoveKYCAddressResponse$json = const {
+  '1': 'MsgRemoveKYCAddressResponse',
+};
+
+/// Descriptor for `MsgRemoveKYCAddressResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgRemoveKYCAddressResponseDescriptor = $convert.base64Decode('ChtNc2dSZW1vdmVLWUNBZGRyZXNzUmVzcG9uc2U=');

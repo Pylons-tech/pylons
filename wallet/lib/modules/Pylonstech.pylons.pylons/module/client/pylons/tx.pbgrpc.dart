@@ -129,6 +129,18 @@ class MsgClient extends $grpc.Client {
           ($1.MsgUpdateCookbook value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $1.MsgUpdateCookbookResponse.fromBuffer(value));
+  static final _$registerKYCAddress = $grpc.ClientMethod<
+          $1.MsgRegisterKYCAddress, $1.MsgRegisterKYCAddressResponse>(
+      '/pylons.pylons.Msg/RegisterKYCAddress',
+      ($1.MsgRegisterKYCAddress value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) =>
+          $1.MsgRegisterKYCAddressResponse.fromBuffer(value));
+  static final _$removeKYCAddress = $grpc.ClientMethod<$1.MsgRemoveKYCAddress,
+          $1.MsgRemoveKYCAddressResponse>(
+      '/pylons.pylons.Msg/RemoveKYCAddress',
+      ($1.MsgRemoveKYCAddress value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) =>
+          $1.MsgRemoveKYCAddressResponse.fromBuffer(value));
 
   MsgClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -248,6 +260,18 @@ class MsgClient extends $grpc.Client {
       $1.MsgUpdateCookbook request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$updateCookbook, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$1.MsgRegisterKYCAddressResponse> registerKYCAddress(
+      $1.MsgRegisterKYCAddress request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$registerKYCAddress, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$1.MsgRemoveKYCAddressResponse> removeKYCAddress(
+      $1.MsgRemoveKYCAddress request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$removeKYCAddress, request, options: options);
   }
 }
 
@@ -423,6 +447,24 @@ abstract class MsgServiceBase extends $grpc.Service {
             ($core.List<$core.int> value) =>
                 $1.MsgUpdateCookbook.fromBuffer(value),
             ($1.MsgUpdateCookbookResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.MsgRegisterKYCAddress,
+            $1.MsgRegisterKYCAddressResponse>(
+        'RegisterKYCAddress',
+        registerKYCAddress_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $1.MsgRegisterKYCAddress.fromBuffer(value),
+        ($1.MsgRegisterKYCAddressResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$1.MsgRemoveKYCAddress,
+            $1.MsgRemoveKYCAddressResponse>(
+        'RemoveKYCAddress',
+        removeKYCAddress_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $1.MsgRemoveKYCAddress.fromBuffer(value),
+        ($1.MsgRemoveKYCAddressResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$1.MsgAppleIapResponse> appleIap_Pre(
@@ -531,6 +573,18 @@ abstract class MsgServiceBase extends $grpc.Service {
     return updateCookbook(call, await request);
   }
 
+  $async.Future<$1.MsgRegisterKYCAddressResponse> registerKYCAddress_Pre(
+      $grpc.ServiceCall call,
+      $async.Future<$1.MsgRegisterKYCAddress> request) async {
+    return registerKYCAddress(call, await request);
+  }
+
+  $async.Future<$1.MsgRemoveKYCAddressResponse> removeKYCAddress_Pre(
+      $grpc.ServiceCall call,
+      $async.Future<$1.MsgRemoveKYCAddress> request) async {
+    return removeKYCAddress(call, await request);
+  }
+
   $async.Future<$1.MsgAppleIapResponse> appleIap(
       $grpc.ServiceCall call, $1.MsgAppleIap request);
   $async.Future<$1.MsgAddStripeRefundResponse> addStripeRefund(
@@ -570,4 +624,8 @@ abstract class MsgServiceBase extends $grpc.Service {
       $grpc.ServiceCall call, $1.MsgCreateCookbook request);
   $async.Future<$1.MsgUpdateCookbookResponse> updateCookbook(
       $grpc.ServiceCall call, $1.MsgUpdateCookbook request);
+  $async.Future<$1.MsgRegisterKYCAddressResponse> registerKYCAddress(
+      $grpc.ServiceCall call, $1.MsgRegisterKYCAddress request);
+  $async.Future<$1.MsgRemoveKYCAddressResponse> removeKYCAddress(
+      $grpc.ServiceCall call, $1.MsgRemoveKYCAddress request);
 }

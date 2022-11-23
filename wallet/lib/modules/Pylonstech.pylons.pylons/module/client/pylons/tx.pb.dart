@@ -14,7 +14,7 @@ import 'payment_info.pb.dart' as $7;
 import 'redeem_info.pb.dart' as $5;
 import 'trade.pb.dart' as $8;
 import 'recipe.pb.dart' as $4;
-import '../cosmos/base/v1beta1/coin.pb.dart' as $2;
+import '../../cosmos/base/v1beta1/coin.pb.dart' as $2;
 
 class MsgAppleIap extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgAppleIap', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
@@ -2512,5 +2512,269 @@ class MsgUpdateCookbookResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static MsgUpdateCookbookResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MsgUpdateCookbookResponse>(create);
   static MsgUpdateCookbookResponse? _defaultInstance;
+}
+
+class MsgRegisterKYCAddress extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgRegisterKYCAddress', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountAddr')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'username')
+    ..a<$fixnum.Int64>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'level', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'provider')
+    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'providerId')
+    ..hasRequiredFields = false
+  ;
+
+  MsgRegisterKYCAddress._() : super();
+  factory MsgRegisterKYCAddress({
+    $core.String? accountAddr,
+    $core.String? username,
+    $fixnum.Int64? level,
+    $core.String? provider,
+    $core.String? providerId,
+  }) {
+    final _result = create();
+    if (accountAddr != null) {
+      _result.accountAddr = accountAddr;
+    }
+    if (username != null) {
+      _result.username = username;
+    }
+    if (level != null) {
+      _result.level = level;
+    }
+    if (provider != null) {
+      _result.provider = provider;
+    }
+    if (providerId != null) {
+      _result.providerId = providerId;
+    }
+    return _result;
+  }
+  factory MsgRegisterKYCAddress.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MsgRegisterKYCAddress.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  MsgRegisterKYCAddress clone() => MsgRegisterKYCAddress()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  MsgRegisterKYCAddress copyWith(void Function(MsgRegisterKYCAddress) updates) => super.copyWith((message) => updates(message as MsgRegisterKYCAddress)) as MsgRegisterKYCAddress; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static MsgRegisterKYCAddress create() => MsgRegisterKYCAddress._();
+  MsgRegisterKYCAddress createEmptyInstance() => create();
+  static $pb.PbList<MsgRegisterKYCAddress> createRepeated() => $pb.PbList<MsgRegisterKYCAddress>();
+  @$core.pragma('dart2js:noInline')
+  static MsgRegisterKYCAddress getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MsgRegisterKYCAddress>(create);
+  static MsgRegisterKYCAddress? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get accountAddr => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set accountAddr($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasAccountAddr() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAccountAddr() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get username => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set username($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasUsername() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearUsername() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get level => $_getI64(2);
+  @$pb.TagNumber(3)
+  set level($fixnum.Int64 v) { $_setInt64(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasLevel() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearLevel() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get provider => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set provider($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasProvider() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearProvider() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get providerId => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set providerId($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasProviderId() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearProviderId() => clearField(5);
+}
+
+class MsgRegisterKYCAddressResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgRegisterKYCAddressResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  MsgRegisterKYCAddressResponse._() : super();
+  factory MsgRegisterKYCAddressResponse() => create();
+  factory MsgRegisterKYCAddressResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MsgRegisterKYCAddressResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  MsgRegisterKYCAddressResponse clone() => MsgRegisterKYCAddressResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  MsgRegisterKYCAddressResponse copyWith(void Function(MsgRegisterKYCAddressResponse) updates) => super.copyWith((message) => updates(message as MsgRegisterKYCAddressResponse)) as MsgRegisterKYCAddressResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static MsgRegisterKYCAddressResponse create() => MsgRegisterKYCAddressResponse._();
+  MsgRegisterKYCAddressResponse createEmptyInstance() => create();
+  static $pb.PbList<MsgRegisterKYCAddressResponse> createRepeated() => $pb.PbList<MsgRegisterKYCAddressResponse>();
+  @$core.pragma('dart2js:noInline')
+  static MsgRegisterKYCAddressResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MsgRegisterKYCAddressResponse>(create);
+  static MsgRegisterKYCAddressResponse? _defaultInstance;
+}
+
+class MsgRemoveKYCAddress extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgRemoveKYCAddress', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'accountAddr')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'username')
+    ..a<$fixnum.Int64>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'level', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'provider')
+    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'providerId')
+    ..hasRequiredFields = false
+  ;
+
+  MsgRemoveKYCAddress._() : super();
+  factory MsgRemoveKYCAddress({
+    $core.String? accountAddr,
+    $core.String? username,
+    $fixnum.Int64? level,
+    $core.String? provider,
+    $core.String? providerId,
+  }) {
+    final _result = create();
+    if (accountAddr != null) {
+      _result.accountAddr = accountAddr;
+    }
+    if (username != null) {
+      _result.username = username;
+    }
+    if (level != null) {
+      _result.level = level;
+    }
+    if (provider != null) {
+      _result.provider = provider;
+    }
+    if (providerId != null) {
+      _result.providerId = providerId;
+    }
+    return _result;
+  }
+  factory MsgRemoveKYCAddress.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MsgRemoveKYCAddress.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  MsgRemoveKYCAddress clone() => MsgRemoveKYCAddress()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  MsgRemoveKYCAddress copyWith(void Function(MsgRemoveKYCAddress) updates) => super.copyWith((message) => updates(message as MsgRemoveKYCAddress)) as MsgRemoveKYCAddress; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static MsgRemoveKYCAddress create() => MsgRemoveKYCAddress._();
+  MsgRemoveKYCAddress createEmptyInstance() => create();
+  static $pb.PbList<MsgRemoveKYCAddress> createRepeated() => $pb.PbList<MsgRemoveKYCAddress>();
+  @$core.pragma('dart2js:noInline')
+  static MsgRemoveKYCAddress getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MsgRemoveKYCAddress>(create);
+  static MsgRemoveKYCAddress? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get accountAddr => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set accountAddr($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasAccountAddr() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAccountAddr() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get username => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set username($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasUsername() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearUsername() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get level => $_getI64(2);
+  @$pb.TagNumber(3)
+  set level($fixnum.Int64 v) { $_setInt64(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasLevel() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearLevel() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get provider => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set provider($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasProvider() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearProvider() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get providerId => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set providerId($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasProviderId() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearProviderId() => clearField(5);
+}
+
+class MsgRemoveKYCAddressResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgRemoveKYCAddressResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  MsgRemoveKYCAddressResponse._() : super();
+  factory MsgRemoveKYCAddressResponse() => create();
+  factory MsgRemoveKYCAddressResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MsgRemoveKYCAddressResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  MsgRemoveKYCAddressResponse clone() => MsgRemoveKYCAddressResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  MsgRemoveKYCAddressResponse copyWith(void Function(MsgRemoveKYCAddressResponse) updates) => super.copyWith((message) => updates(message as MsgRemoveKYCAddressResponse)) as MsgRemoveKYCAddressResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static MsgRemoveKYCAddressResponse create() => MsgRemoveKYCAddressResponse._();
+  MsgRemoveKYCAddressResponse createEmptyInstance() => create();
+  static $pb.PbList<MsgRemoveKYCAddressResponse> createRepeated() => $pb.PbList<MsgRemoveKYCAddressResponse>();
+  @$core.pragma('dart2js:noInline')
+  static MsgRemoveKYCAddressResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MsgRemoveKYCAddressResponse>(create);
+  static MsgRemoveKYCAddressResponse? _defaultInstance;
 }
 
