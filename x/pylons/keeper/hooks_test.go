@@ -87,10 +87,12 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 	delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages)
 	address := map[string]sdk.Coin{}
 	if delegatorsRewards != nil {
+		// looping through delegators to get their old balance
 		for addr, amt := range delegatorsRewards {
 			bal := suite.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(addr), types.PylonsCoinDenom)
 			address[addr] = bal.Add(amt[0])
 		}
+		// sending rewards to delegators
 		k.SendRewards(ctx, delegatorsRewards)
 		for addr, amt := range address {
 			new := suite.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(addr), types.PylonsCoinDenom)
