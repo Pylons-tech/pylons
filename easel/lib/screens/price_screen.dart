@@ -19,6 +19,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import '../generated/locale_keys.g.dart';
 import '../widgets/easel_price_input_field.dart';
 
 class PriceScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   final _formKey = GlobalKey<FormState>();
-  var repository = GetIt.I.get<Repository>();
+  Repository repository = GetIt.I.get<Repository>();
   NFT? nft;
 
   final ValueNotifier<String> _royaltiesFieldError = ValueNotifier("");
@@ -45,7 +46,7 @@ class _PriceScreenState extends State<PriceScreen> {
 
   @override
   void initState() {
-    nft = repository.getCacheDynamicType(key: nftKey);
+    nft = repository.getCacheDynamicType(key: nftKey) as NFT;
     repository.logUserJourney(screenName: AnalyticsScreenEvents.priceScreen);
     super.initState();
   }
@@ -109,7 +110,7 @@ class _PriceScreenState extends State<PriceScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "is_this_free".tr(),
+                        LocaleKeys.is_this_free.tr(),
                         style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
                       ),
                       SizedBox(
@@ -129,7 +130,7 @@ class _PriceScreenState extends State<PriceScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                "yes".tr(),
+                                LocaleKeys.yes.tr(),
                                 style: TextStyle(
                                   color: provider.isFreeDrop == FreeDrop.yes ? EaselAppTheme.kWhite : EaselAppTheme.kBlack,
                                 ),
@@ -153,7 +154,7 @@ class _PriceScreenState extends State<PriceScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                "no".tr(),
+                                LocaleKeys.no.tr(),
                                 style: TextStyle(
                                   color: provider.isFreeDrop == FreeDrop.no ? EaselAppTheme.kWhite : EaselAppTheme.kBlack,
                                 ),
@@ -177,11 +178,11 @@ class _PriceScreenState extends State<PriceScreen> {
                                     controller: provider.priceController,
                                     validator: (value) {
                                       if (value!.isEmpty) {
-                                        _priceFieldError.value = "enter_price".tr();
+                                        _priceFieldError.value = LocaleKeys.enter_price.tr();
                                         return;
                                       }
                                       if (double.parse(value.replaceAll(",", "")) < kMinValue) {
-                                        _priceFieldError.value = "${"minimum_is".tr()} $kMinValue";
+                                        _priceFieldError.value = "${LocaleKeys.minimum_is.tr()} $kMinValue";
                                         return;
                                       }
                                       _priceFieldError.value = '';
@@ -206,14 +207,14 @@ class _PriceScreenState extends State<PriceScreen> {
                                         );
                                       }),
                                   Text(
-                                    "network_fee_10".tr(),
+                                    LocaleKeys.network_fee_10.tr(),
                                     style: TextStyle(color: EaselAppTheme.kLightPurple, fontSize: 14.sp, fontWeight: FontWeight.w800),
                                   ),
                                 ],
                               ),
                             VerticalSpace(20.h),
                             EaselTextField(
-                              label: "royalties".tr(),
+                              label: LocaleKeys.royalties.tr(),
                               hint: kRoyaltyHintText,
                               keyboardType: TextInputType.number,
                               inputFormatters: [
@@ -226,11 +227,11 @@ class _PriceScreenState extends State<PriceScreen> {
                               controller: provider.royaltyController,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  _royaltiesFieldError.value = "enter_royalty_in_percentage".tr();
+                                  _royaltiesFieldError.value = LocaleKeys.enter_royalty_in_percentage.tr();
                                   return;
                                 }
                                 if (int.parse(value) > kMaxRoyalty) {
-                                  _royaltiesFieldError.value = "${"allowed_royalty_is_between".tr()} $kMinRoyalty-$kMaxRoyalty %";
+                                  _royaltiesFieldError.value = "${LocaleKeys.allowed_royalty_is_between.tr()} $kMinRoyalty-$kMaxRoyalty %";
                                   return;
                                 }
                                 _royaltiesFieldError.value = '';
@@ -256,14 +257,14 @@ class _PriceScreenState extends State<PriceScreen> {
                               },
                             ),
                             Text(
-                              "${"royalty_note".tr()} “$kMinRoyalty”.",
+                              "${LocaleKeys.royalty_note.tr()} “$kMinRoyalty”.",
                               style: TextStyle(color: EaselAppTheme.kLightPurple, fontWeight: FontWeight.w800, fontSize: 14.sp),
                             ),
                             VerticalSpace(20.h),
                             EaselTextField(
                               key: ValueKey(provider.selectedDenom.name),
-                              label: "editions".tr(),
-                              hint: "how_many_copies".tr(),
+                              label: LocaleKeys.editions.tr(),
+                              hint: LocaleKeys.how_many_copies.tr(),
                               keyboardType: TextInputType.number,
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly,
@@ -275,15 +276,15 @@ class _PriceScreenState extends State<PriceScreen> {
                               controller: provider.noOfEditionController,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  _noOfEditionsFieldError.value = "enter_number_editions".tr();
+                                  _noOfEditionsFieldError.value = LocaleKeys.enter_number_editions.tr();
                                   return;
                                 }
                                 if (int.parse(value.replaceAll(",", "")) < kMinEditionValue) {
-                                  _noOfEditionsFieldError.value = "${"minimum_is".tr()} $kMinEditionValue";
+                                  _noOfEditionsFieldError.value = "${LocaleKeys.minimum_is.tr()} $kMinEditionValue";
                                   return;
                                 }
                                 if (int.parse(value.replaceAll(",", "")) > kMaxEdition) {
-                                  _noOfEditionsFieldError.value = "${"maximum_is".tr()} $kMaxEdition";
+                                  _noOfEditionsFieldError.value = "${LocaleKeys.maximum_is.tr()} $kMaxEdition";
                                   return;
                                 }
                                 _noOfEditionsFieldError.value = '';
@@ -309,7 +310,7 @@ class _PriceScreenState extends State<PriceScreen> {
                               },
                             ),
                             Text(
-                              "${NumberFormat.decimalPattern().format(kMaxEdition)} ${"maximum".tr()}",
+                              "${NumberFormat.decimalPattern().format(kMaxEdition)} ${LocaleKeys.maximum.tr()}",
                               style: TextStyle(color: EaselAppTheme.kLightPurple, fontSize: 14.sp, fontWeight: FontWeight.w800),
                             ),
                           ],
@@ -326,13 +327,13 @@ class _PriceScreenState extends State<PriceScreen> {
                         ),
                       VerticalSpace(20.h),
                       ClippedButton(
-                        title: "continue".tr(),
+                        title: LocaleKeys.continue_key.tr(),
                         bgColor: provider.isFreeDrop != FreeDrop.unselected ? EaselAppTheme.kBlue : EaselAppTheme.kPurple03,
                         textColor: EaselAppTheme.kWhite,
                         onPressed: () async {
                           if (provider.isFreeDrop != FreeDrop.unselected) {
                             FocusScope.of(context).unfocus();
-                            validateAndUpdatePrice(true);
+                            validateAndUpdatePrice(moveNextPage: true);
                           }
                         },
                         cuttingHeight: 15.h,
@@ -350,10 +351,10 @@ class _PriceScreenState extends State<PriceScreen> {
                               return;
                             }
                             FocusScope.of(context).unfocus();
-                            validateAndUpdatePrice(false);
+                            validateAndUpdatePrice(moveNextPage: false);
                           },
                           child: Text(
-                            "save_as_draft".tr(),
+                            LocaleKeys.save_as_draft.tr(),
                             style: TextStyle(color: EaselAppTheme.kLightGreyText, fontSize: 14.sp, fontWeight: FontWeight.w700),
                           ),
                         ),
@@ -370,7 +371,7 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 
-  void validateAndUpdatePrice(bool moveNextPage) async {
+  Future<void> validateAndUpdatePrice({required bool moveNextPage}) async {
     final navigator = Navigator.of(context);
     final HomeViewModel homeViewModel = context.read<HomeViewModel>();
 

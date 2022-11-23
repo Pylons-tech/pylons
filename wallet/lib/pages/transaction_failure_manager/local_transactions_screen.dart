@@ -15,6 +15,8 @@ import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 class LocalTransactionsScreen extends StatefulWidget {
   const LocalTransactionsScreen({Key? key}) : super(key: key);
 
@@ -95,7 +97,7 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
 
   String getFormattedPrice(LocalTransactionModel txModel) {
     if (txModel.transactionPrice == "0") {
-      return "free".tr();
+      return LocaleKeys.free.tr();
     }
     return "${txModel.transactionPrice}  ${txModel.transactionCurrency}";
   }

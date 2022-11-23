@@ -5,9 +5,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
@@ -21,9 +24,8 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
 
-  await FirebaseAppCheck.instance.activate(
-    webRecaptchaSiteKey: 'recaptcha-v3-site-key',
-  );
+  await initializeAppCheck();
+
   await dotenv.load(fileName: "env/.prod_env");
 
   await di.init();
@@ -36,7 +38,16 @@ Future<void> main() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     runApp(
       EasyLocalization(
-        supportedLocales: const [Locale('en'), Locale('ru'), Locale('id'), Locale('de'), Locale('ko'), Locale('ja'), Locale('es'), Locale('vi')],
+        supportedLocales: const [
+          Locale('en'),
+          Locale('ru'),
+          Locale('id'),
+          Locale('de'),
+          Locale('ko'),
+          Locale('ja'),
+          Locale('es'),
+          Locale('vi'),
+        ],
         path: 'i18n',
         fallbackLocale: const Locale('en'),
         useOnlyLangCode: true,
@@ -44,6 +55,25 @@ Future<void> main() async {
       ),
     );
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
+}
+
+Future<void> initializeAppCheck() async {
+  await FirebaseAppCheck.instance.activate(
+    webRecaptchaSiteKey: 'recaptcha-v3-site-key',
+    androidProvider: AndroidProvider.safetyNet
+  );
+  // FirebaseAppCheck when enforced would block incoming requests from Android and iOS in debug mode.
+  // This kDebugMode check gets a android debug token from FirebaseAppCheck which can then be added on the Firebase console
+  // iOS debug token from FirebaseAppCheck automatically get without method channel when run on debug mode which can then be added on the Firebase console
+  // So that the application can be allowed to access to Firebase AppCheck token in debug mode.
+  if (kDebugMode && Platform.isAndroid) {
+    try {
+      const MethodChannel methodChannel = MethodChannel(kGetFirebaseAppCheckTokenMethodChannelKey);
+      await methodChannel.invokeMethod(kGetFirebaseAppCheckDebugTokenKey);
+    } catch (e) {
+      e.toString().show();
+    }
+  }
 }
 
 class MyHttpOverrides extends HttpOverrides {

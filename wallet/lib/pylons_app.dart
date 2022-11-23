@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flappy/flappy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -27,8 +28,8 @@ import 'package:pylons_wallet/pages/home/wallet_screen/widgets/transaction_detai
 import 'package:pylons_wallet/pages/presenting_onboard_page/presenting_onboard_page.dart';
 import 'package:pylons_wallet/pages/presenting_onboard_page/screens/create_wallet_screen.dart';
 import 'package:pylons_wallet/pages/presenting_onboard_page/screens/restore_wallet_screen.dart';
+import 'package:pylons_wallet/pages/routing_page/splash_screen.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_screen.dart';
-import 'package:pylons_wallet/pages/routing_page/routing_page.dart';
 import 'package:pylons_wallet/pages/routing_page/update_app.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/screens/payment_screen/payment_screen.dart';
@@ -42,6 +43,7 @@ import 'package:pylons_wallet/pages/settings/settings_screen.dart';
 import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
 import 'package:pylons_wallet/pages/transaction_failure_manager/local_transaction_detail_screen.dart';
 import 'package:pylons_wallet/pages/transaction_failure_manager/local_transactions_screen.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
@@ -52,6 +54,7 @@ import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.da
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
+import 'generated/locale_keys.g.dart';
 import 'model/transaction_failure_model.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey();
@@ -78,92 +81,106 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      minTextAdapt: true,
-      builder: (_, __) => ChangeNotifierProvider.value(
-          value: sl<UserInfoProvider>(),
-          builder: (context, value) {
-            return MaterialApp(
-              // key: UniqueKey(),
-              navigatorKey: navigatorKey,
-              debugShowCheckedModeBanner: false,
-              localizationsDelegates: context.localizationDelegates,
-              supportedLocales: context.supportedLocales,
-              locale: context.locale,
-              title: "Pylons Wallet",
-              theme: PylonsAppTheme().buildAppTheme(),
-              initialRoute: '/',
-              routes: {
-                '/': (context) => const RoutingPage(),
-                RouteUtil.ROUTE_HOME: (context) => const HomeScreen(),
-                RouteUtil.ROUTE_APP_UPDATE: (context) => const UpdateApp(),
-                RouteUtil.ROUTE_SETTINGS: (context) => const SettingScreen(),
-                RouteUtil.ROUTE_LEGAL: (context) => const LegalScreen(),
-                RouteUtil.ROUTE_RECOVERY: (context) => const RecoveryScreen(),
-                RouteUtil.ROUTE_GENERAL: (context) => const GeneralScreen(),
-                RouteUtil.ROUTE_SECURITY: (context) => const SecurityScreen(),
-                RouteUtil.ROUTE_PAYMENT: (context) => const PaymentScreen(),
-                RouteUtil.ROUTE_PRACTICE_TEST: (context) => const PracticeTest(),
-                RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE: (context) => const ViewRecoveryScreen(),
-                RouteUtil.ROUTE_TRANSACTION_HISTORY: (context) => const TransactionHistoryScreen(),
-                RouteUtil.ROUTE_ONBOARDING: (context) => const PresentingOnboardPage(),
-                RouteUtil.ROUTE_CREATE_WALLET: (context) => const CreateWalletScreen(),
-                RouteUtil.ROUTE_RESTORE_WALLET: (context) => const RestoreWalletScreen(),
-                RouteUtil.ROUTE_ADD_PYLON: (context) => const AddPylonScreen(),
-                RouteUtil.ROUTE_TRANSACTION_DETAIL: (context) => const TransactionDetailsScreen(),
-                RouteUtil.ROUTE_MESSAGE: (context) => const MessagesScreen(),
-                RouteUtil.ROUTE_PDF_FULL_SCREEN: (context) => const PdfViewerFullScreen(),
-                RouteUtil.ROUTE_FAILURE: (context) => const LocalTransactionsScreen(),
-                RouteUtil.ROUTE_LOCAL_TRX_DETAILS: (context) => const LocalTransactionDetailScreen(),
-                RouteUtil.ROUTE_OWNER_VIEW: (context) {
-                  if (ModalRoute.of(context) == null) {
-                    return const SizedBox();
-                  }
-
-                  if (ModalRoute.of(context)?.settings.arguments == null) {
-                    return const SizedBox();
-                  }
-
-                  if (ModalRoute.of(context)?.settings.arguments is NFT) {
-                    final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
-
-                    return OwnerView(
-                      key: ValueKey(nft),
-                      nft: nft,
-                    );
-                  }
-
+    return FlappyFeedback(
+      appName: 'Pylons',
+      receiverEmails: const ['jawad@pylons.tech'],
+      child: ScreenUtilInit(
+        minTextAdapt: true,
+        builder: (_, __) => MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(
+              value: sl<UserInfoProvider>(),
+            ),
+            Provider(
+              create: (context) => sl<AccountProvider>(),
+            ),
+            Provider(
+              create: (context) => sl<RemoteNotificationsProvider>(),
+            ),
+          ],
+          child: MaterialApp(
+            navigatorKey: navigatorKey,
+            debugShowCheckedModeBanner: false,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            title: "Pylons Wallet",
+            theme: PylonsAppTheme().buildAppTheme(),
+            initialRoute: '/',
+            routes: {
+              '/': (context) => const SplashScreen(),
+              RouteUtil.ROUTE_HOME: (context) => const HomeScreen(),
+              RouteUtil.ROUTE_APP_UPDATE: (context) => const UpdateApp(),
+              RouteUtil.ROUTE_SETTINGS: (context) => const SettingScreen(),
+              RouteUtil.ROUTE_LEGAL: (context) => const LegalScreen(),
+              RouteUtil.ROUTE_RECOVERY: (context) => const RecoveryScreen(),
+              RouteUtil.ROUTE_GENERAL: (context) => const GeneralScreen(),
+              RouteUtil.ROUTE_SECURITY: (context) => const SecurityScreen(),
+              RouteUtil.ROUTE_PAYMENT: (context) => const PaymentScreen(),
+              RouteUtil.ROUTE_PRACTICE_TEST: (context) => const PracticeTest(),
+              RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE: (context) => const ViewRecoveryScreen(),
+              RouteUtil.ROUTE_TRANSACTION_HISTORY: (context) => const TransactionHistoryScreen(),
+              RouteUtil.ROUTE_ONBOARDING: (context) => const PresentingOnboardPage(),
+              RouteUtil.ROUTE_CREATE_WALLET: (context) => const CreateWalletScreen(),
+              RouteUtil.ROUTE_RESTORE_WALLET: (context) => const RestoreWalletScreen(),
+              RouteUtil.ROUTE_ADD_PYLON: (context) => const AddPylonScreen(),
+              RouteUtil.ROUTE_TRANSACTION_DETAIL: (context) => const TransactionDetailsScreen(),
+              RouteUtil.ROUTE_MESSAGE: (context) => const MessagesScreen(),
+              RouteUtil.ROUTE_PDF_FULL_SCREEN: (context) => const PdfViewerFullScreen(),
+              RouteUtil.ROUTE_FAILURE: (context) => const LocalTransactionsScreen(),
+              RouteUtil.ROUTE_LOCAL_TRX_DETAILS: (context) => const LocalTransactionDetailScreen(),
+              RouteUtil.ROUTE_OWNER_VIEW: (context) {
+                if (ModalRoute.of(context) == null) {
                   return const SizedBox();
-                },
-                RouteUtil.ROUTE_PURCHASE_VIEW: (context) {
-                  if (ModalRoute.of(context) == null) {
-                    return const SizedBox();
-                  }
+                }
 
-                  if (ModalRoute.of(context)?.settings.arguments == null) {
-                    return const SizedBox();
-                  }
-
-                  if (ModalRoute.of(context)?.settings.arguments is NFT) {
-                    final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
-
-                    return PurchaseItemScreen(
-                      key: ValueKey(nft),
-                      nft: nft,
-                    );
-                  }
-
+                if (ModalRoute.of(context)?.settings.arguments == null) {
                   return const SizedBox();
-                },
+                }
+
+                if (ModalRoute.of(context)?.settings.arguments is NFT) {
+                  final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
+
+                  return OwnerView(
+                    key: ValueKey(nft),
+                    nft: nft,
+                  );
+                }
+
+                return const SizedBox();
               },
-              builder: (context, widget) {
-                return MediaQuery(
+              RouteUtil.ROUTE_PURCHASE_VIEW: (context) {
+                if (ModalRoute.of(context) == null) {
+                  return const SizedBox();
+                }
+
+                if (ModalRoute.of(context)?.settings.arguments == null) {
+                  return const SizedBox();
+                }
+
+                if (ModalRoute.of(context)?.settings.arguments is NFT) {
+                  final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
+
+                  return PurchaseItemScreen(
+                    key: ValueKey(nft),
+                    nft: nft,
+                  );
+                }
+
+                return const SizedBox();
+              },
+            },
+            builder: (context, widget) {
+              return Material(
+                child: MediaQuery(
                   data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                   child: widget ?? Container(),
-                );
-              },
-            );
-          }),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 
@@ -188,7 +205,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
           break;
         case PurchaseStatus.error:
           if (purchaseDetails.error!.message.contains(kItemAlreadyOwned)) {
-            "please_try_again_later".tr().show();
+            LocaleKeys.please_try_again_later.tr().show();
             return;
           }
           registerFailure(purchaseDetails);
@@ -212,23 +229,28 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
   }
 
   Future<void> registerFailure(PurchaseDetails purchaseDetails) async {
-    final walletStore = GetIt.I.get<WalletsStore>();
+    final wallet = sl<AccountProvider>().accountPublicInfo;
+
+    if (wallet == null) {
+      return;
+    }
 
     if (purchaseDetails is GooglePlayPurchaseDetails) {
       final price = getInAppPrice(purchaseDetails.productID);
-      final creator = walletStore.getWallets().value.last.publicAddress;
+      final creator = wallet.publicAddress;
 
       final GoogleInAppPurchaseModel googleInAppPurchaseModel = GoogleInAppPurchaseModel(
-          productID: purchaseDetails.productID,
-          purchaseToken: purchaseDetails.verificationData.serverVerificationData,
-          receiptData: jsonDecode(purchaseDetails.verificationData.localVerificationData) as Map,
-          signature: purchaseDetails.billingClientPurchase.signature,
-          creator: creator);
+        productID: purchaseDetails.productID,
+        purchaseToken: purchaseDetails.verificationData.serverVerificationData,
+        receiptData: jsonDecode(purchaseDetails.verificationData.localVerificationData) as Map,
+        signature: purchaseDetails.billingClientPurchase.signature,
+        creator: creator,
+      );
 
       final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
         transactionTypeEnum: TransactionTypeEnum.GoogleInAppCoinsRequest,
         transactionData: jsonEncode(googleInAppPurchaseModel.toJsonLocalRetry()),
-        transactionDescription: 'buying_pylon_points'.tr(),
+        transactionDescription: LocaleKeys.buying_pylon_points.tr(),
         transactionCurrency: kStripeUSD_ABR,
         transactionPrice: price,
       );
@@ -237,7 +259,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
 
     if (purchaseDetails is AppStorePurchaseDetails) {
       final price = getInAppPrice(purchaseDetails.productID);
-      final creator = walletStore.getWallets().value.last.publicAddress;
+      final creator = wallet.publicAddress;
 
       final AppleInAppPurchaseModel appleInAppPurchaseModel = AppleInAppPurchaseModel(
         productID: purchaseDetails.productID,
@@ -249,7 +271,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
       final LocalTransactionModel localTransactionModel = createInitialLocalTransactionModel(
           transactionTypeEnum: TransactionTypeEnum.AppleInAppCoinsRequest,
           transactionData: jsonEncode(appleInAppPurchaseModel.toJson()),
-          transactionDescription: 'buying_pylon_points'.tr(),
+          transactionDescription: LocaleKeys.buying_pylon_points.tr(),
           transactionCurrency: kStripeUSD_ABR,
           transactionPrice: price);
 
@@ -287,6 +309,12 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
   }
 
   Future handlerPurchaseEvent(PurchaseDetails purchaseDetails) async {
+    final wallet = sl<AccountProvider>().accountPublicInfo;
+
+    if (wallet == null) {
+      return;
+    }
+
     try {
       final loading = Loading();
       loading.showLoading();
@@ -297,7 +325,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
           await InAppPurchase.instance.completePurchase(purchaseDetails);
         }
         if (purchaseDetails is AppStorePurchaseDetails) {
-          final creator = walletStore.getWallets().value.last.publicAddress;
+          final creator = wallet.publicAddress;
 
           final AppleInAppPurchaseModel appleInAppPurchaseModel = AppleInAppPurchaseModel(
             productID: purchaseDetails.productID,
@@ -307,28 +335,29 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
           );
 
           final appleInAppPurchaseResponse = await walletStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
-
+          loading.dismiss();
           if (appleInAppPurchaseResponse.isLeft()) {
             appleInAppPurchaseResponse.swap().toOption().toNullable()!.message.show();
             return;
           }
 
           GetIt.I.get<HomeProvider>().buildAssetsList();
-          "purchase_successful".tr().show();
+          LocaleKeys.purchase_successful.tr().show();
         }
 
         return;
       }
 
       if (purchaseDetails is GooglePlayPurchaseDetails) {
-        final creator = walletStore.getWallets().value.last.publicAddress;
+        final creator = wallet.publicAddress;
 
         final GoogleInAppPurchaseModel googleInAppPurchaseModel = GoogleInAppPurchaseModel(
-            productID: purchaseDetails.productID,
-            purchaseToken: purchaseDetails.verificationData.serverVerificationData,
-            receiptData: jsonDecode(purchaseDetails.verificationData.localVerificationData) as Map,
-            signature: purchaseDetails.billingClientPurchase.signature,
-            creator: creator);
+          productID: purchaseDetails.productID,
+          purchaseToken: purchaseDetails.verificationData.serverVerificationData,
+          receiptData: jsonDecode(purchaseDetails.verificationData.localVerificationData) as Map,
+          signature: purchaseDetails.billingClientPurchase.signature,
+          creator: creator,
+        );
 
         final googleInAppPurchase = await walletStore.sendGoogleInAppPurchaseCoinsRequest(googleInAppPurchaseModel);
 
@@ -343,7 +372,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
         loading.dismiss();
 
         GetIt.I.get<HomeProvider>().buildAssetsList();
-        "purchase_successful".tr().show();
+        LocaleKeys.purchase_successful.tr().show();
       }
 
       if (purchaseDetails.pendingCompletePurchase) {
@@ -355,7 +384,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
   }
 
   Future setUpNotifications() async {
-    final remoteNotificationService = sl<RemoteNotificationsService>();
+    final remoteNotificationService = sl<RemoteNotificationsProvider>();
 
     await remoteNotificationService.getNotificationsPermission();
 

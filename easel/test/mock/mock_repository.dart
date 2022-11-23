@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:easel_flutter/easel_provider.dart';
-import 'package:easel_flutter/models/api_response.dart';
 import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/models/nft_format.dart';
 import 'package:easel_flutter/models/picked_file_model.dart';
 import 'package:easel_flutter/models/save_nft.dart';
+import 'package:easel_flutter/models/storage_response_model.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/utils/failure/failure.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
@@ -16,37 +16,31 @@ import 'mock_constants.dart';
 class MockRepositoryImp implements Repository {
   @override
   Future<String> autoGenerateCookbookId() {
-    // TODO: implement autoGenerateCookbookId
     throw UnimplementedError();
   }
 
   @override
   String autoGenerateEaselId() {
-    // TODO: implement autoGenerateEaselId
     throw UnimplementedError();
   }
 
   @override
-  deleteCacheDynamic({required String key}) {
-    // TODO: implement deleteCacheDynamic
+  void deleteCacheDynamic({required String key}) {
     throw UnimplementedError();
   }
 
   @override
   String deleteCacheString({required String key}) {
-    // TODO: implement deleteCacheString
     throw UnimplementedError();
   }
 
   @override
   Future<Either<Failure, bool>> deleteNft(int id) {
-    // TODO: implement deleteNft
     throw UnimplementedError();
   }
 
   @override
   String generateEaselLinkForShare({required String recipeId, required String cookbookId}) {
-    // TODO: implement generateEaselLinkForShare
     throw UnimplementedError();
   }
 
@@ -56,43 +50,37 @@ class MockRepositoryImp implements Repository {
   }
 
   @override
-  getCacheDynamicType({required String key}) {
+  NFT getCacheDynamicType({required String key}) {
     return MOCK_NFT;
   }
 
   @override
   String getCacheString({required String key}) {
-    // TODO: implement getCacheString
     throw UnimplementedError();
   }
 
   @override
   String getCookBookGeneratorUsername() {
-    // TODO: implement getCookBookGeneratorUsername
     throw UnimplementedError();
   }
 
   @override
   String? getCookbookId() {
-    // TODO: implement getCookbookId
     throw UnimplementedError();
   }
 
   @override
   String getExtension(String fileName) {
-    // TODO: implement getExtension
     throw UnimplementedError();
   }
 
   @override
   double getFileSizeInGB(int fileLength) {
-    // TODO: implement getFileSizeInGB
     throw UnimplementedError();
   }
 
   @override
   String getFileSizeString({required int fileLength, int precision = 2}) {
-    // TODO: implement getFileSizeString
     throw UnimplementedError();
   }
 
@@ -108,25 +96,21 @@ class MockRepositoryImp implements Repository {
 
   @override
   bool getOnBoardingComplete() {
-    // TODO: implement getOnBoardingComplete
     throw UnimplementedError();
   }
 
   @override
   Future<Either<Failure, List<Recipe>>> getRecipesBasedOnCookBookId({required String cookBookId}) {
-    // TODO: implement getRecipesBasedOnCookBookId
     throw UnimplementedError();
   }
 
   @override
   Future<Either<Failure, void>> launchMyUrl({required String url}) {
-    // TODO: implement launchMyUrl
     throw UnimplementedError();
   }
 
   @override
   Future<Either<Failure, PickedFileModel>> pickFile(NftFormat format) {
-    // TODO: implement pickFile
     throw UnimplementedError();
   }
 
@@ -137,35 +121,33 @@ class MockRepositoryImp implements Repository {
 
   @override
   Future<bool> saveCookBookGeneratorUsername(String username) {
-    // TODO: implement saveCookBookGeneratorUsername
     throw UnimplementedError();
   }
 
   @override
   Future<Either<Failure, int>> saveNft(NFT nft) {
-    // TODO: implement saveNft
     throw UnimplementedError();
   }
 
   @override
   Future<bool> saveOnBoardingComplete() {
-    // TODO: implement saveOnBoardingComplete
+    
     throw UnimplementedError();
   }
 
   @override
-  bool setCacheDynamicType({required String key, required value}) {
+  bool setCacheDynamicType({required String key, required dynamic value}) {
     return true;
   }
 
   @override
   void setCacheString({required String key, required String value}) {
-    // TODO: implement setCacheString
+    
   }
 
   @override
   Future<Either<Failure, bool>> updateNFTDialogShown({required int id}) {
-    // TODO: implement updateNFTDialogShown
+    
     throw UnimplementedError();
   }
 
@@ -180,8 +162,7 @@ class MockRepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, ApiResponse>> uploadFile({required File file, required OnUploadProgressCallback onUploadProgressCallback}) {
-    // TODO: implement uploadFile
+  Future<Either<Failure, StorageResponseModel>> uploadFile({required File file, required OnUploadProgressCallback onUploadProgressCallback}) {
     throw UnimplementedError();
   }
 

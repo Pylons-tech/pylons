@@ -18,6 +18,9 @@ abstract class RemoteConfigService {
 
   /// This method returns the ios app version in the remote config
   String getIOSAppVersion();
+
+  /// This method returns whether the app is in maintenance mode or not
+  bool getMaintenanceMode();
 }
 
 class RemoteConfigServiceImpl implements RemoteConfigService {
@@ -44,6 +47,8 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
   static String ibcTrace = "IBC_TRACE_URL";
   static String mongoUrl = "MONGO_URL";
   static String skus = "skus";
+
+  static String maintenanceMode = "MAINTENANCE_MODE";
 
   RemoteConfigServiceImpl(
       {required this.firebaseRemoteConfig,
@@ -93,6 +98,7 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
       chainId: dotenv.env['CHAIN_ID'],
       skus: defaultPylonsSKUs,
       mongoUrl: dotenv.env[mongoUrl] ?? "",
+      maintenanceMode: false,
     });
 
     firebaseRemoteConfig.setConfigSettings(RemoteConfigSettings(
@@ -118,5 +124,10 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
   @override
   String getIOSAppVersion() {
     return firebaseRemoteConfig.getString(iosVERSION);
+  }
+
+  @override
+  bool getMaintenanceMode() {
+    return firebaseRemoteConfig.getBool(maintenanceMode);
   }
 }

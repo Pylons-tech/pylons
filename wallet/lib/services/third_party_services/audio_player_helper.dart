@@ -4,6 +4,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 /// Abstract Class for providing audio player
 abstract class AudioPlayerHelper {
   /// This method is used to initialize the Audio player
@@ -52,7 +54,7 @@ class AudioPlayerHelperImpl implements AudioPlayerHelper {
       await audioPlayer.setUrl(url);
       return true;
     } catch (e) {
-      'audio_failed_to_load'.tr().show();
+      LocaleKeys.audio_failed_to_load.tr().show();
       return false;
     }
   }

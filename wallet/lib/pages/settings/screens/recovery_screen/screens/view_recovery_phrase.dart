@@ -7,13 +7,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+
+import '../../../../../generated/locale_keys.g.dart';
 
 TextStyle kRecoveryOptionsText = TextStyle(fontSize: 20.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w600);
 TextStyle kViewRecoveryHeadlineText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
@@ -86,7 +89,7 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
               ),
               SizedBox(height: 33.h),
               Text(
-                "recovery_phrase".tr(),
+                LocaleKeys.recovery_phrase.tr(),
                 style: kViewRecoveryHeadlineText,
               ),
               SizedBox(height: 20.h),
@@ -97,7 +100,7 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "biometric_id".tr(),
+                        LocaleKeys.biometric_id.tr(),
                         style: kRecoveryBiometricIdText,
                       ),
                       CupertinoSwitch(
@@ -127,7 +130,7 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
                 ),
                 SizedBox(height: 10.h),
                 Text(
-                  "biometric_reveal_phrase".tr(),
+                  LocaleKeys.biometric_reveal_phrase.tr(),
                   style: kRecoveryInfoText,
                 ),
                 SizedBox(height: 20.h),
@@ -138,7 +141,7 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
                 Row(
                   children: [
                     Text(
-                      "your_recovery_phrase".tr(),
+                      LocaleKeys.your_recovery_phrase.tr(),
                       style: kRecoveryOptionsText,
                     ),
                     IconButton(
@@ -148,7 +151,7 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
                       ),
                       onPressed: () {
                         Clipboard.setData(ClipboardData(text: mnemonicsNotifier.value.join(" "))).then((_) {
-                          "copied_to_clipboard".tr().show();
+                          LocaleKeys.copied_to_clipboard.tr().show();
                         });
                       },
                     ),
@@ -172,13 +175,13 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
                       onTap: () async {
                         onPressedUploadGoogleDrive();
                       },
-                      child: buildBackupButton(title: "back_up_to_google_drive".tr())),
+                      child: buildBackupButton(title: LocaleKeys.back_up_to_google_drive.tr())),
                 if (Platform.isIOS)
                   InkWell(
                     onTap: () {
                       onPressedUploadICloudDrive();
                     },
-                    child: buildBackupButton(title: "back_up_to_icloud".tr()),
+                    child: buildBackupButton(title: LocaleKeys.back_up_to_icloud.tr()),
                   ),
                 SizedBox(height: 30.h),
                 InkWell(
@@ -186,7 +189,7 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
                     Navigator.of(context).pushNamed(RouteUtil.ROUTE_PRACTICE_TEST);
                   },
                   child: Text(
-                    "practice_test".tr(),
+                    LocaleKeys.practice_test.tr(),
                     style: kRecoveryInfoText.copyWith(fontSize: 16.sp),
                     textAlign: TextAlign.center,
                   ),
@@ -213,16 +216,18 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
               color: AppColors.kBlue,
             ),
             Positioned(
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0,
-                child: Center(
-                    child: Text(
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              child: Center(
+                child: Text(
                   title,
                   style: const TextStyle(color: Colors.white),
                   textAlign: TextAlign.center,
-                )))
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -230,32 +235,47 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
   }
 
   Future onPressedUploadGoogleDrive() async {
+    final wallet = context.read<AccountProvider>().accountPublicInfo;
+
+    if (wallet == null) {
+      return;
+    }
     final Loading loading = Loading();
     loading.showLoading();
-    final wallets = GetIt.I.get<WalletsStore>().getWallets();
-    final response = await GetIt.I.get<Repository>().uploadMnemonicGoogleDrive(mnemonic: mnemonicsNotifier.value.join(" "), username: wallets.value.last.name);
+
+    final response = await GetIt.I.get<Repository>().uploadMnemonicGoogleDrive(
+          mnemonic: mnemonicsNotifier.value.join(" "),
+          username: wallet.name,
+        );
 
     loading.dismiss();
     if (response.isRight()) {
-      "uploaded_successful".tr().show();
+      LocaleKeys.uploaded_successful.tr().show();
       return;
     } else {
-      "upload_failed".tr().show();
+      LocaleKeys.upload_failed.tr().show();
     }
   }
 
   Future onPressedUploadICloudDrive() async {
+    final wallet = context.read<AccountProvider>().accountPublicInfo;
+
+    if (wallet == null) {
+      return;
+    }
     final Loading loading = Loading();
     loading.showLoading();
-    final wallets = GetIt.I.get<WalletsStore>().getWallets();
-    final response = await GetIt.I.get<Repository>().uploadMnemonicICloud(mnemonic: mnemonicsNotifier.value.join(" "), username: wallets.value.last.name);
+    final response = await GetIt.I.get<Repository>().uploadMnemonicICloud(
+          mnemonic: mnemonicsNotifier.value.join(" "),
+          username: wallet.name,
+        );
 
     loading.dismiss();
     if (response.isRight()) {
-      "uploaded_successful".tr().show();
+      LocaleKeys.uploaded_successful.tr().show();
       return;
     } else {
-      "upload_failed".tr().show();
+      LocaleKeys.upload_failed.tr().show();
     }
   }
 }

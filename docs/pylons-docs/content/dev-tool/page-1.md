@@ -28,12 +28,6 @@ Run this command in the same directory as your Pylons directory:
 git clone https://github.com/Pylons-tech/dev-tool.git
 ```
 
-Within the Pylons directory run:
-
-```
-starport chain serve
-```
-
 If you haven't created an account on the test-net before, open a new terminal window and go to the pylons directory. Use the pylonsd commands to create a new account on the test-net. [See here for instructions.](https://github.com/Pylons-tech/pylons/blob/main/docs/Developer-CLI-Tutorial.md)
 
 Within the codebase of the dev-tool, open the developer folder and edit the `config.json` file. Add the account name that cookbooks/recipes will be created by and the home directory of the Pylons folder.

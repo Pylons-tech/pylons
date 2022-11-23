@@ -9,6 +9,8 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 
+import '../generated/locale_keys.g.dart';
+
 extension ScaffoldHelper on BuildContext? {
   void show({required String message}) {
     if (this == null) {
@@ -36,6 +38,10 @@ extension ConvertToUSD on String {
     }
     return '';
   }
+
+  String convertPylonsToUSD(String amount) {
+    return (double.parse(convertFromUCoin(amount)) * pyLonToUsdConstant).toString().truncateAfterDecimal(2);
+  }
 }
 
 extension ConvertFromU on String {
@@ -45,6 +51,10 @@ extension ConvertFromU on String {
         return (double.parse(item.amount.substring(0, item.amount.length - (length + 1))) / kBigIntBase).toString().truncateAfterDecimal(2);
     }
     return '';
+  }
+
+  String convertFromUCoin(String amount) {
+    return (double.parse(amount) / kBigIntBase).toString();
   }
 }
 
@@ -85,7 +95,7 @@ extension StringExtension on String {
     }
 
     if (length - indexOf(".") > maxLength) {
-      return substring(0, indexOf(".") + maxLength);
+      return substring(0, indexOf(".") + maxLength + 1);
     }
 
     return this;
@@ -116,7 +126,7 @@ extension NftSize on NFT {
 extension NoInternetConnectionHelper on Failure {
   void checkAndTakeAction({required ValueChanged<String>? onError}) {
     if (this is NoInternetFailure) {
-      "no_internet".tr().show();
+      LocaleKeys.no_internet.tr().show();
     }
   }
 }
@@ -216,7 +226,6 @@ extension ChangeDomain on String {
     return replaceAll(ipfsDomain, proxyIpfsDomain);
   }
 }
-
 
 extension VerifyErrorCode on String {
   bool ifDuplicateReceipt() {

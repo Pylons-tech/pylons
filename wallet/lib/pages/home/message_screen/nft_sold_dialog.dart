@@ -9,6 +9,8 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 import 'package:pylons_wallet/utils/route_util.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 13.sp);
 TextStyle _headingTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 30.sp);
 
@@ -102,7 +104,7 @@ class _NftSoldContentState extends State<NftSoldContent> {
                     height: 20.h,
                   ),
                   Text(
-                    "nft_sold".tr(),
+                    LocaleKeys.nft_sold.tr(),
                     style: _headingTextStyle,
                     textAlign: TextAlign.center,
                   ),
@@ -142,7 +144,7 @@ class _NftSoldContentState extends State<NftSoldContent> {
                               color: AppColors.kPayNowBackgroundGrey.withOpacity(0.2),
                               child: Center(
                                 child: Text(
-                                  "view_detail".tr(),
+                                  LocaleKeys.view_detail.tr(),
                                   textAlign: TextAlign.center,
                                   style: TextStyle(color: Colors.white, fontSize: 14.sp),
                                 ),
@@ -158,7 +160,7 @@ class _NftSoldContentState extends State<NftSoldContent> {
                             Navigator.of(context).pop();
                           },
                           child: Text(
-                            "close".tr(),
+                            LocaleKeys.close.tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.white, fontSize: 14.sp),
                           ),

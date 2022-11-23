@@ -7,6 +7,8 @@ import 'package:pylons_wallet/pages/home/home_provider.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../generated/locale_keys.g.dart';
+
 class NoEaselArtWork extends StatelessWidget {
   const NoEaselArtWork({Key? key}) : super(key: key);
 
@@ -26,7 +28,7 @@ class NoEaselArtWork extends StatelessWidget {
             horizontal: 20.w,
           ),
           child: Text(
-            "creation_list_empty_text".tr(),
+            LocaleKeys.creation_list_empty_text.tr(),
             style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700, color: AppColors.kBlue),
             textAlign: TextAlign.center,
           ),
@@ -35,7 +37,7 @@ class NoEaselArtWork extends StatelessWidget {
           height: 40.h,
         ),
         CustomPaintButton(
-            title: "open_easel".tr(),
+            title: LocaleKeys.open_easel.tr(),
             bgColor: AppColors.kBlue,
             width: 200.w,
             onPressed: () async {

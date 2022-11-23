@@ -4,18 +4,22 @@ class StorageResponseModel {
 
   StorageResponseModel({this.ok, this.value});
 
-  StorageResponseModel.fromJson(dynamic json) {
-    ok = json['ok'];
-    value = json['value'] != null ? Value.fromJson(json['value']) : null;
+  StorageResponseModel.fromJson(Map<String, dynamic> json) {
+    ok = json['ok'] as bool?;
+    value = json['value'] != null ? Value.fromJson(json['value'] as Map<String, dynamic>) : null;
   }
 
   Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
+    final map = <String, dynamic>{};
     map['ok'] = ok;
     if (value != null) {
       map['value'] = value?.toJson();
     }
     return map;
+  }
+
+  factory StorageResponseModel.initial() {
+    return StorageResponseModel();
   }
 }
 
@@ -36,17 +40,17 @@ class Value {
     this.pin,
   });
 
-  Value.fromJson(dynamic json) {
-    cid = json['cid'];
-    created = json['created'];
-    type = json['type'];
-    scope = json['scope'];
-    size = json['size'];
-    pin = json['pin'] != null ? Pin.fromJson(json['pin']) : null;
+  Value.fromJson(Map<String, dynamic> json) {
+    cid = json['cid'] as String?;
+    created = json['created'] as String?;
+    type = json['type'] as String?;
+    scope = json['scope'] as String?;
+    size = json['size'] as int?;
+    pin = json['pin'] != null ? Pin.fromJson(json['pin'] as Map<String, dynamic>) : null;
   }
 
   Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
+    final map = <String, dynamic>{};
     map['cid'] = cid;
     map['created'] = created;
     map['type'] = type;
@@ -67,15 +71,15 @@ class Pin {
 
   Pin({this.cid, this.created, this.size, this.status});
 
-  Pin.fromJson(dynamic json) {
-    cid = json['cid'];
-    created = json['created'];
-    size = json['size'];
-    status = json['status'];
+  Pin.fromJson(Map<String, dynamic> json) {
+    cid = json['cid'] as String?;
+    created = json['created'] as String?;
+    size = json['size'] as int?;
+    status = json['status'] as String?;
   }
 
   Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
+    final map = <String, dynamic>{};
     map['cid'] = cid;
     map['created'] = created;
     map['size'] = size;

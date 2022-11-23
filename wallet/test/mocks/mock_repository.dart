@@ -498,8 +498,7 @@ class MockRepository extends Repository {
 
   @override
   Future<Either<Failure, String>> createDynamicLinkForRecipeNftShare({required String address, required NFT nft}) {
-    // TODO: implement createDynamicLinkForUserInvite
-    throw UnimplementedError();
+    return Future.value(Right(MOCK_DYNAMIC_LINK));
   }
 
   @override
@@ -538,8 +537,7 @@ class MockRepository extends Repository {
 
   @override
   Future<Either<Failure, bool>> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice}) {
-    // TODO: implement logPurchaseItem
-    throw UnimplementedError();
+    return Future.value(const Right(true));
   }
 
   @override
@@ -551,5 +549,11 @@ class MockRepository extends Repository {
   @override
   Future<Either<Failure, void>> logUserJourney({required String screenName}) async {
     return const Right(null);
+  }
+
+  @override
+  Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId}) {
+    // TODO: implement getNftOwnershipHistoryByCookbookIdAndRecipeId
+    throw UnimplementedError();
   }
 }

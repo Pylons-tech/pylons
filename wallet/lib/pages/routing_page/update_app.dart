@@ -6,11 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_config_service/remote_config_service.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
@@ -18,6 +19,8 @@ import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/screen_responsive.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+import '../../generated/locale_keys.g.dart';
 
 TextStyle kUpdateAppSkipText = const TextStyle(fontWeight: FontWeight.w500, color: Colors.black54);
 
@@ -30,8 +33,8 @@ class UpdateApp extends StatefulWidget {
 
 class _UpdateAppState extends State<UpdateApp> {
   RemoteConfigService get remoteConfigService => GetIt.I.get();
+  late AccountProvider accountProvider;
 
-  WalletsStore get walletsStore => GetIt.I.get();
   Repository get repository => GetIt.I.get();
 
   ValueNotifier<String> versionInfoNotifier = ValueNotifier('');
@@ -39,6 +42,8 @@ class _UpdateAppState extends State<UpdateApp> {
   @override
   void initState() {
     super.initState();
+
+    accountProvider = context.read<AccountProvider>();
 
     repository.logUserJourney(screenName: AnalyticsScreenEvents.updateApp);
 
@@ -106,7 +111,7 @@ class _UpdateAppState extends State<UpdateApp> {
                 height: 40.h,
               ),
               Text(
-                "update_available_desc".tr(),
+                LocaleKeys.update_available_desc.tr(),
                 style: Theme.of(context).textTheme.bodyText2,
                 textAlign: TextAlign.center,
               )
@@ -144,7 +149,7 @@ class _UpdateAppState extends State<UpdateApp> {
                     child: IgnorePointer(
                       child: Center(
                         child: Text(
-                          "update_now".tr(),
+                          LocaleKeys.update_now.tr(),
                           textAlign: TextAlign.center,
                           style: const TextStyle(color: Colors.white),
                         ),
@@ -157,14 +162,15 @@ class _UpdateAppState extends State<UpdateApp> {
           right: 0,
           bottom: 20.h,
           child: InkWell(
-              onTap: () {
-                _loadWallets();
-              },
-              child: Text(
-                "skip".tr(),
-                textAlign: TextAlign.center,
-                style: kUpdateAppSkipText,
-              )),
+            onTap: () {
+              _loadWallets();
+            },
+            child: Text(
+              LocaleKeys.skip.tr(),
+              textAlign: TextAlign.center,
+              style: kUpdateAppSkipText,
+            ),
+          ),
         )
       ],
     );
@@ -181,42 +187,43 @@ class _UpdateAppState extends State<UpdateApp> {
           child: SvgPicture.asset(SVGUtil.UPDATE_NOW_BACKGROUND, fit: BoxFit.cover),
         ),
         Positioned(
-            child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 25.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 0.51.sw,
-                child: AspectRatio(
-                  aspectRatio: 1 / 1,
-                  child: Image.asset(ImageUtil.UPDATE_APP_ICON),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 25.w),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 0.51.sw,
+                  child: AspectRatio(
+                    aspectRatio: 1 / 1,
+                    child: Image.asset(ImageUtil.UPDATE_APP_ICON),
+                  ),
                 ),
-              ),
-              SizedBox(height: 35.h),
-              SvgPicture.asset(SVGUtil.UPDATE_AVAILABLE_CAPTION),
-              SizedBox(
-                height: 40.h,
-              ),
-              ValueListenableBuilder(
-                  valueListenable: versionInfoNotifier,
-                  builder: (_, __, ___) {
-                    return Text(
-                      '$__',
-                      style: TextStyle(color: Colors.black, fontSize: 16.sp),
-                    );
-                  }),
-              SizedBox(
-                height: 40.h,
-              ),
-              Text(
-                "update_available_desc".tr(),
-                style: Theme.of(context).textTheme.bodyText2,
-                textAlign: TextAlign.center,
-              )
-            ],
+                SizedBox(height: 35.h),
+                SvgPicture.asset(SVGUtil.UPDATE_AVAILABLE_CAPTION),
+                SizedBox(
+                  height: 40.h,
+                ),
+                ValueListenableBuilder(
+                    valueListenable: versionInfoNotifier,
+                    builder: (_, __, ___) {
+                      return Text(
+                        '$__',
+                        style: TextStyle(color: Colors.black, fontSize: 16.sp),
+                      );
+                    }),
+                SizedBox(
+                  height: 40.h,
+                ),
+                Text(
+                  LocaleKeys.update_available_desc.tr(),
+                  style: Theme.of(context).textTheme.bodyText2,
+                  textAlign: TextAlign.center,
+                )
+              ],
+            ),
           ),
-        )),
+        ),
         Positioned(
             height: 40.h,
             left: 0,
@@ -250,7 +257,7 @@ class _UpdateAppState extends State<UpdateApp> {
                         padding: const EdgeInsets.all(8.0),
                         child: Center(
                           child: Text(
-                            "update_now".tr(),
+                            LocaleKeys.update_now.tr(),
                             textAlign: TextAlign.center,
                             style: const TextStyle(color: Colors.white),
                           ),
@@ -264,17 +271,18 @@ class _UpdateAppState extends State<UpdateApp> {
           right: 0,
           bottom: 20.h,
           child: InkWell(
-              onTap: () {
-                _loadWallets();
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "skip".tr(),
-                  textAlign: TextAlign.center,
-                  style: kUpdateAppSkipText,
-                ),
-              )),
+            onTap: () {
+              _loadWallets();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                LocaleKeys.skip.tr(),
+                textAlign: TextAlign.center,
+                style: kUpdateAppSkipText,
+              ),
+            ),
+          ),
         )
       ],
     );
@@ -282,9 +290,9 @@ class _UpdateAppState extends State<UpdateApp> {
 
   Future<void> _loadWallets() async {
     await sl<LocalDataSource>().clearDataOnIosUnInstall();
-    await walletsStore.loadWallets();
+    await accountProvider.loadWallets();
 
-    if (walletsStore.getWallets().value.isEmpty) {
+    if (accountProvider.accountPublicInfo == null) {
       //Loads the last used wallet.
       Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
     } else {

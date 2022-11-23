@@ -75,7 +75,7 @@
   "congratulations": "Congratulations!",
   "successfully_bought_the_item": "You have successfully bought the item.\\nYour item is in your Collection.",
   "product_name": "Product Name",
-  "continue": "Continue",
+  "_continue": "Continue",
   "wallet_creation": "Wallet Creation",
   "create_new_wallet": "Create new Wallet",
   "proceed": "Proceed",
@@ -274,7 +274,7 @@
   "trade_not_found": "Trade not found",
   "pylon_username": "Pylons Username",
   "get_started": "Get Started",
-  "default": "Default",
+  "_default": "Default",
   "recovery_migration": "Migrate Account",
   "no_biometric": "Your device doesn't support biometrics.",
   "collapse": "Collapse",
@@ -358,5 +358,14 @@
   "transaction_date": "Transaction Date",
   "bought_nft": "Bought",
   "free": "Free",
-  "please_try_again_later": "Please Try again later"
+  "resolution": "Resolution",
+  "please_try_again_later": "Please try again later",
+  "checkout": "Checkout",
+  "artist": "Artist",
+  "set_lockscreen": "Set as lockscreen",
+  "ipfs_cid": "IPFS CID",
+  "available": "available",
+  "ea": "ea",
+  "maintenance_mode_message": "We are experiencing technical issues and have temporarily initiated maintenance mode for troubleshooting. Don't worry, your collection is safe. However, you cannot initiate on-chain transactions until we've resolved the problem and restored normal functionality.",
+  "maintenance_mode_header": "Maintenance Mode"
 }

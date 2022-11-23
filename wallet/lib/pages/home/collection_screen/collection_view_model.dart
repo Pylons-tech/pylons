@@ -7,13 +7,17 @@ import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_screen.dart';
 import 'package:pylons_wallet/services/third_party_services/thumbnail_helper.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
+import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
+
+import '../../../generated/locale_keys.g.dart';
 
 class CollectionViewModel extends ChangeNotifier {
   WalletsStore walletsStore;
 
   ThumbnailHelper thumbnailHelper;
+  AccountPublicInfo accountPublicInfoInfo;
 
-  CollectionViewModel({required this.walletsStore, required this.thumbnailHelper});
+  CollectionViewModel({required this.walletsStore, required this.thumbnailHelper, required this.accountPublicInfoInfo});
 
   List<NFT> assets = [];
 
@@ -46,7 +50,7 @@ class CollectionViewModel extends ChangeNotifier {
   String get colType => _colType;
 
   List<Collection> collectionType = [
-    Collection(title: "art".tr(), icon: "art", type: 'cookbook'),
+    Collection(title: LocaleKeys.art.tr(), icon: "art", type: 'cookbook'),
     Collection(title: "Easel", icon: "easel", type: 'app', app_name: "easel"),
   ];
 
@@ -74,12 +78,11 @@ class CollectionViewModel extends ChangeNotifier {
   Future loadPurchasesAndCreationsData() async {
     thumbnailsPath = (await getTemporaryDirectory()).path;
     try {
-      final wallet = walletsStore.getWallets().value.last;
       final assets = <NFT>[];
       final creations = <NFT>[];
-      final items = await walletsStore.getItemsByOwner(wallet.publicAddress);
-      final trades = await walletsStore.getTrades(wallet.publicAddress);
-      final cookbooks = await walletsStore.getCookbooksByCreator(wallet.publicAddress);
+      final items = await walletsStore.getItemsByOwner(accountPublicInfoInfo.publicAddress);
+      final trades = await walletsStore.getTrades(accountPublicInfoInfo.publicAddress);
+      final cookbooks = await walletsStore.getCookbooksByCreator(accountPublicInfoInfo.publicAddress);
 
       if (items.isNotEmpty) {
         await Future.wait(items.map((item) async {
@@ -112,9 +115,7 @@ class CollectionViewModel extends ChangeNotifier {
       purchases = assets;
       this.creations = creations;
       notifyListeners();
-    } on Exception catch (_) {
-
-    }
+    } on Exception catch (_) {}
   }
 
   void refreshScreen() {

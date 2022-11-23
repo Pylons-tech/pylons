@@ -65,8 +65,8 @@ class PylonsButton extends StatelessWidget {
 
 class PylonsButtonClipper extends CustomClipper<Path> {
   @override
-  getClip(Size size) {
-    Path path0 = Path();
+  Path getClip(Size size) {
+    final Path path0 = Path();
     path0.moveTo(0, 0);
     path0.lineTo(size.width * 0.8991000, 0);
     path0.lineTo(size.width, size.height * 0.3484000);

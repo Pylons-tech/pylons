@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:ui';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/share_helper.dart';
@@ -18,6 +17,7 @@ import 'package:pylons_wallet/utils/enums.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../generated/locale_keys.g.dart';
 import '../owner_purchase_view_common/button_state.dart';
 import '../owner_purchase_view_common/progress_bar_state.dart';
 
@@ -35,7 +35,13 @@ class OwnerViewViewModel extends ChangeNotifier {
     required this.audioPlayerHelper,
     required this.shareHelper,
     required this.videoPlayerHelper,
+    required this.accountPublicInfo, 
   });
+
+  TabFields? selectedField;
+  bool isOwnershipExpanded = false;
+  bool isHistoryExpanded = false;
+  bool isDetailsExpanded = false;
 
   String owner = '';
 
@@ -45,7 +51,7 @@ class OwnerViewViewModel extends ChangeNotifier {
 
   VideoPlayerController? videoPlayerController;
 
-  
+
 
   late StreamSubscription playerStateSubscription;
 
@@ -97,11 +103,10 @@ class OwnerViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  AccountPublicInfo? accountPublicInfo;
+  AccountPublicInfo accountPublicInfo;
 
   Future initOwnerName() async {
-    accountPublicInfo = walletsStore.getWallets().value.last;
-    owner = accountPublicInfo?.name ?? "";
+    owner = accountPublicInfo.name;
     notifyListeners();
   }
 
@@ -139,12 +144,54 @@ class OwnerViewViewModel extends ChangeNotifier {
     toHashtagList();
   }
 
+  void getWhichTabIsExpanded() {
+    isDetailsExpanded = false;
+    isHistoryExpanded = false;
+    isOwnershipExpanded = false;
+
+    switch (selectedField) {
+      case TabFields.ownership:
+        isOwnershipExpanded = true;
+        notifyListeners();
+        break;
+      case TabFields.history:
+        isHistoryExpanded = true;
+        notifyListeners();
+        break;
+      case TabFields.details:
+        isDetailsExpanded = true;
+        notifyListeners();
+        break;
+      default:
+        return;
+    }
+  }
+
+  void closeExpansion() {
+    isDetailsExpanded = false;
+    isHistoryExpanded = false;
+    isOwnershipExpanded = false;
+    notifyListeners();
+  }
+
+  void onChangeTab(TabFields tab) {
+    if (tab == selectedField && isExpansionOpen()) {
+      closeExpansion();
+      return;
+    }
+
+    selectedField = tab;
+    getWhichTabIsExpanded();
+  }
+
+  bool isExpansionOpen() => isDetailsExpanded || isHistoryExpanded || isOwnershipExpanded;
+
   Future<void> nftDataInit({required String recipeId, required String cookBookId, required String itemId}) async {
-    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
+    final walletAddress = accountPublicInfo.publicAddress;
     if (nft.type != NftType.TYPE_RECIPE) {
       final nftOwnershipHistory = await repository.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
       if (nftOwnershipHistory.isLeft()) {
-        "something_wrong".tr().show();
+        LocaleKeys.something_wrong.tr().show();
         return;
       }
       nftOwnershipHistoryList = nftOwnershipHistory.getOrElse(() => []);
@@ -156,7 +203,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     );
 
     if (likesCountEither.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
 
@@ -169,7 +216,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     );
 
     if (likedByMeEither.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
 
@@ -203,7 +250,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     isLiking = true;
     final bool temp = likedByMe;
 
-    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
+    final walletAddress = accountPublicInfo.publicAddress;
     final updateLikeStatusEither = await repository.updateLikeStatus(
       recipeId: recipeId,
       cookBookID: cookBookID,
@@ -211,7 +258,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     );
 
     if (updateLikeStatusEither.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
     likedByMe = !likedByMe;
@@ -396,12 +443,26 @@ class OwnerViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void pauseMedia() {
+    switch (nft.assetType) {
+      case AssetType.Audio:
+        pauseAudio();
+        break;
+      case AssetType.Video:
+        pauseVideo();
+        break;
+      default:
+        break;
+    }
+  }
+
   Future<void> shareNFTLink({required Size size}) async {
-    final address = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
+    pauseMedia();
+    final address = accountPublicInfo.publicAddress;
 
     final link = await repository.createDynamicLinkForRecipeNftShare(address: address, nft: nft);
     return link.fold((l) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return null;
     }, (r) {
       shareHelper.shareText(text: r, size: size);
@@ -413,9 +474,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     repository.logUserJourney(screenName: AnalyticsScreenEvents.ownerView);
   }
 
-
-
-  ValueNotifier<ProgressBarState> audioProgressNotifier  = ValueNotifier<ProgressBarState>(
+  ValueNotifier<ProgressBarState> audioProgressNotifier = ValueNotifier<ProgressBarState>(
     ProgressBarState(
       current: Duration.zero,
       buffered: Duration.zero,

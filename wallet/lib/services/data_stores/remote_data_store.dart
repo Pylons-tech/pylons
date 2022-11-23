@@ -41,6 +41,7 @@ import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
+import '../../generated/locale_keys.g.dart';
 import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
 
 abstract class RemoteDataStore {
@@ -124,6 +125,12 @@ abstract class RemoteDataStore {
   /// Output : [List][NftOwnershipHistory] will contain the list of NftOwnershipHistory data if success
   /// else will throw error
   Future<List<NftOwnershipHistory>> getNftOwnershipHistory({required String itemId, required String cookBookId});
+
+  /// This method is used to get history of nft owners
+  /// Input: [cookBookId] and [recipeId] of the NFT
+  /// Output : [List][NftOwnershipHistory] will contain the list of NftOwnershipHistory data if success
+  /// else will throw error
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId});
 
   /// This method is used to get views count of NFT
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
@@ -281,7 +288,6 @@ abstract class RemoteDataStore {
   /// Output: [bool] return true if successful
   Future<bool> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice});
 
-
   Future<bool> logAddToCart({
     required String recipeId,
     required String recipeName,
@@ -289,7 +295,6 @@ abstract class RemoteDataStore {
     required double purchasePrice,
     required String currency,
   });
-
 
   Future<void> logUserJourney({required String screenName});
 }
@@ -647,9 +652,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final transactionMap = jsonDecode(transactionResponse.body);
 
-    if (transactionMap == null) return transactionList;
+    if (transactionMap == null || transactionResponse.body.length == 2) return transactionList;
 
-    transactionList.addAll((transactionMap as List<dynamic>).map((e) => TransactionHistory.fromJson(e as Map<String, dynamic>)));
+    transactionList.addAll((transactionMap as List<dynamic>).map((e) => TransactionHistory.fromJson(e as Map<String, dynamic>)).toList());
 
     return transactionList;
   }
@@ -706,6 +711,32 @@ class RemoteDataStoreImp implements RemoteDataStore {
     return reverseOrder.toList();
   }
 
+  @override
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId}) async{
+    final baseApiUrl = getBaseEnv().baseApiUrl;
+    final uri = Uri.parse("$baseApiUrl/pylons/get_recipe_history/$cookBookId/$recipeId");
+
+    final List<NftOwnershipHistory> historyList = [];
+
+    final historyResponse = await httpClient.get(uri);
+
+    if (historyResponse.statusCode != API_SUCCESS_CODE) {
+      throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
+    }
+    final historyMap = jsonDecode(historyResponse.body);
+
+    if (historyMap == null) {
+      throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
+    }
+    historyMap[kHistory].map((e) {
+      final nft = NftOwnershipHistory.fromCookBookAndRecipeJson(e as Map<String, dynamic>);
+      historyList.add(nft);
+    }).toList();
+
+    final reverseOrder = historyList.reversed.toList();
+    return reverseOrder.toList();
+  }
+
   Future<String> _signAndBroadcast(GeneratedMessage message) async {
     final unsignedTransaction = UnsignedAlanTransaction(messages: [message]);
 
@@ -721,7 +752,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final accountsList = walletsResultEither.getOrElse(() => []);
     if (accountsList.isEmpty) {
-      throw TransactionSigningFailure(message: "no_profile_found".tr(), type: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
+      throw TransactionSigningFailure(message: LocaleKeys.no_profile_found.tr(), type: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
     }
     final info = accountsList.last;
     final walletLookupKey = createWalletLookUp(info);
@@ -730,7 +761,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     if (signedTransaction.isLeft()) {
       crashlyticsHelper.recordFatalError(error: signedTransaction.swap().toOption().toNullable()!.toString());
-      throw TransactionSigningFailure(message: "something_wrong_signing_transaction".tr(), type: HandlerFactory.ERR_SIG_TRANSACTION);
+      throw TransactionSigningFailure(
+        message: LocaleKeys.something_wrong_signing_transaction.tr(),
+        type: HandlerFactory.ERR_SIG_TRANSACTION,
+      );
     }
 
     final response = await customTransactionSigningGateway.broadcastTransaction(
@@ -773,7 +807,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.recipe;
     }
 
-    throw RecipeNotFoundFailure("recipe_not_found".tr());
+    throw RecipeNotFoundFailure(LocaleKeys.recipe_not_found.tr());
   }
 
   @override
@@ -787,7 +821,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     if (response.hasUsername()) {
       return response.username.value;
     }
-    throw RecipeNotFoundFailure("username_not_found".tr());
+    throw RecipeNotFoundFailure(LocaleKeys.username_not_found.tr());
   }
 
   @override
@@ -810,7 +844,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.cookbook;
     }
 
-    throw CookBookNotFoundFailure("cookbook_not_found".tr());
+    throw CookBookNotFoundFailure(LocaleKeys.cookbook_not_found.tr());
   }
 
   @override
@@ -825,7 +859,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.address.value;
     }
 
-    throw RecipeNotFoundFailure("username_not_found".tr());
+    throw RecipeNotFoundFailure(LocaleKeys.username_not_found.tr());
   }
 
   @override
@@ -852,7 +886,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.item;
     }
 
-    throw ItemNotFoundFailure("item_not_found".tr());
+    throw ItemNotFoundFailure(LocaleKeys.item_not_found.tr());
   }
 
   @override
@@ -876,7 +910,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.execution;
     }
 
-    throw ItemNotFoundFailure("execution_not_found".tr());
+    throw ItemNotFoundFailure(LocaleKeys.execution_not_found.tr());
   }
 
   @override
@@ -924,7 +958,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.trades;
     }
 
-    throw TradeNotFoundFailure("trade_not_found".tr());
+    throw TradeNotFoundFailure(LocaleKeys.trade_not_found.tr());
   }
 
   @override
@@ -962,7 +996,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.trade;
     }
 
-    throw TradeNotFoundFailure("trade_not_found".tr());
+    throw TradeNotFoundFailure(LocaleKeys.trade_not_found.tr());
   }
 
   bank.QueryClient getBankQueryClient() {
@@ -995,7 +1029,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final accountsList = walletsResultEither.getOrElse(() => []);
     if (accountsList.isEmpty) {
-      throw TransactionSigningFailure(message: "no_profile_found".tr(), type: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
+      throw TransactionSigningFailure(
+        message: LocaleKeys.no_profile_found.tr(),
+        type: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST,
+      );
     }
     final info = accountsList.last;
 
@@ -1149,7 +1186,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     );
     return true;
   }
-  
+
   @override
   Future<void> logUserJourney({required String screenName}) async {
     await analyticsHelper.logUserJourney(screenName: screenName);

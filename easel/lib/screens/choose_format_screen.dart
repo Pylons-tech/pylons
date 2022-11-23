@@ -16,6 +16,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 import 'package:provider/provider.dart';
 
+import '../generated/locale_keys.g.dart';
+
 class ChooseFormatScreen extends StatefulWidget {
   const ChooseFormatScreen({Key? key}) : super(key: key);
 
@@ -24,10 +26,10 @@ class ChooseFormatScreen extends StatefulWidget {
 }
 
 class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
-  ValueNotifier<String> errorText = ValueNotifier('err_pic_file'.tr());
+  ValueNotifier<String> errorText = ValueNotifier(LocaleKeys.err_pic_file.tr());
 
-  void proceedToNext({required PickedFileModel result, required EaselProvider easelProvider}) async {
-    EaselProvider provider = context.read();
+  Future<void> proceedToNext({required PickedFileModel result, required EaselProvider easelProvider}) async {
+    final EaselProvider provider = context.read();
     final navigator = Navigator.of(context);
 
     if (result.path.isEmpty) {
@@ -35,19 +37,19 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
     }
 
     if (!provider.nftFormat.extensions.contains(result.extension)) {
-      errorText.value = "un_supported_format".tr();
+      errorText.value = LocaleKeys.un_supported_format.tr();
       showErrorDialog();
       return;
     }
 
-    NftFormat? nftFormat = await provider.resolveNftFormat(context, result.extension);
+    final NftFormat? nftFormat = await provider.resolveNftFormat(context, result.extension);
 
     if (nftFormat == null) {
       return;
     }
 
     if (easelProvider.repository.getFileSizeInGB(File(result.path).lengthSync()) > kFileSizeLimitForAudiVideoInGB) {
-      errorText.value = 'size_error'.tr();
+      errorText.value = LocaleKeys.size_error.tr();
       showErrorDialog(type: nftFormat.format);
       return;
     }
@@ -78,7 +80,7 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
   @override
   void initState() {
     super.initState();
-    EaselProvider provider = context.read();
+    final EaselProvider provider = context.read();
     provider.setLog(screenName: AnalyticsScreenEvents.chooseFormatScreen);
   }
 
@@ -86,7 +88,7 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
   Widget build(BuildContext context) {
     final homeViewModel = context.watch<HomeViewModel>();
 
-    EaselProvider provider = context.read();
+    final EaselProvider provider = context.read();
     return Scaffold(
       body: Column(
         children: [
@@ -198,7 +200,7 @@ class _CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ColoredBox(
       color: EaselAppTheme.kBlack,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -208,7 +210,7 @@ class _CardWidget extends StatelessWidget {
               padding: EdgeInsets.only(top: topPadding, bottom: bottomPadding),
               child: GestureDetector(
                 onTap: () async {
-                  EaselProvider provider = context.read();
+                  final EaselProvider provider = context.read();
                   provider.setFormat(context, NftFormat.supportedFormats[typeIdx]);
                   final pickedFile = await provider.repository.pickFile(provider.nftFormat);
                   final result = pickedFile.getOrElse(() => PickedFileModel(path: "", fileName: "", extension: ""));
@@ -221,7 +223,6 @@ class _CardWidget extends StatelessWidget {
                   child: Stack(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SizedBox(
                             width: 10.0.w,
@@ -297,7 +298,7 @@ class _ErrorMessageWidget extends StatelessWidget {
   Padding buildTablet(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 0.17.sw),
-      child: Container(
+      child: DecoratedBox(
         decoration: const BoxDecoration(image: DecorationImage(image: svg_provider.Svg(SVGUtils.kSvgUploadErrorBG))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -319,7 +320,7 @@ class _ErrorMessageWidget extends StatelessWidget {
                 Text((nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio) ? "• ${(kFileSizeLimitForAudiVideoInGB * 1000).toStringAsFixed(0)}MB Limit" : "• ${kFileSizeLimitInGB}GB Limit",
                     style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
                 Text(kUploadHint2, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
-                Text("upload_hint_three".tr(), style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
+                Text(LocaleKeys.upload_hint_three.tr(), style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
               ],
             ),
             SizedBox(height: 30.h),
@@ -332,7 +333,7 @@ class _ErrorMessageWidget extends StatelessWidget {
                     Positioned.fill(child: SvgPicture.asset(SVGUtils.kSvgCloseButton, fit: BoxFit.cover)),
                     Center(
                       child: Text(
-                        "close".tr(),
+                          LocaleKeys.close.tr(),
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
                       ),
                     ),
@@ -352,7 +353,7 @@ class _ErrorMessageWidget extends StatelessWidget {
   Padding buildMobile(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 0.10.sw),
-      child: Container(
+      child: DecoratedBox(
         decoration: const BoxDecoration(image: DecorationImage(image: svg_provider.Svg(SVGUtils.kSvgUploadErrorBG))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -375,7 +376,7 @@ class _ErrorMessageWidget extends StatelessWidget {
                 Text((nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio) ? "• ${(kFileSizeLimitForAudiVideoInGB * 1000).toStringAsFixed(0)}MB Limit" : "• ${kFileSizeLimitInGB}GB Limit",
                     style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
                 Text(kUploadHint2, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
-                Text("upload_hint_three".tr(), style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
+                Text(LocaleKeys.upload_hint_three.tr(), style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
               ],
             ),
             SizedBox(height: 30.h),
@@ -388,7 +389,7 @@ class _ErrorMessageWidget extends StatelessWidget {
                     Positioned.fill(child: SvgPicture.asset(SVGUtils.kSvgCloseButton, fit: BoxFit.cover)),
                     Center(
                       child: Text(
-                        "close".tr(),
+                          LocaleKeys.close.tr(),
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 16.sp,
                               color: EaselAppTheme.kWhite,

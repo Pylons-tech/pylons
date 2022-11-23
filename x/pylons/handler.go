@@ -71,6 +71,14 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 			res, err := msgServer.SetUsername(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
+		case *types.MsgRegisterKYCAddress:
+			res, err := msgServer.RegisterKYCAddress(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *types.MsgRemoveKYCAddress:
+			res, err := msgServer.RemoveKYCAddress(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
 		case *types.MsgSendItems:
 			res, err := msgServer.SendItems(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)

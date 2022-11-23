@@ -2,12 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/pages/home/message_screen/message_tile.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
+
+import '../../../generated/locale_keys.g.dart';
 
 class MessagesScreen extends StatefulWidget {
   const MessagesScreen({Key? key}) : super(key: key);
@@ -70,7 +73,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
             Align(
               alignment: Alignment.topCenter,
               child: Text(
-                "messages".tr(),
+                LocaleKeys.messages.tr(),
                 style: kHeadingText,
               ),
             ),
@@ -116,9 +119,12 @@ class _MessagesScreenState extends State<MessagesScreen> {
   }
 
   Future getNotifications() async {
+    if (context.read<AccountProvider>().accountPublicInfo == null) {
+      return;
+    }
     final loader = Loading()..showLoading();
 
-    walletAddress = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
+    walletAddress = context.read<AccountProvider>().accountPublicInfo!.publicAddress;
 
     msgList = await callGetNotificationApi();
     loader.dismiss();
@@ -127,7 +133,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
       markNotificationAsRead();
       return;
     }
-    no_messages = "no_notifications_yet".tr();
+    no_messages = LocaleKeys.no_notifications_yet.tr();
   }
 
   Future getMoreNotifications() async {
@@ -143,7 +149,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   Future<List<NotificationMessage>> callGetNotificationApi() async {
     final response = await GetIt.I.get<Repository>().getAllNotificationsMessages(walletAddress: walletAddress, limit: _limit, offset: _offset);
     if (response.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return [];
     }
     final notificationMessageList = response.getOrElse(() => []);
@@ -172,7 +178,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   Future markNotificationAsRead() async {
     final response = await GetIt.I.get<Repository>().markNotificationAsRead(idsList: msgIdsList);
     if (response.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
     }
   }
 }

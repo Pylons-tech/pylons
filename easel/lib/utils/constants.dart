@@ -1,9 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 
+import '../generated/locale_keys.g.dart';
+
 List kTutorialItems = [
-  {'header': 'upload_your_ipfs'.tr(), 'description': 'pick_the_file'.tr(), 'image': 'assets/images/tutorial1.png'},
-  {'header': 'edit_your_nft'.tr(), 'description': 'enter_information_describing_your_nft'.tr(), 'image': 'assets/images/tutorial2.png'},
-  {'header': 'publish_your_nft'.tr(), 'header1': 'pylons_app'.tr(), 'description': 'once_you_enter_all'.tr(), 'image': 'assets/images/tutorial3.png'},
+  {'header': LocaleKeys.upload_your_ipfs.tr(), 'description': LocaleKeys.pick_the_file.tr(), 'image': 'assets/images/tutorial1.png'},
+  {'header': LocaleKeys.edit_your_nft.tr(), 'description': LocaleKeys.enter_information_describing_your_nft.tr(), 'image': 'assets/images/tutorial2.png'},
+  {'header': LocaleKeys.publish_your_nft.tr(), 'header1': LocaleKeys.pylons_app.tr(), 'description': LocaleKeys.once_you_enter_all.tr(), 'image': 'assets/images/tutorial3.png'},
 ];
 
 /// ```PNG assets
@@ -59,6 +61,7 @@ class SVGUtils {
   static const kGridIcon = 'assets/images/svg/grid.svg';
   static const kListIcon = 'assets/images/svg/list.svg';
   static const kOwnerVerifiedIcon = 'assets/images/svg/verified.svg';
+  static const kFileTypeImageIcon = 'assets/images/svg/file_type_image.svg';
 }
 
 const String kLoadingGif = 'assets/images/gifs/loading.gif';
@@ -169,7 +172,7 @@ const kRealWorld = "real_world";
 
 const kThumbnailFileName = "temp.jpg";
 
-final List<String> stepLabels = ["upload", "detail", "price   "];
+final List<String> stepLabels = ["upload", "detail", "price"];
 
 final List<String> imageAllowedExts = ["png", "jpg", "jpeg", "svg", "heif", "gif"];
 final List<String> audioAllowedExts = ['mp3', 'ogg', 'wav', 'aac'];
@@ -244,8 +247,17 @@ const kSaveAsDraftDescKey = "Save_as_draft_decs_key";
 const kSaveAsDraftPriceKey = "Save_as_draft_price_key";
 const kSaveAsDraftPublishKey = "Save_as_draft_publish_key";
 const kGridViewTileNFTKey = "GridViewTileNFTKey";
+const kGridViewTileMoreOptionKey = "gridview_tile_more_option_key";
 const kPublishTextKey = "publish";
 const kPublishButtonKey = "publish_button_key";
+const kPriceBannerKey = "price_banner_key";
+const kNFTMoreOptionButtonKey = "NFT_more_option_key";
+const kNFTMoreOptionBottomSheetKey = "NFT_more_option_bottomsheet_key";
+const kNFTTypeImageIconKey = "NFT_type_image_icon_key";
+const kNFTTypeVideoIconKey = "NFT_type_video_icon_key";
+const kNFTTypeAudioIconKey = "NFT_type_audio_icon_key";
+const kNFTTypePdfIconKey = "NFT_type_pdf_icon_key";
+const kNFTType3dModelIconKey = "NFT_type_3d_icon_key";
 
 class AnalyticsScreenEvents {
   static String tutorialScreen = "TutorialScreen";
