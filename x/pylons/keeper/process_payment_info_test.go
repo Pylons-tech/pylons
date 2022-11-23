@@ -166,7 +166,7 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 	productID := "recipe/Easel_CookBook_auto_cookbook_2022_06_14_114716_442/Easel_Recipe_auto_recipe_2022_06_14_114722_895"
 	purchaseId := "pi_3LFgx7EdpQgutKvr1cp5nqtP"
 	incPurchaseId := "pi_3LFgx7EdpQgutKvr1cp5"
-	processorName := "TestPayment"
+	processorName := "TestVerifyPaymentInfos"
 	signature := genTestPaymentInfoSignature(purchaseId, correctAddr, productID, amount, privKey)
 
 	types.DefaultPaymentProcessors = append(types.DefaultPaymentProcessors, types.PaymentProcessor{
@@ -174,7 +174,7 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 		PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
 		ProcessorPercentage:  types.DefaultProcessorPercentage,
 		ValidatorsPercentage: types.DefaultValidatorsPercentage,
-		Name:                 "TestPayment",
+		Name:                 "TestVerifyPaymentInfos",
 	})
 
 	test_processorName := "testprocessorName"
