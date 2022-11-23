@@ -49,7 +49,7 @@ var (
 
 	DefaultProcessorPercentage     = sdk.ZeroDec()
 	DefaultValidatorsPercentage, _ = sdk.NewDecFromStr("0.003")
-	DefaultPylonsIncPubKey         = "AAAAC3NzaC1lZDI1NTE5AAAAII5xbj49Ce3TSR5CYZ4Y0lXfVwd/eMpwdG8YjbiFL0H6"    // this is a production public key for stripe
+	DefaultPylonsIncPubKey         = "ivwLI5TQr3brHsF/l/PT4TbSpcOS7xX6IVGtzMvEr4M="                            // this is a production public key for stripe
 	DefaultTestPrivateKey          = ed25519.GenPrivKey()                                                      // for test environment, do not use in production!
 	DefaultTestPubKey              = base64.StdEncoding.EncodeToString(DefaultTestPrivateKey.PubKey().Bytes()) // for test environment, do not use in production
 	DefaultPaymentProcessors       = []PaymentProcessor{

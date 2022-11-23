@@ -1047,7 +1047,7 @@
         "paymentProcessors": [
           {
             "CoinDenom": "ustripeusd",
-            "pubKey": "AAAAC3NzaC1lZDI1NTE5AAAAII5xbj49Ce3TSR5CYZ4Y0lXfVwd/eMpwdG8YjbiFL0H6",
+            "pubKey": "ivwLI5TQr3brHsF/l/PT4TbSpcOS7xX6IVGtzMvEr4M=",
             "processorPercentage": "0.000000000000000000",
             "validatorsPercentage": "0.003000000000000000",
             "name": "Pylons_Inc"
