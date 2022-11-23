@@ -186,4 +186,3 @@ class CreatePaymentAccount extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   void clearSignature() => clearField(3);
 }
-
