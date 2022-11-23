@@ -84,7 +84,6 @@ class Recipe {
       cb = Cookbook.current!.getId();
       name = _forcedId!;
     }
-    print("fooo");
     var lowLevel = await PylonsWallet.instance.txExecuteRecipe(
         cookbookId: cb,
         recipeName: name,
