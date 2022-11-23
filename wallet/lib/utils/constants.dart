@@ -461,3 +461,6 @@ const String kShareNftButtonExpandedKey = "share_nft_expanded";
 
 const String kGetFirebaseAppCheckTokenMethodChannelKey = "getFirebaseAppCheckTokenMethodChannel";
 const String kGetFirebaseAppCheckDebugTokenKey = "getFirebaseAppCheckDebugToken";
+
+//for sale toggle feature toggle
+const bool kToggleFeatureEnabled = false;
