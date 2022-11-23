@@ -413,8 +413,10 @@ class ItemHistory extends $pb.GeneratedMessage {
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'cookbookId')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'from')
-    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'to')
-    ..aInt64(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt')
+    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'fromAddress')
+    ..aOS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'to')
+    ..aOS(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'toAddress')
+    ..aInt64(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt')
     ..hasRequiredFields = false
   ;
 
@@ -423,7 +425,9 @@ class ItemHistory extends $pb.GeneratedMessage {
     $core.String? cookbookId,
     $core.String? id,
     $core.String? from,
+    $core.String? fromAddress,
     $core.String? to,
+    $core.String? toAddress,
     $fixnum.Int64? createdAt,
   }) {
     final _result = create();
@@ -436,8 +440,14 @@ class ItemHistory extends $pb.GeneratedMessage {
     if (from != null) {
       _result.from = from;
     }
+    if (fromAddress != null) {
+      _result.fromAddress = fromAddress;
+    }
     if (to != null) {
       _result.to = to;
+    }
+    if (toAddress != null) {
+      _result.toAddress = toAddress;
     }
     if (createdAt != null) {
       _result.createdAt = createdAt;
@@ -493,21 +503,39 @@ class ItemHistory extends $pb.GeneratedMessage {
   void clearFrom() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get to => $_getSZ(3);
+  $core.String get fromAddress => $_getSZ(3);
   @$pb.TagNumber(5)
-  set to($core.String v) { $_setString(3, v); }
+  set fromAddress($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(5)
-  $core.bool hasTo() => $_has(3);
+  $core.bool hasFromAddress() => $_has(3);
   @$pb.TagNumber(5)
-  void clearTo() => clearField(5);
+  void clearFromAddress() => clearField(5);
 
   @$pb.TagNumber(6)
-  $fixnum.Int64 get createdAt => $_getI64(4);
+  $core.String get to => $_getSZ(4);
   @$pb.TagNumber(6)
-  set createdAt($fixnum.Int64 v) { $_setInt64(4, v); }
+  set to($core.String v) { $_setString(4, v); }
   @$pb.TagNumber(6)
-  $core.bool hasCreatedAt() => $_has(4);
+  $core.bool hasTo() => $_has(4);
   @$pb.TagNumber(6)
-  void clearCreatedAt() => clearField(6);
+  void clearTo() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get toAddress => $_getSZ(5);
+  @$pb.TagNumber(7)
+  set toAddress($core.String v) { $_setString(5, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasToAddress() => $_has(5);
+  @$pb.TagNumber(7)
+  void clearToAddress() => clearField(7);
+
+  @$pb.TagNumber(8)
+  $fixnum.Int64 get createdAt => $_getI64(6);
+  @$pb.TagNumber(8)
+  set createdAt($fixnum.Int64 v) { $_setInt64(6, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasCreatedAt() => $_has(6);
+  @$pb.TagNumber(8)
+  void clearCreatedAt() => clearField(8);
 }
 
