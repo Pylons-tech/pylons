@@ -157,6 +157,8 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 	ctx := suite.ctx
 	require := suite.Require()
 
+	privKey := ed25519.GenPrivKey()
+
 	correctAddr := "pylo1xn72u3jxlpqx8tfgmjf0xg970q36xensjngsme"
 	addr, _ := sdk.AccAddressFromBech32(correctAddr)
 	addrInc, _ := sdk.AccAddressFromBech32("tester incorrect")
@@ -166,6 +168,14 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 	incPurchaseId := "pi_3LFgx7EdpQgutKvr1cp5"
 	processorName := "TestPayment"
 	signature := genTestPaymentInfoSignature(purchaseId, correctAddr, productID, amount, privKey)
+
+	types.DefaultPaymentProcessors = append(types.DefaultPaymentProcessors, types.PaymentProcessor{
+		CoinDenom:            "ustripeusd",
+		PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
+		ProcessorPercentage:  types.DefaultProcessorPercentage,
+		ValidatorsPercentage: types.DefaultValidatorsPercentage,
+		Name:                 "TestPayment",
+	})
 
 	test_processorName := "testprocessorName"
 	for _, tc := range []struct {
