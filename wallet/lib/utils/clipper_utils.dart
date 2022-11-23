@@ -82,12 +82,6 @@ class BottomLeftCurvedCorner extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final path = Path();
-    // path.lineTo(0, size.height);
-    // path.lineTo(size.width - 10, size.height);
-    // path.lineTo(size.width, size.height - 10);
-    // path.lineTo(size.width, 0);
-    // path.lineTo(0, 0);
-    //
     path.lineTo(0, size.height-cuttingEdge);
     path.lineTo(cuttingEdge, size.height);
     path.lineTo(size.width, size.height);

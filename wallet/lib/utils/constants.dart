@@ -459,6 +459,9 @@ const String kShareNftButtonExpandedKey = "share_nft_expanded";
 const String kForSaleToggleWidgetKey = "for_sale_toggle_key";
 const String kNotForSaleToggleWidgetKey = "not_for_sale_toggle_key";
 const String kSaleStatusToggleButtonKey = "sale_status_toggle_button_key";
+const String kIntermediateToggleButtonKey = "intermediate_toggle_button_key";
+const String kForSaleBottomSheetKey = "for_sale_sale_bottom_sheet_key";
+const String kNotForSaleDialogKey = "not_for_sale_dialog_key";
 
 const String kGetFirebaseAppCheckTokenMethodChannelKey = "getFirebaseAppCheckTokenMethodChannel";
 const String kGetFirebaseAppCheckDebugTokenKey = "getFirebaseAppCheckDebugToken";

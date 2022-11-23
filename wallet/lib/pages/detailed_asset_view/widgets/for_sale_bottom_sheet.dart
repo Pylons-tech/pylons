@@ -64,6 +64,7 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
         return true;
       },
       child: Container(
+        key: const Key(kForSaleBottomSheetKey),
         padding: EdgeInsets.only(left: 18.w, right: 18.w, top: 10.h, bottom: 10.h + MediaQuery.of(context).viewInsets.bottom),
         child: Column(
           mainAxisSize: MainAxisSize.min,

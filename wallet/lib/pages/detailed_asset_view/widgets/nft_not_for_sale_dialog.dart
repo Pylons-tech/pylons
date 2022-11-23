@@ -1,8 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
+
 import '../../../generated/locale_keys.g.dart';
 import '../../../main_prod.dart';
 import '../../../utils/clipper_utils.dart';
@@ -14,7 +15,10 @@ class NFTNotForSaleDialog {
   final OwnerViewViewModel ownerViewViewModel;
   BuildContext buildContext;
 
-  NFTNotForSaleDialog({required this.buildContext, required this.ownerViewViewModel,});
+  NFTNotForSaleDialog({
+    required this.buildContext,
+    required this.ownerViewViewModel,
+  });
 
   void show() {
     showDialog(
@@ -40,7 +44,8 @@ class NFTNotForSaleDialog {
 
 class NFTForSaleConfirmationWidget extends StatefulWidget {
   final OwnerViewViewModel ownerViewViewModel;
-  const NFTForSaleConfirmationWidget({Key? key,required this.ownerViewViewModel}) : super(key: key);
+
+  const NFTForSaleConfirmationWidget({Key? key, required this.ownerViewViewModel}) : super(key: key);
 
   @override
   State<NFTForSaleConfirmationWidget> createState() => _NFTForSaleConfirmationWidgetState();
@@ -50,12 +55,13 @@ class _NFTForSaleConfirmationWidgetState extends State<NFTForSaleConfirmationWid
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: ()async{
+      onWillPop: () async {
         widget.ownerViewViewModel.onChangeStatusNotForSale();
         Navigator.pop(context);
         return false;
       },
       child: Container(
+        key: const Key(kNotForSaleDialogKey),
         color: Colors.black.withOpacity(0.7),
         height: 250.h,
         width: isTablet ? 200.w : 270.w,
@@ -66,8 +72,8 @@ class _NFTForSaleConfirmationWidgetState extends State<NFTForSaleConfirmationWid
               right: 0,
               top: 0,
               child: SizedBox(
-                height: 60,
-                width: 80,
+                height: 60.h,
+                width: 80.w,
                 child: ClipPath(
                   clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SW),
                   child: Container(
@@ -90,18 +96,26 @@ class _NFTForSaleConfirmationWidgetState extends State<NFTForSaleConfirmationWid
               top: 0,
               bottom: 0,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SizedBox(
                       height: 40.h,
                     ),
-                    Text(LocaleKeys.confirmation.tr(), textAlign: TextAlign.center, style: TextStyle(color: AppColors.kWhite,fontSize:18.sp,fontWeight: FontWeight.w700),),
+                    Text(
+                      LocaleKeys.confirmation.tr(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: AppColors.kWhite, fontSize: 18.sp, fontWeight: FontWeight.w700),
+                    ),
                     SizedBox(
                       height: 30.h,
                     ),
-                    Text(LocaleKeys.delist_confirmation_msg.tr(), textAlign: TextAlign.center, style: TextStyle(color: AppColors.kWhite,fontSize:15.sp,fontWeight: FontWeight.normal),),
+                    Text(
+                      LocaleKeys.delist_confirmation_msg.tr(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: AppColors.kWhite, fontSize: 15.sp, fontWeight: FontWeight.normal),
+                    ),
                     SizedBox(
                       height: 30.h,
                     ),
@@ -113,7 +127,9 @@ class _NFTForSaleConfirmationWidgetState extends State<NFTForSaleConfirmationWid
                         height: 40.h,
                         initialWidth: 40.w,
                         onSwipeComplete: () {
-                          widget.ownerViewViewModel.updateRecipeIsEnabled(context: context,);
+                          widget.ownerViewViewModel.updateRecipeIsEnabled(
+                            context: context,
+                          );
                         },
                       ),
                     ),

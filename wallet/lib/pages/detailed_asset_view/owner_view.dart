@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/for_sale_bottom_sheet.dart';
@@ -261,7 +262,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner),
+                        _title(
+                          nft: viewModel.nft,
+                          owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner,
+                        ),
                         SizedBox(
                           height: 18.h,
                         ),
@@ -271,8 +275,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             getPriceWidget(viewModel: viewModel),
                           ],
                         ),
-                        const SizedBox(
-                          height: 20,
+                        SizedBox(
+                          height: 20.h,
                         ),
                         getProgressWidget(),
                       ],
@@ -353,47 +357,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             Stack(
               key: const ValueKey(kOwnerViewBottomSheetKeyValue),
               children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: ClipPath(
-                    clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SW),
-                    child: Container(
-                      color: AppColors.kDarkRed,
-                      height: 50.h,
-                      width: 50.w,
-                      child: Center(
-                        child: IconButton(
-                          alignment: Alignment.topRight,
-                          padding: EdgeInsets.only(
-                            bottom: 8.h,
-                            left: 8.w,
-                          ),
-                          icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                          onPressed: () {
-                            viewModel.toChangeCollapse();
-                          },
-                          iconSize: 32.h,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: ClipPath(
-                      clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NE),
-                      child: Container(
-                        color: AppColors.kDarkRed,
-                        height: 30.h,
-                        width: 30.w,
-                      ),
-                    ),
-                  ),
-                ),
                 ClipPath(
-                  clipper: ExpandedViewClipper(),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                     child: Container(
@@ -403,7 +367,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator),
+                          _title(
+                            nft: viewModel.nft,
+                            owner: viewModel.nft.type == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator,
+                          ),
                           SizedBox(
                             height: 20.h,
                           ),
@@ -565,7 +532,31 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       ),
                     ),
                   ),
-                )
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: ClipPath(
+                    clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SW),
+                    child: Container(
+                      color: AppColors.kDarkRed,
+                      height: 50.h,
+                      width: 50.w,
+                      child: IconButton(
+                        alignment: Alignment.topRight,
+                        padding: EdgeInsets.only(
+                          bottom: 8.h,
+                          left: 8.w,
+                        ),
+                        icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                        onPressed: () {
+                          viewModel.toChangeCollapse();
+                        },
+                        iconSize: 32.h,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             )
           ]
@@ -578,12 +569,13 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 16.0),
+          padding: EdgeInsets.only(top: 16.h),
           child: GestureDetector(
-              onTap: () async {
-                await viewModel.updateLikeStatus(recipeId: viewModel.nft.recipeID, cookBookID: viewModel.nft.cookbookID);
-              },
-              child: viewModel.isLiking ? getLikingLoader() : getLikeIcon(likedByMe: viewModel.likedByMe)),
+            onTap: () async {
+              await viewModel.updateLikeStatus(recipeId: viewModel.nft.recipeID, cookBookID: viewModel.nft.cookbookID);
+            },
+            child: viewModel.isLiking ? getLikingLoader() : getLikeIcon(likedByMe: viewModel.likedByMe),
+          ),
         ),
         SizedBox(
           height: 2.8.h,
@@ -675,13 +667,15 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         }
       },
       child: SizedBox(
-        height: 30.h,
+        height: isTablet?40.h:30.h,
         width: 100.w,
         child: Stack(
           children: [
-            SvgPicture.asset(getNFTToggleIcon(viewModel: viewModel)),
+            SvgPicture.asset(getNFTToggleIcon(viewModel: viewModel),height:isTablet? 40.h:30.h,),
             if (viewModel.isNFTToggleIntermediateState)
-              const SizedBox()
+              const SizedBox(
+                key: Key(kIntermediateToggleButtonKey),
+              )
             else if (viewModel.nft.isEnabled)
               Row(
                 key: const Key(kForSaleToggleWidgetKey),
@@ -697,7 +691,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(right: 18.w),
+                    padding: EdgeInsets.only(top:isTablet?5.h:0,right: isTablet?24.w:16.w),
                     child: SizedBox(
                       height: 30.h,
                       width: 30.w,
@@ -714,7 +708,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 key: const Key(kNotForSaleToggleWidgetKey),
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 7.w),
+                    padding: EdgeInsets.only(left: isTablet?4.w:5.w,top:isTablet?5.h:0),
                     child: SizedBox(
                       height: 30.h,
                       width: 30.w,

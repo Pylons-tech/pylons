@@ -100,7 +100,7 @@ class _SwipeRightToSellButtonState extends State<SwipeRightToSellButton> {
                           color: (left > constraint.maxWidth * 0.3) ? AppColors.kWhite : widget.activeColor,
                           fontSize: 14.sp,
                           fontFamily: kUniversalFontFamily,
-                          fontWeight: widget.isEnabled?FontWeight.w700:FontWeight.normal,
+                          fontWeight: widget.isEnabled ? FontWeight.w700 : FontWeight.normal,
                         ),
                       ),
                     ),

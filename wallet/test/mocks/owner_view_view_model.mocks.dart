@@ -6,6 +6,7 @@
 import 'dart:async' as _i8;
 import 'dart:ui' as _i16;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' as _i9;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:pylons_wallet/model/nft.dart' as _i2;
@@ -349,6 +350,48 @@ class MockOwnerViewViewModel extends _i1.Mock
         Invocation.setter(
           #isNFTToggleIntermediateState,
           isNFTToggleIntermediateState,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i10.PaymentType get selectedPaymentType => (super.noSuchMethod(
+        Invocation.getter(#selectedPaymentType),
+        returnValue: _i10.PaymentType.credits,
+        returnValueForMissingStub: _i10.PaymentType.credits,
+      ) as _i10.PaymentType);
+  @override
+  set selectedPaymentType(_i10.PaymentType selectedPaymentType) => super.noSuchMethod(
+        Invocation.setter(
+          #selectedPaymentType,
+          selectedPaymentType,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  TextEditingController get noOfEditionsTEController => (super.noSuchMethod(
+        Invocation.getter(#noOfEditionsTEController),
+        returnValue: TextEditingController(),
+        returnValueForMissingStub: TextEditingController(),
+      ) as TextEditingController);
+  @override
+  set noOfEditionsTEController(TextEditingController noOfEditionsTEController) => super.noSuchMethod(
+        Invocation.setter(
+          #noOfEditionsTEController,
+          noOfEditionsTEController,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  TextEditingController get pricePerEditionTEController => (super.noSuchMethod(
+        Invocation.getter(#pricePerEditionTEController),
+        returnValue: TextEditingController(),
+        returnValueForMissingStub: TextEditingController(),
+      ) as TextEditingController);
+  @override
+  set pricePerEditionTEController(TextEditingController pricePerEditionTEController) => super.noSuchMethod(
+        Invocation.setter(
+          #pricePerEditionTEController,
+          pricePerEditionTEController,
         ),
         returnValueForMissingStub: null,
       );
