@@ -5,11 +5,14 @@
 library pylons_flutter_impl;
 
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:fixnum/fixnum.dart' as fixnum;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:pylons_sdk/src/core/error/exceptions.dart';
 import 'package:pylons_sdk/src/features/data/models/profile.dart';
 import 'package:pylons_sdk/src/features/ipc/ipc_constants.dart';
@@ -58,6 +61,9 @@ class PylonsWalletImpl implements PylonsWallet {
 
   Future<SDKIPCResponse> _dispatch<T>(String key, String data,
       {required bool requestResponse}) async {
+    // TODO: there obviously should not be a hard lock here, figure out wtf is actually up
+    const hardLockTime = 1000;
+    await Future.delayed(Duration(milliseconds: hardLockTime));
     final sdkIPCMessage = SDKIPCMessage(
         key, data, getHostBasedOnOS(Platform.isAndroid), requestResponse);
 

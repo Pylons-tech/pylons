@@ -73,21 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     if (kDebugMode) {
       print("initState");
+      WidgetsBinding.instance.addPostFrameCallback((_) { _bootstrap(); });
     }
-    Cookbook.load("appTestCookbook").then((value) {
-      print("go to check init");
-      _checkCharacter().then((value) async {
-        if (kDebugMode) {
-          print("character exists: ${character != null}");
-        }
-        if (character == null || curHp < 1) {
-          await _generateCharacter();
-          if (kDebugMode) {
-            print("after generate - character exists: ${character != null}");
-          }
-        }
-      });
-    });
   }
 
   @override
@@ -166,7 +153,23 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Future<void> _bootstrap() async {
+    await Cookbook.load("appTestCookbook");
+    print("go to check init");
+    await _checkCharacter();
+    if (kDebugMode) {
+      print("character exists: ${character != null}");
+    }
+    if (character == null || curHp < 1) {
+      await _generateCharacter();
+      if (kDebugMode) {
+        print("after generate - character exists: ${character != null}");
+      }
+    }
+  }
+
   Future<void> _checkCharacter() async {
+    print(StackTrace.current);
     final tlmDefault = showTopLevelMenu;
     setState(() {
       showTopLevelMenu = false;
@@ -402,7 +405,7 @@ class _MyHomePageState extends State<MyHomePage> {
         flavorText = "You need 5 shards to upgrade your sword";
       });
     } else {
-      final recipe = Recipe.let("RecipeTestAppPurchaseUpgradeSword");
+      final recipe = Recipe.let("RecipeTestAppUpgradeSword");
       await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
         throw Exception("purchase tx should not fail");
       });
