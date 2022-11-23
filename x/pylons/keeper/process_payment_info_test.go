@@ -162,10 +162,11 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 	addrInc, _ := sdk.AccAddressFromBech32("tester incorrect")
 	amount := sdk.NewIntFromUint64(10020060)
 	productID := "recipe/Easel_CookBook_auto_cookbook_2022_06_14_114716_442/Easel_Recipe_auto_recipe_2022_06_14_114722_895"
-	signature := "+f11IPGOtgMTpQou8V2anPSK9KCyQbi3UXFvocFDzmUKxcloXavWIzKIhIXg7pHwfRut62l1Jgo/J7a6uyusDQ=="
 	purchaseId := "pi_3LFgx7EdpQgutKvr1cp5nqtP"
 	incPurchaseId := "pi_3LFgx7EdpQgutKvr1cp5"
-	processorName := "Pylons_Inc"
+	processorName := "TestPayment"
+	signature := genTestPaymentInfoSignature(purchaseId, correctAddr, productID, amount, privKey)
+
 	test_processorName := "testprocessorName"
 	for _, tc := range []struct {
 		desc    string
