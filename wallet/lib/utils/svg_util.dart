@@ -24,6 +24,8 @@ class SVGUtil {
   static String SORT = "assets/images/icons/sort.svg";
   static String IMAGE_PICKER = "assets/images/icons/image_picker.svg";
   static String BANNER_IMAGE_EDIT = "assets/images/icons/banner_image_edit.svg";
+  static String DOWNLOAD_EASEL_TOOLTIP_BG = "assets/images/svg/download_easel_tooltip_bg.svg";
+  static String MENU_ICON = "assets/images/svg/menu_icon.svg";
 
   static String WALLET_AGORIC = "assets/images/icons/ico_agoric.svg";
   static String WALLET_JUNO = "assets/images/svg/juno.svg";
@@ -43,6 +45,8 @@ class SVGUtil {
   /// NFT Screen
   static String MY_CREATIONS = 'assets/images/svg/creations.svg';
   static String MY_PURCHASES = 'assets/images/svg/purchases.svg';
+  static String MY_FAVORITES = 'assets/images/svg/my_favorites.svg';
+  static String BELL_ICON = 'assets/images/svg/bell_icon.svg';
   static String COLLECTION_BACKGROUND = "assets/images/svg/collections_background.svg";
 
   /// Trade Receipt Dialog
@@ -90,6 +94,11 @@ class SVGUtil {
   static String TRANSACTION_SUCCESS = "assets/images/svg/transaction_success.svg";
   static String TRANSACTION_RETRY = "assets/images/svg/transaction_retry.svg";
   static String PYLONS_POINTS_ICON = "assets/images/svg/pylons_points_icon.svg";
+  static const kSvgNftFormatVideo = 'assets/images/svg/nft_format_video.svg';
+  static const kSvgNftFormatImage = 'assets/images/svg/nft_format_image.svg';
+  static const kSvgNftFormat3d = 'assets/images/svg/nft_format_3d.svg';
+  static const kSvgNftFormatAudio = 'assets/images/svg/nft_format_audio.svg';
+  static const kSvgNftFormatPDF = 'assets/images/svg/nft_format_pdf.svg';
   static String BOTTOM_RIGHT_CURVED_GREY_BG = "assets/images/svg/bottom_right_curved_grey_bg.svg";
   static String CURVED_CORNER_RED_BG = "assets/images/svg/curved_corner_red_bg.svg";
 }
