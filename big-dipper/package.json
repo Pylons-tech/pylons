@@ -38,7 +38,7 @@
     "js-sha256": "^0.9.0",
     "ledger-cosmos-js": "^2.1.8",
     "lodash": "^4.17.21",
-    "meteor-node-stubs": "^0.4.1",
+    "meteor-node-stubs": "^1.2.5",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.33",
     "numbro": "^2.3.2",
