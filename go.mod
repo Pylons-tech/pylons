@@ -32,7 +32,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 )
 
-require github.com/cosmos/gogoproto v1.4.2
+require github.com/cosmos/gogoproto v1.4.3
 
 require (
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
