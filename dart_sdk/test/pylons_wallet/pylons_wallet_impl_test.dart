@@ -21,7 +21,7 @@
 // import '../mocks/mock_constants.dart';
 // import '../mocks/mock_uni_link.dart';
 //
-// void main() {
+ void main() {
 //   goToInstallTest();
 //   goToLoginTest();
 //   getHostBasedOnOsTest();
@@ -41,7 +41,7 @@
 //   getExecutionByIdTest();
 //   getTradesTest();
 //   placeForSaleTest();
-// }
+ }
 //
 // void goToInstallTest() {
 //   test(
