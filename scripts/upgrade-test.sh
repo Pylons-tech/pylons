@@ -7,6 +7,7 @@ ROOT=$(pwd)
 DENOM=upylons
 SOFTWARE_UPGRADE_NAME=v1.1.0
 
+# underscore so that go tool will not take gocache into account
 mkdir -p _build/gocache
 export GOMODCACHE=$ROOT/_build/gocache
 

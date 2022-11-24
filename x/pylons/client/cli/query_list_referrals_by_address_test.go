@@ -17,12 +17,11 @@ func settingPylonsAccount(ctx client.Context, t *testing.T, net *network.Network
 	acc := util.GenerateAddressesInKeyring(ctx.Keyring, 2)
 	common := util.CommonArgs(acc[0].String(), net)
 
-	usernameReferral := "testReferralUsername"
 	usernameTokenReferral := "testUsernameToken"
 	types.UpdateAppCheckFlagTest(types.FlagTrue)
 
 	args := []string{}
-	args = append(args, usernameReferral, usernameTokenReferral, "")
+	args = append(args, usernameTokenReferral, "")
 	args = append(args, common...)
 
 	_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
@@ -35,7 +34,7 @@ func settingPylonsAccount(ctx client.Context, t *testing.T, net *network.Network
 	common = util.CommonArgs(acc[1].String(), net)
 
 	args = []string{}
-	args = append(args, username, usernameToken, referralAddress)
+	args = append(args, usernameToken, referralAddress)
 	args = append(args, common...)
 
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
@@ -55,7 +54,7 @@ func TestCmdListReferralsByAddress(t *testing.T) {
 	net := network.New(t)
 	ctx := net.Validators[0].ClientCtx
 
-	address, username, referral := settingPylonsAccount(ctx, t, net)
+	address, _, referral := settingPylonsAccount(ctx, t, net)
 
 	for _, tc := range []struct {
 		desc      string
@@ -67,14 +66,12 @@ func TestCmdListReferralsByAddress(t *testing.T) {
 		{
 			desc:      "Valid",
 			address:   address,
-			username:  username,
 			referral:  referral,
 			shouldErr: false,
 		},
 		{
 			desc:      "Invalid - referral address",
 			address:   address,
-			username:  username,
 			referral:  "Invalid",
 			shouldErr: true,
 		},
