@@ -496,22 +496,22 @@ abstract class Repository {
   Future<Either<Failure, void>> logUserJourney({required String screenName});
 
   /// This method will get you all the favorites from the DB
-  /// Output: This method will return the List of [FavoritesModel]
+  /// Output: This method will return the List of [FavoritesModel] or else will return [Failure]
   Future<Either<Failure, List<FavoritesModel>>> getAllFavorites();
 
   /// This method will add NFT in favorite
   /// Input: [FavoritesModel] This method will take favoritesModel as input and add it in the database
-  /// Output: This method will return the [int] if successfully added in the database
+  /// Output: This method will return the [int] if successfully added in the database or else will return [Failure]
   Future<Either<Failure, int>> insertNFTInFavorites(FavoritesModel favoritesModel);
 
   /// This method will remove NFT from favorite
   /// Input: [String] This method will take favoritesId as input and remove it from the database
-  /// Output: This method will return [bool] true if NFT has been removed
+  /// Output: This method will return [bool] true if NFT has been removed or else will return [Failure]
   Future<Either<Failure, bool>> deleteNFTFromFavorites(String favoritesId);
 
   /// This method will remove all the NFTs from favorites
   /// Input: This method will take no argument
-  /// Output: This method will return [bool] true if NFTs has been removed successfully
+  /// Output: This method will return [bool] true if NFTs has been removed successfully or else will return [Failure]
   Future<Either<Failure, bool>> deleteAllNFTFromFavorites();
 }
 

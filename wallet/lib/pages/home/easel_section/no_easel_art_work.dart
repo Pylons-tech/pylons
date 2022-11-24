@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
 import 'package:pylons_wallet/main_prod.dart';
-import 'package:pylons_wallet/pages/home/home_provider.dart';
+import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -18,14 +18,16 @@ class NoEaselArtWork extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<HomeProvider>();
+    final viewModel = context.watch<CollectionViewModel>();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25.w,),
+          padding: EdgeInsets.symmetric(
+            horizontal: 25.w,
+          ),
           child: Text(
             LocaleKeys.creation_list_empty_text.tr(),
             style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600, color: AppColors.kGreyColor),
@@ -34,26 +36,19 @@ class NoEaselArtWork extends StatelessWidget {
         ),
         const Spacer(),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25.w,),
-          child: FutureBuilder<Column>(
-            future: _getButtonForEasel(context: context),
-            builder: (context,snapshot){
-              return snapshot.data??const SizedBox();
-            },
+          padding: EdgeInsets.symmetric(
+            horizontal: 25.w,
           ),
+          child: _getButtonForEasel(viewModel: viewModel),
         ),
-        SizedBox(height: 50.h,),
+        SizedBox(
+          height: 50.h,
+        ),
       ],
     );
   }
 
-  Future<Column> _getButtonForEasel({required BuildContext context})async{
-    final isAndroidDevice = Theme.of(context).platform == TargetPlatform.android;
-
-    final easelAppInstallLink = isAndroidDevice ? kAndroidEaselInstallLink : kIOSEaselInstallLink;
-    final easelAppLink = isAndroidDevice ? kAndroidEaselLink : kIOSEaselLink;
-
-    final isInstalled = await canLaunchUrlString(easelAppLink);
+  Column _getButtonForEasel({required CollectionViewModel viewModel}) {
     return Column(
       children: [
         SizedBox(
@@ -68,14 +63,14 @@ class NoEaselArtWork extends StatelessWidget {
                 Center(
                   child: SvgPicture.asset(
                     SVGUtil.DOWNLOAD_EASEL_TOOLTIP_BG,
-                    width: isTablet?400.w:350.w,
+                    width: isTablet ? 400.w : 350.w,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0.h),
                   child: Text(
                     LocaleKeys.create_easel_free_nft.tr(),
-                    style: TextStyle(color: AppColors.kBlue , fontSize: 12.sp, fontWeight: FontWeight.w600),
+                    style: TextStyle(color: AppColors.kBlue, fontSize: 12.sp, fontWeight: FontWeight.w600),
                     textAlign: TextAlign.center,
                   ),
                 )
@@ -83,18 +78,21 @@ class NoEaselArtWork extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 3.h,),
+        SizedBox(
+          height: 3.h,
+        ),
         CustomPaintButton(
-            title: isInstalled?LocaleKeys.open_easel.tr():LocaleKeys.download_easel.tr(),
-            bgColor: AppColors.kBlue,
-            width: double.maxFinite,
-            onPressed: () async {
-              if (isInstalled) {
-                launchUrlString(easelAppLink);
-              } else {
-                launchUrlString(easelAppInstallLink);
-              }
-            }),
+          title: viewModel.isInstalled ? LocaleKeys.open_easel.tr() : LocaleKeys.download_easel.tr(),
+          bgColor: AppColors.kBlue,
+          width: double.maxFinite,
+          onPressed: () async {
+            if (viewModel.isInstalled) {
+              launchUrlString(viewModel.easelAppLink);
+            } else {
+              launchUrlString(viewModel.easelAppInstallLink);
+            }
+          },
+        ),
       ],
     );
   }

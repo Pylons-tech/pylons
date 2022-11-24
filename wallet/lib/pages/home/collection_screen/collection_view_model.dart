@@ -1,21 +1,25 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pylons_wallet/model/favorites.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_screen.dart';
 import 'package:pylons_wallet/services/third_party_services/thumbnail_helper.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/enums.dart';
-import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
+import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
+import 'package:pylons_wallet/utils/constants.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../components/loading.dart';
 import '../../../generated/locale_keys.g.dart';
 import '../../../pylons_app.dart';
 import '../../../services/repository/repository.dart';
+import '../../../utils/favorites_change_notifier.dart';
 import '../../../utils/route_util.dart';
 
 class CollectionViewModel extends ChangeNotifier {
@@ -24,8 +28,15 @@ class CollectionViewModel extends ChangeNotifier {
   ThumbnailHelper thumbnailHelper;
   AccountPublicInfo accountPublicInfoInfo;
   Repository repository;
+  FavoritesChangeNotifier favoritesChangeNotifier;
 
-  CollectionViewModel({required this.walletsStore, required this.thumbnailHelper, required this.accountPublicInfoInfo, required this.repository});
+  CollectionViewModel({
+    required this.walletsStore,
+    required this.thumbnailHelper,
+    required this.accountPublicInfoInfo,
+    required this.repository,
+    required this.favoritesChangeNotifier,
+  });
 
   List<NFT> assets = [];
 
@@ -34,9 +45,12 @@ class CollectionViewModel extends ChangeNotifier {
 
   List<NFT> creations = [];
   List<NFT> purchases = [];
-  List<NFT> favorites = [];
 
   String _colType = "art";
+
+  String easelAppLink = "";
+  String easelAppInstallLink = "";
+  bool isInstalled = false;
 
   String thumbnailsPath = "";
 
@@ -82,10 +96,10 @@ class CollectionViewModel extends ChangeNotifier {
     Timer(const Duration(milliseconds: 300), () async {
       loadPurchasesAndCreationsData();
     });
+    checkEaselIsDownload();
   }
 
   Future loadPurchasesAndCreationsData() async {
-    loadFavoritesData();
     thumbnailsPath = (await getTemporaryDirectory()).path;
     try {
       final assets = <NFT>[];
@@ -128,33 +142,11 @@ class CollectionViewModel extends ChangeNotifier {
     } on Exception catch (_) {}
   }
 
-  Future loadFavoritesData()async{
-    final response = await repository.getAllFavorites();
-
-    if(response.isRight()){
-      final List<FavoritesModel> favModels = response.getOrElse(() => []);
-      favorites.clear();
-      for(final FavoritesModel favoritesModel in favModels){
-        if(favoritesModel.type == NftType.TYPE_ITEM.name){
-          final item = await repository.getItem(cookBookId: favoritesModel.cookbookId,itemId: favoritesModel.id);
-          if(item.isRight()){
-            favorites.add(await NFT.fromItem(item.toOption().toNullable()!));
-          }
-        }else{
-          final item = await repository.getRecipe(cookBookId: favoritesModel.cookbookId,recipeId: favoritesModel.id);
-          if(item.isRight()){
-            favorites.add(NFT.fromRecipe(item.toOption().toNullable()!));
-          }
-        }
-      }
-    }
-  }
-
-  void shouldShowOwnerViewOrPurchaseViewForNFT({required NFT asset,required BuildContext context}) {
+  void shouldShowOwnerViewOrPurchaseViewForNFT({required NFT asset, required BuildContext context}) {
     if (asset.type == NftType.TYPE_RECIPE) {
       onRecipeClicked(asset);
     } else {
-      Navigator.of(context).pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: asset).then((_) => {walletsStore.setStateUpdatedFlag(flag: true)});
+      Navigator.of(context).pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: asset);
     }
   }
 
@@ -164,7 +156,7 @@ class CollectionViewModel extends ChangeNotifier {
     await asset.getOwnerAddress();
 
     loader.dismiss();
-    Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: asset).then((_) => {walletsStore.setStateUpdatedFlag(flag: true)});
+    Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: asset);
   }
 
   String getNFTIcon(AssetType assetType) {
@@ -184,6 +176,13 @@ class CollectionViewModel extends ChangeNotifier {
 
   void refreshScreen() {
     notifyListeners();
+  }
+
+  Future<void> checkEaselIsDownload()async{
+    final isAndroidDevice = Platform.isAndroid;
+    easelAppInstallLink = isAndroidDevice ? kAndroidEaselInstallLink : kIOSEaselInstallLink;
+    easelAppLink = isAndroidDevice ? kAndroidEaselLink : kIOSEaselLink;
+    isInstalled = await canLaunchUrlString(easelAppLink);
   }
 }
 

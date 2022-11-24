@@ -1902,6 +1902,37 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ) as _i8
               .Future<_i2.Either<_i9.Failure, List<_i23.NftOwnershipHistory>>>);
   @override
+  _i8.Future<_i2.Either<_i9.Failure, List<_i23.NftOwnershipHistory>>>
+      getNftOwnershipHistoryByCookbookIdAndRecipeId({
+    required String? cookBookId,
+    required String? recipeId,
+  }) =>
+          (super.noSuchMethod(
+            Invocation.method(
+              #getNftOwnershipHistoryByCookbookIdAndRecipeId,
+              [],
+              {
+                #cookBookId: cookBookId,
+                #recipeId: recipeId,
+              },
+            ),
+            returnValue: _i8.Future<
+                    _i2.Either<_i9.Failure,
+                        List<_i23.NftOwnershipHistory>>>.value(
+                _FakeEither_0<_i9.Failure, List<_i23.NftOwnershipHistory>>(
+              this,
+              Invocation.method(
+                #getNftOwnershipHistoryByCookbookIdAndRecipeId,
+                [],
+                {
+                  #cookBookId: cookBookId,
+                  #recipeId: recipeId,
+                },
+              ),
+            )),
+          ) as _i8
+              .Future<_i2.Either<_i9.Failure, List<_i23.NftOwnershipHistory>>>);
+  @override
   _i8.Future<_i2.Either<_i9.Failure, List<_i24.TransactionHistory>>>
       getTransactionHistory({required String? address}) => (super.noSuchMethod(
             Invocation.method(

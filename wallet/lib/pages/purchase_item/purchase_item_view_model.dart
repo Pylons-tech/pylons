@@ -25,6 +25,7 @@ import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../generated/locale_keys.g.dart';
+import '../../utils/favorites_change_notifier.dart';
 import '../owner_purchase_view_common/button_state.dart';
 import '../owner_purchase_view_common/progress_bar_state.dart';
 
@@ -36,7 +37,10 @@ class PurchaseItemViewModel extends ChangeNotifier {
     required this.repository,
     required this.shareHelper,
     required this.accountPublicInfo,
+    required this.favoritesChangeNotifier,
   });
+
+  final FavoritesChangeNotifier favoritesChangeNotifier;
 
   bool get isViewingFullNft => _isViewingFullNft;
 
@@ -165,7 +169,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
     showLoader.dismiss();
   }
 
-
   void getWhichTabIsExpanded() {
     isDetailsExpanded = false;
     isHistoryExpanded = false;
@@ -207,7 +210,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
   }
 
   bool isExpansionOpen() => isDetailsExpanded || isHistoryExpanded || isOwnershipExpanded;
-
 
   void initializePlayers(NFT nft) {
     switch (nft.assetType) {
@@ -296,7 +298,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
   Future<void> nftDataInit({required String recipeId, required String cookBookId, required String itemId}) async {
     final walletAddress = accountPublicInfo.publicAddress;
     if (nft.type == NftType.TYPE_RECIPE) {
-      final nftOwnershipHistory = await repository.getNftOwnershipHistoryByCookbookIdAndRecipeId(cookBookId: cookBookId,recipeId: recipeId);
+      final nftOwnershipHistory = await repository.getNftOwnershipHistoryByCookbookIdAndRecipeId(cookBookId: cookBookId, recipeId: recipeId);
       if (nftOwnershipHistory.isLeft()) {
         LocaleKeys.something_wrong.tr().show();
         return;
@@ -373,9 +375,17 @@ class PurchaseItemViewModel extends ChangeNotifier {
     if (temp && likesCount > 0) {
       likesCount = likesCount - 1;
       repository.deleteNFTFromFavorites(recipeId);
+      favoritesChangeNotifier.removeFromFavorites(recipeId: recipeId);
     } else {
       likesCount = likesCount + 1;
-      repository.insertNFTInFavorites(FavoritesModel(id: recipeId, cookbookId: cookBookID, type:NftType.TYPE_RECIPE.name, dateTime: DateTime.now().millisecondsSinceEpoch));
+      final favoritesModel = FavoritesModel(
+        id: recipeId,
+        cookbookId: cookBookID,
+        type: NftType.TYPE_RECIPE.name,
+        dateTime: DateTime.now().millisecondsSinceEpoch,
+      );
+      repository.insertNFTInFavorites(favoritesModel);
+      favoritesChangeNotifier.addToFavorites(favoritesModel: favoritesModel);
     }
   }
 

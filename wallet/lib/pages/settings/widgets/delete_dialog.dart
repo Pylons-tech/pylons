@@ -42,7 +42,6 @@ class DeleteDialog {
                   SizedBox(
                     height: 20.h,
                   ),
-
                   Align(
                     child: SvgPicture.asset(
                       SVGUtil.ALERTDIALOG,
@@ -50,17 +49,14 @@ class DeleteDialog {
                       fit: BoxFit.cover,
                     ),
                   ),
-
                   SizedBox(
                     height: 35.h,
                   ),
-
                   Text(
                     LocaleKeys.are_you_sure_you_want_to_delete_your_wallet.tr(),
                     textAlign: TextAlign.center,
                     style: kDeleteHeaderTextStyle,
                   ),
-
                   SizedBox(
                     height: 30.h,
                   ),
@@ -76,9 +72,7 @@ class DeleteDialog {
                             bgColor: AppColors.kBlue,
                             onPressed: () async {
                               final navigator = Navigator.of(context);
-
                               final selectedEnvResponse = GetIt.I.get<Repository>().getNetworkEnvironmentPreference();
-
                               if (selectedEnvResponse.isLeft()) {
                                 navigator.pop();
                                 return;
@@ -88,14 +82,11 @@ class DeleteDialog {
                                 navigator.pop();
                                 return;
                               }
-
                               final deleteResponse = await GetIt.I.get<WalletsStore>().deleteAccounts();
-
                               if (isDeletionNotSuccessful(deleteResponse: deleteResponse)) {
                                 navigator.pop();
                                 return;
                               }
-
                               await GetIt.I.get<Repository>().saveNetworkEnvironmentPreference(networkEnvironment: selectedEnvResponse.getOrElse(() => ''));
                               navigator.pushNamedAndRemoveUntil(RouteUtil.ROUTE_ONBOARDING, (route) => false);
                             },
@@ -110,7 +101,6 @@ class DeleteDialog {
                       ],
                     ),
                   ),
-
                   SizedBox(
                     height: 30.h,
                   ),
@@ -139,7 +129,11 @@ class DeleteDialog {
             child: Center(
               child: Text(
                 title.tr(),
-                style: TextStyle(color: bgColor == AppColors.kButtonColor ? AppColors.kBlue : AppColors.kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  color: bgColor == AppColors.kButtonColor ? AppColors.kBlue : AppColors.kWhite,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),

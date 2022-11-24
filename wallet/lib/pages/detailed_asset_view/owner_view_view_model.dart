@@ -20,6 +20,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../generated/locale_keys.g.dart';
 import '../../model/favorites.dart';
+import '../../utils/favorites_change_notifier.dart';
 import '../owner_purchase_view_common/button_state.dart';
 import '../owner_purchase_view_common/progress_bar_state.dart';
 
@@ -30,6 +31,7 @@ class OwnerViewViewModel extends ChangeNotifier {
   final AudioPlayerHelper audioPlayerHelper;
   final VideoPlayerHelper videoPlayerHelper;
   final ShareHelper shareHelper;
+  final FavoritesChangeNotifier favoritesChangeNotifier;
 
   OwnerViewViewModel({
     required this.repository,
@@ -38,6 +40,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     required this.shareHelper,
     required this.videoPlayerHelper,
     required this.accountPublicInfo,
+    required this.favoritesChangeNotifier
   });
 
   TabFields? selectedField;
@@ -266,9 +269,17 @@ class OwnerViewViewModel extends ChangeNotifier {
     if (temp && likesCount > 0) {
       likesCount = likesCount - 1;
       repository.deleteNFTFromFavorites(recipeId);
+      favoritesChangeNotifier.removeFromFavorites(recipeId: recipeId);
     } else {
       likesCount = likesCount + 1;
-      repository.insertNFTInFavorites(FavoritesModel(id: recipeId, cookbookId: cookBookID, type: NftType.TYPE_RECIPE.name, dateTime: DateTime.now().millisecondsSinceEpoch));
+      final favoriteModel = FavoritesModel(
+        id: recipeId,
+        cookbookId: cookBookID,
+        type: NftType.TYPE_RECIPE.name,
+        dateTime: DateTime.now().millisecondsSinceEpoch,
+      );
+      repository.insertNFTInFavorites(favoriteModel);
+      favoritesChangeNotifier.addToFavorites(favoritesModel: favoriteModel);
     }
   }
 
