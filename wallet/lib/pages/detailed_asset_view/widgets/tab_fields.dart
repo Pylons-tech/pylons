@@ -64,11 +64,11 @@ class _TabFieldState extends State<TabField> {
         return {
           LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
           LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}",
-          LocaleKeys.ipfs_cid.tr(): widget.nft.cid
+          LocaleKeys.ipfs_cid.tr(): widget.nft.cid,
         };
       case NftType.TYPE_ITEM:
         return {
-          LocaleKeys.recipe_id.tr(): widget.nft.recipeID
+          LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
         };
       case NftType.TYPE_TRADE:
         break;
@@ -77,7 +77,8 @@ class _TabFieldState extends State<TabField> {
     return {
       LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
       LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}",
-      LocaleKeys.ipfs_cid.tr(): widget.nft.cid};
+      LocaleKeys.ipfs_cid.tr(): widget.nft.cid,
+    };
   }
 
   @override
@@ -90,10 +91,11 @@ class _TabFieldState extends State<TabField> {
 
     final listDetails = nftDetail.entries
         .map(
-            (element) => _tabDetails(
-                field: element.key,
-                value: element.value,
-                customWidget: (element.key == LocaleKeys.recipe_id.tr() || element.key == LocaleKeys.ipfs_cid.tr()) && element.value.isNotEmpty ? _tabDetailsWithIcon(value: element.value) : null),
+          (element) => _tabDetails(
+            field: element.key,
+            value: element.value,
+            customWidget: (element.key == LocaleKeys.recipe_id.tr() || element.key == LocaleKeys.ipfs_cid.tr()) && element.value.isNotEmpty ? _tabDetailsWithIcon(value: element.value) : null,
+          ),
         )
         .toList();
 
@@ -264,7 +266,10 @@ class _TabFieldState extends State<TabField> {
             flex: 45,
             child: Text(
               value,
-              style: TextStyle(color: customColor != null ? AppColors.kPurple : AppColors.kGreyColor, fontSize: 9.sp),
+              style: TextStyle(
+                color: customColor != null ? AppColors.kTradeReceiptTextColor : AppColors.kGreyColor,
+                fontSize: 9.sp,
+              ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

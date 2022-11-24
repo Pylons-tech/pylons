@@ -22,7 +22,7 @@ class BuyNFTButton extends StatelessWidget {
 
   Widget getButtonContent(NFT nft, PurchaseItemViewModel viewModel) {
     final double btnHeight = 35.h;
-    final double btnWidth = isTablet ? 160.w : 200.w;
+    final double btnWidth = isTablet ? 172.w : 240.w;
     if (double.parse(nft.price) == 0) {
       return Container(
         height: 60.h,
@@ -68,7 +68,7 @@ class BuyNFTButton extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            flex: 4,
+            flex: 5,
             child: Stack(
               children: [
                 Align(

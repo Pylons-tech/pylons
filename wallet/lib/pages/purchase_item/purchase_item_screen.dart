@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
+
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -38,6 +39,7 @@ import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../generated/locale_keys.g.dart';
 import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
+import '../settings/screens/submit_feedback.dart';
 
 /// Sending NFT instead of viewmodel because the share plugin tends to rebuild this screen
 /// Which creates two instance of view model
@@ -169,10 +171,19 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
                       },
                       child: SvgPicture.asset(
                         SVGUtil.OWNER_BACK_ICON,
-                        height: 25.h,
+                        height: 20.h,
                       ),
                     ),
-                    trailing: const SizedBox(),
+                    trailing: GestureDetector(
+                      onTap: () {
+                        final SubmitFeedback submitFeedbackDialog = SubmitFeedback(context: context);
+                        submitFeedbackDialog.show();
+                      },
+                      child: SvgPicture.asset(
+                        SVGUtil.OWNER_REPORT,
+                        height: 20.h,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -311,7 +322,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       ),
                       Text(
                         viewModel.viewsCount.toString(),
-                        style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 11.sp,
+                          fontFamily: kUniversalFontFamily,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       SizedBox(
                         height: 5.h,
@@ -408,7 +424,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         ),
         Text(
           viewModel.likesCount.toString(),
-          style: TextStyle(color: Colors.white, fontSize: 10.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 10.sp,
+            fontFamily: kUniversalFontFamily,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ],
     );
@@ -441,48 +462,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     return Stack(
       key: const Key(kPurchaseItemBottomSheetKey),
       children: [
-        Align(
-          alignment: Alignment.topRight,
-          child: ClipPath(
-            clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SW),
-            child: Container(
-              color: AppColors.kDarkRed,
-              height: 50.h,
-              width: 50.w,
-              child: Center(
-                child: IconButton(
-                  key: const Key(kCloseBottomSheetKey),
-                  alignment: Alignment.topRight,
-                  padding: EdgeInsets.only(
-                    bottom: 8.h,
-                    left: 8.w,
-                  ),
-                  icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                  onPressed: () {
-                    viewModel.toChangeCollapse();
-                  },
-                  iconSize: 32.h,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ),
-        Positioned.fill(
-          child: Align(
-            alignment: Alignment.bottomLeft,
-            child: ClipPath(
-              clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NE),
-              child: Container(
-                color: AppColors.kDarkRed,
-                height: 30.h,
-                width: 30.w,
-              ),
-            ),
-          ),
-        ),
         ClipPath(
-          clipper: ExpandedViewClipper(),
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
             child: Container(
@@ -608,7 +588,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               ),
                               Text(
                                 viewModel.viewsCount.toString(),
-                                style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 11.sp,
+                                  fontFamily: kUniversalFontFamily,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                               SizedBox(
                                 height: 18.h,
@@ -684,7 +669,32 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
               ),
             ),
           ),
-        )
+        ),
+        Align(
+          alignment: Alignment.topRight,
+          child: ClipPath(
+            clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SW),
+            child: Container(
+              color: AppColors.kDarkRed,
+              height: 55.h,
+              width: 55.w,
+              child: IconButton(
+                key: const Key(kCloseBottomSheetKey),
+                alignment: Alignment.topRight,
+                padding: EdgeInsets.only(
+                  bottom: 8.h,
+                  left: 8.w,
+                ),
+                icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                onPressed: () {
+                  viewModel.toChangeCollapse();
+                },
+                iconSize: 32.h,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -699,7 +709,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             Flexible(
               child: Text(
                 nft.name,
-                style: TextStyle(color: Colors.white, fontSize: 18.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.sp,
+                  fontFamily: kUniversalFontFamily,
+                  fontWeight: FontWeight.w700,
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),

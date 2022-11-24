@@ -82,9 +82,7 @@ class NFT extends Equatable {
       final cookbook = await walletsStore.getCookbookById(cookbookID);
       ownerAddress = cookbook?.creator ?? "";
 
-      if (owner.isEmpty && type != NftType.TYPE_RECIPE) {
-        owner = await walletsStore.getAccountNameByAddress(ownerAddress);
-      }
+      owner = await walletsStore.getAccountNameByAddress(ownerAddress);
     }
     return ownerAddress;
   }
