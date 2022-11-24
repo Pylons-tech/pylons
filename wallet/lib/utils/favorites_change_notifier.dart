@@ -13,14 +13,7 @@ class FavoritesChangeNotifier extends ChangeNotifier{
   List<NFT> favorites = [];
 
   Future<void> onInit() async {
-    // final response = await repository.getAllFavorites();
-    // if (response.isRight()) {
-    //   final List<FavoritesModel> favModels = response.getOrElse(() => []);
-    //   favorites.clear();
-    //   for (final FavoritesModel favoritesModel in favModels) {
-    //     addToFavorites(favoritesModel: favoritesModel);
-    //   }
-    // }
+
   }
 
   Future<void> addToFavorites({required FavoritesModel favoritesModel})async{
