@@ -997,9 +997,9 @@ bootstrap-less@^3.3.8:
   version "3.3.8"
   resolved "https://registry.npmjs.org/bootstrap-less/-/bootstrap-less-3.3.8.tgz"
 
-bootstrap@^5.2.2:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.2.2.tgz#834e053eed584a65e244d8aa112a6959f56e27a0"
+bootstrap@^5.2.3:
+  version "5.2.3"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.2.3.tgz#54739f4414de121b9785c5da3c87b37ff008322b"
 
 bootswatch@^5.2.2:
   version "5.2.2"
