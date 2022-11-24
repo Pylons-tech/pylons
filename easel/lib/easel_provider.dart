@@ -252,11 +252,11 @@ class EaselProvider extends ChangeNotifier {
   }
 
   void stopVideoIfPlaying() {
-    if (!videoPlayerController.value.isInitialized) {
+    if (!videoPlayerController!.value.isInitialized) {
       return;
     }
-    if (videoPlayerController.value.isPlaying) {
-      videoPlayerController.pause();
+    if (videoPlayerController!.value.isPlaying) {
+      videoPlayerController!.pause();
     }
   }
 
@@ -284,9 +284,9 @@ class EaselProvider extends ChangeNotifier {
     delayLoading();
     notifyListeners();
 
-    videoPlayerController.addListener(() {
-      if (videoPlayerController.value.hasError) {
-        videoLoadingError = videoPlayerController.value.errorDescription!;
+    videoPlayerController!.addListener(() {
+      if (videoPlayerController!.value.hasError) {
+        videoLoadingError = videoPlayerController!.value.errorDescription!;
       }
       notifyListeners();
     });
@@ -329,6 +329,7 @@ class EaselProvider extends ChangeNotifier {
   }
 
   void disposeVideoController() {
+    isVideoLoading = true;
     videoPlayerController.removeListener(() {});
     videoPlayerHelper.destroyVideoPlayer();
   }
@@ -764,7 +765,7 @@ class EaselProvider extends ChangeNotifier {
   }
 
   Future<void> onVideoThumbnailPicked() async {
-    videoPlayerController.pause();
+    videoPlayerController!.pause();
     final pickedFile = await repository.pickFile(NftFormat.supportedFormats[0]);
 
     final result = pickedFile.getOrElse(
@@ -925,7 +926,7 @@ class EaselProvider extends ChangeNotifier {
     }
 
     if (nftFormat.format == NFTTypes.video) {
-      videoPlayerController.pause();
+      videoPlayerController!.pause();
     }
 
     int id = 0;
@@ -1101,7 +1102,7 @@ class EaselProvider extends ChangeNotifier {
 
     if (assetType == AssetType.Video.name) {
       setVideoThumbnail(null);
-      videoPlayerController.dispose();
+      videoPlayerController!.dispose();
       return;
     }
   }

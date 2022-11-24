@@ -32,3 +32,11 @@ extension ToUploadStepPar on String {
     }, orElse: () => UploadStep.none); //return null if not found
   }
 }
+
+
+enum Orientation {
+  Orientation_SE,
+  Orientation_NE,
+  Orientation_NW,
+  Orientation_SW,
+}

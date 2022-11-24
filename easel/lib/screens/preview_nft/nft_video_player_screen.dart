@@ -41,8 +41,8 @@ class NFTVideoPlayerScreen extends StatelessWidget {
                   onVideoInitialized: (BuildContext context) => Center(
                         child: AspectRatio(
                           aspectRatio:
-                              viewModel.videoPlayerController.value.aspectRatio,
-                          child: VideoPlayer(viewModel.videoPlayerController),
+                              viewModel.videoPlayerController!.value.aspectRatio,
+                          child: VideoPlayer(viewModel.videoPlayerController!),
                         ),
                       ),
                   easelProvider: viewModel),

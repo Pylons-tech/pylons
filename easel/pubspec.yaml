@@ -99,6 +99,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/gifs/
+    - assets/images/icons/
     - assets/images/svg/
     - i18n/en-US.json
     - i18n/ru-RU.json

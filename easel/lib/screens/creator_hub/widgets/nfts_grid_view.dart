@@ -58,7 +58,12 @@ class _NftGridViewItemState extends State<NftGridViewItem> {
                 context.read<CreatorHubViewModel>().startPublishingFlowAgain(startPublishingFlowAgainPressed: startPublishingFlowAgainPressed);
                 return;
               }
-              context.read<CreatorHubViewModel>().onViewOnPylons(onViewOnPylonsPressed: onViewOnPylonsPressed);
+              Navigator.of(context).pushNamed(
+                RouteUtil.kOwnerViewScreen,
+                arguments: widget.nft,
+              );
+
+              // context.read<CreatorHubViewModel>().onViewOnPylons(onViewOnPylonsPressed: onViewOnPylonsPressed);
             },
             child: NftTypeBuilder(
               onImage: (context) => buildNFTPreview(url: widget.nft.url.changeDomain()),

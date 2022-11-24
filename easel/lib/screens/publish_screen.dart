@@ -66,7 +66,18 @@ class _PublishScreenState extends State<PublishScreen> {
       body: Consumer<EaselProvider>(builder: (_, easelProvider, __) {
         return Stack(
           children: [
-            Positioned(left: 0, right: 0, top: 0, bottom: 0, child: SizedBox(width: double.infinity, child: buildPreviewWidget(easelProvider))),
+            Positioned(
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              child: SizedBox(
+                width: double.infinity,
+                child: buildPreviewWidget(
+                  easelProvider,
+                ),
+              ),
+            ),
             Positioned(
                 left: 10.w,
                 top: 30.h,

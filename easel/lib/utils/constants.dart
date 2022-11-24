@@ -62,6 +62,13 @@ class SVGUtils {
   static const kListIcon = 'assets/images/svg/list.svg';
   static const kOwnerVerifiedIcon = 'assets/images/svg/verified.svg';
   static const kFileTypeImageIcon = 'assets/images/svg/file_type_image.svg';
+  static const kBackIcon = 'assets/images/icons/back.svg';
+  static const kReportIcon = 'assets/images/icons/report.svg';
+  static const kCreationIcon = 'assets/images/icons/creations.svg';
+  static const kQrIcon = 'assets/images/icons/qr.svg';
+  static const kShareIcon = 'assets/images/icons/share.svg';
+  static const kVerifiedIcon = 'assets/images/icons/verified.svg';
+  static const kViewsIcon = 'assets/images/icons/views.svg';
 }
 
 const String kLoadingGif = 'assets/images/gifs/loading.gif';
@@ -273,3 +280,19 @@ class AnalyticsScreenEvents {
 
 const kDraftTileKey = "draft_tile_key";
 const kNftTileKey = "nft_tile_key";
+
+const kItemId = "id";
+const String kTo = "to";
+const String kFrom = "from";
+const kCreatedAt = "created_at";
+const String kItemIdKey = "item_id";
+const kSenderName = "sender_name";
+const kReceiver = "receiver";
+const String kRecipeId = 'Recipe ID';
+const kIpfsCid = "IPFS CID";
+const String kDateWithTimeFormat = "MM/dd/yyyy HH:mm";
+const int kMaxItemToShow = 11;
+const String kSubjectKey = 'subject';
+const String kFeedbackKey = 'feedback';
+const String kTimeStampKey = 'timestamp';
+const String kAddressKey = "address";

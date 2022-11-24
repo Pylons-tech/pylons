@@ -8,4 +8,5 @@ class RouteUtil {
   static String kRoutePreviewNFTFullScreen = "/preview_nft_full_screen";
   static String kVideoFullScreen = "/video_full_screen";
   static String kPdfFullScreen = "/pdf_full_screen";
+  static String kOwnerViewScreen = "/owner_view_screen";
 }

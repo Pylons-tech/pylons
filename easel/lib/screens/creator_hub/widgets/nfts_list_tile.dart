@@ -8,6 +8,7 @@ import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/enums.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
+import 'package:easel_flutter/utils/route_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -41,7 +42,11 @@ class NFTsListTile extends StatelessWidget {
     return InkWell(
       key: const Key(kNftTileKey),
       onTap: () {
-        viewModel.onViewOnPylons(onViewOnPylonsPressed: onViewOnPylonsPressed);
+        Navigator.of(context).pushNamed(
+          RouteUtil.kOwnerViewScreen,
+          arguments: publishedNFT,
+        );
+        // viewModel.onViewOnPylons(onViewOnPylonsPressed: onViewOnPylonsPressed);
       },
       child: DecoratedBox(
         decoration: BoxDecoration(

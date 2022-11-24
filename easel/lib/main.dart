@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:easel_flutter/easel_provider.dart';
+import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_screen.dart';
 import 'package:easel_flutter/screens/home_screen.dart';
+import 'package:easel_flutter/screens/owner_view/owner_view.dart';
 import 'package:easel_flutter/screens/preview_nft/preview_nft_full_screen.dart';
 import 'package:easel_flutter/screens/splash_screen.dart';
 import 'package:easel_flutter/screens/tutorial_screen.dart';
@@ -100,6 +102,22 @@ class MyApp extends StatelessWidget {
             RouteUtil.kVideoFullScreen: (context) => const VideoWidgetFullScreen(),
             RouteUtil.kPdfFullScreen: (context) => const PdfViewerFullScreen(),
             RouteUtil.kRouteWelcomeEasel: (context) => const WelcomeEasel(),
+            RouteUtil.kOwnerViewScreen: (context) {
+              print(ModalRoute.of(context)?.settings.arguments.runtimeType);
+              if (ModalRoute.of(context) == null) {
+                return const SizedBox();
+              }
+              if (ModalRoute.of(context)?.settings.arguments == null) {
+                return const SizedBox();
+              }
+              if (ModalRoute.of(context)?.settings.arguments is NFT) {
+                final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
+                return OwnerView(
+                  nft: nft,
+                );
+              }
+              return const SizedBox();
+            },
           },
         ),
       ),

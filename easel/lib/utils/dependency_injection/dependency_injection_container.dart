@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
+import 'package:easel_flutter/screens/owner_view/viewmodel/owner_view_viewmodel.dart';
 import 'package:easel_flutter/screens/tutorial_screen.dart';
 import 'package:easel_flutter/services/datasources/cache_manager.dart';
 import 'package:easel_flutter/services/datasources/local_datasource.dart';
@@ -75,6 +76,7 @@ void _registerProviders() {
   sl.registerLazySingleton<CreatorHubViewModel>(() => CreatorHubViewModel(sl()));
   sl.registerLazySingleton<HomeViewModel>(() => HomeViewModel(sl()));
   sl.registerLazySingleton<TutorialScreenViewModel>(() => TutorialScreenViewModel(repository: sl()));
+  sl.registerLazySingleton(() => OwnerViewViewModel(repository: sl(), audioPlayerHelper: sl(), videoPlayerHelper: sl()));
 }
 
 void _registerServices() {
