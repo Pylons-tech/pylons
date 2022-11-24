@@ -157,15 +157,26 @@ func (suite *IntegrationTestSuite) TestVerifyPaymentInfos() {
 	ctx := suite.ctx
 	require := suite.Require()
 
+	privKey := ed25519.GenPrivKey()
+
 	correctAddr := "pylo1xn72u3jxlpqx8tfgmjf0xg970q36xensjngsme"
 	addr, _ := sdk.AccAddressFromBech32(correctAddr)
 	addrInc, _ := sdk.AccAddressFromBech32("tester incorrect")
 	amount := sdk.NewIntFromUint64(10020060)
 	productID := "recipe/Easel_CookBook_auto_cookbook_2022_06_14_114716_442/Easel_Recipe_auto_recipe_2022_06_14_114722_895"
-	signature := "+f11IPGOtgMTpQou8V2anPSK9KCyQbi3UXFvocFDzmUKxcloXavWIzKIhIXg7pHwfRut62l1Jgo/J7a6uyusDQ=="
 	purchaseId := "pi_3LFgx7EdpQgutKvr1cp5nqtP"
 	incPurchaseId := "pi_3LFgx7EdpQgutKvr1cp5"
-	processorName := "Pylons_Inc"
+	processorName := "TestVerifyPaymentInfos"
+	signature := genTestPaymentInfoSignature(purchaseId, correctAddr, productID, amount, privKey)
+
+	types.DefaultPaymentProcessors = append(types.DefaultPaymentProcessors, types.PaymentProcessor{
+		CoinDenom:            "ustripeusd",
+		PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
+		ProcessorPercentage:  types.DefaultProcessorPercentage,
+		ValidatorsPercentage: types.DefaultValidatorsPercentage,
+		Name:                 "TestVerifyPaymentInfos",
+	})
+
 	test_processorName := "testprocessorName"
 	for _, tc := range []struct {
 		desc    string
@@ -241,12 +252,23 @@ func (suite *IntegrationTestSuite) TestValidatePaymentInfo() {
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
+	privKey := ed25519.GenPrivKey()
 
 	correctAddr := "pylo1xn72u3jxlpqx8tfgmjf0xg970q36xensjngsme"
 	productID := "recipe/Easel_CookBook_auto_cookbook_2022_06_14_114716_442/Easel_Recipe_auto_recipe_2022_06_14_114722_895"
-	signature := "+f11IPGOtgMTpQou8V2anPSK9KCyQbi3UXFvocFDzmUKxcloXavWIzKIhIXg7pHwfRut62l1Jgo/J7a6uyusDQ=="
 	purchaseId := "pi_3LFgx7EdpQgutKvr1cp5nqtP"
-	processorName := "Pylons_Inc"
+	processorName := "TestPayment"
+	amount := sdk.NewIntFromUint64(10000)
+
+	signature := genTestPaymentInfoSignature(purchaseId, correctAddr, productID, amount, privKey)
+
+	types.DefaultPaymentProcessors = append(types.DefaultPaymentProcessors, types.PaymentProcessor{
+		CoinDenom:            "ustripeusd",
+		PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
+		ProcessorPercentage:  types.DefaultProcessorPercentage,
+		ValidatorsPercentage: types.DefaultValidatorsPercentage,
+		Name:                 "TestPayment",
+	})
 
 	req_paymentinfo := make([]types.PaymentInfo, 0)
 
@@ -274,7 +296,7 @@ func (suite *IntegrationTestSuite) TestValidatePaymentInfo() {
 				PurchaseId:    purchaseId,
 				ProcessorName: processorName,
 				PayerAddr:     correctAddr,
-				Amount:        sdk.NewIntFromUint64(10000),
+				Amount:        amount,
 				ProductId:     productID,
 				Signature:     signature,
 			}),
@@ -286,7 +308,7 @@ func (suite *IntegrationTestSuite) TestValidatePaymentInfo() {
 				PurchaseId:    purchaseId,
 				ProcessorName: "testprocessorName",
 				PayerAddr:     correctAddr,
-				Amount:        sdk.NewIntFromUint64(10000),
+				Amount:        amount,
 				ProductId:     productID,
 				Signature:     signature,
 			}),
