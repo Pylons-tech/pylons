@@ -121,7 +121,7 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 		// username will always be found as checked previously
 		to, _ := k.GetUsernameByAddress(ctx, pendingExecution.Creator)
 		from, _ := k.GetUsernameByAddress(ctx, cookbook.Creator)
-		history := item.NewItemHistory(ctx, to.Value, from.Value)
+		history := item.NewItemHistory(ctx, to.Value, from.Value, pendingExecution.Creator, cookbook.Creator)
 		history.Id = id
 		k.SetItemHistory(ctx, history)
 	}
