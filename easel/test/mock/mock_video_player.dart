@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:easel_flutter/services/third_party_services/video_player_helper.dart';
 import 'package:video_player/video_player.dart';
 

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -22,6 +21,7 @@ import 'package:easel_flutter/widgets/pdf_viewer.dart';
 import 'package:easel_flutter/widgets/video_progress_widget.dart';
 import 'package:easel_flutter/widgets/video_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -216,10 +216,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         Expanded(
                           child: _title(
                             nft: viewModel.nft,
-                            owner: viewModel.nft.type.toNftTypeEnum() == NftType.TYPE_RECIPE ? LocaleKeys.you.tr(): viewModel.nft.creator,
+                            owner: viewModel.nft.type.toNftTypeEnum() == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator,
                           ),
                         ),
                         IconButton(
+                          key: const Key(kKeyboardArrowUpKey),
                           icon: Icon(
                             Icons.keyboard_arrow_up,
                             size: 32.h,
@@ -259,8 +260,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              // final Size size = MediaQuery.of(context).size;
-                              // context.read<OwnerViewViewModel>().shareNFTLink(size: size);
+                              ///TODO
                             },
                             child: SvgPicture.asset(
                               SVGUtils.kShareIcon,
@@ -290,6 +290,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       width: 50,
                       child: Center(
                           child: IconButton(
+                        key: const Key(kKeyboardArrowDownKey),
                         alignment: Alignment.topRight,
                         padding: const EdgeInsets.only(
                           bottom: 8,
@@ -461,12 +462,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          // showDialog(
-                                          //   context: context,
-                                          //   builder: (_) => QRCodeScreen(
-                                          //     nft: viewModel.nft,
-                                          //   ),
-                                          // );
+                                          //TODO
                                         },
                                         child: SvgPicture.asset(
                                           SVGUtils.kQrIcon,
@@ -476,8 +472,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       SizedBox(
                                         height: 12.h,
                                       ),
-                                      if (viewModel.nft.assetType.toAssetTypeEnum() == AssetType.Image && Platform.isAndroid)
+                                      if (viewModel.nft.assetType.toAssetTypeEnum() == AssetType.Image && defaultTargetPlatform == TargetPlatform.android)
                                         GestureDetector(
+                                          key: const Key(kWallpaperButtonKey),
                                           onTap: () {
                                             final WallpaperScreen wallpaperScreen = WallpaperScreen(nft: viewModel.nft.url, context: context);
                                             wallpaperScreen.show();
@@ -491,8 +488,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       SizedBox(height: 12.h),
                                       GestureDetector(
                                         onTap: () async {
-                                          // final Size size = MediaQuery.of(context).size;
-                                          // viewModel.shareNFTLink(size: size);
+                                          ///TODO
                                         },
                                         child: SvgPicture.asset(
                                           SVGUtils.kShareIcon,

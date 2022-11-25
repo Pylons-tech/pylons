@@ -9,8 +9,8 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import '../extensions/size_extension.dart';
 import '../mock/creator_hub_viewmodel.mocks.dart';
+import '../mock/mock_constants.dart';
 import '../mock/mock_repository.dart';
-import '../mocks/mock_constants.dart';
 
 void main() {
   final viewModel = MockCreatorHubViewModel();
@@ -78,7 +78,7 @@ void main() {
                 create: (ctx) => GetIt.I.get<CreatorHubViewModel>(),
                 builder: (context, _) {
                   return NFTsListTile(
-                    publishedNFT: MOCK_NFT,
+                    publishedNFT: MOCK_NFT_FREE,
                     viewModel: viewModel,
                   );
                 },
@@ -87,7 +87,7 @@ void main() {
           );
 
           await tester.pump();
-          final banner = find.byKey(Key("${MOCK_NFT.ibcCoins.getCoinWithProperDenomination(MOCK_NFT.price)} ${MOCK_NFT.ibcCoins.getAbbrev()}"));
+          final banner = find.byKey(Key("${MOCK_NFT_FREE.ibcCoins.getCoinWithProperDenomination(MOCK_NFT_FREE.price)} ${MOCK_NFT_FREE.ibcCoins.getAbbrev()}"));
 
           expect(banner, findsNothing);
         },

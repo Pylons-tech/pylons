@@ -18,6 +18,7 @@ class WallpaperScreen {
     await showGeneralDialog<String>(
       context: context,
       pageBuilder: (BuildContext context, _, __) => Dialog(
+        key: const Key(kWallpaperScreenKey),
         backgroundColor: Colors.transparent,
         insetPadding: EdgeInsets.zero,
         child: _WallpaperScreen(nft: nft),

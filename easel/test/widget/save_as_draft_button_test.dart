@@ -11,8 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-
-import '../extensions/size_extensions.dart';
+import '../extensions/size_extension.dart';
 import '../mock/media_info.mocks.dart';
 import '../mock/mock_audio_imp.dart';
 import '../mock/mock_constants.dart';
@@ -20,6 +19,7 @@ import '../mock/mock_file_utils.dart';
 import '../mock/mock_repository.dart';
 import '../mock/mock_video_player.dart';
 import 'package:mockito/annotations.dart';
+
 @GenerateMocks([EaselProvider])
 void main() {
   final repository = MockRepositoryImp();

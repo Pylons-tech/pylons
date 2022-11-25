@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:easel_flutter/models/nft_format.dart';
 import 'package:easel_flutter/models/picked_file_model.dart';
 import 'package:easel_flutter/utils/file_utils_helper.dart';

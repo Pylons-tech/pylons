@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-
-import '../extensions/size_extensions.dart';
+import '../extensions/size_extension.dart';
 import '../mock/mock_repository.dart';
 
 void main() {

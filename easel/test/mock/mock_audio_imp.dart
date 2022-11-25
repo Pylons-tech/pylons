@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:easel_flutter/services/third_party_services/audio_player_helper.dart';
 import 'package:just_audio/just_audio.dart';
 

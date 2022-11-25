@@ -16,25 +16,26 @@ extension SetScreenSize on WidgetTester {
 
   Future testAppForWidgetTesting(Widget child, {Duration duration = Duration.zero}) async {
     SharedPreferences.setMockInitialValues({});
-
     await EasyLocalization.ensureInitialized();
-
-    return pumpWidget(Builder(builder: (context) {
-      return EasyLocalization(
-        supportedLocales: const [Locale('en', 'US'), Locale('ru', 'RU'), Locale('es'), Locale('de')],
-        path: 'i18n',
-        fallbackLocale: const Locale('en'),
-        useOnlyLangCode: true,
-        child: ScreenUtilInit(
-          minTextAdapt: true,
-          builder: (context, _) => MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: kEasel,
-            theme: EaselAppTheme.theme(context),
-            home: child,
+    return pumpWidget(
+      Builder(builder: (context) {
+        return EasyLocalization(
+          supportedLocales: const [Locale('en', 'US'), Locale('ru', 'RU'), Locale('es'), Locale('de')],
+          path: 'i18n',
+          fallbackLocale: const Locale('en'),
+          useOnlyLangCode: true,
+          child: ScreenUtilInit(
+            minTextAdapt: true,
+            builder: (context, _) => MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: kEasel,
+              theme: EaselAppTheme.theme(context),
+              home: child,
+            ),
           ),
-        ),
-      );
-    }), duration);
+        );
+      }),
+      duration,
+    );
   }
 }

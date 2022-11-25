@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/models/nft.dart';
@@ -10,7 +9,6 @@ import 'package:easel_flutter/models/storage_response_model.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/utils/failure/failure.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
-
 import 'mock_constants.dart';
 
 class MockRepositoryImp implements Repository {
@@ -131,7 +129,6 @@ class MockRepositoryImp implements Repository {
 
   @override
   Future<bool> saveOnBoardingComplete() {
-    
     throw UnimplementedError();
   }
 
@@ -141,13 +138,10 @@ class MockRepositoryImp implements Repository {
   }
 
   @override
-  void setCacheString({required String key, required String value}) {
-    
-  }
+  void setCacheString({required String key, required String value}) {}
 
   @override
   Future<Either<Failure, bool>> updateNFTDialogShown({required int id}) {
-    
     throw UnimplementedError();
   }
 
