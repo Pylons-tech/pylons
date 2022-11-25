@@ -85,18 +85,30 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 
 	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
 	delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages)
-	address := map[string]sdk.Coin{}
+	delegatorMap := map[string]sdk.Coins{}
+	balances := sdk.Coins{}
 	if delegatorsRewards != nil {
 		// looping through delegators to get their old balance
-		for addr, amt := range delegatorsRewards {
-			bal := suite.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(addr), types.PylonsCoinDenom)
-			address[addr] = bal.Add(amt[0])
+		for address, amount := range delegatorsRewards {
+			// looping through amount type of sdk.coins to get every amount and denom
+			for _, val := range amount {
+				oldBalance := suite.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(address), val.Denom)
+				// Appending old balance in balances so we can compare it later on with updated balance
+				balances = append(balances, oldBalance.Add(val))
+			}
+			delegatorMap[address] = balances
+
 		}
 		// sending rewards to delegators
 		k.SendRewards(ctx, delegatorsRewards)
-		for addr, amt := range address {
-			new := suite.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(addr), types.PylonsCoinDenom)
-			require.Equal(amt.Amount.Int64(), new.Amount.Int64())
+		for address, updatedAmount := range delegatorMap {
+			// looping through updated amount type of sdk.coins to get every amount and denom
+			for _, val := range updatedAmount {
+				newBalance := suite.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(address), val.Denom)
+				// Comparing updated Amount with new new Blanace both should  be equal
+				require.Equal(val.Amount.Int64(), newBalance.Amount.Int64())
+			}
+
 		}
 
 	}
