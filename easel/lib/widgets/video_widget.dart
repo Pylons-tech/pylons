@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:easel_flutter/easel_provider.dart';
+import 'package:easel_flutter/generated/locale_keys.g.dart';
 import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart' as clipper;
 import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart';
 import 'package:easel_flutter/screens/clippers/small_bottom_corner_clipper.dart';
@@ -99,7 +100,7 @@ class VideoWidgetContent extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Text(
-                      "video_player_error".tr(),
+                      LocaleKeys.video_player_error.tr(),
                       style: TextStyle(fontSize: 18.sp, color: EaselAppTheme.kWhite),
                     ),
                   ),
@@ -127,7 +128,7 @@ class VideoWidgetContent extends StatelessWidget {
                             child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Text(
-                            "video_player_error".tr(),
+                            LocaleKeys.video_player_error.tr(),
                             style: TextStyle(fontSize: 18.sp, color: EaselAppTheme.kBlack),
                           ),
                         )),

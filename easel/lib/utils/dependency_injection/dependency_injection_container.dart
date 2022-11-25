@@ -63,20 +63,49 @@ void _registerExternalDependencies() {
 }
 
 void _registerRemoteDataSources() {
-  sl.registerLazySingleton<RemoteDataSource>(() => RemoteDataSourceImpl(httpClient: sl<Dio>(), analyticsHelper: sl()));
+  sl.registerLazySingleton<RemoteDataSource>(
+    () => RemoteDataSourceImpl(
+      httpClient: sl<Dio>(),
+      analyticsHelper: sl(),
+    ),
+  );
 }
 
 void _registerLocalDataSources() {
-  sl.registerLazySingleton<LocalDataSource>(() => LocalDataSourceImpl(sharedPreferences: sl(), database: sl(), cacheManager: sl()));
+  sl.registerLazySingleton<LocalDataSource>(
+    () => LocalDataSourceImpl(
+      sharedPreferences: sl(),
+      database: sl(),
+      cacheManager: sl(),
+    ),
+  );
 }
 
 void _registerProviders() {
   sl.registerLazySingleton<EaselProvider>(
-      () => EaselProvider(videoPlayerHelper: sl(), audioPlayerHelperForFile: sl(), fileUtilsHelper: sl(), repository: sl(), audioPlayerHelperForUrl: sl(), mediaInfo: sl()));
+    () => EaselProvider(
+      videoPlayerHelper: sl(),
+      audioPlayerHelperForFile: sl(),
+      fileUtilsHelper: sl(),
+      repository: sl(),
+      audioPlayerHelperForUrl: sl(),
+      mediaInfo: sl(),
+    ),
+  );
   sl.registerLazySingleton<CreatorHubViewModel>(() => CreatorHubViewModel(sl()));
   sl.registerLazySingleton<HomeViewModel>(() => HomeViewModel(sl()));
-  sl.registerLazySingleton<TutorialScreenViewModel>(() => TutorialScreenViewModel(repository: sl()));
-  sl.registerLazySingleton(() => OwnerViewViewModel(repository: sl(), audioPlayerHelper: sl(), videoPlayerHelper: sl()));
+  sl.registerLazySingleton<TutorialScreenViewModel>(
+    () => TutorialScreenViewModel(
+      repository: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => OwnerViewViewModel(
+      repository: sl(),
+      audioPlayerHelper: sl(),
+      videoPlayerHelper: sl(),
+    ),
+  );
 }
 
 void _registerServices() {

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
+import 'package:easel_flutter/generated/locale_keys.g.dart';
 import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/screens/owner_view/viewmodel/owner_view_viewmodel.dart';
 import 'package:easel_flutter/screens/owner_view/widgets/audio_progress_widget.dart';
@@ -76,7 +77,6 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
   Widget build(BuildContext context) {
     final viewModel = context.watch<OwnerViewViewModel>();
     return GesturesForDetailsScreen(
-      // key: const ValueKey(kOwnerViewKeyValue),
       screen: DetailScreen.ownerScreen,
       viewModel: viewModel,
       nft: viewModel.nft,
@@ -104,7 +104,6 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
             ),
           if (isUserNotViewingFullNft(viewModel))
             const Align(
-              // key: ValueKey(kOwnerViewDrawerKeyValue),
               alignment: Alignment.bottomCenter,
               child: OwnerBottomDrawer(),
             )
@@ -217,7 +216,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         Expanded(
                           child: _title(
                             nft: viewModel.nft,
-                            owner: viewModel.nft.type.toNftTypeEnum() == NftType.TYPE_RECIPE ? "you".tr() : viewModel.nft.creator,
+                            owner: viewModel.nft.type.toNftTypeEnum() == NftType.TYPE_RECIPE ? LocaleKeys.you.tr(): viewModel.nft.creator,
                           ),
                         ),
                         IconButton(
@@ -259,7 +258,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       Column(
                         children: [
                           GestureDetector(
-                            // key: const Key(kShareNftButtonCollapsedKey),
                             onTap: () {
                               // final Size size = MediaQuery.of(context).size;
                               // context.read<OwnerViewViewModel>().shareNFTLink(size: size);
@@ -281,7 +279,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             )
           ] else ...[
             Stack(
-              // key: const ValueKey(kOwnerViewBottomSheetKeyValue),
               children: [
                 Align(
                   alignment: Alignment.topRight,
@@ -334,7 +331,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         children: [
                           _title(
                             nft: viewModel.nft,
-                            owner: viewModel.nft.type.toNftTypeEnum() == NftType.TYPE_RECIPE ? "you".tr() : viewModel.nft.creator,
+                            owner: viewModel.nft.type.toNftTypeEnum() == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator,
                           ),
                           SizedBox(
                             height: 10.h,
@@ -403,8 +400,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           ),
                           ReadMoreText(
                             viewModel.nft.description,
-                            trimExpandedText: "collapse".tr(),
-                            trimCollapsedText: "read_more".tr(),
+                            trimExpandedText: LocaleKeys.collapse.tr(),
+                            trimCollapsedText: LocaleKeys.read_more.tr(),
                             moreStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: EaselAppTheme.kHashtagColor),
                             lessStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: EaselAppTheme.kHashtagColor),
                           ),
@@ -421,7 +418,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                   child: Column(
                                     children: [
                                       TabField(
-                                        name: "ownership".tr(),
+                                        name: LocaleKeys.ownership.tr(),
                                         icon: kTrophyIcon,
                                         nft: viewModel.nft,
                                         owner: viewModel.owner,
@@ -431,7 +428,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       ),
                                       SizedBox(height: 10.h),
                                       TabField(
-                                        name: "nft_details".tr(),
+                                        name: LocaleKeys.nft_details.tr(),
                                         icon: kDetailIcon,
                                         nft: viewModel.nft,
                                         owner: viewModel.owner,
@@ -442,7 +439,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       SizedBox(height: 10.h),
                                       if (viewModel.nft.type.toNftTypeEnum() != NftType.TYPE_RECIPE)
                                         TabField(
-                                          name: "history".tr(),
+                                          name: LocaleKeys.history.tr(),
                                           icon: kHistoryIcon,
                                           nft: viewModel.nft,
                                           owner: viewModel.nft.owner,
@@ -493,7 +490,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         ),
                                       SizedBox(height: 12.h),
                                       GestureDetector(
-                                        // key: const Key(kShareNftButtonExpandedKey),
                                         onTap: () async {
                                           // final Size size = MediaQuery.of(context).size;
                                           // viewModel.shareNFTLink(size: size);
@@ -573,7 +569,7 @@ Widget _title({required NFT nft, required String owner}) {
         text: TextSpan(
           children: [
             TextSpan(
-              text: "created_by".tr(),
+              text: LocaleKeys.created_by.tr(),
               style: TextStyle(color: Colors.white, fontSize: 18.sp),
             ),
             TextSpan(text: owner, style: TextStyle(color: EaselAppTheme.kHashtagColor, fontSize: 18.sp)),

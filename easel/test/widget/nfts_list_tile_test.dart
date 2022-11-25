@@ -1,6 +1,7 @@
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/nfts_list_tile.dart';
+import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -54,6 +55,7 @@ void main() {
                 builder: (context, _) {
                   return NFTsListTile(
                     publishedNFT: MOCK_PRICED_NFT_USD,
+                    viewModel: viewModel,
                   );
                 },
               ),
@@ -93,7 +95,6 @@ void main() {
       testWidgets(
         "can user tap on whole publish tile",
         (tester) async {
-          // when(nftListViewModel.onViewOnPylons(() {})).thenAnswer((realInvocation) {});
           await tester.setScreenSize();
           await tester.testAppForWidgetTesting(
             Scaffold(

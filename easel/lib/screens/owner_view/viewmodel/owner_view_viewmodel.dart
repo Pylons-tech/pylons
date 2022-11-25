@@ -10,14 +10,11 @@ class OwnerViewViewModel extends ChangeNotifier {
   final Repository repository;
   final AudioPlayerHelper audioPlayerHelper;
   final VideoPlayerHelper videoPlayerHelper;
- OwnerViewViewModel({
+
+  OwnerViewViewModel({
     required this.repository,
-    // required this.accountPublicInfo,
-    // required this.walletsStore,
     required this.audioPlayerHelper,
-    // required this.shareHelper,
     required this.videoPlayerHelper,
-    // required this.accountPublicInfo,
   });
 
   late NFT _nft;
@@ -111,5 +108,4 @@ class OwnerViewViewModel extends ChangeNotifier {
         return;
     }
   }
-
 }

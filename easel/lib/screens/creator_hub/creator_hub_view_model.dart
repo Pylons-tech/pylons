@@ -199,4 +199,8 @@ class CreatorHubViewModel extends ChangeNotifier {
   void startPublishingFlowAgain({required VoidCallback startPublishingFlowAgainPressed}) {
     startPublishingFlowAgainPressed.call();
   }
+
+  void openOwnerView({required VoidCallback openOwnerView}) {
+    openOwnerView.call();
+  }
 }

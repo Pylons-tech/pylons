@@ -262,6 +262,16 @@ class MockCreatorHubViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
+  void openOwnerView({required _i6.VoidCallback? openOwnerView}) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #openOwnerView,
+          [],
+          {#openOwnerView: openOwnerView},
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
   void addListener(_i6.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,

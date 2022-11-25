@@ -144,7 +144,7 @@ class _DraftListTileState extends State<DraftListTile> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "nft_name".tr(args: [if (widget.nft.name.isNotEmpty) widget.nft.name else 'Nft Name']),
+                      LocaleKeys.nft_name.tr(args: [if (widget.nft.name.isNotEmpty) widget.nft.name else 'Nft Name']),
                       style: titleStyle.copyWith(fontSize: isTablet ? 13.sp : 18.sp),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

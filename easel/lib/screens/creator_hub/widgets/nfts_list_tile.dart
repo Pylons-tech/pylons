@@ -38,15 +38,18 @@ class NFTsListTile extends StatelessWidget {
     await _easelProvider.repository.launchMyUrl(url: url);
   }
 
+  void openOwnerView() {
+    Navigator.of(navigatorKey.currentState!.context).pushNamed(
+      RouteUtil.kOwnerViewScreen,
+      arguments: publishedNFT,
+    );
+  }
+
   Widget getPublishedCard({required BuildContext context}) {
     return InkWell(
       key: const Key(kNftTileKey),
       onTap: () {
-        Navigator.of(context).pushNamed(
-          RouteUtil.kOwnerViewScreen,
-          arguments: publishedNFT,
-        );
-        // viewModel.onViewOnPylons(onViewOnPylonsPressed: onViewOnPylonsPressed);
+        viewModel.openOwnerView(openOwnerView: openOwnerView);
       },
       child: DecoratedBox(
         decoration: BoxDecoration(

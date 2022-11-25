@@ -44,6 +44,13 @@ class _NftGridViewItemState extends State<NftGridViewItem> {
     await _easelProvider.repository.launchMyUrl(url: url);
   }
 
+  void openOwnerView() {
+    Navigator.of(context).pushNamed(
+      RouteUtil.kOwnerViewScreen,
+      arguments: widget.nft,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -53,17 +60,13 @@ class _NftGridViewItemState extends State<NftGridViewItem> {
           width: 150.w,
           child: InkWell(
             key: const Key(kGridViewTileNFTKey),
-            onTap: () async {
+            onTap: () {
               if (context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft) {
                 context.read<CreatorHubViewModel>().startPublishingFlowAgain(startPublishingFlowAgainPressed: startPublishingFlowAgainPressed);
                 return;
               }
-              Navigator.of(context).pushNamed(
-                RouteUtil.kOwnerViewScreen,
-                arguments: widget.nft,
-              );
 
-              // context.read<CreatorHubViewModel>().onViewOnPylons(onViewOnPylonsPressed: onViewOnPylonsPressed);
+              context.read<CreatorHubViewModel>().openOwnerView(openOwnerView: openOwnerView);
             },
             child: NftTypeBuilder(
               onImage: (context) => buildNFTPreview(url: widget.nft.url.changeDomain()),
