@@ -83,7 +83,7 @@ class _AcceptPolicyScreenState extends State<AcceptPolicyScreen> {
     return CachedNetworkImage(
       placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()),
       imageUrl: url,
-      fit: BoxFit.fill,
+      fit: BoxFit.contain,
     );
   }
 }
@@ -98,71 +98,68 @@ class AcceptPolicyScreenContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AcceptPolicyViewModel>(
-      builder: (context, viewModel, child) {
-        return Align(
-          key: const Key(kAcceptPolicyPortionKey),
-          alignment: Alignment.bottomCenter,
-          child: ClipPath(
-            clipper: LeftRightTopClipper(),
-            child: Container(
-              height: 0.33.sh,
-              width: double.infinity,
-              color: AppColors.kMainBG,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 60.h,
-                    child: Image.asset(
-                      ImageUtil.PYLONS_LOGO,
-                    ),
-                  ),
-                  MyCheckBox(
-                    LocaleKeys.acknowledge_terms_service.tr(),
-                    isSelected: viewModel.isCheckTermServices,
-                    onChange: (value) {
-                      viewModel.toggleCheckTermServices(value!);
-                    },
-                    onLinkTap: () {
-                      /// TO DO
-                      /// Don't have url of term & services
-                    },
-                  ),
-                  SizedBox(
-                    height: 15.0.h,
-                  ),
-                  MyCheckBox(
-                    LocaleKeys.acknowledge_privacy_policy.tr(),
-                    isSelected: viewModel.isCheckPrivacyPolicy,
-                    onChange: (value) {
-                      viewModel.toggleCheckPrivacyPolicy(value!);
-                    },
-                    onLinkTap: () => launchUrlString(kPrivacyPolicyLink),
-                  ),
-                  SizedBox(
-                    height: 25.0.h,
-                  ),
-                  PylonsGetStartedButton(
-                    key: const Key(kAcceptBottomSheetBtnKey),
-                    enabled: viewModel.isCheckTermServices && viewModel.isCheckPrivacyPolicy,
-                    onTap: () async {
-                      viewModel.onTapGetStartedButton(nft);
-                    },
-                    text: LocaleKeys.get_started.tr(),
-                    loader: ValueNotifier(false),
-                    fontWeight: FontWeight.normal,
-                    btnHeight: 40,
-                    btnWidth: 260,
-                    btnUnselectBGColor: AppColors.kDarkDividerColor,
-                    fontSize: 14,
-                    textColor: !(viewModel.isCheckTermServices && viewModel.isCheckPrivacyPolicy) ? AppColors.kUserInputTextColor : AppColors.kWhite,
-                  ),
-                ],
+    final viewModel = context.watch<AcceptPolicyViewModel>();
+    return Align(
+      key: const Key(kAcceptPolicyPortionKey),
+      alignment: Alignment.bottomCenter,
+      child: ClipPath(
+        clipper: LeftRightTopClipper(),
+        child: Container(
+          height: 0.33.sh,
+          width: double.infinity,
+          color: AppColors.kMainBG,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 60.h,
+                child: Image.asset(
+                  ImageUtil.PYLONS_LOGO,
+                ),
               ),
-            ),
+              MyCheckBox(
+                LocaleKeys.acknowledge_terms_service.tr(),
+                isSelected: viewModel.isCheckTermServices,
+                onChange: (value) {
+                  viewModel.toggleCheckTermServices(value!);
+                },
+                onLinkTap: () {
+                  /// TO DO
+                  /// Don't have url of term & services
+                },
+              ),
+              SizedBox(
+                height: 15.0.h,
+              ),
+              MyCheckBox(
+                LocaleKeys.acknowledge_privacy_policy.tr(),
+                isSelected: viewModel.isCheckPrivacyPolicy,
+                onChange: (value) {
+                  viewModel.toggleCheckPrivacyPolicy(value!);
+                },
+                onLinkTap: () => launchUrlString(kPrivacyPolicyLink),
+              ),
+              SizedBox(
+                height: 25.0.h,
+              ),
+              PylonsGetStartedButton(
+                key: const Key(kAcceptBottomSheetBtnKey),
+                enabled: viewModel.isCheckTermServices && viewModel.isCheckPrivacyPolicy,
+                onTap: () async {
+                  viewModel.onTapGetStartedButton(nft);
+                },
+                text: LocaleKeys.get_started.tr(),
+                loader: ValueNotifier(false),
+                fontWeight: FontWeight.normal,
+                btnHeight: 40,
+                btnWidth: 260,
+                btnUnselectBGColor: AppColors.kDarkDividerColor,
+                fontSize: 14,
+                textColor: !(viewModel.isCheckTermServices && viewModel.isCheckPrivacyPolicy) ? AppColors.kUserInputTextColor : AppColors.kWhite,
+              ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
