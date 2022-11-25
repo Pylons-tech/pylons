@@ -3,7 +3,7 @@
 //  source: pylons/pylons/execution.proto
 //
 // @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
+// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
 import 'dart:core' as $core;
 
@@ -199,6 +199,11 @@ class Execution extends $pb.GeneratedMessage {
         const $core.bool.fromEnvironment('protobuf.omit_field_names')
             ? ''
             : 'itemModifyOutputIds')
+    ..aInt64(
+        13,
+        const $core.bool.fromEnvironment('protobuf.omit_field_names')
+            ? ''
+            : 'txTime')
     ..hasRequiredFields = false;
 
   Execution._() : super();
@@ -215,6 +220,7 @@ class Execution extends $pb.GeneratedMessage {
     $core.Iterable<$2.Coin>? coinOutputs,
     $core.Iterable<$core.String>? itemOutputIds,
     $core.Iterable<$core.String>? itemModifyOutputIds,
+    $fixnum.Int64? txTime,
   }) {
     final _result = create();
     if (creator != null) {
@@ -252,6 +258,9 @@ class Execution extends $pb.GeneratedMessage {
     }
     if (itemModifyOutputIds != null) {
       _result.itemModifyOutputIds.addAll(itemModifyOutputIds);
+    }
+    if (txTime != null) {
+      _result.txTime = txTime;
     }
     return _result;
   }
@@ -379,4 +388,16 @@ class Execution extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(12)
   $core.List<$core.String> get itemModifyOutputIds => $_getList(11);
+
+  @$pb.TagNumber(13)
+  $fixnum.Int64 get txTime => $_getI64(12);
+  @$pb.TagNumber(13)
+  set txTime($fixnum.Int64 v) {
+    $_setInt64(12, v);
+  }
+
+  @$pb.TagNumber(13)
+  $core.bool hasTxTime() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearTxTime() => clearField(13);
 }
