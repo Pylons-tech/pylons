@@ -437,8 +437,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
 
   Widget getLikeIcon({required bool likedByMe}) {
     return SizedBox(
-      height: 15.h,
-      width: 15.w,
+      height: 15.r,
+      width: 15.r,
       child: Image.asset(
         'assets/images/icons/${likedByMe ? 'like_full' : 'like'}.png',
         fit: BoxFit.fill,

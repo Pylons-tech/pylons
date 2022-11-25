@@ -231,7 +231,7 @@ class IPCEngine {
       if (item == null) {
         return;
       }
-      await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: item);
+      navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: item);
 
       walletsStore.setStateUpdatedFlag(flag: true);
     }

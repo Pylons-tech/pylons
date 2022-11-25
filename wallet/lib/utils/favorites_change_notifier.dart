@@ -5,18 +5,16 @@ import '../model/nft.dart';
 import '../services/repository/repository.dart';
 import 'enums.dart';
 
-class FavoritesChangeNotifier extends ChangeNotifier{
-
+class FavoritesChangeNotifier extends ChangeNotifier {
   final Repository repository;
+
   FavoritesChangeNotifier({required this.repository});
 
-  List<NFT> favorites = [];
+  List<NFT?> favorites = [];
 
-  Future<void> onInit() async {
+  Future<void> onInit() async {}
 
-  }
-
-  Future<void> addToFavorites({required FavoritesModel favoritesModel})async{
+  Future<void> addToFavorites({required FavoritesModel favoritesModel}) async {
     if (favoritesModel.type == NftType.TYPE_ITEM.name) {
       final item = await repository.getItem(cookBookId: favoritesModel.cookbookId, itemId: favoritesModel.id);
       if (item.isRight()) {
@@ -31,9 +29,9 @@ class FavoritesChangeNotifier extends ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void> removeFromFavorites({required String recipeId})async{
-    for(final NFT nft in favorites){
-      if(nft.recipeID == recipeId){
+  Future<void> removeFromFavorites({required String recipeId}) async {
+    for (final NFT? nft in favorites) {
+      if (nft!.recipeID == recipeId) {
         favorites.remove(nft);
         break;
       }
