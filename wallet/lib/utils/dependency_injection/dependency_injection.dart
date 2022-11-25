@@ -205,7 +205,6 @@ Future<void> init() async {
       repository: sl(),
       shareHelper: sl(),
       accountPublicInfo: sl<AccountProvider>().accountPublicInfo!,
-      favoritesChangeNotifier: sl(),
     ),
   );
   sl.registerLazySingleton(() => CollectionViewModel(walletsStore: sl(), thumbnailHelper: sl(), accountPublicInfoInfo: sl<AccountProvider>().accountPublicInfo!));
@@ -224,7 +223,6 @@ Future<void> init() async {
       videoPlayerHelper: sl(),
       shareHelper: sl(),
       accountPublicInfo: sl<AccountProvider>().accountPublicInfo!,
-      favoritesChangeNotifier: sl(),
     ),
   );
   sl.registerLazySingleton(() => FavoritesChangeNotifier(repository: sl()));

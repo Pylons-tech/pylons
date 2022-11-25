@@ -52,6 +52,7 @@ import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/enums.dart';
+import 'package:pylons_wallet/utils/favorites_change_notifier.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
 import 'generated/locale_keys.g.dart';
@@ -96,6 +97,9 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
             ),
             Provider(
               create: (context) => sl<RemoteNotificationsProvider>(),
+            ),
+            Provider(
+              create: (context) => sl<FavoritesChangeNotifier>(),
             ),
           ],
           child: MaterialApp(

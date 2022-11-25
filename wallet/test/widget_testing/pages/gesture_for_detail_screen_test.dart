@@ -20,7 +20,6 @@ import '../../mocks/mock_share_helper.dart';
 import '../../mocks/mock_video_player.dart';
 import '../../mocks/mock_wallet_store.dart';
 import '../extension/size_extension.dart';
-import 'gesture_for_detail_screen_test.mocks.dart';
 
 /// TODO: Add test for the account public info shown
 @GenerateMocks([FavoritesChangeNotifier])
@@ -33,13 +32,11 @@ void main() {
     late AudioPlayerHelper audioPlayerHelper;
     late VideoPlayerHelper videoPlayerHelper;
     late ShareHelper shareHelper;
-    late FavoritesChangeNotifier favoritesChangeNotifier;
     audioPlayerHelper = MockAudioPlayerImpl();
     videoPlayerHelper = MockVideoPlayerImpl();
     repositry = MockRepository();
     walletStore = MockWalletStore();
     shareHelper = MockShareHelperImpl();
-    favoritesChangeNotifier = MockFavoritesChangeNotifier();
     final OwnerViewViewModel viewModel = OwnerViewViewModel(
       repository: repositry,
       walletsStore: walletStore,
@@ -52,7 +49,6 @@ void main() {
         name: '',
         publicAddress: '',
       ),
-      favoritesChangeNotifier: favoritesChangeNotifier,
     );
 
     GetIt.I.registerSingleton(viewModel);

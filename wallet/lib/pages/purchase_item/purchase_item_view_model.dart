@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
@@ -37,10 +38,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     required this.repository,
     required this.shareHelper,
     required this.accountPublicInfo,
-    required this.favoritesChangeNotifier,
   });
-
-  final FavoritesChangeNotifier favoritesChangeNotifier;
 
   bool get isViewingFullNft => _isViewingFullNft;
 
@@ -375,6 +373,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     }
     likedByMe = !likedByMe;
     isLiking = false;
+    final favoritesChangeNotifier = GetIt.I.get<FavoritesChangeNotifier>();
     if (temp && likesCount > 0) {
       likesCount = likesCount - 1;
       repository.deleteNFTFromFavorites(recipeId);

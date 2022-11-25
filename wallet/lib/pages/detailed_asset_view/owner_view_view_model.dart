@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
@@ -31,7 +31,6 @@ class OwnerViewViewModel extends ChangeNotifier {
   final AudioPlayerHelper audioPlayerHelper;
   final VideoPlayerHelper videoPlayerHelper;
   final ShareHelper shareHelper;
-  final FavoritesChangeNotifier favoritesChangeNotifier;
 
   OwnerViewViewModel({
     required this.repository,
@@ -40,7 +39,6 @@ class OwnerViewViewModel extends ChangeNotifier {
     required this.shareHelper,
     required this.videoPlayerHelper,
     required this.accountPublicInfo,
-    required this.favoritesChangeNotifier
   });
 
   TabFields? selectedField;
@@ -266,6 +264,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     }
     likedByMe = !likedByMe;
     isLiking = false;
+    final favoritesChangeNotifier = GetIt.I.get<FavoritesChangeNotifier>();
     if (temp && likesCount > 0) {
       likesCount = likesCount - 1;
       repository.deleteNFTFromFavorites(recipeId);
