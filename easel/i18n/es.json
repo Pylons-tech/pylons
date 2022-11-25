@@ -143,5 +143,17 @@
   "app_needed_desc_three": "Siempre puedes borrarlo si quieres",
   "why_app_needed_summary_three": "Sin suscripciones. No vendemos su información. Solo cobramos una tarifa cuando compra un NFT",
   "upload_hint_three": "• Un archivo por carga",
-  "analytics_failure": "Error de Análisis"
+  "analytics_failure": "Error de Análisis",
+  "you": "tú",
+  "views": "puntos de vista",
+  "ownership": "Propiedad",
+  "nft_details": "Detalle NFT",
+  "history": "Historia",
+  "owner": "Dueño",
+  "edition": "Edición",
+  "royalty_text": "Realeza",
+  "recipe_id": "Receta ID",
+  "resolution": "resolución",
+  "ipfs_cid": "CID IPFS",
+  "set_lockscreen": "Establecer como pantalla de bloqueo"
 }

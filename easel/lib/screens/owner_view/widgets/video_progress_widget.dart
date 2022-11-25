@@ -40,18 +40,18 @@ class _OwnerVideoProgressWidgetState extends State<OwnerVideoProgressWidget> {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (viewModel.videoLoadingError.isNotEmpty || viewModel.videoPlayerController == null)
+            if (viewModel.videoLoadingError.isNotEmpty)
               const SizedBox()
             else
               Row(
                 children: [
-                  if (viewModel.isVideoLoading || viewModel.videoPlayerController == null)
+                  if (viewModel.isVideoLoading)
                     SizedBox(
                       height: 22.h,
                       width: 22.h,
                       child: CircularProgressIndicator(strokeWidth: 2.w, color: EaselAppTheme.kWhite),
                     )
-                  else if (viewModel.videoPlayerController!.value.isPlaying)
+                  else if (viewModel.videoPlayerController.value.isPlaying)
                     InkWell(
                       onTap: viewModel.pauseVideo,
                       child: Icon(
@@ -72,7 +72,7 @@ class _OwnerVideoProgressWidgetState extends State<OwnerVideoProgressWidget> {
                   SizedBox(width: 15.w),
                   Expanded(
                     child: VideoProgressIndicator(
-                      viewModel.videoPlayerController!,
+                      viewModel.videoPlayerController,
                       allowScrubbing: true,
                       colors: VideoProgressColors(
                         backgroundColor: EaselAppTheme.kGrey,
@@ -83,7 +83,7 @@ class _OwnerVideoProgressWidgetState extends State<OwnerVideoProgressWidget> {
                   ),
                 ],
               ),
-            if (viewModel.videoLoadingError.isNotEmpty || viewModel.videoPlayerController == null)
+            if (viewModel.videoLoadingError.isNotEmpty)
               const SizedBox()
             else
               SizedBox(
@@ -94,7 +94,7 @@ class _OwnerVideoProgressWidgetState extends State<OwnerVideoProgressWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       StreamBuilder<Duration?>(
-                          stream: viewModel.videoPlayerController!.position.asStream(),
+                          stream: viewModel.videoPlayerController.position.asStream(),
                           builder: (BuildContext context, AsyncSnapshot<Duration?> snapshot) {
                             if (snapshot.hasData) {
                               final String duration = _getDuration(snapshot.data!);
@@ -111,7 +111,7 @@ class _OwnerVideoProgressWidgetState extends State<OwnerVideoProgressWidget> {
                             }
                           }),
                       Text(
-                        formatDuration(viewModel.videoPlayerController!.value.duration.inSeconds),
+                        formatDuration(viewModel.videoPlayerController.value.duration.inSeconds),
                         style: TextStyle(color: EaselAppTheme.kWhite, fontSize: 9.sp),
                       ),
                     ],

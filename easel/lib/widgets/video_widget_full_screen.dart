@@ -58,8 +58,8 @@ class _VideoWidgetFullScreenState extends State<VideoWidgetFullScreen> {
                 onVideoInitialized: (BuildContext context) => Center(
                       child: AspectRatio(
                         aspectRatio: easelProvider
-                            .videoPlayerController!.value.aspectRatio,
-                        child: VideoPlayer(easelProvider.videoPlayerController!),
+                            .videoPlayerController.value.aspectRatio,
+                        child: VideoPlayer(easelProvider.videoPlayerController),
                       ),
                     ),
                 easelProvider: easelProvider),

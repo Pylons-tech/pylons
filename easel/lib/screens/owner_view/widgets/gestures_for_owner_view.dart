@@ -1,11 +1,16 @@
 import 'package:easel_flutter/models/nft.dart';
+import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
+import 'package:easel_flutter/screens/owner_view/viewmodel/owner_view_viewmodel.dart';
+import 'package:easel_flutter/utils/enums.dart';
+import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class GesturesForDetailsScreen extends StatefulWidget {
   final Widget child;
   final DetailScreen screen;
   final NFT nft;
-  final dynamic viewModel;
+  final OwnerViewViewModel viewModel;
   final Function(TapUpDetails)? tapUp;
 
   const GesturesForDetailsScreen({Key? key, required this.child, required this.screen, required this.nft, required this.viewModel, this.tapUp}) : super(key: key);
@@ -42,36 +47,36 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
 
   void _onLongPressStart(LongPressStartDetails details) {
     if (widget.screen == DetailScreen.ownerScreen) {
-      if (widget.viewModel!.collapsed == true) {
+      if (widget.viewModel.collapsed == true) {
         if (details.globalPosition.dy < 745) {
-          widget.viewModel!.isViewingFullNft = true;
+          widget.viewModel.isViewingFullNft = true;
         }
         return;
       }
       if (details.globalPosition.dy < 575) {
-        widget.viewModel!.isViewingFullNft = true;
+        widget.viewModel.isViewingFullNft = true;
       }
       if (details.globalPosition.dx > 210 && details.globalPosition.dx < 320) {
-        widget.viewModel!.isViewingFullNft = true;
+        widget.viewModel.isViewingFullNft = true;
       }
       return;
     }
-    if (widget.viewModel!.collapsed == true) {
+    if (widget.viewModel.collapsed == true) {
       if (details.globalPosition.dy < 745) {
-        widget.viewModel!.isViewingFullNft = true;
+        widget.viewModel.isViewingFullNft = true;
       }
       return;
     }
     if (details.globalPosition.dy < 575) {
-      widget.viewModel!.isViewingFullNft = true;
+      widget.viewModel.isViewingFullNft = true;
     }
     if (details.globalPosition.dx > 210 && details.globalPosition.dx < 320) {
-      widget.viewModel!.isViewingFullNft = true;
+      widget.viewModel.isViewingFullNft = true;
     }
   }
 
   void _onLongPressEnd(LongPressEndDetails details) {
-    widget.viewModel!.isViewingFullNft = false;
+    widget.viewModel.isViewingFullNft = false;
   }
 
   void _onVerticalDragUpdate(DragUpdateDetails details) {
@@ -110,10 +115,10 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
         if (offsetDifference.abs() > swipeConfig.verticalThreshold) {
           final direction = offsetDifference > 0 ? SwipeDirection.up : SwipeDirection.down;
           if (direction == SwipeDirection.up) {
-            widget.viewModel!.collapsed = false;
+            widget.viewModel.collapsed = false;
             return;
           }
-          widget.viewModel!.collapsed = true;
+          widget.viewModel.collapsed = true;
         }
       }
     }
@@ -152,72 +157,48 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
   }
 
   void _onHorizontalDragEnd(DragEndDetails details) {
-    if (widget.screen == DetailScreen.ownerScreen) {
-      if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
-        final initialOffset = _initialSwipeOffset;
-        final finalOffset = _finalSwipeOffset;
+    if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
+      final initialOffset = _initialSwipeOffset;
+      final finalOffset = _finalSwipeOffset;
 
-        if (initialOffset != null && finalOffset != null) {
-          final offsetDifference = initialOffset.dx - finalOffset.dx;
+      if (initialOffset != null && finalOffset != null) {
+        final offsetDifference = initialOffset.dx - finalOffset.dx;
 
-          if (offsetDifference.abs() > swipeConfig.horizontalThreshold) {
-            final direction = offsetDifference > 0 ? SwipeDirection.left : SwipeDirection.right;
-            if (direction == SwipeDirection.left) {
-              // navigateToNextNft();
-              return;
-            }
-            // navigateToPreviousNft();
+        if (offsetDifference.abs() > swipeConfig.horizontalThreshold) {
+          final direction = offsetDifference > 0 ? SwipeDirection.left : SwipeDirection.right;
+          if (direction == SwipeDirection.left) {
+            navigateToNextNft();
+            return;
           }
+          navigateToPreviousNft();
         }
       }
+    }
 
-      _initialSwipeOffset = null;
-      _previousDirection = null;
-      return;
+    _initialSwipeOffset = null;
+    _previousDirection = null;
+    return;
+  }
+
+  void navigateToNextNft() {
+    final creatorHubViewModel = GetIt.I.get<CreatorHubViewModel>();
+    if (widget.nft.type.toNftTypeEnum() == NftType.TYPE_RECIPE) {
+      int index = creatorHubViewModel.nftPublishedList.indexOf(widget.nft);
+
+      if (creatorHubViewModel.nftPublishedList.length - 1 == index) return;
+      index = index + 1;
     }
   }
 
-// void navigateToNextNft() {
-//   final collectionViewModel = GetIt.I.get<CollectionViewModel>();
-//   if (widget.nft.type == NftType.TYPE_RECIPE) {
-//     int index = collectionViewModel.creations.indexOf(widget.nft);
-//
-//     if (collectionViewModel.creations.length - 1 == index) return;
-//     index = index + 1;
-//     final NFT nft = collectionViewModel.creations.elementAt(index);
-//
-//
-//     Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
-//   }
-//   if (widget.nft.type == NftType.TYPE_ITEM) {
-//     int index = collectionViewModel.purchases.indexOf(widget.nft);
-//
-//     if (collectionViewModel.purchases.length - 1 == index) return;
-//     index = index + 1;
-//     final NFT nft = collectionViewModel.purchases.elementAt(index);
-//     Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
-//   }
-// }
-//
-// void navigateToPreviousNft() {
-//   final collectionViewModel = GetIt.I.get<CollectionViewModel>();
-//   if (widget.nft.type == NftType.TYPE_RECIPE) {
-//     int index = collectionViewModel.creations.indexOf(widget.nft);
-//
-//     if (index == 0) return;
-//     index = index - 1;
-//     final NFT nft = collectionViewModel.creations.elementAt(index);
-//     Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
-//   }
-//   if (widget.nft.type == NftType.TYPE_ITEM) {
-//     int index = collectionViewModel.purchases.indexOf(widget.nft);
-//
-//     if (index == 0) return;
-//     index = index - 1;
-//     final NFT nft = collectionViewModel.purchases.elementAt(index);
-//     Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
-//   }
-// }
+  void navigateToPreviousNft() {
+    final collectionViewModel = GetIt.I.get<CreatorHubViewModel>();
+    if (widget.nft.type.toNftTypeEnum() == NftType.TYPE_RECIPE) {
+      int index = collectionViewModel.nftPublishedList.indexOf(widget.nft);
+
+      if (index == 0) return;
+      index = index - 1;
+    }
+  }
 }
 
 enum DetailScreen { ownerScreen, purchaseScreen }

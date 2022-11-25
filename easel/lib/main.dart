@@ -103,7 +103,6 @@ class MyApp extends StatelessWidget {
             RouteUtil.kPdfFullScreen: (context) => const PdfViewerFullScreen(),
             RouteUtil.kRouteWelcomeEasel: (context) => const WelcomeEasel(),
             RouteUtil.kOwnerViewScreen: (context) {
-              print(ModalRoute.of(context)?.settings.arguments.runtimeType);
               if (ModalRoute.of(context) == null) {
                 return const SizedBox();
               }

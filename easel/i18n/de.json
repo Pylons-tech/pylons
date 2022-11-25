@@ -143,5 +143,17 @@
   "app_needed_desc_three": "Sie können es jederzeit löschen, wenn Sie möchten",
   "why_app_needed_summary_three": "Keine Abonnements. Wir verkaufen Ihre Informationen nicht. Wir berechnen nur eine Gebühr, wenn Sie ein NFT kaufen",
   "upload_hint_three": "• Eine Datei pro upload",
-  "analytics_failure": "Analytics-Fehler"
+  "analytics_failure": "Analytics-Fehler",
+  "you": "Du",
+  "views": "Ansichten",
+  "ownership": "Eigentum",
+  "nft_details": "NFT Detail",
+  "history": "Geschichte",
+  "owner": "Eigentümer",
+  "edition": "Auflage",
+  "royalty_text": "Königtum",
+  "recipe_id": "Rezept ID",
+  "resolution": "Auflösung",
+  "ipfs_cid": "IPFS-CID",
+  "set_lockscreen": "Instellen als vergrendelscherm"
 }

@@ -1,19 +1,6 @@
-
 // ignore_for_file: constant_identifier_names
 
-enum IBCCoins {
-  urun,
-  ujunox,
-  none,
-  ujuno,
-  upylon,
-  ustripeusd,
-  eeur,
-  uatom,
-  weth_wei
-}
-
-
+enum IBCCoins { urun, ujunox, none, ujuno, upylon, ustripeusd, eeur, uatom, weth_wei }
 
 enum NftType {
   TYPE_RECIPE,
@@ -32,7 +19,6 @@ extension ToUploadStepPar on String {
     }, orElse: () => UploadStep.none); //return null if not found
   }
 }
-
 
 enum Orientation {
   Orientation_SE,

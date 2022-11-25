@@ -31,9 +31,9 @@ class _PreviewNFTFullScreenState extends State<PreviewNFTFullScreen> {
   }
 
   void onBackPressed({required BuildContext context}) {
-    if (easelProvider.publishedNFTClicked.assetType == AssetType.Video.name && easelProvider.videoPlayerController!.value.isInitialized) {
-      if (easelProvider.videoPlayerController!.value.isPlaying) {
-        easelProvider.videoPlayerController!.pause();
+    if (easelProvider.publishedNFTClicked.assetType == AssetType.Video.name && easelProvider.videoPlayerController.value.isInitialized) {
+      if (easelProvider.videoPlayerController.value.isPlaying) {
+        easelProvider.videoPlayerController.pause();
       }
     }
     easelProvider.videoLoadingError = '';

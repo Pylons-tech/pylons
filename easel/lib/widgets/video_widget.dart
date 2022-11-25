@@ -105,8 +105,8 @@ class VideoWidgetContent extends StatelessWidget {
                   ),
                 ),
                 onVideoInitialized: (BuildContext context) => AspectRatio(
-                  aspectRatio: easelProvider.videoPlayerController!.value.aspectRatio,
-                  child: VideoPlayer(easelProvider.videoPlayerController!),
+                  aspectRatio: easelProvider.videoPlayerController.value.aspectRatio,
+                  child: VideoPlayer(easelProvider.videoPlayerController),
                 ),
                 easelProvider: easelProvider,
               )
@@ -135,8 +135,8 @@ class VideoWidgetContent extends StatelessWidget {
                           child: Stack(
                             children: [
                               AspectRatio(
-                                aspectRatio: easelProvider.videoPlayerController!.value.aspectRatio,
-                                child: VideoPlayer(easelProvider.videoPlayerController!),
+                                aspectRatio: easelProvider.videoPlayerController.value.aspectRatio,
+                                child: VideoPlayer(easelProvider.videoPlayerController),
                               ),
                               _buildVideoFullScreenIcon(context),
                             ],

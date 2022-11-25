@@ -47,7 +47,7 @@ class VideoProgressWidget extends StatelessWidget {
                     children: [
                       if (easelProvider.isVideoLoading)
                         SizedBox(height: 22.h, width: 22.h, child: Image.asset(kLoadingGif))
-                      else if (easelProvider.videoPlayerController!.value.isPlaying)
+                      else if (easelProvider.videoPlayerController.value.isPlaying)
                         SizedBox(
                           height: 20.0.h,
                           child: InkWell(
@@ -74,7 +74,7 @@ class VideoProgressWidget extends StatelessWidget {
                       SizedBox(width: 10.w),
                       Expanded(
                         child: VideoProgressIndicator(
-                          easelProvider.videoPlayerController!,
+                          easelProvider.videoPlayerController,
                           allowScrubbing: true,
                           colors: VideoProgressColors(
                             backgroundColor: darkMode ? EaselAppTheme.kWhite : EaselAppTheme.kBlack,
@@ -94,7 +94,7 @@ class VideoProgressWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   StreamBuilder<Duration?>(
-                      stream: easelProvider.videoPlayerController!.position.asStream(),
+                      stream: easelProvider.videoPlayerController.position.asStream(),
                       builder: (BuildContext context, AsyncSnapshot<Duration?> snapshot) {
                         if (snapshot.hasData) {
                           final String duration = _getDuration(snapshot.data!);
@@ -109,7 +109,7 @@ class VideoProgressWidget extends StatelessWidget {
                         return SizedBox(width: 30.w, child: Image.asset(kLoadingGif));
                       }),
                   Text(
-                    isForFile ? formatDuration(easelProvider.fileDuration ~/ kSecInMillis) : formatDuration(easelProvider.videoPlayerController!.value.duration.inSeconds),
+                    isForFile ? formatDuration(easelProvider.fileDuration ~/ kSecInMillis) : formatDuration(easelProvider.videoPlayerController.value.duration.inSeconds),
                     style: TextStyle(color: darkMode ? EaselAppTheme.kWhite : EaselAppTheme.kBlack, fontWeight: FontWeight.w800, fontSize: 10.sp),
                   ),
                 ],

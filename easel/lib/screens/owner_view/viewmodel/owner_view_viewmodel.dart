@@ -1,4 +1,3 @@
-import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/models/nft_ownership_history.dart';
 import 'package:easel_flutter/repository/repository.dart';
@@ -9,14 +8,11 @@ import 'package:flutter/material.dart';
 
 class OwnerViewViewModel extends ChangeNotifier {
   final Repository repository;
-
   final AudioPlayerHelper audioPlayerHelper;
   final VideoPlayerHelper videoPlayerHelper;
-
-  // final ShareHelper shareHelper;
-
-  OwnerViewViewModel({
+ OwnerViewViewModel({
     required this.repository,
+    // required this.accountPublicInfo,
     // required this.walletsStore,
     required this.audioPlayerHelper,
     // required this.shareHelper,
@@ -28,7 +24,7 @@ class OwnerViewViewModel extends ChangeNotifier {
   bool _isLiking = true;
   bool likedByMe = false;
 
-  bool collapsed = true;
+  bool _collapsed = true;
   int viewCount = 1;
   int likesCount = 1;
   List<String> hashtagList = [];
@@ -38,12 +34,20 @@ class OwnerViewViewModel extends ChangeNotifier {
   bool isOwnershipExpanded = false;
   bool isHistoryExpanded = false;
   bool isDetailsExpanded = false;
+
   NFT get nft => _nft;
 
   bool get isLiking => _isLiking;
 
   set isLiking(bool value) {
     _isLiking = value;
+    notifyListeners();
+  }
+
+  bool get collapsed => _collapsed;
+
+  set collapsed(bool value) {
+    _collapsed = value;
     notifyListeners();
   }
 
@@ -62,7 +66,7 @@ class OwnerViewViewModel extends ChangeNotifier {
   }
 
   void toChangeCollapse() {
-    collapsed = !collapsed;
+    _collapsed = !_collapsed;
     notifyListeners();
   }
 
@@ -108,27 +112,4 @@ class OwnerViewViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> updateLikeStatus({required String recipeId, required String cookBookID}) async {
-    isLiking = true;
-    final bool temp = likedByMe;
-
-    // final walletAddress = accountPublicInfo.publicAddress;
-    // final updateLikeStatusEither = await repository.updateLikeStatus(
-    //   recipeId: recipeId,
-    //   cookBookID: cookBookID,
-    //   walletAddress: walletAddress,
-    // );
-
-    // if (updateLikeStatusEither.isLeft()) {
-    //   LocaleKeys.something_wrong.tr().show();
-    //   return;
-    // }
-    // likedByMe = !likedByMe;
-    // isLiking = false;
-    // if (temp && likesCount > 0) {
-    //   likesCount = likesCount - 1;
-    // } else {
-    //   likesCount = likesCount + 1;
-    // }
-  }
 }

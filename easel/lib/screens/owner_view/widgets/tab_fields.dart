@@ -47,13 +47,13 @@ class _TabFieldState extends State<TabField> {
     switch (widget.nft.type.toNftTypeEnum()) {
       case NftType.TYPE_RECIPE:
         return {
-          "owner": widget.owner,
-          "edition#": '#${widget.nft.amountMinted} of ${widget.nft.quantity}',
-          "rotality": widget.nft.tradePercentage,
+          "owner".tr(): widget.owner,
+          "${"edition".tr()}#": '#${widget.nft.amountMinted} of ${widget.nft.quantity}',
+          "royalty_text": widget.nft.tradePercentage,
         };
       case NftType.TYPE_ITEM:
         return {
-          "owner": widget.owner,
+          "owner".tr(): widget.owner,
         };
       case NftType.TYPE_TRADE:
         return {};
@@ -64,22 +64,22 @@ class _TabFieldState extends State<TabField> {
     switch (widget.nft.type.toNftTypeEnum()) {
       case NftType.TYPE_RECIPE:
         return {
-          "recipe id": widget.nft.recipeID,
-          "resolution": "${widget.nft.width}x${widget.nft.height}",
-          "ipfs id": widget.nft.cid,
+          "recipe_id".tr(): widget.nft.recipeID,
+          "resolution".tr(): "${widget.nft.width}x${widget.nft.height}",
+          "ipfs_cid".tr(): widget.nft.cid,
         };
       case NftType.TYPE_ITEM:
         return {
-          "recipe": widget.nft.recipeID,
+          "recipe_id".tr(): widget.nft.recipeID,
         };
       case NftType.TYPE_TRADE:
         break;
     }
 
     return {
-      "recipe": widget.nft.recipeID,
-      "resolution": "${widget.nft.width}x${widget.nft.height}",
-      "ipfs": widget.nft.cid,
+      "recipe_id".tr(): widget.nft.recipeID,
+      "resolution".tr(): "${widget.nft.width}x${widget.nft.height}",
+      "ipfs_cid".tr(): widget.nft.cid,
     };
   }
 
@@ -94,9 +94,10 @@ class _TabFieldState extends State<TabField> {
     final listDetails = nftDetail.entries
         .map(
           (element) => _tabDetails(
-              field: element.key,
-              value: element.value,
-              customWidget: (element.key == "recipe id" || element.key == "ipfs") && element.value.isNotEmpty ? _tabDetailsWithIcon(value: element.value) : null),
+            field: element.key,
+            value: element.value,
+            customWidget: (element.key == "recipe_id".tr() || element.key == "ipfs_cid".tr()) && element.value.isNotEmpty ? _tabDetailsWithIcon(value: element.value) : null,
+          ),
         )
         .toList();
 
@@ -133,9 +134,9 @@ class _TabFieldState extends State<TabField> {
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
                       TabFields? _field;
-                      if (widget.name == "owner ship") {
+                      if (widget.name == "ownership".tr()) {
                         _field = TabFields.ownership;
-                      } else if (widget.name == "nft detail") {
+                      } else if (widget.name == "nft_details".tr()) {
                         _field = TabFields.details;
                       } else {
                         _field = TabFields.history;
@@ -171,11 +172,11 @@ class _TabFieldState extends State<TabField> {
               ),
             ],
           ),
-          if (widget.name == "ownership" && widget.isExpanded)
+          if (widget.name == "ownership".tr() && widget.isExpanded)
             ...listOwnership
-          else if (widget.name == "nft_details" && widget.isExpanded)
+          else if (widget.name == "nft_details".tr() && widget.isExpanded)
             ...listDetails
-          else if (widget.name == "history" && widget.isExpanded)
+          else if (widget.name == "history".tr() && widget.isExpanded)
             _listHistory(widget.nftOwnershipHistoryList, context)
         ],
       ),

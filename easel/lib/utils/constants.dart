@@ -69,6 +69,7 @@ class SVGUtils {
   static const kShareIcon = 'assets/images/icons/share.svg';
   static const kVerifiedIcon = 'assets/images/icons/verified.svg';
   static const kViewsIcon = 'assets/images/icons/views.svg';
+  static const kTransactionSuccessIcon = 'assets/images/svg/transaction_success.svg';
 }
 
 const String kLoadingGif = 'assets/images/gifs/loading.gif';
@@ -280,7 +281,11 @@ class AnalyticsScreenEvents {
 
 const kDraftTileKey = "draft_tile_key";
 const kNftTileKey = "nft_tile_key";
-
+const kAudioWidgetKey = "audio_widget_key";
+const kVideoWidgetKey = "video_widget_key";
+const kImageWidgetKey = "image_widget_key";
+const k3DWidgetKey = "3d_widget_key";
+const kPdfWidgetKey = "pdf_widget_key";
 const kItemId = "id";
 const String kTo = "to";
 const String kFrom = "from";
@@ -296,3 +301,9 @@ const String kSubjectKey = 'subject';
 const String kFeedbackKey = 'feedback';
 const String kTimeStampKey = 'timestamp';
 const String kAddressKey = "address";
+const String kTrophyIcon = "trophy";
+const String kDetailIcon = "detail";
+const String kHistoryIcon = "history";
+const String kPylo = 'pylo';
+const String kENV = 'ENV';
+const String kLocal = 'local';
