@@ -273,3 +273,36 @@ extension NftTypeConvert on String {
     return NftType.values.firstWhere((e) => e.toString() == 'NftType.$value', orElse: () => NftType.TYPE_RECIPE);
   }
 }
+
+extension GetCoinWithProperDenomination on String {
+  String getCoinWithProperDenomination(String amount) {
+    if (this == kUsdSymbol) {
+      return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
+    } else if (this == kPylonSymbol) {
+      return (double.parse(amount) / kBigIntBase).toStringAsFixed(0);
+    } else {
+      return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
+    }
+  }
+}
+
+extension GetAbbrev on String {
+  String getAbbrev() {
+    switch (this) {
+      case kAgoricSymbol:
+        return kAgoricAbr;
+      case kPylonSymbol:
+        return kPYLNAbbrevation;
+      case kUsdSymbol:
+        return kStripeUSDABR;
+      case kEuroSymbol:
+        return kEmoneyAbb;
+      case kAtomSymbol:
+        return kAtomAbr;
+      case kEthereumSymbol:
+        return kEthereumAbr;
+      default:
+        return kPYLNAbbrevation;
+    }
+  }
+}

@@ -16,9 +16,9 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 // Msg defines the Msg service.
 service Msg {
-    rpc AppleIap(MsgAppleIap) returns (MsgAppleIapResponse);
+  rpc AppleIap(MsgAppleIap) returns (MsgAppleIapResponse);
   rpc AddStripeRefund(MsgAddStripeRefund) returns (MsgAddStripeRefundResponse);
-// this line is used by starport scaffolding # proto/tx/rpc
+// //this line is used by starport scaffolding # proto/tx/rpc
   rpc BurnDebtToken(MsgBurnDebtToken) returns (MsgBurnDebtTokenResponse);
   rpc UpdateAccount(MsgUpdateAccount) returns (MsgUpdateAccountResponse);
   rpc FulfillTrade(MsgFulfillTrade) returns (MsgFulfillTradeResponse);
@@ -28,6 +28,7 @@ service Msg {
   rpc TransferCookbook(MsgTransferCookbook) returns (MsgTransferCookbookResponse);
   rpc GoogleInAppPurchaseGetCoins(MsgGoogleInAppPurchaseGetCoins) returns (MsgGoogleInAppPurchaseGetCoinsResponse);
   rpc CreateAccount(MsgCreateAccount) returns (MsgCreateAccountResponse);
+  rpc SetUsername(MsgSetUsername) returns (MsgSetUsernameResponse);
   rpc SendItems(MsgSendItems) returns (MsgSendItemsResponse);
   rpc ExecuteRecipe(MsgExecuteRecipe) returns (MsgExecuteRecipeResponse);
   rpc SetItemString(MsgSetItemString) returns (MsgSetItemStringResponse);
@@ -76,9 +77,15 @@ message MsgUpdateAccountResponse {
 
 message MsgCreateAccount {
   string creator = 1;
+  string token = 2;
+  string referral_address = 3;
+}
+
+message MsgSetUsername {
+  string creator = 1;
   string username = 2;
-  string token = 3;
-  string referral_address = 4;
+}
+message MsgSetUsernameResponse {
 }
 
 message MsgCreateAccountResponse {

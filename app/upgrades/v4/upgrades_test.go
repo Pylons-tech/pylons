@@ -2,7 +2,6 @@ package v4_test
 
 import (
 	"fmt"
-	"strconv"
 	"testing"
 
 	"cosmossdk.io/math"
@@ -135,8 +134,8 @@ func (suite *UpgradeTestSuite) TestCleanUpylons() {
 	amountOfCoinsTest := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10_000_000)))
 
 	//create Google IAP order and test addresses
-	items := suite.setUpGoogleIAPOrder(suite.Ctx, 2, productID)
-	testAddrs := suite.setUpTestAddrs(5)
+	items := suite.SetUpGoogleIAPOrder(suite.Ctx, 2, productID)
+	testAddrs := suite.SetUpTestAddrs(5)
 
 	for _, tc := range []struct {
 		desc   string
@@ -186,31 +185,6 @@ func (suite *UpgradeTestSuite) TestCleanUpylons() {
 	}
 }
 
-// set up googleIAPOder
-func (suite *UpgradeTestSuite) setUpGoogleIAPOrder(ctx sdk.Context, n int, productID string) []types.GoogleInAppPurchaseOrder {
-	items := make([]types.GoogleInAppPurchaseOrder, n)
-	creators := types.GenTestBech32List(n)
-	for i := range items {
-		items[i].Creator = creators[i]
-		items[i].PurchaseToken = strconv.Itoa(i)
-		items[i].ProductId = productID
-		suite.App.PylonsKeeper.AppendGoogleIAPOrder(ctx, items[i])
-	}
-	return items
-}
-
-// set up test addresses
-func (suite *UpgradeTestSuite) setUpTestAddrs(n int) []sdk.AccAddress {
-	testAddrs := make([]sdk.AccAddress, n)
-	for id := range testAddrs {
-		testAcc := types.GenTestBech32FromString(fmt.Sprint(id))
-		testAddr, err := sdk.AccAddressFromBech32(testAcc)
-		suite.Require().NoError(err)
-		testAddrs[id] = testAddr
-	}
-	return testAddrs
-}
-
 func (suite *UpgradeTestSuite) TestRefundIAPNFTBUY() {
 	// run iap nft buy refund
 	suite.Setup()
@@ -218,8 +192,8 @@ func (suite *UpgradeTestSuite) TestRefundIAPNFTBUY() {
 	amountValid := 10_000_000
 	amountOfCoinsTest := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10_000_000)))
 	// create Google IAP order and test addresses
-	items := suite.setUpGoogleIAPOrder(suite.Ctx, 2, productID)
-	testAddrs := suite.setUpTestAddrs(5)
+	items := suite.SetUpGoogleIAPOrder(suite.Ctx, 2, productID)
+	testAddrs := suite.SetUpTestAddrs(5)
 
 	// create a cookbook
 	creator := testAddrs[0]
@@ -358,7 +332,7 @@ func (suite *UpgradeTestSuite) TestRefundIAPNFTBUY() {
 func (suite *UpgradeTestSuite) TestRefundLuxFloralis() {
 	suite.Setup()
 	// Make recipe executions records
-	testAddrs := suite.setUpTestAddrs(5)
+	testAddrs := suite.SetUpTestAddrs(5)
 	creator := testAddrs[0]
 	amountValid := int64(10_000_000)
 

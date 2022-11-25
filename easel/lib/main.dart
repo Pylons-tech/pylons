@@ -31,6 +31,7 @@ bool isTablet = false;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+      
   await Firebase.initializeApp();
   di.init();
   final firebaseCrashlytics = GetIt.I.get<FirebaseCrashlytics>();

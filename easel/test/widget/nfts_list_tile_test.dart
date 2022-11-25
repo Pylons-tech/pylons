@@ -1,7 +1,7 @@
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/creator_hub/widgets/nfts_list_tile.dart';
-import 'package:easel_flutter/utils/constants.dart';
+import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
@@ -20,7 +20,7 @@ void main() {
     "NFTs List Tile Test",
     () {
       testWidgets(
-        "Testing Price Banner for NFT having price",
+        "Testing Banner text for Pylons NFT having price",
         (tester) async {
           await tester.setScreenSize();
           await tester.testAppForWidgetTesting(
@@ -38,7 +38,30 @@ void main() {
           );
 
           await tester.pump();
-          final banner = find.byKey(const Key(kPriceBannerKey));
+          final banner = find.byKey(Key("${MOCK_PRICED_NFT.ibcCoins.getCoinWithProperDenomination(MOCK_PRICED_NFT.price)} ${MOCK_PRICED_NFT.ibcCoins.getAbbrev()}"));
+          expect(banner, findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        "Testing Banner text for USD NFT having price",
+        (tester) async {
+          await tester.setScreenSize();
+          await tester.testAppForWidgetTesting(
+            Scaffold(
+              body: ChangeNotifierProvider(
+                create: (ctx) => GetIt.I.get<CreatorHubViewModel>(),
+                builder: (context, _) {
+                  return NFTsListTile(
+                    publishedNFT: MOCK_PRICED_NFT_USD,
+                  );
+                },
+              ),
+            ),
+          );
+
+          await tester.pump();
+          final banner = find.byKey(Key("${MOCK_PRICED_NFT_USD.ibcCoins.getCoinWithProperDenomination(MOCK_PRICED_NFT_USD.price)} ${MOCK_PRICED_NFT_USD.ibcCoins.getAbbrev()}"));
           expect(banner, findsOneWidget);
         },
       );
@@ -62,7 +85,8 @@ void main() {
           );
 
           await tester.pump();
-          final banner = find.byKey(const Key(kPriceBannerKey));
+          final banner = find.byKey(Key("${MOCK_NFT.ibcCoins.getCoinWithProperDenomination(MOCK_NFT.price)} ${MOCK_NFT.ibcCoins.getAbbrev()}"));
+
           expect(banner, findsNothing);
         },
       );
