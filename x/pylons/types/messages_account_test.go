@@ -20,7 +20,6 @@ func TestMsgCreateAccountValidateBasic(t *testing.T) {
 			desc: "Valid",
 			req: &MsgCreateAccount{
 				Creator:         correctCreatorAddr,
-				Username:        "Username",
 				ReferralAddress: "",
 			},
 			err: nil,
@@ -28,34 +27,23 @@ func TestMsgCreateAccountValidateBasic(t *testing.T) {
 		{
 			desc: "Invalid creator address 1",
 			req: &MsgCreateAccount{
-				Creator:  "",
-				Username: "Username",
+				Creator: "",
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		},
 		{
 			desc: "Invalid creator address 2",
 			req: &MsgCreateAccount{
-				Creator:  invalidAddr,
-				Username: "Username",
+				Creator: invalidAddr,
 			},
 			err: sdkerrors.ErrInvalidAddress,
 		},
 		{
 			desc: "Invalid creator address 3",
 			req: &MsgCreateAccount{
-				Creator:  "test",
-				Username: "Username",
+				Creator: "test",
 			},
 			err: sdkerrors.ErrInvalidAddress,
-		},
-		{
-			desc: "Invalid username",
-			req: &MsgCreateAccount{
-				Creator:  correctCreatorAddr,
-				Username: "",
-			},
-			err: ErrInvalidRequestField,
 		},
 	} {
 		tc := tc
@@ -114,6 +102,64 @@ func TestMsgUpdateAccountValidateBasic(t *testing.T) {
 		{
 			desc: "Invalid username",
 			req: &MsgUpdateAccount{
+				Creator:  correctCreatorAddr,
+				Username: "",
+			},
+			err: ErrInvalidRequestField,
+		},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			err := tc.req.ValidateBasic()
+			if err != nil {
+				require.ErrorIs(t, err, tc.err)
+			} else {
+				require.NoError(t, tc.err)
+			}
+		})
+	}
+}
+func TestMsgSetUsername(t *testing.T) {
+	correctCreatorAddr := "cosmos1n67vdlaejpj3uzswr9qapeg76zlkusj5k875ma"
+	invalidAddr := "pylo1xn72u3jxlpqx8tfgmjf0xg970q36xensjngsme"
+
+	for _, tc := range []struct {
+		desc string
+		req  *MsgSetUsername
+		err  error
+	}{
+		{
+			desc: "Valid",
+			req: &MsgSetUsername{
+				Creator:  correctCreatorAddr,
+				Username: "Username",
+			},
+			err: nil,
+		},
+		{
+			desc: "Invalid creator address 1",
+			req: &MsgSetUsername{
+				Creator: "",
+			},
+			err: sdkerrors.ErrInvalidAddress,
+		},
+		{
+			desc: "Invalid creator address 2",
+			req: &MsgSetUsername{
+				Creator: invalidAddr,
+			},
+			err: sdkerrors.ErrInvalidAddress,
+		},
+		{
+			desc: "Invalid creator address 3",
+			req: &MsgSetUsername{
+				Creator: "test",
+			},
+			err: sdkerrors.ErrInvalidAddress,
+		},
+		{
+			desc: "Invalid username",
+			req: &MsgSetUsername{
 				Creator:  correctCreatorAddr,
 				Username: "",
 			},

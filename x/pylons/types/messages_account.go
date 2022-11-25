@@ -8,12 +8,12 @@ import (
 var (
 	_ sdk.Msg = &MsgCreateAccount{}
 	_ sdk.Msg = &MsgUpdateAccount{}
+	_ sdk.Msg = &MsgSetUsername{}
 )
 
-func NewMsgCreateAccount(creator, username, token, referral string) *MsgCreateAccount {
+func NewMsgCreateAccount(creator, token, referral string) *MsgCreateAccount {
 	return &MsgCreateAccount{
 		Creator:         creator,
-		Username:        username,
 		Token:           token,
 		ReferralAddress: referral,
 	}
@@ -44,10 +44,6 @@ func (msg *MsgCreateAccount) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
-	}
-
-	if err = ValidateUsername(msg.Username); err != nil {
-		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
 	}
 
 	return nil
@@ -87,6 +83,46 @@ func (msg *MsgUpdateAccount) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
+	if err = ValidateUsername(msg.Username); err != nil {
+		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
+	}
+
+	return nil
+}
+
+func NewMsgSetUsername(creator, username string) *MsgSetUsername {
+	return &MsgSetUsername{
+		Creator:  creator,
+		Username: username,
+	}
+}
+
+func (msg *MsgSetUsername) Route() string {
+	return RouterKey
+}
+
+func (msg *MsgSetUsername) Type() string {
+	return "SetUsername"
+}
+
+func (msg *MsgSetUsername) GetSigners() []sdk.AccAddress {
+	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{creator}
+}
+
+func (msg *MsgSetUsername) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(bz)
+}
+
+func (msg *MsgSetUsername) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
+	}
 	if err = ValidateUsername(msg.Username); err != nil {
 		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
 	}
