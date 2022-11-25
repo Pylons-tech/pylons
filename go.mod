@@ -4,6 +4,7 @@ module github.com/Pylons-tech/pylons
 
 replace (
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.1.7-0.20210622111912-ef00f8ac3d76
+	github.com/confio/ics23/go => github.com/cosmos/cosmos-sdk/ics23/go v0.8.0
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 	github.com/tendermint/tm-db => github.com/notional-labs/tm-db v0.6.7-0.20220731185452-136c7b65fb62
 )
