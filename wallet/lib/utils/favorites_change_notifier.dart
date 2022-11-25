@@ -31,7 +31,8 @@ class FavoritesChangeNotifier extends ChangeNotifier {
 
   Future<void> removeFromFavorites({required String recipeId}) async {
     for (final NFT? nft in favorites) {
-      if (nft!.recipeID == recipeId) {
+      if (nft == null) return;
+      if (nft.recipeID == recipeId) {
         favorites.remove(nft);
         break;
       }
