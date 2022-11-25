@@ -4,7 +4,7 @@ OLD_VERSION=0.5.0
 UPGRADE_HEIGHT=20
 HOME=mytestnet
 ROOT=$(pwd)
-DENOM=upylons
+DENOM=upylon
 SOFTWARE_UPGRADE_NAME=v1.1.0
 
 # underscore so that go tool will not take gocache into account

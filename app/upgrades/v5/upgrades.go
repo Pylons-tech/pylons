@@ -17,7 +17,7 @@ const (
 )
 
 var (
-	TotalUbedrock       = math.NewIntFromUint64(1_000_000_000_000_000) // 1 bedrock = 1_000_000 ubedrock
+	TotalUbedrock       = math.NewIntFromUint64(1e15) // 1 bedrock = 1_000_000 ubedrock
 	MasterWalletbalance = math.NewIntFromUint64(1e15)
 )
 
@@ -31,13 +31,18 @@ func CreateUpgradeHandler(
 	return func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 		// logger := ctx.Logger()
 
+		bankBaseKeeper, _ := bankKeeper.(bankkeeper.BaseKeeper)
 		if types.IsMainnet(ctx.ChainID()) {
-
-			bankBaseKeeper, _ := bankKeeper.(bankkeeper.BaseKeeper)
 			BurnToken(ctx, accKeeper, &bankBaseKeeper, staking)
-			MintUbedrockForInitialAccount(ctx, &bankBaseKeeper, staking)
 		}
-		return mm.RunMigrations(ctx, configurator, fromVM)
+
+		vm, err := mm.RunMigrations(ctx, configurator, fromVM)
+
+		if types.IsMainnet(ctx.ChainID()) {
+			MintUbedrockForInitialAccount(ctx, &bankBaseKeeper, staking, accKeeper)
+		}
+
+		return vm, err
 	}
 }
 
@@ -67,10 +72,9 @@ func BurnToken(ctx sdk.Context, accKeeper *authkeeper.AccountKeeper, bank *bankk
 }
 
 // Mint ubedrock for master wallet
-func MintUbedrockForInitialAccount(ctx sdk.Context, bank *bankkeeper.BaseKeeper, staking *stakingkeeper.Keeper) {
+func MintUbedrockForInitialAccount(ctx sdk.Context, bank *bankkeeper.BaseKeeper, staking *stakingkeeper.Keeper, accKeeper *authkeeper.AccountKeeper) {
 	// Get currect balance of master wallet address
 	balance := bank.GetBalance(ctx, sdk.MustAccAddressFromBech32(MasterWallet), types.StakingCoinDenom)
-
 	// check difference in amount to add
 	toAdd := MasterWalletbalance.Sub(balance.Amount)
 
