@@ -54,6 +54,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdGoogleInAppPurchaseGetCoins())
 
 	cmd.AddCommand(CmdCreateAccount())
+	cmd.AddCommand(CmdSetUsername())
 
 	cmd.AddCommand(CmdSendItems())
 

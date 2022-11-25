@@ -1,72 +1,67 @@
 ---
-title: "Quick Start"
-date: 2022-04-26T12:27:33-05:00
+title: "Tech Setup"
+date: 2022-04-26T12:27:08-05:00
 draft: false
-weight: 1
+weight: 2
 ---
 
-## Get started
+# Technical Setup 
 
-```
-starport chain serve
-```
+To ensure you have a successful experience working with Pylons, your local system must meet these technical requirements.
 
-`serve` command installs dependencies, builds, initializes, and starts your blockchain in development.
+## Install Go
 
-### Configure
+This installation method removes existing Go installations, installs Go in `/usr/local/go/bin/go`, and sets the environment variables.
 
-The blockchain in development can be configured with `config.yml`. To learn more, see the [Starport docs](https://docs.starport.network).
+1. Go to <https://golang.org/dl>.
+1. Download the binary release that is suitable for your system.
+1. Follow the installation instructions.
 
-### Launch
+**Note:** We recommend not using brew to install Go.
 
-To launch the blockchain live on multiple nodes, use `starport network` commands. Learn more about [Starport Network](https://github.com/tendermint/spn).
+## Install Git pre-commit Hook
 
-### Web Frontend
+Git `pre-commit` hooks run before any commit to the Git repository. These hooks verify that each commit passes basic formatting and linting checks.
 
-Starport has scaffolded a Vue.js-based web app in the `vue` directory. Run the following commands to install dependencies and start the app:
+- Homebrew 
 
-```
-cd vue
-npm install
-npm run serve
-```
+    ```shell
+    brew install pre-commit
+    ```
 
-or 
+- Pip package manager
 
-```
-cd vue
-yarn install
-yarn serve
-```
+    ```shell
+    pip install pre-commit
+    ```
 
-The frontend app is built using the `@starport/vue` and `@starport/vuex` packages. For details, see the [monorepo for Starport front-end development](https://github.com/tendermint/vue).
+## Install pre-commit in Your Local Pylons Repo
 
-## Release
+After installing the `pre-commit` binary, run the following command in the base directory of the `pylons` repository:
 
-To release a new version of your blockchain, create and push a new tag with `v` prefix. A new draft release with the configured targets will be created.
-
-```
-git tag v0.1
-git push origin v0.1
+```shell
+pre-commit install
 ```
 
-After a draft release is created, make your final changes from the release page and publish it.
+Now, any time `git commit *` is run, the `pre-commit` hooks run before the commit can be finalized.
 
-### Install
+## Install Go Linters Aggregator
 
-To install the latest version of the blockchain node's binary, execute the following command on your machine:
+The `golangci-lint` linter runner is used in the `make lint` command that is provided to developers.
 
+To install `golangci-lint` into `$GOPATH/bin`, run:
+
+```shell
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.41.1
 ```
-curl https://get.starport.network/Pylons-tech/pylons@latest! | sudo bash
+
+## Install goimports tool
+
+The `goimports` tool is used int the `make format` command taht is provided to developers.
+
+To install `goimports` using the `go get` command:
+
+```shell
+go get golang.org/x/tools/cmd/goimports
 ```
-
-`Pylons-tech/pylons` should match the `username` and `repo_name` of the Github repository to which the source code was pushed. Learn more about [the install process](https://github.com/allinbits/starport-installer).
-
-## Learn more
-
-- [Starport](https://github.com/tendermint/starport)
-- [Starport Docs](https://docs.starport.network)
-- [Cosmos SDK documentation](https://docs.cosmos.network)
-- [Cosmos SDK Tutorials](https://tutorials.cosmos.network)
-- [Discord](https://discord.gg/W8trcGV)
 

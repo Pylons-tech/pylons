@@ -192,9 +192,11 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
               },
             },
             builder: (context, widget) {
-              return MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                child: widget ?? Container(),
+              return Material(
+                child: MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                  child: widget ?? Container(),
+                ),
               );
             },
           ),
@@ -354,7 +356,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
           );
 
           final appleInAppPurchaseResponse = await walletStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
-
+          loading.dismiss();
           if (appleInAppPurchaseResponse.isLeft()) {
             appleInAppPurchaseResponse.swap().toOption().toNullable()!.message.show();
             return;

@@ -11,6 +11,7 @@ import 'package:easel_flutter/screens/creator_hub/widgets/nfts_list_tile.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/dependency_injection/dependency_injection_container.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
+import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:easel_flutter/utils/route_util.dart';
 import 'package:easel_flutter/widgets/clipped_button.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -394,7 +395,7 @@ class BuildGridView extends StatelessWidget {
                   key: const Key(kPriceBannerKey),
                   color: EaselAppTheme.kDarkGreen,
                   location: BannerLocation.topEnd,
-                  message: "${getCoinWithProperDenomination(nft.ibcCoins, nft.price)}  ${getAbbrev(ibcCoin: nft.ibcCoins)}",
+                  message: "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)} ${nft.ibcCoins.getAbbrev()}",
                   child: NftGridViewItem(
                     nft: nft,
                   ),
@@ -405,35 +406,6 @@ class BuildGridView extends StatelessWidget {
               );
       },
     );
-  }
-
-  String getCoinWithProperDenomination(String ibcCoin, String amount) {
-    if (ibcCoin == "weth_wei") {
-      return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
-    } else if (ibcCoin == "upylon") {
-      return (double.parse(amount) / kBigIntBase).toStringAsFixed(0);
-    } else {
-      return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
-    }
-  }
-
-  String getAbbrev({required String ibcCoin}) {
-    switch (ibcCoin) {
-      case "urun":
-        return kAgoricAbr;
-      case "upylon":
-        return kPYLNAbbrevation;
-      case "ustripeusd":
-        return kStripeUSDABR;
-      case "eeur":
-        return kEmoneyAbb;
-      case "uatom":
-        return kAtomAbr;
-      case "weth_wei":
-        return kEthereumAbr;
-      default:
-        return kPYLNAbbrevation;
-    }
   }
 }
 
