@@ -50,24 +50,25 @@ class _CreatorHubScreenState extends State<CreatorHubScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: EaselAppTheme.kBgWhite,
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: EaselAppTheme.kBgWhite,
-          body: ChangeNotifierProvider.value(
-            value: creatorHubViewModel,
-            child: FocusDetector(
-              onFocusGained: () {
-                GetIt.I.get<CreatorHubViewModel>().getDraftsList();
-                GetIt.I.get<CreatorHubViewModel>().getTotalForSale();
-              },
-              child: const CreatorHubContent(),
+    return ChangeNotifierProvider.value(
+        value: creatorHubViewModel,
+        builder: (context, child) {
+          return ColoredBox(
+            color: EaselAppTheme.kBgWhite,
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: EaselAppTheme.kBgWhite,
+                body: FocusDetector(
+                  onFocusGained: () {
+                    GetIt.I.get<CreatorHubViewModel>().getDraftsList();
+                    GetIt.I.get<CreatorHubViewModel>().getTotalForSale();
+                  },
+                  child: const CreatorHubContent(),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
+        });
   }
 }
 
