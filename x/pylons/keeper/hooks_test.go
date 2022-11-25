@@ -195,6 +195,7 @@ func (suite *IntegrationTestSuite) TestAfterEpochEndNoDeligators() {
 	delegatorMap := map[string]sdk.Coins{}
 	balances := sdk.Coins{}
 	if len(delegatorsRewards) == 0 {
+		// In this Case No loop will be executed because we have no deligators to send reward
 		// looping through delegators to get their old balance
 		for address, amount := range delegatorsRewards {
 			// looping through amount type of sdk.coins to get every amount and denom
