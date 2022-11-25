@@ -11,5 +11,4 @@ export 'src/types/execution.dart';
 export 'src/types/item.dart';
 export 'src/types/profile.dart';
 export 'src/types/recipe.dart';
-export 'src/types/trade.dart';
 export 'src/features/helper/dec_string.dart';

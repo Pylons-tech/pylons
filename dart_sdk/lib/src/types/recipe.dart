@@ -66,7 +66,7 @@ class Recipe {
   ///
   /// This is obviously not an ideal state of affairs, and will be fixed ASAP.
 
-  Future<String> executeWith (Profile prf, List<Item> inputs, {int CoinInputIndex = 0, List<generated.PaymentInfo>Function()? paymentInfoGen} ) async {
+  Future<Execution> executeWith (Profile prf, List<Item> inputs, {int CoinInputIndex = 0, List<generated.PaymentInfo>Function()? paymentInfoGen} ) async {
     var ids = <String>[];
     var infos = <generated.PaymentInfo>[];
     if (paymentInfoGen != null) infos = paymentInfoGen();
@@ -93,7 +93,7 @@ class Recipe {
         sender: prf.address,
         requestResponse: true);
     if (lowLevel.success) {
-      return lowLevel.data!;
+      return Execution(lowLevel.data!);
     } else {
       return Future.error(lowLevel.error);
     }

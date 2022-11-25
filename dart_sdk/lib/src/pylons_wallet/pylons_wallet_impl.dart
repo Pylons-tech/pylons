@@ -222,7 +222,7 @@ class PylonsWalletImpl implements PylonsWallet {
   }
 
   @override
-  Future<SDKIPCResponse<String>> txExecuteRecipe(
+  Future<SDKIPCResponse<Execution>> txExecuteRecipe(
       {required String cookbookId,
       required String recipeName,
       required List<String> itemIds,
@@ -244,8 +244,13 @@ class PylonsWalletImpl implements PylonsWallet {
                 .toProto3Json()),
             requestResponse: requestResponse);
 
-        if (response is SDKIPCResponse<String>) {
+        if (response is SDKIPCResponse<Execution>) {
           return response;
+        }
+
+        if (response is SDKIPCResponse<String> && !requestResponse) {
+          return SDKIPCResponse.success(Execution.create(),
+              action: Strings.TX_EXECUTE_RECIPE);
         }
 
         throw Exception('Response malformed');
