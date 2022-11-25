@@ -12,34 +12,43 @@ class VideoPlaceHolder extends StatelessWidget {
   final String nftUrl;
   final String nftName;
   final String thumbnailUrl;
+  final bool showIcon;
 
   const VideoPlaceHolder({
     Key? key,
     required this.nftUrl,
     required this.nftName,
     required this.thumbnailUrl,
+    this.showIcon = true,
   }) : super(key: key);
 
   Widget getVideoThumbnailFromUrl() {
     return Stack(
       children: [
         Positioned.fill(
-            child: CachedNetworkImage(
-                placeholder: (context, url) => Shimmer(
-                      color: PylonsAppTheme.cardBackground,
-                      child: const SizedBox.expand(),
-                    ),
-                imageUrl: thumbnailUrl,
-                fit: BoxFit.cover)),
-        Align(
-          child: Container(
-            width: 35.w,
-            height: 35.h,
-            decoration: BoxDecoration(
-                color: AppColors.kWhite.withOpacity(0.5), shape: BoxShape.circle),
-            child: Image.asset(
-              ImageUtil.VIDEO_ICON,
-              color: AppColors.kBlack,
+          child: CachedNetworkImage(
+            placeholder: (context, url) => Shimmer(
+              color: PylonsAppTheme.cardBackground,
+              child: const SizedBox.expand(),
+            ),
+            imageUrl: thumbnailUrl,
+            fit: BoxFit.cover,
+          ),
+        ),
+        Visibility(
+          visible: showIcon,
+          child: Align(
+            child: Container(
+              width: 35.w,
+              height: 35.h,
+              decoration: BoxDecoration(
+                color: AppColors.kWhite.withOpacity(0.5),
+                shape: BoxShape.circle,
+              ),
+              child: Image.asset(
+                ImageUtil.VIDEO_ICON,
+                color: AppColors.kBlack,
+              ),
             ),
           ),
         ),
@@ -50,13 +59,15 @@ class VideoPlaceHolder extends StatelessWidget {
   Widget getWaitingWidget() {
     return Stack(children: [
       Align(
-          child: SizedBox(
-              width: 35.w,
-              height: 35.h,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.w,
-                color: AppColors.kBlack,
-              ))),
+        child: SizedBox(
+          width: 35.w,
+          height: 35.h,
+          child: CircularProgressIndicator(
+            strokeWidth: 2.w,
+            color: AppColors.kBlack,
+          ),
+        ),
+      ),
     ]);
   }
 
@@ -66,7 +77,9 @@ class VideoPlaceHolder extends StatelessWidget {
         width: 35.w,
         height: 35.h,
         decoration: BoxDecoration(
-            color:AppColors.kWhite.withOpacity(0.5), shape: BoxShape.circle),
+          color: AppColors.kWhite.withOpacity(0.5),
+          shape: BoxShape.circle,
+        ),
         child: Image.asset(
           ImageUtil.VIDEO_ICON,
           color: AppColors.kBlack.withOpacity(0.7),
@@ -78,26 +91,36 @@ class VideoPlaceHolder extends StatelessWidget {
   Widget getSuccessWidget(AsyncSnapshot<String?> snapshot) {
     return Stack(children: [
       Positioned.fill(
-          child: Image.file(File(snapshot.data.toString()),
-              fit: BoxFit.fitWidth, cacheWidth: 100, cacheHeight: 110)),
+        child: Image.file(
+          File(snapshot.data.toString()),
+          fit: BoxFit.fitWidth,
+          cacheWidth: 100,
+          cacheHeight: 110,
+        ),
+      ),
       Align(
-          child: Container(
-              width: 35.w,
-              height: 35.h,
-              decoration: BoxDecoration(
-                  color: AppColors.kWhite.withOpacity(0.5), shape: BoxShape.circle),
-              child: Image.asset(ImageUtil.VIDEO_ICON,
-                  color: AppColors.kBlack.withOpacity(0.7))))
+        child: Container(
+          width: 35.w,
+          height: 35.h,
+          decoration: BoxDecoration(
+            color: AppColors.kWhite.withOpacity(0.5),
+            shape: BoxShape.circle,
+          ),
+          child: Image.asset(
+            ImageUtil.VIDEO_ICON,
+            color: AppColors.kBlack.withOpacity(0.7),
+          ),
+        ),
+      )
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-        color: AppColors.kWhite,
-        child: thumbnailUrl.isNotEmpty
-            ? getVideoThumbnailFromUrl()
-            : getVideoPlaceHolder());
+      color: AppColors.kWhite,
+      child: thumbnailUrl.isNotEmpty ? getVideoThumbnailFromUrl() : getVideoPlaceHolder(),
+    );
   }
 }
 

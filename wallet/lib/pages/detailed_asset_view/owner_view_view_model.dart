@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
@@ -18,6 +19,8 @@ import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../generated/locale_keys.g.dart';
+import '../../model/favorites.dart';
+import '../../utils/favorites_change_notifier.dart';
 import '../owner_purchase_view_common/button_state.dart';
 import '../owner_purchase_view_common/progress_bar_state.dart';
 
@@ -28,6 +31,7 @@ class OwnerViewViewModel extends ChangeNotifier {
   final AudioPlayerHelper audioPlayerHelper;
   final VideoPlayerHelper videoPlayerHelper;
   final ShareHelper shareHelper;
+  final FavoritesChangeNotifier favoritesChangeNotifier;
 
   OwnerViewViewModel({
     required this.repository,
@@ -35,7 +39,8 @@ class OwnerViewViewModel extends ChangeNotifier {
     required this.audioPlayerHelper,
     required this.shareHelper,
     required this.videoPlayerHelper,
-    required this.accountPublicInfo, 
+    required this.accountPublicInfo,
+    required this.favoritesChangeNotifier
   });
 
   TabFields? selectedField;
@@ -50,8 +55,6 @@ class OwnerViewViewModel extends ChangeNotifier {
   bool get toggled => _toggled;
 
   VideoPlayerController? videoPlayerController;
-
-
 
   late StreamSubscription playerStateSubscription;
 
@@ -265,8 +268,18 @@ class OwnerViewViewModel extends ChangeNotifier {
     isLiking = false;
     if (temp && likesCount > 0) {
       likesCount = likesCount - 1;
+      repository.deleteNFTFromFavorites(recipeId);
+      favoritesChangeNotifier.removeFromFavorites(recipeId: recipeId);
     } else {
       likesCount = likesCount + 1;
+      final favoriteModel = FavoritesModel(
+        id: recipeId,
+        cookbookId: cookBookID,
+        type: NftType.TYPE_RECIPE.name,
+        dateTime: DateTime.now().millisecondsSinceEpoch,
+      );
+      repository.insertNFTInFavorites(favoriteModel);
+      favoritesChangeNotifier.addToFavorites(favoritesModel: favoriteModel);
     }
   }
 

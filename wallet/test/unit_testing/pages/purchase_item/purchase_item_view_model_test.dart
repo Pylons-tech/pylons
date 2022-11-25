@@ -14,6 +14,7 @@ import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import '../../../mocks/mock_audio_player.dart';
 import '../../../mocks/mock_share_helper.dart';
 import '../../../mocks/mock_video_player.dart';
+import '../../../widget_testing/pages/gesture_for_detail_screen_test.mocks.dart';
 import 'purchase_item_view_model_test.mocks.dart';
 
 @GenerateMocks([WalletsStore, AccountPublicInfo, Repository, NFT])
@@ -28,6 +29,7 @@ void main() {
     final mockWalletStore = MockWalletsStore();
     final shareHelper = MockShareHelperImpl();
     final mockAccountPublicInfo = MockAccountPublicInfo();
+    final favoritesChangeNotifier = MockFavoritesChangeNotifier();
     purchaseItemViewModel = PurchaseItemViewModel(
       mockWalletStore,
       audioPlayerHelper: audioPlayerMock,
@@ -35,6 +37,7 @@ void main() {
       repository: repository,
       shareHelper: shareHelper,
       accountPublicInfo: mockAccountPublicInfo,
+      favoritesChangeNotifier: favoritesChangeNotifier
     );
 
     when(mockAccountPublicInfo.publicAddress).thenAnswer((realInvocation) => kAddress);

@@ -1,3 +1,4 @@
+import 'package:pylons_wallet/model/favorites.dart';
 import 'package:pylons_wallet/model/pick_image_model.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
@@ -201,6 +202,30 @@ class MockLocalDataSource extends LocalDataSource {
   @override
   Future<int> saveTransactionFailure(LocalTransactionModel txManager) {
     // TODO: implement saveTransactionFailure
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> deleteAllNFTFromFavorites() {
+    // TODO: implement deleteAllNFTFromFavorites
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> deleteNFTFromFavorites(String favoritesId) {
+    // TODO: implement deleteNFTFromFavorites
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<FavoritesModel>> getAllFavorites() {
+    // TODO: implement getAllFavorites
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<int> insertNFTInFavorites(FavoritesModel favoritesModel) {
+    // TODO: implement insertNFTInFavorites
     throw UnimplementedError();
   }
 }

@@ -63,6 +63,8 @@ class _$AppDatabase extends AppDatabase {
 
   TxManagerDao? _txManagerDaoInstance;
 
+  FavoritesDao? _favoritesDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -98,6 +100,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   TxManagerDao get txManagerDao {
     return _txManagerDaoInstance ??= _$TxManagerDao(database, changeListener);
+  }
+
+  @override
+  FavoritesDao get favoritesDao {
+    return _favoritesDaoInstance ??= _$FavoritesDao(database, changeListener);
   }
 }
 
@@ -157,5 +164,58 @@ class _$TxManagerDao extends TxManagerDao {
   Future<int> insertTransactionFailure(LocalTransactionModel txManager) {
     return _localTransactionModelInsertionAdapter.insertAndReturnId(
         txManager, OnConflictStrategy.abort);
+  }
+}
+
+class _$FavoritesDao extends FavoritesDao {
+  _$FavoritesDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _favoritesModelInsertionAdapter = InsertionAdapter(
+            database,
+            'FavoritesModel',
+            (FavoritesModel item) => <String, Object?>{
+                  'dateTime': item.dateTime,
+                  'id': item.id,
+                  'cookbookId': item.cookbookId,
+                  'type': item.type
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<FavoritesModel> _favoritesModelInsertionAdapter;
+
+  @override
+  Future<List<FavoritesModel>> getAll() async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM FavoritesModel ORDER BY dateTime DESC',
+        mapper: (Map<String, Object?> row) => FavoritesModel(
+            id: row['id'] as String,
+            cookbookId: row['cookbookId'] as String,
+            type: row['type'] as String,
+            dateTime: row['dateTime'] as int));
+  }
+
+  @override
+  Future<void> delete(String id) async {
+    await _queryAdapter.queryNoReturn(
+        'DELETE FROM FavoritesModel WHERE id = ?1',
+        arguments: [id]);
+  }
+
+  @override
+  Future<void> deleteAll() async {
+    await _queryAdapter.queryNoReturn('DELETE  FROM FavoritesModel');
+  }
+
+  @override
+  Future<int> insertFavorites(FavoritesModel favoritesModel) {
+    return _favoritesModelInsertionAdapter.insertAndReturnId(
+        favoritesModel, OnConflictStrategy.abort);
   }
 }

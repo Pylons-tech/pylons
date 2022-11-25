@@ -66,6 +66,7 @@ import 'package:transaction_signing_gateway/storage/shared_prefs_plain_data_stor
 import 'package:video_player/video_player.dart';
 
 import '../../services/third_party_services/database/database.dart';
+import '../favorites_change_notifier.dart';
 
 final sl = GetIt.instance;
 
@@ -197,7 +198,16 @@ Future<void> init() async {
   /// ViewModels
   sl.registerLazySingleton<WalletsStore>(() => WalletsStoreImp(repository: sl(), crashlyticsHelper: sl(), accountProvider: sl(), remoteNotificationProvider: sl()));
   sl.registerFactory(
-      () => PurchaseItemViewModel(sl(), audioPlayerHelper: sl(), videoPlayerHelper: sl(), repository: sl(), shareHelper: sl(), accountPublicInfo: sl<AccountProvider>().accountPublicInfo!));
+    () => PurchaseItemViewModel(
+      sl(),
+      audioPlayerHelper: sl(),
+      videoPlayerHelper: sl(),
+      repository: sl(),
+      shareHelper: sl(),
+      accountPublicInfo: sl<AccountProvider>().accountPublicInfo!,
+      favoritesChangeNotifier: sl(),
+    ),
+  );
   sl.registerLazySingleton(() => CollectionViewModel(walletsStore: sl(), thumbnailHelper: sl(), accountPublicInfoInfo: sl<AccountProvider>().accountPublicInfo!));
   sl.registerLazySingleton(() => StripeHandler(walletsStore: sl(), localDataSource: sl(), repository: sl(), accountProvider: sl()));
   sl.registerLazySingleton(() => HomeProvider(repository: sl(), accountPublicInfo: sl<AccountProvider>().accountPublicInfo!));
@@ -206,14 +216,19 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GeneralScreenLocalizationViewModel(shareHelper: sl(), repository: sl(), walletStore: sl()));
   sl.registerLazySingleton(() => PracticeTestViewModel(sl()));
   sl.registerLazySingleton(() => FailureManagerViewModel(repository: sl()));
-  sl.registerFactory(() => OwnerViewViewModel(
-        repository: sl(),
-        walletsStore: sl(),
-        audioPlayerHelper: sl(),
-        videoPlayerHelper: sl(),
-        shareHelper: sl(),
-        accountPublicInfo: sl<AccountProvider>().accountPublicInfo!,
-      ));
+  sl.registerFactory(
+    () => OwnerViewViewModel(
+      repository: sl(),
+      walletsStore: sl(),
+      audioPlayerHelper: sl(),
+      videoPlayerHelper: sl(),
+      shareHelper: sl(),
+      accountPublicInfo: sl<AccountProvider>().accountPublicInfo!,
+      favoritesChangeNotifier: sl(),
+    ),
+  );
+  sl.registerLazySingleton(() => FavoritesChangeNotifier(repository: sl()));
+
   sl.registerLazySingleton(() => UserBannerViewModel());
 
   /// Configurations

@@ -9,32 +9,41 @@ class PdfPlaceHolder extends StatelessWidget {
   final String nftUrl;
   final String nftName;
   final String thumbnailUrl;
+  final bool showIcon;
 
   const PdfPlaceHolder({
     Key? key,
     required this.nftUrl,
     required this.nftName,
     required this.thumbnailUrl,
+    this.showIcon = true,
   }) : super(key: key);
 
   Widget getPdfThumbnailFromUrl() {
     return Stack(
       children: [
         Positioned.fill(
-            child: CachedNetworkImage(
-                placeholder: (context, url) => Shimmer(
-                      color: PylonsAppTheme.cardBackground,
-                      child: const SizedBox.expand(),
-                    ),
-                imageUrl: thumbnailUrl,
-                fit: BoxFit.cover)),
-        Align(
-          child: Container(
-            width: 35.w,
-            height: 35.h,
-            decoration: BoxDecoration(
-                color: AppColors.kWhite.withOpacity(0.5), shape: BoxShape.circle),
-            child: const Icon(Icons.picture_as_pdf),
+          child: CachedNetworkImage(
+            placeholder: (context, url) => Shimmer(
+              color: PylonsAppTheme.cardBackground,
+              child: const SizedBox.expand(),
+            ),
+            imageUrl: thumbnailUrl,
+            fit: BoxFit.cover,
+          ),
+        ),
+        Visibility(
+          visible: showIcon,
+          child: Align(
+            child: Container(
+              width: 35.w,
+              height: 35.h,
+              decoration: BoxDecoration(
+                color: AppColors.kWhite.withOpacity(0.5),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.picture_as_pdf),
+            ),
           ),
         ),
       ],
@@ -47,7 +56,9 @@ class PdfPlaceHolder extends StatelessWidget {
         width: 35.w,
         height: 35.h,
         decoration: BoxDecoration(
-            color: AppColors.kWhite.withOpacity(0.5), shape: BoxShape.circle),
+          color: AppColors.kWhite.withOpacity(0.5),
+          shape: BoxShape.circle,
+        ),
         child: const Icon(Icons.picture_as_pdf),
       ),
     );
@@ -56,9 +67,8 @@ class PdfPlaceHolder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-        color: AppColors.kWhite,
-        child: thumbnailUrl.isNotEmpty
-            ? getPdfThumbnailFromUrl()
-            : getPdfPlaceHolder());
+      color: AppColors.kWhite,
+      child: thumbnailUrl.isNotEmpty ? getPdfThumbnailFromUrl() : getPdfPlaceHolder(),
+    );
   }
 }
