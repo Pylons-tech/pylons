@@ -39,7 +39,7 @@ func CreateUpgradeHandler(
 		vm, err := mm.RunMigrations(ctx, configurator, fromVM)
 
 		if types.IsMainnet(ctx.ChainID()) {
-			MintUbedrockForInitialAccount(ctx, &bankBaseKeeper, staking, accKeeper)
+			MintUbedrockForInitialAccount(ctx, &bankBaseKeeper, staking)
 		}
 
 		return vm, err
@@ -72,7 +72,7 @@ func BurnToken(ctx sdk.Context, accKeeper *authkeeper.AccountKeeper, bank *bankk
 }
 
 // Mint ubedrock for master wallet
-func MintUbedrockForInitialAccount(ctx sdk.Context, bank *bankkeeper.BaseKeeper, staking *stakingkeeper.Keeper, accKeeper *authkeeper.AccountKeeper) {
+func MintUbedrockForInitialAccount(ctx sdk.Context, bank *bankkeeper.BaseKeeper, staking *stakingkeeper.Keeper) {
 	// Get currect balance of master wallet address
 	balance := bank.GetBalance(ctx, sdk.MustAccAddressFromBech32(MasterWallet), types.StakingCoinDenom)
 	// check difference in amount to add
