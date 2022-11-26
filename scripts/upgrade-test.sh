@@ -15,8 +15,8 @@ export GOMODCACHE=$ROOT/_build/gocache
 if ! command -v _build/old/pylonsd &> /dev/null
 then
     mkdir -p _build/old
-    # wget -c "https://github.com/Pylons-tech/pylons/archive/refs/tags/v${OLD_VERSION}.zip" -O _build/v${OLD_VERSION}.zip
-    # unzip _build/v${OLD_VERSION}.zip -d _build
+    wget -c "https://github.com/Pylons-tech/pylons/archive/refs/tags/v${OLD_VERSION}.zip" -O _build/v${OLD_VERSION}.zip
+    unzip _build/v${OLD_VERSION}.zip -d _build
     cd ./_build/pylons-${OLD_VERSION}
     GOBIN="$ROOT/_build/old" go install -mod=readonly ./...
     cd ../..
