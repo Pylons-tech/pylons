@@ -73,7 +73,9 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     if (kDebugMode) {
       print("initState");
-      WidgetsBinding.instance.addPostFrameCallback((_) { _bootstrap(); });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _bootstrap();
+      });
     }
   }
 
@@ -85,13 +87,17 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: SingleChildScrollView(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Text("HP: $curHp/20 | Sword level $swordLv | $coins coins | $shards shards", style: const TextStyle(fontSize: 18)),
-        const Divider(),
-        Text(flavorText, style: const TextStyle(fontSize: 18)),
-        const Divider(),
-        showTopLevelMenu ? topLevelMenu() : Container(),
-      ])),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+            Text("HP: $curHp/20 | Sword level $swordLv | $coins coins | $shards shards",
+                style: const TextStyle(fontSize: 18)),
+            const Divider(),
+            Text(flavorText, style: const TextStyle(fontSize: 18)),
+            const Divider(),
+            showTopLevelMenu ? topLevelMenu() : Container(),
+          ])),
     );
   }
 
@@ -192,7 +198,8 @@ class _MyHomePageState extends State<MyHomePage> {
     var lastUpdate = Int64.MIN_VALUE;
     if (character == null || curHp < 1) {
       for (var item in prf.items) {
-        if (item.getString("entityType") == "character" && !(item.getInt("currentHp")?.isZero ?? true) || !(item.getInt("currentHp")?.isNegative ?? true)) {
+        if (item.getString("entityType") == "character" && !(item.getInt("currentHp")?.isZero ?? true) ||
+            !(item.getInt("currentHp")?.isNegative ?? true)) {
           if (item.getLastUpdate() > lastUpdate) {
             setState(() {
               character = item;
