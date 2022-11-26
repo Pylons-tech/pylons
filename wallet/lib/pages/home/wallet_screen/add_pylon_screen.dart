@@ -13,9 +13,12 @@ import 'package:pylons_wallet/utils/constants.dart';
 
 import '../../../generated/locale_keys.g.dart';
 
-TextStyle kPylonLabelText = TextStyle(fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: AppColors.kTextBlackColor, fontWeight: FontWeight.w800);
-TextStyle kTitleText = TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlack, fontWeight: FontWeight.w700);
-TextStyle kSubTitleText = TextStyle(fontSize: 13.sp, fontFamily: kUniversalFontFamily, color: AppColors.kPriceTagColor, fontWeight: FontWeight.w700);
+TextStyle kPylonLabelText = TextStyle(
+    fontSize: 18.sp, fontFamily: kUniversalFontFamily, color: AppColors.kTextBlackColor, fontWeight: FontWeight.w800);
+TextStyle kTitleText =
+    TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: AppColors.kBlack, fontWeight: FontWeight.w700);
+TextStyle kSubTitleText = TextStyle(
+    fontSize: 13.sp, fontFamily: kUniversalFontFamily, color: AppColors.kPriceTagColor, fontWeight: FontWeight.w700);
 
 class AddPylonScreen extends StatefulWidget {
   const AddPylonScreen({Key? key}) : super(key: key);
@@ -71,20 +74,21 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
                   height: 80.h,
                 ),
                 Expanded(
-                    child: ListView.separated(
-                        itemBuilder: (context, index) => buildBuyRow(
-                              svgAsset: baseEnv.skus[index].getSvgAsset(),
-                              pylonText: baseEnv.skus[index].pylons,
-                              bonusText: baseEnv.skus[index].bonus,
-                              subtitle: baseEnv.skus[index].subtitle,
-                              onPressed: () async {
-                                buyProduct(itemId: baseEnv.skus[index].id);
-                              },
-                            ),
-                        separatorBuilder: (_, __) => SizedBox(
-                              height: 30.h,
-                            ),
-                        itemCount: baseEnv.skus.length)),
+                  child: ListView.separated(
+                      itemBuilder: (context, index) => buildBuyRow(
+                            svgAsset: baseEnv.skus[index].getSvgAsset(),
+                            pylonText: baseEnv.skus[index].pylons,
+                            bonusText: baseEnv.skus[index].bonus,
+                            subtitle: baseEnv.skus[index].subtitle,
+                            onPressed: () async {
+                              buyProduct(itemId: baseEnv.skus[index].id);
+                            },
+                          ),
+                      separatorBuilder: (_, __) => SizedBox(
+                            height: 30.h,
+                          ),
+                      itemCount: baseEnv.skus.length),
+                ),
               ],
             ),
           ],
@@ -93,7 +97,12 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
     );
   }
 
-  Widget buildBuyRow({required String svgAsset, required String pylonText, required String bonusText, required String subtitle, required VoidCallback onPressed}) {
+  Widget buildBuyRow(
+      {required String svgAsset,
+      required String pylonText,
+      required String bonusText,
+      required String subtitle,
+      required VoidCallback onPressed}) {
     return Row(children: [
       SizedBox(
         height: 40.h,
@@ -157,6 +166,13 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
         inAppPurchaseResponse.swap().toOption().toNullable()!.message.show();
         return;
       }
+
+      if (inAppPurchaseResponse.isRight() && !inAppPurchaseResponse.getOrElse(() => false)) {
+        loading.dismiss();
+        LocaleKeys.image_picker_not_supported_err.tr().show();
+        return;
+      }
+
       final productsListResponse = await repository.getProductsForSale(itemId: itemId);
       loading.dismiss();
 

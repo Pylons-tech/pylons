@@ -151,6 +151,23 @@ extension IBCCoinsDePar on IBCCoins {
     }
   }
 
+  String getCoinValueBasedOnDollar(String amount) {
+    switch (this) {
+      case IBCCoins.urun:
+      case IBCCoins.ujunox:
+      case IBCCoins.none:
+      case IBCCoins.eeur:
+      case IBCCoins.ujuno:
+      case IBCCoins.uatom:
+      case IBCCoins.ustripeusd:
+        return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
+      case IBCCoins.upylon:
+        return ((double.parse(amount) / kBigIntBase) * pyLonToUsdConstant).toStringAsFixed(2);
+      case IBCCoins.weth_wei:
+        return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
+    }
+  }
+
   String getCoinWithDenominationAndSymbol(String amount, {bool showDecimal = false}) {
     switch (this) {
       case IBCCoins.urun:
