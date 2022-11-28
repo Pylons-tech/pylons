@@ -17,12 +17,37 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
 
+	/*
+	* amountToPay := refers to the recipe amount
+	* ``
+	*	form this amount we will calculate the reward that needs to be distributed to
+	*	the delegator of the block
+	* ``
+	* creator  := create address will be used to create cookbook / recipe
+	* executor := will be used to execute recipe, as creator and executor cannot be same
+	*
+	* upon execution of recipe we have a defined fee,
+	* i.e. DefaultRecipeFeePercentage (Set at 0.1 or 10%)
+	*
+	* feeCollectorAddr := address of you fee collector module
+	* this modules receives the fee deducted during recipe execution 
+	* 
+	* this test case will verify that correct amount of rewards are divided amongst delegator
+	* first will call a function to get delegator amount percentage that need to be distributed
+	* second will call a function to get delegator reward amount that needs to be distributed
+	* third will call a function to get balance of delegator before sending reward
+	* fourth will call a function to send reward amongst delegator
+	* fifth will call a function to get balance of delegator again to get update balance after sending rewards
+	* Last will compare old balance that we got before sending reward and new balance that we got after sending reward
+	 */
+
 	amountToPay := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100)))
 	creator := types.GenTestBech32FromString("test")
 	executor := types.GenTestBech32FromString("executor")
 	feeCollectorAddr := ak.GetModuleAddress(types.FeeCollectorName)
 
 	types.UpdateAppCheckFlagTest(types.FlagTrue)
+
 
 	srv.CreateAccount(wctx, &types.MsgCreateAccount{
 		Creator:  executor,
@@ -114,7 +139,7 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 	}
 }
 
-// Test Case For After Epoch End Fuction With Case No deligators 
+// Test Case For After Epoch End Fuction With Case No deligators
 func (suite *IntegrationTestSuite) TestAfterEpochEndNoDeligators() {
 	k := suite.k
 	ctx := suite.ctx
