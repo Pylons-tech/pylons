@@ -337,6 +337,8 @@ func (suite *IntegrationTestSuite) TestCalculateDelegatorsRewards() {
 			}
 			if !totalAmountsForAddr.Empty() {
 				delegatorsRewards[addr] = totalAmountsForAddr
+				// Comparing amount to pay/10 percent with totalAmounts for address are equal
+				require.Equal(totalAmountsForAddr[0].Amount.Int64(), amountToPay[0].Amount.Int64()/10)
 			}
 
 		}
