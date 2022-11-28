@@ -103,6 +103,11 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
             alignment: Alignment.bottomRight,
             child: PylonsGetStartedButton(
               onTap: () {
+                if (mnemonicController.text.isNotEmpty || mnemonicController.text.split(" ").length != 12) {
+                  LocaleKeys.invalid_mnemonic.tr().show();
+                  return;
+                }
+
                 _loginExistingUser(mnemonic: mnemonicController.text);
               },
               text: "continue".tr(),

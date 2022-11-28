@@ -162,7 +162,7 @@ extension IBCCoinsDePar on IBCCoins {
       case IBCCoins.ustripeusd:
         return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
       case IBCCoins.upylon:
-        return ((double.parse(amount) / kBigIntBase) * pyLonToUsdConstant).toStringAsFixed(2);
+        return ((double.parse(amount) / kBigIntBase) * 0.1).toStringAsFixed(2);
       case IBCCoins.weth_wei:
         return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
     }

@@ -37,8 +37,14 @@ void main() {
                     onEmptyList: (BuildContext context) {
                       return Text(
                         "no_nft_created".tr(),
-                        style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: EaselAppTheme.kLightGrey,
+                            fontSize: isTablet ? 12.sp : 15.sp),
                       );
+                    },
+                    calculateBannerPrice: ({required String currency, required String price}) {
+                      return price;
                     },
                   );
                 },

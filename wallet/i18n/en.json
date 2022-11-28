@@ -370,5 +370,6 @@
   "available": "available",
   "ea": "ea",
   "maintenance_mode_message": "We are experiencing technical issues and have temporarily initiated maintenance mode for troubleshooting. Don't worry, your collection is safe. However, you cannot initiate on-chain transactions until we've resolved the problem and restored normal functionality.",
-  "maintenance_mode_header": "Maintenance Mode"
+  "maintenance_mode_header": "Maintenance Mode",
+  "invalid_mnemonic" : "Invalid mnemonic"
 }
