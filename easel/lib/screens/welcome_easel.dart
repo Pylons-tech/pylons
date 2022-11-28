@@ -23,7 +23,7 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: EaselAppTheme.kLightWhiteBackground,
+      backgroundColor: EaselAppTheme.kLightGrey02,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 40.0.w),
         child: Column(
