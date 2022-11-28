@@ -10,7 +10,7 @@ class FavoritesChangeNotifier extends ChangeNotifier {
 
   FavoritesChangeNotifier({required this.repository});
 
-  List<NFT?> favorites = [];
+  List<NFT> favorites = [];
 
   Future<void> onInit() async {}
 
@@ -18,7 +18,7 @@ class FavoritesChangeNotifier extends ChangeNotifier {
     if (favoritesModel.type == NftType.TYPE_ITEM.name) {
       final item = await repository.getItem(cookBookId: favoritesModel.cookbookId, itemId: favoritesModel.id);
       if (item.isRight()) {
-        favorites.add(await NFT.fromItem(item.toOption().toNullable()!));
+        favorites.add((await NFT.fromItem(item.toOption().toNullable()!))!);
       }
     } else {
       final item = await repository.getRecipe(cookBookId: favoritesModel.cookbookId, recipeId: favoritesModel.id);
@@ -30,8 +30,7 @@ class FavoritesChangeNotifier extends ChangeNotifier {
   }
 
   Future<void> removeFromFavorites({required String recipeId}) async {
-    for (final NFT? nft in favorites) {
-      if (nft == null) return;
+    for (final NFT nft in favorites) {
       if (nft.recipeID == recipeId) {
         favorites.remove(nft);
         break;
