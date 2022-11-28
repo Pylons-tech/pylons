@@ -71,12 +71,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    if (kDebugMode) {
-      print("initState");
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _bootstrap();
-      });
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _bootstrap();
+    });
   }
 
   @override
