@@ -1,5 +1,4 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
-// ignore_for_file: constant_identifier_names
 
 abstract class  LocaleKeys {
   static const creator_hub = 'creator_hub';
@@ -8,7 +7,6 @@ abstract class  LocaleKeys {
   static const publish_total = 'publish_total';
   static const draft_total = 'draft_total';
   static const draft = 'draft';
-  static const publish = 'publish';
   static const delete = 'delete';
   static const view = 'view';
   static const delete_error = 'delete_error';
@@ -148,5 +146,17 @@ abstract class  LocaleKeys {
   static const why_app_needed_summary_three = 'why_app_needed_summary_three';
   static const upload_hint_three = 'upload_hint_three';
   static const analytics_failure = 'analytics_failure';
+  static const you = 'you';
+  static const views = 'views';
+  static const ownership = 'ownership';
+  static const nft_details = 'nft_details';
+  static const history = 'history';
+  static const owner = 'owner';
+  static const edition = 'edition';
+  static const royalty_text = 'royalty_text';
+  static const recipe_id = 'recipe_id';
+  static const resolution = 'resolution';
+  static const ipfs_cid = 'ipfs_cid';
+  static const set_lockscreen = 'set_lockscreen';
 
 }

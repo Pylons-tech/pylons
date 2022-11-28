@@ -1,4 +1,3 @@
-
 // ignore_for_file: constant_identifier_names
 
 enum IBCCoins {
@@ -10,7 +9,7 @@ enum IBCCoins {
   ustripeusd,
   eeur,
   uatom,
-  weth_wei
+  weth_wei,
 }
 
 
@@ -32,3 +31,5 @@ extension ToUploadStepPar on String {
     }, orElse: () => UploadStep.none); //return null if not found
   }
 }
+
+enum Orientation { Orientation_SE, Orientation_NE, Orientation_NW, Orientation_SW }

@@ -253,3 +253,56 @@ extension GetAbbrev on String {
     }
   }
 }
+
+extension IBCCoinsDePar on IBCCoins {
+  String getAbbrev() {
+    switch (this) {
+      case IBCCoins.urun:
+        return kAgoricAbr;
+      case IBCCoins.ujunox:
+        return kJunoText;
+      case IBCCoins.none:
+        return kJunoText;
+      case IBCCoins.ujuno:
+        return kJunoText;
+      case IBCCoins.upylon:
+        return kPYLNAbbrevation;
+      case IBCCoins.ustripeusd:
+        return kStripeUSDABR;
+      case IBCCoins.eeur:
+        return kEmoneyAbb;
+      case IBCCoins.uatom:
+        return kAtomAbr;
+      case IBCCoins.weth_wei:
+        return kEthereumAbr;
+    }
+  }
+
+  String getCoinWithProperDenomination(String amount) {
+    switch (this) {
+      case IBCCoins.urun:
+      case IBCCoins.ujunox:
+      case IBCCoins.none:
+      case IBCCoins.eeur:
+      case IBCCoins.ujuno:
+      case IBCCoins.uatom:
+      case IBCCoins.ustripeusd:
+        return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
+      case IBCCoins.upylon:
+        return (double.parse(amount) / kBigIntBase).toStringAsFixed(0);
+      case IBCCoins.weth_wei:
+        return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
+    }
+  }
+}
+
+extension NftTypeConvert on String {
+  NftType toNftTypeEnum() {
+    var value = this;
+    if (value == k3dText) {
+      value = kThreeDText;
+    }
+
+    return NftType.values.firstWhere((e) => e.toString() == 'NftType.$value', orElse: () => NftType.TYPE_RECIPE);
+  }
+}

@@ -268,3 +268,22 @@ class AnalyticsScreenEvents {
   static String describeScreen = "DescribeScreen";
   static String chooseFormatScreen = "ChooseFormatScreen";
 }
+
+const String kTimeStampKey = 'timestamp';
+const String kAddressKey = "address";
+const String kTrophyIcon = "trophy";
+const String kDetailIcon = "detail";
+const String kHistoryIcon = "history";
+const kItemId = "id";
+const String kTo = "to";
+const String kFrom = "from";
+const kCreatedAt = "created_at";
+const String kItemIdKey = "item_id";
+const kSenderName = "sender_name";
+const kReceiver = "receiver";
+const String kRecipeId = 'Recipe ID';
+const kIpfsCid = "IPFS CID";
+const String kDateWithTimeFormat = "MM/dd/yyyy HH:mm";
+const int kMaxItemToShow = 11;
+const kDeleteTextKey = "delete";
+const kViewOnPylonsTextKey = "view_on_pylons";

@@ -39,10 +39,12 @@ class EaselAppTheme {
   static const Color kTextGrey = Color(0xFF7A7A8F);
   static const Color kGreyIcon = Color(0xFFAEAEAE);
   static const Color kDarkPurple = Color(0xff0A004A);
-
+  static const Color kLightPurple2 = Color(0xFFBF8FCE);
   static const Color kLightGreyColor = Color(0xFFE5E5E5);
   static const Color kPurple = Color(0xFF4421CC);
   static const Color kHashtagColor = Color(0xFFB6B6E8);
+  static const Color kGreyColor = Color.fromRGBO(141, 140, 140, 1);
+  static Color kTransactionRed = const Color.fromRGBO(239, 68, 33, 1);
 
   static const String universalSansFamily = "UniversalSans";
 

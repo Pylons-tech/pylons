@@ -143,5 +143,17 @@
   "app_needed_desc_three": "You can always delete it if you’d like",
   "why_app_needed_summary_three": "No subscriptions. We don’t sell your information. We only charge a fee when you purchase a NFT",
   "upload_hint_three": "• One file per upload",
-  "analytics_failure": "Analytics Error"
+  "analytics_failure": "Analytics Error",
+  "you": "You",
+  "views": "Views",
+  "ownership": "Ownership",
+  "nft_details": "Nft Detail",
+  "history": "History",
+  "owner": "Owner",
+  "edition": "Edition",
+  "royalty_text": "Royalty",
+  "recipe_id": "Recipe ID",
+  "resolution": "Resolution",
+  "ipfs_cid": "IPFS CID",
+  "set_lockscreen": "Set as lockscreen"
 }

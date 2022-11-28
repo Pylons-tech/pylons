@@ -100,6 +100,7 @@ flutter:
     - assets/images/
     - assets/images/gifs/
     - assets/images/svg/
+    - assets/images/icons/
     - i18n/en-US.json
     - i18n/ru-RU.json
     - i18n/de.json
