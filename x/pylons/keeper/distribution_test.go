@@ -265,7 +265,6 @@ func (suite *IntegrationTestSuite) TestCalculateDelegatorsRewards() {
 
 	srv.CreateAccount(wctx, &types.MsgCreateAccount{
 		Creator:  executor,
-		Username: "Executor",
 	})
 
 	types.UpdateAppCheckFlagTest(types.FlagFalse)
