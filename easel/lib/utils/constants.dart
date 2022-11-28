@@ -62,6 +62,14 @@ class SVGUtils {
   static const kListIcon = 'assets/images/svg/list.svg';
   static const kOwnerVerifiedIcon = 'assets/images/svg/verified.svg';
   static const kFileTypeImageIcon = 'assets/images/svg/file_type_image.svg';
+  static const kBackIcon = 'assets/images/icons/back.svg';
+  static const kReportIcon = 'assets/images/icons/report.svg';
+  static const kCreationIcon = 'assets/images/icons/creations.svg';
+  static const kQrIcon = 'assets/images/icons/qr.svg';
+  static const kShareIcon = 'assets/images/icons/share.svg';
+  static const kVerifiedIcon = 'assets/images/icons/verified.svg';
+  static const kViewsIcon = 'assets/images/icons/views.svg';
+  static const kTransactionSuccessIcon = 'assets/images/svg/transaction_success.svg';
 }
 
 const String kLoadingGif = 'assets/images/gifs/loading.gif';
@@ -288,5 +296,5 @@ const String kRecipeId = 'Recipe ID';
 const kIpfsCid = "IPFS CID";
 const String kDateWithTimeFormat = "MM/dd/yyyy HH:mm";
 const int kMaxItemToShow = 11;
-const kDeleteTextKey = "delete";
 const kViewOnPylonsTextKey = "view_on_pylons";
+const kDraftTileKey = "draft_list_tile_key";

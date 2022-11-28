@@ -116,6 +116,7 @@ class _DraftListTileState extends State<DraftListTile> {
 
   Widget getDraftCard() {
     return InkWell(
+      key: const Key(kDraftTileKey),
       onTap: () {
         widget.viewModel.startPublishingFlowAgain(startPublishingFlowAgainPressed: startPublishingFlowAgainPressed);
       },

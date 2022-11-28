@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
+import 'package:easel_flutter/screens/owner_view/viewmodels/owner_view_viewmodel.dart';
 import 'package:easel_flutter/screens/tutorial_screen.dart';
 import 'package:easel_flutter/services/datasources/cache_manager.dart';
 import 'package:easel_flutter/services/datasources/local_datasource.dart';
@@ -62,18 +63,45 @@ void _registerExternalDependencies() {
 }
 
 void _registerRemoteDataSources() {
-  sl.registerLazySingleton<RemoteDataSource>(() => RemoteDataSourceImpl(httpClient: sl<Dio>(), analyticsHelper: sl()));
+  sl.registerLazySingleton<RemoteDataSource>(
+    () => RemoteDataSourceImpl(
+      httpClient: sl<Dio>(),
+      analyticsHelper: sl(),
+    ),
+  );
 }
 
 void _registerLocalDataSources() {
-  sl.registerLazySingleton<LocalDataSource>(() => LocalDataSourceImpl(sharedPreferences: sl(), database: sl(), cacheManager: sl()));
+  sl.registerLazySingleton<LocalDataSource>(
+    () => LocalDataSourceImpl(
+      sharedPreferences: sl(),
+      database: sl(),
+      cacheManager: sl(),
+    ),
+  );
 }
 
 void _registerProviders() {
-  sl.registerLazySingleton<EaselProvider>(() => EaselProvider(videoPlayerHelper: sl(), audioPlayerHelperForFile: sl(), fileUtilsHelper: sl(), repository: sl(), audioPlayerHelperForUrl: sl(), mediaInfo: sl()));
+  sl.registerLazySingleton<EaselProvider>(
+    () => EaselProvider(
+      videoPlayerHelper: sl(),
+      audioPlayerHelperForFile: sl(),
+      fileUtilsHelper: sl(),
+      repository: sl(),
+      audioPlayerHelperForUrl: sl(),
+      mediaInfo: sl(),
+    ),
+  );
   sl.registerLazySingleton<CreatorHubViewModel>(() => CreatorHubViewModel(sl()));
   sl.registerLazySingleton<HomeViewModel>(() => HomeViewModel(sl()));
   sl.registerLazySingleton<TutorialScreenViewModel>(() => TutorialScreenViewModel(repository: sl()));
+  sl.registerLazySingleton(
+    () => OwnerViewViewModel(
+      repository: sl(),
+      audioPlayerHelper: sl(),
+      videoPlayerHelper: sl(),
+    ),
+  );
 }
 
 void _registerServices() {
