@@ -143,9 +143,18 @@ extension IBCCoinsDePar on IBCCoins {
       case IBCCoins.ujuno:
       case IBCCoins.uatom:
       case IBCCoins.ustripeusd:
-        return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
+        final double denomAmount = double.parse(amount) / kBigIntBase;
+        if(denomAmount > 0 && denomAmount < 100){
+          return denomAmount.toStringAsFixed(2);
+        }else if(denomAmount >= 100 && denomAmount < 1000){
+          return denomAmount.toStringAsFixed(0);
+        }else if(denomAmount >= 1000){
+          final RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+          return (denomAmount.round()).toString().replaceAllMapped(reg, (Match match) => '${match[1]},');
+        }
+        return amount;
       case IBCCoins.upylon:
-        return (double.parse(amount) / kBigIntBase).toStringAsFixed(0);
+        return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
       case IBCCoins.weth_wei:
         return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
     }

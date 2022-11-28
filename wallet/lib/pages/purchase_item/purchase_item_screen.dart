@@ -559,7 +559,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 onChangeTab: viewModel.onChangeTab,
                               ),
                               SizedBox(height: 10.h),
-                              if (viewModel.nft.type == NftType.TYPE_RECIPE && viewModel.nftOwnershipHistoryList.isNotEmpty)
+                              if (viewModel.nft.type == NftType.TYPE_RECIPE)
                                 TabField(
                                   name: LocaleKeys.history.tr(),
                                   icon: 'history',
