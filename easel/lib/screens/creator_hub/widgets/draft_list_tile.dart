@@ -10,6 +10,7 @@ import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/enums.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
+import 'package:easel_flutter/utils/route_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -108,74 +109,84 @@ class _DraftListTileState extends State<DraftListTile> {
     );
   }
 
+  void startPublishingFlowAgainPressed() {
+    widget.viewModel.saveNFT(nft: widget.nft);
+    Navigator.of(context).pushNamed(RouteUtil.kRouteHome);
+  }
+
   Widget getDraftCard() {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            offset: const Offset(0.0, 1.0),
-            blurRadius: 4.0,
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-        child: Row(
-          children: [
-            buildAssetView(),
-            SizedBox(
-              width: 10.w,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "nft_name".tr(args: [if (widget.nft.name.isNotEmpty) widget.nft.name else 'Nft Name']),
-                    style: titleStyle.copyWith(fontSize: isTablet ? 13.sp : 18.sp),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(
-                    height: 6.h,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(1.h),
-                      color: EaselAppTheme.kLightRed,
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
-                    child: Text(
-                      LocaleKeys.draft.tr(),
-                      style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 10.w,
-            ),
-            InkWell(
-              key: const Key(kNFTMoreOptionButtonKey),
-              onTap: () {
-                final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
-                  buildContext: context,
-                  nft: widget.nft,
-                );
-                draftsBottomSheet.show();
-              },
-              child: Padding(
-                padding: EdgeInsets.all(4.0.w),
-                child: SvgPicture.asset(SVGUtils.kSvgMoreOption),
-              ),
-            ),
-            SizedBox(
-              width: 10.w,
+    return InkWell(
+      onTap: () {
+        widget.viewModel.startPublishingFlowAgain(startPublishingFlowAgainPressed: startPublishingFlowAgainPressed);
+      },
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              offset: const Offset(0.0, 1.0),
+              blurRadius: 4.0,
             ),
           ],
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+          child: Row(
+            children: [
+              buildAssetView(),
+              SizedBox(
+                width: 10.w,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "nft_name".tr(args: [if (widget.nft.name.isNotEmpty) widget.nft.name else 'Nft Name']),
+                      style: titleStyle.copyWith(fontSize: isTablet ? 13.sp : 18.sp),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(
+                      height: 6.h,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(1.h),
+                        color: EaselAppTheme.kLightRed,
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                      child: Text(
+                        LocaleKeys.draft.tr(),
+                        style: EaselAppTheme.titleStyle.copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 10.w,
+              ),
+              InkWell(
+                key: const Key(kNFTMoreOptionButtonKey),
+                onTap: () {
+                  final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
+                    buildContext: context,
+                    nft: widget.nft,
+                  );
+                  draftsBottomSheet.show();
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(4.0.w),
+                  child: SvgPicture.asset(SVGUtils.kSvgMoreOption),
+                ),
+              ),
+              SizedBox(
+                width: 10.w,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -191,4 +191,12 @@ class CreatorHubViewModel extends ChangeNotifier {
     _nftForSaleList.add(nft);
     notifyListeners();
   }
+
+  void startPublishingFlowAgain({required VoidCallback startPublishingFlowAgainPressed}) {
+    startPublishingFlowAgainPressed.call();
+  }
+
+  void openOwnerView({required VoidCallback openOwnerView}) {
+    openOwnerView.call();
+  }
 }
