@@ -249,6 +249,7 @@ const kSaveAsDraftPublishKey = "Save_as_draft_publish_key";
 const kGridViewTileNFTKey = "GridViewTileNFTKey";
 const kGridViewTileMoreOptionKey = "gridview_tile_more_option_key";
 const kPublishTextKey = "publish";
+const kDeleteTextKey = "delete";
 const kPublishButtonKey = "publish_button_key";
 const kPriceBannerKey = "price_banner_key";
 const kNFTMoreOptionButtonKey = "NFT_more_option_key";
@@ -268,6 +269,8 @@ class AnalyticsScreenEvents {
   static String describeScreen = "DescribeScreen";
   static String chooseFormatScreen = "ChooseFormatScreen";
 }
+
+const kNftListTileKey = "nft_list_tile_key";
 
 const String kTimeStampKey = 'timestamp';
 const String kAddressKey = "address";

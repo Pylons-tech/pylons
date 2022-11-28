@@ -57,7 +57,7 @@ class _NftGridViewItemState extends State<NftGridViewItem> {
                 context.read<CreatorHubViewModel>().startPublishingFlowAgain(startPublishingFlowAgainPressed: startPublishingFlowAgainPressed);
                 return;
               }
-              context.read<CreatorHubViewModel>().openOwnerView(openOwnerView: openOwnerView);
+              context.read<CreatorHubViewModel>().openOwnerView(openOwnerViewPressed: openOwnerView);
             },
             child: NftTypeBuilder(
               onImage: (context) => buildNFTPreview(url: widget.nft.url.changeDomain()),
