@@ -153,9 +153,12 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 		for address, updatedAmount := range delegatorMap {
 			// looping through updated amount type of sdk.coins to get every amount and denom
 			for _, val := range updatedAmount {
-				newBalance := suite.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(address), val.Denom)
-				// Comparing updated Amount with new new Blanace both should  be equal
-				require.Equal(val.Amount.Int64(), newBalance.Amount.Int64())
+				// balance after reward distribution
+				newBalance := suite.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(address), val.Denom).Amount
+				// balance calculated on line#164
+				balanceToEqual := val.Amount // this amount is equal to the balance of user before reward distribution + reward to be distributed
+				// Comparing balances of delegator before and after reward distribution
+				require.Equal(balanceToEqual, newBalance)
 			}
 
 		}
