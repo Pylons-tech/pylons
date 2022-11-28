@@ -151,6 +151,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           ),
                         ),
                         IconButton(
+                          key: const Key(kKeyboardArrowUpKey),
                           icon: Icon(
                             Icons.keyboard_arrow_up,
                             size: 32.h,
@@ -219,6 +220,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       width: 50,
                       child: Center(
                           child: IconButton(
+                        key: const Key(kKeyboardArrowDownKey),
                         alignment: Alignment.topRight,
                         padding: const EdgeInsets.only(
                           bottom: 8,

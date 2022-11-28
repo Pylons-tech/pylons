@@ -298,3 +298,5 @@ const String kDateWithTimeFormat = "MM/dd/yyyy HH:mm";
 const int kMaxItemToShow = 11;
 const kViewOnPylonsTextKey = "view_on_pylons";
 const kDraftTileKey = "draft_list_tile_key";
+const kKeyboardArrowUpKey = "keyboard_arrow_up_key";
+const kKeyboardArrowDownKey = "keyboard_arrow_down_key";
