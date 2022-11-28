@@ -64,8 +64,7 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 
 	// create an account for the executor as their account in pylons is required
 	srv.CreateAccount(wctx, &types.MsgCreateAccount{
-		Creator:  executor,
-		Username: "Executor",
+		Creator: executor,
 	})
 
 	// enable the app check enforcement again
@@ -130,9 +129,9 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 	_ = bk.SpendableCoins(ctx, sdk.MustAccAddressFromBech32(creator))
 	_ = bk.SpendableCoins(ctx, feeCollectorAddr)
 
-	// get reward distribution percentages 
+	// get reward distribution percentages
 	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
-	// calculate delegator rewards 
+	// calculate delegator rewards
 	delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages)
 	delegatorMap := map[string]sdk.Coins{}
 	balances := sdk.Coins{}
@@ -183,8 +182,7 @@ func (suite *IntegrationTestSuite) TestAfterEpochEndNoDeligators() {
 	types.UpdateAppCheckFlagTest(types.FlagTrue)
 
 	srv.CreateAccount(wctx, &types.MsgCreateAccount{
-		Creator:  executor,
-		Username: "Executor",
+		Creator: executor,
 	})
 
 	types.UpdateAppCheckFlagTest(types.FlagFalse)
