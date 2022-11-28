@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:local_auth/local_auth.dart';
 
+import '../generated/locale_keys.g.dart';
+
 abstract class LocalAuthHelper {
   /// This method checks whether the finger print is available or not
   /// [Output] : [BiometricType] returns the type of biometric that is available
@@ -19,13 +21,13 @@ class LocalAuthHelperImp implements LocalAuthHelper {
   @override
   Future<BiometricType> isBiometricAvailable() async {
     if (!await localAuth.canCheckBiometrics) {
-      throw 'something_wrong'.tr();
+      throw LocaleKeys.something_wrong.tr();
     }
 
     final biometricList = await localAuth.getAvailableBiometrics();
 
     if (biometricList.isEmpty) {
-      throw 'something_wrong'.tr();
+      throw LocaleKeys.something_wrong.tr();
     }
 
     if (deviceHasBiometric(biometricList)) {
@@ -42,7 +44,7 @@ class LocalAuthHelperImp implements LocalAuthHelper {
   @override
   Future<bool> authenticate() async {
     return localAuth.authenticate(
-      localizedReason: 'authenticate'.tr(),
+      localizedReason: LocaleKeys.authenticate.tr(),
     );
   }
 }

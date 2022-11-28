@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
 import 'package:pylons_wallet/components/feedback_text_field.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/main_prod.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as clipper;
+
+import '../../../generated/locale_keys.g.dart';
 
 class SubmitFeedback {
   final BuildContext context;
@@ -51,18 +54,28 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
   }
 
   Future<void> onSubmitButtonPressed() async {
+    final account = context.read<AccountProvider>().accountPublicInfo;
+
     Navigator.pop(context);
+
+    if (account == null) {
+      return;
+    }
     final loader = Loading()..showLoading();
     final repository = GetIt.I.get<Repository>();
-    final walletAddress = GetIt.I.get<WalletsStore>().getWallets().value.last.publicAddress;
-    final responseEither = await repository.saveUserFeedback(walletAddress: walletAddress, subject: subjectController.text, feedback: descController.text);
+    final walletAddress = account.publicAddress;
+    final responseEither = await repository.saveUserFeedback(
+      walletAddress: walletAddress,
+      subject: subjectController.text,
+      feedback: descController.text,
+    );
     if (responseEither.isLeft()) {
       loader.dismiss();
-      return "something_wrong".tr().show();
+      return LocaleKeys.something_wrong.tr().show();
     }
     loader.dismiss();
 
-    return "thank_you_for_feedback".tr().show();
+    return LocaleKeys.thank_you_for_feedback.tr().show();
   }
 
   @override
@@ -111,7 +124,7 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "submit_feedback".tr(),
+                      LocaleKeys.submit_feedback.tr(),
                       style: TextStyle(
                         color: AppColors.kBlack,
                         fontSize: 18.sp,
@@ -127,7 +140,7 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           FeedBackTextField(
-                            label: "subject".tr(),
+                            label: LocaleKeys.subject.tr(),
                             controller: subjectController,
                             textCapitalization: TextCapitalization.sentences,
                             validator: (value) {
@@ -160,7 +173,7 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
                             height: 10.h,
                           ),
                           FeedBackTextField(
-                            label: "description".tr(),
+                            label: LocaleKeys.description.tr(),
                             noOfLines: 5,
                             controller: descController,
                             textCapitalization: TextCapitalization.sentences,
@@ -200,7 +213,7 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
-                                        "character_limit".tr(args: [(kMaxDescription - controller.text.length).toString()]),
+                                        LocaleKeys.character_limit.tr(args: [(kMaxDescription - controller.text.length).toString()]),
                                         style: TextStyle(color: AppColors.kCopyColor, fontSize: 14.sp, fontWeight: FontWeight.w800),
                                       ),
                                     ],
@@ -214,20 +227,21 @@ class _SubmitFeedbackDialogContentState extends State<_SubmitFeedbackDialogConte
                       ),
                     ),
                     CustomPaintButton(
-                        title: "submit".tr(),
-                        bgColor: AppColors.kBlue,
-                        width: 200.w,
-                        onPressed: () {
-                          FocusScope.of(context).unfocus();
-                          if (!_formKey.currentState!.validate()) {
-                            return;
-                          }
-                          if (_subjectFieldError.value.isNotEmpty || _descriptionFieldError.value.isNotEmpty) {
-                            return;
-                          }
+                      title: LocaleKeys.submit.tr(),
+                      bgColor: AppColors.kBlue,
+                      width: 200.w,
+                      onPressed: () {
+                        FocusScope.of(context).unfocus();
+                        if (!_formKey.currentState!.validate()) {
+                          return;
+                        }
+                        if (_subjectFieldError.value.isNotEmpty || _descriptionFieldError.value.isNotEmpty) {
+                          return;
+                        }
 
-                          onSubmitButtonPressed();
-                        }),
+                        onSubmitButtonPressed();
+                      },
+                    ),
                   ],
                 ),
               ),

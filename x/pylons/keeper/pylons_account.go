@@ -11,10 +11,17 @@ import (
 // this function sets two symmetric KVStores with address -> username
 // and username -> address mappings
 func (k Keeper) SetPylonsAccount(ctx sdk.Context, accountAddr types.AccountAddr, username types.Username) {
+	binaryUsername := k.cdc.MustMarshal(&username)
+	accountPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AccountKey))
+	accountPrefixStore.Set(types.KeyPrefix(accountAddr.Value), binaryUsername)
+}
+
+func (k Keeper) UpdatePylonsAccount(ctx sdk.Context, accountAddr types.AccountAddr, username types.Username) {
 	binaryAddr := k.cdc.MustMarshal(&accountAddr)
 	binaryUsername := k.cdc.MustMarshal(&username)
 	usernamePrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
 	accountPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AccountKey))
+
 	usernamePrefixStore.Set(types.KeyPrefix(username.Value), binaryAddr)
 	accountPrefixStore.Set(types.KeyPrefix(accountAddr.Value), binaryUsername)
 }
@@ -52,6 +59,33 @@ func (k Keeper) GetPylonsReferral(ctx sdk.Context, addr string) (val types.Refer
 	}
 	k.cdc.MustUnmarshal(b, &val)
 	return val, true
+}
+
+// SetPylonsKYC set the kyc pylons account in the store from its index
+func (k Keeper) SetPylonsKYC(ctx sdk.Context, kycaccount types.KYCAccount) {
+	binaryKYCAcc := k.cdc.MustMarshal(&kycaccount)
+	kycaccPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.KYCAccountKey))
+
+	kycaccPrefixStore.Set(types.KeyPrefix(kycaccount.AccountAddr), binaryKYCAcc)
+}
+
+// GetPylonsKYC returns an types.KYCAccount corresponding to its AccountAddr
+func (k Keeper) GetPylonsKYC(ctx sdk.Context, kycaddr string) (val types.KYCAccount, found bool) {
+	kycaccPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.KYCAccountKey))
+
+	b := kycaccPrefixStore.Get(types.KeyPrefix(kycaddr))
+	if b == nil {
+		return val, false
+	}
+
+	k.cdc.MustUnmarshal(b, &val)
+	return val, true
+}
+
+// DeletePylonsKYC delete the kyc pylons account in the store from its index
+func (k Keeper) DeletePylonsKYC(ctx sdk.Context, kycaccount types.KYCAccount) {
+	kycaccPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.KYCAccountKey))
+	kycaccPrefixStore.Delete(types.KeyPrefix(kycaccount.AccountAddr))
 }
 
 // HasUsername checks if the username exists in the store

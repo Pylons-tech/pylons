@@ -1,4 +1,3 @@
-
 import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/describe_screen.dart';
@@ -24,7 +23,7 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   late EaselProvider easelProvider;
-  var repository = GetIt.I.get<Repository>();
+  Repository repository = GetIt.I.get<Repository>();
 
   HomeViewModel get homeViewModel => GetIt.I.get();
 
@@ -40,15 +39,17 @@ class HomeScreenState extends State<HomeScreen> {
     homeViewModel.init(
       setTextField: () {
         easelProvider.setTextFieldValuesDescription(
-            artName: homeViewModel.nft?.name,
-            description: homeViewModel.nft?.description,
-            hashtags: homeViewModel.nft?.hashtags);
+          artName: homeViewModel.nft?.name,
+          description: homeViewModel.nft?.description,
+          hashtags: homeViewModel.nft?.hashtags,
+        );
         easelProvider.setTextFieldValuesPrice(
-            royalties: homeViewModel.nft?.tradePercentage,
-            price: homeViewModel.nft?.price,
-            edition: homeViewModel.nft?.quantity.toString(),
-            denom: homeViewModel.nft?.denom,
-            freeDrop: homeViewModel.nft!.isFreeDrop.toFreeDropEnum());
+          royalties: homeViewModel.nft?.tradePercentage,
+          price: homeViewModel.nft?.price,
+          edition: homeViewModel.nft?.quantity,
+          denom: homeViewModel.nft?.denom,
+          freeDrop: homeViewModel.nft!.isFreeDrop.toFreeDropEnum(),
+        );
       },
     );
   }
@@ -64,8 +65,7 @@ class HomeScreenState extends State<HomeScreen> {
     easelProvider.isVideoLoading = true;
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     homeViewModel.previousPage();
-    if (homeViewModel.currentPage.value == 0 ||
-        homeViewModel.currentPage.value == 1) {
+    if (homeViewModel.currentPage.value == 0 || homeViewModel.currentPage.value == 1) {
       Navigator.of(context).pop();
     }
   }
@@ -77,13 +77,12 @@ class HomeScreenState extends State<HomeScreen> {
         onBackPressed();
         return false;
       },
-      child: Container(
+      child: ColoredBox(
         color: EaselAppTheme.kWhite,
         child: SafeArea(
           bottom: false,
           child: Scaffold(
-            body: ChangeNotifierProvider.value(
-                value: homeViewModel, child: const HomeScreenContent()),
+            body: ChangeNotifierProvider.value(value: homeViewModel, child: const HomeScreenContent()),
           ),
         ),
       ),
@@ -108,12 +107,7 @@ class HomeScreenContent extends StatelessWidget {
         homeViewModel.currentStep.value = map[page]!;
       },
       itemBuilder: (BuildContext context, int index) {
-        final map = {
-          0: chooseFormatScreen,
-          1: describeScreen,
-          2: priceScreen,
-          3: publishScreen
-        };
+        final map = {0: chooseFormatScreen, 1: describeScreen, 2: priceScreen, 3: publishScreen};
 
         return map[index]?.call() ?? const SizedBox();
       },

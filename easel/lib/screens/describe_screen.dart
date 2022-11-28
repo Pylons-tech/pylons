@@ -21,6 +21,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import '../generated/locale_keys.g.dart';
+import '../models/nft.dart';
+
 class DescribeScreen extends StatefulWidget {
   const DescribeScreen({Key? key}) : super(key: key);
 
@@ -29,7 +32,7 @@ class DescribeScreen extends StatefulWidget {
 }
 
 class _DescribeScreenState extends State<DescribeScreen> {
-  var repository = GetIt.I.get<Repository>();
+  Repository repository = GetIt.I.get<Repository>();
   EaselProvider provider = GetIt.I.get<EaselProvider>();
   final _formKey = GlobalKey<FormState>();
 
@@ -47,7 +50,7 @@ class _DescribeScreenState extends State<DescribeScreen> {
   void initState() {
     super.initState();
 
-    provider.nft = repository.getCacheDynamicType(key: nftKey);
+    provider.nft = repository.getCacheDynamicType(key: nftKey) as NFT;
     repository.logUserJourney(screenName: AnalyticsScreenEvents.describeScreen);
     String from = "";
     from = context.read<HomeViewModel>().from!;
@@ -121,17 +124,17 @@ class _DescribeScreenState extends State<DescribeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       EaselTextField(
-                        label: "give_nft_a_name".tr(),
-                        hint: "nft_name_hint".tr(),
+                        label: LocaleKeys.give_nft_a_name.tr(),
+                        hint: LocaleKeys.nft_name_hint.tr(),
                         controller: provider.artNameController,
                         textCapitalization: TextCapitalization.sentences,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            _artNameFieldError.value = "enter_nft_name".tr();
+                            _artNameFieldError.value = LocaleKeys.enter_nft_name.tr();
                             return;
                           }
                           if (value.length <= kMinNFTName) {
-                            _artNameFieldError.value = "nft_remaining_characters".tr(args: [kMinNFTName.toString()]);
+                            _artNameFieldError.value = LocaleKeys.nft_remaining_characters.tr(args: [kMinNFTName.toString()]);
                             return;
                           }
                           _artNameFieldError.value = '';
@@ -158,13 +161,13 @@ class _DescribeScreenState extends State<DescribeScreen> {
                       ),
                       VerticalSpace(20.h),
                       EaselTextField(
-                        label: "your_name_as_the_artist".tr(),
-                        hint: "artist_hint".tr(),
+                        label: LocaleKeys.your_name_as_the_artist.tr(),
+                        hint: LocaleKeys.artist_hint.tr(),
                         controller: provider.artistNameController,
                         textCapitalization: TextCapitalization.sentences,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            _artistNameFieldError.value = 'enter_artist_name'.tr();
+                            _artistNameFieldError.value = LocaleKeys.enter_artist_name.tr();
                           } else {
                             _artistNameFieldError.value = '';
                           }
@@ -191,19 +194,19 @@ class _DescribeScreenState extends State<DescribeScreen> {
                       ),
                       VerticalSpace(20.h),
                       EaselTextField(
-                        label: "describe_your_nft".tr(),
-                        hint: "desc_nft_hint".tr(),
+                        label: LocaleKeys.describe_your_nft.tr(),
+                        hint: LocaleKeys.desc_nft_hint.tr(),
                         noOfLines: 5,
                         controller: provider.descriptionController,
                         textCapitalization: TextCapitalization.sentences,
                         inputFormatters: [LengthLimitingTextInputFormatter(kMaxDescription)],
                         validator: (value) {
                           if (value!.isEmpty) {
-                            _descriptionFieldError.value = "enter_nft_description".tr();
+                            _descriptionFieldError.value = LocaleKeys.enter_nft_description.tr();
                             return;
                           }
                           if (value.length <= kMinDescription) {
-                            _descriptionFieldError.value = "${"enter_more_than".tr()} $kMinDescription ${"characters".tr()}";
+                            _descriptionFieldError.value = "${LocaleKeys.enter_more_than.tr()} $kMinDescription ${LocaleKeys.characters.tr()}";
                             return;
                           }
                           _descriptionFieldError.value = '';
@@ -236,7 +239,7 @@ class _DescribeScreenState extends State<DescribeScreen> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text(
-                                    "${kMaxDescription - controller.text.length} ${"character_limit".tr()}",
+                                    "${kMaxDescription - controller.text.length} ${LocaleKeys.character_limit.tr()}",
                                     style: TextStyle(color: EaselAppTheme.kLightPurple, fontSize: 14.sp, fontWeight: FontWeight.w800),
                                   ),
                                 ],
@@ -247,11 +250,11 @@ class _DescribeScreenState extends State<DescribeScreen> {
                       const EaselHashtagInputField(),
                       VerticalSpace(20.h),
                       ClippedButton(
-                        title: "continue".tr(),
+                        title: LocaleKeys.continue_key.tr(),
                         bgColor: EaselAppTheme.kBlue,
                         textColor: EaselAppTheme.kWhite,
                         onPressed: () {
-                          validateAndUpdateDescription(true);
+                          validateAndUpdateDescription(moveNextPage: true);
                         },
                         cuttingHeight: 15.h,
                         clipperType: ClipperType.bottomLeftTopRight,
@@ -263,10 +266,10 @@ class _DescribeScreenState extends State<DescribeScreen> {
                         child: InkWell(
                           key: const Key(kSaveAsDraftDescKey),
                           onTap: () {
-                            validateAndUpdateDescription(false);
+                            validateAndUpdateDescription(moveNextPage: false);
                           },
                           child: Text(
-                            "save_as_draft".tr(),
+                            LocaleKeys.save_as_draft.tr(),
                             style: TextStyle(color: EaselAppTheme.kLightGreyText, fontSize: 14.sp, fontWeight: FontWeight.w700),
                           ),
                         ),
@@ -283,12 +286,12 @@ class _DescribeScreenState extends State<DescribeScreen> {
     );
   }
 
-  void validateAndUpdateDescription(moveNextPage) {
+  void validateAndUpdateDescription({required bool moveNextPage}) {
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    if ((_artNameFieldError.value.isNotEmpty || _artistNameFieldError.value.isNotEmpty || _descriptionFieldError.value.isNotEmpty)) {
+    if (_artNameFieldError.value.isNotEmpty || _artistNameFieldError.value.isNotEmpty || _descriptionFieldError.value.isNotEmpty) {
       return;
     }
     GetIt.I.get<CreatorHubViewModel>().changeSelectedCollection(CollectionType.draft);

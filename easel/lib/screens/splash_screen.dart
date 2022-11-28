@@ -10,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import '../generated/locale_keys.g.dart';
 import '../utils/constants.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -38,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Widget buildMobileScreen(BuildContext context) {
-    return SvgPicture.asset(kSvgSplash, fit: BoxFit.cover);
+    return SvgPicture.asset(SVGUtils.kSvgSplash, fit: BoxFit.cover);
   }
 
   Stack buildTabletScreen(BuildContext context) {
@@ -50,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
             right: 0,
             top: 0,
             bottom: 0,
-            child: SvgPicture.asset(kSvgTabSplash, fit: BoxFit.fill)),
+            child: SvgPicture.asset(SVGUtils.kSvgTabSplash, fit: BoxFit.fill)),
         Positioned(
           top: 0.26.sh,
           left: 0.2.sw,
@@ -63,10 +64,10 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 Align(
                     alignment: Alignment.centerLeft,
-                    child: SvgPicture.asset(kSplashTabEasel)),
+                    child: SvgPicture.asset(SVGUtils.kSplashTabEasel)),
                 SizedBox(height: 10.h),
                 Text(
-                  "nft_manager".tr(),
+                  LocaleKeys.nft_manager.tr(),
                   style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w600,
@@ -80,14 +81,14 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  void populateCoinsAndMoveForward() async {
+  Future<void> populateCoinsAndMoveForward() async {
     context.read<EaselProvider>().populateCoinsIfPylonsNotExists();
 
     navigatorKey.currentState!.pushReplacementNamed(RouteUtil.kRouteCreatorHub);
   }
 
   void onGetStarted() {
-    var onBoardingComplete = GetIt.I.get<Repository>().getOnBoardingComplete();
+    final onBoardingComplete = GetIt.I.get<Repository>().getOnBoardingComplete();
     if (!onBoardingComplete) {
       Navigator.of(context).pushNamed(RouteUtil.kRouteTutorial);
       return;

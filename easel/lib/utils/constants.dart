@@ -1,9 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 
+import '../generated/locale_keys.g.dart';
+
 List kTutorialItems = [
-  {'header': 'upload_your_ipfs'.tr(), 'description': 'pick_the_file'.tr(), 'image': 'assets/images/tutorial1.png'},
-  {'header': 'edit_your_nft'.tr(), 'description': 'enter_information_describing_your_nft'.tr(), 'image': 'assets/images/tutorial2.png'},
-  {'header': 'publish_your_nft'.tr(), 'header1': 'pylons_app'.tr(), 'description': 'once_you_enter_all'.tr(), 'image': 'assets/images/tutorial3.png'},
+  {'header': LocaleKeys.upload_your_ipfs.tr(), 'description': LocaleKeys.pick_the_file.tr(), 'image': 'assets/images/tutorial1.png'},
+  {'header': LocaleKeys.edit_your_nft.tr(), 'description': LocaleKeys.enter_information_describing_your_nft.tr(), 'image': 'assets/images/tutorial2.png'},
+  {'header': LocaleKeys.publish_your_nft.tr(), 'header1': LocaleKeys.pylons_app.tr(), 'description': LocaleKeys.once_you_enter_all.tr(), 'image': 'assets/images/tutorial3.png'},
 ];
 
 /// ```PNG assets
@@ -26,39 +28,41 @@ class PngUtils {
   static const kVideoThumbnailRectangle = 'assets/images/video_thumbnail_rectangle.png';
   static const kFullScreenIcon = 'assets/images/svg/full_screen_icon.svg';
   static const kAlertIcon = 'assets/images/svg/i_icon.svg';
+  static const kDummyImg = 'assets/images/svg/dummy_img.png';
+  static const kVideoIcon = 'assets/images/video_icon.png';
+  static const kSvgIpfsLogo = 'assets/images/ipfs_logo.png';
 }
 
 /// ```SVG assets
-const kSvgSplash = 'assets/images/svg/splash.svg';
-const kSvgTabSplash = 'assets/images/svg/background_tab.svg';
-const kSplashTabEasel = 'assets/images/svg/easel_tab.svg';
-const kSplashNFTCreatorTab = 'assets/images/svg/nft_creator_tab.svg';
-const kSvgRectBlue = 'assets/images/svg/rectangular_button_blue.svg';
-const kSvgRectRed = 'assets/images/svg/rectangular_button_red.svg';
-const kSvgDashedBox = 'assets/images/svg/dashed_box.svg';
-const kSvgFileUpload = 'assets/images/svg/file_upload.svg';
-const kSvgUploadErrorBG = 'assets/images/svg/upload_error_background.svg';
-const kSvgCloseIcon = 'assets/images/svg/close_icon.svg';
-const kSvgCloseButton = 'assets/images/svg/close_button.svg';
-const kSvgNftFormatImage = 'assets/images/svg/nft_format_image.svg';
-const kSvgForwardArrowIcon = 'assets/images/svg/forward_arrow.svg';
-const kSvgNftFormatVideo = 'assets/images/svg/nft_format_video.svg';
-const kSvgNftFormat3d = 'assets/images/svg/nft_format_3d.svg';
-const kSvgNftFormatAudio = 'assets/images/svg/nft_format_audio.svg';
-const kSvgMoreOption = 'assets/images/svg/more_options.svg';
-const kSvgPublish = 'assets/images/svg/publish.svg';
-const kSvgDelete = 'assets/images/svg/delete.svg';
-const kAddIcon = 'assets/images/svg/add.svg';
-const kSearchIcon = 'assets/images/svg/search.svg';
-
-const kDummyImg = 'assets/images/svg/dummy_img.png';
-const kVideoIcon = 'assets/images/video_icon.png';
-
-const kSvgPylonsLogo = 'assets/images/svg/pylons_logo.svg';
-const kSvgIpfsLogo = 'assets/images/ipfs_logo.png';
-const kGridIcon = 'assets/images/svg/grid.svg';
-const kListIcon = 'assets/images/svg/list.svg';
-const kOwnerVerifiedIcon = 'assets/images/svg/verified.svg';
+class SVGUtils {
+  static const kSvgSplash = 'assets/images/svg/splash.svg';
+  static const kSvgTabSplash = 'assets/images/svg/background_tab.svg';
+  static const kSplashTabEasel = 'assets/images/svg/easel_tab.svg';
+  static const kSplashNFTCreatorTab = 'assets/images/svg/nft_creator_tab.svg';
+  static const kSvgRectBlue = 'assets/images/svg/rectangular_button_blue.svg';
+  static const kSvgRectRed = 'assets/images/svg/rectangular_button_red.svg';
+  static const kSvgDashedBox = 'assets/images/svg/dashed_box.svg';
+  static const kSvgFileUpload = 'assets/images/svg/file_upload.svg';
+  static const kSvgUploadErrorBG = 'assets/images/svg/upload_error_background.svg';
+  static const kSvgCloseIcon = 'assets/images/svg/close_icon.svg';
+  static const kSvgCloseButton = 'assets/images/svg/close_button.svg';
+  static const kSvgNftFormatImage = 'assets/images/svg/nft_format_image.svg';
+  static const kSvgForwardArrowIcon = 'assets/images/svg/forward_arrow.svg';
+  static const kSvgNftFormatVideo = 'assets/images/svg/nft_format_video.svg';
+  static const kSvgNftFormat3d = 'assets/images/svg/nft_format_3d.svg';
+  static const kSvgNftFormatAudio = 'assets/images/svg/nft_format_audio.svg';
+  static const kSvgNftFormatPDF = 'assets/images/svg/nft_format_pdf.svg';
+  static const kSvgMoreOption = 'assets/images/svg/more_options.svg';
+  static const kSvgPublish = 'assets/images/svg/publish.svg';
+  static const kSvgDelete = 'assets/images/svg/delete.svg';
+  static const kAddIcon = 'assets/images/svg/add.svg';
+  static const kSearchIcon = 'assets/images/svg/search.svg';
+  static const kSvgPylonsLogo = 'assets/images/svg/pylons_logo.svg';
+  static const kGridIcon = 'assets/images/svg/grid.svg';
+  static const kListIcon = 'assets/images/svg/list.svg';
+  static const kOwnerVerifiedIcon = 'assets/images/svg/verified.svg';
+  static const kFileTypeImageIcon = 'assets/images/svg/file_type_image.svg';
+}
 
 const String kLoadingGif = 'assets/images/gifs/loading.gif';
 
@@ -86,7 +90,7 @@ const kMaxEdition = 10000;
 const kMinRoyalty = 0;
 const kMaxRoyalty = 99.99;
 const kFileSizeLimitInGB = 32;
-const kFileSizeLimitForAudiVideoInGB = 0.2;
+const kFileSizeLimitForAudiVideoInGB = 0.125;
 const kMaxPriceLength = 14;
 const kSecInMillis = 1000;
 const double tabletMinWidth = 600;
@@ -168,7 +172,7 @@ const kRealWorld = "real_world";
 
 const kThumbnailFileName = "temp.jpg";
 
-final List<String> stepLabels = ["upload", "detail", "price   "];
+final List<String> stepLabels = ["upload", "detail", "price"];
 
 final List<String> imageAllowedExts = ["png", "jpg", "jpeg", "svg", "heif", "gif"];
 final List<String> audioAllowedExts = ['mp3', 'ogg', 'wav', 'aac'];
@@ -243,8 +247,17 @@ const kSaveAsDraftDescKey = "Save_as_draft_decs_key";
 const kSaveAsDraftPriceKey = "Save_as_draft_price_key";
 const kSaveAsDraftPublishKey = "Save_as_draft_publish_key";
 const kGridViewTileNFTKey = "GridViewTileNFTKey";
+const kGridViewTileMoreOptionKey = "gridview_tile_more_option_key";
 const kPublishTextKey = "publish";
 const kPublishButtonKey = "publish_button_key";
+const kPriceBannerKey = "price_banner_key";
+const kNFTMoreOptionButtonKey = "NFT_more_option_key";
+const kNFTMoreOptionBottomSheetKey = "NFT_more_option_bottomsheet_key";
+const kNFTTypeImageIconKey = "NFT_type_image_icon_key";
+const kNFTTypeVideoIconKey = "NFT_type_video_icon_key";
+const kNFTTypeAudioIconKey = "NFT_type_audio_icon_key";
+const kNFTTypePdfIconKey = "NFT_type_pdf_icon_key";
+const kNFTType3dModelIconKey = "NFT_type_3d_icon_key";
 
 class AnalyticsScreenEvents {
   static String tutorialScreen = "TutorialScreen";
@@ -254,5 +267,4 @@ class AnalyticsScreenEvents {
   static String createrHubScreen = "CreaterHubScreen";
   static String describeScreen = "DescribeScreen";
   static String chooseFormatScreen = "ChooseFormatScreen";
-
 }

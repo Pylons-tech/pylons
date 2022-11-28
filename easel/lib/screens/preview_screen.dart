@@ -16,6 +16,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import '../generated/locale_keys.g.dart';
 import '../utils/easel_app_theme.dart';
 
 class PreviewScreen extends StatefulWidget {
@@ -28,7 +29,7 @@ class PreviewScreen extends StatefulWidget {
 }
 
 class _PreviewScreenState extends State<PreviewScreen> {
-  var repository = GetIt.I.get<Repository>();
+  Repository repository = GetIt.I.get<Repository>();
   @override
   void initState() {
     super.initState();
@@ -55,8 +56,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
               Column(children: [
                 SizedBox(height: MediaQuery.of(context).viewPadding.top + 20.h),
                 Align(
-                  alignment: Alignment.center,
-                  child: Text("nft_preview_header".tr(),
+                  child: Text(LocaleKeys.nft_preview_header.tr(),
                       textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: EaselAppTheme.kLightPurple, fontSize: 15.sp, fontWeight: FontWeight.w600)),
                 ),
                 Align(
@@ -89,7 +89,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                         widget.onMoveToNextScreen();
                       }
                     },
-                    btnText: "upload".tr(),
+                    btnText: LocaleKeys.upload.tr(),
                     showArrow: true,
                     color: EaselAppTheme.kRed,
                   ),
@@ -105,21 +105,21 @@ class _PreviewScreenState extends State<PreviewScreen> {
   Widget buildPreviewWidget(EaselProvider provider) {
     switch (provider.nftFormat.format) {
       case NFTTypes.image:
-        return ImageWidget(file: provider.file!);
+        return ImageWidget(file: provider.file);
       case NFTTypes.video:
         return VideoWidget(
-          file: provider.file!,
+          file: provider.file,
           previewFlag: false,
           isForFile: true,
           isDarkMode: false,
         );
       case NFTTypes.audio:
-        return AudioWidget(file: provider.file!, previewFlag: true);
+        return AudioWidget(file: provider.file, previewFlag: true);
       case NFTTypes.threeD:
-        return Model3dViewer(path: provider.file!.path, isFile: true);
+        return Model3dViewer(path: provider.file?.path, isFile: true);
       case NFTTypes.pdf:
         return PdfViewer(
-          file: provider.file!,
+          file: provider.file,
           previewFlag: true,
         );
     }
@@ -135,7 +135,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
         break;
       case NFTTypes.video:
         if (provider.videoThumbnail == null) {
-          context.show(message: "kindly_upload_thumbnail".tr());
+          context.show(message: LocaleKeys.kindly_upload_thumbnail.tr());
           return false;
         }
         result = await saveToUpload();
@@ -143,7 +143,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
         break;
       case NFTTypes.audio:
         if (provider.audioThumbnail == null) {
-          context.show(message: "kindly_upload_thumbnail".tr());
+          context.show(message: LocaleKeys.kindly_upload_thumbnail.tr());
           return false;
         }
         result = await saveToUpload();
@@ -153,7 +153,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
         break;
       case NFTTypes.pdf:
         if (provider.pdfThumbnail == null) {
-          context.show(message: "kindly_upload_thumbnail".tr());
+          context.show(message: LocaleKeys.kindly_upload_thumbnail.tr());
           return false;
         }
         result = await saveToUpload();
@@ -165,7 +165,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
   Future<bool> saveToUpload() async {
     final provider = context.read<EaselProvider>();
     if (!await provider.saveNftLocally(UploadStep.assetUploaded)) {
-      'something_wrong'.tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return false;
     }
     return true;

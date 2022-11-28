@@ -61,7 +61,15 @@ class ShowSomethingWentWrongDialog {
                 height: 0.09.sw,
                 child: Stack(
                   children: [
-                    Positioned(left: 0, right: 0, top: 0, bottom: 0, child: Center(child: SizedBox(width: 130.w, child: SvgPicture.asset(kSvgCloseButton, fit: BoxFit.cover)))),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                      child: Center(
+                        child: SizedBox(width: 130.w, child: SvgPicture.asset(SVGUtils.kSvgCloseButton, fit: BoxFit.cover)),
+                      ),
+                    ),
                     Center(
                       child: Text(
                         "close".tr(),
@@ -87,7 +95,7 @@ class ShowSomethingWentWrongDialog {
       padding: EdgeInsets.symmetric(horizontal: 0.1.sw),
       child: ClipPath(
         clipper: DialogClipper(),
-        child: Container(
+        child: ColoredBox(
           color: EaselAppTheme.kLightRed,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -119,7 +127,7 @@ class ShowSomethingWentWrongDialog {
                   height: 0.09.sw,
                   child: Stack(
                     children: [
-                      Positioned(left: 0, right: 0, top: 0, bottom: 0, child: Center(child: SizedBox(width: 130.w, child: SvgPicture.asset(kSvgCloseButton, fit: BoxFit.cover)))),
+                      Positioned(left: 0, right: 0, top: 0, bottom: 0, child: Center(child: SizedBox(width: 130.w, child: SvgPicture.asset(SVGUtils.kSvgCloseButton, fit: BoxFit.cover)))),
                       Center(
                         child: Text(
                           "close".tr(),
@@ -148,7 +156,7 @@ class ShowSomethingWentWrongDialog {
     if (!appAlreadyInstalled) {
       PylonsWallet.instance.goToInstall();
     } else {
-      scaffoldMessenger.show( message: "pylons_already_installed".tr());
+      scaffoldMessenger.show(message: "pylons_already_installed".tr());
     }
   }
 }

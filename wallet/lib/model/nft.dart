@@ -42,6 +42,7 @@ class NFT extends Equatable {
   String duration = "";
   String fileSize = "";
   String hashtags = "";
+  String cid = "";
   String createdAt = "";
   bool realWorld = false;
 
@@ -57,6 +58,7 @@ class NFT extends Equatable {
     this.itemID = "",
     this.cookbookID = "",
     this.recipeID = "",
+    this.cid = "",
     this.owner = "",
     this.width = "",
     this.height = "",
@@ -87,7 +89,10 @@ class NFT extends Equatable {
     return ownerAddress;
   }
 
-  static Future<NFT> fromItem(Item item) async {
+  static Future<NFT?> fromItem(Item item) async {
+    if (item.strings.where((strKeyValue) => strKeyValue.key == kName).isEmpty && item.strings.where((strKeyValue) => strKeyValue.key == kNFTURL).isEmpty) {
+      return null;
+    }
     final walletsStore = GetIt.I.get<WalletsStore>();
     final owner = await walletsStore.getAccountNameByAddress(item.owner);
     return NFT(
@@ -98,6 +103,7 @@ class NFT extends Equatable {
       description: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kDescription).value,
       fileSize: getFileSize(item),
       creator: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kCreator, orElse: () => StringKeyValue(key: kCreator, value: "")).value,
+      cid: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kCID, orElse: () => StringKeyValue(key: kCID, value: "")).value,
       appType: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kAppType, orElse: () => StringKeyValue(key: kAppType, value: "")).value,
       width: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kWidth, orElse: () => LongKeyValue(key: kWidth, value: Int64())).value.toString(),
       height: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kHeight, orElse: () => LongKeyValue(key: kHeight, value: Int64())).value.toString(),
@@ -131,6 +137,7 @@ class NFT extends Equatable {
       description: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kDescription).value,
       fileSize: getFileSize(item),
       creator: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kCreator, orElse: () => StringKeyValue(key: kCreator, value: "")).value,
+      cid: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kCID, orElse: () => StringKeyValue(key: kCID, value: "")).value,
       appType: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kAppType, orElse: () => StringKeyValue(key: kAppType, value: "")).value,
       width: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kWidth, orElse: () => LongKeyValue(key: kWidth, value: Int64())).value.toString(),
       height: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kHeight, orElse: () => LongKeyValue(key: kHeight, value: Int64())).value.toString(),
@@ -161,6 +168,7 @@ class NFT extends Equatable {
       thumbnailUrl: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl, orElse: () => StringParam()).value.changeDomain() ?? "",
       description: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kDescription, orElse: () => StringParam()).value ?? "",
       fileSize: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kFileSize, orElse: () => StringParam()).value ?? "",
+      cid: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kCID, orElse: () => StringParam()).value ?? "",
       appType: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kAppType, orElse: () => StringParam()).value ?? "",
       creator: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kCreator, orElse: () => StringParam()).value ?? "",
       width: recipe.entries.itemOutputs.firstOrNull?.longs.firstWhere((longKeyValue) => longKeyValue.key == kWidth, orElse: () => LongParam()).weightRanges.firstOrNull?.upper.toString() ?? "0",
@@ -181,11 +189,7 @@ class NFT extends Equatable {
     );
   }
 
-  static Future<NFT> fromItemID(String cookbookID, String itemID) async {
-    final walletsStore = GetIt.I.get<WalletsStore>();
-    final item = await walletsStore.getItem(cookbookID, itemID);
-    return NFT.fromItem(item!);
-  }
+
 
   static Future<NFT> fromTradeByID(Int64 tradeID) async {
     final walletsStore = GetIt.I.get<WalletsStore>();

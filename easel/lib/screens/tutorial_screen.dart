@@ -13,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
+import '../generated/locale_keys.g.dart';
 import '../utils/constants.dart';
 
 class TutorialScreen extends StatefulWidget {
@@ -61,7 +62,7 @@ class TutorialScreenState extends State<TutorialScreen> {
     super.initState();
 
     tutorialProvider.setLog();
-    
+
     myBottomDrawerController = BottomDrawerController();
     slides = kTutorialItems
         .map((item) => Column(
@@ -70,15 +71,26 @@ class TutorialScreenState extends State<TutorialScreen> {
                 Padding(
                     padding: EdgeInsets.symmetric(horizontal: 0.22.sw),
                     child: Image.asset(
-                      item[kImageTutorial],
+                      item[kImageTutorial] as String,
                       height: 10.h,
                       width: 40,
                       fit: BoxFit.fill,
                     )),
                 SizedBox(height: 0.1.sh),
-                Text(item[kHeaderTutorial], style: TextStyle(fontSize: isTablet ? 16.sp : 18.sp, fontWeight: FontWeight.w800, color: EaselAppTheme.kDartGrey), textAlign: TextAlign.center),
+                Text(
+                  item[kHeaderTutorial] as String,
+                  style: TextStyle(fontSize: isTablet ? 16.sp : 18.sp, fontWeight: FontWeight.w800, color: EaselAppTheme.kDartGrey),
+                  textAlign: TextAlign.center,
+                ),
                 SizedBox(height: 15.h),
-                SizedBox(width: 0.63.sw, child: Text(item[kDescriptionTutorial], style: TextStyle(color: Colors.black, fontSize: 13.sp, fontWeight: FontWeight.w400), textAlign: TextAlign.center)),
+                SizedBox(
+                  width: 0.63.sw,
+                  child: Text(
+                    item[kDescriptionTutorial] as String,
+                    style: TextStyle(color: Colors.black, fontSize: 13.sp, fontWeight: FontWeight.w400),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ],
             ))
         .toList();
@@ -104,15 +116,15 @@ class TutorialScreenState extends State<TutorialScreen> {
                 Padding(
                     padding: EdgeInsets.symmetric(horizontal: 0.22.sw),
                     child: Image.asset(
-                      item[kImageTutorial],
+                      item[kImageTutorial] as String,
                       height: isTablet ? 140.w : 200.w,
                       width: isTablet ? 140.w : 200.w,
                       fit: BoxFit.fill,
                     )),
                 SizedBox(height: 0.15.sh),
-                Text(item[kHeaderTutorial], style: TextStyle(fontSize: isTablet ? 16.sp : 18.sp, fontWeight: FontWeight.w800, color: EaselAppTheme.kDartGrey), textAlign: TextAlign.center),
+                Text(item[kHeaderTutorial] as String, style: TextStyle(fontSize: isTablet ? 16.sp : 18.sp, fontWeight: FontWeight.w800, color: EaselAppTheme.kDartGrey), textAlign: TextAlign.center),
                 SizedBox(height: 15.h),
-                SizedBox(width: 0.63.sw, child: Text(item[kDescriptionTutorial], style: TextStyle(color: Colors.black, fontSize: 13.sp, fontWeight: FontWeight.w400), textAlign: TextAlign.center)),
+                SizedBox(width: 0.63.sw, child: Text(item[kDescriptionTutorial] as String, style: TextStyle(color: Colors.black, fontSize: 13.sp, fontWeight: FontWeight.w400), textAlign: TextAlign.center)),
               ],
             ))
         .toList();
@@ -164,7 +176,6 @@ class TutorialScreenState extends State<TutorialScreen> {
                     height: 16.h,
                     decoration: const BoxDecoration(
                       color: EaselAppTheme.kLightRed,
-                      shape: BoxShape.rectangle,
                     )),
                 SizedBox(width: 24.w),
                 SizedBox(
@@ -172,9 +183,9 @@ class TutorialScreenState extends State<TutorialScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("pylons_app_desc_1".tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)),
+                      Text(LocaleKeys.pylons_app_desc_1.tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)),
                       SizedBox(height: 8.h),
-                      Text("discover_new_apps_adventures".tr(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))
+                      Text(LocaleKeys.discover_new_apps_adventures.tr(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))
                     ],
                   ),
                 )
@@ -189,7 +200,6 @@ class TutorialScreenState extends State<TutorialScreen> {
                     height: 16.h,
                     decoration: const BoxDecoration(
                       color: EaselAppTheme.kYellow,
-                      shape: BoxShape.rectangle,
                     )),
                 SizedBox(width: 24.w),
                 SizedBox(
@@ -197,9 +207,9 @@ class TutorialScreenState extends State<TutorialScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("app_desc_2".tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)),
+                      Text(LocaleKeys.app_desc_2.tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)),
                       SizedBox(height: 8.h),
-                      Text("app_needed_desc_two".tr(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))
+                      Text(LocaleKeys.app_needed_desc_two.tr(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))
                     ],
                   ),
                 )
@@ -214,7 +224,6 @@ class TutorialScreenState extends State<TutorialScreen> {
                     height: 16.h,
                     decoration: const BoxDecoration(
                       color: EaselAppTheme.kDarkGreen,
-                      shape: BoxShape.rectangle,
                     )),
                 SizedBox(width: 24.w),
                 SizedBox(
@@ -222,9 +231,9 @@ class TutorialScreenState extends State<TutorialScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("app_needed_desc_three".tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)),
+                      Text(LocaleKeys.app_needed_desc_three.tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)),
                       SizedBox(height: 8.h),
-                      Text("why_app_needed_summary_three".tr(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))
+                      Text(LocaleKeys.why_app_needed_summary_three.tr(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))
                     ],
                   ),
                 )
@@ -233,12 +242,11 @@ class TutorialScreenState extends State<TutorialScreen> {
             SizedBox(height: 20.h),
             ScreenResponsive(
               mobileScreen: (context) => Align(
-                alignment: Alignment.center,
                 child: PylonsButton(
                   onPressed: () async {
                     await onDownloadNowPressed(context);
                   },
-                  btnText: 'download_pylons_app'.tr(),
+                  btnText: LocaleKeys.download_pylons_app.tr(),
                   color: EaselAppTheme.kBlue,
                 ),
               ),
@@ -249,7 +257,7 @@ class TutorialScreenState extends State<TutorialScreen> {
                     onPressed: () async {
                       await onDownloadNowPressed(context);
                     },
-                    btnText: 'download_pylons_app'.tr(),
+                    btnText: LocaleKeys.download_pylons_app.tr(),
                     color: EaselAppTheme.kBlue,
                   ),
                 ),
@@ -271,11 +279,11 @@ class TutorialScreenState extends State<TutorialScreen> {
     if (!appAlreadyInstalled) {
       PylonsWallet.instance.goToInstall();
     } else {
-      scaffoldState.show(message: "pylons_already_installed".tr());
+      scaffoldState.show(message: LocaleKeys.pylons_already_installed.tr());
     }
   }
 
-  void moveForwardToEaselMessage() async {
+  Future<void> moveForwardToEaselMessage() async {
     tutorialProvider.forwarding();
     await navigatorKey.currentState!.pushReplacementNamed(RouteUtil.kRouteWelcomeEasel);
     tutorialProvider.forwarding();

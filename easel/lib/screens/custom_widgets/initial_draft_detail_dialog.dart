@@ -19,6 +19,8 @@ import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 TextStyle _rowTitleTextStyle(Color color) => TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: isTablet ? 11.sp : 10.sp);
 
 enum LoadingStatus { loading, success, error }
@@ -41,7 +43,7 @@ class DraftDetailDialog {
     );
   }
 
-  dialogAlreadyShown(EaselProvider provider) => provider.nft.isDialogShown;
+  bool dialogAlreadyShown(EaselProvider provider) => provider.nft.isDialogShown;
 }
 
 class _DraftDetailDialog extends StatefulWidget {
@@ -65,7 +67,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
   }
 
   void selectPreviewWidgetBasedOnType() {
-    EaselProvider easelProvider = context.read<EaselProvider>();
+    final EaselProvider easelProvider = context.read<EaselProvider>();
     if (easelProvider.nft.assetType == k3dText) {
       previewWidget = ModelViewer(
         src: easelProvider.nft.url.changeDomain(),
@@ -120,7 +122,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
 
   @override
   Widget build(BuildContext context) {
-    EaselProvider easelProvider = context.watch<EaselProvider>();
+    final EaselProvider easelProvider = context.watch<EaselProvider>();
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -140,7 +142,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
                   width: 60.h,
                   child: ClipPath(
                     clipper: RightTriangleClipper(orientation: clipper.Orientation.orientationNW),
-                    child: Container(
+                    child: const ColoredBox(
                       color: EaselAppTheme.kLightRed,
                     ),
                   ),
@@ -154,7 +156,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
                   width: 60.h,
                   child: ClipPath(
                     clipper: RightTriangleClipper(orientation: clipper.Orientation.orientationSE),
-                    child: Container(
+                    child: const ColoredBox(
                       color: EaselAppTheme.kLightRed,
                     ),
                   ),
@@ -170,7 +172,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "ipfs_upload".tr(),
+                      LocaleKeys.ipfs_upload.tr(),
                       style: TextStyle(
                         color: EaselAppTheme.kWhite,
                         fontSize: 18.sp,
@@ -189,7 +191,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
                       height: 30.h,
                     ),
                     buildRow(
-                      title: "path_address".tr(),
+                      title: LocaleKeys.path_address.tr(),
                       subtitle: easelProvider.nft.fileName,
                     ),
                     SizedBox(
@@ -199,8 +201,8 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
                         valueListenable: statusNotifier,
                         builder: (context, value, child) {
                           return buildRow(
-                            title: "status".tr(),
-                            subtitle: "status_value".tr(args: [getStatus(loadingStatus: value)]),
+                            title: LocaleKeys.status.tr(),
+                            subtitle: LocaleKeys.status_value.tr(args: [getStatus(loadingStatus: value)]),
                             color: getColor(loadingStatus: value),
                           );
                         }),
@@ -210,15 +212,15 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
                     CidOrIpfs(
                       viewCid: (context) {
                         return buildRow(
-                          title: "content_id".tr(),
+                          title: LocaleKeys.content_id.tr(),
                           subtitle: easelProvider.nft.cid,
                           canCopy: true,
                         );
                       },
                       viewIpfs: (context) {
                         return buildViewOnIPFS(
-                            title: "asset_uri".tr(),
-                            subtitle: "view".tr(),
+                            title: LocaleKeys.asset_uri.tr(),
+                            subtitle: LocaleKeys.view.tr(),
                             onPressed: () {
                               onViewOnIPFSPressed(provider: easelProvider);
                             });
@@ -232,7 +234,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
                       height: 45.h,
                       width: isTablet ? 120.w : 250.w,
                       child: ClippedButton(
-                        title: "close".tr(),
+                        title: LocaleKeys.close.tr(),
                         bgColor: EaselAppTheme.kGrey.withOpacity(0.8),
                         textColor: EaselAppTheme.kWhite,
                         onPressed: () async {
@@ -267,15 +269,15 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
 
   String getStatus({required LoadingStatus loadingStatus}) {
     if (loadingStatus == LoadingStatus.success) {
-      return "success".tr();
+      return LocaleKeys.success.tr();
     }
     if (loadingStatus == LoadingStatus.loading) {
-      return "in_progress".tr();
+      return LocaleKeys.in_progress.tr();
     }
-    return "failed".tr();
+    return LocaleKeys.failed.tr();
   }
 
-  void onViewOnIPFSPressed({required EaselProvider provider}) async {
+  Future<void> onViewOnIPFSPressed({required EaselProvider provider}) async {
     await provider.repository.launchMyUrl(url: provider.nft.url.changeDomain());
   }
 
@@ -313,7 +315,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
     );
   }
 
-  Widget buildRow({required String title, required String subtitle, final color = Colors.white, final bool canCopy = false}) {
+  Widget buildRow({required String title, required String subtitle, Color color = Colors.white, bool canCopy = false}) {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: isTablet ? 20.w : 40.w,
@@ -341,7 +343,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
                     await Clipboard.setData(ClipboardData(text: subtitle));
                     if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("copied_to_clipboard".tr())),
+                      SnackBar(content: Text(LocaleKeys.copied_to_clipboard.tr())),
                     );
                   },
                   child: Icon(

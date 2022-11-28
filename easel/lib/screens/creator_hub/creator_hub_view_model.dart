@@ -7,9 +7,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 
+import '../../generated/locale_keys.g.dart';
+
 enum ViewType { viewGrid, viewList }
 
-enum CollectionType { draft, published, forSale }
+enum CollectionType { draft, published }
 
 class CreatorHubViewModel extends ChangeNotifier {
   final Repository repository;
@@ -20,10 +22,9 @@ class CreatorHubViewModel extends ChangeNotifier {
 
   ViewType viewType = ViewType.viewGrid;
 
-
   int get publishedRecipesLength => nftPublishedList.length;
 
-  changeSelectedCollection(CollectionType collectionType) {
+  void changeSelectedCollection(CollectionType collectionType) {
     switch (collectionType) {
       case CollectionType.draft:
         selectedCollectionType = CollectionType.draft;
@@ -31,10 +32,6 @@ class CreatorHubViewModel extends ChangeNotifier {
         break;
       case CollectionType.published:
         selectedCollectionType = CollectionType.published;
-        notifyListeners();
-        break;
-      case CollectionType.forSale:
-        selectedCollectionType = CollectionType.forSale;
         notifyListeners();
         break;
     }
@@ -87,7 +84,7 @@ class CreatorHubViewModel extends ChangeNotifier {
   void getTotalForSale() {
     _nftForSaleList = [];
 
-    for (NFT nft in nftPublishedList) {
+    for (final NFT nft in nftPublishedList) {
       if (nft.isEnabled && nft.amountMinted < int.parse(nft.quantity)) {
         _nftForSaleList.add(nft);
       }
@@ -137,13 +134,13 @@ class CreatorHubViewModel extends ChangeNotifier {
   }
 
   Future<void> getDraftsList() async {
-    final loading = Loading()..showLoading(message: "loading".tr());
+    final loading = Loading()..showLoading(message: LocaleKeys.loading.tr());
 
     final getNftResponse = await repository.getNfts();
 
     if (getNftResponse.isLeft()) {
       loading.dismiss();
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
 
@@ -158,7 +155,7 @@ class CreatorHubViewModel extends ChangeNotifier {
     final getNftResponse = await repository.getNfts();
 
     if (getNftResponse.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
 
       return;
     }
@@ -172,7 +169,7 @@ class CreatorHubViewModel extends ChangeNotifier {
     final deleteNftResponse = await repository.deleteNft(id!);
 
     if (deleteNftResponse.isLeft()) {
-      "delete_error".tr().show();
+      LocaleKeys.delete_error.tr().show();
       return;
     }
     nftDraftList.removeWhere((element) => element.id == id);

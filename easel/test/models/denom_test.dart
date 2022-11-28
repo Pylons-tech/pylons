@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('should have all the available denoms', () {
-    for (Denom denom in Denom.availableDenoms) {
+    for (final Denom denom in Denom.availableDenoms) {
       if (denom.name == "Pylon") {
         expect(denom.symbol, kPylonSymbol);
       }

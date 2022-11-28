@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../easel_provider.dart';
+import '../generated/locale_keys.g.dart';
 import '../main.dart';
 import '../models/denom.dart';
 
@@ -28,7 +29,7 @@ class EaselPriceInputField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "price".tr(),
+          LocaleKeys.price.tr(),
           textAlign: TextAlign.start,
           style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
         ),
@@ -53,12 +54,10 @@ class EaselPriceInputField extends StatelessWidget {
                         controller: controller,
                         validator: validator,
                         minLines: 1,
-                        maxLines: 1,
                         keyboardType: TextInputType.number,
-                        textCapitalization: TextCapitalization.none,
                         inputFormatters: inputFormatters,
                         decoration: InputDecoration(
-                            hintText: "price_hint".tr(),
+                            hintText: LocaleKeys.price_hint.tr(),
                             hintStyle: TextStyle(
                                 fontSize: 15.sp,
                                 fontWeight: FontWeight.w400,
@@ -98,7 +97,6 @@ class _CurrencyDropDown extends StatelessWidget {
                     padding: EdgeInsets.only(left: 5.w),
                     height: isTablet ? 32.h : 40.h,
                     child: Align(
-                      alignment: Alignment.center,
                       child: DropdownButton<String>(
                         onTap: () {
                           FocusManager.instance.primaryFocus?.unfocus();
@@ -124,7 +122,6 @@ class _CurrencyDropDown extends StatelessWidget {
                           return DropdownMenuItem<String>(
                             value: value.symbol,
                             child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   value.getIconWidget(),
                                   SizedBox(width: isTablet ? 10.w : 10.w),

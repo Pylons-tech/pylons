@@ -39,12 +39,6 @@ class ModelViewerState extends State<ModelViewer> {
   }
 
   @override
-  void didUpdateWidget(final ModelViewer oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // TODO
-  }
-
-  @override
   Widget build(final BuildContext context) {
     if (_proxy == null) {
       return Center(
@@ -233,7 +227,7 @@ class ModelViewerState extends State<ModelViewer> {
 
         case '/model':
           if (url.isAbsolute && !url.isScheme("file")) {
-            await response.redirect(url); // TODO: proxy the resource
+            await response.redirect(url);
           } else {
             final data = await (url.isScheme("file") ? _readFile(url.path) : _readAsset(url.path));
             response

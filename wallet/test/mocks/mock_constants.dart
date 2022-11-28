@@ -9,6 +9,7 @@ import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dar
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
+import 'package:pylons_wallet/utils/enums.dart';
 import 'package:transaction_signing_gateway/model/transaction_hash.dart';
 
 TransactionHash MOCK_TRANSACTION = const TransactionHash(hash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E');
@@ -245,7 +246,7 @@ BaseEnv MOCK_BASE_ENV = BaseEnv()
 
 IBCTraceModel MOCK_IBC_TRACE_MODEL = IBCTraceModel(denomTrace: DenomTrace(baseDenom: IBCCoins.ujunox, path: ''), ibcHash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E');
 
-NFT MOCK_NFT_FREE = NFT(
+NFT MOCK_NFT_FREE_IMAGE = NFT(
   name: "This is my Image NFT",
   height: "2400",
   description: "Please Buy my Image NFT",
@@ -262,11 +263,47 @@ NFT MOCK_NFT_FREE = NFT(
   ibcCoins: IBCCoins.upylon,
 );
 
+NFT MOCK_NFT_FREE_VIDEO = NFT(
+  name: "This is my Image NFT",
+  height: "2400",
+  description: "Please Buy my Image NFT",
+  width: "1080",
+  url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
+  recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
+  duration: "0:0",
+  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+  appType: "easel",
+  creator: "Ahmad",
+  fileSize: "90.12KB",
+  itemID: "DtnxAS8L4pf",
+  owner: "abd",
+  ibcCoins: IBCCoins.upylon,
+  assetType: AssetType.Video,
+);
+
+NFT MOCK_NFT_FREE_AUDIO = NFT(
+  name: "This is my Image NFT",
+  height: "2400",
+  description: "Please Buy my Image NFT",
+  width: "1080",
+  url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
+  recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
+  duration: "0:0",
+  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+  appType: "easel",
+  creator: "Ahmad",
+  fileSize: "90.12KB",
+  itemID: "DtnxAS8L4pf",
+  owner: "abd",
+  ibcCoins: IBCCoins.upylon,
+  assetType: AssetType.Audio,
+);
+
 NftOwnershipHistory MOCK_NFT_OWNERSHIP_HISTORY = NftOwnershipHistory(
   itemID: "ahmad123axd",
   cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
   createdAt: 0,
-  receiver: "xyz",
+  receiverID: "xyz",
   senderName: "abcxyz",
 );
 
@@ -296,3 +333,5 @@ Color MOCK_COLOR = Colors.white;
 bool MOCK_CAMERA_CONTROLS = false;
 bool MOCK_SHOW_LOADER_TRUE = true;
 bool MOCK_SHOW_LOADER_FALSE = false;
+String MOCK_DYNAMIC_LINK = "https://pylons.page.link/i89m9Qxw7fYjW2RS8";
+const MOCK_BUY_BUTTON_KEY_VALUE = "buy_button_key";

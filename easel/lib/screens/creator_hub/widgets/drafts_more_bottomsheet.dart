@@ -16,6 +16,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../../../widgets/clippers/bottom_sheet_clipper.dart';
 
 TextStyle titleStyle = TextStyle(fontSize: isTablet ? 13.sp : 16.sp, fontWeight: FontWeight.w800, fontFamily: kUniversalFontFamily, color: EaselAppTheme.kBlack);
@@ -30,16 +31,18 @@ class DraftsBottomSheet {
 
   Future<void> show() async {
     return showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        context: buildContext,
-        builder: (_) {
-          return ChangeNotifierProvider.value(
-            value: creatorHubViewModel,
-            child: DraftsMoreBottomSheet(
-              nft: nft,
-            ),
-          );
-        });
+      backgroundColor: Colors.transparent,
+      context: buildContext,
+      builder: (_) {
+        return ChangeNotifierProvider.value(
+          value: creatorHubViewModel,
+          child: DraftsMoreBottomSheet(
+            key: const Key(kNFTMoreOptionBottomSheetKey),
+            nft: nft,
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -50,7 +53,7 @@ class DraftsMoreBottomSheet extends StatelessWidget {
 
   EaselProvider get easelProvider => sl();
 
-  void onViewOnIPFSPressed({required BuildContext context, required NFT nft}) async {
+  Future<void> onViewOnIPFSPressed({required BuildContext context, required NFT nft}) async {
     final easelProvider = Provider.of<EaselProvider>(context, listen: false);
     await easelProvider.repository.launchMyUrl(url: nft.url.changeDomain());
   }
@@ -67,7 +70,7 @@ class DraftsMoreBottomSheet extends StatelessWidget {
           children: [
             moreOptionTile(
                 title: "publish",
-                image: kSvgPublish,
+                image: SVGUtils.kSvgPublish,
                 onPressed: () {
                   viewModel.saveNFT(nft: nft);
                   Navigator.of(context).pop();
@@ -78,7 +81,7 @@ class DraftsMoreBottomSheet extends StatelessWidget {
             ),
             moreOptionTile(
                 title: "delete",
-                image: kSvgDelete,
+                image: SVGUtils.kSvgDelete,
                 onPressed: () {
                   Navigator.of(context).pop();
 
@@ -99,11 +102,11 @@ class DraftsMoreBottomSheet extends StatelessWidget {
                       state
                         ..hideCurrentSnackBar()
                         ..showSnackBar(
-                          SnackBar(content: Text("copied_to_clipboard".tr())),
+                          SnackBar(content: Text(LocaleKeys.copied_to_clipboard.tr())),
                         );
                     },
-                    title: "copy_cid".tr(),
-                    image: kSvgIpfsLogo,
+                    title: LocaleKeys.copy_cid.tr(),
+                    image: PngUtils.kSvgIpfsLogo,
                     isSvg: false,
                   );
                 },
@@ -113,8 +116,8 @@ class DraftsMoreBottomSheet extends StatelessWidget {
                       Navigator.of(context).pop();
                       onViewOnIPFSPressed(nft: nft, context: context);
                     },
-                    title: "view".tr(),
-                    image: kSvgIpfsLogo,
+                    title: LocaleKeys.view.tr(),
+                    image: PngUtils.kSvgIpfsLogo,
                     isSvg: false,
                   );
                 },
@@ -132,8 +135,8 @@ class DraftsMoreBottomSheet extends StatelessWidget {
   }
 }
 
-Widget moreOptionTile({required String title, required String image, required VoidCallback onPressed, final bool isSvg = true}) {
-  TextStyle titleStyle = TextStyle(fontSize: isTablet ? 13.sp : 16.sp, fontWeight: FontWeight.w800, fontFamily: kUniversalFontFamily, color: EaselAppTheme.kBlack);
+Widget moreOptionTile({required String title, required String image, required VoidCallback onPressed,  bool isSvg = true}) {
+  final TextStyle titleStyle = TextStyle(fontSize: isTablet ? 13.sp : 16.sp, fontWeight: FontWeight.w800, fontFamily: kUniversalFontFamily, color: EaselAppTheme.kBlack);
 
   return Padding(
     padding: EdgeInsets.symmetric(vertical: 8.h),
@@ -141,12 +144,12 @@ Widget moreOptionTile({required String title, required String image, required Vo
       onTap: onPressed,
       child: Row(
         children: [
-          isSvg ? SvgPicture.asset(image) : Image.asset(image),
+          if (isSvg) SvgPicture.asset(image) else Image.asset(image),
           SizedBox(
             width: 30.w,
           ),
           Text(
-            title.tr(),
+            title,
             style: titleStyle.copyWith(fontSize: 16.sp),
           )
         ],

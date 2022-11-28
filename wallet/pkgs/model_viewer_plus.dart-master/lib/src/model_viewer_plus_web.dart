@@ -111,12 +111,6 @@ class ModelViewerState extends State<ModelViewer> {
   }
 
   @override
-  void didUpdateWidget(final ModelViewer oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // TODO
-  }
-
-  @override
   Widget build(final BuildContext context) {
     return _isLoading
         ? Center(

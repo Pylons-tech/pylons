@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+
 class StepLabels extends StatelessWidget {
   final ValueNotifier<int> currentStep;
   final ValueNotifier<int> currentPage;
@@ -21,14 +22,14 @@ class StepLabels extends StatelessWidget {
       child: Row(
         children: List.generate(stepLabels.length, (index) {
           return SizedBox(
-            width: (0.8.sw / stepLabels.length),
+            width: 0.8.sw / stepLabels.length,
             child: ValueListenableBuilder(
               valueListenable: currentPage,
               builder: (_, int currentPage, __) => Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    stepLabels[index].toString().tr(),
+                    stepLabels[index].tr(),
                     style: Theme.of(context).textTheme.bodyText2!.copyWith(
                           fontSize: 8.sp,
                           fontFamily: 'Inter',

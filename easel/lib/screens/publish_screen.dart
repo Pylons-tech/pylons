@@ -32,6 +32,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import '../generated/locale_keys.g.dart';
 import '../widgets/video_progress_widget.dart';
 
 TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: isTablet ? 11.sp : 13.sp);
@@ -46,13 +47,13 @@ class PublishScreen extends StatefulWidget {
 }
 
 class _PublishScreenState extends State<PublishScreen> {
-  var repository = GetIt.I.get<Repository>();
-  var easelProvider = GetIt.I.get<EaselProvider>();
-  var homeViewModel = GetIt.I.get<HomeViewModel>();
+  Repository repository = GetIt.I.get<Repository>();
+  EaselProvider easelProvider = GetIt.I.get<EaselProvider>();
+  HomeViewModel homeViewModel = GetIt.I.get<HomeViewModel>();
 
   @override
-  initState() {
-    easelProvider.nft = repository.getCacheDynamicType(key: nftKey);
+  void initState() {
+    easelProvider.nft = repository.getCacheDynamicType(key: nftKey) as NFT;
     easelProvider.collapsed = false;
     easelProvider.setLog(screenName: AnalyticsScreenEvents.publishScreen);
     super.initState();
@@ -173,7 +174,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         children: [
           BuildPublishBottomSheet(
             collapseStatus: viewModel.collapsed,
-            onCollapsed: (context) => Container(
+            onCollapsed: (context) => DecoratedBox(
               decoration: const BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [EaselAppTheme.kTransparent, EaselAppTheme.kBlack])),
               child: Padding(
                 padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 8.h, bottom: 16.h),
@@ -223,7 +224,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         case ButtonState.paused:
                                           return InkWell(
                                             onTap: () {
-                                              viewModel.playAudio(false);
+                                              viewModel.playAudio(forFile: false);
                                             },
                                             child: Icon(
                                               Icons.play_arrow_outlined,
@@ -235,7 +236,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         case ButtonState.playing:
                                           return InkWell(
                                             onTap: () {
-                                              viewModel.pauseAudio(false);
+                                              viewModel.pauseAudio(forFile: false);
                                             },
                                             child: Icon(
                                               Icons.pause,
@@ -252,7 +253,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                     valueListenable: viewModel.audioProgressNotifier,
                                     builder: (_, value, __) {
                                       return Padding(
-                                        padding: EdgeInsets.only(right: 10.w, bottom: 3.h, top: 0, left: 5.w),
+                                        padding: EdgeInsets.only(right: 10.w, bottom: 3.h, left: 5.w),
                                         child: ProgressBar(
                                           progressBarColor: EaselAppTheme.kWhite,
                                           thumbColor: EaselAppTheme.kWhite,
@@ -265,7 +266,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                           thumbRadius: 10.h,
                                           timeLabelPadding: 3.h,
                                           onSeek: (position) {
-                                            viewModel.seekAudio(position, false);
+                                            viewModel.seekAudio(position, forFile: false);
                                           },
                                         ),
                                       );
@@ -323,8 +324,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       ],
                       ReadMoreText(
                         widget.nft.description,
-                        trimExpandedText: "collapse".tr(),
-                        trimCollapsedText: "read_more".tr(),
+                        trimExpandedText: LocaleKeys.collapse.tr(),
+                        trimCollapsedText: LocaleKeys.read_more.tr(),
                         moreStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w300, color: EaselAppTheme.kLightPurple),
                         lessStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w300, color: EaselAppTheme.kLightPurple),
                       ),
@@ -337,30 +338,30 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         child: Column(
                           children: [
                             buildRow(
-                              title: "currency".tr(),
+                              title: LocaleKeys.currency.tr(),
                               subtitle: widget.nft.isFreeDrop == FreeDrop.yes.name ? kPylonText : getCurrency(),
                             ),
                             SizedBox(height: 5.h),
-                            buildRow(title: "price".tr(), subtitle: getPriceSubtitle()),
+                            buildRow(title: LocaleKeys.price.tr(), subtitle: getPriceSubtitle()),
                             SizedBox(height: 5.h),
                             buildRow(
-                              title: "editions".tr(),
-                              subtitle: widget.nft.quantity.toString(),
+                              title: LocaleKeys.editions.tr(),
+                              subtitle: widget.nft.quantity,
                             ),
                             SizedBox(height: 5.h),
                             buildRow(
-                              title: "royalty".tr(),
+                              title: LocaleKeys.royalty.tr(),
                               subtitle: "${widget.nft.tradePercentage}%",
                             ),
                             SizedBox(height: 5.h),
-                            buildRow(title: "content_identifier".tr(), subtitle: widget.nft.cid, canCopy: true),
+                            buildRow(title: LocaleKeys.content_identifier.tr(), subtitle: widget.nft.cid, canCopy: true),
                             SizedBox(height: 5.h),
                             CidOrIpfs(
                               viewCid: (context) {
                                 return const SizedBox.shrink();
                               },
                               viewIpfs: (context) {
-                                return buildRow(title: "asset_uri".tr(), subtitle: "view".tr(), viewIPFS: true);
+                                return buildRow(title: LocaleKeys.asset_uri.tr(), subtitle: LocaleKeys.view.tr(), viewIPFS: true);
                               },
                               type: widget.nft.assetType,
                             ),
@@ -371,7 +372,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 if (viewModel.nft.assetType == kAudioText) {
                                   viewModel.disposeAudioController();
                                 }
-                                bool isRecipeCreated = await viewModel.verifyPylonsAndMint(nft: viewModel.nft);
+                                final bool isRecipeCreated = await viewModel.verifyPylonsAndMint(nft: viewModel.nft);
                                 if (!isRecipeCreated) {
                                   return;
                                 }
@@ -386,7 +387,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             ),
                             ClippedButton(
                               key: const Key(kSaveAsDraftPublishKey),
-                              title: "save_as_draft".tr(),
+                              title: LocaleKeys.save_as_draft.tr(),
                               bgColor: Colors.white.withOpacity(0.2),
                               textColor: EaselAppTheme.kWhite,
                               onPressed: () async {
@@ -457,7 +458,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           text: TextSpan(
             children: [
               TextSpan(
-                text: "created_by".tr(),
+                text: LocaleKeys.created_by.tr(),
                 style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w500),
               ),
               TextSpan(text: owner, style: TextStyle(color: EaselAppTheme.kLightPurple, fontSize: 18.sp, fontWeight: FontWeight.w500)),
@@ -465,7 +466,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   child: SvgPicture.asset(
-                    kOwnerVerifiedIcon,
+                    SVGUtils.kOwnerVerifiedIcon,
                     height: 15.h,
                   ),
                 ),
@@ -498,7 +499,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       case ButtonState.paused:
                         return InkWell(
                           onTap: () {
-                            viewModel.playAudio(false);
+                            viewModel.playAudio(forFile: false);
                           },
                           child: Icon(
                             Icons.play_arrow_outlined,
@@ -510,7 +511,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       case ButtonState.playing:
                         return InkWell(
                           onTap: () {
-                            viewModel.pauseAudio(false);
+                            viewModel.pauseAudio(forFile: false);
                           },
                           child: Icon(
                             Icons.pause,
@@ -540,7 +541,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         thumbRadius: 6.h,
                         timeLabelPadding: 2.h,
                         onSeek: (position) {
-                          viewModel.seekAudio(position, false);
+                          viewModel.seekAudio(position, forFile: false);
                         },
                       ),
                     );
@@ -567,11 +568,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     );
   }
 
-  void onViewOnIPFSPressed({required EaselProvider provider}) async {
+  Future<void> onViewOnIPFSPressed({required EaselProvider provider}) async {
     await provider.repository.launchMyUrl(url: provider.nft.url.changeDomain());
   }
 
-  Widget buildRow({required String title, required String subtitle, final viewIPFS = false, final bool canCopy = false}) {
+  Widget buildRow({required String title, required String subtitle, bool viewIPFS = false, bool canCopy = false}) {
     final viewModel = context.watch<EaselProvider>();
 
     return Row(
@@ -585,9 +586,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             InkWell(
-              onTap: () {
+              onTap: () async {
                 if (viewIPFS) {
-                  return onViewOnIPFSPressed(provider: viewModel);
+                  await onViewOnIPFSPressed(provider: viewModel);
                 }
               },
               child: Text(
@@ -604,7 +605,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   await Clipboard.setData(ClipboardData(text: subtitle));
                   if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("copied_to_clipboard".tr())),
+                    SnackBar(content: Text(LocaleKeys.copied_to_clipboard.tr())),
                   );
                 },
                 child: Icon(

@@ -4,16 +4,20 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/buttons/pylons_get_started_button.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
-import 'package:pylons_wallet/pylons_app.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+import '../../../generated/locale_keys.g.dart';
 
 class NewUserForm extends StatefulWidget {
   final WalletsStore walletsStore;
@@ -35,11 +39,6 @@ class NewUserFormState extends State<NewUserForm> {
   final bool _ackChecked3 = true;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
@@ -56,7 +55,7 @@ class NewUserFormState extends State<NewUserForm> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "pylon_username".tr(),
+                LocaleKeys.pylon_username.tr(),
                 style: TextStyle(
                   color: AppColors.kBlack,
                   fontSize: 15.sp,
@@ -65,11 +64,11 @@ class NewUserFormState extends State<NewUserForm> {
               ),
             )
           ]),
-          PylonsTextInput(controller: usernameController, label: "user_name".tr(), errorText: validateUsername),
+          PylonsTextInput(controller: usernameController, label: LocaleKeys.user_name.tr(), errorText: validateUsername),
           VerticalSpace(30.h),
           CheckboxListTile(
             value: _ackChecked1,
-            title: Text('acknowledge_username_never_changed'.tr(),
+            title: Text(LocaleKeys.acknowledge_username_never_changed.tr(),
                 style: TextStyle(
                   color: AppColors.kBlack,
                   fontSize: 12.sp,
@@ -90,14 +89,14 @@ class NewUserFormState extends State<NewUserForm> {
                 style: TextStyle(color: AppColors.kBlack, fontSize: 12.sp),
                 children: <TextSpan>[
                   TextSpan(
-                      text: 'acknowledge_i_agree'.tr(),
+                      text: LocaleKeys.acknowledge_i_agree.tr(),
                       style: TextStyle(
                         color: AppColors.kBlack,
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w500,
                       )),
                   TextSpan(
-                      text: 'acknowledge_privacy_policy'.tr(),
+                      text: LocaleKeys.acknowledge_privacy_policy.tr(),
                       style: TextStyle(
                         color: AppColors.kBlue,
                         fontSize: 12.sp,
@@ -125,7 +124,7 @@ class NewUserFormState extends State<NewUserForm> {
               key: ValueKey(_ackChecked3 && _ackChecked2 && _ackChecked2),
               enabled: _ackChecked3 && _ackChecked2 && _ackChecked2,
               onTap: onStartPylonsPressed,
-              text: "get_started".tr(),
+              text: LocaleKeys.get_started.tr(),
               loader: isLoadingNotifier,
             ),
           ),
@@ -136,7 +135,7 @@ class NewUserFormState extends State<NewUserForm> {
 
   String? validateUsername(String? username) {
     if (username == null || username.isEmpty) {
-      return 'user_name_empty'.tr();
+      return LocaleKeys.user_name_empty.tr();
     }
 
     return null;
@@ -150,6 +149,9 @@ class NewUserFormState extends State<NewUserForm> {
 
   /// Create the new wallet and associate the chosen username with it.
   Future<void> _registerNewUser(String userName) async {
+    final RemoteNotificationsProvider firebaseRemoteNotificationsProvider = context.read<RemoteNotificationsProvider>();
+    final AccountProvider accountProvider = context.read<AccountProvider>();
+
     isLoadingNotifier.value = true;
     final navigator = Navigator.of(context);
 
@@ -157,7 +159,7 @@ class NewUserFormState extends State<NewUserForm> {
 
     if (isAccountExists) {
       isLoadingNotifier.value = false;
-      "${'user_name_already_exists'.tr()}!".show();
+      "${LocaleKeys.user_name_already_exists.tr()}!".show();
       navigator.pop();
       return;
     }
@@ -167,9 +169,9 @@ class NewUserFormState extends State<NewUserForm> {
     isLoadingNotifier.value = false;
     result.fold((failure) {
       failure.message.show();
-      navigator.pop();
     }, (walletInfo) async {
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => false);
+      firebaseRemoteNotificationsProvider.updateFCMToken(address: accountProvider.accountPublicInfo!.publicAddress);
+      navigator.pushNamedAndRemoveUntil(RouteUtil.ROUTE_HOME, (route) => false);
     });
   }
 }

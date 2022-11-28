@@ -15,6 +15,7 @@ import 'package:pylons_wallet/ipc/models/sdk_ipc_message.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/ipc/widgets/sdk_approval_dialog.dart';
 import 'package:pylons_wallet/model/nft.dart';
+import 'package:pylons_wallet/providers/accounts_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
@@ -25,17 +26,24 @@ import 'package:transaction_signing_gateway/model/account_public_info.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../generated/locale_keys.g.dart';
+
 /// Terminology
 /// Signal : Incoming request from a 3rd party app
 /// Key : The key is the process against which the 3rd part app has sent the signal
 class IPCEngine {
   late StreamSubscription _sub;
+  AccountProvider accountProvider;
   WalletsStore walletsStore;
   Repository repository;
 
   bool systemHandlingASignal = false;
 
-  IPCEngine({required this.walletsStore, required this.repository});
+  IPCEngine({
+    required this.accountProvider,
+    required this.repository,
+    required this.walletsStore,
+  });
 
   /// This method initiate the IPC Engine
   Future<bool> init() async {
@@ -135,11 +143,11 @@ class IPCEngine {
 
     final recipeId = (queryParameters.containsKey(kRecipeIdKey)) ? queryParameters[kRecipeIdKey] ?? '' : "";
     final cookbookId = (queryParameters.containsKey(kCookbookIdKey)) ? queryParameters[kCookbookIdKey] ?? "" : "";
-    final currentWallets = walletsStore.getWallets().value;
+    final currentWallet = accountProvider.accountPublicInfo;
     final address = (queryParameters.containsKey(kAddress)) ? queryParameters[kAddress] ?? "" : "";
 
-    if (currentWallets.isEmpty) {
-      "create_an_account_first".tr().show();
+    if (currentWallet == null) {
+      LocaleKeys.create_an_account_first.tr().show();
       repository.saveInviteeAddressFromDynamicLink(dynamicLink: address);
       walletsStore.saveInitialLink(initialLink: link);
       return;
@@ -151,7 +159,7 @@ class IPCEngine {
       return;
     }
 
-    if (isOwnerIsViewing(nullableNFT, currentWallets)) {
+    if (isOwnerIsViewing(nullableNFT, currentWallet)) {
       await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nullableNFT);
     } else {
       await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: nullableNFT);
@@ -160,15 +168,16 @@ class IPCEngine {
     walletsStore.setStateUpdatedFlag(flag: true);
   }
 
-  bool isOwnerIsViewing(NFT nullableNFT, List<AccountPublicInfo> currentWallets) => nullableNFT.ownerAddress == currentWallets.last.publicAddress;
+  bool isOwnerIsViewing(NFT nullableNFT, AccountPublicInfo currentWallet) => nullableNFT.ownerAddress == currentWallet.publicAddress;
 
   Future<void> _handleNFTTradeLink(String link) async {
     final queryParameters = Uri.parse(link).queryParameters;
     final tradeId = queryParameters.containsKey(kTradeIdKey) ? queryParameters[kTradeIdKey] ?? "" : "0";
     final address = queryParameters.containsKey(kAddress) ? queryParameters[kAddress] ?? "" : "";
-    final currentWallets = walletsStore.getWallets().value;
-    if (currentWallets.isEmpty) {
-      "create_an_account_first".tr().show();
+    final currentWallet = accountProvider.accountPublicInfo;
+
+    if (currentWallet == null) {
+      LocaleKeys.create_an_account_first.tr().show();
       repository.saveInviteeAddressFromDynamicLink(dynamicLink: address);
       walletsStore.saveInitialLink(initialLink: link);
       return;
@@ -179,7 +188,7 @@ class IPCEngine {
     final recipeResult = await walletsStore.getTradeByID(Int64.parseInt(tradeId));
 
     if (recipeResult == null) {
-      "nft_does_not_exists".tr().show();
+      LocaleKeys.account_already_exists.tr().show();
       showLoader.dismiss();
       return;
     }
@@ -189,7 +198,7 @@ class IPCEngine {
     await item.getOwnerAddress();
     showLoader.dismiss();
 
-    await  navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: item);
+    await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: item);
     walletsStore.setStateUpdatedFlag(flag: true);
   }
 
@@ -207,11 +216,14 @@ class IPCEngine {
     if (recipeResult == null) {
       ScaffoldMessenger.of(navigatorKey.currentState!.overlay!.context).showSnackBar(
         SnackBar(
-          content: Text("nft_does_not_exists".tr()),
+          content: Text(LocaleKeys.nft_does_not_exists.tr()),
         ),
       );
     } else {
       final item = await NFT.fromItem(recipeResult);
+      if (item == null) {
+        return;
+      }
       await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: item);
 
       walletsStore.setStateUpdatedFlag(flag: true);
@@ -295,7 +307,7 @@ class IPCEngine {
   /// This method is called when the user cancels the transaction
   /// Input: [sdkIPCMessage] the transaction that the user cancels
   Future<void> onUserCancelled(SdkIpcMessage sdkIPCMessage) async {
-    final cancelledResponse = SdkIpcResponse.failure(sender: sdkIPCMessage.sender, error: 'user_declined_request'.tr(), errorCode: HandlerFactory.ERR_USER_DECLINED);
+    final cancelledResponse = SdkIpcResponse.failure(sender: sdkIPCMessage.sender, error: LocaleKeys.user_declined_request.tr(), errorCode: HandlerFactory.ERR_USER_DECLINED);
     await checkAndDispatchUniLinkIfNeeded(handlerMessage: cancelledResponse, responseSendingNeeded: true);
   }
 
@@ -303,7 +315,7 @@ class IPCEngine {
   /// Input: [SdkIpcMessage] the transaction that the user approves.
   Future<void> onUserApproval(SdkIpcMessage sdkIPCMessage) async {
     final handlerMessage = await GetIt.I.get<HandlerFactory>().getHandler(sdkIPCMessage).handle();
-    if  (handlerMessage == null) return;
+    if (handlerMessage == null) return;
     await checkAndDispatchUniLinkIfNeeded(handlerMessage: handlerMessage, responseSendingNeeded: sdkIPCMessage.requestResponse);
   }
 
@@ -373,7 +385,7 @@ class IPCEngine {
     showLoader.dismiss();
 
     if (recipeResult.isLeft()) {
-      "nft_does_not_exists".tr().show();
+      LocaleKeys.nft_does_not_exists.tr().show();
       return null;
     }
 

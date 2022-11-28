@@ -11,6 +11,7 @@ import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
@@ -22,13 +23,26 @@ import 'package:pylons_wallet/utils/enums.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../generated/locale_keys.g.dart';
 import '../owner_purchase_view_common/button_state.dart';
 import '../owner_purchase_view_common/progress_bar_state.dart';
 
 class PurchaseItemViewModel extends ChangeNotifier {
-  PurchaseItemViewModel(this.walletsStore, {required this.audioPlayerHelper, required this.videoPlayerHelper, required this.repository, required this.shareHelper});
+  PurchaseItemViewModel(
+    this.walletsStore, {
+    required this.audioPlayerHelper,
+    required this.videoPlayerHelper,
+    required this.repository,
+    required this.shareHelper,
+    required this.accountPublicInfo,
+  });
 
   bool get isViewingFullNft => _isViewingFullNft;
+
+  TabFields? selectedField;
+  bool isOwnershipExpanded = false;
+  bool isHistoryExpanded = false;
+  bool isDetailsExpanded = false;
 
   set isViewingFullNft(bool value) {
     _isViewingFullNft = value;
@@ -90,10 +104,13 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
   void setNFT(NFT nft) {
     _nft = nft;
-    final walletsList = walletsStore.getWallets().value;
-    accountPublicInfo = walletsList.last;
 
-    repository.logPurchaseItem(recipeId: nft.recipeID, recipeName: nft.name, author: nft.creator, purchasePrice: double.parse(nft.price) / kBigIntBase);
+    repository.logPurchaseItem(
+      recipeId: nft.recipeID,
+      recipeName: nft.name,
+      author: nft.creator,
+      purchasePrice: double.parse(nft.price) / kBigIntBase,
+    );
   }
 
   void initializeData() {
@@ -106,8 +123,8 @@ class PurchaseItemViewModel extends ChangeNotifier {
     const jsonExecuteRecipe = '''
       {
         "creator": "",
-        "cookbookId": "",
-        "recipeId": "",
+        "cookbook_id": "",
+        "recipe_id": "",
         "nftName": "",
         "nftPrice": "",
         "nftCurrency": "",
@@ -116,8 +133,8 @@ class PurchaseItemViewModel extends ChangeNotifier {
         ''';
 
     final jsonMap = jsonDecode(jsonExecuteRecipe) as Map;
-    jsonMap[kCookbookIdMap] = nft.cookbookID;
-    jsonMap[kRecipeIdMap] = nft.recipeID;
+    jsonMap[kCookbookIdKey] = nft.cookbookID;
+    jsonMap[kRecipeIdKey] = nft.recipeID;
     jsonMap[kNftName] = nft.name;
     jsonMap[kNftPrice] = nft.ibcCoins.getCoinWithProperDenomination(nft.price);
     jsonMap[kNftCurrency] = nft.ibcCoins.getAbbrev();
@@ -142,10 +159,54 @@ class PurchaseItemViewModel extends ChangeNotifier {
 
     showLoader.dismiss();
 
-    (response.success ? "purchase_nft_success".tr() : response.error).show();
+    (response.success ? LocaleKeys.purchase_nft_success.tr() : response.error).show();
 
     showLoader.dismiss();
   }
+
+
+  void getWhichTabIsExpanded() {
+    isDetailsExpanded = false;
+    isHistoryExpanded = false;
+    isOwnershipExpanded = false;
+
+    switch (selectedField) {
+      case TabFields.ownership:
+        isOwnershipExpanded = true;
+        notifyListeners();
+        break;
+      case TabFields.history:
+        isHistoryExpanded = true;
+        notifyListeners();
+        break;
+      case TabFields.details:
+        isDetailsExpanded = true;
+        notifyListeners();
+        break;
+      default:
+        return;
+    }
+  }
+
+  void closeExpansion() {
+    isDetailsExpanded = false;
+    isHistoryExpanded = false;
+    isOwnershipExpanded = false;
+    notifyListeners();
+  }
+
+  void onChangeTab(TabFields tab) {
+    if (tab == selectedField && isExpansionOpen()) {
+      closeExpansion();
+      return;
+    }
+
+    selectedField = tab;
+    getWhichTabIsExpanded();
+  }
+
+  bool isExpansionOpen() => isDetailsExpanded || isHistoryExpanded || isOwnershipExpanded;
+
 
   void initializePlayers(NFT nft) {
     switch (nft.assetType) {
@@ -177,6 +238,21 @@ class PurchaseItemViewModel extends ChangeNotifier {
         break;
     }
   }
+
+  void pauseMedia() {
+    switch (nft.assetType) {
+      case AssetType.Audio:
+        pauseAudio();
+        break;
+      case AssetType.Video:
+        pauseVideo();
+        break;
+      default:
+        break;
+    }
+  }
+
+  bool isOwner() => nft.ownerAddress == accountPublicInfo.publicAddress;
 
   Future<void> initializeVideoPlayer() async {
     videoPlayerHelper.initializeVideoPlayer(url: nft.url);
@@ -217,11 +293,11 @@ class PurchaseItemViewModel extends ChangeNotifier {
   bool isUrlLoaded = false;
 
   Future<void> nftDataInit({required String recipeId, required String cookBookId, required String itemId}) async {
-    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
-    if (nft.type != NftType.TYPE_RECIPE) {
-      final nftOwnershipHistory = await repository.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
+    final walletAddress = accountPublicInfo.publicAddress;
+    if (nft.type == NftType.TYPE_RECIPE) {
+      final nftOwnershipHistory = await repository.getNftOwnershipHistoryByCookbookIdAndRecipeId(cookBookId: cookBookId,recipeId: recipeId);
       if (nftOwnershipHistory.isLeft()) {
-        "something_wrong".tr().show();
+        LocaleKeys.something_wrong.tr().show();
         return;
       }
 
@@ -234,7 +310,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     );
 
     if (likesCountEither.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
 
@@ -247,7 +323,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     );
 
     if (likedByMeEither.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
 
@@ -280,7 +356,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     isLiking = true;
     final bool temp = likedByMe;
 
-    final walletAddress = walletsStore.getWallets().value.last.publicAddress;
+    final walletAddress = accountPublicInfo.publicAddress;
     final updateLikeStatusEither = await repository.updateLikeStatus(
       recipeId: recipeId,
       cookBookID: cookBookID,
@@ -288,7 +364,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     );
 
     if (updateLikeStatusEither.isLeft()) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return;
     }
     likedByMe = !likedByMe;
@@ -398,11 +474,11 @@ class PurchaseItemViewModel extends ChangeNotifier {
   }
 
   Future<void> shareNFTLink({required Size size}) async {
-    final address = walletsStore.getWallets().value.last.publicAddress;
-
-    final link = await repository.createDynamicLinkForRecipeNftShare(address: address, nft: nft);
+    final walletAddress = accountPublicInfo.publicAddress;
+    pauseMedia();
+    final link = await repository.createDynamicLinkForRecipeNftShare(address: walletAddress, nft: nft);
     return link.fold((l) {
-      "something_wrong".tr().show();
+      LocaleKeys.something_wrong.tr().show();
       return null;
     }, (r) {
       shareHelper.shareText(text: r, size: size);
@@ -411,11 +487,11 @@ class PurchaseItemViewModel extends ChangeNotifier {
   }
 
   Future<Either<String, bool>> shouldShowSwipeToBuy({required String selectedDenom, required double requiredAmount}) async {
-    final accountPublicInfo = walletsStore.getWallets().value.last;
-    final balancesEither = await repository.getBalance(accountPublicInfo.publicAddress);
+    final walletAddress = accountPublicInfo.publicAddress;
+    final balancesEither = await repository.getBalance(walletAddress);
 
     if (balancesEither.isLeft()) {
-      return Left("something_wrong".tr());
+      return Left(LocaleKeys.something_wrong.tr());
     }
 
     if (balancesEither.getOrElse(() => []).isEmpty) {
@@ -488,7 +564,6 @@ class PurchaseItemViewModel extends ChangeNotifier {
   NFT _nft = NFT(ibcCoins: IBCCoins.upylon);
   bool darkMode = false;
   bool _isViewingFullNft = false;
-  AccountPublicInfo? accountPublicInfo;
   late StreamSubscription playerStateSubscription;
   late StreamSubscription positionStreamSubscription;
   late StreamSubscription bufferPositionSubscription;
@@ -510,6 +585,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
   List<NftOwnershipHistory> nftOwnershipHistoryList = [];
   bool _isVideoLoading = true;
   bool _likedByMe = false;
+  final AccountPublicInfo accountPublicInfo;
 
   void logEvent() {
     repository.logUserJourney(screenName: AnalyticsScreenEvents.purchaseView);

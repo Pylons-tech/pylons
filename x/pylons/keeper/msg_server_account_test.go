@@ -27,26 +27,21 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 	}{
 		{
 			desc:    "Valid",
-			request: &types.MsgCreateAccount{Creator: addr[0], Username: "testUser", ReferralAddress: ""},
+			request: &types.MsgCreateAccount{Creator: addr[0], ReferralAddress: ""},
 		},
 		{
 			desc:    "InvalidCreator",
-			request: &types.MsgCreateAccount{Creator: "invalid", Username: "testUser", ReferralAddress: ""},
+			request: &types.MsgCreateAccount{Creator: "invalid", ReferralAddress: ""},
 			err:     sdkerrors.ErrInvalidRequest,
 		},
 		{
-			desc:    "DuplicateUsername",
-			request: &types.MsgCreateAccount{Creator: addr[1], Username: "testUser", ReferralAddress: ""},
-			err:     types.ErrDuplicateUsername,
-		},
-		{
 			desc:    "Referral Address not found",
-			request: &types.MsgCreateAccount{Creator: addr[1], Username: "testUser1", ReferralAddress: "testReferralAddr"},
+			request: &types.MsgCreateAccount{Creator: addr[1], ReferralAddress: "testReferralAddr"},
 			err:     types.ErrReferralUserNotFound,
 		},
 		{
 			desc:    "Valid 2",
-			request: &types.MsgCreateAccount{Creator: addr[1], Username: "testUser1", ReferralAddress: addr[0]},
+			request: &types.MsgCreateAccount{Creator: addr[1], ReferralAddress: addr[0]},
 		},
 	} {
 		tc := tc
@@ -73,7 +68,7 @@ func (suite *IntegrationTestSuite) TestUpdateAccount() {
 	addr := types.GenTestBech32List(2)
 	types.UpdateAppCheckFlagTest(types.FlagTrue)
 
-	request := &types.MsgCreateAccount{Creator: addr[0], Username: "testUser"}
+	request := &types.MsgCreateAccount{Creator: addr[0]}
 	_, err := srv.CreateAccount(wctx, request)
 	require.NoError(err)
 

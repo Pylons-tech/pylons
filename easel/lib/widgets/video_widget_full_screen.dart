@@ -12,6 +12,8 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
+import '../generated/locale_keys.g.dart';
+
 class VideoWidgetFullScreen extends StatefulWidget {
   const VideoWidgetFullScreen({Key? key}) : super(key: key);
 
@@ -24,7 +26,7 @@ class _VideoWidgetFullScreenState extends State<VideoWidgetFullScreen> {
   final repository = GetIt.I.get<Repository>();
 
   @override
-  initState() {
+  void initState() {
     super.initState();
   }
 
@@ -48,7 +50,7 @@ class _VideoWidgetFullScreenState extends State<VideoWidgetFullScreen> {
                         child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
-                        "video_player_error".tr(),
+                        LocaleKeys.video_player_error.tr(),
                         style: TextStyle(
                             fontSize: 18.sp, color: EaselAppTheme.kBlack),
                       ),
@@ -70,7 +72,7 @@ class _VideoWidgetFullScreenState extends State<VideoWidgetFullScreen> {
                       sigmaX: 5.0,
                       sigmaY: 5.0,
                     ),
-                    child: Container(
+                    child: ColoredBox(
                       color: Colors.black.withOpacity(0.3),
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 30.h),
