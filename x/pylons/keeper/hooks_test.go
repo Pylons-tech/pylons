@@ -18,43 +18,60 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 	wctx := sdk.WrapSDKContext(ctx)
 
 	/*
-	* amountToPay := refers to the recipe amount
-	* ``
-	*	form this amount we will calculate the reward that needs to be distributed to
-	*	the delegator of the block
-	* ``
-	* creator  := create address will be used to create cookbook / recipe
-	* executor := will be used to execute recipe, as creator and executor cannot be same
-	*
-	* upon execution of recipe we have a defined fee,
-	* i.e. DefaultRecipeFeePercentage (Set at 0.1 or 10%)
-	*
-	* feeCollectorAddr := address of you fee collector module
-	* this modules receives the fee deducted during recipe execution 
-	* 
-	* this test case will verify that correct amount of rewards are divided amongst delegator
-	* first will call a function to get delegator amount percentage that need to be distributed
-	* second will call a function to get delegator reward amount that needs to be distributed
-	* third will call a function to get balance of delegator before sending reward
-	* fourth will call a function to send reward amongst delegator
-	* fifth will call a function to get balance of delegator again to get update balance after sending rewards
-	* Last will compare old balance that we got before sending reward and new balance that we got after sending reward
-	 */
+		* amountToPay := refers to the recipe amount
+		* ``
+		*	form this amount we will calculate the reward that needs to be distributed to
+		*	the delegator of the block
+		* ``
+		* creator  := create address will be used to create cookbook / recipe
+		* executor := will be used to execute recipe, as creator and executor cannot be same
+		*
+		* upon execution of recipe we have a defined fee,
+		* i.e. DefaultRecipeFeePercentage (Set at 0.1 or 10%)
+		*
+		* feeCollectorAddr := address of you fee collector module
+		* this modules receives the fee deducted during recipe execution
+		*
+		* Pre Req:
+		*	1. Create Cookbook
+		*	2. Create Recipe
+		*	3. Execute Recipe
+		*
+		*
+		* this test case will verify that correct amount of rewards are divided amongst delegator
+		*
+		* 1. Get `delegator amount percentage` that need to be distributed
+		* 2. Calculate delegator reward amount for distributed
+		* 3. Get balance of delegator before sending reward
+		* 4. Distribute reward amongst delegator
+		* 5. Query for balance of delegator again to get update balance after sending rewards
+		* 6. Compare balance from step 3 with step 5,
+			* 6.1 New balance must be equivalent with the old balance
+				plus reward amount calculated in step 2
+		*
+		* Criteria: In case the balances do not match , i.e. (balance before distribution of reward
+		*			+ the reward amount) == balance after distribution
+		*
+	*/
 
 	amountToPay := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100)))
 	creator := types.GenTestBech32FromString("test")
 	executor := types.GenTestBech32FromString("executor")
 	feeCollectorAddr := ak.GetModuleAddress(types.FeeCollectorName)
 
+	// Required to disable app check enforcement to make an account
 	types.UpdateAppCheckFlagTest(types.FlagTrue)
 
-
+	// create an account for the executor as their account in pylons is required
 	srv.CreateAccount(wctx, &types.MsgCreateAccount{
 		Creator:  executor,
 		Username: "Executor",
 	})
 
+	// enable the app check enforcement again
 	types.UpdateAppCheckFlagTest(types.FlagFalse)
+
+	// making an instance of cookbook
 	cookbookMsg := &types.MsgCreateCookbook{
 		Creator:      creator,
 		Id:           "testCookbookID",
@@ -64,8 +81,11 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 		SupportEmail: "test@email.com",
 		Enabled:      true,
 	}
+	// creating a cookbook
 	_, err := srv.CreateCookbook(sdk.WrapSDKContext(suite.ctx), cookbookMsg)
+	// must not throw any error
 	require.NoError(err)
+	// making an instance of cookbook
 	recipeMsg := &types.MsgCreateRecipe{
 		Creator:       creator,
 		CookbookId:    "testCookbookID",
@@ -78,6 +98,7 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 		CoinInputs:    []types.CoinInput{{Coins: amountToPay}},
 		Enabled:       true,
 	}
+	// creating a recipe
 	_, err = srv.CreateRecipe(sdk.WrapSDKContext(suite.ctx), recipeMsg)
 	require.NoError(err)
 
@@ -90,9 +111,10 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 		ItemIds:         nil,
 	}
 
-	// give coins to requester
+	// fund account of executer to execute recipe
 	suite.FundAccount(suite.ctx, sdk.MustAccAddressFromBech32(executor), amountToPay)
 
+	// execute a recipe
 	resp, err := srv.ExecuteRecipe(sdk.WrapSDKContext(suite.ctx), msgExecution)
 	require.NoError(err)
 
@@ -108,10 +130,13 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 	_ = bk.SpendableCoins(ctx, sdk.MustAccAddressFromBech32(creator))
 	_ = bk.SpendableCoins(ctx, feeCollectorAddr)
 
+	// get reward distribution percentages 
 	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
+	// calculate delegator rewards 
 	delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages)
 	delegatorMap := map[string]sdk.Coins{}
 	balances := sdk.Coins{}
+	// checking if delegator rewards are not nil
 	if delegatorsRewards != nil {
 		// looping through delegators to get their old balance
 		for address, amount := range delegatorsRewards {
