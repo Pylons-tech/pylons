@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: library_private_types_in_public_api
+
 part of 'database.dart';
 
 // **************************************************************************
@@ -10,14 +12,12 @@ part of 'database.dart';
 class $FloorAppDatabase {
   /// Creates a database builder for a persistent database.
   /// Once a database is built, you should keep a reference to it and re-use it.
-  static _$AppDatabaseBuilder databaseBuilder(String name) =>
-      _$AppDatabaseBuilder(name);
+  static _$AppDatabaseBuilder databaseBuilder(String name) => _$AppDatabaseBuilder(name);
 
   /// Creates a database builder for an in memory database.
   /// Information stored in an in memory database disappears when the process is killed.
   /// Once a database is built, you should keep a reference to it and re-use it.
-  static _$AppDatabaseBuilder inMemoryDatabaseBuilder() =>
-      _$AppDatabaseBuilder(null);
+  static _$AppDatabaseBuilder inMemoryDatabaseBuilder() => _$AppDatabaseBuilder(null);
 }
 
 class _$AppDatabaseBuilder {
@@ -43,9 +43,7 @@ class _$AppDatabaseBuilder {
 
   /// Creates the database and initializes it.
   Future<AppDatabase> build() async {
-    final path = name != null
-        ? await sqfliteDatabaseFactory.getDatabasePath(name!)
-        : ':memory:';
+    final path = name != null ? await sqfliteDatabaseFactory.getDatabasePath(name!) : ':memory:';
     final database = _$AppDatabase();
     database.database = await database.open(
       path,
@@ -78,8 +76,7 @@ class _$AppDatabase extends AppDatabase {
         await callback?.onOpen?.call(database);
       },
       onUpgrade: (database, startVersion, endVersion) async {
-        await MigrationAdapter.runMigrations(
-            database, startVersion, endVersion, migrations);
+        await MigrationAdapter.runMigrations(database, startVersion, endVersion, migrations);
 
         await callback?.onUpgrade?.call(database, startVersion, endVersion);
       },
@@ -232,8 +229,7 @@ class _$NftDao extends NftDao {
 
   @override
   Future<void> delete(int id) async {
-    await _queryAdapter
-        .queryNoReturn('DELETE FROM nft WHERE id = ?1', arguments: [id]);
+    await _queryAdapter.queryNoReturn('DELETE FROM nft WHERE id = ?1', arguments: [id]);
   }
 
   @override
@@ -246,24 +242,13 @@ class _$NftDao extends NftDao {
     String hashtags,
     int dateTime,
   ) async {
-    await _queryAdapter.queryNoReturn(
-        'UPDATE nft SET name = ?2, description= ?3, creator = ?4, step = ?5,hashtags = ?6, dateTime = ?7 WHERE id = ?1',
-        arguments: [
-          id,
-          nftName,
-          nftDescription,
-          creatorName,
-          step,
-          hashtags,
-          dateTime
-        ]);
+    await _queryAdapter.queryNoReturn('UPDATE nft SET name = ?2, description= ?3, creator = ?4, step = ?5,hashtags = ?6, dateTime = ?7 WHERE id = ?1',
+        arguments: [id, nftName, nftDescription, creatorName, step, hashtags, dateTime]);
   }
 
   @override
   Future<void> updateNFTDialogShown(int id) async {
-    await _queryAdapter.queryNoReturn(
-        'UPDATE nft SET isDialogShown = true WHERE id = ?1',
-        arguments: [id]);
+    await _queryAdapter.queryNoReturn('UPDATE nft SET isDialogShown = true WHERE id = ?1', arguments: [id]);
   }
 
   @override
@@ -277,23 +262,12 @@ class _$NftDao extends NftDao {
     String isFreeDrop,
     int dateTime,
   ) async {
-    await _queryAdapter.queryNoReturn(
-        'UPDATE nft SET tradePercentage = ?2, price= ?3, quantity = ?4, denom =?6, step = ?5, isFreeDrop = ?7, dateTime = ?8 WHERE id = ?1',
-        arguments: [
-          id,
-          tradePercentage,
-          price,
-          quantity,
-          step,
-          denom,
-          isFreeDrop,
-          dateTime
-        ]);
+    await _queryAdapter.queryNoReturn('UPDATE nft SET tradePercentage = ?2, price= ?3, quantity = ?4, denom =?6, step = ?5, isFreeDrop = ?7, dateTime = ?8 WHERE id = ?1',
+        arguments: [id, tradePercentage, price, quantity, step, denom, isFreeDrop, dateTime]);
   }
 
   @override
   Future<int> insertNft(NFT nft) {
-    return _nFTInsertionAdapter.insertAndReturnId(
-        nft, OnConflictStrategy.abort);
+    return _nFTInsertionAdapter.insertAndReturnId(nft, OnConflictStrategy.abort);
   }
 }

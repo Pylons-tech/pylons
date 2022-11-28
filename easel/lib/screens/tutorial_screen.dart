@@ -33,8 +33,8 @@ class TutorialScreenState extends State<TutorialScreen> {
         slides.length,
         (index) => Container(
           margin: EdgeInsets.symmetric(horizontal: 4.w),
-          height: currentPage.round() == index ? 18.w : 10.h,
-          width: currentPage.round() == index ? 18.w : 10.h,
+          height: currentPage.round() == index ? 16.w : 12.h,
+          width: currentPage.round() == index ? 18.w : 12.h,
           decoration: BoxDecoration(
             color: currentPage.round() == index ? getColorPerPage(index) : EaselAppTheme.kLightGrey,
           ),
