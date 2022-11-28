@@ -5,18 +5,26 @@ import 'package:easel_flutter/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
 import '../extensions/size_extension.dart';
+import '../mock/creator_hub_viewmodel.mocks.dart';
 import '../mock/mock_repository.dart';
 import '../mocks/mock_constants.dart';
 
 void main() {
+  final viewModel = MockCreatorHubViewModel();
   GetIt.I.registerLazySingleton<Repository>(() => MockRepositoryImp());
-  GetIt.I.registerLazySingleton(() => CreatorHubViewModel(GetIt.I.get<Repository>()));
+  GetIt.I.registerLazySingleton<CreatorHubViewModel>(() => viewModel);
   testWidgets(
     "testing bottom bar on NFT click",
     (tester) async {
+      bool clicked = false;
+      when(viewModel.selectedCollectionType).thenAnswer((realInvocation) => CollectionType.draft);
+      when(viewModel.startPublishingFlowAgain(startPublishingFlowAgainPressed: anyNamed("startPublishingFlowAgainPressed"))).thenAnswer((realInvocation) {
+        clicked = true;
+      });
       await tester.setScreenSize();
       await tester.testAppForWidgetTesting(
         Scaffold(
@@ -33,12 +41,10 @@ void main() {
 
       await tester.pump();
       final gridViewTile = find.byKey(const Key(kGridViewTileNFTKey));
-      final draftBottomSheetText = find.text(kPublishTextKey);
       await tester.ensureVisible(gridViewTile);
-      expect(draftBottomSheetText, findsNothing);
       await tester.tap(gridViewTile);
       await tester.pump();
-      expect(draftBottomSheetText, findsOneWidget);
+      expect(clicked, true);
     },
   );
 }

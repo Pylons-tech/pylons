@@ -42,8 +42,9 @@ class NFTsListTile extends StatelessWidget {
 
   Widget getPublishedCard({required BuildContext context}) {
     return InkWell(
+      key: const Key(kNftListTileKey),
       onTap: () {
-        context.read<CreatorHubViewModel>().openOwnerView(openOwnerView: openOwnerView);
+        context.read<CreatorHubViewModel>().openOwnerView(openOwnerViewPressed: openOwnerView);
       },
       child: DecoratedBox(
         decoration: BoxDecoration(

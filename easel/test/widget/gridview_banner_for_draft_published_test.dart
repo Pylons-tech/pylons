@@ -70,7 +70,7 @@ void main() {
 
           await tester.pump();
           final gridViewTile = find.byKey(const Key(kGridViewTileMoreOptionKey));
-          final publishBottomSheetText = find.text(kPublishTextKey);
+          final publishBottomSheetText = find.text(kDeleteTextKey);
           await tester.ensureVisible(gridViewTile);
           expect(publishBottomSheetText, findsNothing);
           await tester.tap(gridViewTile);
