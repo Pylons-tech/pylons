@@ -43,6 +43,7 @@ func GetDefaultCelEnv() CelEnvCollection {
 		"input0.itemID": "shieldID",
 	}
 
+	//nolint:staticcheck // TODO: FIX THIS VIA A REFACTOR OF THIS LINE, WHICH WILL REQUIRE MORE CODE
 	funcs := cel.Functions(
 		Rand10Func,
 		RandIntFunc,

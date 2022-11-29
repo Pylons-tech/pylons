@@ -57,8 +57,22 @@ func (k Keeper) NewCelEnvCollectionFromRecipe(ctx sdk.Context, pendingExecution 
 			varDefs, variables = types.AddVariableFromItem(varDefs, variables, iPrefix2, item) // sword.attack, monster.attack
 		}
 	}
-
-	funcs := cel.Functions(types.Rand10Func, types.RandIntFunc, types.RandFunc, types.Log2DoubleFunc, types.Log2IntFunc, types.MaxDoubleDoubleFunc, types.MaxDoubleIntFunc, types.MaxIntDoubleFunc, types.MaxIntIntFunc, types.MinDoubleDoubleFunc, types.MinDoubleIntFunc, types.MinIntDoubleFunc, types.MinIntIntFunc, types.MultiplyFunc) //nolint:staticcheck // TODO: FIX THIS VIA A REFACTOR OF THIS LINE, WHICH WILL REQUIRE MORE CODE
+	//nolint:staticcheck // TODO: FIX THIS VIA A REFACTOR OF THIS LINE, WHICH WILL REQUIRE MORE CODE
+	funcs := cel.Functions(
+		types.Rand10Func,
+		types.RandIntFunc,
+		types.RandFunc,
+		types.Log2DoubleFunc,
+		types.Log2IntFunc,
+		types.MaxDoubleDoubleFunc,
+		types.MaxDoubleIntFunc,
+		types.MaxIntDoubleFunc,
+		types.MaxIntIntFunc,
+		types.MinDoubleDoubleFunc,
+		types.MinDoubleIntFunc,
+		types.MinIntDoubleFunc,
+		types.MinIntIntFunc,
+		types.MultiplyFunc)
 
 	env, err := cel.NewEnv(
 		cel.Declarations(
