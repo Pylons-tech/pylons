@@ -108,7 +108,8 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
   }
 
   Widget getRefreshButton(CreatorHubViewModel viewModel) {
-    if (easelProvider.isPylonsInstalled && viewModel.selectedCollectionType == CollectionType.published && viewModel.nftPublishedList.isNotEmpty) {
+    final shouldShowRefreshButton = easelProvider.isPylonsInstalled && viewModel.selectedCollectionType == CollectionType.published && viewModel.nftPublishedList.isNotEmpty;
+    if (shouldShowRefreshButton) {
       return Padding(
         key: const Key(kRefreshPublishedNFTButtonKey),
         padding: EdgeInsets.only(right: 15.w),
@@ -177,6 +178,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                     children: [
                       if (viewModel.selectedCollectionType == CollectionType.draft)
                         buildSelectedBox(
+                          key: kSelectedDraftButtonKey,
                           title: LocaleKeys.draft.tr(),
                           viewModel: viewModel,
                           color: EaselAppTheme.kLightRed,
@@ -191,6 +193,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                       SizedBox(width: 14.w),
                       if (viewModel.selectedCollectionType == CollectionType.published)
                         buildSelectedBox(
+                          key: kSelectedPublishedButtonKey,
                           title: LocaleKeys.published.tr(),
                           viewModel: viewModel,
                           color: EaselAppTheme.kDarkGreen,
@@ -388,11 +391,12 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
     );
   }
 
-  Widget buildSelectedBox({required String title, required CreatorHubViewModel viewModel, required Color color, required CollectionType collectionType}) {
+  Widget buildSelectedBox({required String key,required String title, required CreatorHubViewModel viewModel, required Color color, required CollectionType collectionType}) {
     return Expanded(
       child: InkWell(
         onTap: () => viewModel.changeSelectedCollection(collectionType),
         child: DecoratedBox(
+          key: Key(key),
           decoration: BoxDecoration(
             border: Border.all(width: 2.sp, color: color),
             color: color,

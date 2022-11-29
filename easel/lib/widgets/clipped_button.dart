@@ -16,18 +16,18 @@ class ClippedButton extends StatelessWidget {
   bool? isShadow = true;
   final double fontSize;
 
-  ClippedButton(
-      {Key? key,
-      required this.onPressed,
-      required this.title,
-      required this.bgColor,
-      required this.textColor,
-      required this.cuttingHeight,
-      this.isShadow = true,
-      required this.clipperType,
-      required this.fontWeight,
-      this.fontSize = 16})
-      : super(key: key);
+  ClippedButton({
+    Key? key,
+    required this.onPressed,
+    required this.title,
+    required this.bgColor,
+    required this.textColor,
+    required this.cuttingHeight,
+    this.isShadow = true,
+    required this.clipperType,
+    required this.fontWeight,
+    this.fontSize = 16,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
