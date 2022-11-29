@@ -146,7 +146,7 @@ var (
 	// Bech32PrefixConsPub defines the Bech32 prefix of a consensus node public key.
 	Bech32PrefixConsPub = AccountAddressPrefix + sdk.PrefixValidator + sdk.PrefixConsensus + sdk.PrefixPublic
 	// List upgrades
-	Upgrades = []upgrades.Upgrade{v3.Upgrade, v4.Upgrade}
+	Upgrades = []upgrades.Upgrade{v3.Upgrade, v4.Upgrade, v5.Upgrade}
 )
 
 func init() {
