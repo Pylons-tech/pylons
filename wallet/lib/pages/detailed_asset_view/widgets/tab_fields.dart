@@ -89,15 +89,16 @@ class _TabFieldState extends State<TabField> {
 
     final listOwnership = ownership.entries.map((element) => _tabDetails(field: element.key, value: element.value, customColor: element.key == LocaleKeys.owner.tr() ? Colors.red : null)).toList();
 
-    final listDetails = nftDetail.entries
-        .map(
-          (element) => _tabDetails(
-            field: element.key,
-            value: element.value,
-            customWidget: (element.key == LocaleKeys.recipe_id.tr() || element.key == LocaleKeys.ipfs_cid.tr()) && element.value.isNotEmpty ? _tabDetailsWithIcon(value: element.value) : null,
-          ),
-        )
-        .toList();
+    final listDetails = nftDetail.entries.map(
+      (element) {
+        final shouldShowTabIcon = (element.key == LocaleKeys.recipe_id.tr() || element.key == LocaleKeys.ipfs_cid.tr()) && element.value.isNotEmpty;
+        return _tabDetails(
+          field: element.key,
+          value: element.value,
+          customWidget: shouldShowTabIcon ? _tabDetailsWithIcon(value: element.value) : null,
+        );
+      },
+    ).toList();
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 100),

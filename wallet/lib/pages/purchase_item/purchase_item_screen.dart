@@ -561,6 +561,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               SizedBox(height: 10.h),
                               if (viewModel.nft.type == NftType.TYPE_RECIPE)
                                 TabField(
+                                  key: const Key(kHistoryTabPurchaseItemScreenKey),
                                   name: LocaleKeys.history.tr(),
                                   icon: 'history',
                                   nft: viewModel.nft,

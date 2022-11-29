@@ -41,4 +41,22 @@ void main(){
     final closeBottomSheetButton = find.byKey(const Key(kCloseBottomSheetKey));
     expect(closeBottomSheetButton, findsOneWidget);
   });
+
+  testWidgets("History Tab in purchase item Visibility Test", (tester) async {
+    when(viewModel.collapsed).thenAnswer((realInvocation) => false);
+    when(viewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_TYPE_RECIPE);
+    when(viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid)).thenAnswer((realInvocation) => true);
+    await tester.testAppForWidgetTesting(
+      ChangeNotifierProvider<PurchaseItemViewModel>.value(
+        value: viewModel,
+        child: PurchaseItemScreen(
+          nft: viewModel.nft,
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(viewModel.nftOwnershipHistoryList.length, 0);
+    final bottomSheet = find.byKey(const Key(kHistoryTabPurchaseItemScreenKey));
+    expect(bottomSheet, findsOneWidget);
+  });
 }

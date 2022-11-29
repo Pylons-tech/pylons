@@ -412,6 +412,7 @@ const kExpandedBuyButtonKeyValue = "expanded_buy_button";
 const kCheckoutDialogKey = "checkout_dialog_key";
 const kPurchaseItemBottomSheetKey = "purchase_item_bottom_sheet";
 const kCloseBottomSheetKey = "close_bottom_sheet_key";
+const kHistoryTabPurchaseItemScreenKey = "history_tab_purchase_item_screen";
 
 Map<String, Color> denomColors = {'upylon': const Color(0xFF5252d5), 'ustripeusd': const Color(0xFF85bb65), 'uusd': const Color(0xFF85bb65)};
 

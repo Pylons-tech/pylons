@@ -263,6 +263,24 @@ NFT MOCK_NFT_FREE_IMAGE = NFT(
   ibcCoins: IBCCoins.upylon,
 );
 
+NFT MOCK_NFT_TYPE_RECIPE = NFT(
+  name: "This is my Image NFT",
+  height: "2400",
+  description: "Please Buy my Image NFT",
+  width: "1080",
+  url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
+  recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
+  duration: "0:0",
+  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+  appType: "easel",
+  creator: "Ahmad",
+  fileSize: "90.12KB",
+  itemID: "DtnxAS8L4pf",
+  owner: "abd",
+  ibcCoins: IBCCoins.upylon,
+  type: NftType.TYPE_RECIPE
+);
+
 NFT MOCK_NFT_FREE_VIDEO = NFT(
   name: "This is my Image NFT",
   height: "2400",
