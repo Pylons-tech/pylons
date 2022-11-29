@@ -178,11 +178,11 @@ func TestValidateDoubles(t *testing.T) {
 		err  error
 	}{
 		{desc: "ValidSingle", obj: []DoubleParam{
-			{Key: "test"},
+			{Key: "test", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone, Weight: 1}}},
 		}},
 		{desc: "ValidMultiple", obj: []DoubleParam{
-			{Key: "test1", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
-			{Key: "test2", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
+			{Key: "test1", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone, Weight: 1}}},
+			{Key: "test2", WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone, Weight: 1}}},
 		}},
 		{desc: "InvalidSingle1", obj: []DoubleParam{
 			{Key: "1test"},
