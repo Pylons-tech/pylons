@@ -68,7 +68,7 @@ class DeleteDialog {
                       children: [
                         Expanded(
                           child: buildButton(
-                            title: "yes",
+                            title: LocaleKeys.yes.tr(),
                             bgColor: AppColors.kBlue,
                             onPressed: () async {
                               final navigator = Navigator.of(context);

@@ -264,22 +264,29 @@ class OwnerViewViewModel extends ChangeNotifier {
     }
     likedByMe = !likedByMe;
     isLiking = false;
-    final favoritesChangeNotifier = GetIt.I.get<FavoritesChangeNotifier>();
     if (temp && likesCount > 0) {
       likesCount = likesCount - 1;
       repository.deleteNFTFromFavorites(recipeId);
-      favoritesChangeNotifier.removeFromFavorites(recipeId: recipeId);
+      removeFromFavAndUpdateView(recipeId: recipeId);
     } else {
       likesCount = likesCount + 1;
-      final favoriteModel = FavoritesModel(
-        id: recipeId,
-        cookbookId: cookBookID,
-        type: NftType.TYPE_RECIPE.name,
-        dateTime: DateTime.now().millisecondsSinceEpoch,
-      );
-      repository.insertNFTInFavorites(favoriteModel);
-      favoritesChangeNotifier.addToFavorites(favoritesModel: favoriteModel);
+      addToFavAndUpdateView(cookBookID: cookBookID, recipeId: recipeId);
     }
+  }
+
+  void addToFavAndUpdateView({required String cookBookID,required String recipeId}){
+    final favoriteModel = FavoritesModel(
+      id: recipeId,
+      cookbookId: cookBookID,
+      type: NftType.TYPE_RECIPE.name,
+      dateTime: DateTime.now().millisecondsSinceEpoch,
+    );
+    repository.insertNFTInFavorites(favoriteModel);
+    GetIt.I.get<FavoritesChangeNotifier>().addToFavorites(favoritesModel: favoriteModel);
+  }
+
+  void removeFromFavAndUpdateView({required String recipeId}){
+    GetIt.I.get<FavoritesChangeNotifier>().removeFromFavorites(recipeId: recipeId);
   }
 
   void initializePlayers() {

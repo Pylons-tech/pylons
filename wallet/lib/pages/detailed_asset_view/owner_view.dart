@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:io' show Platform;
 import 'dart:ui';
+import 'dart:io' show Platform;
 
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
