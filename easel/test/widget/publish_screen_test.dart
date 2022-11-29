@@ -41,6 +41,5 @@ void main() {
       await tester.pump();
       expect(creatorHubViewModel.selectedCollectionType, CollectionType.published);
     });
-
   });
 }
