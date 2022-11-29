@@ -56,7 +56,7 @@ void main(){
     );
     await tester.pump();
     expect(viewModel.nftOwnershipHistoryList.length, 0);
-    final bottomSheet = find.byKey(const Key(kHistoryTabPurchaseItemScreenKey));
-    expect(bottomSheet, findsOneWidget);
+    final historyTab = find.byKey(const Key(kHistoryTabPurchaseItemScreenKey));
+    expect(historyTab, findsOneWidget);
   });
 }
