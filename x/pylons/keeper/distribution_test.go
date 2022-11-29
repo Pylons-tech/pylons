@@ -145,104 +145,182 @@ func computeDistrPercentages(validators []*sdknetwork.Validator, distrMap map[st
 	return
 }
 
-/*
 // TestGetRewardsDistributionPercentages to perform this test we need to use network simulation, even though it's in keeper
 func (suite *IntegrationTestSuite) TestGetRewardsDistributionPercentages() {
-	req := suite.Require()
-	feesAmount := sdk.NewCoin("node0token", sdk.NewInt(42_000_000))
-	numAccounts := 10
-	numDelegationsPerValidators := 10
+	k := suite.k
+	sk := suite.stakingKeeper
+	ctx := suite.ctx
+	require := suite.Require()
+	bk := suite.bankKeeper
+	ak := suite.accountKeeper
 
-	cfg := distributionNetworkConfig(feesAmount)
-	net, err := network.New(suite.T(), suite.T().TempDir(), cfg)
-	suite.Require().NoError(err)
-	senderValidator := net.Validators[0]
-	keyringCtx := senderValidator.ClientCtx
-	delegatorsInitialBalance := sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(100_000_000))
-	accounts := generateAccountsWithBalance(numAccounts, senderValidator, delegatorsInitialBalance, req)
+	srv := keeper.NewMsgServerImpl(k)
+	wctx := sdk.WrapSDKContext(ctx)
+	/*
+		* amountToPay := refers to the recipe amount
+		* ``
+		*	form this amount we will calculate the reward that needs to be distributed to
+		*	the delegator of the block
+		* ``
+		* creator  := create address will be used to create cookbook / recipe
+		* executor := will be used to execute recipe, as creator and executor cannot be same
+		*
+		* upon execution of recipe we have a defined fee,
+		* i.e. DefaultRecipeFeePercentage (Set at 0.1 or 10%)
+		*
+		* feeCollectorAddr := address of you fee collector module
+		* this modules receives the fee deducted during recipe execution
+		*
+		* Pre Req:
+		*	1. Create Cookbook
+		*	2. Create Recipe
+		*	3. Execute Recipe
+		*
+		*
+		* this test case will verify that correct amount of rewards are divided amongst delegator
+		*
+		* 1. Get `delegator amount percentage` that need to be distributed
+		* 2. Calculate delegator reward amount for distributed
+		* 3. Get balance of delegator before sending reward
+		* 4. Distribute reward amongst delegator
+		* 5. Query for balance of delegator again to get update balance after sending rewards
+		* 6. Compare balance from step 3 with step 5,
+			* 6.1 New balance must be equivalent with the old balance
+				plus reward amount calculated in step 2
+		*
+		* Criteria: In case the balances do not match , i.e. (balance before distribution of reward
+		*			+ the reward amount) == balance after distribution
+		*
+	*/
 
-	distrMap := generateDistributionMap(net.Validators, numDelegationsPerValidators, sdk.NewInt(10_000_000), sdk.NewInt(50_000_000), accounts)
+	amountToPay := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100)))
+	creator := types.GenTestBech32FromString("test")
+	executor := types.GenTestBech32FromString("executor")
+	feeCollectorAddr := ak.GetModuleAddress(types.FeeCollectorName)
 
-	// initial totalStake is given by sum of all staked tokens by validators
-	totalStake := cfg.BondedTokens.Mul(sdk.NewInt(int64(cfg.NumValidators)))
+	// Required to disable app check enforcement to make an account
+	types.UpdateAppCheckFlagTest(types.FlagTrue)
 
-	// by default, validators have same staked amount and some staking token leftover. We add some more stake also
-	// for each validator so they have different shares percentage
-	for _, val := range net.Validators {
-		valAddr := val.Address.String()
-		delegations := distrMap[valAddr]
-		for _, del := range delegations {
-			// send delegation message
-			delAddr, _ := sdk.AccAddressFromBech32(del.address)
-			clientCtx := keyringCtx
-			if del.address == valAddr {
-				clientCtx = val.ClientCtx
-			}
+	// create an account for the executor as their account in pylons is required
+	srv.CreateAccount(wctx, &types.MsgCreateAccount{
+		Creator: executor,
+	})
 
-			flgs := []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, delAddr),
-				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-			}
+	// enable the app check enforcement again
+	types.UpdateAppCheckFlagTest(types.FlagFalse)
 
-			args := []string{val.ValAddress.String(), sdk.NewCoin(net.Config.BondDenom, del.amount).String()}
-			args = append(args, flgs...)
-			_, err := clitestutil.ExecTestCLICmd(clientCtx, stakingcli.NewDelegateCmd(), args)
-			req.NoError(err)
+	// making an instance of cookbook
+	cookbookMsg := &types.MsgCreateCookbook{
+		Creator:      creator,
+		Id:           "testCookbookID",
+		Name:         "testCookbookName",
+		Description:  "descdescdescdescdescdesc",
+		Version:      "v0.0.1",
+		SupportEmail: "test@email.com",
+		Enabled:      true,
+	}
+	// creating a cookbook
+	_, err := srv.CreateCookbook(sdk.WrapSDKContext(suite.ctx), cookbookMsg)
+	// must not throw any error
+	require.NoError(err)
+	// making an instance of cookbook
+	recipeMsg := &types.MsgCreateRecipe{
+		Creator:       creator,
+		CookbookId:    "testCookbookID",
+		Id:            "testRecipeID",
+		Name:          "recipeName",
+		Description:   "descdescdescdescdescdesc",
+		Version:       "v0.0.1",
+		BlockInterval: 10,
+		CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
+		CoinInputs:    []types.CoinInput{{Coins: amountToPay}},
+		Enabled:       true,
+	}
+	// creating a recipe
+	_, err = srv.CreateRecipe(sdk.WrapSDKContext(suite.ctx), recipeMsg)
+	require.NoError(err)
 
-			// update total stake
-			totalStake = totalStake.Add(del.amount)
+	// create only one pendingExecution
+	msgExecution := &types.MsgExecuteRecipe{
+		Creator:         executor,
+		CookbookId:      "testCookbookID",
+		RecipeId:        "testRecipeID",
+		CoinInputsIndex: 0,
+		ItemIds:         nil,
+	}
+
+	// fund account of executer to execute recipe
+	suite.FundAccount(suite.ctx, sdk.MustAccAddressFromBech32(executor), amountToPay)
+
+	// execute a recipe
+	resp, err := srv.ExecuteRecipe(sdk.WrapSDKContext(suite.ctx), msgExecution)
+	require.NoError(err)
+
+	// manually trigger complete execution - simulate endBlocker
+	pendingExecution := k.GetPendingExecution(ctx, resp.Id)
+	execution, _, _, err := k.CompletePendingExecution(suite.ctx, pendingExecution)
+	require.NoError(err)
+	k.ActualizeExecution(ctx, execution)
+
+	// verify execution completion and that requester has no balance left,
+	// also pay and fee are transfered to cookbook owner and fee collector module
+	_ = bk.SpendableCoins(ctx, sdk.MustAccAddressFromBech32(executor))
+	_ = bk.SpendableCoins(ctx, sdk.MustAccAddressFromBech32(creator))
+	_ = bk.SpendableCoins(ctx, feeCollectorAddr)
+
+	// get reward distribution percentages
+	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
+	// Now we will calculate what should be the output
+	delegations := sk.GetAllSDKDelegations(ctx)
+	totalShares := sdk.ZeroDec()
+	validators := make(map[string]bool)
+	sharesMap := make(map[string]sdk.Dec)
+
+	// calculating total shares for out validators
+	for _, delegation := range delegations {
+		valAddr := delegation.GetValidatorAddr()
+		validator := sk.Validator(ctx, valAddr)
+		if _, ok := validators[valAddr.String()]; !ok {
+			validators[valAddr.String()] = true
+			totalShares = totalShares.Add(validator.GetDelegatorShares())
+		}
+		addr := delegation.GetDelegatorAddr().String()
+		if _, ok := sharesMap[addr]; !ok {
+			sharesMap[addr] = sdk.ZeroDec()
 		}
 	}
 
-	// Delegations set, now pay some fees
-	addr := senderValidator.Address.String()
-	flgs := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, addr),
-		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-	}
-	args := []string{"testNewUsername"}
-	args = append(args, flgs...)
-	_, err = clitestutil.ExecTestCLICmd(keyringCtx, cli.CmdUpdateAccount(), args)
-	req.NoError(err)
+	distrPercentagesToEqual := make(map[string]sdk.Dec)
+	for _, delegation := range delegations {
+		valAddr := delegation.GetValidatorAddr()
+		validator := sk.Validator(ctx, valAddr)
 
-	// simulate waiting for later block heights
-	height, err := net.LatestHeight()
-	req.NoError(err)
-	_, err = net.WaitForHeightWithTimeout(height+5, 30*time.Second)
-	req.NoError(err)
+		valAccAddr := sdk.AccAddress(valAddr)
 
-	// compute percentages
-	distrPercentages := computeDistrPercentages(net.Validators, distrMap, cfg.BondedTokens, totalStake)
-	rewardsMap := keeper.CalculateRewardsHelper(distrPercentages, sdk.NewCoins(feesAmount))
-
-	// now check balances
-	for _, val := range net.Validators {
-		valAddr := val.Address.String()
-		delegations := distrMap[valAddr]
-		for _, del := range delegations {
-			args = []string{del.address}
-			flgs = []string{
-				fmt.Sprintf("--denom=%s", feesAmount.Denom),
-			}
-			args = append(args, flgs...)
-			out, err := clitestutil.ExecTestCLICmd(keyringCtx, bankcli.GetBalancesCmd(), args)
-			req.NoError(err)
-
-			// get amount (a bit hacky, but it works)
-			amtStr := strings.Split(out.String(), "amount: \"")[1]
-			amtStr = strings.Split(amtStr, "\"")[0]
-			amt, _ := strconv.ParseInt(amtStr, 10, 64)
-			expected := rewardsMap[del.address].AmountOf(feesAmount.Denom)
-			if del.address == senderValidator.Address.String() {
-				expected = expected.Add(cfg.AccountTokens).Sub(feesAmount.Amount)
-			}
-			req.Equal(expected.Int64(), amt)
+		shares := sharesMap[delegation.DelegatorAddress]
+		sharesPercentage := shares.Quo(totalShares)
+		if _, ok := distrPercentagesToEqual[delegation.DelegatorAddress]; !ok {
+			distrPercentagesToEqual[delegation.DelegatorAddress] = sdk.ZeroDec()
 		}
+		if valAccAddr.String() == delegation.DelegatorAddress {
+			distrPercentagesToEqual[delegation.DelegatorAddress] = distrPercentagesToEqual[delegation.DelegatorAddress].Add(sharesPercentage)
+		} else {
+			commission := validator.GetCommission()
+			commissionPercentage := sharesPercentage.Mul(commission)
+			actualPercentage := sharesPercentage.Sub(commissionPercentage)
+			distrPercentagesToEqual[delegation.DelegatorAddress] = distrPercentages[delegation.DelegatorAddress].Add(actualPercentage)
+			// we also add the commission percentage to the validator
+			if _, ok := distrPercentagesToEqual[valAccAddr.String()]; !ok {
+				// in case the validator was not yet added to the map
+				distrPercentagesToEqual[valAccAddr.String()] = sdk.ZeroDec()
+			}
+			distrPercentagesToEqual[valAccAddr.String()] = distrPercentages[valAccAddr.String()].Add(commissionPercentage)
+		}
+	}
+	for validatorAddr := range distrPercentages {
+		require.Equal(distrPercentages[validatorAddr], distrPercentagesToEqual[validatorAddr])
 	}
 }
-*/
 
 // TestCalculateDelegatorsRewards test cases for calculating delegators rewards
 func (suite *IntegrationTestSuite) TestCalculateDelegatorsRewards() {
@@ -264,7 +342,7 @@ func (suite *IntegrationTestSuite) TestCalculateDelegatorsRewards() {
 	types.UpdateAppCheckFlagTest(types.FlagTrue)
 
 	srv.CreateAccount(wctx, &types.MsgCreateAccount{
-		Creator:  executor,
+		Creator: executor,
 	})
 
 	types.UpdateAppCheckFlagTest(types.FlagFalse)
