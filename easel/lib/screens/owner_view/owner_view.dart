@@ -404,8 +404,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       clipper: RightTriangleOwnerViewClipper(orientation: enums.Orientation.Orientation_NE),
                       child: Container(
                         color: EaselAppTheme.kLightRed,
-                        height: isTablet ? 40.r : 50.r,
-                        width: isTablet ? 40.r : 50.r,
+                        height: isTablet ? 40.r : 35.r,
+                        width: isTablet ? 40.r : 35.r,
                       ),
                     ),
                   ),
@@ -416,8 +416,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                     clipper: RightTriangleOwnerViewClipper(orientation: enums.Orientation.Orientation_SW),
                     child: Container(
                       color: EaselAppTheme.kLightRed,
-                      height: isTablet ? 40.r : 50.r,
-                      width: isTablet ? 40.r : 50.r,
+                      height: isTablet ? 40.r : 35.r,
+                      width: isTablet ? 40.r : 35.r,
                       child: Center(
                         child: IconButton(
                           key: const Key(kKeyboardArrowDownKey),
