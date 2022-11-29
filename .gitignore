@@ -33,3 +33,4 @@ debug
 
 *.env
 wallet/android/app/google-services.json
+mytestnet/
