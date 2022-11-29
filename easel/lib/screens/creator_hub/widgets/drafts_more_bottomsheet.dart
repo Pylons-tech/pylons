@@ -31,7 +31,7 @@ class DraftsBottomSheet {
 
   Future<void> show() async {
     return showModalBottomSheet(
-      backgroundColor: Colors.transparent,
+      backgroundColor: EaselAppTheme.kTransparent,
       context: buildContext,
       builder: (_) {
         return ChangeNotifierProvider.value(

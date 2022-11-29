@@ -371,5 +371,6 @@ abstract class  LocaleKeys {
   static const ea = 'ea';
   static const maintenance_mode_message = 'maintenance_mode_message';
   static const maintenance_mode_header = 'maintenance_mode_header';
+  static const invalid_mnemonic = 'invalid_mnemonic';
 
 }
