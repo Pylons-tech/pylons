@@ -214,45 +214,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           ] else ...[
             Stack(
               children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: ClipPath(
-                    clipper: RightTriangleOwnerViewClipper(orientation: enums.Orientation.Orientation_SW),
-                    child: Container(
-                      color: EaselAppTheme.kLightRed,
-                      height: 50,
-                      width: 50,
-                      child: Center(
-                          child: IconButton(
-                        key: const Key(kKeyboardArrowDownKey),
-                        alignment: Alignment.topRight,
-                        padding: const EdgeInsets.only(
-                          bottom: 8,
-                          left: 8,
-                        ),
-                        icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                        onPressed: () {
-                          viewModel.toChangeCollapse();
-                        },
-                        iconSize: 32,
-                        color: Colors.white,
-                      )),
-                    ),
-                  ),
-                ),
-                Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: ClipPath(
-                      clipper: RightTriangleOwnerViewClipper(orientation: enums.Orientation.Orientation_NE),
-                      child: Container(
-                        color: EaselAppTheme.kLightRed,
-                        height: 30.h,
-                        width: 30.w,
-                      ),
-                    ),
-                  ),
-                ),
                 ClipPath(
                   clipper: ExpandedViewClipper(),
                   child: BackdropFilter(
@@ -434,7 +395,47 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       ),
                     ),
                   ),
-                )
+                ),
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: ClipPath(
+                      clipper: RightTriangleOwnerViewClipper(orientation: enums.Orientation.Orientation_NE),
+                      child: Container(
+                        color: EaselAppTheme.kLightRed,
+                        height: 30.r,
+                        width: 30.r,
+                      ),
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: ClipPath(
+                    clipper: RightTriangleOwnerViewClipper(orientation: enums.Orientation.Orientation_SW),
+                    child: Container(
+                      color: EaselAppTheme.kLightRed,
+                      height: 30.r,
+                      width: 30.r,
+                      child: Center(
+                        child: IconButton(
+                          key: const Key(kKeyboardArrowDownKey),
+                          alignment: Alignment.topRight,
+                          padding: const EdgeInsets.only(
+                            bottom: 8,
+                            left: 8,
+                          ),
+                          icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                          onPressed: () {
+                            viewModel.toChangeCollapse();
+                          },
+                          iconSize: 32,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             )
           ]
