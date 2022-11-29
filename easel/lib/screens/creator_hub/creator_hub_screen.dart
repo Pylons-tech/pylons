@@ -97,7 +97,12 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
     color: EaselAppTheme.kWhite,
     fontFamily: kUniversalFontFamily,
   );
-  TextStyle subTextStyle = TextStyle(color: EaselAppTheme.kWhite, fontWeight: FontWeight.w700, fontFamily: kUniversalFontFamily, fontSize: isTablet ? 9.sp : 11.sp);
+  TextStyle subTextStyle = TextStyle(
+    color: EaselAppTheme.kWhite,
+    fontWeight: FontWeight.w700,
+    fontFamily: kUniversalFontFamily,
+    fontSize: isTablet ? 9.sp : 11.sp,
+  );
 
   EaselProvider get easelProvider => sl();
 
@@ -108,7 +113,9 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
   }
 
   Widget getRefreshButton(CreatorHubViewModel viewModel) {
-    final shouldShowRefreshButton = easelProvider.isPylonsInstalled && viewModel.selectedCollectionType == CollectionType.published && viewModel.nftPublishedList.isNotEmpty;
+    final shouldShowRefreshButton = easelProvider.isPylonsInstalled &&
+        viewModel.selectedCollectionType == CollectionType.published &&
+        viewModel.nftPublishedList.isNotEmpty;
     if (shouldShowRefreshButton) {
       return Padding(
         key: const Key(kRefreshPublishedNFTButtonKey),
@@ -164,12 +171,16 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: getTitleWidget(isDraftCreated: viewModel.nftDraftList.isNotEmpty || viewModel.nftPublishedList.isNotEmpty),
+                  child: getTitleWidget(
+                    isDraftCreated: viewModel.nftDraftList.isNotEmpty || viewModel.nftPublishedList.isNotEmpty,
+                  ),
                 ),
                 SizedBox(height: 12.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: getDescriptionWidget(isDraftCreated: viewModel.nftDraftList.isNotEmpty || viewModel.nftPublishedList.isNotEmpty),
+                  child: getDescriptionWidget(
+                    isDraftCreated: viewModel.nftDraftList.isNotEmpty || viewModel.nftPublishedList.isNotEmpty,
+                  ),
                 ),
                 SizedBox(height: 15.h),
                 Padding(
@@ -254,7 +265,9 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                     viewType: viewModel.viewType,
                   ),
                 ),
-                if (viewModel.selectedCollectionType == CollectionType.draft || (viewModel.selectedCollectionType == CollectionType.published && viewModel.nftPublishedList.isEmpty))
+                if (viewModel.selectedCollectionType == CollectionType.draft ||
+                    (viewModel.selectedCollectionType == CollectionType.published &&
+                        viewModel.nftPublishedList.isEmpty))
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: getCreateNFTWidget(),
@@ -372,7 +385,11 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
     );
   }
 
-  Widget buildOutlinedBox({required String title, required CreatorHubViewModel viewModel, required CollectionType collectionType}) {
+  Widget buildOutlinedBox({
+    required String title,
+    required CreatorHubViewModel viewModel,
+    required CollectionType collectionType,
+  }) {
     return Expanded(
       child: InkWell(
         onTap: () => viewModel.changeSelectedCollection(collectionType),
@@ -383,7 +400,10 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 5.h),
             child: Center(
-              child: Text(title, style: subTextStyle.copyWith(color: EaselAppTheme.kBlack, fontWeight: FontWeight.w900)),
+              child: Text(
+                title,
+                style: subTextStyle.copyWith(color: EaselAppTheme.kBlack, fontWeight: FontWeight.w900),
+              ),
             ),
           ),
         ),
@@ -391,7 +411,12 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
     );
   }
 
-  Widget buildSelectedBox({required String key,required String title, required CreatorHubViewModel viewModel, required Color color, required CollectionType collectionType}) {
+  Widget buildSelectedBox(
+      {required String key,
+      required String title,
+      required CreatorHubViewModel viewModel,
+      required Color color,
+      required CollectionType collectionType}) {
     return Expanded(
       child: InkWell(
         onTap: () => viewModel.changeSelectedCollection(collectionType),

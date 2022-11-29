@@ -35,10 +35,7 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
             ),
             Text(
               LocaleKeys.welcome_to_easel.tr(),
-              style: TextStyle(
-                  color: EaselAppTheme.kBlack,
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(color: EaselAppTheme.kBlack, fontSize: 20.sp, fontWeight: FontWeight.bold),
               textAlign: TextAlign.start,
             ),
             SizedBox(

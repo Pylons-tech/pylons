@@ -3,9 +3,22 @@ import 'package:easy_localization/easy_localization.dart';
 import '../generated/locale_keys.g.dart';
 
 List kTutorialItems = [
-  {'header': LocaleKeys.upload_your_ipfs.tr(), 'description': LocaleKeys.pick_the_file.tr(), 'image': 'assets/images/tutorial1.png'},
-  {'header': LocaleKeys.edit_your_nft.tr(), 'description': LocaleKeys.enter_information_describing_your_nft.tr(), 'image': 'assets/images/tutorial2.png'},
-  {'header': LocaleKeys.publish_your_nft.tr(), 'header1': LocaleKeys.pylons_app.tr(), 'description': LocaleKeys.once_you_enter_all.tr(), 'image': 'assets/images/tutorial3.png'},
+  {
+    'header': LocaleKeys.upload_your_ipfs.tr(),
+    'description': LocaleKeys.pick_the_file.tr(),
+    'image': 'assets/images/tutorial1.png'
+  },
+  {
+    'header': LocaleKeys.edit_your_nft.tr(),
+    'description': LocaleKeys.enter_information_describing_your_nft.tr(),
+    'image': 'assets/images/tutorial2.png'
+  },
+  {
+    'header': LocaleKeys.publish_your_nft.tr(),
+    'header1': LocaleKeys.pylons_app.tr(),
+    'description': LocaleKeys.once_you_enter_all.tr(),
+    'image': 'assets/images/tutorial3.png'
+  },
 ];
 
 /// ```PNG assets

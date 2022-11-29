@@ -37,10 +37,13 @@ class ClippedButton extends StatelessWidget {
       },
       child: isShadow!
           ? CustomPaint(
-              painter:
-                  clipperType == ClipperType.bottomLeftTopRight ? BoxShadowPainterBottomLeftTopRight(cuttingHeight: cuttingHeight) : BoxShadowPainterTopLeftBottomRight(cuttingHeight: cuttingHeight),
+              painter: clipperType == ClipperType.bottomLeftTopRight
+                  ? BoxShadowPainterBottomLeftTopRight(cuttingHeight: cuttingHeight)
+                  : BoxShadowPainterTopLeftBottomRight(cuttingHeight: cuttingHeight),
               child: ClipPath(
-                clipper: clipperType == ClipperType.bottomLeftTopRight ? ButtonClipperBottomLeftTopRight(cuttingHeight: cuttingHeight) : ButtonClipperTopLeftBottomRight(cuttingHeight: cuttingHeight),
+                clipper: clipperType == ClipperType.bottomLeftTopRight
+                    ? ButtonClipperBottomLeftTopRight(cuttingHeight: cuttingHeight)
+                    : ButtonClipperTopLeftBottomRight(cuttingHeight: cuttingHeight),
                 child: Container(
                   color: bgColor,
                   height: 40.h,
@@ -59,7 +62,9 @@ class ClippedButton extends StatelessWidget {
               ),
             )
           : ClipPath(
-              clipper: clipperType == ClipperType.bottomLeftTopRight ? ButtonClipperBottomLeftTopRight(cuttingHeight: cuttingHeight) : ButtonClipperTopLeftBottomRight(cuttingHeight: cuttingHeight),
+              clipper: clipperType == ClipperType.bottomLeftTopRight
+                  ? ButtonClipperBottomLeftTopRight(cuttingHeight: cuttingHeight)
+                  : ButtonClipperTopLeftBottomRight(cuttingHeight: cuttingHeight),
               child: Container(
                 color: bgColor,
                 height: 40.h,

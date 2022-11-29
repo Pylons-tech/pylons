@@ -35,75 +35,72 @@ void main() {
   );
   GetIt.I.registerLazySingleton(() => easelProvider);
 
-  group("Creator Hub Screen Test Cases", () {
-
-    testWidgets("Drafts Button Color Test", (tester) async {
-      await tester.setScreenSize();
-      easelProvider.isPylonsInstalled = true;
-      creatorHubViewModel.viewType = ViewType.viewList;
-      creatorHubViewModel.selectedCollectionType = CollectionType.draft;
-      creatorHubViewModel.nftPublishedList.add(MOCK_NFT);
-      await tester.testAppForWidgetTesting(
-        Scaffold(
-          body: MultiProvider(
-            providers: [
-              ChangeNotifierProvider.value(value: easelProvider),
-              ChangeNotifierProvider.value(value: creatorHubViewModel),
-            ],
-            child: const CreatorHubContent(),
-          ),
+  testWidgets("Drafts Button Color Test", (tester) async {
+    await tester.setScreenSize();
+    easelProvider.isPylonsInstalled = true;
+    creatorHubViewModel.viewType = ViewType.viewList;
+    creatorHubViewModel.selectedCollectionType = CollectionType.draft;
+    creatorHubViewModel.nftPublishedList.add(MOCK_NFT);
+    await tester.testAppForWidgetTesting(
+      Scaffold(
+        body: MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: easelProvider),
+            ChangeNotifierProvider.value(value: creatorHubViewModel),
+          ],
+          child: const CreatorHubContent(),
         ),
-      );
-      final draftButtonKey = find.byKey(const Key(kSelectedDraftButtonKey));
-      await tester.ensureVisible(draftButtonKey);
-      final DecoratedBox decoratedBox = tester.firstWidget(draftButtonKey) as DecoratedBox;
-      final BoxDecoration boxDecoration = decoratedBox.decoration as BoxDecoration;
-      expect(boxDecoration.color, EaselAppTheme.kLightRed);
-    });
+      ),
+    );
+    final draftButtonKey = find.byKey(const Key(kSelectedDraftButtonKey));
+    await tester.ensureVisible(draftButtonKey);
+    final DecoratedBox decoratedBox = tester.firstWidget(draftButtonKey) as DecoratedBox;
+    final BoxDecoration boxDecoration = decoratedBox.decoration as BoxDecoration;
+    expect(boxDecoration.color, EaselAppTheme.kLightRed);
+  });
 
-    testWidgets("Published Button Color Test", (tester) async {
-      await tester.setScreenSize();
-      easelProvider.isPylonsInstalled = true;
-      creatorHubViewModel.viewType = ViewType.viewList;
-      creatorHubViewModel.selectedCollectionType = CollectionType.published;
-      creatorHubViewModel.nftPublishedList.add(MOCK_NFT);
-      await tester.testAppForWidgetTesting(
-        Scaffold(
-          body: MultiProvider(
-            providers: [
-              ChangeNotifierProvider.value(value: easelProvider),
-              ChangeNotifierProvider.value(value: creatorHubViewModel),
-            ],
-            child: const CreatorHubContent(),
-          ),
+  testWidgets("Published Button Color Test", (tester) async {
+    await tester.setScreenSize();
+    easelProvider.isPylonsInstalled = true;
+    creatorHubViewModel.viewType = ViewType.viewList;
+    creatorHubViewModel.selectedCollectionType = CollectionType.published;
+    creatorHubViewModel.nftPublishedList.add(MOCK_NFT);
+    await tester.testAppForWidgetTesting(
+      Scaffold(
+        body: MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: easelProvider),
+            ChangeNotifierProvider.value(value: creatorHubViewModel),
+          ],
+          child: const CreatorHubContent(),
         ),
-      );
-      final publishedButtonKey = find.byKey(const Key(kSelectedPublishedButtonKey));
-      await tester.ensureVisible(publishedButtonKey);
-      final DecoratedBox decoratedBox = tester.firstWidget(publishedButtonKey) as DecoratedBox;
-      final BoxDecoration boxDecoration = decoratedBox.decoration as BoxDecoration;
-      expect(boxDecoration.color, EaselAppTheme.kDarkGreen);
-    });
+      ),
+    );
+    final publishedButtonKey = find.byKey(const Key(kSelectedPublishedButtonKey));
+    await tester.ensureVisible(publishedButtonKey);
+    final DecoratedBox decoratedBox = tester.firstWidget(publishedButtonKey) as DecoratedBox;
+    final BoxDecoration boxDecoration = decoratedBox.decoration as BoxDecoration;
+    expect(boxDecoration.color, EaselAppTheme.kDarkGreen);
+  });
 
-    testWidgets("Testing refresh published NFT button visibility", (tester) async {
-      await tester.setScreenSize();
-      easelProvider.isPylonsInstalled = true;
-      creatorHubViewModel.viewType = ViewType.viewList;
-      creatorHubViewModel.selectedCollectionType = CollectionType.published;
-      creatorHubViewModel.nftPublishedList.add(MOCK_NFT);
-      await tester.testAppForWidgetTesting(
-        Scaffold(
-          body: MultiProvider(
-            providers: [
-              ChangeNotifierProvider.value(value: easelProvider),
-              ChangeNotifierProvider.value(value: creatorHubViewModel),
-            ],
-            child: const CreatorHubContent(),
-          ),
+  testWidgets("Testing refresh published NFT button visibility", (tester) async {
+    await tester.setScreenSize();
+    easelProvider.isPylonsInstalled = true;
+    creatorHubViewModel.viewType = ViewType.viewList;
+    creatorHubViewModel.selectedCollectionType = CollectionType.published;
+    creatorHubViewModel.nftPublishedList.add(MOCK_NFT);
+    await tester.testAppForWidgetTesting(
+      Scaffold(
+        body: MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: easelProvider),
+            ChangeNotifierProvider.value(value: creatorHubViewModel),
+          ],
+          child: const CreatorHubContent(),
         ),
-      );
-      final publishButtonKey = find.byKey(const Key(kRefreshPublishedNFTButtonKey));
-      await tester.ensureVisible(publishButtonKey);
-    });
+      ),
+    );
+    final publishButtonKey = find.byKey(const Key(kRefreshPublishedNFTButtonKey));
+    await tester.ensureVisible(publishButtonKey);
   });
 }
