@@ -266,7 +266,6 @@ class OwnerViewViewModel extends ChangeNotifier {
     isLiking = false;
     if (temp && likesCount > 0) {
       likesCount = likesCount - 1;
-      repository.deleteNFTFromFavorites(recipeId);
       removeFromFavAndUpdateView(recipeId: recipeId);
     } else {
       likesCount = likesCount + 1;
