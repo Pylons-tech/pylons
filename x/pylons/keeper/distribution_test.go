@@ -157,41 +157,35 @@ func (suite *IntegrationTestSuite) TestGetRewardsDistributionPercentages() {
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
 	/*
-		* amountToPay := refers to the recipe amount
-		* ``
-		*	form this amount we will calculate the reward that needs to be distributed to
-		*	the delegator of the block
-		* ``
-		* creator  := create address will be used to create cookbook / recipe
-		* executor := will be used to execute recipe, as creator and executor cannot be same
-		*
-		* upon execution of recipe we have a defined fee,
-		* i.e. DefaultRecipeFeePercentage (Set at 0.1 or 10%)
-		*
-		* feeCollectorAddr := address of you fee collector module
-		* this modules receives the fee deducted during recipe execution
-		*
-		* Pre Req:
-		*	1. Create Cookbook
-		*	2. Create Recipe
-		*	3. Execute Recipe
-		*
-		*
-		* this test case will verify that correct amount of rewards are divided amongst delegator
-		*
-		* 1. Get `delegator amount percentage` that need to be distributed
-		* 2. Calculate delegator reward amount for distributed
-		* 3. Get balance of delegator before sending reward
-		* 4. Distribute reward amongst delegator
-		* 5. Query for balance of delegator again to get update balance after sending rewards
-		* 6. Compare balance from step 3 with step 5,
-			* 6.1 New balance must be equivalent with the old balance
-				plus reward amount calculated in step 2
-		*
-		* Criteria: In case the balances do not match , i.e. (balance before distribution of reward
-		*			+ the reward amount) == balance after distribution
-		*
-	*/
+	* amountToPay := refers to the recipe amount
+	* ``
+	*	form this amount we will calculate the reward that needs to be distributed to
+	*	the delegator of the block
+	* ``
+	* creator  := create address will be used to create cookbook / recipe
+	* executor := will be used to execute recipe, as creator and executor cannot be same
+	*
+	* upon execution of recipe we have a defined fee,
+	* i.e. DefaultRecipeFeePercentage (Set at 0.1 or 10%)
+	*
+	* feeCollectorAddr := address of you fee collector module
+	* this modules receives the fee deducted during recipe execution
+	*
+	* Pre Req:
+	*	1. Create Cookbook
+	*	2. Create Recipe
+	*	3. Execute Recipe
+	*
+	*
+	* this test case will verify that correct amount of rewards are divided amongst delegator
+	*
+	* 1. Get `delegator amount percentage` that need to be distributed
+	*
+	* Criteria: In case the percentages calculated must equal the percentage we have calculated
+	*			distrPercentagesToEqual must equal distrPercentages
+	*			(Calculated)						(Return form our function)
+	*
+	 */
 
 	amountToPay := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100)))
 	creator := types.GenTestBech32FromString("test")

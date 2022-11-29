@@ -49,7 +49,7 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 			* 6.1 New balance must be equivalent with the old balance
 				plus reward amount calculated in step 2
 		*
-		* Criteria: In case the balances do not match , i.e. (balance before distribution of reward
+		* Criteria: In case the balances must match , i.e. (balance before distribution of reward
 		*			+ the reward amount) == balance after distribution
 		*
 	*/
