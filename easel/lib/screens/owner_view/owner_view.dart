@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:easel_flutter/generated/locale_keys.g.dart';
+import 'package:easel_flutter/main.dart';
 import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/screens/owner_view/viewmodels/owner_view_viewmodel.dart';
 import 'package:easel_flutter/screens/owner_view/widget/gestures_for_owner_view_screen.dart';
@@ -403,8 +404,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       clipper: RightTriangleOwnerViewClipper(orientation: enums.Orientation.Orientation_NE),
                       child: Container(
                         color: EaselAppTheme.kLightRed,
-                        height: 30.r,
-                        width: 30.r,
+                        height: isTablet ? 40.r : 50.r,
+                        width: isTablet ? 40.r : 50.r,
                       ),
                     ),
                   ),
@@ -415,17 +416,20 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                     clipper: RightTriangleOwnerViewClipper(orientation: enums.Orientation.Orientation_SW),
                     child: Container(
                       color: EaselAppTheme.kLightRed,
-                      height: 30.r,
-                      width: 30.r,
+                      height: isTablet ? 40.r : 50.r,
+                      width: isTablet ? 40.r : 50.r,
                       child: Center(
                         child: IconButton(
                           key: const Key(kKeyboardArrowDownKey),
                           alignment: Alignment.topRight,
-                          padding: const EdgeInsets.only(
-                            bottom: 8,
-                            left: 8,
+                          padding: EdgeInsets.only(
+                            bottom: isTablet ? 20 : 8,
+                            left: isTablet ? 20 : 8,
                           ),
-                          icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                          icon: Icon(
+                            Icons.keyboard_arrow_down_outlined,
+                            size: isTablet ? 40 : 24,
+                          ),
                           onPressed: () {
                             viewModel.toChangeCollapse();
                           },
