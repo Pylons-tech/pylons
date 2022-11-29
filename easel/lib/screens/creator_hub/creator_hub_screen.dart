@@ -208,7 +208,10 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                   child: Row(
                     children: [
                       buildOutlinedBox(
-                          title: LocaleKeys.draft.tr(), viewModel: viewModel, collectionType: CollectionType.draft),
+                        title: LocaleKeys.draft.tr(),
+                        viewModel: viewModel,
+                        collectionType: CollectionType.draft,
+                      ),
                       SizedBox(width: 14.w),
                       buildOutlinedBox(
                         title: LocaleKeys.published.tr(),
@@ -219,20 +222,22 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                       SizedBox(width: 16.w),
                       InkWell(
                         onTap: () => viewModel.updateViewType(ViewType.viewGrid),
-                        child: SvgPicture.asset(SVGUtils.kGridIcon,
-                            height: 15.h,
-                            color: viewModel.viewType == ViewType.viewGrid
-                                ? EaselAppTheme.kBlack
-                                : EaselAppTheme.kGreyIcon),
+                        child: SvgPicture.asset(
+                          SVGUtils.kGridIcon,
+                          height: 15.h,
+                          color:
+                              viewModel.viewType == ViewType.viewGrid ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon,
+                        ),
                       ),
                       SizedBox(width: 14.w),
                       InkWell(
                         onTap: () => viewModel.updateViewType(ViewType.viewList),
-                        child: SvgPicture.asset(SVGUtils.kListIcon,
-                            height: 15.h,
-                            color: viewModel.viewType == ViewType.viewList
-                                ? EaselAppTheme.kBlack
-                                : EaselAppTheme.kGreyIcon),
+                        child: SvgPicture.asset(
+                          SVGUtils.kListIcon,
+                          height: 15.h,
+                          color:
+                              viewModel.viewType == ViewType.viewList ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon,
+                        ),
                       ),
                     ],
                   ),

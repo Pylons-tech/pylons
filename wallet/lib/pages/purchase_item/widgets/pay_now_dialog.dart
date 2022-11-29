@@ -31,10 +31,18 @@ import 'package:pylons_wallet/utils/route_util.dart';
 
 import '../../../generated/locale_keys.g.dart';
 
-TextStyle _titleTextStyle =
-    TextStyle(color: AppColors.kWhite, fontSize: 19.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w700);
-TextStyle _rowTitleTextStyle =
-    TextStyle(color: Colors.white, fontSize: 12.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w700);
+TextStyle _titleTextStyle = TextStyle(
+  color: AppColors.kWhite,
+  fontSize: 19.sp,
+  fontFamily: kUniversalFontFamily,
+  fontWeight: FontWeight.w700,
+);
+TextStyle _rowTitleTextStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 12.sp,
+  fontFamily: kUniversalFontFamily,
+  fontWeight: FontWeight.w700,
+);
 
 class PayNowDialog {
   final NFT nft;
@@ -44,12 +52,13 @@ class PayNowDialog {
 
   BuildContext buildContext;
 
-  PayNowDialog(
-      {required this.buildContext,
-      required this.nft,
-      required this.purchaseItemViewModel,
-      required this.onPurchaseDone,
-      required this.shouldBuy});
+  PayNowDialog({
+    required this.buildContext,
+    required this.nft,
+    required this.purchaseItemViewModel,
+    required this.onPurchaseDone,
+    required this.shouldBuy,
+  });
 
   void show() {
     showDialog(
@@ -79,8 +88,12 @@ class PayNowWidget extends StatefulWidget {
   final ValueChanged<Execution> onPurchaseDone;
   final bool shouldBuy;
 
-  const PayNowWidget({Key? key, required this.nft, required this.onPurchaseDone, required this.shouldBuy})
-      : super(key: key);
+  const PayNowWidget({
+    Key? key,
+    required this.nft,
+    required this.onPurchaseDone,
+    required this.shouldBuy,
+  }) : super(key: key);
 
   @override
   State<PayNowWidget> createState() => _PayNowWidgetState();
@@ -110,8 +123,9 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   child: GestureDetector(
                     onTap: () => Navigator.pop(context),
                     child: Padding(
-                        padding: EdgeInsets.only(right: isTablet ? 2.w : 5.w, top: 5.h),
-                        child: Icon(Icons.close, color: Colors.white, size: 20.h)),
+                      padding: EdgeInsets.only(right: isTablet ? 2.w : 5.w, top: 5.h),
+                      child: Icon(Icons.close, color: Colors.white, size: 20.h),
+                    ),
                   ),
                 ),
               ),
@@ -228,10 +242,11 @@ class _PayNowWidgetState extends State<PayNowWidget> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-                color: subtitleTextColor,
-                fontSize: 13.sp,
-                fontFamily: kUniversalFontFamily,
-                fontWeight: FontWeight.w700),
+              color: subtitleTextColor,
+              fontSize: 13.sp,
+              fontFamily: kUniversalFontFamily,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
       ],
@@ -256,7 +271,10 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   child: Text(
                     title,
                     style: TextStyle(
-                        color: AppColors.kWhite, fontSize: isTablet ? 14.sp : 16.sp, fontWeight: FontWeight.w700),
+                      color: AppColors.kWhite,
+                      fontSize: isTablet ? 14.sp : 16.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -350,7 +368,8 @@ class _PayNowWidgetState extends State<PayNowWidget> {
       await Stripe.instance.presentPaymentSheet();
 
       final receipt_response = await repository.GeneratePaymentReceipt(
-          StripeGeneratePaymentReceiptRequest(paymentIntentID: pi.id, clientSecret: pi.clientSecret));
+        StripeGeneratePaymentReceiptRequest(paymentIntentID: pi.id, clientSecret: pi.clientSecret),
+      );
 
       if (receipt_response.isLeft()) {
         throw receipt_response.swap().toOption().toNullable()!;
@@ -439,7 +458,8 @@ class _PayNowWidgetState extends State<PayNowWidget> {
         await Stripe.instance.presentPaymentSheet();
 
         final receipt_response = await repository.GeneratePaymentReceipt(
-            StripeGeneratePaymentReceiptRequest(paymentIntentID: pi.id, clientSecret: pi.clientSecret));
+          StripeGeneratePaymentReceiptRequest(paymentIntentID: pi.id, clientSecret: pi.clientSecret),
+        );
 
         final receipt = receipt_response.getOrElse(() => StripeGeneratePaymentReceiptResponse());
 

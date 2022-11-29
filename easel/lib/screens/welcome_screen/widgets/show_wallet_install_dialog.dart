@@ -28,7 +28,7 @@ class ShowWalletInstallDialog {
         builder: (context) {
           return Dialog(
             elevation: 0,
-            backgroundColor: Colors.transparent,
+            backgroundColor: EaselAppTheme.kTransparent,
             child: ScreenResponsive(
               mobileScreen: (context) => buildMobile(context),
               tabletScreen: (context) => buildTablet(context),

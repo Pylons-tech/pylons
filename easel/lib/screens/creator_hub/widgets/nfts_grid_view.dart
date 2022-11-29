@@ -17,7 +17,28 @@ import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../../../main.dart';
+
+List<Color> gradientBlackToTransparent = <Color>[
+  Colors.black87,
+  Colors.black54,
+  Colors.black45,
+  Colors.black38,
+  Colors.black26,
+  Colors.black12,
+  EaselAppTheme.kTransparent,
+];
+
+List<Color> gradientTransparentToBlack = <Color>[
+  EaselAppTheme.kTransparent,
+  Colors.black12,
+  Colors.black26,
+  Colors.black38,
+  Colors.black45,
+  Colors.black54,
+  Colors.black87,
+];
 
 class NftGridViewItem extends StatelessWidget {
   const NftGridViewItem({
@@ -71,17 +92,9 @@ class NftGridViewItem extends StatelessWidget {
           children: [
             Container(
               alignment: Alignment.bottomLeft,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Colors.black87,
-                    Colors.black54,
-                    Colors.black45,
-                    Colors.black38,
-                    Colors.black26,
-                    Colors.black12,
-                    Colors.transparent,
-                  ],
+                  colors: gradientBlackToTransparent,
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
@@ -99,17 +112,9 @@ class NftGridViewItem extends StatelessWidget {
             ),
             Container(
               alignment: Alignment.bottomLeft,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Colors.transparent,
-                    Colors.black12,
-                    Colors.black26,
-                    Colors.black38,
-                    Colors.black45,
-                    Colors.black54,
-                    Colors.black87,
-                  ],
+                  colors: gradientTransparentToBlack,
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
@@ -127,10 +132,12 @@ class NftGridViewItem extends StatelessWidget {
                     margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 6.h),
                     child: Text(
                       context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft
-                          ? "draft".tr()
-                          : "published".tr(),
-                      style: EaselAppTheme.titleStyle
-                          .copyWith(color: EaselAppTheme.kWhite, fontSize: isTablet ? 8.sp : 11.sp),
+                          ? LocaleKeys.draft.tr()
+                          : LocaleKeys.published.tr(),
+                      style: EaselAppTheme.titleStyle.copyWith(
+                        color: EaselAppTheme.kWhite,
+                        fontSize: isTablet ? 8.sp : 11.sp,
+                      ),
                     ),
                   ),
                   const Spacer(),
