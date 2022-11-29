@@ -42,7 +42,7 @@ void main(){
     expect(closeBottomSheetButton, findsOneWidget);
   });
 
-  testWidgets("History Tab in purchase item Visibility Test", (tester) async {
+  testWidgets("History Tab Visibility Test in purchase item screen", (tester) async {
     when(viewModel.collapsed).thenAnswer((realInvocation) => false);
     when(viewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_TYPE_RECIPE);
     when(viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid)).thenAnswer((realInvocation) => true);
