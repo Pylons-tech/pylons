@@ -169,6 +169,7 @@ func TestValidateCoinOutput(t *testing.T) {
 }
 
 func TestValidateDoubles(t *testing.T) {
+	cel := GetDefaultCelEnv()
 	valGTone, _ := sdk.NewDecFromStr("1.01")
 	valLTone, _ := sdk.NewDecFromStr("0.99")
 	for _, tc := range []struct {
@@ -199,7 +200,7 @@ func TestValidateDoubles(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			err := ValidateDoubles(tc.obj)
+			err := ValidateDoubles(tc.obj, cel)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -210,6 +211,7 @@ func TestValidateDoubles(t *testing.T) {
 }
 
 func TestValidateLongs(t *testing.T) {
+	cel := GetDefaultCelEnv()
 	for _, tc := range []struct {
 		desc string
 		obj  []LongParam
@@ -238,7 +240,7 @@ func TestValidateLongs(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			err := ValidateLongs(tc.obj)
+			err := ValidateLongs(tc.obj, cel)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -249,6 +251,7 @@ func TestValidateLongs(t *testing.T) {
 }
 
 func TestValidateStrings(t *testing.T) {
+	cel := GetDefaultCelEnv()
 	for _, tc := range []struct {
 		desc string
 		obj  []StringParam
@@ -274,7 +277,7 @@ func TestValidateStrings(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			err := ValidateStrings(tc.obj)
+			err := ValidateStrings(tc.obj, cel)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -285,6 +288,7 @@ func TestValidateStrings(t *testing.T) {
 }
 
 func TestValidateItemOutputs(t *testing.T) {
+	cel := GetDefaultCelEnv()
 	for _, tc := range []struct {
 		desc string
 		obj  string
@@ -304,7 +308,7 @@ func TestValidateItemOutputs(t *testing.T) {
 			jsonObj := make([]ItemOutput, 1)
 			_ = json.Unmarshal([]byte(tc.obj), &jsonObj)
 			idMap := make(map[string]bool)
-			err := ValidateItemOutputs(jsonObj, idMap)
+			err := ValidateItemOutputs(jsonObj, idMap, cel)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -315,6 +319,7 @@ func TestValidateItemOutputs(t *testing.T) {
 }
 
 func TestValidateItemModifyOutputs(t *testing.T) {
+	cel := GetDefaultCelEnv()
 	for _, tc := range []struct {
 		desc string
 		obj  string
@@ -330,7 +335,7 @@ func TestValidateItemModifyOutputs(t *testing.T) {
 		t.Run(tc.desc, func(t *testing.T) {
 			var jsonObj []ItemModifyOutput
 			_ = json.Unmarshal([]byte(tc.obj), &jsonObj)
-			err := ValidateItemModifyOutputs(jsonObj, make(map[string]bool, 0))
+			err := ValidateItemModifyOutputs(jsonObj, make(map[string]bool, 0), cel)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
