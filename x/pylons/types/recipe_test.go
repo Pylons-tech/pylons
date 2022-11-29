@@ -218,11 +218,11 @@ func TestValidateLongs(t *testing.T) {
 		err  error
 	}{
 		{desc: "ValidSingle", obj: []LongParam{
-			{Key: "test"},
+			{Key: "test", WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2, Weight: 1}}},
 		}},
 		{desc: "ValidMultiple", obj: []LongParam{
-			{Key: "test1", WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
-			{Key: "test2", WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
+			{Key: "test1", WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2, Weight: 1}}},
+			{Key: "test2", WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2, Weight: 1}}},
 		}},
 		{desc: "InvalidSingle1", obj: []LongParam{
 			{Key: "1test"},
