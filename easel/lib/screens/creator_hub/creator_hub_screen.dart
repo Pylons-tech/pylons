@@ -192,7 +192,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                         buildSelectedBox(
                           key: kSelectedDraftButtonKey,
                           title: LocaleKeys.draft.tr(),
-                          viewModel: viewModel,
+                          context: context,
                           color: EaselAppTheme.kLightRed,
                           collectionType: CollectionType.draft,
                         )
@@ -207,7 +207,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                         buildSelectedBox(
                           key: kSelectedPublishedButtonKey,
                           title: LocaleKeys.published.tr(),
-                          viewModel: viewModel,
+                          context: context,
                           color: EaselAppTheme.kDarkGreen,
                           collectionType: CollectionType.published,
                         )
@@ -246,10 +246,16 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                         onDraftList: (context) => BuildGridView(
                               nftsList: viewModel.nftDraftList,
                               onEmptyList: (context) => getDraftPublishListEmptyWidget(isForDraft: true),
+                              calculateBannerPrice: ({required String price, required String currency}) {
+                                return "${currency.getEaselInputCoinWithDenomination(price)} ${currency.getAbbrev()}";
+                              },
                             ),
                         onPublishedList: (context) => BuildGridView(
                               nftsList: viewModel.nftPublishedList,
                               onEmptyList: (context) => getDraftPublishListEmptyWidget(isForDraft: false),
+                              calculateBannerPrice: ({required String price, required String currency}) {
+                                return "${currency.getCoinWithProperDenomination(price)} ${currency.getAbbrev()}";
+                              },
                             ),
                         collectionType: viewModel.selectedCollectionType),
                     onListSelected: (context) => BuildNFTsContent(
@@ -412,15 +418,16 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
     );
   }
 
-  Widget buildSelectedBox(
-      {required String key,
-      required String title,
-      required CreatorHubViewModel viewModel,
-      required Color color,
-      required CollectionType collectionType}) {
+  Widget buildSelectedBox({
+    required String key,
+    required String title,
+    required BuildContext context,
+    required Color color,
+    required CollectionType collectionType,
+  }) {
     return Expanded(
       child: InkWell(
-        onTap: () => viewModel.changeSelectedCollection(collectionType),
+        onTap: () => context.read<CreatorHubViewModel>().changeSelectedCollection(collectionType),
         child: DecoratedBox(
           key: Key(key),
           decoration: BoxDecoration(
