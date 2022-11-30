@@ -8,7 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
-import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
