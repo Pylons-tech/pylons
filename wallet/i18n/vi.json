@@ -296,7 +296,7 @@
   "no_profile_found": "Không tìm thấy hồ sơ",
   "insufficient_balance_msg": "Bạn không có đủ Pylon để hoàn thành giao dịch này. Vui lòng nhấp vào bên dưới để Thêm Pylon và thử lại.",
   "insufficient_balance": "Không đủ quỹ",
-  "add_pylons": "Thêm points",
+  "add_pylons": "Thêm credits",
   "bonus_fifty": "(+50 tiền thưởng)",
   "bonus_hundred": "(+100 tiền thưởng)",
   "add_fund": "Thêm quỹ",
@@ -369,5 +369,6 @@
   "available": "có sẵn",
   "ea": "ea",
   "maintenance_mode_message": "Chúng tôi đang gặp sự cố kỹ thuật và đã tạm thời bắt đầu chế độ bảo trì để khắc phục sự cố. Đừng lo lắng, bộ sưu tập của bạn vẫn an toàn. Tuy nhiên, bạn không thể bắt đầu các giao dịch trên chuỗi cho đến khi chúng tôi giải quyết xong sự cố và khôi phục chức năng bình thường.",
-  "maintenance_mode_header": "Chế độ bảo trì"
+  "maintenance_mode_header": "Chế độ bảo trì",
+  "invalid_mnemonic" : "Không hợp lệ menmonic"
 }
