@@ -15,6 +15,7 @@ import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/enums.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:easel_flutter/utils/read_more.dart';
+import 'package:easel_flutter/widgets/image_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -76,13 +77,7 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
       nft: viewModel.nft,
       child: Stack(
         children: [
-          Container(
-            color: EaselAppTheme.kWhite,
-            height: double.infinity,
-            width: double.infinity,
-          ),
-
-          ///TODO: Add media here based on type
+          getTypeWidget(),
           if (isUserNotViewingFullNft(viewModel))
             Padding(
               padding: EdgeInsets.only(left: 8, right: 8, bottom: 8, top: MediaQuery.of(context).viewPadding.top),
@@ -110,6 +105,20 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
         ],
       ),
     );
+  }
+
+  Widget getTypeWidget() {
+    final viewModel = context.read<OwnerViewViewModel>();
+    switch (viewModel.nft.assetType.toAssetTypeEnum()) {
+      case AssetType.Image:
+        return ImageWidget(
+          key: const Key(kImageWidgetKey),
+          filePath: viewModel.nft.url,
+        );
+
+      default:
+        return const SizedBox();
+    }
   }
 
   bool isUserNotViewingFullNft(OwnerViewViewModel viewModel) => !viewModel.isViewingFullNft;
@@ -215,182 +224,184 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           ] else ...[
             Stack(
               children: [
-                BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.black54,
-                    padding: const EdgeInsets.all(32.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _title(
-                          nft: viewModel.nft,
-                          owner: viewModel.nft.type.toNftTypeEnum() == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Row(
-                          children: [
-                            SvgPicture.asset(SVGUtils.kViewsIcon),
-                            SizedBox(
-                              width: 10.w,
-                            ),
-                            Text(
-                              viewModel.viewCount == 1 ? "${viewModel.viewCount.toString()} ${"views".tr()}" : "${viewModel.viewCount.toString()} ${"views".tr()}",
-                              style: TextStyle(color: Colors.white, fontSize: 12.sp),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-
-                        ///TODO: Add audio & video widget progress
-                        if (viewModel.nft.hashtags.isNotEmpty)
-                          Wrap(
-                            spacing: 10.w,
-                            children: List.generate(
-                              viewModel.hashtagList.length,
-                              (index) => SizedBox(
-                                child: DetectableText(
-                                  text: "#${viewModel.hashtagList[index]}",
-                                  detectionRegExp: detectionRegExp()!,
-                                  detectedStyle: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: EaselAppTheme.kHashtagColor,
-                                  ),
-                                  basicStyle: TextStyle(
-                                    fontSize: 20.sp,
-                                  ),
-                                  onTap: (tappedText) {},
-                                ),
-                              ),
-                            ),
+                ClipRRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.black54,
+                      padding: const EdgeInsets.all(32.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _title(
+                            nft: viewModel.nft,
+                            owner: viewModel.nft.type.toNftTypeEnum() == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator,
                           ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        ReadMoreText(
-                          viewModel.nft.description,
-                          trimExpandedText: LocaleKeys.collapse.tr(),
-                          trimCollapsedText: LocaleKeys.read_more.tr(),
-                          moreStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: EaselAppTheme.kHashtagColor),
-                          lessStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: EaselAppTheme.kHashtagColor),
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Row(
                             children: [
-                              Expanded(
-                                flex: 85,
-                                child: Column(
-                                  children: [
-                                    TabField(
-                                      name: LocaleKeys.ownership.tr(),
-                                      icon: kTrophyIcon,
-                                      nft: viewModel.nft,
-                                      owner: viewModel.owner,
-                                      nftOwnershipHistoryList: const [],
-                                      isExpanded: viewModel.isOwnershipExpanded,
-                                      onChangeTab: viewModel.onChangeTab,
-                                    ),
-                                    SizedBox(height: 10.h),
-                                    TabField(
-                                      name: LocaleKeys.nft_details.tr(),
-                                      icon: kDetailIcon,
-                                      nft: viewModel.nft,
-                                      owner: viewModel.owner,
-                                      nftOwnershipHistoryList: const [],
-                                      isExpanded: viewModel.isDetailsExpanded,
-                                      onChangeTab: viewModel.onChangeTab,
-                                    ),
-                                    SizedBox(height: 10.h),
-                                    if (viewModel.nft.type.toNftTypeEnum() != NftType.TYPE_RECIPE)
-                                      TabField(
-                                        name: LocaleKeys.history.tr(),
-                                        icon: kHistoryIcon,
-                                        nft: viewModel.nft,
-                                        owner: viewModel.nft.owner,
-                                        nftOwnershipHistoryList: viewModel.nftOwnershipHistoryList,
-                                        isExpanded: viewModel.isHistoryExpanded,
-                                        onChangeTab: viewModel.onChangeTab,
-                                      ),
-                                    SizedBox(height: 30.h),
-                                  ],
-                                ),
+                              SvgPicture.asset(SVGUtils.kViewsIcon),
+                              SizedBox(
+                                width: 10.w,
                               ),
-                              Expanded(
-                                flex: 15,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    SizedBox(
-                                      height: 12.h,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        ///TODO
-                                      },
-                                      child: SvgPicture.asset(
-                                        SVGUtils.kQrIcon,
-                                        height: 20.h,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 12.h,
-                                    ),
-                                    if (viewModel.nft.assetType.toAssetTypeEnum() == AssetType.Image && Platform.isAndroid)
-                                      GestureDetector(
-                                        onTap: () {
-                                          final WallpaperScreen wallpaperScreen = WallpaperScreen(nft: viewModel.nft.url, context: context);
-                                          wallpaperScreen.show();
-                                        },
-                                        child: SvgPicture.asset(
-                                          SVGUtils.kCreationIcon,
-                                          height: 20.h,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    SizedBox(height: 12.h),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        // final Size size = MediaQuery.of(context).size;
-                                        // viewModel.shareNFTLink(size: size);
-                                      },
-                                      child: SvgPicture.asset(
-                                        SVGUtils.kShareIcon,
-                                        height: 20.h,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              Text(
+                                viewModel.viewCount == 1 ? "${viewModel.viewCount.toString()} ${"views".tr()}" : "${viewModel.viewCount.toString()} ${"views".tr()}",
+                                style: TextStyle(color: Colors.white, fontSize: 12.sp),
                               )
                             ],
                           ),
-                        ),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 10.w,
+                          SizedBox(
+                            height: 20.h,
+                          ),
+
+                          ///TODO: Add audio & video widget progress
+                          if (viewModel.nft.hashtags.isNotEmpty)
+                            Wrap(
+                              spacing: 10.w,
+                              children: List.generate(
+                                viewModel.hashtagList.length,
+                                (index) => SizedBox(
+                                  child: DetectableText(
+                                    text: "#${viewModel.hashtagList[index]}",
+                                    detectionRegExp: detectionRegExp()!,
+                                    detectedStyle: TextStyle(
+                                      fontSize: 12.sp,
+                                      color: EaselAppTheme.kHashtagColor,
+                                    ),
+                                    basicStyle: TextStyle(
+                                      fontSize: 20.sp,
+                                    ),
+                                    onTap: (tappedText) {},
+                                  ),
+                                ),
+                              ),
                             ),
-                            Column(
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          ReadMoreText(
+                            viewModel.nft.description,
+                            trimExpandedText: LocaleKeys.collapse.tr(),
+                            trimCollapsedText: LocaleKeys.read_more.tr(),
+                            moreStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: EaselAppTheme.kHashtagColor),
+                            lessStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: EaselAppTheme.kHashtagColor),
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                if (viewModel.nft.type.toNftTypeEnum() != NftType.TYPE_ITEM)
-                                  Text(
-                                    "${ibcEnumCoins.toIBCCoinsEnum().getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.toIBCCoinsEnum().getAbbrev()}",
-                                    style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
-                                  )
+                                Expanded(
+                                  flex: 85,
+                                  child: Column(
+                                    children: [
+                                      TabField(
+                                        name: LocaleKeys.ownership.tr(),
+                                        icon: kTrophyIcon,
+                                        nft: viewModel.nft,
+                                        owner: viewModel.owner,
+                                        nftOwnershipHistoryList: const [],
+                                        isExpanded: viewModel.isOwnershipExpanded,
+                                        onChangeTab: viewModel.onChangeTab,
+                                      ),
+                                      SizedBox(height: 10.h),
+                                      TabField(
+                                        name: LocaleKeys.nft_details.tr(),
+                                        icon: kDetailIcon,
+                                        nft: viewModel.nft,
+                                        owner: viewModel.owner,
+                                        nftOwnershipHistoryList: const [],
+                                        isExpanded: viewModel.isDetailsExpanded,
+                                        onChangeTab: viewModel.onChangeTab,
+                                      ),
+                                      SizedBox(height: 10.h),
+                                      if (viewModel.nft.type.toNftTypeEnum() != NftType.TYPE_RECIPE)
+                                        TabField(
+                                          name: LocaleKeys.history.tr(),
+                                          icon: kHistoryIcon,
+                                          nft: viewModel.nft,
+                                          owner: viewModel.nft.owner,
+                                          nftOwnershipHistoryList: viewModel.nftOwnershipHistoryList,
+                                          isExpanded: viewModel.isHistoryExpanded,
+                                          onChangeTab: viewModel.onChangeTab,
+                                        ),
+                                      SizedBox(height: 30.h),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 15,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      SizedBox(
+                                        height: 12.h,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          ///TODO
+                                        },
+                                        child: SvgPicture.asset(
+                                          SVGUtils.kQrIcon,
+                                          height: 20.h,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 12.h,
+                                      ),
+                                      if (viewModel.nft.assetType.toAssetTypeEnum() == AssetType.Image && Platform.isAndroid)
+                                        GestureDetector(
+                                          onTap: () {
+                                            final WallpaperScreen wallpaperScreen = WallpaperScreen(nft: viewModel.nft.url, context: context);
+                                            wallpaperScreen.show();
+                                          },
+                                          child: SvgPicture.asset(
+                                            SVGUtils.kCreationIcon,
+                                            height: 20.h,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      SizedBox(height: 12.h),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          // final Size size = MediaQuery.of(context).size;
+                                          // viewModel.shareNFTLink(size: size);
+                                        },
+                                        child: SvgPicture.asset(
+                                          SVGUtils.kShareIcon,
+                                          height: 20.h,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
-                          ],
-                        )
-                      ],
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 10.w,
+                              ),
+                              Column(
+                                children: [
+                                  if (viewModel.nft.type.toNftTypeEnum() != NftType.TYPE_ITEM)
+                                    Text(
+                                      "${ibcEnumCoins.toIBCCoinsEnum().getCoinWithProperDenomination(viewModel.nft.price)} ${ibcEnumCoins.toIBCCoinsEnum().getAbbrev()}",
+                                      style: TextStyle(color: Colors.white, fontSize: 15.sp, fontWeight: FontWeight.bold),
+                                    )
+                                ],
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),

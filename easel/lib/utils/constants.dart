@@ -300,3 +300,4 @@ const kViewOnPylonsTextKey = "view_on_pylons";
 const kDraftTileKey = "draft_list_tile_key";
 const kKeyboardArrowUpKey = "keyboard_arrow_up_key";
 const kKeyboardArrowDownKey = "keyboard_arrow_down_key";
+const kImageWidgetKey = "image_widget_key";
