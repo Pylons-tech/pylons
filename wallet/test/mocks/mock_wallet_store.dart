@@ -40,6 +40,7 @@ class MockWalletStore implements WalletsStore {
     throw UnimplementedError();
   }
 
+
   @override
   Future<SdkIpcResponse> fulfillTrade(Map json) {
     // TODO: implement fulfillTrade

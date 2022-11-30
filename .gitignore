@@ -33,5 +33,5 @@ big-dipper/settings.json
 debug
 
 *.env
-_build/
+wallet/android/app/google-services.json
 mytestnet/
