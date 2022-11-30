@@ -13,8 +13,8 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../extensions/size_extension.dart';
+import '../mock/mock_constants.dart';
 import '../mock/mock_repository.dart';
-import '../mocks/mock_constants.dart';
 
 void main() {
   GetIt.I.registerLazySingleton<Repository>(() => MockRepositoryImp());

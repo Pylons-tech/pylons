@@ -10,8 +10,8 @@ import 'package:provider/provider.dart';
 
 import '../extensions/size_extension.dart';
 import '../mock/creator_hub_viewmodel.mocks.dart';
+import '../mock/mock_constants.dart';
 import '../mock/mock_repository.dart';
-import '../mocks/mock_constants.dart';
 
 void main() {
   final creatorHubViewModel = MockCreatorHubViewModel();
@@ -55,7 +55,7 @@ void main() {
                 create: (ctx) => GetIt.I.get<CreatorHubViewModel>(),
                 builder: (context, _) {
                   return DraftListTile(
-                    nft: MOCK_NFT,
+                    nft: MOCK_NFT_FREE,
                     viewModel: GetIt.I.get<CreatorHubViewModel>(),
                   );
                 },

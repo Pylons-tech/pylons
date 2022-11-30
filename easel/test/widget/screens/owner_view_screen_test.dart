@@ -56,5 +56,85 @@ void main() {
       await tester.pump();
       expect(viewModel.collapsed, true);
     });
+
+    testWidgets("do Image nft is showing to user or not", (tester) async {
+      when(viewModel.nft).thenAnswer((realInvocation) => MOCK_PRICED_NFT);
+      when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
+      when(viewModel.collapsed).thenAnswer((realInvocation) => true);
+      await tester.testAppForWidgetTesting(
+        OwnerView(
+          nft: MOCK_PRICED_NFT,
+        ),
+      );
+      await tester.pump();
+      final imageWidget = find.byKey(const Key(kImageWidgetKey));
+      expect(imageWidget, findsOneWidget);
+    });
+
+    testWidgets("can user tap on wallpaper icon to set wallpaper", (tester) async {
+      when(viewModel.nft).thenAnswer((realInvocation) => MOCK_PRICED_NFT);
+      when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
+      when(viewModel.collapsed).thenAnswer((realInvocation) => false);
+      when(viewModel.viewCount).thenAnswer((realInvocation) => 4);
+      when(viewModel.owner).thenAnswer((realInvocation) => MOCK_PRICED_NFT.owner);
+      when(viewModel.isOwnershipExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isHistoryExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isDetailsExpanded).thenAnswer((realInvocation) => false);
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      await tester.testAppForWidgetTesting(
+        OwnerView(
+          nft: MOCK_PRICED_NFT,
+        ),
+      );
+      await tester.pump();
+      final wallpaperButtonKey = find.byKey(const Key(kWallpaperButtonKey));
+      final wallpaperScreenKey = find.byKey(const Key(kWallpaperScreenKey));
+      await tester.tap(wallpaperButtonKey);
+      await tester.pump();
+      expect(wallpaperScreenKey, findsOneWidget);
+      debugDefaultTargetPlatformOverride = null;
+    });
+
+    testWidgets("can user set wallpaper on iOS", (tester) async {
+      when(viewModel.nft).thenAnswer((realInvocation) => MOCK_PRICED_NFT);
+      when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
+      when(viewModel.collapsed).thenAnswer((realInvocation) => false);
+      when(viewModel.viewCount).thenAnswer((realInvocation) => 4);
+      when(viewModel.owner).thenAnswer((realInvocation) => MOCK_PRICED_NFT.owner);
+      when(viewModel.isOwnershipExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isHistoryExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isDetailsExpanded).thenAnswer((realInvocation) => false);
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      await tester.testAppForWidgetTesting(
+        OwnerView(
+          nft: MOCK_PRICED_NFT,
+        ),
+      );
+      await tester.pump();
+      final wallpaperButtonKey = find.byKey(const Key(kWallpaperButtonKey));
+      expect(wallpaperButtonKey, findsNothing);
+      debugDefaultTargetPlatformOverride = null;
+    });
+
+    testWidgets("can user set wallpaper on Android", (tester) async {
+      when(viewModel.nft).thenAnswer((realInvocation) => MOCK_PRICED_NFT);
+      when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
+      when(viewModel.collapsed).thenAnswer((realInvocation) => false);
+      when(viewModel.viewCount).thenAnswer((realInvocation) => 4);
+      when(viewModel.owner).thenAnswer((realInvocation) => MOCK_PRICED_NFT.owner);
+      when(viewModel.isOwnershipExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isHistoryExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isDetailsExpanded).thenAnswer((realInvocation) => false);
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      await tester.testAppForWidgetTesting(
+        OwnerView(
+          nft: MOCK_PRICED_NFT,
+        ),
+      );
+      await tester.pump();
+      final wallpaperButtonKey = find.byKey(const Key(kWallpaperButtonKey));
+      expect(wallpaperButtonKey, findsOneWidget);
+      debugDefaultTargetPlatformOverride = null;
+    });
   });
 }

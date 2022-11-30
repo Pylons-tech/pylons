@@ -301,3 +301,5 @@ const kDraftTileKey = "draft_list_tile_key";
 const kKeyboardArrowUpKey = "keyboard_arrow_up_key";
 const kKeyboardArrowDownKey = "keyboard_arrow_down_key";
 const kImageWidgetKey = "image_widget_key";
+const kWallpaperButtonKey = "wallpaper_button_key";
+const kWallpaperScreenKey = "wallpaper_screen_key";
