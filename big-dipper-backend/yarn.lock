@@ -4210,9 +4210,9 @@ react-pose@^4.0.10:
     popmotion-pose "^3.4.10"
     tslib "^1.10.0"
 
-react-responsive-pagination@^1.8.0:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/react-responsive-pagination/-/react-responsive-pagination-1.8.0.tgz#adb4f5536b24041767f5c7a8998c73a22edfa895"
+react-responsive-pagination@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/react-responsive-pagination/-/react-responsive-pagination-1.10.0.tgz#d5d4d333fa876549415515f37161541c622c383e"
   dependencies:
     prop-types "^15.8.1"
     resize-observer-polyfill "^1.5.1"
