@@ -268,7 +268,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           BuyNFTButton(
                             onTapped: () async {
                               if (viewModel.accountPublicInfo == null) {
-                                "create_an_account_first".tr().show();
+                                LocaleKeys.create_an_account_first.tr().show();
                                 Navigator.of(context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
                                 return;
                               }
@@ -627,7 +627,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       key: const Key(kExpandedBuyButtonKeyValue),
                       onTapped: () async {
                         if (viewModel.accountPublicInfo == null) {
-                          "create_an_account_first".tr().show();
+                          LocaleKeys.create_an_account_first.tr().show();
                           Navigator.of(context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
                           return;
                         }
