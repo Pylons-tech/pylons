@@ -148,7 +148,7 @@ class NFTsListTile extends StatelessWidget {
               child: CachedNetworkImage(
                 imageUrl: publishedNFT.assetType.toAssetTypeEnum() == AssetType.Image ? publishedNFT.url.changeDomain() : publishedNFT.thumbnailUrl.changeDomain(),
                 fit: BoxFit.fill,
-                color: Colors.transparent,
+                color: EaselAppTheme.kTransparent,
                 colorBlendMode: BlendMode.clear,
                 placeholder: (context, url) => Shimmer(
                   color: EaselAppTheme.cardBackground,

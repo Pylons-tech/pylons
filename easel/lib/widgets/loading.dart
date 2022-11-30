@@ -5,6 +5,8 @@ import 'package:easel_flutter/utils/image_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../utils/easel_app_theme.dart';
+
 class Loading {
   Loading();
 
@@ -25,11 +27,12 @@ class Loading {
         onWillPop: () async => false,
         child: AlertDialog(
           elevation: 0,
-          backgroundColor: Colors.transparent,
+          backgroundColor: EaselAppTheme.kTransparent,
           content: SizedBox(
-              height: 100.h,
-              width: 100.h,
-              child: Image.asset(ImageUtil.LOADING_GIF)),
+            height: 100.h,
+            width: 100.h,
+            child: Image.asset(ImageUtil.LOADING_GIF),
+          ),
         ),
       ),
     );
