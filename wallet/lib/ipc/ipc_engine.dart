@@ -263,7 +263,8 @@ class IPCEngine {
       HandlerFactory.TX_CREATE_COOKBOOK,
       HandlerFactory.TX_CREATE_RECIPE,
       HandlerFactory.SHOW_STRIPE,
-      HandlerFactory.GET_RECIPES
+      HandlerFactory.GET_RECIPES,
+      HandlerFactory.GET_ITEM_BY_ID,
     ];
 
     if (whiteListedTransactions.contains(sdkIPCMessage.action)) {
