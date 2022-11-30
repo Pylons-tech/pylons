@@ -1,3 +1,4 @@
+import 'package:easel_flutter/generated/locale_keys.g.dart';
 import 'package:easel_flutter/main.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_screen.dart';
@@ -36,9 +37,16 @@ void main() {
                     nftsList: [MOCK_PRICED_NFT],
                     onEmptyList: (BuildContext context) {
                       return Text(
-                        "no_nft_created".tr(),
-                        style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
+                        LocaleKeys.no_nft_created.tr(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: EaselAppTheme.kLightGrey,
+                          fontSize: isTablet ? 12.sp : 15.sp,
+                        ),
                       );
+                    },
+                    calculateBannerPrice: ({required String currency, required String price}) {
+                      return price;
                     },
                   );
                 },

@@ -295,7 +295,7 @@
   "no_profile_found": "Tidak ada profil yang ditemukan di dompet",
   "insufficient_balance_msg": "Anda tidak memiliki cukup Pylon untuk menyelesaikan transaksi ini. Silakan klik di bawah ini untuk Menambahkan Tiang dan coba lagi.",
   "insufficient_balance": "Saldo tidak mencukupi",
-  "add_pylons": "Menambahkan points",
+  "add_pylons": "Menambahkan credits",
   "bonus_fifty": "(+50 bonus)",
   "bonus_hundred": "(+100 bonus)",
   "add_fund": "Tambahkan dana",
@@ -368,5 +368,6 @@
   "available": "tersedia",
   "ea": "ea",
   "maintenance_mode_message": "Kami mengalami masalah teknis dan untuk sementara memulai mode pemeliharaan untuk pemecahan masalah. Jangan khawatir, koleksi Anda aman. Namun, Anda tidak dapat memulai transaksi on-chain sampai kami menyelesaikan masalah dan memulihkan fungsionalitas normal.",
-  "maintenance_mode_header": "Mode Pemeliharaan"
+  "maintenance_mode_header": "Mode Pemeliharaan",
+  "invalid_mnemonic" : "Mnemonic tidak valid"
 }

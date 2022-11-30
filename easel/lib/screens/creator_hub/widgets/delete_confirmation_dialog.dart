@@ -29,9 +29,8 @@ class DeleteDialog {
         builder: (_) {
           return Dialog(
             elevation: 0,
-            insetPadding:
-                EdgeInsets.symmetric(horizontal: isTablet ? 45.w : 15.w),
-            backgroundColor: Colors.transparent,
+            insetPadding: EdgeInsets.symmetric(horizontal: isTablet ? 45.w : 15.w),
+            backgroundColor: EaselAppTheme.kTransparent,
             child: ClipPath(
               clipper: DialogClipper(),
               child: Container(

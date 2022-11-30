@@ -32,3 +32,5 @@ big-dipper/settings.json
 debug
 
 *.env
+_build/
+mytestnet/
