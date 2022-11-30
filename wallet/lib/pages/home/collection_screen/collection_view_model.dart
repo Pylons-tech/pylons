@@ -87,7 +87,10 @@ class CollectionViewModel extends ChangeNotifier {
       if (items.isNotEmpty) {
         await Future.wait(items.map((item) async {
           final nft = await NFT.fromItem(item);
-          assets.add(nft);
+          if(nft != null){
+            assets.add(nft);
+          }
+          
         }).toList());
       }
 

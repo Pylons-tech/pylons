@@ -221,6 +221,9 @@ class IPCEngine {
       );
     } else {
       final item = await NFT.fromItem(recipeResult);
+      if (item == null) {
+        return;
+      }
       await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: item);
 
       walletsStore.setStateUpdatedFlag(flag: true);
@@ -260,7 +263,8 @@ class IPCEngine {
       HandlerFactory.TX_CREATE_COOKBOOK,
       HandlerFactory.TX_CREATE_RECIPE,
       HandlerFactory.SHOW_STRIPE,
-      HandlerFactory.GET_RECIPES
+      HandlerFactory.GET_RECIPES,
+      HandlerFactory.GET_ITEM_BY_ID,
     ];
 
     if (whiteListedTransactions.contains(sdkIPCMessage.action)) {

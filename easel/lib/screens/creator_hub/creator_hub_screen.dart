@@ -147,6 +147,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
+                  height: 40.h,
                   alignment: Alignment.centerRight,
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: Row(
@@ -493,8 +494,17 @@ class NFTsViewBuilder extends StatelessWidget {
 class BuildGridView extends StatelessWidget {
   final List<NFT> nftsList;
   final WidgetBuilder onEmptyList;
+  final String Function({
+    required String price,
+    required String currency,
+  }) calculateBannerPrice;
 
-  const BuildGridView({Key? key, required this.nftsList, required this.onEmptyList}) : super(key: key);
+  const BuildGridView({
+    Key? key,
+    required this.nftsList,
+    required this.onEmptyList,
+    required this.calculateBannerPrice,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -519,7 +529,7 @@ class BuildGridView extends StatelessWidget {
                 key: const Key(kPriceBannerKey),
                 color: EaselAppTheme.kDarkGreen,
                 location: BannerLocation.topEnd,
-                message: "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)} ${nft.ibcCoins.getAbbrev()}",
+                message: calculateBannerPrice(price: nft.price, currency: nft.ibcCoins),
                 child: NftGridViewItem(
                   nft: nft,
                 ),
@@ -553,13 +563,14 @@ class BuildListView extends StatelessWidget {
       shrinkWrap: true,
       itemCount: nftsList.length,
       itemBuilder: (context, index) {
+        final nft = nftsList[index];
         if (viewModel.selectedCollectionType == CollectionType.draft) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: DraftListTile(nft: nftsList[index], viewModel: viewModel),
+            child: DraftListTile(nft: nft, viewModel: viewModel),
           );
         } else {
-          return NFTsListTile(publishedNFT: nftsList[index]);
+          return NFTsListTile(publishedNFT: nft);
         }
       },
     );
