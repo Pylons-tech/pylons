@@ -10,4 +10,9 @@ class FavoritesModel {
   
 
   FavoritesModel({required this.id, required this.cookbookId, required this.type, required this.dateTime});
+
+  @override
+  String toString() {
+    return 'FavoritesModel{dateTime: $dateTime, id: $id, cookbookId: $cookbookId, type: $type}';
+  }
 }

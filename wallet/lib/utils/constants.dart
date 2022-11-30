@@ -64,6 +64,7 @@ class AppColors {
   static Color kTransactionRed = const Color.fromRGBO(239, 68, 33, 1);
   static Color k3DBackgroundColor = Colors.grey.shade200;
   static Color kGreyColor = const Color.fromRGBO(141, 140, 140, 1);
+  static Color kTransparentColor = Colors.transparent;
 }
 
 const double kIconSize = 24.0;
@@ -409,6 +410,10 @@ const kOwnerViewDrawerKeyValue = "ownerview_header";
 const kOwnerViewBottomSheetKeyValue = "bottom_sheet";
 const kKeyboardUpButtonKeyValue = "keyboard_up_button";
 const kExpandedBuyButtonKeyValue = "expanded_buy_button";
+const kCreationTabButtonKey = "creation_tab_button_key";
+const kCollectionGridViewKey = "collection_gridview_key";
+const kPurchasesTabButtonKey = "purchases_tab_button_key";
+const kFavoritesTabButtonKey = "favorites_tab_button_key";
 const kCheckoutDialogKey = "checkout_dialog_key";
 const kPurchaseItemBottomSheetKey = "purchase_item_bottom_sheet";
 const kCloseBottomSheetKey = "close_bottom_sheet_key";

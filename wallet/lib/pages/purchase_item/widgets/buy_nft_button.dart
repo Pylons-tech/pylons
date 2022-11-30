@@ -83,7 +83,12 @@ class BuyNFTButton extends StatelessWidget {
                   child: AutoSizeText(
                     LocaleKeys.buy_now.tr(),
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 12.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.sp,
+                      fontFamily: kUniversalFontFamily,
+                      fontWeight: FontWeight.w700,
+                    ),
                     maxLines: 1,
                   ),
                 ),
@@ -97,18 +102,34 @@ class BuyNFTButton extends StatelessWidget {
               children: [
                 RichText(
                   text: TextSpan(
-                      text: "\$${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}",
-                      style: TextStyle(color: AppColors.kWhite, fontSize: 10.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
-                      children: [
-                        TextSpan(
-                          text: " ${LocaleKeys.ea.tr()}.",
-                          style: TextStyle(color: AppColors.kWhite, fontSize: 10.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
-                        )
-                      ]),
+                    text: "\$${nft.ibcCoins.getCoinValueBasedOnDollar(nft.price)}",
+                    style: TextStyle(
+                      color: AppColors.kWhite,
+                      fontSize: 10.sp,
+                      fontFamily: kUniversalFontFamily,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: " ${LocaleKeys.ea.tr()}.",
+                        style: TextStyle(
+                          color: AppColors.kWhite,
+                          fontSize: 10.sp,
+                          fontFamily: kUniversalFontFamily,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 Text(
                   "${nft.quantity - nft.amountMinted} ${LocaleKeys.available.tr()}",
-                  style: TextStyle(color: AppColors.kGreyLight, fontSize: 9.sp, fontWeight: FontWeight.normal, fontFamily: kUniversalFontFamily),
+                  style: TextStyle(
+                    color: AppColors.kGreyLight,
+                    fontSize: 9.sp,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: kUniversalFontFamily,
+                  ),
                 ),
               ],
             ),
