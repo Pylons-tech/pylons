@@ -66,6 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int coins = 0;
   int shards = 0;
   int curHp = 0;
+  int trophiesWon = 0;
   Int64 pylons = Int64.ZERO;
 
   @override
@@ -88,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-            Text("HP: $curHp/20 | Sword level $swordLv | $coins coins | $shards shards",
+            Text("HP: $curHp/20 | Sword level $swordLv | $coins coins | $shards shards\n$trophiesWon trophies won",
                 style: const TextStyle(fontSize: 18)),
             const Divider(),
             Text(flavorText, style: const TextStyle(fontSize: 18)),
@@ -193,15 +194,25 @@ class _MyHomePageState extends State<MyHomePage> {
       print("(ok!)");
     }
     var lastUpdate = Int64.MIN_VALUE;
+    var trophies = 0;
     if (character == null || curHp < 1) {
       for (var item in prf.items) {
-        if (item.getString("entityType") == "character" && !(item.getInt("currentHp")?.isZero ?? true) ||
-            !(item.getInt("currentHp")?.isNegative ?? true)) {
-          if (item.getLastUpdate() > lastUpdate) {
-            setState(() {
-              character = item;
-            });
-            lastUpdate = item.getLastUpdate();
+        switch (item.getString("entityType")) {
+          case "character": {
+            if (!(item.getInt("currentHp")?.isZero ?? true) ||
+                !(item.getInt("currentHp")?.isNegative ?? true)) {
+              if (item.getLastUpdate() > lastUpdate) {
+                setState(() {
+                  character = item;
+                });
+                lastUpdate = item.getLastUpdate();
+              }
+            }
+            break;
+          }
+          case "trophy": {
+            trophies++;
+            break;
           }
         }
       }
@@ -213,6 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
       coins = character?.getInt("coins")?.toInt() ?? 0;
       shards = character?.getInt("shards")?.toInt() ?? 0;
       curHp = character?.getInt("currentHp")?.toInt() ?? 0;
+      trophiesWon = trophies;
       flavorText = "Got character!";
       showTopLevelMenu = tlmDefault;
     });
