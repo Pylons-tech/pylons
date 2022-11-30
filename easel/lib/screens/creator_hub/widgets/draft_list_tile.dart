@@ -10,7 +10,6 @@ import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/enums.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
-import 'package:easel_flutter/utils/route_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -55,7 +54,7 @@ class _DraftListTileState extends State<DraftListTile> {
         color: EaselAppTheme.kDarkGrey02,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: EaselAppTheme.kBlack.withOpacity(0.3),
             offset: const Offset(0.0, 1.0),
             blurRadius: 4.0,
           ),
@@ -109,22 +108,17 @@ class _DraftListTileState extends State<DraftListTile> {
     );
   }
 
-  void startPublishingFlowAgainPressed() {
-    widget.viewModel.saveNFT(nft: widget.nft);
-    Navigator.of(context).pushNamed(RouteUtil.kRouteHome);
-  }
-
   Widget getDraftCard() {
     return InkWell(
       onTap: () {
-        widget.viewModel.startPublishingFlowAgain(startPublishingFlowAgainPressed: startPublishingFlowAgainPressed);
+        widget.viewModel.startPublishingFlowAgain(widget.nft);
       },
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: EaselAppTheme.kWhite,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: EaselAppTheme.kBlack.withOpacity(0.3),
               offset: const Offset(0.0, 1.0),
               blurRadius: 4.0,
             ),
@@ -143,7 +137,7 @@ class _DraftListTileState extends State<DraftListTile> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "nft_name".tr(args: [if (widget.nft.name.isNotEmpty) widget.nft.name else 'Nft Name']),
+                      LocaleKeys.nft_name.tr(args: [if (widget.nft.name.isNotEmpty) widget.nft.name else 'Nft Name']),
                       style: titleStyle.copyWith(fontSize: isTablet ? 13.sp : 18.sp),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -245,7 +239,7 @@ class _DraftListTileState extends State<DraftListTile> {
               child: CachedNetworkImage(
                 imageUrl: getThumbnailUrl(),
                 fit: BoxFit.fill,
-                color: Colors.transparent,
+                color: EaselAppTheme.kTransparent,
                 colorBlendMode: BlendMode.clear,
                 placeholder: (context, _) => getPlaceHolder(),
                 errorWidget: (context, _, __) {

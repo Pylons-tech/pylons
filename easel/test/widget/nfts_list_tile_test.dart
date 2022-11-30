@@ -95,10 +95,6 @@ void main() {
       testWidgets(
         "can user tap on whole nft tile",
         (tester) async {
-          bool clicked = false;
-          when(viewModel.openOwnerView(openOwnerViewPressed: anyNamed("openOwnerViewPressed"))).thenAnswer((realInvocation) {
-            clicked = true;
-          });
           await tester.setScreenSize();
           await tester.testAppForWidgetTesting(
             Scaffold(
@@ -116,7 +112,7 @@ void main() {
           await tester.pump();
           final nftTile = find.byKey(const Key(kNftListTileKey));
           await tester.tap(nftTile);
-          expect(clicked, true);
+          verify(viewModel.openOwnerView(MOCK_NFT)).called(1);
         },
       );
     },

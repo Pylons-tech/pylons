@@ -1,7 +1,9 @@
+import 'package:easel_flutter/main.dart';
 import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
+import 'package:easel_flutter/utils/route_util.dart';
 import 'package:easel_flutter/widgets/loading.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -192,11 +194,12 @@ class CreatorHubViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void startPublishingFlowAgain({required VoidCallback startPublishingFlowAgainPressed}) {
-    startPublishingFlowAgainPressed.call();
+  void startPublishingFlowAgain(NFT nft) {
+    saveNFT(nft: nft);
+    Navigator.of(navigatorKey.currentState!.context).pushNamed(RouteUtil.kRouteHome);
   }
 
-  void openOwnerView({required VoidCallback openOwnerViewPressed}) {
-    openOwnerViewPressed.call();
+  void openOwnerView(NFT nft) {
+    Navigator.of(navigatorKey.currentState!.context).pushNamed(RouteUtil.kOwnerViewScreen, arguments: nft);
   }
 }

@@ -241,23 +241,18 @@ class MockCreatorHubViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  void startPublishingFlowAgain(
-          {required _i6.VoidCallback? startPublishingFlowAgainPressed}) =>
-      super.noSuchMethod(
+  void startPublishingFlowAgain(_i4.NFT? nft) => super.noSuchMethod(
         Invocation.method(
           #startPublishingFlowAgain,
-          [],
-          {#startPublishingFlowAgainPressed: startPublishingFlowAgainPressed},
+          [nft],
         ),
         returnValueForMissingStub: null,
       );
   @override
-  void openOwnerView({required _i6.VoidCallback? openOwnerViewPressed}) =>
-      super.noSuchMethod(
+  void openOwnerView(_i4.NFT? nft) => super.noSuchMethod(
         Invocation.method(
           #openOwnerView,
-          [],
-          {#openOwnerViewPressed: openOwnerViewPressed},
+          [nft],
         ),
         returnValueForMissingStub: null,
       );

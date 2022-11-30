@@ -131,7 +131,18 @@ Widget moreOptionTile({required String title, required String image, required Vo
       onTap: onPressed,
       child: Row(
         children: [
-          if (isSvg) SvgPicture.asset(image) else Image.asset(image),
+          if (isSvg)
+            SvgPicture.asset(
+              image,
+              height: isTablet ? 20.h : 16.h,
+              fit: BoxFit.fitHeight,
+            )
+          else
+            Image.asset(
+              image,
+              height: isTablet ? 20.h : 16.h,
+              fit: BoxFit.fitHeight,
+            ),
           SizedBox(
             width: 30.w,
           ),

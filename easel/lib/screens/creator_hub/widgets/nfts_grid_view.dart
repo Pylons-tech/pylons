@@ -8,7 +8,6 @@ import 'package:easel_flutter/screens/creator_hub/widgets/published_nfts_bottom_
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
-import 'package:easel_flutter/utils/route_util.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,28 +19,14 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 
 import '../../../main.dart';
 
-class NftGridViewItem extends StatefulWidget {
+class NftGridViewItem extends StatelessWidget {
   const NftGridViewItem({
     Key? key,
     required this.nft,
   }) : super(key: key);
   final NFT nft;
 
-  @override
-  State<NftGridViewItem> createState() => _NftGridViewItemState();
-}
-
-class _NftGridViewItemState extends State<NftGridViewItem> {
   EaselProvider get _easelProvider => GetIt.I.get();
-
-  void startPublishingFlowAgainPressed() {
-    context.read<CreatorHubViewModel>().saveNFT(nft: widget.nft);
-    Navigator.of(navigatorKey.currentState!.context).pushNamed(RouteUtil.kRouteHome);
-  }
-
-  void openOwnerView() {
-    Navigator.of(context).pushNamed(RouteUtil.kOwnerViewScreen, arguments: widget.nft);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,26 +39,26 @@ class _NftGridViewItemState extends State<NftGridViewItem> {
             key: const Key(kGridViewTileNFTKey),
             onTap: () {
               if (context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft) {
-                context.read<CreatorHubViewModel>().startPublishingFlowAgain(startPublishingFlowAgainPressed: startPublishingFlowAgainPressed);
+                context.read<CreatorHubViewModel>().startPublishingFlowAgain(nft);
                 return;
               }
-              context.read<CreatorHubViewModel>().openOwnerView(openOwnerViewPressed: openOwnerView);
+              context.read<CreatorHubViewModel>().openOwnerView(nft);
             },
             child: NftTypeBuilder(
-              onImage: (context) => buildNFTPreview(url: widget.nft.url.changeDomain()),
-              onVideo: (context) => buildNFTPreview(url: widget.nft.thumbnailUrl.changeDomain()),
-              onAudio: (context) => buildNFTPreview(url: widget.nft.thumbnailUrl.changeDomain()),
-              onPdf: (context) => buildNFTPreview(url: widget.nft.thumbnailUrl.changeDomain()),
+              onImage: (context) => buildNFTPreview(url: nft.url.changeDomain()),
+              onVideo: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
+              onAudio: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
+              onPdf: (context) => buildNFTPreview(url: nft.thumbnailUrl.changeDomain()),
               on3D: (context) => IgnorePointer(
                 child: ModelViewer(
-                  src: widget.nft.url.changeDomain(),
+                  src: nft.url.changeDomain(),
                   ar: false,
                   autoRotate: false,
                   backgroundColor: EaselAppTheme.kWhite,
                   cameraControls: false,
                 ),
               ),
-              assetType: widget.nft.assetType.toAssetTypeEnum(),
+              assetType: nft.assetType.toAssetTypeEnum(),
             ),
           ),
         ),
@@ -130,7 +115,7 @@ class _NftGridViewItemState extends State<NftGridViewItem> {
                       if (context.read<CreatorHubViewModel>().selectedCollectionType == CollectionType.draft) {
                         final DraftsBottomSheet draftsBottomSheet = DraftsBottomSheet(
                           buildContext: context,
-                          nft: widget.nft,
+                          nft: nft,
                         );
                         draftsBottomSheet.show();
                         return;
@@ -164,13 +149,13 @@ class _NftGridViewItemState extends State<NftGridViewItem> {
   }
 
   void buildBottomSheet({required BuildContext context}) {
-    final bottomSheet = BuildPublishedNFTsBottomSheet(context: context, nft: widget.nft, easelProvider: _easelProvider);
+    final bottomSheet = BuildPublishedNFTsBottomSheet(context: context, nft: nft, easelProvider: _easelProvider);
 
     bottomSheet.show();
   }
 
   String getNFTIcon() {
-    switch (widget.nft.assetType) {
+    switch (nft.assetType) {
       case kVideoText:
         return SVGUtils.kSvgNftFormatVideo;
       case kAudioText:
@@ -185,7 +170,7 @@ class _NftGridViewItemState extends State<NftGridViewItem> {
   }
 
   String getNFTIconKey() {
-    switch (widget.nft.assetType) {
+    switch (nft.assetType) {
       case kVideoText:
         return kNFTTypeVideoIconKey;
       case kAudioText:

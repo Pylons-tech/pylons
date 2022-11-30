@@ -20,11 +20,7 @@ void main() {
   testWidgets(
     "testing bottom bar on NFT click",
     (tester) async {
-      bool clicked = false;
       when(viewModel.selectedCollectionType).thenAnswer((realInvocation) => CollectionType.draft);
-      when(viewModel.startPublishingFlowAgain(startPublishingFlowAgainPressed: anyNamed("startPublishingFlowAgainPressed"))).thenAnswer((realInvocation) {
-        clicked = true;
-      });
       await tester.setScreenSize();
       await tester.testAppForWidgetTesting(
         Scaffold(
@@ -44,7 +40,7 @@ void main() {
       await tester.ensureVisible(gridViewTile);
       await tester.tap(gridViewTile);
       await tester.pump();
-      expect(clicked, true);
+      verify(viewModel.startPublishingFlowAgain(MOCK_NFT)).called(1);
     },
   );
 }

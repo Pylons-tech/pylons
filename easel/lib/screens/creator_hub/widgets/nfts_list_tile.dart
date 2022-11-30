@@ -44,7 +44,7 @@ class NFTsListTile extends StatelessWidget {
     return InkWell(
       key: const Key(kNftListTileKey),
       onTap: () {
-        context.read<CreatorHubViewModel>().openOwnerView(openOwnerViewPressed: openOwnerView);
+        context.read<CreatorHubViewModel>().openOwnerView(publishedNFT);
       },
       child: DecoratedBox(
         decoration: BoxDecoration(
