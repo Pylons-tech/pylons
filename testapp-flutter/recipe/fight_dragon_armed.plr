@@ -1,5 +1,5 @@
 {
-    #boilerplate v0.0.5 true,
+    #boilerplate v0.0.6 true,
     #id_name RecipeTestAppFightDragonArmed RecipeTestAppFightDragonArmed,
     "description": "Fights a dragon! With slicing!",
     #no_coin_input,
@@ -7,7 +7,28 @@
         #character_input_alive_check_sword_level 2 9999999
     ],
     "entries": {
-        #no_coin_or_item_output,
+        #no_coin_output,
+		"itemOutputs": [
+            {
+                "id": "trophy",
+                "doubles": [],
+                "longs": [],
+                "strings": [
+					{
+						"key": "entityName",
+						"value": "Dragon-Slayer Trophy"
+					},
+                    {
+                        "key": "entityType",
+                        "value": "trophy"
+                    }
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+        ],
         "itemModifyOutputs": [
             {
                 "id": "character",
