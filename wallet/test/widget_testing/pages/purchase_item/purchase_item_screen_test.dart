@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
@@ -14,16 +15,14 @@ import '../../../mocks/mock_wallet_store.dart';
 import '../../../mocks/purchase_item_view_model.mocks.dart';
 import '../../extension/size_extension.dart';
 
-void main(){
+void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   final WalletsStore walletStore = MockWalletStore();
   final PurchaseItemViewModel viewModel = MockPurchaseItemViewModel();
   GetIt.I.registerLazySingleton<WalletsStore>(() => walletStore);
   GetIt.I.registerLazySingleton<PurchaseItemViewModel>(() => viewModel);
 
-
   testWidgets("Purchase Item Screen Bottom Sheet Visibility Test", (tester) async {
-
     when(viewModel.collapsed).thenAnswer((realInvocation) => false);
     when(viewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_FREE_IMAGE);
     when(viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid)).thenAnswer((realInvocation) => true);

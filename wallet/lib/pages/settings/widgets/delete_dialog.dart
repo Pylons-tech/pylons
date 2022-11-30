@@ -13,7 +13,12 @@ import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../../generated/locale_keys.g.dart';
 
-TextStyle kDeleteHeaderTextStyle = TextStyle(fontSize: 14.sp, fontFamily: 'UniversalSans', color: AppColors.kWhite, fontWeight: FontWeight.w500);
+TextStyle kDeleteHeaderTextStyle = TextStyle(
+  fontSize: 14.sp,
+  fontFamily: 'UniversalSans',
+  color: AppColors.kWhite,
+  fontWeight: FontWeight.w500,
+);
 
 class DeleteDialog {
   final BuildContext context;
@@ -87,7 +92,9 @@ class DeleteDialog {
                                 navigator.pop();
                                 return;
                               }
-                              await GetIt.I.get<Repository>().saveNetworkEnvironmentPreference(networkEnvironment: selectedEnvResponse.getOrElse(() => ''));
+                              await GetIt.I.get<Repository>().saveNetworkEnvironmentPreference(
+                                    networkEnvironment: selectedEnvResponse.getOrElse(() => ''),
+                                  );
                               navigator.pushNamedAndRemoveUntil(RouteUtil.ROUTE_ONBOARDING, (route) => false);
                             },
                           ),
@@ -96,7 +103,11 @@ class DeleteDialog {
                           width: 15.w,
                         ),
                         Expanded(
-                          child: buildButton(title: "no", bgColor: AppColors.kWhite.withOpacity(0.3), onPressed: Navigator.of(context).pop),
+                          child: buildButton(
+                            title: "no",
+                            bgColor: AppColors.kWhite.withOpacity(0.3),
+                            onPressed: Navigator.of(context).pop,
+                          ),
                         ),
                       ],
                     ),

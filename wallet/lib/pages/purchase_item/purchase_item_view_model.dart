@@ -382,7 +382,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     }
   }
 
-  void addToFavAndUpdateView({required String cookBookID,required String recipeId}){
+  void addToFavAndUpdateView({required String cookBookID, required String recipeId}) {
     final favoriteModel = FavoritesModel(
       id: recipeId,
       cookbookId: cookBookID,
@@ -393,7 +393,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     GetIt.I.get<FavoritesChangeNotifier>().addToFavorites(favoritesModel: favoriteModel);
   }
 
-  void removeFromFavAndUpdateView({required String recipeId}){
+  void removeFromFavAndUpdateView({required String recipeId}) {
     GetIt.I.get<FavoritesChangeNotifier>().removeFromFavorites(recipeId: recipeId);
   }
 
@@ -507,7 +507,10 @@ class PurchaseItemViewModel extends ChangeNotifier {
     });
   }
 
-  Future<Either<String, bool>> shouldShowSwipeToBuy({required String selectedDenom, required double requiredAmount}) async {
+  Future<Either<String, bool>> shouldShowSwipeToBuy({
+    required String selectedDenom,
+    required double requiredAmount,
+  }) async {
     final walletAddress = accountPublicInfo.publicAddress;
     final balancesEither = await repository.getBalance(walletAddress);
 
@@ -523,7 +526,12 @@ class PurchaseItemViewModel extends ChangeNotifier {
       return const Right(true);
     }
 
-    final mappedBalances = balancesEither.getOrElse(() => []).where((element) => element.denom == selectedDenom).toList();
+    final mappedBalances = balancesEither
+        .getOrElse(() => [])
+        .where(
+          (element) => element.denom == selectedDenom,
+        )
+        .toList();
     if (mappedBalances.isEmpty) {
       return const Right(false);
     }

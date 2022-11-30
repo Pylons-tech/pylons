@@ -273,7 +273,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     }
   }
 
-  void addToFavAndUpdateView({required String cookBookID,required String recipeId}){
+  void addToFavAndUpdateView({required String cookBookID, required String recipeId}) {
     final favoriteModel = FavoritesModel(
       id: recipeId,
       cookbookId: cookBookID,
@@ -284,7 +284,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     GetIt.I.get<FavoritesChangeNotifier>().addToFavorites(favoritesModel: favoriteModel);
   }
 
-  void removeFromFavAndUpdateView({required String recipeId}){
+  void removeFromFavAndUpdateView({required String recipeId}) {
     GetIt.I.get<FavoritesChangeNotifier>().removeFromFavorites(recipeId: recipeId);
   }
 

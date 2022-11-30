@@ -73,9 +73,13 @@ final sl = GetIt.instance;
 /// This method is used for initializing the dependencies
 Future<void> init() async {
   /// Services
-  sl.registerLazySingleton<InternetConnectionChecker>(() => InternetConnectionChecker.createInstance(checkTimeout: const Duration(seconds: 20)));
+  sl.registerLazySingleton<InternetConnectionChecker>(
+    () => InternetConnectionChecker.createInstance(checkTimeout: const Duration(seconds: 20)),
+  );
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
-  sl.registerLazySingleton<IPCEngine>(() => IPCEngine(repository: sl(), walletsStore: sl(), accountProvider: sl<AccountProvider>()));
+  sl.registerLazySingleton<IPCEngine>(
+    () => IPCEngine(repository: sl(), walletsStore: sl(), accountProvider: sl<AccountProvider>()),
+  );
   sl.registerFactory<AudioPlayerHelper>(() => AudioPlayerHelperImpl(sl()));
   sl.registerFactory<VideoPlayerHelper>(() => VideoPlayerHelperImp(sl()));
   sl.registerFactory<ThumbnailHelper>(() => ThumbnailHelperImp());
@@ -108,7 +112,9 @@ Future<void> init() async {
   sl.registerLazySingleton<SharedPrefsPlainDataStore>(() => SharedPrefsPlainDataStore());
   sl.registerLazySingleton<NoOpTransactionSummaryUI>(() => NoOpTransactionSummaryUI());
   sl.registerLazySingleton<CustomTransactionSigner>(() => CustomTransactionSigner(sl.get<BaseEnv>().networkInfo));
-  sl.registerLazySingleton<CustomTransactionBroadcasterImp>(() => CustomTransactionBroadcasterImp(sl.get<BaseEnv>().networkInfo));
+  sl.registerLazySingleton<CustomTransactionBroadcasterImp>(
+    () => CustomTransactionBroadcasterImp(sl.get<BaseEnv>().networkInfo),
+  );
   sl.registerLazySingleton(() => FirebaseCrashlytics.instance);
   sl.registerLazySingleton<AlanAccountDerivator>(() => AlanAccountDerivator());
   sl.registerLazySingleton<FirebaseDynamicLinks>(() => FirebaseDynamicLinks.instance);
@@ -155,7 +161,13 @@ Future<void> init() async {
 
   /// Data Sources
   sl.registerLazySingleton<LocalDataSource>(
-    () => LocalDataSourceImp(picker: sl(), sharedPreferences: sl(), flutterSecureStorage: sl(), permissionService: sl(), database: sl()),
+    () => LocalDataSourceImp(
+      picker: sl(),
+      sharedPreferences: sl(),
+      flutterSecureStorage: sl(),
+      permissionService: sl(),
+      database: sl(),
+    ),
   );
 
   sl.registerLazySingleton<PermissionService>(
@@ -191,12 +203,27 @@ Future<void> init() async {
 
   /// Repository
   sl.registerLazySingleton<Repository>(
-    () =>
-        RepositoryImp(networkInfo: sl(), queryHelper: sl(), remoteDataStore: sl(), localDataSource: sl(), localAuthHelper: sl(), googleDriveApi: sl(), iCloudDriverApi: sl(), crashlyticsHelper: sl()),
+    () => RepositoryImp(
+      networkInfo: sl(),
+      queryHelper: sl(),
+      remoteDataStore: sl(),
+      localDataSource: sl(),
+      localAuthHelper: sl(),
+      googleDriveApi: sl(),
+      iCloudDriverApi: sl(),
+      crashlyticsHelper: sl(),
+    ),
   );
 
   /// ViewModels
-  sl.registerLazySingleton<WalletsStore>(() => WalletsStoreImp(repository: sl(), crashlyticsHelper: sl(), accountProvider: sl(), remoteNotificationProvider: sl()));
+  sl.registerLazySingleton<WalletsStore>(
+    () => WalletsStoreImp(
+      repository: sl(),
+      crashlyticsHelper: sl(),
+      accountProvider: sl(),
+      remoteNotificationProvider: sl(),
+    ),
+  );
   sl.registerFactory(
     () => PurchaseItemViewModel(
       sl(),
@@ -207,12 +234,36 @@ Future<void> init() async {
       accountPublicInfo: sl<AccountProvider>().accountPublicInfo!,
     ),
   );
-  sl.registerLazySingleton(() => CollectionViewModel(walletsStore: sl(), thumbnailHelper: sl(), accountPublicInfoInfo: sl<AccountProvider>().accountPublicInfo!));
-  sl.registerLazySingleton(() => StripeHandler(walletsStore: sl(), localDataSource: sl(), repository: sl(), accountProvider: sl()));
-  sl.registerLazySingleton(() => HomeProvider(repository: sl(), accountPublicInfo: sl<AccountProvider>().accountPublicInfo!));
+  sl.registerLazySingleton(
+    () => CollectionViewModel(
+      walletsStore: sl(),
+      thumbnailHelper: sl(),
+      accountPublicInfoInfo: sl<AccountProvider>().accountPublicInfo!,
+    ),
+  );
+  sl.registerLazySingleton(
+    () => StripeHandler(
+      walletsStore: sl(),
+      localDataSource: sl(),
+      repository: sl(),
+      accountProvider: sl(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => HomeProvider(
+      repository: sl(),
+      accountPublicInfo: sl<AccountProvider>().accountPublicInfo!,
+    ),
+  );
   sl.registerLazySingleton(() => GeneralScreenViewModel());
   sl.registerLazySingleton(() => UserInfoProvider(sl()));
-  sl.registerLazySingleton(() => GeneralScreenLocalizationViewModel(shareHelper: sl(), repository: sl(), walletStore: sl()));
+  sl.registerLazySingleton(
+    () => GeneralScreenLocalizationViewModel(
+      shareHelper: sl(),
+      repository: sl(),
+      walletStore: sl(),
+    ),
+  );
   sl.registerLazySingleton(() => PracticeTestViewModel(sl()));
   sl.registerLazySingleton(() => FailureManagerViewModel(repository: sl()));
   sl.registerFactory(

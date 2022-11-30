@@ -2259,7 +2259,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<FavoritesModel>>> getAllFavorites()async {
+  Future<Either<Failure, List<FavoritesModel>>> getAllFavorites() async {
     try {
       final result = await localDataSource.getAllFavorites();
       return Right(result);
@@ -2269,7 +2269,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, int>> insertNFTInFavorites(FavoritesModel favoritesModel) async{
+  Future<Either<Failure, int>> insertNFTInFavorites(FavoritesModel favoritesModel) async {
     try {
       final result = await localDataSource.insertNFTInFavorites(favoritesModel);
       return Right(result);
@@ -2279,7 +2279,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> deleteAllNFTFromFavorites() async{
+  Future<Either<Failure, bool>> deleteAllNFTFromFavorites() async {
     try {
       await localDataSource.deleteAllNFTFromFavorites();
       return const Right(true);
@@ -2289,7 +2289,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, bool>> deleteNFTFromFavorites(String favoritesId) async{
+  Future<Either<Failure, bool>> deleteNFTFromFavorites(String favoritesId) async {
     try {
       await localDataSource.deleteNFTFromFavorites(favoritesId);
       return const Right(true);

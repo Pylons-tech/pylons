@@ -288,14 +288,24 @@ class LocalDataSourceImp implements LocalDataSource {
   Future<String> pickImageFromGallery(PickImageModel pickImageModel) async {
     final permissionStatus = await permissionService.status(Permission.photos);
     if (permissionStatus.isGranted || permissionStatus.isLimited) {
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery, maxWidth: pickImageModel.maxWidth, maxHeight: pickImageModel.maxHeight, imageQuality: pickImageModel.imageQuality);
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: pickImageModel.maxWidth,
+        maxHeight: pickImageModel.maxHeight,
+        imageQuality: pickImageModel.imageQuality,
+      );
       return image?.path ?? '';
     }
 
     final afterPermissionStatus = await permissionService.request(Permission.photos);
 
     if (afterPermissionStatus.isGranted || permissionStatus.isLimited) {
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery, maxWidth: pickImageModel.maxWidth, maxHeight: pickImageModel.maxHeight, imageQuality: pickImageModel.imageQuality);
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: pickImageModel.maxWidth,
+        maxHeight: pickImageModel.maxHeight,
+        imageQuality: pickImageModel.imageQuality,
+      );
       return image?.path ?? '';
     }
 
@@ -489,7 +499,7 @@ class LocalDataSourceImp implements LocalDataSource {
   }
 
   @override
-  Future<List<FavoritesModel>> getAllFavorites() async{
+  Future<List<FavoritesModel>> getAllFavorites() async {
     try {
       final result = await database.favoritesDao.getAll();
       return result;
@@ -499,7 +509,7 @@ class LocalDataSourceImp implements LocalDataSource {
   }
 
   @override
-  Future<int> insertNFTInFavorites(FavoritesModel favoritesModel) async{
+  Future<int> insertNFTInFavorites(FavoritesModel favoritesModel) async {
     try {
       return await database.favoritesDao.insertFavorites(favoritesModel);
     } catch (e) {
@@ -508,7 +518,7 @@ class LocalDataSourceImp implements LocalDataSource {
   }
 
   @override
-  Future<bool> deleteAllNFTFromFavorites() async{
+  Future<bool> deleteAllNFTFromFavorites() async {
     try {
       await database.favoritesDao.deleteAll();
       return true;
@@ -518,7 +528,7 @@ class LocalDataSourceImp implements LocalDataSource {
   }
 
   @override
-  Future<bool> deleteNFTFromFavorites(String favoritesId) async{
+  Future<bool> deleteNFTFromFavorites(String favoritesId) async {
     try {
       await database.favoritesDao.delete(favoritesId);
       return true;

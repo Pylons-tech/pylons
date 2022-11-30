@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:floor/floor.dart';
 import 'package:pylons_wallet/model/favorites.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
@@ -12,5 +13,6 @@ part 'database.g.dart';
 @Database(version: 2, entities: [LocalTransactionModel, FavoritesModel])
 abstract class AppDatabase extends FloorDatabase {
   TxManagerDao get txManagerDao;
+
   FavoritesDao get favoritesDao;
 }

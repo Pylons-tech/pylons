@@ -7,6 +7,7 @@ import 'enums.dart';
 
 class FavoritesChangeNotifier extends ChangeNotifier {
   final Repository repository;
+
   FavoritesChangeNotifier({required this.repository});
 
   List<NFT> favorites = [];
@@ -38,10 +39,10 @@ class FavoritesChangeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> removeFromFavorites({required String recipeId})async{
+  Future<void> removeFromFavorites({required String recipeId}) async {
     repository.deleteNFTFromFavorites(recipeId);
-    for(final NFT nft in favorites){
-      if(nft.recipeID == recipeId){
+    for (final NFT nft in favorites) {
+      if (nft.recipeID == recipeId) {
         favorites.remove(nft);
         break;
       }
