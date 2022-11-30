@@ -8,7 +8,7 @@ import (
 
 const (
 	// UpgradeName is the shared upgrade plan name for mainnet and testnet
-	UpgradeName = "v1.1.0"
+	UpgradeName = "upgrade-v5"
 )
 
 // TODO: Update StoreUpgrades
