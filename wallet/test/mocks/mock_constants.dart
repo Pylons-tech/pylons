@@ -12,7 +12,9 @@ import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:transaction_signing_gateway/model/transaction_hash.dart';
 
-TransactionHash MOCK_TRANSACTION = const TransactionHash(hash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E');
+TransactionHash MOCK_TRANSACTION = const TransactionHash(
+  hash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E',
+);
 
 String MOCK_USERNAME = "Jawad";
 String SENDER_APP = 'Sending app';
@@ -205,8 +207,14 @@ const String MOCK_ACCOUNT_LINK = 'mock_account_link';
 const String MOCK_ACCOUNT = 'mock_account';
 const bool MOCK_STRIPE_ACCOUNT_EXISTS = true;
 
-StripeUpdateAccountRequest MOCK_STRIPE_UPDATE_ACCOUNT_REQUEST = StripeUpdateAccountRequest(Address: MOCK_ADDRESS, Token: MOCK_TOKEN, Signature: SIGNATURE);
-StripeGetLoginBasedOnAddressRequest MOCK_STRIPE_LOGIN_BASED_ADDRESS_REQUEST = StripeGetLoginBasedOnAddressRequest(MOCK_ADDRESS);
+StripeUpdateAccountRequest MOCK_STRIPE_UPDATE_ACCOUNT_REQUEST = StripeUpdateAccountRequest(
+  Address: MOCK_ADDRESS,
+  Token: MOCK_TOKEN,
+  Signature: SIGNATURE,
+);
+StripeGetLoginBasedOnAddressRequest MOCK_STRIPE_LOGIN_BASED_ADDRESS_REQUEST = StripeGetLoginBasedOnAddressRequest(
+  MOCK_ADDRESS,
+);
 
 Item MOCK_ITEM = Item(
   owner: '',
@@ -244,7 +252,10 @@ BaseEnv MOCK_BASE_ENV = BaseEnv()
       mongoUrl: '',
       skus: '[]');
 
-IBCTraceModel MOCK_IBC_TRACE_MODEL = IBCTraceModel(denomTrace: DenomTrace(baseDenom: IBCCoins.ujunox, path: ''), ibcHash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E');
+IBCTraceModel MOCK_IBC_TRACE_MODEL = IBCTraceModel(
+  denomTrace: DenomTrace(baseDenom: IBCCoins.ujunox, path: ''),
+  ibcHash: '64CFE19786363B8C6AB10D865A5C570C3999AB0B95E5723BE584F574FC58F99E',
+);
 
 NFT MOCK_NFT_FREE_IMAGE = NFT(
   name: "This is my Image NFT",
@@ -278,7 +289,7 @@ NFT MOCK_NFT_TYPE_RECIPE = NFT(
   itemID: "DtnxAS8L4pf",
   owner: "abd",
   ibcCoins: IBCCoins.upylon,
-  type: NftType.TYPE_RECIPE
+  type: NftType.TYPE_RECIPE,
 );
 
 NFT MOCK_NFT_FREE_VIDEO = NFT(

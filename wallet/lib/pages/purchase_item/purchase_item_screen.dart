@@ -159,7 +159,12 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
             Visibility(
               visible: !viewModel.isViewingFullNft,
               child: Padding(
-                padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 8.h, top: MediaQuery.of(context).viewPadding.top.h),
+                padding: EdgeInsets.only(
+                  left: 8.w,
+                  right: 8.w,
+                  bottom: 8.h,
+                  top: MediaQuery.of(context).viewPadding.top.h,
+                ),
                 child: SizedBox(
                   height: 100.h,
                   width: double.infinity,
@@ -269,7 +274,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner),
+                        _title(
+                          nft: viewModel.nft,
+                          owner:
+                              viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner,
+                        ),
                         SizedBox(
                           height: 18.h,
                         ),
@@ -415,7 +424,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           padding: const EdgeInsets.only(top: 16.0),
           child: GestureDetector(
               onTap: () async {
-                await viewModel.updateLikeStatus(recipeId: viewModel.nft.recipeID, cookBookID: viewModel.nft.cookbookID);
+                await viewModel.updateLikeStatus(
+                  recipeId: viewModel.nft.recipeID,
+                  cookBookID: viewModel.nft.cookbookID,
+                );
               },
               child: viewModel.isLiking ? getLikingLoader() : getLikeIcon(likedByMe: viewModel.likedByMe)),
         ),
@@ -472,7 +484,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner),
+                  _title(
+                    nft: viewModel.nft,
+                    owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner,
+                  ),
                   SizedBox(
                     height: 20.h,
                   ),
@@ -601,9 +616,16 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  await viewModel.updateLikeStatus(recipeId: viewModel.nft.recipeID, cookBookID: viewModel.nft.cookbookID);
+                                  await viewModel.updateLikeStatus(
+                                    recipeId: viewModel.nft.recipeID,
+                                    cookBookID: viewModel.nft.cookbookID,
+                                  );
                                 },
-                                child: viewModel.isLiking ? getLikingLoader() : getLikeIcon(likedByMe: viewModel.likedByMe),
+                                child: viewModel.isLiking
+                                    ? getLikingLoader()
+                                    : getLikeIcon(
+                                        likedByMe: viewModel.likedByMe,
+                                      ),
                               ),
                               SizedBox(
                                 height: 5.h,

@@ -87,11 +87,21 @@ class _TabFieldState extends State<TabField> {
 
     final nftDetail = getNFTDetailsMap();
 
-    final listOwnership = ownership.entries.map((element) => _tabDetails(field: element.key, value: element.value, customColor: element.key == LocaleKeys.owner.tr() ? Colors.red : null)).toList();
+    final listOwnership = ownership.entries
+        .map(
+          (element) => _tabDetails(
+            field: element.key,
+            value: element.value,
+            customColor: element.key == LocaleKeys.owner.tr() ? Colors.red : null,
+          ),
+        )
+        .toList();
 
     final listDetails = nftDetail.entries.map(
       (element) {
-        final shouldShowTabIcon = (element.key == LocaleKeys.recipe_id.tr() || element.key == LocaleKeys.ipfs_cid.tr()) && element.value.isNotEmpty;
+        final shouldShowTabIcon =
+            (element.key == LocaleKeys.recipe_id.tr() || element.key == LocaleKeys.ipfs_cid.tr()) &&
+                element.value.isNotEmpty;
         return _tabDetails(
           field: element.key,
           value: element.value,
@@ -200,11 +210,17 @@ class _TabFieldState extends State<TabField> {
             itemBuilder: (context, i) {
               final nftOwnershipHistory = nftOwnershipHistoryList[i];
 
-              final DateTime date = DateTime.fromMillisecondsSinceEpoch(nftOwnershipHistory.createdAt * kNumberOfSeconds);
+              final DateTime date = DateTime.fromMillisecondsSinceEpoch(
+                nftOwnershipHistory.createdAt * kNumberOfSeconds,
+              );
               final createdDate = date.toLocal();
               final formattedDate = DateFormat(kDateWithTimeFormat).format(createdDate);
               if (i < kMaxItemToShow) {
-                return _tabDetails(field: formattedDate, value: nftOwnershipHistory.senderName, customColor: AppColors.kPurple);
+                return _tabDetails(
+                  field: formattedDate,
+                  value: nftOwnershipHistory.senderName,
+                  customColor: AppColors.kPurple,
+                );
               }
               return const SizedBox();
             })
