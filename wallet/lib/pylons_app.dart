@@ -43,7 +43,9 @@ import 'package:pylons_wallet/pages/settings/settings_screen.dart';
 import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
 import 'package:pylons_wallet/pages/transaction_failure_manager/local_transaction_detail_screen.dart';
 import 'package:pylons_wallet/pages/transaction_failure_manager/local_transactions_screen.dart';
-import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
+import 'package:pylons_wallet/providers/items_provider.dart';
+import 'package:pylons_wallet/providers/recipes_provider.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
@@ -57,6 +59,7 @@ import 'package:pylons_wallet/utils/route_util.dart';
 
 import 'generated/locale_keys.g.dart';
 import 'model/transaction_failure_model.dart';
+import 'providers/collections_tab_provider.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
@@ -93,14 +96,58 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
               value: sl<UserInfoProvider>(),
             ),
             Provider(
-              create: (context) => sl<AccountProvider>(),
-            ),
-            Provider(
               create: (context) => sl<RemoteNotificationsProvider>(),
             ),
             Provider(
               create: (context) => sl<FavoritesChangeNotifier>(),
             ),
+            ChangeNotifierProvider<AccountProvider>.value(
+              value: sl<AccountProvider>(),
+            ),
+            ChangeNotifierProxyProvider<AccountProvider, RecipesProvider>(
+              create: (BuildContext context) => RecipesProvider(
+                repository: sl<Repository>(),
+                address: null,
+              ),
+              update: (
+                BuildContext context,
+                AccountProvider accountProvider,
+                RecipesProvider? recipesProvider,
+              ) {
+                final receipeProvider = RecipesProvider.fromAccountProvider(
+                  accountPublicInfo: accountProvider.accountPublicInfo,
+                  repository: sl<Repository>(),
+                );
+                if (sl.isRegistered<RecipesProvider>()) {
+                  sl.unregister<RecipesProvider>();
+                }
+
+                sl.registerSingleton(receipeProvider);
+                return receipeProvider;
+              },
+            ),
+            ChangeNotifierProxyProvider<AccountProvider, ItemsProvider>(
+              create: (BuildContext context) => ItemsProvider(
+                repository: sl<Repository>(),
+                address: null,
+              ),
+              update: (
+                BuildContext context,
+                AccountProvider accountProvider,
+                ItemsProvider? itemsProvider,
+              ) {
+                final itemsProvider = ItemsProvider.fromAccountProvider(
+                  accountPublicInfo: accountProvider.accountPublicInfo,
+                  repository: sl<Repository>(),
+                );
+                if (sl.isRegistered<ItemsProvider>()) {
+                  sl.unregister<ItemsProvider>();
+                }
+                sl.registerSingleton(itemsProvider);
+                return itemsProvider;
+              },
+            ),
+            ChangeNotifierProvider.value(value: sl.get<CollectionsTabProvider>())
           ],
           child: MaterialApp(
             navigatorKey: navigatorKey,
@@ -226,9 +273,17 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> saveTransactionRecord({required String transactionHash, required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
+  Future<void> saveTransactionRecord({
+    required String transactionHash,
+    required TransactionStatus transactionStatus,
+    required LocalTransactionModel txLocalModel,
+  }) async {
     final repository = GetIt.I.get<Repository>();
-    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(transactionHash: transactionHash, status: transactionStatus, transactionModel: txLocalModel);
+    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(
+      transactionHash: transactionHash,
+      status: transactionStatus,
+      transactionModel: txLocalModel,
+    );
     await repository.saveLocalTransaction(txLocalModelWithStatus);
   }
 
@@ -258,7 +313,11 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
         transactionCurrency: kStripeUSD_ABR,
         transactionPrice: price,
       );
-      saveTransactionRecord(transactionHash: '', transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      saveTransactionRecord(
+        transactionHash: '',
+        transactionStatus: TransactionStatus.Failed,
+        txLocalModel: localTransactionModel,
+      );
     }
 
     if (purchaseDetails is AppStorePurchaseDetails) {
@@ -279,7 +338,11 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
           transactionCurrency: kStripeUSD_ABR,
           transactionPrice: price);
 
-      saveTransactionRecord(transactionHash: '', transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      saveTransactionRecord(
+        transactionHash: '',
+        transactionStatus: TransactionStatus.Failed,
+        txLocalModel: localTransactionModel,
+      );
     }
   }
 
@@ -338,7 +401,9 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
             creator: creator,
           );
 
-          final appleInAppPurchaseResponse = await walletStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
+          final appleInAppPurchaseResponse = await walletStore.sendAppleInAppPurchaseCoinsRequest(
+            appleInAppPurchaseModel,
+          );
           loading.dismiss();
           if (appleInAppPurchaseResponse.isLeft()) {
             appleInAppPurchaseResponse.swap().toOption().toNullable()!.message.show();

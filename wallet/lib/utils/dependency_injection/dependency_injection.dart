@@ -25,7 +25,8 @@ import 'package:pylons_wallet/pages/settings/screens/general_screen/general_scre
 import 'package:pylons_wallet/pages/settings/screens/recovery_screen/screens/practice_test.dart';
 import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
 import 'package:pylons_wallet/pages/transaction_failure_manager/failure_manager_view_model.dart';
-import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
+import 'package:pylons_wallet/providers/collections_tab_provider.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
@@ -279,6 +280,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => FavoritesChangeNotifier(repository: sl()));
 
   sl.registerLazySingleton(() => UserBannerViewModel());
+  sl.registerLazySingleton(() => CollectionsTabProvider());
 
   /// Configurations
   sl.registerLazySingleton<BaseEnv>(() => remoteConfigService.getBaseEnv());
