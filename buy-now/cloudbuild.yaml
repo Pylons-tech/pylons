@@ -10,6 +10,7 @@ steps:
       - .
       - '-f'
       - ./buy-now/Dockerfile
+    dir: ./buy-now
     id: Build
   - name: gcr.io/cloud-builders/docker
     args:
