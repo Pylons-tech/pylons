@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -15,7 +14,9 @@ import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/enums.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:easel_flutter/utils/read_more.dart';
+import 'package:easel_flutter/widgets/model_viewer.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -76,13 +77,7 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
       nft: viewModel.nft,
       child: Stack(
         children: [
-          Container(
-            color: EaselAppTheme.kWhite,
-            height: double.infinity,
-            width: double.infinity,
-          ),
-
-          ///TODO: Add media here based on type
+          getTypeWidget(),
           if (isUserNotViewingFullNft(viewModel))
             Padding(
               padding: EdgeInsets.only(left: 8, right: 8, bottom: 8, top: MediaQuery.of(context).viewPadding.top),
@@ -110,6 +105,20 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
         ],
       ),
     );
+  }
+
+  Widget getTypeWidget() {
+    final viewModel = context.read<OwnerViewViewModel>();
+    switch (viewModel.nft.assetType.toAssetTypeEnum()) {
+      case AssetType.ThreeD:
+        return Model3dViewer(
+          key: const Key(k3DWidgetKey),
+          path: viewModel.nft.url.changeDomain(),
+          isFile: false,
+        );
+      default:
+        return const SizedBox();
+    }
   }
 
   bool isUserNotViewingFullNft(OwnerViewViewModel viewModel) => !viewModel.isViewingFullNft;
@@ -345,8 +354,9 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                     SizedBox(
                                       height: 12.h,
                                     ),
-                                    if (viewModel.nft.assetType.toAssetTypeEnum() == AssetType.Image && Platform.isAndroid)
+                                    if (viewModel.nft.assetType.toAssetTypeEnum() == AssetType.Image && defaultTargetPlatform == TargetPlatform.android)
                                       GestureDetector(
+                                        key: const Key(kWallpaperButtonKey),
                                         onTap: () {
                                           final WallpaperScreen wallpaperScreen = WallpaperScreen(nft: viewModel.nft.url, context: context);
                                           wallpaperScreen.show();
