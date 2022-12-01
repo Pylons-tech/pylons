@@ -17,7 +17,6 @@ import 'package:pylons_wallet/components/user_image_widget_viewmodel.dart';
 import 'package:pylons_wallet/ipc/handler/handler_factory.dart';
 import 'package:pylons_wallet/ipc/ipc_engine.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
-import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_localization_view_model.dart';
@@ -233,13 +232,6 @@ Future<void> init() async {
       repository: sl(),
       shareHelper: sl(),
       accountPublicInfo: sl<AccountProvider>().accountPublicInfo!,
-    ),
-  );
-  sl.registerLazySingleton(
-    () => CollectionViewModel(
-      walletsStore: sl(),
-      thumbnailHelper: sl(),
-      accountPublicInfoInfo: sl<AccountProvider>().accountPublicInfo!,
     ),
   );
   sl.registerLazySingleton(
