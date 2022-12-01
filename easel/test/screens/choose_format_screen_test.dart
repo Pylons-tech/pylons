@@ -25,7 +25,7 @@ void main() {
     videoPlayerHelper: MockVideoPlayerHelperImp(),
   );
 
-  testWidgets("Progress Steps Visibility Tests", (widgetTester) async {
+  testWidgets("when choosing file for nft creation process indicator should be visible", (widgetTester) async {
     homeViewModel.currentPage = ValueNotifier(1);
     homeViewModel.currentStep = ValueNotifier(1);
     await widgetTester.testAppForWidgetTesting(

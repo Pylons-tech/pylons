@@ -26,7 +26,7 @@ void main() {
     videoPlayerHelper: MockVideoPlayerHelperImp(),
   );
 
-  testWidgets("Image full screen gridview visibility test", (widgetTester) async {
+  testWidgets("when showing image nft in full screen gridview should show", (widgetTester) async {
     await widgetTester.testAppForWidgetTesting(
       MultiProvider(
         providers: [
