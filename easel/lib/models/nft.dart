@@ -5,7 +5,7 @@ import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:equatable/equatable.dart';
 import 'package:floor/floor.dart';
-import 'package:pylons_sdk/pylons_sdk.dart';
+import 'package:pylons_sdk/low_level.dart';
 
 import '../utils/enums.dart';
 

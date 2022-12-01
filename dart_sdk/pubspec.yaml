@@ -1,8 +1,8 @@
 name: pylons_sdk
 description: Pylons sdk connects client apps to the pylons wallet. It helps the client apps to perform actions on the pylons chain via wallet.
-version: 0.1.2
+version: 0.1.4
 homepage: https://www.pylons.tech/
-repository: https://github.com/Pylons-tech/pylons_dart_sdk
+repository: https://github.com/Pylons-tech/pylons
 
 environment:
   sdk: ">=2.14.0 <3.0.0"
