@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
-class AccountProvider {
+class AccountProvider extends ChangeNotifier{
+  
   AccountProvider({required this.transactionSigningGateway}) {
     accountPublicInfo = null;
   }
