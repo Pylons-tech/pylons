@@ -119,7 +119,7 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
                 child: ValueListenableBuilder(
                   valueListenable: homeViewModel.currentPage,
                   builder: (_, int currentPage, __) => Padding(
-                    padding: EdgeInsets.only(left: 10.sp),
+                    padding: EdgeInsets.only(left: 10.w),
                     child: IconButton(
                       onPressed: () {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
