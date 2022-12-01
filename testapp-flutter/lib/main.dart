@@ -116,26 +116,28 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
             _fightTroll();
           },
-          child: const Text('Fight a troll!'),
+            child: _canSurviveDragon() ? const Text('Fight a troll!') : const Text('💀 Fight a troll! 💀')
         ),
         ElevatedButton(
           onPressed: () {
             _fightDragon();
           },
-          child: const Text('Fight a dragon!'),
+          child: _canSurviveDragon() ? const Text('Fight a dragon!') : const Text('💀 Fight a dragon! 💀')
         ),
-        ElevatedButton(
+        swordLv < 1 ? ElevatedButton(
           onPressed: () {
-            _buySword();
+            _canBuySword() ? _buySword() : () {};
           },
+          style: _canBuySword() ? const ButtonStyle() : ButtonStyle(enableFeedback: false, overlayColor: MaterialStateProperty.all(Colors.grey)),
           child: const Text('Buy a sword!'),
-        ),
-        ElevatedButton(
+        ) : Container(),
+        swordLv == 1 ? ElevatedButton(
           onPressed: () {
-            _upgradeSword();
+            _canUpgradeSword() ? _upgradeSword() : {};
           },
+          style: _canUpgradeSword() ? const ButtonStyle() : ButtonStyle(enableFeedback: false, overlayColor: MaterialStateProperty.all(Colors.grey)),
           child: const Text('Upgrade your sword!'),
-        ),
+        ): Container(),
         ElevatedButton(
           onPressed: () {
             _rest1();
@@ -158,7 +160,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _bootstrap() async {
     await Cookbook.load("appTestCookbook");
-    print("go to check init");
     await _checkCharacter();
     if (kDebugMode) {
       print("character exists: ${character != null}");
@@ -238,6 +239,14 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  bool _canSurviveTroll() {
+    return swordLv >= 1;
+  }
+
+  bool _canSurviveDragon() {
+    return swordLv >= 2;
+  }
+
   Future<void> _fightGoblin() async {
     var buffer = StringBuffer("Fighting a goblin...");
     setState(() {
@@ -273,7 +282,7 @@ class _MyHomePageState extends State<MyHomePage> {
       showTopLevelMenu = false;
       flavorText = buffer.toString();
     });
-    if (swordLv < 1) {
+    if (!_canSurviveTroll()) {
       final recipe = Recipe.let("RecipeTestAppFightTrollUnarmed");
       await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
         throw Exception("combat tx should not fail");
@@ -322,7 +331,7 @@ class _MyHomePageState extends State<MyHomePage> {
       showTopLevelMenu = false;
       flavorText = buffer.toString();
     });
-    if (swordLv < 2) {
+    if (!_canSurviveDragon()) {
       final recipe = Recipe.let("RecipeTestAppFightDragonUnarmed");
       await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
         throw Exception("combat tx should not fail");
@@ -361,36 +370,42 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  bool _canBuySword () {
+    return coins >= 50;
+  }
+
+  bool _hasBoughtSword () {
+    return swordLv > 0;
+  }
+
+  bool _canUpgradeSword () {
+    return coins >= 50;
+  }
+
+  bool _hasUpgradedSword () {
+    return swordLv > 0;
+  }
+
   Future<void> _buySword() async {
     setState(() {
       showTopLevelMenu = false;
     });
-    if (swordLv > 0) {
-      setState(() {
-        flavorText = "You already have a sword";
-      });
-    } else if (coins < 50) {
-      setState(() {
-        flavorText = "You need 50 coins to buy a sword";
-      });
-    } else {
-      final recipe = Recipe.let("RecipeTestAppBuySword");
-      await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
-        throw Exception("purchase tx should not fail");
-      });
-      var buffer = StringBuffer("Bought a sword!");
-      setState(() {
-        flavorText = buffer.toString();
-      });
-      final lastCoins = coins;
-      await _checkCharacter();
-      if (lastCoins != coins) {
-        buffer.writeln("Spent ${lastCoins - coins} coins!");
-      }
-      setState(() {
-        flavorText = buffer.toString();
-      });
+    final recipe = Recipe.let("RecipeTestAppBuySword");
+    await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
+      throw Exception("purchase tx should not fail");
+    });
+    var buffer = StringBuffer("Bought a sword!");
+    setState(() {
+      flavorText = buffer.toString();
+    });
+    final lastCoins = coins;
+    await _checkCharacter();
+    if (lastCoins != coins) {
+      buffer.writeln("Spent ${lastCoins - coins} coins!");
     }
+    setState(() {
+      flavorText = buffer.toString();
+    });
     setState(() {
       showTopLevelMenu = true;
     });
@@ -400,32 +415,22 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       showTopLevelMenu = false;
     });
-    if (swordLv > 1) {
-      setState(() {
-        flavorText = "You already have an upgraded sword";
-      });
-    } else if (shards < 5) {
-      setState(() {
-        flavorText = "You need 5 shards to upgrade your sword";
-      });
-    } else {
-      final recipe = Recipe.let("RecipeTestAppUpgradeSword");
-      await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
-        throw Exception("purchase tx should not fail");
-      });
-      var buffer = StringBuffer("Upgraded your sword!");
-      setState(() {
-        flavorText = buffer.toString();
-      });
-      final lastShards = shards;
-      await _checkCharacter();
-      if (lastShards != shards) {
-        buffer.writeln("Spent ${lastShards - shards} shards!");
-      }
-      setState(() {
-        flavorText = buffer.toString();
-      });
+    final recipe = Recipe.let("RecipeTestAppUpgradeSword");
+    await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
+      throw Exception("purchase tx should not fail");
+    });
+    var buffer = StringBuffer("Upgraded your sword!");
+    setState(() {
+      flavorText = buffer.toString();
+    });
+    final lastShards = shards;
+    await _checkCharacter();
+    if (lastShards != shards) {
+      buffer.writeln("Spent ${lastShards - shards} shards!");
     }
+    setState(() {
+      flavorText = buffer.toString();
+    });
     setState(() {
       showTopLevelMenu = true;
     });
