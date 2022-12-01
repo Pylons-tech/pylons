@@ -383,7 +383,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   bool _hasUpgradedSword () {
-    return swordLv > 0;
+    return swordLv > 1;
   }
 
   Future<void> _buySword() async {
