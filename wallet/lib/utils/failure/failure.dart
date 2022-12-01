@@ -6,6 +6,13 @@ abstract class Failure extends Equatable {
   const Failure(this.message);
 }
 
+class TxNotFoundFailure extends Failure {
+  const TxNotFoundFailure(String message) : super(message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
 class RecipeNotFoundFailure extends Failure {
   const RecipeNotFoundFailure(String message) : super(message);
 
