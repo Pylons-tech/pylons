@@ -42,7 +42,7 @@ void main() {
       creatorHubViewModel.selectedCollectionType = CollectionType.published;
       creatorHubViewModel.nftPublishedList.add(MOCK_NFT);
     });
-    
+
     testWidgets("when draft tab is active testing draft button color", (tester) async {
       creatorHubViewModel.selectedCollectionType = CollectionType.draft;
       await renderWidget(tester: tester, easelProvider: easelProvider, creatorHubViewModel: creatorHubViewModel);
