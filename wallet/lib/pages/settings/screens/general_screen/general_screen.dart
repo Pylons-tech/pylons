@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart' as button;
-import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
 import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_localization_view_model.dart';
@@ -15,7 +14,12 @@ import 'package:pylons_wallet/utils/route_util.dart';
 
 import '../../../../generated/locale_keys.g.dart';
 
-TextStyle kGeneralLabelText = TextStyle(fontSize: 28.sp, fontFamily: kUniversalFontFamily, color: Colors.black, fontWeight: FontWeight.w800);
+TextStyle kGeneralLabelText = TextStyle(
+  fontSize: 28.sp,
+  fontFamily: kUniversalFontFamily,
+  color: Colors.black,
+  fontWeight: FontWeight.w800,
+);
 TextStyle kGeneralOptionsText = TextStyle(fontSize: 18.sp, color: Colors.black, fontWeight: FontWeight.w500);
 
 class GeneralScreen extends StatefulWidget {
@@ -29,8 +33,6 @@ class _GeneralScreenState extends State<GeneralScreen> {
   GeneralScreenLocalizationViewModel get _languageViewModel => GetIt.I.get();
 
   HomeProvider get _homeProvider => GetIt.I.get();
-
-  CollectionViewModel get _collectionProvider => GetIt.I.get();
 
   Repository get repository => GetIt.I.get();
 
@@ -59,13 +61,14 @@ class _GeneralScreenState extends State<GeneralScreen> {
             Align(
               alignment: Alignment.centerLeft,
               child: InkResponse(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: AppColors.kUserInputTextColor,
-                  )),
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: AppColors.kUserInputTextColor,
+                ),
+              ),
             ),
             SizedBox(
               height: 33.h,
@@ -137,7 +140,11 @@ class _GeneralScreenState extends State<GeneralScreen> {
                         padding: EdgeInsets.symmetric(horizontal: 10.0.w),
                         child: Text(
                           LocaleKeys.select_language.tr(),
-                          style: TextStyle(color: AppColors.kTextBlackColor, fontSize: 19.0.sp, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            color: AppColors.kTextBlackColor,
+                            fontSize: 19.0.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -175,7 +182,6 @@ class _GeneralScreenState extends State<GeneralScreen> {
                         onTap: () {
                           model.applyLocal(context);
                           _homeProvider.refreshScreen();
-                          _collectionProvider.refreshScreen();
                           Navigator.of(context).pop();
                         },
                         child: Center(
@@ -191,7 +197,11 @@ class _GeneralScreenState extends State<GeneralScreen> {
                                 child: Center(
                                     child: Text(
                                   LocaleKeys.apply.tr(),
-                                  style: TextStyle(color: AppColors.kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
+                                  style: TextStyle(
+                                    color: AppColors.kWhite,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -242,8 +252,15 @@ class GeneralForwardItem extends StatelessWidget {
                       value: _languageViewModel,
                       builder: (context, child) {
                         return Consumer<GeneralScreenLocalizationViewModel>(builder: (context, model, child) {
-                          return Text(model.getLanguageName(context),
-                              style: TextStyle(fontSize: 15.sp, fontFamily: kUniversalFontFamily, color: AppColors.kUserInputTextColor, fontWeight: FontWeight.w500));
+                          return Text(
+                            model.getLanguageName(context),
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              fontFamily: kUniversalFontFamily,
+                              color: AppColors.kUserInputTextColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          );
                         });
                       })
                 else if (title == LocaleKeys.invite_others.tr())

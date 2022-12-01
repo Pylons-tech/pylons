@@ -4,10 +4,8 @@ import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/transaction.dart';
-import 'package:pylons_wallet/pages/home/collection_screen/collection_screen.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/home/wallet_screen/model/currency.dart';
-import 'package:pylons_wallet/pages/home/wallet_screen/wallet_screen.dart';
 
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
@@ -23,7 +21,6 @@ class HomeProvider extends ChangeNotifier {
 
   HomeProvider({required this.repository, required this.accountPublicInfo});
 
-  final List<Widget> pages = <Widget>[const CollectionScreen(), const WalletScreen()];
   final tabs = ['collection', 'wallet'];
 
   int _selectedIndex = 0;

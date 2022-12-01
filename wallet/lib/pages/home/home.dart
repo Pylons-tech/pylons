@@ -16,6 +16,9 @@ import 'package:pylons_wallet/ipc/ipc_engine.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
+import 'package:pylons_wallet/providers/collections_tab_provider.dart';
+import 'package:pylons_wallet/providers/items_provider.dart';
+import 'package:pylons_wallet/providers/recipes_provider.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
@@ -24,6 +27,8 @@ import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../generated/locale_keys.g.dart';
 import '../../services/third_party_services/remote_config_service/remote_config_service.dart';
+import 'collection_screen/collection_screen.dart';
+import 'wallet_screen/wallet_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -39,15 +44,14 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
 
   HomeProvider get homeProvider => GetIt.I.get();
 
-  CollectionViewModel get collectionViewModel => GetIt.I.get();
-
   RemoteConfigService get remoteConfigService => GetIt.I.get();
+  final List<Widget> pages = <Widget>[const CollectionScreen(), const WalletScreen()];
 
   @override
   void initState() {
     super.initState();
     homeProvider.logAnalyticsEvent();
-    _tabController = TabController(vsync: this, length: homeProvider.pages.length);
+    _tabController = TabController(vsync: this, length: pages.length);
     getInitialLink();
   }
 
@@ -84,8 +88,22 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
           ChangeNotifierProvider<HomeProvider>.value(
             value: homeProvider,
           ),
-          ChangeNotifierProvider<CollectionViewModel>.value(
-            value: collectionViewModel,
+          ChangeNotifierProxyProvider3<RecipesProvider, ItemsProvider, CollectionsTabProvider, CollectionViewModel>(
+            create: (BuildContext context) =>
+                CollectionViewModel(creations: [], assets: [], collectionsType: CollectionsType.purchases),
+            update: (
+              BuildContext context,
+              RecipesProvider recipesProvider,
+              ItemsProvider itemsProvider,
+              CollectionsTabProvider collectionsTabProvider,
+              CollectionViewModel? collectionViewModel,
+            ) {
+              return CollectionViewModel(
+                creations: recipesProvider.creations,
+                assets: itemsProvider.items,
+                collectionsType: collectionsTabProvider.collectionsType,
+              );
+            },
           ),
         ],
         child: Consumer<HomeProvider>(builder: (context, provider, _) {
@@ -102,9 +120,9 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                     child: Scaffold(
                       backgroundColor: AppColors.kMainBG,
                       appBar: buildAppBar(context, provider),
-                      body: provider.pages[provider.selectedIndex],
+                      body: pages[provider.selectedIndex],
                       bottomSheet:
-                        remoteConfigService.getMaintenanceMode() ? const MaintenanceModeMessageWidget() : null,
+                          remoteConfigService.getMaintenanceMode() ? const MaintenanceModeMessageWidget() : null,
                     ),
                   ),
                 ),
@@ -179,9 +197,9 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             ),
             if (remoteConfigService.getMaintenanceMode())
               Positioned(
-                  top: 0.16.sh,
-                  right: 0,
-                  child: const MaintenanceModeBannerWidget(),
+                top: 0.16.sh,
+                right: 0,
+                child: const MaintenanceModeBannerWidget(),
               ),
             Positioned(
               top: 0.2.sh - 30.r,
@@ -213,7 +231,6 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
           SizedBox(width: 5.w),
           GestureDetector(
             onTap: () async {
-
               await Clipboard.setData(ClipboardData(text: homeProvider.accountPublicInfo.publicAddress));
               LocaleKeys.copied_to_clipboard.tr().show();
             },
@@ -298,9 +315,9 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             ),
             if (remoteConfigService.getMaintenanceMode())
               Positioned(
-                  top: 0.16.sh,
-                  right: 0,
-                  child: const MaintenanceModeBannerWidget(),
+                top: 0.16.sh,
+                right: 0,
+                child: const MaintenanceModeBannerWidget(),
               ),
             Positioned(
               top: 0.2.sh - 30.r,

@@ -28,7 +28,7 @@ class LoadingProgress {
         onWillPop: () async => false,
         child: AlertDialog(
           elevation: 0,
-          backgroundColor: Colors.transparent,
+          backgroundColor: EaselAppTheme.kTransparent,
           content: SizedBox(
             width: 100.w,
             height: 100.h,
