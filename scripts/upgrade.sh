@@ -37,6 +37,10 @@ TRUST_HASH=$(curl -s "http://58.65.160.225:26687/block?height=$BLOCK_HEIGHT" | j
 echo "trust_height: $BLOCK_HEIGHT"
 echo "trust_hash: $TRUST_HASH"
 
+# Reduce block time
+command -v toml > /dev/null 2>&1 || { echo >&2 "toml-cli not installed. More info: https://pypi.org/project/toml-cli/"; exit 1; }
+toml set --toml-path $HOME/.pylons/config/config.toml consensus.timeout_commit 1.5s
+
 # Export state sync variables.
 export PYLONSD_STATESYNC_ENABLE=true
 export PYLONSD_P2P_MAX_NUM_OUTBOUND_PEERS=200
