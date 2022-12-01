@@ -81,8 +81,8 @@ export const EaselBuyWebView: FC<EaselWebMobViewTypes> = ({
             <MediaPart>
               <Image
                 src="/images/frame.png"
-                width="400px"
-                height="720px"
+                width={400}
+                height={720}
                 alt="Frame"
                 className="mob-frame"
               />
@@ -139,8 +139,8 @@ export const EaselBuyWebView: FC<EaselWebMobViewTypes> = ({
               </Typography>
               <Image
                 src="/images/check.svg"
-                height="16px"
-                width="16px"
+                height={16}
+                width={16}
                 alt="check"
               />
             </Box>
@@ -264,8 +264,8 @@ export const EaselBuyWebView: FC<EaselWebMobViewTypes> = ({
                     <Image
                       alt="coin"
                       src={getCryptoCurrencyIcon(denom)}
-                      width="30px"
-                      height="29px"
+                      width={30}
+                      height={29}
                     />
                   ) : null}
                 </div>

@@ -170,8 +170,8 @@ export const EaselBuyMobView: FC<EaselBuyMobViewTypes> = ({
               </Typography>
               <Image
                 src="/images/check.svg"
-                height="16px"
-                width="16px"
+                height={16}
+                width={16}
                 alt="check"
               />
             </Box>
@@ -320,8 +320,8 @@ export const EaselBuyMobView: FC<EaselBuyMobViewTypes> = ({
                   <Image
                     alt="coin"
                     src={getCryptoCurrencyIcon(denom)}
-                    width="30px"
-                    height="29px"
+                    width={30}
+                    height={29}
                   />
                 ) : null}
               </div>

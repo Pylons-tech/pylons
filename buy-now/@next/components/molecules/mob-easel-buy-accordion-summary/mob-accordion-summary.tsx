@@ -19,9 +19,19 @@ export const MobOwnershipAccordionSummary: FC<MobOwnershipAccordionProps> = ({
     <AccordionSummary
       expandIcon={
         expanded === accordionId ? (
-          <Image src="/images/minimize.svg" width="20px" height="20px" />
+          <Image
+            alt={'minimize'}
+            src="/images/minimize.svg"
+            width={20}
+            height={20}
+          />
         ) : (
-          <Image src="/images/expand.svg" width="20px" height="20px" />
+          <Image
+            alt={'expand'}
+            src="/images/expand.svg"
+            width={20}
+            height={20}
+          />
         )
       }
       aria-controls="panel1a-content"
@@ -62,6 +72,7 @@ export const MobOwnershipAccordionSummary: FC<MobOwnershipAccordionProps> = ({
             height={20}
             width={20}
             src={`/images/${icon}.svg`}
+            alt={icon}
             style={{
               margin: '0 3rem 0 0'
             }}
@@ -74,7 +85,7 @@ export const MobOwnershipAccordionSummary: FC<MobOwnershipAccordionProps> = ({
             width: '100%'
           }}
         >
-          <Image src="/images/line.svg" height="24px" width="176px" />
+          <Image alt="line" src="/images/line.svg" height={24} width={176} />
         </Box>
       </Box>
     </AccordionSummary>
