@@ -35,24 +35,26 @@ void main() {
   );
   GetIt.I.registerLazySingleton(() => easelProvider);
 
-  group("Published tab tests", () {
-    testWidgets("Published Button Color Test", (tester) async {
-      await tester.setScreenSize();
+  group("Creator Hub", () {
+    setUp(()async{
       easelProvider.isPylonsInstalled = true;
       creatorHubViewModel.viewType = ViewType.viewList;
       creatorHubViewModel.selectedCollectionType = CollectionType.published;
       creatorHubViewModel.nftPublishedList.add(MOCK_NFT);
-      await tester.testAppForWidgetTesting(
-        Scaffold(
-          body: MultiProvider(
-            providers: [
-              ChangeNotifierProvider.value(value: easelProvider),
-              ChangeNotifierProvider.value(value: creatorHubViewModel),
-            ],
-            child: const CreatorHubContent(),
-          ),
-        ),
-      );
+    });
+    
+    testWidgets("when draft tab is active testing draft button color", (tester) async {
+      creatorHubViewModel.selectedCollectionType = CollectionType.draft;
+      await renderWidget(tester: tester, easelProvider: easelProvider, creatorHubViewModel: creatorHubViewModel);
+      final draftButtonKey = find.byKey(const Key(kSelectedDraftButtonKey));
+      await tester.ensureVisible(draftButtonKey);
+      final DecoratedBox decoratedBox = tester.firstWidget(draftButtonKey) as DecoratedBox;
+      final BoxDecoration boxDecoration = decoratedBox.decoration as BoxDecoration;
+      expect(boxDecoration.color, EaselAppTheme.kLightRed);
+    });
+
+    testWidgets("when publish tab is active testing publishing button color", (tester) async {
+      await renderWidget(tester: tester, easelProvider: easelProvider, creatorHubViewModel: creatorHubViewModel);
       final publishedButtonKey = find.byKey(const Key(kSelectedPublishedButtonKey));
       await tester.ensureVisible(publishedButtonKey);
       final DecoratedBox decoratedBox = tester.firstWidget(publishedButtonKey) as DecoratedBox;
@@ -60,50 +62,25 @@ void main() {
       expect(boxDecoration.color, EaselAppTheme.kDarkGreen);
     });
 
-    testWidgets("Testing refresh published NFT button visibility", (tester) async {
-      await tester.setScreenSize();
-      easelProvider.isPylonsInstalled = true;
-      creatorHubViewModel.viewType = ViewType.viewList;
-      creatorHubViewModel.selectedCollectionType = CollectionType.published;
-      creatorHubViewModel.nftPublishedList.add(MOCK_NFT);
-      await tester.testAppForWidgetTesting(
-        Scaffold(
-          body: MultiProvider(
-            providers: [
-              ChangeNotifierProvider.value(value: easelProvider),
-              ChangeNotifierProvider.value(value: creatorHubViewModel),
-            ],
-            child: const CreatorHubContent(),
-          ),
-        ),
-      );
+    testWidgets("when published tab is active testing refresh nft button visibility", (tester) async {
+      await renderWidget(tester: tester, easelProvider: easelProvider, creatorHubViewModel: creatorHubViewModel);
       final publishButtonKey = find.byKey(const Key(kRefreshPublishedNFTButtonKey));
       await tester.ensureVisible(publishButtonKey);
     });
   });
+}
 
-  testWidgets("Drafts Button Color Test", (tester) async {
-    await tester.setScreenSize();
-    easelProvider.isPylonsInstalled = true;
-    creatorHubViewModel.viewType = ViewType.viewList;
-    creatorHubViewModel.selectedCollectionType = CollectionType.draft;
-    creatorHubViewModel.nftPublishedList.add(MOCK_NFT);
-    await tester.testAppForWidgetTesting(
-      Scaffold(
-        body: MultiProvider(
-          providers: [
-            ChangeNotifierProvider.value(value: easelProvider),
-            ChangeNotifierProvider.value(value: creatorHubViewModel),
-          ],
-          child: const CreatorHubContent(),
-        ),
+Future<void> renderWidget({required WidgetTester tester, required EaselProvider easelProvider, required CreatorHubViewModel creatorHubViewModel})async{
+  await tester.setScreenSize();
+  await tester.testAppForWidgetTesting(
+    Scaffold(
+      body: MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: easelProvider),
+          ChangeNotifierProvider.value(value: creatorHubViewModel),
+        ],
+        child: const CreatorHubContent(),
       ),
-    );
-    final draftButtonKey = find.byKey(const Key(kSelectedDraftButtonKey));
-    await tester.ensureVisible(draftButtonKey);
-    final DecoratedBox decoratedBox = tester.firstWidget(draftButtonKey) as DecoratedBox;
-    final BoxDecoration boxDecoration = decoratedBox.decoration as BoxDecoration;
-    expect(boxDecoration.color, EaselAppTheme.kLightRed);
-  });
-
+    ),
+  );
 }
