@@ -22,6 +22,8 @@ import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pyl
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/trade.pb.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
+import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart';
+import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/tx/v1beta1/tx.pb.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
@@ -554,5 +556,11 @@ class MockRepository extends Repository {
   @override
   Future<Either<Failure, List<NftOwnershipHistory>>> getNftOwnershipHistoryByCookbookIdAndRecipeId({required String cookBookId, required String recipeId}) {
     return Future.value(const Right([]));
+  }
+
+  @override
+  Future<Either<Failure, Tuple2<Tx, TxResponse?>>> getTx({required String hash}) {
+    // TODO: implement getTx
+    throw UnimplementedError();
   }
 }

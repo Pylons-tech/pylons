@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:alan/proto/cosmos/bank/v1beta1/export.dart' as bank;
 import 'package:cosmos_utils/cosmos_utils.dart';
+import 'package:dartz/dartz.dart';
 import 'package:decimal/decimal.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -26,6 +27,7 @@ import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
+import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/export.dart' as cosmos_tx;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/third_party_services/analytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
@@ -287,6 +289,11 @@ abstract class RemoteDataStore {
   /// Input: [recipeId] the id of the NFT, [author] the author of the NFT, [purchasePrice] the price of the NFT, [recipeName] the name of the recipe
   /// Output: [bool] return true if successful
   Future<bool> logPurchaseItem({required String recipeId, required String recipeName, required String author, required double purchasePrice});
+
+  /// Get a tuple of the native Cosmos TX struct and (if it exists) the TxResponse struct.
+  /// Input: [hash] hash of the transaction to query.
+  /// Output: [Tuple2] of the [cosmos_tx.Tx] and (if it exists) the [cosmos_tx.TxResponse].
+  Future<Tuple2<cosmos_tx.Tx, cosmos_tx.TxResponse?>> getTx({required String hash});
 
   Future<bool> logAddToCart({
     required String recipeId,
@@ -822,6 +829,23 @@ class RemoteDataStoreImp implements RemoteDataStore {
       return response.username.value;
     }
     throw RecipeNotFoundFailure(LocaleKeys.username_not_found.tr());
+  }
+
+  @override
+  Future<Tuple2<cosmos_tx.Tx, cosmos_tx.TxResponse?>> getTx({required String hash}) async {
+    final cosmos_tx.ServiceClient serviceClient = cosmos_tx.ServiceClient(sl.get<BaseEnv>().networkInfo.gRPCChannel);
+    final request = cosmos_tx.GetTxRequest.create()..hash = hash;
+    final response = await serviceClient.getTx(request);
+
+    if (response.hasTx()) {
+      if (response.hasTxResponse()) {
+        return Tuple2(response.tx, response.txResponse);
+      } else {
+        return Tuple2(response.tx, null);
+      }
+    }
+
+    throw TxNotFoundFailure(LocaleKeys.tx_not_found.tr());
   }
 
   @override
