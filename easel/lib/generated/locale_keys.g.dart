@@ -8,7 +8,6 @@ abstract class  LocaleKeys {
   static const publish_total = 'publish_total';
   static const draft_total = 'draft_total';
   static const draft = 'draft';
-  static const publish = 'publish';
   static const delete = 'delete';
   static const view = 'view';
   static const delete_error = 'delete_error';
@@ -42,6 +41,11 @@ abstract class  LocaleKeys {
   static const uploading = 'uploading';
   static const nft_name = 'nft_name';
   static const could_not_uploaded = 'could_not_uploaded';
+  static const image_nft_must_be = 'image_nft_must_be';
+  static const audio_nft_must_be = 'audio_nft_must_be';
+  static const video_nft_must_be = 'video_nft_must_be';
+  static const three_d_nft_must_be = 'three_d_nft_must_be';
+  static const pdf_nft_must_be = 'pdf_nft_must_be';
   static const something_wrong = 'something_wrong';
   static const err_add_audio_thumbnail = 'err_add_audio_thumbnail';
   static const err_add_video_thumbnail = 'err_add_video_thumbnail';

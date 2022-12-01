@@ -16,7 +16,7 @@ class PublishButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClippedButton(
       key: const Key(kPublishButtonKey),
-      title: LocaleKeys.publish.tr(),
+      title: LocaleKeys.published.tr(),
       bgColor: EaselAppTheme.kLightRed,
       textColor: EaselAppTheme.kWhite,
       onPressed: onPress,
