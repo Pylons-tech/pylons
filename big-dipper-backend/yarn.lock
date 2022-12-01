@@ -310,11 +310,11 @@
     rxjs "6"
     semver "^7.3.5"
 
-"@ledgerhq/devices@^7.0.3":
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/devices/-/devices-7.0.3.tgz#bdd7e8ce078399fe644067a7e1ca9a9d2e249c02"
+"@ledgerhq/devices@^7.0.3", "@ledgerhq/devices@^7.0.5":
+  version "7.0.5"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/devices/-/devices-7.0.5.tgz#2b3f69b84d4bccb2c4b1d34e534444da862f4880"
   dependencies:
-    "@ledgerhq/errors" "^6.11.1"
+    "@ledgerhq/errors" "^6.12.1"
     "@ledgerhq/logs" "^6.10.1"
     rxjs "6"
     semver "^7.3.5"
@@ -323,17 +323,17 @@
   version "5.50.0"
   resolved "https://registry.npmjs.org/@ledgerhq/errors/-/errors-5.50.0.tgz"
 
-"@ledgerhq/errors@^6.11.1":
-  version "6.11.1"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-6.11.1.tgz#a8a81bda6d28ac43c757e109b1ff079ddeec54a6"
+"@ledgerhq/errors@^6.11.1", "@ledgerhq/errors@^6.12.1":
+  version "6.12.1"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-6.12.1.tgz#99ad10bd528942bdfde0ef3d4d0dce658f6f4405"
 
-"@ledgerhq/hw-transport-web-ble@^6.27.6":
-  version "6.27.6"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-web-ble/-/hw-transport-web-ble-6.27.6.tgz#6daadd40cf97a440bb794b5e3bacb1e6716ddbd4"
+"@ledgerhq/hw-transport-web-ble@^6.27.8":
+  version "6.27.8"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-web-ble/-/hw-transport-web-ble-6.27.8.tgz#0b2aadc58942c671470c9e7a47eb9b663dccb124"
   dependencies:
-    "@ledgerhq/devices" "^7.0.3"
-    "@ledgerhq/errors" "^6.11.1"
-    "@ledgerhq/hw-transport" "^6.27.6"
+    "@ledgerhq/devices" "^7.0.5"
+    "@ledgerhq/errors" "^6.12.1"
+    "@ledgerhq/hw-transport" "^6.27.8"
     "@ledgerhq/logs" "^6.10.1"
     rxjs "6"
 
@@ -354,12 +354,12 @@
     "@ledgerhq/errors" "^5.50.0"
     events "^3.3.0"
 
-"@ledgerhq/hw-transport@^6.27.6":
-  version "6.27.6"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-6.27.6.tgz#87f886591bad047c18e76920519aceb9d844667b"
+"@ledgerhq/hw-transport@^6.27.6", "@ledgerhq/hw-transport@^6.27.8":
+  version "6.27.8"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-6.27.8.tgz#57ece7e2b726216df698767de6828478fbe461e1"
   dependencies:
-    "@ledgerhq/devices" "^7.0.3"
-    "@ledgerhq/errors" "^6.11.1"
+    "@ledgerhq/devices" "^7.0.5"
+    "@ledgerhq/errors" "^6.12.1"
     events "^3.3.0"
 
 "@ledgerhq/logs@^5.50.0":
