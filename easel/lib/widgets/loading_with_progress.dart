@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 
+import '../utils/easel_app_theme.dart';
+
 class LoadingProgress {
   LoadingProgress();
 
