@@ -10,7 +10,7 @@ const { publicRuntimeConfig } = getConfig()
  */
 export const environment = object()
   .shape({
-    apiKey: string().required()
+    apiKey: string()
   })
   .validateSync({
     apiKey: publicRuntimeConfig.apiKey

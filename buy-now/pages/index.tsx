@@ -103,7 +103,7 @@ export default function EaselBuyMainPage({
   /* istanbul ignore next */
   const amountMinted: string = itemOutputs?.amount_minted;
   /* istanbul ignore next */
-  const quantity: string = itemOutputs?.Quantity;
+  const quantity: string = itemOutputs?.quantity;
   /* istanbul ignore next */
   const edition = `${amountMinted} of ${quantity}`;
   /* istanbul ignore next */
@@ -128,7 +128,7 @@ export default function EaselBuyMainPage({
         royalty={(+itemOutputs?.trade_percentage * tradePercent)?.toString()}
         edition={edition}
         media={media}
-        createdAt={creator}
+        createdAt={selectedRecipe?.created_at}
         recipeId={selectedRecipe?.id}
         src={src}
       ></EaselBuy>
