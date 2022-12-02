@@ -46,6 +46,7 @@ class AppColors {
   static Color kDarkDividerColor = const Color(0xffE5E5E5);
   static Color kTradeReceiptTextColor = const Color(0xff8F8FCE);
   static Color kHashtagColor = const Color(0xFFB6B6E8);
+  static Color kDarkRedColor = const Color(0xFFAF381F);
 
   static Color kUserInputTextColor = const Color(0xff8D8C8C);
   static Color kSettingsUserNameColor = kBlue;

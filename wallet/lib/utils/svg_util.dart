@@ -100,5 +100,4 @@ class SVGUtil {
   static const kSvgNftFormatAudio = 'assets/images/svg/nft_format_audio.svg';
   static const kSvgNftFormatPDF = 'assets/images/svg/nft_format_pdf.svg';
   static String BOTTOM_RIGHT_CURVED_GREY_BG = "assets/images/svg/bottom_right_curved_grey_bg.svg";
-  static String CURVED_CORNER_RED_BG = "assets/images/svg/curved_corner_red_bg.svg";
 }

@@ -311,7 +311,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       ),
                       Text(
                         viewModel.viewsCount.toString(),
-                        style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
+                        style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w700),
                       ),
                       SizedBox(
                         height: 5.h,
@@ -408,7 +408,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         ),
         Text(
           viewModel.likesCount.toString(),
-          style: TextStyle(color: Colors.white, fontSize: 10.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
+          style: TextStyle(color: Colors.white, fontSize: 10.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w700),
         ),
       ],
     );
@@ -441,46 +441,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     return Stack(
       key: const Key(kPurchaseItemBottomSheetKey),
       children: [
-        Align(
-          alignment: Alignment.topRight,
-          child: ClipPath(
-            clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SW),
-            child: Container(
-              color: AppColors.kDarkRed,
-              height: 50.h,
-              width: 50.w,
-              child: Center(
-                child: IconButton(
-                  key: const Key(kCloseBottomSheetKey),
-                  alignment: Alignment.topRight,
-                  padding: EdgeInsets.only(
-                    bottom: 8.h,
-                    left: 8.w,
-                  ),
-                  icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                  onPressed: () {
-                    viewModel.toChangeCollapse();
-                  },
-                  iconSize: 32.h,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ),
-        Positioned.fill(
-          child: Align(
-            alignment: Alignment.bottomLeft,
-            child: ClipPath(
-              clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NE),
-              child: Container(
-                color: AppColors.kDarkRed,
-                height: 30.h,
-                width: 30.w,
-              ),
-            ),
-          ),
-        ),
         ClipPath(
           clipper: ExpandedViewClipper(),
           child: BackdropFilter(
@@ -608,7 +568,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               ),
                               Text(
                                 viewModel.viewsCount.toString(),
-                                style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
+                                style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w700),
                               ),
                               SizedBox(
                                 height: 18.h,
@@ -684,7 +644,47 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
               ),
             ),
           ),
-        )
+        ),
+        Align(
+          alignment: Alignment.topRight,
+          child: ClipPath(
+            clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SW),
+            child: Container(
+              color: AppColors.kDarkRed,
+              height: 50.r,
+              width: 50.r,
+              child: Center(
+                child: IconButton(
+                  key: const Key(kCloseBottomSheetKey),
+                  alignment: Alignment.topRight,
+                  padding: EdgeInsets.only(
+                    bottom: 12.h,
+                    left: 12.w,
+                  ),
+                  icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                  onPressed: () {
+                    viewModel.toChangeCollapse();
+                  },
+                  iconSize: 32.h,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+        Positioned.fill(
+          child: Align(
+            alignment: Alignment.bottomLeft,
+            child: ClipPath(
+              clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NE),
+              child: Container(
+                color: AppColors.kDarkRed,
+                height: 30.h,
+                width: 30.w,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -699,7 +699,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             Flexible(
               child: Text(
                 nft.name,
-                style: TextStyle(color: Colors.white, fontSize: 18.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
+                style: TextStyle(color: Colors.white, fontSize: 18.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w700),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),

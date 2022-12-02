@@ -369,5 +369,8 @@
   "ea": "ea",
   "maintenance_mode_message": "We ondervinden technische problemen en hebben tijdelijk de onderhoudsmodus gestart voor het oplossen van problemen. Maak je geen zorgen, je collectie is veilig. U kunt echter geen on-chain-transacties starten totdat we het probleem hebben opgelost en de normale functionaliteit hebben hersteld.",
   "maintenance_mode_header": "onderhoudsstand",
-  "invalid_mnemonic" : "Ungültige mnemonic"
+  "invalid_mnemonic": "Ungültige mnemonic",
+  "claim_now": "Beanspruche jetzt",
+  "remaining_and_total_editions": "{remaining} Von {total}",
+  "remaining": "verblieben"
 }

@@ -369,5 +369,8 @@
   "ea": "cada uno",
   "maintenance_mode_message": "Estamos experimentando problemas técnicos y hemos iniciado temporalmente el modo de mantenimiento para solucionar problemas. No te preocupes, tu colección está segura. Sin embargo, no puede iniciar transacciones en cadena hasta que hayamos resuelto el problema y restablecido la funcionalidad normal.",
   "maintenance_mode_header": "Modo de mantenimiento",
-  "invalid_mnemonic" : "Mnemonic inválido"
+  "invalid_mnemonic": "Mnemonic inválido",
+  "claim_now": "Reclama ahora",
+  "remaining_and_total_editions": "{remaining} De {total}",
+  "remaining": "restante"
 }

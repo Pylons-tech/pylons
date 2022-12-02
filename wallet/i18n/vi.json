@@ -369,5 +369,8 @@
   "ea": "ea",
   "maintenance_mode_message": "Chúng tôi đang gặp sự cố kỹ thuật và đã tạm thời bắt đầu chế độ bảo trì để khắc phục sự cố. Đừng lo lắng, bộ sưu tập của bạn vẫn an toàn. Tuy nhiên, bạn không thể bắt đầu các giao dịch trên chuỗi cho đến khi chúng tôi giải quyết xong sự cố và khôi phục chức năng bình thường.",
   "maintenance_mode_header": "Chế độ bảo trì",
-  "invalid_mnemonic" : "Không hợp lệ menmonic"
+  "invalid_mnemonic": "Không hợp lệ menmonic",
+  "claim_now": "yêu cầu ngay bây giờ",
+  "remaining_and_total_editions": "{remaining} Của {total}",
+  "remaining": "còn lại"
 }

@@ -10,7 +10,7 @@
   "recommended": "おすすめされた",
   "following": "続く",
   "select_a_date": "日付を選択",
-  "network_error_description":"トランザクションの処理中にネットワーク エラーが発生しました。アカウントの更新をもう一度お試しください。再試行しても 2 回請求されることはありません。",
+  "network_error_description": "トランザクションの処理中にネットワーク エラーが発生しました。アカウントの更新をもう一度お試しください。再試行しても 2 回請求されることはありません。",
   "what_is_new": "新着情報",
   "trending": "トレンド",
   "price": "価格",
@@ -369,5 +369,8 @@
   "ea": "えー",
   "maintenance_mode_message": "技術的な問題が発生しており、トラブルシューティングのために一時的にメンテナンス モードを開始しました。心配はいりません。あなたのコレクションは安全です。ただし、問題が解決され、通常の機能が回復するまで、オンチェーン トランザクションを開始することはできません。",
   "maintenance_mode_header": "メンテナンスモード",
-  "invalid_mnemonic" : "無効 mnemonic"
+  "invalid_mnemonic": "無効 mnemonic",
+  "claim_now": "今すぐ請求",
+  "remaining_and_total_editions": "{remaining} の {total}",
+  "remaining": "残り"
 }
