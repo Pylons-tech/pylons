@@ -63,7 +63,7 @@ void main() {
     expect(bottomSheet1, findsNothing);
   });
 
-  testWidgets("History Tab Visibility Test in purchase item screen", (tester) async {
+  testWidgets("In Purchase item screen history tab should be visible even if there is no history", (tester) async {
     registerStub(
       repository: repository,
       mockAccountPublicInfo: mockAccountPublicInfo,
