@@ -198,7 +198,7 @@ Future<void> init() async {
   /// ViewModels
   sl.registerLazySingleton<WalletsStore>(() => WalletsStoreImp(repository: sl(), crashlyticsHelper: sl(), accountProvider: sl(), remoteNotificationProvider: sl()));
   sl.registerFactory(
-      () => PurchaseItemViewModel(sl(), audioPlayerHelper: sl(), videoPlayerHelper: sl(), repository: sl(), shareHelper: sl(), accountPublicInfo: sl<AccountProvider>().accountPublicInfo!));
+      () => PurchaseItemViewModel(sl(), audioPlayerHelper: sl(), videoPlayerHelper: sl(), repository: sl(), shareHelper: sl(), accountPublicInfo: sl<AccountProvider>().accountPublicInfo));
   sl.registerLazySingleton(() => StripeHandler(walletsStore: sl(), localDataSource: sl(), repository: sl(), accountProvider: sl()));
   sl.registerLazySingleton(() => HomeProvider(repository: sl(), accountPublicInfo: sl<AccountProvider>().accountPublicInfo!));
   sl.registerLazySingleton(() => GeneralScreenViewModel());
