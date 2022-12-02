@@ -7,8 +7,8 @@ import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/ipc/handler/base_handler.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_message.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
-import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
+import 'package:pylons_wallet/providers/collections_tab_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
@@ -16,6 +16,7 @@ import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dar
 
 import '../../../generated/locale_keys.g.dart';
 import '../../../model/nft.dart';
+import '../../../providers/recipes_provider.dart';
 
 class CreateRecipeHandler implements BaseHandler {
   CreateRecipeHandler(this.sdkIpcMessage);
@@ -45,8 +46,8 @@ class CreateRecipeHandler implements BaseHandler {
         }
 
         GetIt.I.get<HomeProvider>().changeTabs(0);
-        GetIt.I.get<CollectionViewModel>().collectionsType = CollectionsType.creations;
-        GetIt.I.get<CollectionViewModel>().loadPurchasesAndCreationsData();
+        GetIt.I.get<CollectionsTabProvider>().collectionsType = CollectionsType.creations;
+        GetIt.I.get<RecipesProvider>().getCookBooks();
       } else {
         "Recipe ${jsonMap['name']} Created".show();
       }

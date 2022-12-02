@@ -5,7 +5,7 @@ import 'package:pylons_wallet/model/export.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_request.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_response.dart';
-import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
