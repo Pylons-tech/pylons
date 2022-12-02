@@ -329,6 +329,7 @@ class EaselProvider extends ChangeNotifier {
   }
 
   void disposeVideoController() {
+    isVideoLoading = true;
     videoPlayerController.removeListener(() {});
     videoPlayerHelper.destroyVideoPlayer();
   }

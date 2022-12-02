@@ -96,6 +96,7 @@ void main() {
           tester.ensureVisible(bottomSheet);
         },
       );
+
       testWidgets(
         "can user tap on whole draft tile",
         (tester) async {

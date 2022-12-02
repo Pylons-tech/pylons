@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mockito/mockito.dart';
+import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
 import '../../extensions/size_extension.dart';
 import '../../mock/easel_provider.mocks.dart';
 import '../../mock/mock_constants.dart';
@@ -55,6 +57,54 @@ void main() {
       await tester.tap(keyboardDownIcon);
       await tester.pump();
       expect(viewModel.collapsed, true);
+    });
+    testWidgets("do Video nft is showing to user or not", (tester) async {
+      when(viewModel.nft).thenAnswer((realInvocation) => MOCK_PRICED_Video_NFT);
+      when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
+      when(viewModel.collapsed).thenAnswer((realInvocation) => true);
+      when(easelViewModel.isVideoLoading).thenAnswer((realInvocation) => false);
+      when(easelViewModel.videoLoadingError).thenAnswer((realInvocation) => '');
+      when(easelViewModel.videoPlayerController).thenAnswer((realInvocation) => VideoPlayerController.network(MOCK_PRICED_Video_NFT.url));
+      await tester.testAppForWidgetTesting(
+        ChangeNotifierProvider.value(
+            value: GetIt.I.get<EaselProvider>(),
+            builder: (context, child) {
+              return OwnerView(
+                nft: MOCK_PRICED_Video_NFT,
+              );
+            }),
+      );
+      await tester.pump();
+      final imageWidget = find.byKey(const Key(kVideoWidgetKey));
+      expect(imageWidget, findsOneWidget);
+    });
+
+    testWidgets("can user get set wallpaper icon in case of video", (tester) async {
+      when(viewModel.nft).thenAnswer((realInvocation) => MOCK_PRICED_Video_NFT);
+      when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
+      when(viewModel.collapsed).thenAnswer((realInvocation) => false);
+      when(viewModel.viewCount).thenAnswer((realInvocation) => 4);
+      when(viewModel.owner).thenAnswer((realInvocation) => MOCK_PRICED_Video_NFT.owner);
+      when(viewModel.isOwnershipExpanded).thenAnswer((realInvocation) => false);
+      when(easelViewModel.isVideoLoading).thenAnswer((realInvocation) => false);
+      when(easelViewModel.videoLoadingError).thenAnswer((realInvocation) => '');
+      when(easelViewModel.videoPlayerController).thenAnswer((realInvocation) => VideoPlayerController.network(MOCK_PRICED_Video_NFT.url));
+      when(viewModel.isHistoryExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isDetailsExpanded).thenAnswer((realInvocation) => false);
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      await tester.testAppForWidgetTesting(
+        ChangeNotifierProvider.value(
+            value: GetIt.I.get<EaselProvider>(),
+            builder: (context, child) {
+              return OwnerView(
+                nft: MOCK_PRICED_Video_NFT,
+              );
+            }),
+      );
+      await tester.pump();
+      final wallpaperButtonKey = find.byKey(const Key(kWallpaperButtonKey));
+      expect(wallpaperButtonKey, findsNothing);
+      debugDefaultTargetPlatformOverride = null;
     });
   });
 }
