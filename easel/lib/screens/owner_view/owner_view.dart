@@ -6,6 +6,7 @@ import 'package:easel_flutter/generated/locale_keys.g.dart';
 import 'package:easel_flutter/main.dart';
 import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/screens/owner_view/viewmodels/owner_view_viewmodel.dart';
+import 'package:easel_flutter/screens/owner_view/widget/audio_progress_widget.dart';
 import 'package:easel_flutter/screens/owner_view/widget/gestures_for_owner_view_screen.dart';
 import 'package:easel_flutter/screens/owner_view/widget/tab_fields.dart';
 import 'package:easel_flutter/screens/owner_view/widget/wallpaper_sheet.dart';
@@ -15,6 +16,7 @@ import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/enums.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:easel_flutter/utils/read_more.dart';
+import 'package:easel_flutter/widgets/audio_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -76,13 +78,7 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
       nft: viewModel.nft,
       child: Stack(
         children: [
-          Container(
-            color: EaselAppTheme.kWhite,
-            height: double.infinity,
-            width: double.infinity,
-          ),
-
-          ///TODO: Add media here based on type
+          getTypeWidget(),
           if (isUserNotViewingFullNft(viewModel))
             Padding(
               padding: EdgeInsets.only(left: 8, right: 8, bottom: 8, top: MediaQuery.of(context).viewPadding.top),
@@ -112,6 +108,22 @@ class _OwnerViewContentState extends State<OwnerViewContent> {
     );
   }
 
+  Widget getTypeWidget() {
+    final viewModel = context.read<OwnerViewViewModel>();
+    switch (viewModel.nft.assetType.toAssetTypeEnum()) {
+      case AssetType.Audio:
+        return AudioWidget(
+          key: const Key(kAudioWidgetKey),
+          filePath: viewModel.nft.url.changeDomain(),
+          previewFlag: false,
+          fromOwnerScreen: true,
+        );
+
+      default:
+        return const SizedBox();
+    }
+  }
+
   bool isUserNotViewingFullNft(OwnerViewViewModel viewModel) => !viewModel.isViewingFullNft;
 }
 
@@ -124,6 +136,19 @@ class OwnerBottomDrawer extends StatefulWidget {
 
 class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   bool liked = false;
+
+  Widget getProgressWidget() {
+    final viewModel = context.read<OwnerViewViewModel>();
+    switch (viewModel.nft.assetType.toAssetTypeEnum()) {
+      case AssetType.Audio:
+        return OwnerAudioWidget(url: viewModel.nft.url);
+      case AssetType.Image:
+        break;
+      default:
+        return const SizedBox.shrink();
+    }
+    return const SizedBox.shrink();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,8 +195,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   const SizedBox(
                     height: 20,
                   ),
-
-                  ///TODO: Add progress widget here
+                  getProgressWidget(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -246,8 +270,16 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         SizedBox(
                           height: 20.h,
                         ),
-
-                        ///TODO: Add audio & video widget progress
+                        if (viewModel.nft.assetType.toAssetTypeEnum() == AssetType.Audio) ...[
+                          Container(
+                            width: 250.w,
+                            color: EaselAppTheme.kWhite.withOpacity(0.2),
+                            child: OwnerAudioWidget(url: viewModel.nft.url),
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                        ],
                         if (viewModel.nft.hashtags.isNotEmpty)
                           Wrap(
                             spacing: 10.w,

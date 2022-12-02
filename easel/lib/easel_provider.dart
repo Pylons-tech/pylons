@@ -354,7 +354,6 @@ class EaselProvider extends ChangeNotifier {
       audioPlayerHelperForUrl.playerStateStream().listen((playerState) {
         final isPlaying = playerState.playing;
         final processingState = playerState.processingState;
-
         switch (processingState) {
           case ProcessingState.loading:
           case ProcessingState.buffering:

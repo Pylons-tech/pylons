@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/models/picked_file_model.dart';
 import 'package:easel_flutter/repository/repository.dart';
+import 'package:easel_flutter/screens/owner_view/viewmodels/owner_view_viewmodel.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
@@ -20,8 +21,15 @@ class AudioWidget extends StatefulWidget {
   final File? file;
   final String? filePath;
   final bool previewFlag;
+  final bool fromOwnerScreen;
 
-  const AudioWidget({Key? key, this.file, required this.previewFlag, this.filePath}) : super(key: key);
+  const AudioWidget({
+    Key? key,
+    this.file,
+    required this.previewFlag,
+    this.filePath,
+    this.fromOwnerScreen = false,
+  }) : super(key: key);
 
   @override
   AudioWidgetState createState() => AudioWidgetState();
@@ -32,8 +40,10 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
 
   Repository get repository => GetIt.I.get<Repository>();
 
+  OwnerViewViewModel? ownerViewModel;
+
   @override
- void initState() {
+  void initState() {
     super.initState();
 
     if (!widget.previewFlag) {
@@ -45,19 +55,46 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
     }
   }
 
-  BoxDecoration getAudioBackgroundDecoration({required EaselProvider viewModel}) {
+  BoxDecoration getAudioBackgroundDecorationFromEaselViewModel({required EaselProvider viewModel}) {
     if (widget.previewFlag && viewModel.audioThumbnail == null) {
       return const BoxDecoration();
     }
     if (widget.previewFlag && viewModel.audioThumbnail != null) {
       return BoxDecoration(image: DecorationImage(image: FileImage(viewModel.audioThumbnail!), fit: BoxFit.fitHeight));
     }
-    return BoxDecoration(image: viewModel.nft.thumbnailUrl.isNotEmpty ? DecorationImage(image: CachedNetworkImageProvider(viewModel.nft.thumbnailUrl.changeDomain()), fit: BoxFit.fitHeight) : null);
+    return BoxDecoration(
+      image: viewModel.nft.thumbnailUrl.isNotEmpty
+          ? DecorationImage(
+              image: CachedNetworkImageProvider(
+                viewModel.nft.thumbnailUrl.changeDomain(),
+              ),
+              fit: BoxFit.fitHeight,
+            )
+          : null,
+    );
+  }
+
+  BoxDecoration getAudioBackgroundDecorationFromOwnerViewModel(OwnerViewViewModel? viewModel) {
+    return BoxDecoration(
+      image: viewModel!.nft.thumbnailUrl.isNotEmpty
+          ? DecorationImage(
+              image: CachedNetworkImageProvider(
+                viewModel.nft.thumbnailUrl.changeDomain(),
+              ),
+              fit: BoxFit.fitWidth,
+            )
+          : null,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<EaselProvider>();
+    final easelViewModel = context.watch<EaselProvider>();
+    if (widget.fromOwnerScreen) {
+      ownerViewModel = context.watch<OwnerViewViewModel>();
+    } else {
+      ownerViewModel = null;
+    }
 
     return WillPopScope(
         onWillPop: () {
@@ -68,7 +105,13 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
         child: Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: getAudioBackgroundDecoration(viewModel: viewModel),
+          decoration: widget.fromOwnerScreen
+              ? getAudioBackgroundDecorationFromOwnerViewModel(
+                  ownerViewModel,
+                )
+              : getAudioBackgroundDecorationFromEaselViewModel(
+                  viewModel: easelViewModel,
+                ),
           child: SafeArea(
             child: SingleChildScrollView(
               child: Column(
@@ -89,7 +132,7 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
                                 Padding(
                                   padding: EdgeInsets.only(right: 10.w, bottom: 10.h, top: 10.h, left: 5.w),
                                   child: ValueListenableBuilder<ButtonState>(
-                                    valueListenable: viewModel.buttonNotifier,
+                                    valueListenable: easelViewModel.buttonNotifier,
                                     builder: (_, value, __) {
                                       switch (value) {
                                         case ButtonState.loading:
@@ -97,7 +140,7 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
                                         case ButtonState.paused:
                                           return InkWell(
                                             onTap: () {
-                                              viewModel.playAudio(forFile: widget.file != null);
+                                              easelViewModel.playAudio(forFile: widget.file != null);
                                             },
                                             child: Icon(
                                               Icons.play_arrow,
@@ -109,7 +152,7 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
                                         case ButtonState.playing:
                                           return InkWell(
                                             onTap: () {
-                                              viewModel.pauseAudio(forFile: widget.file != null);
+                                              easelViewModel.pauseAudio(forFile: widget.file != null);
                                             },
                                             child: Icon(
                                               Icons.pause,
@@ -123,7 +166,7 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
                                 ),
                                 Expanded(
                                   child: ValueListenableBuilder<ProgressBarState>(
-                                    valueListenable: viewModel.audioProgressNotifier,
+                                    valueListenable: easelViewModel.audioProgressNotifier,
                                     builder: (_, value, __) {
                                       return Padding(
                                         padding: EdgeInsets.only(bottom: 3.h, right: 20.w),
@@ -139,7 +182,7 @@ class AudioWidgetState extends State<AudioWidget> with WidgetsBindingObserver {
                                           thumbRadius: 10.h,
                                           timeLabelPadding: 3.h,
                                           onSeek: (position) {
-                                            viewModel.seekAudio(position, forFile: widget.file != null);
+                                            easelViewModel.seekAudio(position, forFile: widget.file != null);
                                           },
                                         ),
                                       );
