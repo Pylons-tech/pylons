@@ -101,8 +101,8 @@ class BuyNFTButton extends StatelessWidget {
           Text(
             LocaleKeys.remaining_and_total_editions.tr(
               namedArgs: {
-                'remaining': '${nft.quantity - nft.amountMinted}',
-                'total': '${nft.quantity}',
+                kRemaining: '${nft.quantity - nft.amountMinted}',
+                kTotal: '${nft.quantity}',
               },
             ),
             style: TextStyle(
