@@ -144,18 +144,9 @@ extension IBCCoinsDePar on IBCCoins {
       case IBCCoins.ujuno:
       case IBCCoins.uatom:
       case IBCCoins.ustripeusd:
-        final double denomAmount = double.parse(amount) / kBigIntBase;
-        if (denomAmount > 0 && denomAmount < 100) {
-          return denomAmount.toStringAsFixed(2);
-        } else if (denomAmount >= 100 && denomAmount < 1000) {
-          return denomAmount.toStringAsFixed(0);
-        } else if (denomAmount >= 1000) {
-          final formatter = NumberFormat("#,###", "en_US");
-          return formatter.format(denomAmount.round());
-        }
-        return amount;
+      return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
       case IBCCoins.upylon:
-        return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
+        return (double.parse(amount) / kBigIntBase).toStringAsFixed(0);
       case IBCCoins.weth_wei:
         return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
     }
@@ -170,7 +161,16 @@ extension IBCCoinsDePar on IBCCoins {
       case IBCCoins.ujuno:
       case IBCCoins.uatom:
       case IBCCoins.ustripeusd:
-        return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
+        final double denomAmount = double.parse(amount) / kBigIntBase;
+        if (denomAmount > 0 && denomAmount < 100) {
+          return denomAmount.toStringAsFixed(2);
+        } else if (denomAmount >= 100 && denomAmount < 1000) {
+          return denomAmount.toStringAsFixed(0);
+        } else if (denomAmount >= 1000) {
+          final formatter = NumberFormat("#,###", "en_US");
+          return formatter.format(denomAmount.round());
+        }
+        return amount;
       case IBCCoins.upylon:
         return ((double.parse(amount) / kBigIntBase) * 0.1).toStringAsFixed(2);
       case IBCCoins.weth_wei:
