@@ -117,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
             _fightTroll();
           },
-            child: _canSurviveDragon() ? const Text('Fight a troll!') : const Text('💀 Fight a troll! 💀')
+            child: _canSurviveTroll() ? const Text('Fight a troll!') : const Text('💀 Fight a troll! 💀')
         ),
         ElevatedButton(
           onPressed: () {
@@ -129,14 +129,14 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
             _canBuySword() ? _buySword() : () {};
           },
-          style: _canBuySword() ? const ButtonStyle() : ButtonStyle(enableFeedback: false, overlayColor: MaterialStateProperty.all(Colors.grey)),
+          style: _canBuySword() ? const ButtonStyle() : ButtonStyle(enableFeedback: false, backgroundColor: MaterialStateProperty.all(Colors.grey), overlayColor: MaterialStateProperty.all(Colors.grey)),
           child: const Text('Buy a sword!'),
         ) : Container(),
         swordLv == 1 ? ElevatedButton(
           onPressed: () {
             _canUpgradeSword() ? _upgradeSword() : {};
           },
-          style: _canUpgradeSword() ? const ButtonStyle() : ButtonStyle(enableFeedback: false, overlayColor: MaterialStateProperty.all(Colors.grey)),
+          style: _canUpgradeSword() ? const ButtonStyle() : ButtonStyle(enableFeedback: false, backgroundColor: MaterialStateProperty.all(Colors.grey), overlayColor: MaterialStateProperty.all(Colors.grey)),
           child: const Text('Upgrade your sword!'),
         ): Container(),
         ElevatedButton(
@@ -218,6 +218,14 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       }
     } else {
+      for (var item in prf.items) {
+        switch (item.getString("entityType")) {
+          case "trophy": {
+            trophies++;
+            break;
+          }
+        }
+      }
       character = await Item.get(character!.getId());
     }
     setState(() {

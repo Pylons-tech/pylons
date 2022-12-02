@@ -1,5 +1,5 @@
 {
-    #boilerplate v0.0.6 true,
+    #boilerplate v0.0.7 true,
     #id_name RecipeTestAppFightDragonArmed RecipeTestAppFightDragonArmed,
     "description": "Fights a dragon! With slicing!",
     #no_coin_input,
@@ -53,5 +53,13 @@
             }
         ]
     },
-    #solo_output character
+    "outputs": [
+    			{
+    				"entryIds": [
+    					"character",
+    					"trophy"
+    				],
+    				"weight": 1
+    			}
+    		]
 }
