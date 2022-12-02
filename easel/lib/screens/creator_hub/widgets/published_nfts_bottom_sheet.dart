@@ -54,7 +54,7 @@ class BuildPublishedNFTsBottomSheet {
 
   Future show() {
     return showModalBottomSheet(
-      backgroundColor: Colors.transparent,
+      backgroundColor: EaselAppTheme.kTransparent,
       context: context,
       builder: (BuildContext context) {
         return ClipPath(

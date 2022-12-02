@@ -8,7 +8,7 @@ import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
 import 'package:pylons_wallet/components/feedback_text_field.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/main_prod.dart';
-import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
