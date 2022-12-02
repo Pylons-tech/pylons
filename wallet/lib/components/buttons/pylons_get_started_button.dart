@@ -23,7 +23,7 @@ class PylonsGetStartedButton extends StatelessWidget {
     this.enabled = true,
     this.textColor = AppColors.kButtonColor,
     this.fontWeight = FontWeight.w600,
-    this.btnUnselectBGColor = AppColors.kGray,
+    this.btnUnselectBGColor = AppColors.kGreyColorBtn,
     this.btnHeight = 45,
     this.btnWidth = 200,
     this.fontSize = 16,

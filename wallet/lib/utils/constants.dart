@@ -19,7 +19,7 @@ class AppColors {
 
   static Color kPeach = const Color(0xFFFFB094);
   static Color kPeachDark = const Color(0xFFED8864);
-  static const Color kGray = Color(0xFF7B7979);
+  static const Color kGreyColorBtn = Color(0xFF7B7979);
   static Color kLightGray = const Color(0xFFB3B3B3);
   static Color kWhite = const Color(0xFFFFFFFF);
   static Color kYellow = const Color(0xffFED564);
@@ -66,6 +66,7 @@ class AppColors {
   static Color k3DBackgroundColor = Colors.grey.shade200;
   static Color kGreyColor = const Color.fromRGBO(141, 140, 140, 1);
   static Color kTransparentColor = Colors.transparent;
+  static Color kGrey = Colors.grey;
 }
 
 const double kIconSize = 24.0;

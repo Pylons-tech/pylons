@@ -126,7 +126,7 @@ class NewUserFormState extends State<NewUserForm> {
               onTap: onStartPylonsPressed,
               text: LocaleKeys.get_started.tr(),
               loader: isLoadingNotifier,
-              btnUnselectBGColor: AppColors.kGray.withOpacity(0.3),
+              btnUnselectBGColor: AppColors.kGreyColorBtn.withOpacity(0.3),
             ),
           ),
         ],

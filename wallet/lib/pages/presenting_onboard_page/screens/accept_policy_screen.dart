@@ -64,7 +64,7 @@ class _AcceptPolicyScreenState extends State<AcceptPolicyScreen> {
         return imageWidget(nft.thumbnailUrl);
       case AssetType.ThreeD:
         return Container(
-          color: Colors.grey.shade200,
+          color: AppColors.k3DBackgroundColor,
           height: double.infinity,
           child: Nft3dWidget(
             url: nft.url,
@@ -198,7 +198,7 @@ class MyCheckBox extends StatelessWidget {
                 value: isSelected,
                 onChanged: onChange,
                 activeColor: AppColors.kCheckboxActiveColor,
-                checkColor: Colors.black,
+                checkColor: AppColors.kBlack,
                 materialTapTargetSize: MaterialTapTargetSize.padded,
               ),
             ),
