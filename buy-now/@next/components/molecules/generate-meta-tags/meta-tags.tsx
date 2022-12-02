@@ -16,7 +16,6 @@ export const MetaTags: FC<MetaTagsTypes> = ({
   price,
   media,
 }) => {
-  console.log("_____yes____", name, thumbnail, description, price, media);
   return (
     <Box data-testid="metaTags-molecule">
       <Head>
