@@ -144,7 +144,7 @@ extension IBCCoinsDePar on IBCCoins {
       case IBCCoins.ujuno:
       case IBCCoins.uatom:
       case IBCCoins.ustripeusd:
-      return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
+        return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
       case IBCCoins.upylon:
         return (double.parse(amount) / kBigIntBase).toStringAsFixed(0);
       case IBCCoins.weth_wei:
