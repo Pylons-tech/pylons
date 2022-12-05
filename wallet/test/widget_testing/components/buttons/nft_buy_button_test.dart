@@ -20,10 +20,10 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   final WalletsStore walletStore = MockWalletStore();
   final PurchaseItemViewModel viewModel = MockPurchaseItemViewModel();
+  GetIt.I.registerLazySingleton<PurchaseItemViewModel>(() => viewModel);
 
   testWidgets("check buy button is in expanded view or not", (tester) async {
     GetIt.I.registerLazySingleton<WalletsStore>(() => walletStore);
-    GetIt.I.registerLazySingleton<PurchaseItemViewModel>(() => viewModel);
 
     when(viewModel.collapsed).thenAnswer((realInvocation) => false);
     when(viewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_FREE_VIDEO);
@@ -91,6 +91,7 @@ void main() {
 
   testWidgets("Checkout Dialog should show on Buy Now Button Click", (tester) async {
     when(viewModel.collapsed).thenAnswer((realInvocation) => false);
+    when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
     when(viewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_FREE_VIDEO);
     when(viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid)).thenAnswer((realInvocation) => true);
     await tester.testAppForWidgetTesting(
@@ -105,7 +106,7 @@ void main() {
     final buyNFTButton = find.byKey(const Key(kExpandedBuyButtonKeyValue));
     expect(buyNFTButton, findsOneWidget);
     await tester.tap(buyNFTButton);
-    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
     final checkoutDialog = find.byKey(const Key(kCheckoutDialogKey));
     expect(checkoutDialog, findsOneWidget);
   });

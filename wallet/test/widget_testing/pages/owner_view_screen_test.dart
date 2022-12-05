@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mockito/mockito.dart';
@@ -37,9 +38,9 @@ void main() {
       );
       final shareNftButton = find.byKey(const Key(kShareNftButtonCollapsedKey));
       await tester.ensureVisible(shareNftButton);
-      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
       await tester.tap(shareNftButton);
-      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
       expect(viewModel.buttonNotifier.value, ButtonState.paused);
     },
   );
@@ -58,7 +59,7 @@ void main() {
       await tester.ensureVisible(shareNftButton);
       await tester.pump(const Duration(seconds: 4));
       await tester.tap(shareNftButton);
-      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
       expect(viewModel.videoPlayerController!.value.isPlaying, false);
     },
   );
@@ -106,5 +107,39 @@ void registerStubs(OwnerViewViewModel viewModel) {
         minutes: 2,
       ),
     );
+  });
+
+  testWidgets('double tap gesture to hide icons for owner view screen', (tester) async {
+    when(viewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_PREMIUM);
+    await tester.testAppForWidgetTesting(OwnerView(
+      nft: MOCK_NFT_PREMIUM,
+    ));
+    await tester.pump();
+    final gestureWidget = find.byKey(const Key(kGestureDetailWidget));
+    await tester.ensureVisible(gestureWidget);
+    await tester.pumpAndSettle();
+    await tester.tap(gestureWidget);
+    await tester.pump(kDoubleTapMinTime);
+    await tester.tap(gestureWidget);
+    await tester.pumpAndSettle();
+    when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => true);
+    expect(viewModel.isViewingFullNft, true);
+  });
+
+  testWidgets('double tap gesture to hide icons for owner view screen', (tester) async {
+    when(viewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_PREMIUM);
+    await tester.testAppForWidgetTesting(OwnerView(
+      nft: MOCK_NFT_PREMIUM,
+    ));
+    await tester.pump();
+    final gestureWidget = find.byKey(const Key(kGestureDetailWidget));
+    await tester.ensureVisible(gestureWidget);
+    await tester.pumpAndSettle();
+    await tester.tap(gestureWidget);
+    await tester.pump(kDoubleTapMinTime);
+    await tester.tap(gestureWidget);
+    await tester.pumpAndSettle();
+    when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
+    expect(viewModel.isViewingFullNft, false);
   });
 }

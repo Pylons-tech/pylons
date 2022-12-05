@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/model/nft.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
+import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
 import 'package:pylons_wallet/providers/items_provider.dart';
 import 'package:pylons_wallet/providers/recipes_provider.dart';
+import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
@@ -37,6 +40,7 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      key: const Key(kGestureDetailWidget),
       onTapUp: widget.tapUp,
       onHorizontalDragUpdate: widget.screen == DetailScreen.ownerScreen ? _onHorizontalDragUpdate : null,
       onHorizontalDragEnd: widget.screen == DetailScreen.ownerScreen ? _onHorizontalDragEnd : null,
@@ -46,6 +50,7 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
       onVerticalDragStart: _onVerticalDragStart,
       onLongPressStart: _onLongPressStart,
       onLongPressEnd: _onLongPressEnd,
+      onDoubleTap: _onDoubleTap,
       child: widget.child,
     );
   }
@@ -88,6 +93,16 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
     widget.viewModel!.isViewingFullNft = false;
   }
 
+  void _onDoubleTap() {
+    if (widget.viewModel is PurchaseItemViewModel) {
+      final viewModel = widget.viewModel! as PurchaseItemViewModel;
+      viewModel.isViewingFullNft = !viewModel.isViewingFullNft;
+      return;
+    }
+    final viewModel = widget.viewModel! as OwnerViewViewModel;
+    viewModel.isViewingFullNft = !viewModel.isViewingFullNft;
+  }
+
   void _onVerticalDragUpdate(DragUpdateDetails details) {
     _finalSwipeOffset = details.globalPosition;
 
@@ -102,14 +117,11 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
       final offsetDifference = initialOffset.dy - finalOffset.dy;
 
       if (offsetDifference.abs() > swipeConfig.verticalThreshold) {
-        _initialSwipeOffset =
-            swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singular ? null : _finalSwipeOffset;
+        _initialSwipeOffset = swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singular ? null : _finalSwipeOffset;
 
         final direction = offsetDifference > 0 ? SwipeDirection.up : SwipeDirection.down;
 
-        if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.continuous ||
-            _previousDirection == null ||
-            direction != _previousDirection) {
+        if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.continuous || _previousDirection == null || direction != _previousDirection) {
           _previousDirection = direction;
         }
       }
@@ -157,14 +169,11 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
       final offsetDifference = initialOffset.dx - finalOffset.dx;
 
       if (offsetDifference.abs() > swipeConfig.horizontalThreshold) {
-        _initialSwipeOffset =
-            swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singular ? null : _finalSwipeOffset;
+        _initialSwipeOffset = swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singular ? null : _finalSwipeOffset;
 
         final direction = offsetDifference > 0 ? SwipeDirection.left : SwipeDirection.right;
 
-        if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.continuous ||
-            _previousDirection == null ||
-            direction != _previousDirection) {
+        if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.continuous || _previousDirection == null || direction != _previousDirection) {
           _previousDirection = direction;
         }
       }
