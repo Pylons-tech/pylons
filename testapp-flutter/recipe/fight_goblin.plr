@@ -1,5 +1,5 @@
 {
-    #boilerplate v0.0.5 true,
+    #boilerplate v0.0.6 true,
     #id_name RecipeTestAppFightGoblin RecipeTestAppFightGoblin,
     "description": "Fights a goblin! With punching!",
     #no_coin_input,
@@ -21,7 +21,7 @@
                     {
                         "key": "currentHp",
                         "weightRanges": [],
-                        "program": "currentHp - 3"
+                        "program": "currentHp - rand_int(1,4)"
                     }
                 ],
                 "strings": [],
