@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_image_asset.dart';
@@ -340,7 +341,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   Column(
                     children: [
                       SvgPicture.asset(
-                        SVGUtil.OWNER_VIEWS,
+                        SVGUtil.OWNER_VIEWS_BOLD,
                         width: 20.w,
                         height: 15.h,
                       ),
@@ -465,10 +466,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
 
   Widget getLikeIcon({required bool likedByMe}) {
     return SizedBox(
-      height: 15.h,
-      width: 15.w,
+      height: 20.r,
+      width: 20.r,
       child: Image.asset(
-        'assets/images/icons/${likedByMe ? 'like_full' : 'like'}.png',
+        'assets/images/icons/${likedByMe ? 'like_full' : 'like_bold'}.png',
         fit: BoxFit.fill,
         color: likedByMe ? AppColors.kDarkRed : AppColors.kWhite,
       ),
@@ -597,7 +598,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           child: Column(
                             children: [
                               SvgPicture.asset(
-                                SVGUtil.OWNER_VIEWS,
+                                SVGUtil.OWNER_VIEWS_BOLD,
                                 width: 15.w,
                                 height: 15.h,
                               ),
@@ -689,15 +690,15 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SW),
             child: Container(
               color: AppColors.kDarkRed,
-              height: 50.r,
-              width: 50.r,
+              height: 55.r,
+              width: 55.r,
               child: Center(
                 child: IconButton(
                   key: const Key(kCloseBottomSheetKey),
                   alignment: Alignment.topRight,
                   padding: EdgeInsets.only(
-                    bottom: 12.h,
-                    left: 12.w,
+                    bottom: 15.h,
+                    left: isTablet ? 16.w : 20.w,
                   ),
                   icon: const Icon(Icons.keyboard_arrow_down_outlined),
                   onPressed: () {
@@ -706,19 +707,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   iconSize: 32.h,
                   color: AppColors.kWhite,
                 ),
-              ),
-            ),
-          ),
-        ),
-        Positioned.fill(
-          child: Align(
-            alignment: Alignment.bottomLeft,
-            child: ClipPath(
-              clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NE),
-              child: Container(
-                color: AppColors.kDarkRed,
-                height: 30.h,
-                width: 30.w,
               ),
             ),
           ),

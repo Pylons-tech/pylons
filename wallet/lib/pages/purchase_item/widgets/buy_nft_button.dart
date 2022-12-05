@@ -30,11 +30,22 @@ class BuyNFTButton extends StatelessWidget {
         children: [
           Expanded(
             flex: getFlexForMessageContainer(),
-            child: ClipPath(
-              clipper: TopLeftBottomRightClipper(),
-              child: ColoredBox(
-                color: AppColors.kDarkRedColor,
-                child: getMessageContent(),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.kBlack.withOpacity(0.35),
+                    blurRadius: 20,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: ClipPath(
+                clipper: TopLeftBottomRightClipper(),
+                child: ColoredBox(
+                  color: AppColors.kDarkRedColor,
+                  child: getMessageContent(),
+                ),
               ),
             ),
           ),
