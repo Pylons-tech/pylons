@@ -2,22 +2,33 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>com.apple.security.app-sandbox</key>
+	<true/>
+	<key>com.apple.security.network.server</key>
+    <true/>
+    <key>com.apple.security.network.client</key>
+    <true/>
 	<key>aps-environment</key>
+	<true/>
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
+	<true/>
 	<array>
 		<string>applinks:wallet.pylons.tech</string>
 		<string>applinks:pylons.page.link</string>
 	</array>
 	<key>com.apple.developer.icloud-container-identifiers</key>
+	<true/>
 	<array>
 		<string>iCloud.pylonsStorage</string>
 	</array>
 	<key>com.apple.developer.icloud-services</key>
+	<true/>
 	<array>
 		<string>CloudDocuments</string>
 	</array>
 	<key>com.apple.developer.ubiquity-container-identifiers</key>
+	<true/>
 	<array>
 		<string>iCloud.pylonsStorage</string>
 	</array>
