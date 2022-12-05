@@ -61,14 +61,24 @@ class _TabFieldState extends State<TabField> {
   Map<String, String> getNFTDetailsMap() {
     switch (widget.nft.type) {
       case NftType.TYPE_RECIPE:
-        return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID, LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}", LocaleKeys.ipfs_cid.tr(): widget.nft.cid};
+        return {
+          LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
+          LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}",
+          LocaleKeys.ipfs_cid.tr(): widget.nft.cid,
+        };
       case NftType.TYPE_ITEM:
-        return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID};
+        return {
+          LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
+        };
       case NftType.TYPE_TRADE:
         break;
     }
 
-    return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID, LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}", LocaleKeys.ipfs_cid.tr(): widget.nft.cid};
+    return {
+      LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
+      LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}",
+      LocaleKeys.ipfs_cid.tr(): widget.nft.cid,
+    };
   }
 
   @override
@@ -77,14 +87,27 @@ class _TabFieldState extends State<TabField> {
 
     final nftDetail = getNFTDetailsMap();
 
-    final listOwnership = ownership.entries.map((element) => _tabDetails(field: element.key, value: element.value, customColor: element.key == LocaleKeys.owner.tr() ? Colors.red : null)).toList();
+    final listOwnership = ownership.entries
+        .map(
+          (element) => _tabDetails(
+            field: element.key,
+            value: element.value,
+            customColor: element.key == LocaleKeys.owner.tr() ? Colors.red : null,
+          ),
+        )
+        .toList();
 
     final listDetails = nftDetail.entries
         .map(
           (element) => _tabDetails(
-              field: element.key,
-              value: element.value,
-              customWidget: (element.key == LocaleKeys.recipe_id.tr() || element.key == LocaleKeys.ipfs_cid.tr()) && element.value.isNotEmpty ? _tabDetailsWithIcon(value: element.value) : null),
+            field: element.key,
+            value: element.value,
+            customWidget: (element.key == LocaleKeys.recipe_id.tr() || element.key == LocaleKeys.ipfs_cid.tr()) && element.value.isNotEmpty
+                ? _tabDetailsWithIcon(
+                    value: element.value,
+                  )
+                : null,
+          ),
         )
         .toList();
 
