@@ -159,29 +159,6 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
             Visibility(
               visible: !viewModel.isViewingFullNft,
               child: Padding(
-                padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 8.h, top: MediaQuery.of(context).viewPadding.top.h),
-                child: SizedBox(
-                  height: 100.h,
-                  width: double.infinity,
-                  child: ListTile(
-                    leading: GestureDetector(
-                      onTap: () {
-                        viewModel.destroyPlayers();
-                        Navigator.pop(context);
-                      },
-                      child: SvgPicture.asset(
-                        SVGUtil.OWNER_BACK_ICON,
-                        height: 25.h,
-                      ),
-                    ),
-                    trailing: const SizedBox(),
-                  ),
-                ),
-              ),
-            ),
-            Visibility(
-              visible: !viewModel.isViewingFullNft,
-              child: Padding(
                 padding: EdgeInsets.only(
                   left: 8.w,
                   right: 8.w,
