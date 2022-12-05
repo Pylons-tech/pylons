@@ -27,6 +27,7 @@ import 'package:pylons_wallet/pages/purchase_item/widgets/purchase_video_player_
 import 'package:pylons_wallet/pages/purchase_item/widgets/purchase_video_progress_widget.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/trade_receipt_dialog.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/transaction_complete_dialog.dart';
+import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
@@ -173,6 +174,43 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
                       ),
                     ),
                     trailing: const SizedBox(),
+                  ),
+                ),
+              ),
+            ),
+            Visibility(
+              visible: !viewModel.isViewingFullNft,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: 8.w,
+                  right: 8.w,
+                  bottom: 8.h,
+                  top: MediaQuery.of(context).viewPadding.top.h,
+                ),
+                child: SizedBox(
+                  height: 100.h,
+                  width: double.infinity,
+                  child: ListTile(
+                    leading: GestureDetector(
+                      onTap: () {
+                        viewModel.destroyPlayers();
+                        Navigator.pop(context);
+                      },
+                      child: SvgPicture.asset(
+                        SVGUtil.OWNER_BACK_ICON,
+                        height: 25.h,
+                      ),
+                    ),
+                    trailing: GestureDetector(
+                      onTap: () {
+                        final SubmitFeedback submitFeedbackDialog = SubmitFeedback(context: context);
+                        submitFeedbackDialog.show();
+                      },
+                      child: SvgPicture.asset(
+                        SVGUtil.OWNER_REPORT,
+                        height: 25.h,
+                      ),
+                    ),
                   ),
                 ),
               ),
