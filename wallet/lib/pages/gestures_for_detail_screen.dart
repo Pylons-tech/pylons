@@ -36,6 +36,7 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
   Offset? _finalSwipeOffset;
   SwipeDirection? _previousDirection;
   SimpleSwipeConfig swipeConfig = const SimpleSwipeConfig();
+  ValueNotifier<TapDownDetails>? doubleTapDetails = ValueNotifier(TapDownDetails());
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +51,7 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
       onVerticalDragStart: _onVerticalDragStart,
       onLongPressStart: _onLongPressStart,
       onLongPressEnd: _onLongPressEnd,
+      onDoubleTapDown: _onDoubleTapDown,
       onDoubleTap: _onDoubleTap,
       child: widget.child,
     );
@@ -93,7 +95,18 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
     widget.viewModel!.isViewingFullNft = false;
   }
 
+  // ignore: use_setters_to_change_properties
+  void _onDoubleTapDown(TapDownDetails details) {
+    doubleTapDetails!.value = details;
+  }
+
   void _onDoubleTap() {
+    if (doubleTapDetails!.value.globalPosition.dx > 320 && doubleTapDetails!.value.globalPosition.dy > 620) {
+      return;
+    }
+    if (doubleTapDetails!.value.globalPosition.dy > 700) {
+      return;
+    }
     if (widget.viewModel is PurchaseItemViewModel) {
       final viewModel = widget.viewModel! as PurchaseItemViewModel;
       viewModel.isViewingFullNft = !viewModel.isViewingFullNft;
