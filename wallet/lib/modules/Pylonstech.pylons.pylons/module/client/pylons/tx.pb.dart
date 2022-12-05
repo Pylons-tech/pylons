@@ -14,7 +14,7 @@ import 'payment_info.pb.dart' as $7;
 import 'redeem_info.pb.dart' as $5;
 import 'trade.pb.dart' as $8;
 import 'recipe.pb.dart' as $4;
-import '../../cosmos/base/v1beta1/coin.pb.dart' as $2;
+import '../cosmos/base/v1beta1/coin.pb.dart' as $2;
 
 class MsgAppleIap extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgAppleIap', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)

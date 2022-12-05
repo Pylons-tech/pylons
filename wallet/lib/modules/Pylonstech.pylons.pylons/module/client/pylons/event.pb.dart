@@ -14,7 +14,7 @@ import 'redeem_info.pb.dart' as $5;
 import 'cookbook.pb.dart' as $6;
 import 'recipe.pb.dart' as $4;
 import 'payment_info.pb.dart' as $7;
-import '../../cosmos/base/v1beta1/coin.pb.dart' as $2;
+import '../cosmos/base/v1beta1/coin.pb.dart' as $2;
 import 'item.pb.dart' as $3;
 import 'trade.pb.dart' as $8;
 

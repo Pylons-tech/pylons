@@ -11,7 +11,7 @@ import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'accounts.pb.dart' as $12;
-import '../../cosmos/base/query/v1beta1/pagination.pb.dart' as $13;
+import '../cosmos/base/query/v1beta1/pagination.pb.dart' as $13;
 import 'trade.pb.dart' as $8;
 import 'item.pb.dart' as $3;
 import 'stripe_refund.pb.dart' as $14;
