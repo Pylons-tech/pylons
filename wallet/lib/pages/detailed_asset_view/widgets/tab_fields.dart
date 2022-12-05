@@ -92,7 +92,7 @@ class _TabFieldState extends State<TabField> {
           (element) => _tabDetails(
             field: element.key,
             value: element.value,
-            customColor: element.key == LocaleKeys.owner.tr() ? Colors.red : null,
+            customColor: element.key == LocaleKeys.owner.tr() ? AppColors.kRed : null,
           ),
         )
         .toList();
@@ -308,7 +308,7 @@ class DiagonalLinePainter extends CustomPainter {
     final point1 = Offset(-0.5, size.height - 1);
     final point2 = Offset(size.width, -3);
     final paint = Paint()
-      ..color = Colors.white
+      ..color = AppColors.kWhite
       ..strokeWidth = 2;
     canvas.drawLine(point1, point2, paint);
   }
