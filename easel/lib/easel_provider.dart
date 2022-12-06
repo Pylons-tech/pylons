@@ -712,6 +712,7 @@ class EaselProvider extends ChangeNotifier {
               StringParam(key: kNFTURL, value: nft.url),
               StringParam(key: kThumbnailUrl, value: nft.thumbnailUrl),
               StringParam(key: kCreator, value: nft.creator.trim()),
+              StringParam(key: kFileExtension, value: nft.fileExtension.trim()),
               StringParam(key: kCID, value: nft.cid),
               StringParam(key: kFileSize, value: nft.fileSize),
               StringParam(key: kRealWorld, value: "false"),
