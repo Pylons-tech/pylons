@@ -73,3 +73,4 @@ class StripeRefund extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   void clearSettled() => clearField(2);
 }
+
