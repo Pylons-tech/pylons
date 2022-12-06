@@ -266,6 +266,8 @@ func BasicVarDefs() []*exprpb.Decl {
 		decls.NewVar("lastBlockHeight", decls.Int),
 		decls.NewVar("recipeID", decls.String),
 		decls.NewVar("tradeID", decls.String),
+		decls.NewVar("wins", decls.Int),
+		decls.NewVar("level", decls.Int),
 	)
 
 	varDefs = append(varDefs,

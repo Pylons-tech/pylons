@@ -14,6 +14,7 @@ func GetDefaultCelEnv() CelEnvCollection {
 			decls.NewVar("recipeID", decls.String),
 			decls.NewVar("attack", decls.Double),
 			decls.NewVar("level", decls.Int),
+			decls.NewVar("wins", decls.Int),
 			decls.NewVar("name", decls.String),
 			decls.NewVar("input0.attack", decls.Int),
 			decls.NewVar("input0.owner", decls.String),
@@ -41,6 +42,7 @@ func GetDefaultCelEnv() CelEnvCollection {
 		"input1.attack": 3,
 		"input0.owner":  "pylo1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337",
 		"input0.itemID": "shieldID",
+		"wins":          1,
 	}
 
 	//nolint:staticcheck // TODO: FIX THIS VIA A REFACTOR OF THIS LINE, WHICH WILL REQUIRE MORE CODE
