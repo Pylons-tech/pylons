@@ -2528,3 +2528,4 @@ class QueryGetCookbookResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $6.Cookbook ensureCookbook() => $_ensure(0);
 }
+

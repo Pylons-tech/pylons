@@ -546,6 +546,12 @@ abstract class Repository {
 
   Future<Either<Failure, void>> logUserJourney({required String screenName});
 
+  Future<Either<Failure, TransactionResponse>> setUserName({
+    required String username,
+    required String address,
+    required AccountPublicInfo accountPublicInfo,
+  });
+
   /// This method will get you all the favorites from the DB
   /// Output: This method will return the List of [FavoritesModel] or else will return [Failure]
   Future<Either<Failure, List<FavoritesModel>>> getAllFavorites();
@@ -2278,6 +2284,32 @@ class RepositoryImp implements Repository {
     } on Exception catch (e) {
       recordErrorInCrashlytics(e);
       return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, TransactionResponse>> setUserName({
+    required String username,
+    required String address,
+    required AccountPublicInfo accountPublicInfo,
+  }) async {
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
+    }
+    try {
+      final result = await remoteDataStore.setUserName(
+        username: username,
+        address: address,
+        publicInfo: accountPublicInfo,
+      );
+      return Right(result);
+    } on String catch (_) {
+      return Left(AccountCreationFailure(_));
+    } on Failure catch (_) {
+      return Left(_);
+    } on Exception catch (_) {
+      recordErrorInCrashlytics(_);
+      return Left(AccountCreationFailure(LocaleKeys.something_wrong.tr()));
     }
   }
 
