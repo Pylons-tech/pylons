@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 import 'package:fixnum/fixnum.dart';
+import 'package:testapp_flutter/character.dart';
 
 class Game extends StatefulWidget {
   const Game({Key? key, required this.title}) : super(key: key);
@@ -15,12 +16,9 @@ class _GameState extends State<Game> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   bool showTopLevelMenu = true;
   String flavorText = "";
-  Item? character;
+  Character? character;
   Profile? profile;
-  int swordLv = 0;
-  int coins = 0;
-  int shards = 0;
-  int curHp = 0;
+
   int trophiesWon = 0;
   Int64 pylons = Int64.ZERO;
 
@@ -40,24 +38,25 @@ class _GameState extends State<Game> {
         title: Text(widget.title),
       ),
       body: SingleChildScrollView(
-          child: Column(
+          child: character != null ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text("HP: $curHp/20 | Sword level $swordLv | $coins coins | $shards shards\n$trophiesWon trophies won",
+                Text("HP: ${ character!.curHp }/20 | Sword level ${ character!.swordLv } | ${ character!.coins } coins | "
+                    "${ character!.shards } shards\n$trophiesWon trophies won",
                     style: const TextStyle(fontSize: 18)),
                 const Divider(),
                 Text(flavorText, style: const TextStyle(fontSize: 18)),
                 const Divider(),
                 showTopLevelMenu ? _TopLevelMenu(this) : Container(),
-              ])),
+              ]) : Container()),
     );
   }
 
   Future<void> _bootstrap() async {
     await Cookbook.load("appTestCookbook");
     await _checkCharacter();
-    if (character == null || curHp < 1) {
+    if (_noValidCharacter()) {
       await _generateCharacter();
     }
   }
@@ -78,11 +77,11 @@ class _GameState extends State<Game> {
     for (var item in profile!.items) {
       switch (item.getString("entityType")) {
         case "character": {
-          if (character == null || curHp < 1) {
-            if (!(item.getInt("currentHp")?.isZero ?? true) ||
-                !(item.getInt("currentHp")?.isNegative ?? true)) {
+          if (character == null || character!.isDead()) {
+            final chr = Character(item);
+            if (!chr.isDead()) {
               if (item.getLastUpdate() > lastUpdate) {
-                setState(() { character = item; });
+                setState(() { character = chr; });
                 lastUpdate = item.getLastUpdate();
               }
             }
@@ -96,7 +95,6 @@ class _GameState extends State<Game> {
       }
     }
     setState(() {
-      _populateFieldsFromCharacter();
       trophiesWon = trophies;
       flavorText = "Got character!";
       showTopLevelMenu = tlmDefault;
@@ -111,7 +109,7 @@ class _GameState extends State<Game> {
     });
     final itemId = exec.getItemOutputIds().first;
     final chr = await Item.get(itemId);
-    setState(() { character = chr; });
+    setState(() { character = Character(chr); });
     await _checkCharacter();
     setState(() { showTopLevelMenu = true; });
   }
@@ -153,27 +151,20 @@ class _GameState extends State<Game> {
     final buffer = StringBuffer("Resting...!");
     setState(() { flavorText = buffer.toString(); });
     final recipe = Recipe.let("RecipeTestAppRest100Premium");
-    await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
+    await recipe.executeWith(profile!, [character!.item]).onError((error, stackTrace) {
       throw Exception("rest tx should not fail");
     });
     buffer.writeln("Done!");
     setState(() { flavorText = buffer.toString(); });
-    final lastHp = curHp;
+    final lastHp = character!.curHp;
     await _checkCharacter();
-    if (lastHp != curHp) {
-      buffer.writeln("Recovered ${curHp - lastHp} HP!");
+    if (lastHp != character!.curHp) {
+      buffer.writeln("Recovered ${character!.curHp - lastHp} HP!");
     }
     setState(() {
       flavorText = buffer.toString();
       showTopLevelMenu = true;
     });
-  }
-
-  void _populateFieldsFromCharacter() {
-    swordLv = character?.getInt("swordLevel")?.toInt() ?? 0;
-    coins = character?.getInt("coins")?.toInt() ?? 0;
-    shards = character?.getInt("shards")?.toInt() ?? 0;
-    curHp = character?.getInt("currentHp")?.toInt() ?? 0;
   }
 
   void _nonCombatActionInit(String text) {
@@ -195,19 +186,19 @@ class _GameState extends State<Game> {
   Future<void> _characterMutationRecipeHandler(String rcp, String successText) async {
     setState(() { showTopLevelMenu = false; });
     final recipe = Recipe.let(rcp);
-    await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
+    await recipe.executeWith(profile!, [character!.item]).onError((error, stackTrace) {
       throw Exception("purchase tx should not fail");
     });
     final buffer = StringBuffer(successText);
     setState(() { flavorText = buffer.toString(); });
-    final lastCoins = coins;
-    final lastShards = shards;
+    final lastCoins = character!.coins;
+    final lastShards = character!.shards;
     await _checkCharacter();
-    if (lastCoins != coins) {
-      buffer.writeln("Spent ${lastCoins - coins} coins!");
+    if (lastCoins != character!.coins) {
+      buffer.writeln("Spent ${lastCoins - character!.coins} coins!");
     }
-    if (lastShards != shards) {
-      buffer.writeln("Spent ${lastShards - shards} shards!");
+    if (lastShards != character!.shards) {
+      buffer.writeln("Spent ${lastShards - character!.shards} shards!");
     }
     setState(() { flavorText = buffer.toString(); });
     setState(() { showTopLevelMenu = true; });
@@ -215,25 +206,25 @@ class _GameState extends State<Game> {
 
   Future<void> _combatRecipeHandlerWinnable(StringBuffer buffer, String rcp) async {
     final recipe = Recipe.let(rcp);
-    await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
+    await recipe.executeWith(profile!, [character!.item]).onError((error, stackTrace) {
       throw Exception("combat tx should not fail");
     });
     buffer.writeln("Victory!");
     setState(() {
       flavorText = buffer.toString();
     });
-    final lastHp = curHp;
-    final lastCoins = coins;
-    final lastShards = shards;
+    final lastHp = character!.curHp;
+    final lastCoins = character!.coins;
+    final lastShards = character!.shards;
     await _checkCharacter();
-    if (lastHp != curHp) {
-      buffer.writeln("Took ${lastHp - curHp} damage!");
+    if (lastHp != character!.curHp) {
+      buffer.writeln("Took ${lastHp - character!.curHp} damage!");
     }
-    if (lastCoins != coins) {
-      buffer.writeln("Found ${coins - lastCoins} coins!");
+    if (lastCoins != character!.coins) {
+      buffer.writeln("Found ${character!.coins - lastCoins} coins!");
     }
-    if (lastShards != shards) {
-      buffer.writeln("Found ${shards - lastShards} shards!");
+    if (lastShards != character!.shards) {
+      buffer.writeln("Found ${character!.shards - lastShards} shards!");
     }
     setState(() {
       showTopLevelMenu = true;
@@ -243,30 +234,31 @@ class _GameState extends State<Game> {
 
   Future<void> _combatRecipeHandlerUnwinnable(StringBuffer buffer, String rcp) async {
     final recipe = Recipe.let(rcp);
-    await recipe.executeWith(profile!, [character!]).onError((error, stackTrace) {
+    await recipe.executeWith(profile!, [character!.item]).onError((error, stackTrace) {
       throw Exception("combat tx should not fail");
     });
     buffer.writeln("Defeat...");
     setState(() {
       flavorText = buffer.toString();
     });
-    var lastHp = curHp;
+    var lastHp = character!.curHp;
     await _checkCharacter();
-    if (lastHp != curHp) {
-      buffer.writeln("Took ${lastHp - curHp} damage!");
-      if (curHp < 1) buffer.writeln(("You are dead."));
+    if (lastHp != character!.curHp) {
+      buffer.writeln("Took ${lastHp - character!.curHp} damage!");
+      if (character!.isDead()) buffer.writeln(("You are dead."));
     }
     setState(() {
       flavorText = buffer.toString();
     });
   }
 
-  bool _canSurviveTroll() => swordLv >= 1;
-  bool _canSurviveDragon() => swordLv >= 2;
-  bool _canBuySword () => coins >= 50;
-  bool _hasBoughtSword () => swordLv > 0;
-  bool _canUpgradeSword () => coins >= 50;
-  bool _hasUpgradedSword () => swordLv > 1;
+  bool _canSurviveTroll() => character!.swordLv >= 1;
+  bool _canSurviveDragon() => character!.swordLv >= 2;
+  bool _canBuySword () => character!.coins >= 50;
+  bool _hasBoughtSword () => character!.swordLv > 0;
+  bool _canUpgradeSword () => character!.coins >= 50;
+  bool _hasUpgradedSword () => character!.swordLv > 1;
+  bool _noValidCharacter () => character == null || character!.isDead();
 }
 
 class _TopLevelMenu extends StatelessWidget {
@@ -275,7 +267,7 @@ class _TopLevelMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (_homePageState.curHp < 1) {
+    if (_homePageState._noValidCharacter()) {
       return _QuitButton();
     }
     return Column(
