@@ -55,7 +55,7 @@ class _GameState extends State<Game> {
 
   Future<void> _bootstrap() async {
     await Cookbook.load("appTestCookbook");
-    await _checkCharacter();
+    await _checkRemoteState();
     if (_noValidCharacter()) {
       await _generateCharacter();
     }
@@ -68,26 +68,26 @@ class _GameState extends State<Game> {
     pylons = profile!.coins["upylon"] ?? Int64.ZERO;
   }
 
-  Future<void> _checkCharacter() async {
+  Future<void> _checkRemoteState() async {
     final tlmDefault = showTopLevelMenu;
     _nonCombatActionInit('Checking character...');
     await _updateProfile();
-    var lastUpdate = Int64.MIN_VALUE;
+    if (character == null || character!.isDead()) {
+      setState(() {
+        character = Character.fromProfile(profile!);
+      });
+    }
+    _checkTrophies();
+    setState(() {
+      flavorText = "Got character!";
+      showTopLevelMenu = tlmDefault;
+    });
+  }
+
+  void _checkTrophies() {
     var trophies = 0;
     for (var item in profile!.items) {
       switch (item.getString("entityType")) {
-        case "character": {
-          if (character == null || character!.isDead()) {
-            final chr = Character(item);
-            if (!chr.isDead()) {
-              if (item.getLastUpdate() > lastUpdate) {
-                setState(() { character = chr; });
-                lastUpdate = item.getLastUpdate();
-              }
-            }
-          }
-          break;
-        }
         case "trophy": {
           trophies++;
           break;
@@ -96,8 +96,6 @@ class _GameState extends State<Game> {
     }
     setState(() {
       trophiesWon = trophies;
-      flavorText = "Got character!";
-      showTopLevelMenu = tlmDefault;
     });
   }
 
@@ -110,7 +108,7 @@ class _GameState extends State<Game> {
     final itemId = exec.getItemOutputIds().first;
     final chr = await Item.get(itemId);
     setState(() { character = Character(chr); });
-    await _checkCharacter();
+    await _checkRemoteState();
     setState(() { showTopLevelMenu = true; });
   }
 
@@ -134,9 +132,9 @@ class _GameState extends State<Game> {
     }
   }
 
-  Future<void> _buySword() async => await _characterMutationRecipeHandler('RecipeTestAppBuySword', 'Bought a sword!');
+  Future<void> _buySword() async => await _characterUpgradeRecipeHandler('RecipeTestAppBuySword', 'Bought a sword!');
 
-  Future<void> _upgradeSword() async => await _characterMutationRecipeHandler('RecipeTestAppUpgradeSword', 'Upgraded your sword!');
+  Future<void> _upgradeSword() async => await _characterUpgradeRecipeHandler('RecipeTestAppUpgradeSword', 'Upgraded your sword!');
 
   Future<void> _rest() async {
     setState(() { showTopLevelMenu = false; });
@@ -148,23 +146,7 @@ class _GameState extends State<Game> {
       });
       return;
     }
-    final buffer = StringBuffer("Resting...!");
-    setState(() { flavorText = buffer.toString(); });
-    final recipe = Recipe.let("RecipeTestAppRest100Premium");
-    await recipe.executeWith(profile!, [character!.item]).onError((error, stackTrace) {
-      throw Exception("rest tx should not fail");
-    });
-    buffer.writeln("Done!");
-    setState(() { flavorText = buffer.toString(); });
-    final lastHp = character!.curHp;
-    await _checkCharacter();
-    if (lastHp != character!.curHp) {
-      buffer.writeln("Recovered ${character!.curHp - lastHp} HP!");
-    }
-    setState(() {
-      flavorText = buffer.toString();
-      showTopLevelMenu = true;
-    });
+    await _restRecipeHandler('RecipeTestAppRest100Premium');
   }
 
   void _nonCombatActionInit(String text) {
@@ -183,7 +165,27 @@ class _GameState extends State<Game> {
     return buffer;
   }
 
-  Future<void> _characterMutationRecipeHandler(String rcp, String successText) async {
+  Future<void> _restRecipeHandler(String rcp) async {
+    final buffer = StringBuffer("Resting...!");
+    setState(() { flavorText = buffer.toString(); });
+    final recipe = Recipe.let(rcp);
+    await recipe.executeWith(profile!, [character!.item]).onError((error, stackTrace) {
+      throw Exception("rest tx should not fail");
+    });
+    buffer.writeln("Done!");
+    setState(() { flavorText = buffer.toString(); });
+    final lastHp = character!.curHp;
+    await _checkRemoteState();
+    if (lastHp != character!.curHp) {
+      buffer.writeln("Recovered ${character!.curHp - lastHp} HP!");
+    }
+    setState(() {
+      flavorText = buffer.toString();
+      showTopLevelMenu = true;
+    });
+  }
+
+  Future<void> _characterUpgradeRecipeHandler(String rcp, String successText) async {
     setState(() { showTopLevelMenu = false; });
     final recipe = Recipe.let(rcp);
     await recipe.executeWith(profile!, [character!.item]).onError((error, stackTrace) {
@@ -193,7 +195,7 @@ class _GameState extends State<Game> {
     setState(() { flavorText = buffer.toString(); });
     final lastCoins = character!.coins;
     final lastShards = character!.shards;
-    await _checkCharacter();
+    await _checkRemoteState();
     if (lastCoins != character!.coins) {
       buffer.writeln("Spent ${lastCoins - character!.coins} coins!");
     }
@@ -216,7 +218,7 @@ class _GameState extends State<Game> {
     final lastHp = character!.curHp;
     final lastCoins = character!.coins;
     final lastShards = character!.shards;
-    await _checkCharacter();
+    await _checkRemoteState();
     if (lastHp != character!.curHp) {
       buffer.writeln("Took ${lastHp - character!.curHp} damage!");
     }
@@ -242,7 +244,7 @@ class _GameState extends State<Game> {
       flavorText = buffer.toString();
     });
     var lastHp = character!.curHp;
-    await _checkCharacter();
+    await _checkRemoteState();
     if (lastHp != character!.curHp) {
       buffer.writeln("Took ${lastHp - character!.curHp} damage!");
       if (character!.isDead()) buffer.writeln(("You are dead."));
