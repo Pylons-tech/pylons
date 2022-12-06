@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mockito/mockito.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/button_state.dart';
@@ -16,12 +17,10 @@ import '../extension/size_extension.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  late OwnerViewViewModel viewModel;
-  late WalletsStore walletStore;
-  walletStore = MockWalletStore();
+  final walletStore = MockWalletStore();
   GetIt.I.registerLazySingleton<WalletsStore>(() => walletStore);
-  viewModel = MockOwnerViewViewModel();
-  GetIt.I.registerLazySingleton(() => viewModel);
+  final viewModel = MockOwnerViewViewModel();
+  GetIt.I.registerLazySingleton<OwnerViewViewModel>(() => viewModel);
 
   registerStubs(viewModel);
 
@@ -60,6 +59,122 @@ void main() {
       await tester.tap(shareNftButton);
       await tester.pump();
       expect(viewModel.videoPlayerController!.value.isPlaying, false);
+    },
+  );
+
+  testWidgets(
+    "Image file extension should show to user",
+    (tester) async {
+      when(viewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_FREE_IMAGE);
+      when(viewModel.collapsed).thenAnswer((realInvocation) => false);
+      when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
+      when(viewModel.isHistoryExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isOwnershipExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isDetailsExpanded).thenAnswer((realInvocation) => true);
+      await tester.testAppForWidgetTesting(
+        ChangeNotifierProvider.value(
+            value: viewModel,
+            builder: (context, child) {
+              return OwnerView(
+                nft: MOCK_NFT_FREE_IMAGE,
+              );
+            }),
+      );
+      await tester.pump();
+      expect(find.text('${MOCK_NFT_FREE_IMAGE.width}x${MOCK_NFT_FREE_IMAGE.height} ${MOCK_NFT_FREE_IMAGE.fileExtension}'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    "Video file extension should show to user",
+    (tester) async {
+      when(viewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_FREE_VIDEO);
+      when(viewModel.collapsed).thenAnswer((realInvocation) => false);
+      when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
+      when(viewModel.isHistoryExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isOwnershipExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isDetailsExpanded).thenAnswer((realInvocation) => true);
+      await tester.testAppForWidgetTesting(
+        ChangeNotifierProvider.value(
+            value: viewModel,
+            builder: (context, child) {
+              return OwnerView(
+                nft: MOCK_NFT_FREE_VIDEO,
+              );
+            }),
+      );
+      await tester.pump();
+      expect(find.text('${MOCK_NFT_FREE_VIDEO.width}x${MOCK_NFT_FREE_VIDEO.height} ${MOCK_NFT_FREE_VIDEO.fileExtension}'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    "Audio file extension should show to user",
+    (tester) async {
+      when(viewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_FREE_AUDIO);
+      when(viewModel.collapsed).thenAnswer((realInvocation) => false);
+      when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
+      when(viewModel.isHistoryExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isOwnershipExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isDetailsExpanded).thenAnswer((realInvocation) => true);
+      await tester.testAppForWidgetTesting(
+        ChangeNotifierProvider.value(
+            value: viewModel,
+            builder: (context, child) {
+              return OwnerView(
+                nft: MOCK_NFT_FREE_AUDIO,
+              );
+            }),
+      );
+      await tester.pump();
+      expect(find.text('${MOCK_NFT_FREE_AUDIO.width}x${MOCK_NFT_FREE_AUDIO.height} ${MOCK_NFT_FREE_AUDIO.fileExtension}'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    "3D file extension should show to user",
+    (tester) async {
+      when(viewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_FREE_3D);
+      when(viewModel.collapsed).thenAnswer((realInvocation) => false);
+      when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
+      when(viewModel.isHistoryExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isOwnershipExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isDetailsExpanded).thenAnswer((realInvocation) => true);
+      await tester.testAppForWidgetTesting(
+        ChangeNotifierProvider.value(
+            value: viewModel,
+            builder: (context, child) {
+              return OwnerView(
+                nft: MOCK_NFT_FREE_3D,
+              );
+            }),
+      );
+      await tester.pump();
+      expect(find.text('${MOCK_NFT_FREE_3D.width}x${MOCK_NFT_FREE_3D.height} ${MOCK_NFT_FREE_3D.fileExtension}'), findsOneWidget);
+    },
+  );
+
+
+  testWidgets(
+    "Pdf file extension should show to user",
+        (tester) async {
+      when(viewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_FREE_PDF);
+      when(viewModel.collapsed).thenAnswer((realInvocation) => false);
+      when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
+      when(viewModel.isHistoryExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isOwnershipExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isDetailsExpanded).thenAnswer((realInvocation) => true);
+      await tester.testAppForWidgetTesting(
+        ChangeNotifierProvider.value(
+            value: viewModel,
+            builder: (context, child) {
+              return OwnerView(
+                nft: MOCK_NFT_FREE_PDF,
+              );
+            }),
+      );
+      await tester.pump();
+      expect(find.text('${MOCK_NFT_FREE_PDF.width}x${MOCK_NFT_FREE_PDF.height} ${MOCK_NFT_FREE_PDF.fileExtension}'), findsOneWidget);
     },
   );
 }
