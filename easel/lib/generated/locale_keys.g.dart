@@ -1,5 +1,4 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
-// ignore_for_file: constant_identifier_names
 
 abstract class  LocaleKeys {
   static const creator_hub = 'creator_hub';
@@ -8,7 +7,6 @@ abstract class  LocaleKeys {
   static const publish_total = 'publish_total';
   static const draft_total = 'draft_total';
   static const draft = 'draft';
-  static const publish = 'publish';
   static const delete = 'delete';
   static const view = 'view';
   static const delete_error = 'delete_error';
@@ -47,6 +45,16 @@ abstract class  LocaleKeys {
   static const err_add_video_thumbnail = 'err_add_video_thumbnail';
   static const created_by = 'created_by';
   static const currency = 'currency';
+  static const payment_type = 'payment_type';
+  static const price_per_edition = 'price_per_edition';
+  static const enter_whole_dollar_amount = 'enter_whole_dollar_amount';
+  static const network_fee_required = 'network_fee_required';
+  static const no_of_editions = 'no_of_editions';
+  static const editions_are_sold_sequentially = 'editions_are_sold_sequentially';
+  static const min_of_1_per = 'min_of_1_per';
+  static const apple_or_google_play = 'apple_or_google_play';
+  static const credit_or_debit_card = 'credit_or_debit_card';
+  static const learn_more = 'learn_more';
   static const price = 'price';
   static const editions = 'editions';
   static const royalty = 'royalty';

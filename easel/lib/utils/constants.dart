@@ -132,7 +132,6 @@ const String kUniversalFontFamily = "UniversalSans";
 
 /// ```Text constants
 
-const kRoyaltyHintText = '5%';
 
 const kImageText = 'Image';
 const kVideoText = 'Video';
@@ -259,6 +258,7 @@ const kNFTTypeAudioIconKey = "NFT_type_audio_icon_key";
 const kNFTTypePdfIconKey = "NFT_type_pdf_icon_key";
 const kNFTType3dModelIconKey = "NFT_type_3d_icon_key";
 
+const String kFAQsURL = "https://www.pylons.tech/faq/";
 class AnalyticsScreenEvents {
   static String tutorialScreen = "TutorialScreen";
   static String publishScreen = "PublishScreen";

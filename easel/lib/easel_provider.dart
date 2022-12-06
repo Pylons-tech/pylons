@@ -29,6 +29,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:media_info/media_info.dart';
 import 'package:pylons_sdk/low_level.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 import 'generated/locale_keys.g.dart';
@@ -240,7 +241,11 @@ class EaselProvider extends ChangeNotifier {
   void setTextFieldValuesPrice({String? royalties, String? price, String? edition, String? denom, FreeDrop? freeDrop}) {
     royaltyController.text = royalties ?? "";
     priceController.text = price ?? "";
-    noOfEditionController.text = edition ?? "";
+    if(edition != null && int.parse(edition) > 0){
+      noOfEditionController.text = edition;
+    }else{
+      noOfEditionController.text = "";
+    }
     _selectedDenom = denom != "" ? Denom.availableDenoms.firstWhere((element) => element.symbol == denom) : Denom.availableDenoms.first;
     isFreeDrop = freeDrop!;
     notifyListeners();
@@ -650,7 +655,7 @@ class EaselProvider extends ChangeNotifier {
 
     final String tradePercentage = BigInt.from(int.parse(nft.tradePercentage.trim()) * kRoyaltyPrecision).toString();
 
-    final String price = isFreeDrop == FreeDrop.yes ? "0" : _selectedDenom.formatAmount(price: priceController.text);
+    final String price = isFreeDrop == FreeDrop.yes ? "0" : _selectedDenom.formatAmount(price: priceController.text.replaceAll("\$", ""));
     final recipe = Recipe(
       cookbookId: _cookbookId,
       id: _recipeId,
@@ -969,7 +974,7 @@ class EaselProvider extends ChangeNotifier {
       cookbookID: cookbookId ?? "",
       width: fileWidth.toString(),
       creator: repository.getArtistName(),
-      tradePercentage: royaltyController.text,
+      tradePercentage: royaltyController.text.replaceAll("%", ""),
       height: fileHeight.toString(),
       duration: fileDuration.toString(),
       description: descriptionController.text,
@@ -981,7 +986,7 @@ class EaselProvider extends ChangeNotifier {
       thumbnailUrl: (isThumbnailPresent()) ? "$ipfsDomain/${uploadThumbnailResponse.value?.cid}" : "",
       name: artistNameController.text,
       url: "$ipfsDomain/${fileUploadResponse.value?.cid}",
-      price: priceController.text,
+      price: priceController.text.replaceAll("\$", ""),
       dateTime: DateTime.now().millisecondsSinceEpoch,
     );
 
@@ -1002,7 +1007,7 @@ class EaselProvider extends ChangeNotifier {
       assetType: nftFormat.format.getTitle(),
       cookbookID: cookbookId ?? "",
       width: fileWidth.toString(),
-      tradePercentage: royaltyController.text,
+      tradePercentage: royaltyController.text.replaceAll("%", ""),
       height: fileHeight.toString(),
       duration: fileDuration.toString(),
       description: descriptionController.text,
@@ -1013,7 +1018,7 @@ class EaselProvider extends ChangeNotifier {
       thumbnailUrl: (isThumbnailPresent()) ? "$ipfsDomain/${uploadThumbnailResponse.value?.cid}" : "",
       name: artistNameController.text,
       url: "$ipfsDomain/${fileUploadResponse.value?.cid}",
-      price: priceController.text,
+      price: priceController.text.replaceAll("\$", ""),
     );
 
     if (id < 1) {
@@ -1062,8 +1067,8 @@ class EaselProvider extends ChangeNotifier {
 
     final SaveNft saveNftForPrice = SaveNft(
       id: id,
-      tradePercentage: royaltyController.text,
-      price: priceController.text,
+      tradePercentage: royaltyController.text.replaceAll("%", ""),
+      price: priceController.text.replaceAll("\$", ""),
       quantity: noOfEditionController.text,
       step: UploadStep.priceAdded.name,
       denomSymbol: isFreeDrop == FreeDrop.yes ? "" : selectedDenom.symbol,
@@ -1112,6 +1117,29 @@ class EaselProvider extends ChangeNotifier {
 
   late NFT nft;
   bool isUrlLoaded = false;
+
+  Future<void> onLearnMoreClick() async {
+    final Uri parsedUrl = Uri.parse(kFAQsURL);
+    if (await canLaunchUrl(parsedUrl)) {
+      launchUrl(
+        parsedUrl,
+        mode: LaunchMode.externalApplication,
+      );
+    } else {
+      LocaleKeys.something_wrong.tr().show();
+    }
+  }
+
+  void onOutsideTouch(){
+    final String amountStr = priceController.text.replaceAll("\$", "");
+    if(amountStr.isNotEmpty && double.parse(amountStr) > 0){
+      double amount = double.parse(amountStr);
+      amount = amount.round().toDouble();
+      final formatter = NumberFormat("\$#0.00", "en_US");
+      final newText = formatter.format(amount);
+      priceController.text = newText;
+    }
+  }
 }
 
 enum ButtonState { paused, playing, loading }
