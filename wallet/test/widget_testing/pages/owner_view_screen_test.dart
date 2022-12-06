@@ -81,7 +81,7 @@ void main() {
             }),
       );
       await tester.pump();
-      expect(find.text('${MOCK_NFT_FREE_IMAGE.width}x${MOCK_NFT_FREE_IMAGE.height} ${MOCK_NFT_FREE_IMAGE.fileExtension}'), findsOneWidget);
+      expect(find.text('${MOCK_NFT_FREE_IMAGE.width}x${MOCK_NFT_FREE_IMAGE.height} ${MOCK_NFT_FREE_IMAGE.fileExtension.toUpperCase()}'), findsOneWidget);
     },
   );
 
@@ -104,7 +104,7 @@ void main() {
             }),
       );
       await tester.pump();
-      expect(find.text('${MOCK_NFT_FREE_VIDEO.width}x${MOCK_NFT_FREE_VIDEO.height} ${MOCK_NFT_FREE_VIDEO.fileExtension}'), findsOneWidget);
+      expect(find.text('${MOCK_NFT_FREE_VIDEO.width}x${MOCK_NFT_FREE_VIDEO.height} ${MOCK_NFT_FREE_VIDEO.fileExtension.toUpperCase()}'), findsOneWidget);
     },
   );
 
@@ -127,7 +127,7 @@ void main() {
             }),
       );
       await tester.pump();
-      expect(find.text('${MOCK_NFT_FREE_AUDIO.width}x${MOCK_NFT_FREE_AUDIO.height} ${MOCK_NFT_FREE_AUDIO.fileExtension}'), findsOneWidget);
+      expect(find.text('${MOCK_NFT_FREE_AUDIO.width}x${MOCK_NFT_FREE_AUDIO.height} ${MOCK_NFT_FREE_AUDIO.fileExtension.toUpperCase()}'), findsOneWidget);
     },
   );
 
@@ -150,7 +150,7 @@ void main() {
             }),
       );
       await tester.pump();
-      expect(find.text('${MOCK_NFT_FREE_3D.width}x${MOCK_NFT_FREE_3D.height} ${MOCK_NFT_FREE_3D.fileExtension}'), findsOneWidget);
+      expect(find.text('${MOCK_NFT_FREE_3D.width}x${MOCK_NFT_FREE_3D.height} ${MOCK_NFT_FREE_3D.fileExtension.toUpperCase()}'), findsOneWidget);
     },
   );
 
@@ -174,7 +174,7 @@ void main() {
             }),
       );
       await tester.pump();
-      expect(find.text('${MOCK_NFT_FREE_PDF.width}x${MOCK_NFT_FREE_PDF.height} ${MOCK_NFT_FREE_PDF.fileExtension}'), findsOneWidget);
+      expect(find.text('${MOCK_NFT_FREE_PDF.width}x${MOCK_NFT_FREE_PDF.height} ${MOCK_NFT_FREE_PDF.fileExtension.toUpperCase()}'), findsOneWidget);
     },
   );
 }
