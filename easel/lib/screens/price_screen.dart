@@ -275,10 +275,11 @@ class _PriceScreenState extends State<PriceScreen> {
                                               LocaleKeys.credit_or_debit_card.tr(),
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
-                                                  color: easelProvider.selectedDenom.name == kUSDText
-                                                      ? EaselAppTheme.kWhite
-                                                      : EaselAppTheme.kGrey,
-                                                  fontWeight: FontWeight.bold),
+                                                color: easelProvider.selectedDenom.name == kUSDText
+                                                    ? EaselAppTheme.kWhite
+                                                    : EaselAppTheme.kGrey,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
                                         ),
