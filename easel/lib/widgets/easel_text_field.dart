@@ -36,7 +36,7 @@ class EaselTextField extends StatelessWidget {
         Text(
           label,
           textAlign: TextAlign.start,
-          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
         ),
         SizedBox(height: 4.h),
         Stack(
@@ -44,20 +44,18 @@ class EaselTextField extends StatelessWidget {
             ScreenResponsive(
               mobileScreen: (context) => Image.asset(
                 noOfLines == 1 ? PngUtils.kTextFieldSingleLine : PngUtils.kTextFieldMultiLine,
-                height: noOfLines == 1 ? 40.h : 120.h,
+                height: noOfLines == 1 ? 40.h : 95.h,
                 width: 1.sw,
                 fit: BoxFit.fill,
               ),
               tabletScreen: (context) => Image.asset(
                 noOfLines == 1 ? PngUtils.kTextFieldSingleLine : PngUtils.kTextFieldMultiLine,
-                height: noOfLines == 1 ? 32.h : 110.h,
+                height: noOfLines == 1 ? 40.h : 100.h,
                 width: 1.sw,
                 fit: BoxFit.fill,
               ),
             ),
-            ScreenResponsive(
-                mobileScreen: (_) => buildMobileTextField(),
-                tabletScreen: (_) => buildTabletTextField()),
+            ScreenResponsive(mobileScreen: (_) => buildMobileTextField(), tabletScreen: (_) => buildTabletTextField()),
           ],
         ),
       ],
@@ -66,13 +64,14 @@ class EaselTextField extends StatelessWidget {
 
   SizedBox buildMobileTextField() {
     return SizedBox(
-      height: noOfLines == 1 ? 40.h : 120.h,
+      height: noOfLines == 1 ? 40.h : 95.h,
       child: Align(
         child: TextFormField(
           style: TextStyle(
-              fontSize: noOfLines == 1 ? 18.sp : 15.sp,
-              fontWeight: FontWeight.w400,
-              color: EaselAppTheme.kDarkText),
+            fontSize: noOfLines == 1 ? 14.sp : 15.sp,
+            fontWeight: FontWeight.w400,
+            color: EaselAppTheme.kDarkText,
+          ),
           controller: controller,
           validator: validator,
           minLines: noOfLines,
@@ -83,9 +82,10 @@ class EaselTextField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
-                fontSize: 15.sp,
-                fontWeight: FontWeight.w400,
-                color: EaselAppTheme.kGrey),
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+              color: EaselAppTheme.kGrey,
+            ),
             border: const OutlineInputBorder(borderSide: BorderSide.none),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),
@@ -97,13 +97,14 @@ class EaselTextField extends StatelessWidget {
 
   SizedBox buildTabletTextField() {
     return SizedBox(
-      height: noOfLines == 1 ? 32.h : 110.h,
+      height: noOfLines == 1 ? 40.h : 100.h,
       child: Align(
         child: TextFormField(
           style: TextStyle(
-              fontSize: noOfLines == 1 ? 16.sp : 14.sp,
-              fontWeight: FontWeight.w400,
-              color: EaselAppTheme.kDarkText),
+            fontSize: noOfLines == 1 ? 13.sp : 12.sp,
+            fontWeight: FontWeight.w400,
+            color: EaselAppTheme.kDarkText,
+          ),
           controller: controller,
           validator: validator,
           minLines: noOfLines,
@@ -113,9 +114,7 @@ class EaselTextField extends StatelessWidget {
           inputFormatters: inputFormatters,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(
-                fontSize: noOfLines == 1 ? 16.sp : 14.sp,
-                color: EaselAppTheme.kGrey),
+            hintStyle: TextStyle(fontSize: noOfLines == 1 ? 13.sp : 14.sp, color: EaselAppTheme.kGrey),
             border: const OutlineInputBorder(borderSide: BorderSide.none),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),

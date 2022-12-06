@@ -39,7 +39,7 @@ class _HashtagInputFieldState extends State<EaselHashtagInputField> {
           Text(
             "hashtags".tr(),
             textAlign: TextAlign.start,
-            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
           ),
           SizedBox(height: 4.h),
           Stack(children: [
@@ -56,28 +56,34 @@ class _HashtagInputFieldState extends State<EaselHashtagInputField> {
                   child: SvgPicture.asset(SVGUtils.kSearchIcon),
                 ),
                 Flexible(
-                    child: SizedBox(
-                        height: isTablet ? 32.h : 40.h,
-                        child: Align(
-                          child: TextFormField(
-                            style: TextStyle(fontSize: isTablet ? 16.sp : 18.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kDarkText),
-                            controller: _inputController,
-                            minLines: 1,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              hintText: "hashtag_hint".tr(),
-                              hintStyle: TextStyle(fontSize: isTablet ? 16.sp : 15.sp, color: EaselAppTheme.kGrey),
-                              border: const OutlineInputBorder(borderSide: BorderSide.none),
-                              floatingLabelBehavior: FloatingLabelBehavior.always,
-                              contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),
-                            ),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]')),
-                            ],
-                          ),
-                        ))),
+                  child: SizedBox(
+                    height: isTablet ? 32.h : 40.h,
+                    child: Align(
+                      child: TextFormField(
+                        style: TextStyle(
+                          fontSize: isTablet ? 12.sp : 14.sp,
+                          fontWeight: FontWeight.w400,
+                          color: EaselAppTheme.kDarkText,
+                        ),
+                        controller: _inputController,
+                        minLines: 1,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          hintText: "hashtag_hint".tr(),
+                          hintStyle: TextStyle(fontSize: isTablet ? 12.sp : 14.sp, color: EaselAppTheme.kGrey),
+                          border: const OutlineInputBorder(borderSide: BorderSide.none),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          contentPadding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]')),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
                 Padding(
-                  padding: EdgeInsets.only(right: 10.0.w),
+                  padding: EdgeInsets.only(right: 20.0.w),
                   child: InkWell(
                     child: SvgPicture.asset(SVGUtils.kAddIcon),
                     onTap: () {
@@ -95,32 +101,49 @@ class _HashtagInputFieldState extends State<EaselHashtagInputField> {
               ],
             )
           ]),
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: _hashtagsNotifier.value
-                      .map((hashtag) => Row(
-                            children: [
-                              Text('#$hashtag', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kGrey)),
-                              IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _hashtagsNotifier.value.remove(hashtag);
-                                  });
-                                },
-                                icon: const Icon(
-                                  Icons.close,
-                                  color: EaselAppTheme.kLightGrey,
-                                ),
-                              ),
-                              SizedBox(width: 10.w)
-                            ],
-                          ))
-                      .toList(),
-                ),
-              ))
+          SizedBox(height: 10.h,),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: _hashtagsNotifier.value
+                  .map(
+                    (hashtag) => Container(
+                      height: 20.h,
+                      margin: EdgeInsets.only(right: 8.w),
+                      padding: EdgeInsets.only(left: 7.w),
+                      decoration: const BoxDecoration(color: EaselAppTheme.kPurple03),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '#$hashtag',
+                            style: TextStyle(
+                              fontSize: 11.sp,
+                              fontWeight: FontWeight.w400,
+                              color: EaselAppTheme.kNightBlue,
+                            ),
+                          ),
+                          IconButton(
+                            iconSize: 10.h,
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              setState(() {
+                                _hashtagsNotifier.value.remove(hashtag);
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.close,
+                              color: EaselAppTheme.kNightBlue,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          )
         ],
       ),
     );

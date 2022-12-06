@@ -75,41 +75,37 @@ class _DescribeScreenState extends State<DescribeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const VerticalSpace(20),
-                MyStepsIndicator(currentStep: homeViewModel.currentStep),
-                const VerticalSpace(5),
-                StepLabels(currentPage: homeViewModel.currentPage, currentStep: homeViewModel.currentStep),
-                const VerticalSpace(10),
-                const VerticalSpace(20),
                 Stack(
                   alignment: Alignment.center,
                   children: [
                     Align(
-                        alignment: Alignment.centerLeft,
-                        child: ValueListenableBuilder(
-                          valueListenable: homeViewModel.currentPage,
-                          builder: (_, int currentPage, __) => Padding(
-                              padding: EdgeInsets.only(left: 10.sp),
-                              child: IconButton(
-                                onPressed: () {
-                                  FocusScope.of(context).unfocus();
-                                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                  Navigator.pop(context);
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_back_ios,
-                                  color: EaselAppTheme.kGrey,
-                                ),
-                              )),
-                        )),
-                    ValueListenableBuilder(
-                      valueListenable: homeViewModel.currentPage,
-                      builder: (_, int currentPage, __) {
-                        return Text(
-                          homeViewModel.pageTitles[homeViewModel.currentPage.value],
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.w700, color: EaselAppTheme.kDarkText),
-                        );
-                      },
+                      alignment: Alignment.centerLeft,
+                      child: ValueListenableBuilder(
+                        valueListenable: homeViewModel.currentPage,
+                        builder: (_, int currentPage, __) => Padding(
+                          padding: EdgeInsets.only(left: 10.sp),
+                          child: IconButton(
+                            onPressed: () {
+                              FocusScope.of(context).unfocus();
+                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(
+                              Icons.arrow_back_ios,
+                              color: EaselAppTheme.kGrey,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        const VerticalSpace(20),
+                        MyStepsIndicator(currentStep: homeViewModel.currentStep),
+                        const VerticalSpace(5),
+                        StepLabels(currentPage: homeViewModel.currentPage, currentStep: homeViewModel.currentStep),
+                        const VerticalSpace(10),
+                      ],
                     ),
                   ],
                 ),
@@ -134,7 +130,9 @@ class _DescribeScreenState extends State<DescribeScreen> {
                             return;
                           }
                           if (value.length <= kMinNFTName) {
-                            _artNameFieldError.value = LocaleKeys.nft_remaining_characters.tr(args: [kMinNFTName.toString()]);
+                            _artNameFieldError.value = LocaleKeys.nft_remaining_characters.tr(
+                              args: [kMinNFTName.toString()],
+                            );
                             return;
                           }
                           _artNameFieldError.value = '';
@@ -152,14 +150,14 @@ class _DescribeScreenState extends State<DescribeScreen> {
                             child: Text(
                               artNameFieldError,
                               style: TextStyle(
-                                fontSize: 12.sp,
+                                fontSize: 10.sp,
                                 color: Colors.red,
                               ),
                             ),
                           );
                         },
                       ),
-                      VerticalSpace(20.h),
+                      VerticalSpace(12.h),
                       EaselTextField(
                         label: LocaleKeys.your_name_as_the_artist.tr(),
                         hint: LocaleKeys.artist_hint.tr(),
@@ -185,14 +183,14 @@ class _DescribeScreenState extends State<DescribeScreen> {
                             child: Text(
                               artistNameFieldError,
                               style: TextStyle(
-                                fontSize: 12.sp,
+                                fontSize: 10.sp,
                                 color: Colors.red,
                               ),
                             ),
                           );
                         },
                       ),
-                      VerticalSpace(20.h),
+                      VerticalSpace(12.h),
                       EaselTextField(
                         label: LocaleKeys.describe_your_nft.tr(),
                         hint: LocaleKeys.desc_nft_hint.tr(),
@@ -206,7 +204,8 @@ class _DescribeScreenState extends State<DescribeScreen> {
                             return;
                           }
                           if (value.length <= kMinDescription) {
-                            _descriptionFieldError.value = "${LocaleKeys.enter_more_than.tr()} $kMinDescription ${LocaleKeys.characters.tr()}";
+                            _descriptionFieldError.value =
+                                "${LocaleKeys.enter_more_than.tr()} $kMinDescription ${LocaleKeys.characters.tr()}";
                             return;
                           }
                           _descriptionFieldError.value = '';
@@ -224,7 +223,7 @@ class _DescribeScreenState extends State<DescribeScreen> {
                               child: Text(
                                 descriptionFieldError,
                                 style: TextStyle(
-                                  fontSize: 12.sp,
+                                  fontSize: 10.sp,
                                   color: Colors.red,
                                 ),
                               ),
@@ -240,7 +239,11 @@ class _DescribeScreenState extends State<DescribeScreen> {
                                 children: [
                                   Text(
                                     "${kMaxDescription - controller.text.length} ${LocaleKeys.character_limit.tr()}",
-                                    style: TextStyle(color: EaselAppTheme.kLightPurple, fontSize: 14.sp, fontWeight: FontWeight.w800),
+                                    style: TextStyle(
+                                      color: EaselAppTheme.kLightPurple,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w800,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -248,7 +251,7 @@ class _DescribeScreenState extends State<DescribeScreen> {
                           }),
                       VerticalSpace(20.h),
                       const EaselHashtagInputField(),
-                      VerticalSpace(20.h),
+                      VerticalSpace(50.h),
                       ClippedButton(
                         title: LocaleKeys.continue_key.tr(),
                         bgColor: EaselAppTheme.kBlue,
@@ -260,6 +263,8 @@ class _DescribeScreenState extends State<DescribeScreen> {
                         clipperType: ClipperType.bottomLeftTopRight,
                         isShadow: false,
                         fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                        btnHeight: 35,
                       ),
                       VerticalSpace(10.h),
                       Center(
@@ -270,7 +275,11 @@ class _DescribeScreenState extends State<DescribeScreen> {
                           },
                           child: Text(
                             LocaleKeys.save_as_draft.tr(),
-                            style: TextStyle(color: EaselAppTheme.kLightGreyText, fontSize: 14.sp, fontWeight: FontWeight.w700),
+                            style: TextStyle(
+                              color: EaselAppTheme.kLightGreyText,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                       ),
@@ -291,7 +300,9 @@ class _DescribeScreenState extends State<DescribeScreen> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    if (_artNameFieldError.value.isNotEmpty || _artistNameFieldError.value.isNotEmpty || _descriptionFieldError.value.isNotEmpty) {
+    if (_artNameFieldError.value.isNotEmpty ||
+        _artistNameFieldError.value.isNotEmpty ||
+        _descriptionFieldError.value.isNotEmpty) {
       return;
     }
     GetIt.I.get<CreatorHubViewModel>().changeSelectedCollection(CollectionType.draft);

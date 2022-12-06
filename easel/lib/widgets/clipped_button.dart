@@ -14,18 +14,22 @@ class ClippedButton extends StatelessWidget {
   final ClipperType clipperType;
   final FontWeight fontWeight;
   bool? isShadow = true;
+  double fontSize;
+  double btnHeight;
 
-  ClippedButton(
-      {Key? key,
-      required this.onPressed,
-      required this.title,
-      required this.bgColor,
-      required this.textColor,
-      required this.cuttingHeight,
-      this.isShadow = true,
-      required this.clipperType,
-      required this.fontWeight})
-      : super(key: key);
+  ClippedButton({
+    Key? key,
+    required this.onPressed,
+    required this.title,
+    required this.bgColor,
+    required this.textColor,
+    required this.cuttingHeight,
+    this.isShadow = true,
+    required this.clipperType,
+    required this.fontWeight,
+    this.fontSize = 16,
+    this.btnHeight = 40,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,33 +39,39 @@ class ClippedButton extends StatelessWidget {
       },
       child: isShadow!
           ? CustomPaint(
-              painter:
-                  clipperType == ClipperType.bottomLeftTopRight ? BoxShadowPainterBottomLeftTopRight(cuttingHeight: cuttingHeight) : BoxShadowPainterTopLeftBottomRight(cuttingHeight: cuttingHeight),
+              painter: clipperType == ClipperType.bottomLeftTopRight
+                  ? BoxShadowPainterBottomLeftTopRight(cuttingHeight: cuttingHeight)
+                  : BoxShadowPainterTopLeftBottomRight(cuttingHeight: cuttingHeight),
               child: ClipPath(
-                clipper: clipperType == ClipperType.bottomLeftTopRight ? ButtonClipperBottomLeftTopRight(cuttingHeight: cuttingHeight) : ButtonClipperTopLeftBottomRight(cuttingHeight: cuttingHeight),
+                clipper: clipperType == ClipperType.bottomLeftTopRight
+                    ? ButtonClipperBottomLeftTopRight(cuttingHeight: cuttingHeight)
+                    : ButtonClipperTopLeftBottomRight(cuttingHeight: cuttingHeight),
                 child: Container(
                   color: bgColor,
-                  height: 40.h,
+                  height: btnHeight.h,
                   child: Center(
-                      child: Text(
-                    title,
-                    style: TextStyle(color: textColor, fontSize: 16.sp, fontWeight: fontWeight),
-                    textAlign: TextAlign.center,
-                  )),
+                    child: Text(
+                      title,
+                      style: TextStyle(color: textColor, fontSize: fontSize.sp, fontWeight: fontWeight),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
               ),
             )
           : ClipPath(
-              clipper: clipperType == ClipperType.bottomLeftTopRight ? ButtonClipperBottomLeftTopRight(cuttingHeight: cuttingHeight) : ButtonClipperTopLeftBottomRight(cuttingHeight: cuttingHeight),
+              clipper: clipperType == ClipperType.bottomLeftTopRight
+                  ? ButtonClipperBottomLeftTopRight(cuttingHeight: cuttingHeight)
+                  : ButtonClipperTopLeftBottomRight(cuttingHeight: cuttingHeight),
               child: Container(
                 color: bgColor,
-                height: 40.h,
+                height: btnHeight.h,
                 child: Center(
                   child: Text(
                     title,
                     style: TextStyle(
                       color: textColor,
-                      fontSize: 16.sp,
+                      fontSize: fontSize.sp,
                       fontWeight: fontWeight,
                     ),
                     textAlign: TextAlign.center,
@@ -75,7 +85,9 @@ class ClippedButton extends StatelessWidget {
 
 class ButtonClipperBottomLeftTopRight extends CustomClipper<Path> {
   final double cuttingHeight;
+
   ButtonClipperBottomLeftTopRight({required this.cuttingHeight});
+
   @override
   Path getClip(Size size) {
     final path = Path();
@@ -97,7 +109,9 @@ class ButtonClipperBottomLeftTopRight extends CustomClipper<Path> {
 
 class ButtonClipperTopLeftBottomRight extends CustomClipper<Path> {
   final double cuttingHeight;
+
   ButtonClipperTopLeftBottomRight({required this.cuttingHeight});
+
   @override
   Path getClip(Size size) {
     final path = Path();
@@ -120,7 +134,9 @@ class ButtonClipperTopLeftBottomRight extends CustomClipper<Path> {
 
 class BoxShadowPainterBottomLeftTopRight extends CustomPainter {
   final double cuttingHeight;
+
   BoxShadowPainterBottomLeftTopRight({required this.cuttingHeight});
+
   @override
   void paint(Canvas canvas, Size size) {
     final Path path = Path();
@@ -142,7 +158,9 @@ class BoxShadowPainterBottomLeftTopRight extends CustomPainter {
 
 class BoxShadowPainterTopLeftBottomRight extends CustomPainter {
   final double cuttingHeight;
+
   BoxShadowPainterTopLeftBottomRight({required this.cuttingHeight});
+
   @override
   void paint(Canvas canvas, Size size) {
     final path = Path();
