@@ -1,5 +1,5 @@
 name: testapp_flutter
-description: A new Flutter project.
+description: Flutter project corresponding to the BlockSlayer demo game for the Pylons SDK
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
