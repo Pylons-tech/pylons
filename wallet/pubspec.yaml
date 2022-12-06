@@ -1,7 +1,7 @@
 name: pylons_wallet
 description: Pylons Wallet
 publish_to: "none"
-version: 1.0.1+162
+version: 1.0.1+164
 
 
 environment:
@@ -41,6 +41,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.0.2
+  flutter_inappwebview: ^5.7.2+2
   flutter_local_notifications: ^12.0.0
   flutter_localizations:
     sdk: flutter
@@ -93,7 +94,6 @@ dependencies:
   video_player: ^2.4.7
   video_thumbnail: ^0.5.3
   wallpaper: ^1.1.0
-  webview_flutter: ^3.0.4
   
 
 dev_dependencies:

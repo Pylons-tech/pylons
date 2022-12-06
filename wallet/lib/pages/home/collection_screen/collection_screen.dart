@@ -69,6 +69,10 @@ class _CollectionScreenState extends State<CollectionScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<RecipesProvider>().cookbooks = [];
+    context.read<RecipesProvider>().creations = [];
+    context.read<ItemsProvider>().items = [];
+    
     context.read<RecipesProvider>().getCookBooks();
     context.read<ItemsProvider>().getItems();
   }

@@ -27,6 +27,8 @@ class RecipesProvider extends ChangeNotifier {
     log("Get Cookbooks finished", name: "RecipesProvider");
     cookbooks = response.getOrElse(() => []);
 
+    creations = <NFT>[];
+
     for (final cookbook in cookbooks) {
       await getRecipe(cookbook);
     }

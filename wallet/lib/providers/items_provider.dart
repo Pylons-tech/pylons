@@ -25,7 +25,7 @@ class ItemsProvider extends ChangeNotifier {
     log("Get Items started", name: "ItemsProvider");
 
     final itemsEither = await repository.getListItemByOwner(owner: address!);
-
+    this.items = <NFT>[];
     log("Get Items finished", name: "ItemsProvider");
     final items = itemsEither.getOrElse(() => []);
 
