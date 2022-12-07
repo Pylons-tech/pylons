@@ -552,6 +552,12 @@ abstract class Repository {
   });
 
   Future<Either<Failure, void>> logUserJourney({required String screenName});
+
+  Future<Either<Failure, TransactionResponse>> setUserName({
+    required String username,
+    required String address,
+    required AccountPublicInfo accountPublicInfo,
+  });
 }
 
 class RepositoryImp implements Repository {
@@ -2284,6 +2290,32 @@ class RepositoryImp implements Repository {
       return Right(await localDataSource.saveUserAcceptPolicies());
     } on Exception catch (_) {
       return const Left(SavingLocalDataFailure(SOMETHING_WENT_WRONG));
+    }
+  }
+
+  @override
+  Future<Either<Failure, TransactionResponse>> setUserName({
+    required String username,
+    required String address,
+    required AccountPublicInfo accountPublicInfo,
+  }) async {
+    if (!await networkInfo.isConnected) {
+      return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
+    }
+    try {
+      final result = await remoteDataStore.setUserName(
+        username: username,
+        address: address,
+        publicInfo: accountPublicInfo,
+      );
+      return Right(result);
+    } on String catch (_) {
+      return Left(AccountCreationFailure(_));
+    } on Failure catch (_) {
+      return Left(_);
+    } on Exception catch (_) {
+      recordErrorInCrashlytics(_);
+      return Left(AccountCreationFailure(LocaleKeys.something_wrong.tr()));
     }
   }
 }

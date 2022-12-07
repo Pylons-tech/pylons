@@ -574,4 +574,10 @@ class MockRepository extends Repository {
     // TODO: implement getTx
     throw UnimplementedError();
   }
+  
+  @override
+  Future<Either<Failure, TransactionResponse>> setUserName({required String username, required String address, required AccountPublicInfo accountPublicInfo}) {
+    // TODO: implement setUserName
+    throw UnimplementedError();
+  }
 }

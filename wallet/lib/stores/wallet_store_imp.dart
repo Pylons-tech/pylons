@@ -129,6 +129,21 @@ class WalletsStoreImp implements WalletsStore {
         );
       }
 
+      final setUserNameResult = await repository.setUserName(
+        accountPublicInfo: info,
+        address: walletCreationModel.creatorAddress,
+        username: walletCreationModel.userName,
+      );
+
+      if (setUserNameResult.isLeft()) {
+        await deleteAccountCredentials(customTransactionSigningGateway, info);
+        return SdkIpcResponse.failure(
+          sender: '',
+          error: setUserNameResult.swap().toOption().toNullable().toString(),
+          errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
+        );
+      }
+
       return SdkIpcResponse.success(
         sender: '',
         data: result.getOrElse(() => TransactionResponse.initial()).hash,
