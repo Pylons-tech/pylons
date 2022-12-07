@@ -125,3 +125,4 @@ class PaymentInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   void clearSignature() => clearField(6);
 }
+

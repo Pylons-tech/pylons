@@ -1,0 +1,36 @@
+{
+    #boilerplate v0.0.5 true,
+    #id_name RecipeTestAppFightGoblin RecipeTestAppFightGoblin,
+    "description": "Fights a goblin! With punching!",
+    #no_coin_input,
+    "itemInputs": [
+        #character_input_alive
+    ],
+    "entries": {
+        #no_coin_or_item_output,
+        "itemModifyOutputs": [
+            {
+                "id": "character",
+                "itemInputRef": "character",
+                "longs": [
+                    {
+                        "key": "coins",
+                        "weightRanges": [],
+                        "program": "coins + 10"
+                    },
+                    {
+                        "key": "currentHp",
+                        "weightRanges": [],
+                        "program": "currentHp - 3"
+                    }
+                ],
+                "strings": [],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": false
+            }
+        ]
+    },
+    #solo_output character
+}

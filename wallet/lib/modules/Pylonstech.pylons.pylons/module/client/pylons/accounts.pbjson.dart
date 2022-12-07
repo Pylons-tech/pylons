@@ -61,3 +61,17 @@ const RefereeSignup$json = const {
 
 /// Descriptor for `RefereeSignup`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List refereeSignupDescriptor = $convert.base64Decode('Cg1SZWZlcmVlU2lnbnVwEhoKCHVzZXJuYW1lGAEgASgJUgh1c2VybmFtZRIYCgdhZGRyZXNzGAIgASgJUgdhZGRyZXNz');
+@$core.Deprecated('Use kYCAccountDescriptor instead')
+const KYCAccount$json = const {
+  '1': 'KYCAccount',
+  '2': const [
+    const {'1': 'account_addr', '3': 1, '4': 1, '5': 9, '10': 'accountAddr'},
+    const {'1': 'username', '3': 2, '4': 1, '5': 9, '10': 'username'},
+    const {'1': 'level', '3': 3, '4': 1, '5': 4, '10': 'level'},
+    const {'1': 'provider', '3': 4, '4': 1, '5': 9, '10': 'provider'},
+    const {'1': 'provider_id', '3': 5, '4': 1, '5': 9, '10': 'providerId'},
+  ],
+};
+
+/// Descriptor for `KYCAccount`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List kYCAccountDescriptor = $convert.base64Decode('CgpLWUNBY2NvdW50EiEKDGFjY291bnRfYWRkchgBIAEoCVILYWNjb3VudEFkZHISGgoIdXNlcm5hbWUYAiABKAlSCHVzZXJuYW1lEhQKBWxldmVsGAMgASgEUgVsZXZlbBIaCghwcm92aWRlchgEIAEoCVIIcHJvdmlkZXISHwoLcHJvdmlkZXJfaWQYBSABKAlSCnByb3ZpZGVySWQ=');
