@@ -197,7 +197,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             ),
             if (remoteConfigService.getMaintenanceMode())
               Positioned(
-                top: 0.16.sh,
+                top: 0.035.sh,
                 right: 0,
                 child: const MaintenanceModeBannerWidget(),
               ),
@@ -315,7 +315,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             ),
             if (remoteConfigService.getMaintenanceMode())
               Positioned(
-                top: 0.16.sh,
+                top: 0.06.sh,
                 right: 0,
                 child: const MaintenanceModeBannerWidget(),
               ),
