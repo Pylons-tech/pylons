@@ -38,9 +38,18 @@ class MaintenanceModeMessageWidget extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
             color: AppColors.kDarkPurple,
-            child: Text(
-              LocaleKeys.maintenance_mode_message.tr(),
-              style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w500),
+            child: Column(
+              children: [
+                Text(
+                  LocaleKeys.maintenance_mode_message_1.tr(),
+                  style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w500),
+                ),
+                SizedBox(height: 5.h),
+                Text(
+                  LocaleKeys.maintenance_mode_message_2.tr(),
+                  style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.w500),
+                ),
+              ]
             ),
           ),
         ),
