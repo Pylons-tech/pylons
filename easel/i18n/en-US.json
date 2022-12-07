@@ -143,5 +143,8 @@
   "app_needed_desc_three": "You can always delete it if you’d like",
   "why_app_needed_summary_three": "No subscriptions. We don’t sell your information. We only charge a fee when you purchase a NFT",
   "upload_hint_three": "• One file per upload",
-  "analytics_failure": "Analytics Error"
+  "analytics_failure": "Analytics Error",
+  "you_need_to_download_pylons_app": "You need to download the Pylons app to publish your NFT on the pylons chain!",
+  "once_you_download_the_app": "Once you download the app, we will take you back to Easel to finish publishing your NFT!",
+  "download": "Download"
 }

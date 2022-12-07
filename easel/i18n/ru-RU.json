@@ -143,5 +143,8 @@
   "app_needed_desc_three": "Вы всегда можете удалить его, если хотите",
   "why_app_needed_summary_three": "Никаких подписок. Мы не продаем вашу информацию. Мы взимаем комиссию только при покупке NFT",
   "upload_hint_three": "• Один файл на загрузку",
-  "analytics_failure": "Ошибка аналитики"
+  "analytics_failure": "Ошибка аналитики",
+  "you_need_to_download_pylons_app": "Вам нужно загрузить приложение Pylons, чтобы опубликовать свой NFT в сети pylons!",
+  "once_you_download_the_app": "Как только вы загрузите приложение, мы вернем вас в Easel, чтобы завершить публикацию вашего NFT!",
+  "download": "Скачать"
 }

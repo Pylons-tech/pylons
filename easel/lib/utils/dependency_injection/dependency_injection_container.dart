@@ -5,6 +5,7 @@ import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/screens/tutorial_screen.dart';
+import 'package:easel_flutter/screens/welcome_screen/widgets/viewModel/show_install_wallet_bottom_sheet_viewmodel.dart';
 import 'package:easel_flutter/services/datasources/cache_manager.dart';
 import 'package:easel_flutter/services/datasources/local_datasource.dart';
 import 'package:easel_flutter/services/datasources/remote_datasource.dart';
@@ -24,6 +25,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:media_info/media_info.dart';
+import 'package:pylons_sdk/pylons_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 import 'package:easel_flutter/env.dart';
@@ -70,10 +72,12 @@ void _registerLocalDataSources() {
 }
 
 void _registerProviders() {
-  sl.registerLazySingleton<EaselProvider>(() => EaselProvider(videoPlayerHelper: sl(), audioPlayerHelperForFile: sl(), fileUtilsHelper: sl(), repository: sl(), audioPlayerHelperForUrl: sl(), mediaInfo: sl()));
+  sl.registerLazySingleton<EaselProvider>(
+      () => EaselProvider(videoPlayerHelper: sl(), audioPlayerHelperForFile: sl(), fileUtilsHelper: sl(), repository: sl(), audioPlayerHelperForUrl: sl(), mediaInfo: sl()));
   sl.registerLazySingleton<CreatorHubViewModel>(() => CreatorHubViewModel(sl()));
   sl.registerLazySingleton<HomeViewModel>(() => HomeViewModel(sl()));
   sl.registerLazySingleton<TutorialScreenViewModel>(() => TutorialScreenViewModel(repository: sl()));
+  sl.registerLazySingleton(() => ShowInstallBottomSheetViewModel(pylonsWallet: PylonsWallet.instance));
 }
 
 void _registerServices() {

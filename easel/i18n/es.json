@@ -143,5 +143,8 @@
   "app_needed_desc_three": "Siempre puedes borrarlo si quieres",
   "why_app_needed_summary_three": "Sin suscripciones. No vendemos su información. Solo cobramos una tarifa cuando compra un NFT",
   "upload_hint_three": "• Un archivo por carga",
-  "analytics_failure": "Error de Análisis"
+  "analytics_failure": "Error de Análisis",
+  "you_need_to_download_pylons_app": "¡Necesita descargar la aplicación Pylons para publicar su NFT en la cadena de pilones!",
+  "once_you_download_the_app": "Una vez que descargue la aplicación, lo llevaremos de regreso a Easel para terminar de publicar su NFT.",
+  "download": "Descargar"
 }

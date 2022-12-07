@@ -8,6 +8,7 @@ import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart' as clipper;
 import 'package:easel_flutter/screens/clippers/right_triangle_clipper.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
+import 'package:easel_flutter/screens/welcome_screen/widgets/show_install_wallet_bottom_sheet.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easel_flutter/utils/enums.dart';
@@ -372,6 +373,16 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 if (viewModel.nft.assetType == kAudioText) {
                                   viewModel.disposeAudioController();
                                 }
+                                final bool isWalletInstalled = await viewModel.isWalletInstalled();
+                                if (!isWalletInstalled) {
+                                  final showInstallWalletBottomSheet = ShowInstallWalletBottomSheet(
+                                    key: const Key(kShowInstallWalletBottomSheetKey),
+                                    context: context,
+                                  );
+                                  showInstallWalletBottomSheet.show();
+                                  return;
+                                }
+
                                 final bool isRecipeCreated = await viewModel.verifyPylonsAndMint(nft: viewModel.nft);
                                 if (!isRecipeCreated) {
                                   return;

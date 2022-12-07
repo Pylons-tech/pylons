@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, constant_identifier_names
 
+import 'package:easel_flutter/models/denom.dart';
 import 'package:easel_flutter/models/nft.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
 import 'package:easel_flutter/utils/constants.dart';
@@ -139,3 +140,4 @@ const MOCK_NO_OF_ENTITIES = "50";
 const MOCK_PRICE = "50";
 
 CollectionType MOCK_COLLECTION_TYPE = CollectionType.draft;
+Denom MOCK_DENOM = Denom(name: 'pylons', symbol: 'upylons', icon: kPylonSymbol);

@@ -268,3 +268,5 @@ class AnalyticsScreenEvents {
   static String describeScreen = "DescribeScreen";
   static String chooseFormatScreen = "ChooseFormatScreen";
 }
+
+const kShowInstallWalletBottomSheetKey = "show_install_wallet_bottom_sheet_key";

@@ -143,5 +143,8 @@
   "app_needed_desc_three": "Sie können es jederzeit löschen, wenn Sie möchten",
   "why_app_needed_summary_three": "Keine Abonnements. Wir verkaufen Ihre Informationen nicht. Wir berechnen nur eine Gebühr, wenn Sie ein NFT kaufen",
   "upload_hint_three": "• Eine Datei pro upload",
-  "analytics_failure": "Analytics-Fehler"
+  "analytics_failure": "Analytics-Fehler",
+  "you_need_to_download_pylons_app": "Sie müssen die Pylons-App herunterladen, um Ihre NFT in der Pylons-Kette zu veröffentlichen!",
+  "once_you_download_the_app": "Sobald Sie die App heruntergeladen haben, bringen wir Sie zurück zu Easel, um die Veröffentlichung Ihres NFT abzuschließen!",
+  "download": "Download"
 }

@@ -556,27 +556,12 @@ class EaselProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> verifyPylonsAndMint({required NFT nft}) async {
+  Future<bool> isWalletInstalled() async {
     final isPylonsExist = await PylonsWallet.instance.exists();
+    return isPylonsExist;
+  }
 
-    if (!isPylonsExist) {
-      final ShowWalletInstallDialog showWalletInstallDialog = ShowWalletInstallDialog(
-        context: navigatorKey.currentState!.overlay!.context,
-        errorMessage: LocaleKeys.download_pylons_description.tr(),
-        buttonMessage: LocaleKeys.download_pylons_app.tr(),
-        onButtonPressed: () {
-          PylonsWallet.instance.goToInstall();
-        },
-        onClose: () {
-          Navigator.of(navigatorKey.currentState!.overlay!.context).pop();
-        },
-      );
-
-      showWalletInstallDialog.show();
-
-      return false;
-    }
-
+  Future<bool> verifyPylonsAndMint({required NFT nft}) async {
     final response = await getProfile();
 
     if (response.errorCode == kErrProfileNotExist) {

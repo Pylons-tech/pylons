@@ -148,5 +148,8 @@ abstract class  LocaleKeys {
   static const why_app_needed_summary_three = 'why_app_needed_summary_three';
   static const upload_hint_three = 'upload_hint_three';
   static const analytics_failure = 'analytics_failure';
+  static const you_need_to_download_pylons_app = 'you_need_to_download_pylons_app';
+  static const once_you_download_the_app = 'once_you_download_the_app';
+  static const download = 'download';
 
 }
