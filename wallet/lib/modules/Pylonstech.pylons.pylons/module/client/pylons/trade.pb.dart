@@ -202,3 +202,4 @@ class Trade extends $pb.GeneratedMessage {
   @$pb.TagNumber(9)
   $core.List<ItemRef> get tradedItemInputs => $_getList(8);
 }
+

@@ -127,7 +127,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Dialog(
-        backgroundColor: Colors.transparent,
+        backgroundColor: EaselAppTheme.kTransparent,
         insetPadding: EdgeInsets.symmetric(horizontal: isTablet ? 65.w : 21.w),
         child: Container(
           color: Colors.black.withOpacity(0.5),

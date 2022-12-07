@@ -284,6 +284,7 @@ abstract class  LocaleKeys {
   static const read_more = 'read_more';
   static const pylons_fee_msg = 'pylons_fee_msg';
   static const you = 'you';
+  static const tx_not_found = 'tx_not_found';
   static const recipe_not_found = 'recipe_not_found';
   static const username_not_found = 'username_not_found';
   static const cookbook_not_found = 'cookbook_not_found';
@@ -371,5 +372,6 @@ abstract class  LocaleKeys {
   static const ea = 'ea';
   static const maintenance_mode_message = 'maintenance_mode_message';
   static const maintenance_mode_header = 'maintenance_mode_header';
+  static const invalid_mnemonic = 'invalid_mnemonic';
 
 }

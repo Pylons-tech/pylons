@@ -111,3 +111,4 @@ class AppleInAppPurchaseOrder extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   void clearCreator() => clearField(5);
 }
+

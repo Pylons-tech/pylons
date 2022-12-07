@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui';
 import 'package:cosmos_utils/app_info_extractor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,12 +7,11 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
-import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_config_service/remote_config_service.dart';
-import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
@@ -42,6 +40,12 @@ class _SplashScreenState extends State<SplashScreen> {
     accountProvider = context.read<AccountProvider>();
 
     initTimer();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    ImageUtil.BG_IMAGES.map((e) => precacheImage(e.image, context));
   }
 
   void initTimer() {
@@ -114,52 +118,26 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
         child: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0.w),
+            padding: EdgeInsets.symmetric(horizontal: 12.0.w),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: 250.0.h,
+                  height: 145.0.h,
                 ),
                 ValueListenableBuilder(
                   valueListenable: getImageIndex,
                   builder: (context, int value, child) {
                     return SizedBox(
                       height: 0.5.sh,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            left: 18,
-                            child: SizedBox(
-                              width: 0.9.sw,
-                              child: Opacity(
-                                opacity: 0.2,
-                                child: Image.asset(
-                                  ImageUtil.BG_IMAGES[value],
-                                  color: AppColors.kBlack,
-                                ),
-                              ),
-                            ),
-                          ),
-                          ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(
-                                sigmaX: 10.0,
-                                sigmaY: 10.0,
-                              ),
-                              child: AnimatedSwitcher(
-                                transitionBuilder: (Widget child, Animation<double> animation) {
-                                  return FadeTransition(opacity: animation, child: child);
-                                },
-                                duration: const Duration(seconds: 1),
-                                child: Image.asset(
-                                  ImageUtil.BG_IMAGES[value],
-                                  key: UniqueKey(),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
+                      child: ClipRect(
+                        child: AnimatedSwitcher(
+                          transitionBuilder: (Widget child, Animation<double> animation) {
+                            return FadeTransition(opacity: animation, child: child);
+                          },
+                          duration: const Duration(milliseconds: 1500),
+                          child: ImageUtil.BG_IMAGES[value],
+                        ),
                       ),
                     );
                   },
