@@ -51,7 +51,7 @@ class Item {
 
   /// Re-retrieves an item from the chain.
   Future<Item> refresh () async {
-    return get(this.getId(), cookbook : this.getCookbookId());
+    return get(getId(), cookbook : getCookbookId());
   }
 
   /// Retrieves the ID of the item's associated cookbook.
