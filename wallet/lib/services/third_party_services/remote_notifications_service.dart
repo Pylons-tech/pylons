@@ -45,10 +45,15 @@ class RemoteNotificationsProvider {
 
     const initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/launcher_icon');
 
-    final initializationSettingsIOS = DarwinInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    final initializationSettingsIOS =
+        DarwinInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    final initializationSettingsMacOs =
+        DarwinInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+
     final initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
+      macOS: initializationSettingsMacOs,
     );
 
     await flutterLocalNotificationsPlugin.initialize(
@@ -62,7 +67,9 @@ class RemoteNotificationsProvider {
       importance: Importance.max,
     );
 
-    await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
 
     return false;
   }
@@ -87,7 +94,8 @@ class RemoteNotificationsProvider {
             notification.title,
             notification.body,
             NotificationDetails(
-              android: AndroidNotificationDetails(CHANNEL_ID, CHANNEL_NAME, channelDescription: CHANNEL_DESCRIPTION, icon: android.smallIcon, importance: Importance.max),
+              android: AndroidNotificationDetails(CHANNEL_ID, CHANNEL_NAME,
+                  channelDescription: CHANNEL_DESCRIPTION, icon: android.smallIcon, importance: Importance.max),
             ));
       }
       onReceiveNotificationHandler(message.data, notification!);

@@ -76,7 +76,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
     GetIt.I.get<Repository>().setApplicationDirectory();
     checkInternetConnectivity();
     setUpNotifications();
-    InAppPurchase.instance.purchaseStream.listen(onEvent);
+    if (!Platform.isMacOS) InAppPurchase.instance.purchaseStream.listen(onEvent);
   }
 
   @override
@@ -220,9 +220,13 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> saveTransactionRecord({required String transactionHash, required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
+  Future<void> saveTransactionRecord(
+      {required String transactionHash,
+      required TransactionStatus transactionStatus,
+      required LocalTransactionModel txLocalModel}) async {
     final repository = GetIt.I.get<Repository>();
-    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(transactionHash: transactionHash, status: transactionStatus, transactionModel: txLocalModel);
+    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(
+        transactionHash: transactionHash, status: transactionStatus, transactionModel: txLocalModel);
     await repository.saveLocalTransaction(txLocalModelWithStatus);
   }
 
@@ -252,7 +256,8 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
         transactionCurrency: kStripeUSD_ABR,
         transactionPrice: price,
       );
-      saveTransactionRecord(transactionHash: '', transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      saveTransactionRecord(
+          transactionHash: '', transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
     }
 
     if (purchaseDetails is AppStorePurchaseDetails) {
@@ -273,7 +278,8 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
           transactionCurrency: kStripeUSD_ABR,
           transactionPrice: price);
 
-      saveTransactionRecord(transactionHash: '', transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
+      saveTransactionRecord(
+          transactionHash: '', transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
     }
   }
 
@@ -332,7 +338,8 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
             creator: creator,
           );
 
-          final appleInAppPurchaseResponse = await walletStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
+          final appleInAppPurchaseResponse =
+              await walletStore.sendAppleInAppPurchaseCoinsRequest(appleInAppPurchaseModel);
 
           if (appleInAppPurchaseResponse.isLeft()) {
             appleInAppPurchaseResponse.swap().toOption().toNullable()!.message.show();
