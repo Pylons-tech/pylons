@@ -186,6 +186,8 @@ const kFileSize = "fileSize";
 const kRealWorld = "real_world";
 
 const kThumbnailFileName = "temp.jpg";
+const kFormat = "format";
+const kFileName = "fileName";
 
 final List<String> stepLabels = ["upload", "detail", "price"];
 

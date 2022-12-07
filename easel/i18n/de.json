@@ -37,7 +37,7 @@
   "compressing_thumbnail": "Miniaturbild Komprimieren",
   "uploading": "Hochladen ...",
   "nft_name": "{}",
-  "could_not_uploaded": " konnte nicht hochgeladen werden. Das {format} NFT muss:",
+  "could_not_uploaded": "{fileName} konnte nicht hochgeladen werden. Das {format} NFT muss:",
   "something_wrong": "Etwas ist schief gelaufen. Bitte versuchen Sie, die Anwendung neu zu starten.",
   "err_add_audio_thumbnail": "Bitte Audio-Thumbnail auswählen",
   "err_add_video_thumbnail": "Bitte Video-Thumbnail auswählen",

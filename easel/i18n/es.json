@@ -37,7 +37,7 @@
   "compressing_thumbnail": "Comprimir archivo de miniaturas",
   "uploading": "Subiendo...",
   "nft_name": "{}",
-  "could_not_uploaded": " no se pudo cargar. El {format} NFT debe ser:",
+  "could_not_uploaded": "{fileName} no se pudo cargar. El {format} NFT debe ser:",
   "something_wrong": "Algo salió mal. Intenta reiniciar la aplicación.",
   "err_add_audio_thumbnail": "Seleccione el archivo de miniatura de audio",
   "err_add_video_thumbnail": "Seleccione el archivo de miniatura de video",

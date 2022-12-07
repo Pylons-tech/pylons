@@ -38,11 +38,12 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
 
     if (!provider.nftFormat.extensions.contains(result.extension)) {
       final fileName = result.fileName.replaceAll(".${result.extension}", "");
-      errorText.value = '"$fileName" ${LocaleKeys.could_not_uploaded.tr(
+      errorText.value = LocaleKeys.could_not_uploaded.tr(
         namedArgs: {
-          "format": provider.nftFormat.format.getTitle(),
+          kFileName: fileName,
+          kFormat: provider.nftFormat.format.getTitle(),
         },
-      )}';
+      );
       showErrorDialog(extensions: provider.nftFormat.extensions);
       return;
     }
