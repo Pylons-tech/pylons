@@ -369,7 +369,8 @@
   "ipfs_cid": "IPFS CID",
   "available": "available",
   "ea": "ea",
-  "maintenance_mode_message": "We are experiencing technical issues and have temporarily initiated maintenance mode for troubleshooting. Don't worry, your collection is safe. However, you cannot initiate on-chain transactions until we've resolved the problem and restored normal functionality.",
+  "maintenance_mode_message_1": "We are experiencing technical issues and have temporarily initiated maintenance mode.",
+  "maintenance_mode_message_2": "Don't worry, your collection is safe. However, you cannot initiate on-chain transactions until we resolve the issue and restored normal functionality.",
   "maintenance_mode_header": "Maintenance Mode",
   "invalid_mnemonic" : "Invalid mnemonic"
 }
