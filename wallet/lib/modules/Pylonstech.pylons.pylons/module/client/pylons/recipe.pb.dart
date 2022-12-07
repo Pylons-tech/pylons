@@ -10,7 +10,7 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../cosmos/base/v1beta1/coin.pb.dart' as $2;
+import '../../cosmos/base/v1beta1/coin.pb.dart' as $2;
 import 'item.pb.dart' as $3;
 
 class DoubleInputParam extends $pb.GeneratedMessage {
@@ -374,7 +374,8 @@ class DoubleParam extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DoubleParam', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'key')
     ..pc<DoubleWeightRange>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'weightRanges', $pb.PbFieldType.PM, protoName: 'weightRanges', subBuilder: DoubleWeightRange.create)
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'program')
+    ..a<$core.double>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'value', $pb.PbFieldType.OD)
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'program')
     ..hasRequiredFields = false
   ;
 
@@ -382,6 +383,7 @@ class DoubleParam extends $pb.GeneratedMessage {
   factory DoubleParam({
     $core.String? key,
     $core.Iterable<DoubleWeightRange>? weightRanges,
+    $core.double? value,
     $core.String? program,
   }) {
     final _result = create();
@@ -390,6 +392,9 @@ class DoubleParam extends $pb.GeneratedMessage {
     }
     if (weightRanges != null) {
       _result.weightRanges.addAll(weightRanges);
+    }
+    if (value != null) {
+      _result.value = value;
     }
     if (program != null) {
       _result.program = program;
@@ -430,13 +435,22 @@ class DoubleParam extends $pb.GeneratedMessage {
   $core.List<DoubleWeightRange> get weightRanges => $_getList(1);
 
   @$pb.TagNumber(3)
-  $core.String get program => $_getSZ(2);
+  $core.double get value => $_getN(2);
   @$pb.TagNumber(3)
-  set program($core.String v) { $_setString(2, v); }
+  set value($core.double v) { $_setDouble(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasProgram() => $_has(2);
+  $core.bool hasValue() => $_has(2);
   @$pb.TagNumber(3)
-  void clearProgram() => clearField(3);
+  void clearValue() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get program => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set program($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasProgram() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearProgram() => clearField(4);
 }
 
 class IntWeightRange extends $pb.GeneratedMessage {
@@ -518,7 +532,8 @@ class LongParam extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'LongParam', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'key')
     ..pc<IntWeightRange>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'weightRanges', $pb.PbFieldType.PM, protoName: 'weightRanges', subBuilder: IntWeightRange.create)
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'program')
+    ..aInt64(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'value')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'program')
     ..hasRequiredFields = false
   ;
 
@@ -526,6 +541,7 @@ class LongParam extends $pb.GeneratedMessage {
   factory LongParam({
     $core.String? key,
     $core.Iterable<IntWeightRange>? weightRanges,
+    $fixnum.Int64? value,
     $core.String? program,
   }) {
     final _result = create();
@@ -534,6 +550,9 @@ class LongParam extends $pb.GeneratedMessage {
     }
     if (weightRanges != null) {
       _result.weightRanges.addAll(weightRanges);
+    }
+    if (value != null) {
+      _result.value = value;
     }
     if (program != null) {
       _result.program = program;
@@ -574,13 +593,22 @@ class LongParam extends $pb.GeneratedMessage {
   $core.List<IntWeightRange> get weightRanges => $_getList(1);
 
   @$pb.TagNumber(3)
-  $core.String get program => $_getSZ(2);
+  $fixnum.Int64 get value => $_getI64(2);
   @$pb.TagNumber(3)
-  set program($core.String v) { $_setString(2, v); }
+  set value($fixnum.Int64 v) { $_setInt64(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasProgram() => $_has(2);
+  $core.bool hasValue() => $_has(2);
   @$pb.TagNumber(3)
-  void clearProgram() => clearField(3);
+  void clearValue() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get program => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set program($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasProgram() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearProgram() => clearField(4);
 }
 
 class StringParam extends $pb.GeneratedMessage {

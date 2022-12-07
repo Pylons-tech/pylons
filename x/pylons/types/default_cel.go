@@ -6,30 +6,18 @@ import (
 	celTypes "github.com/google/cel-go/common/types"
 	"github.com/google/cel-go/common/types/ref"
 	"github.com/google/cel-go/interpreter/functions"
+	expr "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
+	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 
-func GetDefaultCelEnv() CelEnvCollection {
+func GetDefaultCelEnv(vars []*CelVariable) CelEnvCollection {
+	varDefs := make([]*exprpb.Decl, 0)
+	for _, elem := range vars {
+		varDefs = append(varDefs, decls.NewVar(elem.Variable, elem.Type))
+	}
 	env, _ := cel.NewEnv(
 		cel.Declarations(
-			decls.NewVar("recipeID", decls.String),
-			decls.NewVar("attack", decls.Double),
-			decls.NewVar("level", decls.Int),
-			decls.NewVar("name", decls.String),
-			decls.NewVar("input0.attack", decls.Int),
-			decls.NewVar("input0.owner", decls.String),
-			decls.NewVar("input0.itemID", decls.String),
-			decls.NewVar("input1.attack", decls.Int),
-			// global function for no param
-			Rand10FuncDecls,
-			// global function for 1 param
-			RandFuncDecls,
-			// global function for 1 param
-			Log2FuncDecls,
-			// global function for 2 param
-			MultiplyFuncDecls,
-			MinFuncDecls,
-			MaxFuncDecls,
-			ExecutedByCountDecls,
+			varDefs...,
 		),
 	)
 	variables := map[string]interface{}{
@@ -42,7 +30,9 @@ func GetDefaultCelEnv() CelEnvCollection {
 		"input0.owner":  "pylo1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337",
 		"input0.itemID": "shieldID",
 	}
-
+	for _, elem := range vars {
+		variables[elem.Variable] = elem.Value
+	}
 	//nolint:staticcheck // TODO: FIX THIS VIA A REFACTOR OF THIS LINE, WHICH WILL REQUIRE MORE CODE
 	funcs := cel.Functions(
 		Rand10Func,
@@ -74,3 +64,15 @@ func GetDefaultCelEnv() CelEnvCollection {
 	)
 	return NewCelEnvCollection(env, variables, funcs)
 }
+
+type CelVariable struct {
+	Variable string
+	Type     *expr.Type
+	Value    any
+}
+
+const (
+	BasicVariableBlockHeight = "lastBlockHeight"
+	BasicVariableRecipeID    = "recipeID"
+	BasicVariableTradeID     = "tradeID"
+)

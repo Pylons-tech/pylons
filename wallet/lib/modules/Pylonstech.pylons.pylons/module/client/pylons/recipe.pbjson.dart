@@ -74,12 +74,13 @@ const DoubleParam$json = const {
   '2': const [
     const {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
     const {'1': 'weightRanges', '3': 2, '4': 3, '5': 11, '6': '.pylons.pylons.DoubleWeightRange', '8': const {}, '10': 'weightRanges'},
-    const {'1': 'program', '3': 3, '4': 1, '5': 9, '10': 'program'},
+    const {'1': 'value', '3': 3, '4': 1, '5': 1, '10': 'value'},
+    const {'1': 'program', '3': 4, '4': 1, '5': 9, '10': 'program'},
   ],
 };
 
 /// Descriptor for `DoubleParam`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List doubleParamDescriptor = $convert.base64Decode('CgtEb3VibGVQYXJhbRIQCgNrZXkYASABKAlSA2tleRJKCgx3ZWlnaHRSYW5nZXMYAiADKAsyIC5weWxvbnMucHlsb25zLkRvdWJsZVdlaWdodFJhbmdlQgTI3h8AUgx3ZWlnaHRSYW5nZXMSGAoHcHJvZ3JhbRgDIAEoCVIHcHJvZ3JhbQ==');
+final $typed_data.Uint8List doubleParamDescriptor = $convert.base64Decode('CgtEb3VibGVQYXJhbRIQCgNrZXkYASABKAlSA2tleRJKCgx3ZWlnaHRSYW5nZXMYAiADKAsyIC5weWxvbnMucHlsb25zLkRvdWJsZVdlaWdodFJhbmdlQgTI3h8AUgx3ZWlnaHRSYW5nZXMSFAoFdmFsdWUYAyABKAFSBXZhbHVlEhgKB3Byb2dyYW0YBCABKAlSB3Byb2dyYW0=');
 @$core.Deprecated('Use intWeightRangeDescriptor instead')
 const IntWeightRange$json = const {
   '1': 'IntWeightRange',
@@ -98,12 +99,13 @@ const LongParam$json = const {
   '2': const [
     const {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
     const {'1': 'weightRanges', '3': 2, '4': 3, '5': 11, '6': '.pylons.pylons.IntWeightRange', '8': const {}, '10': 'weightRanges'},
-    const {'1': 'program', '3': 3, '4': 1, '5': 9, '10': 'program'},
+    const {'1': 'value', '3': 3, '4': 1, '5': 3, '10': 'value'},
+    const {'1': 'program', '3': 4, '4': 1, '5': 9, '10': 'program'},
   ],
 };
 
 /// Descriptor for `LongParam`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List longParamDescriptor = $convert.base64Decode('CglMb25nUGFyYW0SEAoDa2V5GAEgASgJUgNrZXkSRwoMd2VpZ2h0UmFuZ2VzGAIgAygLMh0ucHlsb25zLnB5bG9ucy5JbnRXZWlnaHRSYW5nZUIEyN4fAFIMd2VpZ2h0UmFuZ2VzEhgKB3Byb2dyYW0YAyABKAlSB3Byb2dyYW0=');
+final $typed_data.Uint8List longParamDescriptor = $convert.base64Decode('CglMb25nUGFyYW0SEAoDa2V5GAEgASgJUgNrZXkSRwoMd2VpZ2h0UmFuZ2VzGAIgAygLMh0ucHlsb25zLnB5bG9ucy5JbnRXZWlnaHRSYW5nZUIEyN4fAFIMd2VpZ2h0UmFuZ2VzEhQKBXZhbHVlGAMgASgDUgV2YWx1ZRIYCgdwcm9ncmFtGAQgASgJUgdwcm9ncmFt');
 @$core.Deprecated('Use stringParamDescriptor instead')
 const StringParam$json = const {
   '1': 'StringParam',

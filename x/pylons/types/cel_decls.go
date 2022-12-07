@@ -258,6 +258,15 @@ var ExecutedByCountDecls = decls.NewFunction("executed_by_count",
 		decls.Int),
 )
 
+// CustomVarDefs collect custom variable definition
+func CustomVarDefs(variables []*CelVariable) []*exprpb.Decl {
+	varDefs := make([]*exprpb.Decl, 0)
+	for _, elem := range variables {
+		varDefs = append(varDefs, decls.NewVar(elem.Variable, elem.Type))
+	}
+	return varDefs
+}
+
 // BasicVarDefs collect basic variable definitions
 func BasicVarDefs() []*exprpb.Decl {
 	varDefs := make([]*exprpb.Decl, 0)
@@ -280,11 +289,14 @@ func BasicVarDefs() []*exprpb.Decl {
 }
 
 // BasicVariables initialize default variables
-func BasicVariables(blockHeight int64, recipeID, tradeID string) map[string]interface{} {
+func BasicVariables(blockHeight int64, recipeID, tradeID string, vars []*CelVariable) map[string]interface{} {
 	variables := map[string]interface{}{}
 	variables["lastBlockHeight"] = blockHeight
 	variables["recipeID"] = recipeID
 	variables["tradeID"] = tradeID
+	for _, elem := range vars {
+		variables[elem.Variable] = elem.Value
+	}
 	return variables
 }
 

@@ -51,8 +51,9 @@ message DoubleWeightRange {
 message DoubleParam  {
   string key = 1;
   repeated DoubleWeightRange weightRanges = 2 [(gogoproto.nullable) = false];
+  repeated double value = 3;
   // When program is not empty, weightRanges is ignored
-  string program = 3;
+  string program = 4;
 }
 
 // IntWeightRange describes weight range that produce int value
@@ -66,8 +67,9 @@ message IntWeightRange {
 message LongParam {
   string key = 1;
   repeated IntWeightRange weightRanges = 2 [(gogoproto.nullable) = false];
+  repeated int64 value = 3;
   // When program is not empty, weightRanges is ignored
-  string program = 3;
+  string program = 4;
 }
 
 // StringParam describes an item input/output parameter of type string

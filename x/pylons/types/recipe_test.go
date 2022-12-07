@@ -169,7 +169,7 @@ func TestValidateCoinOutput(t *testing.T) {
 }
 
 func TestValidateDoubles(t *testing.T) {
-	cel := GetDefaultCelEnv()
+	cel := GetDefaultCelEnv([]*CelVariable{})
 	valGTone, _ := sdk.NewDecFromStr("1.01")
 	valLTone, _ := sdk.NewDecFromStr("0.99")
 	for _, tc := range []struct {
@@ -211,7 +211,7 @@ func TestValidateDoubles(t *testing.T) {
 }
 
 func TestValidateLongs(t *testing.T) {
-	cel := GetDefaultCelEnv()
+	cel := GetDefaultCelEnv([]*CelVariable{})
 	for _, tc := range []struct {
 		desc string
 		obj  []LongParam
@@ -251,7 +251,7 @@ func TestValidateLongs(t *testing.T) {
 }
 
 func TestValidateStrings(t *testing.T) {
-	cel := GetDefaultCelEnv()
+	cel := GetDefaultCelEnv([]*CelVariable{})
 	for _, tc := range []struct {
 		desc string
 		obj  []StringParam
@@ -288,7 +288,7 @@ func TestValidateStrings(t *testing.T) {
 }
 
 func TestValidateItemOutputs(t *testing.T) {
-	cel := GetDefaultCelEnv()
+	cel := GetDefaultCelEnv([]*CelVariable{})
 	for _, tc := range []struct {
 		desc string
 		obj  string
@@ -319,7 +319,7 @@ func TestValidateItemOutputs(t *testing.T) {
 }
 
 func TestValidateItemModifyOutputs(t *testing.T) {
-	cel := GetDefaultCelEnv()
+	cel := GetDefaultCelEnv([]*CelVariable{})
 	for _, tc := range []struct {
 		desc string
 		obj  string

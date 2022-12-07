@@ -14,7 +14,7 @@ import (
 // NewCelEnvCollectionFromItem generate cel env collection for an item
 func (k Keeper) NewCelEnvCollectionFromItem(ctx sdk.Context, recipeID, tradeID string, item types.Item) (types.CelEnvCollection, error) {
 	varDefs := types.BasicVarDefs()
-	variables := types.BasicVariables(ctx.BlockHeight(), recipeID, tradeID)
+	variables := types.BasicVariables(ctx.BlockHeight(), recipeID, tradeID, []*types.CelVariable{})
 	varDefs, variables = types.AddVariableFromItem(varDefs, variables, "", item) // HP, level, attack
 
 	funcs := cel.Functions() //nolint:staticcheck // TODO: FIX THIS VIA A REFACTOR OF THIS LINE, WHICH WILL INVOLVE MORE CODE.
@@ -34,9 +34,16 @@ func (k Keeper) NewCelEnvCollectionFromItem(ctx sdk.Context, recipeID, tradeID s
 
 // NewCelEnvCollectionFromRecipe generate cel env collection from recipe itemInputs
 func (k Keeper) NewCelEnvCollectionFromRecipe(ctx sdk.Context, pendingExecution types.Execution, recipe types.Recipe) (types.CelEnvCollection, error) {
+	//getting vaiables for recipe
+	recipeVarible := []*types.CelVariable{}
+	vars := types.GetRecipeVariables(recipe.Entries, recipeVarible)
+	customVars := k.ExcludeBasicVarFromCustom(vars)
+	customVarDefs := types.CustomVarDefs(customVars)
 	// create environment variables from matched items
 	varDefs := types.BasicVarDefs()
-	variables := types.BasicVariables(ctx.BlockHeight(), recipe.Id, "")
+	//concat basic and custom variables
+	varDefs = append(varDefs, customVarDefs...)
+	variables := types.BasicVariables(ctx.BlockHeight(), recipe.Id, "", customVars)
 	itemInputs := recipe.ItemInputs
 
 	for idx, itemRecord := range pendingExecution.ItemInputs {
@@ -82,4 +89,13 @@ func (k Keeper) NewCelEnvCollectionFromRecipe(ctx sdk.Context, pendingExecution 
 
 	ec := types.NewCelEnvCollection(env, variables, funcs)
 	return ec, err
+}
+
+func (k Keeper) ExcludeBasicVarFromCustom(recipeVarible []*types.CelVariable) (customVars []*types.CelVariable) {
+	for _, elem := range recipeVarible {
+		if elem.Variable != types.BasicVariableBlockHeight != (types.BasicVariableRecipeID != types.BasicVariableTradeID) {
+			customVars = append(customVars, elem)
+		}
+	}
+	return customVars
 }

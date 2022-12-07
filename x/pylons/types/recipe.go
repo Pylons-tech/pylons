@@ -3,6 +3,7 @@ package types
 import (
 	"errors"
 
+	"github.com/google/cel-go/checker/decls"
 	"github.com/rogpeppe/go-internal/semver"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -767,7 +768,9 @@ func ValidateEntriesList(el EntriesList, idMap map[string]bool) error {
 			return err
 		}
 	}
-	ce := GetDefaultCelEnv()
+	recipeVarible := []*CelVariable{}
+	vars := GetRecipeVariables(el, recipeVarible)
+	ce := GetDefaultCelEnv(vars)
 	err := ValidateItemOutputs(el.ItemOutputs, idMap, ce)
 	if err != nil {
 		return err
@@ -789,4 +792,60 @@ func ValidateOutputs(wo WeightedOutputs, idMap map[string]bool) error {
 	}
 
 	return nil
+}
+
+func GetRecipeVariables(recipe EntriesList, recipeVarible []*CelVariable) []*CelVariable {
+	for _, item := range recipe.ItemOutputs {
+		for _, l := range item.Doubles {
+			celVar := &CelVariable{
+				Variable: l.Key,
+				Type:     decls.Double,
+				Value:    l.Value,
+			}
+			recipeVarible = append(recipeVarible, celVar)
+		}
+		for _, k := range item.Longs {
+			celVar := &CelVariable{
+				Variable: k.Key,
+				Type:     decls.Int,
+				Value:    k.Value,
+			}
+			recipeVarible = append(recipeVarible, celVar)
+		}
+		for _, m := range item.Strings {
+			celVar := &CelVariable{
+				Variable: m.Key,
+				Type:     decls.String,
+				Value:    m.Value,
+			}
+			recipeVarible = append(recipeVarible, celVar)
+		}
+	}
+	for _, temp := range recipe.ItemModifyOutputs {
+		for _, l := range temp.Doubles {
+			celVar := &CelVariable{
+				Variable: l.Key,
+				Type:     decls.Double,
+				Value:    l.Value,
+			}
+			recipeVarible = append(recipeVarible, celVar)
+		}
+		for _, k := range temp.Longs {
+			celVar := &CelVariable{
+				Variable: k.Key,
+				Type:     decls.Int,
+				Value:    k.Value,
+			}
+			recipeVarible = append(recipeVarible, celVar)
+		}
+		for _, m := range temp.Strings {
+			celVar := &CelVariable{
+				Variable: m.Key,
+				Type:     decls.String,
+				Value:    m.Value,
+			}
+			recipeVarible = append(recipeVarible, celVar)
+		}
+	}
+	return recipeVarible
 }
