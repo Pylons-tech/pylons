@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class ImageUtil {
   ImageUtil();
 
@@ -25,12 +27,36 @@ class ImageUtil {
   static String LIKE_FULL = 'assets/images/icons/like_full.png';
   static String SPLASH_SCREEN_BG = "assets/images/splash/Splash_Screen.jpg";
 
-  static List<String> BG_IMAGES = [
-    "assets/images/splash/bg-1.png",
-    "assets/images/splash/bg-2.png",
-    "assets/images/splash/bg-3.png",
-    "assets/images/splash/bg-4.png",
-    "assets/images/splash/bg-5.png",
-    "assets/images/splash/bg-6.png"
+  static List<Image> BG_IMAGES = [
+    Image.asset(
+      "assets/images/splash/bg-1.png",
+      key: UniqueKey(),
+      gaplessPlayback: true,
+    ),
+    Image.asset(
+      "assets/images/splash/bg-2.png",
+      key: UniqueKey(),
+      gaplessPlayback: true,
+    ),
+    Image.asset(
+      "assets/images/splash/bg-3.png",
+      key: UniqueKey(),
+      gaplessPlayback: true,
+    ),
+    Image.asset(
+      "assets/images/splash/bg-4.png",
+      key: UniqueKey(),
+      gaplessPlayback: true,
+    ),
+    Image.asset(
+      "assets/images/splash/bg-5.png",
+      key: UniqueKey(),
+      gaplessPlayback: true,
+    ),
+    Image.asset(
+      "assets/images/splash/bg-6.png",
+      key: UniqueKey(),
+      gaplessPlayback: true,
+    )
   ];
 }
