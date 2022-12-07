@@ -7,18 +7,26 @@ import 'package:flutter/cupertino.dart';
 class NftFormat {
   final NFTTypes format;
   final List<String> extensions;
+  final List<String>? extensionsUI;
   final String badge;
   final Color color;
 
-  NftFormat({required this.format, required this.extensions, required this.badge, required this.color});
+  NftFormat({
+    required this.format,
+    required this.extensions,
+    required this.badge,
+    required this.color,
+    this.extensionsUI,
+  });
 
   String getExtensionsList() {
     final buffer = StringBuffer();
-    for (var i = 0; i < extensions.length; i++) {
+    final List<String> tempExtensions = extensionsUI ?? extensions;
+    for (final x in tempExtensions) {
       if (buffer.isNotEmpty) {
         buffer.write(", ");
       }
-      buffer.write(extensions[i].toUpperCase());
+      buffer.write(x.toUpperCase());
     }
     return buffer.toString();
   }
@@ -26,13 +34,15 @@ class NftFormat {
   static List<NftFormat> get supportedFormats => [
         NftFormat(
           format: NFTTypes.image,
-          extensions: ['jpg', 'png', 'svg', 'heic'],
+          extensions: ['jpg', 'png', 'svg', 'heif', 'jpeg', 'gif'],
+          extensionsUI: ['jpg', 'png', 'svg', 'heic',],
           badge: SVGUtils.kSvgNftFormatImage,
           color: EaselAppTheme.kBlue,
         ),
         NftFormat(
           format: NFTTypes.video,
-          extensions: ['mp4'],
+          extensions: ['mp4', 'mov', 'm4v', 'avi', 'hevc'],
+          extensionsUI: ['mp4'],
           badge: SVGUtils.kSvgNftFormatVideo,
           color: EaselAppTheme.kDarkGreen,
         ),
@@ -44,7 +54,8 @@ class NftFormat {
         ),
         NftFormat(
           format: NFTTypes.audio,
-          extensions: ['mp3', 'flac', 'wav'],
+          extensions: ['wav', 'aiff', 'alac', 'flac', 'mp3', 'aac', 'wma', 'ogg'],
+          extensionsUI: ['mp3', 'flac','wav',],
           badge: SVGUtils.kAudioFileIcon,
           color: EaselAppTheme.kLightRed,
         ),

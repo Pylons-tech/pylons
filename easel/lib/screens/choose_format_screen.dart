@@ -37,7 +37,12 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
     }
 
     if (!provider.nftFormat.extensions.contains(result.extension)) {
-      errorText.value = getFileFormatNotSupportedMsg(nftFormat: provider.nftFormat, nftFile: result);
+      final fileName = result.fileName.replaceAll(".${result.extension}", "");
+      errorText.value = '"$fileName" ${LocaleKeys.could_not_uploaded.tr(
+        namedArgs: {
+          "format": provider.nftFormat.format.getTitle(),
+        },
+      )}';
       showErrorDialog(extensions: provider.nftFormat.extensions);
       return;
     }
@@ -48,7 +53,7 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
       return;
     }
 
-    if (easelProvider.repository.getFileSizeInGB(File(result.path).lengthSync()) > kFileSizeLimitForAudiVideoInGB) {
+    if (easelProvider.repository.getFileSizeInGB(File(result.path).lengthSync()) > kFileSizeLimitForAudioVideoInGB) {
       errorText.value = LocaleKeys.size_error.tr();
       showErrorDialog(type: nftFormat.format, extensions: nftFormat.extensions);
       return;
@@ -62,23 +67,6 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
                 context.read<HomeViewModel>().nextPage();
               },
             )));
-  }
-
-  String getFileFormatNotSupportedMsg({required NftFormat nftFormat, required PickedFileModel nftFile}) {
-    final fileName = nftFile.fileName.replaceAll(".${nftFile.extension}", "");
-    String formatMustBe = "";
-    if (nftFormat.format == NFTTypes.image) {
-      formatMustBe = LocaleKeys.image_nft_must_be.tr();
-    } else if (nftFormat.format == NFTTypes.audio) {
-      formatMustBe = LocaleKeys.audio_nft_must_be.tr();
-    } else if (nftFormat.format == NFTTypes.video) {
-      formatMustBe = LocaleKeys.video_nft_must_be.tr();
-    } else if (nftFormat.format == NFTTypes.threeD) {
-      formatMustBe = LocaleKeys.three_d_nft_must_be.tr();
-    } else if (nftFormat.format == NFTTypes.pdf) {
-      formatMustBe = LocaleKeys.pdf_nft_must_be.tr();
-    }
-    return '"$fileName" ${LocaleKeys.could_not_uploaded.tr()} $formatMustBe';
   }
 
   void showErrorDialog({NFTTypes? type, required List<String> extensions}) {
@@ -363,7 +351,7 @@ class _ErrorMessageWidget extends StatelessWidget {
                 SizedBox(height: 10.h),
                 Text(
                   (nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio)
-                      ? "• ${(kFileSizeLimitForAudiVideoInGB * 1000).toStringAsFixed(0)}MB limit"
+                      ? "• ${(kFileSizeLimitForAudioVideoInGB * 1000).toStringAsFixed(0)}MB limit"
                       : "• ${kFileSizeLimitInGB}GB limit",
                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
                         color: Colors.white,
