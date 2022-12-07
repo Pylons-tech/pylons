@@ -71,42 +71,45 @@ class _StripeScreenState extends State<StripeScreen> {
               top: 40.h,
               bottom: 0,
               child: InAppWebView(
-                  initialUrlRequest: URLRequest(url: Uri.parse(widget.url)),
-                  onWebViewCreated: (InAppWebViewController webViewController) {
-                    _controller = webViewController;
-                  },
-                  shouldOverrideUrlLoading: (controller, navigationAction) async {
-                    final uri = navigationAction.request.url;
-
-                    if (uri == null) {
-                      return NavigationActionPolicy.ALLOW;
-                    }
-
-                    final String urlInString = uri.toString();
-                    if (urlInString.contains(baseEnv.baseStripeCallbackUrl)) {
-                      getAccountLinkAndRedirect();
-                      return NavigationActionPolicy.CANCEL;
-                    }
-                    if (urlInString.contains(baseEnv.baseStripeCallbackRefreshUrl)) {
-                      getAccountLinkAndRedirect();
-                      return NavigationActionPolicy.CANCEL;
-                    }
-
-                    if (urlInString.startsWith("blob:")) {
-                      ScaffoldMessenger.of(context)
-                        ..hideCurrentSnackBar()
-                        ..showSnackBar(SnackBar(
-                          content: Text(LocaleKeys.blob_type_not_supported.tr()),
-                        ));
-                      return NavigationActionPolicy.CANCEL;
-                    }
+                initialUrlRequest: URLRequest(url: Uri.parse(widget.url)),
+                onWebViewCreated: (InAppWebViewController webViewController) {
+                  _controller = webViewController;
+                },
+                shouldOverrideUrlLoading: (controller, navigationAction) async {
+                  final uri = navigationAction.request.url;
+                  if (uri == null) {
                     return NavigationActionPolicy.ALLOW;
-                  },
-                  androidOnPermissionRequest:
-                      (InAppWebViewController controller, String origin, List<String> resources) async {
-                    return PermissionRequestResponse(
-                        resources: resources, action: PermissionRequestResponseAction.GRANT);
-                  }),
+                  }
+
+                  final String urlInString = uri.toString();
+                  if (urlInString.contains(baseEnv.baseStripeCallbackUrl)) {
+                    getAccountLinkAndRedirect();
+                    return NavigationActionPolicy.CANCEL;
+                  }
+                  if (urlInString.contains(baseEnv.baseStripeCallbackRefreshUrl)) {
+                    getAccountLinkAndRedirect();
+                    return NavigationActionPolicy.CANCEL;
+                  }
+
+                  if (urlInString.startsWith("blob:")) {
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(SnackBar(
+                        content: Text(LocaleKeys.blob_type_not_supported.tr()),
+                      ));
+                    return NavigationActionPolicy.CANCEL;
+                  }
+                  return NavigationActionPolicy.ALLOW;
+                },
+                androidOnPermissionRequest:
+                    (InAppWebViewController controller, String origin, List<String> resources) async {
+                  return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
+                },
+                initialOptions: InAppWebViewGroupOptions(
+                    crossPlatform: InAppWebViewOptions(
+                  useShouldOverrideUrlLoading: true,
+                )),
+              ),
             ),
             Positioned(
               left: 20.w,
