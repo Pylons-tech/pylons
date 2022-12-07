@@ -49,6 +49,11 @@ class Item {
     }
   }
 
+  /// Re-retrieves an item from the chain.
+  Future<Item> refresh () async {
+    return get(this.getId(), cookbook : this.getCookbookId());
+  }
+
   /// Retrieves the ID of the item's associated cookbook.
   ///
   /// Not available on partial items.

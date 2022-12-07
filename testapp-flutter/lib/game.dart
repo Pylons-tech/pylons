@@ -30,6 +30,14 @@ class _GameState extends State<Game> {
     });
   }
 
+  Future<void> _bootstrap() async {
+    await Cookbook.load("appTestCookbook");
+    await _checkRemoteState();
+    if (_noValidCharacter()) {
+      await _generateCharacter();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,14 +61,6 @@ class _GameState extends State<Game> {
     );
   }
 
-  Future<void> _bootstrap() async {
-    await Cookbook.load("appTestCookbook");
-    await _checkRemoteState();
-    if (_noValidCharacter()) {
-      await _generateCharacter();
-    }
-  }
-
   Future<void> _updateProfile() async {
     final prf = await Profile.get();
     if (prf == null) throw Exception("Profile should not be null");
@@ -72,10 +72,12 @@ class _GameState extends State<Game> {
     final tlmDefault = showTopLevelMenu;
     _nonCombatActionInit('Checking character...');
     await _updateProfile();
-    if (character == null || character!.isDead()) {
+    if (_noValidCharacter()) {
       setState(() {
         character = Character.fromProfile(profile!);
       });
+    } else {
+      character = Character(await character!.item.refresh());
     }
     _checkTrophies();
     setState(() {

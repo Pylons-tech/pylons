@@ -8,8 +8,7 @@ class Character {
   late int curHp;
   late Item item;
 
-  Character(Item item) {
-    item = item;
+  Character(this.item) {
     swordLv = item.getInt("swordLevel")?.toInt() ?? 0;
     coins = item.getInt("coins")?.toInt() ?? 0;
     shards = item.getInt("shards")?.toInt() ?? 0;
