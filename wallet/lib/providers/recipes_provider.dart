@@ -27,26 +27,34 @@ class RecipesProvider extends ChangeNotifier {
     log("Get Cookbooks finished", name: "RecipesProvider");
     cookbooks = response.getOrElse(() => []);
 
-    creations = <NFT>[];
+    final localCreations = <NFT>[];
 
     for (final cookbook in cookbooks) {
-      await getRecipe(cookbook);
+      final recipesList = await getRecipes(cookbook);
+      localCreations.addAll(recipesList);
     }
+
+    creations = localCreations;
+
     log("Get Recipe finished", name: "RecipesProvider");
     notifyListeners();
   }
 
-  Future<void> getRecipe(Cookbook cookbook) async {
+  Future<List<NFT>> getRecipes(Cookbook cookbook) async {
     final recipesEither = await repository.getRecipesBasedOnCookBookId(cookBookId: cookbook.id);
     final recipes = recipesEither.getOrElse(() => []);
+
+    final localCreations = <NFT>[];
 
     for (final recipe in recipes) {
       final nft = NFT.fromRecipe(recipe);
 
       if (nft.appType.toLowerCase() == "easel" && cookbooks.any((cookbook) => cookbook.id == nft.cookbookID)) {
-        creations.add(nft);
+        localCreations.add(nft);
       }
     }
+
+    return localCreations;
   }
 
   List<Cookbook> cookbooks = [];
