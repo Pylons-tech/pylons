@@ -282,6 +282,7 @@
   "read_more": "Leer mas",
   "pylons_fee_msg": "La tarifa Pylons es la tarifa de red que se aplica a todas las transacciones equivalente al 10 % del precio de lista.",
   "you": "tú",
+  "tx_not_found": "Texto no encontrado",
   "recipe_not_found": "Receta no encontrada",
   "username_not_found": "Usuario no encontrado",
   "cookbook_not_found": "Libro de cocina no encontrado",
@@ -367,8 +368,8 @@
   "ipfs_cid": "CID IPFS",
   "available": "disponible",
   "ea": "cada uno",
-  "maintenance_mode_message_1": "Estamos experimentando problemas técnicos y hemos iniciado temporalmente el modo de mantenimiento.",
-  "maintenance_mode_message_2": "No te preocupes, tu colección está segura. Sin embargo, no puede iniciar transacciones en cadena hasta que resolvamos el problema y restablezcamos la funcionalidad normal.",
+  "maintenance_mode_message_first": "Estamos experimentando problemas técnicos y hemos iniciado temporalmente el modo de mantenimiento.",
+  "maintenance_mode_message_second": "No te preocupes, tu colección está segura. Sin embargo, no puede iniciar transacciones en cadena hasta que resolvamos el problema y restablezcamos la funcionalidad normal.",
   "maintenance_mode_header": "Modo de mantenimiento",
   "invalid_mnemonic" : "Mnemonic inválido"
 }

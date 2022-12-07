@@ -282,6 +282,7 @@
   "read_more": "続きを読む",
   "pylons_fee_msg": "Pylons 料金は、表示価格の10％に等しいすべてのトランザクションで評価されるネットワーク料金です。",
   "you": "あなた",
+  "tx_not_found": "テキストが見つかりません",
   "recipe_not_found": "Recipe 見つかりません",
   "username_not_found": "ユーザー名が見つかりません",
   "cookbook_not_found": "Cookbook 見つかりません",
@@ -367,8 +368,8 @@
   "ipfs_cid": "IPFS CID",
   "available": "利用可能",
   "ea": "えー",
-  "maintenance_mode_message_1": "技術的な問題が発生しており、一時的にメンテナンス モードを開始しています",
-  "maintenance_mode_message_2": "心配はいりません。あなたのコレクションは安全です。ただし、問題を解決して通常の機能を回復するまで、オンチェーン トランザクションを開始することはできません。",
+  "maintenance_mode_message_first": "技術的な問題が発生しており、一時的にメンテナンス モードを開始しています",
+  "maintenance_mode_message_second": "心配はいりません。あなたのコレクションは安全です。ただし、問題を解決して通常の機能を回復するまで、オンチェーン トランザクションを開始することはできません。",
   "maintenance_mode_header": "メンテナンスモード",
   "invalid_mnemonic" : "無効 mnemonic"
 }

@@ -282,6 +282,7 @@
   "read_more": "Baca selengkapnya",
   "pylons_fee_msg": "Biaya Pylons adalah biaya jaringan yang dinilai pada semua transaksi sebesar 10% dari harga yang tercantum.",
   "you": "Anda",
+  "tx_not_found": "Teks tidak ditemukan",
   "recipe_not_found": "Recipe tidak ditemukan",
   "username_not_found": "Nama pengguna tidak ditemukan",
   "cookbook_not_found": "Cookbook tidak ditemukan",
@@ -367,8 +368,8 @@
   "ipfs_cid": "ID Pelanggan IPFS",
   "available": "tersedia",
   "ea": "ea",
-  "maintenance_mode_message_1": "Kami mengalami masalah teknis dan untuk sementara memulai mode pemeliharaan.",
-  "maintenance_mode_message_2": "Jangan khawatir, koleksi Anda aman. Namun, Anda tidak dapat memulai transaksi on-chain sampai kami menyelesaikan masalah dan mengembalikan fungsi normal.",
+  "maintenance_mode_message_first": "Kami mengalami masalah teknis dan untuk sementara memulai mode pemeliharaan.",
+  "maintenance_mode_message_second": "Jangan khawatir, koleksi Anda aman. Namun, Anda tidak dapat memulai transaksi on-chain sampai kami menyelesaikan masalah dan mengembalikan fungsi normal.",
   "maintenance_mode_header": "Mode Pemeliharaan",
   "invalid_mnemonic" : "Mnemonic tidak valid"
 }

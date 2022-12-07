@@ -282,6 +282,7 @@
   "read_more": "Weiterlesen",
   "pylons_fee_msg": "Die Pylons-Gebühr ist die Netzwerkgebühr, die für alle Transaktionen in Höhe von 10 % des Listenpreises erhoben wird.",
   "you": "Sie",
+  "tx_not_found": "Tekst niet gevonden",
   "recipe_not_found": "Recipe nicht gefunden",
   "username_not_found": "Benutzername nicht gefunden",
   "cookbook_not_found": "Cookbook nicht gefunden",
@@ -367,8 +368,8 @@
   "ipfs_cid": "IPFS-CID",
   "available": "verfügbar",
   "ea": "ea",
-  "maintenance_mode_message_1": "We ondervinden technische problemen en hebben tijdelijk de onderhoudsmodus geactiveerd.",
-  "maintenance_mode_message_2": "Maak je geen zorgen, je verzameling is veilig. U kunt echter geen on-chain-transacties starten totdat we het probleem hebben opgelost en de normale functionaliteit hebben hersteld.",
+  "maintenance_mode_message_first": "We ondervinden technische problemen en hebben tijdelijk de onderhoudsmodus geactiveerd.",
+  "maintenance_mode_message_second": "Maak je geen zorgen, je verzameling is veilig. U kunt echter geen on-chain-transacties starten totdat we het probleem hebben opgelost en de normale functionaliteit hebben hersteld.",
   "maintenance_mode_header": "onderhoudsstand",
   "invalid_mnemonic" : "Ungültige mnemonic"
 }

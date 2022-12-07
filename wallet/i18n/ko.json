@@ -283,6 +283,7 @@
   "read_more": "더 읽기",
   "pylons_fee_msg": "Pylons 수수료는 나열된 가격의 10%에 해당하는 모든 거래에 대해 평가된 네트워크 수수료입니다.",
   "you": "너",
+  "tx_not_found": "텍스트를 찾을 수 없음",
   "recipe_not_found": "Recipe 찾을 수 없음",
   "username_not_found": "사용자 이름을 찾을 수 없습니다",
   "cookbook_not_found": "Cookbook 찾을 수 없음",
@@ -366,8 +367,8 @@
   "ipfs_cid": "IPFS CID",
   "available": "사용 가능",
   "ea": "에아",
-  "maintenance_mode_message_1": "기술적인 문제가 발생하여 일시적으로 유지 관리 모드를 시작했습니다.",
-  "maintenance_mode_message_2": "걱정하지 마세요. 컬렉션은 안전합니다. 그러나 문제를 해결하고 정상적인 기능을 복원할 때까지 온체인 트랜잭션을 시작할 수 없습니다.",
+  "maintenance_mode_message_first": "기술적인 문제가 발생하여 일시적으로 유지 관리 모드를 시작했습니다.",
+  "maintenance_mode_message_second": "걱정하지 마세요. 컬렉션은 안전합니다. 그러나 문제를 해결하고 정상적인 기능을 복원할 때까지 온체인 트랜잭션을 시작할 수 없습니다.",
   "maintenance_mode_header": "유지 관리 모드",
   "invalid_mnemonic" : "유효하지 않은 mnemonic"
 }

@@ -282,6 +282,7 @@
   "read_more": "đọc thêm",
   "pylons_fee_msg": "Pylons Phí này là phí mạng được tính trên tất cả các giao dịch bằng 10% giá niêm yết.",
   "you": "bạn",
+  "tx_not_found": "Không tìm thấy văn bản",
   "recipe_not_found": "Không tìm thấy công thức nấu ăn",
   "username_not_found": "tên người sử dụng không được tìm thấy",
   "cookbook_not_found": "Không tìm thấy cookbook",
@@ -367,8 +368,8 @@
   "ipfs_cid": "IPFS CID",
   "available": "có sẵn",
   "ea": "ea",
-  "maintenance_mode_message_1": "Chúng tôi đang gặp sự cố kỹ thuật và đã tạm thời bắt đầu chế độ bảo trì.",
-  "maintenance_mode_message_2": "Đừng lo lắng, bộ sưu tập của bạn được an toàn. Tuy nhiên, bạn không thể bắt đầu giao dịch trên chuỗi cho đến khi chúng tôi giải quyết vấn đề và khôi phục chức năng bình thường.",
+  "maintenance_mode_message_first": "Chúng tôi đang gặp sự cố kỹ thuật và đã tạm thời bắt đầu chế độ bảo trì.",
+  "maintenance_mode_message_second": "Đừng lo lắng, bộ sưu tập của bạn được an toàn. Tuy nhiên, bạn không thể bắt đầu giao dịch trên chuỗi cho đến khi chúng tôi giải quyết vấn đề và khôi phục chức năng bình thường.",
   "maintenance_mode_header": "Chế độ bảo trì",
   "invalid_mnemonic" : "Không hợp lệ menmonic"
 }
