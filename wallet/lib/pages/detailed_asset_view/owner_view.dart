@@ -787,7 +787,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 children: [
                   RichText(
                     text: TextSpan(
-                      text: "\$${viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price)}",
+                      text: "\$${viewModel.nft.ibcCoins.getCoinValueBasedOnDollar(viewModel.nft.price)}",
                       style: TextStyle(
                         color: AppColors.kWhite,
                         fontSize: 10.sp,
