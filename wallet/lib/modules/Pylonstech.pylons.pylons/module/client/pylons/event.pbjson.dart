@@ -40,6 +40,34 @@ const EventUpdateAccount$json = const {
 
 /// Descriptor for `EventUpdateAccount`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List eventUpdateAccountDescriptor = $convert.base64Decode('ChJFdmVudFVwZGF0ZUFjY291bnQSGAoHYWRkcmVzcxgBIAEoCVIHYWRkcmVzcxIaCgh1c2VybmFtZRgCIAEoCVIIdXNlcm5hbWU=');
+@$core.Deprecated('Use eventRegisterKYCAccountDescriptor instead')
+const EventRegisterKYCAccount$json = const {
+  '1': 'EventRegisterKYCAccount',
+  '2': const [
+    const {'1': 'address', '3': 1, '4': 1, '5': 9, '10': 'address'},
+    const {'1': 'username', '3': 2, '4': 1, '5': 9, '10': 'username'},
+    const {'1': 'level', '3': 3, '4': 1, '5': 4, '10': 'level'},
+    const {'1': 'provider', '3': 4, '4': 1, '5': 9, '10': 'provider'},
+    const {'1': 'provider_id', '3': 5, '4': 1, '5': 9, '10': 'providerId'},
+  ],
+};
+
+/// Descriptor for `EventRegisterKYCAccount`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List eventRegisterKYCAccountDescriptor = $convert.base64Decode('ChdFdmVudFJlZ2lzdGVyS1lDQWNjb3VudBIYCgdhZGRyZXNzGAEgASgJUgdhZGRyZXNzEhoKCHVzZXJuYW1lGAIgASgJUgh1c2VybmFtZRIUCgVsZXZlbBgDIAEoBFIFbGV2ZWwSGgoIcHJvdmlkZXIYBCABKAlSCHByb3ZpZGVyEh8KC3Byb3ZpZGVyX2lkGAUgASgJUgpwcm92aWRlcklk');
+@$core.Deprecated('Use eventRemoveKYCAccountDescriptor instead')
+const EventRemoveKYCAccount$json = const {
+  '1': 'EventRemoveKYCAccount',
+  '2': const [
+    const {'1': 'address', '3': 1, '4': 1, '5': 9, '10': 'address'},
+    const {'1': 'username', '3': 2, '4': 1, '5': 9, '10': 'username'},
+    const {'1': 'level', '3': 3, '4': 1, '5': 4, '10': 'level'},
+    const {'1': 'provider', '3': 4, '4': 1, '5': 9, '10': 'provider'},
+    const {'1': 'provider_id', '3': 5, '4': 1, '5': 9, '10': 'providerId'},
+  ],
+};
+
+/// Descriptor for `EventRemoveKYCAccount`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List eventRemoveKYCAccountDescriptor = $convert.base64Decode('ChVFdmVudFJlbW92ZUtZQ0FjY291bnQSGAoHYWRkcmVzcxgBIAEoCVIHYWRkcmVzcxIaCgh1c2VybmFtZRgCIAEoCVIIdXNlcm5hbWUSFAoFbGV2ZWwYAyABKARSBWxldmVsEhoKCHByb3ZpZGVyGAQgASgJUghwcm92aWRlchIfCgtwcm92aWRlcl9pZBgFIAEoCVIKcHJvdmlkZXJJZA==');
 @$core.Deprecated('Use eventCreateCookbookDescriptor instead')
 const EventCreateCookbook$json = const {
   '1': 'EventCreateCookbook',

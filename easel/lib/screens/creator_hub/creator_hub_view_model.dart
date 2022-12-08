@@ -5,7 +5,7 @@ import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:easel_flutter/widgets/loading.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pylons_sdk/pylons_sdk.dart';
+import 'package:pylons_sdk/low_level.dart';
 
 import '../../generated/locale_keys.g.dart';
 
@@ -24,7 +24,7 @@ class CreatorHubViewModel extends ChangeNotifier {
 
   int get publishedRecipesLength => nftPublishedList.length;
 
-  changeSelectedCollection(CollectionType collectionType) {
+  void changeSelectedCollection(CollectionType collectionType) {
     switch (collectionType) {
       case CollectionType.draft:
         selectedCollectionType = CollectionType.draft;
@@ -84,7 +84,7 @@ class CreatorHubViewModel extends ChangeNotifier {
   void getTotalForSale() {
     _nftForSaleList = [];
 
-    for (NFT nft in nftPublishedList) {
+    for (final NFT nft in nftPublishedList) {
       if (nft.isEnabled && nft.amountMinted < int.parse(nft.quantity)) {
         _nftForSaleList.add(nft);
       }

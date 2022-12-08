@@ -12,14 +12,6 @@ This installation method removes existing Go installations, installs Go in `/usr
 
 **Note:** We recommend not using brew to install Go.
 
-## Install Starport
-
-To install the latest version of the `starport` binary use the following command.
-
-```shell
-curl https://get.starport.network/starport! | bash
-```
-
 ## Install Git pre-commit Hook
 
 Git `pre-commit` hooks run before any commit to the Git repository. These hooks verify that each commit passes basic formatting and linting checks.

@@ -91,7 +91,10 @@ class NFT extends Equatable {
     return ownerAddress;
   }
 
-  static Future<NFT> fromItem(Item item) async {
+  static Future<NFT?> fromItem(Item item) async {
+    if (item.strings.where((strKeyValue) => strKeyValue.key == kName).isEmpty && item.strings.where((strKeyValue) => strKeyValue.key == kNFTURL).isEmpty) {
+      return null;
+    }
     final walletsStore = GetIt.I.get<WalletsStore>();
     final owner = await walletsStore.getAccountNameByAddress(item.owner);
     return NFT(
@@ -189,11 +192,7 @@ class NFT extends Equatable {
     );
   }
 
-  static Future<NFT> fromItemID(String cookbookID, String itemID) async {
-    final walletsStore = GetIt.I.get<WalletsStore>();
-    final item = await walletsStore.getItem(cookbookID, itemID);
-    return NFT.fromItem(item!);
-  }
+
 
   static Future<NFT> fromTradeByID(Int64 tradeID) async {
     final walletsStore = GetIt.I.get<WalletsStore>();

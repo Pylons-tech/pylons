@@ -1,0 +1,31 @@
+{
+    #boilerplate_delayed v0.0.2 true 10,
+    #id_name RecipeTestAppRest50 RecipeTestAppRest50,
+    "description": "Rests, recovers 10HP",
+    #no_coin_input,
+    "itemInputs": [
+        #character_input_alive
+    ],
+    "entries": {
+        #no_coin_or_item_output,
+        "itemModifyOutputs": [
+            {
+                "id": "character",
+                "itemInputRef": "character",
+                "longs": [
+                    {
+                        "key": "currentHp",
+                        "weightRanges": [],
+                        "program": "min(currentHp + 10, maxHp)"
+                    }
+                ],
+                "strings": [],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": false
+            }
+        ]
+    },
+    #solo_output character
+}

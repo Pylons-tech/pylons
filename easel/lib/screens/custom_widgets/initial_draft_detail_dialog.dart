@@ -43,7 +43,7 @@ class DraftDetailDialog {
     );
   }
 
-  dialogAlreadyShown(EaselProvider provider) => provider.nft.isDialogShown;
+  bool dialogAlreadyShown(EaselProvider provider) => provider.nft.isDialogShown;
 }
 
 class _DraftDetailDialog extends StatefulWidget {
@@ -67,7 +67,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
   }
 
   void selectPreviewWidgetBasedOnType() {
-    EaselProvider easelProvider = context.read<EaselProvider>();
+    final EaselProvider easelProvider = context.read<EaselProvider>();
     if (easelProvider.nft.assetType == k3dText) {
       previewWidget = ModelViewer(
         src: easelProvider.nft.url.changeDomain(),
@@ -122,12 +122,12 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
 
   @override
   Widget build(BuildContext context) {
-    EaselProvider easelProvider = context.watch<EaselProvider>();
+    final EaselProvider easelProvider = context.watch<EaselProvider>();
 
     return WillPopScope(
       onWillPop: () async => false,
       child: Dialog(
-        backgroundColor: Colors.transparent,
+        backgroundColor: EaselAppTheme.kTransparent,
         insetPadding: EdgeInsets.symmetric(horizontal: isTablet ? 65.w : 21.w),
         child: Container(
           color: Colors.black.withOpacity(0.5),
@@ -142,7 +142,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
                   width: 60.h,
                   child: ClipPath(
                     clipper: RightTriangleClipper(orientation: clipper.Orientation.orientationNW),
-                    child: Container(
+                    child: const ColoredBox(
                       color: EaselAppTheme.kLightRed,
                     ),
                   ),
@@ -156,7 +156,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
                   width: 60.h,
                   child: ClipPath(
                     clipper: RightTriangleClipper(orientation: clipper.Orientation.orientationSE),
-                    child: Container(
+                    child: const ColoredBox(
                       color: EaselAppTheme.kLightRed,
                     ),
                   ),
@@ -277,7 +277,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
     return LocaleKeys.failed.tr();
   }
 
-  void onViewOnIPFSPressed({required EaselProvider provider}) async {
+  Future<void> onViewOnIPFSPressed({required EaselProvider provider}) async {
     await provider.repository.launchMyUrl(url: provider.nft.url.changeDomain());
   }
 
@@ -315,7 +315,7 @@ class _DraftDetailDialogState extends State<_DraftDetailDialog> {
     );
   }
 
-  Widget buildRow({required String title, required String subtitle, final color = Colors.white, final bool canCopy = false}) {
+  Widget buildRow({required String title, required String subtitle, Color color = Colors.white, bool canCopy = false}) {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: isTablet ? 20.w : 40.w,

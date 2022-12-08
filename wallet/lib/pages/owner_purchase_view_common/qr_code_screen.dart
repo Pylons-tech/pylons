@@ -7,7 +7,7 @@ import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_image_asset.dart';
-import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';

@@ -23,7 +23,7 @@ class ShowSomethingWentWrongDialog {
         builder: (context) {
           return Dialog(
             elevation: 0,
-            backgroundColor: Colors.transparent,
+            backgroundColor: EaselAppTheme.kTransparent,
             child: ScreenResponsive(
               mobileScreen: (context) => buildMobile(context),
               tabletScreen: (context) => buildTablet(context),
@@ -95,7 +95,7 @@ class ShowSomethingWentWrongDialog {
       padding: EdgeInsets.symmetric(horizontal: 0.1.sw),
       child: ClipPath(
         clipper: DialogClipper(),
-        child: Container(
+        child: ColoredBox(
           color: EaselAppTheme.kLightRed,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

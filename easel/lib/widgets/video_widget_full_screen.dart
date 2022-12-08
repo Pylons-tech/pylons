@@ -26,7 +26,7 @@ class _VideoWidgetFullScreenState extends State<VideoWidgetFullScreen> {
   final repository = GetIt.I.get<Repository>();
 
   @override
-  initState() {
+  void initState() {
     super.initState();
   }
 
@@ -72,7 +72,7 @@ class _VideoWidgetFullScreenState extends State<VideoWidgetFullScreen> {
                       sigmaX: 5.0,
                       sigmaY: 5.0,
                     ),
-                    child: Container(
+                    child: ColoredBox(
                       color: Colors.black.withOpacity(0.3),
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 30.h),

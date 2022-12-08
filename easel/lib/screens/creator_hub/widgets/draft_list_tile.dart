@@ -34,7 +34,7 @@ class DraftListTile extends StatefulWidget {
 
 class _DraftListTileState extends State<DraftListTile> {
   String getThumbnailUrl() {
-    AssetType assetType = widget.nft.assetType.toAssetTypeEnum();
+    final AssetType assetType = widget.nft.assetType.toAssetTypeEnum();
 
     switch (assetType) {
       case AssetType.Audio:
@@ -109,7 +109,7 @@ class _DraftListTileState extends State<DraftListTile> {
   }
 
   Widget getDraftCard() {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -133,7 +133,7 @@ class _DraftListTileState extends State<DraftListTile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "nft_name".tr(args: [widget.nft.name.isNotEmpty ? widget.nft.name : 'Nft Name']),
+                    "nft_name".tr(args: [if (widget.nft.name.isNotEmpty) widget.nft.name else 'Nft Name']),
                     style: titleStyle.copyWith(fontSize: isTablet ? 13.sp : 18.sp),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -226,26 +226,29 @@ class _DraftListTileState extends State<DraftListTile> {
                 )
               : getDraftCard(),
         ),
-        (widget.nft.assetType.toAssetTypeEnum() != AssetType.ThreeD)
-            ? IgnorePointer(
-                child: SizedBox(
-                  height: 85.0.h,
-                  width: double.infinity,
-                  child: CachedNetworkImage(
-                    imageUrl: getThumbnailUrl(),
-                    fit: BoxFit.fill,
-                    color: Colors.transparent,
-                    colorBlendMode: BlendMode.clear,
-                    placeholder: (context, _) => getPlaceHolder(),
-                    errorWidget: (context, _, __) {
-                      return const IgnorePointer(child: SizedBox());
-                    },
-                  ),
-                ),
-              )
-            : const IgnorePointer(
-                child: SizedBox(),
+        if (widget.nft.assetType.toAssetTypeEnum() != AssetType.ThreeD)
+          IgnorePointer(
+            child: SizedBox(
+              height: 85.0.h,
+              width: double.infinity,
+              child: CachedNetworkImage(
+                imageUrl: getThumbnailUrl(),
+                fit: BoxFit.fill,
+                color: EaselAppTheme.kTransparent,
+                colorBlendMode: BlendMode.clear,
+                placeholder: (context, _) => getPlaceHolder(),
+                errorWidget: (context, _, __) {
+                  return const IgnorePointer(child: SizedBox());
+                },
               ),
+            ),
+          )
+        else
+          IgnorePointer(
+            child: SizedBox(
+              height: 85.h,
+            ),
+          ),
       ],
     );
   }
@@ -291,7 +294,7 @@ class _DraftListTileState extends State<DraftListTile> {
     );
   }
 
-  void onViewOnIPFSPressed({required BuildContext context, required NFT nft}) async {
+  Future<void> onViewOnIPFSPressed({required BuildContext context, required NFT nft}) async {
     switch (nft.assetType) {
       case k3dText:
       case kPdfText:

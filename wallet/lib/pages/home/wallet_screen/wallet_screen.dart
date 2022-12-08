@@ -62,60 +62,55 @@ class _WalletScreenState extends State<WalletScreen> {
   Widget build(BuildContext context) {
     return Consumer<HomeProvider>(
       builder: (context, provider, _) {
-        if (provider.balances.isNotEmpty) {
-          return SizedBox(
-            child: Column(
-              children: [
-                VerticalSpace(10.h),
-                RowComponents(
-                  onRefresh: () async {
-                    provider.buildAssetsList();
-                  },
-                ),
-                VerticalSpace(10.h),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      ReorderableListView.builder(
-                        primary: false,
-                        scrollController: scrollControllerTwo,
-                        onReorder: (oldIndex, newIndex) {
-                          if (oldIndex < newIndex) {
-                            newIndex -= 1;
-                          }
+        return SizedBox(
+          child: Column(
+            children: [
+              VerticalSpace(10.h),
+              RowComponents(
+                onRefresh: () async {
+                  provider.buildAssetsList();
+                },
+              ),
+              VerticalSpace(10.h),
+              Expanded(
+                child: Stack(
+                  children: [
+                    ReorderableListView.builder(
+                      primary: false,
+                      scrollController: scrollControllerTwo,
+                      onReorder: (oldIndex, newIndex) {
+                        if (oldIndex < newIndex) {
+                          newIndex -= 1;
+                        }
 
-                          final previous = provider.items.removeAt(oldIndex);
-                          provider.items.insert(newIndex, previous);
-                          provider.newOrder(newIndex);
-                        },
-                        itemCount: provider.items.length,
-                        proxyDecorator:
-                            (Widget widget, int index, Animation animation) {
-                          return widget;
-                        },
-                        itemBuilder: (context, index) {
-                          final currencyModel = provider.items[index];
-                          return CurrencyCard(
-                            key: ValueKey(index.toString()),
-                            isDefault: index == provider.items.length - 2,
-                            currencyModel: currencyModel,
-                            onFaucetPressed: () {
-                              if (currencyModel.ibcCoins.getName() == kPylons) {
-                                Navigator.of(context)
-                                    .pushNamed(RouteUtil.ROUTE_ADD_PYLON);
-                              }
-                            },
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                        final previous = provider.items.removeAt(oldIndex);
+                        provider.items.insert(newIndex, previous);
+                        provider.newOrder(newIndex);
+                      },
+                      itemCount: provider.items.length,
+                      proxyDecorator: (Widget widget, int index, Animation animation) {
+                        return widget;
+                      },
+                      itemBuilder: (context, index) {
+                        final currencyModel = provider.items[index];
+                        return CurrencyCard(
+                          key: ValueKey(index.toString()),
+                          isDefault: index == provider.items.length - 2,
+                          currencyModel: currencyModel,
+                          onFaucetPressed: () {
+                            if (currencyModel.ibcCoins.getName() == kPylons) {
+                              Navigator.of(context).pushNamed(RouteUtil.ROUTE_ADD_PYLON);
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          );
-        }
-        return const Center(child: CircularProgressIndicator());
+              ),
+            ],
+          ),
+        );
       },
     );
   }
@@ -128,10 +123,8 @@ class _WalletScreenState extends State<WalletScreen> {
     faucetEither.fold((failure) {
       faucetEither.swap().toOption().toNullable()!.message.show();
     }, (success) {
-      sprintf("faucet_added".tr(), [
-        faucetEither.getOrElse(() => 0).toString().UvalToVal(),
-        denom.UdenomToDenom()
-      ]).show();
+      sprintf("faucet_added".tr(), [faucetEither.getOrElse(() => 0).toString().UvalToVal(), denom.UdenomToDenom()])
+          .show();
       Timer(const Duration(milliseconds: 400), () {
         context.read<HomeProvider>().buildAssetsList();
       });

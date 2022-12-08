@@ -72,10 +72,12 @@ const ItemHistory$json = const {
     const {'1': 'cookbook_id', '3': 2, '4': 1, '5': 9, '10': 'cookbookId'},
     const {'1': 'id', '3': 3, '4': 1, '5': 9, '10': 'id'},
     const {'1': 'from', '3': 4, '4': 1, '5': 9, '10': 'from'},
-    const {'1': 'to', '3': 5, '4': 1, '5': 9, '10': 'to'},
-    const {'1': 'created_at', '3': 6, '4': 1, '5': 3, '10': 'createdAt'},
+    const {'1': 'fromAddress', '3': 5, '4': 1, '5': 9, '10': 'fromAddress'},
+    const {'1': 'to', '3': 6, '4': 1, '5': 9, '10': 'to'},
+    const {'1': 'toAddress', '3': 7, '4': 1, '5': 9, '10': 'toAddress'},
+    const {'1': 'created_at', '3': 8, '4': 1, '5': 3, '10': 'createdAt'},
   ],
 };
 
 /// Descriptor for `ItemHistory`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List itemHistoryDescriptor = $convert.base64Decode('CgtJdGVtSGlzdG9yeRIfCgtjb29rYm9va19pZBgCIAEoCVIKY29va2Jvb2tJZBIOCgJpZBgDIAEoCVICaWQSEgoEZnJvbRgEIAEoCVIEZnJvbRIOCgJ0bxgFIAEoCVICdG8SHQoKY3JlYXRlZF9hdBgGIAEoA1IJY3JlYXRlZEF0');
+final $typed_data.Uint8List itemHistoryDescriptor = $convert.base64Decode('CgtJdGVtSGlzdG9yeRIfCgtjb29rYm9va19pZBgCIAEoCVIKY29va2Jvb2tJZBIOCgJpZBgDIAEoCVICaWQSEgoEZnJvbRgEIAEoCVIEZnJvbRIgCgtmcm9tQWRkcmVzcxgFIAEoCVILZnJvbUFkZHJlc3MSDgoCdG8YBiABKAlSAnRvEhwKCXRvQWRkcmVzcxgHIAEoCVIJdG9BZGRyZXNzEh0KCmNyZWF0ZWRfYXQYCCABKANSCWNyZWF0ZWRBdA==');

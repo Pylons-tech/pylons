@@ -17,9 +17,9 @@ class AmountFormatter extends TextInputFormatter {
     if (newValue.selection.baseOffset > maxDigits) {
       return oldValue;
     }
-    double value = double.parse(newValue.text);
+    final double value = double.parse(newValue.text);
     final formatter = NumberFormat(isDecimal ? "#,##0.00" : "#,###", "en_US");
-    String newText = formatter.format(isDecimal ? value / 100 : value);
+    final String newText = formatter.format(isDecimal ? value / 100 : value);
 
     return newValue.copyWith(
         text: newText,

@@ -321,7 +321,7 @@ NftOwnershipHistory MOCK_NFT_OWNERSHIP_HISTORY = NftOwnershipHistory(
   itemID: "ahmad123axd",
   cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
   createdAt: 0,
-  receiver: "xyz",
+  receiverID: "xyz",
   senderName: "abcxyz",
 );
 

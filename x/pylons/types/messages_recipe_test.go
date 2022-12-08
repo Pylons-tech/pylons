@@ -1716,6 +1716,319 @@ func TestMsgRecipeValidateBasic(t *testing.T) {
 			create_err: sdkerrors.ErrInvalidRequest,
 			update_err: sdkerrors.ErrInvalidRequest,
 		},
+		{
+			desc: "Invalid double param list",
+			create_req: &MsgCreateRecipe{
+				Creator:       correctCreatorAddr,
+				CookbookId:    "invalid",
+				Id:            "CookbookId",
+				Name:          "testRecipeName",
+				Description:   "decdescdescdescdescdescdescdesc",
+				Version:       "v0.0.1",
+				CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.OneInt()},
+				BlockInterval: 100,
+				ItemInputs: []ItemInput{{
+					Id: "test",
+					Doubles: []DoubleInputParam{
+						{Key: "test", MinValue: sdk.OneDec(), MaxValue: valDoubles1},
+					},
+					Longs: []LongInputParam{
+						{Key: "test", MinValue: int64(1), MaxValue: int64(2)},
+					},
+					Strings: []StringInputParam{
+						{Key: "test", Value: ""},
+					},
+				}},
+				Entries: EntriesList{
+					CoinOutputs: []CoinOutput{{
+						Id:      "test1",
+						Coin:    sdk.Coin{Denom: "cookbookID/", Amount: sdk.OneInt()},
+						Program: "",
+					}},
+					ItemOutputs: []ItemOutput{{
+						Id: "test4",
+						Doubles: []DoubleParam{{
+							Key:          "test",
+							WeightRanges: []DoubleWeightRange{},
+							Program:      "rand_int(20)",
+						}},
+						Longs: []LongParam{{
+							Key: "test",
+							WeightRanges: []IntWeightRange{{
+								Lower: int64(1),
+								Upper: int64(4),
+							}},
+						}},
+						Strings: []StringParam{{
+							Key: "test",
+						}},
+						MutableStrings: []StringKeyValue{{
+							Key: "test",
+						}},
+						TradePercentage: sdk.ZeroDec(),
+						TransferFee: []sdk.Coin{{
+							Denom:  "test",
+							Amount: sdk.NewInt(1),
+						}},
+					}},
+				},
+				Outputs: []WeightedOutputs{{
+					EntryIds: []string{"test4"},
+					Weight:   1,
+				}},
+			},
+			create_err: sdkerrors.ErrInvalidRequest,
+			update_err: sdkerrors.ErrInvalidRequest,
+		},
+		{
+			desc: "Invalid long param program",
+			create_req: &MsgCreateRecipe{
+				Creator:       correctCreatorAddr,
+				CookbookId:    "invalid",
+				Id:            "CookbookId",
+				Name:          "testRecipeName",
+				Description:   "decdescdescdescdescdescdescdesc",
+				Version:       "v0.0.1",
+				CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.OneInt()},
+				BlockInterval: 100,
+				ItemInputs: []ItemInput{{
+					Id: "test",
+					Doubles: []DoubleInputParam{
+						{Key: "test", MinValue: sdk.OneDec(), MaxValue: valDoubles1},
+					},
+					Longs: []LongInputParam{
+						{Key: "test", MinValue: int64(1), MaxValue: int64(2)},
+					},
+					Strings: []StringInputParam{
+						{Key: "test", Value: ""},
+					},
+				}},
+				Entries: EntriesList{
+					CoinOutputs: []CoinOutput{{
+						Id:      "test1",
+						Coin:    sdk.Coin{Denom: "cookbookID/", Amount: sdk.OneInt()},
+						Program: "",
+					}},
+					ItemOutputs: []ItemOutput{{
+						Id: "test4",
+						Doubles: []DoubleParam{{
+							Key: "test",
+							WeightRanges: []DoubleWeightRange{{
+								Upper:  valDoubles1,
+								Lower:  valDoubles2,
+								Weight: 1,
+							}},
+						}},
+						Longs: []LongParam{{
+							Key:          "test",
+							WeightRanges: []IntWeightRange{},
+							Program:      "log2(10)",
+						}},
+						Strings: []StringParam{{
+							Key: "test",
+						}},
+						MutableStrings: []StringKeyValue{{
+							Key: "test",
+						}},
+						TradePercentage: sdk.ZeroDec(),
+						TransferFee: []sdk.Coin{{
+							Denom:  "test",
+							Amount: sdk.NewInt(1),
+						}},
+					}},
+				},
+				Outputs: []WeightedOutputs{{
+					EntryIds: []string{"test4"},
+					Weight:   1,
+				}},
+			},
+			create_err: sdkerrors.ErrInvalidRequest,
+			update_err: sdkerrors.ErrInvalidRequest,
+		},
+		{
+			desc: "Invalid long param program",
+			create_req: &MsgCreateRecipe{
+				Creator:       correctCreatorAddr,
+				CookbookId:    "invalid",
+				Id:            "CookbookId",
+				Name:          "testRecipeName",
+				Description:   "decdescdescdescdescdescdescdesc",
+				Version:       "v0.0.1",
+				CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.OneInt()},
+				BlockInterval: 100,
+				ItemInputs: []ItemInput{{
+					Id: "test",
+					Doubles: []DoubleInputParam{
+						{Key: "test", MinValue: sdk.OneDec(), MaxValue: valDoubles1},
+					},
+					Longs: []LongInputParam{
+						{Key: "test", MinValue: int64(1), MaxValue: int64(2)},
+					},
+					Strings: []StringInputParam{
+						{Key: "test", Value: ""},
+					},
+				}},
+				Entries: EntriesList{
+					CoinOutputs: []CoinOutput{},
+					ItemOutputs: []ItemOutput{{
+						Id: "test4",
+						Doubles: []DoubleParam{{
+							Key: "test",
+							WeightRanges: []DoubleWeightRange{{
+								Upper:  valDoubles1,
+								Lower:  valDoubles2,
+								Weight: 1,
+							}},
+						}},
+						Longs: []LongParam{{
+							Key:          "test",
+							WeightRanges: []IntWeightRange{},
+							Program:      "rand_int(10)",
+						}},
+						Strings: []StringParam{{
+							Key: "test",
+						}},
+						MutableStrings: []StringKeyValue{{
+							Key: "test",
+						}},
+						TradePercentage: sdk.ZeroDec(),
+						TransferFee: []sdk.Coin{{
+							Denom:  "test",
+							Amount: sdk.NewInt(1),
+						}},
+					}},
+				},
+				Outputs: []WeightedOutputs{{
+					EntryIds: []string{"test4"},
+					Weight:   1,
+				}},
+			},
+			create_err: sdkerrors.ErrInvalidRequest,
+			update_err: sdkerrors.ErrInvalidRequest,
+		},
+		{
+			desc: "Valid long param program",
+			create_req: &MsgCreateRecipe{
+				Creator:       correctCreatorAddr,
+				CookbookId:    "invalid",
+				Id:            "CookbookId",
+				Name:          "testRecipeName",
+				Description:   "decdescdescdescdescdescdescdesc",
+				Version:       "v0.0.1",
+				CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.OneInt()},
+				BlockInterval: 100,
+				ItemInputs: []ItemInput{{
+					Id: "test",
+					Doubles: []DoubleInputParam{
+						{Key: "test", MinValue: sdk.OneDec(), MaxValue: valDoubles1},
+					},
+					Longs: []LongInputParam{
+						{Key: "test", MinValue: int64(1), MaxValue: int64(2)},
+					},
+					Strings: []StringInputParam{
+						{Key: "test", Value: ""},
+					},
+				}},
+				Entries: EntriesList{
+					CoinOutputs: []CoinOutput{},
+					ItemOutputs: []ItemOutput{{
+						Id: "test4",
+						Doubles: []DoubleParam{{
+							Key: "test",
+							WeightRanges: []DoubleWeightRange{{
+								Upper:  valDoubles1,
+								Lower:  valDoubles2,
+								Weight: 1,
+							}},
+						}},
+						Longs: []LongParam{{
+							Key:          "test",
+							WeightRanges: []IntWeightRange{},
+							Program:      "rand(10)",
+						}},
+						Strings: []StringParam{{
+							Key: "test",
+						}},
+						MutableStrings: []StringKeyValue{{
+							Key: "test",
+						}},
+						TradePercentage: sdk.ZeroDec(),
+						TransferFee: []sdk.Coin{{
+							Denom:  "test",
+							Amount: sdk.NewInt(1),
+						}},
+					}},
+				},
+				Outputs: []WeightedOutputs{{
+					EntryIds: []string{"test4"},
+					Weight:   1,
+				}},
+			},
+			create_err: nil,
+			update_err: nil,
+		},
+		{
+			desc: "Valid string param program",
+			create_req: &MsgCreateRecipe{
+				Creator:       correctCreatorAddr,
+				CookbookId:    "invalid",
+				Id:            "CookbookId",
+				Name:          "testRecipeName",
+				Description:   "decdescdescdescdescdescdescdesc",
+				Version:       "v0.0.1",
+				CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.OneInt()},
+				BlockInterval: 100,
+				ItemInputs: []ItemInput{{
+					Id: "test",
+					Doubles: []DoubleInputParam{
+						{Key: "test", MinValue: sdk.OneDec(), MaxValue: valDoubles1},
+					},
+					Longs: []LongInputParam{
+						{Key: "test", MinValue: int64(1), MaxValue: int64(2)},
+					},
+					Strings: []StringInputParam{
+						{Key: "test", Value: ""},
+					},
+				}},
+				Entries: EntriesList{
+					CoinOutputs: []CoinOutput{},
+					ItemOutputs: []ItemOutput{{
+						Id: "test4",
+						Doubles: []DoubleParam{{
+							Key: "test",
+							WeightRanges: []DoubleWeightRange{{
+								Upper:  valDoubles1,
+								Lower:  valDoubles2,
+								Weight: 1,
+							}},
+						}},
+						Longs: []LongParam{{
+							Key:          "test",
+							WeightRanges: []IntWeightRange{},
+							Program:      "rand(10)",
+						}},
+						Strings: []StringParam{{
+							Key:     "test",
+							Program: "rand(10)",
+						}},
+						MutableStrings: []StringKeyValue{{
+							Key: "test",
+						}},
+						TradePercentage: sdk.ZeroDec(),
+						TransferFee: []sdk.Coin{{
+							Denom:  "test",
+							Amount: sdk.NewInt(1),
+						}},
+					}},
+				},
+				Outputs: []WeightedOutputs{{
+					EntryIds: []string{"test4"},
+					Weight:   1,
+				}},
+			},
+			create_err: nil,
+			update_err: nil,
+		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {

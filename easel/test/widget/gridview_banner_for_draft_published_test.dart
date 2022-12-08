@@ -1,7 +1,9 @@
+import 'package:easel_flutter/generated/locale_keys.g.dart';
 import 'package:easel_flutter/main.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_screen.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_view_model.dart';
+import 'package:easel_flutter/screens/creator_hub/widgets/nfts_grid_view.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -28,16 +30,23 @@ void main() {
           await tester.setScreenSize();
           await tester.testAppForWidgetTesting(
             Scaffold(
-              body: ChangeNotifierProvider(
-                create: (ctx) => GetIt.I.get<CreatorHubViewModel>(),
+              body: ChangeNotifierProvider.value(
+                value: GetIt.I.get<CreatorHubViewModel>(),
                 builder: (context, _) {
                   return BuildGridView(
                     nftsList: [MOCK_PRICED_NFT],
                     onEmptyList: (BuildContext context) {
                       return Text(
-                        "no_nft_created".tr(),
-                        style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
+                        LocaleKeys.no_nft_created.tr(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: EaselAppTheme.kLightGrey,
+                          fontSize: isTablet ? 12.sp : 15.sp,
+                        ),
                       );
+                    },
+                    calculateBannerPrice: ({required String currency, required String price}) {
+                      return price;
                     },
                   );
                 },
@@ -47,6 +56,34 @@ void main() {
           await tester.pump();
           final banner = find.byKey(const Key(kPriceBannerKey));
           expect(banner, findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        "Testing Bottom Sheet Options For Published NFT",
+        (tester) async {
+          await tester.setScreenSize();
+          await tester.testAppForWidgetTesting(
+            Scaffold(
+              body: ChangeNotifierProvider.value(
+                value: GetIt.I.get<CreatorHubViewModel>(),
+                builder: (context, _) {
+                  return NftGridViewItem(
+                    nft: MOCK_NFT,
+                  );
+                },
+              ),
+            ),
+          );
+
+          await tester.pump();
+          final gridViewTile = find.byKey(const Key(kGridViewTileMoreOptionKey));
+          final publishBottomSheetText = find.text(kPublishTextKey);
+          await tester.ensureVisible(gridViewTile);
+          expect(publishBottomSheetText, findsNothing);
+          await tester.tap(gridViewTile);
+          await tester.pump();
+          expect(publishBottomSheetText, findsOneWidget);
         },
       );
     },

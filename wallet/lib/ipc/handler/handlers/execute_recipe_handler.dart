@@ -20,8 +20,8 @@ class ExecuteRecipeHandler implements BaseHandler {
     final response = await walletsStore.executeRecipe(jsonMap);
 
     final concereteTypeToStringTypeResponse = response.finalizeTheSDKResponse(
-      action: response.action,
-      sender: response.sender,
+      action: sdkIpcMessage.action,
+      sender: sdkIpcMessage.sender,
     );
 
     return SynchronousFuture(concereteTypeToStringTypeResponse);
