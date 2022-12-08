@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -60,7 +59,6 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
     final ownerViewViewModel = context.watch<OwnerViewViewModel>();
     return WillPopScope(
       onWillPop: () async {
-        ownerViewViewModel.onChangeStatusNotForSale();
         return true;
       },
       child: Container(
@@ -80,7 +78,6 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
               child: GestureDetector(
                 onTap: () {
                   Navigator.of(context).pop();
-                  ownerViewViewModel.onChangeStatusNotForSale();
                 },
                 child: Image.asset(
                   ImageUtil.CLOSE_ICON,
@@ -127,22 +124,16 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
                       clipper: ToggleClipper(),
                       child: GestureDetector(
                         onTap: () {
-                          ownerViewViewModel.onPaymentTypeChange(paymentType: PaymentType.credits);
                         },
                         child: Container(
-                          decoration: BoxDecoration(
-                            color: ownerViewViewModel.selectedPaymentType == PaymentType.credits
-                                ? AppColors.kDarkPurple
-                                : AppColors.kTransparentColor,
+                          decoration: const BoxDecoration(
                           ),
                           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 7.h),
                           child: Text(
                             LocaleKeys.credits.tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: ownerViewViewModel.selectedPaymentType == PaymentType.credits
-                                  ? AppColors.kWhite
-                                  : AppColors.kGreyColor,
+                              color: AppColors.kGreyColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -158,22 +149,17 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
                       clipper: BottomLeftCurvedCorner(cuttingEdge: 10),
                       child: GestureDetector(
                         onTap: () {
-                          ownerViewViewModel.onPaymentTypeChange(paymentType: PaymentType.cash);
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            color: ownerViewViewModel.selectedPaymentType == PaymentType.cash
-                                ? AppColors.kDarkPurple
-                                : AppColors.kTransparentColor,
+                            color: AppColors.kTransparentColor,
                           ),
                           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 7.h),
                           child: Text(
                             LocaleKeys.cash.tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: ownerViewViewModel.selectedPaymentType == PaymentType.cash
-                                  ? AppColors.kWhite
-                                  : AppColors.kGreyColor,
+                              color: AppColors.kGreyColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -208,14 +194,13 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 7.h),
                 child: TextFormField(
                   style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, color: AppColors.kTextBlackColor),
-                  controller: ownerViewViewModel.noOfEditionsTEController,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(2),
                   ],
                   onChanged: (str) {
-                    ownerViewViewModel.validateEditions();
+
                   },
                   decoration: InputDecoration(
                     hintText: LocaleKeys.editions_are_sold_sequentially.tr(),
@@ -237,10 +222,7 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
             Align(
               alignment: Alignment.centerRight,
               child: Text(
-                (ownerViewViewModel.noOfEditionsTEController.text.isNotEmpty &&
-                        int.parse(ownerViewViewModel.noOfEditionsTEController.text) > 0)
-                    ? "${ownerViewViewModel.noOfEditionsTEController.text} ${LocaleKeys.available.tr()}"
-                    : "${ownerViewViewModel.nft.quantity - ownerViewViewModel.nft.amountMinted} ${LocaleKeys.available.tr()}",
+                "${ownerViewViewModel.nft.quantity - ownerViewViewModel.nft.amountMinted} ${LocaleKeys.available.tr()}",
                 style: TextStyle(
                   color: AppColors.kHashtagColor,
                   fontSize: 12.sp,
@@ -273,7 +255,6 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 7.h),
                 child: TextFormField(
                   style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w400, color: AppColors.kTextBlackColor),
-                  controller: ownerViewViewModel.pricePerEditionTEController,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -312,7 +293,6 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
                   TextSpan(
                     text: " ${LocaleKeys.learn_more.tr()}",
                     style: TextStyle(color: AppColors.kEmoneyColor, fontSize: 12.sp, fontWeight: FontWeight.bold),
-                    recognizer: TapGestureRecognizer()..onTap = ownerViewViewModel.onLearnMoreClick,
                   ),
                 ],
               ),
@@ -326,9 +306,7 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
               initialWidth: 40.w,
               isEnabled: true,
               onSwipeComplete: () {
-                ownerViewViewModel.updateRecipeIsEnabled(
-                  context: context,
-                );
+
               },
             )
           ],

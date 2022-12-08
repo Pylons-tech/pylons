@@ -213,7 +213,6 @@ Future<void> init() async {
       videoPlayerHelper: sl(),
       shareHelper: sl(),
       accountPublicInfo: sl<AccountProvider>().accountPublicInfo!,
-      permissionService: sl(),
     ),
   );
   sl.registerLazySingleton(() => UserBannerViewModel());

@@ -56,7 +56,6 @@ class _NFTForSaleConfirmationWidgetState extends State<NFTForSaleConfirmationWid
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        widget.ownerViewViewModel.onChangeStatusNotForSale();
         Navigator.pop(context);
         return false;
       },
@@ -81,7 +80,6 @@ class _NFTForSaleConfirmationWidgetState extends State<NFTForSaleConfirmationWid
                     alignment: Alignment.topRight,
                     child: GestureDetector(
                       onTap: () {
-                        widget.ownerViewViewModel.onChangeStatusNotForSale();
                         Navigator.pop(context);
                       },
                       child: Padding(
@@ -133,11 +131,7 @@ class _NFTForSaleConfirmationWidgetState extends State<NFTForSaleConfirmationWid
                         inactiveColor: AppColors.kPayNowBackgroundGrey,
                         height: 40.h,
                         initialWidth: 40.w,
-                        onSwipeComplete: () {
-                          widget.ownerViewViewModel.updateRecipeIsEnabled(
-                            context: context,
-                          );
-                        },
+                        onSwipeComplete: () {},
                       ),
                     ),
                     SizedBox(

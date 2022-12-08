@@ -1,16 +1,12 @@
 import 'dart:async';
-
+import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:external_path/external_path.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
-import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/share_helper.dart';
@@ -18,17 +14,12 @@ import 'package:pylons_wallet/services/third_party_services/video_player_helper.
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
-import 'package:pylons_wallet/utils/permission_service.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../generated/locale_keys.g.dart';
-import '../../model/update_recipe_model.dart';
 import '../owner_purchase_view_common/button_state.dart';
 import '../owner_purchase_view_common/progress_bar_state.dart';
-
-enum PaymentType { credits, cash }
 
 class OwnerViewViewModel extends ChangeNotifier {
   late NFT nft;
@@ -37,7 +28,6 @@ class OwnerViewViewModel extends ChangeNotifier {
   final AudioPlayerHelper audioPlayerHelper;
   final VideoPlayerHelper videoPlayerHelper;
   final ShareHelper shareHelper;
-  final PermissionService permissionService;
 
   OwnerViewViewModel({
     required this.repository,
@@ -46,14 +36,12 @@ class OwnerViewViewModel extends ChangeNotifier {
     required this.shareHelper,
     required this.videoPlayerHelper,
     required this.accountPublicInfo,
-    required this.permissionService,
   });
 
   TabFields? selectedField;
   bool isOwnershipExpanded = false;
   bool isHistoryExpanded = false;
   bool isDetailsExpanded = false;
-  bool isNFTToggleIntermediateState = false;
 
   String owner = '';
 
@@ -62,6 +50,8 @@ class OwnerViewViewModel extends ChangeNotifier {
   bool get toggled => _toggled;
 
   VideoPlayerController? videoPlayerController;
+
+
 
   late StreamSubscription playerStateSubscription;
 
@@ -146,11 +136,6 @@ class OwnerViewViewModel extends ChangeNotifier {
     _viewsCount = value;
     notifyListeners();
   }
-
-  TextEditingController noOfEditionsTEController = TextEditingController();
-  TextEditingController pricePerEditionTEController = TextEditingController();
-
-  PaymentType selectedPaymentType = PaymentType.credits;
 
   void initializeData() {
     nftDataInit(recipeId: nft.recipeID, cookBookId: nft.cookbookID, itemId: nft.itemID);
@@ -498,117 +483,4 @@ class OwnerViewViewModel extends ChangeNotifier {
   );
 
   ValueNotifier<ButtonState> buttonNotifier = ValueNotifier(ButtonState.loading);
-
-  void onPaymentTypeChange({required PaymentType paymentType}) {
-    selectedPaymentType = paymentType;
-    notifyListeners();
-  }
-
-  void validateEditions() {
-    notifyListeners();
-  }
-
-  Future<void> onLearnMoreClick() async {
-    final Uri parsedUrl = Uri.parse(kFAQsURL);
-    if (await canLaunchUrl(parsedUrl)) {
-      launchUrl(
-        parsedUrl,
-        mode: LaunchMode.externalApplication,
-      );
-    } else {
-      LocaleKeys.something_wrong.tr().show();
-    }
-  }
-
-  Future<void> onDownloadButtonPressed() async {
-    if (await permissionService.request(Permission.storage).isGranted) {
-      final externalDir = await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOADS);
-      LocaleKeys.downloading_started.tr().show();
-      await FlutterDownloader.enqueue(
-        url: nft.url,
-        savedDir: externalDir,
-        fileName: nft.name.replaceAll(" ", "-"),
-      );
-    }
-  }
-
-  void onChangeStatusNotForSale() {
-    isNFTToggleIntermediateState = !isNFTToggleIntermediateState;
-    notifyListeners();
-  }
-
-  Future<void> updateRecipeIsEnabled({required BuildContext context}) async {
-    final navigator = Navigator.of(context);
-    final loading = Loading()..showLoading();
-    final publicAddress = accountPublicInfo.publicAddress;
-    final recipeEither = await repository.getRecipe(cookBookId: nft.cookbookID, recipeId: nft.recipeID);
-    if (recipeEither.isLeft()) {
-      LocaleKeys.something_wrong.tr().show();
-      loading.dismiss();
-      onChangeStatusNotForSale();
-      navigator.pop();
-      return;
-    }
-    if (nft.isEnabled) {
-      final updateRecipeModel = UpdateRecipeModel(
-        recipe: recipeEither.toOption().toNullable()!,
-        publicAddress: publicAddress,
-        enabledStatus: !nft.isEnabled,
-        nftPrice: nft.price,
-        denom: nft.denom,
-        quantity: nft.quantity,
-      );
-      final response = await repository.updateRecipe(updateRecipeModel: updateRecipeModel);
-      if (response.isLeft()) {
-        response.toOption().getOrElse(() => LocaleKeys.something_wrong.tr()).show();
-        loading.dismiss();
-        onChangeStatusNotForSale();
-        navigator.pop();
-        return;
-      }
-      loading.dismiss();
-      updateRecipeInLocalVm(
-          nftEnabledStatus: !nft.isEnabled,
-          nftPrice: pricePerEditionTEController.text.replaceAll("\$", "").trim(),
-          denom: selectedPaymentType == PaymentType.credits ? IBCCoins.upylon.name : IBCCoins.ustripeusd.name,
-          quantity: nft.quantity);
-      onChangeStatusNotForSale();
-      navigator.pop();
-      return;
-    }
-
-    final int price = int.parse(pricePerEditionTEController.text.replaceAll("\$", "").trim()) * kBigIntBase;
-
-    final updateRecipeModel = UpdateRecipeModel(
-      recipe: recipeEither.toOption().toNullable()!,
-      publicAddress: publicAddress,
-      enabledStatus: !nft.isEnabled,
-      nftPrice: price.toString(),
-      denom: selectedPaymentType == PaymentType.credits ? IBCCoins.upylon.name : IBCCoins.ustripeusd.name,
-      quantity: noOfEditionsTEController.text.isNotEmpty && int.parse(noOfEditionsTEController.text) > 0 ? int.parse(noOfEditionsTEController.text) : nft.quantity,
-    );
-    final response = await repository.updateRecipe(updateRecipeModel: updateRecipeModel);
-    loading.dismiss();
-    if (response.isLeft()) {
-      response.toOption().getOrElse(() => LocaleKeys.something_wrong.tr()).show();
-      loading.dismiss();
-      return;
-    }
-    updateRecipeInLocalVm(
-      nftPrice: price.toString(),
-      nftEnabledStatus: !nft.isEnabled,
-      denom: selectedPaymentType == PaymentType.credits ? IBCCoins.upylon.name : IBCCoins.ustripeusd.name,
-      quantity: noOfEditionsTEController.text.isNotEmpty && int.parse(noOfEditionsTEController.text) > 0 ? int.parse(noOfEditionsTEController.text) : nft.quantity,
-    );
-    onChangeStatusNotForSale();
-    navigator.pop();
-  }
-
-  void updateRecipeInLocalVm({required bool nftEnabledStatus, required String nftPrice, required String denom, required int quantity}) {
-    nft.isEnabled = nftEnabledStatus;
-    nft.price = nftPrice;
-    nft.denom = denom;
-    nft.quantity = quantity;
-    notifyListeners();
-  }
 }

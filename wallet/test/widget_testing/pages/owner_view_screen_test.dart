@@ -1,8 +1,5 @@
-import 'package:flutter/services.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
@@ -17,7 +14,6 @@ import '../../mocks/mock_wallet_store.dart';
 import '../../mocks/owner_view_view_model.mocks.dart';
 import '../extension/size_extension.dart';
 
-@GenerateMocks([BuildContext])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late OwnerViewViewModel viewModel;
@@ -66,61 +62,9 @@ void main() {
       expect(viewModel.videoPlayerController!.value.isPlaying, false);
     },
   );
-
-  testWidgets(
-    "For Sale toggle dialog test",
-    (tester) async {
-      when(viewModel.nft).thenAnswer((realInvocation) => viewModel.nft = MOCK_NFT_FREE_IMAGE);
-      await tester.testAppForWidgetTesting(
-        Scaffold(
-          body: OwnerView(
-            nft: MOCK_NFT_FREE_IMAGE,
-          ),
-        ),
-      );
-
-      final toggleButton = find.byKey(const Key(kSaleStatusToggleButtonKey));
-      tester.ensureVisible(toggleButton);
-      final enabledToggleIcon = find.byKey(const Key(kForSaleToggleWidgetKey));
-      await tester.ensureVisible(enabledToggleIcon);
-      await tester.tap(toggleButton);
-      await tester.pump();
-      final notForSaleDialog = find.byKey(const Key(kNotForSaleDialogKey));
-      await tester.ensureVisible(notForSaleDialog);
-    },
-  );
-
-  testWidgets(
-    "Not For Sale toggle bottom sheet test",
-    (tester) async {
-      when(viewModel.nft).thenAnswer((realInvocation) => viewModel.nft = MOCK_DISABLED_NFT_IMAGE);
-      await tester.testAppForWidgetTesting(
-        Scaffold(
-          body: OwnerView(
-            nft: MOCK_DISABLED_NFT_IMAGE,
-          ),
-        ),
-      );
-
-      final toggleButton = find.byKey(const Key(kSaleStatusToggleButtonKey));
-      tester.ensureVisible(toggleButton);
-      final disabledToggleIcon = find.byKey(const Key(kNotForSaleToggleWidgetKey));
-      await tester.ensureVisible(disabledToggleIcon);
-      await tester.tap(toggleButton);
-      await tester.pump();
-      final forSaleBottomSheet = find.byKey(const Key(kForSaleBottomSheetKey));
-      await tester.ensureVisible(forSaleBottomSheet);
-    },
-  );
 }
 
 void registerStubs(OwnerViewViewModel viewModel) {
-  const MethodChannel channel = MethodChannel('vn.hunghd/downloader');
-  channel.setMockMethodCallHandler((MethodCall methodCall) async {
-    return "initialize";
-  });
-  FlutterDownloader.initialize();
-
   ///Defines Stub for audio player
   when(viewModel.buttonNotifier).thenAnswer((realInvocation) => ValueNotifier(ButtonState.paused));
   when(viewModel.audioProgressNotifier).thenAnswer(
