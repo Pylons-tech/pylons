@@ -49,6 +49,7 @@ import 'package:pylons_wallet/utils/enums.dart' as _i35;
 import 'package:pylons_wallet/utils/failure/failure.dart' as _i9;
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart'
     as _i6;
+import 'package:pylons_wallet/model/update_recipe_model.dart' as _i36;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -1979,20 +1980,20 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
               .Future<_i2.Either<_i9.Failure, List<_i25.TransactionHistory>>>);
   @override
   _i8.Future<_i2.Either<_i9.Failure, String>> updateRecipe(
-          {required _i10.MsgUpdateRecipe? msgUpdateRecipe}) =>
+          {required _i36.UpdateRecipeModel? updateRecipeModel}) =>
       (super.noSuchMethod(
         Invocation.method(
           #updateRecipe,
           [],
-          {#msgUpdateRecipe: msgUpdateRecipe},
+          {#msgUpdateRecipe: updateRecipeModel},
         ),
         returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(
             _FakeEither_0<_i9.Failure, String>(
           this,
           Invocation.method(
-            #updateRecipe,
+            #updateRecipeModel,
             [],
-            {#msgUpdateRecipe: msgUpdateRecipe},
+            {#updateRecipeModel: updateRecipeModel},
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, String>>);

@@ -388,8 +388,6 @@ abstract class  LocaleKeys {
   static const swipe_right_to_sell = 'swipe_right_to_sell';
   static const network_fee_required = 'network_fee_required';
   static const learn_more = 'learn_more';
-  static const available = 'available';
-  static const ea = 'ea';
   static const downloading_started = 'downloading_started';
 
 }

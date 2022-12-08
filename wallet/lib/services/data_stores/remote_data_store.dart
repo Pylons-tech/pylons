@@ -45,6 +45,7 @@ import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
 import '../../generated/locale_keys.g.dart';
 import '../../model/update_recipe_model.dart';
+import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
 
 abstract class RemoteDataStore {
   /// This method is used to generate the stripe registration token
