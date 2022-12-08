@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mockito/annotations.dart';
@@ -40,26 +38,19 @@ void main() {
     walletStore = MockWalletStore();
     shareHelper = MockShareHelperImpl();
     final OwnerViewViewModel viewModel = OwnerViewViewModel(
-      repository: repositry,
-      walletsStore: walletStore,
-      audioPlayerHelper: audioPlayerHelper,
-      videoPlayerHelper: videoPlayerHelper,
-      shareHelper: shareHelper,
-      accountPublicInfo: const AccountPublicInfo(
-        accountId: '',
-        chainId: '',
-        name: '',
-        publicAddress: '',
-      ),
-    );
+        repository: repositry,
+        walletsStore: walletStore,
+        audioPlayerHelper: audioPlayerHelper,
+        videoPlayerHelper: videoPlayerHelper,
+        shareHelper: shareHelper,
+        accountPublicInfo: const AccountPublicInfo(
+          accountId: '',
+          chainId: '',
+          name: '',
+          publicAddress: '',
+        ));
 
     GetIt.I.registerSingleton(viewModel);
-
-    const MethodChannel channel = MethodChannel('vn.hunghd/downloader');
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return "initialize";
-    });
-    FlutterDownloader.initialize();
   });
 
   testWidgets('test case for gestures', (tester) async {
