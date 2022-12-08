@@ -222,12 +222,11 @@ class PurchasesCollection extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          flex: 2,
-                          child: SvgPicture.asset(
-                            SVGUtil.MY_PURCHASES,
-                            height: 25.h,
-                          ),
-                        ),
+                            flex: 2,
+                            child: SvgPicture.asset(
+                              SVGUtil.MY_PURCHASES,
+                              height: 25.h,
+                            )),
                         Expanded(
                           flex: 8,
                           child: Text(
@@ -392,12 +391,11 @@ class CreationsCollection extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          flex: 2,
-                          child: SvgPicture.asset(
-                            SVGUtil.MY_CREATIONS,
-                            height: 20.h,
-                          ),
-                        ),
+                            flex: 2,
+                            child: SvgPicture.asset(
+                              SVGUtil.MY_CREATIONS,
+                              height: 20.h,
+                            )),
                         Expanded(
                           flex: 8,
                           child: Text(
