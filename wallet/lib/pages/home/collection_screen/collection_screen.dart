@@ -89,7 +89,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
             left: 0,
             right: 0,
             bottom: 0,
-            top: 0,
+            top: 0.h,
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 450),
               child: viewModel.collectionsType == CollectionsType.purchases ? creationsCollection : purchasesCollection,
@@ -189,8 +189,8 @@ class PurchasesCollection extends StatelessWidget {
                     Positioned(
                         top: 0,
                         bottom: 0,
-                        left: 0,
-                        right: 0,
+                        left: 0.w,
+                        right: 0.w,
                         child: DecoratedBox(
                           decoration: BoxDecoration(
                             boxShadow: [
@@ -199,7 +199,7 @@ class PurchasesCollection extends StatelessWidget {
                                 spreadRadius: 3,
                                 color: Colors.grey.withOpacity(0.1),
                               ),
-                              BoxShadow(color: AppColors.kMainBG, offset: Offset(0, 30.r)),
+                              BoxShadow(color: AppColors.kMainBG, offset: const Offset(0, 30)),
                             ],
                           ),
                         )),
@@ -359,8 +359,8 @@ class CreationsCollection extends StatelessWidget {
                     Positioned(
                         top: 0,
                         bottom: 0,
-                        left: 0,
-                        right: 0,
+                        left: 0.w,
+                        right: 0.w,
                         child: DecoratedBox(
                           decoration: BoxDecoration(
                             boxShadow: [
@@ -369,7 +369,7 @@ class CreationsCollection extends StatelessWidget {
                                 spreadRadius: 3,
                                 color: Colors.grey.withOpacity(0.1),
                               ),
-                              BoxShadow(color: AppColors.kMainBG, offset: Offset(0, 30.r)),
+                              BoxShadow(color: AppColors.kMainBG, offset: const Offset(0, 30)),
                             ],
                           ),
                         )),

@@ -49,7 +49,8 @@ class _SwipeRightToSellButtonState extends State<SwipeRightToSellButton> {
                     onHorizontalDragUpdate: widget.isEnabled
                         ? (details) {
                             setState(() {
-                              if (details.globalPosition.dx > widget.initialWidth && ((left + widget.initialWidth) < constraint.maxWidth)) {
+                              if (details.globalPosition.dx > widget.initialWidth &&
+                                  ((left + widget.initialWidth) < constraint.maxWidth)) {
                                 left = details.globalPosition.dx - widget.initialWidth;
                               }
                             });
@@ -71,7 +72,7 @@ class _SwipeRightToSellButtonState extends State<SwipeRightToSellButton> {
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: SizedBox(
-                            height: 40.w,
+                            height: 40.h,
                             width: 40.w,
                             child: Visibility(
                               visible: !((left + widget.initialWidth) >= constraint.maxWidth * 0.9),

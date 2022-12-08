@@ -65,7 +65,12 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
       },
       child: Container(
         key: const Key(kForSaleBottomSheetKey),
-        padding: EdgeInsets.only(left: 18.w, right: 18.w, top: 10.h, bottom: 10.h + MediaQuery.of(context).viewInsets.bottom),
+        padding: EdgeInsets.only(
+          left: 18.w,
+          right: 18.w,
+          top: 10.h,
+          bottom: 10.h + MediaQuery.of(context).viewInsets.bottom,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +92,12 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
             Align(
               child: Text(
                 LocaleKeys.sell_your_nft.tr(),
-                style: TextStyle(color: AppColors.kDarkPurple, fontSize: 15.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w800),
+                style: TextStyle(
+                  color: AppColors.kDarkPurple,
+                  fontSize: 15.sp,
+                  fontFamily: kUniversalFontFamily,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
             SizedBox(
@@ -95,7 +105,12 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
             ),
             Text(
               LocaleKeys.payment_type.tr(),
-              style: TextStyle(color: AppColors.kDarkPurple, fontSize: 12.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w800),
+              style: TextStyle(
+                color: AppColors.kDarkPurple,
+                fontSize: 12.sp,
+                fontFamily: kUniversalFontFamily,
+                fontWeight: FontWeight.w800,
+              ),
             ),
             SizedBox(
               height: 7.h,
@@ -116,13 +131,20 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            color: ownerViewViewModel.selectedPaymentType == PaymentType.credits ? AppColors.kDarkPurple : AppColors.kTransparentColor,
+                            color: ownerViewViewModel.selectedPaymentType == PaymentType.credits
+                                ? AppColors.kDarkPurple
+                                : AppColors.kTransparentColor,
                           ),
                           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 7.h),
                           child: Text(
                             LocaleKeys.credits.tr(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: ownerViewViewModel.selectedPaymentType == PaymentType.credits ? AppColors.kWhite : AppColors.kGreyColor, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              color: ownerViewViewModel.selectedPaymentType == PaymentType.credits
+                                  ? AppColors.kWhite
+                                  : AppColors.kGreyColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -140,13 +162,20 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            color: ownerViewViewModel.selectedPaymentType == PaymentType.cash ? AppColors.kDarkPurple : AppColors.kTransparentColor,
+                            color: ownerViewViewModel.selectedPaymentType == PaymentType.cash
+                                ? AppColors.kDarkPurple
+                                : AppColors.kTransparentColor,
                           ),
                           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 7.h),
                           child: Text(
                             LocaleKeys.cash.tr(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: ownerViewViewModel.selectedPaymentType == PaymentType.cash ? AppColors.kWhite : AppColors.kGreyColor, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              color: ownerViewViewModel.selectedPaymentType == PaymentType.cash
+                                  ? AppColors.kWhite
+                                  : AppColors.kGreyColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -160,7 +189,12 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
             ),
             Text(
               LocaleKeys.no_of_editions.tr(),
-              style: TextStyle(color: AppColors.kDarkPurple, fontSize: 12.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w800),
+              style: TextStyle(
+                color: AppColors.kDarkPurple,
+                fontSize: 12.sp,
+                fontFamily: kUniversalFontFamily,
+                fontWeight: FontWeight.w800,
+              ),
             ),
             SizedBox(
               height: 7.h,
@@ -185,7 +219,11 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
                   },
                   decoration: InputDecoration(
                     hintText: LocaleKeys.editions_are_sold_sequentially.tr(),
-                    hintStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400, color: AppColors.kUserInputTextColor),
+                    hintStyle: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.kUserInputTextColor,
+                    ),
                     border: const OutlineInputBorder(borderSide: BorderSide.none),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     contentPadding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
@@ -199,10 +237,16 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
             Align(
               alignment: Alignment.centerRight,
               child: Text(
-                (ownerViewViewModel.noOfEditionsTEController.text.isNotEmpty && int.parse(ownerViewViewModel.noOfEditionsTEController.text) > 0)
+                (ownerViewViewModel.noOfEditionsTEController.text.isNotEmpty &&
+                        int.parse(ownerViewViewModel.noOfEditionsTEController.text) > 0)
                     ? "${ownerViewViewModel.noOfEditionsTEController.text} ${LocaleKeys.available.tr()}"
                     : "${ownerViewViewModel.nft.quantity - ownerViewViewModel.nft.amountMinted} ${LocaleKeys.available.tr()}",
-                style: TextStyle(color: AppColors.kHashtagColor, fontSize: 12.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w800),
+                style: TextStyle(
+                  color: AppColors.kHashtagColor,
+                  fontSize: 12.sp,
+                  fontFamily: kUniversalFontFamily,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
             SizedBox(
@@ -210,7 +254,12 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
             ),
             Text(
               LocaleKeys.price_per_edition.tr(),
-              style: TextStyle(color: AppColors.kDarkPurple, fontSize: 12.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w800),
+              style: TextStyle(
+                color: AppColors.kDarkPurple,
+                fontSize: 12.sp,
+                fontFamily: kUniversalFontFamily,
+                fontWeight: FontWeight.w800,
+              ),
             ),
             SizedBox(
               height: 7.h,
@@ -233,7 +282,11 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
                   ],
                   decoration: InputDecoration(
                     hintText: LocaleKeys.enter_whole_dollar_amount.tr(),
-                    hintStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400, color: AppColors.kUserInputTextColor),
+                    hintStyle: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.kUserInputTextColor,
+                    ),
                     border: const OutlineInputBorder(borderSide: BorderSide.none),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     contentPadding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
@@ -249,7 +302,12 @@ class _ForSaleBottomSheetWidgetState extends State<ForSaleBottomSheetWidget> {
                 children: [
                   TextSpan(
                     text: LocaleKeys.network_fee_required.tr(),
-                    style: TextStyle(color: AppColors.kHashtagColor, fontSize: 12.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w800),
+                    style: TextStyle(
+                      color: AppColors.kHashtagColor,
+                      fontSize: 12.sp,
+                      fontFamily: kUniversalFontFamily,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                   TextSpan(
                     text: " ${LocaleKeys.learn_more.tr()}",

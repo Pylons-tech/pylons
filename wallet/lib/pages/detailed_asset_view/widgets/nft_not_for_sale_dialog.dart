@@ -84,7 +84,14 @@ class _NFTForSaleConfirmationWidgetState extends State<NFTForSaleConfirmationWid
                         widget.ownerViewViewModel.onChangeStatusNotForSale();
                         Navigator.pop(context);
                       },
-                      child: Padding(padding: EdgeInsets.only(right: isTablet ? 2.w : 5.w, top: 5.h), child: Icon(Icons.close, color: Colors.white, size: 20.h)),
+                      child: Padding(
+                        padding: EdgeInsets.only(right: isTablet ? 2.w : 5.w, top: 5.h),
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 20.h,
+                        ),
+                      ),
                     ),
                   ),
                 ),

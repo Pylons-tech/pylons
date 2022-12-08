@@ -225,7 +225,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   Widget getLikingLoader() {
     return SizedBox(
       height: 20.h,
-      width: 20.h,
+      width: 20.w,
       child: CircularProgressIndicator(
         strokeWidth: 2,
         valueColor: AlwaysStoppedAnimation<Color>(AppColors.kWhite),
@@ -254,7 +254,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         children: [
           if (viewModel.collapsed) ...[
             Padding(
-              padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w, top: 8.w),
+              padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h, top: 8.h),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -264,7 +264,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       children: [
                         _title(
                           nft: viewModel.nft,
-                          owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner,
+                          owner:
+                              viewModel.nft.type == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator,
                         ),
                         SizedBox(
                           height: 18.h,
@@ -287,21 +288,26 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       SvgPicture.asset(
                         SVGUtil.OWNER_VIEWS,
                         width: 20.w,
-                        height: 15.w,
+                        height: 15.h,
                       ),
                       SizedBox(
                         width: 4.5.w,
                       ),
                       Text(
                         viewModel.viewsCount.toString(),
-                        style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w700),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 11.sp,
+                          fontFamily: kUniversalFontFamily,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       SizedBox(
-                        height: 5.w,
+                        height: 5.h,
                       ),
                       buildLikeColumn(viewModel: viewModel),
                       SizedBox(
-                        height: 18.w,
+                        height: 18.h,
                       ),
                       GestureDetector(
                         key: const Key(kShareNftButtonCollapsedKey),
@@ -319,7 +325,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         ),
                       ),
                       SizedBox(
-                        height: 8.w,
+                        height: 8.h,
                       ),
                       GestureDetector(
                         onTap: () async {
@@ -369,7 +375,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         children: [
                           _title(
                             nft: viewModel.nft,
-                            owner: viewModel.nft.type == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator,
+                            owner:
+                                viewModel.nft.type == NftType.TYPE_RECIPE ? LocaleKeys.you.tr() : viewModel.nft.creator,
                           ),
                           SizedBox(
                             height: 20.h,
@@ -422,8 +429,16 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                             viewModel.nft.description,
                             trimExpandedText: LocaleKeys.collapse.tr(),
                             trimCollapsedText: LocaleKeys.read_more.tr(),
-                            moreStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.kCopyColor),
-                            lessStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.kCopyColor),
+                            moreStyle: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.kCopyColor,
+                            ),
+                            lessStyle: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.kCopyColor,
+                            ),
                           ),
                           SizedBox(
                             height: 20.h,
@@ -457,7 +472,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                         onChangeTab: viewModel.onChangeTab,
                                       ),
                                       SizedBox(height: 10.h),
-                                      if (viewModel.nft.type != NftType.TYPE_RECIPE)
+                                      if (viewModel.nft.type == NftType.TYPE_RECIPE)
                                         TabField(
                                           name: LocaleKeys.history.tr(),
                                           icon: 'history',
@@ -485,16 +500,26 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       ),
                                       Text(
                                         viewModel.viewsCount.toString(),
-                                        style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w700),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 11.sp,
+                                          fontFamily: kUniversalFontFamily,
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
                                       SizedBox(
                                         height: 18.h,
                                       ),
                                       GestureDetector(
                                         onTap: () async {
-                                          await viewModel.updateLikeStatus(recipeId: viewModel.nft.recipeID, cookBookID: viewModel.nft.cookbookID);
+                                          await viewModel.updateLikeStatus(
+                                            recipeId: viewModel.nft.recipeID,
+                                            cookBookID: viewModel.nft.cookbookID,
+                                          );
                                         },
-                                        child: viewModel.isLiking ? getLikingLoader() : getLikeIcon(likedByMe: viewModel.likedByMe),
+                                        child: viewModel.isLiking
+                                            ? getLikingLoader()
+                                            : getLikeIcon(likedByMe: viewModel.likedByMe),
                                       ),
                                       SizedBox(
                                         height: 5.h,
@@ -509,7 +534,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                       GestureDetector(
                                         onTap: () async {
                                           final Size size = MediaQuery.of(context).size;
-                                          context.read<OwnerViewViewModel>().shareNFTLink(size: size);
+                                          viewModel.shareNFTLink(size: size);
                                         },
                                         child: SvgPicture.asset(
                                           SVGUtil.OWNER_SHARE,
@@ -582,7 +607,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         ),
         Text(
           viewModel.likesCount.toString(),
-          style: TextStyle(color: Colors.white, fontSize: 11.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w700),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 11.sp,
+            fontFamily: kUniversalFontFamily,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ],
     );
@@ -667,11 +697,14 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         }
       },
       child: SizedBox(
-        height: isTablet?40.h:30.h,
+        height: isTablet ? 40.h : 30.h,
         width: 100.w,
         child: Stack(
           children: [
-            SvgPicture.asset(getNFTToggleIcon(viewModel: viewModel),height:isTablet? 40.h:30.h,),
+            SvgPicture.asset(
+              getNFTToggleIcon(viewModel: viewModel),
+              height: isTablet ? 40.h : 30.h,
+            ),
             if (viewModel.isNFTToggleIntermediateState)
               const SizedBox(
                 key: Key(kIntermediateToggleButtonKey),
@@ -691,7 +724,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top:isTablet?5.h:0,right: isTablet?24.w:16.w),
+                    padding: EdgeInsets.only(top: isTablet ? 5.h : 0, right: isTablet ? 24.w : 16.w),
                     child: SizedBox(
                       height: 30.h,
                       width: 30.w,
@@ -708,7 +741,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 key: const Key(kNotForSaleToggleWidgetKey),
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: isTablet?4.w:5.w,top:isTablet?5.h:0),
+                    padding: EdgeInsets.only(left: isTablet ? 4.w : 5.w, top: isTablet ? 5.h : 0),
                     child: SizedBox(
                       height: 30.h,
                       width: 30.w,
@@ -737,7 +770,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   }
 
   Widget getPriceWidget({required OwnerViewViewModel viewModel}) {
-    return viewModel.nft.isEnabled && !viewModel.isNFTToggleIntermediateState && viewModel.nft.price.isNotEmpty && double.parse(viewModel.nft.price) > 0
+    return viewModel.nft.isEnabled &&
+            !viewModel.isNFTToggleIntermediateState &&
+            viewModel.nft.price.isNotEmpty &&
+            double.parse(viewModel.nft.price) > 0
         ? ClipPath(
             clipper: ToggleClipper(),
             child: Container(
@@ -752,18 +788,33 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   RichText(
                     text: TextSpan(
                       text: "\$${viewModel.nft.ibcCoins.getCoinWithProperDenomination(viewModel.nft.price)}",
-                      style: TextStyle(color: AppColors.kWhite, fontSize: 10.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        color: AppColors.kWhite,
+                        fontSize: 10.sp,
+                        fontFamily: kUniversalFontFamily,
+                        fontWeight: FontWeight.w700,
+                      ),
                       children: [
                         TextSpan(
                           text: " ${LocaleKeys.ea.tr()}.",
-                          style: TextStyle(color: AppColors.kWhite, fontSize: 10.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w700),
+                          style: TextStyle(
+                            color: AppColors.kWhite,
+                            fontSize: 10.sp,
+                            fontFamily: kUniversalFontFamily,
+                            fontWeight: FontWeight.w700,
+                          ),
                         )
                       ],
                     ),
                   ),
                   Text(
                     "${viewModel.nft.quantity - viewModel.nft.amountMinted} ${LocaleKeys.available.tr()}",
-                    style: TextStyle(color: AppColors.kGreyLight, fontSize: 9.sp, fontWeight: FontWeight.normal, fontFamily: kUniversalFontFamily),
+                    style: TextStyle(
+                      color: AppColors.kGreyLight,
+                      fontSize: 9.sp,
+                      fontWeight: FontWeight.normal,
+                      fontFamily: kUniversalFontFamily,
+                    ),
                   ),
                 ],
               ),
