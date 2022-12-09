@@ -121,7 +121,7 @@ Below are the instructions to generate & submit your genesis transaction
 4. Create the gentx, use only `9000000000upylon`:
 
    ```bash
-   pylonsd gentx <key-name> 9000000000upylon --chain-id=pylons-testnet-3
+   pylonsd gentx <key-name> 9000000000upylon --chain-id=pylons-mainnet-1
    ```
 
    If all goes well, you will see a message similar to the following:
