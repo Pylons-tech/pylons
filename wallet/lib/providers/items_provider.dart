@@ -25,22 +25,28 @@ class ItemsProvider extends ChangeNotifier {
     log("Get Items started", name: "ItemsProvider");
 
     final itemsEither = await repository.getListItemByOwner(owner: address!);
-
     log("Get Items finished", name: "ItemsProvider");
     final items = itemsEither.getOrElse(() => []);
 
+    final localItems = <NFT>[];
+
     for (final item in items) {
-      await convertItemToNFT(item);
+      final nft = await convertItemToNFT(item);
+      if (nft != null) {
+        localItems.add(nft);
+      }
     }
+    this.items = localItems;
     log("Convert item to NFT finished", name: "ItemsProvider");
     notifyListeners();
   }
 
-  Future<void> convertItemToNFT(Item item) async {
+  Future<NFT?> convertItemToNFT(Item item) async {
     final nft = await NFT.fromItem(item);
     if (nft != null) {
-      items.add(nft);
+      return nft;
     }
+    return null;
   }
 
   List<NFT> items = [];
