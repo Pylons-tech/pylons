@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/nft.dart';
@@ -31,6 +30,7 @@ class OwnerViewViewModel extends ChangeNotifier {
   final AudioPlayerHelper audioPlayerHelper;
   final VideoPlayerHelper videoPlayerHelper;
   final ShareHelper shareHelper;
+  final FavoritesChangeNotifier favoritesChangeNotifier;
 
   OwnerViewViewModel({
     required this.repository,
@@ -39,6 +39,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     required this.shareHelper,
     required this.videoPlayerHelper,
     required this.accountPublicInfo,
+    required this.favoritesChangeNotifier,
   });
 
   TabFields? selectedField;
@@ -281,11 +282,11 @@ class OwnerViewViewModel extends ChangeNotifier {
       dateTime: DateTime.now().millisecondsSinceEpoch,
     );
     repository.insertNFTInFavorites(favoriteModel);
-    GetIt.I.get<FavoritesChangeNotifier>().addToFavorites(favoritesModel: favoriteModel);
+    favoritesChangeNotifier.addToFavorites(favoritesModel: favoriteModel);
   }
 
   void removeFromFavAndUpdateView({required String recipeId}) {
-    GetIt.I.get<FavoritesChangeNotifier>().removeFromFavorites(recipeId: recipeId);
+    favoritesChangeNotifier.removeFromFavorites(recipeId: recipeId);
   }
 
   void initializePlayers() {

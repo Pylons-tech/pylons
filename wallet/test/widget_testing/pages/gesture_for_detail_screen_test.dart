@@ -49,6 +49,7 @@ void main() {
         name: '',
         publicAddress: '',
       ),
+      favoritesChangeNotifier: FavoritesChangeNotifier(repository: repositry),
     );
 
     GetIt.I.registerSingleton(viewModel);

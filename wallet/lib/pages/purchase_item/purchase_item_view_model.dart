@@ -5,7 +5,6 @@ import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
@@ -31,6 +30,7 @@ import '../owner_purchase_view_common/button_state.dart';
 import '../owner_purchase_view_common/progress_bar_state.dart';
 
 class PurchaseItemViewModel extends ChangeNotifier {
+  FavoritesChangeNotifier favoritesChangeNotifier;
   PurchaseItemViewModel(
     this.walletsStore, {
     required this.audioPlayerHelper,
@@ -38,6 +38,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     required this.repository,
     required this.shareHelper,
     required this.accountPublicInfo,
+    required this.favoritesChangeNotifier,
   });
 
   bool get isViewingFullNft => _isViewingFullNft;
@@ -390,11 +391,11 @@ class PurchaseItemViewModel extends ChangeNotifier {
       dateTime: DateTime.now().millisecondsSinceEpoch,
     );
     repository.insertNFTInFavorites(favoriteModel);
-    GetIt.I.get<FavoritesChangeNotifier>().addToFavorites(favoritesModel: favoriteModel);
+    favoritesChangeNotifier.addToFavorites(favoritesModel: favoriteModel);
   }
 
   void removeFromFavAndUpdateView({required String recipeId}) {
-    GetIt.I.get<FavoritesChangeNotifier>().removeFromFavorites(recipeId: recipeId);
+    favoritesChangeNotifier.removeFromFavorites(recipeId: recipeId);
   }
 
   Future<void> initializeAudioPlayer() async {

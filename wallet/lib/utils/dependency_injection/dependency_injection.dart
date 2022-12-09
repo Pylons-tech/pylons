@@ -232,6 +232,7 @@ Future<void> init() async {
       repository: sl(),
       shareHelper: sl(),
       accountPublicInfo: sl<AccountProvider>().accountPublicInfo!,
+      favoritesChangeNotifier: sl(),
     ),
   );
   sl.registerLazySingleton(
@@ -267,6 +268,7 @@ Future<void> init() async {
       videoPlayerHelper: sl(),
       shareHelper: sl(),
       accountPublicInfo: sl<AccountProvider>().accountPublicInfo!,
+      favoritesChangeNotifier: sl(),
     ),
   );
   sl.registerLazySingleton(() => FavoritesChangeNotifier(repository: sl()));
