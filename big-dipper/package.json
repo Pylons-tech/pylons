@@ -60,7 +60,7 @@
     "react-sidebar": "^3.0.2",
     "react-toastify": "^4.5.2",
     "reactstrap": "^8.9.0",
-    "rollup": "^2.49.0",
+    "rollup": "^3.7.0",
     "secp256k1": "^3.8.0",
     "simpl-schema": "^1.12.2",
     "styled-components": "^4.4.1",
