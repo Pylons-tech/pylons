@@ -39,7 +39,7 @@ N/A
 
 * You should already have a fully built node, but for completeness *
 
-**Prerequisites:** Make sure to have [Golang >=1.17](https://golang.org/).
+**Prerequisites:** Make sure to have [Golang >=1.18](https://golang.org/).
 
 #### Build from source
 
@@ -112,10 +112,10 @@ Below are the instructions to generate & submit your genesis transaction
    > pylonsd keys add <key-name>
    ```
 
-3. Add your account to your local genesis file with a given amount and the key you just created. Use only `10000000000upylon`, other amounts will be ignored.
+3. Add your account to your local genesis file with a given amount and the key you just created. Use only `2000000ubedrock`, other amounts will be ignored.
 
    ```bash
-   pylonsd add-genesis-account $(pylonsd keys show <key-name> -a) 10000000000upylon
+   pylonsd add-genesis-account $(pylonsd keys show <key-name> -a) 2000000ubedrock
    ```
 
 4. Create the gentx, use only `2000000ubedrock`:
