@@ -65,7 +65,7 @@ source .profile
 ```sh
 git clone https://github.com/Pylons-tech/pylons
 cd pylons
-git checkout v1.1.0
+git checkout v1.1.1
 make build && make install
 ```
 
@@ -84,8 +84,8 @@ Check that you have the right Pylons version installed:
 $ pylonsd version --long
 name: Pylons
 server_name: pylonsd
-version: 1.1.0
-commit: 8800332c5543ba1d2bfc2ddebb710e47644fa4cb
+version: 1.1.1
+commit: 2bc3b684587d4acc9e2384cbbea2bc54eb699dc9
 ```
 
 ### Minimum hardware requirements
@@ -115,13 +115,13 @@ Below are the instructions to generate & submit your genesis transaction
 3. Add your account to your local genesis file with a given amount and the key you just created. Use only `2000000ubedrock`, other amounts will be ignored.
 
    ```bash
-   pylonsd add-genesis-account $(pylonsd keys show <key-name> -a) 2000000ubedrock
+   pylonsd add-genesis-account $(pylonsd keys show <key-name> -a) 200000000ubedrock
    ```
 
-4. Create the gentx, use only `2000000ubedrock`:
+4. Create the gentx, use only `200000000ubedrock`:
 
    ```bash
-   pylonsd gentx <key-name> 2000000ubedrock --chain-id=pylons-mainnet-1
+   pylonsd gentx <key-name> 200000000ubedrock --chain-id=pylons-mainnet-1
    ```
 
    If all goes well, you will see a message similar to the following:
