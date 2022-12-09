@@ -70,7 +70,6 @@ class _CollectionScreenState extends State<CollectionScreen> {
   void initState() {
     super.initState();
     
-    
     context.read<RecipesProvider>().getCookBooks();
     context.read<ItemsProvider>().getItems();
   }

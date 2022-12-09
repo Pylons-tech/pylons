@@ -231,8 +231,9 @@ class LatestTransactions extends StatelessWidget {
           seller: seller,
           buyer: buyer,
           txID: txHistory.txID,
-          transactionTime: DateFormat("MMM dd yyyy HH:mm")
-              .format(DateTime.fromMillisecondsSinceEpoch(txHistory.createdAt * kDateConverterConstant)),
+          transactionTime: DateFormat("MMM dd yyyy HH:mm").format(
+            DateTime.fromMillisecondsSinceEpoch(txHistory.createdAt * kDateConverterConstant),
+          ),
           currency: (denomAbbr[defaultCurrency])!,
           price: "${defaultCurrency.convertFromU(txHistory)} ${denomAbbr[defaultCurrency]}",
           transactionEnum: txHistory.transactionTypeEnum,
