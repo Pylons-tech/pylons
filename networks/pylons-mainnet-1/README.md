@@ -112,16 +112,16 @@ Below are the instructions to generate & submit your genesis transaction
    > pylonsd keys add <key-name>
    ```
 
-3. Add your account to your local genesis file with a given amount and the key you just created. Use only `10000000000upylon`, other amounts will be ignored.
+3. Add your account to your local genesis file with a given amount and the key you just created. Use only `2000000ubedrock`, other amounts will be ignored.
 
    ```bash
-   pylonsd add-genesis-account $(pylonsd keys show <key-name> -a) 10000000000upylon
+   pylonsd add-genesis-account $(pylonsd keys show <key-name> -a) 2000000ubedrock
    ```
 
-4. Create the gentx, use only `9000000000upylon`:
+4. Create the gentx, use only `2000000ubedrock`:
 
    ```bash
-   pylonsd gentx <key-name> 9000000000upylon --chain-id=pylons-mainnet-1
+   pylonsd gentx <key-name> 2000000ubedrock --chain-id=pylons-mainnet-1
    ```
 
    If all goes well, you will see a message similar to the following:
