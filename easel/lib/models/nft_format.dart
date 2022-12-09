@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 class NftFormat {
   final NFTTypes format;
   final List<String> extensions;
-  final List<String>? extensionsUI;
   final String badge;
   final Color color;
 
@@ -16,17 +15,15 @@ class NftFormat {
     required this.extensions,
     required this.badge,
     required this.color,
-    this.extensionsUI,
   });
 
   String getExtensionsList() {
     final buffer = StringBuffer();
-    final List<String> tempExtensions = extensionsUI ?? extensions;
-    for (final x in tempExtensions) {
+    for (var i = 0; i < extensions.length; i++) {
       if (buffer.isNotEmpty) {
         buffer.write(", ");
       }
-      buffer.write(x.toUpperCase());
+      buffer.write(extensions[i].toUpperCase());
     }
     return buffer.toString();
   }
@@ -35,14 +32,12 @@ class NftFormat {
         NftFormat(
           format: NFTTypes.image,
           extensions: ['jpg', 'png', 'svg', 'heif', 'jpeg', 'gif'],
-          extensionsUI: ['jpg', 'png', 'svg', 'heic',],
           badge: SVGUtils.kSvgNftFormatImage,
           color: EaselAppTheme.kBlue,
         ),
         NftFormat(
           format: NFTTypes.video,
           extensions: ['mp4', 'mov', 'm4v', 'avi', 'hevc'],
-          extensionsUI: ['mp4'],
           badge: SVGUtils.kSvgNftFormatVideo,
           color: EaselAppTheme.kDarkGreen,
         ),
@@ -55,7 +50,6 @@ class NftFormat {
         NftFormat(
           format: NFTTypes.audio,
           extensions: ['wav', 'aiff', 'alac', 'flac', 'mp3', 'aac', 'wma', 'ogg'],
-          extensionsUI: ['mp3', 'flac','wav',],
           badge: SVGUtils.kAudioFileIcon,
           color: EaselAppTheme.kLightRed,
         ),
