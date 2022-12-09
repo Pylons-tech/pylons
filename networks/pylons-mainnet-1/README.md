@@ -18,8 +18,8 @@ Not yet available
 $ pylonsd version --long
 name: Pylons
 server_name: pylonsd
-version: 0.4.2
-commit: 89479b96c93ff293144ae4205a91affc806b09c8
+version: 1.1.0
+commit: 8800332c5543ba1d2bfc2ddebb710e47644fa4cb
 ```
 
 **Seed nodes**
@@ -65,7 +65,7 @@ source .profile
 ```sh
 git clone https://github.com/Pylons-tech/pylons
 cd pylons
-git checkout v0.4.2
+git checkout v1.1.0
 make build && make install
 ```
 
@@ -84,8 +84,8 @@ Check that you have the right Pylons version installed:
 $ pylonsd version --long
 name: Pylons
 server_name: pylonsd
-version: 0.4.2
-commit: 89479b96c93ff293144ae4205a91affc806b09c8
+version: 1.1.0
+commit: 8800332c5543ba1d2bfc2ddebb710e47644fa4cb
 ```
 
 ### Minimum hardware requirements
