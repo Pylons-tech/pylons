@@ -20,13 +20,13 @@ import 'package:pylons_sdk/src/generated/pylons/execution.pb.dart';
 import 'package:pylons_sdk/src/generated/pylons/item.pb.dart';
 import 'package:pylons_sdk/src/generated/pylons/payment_info.pb.dart';
 import 'package:pylons_sdk/src/features/ipc/ipc_handler_factory.dart';
-import 'package:pylons_sdk/src/features/ipc/responseCompleters.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_message.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:pylons_sdk/src/generated/pylons/recipe.pb.dart';
 import 'package:pylons_sdk/src/generated/pylons/trade.pb.dart';
 import 'package:pylons_sdk/src/generated/pylons/tx.pb.dart';
 import 'package:pylons_sdk/src/pylons_wallet.dart';
+import 'package:pylons_sdk/src/pylons_wallet/response_fetcher/response_fetch.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
 
@@ -63,7 +63,7 @@ class PylonsWalletImpl implements PylonsWallet {
     final sdkIPCMessage = SDKIPCMessage(key, data, getHostBasedOnOS(Platform.isAndroid), requestResponse);
 
     if (requestResponse) {
-      return sendMessage(sdkIPCMessage, initResponseCompleter(key));
+      return sendMessage(sdkIPCMessage, getResponseFetch().initResponseCompleter(key));
     }
 
     return sendMessageWithoutResponse(sdkIPCMessage);

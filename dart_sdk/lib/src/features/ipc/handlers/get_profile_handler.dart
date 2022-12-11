@@ -4,8 +4,9 @@ import 'dart:developer';
 import 'package:pylons_sdk/src/core/constants/strings.dart';
 import 'package:pylons_sdk/src/features/data/models/profile.dart';
 import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
-import 'package:pylons_sdk/src/features/ipc/responseCompleters.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
+
+import '../../../pylons_wallet/response_fetcher/response_fetch.dart';
 
 class GetProfileHandler implements IPCHandler {
   @override
@@ -27,6 +28,7 @@ class GetProfileHandler implements IPCHandler {
       defaultResponse.errorCode = Strings.ERR_MALFORMED_USER_INFO;
       defaultResponse.success = false;
     }
-    responseCompleters[Strings.GET_PROFILE]!.complete(defaultResponse);
+
+    getResponseFetch().complete(key: Strings.GET_PROFILE, sdkipcResponse: defaultResponse);
   }
 }
