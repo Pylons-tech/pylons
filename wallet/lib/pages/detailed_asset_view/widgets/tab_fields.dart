@@ -63,21 +63,20 @@ class _TabFieldState extends State<TabField> {
       case NftType.TYPE_RECIPE:
         return {
           LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
-          LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}",
+          LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height} ${widget.nft.fileExtension.toUpperCase()}",
           LocaleKeys.ipfs_cid.tr(): widget.nft.cid
         };
       case NftType.TYPE_ITEM:
-        return {
-          LocaleKeys.recipe_id.tr(): widget.nft.recipeID
-        };
+        return {LocaleKeys.recipe_id.tr(): widget.nft.recipeID};
       case NftType.TYPE_TRADE:
         break;
     }
 
     return {
       LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
-      LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}",
-      LocaleKeys.ipfs_cid.tr(): widget.nft.cid};
+      LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height} ${widget.nft.fileExtension}",
+      LocaleKeys.ipfs_cid.tr(): widget.nft.cid
+    };
   }
 
   @override
@@ -90,10 +89,10 @@ class _TabFieldState extends State<TabField> {
 
     final listDetails = nftDetail.entries
         .map(
-            (element) => _tabDetails(
-                field: element.key,
-                value: element.value,
-                customWidget: (element.key == LocaleKeys.recipe_id.tr() || element.key == LocaleKeys.ipfs_cid.tr()) && element.value.isNotEmpty ? _tabDetailsWithIcon(value: element.value) : null),
+          (element) => _tabDetails(
+              field: element.key,
+              value: element.value,
+              customWidget: (element.key == LocaleKeys.recipe_id.tr() || element.key == LocaleKeys.ipfs_cid.tr()) && element.value.isNotEmpty ? _tabDetailsWithIcon(value: element.value) : null),
         )
         .toList();
 
