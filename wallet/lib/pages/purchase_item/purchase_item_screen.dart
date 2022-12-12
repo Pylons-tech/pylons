@@ -418,7 +418,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
     return SizedBox(
       height: 15.h,
       width: 15.w,
-      child: CircularProgressIndicator(
+      child: const CircularProgressIndicator(
         strokeWidth: 2,
         valueColor: AlwaysStoppedAnimation<Color>(AppColors.kWhite),
       ),

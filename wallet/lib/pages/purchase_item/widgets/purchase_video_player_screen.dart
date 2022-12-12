@@ -35,7 +35,7 @@ class _PurchaseVideoPlayerScreenState extends State<PurchaseVideoPlayerScreen> {
       return ColoredBox(
         color: AppColors.kBlack,
         child: viewModel.isVideoLoading
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(AppColors.kWhite),
@@ -57,7 +57,7 @@ class _PurchaseVideoPlayerScreenState extends State<PurchaseVideoPlayerScreen> {
                             aspectRatio: viewModel.videoPlayerController!.value.aspectRatio,
                             child: VideoPlayer(viewModel.videoPlayerController!),
                           )
-                        : Center(
+                        : const Center(
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
                               valueColor: AlwaysStoppedAnimation<Color>(AppColors.kWhite),

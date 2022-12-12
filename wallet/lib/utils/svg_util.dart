@@ -12,6 +12,10 @@ class SVGUtil {
   static String SETTINGS_GENERAL = "assets/images/svg/settings_general.svg";
   static String SETTINGS_LEGAL = "assets/images/svg/settings_legal.svg";
   static String SETTINGS_RECOVERY = "assets/images/svg/settings_recovery.svg";
+  static String DRAWER_CASH_OUT = "assets/images/svg/cash_out.svg";
+  static String DRAWER_HISTORY = "assets/images/svg/history.svg";
+  static String IMAGE_EDIT = "assets/images/svg/image_edit.svg";
+  static String LOCK_ICON = "assets/images/svg/lock.svg";
   static String APP_ICON = "assets/images/icons/pylons_logo.svg";
   static String WALLET_COPY = "assets/images/icons/copy.svg";
   static String WALLET_TRANSACTION_HISTORY = "assets/images/icons/transaction_history.svg";

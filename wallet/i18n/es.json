@@ -247,7 +247,6 @@
   "copied_to_clipboard": "Copiada a tu portapapeles!",
   "no_internet": "Sin conexión a Internet",
   "stake_your_digital_claim": "Haga su reclamo digital",
-  "bio_text": "Artista Multimedia (3D, Motiongraphics)\nCreación y recopilación de NFT",
   "save": "Guardar",
   "submit": "Enviar",
   "place_your_recovery_phrase_in_correct_order": "Coloque su frase de recuperación en el orden correcto.",
@@ -369,5 +368,18 @@
   "ea": "cada uno",
   "maintenance_mode_message": "Estamos experimentando problemas técnicos y hemos iniciado temporalmente el modo de mantenimiento para solucionar problemas. No te preocupes, tu colección está segura. Sin embargo, no puede iniciar transacciones en cadena hasta que hayamos resuelto el problema y restablecido la funcionalidad normal.",
   "maintenance_mode_header": "Modo de mantenimiento",
-  "invalid_mnemonic" : "Mnemonic inválido"
+  "invalid_mnemonic": "Mnemonic inválido",
+  "edit_profile": "Editar perfil",
+  "cash_out": "Retiro",
+  "bio_text": "Diseñadora de productos en Pylons.",
+  "verify": "Verificar",
+  "display_name": "display name",
+  "social": "Social",
+  "facebook": "Facebook",
+  "instagram": "Instagram",
+  "tiktok": "TikTok",
+  "youtube": "Youtube",
+  "discord": "Discord",
+  "twitter": "Twitter",
+  "connected": "Conectada"
 }
