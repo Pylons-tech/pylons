@@ -1,5 +1,5 @@
 {
-    #boilerplate v0.0.7 true,
+    #boilerplate v0.0.8 true,
     #id_name RecipeTestAppFightDragonArmed RecipeTestAppFightDragonArmed,
     "description": "Fights a dragon! With slicing!",
     #no_coin_input,
@@ -35,14 +35,9 @@
                 "itemInputRef": "character",
                 "longs": [
                     {
-                        "key": "wins",
-                        "weightRanges": [],
-                        "program": "wins + 1"
-                    },
-                    {
                         "key": "currentHp",
                         "weightRanges": [],
-                        "program": "currentHp - 7"
+                        "program": "(currentHp - 5) - rand_int(5)"
                     }
                 ],
                 "strings": [],

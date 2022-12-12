@@ -20,14 +20,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    super.initState();
-        () async {
-      await PylonsWallet.verifyOrInstall();
-    };
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'BlockSlayer',
