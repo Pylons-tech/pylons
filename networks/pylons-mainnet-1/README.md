@@ -18,8 +18,8 @@ Not yet available
 $ pylonsd version --long
 name: Pylons
 server_name: pylonsd
-version: 0.4.2
-commit: 89479b96c93ff293144ae4205a91affc806b09c8
+version: 1.1.2
+commit: f9431be876e41853459d92ef05183732dfef4b16
 ```
 
 **Seed nodes**
@@ -39,7 +39,7 @@ N/A
 
 * You should already have a fully built node, but for completeness *
 
-**Prerequisites:** Make sure to have [Golang >=1.17](https://golang.org/).
+**Prerequisites:** Make sure to have [Golang >=1.18](https://golang.org/).
 
 #### Build from source
 
@@ -65,7 +65,7 @@ source .profile
 ```sh
 git clone https://github.com/Pylons-tech/pylons
 cd pylons
-git checkout v0.4.2
+git checkout v1.1.1
 make build && make install
 ```
 
@@ -84,8 +84,8 @@ Check that you have the right Pylons version installed:
 $ pylonsd version --long
 name: Pylons
 server_name: pylonsd
-version: 0.4.2
-commit: 89479b96c93ff293144ae4205a91affc806b09c8
+version: 1.1.1
+commit: 2bc3b684587d4acc9e2384cbbea2bc54eb699dc9
 ```
 
 ### Minimum hardware requirements
@@ -112,16 +112,16 @@ Below are the instructions to generate & submit your genesis transaction
    > pylonsd keys add <key-name>
    ```
 
-3. Add your account to your local genesis file with a given amount and the key you just created. Use only `10000000000upylon`, other amounts will be ignored.
+3. Add your account to your local genesis file with a given amount and the key you just created. Use only `2000000ubedrock`, other amounts will be ignored.
 
    ```bash
-   pylonsd add-genesis-account $(pylonsd keys show <key-name> -a) 10000000000upylon
+   pylonsd add-genesis-account $(pylonsd keys show <key-name> -a) 200000000ubedrock
    ```
 
-4. Create the gentx, use only `9000000000upylon`:
+4. Create the gentx, use only `200000000ubedrock`:
 
    ```bash
-   pylonsd gentx <key-name> 9000000000upylon --chain-id=pylons-testnet-3
+   pylonsd gentx <key-name> 200000000ubedrock --chain-id=pylons-mainnet-1
    ```
 
    If all goes well, you will see a message similar to the following:
