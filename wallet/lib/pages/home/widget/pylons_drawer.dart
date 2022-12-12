@@ -19,7 +19,7 @@ class PylonsDrawer extends StatelessWidget {
     return SizedBox(
       width: 0.43.sw,
       child: Drawer(
-        backgroundColor: AppColors.kBlack87.withOpacity(0.6),
+        backgroundColor: AppColors.kBlack87.withOpacity(0.7),
         child: ClipRRect(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
