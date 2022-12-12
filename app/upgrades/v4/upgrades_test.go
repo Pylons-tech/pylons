@@ -133,7 +133,7 @@ func (suite *UpgradeTestSuite) TestCleanUpylons() {
 	amountValid := 10_000_000
 	amountOfCoinsTest := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10_000_000)))
 
-	//create Google IAP order and test addresses
+	// create Google IAP order and test addresses
 	items := suite.SetUpGoogleIAPOrder(suite.Ctx, 2, productID)
 	testAddrs := suite.SetUpTestAddrs(5)
 
@@ -156,12 +156,12 @@ func (suite *UpgradeTestSuite) TestCleanUpylons() {
 	} {
 		tc := tc
 		suite.Run(tc.desc, func() {
-			//mint coin to test account
+			// mint coin to test account
 			for _, addr := range testAddrs {
 				err := suite.App.PylonsKeeper.MintCoinsToAddr(suite.Ctx, addr, amountOfCoinsTest)
 				suite.Require().NoError(err)
 			}
-			//mint valid coin
+			// mint valid coin
 			for _, item := range items {
 				addr, _ := sdk.AccAddressFromBech32(item.Creator)
 				amt := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(tc.amount))))
@@ -289,12 +289,12 @@ func (suite *UpgradeTestSuite) TestRefundIAPNFTBUY() {
 	// setting IAP addresses as valid for IAP based refund
 	v4.IAPAddress[items[0].Creator] = true
 	v4.IAPAddress[items[1].Creator] = true
-	//mint coin to test account
+	// mint coin to test account
 	for _, addr := range testAddrs {
 		err := suite.App.PylonsKeeper.MintCoinsToAddr(suite.Ctx, addr, amountOfCoinsTest)
 		suite.Require().NoError(err)
 	}
-	//mint valid coin
+	// mint valid coin
 	for _, item := range items {
 		addr, _ := sdk.AccAddressFromBech32(item.Creator)
 		amt := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(int64(amountValid))))
