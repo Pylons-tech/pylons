@@ -1,0 +1,62 @@
+{
+    "ID": "LOUD-fight-fire-dragon-with-iron-sword-recipe-v0.1.0-1589853709",
+    "CoinInputs":[],
+    "ItemInputs":[
+        {
+            "ID": "character_fire",
+            "Ref": "./recipes/item_input/character_fire.json"
+        },
+        {
+            "ID": "iron_sword",
+            "Ref": "./recipes/item_input/iron_sword.json"
+        }
+    ],
+    "Entries":{
+        "CoinOutputs":[{
+            "ID": "coin_reward",
+            "Coin":"loudcoin",
+            "Count": "10000"
+        }],
+        "ItemModifyOutputs": [
+            {
+                "ID": "modified_character_fire",
+                "ItemInputRef": "character_fire",
+                "ModifyParamsRef": "./recipes/upgrader/character_after_fighting_special_dragon.json"
+            },
+            {
+                "ID": "iron_sword",
+                "ItemInputRef": "iron_sword" 
+            }
+        ],
+        "ItemOutputs":[
+            {
+                "ID": "drop_from_fire_dragon",
+                "Ref": "./recipes/item_output/drop_from_fire_dragon.json"  
+            }
+        ]
+    },
+    "Outputs": [
+        {
+            "EntryIDs": [],
+            "Weight": "4"
+        },
+        {
+            "EntryIDs": ["coin_reward", "modified_character_fire"],
+            "Weight": "3"
+        },
+        {
+            "EntryIDs": ["coin_reward", "modified_character_fire", "iron_sword"],
+            "Weight": "83"
+        },
+        {
+            "EntryIDs": ["coin_reward", "modified_character_fire", "iron_sword", "drop_from_fire_dragon"],
+            "Weight": "10"
+        }
+    ],
+    "ExtraInfo":"",
+    "Sender":"account1",
+    "Name": "LOUD's fight with fire dragon with an iron sword recipe",
+    "CookbookID": "LOUD-v0.1.0-1589853709",
+    "Description": "this recipe is used to fight with fire dragon with a sword.",
+    "BlockInterval":"0"
+}

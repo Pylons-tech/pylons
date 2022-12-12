@@ -1,0 +1,32 @@
+{
+    "ID": "LOUD-iron-sword-lv1-make-recipe-v0.1.0-1589853709",
+    "CoinInputs":[{
+        "Coin": "loudcoin",
+        "Count": "250"
+    }],
+    "ItemInputs": [
+        {
+            "ID": "troll_toes",
+            "Ref": "./recipes/item_input/troll_toes.json"
+        }
+    ],
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemOutputs":[{
+            "ID": "iron_sword_lv1",
+            "Ref": "./recipes/item_output/iron_sword_lv1.json"
+        }]
+    },
+    "Outputs": [
+        {
+            "EntryIDs": ["iron_sword_lv1"],
+            "Weight": "1"
+        }
+    ],
+    "ExtraInfo":"",
+    "Sender":"account1",
+    "Name": "LOUD's Iron sword lv1 make recipe",
+    "CookbookID": "LOUD-v0.1.0-1589853709",
+    "Description": "this recipe is used to make iron sword lv1.",
+    "BlockInterval":"0"
+}

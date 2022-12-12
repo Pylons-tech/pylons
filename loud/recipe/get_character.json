@@ -1,0 +1,24 @@
+{
+    "ID": "LOUD-get-character-recipe-v0.1.0-1589853709",
+    "CoinInputs":[],
+    "ItemInputs": [],
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemOutputs":[{
+            "ID": "tiger_character_lv1",
+            "Ref": "./recipes/item_output/tiger_character_lv1.json"
+        }]
+    },
+    "Outputs": [
+        {
+            "EntryIDs": ["tiger_character_lv1"],
+            "Weight": "1"
+        }
+    ],
+    "ExtraInfo":"",
+    "Sender":"account1",
+    "Name": "LOUD's Get Character recipe",
+    "CookbookID": "LOUD-v0.1.0-1589853709",
+    "Description": "this recipe is used to create character.",
+    "BlockInterval":"0"
+}

@@ -1,0 +1,15 @@
+{
+    "Doubles":[{ "Rate":"1.0", "Key":"XP", "Program": "1" }],
+    "Longs":[
+        { "Rate":"1.0", "Key":"level", "Program": "1" },
+        { "Rate":"1.0", "Key":"GiantKill", "Program": "0" },
+        { "Rate":"1.0", "Key":"Special", "Program": "1" },
+        { "Rate":"1.0", "Key":"SpecialDragonKill", "Program": "0" },
+        { "Rate":"1.0", "Key":"UndeadDragonKill", "Program": "0" }
+    ],
+    "Strings":[
+        { "Key":"Name", "Value": "Ruppell's Fox", "Rate":"1.0" },
+        { "Key":"Type", "Value": "Character", "Rate":"1.0" }
+    ],
+    "TransferFee": 100
+}

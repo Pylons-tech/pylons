@@ -1,0 +1,28 @@
+{
+    "ID": "LOUD-buy-gold-from-pylons-recipe-v0.1.0-1589853709",
+    "CoinInputs":[{
+        "Coin": "pylon",
+        "Count": "100"
+    }],    
+    "ItemInputs":[],
+    "Entries":{
+        "CoinOutputs":[{
+            "ID": "coin_reward",
+            "Coin":"loudcoin",
+            "Count": "5000"
+        }],
+        "ItemOutputs":[]
+    },
+    "Outputs": [
+        {
+            "EntryIDs": ["coin_reward"],
+            "Weight": "1"
+        }
+    ],
+    "ExtraInfo":"",
+    "Sender":"account1",
+    "Name": "LOUD's buy gold with pylons recipe",
+    "CookbookID": "LOUD-v0.1.0-1589853709",
+    "Description": "this recipe is used to get enough coins to test game.",
+    "BlockInterval":"0"
+}

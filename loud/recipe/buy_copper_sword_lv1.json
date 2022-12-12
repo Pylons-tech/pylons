@@ -1,0 +1,27 @@
+{
+    "ID": "LOUD-copper-sword-lv1-buy-recipe-v0.1.0-1589853709",
+    "CoinInputs":[{
+        "Coin": "loudcoin",
+        "Count": "250"
+    }],
+    "ItemInputs": [],
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemOutputs":[{
+            "ID": "copper_sword_lv1",
+            "Ref": "./recipes/item_output/copper_sword_lv1.json"
+        }]
+    },
+    "Outputs": [
+        {
+            "EntryIDs": ["copper_sword_lv1"],
+            "Weight": "1"
+        }
+    ],
+    "ExtraInfo":"",
+    "Sender":"account1",
+    "Name": "LOUD's Copper sword lv1 buy recipe",
+    "CookbookID": "LOUD-v0.1.0-1589853709",
+    "Description": "this recipe is used to buy copper sword lv1.",
+    "BlockInterval":"0"
+}

@@ -1,0 +1,13 @@
+{
+    "Doubles": [{
+        "Key": "XP",
+        "Program": "XP + double(1000 * 100)"
+    }],
+    "Longs": [{
+        "Key": "level", 
+        "Program": "level + int(XP / double(level * level * level + 5))"
+    }, {
+        "Key": "UndeadDragonKill", 
+        "Program": "UndeadDragonKill+1"
+    }]
+}

@@ -1,0 +1,70 @@
+{
+    "ID": "LOUD-fight-wolf-with-a-sword-recipe-v0.1.0-1589853709",
+    "CoinInputs":[],
+    "ItemInputs":[
+        {
+            "ID": "character",
+            "Ref": "./recipes/item_input/character.json"
+        },
+        {
+            "ID": "sword",
+            "Ref": "./recipes/item_input/sword.json"
+        }
+    ],
+    "Entries":{
+        "CoinOutputs":[{
+            "ID": "coin_reward",
+            "Coin":"loudcoin",
+            "Count": "1"
+        }],
+        "ItemModifyOutputs": [
+            {
+                "ID": "modified_character",
+                "ItemInputRef": "character",
+                "ModifyParamsRef": "./recipes/upgrader/character_after_fighting_wolf.json"
+            },
+            {
+                "ID": "sword",
+                "ItemInputRef": "sword"
+            }
+        ],
+        "ItemOutputs":[
+            {
+                "ID": "wolf_tail",
+                "Ref": "./recipes/item_output/wolf_tail.json"  
+            },
+            {
+                "ID": "wolf_fur",
+                "Ref": "./recipes/item_output/wolf_fur.json"  
+            }
+        ]
+    },
+    "Outputs": [
+        {
+            "EntryIDs": [],
+            "Weight": "3"
+        },
+        {
+            "EntryIDs": ["coin_reward", "modified_character"],
+            "Weight": "3"
+        },
+        {
+            "EntryIDs": ["coin_reward", "modified_character", "sword"],
+            "Weight": "24"
+        },
+        {
+            "EntryIDs": ["coin_reward", "modified_character", "sword", "wolf_tail"],
+            "Weight": "40"
+        },
+        {
+            "EntryIDs": ["coin_reward", "modified_character", "sword", "wolf_fur"],
+            "Weight": "30"
+        }
+    ],
+    "ExtraInfo":"",
+    "Sender":"account1",
+    "Name": "LOUD's fight with wolf with a sword recipe",
+    "CookbookID": "LOUD-v0.1.0-1589853709",
+    "Description": "this recipe is used to fight with wolf with a sword.",
+    "BlockInterval":"0"
+}

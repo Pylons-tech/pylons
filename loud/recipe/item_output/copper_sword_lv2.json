@@ -1,0 +1,10 @@
+{
+    "Doubles":[
+        { "Rate":"1.0", "Key":"attack", "Program": "20.0" }
+    ],
+    "Longs":[
+        { "Rate":"1.0", "Key":"level", "Program": "2" },
+        { "Rate":"1.0", "Key":"value", "Program": "500" }
+    ],
+    "Strings":[{ "Key":"Name", "Value":"Copper sword", "Rate":"1.0" }]
+}

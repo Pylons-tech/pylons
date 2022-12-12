@@ -1,0 +1,40 @@
+{
+    "ID": "LOUD-hunt-rabbits-with-no-weapon-recipe-v0.1.0-1589853709",
+    "CoinInputs":[],    
+    "ItemInputs":[
+        {
+            "ID": "character",
+            "Ref": "./recipes/item_input/character.json"
+        }
+    ],
+    "Entries":{
+        "CoinOutputs":[{
+            "ID": "coin_reward",
+            "Coin":"loudcoin",
+            "Count": "rand(2)+1"
+        }],
+        "ItemModifyOutputs": [
+            {
+                "ID": "modified_character",
+                "ItemInputRef": "character",
+                "ModifyParamsRef": "./recipes/upgrader/character_after_hunting_rabbits.json"
+            }
+        ]
+    },
+    "Outputs": [
+        {
+            "EntryIDs": ["coin_reward", "modified_character"],
+            "Weight": "99"
+        },
+        {
+            "EntryIDs": [],
+            "Weight": "1"
+        }
+    ],
+    "ExtraInfo":"",
+    "Sender":"account1",
+    "Name": "LOUD's hunt rabbits without sword recipe",
+    "CookbookID": "LOUD-v0.1.0-1589853709",
+    "Description": "this recipe is used to hunt rabbits without sword.",
+    "BlockInterval":"0"
+}

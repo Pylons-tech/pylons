@@ -1,0 +1,65 @@
+{
+    "ID": "LOUD-dev-get-test-items-recipe-v0.1.0-1589853709",
+    "CoinInputs":[{
+        "Coin": "pylon",
+        "Count": "1"
+    }],
+    "ItemInputs": [],
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemOutputs":[
+            {
+                "ID": "goblin_ear",
+                "Ref": "./recipes/item_output/goblin_ear.json"
+            },
+            {
+                "ID": "troll_toes",
+                "Ref": "./recipes/item_output/troll_toes.json"
+            },
+            {
+                "ID": "wolf_tail",
+                "Ref": "./recipes/item_output/wolf_tail.json"
+            },
+            {
+                "ID": "drop_from_acid_dragon",
+                "Ref": "./recipes/item_output/drop_from_acid_dragon.json"
+            },
+            {
+                "ID": "drop_from_fire_dragon",
+                "Ref": "./recipes/item_output/drop_from_fire_dragon.json"
+            },
+            {
+                "ID": "drop_from_ice_dragon",
+                "Ref": "./recipes/item_output/drop_from_ice_dragon.json"
+            },
+            {
+                "ID": "character_fire_lv1",
+                "Ref": "./recipes/item_output/character_fire_lv1.json"
+            },
+            {
+                "ID": "character_ice_lv1",
+                "Ref": "./recipes/item_output/character_ice_lv1.json"
+            },
+            {
+                "ID": "character_acid_lv1",
+                "Ref": "./recipes/item_output/character_acid_lv1.json"
+            }
+        ]
+    },
+    "Outputs": [
+        {
+            "EntryIDs": [
+                "goblin_ear", "troll_toes", "wolf_tail",
+                "drop_from_acid_dragon", "drop_from_fire_dragon", "drop_from_ice_dragon",
+                "character_fire_lv1", "character_ice_lv1", "character_acid_lv1"
+            ],
+            "Weight": "1"
+        }
+    ],
+    "ExtraInfo":"",
+    "Sender":"account1",
+    "Name": "LOUD's Dev Get Test Items recipe",
+    "CookbookID": "LOUD-v0.1.0-1589853709",
+    "Description": "this recipe is used to create character.",
+    "BlockInterval":"0"
+}

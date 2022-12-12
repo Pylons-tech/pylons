@@ -1,0 +1,17 @@
+{
+    "Doubles": [{
+        "Rate":"1.0",
+        "Key":"attack",
+        "Program": "attack * 2.0"
+    }],
+    "Longs": [
+        {
+            "Key": "level", 
+            "Program": "level + 1"
+        },
+        {
+            "Key": "value", 
+            "Program": "value * 2"
+        }
+    ]
+}
