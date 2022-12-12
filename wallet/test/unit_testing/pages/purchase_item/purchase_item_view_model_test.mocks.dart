@@ -8,47 +8,37 @@ import 'dart:async' as _i8;
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:fixnum/fixnum.dart' as _i11;
 import 'package:in_app_purchase/in_app_purchase.dart' as _i28;
-import 'package:internet_connection_checker/internet_connection_checker.dart'
-    as _i27;
+import 'package:internet_connection_checker/internet_connection_checker.dart' as _i27;
 import 'package:local_auth/local_auth.dart' as _i23;
 import 'package:mobx/mobx.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart' as _i3;
 import 'package:pylons_wallet/model/balance.dart' as _i15;
-import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart'
-    as _i16;
+import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart' as _i16;
 import 'package:pylons_wallet/model/export.dart' as _i17;
 import 'package:pylons_wallet/model/nft.dart' as _i30;
 import 'package:pylons_wallet/model/nft_ownership_history.dart' as _i24;
 import 'package:pylons_wallet/model/notification_message.dart' as _i29;
 import 'package:pylons_wallet/model/pick_image_model.dart' as _i22;
-import 'package:pylons_wallet/model/stripe_get_login_based_address.dart'
-    as _i20;
+import 'package:pylons_wallet/model/stripe_get_login_based_address.dart' as _i20;
 import 'package:pylons_wallet/model/stripe_loginlink_request.dart' as _i19;
 import 'package:pylons_wallet/model/stripe_loginlink_response.dart' as _i18;
 import 'package:pylons_wallet/model/transaction.dart' as _i25;
 import 'package:pylons_wallet/model/transaction_failure_model.dart' as _i33;
 import 'package:pylons_wallet/model/wallet_creation_model.dart' as _i32;
-import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart'
-    as _i4;
-import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/export.dart'
-    as _i14;
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart'
-    as _i10;
-import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart'
-    as _i34;
-import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart'
-    as _i21;
-import 'package:pylons_wallet/services/data_stores/remote_data_store.dart'
-    as _i12;
+import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart' as _i4;
+import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/export.dart' as _i14;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as _i10;
+import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart' as _i34;
+import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart' as _i21;
+import 'package:pylons_wallet/services/data_stores/remote_data_store.dart' as _i12;
 import 'package:pylons_wallet/services/repository/repository.dart' as _i13;
 import 'package:pylons_wallet/stores/models/transaction_response.dart' as _i31;
 import 'package:pylons_wallet/stores/wallet_store.dart' as _i7;
 import 'package:pylons_wallet/utils/backup/common/backup_model.dart' as _i26;
 import 'package:pylons_wallet/utils/enums.dart' as _i35;
 import 'package:pylons_wallet/utils/failure/failure.dart' as _i9;
-import 'package:transaction_signing_gateway/transaction_signing_gateway.dart'
-    as _i6;
+import 'package:transaction_signing_gateway/transaction_signing_gateway.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -71,8 +61,7 @@ class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
         );
 }
 
-class _FakeSdkIpcResponse_1<T> extends _i1.SmartFake
-    implements _i3.SdkIpcResponse<T> {
+class _FakeSdkIpcResponse_1<T> extends _i1.SmartFake implements _i3.SdkIpcResponse<T> {
   _FakeSdkIpcResponse_1(
     Object parent,
     Invocation parentInvocation,
@@ -102,8 +91,7 @@ class _FakeObservable_3<T> extends _i1.SmartFake implements _i5.Observable<T> {
         );
 }
 
-class _FakeAccountPublicInfo_4 extends _i1.SmartFake
-    implements _i6.AccountPublicInfo {
+class _FakeAccountPublicInfo_4 extends _i1.SmartFake implements _i6.AccountPublicInfo {
   _FakeAccountPublicInfo_4(
     Object parent,
     Invocation parentInvocation,
@@ -134,9 +122,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
             userName,
           ],
         ),
-        returnValue:
-            _i8.Future<_i2.Either<_i9.Failure, _i6.AccountPublicInfo>>.value(
-                _FakeEither_0<_i9.Failure, _i6.AccountPublicInfo>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i6.AccountPublicInfo>>.value(_FakeEither_0<_i9.Failure, _i6.AccountPublicInfo>(
           this,
           Invocation.method(
             #importAlanWallet,
@@ -147,16 +133,14 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, _i6.AccountPublicInfo>>);
+
   @override
-  _i8.Future<_i3.SdkIpcResponse<String>> createCookbook(
-          Map<dynamic, dynamic>? json) =>
-      (super.noSuchMethod(
+  _i8.Future<_i3.SdkIpcResponse<String>> createCookbook(Map<dynamic, dynamic>? json) => (super.noSuchMethod(
         Invocation.method(
           #createCookbook,
           [json],
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<String>>.value(
-            _FakeSdkIpcResponse_1<String>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<String>>.value(_FakeSdkIpcResponse_1<String>(
           this,
           Invocation.method(
             #createCookbook,
@@ -164,16 +148,14 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<String>>);
+
   @override
-  _i8.Future<_i3.SdkIpcResponse<dynamic>> createRecipe(
-          Map<dynamic, dynamic>? json) =>
-      (super.noSuchMethod(
+  _i8.Future<_i3.SdkIpcResponse<dynamic>> createRecipe(Map<dynamic, dynamic>? json) => (super.noSuchMethod(
         Invocation.method(
           #createRecipe,
           [json],
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(_FakeSdkIpcResponse_1<dynamic>(
           this,
           Invocation.method(
             #createRecipe,
@@ -181,16 +163,14 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+
   @override
-  _i8.Future<_i3.SdkIpcResponse<_i10.Execution>> executeRecipe(
-          Map<dynamic, dynamic>? json) =>
-      (super.noSuchMethod(
+  _i8.Future<_i3.SdkIpcResponse<_i10.Execution>> executeRecipe(Map<dynamic, dynamic>? json) => (super.noSuchMethod(
         Invocation.method(
           #executeRecipe,
           [json],
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<_i10.Execution>>.value(
-            _FakeSdkIpcResponse_1<_i10.Execution>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<_i10.Execution>>.value(_FakeSdkIpcResponse_1<_i10.Execution>(
           this,
           Invocation.method(
             #executeRecipe,
@@ -198,16 +178,14 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<_i10.Execution>>);
+
   @override
-  _i8.Future<_i3.SdkIpcResponse<dynamic>> createTrade(
-          Map<dynamic, dynamic>? json) =>
-      (super.noSuchMethod(
+  _i8.Future<_i3.SdkIpcResponse<dynamic>> createTrade(Map<dynamic, dynamic>? json) => (super.noSuchMethod(
         Invocation.method(
           #createTrade,
           [json],
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(_FakeSdkIpcResponse_1<dynamic>(
           this,
           Invocation.method(
             #createTrade,
@@ -215,16 +193,14 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+
   @override
-  _i8.Future<_i3.SdkIpcResponse<dynamic>> fulfillTrade(
-          Map<dynamic, dynamic>? json) =>
-      (super.noSuchMethod(
+  _i8.Future<_i3.SdkIpcResponse<dynamic>> fulfillTrade(Map<dynamic, dynamic>? json) => (super.noSuchMethod(
         Invocation.method(
           #fulfillTrade,
           [json],
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(_FakeSdkIpcResponse_1<dynamic>(
           this,
           Invocation.method(
             #fulfillTrade,
@@ -232,6 +208,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+
   @override
   _i8.Future<_i4.TxResponse> getTxs(String? txHash) => (super.noSuchMethod(
         Invocation.method(
@@ -246,24 +223,25 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i4.TxResponse>);
+
   @override
-  _i8.Future<_i10.Cookbook?> getCookbookById(String? cookbookID) =>
-      (super.noSuchMethod(
+  _i8.Future<_i10.Cookbook?> getCookbookById(String? cookbookID) => (super.noSuchMethod(
         Invocation.method(
           #getCookbookById,
           [cookbookID],
         ),
         returnValue: _i8.Future<_i10.Cookbook?>.value(),
       ) as _i8.Future<_i10.Cookbook?>);
+
   @override
-  _i8.Future<List<_i10.Cookbook>> getCookbooksByCreator(String? creator) =>
-      (super.noSuchMethod(
+  _i8.Future<List<_i10.Cookbook>> getCookbooksByCreator(String? creator) => (super.noSuchMethod(
         Invocation.method(
           #getCookbooksByCreator,
           [creator],
         ),
         returnValue: _i8.Future<List<_i10.Cookbook>>.value(<_i10.Cookbook>[]),
       ) as _i8.Future<List<_i10.Cookbook>>);
+
   @override
   _i8.Future<_i10.Trade?> getTradeByID(_i11.Int64? ID) => (super.noSuchMethod(
         Invocation.method(
@@ -272,15 +250,16 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
         ),
         returnValue: _i8.Future<_i10.Trade?>.value(),
       ) as _i8.Future<_i10.Trade?>);
+
   @override
-  _i8.Future<List<_i10.Trade>> getTrades(String? creator) =>
-      (super.noSuchMethod(
+  _i8.Future<List<_i10.Trade>> getTrades(String? creator) => (super.noSuchMethod(
         Invocation.method(
           #getTrades,
           [creator],
         ),
         returnValue: _i8.Future<List<_i10.Trade>>.value(<_i10.Trade>[]),
       ) as _i8.Future<List<_i10.Trade>>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, _i10.Recipe>> getRecipe(
     String? cookbookID,
@@ -294,8 +273,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
             recipeID,
           ],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i10.Recipe>>.value(
-            _FakeEither_0<_i9.Failure, _i10.Recipe>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i10.Recipe>>.value(_FakeEither_0<_i9.Failure, _i10.Recipe>(
           this,
           Invocation.method(
             #getRecipe,
@@ -306,6 +284,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, _i10.Recipe>>);
+
   @override
   _i8.Future<_i10.Item?> getItem(
     String? cookbookID,
@@ -321,33 +300,34 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
         ),
         returnValue: _i8.Future<_i10.Item?>.value(),
       ) as _i8.Future<_i10.Item?>);
+
   @override
-  _i8.Future<List<_i10.Item>> getItemsByOwner(String? owner) =>
-      (super.noSuchMethod(
+  _i8.Future<List<_i10.Item>> getItemsByOwner(String? owner) => (super.noSuchMethod(
         Invocation.method(
           #getItemsByOwner,
           [owner],
         ),
         returnValue: _i8.Future<List<_i10.Item>>.value(<_i10.Item>[]),
       ) as _i8.Future<List<_i10.Item>>);
+
   @override
-  _i8.Future<String> getAccountNameByAddress(String? address) =>
-      (super.noSuchMethod(
+  _i8.Future<String> getAccountNameByAddress(String? address) => (super.noSuchMethod(
         Invocation.method(
           #getAccountNameByAddress,
           [address],
         ),
         returnValue: _i8.Future<String>.value(''),
       ) as _i8.Future<String>);
+
   @override
-  _i8.Future<String> getAccountAddressByName(String? username) =>
-      (super.noSuchMethod(
+  _i8.Future<String> getAccountAddressByName(String? username) => (super.noSuchMethod(
         Invocation.method(
           #getAccountAddressByName,
           [username],
         ),
         returnValue: _i8.Future<String>.value(''),
       ) as _i8.Future<String>);
+
   @override
   _i8.Future<List<_i10.Execution>> getRecipeExecutions(
     String? cookbookID,
@@ -363,17 +343,15 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
         ),
         returnValue: _i8.Future<List<_i10.Execution>>.value(<_i10.Execution>[]),
       ) as _i8.Future<List<_i10.Execution>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, int>> getFaucetCoin(
-          {String? denom = r''}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, int>> getFaucetCoin({String? denom = r''}) => (super.noSuchMethod(
         Invocation.method(
           #getFaucetCoin,
           [],
           {#denom: denom},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, int>>.value(
-            _FakeEither_0<_i9.Failure, int>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, int>>.value(_FakeEither_0<_i9.Failure, int>(
           this,
           Invocation.method(
             #getFaucetCoin,
@@ -382,6 +360,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, int>>);
+
   @override
   _i8.Future<bool> isAccountExists(String? username) => (super.noSuchMethod(
         Invocation.method(
@@ -390,16 +369,14 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
         ),
         returnValue: _i8.Future<bool>.value(false),
       ) as _i8.Future<bool>);
+
   @override
-  _i8.Future<_i3.SdkIpcResponse<dynamic>> updateRecipe(
-          Map<dynamic, dynamic>? jsonMap) =>
-      (super.noSuchMethod(
+  _i8.Future<_i3.SdkIpcResponse<dynamic>> updateRecipe(Map<dynamic, dynamic>? jsonMap) => (super.noSuchMethod(
         Invocation.method(
           #updateRecipe,
           [jsonMap],
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(_FakeSdkIpcResponse_1<dynamic>(
           this,
           Invocation.method(
             #updateRecipe,
@@ -407,19 +384,15 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+
   @override
-  _i8.Future<
-      _i2.Either<_i9.Failure, _i6.AccountPublicInfo>> importPylonsAccount(
-          {required String? mnemonic}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, _i6.AccountPublicInfo>> importPylonsAccount({required String? mnemonic}) => (super.noSuchMethod(
         Invocation.method(
           #importPylonsAccount,
           [],
           {#mnemonic: mnemonic},
         ),
-        returnValue:
-            _i8.Future<_i2.Either<_i9.Failure, _i6.AccountPublicInfo>>.value(
-                _FakeEither_0<_i9.Failure, _i6.AccountPublicInfo>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i6.AccountPublicInfo>>.value(_FakeEither_0<_i9.Failure, _i6.AccountPublicInfo>(
           this,
           Invocation.method(
             #importPylonsAccount,
@@ -428,16 +401,14 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, _i6.AccountPublicInfo>>);
+
   @override
-  _i8.Future<_i3.SdkIpcResponse<dynamic>> updateCookbook(
-          Map<dynamic, dynamic>? jsonMap) =>
-      (super.noSuchMethod(
+  _i8.Future<_i3.SdkIpcResponse<dynamic>> updateCookbook(Map<dynamic, dynamic>? jsonMap) => (super.noSuchMethod(
         Invocation.method(
           #updateCookbook,
           [jsonMap],
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(_FakeSdkIpcResponse_1<dynamic>(
           this,
           Invocation.method(
             #updateCookbook,
@@ -445,14 +416,14 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+
   @override
   _i8.Future<_i3.SdkIpcResponse<dynamic>> getProfile() => (super.noSuchMethod(
         Invocation.method(
           #getProfile,
           [],
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(_FakeSdkIpcResponse_1<dynamic>(
           this,
           Invocation.method(
             #getProfile,
@@ -460,6 +431,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+
   @override
   _i8.Future<String> signPureMessage(String? message) => (super.noSuchMethod(
         Invocation.method(
@@ -468,26 +440,24 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
         ),
         returnValue: _i8.Future<String>.value(''),
       ) as _i8.Future<String>);
+
   @override
-  _i8.Future<List<_i10.Recipe>> getRecipesByCookbookID(String? cookbookID) =>
-      (super.noSuchMethod(
+  _i8.Future<List<_i10.Recipe>> getRecipesByCookbookID(String? cookbookID) => (super.noSuchMethod(
         Invocation.method(
           #getRecipesByCookbookID,
           [cookbookID],
         ),
         returnValue: _i8.Future<List<_i10.Recipe>>.value(<_i10.Recipe>[]),
       ) as _i8.Future<List<_i10.Recipe>>);
+
   @override
-  _i8.Future<_i3.SdkIpcResponse<dynamic>> getAllRecipesByCookbookId(
-          {required String? cookbookId}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i3.SdkIpcResponse<dynamic>> getAllRecipesByCookbookId({required String? cookbookId}) => (super.noSuchMethod(
         Invocation.method(
           #getAllRecipesByCookbookId,
           [],
           {#cookbookId: cookbookId},
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(_FakeSdkIpcResponse_1<dynamic>(
           this,
           Invocation.method(
             #getAllRecipesByCookbookId,
@@ -496,17 +466,15 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+
   @override
-  _i8.Future<_i3.SdkIpcResponse<dynamic>> getCookbookByIdForSDK(
-          {required String? cookbookId}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i3.SdkIpcResponse<dynamic>> getCookbookByIdForSDK({required String? cookbookId}) => (super.noSuchMethod(
         Invocation.method(
           #getCookbookByIdForSDK,
           [],
           {#cookbookId: cookbookId},
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(_FakeSdkIpcResponse_1<dynamic>(
           this,
           Invocation.method(
             #getCookbookByIdForSDK,
@@ -515,6 +483,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+
   @override
   _i5.Observable<bool> getStateUpdatedFlag() => (super.noSuchMethod(
         Invocation.method(
@@ -529,6 +498,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         ),
       ) as _i5.Observable<bool>);
+
   @override
   void setStateUpdatedFlag({required bool? flag}) => super.noSuchMethod(
         Invocation.method(
@@ -538,6 +508,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   _i8.Future<_i3.SdkIpcResponse<dynamic>> getExecutionByRecipeId({
     required String? cookbookId,
@@ -552,8 +523,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
             #recipeId: recipeId,
           },
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(_FakeSdkIpcResponse_1<dynamic>(
           this,
           Invocation.method(
             #getExecutionByRecipeId,
@@ -565,6 +535,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+
   @override
   _i8.Future<_i3.SdkIpcResponse<dynamic>> getRecipeByIdForSDK({
     required String? cookbookId,
@@ -579,8 +550,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
             #recipeId: recipeId,
           },
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(_FakeSdkIpcResponse_1<dynamic>(
           this,
           Invocation.method(
             #getRecipeByIdForSDK,
@@ -592,6 +562,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+
   @override
   _i8.Future<_i3.SdkIpcResponse<dynamic>> getItemByIdForSDK({
     required String? cookBookId,
@@ -606,8 +577,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
             #itemId: itemId,
           },
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(_FakeSdkIpcResponse_1<dynamic>(
           this,
           Invocation.method(
             #getItemByIdForSDK,
@@ -619,17 +589,15 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+
   @override
-  _i8.Future<_i3.SdkIpcResponse<dynamic>> getItemListByOwner(
-          {required String? owner}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i3.SdkIpcResponse<dynamic>> getItemListByOwner({required String? owner}) => (super.noSuchMethod(
         Invocation.method(
           #getItemListByOwner,
           [],
           {#owner: owner},
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(_FakeSdkIpcResponse_1<dynamic>(
           this,
           Invocation.method(
             #getItemListByOwner,
@@ -638,17 +606,15 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+
   @override
-  _i8.Future<_i3.SdkIpcResponse<dynamic>> getExecutionBasedOnId(
-          {required String? id}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i3.SdkIpcResponse<dynamic>> getExecutionBasedOnId({required String? id}) => (super.noSuchMethod(
         Invocation.method(
           #getExecutionBasedOnId,
           [],
           {#id: id},
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(_FakeSdkIpcResponse_1<dynamic>(
           this,
           Invocation.method(
             #getExecutionBasedOnId,
@@ -657,17 +623,15 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+
   @override
-  _i8.Future<_i3.SdkIpcResponse<dynamic>> getTradesForSDK(
-          {required String? creator}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i3.SdkIpcResponse<dynamic>> getTradesForSDK({required String? creator}) => (super.noSuchMethod(
         Invocation.method(
           #getTradesForSDK,
           [],
           {#creator: creator},
         ),
-        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(
-            _FakeSdkIpcResponse_1<dynamic>(
+        returnValue: _i8.Future<_i3.SdkIpcResponse<dynamic>>.value(_FakeSdkIpcResponse_1<dynamic>(
           this,
           Invocation.method(
             #getTradesForSDK,
@@ -676,6 +640,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         )),
       ) as _i8.Future<_i3.SdkIpcResponse<dynamic>>);
+
   @override
   _i8.Future<bool> deleteAccounts() => (super.noSuchMethod(
         Invocation.method(
@@ -684,10 +649,9 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
         ),
         returnValue: _i8.Future<bool>.value(false),
       ) as _i8.Future<bool>);
+
   @override
-  _i2.Either<_i9.Failure, bool> saveInitialLink(
-          {required String? initialLink}) =>
-      (super.noSuchMethod(
+  _i2.Either<_i9.Failure, bool> saveInitialLink({required String? initialLink}) => (super.noSuchMethod(
         Invocation.method(
           #saveInitialLink,
           [],
@@ -702,6 +666,7 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         ),
       ) as _i2.Either<_i9.Failure, bool>);
+
   @override
   _i2.Either<_i9.Failure, String> getInitialLink() => (super.noSuchMethod(
         Invocation.method(
@@ -716,42 +681,36 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
           ),
         ),
       ) as _i2.Either<_i9.Failure, String>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, String>>
-      sendGoogleInAppPurchaseCoinsRequest(
-              _i12.GoogleInAppPurchaseModel? googleInAppPurchaseModel) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #sendGoogleInAppPurchaseCoinsRequest,
-              [googleInAppPurchaseModel],
-            ),
-            returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(
-                _FakeEither_0<_i9.Failure, String>(
-              this,
-              Invocation.method(
-                #sendGoogleInAppPurchaseCoinsRequest,
-                [googleInAppPurchaseModel],
-              ),
-            )),
-          ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+  _i8.Future<_i2.Either<_i9.Failure, String>> sendGoogleInAppPurchaseCoinsRequest(_i12.GoogleInAppPurchaseModel? googleInAppPurchaseModel) => (super.noSuchMethod(
+        Invocation.method(
+          #sendGoogleInAppPurchaseCoinsRequest,
+          [googleInAppPurchaseModel],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(_FakeEither_0<_i9.Failure, String>(
+          this,
+          Invocation.method(
+            #sendGoogleInAppPurchaseCoinsRequest,
+            [googleInAppPurchaseModel],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, String>>
-      sendAppleInAppPurchaseCoinsRequest(
-              _i12.AppleInAppPurchaseModel? appleInAppPurchaseModel) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #sendAppleInAppPurchaseCoinsRequest,
-              [appleInAppPurchaseModel],
-            ),
-            returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(
-                _FakeEither_0<_i9.Failure, String>(
-              this,
-              Invocation.method(
-                #sendAppleInAppPurchaseCoinsRequest,
-                [appleInAppPurchaseModel],
-              ),
-            )),
-          ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+  _i8.Future<_i2.Either<_i9.Failure, String>> sendAppleInAppPurchaseCoinsRequest(_i12.AppleInAppPurchaseModel? appleInAppPurchaseModel) => (super.noSuchMethod(
+        Invocation.method(
+          #sendAppleInAppPurchaseCoinsRequest,
+          [appleInAppPurchaseModel],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(_FakeEither_0<_i9.Failure, String>(
+          this,
+          Invocation.method(
+            #sendAppleInAppPurchaseCoinsRequest,
+            [appleInAppPurchaseModel],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
 }
 
 /// A class which mocks [AccountPublicInfo].
@@ -767,26 +726,31 @@ class MockAccountPublicInfo extends _i1.Mock implements _i6.AccountPublicInfo {
         Invocation.getter(#name),
         returnValue: '',
       ) as String);
+
   @override
   String get publicAddress => (super.noSuchMethod(
         Invocation.getter(#publicAddress),
         returnValue: '',
       ) as String);
+
   @override
   String get accountId => (super.noSuchMethod(
         Invocation.getter(#accountId),
         returnValue: '',
       ) as String);
+
   @override
   String get chainId => (super.noSuchMethod(
         Invocation.getter(#chainId),
         returnValue: '',
       ) as String);
+
   @override
   List<Object?> get props => (super.noSuchMethod(
         Invocation.getter(#props),
         returnValue: <Object?>[],
       ) as List<Object?>);
+
   @override
   _i6.AccountPublicInfo copyWith({
     String? name,
@@ -846,8 +810,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #recipeId: recipeId,
           },
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i10.Recipe>>.value(
-            _FakeEither_0<_i9.Failure, _i10.Recipe>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i10.Recipe>>.value(_FakeEither_0<_i9.Failure, _i10.Recipe>(
           this,
           Invocation.method(
             #getRecipe,
@@ -859,17 +822,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, _i10.Recipe>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, String>> getUsername(
-          {required String? address}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, String>> getUsername({required String? address}) => (super.noSuchMethod(
         Invocation.method(
           #getUsername,
           [],
           {#address: address},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(
-            _FakeEither_0<_i9.Failure, String>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(_FakeEither_0<_i9.Failure, String>(
           this,
           Invocation.method(
             #getUsername,
@@ -878,20 +839,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+
   @override
-  _i8.Future<
-      _i2.Either<_i9.Failure, _i2.Tuple2<_i14.Tx, _i4.TxResponse?>>> getTx(
-          {required String? hash}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, _i2.Tuple2<_i14.Tx, _i4.TxResponse?>>> getTx({required String? hash}) => (super.noSuchMethod(
         Invocation.method(
           #getTx,
           [],
           {#hash: hash},
         ),
-        returnValue: _i8.Future<
-                _i2.Either<_i9.Failure,
-                    _i2.Tuple2<_i14.Tx, _i4.TxResponse?>>>.value(
-            _FakeEither_0<_i9.Failure, _i2.Tuple2<_i14.Tx, _i4.TxResponse?>>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i2.Tuple2<_i14.Tx, _i4.TxResponse?>>>.value(_FakeEither_0<_i9.Failure, _i2.Tuple2<_i14.Tx, _i4.TxResponse?>>(
           this,
           Invocation.method(
             #getTx,
@@ -899,39 +855,33 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             {#hash: hash},
           ),
         )),
-      ) as _i8.Future<
-          _i2.Either<_i9.Failure, _i2.Tuple2<_i14.Tx, _i4.TxResponse?>>>);
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i2.Tuple2<_i14.Tx, _i4.TxResponse?>>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, List<_i10.Recipe>>>
-      getRecipesBasedOnCookBookId({required String? cookBookId}) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #getRecipesBasedOnCookBookId,
-              [],
-              {#cookBookId: cookBookId},
-            ),
-            returnValue:
-                _i8.Future<_i2.Either<_i9.Failure, List<_i10.Recipe>>>.value(
-                    _FakeEither_0<_i9.Failure, List<_i10.Recipe>>(
-              this,
-              Invocation.method(
-                #getRecipesBasedOnCookBookId,
-                [],
-                {#cookBookId: cookBookId},
-              ),
-            )),
-          ) as _i8.Future<_i2.Either<_i9.Failure, List<_i10.Recipe>>>);
+  _i8.Future<_i2.Either<_i9.Failure, List<_i10.Recipe>>> getRecipesBasedOnCookBookId({required String? cookBookId}) => (super.noSuchMethod(
+        Invocation.method(
+          #getRecipesBasedOnCookBookId,
+          [],
+          {#cookBookId: cookBookId},
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, List<_i10.Recipe>>>.value(_FakeEither_0<_i9.Failure, List<_i10.Recipe>>(
+          this,
+          Invocation.method(
+            #getRecipesBasedOnCookBookId,
+            [],
+            {#cookBookId: cookBookId},
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, List<_i10.Recipe>>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i10.Cookbook>> getCookbookBasedOnId(
-          {required String? cookBookId}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, _i10.Cookbook>> getCookbookBasedOnId({required String? cookBookId}) => (super.noSuchMethod(
         Invocation.method(
           #getCookbookBasedOnId,
           [],
           {#cookBookId: cookBookId},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i10.Cookbook>>.value(
-            _FakeEither_0<_i9.Failure, _i10.Cookbook>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i10.Cookbook>>.value(_FakeEither_0<_i9.Failure, _i10.Cookbook>(
           this,
           Invocation.method(
             #getCookbookBasedOnId,
@@ -940,16 +890,14 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, _i10.Cookbook>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, String>> getAddressBasedOnUsername(
-          String? username) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, String>> getAddressBasedOnUsername(String? username) => (super.noSuchMethod(
         Invocation.method(
           #getAddressBasedOnUsername,
           [username],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(
-            _FakeEither_0<_i9.Failure, String>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(_FakeEither_0<_i9.Failure, String>(
           this,
           Invocation.method(
             #getAddressBasedOnUsername,
@@ -957,17 +905,14 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, List<_i15.Balance>>> getBalance(
-          String? address) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, List<_i15.Balance>>> getBalance(String? address) => (super.noSuchMethod(
         Invocation.method(
           #getBalance,
           [address],
         ),
-        returnValue:
-            _i8.Future<_i2.Either<_i9.Failure, List<_i15.Balance>>>.value(
-                _FakeEither_0<_i9.Failure, List<_i15.Balance>>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, List<_i15.Balance>>>.value(_FakeEither_0<_i9.Failure, List<_i15.Balance>>(
           this,
           Invocation.method(
             #getBalance,
@@ -975,37 +920,34 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, List<_i15.Balance>>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i16.ExecutionListByRecipeResponse>>
-      getExecutionsByRecipeId({
+  _i8.Future<_i2.Either<_i9.Failure, _i16.ExecutionListByRecipeResponse>> getExecutionsByRecipeId({
     required String? cookBookId,
     required String? recipeId,
   }) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #getExecutionsByRecipeId,
-              [],
-              {
-                #cookBookId: cookBookId,
-                #recipeId: recipeId,
-              },
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        _i16.ExecutionListByRecipeResponse>>.value(
-                _FakeEither_0<_i9.Failure, _i16.ExecutionListByRecipeResponse>(
-              this,
-              Invocation.method(
-                #getExecutionsByRecipeId,
-                [],
-                {
-                  #cookBookId: cookBookId,
-                  #recipeId: recipeId,
-                },
-              ),
-            )),
-          ) as _i8.Future<
-              _i2.Either<_i9.Failure, _i16.ExecutionListByRecipeResponse>>);
+      (super.noSuchMethod(
+        Invocation.method(
+          #getExecutionsByRecipeId,
+          [],
+          {
+            #cookBookId: cookBookId,
+            #recipeId: recipeId,
+          },
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i16.ExecutionListByRecipeResponse>>.value(_FakeEither_0<_i9.Failure, _i16.ExecutionListByRecipeResponse>(
+          this,
+          Invocation.method(
+            #getExecutionsByRecipeId,
+            [],
+            {
+              #cookBookId: cookBookId,
+              #recipeId: recipeId,
+            },
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i16.ExecutionListByRecipeResponse>>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, int>> getFaucetCoin({
     required String? address,
@@ -1020,8 +962,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #denom: denom,
           },
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, int>>.value(
-            _FakeEither_0<_i9.Failure, int>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, int>>.value(_FakeEither_0<_i9.Failure, int>(
           this,
           Invocation.method(
             #getFaucetCoin,
@@ -1033,6 +974,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, int>>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, _i10.Item>> getItem({
     required String? cookBookId,
@@ -1047,8 +989,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #itemId: itemId,
           },
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i10.Item>>.value(
-            _FakeEither_0<_i9.Failure, _i10.Item>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i10.Item>>.value(_FakeEither_0<_i9.Failure, _i10.Item>(
           this,
           Invocation.method(
             #getItem,
@@ -1060,17 +1001,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, _i10.Item>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, List<_i10.Item>>> getListItemByOwner(
-          {required String? owner}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, List<_i10.Item>>> getListItemByOwner({required String? owner}) => (super.noSuchMethod(
         Invocation.method(
           #getListItemByOwner,
           [],
           {#owner: owner},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, List<_i10.Item>>>.value(
-            _FakeEither_0<_i9.Failure, List<_i10.Item>>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, List<_i10.Item>>>.value(_FakeEither_0<_i9.Failure, List<_i10.Item>>(
           this,
           Invocation.method(
             #getListItemByOwner,
@@ -1079,17 +1018,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, List<_i10.Item>>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i10.Execution>> getExecutionBasedOnId(
-          {required String? id}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, _i10.Execution>> getExecutionBasedOnId({required String? id}) => (super.noSuchMethod(
         Invocation.method(
           #getExecutionBasedOnId,
           [],
           {#id: id},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i10.Execution>>.value(
-            _FakeEither_0<_i9.Failure, _i10.Execution>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i10.Execution>>.value(_FakeEither_0<_i9.Failure, _i10.Execution>(
           this,
           Invocation.method(
             #getExecutionBasedOnId,
@@ -1098,18 +1035,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, _i10.Execution>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, List<_i10.Trade>>> getTradesBasedOnCreator(
-          {required String? creator}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, List<_i10.Trade>>> getTradesBasedOnCreator({required String? creator}) => (super.noSuchMethod(
         Invocation.method(
           #getTradesBasedOnCreator,
           [],
           {#creator: creator},
         ),
-        returnValue:
-            _i8.Future<_i2.Either<_i9.Failure, List<_i10.Trade>>>.value(
-                _FakeEither_0<_i9.Failure, List<_i10.Trade>>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, List<_i10.Trade>>>.value(_FakeEither_0<_i9.Failure, List<_i10.Trade>>(
           this,
           Invocation.method(
             #getTradesBasedOnCreator,
@@ -1118,215 +1052,161 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, List<_i10.Trade>>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i6.PrivateAccountCredentials>>
-      getPrivateCredentials({
+  _i8.Future<_i2.Either<_i9.Failure, _i6.PrivateAccountCredentials>> getPrivateCredentials({
     required String? mnemonic,
     required String? username,
   }) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #getPrivateCredentials,
-              [],
-              {
-                #mnemonic: mnemonic,
-                #username: username,
-              },
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        _i6.PrivateAccountCredentials>>.value(
-                _FakeEither_0<_i9.Failure, _i6.PrivateAccountCredentials>(
-              this,
-              Invocation.method(
-                #getPrivateCredentials,
-                [],
-                {
-                  #mnemonic: mnemonic,
-                  #username: username,
-                },
-              ),
-            )),
-          ) as _i8
-              .Future<_i2.Either<_i9.Failure, _i6.PrivateAccountCredentials>>);
-  @override
-  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeCreatePaymentIntentResponse>>
-      CreatePaymentIntent(_i17.StripeCreatePaymentIntentRequest? req) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #CreatePaymentIntent,
-              [req],
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        _i17.StripeCreatePaymentIntentResponse>>.value(
-                _FakeEither_0<_i9.Failure,
-                    _i17.StripeCreatePaymentIntentResponse>(
-              this,
-              Invocation.method(
-                #CreatePaymentIntent,
-                [req],
-              ),
-            )),
-          ) as _i8.Future<
-              _i2.Either<_i9.Failure, _i17.StripeCreatePaymentIntentResponse>>);
-  @override
-  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeGeneratePaymentReceiptResponse>>
-      GeneratePaymentReceipt(_i17.StripeGeneratePaymentReceiptRequest? req) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #GeneratePaymentReceipt,
-              [req],
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        _i17.StripeGeneratePaymentReceiptResponse>>.value(
-                _FakeEither_0<_i9.Failure,
-                    _i17.StripeGeneratePaymentReceiptResponse>(
-              this,
-              Invocation.method(
-                #GeneratePaymentReceipt,
-                [req],
-              ),
-            )),
-          ) as _i8.Future<
-              _i2.Either<_i9.Failure,
-                  _i17.StripeGeneratePaymentReceiptResponse>>);
-  @override
-  _i8.Future<
-          _i2.Either<_i9.Failure, _i17.StripeGenerateRegistrationTokenResponse>>
-      GenerateRegistrationToken(String? address) => (super.noSuchMethod(
-            Invocation.method(
-              #GenerateRegistrationToken,
-              [address],
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        _i17.StripeGenerateRegistrationTokenResponse>>.value(
-                _FakeEither_0<_i9.Failure,
-                    _i17.StripeGenerateRegistrationTokenResponse>(
-              this,
-              Invocation.method(
-                #GenerateRegistrationToken,
-                [address],
-              ),
-            )),
-          ) as _i8.Future<
-              _i2.Either<_i9.Failure,
-                  _i17.StripeGenerateRegistrationTokenResponse>>);
-  @override
-  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeRegisterAccountResponse>>
-      RegisterAccount(_i17.StripeRegisterAccountRequest? req) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #RegisterAccount,
-              [req],
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        _i17.StripeRegisterAccountResponse>>.value(
-                _FakeEither_0<_i9.Failure, _i17.StripeRegisterAccountResponse>(
-              this,
-              Invocation.method(
-                #RegisterAccount,
-                [req],
-              ),
-            )),
-          ) as _i8.Future<
-              _i2.Either<_i9.Failure, _i17.StripeRegisterAccountResponse>>);
-  @override
-  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeGenerateUpdateTokenResponse>>
-      GenerateUpdateToken(String? address) => (super.noSuchMethod(
-            Invocation.method(
-              #GenerateUpdateToken,
-              [address],
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        _i17.StripeGenerateUpdateTokenResponse>>.value(
-                _FakeEither_0<_i9.Failure,
-                    _i17.StripeGenerateUpdateTokenResponse>(
-              this,
-              Invocation.method(
-                #GenerateUpdateToken,
-                [address],
-              ),
-            )),
-          ) as _i8.Future<
-              _i2.Either<_i9.Failure, _i17.StripeGenerateUpdateTokenResponse>>);
-  @override
-  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeUpdateAccountResponse>>
-      UpdateAccount(_i17.StripeUpdateAccountRequest? req) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #UpdateAccount,
-              [req],
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        _i17.StripeUpdateAccountResponse>>.value(
-                _FakeEither_0<_i9.Failure, _i17.StripeUpdateAccountResponse>(
-              this,
-              Invocation.method(
-                #UpdateAccount,
-                [req],
-              ),
-            )),
-          ) as _i8.Future<
-              _i2.Either<_i9.Failure, _i17.StripeUpdateAccountResponse>>);
-  @override
-  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeUpdateAccountResponse>>
-      getAccountLinkBasedOnUpdateToken(_i17.StripeUpdateAccountRequest? req) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #getAccountLinkBasedOnUpdateToken,
-              [req],
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        _i17.StripeUpdateAccountResponse>>.value(
-                _FakeEither_0<_i9.Failure, _i17.StripeUpdateAccountResponse>(
-              this,
-              Invocation.method(
-                #getAccountLinkBasedOnUpdateToken,
-                [req],
-              ),
-            )),
-          ) as _i8.Future<
-              _i2.Either<_i9.Failure, _i17.StripeUpdateAccountResponse>>);
-  @override
-  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeGeneratePayoutTokenResponse>>
-      GeneratePayoutToken(_i17.StripeGeneratePayoutTokenRequest? req) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #GeneratePayoutToken,
-              [req],
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        _i17.StripeGeneratePayoutTokenResponse>>.value(
-                _FakeEither_0<_i9.Failure,
-                    _i17.StripeGeneratePayoutTokenResponse>(
-              this,
-              Invocation.method(
-                #GeneratePayoutToken,
-                [req],
-              ),
-            )),
-          ) as _i8.Future<
-              _i2.Either<_i9.Failure, _i17.StripeGeneratePayoutTokenResponse>>);
-  @override
-  _i8.Future<
-      _i2.Either<_i9.Failure, _i17.StripeAccountLinkResponse>> GetAccountLink(
-          _i17.StripeAccountLinkRequest? req) =>
       (super.noSuchMethod(
+        Invocation.method(
+          #getPrivateCredentials,
+          [],
+          {
+            #mnemonic: mnemonic,
+            #username: username,
+          },
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i6.PrivateAccountCredentials>>.value(_FakeEither_0<_i9.Failure, _i6.PrivateAccountCredentials>(
+          this,
+          Invocation.method(
+            #getPrivateCredentials,
+            [],
+            {
+              #mnemonic: mnemonic,
+              #username: username,
+            },
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i6.PrivateAccountCredentials>>);
+
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeCreatePaymentIntentResponse>> CreatePaymentIntent(_i17.StripeCreatePaymentIntentRequest? req) => (super.noSuchMethod(
+        Invocation.method(
+          #CreatePaymentIntent,
+          [req],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i17.StripeCreatePaymentIntentResponse>>.value(_FakeEither_0<_i9.Failure, _i17.StripeCreatePaymentIntentResponse>(
+          this,
+          Invocation.method(
+            #CreatePaymentIntent,
+            [req],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i17.StripeCreatePaymentIntentResponse>>);
+
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeGeneratePaymentReceiptResponse>> GeneratePaymentReceipt(_i17.StripeGeneratePaymentReceiptRequest? req) => (super.noSuchMethod(
+        Invocation.method(
+          #GeneratePaymentReceipt,
+          [req],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i17.StripeGeneratePaymentReceiptResponse>>.value(_FakeEither_0<_i9.Failure, _i17.StripeGeneratePaymentReceiptResponse>(
+          this,
+          Invocation.method(
+            #GeneratePaymentReceipt,
+            [req],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i17.StripeGeneratePaymentReceiptResponse>>);
+
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeGenerateRegistrationTokenResponse>> GenerateRegistrationToken(String? address) => (super.noSuchMethod(
+        Invocation.method(
+          #GenerateRegistrationToken,
+          [address],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i17.StripeGenerateRegistrationTokenResponse>>.value(_FakeEither_0<_i9.Failure, _i17.StripeGenerateRegistrationTokenResponse>(
+          this,
+          Invocation.method(
+            #GenerateRegistrationToken,
+            [address],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i17.StripeGenerateRegistrationTokenResponse>>);
+
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeRegisterAccountResponse>> RegisterAccount(_i17.StripeRegisterAccountRequest? req) => (super.noSuchMethod(
+        Invocation.method(
+          #RegisterAccount,
+          [req],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i17.StripeRegisterAccountResponse>>.value(_FakeEither_0<_i9.Failure, _i17.StripeRegisterAccountResponse>(
+          this,
+          Invocation.method(
+            #RegisterAccount,
+            [req],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i17.StripeRegisterAccountResponse>>);
+
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeGenerateUpdateTokenResponse>> GenerateUpdateToken(String? address) => (super.noSuchMethod(
+        Invocation.method(
+          #GenerateUpdateToken,
+          [address],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i17.StripeGenerateUpdateTokenResponse>>.value(_FakeEither_0<_i9.Failure, _i17.StripeGenerateUpdateTokenResponse>(
+          this,
+          Invocation.method(
+            #GenerateUpdateToken,
+            [address],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i17.StripeGenerateUpdateTokenResponse>>);
+
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeUpdateAccountResponse>> UpdateAccount(_i17.StripeUpdateAccountRequest? req) => (super.noSuchMethod(
+        Invocation.method(
+          #UpdateAccount,
+          [req],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i17.StripeUpdateAccountResponse>>.value(_FakeEither_0<_i9.Failure, _i17.StripeUpdateAccountResponse>(
+          this,
+          Invocation.method(
+            #UpdateAccount,
+            [req],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i17.StripeUpdateAccountResponse>>);
+
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeUpdateAccountResponse>> getAccountLinkBasedOnUpdateToken(_i17.StripeUpdateAccountRequest? req) => (super.noSuchMethod(
+        Invocation.method(
+          #getAccountLinkBasedOnUpdateToken,
+          [req],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i17.StripeUpdateAccountResponse>>.value(_FakeEither_0<_i9.Failure, _i17.StripeUpdateAccountResponse>(
+          this,
+          Invocation.method(
+            #getAccountLinkBasedOnUpdateToken,
+            [req],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i17.StripeUpdateAccountResponse>>);
+
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeGeneratePayoutTokenResponse>> GeneratePayoutToken(_i17.StripeGeneratePayoutTokenRequest? req) => (super.noSuchMethod(
+        Invocation.method(
+          #GeneratePayoutToken,
+          [req],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i17.StripeGeneratePayoutTokenResponse>>.value(_FakeEither_0<_i9.Failure, _i17.StripeGeneratePayoutTokenResponse>(
+          this,
+          Invocation.method(
+            #GeneratePayoutToken,
+            [req],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i17.StripeGeneratePayoutTokenResponse>>);
+
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i17.StripeAccountLinkResponse>> GetAccountLink(_i17.StripeAccountLinkRequest? req) => (super.noSuchMethod(
         Invocation.method(
           #GetAccountLink,
           [req],
         ),
-        returnValue: _i8.Future<
-                _i2.Either<_i9.Failure, _i17.StripeAccountLinkResponse>>.value(
-            _FakeEither_0<_i9.Failure, _i17.StripeAccountLinkResponse>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i17.StripeAccountLinkResponse>>.value(_FakeEither_0<_i9.Failure, _i17.StripeAccountLinkResponse>(
           this,
           Invocation.method(
             #GetAccountLink,
@@ -1334,18 +1214,14 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, _i17.StripeAccountLinkResponse>>);
+
   @override
-  _i8.Future<
-      _i2.Either<_i9.Failure, _i18.StripeLoginLinkResponse>> stripeGetLoginLink(
-          _i19.StripeLoginLinkRequest? req) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, _i18.StripeLoginLinkResponse>> stripeGetLoginLink(_i19.StripeLoginLinkRequest? req) => (super.noSuchMethod(
         Invocation.method(
           #stripeGetLoginLink,
           [req],
         ),
-        returnValue: _i8.Future<
-                _i2.Either<_i9.Failure, _i18.StripeLoginLinkResponse>>.value(
-            _FakeEither_0<_i9.Failure, _i18.StripeLoginLinkResponse>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i18.StripeLoginLinkResponse>>.value(_FakeEither_0<_i9.Failure, _i18.StripeLoginLinkResponse>(
           this,
           Invocation.method(
             #stripeGetLoginLink,
@@ -1353,41 +1229,30 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, _i18.StripeLoginLinkResponse>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i20.StripeGetLoginBasedOnAddressResponse>>
-      getLoginLinkBasedOnAddress(
-              _i20.StripeGetLoginBasedOnAddressRequest? req) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #getLoginLinkBasedOnAddress,
-              [req],
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        _i20.StripeGetLoginBasedOnAddressResponse>>.value(
-                _FakeEither_0<_i9.Failure,
-                    _i20.StripeGetLoginBasedOnAddressResponse>(
-              this,
-              Invocation.method(
-                #getLoginLinkBasedOnAddress,
-                [req],
-              ),
-            )),
-          ) as _i8.Future<
-              _i2.Either<_i9.Failure,
-                  _i20.StripeGetLoginBasedOnAddressResponse>>);
+  _i8.Future<_i2.Either<_i9.Failure, _i20.StripeGetLoginBasedOnAddressResponse>> getLoginLinkBasedOnAddress(_i20.StripeGetLoginBasedOnAddressRequest? req) => (super.noSuchMethod(
+        Invocation.method(
+          #getLoginLinkBasedOnAddress,
+          [req],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i20.StripeGetLoginBasedOnAddressResponse>>.value(_FakeEither_0<_i9.Failure, _i20.StripeGetLoginBasedOnAddressResponse>(
+          this,
+          Invocation.method(
+            #getLoginLinkBasedOnAddress,
+            [req],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i20.StripeGetLoginBasedOnAddressResponse>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i21.IBCTraceModel>> getIBCHashTrace(
-          {required String? ibcHash}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, _i21.IBCTraceModel>> getIBCHashTrace({required String? ibcHash}) => (super.noSuchMethod(
         Invocation.method(
           #getIBCHashTrace,
           [],
           {#ibcHash: ibcHash},
         ),
-        returnValue:
-            _i8.Future<_i2.Either<_i9.Failure, _i21.IBCTraceModel>>.value(
-                _FakeEither_0<_i9.Failure, _i21.IBCTraceModel>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i21.IBCTraceModel>>.value(_FakeEither_0<_i9.Failure, _i21.IBCTraceModel>(
           this,
           Invocation.method(
             #getIBCHashTrace,
@@ -1396,17 +1261,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, _i21.IBCTraceModel>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> doesStripeAccountExistsFromServer(
-          {required String? address}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> doesStripeAccountExistsFromServer({required String? address}) => (super.noSuchMethod(
         Invocation.method(
           #doesStripeAccountExistsFromServer,
           [],
           {#address: address},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #doesStripeAccountExistsFromServer,
@@ -1415,9 +1278,9 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i2.Either<_i9.Failure, bool> getStripeAccountExistsFromLocal() =>
-      (super.noSuchMethod(
+  _i2.Either<_i9.Failure, bool> getStripeAccountExistsFromLocal() => (super.noSuchMethod(
         Invocation.method(
           #getStripeAccountExistsFromLocal,
           [],
@@ -1430,9 +1293,9 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         ),
       ) as _i2.Either<_i9.Failure, bool>);
+
   @override
-  _i8.Future<dynamic> saveStripeAccountExistsLocal({required bool? isExist}) =>
-      (super.noSuchMethod(
+  _i8.Future<dynamic> saveStripeAccountExistsLocal({required bool? isExist}) => (super.noSuchMethod(
         Invocation.method(
           #saveStripeAccountExistsLocal,
           [],
@@ -1440,16 +1303,14 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
         ),
         returnValue: _i8.Future<dynamic>.value(),
       ) as _i8.Future<dynamic>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, String>> pickImageFromGallery(
-          _i22.PickImageModel? pickImageModel) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, String>> pickImageFromGallery(_i22.PickImageModel? pickImageModel) => (super.noSuchMethod(
         Invocation.method(
           #pickImageFromGallery,
           [pickImageModel],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(
-            _FakeEither_0<_i9.Failure, String>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(_FakeEither_0<_i9.Failure, String>(
           this,
           Invocation.method(
             #pickImageFromGallery,
@@ -1457,6 +1318,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, bool>> saveImage({
     required String? key,
@@ -1471,8 +1333,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #imagePath: imagePath,
           },
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #saveImage,
@@ -1484,9 +1345,9 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i2.Either<_i9.Failure, String> getImagePath(String? uri) =>
-      (super.noSuchMethod(
+  _i2.Either<_i9.Failure, String> getImagePath(String? uri) => (super.noSuchMethod(
         Invocation.method(
           #getImagePath,
           [uri],
@@ -1499,17 +1360,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         ),
       ) as _i2.Either<_i9.Failure, String>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> saveIsBannerDark(
-          {required bool? isBannerDark}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> saveIsBannerDark({required bool? isBannerDark}) => (super.noSuchMethod(
         Invocation.method(
           #saveIsBannerDark,
           [],
           {#isBannerDark: isBannerDark},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #saveIsBannerDark,
@@ -1518,6 +1377,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
   _i2.Either<_i9.Failure, bool> getIsBannerDark() => (super.noSuchMethod(
         Invocation.method(
@@ -1532,17 +1392,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         ),
       ) as _i2.Either<_i9.Failure, bool>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> saveEmail(
-          {required String? value}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> saveEmail({required String? value}) => (super.noSuchMethod(
         Invocation.method(
           #saveEmail,
           [],
           {#value: value},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #saveEmail,
@@ -1551,6 +1409,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
   _i2.Either<_i9.Failure, String> getSavedEmail() => (super.noSuchMethod(
         Invocation.method(
@@ -1565,9 +1424,9 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         ),
       ) as _i2.Either<_i9.Failure, String>);
+
   @override
-  _i2.Either<_i9.Failure, bool> saveInitialLink(String? initialLink) =>
-      (super.noSuchMethod(
+  _i2.Either<_i9.Failure, bool> saveInitialLink(String? initialLink) => (super.noSuchMethod(
         Invocation.method(
           #saveInitialLink,
           [initialLink],
@@ -1580,6 +1439,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         ),
       ) as _i2.Either<_i9.Failure, bool>);
+
   @override
   _i2.Either<_i9.Failure, String> getInitialLink() => (super.noSuchMethod(
         Invocation.method(
@@ -1594,17 +1454,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         ),
       ) as _i2.Either<_i9.Failure, String>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> saveDescription(
-          {required String? description}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> saveDescription({required String? description}) => (super.noSuchMethod(
         Invocation.method(
           #saveDescription,
           [],
           {#description: description},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #saveDescription,
@@ -1613,6 +1471,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
   _i2.Either<_i9.Failure, String> getDescription() => (super.noSuchMethod(
         Invocation.method(
@@ -1627,17 +1486,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         ),
       ) as _i2.Either<_i9.Failure, String>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> saveNotificationsPreference(
-          {required bool? notificationStatus}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> saveNotificationsPreference({required bool? notificationStatus}) => (super.noSuchMethod(
         Invocation.method(
           #saveNotificationsPreference,
           [],
           {#notificationStatus: notificationStatus},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #saveNotificationsPreference,
@@ -1646,9 +1503,9 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i2.Either<_i9.Failure, bool> getNotificationsPreference() =>
-      (super.noSuchMethod(
+  _i2.Either<_i9.Failure, bool> getNotificationsPreference() => (super.noSuchMethod(
         Invocation.method(
           #getNotificationsPreference,
           [],
@@ -1661,17 +1518,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         ),
       ) as _i2.Either<_i9.Failure, bool>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> saveNetworkEnvironmentPreference(
-          {required String? networkEnvironment}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> saveNetworkEnvironmentPreference({required String? networkEnvironment}) => (super.noSuchMethod(
         Invocation.method(
           #saveNetworkEnvironmentPreference,
           [],
           {#networkEnvironment: networkEnvironment},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #saveNetworkEnvironmentPreference,
@@ -1680,9 +1535,9 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i2.Either<_i9.Failure, String> getNetworkEnvironmentPreference() =>
-      (super.noSuchMethod(
+  _i2.Either<_i9.Failure, String> getNetworkEnvironmentPreference() => (super.noSuchMethod(
         Invocation.method(
           #getNetworkEnvironmentPreference,
           [],
@@ -1695,16 +1550,14 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         ),
       ) as _i2.Either<_i9.Failure, String>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, String>> saveImageInLocalDirectory(
-          String? imagePath) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, String>> saveImageInLocalDirectory(String? imagePath) => (super.noSuchMethod(
         Invocation.method(
           #saveImageInLocalDirectory,
           [imagePath],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(
-            _FakeEither_0<_i9.Failure, String>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(_FakeEither_0<_i9.Failure, String>(
           this,
           Invocation.method(
             #saveImageInLocalDirectory,
@@ -1712,15 +1565,14 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> saveMnemonic(String? mnemonics) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> saveMnemonic(String? mnemonics) => (super.noSuchMethod(
         Invocation.method(
           #saveMnemonic,
           [mnemonics],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #saveMnemonic,
@@ -1728,15 +1580,14 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, String>> getMnemonic() =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, String>> getMnemonic() => (super.noSuchMethod(
         Invocation.method(
           #getMnemonic,
           [],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(
-            _FakeEither_0<_i9.Failure, String>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(_FakeEither_0<_i9.Failure, String>(
           this,
           Invocation.method(
             #getMnemonic,
@@ -1744,32 +1595,29 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i23.BiometricType>>
-      isBiometricAvailable() => (super.noSuchMethod(
-            Invocation.method(
-              #isBiometricAvailable,
-              [],
-            ),
-            returnValue:
-                _i8.Future<_i2.Either<_i9.Failure, _i23.BiometricType>>.value(
-                    _FakeEither_0<_i9.Failure, _i23.BiometricType>(
-              this,
-              Invocation.method(
-                #isBiometricAvailable,
-                [],
-              ),
-            )),
-          ) as _i8.Future<_i2.Either<_i9.Failure, _i23.BiometricType>>);
+  _i8.Future<_i2.Either<_i9.Failure, _i23.BiometricType>> isBiometricAvailable() => (super.noSuchMethod(
+        Invocation.method(
+          #isBiometricAvailable,
+          [],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i23.BiometricType>>.value(_FakeEither_0<_i9.Failure, _i23.BiometricType>(
+          this,
+          Invocation.method(
+            #isBiometricAvailable,
+            [],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i23.BiometricType>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> authenticate() =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> authenticate() => (super.noSuchMethod(
         Invocation.method(
           #authenticate,
           [],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #authenticate,
@@ -1777,15 +1625,14 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, void>> setApplicationDirectory() =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, void>> setApplicationDirectory() => (super.noSuchMethod(
         Invocation.method(
           #setApplicationDirectory,
           [],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, void>>.value(
-            _FakeEither_0<_i9.Failure, void>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, void>>.value(_FakeEither_0<_i9.Failure, void>(
           this,
           Invocation.method(
             #setApplicationDirectory,
@@ -1793,17 +1640,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, void>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> saveDefaultSecurityBiometric(
-          {required bool? biometricEnabled}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> saveDefaultSecurityBiometric({required bool? biometricEnabled}) => (super.noSuchMethod(
         Invocation.method(
           #saveDefaultSecurityBiometric,
           [],
           {#biometricEnabled: biometricEnabled},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #saveDefaultSecurityBiometric,
@@ -1812,6 +1657,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
   _i2.Either<_i9.Failure, bool> getSecurityBiometric() => (super.noSuchMethod(
         Invocation.method(
@@ -1826,17 +1672,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         ),
       ) as _i2.Either<_i9.Failure, bool>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> saveBiometricLogin(
-          {required bool? biometricEnabled}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> saveBiometricLogin({required bool? biometricEnabled}) => (super.noSuchMethod(
         Invocation.method(
           #saveBiometricLogin,
           [],
           {#biometricEnabled: biometricEnabled},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #saveBiometricLogin,
@@ -1845,6 +1689,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
   _i2.Either<_i9.Failure, bool> getBiometricLogin() => (super.noSuchMethod(
         Invocation.method(
@@ -1859,17 +1704,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         ),
       ) as _i2.Either<_i9.Failure, bool>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> saveBiometricTransaction(
-          {required bool? biometricEnabled}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> saveBiometricTransaction({required bool? biometricEnabled}) => (super.noSuchMethod(
         Invocation.method(
           #saveBiometricTransaction,
           [],
           {#biometricEnabled: biometricEnabled},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #saveBiometricTransaction,
@@ -1878,9 +1721,9 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i2.Either<_i9.Failure, bool> getBiometricTransaction() =>
-      (super.noSuchMethod(
+  _i2.Either<_i9.Failure, bool> getBiometricTransaction() => (super.noSuchMethod(
         Invocation.method(
           #getBiometricTransaction,
           [],
@@ -1893,100 +1736,86 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         ),
       ) as _i2.Either<_i9.Failure, bool>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, List<_i24.NftOwnershipHistory>>>
-      getNftOwnershipHistory({
+  _i8.Future<_i2.Either<_i9.Failure, List<_i24.NftOwnershipHistory>>> getNftOwnershipHistory({
     required String? itemId,
     required String? cookBookId,
   }) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #getNftOwnershipHistory,
-              [],
-              {
-                #itemId: itemId,
-                #cookBookId: cookBookId,
-              },
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        List<_i24.NftOwnershipHistory>>>.value(
-                _FakeEither_0<_i9.Failure, List<_i24.NftOwnershipHistory>>(
-              this,
-              Invocation.method(
-                #getNftOwnershipHistory,
-                [],
-                {
-                  #itemId: itemId,
-                  #cookBookId: cookBookId,
-                },
-              ),
-            )),
-          ) as _i8
-              .Future<_i2.Either<_i9.Failure, List<_i24.NftOwnershipHistory>>>);
+      (super.noSuchMethod(
+        Invocation.method(
+          #getNftOwnershipHistory,
+          [],
+          {
+            #itemId: itemId,
+            #cookBookId: cookBookId,
+          },
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, List<_i24.NftOwnershipHistory>>>.value(_FakeEither_0<_i9.Failure, List<_i24.NftOwnershipHistory>>(
+          this,
+          Invocation.method(
+            #getNftOwnershipHistory,
+            [],
+            {
+              #itemId: itemId,
+              #cookBookId: cookBookId,
+            },
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, List<_i24.NftOwnershipHistory>>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, List<_i24.NftOwnershipHistory>>>
-      getNftOwnershipHistoryByCookbookIdAndRecipeId({
+  _i8.Future<_i2.Either<_i9.Failure, List<_i24.NftOwnershipHistory>>> getNftOwnershipHistoryByCookbookIdAndRecipeId({
     required String? cookBookId,
     required String? recipeId,
   }) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #getNftOwnershipHistoryByCookbookIdAndRecipeId,
-              [],
-              {
-                #cookBookId: cookBookId,
-                #recipeId: recipeId,
-              },
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        List<_i24.NftOwnershipHistory>>>.value(
-                _FakeEither_0<_i9.Failure, List<_i24.NftOwnershipHistory>>(
-              this,
-              Invocation.method(
-                #getNftOwnershipHistoryByCookbookIdAndRecipeId,
-                [],
-                {
-                  #cookBookId: cookBookId,
-                  #recipeId: recipeId,
-                },
-              ),
-            )),
-          ) as _i8
-              .Future<_i2.Either<_i9.Failure, List<_i24.NftOwnershipHistory>>>);
-  @override
-  _i8.Future<_i2.Either<_i9.Failure, List<_i25.TransactionHistory>>>
-      getTransactionHistory({required String? address}) => (super.noSuchMethod(
-            Invocation.method(
-              #getTransactionHistory,
-              [],
-              {#address: address},
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        List<_i25.TransactionHistory>>>.value(
-                _FakeEither_0<_i9.Failure, List<_i25.TransactionHistory>>(
-              this,
-              Invocation.method(
-                #getTransactionHistory,
-                [],
-                {#address: address},
-              ),
-            )),
-          ) as _i8
-              .Future<_i2.Either<_i9.Failure, List<_i25.TransactionHistory>>>);
-  @override
-  _i8.Future<_i2.Either<_i9.Failure, String>> updateRecipe(
-          {required _i10.MsgUpdateRecipe? msgUpdateRecipe}) =>
       (super.noSuchMethod(
+        Invocation.method(
+          #getNftOwnershipHistoryByCookbookIdAndRecipeId,
+          [],
+          {
+            #cookBookId: cookBookId,
+            #recipeId: recipeId,
+          },
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, List<_i24.NftOwnershipHistory>>>.value(_FakeEither_0<_i9.Failure, List<_i24.NftOwnershipHistory>>(
+          this,
+          Invocation.method(
+            #getNftOwnershipHistoryByCookbookIdAndRecipeId,
+            [],
+            {
+              #cookBookId: cookBookId,
+              #recipeId: recipeId,
+            },
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, List<_i24.NftOwnershipHistory>>>);
+
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, List<_i25.TransactionHistory>>> getTransactionHistory({required String? address}) => (super.noSuchMethod(
+        Invocation.method(
+          #getTransactionHistory,
+          [],
+          {#address: address},
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, List<_i25.TransactionHistory>>>.value(_FakeEither_0<_i9.Failure, List<_i25.TransactionHistory>>(
+          this,
+          Invocation.method(
+            #getTransactionHistory,
+            [],
+            {#address: address},
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, List<_i25.TransactionHistory>>>);
+
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, String>> updateRecipe({required _i10.MsgUpdateRecipe? msgUpdateRecipe}) => (super.noSuchMethod(
         Invocation.method(
           #updateRecipe,
           [],
           {#msgUpdateRecipe: msgUpdateRecipe},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(
-            _FakeEither_0<_i9.Failure, String>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(_FakeEither_0<_i9.Failure, String>(
           this,
           Invocation.method(
             #updateRecipe,
@@ -1995,6 +1824,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, bool>> uploadMnemonicGoogleDrive({
     required String? mnemonic,
@@ -2009,8 +1839,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #username: username,
           },
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #uploadMnemonicGoogleDrive,
@@ -2022,23 +1851,22 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>>
-      getGoogleDriveMnemonic() => (super.noSuchMethod(
-            Invocation.method(
-              #getGoogleDriveMnemonic,
-              [],
-            ),
-            returnValue:
-                _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>>.value(
-                    _FakeEither_0<_i9.Failure, _i26.BackupData>(
-              this,
-              Invocation.method(
-                #getGoogleDriveMnemonic,
-                [],
-              ),
-            )),
-          ) as _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>>);
+  _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>> getGoogleDriveMnemonic() => (super.noSuchMethod(
+        Invocation.method(
+          #getGoogleDriveMnemonic,
+          [],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>>.value(_FakeEither_0<_i9.Failure, _i26.BackupData>(
+          this,
+          Invocation.method(
+            #getGoogleDriveMnemonic,
+            [],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, bool>> uploadMnemonicICloud({
     required String? mnemonic,
@@ -2053,8 +1881,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #username: username,
           },
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #uploadMnemonicICloud,
@@ -2066,15 +1893,14 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>> getICloudMnemonic() =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>> getICloudMnemonic() => (super.noSuchMethod(
         Invocation.method(
           #getICloudMnemonic,
           [],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>>.value(
-            _FakeEither_0<_i9.Failure, _i26.BackupData>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>>.value(_FakeEither_0<_i9.Failure, _i26.BackupData>(
           this,
           Invocation.method(
             #getICloudMnemonic,
@@ -2082,35 +1908,31 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, List<_i10.Cookbook>>>
-      getCookbooksByCreator({required String? creator}) => (super.noSuchMethod(
-            Invocation.method(
-              #getCookbooksByCreator,
-              [],
-              {#creator: creator},
-            ),
-            returnValue:
-                _i8.Future<_i2.Either<_i9.Failure, List<_i10.Cookbook>>>.value(
-                    _FakeEither_0<_i9.Failure, List<_i10.Cookbook>>(
-              this,
-              Invocation.method(
-                #getCookbooksByCreator,
-                [],
-                {#creator: creator},
-              ),
-            )),
-          ) as _i8.Future<_i2.Either<_i9.Failure, List<_i10.Cookbook>>>);
+  _i8.Future<_i2.Either<_i9.Failure, List<_i10.Cookbook>>> getCookbooksByCreator({required String? creator}) => (super.noSuchMethod(
+        Invocation.method(
+          #getCookbooksByCreator,
+          [],
+          {#creator: creator},
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, List<_i10.Cookbook>>>.value(_FakeEither_0<_i9.Failure, List<_i10.Cookbook>>(
+          this,
+          Invocation.method(
+            #getCookbooksByCreator,
+            [],
+            {#creator: creator},
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, List<_i10.Cookbook>>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i10.Trade>> getTradeByID(
-          _i11.Int64? id) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, _i10.Trade>> getTradeByID(_i11.Int64? id) => (super.noSuchMethod(
         Invocation.method(
           #getTradeByID,
           [id],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i10.Trade>>.value(
-            _FakeEither_0<_i9.Failure, _i10.Trade>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i10.Trade>>.value(_FakeEither_0<_i9.Failure, _i10.Trade>(
           this,
           Invocation.method(
             #getTradeByID,
@@ -2118,6 +1940,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, _i10.Trade>>);
+
   @override
   _i8.Future<bool> isInternetConnected() => (super.noSuchMethod(
         Invocation.method(
@@ -2126,15 +1949,16 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
         ),
         returnValue: _i8.Future<bool>.value(false),
       ) as _i8.Future<bool>);
+
   @override
-  _i8.Stream<_i27.InternetConnectionStatus> getInternetStatus() =>
-      (super.noSuchMethod(
+  _i8.Stream<_i27.InternetConnectionStatus> getInternetStatus() => (super.noSuchMethod(
         Invocation.method(
           #getInternetStatus,
           [],
         ),
         returnValue: _i8.Stream<_i27.InternetConnectionStatus>.empty(),
       ) as _i8.Stream<_i27.InternetConnectionStatus>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, int>> getLikesCount({
     required String? recipeId,
@@ -2149,8 +1973,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #cookBookID: cookBookID,
           },
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, int>>.value(
-            _FakeEither_0<_i9.Failure, int>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, int>>.value(_FakeEither_0<_i9.Failure, int>(
           this,
           Invocation.method(
             #getLikesCount,
@@ -2162,6 +1985,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, int>>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, int>> getViewsCount({
     required String? recipeId,
@@ -2176,8 +2000,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #cookBookID: cookBookID,
           },
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, int>>.value(
-            _FakeEither_0<_i9.Failure, int>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, int>>.value(_FakeEither_0<_i9.Failure, int>(
           this,
           Invocation.method(
             #getViewsCount,
@@ -2189,6 +2012,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, int>>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, void>> countAView({
     required String? recipeId,
@@ -2205,8 +2029,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #walletAddress: walletAddress,
           },
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, void>>.value(
-            _FakeEither_0<_i9.Failure, void>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, void>>.value(_FakeEither_0<_i9.Failure, void>(
           this,
           Invocation.method(
             #countAView,
@@ -2219,6 +2042,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, void>>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, bool>> ifLikedByMe({
     required String? recipeId,
@@ -2235,8 +2059,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #walletAddress: walletAddress,
           },
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #ifLikedByMe,
@@ -2249,6 +2072,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, void>> updateLikeStatus({
     required String? recipeId,
@@ -2265,8 +2089,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #walletAddress: walletAddress,
           },
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, void>>.value(
-            _FakeEither_0<_i9.Failure, void>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, void>>.value(_FakeEither_0<_i9.Failure, void>(
           this,
           Invocation.method(
             #updateLikeStatus,
@@ -2279,6 +2102,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, void>>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, bool>> saveUserFeedback({
     required String? walletAddress,
@@ -2295,8 +2119,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #feedback: feedback,
           },
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #saveUserFeedback,
@@ -2309,54 +2132,45 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, String>>
-      sendAppleInAppPurchaseCoinsRequest(
-              _i12.AppleInAppPurchaseModel? appleInAppPurchaseModel) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #sendAppleInAppPurchaseCoinsRequest,
-              [appleInAppPurchaseModel],
-            ),
-            returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(
-                _FakeEither_0<_i9.Failure, String>(
-              this,
-              Invocation.method(
-                #sendAppleInAppPurchaseCoinsRequest,
-                [appleInAppPurchaseModel],
-              ),
-            )),
-          ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+  _i8.Future<_i2.Either<_i9.Failure, String>> sendAppleInAppPurchaseCoinsRequest(_i12.AppleInAppPurchaseModel? appleInAppPurchaseModel) => (super.noSuchMethod(
+        Invocation.method(
+          #sendAppleInAppPurchaseCoinsRequest,
+          [appleInAppPurchaseModel],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(_FakeEither_0<_i9.Failure, String>(
+          this,
+          Invocation.method(
+            #sendAppleInAppPurchaseCoinsRequest,
+            [appleInAppPurchaseModel],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, String>>
-      sendGoogleInAppPurchaseCoinsRequest(
-              _i12.GoogleInAppPurchaseModel? msgGoogleInAPPPurchase) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #sendGoogleInAppPurchaseCoinsRequest,
-              [msgGoogleInAPPPurchase],
-            ),
-            returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(
-                _FakeEither_0<_i9.Failure, String>(
-              this,
-              Invocation.method(
-                #sendGoogleInAppPurchaseCoinsRequest,
-                [msgGoogleInAPPPurchase],
-              ),
-            )),
-          ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+  _i8.Future<_i2.Either<_i9.Failure, String>> sendGoogleInAppPurchaseCoinsRequest(_i12.GoogleInAppPurchaseModel? msgGoogleInAPPPurchase) => (super.noSuchMethod(
+        Invocation.method(
+          #sendGoogleInAppPurchaseCoinsRequest,
+          [msgGoogleInAPPPurchase],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(_FakeEither_0<_i9.Failure, String>(
+          this,
+          Invocation.method(
+            #sendGoogleInAppPurchaseCoinsRequest,
+            [msgGoogleInAPPPurchase],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i28.ProductDetails>> getProductsForSale(
-          {required String? itemId}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, _i28.ProductDetails>> getProductsForSale({required String? itemId}) => (super.noSuchMethod(
         Invocation.method(
           #getProductsForSale,
           [],
           {#itemId: itemId},
         ),
-        returnValue:
-            _i8.Future<_i2.Either<_i9.Failure, _i28.ProductDetails>>.value(
-                _FakeEither_0<_i9.Failure, _i28.ProductDetails>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i28.ProductDetails>>.value(_FakeEither_0<_i9.Failure, _i28.ProductDetails>(
           this,
           Invocation.method(
             #getProductsForSale,
@@ -2365,16 +2179,14 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, _i28.ProductDetails>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> buyProduct(
-          _i28.ProductDetails? productDetails) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> buyProduct(_i28.ProductDetails? productDetails) => (super.noSuchMethod(
         Invocation.method(
           #buyProduct,
           [productDetails],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #buyProduct,
@@ -2382,15 +2194,14 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> isInAppPurchaseAvailable() =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> isInAppPurchaseAvailable() => (super.noSuchMethod(
         Invocation.method(
           #isInAppPurchaseAvailable,
           [],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #isInAppPurchaseAvailable,
@@ -2398,6 +2209,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, bool>> updateFcmToken({
     required String? address,
@@ -2412,8 +2224,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #fcmToken: fcmToken,
           },
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #updateFcmToken,
@@ -2425,17 +2236,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> markNotificationAsRead(
-          {required List<String>? idsList}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> markNotificationAsRead({required List<String>? idsList}) => (super.noSuchMethod(
         Invocation.method(
           #markNotificationAsRead,
           [],
           {#idsList: idsList},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #markNotificationAsRead,
@@ -2444,15 +2253,14 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, String>> getAppCheckToken() =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, String>> getAppCheckToken() => (super.noSuchMethod(
         Invocation.method(
           #getAppCheckToken,
           [],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(
-            _FakeEither_0<_i9.Failure, String>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(_FakeEither_0<_i9.Failure, String>(
           this,
           Invocation.method(
             #getAppCheckToken,
@@ -2460,51 +2268,45 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, List<_i29.NotificationMessage>>>
-      getAllNotificationsMessages({
+  _i8.Future<_i2.Either<_i9.Failure, List<_i29.NotificationMessage>>> getAllNotificationsMessages({
     required String? walletAddress,
     required int? limit,
     required int? offset,
   }) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #getAllNotificationsMessages,
-              [],
-              {
-                #walletAddress: walletAddress,
-                #limit: limit,
-                #offset: offset,
-              },
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        List<_i29.NotificationMessage>>>.value(
-                _FakeEither_0<_i9.Failure, List<_i29.NotificationMessage>>(
-              this,
-              Invocation.method(
-                #getAllNotificationsMessages,
-                [],
-                {
-                  #walletAddress: walletAddress,
-                  #limit: limit,
-                  #offset: offset,
-                },
-              ),
-            )),
-          ) as _i8
-              .Future<_i2.Either<_i9.Failure, List<_i29.NotificationMessage>>>);
-  @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> saveInviteeAddressFromDynamicLink(
-          {required String? dynamicLink}) =>
       (super.noSuchMethod(
+        Invocation.method(
+          #getAllNotificationsMessages,
+          [],
+          {
+            #walletAddress: walletAddress,
+            #limit: limit,
+            #offset: offset,
+          },
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, List<_i29.NotificationMessage>>>.value(_FakeEither_0<_i9.Failure, List<_i29.NotificationMessage>>(
+          this,
+          Invocation.method(
+            #getAllNotificationsMessages,
+            [],
+            {
+              #walletAddress: walletAddress,
+              #limit: limit,
+              #offset: offset,
+            },
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, List<_i29.NotificationMessage>>>);
+
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, bool>> saveInviteeAddressFromDynamicLink({required String? dynamicLink}) => (super.noSuchMethod(
         Invocation.method(
           #saveInviteeAddressFromDynamicLink,
           [],
           {#dynamicLink: dynamicLink},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #saveInviteeAddressFromDynamicLink,
@@ -2513,17 +2315,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, String>> createDynamicLinkForUserInvite(
-          {required String? address}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, String>> createDynamicLinkForUserInvite({required String? address}) => (super.noSuchMethod(
         Invocation.method(
           #createDynamicLinkForUserInvite,
           [],
           {#address: address},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(
-            _FakeEither_0<_i9.Failure, String>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(_FakeEither_0<_i9.Failure, String>(
           this,
           Invocation.method(
             #createDynamicLinkForUserInvite,
@@ -2532,34 +2332,34 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, String>>
-      createDynamicLinkForRecipeNftShare({
+  _i8.Future<_i2.Either<_i9.Failure, String>> createDynamicLinkForRecipeNftShare({
     required String? address,
     required _i30.NFT? nft,
   }) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #createDynamicLinkForRecipeNftShare,
-              [],
-              {
-                #address: address,
-                #nft: nft,
-              },
-            ),
-            returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(
-                _FakeEither_0<_i9.Failure, String>(
-              this,
-              Invocation.method(
-                #createDynamicLinkForRecipeNftShare,
-                [],
-                {
-                  #address: address,
-                  #nft: nft,
-                },
-              ),
-            )),
-          ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+      (super.noSuchMethod(
+        Invocation.method(
+          #createDynamicLinkForRecipeNftShare,
+          [],
+          {
+            #address: address,
+            #nft: nft,
+          },
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(_FakeEither_0<_i9.Failure, String>(
+          this,
+          Invocation.method(
+            #createDynamicLinkForRecipeNftShare,
+            [],
+            {
+              #address: address,
+              #nft: nft,
+            },
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>> createAccount({
     required _i6.AccountPublicInfo? publicInfo,
@@ -2574,9 +2374,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #walletCreationModel: walletCreationModel,
           },
         ),
-        returnValue:
-            _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>>.value(
-                _FakeEither_0<_i9.Failure, _i31.TransactionResponse>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>>.value(_FakeEither_0<_i9.Failure, _i31.TransactionResponse>(
           this,
           Invocation.method(
             #createAccount,
@@ -2588,16 +2386,14 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, int>> saveLocalTransaction(
-          _i33.LocalTransactionModel? txManager) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, int>> saveLocalTransaction(_i33.LocalTransactionModel? txManager) => (super.noSuchMethod(
         Invocation.method(
           #saveLocalTransaction,
           [txManager],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, int>>.value(
-            _FakeEither_0<_i9.Failure, int>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, int>>.value(_FakeEither_0<_i9.Failure, int>(
           this,
           Invocation.method(
             #saveLocalTransaction,
@@ -2605,35 +2401,29 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, int>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, List<_i33.LocalTransactionModel>>>
-      getAllTransactionFailures() => (super.noSuchMethod(
-            Invocation.method(
-              #getAllTransactionFailures,
-              [],
-            ),
-            returnValue: _i8.Future<
-                    _i2.Either<_i9.Failure,
-                        List<_i33.LocalTransactionModel>>>.value(
-                _FakeEither_0<_i9.Failure, List<_i33.LocalTransactionModel>>(
-              this,
-              Invocation.method(
-                #getAllTransactionFailures,
-                [],
-              ),
-            )),
-          ) as _i8.Future<
-              _i2.Either<_i9.Failure, List<_i33.LocalTransactionModel>>>);
+  _i8.Future<_i2.Either<_i9.Failure, List<_i33.LocalTransactionModel>>> getAllTransactionFailures() => (super.noSuchMethod(
+        Invocation.method(
+          #getAllTransactionFailures,
+          [],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, List<_i33.LocalTransactionModel>>>.value(_FakeEither_0<_i9.Failure, List<_i33.LocalTransactionModel>>(
+          this,
+          Invocation.method(
+            #getAllTransactionFailures,
+            [],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, List<_i33.LocalTransactionModel>>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> deleteTransactionFailureRecord(
-          int? id) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> deleteTransactionFailureRecord(int? id) => (super.noSuchMethod(
         Invocation.method(
           #deleteTransactionFailureRecord,
           [id],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #deleteTransactionFailureRecord,
@@ -2641,17 +2431,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, bool>> setUserIdentifierInAnalytics(
-          {required String? address}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, bool>> setUserIdentifierInAnalytics({required String? address}) => (super.noSuchMethod(
         Invocation.method(
           #setUserIdentifierInAnalytics,
           [],
           {#address: address},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #setUserIdentifierInAnalytics,
@@ -2660,6 +2448,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, bool>> logPurchaseItem({
     required String? recipeId,
@@ -2678,8 +2467,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #purchasePrice: purchasePrice,
           },
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #logPurchaseItem,
@@ -2693,6 +2481,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
   _i8.Future<_i2.Either<_i9.Failure, bool>> logAddToCart({
     required String? recipeId,
@@ -2713,8 +2502,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             #currency: currency,
           },
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
-            _FakeEither_0<_i9.Failure, bool>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(_FakeEither_0<_i9.Failure, bool>(
           this,
           Invocation.method(
             #logAddToCart,
@@ -2729,17 +2517,15 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+
   @override
-  _i8.Future<_i2.Either<_i9.Failure, void>> logUserJourney(
-          {required String? screenName}) =>
-      (super.noSuchMethod(
+  _i8.Future<_i2.Either<_i9.Failure, void>> logUserJourney({required String? screenName}) => (super.noSuchMethod(
         Invocation.method(
           #logUserJourney,
           [],
           {#screenName: screenName},
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, void>>.value(
-            _FakeEither_0<_i9.Failure, void>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, void>>.value(_FakeEither_0<_i9.Failure, void>(
           this,
           Invocation.method(
             #logUserJourney,
@@ -2794,6 +2580,7 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         Invocation.getter(#url),
         returnValue: '',
       ) as String);
+
   @override
   set url(String? _url) => super.noSuchMethod(
         Invocation.setter(
@@ -2802,11 +2589,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get thumbnailUrl => (super.noSuchMethod(
         Invocation.getter(#thumbnailUrl),
         returnValue: '',
       ) as String);
+
   @override
   set thumbnailUrl(String? _thumbnailUrl) => super.noSuchMethod(
         Invocation.setter(
@@ -2815,11 +2604,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get name => (super.noSuchMethod(
         Invocation.getter(#name),
         returnValue: '',
       ) as String);
+
   @override
   set name(String? _name) => super.noSuchMethod(
         Invocation.setter(
@@ -2828,11 +2619,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get description => (super.noSuchMethod(
         Invocation.getter(#description),
         returnValue: '',
       ) as String);
+
   @override
   set description(String? _description) => super.noSuchMethod(
         Invocation.setter(
@@ -2841,11 +2634,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get denom => (super.noSuchMethod(
         Invocation.getter(#denom),
         returnValue: '',
       ) as String);
+
   @override
   set denom(String? _denom) => super.noSuchMethod(
         Invocation.setter(
@@ -2854,11 +2649,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get price => (super.noSuchMethod(
         Invocation.getter(#price),
         returnValue: '',
       ) as String);
+
   @override
   set price(String? _price) => super.noSuchMethod(
         Invocation.setter(
@@ -2867,11 +2664,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get creator => (super.noSuchMethod(
         Invocation.getter(#creator),
         returnValue: '',
       ) as String);
+
   @override
   set creator(String? _creator) => super.noSuchMethod(
         Invocation.setter(
@@ -2880,11 +2679,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get owner => (super.noSuchMethod(
         Invocation.getter(#owner),
         returnValue: '',
       ) as String);
+
   @override
   set owner(String? _owner) => super.noSuchMethod(
         Invocation.setter(
@@ -2893,11 +2694,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   int get amountMinted => (super.noSuchMethod(
         Invocation.getter(#amountMinted),
         returnValue: 0,
       ) as int);
+
   @override
   set amountMinted(int? _amountMinted) => super.noSuchMethod(
         Invocation.setter(
@@ -2906,11 +2709,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   int get quantity => (super.noSuchMethod(
         Invocation.getter(#quantity),
         returnValue: 0,
       ) as int);
+
   @override
   set quantity(int? _quantity) => super.noSuchMethod(
         Invocation.setter(
@@ -2919,11 +2724,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get tradePercentage => (super.noSuchMethod(
         Invocation.getter(#tradePercentage),
         returnValue: '',
       ) as String);
+
   @override
   set tradePercentage(String? _tradePercentage) => super.noSuchMethod(
         Invocation.setter(
@@ -2932,11 +2739,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get cookbookID => (super.noSuchMethod(
         Invocation.getter(#cookbookID),
         returnValue: '',
       ) as String);
+
   @override
   set cookbookID(String? _cookbookID) => super.noSuchMethod(
         Invocation.setter(
@@ -2945,11 +2754,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get recipeID => (super.noSuchMethod(
         Invocation.getter(#recipeID),
         returnValue: '',
       ) as String);
+
   @override
   set recipeID(String? _recipeID) => super.noSuchMethod(
         Invocation.setter(
@@ -2958,11 +2769,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get itemID => (super.noSuchMethod(
         Invocation.getter(#itemID),
         returnValue: '',
       ) as String);
+
   @override
   set itemID(String? _itemID) => super.noSuchMethod(
         Invocation.setter(
@@ -2971,11 +2784,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get width => (super.noSuchMethod(
         Invocation.getter(#width),
         returnValue: '',
       ) as String);
+
   @override
   set width(String? _width) => super.noSuchMethod(
         Invocation.setter(
@@ -2984,11 +2799,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get height => (super.noSuchMethod(
         Invocation.getter(#height),
         returnValue: '',
       ) as String);
+
   @override
   set height(String? _height) => super.noSuchMethod(
         Invocation.setter(
@@ -2997,11 +2814,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get appType => (super.noSuchMethod(
         Invocation.getter(#appType),
         returnValue: '',
       ) as String);
+
   @override
   set appType(String? _appType) => super.noSuchMethod(
         Invocation.setter(
@@ -3010,11 +2829,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get tradeID => (super.noSuchMethod(
         Invocation.getter(#tradeID),
         returnValue: '',
       ) as String);
+
   @override
   set tradeID(String? _tradeID) => super.noSuchMethod(
         Invocation.setter(
@@ -3023,11 +2844,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get ownerAddress => (super.noSuchMethod(
         Invocation.getter(#ownerAddress),
         returnValue: '',
       ) as String);
+
   @override
   set ownerAddress(String? _ownerAddress) => super.noSuchMethod(
         Invocation.setter(
@@ -3036,11 +2859,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   _i34.IBCCoins get ibcCoins => (super.noSuchMethod(
         Invocation.getter(#ibcCoins),
         returnValue: _i34.IBCCoins.urun,
       ) as _i34.IBCCoins);
+
   @override
   set ibcCoins(_i34.IBCCoins? _ibcCoins) => super.noSuchMethod(
         Invocation.setter(
@@ -3049,11 +2874,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   _i35.NftType get type => (super.noSuchMethod(
         Invocation.getter(#type),
         returnValue: _i35.NftType.TYPE_RECIPE,
       ) as _i35.NftType);
+
   @override
   set type(_i35.NftType? _type) => super.noSuchMethod(
         Invocation.setter(
@@ -3062,11 +2889,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   _i35.AssetType get assetType => (super.noSuchMethod(
         Invocation.getter(#assetType),
         returnValue: _i35.AssetType.Audio,
       ) as _i35.AssetType);
+
   @override
   set assetType(_i35.AssetType? _assetType) => super.noSuchMethod(
         Invocation.setter(
@@ -3075,11 +2904,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get duration => (super.noSuchMethod(
         Invocation.getter(#duration),
         returnValue: '',
       ) as String);
+
   @override
   set duration(String? _duration) => super.noSuchMethod(
         Invocation.setter(
@@ -3088,11 +2919,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get fileSize => (super.noSuchMethod(
         Invocation.getter(#fileSize),
         returnValue: '',
       ) as String);
+
   @override
   set fileSize(String? _fileSize) => super.noSuchMethod(
         Invocation.setter(
@@ -3101,11 +2934,28 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
+  @override
+  String get fileExtension => (super.noSuchMethod(
+        Invocation.getter(#fileExtension),
+        returnValue: '',
+      ) as String);
+
+  @override
+  set fileExtension(String? _fileExtension) => super.noSuchMethod(
+        Invocation.setter(
+          #fileExtension,
+          _fileExtension,
+        ),
+        returnValueForMissingStub: null,
+      );
+
   @override
   String get hashtags => (super.noSuchMethod(
         Invocation.getter(#hashtags),
         returnValue: '',
       ) as String);
+
   @override
   set hashtags(String? _hashtags) => super.noSuchMethod(
         Invocation.setter(
@@ -3114,11 +2964,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get cid => (super.noSuchMethod(
         Invocation.getter(#cid),
         returnValue: '',
       ) as String);
+
   @override
   set cid(String? _cid) => super.noSuchMethod(
         Invocation.setter(
@@ -3127,11 +2979,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   String get createdAt => (super.noSuchMethod(
         Invocation.getter(#createdAt),
         returnValue: '',
       ) as String);
+
   @override
   set createdAt(String? _createdAt) => super.noSuchMethod(
         Invocation.setter(
@@ -3140,11 +2994,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   bool get realWorld => (super.noSuchMethod(
         Invocation.getter(#realWorld),
         returnValue: false,
       ) as bool);
+
   @override
   set realWorld(bool? _realWorld) => super.noSuchMethod(
         Invocation.setter(
@@ -3153,11 +3009,13 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   List<Object?> get props => (super.noSuchMethod(
         Invocation.getter(#props),
         returnValue: <Object?>[],
       ) as List<Object?>);
+
   @override
   _i8.Future<String> getOwnerAddress() => (super.noSuchMethod(
         Invocation.method(

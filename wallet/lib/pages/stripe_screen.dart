@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
@@ -11,7 +11,6 @@ import 'package:pylons_wallet/services/third_party_services/stripe_handler.dart'
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/svg_util.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../generated/locale_keys.g.dart';
 
@@ -26,15 +25,12 @@ class StripeScreen extends StatefulWidget {
 }
 
 class _StripeScreenState extends State<StripeScreen> {
-  late WebViewController _controller;
+  late InAppWebViewController _controller;
   final baseEnv = GetIt.I.get<BaseEnv>();
 
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) {
-      WebView.platform = SurfaceAndroidWebView();
-    }
   }
 
   Future backHistory(BuildContext context) async {
@@ -43,7 +39,6 @@ class _StripeScreenState extends State<StripeScreen> {
       _controller.goBack();
       return;
     }
-
     widget.onBack();
   }
 
@@ -51,20 +46,11 @@ class _StripeScreenState extends State<StripeScreen> {
     final loading = Loading()..showLoading();
     final account_response = await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
     loading.dismiss();
-    account_response.fold((fail) => {fail.message.show()}, (accountlink) => {_controller.loadUrl(accountlink)});
+    account_response.fold((fail) => {fail.message.show()}, (accountlink) {
+      _controller.loadUrl(urlRequest: URLRequest(url: Uri.parse(accountlink)));
+    });
 
     return true;
-  }
-
-  JavascriptChannel _extractDataJSChannel(BuildContext context) {
-    return JavascriptChannel(
-      name: 'Flutter',
-      onMessageReceived: (JavascriptMessage message) {},
-    );
-  }
-
-  void hideSignout() {
-    _controller.runJavascript(kStripeSignoutJS);
   }
 
   @override
@@ -72,7 +58,7 @@ class _StripeScreenState extends State<StripeScreen> {
     return WillPopScope(
       onWillPop: () async {
         backHistory(context);
-        return true;
+        return false;
       },
       child: SafeArea(
         child: Scaffold(
@@ -84,42 +70,45 @@ class _StripeScreenState extends State<StripeScreen> {
               right: 0,
               top: 40.h,
               bottom: 0,
-              child: WebView(
-                initialUrl: widget.url,
-                javascriptMode: JavascriptMode.unrestricted,
-                debuggingEnabled: true,
-                //userAgent: 'Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/43.0.2357.65 Mobile Safari/537.36',
-                onWebViewCreated: (WebViewController webViewController) {
+              child: InAppWebView(
+                initialUrlRequest: URLRequest(url: Uri.parse(widget.url)),
+                onWebViewCreated: (InAppWebViewController webViewController) {
                   _controller = webViewController;
                 },
-                javascriptChannels: {
-                  _extractDataJSChannel(context),
-                  JavascriptChannel(name: 'Print', onMessageReceived: (JavascriptMessage message) {}),
-                },
-                navigationDelegate: (NavigationRequest request) {
-                  if (request.url.contains(baseEnv.baseStripeCallbackUrl)) {
-                    getAccountLinkAndRedirect();
-                    return NavigationDecision.prevent;
-                  }
-                  if (request.url.contains(baseEnv.baseStripeCallbackRefreshUrl)) {
-                    getAccountLinkAndRedirect();
-                    return NavigationDecision.prevent;
+                shouldOverrideUrlLoading: (controller, navigationAction) async {
+                  final uri = navigationAction.request.url;
+                  if (uri == null) {
+                    return NavigationActionPolicy.ALLOW;
                   }
 
-                  if (request.url.startsWith("blob:")) {
+                  final String urlInString = uri.toString();
+                  if (urlInString.contains(baseEnv.baseStripeCallbackUrl)) {
+                    getAccountLinkAndRedirect();
+                    return NavigationActionPolicy.CANCEL;
+                  }
+                  if (urlInString.contains(baseEnv.baseStripeCallbackRefreshUrl)) {
+                    getAccountLinkAndRedirect();
+                    return NavigationActionPolicy.CANCEL;
+                  }
+
+                  if (urlInString.startsWith("blob:")) {
                     ScaffoldMessenger.of(context)
                       ..hideCurrentSnackBar()
                       ..showSnackBar(SnackBar(
                         content: Text(LocaleKeys.blob_type_not_supported.tr()),
                       ));
-                    return NavigationDecision.prevent;
+                    return NavigationActionPolicy.CANCEL;
                   }
-                  return NavigationDecision.navigate;
+                  return NavigationActionPolicy.ALLOW;
                 },
-
-                onPageStarted: (String url) {},
-                onPageFinished: (String url) {},
-                gestureNavigationEnabled: true,
+                androidOnPermissionRequest:
+                    (InAppWebViewController controller, String origin, List<String> resources) async {
+                  return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
+                },
+                initialOptions: InAppWebViewGroupOptions(
+                    crossPlatform: InAppWebViewOptions(
+                  useShouldOverrideUrlLoading: true,
+                )),
               ),
             ),
             Positioned(
@@ -128,7 +117,6 @@ class _StripeScreenState extends State<StripeScreen> {
               height: 40.h,
               child: InkWell(
                   onTap: () async {
-                    Navigator.of(context).pop();
                     await backHistory(context);
                   },
                   child: Icon(
@@ -161,7 +149,7 @@ class _StripeScreenState extends State<StripeScreen> {
     final account_response = await GetIt.I.get<StripeHandler>().handleStripeAccountLink();
     loading.dismiss();
     account_response.fold((fail) => {fail.message.show()}, (accountlink) {
-      _controller.loadUrl(accountlink);
+      _controller.loadUrl(urlRequest: URLRequest(url: Uri.parse(accountlink)));
     });
   }
 }
