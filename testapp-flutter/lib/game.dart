@@ -32,6 +32,7 @@ class _GameState extends State<Game> {
   }
 
   Future<void> _bootstrap() async {
+    await PylonsWallet.verifyOrInstall();
     await Cookbook.load("appTestCookbook");
     await _checkRemoteState();
     if (_noValidCharacter()) {
@@ -58,7 +59,7 @@ class _GameState extends State<Game> {
                 Text(flavorText, style: const TextStyle(fontSize: 18)),
                 const Divider(),
                 showTopLevelMenu ? _TopLevelMenu(this) : Container(),
-              ]) : Container()),
+              ]) : const Text("Please wait...")),
     );
   }
 
