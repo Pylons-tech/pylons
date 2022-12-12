@@ -17,7 +17,6 @@ func CreateUpgradeHandler(
 	staking *stakingkeeper.Keeper,
 ) upgradetypes.UpgradeHandler {
 	return func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-
 		return mm.RunMigrations(ctx, configurator, fromVM)
 	}
 }
