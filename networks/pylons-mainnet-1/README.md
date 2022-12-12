@@ -24,7 +24,9 @@ commit: 2bc3b684587d4acc9e2384cbbea2bc54eb699dc9
 
 **Seed nodes**
 
-N/A
+```
+20e1000e88125698264454a884812746c2eb4807@seeds.lavenderfive.com:19456
+```
 
 **Persistent Peers**
 
