@@ -36,6 +36,16 @@ abstract class PylonsWallet {
     return _instance!;
   }
 
+  /// Make sure the Pylons app is installed on the device and can be reached.
+  /// If it can't be, installs the Pylons app.
+  static Future<void> verifyOrInstall () async {
+    await PylonsWallet.instance.exists().then((exists) async {
+      if (!exists) {
+        await PylonsWallet.instance.goToInstall();
+      }
+    });
+  }
+
   /// Initializes the wallet model.
   ///
   /// [mode] identifies which chain will be used - [PylonsMode.prod] will run on mainnet; [PylonsMode.dev] will run on testnet.

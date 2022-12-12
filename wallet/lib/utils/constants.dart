@@ -466,3 +466,5 @@ const String kShareNftButtonExpandedKey = "share_nft_expanded";
 
 const String kGetFirebaseAppCheckTokenMethodChannelKey = "getFirebaseAppCheckTokenMethodChannel";
 const String kGetFirebaseAppCheckDebugTokenKey = "getFirebaseAppCheckDebugToken";
+
+const kFileExtension = "file_extension";
