@@ -3,24 +3,24 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pylons_sdk/src/core/constants/strings.dart';
 import 'package:pylons_sdk/src/features/ipc/handlers/get_recipe_handler.dart';
-import 'package:pylons_sdk/src/features/ipc/responseCompleters.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:pylons_sdk/src/generated/pylons/recipe.pb.dart';
+import 'package:pylons_sdk/src/pylons_wallet/response_fetcher/response_fetch.dart';
 
 import '../../../../mocks/mock_constants.dart';
 
 void main() {
   test('should complete the get  recipe future', () {
-    initResponseCompleter(Strings.GET_RECIPE);
+    final completer = getResponseFetch().initResponseCompleter(Strings.GET_RECIPE);
     var sdkResponse = SDKIPCResponse(
         success: false, error: '', data: '', errorCode: '', action: '');
     var handler = GetRecipeHandler();
     handler.handler(sdkResponse);
-    expect(true, responseCompleters[Strings.GET_RECIPE]!.isCompleted);
+    expect(true, completer.isCompleted);
   });
 
   test('should complete the get  recipe future with data ', () async {
-    initResponseCompleter(Strings.GET_RECIPE);
+    final completer = getResponseFetch().initResponseCompleter(Strings.GET_RECIPE);
     var sdkResponse = SDKIPCResponse(
         success: true,
         error: '',
@@ -31,17 +31,17 @@ void main() {
 
     Future.delayed(Duration(seconds: 1), () {
       handler.handler(sdkResponse);
-      expect(true, responseCompleters[Strings.GET_RECIPE]!.isCompleted);
+      expect(true, completer.isCompleted);
     });
 
-    var response = await responseCompleters[Strings.GET_RECIPE]!.future;
+    var response = await completer.future;
 
     expect(true, response.success);
     expect(true, response.data is Recipe);
   });
 
   test('should complete the get  recipe future with error ', () async {
-    initResponseCompleter(Strings.GET_RECIPE);
+    final completer = getResponseFetch().initResponseCompleter(Strings.GET_RECIPE);
     var sdkResponse = SDKIPCResponse(
         success: true,
         error: '',
@@ -52,10 +52,10 @@ void main() {
 
     Future.delayed(Duration(seconds: 1), () {
       handler.handler(sdkResponse);
-      expect(true, responseCompleters[Strings.GET_RECIPE]!.isCompleted);
+      expect(true, completer.isCompleted);
     });
 
-    var response = await responseCompleters[Strings.GET_RECIPE]!.future;
+    var response = await completer.future;
     expect(false, response.success);
     expect(Strings.ERR_MALFORMED_RECIPE, response.errorCode);
   });
