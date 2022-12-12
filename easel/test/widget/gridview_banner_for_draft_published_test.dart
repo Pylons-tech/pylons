@@ -1,3 +1,4 @@
+import 'package:easel_flutter/generated/locale_keys.g.dart';
 import 'package:easel_flutter/main.dart';
 import 'package:easel_flutter/repository/repository.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_screen.dart';
@@ -36,9 +37,16 @@ void main() {
                     nftsList: [MOCK_PRICED_NFT],
                     onEmptyList: (BuildContext context) {
                       return Text(
-                        "no_nft_created".tr(),
-                        style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
+                        LocaleKeys.no_nft_created.tr(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: EaselAppTheme.kLightGrey,
+                          fontSize: isTablet ? 12.sp : 15.sp,
+                        ),
                       );
+                    },
+                    calculateBannerPrice: ({required String currency, required String price}) {
+                      return price;
                     },
                   );
                 },
@@ -53,7 +61,7 @@ void main() {
 
       testWidgets(
         "Testing Bottom Sheet Options For Published NFT",
-            (tester) async {
+        (tester) async {
           await tester.setScreenSize();
           await tester.testAppForWidgetTesting(
             Scaffold(
@@ -72,7 +80,7 @@ void main() {
           final gridViewTile = find.byKey(const Key(kGridViewTileMoreOptionKey));
           final publishBottomSheetText = find.text(kPublishTextKey);
           await tester.ensureVisible(gridViewTile);
-          expect(publishBottomSheetText,findsNothing);
+          expect(publishBottomSheetText, findsNothing);
           await tester.tap(gridViewTile);
           await tester.pump();
           expect(publishBottomSheetText, findsOneWidget);

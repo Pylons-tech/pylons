@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/pages/home/message_screen/message_tile.dart';
-import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 

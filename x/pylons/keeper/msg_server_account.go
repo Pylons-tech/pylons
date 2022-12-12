@@ -32,7 +32,7 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 		defer telemetry.IncrCounter(1, "new", "account")
 	}
 
-	username := types.Username{Value: msg.Username}
+	username := types.Username{Value: ""}
 	accountAddr := types.AccountAddr{Value: msg.Creator}
 
 	found := k.HasUsername(ctx, username) || k.HasAccountAddr(ctx, accountAddr)
@@ -43,7 +43,7 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 	if len(msg.ReferralAddress) > 0 {
 		referralAddr := types.AccountAddr{Value: msg.ReferralAddress}
 		if k.HasAccountAddr(ctx, referralAddr) {
-			k.SetPylonsReferral(ctx, msg.Creator, msg.Username, msg.ReferralAddress)
+			k.SetPylonsReferral(ctx, msg.Creator, "", msg.ReferralAddress)
 		} else {
 			return nil, types.ErrReferralUserNotFound
 		}
@@ -52,13 +52,43 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 	k.SetPylonsAccount(ctx, accountAddr, username)
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateAccount{
-		Address:  msg.Creator,
-		Username: msg.Username,
+		Address: msg.Creator,
 	})
 
 	telemetry.IncrCounter(1, "account", "create")
 
 	return &types.MsgCreateAccountResponse{}, err
+}
+
+func (k msgServer) SetUsername(goCtx context.Context, msg *types.MsgSetUsername) (*types.MsgSetUsernameResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	addr, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unable to derive address from bech32 string")
+	}
+	acc := k.accountKeeper.GetAccount(ctx, addr)
+	if acc == nil {
+		return nil, types.ErrAccountNotFound
+	}
+
+	username := types.Username{Value: msg.Username}
+	accountAddr := types.AccountAddr{Value: msg.Creator}
+
+	found := k.HasAccountAddr(ctx, accountAddr)
+	if !found {
+		return nil, types.ErrAccountNotFound
+	}
+	found = k.HasUsername(ctx, username)
+	if found {
+		return nil, types.ErrDuplicateUsername
+	}
+
+	k.UpdatePylonsAccount(ctx, accountAddr, username)
+
+	telemetry.IncrCounter(1, "account", "setsername")
+
+	return &types.MsgSetUsernameResponse{}, err
 }
 
 func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAccount) (*types.MsgUpdateAccountResponse, error) {
@@ -81,7 +111,7 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 		return nil, types.ErrDuplicateUsername
 	}
 
-	k.SetPylonsAccount(ctx, accountAddr, username)
+	k.UpdatePylonsAccount(ctx, accountAddr, username)
 
 	// perform payment after update
 	updateFee := k.Keeper.UpdateUsernameFee(ctx)

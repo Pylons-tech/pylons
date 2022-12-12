@@ -18,7 +18,7 @@ import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pyl
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/pay_with_swipe.dart';
-import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
@@ -31,8 +31,18 @@ import 'package:pylons_wallet/utils/route_util.dart';
 
 import '../../../generated/locale_keys.g.dart';
 
-TextStyle _titleTextStyle = TextStyle(color: AppColors.kWhite, fontSize: 19.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700);
-TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontSize: 12.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700);
+TextStyle _titleTextStyle = TextStyle(
+  color: AppColors.kWhite,
+  fontSize: 19.sp,
+  fontFamily: kUniversalFontFamily,
+  fontWeight: FontWeight.w700,
+);
+TextStyle _rowTitleTextStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 12.sp,
+  fontFamily: kUniversalFontFamily,
+  fontWeight: FontWeight.w700,
+);
 
 class PayNowDialog {
   final NFT nft;
@@ -42,7 +52,13 @@ class PayNowDialog {
 
   BuildContext buildContext;
 
-  PayNowDialog({required this.buildContext, required this.nft, required this.purchaseItemViewModel, required this.onPurchaseDone, required this.shouldBuy});
+  PayNowDialog({
+    required this.buildContext,
+    required this.nft,
+    required this.purchaseItemViewModel,
+    required this.onPurchaseDone,
+    required this.shouldBuy,
+  });
 
   void show() {
     showDialog(
@@ -72,7 +88,12 @@ class PayNowWidget extends StatefulWidget {
   final ValueChanged<Execution> onPurchaseDone;
   final bool shouldBuy;
 
-  const PayNowWidget({Key? key, required this.nft, required this.onPurchaseDone, required this.shouldBuy}) : super(key: key);
+  const PayNowWidget({
+    Key? key,
+    required this.nft,
+    required this.onPurchaseDone,
+    required this.shouldBuy,
+  }) : super(key: key);
 
   @override
   State<PayNowWidget> createState() => _PayNowWidgetState();
@@ -101,7 +122,10 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   alignment: Alignment.topRight,
                   child: GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: Padding(padding: EdgeInsets.only(right: isTablet ? 2.w : 5.w, top: 5.h), child: Icon(Icons.close, color: Colors.white, size: 20.h)),
+                    child: Padding(
+                      padding: EdgeInsets.only(right: isTablet ? 2.w : 5.w, top: 5.h),
+                      child: Icon(Icons.close, color: Colors.white, size: 20.h),
+                    ),
                   ),
                 ),
               ),
@@ -157,7 +181,7 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                   height: 30.h,
                 ),
                 buildRow(
-                  subtitle: "\$${widget.nft.ibcCoins.getCoinWithProperDenomination(widget.nft.price)}",
+                  subtitle: "\$${widget.nft.ibcCoins.getCoinValueBasedOnDollar(widget.nft.price)}",
                   title: LocaleKeys.price.tr(),
                 ),
                 SizedBox(
@@ -217,7 +241,12 @@ class _PayNowWidgetState extends State<PayNowWidget> {
             subtitle,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: subtitleTextColor, fontSize: 13.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
+            style: TextStyle(
+              color: subtitleTextColor,
+              fontSize: 13.sp,
+              fontFamily: kUniversalFontFamily,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
       ],
@@ -241,7 +270,11 @@ class _PayNowWidgetState extends State<PayNowWidget> {
                 child: Center(
                   child: Text(
                     title,
-                    style: TextStyle(color: AppColors.kWhite, fontSize: isTablet ? 14.sp : 16.sp, fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      color: AppColors.kWhite,
+                      fontSize: isTablet ? 14.sp : 16.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -334,7 +367,9 @@ class _PayNowWidgetState extends State<PayNowWidget> {
       Navigator.pop(navigatorKey.currentState!.overlay!.context);
       await Stripe.instance.presentPaymentSheet();
 
-      final receipt_response = await repository.GeneratePaymentReceipt(StripeGeneratePaymentReceiptRequest(paymentIntentID: pi.id, clientSecret: pi.clientSecret));
+      final receipt_response = await repository.GeneratePaymentReceipt(
+        StripeGeneratePaymentReceiptRequest(paymentIntentID: pi.id, clientSecret: pi.clientSecret),
+      );
 
       if (receipt_response.isLeft()) {
         throw receipt_response.swap().toOption().toNullable()!;
@@ -422,7 +457,9 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
         await Stripe.instance.presentPaymentSheet();
 
-        final receipt_response = await repository.GeneratePaymentReceipt(StripeGeneratePaymentReceiptRequest(paymentIntentID: pi.id, clientSecret: pi.clientSecret));
+        final receipt_response = await repository.GeneratePaymentReceipt(
+          StripeGeneratePaymentReceiptRequest(paymentIntentID: pi.id, clientSecret: pi.clientSecret),
+        );
 
         final receipt = receipt_response.getOrElse(() => StripeGeneratePaymentReceiptResponse());
 

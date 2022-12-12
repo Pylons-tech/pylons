@@ -126,10 +126,10 @@ class NFTsListTile extends StatelessWidget {
               margin: EdgeInsets.zero,
               child: ClipRRect(
                 child: Banner(
-                  key: const Key(kPriceBannerKey),
+                  key: Key("${publishedNFT.ibcCoins.getCoinWithProperDenomination(publishedNFT.price)} ${publishedNFT.ibcCoins.getAbbrev()}"),
                   color: EaselAppTheme.kDarkGreen,
                   location: BannerLocation.topEnd,
-                  message: "\$ ${publishedNFT.price}",
+                  message: "${publishedNFT.ibcCoins.getCoinWithProperDenomination(publishedNFT.price)} ${publishedNFT.ibcCoins.getAbbrev()}",
                   child: getPublishedCard(context: context),
                 ),
               ),
@@ -148,7 +148,7 @@ class NFTsListTile extends StatelessWidget {
               child: CachedNetworkImage(
                 imageUrl: publishedNFT.assetType.toAssetTypeEnum() == AssetType.Image ? publishedNFT.url.changeDomain() : publishedNFT.thumbnailUrl.changeDomain(),
                 fit: BoxFit.fill,
-                color: Colors.transparent,
+                color: EaselAppTheme.kTransparent,
                 colorBlendMode: BlendMode.clear,
                 placeholder: (context, url) => Shimmer(
                   color: EaselAppTheme.cardBackground,

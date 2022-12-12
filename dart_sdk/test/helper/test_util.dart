@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:pylons_sdk/pylons_sdk.dart';
+import 'package:pylons_sdk/low_level.dart' as ll;
 
 import '../mocks/mockedWallet.dart';
 
@@ -18,21 +18,21 @@ class TestUtil {
     return file.readAsStringSync();
   }
 
-  static Cookbook loadCookbook(String path) {
+  static ll.Cookbook loadCookbook(String path) {
     var json = jsonDecode(loadFile(path));
-    final cb = Cookbook.fromJson(json);
+    final cb = ll.Cookbook.fromJson(json);
     return cb;
   }
 
-  static Recipe loadRecipe(String path) {
+  static ll.Recipe loadRecipe(String path) {
     var json = jsonDecode(loadFile(path));
-    final rcp = Recipe.fromJson(json);
+    final rcp = ll.Recipe.fromJson(json);
     return rcp;
   }
 
-  static Trade loadTrade(String path) {
+  static ll.Trade loadTrade(String path) {
     var json = jsonDecode(loadFile(path));
-    final trade = Trade.fromJson(json);
+    final trade = ll.Trade.fromJson(json);
     return trade;
   }
 }

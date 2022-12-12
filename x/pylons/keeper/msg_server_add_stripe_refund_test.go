@@ -1,8 +1,11 @@
 package keeper_test
 
 import (
+	"encoding/base64"
+
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -15,14 +18,23 @@ func (suite *IntegrationTestSuite) TestAddStripeRefund() {
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
 
+	privKey := ed25519.GenPrivKey()
+
 	addr := types.GenTestBech32List(1)
 	correctAddr := "pylo1xn72u3jxlpqx8tfgmjf0xg970q36xensjngsme"
 	amount := sdk.NewIntFromUint64(10020060)
 	productID := "recipe/Easel_CookBook_auto_cookbook_2022_06_14_114716_442/Easel_Recipe_auto_recipe_2022_06_14_114722_895"
-	signature := "8lZsKTOdMuJSoFn0RCGEUGpPXl4YzLmhJMrEiAd4qZh99S4IIGbvcsXyOcOHdlKi6Yys9NhmkLN4LqSlq8Y1Cw=="
 	purchaseId := "pi_3LFdcNEdpQgutKvr1aspFGXh"
 	incPurchaseId := "pi_3LFgx7EdpQgutKvr1cp5"
-	processorName := "Pylons_Inc"
+	signature := genTestPaymentInfoSignature(purchaseId, correctAddr, productID, amount, privKey)
+	processorName := "TestPayment"
+	types.DefaultPaymentProcessors = append(types.DefaultPaymentProcessors, types.PaymentProcessor{
+		CoinDenom:            "ustripeusd",
+		PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
+		ProcessorPercentage:  types.DefaultProcessorPercentage,
+		ValidatorsPercentage: types.DefaultValidatorsPercentage,
+		Name:                 "TestPayment",
+	})
 	for _, tc := range []struct {
 		desc    string
 		request *types.MsgAddStripeRefund

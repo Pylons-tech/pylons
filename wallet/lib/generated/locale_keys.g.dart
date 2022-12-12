@@ -284,6 +284,7 @@ abstract class  LocaleKeys {
   static const read_more = 'read_more';
   static const pylons_fee_msg = 'pylons_fee_msg';
   static const you = 'you';
+  static const tx_not_found = 'tx_not_found';
   static const recipe_not_found = 'recipe_not_found';
   static const username_not_found = 'username_not_found';
   static const cookbook_not_found = 'cookbook_not_found';
@@ -360,6 +361,9 @@ abstract class  LocaleKeys {
   static const buying_pylon_points = 'buying_pylon_points';
   static const transaction_date = 'transaction_date';
   static const retry = 'retry';
+  static const favorites = 'favorites';
+  static const download_easel = 'download_easel';
+  static const create_easel_free_nft = 'create_easel_free_nft';
   static const resolution = 'resolution';
   static const bought_nft = 'bought_nft';
   static const set_lockscreen = 'set_lockscreen';
@@ -368,5 +372,6 @@ abstract class  LocaleKeys {
   static const ea = 'ea';
   static const maintenance_mode_message = 'maintenance_mode_message';
   static const maintenance_mode_header = 'maintenance_mode_header';
+  static const invalid_mnemonic = 'invalid_mnemonic';
 
 }

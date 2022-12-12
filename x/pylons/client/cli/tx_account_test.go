@@ -97,7 +97,6 @@ func TestCmdCreateAccount(t *testing.T) {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			args := []string{}
-			args = append(args, tc.username)
 			args = append(args, tc.token)
 			args = append(args, tc.referralAddress)
 			args = append(args, tc.common...)
@@ -144,13 +143,11 @@ func TestCmdUpdateAccount(t *testing.T) {
 
 	fundToken(t, net, []string{acc[0].String(), acc[1].String()})
 
-	username := "testUsername"
 	token := ""
 	referralAddress := ""
 	common := util.CommonArgs(acc[0].String(), net)
 
 	args := []string{}
-	args = append(args, username)
 	args = append(args, token)
 	args = append(args, referralAddress)
 	args = append(args, common...)

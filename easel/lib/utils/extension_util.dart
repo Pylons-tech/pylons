@@ -7,8 +7,7 @@ import 'package:easel_flutter/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path/path.dart' as path;
-import 'package:pylons_sdk/pylons_sdk.dart';
-
+import 'package:pylons_sdk/low_level.dart';
 
 extension ScaffoldHelper on BuildContext? {
   void show({required String message}) {
@@ -219,5 +218,48 @@ extension TrimString on String {
       return "${substring(0, 8)}...${substring(length - 4, length)}";
     }
     return this;
+  }
+}
+
+extension GetCoinWithProperDenomination on String {
+  String getCoinWithProperDenomination(String amount) {
+    if (this == kUsdSymbol) {
+      return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
+    } else if (this == kPylonSymbol) {
+      return (double.parse(amount) / kBigIntBase).toStringAsFixed(0);
+    } else {
+      return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
+    }
+  }
+
+   String getEaselInputCoinWithDenomination(String amount) {
+    if (this == kUsdSymbol) {
+      return (double.parse(amount)).toStringAsFixed(2);
+    } else if (this == kPylonSymbol) {
+      return (double.parse(amount)).toStringAsFixed(0);
+    } else {
+      return (double.parse(amount)).toStringAsFixed(2);
+    }
+  }
+}
+
+extension GetAbbrev on String {
+  String getAbbrev() {
+    switch (this) {
+      case kAgoricSymbol:
+        return kAgoricAbr;
+      case kPylonSymbol:
+        return kPYLNAbbrevation;
+      case kUsdSymbol:
+        return kStripeUSDABR;
+      case kEuroSymbol:
+        return kEmoneyAbb;
+      case kAtomSymbol:
+        return kAtomAbr;
+      case kEthereumSymbol:
+        return kEthereumAbr;
+      default:
+        return kPYLNAbbrevation;
+    }
   }
 }

@@ -32,7 +32,7 @@ class LoadingProgress {
               onWillPop: () async => false,
               child: AlertDialog(
                   elevation: 0,
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: EaselAppTheme.kTransparent,
                   content: StreamBuilder<UploadProgress>(
                       stream: easelProvider.uploadProgressStream,
                       builder: (context, uploadProgress) {

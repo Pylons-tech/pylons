@@ -234,7 +234,7 @@ class _DraftListTileState extends State<DraftListTile> {
               child: CachedNetworkImage(
                 imageUrl: getThumbnailUrl(),
                 fit: BoxFit.fill,
-                color: Colors.transparent,
+                color: EaselAppTheme.kTransparent,
                 colorBlendMode: BlendMode.clear,
                 placeholder: (context, _) => getPlaceHolder(),
                 errorWidget: (context, _, __) {

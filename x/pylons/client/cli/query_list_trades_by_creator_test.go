@@ -1,7 +1,6 @@
 package cli_test
 
 import (
-	"strconv"
 	"testing"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -23,7 +22,6 @@ func createAccountInKeyring(ctx client.Context, t *testing.T, net *network.Netwo
 	for i := 0; i < n; i++ {
 		common := util.CommonArgs(acc[0].String(), net)
 		args := []string{}
-		args = append(args, "testUsername"+strconv.Itoa(i))
 		args = append(args, "")
 		args = append(args, "")
 		args = append(args, common...)

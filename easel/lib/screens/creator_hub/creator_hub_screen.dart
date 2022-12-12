@@ -11,6 +11,7 @@ import 'package:easel_flutter/screens/creator_hub/widgets/nfts_list_tile.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/dependency_injection/dependency_injection_container.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
+import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:easel_flutter/utils/route_util.dart';
 import 'package:easel_flutter/widgets/clipped_button.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -96,7 +97,12 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
     color: EaselAppTheme.kWhite,
     fontFamily: kUniversalFontFamily,
   );
-  TextStyle subTextStyle = TextStyle(color: EaselAppTheme.kWhite, fontWeight: FontWeight.w700, fontFamily: kUniversalFontFamily, fontSize: isTablet ? 9.sp : 11.sp);
+  TextStyle subTextStyle = TextStyle(
+    color: EaselAppTheme.kWhite,
+    fontWeight: FontWeight.w700,
+    fontFamily: kUniversalFontFamily,
+    fontSize: isTablet ? 9.sp : 11.sp,
+  );
 
   EaselProvider get easelProvider => sl();
 
@@ -143,6 +149,7 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
+                  height: 40.h,
                   alignment: Alignment.centerRight,
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: Row(
@@ -172,7 +179,10 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                       children: [
                         TextSpan(
                           text: LocaleKeys.hello.tr(),
-                          style: titleStyle.copyWith(color: EaselAppTheme.kTextGrey, fontSize: isTablet ? 16.sp : 18.sp),
+                          style: titleStyle.copyWith(
+                            color: EaselAppTheme.kTextGrey,
+                            fontSize: isTablet ? 16.sp : 18.sp,
+                          ),
                         ),
                         TextSpan(
                           text: easelProvider.currentUsername,
@@ -197,19 +207,37 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Row(
                     children: [
-                      buildOutlinedBox(title: LocaleKeys.draft.tr(), viewModel: viewModel, collectionType: CollectionType.draft),
+                      buildOutlinedBox(
+                        title: LocaleKeys.draft.tr(),
+                        viewModel: viewModel,
+                        collectionType: CollectionType.draft,
+                      ),
                       SizedBox(width: 14.w),
-                      buildOutlinedBox(title: LocaleKeys.published.tr(), viewModel: viewModel, collectionType: CollectionType.published),
+                      buildOutlinedBox(
+                        title: LocaleKeys.published.tr(),
+                        viewModel: viewModel,
+                        collectionType: CollectionType.published,
+                      ),
                       const Expanded(child: SizedBox()),
                       SizedBox(width: 16.w),
                       InkWell(
                         onTap: () => viewModel.updateViewType(ViewType.viewGrid),
-                        child: SvgPicture.asset(SVGUtils.kGridIcon, height: 15.h, color: viewModel.viewType == ViewType.viewGrid ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon),
+                        child: SvgPicture.asset(
+                          SVGUtils.kGridIcon,
+                          height: 15.h,
+                          color:
+                              viewModel.viewType == ViewType.viewGrid ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon,
+                        ),
                       ),
                       SizedBox(width: 14.w),
                       InkWell(
                         onTap: () => viewModel.updateViewType(ViewType.viewList),
-                        child: SvgPicture.asset(SVGUtils.kListIcon, height: 15.h, color: viewModel.viewType == ViewType.viewList ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon),
+                        child: SvgPicture.asset(
+                          SVGUtils.kListIcon,
+                          height: 15.h,
+                          color:
+                              viewModel.viewType == ViewType.viewList ? EaselAppTheme.kBlack : EaselAppTheme.kGreyIcon,
+                        ),
                       ),
                     ],
                   ),
@@ -224,6 +252,9 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                                 child: getEmptyDraftListWidget(),
                               ),
+                              calculateBannerPrice: ({required String price, required String currency}) {
+                                return "${currency.getEaselInputCoinWithDenomination(price)} ${currency.getAbbrev()}";
+                              },
                             ),
                         onPublishedList: (context) => BuildGridView(
                               nftsList: viewModel.nftPublishedList,
@@ -231,6 +262,9 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
                                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                                 child: getEmptyPublishedWidget(),
                               ),
+                              calculateBannerPrice: ({required String price, required String currency}) {
+                                return "${currency.getCoinWithProperDenomination(price)} ${currency.getAbbrev()}";
+                              },
                             ),
                         collectionType: viewModel.selectedCollectionType),
                     onListSelected: (context) => BuildNFTsContent(
@@ -261,14 +295,22 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
   Widget getEmptyWidgetForSale() {
     return Text(
       LocaleKeys.no_for_sale_nft.tr(),
-      style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
+      style: TextStyle(
+        fontWeight: FontWeight.w700,
+        color: EaselAppTheme.kLightGrey,
+        fontSize: isTablet ? 12.sp : 15.sp,
+      ),
     );
   }
 
   Widget getEmptyPublishedWidget() {
     return Text(
       LocaleKeys.no_published_nft.tr(),
-      style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
+      style: TextStyle(
+        fontWeight: FontWeight.w700,
+        color: EaselAppTheme.kLightGrey,
+        fontSize: isTablet ? 12.sp : 15.sp,
+      ),
     );
   }
 
@@ -279,7 +321,11 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
       children: [
         Text(
           LocaleKeys.no_nft_created.tr(),
-          style: TextStyle(fontWeight: FontWeight.w700, color: EaselAppTheme.kLightGrey, fontSize: isTablet ? 12.sp : 15.sp),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            color: EaselAppTheme.kLightGrey,
+            fontSize: isTablet ? 12.sp : 15.sp,
+          ),
         ),
         Padding(
           padding: EdgeInsets.only(bottom: 20.h),
@@ -300,7 +346,11 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
     );
   }
 
-  Widget buildOutlinedBox({required String title, required CreatorHubViewModel viewModel, required CollectionType collectionType}) {
+  Widget buildOutlinedBox({
+    required String title,
+    required CreatorHubViewModel viewModel,
+    required CollectionType collectionType,
+  }) {
     return Expanded(
       child: InkWell(
         onTap: () => viewModel.changeSelectedCollection(collectionType),
@@ -311,7 +361,10 @@ class _CreatorHubContentState extends State<CreatorHubContent> {
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 5.h),
             child: Center(
-              child: Text(title, style: subTextStyle.copyWith(color: EaselAppTheme.kBlack, fontWeight: FontWeight.w900)),
+              child: Text(
+                title,
+                style: subTextStyle.copyWith(color: EaselAppTheme.kBlack, fontWeight: FontWeight.w900),
+              ),
             ),
           ),
         ),
@@ -370,8 +423,17 @@ class NFTsViewBuilder extends StatelessWidget {
 class BuildGridView extends StatelessWidget {
   final List<NFT> nftsList;
   final WidgetBuilder onEmptyList;
+  final String Function({
+    required String price,
+    required String currency,
+  }) calculateBannerPrice;
 
-  const BuildGridView({Key? key, required this.nftsList, required this.onEmptyList}) : super(key: key);
+  const BuildGridView({
+    Key? key,
+    required this.nftsList,
+    required this.onEmptyList,
+    required this.calculateBannerPrice,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -394,7 +456,7 @@ class BuildGridView extends StatelessWidget {
                   key: const Key(kPriceBannerKey),
                   color: EaselAppTheme.kDarkGreen,
                   location: BannerLocation.topEnd,
-                  message: "${getCoinWithProperDenomination(nft.ibcCoins, nft.price)}  ${getAbbrev(ibcCoin: nft.ibcCoins)}",
+                  message: calculateBannerPrice(price: nft.price, currency: nft.ibcCoins),
                   child: NftGridViewItem(
                     nft: nft,
                   ),
@@ -405,35 +467,6 @@ class BuildGridView extends StatelessWidget {
               );
       },
     );
-  }
-
-  String getCoinWithProperDenomination(String ibcCoin, String amount) {
-    if (ibcCoin == "weth_wei") {
-      return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
-    } else if (ibcCoin == "upylon") {
-      return (double.parse(amount) / kBigIntBase).toStringAsFixed(0);
-    } else {
-      return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
-    }
-  }
-
-  String getAbbrev({required String ibcCoin}) {
-    switch (ibcCoin) {
-      case "urun":
-        return kAgoricAbr;
-      case "upylon":
-        return kPYLNAbbrevation;
-      case "ustripeusd":
-        return kStripeUSDABR;
-      case "eeur":
-        return kEmoneyAbb;
-      case "uatom":
-        return kAtomAbr;
-      case "weth_wei":
-        return kEthereumAbr;
-      default:
-        return kPYLNAbbrevation;
-    }
   }
 }
 
@@ -455,7 +488,9 @@ class BuildListView extends StatelessWidget {
       itemCount: nftsList.length,
       itemBuilder: (context, index) {
         final nft = nftsList[index];
-        return viewModel.selectedCollectionType == CollectionType.draft ? DraftListTile(nft: nft, viewModel: viewModel) : NFTsListTile(publishedNFT: nft);
+        return viewModel.selectedCollectionType == CollectionType.draft
+            ? DraftListTile(nft: nft, viewModel: viewModel)
+            : NFTsListTile(publishedNFT: nft);
       },
     );
   }
