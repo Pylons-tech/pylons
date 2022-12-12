@@ -91,7 +91,11 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             value: homeProvider,
           ),
           ChangeNotifierProxyProvider3<RecipesProvider, ItemsProvider, CollectionsTabProvider, CollectionViewModel>(
-            create: (BuildContext context) => CollectionViewModel(creations: [], assets: [], collectionsType: CollectionsType.purchases),
+            create: (BuildContext context) => CollectionViewModel(
+              creations: [],
+              assets: [],
+              collectionsType: CollectionsType.purchases,
+            ),
             update: (
               BuildContext context,
               RecipesProvider recipesProvider,
