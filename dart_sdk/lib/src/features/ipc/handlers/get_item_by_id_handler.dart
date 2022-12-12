@@ -2,9 +2,10 @@ import 'dart:convert';
 
 import 'package:pylons_sdk/src/core/constants/strings.dart';
 import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
-import 'package:pylons_sdk/src/features/ipc/responseCompleters.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:pylons_sdk/src/generated/pylons/item.pb.dart';
+
+import '../../../pylons_wallet/response_fetcher/response_fetch.dart';
 
 class GetItemByIdHandler implements IPCHandler {
   @override
@@ -26,6 +27,8 @@ class GetItemByIdHandler implements IPCHandler {
       defaultResponse.errorCode = Strings.ERR_MALFORMED_ITEM;
       defaultResponse.success = false;
     }
-    responseCompleters[Strings.GET_ITEM_BY_ID]!.complete(defaultResponse);
+
+        getResponseFetch().complete(key: Strings.GET_ITEM_BY_ID, sdkipcResponse: defaultResponse);
+
   }
 }
