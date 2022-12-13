@@ -18,6 +18,7 @@ import 'package:pylons_wallet/ipc/handler/handler_factory.dart';
 import 'package:pylons_wallet/ipc/ipc_engine.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
+import 'package:pylons_wallet/pages/presenting_onboard_page/viewmodel/accept_policy_viewmodel.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_localization_view_model.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/general_screen_viewmodel.dart';
@@ -197,7 +198,7 @@ Future<void> init() async {
   /// ViewModels
   sl.registerLazySingleton<WalletsStore>(() => WalletsStoreImp(repository: sl(), crashlyticsHelper: sl(), accountProvider: sl(), remoteNotificationProvider: sl()));
   sl.registerFactory(
-      () => PurchaseItemViewModel(sl(), audioPlayerHelper: sl(), videoPlayerHelper: sl(), repository: sl(), shareHelper: sl(), accountPublicInfo: sl<AccountProvider>().accountPublicInfo!));
+      () => PurchaseItemViewModel(sl(), audioPlayerHelper: sl(), videoPlayerHelper: sl(), repository: sl(), shareHelper: sl(), accountPublicInfo: sl<AccountProvider>().accountPublicInfo));
   sl.registerLazySingleton(() => StripeHandler(walletsStore: sl(), localDataSource: sl(), repository: sl(), accountProvider: sl()));
   sl.registerLazySingleton(() => HomeProvider(repository: sl(), accountPublicInfo: sl<AccountProvider>().accountPublicInfo!));
   sl.registerLazySingleton(() => GeneralScreenViewModel());
@@ -215,6 +216,7 @@ Future<void> init() async {
       ));
   sl.registerLazySingleton(() => UserBannerViewModel());
   sl.registerLazySingleton(() => CollectionsTabProvider());
+  sl.registerLazySingleton(() => AcceptPolicyViewModel(repository: sl()));
 
   /// Configurations
   sl.registerLazySingleton<BaseEnv>(() => remoteConfigService.getBaseEnv());

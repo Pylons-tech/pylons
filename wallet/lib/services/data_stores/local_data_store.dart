@@ -182,6 +182,14 @@ abstract class LocalDataSource {
   /// Input: [id] This method will take id of the transaction record to be removed
   /// Output: [bool] status of the process is successful or not
   Future<bool> deleteTransactionFailureRecord(int id);
+
+  /// This method will save that user accepts Terms of Services & Privacy Policy
+  /// Output: [bool] status of operation is successful or not
+  Future<bool> saveUserAcceptPolicies();
+
+  /// This method will return that user accepts Terms of Services & Privacy Policy or not
+  /// Output: [bool] user already accept policies ot not
+  bool getUserAcceptPolicies();
 }
 
 class LocalDataSourceImp implements LocalDataSource {
@@ -218,6 +226,7 @@ class LocalDataSourceImp implements LocalDataSource {
   static String INITIAL_LINK = 'initial_link';
   static String ENVIRONMENT_NETWORK = 'environment_network';
   static String INVITEE_ADDRESS = 'invitee_address';
+  static String USER_ACCEPT_POLICIES = 'user_accept_policies';
 
   Map cacheContainer = {};
 
@@ -466,5 +475,16 @@ class LocalDataSourceImp implements LocalDataSource {
     } catch (e) {
       throw "save_error".tr();
     }
+  }
+
+  @override
+  bool getUserAcceptPolicies() {
+    return sharedPreferences.getBool(USER_ACCEPT_POLICIES) ?? false;
+  }
+
+  @override
+  Future<bool> saveUserAcceptPolicies() async {
+    await sharedPreferences.setBool(USER_ACCEPT_POLICIES, true);
+    return true;
   }
 }

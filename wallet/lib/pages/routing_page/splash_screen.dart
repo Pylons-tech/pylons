@@ -146,7 +146,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 SizedBox(
                   height: 30.0.h,
                   child: Image.asset(
-                    ImageUtil.PYLONS_LOGO,
+                    ImageUtil.PYLONS_LOGO_DARK,
                   ),
                 ),
                 SizedBox(
