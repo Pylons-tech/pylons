@@ -105,7 +105,7 @@ class _PurchaseVideoProgressWidgetState extends State<PurchaseVideoProgressWidge
                         }),
                     Text(
                       formatDuration(viewModel.videoPlayerController!.value.duration.inSeconds),
-                      style:  TextStyle(color: AppColors.kWhite),
+                      style:  const TextStyle(color: AppColors.kWhite),
                     ),
                   ],
                 ),

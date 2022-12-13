@@ -21,7 +21,7 @@ class AppColors {
   static Color kPeachDark = const Color(0xFFED8864);
   static Color kGray = const Color(0xFF7B7979);
   static Color kLightGray = const Color(0xFFB3B3B3);
-  static Color kWhite = const Color(0xFFFFFFFF);
+  static const Color kWhite = Color(0xFFFFFFFF);
   static Color kYellow = const Color(0xffFED564);
   static Color kDarkPurple = const Color(0xff0A004A);
   static Color kDarkRed = const Color(0xffEF4421);
@@ -38,6 +38,7 @@ class AppColors {
 
   static Color kDarkGrey = const Color(0xFF333333);
   static Color kGreyLight = const Color.fromRGBO(219, 217, 215, 1);
+  static Color kBlack87 = Colors.black87;
   static Color kCreateWalletButtonColorDark = const Color.fromRGBO(8, 8, 48, 1);
   static Color textFieldGreyColor = const Color.fromRGBO(219, 217, 215, 1);
 
@@ -45,11 +46,13 @@ class AppColors {
   static Color kCopyColor = const Color(0xffB6B6E8);
   static Color kDarkDividerColor = const Color(0xffE5E5E5);
   static Color kTradeReceiptTextColor = const Color(0xff8F8FCE);
+  static Color kDarkPurpleColor = const Color(0xff0A004A);
   static Color kHashtagColor = const Color(0xFFB6B6E8);
 
   static Color kUserInputTextColor = const Color(0xff8D8C8C);
   static Color kSettingsUserNameColor = kBlue;
   static Color kForwardIconColor = const Color(0x331212C4);
+  static Color kImageEditIconColor = const Color(0xFF7A7A8F);
   static Color kSwitchActiveColor = kDarkGreen;
   static Color kSwitchInactiveColor = const Color(0xffC4C4C4);
   static Color kBlack = const Color(0xff000000);
@@ -466,5 +469,7 @@ const String kShareNftButtonExpandedKey = "share_nft_expanded";
 
 const String kGetFirebaseAppCheckTokenMethodChannelKey = "getFirebaseAppCheckTokenMethodChannel";
 const String kGetFirebaseAppCheckDebugTokenKey = "getFirebaseAppCheckDebugToken";
+const String drawerIconKey = "drawer_icon_key";
+const String drawerKey = "drawer_key";
 
 const kFileExtension = "file_extension";

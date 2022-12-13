@@ -249,7 +249,6 @@ abstract class  LocaleKeys {
   static const copied_to_clipboard = 'copied_to_clipboard';
   static const no_internet = 'no_internet';
   static const stake_your_digital_claim = 'stake_your_digital_claim';
-  static const bio_text = 'bio_text';
   static const save = 'save';
   static const submit = 'submit';
   static const place_your_recovery_phrase_in_correct_order = 'place_your_recovery_phrase_in_correct_order';
@@ -373,5 +372,17 @@ abstract class  LocaleKeys {
   static const maintenance_mode_message = 'maintenance_mode_message';
   static const maintenance_mode_header = 'maintenance_mode_header';
   static const invalid_mnemonic = 'invalid_mnemonic';
-
+  static const edit_profile = 'edit_profile';
+  static const cash_out = 'cash_out';
+  static const bio_text = 'bio_text';
+  static const verify = 'verify';
+  static const display_name = 'display_name';
+  static const social = 'social';
+  static const facebook = 'facebook';
+  static const instagram = 'instagram';
+  static const tiktok = 'tiktok';
+  static const youtube = 'youtube';
+  static const discord = 'discord';
+  static const twitter = 'twitter';
+  static const connected = 'connected';
 }

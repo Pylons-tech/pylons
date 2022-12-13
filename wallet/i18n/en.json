@@ -246,7 +246,6 @@
   "copied_to_clipboard": "Copied to your clipboard!",
   "no_internet": "No Internet Connection",
   "stake_your_digital_claim": "Stake your digital claim",
-  "bio_text": "Media Artist (3D, Motiongraphics)\nCreating & Collecting NFTs",
   "save": "Save",
   "submit": "Submit",
   "place_your_recovery_phrase_in_correct_order": "Place your recovery phrase in correct order.",
@@ -371,5 +370,18 @@
   "ea": "ea",
   "maintenance_mode_message": "We are experiencing technical issues and have temporarily initiated maintenance mode for troubleshooting. Don't worry, your collection is safe. However, you cannot initiate on-chain transactions until we've resolved the problem and restored normal functionality.",
   "maintenance_mode_header": "Maintenance Mode",
-  "invalid_mnemonic" : "Invalid mnemonic"
+  "invalid_mnemonic": "Invalid mnemonic",
+  "edit_profile": "Edit Profile",
+  "cash_out": "Cash Out",
+  "bio_text": "Product designer at Pylons.",
+  "verify": "Verify",
+  "display_name": "display name",
+  "social": "Social",
+  "facebook": "Facebook",
+  "instagram": "Instagram",
+  "tiktok": "TikTok",
+  "youtube": "Youtube",
+  "discord": "Discord",
+  "twitter": "Twitter",
+  "connected": "Connected"
 }

@@ -2534,6 +2534,37 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, void>>);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>> setUserName({
+    required String? username,
+    required String? address,
+    required _i6.AccountPublicInfo? accountPublicInfo,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #setUserName,
+          [],
+          {
+            #username: username,
+            #address: address,
+            #accountPublicInfo: accountPublicInfo,
+          },
+        ),
+        returnValue:
+            _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>>.value(
+                _FakeEither_0<_i9.Failure, _i31.TransactionResponse>(
+          this,
+          Invocation.method(
+            #setUserName,
+            [],
+            {
+              #username: username,
+              #address: address,
+              #accountPublicInfo: accountPublicInfo,
+            },
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>>);
 }
 
 /// A class which mocks [NFT].
