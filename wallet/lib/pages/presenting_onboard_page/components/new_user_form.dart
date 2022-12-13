@@ -1,5 +1,6 @@
 import 'package:cosmos_utils/mnemonic.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -117,7 +118,11 @@ class NewUserFormState extends State<NewUserForm> {
             activeColor: AppColors.kPurple,
             controlAffinity: ListTileControlAffinity.leading,
           ),
-          VerticalSpace(210.h),
+          if (defaultTargetPlatform==TargetPlatform.macOS) ...[
+            VerticalSpace(10.h)
+          ] else ...[
+            VerticalSpace(210.h),
+          ],
           Align(
             alignment: Alignment.bottomRight,
             child: PylonsGetStartedButton(
