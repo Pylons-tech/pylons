@@ -1,0 +1,1 @@
+export const HOMEPAGE_URL:string="https://www.pylons.tech/"

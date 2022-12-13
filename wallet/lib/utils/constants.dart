@@ -472,3 +472,5 @@ const String kGetFirebaseAppCheckTokenMethodChannelKey = "getFirebaseAppCheckTok
 const String kGetFirebaseAppCheckDebugTokenKey = "getFirebaseAppCheckDebugToken";
 
 const bool shouldShowAcceptPolicyScreen = true;
+
+const kFileExtension = "file_extension";
