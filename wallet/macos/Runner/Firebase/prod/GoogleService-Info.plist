@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>628365338383-dltajlvu599cjo0hrb7a44j710o3hjic.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.628365338383-dltajlvu599cjo0hrb7a44j710o3hjic</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBDhn4G-HWIgqF0O-fL8l-oQvcBIjvmv9E</string>
+	<key>GCM_SENDER_ID</key>
+	<string>628365338383</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>xyz.pylons.wallet</string>
+	<key>PROJECT_ID</key>
+	<string>pylons-b923c</string>
+	<key>STORAGE_BUCKET</key>
+	<string>pylons-b923c.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:628365338383:ios:cc32f1ef0ec25071d0407a</string>
+	<key>get-task-allow</key>
+    <true></true>
+</dict>
+</plist>
