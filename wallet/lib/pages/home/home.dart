@@ -188,14 +188,15 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 ),
               ),
             ),
+
             Positioned(
-              top: 0.035.sh,
-              left: 0.86.sw,
-              child: GestureDetector(
+              top: 0.04.sh,
+              left: 0.07.sw,
+              child: InkResponse(
+                  key: const Key(drawerIconKey),
                   onTap: () {
-                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_SETTINGS);
+                    _scaffoldKey.currentState!.openDrawer();
                   },
-                  behavior: HitTestBehavior.translucent,
                   child: SvgPicture.asset(
                     SVGUtil.SORT,
                     color: provider.isBannerDark() ? Colors.white : Colors.black,

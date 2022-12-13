@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/generated/locale_keys.g.dart';
+import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/settings/widgets/delete_dialog.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
@@ -41,11 +42,13 @@ class PylonsDrawer extends StatelessWidget {
                 DrawerTile(
                   LocaleKeys.edit_profile.tr(),
                   width: 75,
+                  textAlign: TextAlign.center,
                   onPressed: () {},
                 ),
                 DrawerTile(
                   LocaleKeys.general.tr(),
                   height: 60,
+                  width: isTablet ? 60 : 85,
                   icon: SVGUtil.SETTINGS_GENERAL,
                   onPressed: () {
                     Navigator.of(context).pushNamed(RouteUtil.ROUTE_GENERAL);
@@ -54,18 +57,21 @@ class PylonsDrawer extends StatelessWidget {
                 DrawerTile(
                   LocaleKeys.cash_out.tr(),
                   height: 60,
+                  width: isTablet ? 60 : 85,
                   icon: SVGUtil.DRAWER_CASH_OUT,
                   onPressed: () {},
                 ),
                 DrawerTile(
                   LocaleKeys.history.tr(),
                   height: 60,
+                  width: isTablet ? 60 : 85,
                   icon: SVGUtil.DRAWER_HISTORY,
                   onPressed: () {},
                 ),
                 DrawerTile(
                   LocaleKeys.recovery.tr(),
                   height: 60,
+                  width: isTablet ? 60 : 85,
                   icon: SVGUtil.SETTINGS_RECOVERY,
                   onPressed: () {
                     Navigator.of(context).pushNamed(RouteUtil.ROUTE_RECOVERY);
@@ -74,6 +80,8 @@ class PylonsDrawer extends StatelessWidget {
                 DrawerTile(
                   LocaleKeys.legal.tr(),
                   height: 60,
+                  width: isTablet ? 60 : 85,
+
                   icon: SVGUtil.SETTINGS_LEGAL,
                   onPressed: () {
                     Navigator.of(context).pushNamed(RouteUtil.ROUTE_LEGAL);
@@ -83,7 +91,7 @@ class PylonsDrawer extends StatelessWidget {
                 DrawerTile(
                   LocaleKeys.delete_wallet.tr(),
                   height: 60,
-                  width: 100,
+                  width: isTablet ? 70 : 100,
                   icon: SVGUtil.SETTINGS_DELETE,
                   iconColor: AppColors.kDarkRed,
                   onPressed: () {
@@ -107,6 +115,7 @@ class DrawerTile extends StatelessWidget {
   final double width;
   final String? icon;
   final Color iconColor;
+  final TextAlign textAlign;
 
   const DrawerTile(
     this.title, {
@@ -116,6 +125,7 @@ class DrawerTile extends StatelessWidget {
     this.width = 85,
     this.icon,
     this.iconColor = AppColors.kWhite,
+    this.textAlign = TextAlign.start,
   }) : super(key: key);
 
   @override
@@ -145,6 +155,7 @@ class DrawerTile extends StatelessWidget {
               width: width.w,
               child: Text(
                 title,
+                textAlign: textAlign,
                 style: TextStyle(
                   color: AppColors.kWhite,
                   fontSize: 14.sp,
