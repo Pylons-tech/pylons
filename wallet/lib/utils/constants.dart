@@ -19,7 +19,7 @@ class AppColors {
 
   static Color kPeach = const Color(0xFFFFB094);
   static Color kPeachDark = const Color(0xFFED8864);
-  static Color kGray = const Color(0xFF7B7979);
+  static const Color kGreyColorBtn = Color(0xFF7B7979);
   static Color kLightGray = const Color(0xFFB3B3B3);
   static const Color kWhite = Color(0xFFFFFFFF);
   static Color kYellow = const Color(0xffFED564);
@@ -27,7 +27,7 @@ class AppColors {
   static Color kDarkRed = const Color(0xffEF4421);
   static Color kDarkGreen = const Color(0xFF3A8977);
   static Color kWhite01 = const Color(0xFFFBFBFB);
-  static Color kButtonColor = const Color(0xFFFFFFFF);
+  static const Color kButtonColor = Color(0xFFFFFFFF);
 
   static Color kUSDColor = kDarkGreen;
   static Color kPylonsColor = kDarkRed;
@@ -37,6 +37,7 @@ class AppColors {
   static Color kAtomColor = kDarkPurple;
 
   static Color kDarkGrey = const Color(0xFF333333);
+  static Color kLightGrey = const Color(0xFFDBD9D7);
   static Color kGreyLight = const Color.fromRGBO(219, 217, 215, 1);
   static Color kBlack87 = Colors.black87;
   static Color kCreateWalletButtonColorDark = const Color.fromRGBO(8, 8, 48, 1);
@@ -48,7 +49,7 @@ class AppColors {
   static Color kTradeReceiptTextColor = const Color(0xff8F8FCE);
   static Color kDarkPurpleColor = const Color(0xff0A004A);
   static Color kHashtagColor = const Color(0xFFB6B6E8);
-
+  static Color kCheckboxActiveColor = const Color(0xFFCBC8F3);
   static Color kUserInputTextColor = const Color(0xff8D8C8C);
   static Color kSettingsUserNameColor = kBlue;
   static Color kForwardIconColor = const Color(0x331212C4);
@@ -68,6 +69,7 @@ class AppColors {
   static Color k3DBackgroundColor = Colors.grey.shade200;
   static Color kGreyColor = const Color.fromRGBO(141, 140, 140, 1);
   static Color kTransparentColor = Colors.transparent;
+  static Color kGrey = Colors.grey;
 }
 
 const double kIconSize = 24.0;
@@ -466,10 +468,14 @@ const String kProgressKey = "Progress";
 const String kImageAssetKey = "image_asset_key";
 const String kShareNftButtonCollapsedKey = "share_nft_collapsed";
 const String kShareNftButtonExpandedKey = "share_nft_expanded";
+const String kAcceptPolicyPortionKey = "accept_policy_portion";
+const String kAcceptBottomSheetBtnKey = "accept_bottom_sheet_btn";
 
 const String kGetFirebaseAppCheckTokenMethodChannelKey = "getFirebaseAppCheckTokenMethodChannel";
 const String kGetFirebaseAppCheckDebugTokenKey = "getFirebaseAppCheckDebugToken";
 const String drawerIconKey = "drawer_icon_key";
 const String drawerKey = "drawer_key";
+
+const bool shouldShowAcceptPolicyScreen = true;
 
 const kFileExtension = "file_extension";

@@ -15,6 +15,7 @@ abstract class  LocaleKeys {
   static const network_error_description = 'network_error_description';
   static const what_is_new = 'what_is_new';
   static const trending = 'trending';
+  static const acknowledge_i_agree_to = 'acknowledge_i_agree_to';
   static const price = 'price';
   static const low_to_high = 'low_to_high';
   static const high_to_low = 'high_to_low';

@@ -169,6 +169,7 @@
   "image_picker_misc_err": "Unhandled error. If you see this, report it.",
   "image_picker_error": "Error",
   "acknowledge_username_never_changed": "I understand that once I create my username it can never be changed",
+  "acknowledge_i_agree_to": "I agree to the ",
   "acknowledge_i_agree": "I agree with Pylons ",
   "acknowledge_privacy_policy": "Privacy Policy",
   "acknowledge_terms_service": "Terms of Service",

@@ -20,7 +20,7 @@ class MessageTile extends StatefulWidget {
 class _MessageTileState extends State<MessageTile> {
   @override
   Widget build(BuildContext context) {
-    final TextStyle kMessageTextStyle = TextStyle(fontSize: 13.sp, fontFamily: kUniversalFontFamily, color: AppColors.kGray, fontWeight: FontWeight.w800);
+    final TextStyle kMessageTextStyle = TextStyle(fontSize: 13.sp, fontFamily: kUniversalFontFamily, color: AppColors.kGreyColorBtn, fontWeight: FontWeight.w800);
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 4.h),

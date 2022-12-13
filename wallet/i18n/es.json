@@ -10,6 +10,7 @@
   "recommended": "Recomendada",
   "network_error_description": "Ocurrió un error de red al procesar su transacción. Vuelva a intentar actualizar su cuenta. No se le cobrará dos veces por volver a intentarlo.",
   "following": "Siguiendo",
+  "acknowledge_i_agree_to": "Estoy de acuerdo con la ",
   "select_a_date": "Seleccione una fecha",
   "what_is_new": "Qué hay de nuevo",
   "trending": "Tendencias",
