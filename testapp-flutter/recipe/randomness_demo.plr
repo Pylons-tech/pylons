@@ -1,0 +1,43 @@
+{
+    #boilerplate v0.0.1 true,
+    #id_name RecipeTestAppRandomnessDemo RecipeTestAppRandomnessDemo,
+    "description": "is randomness still broken?",
+    #no_input,
+    "entries": {
+        #no_coin_or_item_modify_output,
+        "itemOutputs": [
+            {
+                "id": "widget",
+                "doubles": [],
+                "longs": [
+                    {
+                        "key": "coins",
+                        "weightRanges": [],
+                        "program": "rand_int(2, 4)"        
+                    },
+                    {
+                        "key": "currentHp",
+                        "weightRanges": [],
+                        "program": "rand_int(2, 4)"
+                    },
+                    {
+                        "key": "maxHp",
+                        "weightRanges": [],
+                        "program": "rand_int(2, 4)"
+                    }
+                ],
+                "strings": [
+                    {
+                        "key": "entityType",
+                        "value": "widget"
+                    }
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+        ]
+    },
+    #solo_output widget
+}

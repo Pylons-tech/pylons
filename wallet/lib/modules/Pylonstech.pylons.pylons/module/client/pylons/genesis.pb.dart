@@ -219,3 +219,4 @@ class GenesisState extends $pb.GeneratedMessage {
   @$pb.TagNumber(16)
   $core.List<$5.RedeemInfo> get redeemInfoList => $_getList(15);
 }
+

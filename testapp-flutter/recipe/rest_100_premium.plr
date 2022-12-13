@@ -1,0 +1,31 @@
+{
+    #boilerplate v0.0.1 true,
+    #id_name RecipeTestAppRest100Premium RecipeTestAppRest100Premium,
+    "description": "Rests, recovers 20HP, spends Pylons",
+    #price upylon 9,
+    "itemInputs": [
+        #character_input_alive
+    ],
+    "entries": {
+        #no_coin_or_item_output,
+        "itemModifyOutputs": [
+            {
+                "id": "character",
+                "itemInputRef": "character",
+                "longs": [
+                    {
+                        "key": "currentHp",
+                        "weightRanges": [],
+                        "program": "maxHp"
+                    }
+                ],
+                "strings": [],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": false
+            }
+        ]
+    },
+    #solo_output character
+}

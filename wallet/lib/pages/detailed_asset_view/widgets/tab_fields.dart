@@ -76,7 +76,7 @@ class _TabFieldState extends State<TabField> {
 
     return {
       LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
-      LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}",
+      LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height} ${widget.nft.fileExtension}",
       LocaleKeys.ipfs_cid.tr(): widget.nft.cid,
     };
   }

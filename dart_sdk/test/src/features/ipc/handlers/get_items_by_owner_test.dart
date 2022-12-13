@@ -4,15 +4,15 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:pylons_sdk/src/core/constants/strings.dart';
 import 'package:pylons_sdk/src/features/ipc/handlers/get_list_items_by_owner_handler.dart';
-import 'package:pylons_sdk/src/features/ipc/responseCompleters.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:pylons_sdk/src/generated/pylons/item.pb.dart';
+import 'package:pylons_sdk/src/pylons_wallet/response_fetcher/response_fetch.dart';
 
 import '../../../../mocks/mock_constants.dart';
 
 void main() {
   test('should complete the get item by owner handler future', () {
-    initResponseCompleter(Strings.GET_ITEMS_BY_OWNER);
+    final completer = getResponseFetch().initResponseCompleter(Strings.GET_ITEMS_BY_OWNER);
     var sdkResponse = SDKIPCResponse(
         success: false,
         error: '',
@@ -21,11 +21,11 @@ void main() {
         action: '');
     var handler = GetListItemsByOwnerHandler();
     handler.handler(sdkResponse);
-    expect(true, responseCompleters[Strings.GET_ITEMS_BY_OWNER]!.isCompleted);
+    expect(true, completer.isCompleted);
   });
 
   test('should complete the get item by owner with data ', () async {
-    initResponseCompleter(Strings.GET_ITEMS_BY_OWNER);
+    final completer = getResponseFetch().initResponseCompleter(Strings.GET_ITEMS_BY_OWNER);
     var sdkResponse = SDKIPCResponse(
         success: true,
         error: '',
@@ -36,10 +36,10 @@ void main() {
 
     Future.delayed(Duration(seconds: 1), () {
       handler.handler(sdkResponse);
-      expect(true, responseCompleters[Strings.GET_ITEMS_BY_OWNER]!.isCompleted);
+      expect(true, completer.isCompleted);
     });
 
-    var response = await responseCompleters[Strings.GET_ITEMS_BY_OWNER]!.future;
+    var response = await completer.future;
 
     expect(true, response.success);
     expect(true, response.data is List<Item>);

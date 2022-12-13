@@ -52,6 +52,7 @@ analyzer:
     depend_on_referenced_packages: ignore
     implementation_imports: ignore
     sort_pub_dependencies: error
+    eol_at_end_of_file: ignore
 
 linter:
   rules:

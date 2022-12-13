@@ -11,9 +11,9 @@ import 'package:pylons_sdk/src/features/ipc/handlers/get_profile_handler.dart';
 import 'package:pylons_sdk/src/features/ipc/handlers/get_recipe_handler.dart';
 import 'package:pylons_sdk/src/features/ipc/handlers/get_recipes_handler.dart';
 import 'package:pylons_sdk/src/features/ipc/handlers/get_trades_handler.dart';
-import 'package:pylons_sdk/src/features/ipc/responseCompleters.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 
+import '../../pylons_wallet/response_fetcher/response_fetch.dart';
 import 'handlers/get_execution_by_recipe_handler.dart';
 
 class IPCHandlerFactory {
@@ -36,14 +36,15 @@ class IPCHandlerFactory {
   /// the completer if no specific handler is set.
   static void getHandler(SDKIPCResponse sdkipcResponse) {
     print(sdkipcResponse);
-    if (!responseCompleters.containsKey(sdkipcResponse.action)) {
+    
+    if (!getResponseFetch().listenerExists(key: sdkipcResponse.action)) {
       throw Exception(
           'Unexpected response for unsent message of type ${sdkipcResponse.action}');
     }
     if (handlers.containsKey(sdkipcResponse.action)) {
       handlers[sdkipcResponse.action]!.handler(sdkipcResponse);
     } else {
-      responseCompleters[sdkipcResponse.action]!.complete(sdkipcResponse);
+      getResponseFetch().complete(key: sdkipcResponse.action, sdkipcResponse: sdkipcResponse);
     }
     return;
   }
