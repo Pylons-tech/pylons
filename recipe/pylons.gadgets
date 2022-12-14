@@ -1,0 +1,100 @@
+#boilerplate 2
+    "cookbookId": "appTestCookbook",
+    "blockInterval": 0,
+    "costPerBlock": {
+        "denom": "upylon",
+        "amount": "1000000"
+    },
+    "version": "%0",
+    "enabled": %1
+#boilerplate_delayed 3
+    "cookbookId": "appTestCookbook",
+    "blockInterval": %2,
+    "costPerBlock": {
+        "denom": "upylon",
+        "amount": "1000000"
+    },
+    "version": "%0",
+    "enabled": %1
+#character_input_alive_check_sword_level_and_token 4
+		{
+			"id": "character",
+            "doubles": [
+            ],
+            "longs": [
+                {
+                    "key": "%2",
+                    "minValue": %3,
+                    "maxValue": 999999999
+                },
+                {
+                    "key": "currentHp",
+                    "minValue": 1,
+                    "maxValue": 999999999
+                },
+                {
+                    "key": "swordLevel",
+                    "minValue": %0,
+                    "maxValue": %1
+                }
+            ],
+            "strings": [
+                {
+                    "key": "entityType",
+                    "value": "character"
+                }
+            ]
+        }
+#character_input_alive_check_sword_level 2
+		{
+			"id": "character",
+            "doubles": [
+            ],
+            "longs": [
+                {
+                    "key": "currentHp",
+                    "minValue": 1,
+                    "maxValue": 999999999
+                },
+				{
+				    "key": "wins",
+                    "minValue": 0,
+                    "maxValue": 999999999
+				},
+                {
+                    "key": "swordLevel",
+                    "minValue": %0,
+                    "maxValue": %1
+                }
+            ],
+            "strings": [
+                {
+                    "key": "entityType",
+                    "value": "character"
+                }
+            ]
+        }
+#character_input_alive 0
+		{
+			"id": "character",
+            "doubles": [
+            ],
+            "longs": [
+                {
+                    "key": "currentHp",
+                    "minValue": 1,
+                    "maxValue": 999999999
+                },
+				{
+				    "key": "coins",
+                    "minValue": 0,
+                    "maxValue": 999999999
+				}
+            ],
+            "strings": [
+                {
+                    "key": "entityType",
+                    "value": "character"
+                }
+            ]
+        }

@@ -1,0 +1,37 @@
+{
+    "cookbook_id": "appTestCookbook",
+    #boilerplate v0.0.2 true,
+    #id_name RecipeTestAppBuySword RecipeTestAppBuySword,
+    "description": "Purchase a sword for coins",
+    #no_coin_input,
+    "itemInputs": [
+        #character_input_alive_check_sword_level_and_token 0 0 coins 50
+    ],
+    "entries": {
+        #no_coin_or_item_output,
+        "itemModifyOutputs": [
+            {
+                "id": "character",
+                "itemInputRef": "character",
+                "longs": [
+                    {
+                        "key": "swordLevel",
+                        "weightRanges": [],
+                        "program": "1"
+                    },
+					{
+                        "key": "coins",
+                        "weightRanges": [],
+                        "program": "coins - 50"
+                    }
+                ],
+                "strings": [],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": false
+            }
+        ]
+    },
+    #solo_output character
+}

@@ -1,0 +1,36 @@
+{
+    #boilerplate v0.0.2 true,
+    #id_name RecipeTestAppUpgradeSword RecipeTestAppUpgradeSword,
+    "description": "Upgrades sword to level 2 for shards",
+    #no_coin_input,
+    "itemInputs": [
+        #character_input_alive_check_sword_level_and_token 1 1 shards 5
+    ],
+    "entries": {
+        #no_coin_or_item_output,
+        "itemModifyOutputs": [
+            {
+                "id": "character",
+                "itemInputRef": "character",
+                "longs": [
+                    {
+                        "key": "swordLevel",
+                        "weightRanges": [],
+                        "program": "2"
+                    },
+					{
+                        "key": "coins",
+                        "weightRanges": [],
+                        "program": "shards - 5"
+                    }
+                ],
+                "strings": [],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": false
+            }
+        ]
+    },
+    #solo_output character
+}
