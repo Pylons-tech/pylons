@@ -88,6 +88,7 @@ dependencies:
     path: pkgs/transaction_signing_gateway
   transparent_image: ^2.0.0
   uni_links: ^0.5.1
+  uni_links_macos:
   url_launcher: ^6.1.5
   uuid: ^3.0.6
   video_player: ^2.4.7

@@ -76,12 +76,14 @@ class IPCEngine {
 
     final initialLink = await getInitialLink();
 
-    final PendingDynamicLinkData? firebaseInitialLink = await FirebaseDynamicLinks.instance.getInitialLink();
+    if (!Platform.isMacOS) {
+      final PendingDynamicLinkData? firebaseInitialLink = await FirebaseDynamicLinks.instance.getInitialLink();
 
-    log('$firebaseInitialLink', name: '[IPCEngine : firebaseIntialLink]');
-    if (firebaseInitialLink != null) {
-      handleLinksBasedOnUri(firebaseInitialLink.link.toString());
-      return;
+      log('$firebaseInitialLink', name: '[IPCEngine : firebaseIntialLink]');
+      if (firebaseInitialLink != null) {
+        handleLinksBasedOnUri(firebaseInitialLink.link.toString());
+        return;
+      }
     }
 
     log('$initialLink', name: '[IPCEngine : handleInitialLink]');
@@ -168,7 +170,8 @@ class IPCEngine {
     walletsStore.setStateUpdatedFlag(flag: true);
   }
 
-  bool isOwnerIsViewing(NFT nullableNFT, AccountPublicInfo currentWallet) => nullableNFT.ownerAddress == currentWallet.publicAddress;
+  bool isOwnerIsViewing(NFT nullableNFT, AccountPublicInfo currentWallet) =>
+      nullableNFT.ownerAddress == currentWallet.publicAddress;
 
   Future<void> _handleNFTTradeLink(String link) async {
     final queryParameters = Uri.parse(link).queryParameters;
@@ -304,7 +307,10 @@ class IPCEngine {
   /// This method is called when the user cancels the transaction
   /// Input: [sdkIPCMessage] the transaction that the user cancels
   Future<void> onUserCancelled(SdkIpcMessage sdkIPCMessage) async {
-    final cancelledResponse = SdkIpcResponse.failure(sender: sdkIPCMessage.sender, error: LocaleKeys.user_declined_request.tr(), errorCode: HandlerFactory.ERR_USER_DECLINED);
+    final cancelledResponse = SdkIpcResponse.failure(
+        sender: sdkIPCMessage.sender,
+        error: LocaleKeys.user_declined_request.tr(),
+        errorCode: HandlerFactory.ERR_USER_DECLINED);
     await checkAndDispatchUniLinkIfNeeded(handlerMessage: cancelledResponse, responseSendingNeeded: true);
   }
 
@@ -313,12 +319,14 @@ class IPCEngine {
   Future<void> onUserApproval(SdkIpcMessage sdkIPCMessage) async {
     final handlerMessage = await GetIt.I.get<HandlerFactory>().getHandler(sdkIPCMessage).handle();
     if (handlerMessage == null) return;
-    await checkAndDispatchUniLinkIfNeeded(handlerMessage: handlerMessage, responseSendingNeeded: sdkIPCMessage.requestResponse);
+    await checkAndDispatchUniLinkIfNeeded(
+        handlerMessage: handlerMessage, responseSendingNeeded: sdkIPCMessage.requestResponse);
   }
 
   bool shouldNotDoBiometric(Either<Failure, bool> biometricResponse) => !biometricResponse.getOrElse(() => false);
 
-  Future<void> checkAndDispatchUniLinkIfNeeded({required SdkIpcResponse handlerMessage, required bool responseSendingNeeded}) async {
+  Future<void> checkAndDispatchUniLinkIfNeeded(
+      {required SdkIpcResponse handlerMessage, required bool responseSendingNeeded}) async {
     if (responseSendingNeeded) {
       await dispatchUniLink(handlerMessage.createMessageLink(isAndroid: Platform.isAndroid));
     }
