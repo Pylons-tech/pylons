@@ -42,7 +42,8 @@ class LatestTransactions extends StatelessWidget {
 
   final String defaultCurrency;
 
-  const LatestTransactions({Key? key, required this.denomSpecificTxList, required this.defaultCurrency}) : super(key: key);
+  const LatestTransactions({Key? key, required this.denomSpecificTxList, required this.defaultCurrency})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,8 @@ class LatestTransactions extends StatelessWidget {
   }
 
   Column getAmountColumn({required TransactionHistory txHistory}) {
-    if (txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTSELL || txHistory.transactionTypeEnum == WalletHistoryTransactionType.RECEIVE) {
+    if (txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTSELL ||
+        txHistory.transactionTypeEnum == WalletHistoryTransactionType.RECEIVE) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -117,6 +119,7 @@ class LatestTransactions extends StatelessWidget {
               Text(
                 txHistory.recipeId.trimString(stringTrimConstantMax),
                 style: _headingTextStyle,
+                maxLines: 1,
               ),
               SizedBox(
                 height: 10.h,
@@ -186,7 +189,8 @@ class LatestTransactions extends StatelessWidget {
     String seller = "";
     String buyer = "";
 
-    if (txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTSELL || txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTBUY) {
+    if (txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTSELL ||
+        txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTBUY) {
       final showLoader = Loading()..showLoading();
 
       if (txHistory.transactionTypeEnum == WalletHistoryTransactionType.NFTSELL) {
@@ -208,9 +212,16 @@ class LatestTransactions extends StatelessWidget {
       }
       final recipe = recipeResult.toOption().toNullable()!;
 
-      final AssetType nftType = recipe.entries.itemOutputs.first.strings.firstWhere((strKeyValue) => strKeyValue.key == kNftFormat, orElse: () => StringParam()).value.toAssetTypeEnum();
-      final String nftUrl = recipe.entries.itemOutputs.first.strings.firstWhere((strKeyValue) => strKeyValue.key == kNFTURL, orElse: () => StringParam()).value;
-      final String thumbnailUrl = recipe.entries.itemOutputs.first.strings.firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl, orElse: () => StringParam()).value;
+      final AssetType nftType = recipe.entries.itemOutputs.first.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kNftFormat, orElse: () => StringParam())
+          .value
+          .toAssetTypeEnum();
+      final String nftUrl = recipe.entries.itemOutputs.first.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kNFTURL, orElse: () => StringParam())
+          .value;
+      final String thumbnailUrl = recipe.entries.itemOutputs.first.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl, orElse: () => StringParam())
+          .value;
 
       Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(
         RouteUtil.ROUTE_TRANSACTION_DETAIL,
@@ -220,7 +231,9 @@ class LatestTransactions extends StatelessWidget {
           seller: seller,
           buyer: buyer,
           txID: txHistory.txID,
-          transactionTime: DateFormat("MMM dd yyyy HH:mm").format(DateTime.fromMillisecondsSinceEpoch(txHistory.createdAt * kDateConverterConstant)),
+          transactionTime: DateFormat("MMM dd yyyy HH:mm").format(
+            DateTime.fromMillisecondsSinceEpoch(txHistory.createdAt * kDateConverterConstant),
+          ),
           currency: (denomAbbr[defaultCurrency])!,
           price: "${defaultCurrency.convertFromU(txHistory)} ${denomAbbr[defaultCurrency]}",
           transactionEnum: txHistory.transactionTypeEnum,
@@ -233,35 +246,34 @@ class LatestTransactions extends StatelessWidget {
   }
 
   Builder buildRow({required TransactionHistory txHistory}) {
-    final DateTime date = DateTime.fromMillisecondsSinceEpoch(txHistory.createdAt * kDateConverterConstant, isUtc: true);
-    return Builder(
-      builder: (context) {
-        return InkWell(
-          onTap: () => onTxTapped(txHistory: txHistory, context: context),
-          child: Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(monthStrMap[date.month]!, style: _subtitleTextStyle),
-                  Text(date.day.toString(), style: _headingTextStyle),
-                ],
-              ),
-              Expanded(child: buildTransactionListTile(txHistory: txHistory)),
-              getAmountColumn(txHistory: txHistory),
-              SizedBox(
-                width: 10.w,
-              ),
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 10.r,
-                color: AppColors.kUnselectedIcon,
-              ),
-            ],
-          ),
-        );
-      }
-    );
+    final DateTime date =
+        DateTime.fromMillisecondsSinceEpoch(txHistory.createdAt * kDateConverterConstant, isUtc: true);
+    return Builder(builder: (context) {
+      return InkWell(
+        onTap: () => onTxTapped(txHistory: txHistory, context: context),
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(monthStrMap[date.month]!, style: _subtitleTextStyle),
+                Text(date.day.toString(), style: _headingTextStyle),
+              ],
+            ),
+            Expanded(child: buildTransactionListTile(txHistory: txHistory)),
+            getAmountColumn(txHistory: txHistory),
+            SizedBox(
+              width: 10.w,
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 10.r,
+              color: AppColors.kUnselectedIcon,
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 

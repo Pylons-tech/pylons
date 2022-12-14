@@ -13,6 +13,7 @@ import (
 	v3 "github.com/Pylons-tech/pylons/app/upgrades/v3"
 	v4 "github.com/Pylons-tech/pylons/app/upgrades/v4"
 	v5 "github.com/Pylons-tech/pylons/app/upgrades/v5"
+	v6 "github.com/Pylons-tech/pylons/app/upgrades/v6"
 
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	"github.com/cosmos/cosmos-sdk/version"
@@ -146,7 +147,7 @@ var (
 	// Bech32PrefixConsPub defines the Bech32 prefix of a consensus node public key.
 	Bech32PrefixConsPub = AccountAddressPrefix + sdk.PrefixValidator + sdk.PrefixConsensus + sdk.PrefixPublic
 	// List upgrades
-	Upgrades = []upgrades.Upgrade{v3.Upgrade, v4.Upgrade, v5.Upgrade}
+	Upgrades = []upgrades.Upgrade{v3.Upgrade, v4.Upgrade, v5.Upgrade, v6.Upgrade}
 )
 
 func init() {
@@ -826,6 +827,12 @@ func (app *PylonsApp) setupUpgradeHandlers() {
 	app.UpgradeKeeper.SetUpgradeHandler(
 		v5.UpgradeName,
 		v5.CreateUpgradeHandler(app.mm, app.configurator, app.BankKeeper, &app.AccountKeeper, &app.StakingKeeper),
+	)
+
+	// v1.1.1 mainnet upgrade handler
+	app.UpgradeKeeper.SetUpgradeHandler(
+		v6.UpgradeName,
+		v6.CreateUpgradeHandler(app.mm, app.configurator, app.BankKeeper, &app.AccountKeeper, &app.StakingKeeper),
 	)
 }
 
