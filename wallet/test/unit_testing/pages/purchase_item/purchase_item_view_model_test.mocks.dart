@@ -2,7 +2,7 @@
 // in pylons_wallet/test/unit_testing/pages/purchase_item/purchase_item_view_model_test.dart.
 // Do not manually edit this file.
 
-// ignore_for_file: no_leading_underscores_for_library_prefixes
+// ignore_for_file: no_leading_underscores_for_library_prefixes, must_be_immutable
 import 'dart:async' as _i8;
 
 import 'package:dartz/dartz.dart' as _i2;

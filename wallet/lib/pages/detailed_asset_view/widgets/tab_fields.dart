@@ -63,7 +63,7 @@ class _TabFieldState extends State<TabField> {
       case NftType.TYPE_RECIPE:
         return {
           LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
-          LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}",
+          LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height} ${widget.nft.fileExtension.toUpperCase()}",
           LocaleKeys.ipfs_cid.tr(): widget.nft.cid,
         };
       case NftType.TYPE_ITEM:
@@ -76,7 +76,7 @@ class _TabFieldState extends State<TabField> {
 
     return {
       LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
-      LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height} ${widget.nft.fileExtension}",
+      LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height} ${widget.nft.fileExtension.toUpperCase()}",
       LocaleKeys.ipfs_cid.tr(): widget.nft.cid,
     };
   }
@@ -126,7 +126,7 @@ class _TabFieldState extends State<TabField> {
                     child: AutoSizeText(
                       widget.name,
                       maxLines: 1,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: AppColors.kWhite,
                         fontWeight: FontWeight.bold,
                       ),
@@ -175,7 +175,7 @@ class _TabFieldState extends State<TabField> {
                   Container(
                     width: 100.w,
                     height: 6.h,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
                           color: AppColors.kWhite,
