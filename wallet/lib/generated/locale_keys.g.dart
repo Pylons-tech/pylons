@@ -373,6 +373,9 @@ abstract class  LocaleKeys {
   static const maintenance_mode_message = 'maintenance_mode_message';
   static const maintenance_mode_header = 'maintenance_mode_header';
   static const invalid_mnemonic = 'invalid_mnemonic';
+  static const claim_now = 'claim_now';
+  static const remaining_and_total_editions = 'remaining_and_total_editions';
+  static const remaining = 'remaining';
   static const edit_profile = 'edit_profile';
   static const cash_out = 'cash_out';
   static const bio_text = 'bio_text';
