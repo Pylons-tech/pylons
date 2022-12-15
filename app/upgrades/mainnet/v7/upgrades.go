@@ -11,6 +11,11 @@ import (
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 )
 
+const (
+	// mainnet master wallet address
+	MasterWallet = "pylo1vnwhaymaazugzz9ln2sznddveyed6shz3x8xwl"
+)
+
 func CreateUpgradeHandler(
 	mm *module.Manager,
 	configurator module.Configurator,
@@ -35,22 +40,37 @@ func CreateUpgradeHandler(
 func BurnToken(ctx sdk.Context, accKeeper *authkeeper.AccountKeeper, bank *bankkeeper.BaseKeeper, staking *stakingkeeper.Keeper) {
 	// only burn bedrock token
 	denom := types.StakingCoinDenom
+	// Get all delegations
+	delegations := staking.GetAllDelegations(ctx)
 	// Get all account balances
 	accs := bank.GetAccountsBalances(ctx)
 	for _, acc := range accs {
+		found := false
 		balance := acc.Coins.AmountOf(denom)
 		// Check if denom token amount GT 0
 		if balance.GT(math.ZeroInt()) {
-			amount := sdk.NewCoin(denom, balance)
-			// Send denom token to module
-			err := bank.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(acc.Address), types.PaymentsProcessorName, sdk.NewCoins(amount))
-			if err != nil {
-				panic(err)
+			for _, delegator := range delegations {
+				// Check if account address is equal to delegator address, if equal do nothing
+				if acc.Address == delegator.DelegatorAddress || acc.Address == MasterWallet {
+					found = true
+					break
+				} else {
+					// If account address address is not equal to delegator address burn token
+					found = false
+				}
 			}
-			// Burn denom token in module
-			err = bank.BurnCoins(ctx, types.PaymentsProcessorName, sdk.NewCoins(amount))
-			if err != nil {
-				panic(err)
+			if !found {
+				amount := sdk.NewCoin(denom, balance)
+				// Send denom token to module
+				err := bank.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(acc.Address), types.PaymentsProcessorName, sdk.NewCoins(amount))
+				if err != nil {
+					panic(err)
+				}
+				// Burn denom token in module
+				err = bank.BurnCoins(ctx, types.PaymentsProcessorName, sdk.NewCoins(amount))
+				if err != nil {
+					panic(err)
+				}
 			}
 		}
 	}
