@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -43,7 +44,7 @@ void main() {
   });
 
   testWidgets('should show the Free Drop NFT Buy Button and make sure user is able to tap', (tester) async {
-    final buyButtonFinder = find.text(LocaleKeys.claim_free_nft.tr());
+    final buyButtonFinder = find.text(LocaleKeys.claim_now.tr());
     var isTapped = false;
 
     await tester.setScreenSize();
@@ -90,11 +91,69 @@ void main() {
     expect(counter, 1);
   });
 
+  testWidgets('should show remaining quantity & total quantity in Free NFT Buy Button ', (tester) async {
+    await tester.setScreenSize();
+    await tester.testAppForWidgetTesting(ChangeNotifierProvider.value(
+      value: viewModel,
+      child: Material(
+        child: BuyNFTButton(
+          key: const Key(MOCK_BUY_BUTTON_KEY_VALUE),
+          onTapped: () {},
+          nft: MOCK_NFT_FREE_IMAGE,
+        ),
+      ),
+    ));
+    final buyButton = find.text(LocaleKeys.remaining_and_total_editions.tr(
+      namedArgs: {
+        'remaining': '${MOCK_NFT_FREE_IMAGE.quantity - MOCK_NFT_FREE_IMAGE.amountMinted}',
+        'total': '${MOCK_NFT_FREE_IMAGE.quantity}',
+      },
+    ));
+    expect(buyButton, findsOneWidget);
+  });
+
+  testWidgets('should show claim now in Free NFT Buy Button ', (tester) async {
+    await tester.setScreenSize();
+    await tester.testAppForWidgetTesting(ChangeNotifierProvider.value(
+      value: viewModel,
+      child: Material(
+        child: BuyNFTButton(
+          key: const Key(MOCK_BUY_BUTTON_KEY_VALUE),
+          onTapped: () {},
+          nft: MOCK_NFT_FREE_IMAGE,
+        ),
+      ),
+    ));
+    final buyButton = find.text(LocaleKeys.claim_now.tr());
+    expect(buyButton, findsOneWidget);
+  });
+
+  testWidgets('should show buy now in Premium NFT Buy Button ', (tester) async {
+    await tester.setScreenSize();
+    await tester.testAppForWidgetTesting(ChangeNotifierProvider.value(
+      value: viewModel,
+      child: Material(
+        child: BuyNFTButton(
+          key: const Key(MOCK_BUY_BUTTON_KEY_VALUE),
+          onTapped: () {},
+          nft: MOCK_NFT_PREMIUM,
+        ),
+      ),
+    ));
+    final buyButton = find.text(LocaleKeys.buy_now.tr());
+    expect(buyButton, findsOneWidget);
+  });
+
   testWidgets("Checkout Dialog should show on Buy Now Button Click", (tester) async {
     when(viewModel.collapsed).thenAnswer((realInvocation) => false);
-    when(viewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_FREE_VIDEO);
+    when(viewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_PREMIUM);
     when(viewModel.accountPublicInfo).thenAnswer((realInvocation) => MockAccountPublicInfo());
     when(viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid)).thenAnswer((realInvocation) => true);
+    when(viewModel.shouldShowSwipeToBuy(
+      selectedDenom: MOCK_NFT_PREMIUM.denom,
+      requiredAmount: double.parse(MOCK_NFT_PREMIUM.price) / kBigIntBase,
+    )).thenAnswer((realInvocation) => Future.value(const Right(true)));
+    await tester.setScreenSize();
     await tester.testAppForWidgetTesting(
       ChangeNotifierProvider<PurchaseItemViewModel>.value(
         value: viewModel,

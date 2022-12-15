@@ -42,6 +42,7 @@ class SVGUtil {
   static String OWNER_VERIFIED_ICON = 'assets/images/icons/verified.svg';
   static String OWNER_SHARE = 'assets/images/icons/share.svg';
   static String OWNER_VIEWS = 'assets/images/icons/views.svg';
+  static String OWNER_VIEWS_BOLD = 'assets/images/icons/eye_bold.svg';
   static String DEV_NET = "assets/images/icons/dev_net.svg";
   static String PYLONS_CURRENCY = "assets/images/icons/pylons_engagement_token.svg";
   static String QR_ICON = 'assets/images/icons/qr.svg';
@@ -104,5 +105,4 @@ class SVGUtil {
   static const kSvgNftFormatAudio = 'assets/images/svg/nft_format_audio.svg';
   static const kSvgNftFormatPDF = 'assets/images/svg/nft_format_pdf.svg';
   static String BOTTOM_RIGHT_CURVED_GREY_BG = "assets/images/svg/bottom_right_curved_grey_bg.svg";
-  static String CURVED_CORNER_RED_BG = "assets/images/svg/curved_corner_red_bg.svg";
 }
