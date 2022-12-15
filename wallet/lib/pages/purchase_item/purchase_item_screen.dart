@@ -28,6 +28,7 @@ import 'package:pylons_wallet/pages/purchase_item/widgets/purchase_video_player_
 import 'package:pylons_wallet/pages/purchase_item/widgets/purchase_video_progress_widget.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/trade_receipt_dialog.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/transaction_complete_dialog.dart';
+import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
@@ -157,7 +158,12 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
             Visibility(
               visible: !viewModel.isViewingFullNft,
               child: Padding(
-                padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 8.h, top: MediaQuery.of(context).viewPadding.top.h),
+                padding: EdgeInsets.only(
+                  left: 8.w,
+                  right: 8.w,
+                  bottom: 8.h,
+                  top: MediaQuery.of(context).viewPadding.top.h,
+                ),
                 child: SizedBox(
                   height: 100.h,
                   width: double.infinity,
@@ -172,7 +178,16 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
                         height: 25.h,
                       ),
                     ),
-                    trailing: const SizedBox(),
+                    trailing: GestureDetector(
+                      onTap: () {
+                        final SubmitFeedback submitFeedbackDialog = SubmitFeedback(context: context);
+                        submitFeedbackDialog.show();
+                      },
+                      child: SvgPicture.asset(
+                        SVGUtil.OWNER_REPORT,
+                        height: 25.h,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -307,7 +322,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   Column(
                     children: [
                       SvgPicture.asset(
-                        SVGUtil.OWNER_VIEWS,
+                        SVGUtil.OWNER_VIEWS_BOLD,
                         width: 20.w,
                         height: 15.h,
                       ),
@@ -437,10 +452,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
 
   Widget getLikeIcon({required bool likedByMe}) {
     return SizedBox(
-      height: 15.r,
-      width: 15.r,
+      height: 20.r,
+      width: 20.r,
       child: Image.asset(
-        'assets/images/icons/${likedByMe ? 'like_full' : 'like'}.png',
+        'assets/images/icons/${likedByMe ? 'like_full' : 'like_bold'}.png',
         fit: BoxFit.fill,
         color: likedByMe ? AppColors.kDarkRed : AppColors.kWhite,
       ),
@@ -569,7 +584,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           child: Column(
                             children: [
                               SvgPicture.asset(
-                                SVGUtil.OWNER_VIEWS,
+                                SVGUtil.OWNER_VIEWS_BOLD,
                                 width: 15.w,
                                 height: 15.h,
                               ),
@@ -671,15 +686,17 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SW),
             child: Container(
               color: AppColors.kDarkRed,
-              height: 50.r,
-              width: 50.r,
+
+              height: 55.r,
+              width: 55.r,
               child: Center(
                 child: IconButton(
                   key: const Key(kCloseBottomSheetKey),
                   alignment: Alignment.topRight,
                   padding: EdgeInsets.only(
-                    bottom: 12.h,
-                    left: 12.w,
+
+                    bottom: 15.h,
+                    left: isTablet ? 16.w : 20.w,
                   ),
                   icon: const Icon(Icons.keyboard_arrow_down_outlined),
                   onPressed: () {
@@ -688,19 +705,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   iconSize: 32.h,
                   color: AppColors.kWhite,
                 ),
-              ),
-            ),
-          ),
-        ),
-        Positioned.fill(
-          child: Align(
-            alignment: Alignment.bottomLeft,
-            child: ClipPath(
-              clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NE),
-              child: Container(
-                color: AppColors.kDarkRed,
-                height: isTablet ? 25.0.r : 30.r,
-                width: isTablet ? 25.0.r : 30.r,
               ),
             ),
           ),

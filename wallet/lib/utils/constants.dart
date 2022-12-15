@@ -25,6 +25,7 @@ class AppColors {
   static Color kYellow = const Color(0xffFED564);
   static Color kDarkPurple = const Color(0xff0A004A);
   static Color kDarkRed = const Color(0xffEF4421);
+  static Color kRed = Colors.red;
   static Color kDarkGreen = const Color(0xFF3A8977);
   static Color kWhite01 = const Color(0xFFFBFBFB);
   static const Color kButtonColor = Color(0xFFFFFFFF);
@@ -49,6 +50,7 @@ class AppColors {
   static Color kTradeReceiptTextColor = const Color(0xff8F8FCE);
   static Color kDarkPurpleColor = const Color(0xff0A004A);
   static Color kHashtagColor = const Color(0xFFB6B6E8);
+  static Color kDarkRedColor = const Color(0xFFAF381F);
   static Color kCheckboxActiveColor = const Color(0xFFCBC8F3);
   static Color kUserInputTextColor = const Color(0xff8D8C8C);
   static Color kSettingsUserNameColor = kBlue;
@@ -478,4 +480,6 @@ const String drawerKey = "drawer_key";
 
 const bool shouldShowAcceptPolicyScreen = true;
 
+const String kRemaining = 'remaining';
+const kTotal = 'total';
 const kFileExtension = "file_extension";
