@@ -14,6 +14,7 @@ import (
 const (
 	// mainnet master wallet address
 	MasterWallet = "pylo1vnwhaymaazugzz9ln2sznddveyed6shz3x8xwl"
+	MaxSupply    = 1_000_000_000_000_000
 )
 
 func CreateUpgradeHandler(
@@ -61,17 +62,33 @@ func BurnToken(ctx sdk.Context, accKeeper *authkeeper.AccountKeeper, bank *bankk
 			}
 			if !found {
 				amount := sdk.NewCoin(denom, balance)
-				// Send denom token to module
-				err := bank.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(acc.Address), types.PaymentsProcessorName, sdk.NewCoins(amount))
-				if err != nil {
-					panic(err)
-				}
-				// Burn denom token in module
-				err = bank.BurnCoins(ctx, types.PaymentsProcessorName, sdk.NewCoins(amount))
-				if err != nil {
-					panic(err)
-				}
+				BurnCoins(ctx, bank, acc.Address, amount)
 			}
 		}
 	}
+
+	supply := bank.GetSupply(ctx, denom)
+	maxSupply := math.NewInt(MaxSupply)
+	if supply.Amount.GT(maxSupply) {
+
+		extraSupply := supply.Amount.Sub(maxSupply)
+		extraCoins := sdk.NewCoin(denom, extraSupply)
+		BurnCoins(ctx, bank, MasterWallet, extraCoins)
+
+	}
+
+}
+
+func BurnCoins(ctx sdk.Context, bank *bankkeeper.BaseKeeper, acc string, amount sdk.Coin) {
+	// Send denom token to module
+	err := bank.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(acc), types.PaymentsProcessorName, sdk.NewCoins(amount))
+	if err != nil {
+		panic(err)
+	}
+	// Burn denom token in module
+	err = bank.BurnCoins(ctx, types.PaymentsProcessorName, sdk.NewCoins(amount))
+	if err != nil {
+		panic(err)
+	}
+
 }
