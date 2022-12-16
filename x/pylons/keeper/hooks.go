@@ -7,20 +7,39 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
+func (k Keeper) sendDelegatorRewards(ctx sdk.Context, sk types.StakingKeeper) {
+
+	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
+	delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages)
+	if delegatorsRewards != nil {
+		err := k.SendRewards(ctx, delegatorsRewards)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func (k Keeper) sendBedRockholderRewards(ctx sdk.Context, sk types.StakingKeeper) {
+
+	distrPercentages := k.GetHoldersRewardsDistributionPercentages(ctx, sk)
+	delegatorsRewards := k.CalculateHolderRewards(ctx, distrPercentages)
+	if delegatorsRewards != nil {
+		err := k.SendRewards(ctx, delegatorsRewards)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
 func (k Keeper) BeforeEpochStart(ctx sdk.Context, epochIdentifier string, epochNumber int64, sk types.StakingKeeper) {
 }
 
 func (k Keeper) AfterEpochEnd(ctx sdk.Context, epochIdentifier string, epochNumber int64, sk types.StakingKeeper) {
+
 	if epochIdentifier == k.DistrEpochIdentifier(ctx) {
-		distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
-		delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages)
-		if delegatorsRewards != nil {
-			err := k.SendRewards(ctx, delegatorsRewards)
-			if err != nil {
-				panic(err)
-			}
-		}
+		k.sendDelegatorRewards(ctx, sk)
 	}
+
 }
 
 // ___________________________________________________________________________________________________

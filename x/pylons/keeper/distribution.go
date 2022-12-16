@@ -1,11 +1,17 @@
 package keeper
 
 import (
+	"cosmossdk.io/math"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+)
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+const (
+	VALIDATORS_REWARD_PERCENTAGE     = 1
+	BEDROCK_HOLDER_REWARD_PERCENTAGE = 9
 )
 
 func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper) (distrPercentages map[string]sdk.Dec) {
@@ -71,12 +77,89 @@ func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.Stak
 	return distrPercentages
 }
 
+func (k Keeper) getTotalSupply(ctx sdk.Context, denom string) math.Int {
+
+	// Get all account balances
+	bankBaseKeeper, _ := k.bankKeeper.(bankkeeper.BaseKeeper)
+	accs := bankBaseKeeper.GetAccountsBalances(ctx)
+
+	totalAvailable := math.ZeroInt()
+
+	for _, acc := range accs {
+		balance := acc.Coins.AmountOf(denom)
+		// Check if denom token amount GT 0
+		if balance.GT(math.ZeroInt()) {
+
+			totalAvailable = totalAvailable.Add(balance)
+		}
+	}
+
+	return totalAvailable
+}
+
+func (k Keeper) GetHoldersRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper) map[string]sdk.Dec {
+
+	distrPercentages := make(map[string]sdk.Dec)
+	stakingDenom := types.StakingCoinDenom
+	// Get all account balances
+	bankBaseKeeper, _ := k.bankKeeper.(bankkeeper.BaseKeeper)
+	totalSupply := k.getTotalSupply(ctx, stakingDenom)
+
+	accs := bankBaseKeeper.GetAccountsBalances(ctx)
+
+	for _, acc := range accs {
+		balance := acc.Coins.AmountOf(stakingDenom)
+		// Check if denom token amount GT 0
+		if balance.GT(math.ZeroInt()) {
+
+			sharePercentage := balance.Quo(totalSupply)
+			distrPercentages[acc.Address] = sdk.Dec(sharePercentage)
+		}
+	}
+	return distrPercentages
+}
+
+func calculateAvailableAmount(coin math.Int) math.Int {
+
+	validatorRewardPercentage := sdk.NewDecFromInt(math.NewInt(VALIDATORS_REWARD_PERCENTAGE))
+	return sdk.NewDecFromInt(coin).Mul(validatorRewardPercentage).TruncateInt()
+
+}
+
+func calculateDelegatorAvailableAmount(coin math.Int) math.Int {
+
+	validatorRewardPercentage := sdk.NewDecFromInt(math.NewInt(BEDROCK_HOLDER_REWARD_PERCENTAGE))
+	return sdk.NewDecFromInt(coin).Mul(validatorRewardPercentage).TruncateInt()
+
+}
 func CalculateRewardsHelper(distrPercentages map[string]sdk.Dec, rewardsTotalAmount sdk.Coins) (delegatorsRewards map[string]sdk.Coins) {
 	delegatorsRewards = make(map[string]sdk.Coins)
 	for addr, percentage := range distrPercentages {
 		totalAmountsForAddr := sdk.NewCoins()
 		for _, coin := range rewardsTotalAmount {
-			amountForAddr := sdk.NewDecFromInt(coin.Amount).Mul(percentage).TruncateInt()
+
+			availableAmount := calculateAvailableAmount(coin.Amount)
+			amountForAddr := sdk.NewDecFromInt(availableAmount).Mul(percentage).TruncateInt()
+			if amountForAddr.IsPositive() {
+				// only add strictly positive amounts
+				totalAmountsForAddr = totalAmountsForAddr.Add(sdk.NewCoin(coin.Denom, amountForAddr))
+			}
+		}
+		if !totalAmountsForAddr.Empty() {
+			delegatorsRewards[addr] = totalAmountsForAddr
+		}
+	}
+	return
+}
+
+func CalculateHolderRewardsHelper(distrPercentages map[string]sdk.Dec, rewardsTotalAmount sdk.Coins) (delegatorsRewards map[string]sdk.Coins) {
+	delegatorsRewards = make(map[string]sdk.Coins)
+	for addr, percentage := range distrPercentages {
+		totalAmountsForAddr := sdk.NewCoins()
+		for _, coin := range rewardsTotalAmount {
+
+			availableAmount := calculateDelegatorAvailableAmount(coin.Amount)
+			amountForAddr := sdk.NewDecFromInt(availableAmount).Mul(percentage).TruncateInt()
 			if amountForAddr.IsPositive() {
 				// only add strictly positive amounts
 				totalAmountsForAddr = totalAmountsForAddr.Add(sdk.NewCoin(coin.Denom, amountForAddr))
@@ -105,6 +188,15 @@ func (k Keeper) SendRewards(ctx sdk.Context, delegatorsRewards map[string]sdk.Co
 		if err != nil {
 			return sdkerrors.Wrapf(err, "unable to send coins to %v from %v", addr, k.FeeCollectorAddress().String())
 		}
+	}
+	return nil
+}
+
+func (k Keeper) CalculateHolderRewards(ctx sdk.Context, distrPercentages map[string]sdk.Dec) map[string]sdk.Coins {
+	// get the balance of the feeCollector moduleAcc
+	rewardsTotalAmount := k.bankKeeper.SpendableCoins(ctx, k.FeeCollectorAddress())
+	if !rewardsTotalAmount.IsZero() {
+		return CalculateHolderRewardsHelper(distrPercentages, rewardsTotalAmount)
 	}
 	return nil
 }
