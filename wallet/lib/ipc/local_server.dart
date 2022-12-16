@@ -13,10 +13,6 @@ class LocalServer {
   HandlerFactory handlerFactory;
 
   Future<void> init() async {
-    if (initialized) {
-      return;
-    }
-    initialized = true;
     final handler = const Pipeline().addMiddleware(logRequests()).addHandler(_ipcRequest);
     final server = await shelf_io.serve(handler, 'localhost', 3333);
 
@@ -28,12 +24,7 @@ class LocalServer {
 
   Future<Response> _ipcRequest(Request request) async {
     log("Incoming request");
-
     final getMessage = request.url.toString().split('/').last;
-
-    if (getMessage == "exists") {
-      return Response.ok("Online");
-    }
 
     SdkIpcMessage sdkIPCMessage;
 
@@ -51,6 +42,4 @@ class LocalServer {
       return Response.badRequest(body: "Something went wrong ${error.toString()}");
     }
   }
-
-  bool initialized = false;
 }

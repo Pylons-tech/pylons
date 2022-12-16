@@ -11,21 +11,18 @@ import 'package:http/http.dart' as http;
 
 abstract class ResponseFetch {
   void complete({required String key, required SDKIPCResponse sdkipcResponse});
+  Completer<SDKIPCResponse> initResponseCompleter(String key);
 
   bool listenerExists({required String key});
 
-  Future<SDKIPCResponse> sendMessage({required SDKIPCMessage sdkipcMessage, required String key});
+  Future<SDKIPCResponse> sendMessage(SDKIPCMessage sdkipcMessage, Completer<SDKIPCResponse> completer);
 }
 
-Future<ResponseFetch> getResponseFetch() async {
+ResponseFetch getResponseFetch() {
   if (Platform.isIOS) {
     return IOSResponseFetch.instance;
   } else {
-    if (await _portExistsOrNot()) {
-      return AndroidResponseFetchV2.instance;
-    } else {
-      return AndroidResponseFetch.instance;
-    }
+    return AndroidResponseFetchV2.instance;
   }
 }
 
@@ -40,6 +37,7 @@ class IOSResponseFetch implements ResponseFetch {
     // or you're doing something wrong and should expect a crash regardless.
   };
 
+  @override
   Completer<SDKIPCResponse> initResponseCompleter(String key) {
     responseCompleters[key] = Completer();
     return responseCompleters[key]!;
@@ -58,8 +56,7 @@ class IOSResponseFetch implements ResponseFetch {
   }
 
   @override
-  Future<SDKIPCResponse> sendMessage({required SDKIPCMessage sdkipcMessage, required String key}) {
-    final completer = initResponseCompleter(key);
+  Future<SDKIPCResponse> sendMessage(SDKIPCMessage sdkipcMessage, Completer<SDKIPCResponse> completer) {
     final encodedMessage = sdkipcMessage.createMessage();
     final universalLink = createLink(encodedMessage: encodedMessage);
     dispatchUniLink(universalLink);
@@ -104,6 +101,7 @@ class AndroidResponseFetch implements ResponseFetch {
     // or you're doing something wrong and should expect a crash regardless.
   };
 
+  @override
   Completer<SDKIPCResponse> initResponseCompleter(String key) {
     responseCompleters[key] = Completer();
     return responseCompleters[key]!;
@@ -122,8 +120,7 @@ class AndroidResponseFetch implements ResponseFetch {
   }
 
   @override
-  Future<SDKIPCResponse> sendMessage({required SDKIPCMessage sdkipcMessage, required String key}) {
-    final completer = initResponseCompleter(key);
+  Future<SDKIPCResponse> sendMessage(SDKIPCMessage sdkipcMessage, Completer<SDKIPCResponse> completer) {
     final encodedMessage = sdkipcMessage.createMessage();
     final universalLink = createLink(encodedMessage: encodedMessage);
     dispatchUniLink(universalLink);
@@ -147,50 +144,35 @@ class AndroidResponseFetchV2 implements ResponseFetch {
   void complete({required String key, required SDKIPCResponse sdkipcResponse}) {}
 
   @override
-  bool listenerExists({required String key}) {
-    return false;
+  Completer<SDKIPCResponse> initResponseCompleter(String key) {
+    return Completer();
   }
 
   @override
-  Future<SDKIPCResponse> sendMessage({required SDKIPCMessage sdkipcMessage, required String key}) async {
+  bool listenerExists({required String key}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<SDKIPCResponse> sendMessage(SDKIPCMessage sdkipcMessage, Completer<SDKIPCResponse> _) async {
+    final encodedMessage = sdkipcMessage.createMessage();
+
+    final response = await http.get(Uri.parse('http://127.0.0.1:3333/$encodedMessage'));
     final completer = Completer<SDKIPCResponse>();
 
-    try {
-      final encodedMessage = sdkipcMessage.createMessage();
+    if (response.statusCode == 200) {
+      final message = response.body.split('/').last;
 
-      final response = await http.get(Uri.parse('http://127.0.0.1:3333/$encodedMessage'));
+      final sdkipcResponse = SDKIPCResponse.fromIPCMessage(message);
 
-      if (response.statusCode == 200) {
-        final message = response.body.split('/').last;
-
-        final sdkipcResponse = SDKIPCResponse.fromIPCMessage(message);
-
-        IPCHandlerFactory.handlers[sdkipcResponse.action]!.handler(
-          sdkipcResponse,
-          ((key, response) async {
-            completer.complete(response);
-          }),
-        );
-      }
-    } on http.ClientException catch (e) {
-      if (e.message == 'Connection refused') {
-        completer.completeError(Exception('Wallet App is not in background'));
-      } else {
-        completer.completeError(e);
-      }
-    } catch (e) {
-      completer.completeError(e);
+      IPCHandlerFactory.handlers[sdkipcResponse.action]!.handler(
+        sdkipcResponse,
+        ((key, response) async {
+          completer.complete(response);
+        }),
+      );
     }
 
     return completer.future;
-  }
-}
-
-Future<bool> _portExistsOrNot() async {
-  try {
-    await http.get(Uri.parse('http://127.0.0.1:3333/exists'));
-    return true;
-  } catch (e) {
-    return false;
   }
 }
