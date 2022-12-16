@@ -155,22 +155,33 @@ class AndroidResponseFetchV2 implements ResponseFetch {
 
   @override
   Future<SDKIPCResponse> sendMessage(SDKIPCMessage sdkipcMessage, Completer<SDKIPCResponse> _) async {
-    final encodedMessage = sdkipcMessage.createMessage();
-
-    final response = await http.get(Uri.parse('http://127.0.0.1:3333/$encodedMessage'));
     final completer = Completer<SDKIPCResponse>();
 
-    if (response.statusCode == 200) {
-      final message = response.body.split('/').last;
+    try {
+      final encodedMessage = sdkipcMessage.createMessage();
 
-      final sdkipcResponse = SDKIPCResponse.fromIPCMessage(message);
+      final response = await http.get(Uri.parse('http://127.0.0.1:3333/$encodedMessage'));
 
-      IPCHandlerFactory.handlers[sdkipcResponse.action]!.handler(
-        sdkipcResponse,
-        ((key, response) async {
-          completer.complete(response);
-        }),
-      );
+      if (response.statusCode == 200) {
+        final message = response.body.split('/').last;
+
+        final sdkipcResponse = SDKIPCResponse.fromIPCMessage(message);
+
+        IPCHandlerFactory.handlers[sdkipcResponse.action]!.handler(
+          sdkipcResponse,
+          ((key, response) async {
+            completer.complete(response);
+          }),
+        );
+      }
+    } on http.ClientException catch (e) {
+      if (e.message == 'Connection refused') {
+        completer.completeError(Exception('Wallet App is not in background'));
+      } else {
+        completer.completeError(e);
+      }
+    } catch (e) {
+      completer.completeError(e);
     }
 
     return completer.future;
