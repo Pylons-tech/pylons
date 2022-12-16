@@ -1,11 +1,11 @@
-package v7_test
+package v1_test
 
 import (
 	"testing"
 
 	"cosmossdk.io/math"
 	"github.com/Pylons-tech/pylons/app/apptesting"
-	v7 "github.com/Pylons-tech/pylons/app/upgrades/mainnet/v7"
+	v1 "github.com/Pylons-tech/pylons/app/upgrades/mainnet/v1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	"github.com/stretchr/testify/suite"
@@ -38,7 +38,7 @@ func (suite *UpgradeTestSuite) TestBurnToken_Ubedrock() {
 	suite.Require().Equal(totalAmount.Amount, math.NewInt(31_000_000))
 	// Burn ubedrock
 	bankBaseKeeper, _ := suite.App.BankKeeper.(bankkeeper.BaseKeeper)
-	v7.BurnToken(suite.Ctx, &suite.App.AccountKeeper, &bankBaseKeeper, &suite.App.StakingKeeper)
+	v1.BurnToken(suite.Ctx, &suite.App.AccountKeeper, &bankBaseKeeper, &suite.App.StakingKeeper)
 	// Check ubedrock total supply (should equal 0)
 	totalAmount = suite.App.BankKeeper.GetSupply(suite.Ctx, stakingCoinDenom)
 	suite.Require().Equal(totalAmount.Amount, math.ZeroInt())
