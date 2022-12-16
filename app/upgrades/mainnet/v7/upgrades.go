@@ -14,7 +14,7 @@ import (
 const (
 	// mainnet master wallet address
 	MasterWallet = "pylo1vnwhaymaazugzz9ln2sznddveyed6shz3x8xwl"
-	MaxSupply    = 1_000_000_000_000_000
+	MaxSupply    = 100_000_000_000_000
 )
 
 func CreateUpgradeHandler(
