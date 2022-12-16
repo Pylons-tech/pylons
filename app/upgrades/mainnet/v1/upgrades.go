@@ -76,7 +76,6 @@ func BurnToken(ctx sdk.Context, accKeeper *authkeeper.AccountKeeper, bank *bankk
 		BurnCoins(ctx, bank, MasterWallet, extraCoins)
 
 	}
-
 }
 
 func BurnCoins(ctx sdk.Context, bank *bankkeeper.BaseKeeper, acc string, amount sdk.Coin) {
@@ -90,5 +89,4 @@ func BurnCoins(ctx sdk.Context, bank *bankkeeper.BaseKeeper, acc string, amount 
 	if err != nil {
 		panic(err)
 	}
-
 }
