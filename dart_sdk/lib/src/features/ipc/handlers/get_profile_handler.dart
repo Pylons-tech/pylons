@@ -6,11 +6,13 @@ import 'package:pylons_sdk/src/features/data/models/profile.dart';
 import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 
-import '../../../pylons_wallet/response_fetcher/response_fetch.dart';
 
 class GetProfileHandler implements IPCHandler {
   @override
-  void handler(SDKIPCResponse<dynamic> response) {
+  void handler(
+    SDKIPCResponse<dynamic> response,
+    void Function(String key, SDKIPCResponse response) onHandlingComplete,
+  ) {
     log(response.toString(), name: 'GetProfileHandler');
 
     final defaultResponse = SDKIPCResponse<Profile>(
@@ -29,6 +31,6 @@ class GetProfileHandler implements IPCHandler {
       defaultResponse.success = false;
     }
 
-    getResponseFetch().complete(key: Strings.GET_PROFILE, sdkipcResponse: defaultResponse);
+    return onHandlingComplete(Strings.GET_PROFILE, defaultResponse);
   }
 }

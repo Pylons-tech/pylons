@@ -5,11 +5,13 @@ import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:pylons_sdk/src/generated/pylons/recipe.pb.dart';
 
-import '../../../pylons_wallet/response_fetcher/response_fetch.dart';
 
 class GetRecipeHandler implements IPCHandler {
   @override
-  void handler(SDKIPCResponse<dynamic> response) {
+  void handler(
+    SDKIPCResponse<dynamic> response,
+    void Function(String key, SDKIPCResponse response) onHandlingComplete,
+  ) {
     print(response);
     final defaultResponse = SDKIPCResponse<Recipe>(
         success: response.success,
@@ -27,6 +29,6 @@ class GetRecipeHandler implements IPCHandler {
       defaultResponse.success = false;
     }
 
-    getResponseFetch().complete(key: Strings.GET_RECIPE, sdkipcResponse: defaultResponse);
+    return onHandlingComplete(Strings.GET_RECIPE, defaultResponse);
   }
 }

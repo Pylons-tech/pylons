@@ -36,13 +36,15 @@ class IPCHandlerFactory {
   /// the completer if no specific handler is set.
   static void getHandler(SDKIPCResponse sdkipcResponse) {
     print(sdkipcResponse);
-    
+
     if (!getResponseFetch().listenerExists(key: sdkipcResponse.action)) {
-      throw Exception(
-          'Unexpected response for unsent message of type ${sdkipcResponse.action}');
+      throw Exception('Unexpected response for unsent message of type ${sdkipcResponse.action}');
     }
     if (handlers.containsKey(sdkipcResponse.action)) {
-      handlers[sdkipcResponse.action]!.handler(sdkipcResponse);
+      handlers[sdkipcResponse.action]!.handler(
+        sdkipcResponse,
+        ((key, response) => getResponseFetch().complete(key: key, sdkipcResponse: response)),
+      );
     } else {
       getResponseFetch().complete(key: sdkipcResponse.action, sdkipcResponse: sdkipcResponse);
     }
