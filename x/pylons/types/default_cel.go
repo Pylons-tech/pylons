@@ -6,32 +6,31 @@ import (
 	celTypes "github.com/google/cel-go/common/types"
 	"github.com/google/cel-go/common/types/ref"
 	"github.com/google/cel-go/interpreter/functions"
+	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 
-func GetDefaultCelEnv() CelEnvCollection {
-	env, _ := cel.NewEnv(
-		cel.Declarations(
-			decls.NewVar("recipeID", decls.String),
-			decls.NewVar("attack", decls.Double),
-			decls.NewVar("level", decls.Int),
-			decls.NewVar("name", decls.String),
-			decls.NewVar("input0.attack", decls.Int),
-			decls.NewVar("input0.owner", decls.String),
-			decls.NewVar("input0.itemID", decls.String),
-			decls.NewVar("input1.attack", decls.Int),
-			// global function for no param
-			Rand10FuncDecls,
-			// global function for 1 param
-			RandFuncDecls,
-			// global function for 1 param
-			Log2FuncDecls,
-			// global function for 2 param
-			MultiplyFuncDecls,
-			MinFuncDecls,
-			MaxFuncDecls,
-			ExecutedByCountDecls,
-		),
-	)
+func GetDefaultCelEnv() ([]*exprpb.Decl, map[string]interface{}, cel.ProgramOption) {
+	varDefs := []*exprpb.Decl{
+		decls.NewVar("recipeID", decls.String),
+		decls.NewVar("attack", decls.Double),
+		decls.NewVar("level", decls.Int),
+		decls.NewVar("name", decls.String),
+		decls.NewVar("input0.attack", decls.Int),
+		decls.NewVar("input0.owner", decls.String),
+		decls.NewVar("input0.itemID", decls.String),
+		decls.NewVar("input1.attack", decls.Int),
+		// global function for no param
+		Rand10FuncDecls,
+		// global function for 1 param
+		RandFuncDecls,
+		// global function for 1 param
+		Log2FuncDecls,
+		// global function for 2 param
+		MultiplyFuncDecls,
+		MinFuncDecls,
+		MaxFuncDecls,
+		ExecutedByCountDecls,
+	}
 	variables := map[string]interface{}{
 		"recipeID":      "recipeID",
 		"name":          "shield",
@@ -71,6 +70,27 @@ func GetDefaultCelEnv() CelEnvCollection {
 				return celTypes.Int(matchingCount)
 			},
 		},
+	)
+	return varDefs, variables, funcs
+}
+
+func GetCustomCelEnv(inputItems []ItemInput, varDefs []*exprpb.Decl, variables map[string]interface{}, funcs cel.ProgramOption) CelEnvCollection {
+	for _, ii := range inputItems {
+		for _, dbli := range ii.Doubles {
+			varDefs = append(varDefs, decls.NewVar(dbli.Key, decls.Double))
+			variables[dbli.Key] = 0.0
+		}
+		for _, inti := range ii.Longs {
+			varDefs = append(varDefs, decls.NewVar(inti.Key, decls.Int))
+			variables[inti.Key] = 0
+		}
+		for _, stri := range ii.Strings {
+			varDefs = append(varDefs, decls.NewVar(stri.Key, decls.String))
+			variables[stri.Key] = ""
+		}
+	}
+	env, _ := cel.NewEnv(
+		cel.Declarations(varDefs...),
 	)
 	return NewCelEnvCollection(env, variables, funcs)
 }
