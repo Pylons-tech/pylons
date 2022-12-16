@@ -760,14 +760,13 @@ func ValidateItemModifyOutputs(imo []ItemModifyOutput, idMap map[string]bool, ce
 	return nil
 }
 
-func ValidateEntriesList(el EntriesList, idMap map[string]bool) error {
+func ValidateEntriesList(el EntriesList, idMap map[string]bool, ce CelEnvCollection) error {
 	for _, co := range el.CoinOutputs {
 		err := ValidateCoinOutput(co, idMap)
 		if err != nil {
 			return err
 		}
 	}
-	ce := GetDefaultCelEnv()
 	err := ValidateItemOutputs(el.ItemOutputs, idMap, ce)
 	if err != nil {
 		return err
