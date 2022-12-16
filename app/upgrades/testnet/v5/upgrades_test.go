@@ -5,7 +5,7 @@ import (
 
 	"cosmossdk.io/math"
 	"github.com/Pylons-tech/pylons/app/apptesting"
-	v5 "github.com/Pylons-tech/pylons/app/upgrades/v5"
+	v5 "github.com/Pylons-tech/pylons/app/upgrades/testnet/v5"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	"github.com/stretchr/testify/suite"
