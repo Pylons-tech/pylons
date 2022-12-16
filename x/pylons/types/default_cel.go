@@ -12,13 +12,6 @@ import (
 func GetDefaultCelEnv() ([]*exprpb.Decl, map[string]interface{}, cel.ProgramOption) {
 	varDefs := []*exprpb.Decl{
 		decls.NewVar("recipeID", decls.String),
-		decls.NewVar("attack", decls.Double),
-		decls.NewVar("level", decls.Int),
-		decls.NewVar("name", decls.String),
-		decls.NewVar("input0.attack", decls.Int),
-		decls.NewVar("input0.owner", decls.String),
-		decls.NewVar("input0.itemID", decls.String),
-		decls.NewVar("input1.attack", decls.Int),
 		// global function for no param
 		Rand10FuncDecls,
 		// global function for 1 param
@@ -32,14 +25,7 @@ func GetDefaultCelEnv() ([]*exprpb.Decl, map[string]interface{}, cel.ProgramOpti
 		ExecutedByCountDecls,
 	}
 	variables := map[string]interface{}{
-		"recipeID":      "recipeID",
-		"name":          "shield",
-		"attack":        5.0,
-		"level":         3,
-		"input0.attack": 2,
-		"input1.attack": 3,
-		"input0.owner":  "pylo1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337",
-		"input0.itemID": "shieldID",
+		"recipeID": "recipeID",
 	}
 
 	//nolint:staticcheck // TODO: FIX THIS VIA A REFACTOR OF THIS LINE, WHICH WILL REQUIRE MORE CODE
