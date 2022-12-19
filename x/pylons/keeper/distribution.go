@@ -5,13 +5,14 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 const (
-	VALIDATORS_REWARD_PERCENTAGE     = 1
-	BEDROCK_HOLDER_REWARD_PERCENTAGE = 9
+	ValidatorRewardPercentage     = 10
+	BedRockHolderRewardPercentage = 90
 )
 
 func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper) (distrPercentages map[string]sdk.Dec) {
@@ -77,61 +78,59 @@ func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.Stak
 	return distrPercentages
 }
 
-func (k Keeper) getTotalSupply(ctx sdk.Context, denom string) math.Int {
-
+func (k Keeper) getTotalSupply(ctx sdk.Context, ak types.AccountKeeper, denom string) sdk.Dec {
 	// Get all account balances
 	bankBaseKeeper, _ := k.bankKeeper.(bankkeeper.BaseKeeper)
 	accs := bankBaseKeeper.GetAccountsBalances(ctx)
-
-	totalAvailable := math.ZeroInt()
-
+	totalAvailable := sdk.ZeroDec()
 	for _, acc := range accs {
-		balance := acc.Coins.AmountOf(denom)
-		// Check if denom token amount GT 0
-		if balance.GT(math.ZeroInt()) {
-
-			totalAvailable = totalAvailable.Add(balance)
+		found := checkModuleAccount(ctx, ak, acc.Address)
+		if !found {
+			balance := sdk.NewDec(acc.Coins.AmountOf(denom).Int64())
+			// Check if denom token amount GT 0
+			if balance.GT(sdk.ZeroDec()) {
+				totalAvailable = totalAvailable.Add(balance)
+			}
 		}
-	}
 
+	}
 	return totalAvailable
 }
 
-func (k Keeper) GetHoldersRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper) map[string]sdk.Dec {
-
+func (k Keeper) GetHoldersRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper, ak types.AccountKeeper) map[string]sdk.Dec {
 	distrPercentages := make(map[string]sdk.Dec)
 	stakingDenom := types.StakingCoinDenom
 	// Get all account balances
 	bankBaseKeeper, _ := k.bankKeeper.(bankkeeper.BaseKeeper)
-	totalSupply := k.getTotalSupply(ctx, stakingDenom)
+	totalSupply := k.getTotalSupply(ctx, ak, stakingDenom)
 
 	accs := bankBaseKeeper.GetAccountsBalances(ctx)
-
 	for _, acc := range accs {
-		balance := acc.Coins.AmountOf(stakingDenom)
-		// Check if denom token amount GT 0
-		if balance.GT(math.ZeroInt()) {
+		balance := sdk.NewDec(acc.Coins.AmountOf(stakingDenom).Int64())
 
-			sharePercentage := balance.Quo(totalSupply)
-			distrPercentages[acc.Address] = sdk.Dec(sharePercentage)
+		// Check if denom token amount GT 0
+		if balance.GT(sdk.ZeroDec()) {
+			found := checkModuleAccount(ctx, ak, acc.Address)
+			if !found {
+				sharePercentage := balance.Quo(totalSupply)
+				distrPercentages[acc.Address] = sharePercentage
+			}
+
 		}
 	}
 	return distrPercentages
 }
 
 func calculateAvailableAmount(coin math.Int) math.Int {
-
-	validatorRewardPercentage := sdk.NewDecFromInt(math.NewInt(VALIDATORS_REWARD_PERCENTAGE))
+	validatorRewardPercentage := sdk.NewDecFromInt(math.NewInt(ValidatorRewardPercentage))
 	return sdk.NewDecFromInt(coin).Mul(validatorRewardPercentage).TruncateInt()
-
 }
 
-func calculateDelegatorAvailableAmount(coin math.Int) math.Int {
-
-	validatorRewardPercentage := sdk.NewDecFromInt(math.NewInt(BEDROCK_HOLDER_REWARD_PERCENTAGE))
-	return sdk.NewDecFromInt(coin).Mul(validatorRewardPercentage).TruncateInt()
-
+func calculateHolderAavailableAmount(coin math.Int) sdk.Dec {
+	holderPercentage := sdk.NewDec(BedRockHolderRewardPercentage).Quo(sdk.NewDec(100))
+	return sdk.NewDecFromInt(coin).Mul(holderPercentage)
 }
+
 func CalculateRewardsHelper(distrPercentages map[string]sdk.Dec, rewardsTotalAmount sdk.Coins) (delegatorsRewards map[string]sdk.Coins) {
 	delegatorsRewards = make(map[string]sdk.Coins)
 	for addr, percentage := range distrPercentages {
@@ -158,11 +157,11 @@ func CalculateHolderRewardsHelper(distrPercentages map[string]sdk.Dec, rewardsTo
 		totalAmountsForAddr := sdk.NewCoins()
 		for _, coin := range rewardsTotalAmount {
 
-			availableAmount := calculateDelegatorAvailableAmount(coin.Amount)
-			amountForAddr := sdk.NewDecFromInt(availableAmount).Mul(percentage).TruncateInt()
+			availableAmount := calculateHolderAavailableAmount(coin.Amount)
+			amountForAddr := availableAmount.Mul(percentage)
 			if amountForAddr.IsPositive() {
 				// only add strictly positive amounts
-				totalAmountsForAddr = totalAmountsForAddr.Add(sdk.NewCoin(coin.Denom, amountForAddr))
+				totalAmountsForAddr = totalAmountsForAddr.Add(sdk.NewCoin(coin.Denom, amountForAddr.RoundInt()))
 			}
 		}
 		if !totalAmountsForAddr.Empty() {
@@ -199,4 +198,33 @@ func (k Keeper) CalculateHolderRewards(ctx sdk.Context, distrPercentages map[str
 		return CalculateHolderRewardsHelper(distrPercentages, rewardsTotalAmount)
 	}
 	return nil
+}
+
+// Get all module accounts
+func getModuleAccountsWithAddress(ctx sdk.Context, ak types.AccountKeeper) []string {
+	moduleAddress := []string{}
+	accs := ak.GetAllAccounts(ctx)
+	for _, acc := range accs {
+		_, ok := acc.(*authtypes.ModuleAccount)
+		if ok {
+			moduleAddress = append(moduleAddress, acc.GetAddress().String())
+		}
+	}
+	return moduleAddress
+}
+
+func checkModuleAccount(ctx sdk.Context, ak types.AccountKeeper, acc string) bool {
+	moduleAccs := getModuleAccountsWithAddress(ctx, ak)
+	found := false
+	for _, modacc := range moduleAccs {
+		// check if account address is equal to module account address, if equal do not distribute
+		if acc == modacc {
+			found = true
+			break
+		} else {
+			// if account address is not equal to module account address, distribute
+			found = false
+		}
+	}
+	return found
 }

@@ -8,7 +8,6 @@ import (
 )
 
 func (k Keeper) sendDelegatorRewards(ctx sdk.Context, sk types.StakingKeeper) {
-
 	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
 	delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages)
 	if delegatorsRewards != nil {
@@ -19,9 +18,8 @@ func (k Keeper) sendDelegatorRewards(ctx sdk.Context, sk types.StakingKeeper) {
 	}
 }
 
-func (k Keeper) sendBedRockholderRewards(ctx sdk.Context, sk types.StakingKeeper) {
-
-	distrPercentages := k.GetHoldersRewardsDistributionPercentages(ctx, sk)
+func (k Keeper) sendBedRockholderRewards(ctx sdk.Context, sk types.StakingKeeper, ak types.AccountKeeper) {
+	distrPercentages := k.GetHoldersRewardsDistributionPercentages(ctx, sk, ak)
 	delegatorsRewards := k.CalculateHolderRewards(ctx, distrPercentages)
 	if delegatorsRewards != nil {
 		err := k.SendRewards(ctx, delegatorsRewards)
@@ -34,12 +32,11 @@ func (k Keeper) sendBedRockholderRewards(ctx sdk.Context, sk types.StakingKeeper
 func (k Keeper) BeforeEpochStart(ctx sdk.Context, epochIdentifier string, epochNumber int64, sk types.StakingKeeper) {
 }
 
-func (k Keeper) AfterEpochEnd(ctx sdk.Context, epochIdentifier string, epochNumber int64, sk types.StakingKeeper) {
-
+func (k Keeper) AfterEpochEnd(ctx sdk.Context, epochIdentifier string, epochNumber int64, sk types.StakingKeeper, ak types.AccountKeeper) {
 	if epochIdentifier == k.DistrEpochIdentifier(ctx) {
 		k.sendDelegatorRewards(ctx, sk)
+		k.sendBedRockholderRewards(ctx, sk, ak)
 	}
-
 }
 
 // ___________________________________________________________________________________________________
@@ -61,13 +58,14 @@ check if expected distribution corresponds
 type Hooks struct {
 	k  Keeper
 	sk types.StakingKeeper
+	ak types.AccountKeeper
 }
 
 var _ epochstypes.EpochHooks = Hooks{}
 
 // Hooks returns the wrapper struct
-func (k Keeper) Hooks(sk types.StakingKeeper) Hooks {
-	return Hooks{k: k, sk: sk}
+func (k Keeper) Hooks(sk types.StakingKeeper, ak types.AccountKeeper) Hooks {
+	return Hooks{k: k, sk: sk, ak: ak}
 }
 
 func (h Hooks) BeforeEpochStart(ctx sdk.Context, epochIdentifier string, epochNumber int64) {
@@ -75,5 +73,5 @@ func (h Hooks) BeforeEpochStart(ctx sdk.Context, epochIdentifier string, epochNu
 }
 
 func (h Hooks) AfterEpochEnd(ctx sdk.Context, epochIdentifier string, epochNumber int64) {
-	h.k.AfterEpochEnd(ctx, epochIdentifier, epochNumber, h.sk)
+	h.k.AfterEpochEnd(ctx, epochIdentifier, epochNumber, h.sk, h.ak)
 }
