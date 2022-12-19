@@ -63,7 +63,7 @@ class PylonsWalletImpl implements PylonsWallet {
     final sdkIPCMessage = SDKIPCMessage(key, data, getHostBasedOnOS(Platform.isAndroid), requestResponse);
 
     if (requestResponse) {
-      return getResponseFetch().sendMessage(sdkIPCMessage, getResponseFetch().initResponseCompleter(key));
+      return getResponseFetch().sendMessage(sdkipcMessage: sdkIPCMessage, key: key);
     }
 
     return sendMessageWithoutResponse(sdkIPCMessage);

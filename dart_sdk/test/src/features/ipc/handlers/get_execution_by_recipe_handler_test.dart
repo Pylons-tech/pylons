@@ -28,7 +28,7 @@ void main() {
     var handler = GetExecutionByRecipeHandler();
 
     handler.handler(sdkResponse, ((key, response) {
-      expect(key, Strings.GET_EXECUTION_BY_RECIPE_ID);
+      expect(key, Strings.GET_EXECUTION_BY_ID);
       expect(response.success, true);
       expect(response.data is ExecutionListByRecipeResponse, true);
     }));
