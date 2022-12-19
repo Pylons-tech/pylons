@@ -12,7 +12,6 @@ class GetRecipeHandler implements IPCHandler {
     SDKIPCResponse<dynamic> response,
     void Function(String key, SDKIPCResponse response) onHandlingComplete,
   ) {
-    print(response);
     final defaultResponse = SDKIPCResponse<Recipe>(
         success: response.success,
         action: response.action,

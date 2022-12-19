@@ -11,11 +11,10 @@ import 'package:http/http.dart' as http;
 
 abstract class ResponseFetch {
   void complete({required String key, required SDKIPCResponse sdkipcResponse});
-  Completer<SDKIPCResponse> initResponseCompleter(String key);
 
   bool listenerExists({required String key});
 
-  Future<SDKIPCResponse> sendMessage(SDKIPCMessage sdkipcMessage, Completer<SDKIPCResponse> completer);
+  Future<SDKIPCResponse> sendMessage({required SDKIPCMessage sdkipcMessage, required String key});
 }
 
 ResponseFetch getResponseFetch() {
@@ -37,7 +36,6 @@ class IOSResponseFetch implements ResponseFetch {
     // or you're doing something wrong and should expect a crash regardless.
   };
 
-  @override
   Completer<SDKIPCResponse> initResponseCompleter(String key) {
     responseCompleters[key] = Completer();
     return responseCompleters[key]!;
@@ -56,7 +54,8 @@ class IOSResponseFetch implements ResponseFetch {
   }
 
   @override
-  Future<SDKIPCResponse> sendMessage(SDKIPCMessage sdkipcMessage, Completer<SDKIPCResponse> completer) {
+  Future<SDKIPCResponse> sendMessage({required SDKIPCMessage sdkipcMessage, required String key}) {
+    final completer = initResponseCompleter(key);
     final encodedMessage = sdkipcMessage.createMessage();
     final universalLink = createLink(encodedMessage: encodedMessage);
     dispatchUniLink(universalLink);
@@ -101,7 +100,6 @@ class AndroidResponseFetch implements ResponseFetch {
     // or you're doing something wrong and should expect a crash regardless.
   };
 
-  @override
   Completer<SDKIPCResponse> initResponseCompleter(String key) {
     responseCompleters[key] = Completer();
     return responseCompleters[key]!;
@@ -120,7 +118,8 @@ class AndroidResponseFetch implements ResponseFetch {
   }
 
   @override
-  Future<SDKIPCResponse> sendMessage(SDKIPCMessage sdkipcMessage, Completer<SDKIPCResponse> completer) {
+  Future<SDKIPCResponse> sendMessage({required SDKIPCMessage sdkipcMessage, required String key}) {
+    final completer = initResponseCompleter(key);
     final encodedMessage = sdkipcMessage.createMessage();
     final universalLink = createLink(encodedMessage: encodedMessage);
     dispatchUniLink(universalLink);
@@ -143,10 +142,6 @@ class AndroidResponseFetchV2 implements ResponseFetch {
   @override
   void complete({required String key, required SDKIPCResponse sdkipcResponse}) {}
 
-  @override
-  Completer<SDKIPCResponse> initResponseCompleter(String key) {
-    return Completer();
-  }
 
   @override
   bool listenerExists({required String key}) {
@@ -154,7 +149,7 @@ class AndroidResponseFetchV2 implements ResponseFetch {
   }
 
   @override
-  Future<SDKIPCResponse> sendMessage(SDKIPCMessage sdkipcMessage, Completer<SDKIPCResponse> _) async {
+  Future<SDKIPCResponse> sendMessage({required SDKIPCMessage sdkipcMessage, required String key}) async {
     final completer = Completer<SDKIPCResponse>();
 
     try {
