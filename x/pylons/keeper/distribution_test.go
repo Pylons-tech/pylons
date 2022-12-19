@@ -577,6 +577,13 @@ func (suite *IntegrationTestSuite) TestGetHoldersRewardsDistributionPercentages(
 					}
 
 				}
+				require.Equal(tc.executer.expectedCoins, sdk.Coins{
+					sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(0)},
+				})
+				require.Equal(tc.creator.expectedCoins, sdk.Coins{
+					sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(90)},
+				})
+
 				// Checking if delegators Rewards are not empty
 				require.NotEqual(len(holderRewards), 0)
 			}
