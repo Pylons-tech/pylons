@@ -17,11 +17,15 @@ abstract class ResponseFetch {
   Future<SDKIPCResponse> sendMessage({required SDKIPCMessage sdkipcMessage, required String key});
 }
 
-ResponseFetch getResponseFetch() {
+Future<ResponseFetch> getResponseFetch() async {
   if (Platform.isIOS) {
     return IOSResponseFetch.instance;
   } else {
-    return AndroidResponseFetchV2.instance;
+    if (await _portExistsOrNot()) {
+      return AndroidResponseFetchV2.instance;
+    } else {
+      return AndroidResponseFetch.instance;
+    }
   }
 }
 
@@ -142,10 +146,9 @@ class AndroidResponseFetchV2 implements ResponseFetch {
   @override
   void complete({required String key, required SDKIPCResponse sdkipcResponse}) {}
 
-
   @override
   bool listenerExists({required String key}) {
-    throw UnimplementedError();
+    return false;
   }
 
   @override
@@ -180,5 +183,14 @@ class AndroidResponseFetchV2 implements ResponseFetch {
     }
 
     return completer.future;
+  }
+}
+
+Future<bool> _portExistsOrNot() async {
+  try {
+    await http.get(Uri.parse('http://127.0.0.1:3333/exists'));
+    return true;
+  } catch (e) {
+    return false;
   }
 }
