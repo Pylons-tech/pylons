@@ -6,7 +6,7 @@ import (
 
 	"cosmossdk.io/math"
 	"github.com/Pylons-tech/pylons/app/apptesting"
-	v4 "github.com/Pylons-tech/pylons/app/upgrades/v4"
+	v4 "github.com/Pylons-tech/pylons/app/upgrades/testnet/v4"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"

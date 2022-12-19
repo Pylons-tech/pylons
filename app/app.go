@@ -10,10 +10,11 @@ import (
 	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
 
 	"github.com/Pylons-tech/pylons/app/upgrades"
-	v3 "github.com/Pylons-tech/pylons/app/upgrades/v3"
-	v4 "github.com/Pylons-tech/pylons/app/upgrades/v4"
-	v5 "github.com/Pylons-tech/pylons/app/upgrades/v5"
-	v6 "github.com/Pylons-tech/pylons/app/upgrades/v6"
+	v1 "github.com/Pylons-tech/pylons/app/upgrades/mainnet/v1"
+	v3 "github.com/Pylons-tech/pylons/app/upgrades/testnet/v3"
+	v4 "github.com/Pylons-tech/pylons/app/upgrades/testnet/v4"
+	v5 "github.com/Pylons-tech/pylons/app/upgrades/testnet/v5"
+	v6 "github.com/Pylons-tech/pylons/app/upgrades/testnet/v6"
 
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	"github.com/cosmos/cosmos-sdk/version"
@@ -833,6 +834,11 @@ func (app *PylonsApp) setupUpgradeHandlers() {
 	app.UpgradeKeeper.SetUpgradeHandler(
 		v6.UpgradeName,
 		v6.CreateUpgradeHandler(app.mm, app.configurator, app.BankKeeper, &app.AccountKeeper, &app.StakingKeeper),
+	)
+	// v1.1.2 mainnet upgrade handler
+	app.UpgradeKeeper.SetUpgradeHandler(
+		v1.UpgradeName,
+		v1.CreateUpgradeHandler(app.mm, app.configurator, app.BankKeeper, &app.AccountKeeper, &app.StakingKeeper),
 	)
 }
 

@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/Pylons-tech/pylons/app"
-	v4 "github.com/Pylons-tech/pylons/app/upgrades/v4"
+	v4 "github.com/Pylons-tech/pylons/app/upgrades/testnet/v4"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/stretchr/testify/require"
