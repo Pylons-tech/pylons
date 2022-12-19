@@ -447,29 +447,29 @@ func (suite *IntegrationTestSuite) TestGetHoldersRewardsDistributionPercentages(
 			creator: Account{
 				address: types.GenTestBech32FromString("creator"),
 				coins: sdk.Coins{
-					sdk.Coin{types.PylonsCoinDenom, sdk.NewInt(0)},
+					sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(0)},
 				},
 				expectedCoins: sdk.Coins{
-					sdk.Coin{types.PylonsCoinDenom, sdk.NewInt(90)},
+					sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(90)},
 				},
 			},
 			executer: Account{
 				types.GenTestBech32FromString("executer"),
 				sdk.Coins{
-					sdk.Coin{types.PylonsCoinDenom, sdk.NewInt(100)},
+					sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(100)},
 				},
 				sdk.Coins{
-					sdk.Coin{types.PylonsCoinDenom, sdk.NewInt(0)},
+					sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(0)},
 				},
 			},
 			holder: Account{
 				types.GenTestBech32FromString("holder"),
 				sdk.Coins{
-					sdk.Coin{types.StakingCoinDenom, sdk.NewInt(100)},
+					sdk.Coin{Denom: types.StakingCoinDenom, Amount: sdk.NewInt(100)},
 				},
 				sdk.Coins{
-					sdk.Coin{types.StakingCoinDenom, sdk.NewInt(100)},
-					sdk.Coin{types.PylonsCoinDenom, sdk.NewInt(9)},
+					sdk.Coin{Denom: types.StakingCoinDenom, Amount: sdk.NewInt(100)},
+					sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(9)},
 				},
 			},
 		},
