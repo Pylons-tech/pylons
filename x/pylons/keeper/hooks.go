@@ -9,7 +9,7 @@ import (
 
 func (k Keeper) sendDelegatorRewards(ctx sdk.Context, sk types.StakingKeeper, totalRewardCoins sdk.Coins) {
 	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
-	delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages, totalRewardCoins)
+	delegatorsRewards := k.CalculateRewardsHelper(distrPercentages, totalRewardCoins)
 	if delegatorsRewards != nil {
 		err := k.SendRewards(ctx, delegatorsRewards)
 		if err != nil {
@@ -20,7 +20,7 @@ func (k Keeper) sendDelegatorRewards(ctx sdk.Context, sk types.StakingKeeper, to
 
 func (k Keeper) sendBedRockholderRewards(ctx sdk.Context, sk types.StakingKeeper, ak types.AccountKeeper, totalRewardCoins sdk.Coins) {
 	distrPercentages := k.GetHoldersRewardsDistributionPercentages(ctx, sk, ak)
-	delegatorsRewards := k.CalculateHolderRewards(ctx, distrPercentages, totalRewardCoins)
+	delegatorsRewards := k.CalculateHolderRewardsHelper(distrPercentages, totalRewardCoins)
 	if delegatorsRewards != nil {
 		err := k.SendRewards(ctx, delegatorsRewards)
 		if err != nil {

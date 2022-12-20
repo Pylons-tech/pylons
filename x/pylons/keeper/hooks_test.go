@@ -135,7 +135,7 @@ func (suite *IntegrationTestSuite) TestAfterEpochEndWithDeligators() {
 	// get the balance of the feeCollector moduleAcc
 	rewardsTotalAmount := bk.SpendableCoins(ctx, k.FeeCollectorAddress())
 	// calculate delegator rewards
-	delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages, rewardsTotalAmount)
+	delegatorsRewards := k.CalculateRewardsHelper(distrPercentages, rewardsTotalAmount)
 	delegatorMap := map[string]sdk.Coins{}
 	balances := sdk.Coins{}
 	// checking if delegator rewards are not nil
@@ -247,7 +247,7 @@ func (suite *IntegrationTestSuite) TestAfterEpochEndNoDeligators() {
 
 	// get the balance of the feeCollector moduleAcc
 	rewardsTotalAmount := bk.SpendableCoins(ctx, k.FeeCollectorAddress())
-	delegatorsRewards := k.CalculateDelegatorsRewards(ctx, nil, rewardsTotalAmount)
+	delegatorsRewards := k.CalculateRewardsHelper(nil, rewardsTotalAmount)
 	delegatorMap := map[string]sdk.Coins{}
 	balances := sdk.Coins{}
 	if len(delegatorsRewards) == 0 {
