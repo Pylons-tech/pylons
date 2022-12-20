@@ -454,20 +454,20 @@ func (suite *IntegrationTestSuite) TestGetHoldersRewardsDistributionPercentages(
 				},
 			},
 			executer: Account{
-				types.GenTestBech32FromString("executer"),
-				sdk.Coins{
+				address: types.GenTestBech32FromString("executor"),
+				coins: sdk.Coins{
 					sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(100)},
 				},
-				sdk.Coins{
+				expectedCoins: sdk.Coins{
 					sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(0)},
 				},
 			},
 			holder: Account{
-				types.GenTestBech32FromString("holder"),
-				sdk.Coins{
+				address: types.GenTestBech32FromString("holder"),
+				coins: sdk.Coins{
 					sdk.Coin{Denom: types.StakingCoinDenom, Amount: sdk.NewInt(100)},
 				},
-				sdk.Coins{
+				expectedCoins: sdk.Coins{
 					sdk.Coin{Denom: types.StakingCoinDenom, Amount: sdk.NewInt(100)},
 					sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(9)},
 				},
@@ -513,13 +513,8 @@ func (suite *IntegrationTestSuite) TestGetHoldersRewardsDistributionPercentages(
 				Version:       "v0.0.1",
 				BlockInterval: 10,
 				CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
-				CoinInputs: []types.CoinInput{{Coins: sdk.Coins{
-					sdk.Coin{
-						Denom:  types.PylonsCoinDenom,
-						Amount: math.NewInt(100),
-					},
-				}}},
-				Enabled: true,
+				CoinInputs:    []types.CoinInput{{Coins: sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100)))}},
+				Enabled:       true,
 			}
 			_, err = srv.CreateRecipe(sdk.WrapSDKContext(suite.ctx), recipeMsg)
 			require.NoError(err)
@@ -577,13 +572,15 @@ func (suite *IntegrationTestSuite) TestGetHoldersRewardsDistributionPercentages(
 					}
 
 				}
+				// get executor pylon balance
+				executorBalance := bk.GetBalance(suite.ctx, sdk.MustAccAddressFromBech32(tc.executer.address), types.PylonsCoinDenom)
 				require.Equal(tc.executer.expectedCoins, sdk.Coins{
-					sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(0)},
+					executorBalance,
 				})
+				creatorBalance := bk.GetBalance(ctx, sdk.MustAccAddressFromBech32(tc.creator.address), types.PylonsCoinDenom)
 				require.Equal(tc.creator.expectedCoins, sdk.Coins{
-					sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(90)},
+					creatorBalance,
 				})
-
 				// Checking if delegators Rewards are not empty
 				require.NotEqual(len(holderRewards), 0)
 			}

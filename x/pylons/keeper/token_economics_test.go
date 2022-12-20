@@ -150,8 +150,10 @@ func (suite *IntegrationTestSuite) TestAfterEpochEndTokenEconomics() {
 
 	// get reward distribution percentages
 	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
+	// get the balance of the feeCollector moduleAcc
+	rewardsTotalAmount := bk.SpendableCoins(ctx, k.FeeCollectorAddress())
 	// calculate delegator rewards
-	delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages)
+	delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages, rewardsTotalAmount)
 	delegatorMap := map[string]sdk.Coins{}
 	balances := sdk.Coins{}
 	// checking if delegator rewards are not nil

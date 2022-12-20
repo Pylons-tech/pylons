@@ -7,9 +7,9 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) sendDelegatorRewards(ctx sdk.Context, sk types.StakingKeeper) {
+func (k Keeper) sendDelegatorRewards(ctx sdk.Context, sk types.StakingKeeper, totalRewardCoins sdk.Coins) {
 	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
-	delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages)
+	delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages, totalRewardCoins)
 	if delegatorsRewards != nil {
 		err := k.SendRewards(ctx, delegatorsRewards)
 		if err != nil {
@@ -18,9 +18,9 @@ func (k Keeper) sendDelegatorRewards(ctx sdk.Context, sk types.StakingKeeper) {
 	}
 }
 
-func (k Keeper) sendBedRockholderRewards(ctx sdk.Context, sk types.StakingKeeper, ak types.AccountKeeper) {
+func (k Keeper) sendBedRockholderRewards(ctx sdk.Context, sk types.StakingKeeper, ak types.AccountKeeper, totalRewardCoins sdk.Coins) {
 	distrPercentages := k.GetHoldersRewardsDistributionPercentages(ctx, sk, ak)
-	delegatorsRewards := k.CalculateHolderRewards(ctx, distrPercentages)
+	delegatorsRewards := k.CalculateHolderRewards(ctx, distrPercentages, totalRewardCoins)
 	if delegatorsRewards != nil {
 		err := k.SendRewards(ctx, delegatorsRewards)
 		if err != nil {
@@ -34,8 +34,10 @@ func (k Keeper) BeforeEpochStart(ctx sdk.Context, epochIdentifier string, epochN
 
 func (k Keeper) AfterEpochEnd(ctx sdk.Context, epochIdentifier string, epochNumber int64, sk types.StakingKeeper, ak types.AccountKeeper) {
 	if epochIdentifier == k.DistrEpochIdentifier(ctx) {
-		k.sendDelegatorRewards(ctx, sk)
-		k.sendBedRockholderRewards(ctx, sk, ak)
+		// get the balance of the feeCollector moduleAcc
+		rewardsTotalAmount := k.bankKeeper.SpendableCoins(ctx, k.FeeCollectorAddress())
+		k.sendDelegatorRewards(ctx, sk, rewardsTotalAmount)
+		k.sendBedRockholderRewards(ctx, sk, ak, rewardsTotalAmount)
 	}
 }
 
