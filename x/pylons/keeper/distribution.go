@@ -15,8 +15,8 @@ const (
 	BedRockHolderRewardPercentage = 90
 )
 
-func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper) (distrPercentages map[string]sdk.Dec) {
-	distrPercentages = make(map[string]sdk.Dec)
+func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper) (distPercentages []types.DistributionPercentage) {
+	distrPercentages := make(map[string]sdk.Dec)
 	sharesMap := make(map[string]sdk.Dec)
 	validators := make(map[string]bool)
 	totalShares := sdk.ZeroDec()
@@ -74,7 +74,8 @@ func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.Stak
 			distrPercentages[valAccAddr.String()] = distrPercentages[valAccAddr.String()].Add(commissionPercentage)
 		}
 	}
-	return distrPercentages
+	distPercentage := convertMapToArray(distrPercentages)
+	return distPercentage
 }
 
 func (k Keeper) getTotalSupply(ctx sdk.Context, ak types.AccountKeeper, denom string) sdk.Dec {
@@ -97,7 +98,7 @@ func (k Keeper) getTotalSupply(ctx sdk.Context, ak types.AccountKeeper, denom st
 	return totalAvailable
 }
 
-func (k Keeper) GetHoldersRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper, ak types.AccountKeeper) map[string]sdk.Dec {
+func (k Keeper) GetHoldersRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper, ak types.AccountKeeper) (distPercentages []types.DistributionPercentage) {
 	distrPercentages := make(map[string]sdk.Dec)
 	stakingDenom := types.StakingCoinDenom
 	// Get all account balances
@@ -118,7 +119,8 @@ func (k Keeper) GetHoldersRewardsDistributionPercentages(ctx sdk.Context, sk typ
 
 		}
 	}
-	return distrPercentages
+	distPercentage := convertMapToArray(distrPercentages)
+	return distPercentage
 }
 
 func calculateAvailableAmount(coin math.Int) sdk.Dec {
@@ -131,22 +133,26 @@ func calculateHolderAavailableAmount(coin math.Int) sdk.Dec {
 	return sdk.NewDecFromInt(coin).Mul(holderPercentage)
 }
 
-func (k Keeper) CalculateRewardsHelper(distrPercentages map[string]sdk.Dec, rewardsTotalAmount sdk.Coins) (delegatorsRewards map[string]sdk.Coins) {
+func (k Keeper) CalculateRewardsHelper(distrPercentages []types.DistributionPercentage, rewardsTotalAmount sdk.Coins) (delegatorsRewards []types.DistributionCoin) {
 	if !rewardsTotalAmount.IsZero() {
-		delegatorsRewards = make(map[string]sdk.Coins)
-		for addr, percentage := range distrPercentages {
+		delegatorsRewards = make([]types.DistributionCoin, 0)
+		for _, percentage := range distrPercentages {
 			totalAmountsForAddr := sdk.NewCoins()
 			for _, coin := range rewardsTotalAmount {
 
 				availableAmount := calculateAvailableAmount(coin.Amount)
-				amountForAddr := availableAmount.Mul(percentage)
+				amountForAddr := availableAmount.Mul(percentage.SharePercentage)
 				if amountForAddr.IsPositive() {
 					// only add strictly positive amounts
 					totalAmountsForAddr = totalAmountsForAddr.Add(sdk.NewCoin(coin.Denom, amountForAddr.RoundInt()))
 				}
 			}
 			if !totalAmountsForAddr.Empty() {
-				delegatorsRewards[addr] = totalAmountsForAddr
+				distrCoins := types.DistributionCoin{
+					Address: percentage.Address,
+					Coins:   totalAmountsForAddr,
+				}
+				delegatorsRewards = append(delegatorsRewards, distrCoins)
 			}
 		}
 	} else {
@@ -155,22 +161,26 @@ func (k Keeper) CalculateRewardsHelper(distrPercentages map[string]sdk.Dec, rewa
 	return
 }
 
-func (k Keeper) CalculateHolderRewardsHelper(distrPercentages map[string]sdk.Dec, rewardsTotalAmount sdk.Coins) (delegatorsRewards map[string]sdk.Coins) {
+func (k Keeper) CalculateHolderRewardsHelper(distrPercentages []types.DistributionPercentage, rewardsTotalAmount sdk.Coins) (holdersRewards []types.DistributionCoin) {
 	if !rewardsTotalAmount.IsZero() {
-		delegatorsRewards = make(map[string]sdk.Coins)
-		for addr, percentage := range distrPercentages {
+		holdersRewards = make([]types.DistributionCoin, 0)
+		for _, percentage := range distrPercentages {
 			totalAmountsForAddr := sdk.NewCoins()
 			for _, coin := range rewardsTotalAmount {
 
 				availableAmount := calculateHolderAavailableAmount(coin.Amount)
-				amountForAddr := availableAmount.Mul(percentage)
+				amountForAddr := availableAmount.Mul(percentage.SharePercentage)
 				if amountForAddr.IsPositive() {
 					// only add strictly positive amounts
 					totalAmountsForAddr = totalAmountsForAddr.Add(sdk.NewCoin(coin.Denom, amountForAddr.RoundInt()))
 				}
 			}
 			if !totalAmountsForAddr.Empty() {
-				delegatorsRewards[addr] = totalAmountsForAddr
+				distrCoins := types.DistributionCoin{
+					Address: percentage.Address,
+					Coins:   totalAmountsForAddr,
+				}
+				holdersRewards = append(holdersRewards, distrCoins)
 			}
 		}
 	} else {
@@ -179,12 +189,12 @@ func (k Keeper) CalculateHolderRewardsHelper(distrPercentages map[string]sdk.Dec
 	return
 }
 
-func (k Keeper) SendRewards(ctx sdk.Context, delegatorsRewards map[string]sdk.Coins) error {
-	for addr, amount := range delegatorsRewards {
-		accAddr, _ := sdk.AccAddressFromBech32(addr)
-		err := k.SendRewardsFromFeeCollector(ctx, accAddr, amount)
+func (k Keeper) SendRewards(ctx sdk.Context, delegatorsRewards []types.DistributionCoin) error {
+	for _, dist := range delegatorsRewards {
+		accAddr, _ := sdk.AccAddressFromBech32(dist.Address)
+		err := k.SendRewardsFromFeeCollector(ctx, accAddr, dist.Coins)
 		if err != nil {
-			return sdkerrors.Wrapf(err, "unable to send coins to %v from %v", addr, k.FeeCollectorAddress().String())
+			return sdkerrors.Wrapf(err, "unable to send coins to %v from %v", dist.Address, k.FeeCollectorAddress().String())
 		}
 	}
 	return nil
@@ -216,4 +226,16 @@ func checkModuleAccount(acc string, modAccs []string) bool {
 		}
 	}
 	return found
+}
+
+func convertMapToArray(distrPercentage map[string]sdk.Dec) []types.DistributionPercentage {
+	distPercentage := make([]types.DistributionPercentage, 0)
+	for add, percentage := range distrPercentage {
+		percentage := types.DistributionPercentage{
+			Address:         add,
+			SharePercentage: percentage,
+		}
+		distPercentage = append(distPercentage, percentage)
+	}
+	return distPercentage
 }

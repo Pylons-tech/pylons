@@ -159,14 +159,14 @@ func (suite *IntegrationTestSuite) TestAfterEpochEndTokenEconomics() {
 	// checking if delegator rewards are not nil
 	if delegatorsRewards != nil {
 		// looping through delegators to get their old balance
-		for address, amount := range delegatorsRewards {
+		for _, reward := range delegatorsRewards {
 			// looping through amount type of sdk.coins to get every amount and denom
-			for _, val := range amount {
-				oldBalance := suite.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(address), val.Denom)
+			for _, val := range reward.Coins {
+				oldBalance := suite.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(reward.Address), val.Denom)
 				// Appending old balance in balances so we can compare it later on with updated balance
 				balances = append(balances, oldBalance.Add(val))
 			}
-			delegatorMap[address] = balances
+			delegatorMap[reward.Address] = balances
 
 		}
 		// sending rewards to delegators

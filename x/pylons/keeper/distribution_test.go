@@ -145,6 +145,15 @@ func computeDistrPercentages(validators []*sdknetwork.Validator, distrMap map[st
 	return
 }
 
+// convert array to map used in test
+func convertArrayToMap(distrPercentage []types.DistributionPercentage) map[string]sdk.Dec {
+	distPercentage := make(map[string]sdk.Dec, 0)
+	for _, dist := range distrPercentage {
+		distPercentage[dist.Address] = dist.SharePercentage
+	}
+	return distPercentage
+}
+
 // TestGetRewardsDistributionPercentages to perform this test we need to use network simulation, even though it's in keeper
 func (suite *IntegrationTestSuite) TestGetRewardsDistributionPercentages() {
 	k := suite.k
@@ -263,13 +272,14 @@ func (suite *IntegrationTestSuite) TestGetRewardsDistributionPercentages() {
 	_ = bk.SpendableCoins(ctx, feeCollectorAddr)
 
 	// get reward distribution percentages
-	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
+	distPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
 	// Now we will calculate what should be the output
 	delegations := sk.GetAllSDKDelegations(ctx)
 	totalShares := sdk.ZeroDec()
 	validators := make(map[string]bool)
 	sharesMap := make(map[string]sdk.Dec)
-
+	// convert array to map for testing
+	distrPercentages := convertArrayToMap(distPercentages)
 	// calculating total shares for out validators
 	for _, delegation := range delegations {
 		valAddr := delegation.GetValidatorAddr()
@@ -396,18 +406,22 @@ func (suite *IntegrationTestSuite) TestCalculateDelegatorsRewards() {
 	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
 	rewardsTotalAmount := bk.SpendableCoins(ctx, k.FeeCollectorAddress())
 	if !rewardsTotalAmount.IsZero() {
-		delegatorsRewards := make(map[string]sdk.Coins)
-		for addr, percentage := range distrPercentages {
+		delegatorsRewards := make([]types.DistributionCoin, 0)
+		for _, percentage := range distrPercentages {
 			totalAmountsForAddr := sdk.NewCoins()
 			for _, coin := range rewardsTotalAmount {
-				amountForAddr := sdk.NewDecFromInt(coin.Amount).Mul(percentage).TruncateInt()
+				amountForAddr := sdk.NewDecFromInt(coin.Amount).Mul(percentage.SharePercentage).TruncateInt()
 				if amountForAddr.IsPositive() {
 					// only add strictly positive amounts
 					totalAmountsForAddr = totalAmountsForAddr.Add(sdk.NewCoin(coin.Denom, amountForAddr))
 				}
 			}
 			if !totalAmountsForAddr.Empty() {
-				delegatorsRewards[addr] = totalAmountsForAddr
+				distrCoins := types.DistributionCoin{
+					Address: percentage.Address,
+					Coins:   totalAmountsForAddr,
+				}
+				delegatorsRewards = append(delegatorsRewards, distrCoins)
 				// Comparing amount to pay/10 percent with totalAmounts for address are equal
 				require.Equal(totalAmountsForAddr[0].Amount.Int64(), amountToPay[0].Amount.Int64()/10)
 			}
@@ -551,24 +565,28 @@ func (suite *IntegrationTestSuite) TestGetHoldersRewardsDistributionPercentages(
 
 			rewardsTotalAmount := bk.SpendableCoins(ctx, k.FeeCollectorAddress())
 			if !rewardsTotalAmount.IsZero() {
-				holderRewards := make(map[string]sdk.Coins)
-				for addr, percentage := range distrPercentages {
+				holderRewards := make([]types.DistributionCoin, 0)
+				for _, percentage := range distrPercentages {
 
-					require.Equal(sdk.NewDec(1), percentage)
+					require.Equal(sdk.NewDec(1), percentage.SharePercentage)
 					totalAmountsForAddr := sdk.NewCoins()
 					for _, coin := range rewardsTotalAmount {
 
 						holderRewardPercentage := sdk.NewDec(keeper.BedRockHolderRewardPercentage).Quo(sdk.NewDec(100))
 						amount := sdk.NewDec(coin.Amount.Int64())
 						availableAmount := amount.Mul(holderRewardPercentage)
-						amountForAddr := availableAmount.Mul(percentage)
+						amountForAddr := availableAmount.Mul(percentage.SharePercentage)
 						if amountForAddr.IsPositive() {
 							// only add strictly positive amounts
 							totalAmountsForAddr = totalAmountsForAddr.Add(sdk.NewCoin(coin.Denom, amountForAddr.RoundInt()))
 						}
 					}
 					if !totalAmountsForAddr.Empty() {
-						holderRewards[addr] = totalAmountsForAddr
+						distrCoins := types.DistributionCoin{
+							Address: percentage.Address,
+							Coins:   totalAmountsForAddr,
+						}
+						holderRewards = append(holderRewards, distrCoins)
 					}
 
 				}
