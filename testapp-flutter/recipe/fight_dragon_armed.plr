@@ -37,7 +37,7 @@
                     {
                         "key": "currentHp",
                         "weightRanges": [],
-                        "program": "(currentHp - 5) - rand_int(5)"
+                        "program": "(currentHp - 5) - rand(5)"
                     }
                 ],
                 "strings": [],

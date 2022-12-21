@@ -56,11 +56,6 @@
                     "minValue": 1,
                     "maxValue": 999999999
                 },
-				{
-				    "key": "wins",
-                    "minValue": 0,
-                    "maxValue": 999999999
-				},
                 {
                     "key": "swordLevel",
                     "minValue": %0,
@@ -84,12 +79,7 @@
                     "key": "currentHp",
                     "minValue": 1,
                     "maxValue": 999999999
-                },
-				{
-				    "key": "coins",
-                    "minValue": 0,
-                    "maxValue": 999999999
-				}
+                }
             ],
             "strings": [
                 {
