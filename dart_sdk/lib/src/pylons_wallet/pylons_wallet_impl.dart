@@ -63,7 +63,8 @@ class PylonsWalletImpl implements PylonsWallet {
     final sdkIPCMessage = SDKIPCMessage(key, data, getHostBasedOnOS(Platform.isAndroid), requestResponse);
 
     if (requestResponse) {
-      return sendMessage(sdkIPCMessage, getResponseFetch().initResponseCompleter(key));
+      final responseFetcher = await getResponseFetch();
+      return responseFetcher.sendMessage(sdkipcMessage: sdkIPCMessage, key: key);
     }
 
     return sendMessageWithoutResponse(sdkIPCMessage);
@@ -85,13 +86,6 @@ class PylonsWalletImpl implements PylonsWallet {
     }
   }
 
-  @override
-  Future<SDKIPCResponse> sendMessage(SDKIPCMessage sdkipcMessage, Completer<SDKIPCResponse> completer) {
-    final encodedMessage = sdkipcMessage.createMessage();
-    final universalLink = createLinkBasedOnOS(encodedMessage: encodedMessage, isAndroid: Platform.isAndroid);
-    dispatchUniLink(universalLink);
-    return completer.future;
-  }
 
   SDKIPCResponse sendMessageWithoutResponse(SDKIPCMessage sdkipcMessage) {
     final encodedMessage = sdkipcMessage.createMessage();

@@ -3,11 +3,14 @@ import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:pylons_sdk/src/generated/pylons/trade.pb.dart';
 
-import '../../../pylons_wallet/response_fetcher/response_fetch.dart';
+
 
 class GetTradesHandler implements IPCHandler {
   @override
-  void handler(SDKIPCResponse<dynamic> response) {
+  void handler(
+    SDKIPCResponse<dynamic> response,
+    void Function(String key, SDKIPCResponse response) onHandlingComplete,
+  ) {
     final defaultResponse = SDKIPCResponse<List<Trade>>(
         success: response.success,
         action: response.action,
@@ -25,6 +28,7 @@ class GetTradesHandler implements IPCHandler {
       defaultResponse.errorCode = Strings.ERR_MALFORMED_TRADES;
       defaultResponse.success = false;
     }
-    getResponseFetch().complete(key: Strings.GET_TRADES, sdkipcResponse: defaultResponse);
+    
+    return onHandlingComplete(Strings.GET_TRADES, defaultResponse);
   }
 }

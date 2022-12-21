@@ -1,7 +1,7 @@
 name: pylons_wallet
 description: Pylons Wallet
 publish_to: "none"
-version: 1.0.1+168
+version: 1.0.1+170
 
 
 
@@ -9,7 +9,6 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-
   advance_pdf_viewer:
     path: pkgs/pdf_viewer-master
   alan:

@@ -66,6 +66,7 @@ import 'package:transaction_signing_gateway/storage/flutter_secure_storage_data_
 import 'package:transaction_signing_gateway/storage/shared_prefs_plain_data_store.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../ipc/local_server.dart';
 import '../../services/third_party_services/database/database.dart';
 
 final sl = GetIt.instance;
@@ -76,6 +77,7 @@ Future<void> init() async {
   sl.registerLazySingleton<InternetConnectionChecker>(() => InternetConnectionChecker.createInstance(checkTimeout: const Duration(seconds: 20)));
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   sl.registerLazySingleton<IPCEngine>(() => IPCEngine(repository: sl(), walletsStore: sl(), accountProvider: sl<AccountProvider>()));
+  sl.registerLazySingleton<LocalServer>(() => LocalServer(sl<HandlerFactory>()));
   sl.registerFactory<AudioPlayerHelper>(() => AudioPlayerHelperImpl(sl()));
   sl.registerFactory<VideoPlayerHelper>(() => VideoPlayerHelperImp(sl()));
   sl.registerFactory<ThumbnailHelper>(() => ThumbnailHelperImp());
@@ -202,7 +204,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => StripeHandler(walletsStore: sl(), localDataSource: sl(), repository: sl(), accountProvider: sl()));
   sl.registerLazySingleton(() => HomeProvider(repository: sl(), accountPublicInfo: sl<AccountProvider>().accountPublicInfo!));
   sl.registerLazySingleton(() => GeneralScreenViewModel());
-  sl.registerLazySingleton(() => UserInfoProvider(sl()));
+  sl.registerLazySingleton(() => UserInfoProvider(sl<IPCEngine>(), sl<LocalServer>()));
   sl.registerLazySingleton(() => GeneralScreenLocalizationViewModel(shareHelper: sl(), repository: sl(), walletStore: sl()));
   sl.registerLazySingleton(() => PracticeTestViewModel(sl()));
   sl.registerLazySingleton(() => FailureManagerViewModel(repository: sl()));

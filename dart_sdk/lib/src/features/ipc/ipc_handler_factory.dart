@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:pylons_sdk/src/core/constants/strings.dart';
 import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
 import 'package:pylons_sdk/src/features/ipc/handlers/create_cookbook_handler.dart';
@@ -34,17 +36,22 @@ class IPCHandlerFactory {
 
   /// Fetches and resolves appropriate [IPCHandler] instance for [sdkIpcResponse], or completes
   /// the completer if no specific handler is set.
-  static void getHandler(SDKIPCResponse sdkipcResponse) {
-    print(sdkipcResponse);
-    
-    if (!getResponseFetch().listenerExists(key: sdkipcResponse.action)) {
-      throw Exception(
-          'Unexpected response for unsent message of type ${sdkipcResponse.action}');
+  static void getHandler(SDKIPCResponse sdkipcResponse) async {
+    var responseFetcher = await getResponseFetch();
+    if (!responseFetcher.listenerExists(key: sdkipcResponse.action)) {
+      if (Platform.isAndroid) {
+        responseFetcher = AndroidResponseFetch.instance;
+      } else {
+        throw Exception('Unexpected response for unsent message of type ${sdkipcResponse.action}');
+      }
     }
     if (handlers.containsKey(sdkipcResponse.action)) {
-      handlers[sdkipcResponse.action]!.handler(sdkipcResponse);
+      handlers[sdkipcResponse.action]!.handler(
+        sdkipcResponse,
+        ((key, response) => responseFetcher.complete(key: key, sdkipcResponse: response)),
+      );
     } else {
-      getResponseFetch().complete(key: sdkipcResponse.action, sdkipcResponse: sdkipcResponse);
+      responseFetcher.complete(key: sdkipcResponse.action, sdkipcResponse: sdkipcResponse);
     }
     return;
   }

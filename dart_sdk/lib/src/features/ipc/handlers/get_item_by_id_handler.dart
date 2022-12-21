@@ -5,11 +5,13 @@ import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:pylons_sdk/src/generated/pylons/item.pb.dart';
 
-import '../../../pylons_wallet/response_fetcher/response_fetch.dart';
 
 class GetItemByIdHandler implements IPCHandler {
   @override
-  void handler(SDKIPCResponse<dynamic> response) {
+  void handler(
+    SDKIPCResponse<dynamic> response,
+    void Function(String key, SDKIPCResponse response) onHandlingComplete,
+  ) {
     final defaultResponse = SDKIPCResponse<Item>(
         success: response.success,
         action: response.action,
@@ -19,8 +21,7 @@ class GetItemByIdHandler implements IPCHandler {
 
     try {
       if (response.success) {
-        defaultResponse.data = Item.create()
-          ..mergeFromProto3Json(jsonDecode(response.data));
+        defaultResponse.data = Item.create()..mergeFromProto3Json(jsonDecode(response.data));
       }
     } on FormatException catch (_) {
       defaultResponse.error = _.message;
@@ -28,7 +29,6 @@ class GetItemByIdHandler implements IPCHandler {
       defaultResponse.success = false;
     }
 
-        getResponseFetch().complete(key: Strings.GET_ITEM_BY_ID, sdkipcResponse: defaultResponse);
-
+    return onHandlingComplete(Strings.GET_ITEM_BY_ID, defaultResponse);
   }
 }

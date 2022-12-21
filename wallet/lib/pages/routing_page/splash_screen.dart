@@ -52,7 +52,8 @@ class _SplashScreenState extends State<SplashScreen> {
     timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
-        if (getImageIndex.value > 4) {
+        if (getImageIndex.value == 5) {
+          timer.cancel();
           checkAppLatestOrNot().then((value) {
             userInfoProvider.initIPC();
           });
@@ -179,7 +180,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     await accountProvider.loadWallets();
 
-    Navigator.of(navigatorKey.currentState!.overlay!.context).pushReplacementNamed(RouteUtil.ROUTE_APP_UPDATE, arguments: remoteConfigVersion);
+    Navigator.of(navigatorKey.currentState!.overlay!.context).pushReplacementNamed(
+      RouteUtil.ROUTE_APP_UPDATE,
+      arguments: remoteConfigVersion,
+    );
 
     return false;
   }

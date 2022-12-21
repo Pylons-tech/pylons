@@ -5,11 +5,13 @@ import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:pylons_sdk/src/generated/pylons/cookbook.pb.dart';
 
-import '../../../pylons_wallet/response_fetcher/response_fetch.dart';
 
 class GetCookbooksHandler implements IPCHandler {
   @override
-  void handler(SDKIPCResponse<dynamic> response) {
+  void handler(
+    SDKIPCResponse<dynamic> response,
+    void Function(String key, SDKIPCResponse response) onHandlingComplete,
+  ) {
     final defaultResponse = SDKIPCResponse<Cookbook>(
         success: response.success,
         action: response.action,
@@ -26,6 +28,6 @@ class GetCookbooksHandler implements IPCHandler {
       defaultResponse.errorCode = Strings.ERR_MALFORMED_COOKBOOK;
     }
 
-    getResponseFetch().complete(key: Strings.GET_COOKBOOK, sdkipcResponse: defaultResponse);
+    return onHandlingComplete(Strings.GET_COOKBOOK, defaultResponse);
   }
 }
