@@ -39,12 +39,13 @@ class PylonsDrawer extends StatelessWidget {
                 SizedBox(
                   height: 10.h,
                 ),
-                DrawerTile(
-                  LocaleKeys.edit_profile.tr(),
-                  width: 75,
-                  textAlign: TextAlign.center,
-                  onPressed: () {},
-                ),
+                /// Revert when the functionality is added
+                // DrawerTile(
+                //   LocaleKeys.edit_profile.tr(),
+                //   width: 75,
+                //   textAlign: TextAlign.center,
+                //   onPressed: () {},
+                // ),
                 DrawerTile(
                   LocaleKeys.general.tr(),
                   height: 60,
@@ -54,20 +55,21 @@ class PylonsDrawer extends StatelessWidget {
                     Navigator.of(context).pushNamed(RouteUtil.ROUTE_GENERAL);
                   },
                 ),
-                DrawerTile(
-                  LocaleKeys.cash_out.tr(),
-                  height: 60,
-                  width: isTablet ? 60 : 85,
-                  icon: SVGUtil.DRAWER_CASH_OUT,
-                  onPressed: () {},
-                ),
-                DrawerTile(
-                  LocaleKeys.history.tr(),
-                  height: 60,
-                  width: isTablet ? 60 : 85,
-                  icon: SVGUtil.DRAWER_HISTORY,
-                  onPressed: () {},
-                ),
+                /// Revert when the functionality is added
+                // DrawerTile(
+                //   LocaleKeys.cash_out.tr(),
+                //   height: 60,
+                //   width: isTablet ? 60 : 85,
+                //   icon: SVGUtil.DRAWER_CASH_OUT,
+                //   onPressed: () {},
+                // ),
+                // DrawerTile(
+                //   LocaleKeys.history.tr(),
+                //   height: 60,
+                //   width: isTablet ? 60 : 85,
+                //   icon: SVGUtil.DRAWER_HISTORY,
+                //   onPressed: () {},
+                // ),
                 DrawerTile(
                   LocaleKeys.recovery.tr(),
                   height: 60,
@@ -81,7 +83,6 @@ class PylonsDrawer extends StatelessWidget {
                   LocaleKeys.legal.tr(),
                   height: 60,
                   width: isTablet ? 60 : 85,
-
                   icon: SVGUtil.SETTINGS_LEGAL,
                   onPressed: () {
                     Navigator.of(context).pushNamed(RouteUtil.ROUTE_LEGAL);
