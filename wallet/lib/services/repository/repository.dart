@@ -521,6 +521,14 @@ abstract class Repository {
   /// Output: [bool] status of the process is successful or not
   Future<Either<Failure, bool>> deleteTransactionFailureRecord(int id);
 
+  /// This method will save that user accepts Terms of Services & Privacy Policy
+  /// Output: [bool] status of operation is successful or not
+  Future<Either<Failure, bool>> saveUserAcceptPolicies();
+
+  /// This method will return that user accepts Terms of Services & Privacy Policy or not
+  /// Output: [bool] user already accept policies ot not
+  Either<Failure, bool> getUserAcceptPolicies();
+
   /// This method will set user app level identifier in the analytics
   /// Input: [address] the address of the user
   /// Output: [bool] tells whether the operation is successful or else will return [Failure]
@@ -2264,6 +2272,24 @@ class RepositoryImp implements Repository {
     } on Exception catch (e) {
       recordErrorInCrashlytics(e);
       return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Either<Failure, bool> getUserAcceptPolicies() {
+    try {
+      return Right(localDataSource.getUserAcceptPolicies());
+    } on Exception catch (_) {
+      return const Left(GettingLocalDataFailure(SOMETHING_WENT_WRONG));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> saveUserAcceptPolicies() async {
+    try {
+      return Right(await localDataSource.saveUserAcceptPolicies());
+    } on Exception catch (_) {
+      return const Left(SavingLocalDataFailure(SOMETHING_WENT_WRONG));
     }
   }
 

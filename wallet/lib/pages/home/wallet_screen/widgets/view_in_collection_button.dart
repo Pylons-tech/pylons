@@ -19,7 +19,7 @@ class BlueClippedButton extends StatelessWidget {
       child: ClipPath(
         clipper: MnemonicClipper(cuttingHeight: 18.h),
         child: Container(
-          color: enabled ? AppColors.kDarkPurple : AppColors.kGray.withOpacity(0.3),
+          color: enabled ? AppColors.kDarkPurple : AppColors.kGreyColorBtn.withOpacity(0.3),
           height: 45.h,
           width: 200.w,
           child: Center(

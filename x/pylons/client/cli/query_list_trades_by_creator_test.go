@@ -94,7 +94,6 @@ func TestCmdListTradesByCreator(t *testing.T) {
 				require.Equal(t, tc.id, resp.Trades[0].Id)
 				require.NoError(t, err)
 			} else {
-
 			}
 		})
 	}

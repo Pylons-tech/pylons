@@ -5,8 +5,10 @@ import '../model/nft.dart';
 import '../services/repository/repository.dart';
 import 'enums.dart';
 
-class FavoritesChangeNotifier extends ChangeNotifier {
+class FavoritesChangeNotifier extends ChangeNotifier{
+
   final Repository repository;
+
   FavoritesChangeNotifier({required this.repository});
 
   List<NFT> favorites = [];

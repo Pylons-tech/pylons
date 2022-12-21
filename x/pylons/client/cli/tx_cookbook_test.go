@@ -42,7 +42,6 @@ func TestCmdCreateCookbook(t *testing.T) {
 		enabled    string
 		shouldFail bool
 	}{
-
 		{
 			testDesc:   "Invalid enabled-param",
 			id:         id,
@@ -220,7 +219,6 @@ func TestCmdUpdateCookbook(t *testing.T) {
 		common     []string
 		shouldFail bool
 	}{
-
 		{
 			testDesc:   "Invalid enabled-param",
 			id:         id,
