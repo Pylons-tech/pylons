@@ -17,6 +17,7 @@ const (
 
 func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper) (distPercentages []types.DistributionPercentage) {
 	distrPercentages := make(map[string]sdk.Dec)
+	distPercentage := make([]types.DistributionPercentage, 0)
 	sharesMap := make(map[string]sdk.Dec)
 	validators := make(map[string]bool)
 	totalShares := sdk.ZeroDec()
@@ -47,6 +48,8 @@ func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.Stak
 	}
 
 	for _, delegation := range prunedDelegations {
+		delegatorPercentage := types.DistributionPercentage{}
+		validatorPercentage := types.DistributionPercentage{}
 		valAddr := delegation.GetValidatorAddr()
 		validator := sk.Validator(ctx, valAddr)
 
@@ -57,24 +60,35 @@ func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.Stak
 
 		if _, ok := distrPercentages[delegation.DelegatorAddress]; !ok {
 			distrPercentages[delegation.DelegatorAddress] = sdk.ZeroDec()
+			delegatorPercentage.SharePercentage = sdk.ZeroDec()
+			delegatorPercentage.Address = delegation.DelegatorAddress
 		}
 
 		if valAccAddr.String() == delegation.DelegatorAddress {
 			distrPercentages[delegation.DelegatorAddress] = distrPercentages[delegation.DelegatorAddress].Add(sharesPercentage)
+			delegatorPercentage.SharePercentage = sharesPercentage
+			delegatorPercentage.Address = delegation.DelegatorAddress
 		} else {
 			commission := validator.GetCommission()
 			commissionPercentage := sharesPercentage.Mul(commission)
 			actualPercentage := sharesPercentage.Sub(commissionPercentage)
 			distrPercentages[delegation.DelegatorAddress] = distrPercentages[delegation.DelegatorAddress].Add(actualPercentage)
+			delegatorPercentage.SharePercentage = actualPercentage
+			delegatorPercentage.Address = delegation.DelegatorAddress
 			// we also add the commission percentage to the validator
 			if _, ok := distrPercentages[valAccAddr.String()]; !ok {
 				// in case the validator was not yet added to the map
 				distrPercentages[valAccAddr.String()] = sdk.ZeroDec()
+				validatorPercentage.SharePercentage = sdk.ZeroDec()
+				validatorPercentage.Address = valAccAddr.String()
 			}
 			distrPercentages[valAccAddr.String()] = distrPercentages[valAccAddr.String()].Add(commissionPercentage)
+			validatorPercentage.SharePercentage = commissionPercentage
+			validatorPercentage.Address = valAccAddr.String()
 		}
+		distPercentage = append(distPercentage, delegatorPercentage)
+		distPercentage = append(distPercentage, validatorPercentage)
 	}
-	distPercentage := convertMapToArray(distrPercentages)
 	return distPercentage
 }
 
@@ -98,8 +112,8 @@ func (k Keeper) getTotalSupply(ctx sdk.Context, ak types.AccountKeeper, denom st
 	return totalAvailable
 }
 
-func (k Keeper) GetHoldersRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper, ak types.AccountKeeper) (distPercentages []types.DistributionPercentage) {
-	distrPercentages := make(map[string]sdk.Dec)
+func (k Keeper) GetHoldersRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper, ak types.AccountKeeper) (distrPercentages []types.DistributionPercentage) {
+	distrPercentages = make([]types.DistributionPercentage, 0)
 	stakingDenom := types.StakingCoinDenom
 	// Get all account balances
 	bankBaseKeeper, _ := k.bankKeeper.(bankkeeper.BaseKeeper)
@@ -114,13 +128,16 @@ func (k Keeper) GetHoldersRewardsDistributionPercentages(ctx sdk.Context, sk typ
 			found := checkModuleAccount(acc.Address, moduleAccs)
 			if !found {
 				sharePercentage := balance.Quo(totalSupply)
-				distrPercentages[acc.Address] = sharePercentage
+				distPercentage := types.DistributionPercentage{
+					Address:         acc.Address,
+					SharePercentage: sharePercentage,
+				}
+				distrPercentages = append(distrPercentages, distPercentage)
 			}
 
 		}
 	}
-	distPercentage := convertMapToArray(distrPercentages)
-	return distPercentage
+	return distrPercentages
 }
 
 func calculateAvailableAmount(coin math.Int) sdk.Dec {
@@ -228,14 +245,14 @@ func checkModuleAccount(acc string, modAccs []string) bool {
 	return found
 }
 
-func convertMapToArray(distrPercentage map[string]sdk.Dec) []types.DistributionPercentage {
-	distPercentage := make([]types.DistributionPercentage, 0)
-	for add, percentage := range distrPercentage {
-		percentage := types.DistributionPercentage{
-			Address:         add,
-			SharePercentage: percentage,
-		}
-		distPercentage = append(distPercentage, percentage)
-	}
-	return distPercentage
-}
+// func convertMapToArray(distrPercentage map[string]sdk.Dec) []types.DistributionPercentage {
+// 	distPercentage := make([]types.DistributionPercentage, 0)
+// 	for add, percentage := range distrPercentage {
+// 		percentage := types.DistributionPercentage{
+// 			Address:         add,
+// 			SharePercentage: percentage,
+// 		}
+// 		distPercentage = append(distPercentage, percentage)
+// 	}
+// 	return distPercentage
+// }

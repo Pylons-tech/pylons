@@ -293,9 +293,11 @@ func (suite *IntegrationTestSuite) TestGetRewardsDistributionPercentages() {
 			sharesMap[addr] = sdk.ZeroDec()
 		}
 	}
-
+	distPercentagesToEqual := make([]types.DistributionPercentage, 0)
 	distrPercentagesToEqual := make(map[string]sdk.Dec)
 	for _, delegation := range delegations {
+		delegatorPercentage := types.DistributionPercentage{}
+		validatorPercentage := types.DistributionPercentage{}
 		valAddr := delegation.GetValidatorAddr()
 		validator := sk.Validator(ctx, valAddr)
 
@@ -305,24 +307,40 @@ func (suite *IntegrationTestSuite) TestGetRewardsDistributionPercentages() {
 		sharesPercentage := shares.Quo(totalShares)
 		if _, ok := distrPercentagesToEqual[delegation.DelegatorAddress]; !ok {
 			distrPercentagesToEqual[delegation.DelegatorAddress] = sdk.ZeroDec()
+			delegatorPercentage.SharePercentage = sdk.ZeroDec()
+			delegatorPercentage.Address = delegation.DelegatorAddress
 		}
 		if valAccAddr.String() == delegation.DelegatorAddress {
 			distrPercentagesToEqual[delegation.DelegatorAddress] = distrPercentagesToEqual[delegation.DelegatorAddress].Add(sharesPercentage)
+			delegatorPercentage.SharePercentage = sharesPercentage
+			delegatorPercentage.Address = delegation.DelegatorAddress
 		} else {
 			commission := validator.GetCommission()
 			commissionPercentage := sharesPercentage.Mul(commission)
 			actualPercentage := sharesPercentage.Sub(commissionPercentage)
 			distrPercentagesToEqual[delegation.DelegatorAddress] = distrPercentages[delegation.DelegatorAddress].Add(actualPercentage)
+			delegatorPercentage.SharePercentage = actualPercentage
+			delegatorPercentage.Address = delegation.DelegatorAddress
 			// we also add the commission percentage to the validator
 			if _, ok := distrPercentagesToEqual[valAccAddr.String()]; !ok {
 				// in case the validator was not yet added to the map
 				distrPercentagesToEqual[valAccAddr.String()] = sdk.ZeroDec()
+				validatorPercentage.SharePercentage = sdk.ZeroDec()
+				validatorPercentage.Address = valAccAddr.String()
 			}
 			distrPercentagesToEqual[valAccAddr.String()] = distrPercentages[valAccAddr.String()].Add(commissionPercentage)
+			delegatorPercentage.SharePercentage = commissionPercentage
+			delegatorPercentage.Address = valAccAddr.String()
 		}
+		distPercentagesToEqual = append(distPercentagesToEqual, delegatorPercentage)
+		distPercentagesToEqual = append(distPercentagesToEqual, validatorPercentage)
 	}
-	for validatorAddr := range distrPercentages {
-		require.Equal(distrPercentages[validatorAddr], distrPercentagesToEqual[validatorAddr])
+	for _, validatorAddr := range distPercentages {
+		for _, addr := range distPercentagesToEqual {
+			if validatorAddr.Address == addr.Address {
+				require.Equal(validatorAddr.SharePercentage, validatorAddr.SharePercentage)
+			}
+		}
 	}
 }
 
