@@ -12,3 +12,4 @@ export 'src/types/item.dart';
 export 'src/types/profile.dart';
 export 'src/types/recipe.dart';
 export 'src/features/helper/dec_string.dart';
+export 'src/ui/pylons_loading_animation.dart';

@@ -11,3 +11,4 @@ export 'src/generated/pylons/tx.pb.dart';
 export 'src/features/models/sdk_ipc_response.dart';
 export 'src/features/data/models/profile.dart' show Profile;
 export 'src/features/helper/dec_string.dart';
+export 'src/ui/pylons_loading_animation.dart';
