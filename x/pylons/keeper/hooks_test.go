@@ -1,12 +1,13 @@
 package keeper_test
 
 import (
+	"cosmossdk.io/math"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
+func (suite *IntegrationTestSuite) TestAfterEpochEndWithDeligators() {
 	k := suite.k
 	sk := suite.stakingKeeper
 	ctx := suite.ctx
@@ -130,22 +131,24 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 	_ = bk.SpendableCoins(ctx, feeCollectorAddr)
 
 	// get reward distribution percentages
-	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
+	distrPercentages := k.GetValidatorRewardsDistributionPercentages(ctx, sk)
+	// get the balance of the feeCollector moduleAcc
+	rewardsTotalAmount := bk.SpendableCoins(ctx, k.FeeCollectorAddress())
 	// calculate delegator rewards
-	delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages)
+	delegatorsRewards := k.CalculateValidatorRewardsHelper(distrPercentages, rewardsTotalAmount)
 	delegatorMap := map[string]sdk.Coins{}
 	balances := sdk.Coins{}
 	// checking if delegator rewards are not nil
 	if delegatorsRewards != nil {
 		// looping through delegators to get their old balance
-		for address, amount := range delegatorsRewards {
+		for _, reward := range delegatorsRewards {
 			// looping through amount type of sdk.coins to get every amount and denom
-			for _, val := range amount {
-				oldBalance := suite.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(address), val.Denom)
+			for _, val := range reward.Coins {
+				oldBalance := suite.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(reward.Address), val.Denom)
 				// Appending old balance in balances so we can compare it later on with updated balance
 				balances = append(balances, oldBalance.Add(val))
 			}
-			delegatorMap[address] = balances
+			delegatorMap[reward.Address] = balances
 
 		}
 		// sending rewards to delegators
@@ -242,24 +245,26 @@ func (suite *IntegrationTestSuite) TestAfterEpochEndNoDeligators() {
 	_ = bk.SpendableCoins(ctx, sdk.MustAccAddressFromBech32(creator))
 	_ = bk.SpendableCoins(ctx, feeCollectorAddr)
 
-	delegatorsRewards := k.CalculateDelegatorsRewards(ctx, nil)
+	// get the balance of the feeCollector moduleAcc
+	rewardsTotalAmount := bk.SpendableCoins(ctx, k.FeeCollectorAddress())
+	validatorRewards := k.CalculateValidatorRewardsHelper(nil, rewardsTotalAmount)
 	delegatorMap := map[string]sdk.Coins{}
 	balances := sdk.Coins{}
-	if len(delegatorsRewards) == 0 {
+	if len(validatorRewards) == 0 {
 		// In this Case No loop will be executed because we have no deligators to send reward
 		// looping through delegators to get their old balance
-		for address, amount := range delegatorsRewards {
+		for _, reward := range validatorRewards {
 			// looping through amount type of sdk.coins to get every amount and denom
-			for _, val := range amount {
-				oldBalance := suite.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(address), val.Denom)
+			for _, val := range reward.Coins {
+				oldBalance := suite.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(reward.Address), val.Denom)
 				// Appending old balance in balances so we can compare it later on with updated balance
 				balances = append(balances, oldBalance.Add(val))
 			}
-			delegatorMap[address] = balances
+			delegatorMap[reward.Address] = balances
 
 		}
 		// sending rewards to delegators
-		k.SendRewards(ctx, delegatorsRewards)
+		k.SendRewards(ctx, validatorRewards)
 		for address, updatedAmount := range delegatorMap {
 			// looping through updated amount type of sdk.coins to get every amount and denom
 			for _, val := range updatedAmount {
@@ -267,8 +272,201 @@ func (suite *IntegrationTestSuite) TestAfterEpochEndNoDeligators() {
 				// Comparing updated Amount with new new Blanace both should  be equal
 				require.Equal(val.Amount.Int64(), newBalance.Amount.Int64())
 			}
-
 		}
+	}
+}
 
+func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
+	k := suite.k
+	sk := suite.stakingKeeper
+	ctx := suite.ctx
+	require := suite.Require()
+	bk := suite.bankKeeper
+	ak := suite.accountKeeper
+
+	srv := keeper.NewMsgServerImpl(k)
+	wctx := sdk.WrapSDKContext(ctx)
+	type Account struct {
+		address       string
+		name          string
+		coins         sdk.Coins
+		expectedCoins sdk.Coins
+	}
+	tests := []struct {
+		desc                    string
+		accounts                []Account
+		validatorBalance        int64
+		updatedValidatorBalance int64
+		err                     error
+	}{
+		{
+			desc: "Epoch end with 1 delegator and 1 validator",
+			accounts: []Account{
+				{
+					address: types.GenTestBech32FromString("creator1"),
+					name:    "test",
+					coins: sdk.Coins{
+						sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(0)},
+					},
+					expectedCoins: sdk.Coins{
+						sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(90)},
+					},
+				},
+				{
+					address: types.GenTestBech32FromString("executer2"),
+					name:    "test3",
+					coins: sdk.Coins{
+						sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(100)},
+					},
+					expectedCoins: sdk.Coins{
+						sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(0)},
+					},
+				},
+				{
+					address: types.GenTestBech32FromString("holder3"),
+					name:    "holder",
+					coins: sdk.Coins{
+						sdk.Coin{Denom: types.StakingCoinDenom, Amount: sdk.NewInt(100)},
+					},
+					expectedCoins: sdk.Coins{
+						sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(9)},
+					},
+				},
+			},
+			validatorBalance:        0,
+			updatedValidatorBalance: 1,
+		},
+		{
+			desc: "Epoch end with 2 delegators and 1 validator",
+			accounts: []Account{
+				{
+					address: types.GenTestBech32FromString("creator2"),
+					name:    "test2",
+					coins: sdk.Coins{
+						sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(0)},
+					},
+					expectedCoins: sdk.Coins{
+						sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(90)},
+					},
+				},
+				{
+					address: types.GenTestBech32FromString("executer3"),
+					name:    "test4",
+					coins: sdk.Coins{
+						sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(100)},
+					},
+					expectedCoins: sdk.Coins{
+						sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(0)},
+					},
+				},
+				{
+					address: types.GenTestBech32FromString("holder5"),
+					name:    "holder",
+					coins: sdk.Coins{
+						sdk.Coin{Denom: types.StakingCoinDenom, Amount: sdk.NewInt(100)},
+					},
+					expectedCoins: sdk.Coins{
+						sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(2)},
+					},
+				},
+				{
+					address: types.GenTestBech32FromString("rockholder"),
+					name:    "rockholder",
+					coins: sdk.Coins{
+						sdk.Coin{Denom: types.StakingCoinDenom, Amount: sdk.NewInt(200)},
+					},
+					expectedCoins: sdk.Coins{
+						sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(4)},
+					},
+				},
+			},
+			validatorBalance:        1,
+			updatedValidatorBalance: 2,
+		},
+	}
+	for _, tc := range tests {
+		suite.Run(tc.desc, func() {
+			types.UpdateAppCheckFlagTest(types.FlagTrue)
+			// create account for address
+			for _, acc := range tc.accounts {
+				srv.CreateAccount(wctx, &types.MsgCreateAccount{
+					Creator: acc.address,
+				})
+				// give accounts initial coins
+				suite.FundAccount(ctx, sdk.MustAccAddressFromBech32(acc.address), acc.coins)
+			}
+			creator := tc.accounts[0]
+			executor := tc.accounts[1]
+			cookbookId := tc.accounts[0].name
+			recipeId := tc.accounts[1].name
+			types.UpdateAppCheckFlagTest(types.FlagFalse)
+			cookbookMsg := &types.MsgCreateCookbook{
+				Creator:      creator.address,
+				Id:           cookbookId,
+				Name:         "testCookbookName",
+				Description:  "descdescdescdescdescdesc",
+				Version:      "v0.0.1",
+				SupportEmail: "test@email.com",
+				Enabled:      true,
+			}
+			_, err := srv.CreateCookbook(sdk.WrapSDKContext(suite.ctx), cookbookMsg)
+			require.NoError(err)
+			recipeMsg := &types.MsgCreateRecipe{
+				Creator:       creator.address,
+				CookbookId:    cookbookId,
+				Id:            recipeId,
+				Name:          "recipeName",
+				Description:   "descdescdescdescdescdesc",
+				Version:       "v0.0.1",
+				BlockInterval: 10,
+				CostPerBlock:  sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
+				CoinInputs: []types.CoinInput{{Coins: sdk.Coins{
+					sdk.Coin{
+						Denom:  types.PylonsCoinDenom,
+						Amount: math.NewInt(100),
+					},
+				}}},
+				Enabled: true,
+			}
+			_, err = srv.CreateRecipe(sdk.WrapSDKContext(suite.ctx), recipeMsg)
+			require.NoError(err)
+			// create only one pendingExecution
+			msgExecution := &types.MsgExecuteRecipe{
+				Creator:         executor.address,
+				CookbookId:      cookbookId,
+				RecipeId:        recipeId,
+				CoinInputsIndex: 0,
+				ItemIds:         nil,
+			}
+			resp, err := srv.ExecuteRecipe(sdk.WrapSDKContext(suite.ctx), msgExecution)
+			require.NoError(err)
+			// manually trigger complete execution - simulate endBlocker
+			pendingExecution := k.GetPendingExecution(ctx, resp.Id)
+			execution, _, _, err := k.CompletePendingExecution(suite.ctx, pendingExecution)
+			require.NoError(err)
+			k.ActualizeExecution(ctx, execution)
+			delegations := sk.GetAllSDKDelegations(ctx)
+			validatorBalance := make(map[string]sdk.Coin)
+
+			// calculating total shares for out validators
+			for _, delegation := range delegations {
+				validatorBalance[delegation.DelegatorAddress] = bk.GetBalance(ctx, delegation.GetDelegatorAddr(), types.PylonsCoinDenom)
+				require.Equal(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(tc.validatorBalance)), validatorBalance[delegation.DelegatorAddress])
+			}
+			k.AfterEpochEnd(ctx, "day", 25, sk, ak)
+
+			// check coins of accounts after epoch end
+			for _, acc := range tc.accounts {
+				accBal := bk.GetBalance(ctx, sdk.MustAccAddressFromBech32(acc.address), types.PylonsCoinDenom)
+				require.Equal(acc.expectedCoins, sdk.Coins{
+					accBal,
+				})
+			}
+			// checking delegation balance
+			for _, delegation := range delegations {
+				delegatorPylonBalance := bk.GetBalance(ctx, delegation.GetDelegatorAddr(), types.PylonsCoinDenom)
+				require.Equal(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(tc.updatedValidatorBalance)), delegatorPylonBalance)
+			}
+		})
 	}
 }

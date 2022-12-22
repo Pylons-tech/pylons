@@ -472,7 +472,7 @@ func New(
 	app.EpochsKeeper = *epochsKeeper.SetHooks(
 		epochsmoduletypes.NewMultiEpochHooks(
 			// insert epoch hook receivers here
-			app.PylonsKeeper.Hooks(app.StakingKeeper),
+			app.PylonsKeeper.Hooks(app.StakingKeeper, app.AccountKeeper),
 		),
 	)
 
