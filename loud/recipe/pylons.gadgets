@@ -1,0 +1,132 @@
+#boilerplate 2
+    "cookbookId": "loudCookbookDec22",
+    "blockInterval": 0,
+    "costPerBlock": {
+        "denom": "upylon",
+        "amount": "1000000"
+    },
+    "version": "%0",
+    "enabled": %1
+#boilerplate_delayed 3
+    "cookbookId": "loudCookbookDec22",
+    "blockInterval": %2,
+    "costPerBlock": {
+        "denom": "upylon",
+        "amount": "1000000"
+    },
+    "version": "%0",
+    "enabled": %1
+#input_material 1
+		{
+			"id": "%0",
+            "doubles": [
+            ],
+            "longs": [
+            ],
+            "strings": [
+                {
+                    "key": "entityType",
+                    "value": "upgradeMaterial"
+                },
+				{
+					"key": "entitySubtype",
+					"value": "%0"
+				}
+            ]
+        }
+#output_sword 4
+            {
+                "id": "sword",
+                "doubles": [
+					{
+						"key": "attack",
+						"weightRanges": [],
+						"program": "%2"
+					}
+				],
+                "longs": [
+                    {
+                        "key": "level",
+                        "weightRanges": [],
+                        "program": "%1"         
+                    },
+                    {
+                        "key": "value",
+                        "weightRanges": [],
+                        "program": "%3"         
+                    }
+                ],
+                "strings": [
+                    {
+                        "key": "entityType",
+                        "value": "equipment"
+                    },
+					{
+						"key": "entitySubtype",
+						"value" "sword"
+					},
+					{
+						"key" "name"
+						"value" "%0"
+					}
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+#output_modify_sword 3
+            {
+                "id": "sword",
+				"itemInputRef": "sword",
+                "doubles": [
+					{
+						"key": "attack",
+						"weightRanges": [],
+						"program": "%1"
+					}
+				],
+                "longs": [
+                    {
+                        "key": "level",
+                        "weightRanges": [],
+                        "program": "%0"         
+                    },
+                    {
+                        "key": "value",
+                        "weightRanges": [],
+                        "program": "%2"         
+                    }
+                ],
+                "strings": [
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+#input_sword 2
+		{
+			"id": "sword",
+            "doubles": [
+            ],
+            "longs": [
+                    "key": "level",
+                    "minValue": %1,
+                    "maxValue": %1
+            ],
+            "strings": [
+                {
+                    "key": "entityType",
+                    "value": "equipment"
+                },
+				{
+					"key": "entitySubtype",
+					"value": "sword"
+				},
+				{
+					"key": "name",
+					"value": "%0"
+				}
+            ]
+        }

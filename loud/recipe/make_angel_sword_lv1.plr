@@ -1,0 +1,18 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeMakeAngelSwordLv1 RecipeMakeAngelSwordLv1,
+	"description": "Make a level 1 angel sword",
+	#price loudcoin 20000,
+	"itemInputs" : [
+		#input_material fireDragonDrop,
+		#input_material iceDragonDrop,
+		#input_material acidDragonDrop
+	],
+	"entries" : {
+		#no_coin_or_item_modify_output,
+		"itemOutputs": [
+			#output_sword '''Angel sword''' 1 1000 23000
+		]
+	},
+	#solo_output sword
+}

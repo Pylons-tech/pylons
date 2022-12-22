@@ -1,0 +1,14 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeBuyCopperSwordLv1 RecipeBuyCopperSwordLv1,
+	"description": "Buy a level 1 copper sword",
+	#coin_input loudcoin 250,
+	#no_item_input,
+	"entries" : {
+		#no_coin_or_item_modify_output,
+		"itemOutputs": [
+			#output_sword '''Copper sword''' 1 10 250
+		]
+	},
+	#solo_output sword
+}

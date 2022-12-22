@@ -1,0 +1,16 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeUpgradeCopperSwordToLv2 RecipeUpgradeCopperSwordToLv2,
+	"description": "Upgrades a level 1 copper sword to level 2",
+	#price loudcoin 250,
+	"itemInputs" : [
+		#input_sword '''Copper sword''' 1
+	],
+	"entries" : {
+		#no_coin_or_item_output,
+		"itemModifyOutputs": [
+			#output_modify_sword 2 20 500
+		]
+	},
+	#solo_output sword
+}

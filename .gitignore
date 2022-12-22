@@ -24,8 +24,6 @@ genesis/gamma
 genesis/pylonsd
 
 artifacts
-*.plc
-*.plr
 cmd/pylonsd/__debug_bin
 proto/dart/*
 

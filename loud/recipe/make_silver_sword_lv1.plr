@@ -1,0 +1,16 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeMakeSilverSwordLv1 RecipeMakeSilverSwordLv1,
+	"description": "Make a level 1 silver sword",
+	#price loudcoin 50,
+	"itemInputs" : [
+		#input_material goblinEar
+	],
+	"entries" : {
+		#no_coin_or_item_modify_output,
+		"itemOutputs": [
+			#output_sword '''Silver sword''' 1 30 100
+		]
+	},
+	#solo_output sword
+}

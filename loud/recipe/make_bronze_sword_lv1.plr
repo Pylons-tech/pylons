@@ -1,0 +1,16 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeMakeBronzeSwordLv1 RecipeMakeBronzeSwordLv1,
+	"description": "Make a level 1 bronze sword",
+	#price loudcoin 10,
+	"itemInputs" : [
+		#input_material wolfTail
+	],
+	"entries" : {
+		#no_coin_or_item_modify_output,
+		"itemOutpute": [
+			#output_sword '''Bronze sword''' 1 50 150
+		]
+	},
+	#solo_output sword
+}

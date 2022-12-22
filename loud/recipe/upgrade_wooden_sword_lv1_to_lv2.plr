@@ -1,0 +1,16 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeUpgradeWoodenSwordToLv2 RecipeUpgradeWoodenSwordToLv2,
+	"description": "Upgrades a level 1 wooden sword to level 2",
+	#price loudcoin 100,
+	"itemInputs" : [
+		#input_sword '''Wooden sword''' 1
+	],
+	"entries" : {
+		#no_coin_or_item_output,
+		"itemModifyOutputs": [
+			#output_modify_sword 2 6 200
+		]
+	},
+	#solo_output sword
+}

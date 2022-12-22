@@ -1,0 +1,16 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeMakeIronSwordLv1 RecipeMakeIronSwordLv1,
+	"description": "Make a level 1 iron sword",
+	#price loudcoin 250,
+	"itemInputs" : [
+		#input_material trollToes
+	],
+	"entries" : {
+		#no_coin_or_item_modify_output,
+		"itemOutputs": [
+			#output_sword '''Iron sword''' 1 100 450
+		]
+	},
+	#solo_output sword
+}
