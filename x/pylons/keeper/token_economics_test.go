@@ -149,11 +149,11 @@ func (suite *IntegrationTestSuite) TestAfterEpochEndTokenEconomics() {
 	require.Less(newBalanceExecuter.Int64(), oldBalanceExecutor.Int64())
 
 	// get reward distribution percentages
-	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
+	distrPercentages := k.GetValidatorRewardsDistributionPercentages(ctx, sk)
 	// get the balance of the feeCollector moduleAcc
 	rewardsTotalAmount := bk.SpendableCoins(ctx, k.FeeCollectorAddress())
 	// calculate delegator rewards
-	delegatorsRewards := k.CalculateRewardsHelper(distrPercentages, rewardsTotalAmount)
+	delegatorsRewards := k.CalculateValidatorRewardsHelper(distrPercentages, rewardsTotalAmount)
 	delegatorMap := map[string]sdk.Coins{}
 	balances := sdk.Coins{}
 	// checking if delegator rewards are not nil

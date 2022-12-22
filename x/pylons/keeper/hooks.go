@@ -7,9 +7,9 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) sendDelegatorRewards(ctx sdk.Context, sk types.StakingKeeper, totalRewardCoins sdk.Coins) {
-	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
-	delegatorsRewards := k.CalculateRewardsHelper(distrPercentages, totalRewardCoins)
+func (k Keeper) sendValidatorRewards(ctx sdk.Context, sk types.StakingKeeper, totalRewardCoins sdk.Coins) {
+	distrPercentages := k.GetValidatorRewardsDistributionPercentages(ctx, sk)
+	delegatorsRewards := k.CalculateValidatorRewardsHelper(distrPercentages, totalRewardCoins)
 	if delegatorsRewards != nil {
 		err := k.SendRewards(ctx, delegatorsRewards)
 		if err != nil {
@@ -18,9 +18,9 @@ func (k Keeper) sendDelegatorRewards(ctx sdk.Context, sk types.StakingKeeper, to
 	}
 }
 
-func (k Keeper) sendBedRockholderRewards(ctx sdk.Context, sk types.StakingKeeper, ak types.AccountKeeper, totalRewardCoins sdk.Coins) {
-	distrPercentages := k.GetHoldersRewardsDistributionPercentages(ctx, sk, ak)
-	delegatorsRewards := k.CalculateHolderRewardsHelper(distrPercentages, totalRewardCoins)
+func (k Keeper) sendDelegatorRewards(ctx sdk.Context, sk types.StakingKeeper, ak types.AccountKeeper, totalRewardCoins sdk.Coins) {
+	distrPercentages := k.GetDelegatorRewardsDistributionPercentages(ctx, sk, ak)
+	delegatorsRewards := k.CalculateDelegatorRewardsHelper(distrPercentages, totalRewardCoins)
 	if delegatorsRewards != nil {
 		err := k.SendRewards(ctx, delegatorsRewards)
 		if err != nil {
@@ -36,8 +36,8 @@ func (k Keeper) AfterEpochEnd(ctx sdk.Context, epochIdentifier string, epochNumb
 	if epochIdentifier == k.DistrEpochIdentifier(ctx) {
 		// get the balance of the feeCollector moduleAcc
 		rewardsTotalAmount := k.bankKeeper.SpendableCoins(ctx, k.FeeCollectorAddress())
-		k.sendDelegatorRewards(ctx, sk, rewardsTotalAmount)
-		k.sendBedRockholderRewards(ctx, sk, ak, rewardsTotalAmount)
+		k.sendValidatorRewards(ctx, sk, rewardsTotalAmount)
+		k.sendDelegatorRewards(ctx, sk, ak, rewardsTotalAmount)
 	}
 }
 

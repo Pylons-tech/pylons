@@ -11,11 +11,11 @@ import (
 )
 
 const (
-	ValidatorRewardPercentage     = 10
-	BedRockHolderRewardPercentage = 90
+	ValidatorRewardPercentage = 10
+	DelegatorRewardPercentage = 90
 )
 
-func (k Keeper) GetRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper) (distPercentages []types.DistributionPercentage) {
+func (k Keeper) GetValidatorRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper) (distPercentages []types.DistributionPercentage) {
 	distrPercentages := make(map[string]sdk.Dec)
 	distPercentage := make([]types.DistributionPercentage, 0)
 	sharesMap := make(map[string]sdk.Dec)
@@ -112,7 +112,7 @@ func (k Keeper) getTotalSupply(ctx sdk.Context, ak types.AccountKeeper, denom st
 	return totalAvailable
 }
 
-func (k Keeper) GetHoldersRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper, ak types.AccountKeeper) (distrPercentages []types.DistributionPercentage) {
+func (k Keeper) GetDelegatorRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper, ak types.AccountKeeper) (distrPercentages []types.DistributionPercentage) {
 	distrPercentages = make([]types.DistributionPercentage, 0)
 	stakingDenom := types.StakingCoinDenom
 	// Get all account balances
@@ -140,24 +140,24 @@ func (k Keeper) GetHoldersRewardsDistributionPercentages(ctx sdk.Context, sk typ
 	return distrPercentages
 }
 
-func calculateAvailableAmount(coin math.Int) sdk.Dec {
+func calculateValidatorAvailableAmount(coin math.Int) sdk.Dec {
 	validatorRewardPercentage := sdk.NewDecFromInt(math.NewInt(ValidatorRewardPercentage)).Quo(sdk.NewDec(100))
 	return sdk.NewDecFromInt(coin).Mul(validatorRewardPercentage)
 }
 
-func calculateHolderAavailableAmount(coin math.Int) sdk.Dec {
-	holderPercentage := sdk.NewDec(BedRockHolderRewardPercentage).Quo(sdk.NewDec(100))
-	return sdk.NewDecFromInt(coin).Mul(holderPercentage)
+func calculateDelegatorAavailableAmount(coin math.Int) sdk.Dec {
+	delegatorPercentage := sdk.NewDec(DelegatorRewardPercentage).Quo(sdk.NewDec(100))
+	return sdk.NewDecFromInt(coin).Mul(delegatorPercentage)
 }
 
-func (k Keeper) CalculateRewardsHelper(distrPercentages []types.DistributionPercentage, rewardsTotalAmount sdk.Coins) (delegatorsRewards []types.DistributionCoin) {
+func (k Keeper) CalculateValidatorRewardsHelper(distrPercentages []types.DistributionPercentage, rewardsTotalAmount sdk.Coins) (validatorRewards []types.DistributionCoin) {
 	if !rewardsTotalAmount.IsZero() {
-		delegatorsRewards = make([]types.DistributionCoin, 0)
+		validatorRewards = make([]types.DistributionCoin, 0)
 		for _, percentage := range distrPercentages {
 			totalAmountsForAddr := sdk.NewCoins()
 			for _, coin := range rewardsTotalAmount {
 
-				availableAmount := calculateAvailableAmount(coin.Amount)
+				availableAmount := calculateValidatorAvailableAmount(coin.Amount)
 				amountForAddr := availableAmount.Mul(percentage.SharePercentage)
 				if amountForAddr.IsPositive() {
 					// only add strictly positive amounts
@@ -169,7 +169,7 @@ func (k Keeper) CalculateRewardsHelper(distrPercentages []types.DistributionPerc
 					Address: percentage.Address,
 					Coins:   totalAmountsForAddr,
 				}
-				delegatorsRewards = append(delegatorsRewards, distrCoins)
+				validatorRewards = append(validatorRewards, distrCoins)
 			}
 		}
 	} else {
@@ -178,14 +178,14 @@ func (k Keeper) CalculateRewardsHelper(distrPercentages []types.DistributionPerc
 	return
 }
 
-func (k Keeper) CalculateHolderRewardsHelper(distrPercentages []types.DistributionPercentage, rewardsTotalAmount sdk.Coins) (holdersRewards []types.DistributionCoin) {
+func (k Keeper) CalculateDelegatorRewardsHelper(distrPercentages []types.DistributionPercentage, rewardsTotalAmount sdk.Coins) (delegatorRewards []types.DistributionCoin) {
 	if !rewardsTotalAmount.IsZero() {
-		holdersRewards = make([]types.DistributionCoin, 0)
+		delegatorRewards = make([]types.DistributionCoin, 0)
 		for _, percentage := range distrPercentages {
 			totalAmountsForAddr := sdk.NewCoins()
 			for _, coin := range rewardsTotalAmount {
 
-				availableAmount := calculateHolderAavailableAmount(coin.Amount)
+				availableAmount := calculateDelegatorAavailableAmount(coin.Amount)
 				amountForAddr := availableAmount.Mul(percentage.SharePercentage)
 				if amountForAddr.IsPositive() {
 					// only add strictly positive amounts
@@ -197,7 +197,7 @@ func (k Keeper) CalculateHolderRewardsHelper(distrPercentages []types.Distributi
 					Address: percentage.Address,
 					Coins:   totalAmountsForAddr,
 				}
-				holdersRewards = append(holdersRewards, distrCoins)
+				delegatorRewards = append(delegatorRewards, distrCoins)
 			}
 		}
 	} else {
@@ -206,8 +206,8 @@ func (k Keeper) CalculateHolderRewardsHelper(distrPercentages []types.Distributi
 	return
 }
 
-func (k Keeper) SendRewards(ctx sdk.Context, delegatorsRewards []types.DistributionCoin) error {
-	for _, dist := range delegatorsRewards {
+func (k Keeper) SendRewards(ctx sdk.Context, rewards []types.DistributionCoin) error {
+	for _, dist := range rewards {
 		accAddr, _ := sdk.AccAddressFromBech32(dist.Address)
 		err := k.SendRewardsFromFeeCollector(ctx, accAddr, dist.Coins)
 		if err != nil {
@@ -244,15 +244,3 @@ func checkModuleAccount(acc string, modAccs []string) bool {
 	}
 	return found
 }
-
-// func convertMapToArray(distrPercentage map[string]sdk.Dec) []types.DistributionPercentage {
-// 	distPercentage := make([]types.DistributionPercentage, 0)
-// 	for add, percentage := range distrPercentage {
-// 		percentage := types.DistributionPercentage{
-// 			Address:         add,
-// 			SharePercentage: percentage,
-// 		}
-// 		distPercentage = append(distPercentage, percentage)
-// 	}
-// 	return distPercentage
-// }

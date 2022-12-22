@@ -131,11 +131,11 @@ func (suite *IntegrationTestSuite) TestAfterEpochEndWithDeligators() {
 	_ = bk.SpendableCoins(ctx, feeCollectorAddr)
 
 	// get reward distribution percentages
-	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
+	distrPercentages := k.GetValidatorRewardsDistributionPercentages(ctx, sk)
 	// get the balance of the feeCollector moduleAcc
 	rewardsTotalAmount := bk.SpendableCoins(ctx, k.FeeCollectorAddress())
 	// calculate delegator rewards
-	delegatorsRewards := k.CalculateRewardsHelper(distrPercentages, rewardsTotalAmount)
+	delegatorsRewards := k.CalculateValidatorRewardsHelper(distrPercentages, rewardsTotalAmount)
 	delegatorMap := map[string]sdk.Coins{}
 	balances := sdk.Coins{}
 	// checking if delegator rewards are not nil
@@ -247,13 +247,13 @@ func (suite *IntegrationTestSuite) TestAfterEpochEndNoDeligators() {
 
 	// get the balance of the feeCollector moduleAcc
 	rewardsTotalAmount := bk.SpendableCoins(ctx, k.FeeCollectorAddress())
-	delegatorsRewards := k.CalculateRewardsHelper(nil, rewardsTotalAmount)
+	validatorRewards := k.CalculateValidatorRewardsHelper(nil, rewardsTotalAmount)
 	delegatorMap := map[string]sdk.Coins{}
 	balances := sdk.Coins{}
-	if len(delegatorsRewards) == 0 {
+	if len(validatorRewards) == 0 {
 		// In this Case No loop will be executed because we have no deligators to send reward
 		// looping through delegators to get their old balance
-		for _, reward := range delegatorsRewards {
+		for _, reward := range validatorRewards {
 			// looping through amount type of sdk.coins to get every amount and denom
 			for _, val := range reward.Coins {
 				oldBalance := suite.bankKeeper.GetBalance(ctx, sdk.MustAccAddressFromBech32(reward.Address), val.Denom)
@@ -264,7 +264,7 @@ func (suite *IntegrationTestSuite) TestAfterEpochEndNoDeligators() {
 
 		}
 		// sending rewards to delegators
-		k.SendRewards(ctx, delegatorsRewards)
+		k.SendRewards(ctx, validatorRewards)
 		for address, updatedAmount := range delegatorMap {
 			// looping through updated amount type of sdk.coins to get every amount and denom
 			for _, val := range updatedAmount {
@@ -295,12 +295,12 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 	tests := []struct {
 		desc                    string
 		accounts                []Account
-		delegatorBalance        int64
-		updatedDelegatorBalance int64
+		validatorBalance        int64
+		updatedValidatorBalance int64
 		err                     error
 	}{
 		{
-			desc: "Epoch end with 1 bedrock holder and 1 delegator",
+			desc: "Epoch end with 1 delegator and 1 validator",
 			accounts: []Account{
 				{
 					address: types.GenTestBech32FromString("creator1"),
@@ -333,11 +333,11 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 					},
 				},
 			},
-			delegatorBalance:        0,
-			updatedDelegatorBalance: 1,
+			validatorBalance:        0,
+			updatedValidatorBalance: 1,
 		},
 		{
-			desc: "Epoch end with 2 bedrock holder and 1 delegator",
+			desc: "Epoch end with 2 delegators and 1 validator",
 			accounts: []Account{
 				{
 					address: types.GenTestBech32FromString("creator2"),
@@ -366,22 +366,22 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 						sdk.Coin{Denom: types.StakingCoinDenom, Amount: sdk.NewInt(100)},
 					},
 					expectedCoins: sdk.Coins{
-						sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(3)},
+						sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(2)},
 					},
 				},
 				{
 					address: types.GenTestBech32FromString("rockholder"),
 					name:    "rockholder",
 					coins: sdk.Coins{
-						sdk.Coin{Denom: types.StakingCoinDenom, Amount: sdk.NewInt(100)},
+						sdk.Coin{Denom: types.StakingCoinDenom, Amount: sdk.NewInt(200)},
 					},
 					expectedCoins: sdk.Coins{
-						sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(3)},
+						sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(4)},
 					},
 				},
 			},
-			delegatorBalance:        1,
-			updatedDelegatorBalance: 2,
+			validatorBalance:        1,
+			updatedValidatorBalance: 2,
 		},
 	}
 	for _, tc := range tests {
@@ -392,7 +392,7 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 				srv.CreateAccount(wctx, &types.MsgCreateAccount{
 					Creator: acc.address,
 				})
-				// give accounts expected coins
+				// give accounts initial coins
 				suite.FundAccount(ctx, sdk.MustAccAddressFromBech32(acc.address), acc.coins)
 			}
 			creator := tc.accounts[0]
@@ -451,7 +451,7 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 			// calculating total shares for out validators
 			for _, delegation := range delegations {
 				validatorBalance[delegation.DelegatorAddress] = bk.GetBalance(ctx, delegation.GetDelegatorAddr(), types.PylonsCoinDenom)
-				require.Equal(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(tc.delegatorBalance)), validatorBalance[delegation.DelegatorAddress])
+				require.Equal(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(tc.validatorBalance)), validatorBalance[delegation.DelegatorAddress])
 			}
 			k.AfterEpochEnd(ctx, "day", 25, sk, ak)
 
@@ -465,7 +465,7 @@ func (suite *IntegrationTestSuite) TestAfterEpochEnd() {
 			// checking delegation balance
 			for _, delegation := range delegations {
 				delegatorPylonBalance := bk.GetBalance(ctx, delegation.GetDelegatorAddr(), types.PylonsCoinDenom)
-				require.Equal(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(tc.updatedDelegatorBalance)), delegatorPylonBalance)
+				require.Equal(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(tc.updatedValidatorBalance)), delegatorPylonBalance)
 			}
 		})
 	}

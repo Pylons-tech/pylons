@@ -272,7 +272,7 @@ func (suite *IntegrationTestSuite) TestGetRewardsDistributionPercentages() {
 	_ = bk.SpendableCoins(ctx, feeCollectorAddr)
 
 	// get reward distribution percentages
-	distPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
+	distPercentages := k.GetValidatorRewardsDistributionPercentages(ctx, sk)
 	// Now we will calculate what should be the output
 	delegations := sk.GetAllSDKDelegations(ctx)
 	totalShares := sdk.ZeroDec()
@@ -421,7 +421,7 @@ func (suite *IntegrationTestSuite) TestCalculateDelegatorsRewards() {
 	_ = bk.SpendableCoins(ctx, sdk.MustAccAddressFromBech32(creator))
 	_ = bk.SpendableCoins(ctx, feeCollectorAddr)
 
-	distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
+	distrPercentages := k.GetValidatorRewardsDistributionPercentages(ctx, sk)
 	rewardsTotalAmount := bk.SpendableCoins(ctx, k.FeeCollectorAddress())
 	if !rewardsTotalAmount.IsZero() {
 		delegatorsRewards := make([]types.DistributionCoin, 0)
@@ -579,20 +579,20 @@ func (suite *IntegrationTestSuite) TestGetHoldersRewardsDistributionPercentages(
 				validatorBalance[delegation.DelegatorAddress] = bk.GetBalance(ctx, delegation.GetDelegatorAddr(), types.PylonsCoinDenom)
 				require.Equal(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(0)), validatorBalance[delegation.DelegatorAddress])
 			}
-			distrPercentages := k.GetHoldersRewardsDistributionPercentages(ctx, sk, ak)
+			distrPercentages := k.GetDelegatorRewardsDistributionPercentages(ctx, sk, ak)
 
 			rewardsTotalAmount := bk.SpendableCoins(ctx, k.FeeCollectorAddress())
 			if !rewardsTotalAmount.IsZero() {
-				holderRewards := make([]types.DistributionCoin, 0)
+				delegatorRewards := make([]types.DistributionCoin, 0)
 				for _, percentage := range distrPercentages {
 
 					require.Equal(sdk.NewDec(1), percentage.SharePercentage)
 					totalAmountsForAddr := sdk.NewCoins()
 					for _, coin := range rewardsTotalAmount {
 
-						holderRewardPercentage := sdk.NewDec(keeper.BedRockHolderRewardPercentage).Quo(sdk.NewDec(100))
+						delegatorRewardPercentage := sdk.NewDec(keeper.DelegatorRewardPercentage).Quo(sdk.NewDec(100))
 						amount := sdk.NewDec(coin.Amount.Int64())
-						availableAmount := amount.Mul(holderRewardPercentage)
+						availableAmount := amount.Mul(delegatorRewardPercentage)
 						amountForAddr := availableAmount.Mul(percentage.SharePercentage)
 						if amountForAddr.IsPositive() {
 							// only add strictly positive amounts
@@ -604,7 +604,7 @@ func (suite *IntegrationTestSuite) TestGetHoldersRewardsDistributionPercentages(
 							Address: percentage.Address,
 							Coins:   totalAmountsForAddr,
 						}
-						holderRewards = append(holderRewards, distrCoins)
+						delegatorRewards = append(delegatorRewards, distrCoins)
 					}
 
 				}
@@ -618,7 +618,7 @@ func (suite *IntegrationTestSuite) TestGetHoldersRewardsDistributionPercentages(
 					creatorBalance,
 				})
 				// Checking if delegators Rewards are not empty
-				require.NotEqual(len(holderRewards), 0)
+				require.NotEqual(len(delegatorRewards), 0)
 			}
 		})
 	}
