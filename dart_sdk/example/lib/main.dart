@@ -177,6 +177,12 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: const Text('Show Stripe'),
             ),
+            ElevatedButton(
+              onPressed: () async {
+                _showLoader();
+              },
+              child: const Text('Show Loader'),
+            ),
           ],
         ),
       ),
@@ -397,5 +403,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void showStripe() {
     PylonsWallet.instance.showStripe();
+  }
+
+  void _showLoader() async {
+    PylonsLoadingAnimation animation = PylonsLoadingAnimation(context: context, height: 100, width: 100);
+    animation.show();
+
+    await Future.delayed(const Duration(seconds: 5));
+    animation.hide();
   }
 }
