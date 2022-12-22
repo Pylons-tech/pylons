@@ -472,7 +472,7 @@ func New(
 	app.EpochsKeeper = *epochsKeeper.SetHooks(
 		epochsmoduletypes.NewMultiEpochHooks(
 			// insert epoch hook receivers here
-			app.PylonsKeeper.Hooks(app.StakingKeeper),
+			app.PylonsKeeper.Hooks(app.StakingKeeper, app.AccountKeeper),
 		),
 	)
 
@@ -838,7 +838,7 @@ func (app *PylonsApp) setupUpgradeHandlers() {
 	// v1.1.2 mainnet upgrade handler
 	app.UpgradeKeeper.SetUpgradeHandler(
 		v1.UpgradeName,
-		v1.CreateUpgradeHandler(app.mm, app.configurator, app.BankKeeper, &app.AccountKeeper, &app.StakingKeeper),
+		v1.CreateUpgradeHandler(app.mm, app.configurator, app.BankKeeper, &app.AccountKeeper, &app.StakingKeeper, &app.PylonsKeeper),
 	)
 }
 
