@@ -1,0 +1,16 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeBuyGoldWithPylons RecipeBuyGoldWithPylons,
+	"description": "Buys gold with Pylons credit",
+    #price upylon 100,   
+    #no_item_input,
+	"entries" : {
+		#no_item_or_item_modify_output,
+		"coinOutputs": [{
+            "id": "coin_reward",
+            "denom":"loudcoin",
+            "program": "5000"
+        }],
+	},
+	#solo_output coin_reward
+}

@@ -11,7 +11,7 @@
 	"entries" : {
 		#no_coin_or_item_modify_output,
 		"itemOutputs": [
-			#output_sword '''Angel sword''' 1 1000 23000
+			#output_sword angel 1 1000 23000
 		]
 	},
 	#solo_output sword

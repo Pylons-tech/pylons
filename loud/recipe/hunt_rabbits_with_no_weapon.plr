@@ -1,0 +1,30 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeHuntRabbitsUnarmed RecipeHuntRabbitsUnarmed,
+	"description": "Hunts rabbits without a weapon",
+    #no_coin_input,   
+    "itemInputs": [
+		#input_character_any
+	],
+	"entries" : {
+		#no_item_output,
+		"coinOutputs": [{
+            "id": "coin_reward",
+            "denom":"loudcoin",
+            "program": "rand(2)+1"
+        }],
+		"itemModifyOutputs": [
+			#output_modify_character '''xp + 1.0'''
+		]
+	},
+	"outputs": [
+		{
+			"entryIds": ["coin_reward", "character"],
+			"weight": 99
+		},
+		{
+			"entryIds": [],
+			"weight": 1
+		}
+	]
+}

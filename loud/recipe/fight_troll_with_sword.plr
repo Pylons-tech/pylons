@@ -1,0 +1,47 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeFightTrollWithSword RecipeFightTrollWithSword,
+	"description": "Fights a troll with a sword",
+    #no_coin_input,   
+    "itemInputs": [
+		#input_character_any,
+		#input_sword
+	],
+	"entries" : {
+		"itemOutputs": [
+			#output_material trollToes 200,
+			#output_material trollSmellyBones 1,
+		],
+		"coinOutputs": [{
+            "id": "coin_reward",
+            "denom":"loudcoin",
+            "program": "300"
+        }],
+		"itemModifyOutputs": [
+			#output_modify_character '''xp + double(20 * 5)''',
+			#output_echo_sword
+		]
+	},
+	"outputs": [
+        {
+            "entryIds": [],
+            "weight": "4"
+        },
+        {
+            "entryIds": ["coin_reward", "character"],
+            "weight": "3"
+        },
+        {
+            "entryIds": ["coin_reward", "character", "sword"],
+            "weight": "53"
+        },
+        {
+            "entryIds": ["coin_reward", "character", "sword", "trollToes"],
+            "weight": "10"
+        },
+        {
+            "entryIds": ["coin_reward", "character", "sword", "trollSmellyBones"],
+            "weight": "30"
+        }
+	]
+}

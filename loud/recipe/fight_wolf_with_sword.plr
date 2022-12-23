@@ -1,0 +1,47 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeFightWolfWithSword RecipeFightWolfWithSword,
+	"description": "Fights a wolf with a sword",
+    #no_coin_input,   
+    "itemInputs": [
+		#input_character_any,
+		#input_sword
+	],
+	"entries" : {
+		"itemOutputs": [
+			#output_material wolfTail 140,
+			#output_material wolfFur 140,
+		],
+		"coinOutputs": [{
+            "id": "coin_reward",
+            "denom":"loudcoin",
+            "program": "1"
+        }],
+		"itemModifyOutputs": [
+			#output_modify_character '''xp + double(15 * 3)''',
+			#output_echo_sword
+		]
+	},
+	"outputs": [
+        {
+            "entryIds": [],
+            "weight": "3"
+        },
+        {
+            "entryIds": ["coin_reward", "character"],
+            "weight": "3"
+        },
+        {
+            "entryIds": ["coin_reward", "character", "sword"],
+            "weight": "24"
+        },
+        {
+            "entryIds": ["coin_reward", "character", "sword", "wolfTail"],
+            "weight": "40"
+        },
+        {
+            "entryIds": ["coin_reward", "character", "sword", "wolfFur"],
+            "weight": "30"
+        }
+	]
+}

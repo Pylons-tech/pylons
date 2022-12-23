@@ -1,5 +1,0 @@
-{
-    "Doubles": [{"Key": "attack", "MinValue": "0.0", "MaxValue": "10000000.0"}],
-    "Longs": [{"Key": "level", "MinValue": "0", "MaxValue": "10000000"}],
-    "Strings": [{"Key": "DropFrom", "Value": "Ice Dragon"}]
-}

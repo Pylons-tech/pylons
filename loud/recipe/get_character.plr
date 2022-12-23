@@ -1,0 +1,13 @@
+{
+    #boilerplate v0.0.1 true,
+    #id_name RecipeGetCharacter RecipeGetCharacter,
+    "description": "Creates a character for LOUD",
+    #no_input,
+    "entries": {
+        #no_coin_or_item_modify_output,
+        "itemOutputs": [
+			#output_character character 0
+        ]
+    },
+    #solo_output character
+}

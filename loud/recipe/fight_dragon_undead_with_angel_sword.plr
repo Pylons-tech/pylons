@@ -1,0 +1,36 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeFightDragonUndead RecipeFightDragonUndead,
+	"description": "Fights an undead dragon with an angel sword",
+    #no_coin_input,   
+    "itemInputs": [
+		#input_character_any,
+		#input_sword_type angel
+	],
+	"entries" : {
+		#no_item_output
+		"coinOutputs": [{
+            "id": "coin_reward",
+            "denom":"loudcoin",
+            "program": "50000"
+        }],
+		"itemModifyOutputs": [
+			#output_modify_character_incr '''xp + double(1000 * 100)''' undeadDragonKill,
+			#output_echo_sword
+		]
+	},
+	"outputs": [
+        {
+            "entryIds": [],
+            "weight": "7"
+        },
+        {
+            "entryIds": ["coin_reward", "character"],
+            "weight": "3"
+        },
+        {
+            "entryIds": ["coin_reward", "character", "sword"],
+            "weight": "90"
+        }
+	]
+}

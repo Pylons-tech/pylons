@@ -1,0 +1,41 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeFightGiantWithIronSword RecipeFightGiantWithIronSword,
+	"description": "Fights a giant with an iron sword",
+    #no_coin_input,   
+    "itemInputs": [
+		#input_character_no_special,
+		#input_sword_type iron
+	],
+	"entries" : {
+		#no_item_output,
+		"coinOutputs": [{
+            "id": "coin_reward",
+            "denom":"loudcoin",
+            "program": "3000"
+        }],
+		"itemModifyOutputs": [
+			#output_modify_character_incr '''xp + double(100 * 10)''' giantKill,
+			#output_modify_character__incr_special '''xp + double(100 * 10)''' giantKill '''{ "Lower": 1, "Upper":1,"Weight":4 },{ "Lower": 2, "Upper":2,"Weight":3 },{ "Lower": 3, "Upper":3,"Weight":3 }''',
+			#output_echo_sword
+		]
+	},
+	"outputs": [
+        {
+            "entryIds": [],
+            "weight": "2"
+        },
+        {
+            "entryIds": ["coin_reward", "character"],
+            "weight": "3"
+        },
+        {
+            "entryIds": ["coin_reward", "character", "sword"],
+            "weight": "82"
+        },
+        {
+            "entryIds": ["coin_reward", "characterSpecial", "sword"],
+            "weight": "10"
+        }
+	]
+}

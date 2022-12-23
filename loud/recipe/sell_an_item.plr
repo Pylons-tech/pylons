@@ -1,0 +1,31 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeSellItem RecipeSellItem,
+	"description": "Sells an item for loudcoin",
+    #no_coin_input,
+	"itemInputs": [
+		{
+			"id": "item",
+            "doubles": [
+            ],
+            "longs": [
+				{
+					"key": "value",
+					"minValue": 0,
+					"maxValue": 999999999
+				}
+            ],
+            "strings": [
+            ]
+		}
+	],
+	"entries" : {
+		#no_item_or_item_modify_output,
+		"coinOutputs": [{
+            "id": "coin_reward",
+            "denom":"loudcoin",
+            "program": "value*8/10+rand(20)"
+        }],
+	},
+	#solo_output coin_reward
+}

@@ -1,0 +1,47 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeFightGoblinWithSword RecipeFightGoblinWithSword,
+	"description": "Fights a goblin with a sword",
+    #no_coin_input,   
+    "itemInputs": [
+		#input_character_any,
+		#input_sword
+	],
+	"entries" : {
+		"itemOutputs": [
+			#output_material goblinEar 50,
+			#output_material goblinBoots 100,
+		],
+		"coinOutputs": [{
+            "id": "coin_reward",
+            "denom":"loudcoin",
+            "program": "50"
+        }],
+		"itemModifyOutputs": [
+			#output_modify_character '''xp + double(10)''',
+			#output_echo_sword
+		]
+	},
+	"outputs": [
+        {
+            "entryIds": [],
+            "weight": "2"
+        },
+        {
+            "entryIds": ["coin_reward", "character"],
+            "weight": "3"
+        },
+        {
+            "entryIds": ["coin_reward", "character", "sword"],
+            "weight": "55"
+        },
+        {
+            "entryIds": ["coin_reward", "character", "sword", "goblinEar"],
+            "weight": "20"
+        },
+        {
+            "entryIds": ["coin_reward", "character", "sword", "goblinBoots"],
+            "weight": "20"
+        }
+	]
+}

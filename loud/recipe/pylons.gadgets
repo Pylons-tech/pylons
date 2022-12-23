@@ -66,7 +66,7 @@
 						"value" "sword"
 					},
 					{
-						"key" "name"
+						"key" "swordType"
 						"value" "%0"
 					}
                 ],
@@ -105,15 +105,30 @@
                 "tradePercentage": "0.100000000000000000",
                 "tradeable": true
             }
-#input_sword 2
+#input_sword 0
 		{
 			"id": "sword",
             "doubles": [
             ],
             "longs": [
-                    "key": "level",
-                    "minValue": %1,
-                    "maxValue": %1
+            ],
+            "strings": [
+                {
+                    "key": "entityType",
+                    "value": "equipment"
+                },
+				{
+					"key": "entitySubtype",
+					"value": "sword"
+				}
+            ]
+        }
+#input_sword_type 1
+		{
+			"id": "sword",
+            "doubles": [
+            ],
+            "longs": [
             ],
             "strings": [
                 {
@@ -125,8 +140,267 @@
 					"value": "sword"
 				},
 				{
-					"key": "name",
+					"key": "swordType",
 					"value": "%0"
 				}
             ]
         }
+#input_sword_specific 2
+		{
+			"id": "sword",
+            "doubles": [
+            ],
+            "longs": [
+				{
+					"key": "level",
+					"minValue": %1,
+					"maxValue": %1
+				}
+            ],
+            "strings": [
+                {
+                    "key": "entityType",
+                    "value": "equipment"
+                },
+				{
+					"key": "entitySubtype",
+					"value": "sword"
+				},
+				{
+					"key": "swordType",
+					"value": "%0"
+				}
+            ]
+        }
+#input_character_any 0
+		{
+			"id": "character",
+            "doubles": [
+            ],
+            "longs": [
+            ],
+            "strings": [
+                {
+                    "key": "entityType",
+                    "value": "character"
+                }
+            ]
+        }
+#input_character_no_special 0
+		{
+			"id": "character",
+            "doubles": [
+            ],
+            "longs": [
+				"key": "special",
+				"minValue": 0,
+				"maxValue": 0
+            ],
+            "strings": [
+                {
+                    "key": "entityType",
+                    "value": "character"
+                }
+            ]
+        }
+#input_character_special 1
+		{
+			"id": "character",
+            "doubles": [
+            ],
+            "longs": [
+				"key": "special",
+				"minValue": %0,
+				"maxValue": %0
+            ],
+            "strings": [
+                {
+                    "key": "entityType",
+                    "value": "character"
+                }
+            ]
+        }
+#output_material 2
+            {
+                "id": "%0",
+                "doubles": [
+				],
+                "longs": [
+                    {
+                        "key": "value",
+                        "weightRanges": [],
+                        "program": "%1"
+                    }
+                ],
+                "strings": [
+                    {
+                        "key": "entityType",
+                        "value": "equipment"
+                    },
+					{
+						"key": "entitySubtype",
+						"value" "&0"
+					}
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+#output_modify_character 1
+			{
+                "id": "character",
+				"itemInputRef": "character",
+                "doubles": [
+					{
+						"key": "xp",
+						"weightRanges": [],
+						"program": "%0"
+					}
+				],
+                "longs": [
+                    {
+                        "key": "level",
+                        "weightRanges": [],
+                        "program": "level + int(XP / double(level * level * level + 5))"
+                    }
+                ],
+                "strings": [
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+#output_modify_character_incr 2
+			{
+                "id": "character",
+				"itemInputRef": "character",
+                "doubles": [
+					{
+						"key": "xp",
+						"weightRanges": [],
+						"program": "%0"
+					}
+				],
+                "longs": [
+                    {
+                        "key": "level",
+                        "weightRanges": [],
+                        "program": "level + int(XP / double(level * level * level + 5))"
+                    },
+					 {
+                        "key": "%1",
+                        "weightRanges": [],
+                        "program": "%1 + 1"
+                    }
+                ],
+                "strings": [
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+#output_modify_character_incr_special 3
+			{
+                "id": "characterSpecial",
+				"itemInputRef": "character",
+                "doubles": [
+					{
+						"key": "xp",
+						"weightRanges": [],
+						"program": "%0"
+					}
+				],
+                "longs": [
+                    {
+                        "key": "level",
+                        "weightRanges": [],
+                        "program": "level + int(XP / double(level * level * level + 5))"
+                    },
+					{
+                        "key": "%1",
+                        "weightRanges": [],
+                        "program": "%1 + 1"
+                    },
+					{
+						"key": "special",
+                        "weightRanges": [%2],
+                        "program": ""
+					}
+                ],
+                "strings": [
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+#output_echo_sword 0
+            {
+                "id": "sword",
+				"itemInputRef": "sword",
+                "doubles": [
+				],
+                "longs": [
+                ],
+                "strings": [
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+#output_character 2
+            {
+                "id": "%0",
+                "doubles": [
+					{
+							"key": "xp",
+							"weightRanges": [],
+							"program": "1"         
+					},
+				],
+                "longs": [
+                    {
+                        "key": "level",
+                        "weightRanges": [],
+                        "program": "1"         
+                    },
+                    {
+                        "key": "giantKill",
+                        "weightRanges": [],
+                        "program": "0"         
+                    },
+                    {
+                        "key": "special",
+                        "weightRanges": [],
+                        "program": "%1"
+                    },
+                    {
+                        "key": "specialDragonKill",
+                        "weightRanges": [],
+                        "program": "0"         
+                    },
+                    {
+                        "key": "undeadDragonKill",
+                        "weightRanges": [],
+                        "program": "0"
+                    }
+                ],
+                "strings": [
+                    {
+                        "key": "entityType",
+                        "value": "character"
+                    },
+					{
+                        "key": "name",
+                        "value": "Tiger"
+                    },
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }

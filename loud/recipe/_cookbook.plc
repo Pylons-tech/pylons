@@ -1,0 +1,10 @@
+{
+  "creator": "pylo199cq5r46uqsjxqv05c5x7nx22yxdawne550hsy",
+  "id": "loudCookbookDec22",
+  "name": "LOUD",
+  "description": "Cookbook for Legend of the Undead Dragon",
+  "developer": "Pylons Inc",
+  "version": "v0.0.1",
+  "supportEmail": "support@pylons.tech",
+  "enabled": true
+}

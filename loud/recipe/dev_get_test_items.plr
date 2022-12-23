@@ -1,0 +1,31 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeDevGetTestItems RecipeDevGetTestItems,
+	"description": "Buys test items with Pylons credit",
+    #price upylon 1,   
+    #no_item_input,
+	"entries" : {
+		#no_coin_or_item_modify_output,
+		"itemOutputs": [
+			#output_material acidDragonDrop 1000,
+			#output_material fireDragonDrop 1000,
+			#output_material iceDragonDrop 1000,
+			#output_material goblinEar 50,
+			#output_material trollToes 200,
+			#output_material wolfTail 140,
+			#output_character character_fire 1,
+			#output_character character_ice 2,
+			#output_character character_acid 3
+		]
+	},
+    "outputs": [
+        {
+            "entryIds": [
+                "goblinEar", "trollToes", "wolfTail",
+                "acidDragonDrop", "fireDragonDrop", "iceDragonDrop",
+                "character_fire", "character_ice", "character_acid"
+            ],
+            "weight": "1"
+        }
+    ]
+}

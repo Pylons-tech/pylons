@@ -1,0 +1,42 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeFightDragonIce RecipeFightDragonIce,
+	"description": "Fights an ice dragon with an iron sword",
+    #no_coin_input,   
+    "itemInputs": [
+		#input_character_special 2,
+		#input_sword_type iron
+	],
+	"entries" : {
+		"itemOuutputs": [
+			#output_material iceDragonDrop 1000,
+		],
+		"coinOutputs": [{
+            "id": "coin_reward",
+            "denom":"loudcoin",
+            "program": "10000"
+        }],
+		"itemModifyOutputs": [
+			#output_modify_character_incr '''xp + double(100 * 10)''' specialDragonKill,
+			#output_echo_sword
+		]
+	},
+	"outputs": [
+        {
+            "entryIds": [],
+            "weight": "4"
+        },
+        {
+            "entryIds": ["coin_reward", "character"],
+            "weight": "3"
+        },
+        {
+            "entryIds": ["coin_reward", "character", "sword"],
+            "weight": "83"
+        },
+        {
+            "entryIds": ["coin_reward", "character", "sword", "iceDragonDrop"],
+            "weight": "10"
+        }
+	]
+}

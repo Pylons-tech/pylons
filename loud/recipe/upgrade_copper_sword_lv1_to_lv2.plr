@@ -4,7 +4,7 @@
 	"description": "Upgrades a level 1 copper sword to level 2",
 	#price loudcoin 250,
 	"itemInputs" : [
-		#input_sword '''Copper sword''' 1
+		#input_sword_specific copper 1
 	],
 	"entries" : {
 		#no_coin_or_item_output,

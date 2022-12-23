@@ -9,7 +9,7 @@
 	"entries" : {
 		#no_coin_or_item_modify_output,
 		"itemOutputs": [
-			#output_sword '''Iron sword''' 1 100 450
+			#output_sword iron 1 100 450
 		]
 	},
 	#solo_output sword
