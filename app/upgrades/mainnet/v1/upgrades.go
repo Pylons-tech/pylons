@@ -2,6 +2,7 @@ package v1
 
 import (
 	"cosmossdk.io/math"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
@@ -23,6 +24,7 @@ func CreateUpgradeHandler(
 	bankKeeper bankkeeper.Keeper,
 	accKeeper *authkeeper.AccountKeeper,
 	staking *stakingkeeper.Keeper,
+	keeper *keeper.Keeper,
 ) upgradetypes.UpgradeHandler {
 	return func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 		// logger := ctx.Logger()
@@ -30,6 +32,7 @@ func CreateUpgradeHandler(
 		bankBaseKeeper, _ := bankKeeper.(bankkeeper.BaseKeeper)
 		if types.IsMainnet(ctx.ChainID()) {
 			BurnToken(ctx, accKeeper, &bankBaseKeeper, staking)
+			SetParams(ctx, *keeper)
 		}
 
 		vm, err := mm.RunMigrations(ctx, configurator, fromVM)
@@ -89,4 +92,26 @@ func BurnCoins(ctx sdk.Context, bank *bankkeeper.BaseKeeper, acc string, amount 
 	if err != nil {
 		panic(err)
 	}
+}
+
+func SetParams(ctx sdk.Context, k keeper.Keeper) {
+	oldParams := k.GetParams(ctx)
+	newParams := getParamsPaymentProcessor(oldParams)
+	k.SetParams(ctx, newParams)
+}
+
+func getParamsPaymentProcessor(params types.Params) types.Params {
+	paymentProcessor := []types.PaymentProcessor{}
+	processorPercentage, _ := sdk.NewDecFromStr("0.000000000000000000")
+	validatorPercentage, _ := sdk.NewDecFromStr("0.003000000000000000")
+	processor := types.PaymentProcessor{
+		CoinDenom:            "ustripeusd",
+		PubKey:               "JgxPJ/hZe0nZ019iSmL+gIPM/pO8i3s8AsikLjoJAJs=",
+		ProcessorPercentage:  processorPercentage,
+		ValidatorsPercentage: validatorPercentage,
+		Name:                 "Pylons_Inc",
+	}
+	paymentProcessor = append(paymentProcessor, processor)
+	params.PaymentProcessors = paymentProcessor
+	return params
 }

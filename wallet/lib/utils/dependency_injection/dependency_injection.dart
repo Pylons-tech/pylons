@@ -74,7 +74,9 @@ final sl = GetIt.instance;
 /// This method is used for initializing the dependencies
 Future<void> init() async {
   /// Services
-  sl.registerLazySingleton<InternetConnectionChecker>(() => InternetConnectionChecker.createInstance(checkTimeout: const Duration(seconds: 20)));
+  sl.registerLazySingleton<InternetConnectionChecker>(
+    () => InternetConnectionChecker.createInstance(checkTimeout: const Duration(seconds: 20)),
+  );
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   sl.registerLazySingleton<IPCEngine>(() => IPCEngine(repository: sl(), walletsStore: sl(), accountProvider: sl<AccountProvider>()));
   sl.registerLazySingleton<LocalServer>(() => LocalServer(sl<HandlerFactory>()));
@@ -157,7 +159,13 @@ Future<void> init() async {
 
   /// Data Sources
   sl.registerLazySingleton<LocalDataSource>(
-    () => LocalDataSourceImp(picker: sl(), sharedPreferences: sl(), flutterSecureStorage: sl(), permissionService: sl(), database: sl()),
+    () => LocalDataSourceImp(
+      picker: sl(),
+      sharedPreferences: sl(),
+      flutterSecureStorage: sl(),
+      permissionService: sl(),
+      database: sl(),
+    ),
   );
 
   sl.registerLazySingleton<PermissionService>(
