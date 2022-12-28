@@ -585,7 +585,7 @@ class NONNftCreations extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               itemBuilder: (context, index) => InkWell(
                 onTap: () {
-                  ShowRecipeJsonDialog showRecipeJsonDialog = ShowRecipeJsonDialog(
+                  final showRecipeJsonDialog = ShowRecipeJsonDialog(
                     context: context,
                     recipe: viewModel.nonNFTRecipes[index],
                   );
