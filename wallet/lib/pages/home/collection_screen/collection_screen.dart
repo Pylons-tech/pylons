@@ -15,6 +15,7 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_placeholder.
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/video_placeholder.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/preview_nft_grid.dart';
+import 'package:pylons_wallet/pages/home/collection_screen/widgets/show_recipe_json.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/home/easel_section/no_easel_art_work.dart';
 import 'package:pylons_wallet/providers/items_provider.dart';
@@ -579,67 +580,27 @@ class NONNftCreations extends StatelessWidget {
           SizedBox(
             height: 15.h,
           ),
-          // if (viewModel.collectionsType == CollectionsType.purchases)
-          //   Expanded(
-          //     child: GridView.custom(
-          //       padding: EdgeInsets.only(
-          //         bottom: 16.h,
-          //         left: 16.w,
-          //         right: 16.w,
-          //       ),
-          //       gridDelegate: SliverQuiltedGridDelegate(
-          //         crossAxisCount: 6,
-          //         mainAxisSpacing: 8,
-          //         crossAxisSpacing: 8,
-          //         repeatPattern: QuiltedGridRepeatPattern.inverted,
-          //         pattern: quiltedGridTile,
-          //       ),
-          //       childrenDelegate: SliverChildBuilderDelegate(
-          //         (context, index) {
-          //           final nft = viewModel.assets[index];
-          //           return GestureDetector(
-          //             onTap: () => onNFTSelected(nft),
-          //             child: ClipRRect(
-          //               child: PreviewNFTGrid(
-          //                 assetType: nft.assetType,
-          //                 on3dNFT: (BuildContext context) => Container(
-          //                   color: AppColors.k3DBackgroundColor,
-          //                   height: double.infinity,
-          //                   child: IgnorePointer(
-          //                     child: Nft3dWidget(
-          //                       url: nft.url,
-          //                       cameraControls: false,
-          //                       backgroundColor: AppColors.k3DBackgroundColor,
-          //                     ),
-          //                   ),
-          //                 ),
-          //                 onPdfNFT: (BuildContext context) => PdfPlaceHolder(
-          //                   nftUrl: nft.url,
-          //                   nftName: nft.name,
-          //                   thumbnailUrl: nft.thumbnailUrl,
-          //                 ),
-          //                 onVideoNFT: (BuildContext context) => VideoPlaceHolder(
-          //                   nftUrl: nft.url,
-          //                   nftName: nft.name,
-          //                   thumbnailUrl: nft.thumbnailUrl,
-          //                 ),
-          //                 onImageNFT: (BuildContext context) => CachedNetworkImage(
-          //                   placeholder: (context, url) => Shimmer(
-          //                     color: PylonsAppTheme.cardBackground,
-          //                     child: const SizedBox.expand(),
-          //                   ),
-          //                   imageUrl: nft.url,
-          //                   fit: BoxFit.cover,
-          //                 ),
-          //                 onAudioNFT: (BuildContext context) => _getAudioPlaceHolder(thumbnailUrl: nft.thumbnailUrl),
-          //               ),
-          //             ),
-          //           );
-          //         },
-          //         childCount: viewModel.assets.length,
-          //       ),
-          //     ),
-          //   )
+          Expanded(
+            child: ListView.separated(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              itemBuilder: (context, index) => InkWell(
+                onTap: () {
+                  ShowRecipeJsonDialog showRecipeJsonDialog = ShowRecipeJsonDialog(
+                    context: context,
+                    recipe: viewModel.nonNFTRecipes[index],
+                  );
+                  showRecipeJsonDialog.show();
+                },
+                child: Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                  child: Text(viewModel.nonNFTRecipes[index].name),
+                ),
+              ),
+              separatorBuilder: (_, __) => const SizedBox(height: 10),
+              itemCount: viewModel.nonNFTRecipes.length,
+            ),
+          )
         ],
       ),
     );
