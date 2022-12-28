@@ -4568,9 +4568,9 @@ signal-exit@^3.0.2:
   version "3.0.7"
   resolved "https://registry.npmjs.org/signal-exit/-/signal-exit-3.0.7.tgz"
 
-simpl-schema@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/simpl-schema/-/simpl-schema-3.0.1.tgz#c30a8bd69d5bf86c044915dc2ab00b0b1344c60f"
+simpl-schema@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/simpl-schema/-/simpl-schema-3.4.0.tgz#a2c720db83cb7f13dba5cea3cc6cd5db57747359"
   dependencies:
     clone "^2.1.2"
     mongo-object "^3.0.0"
