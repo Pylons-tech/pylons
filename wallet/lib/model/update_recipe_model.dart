@@ -8,7 +8,14 @@ class UpdateRecipeModel {
   String denom = "";
   int quantity = 0;
 
-  UpdateRecipeModel({required this.recipe, required this.publicAddress, required this.enabledStatus, required this.nftPrice, required this.denom,required this.quantity});
+  UpdateRecipeModel({
+    required this.recipe,
+    required this.publicAddress,
+    required this.enabledStatus,
+    required this.nftPrice,
+    required this.denom,
+    required this.quantity,
+  });
 
   @override
   String toString() {
