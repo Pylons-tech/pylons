@@ -94,7 +94,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             create: (BuildContext context) => CollectionViewModel(
               creations: [],
               assets: [],
-              collectionsType: CollectionsType.purchases,
+              nonNFTRecipes: [],
+              collectionsType: CollectionsType.purchases, 
             ),
             update: (
               BuildContext context,
@@ -103,8 +104,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               CollectionsTabProvider collectionsTabProvider,
               CollectionViewModel? collectionViewModel,
             ) {
-              return CollectionViewModel(
-                creations: recipesProvider.creations,
+              return CollectionViewModel.fromState(
+                recipesProvider: recipesProvider,
                 assets: itemsProvider.items,
                 collectionsType: collectionsTabProvider.collectionsType,
               );
@@ -130,7 +131,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                       ),
                       appBar: buildAppBar(context, provider),
                       body: pages[provider.selectedIndex],
-                      bottomSheet: remoteConfigService.getMaintenanceMode() ? const MaintenanceModeMessageWidget() : null,
+                      bottomSheet:
+                          remoteConfigService.getMaintenanceMode() ? const MaintenanceModeMessageWidget() : null,
                     ),
                   ),
                 ),
@@ -188,7 +190,6 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 ),
               ),
             ),
-
             Positioned(
               top: 0.04.sh,
               left: 0.07.sw,
