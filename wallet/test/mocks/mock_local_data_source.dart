@@ -168,8 +168,7 @@ class MockLocalDataSource extends LocalDataSource {
   }
 
   @override
-  Future<bool> saveNetworkEnvironmentPreference(
-      {required String networkEnvironment}) {
+  Future<bool> saveNetworkEnvironmentPreference({required String networkEnvironment}) {
     // TODO: implement saveNetworkEnvironmentPreference
     throw UnimplementedError();
   }
@@ -202,5 +201,15 @@ class MockLocalDataSource extends LocalDataSource {
   Future<int> saveTransactionFailure(LocalTransactionModel txManager) {
     // TODO: implement saveTransactionFailure
     throw UnimplementedError();
+  }
+
+  @override
+  bool getUserAcceptPolicies() {
+    return true;
+  }
+
+  @override
+  Future<bool> saveUserAcceptPolicies() {
+    return Future.value(true);
   }
 }

@@ -560,6 +560,16 @@ class MockRepository extends Repository {
   }
 
   @override
+  Either<Failure, bool> getUserAcceptPolicies() {
+    return const Right(true);
+  }
+
+  @override
+  Future<Either<Failure, bool>> saveUserAcceptPolicies() {
+    return Future.value(const Right(true));
+  }
+
+  @override
   Future<Either<Failure, Tuple2<Tx, TxResponse?>>> getTx({required String hash}) {
     // TODO: implement getTx
     throw UnimplementedError();

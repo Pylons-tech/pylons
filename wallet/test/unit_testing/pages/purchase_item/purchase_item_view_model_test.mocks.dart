@@ -2,7 +2,7 @@
 // in pylons_wallet/test/unit_testing/pages/purchase_item/purchase_item_view_model_test.dart.
 // Do not manually edit this file.
 
-// ignore_for_file: no_leading_underscores_for_library_prefixes
+// ignore_for_file: no_leading_underscores_for_library_prefixes, must_be_immutable
 import 'dart:async' as _i8;
 
 import 'package:dartz/dartz.dart' as _i2;
@@ -758,7 +758,6 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
 /// A class which mocks [AccountPublicInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-// ignore: must_be_immutable
 class MockAccountPublicInfo extends _i1.Mock implements _i6.AccountPublicInfo {
   MockAccountPublicInfo() {
     _i1.throwOnMissingStub(this);
@@ -2644,6 +2643,36 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
   @override
+  _i8.Future<_i2.Either<_i9.Failure, bool>> saveUserAcceptPolicies() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveUserAcceptPolicies,
+          [],
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, bool>>.value(
+            _FakeEither_0<_i9.Failure, bool>(
+          this,
+          Invocation.method(
+            #saveUserAcceptPolicies,
+            [],
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
+  @override
+  _i2.Either<_i9.Failure, bool> getUserAcceptPolicies() => (super.noSuchMethod(
+        Invocation.method(
+          #getUserAcceptPolicies,
+          [],
+        ),
+        returnValue: _FakeEither_0<_i9.Failure, bool>(
+          this,
+          Invocation.method(
+            #getUserAcceptPolicies,
+            [],
+          ),
+        ),
+      ) as _i2.Either<_i9.Failure, bool>);
+  @override
   _i8.Future<_i2.Either<_i9.Failure, bool>> setUserIdentifierInAnalytics(
           {required String? address}) =>
       (super.noSuchMethod(
@@ -2750,12 +2779,42 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, void>>);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>> setUserName({
+    required String? username,
+    required String? address,
+    required _i6.AccountPublicInfo? accountPublicInfo,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #setUserName,
+          [],
+          {
+            #username: username,
+            #address: address,
+            #accountPublicInfo: accountPublicInfo,
+          },
+        ),
+        returnValue:
+            _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>>.value(
+                _FakeEither_0<_i9.Failure, _i31.TransactionResponse>(
+          this,
+          Invocation.method(
+            #setUserName,
+            [],
+            {
+              #username: username,
+              #address: address,
+              #accountPublicInfo: accountPublicInfo,
+            },
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>>);
 }
 
 /// A class which mocks [NFT].
 ///
 /// See the documentation for Mockito's code generation for more information.
-// ignore: must_be_immutable
 class MockNFT extends _i1.Mock implements _i30.NFT {
   MockNFT() {
     _i1.throwOnMissingStub(this);
@@ -3070,6 +3129,19 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         Invocation.setter(
           #fileSize,
           _fileSize,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  String get fileExtension => (super.noSuchMethod(
+        Invocation.getter(#fileExtension),
+        returnValue: '',
+      ) as String);
+  @override
+  set fileExtension(String? _fileExtension) => super.noSuchMethod(
+        Invocation.setter(
+          #fileExtension,
+          _fileExtension,
         ),
         returnValueForMissingStub: null,
       );

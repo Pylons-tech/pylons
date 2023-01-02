@@ -12,6 +12,10 @@ class SVGUtil {
   static String SETTINGS_GENERAL = "assets/images/svg/settings_general.svg";
   static String SETTINGS_LEGAL = "assets/images/svg/settings_legal.svg";
   static String SETTINGS_RECOVERY = "assets/images/svg/settings_recovery.svg";
+  static String DRAWER_CASH_OUT = "assets/images/svg/cash_out.svg";
+  static String DRAWER_HISTORY = "assets/images/svg/history.svg";
+  static String IMAGE_EDIT = "assets/images/svg/image_edit.svg";
+  static String LOCK_ICON = "assets/images/svg/lock.svg";
   static String APP_ICON = "assets/images/icons/pylons_logo.svg";
   static String WALLET_COPY = "assets/images/icons/copy.svg";
   static String WALLET_TRANSACTION_HISTORY = "assets/images/icons/transaction_history.svg";
@@ -38,6 +42,7 @@ class SVGUtil {
   static String OWNER_VERIFIED_ICON = 'assets/images/icons/verified.svg';
   static String OWNER_SHARE = 'assets/images/icons/share.svg';
   static String OWNER_VIEWS = 'assets/images/icons/views.svg';
+  static String OWNER_VIEWS_BOLD = 'assets/images/icons/eye_bold.svg';
   static String DEV_NET = "assets/images/icons/dev_net.svg";
   static String PYLONS_CURRENCY = "assets/images/icons/pylons_engagement_token.svg";
   static String QR_ICON = 'assets/images/icons/qr.svg';

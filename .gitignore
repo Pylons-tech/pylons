@@ -24,8 +24,7 @@ genesis/gamma
 genesis/pylonsd
 
 artifacts
-*.plc
-*.plr
+
 cmd/pylonsd/__debug_bin
 proto/dart/*
 
@@ -35,3 +34,7 @@ debug
 *.env
 wallet/android/app/google-services.json
 mytestnet/
+recipetool/.flutter-plugins
+recipetool/.flutter-plugins-dependencies
+recipetool/.dart_tool/
+recipetool/build/

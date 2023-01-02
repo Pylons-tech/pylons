@@ -75,7 +75,7 @@ class _OwnerVideoProgressWidgetState extends State<OwnerVideoProgressWidget> {
                       viewModel.videoPlayerController!,
                       allowScrubbing: true,
                       colors: VideoProgressColors(
-                        backgroundColor: AppColors.kGray,
+                        backgroundColor: AppColors.kGreyColorBtn,
                         playedColor: AppColors.kWhite,
                         bufferedColor: AppColors.kWhite.withOpacity(0.7),
                       ),

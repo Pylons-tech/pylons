@@ -849,7 +849,7 @@ class WalletsStoreImp implements WalletsStore {
   Future<bool> deleteAccounts() async {
     final transactionSigningGateway = getTransactionSigningGateway();
     final customTransactionSigningGateway = getCustomTransactionSigningGateway();
-
+    accountProvider.accountPublicInfo = null;
     final response = await transactionSigningGateway.clearAllCredentials();
     final customResponse = await customTransactionSigningGateway.clearAllCredentials();
 

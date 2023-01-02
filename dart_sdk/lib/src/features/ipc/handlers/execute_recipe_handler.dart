@@ -1,11 +1,15 @@
 import 'package:pylons_sdk/src/core/constants/strings.dart';
 import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
-import 'package:pylons_sdk/src/features/ipc/responseCompleters.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
+
+
 
 class ExecuteRecipeHandler implements IPCHandler {
   @override
-  void handler(SDKIPCResponse<dynamic> response) {
+  void handler(
+    SDKIPCResponse<dynamic> response,
+    void Function(String key, SDKIPCResponse response) onHandlingComplete,
+  ) {
     final defaultResponse = SDKIPCResponse<String>(
         success: response.success,
         action: response.action,
@@ -21,6 +25,7 @@ class ExecuteRecipeHandler implements IPCHandler {
       defaultResponse.error = 'TX response parsing failed';
       defaultResponse.errorCode = Strings.ERR_MALFORMED_EXECUTION;
     }
-    responseCompleters[Strings.TX_EXECUTE_RECIPE]!.complete(defaultResponse);
+
+    return onHandlingComplete(Strings.TX_EXECUTE_RECIPE, defaultResponse);
   }
 }

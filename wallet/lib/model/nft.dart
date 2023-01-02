@@ -41,6 +41,7 @@ class NFT extends Equatable {
   AssetType assetType = AssetType.Image;
   String duration = "";
   String fileSize = "";
+  String fileExtension = "";
   String hashtags = "";
   String cid = "";
   String createdAt = "";
@@ -72,6 +73,7 @@ class NFT extends Equatable {
     this.assetType = AssetType.Image,
     this.duration = "",
     this.fileSize = "",
+    this.fileExtension = "",
     this.hashtags = "",
     this.createdAt = "",
     this.realWorld = false,
@@ -105,6 +107,7 @@ class NFT extends Equatable {
       description: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kDescription).value,
       fileSize: getFileSize(item),
       creator: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kCreator, orElse: () => StringKeyValue(key: kCreator, value: "")).value,
+      fileExtension: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kCreator, orElse: () => StringKeyValue(key: kFileExtension, value: "")).value,
       cid: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kCID, orElse: () => StringKeyValue(key: kCID, value: "")).value,
       appType: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kAppType, orElse: () => StringKeyValue(key: kAppType, value: "")).value,
       width: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kWidth, orElse: () => LongKeyValue(key: kWidth, value: Int64())).value.toString(),
@@ -139,6 +142,7 @@ class NFT extends Equatable {
       description: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kDescription).value,
       fileSize: getFileSize(item),
       creator: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kCreator, orElse: () => StringKeyValue(key: kCreator, value: "")).value,
+      fileExtension: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kFileExtension, orElse: () => StringKeyValue(key: kCreator, value: "")).value,
       cid: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kCID, orElse: () => StringKeyValue(key: kCID, value: "")).value,
       appType: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kAppType, orElse: () => StringKeyValue(key: kAppType, value: "")).value,
       width: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kWidth, orElse: () => LongKeyValue(key: kWidth, value: Int64())).value.toString(),
@@ -173,6 +177,7 @@ class NFT extends Equatable {
       cid: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kCID, orElse: () => StringParam()).value ?? "",
       appType: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kAppType, orElse: () => StringParam()).value ?? "",
       creator: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kCreator, orElse: () => StringParam()).value ?? "",
+      fileExtension: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kFileExtension, orElse: () => StringParam()).value ?? "",
       width: recipe.entries.itemOutputs.firstOrNull?.longs.firstWhere((longKeyValue) => longKeyValue.key == kWidth, orElse: () => LongParam()).weightRanges.firstOrNull?.upper.toString() ?? "0",
       height: recipe.entries.itemOutputs.firstOrNull?.longs.firstWhere((longKeyValue) => longKeyValue.key == kHeight, orElse: () => LongParam()).weightRanges.firstOrNull?.upper.toString() ?? "0",
       amountMinted: int.parse(recipe.entries.itemOutputs.firstOrNull?.amountMinted.toString() ?? "0"),
@@ -191,8 +196,6 @@ class NFT extends Equatable {
       isEnabled: recipe.enabled,
     );
   }
-
-
 
   static Future<NFT> fromTradeByID(Int64 tradeID) async {
     final walletsStore = GetIt.I.get<WalletsStore>();
@@ -237,6 +240,7 @@ class NFT extends Equatable {
         assetType,
         duration,
         fileSize,
+        fileExtension,
         hashtags,
         createdAt,
         realWorld,

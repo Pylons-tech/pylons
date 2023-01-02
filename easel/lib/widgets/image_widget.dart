@@ -13,28 +13,30 @@ class ImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return file != null
-        ? Image.memory(
-            file!.readAsBytesSync(),
-            width: 1.sw,
-            height: 1.sh,
-            fit: BoxFit.fitWidth,
-          )
-        : SizedBox(
-            height: double.infinity,
-            child: CachedNetworkImage(
-              fit: BoxFit.fitWidth,
-              imageUrl: filePath!,
-              errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
-              placeholder: (context, url) => Center(
-                child: SizedBox(
-                  height: 50.0.h,
-                  child: Image.asset(
-                    kLoadingGif,
-                  ),
-                ),
+    if (file != null) {
+      return Image.memory(
+        file!.readAsBytesSync(),
+        width: 1.sw,
+        height: 1.sh,
+        fit: BoxFit.fill,
+      );
+    } else {
+      return SizedBox(
+        height: double.infinity,
+        child: CachedNetworkImage(
+          fit: BoxFit.fill,
+          imageUrl: filePath!,
+          errorWidget: (a, b, c) => const Center(child: Icon(Icons.error_outline)),
+          placeholder: (context, url) => Center(
+            child: SizedBox(
+              height: 50.0.h,
+              child: Image.asset(
+                kLoadingGif,
               ),
             ),
-          );
+          ),
+        ),
+      );
+    }
   }
 }

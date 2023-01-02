@@ -260,6 +260,8 @@ NFT MOCK_NFT_FREE_IMAGE = NFT(
   fileSize: "90.12KB",
   itemID: "DtnxAS8L4pf",
   owner: "abd",
+  type: NftType.TYPE_RECIPE,
+  fileExtension: 'jpg',
   ibcCoins: IBCCoins.upylon,
 );
 
@@ -297,6 +299,8 @@ NFT MOCK_NFT_FREE_VIDEO = NFT(
   owner: "abd",
   ibcCoins: IBCCoins.upylon,
   assetType: AssetType.Video,
+  fileExtension: 'mp4',
+  type: NftType.TYPE_RECIPE,
 );
 
 NFT MOCK_NFT_FREE_AUDIO = NFT(
@@ -315,6 +319,46 @@ NFT MOCK_NFT_FREE_AUDIO = NFT(
   owner: "abd",
   ibcCoins: IBCCoins.upylon,
   assetType: AssetType.Audio,
+  fileExtension: 'mp3',
+  type: NftType.TYPE_RECIPE,
+);
+NFT MOCK_NFT_FREE_3D = NFT(
+  name: "This is my Image NFT",
+  height: "2400",
+  description: "Please Buy my Image NFT",
+  width: "1080",
+  url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
+  recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
+  duration: "0:0",
+  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+  appType: "easel",
+  creator: "Ahmad",
+  fileSize: "90.12KB",
+  itemID: "DtnxAS8L4pf",
+  owner: "abd",
+  ibcCoins: IBCCoins.upylon,
+  assetType: AssetType.ThreeD,
+  fileExtension: 'glb',
+  type: NftType.TYPE_RECIPE,
+);
+NFT MOCK_NFT_FREE_PDF = NFT(
+  name: "This is my Image NFT",
+  height: "2400",
+  description: "Please Buy my Image NFT",
+  width: "1080",
+  url: "https://proxy.pylons.tech/ipfs/bafkreihzxrk7rpxmih3wr6o5kccxpfyjneg7rbgkpmdflvwyd63geaiaby",
+  recipeID: "Easel_Recipe_auto_recipe_2022_08_31_154526_206",
+  duration: "0:0",
+  cookbookID: "Easel_CookBook_auto_cookbook_2022_08_31_152836_312",
+  appType: "easel",
+  creator: "Ahmad",
+  fileSize: "90.12KB",
+  itemID: "DtnxAS8L4pf",
+  owner: "abd",
+  ibcCoins: IBCCoins.upylon,
+  assetType: AssetType.ThreeD,
+  fileExtension: 'pdf',
+  type: NftType.TYPE_RECIPE,
 );
 
 NftOwnershipHistory MOCK_NFT_OWNERSHIP_HISTORY = NftOwnershipHistory(
@@ -353,3 +397,10 @@ bool MOCK_SHOW_LOADER_TRUE = true;
 bool MOCK_SHOW_LOADER_FALSE = false;
 String MOCK_DYNAMIC_LINK = "https://pylons.page.link/i89m9Qxw7fYjW2RS8";
 const MOCK_BUY_BUTTON_KEY_VALUE = "buy_button_key";
+const MOCK_NAME = "Ahmad";
+const MOCK_ACCOUNT_ID = "account1";
+const MOCK_PUBLIC_ADDRESS = "publicAddress123";
+const MOCK_CHAIN_ID = "chain_id_1";
+const MOCK_PYLONS_BANNER = "pylons_banner_file_uri";
+const MOCK_PYLONS_AVATAR = "pylons_avatar_file_uri";
+const MOCK_TABS = ["Collection", "Wallet"];
