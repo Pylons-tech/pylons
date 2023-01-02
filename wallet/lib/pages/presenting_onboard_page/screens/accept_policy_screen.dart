@@ -103,7 +103,7 @@ class AcceptPolicyScreenContent extends StatelessWidget {
       key: const Key(kAcceptPolicyPortionKey),
       alignment: Alignment.bottomCenter,
       child: ClipPath(
-        clipper: LeftRightTopClipper(),
+        clipper: BottomLeftCurvedCorner(cuttingEdge: 100),
         child: Container(
           height: 0.33.sh,
           width: double.infinity,

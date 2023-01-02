@@ -2,14 +2,14 @@
 // in pylons_wallet/test/unit_testing/pages/purchase_item/purchase_item_view_model_test.dart.
 // Do not manually edit this file.
 
-// ignore_for_file: no_leading_underscores_for_library_prefixes, must_be_immutable
+// ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i8;
 
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:fixnum/fixnum.dart' as _i11;
-import 'package:in_app_purchase/in_app_purchase.dart' as _i28;
+import 'package:in_app_purchase/in_app_purchase.dart' as _i29;
 import 'package:internet_connection_checker/internet_connection_checker.dart'
-    as _i27;
+    as _i28;
 import 'package:local_auth/local_auth.dart' as _i23;
 import 'package:mobx/mobx.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
@@ -18,17 +18,18 @@ import 'package:pylons_wallet/model/balance.dart' as _i15;
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart'
     as _i16;
 import 'package:pylons_wallet/model/export.dart' as _i17;
-import 'package:pylons_wallet/model/nft.dart' as _i30;
+import 'package:pylons_wallet/model/nft.dart' as _i31;
 import 'package:pylons_wallet/model/nft_ownership_history.dart' as _i24;
-import 'package:pylons_wallet/model/notification_message.dart' as _i29;
+import 'package:pylons_wallet/model/notification_message.dart' as _i30;
 import 'package:pylons_wallet/model/pick_image_model.dart' as _i22;
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart'
     as _i20;
 import 'package:pylons_wallet/model/stripe_loginlink_request.dart' as _i19;
 import 'package:pylons_wallet/model/stripe_loginlink_response.dart' as _i18;
 import 'package:pylons_wallet/model/transaction.dart' as _i25;
-import 'package:pylons_wallet/model/transaction_failure_model.dart' as _i33;
-import 'package:pylons_wallet/model/wallet_creation_model.dart' as _i32;
+import 'package:pylons_wallet/model/transaction_failure_model.dart' as _i34;
+import 'package:pylons_wallet/model/update_recipe_model.dart' as _i26;
+import 'package:pylons_wallet/model/wallet_creation_model.dart' as _i33;
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart'
     as _i4;
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/export.dart'
@@ -36,20 +37,19 @@ import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/export.dart'
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart'
     as _i10;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart'
-    as _i34;
+    as _i35;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart'
     as _i21;
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart'
     as _i12;
 import 'package:pylons_wallet/services/repository/repository.dart' as _i13;
-import 'package:pylons_wallet/stores/models/transaction_response.dart' as _i31;
+import 'package:pylons_wallet/stores/models/transaction_response.dart' as _i32;
 import 'package:pylons_wallet/stores/wallet_store.dart' as _i7;
-import 'package:pylons_wallet/utils/backup/common/backup_model.dart' as _i26;
-import 'package:pylons_wallet/utils/enums.dart' as _i35;
+import 'package:pylons_wallet/utils/backup/common/backup_model.dart' as _i27;
+import 'package:pylons_wallet/utils/enums.dart' as _i36;
 import 'package:pylons_wallet/utils/failure/failure.dart' as _i9;
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart'
     as _i6;
-import 'package:pylons_wallet/model/update_recipe_model.dart' as _i36;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -1979,18 +1979,18 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
               .Future<_i2.Either<_i9.Failure, List<_i25.TransactionHistory>>>);
   @override
   _i8.Future<_i2.Either<_i9.Failure, String>> updateRecipe(
-          {required _i36.UpdateRecipeModel? updateRecipeModel}) =>
+          {required _i26.UpdateRecipeModel? updateRecipeModel}) =>
       (super.noSuchMethod(
         Invocation.method(
           #updateRecipe,
           [],
-          {#msgUpdateRecipe: updateRecipeModel},
+          {#updateRecipeModel: updateRecipeModel},
         ),
         returnValue: _i8.Future<_i2.Either<_i9.Failure, String>>.value(
             _FakeEither_0<_i9.Failure, String>(
           this,
           Invocation.method(
-            #updateRecipeModel,
+            #updateRecipe,
             [],
             {#updateRecipeModel: updateRecipeModel},
           ),
@@ -2024,22 +2024,22 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>>
+  _i8.Future<_i2.Either<_i9.Failure, _i27.BackupData>>
       getGoogleDriveMnemonic() => (super.noSuchMethod(
             Invocation.method(
               #getGoogleDriveMnemonic,
               [],
             ),
             returnValue:
-                _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>>.value(
-                    _FakeEither_0<_i9.Failure, _i26.BackupData>(
+                _i8.Future<_i2.Either<_i9.Failure, _i27.BackupData>>.value(
+                    _FakeEither_0<_i9.Failure, _i27.BackupData>(
               this,
               Invocation.method(
                 #getGoogleDriveMnemonic,
                 [],
               ),
             )),
-          ) as _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>>);
+          ) as _i8.Future<_i2.Either<_i9.Failure, _i27.BackupData>>);
   @override
   _i8.Future<_i2.Either<_i9.Failure, bool>> uploadMnemonicICloud({
     required String? mnemonic,
@@ -2068,21 +2068,21 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, bool>>);
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>> getICloudMnemonic() =>
+  _i8.Future<_i2.Either<_i9.Failure, _i27.BackupData>> getICloudMnemonic() =>
       (super.noSuchMethod(
         Invocation.method(
           #getICloudMnemonic,
           [],
         ),
-        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>>.value(
-            _FakeEither_0<_i9.Failure, _i26.BackupData>(
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, _i27.BackupData>>.value(
+            _FakeEither_0<_i9.Failure, _i27.BackupData>(
           this,
           Invocation.method(
             #getICloudMnemonic,
             [],
           ),
         )),
-      ) as _i8.Future<_i2.Either<_i9.Failure, _i26.BackupData>>);
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i27.BackupData>>);
   @override
   _i8.Future<_i2.Either<_i9.Failure, List<_i10.Cookbook>>>
       getCookbooksByCreator({required String? creator}) => (super.noSuchMethod(
@@ -2128,14 +2128,14 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
         returnValue: _i8.Future<bool>.value(false),
       ) as _i8.Future<bool>);
   @override
-  _i8.Stream<_i27.InternetConnectionStatus> getInternetStatus() =>
+  _i8.Stream<_i28.InternetConnectionStatus> getInternetStatus() =>
       (super.noSuchMethod(
         Invocation.method(
           #getInternetStatus,
           [],
         ),
-        returnValue: _i8.Stream<_i27.InternetConnectionStatus>.empty(),
-      ) as _i8.Stream<_i27.InternetConnectionStatus>);
+        returnValue: _i8.Stream<_i28.InternetConnectionStatus>.empty(),
+      ) as _i8.Stream<_i28.InternetConnectionStatus>);
   @override
   _i8.Future<_i2.Either<_i9.Failure, int>> getLikesCount({
     required String? recipeId,
@@ -2347,7 +2347,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             )),
           ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i28.ProductDetails>> getProductsForSale(
+  _i8.Future<_i2.Either<_i9.Failure, _i29.ProductDetails>> getProductsForSale(
           {required String? itemId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2356,8 +2356,8 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           {#itemId: itemId},
         ),
         returnValue:
-            _i8.Future<_i2.Either<_i9.Failure, _i28.ProductDetails>>.value(
-                _FakeEither_0<_i9.Failure, _i28.ProductDetails>(
+            _i8.Future<_i2.Either<_i9.Failure, _i29.ProductDetails>>.value(
+                _FakeEither_0<_i9.Failure, _i29.ProductDetails>(
           this,
           Invocation.method(
             #getProductsForSale,
@@ -2365,10 +2365,10 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             {#itemId: itemId},
           ),
         )),
-      ) as _i8.Future<_i2.Either<_i9.Failure, _i28.ProductDetails>>);
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i29.ProductDetails>>);
   @override
   _i8.Future<_i2.Either<_i9.Failure, bool>> buyProduct(
-          _i28.ProductDetails? productDetails) =>
+          _i29.ProductDetails? productDetails) =>
       (super.noSuchMethod(
         Invocation.method(
           #buyProduct,
@@ -2462,7 +2462,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
   @override
-  _i8.Future<_i2.Either<_i9.Failure, List<_i29.NotificationMessage>>>
+  _i8.Future<_i2.Either<_i9.Failure, List<_i30.NotificationMessage>>>
       getAllNotificationsMessages({
     required String? walletAddress,
     required int? limit,
@@ -2480,8 +2480,8 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             ),
             returnValue: _i8.Future<
                     _i2.Either<_i9.Failure,
-                        List<_i29.NotificationMessage>>>.value(
-                _FakeEither_0<_i9.Failure, List<_i29.NotificationMessage>>(
+                        List<_i30.NotificationMessage>>>.value(
+                _FakeEither_0<_i9.Failure, List<_i30.NotificationMessage>>(
               this,
               Invocation.method(
                 #getAllNotificationsMessages,
@@ -2494,7 +2494,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
               ),
             )),
           ) as _i8
-              .Future<_i2.Either<_i9.Failure, List<_i29.NotificationMessage>>>);
+              .Future<_i2.Either<_i9.Failure, List<_i30.NotificationMessage>>>);
   @override
   _i8.Future<_i2.Either<_i9.Failure, bool>> saveInviteeAddressFromDynamicLink(
           {required String? dynamicLink}) =>
@@ -2537,7 +2537,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
   _i8.Future<_i2.Either<_i9.Failure, String>>
       createDynamicLinkForRecipeNftShare({
     required String? address,
-    required _i30.NFT? nft,
+    required _i31.NFT? nft,
   }) =>
           (super.noSuchMethod(
             Invocation.method(
@@ -2562,9 +2562,9 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             )),
           ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>> createAccount({
+  _i8.Future<_i2.Either<_i9.Failure, _i32.TransactionResponse>> createAccount({
     required _i6.AccountPublicInfo? publicInfo,
-    required _i32.WalletCreationModel? walletCreationModel,
+    required _i33.WalletCreationModel? walletCreationModel,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2576,8 +2576,8 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           },
         ),
         returnValue:
-            _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>>.value(
-                _FakeEither_0<_i9.Failure, _i31.TransactionResponse>(
+            _i8.Future<_i2.Either<_i9.Failure, _i32.TransactionResponse>>.value(
+                _FakeEither_0<_i9.Failure, _i32.TransactionResponse>(
           this,
           Invocation.method(
             #createAccount,
@@ -2588,10 +2588,10 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             },
           ),
         )),
-      ) as _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>>);
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i32.TransactionResponse>>);
   @override
   _i8.Future<_i2.Either<_i9.Failure, int>> saveLocalTransaction(
-          _i33.LocalTransactionModel? txManager) =>
+          _i34.LocalTransactionModel? txManager) =>
       (super.noSuchMethod(
         Invocation.method(
           #saveLocalTransaction,
@@ -2607,7 +2607,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, int>>);
   @override
-  _i8.Future<_i2.Either<_i9.Failure, List<_i33.LocalTransactionModel>>>
+  _i8.Future<_i2.Either<_i9.Failure, List<_i34.LocalTransactionModel>>>
       getAllTransactionFailures() => (super.noSuchMethod(
             Invocation.method(
               #getAllTransactionFailures,
@@ -2615,8 +2615,8 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             ),
             returnValue: _i8.Future<
                     _i2.Either<_i9.Failure,
-                        List<_i33.LocalTransactionModel>>>.value(
-                _FakeEither_0<_i9.Failure, List<_i33.LocalTransactionModel>>(
+                        List<_i34.LocalTransactionModel>>>.value(
+                _FakeEither_0<_i9.Failure, List<_i34.LocalTransactionModel>>(
               this,
               Invocation.method(
                 #getAllTransactionFailures,
@@ -2624,7 +2624,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
               ),
             )),
           ) as _i8.Future<
-              _i2.Either<_i9.Failure, List<_i33.LocalTransactionModel>>>);
+              _i2.Either<_i9.Failure, List<_i34.LocalTransactionModel>>>);
   @override
   _i8.Future<_i2.Either<_i9.Failure, bool>> deleteTransactionFailureRecord(
           int? id) =>
@@ -2780,7 +2780,7 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, void>>);
   @override
-  _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>> setUserName({
+  _i8.Future<_i2.Either<_i9.Failure, _i32.TransactionResponse>> setUserName({
     required String? username,
     required String? address,
     required _i6.AccountPublicInfo? accountPublicInfo,
@@ -2796,8 +2796,8 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
           },
         ),
         returnValue:
-            _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>>.value(
-                _FakeEither_0<_i9.Failure, _i31.TransactionResponse>(
+            _i8.Future<_i2.Either<_i9.Failure, _i32.TransactionResponse>>.value(
+                _FakeEither_0<_i9.Failure, _i32.TransactionResponse>(
           this,
           Invocation.method(
             #setUserName,
@@ -2809,13 +2809,13 @@ class MockRepository extends _i1.Mock implements _i13.Repository {
             },
           ),
         )),
-      ) as _i8.Future<_i2.Either<_i9.Failure, _i31.TransactionResponse>>);
+      ) as _i8.Future<_i2.Either<_i9.Failure, _i32.TransactionResponse>>);
 }
 
 /// A class which mocks [NFT].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNFT extends _i1.Mock implements _i30.NFT {
+class MockNFT extends _i1.Mock implements _i31.NFT {
   MockNFT() {
     _i1.throwOnMissingStub(this);
   }
@@ -3068,12 +3068,12 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         returnValueForMissingStub: null,
       );
   @override
-  _i34.IBCCoins get ibcCoins => (super.noSuchMethod(
+  _i35.IBCCoins get ibcCoins => (super.noSuchMethod(
         Invocation.getter(#ibcCoins),
-        returnValue: _i34.IBCCoins.urun,
-      ) as _i34.IBCCoins);
+        returnValue: _i35.IBCCoins.urun,
+      ) as _i35.IBCCoins);
   @override
-  set ibcCoins(_i34.IBCCoins? _ibcCoins) => super.noSuchMethod(
+  set ibcCoins(_i35.IBCCoins? _ibcCoins) => super.noSuchMethod(
         Invocation.setter(
           #ibcCoins,
           _ibcCoins,
@@ -3081,12 +3081,12 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         returnValueForMissingStub: null,
       );
   @override
-  _i35.NftType get type => (super.noSuchMethod(
+  _i36.NftType get type => (super.noSuchMethod(
         Invocation.getter(#type),
-        returnValue: _i35.NftType.TYPE_RECIPE,
-      ) as _i35.NftType);
+        returnValue: _i36.NftType.TYPE_RECIPE,
+      ) as _i36.NftType);
   @override
-  set type(_i35.NftType? _type) => super.noSuchMethod(
+  set type(_i36.NftType? _type) => super.noSuchMethod(
         Invocation.setter(
           #type,
           _type,
@@ -3094,12 +3094,12 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         returnValueForMissingStub: null,
       );
   @override
-  _i35.AssetType get assetType => (super.noSuchMethod(
+  _i36.AssetType get assetType => (super.noSuchMethod(
         Invocation.getter(#assetType),
-        returnValue: _i35.AssetType.Audio,
-      ) as _i35.AssetType);
+        returnValue: _i36.AssetType.Audio,
+      ) as _i36.AssetType);
   @override
-  set assetType(_i35.AssetType? _assetType) => super.noSuchMethod(
+  set assetType(_i36.AssetType? _assetType) => super.noSuchMethod(
         Invocation.setter(
           #assetType,
           _assetType,
@@ -3194,6 +3194,19 @@ class MockNFT extends _i1.Mock implements _i30.NFT {
         Invocation.setter(
           #realWorld,
           _realWorld,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  bool get isEnabled => (super.noSuchMethod(
+        Invocation.getter(#isEnabled),
+        returnValue: false,
+      ) as bool);
+  @override
+  set isEnabled(bool? _isEnabled) => super.noSuchMethod(
+        Invocation.setter(
+          #isEnabled,
+          _isEnabled,
         ),
         returnValueForMissingStub: null,
       );

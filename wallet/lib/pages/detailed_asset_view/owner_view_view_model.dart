@@ -51,8 +51,6 @@ class OwnerViewViewModel extends ChangeNotifier {
 
   VideoPlayerController? videoPlayerController;
 
-
-
   late StreamSubscription playerStateSubscription;
 
   late StreamSubscription positionStreamSubscription;
@@ -110,7 +108,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _isLiking = true;
+  bool _isLiking = false;
 
   bool _isViewingFullNft = false;
 
@@ -257,12 +255,14 @@ class OwnerViewViewModel extends ChangeNotifier {
       walletAddress: walletAddress,
     );
 
+    isLiking = false;
+
     if (updateLikeStatusEither.isLeft()) {
       LocaleKeys.something_wrong.tr().show();
       return;
     }
     likedByMe = !likedByMe;
-    isLiking = false;
+
     if (temp && likesCount > 0) {
       likesCount = likesCount - 1;
     } else {

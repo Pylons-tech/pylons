@@ -335,6 +335,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
   final FirebaseDynamicLinks dynamicLinksGenerator;
   final FirestoreHelper firebaseHelper;
   final AnalyticsHelper analyticsHelper;
+  final timeOutDuration = const Duration(seconds: 10);
 
   RemoteDataStoreImp({
     required this.dynamicLinksGenerator,
@@ -355,7 +356,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final uri = Uri.parse("$baseApiUrl/api/actions/likes/$cookBookID/$recipeId");
 
     final response = await httpClient.post(uri, body: body).timeout(
-          const Duration(seconds: 30),
+          timeOutDuration,
         );
 
     if (response.statusCode == API_SUCCESS_CODE) {
@@ -381,7 +382,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     log("$baseApiUrl/api/actions/likes/$cookBookID/$recipeId");
 
     final response = await httpClient.get(uri).timeout(
-          const Duration(seconds: 30),
+          timeOutDuration,
         );
 
     if (response.statusCode == API_SUCCESS_CODE) {
@@ -411,7 +412,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final uri = Uri.parse("$baseApiUrl/api/actions/views/$cookBookID/$recipeId");
 
     final response = await httpClient.post(uri, body: body).timeout(
-          const Duration(seconds: 30),
+          timeOutDuration,
         );
 
     if (response.statusCode == API_SUCCESS_CODE) {
@@ -435,7 +436,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final uri = Uri.parse("$baseApiUrl/api/actions/views/$cookBookID/$recipeId");
 
     final response = await httpClient.get(uri).timeout(
-          const Duration(seconds: 30),
+          timeOutDuration,
         );
 
     if (response.statusCode == API_SUCCESS_CODE) {
@@ -464,7 +465,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final uri = Uri.parse("$baseApiUrl/api/actions/likes/$walletAddress/$cookBookID/$recipeId");
 
     final response = await httpClient.get(uri).timeout(
-          const Duration(seconds: 30),
+          timeOutDuration,
         );
 
     if (response.statusCode == API_SUCCESS_CODE) {
@@ -491,7 +492,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final response = await httpClient
         .get(Uri.parse("${baseEnv.baseStripeUrl}/generate-registration-token?address=$address"))
         .timeout(
-          const Duration(seconds: 30),
+          timeOutDuration,
         );
 
     log(response.body, name: "Stripe | generateStripeRegistrationToken");
@@ -515,7 +516,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
         .get(
           Uri.parse("${baseEnv.baseStripeUrl}/generate-update-token?address=$address"),
         )
-        .timeout(const Duration(seconds: 30));
+        .timeout(timeOutDuration);
 
     if (response.statusCode == API_SUCCESS_CODE) {
       return StripeGenerateUpdateTokenResponse.fromJson(
@@ -537,7 +538,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
             ),
             body: jsonEncode(req.toJson()))
         .timeout(
-          const Duration(seconds: 30),
+          timeOutDuration,
         );
 
     if (response.statusCode == API_SUCCESS_CODE) {
@@ -558,7 +559,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
             ),
             body: jsonEncode(req.toJson()))
         .timeout(
-          const Duration(seconds: 30),
+          timeOutDuration,
         );
 
     log(response.body, name: "Stripe | getAccountLinkBasedOnUpdateToken");
@@ -577,9 +578,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
         .get(Uri.parse(
           "${baseEnv.denomTraceUrl}/ibc/apps/transfer/v1/denom_traces/$ibcHash",
         ))
-        .timeout(
-          const Duration(seconds: 30),
-        );
+        .timeout(timeOutDuration);
 
     if (response.statusCode == API_SUCCESS_CODE) {
       return IBCTraceModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>, ibcHash);
@@ -598,9 +597,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
               "${baseEnv.baseStripeUrl}/address-based-link",
             ),
             body: jsonEncode(req))
-        .timeout(
-          const Duration(seconds: 30),
-        );
+        .timeout(timeOutDuration);
 
     log(response.body, name: "Stripe | getLoginLinkBasedOnAddress");
     if (response.statusCode == API_SUCCESS_CODE) {
@@ -620,9 +617,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
               "${baseEnv.baseStripeUrl}/register-account",
             ),
             body: jsonEncode(req.toJson()))
-        .timeout(
-          const Duration(seconds: 30),
-        );
+        .timeout(timeOutDuration);
 
     log(response.body, name: "Stripe | registerAccount");
     if (response.statusCode == API_SUCCESS_CODE) {
@@ -643,9 +638,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
         .get(Uri.parse(
           "${baseEnv.baseStripeUrl}/accountExists?address=$address",
         ))
-        .timeout(
-          const Duration(seconds: 30),
-        );
+        .timeout(timeOutDuration);
 
     log(response.body, name: "Stripe | doesStripeAccountExists");
     if (response.statusCode == API_SUCCESS_CODE) {
@@ -701,9 +694,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final transactionUri = '${baseEnv.baseApiUrl}/pylons/tx?address=%27$address%27';
 
-    final transactionResponse = await httpClient.get(Uri.parse(transactionUri)).timeout(
-          const Duration(seconds: 30),
-        );
+    final transactionResponse = await httpClient.get(Uri.parse(transactionUri)).timeout(timeOutDuration);
 
     final transactionMap = jsonDecode(transactionResponse.body);
 
@@ -722,9 +713,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final uri = Uri.parse("$baseApiUrl/api/notifications/getAllNotifications/$walletAddress/$limit/$offset");
 
-    final notificationResponse = await httpClient.get(uri).timeout(
-          const Duration(seconds: 30),
-        );
+    final notificationResponse = await httpClient.get(uri).timeout(timeOutDuration);
 
     if (notificationResponse.statusCode != API_SUCCESS_CODE) {
       throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
@@ -750,9 +739,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final uri = Uri.parse("$baseApiUrl/pylons/item_history/$cookBookId/$itemId");
     final List<NftOwnershipHistory> historyList = [];
 
-    final historyResponse = await httpClient.get(uri).timeout(
-          const Duration(seconds: 30),
-        );
+    final historyResponse = await httpClient.get(uri).timeout(timeOutDuration);
 
     if (historyResponse.statusCode != API_SUCCESS_CODE) {
       throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
@@ -780,9 +767,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final List<NftOwnershipHistory> historyList = [];
 
-    final historyResponse = await httpClient.get(uri).timeout(
-          const Duration(seconds: 30),
-        );
+    final historyResponse = await httpClient.get(uri).timeout(timeOutDuration);
 
     if (historyResponse.statusCode != API_SUCCESS_CODE) {
       throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
@@ -1020,8 +1005,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final uri = Uri.parse("$baseApiUrl/api/fcmtoken/update/$address/$fcmToken");
 
-    final response = await httpClient.post(uri, headers: {FIREBASE_APP_CHECK_HEADER: appCheckToken}).timeout(
-      const Duration(seconds: 30),
+    final response = await httpClient.post(uri, headers: {
+      FIREBASE_APP_CHECK_HEADER: appCheckToken,
+    }).timeout(
+      timeOutDuration,
     );
 
     if (response.statusCode == API_SUCCESS_CODE) {
