@@ -119,6 +119,7 @@ func TestMsgUpdateAccountValidateBasic(t *testing.T) {
 		})
 	}
 }
+
 func TestMsgSetUsername(t *testing.T) {
 	correctCreatorAddr := "cosmos1n67vdlaejpj3uzswr9qapeg76zlkusj5k875ma"
 	invalidAddr := "pylo1xn72u3jxlpqx8tfgmjf0xg970q36xensjngsme"

@@ -48,7 +48,7 @@ class TransactionCard extends StatelessWidget {
         children: [
           Text(
             formattedDate[0],
-            style: kTransactionTitle.copyWith(fontSize: 13.sp, color: AppColors.kGray),
+            style: kTransactionTitle.copyWith(fontSize: 13.sp, color: AppColors.kGreyColorBtn),
           ),
           Text(
             formattedDate[1],

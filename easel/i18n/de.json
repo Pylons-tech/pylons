@@ -37,7 +37,7 @@
   "compressing_thumbnail": "Miniaturbild Komprimieren",
   "uploading": "Hochladen ...",
   "nft_name": "{}",
-  "could_not_uploaded": "{} konnte nicht hochgeladen werden",
+  "could_not_uploaded": "{fileName} konnte nicht hochgeladen werden. Das {format} NFT muss:",
   "something_wrong": "Etwas ist schief gelaufen. Bitte versuchen Sie, die Anwendung neu zu starten.",
   "err_add_audio_thumbnail": "Bitte Audio-Thumbnail auswählen",
   "err_add_video_thumbnail": "Bitte Video-Thumbnail auswählen",
@@ -143,5 +143,6 @@
   "app_needed_desc_three": "Sie können es jederzeit löschen, wenn Sie möchten",
   "why_app_needed_summary_three": "Keine Abonnements. Wir verkaufen Ihre Informationen nicht. Wir berechnen nur eine Gebühr, wenn Sie ein NFT kaufen",
   "upload_hint_three": "• Eine Datei pro upload",
-  "analytics_failure": "Analytics-Fehler"
+  "analytics_failure": "Analytics-Fehler",
+  "publish" : "Veröffentlichen"
 }

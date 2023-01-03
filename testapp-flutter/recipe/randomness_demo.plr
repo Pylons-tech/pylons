@@ -13,17 +13,17 @@
                     {
                         "key": "coins",
                         "weightRanges": [],
-                        "program": "rand_int(2, 4)"        
+                        "program": "rand(4)"        
                     },
                     {
                         "key": "currentHp",
                         "weightRanges": [],
-                        "program": "rand_int(2, 4)"
+                        "program": "rand(4)"
                     },
                     {
                         "key": "maxHp",
                         "weightRanges": [],
-                        "program": "rand_int(2, 4)"
+                        "program": "rand(4)"
                     }
                 ],
                 "strings": [

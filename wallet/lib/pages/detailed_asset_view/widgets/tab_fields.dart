@@ -63,12 +63,12 @@ class _TabFieldState extends State<TabField> {
       case NftType.TYPE_RECIPE:
         return {
           LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
-          LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}",
-          LocaleKeys.ipfs_cid.tr(): widget.nft.cid
+          LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height} ${widget.nft.fileExtension.toUpperCase()}",
+          LocaleKeys.ipfs_cid.tr(): widget.nft.cid,
         };
       case NftType.TYPE_ITEM:
         return {
-          LocaleKeys.recipe_id.tr(): widget.nft.recipeID
+          LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
         };
       case NftType.TYPE_TRADE:
         break;
@@ -76,8 +76,9 @@ class _TabFieldState extends State<TabField> {
 
     return {
       LocaleKeys.recipe_id.tr(): widget.nft.recipeID,
-      LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height}",
-      LocaleKeys.ipfs_cid.tr(): widget.nft.cid};
+      LocaleKeys.resolution.tr(): "${widget.nft.width}x${widget.nft.height} ${widget.nft.fileExtension.toUpperCase()}",
+      LocaleKeys.ipfs_cid.tr(): widget.nft.cid,
+    };
   }
 
   @override
@@ -86,14 +87,27 @@ class _TabFieldState extends State<TabField> {
 
     final nftDetail = getNFTDetailsMap();
 
-    final listOwnership = ownership.entries.map((element) => _tabDetails(field: element.key, value: element.value, customColor: element.key == LocaleKeys.owner.tr() ? Colors.red : null)).toList();
+    final listOwnership = ownership.entries
+        .map(
+          (element) => _tabDetails(
+            field: element.key,
+            value: element.value,
+            customColor: element.key == LocaleKeys.owner.tr() ? AppColors.kRed : null,
+          ),
+        )
+        .toList();
 
     final listDetails = nftDetail.entries
         .map(
-            (element) => _tabDetails(
-                field: element.key,
-                value: element.value,
-                customWidget: (element.key == LocaleKeys.recipe_id.tr() || element.key == LocaleKeys.ipfs_cid.tr()) && element.value.isNotEmpty ? _tabDetailsWithIcon(value: element.value) : null),
+          (element) => _tabDetails(
+            field: element.key,
+            value: element.value,
+            customWidget: (element.key == LocaleKeys.recipe_id.tr() || element.key == LocaleKeys.ipfs_cid.tr()) && element.value.isNotEmpty
+                ? _tabDetailsWithIcon(
+                    value: element.value,
+                  )
+                : null,
+          ),
         )
         .toList();
 
@@ -112,7 +126,10 @@ class _TabFieldState extends State<TabField> {
                     child: AutoSizeText(
                       widget.name,
                       maxLines: 1,
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(
+                        color: AppColors.kWhite,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -157,10 +174,20 @@ class _TabFieldState extends State<TabField> {
                 children: [
                   Container(
                     width: 100.w,
-                    height: 10.h,
-                    decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white, width: 2))),
+                    height: 6.h,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: AppColors.kWhite,
+                          width: 2,
+                        ),
+                      ),
+                    ),
                   ),
-                  CustomPaint(size: Size(10.w, 10.h), painter: DiagonalLinePainter()),
+                  CustomPaint(
+                    size: Size(6.w, 6.h),
+                    painter: DiagonalLinePainter(),
+                  ),
                 ],
               ),
               SizedBox(
@@ -279,9 +306,9 @@ class DiagonalLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final point1 = Offset(-0.5, size.height - 1);
-    final point2 = Offset(size.width, 0);
+    final point2 = Offset(size.width, -3);
     final paint = Paint()
-      ..color = Colors.white
+      ..color = AppColors.kWhite
       ..strokeWidth = 2;
     canvas.drawLine(point1, point2, paint);
   }

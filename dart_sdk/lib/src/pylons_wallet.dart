@@ -15,7 +15,6 @@ import 'package:pylons_sdk/src/generated/pylons/recipe.pb.dart';
 import 'package:pylons_sdk/src/generated/pylons/trade.pb.dart';
 
 import 'features/models/execution_list_by_recipe_response.dart';
-import 'features/models/sdk_ipc_message.dart';
 import 'generated/pylons/payment_info.pb.dart';
 import 'features/models/sdk_ipc_response.dart';
 import 'pylons_wallet/pylons_wallet_impl.dart';
@@ -34,6 +33,16 @@ abstract class PylonsWallet {
     }
 
     return _instance!;
+  }
+
+  /// Make sure the Pylons app is installed on the device and can be reached.
+  /// If it can't be, installs the Pylons app.
+  static Future<void> verifyOrInstall () async {
+    await PylonsWallet.instance.exists().then((exists) async {
+      if (!exists) {
+        await PylonsWallet.instance.goToInstall();
+      }
+    });
   }
 
   /// Initializes the wallet model.
@@ -74,13 +83,6 @@ abstract class PylonsWallet {
         PylonsWalletImpl(host: host, uniLink: UniLinksPlatform.instance);
   }
 
-  /// Async: Send the provided message over the IPC channel, then retrieve a
-  /// response.
-  ///
-  /// [sdkipcMessage] is the prebuilt message to be sent; [completer] is the completer which will
-  /// generate the final response.
-  Future<SDKIPCResponse> sendMessage(
-      SDKIPCMessage sdkipcMessage, Completer<SDKIPCResponse> completer);
 
   /// Async: Returns true if an IPC target exists. False otherwise.
   Future<bool> exists();

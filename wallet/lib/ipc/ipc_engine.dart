@@ -147,10 +147,8 @@ class IPCEngine {
     final address = (queryParameters.containsKey(kAddress)) ? queryParameters[kAddress] ?? "" : "";
 
     if (currentWallet == null) {
-      LocaleKeys.create_an_account_first.tr().show();
       repository.saveInviteeAddressFromDynamicLink(dynamicLink: address);
       walletsStore.saveInitialLink(initialLink: link);
-      return;
     }
 
     final nullableNFT = await getNFtFromRecipe(cookbookId: cookbookId, recipeId: recipeId);
@@ -160,15 +158,24 @@ class IPCEngine {
     }
 
     if (isOwnerIsViewing(nullableNFT, currentWallet)) {
-      await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nullableNFT);
+      navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nullableNFT);
     } else {
-      await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: nullableNFT);
+      if (!getUserAcceptPolicies() && shouldShowAcceptPolicyScreen) {
+        navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_ACCEPT_POLICY, arguments: nullableNFT);
+        return;
+      }
+      navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: nullableNFT);
     }
 
     walletsStore.setStateUpdatedFlag(flag: true);
   }
 
-  bool isOwnerIsViewing(NFT nullableNFT, AccountPublicInfo currentWallet) => nullableNFT.ownerAddress == currentWallet.publicAddress;
+  bool isOwnerIsViewing(NFT nullableNFT, AccountPublicInfo? currentWallet) {
+    if (currentWallet == null) return false;
+    return nullableNFT.ownerAddress == currentWallet.publicAddress;
+  }
+
+  bool getUserAcceptPolicies() => repository.getUserAcceptPolicies().getOrElse(() => false);
 
   Future<void> _handleNFTTradeLink(String link) async {
     final queryParameters = Uri.parse(link).queryParameters;
@@ -224,7 +231,7 @@ class IPCEngine {
       if (item == null) {
         return;
       }
-      await navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: item);
+      navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: item);
 
       walletsStore.setStateUpdatedFlag(flag: true);
     }
