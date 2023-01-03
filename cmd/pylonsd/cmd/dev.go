@@ -83,7 +83,7 @@ func loadModuleFromPath(modulePath, currentPath string) string {
 	return string(bytes)
 }
 
-func loadModulesInline(bytes []byte, path string, info os.FileInfo, gadgets *[]Gadget) string {
+func LoadModulesInline(bytes []byte, path string, info os.FileInfo, gadgets *[]Gadget) string {
 	lines := strings.Split(string(bytes), "\n")
 	for i, line := range lines {
 		line = strings.TrimSpace(line)
@@ -115,7 +115,7 @@ func loadCookbookFromPath(path string, gadgets *[]Gadget) (types.Cookbook, strin
 	info, _ := os.Stat(path)
 	var cb types.Cookbook
 
-	json := loadModulesInline(bytes, path, info, gadgets)
+	json := LoadModulesInline(bytes, path, info, gadgets)
 	if Verbose {
 		println(json)
 	}
@@ -129,7 +129,7 @@ func loadRecipeFromPath(path string, gadgets *[]Gadget) (types.Recipe, string, e
 	info, _ := os.Stat(path)
 	var rcp types.Recipe
 
-	json := loadModulesInline(bytes, path, info, gadgets)
+	json := LoadModulesInline(bytes, path, info, gadgets)
 	if Verbose {
 		println(json)
 	}
