@@ -7,7 +7,7 @@ import 'package:pylons_wallet/ipc/handler/handler_factory.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_message.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/pages/stripe_screen.dart';
-import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/third_party_services/stripe_handler.dart';
 
@@ -24,8 +24,11 @@ class CreateStripeAccountHandler implements BaseHandler {
     final accountProvider = GetIt.I.get<AccountProvider>();
 
     if (accountProvider.accountPublicInfo == null) {
-      final SdkIpcResponse sdkIpcResponse =
-          SdkIpcResponse.failure(error: LocaleKeys.create_profile_before_using.tr(), sender: sdkIpcMessage.sender, errorCode: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
+      final SdkIpcResponse sdkIpcResponse = SdkIpcResponse.failure(
+        error: LocaleKeys.create_profile_before_using.tr(),
+        sender: sdkIpcMessage.sender,
+        errorCode: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST,
+      );
       return sdkIpcResponse;
     }
 

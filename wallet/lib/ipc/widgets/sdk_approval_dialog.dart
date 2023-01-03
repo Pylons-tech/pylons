@@ -77,7 +77,7 @@ class SDKApprovalDialog {
                                 },
                                 child: Text(
                                   LocaleKeys.dont_allow.tr(),
-                                  style: TextStyle(fontSize: 16, color: AppColors.kWhite, fontWeight: FontWeight.w300),
+                                  style: const TextStyle(fontSize: 16, color: AppColors.kWhite, fontWeight: FontWeight.w300),
                                 ),
                               ),
                               const HorizontalSpace(30),
@@ -93,7 +93,7 @@ class SDKApprovalDialog {
                                 },
                                 child: Text(
                                   LocaleKeys.ok.tr(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
                                     color: AppColors.kWhite,

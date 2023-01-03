@@ -25,6 +25,7 @@ type BankKeeper interface {
 // Interface provides support to use non-sdk AccountKeeper for AnteHandler's decorators.
 type AccountKeeper interface {
 	GetAccount(ctx sdk.Context, addr sdk.AccAddress) authtypes.AccountI
+	GetAllAccounts(ctx sdk.Context) []authtypes.AccountI
 	GetModuleAddress(moduleName string) sdk.AccAddress
 	GetNextAccountNumber(ctx sdk.Context) uint64
 	GetParams(ctx sdk.Context) (params authtypes.Params)

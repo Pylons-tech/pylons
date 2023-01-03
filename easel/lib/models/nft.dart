@@ -5,7 +5,7 @@ import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/extension_util.dart';
 import 'package:equatable/equatable.dart';
 import 'package:floor/floor.dart';
-import 'package:pylons_sdk/pylons_sdk.dart';
+import 'package:pylons_sdk/low_level.dart';
 
 import '../utils/enums.dart';
 
@@ -74,6 +74,8 @@ class NFT extends Equatable {
 
   final bool isEnabled;
 
+  final String fileExtension;
+
   const NFT({
     this.id,
     this.url = "",
@@ -108,6 +110,7 @@ class NFT extends Equatable {
     this.isDialogShown = false,
     this.dateTime = 0,
     this.ownerAddress = "",
+    this.fileExtension = "",
   });
 
   factory NFT.fromRecipe(Recipe recipe) {
@@ -122,6 +125,7 @@ class NFT extends Equatable {
       description: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kDescription, orElse: () => StringParam()).value ?? "",
       appType: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kAppType, orElse: () => StringParam()).value ?? "",
       creator: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kCreator, orElse: () => StringParam()).value ?? "",
+      fileExtension: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kFileExtension, orElse: () => StringParam()).value ?? "",
       cid: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kCID, orElse: () => StringParam()).value ?? "",
       width: recipe.entries.itemOutputs.firstOrNull?.longs.firstWhere((longKeyValue) => longKeyValue.key == kWidth, orElse: () => LongParam()).weightRanges.firstOrNull?.upper.toString() ?? "0",
       height: recipe.entries.itemOutputs.firstOrNull?.longs.firstWhere((longKeyValue) => longKeyValue.key == kHeight, orElse: () => LongParam()).weightRanges.firstOrNull?.upper.toString() ?? "0",

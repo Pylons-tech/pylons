@@ -2,13 +2,15 @@ import 'dart:convert';
 
 import 'package:pylons_sdk/src/core/constants/strings.dart';
 import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
-import 'package:pylons_sdk/src/features/ipc/responseCompleters.dart';
 import 'package:pylons_sdk/src/features/models/execution_list_by_recipe_response.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 
+
 class GetExecutionByRecipeHandler implements IPCHandler {
   @override
-  void handler(SDKIPCResponse<dynamic> response) {
+  void handler(SDKIPCResponse<dynamic> response,
+  void Function(String key, SDKIPCResponse response) onHandlingComplete,
+  ) {
     final defaultResponse = SDKIPCResponse<ExecutionListByRecipeResponse>(
         success: response.success,
         action: response.action,
@@ -25,7 +27,7 @@ class GetExecutionByRecipeHandler implements IPCHandler {
       defaultResponse.errorCode = Strings.ERR_MALFORMED_EXECUTION;
       defaultResponse.success = false;
     }
-    responseCompleters[Strings.GET_EXECUTION_BY_RECIPE_ID]!
-        .complete(defaultResponse);
+
+    return onHandlingComplete(Strings.GET_EXECUTION_BY_RECIPE_ID, defaultResponse);
   }
 }

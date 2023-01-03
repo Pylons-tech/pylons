@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/pages/settings/screens/general_screen/screens/payment_screen/widgets/transactions_list_view.dart';
-import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 

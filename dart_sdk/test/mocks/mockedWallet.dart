@@ -1,5 +1,5 @@
 import 'package:mockito/mockito.dart';
-import 'package:pylons_sdk/pylons_sdk.dart';
+import 'package:pylons_sdk/low_level.dart';
 
 class MockWallet extends Mock implements PylonsWallet {
   List<Cookbook> cookbooks = [];

@@ -32,5 +32,9 @@ big-dipper/settings.json
 debug
 
 *.env
-_build/
+wallet/android/app/google-services.json
 mytestnet/
+recipetool/.flutter-plugins
+recipetool/.flutter-plugins-dependencies
+recipetool/.dart_tool/
+recipetool/build/

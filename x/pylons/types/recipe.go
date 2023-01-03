@@ -566,7 +566,7 @@ func ValidateCoinOutput(co CoinOutput, idMap map[string]bool) error {
 	return nil
 }
 
-func ValidateDoubles(dp []DoubleParam) error {
+func ValidateDoubles(dp []DoubleParam, ce CelEnvCollection) error {
 	keyMap := make(map[string]bool)
 	for _, param := range dp {
 		err := ValidateID(param.Key)
@@ -578,7 +578,6 @@ func ValidateDoubles(dp []DoubleParam) error {
 			return sdkerrors.Wrapf(ErrInvalidRequestField, "key %s repeated in double param list", param.Key)
 		}
 		keyMap[param.Key] = true
-
 		for _, item := range param.WeightRanges {
 			if item.Upper.LT(item.Lower) {
 				return sdkerrors.Wrapf(ErrInvalidRequestField, "upper value cannot be less than lower value for weigthRange of double param %s", param.Key)
@@ -589,11 +588,15 @@ func ValidateDoubles(dp []DoubleParam) error {
 		}
 
 	}
-
+	if len(dp) != 0 {
+		if _, err := DoubleParamList(dp).Actualize(ce); err != nil {
+			return sdkerrors.Wrapf(ErrInvalidRequestField, "double param list contains incompatible program %v", err)
+		}
+	}
 	return nil
 }
 
-func ValidateLongs(lp []LongParam) error {
+func ValidateLongs(lp []LongParam, ce CelEnvCollection) error {
 	keyMap := make(map[string]bool)
 	for _, param := range lp {
 		err := ValidateID(param.Key)
@@ -615,11 +618,16 @@ func ValidateLongs(lp []LongParam) error {
 			}
 		}
 	}
+	if len(lp) != 0 {
+		if _, err := LongParamList(lp).Actualize(ce); err != nil {
+			return sdkerrors.Wrapf(ErrInvalidRequestField, "long param list contains incompatible program %v", err)
+		}
+	}
 
 	return nil
 }
 
-func ValidateStrings(sp []StringParam) error {
+func ValidateStrings(sp []StringParam, ce CelEnvCollection) error {
 	keyMap := make(map[string]bool)
 	for _, param := range sp {
 		err := ValidateID(param.Key)
@@ -631,6 +639,11 @@ func ValidateStrings(sp []StringParam) error {
 			return sdkerrors.Wrapf(ErrInvalidRequestField, "key %s repeated in string param list", param.Key)
 		}
 		keyMap[param.Key] = true
+	}
+	if len(sp) != 0 {
+		if _, err := StringParamList(sp).Actualize(ce); err != nil {
+			return sdkerrors.Wrapf(ErrInvalidRequestField, "string param list contains incompatible program %v", err)
+		}
 	}
 	return nil
 }
@@ -652,7 +665,7 @@ func ValidateMutableStrings(skv []StringKeyValue) error {
 	return nil
 }
 
-func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool) error {
+func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool, ce CelEnvCollection) error {
 	for _, item := range io {
 		err := ValidateID(item.Id)
 		if err != nil {
@@ -664,17 +677,17 @@ func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool) error {
 		}
 		idMap[item.Id] = true
 
-		err = ValidateDoubles(item.Doubles)
+		err = ValidateDoubles(item.Doubles, ce)
 		if err != nil {
 			return err
 		}
 
-		err = ValidateLongs(item.Longs)
+		err = ValidateLongs(item.Longs, ce)
 		if err != nil {
 			return err
 		}
 
-		err = ValidateStrings(item.Strings)
+		err = ValidateStrings(item.Strings, ce)
 		if err != nil {
 			return err
 		}
@@ -700,7 +713,7 @@ func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool) error {
 	return nil
 }
 
-func ValidateItemModifyOutputs(imo []ItemModifyOutput, idMap map[string]bool) error {
+func ValidateItemModifyOutputs(imo []ItemModifyOutput, idMap map[string]bool, ce CelEnvCollection) error {
 	for _, item := range imo {
 		err := ValidateID(item.Id)
 		if err != nil {
@@ -712,17 +725,17 @@ func ValidateItemModifyOutputs(imo []ItemModifyOutput, idMap map[string]bool) er
 		}
 		idMap[item.Id] = true
 
-		err = ValidateDoubles(item.Doubles)
+		err = ValidateDoubles(item.Doubles, ce)
 		if err != nil {
 			return err
 		}
 
-		err = ValidateLongs(item.Longs)
+		err = ValidateLongs(item.Longs, ce)
 		if err != nil {
 			return err
 		}
 
-		err = ValidateStrings(item.Strings)
+		err = ValidateStrings(item.Strings, ce)
 		if err != nil {
 			return err
 		}
@@ -747,20 +760,19 @@ func ValidateItemModifyOutputs(imo []ItemModifyOutput, idMap map[string]bool) er
 	return nil
 }
 
-func ValidateEntriesList(el EntriesList, idMap map[string]bool) error {
+func ValidateEntriesList(el EntriesList, idMap map[string]bool, ce CelEnvCollection) error {
 	for _, co := range el.CoinOutputs {
 		err := ValidateCoinOutput(co, idMap)
 		if err != nil {
 			return err
 		}
 	}
-
-	err := ValidateItemOutputs(el.ItemOutputs, idMap)
+	err := ValidateItemOutputs(el.ItemOutputs, idMap, ce)
 	if err != nil {
 		return err
 	}
 
-	err = ValidateItemModifyOutputs(el.ItemModifyOutputs, idMap)
+	err = ValidateItemModifyOutputs(el.ItemModifyOutputs, idMap, ce)
 	if err != nil {
 		return err
 	}

@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/pages/routing_page/splash_screen.dart';
-import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:transaction_signing_gateway/gateway/transaction_signing_gateway.dart';
 import '../../extension/size_extension.dart';
 
@@ -15,7 +15,7 @@ void main() {
     expect(find.byType(SplashScreen), findsNothing);
     await tester.runAsync(() async {
       await tester.testAppForWidgetTesting(MultiProvider(providers: [
-        Provider(
+        ChangeNotifierProvider(
           create: (context) => GetIt.I<AccountProvider>(),
         ),
       ], child: const SplashScreen()));

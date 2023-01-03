@@ -19,7 +19,7 @@ import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dar
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
-import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
@@ -125,6 +125,21 @@ class WalletsStoreImp implements WalletsStore {
         return SdkIpcResponse.failure(
           sender: '',
           error: result.swap().toOption().toNullable().toString(),
+          errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
+        );
+      }
+
+      final setUserNameResult = await repository.setUserName(
+        accountPublicInfo: info,
+        address: walletCreationModel.creatorAddress,
+        username: walletCreationModel.userName,
+      );
+
+      if (setUserNameResult.isLeft()) {
+        await deleteAccountCredentials(customTransactionSigningGateway, info);
+        return SdkIpcResponse.failure(
+          sender: '',
+          error: setUserNameResult.swap().toOption().toNullable().toString(),
           errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
         );
       }
@@ -834,7 +849,7 @@ class WalletsStoreImp implements WalletsStore {
   Future<bool> deleteAccounts() async {
     final transactionSigningGateway = getTransactionSigningGateway();
     final customTransactionSigningGateway = getCustomTransactionSigningGateway();
-
+    accountProvider.accountPublicInfo = null;
     final response = await transactionSigningGateway.clearAllCredentials();
     final customResponse = await customTransactionSigningGateway.clearAllCredentials();
 

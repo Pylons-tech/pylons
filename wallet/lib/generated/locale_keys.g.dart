@@ -15,6 +15,7 @@ abstract class  LocaleKeys {
   static const network_error_description = 'network_error_description';
   static const what_is_new = 'what_is_new';
   static const trending = 'trending';
+  static const acknowledge_i_agree_to = 'acknowledge_i_agree_to';
   static const price = 'price';
   static const low_to_high = 'low_to_high';
   static const high_to_low = 'high_to_low';
@@ -249,7 +250,6 @@ abstract class  LocaleKeys {
   static const copied_to_clipboard = 'copied_to_clipboard';
   static const no_internet = 'no_internet';
   static const stake_your_digital_claim = 'stake_your_digital_claim';
-  static const bio_text = 'bio_text';
   static const save = 'save';
   static const submit = 'submit';
   static const place_your_recovery_phrase_in_correct_order = 'place_your_recovery_phrase_in_correct_order';
@@ -284,6 +284,7 @@ abstract class  LocaleKeys {
   static const read_more = 'read_more';
   static const pylons_fee_msg = 'pylons_fee_msg';
   static const you = 'you';
+  static const tx_not_found = 'tx_not_found';
   static const recipe_not_found = 'recipe_not_found';
   static const username_not_found = 'username_not_found';
   static const cookbook_not_found = 'cookbook_not_found';
@@ -372,5 +373,20 @@ abstract class  LocaleKeys {
   static const maintenance_mode_message = 'maintenance_mode_message';
   static const maintenance_mode_header = 'maintenance_mode_header';
   static const invalid_mnemonic = 'invalid_mnemonic';
-
+  static const claim_now = 'claim_now';
+  static const remaining_and_total_editions = 'remaining_and_total_editions';
+  static const remaining = 'remaining';
+  static const edit_profile = 'edit_profile';
+  static const cash_out = 'cash_out';
+  static const bio_text = 'bio_text';
+  static const verify = 'verify';
+  static const display_name = 'display_name';
+  static const social = 'social';
+  static const facebook = 'facebook';
+  static const instagram = 'instagram';
+  static const tiktok = 'tiktok';
+  static const youtube = 'youtube';
+  static const discord = 'discord';
+  static const twitter = 'twitter';
+  static const connected = 'connected';
 }

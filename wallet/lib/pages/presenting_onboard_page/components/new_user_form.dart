@@ -9,7 +9,7 @@ import 'package:pylons_wallet/components/buttons/pylons_get_started_button.dart'
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
-import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
@@ -126,6 +126,7 @@ class NewUserFormState extends State<NewUserForm> {
               onTap: onStartPylonsPressed,
               text: LocaleKeys.get_started.tr(),
               loader: isLoadingNotifier,
+              btnUnselectBGColor: AppColors.kGreyColorBtn.withOpacity(0.3),
             ),
           ),
         ],
