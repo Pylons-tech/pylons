@@ -75,20 +75,20 @@ class CustomTriangleClipper extends CustomClipper<Path> {
   bool shouldReclip(CustomTriangleClipper oldClipper) => false;
 }
 
-class LeftRightTopClipper extends CustomClipper<Path> {
+class BottomLeftCurvedCorner extends CustomClipper<Path> {
+  final double cuttingEdge;
+  BottomLeftCurvedCorner({required this.cuttingEdge});
+
   @override
   Path getClip(Size size) {
-    final Path path0 = Path();
-    path0.moveTo(0, size.height);
-    path0.lineTo(0, size.height * 0.0714000);
-    path0.lineTo(size.width * 0.0452000, 0);
-    path0.lineTo(size.width * 0.9579000, size.height * 0.0004000);
-    path0.lineTo(size.width, size.height * 0.0713000);
-    path0.lineTo(size.width, size.height);
-    path0.lineTo(0, size.height);
-    path0.close();
+    final path = Path();
+    path.lineTo(0, size.height-cuttingEdge);
+    path.lineTo(cuttingEdge, size.height);
+    path.lineTo(size.width, size.height);
+    path.lineTo(size.width, 0);
+    path.lineTo(0, 0);
 
-    return path0;
+    return path;
   }
 
   @override

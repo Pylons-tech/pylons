@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mockito/annotations.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/user_image_widget_viewmodel.dart';
 import 'package:pylons_wallet/ipc/ipc_engine.dart';
@@ -22,8 +23,10 @@ import '../../../mocks/user_info_provider.mocks.dart';
 import '../../extension/size_extension.dart';
 import 'package:mockito/mockito.dart';
 import '../../../mocks/mock_constants.dart';
-import '../../../mocks/repository.mocks.dart';
+import 'home_page_test.mocks.dart';
 
+
+@GenerateMocks([Repository])
 void main() {
   final homeProvider = MockHomeProvider();
   final userBannerViewModel = MockUserBannerViewModel();
