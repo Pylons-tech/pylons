@@ -15,8 +15,10 @@ import (
 	"github.com/gogo/protobuf/jsonpb"
 )
 
-var Out io.Writer = os.Stdout // modified during testing
-var Verbose = false
+var (
+	Out     io.Writer = os.Stdout // modified during testing
+	Verbose           = false
+)
 
 // group 1: (whole raw string tokens encapsulated ```like this```)
 // group 2: (tokens not containing whitespace, separated by whitespace)

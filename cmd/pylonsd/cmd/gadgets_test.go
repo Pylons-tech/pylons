@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"testing"
 	"strings"
+	"testing"
 
 	"github.com/stretchr/testify/assert"
 
@@ -32,7 +32,7 @@ const pylonsGadgetsLiteral_good = `#go_go_gadget_gadgets 3
 	"foo": "%0",
 	"bar": "%1",
 	"%2": "true"`
-	
+
 const gadgetUserLiteral_tripleQuotes = `{
 	#go_go_gadget_gadgets '''a triple quoted string''' '''another one''' whatever
 }`
@@ -174,7 +174,7 @@ func TestGadgets(t *testing.T) {
 		assert.EqualValues(t, expected, ExpandGadget(gadget, []string{"a", "b", "is_a_gadget"}))
 		os.Remove(gadgetsFilename)
 	})
-	
+
 	t.Run("Should remove triple quotes from raw string tokens", func(t *testing.T) {
 		testutil.WriteFixtureAtTestRuntime(gadgetsFilename, pylonsGadgetsLiteral_good)
 		testutil.WriteFixtureAtTestRuntime(rcpFilename, gadgetUserLiteral_tripleQuotes)
