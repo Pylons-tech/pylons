@@ -184,8 +184,8 @@ func TestGadgets(t *testing.T) {
 		}
 		bytes, _ := os.ReadFile(rcpFilename)
 		info, _ := os.Stat(rcpFilename)
-		json := loadModulesInline(bytes, rcpFilename, info, gadgets)
-		assert.False(strings.Contains(json, "'''"))
+		json := LoadModulesInline(bytes, rcpFilename, info, gadgets)
+		assert.False(t, strings.Contains(json, "'''"))
 		os.Remove(gadgetsFilename)
 		os.Remove(rcpFilename)
 	})
