@@ -201,11 +201,11 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
     final recipesProvider = context.read<RecipesProvider>();
     final itemsProvider = context.read<ItemsProvider>();
     if (widget.nft.type == NftType.TYPE_RECIPE) {
-      int index = recipesProvider.creations.indexOf(widget.nft);
+      int index = recipesProvider.nftCreations.indexOf(widget.nft);
 
-      if (recipesProvider.creations.length - 1 == index) return;
+      if (recipesProvider.nftCreations.length - 1 == index) return;
       index = index + 1;
-      final NFT nft = recipesProvider.creations.elementAt(index);
+      final NFT nft = recipesProvider.nftCreations.elementAt(index);
 
       Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
     }

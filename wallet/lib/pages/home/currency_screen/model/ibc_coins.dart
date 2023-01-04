@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:pylons_wallet/utils/constants.dart' as constants;
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
@@ -160,7 +161,16 @@ extension IBCCoinsDePar on IBCCoins {
       case IBCCoins.ujuno:
       case IBCCoins.uatom:
       case IBCCoins.ustripeusd:
-        return (double.parse(amount) / kBigIntBase).toStringAsFixed(2);
+        final double denomAmount = double.parse(amount) / kBigIntBase;
+        if (denomAmount > 0 && denomAmount < 100) {
+          return denomAmount.toStringAsFixed(2);
+        } else if (denomAmount >= 100 && denomAmount < 1000) {
+          return denomAmount.toStringAsFixed(0);
+        } else if (denomAmount >= 1000) {
+          final formatter = NumberFormat("#,###", "en_US");
+          return formatter.format(denomAmount.round());
+        }
+        return amount;
       case IBCCoins.upylon:
         return ((double.parse(amount) / kBigIntBase) * 0.1).toStringAsFixed(2);
       case IBCCoins.weth_wei:

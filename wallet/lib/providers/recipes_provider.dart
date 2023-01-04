@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/cookbook.pb.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:transaction_signing_gateway/model/account_public_info.dart';
+import 'package:tuple/tuple.dart';
 
 import '../model/nft.dart';
 
@@ -27,38 +29,45 @@ class RecipesProvider extends ChangeNotifier {
     log("Get Cookbooks finished", name: "RecipesProvider");
     cookbooks = response.getOrElse(() => []);
 
-    final localCreations = <NFT>[];
+    final localNFTCreations = <NFT>[];
+    final localNonNFTCreations = <Recipe>[];
 
     for (final cookbook in cookbooks) {
-      final recipesList = await getRecipes(cookbook);
-      localCreations.addAll(recipesList);
+      final recipeCreations = await getRecipes(cookbook);
+
+      localNFTCreations.addAll(recipeCreations.item1);
+      localNonNFTCreations.addAll(recipeCreations.item2);
     }
 
-    creations = localCreations;
+    nftCreations = localNFTCreations;
+    nonNftCreations = localNonNFTCreations;
 
     log("Get Recipe finished", name: "RecipesProvider");
     notifyListeners();
   }
 
-  Future<List<NFT>> getRecipes(Cookbook cookbook) async {
+  Future<Tuple2<List<NFT>, List<Recipe>>> getRecipes(Cookbook cookbook) async {
     final recipesEither = await repository.getRecipesBasedOnCookBookId(cookBookId: cookbook.id);
     final recipes = recipesEither.getOrElse(() => []);
 
-    final localCreations = <NFT>[];
+    final localNFTCreations = <NFT>[];
+    final localNonNFTCreations = <Recipe>[];
 
     for (final recipe in recipes) {
-      final nft = NFT.fromRecipe(recipe);
-
-      if (nft.appType.toLowerCase() == "easel" && cookbooks.any((cookbook) => cookbook.id == nft.cookbookID)) {
-        localCreations.add(nft);
+      try {
+        final nft = NFT.fromRecipe(recipe);
+        localNFTCreations.add(nft);
+      } catch (_) {
+        localNonNFTCreations.add(recipe);
       }
     }
 
-    return localCreations;
+    return Tuple2(localNFTCreations, localNonNFTCreations);
   }
 
   List<Cookbook> cookbooks = [];
-  List<NFT> creations = [];
+  List<NFT> nftCreations = [];
+  List<Recipe> nonNftCreations = [];
   String? address;
   Repository repository;
 }
