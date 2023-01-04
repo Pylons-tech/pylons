@@ -276,8 +276,12 @@ const kNFTTypeVideoIconKey = "NFT_type_video_icon_key";
 const kNFTTypeAudioIconKey = "NFT_type_audio_icon_key";
 const kNFTTypePdfIconKey = "NFT_type_pdf_icon_key";
 const kNFTType3dModelIconKey = "NFT_type_3d_icon_key";
+const kRefreshPublishedNFTButtonKey = "refresh_published_nft_button_key";
+const kSelectedDraftButtonKey = "selected_draft_button_key";
+const kSelectedPublishedButtonKey = "selected_published_button_key";
 const kProgressStepsKey = "progress_steps_key";
 const kImageFullScreenGridviewKey = "image_full_screen_gridview_key";
+
 
 class AnalyticsScreenEvents {
   static String tutorialScreen = "TutorialScreen";

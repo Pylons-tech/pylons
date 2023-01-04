@@ -23,7 +23,7 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: EaselAppTheme.kLightWhiteBackground,
+      backgroundColor: EaselAppTheme.kLightGrey02,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 40.0.w),
         child: Column(
@@ -35,10 +35,7 @@ class _WelcomeEaselState extends State<WelcomeEasel> {
             ),
             Text(
               LocaleKeys.welcome_to_easel.tr(),
-              style: TextStyle(
-                  color: EaselAppTheme.kBlack,
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(color: EaselAppTheme.kBlack, fontSize: 20.sp, fontWeight: FontWeight.bold),
               textAlign: TextAlign.start,
             ),
             SizedBox(

@@ -62,6 +62,7 @@ abstract class  LocaleKeys {
   static const create_username_description = 'create_username_description';
   static const create_stripe_description = 'create_stripe_description';
   static const welcome_msg = 'welcome_msg';
+  static const first_welcome_msg = 'first_welcome_msg';
   static const hello = 'hello';
   static const no_nft_created = 'no_nft_created';
   static const loading = 'loading';

@@ -105,4 +105,11 @@ class SVGUtil {
   static const kSvgNftFormatAudio = 'assets/images/svg/nft_format_audio.svg';
   static const kSvgNftFormatPDF = 'assets/images/svg/nft_format_pdf.svg';
   static String BOTTOM_RIGHT_CURVED_GREY_BG = "assets/images/svg/bottom_right_curved_grey_bg.svg";
+  static String CURVED_CORNER_RED_BG = "assets/images/svg/curved_corner_red_bg.svg";
+  static String DOWNLOAD_NFT_ICON = "assets/images/svg/download_nft.svg";
+  static String FOR_SALE_BORDER = "assets/images/svg/for_sale_border.svg";
+  static String NOT_FOR_SALE_BORDER = "assets/images/svg/not_for_sale_border.svg";
+  static String GREEN_BOTTOM_LEFT_CURVED_CONTAINER = "assets/images/svg/green_bottom_left_curved_container.svg";
+  static String RED_BOTTOM_RIGHT_CURVED_CONTAINER = "assets/images/svg/red_bottom_right_curved_container.svg";
+  static String NFT_TOGGLE_INTERMEDIATE_STATE = "assets/images/svg/nft_toggle_intermediate_state.svg";
 }

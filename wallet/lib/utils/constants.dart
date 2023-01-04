@@ -186,6 +186,7 @@ const ANDROID_VERSION = '1.0.1+145';
 const IOS_VERSION = '1.0.8+1';
 
 const kCurrencyDecimalLength = 2;
+const kMaxPriceLength = 14;
 
 List<Color> colorList = [AppColors.kYellow, AppColors.kBlue, AppColors.kDarkPurple, AppColors.kDarkRed, AppColors.kDarkGreen];
 List<Color> colorListForPracticeTest = [
@@ -318,6 +319,7 @@ const kItemId = "id";
 const kCookbookId = "cookbook_id";
 const kAmount = "amount";
 const kCreatedAt = "created_at";
+const kCreatedAtCamelCase = "createdAt";
 const kSenderName = "sender_name";
 const kReceiver = "receiver";
 
@@ -394,6 +396,7 @@ const String kSettled = "settled";
 const String kTo = "to";
 const String kType = "type";
 const String kUpdatedAt = "updated_at";
+const kUpdatedAtCamelCase = "updatedAt";
 const String kNotificationsIds = "notificationIDs";
 
 const String kZeroDouble = "0.0";
@@ -470,11 +473,19 @@ const String kProgressKey = "Progress";
 const String kImageAssetKey = "image_asset_key";
 const String kShareNftButtonCollapsedKey = "share_nft_collapsed";
 const String kShareNftButtonExpandedKey = "share_nft_expanded";
-const String kAcceptPolicyPortionKey = "accept_policy_portion";
-const String kAcceptBottomSheetBtnKey = "accept_bottom_sheet_btn";
+const String kForSaleToggleWidgetKey = "for_sale_toggle_key";
+const String kNotForSaleToggleWidgetKey = "not_for_sale_toggle_key";
+const String kSaleStatusToggleButtonKey = "sale_status_toggle_button_key";
+const String kIntermediateToggleButtonKey = "intermediate_toggle_button_key";
+const String kForSaleBottomSheetKey = "for_sale_sale_bottom_sheet_key";
+const String kNotForSaleDialogKey = "not_for_sale_dialog_key";
 
 const String kGetFirebaseAppCheckTokenMethodChannelKey = "getFirebaseAppCheckTokenMethodChannel";
 const String kGetFirebaseAppCheckDebugTokenKey = "getFirebaseAppCheckDebugToken";
+
+const String kFAQsURL = "https://www.pylons.tech/faq/";
+const String kAcceptPolicyPortionKey = "accept_policy_portion";
+const String kAcceptBottomSheetBtnKey = "accept_bottom_sheet_btn";
 const String drawerIconKey = "drawer_icon_key";
 const String drawerKey = "drawer_key";
 
