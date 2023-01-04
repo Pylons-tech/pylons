@@ -8,7 +8,11 @@ import '../model/nft.dart';
 import '../services/repository/repository.dart';
 
 class ItemsProvider extends ChangeNotifier {
-  ItemsProvider({required this.repository, required this.address});
+  ItemsProvider({required this.repository, required this.address}) {
+    repository.getStoredPurchases().fold((l) => null, (List<NFT>? _items) {
+      items = _items ?? [];
+    });
+  }
 
   factory ItemsProvider.fromAccountProvider({
     required AccountPublicInfo? accountPublicInfo,
@@ -36,7 +40,8 @@ class ItemsProvider extends ChangeNotifier {
         localItems.add(nft);
       }
     }
-    this.items = localItems;
+
+    processItems(localItems);
     log("Convert item to NFT finished", name: "ItemsProvider");
     notifyListeners();
   }
@@ -52,4 +57,9 @@ class ItemsProvider extends ChangeNotifier {
   List<NFT> items = [];
   String? address;
   Repository repository;
+
+  void processItems(List<NFT> localItems) {
+    items = localItems;
+    repository.storePurchases(localItems);
+  }
 }

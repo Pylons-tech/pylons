@@ -319,7 +319,6 @@ class NFT extends Equatable {
           "0",
       createdAt: createdAt,
       isEnabled: recipe.enabled,
-
       hashtags: recipe.entries.itemOutputs.firstOrNull?.strings
               .firstWhere((strKeyValue) => strKeyValue.key == kHashtags, orElse: () => StringParam())
               .value ??
@@ -348,6 +347,60 @@ class NFT extends Equatable {
 
     return NFT.fromRecipe(recipeEither.toOption().toNullable()!);
   }
+
+  factory NFT.fromJson(Map<String, Object?> json) {
+    return NFT(
+      name: json['name'].toString(),
+      type: json['type'].toNFTTypeEnum(),
+      url: json['url'].toString(),
+      thumbnailUrl: json['thumbnailUrl'].toString(),
+      description: json['description'].toString(),
+      fileSize: json['fileSize'].toString(),
+      creator: json['creator'].toString(),
+      fileExtension: json['fileExtension'].toString(),
+      cid: json['cid'].toString(),
+      appType: json['appType'].toString(),
+      width: json['width'].toString(),
+      height: json['height'].toString(),
+      price: json['price'].toString(),
+      denom: json['denom'].toString(),
+      itemID: json['itemID'].toString(),
+      cookbookID: json['cookbookID'].toString(),
+      owner: json['owner'].toString(),
+      tradeID: json['tradeID'].toString(),
+      ibcCoins: json['ibcCoins'].toString().toIBCCoinsEnum(),
+      assetType: json['assetType'].toString().toAssetTypeEnum(),
+      duration: json['duration'].toString(),
+      hashtags: json['hashtags'].toString(),
+      realWorld: json['realWorld']! as bool,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    "name" : name,
+    "type" : type.name,
+    "url" : url,
+    "thumbnailUrl" : thumbnailUrl,
+    "description" : description,
+    "fileSize" : fileSize,
+    "creator" : creator,
+    "fileExtension" : fileExtension, 
+    "cid" : cid,
+    "appType": appType,
+    "width" : width, 
+    "height" : height, 
+    "price" : price,
+    "denom" : denom,
+    "itemID" : itemID,
+    "cookbookID": cookbookID,
+    "owner" : owner,
+    "tradeID": tradeID,
+    "ibcCoins": ibcCoins.name,
+    "assetType" : assetType.name,
+    "duration" : duration,
+    "hashtags" : hashtags,
+    "realWorld" : realWorld,
+  };
 
   @override
   List<Object?> get props => [

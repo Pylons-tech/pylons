@@ -1,5 +1,8 @@
+import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/pick_image_model.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/cookbook.pb.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 
 class MockLocalDataSource extends LocalDataSource {
@@ -211,5 +214,53 @@ class MockLocalDataSource extends LocalDataSource {
   @override
   Future<bool> saveUserAcceptPolicies() {
     return Future.value(true);
+  }
+
+  @override
+  List<Cookbook>? getStoredCookBooks() {
+    // TODO: implement getStoredCookBooks
+    throw UnimplementedError();
+  }
+
+  @override
+  List<Recipe>? getNonNFTCreations() {
+    // TODO: implement getNonNFTCreations
+    throw UnimplementedError();
+  }
+
+  @override
+  List<NFT>? getStoredCreations() {
+    // TODO: implement getStoredCreations
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> storeCookBooks(List<Cookbook> cookbooks) {
+    // TODO: implement storeCookBooks
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> storeCreations(List<NFT> nfts) {
+    // TODO: implement storeCreations
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> storeNonNFTCreations(List<Recipe> recipes) {
+    // TODO: implement storeNonNFTCreations
+    throw UnimplementedError();
+  }
+  
+  @override
+  List<NFT>? getStoredPurchases() {
+    // TODO: implement getStoredPurchases
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<bool> storePurchases(List<NFT> localItems) {
+    // TODO: implement storePurchases
+    throw UnimplementedError();
   }
 }
