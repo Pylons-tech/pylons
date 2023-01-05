@@ -86,7 +86,6 @@ const double kRoyaltyPrecision = 10000000000000000;
 const String kPylonDenom = "upylon";
 
 const String kUniversalFontFamily = "UniversalSans";
-const String kENV = 'ENV';
 const String kLocal = 'local';
 const String kPylo = 'pylo';
 const kCID = "cid";

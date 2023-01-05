@@ -580,4 +580,52 @@ class MockRepository extends Repository {
     // TODO: implement setUserName
     throw UnimplementedError();
   }
+  
+  @override
+  Either<Failure, List<Cookbook>?> getStoredCookBooks() {
+    // TODO: implement getStoredCookBooks
+    throw UnimplementedError();
+  }
+  
+  @override
+  Either<Failure, List<pylons.Recipe>?> getNonNFTCreations() {
+    // TODO: implement getNonNFTCreations
+    throw UnimplementedError();
+  }
+  
+  @override
+  Either<Failure, List<NFT>?> getStoredCreations() {
+    // TODO: implement getStoredCreations
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Either<Failure, bool>> storeCookBooks(List<Cookbook> cookbooks) {
+    // TODO: implement storeCookBooks
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Either<Failure, bool>> storeCreations(List<NFT> creations) {
+    // TODO: implement storeCreations
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Either<Failure, bool>> storeNonNFTCreations(List<pylons.Recipe> recipes) {
+    // TODO: implement storeNonNFTCreations
+    throw UnimplementedError();
+  }
+  
+  @override
+  Either<Failure, List<NFT>?> getStoredPurchases() {
+    // TODO: implement getStoredPurchases
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Either<Failure, bool>> storePurchases(List<NFT> purchases) {
+    // TODO: implement storePurchases
+    throw UnimplementedError();
+  }
 }

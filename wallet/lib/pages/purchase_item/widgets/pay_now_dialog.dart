@@ -22,7 +22,6 @@ import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
-import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
@@ -326,7 +325,6 @@ class _PayNowWidgetState extends State<PayNowWidget> {
   Future<void> stripePaymentForRecipe(BuildContext context, NFT nft) async {
     final walletsStore = GetIt.I.get<WalletsStore>();
     final repository = GetIt.I.get<Repository>();
-    final baseEnv = GetIt.I.get<BaseEnv>();
     final wallet = context.read<AccountProvider>().accountPublicInfo;
 
     if (wallet == null) {
@@ -355,9 +353,8 @@ class _PayNowWidgetState extends State<PayNowWidget> {
 
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
-            googlePay: PaymentSheetGooglePay(
+            googlePay: const PaymentSheetGooglePay(
               merchantCountryCode: kStripeMerchantCountry,
-              testEnv: baseEnv.baseStripeTestEnv,
             ),
             applePay: const PaymentSheetApplePay(merchantCountryCode: kStripeMerchantCountry),
             style: ThemeMode.system,
@@ -421,7 +418,6 @@ class _PayNowWidgetState extends State<PayNowWidget> {
   Future<void> stripePaymentForTrade(BuildContext context, NFT nft) async {
     final walletsStore = GetIt.I.get<WalletsStore>();
     final repository = GetIt.I.get<Repository>();
-    final baseEnv = GetIt.I.get<BaseEnv>();
 
     final wallet = context.read<AccountProvider>().accountPublicInfo;
 
@@ -445,9 +441,8 @@ class _PayNowWidgetState extends State<PayNowWidget> {
         await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
               style: ThemeMode.system,
-              googlePay: PaymentSheetGooglePay(
+              googlePay: const PaymentSheetGooglePay(
                 merchantCountryCode: kStripeMerchantCountry,
-                testEnv: baseEnv.baseStripeTestEnv,
               ),
               applePay: const PaymentSheetApplePay(merchantCountryCode: kStripeMerchantCountry),
               merchantDisplayName: kStripeMerchantDisplayName,
