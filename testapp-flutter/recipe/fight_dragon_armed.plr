@@ -1,6 +1,6 @@
 {
     #boilerplate v0.0.8 true,
-    #id_name RecipeTestAppFightDragonArmed RecipeTestAppFightDragonArmed,
+    #id_name RecipeTestAppFightDragonArmedNew RecipeTestAppFightDragonArmedNew,
     "description": "Fights a dragon! With slicing!",
     #no_coin_input,
     "itemInputs": [

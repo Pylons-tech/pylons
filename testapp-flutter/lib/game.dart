@@ -132,7 +132,7 @@ class _GameState extends State<Game> {
     if (!_canSurviveTroll()) {
       await _combatRecipeHandlerUnwinnable(buffer, 'RecipeTestAppFightDragonUnarmed');
     } else {
-      await _combatRecipeHandlerWinnable(buffer, 'RecipeTestAppFightDragonArmed');
+      await _combatRecipeHandlerWinnable(buffer, 'RecipeTestAppFightDragonArmedNew');
     }
   }
 
