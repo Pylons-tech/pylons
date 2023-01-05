@@ -973,6 +973,8 @@ class RepositoryImp implements Repository {
       return Right(response);
     } on Failure catch (_) {
       return Left(_);
+    } on String catch (_) {
+      return Left(StripeFailure(_));
     } on Exception catch (_) {
       recordErrorInCrashlytics(_);
       return const Left(StripeFailure(GEN_REGISTRATIONTOKEN_FAILED));

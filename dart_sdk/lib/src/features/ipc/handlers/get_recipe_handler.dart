@@ -5,12 +5,11 @@ import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:pylons_sdk/src/generated/pylons/recipe.pb.dart';
 
-
-class GetRecipeHandler implements IPCHandler {
+class GetRecipeHandler implements IPCHandler<Recipe> {
   @override
   void handler(
     SDKIPCResponse<dynamic> response,
-    void Function(String key, SDKIPCResponse response) onHandlingComplete,
+    void Function(String key, SDKIPCResponse<Recipe> response) onHandlingComplete,
   ) {
     final defaultResponse = SDKIPCResponse<Recipe>(
         success: response.success,
@@ -21,6 +20,8 @@ class GetRecipeHandler implements IPCHandler {
     try {
       if (response.success) {
         defaultResponse.data = Recipe.create()..mergeFromProto3Json(jsonDecode(response.data));
+      } else {
+        defaultResponse.error = response.error;
       }
     } on FormatException catch (_) {
       defaultResponse.error = _.message;

@@ -37,7 +37,7 @@ void main() {
       expect(key, Strings.GET_RECIPES);
       expect(response.success, true);
       expect(true, response.data is List<Recipe>);
-      expect(1, List<Recipe>.from(response.data).length);
+      expect(List<Recipe>.from(response.data!).length, 1);
     }));
   });
 
