@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -6,8 +7,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/pick_image_model.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/cookbook.pb.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:pylons_wallet/utils/permission_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -190,6 +194,22 @@ abstract class LocalDataSource {
   /// This method will return that user accepts Terms of Services & Privacy Policy or not
   /// Output: [bool] user already accept policies ot not
   bool getUserAcceptPolicies();
+
+  List<NFT>? getStoredPurchases();
+
+  List<Cookbook>? getStoredCookBooks();
+
+  Future<bool> storeCookBooks(List<Cookbook> cookbooks);
+
+  List<NFT>? getStoredCreations();
+
+  Future<bool> storeCreations(List<NFT> nfts);
+
+  Future<bool> storeNonNFTCreations(List<Recipe> recipes);
+
+  List<Recipe>? getNonNFTCreations();
+
+  Future<bool> storePurchases(List<NFT> localItems);
 }
 
 class LocalDataSourceImp implements LocalDataSource {
@@ -227,6 +247,10 @@ class LocalDataSourceImp implements LocalDataSource {
   static String ENVIRONMENT_NETWORK = 'environment_network';
   static String INVITEE_ADDRESS = 'invitee_address';
   static String USER_ACCEPT_POLICIES = 'user_accept_policies';
+  static String PURCHASES_LIST = 'purchases_list';
+  static String COOKBOOK_LIST = 'cookbook_list';
+  static String NFT_LIST = 'nft_list';
+  static String RECIPES_LIST = 'recipe_list';
 
   Map cacheContainer = {};
 
@@ -277,14 +301,22 @@ class LocalDataSourceImp implements LocalDataSource {
   Future<String> pickImageFromGallery(PickImageModel pickImageModel) async {
     final permissionStatus = await permissionService.status(Permission.photos);
     if (permissionStatus.isGranted || permissionStatus.isLimited) {
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery, maxWidth: pickImageModel.maxWidth, maxHeight: pickImageModel.maxHeight, imageQuality: pickImageModel.imageQuality);
+      final XFile? image = await picker.pickImage(
+          source: ImageSource.gallery,
+          maxWidth: pickImageModel.maxWidth,
+          maxHeight: pickImageModel.maxHeight,
+          imageQuality: pickImageModel.imageQuality);
       return image?.path ?? '';
     }
 
     final afterPermissionStatus = await permissionService.request(Permission.photos);
 
     if (afterPermissionStatus.isGranted || permissionStatus.isLimited) {
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery, maxWidth: pickImageModel.maxWidth, maxHeight: pickImageModel.maxHeight, imageQuality: pickImageModel.imageQuality);
+      final XFile? image = await picker.pickImage(
+          source: ImageSource.gallery,
+          maxWidth: pickImageModel.maxWidth,
+          maxHeight: pickImageModel.maxHeight,
+          imageQuality: pickImageModel.imageQuality);
       return image?.path ?? '';
     }
 
@@ -486,5 +518,85 @@ class LocalDataSourceImp implements LocalDataSource {
   Future<bool> saveUserAcceptPolicies() async {
     await sharedPreferences.setBool(USER_ACCEPT_POLICIES, true);
     return true;
+  }
+
+
+
+  @override
+  List<Cookbook>? getStoredCookBooks() {
+    final cookbookListNullable = sharedPreferences.getStringList(COOKBOOK_LIST);
+
+    if (cookbookListNullable == null) {
+      return null;
+    }
+
+    return cookbookListNullable.map((item) => Cookbook.create()..mergeFromProto3Json(jsonEncode(item))).toList();
+  }
+
+  @override
+  Future<bool> storeCookBooks(List<Cookbook> cookbooks) {
+    final cookBookString = cookbooks.map((e) => jsonEncode(e.toProto3Json())).toList();
+    return sharedPreferences.setStringList(COOKBOOK_LIST, cookBookString);
+  }
+
+  @override
+  List<NFT>? getStoredCreations() {
+    final nftNullableList = sharedPreferences.getStringList(NFT_LIST);
+
+    if (nftNullableList == null) {
+      return null;
+    }
+
+    return nftNullableList.map((nft) {
+      final map = jsonDecode(nft) as Map<String, dynamic>;
+      return NFT.fromJson(map);
+    }).toList();
+  }
+
+  @override
+  Future<bool> storeCreations(List<NFT> nfts) {
+    final nftStringsList = nfts.map((nft) => jsonEncode(nft)).toList();
+    return sharedPreferences.setStringList(NFT_LIST, nftStringsList);
+  }
+
+  @override
+  Future<bool> storeNonNFTCreations(List<Recipe> recipes) {
+    final recipesStringsList = recipes.map((nft) => jsonEncode(nft.toProto3Json())).toList();
+    return sharedPreferences.setStringList(RECIPES_LIST, recipesStringsList);
+  }
+
+  @override
+  List<Recipe>? getNonNFTCreations() {
+    final nftNullableList = sharedPreferences.getStringList(RECIPES_LIST);
+
+    if (nftNullableList == null) {
+      return null;
+    }
+
+    return nftNullableList.map((recipe) {
+      final map = jsonDecode(recipe) as Map<String, dynamic>;
+      return Recipe.create()..mergeFromProto3Json(map);
+    }).toList();
+  }
+
+  @override
+  Future<bool> storePurchases(List<NFT> purchases) async {
+    final nftList = purchases.map((nft) => jsonEncode(nft)).toList();
+    return sharedPreferences.setStringList(PURCHASES_LIST, nftList);
+  }
+
+
+  @override
+  List<NFT>? getStoredPurchases() {
+    final nftNullableList = sharedPreferences.getStringList(PURCHASES_LIST);
+
+    if (nftNullableList == null) {
+      return null;
+    }
+
+    return nftNullableList.map((nft) {
+      final map = jsonDecode(nft) as Map<String, dynamic>;
+      return NFT.fromJson(map);
+    }).toList();
   }
 }

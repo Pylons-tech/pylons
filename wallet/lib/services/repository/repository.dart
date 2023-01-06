@@ -22,6 +22,7 @@ import 'package:pylons_wallet/model/stripe_loginlink_response.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/cookbook.pb.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/export.dart' as cosmos_tx;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
@@ -558,6 +559,22 @@ abstract class Repository {
     required String address,
     required AccountPublicInfo accountPublicInfo,
   });
+
+  Either<Failure, List<NFT>?> getStoredPurchases();
+
+  Either<Failure, List<Cookbook>?> getStoredCookBooks();
+
+  Future<Either<Failure, bool>> storeCookBooks(List<Cookbook> cookbooks);
+
+  Either<Failure, List<NFT>?> getStoredCreations();
+
+  Future<Either<Failure, bool>> storeCreations(List<NFT> creations);
+
+  Future<Either<Failure, bool>> storeNonNFTCreations(List<pylons.Recipe> recipes);
+
+  Either<Failure, List<pylons.Recipe>?> getNonNFTCreations();
+
+  Future<Either<Failure, bool>> storePurchases(List<NFT> purchases);
 }
 
 class RepositoryImp implements Repository {
@@ -1480,7 +1497,7 @@ class RepositoryImp implements Repository {
     }
 
     try {
-      final result = await remoteDataStore.updateRecipe(updateRecipeModel:updateRecipeModel );
+      final result = await remoteDataStore.updateRecipe(updateRecipeModel: updateRecipeModel);
 
       return Right(result);
     } on Failure catch (_) {
@@ -2316,6 +2333,85 @@ class RepositoryImp implements Repository {
     } on Exception catch (_) {
       recordErrorInCrashlytics(_);
       return Left(AccountCreationFailure(LocaleKeys.something_wrong.tr()));
+    }
+  }
+
+  @override
+  Either<Failure, List<NFT>?> getStoredPurchases() {
+    try {
+      return Right(localDataSource.getStoredPurchases());
+    } on Exception catch (_) {
+      return const Left(GettingLocalDataFailure(SOMETHING_WENT_WRONG));
+    }
+  }
+
+  @override
+  Either<Failure, List<Cookbook>?> getStoredCookBooks() {
+    try {
+      return Right(localDataSource.getStoredCookBooks());
+    } on Exception catch (_) {
+      recordErrorInCrashlytics(_);
+      return const Left(GettingLocalDataFailure(SOMETHING_WENT_WRONG));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> storeCookBooks(List<Cookbook> cookbooks) async {
+    try {
+      return Right(await localDataSource.storeCookBooks(cookbooks));
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Either<Failure, List<NFT>?> getStoredCreations() {
+    try {
+      return Right(localDataSource.getStoredCreations());
+    } on Exception catch (_) {
+      recordErrorInCrashlytics(_);
+      return const Left(GettingLocalDataFailure(SOMETHING_WENT_WRONG));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> storeCreations(List<NFT> creations) async {
+    try {
+      return Right(await localDataSource.storeCreations(creations));
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(GettingLocalDataFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> storeNonNFTCreations(List<pylons.Recipe> recipes) async {
+    try {
+      return Right(await localDataSource.storeNonNFTCreations(recipes));
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(GettingLocalDataFailure(e.toString()));
+    }
+  }
+
+  @override
+  Either<Failure, List<pylons.Recipe>?> getNonNFTCreations() {
+    try {
+      return Right(localDataSource.getNonNFTCreations());
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(GettingLocalDataFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> storePurchases(List<NFT> purchases) async {
+    try {
+      return Right(await localDataSource.storePurchases(purchases));
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(GettingLocalDataFailure(e.toString()));
     }
   }
 }
