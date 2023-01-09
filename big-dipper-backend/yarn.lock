@@ -3596,9 +3596,9 @@ moment-timezone@^0.5.38:
   version "2.29.4"
   resolved "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz"
 
-mongo-object@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/mongo-object/-/mongo-object-3.0.0.tgz#7cb751ec77174e4d1894a1a0b165ab5deb762509"
+mongo-object@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/mongo-object/-/mongo-object-3.0.1.tgz#e0d4a3b2348115175ed19bebd3f99a12bb387983"
 
 ms@2.0.0:
   version "2.0.0"
@@ -4568,12 +4568,12 @@ signal-exit@^3.0.2:
   version "3.0.7"
   resolved "https://registry.npmjs.org/signal-exit/-/signal-exit-3.0.7.tgz"
 
-simpl-schema@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/simpl-schema/-/simpl-schema-3.0.1.tgz#c30a8bd69d5bf86c044915dc2ab00b0b1344c60f"
+simpl-schema@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/simpl-schema/-/simpl-schema-3.4.1.tgz#930006a150d1e19645c241e96da7fe076fe26583"
   dependencies:
     clone "^2.1.2"
-    mongo-object "^3.0.0"
+    mongo-object "^3.0.1"
 
 slice-ansi@^2.1.0:
   version "2.1.0"
