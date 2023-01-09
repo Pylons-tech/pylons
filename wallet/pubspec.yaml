@@ -61,7 +61,7 @@ dependencies:
   home_widget: ^0.1.6
   http: ^0.13.4
   icloud_storage: ^2.0.0
-  image: ^3.2.0
+  image: ^4.0.8
   image_cropper: ^3.0.0
   image_picker: ^0.8.5+3
   in_app_purchase: ^3.0.7
