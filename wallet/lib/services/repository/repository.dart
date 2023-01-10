@@ -45,6 +45,7 @@ import 'package:pylons_wallet/utils/query_helper.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
 import '../../generated/locale_keys.g.dart';
+import '../../model/common.dart';
 import '../../model/update_recipe_model.dart';
 
 abstract class Repository {
@@ -575,6 +576,13 @@ abstract class Repository {
   Either<Failure, List<pylons.Recipe>?> getNonNFTCreations();
 
   Future<Either<Failure, bool>> storePurchases(List<NFT> purchases);
+
+  Future<Either<Failure, void>> enableDisableRecipe({
+    required CookbookId cookBookId,
+    required RecipeId recipeId,
+    required bool enabled,
+    required Address creatorAddress,
+  });
 }
 
 class RepositoryImp implements Repository {
@@ -611,7 +619,10 @@ class RepositoryImp implements Repository {
     }
 
     try {
-      return Right(await remoteDataStore.getRecipe(cookBookId: cookBookId, recipeId: recipeId));
+      return Right(await remoteDataStore.getRecipe(
+        cookBookId: CookbookId(cookBookId),
+        recipeId: RecipeId(recipeId),
+      ));
     } on Failure catch (e) {
       return Left(e);
     } on Exception catch (_) {
@@ -627,7 +638,7 @@ class RepositoryImp implements Repository {
     }
 
     try {
-      return Right(await remoteDataStore.getUsername(address: address));
+      return Right(await remoteDataStore.getUsername(address: Address(address)));
     } on Failure catch (e) {
       return Left(e);
     } on Exception catch (_) {
@@ -1645,7 +1656,11 @@ class RepositoryImp implements Repository {
     }
     try {
       return Right(
-        await remoteDataStore.countAView(recipeId: recipeId, cookBookID: cookBookID, walletAddress: walletAddress),
+        await remoteDataStore.countAView(
+          recipeId: RecipeId(recipeId),
+          cookBookID: CookbookId(cookBookID),
+          walletAddress: Address(walletAddress),
+        ),
       );
     } on Failure catch (e) {
       return Left(e);
@@ -1665,7 +1680,9 @@ class RepositoryImp implements Repository {
       return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
-      return Right(await remoteDataStore.getLikesCount(recipeId: recipeId, cookBookID: cookBookID));
+      return Right(
+        await remoteDataStore.getLikesCount(recipeId: RecipeId(recipeId), cookBookID: CookbookId(cookBookID)),
+      );
     } on Failure catch (e) {
       return Left(e);
     } on Exception catch (e) {
@@ -1680,7 +1697,12 @@ class RepositoryImp implements Repository {
       return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
-      return Right(await remoteDataStore.getViewsCount(recipeId: recipeId, cookBookID: cookBookID));
+      return Right(
+        await remoteDataStore.getViewsCount(
+          recipeId: RecipeId(recipeId),
+          cookBookID: CookbookId(cookBookID),
+        ),
+      );
     } on Failure catch (e) {
       return Left(e);
     } on Exception catch (e) {
@@ -1700,7 +1722,11 @@ class RepositoryImp implements Repository {
     }
     try {
       return Right(
-        await remoteDataStore.ifLikedByMe(recipeId: recipeId, cookBookID: cookBookID, walletAddress: walletAddress),
+        await remoteDataStore.ifLikedByMe(
+          recipeId: RecipeId(recipeId),
+          cookBookID: CookbookId(cookBookID),
+          walletAddress: Address(walletAddress),
+        ),
       );
     } on Failure catch (e) {
       return Left(e);
@@ -1721,9 +1747,9 @@ class RepositoryImp implements Repository {
     }
     try {
       return Right(await remoteDataStore.updateLikeStatus(
-        recipeId: recipeId,
-        cookBookID: cookBookID,
-        walletAddress: walletAddress,
+        recipeId: RecipeId(recipeId),
+        cookBookID: CookbookId(cookBookID),
+        walletAddress: Address(walletAddress),
       ));
     } on Failure catch (e) {
       return Left(e);
@@ -2044,8 +2070,8 @@ class RepositoryImp implements Repository {
 
     try {
       final result = await remoteDataStore.getNftOwnershipHistoryByCookbookIdAndRecipeId(
-        cookBookId: cookBookId,
-        recipeId: recipeId,
+        cookBookId: CookbookId(cookBookId),
+        recipeId: RecipeId(recipeId),
       );
 
       return Right(result);
@@ -2211,7 +2237,7 @@ class RepositoryImp implements Repository {
     }
     try {
       return Right(await remoteDataStore.logPurchaseItem(
-        recipeId: recipeId,
+        recipeId: RecipeId(recipeId),
         recipeName: recipeName,
         author: author,
         purchasePrice: purchasePrice,
@@ -2236,7 +2262,7 @@ class RepositoryImp implements Repository {
     try {
       return Right(
         await remoteDataStore.logAddToCart(
-          recipeId: recipeId,
+          recipeId: RecipeId(recipeId),
           recipeName: recipeName,
           author: author,
           purchasePrice: purchasePrice,
@@ -2412,6 +2438,27 @@ class RepositoryImp implements Repository {
     } on Exception catch (e) {
       recordErrorInCrashlytics(e);
       return Left(GettingLocalDataFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> enableDisableRecipe({
+    required CookbookId cookBookId,
+    required RecipeId recipeId,
+    required bool enabled,
+    required Address creatorAddress,
+  }) async {
+    try {
+      await remoteDataStore.enableDisableRecipe(
+        cookBookId: cookBookId,
+        recipeId: recipeId,
+        enabled: enabled,
+        creatorAddress: creatorAddress,
+      );
+      return const Right(null);
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
     }
   }
 }
