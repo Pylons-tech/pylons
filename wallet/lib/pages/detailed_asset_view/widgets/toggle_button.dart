@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
 class ToggleButton extends StatefulWidget {
-  const ToggleButton({Key? key}) : super(key: key);
+  final bool enabled;
+  final void Function(bool enabled) onPressed;
+  const ToggleButton({
+    Key? key,
+    required this.enabled,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   State<ToggleButton> createState() => _ToggleButtonState();
@@ -13,37 +17,34 @@ class ToggleButton extends StatefulWidget {
 class _ToggleButtonState extends State<ToggleButton> {
   @override
   Widget build(BuildContext context) {
-    final assetProvider = context.watch<OwnerViewViewModel>();
     return ClipPath(
       clipper: ToggleClipper(),
       child: Container(
         height: 50,
         width: 100,
-        color: assetProvider.toggled
-            ? AppColors.kGreenBackground.withOpacity(.7)
-            : AppColors.kDarkRed.withOpacity(.7),
+        color: widget.enabled ? AppColors.kGreenBackground.withOpacity(.7) : AppColors.kDarkRed.withOpacity(.7),
         padding: const EdgeInsets.all(6.0),
-        child: assetProvider.toggled
-            ? enabledRow(assetProvider)
-            : disableRow(assetProvider),
+        child: widget.enabled ? enabledRow() : disableRow(),
       ),
     );
   }
 
-  Widget enabledRow(OwnerViewViewModel assetProvider) {
+  Widget enabledRow() {
     return Row(
       children: [
         Expanded(
           child: GestureDetector(
             onTap: () {
-              assetProvider.setToggle(toggle: false);
+              widget.onPressed(false);
             },
             child: Container(
               alignment: Alignment.center,
               child: Container(
                 height: 10,
                 decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: AppColors.kButtonBuyNowColor),
+                  shape: BoxShape.circle,
+                  color: AppColors.kButtonBuyNowColor,
+                ),
               ),
             ),
           ),
@@ -51,7 +52,7 @@ class _ToggleButtonState extends State<ToggleButton> {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              assetProvider.setToggle(toggle: false);
+              widget.onPressed(false);
             },
             child: ClipPath(
               clipper: ToggleClipper(),
@@ -66,13 +67,13 @@ class _ToggleButtonState extends State<ToggleButton> {
     );
   }
 
-  Widget disableRow(OwnerViewViewModel assetProvider) {
+  Widget disableRow() {
     return Row(
       children: [
         Expanded(
           child: GestureDetector(
             onTap: () {
-              assetProvider.setToggle(toggle: true);
+              widget.onPressed(true);
             },
             child: ClipPath(
               clipper: ToggleClipper(),
@@ -86,15 +87,14 @@ class _ToggleButtonState extends State<ToggleButton> {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              assetProvider.setToggle(toggle: true);
+              widget.onPressed(true);
             },
             child: SizedBox.expand(
               child: Container(
                 alignment: Alignment.center,
                 child: Container(
                   height: 10,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: AppColors.kDarkRed),
+                  decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.kDarkRed),
                 ),
               ),
             ),
