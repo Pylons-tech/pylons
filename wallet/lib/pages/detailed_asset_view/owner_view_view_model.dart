@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/model/common.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/model/nft_ownership_history.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
@@ -468,6 +469,22 @@ class OwnerViewViewModel extends ChangeNotifier {
       shareHelper.shareText(text: r, size: size);
       return null;
     });
+  }
+
+  Future<void> changeNFTEnabledDisableStatus({required bool enabled}) async {
+    final response = await repository.enableDisableRecipe(
+      cookBookId: CookbookId(nft.cookbookID),
+      recipeId: RecipeId(nft.recipeID),
+      enabled: enabled,
+      creatorAddress: Address(nft.ownerAddress),
+    );
+
+    if (response.isLeft()) {
+      throw response.swap().toOption().toNullable()!;
+    }
+
+    nft.isEnabled = enabled;
+    notifyListeners();
   }
 
   void logEvent() {
