@@ -236,7 +236,6 @@ BaseEnv MOCK_BASE_ENV = BaseEnv()
       faucetUrl: '',
       stripeUrl: '',
       stripePubKey: '',
-      stripeTestEnv: false,
       stripeCallbackUrl: '',
       stripeCallbackRefreshUrl: "",
       chainId: 'pylons-testnet-2',

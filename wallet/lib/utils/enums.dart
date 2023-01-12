@@ -6,6 +6,12 @@ enum NftType {
   TYPE_TRADE,
 }
 
+extension NftTypePar on dynamic {
+  NftType toNFTTypeEnum() {
+    return NftType.values.firstWhere((e) => e.toString() == 'NftType.$this', orElse: () => NftType.TYPE_ITEM);
+  }
+}
+
 enum Orientation {
   Orientation_SE,
   Orientation_NE,

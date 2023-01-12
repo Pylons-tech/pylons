@@ -325,6 +325,7 @@ abstract class RemoteDataStore {
     required String address,
     required AccountPublicInfo publicInfo,
   });
+
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
