@@ -2,15 +2,12 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart';
 import 'package:pylons_wallet/utils/constants.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
-
 import '../../../generated/locale_keys.g.dart';
 import '../clipper/top_left_bottom_right_clipper.dart';
 
@@ -21,44 +18,8 @@ class BuyNFTButton extends StatelessWidget {
   const BuyNFTButton({Key? key, required this.onTapped, required this.nft}) : super(key: key);
 
   Widget getButtonContent(NFT nft, PurchaseItemViewModel viewModel) {
-    final double btnHeight = 35.h;
+    final double btnHeight = 37.h;
     final double btnWidth = isTablet ? 160.w : 200.w;
-    if (double.parse(nft.price) == 0) {
-      return Container(
-        height: 60.h,
-        color: AppColors.kDarkRed.withOpacity(0.8),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AutoSizeText(
-                LocaleKeys.claim_free_nft.tr(),
-                maxLines: 1,
-                style: TextStyle(color: AppColors.kWhite, fontSize: 16.sp, fontFamily: kUniversalFontFamily),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  AutoSizeText(
-                    LocaleKeys.before_too_late.tr(),
-                    maxLines: 1,
-                    style: TextStyle(color: AppColors.kWhite, fontSize: 12.sp, fontFamily: kUniversalFontFamily),
-                  ),
-                  SizedBox(width: 8.w),
-                  SizedBox(
-                    height: 20.h,
-                    width: 20.h,
-                    child: nft.ibcCoins.getAssets(),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      );
-    }
     return Container(
       height: btnHeight,
       width: btnWidth,
@@ -68,52 +29,141 @@ class BuyNFTButton extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            flex: 4,
-            child: Stack(
-              children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: SvgPicture.asset(
-                    SVGUtil.CURVED_CORNER_RED_BG,
-                    height: btnHeight,
-                    fit: BoxFit.fill,
+            flex: getFlexForMessageContainer(),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.kBlack.withOpacity(0.35),
+                    blurRadius: 20,
+                    spreadRadius: 2,
                   ),
+                ],
+              ),
+              child: ClipPath(
+                clipper: TopLeftBottomRightClipper(),
+                child: ColoredBox(
+                  color: AppColors.kDarkRedColor,
+                  child: getMessageContent(),
                 ),
-                Center(
-                  child: AutoSizeText(
-                    LocaleKeys.buy_now.tr(),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 12.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
-                    maxLines: 1,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
-          Expanded(
-            flex: 3,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                RichText(
-                  text: TextSpan(
-                      text: "\$${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}",
-                      style: TextStyle(color: AppColors.kWhite, fontSize: 10.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
-                      children: [
-                        TextSpan(
-                          text: " ${LocaleKeys.ea.tr()}.",
-                          style: TextStyle(color: AppColors.kWhite, fontSize: 10.sp, fontFamily: kUniversalFontFamily,fontWeight: FontWeight.w700),
-                        )
-                      ]),
+          getPriceAndAvailability(nft),
+        ],
+      ),
+    );
+  }
+
+  int getFlexForMessageContainer() {
+    if (double.parse(nft.price) == 0) {
+      return 5;
+    }
+    return 4;
+  }
+
+  Expanded getPriceAndAvailability(NFT nft) {
+    if (double.parse(nft.price) != 0) {
+      return Expanded(
+        flex: 3,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RichText(
+              text: TextSpan(
+                text: "\$${nft.ibcCoins.getCoinValueBasedOnDollar(nft.price)}",
+                style: TextStyle(
+                  color: AppColors.kWhite,
+                  fontSize: 10.sp,
+                  fontFamily: kUniversalFontFamily,
+                  fontWeight: FontWeight.w700,
                 ),
-                Text(
-                  "${nft.quantity - nft.amountMinted} ${LocaleKeys.available.tr()}",
-                  style: TextStyle(color: AppColors.kGreyLight, fontSize: 9.sp, fontWeight: FontWeight.normal, fontFamily: kUniversalFontFamily),
-                ),
-              ],
+                children: [
+                  TextSpan(
+                    text: " ${LocaleKeys.ea.tr()}.",
+                    style: TextStyle(
+                      color: AppColors.kWhite,
+                      fontSize: 10.sp,
+                      fontFamily: kUniversalFontFamily,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Text(
+              "${nft.quantity - nft.amountMinted} ${LocaleKeys.available.tr()}",
+              style: TextStyle(
+                color: AppColors.kGreyLight,
+                fontSize: 9.sp,
+                fontWeight: FontWeight.normal,
+                fontFamily: kUniversalFontFamily,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    return Expanded(
+      flex: 3,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            LocaleKeys.remaining_and_total_editions.tr(
+              namedArgs: {
+                kRemaining: '${nft.quantity - nft.amountMinted}',
+                kTotal: '${nft.quantity}',
+              },
+            ),
+            style: TextStyle(
+              color: AppColors.kGreyLight,
+              fontSize: 9.sp,
+              fontWeight: FontWeight.normal,
+              fontFamily: kUniversalFontFamily,
+            ),
+          ),
+          Text(
+            LocaleKeys.remaining.tr(),
+            style: TextStyle(
+              color: AppColors.kGreyLight,
+              fontSize: 9.sp,
+              fontWeight: FontWeight.normal,
+              fontFamily: kUniversalFontFamily,
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Center getMessageContent() {
+    if (double.parse(nft.price) != 0) {
+      return Center(
+        child: AutoSizeText(
+          LocaleKeys.buy_now.tr(),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: AppColors.kWhite,
+            fontSize: 12.sp,
+            fontFamily: kUniversalFontFamily,
+            fontWeight: FontWeight.w700,
+          ),
+          maxLines: 1,
+        ),
+      );
+    }
+    return Center(
+      child: AutoSizeText(
+        LocaleKeys.claim_now.tr(),
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: AppColors.kWhite,
+          fontSize: 12.sp,
+          fontFamily: kUniversalFontFamily,
+          fontWeight: FontWeight.w700,
+        ),
+        maxLines: 1,
       ),
     );
   }

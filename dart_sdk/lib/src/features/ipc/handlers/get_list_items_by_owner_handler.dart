@@ -5,11 +5,13 @@ import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:pylons_sdk/src/generated/pylons/item.pb.dart';
 
-import '../responseCompleters.dart';
 
 class GetListItemsByOwnerHandler implements IPCHandler {
   @override
-  void handler(SDKIPCResponse<dynamic> response) {
+  void handler(
+    SDKIPCResponse<dynamic> response,
+    void Function(String key, SDKIPCResponse response) onHandlingComplete,
+  ) {
     final defaultResponse = SDKIPCResponse<List<Item>>(
         success: response.success,
         action: response.action,
@@ -19,9 +21,7 @@ class GetListItemsByOwnerHandler implements IPCHandler {
     try {
       if (response.success) {
         defaultResponse.data = [
-          ...List.from(jsonDecode(response.data))
-              .map((item) => Item.create()..mergeFromProto3Json(item))
-              .toList()
+          ...List.from(jsonDecode(response.data)).map((item) => Item.create()..mergeFromProto3Json(item)).toList()
         ];
       }
     } on Exception catch (_) {
@@ -29,6 +29,7 @@ class GetListItemsByOwnerHandler implements IPCHandler {
       defaultResponse.error = 'Items list parsing failed';
       defaultResponse.errorCode = Strings.ERR_MALFORMED_ITEMS_LIST;
     }
-    responseCompleters[Strings.GET_ITEMS_BY_OWNER]!.complete(defaultResponse);
+
+    return onHandlingComplete(Strings.GET_ITEMS_BY_OWNER, defaultResponse);
   }
 }

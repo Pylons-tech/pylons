@@ -451,3 +451,4 @@ class Params extends $pb.GeneratedMessage {
   @$pb.TagNumber(11)
   void clearMaxTxsInBlock() => clearField(11);
 }
+

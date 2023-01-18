@@ -211,7 +211,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
           textSpan,
           textAlign: textAlign,
           textDirection: textDirection,
-          style: TextStyle(color: AppColors.kWhite),
+          style: const TextStyle(color: AppColors.kWhite),
           maxLines: 4,
           minFontSize: 10,
         );

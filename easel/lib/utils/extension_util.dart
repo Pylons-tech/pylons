@@ -7,7 +7,7 @@ import 'package:easel_flutter/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path/path.dart' as path;
-import 'package:pylons_sdk/pylons_sdk.dart';
+import 'package:pylons_sdk/low_level.dart';
 
 extension ScaffoldHelper on BuildContext? {
   void show({required String message}) {
@@ -229,6 +229,16 @@ extension GetCoinWithProperDenomination on String {
       return (double.parse(amount) / kBigIntBase).toStringAsFixed(0);
     } else {
       return (double.parse(amount) / kEthIntBase).toStringAsFixed(2);
+    }
+  }
+
+   String getEaselInputCoinWithDenomination(String amount) {
+    if (this == kUsdSymbol) {
+      return (double.parse(amount)).toStringAsFixed(2);
+    } else if (this == kPylonSymbol) {
+      return (double.parse(amount)).toStringAsFixed(0);
+    } else {
+      return (double.parse(amount)).toStringAsFixed(2);
     }
   }
 }

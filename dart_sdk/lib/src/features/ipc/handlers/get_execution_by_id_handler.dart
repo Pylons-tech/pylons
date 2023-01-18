@@ -2,13 +2,15 @@ import 'dart:convert';
 
 import 'package:pylons_sdk/src/core/constants/strings.dart';
 import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
-import 'package:pylons_sdk/src/features/ipc/responseCompleters.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:pylons_sdk/src/generated/pylons/execution.pb.dart';
 
+
 class GetExecutionByIdHandler implements IPCHandler {
   @override
-  void handler(SDKIPCResponse<dynamic> response) {
+  void handler(SDKIPCResponse<dynamic> response, 
+  void Function(String key, SDKIPCResponse response) onHandlingComplete,
+   ) {
     final defaultResponse = SDKIPCResponse<Execution>(
         success: response.success,
         action: response.action,
@@ -17,14 +19,14 @@ class GetExecutionByIdHandler implements IPCHandler {
         errorCode: response.errorCode);
     try {
       if (response.success) {
-        defaultResponse.data = Execution.create()
-          ..mergeFromProto3Json(jsonDecode(response.data));
+        defaultResponse.data = Execution.create()..mergeFromProto3Json(jsonDecode(response.data));
       }
     } on FormatException catch (_) {
       defaultResponse.error = _.message;
       defaultResponse.errorCode = Strings.ERR_MALFORMED_EXECUTION;
       defaultResponse.success = false;
     }
-    responseCompleters[Strings.GET_EXECUTION_BY_ID]!.complete(defaultResponse);
+
+    return onHandlingComplete(Strings.GET_EXECUTION_BY_ID, defaultResponse);
   }
 }

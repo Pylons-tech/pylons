@@ -23,4 +23,5 @@ class RouteUtil {
   static String ROUTE_PDF_FULL_SCREEN = "/pdf_full_screen";
   static String ROUTE_OWNER_VIEW = "/owner_view";
   static String ROUTE_PURCHASE_VIEW = "/purchase_view";
+  static String ROUTE_ACCEPT_POLICY = "/accept_policy";
 }

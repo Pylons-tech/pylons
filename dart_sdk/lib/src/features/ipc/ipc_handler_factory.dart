@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:pylons_sdk/src/core/constants/strings.dart';
 import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
 import 'package:pylons_sdk/src/features/ipc/handlers/create_cookbook_handler.dart';
@@ -11,9 +13,9 @@ import 'package:pylons_sdk/src/features/ipc/handlers/get_profile_handler.dart';
 import 'package:pylons_sdk/src/features/ipc/handlers/get_recipe_handler.dart';
 import 'package:pylons_sdk/src/features/ipc/handlers/get_recipes_handler.dart';
 import 'package:pylons_sdk/src/features/ipc/handlers/get_trades_handler.dart';
-import 'package:pylons_sdk/src/features/ipc/responseCompleters.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 
+import '../../pylons_wallet/response_fetcher/response_fetch.dart';
 import 'handlers/get_execution_by_recipe_handler.dart';
 
 class IPCHandlerFactory {
@@ -34,16 +36,22 @@ class IPCHandlerFactory {
 
   /// Fetches and resolves appropriate [IPCHandler] instance for [sdkIpcResponse], or completes
   /// the completer if no specific handler is set.
-  static void getHandler(SDKIPCResponse sdkipcResponse) {
-    print(sdkipcResponse);
-    if (!responseCompleters.containsKey(sdkipcResponse.action)) {
-      throw Exception(
-          'Unexpected response for unsent message of type ${sdkipcResponse.action}');
+  static void getHandler(SDKIPCResponse sdkipcResponse) async {
+    var responseFetcher = await getResponseFetch();
+    if (!responseFetcher.listenerExists(key: sdkipcResponse.action)) {
+      if (Platform.isAndroid) {
+        responseFetcher = AndroidResponseFetch.instance;
+      } else {
+        throw Exception('Unexpected response for unsent message of type ${sdkipcResponse.action}');
+      }
     }
     if (handlers.containsKey(sdkipcResponse.action)) {
-      handlers[sdkipcResponse.action]!.handler(sdkipcResponse);
+      handlers[sdkipcResponse.action]!.handler(
+        sdkipcResponse,
+        ((key, response) => responseFetcher.complete(key: key, sdkipcResponse: response)),
+      );
     } else {
-      responseCompleters[sdkipcResponse.action]!.complete(sdkipcResponse);
+      responseFetcher.complete(key: sdkipcResponse.action, sdkipcResponse: sdkipcResponse);
     }
     return;
   }

@@ -37,7 +37,7 @@
   "compressing_thumbnail": "Miniaturbild Komprimieren",
   "uploading": "Hochladen ...",
   "nft_name": "{}",
-  "could_not_uploaded": "{} konnte nicht hochgeladen werden",
+  "could_not_uploaded": "{fileName} konnte nicht hochgeladen werden. Das {format} NFT muss:",
   "something_wrong": "Etwas ist schief gelaufen. Bitte versuchen Sie, die Anwendung neu zu starten.",
   "err_add_audio_thumbnail": "Bitte Audio-Thumbnail auswählen",
   "err_add_video_thumbnail": "Bitte Video-Thumbnail auswählen",
@@ -60,8 +60,9 @@
   "create_username_description": "Bitte öffnen Sie die Pylons-App und erstellen Sie einen Benutzernamen, um eine NFT mit Easel zu veröffentlichen.",
   "create_stripe_description": "Bitte registrieren Sie sich bei Stripe in der Pylons-App, um Ihre NFT für USD aufzulisten.",
   "welcome_msg": "Willkommen im Creator Hub, wo Sie Ihre NFT-Entwürfe und -Einträge verwalten können!",
+  "first_welcome_msg":"NFT-Entwürfe enthalten eine IPFS-Inhalts-ID, erfordern jedoch zusätzliche Informationen, die in der pylons-Kette veröffentlicht und in der pylons-App zum Verkauf angeboten werden. Sie können einen aktiven NFT-Eintrag entfernen, aber Sie können niemals die Veröffentlichung einer NFT rückgängig machen.",
   "hello": "Hallo, ",
-  "no_nft_created": "Es gibt keine NFT-Entwürfe",
+  "no_nft_created": "Sie haben keine NFT-Entwürfe erstellt",
   "loading": "Wird geladen ...",
   "are_you_sure_you_want_to_delete": "Möchten Sie diesen Entwurf wirklich löschen?",
   "something_wrong_while_uploading": "Beim Hochladen ist etwas schief gelaufen. Bitte versuche es erneut.",
@@ -97,7 +98,7 @@
   "first_pick_pdf": "Wählen Sie zunächst eine PDF-Datei aus",
   "nft_manager": "Ihr NFT-Manager",
   "create_draft": "Entwurf Erstellen",
-  "no_published_nft": "Es gibt keine veröffentlichten NFTs",
+  "no_published_nft": "Sie haben keine NFTs veröffentlicht",
   "no_for_sale_nft": "Es stehen keine NFTs zum Verkauf",
   "success": "Erfolg",
   "in_progress": "Im Gange",
@@ -143,5 +144,6 @@
   "app_needed_desc_three": "Sie können es jederzeit löschen, wenn Sie möchten",
   "why_app_needed_summary_three": "Keine Abonnements. Wir verkaufen Ihre Informationen nicht. Wir berechnen nur eine Gebühr, wenn Sie ein NFT kaufen",
   "upload_hint_three": "• Eine Datei pro upload",
-  "analytics_failure": "Analytics-Fehler"
+  "analytics_failure": "Analytics-Fehler",
+  "publish" : "Veröffentlichen"
 }

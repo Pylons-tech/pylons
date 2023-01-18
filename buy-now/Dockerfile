@@ -14,6 +14,7 @@ FROM node:16-alpine AS builder
 ENV GENERATE_SOURCEMAP false
 
 WORKDIR /app
+
 ARG NEXT_PUBLIC_API_KEY
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -23,6 +24,7 @@ COPY . .
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
+
 
 ENV NEXT_PUBLIC_API_KEY ${NEXT_PUBLIC_API_KEY}
 

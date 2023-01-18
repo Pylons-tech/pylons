@@ -6,6 +6,13 @@ abstract class Failure extends Equatable {
   const Failure(this.message);
 }
 
+class TxNotFoundFailure extends Failure {
+  const TxNotFoundFailure(String message) : super(message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
 class RecipeNotFoundFailure extends Failure {
   const RecipeNotFoundFailure(String message) : super(message);
 
@@ -29,6 +36,7 @@ class NoInternetFailure extends Failure {
 
 class StripeFailure extends Failure {
   const StripeFailure(String message) : super(message);
+
   @override
   List<Object?> get props => [message];
 }
@@ -120,8 +128,7 @@ class PlatformFailure extends Failure {
 class TransactionSigningFailure extends Failure {
   final String type;
 
-  const TransactionSigningFailure({required String message, required this.type})
-      : super(message);
+  const TransactionSigningFailure({required String message, required this.type}) : super(message);
 
   @override
   List<Object?> get props => [message, type];
@@ -142,8 +149,7 @@ class UploadFailedFailure extends Failure {
 }
 
 class ICloudInitializationFailedFailure extends Failure {
-  const ICloudInitializationFailedFailure({required String message})
-      : super(message);
+  const ICloudInitializationFailedFailure({required String message}) : super(message);
 
   @override
   List<Object?> get props => [message];
@@ -185,16 +191,14 @@ class UpdateFcmTokenFailure extends Failure {
 }
 
 class FetchNftOwnershipHistoryFailure extends Failure {
-  const FetchNftOwnershipHistoryFailure({required String message})
-      : super(message);
+  const FetchNftOwnershipHistoryFailure({required String message}) : super(message);
 
   @override
   List<Object?> get props => [message];
 }
 
 class AppCheckTokenCreationFailure extends Failure {
-  const AppCheckTokenCreationFailure({required String message})
-      : super(message);
+  const AppCheckTokenCreationFailure({required String message}) : super(message);
 
   @override
   List<Object?> get props => [message];
@@ -202,6 +206,20 @@ class AppCheckTokenCreationFailure extends Failure {
 
 class MarkReadNotificationFailure extends Failure {
   const MarkReadNotificationFailure({required String message}) : super(message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class SavingLocalDataFailure extends Failure {
+  const SavingLocalDataFailure(String message) : super(message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class GettingLocalDataFailure extends Failure {
+  const GettingLocalDataFailure(String message) : super(message);
 
   @override
   List<Object?> get props => [message];

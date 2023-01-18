@@ -77,7 +77,7 @@ class _AudioWidgetState extends State<PurchaseAudioWidget> {
                   progressBarColor: AppColors.kWhite,
                   thumbColor: AppColors.kWhite,
                   progress: value.current,
-                  baseBarColor: AppColors.kGray,
+                  baseBarColor: AppColors.kGreyColorBtn,
                   bufferedBarColor: AppColors.kWhite,
                   buffered: value.buffered,
                   total: value.total,

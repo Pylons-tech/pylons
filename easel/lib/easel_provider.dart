@@ -27,7 +27,7 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:media_info/media_info.dart';
-import 'package:pylons_sdk/pylons_sdk.dart';
+import 'package:pylons_sdk/low_level.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 
@@ -712,6 +712,7 @@ class EaselProvider extends ChangeNotifier {
               StringParam(key: kNFTURL, value: nft.url),
               StringParam(key: kThumbnailUrl, value: nft.thumbnailUrl),
               StringParam(key: kCreator, value: nft.creator.trim()),
+              StringParam(key: kFileExtension, value: nft.fileExtension.trim()),
               StringParam(key: kCID, value: nft.cid),
               StringParam(key: kFileSize, value: nft.fileSize),
               StringParam(key: kRealWorld, value: "false"),
@@ -972,6 +973,7 @@ class EaselProvider extends ChangeNotifier {
       tradePercentage: royaltyController.text,
       height: fileHeight.toString(),
       duration: fileDuration.toString(),
+      fileExtension: _fileExtension,
       description: descriptionController.text,
       fileSize: _fileSize,
       recipeID: recipeId,
@@ -1009,6 +1011,7 @@ class EaselProvider extends ChangeNotifier {
       recipeID: recipeId,
       step: step.name,
       fileName: _file!.path.split("/").last,
+      fileExtension: fileExtension,
       cid: fileUploadResponse.value?.cid ?? "",
       thumbnailUrl: (isThumbnailPresent()) ? "$ipfsDomain/${uploadThumbnailResponse.value?.cid}" : "",
       name: artistNameController.text,
