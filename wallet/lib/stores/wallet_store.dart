@@ -10,6 +10,8 @@ import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:transaction_signing_gateway/model/transaction_hash.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
+import '../model/common.dart';
+
 abstract class WalletsStore {
   /// This method creates uer wallet and broadcast it in the blockchain
   /// Input: [mnemonic] mnemonic for creating user account, [userName] is the user entered nick name
@@ -69,7 +71,7 @@ abstract class WalletsStore {
   /// Output : [Trade?] return Trade Info of the tradeID, reutrn null if not exists
   Future<Trade?> getTradeByID(Int64 ID);
 
-  Future<List<Trade>> getTrades(String creator);
+  Future<List<Trade>> getTrades(Address creator);
 
   /// This method is for get Recipe Info
   /// Input : [cookbookID, recipeID]
@@ -85,7 +87,7 @@ abstract class WalletsStore {
   /// This method is for get list of Items info by owner
   /// Input : [owner] owner iD
   /// Output : [Item?] return list of Items owned by owner
-  Future<List<Item>> getItemsByOwner(String owner);
+  Future<List<Item>> getItemsByOwner(Address owner);
 
   /// This method is for get account name from wallet address
   /// Input : [address] target wallet address
@@ -168,7 +170,7 @@ abstract class WalletsStore {
   /// This method returns the list of item based on it
   /// Input : [owner] the id of the owner
   /// Output: [SdkIpcResponse] returns the item list
-  Future<SdkIpcResponse> getItemListByOwner({required String owner});
+  Future<SdkIpcResponse> getItemListByOwner({required Address owner});
 
   /// This method returns the execution based on id
   /// Input : [id] the id of the execution
@@ -178,7 +180,7 @@ abstract class WalletsStore {
   /// Get all current trades based on the given [creator]
   /// Input : [creator] the id of the creator
   /// Output: [List<pylons.Trade>] returns a list of trades
-  Future<SdkIpcResponse> getTradesForSDK({required String creator});
+  Future<SdkIpcResponse> getTradesForSDK({required Address creator});
 
   /// This method will delete the accounts from the device
   /// Output: [bool] if successful will return true else return false

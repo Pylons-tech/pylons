@@ -144,7 +144,10 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
                 return itemsProvider;
               },
             ),
-            ChangeNotifierProvider.value(value: sl.get<CollectionsTabProvider>())
+            ChangeNotifierProvider.value(value: sl.get<CollectionsTabProvider>()),
+            Provider<WalletsStore>.value(
+              value: sl<WalletsStore>(),
+            ),
           ],
           child: MaterialApp(
             navigatorKey: navigatorKey,

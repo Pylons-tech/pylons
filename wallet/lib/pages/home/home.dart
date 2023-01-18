@@ -95,7 +95,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               creations: [],
               assets: [],
               nonNFTRecipes: [],
-              collectionsType: CollectionsType.purchases, 
+              collectionsType: CollectionsType.purchases,
+              trades: [],
             ),
             update: (
               BuildContext context,
@@ -108,6 +109,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 recipesProvider: recipesProvider,
                 assets: itemsProvider.items,
                 collectionsType: collectionsTabProvider.collectionsType,
+                trades: itemsProvider.trades,
               );
             },
           ),
@@ -148,8 +150,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     return PreferredSize(
       preferredSize: Size.fromHeight(isTablet ? 0.4.sh : 0.2.sh + 115.h),
       child: ScreenResponsive(
-        mobileScreen: (BuildContext context) => buildMobileAppBar(provider),
-        tabletScreen: (BuildContext context) => buildTabletAppBar(provider),
+        mobileScreen: (_) => buildMobileAppBar(provider),
+        tabletScreen: (_) => buildTabletAppBar(provider),
       ),
     );
   }
@@ -194,16 +196,17 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               top: 0.04.sh,
               left: 0.07.sw,
               child: InkResponse(
-                  key: const Key(drawerIconKey),
-                  onTap: () {
-                    _scaffoldKey.currentState!.openDrawer();
-                  },
-                  child: SvgPicture.asset(
-                    SVGUtil.SORT,
-                    color: provider.isBannerDark() ? Colors.white : Colors.black,
-                    height: 20.h,
-                    width: 20.w,
-                  )),
+                key: const Key(drawerIconKey),
+                onTap: () {
+                  _scaffoldKey.currentState!.openDrawer();
+                },
+                child: SvgPicture.asset(
+                  SVGUtil.SORT,
+                  color: provider.isBannerDark() ? Colors.white : Colors.black,
+                  height: 20.h,
+                  width: 20.w,
+                ),
+              ),
             ),
             if (remoteConfigService.getMaintenanceMode())
               Positioned(

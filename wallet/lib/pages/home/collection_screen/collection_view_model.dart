@@ -11,21 +11,25 @@ class CollectionViewModel extends ChangeNotifier {
     required this.assets,
     required this.collectionsType,
     required this.nonNFTRecipes,
+    required this.trades,
   });
 
   factory CollectionViewModel.fromState({
     required List<NFT> assets,
     required CollectionsType collectionsType,
     required RecipesProvider recipesProvider,
+    required List<NFT> trades,
   }) {
     return CollectionViewModel(
       creations: recipesProvider.nftCreations,
       assets: assets,
       collectionsType: collectionsType,
       nonNFTRecipes: recipesProvider.nonNftCreations,
+      trades: trades,
     );
   }
 
+  final List<NFT> trades;
   final List<NFT> assets;
   final List<NFT> creations;
   final List<Recipe> nonNFTRecipes;
