@@ -202,7 +202,7 @@ class OwnerViewViewModel extends ChangeNotifier {
     );
 
     if (likesCountEither.isLeft()) {
-      LocaleKeys.something_wrong.tr().show();
+      // LocaleKeys.something_wrong.tr().show();
       return;
     }
 

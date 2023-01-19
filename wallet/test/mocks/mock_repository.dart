@@ -128,7 +128,7 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, List<Item>>> getListItemByOwner({required String owner}) {
+  Future<Either<Failure, List<Item>>> getListItemByOwner({required Address owner}) {
     // TODO: implement getListItemByOwner
     throw UnimplementedError();
   }
@@ -153,7 +153,7 @@ class MockRepository extends Repository {
   }
 
   @override
-  Future<Either<Failure, List<Trade>>> getTradesBasedOnCreator({required String creator}) {
+  Future<Either<Failure, List<Trade>>> getTradesBasedOnCreator({required Address creator}) {
     // TODO: implement getTradesBasedOnCreator
     throw UnimplementedError();
   }
@@ -669,6 +669,12 @@ class MockRepository extends Repository {
     required Address creatorAddress,
   }) {
     // TODO: implement enableDisableRecipe
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Either<Failure, void>> createTrade(pylons.MsgCreateTrade msgCreateTrade) {
+    // TODO: implement createTrade
     throw UnimplementedError();
   }
 }

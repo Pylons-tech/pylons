@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
+import 'package:pylons_wallet/model/common.dart';
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart';
@@ -66,7 +67,7 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<List<Item>> getItemsByOwner(String owner) {
+  Future<List<Item>> getItemsByOwner(Address owner) {
     return Completer<List<Item>>().future;
   }
 
@@ -106,7 +107,7 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<List<Trade>> getTrades(String creator) {
+  Future<List<Trade>> getTrades(Address creator) {
     // TODO: implement getTrades
     throw UnimplementedError();
   }
@@ -204,8 +205,8 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> getItemListByOwner({required String owner}) async {
-    if (owner != MOCK_ADDRESS) {
+  Future<SdkIpcResponse> getItemListByOwner({required Address owner}) async {
+    if (owner.toString() != MOCK_ADDRESS) {
       throw MOCK_ERROR;
     }
 
@@ -222,8 +223,8 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> getTradesForSDK({required String creator}) async {
-    if (creator != MOCK_ADDRESS) {
+  Future<SdkIpcResponse> getTradesForSDK({required Address creator}) async {
+    if (creator.toString() != MOCK_ADDRESS) {
       throw MOCK_ERROR;
     }
 

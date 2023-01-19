@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/services.dart';
+
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:local_auth/local_auth.dart';
@@ -111,7 +112,7 @@ abstract class Repository {
   /// This method returns the list of items based on id
   /// Input : [owner] the id of the owner
   /// Output: [List][pylons.Item] returns the item list
-  Future<Either<Failure, List<pylons.Item>>> getListItemByOwner({required String owner});
+  Future<Either<Failure, List<pylons.Item>>> getListItemByOwner({required Address owner});
 
   /// This method returns the execution based on id
   /// Input : [id] the id of the execution
@@ -121,7 +122,7 @@ abstract class Repository {
   /// Get all current trades against the given creator
   /// Input : [creator] the id of the creator
   /// Output: [List<pylons.Trade>] returns a list of trades
-  Future<Either<Failure, List<pylons.Trade>>> getTradesBasedOnCreator({required String creator});
+  Future<Either<Failure, List<pylons.Trade>>> getTradesBasedOnCreator({required Address creator});
 
   /// This method returns the private credentials based on the mnemonics
   /// Input : [mnemonic] mnemonics of the imported account, [username] user name of the user
@@ -583,6 +584,8 @@ abstract class Repository {
     required bool enabled,
     required Address creatorAddress,
   });
+
+  Future<Either<Failure, void>> createTrade(pylons.MsgCreateTrade msgCreateTrade);
 }
 
 class RepositoryImp implements Repository {
@@ -786,7 +789,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<pylons.Item>>> getListItemByOwner({required String owner}) async {
+  Future<Either<Failure, List<pylons.Item>>> getListItemByOwner({required Address owner}) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
@@ -819,7 +822,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<pylons.Trade>>> getTradesBasedOnCreator({required String creator}) async {
+  Future<Either<Failure, List<pylons.Trade>>> getTradesBasedOnCreator({required Address creator}) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
@@ -2462,5 +2465,11 @@ class RepositoryImp implements Repository {
       recordErrorInCrashlytics(e);
       return Left(ServerFailure(e.toString()));
     }
+  }
+  
+  @override
+  Future<Either<Failure, void>> createTrade(pylons.MsgCreateTrade msgCreateTrade) {
+    // TODO: implement createTrade
+    throw UnimplementedError();
   }
 }
