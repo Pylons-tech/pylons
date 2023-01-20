@@ -5,12 +5,11 @@ import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:pylons_sdk/src/generated/pylons/cookbook.pb.dart';
 
-
-class GetCookbooksHandler implements IPCHandler {
+class GetCookbooksHandler implements IPCHandler<Cookbook> {
   @override
   void handler(
     SDKIPCResponse<dynamic> response,
-    void Function(String key, SDKIPCResponse response) onHandlingComplete,
+    void Function(String key, SDKIPCResponse<Cookbook> response) onHandlingComplete,
   ) {
     final defaultResponse = SDKIPCResponse<Cookbook>(
         success: response.success,
@@ -21,6 +20,8 @@ class GetCookbooksHandler implements IPCHandler {
     try {
       if (response.success) {
         defaultResponse.data = Cookbook.create()..mergeFromProto3Json(jsonDecode(response.data));
+      } else {
+        defaultResponse.error = response.error;
       }
     } on Exception catch (_) {
       defaultResponse.success = false;

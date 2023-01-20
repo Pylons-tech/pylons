@@ -7,11 +7,11 @@ import 'package:pylons_sdk/src/features/ipc/base/ipc_handler.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 
 
-class GetProfileHandler implements IPCHandler {
+class GetProfileHandler implements IPCHandler<Profile> {
   @override
   void handler(
     SDKIPCResponse<dynamic> response,
-    void Function(String key, SDKIPCResponse response) onHandlingComplete,
+    void Function(String key, SDKIPCResponse<Profile> response) onHandlingComplete,
   ) {
     log(response.toString(), name: 'GetProfileHandler');
 
@@ -24,6 +24,8 @@ class GetProfileHandler implements IPCHandler {
     try {
       if (response.success) {
         defaultResponse.data = Profile.fromJson(jsonDecode(response.data));
+      } else {
+        defaultResponse.error = response.error;
       }
     } on FormatException catch (_) {
       defaultResponse.error = _.message;

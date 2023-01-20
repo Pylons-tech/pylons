@@ -10,6 +10,7 @@ import 'package:fixnum/fixnum.dart' as _i11;
 import 'package:mobx/mobx.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart' as _i3;
+import 'package:pylons_wallet/model/common.dart';
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart'
     as _i4;
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart'
@@ -233,7 +234,7 @@ class MockWalletsStore extends _i1.Mock implements _i6.WalletsStore {
         returnValue: _i7.Future<_i10.Trade?>.value(),
       ) as _i7.Future<_i10.Trade?>);
   @override
-  _i7.Future<List<_i10.Trade>> getTrades(String? creator) =>
+  _i7.Future<List<_i10.Trade>> getTrades(Address? creator) =>
       (super.noSuchMethod(
         Invocation.method(
           #getTrades,
@@ -282,7 +283,7 @@ class MockWalletsStore extends _i1.Mock implements _i6.WalletsStore {
         returnValue: _i7.Future<_i10.Item?>.value(),
       ) as _i7.Future<_i10.Item?>);
   @override
-  _i7.Future<List<_i10.Item>> getItemsByOwner(String? owner) =>
+  _i7.Future<List<_i10.Item>> getItemsByOwner(Address? owner) =>
       (super.noSuchMethod(
         Invocation.method(
           #getItemsByOwner,
@@ -581,7 +582,7 @@ class MockWalletsStore extends _i1.Mock implements _i6.WalletsStore {
       ) as _i7.Future<_i3.SdkIpcResponse<dynamic>>);
   @override
   _i7.Future<_i3.SdkIpcResponse<dynamic>> getItemListByOwner(
-          {required String? owner}) =>
+          {required Address? owner}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getItemListByOwner,
@@ -619,7 +620,7 @@ class MockWalletsStore extends _i1.Mock implements _i6.WalletsStore {
       ) as _i7.Future<_i3.SdkIpcResponse<dynamic>>);
   @override
   _i7.Future<_i3.SdkIpcResponse<dynamic>> getTradesForSDK(
-          {required String? creator}) =>
+          {required Address? creator}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getTradesForSDK,

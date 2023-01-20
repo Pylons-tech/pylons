@@ -86,7 +86,6 @@ class PylonsWalletImpl implements PylonsWallet {
     }
   }
 
-
   SDKIPCResponse sendMessageWithoutResponse(SDKIPCMessage sdkipcMessage) {
     final encodedMessage = sdkipcMessage.createMessage();
     final universalLink = createLinkBasedOnOS(encodedMessage: encodedMessage, isAndroid: Platform.isAndroid);
@@ -207,34 +206,27 @@ class PylonsWalletImpl implements PylonsWallet {
       required String sender,
       bool requestResponse = true}) async {
     return Future.sync(() async {
-      return Future.sync(() async {
-        final response = await _dispatch(
-            Strings.TX_EXECUTE_RECIPE,
-            jsonEncode(MsgExecuteRecipe(
-                    creator: sender,
-                    cookbookId: cookbookId,
-                    recipeId: recipeName,
-                    coinInputsIndex: fixnum.Int64(coinInputIndex),
-                    itemIds: itemIds,
-                    paymentInfos: paymentInfo)
-                .toProto3Json()),
-            requestResponse: requestResponse);
+      final response = await _dispatch(
+          Strings.TX_EXECUTE_RECIPE,
+          jsonEncode(MsgExecuteRecipe(
+                  creator: sender,
+                  cookbookId: cookbookId,
+                  recipeId: recipeName,
+                  coinInputsIndex: fixnum.Int64(coinInputIndex),
+                  itemIds: itemIds,
+                  paymentInfos: paymentInfo)
+              .toProto3Json()),
+          requestResponse: requestResponse);
 
-        if (response is SDKIPCResponse<Execution>) {
-          return response;
-        }
+      if (response is SDKIPCResponse<Execution>) {
+        return response;
+      }
 
-        if (response is SDKIPCResponse<String>) {
-          return SDKIPCResponse.success(Execution.create()..mergeFromProto3Json(jsonDecode(response.data!)),
-              action: Strings.TX_EXECUTE_RECIPE);
-        }
+      if (response is SDKIPCResponse<String> && !requestResponse) {
+        return SDKIPCResponse.success(Execution.create(), action: Strings.TX_EXECUTE_RECIPE);
+      }
 
-        if (response is SDKIPCResponse<String> && !requestResponse) {
-          return SDKIPCResponse.success(Execution.create(), action: Strings.TX_EXECUTE_RECIPE);
-        }
-
-        throw Exception('Response malformed');
-      });
+      throw Exception('Response malformed');
     });
   }
 

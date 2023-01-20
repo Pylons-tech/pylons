@@ -38,7 +38,6 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
   static String wsUrl = "WS_URL";
   static String stripeUrl = "STRIPE_SERVER";
   static String stripePubKey = "STRIPE_PUB_KEY";
-  static String stripeTestEnv = "STRIPE_TEST_ENV";
   static String stripeCallbackUrl = "STRIPE_CALLBACK_URL";
   static String stripeCallbackRefreshUrl = "STRIPE_CALLBACK_REFRESH_URL";
   static String androidVersion = "ANDROID_VERSION";
@@ -70,13 +69,12 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
         faucetUrl: firebaseRemoteConfig.getString(faucetUrl),
         stripeUrl: firebaseRemoteConfig.getString(stripeUrl),
         stripePubKey: firebaseRemoteConfig.getString(stripePubKey),
-        stripeTestEnv: firebaseRemoteConfig.getString(stripeTestEnv) == 'true',
-        stripeCallbackUrl: firebaseRemoteConfig.getString(stripeCallbackUrl),
-        stripeCallbackRefreshUrl: firebaseRemoteConfig.getString(stripeCallbackRefreshUrl),
-        chainId: firebaseRemoteConfig.getString(chainId),
-        ibcTraceUrl: firebaseRemoteConfig.getString(ibcTrace),
-        skus: firebaseRemoteConfig.getString(skus),
-      );
+          stripeCallbackUrl: firebaseRemoteConfig.getString(stripeCallbackUrl),
+          stripeCallbackRefreshUrl: firebaseRemoteConfig.getString(stripeCallbackRefreshUrl),
+          chainId: firebaseRemoteConfig.getString(chainId),
+          ibcTraceUrl: firebaseRemoteConfig.getString(ibcTrace),
+          skus: firebaseRemoteConfig.getString(skus),
+        );
     } else {
       return BaseEnv()
       ..setEnv(
@@ -89,7 +87,6 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
         faucetUrl: dotenv.env['FAUCET_URL'].toString(),
         stripeUrl: dotenv.env['STRIPE_SERVER'].toString(),
         stripePubKey: dotenv.env['STRIPE_PUB_KEY'].toString(),
-        stripeTestEnv: dotenv.env['STRIPE_TEST_ENV'] == 'true',
         stripeCallbackUrl: dotenv.env['STRIPE_CALLBACK_URL'] ?? "",
         stripeCallbackRefreshUrl:  dotenv.env['STRIPE_CALLBACK_REFRESH_URL'].toString(),
         chainId: dotenv.env['CHAIN_ID'].toString(),
@@ -112,7 +109,6 @@ class RemoteConfigServiceImpl implements RemoteConfigService {
       wsUrl: dotenv.env['WS_URL'],
       stripeUrl: dotenv.env['STRIPE_SERVER'],
       stripePubKey: dotenv.env['STRIPE_PUB_KEY'],
-      stripeTestEnv: dotenv.env['STRIPE_TEST_ENV'] == 'true',
       stripeCallbackUrl: dotenv.env['STRIPE_CALLBACK_URL'] ?? "",
       stripeCallbackRefreshUrl: dotenv.env['STRIPE_CALLBACK_REFRESH_URL'] ?? "",
       iosVERSION: IOS_VERSION,

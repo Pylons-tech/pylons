@@ -1,25 +1,28 @@
+
+import 'package:dartz/dartz.dart' show Either;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart';
+
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/swipe_right_to_sell_button.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/toggle_button.dart';
-import 'package:pylons_wallet/utils/clipper_utils.dart';
+import 'package:pylons_wallet/services/repository/repository.dart';
+import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 
 import '../../../generated/locale_keys.g.dart';
+import '../../../model/nft.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/dollar_sign_formatter.dart';
 
-class ForSaleBottomSheet {
-  final OwnerViewViewModel ownerViewViewModel;
-  BuildContext context;
-
-  ForSaleBottomSheet({
-    required this.ownerViewViewModel,
+class CreateTradeBottomSheet {
+  CreateTradeBottomSheet({
     required this.context,
+    required this.nft,
   });
 
   Future show() {
@@ -32,31 +35,31 @@ class ForSaleBottomSheet {
           topRight: Radius.circular(30.r),
         ),
       ),
-      builder: (context) => ChangeNotifierProvider.value(
-        value: ownerViewViewModel,
-        builder: (context, widget) {
-          return Wrap(
-            children: const [
-              _ForSaleBottomSheetWidget(),
-            ],
-          );
-        },
+      builder: (context) => Wrap(
+        children: [
+          _CreateTradeBottomSheetWidget(
+            nft: nft,
+          )
+        ],
       ),
     );
   }
+
+  final BuildContext context;
+  final NFT nft;
 }
 
-class _ForSaleBottomSheetWidget extends StatefulWidget {
-  const _ForSaleBottomSheetWidget({Key? key}) : super(key: key);
+class _CreateTradeBottomSheetWidget extends StatefulWidget {
+  final NFT nft;
+  const _CreateTradeBottomSheetWidget({Key? key, required this.nft}) : super(key: key);
 
   @override
-  State<_ForSaleBottomSheetWidget> createState() => _ForSaleBottomSheetWidgetState();
+  State<_CreateTradeBottomSheetWidget> createState() => __CreateTradeBottomSheetWidgetState();
 }
 
-class _ForSaleBottomSheetWidgetState extends State<_ForSaleBottomSheetWidget> {
+class __CreateTradeBottomSheetWidgetState extends State<_CreateTradeBottomSheetWidget> {
   @override
   Widget build(BuildContext context) {
-    final ownerViewViewModel = context.watch<OwnerViewViewModel>();
     return WillPopScope(
       onWillPop: () async {
         return true;
@@ -112,79 +115,6 @@ class _ForSaleBottomSheetWidgetState extends State<_ForSaleBottomSheetWidget> {
             SizedBox(
               height: 7.h,
             ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: AppColors.kDarkPurple, width: 3),
-              ),
-              padding: const EdgeInsets.all(3),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: ClipPath(
-                      clipper: ToggleClipper(),
-                      child: GestureDetector(
-                        onTap: () {
-                        },
-                        child: Container(
-                          decoration: const BoxDecoration(
-                          ),
-                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 7.h),
-                          child: Text(
-                            LocaleKeys.credits.tr(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: AppColors.kGreyColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 1.w,
-                  ),
-                  Expanded(
-                    child: ClipPath(
-                      clipper: BottomLeftCurvedCorner(cuttingEdge: 10),
-                      child: GestureDetector(
-                        onTap: () {
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.kTransparentColor,
-                          ),
-                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 7.h),
-                          child: Text(
-                            LocaleKeys.cash.tr(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: AppColors.kGreyColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Text(
-              LocaleKeys.no_of_editions.tr(),
-              style: TextStyle(
-                color: AppColors.kDarkPurple,
-                fontSize: 12.sp,
-                fontFamily: kUniversalFontFamily,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            SizedBox(
-              height: 7.h,
-            ),
             ClipPath(
               clipper: ToggleClipper(),
               child: Container(
@@ -199,9 +129,7 @@ class _ForSaleBottomSheetWidgetState extends State<_ForSaleBottomSheetWidget> {
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(2),
                   ],
-                  onChanged: (str) {
-
-                  },
+                  onChanged: (str) {},
                   decoration: InputDecoration(
                     hintText: LocaleKeys.editions_are_sold_sequentially.tr(),
                     hintStyle: TextStyle(
@@ -219,18 +147,18 @@ class _ForSaleBottomSheetWidgetState extends State<_ForSaleBottomSheetWidget> {
             SizedBox(
               height: 5.h,
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                "${ownerViewViewModel.nft.quantity - ownerViewViewModel.nft.amountMinted} ${LocaleKeys.available.tr()}",
-                style: TextStyle(
-                  color: AppColors.kHashtagColor,
-                  fontSize: 12.sp,
-                  fontFamily: kUniversalFontFamily,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
+            // Align(
+            //   alignment: Alignment.centerRight,
+            //   child: Text(
+            //     "${ownerViewViewModel.nft.quantity - ownerViewViewModel.nft.amountMinted} ${LocaleKeys.available.tr()}",
+            //     style: TextStyle(
+            //       color: AppColors.kHashtagColor,
+            //       fontSize: 12.sp,
+            //       fontFamily: kUniversalFontFamily,
+            //       fontWeight: FontWeight.w800,
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               height: 20.h,
             ),
@@ -306,12 +234,45 @@ class _ForSaleBottomSheetWidgetState extends State<_ForSaleBottomSheetWidget> {
               initialWidth: 40.w,
               isEnabled: true,
               onSwipeComplete: () {
-
+                createTrade();
               },
             )
           ],
         ),
       ),
     );
+  }
+
+  Future<void> createTrade() async {
+    final repository = GetIt.I.get<Repository>();
+    final walletStore = context.read<WalletsStore>();
+
+    final recipeEither = await repository.getRecipe(
+      cookBookId: widget.nft.cookbookID,
+      recipeId: widget.nft.recipeID,
+    );
+
+    if (recipeEither.isLeft()) {
+      return;
+    }
+    final recipe = recipeEither.getRight();
+
+    // itemOutput.doubles
+
+    final msgCreateTrade = MsgCreateTrade(coinInputs: recipe.coinInputs, extraInfo: recipe.extraInfo, itemOutputs: [
+      ItemRef(
+        cookbookId: widget.nft.cookbookID,
+        itemId: widget.nft.itemID,
+      ),
+    ]);
+
+     await walletStore.createTrade(msgCreateTrade.toProto3Json()! as Map);
+    // TODO Add error and success 
+  }
+}
+
+extension EitherHelper<T, R> on Either<T, R> {
+  R getRight() {
+    return toOption().toNullable()!;
   }
 }

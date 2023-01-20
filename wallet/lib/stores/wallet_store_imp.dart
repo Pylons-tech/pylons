@@ -13,6 +13,7 @@ import 'package:pylons_wallet/ipc/handler/handler_factory.dart';
 import 'package:pylons_wallet/ipc/handler/handlers/get_profile_handler.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/model/balance.dart';
+import 'package:pylons_wallet/model/common.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
@@ -480,7 +481,7 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   @override
-  Future<List<Item>> getItemsByOwner(String owner) async {
+  Future<List<Item>> getItemsByOwner(Address owner) async {
     final response = await repository.getListItemByOwner(owner: owner);
     return response.getOrElse(() => []);
   }
@@ -498,7 +499,7 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   @override
-  Future<List<Trade>> getTrades(String creator) async {
+  Future<List<Trade>> getTrades(Address creator) async {
     final response = await repository.getTradesBasedOnCreator(creator: creator);
     return response.getOrElse(() => []);
   }
@@ -596,7 +597,7 @@ class WalletsStoreImp implements WalletsStore {
       );
     }
 
-    final getItemListEither = await repository.getListItemByOwner(owner: publicAddress);
+    final getItemListEither = await repository.getListItemByOwner(owner: Address(publicAddress));
 
     if (getItemListEither.isLeft()) {
       return SdkIpcResponse.failure(
@@ -744,7 +745,7 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> getItemListByOwner({required String owner}) async {
+  Future<SdkIpcResponse> getItemListByOwner({required Address owner}) async {
     final getItemListEither = await repository.getListItemByOwner(owner: owner);
 
     if (getItemListEither.isLeft()) {
@@ -782,7 +783,7 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> getTradesForSDK({required String creator}) async {
+  Future<SdkIpcResponse> getTradesForSDK({required Address creator}) async {
     final tradesEither = await repository.getTradesBasedOnCreator(creator: creator);
 
     if (tradesEither.isLeft()) {
