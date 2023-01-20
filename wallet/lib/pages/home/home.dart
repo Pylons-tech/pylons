@@ -16,6 +16,10 @@ import 'package:pylons_wallet/ipc/ipc_engine.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
+import 'package:pylons_wallet/pages/home/widget/pylons_drawer.dart';
+import 'package:pylons_wallet/providers/collections_tab_provider.dart';
+import 'package:pylons_wallet/providers/items_provider.dart';
+import 'package:pylons_wallet/providers/recipes_provider.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
@@ -24,6 +28,8 @@ import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../generated/locale_keys.g.dart';
 import '../../services/third_party_services/remote_config_service/remote_config_service.dart';
+import 'collection_screen/collection_screen.dart';
+import 'wallet_screen/wallet_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -34,20 +40,20 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   WalletsStore get walletsStore => GetIt.I.get();
 
   HomeProvider get homeProvider => GetIt.I.get();
 
-  CollectionViewModel get collectionViewModel => GetIt.I.get();
-
   RemoteConfigService get remoteConfigService => GetIt.I.get();
+  final List<Widget> pages = <Widget>[const CollectionScreen(), const WalletScreen()];
 
   @override
   void initState() {
     super.initState();
     homeProvider.logAnalyticsEvent();
-    _tabController = TabController(vsync: this, length: homeProvider.pages.length);
+    _tabController = TabController(vsync: this, length: pages.length);
     getInitialLink();
   }
 
@@ -84,8 +90,28 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
           ChangeNotifierProvider<HomeProvider>.value(
             value: homeProvider,
           ),
-          ChangeNotifierProvider<CollectionViewModel>.value(
-            value: collectionViewModel,
+          ChangeNotifierProxyProvider3<RecipesProvider, ItemsProvider, CollectionsTabProvider, CollectionViewModel>(
+            create: (BuildContext context) => CollectionViewModel(
+              creations: [],
+              assets: [],
+              nonNFTRecipes: [],
+              collectionsType: CollectionsType.purchases,
+              trades: [],
+            ),
+            update: (
+              BuildContext context,
+              RecipesProvider recipesProvider,
+              ItemsProvider itemsProvider,
+              CollectionsTabProvider collectionsTabProvider,
+              CollectionViewModel? collectionViewModel,
+            ) {
+              return CollectionViewModel.fromState(
+                recipesProvider: recipesProvider,
+                assets: itemsProvider.items,
+                collectionsType: collectionsTabProvider.collectionsType,
+                trades: itemsProvider.trades,
+              );
+            },
           ),
         ],
         child: Consumer<HomeProvider>(builder: (context, provider, _) {
@@ -100,11 +126,15 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   child: DefaultTabController(
                     length: tabLen,
                     child: Scaffold(
+                      key: _scaffoldKey,
                       backgroundColor: AppColors.kMainBG,
+                      drawer: const PylonsDrawer(
+                        key: Key(drawerKey),
+                      ),
                       appBar: buildAppBar(context, provider),
-                      body: provider.pages[provider.selectedIndex],
+                      body: pages[provider.selectedIndex],
                       bottomSheet:
-                        remoteConfigService.getMaintenanceMode() ? const MaintenanceModeMessageWidget() : null,
+                          remoteConfigService.getMaintenanceMode() ? const MaintenanceModeMessageWidget() : null,
                     ),
                   ),
                 ),
@@ -120,8 +150,8 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     return PreferredSize(
       preferredSize: Size.fromHeight(isTablet ? 0.4.sh : 0.2.sh + 115.h),
       child: ScreenResponsive(
-        mobileScreen: (BuildContext context) => buildMobileAppBar(provider),
-        tabletScreen: (BuildContext context) => buildTabletAppBar(provider),
+        mobileScreen: (_) => buildMobileAppBar(provider),
+        tabletScreen: (_) => buildTabletAppBar(provider),
       ),
     );
   }
@@ -163,25 +193,26 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               ),
             ),
             Positioned(
-              top: 0.035.sh,
-              left: 0.86.sw,
-              child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_SETTINGS);
-                  },
-                  behavior: HitTestBehavior.translucent,
-                  child: SvgPicture.asset(
-                    SVGUtil.SORT,
-                    color: provider.isBannerDark() ? Colors.white : Colors.black,
-                    height: 20.h,
-                    width: 20.w,
-                  )),
+              top: 0.04.sh,
+              left: 0.07.sw,
+              child: InkResponse(
+                key: const Key(drawerIconKey),
+                onTap: () {
+                  _scaffoldKey.currentState!.openDrawer();
+                },
+                child: SvgPicture.asset(
+                  SVGUtil.SORT,
+                  color: provider.isBannerDark() ? Colors.white : Colors.black,
+                  height: 20.h,
+                  width: 20.w,
+                ),
+              ),
             ),
             if (remoteConfigService.getMaintenanceMode())
               Positioned(
-                  top: 0.16.sh,
-                  right: 0,
-                  child: const MaintenanceModeBannerWidget(),
+                top: 0.16.sh,
+                right: 0,
+                child: const MaintenanceModeBannerWidget(),
               ),
             Positioned(
               top: 0.2.sh - 30.r,
@@ -213,7 +244,6 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
           SizedBox(width: 5.w),
           GestureDetector(
             onTap: () async {
-
               await Clipboard.setData(ClipboardData(text: homeProvider.accountPublicInfo.publicAddress));
               LocaleKeys.copied_to_clipboard.tr().show();
             },
@@ -250,73 +280,76 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
   Column buildMobileAppBar(HomeProvider provider) {
     return Column(
       children: [
-        Stack(
-          children: [
-            Container(
-              height: 0.2.sh + 35.h,
-            ),
-            UserBannerWidget(height: 0.2.sh),
-            Positioned(
-              top: 0.06.sh,
-              right: 0.02.sw,
-              child: UserBannerPickerWidget(),
-            ),
-            Positioned(
-              top: 0.062.sh,
-              right: 0.12.sw,
-              child: InkResponse(
-                onTap: () async {
-                  Navigator.of(context).pushNamed(RouteUtil.ROUTE_MESSAGE);
-                },
-                child: Stack(
-                  children: [
-                    SvgPicture.asset(
-                      SVGUtil.MESSAGE_ENVELOPE,
-                      height: 20.h,
-                      width: 20.w,
-                      fit: BoxFit.fill,
-                      color: provider.isBannerDark() ? Colors.white : Colors.black,
-                    ),
-                    if (provider.showBadge) Positioned(right: 0.w, top: 0.h, child: buildBadge()),
-                  ],
+        Expanded(
+          child: Stack(
+            children: [
+              Container(
+                height: 0.2.sh + 35.h,
+              ),
+              UserBannerWidget(height: 0.2.sh),
+              Positioned(
+                top: 0.06.sh,
+                right: 0.02.sw,
+                child: UserBannerPickerWidget(),
+              ),
+              Positioned(
+                top: 0.062.sh,
+                right: 0.12.sw,
+                child: InkResponse(
+                  onTap: () async {
+                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_MESSAGE);
+                  },
+                  child: Stack(
+                    children: [
+                      SvgPicture.asset(
+                        SVGUtil.MESSAGE_ENVELOPE,
+                        height: 20.h,
+                        width: 20.w,
+                        fit: BoxFit.fill,
+                        color: provider.isBannerDark() ? Colors.white : Colors.black,
+                      ),
+                      if (provider.showBadge) Positioned(right: 0.w, top: 0.h, child: buildBadge()),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              top: 0.06.sh,
-              left: 0.09.sw,
-              child: InkResponse(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(RouteUtil.ROUTE_SETTINGS);
-                  },
-                  child: SvgPicture.asset(
-                    SVGUtil.SORT,
-                    color: provider.isBannerDark() ? Colors.white : Colors.black,
-                    height: 20.h,
-                    width: 20.w,
-                  )),
-            ),
-            if (remoteConfigService.getMaintenanceMode())
               Positioned(
+                top: 0.06.sh,
+                left: 0.09.sw,
+                child: InkResponse(
+                    key: const Key(drawerIconKey),
+                    onTap: () {
+                      _scaffoldKey.currentState!.openDrawer();
+                    },
+                    child: SvgPicture.asset(
+                      SVGUtil.SORT,
+                      color: provider.isBannerDark() ? Colors.white : Colors.black,
+                      height: 20.h,
+                      width: 20.w,
+                    )),
+              ),
+              if (remoteConfigService.getMaintenanceMode())
+                Positioned(
                   top: 0.16.sh,
                   right: 0,
                   child: const MaintenanceModeBannerWidget(),
+                ),
+              Positioned(
+                top: 0.2.sh - 30.r,
+                left: 0.5.sw - 30.r,
+                child: CircleAvatar(
+                  backgroundColor: AppColors.kMainBG,
+                  radius: 34.r,
+                  child: UserAvatarWidget(radius: 30.r),
+                ),
               ),
-            Positioned(
-              top: 0.2.sh - 30.r,
-              left: 0.5.sw - 30.r,
-              child: CircleAvatar(
-                backgroundColor: AppColors.kMainBG,
-                radius: 34.r,
-                child: UserAvatarWidget(radius: 30.r),
-              ),
-            ),
-            Positioned(
-              top: 0.2.sh + 20.r,
-              left: 0.5.sw + 20.r,
-              child: const UserAvatarPickerWidget(),
-            )
-          ],
+              Positioned(
+                top: 0.2.sh + 20.r,
+                left: 0.5.sw + 20.r,
+                child: const UserAvatarPickerWidget(),
+              )
+            ],
+          ),
         ),
         Text(
           homeProvider.accountPublicInfo.name,

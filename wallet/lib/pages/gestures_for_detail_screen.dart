@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
+import 'package:pylons_wallet/providers/items_provider.dart';
+import 'package:pylons_wallet/providers/recipes_provider.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 
@@ -12,7 +15,14 @@ class GesturesForDetailsScreen extends StatefulWidget {
   final dynamic viewModel;
   final Function(TapUpDetails)? tapUp;
 
-  const GesturesForDetailsScreen({Key? key, required this.child, required this.screen, required this.nft, required this.viewModel, this.tapUp}) : super(key: key);
+  const GesturesForDetailsScreen({
+    Key? key,
+    required this.child,
+    required this.screen,
+    required this.nft,
+    required this.viewModel,
+    this.tapUp,
+  }) : super(key: key);
 
   @override
   State<GesturesForDetailsScreen> createState() => _GesturesForDetailsScreenState();
@@ -92,11 +102,14 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
       final offsetDifference = initialOffset.dy - finalOffset.dy;
 
       if (offsetDifference.abs() > swipeConfig.verticalThreshold) {
-        _initialSwipeOffset = swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singular ? null : _finalSwipeOffset;
+        _initialSwipeOffset =
+            swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singular ? null : _finalSwipeOffset;
 
         final direction = offsetDifference > 0 ? SwipeDirection.up : SwipeDirection.down;
 
-        if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.continuous || _previousDirection == null || direction != _previousDirection) {
+        if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.continuous ||
+            _previousDirection == null ||
+            direction != _previousDirection) {
           _previousDirection = direction;
         }
       }
@@ -144,11 +157,14 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
       final offsetDifference = initialOffset.dx - finalOffset.dx;
 
       if (offsetDifference.abs() > swipeConfig.horizontalThreshold) {
-        _initialSwipeOffset = swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singular ? null : _finalSwipeOffset;
+        _initialSwipeOffset =
+            swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singular ? null : _finalSwipeOffset;
 
         final direction = offsetDifference > 0 ? SwipeDirection.left : SwipeDirection.right;
 
-        if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.continuous || _previousDirection == null || direction != _previousDirection) {
+        if (swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.continuous ||
+            _previousDirection == null ||
+            direction != _previousDirection) {
           _previousDirection = direction;
         }
       }
@@ -170,7 +186,7 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
               navigateToNextNft();
               return;
             }
-            navigateToPreviousNft();
+            // navigateToPreviousNft();
           }
         }
       }
@@ -182,23 +198,23 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
   }
 
   void navigateToNextNft() {
-    final collectionViewModel = GetIt.I.get<CollectionViewModel>();
+    final recipesProvider = context.read<RecipesProvider>();
+    final itemsProvider = context.read<ItemsProvider>();
     if (widget.nft.type == NftType.TYPE_RECIPE) {
-      int index = collectionViewModel.creations.indexOf(widget.nft);
+      int index = recipesProvider.nftCreations.indexOf(widget.nft);
 
-      if (collectionViewModel.creations.length - 1 == index) return;
+      if (recipesProvider.nftCreations.length - 1 == index) return;
       index = index + 1;
-      final NFT nft = collectionViewModel.creations.elementAt(index);
-
+      final NFT nft = recipesProvider.nftCreations.elementAt(index);
 
       Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
     }
     if (widget.nft.type == NftType.TYPE_ITEM) {
-      int index = collectionViewModel.purchases.indexOf(widget.nft);
+      int index = itemsProvider.items.indexOf(widget.nft);
 
-      if (collectionViewModel.purchases.length - 1 == index) return;
+      if (itemsProvider.items.length - 1 == index) return;
       index = index + 1;
-      final NFT nft = collectionViewModel.purchases.elementAt(index);
+      final NFT nft = itemsProvider.items.elementAt(index);
       Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
     }
   }
@@ -214,11 +230,11 @@ class _GesturesForDetailsScreenState extends State<GesturesForDetailsScreen> {
       Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
     }
     if (widget.nft.type == NftType.TYPE_ITEM) {
-      int index = collectionViewModel.purchases.indexOf(widget.nft);
+      int index = collectionViewModel.assets.indexOf(widget.nft);
 
       if (index == 0) return;
       index = index - 1;
-      final NFT nft = collectionViewModel.purchases.elementAt(index);
+      final NFT nft = collectionViewModel.assets.elementAt(index);
       Navigator.of(context).pushReplacementNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nft);
     }
   }

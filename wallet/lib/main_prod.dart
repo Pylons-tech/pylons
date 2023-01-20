@@ -9,18 +9,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart' as di;
-import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 
 bool isTablet = false;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(
+      ignoreSsl: true
+  );
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
 
@@ -30,7 +33,7 @@ Future<void> main() async {
 
   await di.init();
 
-  Stripe.publishableKey = sl<BaseEnv>().baseStripPubKey;
+  Stripe.publishableKey = di.sl<BaseEnv>().baseStripPubKey;
   Stripe.merchantIdentifier = "merchant.tech.pylons.wallet";
 
   runZonedGuarded<Future<void>>(() async {
@@ -58,9 +61,7 @@ Future<void> main() async {
 }
 
 Future<void> initializeAppCheck() async {
-  await FirebaseAppCheck.instance.activate(
-    webRecaptchaSiteKey: 'recaptcha-v3-site-key'
-  );
+  await FirebaseAppCheck.instance.activate(webRecaptchaSiteKey: 'recaptcha-v3-site-key');
   // FirebaseAppCheck when enforced would block incoming requests from Android and iOS in debug mode.
   // This kDebugMode check gets a android debug token from FirebaseAppCheck which can then be added on the Firebase console
   // iOS debug token from FirebaseAppCheck automatically get without method channel when run on debug mode which can then be added on the Firebase console
@@ -78,6 +79,7 @@ Future<void> initializeAppCheck() async {
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }

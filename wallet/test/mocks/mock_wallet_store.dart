@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
+import 'package:pylons_wallet/model/common.dart';
 import 'package:pylons_wallet/model/execution_list_by_recipe_response.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart';
@@ -18,17 +19,14 @@ import 'mock_wallet_public_info.dart';
 
 class MockWalletStore implements WalletsStore {
   @override
-  Future<Either<Failure, AccountPublicInfo>> importAlanWallet(
-      String mnemonic, String userName) {
+  Future<Either<Failure, AccountPublicInfo>> importAlanWallet(String mnemonic, String userName) {
     // TODO: implement importAlanWallet
     throw UnimplementedError();
   }
 
-
   @override
   Future<SdkIpcResponse> createRecipe(Map json) async {
-    return SdkIpcResponse.success(
-        data: MOCK_TRANSACTION.hash, sender: '', transaction: '');
+    return SdkIpcResponse.success(data: MOCK_TRANSACTION.hash, sender: '', transaction: '');
   }
 
   @override
@@ -42,6 +40,7 @@ class MockWalletStore implements WalletsStore {
     // TODO: implement executeRecipe
     throw UnimplementedError();
   }
+
 
   @override
   Future<SdkIpcResponse> fulfillTrade(Map json) {
@@ -68,7 +67,7 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<List<Item>> getItemsByOwner(String owner) {
+  Future<List<Item>> getItemsByOwner(Address owner) {
     return Completer<List<Item>>().future;
   }
 
@@ -91,16 +90,14 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<List<Execution>> getRecipeExecutions(
-      String cookbookID, String recipeID) {
+  Future<List<Execution>> getRecipeExecutions(String cookbookID, String recipeID) {
     // TODO: implement getRecipeEexecutions
     throw UnimplementedError();
   }
 
   @override
   Future<SdkIpcResponse<String>> createCookbook(Map json) async {
-    return SdkIpcResponse<String>.success(
-        data: MOCK_COOKBOOK, sender: '', transaction: MOCK_TRANSACTION.hash);
+    return SdkIpcResponse<String>.success(data: MOCK_COOKBOOK, sender: '', transaction: MOCK_TRANSACTION.hash);
   }
 
   @override
@@ -110,7 +107,7 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<List<Trade>> getTrades(String creator) {
+  Future<List<Trade>> getTrades(Address creator) {
     // TODO: implement getTrades
     throw UnimplementedError();
   }
@@ -123,21 +120,18 @@ class MockWalletStore implements WalletsStore {
 
   @override
   Future<SdkIpcResponse> updateCookbook(Map<dynamic, dynamic> jsonMap) async {
-    return SdkIpcResponse.success(
-        data: MOCK_TRANSACTION.hash, sender: '', transaction: '');
+    return SdkIpcResponse.success(data: MOCK_TRANSACTION.hash, sender: '', transaction: '');
   }
 
   @override
-  Future<Either<Failure, Recipe>> getRecipe(
-      String cookbookID, String recipeID) {
+  Future<Either<Failure, Recipe>> getRecipe(String cookbookID, String recipeID) {
     // TODO: implement getRecipe
     throw UnimplementedError();
   }
 
   @override
   Future<SdkIpcResponse> getProfile() async {
-    return SdkIpcResponse.success(
-        data: {"username": MOCK_USERNAME}, sender: '', transaction: '');
+    return SdkIpcResponse.success(data: {"username": MOCK_USERNAME}, sender: '', transaction: '');
   }
 
   @override
@@ -147,16 +141,13 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> getAllRecipesByCookbookId(
-      {required String cookbookId}) async {
+  Future<SdkIpcResponse> getAllRecipesByCookbookId({required String cookbookId}) async {
     return SdkIpcResponse.success(data: [], sender: '', transaction: '');
   }
 
   @override
-  Future<SdkIpcResponse> getCookbookByIdForSDK(
-      {required String cookbookId}) async {
-    return SdkIpcResponse.success(
-        data: MOCK_COOKBOOK, sender: '', transaction: '');
+  Future<SdkIpcResponse> getCookbookByIdForSDK({required String cookbookId}) async {
+    return SdkIpcResponse.success(data: MOCK_COOKBOOK, sender: '', transaction: '');
   }
 
   @override
@@ -181,27 +172,21 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> getRecipeByIdForSDK(
-      {required String cookbookId, required String recipeId}) async {
+  Future<SdkIpcResponse> getRecipeByIdForSDK({required String cookbookId, required String recipeId}) async {
     if (cookbookId != MOCK_COOKBOOK_ID && recipeId != MOCK_RECIPE_ID) {
       throw MOCK_ERROR;
     }
 
-    return SdkIpcResponse.success(
-        data: MOCK_RECIPE, sender: '', transaction: '');
+    return SdkIpcResponse.success(data: MOCK_RECIPE, sender: '', transaction: '');
   }
 
   @override
-  Future<SdkIpcResponse> getExecutionByRecipeId(
-      {required String cookbookId, required String recipeId}) async {
+  Future<SdkIpcResponse> getExecutionByRecipeId({required String cookbookId, required String recipeId}) async {
     if (cookbookId != MOCK_COOKBOOK_ID && recipeId != MOCK_RECIPE_ID) {
       throw MOCK_ERROR;
     }
 
-    return SdkIpcResponse.success(
-        data: ExecutionListByRecipeResponse.empty(),
-        sender: '',
-        transaction: '');
+    return SdkIpcResponse.success(data: ExecutionListByRecipeResponse.empty(), sender: '', transaction: '');
   }
 
   @override
@@ -211,28 +196,21 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> getItemByIdForSDK(
-      {required String cookBookId, required String itemId}) async {
+  Future<SdkIpcResponse> getItemByIdForSDK({required String cookBookId, required String itemId}) async {
     if (cookBookId != MOCK_COOKBOOK_ID && itemId != MOCK_ITEM_ID) {
       throw MOCK_ERROR;
     }
 
-    return SdkIpcResponse.success(
-        data: jsonEncode(MOCK_ITEM.toProto3Json()),
-        sender: '',
-        transaction: '');
+    return SdkIpcResponse.success(data: jsonEncode(MOCK_ITEM.toProto3Json()), sender: '', transaction: '');
   }
 
   @override
-  Future<SdkIpcResponse> getItemListByOwner({required String owner}) async {
-    if (owner != MOCK_ADDRESS) {
+  Future<SdkIpcResponse> getItemListByOwner({required Address owner}) async {
+    if (owner.toString() != MOCK_ADDRESS) {
       throw MOCK_ERROR;
     }
 
-    return SdkIpcResponse.success(
-        data: jsonEncode([MOCK_ITEM.toProto3Json()]),
-        sender: '',
-        transaction: '');
+    return SdkIpcResponse.success(data: jsonEncode([MOCK_ITEM.toProto3Json()]), sender: '', transaction: '');
   }
 
   @override
@@ -241,15 +219,12 @@ class MockWalletStore implements WalletsStore {
       throw MOCK_ERROR;
     }
 
-    return SdkIpcResponse.success(
-        data: jsonEncode(MOCK_EXECUTION.toProto3Json()),
-        sender: '',
-        transaction: '');
+    return SdkIpcResponse.success(data: jsonEncode(MOCK_EXECUTION.toProto3Json()), sender: '', transaction: '');
   }
 
   @override
-  Future<SdkIpcResponse> getTradesForSDK({required String creator}) async {
-    if (creator != MOCK_ADDRESS) {
+  Future<SdkIpcResponse> getTradesForSDK({required Address creator}) async {
+    if (creator.toString() != MOCK_ADDRESS) {
       throw MOCK_ERROR;
     }
 
@@ -257,9 +232,8 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Future<Either<Failure, AccountPublicInfo>> importPylonsAccount(
-      {required String mnemonic}) async {
-    if (mnemonic != MOCK_MNEMONIC ) {
+  Future<Either<Failure, AccountPublicInfo>> importPylonsAccount({required String mnemonic}) async {
+    if (mnemonic != MOCK_MNEMONIC) {
       throw MOCK_ERROR;
     }
 
@@ -291,14 +265,14 @@ class MockWalletStore implements WalletsStore {
 
   @override
   Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(
-      GoogleInAppPurchaseModel googleInAppPurchaseModel) {
+    GoogleInAppPurchaseModel googleInAppPurchaseModel,
+  ) {
     // TODO: implement sendGoogleInAppPurchaseCoinsRequest
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(
-      AppleInAppPurchaseModel appleInAppPurchaseModel) {
+  Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(AppleInAppPurchaseModel appleInAppPurchaseModel) {
     // TODO: implement sendAppleInAppPurchaseCoinsRequest
     throw UnimplementedError();
   }

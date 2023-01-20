@@ -19,7 +19,7 @@ class ExecuteRecipeHandler implements BaseHandler {
     final walletsStore = GetIt.I.get<WalletsStore>();
     final response = await walletsStore.executeRecipe(jsonMap);
 
- final concereteTypeToStringTypeResponse = response.finalizeTheSDKResponse(
+    final concereteTypeToStringTypeResponse = response.finalizeTheSDKResponse(
       action: sdkIpcMessage.action,
       sender: sdkIpcMessage.sender,
     );

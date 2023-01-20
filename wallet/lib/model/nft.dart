@@ -41,10 +41,12 @@ class NFT extends Equatable {
   AssetType assetType = AssetType.Image;
   String duration = "";
   String fileSize = "";
+  String fileExtension = "";
   String hashtags = "";
   String cid = "";
   String createdAt = "";
   bool realWorld = false;
+  bool isEnabled = true;
 
   NFT({
     this.url = "",
@@ -71,9 +73,11 @@ class NFT extends Equatable {
     this.assetType = AssetType.Image,
     this.duration = "",
     this.fileSize = "",
+    this.fileExtension = "",
     this.hashtags = "",
     this.createdAt = "",
     this.realWorld = false,
+    this.isEnabled = true,
   });
 
   Future<String> getOwnerAddress() async {
@@ -90,7 +94,8 @@ class NFT extends Equatable {
   }
 
   static Future<NFT?> fromItem(Item item) async {
-    if (item.strings.where((strKeyValue) => strKeyValue.key == kName).isEmpty && item.strings.where((strKeyValue) => strKeyValue.key == kNFTURL).isEmpty) {
+    if (item.strings.where((strKeyValue) => strKeyValue.key == kName).isEmpty &&
+        item.strings.where((strKeyValue) => strKeyValue.key == kNFTURL).isEmpty) {
       return null;
     }
     final walletsStore = GetIt.I.get<WalletsStore>();
@@ -99,26 +104,63 @@ class NFT extends Equatable {
       recipeID: item.recipeId,
       name: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kName).value,
       url: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kNFTURL).value.changeDomain(),
-      thumbnailUrl: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl, orElse: () => StringKeyValue(key: kThumbnailUrl, value: "")).value.changeDomain(),
+      thumbnailUrl: item.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl,
+              orElse: () => StringKeyValue(key: kThumbnailUrl, value: ""))
+          .value
+          .changeDomain(),
       description: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kDescription).value,
       fileSize: getFileSize(item),
-      creator: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kCreator, orElse: () => StringKeyValue(key: kCreator, value: "")).value,
-      cid: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kCID, orElse: () => StringKeyValue(key: kCID, value: "")).value,
-      appType: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kAppType, orElse: () => StringKeyValue(key: kAppType, value: "")).value,
-      width: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kWidth, orElse: () => LongKeyValue(key: kWidth, value: Int64())).value.toString(),
-      height: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kHeight, orElse: () => LongKeyValue(key: kHeight, value: Int64())).value.toString(),
+      creator: item.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kCreator,
+              orElse: () => StringKeyValue(key: kCreator, value: ""))
+          .value,
+      fileExtension: item.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kCreator,
+              orElse: () => StringKeyValue(key: kFileExtension, value: ""))
+          .value,
+      cid: item.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kCID, orElse: () => StringKeyValue(key: kCID, value: ""))
+          .value,
+      appType: item.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kAppType,
+              orElse: () => StringKeyValue(key: kAppType, value: ""))
+          .value,
+      width: item.longs
+          .firstWhere((longKeyValue) => longKeyValue.key == kWidth,
+              orElse: () => LongKeyValue(key: kWidth, value: Int64()))
+          .value
+          .toString(),
+      height: item.longs
+          .firstWhere((longKeyValue) => longKeyValue.key == kHeight,
+              orElse: () => LongKeyValue(key: kHeight, value: Int64()))
+          .value
+          .toString(),
       itemID: item.id,
       cookbookID: item.cookbookId,
       owner: owner,
       ibcCoins: IBCCoins.upylon,
       assetType: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kNftFormat).value.toAssetTypeEnum(),
-      duration: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kDuration, orElse: () => LongKeyValue(key: kDuration, value: Int64())).value.toInt().toSeconds(),
-      hashtags: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kHashtags, orElse: () => StringKeyValue(key: kHashtags, value: "")).value,
-      realWorld: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kRealWorld, orElse: () => StringKeyValue(key: kRealWorld, value: "false")).value == "true",
+      duration: item.longs
+          .firstWhere((longKeyValue) => longKeyValue.key == kDuration,
+              orElse: () => LongKeyValue(key: kDuration, value: Int64()))
+          .value
+          .toInt()
+          .toSeconds(),
+      hashtags: item.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kHashtags,
+              orElse: () => StringKeyValue(key: kHashtags, value: ""))
+          .value,
+      realWorld: item.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kRealWorld,
+                  orElse: () => StringKeyValue(key: kRealWorld, value: "false"))
+              .value ==
+          "true",
     );
   }
 
-  static String getFileSize(Item item) => item.strings.firstWhereOrNull((strKeyValue) => strKeyValue.key == kFileSize)?.value ?? "";
+  static String getFileSize(Item item) =>
+      item.strings.firstWhereOrNull((strKeyValue) => strKeyValue.key == kFileSize)?.value ?? "";
 
   static Future<NFT> fromTrade(Trade trade) async {
     final walletsStore = GetIt.I.get<WalletsStore>();
@@ -133,14 +175,38 @@ class NFT extends Equatable {
       type: NftType.TYPE_TRADE,
       name: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kName).value,
       url: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kNFTURL).value.changeDomain(),
-      thumbnailUrl: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl, orElse: () => StringKeyValue(key: kThumbnailUrl, value: "")).value.changeDomain(),
+      thumbnailUrl: item.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl,
+              orElse: () => StringKeyValue(key: kThumbnailUrl, value: ""))
+          .value
+          .changeDomain(),
       description: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kDescription).value,
       fileSize: getFileSize(item),
-      creator: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kCreator, orElse: () => StringKeyValue(key: kCreator, value: "")).value,
-      cid: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kCID, orElse: () => StringKeyValue(key: kCID, value: "")).value,
-      appType: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kAppType, orElse: () => StringKeyValue(key: kAppType, value: "")).value,
-      width: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kWidth, orElse: () => LongKeyValue(key: kWidth, value: Int64())).value.toString(),
-      height: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kHeight, orElse: () => LongKeyValue(key: kHeight, value: Int64())).value.toString(),
+      creator: item.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kCreator,
+              orElse: () => StringKeyValue(key: kCreator, value: ""))
+          .value,
+      fileExtension: item.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kFileExtension,
+              orElse: () => StringKeyValue(key: kCreator, value: ""))
+          .value,
+      cid: item.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kCID, orElse: () => StringKeyValue(key: kCID, value: ""))
+          .value,
+      appType: item.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kAppType,
+              orElse: () => StringKeyValue(key: kAppType, value: ""))
+          .value,
+      width: item.longs
+          .firstWhere((longKeyValue) => longKeyValue.key == kWidth,
+              orElse: () => LongKeyValue(key: kWidth, value: Int64()))
+          .value
+          .toString(),
+      height: item.longs
+          .firstWhere((longKeyValue) => longKeyValue.key == kHeight,
+              orElse: () => LongKeyValue(key: kHeight, value: Int64()))
+          .value
+          .toString(),
       price: trade.coinInputs.first.coins.first.amount,
       denom: trade.coinInputs.first.coins.first.denom,
       itemID: item.id,
@@ -149,9 +215,21 @@ class NFT extends Equatable {
       tradeID: trade.id.toString(),
       ibcCoins: trade.coinInputs.first.coins.first.denom.toIBCCoinsEnum(),
       assetType: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kNftFormat).value.toAssetTypeEnum(),
-      duration: item.longs.firstWhere((longKeyValue) => longKeyValue.key == kDuration, orElse: () => LongKeyValue(key: kDuration, value: Int64())).value.toInt().toSeconds(),
-      hashtags: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kHashtags, orElse: () => StringKeyValue(key: kHashtags, value: "")).value,
-      realWorld: item.strings.firstWhere((strKeyValue) => strKeyValue.key == kRealWorld, orElse: () => StringKeyValue(key: kRealWorld, value: "false")).value == "true",
+      duration: item.longs
+          .firstWhere((longKeyValue) => longKeyValue.key == kDuration,
+              orElse: () => LongKeyValue(key: kDuration, value: Int64()))
+          .value
+          .toInt()
+          .toSeconds(),
+      hashtags: item.strings
+          .firstWhere((strKeyValue) => strKeyValue.key == kHashtags,
+              orElse: () => StringKeyValue(key: kHashtags, value: ""))
+          .value,
+      realWorld: item.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kRealWorld,
+                  orElse: () => StringKeyValue(key: kRealWorld, value: "false"))
+              .value ==
+          "true",
     );
   }
 
@@ -159,37 +237,99 @@ class NFT extends Equatable {
     final royalties = (recipe.entries.itemOutputs.firstOrNull?.tradePercentage.fromBigInt().toInt() ?? 0).toString();
     final createdAt = recipe.createdAt.toInt().getCreatedAt();
 
+    if (recipe.entries.itemOutputs.firstOrNull!.strings.where((strKeyValue) => strKeyValue.key == kName).isEmpty &&
+        recipe.entries.itemOutputs.firstOrNull!.strings.where((strKeyValue) => strKeyValue.key == kNFTURL).isEmpty) {
+      return throw Exception('Not a NFT');
+    }
+
     return NFT(
       type: NftType.TYPE_RECIPE,
       recipeID: recipe.id,
       cookbookID: recipe.cookbookId,
-      name: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kName, orElse: () => StringParam()).value ?? "",
-      url: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kNFTURL, orElse: () => StringParam()).value.changeDomain() ?? "",
-      thumbnailUrl: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl, orElse: () => StringParam()).value.changeDomain() ?? "",
-      description: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kDescription, orElse: () => StringParam()).value ?? "",
-      fileSize: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kFileSize, orElse: () => StringParam()).value ?? "",
-      cid: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kCID, orElse: () => StringParam()).value ?? "",
-      appType: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kAppType, orElse: () => StringParam()).value ?? "",
-      creator: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kCreator, orElse: () => StringParam()).value ?? "",
-      width: recipe.entries.itemOutputs.firstOrNull?.longs.firstWhere((longKeyValue) => longKeyValue.key == kWidth, orElse: () => LongParam()).weightRanges.firstOrNull?.upper.toString() ?? "0",
-      height: recipe.entries.itemOutputs.firstOrNull?.longs.firstWhere((longKeyValue) => longKeyValue.key == kHeight, orElse: () => LongParam()).weightRanges.firstOrNull?.upper.toString() ?? "0",
+      name: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kName, orElse: () => StringParam())
+              .value ??
+          "",
+      url: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kNFTURL, orElse: () => StringParam())
+              .value
+              .changeDomain() ??
+          "",
+      thumbnailUrl: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl, orElse: () => StringParam())
+              .value
+              .changeDomain() ??
+          "",
+      description: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kDescription, orElse: () => StringParam())
+              .value ??
+          "",
+      fileSize: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kFileSize, orElse: () => StringParam())
+              .value ??
+          "",
+      cid: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kCID, orElse: () => StringParam())
+              .value ??
+          "",
+      appType: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kAppType, orElse: () => StringParam())
+              .value ??
+          "",
+      creator: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kCreator, orElse: () => StringParam())
+              .value ??
+          "",
+      fileExtension: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kFileExtension, orElse: () => StringParam())
+              .value ??
+          "",
+      width: recipe.entries.itemOutputs.firstOrNull?.longs
+              .firstWhere((longKeyValue) => longKeyValue.key == kWidth, orElse: () => LongParam())
+              .weightRanges
+              .firstOrNull
+              ?.upper
+              .toString() ??
+          "0",
+      height: recipe.entries.itemOutputs.firstOrNull?.longs
+              .firstWhere((longKeyValue) => longKeyValue.key == kHeight, orElse: () => LongParam())
+              .weightRanges
+              .firstOrNull
+              ?.upper
+              .toString() ??
+          "0",
       amountMinted: int.parse(recipe.entries.itemOutputs.firstOrNull?.amountMinted.toString() ?? "0"),
       quantity: recipe.entries.itemOutputs.firstOrNull?.quantity.toInt() ?? 0,
       tradePercentage: royalties == "0" ? kNone : "$royalties%",
       price: recipe.coinInputs.firstOrNull?.coins.firstOrNull?.amount ?? "0",
       denom: recipe.coinInputs.firstOrNull?.coins.firstOrNull?.denom ?? "",
       ibcCoins: recipe.coinInputs.firstOrNull?.coins.firstOrNull?.denom.toIBCCoinsEnum() ?? IBCCoins.upylon,
-      assetType: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kNftFormat, orElse: () => StringParam()).value.toAssetTypeEnum() ?? AssetType.Image,
-      duration:
-          recipe.entries.itemOutputs.firstOrNull?.longs.firstWhere((longKeyValue) => longKeyValue.key == kDuration, orElse: () => LongParam()).weightRanges.firstOrNull?.upper.toInt().toSeconds() ??
-              "0",
+      assetType: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kNftFormat, orElse: () => StringParam())
+              .value
+              .toAssetTypeEnum() ??
+          AssetType.Image,
+      duration: recipe.entries.itemOutputs.firstOrNull?.longs
+              .firstWhere((longKeyValue) => longKeyValue.key == kDuration, orElse: () => LongParam())
+              .weightRanges
+              .firstOrNull
+              ?.upper
+              .toInt()
+              .toSeconds() ??
+          "0",
       createdAt: createdAt,
-      hashtags: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kHashtags, orElse: () => StringParam()).value ?? "",
-      realWorld: recipe.entries.itemOutputs.firstOrNull?.strings.firstWhere((strKeyValue) => strKeyValue.key == kRealWorld, orElse: () => StringParam(key: kRealWorld, value: "false")).value == "true",
+      isEnabled: recipe.enabled,
+      hashtags: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kHashtags, orElse: () => StringParam())
+              .value ??
+          "",
+      realWorld: recipe.entries.itemOutputs.firstOrNull?.strings
+              .firstWhere((strKeyValue) => strKeyValue.key == kRealWorld,
+                  orElse: () => StringParam(key: kRealWorld, value: "false"))
+              .value ==
+          "true",
     );
   }
-
-
 
   static Future<NFT> fromTradeByID(Int64 tradeID) async {
     final walletsStore = GetIt.I.get<WalletsStore>();
@@ -207,6 +347,60 @@ class NFT extends Equatable {
 
     return NFT.fromRecipe(recipeEither.toOption().toNullable()!);
   }
+
+  factory NFT.fromJson(Map<String, Object?> json) {
+    return NFT(
+      name: json['name'].toString(),
+      type: json['type'].toNFTTypeEnum(),
+      url: json['url'].toString(),
+      thumbnailUrl: json['thumbnailUrl'].toString(),
+      description: json['description'].toString(),
+      fileSize: json['fileSize'].toString(),
+      creator: json['creator'].toString(),
+      fileExtension: json['fileExtension'].toString(),
+      cid: json['cid'].toString(),
+      appType: json['appType'].toString(),
+      width: json['width'].toString(),
+      height: json['height'].toString(),
+      price: json['price'].toString(),
+      denom: json['denom'].toString(),
+      itemID: json['itemID'].toString(),
+      cookbookID: json['cookbookID'].toString(),
+      owner: json['owner'].toString(),
+      tradeID: json['tradeID'].toString(),
+      ibcCoins: json['ibcCoins'].toString().toIBCCoinsEnum(),
+      assetType: json['assetType'].toString().toAssetTypeEnum(),
+      duration: json['duration'].toString(),
+      hashtags: json['hashtags'].toString(),
+      realWorld: json['realWorld']! as bool,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    "name" : name,
+    "type" : type.name,
+    "url" : url,
+    "thumbnailUrl" : thumbnailUrl,
+    "description" : description,
+    "fileSize" : fileSize,
+    "creator" : creator,
+    "fileExtension" : fileExtension, 
+    "cid" : cid,
+    "appType": appType,
+    "width" : width, 
+    "height" : height, 
+    "price" : price,
+    "denom" : denom,
+    "itemID" : itemID,
+    "cookbookID": cookbookID,
+    "owner" : owner,
+    "tradeID": tradeID,
+    "ibcCoins": ibcCoins.name,
+    "assetType" : assetType.name,
+    "duration" : duration,
+    "hashtags" : hashtags,
+    "realWorld" : realWorld,
+  };
 
   @override
   List<Object?> get props => [
@@ -234,6 +428,7 @@ class NFT extends Equatable {
         assetType,
         duration,
         fileSize,
+        fileExtension,
         hashtags,
         createdAt,
         realWorld,

@@ -7,19 +7,37 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
+func (k Keeper) sendValidatorRewards(ctx sdk.Context, sk types.StakingKeeper, totalRewardCoins sdk.Coins) {
+	distrPercentages := k.GetValidatorRewardsDistributionPercentages(ctx, sk)
+	delegatorsRewards := k.CalculateValidatorRewardsHelper(distrPercentages, totalRewardCoins)
+	if delegatorsRewards != nil {
+		err := k.SendRewards(ctx, delegatorsRewards)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func (k Keeper) sendDelegatorRewards(ctx sdk.Context, sk types.StakingKeeper, ak types.AccountKeeper, totalRewardCoins sdk.Coins) {
+	distrPercentages := k.GetDelegatorRewardsDistributionPercentages(ctx, sk, ak)
+	delegatorsRewards := k.CalculateDelegatorRewardsHelper(distrPercentages, totalRewardCoins)
+	if delegatorsRewards != nil {
+		err := k.SendRewards(ctx, delegatorsRewards)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
 func (k Keeper) BeforeEpochStart(ctx sdk.Context, epochIdentifier string, epochNumber int64, sk types.StakingKeeper) {
 }
 
-func (k Keeper) AfterEpochEnd(ctx sdk.Context, epochIdentifier string, epochNumber int64, sk types.StakingKeeper) {
+func (k Keeper) AfterEpochEnd(ctx sdk.Context, epochIdentifier string, epochNumber int64, sk types.StakingKeeper, ak types.AccountKeeper) {
 	if epochIdentifier == k.DistrEpochIdentifier(ctx) {
-		distrPercentages := k.GetRewardsDistributionPercentages(ctx, sk)
-		delegatorsRewards := k.CalculateDelegatorsRewards(ctx, distrPercentages)
-		if delegatorsRewards != nil {
-			err := k.SendRewards(ctx, delegatorsRewards)
-			if err != nil {
-				panic(err)
-			}
-		}
+		// get the balance of the feeCollector moduleAcc
+		rewardsTotalAmount := k.bankKeeper.SpendableCoins(ctx, k.FeeCollectorAddress())
+		k.sendValidatorRewards(ctx, sk, rewardsTotalAmount)
+		k.sendDelegatorRewards(ctx, sk, ak, rewardsTotalAmount)
 	}
 }
 
@@ -42,13 +60,14 @@ check if expected distribution corresponds
 type Hooks struct {
 	k  Keeper
 	sk types.StakingKeeper
+	ak types.AccountKeeper
 }
 
 var _ epochstypes.EpochHooks = Hooks{}
 
 // Hooks returns the wrapper struct
-func (k Keeper) Hooks(sk types.StakingKeeper) Hooks {
-	return Hooks{k: k, sk: sk}
+func (k Keeper) Hooks(sk types.StakingKeeper, ak types.AccountKeeper) Hooks {
+	return Hooks{k: k, sk: sk, ak: ak}
 }
 
 func (h Hooks) BeforeEpochStart(ctx sdk.Context, epochIdentifier string, epochNumber int64) {
@@ -56,5 +75,5 @@ func (h Hooks) BeforeEpochStart(ctx sdk.Context, epochIdentifier string, epochNu
 }
 
 func (h Hooks) AfterEpochEnd(ctx sdk.Context, epochIdentifier string, epochNumber int64) {
-	h.k.AfterEpochEnd(ctx, epochIdentifier, epochNumber, h.sk)
+	h.k.AfterEpochEnd(ctx, epochIdentifier, epochNumber, h.sk, h.ak)
 }

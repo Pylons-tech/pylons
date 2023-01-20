@@ -10,7 +10,12 @@ class NftFormat {
   final String badge;
   final Color color;
 
-  NftFormat({required this.format, required this.extensions, required this.badge, required this.color});
+  NftFormat({
+    required this.format,
+    required this.extensions,
+    required this.badge,
+    required this.color,
+  });
 
   String getExtensionsList() {
     final buffer = StringBuffer();
@@ -45,7 +50,7 @@ class NftFormat {
         NftFormat(
           format: NFTTypes.audio,
           extensions: ['wav', 'aiff', 'alac', 'flac', 'mp3', 'aac', 'wma', 'ogg'],
-          badge: SVGUtils.kSvgNftFormatAudio,
+          badge: SVGUtils.kAudioFileIcon,
           color: EaselAppTheme.kLightRed,
         ),
         NftFormat(

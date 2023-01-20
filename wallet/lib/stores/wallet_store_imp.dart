@@ -13,13 +13,14 @@ import 'package:pylons_wallet/ipc/handler/handler_factory.dart';
 import 'package:pylons_wallet/ipc/handler/handlers/get_profile_handler.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/model/balance.dart';
+import 'package:pylons_wallet/model/common.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
-import 'package:pylons_wallet/providers/accounts_provider.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
@@ -122,18 +123,48 @@ class WalletsStoreImp implements WalletsStore {
 
       if (result.isLeft()) {
         await deleteAccountCredentials(customTransactionSigningGateway, info);
-        return SdkIpcResponse.failure(sender: '', error: result.swap().toOption().toNullable().toString(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
+        return SdkIpcResponse.failure(
+          sender: '',
+          error: result.swap().toOption().toNullable().toString(),
+          errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
+        );
       }
 
-      return SdkIpcResponse.success(sender: '', data: result.getOrElse(() => TransactionResponse.initial()).hash, transaction: '');
+      final setUserNameResult = await repository.setUserName(
+        accountPublicInfo: info,
+        address: walletCreationModel.creatorAddress,
+        username: walletCreationModel.userName,
+      );
+
+      if (setUserNameResult.isLeft()) {
+        await deleteAccountCredentials(customTransactionSigningGateway, info);
+        return SdkIpcResponse.failure(
+          sender: '',
+          error: setUserNameResult.swap().toOption().toNullable().toString(),
+          errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
+        );
+      }
+
+      return SdkIpcResponse.success(
+        sender: '',
+        data: result.getOrElse(() => TransactionResponse.initial()).hash,
+        transaction: '',
+      );
     } catch (error) {
       await deleteAccountCredentials(customTransactionSigningGateway, walletCreationModel.creds.publicInfo);
       crashlyticsHelper.recordFatalError(error: error.toString());
     }
-    return SdkIpcResponse.failure(sender: '', error: LocaleKeys.account_creation_failed.tr(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
+    return SdkIpcResponse.failure(
+      sender: '',
+      error: LocaleKeys.account_creation_failed.tr(),
+      errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
+    );
   }
 
-  Future<Either<CredentialsStorageFailure, Unit>> deleteAccountCredentials(CustomTransactionSigningGateway customTransactionSigningGateway, AccountPublicInfo info) {
+  Future<Either<CredentialsStorageFailure, Unit>> deleteAccountCredentials(
+    CustomTransactionSigningGateway customTransactionSigningGateway,
+    AccountPublicInfo info,
+  ) {
     return customTransactionSigningGateway.deleteAccountCredentials(
       info: info,
     );
@@ -148,7 +179,11 @@ class WalletsStoreImp implements WalletsStore {
 
     final info = accountsList.last;
     final walletLookupKey = createWalletLookUp(info);
-    return customTransactionSigningGateway.signPureMessage(networkInfo: baseEnv.networkInfo, walletLookupKey: walletLookupKey, msg: message);
+    return customTransactionSigningGateway.signPureMessage(
+      networkInfo: baseEnv.networkInfo,
+      walletLookupKey: walletLookupKey,
+      msg: message,
+    );
   }
 
   Future<SdkIpcResponse> _signAndBroadcast(GeneratedMessage message) async {
@@ -160,21 +195,36 @@ class WalletsStoreImp implements WalletsStore {
 
     if (walletsResultEither.isLeft()) {
       crashlyticsHelper.recordFatalError(error: walletsResultEither.swap().toOption().toNullable()!.message);
-      return SdkIpcResponse.failure(sender: '', error: SOMETHING_WRONG_FETCHING_WALLETS, errorCode: HandlerFactory.ERR_FETCHING_WALLETS);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: SOMETHING_WRONG_FETCHING_WALLETS,
+        errorCode: HandlerFactory.ERR_FETCHING_WALLETS,
+      );
     }
 
     final accountsList = walletsResultEither.getOrElse(() => []);
     if (accountsList.isEmpty) {
-      return SdkIpcResponse.failure(sender: '', error: LocaleKeys.no_profile_found.tr(), errorCode: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: LocaleKeys.no_profile_found.tr(),
+        errorCode: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST,
+      );
     }
     final info = accountsList.last;
     final walletLookupKey = createWalletLookUp(info);
 
-    final signedTransaction = await transactionSigningGateway.signTransaction(transaction: unsignedTransaction, accountLookupKey: walletLookupKey);
+    final signedTransaction = await transactionSigningGateway.signTransaction(
+      transaction: unsignedTransaction,
+      accountLookupKey: walletLookupKey,
+    );
 
     if (signedTransaction.isLeft()) {
       crashlyticsHelper.recordFatalError(error: signedTransaction.swap().toOption().toNullable()!.toString());
-      return SdkIpcResponse.failure(sender: '', error: LocaleKeys.something_wrong_signing_transaction.tr(), errorCode: HandlerFactory.ERR_SIG_TRANSACTION);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: LocaleKeys.something_wrong_signing_transaction.tr(),
+        errorCode: HandlerFactory.ERR_SIG_TRANSACTION,
+      );
     }
 
     final response = await customTransactionSigningGateway.broadcastTransaction(
@@ -183,10 +233,18 @@ class WalletsStoreImp implements WalletsStore {
     );
 
     if (response.isLeft()) {
-      return SdkIpcResponse.failure(sender: '', error: response.swap().toOption().toNullable().toString(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: response.swap().toOption().toNullable().toString(),
+        errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
+      );
     }
 
-    return SdkIpcResponse.success(sender: '', data: response.getOrElse(() => TransactionResponse.initial()).hash, transaction: '');
+    return SdkIpcResponse.success(
+      sender: '',
+      data: response.getOrElse(() => TransactionResponse.initial()).hash,
+      transaction: '',
+    );
   }
 
   AccountLookupKey createWalletLookUp(AccountPublicInfo info) {
@@ -207,16 +265,28 @@ class WalletsStoreImp implements WalletsStore {
     msgObj.creator = accountProvider.accountPublicInfo!.publicAddress;
     final sdkResponse = await _signAndBroadcast(msgObj);
     if (!sdkResponse.success) {
-      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+      return SdkIpcResponse.failure(
+        error: sdkResponse.error,
+        sender: sdkResponse.sender,
+        errorCode: sdkResponse.errorCode,
+      );
     }
 
     final cookBookResponseEither = await repository.getCookbookBasedOnId(cookBookId: json["id"].toString());
 
     if (cookBookResponseEither.isLeft()) {
-      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+      return SdkIpcResponse.failure(
+        error: sdkResponse.error,
+        sender: sdkResponse.sender,
+        errorCode: sdkResponse.errorCode,
+      );
     }
 
-    return SdkIpcResponse.success(data: jsonEncode(cookBookResponseEither.toOption().toNullable()!.toProto3Json()), sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
+    return SdkIpcResponse.success(
+      data: jsonEncode(cookBookResponseEither.toOption().toNullable()!.toProto3Json()),
+      sender: sdkResponse.sender,
+      transaction: sdkResponse.data.toString(),
+    );
   }
 
   @override
@@ -225,16 +295,31 @@ class WalletsStoreImp implements WalletsStore {
     msgObj.creator = accountProvider.accountPublicInfo!.publicAddress;
     final sdkResponse = await _signAndBroadcast(msgObj);
     if (!sdkResponse.success) {
-      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+      return SdkIpcResponse.failure(
+        error: sdkResponse.error,
+        sender: sdkResponse.sender,
+        errorCode: sdkResponse.errorCode,
+      );
     }
 
-    final recipeResponseEither = await repository.getRecipe(recipeId: json["id"].toString(), cookBookId: json["cookbookId"].toString());
+    final recipeResponseEither = await repository.getRecipe(
+      recipeId: json["id"].toString(),
+      cookBookId: json["cookbookId"].toString(),
+    );
 
     if (recipeResponseEither.isLeft()) {
-      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+      return SdkIpcResponse.failure(
+        error: sdkResponse.error,
+        sender: sdkResponse.sender,
+        errorCode: sdkResponse.errorCode,
+      );
     }
 
-    return SdkIpcResponse.success(data: jsonEncode(recipeResponseEither.toOption().toNullable()!.toProto3Json()), sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
+    return SdkIpcResponse.success(
+      data: jsonEncode(recipeResponseEither.toOption().toNullable()!.toProto3Json()),
+      sender: sdkResponse.sender,
+      transaction: sdkResponse.data.toString(),
+    );
   }
 
   LocalTransactionModel createInitialLocalTransactionModel({
@@ -263,8 +348,16 @@ class WalletsStoreImp implements WalletsStore {
     return _signAndBroadcast(msgObj);
   }
 
-  Future<void> saveTransactionRecord({required String transactionHash, required TransactionStatus transactionStatus, required LocalTransactionModel txLocalModel}) async {
-    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(transactionHash: transactionHash, status: transactionStatus, transactionModel: txLocalModel);
+  Future<void> saveTransactionRecord({
+    required String transactionHash,
+    required TransactionStatus transactionStatus,
+    required LocalTransactionModel txLocalModel,
+  }) async {
+    final txLocalModelWithStatus = LocalTransactionModel.fromStatus(
+      transactionHash: transactionHash,
+      status: transactionStatus,
+      transactionModel: txLocalModel,
+    );
     repository.saveLocalTransaction(txLocalModelWithStatus);
   }
 
@@ -281,8 +374,16 @@ class WalletsStoreImp implements WalletsStore {
     );
 
     if (!await networkInfo.isConnected) {
-      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
-      return SdkIpcResponse.failure(sender: '', error: LocaleKeys.no_internet.tr(), errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
+      await saveTransactionRecord(
+        transactionHash: "",
+        transactionStatus: TransactionStatus.Failed,
+        txLocalModel: localTransactionModel,
+      );
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: LocaleKeys.no_internet.tr(),
+        errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
+      );
     }
 
     json.remove(kNftName);
@@ -293,8 +394,16 @@ class WalletsStoreImp implements WalletsStore {
     msgObj.creator = accountProvider.accountPublicInfo!.publicAddress;
     final sdkResponse = await _signAndBroadcast(msgObj);
     if (!sdkResponse.success) {
-      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
-      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+      await saveTransactionRecord(
+        transactionHash: "",
+        transactionStatus: TransactionStatus.Failed,
+        txLocalModel: localTransactionModel,
+      );
+      return SdkIpcResponse.failure(
+        error: sdkResponse.error,
+        sender: sdkResponse.sender,
+        errorCode: sdkResponse.errorCode,
+      );
     }
 
     final executionEither = await repository.getExecutionsByRecipeId(
@@ -302,17 +411,41 @@ class WalletsStoreImp implements WalletsStore {
       cookBookId: json.containsKey(kCookbookIdKey) ? json[kCookbookIdKey].toString() : json[kCookbookIdMap].toString(),
     );
     if (executionEither.isLeft()) {
-      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
-      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+      await saveTransactionRecord(
+        transactionHash: "",
+        transactionStatus: TransactionStatus.Failed,
+        txLocalModel: localTransactionModel,
+      );
+      return SdkIpcResponse.failure(
+        error: sdkResponse.error,
+        sender: sdkResponse.sender,
+        errorCode: sdkResponse.errorCode,
+      );
     }
 
     if (executionEither.toOption().toNullable()!.completedExecutions.isEmpty) {
-      await saveTransactionRecord(transactionHash: "", transactionStatus: TransactionStatus.Failed, txLocalModel: localTransactionModel);
-      return SdkIpcResponse.failure(error: sdkResponse.error, sender: sdkResponse.sender, errorCode: sdkResponse.errorCode);
+      await saveTransactionRecord(
+        transactionHash: "",
+        transactionStatus: TransactionStatus.Failed,
+        txLocalModel: localTransactionModel,
+      );
+      return SdkIpcResponse.failure(
+        error: sdkResponse.error,
+        sender: sdkResponse.sender,
+        errorCode: sdkResponse.errorCode,
+      );
     }
 
-    await saveTransactionRecord(transactionHash: sdkResponse.data.toString(), transactionStatus: TransactionStatus.Success, txLocalModel: localTransactionModel);
-    return SdkIpcResponse.success(data: executionEither.toOption().toNullable()!.completedExecutions.last, sender: sdkResponse.sender, transaction: sdkResponse.data.toString());
+    await saveTransactionRecord(
+      transactionHash: sdkResponse.data.toString(),
+      transactionStatus: TransactionStatus.Success,
+      txLocalModel: localTransactionModel,
+    );
+    return SdkIpcResponse.success(
+      data: executionEither.toOption().toNullable()!.completedExecutions.last,
+      sender: sdkResponse.sender,
+      transaction: sdkResponse.data.toString(),
+    );
   }
 
   @override
@@ -348,7 +481,7 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   @override
-  Future<List<Item>> getItemsByOwner(String owner) async {
+  Future<List<Item>> getItemsByOwner(Address owner) async {
     final response = await repository.getListItemByOwner(owner: owner);
     return response.getOrElse(() => []);
   }
@@ -366,7 +499,7 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   @override
-  Future<List<Trade>> getTrades(String creator) async {
+  Future<List<Trade>> getTrades(Address creator) async {
     final response = await repository.getTradesBasedOnCreator(creator: creator);
     return response.getOrElse(() => []);
   }
@@ -425,7 +558,11 @@ class WalletsStoreImp implements WalletsStore {
   @override
   Future<SdkIpcResponse> getProfile() async {
     if (accountProvider.accountPublicInfo == null) {
-      return SdkIpcResponse.failure(sender: '', error: LocaleKeys.create_profile_before_using.tr(), errorCode: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: LocaleKeys.create_profile_before_using.tr(),
+        errorCode: HandlerFactory.ERR_PROFILE_DOES_NOT_EXIST,
+      );
     }
 
     final publicAddress = accountProvider.accountPublicInfo!.publicAddress;
@@ -433,25 +570,41 @@ class WalletsStoreImp implements WalletsStore {
     final userNameEither = await repository.getUsername(address: publicAddress);
 
     if (userNameEither.isLeft()) {
-      return SdkIpcResponse.failure(sender: '', error: userNameEither.swap().toOption().toNullable()!.message, errorCode: HandlerFactory.ERR_CANNOT_FETCH_USERNAME);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: userNameEither.swap().toOption().toNullable()!.message,
+        errorCode: HandlerFactory.ERR_CANNOT_FETCH_USERNAME,
+      );
     }
 
     final stripeExistsInfoEither = repository.getStripeAccountExistsFromLocal();
 
     if (stripeExistsInfoEither.isLeft()) {
-      return SdkIpcResponse.failure(sender: '', error: stripeExistsInfoEither.swap().toOption().toNullable()!.message, errorCode: HandlerFactory.ERR_CANNOT_FETCH_USERNAME);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: stripeExistsInfoEither.swap().toOption().toNullable()!.message,
+        errorCode: HandlerFactory.ERR_CANNOT_FETCH_USERNAME,
+      );
     }
 
     final balanceResponseEither = await repository.getBalance(publicAddress);
 
     if (balanceResponseEither.isLeft()) {
-      return SdkIpcResponse.failure(sender: '', error: balanceResponseEither.swap().toOption().toNullable()!.message, errorCode: HandlerFactory.ERR_CANNOT_FETCH_USERNAME);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: balanceResponseEither.swap().toOption().toNullable()!.message,
+        errorCode: HandlerFactory.ERR_CANNOT_FETCH_USERNAME,
+      );
     }
 
-    final getItemListEither = await repository.getListItemByOwner(owner: publicAddress);
+    final getItemListEither = await repository.getListItemByOwner(owner: Address(publicAddress));
 
     if (getItemListEither.isLeft()) {
-      return SdkIpcResponse.failure(sender: '', error: getItemListEither.swap().toOption().toNullable()!.message, errorCode: HandlerFactory.ERR_CANNOT_FETCH_ITEM);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: getItemListEither.swap().toOption().toNullable()!.message,
+        errorCode: HandlerFactory.ERR_CANNOT_FETCH_ITEM,
+      );
     }
 
     final balancesList = balanceResponseEither.toOption().toNullable()!;
@@ -486,10 +639,18 @@ class WalletsStoreImp implements WalletsStore {
     final recipesEither = await repository.getRecipesBasedOnCookBookId(cookBookId: cookbookId);
 
     if (recipesEither.isLeft()) {
-      return SdkIpcResponse.failure(sender: '', error: recipesEither.swap().toOption().toNullable()!.message, errorCode: HandlerFactory.ERR_CANNOT_FETCH_RECIPES);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: recipesEither.swap().toOption().toNullable()!.message,
+        errorCode: HandlerFactory.ERR_CANNOT_FETCH_RECIPES,
+      );
     }
 
-    return SdkIpcResponse.success(data: recipesEither.getOrElse(() => []).map((recipe) => recipe.toProto3Json()).toList(), sender: '', transaction: '');
+    return SdkIpcResponse.success(
+      data: recipesEither.getOrElse(() => []).map((recipe) => recipe.toProto3Json()).toList(),
+      sender: '',
+      transaction: '',
+    );
   }
 
   @override
@@ -504,10 +665,18 @@ class WalletsStoreImp implements WalletsStore {
     final cookBookEither = await repository.getCookbookBasedOnId(cookBookId: cookbookId);
 
     if (cookBookEither.isLeft()) {
-      return SdkIpcResponse.failure(sender: '', error: cookBookEither.swap().toOption().toNullable()!.message, errorCode: HandlerFactory.ERR_CANNOT_FETCH_COOKBOOK);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: cookBookEither.swap().toOption().toNullable()!.message,
+        errorCode: HandlerFactory.ERR_CANNOT_FETCH_COOKBOOK,
+      );
     }
 
-    return SdkIpcResponse.success(data: jsonEncode(cookBookEither.toOption().toNullable()!.toProto3Json()), sender: '', transaction: '');
+    return SdkIpcResponse.success(
+      data: jsonEncode(cookBookEither.toOption().toNullable()!.toProto3Json()),
+      sender: '',
+      transaction: '',
+    );
   }
 
   @override
@@ -515,10 +684,18 @@ class WalletsStoreImp implements WalletsStore {
     final recipeEither = await repository.getRecipe(cookBookId: cookbookId, recipeId: recipeId);
 
     if (recipeEither.isLeft()) {
-      return SdkIpcResponse.failure(sender: '', error: recipeEither.swap().toOption().toNullable()!.message, errorCode: HandlerFactory.ERR_CANNOT_FETCH_RECIPE);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: recipeEither.swap().toOption().toNullable()!.message,
+        errorCode: HandlerFactory.ERR_CANNOT_FETCH_RECIPE,
+      );
     }
 
-    return SdkIpcResponse.success(data: jsonEncode(recipeEither.toOption().toNullable()!.toProto3Json()), sender: '', transaction: '');
+    return SdkIpcResponse.success(
+      data: jsonEncode(recipeEither.toOption().toNullable()!.toProto3Json()),
+      sender: '',
+      transaction: '',
+    );
   }
 
   @override
@@ -526,7 +703,11 @@ class WalletsStoreImp implements WalletsStore {
     final recipesEither = await repository.getExecutionsByRecipeId(cookBookId: cookbookId, recipeId: recipeId);
 
     if (recipesEither.isLeft()) {
-      return SdkIpcResponse.failure(sender: '', error: recipesEither.swap().toOption().toNullable()!.message, errorCode: HandlerFactory.ERR_CANNOT_FETCH_RECIPES);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: recipesEither.swap().toOption().toNullable()!.message,
+        errorCode: HandlerFactory.ERR_CANNOT_FETCH_RECIPES,
+      );
     }
     final response = recipesEither.toOption().toNullable()!;
 
@@ -551,7 +732,11 @@ class WalletsStoreImp implements WalletsStore {
     final getItemEither = await repository.getItem(cookBookId: cookBookId, itemId: itemId);
 
     if (getItemEither.isLeft()) {
-      return SdkIpcResponse.failure(sender: '', error: getItemEither.swap().toOption().toNullable()!.message, errorCode: HandlerFactory.ERR_CANNOT_FETCH_ITEM);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: getItemEither.swap().toOption().toNullable()!.message,
+        errorCode: HandlerFactory.ERR_CANNOT_FETCH_ITEM,
+      );
     }
 
     final response = getItemEither.toOption().toNullable()!;
@@ -560,16 +745,24 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> getItemListByOwner({required String owner}) async {
+  Future<SdkIpcResponse> getItemListByOwner({required Address owner}) async {
     final getItemListEither = await repository.getListItemByOwner(owner: owner);
 
     if (getItemListEither.isLeft()) {
-      return SdkIpcResponse.failure(sender: '', error: getItemListEither.swap().toOption().toNullable()!.message, errorCode: HandlerFactory.ERR_CANNOT_FETCH_ITEM);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: getItemListEither.swap().toOption().toNullable()!.message,
+        errorCode: HandlerFactory.ERR_CANNOT_FETCH_ITEM,
+      );
     }
 
     final response = getItemListEither.toOption().toNullable()!;
 
-    return SdkIpcResponse.success(data: jsonEncode(response.map((item) => item.toProto3Json()).toList()), sender: '', transaction: '');
+    return SdkIpcResponse.success(
+      data: jsonEncode(response.map((item) => item.toProto3Json()).toList()),
+      sender: '',
+      transaction: '',
+    );
   }
 
   @override
@@ -577,7 +770,11 @@ class WalletsStoreImp implements WalletsStore {
     final getExecutionEither = await repository.getExecutionBasedOnId(id: id);
 
     if (getExecutionEither.isLeft()) {
-      return SdkIpcResponse.failure(sender: '', error: getExecutionEither.swap().toOption().toNullable()!.message, errorCode: HandlerFactory.ERR_CANNOT_FETCH_ITEM);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: getExecutionEither.swap().toOption().toNullable()!.message,
+        errorCode: HandlerFactory.ERR_CANNOT_FETCH_ITEM,
+      );
     }
 
     final response = getExecutionEither.toOption().toNullable()!;
@@ -586,14 +783,22 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   @override
-  Future<SdkIpcResponse> getTradesForSDK({required String creator}) async {
+  Future<SdkIpcResponse> getTradesForSDK({required Address creator}) async {
     final tradesEither = await repository.getTradesBasedOnCreator(creator: creator);
 
     if (tradesEither.isLeft()) {
-      return SdkIpcResponse.failure(sender: '', error: tradesEither.swap().toOption().toNullable()!.message, errorCode: HandlerFactory.ERR_CANNOT_FETCH_TRADES);
+      return SdkIpcResponse.failure(
+        sender: '',
+        error: tradesEither.swap().toOption().toNullable()!.message,
+        errorCode: HandlerFactory.ERR_CANNOT_FETCH_TRADES,
+      );
     }
 
-    return SdkIpcResponse.success(data: jsonEncode(tradesEither.getOrElse(() => []).map((trade) => trade.toProto3Json()).toList()), sender: '', transaction: '');
+    return SdkIpcResponse.success(
+      data: jsonEncode(tradesEither.getOrElse(() => []).map((trade) => trade.toProto3Json()).toList()),
+      sender: '',
+      transaction: '',
+    );
   }
 
   @override
@@ -645,7 +850,7 @@ class WalletsStoreImp implements WalletsStore {
   Future<bool> deleteAccounts() async {
     final transactionSigningGateway = getTransactionSigningGateway();
     final customTransactionSigningGateway = getCustomTransactionSigningGateway();
-
+    accountProvider.accountPublicInfo = null;
     final response = await transactionSigningGateway.clearAllCredentials();
     final customResponse = await customTransactionSigningGateway.clearAllCredentials();
 
@@ -663,7 +868,9 @@ class WalletsStoreImp implements WalletsStore {
   }
 
   @override
-  Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(GoogleInAppPurchaseModel googleInAppPurchaseModel) {
+  Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(
+    GoogleInAppPurchaseModel googleInAppPurchaseModel,
+  ) {
     return repository.sendGoogleInAppPurchaseCoinsRequest(googleInAppPurchaseModel);
   }
 
