@@ -148,59 +148,59 @@
   dependencies:
     text-decoding "^1.0.0"
 
-"@firebase/app-types@0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@firebase/app-types/-/app-types-0.8.0.tgz#50a539a0a20bef8c50494d0615592fe2a384851f"
+"@firebase/app-types@0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@firebase/app-types/-/app-types-0.9.0.tgz#35b5c568341e9e263b29b3d2ba0e9cfc9ec7f01e"
 
-"@firebase/auth-interop-types@0.1.6":
-  version "0.1.6"
-  resolved "https://registry.npmjs.org/@firebase/auth-interop-types/-/auth-interop-types-0.1.6.tgz"
+"@firebase/auth-interop-types@0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@firebase/auth-interop-types/-/auth-interop-types-0.2.1.tgz#78884f24fa539e34a06c03612c75f222fcc33742"
 
-"@firebase/component@0.5.20":
-  version "0.5.20"
-  resolved "https://registry.yarnpkg.com/@firebase/component/-/component-0.5.20.tgz#52165b5f7d25c4ac9c679e4e48d6f7fa7bf722cf"
+"@firebase/component@0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@firebase/component/-/component-0.6.1.tgz#1099d18700fd35b114a2ddc4b5e91ce23971e45f"
   dependencies:
-    "@firebase/util" "1.7.2"
+    "@firebase/util" "1.9.0"
     tslib "^2.1.0"
 
-"@firebase/database-compat@^0.2.6":
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/@firebase/database-compat/-/database-compat-0.2.9.tgz#a1b4ecf94e11eadfc21aa48121b3ba7ea18a57ae"
+"@firebase/database-compat@^0.3.0":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@firebase/database-compat/-/database-compat-0.3.1.tgz#417043cb25388e44086dde0605f2ce7dc1bf9902"
   dependencies:
-    "@firebase/component" "0.5.20"
-    "@firebase/database" "0.13.9"
-    "@firebase/database-types" "0.9.16"
-    "@firebase/logger" "0.3.3"
-    "@firebase/util" "1.7.2"
+    "@firebase/component" "0.6.1"
+    "@firebase/database" "0.14.1"
+    "@firebase/database-types" "0.10.1"
+    "@firebase/logger" "0.4.0"
+    "@firebase/util" "1.9.0"
     tslib "^2.1.0"
 
-"@firebase/database-types@0.9.16", "@firebase/database-types@^0.9.13":
-  version "0.9.16"
-  resolved "https://registry.yarnpkg.com/@firebase/database-types/-/database-types-0.9.16.tgz#4f7f612c00346641a641ac689005857190e91ebc"
+"@firebase/database-types@0.10.1", "@firebase/database-types@^0.10.0":
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/@firebase/database-types/-/database-types-0.10.1.tgz#6c2288a7da869acd34f6b61493bb5f8d962b3a2a"
   dependencies:
-    "@firebase/app-types" "0.8.0"
-    "@firebase/util" "1.7.2"
+    "@firebase/app-types" "0.9.0"
+    "@firebase/util" "1.9.0"
 
-"@firebase/database@0.13.9":
-  version "0.13.9"
-  resolved "https://registry.yarnpkg.com/@firebase/database/-/database-0.13.9.tgz#8cf8c77fb837ed1a6fa85565ac8c28864b0957fb"
+"@firebase/database@0.14.1":
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/@firebase/database/-/database-0.14.1.tgz#2f2efaceb85ec51b6b10d3647340b44233f7c2ee"
   dependencies:
-    "@firebase/auth-interop-types" "0.1.6"
-    "@firebase/component" "0.5.20"
-    "@firebase/logger" "0.3.3"
-    "@firebase/util" "1.7.2"
+    "@firebase/auth-interop-types" "0.2.1"
+    "@firebase/component" "0.6.1"
+    "@firebase/logger" "0.4.0"
+    "@firebase/util" "1.9.0"
     faye-websocket "0.11.4"
     tslib "^2.1.0"
 
-"@firebase/logger@0.3.3":
-  version "0.3.3"
-  resolved "https://registry.npmjs.org/@firebase/logger/-/logger-0.3.3.tgz"
+"@firebase/logger@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@firebase/logger/-/logger-0.4.0.tgz#15ecc03c452525f9d47318ad9491b81d1810f113"
   dependencies:
     tslib "^2.1.0"
 
-"@firebase/util@1.7.2":
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/@firebase/util/-/util-1.7.2.tgz#dbdb259f141b5025a7faaaa38e2ea5df0be36ff5"
+"@firebase/util@1.9.0":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@firebase/util/-/util-1.9.0.tgz#4aad6d777d140296839874a48339c6544d3ff11c"
   dependencies:
     tslib "^2.1.0"
 
@@ -373,10 +373,6 @@
 "@lit/reactive-element@^1.3.0":
   version "1.3.3"
   resolved "https://registry.npmjs.org/@lit/reactive-element/-/reactive-element-1.3.3.tgz"
-
-"@panva/asn1.js@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@panva/asn1.js/-/asn1.js-1.0.0.tgz#dd55ae7b8129e02049f009408b97c61ccf9032f6"
 
 "@popmotion/easing@^1.0.1":
   version "1.0.2"
@@ -669,9 +665,9 @@
   version "0.0.29"
   resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
 
-"@types/jsonwebtoken@^8.5.9":
-  version "8.5.9"
-  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.5.9.tgz#2c064ecb0b3128d837d2764aa0b117b0ff6e4586"
+"@types/jsonwebtoken@^9.0.0":
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-9.0.1.tgz#29b1369c4774200d6d6f63135bf3d1ba3ef997a4"
   dependencies:
     "@types/node" "*"
 
@@ -2506,16 +2502,16 @@ find-up@^4.0.0:
     locate-path "^5.0.0"
     path-exists "^4.0.0"
 
-firebase-admin@^11.2.0:
-  version "11.2.0"
-  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-11.2.0.tgz#eeabeddcca03cb50cc04564e8d6f0db4d25878cf"
+firebase-admin@^11.5.0:
+  version "11.5.0"
+  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-11.5.0.tgz#86aa97e45fd9868be1759dccf04614c488945093"
   dependencies:
     "@fastify/busboy" "^1.1.0"
-    "@firebase/database-compat" "^0.2.6"
-    "@firebase/database-types" "^0.9.13"
+    "@firebase/database-compat" "^0.3.0"
+    "@firebase/database-types" "^0.10.0"
     "@types/node" ">=12.12.47"
-    jsonwebtoken "^8.5.1"
-    jwks-rsa "^2.1.4"
+    jsonwebtoken "^9.0.0"
+    jwks-rsa "^3.0.1"
     node-forge "^1.3.1"
     uuid "^9.0.0"
   optionalDependencies:
@@ -3111,11 +3107,9 @@ isobject@^3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/isobject/-/isobject-3.0.1.tgz"
 
-jose@^2.0.6:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/jose/-/jose-2.0.6.tgz#894ba19169af339d3911be933f913dd02fc57c7c"
-  dependencies:
-    "@panva/asn1.js" "^1.0.0"
+jose@^4.10.4:
+  version "4.11.2"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-4.11.2.tgz#d9699307c02e18ff56825843ba90e2fae9f09e23"
 
 jquery@^3.6.1:
   version "3.6.1"
@@ -3206,20 +3200,14 @@ jsonify@~0.0.0:
   version "0.0.0"
   resolved "https://registry.npmjs.org/jsonify/-/jsonify-0.0.0.tgz"
 
-jsonwebtoken@^8.5.1:
-  version "8.5.1"
-  resolved "https://registry.npmjs.org/jsonwebtoken/-/jsonwebtoken-8.5.1.tgz"
+jsonwebtoken@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-9.0.0.tgz#d0faf9ba1cc3a56255fe49c0961a67e520c1926d"
   dependencies:
     jws "^3.2.2"
-    lodash.includes "^4.3.0"
-    lodash.isboolean "^3.0.3"
-    lodash.isinteger "^4.0.4"
-    lodash.isnumber "^3.0.3"
-    lodash.isplainobject "^4.0.6"
-    lodash.isstring "^4.0.1"
-    lodash.once "^4.0.0"
+    lodash "^4.17.21"
     ms "^2.1.1"
-    semver "^5.6.0"
+    semver "^7.3.8"
 
 "jsx-ast-utils@^2.4.1 || ^3.0.0", jsx-ast-utils@^3.3.2:
   version "3.3.2"
@@ -3244,14 +3232,14 @@ jwa@^2.0.0:
     ecdsa-sig-formatter "1.0.11"
     safe-buffer "^5.0.1"
 
-jwks-rsa@^2.1.4:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/jwks-rsa/-/jwks-rsa-2.1.5.tgz#bb7bf8c5767836bc273bf5b27870066aca39c1bb"
+jwks-rsa@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/jwks-rsa/-/jwks-rsa-3.0.1.tgz#ba79ddca7ee7520f7bb26b942ef1aee91df8d7e4"
   dependencies:
     "@types/express" "^4.17.14"
-    "@types/jsonwebtoken" "^8.5.9"
+    "@types/jsonwebtoken" "^9.0.0"
     debug "^4.3.4"
-    jose "^2.0.6"
+    jose "^4.10.4"
     limiter "^1.1.5"
     lru-memoizer "^2.1.4"
 
@@ -3371,34 +3359,6 @@ lodash.curry@^4.0.1:
 lodash.flow@^3.3.0:
   version "3.5.0"
   resolved "https://registry.npmjs.org/lodash.flow/-/lodash.flow-3.5.0.tgz"
-
-lodash.includes@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.npmjs.org/lodash.includes/-/lodash.includes-4.3.0.tgz"
-
-lodash.isboolean@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.npmjs.org/lodash.isboolean/-/lodash.isboolean-3.0.3.tgz"
-
-lodash.isinteger@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.npmjs.org/lodash.isinteger/-/lodash.isinteger-4.0.4.tgz"
-
-lodash.isnumber@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.npmjs.org/lodash.isnumber/-/lodash.isnumber-3.0.3.tgz"
-
-lodash.isplainobject@^4.0.6:
-  version "4.0.6"
-  resolved "https://registry.npmjs.org/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz"
-
-lodash.isstring@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.npmjs.org/lodash.isstring/-/lodash.isstring-4.0.1.tgz"
-
-lodash.once@^4.0.0:
-  version "4.1.1"
-  resolved "https://registry.npmjs.org/lodash.once/-/lodash.once-4.1.1.tgz"
 
 lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.21:
   version "4.17.21"
@@ -4505,7 +4465,7 @@ secp256k1@^4.0.3:
     node-addon-api "^2.0.0"
     node-gyp-build "^4.2.0"
 
-semver@^5.5.0, semver@^5.5.1, semver@^5.6.0:
+semver@^5.5.0, semver@^5.5.1:
   version "5.7.1"
   resolved "https://registry.npmjs.org/semver/-/semver-5.7.1.tgz"
 
@@ -4513,7 +4473,7 @@ semver@^6.0.0, semver@^6.3.0:
   version "6.3.0"
   resolved "https://registry.npmjs.org/semver/-/semver-6.3.0.tgz"
 
-semver@^7.1.2:
+semver@^7.1.2, semver@^7.3.8:
   version "7.3.8"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.8.tgz#07a78feafb3f7b32347d725e33de7e2a2df67798"
   dependencies:
