@@ -198,11 +198,14 @@ abstract class WalletsStore {
   /// Input: [GoogleInAppPurchaseModel] contains the input data for the api.
   /// Output: if successful will return the [String] hash of the transaction
   /// else will give failure
-  Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(GoogleInAppPurchaseModel googleInAppPurchaseModel);
+  Future<Either<Failure, String>> sendGoogleInAppPurchaseCoinsRequest(
+      GoogleInAppPurchaseModel googleInAppPurchaseModel);
 
   /// This method will send apple in app purchase request to the chain
   /// Input: [AppleInAppPurchaseModel] contains the input data for the api.
   /// Output: if successful will return the [String] hash of the transaction
   /// else will give failure
   Future<Either<Failure, String>> sendAppleInAppPurchaseCoinsRequest(AppleInAppPurchaseModel appleInAppPurchaseModel);
+
+  Future<Either<WalletCreationFailure, String>> createAccountOnChainWithoutUserName();
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/buttons/pylons_get_started_button.dart';
+import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
 import 'package:pylons_wallet/generated/locale_keys.g.dart';
 import 'package:pylons_wallet/model/nft.dart';
@@ -34,14 +35,19 @@ class _AcceptPolicyScreenState extends State<AcceptPolicyScreen> {
       body: Stack(
         children: [
           SizedBox.expand(
-            child: getTypeWidget(
-              widget.nft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: getTypeWidget(
+                    widget.nft,
+                  ),
+                ),
+                SizedBox(
+                  height: 100.h,
+                ),
+              ],
             ),
-          ),
-          Container(
-            height: double.infinity,
-            width: double.infinity,
-            color: Colors.grey.withOpacity(0.3),
           ),
           ChangeNotifierProvider.value(
             value: widget.viewModel,
@@ -79,11 +85,14 @@ class _AcceptPolicyScreenState extends State<AcceptPolicyScreen> {
     }
   }
 
-  CachedNetworkImage imageWidget(String url) {
-    return CachedNetworkImage(
-      placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()),
-      imageUrl: url,
-      fit: BoxFit.contain,
+  ColoredBox imageWidget(String url) {
+    return ColoredBox(
+      color: Colors.black,
+      child: CachedNetworkImage(
+        placeholder: (context, url) => Shimmer(color: PylonsAppTheme.cardBackground, child: const SizedBox.expand()),
+        imageUrl: url,
+        fit: BoxFit.contain,
+      ),
     );
   }
 }
@@ -103,7 +112,7 @@ class AcceptPolicyScreenContent extends StatelessWidget {
       key: const Key(kAcceptPolicyPortionKey),
       alignment: Alignment.bottomCenter,
       child: ClipPath(
-        clipper: BottomLeftCurvedCorner(cuttingEdge: 100),
+        clipper: TopCornerCut(depth: 30),
         child: Container(
           height: 0.33.sh,
           width: double.infinity,
@@ -144,8 +153,8 @@ class AcceptPolicyScreenContent extends StatelessWidget {
               PylonsGetStartedButton(
                 key: const Key(kAcceptBottomSheetBtnKey),
                 enabled: viewModel.isCheckTermServices && viewModel.isCheckPrivacyPolicy,
-                onTap: () async {
-                  viewModel.onTapGetStartedButton(nft);
+                onTap: () {
+                  _onAcceptedTermsAndConditions(viewModel);
                 },
                 text: LocaleKeys.get_started.tr(),
                 loader: ValueNotifier(false),
@@ -154,13 +163,29 @@ class AcceptPolicyScreenContent extends StatelessWidget {
                 btnWidth: 260,
                 btnUnselectBGColor: AppColors.kDarkDividerColor,
                 fontSize: 14,
-                textColor: !(viewModel.isCheckTermServices && viewModel.isCheckPrivacyPolicy) ? AppColors.kUserInputTextColor : AppColors.kWhite,
+                textColor: !(viewModel.isCheckTermServices && viewModel.isCheckPrivacyPolicy)
+                    ? AppColors.kUserInputTextColor
+                    : AppColors.kWhite,
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _onAcceptedTermsAndConditions(AcceptPolicyViewModel viewModel) async {
+    final loading = Loading()..showLoading();
+
+    final response = await viewModel.createAccountOnChain();
+    loading.dismiss();
+
+    if (response.isLeft()) {
+      response.swap().toOption().toNullable()!.message.show();
+      return;
+    } else {
+      viewModel.onTapGetStartedButton(nft);
+    }
   }
 }
 

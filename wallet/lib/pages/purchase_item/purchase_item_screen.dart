@@ -18,7 +18,6 @@ import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_image_asset.
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/pdf_viewer.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart';
 import 'package:pylons_wallet/pages/gestures_for_detail_screen.dart';
-import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/purchase_item/clipper/buy_now_clipper.dart';
 import 'package:pylons_wallet/pages/purchase_item/purchase_item_view_model.dart' show PurchaseItemViewModel;
 import 'package:pylons_wallet/pages/purchase_item/widgets/buy_nft_button.dart';
@@ -273,7 +272,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner),
+                        _title(
+                          nft: viewModel.nft,
+                          owner:
+                              viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner,
+                        ),
                         SizedBox(
                           height: 18.h,
                         ),
@@ -282,37 +285,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         if (viewModel.showBuyNowButton(isPlatformAndroid: Platform.isAndroid))
                           BuyNFTButton(
                             onTapped: () async {
-                              if (viewModel.accountPublicInfo == null) {
-                                LocaleKeys.create_an_account_first.tr().show();
-                                Navigator.of(context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
-                                return;
-                              }
-                              bool balancesFetchResult = true;
-                              if (viewModel.nft.price != kZeroInt) {
-                                final balancesEither = await viewModel.shouldShowSwipeToBuy(
-                                  selectedDenom: viewModel.nft.denom,
-                                  requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
-                                );
-
-                                if (balancesEither.isLeft()) {
-                                  balancesEither.swap().getOrElse(() => '').show();
-                                  return;
-                                }
-
-                                balancesFetchResult = balancesEither.getOrElse(() => false);
-                              }
-
-                              viewModel.addLogForCart();
-
-                              final PayNowDialog payNowDialog = PayNowDialog(
-                                  buildContext: context,
-                                  nft: viewModel.nft,
-                                  purchaseItemViewModel: viewModel,
-                                  onPurchaseDone: (txData) {
-                                    showTransactionCompleteDialog(execution: txData);
-                                  },
-                                  shouldBuy: balancesFetchResult);
-                              payNowDialog.show();
+                              onBuyNowPressed();
                             },
                             nft: viewModel.nft,
                           ),
@@ -331,7 +304,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                       ),
                       Text(
                         viewModel.viewsCount.toString(),
-                        style: TextStyle(color: AppColors.kWhite, fontSize: 11.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w700),
+                        style: TextStyle(
+                          color: AppColors.kWhite,
+                          fontSize: 11.sp,
+                          fontFamily: kUniversalFontFamily,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       SizedBox(
                         height: 5.h,
@@ -424,7 +402,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           child: GestureDetector(
               onTap: () async {
                 if (viewModel.accountPublicInfo == null) return;
-                await viewModel.updateLikeStatus(recipeId: viewModel.nft.recipeID, cookBookID: viewModel.nft.cookbookID);
+                await viewModel.updateLikeStatus(
+                  recipeId: viewModel.nft.recipeID,
+                  cookBookID: viewModel.nft.cookbookID,
+                );
               },
               child: viewModel.isLiking ? getLikingLoader() : getLikeIcon(likedByMe: viewModel.likedByMe)),
         ),
@@ -433,7 +414,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
         ),
         Text(
           viewModel.likesCount.toString(),
-          style: TextStyle(color: AppColors.kWhite, fontSize: 10.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w700),
+          style: TextStyle(
+            color: AppColors.kWhite,
+            fontSize: 10.sp,
+            fontFamily: kUniversalFontFamily,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ],
     );
@@ -477,7 +463,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _title(nft: viewModel.nft, owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner),
+                  _title(
+                    nft: viewModel.nft,
+                    owner: viewModel.nft.type == NftType.TYPE_RECIPE ? viewModel.nft.creator : viewModel.nft.owner,
+                  ),
                   SizedBox(
                     height: 20.h,
                   ),
@@ -564,7 +553,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                 onChangeTab: viewModel.onChangeTab,
                               ),
                               SizedBox(height: 10.h),
-                              if (viewModel.nft.type == NftType.TYPE_RECIPE && viewModel.nftOwnershipHistoryList.isNotEmpty)
+                              if (viewModel.nft.type == NftType.TYPE_RECIPE &&
+                                  viewModel.nftOwnershipHistoryList.isNotEmpty)
                                 TabField(
                                   name: LocaleKeys.history.tr(),
                                   icon: 'history',
@@ -593,7 +583,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               ),
                               Text(
                                 viewModel.viewsCount.toString(),
-                                style: TextStyle(color: AppColors.kWhite, fontSize: 11.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w700),
+                                style: TextStyle(
+                                    color: AppColors.kWhite,
+                                    fontSize: 11.sp,
+                                    fontFamily: kUniversalFontFamily,
+                                    fontWeight: FontWeight.w700),
                               ),
                               SizedBox(
                                 height: 18.h,
@@ -601,9 +595,14 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               GestureDetector(
                                 onTap: () async {
                                   if (viewModel.accountPublicInfo == null) return;
-                                  await viewModel.updateLikeStatus(recipeId: viewModel.nft.recipeID, cookBookID: viewModel.nft.cookbookID);
+                                  await viewModel.updateLikeStatus(
+                                    recipeId: viewModel.nft.recipeID,
+                                    cookBookID: viewModel.nft.cookbookID,
+                                  );
                                 },
-                                child: viewModel.isLiking ? getLikingLoader() : getLikeIcon(likedByMe: viewModel.likedByMe),
+                                child: viewModel.isLiking
+                                    ? getLikingLoader()
+                                    : getLikeIcon(likedByMe: viewModel.likedByMe),
                               ),
                               SizedBox(
                                 height: 5.h,
@@ -686,7 +685,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SW),
             child: Container(
               color: AppColors.kDarkRed,
-
               height: 55.r,
               width: 55.r,
               child: Center(
@@ -694,7 +692,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   key: const Key(kCloseBottomSheetKey),
                   alignment: Alignment.topRight,
                   padding: EdgeInsets.only(
-
                     bottom: 15.h,
                     left: isTablet ? 16.w : 20.w,
                   ),
@@ -723,7 +720,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
             Flexible(
               child: Text(
                 nft.name,
-                style: TextStyle(color: AppColors.kWhite, fontSize: 18.sp, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.w700),
+                style: TextStyle(
+                  color: AppColors.kWhite,
+                  fontSize: 18.sp,
+                  fontFamily: kUniversalFontFamily,
+                  fontWeight: FontWeight.w700,
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -779,17 +781,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
 
     final txTime = getTransactionTimeStamp(execution.hasTxTime() ? execution.txTime.toInt() : null);
 
-    final model = TradeReceiptModel(
-      tradeId: viewModel.nft.tradeID,
-      pylonsFee: viewModel.nft.ibcCoins.getCoinWithDenominationAndSymbol(fee.toString(), showDecimal: true),
-      price: viewModel.nft.ibcCoins.getCoinWithDenominationAndSymbol(price.toString()),
-      createdBy: viewModel.nft.creator,
-      currency: viewModel.nft.ibcCoins.getAbbrev(),
-      soldBy: viewModel.nft.owner.isEmpty ? viewModel.nft.creator : viewModel.nft.owner,
-      transactionTime: txTime,
-      total: viewModel.nft.ibcCoins.getCoinWithDenominationAndSymbol(viewModel.nft.price, showDecimal: true),
-      nftName: viewModel.nft.name,
-      transactionID: txId,
+    final model = viewModel.createTradeReciptModel(
+      fee: fee,
+      price: price,
+      txId: txId,
+      txTime: txTime,
     );
 
     final TradeCompleteDialog tradeCompleteDialog = TradeCompleteDialog(
@@ -805,5 +801,46 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   void showReceiptDialog(TradeReceiptModel model) {
     final TradeReceiptDialog tradeReceiptDialog = TradeReceiptDialog(context: context, model: model);
     tradeReceiptDialog.show();
+  }
+
+  Future<void> onBuyNowPressed() async {
+    final viewModel = context.read<PurchaseItemViewModel>();
+
+    if (viewModel.accountPublicInfo == null) {
+      return;
+    } else {
+      await _onAccountExists();
+    }
+  }
+
+  Future<void> _onAccountExists() async {
+    final viewModel = context.read<PurchaseItemViewModel>();
+
+    bool balancesFetchResult = true;
+    if (viewModel.nft.price != kZeroInt) {
+      final balancesEither = await viewModel.shouldShowSwipeToBuy(
+        selectedDenom: viewModel.nft.denom,
+        requiredAmount: double.parse(viewModel.nft.price) / kBigIntBase,
+      );
+
+      if (balancesEither.isLeft()) {
+        balancesEither.swap().getOrElse(() => '').show();
+        return;
+      }
+
+      balancesFetchResult = balancesEither.getOrElse(() => false);
+    }
+
+    viewModel.addLogForCart();
+
+    final PayNowDialog payNowDialog = PayNowDialog(
+        buildContext: context,
+        nft: viewModel.nft,
+        purchaseItemViewModel: viewModel,
+        onPurchaseDone: (txData) {
+          showTransactionCompleteDialog(execution: txData);
+        },
+        shouldBuy: balancesFetchResult);
+    payNowDialog.show();
   }
 }
