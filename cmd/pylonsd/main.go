@@ -21,6 +21,7 @@ func main() {
 	rootCmd.AddCommand(pyloncmd.DevUpdate())
 	rootCmd.AddCommand(pyloncmd.Completion())
 	rootCmd.AddCommand(pyloncmd.DevCelCheck())
+	rootCmd.AddCommand(pyloncmd.DevParse())
 	removeLineBreaksInCobraArgs(rootCmd)
 
 	if err := svrcmd.Execute(rootCmd, "PYLONSD", app.DefaultNodeHome); err != nil {
