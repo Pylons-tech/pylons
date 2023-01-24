@@ -37,7 +37,7 @@ import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
 import 'package:transaction_signing_gateway/model/transaction_hash.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
-
+import 'package:cosmos_utils/mnemonic.dart';
 import '../generated/locale_keys.g.dart';
 
 class WalletsStoreImp implements WalletsStore {
@@ -84,11 +84,12 @@ class WalletsStoreImp implements WalletsStore {
       mnemonic: mnemonic,
     );
 
-    final response = await broadcastWalletCreationMessageOnBlockchain(WalletCreationModel(
-      creatorAddress: wallet.bech32Address,
-      userName: userName,
-      creds: creds,
-    ));
+    final response = await broadcastWalletCreationMessageOnBlockchain(
+        username: userName,
+        walletCreationModel: WalletCreationModel(
+          creatorAddress: Address(wallet.bech32Address),
+          creds: creds,
+        ));
 
     if (!response.success) {
       crashlyticsHelper.recordFatalError(error: response.error);
@@ -108,7 +109,10 @@ class WalletsStoreImp implements WalletsStore {
   /// [creatorAddress] The address of the new wallet
   /// [userName] The name that the user entered
 
-  Future<SdkIpcResponse> broadcastWalletCreationMessageOnBlockchain(WalletCreationModel walletCreationModel) async {
+  Future<SdkIpcResponse> broadcastWalletCreationMessageOnBlockchain({
+    required WalletCreationModel walletCreationModel,
+    required String username,
+  }) async {
     final customTransactionSigningGateway = getCustomTransactionSigningGateway();
 
     try {
@@ -132,8 +136,8 @@ class WalletsStoreImp implements WalletsStore {
 
       final setUserNameResult = await repository.setUserName(
         accountPublicInfo: info,
-        address: walletCreationModel.creatorAddress,
-        username: walletCreationModel.userName,
+        address: walletCreationModel.creatorAddress.toString(),
+        username: username,
       );
 
       if (setUserNameResult.isLeft()) {
@@ -855,6 +859,79 @@ class WalletsStoreImp implements WalletsStore {
     final customResponse = await customTransactionSigningGateway.clearAllCredentials();
 
     return response.isRight() && customResponse.isRight();
+  }
+
+  @override
+  Future<Either<WalletCreationFailure, String>> createAccountOnChainWithoutUserName() async {
+    final mnemonic = await generateMnemonic(strength: kMnemonicStrength);
+    final baseEnv = getBaseEnv();
+
+    final wallet = alan.Wallet.derive(mnemonic.split(" "), baseEnv.networkInfo);
+
+    final creds = AlanPrivateAccountCredentials(
+      publicInfo: AccountPublicInfo(
+        chainId: baseEnv.chainId,
+        name: wallet.bech32Address,
+        publicAddress: wallet.bech32Address,
+        accountId: wallet.bech32Address,
+      ),
+      mnemonic: mnemonic,
+    );
+
+    final accountCreationResponse = await _broadcastPylonsAddressOnChain(
+      WalletCreationModel(creds: creds, creatorAddress: Address(wallet.bech32Address)),
+    );
+
+    if (!accountCreationResponse.success) {
+      crashlyticsHelper.recordFatalError(error: accountCreationResponse.error);
+      return Left(WalletCreationFailure(LocaleKeys.wallet_creation_failed.tr()));
+    }
+
+    accountProvider.accountPublicInfo = creds.publicInfo;
+    await repository.saveMnemonic(mnemonic);
+
+    await repository.setUserIdentifierInAnalytics(address: creds.publicInfo.publicAddress);
+    crashlyticsHelper.setUserIdentifier(identifier: creds.publicInfo.publicAddress);
+
+    return Right(wallet.bech32Address);
+  }
+
+  Future<SdkIpcResponse> _broadcastPylonsAddressOnChain(WalletCreationModel walletCreationModel) async {
+    final customTransactionSigningGateway = getCustomTransactionSigningGateway();
+
+    try {
+      await customTransactionSigningGateway.storeAccountCredentials(
+        credentials: walletCreationModel.creds,
+        password: '',
+      );
+
+      final info = walletCreationModel.creds.publicInfo;
+
+      final result = await repository.createAccount(walletCreationModel: walletCreationModel, publicInfo: info);
+
+      if (result.isLeft()) {
+        await deleteAccountCredentials(customTransactionSigningGateway, info);
+        return SdkIpcResponse.failure(
+          sender: '',
+          error: result.swap().toOption().toNullable().toString(),
+          errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
+        );
+      }
+
+      return SdkIpcResponse.success(
+        sender: '',
+        data: result.getOrElse(() => TransactionResponse.initial()).hash,
+        transaction: '',
+      );
+    } catch (error) {
+      await deleteAccountCredentials(customTransactionSigningGateway, walletCreationModel.creds.publicInfo);
+      crashlyticsHelper.recordFatalError(error: error.toString());
+    }
+    return SdkIpcResponse.failure(
+      sender: '',
+      error: LocaleKeys.account_creation_failed.tr(),
+      errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
+    );
   }
 
   @override

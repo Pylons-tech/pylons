@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/loading.dart';
@@ -8,7 +7,6 @@ import 'package:pylons_wallet/ipc/models/sdk_ipc_message.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 
-import '../../../generated/locale_keys.g.dart';
 
 /// This handler handles the create cookbook transaction request from third-party apps
 class CreateCookbookHandler implements BaseHandler {
@@ -20,7 +18,7 @@ class CreateCookbookHandler implements BaseHandler {
 
     jsonMap.remove('nodeVersion');
     final loading = Loading()
-      ..showLoading(message: "${LocaleKeys.creating_cookbook.tr()}...");
+      ..showLoading();
 
     final walletsStore = GetIt.I.get<WalletsStore>();
 

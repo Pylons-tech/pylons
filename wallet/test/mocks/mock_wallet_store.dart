@@ -276,4 +276,10 @@ class MockWalletStore implements WalletsStore {
     // TODO: implement sendAppleInAppPurchaseCoinsRequest
     throw UnimplementedError();
   }
+  
+  @override
+  Future<Either<WalletCreationFailure, String>> createAccountOnChainWithoutUserName() {
+    // TODO: implement createAccountOnChainWithoutUserName
+    throw UnimplementedError();
+  }
 }

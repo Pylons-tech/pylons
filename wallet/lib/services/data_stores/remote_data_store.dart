@@ -1136,7 +1136,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
     if (walletsResultEither.isLeft()) {
       crashlyticsHelper.recordFatalError(error: walletsResultEither.swap().toOption().toNullable()!.message);
       throw const TransactionSigningFailure(
-          message: SOMETHING_WRONG_FETCHING_WALLETS, type: HandlerFactory.ERR_FETCHING_WALLETS);
+        message: SOMETHING_WRONG_FETCHING_WALLETS,
+        type: HandlerFactory.ERR_FETCHING_WALLETS,
+      );
     }
 
     final accountsList = walletsResultEither.getOrElse(() => []);
@@ -1231,7 +1233,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final walletLookupKey = createWalletLookUp(publicInfo);
 
     final msgObj = pylons.MsgCreateAccount(
-      creator: walletCreationModel.creatorAddress,
+      creator: walletCreationModel.creatorAddress.toString(),
       token: appCheckToken,
       referralAddress: referralToken,
     );
