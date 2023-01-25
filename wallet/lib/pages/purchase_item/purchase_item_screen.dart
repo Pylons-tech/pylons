@@ -662,15 +662,18 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
 
                         viewModel.addLogForCart();
 
-                        final PayNowDialog payNowDialog = PayNowDialog(
+                        if (mounted) {
+                          final PayNowDialog payNowDialog = PayNowDialog(
                             buildContext: context,
                             nft: viewModel.nft,
                             purchaseItemViewModel: viewModel,
                             onPurchaseDone: (txData) {
                               showTransactionCompleteDialog(execution: txData);
                             },
-                            shouldBuy: balancesFetchResult);
-                        payNowDialog.show();
+                            shouldBuy: balancesFetchResult,
+                          );
+                          payNowDialog.show();
+                        }
                       },
                       nft: viewModel.nft,
                     ),
@@ -833,14 +836,16 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
 
     viewModel.addLogForCart();
 
-    final PayNowDialog payNowDialog = PayNowDialog(
-        buildContext: context,
-        nft: viewModel.nft,
-        purchaseItemViewModel: viewModel,
-        onPurchaseDone: (txData) {
-          showTransactionCompleteDialog(execution: txData);
-        },
-        shouldBuy: balancesFetchResult);
-    payNowDialog.show();
+    if (mounted) {
+      final PayNowDialog payNowDialog = PayNowDialog(
+          buildContext: context,
+          nft: viewModel.nft,
+          purchaseItemViewModel: viewModel,
+          onPurchaseDone: (txData) {
+            showTransactionCompleteDialog(execution: txData);
+          },
+          shouldBuy: balancesFetchResult);
+      payNowDialog.show();
+    }
   }
 }

@@ -84,7 +84,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                       child: Text(
                         LocaleKeys.nft_preview_header.tr(),
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: EaselAppTheme.kLightPurple,
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w600,
@@ -123,7 +123,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                             Center(
                               child: Text(
                                 LocaleKeys.continue_key.tr(),
-                                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                       fontSize: 15.sp,
                                       color: EaselAppTheme.kWhite,
                                       fontWeight: FontWeight.w600,
