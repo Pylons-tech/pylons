@@ -486,8 +486,8 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
                       ),
                       Text(
                         viewModel.viewsCount == 1
-                            ? "${viewModel.viewsCount.toString()} ${LocaleKeys.view.tr()}"
-                            : "${viewModel.viewsCount.toString()} ${LocaleKeys.views.tr()}",
+                            ? "${viewModel.viewsCount} ${LocaleKeys.view.tr()}"
+                            : "${viewModel.viewsCount} ${LocaleKeys.views.tr()}",
                         style: TextStyle(color: Colors.white, fontSize: 12.sp),
                       )
                     ],

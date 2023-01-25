@@ -378,7 +378,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final baseApiUrl = getBaseEnv().baseMongoUrl;
     final body = {userIdKey: walletAddress};
 
-    final uri = Uri.parse("$baseApiUrl/api/actions/likes/${cookBookID.toString()}/${recipeId.toString()}");
+    final uri = Uri.parse("$baseApiUrl/api/actions/likes/$cookBookID/$recipeId");
 
     final response = await httpClient.post(uri, body: body).timeout(
           timeOutDuration,
@@ -402,7 +402,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
   Future<int> getLikesCount({required RecipeId recipeId, required CookbookId cookBookID}) async {
     final baseApiUrl = GetIt.I.get<BaseEnv>().baseMongoUrl;
 
-    final uri = Uri.parse("$baseApiUrl/api/actions/likes/${cookBookID.toString()}/${recipeId.toString()}");
+    final uri = Uri.parse("$baseApiUrl/api/actions/likes/$cookBookID/$recipeId");
 
     log("$baseApiUrl/api/actions/likes/$cookBookID/$recipeId");
 
@@ -438,7 +438,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final body = {userIdKey: walletAddress.toString()};
 
-    final uri = Uri.parse("$baseApiUrl/api/actions/views/${cookBookID.toString()}/${recipeId.toString()}");
+    final uri = Uri.parse("$baseApiUrl/api/actions/views/$cookBookID/$recipeId");
 
     final response = await httpClient.post(uri, body: body).timeout(
           timeOutDuration,
@@ -462,7 +462,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
   Future<int> getViewsCount({required RecipeId recipeId, required CookbookId cookBookID}) async {
     final baseApiUrl = GetIt.I.get<BaseEnv>().baseMongoUrl;
 
-    final uri = Uri.parse("$baseApiUrl/api/actions/views/${cookBookID.toString()}/${recipeId.toString()}");
+    final uri = Uri.parse("$baseApiUrl/api/actions/views/$cookBookID/$recipeId");
 
     final response = await httpClient.get(uri).timeout(
           timeOutDuration,
@@ -797,6 +797,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     required RecipeId recipeId,
   }) async {
     final baseApiUrl = getBaseEnv().baseApiUrl;
+    // ignore: noop_primitive_operations
     final uri = Uri.parse("$baseApiUrl/pylons/get_recipe_history/${cookBookId.toString()}/${recipeId.toString()}");
 
     final List<NftOwnershipHistory> historyList = [];

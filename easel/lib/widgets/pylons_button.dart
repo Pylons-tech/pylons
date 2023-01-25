@@ -49,7 +49,7 @@ class PylonsButton extends StatelessWidget {
               Center(
                 child: Text(
                   btnText,
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontSize: 15.sp,
                       color: textColor,
                       fontWeight: FontWeight.w600),

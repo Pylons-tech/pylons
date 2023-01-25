@@ -60,13 +60,13 @@ extension ConvertFromU on String {
 
 extension TransactionTypeEnumExt on String {
   TransactionTypeEnum toTransactionTypeEnum() {
-    return TransactionTypeEnum.values.firstWhere((e) => e.toString() == "TransactionTypeEnum.${this}", orElse: () => TransactionTypeEnum.Unknown);
+    return TransactionTypeEnum.values.firstWhere((e) => e.toString() == "TransactionTypeEnum.$this", orElse: () => TransactionTypeEnum.Unknown);
   }
 }
 
 extension TransactionStatusEnumExt on String {
   TransactionStatus toTransactionStatusEnum() {
-    return TransactionStatus.values.firstWhere((e) => e.toString() == "TransactionStatus.${this}", orElse: () => TransactionStatus.Undefined);
+    return TransactionStatus.values.firstWhere((e) => e.toString() == "TransactionStatus.$this", orElse: () => TransactionStatus.Undefined);
   }
 }
 

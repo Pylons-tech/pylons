@@ -94,7 +94,7 @@ class _BalanceIBCCoinsState extends State<BalanceIBCCoins> {
                           ibcCoins.getName(),
                           style: Theme.of(context)
                               .textTheme
-                              .subtitle1!
+                              .titleMedium!
                               .copyWith(color: Colors.white, fontSize: 18),
                         ),
                 ),
@@ -114,7 +114,7 @@ class _BalanceIBCCoinsState extends State<BalanceIBCCoins> {
                           "\$${"${widget.balance.amount.toHumanReadable()}".trimZero()}",
                           style: Theme.of(context)
                               .textTheme
-                              .subtitle1!
+                              .titleMedium!
                               .copyWith(
                                   color: Colors.white,
                                   fontSize: 24,
