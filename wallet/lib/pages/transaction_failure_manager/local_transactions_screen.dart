@@ -56,11 +56,13 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
     final DateTime date = DateTime.fromMillisecondsSinceEpoch(txTime);
     return Padding(
       padding: EdgeInsets.all(5.h),
-      child: Text("${monthStrMap[date.month]!} ${date.day.toString()}",
-          style: TextStyle(
-            color: AppColors.kDarkGrey,
-            fontSize: 12.sp,
-          )),
+      child: Text(
+        "${monthStrMap[date.month]!} ${date.day}",
+        style: TextStyle(
+          color: AppColors.kDarkGrey,
+          fontSize: 12.sp,
+        ),
+      ),
     );
   }
 
@@ -73,7 +75,9 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 6.w),
             child: Text(
-              isTablet ? txModel.transactionDescription : txModel.transactionDescription.trimStringMedium(stringTrimConstantMid),
+              isTablet
+                  ? txModel.transactionDescription
+                  : txModel.transactionDescription.trimStringMedium(stringTrimConstantMid),
               style: TextStyle(
                 color: AppColors.kBlack,
                 fontFamily: kUniversalFontFamily,
@@ -148,12 +152,18 @@ class _LocalTransactionsScreenState extends State<LocalTransactionsScreen> {
                   )),
               Text(
                 'all_transactions'.tr(),
-                style: TextStyle(color: AppColors.kBlack, fontFamily: kUniversalFontFamily, fontWeight: FontWeight.bold, fontSize: 20.sp),
+                style: TextStyle(
+                    color: AppColors.kBlack,
+                    fontFamily: kUniversalFontFamily,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.sp),
               ),
               SizedBox(width: 40.w),
             ],
           ),
-          Padding(padding: EdgeInsets.symmetric(horizontal: 10.w), child: buildScreenContent(value: failureManagerViewModel)),
+          Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              child: buildScreenContent(value: failureManagerViewModel)),
         ],
       ),
     ));

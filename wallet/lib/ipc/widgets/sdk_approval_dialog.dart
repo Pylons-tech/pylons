@@ -60,7 +60,7 @@ class SDKApprovalDialog {
                           Text(
                             '"${sdkipcMessage.sender}" ${LocaleKeys.would_like_to.tr()} ${sdkipcMessage.action}?',
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.headline6!.copyWith(
+                            style: Theme.of(context).textTheme.titleLarge!.copyWith(
                                   color: Colors.white,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w500,

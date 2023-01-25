@@ -78,14 +78,14 @@ class NoInternetDialog {
                     children: [
                       TextSpan(
                         text: LocaleKeys.no_internet_connection.tr(),
-                        style: Theme.of(navigatorKey.currentState!.context).textTheme.bodyText2!.copyWith(
+                        style: Theme.of(navigatorKey.currentState!.context).textTheme.bodyMedium!.copyWith(
                               color: Colors.white,
                               fontSize: 12.sp,
                             ),
                       ),
                       TextSpan(
                           text: email,
-                          style: Theme.of(navigatorKey.currentState!.context).textTheme.bodyText2!.copyWith(
+                          style: Theme.of(navigatorKey.currentState!.context).textTheme.bodyMedium!.copyWith(
                                 color: Colors.white,
                                 fontSize: 12.sp,
                               ),
@@ -107,7 +107,7 @@ class NoInternetDialog {
                     child: Center(
                       child: Text(
                         LocaleKeys.cancel.tr(),
-                        style: Theme.of(navigatorKey.currentState!.context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: AppColors.kWhite, fontWeight: FontWeight.w300),
+                        style: Theme.of(navigatorKey.currentState!.context).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: AppColors.kWhite, fontWeight: FontWeight.w300),
                       ),
                     ),
                   ),
