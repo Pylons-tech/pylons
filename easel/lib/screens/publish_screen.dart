@@ -31,11 +31,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:pylons_sdk/low_level.dart';
 
 import '../generated/locale_keys.g.dart';
 import '../widgets/video_progress_widget.dart';
+import 'welcome_screen/widgets/show_wallet_install_dialog.dart';
 
-TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: isTablet ? 11.sp : 13.sp);
+TextStyle _rowTitleTextStyle = TextStyle(
+  color: Colors.white,
+  fontWeight: FontWeight.w700,
+  fontSize: isTablet ? 11.sp : 13.sp,
+);
 
 class PublishScreen extends StatefulWidget {
   const PublishScreen({
@@ -66,7 +72,12 @@ class _PublishScreenState extends State<PublishScreen> {
       body: Consumer<EaselProvider>(builder: (_, easelProvider, __) {
         return Stack(
           children: [
-            Positioned(left: 0, right: 0, top: 0, bottom: 0, child: SizedBox(width: double.infinity, child: buildPreviewWidget(easelProvider))),
+            Positioned(
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                child: SizedBox(width: double.infinity, child: buildPreviewWidget(easelProvider))),
             Positioned(
                 left: 10.w,
                 top: 30.h,
@@ -175,7 +186,12 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
           BuildPublishBottomSheet(
             collapseStatus: viewModel.collapsed,
             onCollapsed: (context) => DecoratedBox(
-              decoration: const BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [EaselAppTheme.kTransparent, EaselAppTheme.kBlack])),
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [EaselAppTheme.kTransparent, EaselAppTheme.kBlack]),
+              ),
               child: Padding(
                 padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 8.h, bottom: 16.h),
                 child: Column(
@@ -220,7 +236,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                     builder: (_, value, __) {
                                       switch (value) {
                                         case ButtonState.loading:
-                                          return SizedBox(height: 20.h, width: 15.h, child: CircularProgressIndicator(strokeWidth: 2.w, color: EaselAppTheme.kWhite));
+                                          return SizedBox(
+                                              height: 20.h,
+                                              width: 15.h,
+                                              child: CircularProgressIndicator(
+                                                  strokeWidth: 2.w, color: EaselAppTheme.kWhite));
                                         case ButtonState.paused:
                                           return InkWell(
                                             onTap: () {
@@ -262,7 +282,8 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                           bufferedBarColor: EaselAppTheme.kLightGrey,
                                           buffered: value.buffered,
                                           total: value.total,
-                                          timeLabelTextStyle: TextStyle(color: EaselAppTheme.kWhite, fontWeight: FontWeight.w800, fontSize: 9.sp),
+                                          timeLabelTextStyle: TextStyle(
+                                              color: EaselAppTheme.kWhite, fontWeight: FontWeight.w800, fontSize: 9.sp),
                                           thumbRadius: 10.h,
                                           timeLabelPadding: 3.h,
                                           onSeek: (position) {
@@ -295,29 +316,33 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _title(nft: widget.nft, owner: widget.nft.type == NftType.TYPE_RECIPE.name ? "you".tr() : widget.nft.creator),
+                      _title(
+                          nft: widget.nft,
+                          owner: widget.nft.type == NftType.TYPE_RECIPE.name ? "you".tr() : widget.nft.creator),
                       SizedBox(
                         height: 30.h,
                       ),
                       if (widget.nft.hashtags.isNotEmpty) ...[
                         Wrap(
-                            spacing: 10.w,
-                            children: List.generate(
-                                viewModel.hashtagsList.length,
-                                (index) => SizedBox(
-                                      child: DetectableText(
-                                        text: "#${viewModel.hashtagsList[index]}",
-                                        detectionRegExp: detectionRegExp()!,
-                                        detectedStyle: TextStyle(
-                                          fontSize: 12.sp,
-                                          color: EaselAppTheme.kHashtagColor,
-                                        ),
-                                        basicStyle: TextStyle(
-                                          fontSize: 20.sp,
-                                        ),
-                                        onTap: (tappedText) {},
-                                      ),
-                                    ))),
+                          spacing: 10.w,
+                          children: List.generate(
+                            viewModel.hashtagsList.length,
+                            (index) => SizedBox(
+                              child: DetectableText(
+                                text: "#${viewModel.hashtagsList[index]}",
+                                detectionRegExp: detectionRegExp()!,
+                                detectedStyle: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: EaselAppTheme.kHashtagColor,
+                                ),
+                                basicStyle: TextStyle(
+                                  fontSize: 20.sp,
+                                ),
+                                onTap: (tappedText) {},
+                              ),
+                            ),
+                          ),
+                        ),
                         SizedBox(
                           height: 10.h,
                         ),
@@ -326,8 +351,16 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         widget.nft.description,
                         trimExpandedText: LocaleKeys.collapse.tr(),
                         trimCollapsedText: LocaleKeys.read_more.tr(),
-                        moreStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w300, color: EaselAppTheme.kLightPurple),
-                        lessStyle: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w300, color: EaselAppTheme.kLightPurple),
+                        moreStyle: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w300,
+                          color: EaselAppTheme.kLightPurple,
+                        ),
+                        lessStyle: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w300,
+                          color: EaselAppTheme.kLightPurple,
+                        ),
                       ),
                       SizedBox(
                         height: 30.h,
@@ -354,32 +387,23 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                               subtitle: "${widget.nft.tradePercentage}%",
                             ),
                             SizedBox(height: 5.h),
-                            buildRow(title: LocaleKeys.content_identifier.tr(), subtitle: widget.nft.cid, canCopy: true),
+                            buildRow(
+                                title: LocaleKeys.content_identifier.tr(), subtitle: widget.nft.cid, canCopy: true),
                             SizedBox(height: 5.h),
                             CidOrIpfs(
                               viewCid: (context) {
                                 return const SizedBox.shrink();
                               },
                               viewIpfs: (context) {
-                                return buildRow(title: LocaleKeys.asset_uri.tr(), subtitle: LocaleKeys.view.tr(), viewIPFS: true);
+                                return buildRow(
+                                    title: LocaleKeys.asset_uri.tr(), subtitle: LocaleKeys.view.tr(), viewIPFS: true);
                               },
                               type: widget.nft.assetType,
                             ),
                             SizedBox(height: 40.h),
                             PublishButton(
-                              onPress: () async {
-                                final navigator = Navigator.of(context);
-                                if (viewModel.nft.assetType == kAudioText) {
-                                  viewModel.disposeAudioController();
-                                }
-                                final bool isRecipeCreated = await viewModel.verifyPylonsAndMint(nft: viewModel.nft);
-                                if (!isRecipeCreated) {
-                                  return;
-                                }
-                                GetIt.I.get<CreatorHubViewModel>().changeSelectedCollection(CollectionType.published);
-                                navigator.popUntil((route) {
-                                  return route.settings.name == RouteUtil.kRouteCreatorHub;
-                                });
+                              onPress: () {
+                                onPublishPressed();
                               },
                             ),
                             SizedBox(
@@ -461,7 +485,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 text: LocaleKeys.created_by.tr(),
                 style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w500),
               ),
-              TextSpan(text: owner, style: TextStyle(color: EaselAppTheme.kLightPurple, fontSize: 18.sp, fontWeight: FontWeight.w500)),
+              TextSpan(
+                text: owner,
+                style: TextStyle(color: EaselAppTheme.kLightPurple, fontSize: 18.sp, fontWeight: FontWeight.w500),
+              ),
               WidgetSpan(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -495,7 +522,10 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   builder: (_, value, __) {
                     switch (value) {
                       case ButtonState.loading:
-                        return SizedBox(height: 22.h, width: 22.h, child: CircularProgressIndicator(strokeWidth: 2.w, color: EaselAppTheme.kWhite));
+                        return SizedBox(
+                            height: 22.h,
+                            width: 22.h,
+                            child: CircularProgressIndicator(strokeWidth: 2.w, color: EaselAppTheme.kWhite));
                       case ButtonState.paused:
                         return InkWell(
                           onTap: () {
@@ -537,7 +567,11 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         bufferedBarColor: EaselAppTheme.kLightGrey,
                         buffered: value.buffered,
                         total: value.total,
-                        timeLabelTextStyle: TextStyle(color: EaselAppTheme.kWhite, fontWeight: FontWeight.w800, fontSize: 9.sp),
+                        timeLabelTextStyle: TextStyle(
+                          color: EaselAppTheme.kWhite,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 9.sp,
+                        ),
                         thumbRadius: 6.h,
                         timeLabelPadding: 2.h,
                         onSeek: (position) {
@@ -620,6 +654,96 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
       ],
     );
   }
+
+  Future<void> onPublishPressed() async {
+    final viewModel = context.read<EaselProvider>();
+    final navigator = Navigator.of(context);
+    if (viewModel.nft.assetType == kAudioText) {
+      viewModel.disposeAudioController();
+    }
+
+    final PylonsLoadingAnimation pylonsLoadingAnimation = PylonsLoadingAnimation(context: context);
+    pylonsLoadingAnimation.show();
+
+    final isPylonsWalletExists = await PylonsWallet.instance.exists();
+
+    if (!isPylonsWalletExists) {
+      pylonsLoadingAnimation.hide();
+      _showInstallWalletDialog();
+      return;
+    }
+
+    final profileResponse = await viewModel.getProfile();
+
+    if (profileResponse.errorCode == kErrProfileNotExist) {
+      pylonsLoadingAnimation.hide();
+      _showCreateAccountDialog();
+      return;
+    }
+
+    if (viewModel.showStripeDialog()) {
+      pylonsLoadingAnimation.hide();
+      _showStripeDialog();
+      return;
+    }
+
+    final bool isRecipeCreated = await viewModel.createRecipe(nft: viewModel.nft);
+    pylonsLoadingAnimation.hide();
+    if (!isRecipeCreated) {
+      return;
+    }
+    GetIt.I.get<CreatorHubViewModel>().changeSelectedCollection(CollectionType.published);
+    navigator.popUntil((route) {
+      return route.settings.name == RouteUtil.kRouteCreatorHub;
+    });
+  }
+
+  void _showInstallWalletDialog() {
+    final ShowWalletInstallDialog showWalletInstallDialog = ShowWalletInstallDialog(
+      context: context,
+      errorMessage: LocaleKeys.download_pylons_description.tr(),
+      buttonMessage: LocaleKeys.download_pylons_app.tr(),
+      onButtonPressed: () {
+        PylonsWallet.instance.goToInstall();
+      },
+      onClose: () {
+        Navigator.of(navigatorKey.currentState!.overlay!.context).pop();
+      },
+    );
+
+    showWalletInstallDialog.show();
+  }
+
+  void _showCreateAccountDialog() {
+    final ShowWalletInstallDialog showWalletInstallDialog = ShowWalletInstallDialog(
+      context: context,
+      errorMessage: LocaleKeys.create_username_description.tr(),
+      buttonMessage: LocaleKeys.open_pylons_app.tr(),
+      onButtonPressed: () {
+        PylonsWallet.instance.goToPylons();
+      },
+      onClose: () {
+        Navigator.of(navigatorKey.currentState!.overlay!.context).pop();
+      },
+    );
+    showWalletInstallDialog.show();
+  }
+
+  void _showStripeDialog() {
+    final ShowWalletInstallDialog showWalletInstallDialog = ShowWalletInstallDialog(
+      context: context,
+      errorMessage: LocaleKeys.create_stripe_description.tr(),
+      buttonMessage: LocaleKeys.start.tr(),
+      onButtonPressed: () async {
+        Navigator.pop(navigatorKey.currentState!.overlay!.context);
+        await PylonsWallet.instance.showStripe();
+      },
+      onClose: () {
+        Navigator.of(navigatorKey.currentState!.overlay!.context).pop();
+      },
+    );
+    showWalletInstallDialog.show();
+  }
 }
 
 class BuildPublishBottomSheet extends StatelessWidget {
@@ -627,7 +751,9 @@ class BuildPublishBottomSheet extends StatelessWidget {
   final WidgetBuilder onOpened;
   final bool collapseStatus;
 
-  const BuildPublishBottomSheet({Key? key, required this.onCollapsed, required this.onOpened, required this.collapseStatus}) : super(key: key);
+  const BuildPublishBottomSheet(
+      {Key? key, required this.onCollapsed, required this.onOpened, required this.collapseStatus})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
