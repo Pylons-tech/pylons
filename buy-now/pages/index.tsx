@@ -37,16 +37,15 @@ export default function EaselBuyMainPage({
     const resCoins: any = coinInputs[0]?.coins[0];
     denom = resCoins.denom;
     if (resCoins?.denom === "USD") {
-      price = `${Math.floor(resCoins.amount / 100)}.${
-        resCoins.amount % 100
-      } USD`;
+      price = `${Math.floor(resCoins.amount / 100)}.${resCoins.amount % 100
+        } USD`;
     } else {
       const coins: any[] = settings?.public?.coins;
       coin = coins?.length
         ? coins.find(
-            (coin) =>
-              coin?.denom?.toLowerCase() === resCoins?.denom?.toLowerCase()
-          )
+          (coin) =>
+            coin?.denom?.toLowerCase() === resCoins?.denom?.toLowerCase()
+        )
         : null;
       if (coin) {
         const displayName: string = coin?.displayName ?? "";
@@ -147,7 +146,7 @@ export async function getServerSideProps({ res, query }: any): Promise<any> {
         destination: HOMEPAGE_URL,
       },
     };
-  } 
+  }
   try {
     const data = await fetch(
       `${baseURL}/pylons/recipe/${cookbookId}/${recipeId}`
@@ -167,11 +166,6 @@ export async function getServerSideProps({ res, query }: any): Promise<any> {
       },
     };
   } catch (error) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/404",
-      },
-    };
+    throw (error);
   }
 }
