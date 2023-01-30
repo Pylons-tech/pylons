@@ -3,6 +3,8 @@ steps:
     args:
       - build
       - '--no-cache'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_API_KEY=$_NEXT_PUBLIC_API_KEY'
       - '-t'
       - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
       - .

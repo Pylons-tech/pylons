@@ -209,7 +209,7 @@ abstract class RemoteDataStore {
   /// This method is used get the list if items based on [owner]
   /// Input: [owner] will be the owner name to get the list of his items
   /// Output : [pylons.Item] will be the list of items based on their owner
-  Future<List<pylons.Item>> getListItemByOwner({required String owner});
+  Future<List<pylons.Item>> getListItemByOwner({required Address owner});
 
   /// This method is used get the execution based on its [id]
   /// Input: [id] will be the execution id
@@ -219,7 +219,7 @@ abstract class RemoteDataStore {
   /// This method is used get the list of trades based on its [creator]
   /// Input: [creator] will be the creator name to get trades
   /// Output : [pylons.Trade] will be the the list of trades based on its [creator]
-  Future<List<pylons.Trade>> getTradesBasedOnCreator({required String creator});
+  Future<List<pylons.Trade>> getTradesBasedOnCreator({required Address creator});
 
   /// This method is used get the list of cookbooks based on its wallet [address]
   /// Input: [address] will the public address of user's wallet
@@ -1009,9 +1009,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<List<pylons.Item>> getListItemByOwner({required String owner}) async {
+  Future<List<pylons.Item>> getListItemByOwner({required Address owner}) async {
     final pylons.QueryClient queryClient = getQueryClient();
-    final queryListItemByOwner = pylons.QueryListItemByOwnerRequest()..owner = owner;
+    final queryListItemByOwner = pylons.QueryListItemByOwnerRequest()..owner = owner.toString();
 
     final response = await queryClient.listItemByOwner(queryListItemByOwner);
 
@@ -1074,9 +1074,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<List<pylons.Trade>> getTradesBasedOnCreator({required String creator}) async {
+  Future<List<pylons.Trade>> getTradesBasedOnCreator({required Address creator}) async {
     final pylons.QueryClient queryClient = getQueryClient();
-    final request = pylons.QueryListTradesByCreatorRequest.create()..creator = creator;
+    final request = pylons.QueryListTradesByCreatorRequest.create()..creator = creator.toString();
 
     final response = await queryClient.listTradesByCreator(request);
 
