@@ -58,7 +58,7 @@ dependencies:
   flutter_svg_provider: ^1.0.3
   focus_detector: ^2.0.1
   get_it: ^7.2.0  
-  google_fonts: ^3.0.1
+  google_fonts: ^4.0.1
   image_cropper: ^3.0.0
   internet_connection_checker: ^0.0.1+4
   intl: ^0.17.0
