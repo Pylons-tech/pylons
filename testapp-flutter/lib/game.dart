@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:testapp_flutter/character.dart';
+import 'package:testapp_flutter/spinner.dart';
 
 class Game extends StatefulWidget {
   const Game({Key? key, required this.title}) : super(key: key);
@@ -31,6 +32,7 @@ class _GameState extends State<Game> {
   }
 
   Future<void> _bootstrap() async {
+    await PylonsWallet.verifyOrInstall();
     await Cookbook.load("appTestCookbook");
     await _checkRemoteState();
     if (_noValidCharacter()) {
@@ -57,7 +59,7 @@ class _GameState extends State<Game> {
                 Text(flavorText, style: const TextStyle(fontSize: 18)),
                 const Divider(),
                 showTopLevelMenu ? _TopLevelMenu(this) : Container(),
-              ]) : Container()),
+              ]) : const Text("Please wait...")),
     );
   }
 
@@ -130,7 +132,7 @@ class _GameState extends State<Game> {
     if (!_canSurviveTroll()) {
       await _combatRecipeHandlerUnwinnable(buffer, 'RecipeTestAppFightDragonUnarmed');
     } else {
-      await _combatRecipeHandlerWinnable(buffer, 'RecipeTestAppFightDragonArmed');
+      await _combatRecipeHandlerWinnable(buffer, 'RecipeTestAppFightDragonArmedNew');
     }
   }
 
@@ -169,7 +171,10 @@ class _GameState extends State<Game> {
 
   Future<void> _restRecipeHandler(String rcp) async {
     final buffer = StringBuffer("Resting...!");
-    setState(() { flavorText = buffer.toString(); });
+    setState(() {
+      Spinner.enable(context);
+      flavorText = buffer.toString();
+    });
     final recipe = Recipe.let(rcp);
     await recipe.executeWith(profile!, [character!.item]).onError((error, stackTrace) {
       throw Exception("rest tx should not fail");
@@ -182,13 +187,17 @@ class _GameState extends State<Game> {
       buffer.writeln("Recovered ${character!.curHp - lastHp} HP!");
     }
     setState(() {
+      Spinner.disable(context);
       flavorText = buffer.toString();
       showTopLevelMenu = true;
     });
   }
 
   Future<void> _characterUpgradeRecipeHandler(String rcp, String successText) async {
-    setState(() { showTopLevelMenu = false; });
+    setState(() {
+      Spinner.enable(context);
+      showTopLevelMenu = false;
+    });
     final recipe = Recipe.let(rcp);
     await recipe.executeWith(profile!, [character!.item]).onError((error, stackTrace) {
       throw Exception("purchase tx should not fail");
@@ -205,11 +214,17 @@ class _GameState extends State<Game> {
       buffer.writeln("Spent ${lastShards - character!.shards} shards!");
     }
     setState(() { flavorText = buffer.toString(); });
-    setState(() { showTopLevelMenu = true; });
+    setState(() {
+      Spinner.disable(context);
+      showTopLevelMenu = true;
+    });
   }
 
   Future<void> _combatRecipeHandlerWinnable(StringBuffer buffer, String rcp) async {
     final recipe = Recipe.let(rcp);
+    setState(() {
+      Spinner.enable(context);
+    });
     await recipe.executeWith(profile!, [character!.item]).onError((error, stackTrace) {
       throw Exception("combat tx should not fail");
     });
@@ -231,6 +246,7 @@ class _GameState extends State<Game> {
       buffer.writeln("Found ${character!.shards - lastShards} shards!");
     }
     setState(() {
+      Spinner.disable(context);
       showTopLevelMenu = true;
       flavorText = buffer.toString();
     });
@@ -238,6 +254,9 @@ class _GameState extends State<Game> {
 
   Future<void> _combatRecipeHandlerUnwinnable(StringBuffer buffer, String rcp) async {
     final recipe = Recipe.let(rcp);
+    setState(() {
+      Spinner.enable(context);
+    });
     await recipe.executeWith(profile!, [character!.item]).onError((error, stackTrace) {
       throw Exception("combat tx should not fail");
     });
@@ -252,6 +271,7 @@ class _GameState extends State<Game> {
       if (character!.isDead()) buffer.writeln(("You are dead."));
     }
     setState(() {
+      Spinner.disable(context);
       flavorText = buffer.toString();
     });
   }

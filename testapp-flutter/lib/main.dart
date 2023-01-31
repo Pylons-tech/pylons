@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
+import 'package:testapp_flutter/spinner.dart';
 
 import 'game.dart';
+import "spinner.dart";
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,21 +22,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    super.initState();
-        () async {
-      await PylonsWallet.verifyOrInstall();
-    };
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'BlockSlayer',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Game(title: 'Welcome to BlockSlayer'),
+      home: const Spinner(child: Game(title: 'Welcome to BlockSlayer'))
     );
   }
 }
