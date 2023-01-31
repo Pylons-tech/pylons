@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tech.pylons.flame_demor">
+    package="tech.pylons.flame_demo">
 
 
     <queries>
