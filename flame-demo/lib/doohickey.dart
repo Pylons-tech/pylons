@@ -7,7 +7,7 @@ import 'package:pylons_flame_demo/pylons_component.dart';
 class Doohickey extends PositionComponent {
   static final _paint = Paint()..color = Colors.white;
   double _timeSinceLastProfileFetch = 0;
-  static const double _profileLifespan = 35; // seconds
+  static const double _profileLifespan = 15; // seconds
   bool _dispatchedAction = false;
   late PylonsGame game;
 
@@ -32,6 +32,7 @@ class Doohickey extends PositionComponent {
           _timeSinceLastProfileFetch = 0;
           _dispatchedAction = false;
           nameNotifier.updateName(prf?.username != null ? prf!.username : "ERROR");
+          return;
         }
       ]);
     } else {

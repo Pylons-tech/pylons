@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:pylons_sdk/pylons_sdk.dart';
 import 'package:flame/components.dart';
 
@@ -11,34 +12,39 @@ class PylonsComponent extends Component {
   bool get ready => _ready;
 
   @override
-  void onMount() {
-    super.onMount();
+  void onLoad() {
+    super.onLoad();
     if (_instance != null) {
       throw Exception("There should be only one instance of PylonsComponent");
     }
     _instance = this;
-  }
-
-  @override
-  void onLoad() {
-    super.onLoad();
     PylonsWallet.verifyOrInstall().then(
             (_) async {
-              await Cookbook.load("appTestCookbook");
-              _ready = true;
-            }
+          await Cookbook.load("appTestCookbook");
+          _ready = true;
+        }
     );
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    for (final action in _actions) {
-      if (action.done) {
-        for (final callback in action.callbacks) {
-          callback(action.value);
+    for (int i = _actions.length - 1; i > -1; i--) {
+      if (_actions[i].done) {
+        // HACK: doing this dynamically doesn't work. there is probably a better, more durable way to handle this.
+        if (_actions[i].runtimeType == _DispatchedAction<Profile?>) {
+          final a = _actions[i] as _DispatchedAction<Profile?>;
+          for (var callback in a.callbacks) {
+            callback(a.value);
+          }
+        } else if (_actions[i].runtimeType == _DispatchedAction<Execution?>) {
+          final a = _actions[i] as _DispatchedAction<Execution?>;
+          for (var callback in a.callbacks) {
+            callback(a.value);
+          }
         }
-        _actions.remove(action);
+
+        _actions.removeAt(i);
       }
     }
   }
@@ -67,7 +73,9 @@ class PylonsComponent extends Component {
   void getProfile(List<Function1<Profile?, void>> callbacks) {
     _requireReady();
     final future = Profile.get();
-    _actions.add(_DispatchedAction<Profile?>(future, callbacks..add((prf) => _last = prf)));
+    _actions.add(_DispatchedAction<Profile?>(future, callbacks..add((prf) {
+      _last = prf;
+    })));
   }
 }
 

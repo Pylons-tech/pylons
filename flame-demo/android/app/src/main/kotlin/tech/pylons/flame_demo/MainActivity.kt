@@ -1,4 +1,4 @@
-package tech.pylons.testapp_flutter
+package tech.pylons.flame_demo
 
 import io.flutter.embedding.android.FlutterActivity
 
