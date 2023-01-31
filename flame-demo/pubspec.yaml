@@ -37,6 +37,8 @@ dependencies:
 
   flame: 1.6.0
 
+  provider: ^6.0.5
+
 
   pylons_sdk:
     path: ../dart_sdk
