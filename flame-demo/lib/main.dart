@@ -6,27 +6,33 @@ import 'package:pylons_sdk/pylons_sdk.dart';
 import 'game.dart';
 import 'hud.dart';
 
-class NameNotifier extends ChangeNotifier {
+class HudNotifier extends ChangeNotifier {
   String profileName = "Please wait";
+  String line2 = "Tap screen once \nprofile is retrieved";
 
   void updateName (String name) {
     profileName = name;
     notifyListeners();
   }
+
+  void updateLine2 (String line) {
+    line2 = line;
+    notifyListeners();
+  }
 }
 
-late NameNotifier nameNotifier;
+late HudNotifier hudNotifier;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   PylonsWallet.setup(mode: PylonsMode.prod, host: 'testapp_flutter');
-  nameNotifier = NameNotifier();
+  hudNotifier = HudNotifier();
   final game = PylonsGame();
   runApp(GameWidget(
     game: game,
     overlayBuilderMap: {
       'HudOverlay': (BuildContext context, PylonsGame game) {
-        return ChangeNotifierProvider.value(value: nameNotifier, child: const Hud());
+        return ChangeNotifierProvider.value(value: hudNotifier, child: const Hud());
       }
     },
     initialActiveOverlays: const ["HudOverlay"],

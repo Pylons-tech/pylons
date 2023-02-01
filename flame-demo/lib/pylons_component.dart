@@ -8,8 +8,12 @@ class PylonsComponent extends Component {
   static PylonsComponent? _instance;
   static PylonsComponent get instance => _instance!;
   Profile? _last;
+  Profile? get lastProfile => _last;
   bool _ready = false;
   bool get ready => _ready;
+  String _cookbook;
+
+  PylonsComponent(this._cookbook);
 
   @override
   void onLoad() {
@@ -20,7 +24,7 @@ class PylonsComponent extends Component {
     _instance = this;
     PylonsWallet.verifyOrInstall().then(
             (_) async {
-          await Cookbook.load("appTestCookbook");
+          await Cookbook.load(_cookbook);
           _ready = true;
         }
     );

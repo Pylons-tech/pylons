@@ -7,6 +7,7 @@ class Hud extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(Provider.of<NameNotifier>(context).profileName, style: const TextStyle(fontSize: 42));
+    final text = "${Provider.of<HudNotifier>(context).profileName}\n${Provider.of<HudNotifier>(context).line2}";
+    return Text(text, style: const TextStyle(fontSize: 42));
   }
 }

@@ -1,10 +1,12 @@
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_flame_demo/game.dart';
 import 'package:pylons_flame_demo/main.dart';
 import 'package:pylons_flame_demo/pylons_component.dart';
+import 'package:pylons_flame_demo/recipe.dart';
 
-class Doohickey extends PositionComponent {
+class Doohickey extends PositionComponent with TapCallbacks {
   static final _paint = Paint()..color = Colors.white;
   double _timeSinceLastProfileFetch = 0;
   static const double _profileLifespan = 15; // seconds
@@ -31,12 +33,30 @@ class Doohickey extends PositionComponent {
         (prf) {
           _timeSinceLastProfileFetch = 0;
           _dispatchedAction = false;
-          nameNotifier.updateName(prf?.username != null ? prf!.username : "ERROR");
+          hudNotifier.updateName(prf?.username != null ? prf!.username : "ERROR");
           return;
         }
       ]);
     } else {
       _timeSinceLastProfileFetch += dt;
     }
+  }
+
+  @override
+  void onTapUp(TapUpEvent event) {
+    if (_dispatchedAction == false && PylonsComponent.instance.lastProfile != null) {
+      _dispatchedAction = true;
+      PylonsComponent.instance.executeRecipe(recipeGetCharacter.sdkRecipe, [], [
+        (exec) {
+          _dispatchedAction = false;
+          hudNotifier.updateLine2("Created a BlockSlayer character!");
+        }
+      ]);
+    }
+  }
+
+  @override
+  bool containsLocalPoint(Vector2 point) {
+    return true; // we don't really need to check this atm
   }
 }
