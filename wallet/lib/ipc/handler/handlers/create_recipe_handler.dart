@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/loading.dart';
@@ -14,7 +13,6 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 
-import '../../../generated/locale_keys.g.dart';
 import '../../../model/nft.dart';
 import '../../../providers/recipes_provider.dart';
 
@@ -26,7 +24,7 @@ class CreateRecipeHandler implements BaseHandler {
     final jsonMap = jsonDecode(sdkIpcMessage.json) as Map;
 
     jsonMap.remove('nodeVersion');
-    final loading = Loading()..showLoading(message: "${LocaleKeys.creating_recipe.tr()}...");
+    final loading = Loading()..showLoading();
 
     final walletsStore = GetIt.I.get<WalletsStore>();
 

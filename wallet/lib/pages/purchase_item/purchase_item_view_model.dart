@@ -26,6 +26,7 @@ import 'package:video_player/video_player.dart';
 import '../../generated/locale_keys.g.dart';
 import '../owner_purchase_view_common/button_state.dart';
 import '../owner_purchase_view_common/progress_bar_state.dart';
+import 'widgets/trade_receipt_dialog.dart';
 
 class PurchaseItemViewModel extends ChangeNotifier {
   PurchaseItemViewModel(
@@ -317,7 +318,7 @@ class PurchaseItemViewModel extends ChangeNotifier {
     );
 
     if (likesCountEither.isLeft()) {
-      LocaleKeys.something_wrong.tr().show();
+      // LocaleKeys.something_wrong.tr().show();
       return;
     }
 
@@ -493,7 +494,8 @@ class PurchaseItemViewModel extends ChangeNotifier {
     });
   }
 
-  Future<Either<String, bool>> shouldShowSwipeToBuy({required String selectedDenom, required double requiredAmount}) async {
+  Future<Either<String, bool>> shouldShowSwipeToBuy(
+      {required String selectedDenom, required double requiredAmount}) async {
     final walletAddress = accountPublicInfo!.publicAddress;
     final balancesEither = await repository.getBalance(walletAddress);
 
@@ -509,7 +511,8 @@ class PurchaseItemViewModel extends ChangeNotifier {
       return const Right(true);
     }
 
-    final mappedBalances = balancesEither.getOrElse(() => []).where((element) => element.denom == selectedDenom).toList();
+    final mappedBalances =
+        balancesEither.getOrElse(() => []).where((element) => element.denom == selectedDenom).toList();
     if (mappedBalances.isEmpty) {
       return const Right(false);
     }
@@ -597,4 +600,23 @@ class PurchaseItemViewModel extends ChangeNotifier {
   void logEvent() {
     repository.logUserJourney(screenName: AnalyticsScreenEvents.purchaseView);
   }
+
+  TradeReceiptModel createTradeReciptModel({
+    required double price,
+    required double fee, 
+    required String txTime,
+    required String txId,
+  }) =>
+      TradeReceiptModel(
+        tradeId: nft.tradeID,
+        pylonsFee: nft.ibcCoins.getCoinWithDenominationAndSymbol(fee.toString(), showDecimal: true),
+        price: nft.ibcCoins.getCoinWithDenominationAndSymbol(price.toString()),
+        createdBy: nft.creator,
+        currency: nft.ibcCoins.getAbbrev(),
+        soldBy: nft.owner.isEmpty ? nft.creator : nft.owner,
+        transactionTime: txTime,
+        total: nft.ibcCoins.getCoinWithDenominationAndSymbol(nft.price, showDecimal: true),
+        nftName: nft.name,
+        transactionID: txId,
+      );
 }

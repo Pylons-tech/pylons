@@ -84,7 +84,7 @@ class ShowWalletInstallDialog {
                     Center(
                       child: Text(
                         "cancel".tr(),
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             fontSize: 14.sp,
                             color: EaselAppTheme.kWhite,
                             fontWeight: FontWeight.w300),
@@ -157,7 +157,7 @@ class ShowWalletInstallDialog {
                           "cancel".tr(),
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText1!
+                              .bodyLarge!
                               .copyWith(
                                   fontSize: 16.sp,
                                   color: EaselAppTheme.kWhite,

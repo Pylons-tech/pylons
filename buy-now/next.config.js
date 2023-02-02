@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
-
+const defaultSettings  = require("./settings.json")
 const settings =
-  typeof process.env.NEXT_PUBLIC_SETTINGS === 'string'
+  process.env.NEXT_PUBLIC_SETTINGS 
     ? JSON.parse(process.env.NEXT_PUBLIC_SETTINGS)
-    : {}
+    : defaultSettings
 const nextConfig = {
   compiler: {
     emotion: true,
@@ -16,7 +16,7 @@ const nextConfig = {
   },
   publicRuntimeConfig: {
     // Will be available on both server and client
-    apiKey: process.env.NEXT_PUBLIC_API_KEY,
+    apiKey: process.env.NEXT_PUBLIC_API_KEY ?? defaultSettings?.remote?.api,
     settings
   }
 }

@@ -112,7 +112,7 @@ class _UpdateAppState extends State<UpdateApp> {
               ),
               Text(
                 LocaleKeys.update_available_desc.tr(),
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               )
             ],
@@ -217,7 +217,7 @@ class _UpdateAppState extends State<UpdateApp> {
                 ),
                 Text(
                   LocaleKeys.update_available_desc.tr(),
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 )
               ],

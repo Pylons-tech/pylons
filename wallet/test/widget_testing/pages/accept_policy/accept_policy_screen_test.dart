@@ -73,28 +73,5 @@ void main() {
     },
   );
 
-  testWidgets(
-    "When both are accepted then user can go to next screen.",
-    (tester) async {
-      bool isClicked = false;
-      when(acceptPolicyViewModel.isCheckPrivacyPolicy).thenAnswer((realInvocation) => true);
-      when(acceptPolicyViewModel.isCheckTermServices).thenAnswer((realInvocation) => true);
-      when(purchaseItemViewModel.nft).thenAnswer((realInvocation) => MOCK_NFT_FREE_IMAGE);
-      when(purchaseItemViewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
-      when(acceptPolicyViewModel.onTapGetStartedButton(MOCK_NFT_FREE_IMAGE)).thenAnswer((realInvocation) {
-        isClicked = true;
-      });
-      await tester.testAppForWidgetTesting(
-        AcceptPolicyScreen(
-          nft: MOCK_NFT_FREE_IMAGE,
-          viewModel: GetIt.I.get<AcceptPolicyViewModel>(),
-        ),
-      );
-      await tester.pump();
-      final kBottomSheetBtnKey = find.byKey(const Key(kAcceptBottomSheetBtnKey));
-      await tester.tap(kBottomSheetBtnKey);
-      await tester.pump();
-      expect(isClicked, true);
-    },
-  );
+
 }

@@ -48,7 +48,7 @@ class LocalServer {
       final messageLink = handlerMessage.createMessageLink(isAndroid: Platform.isAndroid);
       return Response.ok(messageLink);
     } catch (error) {
-      return Response.badRequest(body: "Something went wrong ${error.toString()}");
+      return Response.badRequest(body: "Something went wrong $error");
     }
   }
 
