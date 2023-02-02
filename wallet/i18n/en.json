@@ -403,5 +403,6 @@
   "youtube": "Youtube",
   "discord": "Discord",
   "twitter": "Twitter",
-  "connected": "Connected"
+  "connected": "Connected",
+  "no_account_found": "No account found"
 }

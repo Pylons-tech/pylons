@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/create_trade_bottom_sheet.dart';
 import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
@@ -134,7 +135,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
     if (allowBiometric) {
       repository.authenticate().then((value) {
         if (value.isLeft()) {
-          value.swap().toOption().toNullable()!.message.show();
+          value.getLeft().message.show();
         }
 
         if (value.isRight() && value.getOrElse(() => false)) {
@@ -201,7 +202,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
     if (allowLogin) {
       repository.authenticate().then((value) {
         if (value.isLeft()) {
-          value.swap().toOption().toNullable()!.message.show();
+          value.getLeft().message.show();
         }
 
         if (value.isRight() && value.getOrElse(() => false)) {
@@ -265,7 +266,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
     if (allowTransaction) {
       repository.authenticate().then((value) {
         if (value.isLeft()) {
-          value.swap().toOption().toNullable()!.message.show();
+          value.getLeft().message.show();
         }
 
         if (value.isRight() && value.getOrElse(() => false)) {

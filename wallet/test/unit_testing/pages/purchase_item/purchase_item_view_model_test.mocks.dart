@@ -2,7 +2,7 @@
 // in pylons_wallet/test/unit_testing/pages/purchase_item/purchase_item_view_model_test.dart.
 // Do not manually edit this file.
 
-// ignore_for_file: no_leading_underscores_for_library_prefixes
+// ignore_for_file: no_leading_underscores_for_library_prefixes, must_be_immutable
 import 'dart:async' as _i8;
 
 import 'package:dartz/dartz.dart' as _i2;
@@ -687,38 +687,6 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
         returnValue: _i8.Future<bool>.value(false),
       ) as _i8.Future<bool>);
   @override
-  _i2.Either<_i9.Failure, bool> saveInitialLink(
-          {required String? initialLink}) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #saveInitialLink,
-          [],
-          {#initialLink: initialLink},
-        ),
-        returnValue: _FakeEither_0<_i9.Failure, bool>(
-          this,
-          Invocation.method(
-            #saveInitialLink,
-            [],
-            {#initialLink: initialLink},
-          ),
-        ),
-      ) as _i2.Either<_i9.Failure, bool>);
-  @override
-  _i2.Either<_i9.Failure, String> getInitialLink() => (super.noSuchMethod(
-        Invocation.method(
-          #getInitialLink,
-          [],
-        ),
-        returnValue: _FakeEither_0<_i9.Failure, String>(
-          this,
-          Invocation.method(
-            #getInitialLink,
-            [],
-          ),
-        ),
-      ) as _i2.Either<_i9.Failure, String>);
-  @override
   _i8.Future<_i2.Either<_i9.Failure, String>>
       sendGoogleInAppPurchaseCoinsRequest(
               _i13.GoogleInAppPurchaseModel? googleInAppPurchaseModel) =>
@@ -754,12 +722,28 @@ class MockWalletsStore extends _i1.Mock implements _i7.WalletsStore {
               ),
             )),
           ) as _i8.Future<_i2.Either<_i9.Failure, String>>);
+  @override
+  _i8.Future<_i2.Either<_i9.WalletCreationFailure, String>>
+      createAccountOnChainWithoutUserName() => (super.noSuchMethod(
+            Invocation.method(
+              #createAccountOnChainWithoutUserName,
+              [],
+            ),
+            returnValue:
+                _i8.Future<_i2.Either<_i9.WalletCreationFailure, String>>.value(
+                    _FakeEither_0<_i9.WalletCreationFailure, String>(
+              this,
+              Invocation.method(
+                #createAccountOnChainWithoutUserName,
+                [],
+              ),
+            )),
+          ) as _i8.Future<_i2.Either<_i9.WalletCreationFailure, String>>);
 }
 
 /// A class which mocks [AccountPublicInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-// ignore: must_be_immutable
 class MockAccountPublicInfo extends _i1.Mock implements _i6.AccountPublicInfo {
   MockAccountPublicInfo() {
     _i1.throwOnMissingStub(this);
@@ -1564,35 +1548,6 @@ class MockRepository extends _i1.Mock implements _i14.Repository {
           this,
           Invocation.method(
             #getSavedEmail,
-            [],
-          ),
-        ),
-      ) as _i2.Either<_i9.Failure, String>);
-  @override
-  _i2.Either<_i9.Failure, bool> saveInitialLink(String? initialLink) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #saveInitialLink,
-          [initialLink],
-        ),
-        returnValue: _FakeEither_0<_i9.Failure, bool>(
-          this,
-          Invocation.method(
-            #saveInitialLink,
-            [initialLink],
-          ),
-        ),
-      ) as _i2.Either<_i9.Failure, bool>);
-  @override
-  _i2.Either<_i9.Failure, String> getInitialLink() => (super.noSuchMethod(
-        Invocation.method(
-          #getInitialLink,
-          [],
-        ),
-        returnValue: _FakeEither_0<_i9.Failure, String>(
-          this,
-          Invocation.method(
-            #getInitialLink,
             [],
           ),
         ),
@@ -2975,18 +2930,47 @@ class MockRepository extends _i1.Mock implements _i14.Repository {
       ) as _i8.Future<_i2.Either<_i9.Failure, void>>);
   @override
   _i8.Future<_i2.Either<_i9.Failure, void>> createTrade(
-          _i10.MsgCreateTrade? msgCreateTrade) =>
+          {required _i10.MsgCreateTrade? msgCreateTrade}) =>
       (super.noSuchMethod(
         Invocation.method(
           #createTrade,
-          [msgCreateTrade],
+          [],
+          {#msgCreateTrade: msgCreateTrade},
         ),
         returnValue: _i8.Future<_i2.Either<_i9.Failure, void>>.value(
             _FakeEither_0<_i9.Failure, void>(
           this,
           Invocation.method(
             #createTrade,
-            [msgCreateTrade],
+            [],
+            {#msgCreateTrade: msgCreateTrade},
+          ),
+        )),
+      ) as _i8.Future<_i2.Either<_i9.Failure, void>>);
+  @override
+  _i8.Future<_i2.Either<_i9.Failure, void>> cancelTrade({
+    required _i12.TradeId? tradeId,
+    required _i12.Address? address,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #cancelTrade,
+          [],
+          {
+            #tradeId: tradeId,
+            #address: address,
+          },
+        ),
+        returnValue: _i8.Future<_i2.Either<_i9.Failure, void>>.value(
+            _FakeEither_0<_i9.Failure, void>(
+          this,
+          Invocation.method(
+            #cancelTrade,
+            [],
+            {
+              #tradeId: tradeId,
+              #address: address,
+            },
           ),
         )),
       ) as _i8.Future<_i2.Either<_i9.Failure, void>>);
@@ -2995,7 +2979,6 @@ class MockRepository extends _i1.Mock implements _i14.Repository {
 /// A class which mocks [NFT].
 ///
 /// See the documentation for Mockito's code generation for more information.
-// ignore: must_be_immutable
 class MockNFT extends _i1.Mock implements _i32.NFT {
   MockNFT() {
     _i1.throwOnMissingStub(this);

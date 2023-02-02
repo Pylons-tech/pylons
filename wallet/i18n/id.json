@@ -401,5 +401,6 @@
   "youtube": "Youtube",
   "discord": "Discord",
   "twitter": "Twitter",
-  "connected": "Terhubung"
+  "connected": "Terhubung",
+  "no_account_found": "Tidak ada akun yang ditemukan"
 }

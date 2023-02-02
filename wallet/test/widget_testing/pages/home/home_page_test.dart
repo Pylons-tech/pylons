@@ -52,7 +52,6 @@ void main() {
     when(repository.getImagePath(MOCK_PYLONS_BANNER)).thenAnswer((realInvocation) => const Right(MOCK_PYLONS_BANNER));
     when(repository.getImagePath(MOCK_PYLONS_AVATAR)).thenAnswer((realInvocation) => const Right(MOCK_PYLONS_AVATAR));
     when(homeProvider.tabs).thenAnswer((realInvocation) => MOCK_TABS);
-    when(walletStore.getInitialLink()).thenAnswer((realInvocation) => Right(MOCK_URL));
     when(ipcEngine.handleLinksBasedOnUri(MOCK_URL)).thenAnswer((realInvocation) async {});
     when(homeProvider.accountPublicInfo).thenAnswer(
       (realInvocation) => const AccountPublicInfo(

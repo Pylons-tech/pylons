@@ -19,6 +19,7 @@ import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/client/cosmos/base/abci/v1beta1/abci.pb.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/create_trade_bottom_sheet.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/services/data_stores/remote_data_store.dart';
@@ -198,7 +199,7 @@ class WalletsStoreImp implements WalletsStore {
     final walletsResultEither = await customTransactionSigningGateway.getWalletsList();
 
     if (walletsResultEither.isLeft()) {
-      crashlyticsHelper.recordFatalError(error: walletsResultEither.swap().toOption().toNullable()!.message);
+      crashlyticsHelper.recordFatalError(error: walletsResultEither.getLeft().message);
       return SdkIpcResponse.failure(
         sender: '',
         error: SOMETHING_WRONG_FETCHING_WALLETS,
@@ -223,7 +224,7 @@ class WalletsStoreImp implements WalletsStore {
     );
 
     if (signedTransaction.isLeft()) {
-      crashlyticsHelper.recordFatalError(error: signedTransaction.swap().toOption().toNullable()!.toString());
+      crashlyticsHelper.recordFatalError(error: signedTransaction.getLeft().toString());
       return SdkIpcResponse.failure(
         sender: '',
         error: LocaleKeys.something_wrong_signing_transaction.tr(),
@@ -576,7 +577,7 @@ class WalletsStoreImp implements WalletsStore {
     if (userNameEither.isLeft()) {
       return SdkIpcResponse.failure(
         sender: '',
-        error: userNameEither.swap().toOption().toNullable()!.message,
+        error: userNameEither.getLeft().message,
         errorCode: HandlerFactory.ERR_CANNOT_FETCH_USERNAME,
       );
     }
@@ -586,7 +587,7 @@ class WalletsStoreImp implements WalletsStore {
     if (stripeExistsInfoEither.isLeft()) {
       return SdkIpcResponse.failure(
         sender: '',
-        error: stripeExistsInfoEither.swap().toOption().toNullable()!.message,
+        error: stripeExistsInfoEither.getLeft().message,
         errorCode: HandlerFactory.ERR_CANNOT_FETCH_USERNAME,
       );
     }
@@ -596,7 +597,7 @@ class WalletsStoreImp implements WalletsStore {
     if (balanceResponseEither.isLeft()) {
       return SdkIpcResponse.failure(
         sender: '',
-        error: balanceResponseEither.swap().toOption().toNullable()!.message,
+        error: balanceResponseEither.getLeft().message,
         errorCode: HandlerFactory.ERR_CANNOT_FETCH_USERNAME,
       );
     }
@@ -606,7 +607,7 @@ class WalletsStoreImp implements WalletsStore {
     if (getItemListEither.isLeft()) {
       return SdkIpcResponse.failure(
         sender: '',
-        error: getItemListEither.swap().toOption().toNullable()!.message,
+        error: getItemListEither.getLeft().message,
         errorCode: HandlerFactory.ERR_CANNOT_FETCH_ITEM,
       );
     }
@@ -645,7 +646,7 @@ class WalletsStoreImp implements WalletsStore {
     if (recipesEither.isLeft()) {
       return SdkIpcResponse.failure(
         sender: '',
-        error: recipesEither.swap().toOption().toNullable()!.message,
+        error: recipesEither.getLeft().message,
         errorCode: HandlerFactory.ERR_CANNOT_FETCH_RECIPES,
       );
     }
@@ -671,7 +672,7 @@ class WalletsStoreImp implements WalletsStore {
     if (cookBookEither.isLeft()) {
       return SdkIpcResponse.failure(
         sender: '',
-        error: cookBookEither.swap().toOption().toNullable()!.message,
+        error: cookBookEither.getLeft().message,
         errorCode: HandlerFactory.ERR_CANNOT_FETCH_COOKBOOK,
       );
     }
@@ -690,7 +691,7 @@ class WalletsStoreImp implements WalletsStore {
     if (recipeEither.isLeft()) {
       return SdkIpcResponse.failure(
         sender: '',
-        error: recipeEither.swap().toOption().toNullable()!.message,
+        error: recipeEither.getLeft().message,
         errorCode: HandlerFactory.ERR_CANNOT_FETCH_RECIPE,
       );
     }
@@ -709,7 +710,7 @@ class WalletsStoreImp implements WalletsStore {
     if (recipesEither.isLeft()) {
       return SdkIpcResponse.failure(
         sender: '',
-        error: recipesEither.swap().toOption().toNullable()!.message,
+        error: recipesEither.getLeft().message,
         errorCode: HandlerFactory.ERR_CANNOT_FETCH_RECIPES,
       );
     }
@@ -738,7 +739,7 @@ class WalletsStoreImp implements WalletsStore {
     if (getItemEither.isLeft()) {
       return SdkIpcResponse.failure(
         sender: '',
-        error: getItemEither.swap().toOption().toNullable()!.message,
+        error: getItemEither.getLeft().message,
         errorCode: HandlerFactory.ERR_CANNOT_FETCH_ITEM,
       );
     }
@@ -755,7 +756,7 @@ class WalletsStoreImp implements WalletsStore {
     if (getItemListEither.isLeft()) {
       return SdkIpcResponse.failure(
         sender: '',
-        error: getItemListEither.swap().toOption().toNullable()!.message,
+        error: getItemListEither.getLeft().message,
         errorCode: HandlerFactory.ERR_CANNOT_FETCH_ITEM,
       );
     }
@@ -776,7 +777,7 @@ class WalletsStoreImp implements WalletsStore {
     if (getExecutionEither.isLeft()) {
       return SdkIpcResponse.failure(
         sender: '',
-        error: getExecutionEither.swap().toOption().toNullable()!.message,
+        error: getExecutionEither.getLeft().message,
         errorCode: HandlerFactory.ERR_CANNOT_FETCH_ITEM,
       );
     }
@@ -793,7 +794,7 @@ class WalletsStoreImp implements WalletsStore {
     if (tradesEither.isLeft()) {
       return SdkIpcResponse.failure(
         sender: '',
-        error: tradesEither.swap().toOption().toNullable()!.message,
+        error: tradesEither.getLeft().message,
         errorCode: HandlerFactory.ERR_CANNOT_FETCH_TRADES,
       );
     }
@@ -816,7 +817,7 @@ class WalletsStoreImp implements WalletsStore {
       final getUsernameBasedOnAddress = await repository.getUsername(address: wallet.bech32Address);
 
       if (getUsernameBasedOnAddress.isLeft()) {
-        return Left(getUsernameBasedOnAddress.swap().toOption().toNullable()!);
+        return Left(getUsernameBasedOnAddress.getLeft());
       }
 
       final userName = getUsernameBasedOnAddress.getOrElse(() => '');
@@ -932,16 +933,6 @@ class WalletsStoreImp implements WalletsStore {
       error: LocaleKeys.account_creation_failed.tr(),
       errorCode: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
     );
-  }
-
-  @override
-  Either<Failure, bool> saveInitialLink({required String initialLink}) {
-    return repository.saveInitialLink(initialLink);
-  }
-
-  @override
-  Either<Failure, String> getInitialLink() {
-    return repository.getInitialLink();
   }
 
   @override

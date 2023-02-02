@@ -1,7 +1,7 @@
 name: pylons_wallet
 description: Pylons Wallet
 publish_to: "none"
-version: 1.0.1+170
+version: 1.0.1+172
 
 
 
@@ -18,7 +18,7 @@ dependencies:
   backdrop: ^0.8.1
   bottom_drawer: ^0.0.3
   cached_network_image: ^3.1.0
-  cloud_firestore: ^4.3.0  
+  cloud_firestore: ^4.3.0
   cupertino_icons: ^1.0.3
   dartz: ^0.10.1
   decimal: ^2.3.0

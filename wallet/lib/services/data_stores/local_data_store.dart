@@ -82,14 +82,7 @@ abstract class LocalDataSource {
   /// Output: [String] returns the email
   String getEmail();
 
-  /// This method will save initialLink in the local database
-  /// Input: [link] save initialLink in the local database
-  /// Output: [bool] tells whether the operation is successful or not
-  bool saveInitialLink(String initialLink);
 
-  /// This method will get the initialLink from the local database
-  /// Output: [String] return the link
-  String getInitialLink();
 
   /// This method will save description in the local database
   /// Input: [description] save description in the local database
@@ -243,7 +236,6 @@ class LocalDataSourceImp implements LocalDataSource {
   static String LOGIN_BIOMETRIC = 'login-biometric';
   static String TRANSACTION_BIOMETRIC = 'transaction-biometric';
   static String APPLICATION_DIRECTORY = 'application_directory';
-  static String INITIAL_LINK = 'initial_link';
   static String ENVIRONMENT_NETWORK = 'environment_network';
   static String INVITEE_ADDRESS = 'invitee_address';
   static String USER_ACCEPT_POLICIES = 'user_accept_policies';
@@ -360,17 +352,6 @@ class LocalDataSourceImp implements LocalDataSource {
   @override
   String getEmail() {
     return sharedPreferences.getString(EMAIL) ?? '';
-  }
-
-  @override
-  bool saveInitialLink(String initialLink) {
-    cacheContainer.update(INITIAL_LINK, (v) => initialLink, ifAbsent: () => initialLink);
-    return cacheContainer.containsValue(initialLink);
-  }
-
-  @override
-  String getInitialLink() {
-    return cacheContainer[INITIAL_LINK].toString();
   }
 
   @override
