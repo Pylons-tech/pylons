@@ -32,13 +32,13 @@ class PylonsAppTheme {
           border: OutlineInputBorder(),
         ),
         textTheme: TextTheme(
-          headline1: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, fontFamily: 'Inter'),
-          headline2: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, fontFamily: 'Inter', fontStyle: FontStyle.normal),
-          subtitle1: const TextStyle(fontSize: 26, fontWeight: FontWeight.w600, fontFamily: 'Inter'),
-          subtitle2: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400, fontFamily: 'Inter'),
-          bodyText1: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal, fontFamily: 'Inter'),
-          bodyText2: const TextStyle(fontWeight: FontWeight.normal, fontFamily: 'Inter', color: Colors.black54),
-          headline5: TextStyle(fontSize: 15, fontWeight: FontWeight.normal, fontFamily: 'Inter', color: AppColors.kBlue),
+          displayLarge: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, fontFamily: 'Inter'),
+          displayMedium: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, fontFamily: 'Inter', fontStyle: FontStyle.normal),
+          titleMedium: const TextStyle(fontSize: 26, fontWeight: FontWeight.w600, fontFamily: 'Inter'),
+          titleSmall: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400, fontFamily: 'Inter'),
+          bodyLarge: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal, fontFamily: 'Inter'),
+          bodyMedium: const TextStyle(fontWeight: FontWeight.normal, fontFamily: 'Inter', color: Colors.black54),
+          headlineSmall: TextStyle(fontSize: 15, fontWeight: FontWeight.normal, fontFamily: 'Inter', color: AppColors.kBlue),
         ));
   }
 }

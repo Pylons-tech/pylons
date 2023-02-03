@@ -60,7 +60,7 @@ class SDKApprovalDialog {
                           Text(
                             '"${sdkipcMessage.sender}" ${LocaleKeys.would_like_to.tr()} ${sdkipcMessage.action}?',
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.headline6!.copyWith(
+                            style: Theme.of(context).textTheme.titleLarge!.copyWith(
                                   color: Colors.white,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w500,
@@ -77,7 +77,7 @@ class SDKApprovalDialog {
                                 },
                                 child: Text(
                                   LocaleKeys.dont_allow.tr(),
-                                  style: TextStyle(fontSize: 16, color: AppColors.kWhite, fontWeight: FontWeight.w300),
+                                  style: const TextStyle(fontSize: 16, color: AppColors.kWhite, fontWeight: FontWeight.w300),
                                 ),
                               ),
                               const HorizontalSpace(30),
@@ -93,7 +93,7 @@ class SDKApprovalDialog {
                                 },
                                 child: Text(
                                   LocaleKeys.ok.tr(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
                                     color: AppColors.kWhite,

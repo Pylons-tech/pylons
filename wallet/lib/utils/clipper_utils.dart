@@ -74,3 +74,49 @@ class CustomTriangleClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(CustomTriangleClipper oldClipper) => false;
 }
+
+class BottomLeftCurvedCorner extends CustomClipper<Path> {
+  final double cuttingEdge;
+  BottomLeftCurvedCorner({required this.cuttingEdge});
+
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.lineTo(0, size.height - cuttingEdge);
+    path.lineTo(cuttingEdge, size.height);
+    path.lineTo(size.width, size.height);
+    path.lineTo(size.width, 0);
+    path.lineTo(0, 0);
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return true;
+  }
+}
+
+class TopCornerCut extends CustomClipper<Path> {
+  final double depth;
+  TopCornerCut({required this.depth});
+
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.moveTo(depth, 0);
+    path.lineTo(0, depth);
+    path.lineTo(0, size.height);
+    path.lineTo(size.width, size.height);
+    path.lineTo(size.width, depth);
+    path.lineTo(size.width - depth, 0);
+    path.lineTo(0, 0);
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return true;
+  }
+}

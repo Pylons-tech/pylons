@@ -2,13 +2,27 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/cookbook.pb.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:transaction_signing_gateway/model/account_public_info.dart';
+import 'package:tuple/tuple.dart';
 
 import '../model/nft.dart';
 
 class RecipesProvider extends ChangeNotifier {
-  RecipesProvider({required this.repository, required this.address});
+  RecipesProvider({required this.repository, required this.address}) {
+    repository.getStoredCookBooks().fold((l) => null, (List<Cookbook>? _cookBooks) {
+      cookbooks = _cookBooks ?? [];
+    });
+
+    repository.getStoredCreations().fold((l) => null, (List<NFT>? _nftCreations) {
+      nftCreations = _nftCreations ?? [];
+    });
+
+    repository.getNonNFTCreations().fold((l) => null, (List<Recipe>? _nonNFTCreations) {
+      nonNftCreations = _nonNFTCreations ?? [];
+    });
+  }
 
   factory RecipesProvider.fromAccountProvider({
     required AccountPublicInfo? accountPublicInfo,
@@ -25,40 +39,72 @@ class RecipesProvider extends ChangeNotifier {
     final response = await repository.getCookbooksByCreator(creator: address!);
 
     log("Get Cookbooks finished", name: "RecipesProvider");
-    cookbooks = response.getOrElse(() => []);
+    final localCookbooks = response.getOrElse(() => []);
 
-    final localCreations = <NFT>[];
+    final localNFTCreations = <NFT>[];
+    final localNonNFTCreations = <Recipe>[];
 
-    for (final cookbook in cookbooks) {
-      final recipesList = await getRecipes(cookbook);
-      localCreations.addAll(recipesList);
+    for (final _cookbook in localCookbooks) {
+      final recipeCreations = await getRecipes(_cookbook);
+
+      localNFTCreations.addAll(recipeCreations.item1);
+      localNonNFTCreations.addAll(recipeCreations.item2);
     }
 
-    creations = localCreations;
+    processCookBook(localCookbooks);
+    processNFTCreations(localNFTCreations);
+    processNonNFTCreations(localNonNFTCreations);
 
     log("Get Recipe finished", name: "RecipesProvider");
     notifyListeners();
   }
 
-  Future<List<NFT>> getRecipes(Cookbook cookbook) async {
+  Future<Tuple2<List<NFT>, List<Recipe>>> getRecipes(Cookbook cookbook) async {
     final recipesEither = await repository.getRecipesBasedOnCookBookId(cookBookId: cookbook.id);
     final recipes = recipesEither.getOrElse(() => []);
 
-    final localCreations = <NFT>[];
+    final localNFTCreations = <NFT>[];
+    final localNonNFTCreations = <Recipe>[];
 
     for (final recipe in recipes) {
-      final nft = NFT.fromRecipe(recipe);
-
-      if (nft.appType.toLowerCase() == "easel" && cookbooks.any((cookbook) => cookbook.id == nft.cookbookID)) {
-        localCreations.add(nft);
+      try {
+        final nft = NFT.fromRecipe(recipe);
+        localNFTCreations.add(nft);
+      } catch (_) {
+        localNonNFTCreations.add(recipe);
       }
     }
 
-    return localCreations;
+    return Tuple2(localNFTCreations, localNonNFTCreations);
+  }
+
+  void processCookBook(List<Cookbook> localCookbooks) {
+    if (localCookbooks.isEmpty) {
+      return;
+    }
+    cookbooks = localCookbooks;
+    repository.storeCookBooks(cookbooks);
+  }
+
+  void processNFTCreations(List<NFT> _nftCreations) {
+    if (_nftCreations.isEmpty) {
+      return;
+    }
+    nftCreations = _nftCreations;
+    repository.storeCreations(_nftCreations);
+  }
+
+  void processNonNFTCreations(List<Recipe> _nonNFTCreations) {
+    if (_nonNFTCreations.isEmpty) {
+      return;
+    }
+    nonNftCreations = _nonNFTCreations;
+    repository.storeNonNFTCreations(_nonNFTCreations);
   }
 
   List<Cookbook> cookbooks = [];
-  List<NFT> creations = [];
+  List<NFT> nftCreations = [];
+  List<Recipe> nonNftCreations = [];
   String? address;
   Repository repository;
 }

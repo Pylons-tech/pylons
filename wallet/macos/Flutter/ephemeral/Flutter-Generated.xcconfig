@@ -2,12 +2,10 @@
 FLUTTER_ROOT=/Users/jawad/Downloads/flutter
 FLUTTER_APPLICATION_PATH=/Users/jawad/Desktop/pylons/pylons/wallet
 COCOAPODS_PARALLEL_CODE_SIGN=true
-FLUTTER_TARGET=/Users/jawad/Desktop/pylons/pylons/wallet/lib/main_prod.dart
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.1
-FLUTTER_BUILD_NUMBER=165
-DART_DEFINES=RkxVVFRFUl9XRUJfQVVUT19ERVRFQ1Q9dHJ1ZQ==
+FLUTTER_BUILD_NUMBER=170
 DART_OBFUSCATION=false
 TRACK_WIDGET_CREATION=true
 TREE_SHAKE_ICONS=false
-PACKAGE_CONFIG=/Users/jawad/Desktop/pylons/pylons/wallet/.dart_tool/package_config.json
+PACKAGE_CONFIG=.dart_tool/package_config.json

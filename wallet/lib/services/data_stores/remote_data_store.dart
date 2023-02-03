@@ -25,7 +25,6 @@ import 'package:pylons_wallet/model/notification_message.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/export.dart' as cosmos_tx;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
@@ -39,11 +38,14 @@ import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/custom_transaction_signing_gateaway/custom_transaction_signing_gateway.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/enums.dart';
+import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/failure/failure.dart';
 import 'package:transaction_signing_gateway/model/account_lookup_key.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
 import '../../generated/locale_keys.g.dart';
+import '../../model/common.dart';
+import '../../model/update_recipe_model.dart';
 import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
 
 abstract class RemoteDataStore {
@@ -114,15 +116,15 @@ abstract class RemoteDataStore {
       {required String walletAddress, required int limit, required int offset});
 
   /// This method will update the recipe in the chain
-  /// Input: [MsgUpdateRecipe] contains the info regarding the recipe update
+  /// Input: [updateRecipeModel] contains the info regarding the recipe update
   /// Output: if successful will return [String] the hash of the transaction
   /// else will through error
-  Future<String> updateRecipe({required MsgUpdateRecipe msgUpdateRecipe});
+  Future<String> updateRecipe({required UpdateRecipeModel updateRecipeModel});
 
   /// This method is used to get likes count of NFT
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
   /// Output : [int] will contain the likes count of the NFT
-  Future<int> getLikesCount({required String recipeId, required String cookBookID});
+  Future<int> getLikesCount({required RecipeId recipeId, required CookbookId cookBookID});
 
   /// This method is used to get history of nft owners
   /// Input: [itemId] and [cookBookID] of the NFT
@@ -134,36 +136,50 @@ abstract class RemoteDataStore {
   /// Input: [cookBookId] and [recipeId] of the NFT
   /// Output : [List][NftOwnershipHistory] will contain the list of NftOwnershipHistory data if success
   /// else will throw error
-  Future<List<NftOwnershipHistory>> getNftOwnershipHistoryByCookbookIdAndRecipeId(
-      {required String cookBookId, required String recipeId});
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistoryByCookbookIdAndRecipeId({
+    required CookbookId cookBookId,
+    required RecipeId recipeId,
+  });
 
   /// This method is used to get views count of NFT
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
   /// Output : [int] will contain the views count of the NFT
-  Future<int> getViewsCount({required String recipeId, required String cookBookID});
+  Future<int> getViewsCount({required RecipeId recipeId, required CookbookId cookBookID});
 
   /// This method is used to increment a view for an NFT when a user view an NFT
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
-  Future<void> countAView({required String recipeId, required String cookBookID, required String walletAddress});
+  Future<void> countAView({
+    required RecipeId recipeId,
+    required CookbookId cookBookID,
+    required Address walletAddress,
+  });
 
   /// This method is used get the like status of the NFT ; if it is Liked by me or not
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
   /// Output : [bool] will be the status for NFT if it is Liked or not
-  Future<bool> ifLikedByMe({required String recipeId, required String cookBookID, required String walletAddress});
+  Future<bool> ifLikedByMe({
+    required RecipeId recipeId,
+    required CookbookId cookBookID,
+    required Address walletAddress,
+  });
 
   /// This method is used to update the like status of an NFT; it will toggle the like button
   /// Input: [recipeId],[cookBookID] and [walletAddress] of the given NFT
-  Future<void> updateLikeStatus({required String recipeId, required String cookBookID, required String walletAddress});
+  Future<void> updateLikeStatus({
+    required RecipeId recipeId,
+    required CookbookId cookBookID,
+    required Address walletAddress,
+  });
 
   /// This method is used get the recipe object based on CookbookId and RecipeId
   /// Input: [recipeId] and [cookBookId] of the given Recipe
   /// Output : [pylons.Recipe] will be the recipe object based on CookbookId and RecipeId
-  Future<pylons.Recipe> getRecipe({required String cookBookId, required String recipeId});
+  Future<pylons.Recipe> getRecipe({required CookbookId cookBookId, required RecipeId recipeId});
 
   /// This method is used get the username based on the wallet address
   /// Input: [address] wll be the public address of the user's wallet
   /// Output : [String] will be the username as per the provided wallet address
-  Future<String> getUsername({required String address});
+  Future<String> getUsername({required Address address});
 
   /// This method is used get the list of recipes object based on [cookBookId]
   /// Input: [cookBookId] of the given Recipe
@@ -193,7 +209,7 @@ abstract class RemoteDataStore {
   /// This method is used get the list if items based on [owner]
   /// Input: [owner] will be the owner name to get the list of his items
   /// Output : [pylons.Item] will be the list of items based on their owner
-  Future<List<pylons.Item>> getListItemByOwner({required String owner});
+  Future<List<pylons.Item>> getListItemByOwner({required Address owner});
 
   /// This method is used get the execution based on its [id]
   /// Input: [id] will be the execution id
@@ -203,7 +219,7 @@ abstract class RemoteDataStore {
   /// This method is used get the list of trades based on its [creator]
   /// Input: [creator] will be the creator name to get trades
   /// Output : [pylons.Trade] will be the the list of trades based on its [creator]
-  Future<List<pylons.Trade>> getTradesBasedOnCreator({required String creator});
+  Future<List<pylons.Trade>> getTradesBasedOnCreator({required Address creator});
 
   /// This method is used get the list of cookbooks based on its wallet [address]
   /// Input: [address] will the public address of user's wallet
@@ -298,7 +314,7 @@ abstract class RemoteDataStore {
   /// Input: [recipeId] the id of the NFT, [author] the author of the NFT, [purchasePrice] the price of the NFT, [recipeName] the name of the recipe
   /// Output: [bool] return true if successful
   Future<bool> logPurchaseItem({
-    required String recipeId,
+    required RecipeId recipeId,
     required String recipeName,
     required String author,
     required double purchasePrice,
@@ -310,7 +326,7 @@ abstract class RemoteDataStore {
   Future<Tuple2<cosmos_tx.Tx, cosmos_tx.TxResponse?>> getTx({required String hash});
 
   Future<bool> logAddToCart({
-    required String recipeId,
+    required RecipeId recipeId,
     required String recipeName,
     required String author,
     required double purchasePrice,
@@ -324,6 +340,13 @@ abstract class RemoteDataStore {
     required String address,
     required AccountPublicInfo publicInfo,
   });
+
+  Future<String> enableDisableRecipe({
+    required CookbookId cookBookId,
+    required RecipeId recipeId,
+    required bool enabled,
+    required Address creatorAddress,
+  });
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -334,25 +357,32 @@ class RemoteDataStoreImp implements RemoteDataStore {
   final FirebaseDynamicLinks dynamicLinksGenerator;
   final FirestoreHelper firebaseHelper;
   final AnalyticsHelper analyticsHelper;
+  final timeOutDuration = const Duration(seconds: 10);
 
-  RemoteDataStoreImp(
-      {required this.dynamicLinksGenerator,
-      required this.httpClient,
-      required this.firebaseHelper,
-      required this.analyticsHelper,
-      required this.crashlyticsHelper,
-      required this.storePaymentService,
-      required this.firebaseAppCheck});
+  RemoteDataStoreImp({
+    required this.dynamicLinksGenerator,
+    required this.httpClient,
+    required this.firebaseHelper,
+    required this.analyticsHelper,
+    required this.crashlyticsHelper,
+    required this.storePaymentService,
+    required this.firebaseAppCheck,
+  });
 
   @override
-  Future<void> updateLikeStatus(
-      {required String recipeId, required String cookBookID, required String walletAddress}) async {
+  Future<void> updateLikeStatus({
+    required RecipeId recipeId,
+    required CookbookId cookBookID,
+    required Address walletAddress,
+  }) async {
     final baseApiUrl = getBaseEnv().baseMongoUrl;
     final body = {userIdKey: walletAddress};
 
     final uri = Uri.parse("$baseApiUrl/api/actions/likes/$cookBookID/$recipeId");
 
-    final response = await httpClient.post(uri, body: body);
+    final response = await httpClient.post(uri, body: body).timeout(
+          timeOutDuration,
+        );
 
     if (response.statusCode == API_SUCCESS_CODE) {
       final recipeMap = jsonDecode(response.body) as Map<String, dynamic>;
@@ -369,14 +399,16 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<int> getLikesCount({required String recipeId, required String cookBookID}) async {
+  Future<int> getLikesCount({required RecipeId recipeId, required CookbookId cookBookID}) async {
     final baseApiUrl = GetIt.I.get<BaseEnv>().baseMongoUrl;
 
     final uri = Uri.parse("$baseApiUrl/api/actions/likes/$cookBookID/$recipeId");
 
     log("$baseApiUrl/api/actions/likes/$cookBookID/$recipeId");
 
-    final response = await httpClient.get(uri);
+    final response = await httpClient.get(uri).timeout(
+          timeOutDuration,
+        );
 
     if (response.statusCode == API_SUCCESS_CODE) {
       final recipeMap = jsonDecode(response.body) as Map<String, dynamic>;
@@ -397,14 +429,20 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<void> countAView({required String recipeId, required String cookBookID, required String walletAddress}) async {
+  Future<void> countAView({
+    required RecipeId recipeId,
+    required CookbookId cookBookID,
+    required Address walletAddress,
+  }) async {
     final baseApiUrl = GetIt.I.get<BaseEnv>().baseMongoUrl;
 
-    final body = {userIdKey: walletAddress};
+    final body = {userIdKey: walletAddress.toString()};
 
     final uri = Uri.parse("$baseApiUrl/api/actions/views/$cookBookID/$recipeId");
 
-    final response = await httpClient.post(uri, body: body);
+    final response = await httpClient.post(uri, body: body).timeout(
+          timeOutDuration,
+        );
 
     if (response.statusCode == API_SUCCESS_CODE) {
       final recipeMap = jsonDecode(response.body) as Map<String, dynamic>;
@@ -421,12 +459,14 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<int> getViewsCount({required String recipeId, required String cookBookID}) async {
+  Future<int> getViewsCount({required RecipeId recipeId, required CookbookId cookBookID}) async {
     final baseApiUrl = GetIt.I.get<BaseEnv>().baseMongoUrl;
 
     final uri = Uri.parse("$baseApiUrl/api/actions/views/$cookBookID/$recipeId");
 
-    final response = await httpClient.get(uri);
+    final response = await httpClient.get(uri).timeout(
+          timeOutDuration,
+        );
 
     if (response.statusCode == API_SUCCESS_CODE) {
       final recipeMap = jsonDecode(response.body) as Map<String, dynamic>;
@@ -447,13 +487,18 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<bool> ifLikedByMe(
-      {required String recipeId, required String cookBookID, required String walletAddress}) async {
+  Future<bool> ifLikedByMe({
+    required RecipeId recipeId,
+    required CookbookId cookBookID,
+    required Address walletAddress,
+  }) async {
     final baseApiUrl = GetIt.I.get<BaseEnv>().baseMongoUrl;
 
     final uri = Uri.parse("$baseApiUrl/api/actions/likes/$walletAddress/$cookBookID/$recipeId");
 
-    final response = await httpClient.get(uri);
+    final response = await httpClient.get(uri).timeout(
+          timeOutDuration,
+        );
 
     if (response.statusCode == API_SUCCESS_CODE) {
       final recipeMap = jsonDecode(response.body) as Map<String, dynamic>;
@@ -479,7 +524,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final response = await httpClient
         .get(Uri.parse("${baseEnv.baseStripeUrl}/generate-registration-token?address=$address"))
         .timeout(
-          const Duration(seconds: 30),
+          timeOutDuration,
         );
 
     log(response.body, name: "Stripe | generateStripeRegistrationToken");
@@ -499,7 +544,11 @@ class RemoteDataStoreImp implements RemoteDataStore {
   @override
   Future<StripeGenerateUpdateTokenResponse> generateUpdateToken({required String address}) async {
     final baseEnv = getBaseEnv();
-    final response = await httpClient.get(Uri.parse("${baseEnv.baseStripeUrl}/generate-update-token?address=$address"));
+    final response = await httpClient
+        .get(
+          Uri.parse("${baseEnv.baseStripeUrl}/generate-update-token?address=$address"),
+        )
+        .timeout(timeOutDuration);
 
     if (response.statusCode == API_SUCCESS_CODE) {
       return StripeGenerateUpdateTokenResponse.fromJson(
@@ -521,7 +570,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
             ),
             body: jsonEncode(req.toJson()))
         .timeout(
-          const Duration(seconds: 30),
+          timeOutDuration,
         );
 
     if (response.statusCode == API_SUCCESS_CODE) {
@@ -542,7 +591,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
             ),
             body: jsonEncode(req.toJson()))
         .timeout(
-          const Duration(seconds: 30),
+          timeOutDuration,
         );
 
     log(response.body, name: "Stripe | getAccountLinkBasedOnUpdateToken");
@@ -561,9 +610,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
         .get(Uri.parse(
           "${baseEnv.denomTraceUrl}/ibc/apps/transfer/v1/denom_traces/$ibcHash",
         ))
-        .timeout(
-          const Duration(seconds: 30),
-        );
+        .timeout(timeOutDuration);
 
     if (response.statusCode == API_SUCCESS_CODE) {
       return IBCTraceModel.fromJson(jsonDecode(response.body) as Map<String, dynamic>, ibcHash);
@@ -582,9 +629,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
               "${baseEnv.baseStripeUrl}/address-based-link",
             ),
             body: jsonEncode(req))
-        .timeout(
-          const Duration(seconds: 30),
-        );
+        .timeout(timeOutDuration);
 
     log(response.body, name: "Stripe | getLoginLinkBasedOnAddress");
     if (response.statusCode == API_SUCCESS_CODE) {
@@ -604,9 +649,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
               "${baseEnv.baseStripeUrl}/register-account",
             ),
             body: jsonEncode(req.toJson()))
-        .timeout(
-          const Duration(seconds: 30),
-        );
+        .timeout(timeOutDuration);
 
     log(response.body, name: "Stripe | registerAccount");
     if (response.statusCode == API_SUCCESS_CODE) {
@@ -627,9 +670,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
         .get(Uri.parse(
           "${baseEnv.baseStripeUrl}/accountExists?address=$address",
         ))
-        .timeout(
-          const Duration(seconds: 30),
-        );
+        .timeout(timeOutDuration);
 
     log(response.body, name: "Stripe | doesStripeAccountExists");
     if (response.statusCode == API_SUCCESS_CODE) {
@@ -685,7 +726,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final transactionUri = '${baseEnv.baseApiUrl}/pylons/tx?address=%27$address%27';
 
-    final transactionResponse = await httpClient.get(Uri.parse(transactionUri));
+    final transactionResponse = await httpClient.get(Uri.parse(transactionUri)).timeout(timeOutDuration);
 
     final transactionMap = jsonDecode(transactionResponse.body);
 
@@ -704,7 +745,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final uri = Uri.parse("$baseApiUrl/api/notifications/getAllNotifications/$walletAddress/$limit/$offset");
 
-    final notificationResponse = await httpClient.get(uri);
+    final notificationResponse = await httpClient.get(uri).timeout(timeOutDuration);
 
     if (notificationResponse.statusCode != API_SUCCESS_CODE) {
       throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
@@ -730,7 +771,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final uri = Uri.parse("$baseApiUrl/pylons/item_history/$cookBookId/$itemId");
     final List<NftOwnershipHistory> historyList = [];
 
-    final historyResponse = await httpClient.get(uri);
+    final historyResponse = await httpClient.get(uri).timeout(timeOutDuration);
 
     if (historyResponse.statusCode != API_SUCCESS_CODE) {
       throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
@@ -751,14 +792,17 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<List<NftOwnershipHistory>> getNftOwnershipHistoryByCookbookIdAndRecipeId(
-      {required String cookBookId, required String recipeId}) async {
+  Future<List<NftOwnershipHistory>> getNftOwnershipHistoryByCookbookIdAndRecipeId({
+    required CookbookId cookBookId,
+    required RecipeId recipeId,
+  }) async {
     final baseApiUrl = getBaseEnv().baseApiUrl;
-    final uri = Uri.parse("$baseApiUrl/pylons/get_recipe_history/$cookBookId/$recipeId");
+    // ignore: noop_primitive_operations
+    final uri = Uri.parse("$baseApiUrl/pylons/get_recipe_history/${cookBookId.toString()}/${recipeId.toString()}");
 
     final List<NftOwnershipHistory> historyList = [];
 
-    final historyResponse = await httpClient.get(uri);
+    final historyResponse = await httpClient.get(uri).timeout(timeOutDuration);
 
     if (historyResponse.statusCode != API_SUCCESS_CODE) {
       throw HandlerFactory.ERR_SOMETHING_WENT_WRONG;
@@ -838,16 +882,25 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<String> updateRecipe({required MsgUpdateRecipe msgUpdateRecipe}) {
+  Future<String> updateRecipe({required UpdateRecipeModel updateRecipeModel}) {
+    final recipeProto3Json = updateRecipeModel.recipe.toProto3Json()! as Map;
+    recipeProto3Json.remove(kCreatedAtCamelCase);
+    recipeProto3Json.remove(kUpdatedAtCamelCase);
+    final msgUpdateRecipe = pylons.MsgUpdateRecipe.create()..mergeFromProto3Json(recipeProto3Json);
+    msgUpdateRecipe.enabled = updateRecipeModel.enabledStatus;
+    msgUpdateRecipe.creator = updateRecipeModel.publicAddress;
+    msgUpdateRecipe.coinInputs.first.coins.first.amount = updateRecipeModel.nftPrice;
+    msgUpdateRecipe.coinInputs.first.coins.first.denom = updateRecipeModel.denom;
+    msgUpdateRecipe.version = msgUpdateRecipe.version.incrementRecipeVersion();
     return _signAndBroadcast(msgUpdateRecipe);
   }
 
   @override
-  Future<pylons.Recipe> getRecipe({required String cookBookId, required String recipeId}) async {
+  Future<pylons.Recipe> getRecipe({required CookbookId cookBookId, required RecipeId recipeId}) async {
     final pylons.QueryClient queryClient = getQueryClient();
     final request = pylons.QueryGetRecipeRequest.create()
-      ..cookbookId = cookBookId
-      ..id = recipeId;
+      ..cookbookId = cookBookId.toString()
+      ..id = recipeId.toString();
 
     final response = await queryClient.recipe(request);
 
@@ -859,10 +912,10 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<String> getUsername({required String address}) async {
+  Future<String> getUsername({required Address address}) async {
     final pylons.QueryClient queryClient = getQueryClient();
 
-    final request = pylons.QueryGetUsernameByAddressRequest.create()..address = address;
+    final request = pylons.QueryGetUsernameByAddressRequest.create()..address = address.toString();
 
     final response = await queryClient.usernameByAddress(request);
 
@@ -957,9 +1010,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<List<pylons.Item>> getListItemByOwner({required String owner}) async {
+  Future<List<pylons.Item>> getListItemByOwner({required Address owner}) async {
     final pylons.QueryClient queryClient = getQueryClient();
-    final queryListItemByOwner = pylons.QueryListItemByOwnerRequest()..owner = owner;
+    final queryListItemByOwner = pylons.QueryListItemByOwnerRequest()..owner = owner.toString();
 
     final response = await queryClient.listItemByOwner(queryListItemByOwner);
 
@@ -987,7 +1040,11 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final uri = Uri.parse("$baseApiUrl/api/fcmtoken/update/$address/$fcmToken");
 
-    final response = await httpClient.post(uri, headers: {FIREBASE_APP_CHECK_HEADER: appCheckToken});
+    final response = await httpClient.post(uri, headers: {
+      FIREBASE_APP_CHECK_HEADER: appCheckToken,
+    }).timeout(
+      timeOutDuration,
+    );
 
     if (response.statusCode == API_SUCCESS_CODE) {
       return true;
@@ -1018,9 +1075,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<List<pylons.Trade>> getTradesBasedOnCreator({required String creator}) async {
+  Future<List<pylons.Trade>> getTradesBasedOnCreator({required Address creator}) async {
     final pylons.QueryClient queryClient = getQueryClient();
-    final request = pylons.QueryListTradesByCreatorRequest.create()..creator = creator;
+    final request = pylons.QueryListTradesByCreatorRequest.create()..creator = creator.toString();
 
     final response = await queryClient.listTradesByCreator(request);
 
@@ -1069,22 +1126,6 @@ class RemoteDataStoreImp implements RemoteDataStore {
     throw TradeNotFoundFailure(LocaleKeys.trade_not_found.tr());
   }
 
-  bank.QueryClient getBankQueryClient() {
-    return bank.QueryClient(sl.get<BaseEnv>().networkInfo.gRPCChannel);
-  }
-
-  CustomTransactionSigningGateway getCustomTransactionSigningGateway() {
-    return sl.get<CustomTransactionSigningGateway>();
-  }
-
-  TransactionSigningGateway getTransactionSigningGateway() {
-    return sl.get<TransactionSigningGateway>();
-  }
-
-  BaseEnv getBaseEnv() {
-    return sl.get<BaseEnv>();
-  }
-
   @override
   Future<String> sendGoogleInAppPurchaseCoinsRequest(GoogleInAppPurchaseModel googleInAppPurchaseModel) async {
     final msgGoogleInAPPPurchase = pylons.MsgGoogleInAppPurchaseGetCoins()
@@ -1096,7 +1137,9 @@ class RemoteDataStoreImp implements RemoteDataStore {
     if (walletsResultEither.isLeft()) {
       crashlyticsHelper.recordFatalError(error: walletsResultEither.swap().toOption().toNullable()!.message);
       throw const TransactionSigningFailure(
-          message: SOMETHING_WRONG_FETCHING_WALLETS, type: HandlerFactory.ERR_FETCHING_WALLETS);
+        message: SOMETHING_WRONG_FETCHING_WALLETS,
+        type: HandlerFactory.ERR_FETCHING_WALLETS,
+      );
     }
 
     final accountsList = walletsResultEither.getOrElse(() => []);
@@ -1156,13 +1199,15 @@ class RemoteDataStoreImp implements RemoteDataStore {
       link: Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address"),
       uriPrefix: kDeepLink,
       androidParameters: AndroidParameters(
-          packageName: packageName,
-          fallbackUrl:
-              Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
+        packageName: packageName,
+        fallbackUrl:
+            Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address"),
+      ),
       iosParameters: IOSParameters(
-          bundleId: bundleId,
-          fallbackUrl:
-              Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address")),
+        bundleId: bundleId,
+        fallbackUrl:
+            Uri.parse("$bigDipperBaseLink?recipe_id=${nft.recipeID}&cookbook_id=${nft.cookbookID}&address=$address"),
+      ),
       navigationInfoParameters: const NavigationInfoParameters(forcedRedirectEnabled: true),
     );
 
@@ -1189,7 +1234,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final walletLookupKey = createWalletLookUp(publicInfo);
 
     final msgObj = pylons.MsgCreateAccount(
-      creator: walletCreationModel.creatorAddress,
+      creator: walletCreationModel.creatorAddress.toString(),
       token: appCheckToken,
       referralAddress: referralToken,
     );
@@ -1212,6 +1257,27 @@ class RemoteDataStoreImp implements RemoteDataStore {
     }
 
     return result.getOrElse(() => TransactionResponse.initial());
+  }
+
+  @override
+  Future<String> enableDisableRecipe({
+    required CookbookId cookBookId,
+    required RecipeId recipeId,
+    required bool enabled,
+    required Address creatorAddress,
+  }) async {
+    final recipe = await getRecipe(cookBookId: cookBookId, recipeId: recipeId);
+
+    final recipeProto3Json = recipe.toProto3Json()! as Map;
+    recipeProto3Json.remove(kCreatedAtCamelCase);
+    recipeProto3Json.remove(kUpdatedAtCamelCase);
+
+    final msgUpdateRecipe = pylons.MsgUpdateRecipe.create()..mergeFromProto3Json(recipeProto3Json);
+    msgUpdateRecipe.enabled = enabled;
+    msgUpdateRecipe.version = msgUpdateRecipe.version.incrementRecipeVersion();
+    msgUpdateRecipe.creator = creatorAddress.toString();
+
+    return _signAndBroadcast(msgUpdateRecipe);
   }
 
   @override
@@ -1292,26 +1358,31 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<bool> logPurchaseItem(
-      {required String recipeId,
-      required String recipeName,
-      required String author,
-      required double purchasePrice}) async {
+  Future<bool> logPurchaseItem({
+    required RecipeId recipeId,
+    required String recipeName,
+    required String author,
+    required double purchasePrice,
+  }) async {
     await analyticsHelper.logPurchaseItem(
-        recipeId: recipeId, recipeName: recipeName, author: author, purchasePrice: purchasePrice);
+      recipeId: recipeId.toString(),
+      recipeName: recipeName,
+      author: author,
+      purchasePrice: purchasePrice,
+    );
     return true;
   }
 
   @override
   Future<bool> logAddToCart({
-    required String recipeId,
+    required RecipeId recipeId,
     required String recipeName,
     required String author,
     required double purchasePrice,
     required String currency,
   }) async {
     await analyticsHelper.logAddToCart(
-      recipeId: recipeId,
+      recipeId: recipeId.toString(),
       recipeName: recipeName,
       author: author,
       purchasePrice: purchasePrice,
@@ -1323,6 +1394,22 @@ class RemoteDataStoreImp implements RemoteDataStore {
   @override
   Future<void> logUserJourney({required String screenName}) async {
     await analyticsHelper.logUserJourney(screenName: screenName);
+  }
+
+  bank.QueryClient getBankQueryClient() {
+    return bank.QueryClient(sl.get<BaseEnv>().networkInfo.gRPCChannel);
+  }
+
+  CustomTransactionSigningGateway getCustomTransactionSigningGateway() {
+    return sl.get<CustomTransactionSigningGateway>();
+  }
+
+  TransactionSigningGateway getTransactionSigningGateway() {
+    return sl.get<TransactionSigningGateway>();
+  }
+
+  BaseEnv getBaseEnv() {
+    return sl.get<BaseEnv>();
   }
 }
 

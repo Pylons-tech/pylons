@@ -51,9 +51,24 @@
             "doubles": [
             ],
             "longs": [
+			    {
+                    "key": "coins",
+                    "minValue": 0,
+                    "maxValue": 999999999
+                },
                 {
                     "key": "currentHp",
                     "minValue": 1,
+                    "maxValue": 999999999
+                },
+				{
+                    "key": "shards",
+                    "minValue": 0,
+                    "maxValue": 999999999
+                },
+				{
+                    "key": "wins",
+                    "minValue": 0,
                     "maxValue": 999999999
                 },
                 {
@@ -75,9 +90,24 @@
             "doubles": [
             ],
             "longs": [
+			    {
+                    "key": "coins",
+                    "minValue": 0,
+                    "maxValue": 999999999
+                },
                 {
                     "key": "currentHp",
                     "minValue": 1,
+                    "maxValue": 999999999
+                },
+				{
+                    "key": "shards",
+                    "minValue": 0,
+                    "maxValue": 999999999
+                },
+				{
+                    "key": "wins",
+                    "minValue": 0,
                     "maxValue": 999999999
                 }
             ],

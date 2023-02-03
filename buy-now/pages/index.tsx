@@ -37,16 +37,15 @@ export default function EaselBuyMainPage({
     const resCoins: any = coinInputs[0]?.coins[0];
     denom = resCoins.denom;
     if (resCoins?.denom === "USD") {
-      price = `${Math.floor(resCoins.amount / 100)}.${
-        resCoins.amount % 100
-      } USD`;
+      price = `${Math.floor(resCoins.amount / 100)}.${resCoins.amount % 100
+        } USD`;
     } else {
       const coins: any[] = settings?.public?.coins;
       coin = coins?.length
         ? coins.find(
-            (coin) =>
-              coin?.denom?.toLowerCase() === resCoins?.denom?.toLowerCase()
-          )
+          (coin) =>
+            coin?.denom?.toLowerCase() === resCoins?.denom?.toLowerCase()
+        )
         : null;
       if (coin) {
         const displayName: string = coin?.displayName ?? "";
@@ -103,7 +102,7 @@ export default function EaselBuyMainPage({
   /* istanbul ignore next */
   const amountMinted: string = itemOutputs?.amount_minted;
   /* istanbul ignore next */
-  const quantity: string = itemOutputs?.quantity;
+  const quantity: string = itemOutputs?.Quantity;
   /* istanbul ignore next */
   const edition = `${amountMinted} of ${quantity}`;
   /* istanbul ignore next */
@@ -120,7 +119,7 @@ export default function EaselBuyMainPage({
       <EaselBuy
         createdBy={creator}
         name={selectedRecipe?.name}
-        description={dimensions}
+        description={selectedRecipe?.description}
         price={price}
         denom={denom}
         nftType={nftType}
@@ -128,7 +127,7 @@ export default function EaselBuyMainPage({
         royalty={(+itemOutputs?.trade_percentage * tradePercent)?.toString()}
         edition={edition}
         media={media}
-        createdAt={selectedRecipe?.created_at}
+        createdAt={creator}
         recipeId={selectedRecipe?.id}
         src={src}
       ></EaselBuy>
@@ -139,20 +138,21 @@ export default function EaselBuyMainPage({
 export async function getServerSideProps({ res, query }: any): Promise<any> {
   const recipeId: string = query?.recipe_id ?? "";
   const cookbookId: string = query?.cookbook_id ?? "";
-  const baseURL: string = process?.env?.NEXT_PUBLIC_API_KEY ?? "";
+  const baseURL: string = "https://api.pylons.nodestake.top";
+  if (!recipeId || !cookbookId) {
+    return {
+      redirect: {
+        permanent: true,
+        destination: HOMEPAGE_URL,
+      },
+    };
+  }
   try {
     const data = await fetch(
       `${baseURL}/pylons/recipe/${cookbookId}/${recipeId}`
     );
     const recipeDetails = await data.json();
-    if (!recipeId || !cookbookId) {
-      return {
-        redirect: {
-          permanent: true,
-          destination: HOMEPAGE_URL,
-        },
-      };
-    } else if (!recipeDetails?.recipe) {
+    if (!recipeDetails?.recipe) {
       return {
         redirect: {
           permanent: false,
@@ -166,11 +166,6 @@ export async function getServerSideProps({ res, query }: any): Promise<any> {
       },
     };
   } catch (error) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/404",
-      },
-    };
+    throw (error);
   }
 }

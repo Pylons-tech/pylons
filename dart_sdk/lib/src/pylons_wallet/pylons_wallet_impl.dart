@@ -20,13 +20,13 @@ import 'package:pylons_sdk/src/generated/pylons/execution.pb.dart';
 import 'package:pylons_sdk/src/generated/pylons/item.pb.dart';
 import 'package:pylons_sdk/src/generated/pylons/payment_info.pb.dart';
 import 'package:pylons_sdk/src/features/ipc/ipc_handler_factory.dart';
-import 'package:pylons_sdk/src/features/ipc/responseCompleters.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_message.dart';
 import 'package:pylons_sdk/src/features/models/sdk_ipc_response.dart';
 import 'package:pylons_sdk/src/generated/pylons/recipe.pb.dart';
 import 'package:pylons_sdk/src/generated/pylons/trade.pb.dart';
 import 'package:pylons_sdk/src/generated/pylons/tx.pb.dart';
 import 'package:pylons_sdk/src/pylons_wallet.dart';
+import 'package:pylons_sdk/src/pylons_wallet/response_fetcher/response_fetch.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:uni_links_platform_interface/uni_links_platform_interface.dart';
 
@@ -63,7 +63,8 @@ class PylonsWalletImpl implements PylonsWallet {
     final sdkIPCMessage = SDKIPCMessage(key, data, getHostBasedOnOS(Platform.isAndroid), requestResponse);
 
     if (requestResponse) {
-      return sendMessage(sdkIPCMessage, initResponseCompleter(key));
+      final responseFetcher = await getResponseFetch();
+      return responseFetcher.sendMessage(sdkipcMessage: sdkIPCMessage, key: key);
     }
 
     return sendMessageWithoutResponse(sdkIPCMessage);
@@ -83,14 +84,6 @@ class PylonsWalletImpl implements PylonsWallet {
       print('Something went wrong in parsing');
       return;
     }
-  }
-
-  @override
-  Future<SDKIPCResponse> sendMessage(SDKIPCMessage sdkipcMessage, Completer<SDKIPCResponse> completer) {
-    final encodedMessage = sdkipcMessage.createMessage();
-    final universalLink = createLinkBasedOnOS(encodedMessage: encodedMessage, isAndroid: Platform.isAndroid);
-    dispatchUniLink(universalLink);
-    return completer.future;
   }
 
   SDKIPCResponse sendMessageWithoutResponse(SDKIPCMessage sdkipcMessage) {
@@ -213,34 +206,27 @@ class PylonsWalletImpl implements PylonsWallet {
       required String sender,
       bool requestResponse = true}) async {
     return Future.sync(() async {
-      return Future.sync(() async {
-        final response = await _dispatch(
-            Strings.TX_EXECUTE_RECIPE,
-            jsonEncode(MsgExecuteRecipe(
-                    creator: sender,
-                    cookbookId: cookbookId,
-                    recipeId: recipeName,
-                    coinInputsIndex: fixnum.Int64(coinInputIndex),
-                    itemIds: itemIds,
-                    paymentInfos: paymentInfo)
-                .toProto3Json()),
-            requestResponse: requestResponse);
+      final response = await _dispatch(
+          Strings.TX_EXECUTE_RECIPE,
+          jsonEncode(MsgExecuteRecipe(
+                  creator: sender,
+                  cookbookId: cookbookId,
+                  recipeId: recipeName,
+                  coinInputsIndex: fixnum.Int64(coinInputIndex),
+                  itemIds: itemIds,
+                  paymentInfos: paymentInfo)
+              .toProto3Json()),
+          requestResponse: requestResponse);
 
-        if (response is SDKIPCResponse<Execution>) {
-          return response;
-        }
+      if (response is SDKIPCResponse<Execution>) {
+        return response;
+      }
 
-        if (response is SDKIPCResponse<String>) {
-          return SDKIPCResponse.success(Execution.create()..mergeFromProto3Json(jsonDecode(response.data!)),
-              action: Strings.TX_EXECUTE_RECIPE);
-        }
+      if (response is SDKIPCResponse<String> && !requestResponse) {
+        return SDKIPCResponse.success(Execution.create(), action: Strings.TX_EXECUTE_RECIPE);
+      }
 
-        if (response is SDKIPCResponse<String> && !requestResponse) {
-          return SDKIPCResponse.success(Execution.create(), action: Strings.TX_EXECUTE_RECIPE);
-        }
-
-        throw Exception('Response malformed');
-      });
+      throw Exception('Response malformed');
     });
   }
 

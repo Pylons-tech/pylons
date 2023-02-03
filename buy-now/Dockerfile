@@ -15,6 +15,8 @@ ENV GENERATE_SOURCEMAP false
 
 WORKDIR /app
 
+ARG NEXT_PUBLIC_API_KEY
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
@@ -23,6 +25,8 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
+
+ENV NEXT_PUBLIC_API_KEY ${NEXT_PUBLIC_API_KEY}
 
 RUN npm run build
 
@@ -46,6 +50,7 @@ COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/settings.json ./settings.json
 
 # Automatically leverage output traces to reduce image size 
 # https://nextjs.org/docs/advanced-features/output-file-tracing

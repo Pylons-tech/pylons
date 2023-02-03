@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class ImageUtil {
   ImageUtil();
 
+  static String PYLONS_LOGO = "assets/images/icons/pylons_logo_24x24.png";
   static String UPDATE_APP_ICON = 'assets/images/icons/update_app_icon.jpg';
   static String DUMMY_USER = 'assets/images/dummy_user.png';
   static String LOADING_GIF = 'assets/images/gifs/loading.gif';
@@ -21,11 +22,12 @@ class ImageUtil {
   static String VIDEO_ICON = "assets/images/icons/video_icon.png";
   static String AUDIO_ICON = "assets/images/icons/audio_icon.png";
   static String PYLONS_LOGO_QR = "assets/images/icons/pylons_logo.jpeg";
-  static String PYLONS_LOGO = "assets/images/icons/pylons_logo_dark.png";
+  static String PYLONS_LOGO_DARK = "assets/images/icons/pylons_logo_dark.png";
   static String TextFieldSingleLine = "assets/images/text_field_single_line.png";
   static String TextFieldMultiLine = "assets/images/text_field_multi_line.png";
   static String LIKE_FULL = 'assets/images/icons/like_full.png';
   static String SPLASH_SCREEN_BG = "assets/images/splash/Splash_Screen.jpg";
+  static String CLOSE_ICON = 'assets/images/icons/close.png';
 
   static List<Image> BG_IMAGES = [
     Image.asset(

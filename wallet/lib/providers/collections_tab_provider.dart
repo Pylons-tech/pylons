@@ -9,4 +9,9 @@ class CollectionsTabProvider extends ChangeNotifier {
   }
 }
 
-enum CollectionsType { purchases, creations }
+enum CollectionsType {
+  purchases,
+  creations,
+  non_nft_creations,
+  trades,
+}

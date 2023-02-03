@@ -1,7 +1,7 @@
 name: pylons_wallet
 description: Pylons Wallet
 publish_to: "none"
-version: 1.0.1+168
+version: 1.0.1+170
 
 
 
@@ -9,7 +9,6 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-
   advance_pdf_viewer:
     path: pkgs/pdf_viewer-master
   alan:
@@ -19,9 +18,8 @@ dependencies:
   backdrop: ^0.8.1
   bottom_drawer: ^0.0.3
   cached_network_image: ^3.1.0
-  cloud_firestore: ^4.0.2
+  cloud_firestore: ^4.3.0  
   cupertino_icons: ^1.0.3
-
   dartz: ^0.10.1
   decimal: ^2.3.0
   detectable_text_field: ^2.0.3
@@ -29,21 +27,22 @@ dependencies:
   easy_localization: ^3.0.1
   equatable: ^2.0.5
   expandable: ^5.0.1
-  firebase_analytics: ^10.0.2
-  firebase_app_check: ^0.1.1+1
-  firebase_core: ^2.1.0
-  firebase_crashlytics: ^3.0.2
-  firebase_dynamic_links: ^5.0.2
-  firebase_messaging: ^14.0.2
-  firebase_remote_config: ^3.0.2
+  firebase_analytics: ^10.0.8
+  firebase_app_check: ^0.1.1+7
+  firebase_core: ^2.4.0
+  firebase_crashlytics: ^3.0.8
+  firebase_dynamic_links: ^5.0.10
+  firebase_messaging: ^14.2.0
+  firebase_remote_config: ^3.0.8
   fixnum: ^1.0.0
   flappy: ^0.1.7
   floor: ^1.3.0
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.0.2
+  flutter_downloader: ^1.9.1
   flutter_inappwebview: ^5.7.2+2
-  flutter_local_notifications: ^12.0.0
+  flutter_local_notifications: ^13.0.0
   flutter_localizations:
     sdk: flutter
   flutter_mobx: ^2.0.1
@@ -57,12 +56,12 @@ dependencies:
   focus_detector: ^2.0.1
   get_it: ^7.2.0
   google_sign_in: ^5.4.2
-  googleapis: ^9.2.0
+  googleapis: ^10.0.0
   grpc: ^3.0.2
   home_widget: ^0.1.6
   http: ^0.13.4
   icloud_storage: ^2.0.0
-  image: ^3.2.0
+  image: ^4.0.12
   image_cropper: ^3.0.0
   image_picker: ^0.8.5+3
   in_app_purchase: ^3.0.7
@@ -89,6 +88,7 @@ dependencies:
   transaction_signing_gateway:
     path: pkgs/transaction_signing_gateway
   transparent_image: ^2.0.0
+  tuple: ^2.0.1
   uni_links: ^0.5.1
   url_launcher: ^6.1.5
   uuid: ^3.0.6

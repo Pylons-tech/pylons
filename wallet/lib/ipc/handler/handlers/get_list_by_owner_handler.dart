@@ -7,6 +7,8 @@ import 'package:pylons_wallet/ipc/models/sdk_ipc_message.dart';
 import 'package:pylons_wallet/ipc/models/sdk_ipc_response.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 
+import '../../../model/common.dart';
+
 class GetItemsByOwnerHandler implements BaseHandler {
   @override
   SdkIpcMessage sdkIpcMessage;
@@ -18,7 +20,7 @@ class GetItemsByOwnerHandler implements BaseHandler {
     final walletsStore = GetIt.I.get<WalletsStore>();
     final jsonMap = jsonDecode(sdkIpcMessage.json) as Map;
     final owner = jsonMap[HandlerFactory.OWNER_ADDRESS].toString();
-    final response = await walletsStore.getItemListByOwner(owner: owner);
+    final response = await walletsStore.getItemListByOwner(owner: Address(owner));
     response.sender = sdkIpcMessage.sender;
     response.action = sdkIpcMessage.action;
     return SynchronousFuture(response);

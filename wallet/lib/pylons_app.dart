@@ -58,6 +58,7 @@ import 'package:pylons_wallet/utils/route_util.dart';
 
 import 'generated/locale_keys.g.dart';
 import 'model/transaction_failure_model.dart';
+import 'pages/presenting_onboard_page/screens/accept_policy_screen.dart';
 import 'providers/collections_tab_provider.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey();
@@ -143,7 +144,10 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
                 return itemsProvider;
               },
             ),
-            ChangeNotifierProvider.value(value: sl.get<CollectionsTabProvider>())
+            ChangeNotifierProvider.value(value: sl.get<CollectionsTabProvider>()),
+            Provider<WalletsStore>.value(
+              value: sl<WalletsStore>(),
+            ),
           ],
           child: MaterialApp(
             navigatorKey: navigatorKey,
@@ -211,6 +215,26 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
                   return PurchaseItemScreen(
                     key: ValueKey(nft),
                     nft: nft,
+                  );
+                }
+
+                return const SizedBox();
+              },
+              RouteUtil.ROUTE_ACCEPT_POLICY: (context) {
+                if (ModalRoute.of(context) == null) {
+                  return const SizedBox();
+                }
+
+                if (ModalRoute.of(context)?.settings.arguments == null) {
+                  return const SizedBox();
+                }
+
+                if (ModalRoute.of(context)?.settings.arguments is NFT) {
+                  final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
+
+                  return AcceptPolicyScreen(
+                    nft: nft,
+                    viewModel: sl(),
                   );
                 }
 

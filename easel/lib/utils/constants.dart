@@ -3,9 +3,22 @@ import 'package:easy_localization/easy_localization.dart';
 import '../generated/locale_keys.g.dart';
 
 List kTutorialItems = [
-  {'header': LocaleKeys.upload_your_ipfs.tr(), 'description': LocaleKeys.pick_the_file.tr(), 'image': 'assets/images/tutorial1.png'},
-  {'header': LocaleKeys.edit_your_nft.tr(), 'description': LocaleKeys.enter_information_describing_your_nft.tr(), 'image': 'assets/images/tutorial2.png'},
-  {'header': LocaleKeys.publish_your_nft.tr(), 'header1': LocaleKeys.pylons_app.tr(), 'description': LocaleKeys.once_you_enter_all.tr(), 'image': 'assets/images/tutorial3.png'},
+  {
+    'header': LocaleKeys.upload_your_ipfs.tr(),
+    'description': LocaleKeys.pick_the_file.tr(),
+    'image': 'assets/images/tutorial1.png'
+  },
+  {
+    'header': LocaleKeys.edit_your_nft.tr(),
+    'description': LocaleKeys.enter_information_describing_your_nft.tr(),
+    'image': 'assets/images/tutorial2.png'
+  },
+  {
+    'header': LocaleKeys.publish_your_nft.tr(),
+    'header1': LocaleKeys.pylons_app.tr(),
+    'description': LocaleKeys.once_you_enter_all.tr(),
+    'image': 'assets/images/tutorial3.png'
+  },
 ];
 
 /// ```PNG assets
@@ -62,6 +75,8 @@ class SVGUtils {
   static const kListIcon = 'assets/images/svg/list.svg';
   static const kOwnerVerifiedIcon = 'assets/images/svg/verified.svg';
   static const kFileTypeImageIcon = 'assets/images/svg/file_type_image.svg';
+  static const kAudioFileIcon = 'assets/images/svg/audio_file_icon.svg';
+  static const kFullScreenImgGridview = 'assets/images/svg/full_screen_img_gridview.svg';
 }
 
 const String kLoadingGif = 'assets/images/gifs/loading.gif';
@@ -90,7 +105,7 @@ const kMaxEdition = 10000;
 const kMinRoyalty = 0;
 const kMaxRoyalty = 99.99;
 const kFileSizeLimitInGB = 32;
-const kFileSizeLimitForAudiVideoInGB = 0.125;
+const kFileSizeLimitForAudioVideoInGB = 0.125;
 const kMaxPriceLength = 14;
 const kSecInMillis = 1000;
 const double tabletMinWidth = 600;
@@ -172,6 +187,8 @@ const kFileSize = "fileSize";
 const kRealWorld = "real_world";
 
 const kThumbnailFileName = "temp.jpg";
+const kFormat = "format";
+const kFileName = "fileName";
 
 final List<String> stepLabels = ["upload", "detail", "price"];
 
@@ -259,6 +276,12 @@ const kNFTTypeVideoIconKey = "NFT_type_video_icon_key";
 const kNFTTypeAudioIconKey = "NFT_type_audio_icon_key";
 const kNFTTypePdfIconKey = "NFT_type_pdf_icon_key";
 const kNFTType3dModelIconKey = "NFT_type_3d_icon_key";
+const kRefreshPublishedNFTButtonKey = "refresh_published_nft_button_key";
+const kSelectedDraftButtonKey = "selected_draft_button_key";
+const kSelectedPublishedButtonKey = "selected_published_button_key";
+const kProgressStepsKey = "progress_steps_key";
+const kImageFullScreenGridviewKey = "image_full_screen_gridview_key";
+
 
 class AnalyticsScreenEvents {
   static String tutorialScreen = "TutorialScreen";

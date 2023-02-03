@@ -6,17 +6,17 @@ import 'package:easel_flutter/models/picked_file_model.dart';
 import 'package:easel_flutter/screens/preview_screen.dart';
 import 'package:easel_flutter/utils/constants.dart';
 import 'package:easel_flutter/utils/easel_app_theme.dart';
-import 'package:easel_flutter/utils/screen_responsive.dart';
 import 'package:easel_flutter/utils/space_utils.dart';
 import 'package:easel_flutter/viewmodels/home_viewmodel.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart' as svg_provider;
 import 'package:provider/provider.dart';
 
 import '../generated/locale_keys.g.dart';
+import 'custom_widgets/step_labels.dart';
+import 'custom_widgets/steps_indicator.dart';
 
 class ChooseFormatScreen extends StatefulWidget {
   const ChooseFormatScreen({Key? key}) : super(key: key);
@@ -37,8 +37,14 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
     }
 
     if (!provider.nftFormat.extensions.contains(result.extension)) {
-      errorText.value = LocaleKeys.un_supported_format.tr();
-      showErrorDialog();
+      final fileName = result.fileName.replaceAll(".${result.extension}", "");
+      errorText.value = LocaleKeys.could_not_uploaded.tr(
+        namedArgs: {
+          kFileName: fileName,
+          kFormat: provider.nftFormat.format.getTitle(),
+        },
+      );
+      showErrorDialog(extensions: provider.nftFormat.extensions);
       return;
     }
 
@@ -48,9 +54,9 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
       return;
     }
 
-    if (easelProvider.repository.getFileSizeInGB(File(result.path).lengthSync()) > kFileSizeLimitForAudiVideoInGB) {
+    if (easelProvider.repository.getFileSizeInGB(File(result.path).lengthSync()) > kFileSizeLimitForAudioVideoInGB) {
       errorText.value = LocaleKeys.size_error.tr();
-      showErrorDialog(type: nftFormat.format);
+      showErrorDialog(type: nftFormat.format, extensions: nftFormat.extensions);
       return;
     }
 
@@ -64,11 +70,12 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
             )));
   }
 
-  void showErrorDialog({NFTTypes? type}) {
+  void showErrorDialog({NFTTypes? type, required List<String> extensions}) {
     showDialog(
       context: context,
       builder: (context) => _ErrorMessageWidget(
         errorMessage: errorText.value,
+        extensions: extensions,
         nftTypes: type,
         onClose: () {
           Navigator.of(context).pop();
@@ -93,34 +100,44 @@ class _ChooseFormatScreenState extends State<ChooseFormatScreen> {
       body: Column(
         children: [
           const VerticalSpace(20),
-          Stack(alignment: Alignment.center, children: [
-            Align(
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Align(
                 alignment: Alignment.centerLeft,
                 child: ValueListenableBuilder(
                   valueListenable: homeViewModel.currentPage,
                   builder: (_, int currentPage, __) => Padding(
-                      padding: EdgeInsets.only(left: 10.sp),
-                      child: IconButton(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                          Navigator.of(context).pop();
-                        },
-                        icon: const Icon(
-                          Icons.arrow_back_ios,
-                          color: EaselAppTheme.kGrey,
-                        ),
-                      )),
-                )),
-            ValueListenableBuilder(
-              valueListenable: homeViewModel.currentPage,
-              builder: (_, int currentPage, __) {
-                return Text(
-                  homeViewModel.pageTitles[homeViewModel.currentPage.value],
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kDarkText),
-                );
-              },
-            ),
-          ]),
+                    padding: EdgeInsets.only(left: 10.w),
+                    child: IconButton(
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back_ios,
+                        color: EaselAppTheme.kGrey,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              ValueListenableBuilder(
+                valueListenable: homeViewModel.currentPage,
+                builder: (_, int currentPage, __) {
+                  return Column(
+                    key: const Key(kProgressStepsKey),
+                    children: [
+                      const VerticalSpace(20),
+                      MyStepsIndicator(currentStep: homeViewModel.currentStep),
+                      const VerticalSpace(5),
+                      StepLabels(currentPage: homeViewModel.currentPage, currentStep: homeViewModel.currentStep),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
           const VerticalSpace(20),
           Expanded(
             child: _CardWidget(
@@ -231,7 +248,7 @@ class _CardWidget extends StatelessWidget {
                             NftFormat.supportedFormats[typeIdx].badge,
                           ),
                           SizedBox(
-                            width: 10.0.w,
+                            width: 20.0.w,
                           ),
                           Expanded(
                             child: Column(
@@ -240,14 +257,22 @@ class _CardWidget extends StatelessWidget {
                               children: [
                                 Text(
                                   NftFormat.supportedFormats[typeIdx].format.getTitle().toUpperCase(),
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(color: textIconColor, fontSize: 45.sp, fontWeight: FontWeight.bold),
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                        color: textIconColor,
+                                        fontSize: 45.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                 ),
                                 SizedBox(height: 3.h),
                                 RichText(
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
                                   text: TextSpan(
-                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: textIconColor, fontSize: 12.sp, fontWeight: FontWeight.w600),
+                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                          color: textIconColor,
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                     text: NftFormat.supportedFormats[typeIdx].getExtensionsList(),
                                   ),
                                 ),
@@ -281,132 +306,80 @@ class _CardWidget extends StatelessWidget {
 }
 
 class _ErrorMessageWidget extends StatelessWidget {
-  const _ErrorMessageWidget({Key? key, required this.errorMessage, required this.onClose, this.nftTypes}) : super(key: key);
+  const _ErrorMessageWidget({
+    Key? key,
+    required this.errorMessage,
+    required this.extensions,
+    required this.onClose,
+    this.nftTypes,
+  }) : super(key: key);
 
   final String errorMessage;
   final VoidCallback onClose;
   final NFTTypes? nftTypes;
+  final List<String> extensions;
 
   @override
   Widget build(BuildContext context) {
-    return ScreenResponsive(
-      mobileScreen: (context) => buildMobile(context),
-      tabletScreen: (context) => buildTablet(context),
-    );
+    return buildMobile(context);
   }
 
-  Padding buildTablet(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 0.17.sw),
-      child: DecoratedBox(
-        decoration: const BoxDecoration(image: DecorationImage(image: svg_provider.Svg(SVGUtils.kSvgUploadErrorBG))),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SvgPicture.asset(
-              SVGUtils.kSvgCloseIcon,
-              height: 30.h,
-            ),
-            SizedBox(height: 30.h),
-            Text(
-              errorMessage,
-              style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
-            ),
-            SizedBox(height: 30.h),
-            Column(
+  Widget buildMobile(BuildContext context) {
+    return Container(
+      width: double.maxFinite,
+      height: double.maxFinite,
+      margin: EdgeInsets.symmetric(horizontal: 0.1.sw, vertical: 0.08.sw),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Spacer(),
+          Container(
+            width: double.maxFinite,
+            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
+            decoration: const BoxDecoration(color: EaselAppTheme.kRed),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text((nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio) ? "• ${(kFileSizeLimitForAudiVideoInGB * 1000).toStringAsFixed(0)}MB Limit" : "• ${kFileSizeLimitInGB}GB Limit",
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
-                Text(kUploadHint2, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
-                Text(LocaleKeys.upload_hint_three.tr(), style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
+                Text(
+                  errorMessage,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                Text(
+                  (nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio)
+                      ? "• ${(kFileSizeLimitForAudioVideoInGB * 1000).toStringAsFixed(0)}MB limit"
+                      : "• ${kFileSizeLimitInGB}GB limit",
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Colors.white,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w800,
+                      ),
+                ),
+                Text(
+                  "• ${extensions.join(", ").toUpperCase()}",
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Colors.white,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w800,
+                      ),
+                ),
+                Text(
+                  LocaleKeys.upload_hint_three.tr(),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Colors.white,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w800,
+                      ),
+                ),
               ],
             ),
-            SizedBox(height: 30.h),
-            GestureDetector(
-              child: SizedBox(
-                width: 0.35.sw,
-                height: 0.09.sw,
-                child: Stack(
-                  children: [
-                    Positioned.fill(child: SvgPicture.asset(SVGUtils.kSvgCloseButton, fit: BoxFit.cover)),
-                    Center(
-                      child: Text(
-                          LocaleKeys.close.tr(),
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              onTap: () {
-                onClose();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Padding buildMobile(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 0.10.sw),
-      child: DecoratedBox(
-        decoration: const BoxDecoration(image: DecorationImage(image: svg_provider.Svg(SVGUtils.kSvgUploadErrorBG))),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(height: 10.h),
-            SvgPicture.asset(
-              SVGUtils.kSvgCloseIcon,
-              height: 30.h,
-            ),
-            SizedBox(height: 30.h),
-            Text(
-              errorMessage,
-              style: TextStyle(color: Colors.white, fontSize: 18.sp, fontWeight: FontWeight.w800),
-            ),
-            SizedBox(height: 30.h),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text((nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio) ? "• ${(kFileSizeLimitForAudiVideoInGB * 1000).toStringAsFixed(0)}MB Limit" : "• ${kFileSizeLimitInGB}GB Limit",
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
-                Text(kUploadHint2, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
-                Text(LocaleKeys.upload_hint_three.tr(), style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w800)),
-              ],
-            ),
-            SizedBox(height: 30.h),
-            GestureDetector(
-              child: SizedBox(
-                width: 0.35.sw,
-                height: 0.09.sw,
-                child: Stack(
-                  children: [
-                    Positioned.fill(child: SvgPicture.asset(SVGUtils.kSvgCloseButton, fit: BoxFit.cover)),
-                    Center(
-                      child: Text(
-                          LocaleKeys.close.tr(),
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                              fontSize: 16.sp,
-                              color: EaselAppTheme.kWhite,
-                              fontWeight: FontWeight.w300,
-                            ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              onTap: () {
-                onClose();
-              },
-            ),
-            SizedBox(height: 10.h),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

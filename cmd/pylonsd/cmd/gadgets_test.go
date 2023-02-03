@@ -3,12 +3,15 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
 	testutil "github.com/Pylons-tech/pylons/testutil/cli"
 )
+
+const rcpFilename = "test.rcp"
 
 const pylonsGadgetsLiteral_duplicateName = `#foobar 1
 	"foo": "%0"
@@ -29,6 +32,10 @@ const pylonsGadgetsLiteral_good = `#go_go_gadget_gadgets 3
 	"foo": "%0",
 	"bar": "%1",
 	"%2": "true"`
+
+const gadgetUserLiteral_tripleQuotes = `{
+	#go_go_gadget_gadgets '''a triple quoted string''' '''another one''' whatever
+}`
 
 func TestGadgets(t *testing.T) {
 	// builtins!
@@ -166,5 +173,20 @@ func TestGadgets(t *testing.T) {
 		gadget := GetGadget("go_go_gadget_gadgets", gadgets)
 		assert.EqualValues(t, expected, ExpandGadget(gadget, []string{"a", "b", "is_a_gadget"}))
 		os.Remove(gadgetsFilename)
+	})
+
+	t.Run("Should remove triple quotes from raw string tokens", func(t *testing.T) {
+		testutil.WriteFixtureAtTestRuntime(gadgetsFilename, pylonsGadgetsLiteral_good)
+		testutil.WriteFixtureAtTestRuntime(rcpFilename, gadgetUserLiteral_tripleQuotes)
+		gadgets, err := LoadGadgetsForPath(rcpFilename)
+		if err != nil {
+			panic(err)
+		}
+		bytes, _ := os.ReadFile(rcpFilename)
+		info, _ := os.Stat(rcpFilename)
+		json := LoadModulesInline(bytes, rcpFilename, info, gadgets)
+		assert.False(t, strings.Contains(json, "'''"))
+		os.Remove(gadgetsFilename)
+		os.Remove(rcpFilename)
 	})
 }

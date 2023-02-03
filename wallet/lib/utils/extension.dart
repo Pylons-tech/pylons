@@ -60,13 +60,13 @@ extension ConvertFromU on String {
 
 extension TransactionTypeEnumExt on String {
   TransactionTypeEnum toTransactionTypeEnum() {
-    return TransactionTypeEnum.values.firstWhere((e) => e.toString() == "TransactionTypeEnum.${this}", orElse: () => TransactionTypeEnum.Unknown);
+    return TransactionTypeEnum.values.firstWhere((e) => e.toString() == "TransactionTypeEnum.$this", orElse: () => TransactionTypeEnum.Unknown);
   }
 }
 
 extension TransactionStatusEnumExt on String {
   TransactionStatus toTransactionStatusEnum() {
-    return TransactionStatus.values.firstWhere((e) => e.toString() == "TransactionStatus.${this}", orElse: () => TransactionStatus.Undefined);
+    return TransactionStatus.values.firstWhere((e) => e.toString() == "TransactionStatus.$this", orElse: () => TransactionStatus.Undefined);
   }
 }
 
@@ -230,5 +230,15 @@ extension ChangeDomain on String {
 extension VerifyErrorCode on String {
   bool ifDuplicateReceipt() {
     return contains(kDuplicateIapReceiptCode);
+  }
+}
+
+extension UpdateRecipeVersion on String {
+  String incrementRecipeVersion() {
+    final arr = split('.');
+    int intVersion = int.parse(arr.last);
+    intVersion = intVersion + 1;
+    final str = '${arr[0]}.${arr[1]}.';
+    return str + intVersion.toString();
   }
 }

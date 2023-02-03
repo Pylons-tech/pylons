@@ -73,7 +73,7 @@ class ShowSomethingWentWrongDialog {
                     Center(
                       child: Text(
                         "close".tr(),
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
                       ),
                     ),
                   ],
@@ -131,7 +131,7 @@ class ShowSomethingWentWrongDialog {
                       Center(
                         child: Text(
                           "close".tr(),
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 16.sp, color: EaselAppTheme.kWhite, fontWeight: FontWeight.w300),
                         ),
                       ),
                     ],

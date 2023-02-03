@@ -33,8 +33,8 @@ class TutorialScreenState extends State<TutorialScreen> {
         slides.length,
         (index) => Container(
           margin: EdgeInsets.symmetric(horizontal: 4.w),
-          height: currentPage.round() == index ? 16.w : 12.h,
-          width: currentPage.round() == index ? 18.w : 12.h,
+          height: currentPage.round() == index ? 18.w : 10.h,
+          width: currentPage.round() == index ? 18.w : 10.h,
           decoration: BoxDecoration(
             color: currentPage.round() == index ? getColorPerPage(index) : EaselAppTheme.kLightGrey,
           ),
@@ -79,7 +79,11 @@ class TutorialScreenState extends State<TutorialScreen> {
                 SizedBox(height: 0.1.sh),
                 Text(
                   item[kHeaderTutorial] as String,
-                  style: TextStyle(fontSize: isTablet ? 16.sp : 18.sp, fontWeight: FontWeight.w800, color: EaselAppTheme.kDartGrey),
+                  style: TextStyle(
+                    fontSize: isTablet ? 16.sp : 18.sp,
+                    fontWeight: FontWeight.w800,
+                    color: EaselAppTheme.kDartGrey,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 15.h),
@@ -105,7 +109,10 @@ class TutorialScreenState extends State<TutorialScreen> {
     });
   }
 
-  bool doMoveForwardToMessageScreen() => currentPage == 2 && _pageViewController.position.userScrollDirection == ScrollDirection.reverse && !tutorialProvider.isForwarding;
+  bool doMoveForwardToMessageScreen() =>
+      currentPage == 2 &&
+      _pageViewController.position.userScrollDirection == ScrollDirection.reverse &&
+      !tutorialProvider.isForwarding;
 
   @override
   Widget build(BuildContext context) {
@@ -122,9 +129,24 @@ class TutorialScreenState extends State<TutorialScreen> {
                       fit: BoxFit.fill,
                     )),
                 SizedBox(height: 0.15.sh),
-                Text(item[kHeaderTutorial] as String, style: TextStyle(fontSize: isTablet ? 16.sp : 18.sp, fontWeight: FontWeight.w800, color: EaselAppTheme.kDartGrey), textAlign: TextAlign.center),
+                Text(
+                  item[kHeaderTutorial] as String,
+                  style: TextStyle(
+                    fontSize: isTablet ? 16.sp : 18.sp,
+                    fontWeight: FontWeight.w800,
+                    color: EaselAppTheme.kDartGrey,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
                 SizedBox(height: 15.h),
-                SizedBox(width: 0.63.sw, child: Text(item[kDescriptionTutorial] as String, style: TextStyle(color: Colors.black, fontSize: 13.sp, fontWeight: FontWeight.w400), textAlign: TextAlign.center)),
+                SizedBox(
+                  width: 0.63.sw,
+                  child: Text(
+                    item[kDescriptionTutorial] as String,
+                    style: TextStyle(color: Colors.black, fontSize: 13.sp, fontWeight: FontWeight.w400),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ],
             ))
         .toList();
@@ -183,9 +205,23 @@ class TutorialScreenState extends State<TutorialScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(LocaleKeys.pylons_app_desc_1.tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)),
+                      Text(
+                        LocaleKeys.pylons_app_desc_1.tr(),
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.black,
+                        ),
+                      ),
                       SizedBox(height: 8.h),
-                      Text(LocaleKeys.discover_new_apps_adventures.tr(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))
+                      Text(
+                        LocaleKeys.discover_new_apps_adventures.tr(),
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w400,
+                          color: EaselAppTheme.kLightGrey,
+                        ),
+                      )
                     ],
                   ),
                 )
@@ -207,9 +243,23 @@ class TutorialScreenState extends State<TutorialScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(LocaleKeys.app_desc_2.tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)),
+                      Text(
+                        LocaleKeys.app_desc_2.tr(),
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.black,
+                        ),
+                      ),
                       SizedBox(height: 8.h),
-                      Text(LocaleKeys.app_needed_desc_two.tr(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))
+                      Text(
+                        LocaleKeys.app_needed_desc_two.tr(),
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w400,
+                          color: EaselAppTheme.kLightGrey,
+                        ),
+                      )
                     ],
                   ),
                 )
@@ -231,9 +281,23 @@ class TutorialScreenState extends State<TutorialScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(LocaleKeys.app_needed_desc_three.tr(), style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800, color: Colors.black)),
+                      Text(
+                        LocaleKeys.app_needed_desc_three.tr(),
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.black,
+                        ),
+                      ),
                       SizedBox(height: 8.h),
-                      Text(LocaleKeys.why_app_needed_summary_three.tr(), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: EaselAppTheme.kLightGrey))
+                      Text(
+                        LocaleKeys.why_app_needed_summary_three.tr(),
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w400,
+                          color: EaselAppTheme.kLightGrey,
+                        ),
+                      )
                     ],
                   ),
                 )
@@ -293,6 +357,7 @@ class TutorialScreenState extends State<TutorialScreen> {
 class TutorialScreenViewModel extends ChangeNotifier {
   bool isForwarding = false;
   final Repository repository;
+
   TutorialScreenViewModel({required this.repository});
 
   void forwarding() {

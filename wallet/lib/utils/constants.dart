@@ -19,15 +19,16 @@ class AppColors {
 
   static Color kPeach = const Color(0xFFFFB094);
   static Color kPeachDark = const Color(0xFFED8864);
-  static Color kGray = const Color(0xFF7B7979);
+  static const Color kGreyColorBtn = Color(0xFF7B7979);
   static Color kLightGray = const Color(0xFFB3B3B3);
-  static Color kWhite = const Color(0xFFFFFFFF);
+  static const Color kWhite = Color(0xFFFFFFFF);
   static Color kYellow = const Color(0xffFED564);
   static Color kDarkPurple = const Color(0xff0A004A);
   static Color kDarkRed = const Color(0xffEF4421);
+  static Color kRed = Colors.red;
   static Color kDarkGreen = const Color(0xFF3A8977);
   static Color kWhite01 = const Color(0xFFFBFBFB);
-  static Color kButtonColor = const Color(0xFFFFFFFF);
+  static const Color kButtonColor = Color(0xFFFFFFFF);
 
   static Color kUSDColor = kDarkGreen;
   static Color kPylonsColor = kDarkRed;
@@ -37,7 +38,9 @@ class AppColors {
   static Color kAtomColor = kDarkPurple;
 
   static Color kDarkGrey = const Color(0xFF333333);
+  static Color kLightGrey = const Color(0xFFDBD9D7);
   static Color kGreyLight = const Color.fromRGBO(219, 217, 215, 1);
+  static Color kBlack87 = Colors.black87;
   static Color kCreateWalletButtonColorDark = const Color.fromRGBO(8, 8, 48, 1);
   static Color textFieldGreyColor = const Color.fromRGBO(219, 217, 215, 1);
 
@@ -45,11 +48,14 @@ class AppColors {
   static Color kCopyColor = const Color(0xffB6B6E8);
   static Color kDarkDividerColor = const Color(0xffE5E5E5);
   static Color kTradeReceiptTextColor = const Color(0xff8F8FCE);
+  static Color kDarkPurpleColor = const Color(0xff0A004A);
   static Color kHashtagColor = const Color(0xFFB6B6E8);
-
+  static Color kDarkRedColor = const Color(0xFFAF381F);
+  static Color kCheckboxActiveColor = const Color(0xFFCBC8F3);
   static Color kUserInputTextColor = const Color(0xff8D8C8C);
   static Color kSettingsUserNameColor = kBlue;
   static Color kForwardIconColor = const Color(0x331212C4);
+  static Color kImageEditIconColor = const Color(0xFF7A7A8F);
   static Color kSwitchActiveColor = kDarkGreen;
   static Color kSwitchInactiveColor = const Color(0xffC4C4C4);
   static Color kBlack = const Color(0xff000000);
@@ -65,6 +71,7 @@ class AppColors {
   static Color k3DBackgroundColor = Colors.grey.shade200;
   static Color kGreyColor = const Color.fromRGBO(141, 140, 140, 1);
   static Color kTransparentColor = Colors.transparent;
+  static Color kGrey = Colors.grey;
 }
 
 const double kIconSize = 24.0;
@@ -79,7 +86,6 @@ const double kRoyaltyPrecision = 10000000000000000;
 const String kPylonDenom = "upylon";
 
 const String kUniversalFontFamily = "UniversalSans";
-const String kENV = 'ENV';
 const String kLocal = 'local';
 const String kPylo = 'pylo';
 const kCID = "cid";
@@ -179,6 +185,7 @@ const ANDROID_VERSION = '1.0.1+145';
 const IOS_VERSION = '1.0.8+1';
 
 const kCurrencyDecimalLength = 2;
+const kMaxPriceLength = 14;
 
 List<Color> colorList = [AppColors.kYellow, AppColors.kBlue, AppColors.kDarkPurple, AppColors.kDarkRed, AppColors.kDarkGreen];
 List<Color> colorListForPracticeTest = [
@@ -311,6 +318,7 @@ const kItemId = "id";
 const kCookbookId = "cookbook_id";
 const kAmount = "amount";
 const kCreatedAt = "created_at";
+const kCreatedAtCamelCase = "createdAt";
 const kSenderName = "sender_name";
 const kReceiver = "receiver";
 
@@ -387,6 +395,7 @@ const String kSettled = "settled";
 const String kTo = "to";
 const String kType = "type";
 const String kUpdatedAt = "updated_at";
+const kUpdatedAtCamelCase = "updatedAt";
 const String kNotificationsIds = "notificationIDs";
 
 const String kZeroDouble = "0.0";
@@ -463,8 +472,24 @@ const String kProgressKey = "Progress";
 const String kImageAssetKey = "image_asset_key";
 const String kShareNftButtonCollapsedKey = "share_nft_collapsed";
 const String kShareNftButtonExpandedKey = "share_nft_expanded";
+const String kForSaleToggleWidgetKey = "for_sale_toggle_key";
+const String kNotForSaleToggleWidgetKey = "not_for_sale_toggle_key";
+const String kSaleStatusToggleButtonKey = "sale_status_toggle_button_key";
+const String kIntermediateToggleButtonKey = "intermediate_toggle_button_key";
+const String kForSaleBottomSheetKey = "for_sale_sale_bottom_sheet_key";
+const String kNotForSaleDialogKey = "not_for_sale_dialog_key";
 
 const String kGetFirebaseAppCheckTokenMethodChannelKey = "getFirebaseAppCheckTokenMethodChannel";
 const String kGetFirebaseAppCheckDebugTokenKey = "getFirebaseAppCheckDebugToken";
 
+const String kFAQsURL = "https://www.pylons.tech/faq/";
+const String kAcceptPolicyPortionKey = "accept_policy_portion";
+const String kAcceptBottomSheetBtnKey = "accept_bottom_sheet_btn";
+const String drawerIconKey = "drawer_icon_key";
+const String drawerKey = "drawer_key";
+
+const bool shouldShowAcceptPolicyScreen = true;
+
+const String kRemaining = 'remaining';
+const kTotal = 'total';
 const kFileExtension = "file_extension";

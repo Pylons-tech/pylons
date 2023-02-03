@@ -19,7 +19,7 @@ class NftImageWidget extends StatelessWidget {
         errorWidget: (a, b, c) => Center(
             child: Text(
           "unable_to_fetch_nft_item".tr(),
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
         )),
         imageBuilder: (context, imageProvider) {
           return Container(

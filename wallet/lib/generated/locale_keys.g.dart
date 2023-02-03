@@ -15,6 +15,7 @@ abstract class  LocaleKeys {
   static const network_error_description = 'network_error_description';
   static const what_is_new = 'what_is_new';
   static const trending = 'trending';
+  static const acknowledge_i_agree_to = 'acknowledge_i_agree_to';
   static const price = 'price';
   static const low_to_high = 'low_to_high';
   static const high_to_low = 'high_to_low';
@@ -249,7 +250,6 @@ abstract class  LocaleKeys {
   static const copied_to_clipboard = 'copied_to_clipboard';
   static const no_internet = 'no_internet';
   static const stake_your_digital_claim = 'stake_your_digital_claim';
-  static const bio_text = 'bio_text';
   static const save = 'save';
   static const submit = 'submit';
   static const place_your_recovery_phrase_in_correct_order = 'place_your_recovery_phrase_in_correct_order';
@@ -373,5 +373,36 @@ abstract class  LocaleKeys {
   static const maintenance_mode_message = 'maintenance_mode_message';
   static const maintenance_mode_header = 'maintenance_mode_header';
   static const invalid_mnemonic = 'invalid_mnemonic';
-
+  static const for_sale = 'for_sale';
+  static const not_for_sale = 'not_for_sale';
+  static const confirmation = 'confirmation';
+  static const delist_confirmation_msg = 'delist_confirmation_msg';
+  static const sell_your_nft = 'sell_your_nft';
+  static const payment_type = 'payment_type';
+  static const credits = 'credits';
+  static const cash = 'cash';
+  static const no_of_editions = 'no_of_editions';
+  static const price_per_edition = 'price_per_edition';
+  static const editions_are_sold_sequentially = 'editions_are_sold_sequentially';
+  static const enter_whole_dollar_amount = 'enter_whole_dollar_amount';
+  static const swipe_right_to_sell = 'swipe_right_to_sell';
+  static const network_fee_required = 'network_fee_required';
+  static const learn_more = 'learn_more';
+  static const downloading_started = 'downloading_started';
+  static const claim_now = 'claim_now';
+  static const remaining_and_total_editions = 'remaining_and_total_editions';
+  static const remaining = 'remaining';
+  static const edit_profile = 'edit_profile';
+  static const cash_out = 'cash_out';
+  static const bio_text = 'bio_text';
+  static const verify = 'verify';
+  static const display_name = 'display_name';
+  static const social = 'social';
+  static const facebook = 'facebook';
+  static const instagram = 'instagram';
+  static const tiktok = 'tiktok';
+  static const youtube = 'youtube';
+  static const discord = 'discord';
+  static const twitter = 'twitter';
+  static const connected = 'connected';
 }

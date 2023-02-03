@@ -13,10 +13,12 @@ import 'package:easel_flutter/widgets/video_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../generated/locale_keys.g.dart';
+import '../main.dart';
 import '../utils/easel_app_theme.dart';
 
 class PreviewScreen extends StatefulWidget {
@@ -30,6 +32,7 @@ class PreviewScreen extends StatefulWidget {
 
 class _PreviewScreenState extends State<PreviewScreen> {
   Repository repository = GetIt.I.get<Repository>();
+
   @override
   void initState() {
     super.initState();
@@ -53,16 +56,18 @@ class _PreviewScreenState extends State<PreviewScreen> {
             children: [
               if (provider.file != null) buildPreviewWidget(provider),
               Image.asset(PngUtils.kPreviewGradient, width: 1.sw, fit: BoxFit.fill),
-              Column(children: [
-                SizedBox(height: MediaQuery.of(context).viewPadding.top + 20.h),
-                Align(
-                  child: Text(LocaleKeys.nft_preview_header.tr(),
-                      textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText2!.copyWith(color: EaselAppTheme.kLightPurple, fontSize: 15.sp, fontWeight: FontWeight.w600)),
+              if (provider.nftFormat.format == NFTTypes.image)
+                SizedBox(
+                  key: const Key(kImageFullScreenGridviewKey),
+                  width: double.maxFinite,
+                  child: SvgPicture.asset(SVGUtils.kFullScreenImgGridview, width: 1.sw, height: 1.sh, fit: BoxFit.fill),
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                      padding: EdgeInsets.only(left: 10.sp),
+              Padding(
+                padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top + 20.h),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.w),
                       child: IconButton(
                         onPressed: () {
                           provider.setAudioThumbnail(null);
@@ -73,15 +78,33 @@ class _PreviewScreenState extends State<PreviewScreen> {
                           Icons.arrow_back_ios,
                           color: EaselAppTheme.kWhite,
                         ),
-                      )),
-                )
-              ]),
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        LocaleKeys.nft_preview_header.tr(),
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: EaselAppTheme.kLightPurple,
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 30.w,
+                    )
+                  ],
+                ),
+              ),
               Padding(
-                padding: EdgeInsets.only(bottom: 30.h, right: 25.w),
+                padding: EdgeInsets.only(
+                  bottom: 30.h,
+                ),
                 child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: PylonsButton(
-                    onPressed: () async {
+                  alignment: Alignment.bottomCenter,
+                  child: GestureDetector(
+                    onTap: () async {
                       final navigator = Navigator.of(context);
                       final result = await onUploadPressed();
                       if (result) {
@@ -89,12 +112,31 @@ class _PreviewScreenState extends State<PreviewScreen> {
                         widget.onMoveToNextScreen();
                       }
                     },
-                    btnText: LocaleKeys.upload.tr(),
-                    showArrow: true,
-                    color: EaselAppTheme.kRed,
+                    child: ClipPath(
+                      clipper: PylonsButtonClipper(),
+                      child: Container(
+                        width: 0.75.sw,
+                        height: isTablet ? 0.09.sw : 0.12.sw,
+                        decoration: const BoxDecoration(color: EaselAppTheme.kBlue),
+                        child: Stack(
+                          children: [
+                            Center(
+                              child: Text(
+                                LocaleKeys.continue_key.tr(),
+                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      fontSize: 15.sp,
+                                      color: EaselAppTheme.kWhite,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

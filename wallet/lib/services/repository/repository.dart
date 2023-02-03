@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/services.dart';
+
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:local_auth/local_auth.dart';
@@ -22,7 +23,7 @@ import 'package:pylons_wallet/model/stripe_loginlink_response.dart';
 import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pbgrpc.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/cookbook.pb.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/export.dart' as cosmos_tx;
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
@@ -45,6 +46,8 @@ import 'package:pylons_wallet/utils/query_helper.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
 import '../../generated/locale_keys.g.dart';
+import '../../model/common.dart';
+import '../../model/update_recipe_model.dart';
 
 abstract class Repository {
   /// This method returns the recipe based on cookbook id and recipe Id
@@ -109,7 +112,7 @@ abstract class Repository {
   /// This method returns the list of items based on id
   /// Input : [owner] the id of the owner
   /// Output: [List][pylons.Item] returns the item list
-  Future<Either<Failure, List<pylons.Item>>> getListItemByOwner({required String owner});
+  Future<Either<Failure, List<pylons.Item>>> getListItemByOwner({required Address owner});
 
   /// This method returns the execution based on id
   /// Input : [id] the id of the execution
@@ -119,7 +122,7 @@ abstract class Repository {
   /// Get all current trades against the given creator
   /// Input : [creator] the id of the creator
   /// Output: [List<pylons.Trade>] returns a list of trades
-  Future<Either<Failure, List<pylons.Trade>>> getTradesBasedOnCreator({required String creator});
+  Future<Either<Failure, List<pylons.Trade>>> getTradesBasedOnCreator({required Address creator});
 
   /// This method returns the private credentials based on the mnemonics
   /// Input : [mnemonic] mnemonics of the imported account, [username] user name of the user
@@ -351,9 +354,9 @@ abstract class Repository {
   Future<Either<Failure, List<TransactionHistory>>> getTransactionHistory({required String address});
 
   /// This method will update the recipe in the chain
-  /// Input: [MsgUpdateRecipe] contains the info regarding the recipe update
+  /// Input: [updateRecipeModel] contains the info regarding the recipe update
   /// Output: if successful will return [String] the hash of the transaction else this will give [Failure]
-  Future<Either<Failure, String>> updateRecipe({required MsgUpdateRecipe msgUpdateRecipe});
+  Future<Either<Failure, String>> updateRecipe({required UpdateRecipeModel updateRecipeModel});
 
   /// This method will upload the mnemonic on the google drive
   /// Input: [mnemonic] the mnemonic of the user, [username] the username of the user
@@ -521,6 +524,14 @@ abstract class Repository {
   /// Output: [bool] status of the process is successful or not
   Future<Either<Failure, bool>> deleteTransactionFailureRecord(int id);
 
+  /// This method will save that user accepts Terms of Services & Privacy Policy
+  /// Output: [bool] status of operation is successful or not
+  Future<Either<Failure, bool>> saveUserAcceptPolicies();
+
+  /// This method will return that user accepts Terms of Services & Privacy Policy or not
+  /// Output: [bool] user already accept policies ot not
+  Either<Failure, bool> getUserAcceptPolicies();
+
   /// This method will set user app level identifier in the analytics
   /// Input: [address] the address of the user
   /// Output: [bool] tells whether the operation is successful or else will return [Failure]
@@ -550,6 +561,31 @@ abstract class Repository {
     required String address,
     required AccountPublicInfo accountPublicInfo,
   });
+
+  Either<Failure, List<NFT>?> getStoredPurchases();
+
+  Either<Failure, List<Cookbook>?> getStoredCookBooks();
+
+  Future<Either<Failure, bool>> storeCookBooks(List<Cookbook> cookbooks);
+
+  Either<Failure, List<NFT>?> getStoredCreations();
+
+  Future<Either<Failure, bool>> storeCreations(List<NFT> creations);
+
+  Future<Either<Failure, bool>> storeNonNFTCreations(List<pylons.Recipe> recipes);
+
+  Either<Failure, List<pylons.Recipe>?> getNonNFTCreations();
+
+  Future<Either<Failure, bool>> storePurchases(List<NFT> purchases);
+
+  Future<Either<Failure, void>> enableDisableRecipe({
+    required CookbookId cookBookId,
+    required RecipeId recipeId,
+    required bool enabled,
+    required Address creatorAddress,
+  });
+
+  Future<Either<Failure, void>> createTrade(pylons.MsgCreateTrade msgCreateTrade);
 }
 
 class RepositoryImp implements Repository {
@@ -586,7 +622,10 @@ class RepositoryImp implements Repository {
     }
 
     try {
-      return Right(await remoteDataStore.getRecipe(cookBookId: cookBookId, recipeId: recipeId));
+      return Right(await remoteDataStore.getRecipe(
+        cookBookId: CookbookId(cookBookId),
+        recipeId: RecipeId(recipeId),
+      ));
     } on Failure catch (e) {
       return Left(e);
     } on Exception catch (_) {
@@ -602,7 +641,7 @@ class RepositoryImp implements Repository {
     }
 
     try {
-      return Right(await remoteDataStore.getUsername(address: address));
+      return Right(await remoteDataStore.getUsername(address: Address(address)));
     } on Failure catch (e) {
       return Left(e);
     } on Exception catch (_) {
@@ -750,7 +789,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<pylons.Item>>> getListItemByOwner({required String owner}) async {
+  Future<Either<Failure, List<pylons.Item>>> getListItemByOwner({required Address owner}) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
@@ -783,7 +822,7 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, List<pylons.Trade>>> getTradesBasedOnCreator({required String creator}) async {
+  Future<Either<Failure, List<pylons.Trade>>> getTradesBasedOnCreator({required Address creator}) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
@@ -948,6 +987,8 @@ class RepositoryImp implements Repository {
       return Right(response);
     } on Failure catch (_) {
       return Left(_);
+    } on String catch (_) {
+      return Left(StripeFailure(_));
     } on Exception catch (_) {
       recordErrorInCrashlytics(_);
       return const Left(StripeFailure(GEN_REGISTRATIONTOKEN_FAILED));
@@ -1466,13 +1507,13 @@ class RepositoryImp implements Repository {
   }
 
   @override
-  Future<Either<Failure, String>> updateRecipe({required MsgUpdateRecipe msgUpdateRecipe}) async {
+  Future<Either<Failure, String>> updateRecipe({required UpdateRecipeModel updateRecipeModel}) async {
     if (!await networkInfo.isConnected) {
       return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
 
     try {
-      final result = await remoteDataStore.updateRecipe(msgUpdateRecipe: msgUpdateRecipe);
+      final result = await remoteDataStore.updateRecipe(updateRecipeModel: updateRecipeModel);
 
       return Right(result);
     } on Failure catch (_) {
@@ -1620,7 +1661,11 @@ class RepositoryImp implements Repository {
     }
     try {
       return Right(
-        await remoteDataStore.countAView(recipeId: recipeId, cookBookID: cookBookID, walletAddress: walletAddress),
+        await remoteDataStore.countAView(
+          recipeId: RecipeId(recipeId),
+          cookBookID: CookbookId(cookBookID),
+          walletAddress: Address(walletAddress),
+        ),
       );
     } on Failure catch (e) {
       return Left(e);
@@ -1640,7 +1685,9 @@ class RepositoryImp implements Repository {
       return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
-      return Right(await remoteDataStore.getLikesCount(recipeId: recipeId, cookBookID: cookBookID));
+      return Right(
+        await remoteDataStore.getLikesCount(recipeId: RecipeId(recipeId), cookBookID: CookbookId(cookBookID)),
+      );
     } on Failure catch (e) {
       return Left(e);
     } on Exception catch (e) {
@@ -1655,7 +1702,12 @@ class RepositoryImp implements Repository {
       return Left(NoInternetFailure(LocaleKeys.no_internet.tr()));
     }
     try {
-      return Right(await remoteDataStore.getViewsCount(recipeId: recipeId, cookBookID: cookBookID));
+      return Right(
+        await remoteDataStore.getViewsCount(
+          recipeId: RecipeId(recipeId),
+          cookBookID: CookbookId(cookBookID),
+        ),
+      );
     } on Failure catch (e) {
       return Left(e);
     } on Exception catch (e) {
@@ -1675,7 +1727,11 @@ class RepositoryImp implements Repository {
     }
     try {
       return Right(
-        await remoteDataStore.ifLikedByMe(recipeId: recipeId, cookBookID: cookBookID, walletAddress: walletAddress),
+        await remoteDataStore.ifLikedByMe(
+          recipeId: RecipeId(recipeId),
+          cookBookID: CookbookId(cookBookID),
+          walletAddress: Address(walletAddress),
+        ),
       );
     } on Failure catch (e) {
       return Left(e);
@@ -1696,9 +1752,9 @@ class RepositoryImp implements Repository {
     }
     try {
       return Right(await remoteDataStore.updateLikeStatus(
-        recipeId: recipeId,
-        cookBookID: cookBookID,
-        walletAddress: walletAddress,
+        recipeId: RecipeId(recipeId),
+        cookBookID: CookbookId(cookBookID),
+        walletAddress: Address(walletAddress),
       ));
     } on Failure catch (e) {
       return Left(e);
@@ -2019,8 +2075,8 @@ class RepositoryImp implements Repository {
 
     try {
       final result = await remoteDataStore.getNftOwnershipHistoryByCookbookIdAndRecipeId(
-        cookBookId: cookBookId,
-        recipeId: recipeId,
+        cookBookId: CookbookId(cookBookId),
+        recipeId: RecipeId(recipeId),
       );
 
       return Right(result);
@@ -2186,7 +2242,7 @@ class RepositoryImp implements Repository {
     }
     try {
       return Right(await remoteDataStore.logPurchaseItem(
-        recipeId: recipeId,
+        recipeId: RecipeId(recipeId),
         recipeName: recipeName,
         author: author,
         purchasePrice: purchasePrice,
@@ -2211,7 +2267,7 @@ class RepositoryImp implements Repository {
     try {
       return Right(
         await remoteDataStore.logAddToCart(
-          recipeId: recipeId,
+          recipeId: RecipeId(recipeId),
           recipeName: recipeName,
           author: author,
           purchasePrice: purchasePrice,
@@ -2268,6 +2324,24 @@ class RepositoryImp implements Repository {
   }
 
   @override
+  Either<Failure, bool> getUserAcceptPolicies() {
+    try {
+      return Right(localDataSource.getUserAcceptPolicies());
+    } on Exception catch (_) {
+      return const Left(GettingLocalDataFailure(SOMETHING_WENT_WRONG));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> saveUserAcceptPolicies() async {
+    try {
+      return Right(await localDataSource.saveUserAcceptPolicies());
+    } on Exception catch (_) {
+      return const Left(SavingLocalDataFailure(SOMETHING_WENT_WRONG));
+    }
+  }
+
+  @override
   Future<Either<Failure, TransactionResponse>> setUserName({
     required String username,
     required String address,
@@ -2291,5 +2365,111 @@ class RepositoryImp implements Repository {
       recordErrorInCrashlytics(_);
       return Left(AccountCreationFailure(LocaleKeys.something_wrong.tr()));
     }
+  }
+
+  @override
+  Either<Failure, List<NFT>?> getStoredPurchases() {
+    try {
+      return Right(localDataSource.getStoredPurchases());
+    } on Exception catch (_) {
+      return const Left(GettingLocalDataFailure(SOMETHING_WENT_WRONG));
+    }
+  }
+
+  @override
+  Either<Failure, List<Cookbook>?> getStoredCookBooks() {
+    try {
+      return Right(localDataSource.getStoredCookBooks());
+    } on Exception catch (_) {
+      recordErrorInCrashlytics(_);
+      return const Left(GettingLocalDataFailure(SOMETHING_WENT_WRONG));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> storeCookBooks(List<Cookbook> cookbooks) async {
+    try {
+      return Right(await localDataSource.storeCookBooks(cookbooks));
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Either<Failure, List<NFT>?> getStoredCreations() {
+    try {
+      return Right(localDataSource.getStoredCreations());
+    } on Exception catch (_) {
+      recordErrorInCrashlytics(_);
+      return const Left(GettingLocalDataFailure(SOMETHING_WENT_WRONG));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> storeCreations(List<NFT> creations) async {
+    try {
+      return Right(await localDataSource.storeCreations(creations));
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(GettingLocalDataFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> storeNonNFTCreations(List<pylons.Recipe> recipes) async {
+    try {
+      return Right(await localDataSource.storeNonNFTCreations(recipes));
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(GettingLocalDataFailure(e.toString()));
+    }
+  }
+
+  @override
+  Either<Failure, List<pylons.Recipe>?> getNonNFTCreations() {
+    try {
+      return Right(localDataSource.getNonNFTCreations());
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(GettingLocalDataFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> storePurchases(List<NFT> purchases) async {
+    try {
+      return Right(await localDataSource.storePurchases(purchases));
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(GettingLocalDataFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> enableDisableRecipe({
+    required CookbookId cookBookId,
+    required RecipeId recipeId,
+    required bool enabled,
+    required Address creatorAddress,
+  }) async {
+    try {
+      await remoteDataStore.enableDisableRecipe(
+        cookBookId: cookBookId,
+        recipeId: recipeId,
+        enabled: enabled,
+        creatorAddress: creatorAddress,
+      );
+      return const Right(null);
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+  
+  @override
+  Future<Either<Failure, void>> createTrade(pylons.MsgCreateTrade msgCreateTrade) {
+    // TODO: implement createTrade
+    throw UnimplementedError();
   }
 }

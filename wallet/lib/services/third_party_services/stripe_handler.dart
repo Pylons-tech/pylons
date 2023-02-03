@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/model/export.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_request.dart';
@@ -31,8 +30,6 @@ class StripeHandler {
   /// @param
   /// @return StripeFailure, String accountLink
   Future<Either<Failure, String>> handleStripeAccountLink() async {
-    final walletsStore = GetIt.I.get<WalletsStore>();
-
     var token = '';
     var accountlink = "";
 

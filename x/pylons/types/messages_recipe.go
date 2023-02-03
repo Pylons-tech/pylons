@@ -116,7 +116,9 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 	}
 
 	idMap := make(map[string]bool)
-	if err = ValidateEntriesList(msg.Entries, idMap); err != nil {
+	varDefs, variables, funcs := GetDefaultCelEnv()
+	ce := GetCustomCelEnv(msg.ItemInputs, varDefs, variables, funcs)
+	if err = ValidateEntriesList(msg.Entries, idMap, ce); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
@@ -262,7 +264,9 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 	}
 
 	idMap := make(map[string]bool)
-	if err = ValidateEntriesList(msg.Entries, idMap); err != nil {
+	varDefs, variables, funcs := GetDefaultCelEnv()
+	ce := GetCustomCelEnv(msg.ItemInputs, varDefs, variables, funcs)
+	if err = ValidateEntriesList(msg.Entries, idMap, ce); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
