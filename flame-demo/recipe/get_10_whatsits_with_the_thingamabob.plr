@@ -1,0 +1,54 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeGetWhatsitsWithThingamabob RecipeGetWhatsitsWithThingamabob,
+	"description": "Gets 10 Whatsits using a Thingamabob",
+    #no_coin_input,
+	"itemInputs": [
+		{
+			"id": "thingamabob",
+            "doubles": [
+            ],
+            "longs": [
+            ],
+            "strings": [
+                {
+                    "key": "entityType",
+                    "value": "thingamabob"
+                }
+            ]
+        }
+	],
+	"entries" : {
+		#no_item_output,
+		"itemModifyOutputs": [
+            {
+                "id": "thingamabob",
+				"itemInputRef": "thingamabob",
+                "doubles": [
+				],
+                "longs": [
+                ],
+                "strings": [
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+		],
+		"coinOutputs": [{
+            "id": "coin_reward",
+            "coin": {
+				"denom": "whatsit",
+				"amount":"10"
+			},
+            "program": ""
+        }]
+	},
+	"outputs": [
+		{
+			"entryIds": ["coin_reward", "thingamabob"],
+			"weight": 1
+		}
+	]
+}
