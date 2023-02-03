@@ -1,19 +1,15 @@
-# testapp-flutter
+# flame-demo
 
-This repository contains the Flutter project corresponding to the BlockSlayer demo game for the Pylons SDK, 
-available on Google Play [here](https://play.google.com/store/apps/details?id=tech.pylons.testapp_flutter).
-
-Feel free to peruse it to get an idea of what a very, very minimal set of game mechanics built on the Pylons
-tools might look like, or use it as a starting point for your own projects!
+Simple demonstration app for Pylons integration with Flame Engine. Can be used as a reference,
+or directly as a starting point for your own projects.
 
 ## Getting Started
 
-testapp-flutter is just a normal Flutter project; no surprises here. Clone it and build it like any other
-Flutter app. Note, though, that at present this application *only* supports mobile platforms, and has only been
-adequately tested on Android.
+flame-demo is just a normal Flutter project; no surprises here. Clone it and build it like any other
+Flutter app. Note, though, that at present this application *only* supports Android.
 
 If you're using this project as a base for
-your own, change all occurrences of the BlockSlayer package ID (tech.pylons.testapp_flutter) to your own in the 
+your own, change all occurrences of the demo package ID (tech.pylons.flame_demo) to your own in the 
 following files:
 
 * `android/app/src/main/AndroidManifest.xml`
