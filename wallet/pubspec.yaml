@@ -56,12 +56,12 @@ dependencies:
   focus_detector: ^2.0.1
   get_it: ^7.2.0
   google_sign_in: ^5.4.2
-  googleapis: ^9.2.0
+  googleapis: ^10.0.0
   grpc: ^3.0.2
   home_widget: ^0.1.6
   http: ^0.13.4
   icloud_storage: ^2.0.0
-  image: ^3.2.0
+  image: ^4.0.12
   image_cropper: ^3.0.0
   image_picker: ^0.8.5+3
   in_app_purchase: ^3.0.7

@@ -1,30 +1,20 @@
-import { Box } from '@mui/material'
-import Head from 'next/head'
-import { FC } from 'react'
+import { Box } from "@mui/material";
+import Head from "next/head";
+import { FC } from "react";
 
 interface MetaTagsTypes {
-  history: any[]
-  createdBy: string
-  name: string
-  description: string
-  price: string
-  denom: string
-  nftType: string
-  dimensions: string
-  royalty: string
-  edition: string
-  media: string
-  createdAt: string
-  recipeId: string
-  src: string
-  thumbnail: string
+  name: string;
+  description: string;
+  price: string;
+  media: string;
+  thumbnail: string;
 }
 export const MetaTags: FC<MetaTagsTypes> = ({
   name,
   thumbnail,
   description,
   price,
-  media
+  media,
 }) => {
   return (
     <Box data-testid="metaTags-molecule">
@@ -33,8 +23,8 @@ export const MetaTags: FC<MetaTagsTypes> = ({
           name="description"
           content={`${description}
         Price: ${
-          price === undefined || price === 'undefined undefined'
-            ? 'Free'
+          price === undefined || price === "undefined undefined"
+            ? "Free"
             : price
         }`}
         ></meta>
@@ -43,8 +33,8 @@ export const MetaTags: FC<MetaTagsTypes> = ({
           property="og:description"
           content={`${description}
         Price: ${
-          price === undefined || price === 'undefined undefined'
-            ? 'Free'
+          price === undefined || price === "undefined undefined"
+            ? "Free"
             : price
         }`}
           data-rh="true"
@@ -52,19 +42,19 @@ export const MetaTags: FC<MetaTagsTypes> = ({
         <meta property="og:url" content={thumbnail ?? media} />
         <meta property="og:image" content={thumbnail ?? media} />
         <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="852.2222222222222" />
+        <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={name} />
         <meta
           name="twitter:description"
           content={`${description}
         Price: ${
-          price === undefined || price === 'undefined undefined'
-            ? 'Free'
+          price === undefined || price === "undefined undefined"
+            ? "Free"
             : price
         }`}
         ></meta>
       </Head>
     </Box>
-  )
-}
+  );
+};

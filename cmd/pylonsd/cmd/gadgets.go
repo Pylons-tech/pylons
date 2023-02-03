@@ -222,7 +222,7 @@ func parseGadgets(path string, s string) ([]Gadget, error) {
 func ExpandGadget(gadget *Gadget, params []string) string {
 	str := gadget.json
 	for i := 0; i < gadget.parametersCount; i++ {
-		str = strings.ReplaceAll(str, "%"+strconv.Itoa(i), strings.TrimSpace(params[i]))
+		str = strings.ReplaceAll(strings.ReplaceAll(str, "%"+strconv.Itoa(i), strings.TrimSpace(params[i])), "'''", "") // hack - strip the triple quotes more elegantly instead of doing this
 	}
 	return str
 }

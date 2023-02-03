@@ -47,7 +47,6 @@ class EaselAppTheme {
   static const String universalSansFamily = "UniversalSans";
 
   static ThemeData theme(BuildContext context) => ThemeData(
-        backgroundColor: kWhite,
         primaryColor: kWhite,
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
         scaffoldBackgroundColor: kWhite,
@@ -70,5 +69,6 @@ class EaselAppTheme {
     fontFamily: universalSansFamily,
   );
 
-  static TextStyle kDeleteHeaderTextStyle = TextStyle(fontSize: 14.sp, fontFamily: 'UniversalSans', color: EaselAppTheme.kWhite, fontWeight: FontWeight.w600);
+  static TextStyle kDeleteHeaderTextStyle =
+      TextStyle(fontSize: 14.sp, fontFamily: 'UniversalSans', color: EaselAppTheme.kWhite, fontWeight: FontWeight.w600);
 }

@@ -28,7 +28,7 @@ class Loading {
     navigatorKey.currentState?.pop();
   }
 
-  Future showLoading({String? message}) {
+  Future showLoading() {
     if (navigatorKey.currentState?.overlay == null) {
       return Completer().future; // return a fake future if state is screwy - this only ever happens during testing. todo: eliminate this hack
     }

@@ -30,7 +30,7 @@ class StepLabels extends StatelessWidget {
                 children: [
                   Text(
                     stepLabels[index].tr(),
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           fontSize: 8.sp,
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w700,

@@ -257,7 +257,7 @@ class _CardWidget extends StatelessWidget {
                               children: [
                                 Text(
                                   NftFormat.supportedFormats[typeIdx].format.getTitle().toUpperCase(),
-                                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                         color: textIconColor,
                                         fontSize: 45.sp,
                                         fontWeight: FontWeight.bold,
@@ -268,7 +268,7 @@ class _CardWidget extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
                                   text: TextSpan(
-                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                           color: textIconColor,
                                           fontSize: 12.sp,
                                           fontWeight: FontWeight.w600,
@@ -354,7 +354,7 @@ class _ErrorMessageWidget extends StatelessWidget {
                   (nftTypes == NFTTypes.video || nftTypes == NFTTypes.audio)
                       ? "• ${(kFileSizeLimitForAudioVideoInGB * 1000).toStringAsFixed(0)}MB limit"
                       : "• ${kFileSizeLimitInGB}GB limit",
-                  style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Colors.white,
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w800,
@@ -362,7 +362,7 @@ class _ErrorMessageWidget extends StatelessWidget {
                 ),
                 Text(
                   "• ${extensions.join(", ").toUpperCase()}",
-                  style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Colors.white,
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w800,
@@ -370,7 +370,7 @@ class _ErrorMessageWidget extends StatelessWidget {
                 ),
                 Text(
                   LocaleKeys.upload_hint_three.tr(),
-                  style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Colors.white,
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w800,
