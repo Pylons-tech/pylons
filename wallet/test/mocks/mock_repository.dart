@@ -363,17 +363,6 @@ class MockRepository extends Repository {
     throw UnimplementedError();
   }
 
-  @override
-  Either<Failure, String> getInitialLink() {
-    // TODO: implement getInitialLink
-    throw UnimplementedError();
-  }
-
-  @override
-  Either<Failure, bool> saveInitialLink(String initialLink) {
-    // TODO: implement saveInitialLink
-    throw UnimplementedError();
-  }
 
   @override
   Future<Either<Failure, List<Cookbook>>> getCookbooksByCreator({required String creator}) {
@@ -671,9 +660,17 @@ class MockRepository extends Repository {
     // TODO: implement enableDisableRecipe
     throw UnimplementedError();
   }
+
+
+
+  @override
+  Future<Either<Failure, void>> cancelTrade({required TradeId tradeId, required Address address}) {
+    // ignore: void_checks
+    return Future.value(const Right(''));
+  }
   
   @override
-  Future<Either<Failure, void>> createTrade(pylons.MsgCreateTrade msgCreateTrade) {
+  Future<Either<Failure, void>> createTrade({required pylons.MsgCreateTrade msgCreateTrade}) {
     // TODO: implement createTrade
     throw UnimplementedError();
   }

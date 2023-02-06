@@ -6,6 +6,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/model/pick_image_model.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/create_trade_bottom_sheet.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
@@ -14,7 +15,7 @@ Future<File?> pickImageFromGallery(double maxHeight, double maxWidth, int imageQ
 
   if (pickImageEither.isLeft()) {
     // ignore: use_build_context_synchronously
-    pickImageEither.swap().toOption().toNullable()!.message.show();
+    pickImageEither.getLeft().message.show();
     return null;
   }
   final pickedImagePath = pickImageEither.getOrElse(() => '');

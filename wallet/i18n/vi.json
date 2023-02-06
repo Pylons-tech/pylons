@@ -401,5 +401,6 @@
   "youtube": "Youtube",
   "discord": "Discord",
   "twitter": "Twitter",
-  "connected": "kết nối"
+  "connected": "kết nối",
+  "no_account_found": "Không có tài khoản nào được tìm thấy"
 }

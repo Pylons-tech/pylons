@@ -153,18 +153,6 @@ class MockLocalDataSource extends LocalDataSource {
   }
 
   @override
-  String getInitialLink() {
-    // TODO: implement getInitialLink
-    throw UnimplementedError();
-  }
-
-  @override
-  bool saveInitialLink(String initialLink) {
-    // TODO: implement saveInitialLink
-    throw UnimplementedError();
-  }
-
-  @override
   String getNetworkEnvironmentPreference() {
     // TODO: implement getNetworkEnvironmentPreference
     throw UnimplementedError();

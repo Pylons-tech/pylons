@@ -9,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/create_trade_bottom_sheet.dart';
 import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
@@ -113,7 +114,7 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
 
                           GetIt.I.get<Repository>().authenticate().then((value) {
                             if (value.isLeft()) {
-                              value.swap().toOption().toNullable()!.message.show();
+                              value.getLeft().message.show();
                             }
 
                             if (value.isRight() && value.getOrElse(() => false)) {

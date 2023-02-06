@@ -25,6 +25,8 @@ import 'package:pylons_wallet/pages/gestures_for_detail_screen.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
 import 'package:pylons_wallet/pages/owner_purchase_view_common/qr_code_screen.dart';
 import 'package:pylons_wallet/pages/settings/screens/submit_feedback.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
+import 'package:pylons_wallet/providers/items_provider.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
@@ -217,20 +219,6 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
   }
 }
 
-Future<void> enableDisableNFT({
-  required OwnerViewViewModel viewModel,
-  required bool enabled,
-}) async {
-  final loading = Loading()..showLoading();
-  try {
-    await viewModel.changeNFTEnabledDisableStatus(enabled: enabled);
-    loading.dismiss();
-  } on Failure catch (exception) {
-    loading.dismiss();
-    exception.message.show();
-  }
-}
-
 Widget _title({required NFT nft, required String owner}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -370,20 +358,6 @@ class _CollapsedBottomMenuState extends State<_CollapsedBottomMenu> {
               ),
             ],
           ),
-          if (viewModel.nft.type == NftType.TYPE_ITEM) ...[
-            ToggleButton(
-                enabled: true,
-                onPressed: (isEnabled) {
-                  final createTradeBottomSheet = CreateTradeBottomSheet(
-                    context: context,
-                    nft: viewModel.nft,
-                  );
-                  createTradeBottomSheet.show();
-                }),
-            SizedBox(
-              height: 7.h,
-            ),
-          ]
         ],
       ),
     );
@@ -691,13 +665,12 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
                       SizedBox(
                         width: 10.w,
                       ),
-                      if (viewModel.nft.type == NftType.TYPE_RECIPE)
-                        ToggleButton(
-                          enabled: viewModel.nft.isEnabled,
-                          onPressed: (bool enabled) {
-                            enableDisableNFT(viewModel: viewModel, enabled: enabled);
-                          },
-                        ),
+                      ToggleButton(
+                        enabled: viewModel.isNFTEnabled(),
+                        onPressed: (bool enabled) {
+                          onUpdateToggle(enabled: enabled);
+                        },
+                      ),
                     ],
                   )
                 ],
@@ -726,5 +699,72 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
       height: 20.h,
       color: likedByMe ? AppColors.kDarkRed : Colors.white,
     );
+  }
+
+  Future<void> _enableDisableNFT({
+    required OwnerViewViewModel viewModel,
+    required bool enabled,
+  }) async {
+    final loading = Loading()..showLoading();
+    try {
+      await viewModel.changeNFTEnabledDisableStatus(enabled: enabled);
+      loading.dismiss();
+    } on Failure catch (exception) {
+      loading.dismiss();
+      exception.message.show();
+    }
+  }
+
+  Future<void> _cancelTrade({
+    required OwnerViewViewModel viewModel,
+    required bool enabled,
+  }) async {
+    final accountProvider = context.read<AccountProvider>();
+
+    if (accountProvider.accountPublicInfo == null) {
+      "No Account exists".show();
+      return;
+    }
+
+    final loading = Loading()..showLoading();
+    try {
+      final tradeId = viewModel.nft.tradeID;
+      await viewModel.cancelTrade(tradeId: tradeId, address: accountProvider.accountPublicInfo!.publicAddress);
+      loading.dismiss();
+
+      if (mounted) {
+        context.read<ItemsProvider>()
+          ..getTrades()
+          ..getItems();
+        Navigator.of(context).pop();
+      }
+    } on Failure catch (exception) {
+      loading.dismiss();
+      exception.message.show();
+    }
+  }
+
+  Future<void> onUpdateToggle({required bool enabled}) async {
+    final viewModel = context.read<OwnerViewViewModel>();
+
+    switch (viewModel.nft.type) {
+      case NftType.TYPE_RECIPE:
+        _enableDisableNFT(viewModel: viewModel, enabled: enabled);
+        break;
+      case NftType.TYPE_ITEM:
+        final createTradeBottomSheet = CreateTradeBottomSheet(
+          context: context,
+          nft: viewModel.nft,
+        );
+        await createTradeBottomSheet.show();
+
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+        break;
+      case NftType.TYPE_TRADE:
+        _cancelTrade(viewModel: viewModel, enabled: enabled);
+        break;
+    }
   }
 }

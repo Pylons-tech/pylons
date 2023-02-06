@@ -9,6 +9,7 @@ import 'package:googleapis/drive/v2.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/create_trade_bottom_sheet.dart';
 import 'package:pylons_wallet/utils/backup/common/backup_model.dart';
 import 'package:pylons_wallet/utils/backup/common/i_driver_client.dart';
 import 'package:pylons_wallet/utils/constants.dart';
@@ -39,7 +40,7 @@ class GoogleDriveApiImpl extends IDriverApi {
       {required String mnemonic, required String username}) async {
     final driverEither = await _getDriveApi();
     if (driverEither.isLeft()) {
-      throw driverEither.swap().toOption().toNullable()!.message;
+      throw driverEither.getLeft().message;
     }
 
     final data = jsonEncode({"username": username, "mnemonic": mnemonic});
@@ -72,7 +73,7 @@ class GoogleDriveApiImpl extends IDriverApi {
   Future<BackupData> getBackupData() async {
     final driverEither = await _getDriveApi();
     if (driverEither.isLeft()) {
-      throw driverEither.swap().toOption().toNullable()!.message;
+      throw driverEither.getLeft().message;
     }
 
     final driveApi = driverEither.toOption().toNullable()!;

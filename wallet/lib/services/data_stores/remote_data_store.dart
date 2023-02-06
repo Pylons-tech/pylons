@@ -27,6 +27,7 @@ import 'package:pylons_wallet/model/transaction.dart';
 import 'package:pylons_wallet/model/wallet_creation_model.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/modules/cosmos.tx.v1beta1/module/export.dart' as cosmos_tx;
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/create_trade_bottom_sheet.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_trace_model.dart';
 import 'package:pylons_wallet/services/third_party_services/analytics_helper.dart';
 import 'package:pylons_wallet/services/third_party_services/crashlytics_helper.dart';
@@ -347,6 +348,10 @@ abstract class RemoteDataStore {
     required bool enabled,
     required Address creatorAddress,
   });
+
+  Future<TransactionResponse> cancelTrade({required TradeId tradeId, required Address address});
+
+  Future<TransactionResponse> createTrade({required pylons.MsgCreateTrade msgCreateTrade});
 }
 
 class RemoteDataStoreImp implements RemoteDataStore {
@@ -830,7 +835,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     final walletsResultEither = await customTransactionSigningGateway.getWalletsList();
 
     if (walletsResultEither.isLeft()) {
-      crashlyticsHelper.recordFatalError(error: walletsResultEither.swap().toOption().toNullable()!.message);
+      crashlyticsHelper.recordFatalError(error: walletsResultEither.getLeft().message);
       throw const TransactionSigningFailure(
           message: SOMETHING_WRONG_FETCHING_WALLETS, type: HandlerFactory.ERR_FETCHING_WALLETS);
     }
@@ -851,7 +856,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     );
 
     if (signedTransaction.isLeft()) {
-      crashlyticsHelper.recordFatalError(error: signedTransaction.swap().toOption().toNullable()!.toString());
+      crashlyticsHelper.recordFatalError(error: signedTransaction.getLeft().toString());
       throw TransactionSigningFailure(
         message: LocaleKeys.something_wrong_signing_transaction.tr(),
         type: HandlerFactory.ERR_SIG_TRANSACTION,
@@ -864,9 +869,11 @@ class RemoteDataStoreImp implements RemoteDataStore {
     );
 
     if (response.isLeft()) {
-      crashlyticsHelper.recordFatalError(error: response.swap().toOption().toNullable()!.toString());
+      crashlyticsHelper.recordFatalError(error: response.getLeft().toString());
       throw TransactionSigningFailure(
-          message: response.swap().toOption().toNullable().toString(), type: HandlerFactory.ERR_SOMETHING_WENT_WRONG);
+        message: response.swap().toOption().toNullable().toString(),
+        type: HandlerFactory.ERR_SOMETHING_WENT_WRONG,
+      );
     }
 
     return response.getOrElse(() => TransactionResponse.initial()).hash;
@@ -1135,7 +1142,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final walletsResultEither = await customTransactionSigningGateway.getWalletsList();
     if (walletsResultEither.isLeft()) {
-      crashlyticsHelper.recordFatalError(error: walletsResultEither.swap().toOption().toNullable()!.message);
+      crashlyticsHelper.recordFatalError(error: walletsResultEither.getLeft().message);
       throw const TransactionSigningFailure(
         message: SOMETHING_WRONG_FETCHING_WALLETS,
         type: HandlerFactory.ERR_FETCHING_WALLETS,
@@ -1253,7 +1260,7 @@ class RemoteDataStoreImp implements RemoteDataStore {
     );
 
     if (result.isLeft()) {
-      throw result.swap().toOption().toNullable()!.toString();
+      throw result.getLeft().toString();
     }
 
     return result.getOrElse(() => TransactionResponse.initial());
@@ -1281,8 +1288,11 @@ class RemoteDataStoreImp implements RemoteDataStore {
   }
 
   @override
-  Future<String> createDynamicLinkForItemNftShare(
-      {required String address, required String itemId, required String cookbookId}) async {
+  Future<String> createDynamicLinkForItemNftShare({
+    required String address,
+    required String itemId,
+    required String cookbookId,
+  }) async {
     final dynamicLinkParams = DynamicLinkParameters(
       link: Uri.parse("$bigDipperBaseLink?item_id=$itemId&cookbook_id=$cookbookId&address=$address"),
       uriPrefix: kDeepLink,
@@ -1331,30 +1341,6 @@ class RemoteDataStoreImp implements RemoteDataStore {
 
     final txHash = await _signAndBroadcast(msgObj);
     return TransactionResponse(hash: txHash);
-
-    // final customTransactionSigningGateway = getCustomTransactionSigningGateway();
-    // final walletLookupKey = createWalletLookUp(publicInfo);
-
-    // final msgObj = MsgSetUsername(creator: address, username: username);
-
-    // final unsignedTransaction = UnsignedAlanTransaction(messages: [msgObj]);
-
-    // final result = await customTransactionSigningGateway
-    //     .signTransaction(transaction: unsignedTransaction, walletLookupKey: walletLookupKey)
-    //     .mapError<dynamic>((error) {
-    //   throw error;
-    // }).flatMap(
-    //   (signed) => customTransactionSigningGateway.broadcastTransaction(
-    //     walletLookupKey: walletLookupKey,
-    //     transaction: signed,
-    //   ),
-    // );
-
-    // if (result.isLeft()) {
-    //   throw result.swap().toOption().toNullable()!.toString();
-    // }
-
-    // return result.getOrElse(() => TransactionResponse.initial());
   }
 
   @override
@@ -1389,6 +1375,19 @@ class RemoteDataStoreImp implements RemoteDataStore {
       currency: currency,
     );
     return true;
+  }
+
+  @override
+  Future<TransactionResponse> cancelTrade({required TradeId tradeId, required Address address}) async {
+    final msgObj = MsgCancelTrade(creator: address.toString(), id: tradeId.id);
+    final txHash = await _signAndBroadcast(msgObj);
+    return TransactionResponse(hash: txHash);
+  }
+
+  @override
+  Future<TransactionResponse> createTrade({required pylons.MsgCreateTrade msgCreateTrade}) async {
+    final txHash = await _signAndBroadcast(msgCreateTrade);
+    return TransactionResponse(hash: txHash);
   }
 
   @override

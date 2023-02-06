@@ -246,18 +246,6 @@ class MockWalletStore implements WalletsStore {
   }
 
   @override
-  Either<Failure, String> getInitialLink() {
-    // TODO: implement getInitialLink
-    throw UnimplementedError();
-  }
-
-  @override
-  Either<Failure, bool> saveInitialLink({required String initialLink}) {
-    // TODO: implement saveInitialLink
-    throw UnimplementedError();
-  }
-
-  @override
   Future<TxResponse> getTxs(String txHash) {
     // TODO: implement getTxs
     throw UnimplementedError();

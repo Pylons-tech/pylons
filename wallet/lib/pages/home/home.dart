@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/components/maintenance_mode_widgets.dart';
-import 'package:pylons_wallet/ipc/ipc_engine.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
@@ -54,16 +53,6 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     super.initState();
     homeProvider.logAnalyticsEvent();
     _tabController = TabController(vsync: this, length: pages.length);
-    getInitialLink();
-  }
-
-  Future<void> getInitialLink() async {
-    await Future.delayed(const Duration(seconds: 2));
-
-    final String link = walletsStore.getInitialLink().getOrElse(() => '');
-    if (link.isNotEmpty) {
-      await GetIt.I.get<IPCEngine>().handleLinksBasedOnUri(link);
-    }
   }
 
   @override
@@ -351,10 +340,14 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
             ],
           ),
         ),
-        Text(
-          homeProvider.accountPublicInfo.name,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20.sp),
-          textAlign: TextAlign.center,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            homeProvider.accountPublicInfo.name,
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20.sp),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+          ),
         ),
         SizedBox(height: 5.h),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
