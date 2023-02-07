@@ -1,0 +1,19 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeGetWhatsit RecipeGetWhatsit,
+	"description": "Gets one Whatsit",
+    #no_coin_input,
+	#no_item_input,
+	"entries" : {
+		#no_item_or_item_modify_output,
+		"coinOutputs": [{
+            "id": "coin_reward",
+            "coin": {
+				"denom": "whatsit",
+				"amount":"1"
+			},
+            "program": ""
+        }]
+	},
+	#solo_output coin_reward
+}

@@ -6,9 +6,11 @@ import 'package:pylons_sdk/pylons_sdk.dart';
 import 'game.dart';
 import 'hud.dart';
 
-class HudNotifier extends ChangeNotifier {
+class GameStateNotifier extends ChangeNotifier {
   String profileName = "Please wait";
-  String line2 = "Tap screen once \nprofile is retrieved";
+  String line2 = "Tap to collect whatsits";
+  bool hasThingamabob = false;
+  int whatsits = 0;
 
   void updateName (String name) {
     profileName = name;
@@ -19,22 +21,32 @@ class HudNotifier extends ChangeNotifier {
     line2 = line;
     notifyListeners();
   }
+
+  void updateWhatsits (int whatsits) {
+    this.whatsits = whatsits;
+    notifyListeners();
+  }
+
+  void updateThingamabob (bool hasThingamabob) {
+    this.hasThingamabob = hasThingamabob;
+    notifyListeners();
+  }
 }
 
-late HudNotifier hudNotifier;
+late GameStateNotifier gameStateNotifier;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   PylonsWallet.setup(mode: PylonsMode.prod, host: 'testapp_flutter');
-  hudNotifier = HudNotifier();
+  gameStateNotifier = GameStateNotifier();
   final game = PylonsGame();
-  runApp(GameWidget(
+  runApp(ChangeNotifierProvider.value(value: gameStateNotifier, child: GameWidget(
     game: game,
     overlayBuilderMap: {
       'HudOverlay': (BuildContext context, PylonsGame game) {
-        return ChangeNotifierProvider.value(value: hudNotifier, child: const Hud());
+        return const Hud();
       }
     },
     initialActiveOverlays: const ["HudOverlay"],
-  ));
+  )));
 }

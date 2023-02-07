@@ -1,0 +1,9 @@
+#boilerplate 2
+    "cookbookId": "appFlameClicker",
+    "blockInterval": 0,
+    "costPerBlock": {
+        "denom": "upylon",
+        "amount": "1000000"
+    },
+    "version": "%0",
+    "enabled": %1
