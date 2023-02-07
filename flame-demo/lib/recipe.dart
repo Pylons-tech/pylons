@@ -10,6 +10,6 @@ class Recipe {
   Recipe(this.sdkRecipe, this.executeCheck);
 }
 
-final recipeGetWhatsit = Recipe(sdk.Recipe.let("RecipeGetWhatsit"), (notifier) => !notifier.hasThingamabob);
-final recipeGet10Whatsits = Recipe(sdk.Recipe.let("RecipeGetWhatsitsWithThingamabob"), (notifier) => notifier.hasThingamabob);
-final recipeGetThingamabob = Recipe(sdk.Recipe.let("RecipeBuyThingamabob"), (notifier) => !notifier.hasThingamabob && notifier.whatsits >= 10);
+late final Recipe recipeGetWhatsit;
+late final Recipe recipeGet10Whatsits;
+late final Recipe recipeGetThingamabob;

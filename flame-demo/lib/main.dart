@@ -8,7 +8,7 @@ import 'hud.dart';
 
 class GameStateNotifier extends ChangeNotifier {
   String profileName = "Please wait";
-  String line2 = "Tap screen once \nprofile is retrieved";
+  String line2 = "Tap to collect whatsits";
   bool hasThingamabob = false;
   int whatsits = 0;
 
@@ -33,20 +33,20 @@ class GameStateNotifier extends ChangeNotifier {
   }
 }
 
-late GameStateNotifier hudNotifier;
+late GameStateNotifier gameStateNotifier;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   PylonsWallet.setup(mode: PylonsMode.prod, host: 'testapp_flutter');
-  hudNotifier = GameStateNotifier();
+  gameStateNotifier = GameStateNotifier();
   final game = PylonsGame();
-  runApp(GameWidget(
+  runApp(ChangeNotifierProvider.value(value: gameStateNotifier, child: GameWidget(
     game: game,
     overlayBuilderMap: {
       'HudOverlay': (BuildContext context, PylonsGame game) {
-        return ChangeNotifierProvider.value(value: hudNotifier, child: const Hud());
+        return const Hud();
       }
     },
     initialActiveOverlays: const ["HudOverlay"],
-  ));
+  )));
 }

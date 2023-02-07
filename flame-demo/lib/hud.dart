@@ -16,14 +16,18 @@ class Hud extends StatelessWidget {
     return Column(
       children: [
         Text(text, style: const TextStyle(fontSize: 42)),
-        MaterialButton(onPressed: recipeGetThingamabob.executeCheck(Provider.of<GameStateNotifier>(context)) ? () {
+        MaterialButton(onPressed: PylonsComponent.instance.ready && recipeGetThingamabob.executeCheck(Provider.of<GameStateNotifier>(context)) ? () {
           PylonsComponent.instance.executeRecipe(recipeGetThingamabob.sdkRecipe, [], [
                 (exec) {
-              hudNotifier.updateThingamabob(true);
-              hudNotifier.updateWhatsits(Provider.of<GameStateNotifier>(context).whatsits - 10);
+              gameStateNotifier.updateThingamabob(true);
+              gameStateNotifier.updateWhatsits(Provider.of<GameStateNotifier>(context).whatsits - 10);
             }
           ]);
-        } : null)
+        } : null, child: PylonsComponent.instance.ready && recipeGetThingamabob.executeCheck(Provider.of<GameStateNotifier>(context)) ?
+        Row(children: [
+          Image.asset("images/spinning_wheel.png", height: 40),
+          const Text("Buy a Thingamabob (10 whatsits)", style: TextStyle(fontSize: 42))
+        ]) : null)
       ],
     );
   }
