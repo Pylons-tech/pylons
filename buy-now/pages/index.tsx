@@ -33,7 +33,7 @@ export default function EaselBuyMainPage({
   const coinInputs = [...selectedRecipe?.coin_inputs];
 
   /* istanbul ignore next */
-  if (coinInputs?.length > 0) {
+  if (coinInputs?.length > 0 && coinInputs[0].coins?.length > 0) {
     const resCoins: any = coinInputs[0]?.coins[0];
     denom = resCoins.denom;
     if (resCoins?.denom === "USD") {
