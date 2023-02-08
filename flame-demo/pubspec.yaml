@@ -86,6 +86,7 @@ flutter:
     - assets/images/Skull_alien_goofy_skull.png
     - assets/images/spinning_wheel.png
     - assets/images/Star_many_pointed_star.png
+    - assets/images/hourglass_3.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

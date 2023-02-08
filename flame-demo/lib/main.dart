@@ -8,7 +8,7 @@ import 'hud.dart';
 
 class GameStateNotifier extends ChangeNotifier {
   String profileName = "Please wait";
-  String line2 = "Tap to collect whatsits";
+  String line2 = "";
   bool hasThingamabob = false;
   int whatsits = 0;
 
