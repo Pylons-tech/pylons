@@ -1,4 +1,4 @@
-# flame-demo
+# flame_demo
 
 Simple demonstration app for Pylons integration with Flame Engine. Can be used as a reference,
 or directly as a starting point for your own projects.

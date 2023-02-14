@@ -49,7 +49,14 @@ class Doohickey extends PositionComponent with TapCallbacks {
 
   @override
   void update(double dt) {
+    const rotSpeed = 10;
     super.update(dt);
+
+    if (_dispatchedAction) {
+      angle += rotSpeed * dt;
+    } else {
+      angle = 0;
+    }
     if (_dispatchedAction == false && PylonsComponent.instance.lastProfile == null && PylonsComponent.instance.ready) {
       initialStateSetup();
     }

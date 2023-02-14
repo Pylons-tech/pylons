@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:pylons_flame_demo/recipe.dart';
+import 'package:pylons_sdk/low_level.dart' as ll;
 import 'package:pylons_sdk/pylons_sdk.dart' as sdk;
 import 'package:flame/components.dart';
+import 'dart:io' show Platform;
 
 class PylonsComponent extends Component {
   final List<_DispatchedAction> _actions = [];
@@ -22,15 +26,23 @@ class PylonsComponent extends Component {
       throw Exception("There should be only one instance of PylonsComponent");
     }
     _instance = this;
-    sdk.PylonsWallet.verifyOrInstall().then(
-            (_) async {
-          await sdk.Cookbook.load(_cookbook);
-          recipeGetWhatsit = Recipe(sdk.Recipe.let("RecipeGetWhatsit"), (notifier) => !notifier.hasThingamabob);
-          recipeGet10Whatsits = Recipe(sdk.Recipe.let("RecipeGetWhatsitsWithThingamabob"), (notifier) => notifier.hasThingamabob);
-          recipeGetThingamabob = Recipe(sdk.Recipe.let("RecipeBuyThingamabob"), (notifier) => !notifier.hasThingamabob && notifier.whatsits >= 10);
-          _ready = true;
-        }
-    );
+    if (Platform.isWindows) {
+      // probably need to do some setup stuff for mocks here?
+      recipeGetWhatsit = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeGetWhatsit"), (notifier) => !notifier.hasThingamabob);
+      recipeGet10Whatsits = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeGetWhatsitsWithThingamabob"), (notifier) => notifier.hasThingamabob);
+      recipeGetThingamabob = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeBuyThingamabob"), (notifier) => !notifier.hasThingamabob && notifier.whatsits >= 10);
+      _ready = true;
+    } else {
+      sdk.PylonsWallet.verifyOrInstall().then(
+              (_) async {
+            await sdk.Cookbook.load(_cookbook);
+            recipeGetWhatsit = Recipe(sdk.Recipe.let("RecipeGetWhatsit"), (notifier) => !notifier.hasThingamabob);
+            recipeGet10Whatsits = Recipe(sdk.Recipe.let("RecipeGetWhatsitsWithThingamabob"), (notifier) => notifier.hasThingamabob);
+            recipeGetThingamabob = Recipe(sdk.Recipe.let("RecipeBuyThingamabob"), (notifier) => !notifier.hasThingamabob && notifier.whatsits >= 10);
+            _ready = true;
+          }
+      );
+    }
   }
 
   @override
@@ -50,7 +62,6 @@ class PylonsComponent extends Component {
             callback(a.value);
           }
         }
-
         _actions.removeAt(i);
       }
     }
@@ -73,16 +84,32 @@ class PylonsComponent extends Component {
   void executeRecipe(sdk.Recipe rcp, List<sdk.Item> inputs, List<Function1<sdk.Execution?, void>> callbacks) {
     _requireReady();
     _requireProfile();
-    final future = rcp.executeWith(_last!, inputs);
-    _actions.add(_DispatchedAction<sdk.Execution?>(future, callbacks));
+    if (Platform.isWindows) {
+      final exec = sdk.Execution(ll.Execution.create());
+      final completer = Completer<sdk.Execution?>.sync();
+      _actions.add(_DispatchedAction<sdk.Execution?>(completer.future, callbacks));
+      completer.complete((exec));
+    } else {
+      final future = rcp.executeWith(_last!, inputs);
+      _actions.add(_DispatchedAction<sdk.Execution?>(future, callbacks));
+    }
   }
 
   void getProfile(List<Function1<sdk.Profile?, void>> callbacks) {
     _requireReady();
-    final future = sdk.Profile.get();
-    _actions.add(_DispatchedAction<sdk.Profile?>(future, callbacks..add((prf) {
-      _last = prf;
-    })));
+    if (Platform.isWindows) {
+      final prf = sdk.Profile("nulladdress", "Username", {}, [], false);
+      final completer = Completer<sdk.Profile?>.sync();
+      _actions.add(_DispatchedAction<sdk.Profile?>(completer.future, callbacks..add((_) {
+        _last = prf;
+      })));
+      completer.complete(prf);
+    } else {
+      final future = sdk.Profile.get();
+      _actions.add(_DispatchedAction<sdk.Profile?>(future, callbacks..add((prf) {
+        _last = prf;
+      })));
+    }
   }
 }
 
