@@ -1923,6 +1923,10 @@ class RepositoryImp implements Repository {
       return Left(InAppPurchaseFailure(message: _));
     } on Exception catch (_) {
       recordErrorInCrashlytics(_);
+      if (_ is PlatformException) {
+        return Left(InAppPurchaseFailure(message: _.message ?? SOMETHING_WENT_WRONG));
+      }
+
       return const Left(InAppPurchaseFailure(message: SOMETHING_WENT_WRONG));
     }
   }

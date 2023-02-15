@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/ipc/ipc_engine.dart';
 import 'package:pylons_wallet/ipc/local_server.dart';
@@ -14,7 +16,9 @@ class UserInfoProvider extends ChangeNotifier {
 
   void initIPC() {
     _ipcEngine.init();
-    _localServer.init();
+    if (Platform.isAndroid) {
+      _localServer.init();
+    }
   }
 
   @override

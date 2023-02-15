@@ -50,6 +50,9 @@ class ItemsProvider extends ChangeNotifier {
   }
 
   Future<void> getTrades() async {
+    if (address == null || address!.isEmpty) {
+      return;
+    }
     final getTradesEither = await repository.getTradesBasedOnCreator(creator: Address(address!));
     final trades = getTradesEither.getOrElse(() => []);
 

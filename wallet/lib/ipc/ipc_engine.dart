@@ -34,6 +34,7 @@ import '../generated/locale_keys.g.dart';
 /// Key : The key is the process against which the 3rd part app has sent the signal
 class IPCEngine {
   late StreamSubscription _sub;
+  StreamSubscription? _firebaseSubscription;
   AccountProvider accountProvider;
   WalletsStore walletsStore;
   Repository repository;
@@ -68,6 +69,14 @@ class IPCEngine {
 
       // Link contains the data that the wallet need
     }, onError: (err) {});
+
+    // Explicitly for ios
+    if (Platform.isIOS) {
+      _firebaseSubscription = FirebaseDynamicLinks.instance.onLink.listen((event) async {
+        final unwrappedLink = await checkAndUnWrapFirebaseLink(event.link.toString());
+        handleLinksBasedOnUri(unwrappedLink);
+      });
+    }
   }
 
   /// This method is used to handle the uni link when the app first opens
@@ -343,11 +352,6 @@ class IPCEngine {
     }
   }
 
-  /// This method disposes the
-  void dispose() {
-    _sub.cancel();
-  }
-
   /// This method disconnect any new signal. If another signal is already in process
   /// Input : [sender] The sender of the signal
   /// Output : [key] The signal kind against which the signal is sent
@@ -410,5 +414,11 @@ class IPCEngine {
     await nft.getOwnerAddress();
 
     return nft;
+  }
+
+  /// This method disposes the
+  void dispose() {
+    _sub.cancel();
+    _firebaseSubscription?.cancel();
   }
 }
