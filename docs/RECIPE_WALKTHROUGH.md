@@ -38,7 +38,7 @@ Let's start by creating the following cookbook:
 
 - The "ID" is the unique identifier string of the cookbook. This is currently chosen by the developer when creating the cookbook.
 
-- The "name", "description", "version" and "supportEmail" strings are additional metadata fields that the can provide users and apps with more details about the experience.
+- The "name", "description", "version" and "supportEmail" strings are additional metadata fields that can provide users and apps with more details about the experience.
 
 - The "version" is the string form of the cookbook's [semantic version](https://semver.org/). If the cookbook is updated, this version string MUST also be increased.
 
@@ -75,7 +75,7 @@ To get a better look at the data structures that comprise a Recipe, check out ou
 - The "Name" and "Description" fields are the name and description of the recipe
 - The "CoinInputs" are the fields that detail what coins are required to run the recipe
 - The "ItemInputs" is the field for items which are required to run the recipe
-- The "Entries" field holds a list of the various outputs one could get from the recipe. Items are established with an ID and a set of doubles, longs, and strings to flesh oout the outputs.
+- The "Entries" field holds a list of the various outputs one could get from the recipe. Items are established with an ID and a set of doubles, longs, and strings to flesh out the outputs.
 - The "Outputs" field calls the unique IDs of the items in entries list and uses them as outputs after the execution of the recipe.
 - The "BlockInterval" field indicates what block the recipe will execute. For instance, if blockInterval is at 2, the recipe won't execute until the chain has executed 2 blocks.
 - The "CostPerBlock" field is a Cosmos SDK coin that is used to build the fee for paying to do the `execute-recipe` transaction before the recipe's `blockInterval` is met.
@@ -167,7 +167,7 @@ Note both coinInputs and itemInputs are empty, so this recipe doesn't require an
 
 In the outputs field we return the new character by calling the item output ID. Weight refers how often it will occur and since the character is are only output it'll always return a character.
 
-### Cookbook tokens facuet recipe
+### Cookbook tokens faucet recipe
 
 ```json
 {
@@ -287,7 +287,7 @@ Let's see if you can follow along with this more complex recipe. We have all of 
 
 As we move along to outputs, we can see we don't output any coins but we do have an item called 'copper_sword_lv1'. Let's look at our first output in doubles. We use 'key' to indicate the unique feature from the sword. Our first one is 'attack' which indicates an attack function. weightRanges is empty, but in future can be used to help randomize the attack/how intense it is. Our final field is 'program', which can run a program each time a 'attack' is called from the sword. For now we have '10.0' which means we'll be getting 10.0 point attack from the sword. In long and string output fields, we assign outputs/values to features of the sword, like 'level', 'value', and 'name'.
 
-Finally we have have our tradePercentage, tradeable, and outputs reflecting what we've used in previous recipes.
+Finally we have our tradePercentage, tradeable, and outputs reflecting what we've used in previous recipes.
 
 ### Enemy encounter recipe
 
@@ -486,7 +486,7 @@ Finally we have have our tradePercentage, tradeable, and outputs reflecting what
 }
 ```
 
-This recipe is complex, but given what we know from before let's dissect it. We have our identifying information for the recipe in cookbookID, Id, name, etc. In order for the recipe to execute, we require a 'character' that requires XP at a minimum amount of 1, a level status at least at level 1, and it needs to have the entitiyType of a 'character'. We also need the sword that we created in the recipe earlier on, with the specific features we reference in the double/long/string fields. 
+This recipe is complex, but given what we know from before let's dissect it. We have our identifying information for the recipe in cookbookID, Id, name, etc. In order for the recipe to execute, we require a 'character' that requires XP at a minimum amount of 1, a level status at least at level 1, and it needs to have the entityType of a 'character'. We also need the sword that we created in the recipe earlier on, with the specific features we reference in the double/long/string fields. 
 
 Outputs is where it gets interesting. First we output coins: if you look you can see we're giving back ten LOUD coins. In addition we have some unique items which look similar to the recipes we've toyed with before. We have a wolf tail and wolf fur (both have attacks at 0, level at 1, and value at 140). In ItemModifyOutputs, we can modify one of our inputs. In this case we modify our 'character' which we indicate with 'itemInputRef'. The modification looks the exact same as the other recipes we've built but we can use the program field to actively change our stats on chain. Note that we reference some of the past keys like level and XP. The program takes our previous stats and upgrades them within our program field.
 
