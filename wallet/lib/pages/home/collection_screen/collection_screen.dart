@@ -86,7 +86,9 @@ class _CollectionScreenState extends State<CollectionScreen> {
         );
 
     TradesCollection tradesCollection() => TradesCollection(
-          onNFTSelected: (NFT asset) {},
+          onNFTSelected: (NFT asset) {
+            shouldShowOwnerViewOrPurchaseViewForNFT(asset);
+          },
         );
 
     final collections = <CollectionsType, Widget Function()>{
@@ -152,9 +154,6 @@ class _CollectionScreenState extends State<CollectionScreen> {
   }
 }
 
-
-
-
 class NONNftCreations extends StatelessWidget {
   final OnNFTSelected onNFTSelected;
 
@@ -203,11 +202,6 @@ class NONNftCreations extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
 
 List<QuiltedGridTile> _quiltedGridTile = [
   const QuiltedGridTile(4, 4),

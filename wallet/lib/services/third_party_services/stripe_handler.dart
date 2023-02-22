@@ -4,6 +4,7 @@ import 'package:pylons_wallet/model/export.dart';
 import 'package:pylons_wallet/model/stripe_get_login_based_address.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_request.dart';
 import 'package:pylons_wallet/model/stripe_loginlink_response.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/create_trade_bottom_sheet.dart';
 import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/services/data_stores/local_data_store.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
@@ -95,7 +96,7 @@ class StripeHandler {
 
   /// This method will unparse the error and will check if it is related with user already exists it will update the account link
   Future<Either<Failure, String>> handleError(Either<Failure, dynamic> response) async {
-    final failure = response.swap().toOption().toNullable()!;
+    final failure = response.getLeft();
 
     if (failure is AccountAlreadyExistsFailure) {
       return getLinkBasedOnAddress();

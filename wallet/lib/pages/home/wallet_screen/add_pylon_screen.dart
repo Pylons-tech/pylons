@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/create_trade_bottom_sheet.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
@@ -177,7 +178,7 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
 
       if (inAppPurchaseResponse.isLeft()) {
         loading.dismiss();
-        inAppPurchaseResponse.swap().toOption().toNullable()!.message.show();
+        inAppPurchaseResponse.getLeft().message.show();
         return;
       }
 
@@ -191,12 +192,12 @@ class _AddPylonScreenState extends State<AddPylonScreen> {
       loading.dismiss();
 
       if (productsListResponse.isLeft()) {
-        productsListResponse.swap().toOption().toNullable()!.message.show();
+        productsListResponse.getLeft().message.show();
         return;
       }
       final buyProductResponse = await repository.buyProduct(productsListResponse.toOption().toNullable()!);
       if (buyProductResponse.isLeft()) {
-        buyProductResponse.swap().toOption().toNullable()!.message.show();
+        buyProductResponse.getLeft().message.show();
         return;
       }
     } catch (e) {

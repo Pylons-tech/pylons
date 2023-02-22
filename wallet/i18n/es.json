@@ -400,5 +400,6 @@
   "youtube": "Youtube",
   "discord": "Discord",
   "twitter": "Twitter",
-  "connected": "Conectada"
+  "connected": "Conectada",
+  "no_account_found": "No se encontró ninguna cuenta"
 }

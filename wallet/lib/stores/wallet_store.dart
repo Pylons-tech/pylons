@@ -186,14 +186,6 @@ abstract class WalletsStore {
   /// Output: [bool] if successful will return true else return false
   Future<bool> deleteAccounts();
 
-  /// This method will save link in local cache for future use on home page
-  /// Output: [bool] if successful will return true else return false
-  Either<Failure, bool> saveInitialLink({required String initialLink});
-
-  /// This method will get link from local cache
-  /// Output: [String] if successful will return String
-  Either<Failure, String> getInitialLink();
-
   /// This method will send google in app purchase request to the chain
   /// Input: [GoogleInAppPurchaseModel] contains the input data for the api.
   /// Output: if successful will return the [String] hash of the transaction

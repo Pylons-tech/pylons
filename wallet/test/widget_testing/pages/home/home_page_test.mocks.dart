@@ -806,35 +806,6 @@ class MockRepository extends _i1.Mock implements _i3.Repository {
         ),
       ) as _i2.Either<_i5.Failure, String>);
   @override
-  _i2.Either<_i5.Failure, bool> saveInitialLink(String? initialLink) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #saveInitialLink,
-          [initialLink],
-        ),
-        returnValue: _FakeEither_0<_i5.Failure, bool>(
-          this,
-          Invocation.method(
-            #saveInitialLink,
-            [initialLink],
-          ),
-        ),
-      ) as _i2.Either<_i5.Failure, bool>);
-  @override
-  _i2.Either<_i5.Failure, String> getInitialLink() => (super.noSuchMethod(
-        Invocation.method(
-          #getInitialLink,
-          [],
-        ),
-        returnValue: _FakeEither_0<_i5.Failure, String>(
-          this,
-          Invocation.method(
-            #getInitialLink,
-            [],
-          ),
-        ),
-      ) as _i2.Either<_i5.Failure, String>);
-  @override
   _i4.Future<_i2.Either<_i5.Failure, bool>> saveDescription(
           {required String? description}) =>
       (super.noSuchMethod(
@@ -2212,18 +2183,47 @@ class MockRepository extends _i1.Mock implements _i3.Repository {
       ) as _i4.Future<_i2.Either<_i5.Failure, void>>);
   @override
   _i4.Future<_i2.Either<_i5.Failure, void>> createTrade(
-          _i6.MsgCreateTrade? msgCreateTrade) =>
+          {required _i6.MsgCreateTrade? msgCreateTrade}) =>
       (super.noSuchMethod(
         Invocation.method(
           #createTrade,
-          [msgCreateTrade],
+          [],
+          {#msgCreateTrade: msgCreateTrade},
         ),
         returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
             _FakeEither_0<_i5.Failure, void>(
           this,
           Invocation.method(
             #createTrade,
-            [msgCreateTrade],
+            [],
+            {#msgCreateTrade: msgCreateTrade},
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, void>>);
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, void>> cancelTrade({
+    required _i11.TradeId? tradeId,
+    required _i11.Address? address,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #cancelTrade,
+          [],
+          {
+            #tradeId: tradeId,
+            #address: address,
+          },
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
+            _FakeEither_0<_i5.Failure, void>(
+          this,
+          Invocation.method(
+            #cancelTrade,
+            [],
+            {
+              #tradeId: tradeId,
+              #address: address,
+            },
           ),
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, void>>);

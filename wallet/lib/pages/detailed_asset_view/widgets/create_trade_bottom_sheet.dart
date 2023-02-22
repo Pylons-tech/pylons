@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz.dart' show Either;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -6,12 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:pylons_wallet/components/loading.dart';
 
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/swipe_right_to_sell_button.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/toggle_button.dart';
+import 'package:pylons_wallet/providers/account_provider.dart';
+import 'package:pylons_wallet/providers/items_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 
 import '../../../generated/locale_keys.g.dart';
@@ -245,7 +246,13 @@ class __CreateTradeBottomSheetWidgetState extends State<_CreateTradeBottomSheetW
 
   Future<void> createTrade() async {
     final repository = GetIt.I.get<Repository>();
-    final walletStore = context.read<WalletsStore>();
+
+    final accountPublicInfo = context.read<AccountProvider>().accountPublicInfo;
+
+    if (accountPublicInfo == null) {
+      LocaleKeys.no_account_found.tr().show();
+      return;
+    }
 
     final recipeEither = await repository.getRecipe(
       cookBookId: widget.nft.cookbookID,
@@ -257,22 +264,39 @@ class __CreateTradeBottomSheetWidgetState extends State<_CreateTradeBottomSheetW
     }
     final recipe = recipeEither.getRight();
 
-    // itemOutput.doubles
+    final msgCreateTrade = MsgCreateTrade(
+        creator: accountPublicInfo.publicAddress,
+        coinInputs: recipe.coinInputs,
+        extraInfo: recipe.extraInfo,
+        itemOutputs: [
+          ItemRef(
+            cookbookId: widget.nft.cookbookID,
+            itemId: widget.nft.itemID,
+          ),
+        ]);
 
-    final msgCreateTrade = MsgCreateTrade(coinInputs: recipe.coinInputs, extraInfo: recipe.extraInfo, itemOutputs: [
-      ItemRef(
-        cookbookId: widget.nft.cookbookID,
-        itemId: widget.nft.itemID,
-      ),
-    ]);
+    final tradeResponse = await repository.createTrade(msgCreateTrade: msgCreateTrade);
 
-     await walletStore.createTrade(msgCreateTrade.toProto3Json()! as Map);
-    // TODO Add error and success 
+    if (tradeResponse.isLeft()) {
+      tradeResponse.getLeft().message.show();
+      return;
+    }
+
+    if (mounted) {
+      context.read<ItemsProvider>()
+        ..getItems()
+        ..getTrades();
+      Navigator.of(context).pop();
+    }
   }
 }
 
 extension EitherHelper<T, R> on Either<T, R> {
   R getRight() {
     return toOption().toNullable()!;
+  }
+
+  T getLeft() {
+    return swap().toOption().toNullable()!;
   }
 }

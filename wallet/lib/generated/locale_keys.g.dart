@@ -405,4 +405,6 @@ abstract class  LocaleKeys {
   static const discord = 'discord';
   static const twitter = 'twitter';
   static const connected = 'connected';
+  static const no_account_found = 'no_account_found';
+
 }

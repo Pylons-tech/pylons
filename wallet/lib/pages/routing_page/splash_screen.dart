@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/create_trade_bottom_sheet.dart';
 import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
 import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
@@ -92,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen> {
       final authenticateResponse = await repository.authenticate();
 
       if (!authenticateResponse.getOrElse(() => false)) {
-        authenticateResponse.swap().toOption().toNullable()!.message.show();
+        authenticateResponse.getLeft().message.show();
         return;
       }
       moveToHome();

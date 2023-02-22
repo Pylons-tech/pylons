@@ -243,15 +243,6 @@ abstract class Repository {
   /// Output: if successful will return [String] email else this will give [Failure]
   Either<Failure, String> getSavedEmail();
 
-  /// This method will save the initial link in the local data store.
-  /// Input: [link] the initialLink to be saved in the local data store
-  /// Output: if successful will return [bool] which tells whether the operation is successful or not else this will give [Failure]
-  Either<Failure, bool> saveInitialLink(String initialLink);
-
-  /// This method will get the initial link
-  /// Output: if successful will return [String] link else this will give [Failure]
-  Either<Failure, String> getInitialLink();
-
   /// This method will save description in the local database
   /// Input : [description] contains the description
   /// Output: if successful will return [bool] which tells whether the operation is successful or not else this will give [Failure]
@@ -585,7 +576,9 @@ abstract class Repository {
     required Address creatorAddress,
   });
 
-  Future<Either<Failure, void>> createTrade(pylons.MsgCreateTrade msgCreateTrade);
+  Future<Either<Failure, void>> createTrade({required pylons.MsgCreateTrade msgCreateTrade});
+
+  Future<Either<Failure, void>> cancelTrade({required TradeId tradeId, required Address address});
 }
 
 class RepositoryImp implements Repository {
@@ -1267,28 +1260,6 @@ class RepositoryImp implements Repository {
   Either<Failure, String> getSavedEmail() {
     try {
       return Right(localDataSource.getEmail());
-    } on Exception catch (_) {
-      return const Left(CacheFailure(PLATFORM_FAILED));
-    }
-  }
-
-  @override
-  Either<Failure, bool> saveInitialLink(String initialLink) {
-    try {
-      return Right(localDataSource.saveInitialLink(initialLink));
-    } on Failure catch (_) {
-      return Left(_);
-    } on Exception catch (_) {
-      return const Left(CacheFailure(PLATFORM_FAILED));
-    }
-  }
-
-  @override
-  Either<Failure, String> getInitialLink() {
-    try {
-      return Right(localDataSource.getInitialLink());
-    } on Failure catch (_) {
-      return Left(_);
     } on Exception catch (_) {
       return const Left(CacheFailure(PLATFORM_FAILED));
     }
@@ -2466,10 +2437,26 @@ class RepositoryImp implements Repository {
       return Left(ServerFailure(e.toString()));
     }
   }
-  
+
   @override
-  Future<Either<Failure, void>> createTrade(pylons.MsgCreateTrade msgCreateTrade) {
-    // TODO: implement createTrade
-    throw UnimplementedError();
+  Future<Either<Failure, void>> createTrade({required pylons.MsgCreateTrade msgCreateTrade}) async {
+    try {
+      await remoteDataStore.createTrade(msgCreateTrade: msgCreateTrade);
+      return const Right(null);
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> cancelTrade({required TradeId tradeId, required Address address}) async {
+    try {
+      await remoteDataStore.cancelTrade(address: address, tradeId: tradeId);
+      return const Right(null);
+    } on Exception catch (e) {
+      recordErrorInCrashlytics(e);
+      return Left(ServerFailure(e.toString()));
+    }
   }
 }
