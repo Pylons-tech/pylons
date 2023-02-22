@@ -645,38 +645,7 @@ class MockWalletsStore extends _i1.Mock implements _i6.WalletsStore {
         ),
         returnValue: _i7.Future<bool>.value(false),
       ) as _i7.Future<bool>);
-  @override
-  _i2.Either<_i8.Failure, bool> saveInitialLink(
-          {required String? initialLink}) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #saveInitialLink,
-          [],
-          {#initialLink: initialLink},
-        ),
-        returnValue: _FakeEither_0<_i8.Failure, bool>(
-          this,
-          Invocation.method(
-            #saveInitialLink,
-            [],
-            {#initialLink: initialLink},
-          ),
-        ),
-      ) as _i2.Either<_i8.Failure, bool>);
-  @override
-  _i2.Either<_i8.Failure, String> getInitialLink() => (super.noSuchMethod(
-        Invocation.method(
-          #getInitialLink,
-          [],
-        ),
-        returnValue: _FakeEither_0<_i8.Failure, String>(
-          this,
-          Invocation.method(
-            #getInitialLink,
-            [],
-          ),
-        ),
-      ) as _i2.Either<_i8.Failure, String>);
+
   @override
   _i7.Future<_i2.Either<_i8.Failure, String>>
       sendGoogleInAppPurchaseCoinsRequest(

@@ -40,66 +40,67 @@ class TradesCollection extends StatelessWidget {
           ),
           if (viewModel.collectionsType == CollectionsType.trades)
             Expanded(
-                child: GridView.custom(
-              padding: EdgeInsets.only(
-                bottom: 16.h,
-                left: 16.w,
-                right: 16.w,
-              ),
-              gridDelegate: gridDelegate,
-              childrenDelegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final nft = viewModel.trades[index];
-                  return ClipRRect(
-                    child: GestureDetector(
-                      onTap: () => onNFTSelected(nft),
-                      child: Banner(
-                        color: AppColors.kPriceTagColor,
-                        location: BannerLocation.topStart,
-                        message:
-                            "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}  ${nft.ibcCoins.getAbbrev()}",
-                        child: PreviewNFTGrid(
-                          assetType: nft.assetType,
-                          on3dNFT: (BuildContext context) => Container(
-                            color: Colors.grey.shade200,
-                            height: double.infinity,
-                            child: IgnorePointer(
-                              child: Nft3dWidget(
-                                url: nft.url,
-                                cameraControls: false,
-                                backgroundColor: AppColors.k3DBackgroundColor,
+              child: GridView.custom(
+                padding: EdgeInsets.only(
+                  bottom: 16.h,
+                  left: 16.w,
+                  right: 16.w,
+                ),
+                gridDelegate: gridDelegate,
+                childrenDelegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final nft = viewModel.trades[index];
+                    return ClipRRect(
+                      child: GestureDetector(
+                        onTap: () => onNFTSelected(nft),
+                        child: Banner(
+                          color: AppColors.kPriceTagColor,
+                          location: BannerLocation.topStart,
+                          message:
+                              "${nft.ibcCoins.getCoinWithProperDenomination(nft.price)}  ${nft.ibcCoins.getAbbrev()}",
+                          child: PreviewNFTGrid(
+                            assetType: nft.assetType,
+                            on3dNFT: (BuildContext context) => Container(
+                              color: Colors.grey.shade200,
+                              height: double.infinity,
+                              child: IgnorePointer(
+                                child: Nft3dWidget(
+                                  url: nft.url,
+                                  cameraControls: false,
+                                  backgroundColor: AppColors.k3DBackgroundColor,
+                                ),
                               ),
                             ),
-                          ),
-                          onPdfNFT: (BuildContext context) => PdfPlaceHolder(
-                            nftUrl: nft.url,
-                            nftName: nft.name,
-                            thumbnailUrl: nft.thumbnailUrl,
-                          ),
-                          onVideoNFT: (BuildContext context) => VideoPlaceHolder(
-                            nftUrl: nft.url,
-                            nftName: nft.name,
-                            thumbnailUrl: nft.thumbnailUrl,
-                          ),
-                          onImageNFT: (BuildContext context) => CachedNetworkImage(
-                            placeholder: (context, url) => Shimmer(
-                              color: PylonsAppTheme.cardBackground,
-                              child: const SizedBox.expand(),
+                            onPdfNFT: (BuildContext context) => PdfPlaceHolder(
+                              nftUrl: nft.url,
+                              nftName: nft.name,
+                              thumbnailUrl: nft.thumbnailUrl,
                             ),
-                            imageUrl: nft.url,
-                            fit: BoxFit.cover,
-                          ),
-                          onAudioNFT: (BuildContext context) => _getAudioPlaceHolder(
-                            thumbnailUrl: nft.thumbnailUrl,
+                            onVideoNFT: (BuildContext context) => VideoPlaceHolder(
+                              nftUrl: nft.url,
+                              nftName: nft.name,
+                              thumbnailUrl: nft.thumbnailUrl,
+                            ),
+                            onImageNFT: (BuildContext context) => CachedNetworkImage(
+                              placeholder: (context, url) => Shimmer(
+                                color: PylonsAppTheme.cardBackground,
+                                child: const SizedBox.expand(),
+                              ),
+                              imageUrl: nft.url,
+                              fit: BoxFit.cover,
+                            ),
+                            onAudioNFT: (BuildContext context) => _getAudioPlaceHolder(
+                              thumbnailUrl: nft.thumbnailUrl,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-                childCount: viewModel.trades.length,
+                    );
+                  },
+                  childCount: viewModel.trades.length,
+                ),
               ),
-            ))
+            )
         ],
       ),
     );

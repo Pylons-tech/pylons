@@ -401,5 +401,6 @@
   "youtube": "Youtube",
   "discord": "Discord",
   "twitter": "Twitter",
-  "connected": "In Verbindung gebracht"
+  "connected": "In Verbindung gebracht",
+  "no_account_found": "Kein Konto gefunden"
 }

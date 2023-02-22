@@ -401,6 +401,7 @@
   "youtube": "Youtube",
   "discord": "Discord",
   "twitter": "Twitter",
-  "connected": "Связано"
+  "connected": "Связано",
+  "no_account_found": "Аккаунт не найден"
 }
 

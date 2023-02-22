@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import '../../mocks/mock_constants.dart';
 import '../../mocks/mock_wallet_store.dart';
-import '../../mocks/owner_view_view_model.mocks.dart';
+import '../../mocks/test_mocks.mocks.dart';
 import '../extension/size_extension.dart';
 
 void main() {
@@ -28,6 +28,7 @@ void main() {
     "Audio should stops when sharing nft",
     (tester) async {
       when(viewModel.nft).thenAnswer((realInvocation) => viewModel.nft = MOCK_NFT_FREE_AUDIO);
+      when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
 
       await tester.testAppForWidgetTesting(
         OwnerView(
@@ -47,6 +48,10 @@ void main() {
     "Video should stops when sharing nft",
     (tester) async {
       when(viewModel.nft).thenAnswer((realInvocation) => viewModel.nft = MOCK_NFT_FREE_VIDEO);
+      when(viewModel.isVideoLoading).thenAnswer((realInvocation) => false);
+      when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
+      when(viewModel.videoLoadingError).thenAnswer((realInvocation) => '');
+
 
       await tester.testAppForWidgetTesting(
         OwnerView(
@@ -69,19 +74,30 @@ void main() {
       when(viewModel.collapsed).thenAnswer((realInvocation) => false);
       when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
       when(viewModel.isHistoryExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.viewsCount).thenAnswer((realInvocation) => 0);
+      when(viewModel.owner).thenAnswer((realInvocation) => '');
+      when(viewModel.isLiking).thenAnswer((realInvocation) => false);
+      when(viewModel.likesCount).thenAnswer((realInvocation) => 0);
+      when(viewModel.likedByMe).thenAnswer((realInvocation) => false);
       when(viewModel.isOwnershipExpanded).thenAnswer((realInvocation) => false);
       when(viewModel.isDetailsExpanded).thenAnswer((realInvocation) => true);
+      when(viewModel.isNFTEnabled()).thenAnswer((realInvocation) => true);
       await tester.testAppForWidgetTesting(
         ChangeNotifierProvider.value(
-            value: viewModel,
-            builder: (context, child) {
-              return OwnerView(
-                nft: MOCK_NFT_FREE_IMAGE,
-              );
-            }),
+          value: viewModel,
+          builder: (context, child) {
+            return OwnerView(
+              nft: MOCK_NFT_FREE_IMAGE,
+            );
+          },
+        ),
       );
       await tester.pump();
-      expect(find.text('${MOCK_NFT_FREE_IMAGE.width}x${MOCK_NFT_FREE_IMAGE.height} ${MOCK_NFT_FREE_IMAGE.fileExtension.toUpperCase()}'), findsOneWidget);
+      expect(
+        find.text(
+            '${MOCK_NFT_FREE_IMAGE.width}x${MOCK_NFT_FREE_IMAGE.height} ${MOCK_NFT_FREE_IMAGE.fileExtension.toUpperCase()}'),
+        findsOneWidget,
+      );
     },
   );
 
@@ -92,8 +108,16 @@ void main() {
       when(viewModel.collapsed).thenAnswer((realInvocation) => false);
       when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
       when(viewModel.isHistoryExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.isVideoLoading).thenAnswer((realInvocation) => false);
+      when(viewModel.videoLoadingError).thenAnswer((realInvocation) => '');
+      when(viewModel.viewsCount).thenAnswer((realInvocation) => 0);
+      when(viewModel.owner).thenAnswer((realInvocation) => '');
+      when(viewModel.likedByMe).thenAnswer((realInvocation) => false);
+      when(viewModel.isLiking).thenAnswer((realInvocation) => false);
+      when(viewModel.likesCount).thenAnswer((realInvocation) => 0);
       when(viewModel.isOwnershipExpanded).thenAnswer((realInvocation) => false);
       when(viewModel.isDetailsExpanded).thenAnswer((realInvocation) => true);
+      when(viewModel.isNFTEnabled()).thenAnswer((realInvocation) => true);
       await tester.testAppForWidgetTesting(
         ChangeNotifierProvider.value(
             value: viewModel,
@@ -116,6 +140,12 @@ void main() {
       when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
       when(viewModel.isHistoryExpanded).thenAnswer((realInvocation) => false);
       when(viewModel.isOwnershipExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.viewsCount).thenAnswer((realInvocation) => 0);
+      when(viewModel.owner).thenAnswer((realInvocation) => '');
+      when(viewModel.isLiking).thenAnswer((realInvocation) => false);
+      when(viewModel.likedByMe).thenAnswer((realInvocation) => false);
+      when(viewModel.likesCount).thenAnswer((realInvocation) => 0);
+      when(viewModel.isNFTEnabled()).thenAnswer((realInvocation) => true);
       when(viewModel.isDetailsExpanded).thenAnswer((realInvocation) => true);
       await tester.testAppForWidgetTesting(
         ChangeNotifierProvider.value(
@@ -139,6 +169,12 @@ void main() {
       when(viewModel.isViewingFullNft).thenAnswer((realInvocation) => false);
       when(viewModel.isHistoryExpanded).thenAnswer((realInvocation) => false);
       when(viewModel.isOwnershipExpanded).thenAnswer((realInvocation) => false);
+      when(viewModel.viewsCount).thenAnswer((realInvocation) => 0);
+      when(viewModel.owner).thenAnswer((realInvocation) => '');
+      when(viewModel.isLiking).thenAnswer((realInvocation) => false);
+      when(viewModel.likesCount).thenAnswer((realInvocation) => 0);
+      when(viewModel.isNFTEnabled()).thenAnswer((realInvocation) => true);
+      when(viewModel.likedByMe).thenAnswer((realInvocation) => false);
       when(viewModel.isDetailsExpanded).thenAnswer((realInvocation) => true);
       await tester.testAppForWidgetTesting(
         ChangeNotifierProvider.value(
@@ -154,7 +190,6 @@ void main() {
     },
   );
 
-
   testWidgets(
     "Pdf file extension should show to user",
         (tester) async {
@@ -164,6 +199,12 @@ void main() {
       when(viewModel.isHistoryExpanded).thenAnswer((realInvocation) => false);
       when(viewModel.isOwnershipExpanded).thenAnswer((realInvocation) => false);
       when(viewModel.isDetailsExpanded).thenAnswer((realInvocation) => true);
+      when(viewModel.viewsCount).thenAnswer((realInvocation) => 0);
+      when(viewModel.owner).thenAnswer((realInvocation) => '');
+      when(viewModel.isLiking).thenAnswer((realInvocation) => false);
+      when(viewModel.likesCount).thenAnswer((realInvocation) => 0);
+      when(viewModel.isNFTEnabled()).thenAnswer((realInvocation) => true);
+      when(viewModel.likedByMe).thenAnswer((realInvocation) => false);
       await tester.testAppForWidgetTesting(
         ChangeNotifierProvider.value(
             value: viewModel,
