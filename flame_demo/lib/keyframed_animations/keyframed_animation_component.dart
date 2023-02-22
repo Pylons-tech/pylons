@@ -71,7 +71,7 @@ class KeyframedAnimationComponent extends SpriteAnimationComponent {
       }
 
       // Interpolate framedata if not last frame of animation; otherwise, just use last frame
-      if (_currentFrameIndex <= _currentAnimation!.frameData.length) {
+      if (_currentFrameIndex + 1 < _currentAnimation!.frameData.length) {
         framedata = _currentAnimation!.frameData[_currentFrameIndex].lerp(_currentAnimation!.frameData[_currentFrameIndex + 1], _currentFrameTime);
         animDone = false;
       } else {
