@@ -1,0 +1,54 @@
+---
+project_name: umee
+
+env:
+  # - CGO_ENABLED=1  # needed if building with cosmwasm
+
+before:
+  hooks:
+    - go mod download
+
+builds:
+  - main: ./cmd/pylonsd
+    id: "pylons"
+    binary: umeed
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    flags:
+      - -tags=badgerdb ledger netgo
+      - -trimpath
+    ldflags:
+      - -s -w -X main.commit={{.Commit}} -X main.date={{ .CommitDate }} -X github.com/cosmos/cosmos-sdk/version.Name=umee -X github.com/cosmos/cosmos-sdk/version.AppName=umeed -X github.com/cosmos/cosmos-sdk/version.Version={{ .Version }} -X github.com/cosmos/cosmos-sdk/version.Commit={{ .Commit }} -X github.com/cosmos/cosmos-sdk/version.BuildTags=netgo,ledger -X github.com/tendermint/tendermint/version.TMCoreSemVer={{ .Env.TM_VERSION }}
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64 # github only supports linux @ amd64, so this works only when cgo is disabled
+
+archives:
+  # prefer binary archives, uncomment if you want non-archived binary as well.
+  # - id: bins
+  #   format: binary
+  #   name_template: "{{ .Binary }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+
+  - id: tarball
+    format: tar.gz
+    wrap_in_directory: false # must not wrap into directory to support cosmwasm
+    name_template: "{{ .Binary }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    files:
+      - LICENSE
+      - README.md
+
+release:
+  github:
+    owner: robert-zaremba # TODO
+    name: pylons
+
+snapshot:
+  name_template: SNAPSHOT-{{ .Commit }}
+
+checksum:
+  name_template: SHA256SUMS-v{{.Version}}.txt
+  algorithm: sha256
+
+changelog:
+  skip: false
