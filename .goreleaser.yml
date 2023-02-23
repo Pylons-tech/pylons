@@ -42,7 +42,6 @@ release:
   github:
     owner: robert-zaremba # TODO
     name: pylons
-    token: "{{ .Env.GITHUB_TOKEN }}"
 
 snapshot:
   name_template: SNAPSHOT-{{ .Commit }}
