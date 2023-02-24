@@ -8,7 +8,7 @@ class PylonsGame extends FlameGame with HasTappableComponents {
   Future<void> onLoad() async {
     addAll([
         PylonsComponent("appFlameClicker"),
-        Doohickey()
+        await Doohickey.create()
       ]);
   }
 }

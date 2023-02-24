@@ -19,12 +19,12 @@ class Hud extends StatelessWidget {
           PylonsComponent.instance.executeRecipe(recipeGetThingamabob.sdkRecipe, [], [
                 (exec) {
               gameStateNotifier.updateThingamabob(true);
-              gameStateNotifier.updateWhatsits(Provider.of<GameStateNotifier>(context).whatsits - 10);
+              gameStateNotifier.updateWhatsits(Provider.of<GameStateNotifier>(context, listen: false).whatsits - 10);
             }
           ]);
-        } : null, child: PylonsComponent.instance.ready && recipeGetThingamabob.executeCheck(Provider.of<GameStateNotifier>(context)) ?
+        } : null, child: PylonsComponent.instance.ready && recipeGetThingamabob.executeCheck(Provider.of<GameStateNotifier>(context, listen: false)) ?
         Row(children: [
-          Image.asset("images/spinning_wheel.png", height: 40),
+          Image.asset("assets/images/spinning_wheel.png", height: 40),
           const Text("Buy a Thingamabob (10 whatsits)", style: TextStyle(fontSize: 42))
         ]) : null)
       ],
