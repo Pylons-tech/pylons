@@ -686,29 +686,23 @@ func (app *PylonsApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) 
 
 	// This should only run once, and afterwards the bonded_tokens_pool's balance will be automatically kept in order
 	if ctx.BlockHeight() == 1000001 {
-		ctx.Logger().Info(fmt.Sprintf("Attempting to correct bonded_tokens_pool"))
+		ctx.Logger().Info("Correcting bonded_tokens_pool")
 
 		bk := app.BankKeeper
 		bonded_tokens_pool_address := sdk.MustAccAddressFromBech32("pylo1fl48vsnmsdzcv85q5d2q4z5ajdha8yu3vp7zan")
-		balance := bk.GetBalance(ctx, bonded_tokens_pool_address, "ubedrock")
-		ctx.Logger().Info(fmt.Sprintf("bonded_tokens_pools has %v", balance))
+		multisig_address := sdk.MustAccAddressFromBech32("pylo1vnwhaymaazugzz9ln2sznddveyed6shz3x8xwl")
 
 		// Account currently has 1 BEDROCK
 		// There is currently 15202 BEDROCK Total Power Delegated
-		// Unclear how this became broken, but let's mint the delta and send it to the pool
+		// Transferring the missing accounting from multisig to bonded_tokens_pool
 		amount := sdk.NewCoins(sdk.NewCoin("ubedrock", sdk.NewInt(15201000000)))
-		err := bk.MintCoins(ctx, "mint", amount)
-		if err != nil {
-			panic(err)
-		}
-
-		err = bk.SendCoinsFromModuleToModule(ctx, "mint", "bonded_tokens_pool", amount)
+		err := bk.SendCoinsFromAccountToModule(ctx, multisig_address, "bonded_tokens_pool", amount)
 		if err != nil {
 			panic(err)
 		}
 
 		// Double check that the balance is expected
-		balance = bk.GetBalance(ctx, bonded_tokens_pool_address, "ubedrock")
+		balance := bk.GetBalance(ctx, bonded_tokens_pool_address, "ubedrock")
 		ctx.Logger().Info(fmt.Sprintf("bonded_tokens_pools now has %v\n", balance))
 	}
 
