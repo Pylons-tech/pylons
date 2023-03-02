@@ -26,8 +26,8 @@ func (app *PylonsApp) FixBondedTokensPool(ctx sdk.Context) {
 	// Account currently has 1 BEDROCK
 	// There is currently 15202 BEDROCK Total Power Delegated
 	// Transferring the missing accounting from multisig to bonded_tokens_pool
-	totalPower := app.StakingKeeper.GetLastTotalPower(ctx)
-	totalPower = totalPower.Mul(math.NewInt(1_000_000))
+	totalPowerInBedrock := app.StakingKeeper.GetLastTotalPower(ctx)
+	totalPowerInUbedrock = totalPower.Mul(math.NewInt(1_000_000))
 
 	bondeTokensPoolBalance := bk.GetBalance(ctx, bondedTokensPoolAddress, params.StakingBaseCoinUnit)
 	bondeTokensPoolDelta := totalPower.Sub(bondeTokensPoolBalance.Amount)
