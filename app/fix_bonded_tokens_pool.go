@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 
+	"cosmossdk.io/math"
 	"github.com/Pylons-tech/pylons/app/params"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -26,6 +27,7 @@ func (app *PylonsApp) FixBondedTokensPool(ctx sdk.Context) {
 	// There is currently 15202 BEDROCK Total Power Delegated
 	// Transferring the missing accounting from multisig to bonded_tokens_pool
 	totalPower := app.StakingKeeper.GetLastTotalPower(ctx)
+	totalPower = totalPower.Mul(math.NewInt(1_000_000))
 
 	bondeTokensPoolBalance := bk.GetBalance(ctx, bondedTokensPoolAddress, params.StakingBaseCoinUnit)
 	bondeTokensPoolDelta := totalPower.Sub(bondeTokensPoolBalance.Amount)
