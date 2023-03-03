@@ -9,6 +9,7 @@ import 'package:pylons_flame_demo/game.dart';
 import 'package:pylons_flame_demo/main.dart';
 import 'package:pylons_flame_demo/pylons_component.dart';
 import 'package:pylons_flame_demo/recipe.dart';
+import 'package:pylons_flame_demo/whatsit.dart';
 
 import 'keyframed_animations/keyframed_animation_component.dart';
 
@@ -81,6 +82,7 @@ class Doohickey extends KeyframedAnimationComponent with TapCallbacks {
             gameStateNotifier.updateLine2(_tapLine);
             gameStateNotifier.updateWhatsits(Provider.of<GameStateNotifier>(game.buildContext!, listen: false).whatsits + 10);
             playAnimation(_animIdle);
+            Whatsit.addToN(gameStateNotifier.whatsits, game);
           }
         ]);
       } else {
@@ -91,6 +93,7 @@ class Doohickey extends KeyframedAnimationComponent with TapCallbacks {
             gameStateNotifier.updateLine2(_tapLine);
             gameStateNotifier.updateWhatsits(Provider.of<GameStateNotifier>(game.buildContext!, listen: false).whatsits + 1);
             playAnimation(_animIdle);
+            Whatsit.addToN(gameStateNotifier.whatsits, game);
           }
         ]);
       }
@@ -108,6 +111,7 @@ class Doohickey extends KeyframedAnimationComponent with TapCallbacks {
         try {
           prf?.items.firstWhere((item) => item.getString("entityType") == "thingamabob");
           gameStateNotifier.updateThingamabob(true);
+          Whatsit.addToN(gameStateNotifier.whatsits, game);
         } on StateError {
           // swallow it - nothing to do here
         }

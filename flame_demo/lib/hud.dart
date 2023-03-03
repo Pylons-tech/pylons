@@ -24,8 +24,8 @@ class Hud extends StatelessWidget {
           ]);
         } : null, child: PylonsComponent.instance.ready && recipeGetThingamabob.executeCheck(Provider.of<GameStateNotifier>(context, listen: false)) ?
         Row(children: [
-          Image.asset("assets/images/spinning_wheel.png", height: 40),
-          const Text("Buy a Thingamabob (10 whatsits)", style: TextStyle(fontSize: 42))
+          Expanded(child: Image.asset("assets/images/spinning_wheel.png", height: 50)),
+          const Expanded(child: Text("Buy a Thingamabob (10 whatsits)", style: TextStyle(fontSize: 16)))
         ]) : null)
       ],
     );
