@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:pylons_flame_demo/keyframed_animations/extensions.dart';
 
 /// Extends SpriteAnimationComponent with support for simple keyframe-based animations
@@ -13,6 +14,10 @@ class KeyframedAnimationComponent extends SpriteAnimationComponent {
   String get currentAnimationKey => _currentAnimation?.name ?? "";
   final Map<String, KeyframedAnimation> animMap;
   final String initialAnimationKey;
+
+  Keyframe? _framedata;
+  bool _animDone = false;
+  bool _frameDone = false;
 
   KeyframedAnimationComponent(this.animMap, this.initialAnimationKey, this._paused);
 
@@ -54,38 +59,37 @@ class KeyframedAnimationComponent extends SpriteAnimationComponent {
   }
 
   @override
+  void render(Canvas canvas) {
+    scale = _framedata!.scale;
+    animation = _framedata!.baseAnim;
+    transform.angleDegrees = _framedata!.angle;
+    super.render(canvas);
+  }
+
+  @override
   void update(double dt) {
     if (_currentAnimation != null) {
       _currentFrameTime += dt;
 
-      final Keyframe framedata;
-      final bool animDone;
-      final bool frameDone;
-
       // Are we done w/ the current keyframe?
       if (_currentFrameTime >= _currentAnimation!.frameData[_currentFrameIndex].transitionTime) {
         _currentFrameTime = _currentAnimation!.frameData[_currentFrameIndex].transitionTime; // clamp
-        frameDone = true;
+        _frameDone = true;
       } else {
-        frameDone = false;
+        _frameDone = false;
       }
 
       // Interpolate framedata if not last frame of animation; otherwise, just use last frame
       if (_currentFrameIndex + 1 < _currentAnimation!.frameData.length) {
-        framedata = _currentAnimation!.frameData[_currentFrameIndex].lerp(_currentAnimation!.frameData[_currentFrameIndex + 1], _currentFrameTime);
-        animDone = false;
+        _framedata = _currentAnimation!.frameData[_currentFrameIndex].lerp(_currentAnimation!.frameData[_currentFrameIndex + 1], _currentFrameTime);
+        _animDone = false;
       } else {
-        framedata = _currentAnimation!.frameData[_currentFrameIndex];
-        animDone = true;
+        _framedata = _currentAnimation!.frameData[_currentFrameIndex];
+        _animDone = true;
       }
-
-      scale = framedata.scale;
-      angle = framedata.angle;
-      animation = framedata.baseAnim;
-
-      if (frameDone) {
+      if (_frameDone) {
         _currentFrameTime = 0;
-        if (animDone) {
+        if (_animDone) {
           switch (_currentAnimation!.endBehavior) {
             case AnimationEndBehavior.playOnce:
               onAnimationDone(_currentAnimation!.name);
