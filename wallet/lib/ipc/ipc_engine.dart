@@ -94,7 +94,22 @@ class IPCEngine {
 
   Future handleLinksBasedOnUri(String initialLink) async {
     if (_isEaselUniLink(initialLink)) {
-      _handleEaselLink(initialLink);
+      handleEaselLink(
+        link: initialLink,
+        showOwnerView: (nullableNFT) => navigatorKey.currentState!.pushNamed(
+          RouteUtil.ROUTE_OWNER_VIEW,
+          arguments: nullableNFT,
+        ),
+        showCreateAccountView: (nullableNFT) => navigatorKey.currentState!.pushNamed(
+          RouteUtil.ROUTE_ACCEPT_POLICY,
+          arguments: nullableNFT,
+        ),
+        showPurchaseView: (nullableNFT) => navigatorKey.currentState!.pushNamed(
+          RouteUtil.ROUTE_PURCHASE_VIEW,
+          arguments: nullableNFT,
+        ),
+        getNFtFromRecipe: getNFtFromRecipe,
+      );
     } else if (_isNFTViewUniLink(initialLink)) {
       _handleNFTViewLink(initialLink);
     } else if (_isNFTTradeUniLink(initialLink)) {
@@ -139,7 +154,18 @@ class IPCEngine {
     await showApprovalDialog(sdkIPCMessage: sdkIPCMessage);
   }
 
-  Future<void> _handleEaselLink(String link) async {
+  @visibleForTesting
+  Future<void> handleEaselLink({
+    required String link,
+    required Future<NFT?> Function({
+      required String cookbookId,
+      required String recipeId,
+    })
+        getNFtFromRecipe,
+    required void Function(NFT?) showOwnerView,
+    required void Function(NFT?) showCreateAccountView,
+    required void Function(NFT?) showPurchaseView,
+  }) async {
     final queryParameters = Uri.parse(link).queryParameters;
 
     final recipeId = (queryParameters.containsKey(kRecipeIdKey)) ? queryParameters[kRecipeIdKey] ?? '' : "";
@@ -158,13 +184,13 @@ class IPCEngine {
     }
 
     if (isOwnerIsViewing(nullableNFT, currentWallet)) {
-      navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_OWNER_VIEW, arguments: nullableNFT);
+      showOwnerView(nullableNFT);
     } else {
-      if (!getUserAcceptPolicies() && shouldShowAcceptPolicyScreen) {
-        navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_ACCEPT_POLICY, arguments: nullableNFT);
-        return;
+      if (currentWallet != null) {
+        showPurchaseView(nullableNFT);
+      } else {
+        showCreateAccountView(nullableNFT);
       }
-      navigatorKey.currentState!.pushNamed(RouteUtil.ROUTE_PURCHASE_VIEW, arguments: nullableNFT);
     }
 
     walletsStore.setStateUpdatedFlag(flag: true);

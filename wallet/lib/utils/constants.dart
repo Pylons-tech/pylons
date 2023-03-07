@@ -488,7 +488,6 @@ const String kAcceptBottomSheetBtnKey = "accept_bottom_sheet_btn";
 const String drawerIconKey = "drawer_icon_key";
 const String drawerKey = "drawer_key";
 
-const bool shouldShowAcceptPolicyScreen = true;
 
 const String kRemaining = 'remaining';
 const kTotal = 'total';
