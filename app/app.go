@@ -683,6 +683,12 @@ func (app *PylonsApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) 
 	// 		panic(err)
 	// 	}
 	// }
+
+	// This should only run once, and afterwards the bonded_tokens_pool's balance will be automatically kept in order
+	if ctx.BlockHeight() == 1000001 && ctx.ChainID() == "pylons-mainnet-1" {
+		app.FixBondedTokensPool(ctx)
+	}
+
 	return app.mm.BeginBlock(ctx, req)
 }
 

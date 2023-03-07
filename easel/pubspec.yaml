@@ -38,7 +38,7 @@ dependencies:
   dartz: ^0.10.0
   detectable_text_field: ^2.0.4
   device_preview: 1.1.0
-  dio: ^4.0.1
+  dio: ^5.0.1
   easy_localization: 3.0.1
   equatable: ^2.0.5
   file_picker: ^5.0.1
