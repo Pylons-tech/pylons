@@ -1,0 +1,30 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeBuyHickey RecipeBuyHickey,
+	"description": "Buy a hickey",
+	#price whatsit 60,
+	#no_item_input,
+	"entries" : {
+		#no_coin_or_item_modify_output,
+		"itemOutputs": [
+            {
+                "id": "hickey",
+                "doubles": [
+				],
+                "longs": [
+                ],
+                "strings": [
+                    {
+                        "key": "entityType",
+                        "value": "hickey"
+                    }
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+		]
+	},
+	#solo_output hickey
+}

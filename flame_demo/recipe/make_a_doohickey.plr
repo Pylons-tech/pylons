@@ -1,0 +1,57 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeMakeDoohickey RecipeMakeDoohickey,
+	"description": "Combine a doo and a hickey into a doohickey",
+    #no_coin_input,
+    "itemInputs": [
+    		{
+    			"id": "doo",
+                "doubles": [
+                ],
+                "longs": [
+                ],
+                "strings": [
+                    {
+                        "key": "entityType",
+                        "value": "doo"
+                    }
+                ]
+            },
+    		{
+    			"id": "hickey",
+                "doubles": [
+                ],
+                "longs": [
+                ],
+                "strings": [
+                    {
+                        "key": "entityType",
+                        "value": "hickey"
+                    }
+                ]
+            }
+    	],
+	"entries" : {
+		#no_coin_or_item_modify_output,
+		"itemOutputs": [
+            {
+                "id": "doohickey",
+                "doubles": [
+				],
+                "longs": [
+                ],
+                "strings": [
+                    {
+                        "key": "entityType",
+                        "value": "doohickey"
+                    }
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+		]
+	},
+	#solo_output doohickey
+}

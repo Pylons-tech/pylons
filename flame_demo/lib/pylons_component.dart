@@ -5,7 +5,8 @@ import 'package:pylons_flame_demo/recipe.dart';
 import 'package:pylons_sdk/low_level.dart' as ll;
 import 'package:pylons_sdk/pylons_sdk.dart' as sdk;
 import 'package:flame/components.dart';
-import 'dart:io' show Platform;
+
+import 'debug.dart';
 
 class PylonsComponent extends Component {
   final List<_DispatchedAction> _actions = [];
@@ -26,11 +27,15 @@ class PylonsComponent extends Component {
       throw Exception("There should be only one instance of PylonsComponent");
     }
     _instance = this;
-    if (Platform.isWindows) {
+    if (Debug.isOfflineBuild) {
       // probably need to do some setup stuff for mocks here?
       recipeGetWhatsit = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeGetWhatsit"), (notifier) => !notifier.hasThingamabob);
       recipeGet10Whatsits = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeGetWhatsitsWithThingamabob"), (notifier) => notifier.hasThingamabob);
+      recipeGet100Whatsits = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeGetWhatsitsWithDoohickey"), (notifier) => notifier.hasDoohickey);
       recipeGetThingamabob = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeBuyThingamabob"), (notifier) => !notifier.hasThingamabob && notifier.whatsits >= 10);
+      recipeGetDoo = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeBuyDoo"), (notifier) => !notifier.hasDoo && notifier.whatsits >= 70);
+      recipeGetHickey = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeBuyHickey"), (notifier) => !notifier.hasHickey && notifier.whatsits >= 60);
+      recipeGetDoohickey = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeMakeDoohickey"), (notifier) => notifier.hasDoo && notifier.hasHickey);
       _ready = true;
     } else {
       sdk.PylonsWallet.verifyOrInstall().then(
@@ -38,7 +43,11 @@ class PylonsComponent extends Component {
             await sdk.Cookbook.load(_cookbook);
             recipeGetWhatsit = Recipe(sdk.Recipe.let("RecipeGetWhatsit"), (notifier) => !notifier.hasThingamabob);
             recipeGet10Whatsits = Recipe(sdk.Recipe.let("RecipeGetWhatsitsWithThingamabob"), (notifier) => notifier.hasThingamabob);
+            recipeGet100Whatsits = Recipe(sdk.Recipe.let("RecipeGetWhatsitsWithDoohickey"), (notifier) => notifier.hasDoohickey);
             recipeGetThingamabob = Recipe(sdk.Recipe.let("RecipeBuyThingamabob"), (notifier) => !notifier.hasThingamabob && notifier.whatsits >= 10);
+            recipeGetDoo = Recipe(sdk.Recipe.let("RecipeBuyDoo"), (notifier) => !notifier.hasDoo && notifier.whatsits >= 70);
+            recipeGetHickey = Recipe(sdk.Recipe.let("RecipeBuyHickey"), (notifier) => !notifier.hasHickey && notifier.whatsits >= 60);
+            recipeGetDoohickey = Recipe(sdk.Recipe.let("RecipeMakeDoohickey"), (notifier) => notifier.hasDoo && notifier.hasHickey);
             _ready = true;
           }
       );
@@ -84,7 +93,7 @@ class PylonsComponent extends Component {
   void executeRecipe(sdk.Recipe rcp, List<sdk.Item> inputs, List<Function1<sdk.Execution?, void>> callbacks) {
     _requireReady();
     _requireProfile();
-    if (Platform.isWindows) {
+    if (Debug.isOfflineBuild) {
       final exec = sdk.Execution(ll.Execution.create());
       final completer = Completer<sdk.Execution?>.sync();
       _actions.add(_DispatchedAction<sdk.Execution?>(completer.future, callbacks));
@@ -97,7 +106,7 @@ class PylonsComponent extends Component {
 
   void getProfile(List<Function1<sdk.Profile?, void>> callbacks) {
     _requireReady();
-    if (Platform.isWindows) {
+    if (Debug.isOfflineBuild) {
       final prf = sdk.Profile("nulladdress", "Username", {}, [], false);
       final completer = Completer<sdk.Profile?>.sync();
       _actions.add(_DispatchedAction<sdk.Profile?>(completer.future, callbacks..add((_) {

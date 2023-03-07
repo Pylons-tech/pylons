@@ -1,0 +1,30 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeBuyDoo RecipeBuyDoo,
+	"description": "Buy a doo",
+	#price whatsit 70,
+	#no_item_input,
+	"entries" : {
+		#no_coin_or_item_modify_output,
+		"itemOutputs": [
+            {
+                "id": "doo",
+                "doubles": [
+				],
+                "longs": [
+                ],
+                "strings": [
+                    {
+                        "key": "entityType",
+                        "value": "doo"
+                    }
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+		]
+	},
+	#solo_output doo
+}

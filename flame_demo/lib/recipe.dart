@@ -12,4 +12,8 @@ class Recipe {
 
 late final Recipe recipeGetWhatsit;
 late final Recipe recipeGet10Whatsits;
+late final Recipe recipeGet100Whatsits;
 late final Recipe recipeGetThingamabob;
+late final Recipe recipeGetDoohickey;
+late final Recipe recipeGetDoo;
+late final Recipe recipeGetHickey;

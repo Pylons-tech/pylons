@@ -1,0 +1,54 @@
+{
+	#boilerplate v0.0.1 true,
+	#id_name RecipeGetWhatsitsWithDoohickey RecipeGetWhatsitsWithDoohickey,
+	"description": "Gets 100 Whatsits using a Doohickey",
+    #no_coin_input,
+	"itemInputs": [
+		{
+			"id": "doohickey",
+            "doubles": [
+            ],
+            "longs": [
+            ],
+            "strings": [
+                {
+                    "key": "entityType",
+                    "value": "doohickey"
+                }
+            ]
+        }
+	],
+	"entries" : {
+		#no_item_output,
+		"itemModifyOutputs": [
+            {
+                "id": "doohickey",
+				"itemInputRef": "doohickey",
+                "doubles": [
+				],
+                "longs": [
+                ],
+                "strings": [
+                ],
+                "mutableStrings": [],
+                "transferFee": [],
+                "tradePercentage": "0.100000000000000000",
+                "tradeable": true
+            }
+		],
+		"coinOutputs": [{
+            "id": "coin_reward",
+            "coin": {
+				"denom": "whatsit",
+				"amount":"100"
+			},
+            "program": ""
+        }]
+	},
+	"outputs": [
+		{
+			"entryIds": ["coin_reward", "doohickey"],
+			"weight": 1
+		}
+	]
+}
