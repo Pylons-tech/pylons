@@ -32,12 +32,32 @@ class PylonsGame extends FlameGame with HasTappables {
         gameStateNotifier.updateName(prf?.username != null ? prf!.username : "ERROR");
         gameStateNotifier.updateLine2(tapToCollectWhatsits);
         gameStateNotifier.updateWhatsits(prf?.coins["appFlameClicker/whatsit"]?.toInt() ?? 0);
+        Whatsit.addToN(gameStateNotifier.whatsits, this);
         try {
-          prf?.items.firstWhere((item) => item.getString("entityType") == "thingamabob");
-          gameStateNotifier.updateThingamabob(true);
-          Whatsit.addToN(gameStateNotifier.whatsits, this);
+          final item = prf?.items.firstWhere((item) => item.getString("entityType") == "thingamabob");
+          gameStateNotifier.updateThingamabob(true, item: item);
         } on StateError {
           // swallow it - nothing to do here
+        }
+        try {
+          final item = prf?.items.firstWhere((item) => item.getString("entityType") == "doohickey");
+          gameStateNotifier.updateDoohickey(true, item: item);
+        } on StateError {
+          // swallow it - nothing to do here
+        }
+        if (!gameStateNotifier.hasDoohickey) {
+          try {
+            final item = prf?.items.firstWhere((item) => item.getString("entityType") == "doo");
+            gameStateNotifier.updateDoo(true, item: item);
+          } on StateError {
+            // swallow it - nothing to do here
+          }
+          try {
+            final item = prf?.items.firstWhere((item) => item.getString("entityType") == "hickey");
+            gameStateNotifier.updateHickey(true, item: item);
+          } on StateError {
+            // swallow it - nothing to do here
+          }
         }
         return;
       }

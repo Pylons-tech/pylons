@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pylons_flame_demo/hud/buy_doohickey_button.dart';
+import 'package:pylons_flame_demo/hud/buy_hickey_button.dart';
+import 'package:pylons_flame_demo/hud/buy_thingamabob_button.dart';
+import 'package:pylons_flame_demo/hud/text_display.dart';
 import 'package:pylons_flame_demo/main.dart';
 import 'package:pylons_flame_demo/pylons_component.dart';
 import 'package:pylons_flame_demo/recipe.dart';
+
+import 'buy_doo_button.dart';
 
 class Hud extends StatelessWidget {
   const Hud({Key? key}) : super(key: key);
@@ -14,19 +20,11 @@ class Hud extends StatelessWidget {
         "${thingamabobString(context)}";
     return Column(
       children: [
-        Text(text, style: const TextStyle(fontSize: 42)),
-        MaterialButton(onPressed: PylonsComponent.instance.ready && recipeGetThingamabob.executeCheck(Provider.of<GameStateNotifier>(context)) ? () {
-          PylonsComponent.instance.executeRecipe(recipeGetThingamabob.sdkRecipe, [], [
-                (exec) {
-              gameStateNotifier.updateThingamabob(true);
-              gameStateNotifier.updateWhatsits(Provider.of<GameStateNotifier>(context, listen: false).whatsits - 10);
-            }
-          ]);
-        } : null, child: PylonsComponent.instance.ready && recipeGetThingamabob.executeCheck(Provider.of<GameStateNotifier>(context, listen: false)) ?
-        Row(children: [
-          Expanded(child: Image.asset("assets/images/spinning_wheel.png", height: 50)),
-          const Expanded(child: Text("Buy a Thingamabob (10 whatsits)", style: TextStyle(fontSize: 16)))
-        ]) : null)
+        TextDisplay(text: text),
+        const BuyThingamabobButton(),
+        const BuyDooButton(),
+        const BuyHickeyButton(),
+        const BuyDoohickeyButton()
       ],
     );
   }

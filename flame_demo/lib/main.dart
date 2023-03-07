@@ -13,6 +13,10 @@ class GameStateNotifier extends ChangeNotifier {
   bool hasDoo = false;
   bool hasHickey = false;
   bool hasDoohickey = false;
+  Item? itemThingamabob;
+  Item? itemDoo;
+  Item? itemHickey;
+  Item? itemDoohickey;
   int whatsits = 0;
 
   void updateName (String name) {
@@ -30,23 +34,27 @@ class GameStateNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateThingamabob (bool hasThingamabob) {
+  void updateThingamabob (bool hasThingamabob, {Item? item}) {
     this.hasThingamabob = hasThingamabob;
+    itemThingamabob = item;
     notifyListeners();
   }
 
-  void updateDoo (bool hasDoo) {
+  void updateDoo (bool hasDoo, {Item? item}) {
     this.hasDoo = hasDoo;
+    itemDoo = item;
     notifyListeners();
   }
 
-  void updateHickey (bool hasHickey) {
+  void updateHickey (bool hasHickey, {Item? item}) {
     this.hasHickey = hasHickey;
+    itemHickey = item;
     notifyListeners();
   }
 
-  void updateDoohickey (bool hasDoohickey) {
+  void updateDoohickey (bool hasDoohickey, {Item? item}) {
     this.hasDoohickey = hasDoohickey;
+    itemDoohickey = item;
     notifyListeners();
   }
 }

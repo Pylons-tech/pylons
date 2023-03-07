@@ -68,8 +68,20 @@ class Doohickey extends KeyframedAnimationComponent with Tappable {
     if (animation == _animClick) {
       playAnimation(_animLocked);
       gameStateNotifier.updateLine2(collectingWhatsits);
-      if (recipeGet10Whatsits.executeCheck(Provider.of<GameStateNotifier>(game.buildContext!, listen: false))) {
-        PylonsComponent.instance.executeRecipe(recipeGet10Whatsits.sdkRecipe, [], [
+      if (recipeGet100Whatsits.executeCheck(Provider.of<GameStateNotifier>(game.buildContext!, listen: false))) {
+        PylonsComponent.instance.executeRecipe(recipeGet100Whatsits.sdkRecipe, [Provider.of<GameStateNotifier>(game.buildContext!, listen: false).itemDoohickey!], [
+              (exec) async {
+            game.dispatchedAction = false;
+            gameStateNotifier.updateLine2("Got 100 whatsits!");
+            gameStateNotifier.updateLine2(tapToCollectWhatsits);
+            gameStateNotifier.updateWhatsits(Provider.of<GameStateNotifier>(game.buildContext!, listen: false).whatsits + 100);
+            playAnimation(_animIdle);
+            Whatsit.addToN(gameStateNotifier.whatsits, game);
+          }
+        ]);
+      }
+      else if (recipeGet10Whatsits.executeCheck(Provider.of<GameStateNotifier>(game.buildContext!, listen: false))) {
+        PylonsComponent.instance.executeRecipe(recipeGet10Whatsits.sdkRecipe, [Provider.of<GameStateNotifier>(game.buildContext!, listen: false).itemThingamabob!], [
               (exec) async {
             game.dispatchedAction = false;
             gameStateNotifier.updateLine2("Got 10 whatsits!");
