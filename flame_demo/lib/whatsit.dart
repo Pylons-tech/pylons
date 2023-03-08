@@ -28,7 +28,7 @@ class Whatsit extends KeyframedAnimationComponent {
       _animMap = {_animDefault : _defaultAnim};
       _initializedAnims = true;
     }
-    return Whatsit();
+    return Whatsit()..priority = -1;
   }
 
   static Future<void> addToN(int n, Component parent) async {
@@ -36,8 +36,8 @@ class Whatsit extends KeyframedAnimationComponent {
       final whatsit = await create();
       whatsit.position = Vector2.random();
       // todo: eliminate magic numbers (work out a saner way to do positioning tho)
-      whatsit.position.x *= 250;
-      whatsit.position.y *= 1000;
+      whatsit.position.x *= 450;
+      whatsit.position.y *= 800;
       whatsit.size = Vector2(24, 24);
       parent.add(whatsit);
       _noWhatsits++;

@@ -33,8 +33,8 @@ class PylonsComponent extends Component {
       recipeGet10Whatsits = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeGetWhatsitsWithThingamabob"), (notifier) => notifier.hasThingamabob);
       recipeGet100Whatsits = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeGetWhatsitsWithDoohickey"), (notifier) => notifier.hasDoohickey);
       recipeGetThingamabob = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeBuyThingamabob"), (notifier) => !notifier.hasThingamabob && notifier.whatsits >= 10);
-      recipeGetDoo = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeBuyDoo"), (notifier) => !notifier.hasDoo && notifier.whatsits >= 70);
-      recipeGetHickey = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeBuyHickey"), (notifier) => !notifier.hasHickey && notifier.whatsits >= 60);
+      recipeGetDoo = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeBuyDoo"), (notifier) => !notifier.hasDoo && !notifier.hasDoohickey && notifier.whatsits >= 70);
+      recipeGetHickey = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeBuyHickey"), (notifier) => !notifier.hasHickey && !notifier.hasDoohickey && notifier.whatsits >= 60);
       recipeGetDoohickey = Recipe(sdk.Recipe(ll.Recipe.create(), "RecipeMakeDoohickey"), (notifier) => notifier.hasDoo && notifier.hasHickey);
       _ready = true;
     } else {
@@ -45,8 +45,8 @@ class PylonsComponent extends Component {
             recipeGet10Whatsits = Recipe(sdk.Recipe.let("RecipeGetWhatsitsWithThingamabob"), (notifier) => notifier.hasThingamabob);
             recipeGet100Whatsits = Recipe(sdk.Recipe.let("RecipeGetWhatsitsWithDoohickey"), (notifier) => notifier.hasDoohickey);
             recipeGetThingamabob = Recipe(sdk.Recipe.let("RecipeBuyThingamabob"), (notifier) => !notifier.hasThingamabob && notifier.whatsits >= 10);
-            recipeGetDoo = Recipe(sdk.Recipe.let("RecipeBuyDoo"), (notifier) => !notifier.hasDoo && notifier.whatsits >= 70);
-            recipeGetHickey = Recipe(sdk.Recipe.let("RecipeBuyHickey"), (notifier) => !notifier.hasHickey && notifier.whatsits >= 60);
+            recipeGetDoo = Recipe(sdk.Recipe.let("RecipeBuyDoo"), (notifier) => !notifier.hasDoo && !notifier.hasDoohickey && notifier.whatsits >= 70);
+            recipeGetHickey = Recipe(sdk.Recipe.let("RecipeBuyHickey"), (notifier) => !notifier.hasHickey && !notifier.hasDoohickey && notifier.whatsits >= 60);
             recipeGetDoohickey = Recipe(sdk.Recipe.let("RecipeMakeDoohickey"), (notifier) => notifier.hasDoo && notifier.hasHickey);
             _ready = true;
           }
@@ -107,12 +107,15 @@ class PylonsComponent extends Component {
   void getProfile(List<Function1<sdk.Profile?, void>> callbacks) {
     _requireReady();
     if (Debug.isOfflineBuild) {
-      final prf = sdk.Profile("nulladdress", "Username", {}, [], false);
-      final completer = Completer<sdk.Profile?>.sync();
-      _actions.add(_DispatchedAction<sdk.Profile?>(completer.future, callbacks..add((_) {
-        _last = prf;
-      })));
-      completer.complete(prf);
+      () async {
+        await Future.delayed(const Duration(seconds: 1));
+        final prf = sdk.Profile("nulladdress", "Username", {}, [], false);
+        final completer = Completer<sdk.Profile?>.sync();
+        _actions.add(_DispatchedAction<sdk.Profile?>(completer.future, callbacks..add((_) {
+          _last = prf;
+        })));
+        completer.complete(prf);
+      }();
     } else {
       final future = sdk.Profile.get();
       _actions.add(_DispatchedAction<sdk.Profile?>(future, callbacks..add((prf) {

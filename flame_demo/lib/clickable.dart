@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_flame_demo/game.dart';
 import 'package:pylons_flame_demo/main.dart';
@@ -8,7 +9,9 @@ import 'package:pylons_flame_demo/pylons_component.dart';
 import 'package:pylons_flame_demo/recipe.dart';
 import 'package:pylons_flame_demo/text.dart';
 import 'package:pylons_flame_demo/whatsit.dart';
+import 'package:pylons_sdk/pylons_sdk.dart';
 
+import 'debug.dart';
 import 'keyframed_animations/keyframed_animation_component.dart';
 
 const _animIdle = "idle";
@@ -52,7 +55,7 @@ class Doohickey extends KeyframedAnimationComponent with Tappable {
     super.onMount();
     game = findGame() as PylonsGame;
     size = Vector2(200, 200);
-    position = Vector2(0, 200);
+    position = Vector2(100, 400);
   }
 
   @override
@@ -68,8 +71,15 @@ class Doohickey extends KeyframedAnimationComponent with Tappable {
     if (animation == _animClick) {
       playAnimation(_animLocked);
       gameStateNotifier.updateLine2(collectingWhatsits);
+      FlameAudio.play("wow-121578.mp3");
       if (recipeGet100Whatsits.executeCheck(Provider.of<GameStateNotifier>(game.buildContext!, listen: false))) {
-        PylonsComponent.instance.executeRecipe(recipeGet100Whatsits.sdkRecipe, [Provider.of<GameStateNotifier>(game.buildContext!, listen: false).itemDoohickey!], [
+        final List<Item> itemArr;
+        if (Debug.isOfflineBuild) {
+          itemArr = [];
+        } else {
+          itemArr = [Provider.of<GameStateNotifier>(game.buildContext!, listen: false).itemDoohickey!];
+        }
+        PylonsComponent.instance.executeRecipe(recipeGet100Whatsits.sdkRecipe, itemArr, [
               (exec) async {
             game.dispatchedAction = false;
             gameStateNotifier.updateLine2("Got 100 whatsits!");
@@ -81,7 +91,13 @@ class Doohickey extends KeyframedAnimationComponent with Tappable {
         ]);
       }
       else if (recipeGet10Whatsits.executeCheck(Provider.of<GameStateNotifier>(game.buildContext!, listen: false))) {
-        PylonsComponent.instance.executeRecipe(recipeGet10Whatsits.sdkRecipe, [Provider.of<GameStateNotifier>(game.buildContext!, listen: false).itemThingamabob!], [
+        final List<Item> itemArr;
+        if (Debug.isOfflineBuild) {
+          itemArr = [];
+        } else {
+          itemArr = [Provider.of<GameStateNotifier>(game.buildContext!, listen: false).itemThingamabob!];
+        }
+        PylonsComponent.instance.executeRecipe(recipeGet10Whatsits.sdkRecipe, itemArr, [
               (exec) async {
             game.dispatchedAction = false;
             gameStateNotifier.updateLine2("Got 10 whatsits!");

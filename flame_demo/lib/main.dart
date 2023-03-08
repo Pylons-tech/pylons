@@ -9,6 +9,7 @@ import 'hud/hud.dart';
 class GameStateNotifier extends ChangeNotifier {
   String profileName = "Please wait";
   String line2 = "";
+  bool initialized = false;
   bool hasThingamabob = false;
   bool hasDoo = false;
   bool hasHickey = false;
@@ -18,6 +19,11 @@ class GameStateNotifier extends ChangeNotifier {
   Item? itemHickey;
   Item? itemDoohickey;
   int whatsits = 0;
+
+  void updateInitialized () {
+    initialized = true;
+    notifyListeners();
+  }
 
   void updateName (String name) {
     profileName = name;

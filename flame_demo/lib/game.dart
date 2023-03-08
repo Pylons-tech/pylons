@@ -7,6 +7,7 @@ import 'package:pylons_flame_demo/pylons_component.dart';
 import 'package:pylons_flame_demo/text.dart';
 import 'package:pylons_flame_demo/whatsit.dart';
 
+import 'debug.dart';
 import 'main.dart';
 
 class PylonsGame extends FlameGame with HasTappables {
@@ -29,6 +30,7 @@ class PylonsGame extends FlameGame with HasTappables {
     PylonsComponent.instance.getProfile([
           (prf) {
         dispatchedAction = false;
+        gameStateNotifier.updateInitialized();
         gameStateNotifier.updateName(prf?.username != null ? prf!.username : "ERROR");
         gameStateNotifier.updateLine2(tapToCollectWhatsits);
         gameStateNotifier.updateWhatsits(prf?.coins["appFlameClicker/whatsit"]?.toInt() ?? 0);
