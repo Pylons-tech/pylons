@@ -70,6 +70,7 @@ class MockFirebaseAppCheck extends _i1.Mock implements _i3.FirebaseAppCheck {
   _i4.Future<void> activate({
     String? webRecaptchaSiteKey,
     _i5.AndroidProvider? androidProvider = _i5.AndroidProvider.playIntegrity,
+    _i5.AppleProvider? appleProvider = _i5.AppleProvider.deviceCheck,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -78,6 +79,7 @@ class MockFirebaseAppCheck extends _i1.Mock implements _i3.FirebaseAppCheck {
           {
             #webRecaptchaSiteKey: webRecaptchaSiteKey,
             #androidProvider: androidProvider,
+            #appleProvider: appleProvider,
           },
         ),
         returnValue: _i4.Future<void>.value(),
