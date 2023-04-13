@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -86,13 +87,13 @@ func (k Keeper) getRecipesByCookbookPaginated(ctx sdk.Context, cookbookID string
 }
 
 // GetCoinsInputsByIndex will return coins that are provided in recipe at index
-func (k Keeper) GetCoinsInputsByIndex(ctx sdk.Context, recipe types.Recipe, coinInputsIndex int) (sdk.Coins, error) {
+func (k Keeper) GetCoinsInputsByIndex(_ sdk.Context, recipe types.Recipe, coinInputsIndex int) (sdk.Coins, error) {
 	var coinInputs sdk.Coins
 	switch {
 	case len(recipe.CoinInputs) == 0:
 		coinInputs = sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.ZeroInt()))
 	case coinInputsIndex >= len(recipe.CoinInputs) && len(recipe.CoinInputs) != 0:
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid coinInputs index")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid coinInputs index")
 	default:
 		coinInputs = recipe.CoinInputs[coinInputsIndex].Coins
 	}

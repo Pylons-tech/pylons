@@ -1,6 +1,7 @@
 package types
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/rogpeppe/go-internal/semver"
 )
@@ -33,7 +34,7 @@ func CookbookModified(original, updated Cookbook) (bool, error) {
 	if modified {
 		comp := semver.Compare(original.Version, updated.Version)
 		if comp != -1 {
-			return modified, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "version needs to be higher when updating")
+			return modified, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "version needs to be higher when updating")
 		}
 	}
 	return modified, nil

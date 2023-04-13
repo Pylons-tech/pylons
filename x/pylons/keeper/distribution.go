@@ -1,10 +1,10 @@
 package keeper
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -112,7 +112,7 @@ func (k Keeper) getTotalSupply(ctx sdk.Context, ak types.AccountKeeper, denom st
 	return totalAvailable
 }
 
-func (k Keeper) GetDelegatorRewardsDistributionPercentages(ctx sdk.Context, sk types.StakingKeeper, ak types.AccountKeeper) (distrPercentages []types.DistributionPercentage) {
+func (k Keeper) GetDelegatorRewardsDistributionPercentages(ctx sdk.Context, _ types.StakingKeeper, ak types.AccountKeeper) (distrPercentages []types.DistributionPercentage) {
 	distrPercentages = make([]types.DistributionPercentage, 0)
 	stakingDenom := types.StakingCoinDenom
 	// Get all account balances
@@ -211,7 +211,7 @@ func (k Keeper) SendRewards(ctx sdk.Context, rewards []types.DistributionCoin) e
 		accAddr, _ := sdk.AccAddressFromBech32(dist.Address)
 		err := k.SendRewardsFromFeeCollector(ctx, accAddr, dist.Coins)
 		if err != nil {
-			return sdkerrors.Wrapf(err, "unable to send coins to %v from %v", dist.Address, k.FeeCollectorAddress().String())
+			return errorsmod.Wrapf(err, "unable to send coins to %v from %v", dist.Address, k.FeeCollectorAddress().String())
 		}
 	}
 	return nil
@@ -237,10 +237,9 @@ func checkModuleAccount(acc string, modAccs []string) bool {
 		if acc == modacc {
 			found = true
 			break
-		} else {
-			// if account address is not equal to module account address, distribute
-			found = false
 		}
+		// if account address is not equal to module account address, distribute
+		found = false
 	}
 	return found
 }

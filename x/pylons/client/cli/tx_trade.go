@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -23,27 +24,27 @@ func CmdCreateTrade() *cobra.Command {
 			argsCoinInputs := args[0]
 			jsonArgsCoinInputs, err := types.ParseCoinInputsCLI(argsCoinInputs)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			argsItemInputs := args[1]
 			jsonArgsItemInputs := make([]types.ItemInput, 0)
 			err = json.Unmarshal([]byte(argsItemInputs), &jsonArgsItemInputs)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			argsCoinOutput := args[2]
 			jsonArgsCoinOutput, err := types.ParseCoinsCLI(argsCoinOutput)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			argsItemOutputs := args[3]
 			jsonArgsItemOutputs := make([]types.ItemRef, 0)
 			err = json.Unmarshal([]byte(argsItemOutputs), &jsonArgsItemOutputs)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			argsExtraInfo := args[4]
@@ -55,7 +56,7 @@ func CmdCreateTrade() *cobra.Command {
 
 			msg := types.NewMsgCreateTrade(clientCtx.GetFromAddress().String(), jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsCoinOutput, jsonArgsItemOutputs, argsExtraInfo)
 			if err := msg.ValidateBasic(); err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
@@ -74,7 +75,7 @@ func CmdCancelTrade() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			id, err := strconv.ParseUint(args[0], 10, 64)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)

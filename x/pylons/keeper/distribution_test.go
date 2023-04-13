@@ -509,7 +509,6 @@ func (suite *IntegrationTestSuite) TestGetHoldersRewardsDistributionPercentages(
 
 	for _, tc := range tests {
 		suite.Run(tc.desc, func() {
-
 			types.UpdateAppCheckFlagTest(types.FlagTrue)
 			// create executor account
 			srv.CreateAccount(wctx, &types.MsgCreateAccount{

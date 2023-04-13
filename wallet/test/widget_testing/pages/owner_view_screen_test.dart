@@ -248,8 +248,8 @@ void registerStubs(OwnerViewViewModel viewModel) {
   when(viewModel.videoPlayerController).thenAnswer((realInvocation) {
     final VideoPlayerController controller;
     controller = VideoPlayerController.network(MOCK_URL);
-    controller.value = VideoPlayerValue(
-      duration: const Duration(
+    controller.value = const VideoPlayerValue(
+      duration: Duration(
         minutes: 2,
       ),
     );
@@ -257,8 +257,8 @@ void registerStubs(OwnerViewViewModel viewModel) {
   });
   when(viewModel.collapsed).thenAnswer((realInvocation) => true);
   when(viewModel.shareNFTLink(size: const Size(10, 10))).thenAnswer((realInvocation) async {
-    viewModel.videoPlayerController!.value = VideoPlayerValue(
-      duration: const Duration(
+    viewModel.videoPlayerController!.value = const VideoPlayerValue(
+      duration: Duration(
         minutes: 2,
       ),
     );

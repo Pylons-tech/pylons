@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -13,18 +14,18 @@ func (k msgServer) AppleIap(goCtx context.Context, msg *types.MsgAppleIap) (*typ
 
 	receipt, err := types.ValidateApplePay(msg)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid receipt")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid receipt")
 	}
 
 	if receipt.PurchaseId != msg.PurchaseId {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid transaction token")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid transaction token")
 	}
 	if receipt.ProductId != msg.ProductId {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid product id")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid product id")
 	}
 
 	if k.HasAppleIAPOrder(ctx, receipt.PurchaseId) {
-		return nil, sdkerrors.Wrap(types.ErrReceiptAlreadyUsed, "the Apple IAP order ID is already being used")
+		return nil, errorsmod.Wrap(types.ErrReceiptAlreadyUsed, "the Apple IAP order ID is already being used")
 	}
 
 	var coinIssuer types.CoinIssuer
@@ -41,7 +42,7 @@ CoinIssuersLoop:
 	}
 
 	if len(coinIssuer.CoinDenom) == 0 {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid product id")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid product id")
 	}
 
 	receipt.Creator = msg.Creator
@@ -52,7 +53,7 @@ CoinIssuersLoop:
 	amt := sdk.NewCoins(sdk.NewCoin(coinIssuer.CoinDenom, iapPackage.Amount))
 	err = k.MintCoinsToAddr(ctx, addr, amt)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	_ = ctx.EventManager().EmitTypedEvent(&types.EventApplePurchase{

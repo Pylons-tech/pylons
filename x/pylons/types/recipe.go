@@ -5,6 +5,7 @@ import (
 
 	"github.com/rogpeppe/go-internal/semver"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -49,7 +50,7 @@ func RecipeModified(original, updated Recipe) (bool, error) {
 
 	equal, err := EntriesListEqual(original.Entries, updated.Entries)
 	if err != nil {
-		return modified, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return modified, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if !equal {
@@ -69,7 +70,7 @@ func RecipeModified(original, updated Recipe) (bool, error) {
 	if modified {
 		comp := semver.Compare(original.Version, updated.Version)
 		if comp != -1 {
-			return modified, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "version needs to be higher when updating")
+			return modified, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "version needs to be higher when updating")
 		}
 	}
 
@@ -473,13 +474,13 @@ func ValidateInputDoubles(dip []DoubleInputParam) error {
 	doublesKeyMap := make(map[string]bool)
 	for _, d := range dip {
 		if d.MaxValue.LT(d.MinValue) {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "maxValue cannot be less than minValue for double %s", d.Key)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "maxValue cannot be less than minValue for double %s", d.Key)
 		}
 		if d.MinValue.IsNegative() {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "minValue cannot be less than 0 for double %s", d.Key)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "minValue cannot be less than 0 for double %s", d.Key)
 		}
 		if _, ok := doublesKeyMap[d.Key]; ok {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "key %s repeated in double itemInput list", d.Key)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "key %s repeated in double itemInput list", d.Key)
 		}
 		doublesKeyMap[d.Key] = true
 	}
@@ -491,13 +492,13 @@ func ValidateInputLongs(lip []LongInputParam) error {
 	longsKeyMap := make(map[string]bool)
 	for _, l := range lip {
 		if l.MaxValue < l.MinValue {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "maxValue cannot be less than minValue for long %s", l.Key)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "maxValue cannot be less than minValue for long %s", l.Key)
 		}
 		if l.MinValue < 0 {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "minValue cannot be less than 0 for long %s", l.Key)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "minValue cannot be less than 0 for long %s", l.Key)
 		}
 		if _, ok := longsKeyMap[l.Key]; ok {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "key %s repeated in long itemInput list", l.Key)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "key %s repeated in long itemInput list", l.Key)
 		}
 		longsKeyMap[l.Key] = true
 	}
@@ -509,7 +510,7 @@ func ValidateInputStrings(sip []StringInputParam) error {
 	stringsKeyMap := make(map[string]bool)
 	for _, s := range sip {
 		if _, ok := stringsKeyMap[s.Key]; ok {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "key %s repeated in string itemInput list", s.Key)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "key %s repeated in string itemInput list", s.Key)
 		}
 		stringsKeyMap[s.Key] = true
 	}
@@ -548,19 +549,19 @@ func ValidateCoinOutput(co CoinOutput, idMap map[string]bool) error {
 	}
 
 	if _, ok := idMap[co.Id]; ok {
-		return sdkerrors.Wrapf(ErrInvalidRequestField, "id %s repeated in coinOutput list", co.Id)
+		return errorsmod.Wrapf(ErrInvalidRequestField, "id %s repeated in coinOutput list", co.Id)
 	}
 	idMap[co.Id] = true
 
 	// Validate sdk coins
 	if !co.Coin.IsValid() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, co.Coin.String())
+		return errorsmod.Wrap(sdkerrors.ErrInvalidCoins, co.Coin.String())
 	}
 
 	// prevent ibc coins as coin outputs
 	// theoretically, a cookbook could have the ID 'ibc'. This prevents coinOutputs from aliasing real ibc coins
 	if IsIBCDenomRepresentation(co.Coin.Denom) {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "coin denom %s is of ibc/{hash} - cannot be used as a coin output", co.Coin.Denom)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "coin denom %s is of ibc/{hash} - cannot be used as a coin output", co.Coin.Denom)
 	}
 
 	return nil
@@ -575,22 +576,22 @@ func ValidateDoubles(dp []DoubleParam, ce CelEnvCollection) error {
 		}
 
 		if _, ok := keyMap[param.Key]; ok {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "key %s repeated in double param list", param.Key)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "key %s repeated in double param list", param.Key)
 		}
 		keyMap[param.Key] = true
 		for _, item := range param.WeightRanges {
 			if item.Upper.LT(item.Lower) {
-				return sdkerrors.Wrapf(ErrInvalidRequestField, "upper value cannot be less than lower value for weigthRange of double param %s", param.Key)
+				return errorsmod.Wrapf(ErrInvalidRequestField, "upper value cannot be less than lower value for weigthRange of double param %s", param.Key)
 			}
 			if item.Lower.IsNegative() {
-				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid negative lower value for weigthRange of double param %s", param.Key)
+				return errorsmod.Wrapf(ErrInvalidRequestField, "invalid negative lower value for weigthRange of double param %s", param.Key)
 			}
 		}
 
 	}
 	if len(dp) != 0 {
 		if _, err := DoubleParamList(dp).Actualize(ce); err != nil {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "double param list contains incompatible program %v", err)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "double param list contains incompatible program %v", err)
 		}
 	}
 	return nil
@@ -605,22 +606,22 @@ func ValidateLongs(lp []LongParam, ce CelEnvCollection) error {
 		}
 
 		if _, ok := keyMap[param.Key]; ok {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "key %s repeated in long param list", param.Key)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "key %s repeated in long param list", param.Key)
 		}
 		keyMap[param.Key] = true
 
 		for _, item := range param.WeightRanges {
 			if item.Upper < item.Lower {
-				return sdkerrors.Wrapf(ErrInvalidRequestField, "upper value cannot be less than lower value for weigthRange of long param %s", param.Key)
+				return errorsmod.Wrapf(ErrInvalidRequestField, "upper value cannot be less than lower value for weigthRange of long param %s", param.Key)
 			}
 			if item.Lower < 0 {
-				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid negative lower value for weigthRange of long param %s", param.Key)
+				return errorsmod.Wrapf(ErrInvalidRequestField, "invalid negative lower value for weigthRange of long param %s", param.Key)
 			}
 		}
 	}
 	if len(lp) != 0 {
 		if _, err := LongParamList(lp).Actualize(ce); err != nil {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "long param list contains incompatible program %v", err)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "long param list contains incompatible program %v", err)
 		}
 	}
 
@@ -636,13 +637,13 @@ func ValidateStrings(sp []StringParam, ce CelEnvCollection) error {
 		}
 
 		if _, ok := keyMap[param.Key]; ok {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "key %s repeated in string param list", param.Key)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "key %s repeated in string param list", param.Key)
 		}
 		keyMap[param.Key] = true
 	}
 	if len(sp) != 0 {
 		if _, err := StringParamList(sp).Actualize(ce); err != nil {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "string param list contains incompatible program %v", err)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "string param list contains incompatible program %v", err)
 		}
 	}
 	return nil
@@ -657,7 +658,7 @@ func ValidateMutableStrings(skv []StringKeyValue) error {
 		}
 
 		if _, ok := keyMap[kv.Key]; ok {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "key %s repeated in string param list", kv.Key)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "key %s repeated in string param list", kv.Key)
 		}
 		keyMap[kv.Key] = true
 	}
@@ -673,7 +674,7 @@ func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool, ce CelEnvCollec
 		}
 
 		if _, ok := idMap[item.Id]; ok {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "id %s repeated in itemOutput list", item.Id)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "id %s repeated in itemOutput list", item.Id)
 		}
 		idMap[item.Id] = true
 
@@ -700,13 +701,13 @@ func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool, ce CelEnvCollec
 		// item.TradePercentage must be in (0, 1)
 		if !item.TradePercentage.IsNil() {
 			if item.TradePercentage.LT(sdk.ZeroDec()) || item.TradePercentage.GTE(sdk.OneDec()) {
-				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemOutput %s", item.Id)
+				return errorsmod.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemOutput %s", item.Id)
 			}
 		}
 
 		for _, tf := range item.TransferFee {
 			if !tf.IsValid() {
-				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid transferFee on ItemOutput %s", item.Id)
+				return errorsmod.Wrapf(ErrInvalidRequestField, "invalid transferFee on ItemOutput %s", item.Id)
 			}
 		}
 	}
@@ -721,7 +722,7 @@ func ValidateItemModifyOutputs(imo []ItemModifyOutput, idMap map[string]bool, ce
 		}
 
 		if _, ok := idMap[item.Id]; ok {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "id %s repeated in itemModifyOutput list", item.Id)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "id %s repeated in itemModifyOutput list", item.Id)
 		}
 		idMap[item.Id] = true
 
@@ -747,12 +748,12 @@ func ValidateItemModifyOutputs(imo []ItemModifyOutput, idMap map[string]bool, ce
 
 		// item.TradePercentage must be in (0, 1)
 		if item.TradePercentage.LTE(sdk.ZeroDec()) || item.TradePercentage.GTE(sdk.OneDec()) {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemModifyOutput %s", item.Id)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemModifyOutput %s", item.Id)
 		}
 
 		for _, tf := range item.TransferFee {
 			if !tf.IsValid() {
-				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid transferFee on ItemOutput %s", item.Id)
+				return errorsmod.Wrapf(ErrInvalidRequestField, "invalid transferFee on ItemOutput %s", item.Id)
 			}
 		}
 	}
@@ -783,7 +784,7 @@ func ValidateEntriesList(el EntriesList, idMap map[string]bool, ce CelEnvCollect
 func ValidateOutputs(wo WeightedOutputs, idMap map[string]bool) error {
 	for _, id := range wo.EntryIds {
 		if _, ok := idMap[id]; !ok {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "no valid entry found with ID %s", id)
+			return errorsmod.Wrapf(ErrInvalidRequestField, "no valid entry found with ID %s", id)
 		}
 	}
 

@@ -1,6 +1,7 @@
 package types
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -42,17 +43,17 @@ func (msg *MsgCreateTrade) GetSignBytes() []byte {
 func (msg *MsgCreateTrade) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
 	for i, coinInput := range msg.CoinInputs {
 		if !coinInput.Coins.IsValid() {
-			return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
+			return errorsmod.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
 		}
 	}
 
 	if !msg.CoinOutputs.Empty() && !msg.CoinOutputs.IsValid() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "invalid coinOutputs")
+		return errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "invalid coinOutputs")
 	}
 
 	// ensure that there is only one payment token
@@ -63,12 +64,12 @@ func (msg *MsgCreateTrade) ValidateBasic() error {
 			switch {
 			case !IsCookbookDenom(coin.Denom) && !IsIBCDenomRepresentation(coin.Denom):
 				if paymentDenom != "" {
-					return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "multiple paymentDenoms in CoinInputs")
+					return errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "multiple paymentDenoms in CoinInputs")
 				}
 				paymentDenom = coin.Denom
 			case IsIBCDenomRepresentation(coin.Denom):
 				if paymentDenom != "" {
-					return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "multiple paymentDenoms in CoinInputs")
+					return errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "multiple paymentDenoms in CoinInputs")
 				}
 				paymentDenom = coin.Denom
 			}
@@ -78,13 +79,13 @@ func (msg *MsgCreateTrade) ValidateBasic() error {
 			switch {
 			case !IsCookbookDenom(coin.Denom) && !IsIBCDenomRepresentation(coin.Denom):
 				if coin.Denom != paymentDenom && paymentDenom != "" {
-					return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "multiple paymentDenoms in CoinOutputs")
+					return errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "multiple paymentDenoms in CoinOutputs")
 				} else if paymentDenom == "" {
 					paymentDenom = coin.Denom
 				}
 			case IsIBCDenomRepresentation(coin.Denom):
 				if coin.Denom != paymentDenom && paymentDenom != "" {
-					return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "multiple paymentDenoms in CoinOutputs")
+					return errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "multiple paymentDenoms in CoinOutputs")
 				} else if paymentDenom == "" {
 					paymentDenom = coin.Denom
 				}
@@ -95,17 +96,17 @@ func (msg *MsgCreateTrade) ValidateBasic() error {
 	for _, item := range msg.ItemOutputs {
 		err := ValidateItemID(item.ItemId)
 		if err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 		err = ValidateID(item.CookbookId)
 		if err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}
 
 	for _, ii := range msg.ItemInputs {
 		if err = ValidateItemInput(ii); err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}
 
@@ -145,7 +146,7 @@ func (msg *MsgCancelTrade) GetSignBytes() []byte {
 func (msg *MsgCancelTrade) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 	return nil
 }
