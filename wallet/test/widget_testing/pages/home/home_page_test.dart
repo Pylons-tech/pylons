@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mockito/annotations.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/user_image_widget_viewmodel.dart';
 import 'package:pylons_wallet/ipc/ipc_engine.dart';
@@ -15,18 +14,14 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:transaction_signing_gateway/model/account_public_info.dart';
 import '../../../mocks/home_provider.mocks.dart';
-import '../../../mocks/ipc_engine.mocks.dart';
+import '../../../mocks/main_mock.mocks.dart';
 import '../../../mocks/maintenance_mode_widgets_test.mocks.dart';
-import '../../../mocks/wallet_store.mocks.dart';
 import '../../../mocks/user_banner_view_model.mocks.dart';
 import '../../../mocks/user_info_provider.mocks.dart';
 import '../../extension/size_extension.dart';
 import 'package:mockito/mockito.dart';
 import '../../../mocks/mock_constants.dart';
-import 'home_page_test.mocks.dart';
 
-
-@GenerateMocks([Repository])
 void main() {
   final homeProvider = MockHomeProvider();
   final userBannerViewModel = MockUserBannerViewModel();

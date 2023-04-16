@@ -5,20 +5,8 @@ import 'package:pylons_wallet/services/third_party_services/remote_config_servic
 import 'package:pylons_wallet/utils/constants.dart';
 
 class BaseEnv {
-  late NetworkInfo _networkInfo;
-  late String _baseApiUrl;
-  late String _baseEthUrl;
-
-  late String _stripeUrl;
-  late String _stripePubKey;
-  late String _stripeCallbackUrl;
-  late String _stripeCallbackRefreshUrl;
-  late String _chainId;
-  late String _ibcTraceUrl;
-  late String _faucetUrl;
-  late String _baseMongoUrl;
-  late List<SKUModel> _skus;
-
+  BaseEnv();
+  
   void setEnv({
     required String lcdUrl,
     required String grpcUrl,
@@ -60,6 +48,25 @@ class BaseEnv {
     _skus = jsonSkuList.map((e) => SKUModel.fromJson(e as Map)).toList();
   }
 
+  @override
+  String toString() {
+    return 'BaseEnv{_networkInfo: $_networkInfo, _baseApiUrl: $_baseApiUrl, _baseEthUrl: $_baseEthUrl,  _stripeUrl: $_stripeUrl, _stripePubKey: $_stripePubKey,  _stripeCallbackUrl: $_stripeCallbackUrl, _stripeCallbackRefreshUrl: $_stripeCallbackRefreshUrl, _chainId: $_chainId, _ibcTraceUrl: $_ibcTraceUrl, _faucetUrl: $_faucetUrl}';
+  }
+
+  late NetworkInfo _networkInfo;
+  late String _baseApiUrl;
+  late String _baseEthUrl;
+
+  late String _stripeUrl;
+  late String _stripePubKey;
+  late String _stripeCallbackUrl;
+  late String _stripeCallbackRefreshUrl;
+  late String _chainId;
+  late String _ibcTraceUrl;
+  late String _faucetUrl;
+  late String _baseMongoUrl;
+  late List<SKUModel> _skus;
+
   NetworkInfo get networkInfo => _networkInfo;
 
   String get baseApiUrl => _baseApiUrl;
@@ -83,9 +90,4 @@ class BaseEnv {
   String get faucetUrl => _faucetUrl;
 
   List<SKUModel> get skus => _skus;
-
-  @override
-  String toString() {
-    return 'BaseEnv{_networkInfo: $_networkInfo, _baseApiUrl: $_baseApiUrl, _baseEthUrl: $_baseEthUrl,  _stripeUrl: $_stripeUrl, _stripePubKey: $_stripePubKey,  _stripeCallbackUrl: $_stripeCallbackUrl, _stripeCallbackRefreshUrl: $_stripeCallbackRefreshUrl, _chainId: $_chainId, _ibcTraceUrl: $_ibcTraceUrl, _faucetUrl: $_faucetUrl}';
-  }
 }

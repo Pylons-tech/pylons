@@ -1,19 +1,14 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pylons_wallet/ipc/ipc_engine.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
-import 'package:pylons_wallet/providers/account_provider.dart';
-import 'package:pylons_wallet/services/repository/repository.dart';
-import 'package:pylons_wallet/stores/wallet_store.dart';
+import 'package:pylons_wallet/utils/types.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
-import 'ipc_test.mocks.dart';
+import '../../mocks/main_mock.mocks.dart';
 
-@GenerateMocks([AccountProvider, Repository, WalletsStore])
 void main() {
   group("$IPCEngine", () {
     late IPCEngine ipcEngine;
@@ -29,6 +24,7 @@ void main() {
         accountProvider: mockAccountProvider,
         repository: mockRepository,
         walletsStore: walletStore,
+        onLogEvent: (AnalyticsEventEnum event) {},
       );
 
       when(mockAccountProvider.accountPublicInfo).thenAnswer((realInvocation) => const AccountPublicInfo(
@@ -101,6 +97,24 @@ void main() {
                 NFT(ibcCoins: IBCCoins.none),
           );
         });
+      });
+    });
+
+    group("checkAndUnWrapFirebaseLink", () {
+      test("parse fallback chrome link", () async {
+        final link = await ipcEngine.checkAndUnWrapFirebaseLink(
+            "xyz.pylons.wallet://google/link?deep_link_id=https%3A%2F%2Fwallet.pylons.tech%2F%3Frecipe_id%3DEasel_Recipe_auto_recipe_2023_01_08_112058_779%26cookbook_id%3DEasel_CookBook_auto_cookbook_2022_05_02_204103_876%26address%3Dpylo10sgeshtw6ewaq8s0daqev80gm69jh7rt264t7r&lt=DDL_SHORT&lid=https%3A%2F%2Fpylons.page.link%2FcaJSy3tdVAq3LNGJ8&utm_medium=dynamic_link&utm_source=firebase");
+
+        expect(link,
+            "https://wallet.pylons.tech/?recipe_id=Easel_Recipe_auto_recipe_2023_01_08_112058_779&cookbook_id=Easel_CookBook_auto_cookbook_2022_05_02_204103_876&address=pylo10sgeshtw6ewaq8s0daqev80gm69jh7rt264t7r");
+      });
+
+      test("parse normal firebase link", () async {
+        final link = await ipcEngine.checkAndUnWrapFirebaseLink(
+            "https://wallet.pylons.tech/?recipe_id=Easel_Recipe_auto_recipe_2023_01_08_112058_779&cookbook_id=Easel_CookBook_auto_cookbook_2022_05_02_204103_876&address=pylo10sgeshtw6ewaq8s0daqev80gm69jh7rt264t7r");
+
+        expect(link,
+            "https://wallet.pylons.tech/?recipe_id=Easel_Recipe_auto_recipe_2023_01_08_112058_779&cookbook_id=Easel_CookBook_auto_cookbook_2022_05_02_204103_876&address=pylo10sgeshtw6ewaq8s0daqev80gm69jh7rt264t7r");
       });
     });
   });

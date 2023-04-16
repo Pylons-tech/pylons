@@ -182,7 +182,7 @@ const String kAtom = "ATOM";
 const String kEthereum = "Ethereum";
 
 const ANDROID_VERSION = '1.0.1+145';
-const IOS_VERSION = '1.0.8+1';
+const IOS_VERSION = '1.0.8+3';
 
 const kCurrencyDecimalLength = 2;
 const kMaxPriceLength = 14;
@@ -345,6 +345,7 @@ const String kDateWithTimeFormat = "MM/dd/yyyy HH:mm";
 const int kMaxItemToShow = 11;
 const String kHistory = "history";
 const String kFirebaseLink = "https://pylons.page.link";
+const String kChromeThrowLink = "google/link?deep_link_id";
 
 //transaction keys
 const String kAddressKey = "address";

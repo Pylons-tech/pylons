@@ -7,8 +7,8 @@ import 'package:pylons_wallet/services/third_party_services/remote_notifications
 import 'package:pylons_wallet/stores/wallet_store_imp.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
+import '../../mocks/main_mock.mocks.dart';
 import '../../mocks/mock_crashlytics_helper.dart';
-import '../../mocks/mock_repository.dart';
 import 'wallet_store_imp_test.mocks.dart';
 
 @GenerateMocks([RemoteNotificationsProvider])

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -61,9 +62,10 @@ class ItemsProvider extends ChangeNotifier {
         localTrades.add(nft);
       }
     }
-    processTrades(localTrades);
 
-    notifyListeners();
+    scheduleMicrotask(() {
+      processTrades(localTrades);
+    });
   }
 
   Future<NFT?> convertItemToNFT(Item item) async {

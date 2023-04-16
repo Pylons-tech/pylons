@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -11,6 +12,7 @@ import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart' as di;
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
+import 'package:pylons_wallet/utils/types.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +23,12 @@ Future<void> main() async {
 
   // Read the values from .env file
   await dotenv.load(fileName: "env/.dev_env");
-  await di.init();
+  await di.init(
+    onLogEvent: (AnalyticsEventEnum event) {},
+    onLogError: (exception, {bool fatal = false, StackTrace? stack}) {
+      FirebaseCrashlytics.instance.recordError(exception, stack, fatal: fatal);
+    },
+  );
 
   isTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide >= TABLET_MIN_LENGTH;
 
@@ -42,6 +49,7 @@ Future<void> main() async {
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
