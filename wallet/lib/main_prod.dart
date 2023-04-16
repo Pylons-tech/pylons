@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -16,29 +17,37 @@ import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart' as di;
+import 'package:pylons_wallet/utils/types.dart';
 
 bool isTablet = false;
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await FlutterDownloader.initialize(
-      ignoreSsl: true
-  );
-  await EasyLocalization.ensureInitialized();
-  await Firebase.initializeApp();
-
-  await initializeAppCheck();
-
-  await dotenv.load(fileName: "env/.prod_env");
-
-  await di.init();
-
-  Stripe.publishableKey = di.sl<BaseEnv>().baseStripPubKey;
-  Stripe.merchantIdentifier = "merchant.tech.pylons.wallet";
-
   runZonedGuarded<Future<void>>(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await FlutterDownloader.initialize(ignoreSsl: true);
+    await EasyLocalization.ensureInitialized();
+    await Firebase.initializeApp();
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(!kDebugMode);
+
+    await initializeAppCheck();
+
+    await dotenv.load(fileName: "env/.prod_env");
+
+    Stripe.publishableKey = di.sl<BaseEnv>().baseStripPubKey;
+    Stripe.merchantIdentifier = "merchant.tech.pylons.wallet";
+
+    await di.init(
+      onLogEvent: (AnalyticsEventEnum event) {
+        FirebaseAnalytics.instance.logEvent(name: event.getEventName());
+      },
+      onLogError: (exception, {bool fatal = false, StackTrace? stack}) {
+        FirebaseCrashlytics.instance.recordError(exception, stack, fatal: fatal);
+      },
+    );
+
     isTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide >= TABLET_MIN_LENGTH;
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
     runApp(
       EasyLocalization(
         supportedLocales: const [
