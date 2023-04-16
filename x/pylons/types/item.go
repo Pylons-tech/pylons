@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/btcsuite/btcutil/base58"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -122,12 +123,12 @@ func (io ItemModifyOutput) Actualize(targetItem *Item, ctx sdk.Context, addr sdk
 	if io.Doubles != nil {
 		dblKeyValues, err := DoubleParamList(io.Doubles).Actualize(ec)
 		if err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrLogic, err.Error())
+			return errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
 		}
 		for idx, dbl := range dblKeyValues {
 			dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
 			if !ok {
-				return sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "could not find double %s on item to be updated", dbl.Key)
+				return errorsmod.Wrapf(sdkerrors.ErrKeyNotFound, "could not find double %s on item to be updated", dbl.Key)
 			}
 			if len(io.Doubles[idx].Program) == 0 { // NO PROGRAM
 				originValue := targetItem.Doubles[dblKey].Value
@@ -142,12 +143,12 @@ func (io ItemModifyOutput) Actualize(targetItem *Item, ctx sdk.Context, addr sdk
 	if io.Longs != nil {
 		lngKeyValues, err := LongParamList(io.Longs).Actualize(ec)
 		if err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrLogic, err.Error())
+			return errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
 		}
 		for idx, lng := range lngKeyValues {
 			lngKey, ok := targetItem.FindLongKey(lng.Key)
 			if !ok {
-				return sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "could not find long %s on item to be updated", lng.Key)
+				return errorsmod.Wrapf(sdkerrors.ErrKeyNotFound, "could not find long %s on item to be updated", lng.Key)
 			}
 			if len(io.Longs[idx].Program) == 0 { // NO PROGRAM
 				targetItem.Longs[lngKey].Value += lng.Value
@@ -160,12 +161,12 @@ func (io ItemModifyOutput) Actualize(targetItem *Item, ctx sdk.Context, addr sdk
 	if io.Strings != nil {
 		strKeyValues, err := StringParamList(io.Strings).Actualize(ec)
 		if err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrLogic, err.Error())
+			return errorsmod.Wrap(sdkerrors.ErrLogic, err.Error())
 		}
 		for _, str := range strKeyValues {
 			strKey, ok := targetItem.FindStringKey(str.Key)
 			if !ok {
-				return sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "could not find string %s on item to be updated", str.Key)
+				return errorsmod.Wrapf(sdkerrors.ErrKeyNotFound, "could not find string %s on item to be updated", str.Key)
 			}
 			targetItem.Strings[strKey].Value = str.Value
 		}
@@ -194,16 +195,16 @@ func (io ItemModifyOutput) Actualize(targetItem *Item, ctx sdk.Context, addr sdk
 }
 
 // MatchItem checks if all the constraint match the given item
-func (itemInput ItemInput) MatchItem(item Item, ec CelEnvCollection) error {
+func (itemInput ItemInput) MatchItem(item Item, _ CelEnvCollection) error {
 	if itemInput.Doubles != nil {
 		for _, param := range itemInput.Doubles {
 			double, ok := item.FindDouble(param.Key)
 			if !ok {
-				return sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.Id)
+				return errorsmod.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.Id)
 			}
 
 			if !param.Has(double) {
-				return sdkerrors.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", param.Key, item.Id)
+				return errorsmod.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", param.Key, item.Id)
 			}
 		}
 	}
@@ -212,11 +213,11 @@ func (itemInput ItemInput) MatchItem(item Item, ec CelEnvCollection) error {
 		for _, param := range itemInput.Longs {
 			long, ok := item.FindLong(param.Key)
 			if !ok {
-				return sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.Id)
+				return errorsmod.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.Id)
 			}
 
 			if !param.Has(long) {
-				return sdkerrors.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", param.Key, item.Id)
+				return errorsmod.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", param.Key, item.Id)
 			}
 		}
 	}
@@ -225,10 +226,10 @@ func (itemInput ItemInput) MatchItem(item Item, ec CelEnvCollection) error {
 		for _, param := range itemInput.Strings {
 			str, ok := item.FindString(param.Key)
 			if !ok {
-				return sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.Id)
+				return errorsmod.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.Id)
 			}
 			if str != param.Value {
-				return sdkerrors.Wrapf(ErrItemMatch, "%s key value does not match: item_id=%s", param.Key, item.Id)
+				return errorsmod.Wrapf(ErrItemMatch, "%s key value does not match: item_id=%s", param.Key, item.Id)
 			}
 		}
 	}

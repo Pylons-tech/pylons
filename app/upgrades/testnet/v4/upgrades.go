@@ -1,6 +1,7 @@
 package v4
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	pylonskeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -276,7 +277,7 @@ func MintValidUpylonsGoogleIAP(ctx sdk.Context, pylons *pylonskeeper.Keeper) err
 		amt := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amountUpylons))
 		err := pylons.MintCoinsToAddr(ctx, addr, amt)
 		if err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 		// To maintain records for IAP addresses
 		IAPAddress[googleIAPOder.Creator] = true
@@ -293,7 +294,7 @@ func MintValidUpylonsAppleIAP(ctx sdk.Context, pylons *pylonskeeper.Keeper) erro
 		amt := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, amountUpylons))
 		err := pylons.MintCoinsToAddr(ctx, addr, amt)
 		if err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 		// To maintain records for IAP addresses
 		IAPAddress[appleIAPOder.Creator] = true
@@ -302,7 +303,7 @@ func MintValidUpylonsAppleIAP(ctx sdk.Context, pylons *pylonskeeper.Keeper) erro
 }
 
 // Get amount of upylons was minted by product id
-func GetAmountOfUpylonsMintedByProductID(ctx sdk.Context, productID string) math.Int {
+func GetAmountOfUpylonsMintedByProductID(_ sdk.Context, productID string) math.Int {
 	// Looping defaultCoinIssuers to get amount upylons by product id
 	for _, ci := range types.DefaultCoinIssuers {
 		for _, p := range ci.Packages {
@@ -315,7 +316,7 @@ func GetAmountOfUpylonsMintedByProductID(ctx sdk.Context, productID string) math
 	return math.ZeroInt()
 }
 
-func RefundIAPNFTBUY(ctx sdk.Context, pylons *pylonskeeper.Keeper, accKeeper *authkeeper.AccountKeeper, bank *bankkeeper.BaseKeeper) {
+func RefundIAPNFTBUY(ctx sdk.Context, pylons *pylonskeeper.Keeper, _ *authkeeper.AccountKeeper, bank *bankkeeper.BaseKeeper) {
 	// Query All cookbooks on chain
 	cookbooks := pylons.GetAllCookbook(ctx)
 	for _, cookbook := range cookbooks {

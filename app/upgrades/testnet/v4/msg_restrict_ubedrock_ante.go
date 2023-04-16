@@ -1,6 +1,7 @@
 package v4
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	pylonskeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
 	pylonstypes "github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -24,12 +25,12 @@ func (ad MsgRestrictUbedrockDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, si
 	if (ctx.IsCheckTx() || ctx.IsReCheckTx()) && !simulate {
 		sigTx, ok := tx.(authsigning.SigVerifiableTx)
 		if !ok {
-			return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
+			return ctx, errorsmod.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
 		}
 
 		messages := sigTx.GetMsgs()
 		if len(messages) == 0 {
-			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid messages")
+			return ctx, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid messages")
 		}
 		for _, message := range messages {
 			msgSend, ok := message.(*banktypes.MsgSend)
@@ -43,7 +44,7 @@ func (ad MsgRestrictUbedrockDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, si
 			}
 
 			if _, kycAccFound := ad.pk.GetPylonsKYC(ctx, msgSend.ToAddress); !kycAccFound {
-				return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "'ubedrock' should only be transferred among allowed address")
+				return ctx, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "'ubedrock' should only be transferred among allowed address")
 			}
 		}
 	}

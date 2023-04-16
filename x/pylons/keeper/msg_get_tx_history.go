@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	sdkTypes "github.com/cosmos/cosmos-sdk/types"
@@ -49,7 +50,7 @@ func TxHistoryRequestHandler(w http.ResponseWriter, r *http.Request, ctx client.
 	if err != nil {
 		// incase of error return error
 		w.Header().Add(types.HTTPContentTypeKey, types.HTTPContentTypeVal)
-		info, _ := json.Marshal(sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, types.GetErrorHistoryMsg))
+		info, _ := json.Marshal(errorsmod.Wrap(sdkerrors.ErrInvalidRequest, types.GetErrorHistoryMsg))
 		_, _ = w.Write(info)
 		return
 	}
@@ -324,19 +325,19 @@ func IsInvalidNum(val int64) bool {
 // validate all common params i.e. address, limit and offset
 func ValidateRequest(address string, limit, offset int64) error {
 	if IsInvalidAddress(address) {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, types.AddressNotFound)
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, types.AddressNotFound)
 	}
 	_, err := sdkTypes.AccAddressFromBech32(strings.Trim(address, "'"))
 	if err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, types.AddressInvalid)
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, types.AddressInvalid)
 	}
 
 	if IsInvalidNum(offset) {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, types.OffsetInvalid)
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, types.OffsetInvalid)
 	}
 
 	if IsInvalidNum(limit) {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, types.LimitInvalid)
+		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, types.LimitInvalid)
 	}
 	return nil
 }

@@ -133,7 +133,7 @@ func WeightedOperations(
 }
 
 // SimulateCreateAccount generates a MsgCreateAccount with random values
-func SimulateCreateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+func SimulateCreateAccount(bk types.BankKeeper, _ keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
@@ -164,7 +164,7 @@ func SimulateCreateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 }
 
 // SimulateCreateAccount generates a MsgCreateAccount with random values
-func SimulateSetUsername(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+func SimulateSetUsername(bk types.BankKeeper, _ keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
@@ -197,7 +197,7 @@ func SimulateSetUsername(bk types.BankKeeper, k keeper.Keeper) simtypes.Operatio
 }
 
 // SimulateUpdateAccount generates a MsgUpdateAccount with random values
-func SimulateUpdateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+func SimulateUpdateAccount(bk types.BankKeeper, _ keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
@@ -220,7 +220,7 @@ func SimulateUpdateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 }
 
 // SimulateCreateCookbook generates a MsgCreateCookbook with random values
-func SimulateCreateCookbook(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+func SimulateCreateCookbook(bk types.BankKeeper, _ keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
@@ -257,7 +257,7 @@ func SimulateCreateCookbook(bk types.BankKeeper, k keeper.Keeper) simtypes.Opera
 }
 
 // SimulateCreateRecipe generates a MsgCreateRecipe with random values
-func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+func SimulateCreateRecipe(bk types.BankKeeper, _ keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,
@@ -310,7 +310,7 @@ func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operati
 }
 
 // SimulateExecuteRecipe generates a MsgExecuteRecipe with random values
-func SimulateExecuteRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+func SimulateExecuteRecipe(bk types.BankKeeper, _ keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
 		accs []simtypes.Account, chainID string,

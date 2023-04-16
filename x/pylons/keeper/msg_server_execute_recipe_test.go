@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -491,7 +492,7 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 				},
 			},
 			creator:       types.GenTestBech32FromString("test1"),
-			expectedError: sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "size mismatch between provided input items and items required by recipe"),
+			expectedError: errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "size mismatch between provided input items and items required by recipe"),
 		}, {
 			name:    "Expect item with ID not found",
 			creator: types.GenTestBech32FromString("test2"),
@@ -505,7 +506,7 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 					},
 				},
 			},
-			expectedError: sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v not found", "nonExistentId"),
+			expectedError: errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v not found", "nonExistentId"),
 		}, {
 			name:          "Different Owner",
 			creator:       types.GenTestBech32FromString("notyourkeysnotyouratoms"),
@@ -515,7 +516,7 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 				ItemInputs: mapItems(itemStr),
 			},
 			expected:      nil,
-			expectedError: sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %s not owned by sender", itemStr[0]),
+			expectedError: errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %s not owned by sender", itemStr[0]),
 		}, {
 			name:          "Expect Locked Item Error",
 			creator:       owner,
@@ -548,7 +549,7 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 					},
 				},
 			},
-			expectedError: sdkerrors.Wrapf(types.ErrItemLocked, "item with id %s locked", itemStr[3]),
+			expectedError: errorsmod.Wrapf(types.ErrItemLocked, "item with id %s locked", itemStr[3]),
 		}, {
 			name:          "Matching Successfull",
 			creator:       owner,
@@ -637,7 +638,7 @@ func (suite *IntegrationTestSuite) TestMatchItemInputsForExecution() {
 					},
 				},
 			},
-			expectedError: sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cannot find match for recipe input item "),
+			expectedError: errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "cannot find match for recipe input item "),
 		},
 	}
 	for _, tc := range tests {

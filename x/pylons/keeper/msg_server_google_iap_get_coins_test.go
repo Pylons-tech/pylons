@@ -6,6 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
@@ -35,7 +36,7 @@ func (suite *IntegrationTestSuite) TestMsgServerGoogleInAppPurchaseGetCoins() {
 				ReceiptDataBase64: to64(`{"productId":"pylons_1000","purchaseToken":"hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o","purchaseTime":1595031050407,"developerPayload":null}`),
 				Signature:         "invalid signature",
 			},
-			err: sdkerrors.Wrap(sdkerrors.ErrorInvalidSigner, "Google IAP Signature is invalid"),
+			err: errorsmod.Wrap(sdkerrors.ErrorInvalidSigner, "Google IAP Signature is invalid"),
 		},
 		{
 			// need to run first - using same purchase token as valid tests
@@ -47,7 +48,7 @@ func (suite *IntegrationTestSuite) TestMsgServerGoogleInAppPurchaseGetCoins() {
 				ReceiptDataBase64: to64(`{"productId":"pylons_55000","purchaseToken":"hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o","purchaseTime":1595031050407,"developerPayload":null}`),
 				Signature:         "HEo0RYQeH0+8nmYa6ETKP9f3S/W/cUuQTBme7VSh3Lzm+1+1GwJIl1pdF1dh32YGhd3BtyMoLVGzr9ZajfHhhznIvbowS/XIlyJJCE6dI+zg68mKo5rDt0wB2BY8azk0+WCkc5XT5y8biRNXe5RyvmuqYKPXmEsgHaYKo6x3mHs6oXrECckKv/c9T9MHCvdAqVFrml9W7K41sRHbpOdFmYnO33bkNITCCaf/C1PDGMVOItxvq7uXi+F0DpjXwXko9AU6L3pK6zDICcD38HblbzumOg6LGsuWCjOw8QwNobYOUNtrdj01fEXqkKhfYzFZcwxM6xsphN38gnO0ksDdyw==",
 			},
-			err: sdkerrors.Wrap(sdkerrors.ErrorInvalidSigner, "Google IAP Signature is invalid"),
+			err: errorsmod.Wrap(sdkerrors.ErrorInvalidSigner, "Google IAP Signature is invalid"),
 		},
 		{
 			desc: "Valid1",
@@ -92,7 +93,7 @@ func (suite *IntegrationTestSuite) TestMsgServerGoogleInAppPurchaseGetCoins() {
 				ReceiptDataBase64: "eyJvcmRlcklkIjoiR1BBLjMzMTgtMjc2MS0zODk1LTI5NDcwIiwicGFja2FnZU5hbWUiOiJ0ZWNoLnB5bG9ucy53YWxsZXQiLCJwcm9kdWN0SWQiOiJweWxvbnNfNjAiLCJwdXJjaGFzZVRpbWUiOjE2NTU5MDEzODY4MjAsInB1cmNoYXNlU3RhdGUiOjAsInB1cmNoYXNlVG9rZW4iOiJtY25wa25vamtwY2lnZWdib21jaGlraW4uQU8tSjFPeUZlZ1kxRkRlTkE5S3psWWVFbU9Jd2tYaUFYZWhmVnlsb3F2YjhUWGYyV21vYnIxdzhlbWNjQUtuamV6XzllNk5DMWk0Q0txN0tuVGxQa2tTa2xkVnI4QzFjMWciLCJhY2tub3dsZWRnZWQiOmZhbHNlfQ==",
 				Signature:         "FREfEWfRXaNzRCgD6MLAaKpc1kZ2FbNVfeXLazKoxpY4tHFo1VsmEqCPdsYymCZys0yehWczPaQJMkB5YwGgwPSKGtWKgwP68gG6SsO21f5SKqcLjvuWyShspifDNjJ7vNy+XPwfjd6PWwYQWVNogr2dC8dN433X+1guY+FExeT0UwbgY8SedsaxRT2nOH2ONLDVx/rR0+kNie13bg/AUZzRkFKYKtUuUQtXq3F1CyDGg/ARgut0EFNJVaW6nrK9as2/7l6V3/+16iDP3dknk7sL9y+VpgfwFrGwQKX23DR33qepjhh7uY67DjxST7Ci4AoALkYdRJ7/TRyDXKe8xw==",
 			},
-			err: sdkerrors.Wrap(types.ErrReceiptAlreadyUsed, "the Google IAP order ID is already being used"),
+			err: errorsmod.Wrap(types.ErrReceiptAlreadyUsed, "the Google IAP order ID is already being used"),
 		},
 		{
 			// Invalid product ID
@@ -104,7 +105,7 @@ func (suite *IntegrationTestSuite) TestMsgServerGoogleInAppPurchaseGetCoins() {
 				ReceiptDataBase64: "eyJvcmRlcklkIjoiR1BBLjMzMDYtNzU5MS0wMzk4LTgxMDY1IiwicGFja2FnZU5hbWUiOiJ0ZWNoLnB5bG9ucy53YWxsZXQiLCJwcm9kdWN0SWQiOiJmcmVlX3B5bG9ucyIsInB1cmNoYXNlVGltZSI6MTY1NDYxNTc3Nzc5OSwicHVyY2hhc2VTdGF0ZSI6MCwicHVyY2hhc2VUb2tlbiI6ImNiZWphYWhlaGFhbGlwcGJhbGtwYmRsaS5BTy1KMU95RU9CN205WnpsRnFfQ2hKcHJLTDZUeklmbnlyZ2UwcmtseVQydFFHZHk3RVRrNEYteHhtQ1RCWXlHVU15cVpZMFRpWlZxZUt2Q2M3WTVlTlFET2pnSUxUa292dyIsImFja25vd2xlZGdlZCI6ZmFsc2V9",
 				Signature:         "O90FTzVlKiwRMasg0tgEF65tXoQi7BKOoA8K+2i1SuC0Mbi49Tw7JJAK6bHVXMqGn/urkANCJl1+Zu3vabp91SPLpT1hlVwzAC2NIRa5qs7D7DgAZiaRhqqP+01LNc3DKzxGWVThzT6Cq4PB0h2LyYDlZZBfGFXH9LAXd4e+lNTgewAs1zmBzWBDdFO1G8S7xxB373MgW9V9/rKZH1odyDaMBhbvhMgunmxdtmO6/MOuxkdg2FjvUxXzPTAmnUvoLEM2771caP5JAYxQNeejj2Te1QCTWZ1F66MIggJLEBBqq7sIafGRJ4zKHtpJyhR8iSKatzXcHrXMqUSqTs/W9Q==",
 			},
-			err: sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid product id"),
+			err: errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid product id"),
 		},
 	} {
 		tc := tc

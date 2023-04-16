@@ -6,7 +6,7 @@ import (
 	"math"
 	"testing"
 
-	sdkerrors "cosmossdk.io/errors"
+	errorsmod "cosmossdk.io/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -623,7 +623,7 @@ func TestMatchItem(t *testing.T) {
 					},
 				},
 			},
-			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", "doublethree", "test1"),
+			expectedError: errorsmod.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", "doublethree", "test1"),
 		},
 		{
 			desc: "Double key is available but range do not match",
@@ -654,7 +654,7 @@ func TestMatchItem(t *testing.T) {
 					},
 				},
 			},
-			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", "doubletwo", "test1"),
+			expectedError: errorsmod.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", "doubletwo", "test1"),
 		},
 		{
 			desc: "Long Key Not Available",
@@ -685,7 +685,7 @@ func TestMatchItem(t *testing.T) {
 					},
 				},
 			},
-			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", "longthree", "test1"),
+			expectedError: errorsmod.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", "longthree", "test1"),
 		},
 		{
 			desc: "Long key is available but range do not match",
@@ -716,7 +716,7 @@ func TestMatchItem(t *testing.T) {
 					},
 				},
 			},
-			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", "longtwo", "test1"),
+			expectedError: errorsmod.Wrapf(ErrItemMatch, "%s key range does not match: item_id=%s", "longtwo", "test1"),
 		},
 		{
 			desc: "String Key Not Available",
@@ -745,7 +745,7 @@ func TestMatchItem(t *testing.T) {
 					},
 				},
 			},
-			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", "stringone", "test1"),
+			expectedError: errorsmod.Wrapf(ErrItemMatch, "%s key is not available on the item: item_id=%s", "stringone", "test1"),
 		},
 		{
 			desc: "String key is available but values do not match",
@@ -774,7 +774,7 @@ func TestMatchItem(t *testing.T) {
 					},
 				},
 			},
-			expectedError: sdkerrors.Wrapf(ErrItemMatch, "%s key value does not match: item_id=%s", "stringtwo", "test1"),
+			expectedError: errorsmod.Wrapf(ErrItemMatch, "%s key value does not match: item_id=%s", "stringtwo", "test1"),
 		},
 	} {
 		tc := tc

@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/cast"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -66,42 +67,42 @@ All the recipe fields are mandatory:
 			argsCoinInputs := args[5]
 			jsonArgsCoinInputs, err := types.ParseCoinInputsCLI(argsCoinInputs)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			argsItemInputs := args[6]
 			jsonArgsItemInputs := make([]types.ItemInput, 0)
 			err = json.Unmarshal([]byte(argsItemInputs), &jsonArgsItemInputs)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			argsEntries := args[7]
 			jsonArgsEntries := types.EntriesList{}
 			err = json.Unmarshal([]byte(argsEntries), &jsonArgsEntries)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			argsOutputs := args[8]
 			jsonArgsOutputs := make([]types.WeightedOutputs, 0)
 			err = json.Unmarshal([]byte(argsOutputs), &jsonArgsOutputs)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsBlockInterval, err := cast.ToInt64E(args[9])
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			argsCostPerBlock := args[10]
 			jsonArgsCostPerBlock, err := types.ParseCoinCLI(argsCostPerBlock)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsEnabled, err := cast.ToBoolE(args[11])
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsExtraInfo := args[12]
 
@@ -150,42 +151,42 @@ func CmdUpdateRecipe() *cobra.Command {
 			argsCoinInputs := args[5]
 			jsonArgsCoinInputs, err := types.ParseCoinInputsCLI(argsCoinInputs)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			argsItemInputs := args[6]
 			jsonArgsItemInputs := make([]types.ItemInput, 0)
 			err = json.Unmarshal([]byte(argsItemInputs), &jsonArgsItemInputs)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			argsEntries := args[7]
 			jsonArgsEntries := types.EntriesList{}
 			err = json.Unmarshal([]byte(argsEntries), &jsonArgsEntries)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			argsOutputs := args[8]
 			jsonArgsOutputs := make([]types.WeightedOutputs, 0)
 			err = json.Unmarshal([]byte(argsOutputs), &jsonArgsOutputs)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsBlockInterval, err := cast.ToInt64E(args[9])
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			argsCostPerBlock := args[10]
 			jsonArgsCostPerBlock, err := types.ParseCoinCLI(argsCostPerBlock)
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsEnabled, err := cast.ToBoolE(args[11])
 			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+				return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsExtraInfo := args[12]
 
