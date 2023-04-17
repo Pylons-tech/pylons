@@ -53,7 +53,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_screenutil: ^5.5.4
-  flutter_slidable: ^2.0.0
+  flutter_slidable: ^3.0.0
   flutter_svg: ^1.0.3
   flutter_svg_provider: ^1.0.3
   focus_detector: ^2.0.1
