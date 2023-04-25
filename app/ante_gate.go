@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
@@ -23,7 +24,7 @@ func (ad AnteSpamMigitationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, sim
 	if (ctx.IsCheckTx() || ctx.IsReCheckTx()) && !simulate {
 		sigTx, ok := tx.(authsigning.SigVerifiableTx)
 		if !ok {
-			return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
+			return ctx, errorsmod.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
 		}
 
 		// get max txs in a block, default is 20

@@ -18,7 +18,7 @@ import (
 )
 
 // CreateUpgradeHandler make upgrade handler
-func CreateUpgradeHandler(mm *module.Manager, configurator module.Configurator, staking *stakingkeeper.Keeper, pylonStoreKey storetypes.StoreKey, cdc codec.Codec) upgradetypes.UpgradeHandler {
+func CreateUpgradeHandler(mm *module.Manager, configurator module.Configurator, staking *stakingkeeper.Keeper, _ storetypes.StoreKey, _ codec.Codec) upgradetypes.UpgradeHandler {
 	return func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
 		vm[icatypes.ModuleName] = mm.Modules[icatypes.ModuleName].ConsensusVersion()
 

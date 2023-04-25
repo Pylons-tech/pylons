@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"encoding/base64"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
@@ -67,7 +68,7 @@ func (suite *IntegrationTestSuite) TestAddStripeRefund() {
 				},
 				Creator: correctAddr,
 			},
-			err: sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the purchase ID is already being used"),
+			err: errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "the purchase ID is already being used"),
 		},
 		{
 			desc: "Address Do Not Match",
@@ -82,7 +83,7 @@ func (suite *IntegrationTestSuite) TestAddStripeRefund() {
 				},
 				Creator: addr[0],
 			},
-			err: sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", "pi_3Ju3j843klKuxW9f0JrajT3q"),
+			err: errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", "pi_3Ju3j843klKuxW9f0JrajT3q"),
 		},
 		{
 			desc: "Signature Invalid",
@@ -97,7 +98,7 @@ func (suite *IntegrationTestSuite) TestAddStripeRefund() {
 				},
 				Creator: correctAddr,
 			},
-			err: sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", "pi_3Ju3j843klKuxW9f0Jra", sdkerrors.Wrapf(sdkerrors.ErrorInvalidSigner, "signature for %s is invalid", "Pylons_Inc").Error()),
+			err: errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "error validating purchase %s - %s", "pi_3Ju3j843klKuxW9f0Jra", errorsmod.Wrapf(sdkerrors.ErrorInvalidSigner, "signature for %s is invalid", "Pylons_Inc").Error()),
 		},
 	} {
 		tc := tc

@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	errorsmod "cosmossdk.io/errors"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -13,7 +14,7 @@ func (k msgServer) AddStripeRefund(goCtx context.Context, msg *types.MsgAddStrip
 
 	// search if purchase id is already reserved
 	if k.HasPaymentInfo(ctx, msg.Payment.PurchaseId) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the purchase ID is already being used")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "the purchase ID is already being used")
 	}
 
 	// it is checked previously hence no need to check error
@@ -21,7 +22,7 @@ func (k msgServer) AddStripeRefund(goCtx context.Context, msg *types.MsgAddStrip
 
 	err := k.VerifyPaymentInfos(ctx, msg.Payment, addr)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	// now the payment info is verified we will store it in our store

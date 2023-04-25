@@ -47,7 +47,7 @@ func CreateUpgradeHandler(
 }
 
 // Burn stripeUSD denom token
-func BurnToken(ctx sdk.Context, accKeeper *authkeeper.AccountKeeper, bank *bankkeeper.BaseKeeper, staking *stakingkeeper.Keeper) {
+func BurnToken(ctx sdk.Context, _ *authkeeper.AccountKeeper, bank *bankkeeper.BaseKeeper, _ *stakingkeeper.Keeper) {
 	// only burn stripe usd token
 	denom := types.StripeCoinDenom
 	// Get all account balances
@@ -72,7 +72,7 @@ func BurnToken(ctx sdk.Context, accKeeper *authkeeper.AccountKeeper, bank *bankk
 }
 
 // Mint ubedrock for master wallet
-func MintUbedrockForInitialAccount(ctx sdk.Context, bank *bankkeeper.BaseKeeper, staking *stakingkeeper.Keeper) {
+func MintUbedrockForInitialAccount(ctx sdk.Context, bank *bankkeeper.BaseKeeper, _ *stakingkeeper.Keeper) {
 	// Get currect balance of master wallet address
 	balance := bank.GetBalance(ctx, sdk.MustAccAddressFromBech32(MasterWallet), types.StakingCoinDenom)
 	// check difference in amount to add

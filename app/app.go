@@ -782,7 +782,7 @@ func (app *PylonsApp) SimulationManager() *module.SimulationManager {
 
 // RegisterAPIRoutes registers all application module routes with the provided
 // API server.
-func (app *PylonsApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
+func (app *PylonsApp) RegisterAPIRoutes(apiSvr *api.Server, _ config.APIConfig) {
 	clientCtx := apiSvr.ClientCtx
 	// Register legacy tx routes.
 	// Register new tx routes from grpc-gateway.

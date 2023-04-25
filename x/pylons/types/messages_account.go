@@ -1,6 +1,7 @@
 package types
 
 import (
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -43,7 +44,7 @@ func (msg *MsgCreateAccount) GetSignBytes() []byte {
 func (msg *MsgCreateAccount) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
 	}
 
 	return nil
@@ -80,11 +81,11 @@ func (msg *MsgUpdateAccount) GetSignBytes() []byte {
 func (msg *MsgUpdateAccount) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
 	if err = ValidateUsername(msg.Username); err != nil {
-		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
+		return errorsmod.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
 	}
 
 	return nil
@@ -121,10 +122,10 @@ func (msg *MsgSetUsername) GetSignBytes() []byte {
 func (msg *MsgSetUsername) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
 	}
 	if err = ValidateUsername(msg.Username); err != nil {
-		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
+		return errorsmod.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
 	}
 
 	return nil

@@ -10,14 +10,14 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import '../../mocks/main_mock.mocks.dart';
 import '../../mocks/mock_constants.dart';
-import '../../mocks/mock_wallet_store.dart';
 import '../../mocks/test_mocks.mocks.dart';
 import '../extension/size_extension.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  final walletStore = MockWalletStore();
+  final walletStore = MockWalletsStore();
   GetIt.I.registerLazySingleton<WalletsStore>(() => walletStore);
   final viewModel = MockOwnerViewViewModel();
   GetIt.I.registerLazySingleton<OwnerViewViewModel>(() => viewModel);
@@ -248,8 +248,8 @@ void registerStubs(OwnerViewViewModel viewModel) {
   when(viewModel.videoPlayerController).thenAnswer((realInvocation) {
     final VideoPlayerController controller;
     controller = VideoPlayerController.network(MOCK_URL);
-    controller.value = VideoPlayerValue(
-      duration: const Duration(
+    controller.value = const VideoPlayerValue(
+      duration: Duration(
         minutes: 2,
       ),
     );
@@ -257,8 +257,8 @@ void registerStubs(OwnerViewViewModel viewModel) {
   });
   when(viewModel.collapsed).thenAnswer((realInvocation) => true);
   when(viewModel.shareNFTLink(size: const Size(10, 10))).thenAnswer((realInvocation) async {
-    viewModel.videoPlayerController!.value = VideoPlayerValue(
-      duration: const Duration(
+    viewModel.videoPlayerController!.value = const VideoPlayerValue(
+      duration: Duration(
         minutes: 2,
       ),
     );

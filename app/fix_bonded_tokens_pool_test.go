@@ -86,5 +86,4 @@ func (suite *UpgradeTestSuite) TestFixBondedTokensPool() {
 	// The master wallet should now have 9
 	masterWalletBalance = suite.App.BankKeeper.GetBalance(suite.Ctx, multisigAddress, params.StakingBaseCoinUnit)
 	suite.Require().Equal(masterWalletBalance.Amount, math.NewInt(9_000_000))
-
 }

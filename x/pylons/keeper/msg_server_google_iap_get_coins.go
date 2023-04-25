@@ -5,6 +5,7 @@ import (
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -14,7 +15,7 @@ func (k msgServer) GoogleInAppPurchaseGetCoins(goCtx context.Context, msg *types
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if k.HasGoogleIAPOrder(ctx, msg.PurchaseToken) {
-		return nil, sdkerrors.Wrap(types.ErrReceiptAlreadyUsed, "the Google IAP order ID is already being used")
+		return nil, errorsmod.Wrap(types.ErrReceiptAlreadyUsed, "the Google IAP order ID is already being used")
 	}
 
 	// find matching package from list of coin issuers
@@ -31,11 +32,11 @@ CoinIssuersLoop:
 		}
 	}
 	if len(coinIssuer.CoinDenom) == 0 {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid product id")
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "invalid product id")
 	}
 
 	if err := types.ValidateGoogleIAPSignature(msg, coinIssuer); err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrorInvalidSigner, "Google IAP Signature is invalid")
+		return nil, errorsmod.Wrap(sdkerrors.ErrorInvalidSigner, "Google IAP Signature is invalid")
 	}
 
 	iap := types.GoogleInAppPurchaseOrder{
@@ -53,7 +54,7 @@ CoinIssuersLoop:
 	amt := sdk.NewCoins(sdk.NewCoin(coinIssuer.CoinDenom, googleIapPackage.Amount))
 	err := k.MintCoinsToAddr(ctx, addr, amt)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		return nil, errorsmod.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventGooglePurchase{

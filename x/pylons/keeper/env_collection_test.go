@@ -3,10 +3,10 @@ package keeper_test
 import (
 	"reflect"
 
+	errorsmod "cosmossdk.io/errors"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromItem() {
@@ -114,7 +114,7 @@ func (suite *IntegrationTestSuite) TestNewCelEnvCollectionFromRecipe() {
 					},
 				},
 			},
-			err: sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "itemRecord item not found in store"),
+			err: errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "itemRecord item not found in store"),
 		},
 		{
 			desc: "Valid Test",

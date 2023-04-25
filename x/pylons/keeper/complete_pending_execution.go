@@ -3,11 +3,11 @@ package keeper
 import (
 	"github.com/rogpeppe/go-internal/semver"
 
+	errorsmod "cosmossdk.io/errors"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // GenerateExecutionResult generates actual coins and items to be finalized in the store
@@ -31,14 +31,14 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 			coins[i].Amount = coinOutput.Coin.Amount
 		}
 		if !coins[i].IsValid() {
-			return nil, nil, nil, sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "invalid coinOutputs from execution")
+			return nil, nil, nil, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "invalid coinOutputs from execution")
 		}
 	}
 
 	mintedItems := make([]types.Item, 0)
 	for idx, itemOutput := range itemOutputs {
 		if itemOutput.Quantity != 0 && itemOutput.Quantity <= recipe.Entries.ItemOutputs[idx].AmountMinted {
-			return nil, nil, nil, sdkerrors.Wrapf(types.ErrItemQuantityExceeded, "quantity: %d, already minted: %d", itemOutput.Quantity, itemOutput.AmountMinted)
+			return nil, nil, nil, errorsmod.Wrapf(types.ErrItemQuantityExceeded, "quantity: %d, already minted: %d", itemOutput.Quantity, itemOutput.AmountMinted)
 		}
 		recipe.Entries.ItemOutputs[idx].AmountMinted++
 		item, err := itemOutput.Actualize(ctx, recipe.CookbookId, recipe.Id, addr, ec, k.EngineVersion(ctx))
@@ -51,7 +51,7 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 	modifiedItems := make([]types.Item, len(itemModifyOutputs))
 	for idx, itemModifyOutput := range itemModifyOutputs {
 		if itemModifyOutput.Quantity != 0 && itemModifyOutput.Quantity <= recipe.Entries.ItemOutputs[idx].AmountMinted {
-			return nil, nil, nil, sdkerrors.Wrapf(types.ErrItemQuantityExceeded, "quantity: %d, already minted: %d", itemModifyOutput.Quantity, itemModifyOutput.AmountMinted)
+			return nil, nil, nil, errorsmod.Wrapf(types.ErrItemQuantityExceeded, "quantity: %d, already minted: %d", itemModifyOutput.Quantity, itemModifyOutput.AmountMinted)
 		}
 		itemInputIdx := 0
 		for i, itemInput := range recipe.ItemInputs {
@@ -62,7 +62,7 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 		}
 		item, found := k.GetItem(ctx, recipe.CookbookId, matchedItems[itemInputIdx].Id)
 		if !found {
-			return nil, nil, nil, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "item %s to modify not found", matchedItems[itemInputIdx].Id)
+			return nil, nil, nil, errorsmod.Wrapf(sdkerrors.ErrKeyNotFound, "item %s to modify not found", matchedItems[itemInputIdx].Id)
 		}
 		err := itemModifyOutput.Actualize(&item, ctx, addr, ec)
 		if err != nil {
