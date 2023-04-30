@@ -4,20 +4,24 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i8;
-import 'dart:ui' as _i17;
+import 'dart:ui' as _i18;
 
+import 'package:firebase_app_check/firebase_app_check.dart' as _i19;
+import 'package:firebase_app_check_platform_interface/firebase_app_check_platform_interface.dart'
+    as _i20;
+import 'package:firebase_core/firebase_core.dart' as _i11;
 import 'package:flutter/foundation.dart' as _i10;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:pylons_wallet/model/nft.dart' as _i2;
-import 'package:pylons_wallet/model/nft_ownership_history.dart' as _i14;
+import 'package:pylons_wallet/model/nft_ownership_history.dart' as _i15;
 import 'package:pylons_wallet/pages/detailed_asset_view/owner_view_view_model.dart'
-    as _i11;
-import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart'
     as _i12;
+import 'package:pylons_wallet/pages/detailed_asset_view/widgets/tab_fields.dart'
+    as _i13;
 import 'package:pylons_wallet/pages/owner_purchase_view_common/button_state.dart'
-    as _i16;
+    as _i17;
 import 'package:pylons_wallet/pages/owner_purchase_view_common/progress_bar_state.dart'
-    as _i15;
+    as _i16;
 import 'package:pylons_wallet/services/repository/repository.dart' as _i3;
 import 'package:pylons_wallet/services/third_party_services/audio_player_helper.dart'
     as _i5;
@@ -28,7 +32,7 @@ import 'package:pylons_wallet/services/third_party_services/video_player_helper.
 import 'package:pylons_wallet/stores/wallet_store.dart' as _i4;
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart'
     as _i9;
-import 'package:video_player/video_player.dart' as _i13;
+import 'package:video_player/video_player.dart' as _i14;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -136,11 +140,21 @@ class _FakeValueNotifier_8<T> extends _i1.SmartFake
         );
 }
 
+class _FakeFirebaseApp_9 extends _i1.SmartFake implements _i11.FirebaseApp {
+  _FakeFirebaseApp_9(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [OwnerViewViewModel].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockOwnerViewViewModel extends _i1.Mock
-    implements _i11.OwnerViewViewModel {
+    implements _i12.OwnerViewViewModel {
   MockOwnerViewViewModel() {
     _i1.throwOnMissingStub(this);
   }
@@ -202,7 +216,7 @@ class MockOwnerViewViewModel extends _i1.Mock
         ),
       ) as _i7.ShareHelper);
   @override
-  set selectedField(_i12.TabFields? _selectedField) => super.noSuchMethod(
+  set selectedField(_i13.TabFields? _selectedField) => super.noSuchMethod(
         Invocation.setter(
           #selectedField,
           _selectedField,
@@ -263,7 +277,7 @@ class MockOwnerViewViewModel extends _i1.Mock
       );
   @override
   set videoPlayerController(
-          _i13.VideoPlayerController? _videoPlayerController) =>
+          _i14.VideoPlayerController? _videoPlayerController) =>
       super.noSuchMethod(
         Invocation.setter(
           #videoPlayerController,
@@ -374,14 +388,14 @@ class MockOwnerViewViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  List<_i14.NftOwnershipHistory> get nftOwnershipHistoryList =>
+  List<_i15.NftOwnershipHistory> get nftOwnershipHistoryList =>
       (super.noSuchMethod(
         Invocation.getter(#nftOwnershipHistoryList),
-        returnValue: <_i14.NftOwnershipHistory>[],
-      ) as List<_i14.NftOwnershipHistory>);
+        returnValue: <_i15.NftOwnershipHistory>[],
+      ) as List<_i15.NftOwnershipHistory>);
   @override
   set nftOwnershipHistoryList(
-          List<_i14.NftOwnershipHistory>? _nftOwnershipHistoryList) =>
+          List<_i15.NftOwnershipHistory>? _nftOwnershipHistoryList) =>
       super.noSuchMethod(
         Invocation.setter(
           #nftOwnershipHistoryList,
@@ -420,17 +434,17 @@ class MockOwnerViewViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  _i10.ValueNotifier<_i15.ProgressBarState> get audioProgressNotifier =>
+  _i10.ValueNotifier<_i16.ProgressBarState> get audioProgressNotifier =>
       (super.noSuchMethod(
         Invocation.getter(#audioProgressNotifier),
-        returnValue: _FakeValueNotifier_8<_i15.ProgressBarState>(
+        returnValue: _FakeValueNotifier_8<_i16.ProgressBarState>(
           this,
           Invocation.getter(#audioProgressNotifier),
         ),
-      ) as _i10.ValueNotifier<_i15.ProgressBarState>);
+      ) as _i10.ValueNotifier<_i16.ProgressBarState>);
   @override
   set audioProgressNotifier(
-          _i10.ValueNotifier<_i15.ProgressBarState>? _audioProgressNotifier) =>
+          _i10.ValueNotifier<_i16.ProgressBarState>? _audioProgressNotifier) =>
       super.noSuchMethod(
         Invocation.setter(
           #audioProgressNotifier,
@@ -439,16 +453,16 @@ class MockOwnerViewViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  _i10.ValueNotifier<_i16.ButtonState> get buttonNotifier =>
+  _i10.ValueNotifier<_i17.ButtonState> get buttonNotifier =>
       (super.noSuchMethod(
         Invocation.getter(#buttonNotifier),
-        returnValue: _FakeValueNotifier_8<_i16.ButtonState>(
+        returnValue: _FakeValueNotifier_8<_i17.ButtonState>(
           this,
           Invocation.getter(#buttonNotifier),
         ),
-      ) as _i10.ValueNotifier<_i16.ButtonState>);
+      ) as _i10.ValueNotifier<_i17.ButtonState>);
   @override
-  set buttonNotifier(_i10.ValueNotifier<_i16.ButtonState>? _buttonNotifier) =>
+  set buttonNotifier(_i10.ValueNotifier<_i17.ButtonState>? _buttonNotifier) =>
       super.noSuchMethod(
         Invocation.setter(
           #buttonNotifier,
@@ -590,7 +604,7 @@ class MockOwnerViewViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  void onChangeTab(_i12.TabFields? tab) => super.noSuchMethod(
+  void onChangeTab(_i13.TabFields? tab) => super.noSuchMethod(
         Invocation.method(
           #onChangeTab,
           [tab],
@@ -782,7 +796,7 @@ class MockOwnerViewViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  _i8.Future<void> shareNFTLink({required _i17.Size? size}) =>
+  _i8.Future<void> shareNFTLink({required _i18.Size? size}) =>
       (super.noSuchMethod(
         Invocation.method(
           #shareNFTLink,
@@ -837,7 +851,7 @@ class MockOwnerViewViewModel extends _i1.Mock
         returnValue: false,
       ) as bool);
   @override
-  void addListener(_i17.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i18.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -845,7 +859,7 @@ class MockOwnerViewViewModel extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  void removeListener(_i17.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i18.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -868,4 +882,78 @@ class MockOwnerViewViewModel extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
+}
+
+/// A class which mocks [FirebaseAppCheck].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFirebaseAppCheck extends _i1.Mock implements _i19.FirebaseAppCheck {
+  MockFirebaseAppCheck() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i11.FirebaseApp get app => (super.noSuchMethod(
+        Invocation.getter(#app),
+        returnValue: _FakeFirebaseApp_9(
+          this,
+          Invocation.getter(#app),
+        ),
+      ) as _i11.FirebaseApp);
+  @override
+  set app(_i11.FirebaseApp? _app) => super.noSuchMethod(
+        Invocation.setter(
+          #app,
+          _app,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i8.Stream<String?> get onTokenChange => (super.noSuchMethod(
+        Invocation.getter(#onTokenChange),
+        returnValue: _i8.Stream<String?>.empty(),
+      ) as _i8.Stream<String?>);
+  @override
+  Map<dynamic, dynamic> get pluginConstants => (super.noSuchMethod(
+        Invocation.getter(#pluginConstants),
+        returnValue: <dynamic, dynamic>{},
+      ) as Map<dynamic, dynamic>);
+  @override
+  _i8.Future<void> activate({
+    String? webRecaptchaSiteKey,
+    _i20.AndroidProvider? androidProvider = _i20.AndroidProvider.playIntegrity,
+    _i20.AppleProvider? appleProvider = _i20.AppleProvider.deviceCheck,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #activate,
+          [],
+          {
+            #webRecaptchaSiteKey: webRecaptchaSiteKey,
+            #androidProvider: androidProvider,
+            #appleProvider: appleProvider,
+          },
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
+  @override
+  _i8.Future<String?> getToken([bool? forceRefresh]) => (super.noSuchMethod(
+        Invocation.method(
+          #getToken,
+          [forceRefresh],
+        ),
+        returnValue: _i8.Future<String?>.value(),
+      ) as _i8.Future<String?>);
+  @override
+  _i8.Future<void> setTokenAutoRefreshEnabled(
+          bool? isTokenAutoRefreshEnabled) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #setTokenAutoRefreshEnabled,
+          [isTokenAutoRefreshEnabled],
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
 }

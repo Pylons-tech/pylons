@@ -9,13 +9,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/create_trade_bottom_sheet.dart';
 import 'package:pylons_wallet/pages/settings/common/settings_divider.dart';
 import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
 
@@ -213,7 +213,7 @@ class _ViewRecoveryScreenState extends State<ViewRecoveryScreen> {
         child: Stack(
           children: [
             SvgPicture.asset(
-              SVGUtil.BUTTON_BACKGROUND,
+              Assets.images.svg.buttonBackground,
               color: AppColors.kBlue,
             ),
             Positioned(

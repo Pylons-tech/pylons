@@ -9,12 +9,12 @@ import 'package:pylons_wallet/components/buttons/pylons_get_started_button.dart'
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/services/third_party_services/remote_notifications_service.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../generated/locale_keys.g.dart';
@@ -46,7 +46,7 @@ class NewUserFormState extends State<NewUserForm> {
         children: [
           VerticalSpace(90.h),
           SvgPicture.asset(
-            SVGUtil.PYLONS_LOGO,
+            Assets.images.icons.pylonsLogoSvg,
             width: 60.w,
             fit: BoxFit.fill,
           ),

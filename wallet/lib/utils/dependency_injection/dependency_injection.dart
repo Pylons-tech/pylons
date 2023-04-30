@@ -197,12 +197,12 @@ Future<void> init({
 
   sl.registerLazySingleton<RemoteDataStore>(() => RemoteDataStoreImp(
         httpClient: sl(),
-        crashlyticsHelper: sl(),
         storePaymentService: sl(),
         firebaseAppCheck: sl(),
         dynamicLinksGenerator: sl(),
         firebaseHelper: sl(),
         analyticsHelper: sl(),
+        onLogError: onLogError,
       ));
 
   sl.registerLazySingleton<StorePaymentService>(() => StorePaymentServiceImpl());

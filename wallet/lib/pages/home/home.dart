@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/components/maintenance_mode_widgets.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
@@ -23,7 +24,6 @@ import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
 import 'package:pylons_wallet/utils/screen_responsive.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../generated/locale_keys.g.dart';
 import '../../services/third_party_services/remote_config_service/remote_config_service.dart';
@@ -170,7 +170,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                 child: Stack(
                   children: [
                     SvgPicture.asset(
-                      SVGUtil.MESSAGE_ENVELOPE,
+                      Assets.images.svg.messageEnvelope,
                       height: 15.h,
                       width: 15.w,
                       fit: BoxFit.fill,
@@ -190,7 +190,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   _scaffoldKey.currentState!.openDrawer();
                 },
                 child: SvgPicture.asset(
-                  SVGUtil.SORT,
+                  Assets.images.icons.sort,
                   color: provider.isBannerDark() ? Colors.white : Colors.black,
                   height: 20.h,
                   width: 20.w,
@@ -236,7 +236,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               await Clipboard.setData(ClipboardData(text: homeProvider.accountPublicInfo.publicAddress));
               LocaleKeys.copied_to_clipboard.tr().show();
             },
-            child: SvgPicture.asset(SVGUtil.WALLET_COPY, height: 10.h, width: 10.w, fit: BoxFit.scaleDown),
+            child: SvgPicture.asset(Assets.images.icons.copySvg, height: 10.h, width: 10.w, fit: BoxFit.scaleDown),
           ),
         ]),
         SizedBox(height: 20.h),
@@ -291,7 +291,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                   child: Stack(
                     children: [
                       SvgPicture.asset(
-                        SVGUtil.MESSAGE_ENVELOPE,
+                        Assets.images.svg.messageEnvelope,
                         height: 20.h,
                         width: 20.w,
                         fit: BoxFit.fill,
@@ -311,7 +311,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
                       _scaffoldKey.currentState!.openDrawer();
                     },
                     child: SvgPicture.asset(
-                      SVGUtil.SORT,
+                      Assets.images.icons.sort,
                       color: provider.isBannerDark() ? Colors.white : Colors.black,
                       height: 20.h,
                       width: 20.w,
@@ -363,7 +363,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
               await Clipboard.setData(ClipboardData(text: publicAddress));
               LocaleKeys.copied_to_clipboard.tr().show();
             },
-            child: SvgPicture.asset(SVGUtil.WALLET_COPY, height: 15.h, width: 15.w, fit: BoxFit.scaleDown),
+            child: SvgPicture.asset(Assets.images.icons.copySvg, height: 15.h, width: 15.w, fit: BoxFit.scaleDown),
           ),
         ]),
         SizedBox(height: 20.h),

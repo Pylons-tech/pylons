@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_image_asset.dart';
@@ -11,7 +12,7 @@ import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
+
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../generated/locale_keys.g.dart';
@@ -72,7 +73,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
                 Navigator.pop(context);
               },
               child: SvgPicture.asset(
-                SVGUtil.OWNER_BACK_ICON,
+                Assets.images.icons.back,
                 height: 25.h,
               ),
             ),
@@ -94,7 +95,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
           Align(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: SvgPicture.asset(SVGUtil.QR_SIDE_BORDER),
+              child: SvgPicture.asset(Assets.images.svg.qrSideBorder),
             ),
           ),
           Align(

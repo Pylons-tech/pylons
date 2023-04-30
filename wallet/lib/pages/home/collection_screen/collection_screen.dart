@@ -6,6 +6,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/collection_view_model.dart';
 import 'package:pylons_wallet/pages/home/collection_screen/widgets/creation_collection_sheet.dart';
@@ -15,7 +16,6 @@ import 'package:pylons_wallet/providers/recipes_provider.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../../providers/collections_tab_provider.dart';
 import 'widgets/purchase_collection_sheet.dart';
@@ -266,7 +266,7 @@ class SheetHeading extends StatelessWidget {
                 right: 0,
                 bottom: 0,
                 child: SvgPicture.asset(
-                  SVGUtil.COLLECTION_BACKGROUND,
+                  Assets.images.svg.collectionsBackground,
                   fit: BoxFit.fill,
                 ),
               ),
