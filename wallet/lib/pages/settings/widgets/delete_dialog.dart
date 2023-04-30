@@ -4,16 +4,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
+import 'package:pylons_wallet/gen/fonts.gen.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../../generated/locale_keys.g.dart';
 
-TextStyle kDeleteHeaderTextStyle = TextStyle(fontSize: 14.sp, fontFamily: 'UniversalSans', color: AppColors.kWhite, fontWeight: FontWeight.w500);
+TextStyle kDeleteHeaderTextStyle = TextStyle(
+  fontSize: 14.sp,
+  fontFamily: FontFamily.universalSans,
+  color: AppColors.kWhite,
+  fontWeight: FontWeight.w500,
+);
 
 class DeleteDialog {
   final BuildContext context;
@@ -45,7 +51,7 @@ class DeleteDialog {
 
                     Align(
                       child: SvgPicture.asset(
-                        SVGUtil.ALERTDIALOG,
+                        Assets.images.icons.alertSvg,
                         height: 40.h,
                         fit: BoxFit.cover,
                       ),
@@ -77,7 +83,8 @@ class DeleteDialog {
                                   onPressed: () async {
                                     final navigator = Navigator.of(context);
 
-                                    final selectedEnvResponse = GetIt.I.get<Repository>().getNetworkEnvironmentPreference();
+                                    final selectedEnvResponse =
+                                        GetIt.I.get<Repository>().getNetworkEnvironmentPreference();
 
                                     if (selectedEnvResponse.isLeft()) {
                                       navigator.pop();
@@ -91,14 +98,19 @@ class DeleteDialog {
                                       return;
                                     }
 
-                                    await GetIt.I.get<Repository>().saveNetworkEnvironmentPreference(networkEnvironment: selectedEnvResponse.getOrElse(() => ''));
+                                    await GetIt.I.get<Repository>().saveNetworkEnvironmentPreference(
+                                        networkEnvironment: selectedEnvResponse.getOrElse(() => ''));
                                     navigator.pushNamedAndRemoveUntil(RouteUtil.ROUTE_ONBOARDING, (route) => false);
                                   })),
                           SizedBox(
                             width: 15.w,
                           ),
                           Expanded(
-                            child: buildButton(title: "no", bgColor: AppColors.kWhite.withOpacity(0.3), onPressed: Navigator.of(context).pop),
+                            child: buildButton(
+                              title: "no",
+                              bgColor: AppColors.kWhite.withOpacity(0.3),
+                              onPressed: Navigator.of(context).pop,
+                            ),
                           ),
                         ],
                       ),
@@ -132,7 +144,11 @@ class DeleteDialog {
             child: Center(
                 child: Text(
               title.tr(),
-              style: TextStyle(color: bgColor == AppColors.kButtonColor ? AppColors.kBlue : AppColors.kWhite, fontSize: 16.sp, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: bgColor == AppColors.kButtonColor ? AppColors.kBlue : AppColors.kWhite,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+              ),
               textAlign: TextAlign.center,
             )),
           ),

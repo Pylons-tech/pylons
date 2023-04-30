@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/model/nft.dart';
 import 'package:pylons_wallet/pages/detailed_asset_view/widgets/nft_3d_asset.dart';
@@ -36,7 +37,7 @@ import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/read_more.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
+
 
 import '../../generated/locale_keys.g.dart';
 import '../../modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart';
@@ -173,7 +174,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
                         Navigator.pop(context);
                       },
                       child: SvgPicture.asset(
-                        SVGUtil.OWNER_BACK_ICON,
+                        Assets.images.icons.back,
                         height: 25.h,
                       ),
                     ),
@@ -183,7 +184,7 @@ class _PurchaseItemContentState extends State<PurchaseItemContent> {
                         submitFeedbackDialog.show();
                       },
                       child: SvgPicture.asset(
-                        SVGUtil.OWNER_REPORT,
+                        Assets.images.icons.report,
                         height: 25.h,
                       ),
                     ),
@@ -295,7 +296,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                   Column(
                     children: [
                       SvgPicture.asset(
-                        SVGUtil.OWNER_VIEWS_BOLD,
+                        Assets.images.icons.eyeBold,
                         width: 20.w,
                         height: 15.h,
                       ),
@@ -330,7 +331,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                         child: Container(
                           padding: EdgeInsets.only(bottom: 12.h),
                           child: SvgPicture.asset(
-                            SVGUtil.OWNER_SHARE,
+                            Assets.images.icons.shareSvg,
                             height: 15.h,
                             width: 15.w,
                           ),
@@ -574,7 +575,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                           child: Column(
                             children: [
                               SvgPicture.asset(
-                                SVGUtil.OWNER_VIEWS_BOLD,
+                                Assets.images.icons.eyeBold,
                                 width: 15.w,
                                 height: 15.h,
                               ),
@@ -624,7 +625,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                                   context.read<PurchaseItemViewModel>().shareNFTLink(size: size);
                                 },
                                 child: SvgPicture.asset(
-                                  SVGUtil.OWNER_SHARE,
+                                  Assets.images.icons.shareSvg,
                                   height: 15.h,
                                 ),
                               ),
@@ -750,7 +751,7 @@ class _OwnerBottomDrawerState extends State<OwnerBottomDrawer> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   child: SvgPicture.asset(
-                    SVGUtil.OWNER_VERIFIED_ICON,
+                    Assets.images.icons.verified,
                     height: 12.h,
                   ),
                 ),

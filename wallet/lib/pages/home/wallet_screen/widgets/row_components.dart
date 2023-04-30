@@ -6,13 +6,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/pages/stripe_screen.dart';
 import 'package:pylons_wallet/providers/account_provider.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/services/third_party_services/stripe_handler.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../../../generated/locale_keys.g.dart';
 
@@ -42,7 +42,7 @@ class RowComponents extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () => Navigator.of(context).pushNamed(RouteUtil.ROUTE_TRANSACTION_HISTORY),
-            child: SvgPicture.asset(SVGUtil.WALLET_TRANSACTION_HISTORY),
+            child: SvgPicture.asset(Assets.images.icons.transactionHistory),
           ),
           SizedBox(
             width: 20.w,
@@ -60,7 +60,7 @@ class RowComponents extends StatelessWidget {
                 },
               );
             },
-            child: SvgPicture.asset(SVGUtil.WALLET_COPY),
+            child: SvgPicture.asset(Assets.images.icons.copySvg),
           ),
           SizedBox(
             width: 10.w,

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/utils/constants.dart' as constants;
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 enum IBCCoins { urun, ujunox, none, ujuno, upylon, ustripeusd, eeur, uatom, weth_wei }
 
@@ -25,23 +25,23 @@ extension IBCCoinsDePar on IBCCoins {
   Widget getAssets() {
     switch (this) {
       case IBCCoins.urun:
-        return getIconFromSvg(SVGUtil.WALLET_AGORIC);
+        return getIconFromSvg(Assets.images.icons.icoAgoric);
       case IBCCoins.ujunox:
-        return getIconFromSvg(SVGUtil.WALLET_JUNO);
+        return getIconFromSvg(Assets.images.svg.juno);
       case IBCCoins.none:
-        return getIconFromSvg(SVGUtil.WALLET_AGORIC);
+        return getIconFromSvg(Assets.images.icons.icoAgoric);
       case IBCCoins.ujuno:
-        return getIconFromSvg(SVGUtil.WALLET_JUNO);
+        return getIconFromSvg(Assets.images.svg.juno);
       case IBCCoins.upylon:
-        return getIconFromSvg(SVGUtil.PYLONS_CURRENCY);
+        return getIconFromSvg(Assets.images.icons.pylonsEngagementTokenSvg);
       case IBCCoins.ustripeusd:
         return getIconFromAsset(ImageUtil.WALLET_USD);
       case IBCCoins.eeur:
-        return getIconFromSvg(SVGUtil.WALLET_EEUR);
+        return getIconFromSvg(Assets.images.svg.eeur);
       case IBCCoins.uatom:
-        return getIconFromSvg(SVGUtil.WALLET_ATOM);
+        return getIconFromSvg(Assets.images.svg.atom);
       case IBCCoins.weth_wei:
-        return getIconFromSvg(SVGUtil.WALLET_ETH);
+        return getIconFromSvg(Assets.images.svg.eth);
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pylons_wallet/gen/fonts.gen.dart';
 import 'package:pylons_wallet/model/amount.dart';
 import 'package:pylons_wallet/model/balance.dart';
 import 'package:pylons_wallet/pages/home/currency_screen/model/ibc_coins.dart';
@@ -29,7 +30,9 @@ class _BalanceIBCCoinsState extends State<BalanceIBCCoins> {
 
     GetIt.I
         .get<Repository>()
-        .getIBCHashTrace(ibcHash: widget.balance.denom.replaceFirst('ibc/', ''))
+        .getIBCHashTrace(
+          ibcHash: widget.balance.denom.replaceFirst('ibc/', ''),
+        )
         .then((value) {
       if (value.isLeft()) {
         return;
@@ -56,14 +59,14 @@ class _BalanceIBCCoinsState extends State<BalanceIBCCoins> {
           width: 1.sw,
           height: 0.35.sw,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
-              color: denomColors[widget.balance.denom] ?? Colors.blueGrey,
-              image: DecorationImage(
-                  image: const AssetImage('assets/images/masks/card_luma.png'),
-                  fit: BoxFit.fill,
-                  colorFilter: ColorFilter.mode(
-                      denomColors[widget.balance.denom] ?? Colors.blueGrey,
-                      BlendMode.overlay))),
+            borderRadius: BorderRadius.circular(20.0),
+            color: denomColors[widget.balance.denom] ?? Colors.blueGrey,
+            image: DecorationImage(
+              image: const AssetImage('assets/images/masks/card_luma.png'),
+              fit: BoxFit.fill,
+              colorFilter: ColorFilter.mode(denomColors[widget.balance.denom] ?? Colors.blueGrey, BlendMode.overlay),
+            ),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,10 +95,10 @@ class _BalanceIBCCoinsState extends State<BalanceIBCCoins> {
                         )
                       : Text(
                           ibcCoins.getName(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(color: Colors.white, fontSize: 18),
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
                         ),
                 ),
                 const Spacer(),
@@ -112,13 +115,11 @@ class _BalanceIBCCoinsState extends State<BalanceIBCCoins> {
                         )
                       : Text(
                           "\$${"${widget.balance.amount.toHumanReadable()}".trimZero()}",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontFamily: 'Inter'),
+                          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontFamily: FontFamily.inter,
+                              ),
                         ),
                 ),
               ),

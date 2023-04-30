@@ -2,12 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/trade_receipt_dialog.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../../generated/locale_keys.g.dart';
 
@@ -106,7 +106,7 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
                   height: 20.h,
                 ),
                 SvgPicture.asset(
-                  SVGUtil.TRANSACTION_COMPLETE,
+                  Assets.images.svg.transactionComplete,
                   height: isTablet ? 24.h : null,
                 ),
                 SizedBox(

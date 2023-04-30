@@ -1,10 +1,4 @@
-// "id": "pylons_10",
-// "bonus": "",
-// "subtitle": "$1.00",
-// "pylons" : "10 PYLN"
-//
-
-import 'package:pylons_wallet/utils/svg_util.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 
 class SKUModel {
   String id;
@@ -24,11 +18,11 @@ class SKUModel {
 
   String getSvgAsset() {
     if(id == "pylons_10"){
-      return SVGUtil.PYLON_ONE_CURRENCY;
+      return Assets.images.icons.pylon1hCurrency;
     } else if (id == "pylons_35"){
-      return SVGUtil.PYLON_THREE_CURRENCY;
+      return Assets.images.icons.pylon3hCurrency;
     } else {
-      return SVGUtil.PYLON_FIVE_CURRENCY;
+      return Assets.images.icons.pylon5hCurrency;
     }
   }
 }

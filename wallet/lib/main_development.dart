@@ -14,6 +14,8 @@ import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.da
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart';
 import 'package:pylons_wallet/utils/types.dart';
 
+import 'gen/assets.gen.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //for HTTPS
@@ -22,7 +24,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   // Read the values from .env file
-  await dotenv.load(fileName: "env/.dev_env");
+  await dotenv.load(fileName: Assets.env.devEnv);
   await di.init(
     onLogEvent: (AnalyticsEventEnum event) {},
     onLogError: (exception, {bool fatal = false, StackTrace? stack}) {

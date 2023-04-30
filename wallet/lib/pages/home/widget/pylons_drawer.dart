@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/generated/locale_keys.g.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/settings/widgets/delete_dialog.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 class PylonsDrawer extends StatelessWidget {
   const PylonsDrawer({Key? key}) : super(key: key);
@@ -50,7 +50,7 @@ class PylonsDrawer extends StatelessWidget {
                   LocaleKeys.general.tr(),
                   height: 60,
                   width: isTablet ? 60 : 85,
-                  icon: SVGUtil.SETTINGS_GENERAL,
+                  icon: Assets.images.svg.settingsGeneral,
                   onPressed: () {
                     Navigator.of(context).pushNamed(RouteUtil.ROUTE_GENERAL);
                   },
@@ -74,7 +74,7 @@ class PylonsDrawer extends StatelessWidget {
                   LocaleKeys.recovery.tr(),
                   height: 60,
                   width: isTablet ? 60 : 85,
-                  icon: SVGUtil.SETTINGS_RECOVERY,
+                  icon: Assets.images.svg.settingsRecovery,
                   onPressed: () {
                     Navigator.of(context).pushNamed(RouteUtil.ROUTE_RECOVERY);
                   },
@@ -83,7 +83,7 @@ class PylonsDrawer extends StatelessWidget {
                   LocaleKeys.legal.tr(),
                   height: 60,
                   width: isTablet ? 60 : 85,
-                  icon: SVGUtil.SETTINGS_LEGAL,
+                  icon: Assets.images.svg.settingsLegal,
                   onPressed: () {
                     Navigator.of(context).pushNamed(RouteUtil.ROUTE_LEGAL);
                   },
@@ -93,7 +93,7 @@ class PylonsDrawer extends StatelessWidget {
                   LocaleKeys.delete_wallet.tr(),
                   height: 60,
                   width: isTablet ? 70 : 100,
-                  icon: SVGUtil.SETTINGS_DELETE,
+                  icon: Assets.images.svg.settingsDelete,
                   iconColor: AppColors.kDarkRed,
                   onPressed: () {
                     final DeleteDialog deleteDialog = DeleteDialog(context);
