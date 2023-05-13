@@ -511,7 +511,7 @@ class LocalDataSourceImp implements LocalDataSource {
       return null;
     }
 
-    return cookbookListNullable.map((item) => Cookbook.create()..mergeFromProto3Json(jsonEncode(item))).toList();
+    return cookbookListNullable.map((item) => Cookbook.create()..mergeFromProto3Json(jsonDecode(item))).toList();
   }
 
   @override

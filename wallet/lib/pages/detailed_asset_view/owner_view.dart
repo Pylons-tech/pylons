@@ -667,7 +667,7 @@ class __ExpandedBottomMenuState extends State<_ExpandedBottomMenu> {
                       ),
                       ToggleButton(
                         enabled: viewModel.isNFTEnabled(),
-                        onPressed: (bool enabled) {
+                        onPressed: ({required bool enabled}) {
                           onUpdateToggle(enabled: enabled);
                         },
                       ),

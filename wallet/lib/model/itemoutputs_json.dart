@@ -50,14 +50,14 @@ class ItemOutputs {
     if (json['longs'] != null) {
       longs = [];
 
-      for (final longsJson in json['longs']) {
+      for (final longsJson in json['longs'] as Iterable<dynamic>) {
         longs.add(Longs.fromJson(longsJson));
       }
     }
     if (json['strings'] != null) {
       strings = [];
 
-      for (final stringsJson in json['strings']) {
+      for (final stringsJson in json['strings'] as Iterable<dynamic>) {
         if (stringsJson is Map<String, dynamic>) {
           strings.add(Strings.fromJson(stringsJson));
         }
@@ -72,7 +72,7 @@ class ItemOutputs {
     }
     if (json['transferFee'] != null) {
       transferFee = [];
-      for (final transferFeeJson in json['transferFee']) {
+      for (final transferFeeJson in json['transferFee'] as Iterable<dynamic>) {
         transferFee.add(Coins.fromJson(transferFeeJson));
       }
     }

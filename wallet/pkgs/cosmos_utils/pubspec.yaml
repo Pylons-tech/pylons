@@ -14,7 +14,7 @@ dependencies:
   dartz: ^0.10.1
   equatable: ^2.0.5
   hex: ^0.2.0
-  intl: ^0.17.0
+  intl:
   package_info: 2.0.2
 
 #dev_dependencies:

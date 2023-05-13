@@ -1,18 +1,21 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/purchase_item/widgets/trade_receipt_dialog.dart';
+import 'package:pylons_wallet/providers/items_provider.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart' as enums;
 
 import '../../../generated/locale_keys.g.dart';
 
-TextStyle _rowTitleTextStyle = TextStyle(
-    color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.sp);
+TextStyle _rowTitleTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13.sp);
 
 class TradeCompleteDialog {
   final TradeReceiptModel _model;
@@ -20,9 +23,7 @@ class TradeCompleteDialog {
   final VoidCallback _onBackPressed;
 
   TradeCompleteDialog(
-      {required TradeReceiptModel model,
-      required BuildContext context,
-      required VoidCallback onBackPressed})
+      {required TradeReceiptModel model, required BuildContext context, required VoidCallback onBackPressed})
       : _model = model,
         _buildContext = context,
         _onBackPressed = onBackPressed;
@@ -45,9 +46,7 @@ class TradeCompleteWidget extends StatefulWidget {
   final TradeReceiptModel model;
   final VoidCallback onBackPressed;
 
-  const TradeCompleteWidget(
-      {Key? key, required this.model, required this.onBackPressed})
-      : super(key: key);
+  const TradeCompleteWidget({Key? key, required this.model, required this.onBackPressed}) : super(key: key);
 
   @override
   State<TradeCompleteWidget> createState() => _TradeCompleteWidgetState();
@@ -59,8 +58,7 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
     return Container(
       color: Colors.black.withOpacity(0.7),
       height: 200.h,
-      margin:
-          isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
+      margin: isTablet ? EdgeInsets.symmetric(horizontal: 30.w) : EdgeInsets.zero,
       child: Stack(
         children: [
           Positioned(
@@ -70,9 +68,8 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
               height: 60,
               width: 80,
               child: ClipPath(
-                clipper: RightTriangleClipper(
-                    orientation: enums.Orientation.Orientation_NW),
-                child:  ColoredBox(
+                clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_NW),
+                child: ColoredBox(
                   color: AppColors.kDarkRed,
                 ),
               ),
@@ -85,8 +82,7 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
               height: 60,
               width: 80,
               child: ClipPath(
-                clipper: RightTriangleClipper(
-                    orientation: enums.Orientation.Orientation_SE),
+                clipper: RightTriangleClipper(orientation: enums.Orientation.Orientation_SE),
                 child: ColoredBox(
                   color: AppColors.kDarkRed,
                 ),
@@ -113,11 +109,9 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
                   height: 25.h,
                 ),
                 Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: isTablet ? 20.w : 30.w),
+                  padding: EdgeInsets.symmetric(horizontal: isTablet ? 20.w : 30.w),
                   child: Text(
-                    "transaction_complete_desc"
-                        .tr(args: [widget.model.nftName]),
+                    "transaction_complete_desc".tr(args: [widget.model.nftName]),
                     style: _rowTitleTextStyle,
                     textAlign: TextAlign.center,
                   ),
@@ -130,6 +124,7 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
                     clipper: TradeReceiptClipper(),
                     child: InkWell(
                       onTap: () {
+                        unawaited(context.read<ItemsProvider>().getItems());
                         Navigator.of(context).pop();
                         widget.onBackPressed.call();
                       },
@@ -141,8 +136,7 @@ class _TradeCompleteWidgetState extends State<TradeCompleteWidget> {
                           child: Text(
                             LocaleKeys.view_receipt.tr(),
                             textAlign: TextAlign.center,
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 14.sp),
+                            style: TextStyle(color: Colors.white, fontSize: 14.sp),
                           ),
                         ),
                       ),

@@ -296,15 +296,16 @@ class _UpdateAppState extends State<UpdateApp> {
   }
 
   Future<void> _loadWallets() async {
+    final navigator = Navigator.of(navigatorKey.currentState!.overlay!.context);
     await sl<LocalDataSource>().clearDataOnIosUnInstall();
     await accountProvider.loadWallets();
 
     if (accountProvider.accountPublicInfo == null) {
       //Loads the last used wallet.
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_ONBOARDING);
+      navigator.pushNamed(RouteUtil.ROUTE_ONBOARDING);
     } else {
       // Assigning the latest wallet to the app.
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_HOME);
+      navigator.pushNamed(RouteUtil.ROUTE_HOME);
     }
   }
 

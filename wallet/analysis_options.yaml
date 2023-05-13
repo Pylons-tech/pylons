@@ -53,6 +53,7 @@ analyzer:
     implementation_imports: ignore
     sort_pub_dependencies: error
     eol_at_end_of_file: ignore
+    dangling_library_doc_comments: ignore
 
 linter:
   rules:

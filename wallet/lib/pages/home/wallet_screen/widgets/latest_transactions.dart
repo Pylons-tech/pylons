@@ -179,6 +179,7 @@ class LatestTransactions extends StatelessWidget {
   }
 
   Future<void> onTxTapped({required TransactionHistory txHistory, required BuildContext context}) async {
+    final navigator = Navigator.of(navigatorKey.currentState!.overlay!.context);
     final walletsStore = GetIt.I.get<WalletsStore>();
     final wallet = context.read<AccountProvider>().accountPublicInfo;
 
@@ -223,7 +224,7 @@ class LatestTransactions extends StatelessWidget {
           .firstWhere((strKeyValue) => strKeyValue.key == kThumbnailUrl, orElse: () => StringParam())
           .value;
 
-      Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(
+      navigator.pushNamed(
         RouteUtil.ROUTE_TRANSACTION_DETAIL,
         arguments: TxDetailArguments(
           recipe: recipe,
@@ -234,7 +235,7 @@ class LatestTransactions extends StatelessWidget {
           transactionTime: DateFormat("MMM dd yyyy HH:mm").format(
             DateTime.fromMillisecondsSinceEpoch(txHistory.createdAt * kDateConverterConstant),
           ),
-          currency: (denomAbbr[defaultCurrency])!,
+          currency: denomAbbr[defaultCurrency]!,
           price: "${defaultCurrency.convertFromU(txHistory)} ${denomAbbr[defaultCurrency]}",
           transactionEnum: txHistory.transactionTypeEnum,
           nftType: nftType,

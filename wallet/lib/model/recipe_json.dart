@@ -74,7 +74,7 @@ class Recipe {
     version = json['version'] as String;
     if (json['coinInputs'] != null) {
       coinInputs = [];
-      for (final coinInputsJson in json['coinInputs']) {
+      for (final coinInputsJson in json['coinInputs'] as Iterable<dynamic>) {
         if (coinInputsJson is Map<String, dynamic>) {
           coinInputs.add(CoinInputs.fromJson(coinInputsJson));
         }
@@ -83,7 +83,7 @@ class Recipe {
 
     if (json['itemInputs'] != null) {
       itemInputs = [];
-      for (final itemInputsJson in json['itemInputs']) {
+      for (final itemInputsJson in json['itemInputs'] as Iterable<dynamic>) {
         if (itemInputsJson is Map<String, dynamic>) {}
       }
     }
@@ -92,7 +92,7 @@ class Recipe {
 
     if (json['outputs'] != null) {
       outputs = [];
-      for (final outputsJson in json['itemInputs']) {
+      for (final outputsJson in json['itemInputs'] as Iterable<dynamic>) {
         if (outputsJson is Map<String, dynamic>) {
           outputs.add(Outputs.fromJson(outputsJson));
         }

@@ -267,10 +267,10 @@ class FeedbackModel {
   });
 
   factory FeedbackModel.fromMap(Map<String, dynamic> map) => FeedbackModel(
-        walletAddress: map[kAddressKey] == null ? "" : (map[kAddressKey]).toString(),
-        subject: map[kSubjectKey] == null ? "" : (map[kSubjectKey]).toString(),
-        feedback: map[kFeedbackKey] == null ? "" : (map[kFeedbackKey]).toString(),
-        timestamp: map[kTimeStampKey] == null ? "" : (map[kTimeStampKey]).toString(),
+        walletAddress: map[kAddressKey] == null ? "" : map[kAddressKey].toString(),
+        subject: map[kSubjectKey] == null ? "" : map[kSubjectKey].toString(),
+        feedback: map[kFeedbackKey] == null ? "" : map[kFeedbackKey].toString(),
+        timestamp: map[kTimeStampKey] == null ? "" : map[kTimeStampKey].toString(),
       );
 
   Map<String, dynamic> toMap() {

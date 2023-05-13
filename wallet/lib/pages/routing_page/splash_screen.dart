@@ -66,15 +66,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _loadWallets() async {
+    final navigator = Navigator.of(navigatorKey.currentState!.overlay!.context);
     await sl<LocalDataSource>().clearDataOnIosUnInstall();
 
     await accountProvider.loadWallets();
 
     if (accountProvider.accountPublicInfo == null) {
       //Loads the last used wallet.
-      Navigator.of(
-        navigatorKey.currentState!.overlay!.context,
-      ).pushReplacementNamed(RouteUtil.ROUTE_ONBOARDING);
+      navigator.pushReplacementNamed(RouteUtil.ROUTE_ONBOARDING);
     } else {
       final repository = GetIt.I.get<Repository>();
 
@@ -163,6 +162,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<bool> checkAppLatestOrNot() async {
+    final navigator = Navigator.of(navigatorKey.currentState!.overlay!.context);
     final getAppInfoResult = await getAppInfo();
 
     final appVersion = "${getAppInfoResult.version}+${getAppInfoResult.buildNumber}";
@@ -181,7 +181,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     await accountProvider.loadWallets();
 
-    Navigator.of(navigatorKey.currentState!.overlay!.context).pushReplacementNamed(
+    navigator.pushReplacementNamed(
       RouteUtil.ROUTE_APP_UPDATE,
       arguments: remoteConfigVersion,
     );
