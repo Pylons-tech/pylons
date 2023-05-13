@@ -86,7 +86,8 @@ Future<void> init({
         repository: sl(),
         walletsStore: sl(),
         accountProvider: sl<AccountProvider>(),
-        onLogEvent: (AnalyticsEventEnum event) {},
+        onLogEvent: onLogEvent,
+        onLogError: onLogError,
       ));
   sl.registerLazySingleton<LocalServer>(() => LocalServer(sl<HandlerFactory>()));
   sl.registerFactory<AudioPlayerHelper>(() => AudioPlayerHelperImpl(sl()));
@@ -261,4 +262,6 @@ Future<void> init({
 
   /// Configurations
   sl.registerLazySingleton<BaseEnv>(() => remoteConfigService.getBaseEnv());
+
+  
 }

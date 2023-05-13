@@ -22,7 +22,7 @@ class Longs {
 
     if (json['weightRanges'] != null) {
       weightRanges = [];
-      for (final weightRangesJson in json['weightRanges']) {
+      for (final weightRangesJson in json['weightRanges'] as Iterable<dynamic>) {
         weightRanges.add(WeightRanges.fromJson(weightRangesJson));
       }
     }

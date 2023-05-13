@@ -85,9 +85,6 @@ class ItemsProvider extends ChangeNotifier {
   void processTrades(List<NFT> localTrades) {
     trades = localTrades;
     notifyListeners();
-
-    //TODO cache trades as well
-    // repository.storePurchases(localItems);
   }
 
   void processItems(List<NFT> localItems) {

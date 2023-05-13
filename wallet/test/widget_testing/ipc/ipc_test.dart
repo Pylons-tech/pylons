@@ -24,6 +24,9 @@ void main() {
         accountProvider: mockAccountProvider,
         repository: mockRepository,
         walletsStore: walletStore,
+        onLogError:(exception, {bool? fatal, stack}){
+
+        },
         onLogEvent: (AnalyticsEventEnum event) {},
       );
 

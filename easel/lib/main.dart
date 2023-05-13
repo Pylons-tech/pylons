@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:easel_flutter/easel_provider.dart';
 import 'package:easel_flutter/screens/creator_hub/creator_hub_screen.dart';
@@ -40,7 +41,7 @@ Future<void> main() async {
 
     PylonsWallet.setup(mode: PylonsMode.prod, host: 'easel');
 
-    isTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide >= tabletMinWidth;
+    isTablet = _getIsCurrentDeviceTablet();
 
     FlutterError.onError = firebaseCrashlytics.recordFlutterError;
 
@@ -106,4 +107,10 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+
+bool _getIsCurrentDeviceTablet() {
+  final MediaQueryData mediaQuery = MediaQueryData.fromView(PlatformDispatcher.instance.implicitView!);
+  return mediaQuery.size.shortestSide >= tabletMinWidth;
 }

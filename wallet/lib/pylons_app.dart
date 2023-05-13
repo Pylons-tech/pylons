@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flappy/flappy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -86,171 +85,167 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return FlappyFeedback(
-      appName: 'Pylons',
-      receiverEmails: const ['jawad@pylons.tech'],
-      child: ScreenUtilInit(
-        minTextAdapt: true,
-        builder: (_, __) => MultiProvider(
-          providers: [
-            ChangeNotifierProvider.value(
-              value: sl<UserInfoProvider>(),
+    return ScreenUtilInit(
+      minTextAdapt: true,
+      builder: (_, __) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(
+            value: sl<UserInfoProvider>(),
+          ),
+          Provider(
+            create: (context) => sl<RemoteNotificationsProvider>(),
+          ),
+          ChangeNotifierProvider<AccountProvider>.value(
+            value: sl<AccountProvider>(),
+          ),
+          ChangeNotifierProxyProvider<AccountProvider, RecipesProvider>(
+            create: (BuildContext context) => RecipesProvider(
+              repository: sl<Repository>(),
+              address: null,
             ),
-            Provider(
-              create: (context) => sl<RemoteNotificationsProvider>(),
-            ),
-            ChangeNotifierProvider<AccountProvider>.value(
-              value: sl<AccountProvider>(),
-            ),
-            ChangeNotifierProxyProvider<AccountProvider, RecipesProvider>(
-              create: (BuildContext context) => RecipesProvider(
+            update: (
+              BuildContext context,
+              AccountProvider accountProvider,
+              RecipesProvider? recipesProvider,
+            ) {
+              final receipeProvider = RecipesProvider.fromAccountProvider(
+                accountPublicInfo: accountProvider.accountPublicInfo,
                 repository: sl<Repository>(),
-                address: null,
-              ),
-              update: (
-                BuildContext context,
-                AccountProvider accountProvider,
-                RecipesProvider? recipesProvider,
-              ) {
-                final receipeProvider = RecipesProvider.fromAccountProvider(
-                  accountPublicInfo: accountProvider.accountPublicInfo,
-                  repository: sl<Repository>(),
-                );
-                if (sl.isRegistered<RecipesProvider>()) {
-                  sl.unregister<RecipesProvider>();
-                }
-
-                sl.registerSingleton(receipeProvider);
-                return receipeProvider;
-              },
-            ),
-            ChangeNotifierProxyProvider<AccountProvider, ItemsProvider>(
-              create: (BuildContext context) => ItemsProvider(
-                repository: sl<Repository>(),
-                address: null,
-              ),
-              update: (
-                BuildContext context,
-                AccountProvider accountProvider,
-                ItemsProvider? itemsProvider,
-              ) {
-                final itemsProvider = ItemsProvider.fromAccountProvider(
-                  accountPublicInfo: accountProvider.accountPublicInfo,
-                  repository: sl<Repository>(),
-                );
-                if (sl.isRegistered<ItemsProvider>()) {
-                  sl.unregister<ItemsProvider>();
-                }
-                sl.registerSingleton(itemsProvider);
-                return itemsProvider;
-              },
-            ),
-            ChangeNotifierProvider.value(value: sl.get<CollectionsTabProvider>()),
-            Provider<WalletsStore>.value(
-              value: sl<WalletsStore>(),
-            ),
-          ],
-          child: MaterialApp(
-            navigatorKey: navigatorKey,
-            debugShowCheckedModeBanner: false,
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: context.locale,
-            title: "Pylons Wallet",
-            theme: PylonsAppTheme().buildAppTheme(),
-            initialRoute: '/',
-            routes: {
-              '/': (context) => const SplashScreen(),
-              RouteUtil.ROUTE_HOME: (context) => const HomeScreen(),
-              RouteUtil.ROUTE_APP_UPDATE: (context) => const UpdateApp(),
-              RouteUtil.ROUTE_SETTINGS: (context) => const SettingScreen(),
-              RouteUtil.ROUTE_LEGAL: (context) => const LegalScreen(),
-              RouteUtil.ROUTE_RECOVERY: (context) => const RecoveryScreen(),
-              RouteUtil.ROUTE_GENERAL: (context) => const GeneralScreen(),
-              RouteUtil.ROUTE_SECURITY: (context) => const SecurityScreen(),
-              RouteUtil.ROUTE_PAYMENT: (context) => const PaymentScreen(),
-              RouteUtil.ROUTE_PRACTICE_TEST: (context) => const PracticeTest(),
-              RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE: (context) => const ViewRecoveryScreen(),
-              RouteUtil.ROUTE_TRANSACTION_HISTORY: (context) => const TransactionHistoryScreen(),
-              RouteUtil.ROUTE_ONBOARDING: (context) => const PresentingOnboardPage(),
-              RouteUtil.ROUTE_CREATE_WALLET: (context) => const CreateWalletScreen(),
-              RouteUtil.ROUTE_RESTORE_WALLET: (context) => const RestoreWalletScreen(),
-              RouteUtil.ROUTE_ADD_PYLON: (context) => const AddPylonScreen(),
-              RouteUtil.ROUTE_TRANSACTION_DETAIL: (context) => const TransactionDetailsScreen(),
-              RouteUtil.ROUTE_MESSAGE: (context) => const MessagesScreen(),
-              RouteUtil.ROUTE_PDF_FULL_SCREEN: (context) => const PdfViewerFullScreen(),
-              RouteUtil.ROUTE_FAILURE: (context) => const LocalTransactionsScreen(),
-              RouteUtil.ROUTE_LOCAL_TRX_DETAILS: (context) => const LocalTransactionDetailScreen(),
-              RouteUtil.ROUTE_OWNER_VIEW: (context) {
-                if (ModalRoute.of(context) == null) {
-                  return const SizedBox();
-                }
-
-                if (ModalRoute.of(context)?.settings.arguments == null) {
-                  return const SizedBox();
-                }
-
-                if (ModalRoute.of(context)?.settings.arguments is NFT) {
-                  final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
-
-                  return OwnerView(
-                    key: ValueKey(nft),
-                    nft: nft,
-                  );
-                }
-
-                return const SizedBox();
-              },
-              RouteUtil.ROUTE_PURCHASE_VIEW: (context) {
-                if (ModalRoute.of(context) == null) {
-                  return const SizedBox();
-                }
-
-                if (ModalRoute.of(context)?.settings.arguments == null) {
-                  return const SizedBox();
-                }
-
-                if (ModalRoute.of(context)?.settings.arguments is NFT) {
-                  final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
-
-                  return PurchaseItemScreen(
-                    key: ValueKey(nft),
-                    nft: nft,
-                  );
-                }
-
-                return const SizedBox();
-              },
-              RouteUtil.ROUTE_ACCEPT_POLICY: (context) {
-                if (ModalRoute.of(context) == null) {
-                  return const SizedBox();
-                }
-
-                if (ModalRoute.of(context)?.settings.arguments == null) {
-                  return const SizedBox();
-                }
-
-                if (ModalRoute.of(context)?.settings.arguments is NFT) {
-                  final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
-
-                  return AcceptPolicyScreen(
-                    nft: nft,
-                    viewModel: sl(),
-                  );
-                }
-
-                return const SizedBox();
-              },
-            },
-            builder: (context, widget) {
-              return Material(
-                child: MediaQuery(
-                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                  child: widget ?? Container(),
-                ),
               );
+              if (sl.isRegistered<RecipesProvider>()) {
+                sl.unregister<RecipesProvider>();
+              }
+
+              sl.registerSingleton(receipeProvider);
+              return receipeProvider;
             },
           ),
+          ChangeNotifierProxyProvider<AccountProvider, ItemsProvider>(
+            create: (BuildContext context) => ItemsProvider(
+              repository: sl<Repository>(),
+              address: null,
+            ),
+            update: (
+              BuildContext context,
+              AccountProvider accountProvider,
+              ItemsProvider? itemsProvider,
+            ) {
+              final itemsProvider = ItemsProvider.fromAccountProvider(
+                accountPublicInfo: accountProvider.accountPublicInfo,
+                repository: sl<Repository>(),
+              );
+              if (sl.isRegistered<ItemsProvider>()) {
+                sl.unregister<ItemsProvider>();
+              }
+              sl.registerSingleton(itemsProvider);
+              return itemsProvider;
+            },
+          ),
+          ChangeNotifierProvider.value(value: sl.get<CollectionsTabProvider>()),
+          Provider<WalletsStore>.value(
+            value: sl<WalletsStore>(),
+          ),
+        ],
+        child: MaterialApp(
+          navigatorKey: navigatorKey,
+          debugShowCheckedModeBanner: false,
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+          title: "Pylons Wallet",
+          theme: PylonsAppTheme().buildAppTheme(),
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const SplashScreen(),
+            RouteUtil.ROUTE_HOME: (context) => const HomeScreen(),
+            RouteUtil.ROUTE_APP_UPDATE: (context) => const UpdateApp(),
+            RouteUtil.ROUTE_SETTINGS: (context) => const SettingScreen(),
+            RouteUtil.ROUTE_LEGAL: (context) => const LegalScreen(),
+            RouteUtil.ROUTE_RECOVERY: (context) => const RecoveryScreen(),
+            RouteUtil.ROUTE_GENERAL: (context) => const GeneralScreen(),
+            RouteUtil.ROUTE_SECURITY: (context) => const SecurityScreen(),
+            RouteUtil.ROUTE_PAYMENT: (context) => const PaymentScreen(),
+            RouteUtil.ROUTE_PRACTICE_TEST: (context) => const PracticeTest(),
+            RouteUtil.ROUTE_VIEW_RECOVERY_PHRASE: (context) => const ViewRecoveryScreen(),
+            RouteUtil.ROUTE_TRANSACTION_HISTORY: (context) => const TransactionHistoryScreen(),
+            RouteUtil.ROUTE_ONBOARDING: (context) => const PresentingOnboardPage(),
+            RouteUtil.ROUTE_CREATE_WALLET: (context) => const CreateWalletScreen(),
+            RouteUtil.ROUTE_RESTORE_WALLET: (context) => const RestoreWalletScreen(),
+            RouteUtil.ROUTE_ADD_PYLON: (context) => const AddPylonScreen(),
+            RouteUtil.ROUTE_TRANSACTION_DETAIL: (context) => const TransactionDetailsScreen(),
+            RouteUtil.ROUTE_MESSAGE: (context) => const MessagesScreen(),
+            RouteUtil.ROUTE_PDF_FULL_SCREEN: (context) => const PdfViewerFullScreen(),
+            RouteUtil.ROUTE_FAILURE: (context) => const LocalTransactionsScreen(),
+            RouteUtil.ROUTE_LOCAL_TRX_DETAILS: (context) => const LocalTransactionDetailScreen(),
+            RouteUtil.ROUTE_OWNER_VIEW: (context) {
+              if (ModalRoute.of(context) == null) {
+                return const SizedBox();
+              }
+
+              if (ModalRoute.of(context)?.settings.arguments == null) {
+                return const SizedBox();
+              }
+
+              if (ModalRoute.of(context)?.settings.arguments is NFT) {
+                final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
+
+                return OwnerView(
+                  key: ValueKey(nft),
+                  nft: nft,
+                );
+              }
+
+              return const SizedBox();
+            },
+            RouteUtil.ROUTE_PURCHASE_VIEW: (context) {
+              if (ModalRoute.of(context) == null) {
+                return const SizedBox();
+              }
+
+              if (ModalRoute.of(context)?.settings.arguments == null) {
+                return const SizedBox();
+              }
+
+              if (ModalRoute.of(context)?.settings.arguments is NFT) {
+                final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
+
+                return PurchaseItemScreen(
+                  key: ValueKey(nft),
+                  nft: nft,
+                );
+              }
+
+              return const SizedBox();
+            },
+            RouteUtil.ROUTE_ACCEPT_POLICY: (context) {
+              if (ModalRoute.of(context) == null) {
+                return const SizedBox();
+              }
+
+              if (ModalRoute.of(context)?.settings.arguments == null) {
+                return const SizedBox();
+              }
+
+              if (ModalRoute.of(context)?.settings.arguments is NFT) {
+                final nft = ModalRoute.of(context)!.settings.arguments! as NFT;
+
+                return AcceptPolicyScreen(
+                  nft: nft,
+                  viewModel: sl(),
+                );
+              }
+
+              return const SizedBox();
+            },
+          },
+          builder: (context, widget) {
+            return Material(
+              child: MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                child: widget ?? Container(),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -264,6 +259,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
   }
 
   Future onEvent(List<PurchaseDetails> event) async {
+    final navigator = Navigator.of(navigatorKey.currentState!.overlay!.context);
     if (event.isEmpty) {
       return;
     }
@@ -283,7 +279,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
           registerFailure(purchaseDetails);
           purchaseDetails.error?.message.show();
           await Future.delayed(const Duration(seconds: 2));
-          Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
+          navigator.pushNamed(RouteUtil.ROUTE_FAILURE);
 
           break;
         case PurchaseStatus.restored:
@@ -398,6 +394,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
 
   Future handlerPurchaseEvent(PurchaseDetails purchaseDetails) async {
     final wallet = sl<AccountProvider>().accountPublicInfo;
+    final navigator = Navigator.of(navigatorKey.currentState!.overlay!.context);
 
     if (wallet == null) {
       return;
@@ -455,7 +452,7 @@ class _PylonsAppState extends State<PylonsApp> with WidgetsBindingObserver {
           loading.dismiss();
           googleInAppPurchase.getLeft().message.show();
           await Future.delayed(const Duration(seconds: 2));
-          Navigator.of(navigatorKey.currentState!.overlay!.context).pushNamed(RouteUtil.ROUTE_FAILURE);
+          navigator.pushNamed(RouteUtil.ROUTE_FAILURE);
           return;
         }
 

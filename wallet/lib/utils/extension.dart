@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pylons_wallet/components/loading.dart';
@@ -241,4 +242,9 @@ extension UpdateRecipeVersion on String {
     final str = '${arr[0]}.${arr[1]}.';
     return str + intVersion.toString();
   }
+}
+
+bool getIsCurrentDeviceTablet() {
+  final MediaQueryData mediaQuery = MediaQueryData.fromView(PlatformDispatcher.instance.implicitView!);
+  return mediaQuery.size.shortestSide >= TABLET_MIN_LENGTH;
 }

@@ -76,7 +76,7 @@ class Activity {
   Activity.fromMap(Map<String, dynamic> map)
       : this(
             id: map[db_id] == null ? (map[db_id] as int) : 0,
-            username: (map[db_username]).toString(),
+            username: map[db_username].toString(),
             action: map[db_action].toString().fromString(),
             itemName: (map[db_item_name] ?? '').toString(),
             itemUrl: (map[db_item_url] ?? '').toString(),

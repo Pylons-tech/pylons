@@ -39,6 +39,7 @@ class IPCEngine {
     required this.repository,
     required this.walletsStore,
     required this.onLogEvent,
+    required this.onLogError,
   });
 
   /// This method initiate the IPC Engine
@@ -63,7 +64,9 @@ class IPCEngine {
       handleLinksBasedOnUri(unwrappedLink);
 
       // Link contains the data that the wallet need
-    }, onError: (err) {});
+    }, onError: (err) {
+      onLogError(err);
+    });
   }
 
   /// This method is used to handle the uni link when the app first opens
@@ -160,8 +163,7 @@ class IPCEngine {
     required Future<NFT?> Function({
       required String cookbookId,
       required String recipeId,
-    })
-        getNFtFromRecipe,
+    }) getNFtFromRecipe,
     required void Function(NFT?) showOwnerView,
     required void Function(NFT?) showCreateAccountView,
     required void Function(NFT?) showPurchaseView,
@@ -235,6 +237,7 @@ class IPCEngine {
   }
 
   Future<void> _handleNFTViewLink(String link) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(navigatorKey.currentState!.overlay!.context);
     final queryParameters = Uri.parse(link).queryParameters;
     final itemId = queryParameters['item_id'];
     final cookbookId = queryParameters['cookbook_id'];
@@ -246,7 +249,7 @@ class IPCEngine {
     showLoader.dismiss();
 
     if (recipeResult == null) {
-      ScaffoldMessenger.of(navigatorKey.currentState!.overlay!.context).showSnackBar(
+      scaffoldMessenger.showSnackBar(
         SnackBar(
           content: Text(LocaleKeys.nft_does_not_exists.tr()),
         ),
@@ -414,7 +417,7 @@ class IPCEngine {
 
     final uri = Uri.parse(link);
 
-    if (uri.queryParameters.containsKey([kLinkKey])) {
+    if (uri.queryParameters.containsKey(kLinkKey)) {
       onLogEvent(AnalyticsEventEnum.link);
       return uri.queryParameters[kLinkKey] ?? '';
     }
@@ -458,4 +461,5 @@ class IPCEngine {
   final WalletsStore walletsStore;
   final Repository repository;
   final OnLogEvent onLogEvent;
+  final OnLogError onLogError;
 }
