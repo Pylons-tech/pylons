@@ -23,12 +23,7 @@ dependencies:
 
 
 dev_dependencies:
-  lint: ^1.5.3
-  lints: ^2.0.0
-#  flutter_test:
-#    sdk: flutter
-#  lint: ^1.5.3
-#  lints: ^2.0.0
-#  very_good_analysis: 3.1.0
-#  mocktail: 0.3.0
+  lint:
+  lints:
+
 
