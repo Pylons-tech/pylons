@@ -11,11 +11,6 @@ analyzer:
     - test/**/*.reflectable.dart
 
     - tool/**/*.g.dart
-  strong-mode:
-    implicit-casts: false
-
-  # enable-experiment:
-  #  - non-nullable
 
 linter:
   rules:

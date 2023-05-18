@@ -83,11 +83,13 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
             child: Align(
               child: RepaintBoundary(
                 key: renderObjectKey,
-                child: QrImage(
+                child: QrImageView(
                   padding: EdgeInsets.zero,
                   data: link,
                   size: 200,
-                  foregroundColor: AppColors.kWhite,
+                  dataModuleStyle: const QrDataModuleStyle(
+                    color: AppColors.kWhite
+                  ),
                 ),
               ),
             ),
