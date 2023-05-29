@@ -59,7 +59,7 @@ dependencies:
   focus_detector: ^2.0.1
   get_it: ^7.2.0  
   google_fonts: ^4.0.3
-  image_cropper: ^3.0.0
+  image_cropper: ^4.0.1
   internet_connection_checker: ^0.0.1+4
   intl:
   just_audio: ^0.9.28
