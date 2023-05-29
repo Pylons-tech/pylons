@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -17,7 +18,10 @@ import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/dependency_injection/dependency_injection.dart' as di;
+import 'package:pylons_wallet/utils/extension.dart';
 import 'package:pylons_wallet/utils/types.dart';
+
+import 'gen/assets.gen.dart';
 
 bool isTablet = false;
 
@@ -29,12 +33,17 @@ Future<void> main() async {
     await Firebase.initializeApp();
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(!kDebugMode);
 
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+
+      return true;
+    };
+
+    HttpOverrides.global = MyHttpOverrides();
+
     await initializeAppCheck();
 
-    await dotenv.load(fileName: "env/.prod_env");
-
-    Stripe.publishableKey = di.sl<BaseEnv>().baseStripPubKey;
-    Stripe.merchantIdentifier = "merchant.tech.pylons.wallet";
+    await dotenv.load(fileName: Assets.env.prodEnv);
 
     await di.init(
       onLogEvent: (AnalyticsEventEnum event) {
@@ -45,7 +54,10 @@ Future<void> main() async {
       },
     );
 
-    isTablet = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.shortestSide >= TABLET_MIN_LENGTH;
+    Stripe.publishableKey = di.sl<BaseEnv>().baseStripPubKey;
+    Stripe.merchantIdentifier = "merchant.tech.pylons.wallet";
+
+    isTablet = getIsCurrentDeviceTablet();
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
     runApp(

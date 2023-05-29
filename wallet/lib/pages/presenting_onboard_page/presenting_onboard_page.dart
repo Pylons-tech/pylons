@@ -6,10 +6,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../generated/locale_keys.g.dart';
 
@@ -46,7 +46,7 @@ class __PresentingOnboardPageState extends State<PresentingOnboardPage> {
               top: 0,
               bottom: 0,
               child: SvgPicture.asset(
-                SVGUtil.MAIN_SCREEN_BG,
+                Assets.images.svg.mainScreenBackground,
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 fit: BoxFit.cover,
@@ -66,12 +66,12 @@ class __PresentingOnboardPageState extends State<PresentingOnboardPage> {
                     Row(
                       children: [
                         SvgPicture.asset(
-                          SVGUtil.PYLONS_LOGO,
+                          Assets.images.icons.pylonsLogoSvg,
                           fit: BoxFit.cover,
                         ),
                         HorizontalSpace(20.w),
                         SvgPicture.asset(
-                          SVGUtil.PYLON,
+                          Assets.images.svg.pylon,
                           fit: BoxFit.cover,
                         ),
                       ],

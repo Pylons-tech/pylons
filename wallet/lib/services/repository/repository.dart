@@ -2000,7 +2000,6 @@ class RepositoryImp implements Repository {
 
     try {
       final result = await remoteDataStore.getNftOwnershipHistory(itemId: itemId, cookBookId: cookBookId);
-
       return Right(result);
     } on String catch (_) {
       return Left(FetchNftOwnershipHistoryFailure(message: LocaleKeys.something_wrong.tr()));

@@ -86,7 +86,8 @@ Future<void> init({
         repository: sl(),
         walletsStore: sl(),
         accountProvider: sl<AccountProvider>(),
-        onLogEvent: (AnalyticsEventEnum event) {},
+        onLogEvent: onLogEvent,
+        onLogError: onLogError,
       ));
   sl.registerLazySingleton<LocalServer>(() => LocalServer(sl<HandlerFactory>()));
   sl.registerFactory<AudioPlayerHelper>(() => AudioPlayerHelperImpl(sl()));
@@ -197,12 +198,12 @@ Future<void> init({
 
   sl.registerLazySingleton<RemoteDataStore>(() => RemoteDataStoreImp(
         httpClient: sl(),
-        crashlyticsHelper: sl(),
         storePaymentService: sl(),
         firebaseAppCheck: sl(),
         dynamicLinksGenerator: sl(),
         firebaseHelper: sl(),
         analyticsHelper: sl(),
+        onLogError: onLogError,
       ));
 
   sl.registerLazySingleton<StorePaymentService>(() => StorePaymentServiceImpl());
@@ -261,4 +262,6 @@ Future<void> init({
 
   /// Configurations
   sl.registerLazySingleton<BaseEnv>(() => remoteConfigService.getBaseEnv());
+
+  
 }

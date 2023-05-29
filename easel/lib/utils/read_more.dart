@@ -1,5 +1,3 @@
-library readmore;
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -49,7 +47,7 @@ class ReadMoreText extends StatefulWidget {
   final TextStyle? lessStyle;
 
   ///Called when state change between expanded/compress
-  final Function(bool val)? callback;
+  final Function({required bool val})? callback;
 
   final String delimiter;
   final String data;
@@ -78,7 +76,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
   void _onTapLink() {
     setState(() {
       _readMore = !_readMore;
-      widget.callback?.call(_readMore);
+      widget.callback?.call(val: _readMore);
     });
   }
 
@@ -90,20 +88,15 @@ class ReadMoreTextState extends State<ReadMoreText> {
       effectiveTextStyle = defaultTextStyle.style.merge(widget.style);
     }
 
-    final textAlign =
-        widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
+    final textAlign = widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
     final textDirection = widget.textDirection ?? Directionality.of(context);
-    final textScaleFactor =
-        widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
+    final textScaleFactor = widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
     final overflow = defaultTextStyle.overflow;
     final locale = widget.locale ?? Localizations.maybeLocaleOf(context);
 
-    final colorClickableText =
-        widget.colorClickableText ?? Theme.of(context).colorScheme.secondary;
-    final defaultLessStyle = widget.lessStyle ??
-        effectiveTextStyle?.copyWith(color: colorClickableText);
-    final defaultMoreStyle = widget.moreStyle ??
-        effectiveTextStyle?.copyWith(color: colorClickableText);
+    final colorClickableText = widget.colorClickableText ?? Theme.of(context).colorScheme.secondary;
+    final defaultLessStyle = widget.lessStyle ?? effectiveTextStyle?.copyWith(color: colorClickableText);
+    final defaultMoreStyle = widget.moreStyle ?? effectiveTextStyle?.copyWith(color: colorClickableText);
     final defaultDelimiterStyle = widget.delimiterStyle ?? effectiveTextStyle;
 
     final TextSpan link = TextSpan(
@@ -163,9 +156,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
         if (linkSize.width < maxWidth) {
           final readMoreSize = linkSize.width + delimiterSize.width;
           final pos = textPainter.getPositionForOffset(Offset(
-            textDirection == TextDirection.rtl
-                ? readMoreSize
-                : textSize.width - readMoreSize,
+            textDirection == TextDirection.rtl ? readMoreSize : textSize.width - readMoreSize,
             textSize.height,
           ));
           endIndex = textPainter.getOffsetBefore(pos.offset) ?? 0;
@@ -183,9 +174,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
             if (widget.trimLength < widget.data.length) {
               textSpan = TextSpan(
                 style: effectiveTextStyle,
-                text: _readMore
-                    ? widget.data.substring(0, widget.trimLength)
-                    : widget.data,
+                text: _readMore ? widget.data.substring(0, widget.trimLength) : widget.data,
                 children: <TextSpan>[delimiter, link],
               );
             } else {
@@ -200,8 +189,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
               textSpan = TextSpan(
                 style: effectiveTextStyle,
                 text: _readMore
-                    ? widget.data.substring(0, endIndex) +
-                        (linkLongerThanLine ? _kLineSeparator : '')
+                    ? widget.data.substring(0, endIndex) + (linkLongerThanLine ? _kLineSeparator : '')
                     : widget.data,
                 children: <TextSpan>[delimiter, link],
               );
@@ -213,8 +201,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
             }
             break;
           default:
-            throw Exception(
-                'TrimMode type: ${widget.trimMode} is not supported');
+            throw Exception('TrimMode type: ${widget.trimMode} is not supported');
         }
 
         return RichText(

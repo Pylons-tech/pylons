@@ -35,8 +35,8 @@ class ForSaleBottomSheet {
       builder: (context) => ChangeNotifierProvider.value(
         value: ownerViewViewModel,
         builder: (context, widget) {
-          return Wrap(
-            children: const [
+          return const Wrap(
+            children: [
               _ForSaleBottomSheetWidget(),
             ],
           );

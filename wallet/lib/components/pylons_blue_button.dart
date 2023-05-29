@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 
+import '../gen/fonts.gen.dart';
+
 class PylonsBlueButton extends StatelessWidget {
   final VoidCallback onTap;
   final String text;
@@ -29,7 +31,16 @@ class PylonsBlueButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
-              child: Text(text, textAlign: TextAlign.center, style: TextStyle(fontFamily: 'Inter', fontSize: 13, fontWeight: FontWeight.w600, color: fulfilled ? AppColors.kWhite : AppColors.kBlue)),
+              child: Text(
+                text,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: FontFamily.inter,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: fulfilled ? AppColors.kWhite : AppColors.kBlue,
+                ),
+              ),
             ),
           ],
         ),

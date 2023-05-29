@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/loading.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/model/transaction_failure_model.dart';
 import 'package:pylons_wallet/pages/home/wallet_screen/widgets/view_in_collection_button.dart';
@@ -14,7 +15,6 @@ import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/enums.dart';
 import 'package:pylons_wallet/utils/extension.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../generated/locale_keys.g.dart';
 
@@ -90,7 +90,7 @@ class _LocalTransactionDetailScreenState extends State<LocalTransactionDetailScr
         height: 70.h,
         child: Row(
           children: [
-            SizedBox(height: 70.h, width: 70.h, child: SvgPicture.asset(SVGUtil.PYLONS_POINTS_ICON)),
+            SizedBox(height: 70.h, width: 70.h, child: SvgPicture.asset(Assets.images.svg.pylonsPointsIcon)),
             SizedBox(width: 10.w),
             Expanded(
               flex: isTablet ? 7 : 5,

@@ -1,4 +1,3 @@
-library transaction_signing_gateway;
 
 export 'package:transaction_signing_gateway/alan/alan_credentials_serializer.dart';
 export 'package:transaction_signing_gateway/alan/alan_private_account_credentials.dart';

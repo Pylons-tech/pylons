@@ -4,11 +4,11 @@ import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/utils/clipper_utils.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 class PdfViewer extends StatefulWidget {
   final String? fileUrl;
@@ -91,7 +91,7 @@ class _PdfViewerState extends State<PdfViewer> {
               child: RotationTransition(
                 turns: const AlwaysStoppedAnimation(0.25),
                 child: SvgPicture.asset(
-                  SVGUtil.FULL_SCREEN_ICON,
+                  Assets.images.svg.fullScreenIcon,
                   fit: BoxFit.fill,
                   width: 8.w,
                   height: 8.w,

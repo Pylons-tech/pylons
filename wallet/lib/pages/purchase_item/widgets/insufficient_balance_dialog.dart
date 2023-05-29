@@ -3,17 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pylons_wallet/components/buttons/custom_paint_button.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
+import 'package:pylons_wallet/gen/fonts.gen.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/settings/widgets/delete_dialog.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/route_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 import '../../../generated/locale_keys.g.dart';
 
-TextStyle kHeadingTextStyle = TextStyle(fontSize: isTablet ? 23.sp : 27.sp, fontFamily: 'UniversalSans', color: AppColors.kWhite, fontWeight: FontWeight.w700);
+TextStyle kHeadingTextStyle = TextStyle(
+  fontSize: isTablet ? 23.sp : 27.sp,
+  fontFamily: FontFamily.universalSans,
+  color: AppColors.kWhite,
+  fontWeight: FontWeight.w700,
+);
 
-TextStyle kMsgTextStyle = TextStyle(fontSize: isTablet ? 12.sp : 14.sp, fontFamily: 'UniversalSans', color: AppColors.kWhite, fontWeight: FontWeight.w700);
+TextStyle kMsgTextStyle = TextStyle(
+  fontSize: isTablet ? 12.sp : 14.sp,
+  fontFamily: FontFamily.universalSans,
+  color: AppColors.kWhite,
+  fontWeight: FontWeight.w700,
+);
 
 class InsufficientBalanceDialog {
   final BuildContext context;
@@ -45,7 +56,7 @@ class InsufficientBalanceDialog {
 
                   Align(
                     child: SvgPicture.asset(
-                      SVGUtil.ALERTDIALOG,
+                      Assets.images.icons.alertSvg,
                       height: 40.h,
                       fit: BoxFit.cover,
                     ),
@@ -126,7 +137,11 @@ class InsufficientBalanceDialog {
             child: Center(
                 child: Text(
               title,
-              style: TextStyle(color: AppColors.kWhite, fontSize: isTablet ? 14.sp : 16.sp, fontWeight: FontWeight.w700),
+              style: TextStyle(
+                color: AppColors.kWhite,
+                fontSize: isTablet ? 14.sp : 16.sp,
+                fontWeight: FontWeight.w700,
+              ),
               textAlign: TextAlign.center,
             )),
           ),

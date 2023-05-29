@@ -8,6 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:image/image.dart' as im;
 import 'package:provider/provider.dart';
 import 'package:pylons_wallet/components/user_image_widget_viewmodel.dart';
+import 'package:pylons_wallet/gen/assets.gen.dart';
 import 'package:pylons_wallet/main_prod.dart';
 import 'package:pylons_wallet/pages/home/home_provider.dart';
 import 'package:pylons_wallet/pages/image_picker.dart';
@@ -15,7 +16,6 @@ import 'package:pylons_wallet/pages/settings/utils/user_info_provider.dart';
 import 'package:pylons_wallet/services/repository/repository.dart';
 import 'package:pylons_wallet/utils/constants.dart';
 import 'package:pylons_wallet/utils/image_util.dart';
-import 'package:pylons_wallet/utils/svg_util.dart';
 
 abstract class UserImageWidget extends StatelessWidget {
   const UserImageWidget({Key? key}) : super(key: key);
@@ -63,7 +63,7 @@ class UserAvatarWidget extends UserImageWidget {
   static const uriKey = "pylons_avatar_file_uri";
   @visibleForTesting
   static svg.Svg defaultImage =
-      svg.Svg(SVGUtil.USER_AVATAR); // todo: sensible default avatar
+      svg.Svg(Assets.images.svg.userAvatar); // todo: sensible default avatar
 
   const UserAvatarWidget({this.radius = 20});
 
@@ -130,7 +130,7 @@ class UserAvatarPickerWidget extends UserAvatarWidget {
           setState(() {});
         },
         child: SvgPicture.asset(
-          SVGUtil.IMAGE_PICKER,
+          Assets.images.icons.imagePicker,
           height: 12.h,
           width: 12.w,
           fit: BoxFit.scaleDown,
@@ -251,7 +251,7 @@ class UserBannerPickerWidget extends UserBannerWidget {
           setState(() {});
         },
         child: SvgPicture.asset(
-          SVGUtil.BANNER_IMAGE_EDIT,
+          Assets.images.icons.bannerImageEdit,
           height: isTablet ? 20.h : 22.h,
           width: isTablet ? 20.w : 22.w,
           fit: BoxFit.fill,
